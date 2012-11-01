@@ -53,7 +53,7 @@ class CContact extends w2p_Core_BaseObject
         parent::__construct('contacts', 'contact_id');
     }
 
-    public function loadFull($AppUI = null, $contactId)
+    public function loadFull($notUsed = null, $contactId)
     {
         $q = $this->_getQuery();
         $q->addTable('contacts');
@@ -102,7 +102,7 @@ class CContact extends w2p_Core_BaseObject
         // TODO:  I *really* don't like using the POST inside here..
         $contact_methods = empty($_POST['contact_methods']) ? array() : $_POST['contact_methods'];
         if (count($contact_methods)) {
-            foreach ($contact_methods['field'] as $key => $field) {
+            foreach ($contact_methods['field'] as $key => $notUsed) {
                 $fields[] = $contact_methods['field'][$key];
                 $values[] = $contact_methods['value'][$key];
             }
@@ -113,7 +113,7 @@ class CContact extends w2p_Core_BaseObject
 
         $custom_fields = new w2p_Core_CustomFields('contacts', 'addedit', $this->contact_id, 'edit');
         $custom_fields->bind($_POST);
-        $sql = $custom_fields->store($this->contact_id); // Store Custom Fields
+        $custom_fields->store($this->contact_id); // Store Custom Fields
 
         parent::hook_postStore();
     }
@@ -170,7 +170,7 @@ class CContact extends w2p_Core_BaseObject
         $q->addOrder('method_name');
         $contacts = $q->loadList();
 
-        foreach ($contacts as $row => $data) {
+        foreach ($contacts as $notUsed => $data) {
             $fields[] = $data['method_name'];
             $values[] = $data['method_value'];
         }
@@ -335,7 +335,7 @@ class CContact extends w2p_Core_BaseObject
     public function notify()
     {
         $result = false;
-        global $w2Pconfig, $locale_char_set;
+        global $locale_char_set;
         $df = $this->_AppUI->getPref('SHDATEFORMAT');
         $df .= ' ' . $this->_AppUI->getPref('TIMEFORMAT');
 

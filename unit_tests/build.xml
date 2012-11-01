@@ -18,6 +18,7 @@
     <fileset dir="." id="project.source">
         <include name="**/*.php" />
         <exclude name="classes/deprecated.class.php" />
+        <exclude name="includes/deprecated_functions.php" />
         <exclude name="${dir.lib}/" />
         <exclude name="${dir.tests}/" />
         <exclude name="${dir.build}/" />

@@ -78,8 +78,7 @@ function db_exec($sql) {
 	}
 	$qid = $db->Execute($sql);
 	dprint(__file__, __line__, 10, $sql);
-	if ($msg = db_error()) {
-		global $AppUI;
+	if (db_error()) {
 		dprint(__file__, __line__, 0, "Error executing: <pre>$sql</pre>");
 		// Useless statement, but it is being executed only on error,
 		// and it stops infinite loop.

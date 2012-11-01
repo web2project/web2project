@@ -68,7 +68,7 @@ $manager = new w2p_Core_UpgradeManager();
 					}
 					break;
 				case 'upgrade':
-          ?>
+                    ?>
 					<tr>
 						<td colspan="2">The system upgrade is performed through the
                         <strong><a href="../index.php?m=system">System Admin</a></strong> and requires you

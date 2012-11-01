@@ -27,7 +27,7 @@ class CDepartment extends w2p_Core_BaseObject {
         parent::__construct('departments', 'dept_id');
 	}
 
-	public function loadFull($AppUI = null, $deptId) {
+	public function loadFull($notUsed = null, $deptId) {
 		$q = $this->_getQuery();
 		$q->addQuery('dep.*, company_name, con.contact_id');
 		$q->addQuery('con.contact_first_name, con.contact_last_name, con.contact_display_name as contact_name');
@@ -66,7 +66,7 @@ class CDepartment extends w2p_Core_BaseObject {
         return $q->loadList();
     }
 
-	public function loadOtherDepts($AppUI = null, $company_id, $removeDeptId = 0) {
+	public function loadOtherDepts($notUsed = null, $company_id, $removeDeptId = 0) {
         $results = array();
         $q = $this->_getQuery();
 		$q->addTable('departments', 'dep');
@@ -85,7 +85,7 @@ class CDepartment extends w2p_Core_BaseObject {
         return $results;
 	}
 
-	public function getFilteredDepartmentList($AppUI = null, $deptType = -1, $searchString = '', $ownerId = 0, $orderby = 'dept_name', $orderdir = 'ASC') {
+	public function getFilteredDepartmentList($notUsed = null, $deptType = -1, $searchString = '', $ownerId = 0, $orderby = 'dept_name', $orderdir = 'ASC') {
         $orderby = (in_array($orderby, array('dept_name', 'dept_type', 'countp', 'inactive'))) ? $orderby : 'dept_name';
         $q = $this->_getQuery();
         $q->addTable('departments');

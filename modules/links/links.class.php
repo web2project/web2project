@@ -25,7 +25,7 @@ class CLink extends w2p_Core_BaseObject
         parent::__construct('links', 'link_id');
     }
 
-    public function loadFull($AppUI = null, $link_id)
+    public function loadFull($notUsed = null, $link_id)
     {
 
         $q = $this->_getQuery();
@@ -43,7 +43,7 @@ class CLink extends w2p_Core_BaseObject
         $q->loadObject($this, true, false);
     }
 
-    public function getProjectTaskLinksByCategory($AppUI = null, $project_id = 0, $task_id = 0, $category_id = 0, $search = '')
+    public function getProjectTaskLinksByCategory($notUsed = null, $project_id = 0, $task_id = 0, $category_id = 0, $search = '')
     {
         // load the following classes to retrieved denied records
 

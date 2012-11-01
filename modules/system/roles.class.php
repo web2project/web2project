@@ -160,8 +160,6 @@ class CSystem_Role {
 			$permission = $this->perms->get_acl($acl);
 		
 			if (is_array($permission)) {
-				$modlist = array();
-				$itemlist = array();
 				if (is_array($permission['axo_groups'])) {
 					foreach ($permission['axo_groups'] as $group_id) {
 						//catche Group of Permissions (All, All Non-Admin, and Admin) or Module Permissions
@@ -178,7 +176,6 @@ class CSystem_Role {
 						}
 					}
 				}
-				$perm_type = array();
 				if (is_array($permission['aco'])) {
 					foreach ($permission['aco'] as $key => $section) {
 						foreach ($section as $value) {
@@ -234,7 +231,7 @@ class CSystem_Role {
 						$type_map[$t[0]][] = $t[1];
 					}
 				}
-				$res = $this->perms->add_acl($type_map, null, $aro_map, $mod_mod, $mod_group, $permission_access, 1, null, null, 'user');
+				$this->perms->add_acl($type_map, null, $aro_map, $mod_mod, $mod_group, $permission_access, 1, null, null, 'user');
 			}
 		}
 		return true;

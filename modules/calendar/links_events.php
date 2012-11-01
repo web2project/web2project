@@ -11,7 +11,7 @@ if (!defined('W2P_BASE_DIR')) {
  * @param int the length to truncate entries by
  * @author Andrew Eddie <eddieajau@users.sourceforge.net>
  */
-function getEventLinks($startPeriod, $endPeriod, &$links, $strMaxLen, $minical = false) {
+function getEventLinks($startPeriod, $endPeriod, &$links, $notUsed = null, $minical = false) {
 	global $event_filter;
 	$events = CEvent::getEventsForPeriod($startPeriod, $endPeriod, $event_filter);
 	$cwd = explode(',', w2PgetConfig('cal_working_days'));
@@ -66,8 +66,6 @@ function getEventTooltip($event_id) {
 	$obj->event_id = $event_id;
 	$assigned = $obj->getAssigned();
 
-	$start_date = $event->event_start_date ? new w2p_Utilities_Date($event->event_start_date) : null;
-	$end_date = $event->event_end_date ? new w2p_Utilities_Date($event->event_end_date) : null;
 	if ($event->event_project) {
 		$event_project = $event->project_name;
 		$event_company = $event->company_name;
