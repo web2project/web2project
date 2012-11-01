@@ -609,13 +609,13 @@ function calcDuration(f, start_date, end_date, duration_fld, durntype_fld) {
 <table border="0" cellpadding="4" cellspacing="0" width="100%" class="std">
 <tr>
 	<td style="border: outset #d1d1cd 1px;" colspan="2">
-        <a href="javascript: void(0);" name="fg" style="display:block" onclick="expand_collapse('files', 'tblProjects');update_workspace('files');">
-            <span style="font-weight: bold;"><?php echo $AppUI->_('Files'); ?></span>
+        <a href="javascript: void(0);" name="fg" style="display:block" onclick="expand_collapse('addtasks', 'tblProjects');update_workspace('addtasks');">
+            <span style="font-weight: bold;"><?php echo $AppUI->_('Add Tasks'); ?></span>
             <span class="right">
-                <img id="files_expand" src="<?php echo w2PfindImage('icons/expand.gif', $m); ?>" width="12" height="12" border="0"
-                     alt="" <?php echo (isset($view_options[0]['pd_option_view_files']) ? ($view_options[0]['pd_option_view_files'] ? 'style="display:none"' : 'style="display:"') : 'style="display:none"') ?>>
-                <img id="files_collapse" src="<?php echo w2PfindImage('icons/collapse.gif', $m); ?>" width="12" height="12" border="0"
-                     <?php echo (isset($view_options[0]['pd_option_view_files']) ? ($view_options[0]['pd_option_view_files'] ? 'style="display:"' : 'style="display:none"') : 'style="display:"') ?>>
+                <img id="addtasks_expand" src="<?php echo w2PfindImage('icons/expand.gif', $m); ?>" width="12" height="12" border="0"
+                     alt="" <?php echo (isset($view_options[0]['pd_option_view_addtasks']) ? ($view_options[0]['pd_option_view_addtasks'] ? 'style="display:none"' : 'style="display:"') : 'style="display:none"') ?>>
+                <img id="addtasks_collapse" src="<?php echo w2PfindImage('icons/collapse.gif', $m); ?>" width="12" height="12" border="0"
+                     <?php echo (isset($view_options[0]['pd_option_view_addtasks']) ? ($view_options[0]['pd_option_view_addtasks'] ? 'style="display:"' : 'style="display:none"') : 'style="display:"') ?>>
             </span>
         </a>
 	</td>
@@ -646,32 +646,15 @@ function calcDuration(f, start_date, end_date, duration_fld, durntype_fld) {
 <table border="0" cellpadding="4" cellspacing="0" width="100%" class="std">
 <tr>
 	<td style="border: outset #d1d1cd 1px;" colspan="2">
-            <table border="0" cellpadding="0" cellspacing="0" width="100%">
-            <tr>
-            	<td colspan="1">
-           	<?php
-	echo '<a href="javascript: void(0);" name="fbt" style="display:block" onclick="expand_collapse(\'files\', \'tblProjects\');update_workspace(\'files\');">'
-?>
-            	<?php
-	echo '<strong>' . $AppUI->_('Files') . '<strong></font>';
-?>
-           	<?php
-	echo '</a>'
-?>
-            	</td>
-            	<td width="12" align="right" colspan="1">
-           	<?php
-	echo '<a href="javascript: void(0);" name="fbt" style="display:block" onclick="expand_collapse(\'files\', \'tblProjects\');update_workspace(\'files\');">'
-?>
-            	<?php
-	echo '<img id="files_expand" src="' . w2PfindImage('icons/expand.gif', $m) . '" width="12" height="12" border="0" alt="" ' . (isset($view_options[0]['pd_option_view_files']) ? ($view_options[0]['pd_option_view_files'] ? 'style="display:none"' : 'style="display:"') : 'style="display:none"') . '><img id="files_collapse" src="' . w2PfindImage('icons/collapse.gif', $m) . '" width="12" height="12" border="0" ' . (isset($view_options[0]['pd_option_view_files']) ? ($view_options[0]['pd_option_view_files'] ? 'style="display:"' : 'style="display:none"') : 'style="display:"') . '></a>';
-?>
-            	</td>
-            </tr>
-           	<?php
-	echo '</a>'
-?>
-      	</table>
+        <a href="javascript: void(0);" name="fg" style="display:block" onclick="expand_collapse('files', 'tblProjects');update_workspace('files');">
+            <span style="font-weight: bold;"><?php echo $AppUI->_('Files'); ?></span>
+            <span class="right">
+                <img id="files_expand" src="<?php echo w2PfindImage('icons/expand.gif', $m); ?>" width="12" height="12" border="0"
+                     alt="" <?php echo (isset($view_options[0]['pd_option_view_files']) ? ($view_options[0]['pd_option_view_files'] ? 'style="display:none"' : 'style="display:"') : 'style="display:none"') ?>>
+                <img id="files_collapse" src="<?php echo w2PfindImage('icons/collapse.gif', $m); ?>" width="12" height="12" border="0"
+                     <?php echo (isset($view_options[0]['pd_option_view_files']) ? ($view_options[0]['pd_option_view_files'] ? 'style="display:"' : 'style="display:none"') : 'style="display:"') ?>>
+            </span>
+        </a>
 	</td>
 </tr>
 <tr id="files" <?php echo (isset($view_options[0]['pd_option_view_files']) ? ($view_options[0]['pd_option_view_files'] ? 'style="visibility:visible;display:"' : 'style="visibility:collapse;display:none"') : 'style="visibility:visible;display:"'); ?>>
