@@ -539,13 +539,6 @@ class CTask extends w2p_Core_BaseObject
     public function bind($hash, $prefix = null, $checkSlashes = true, $bindAll = false)
     {
         parent::bind($hash, $prefix, $checkSlashes, $bindAll);
-        if ($this->task_start_date != '' && $this->task_start_date != '0000-00-00 00:00:00') {
-            $this->task_start_date = $this->_AppUI->convertToSystemTZ($this->task_start_date);
-        }
-        if ($this->task_end_date != '' && $this->task_end_date != '0000-00-00 00:00:00') {
-            $this->task_end_date = $this->_AppUI->convertToSystemTZ($this->task_end_date);
-        }
-        $this->task_contacts = explode(',', $this->task_contacts);
 
         return true;
     }
@@ -663,6 +656,19 @@ class CTask extends w2p_Core_BaseObject
         return $stored;
     }
 
+    protected function hook_preStore()
+    {
+        parent::hook_preStore();
+
+        if ($this->task_start_date != '' && $this->task_start_date != '0000-00-00 00:00:00') {
+            $this->task_start_date = $this->_AppUI->convertToSystemTZ($this->task_start_date);
+        }
+        if ($this->task_end_date != '' && $this->task_end_date != '0000-00-00 00:00:00') {
+            $this->task_end_date = $this->_AppUI->convertToSystemTZ($this->task_end_date);
+        }
+        $this->task_contacts = is_array($this->task_contacts) ? $this->task_contacts : explode(',', $this->task_contacts);
+    }
+
     protected function hook_postStore()
     {
         parent::hook_postStore();
@@ -693,7 +699,6 @@ class CTask extends w2p_Core_BaseObject
             $last_task_data['last_date'],
             $this->getTaskCount($this->task_project)
         );
-        
         $this->pushDependencies($this->task_id, $this->task_end_date);
 
         //split out related departments and store them seperatly.
@@ -945,46 +950,34 @@ class CTask extends w2p_Core_BaseObject
      */
     public function pushDependencies($taskId, $lastEndDate)
     {
-
         $q = $this->_getQuery();
-        $q->addQuery('td.dependencies_task_id, t.task_start_date');
-        $q->addQuery('t.task_end_date, t.task_duration, t.task_duration_type, t.task_parent');
+        $q->addQuery('task_id, task_duration, task_duration_type');
         $q->addTable('task_dependencies', 'td');
-        $q->leftJoin('tasks', 't', 't.task_id = td.dependencies_task_id');
+        $q->rightJoin('tasks', 't', 't.task_id = td.dependencies_task_id');
         $q->addWhere('td.dependencies_req_task_id = ' . (int) $taskId);
         $q->addWhere("t.task_start_date < '$lastEndDate'");
         $q->addWhere('t.task_dynamic = 31');
         $q->addOrder('t.task_start_date');
-
         $cascadingTasks = $q->loadList();
-        $q->clear();
 
+        $lastEndDate = $this->_AppUI->formatTZAwareTime($lastEndDate, '%Y-%m-%d %T');
+        $nsd = new w2p_Utilities_Date($lastEndDate);
+        $nsd = $nsd->next_working_day();
+
+        $tmpTask = new CTask();
         foreach ($cascadingTasks as $nextTask) {
             $multiplier = ('24' == $nextTask['task_duration_type']) ? 3 : 1;
             $d = $nextTask['task_duration'] * $multiplier;
 
-            $nsd = new w2p_Utilities_Date($lastEndDate);
             $ned = new w2p_Utilities_Date();
-            $nsd = $nsd->next_working_day();
             $ned->copy($nsd);
             $ned->addDuration($d);
+            $ned = $ned->prev_working_day();
 
-            $task_end_date = $ned->format(FMT_DATETIME_MYSQL);
-            $ned = $ned->next_working_day();
-
-            $task_start_date = $nsd->format(FMT_DATETIME_MYSQL);
-            $task_start_date = $this->_AppUI->convertToSystemTZ($task_start_date);
-            $task_end_date = $this->_AppUI->convertToSystemTZ($task_end_date);
-
-            $q->addTable('tasks', 't');
-            $q->addUpdate('task_start_date', $task_start_date);
-            $q->addUpdate('task_end_date', $task_end_date);
-            $q->addUpdate('task_updated', "'" . $q->dbfnNowWithTZ() . "'", null, true);
-            $q->addWhere('task_id = ' . $nextTask['dependencies_task_id']);
-            $q->exec();
-            $q->clear();
-
-            $this->pushDependencies($nextTask['dependencies_task_id'], $task_end_date);
+            $tmpTask->load($nextTask['task_id']);
+            $tmpTask->task_start_date = $nsd->format(FMT_DATETIME_MYSQL);
+            $tmpTask->task_end_date   = $ned->format(FMT_DATETIME_MYSQL);
+            $tmpTask->store();
         }
     }
 
