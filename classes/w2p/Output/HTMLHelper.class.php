@@ -170,6 +170,7 @@ class w2p_Output_HTMLHelper
  *   of our standard 'view' for the page. ~ caseydk 16 Feb 2012
 */
             case '_name':
+                $prefix = ($prefix == 'project_short')  ? 'project' : $prefix;
                 $prefix = ($prefix == 'dept')  ? 'department' : $prefix;
                 $prefix = ($prefix == 'message')  ? 'forum' : $prefix;
                 $page   = ($prefix == 'forum') ? 'viewer&message_id='.$this->tableRowData['message_id'] : 'view';
