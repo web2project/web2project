@@ -21,6 +21,19 @@ class CSystem_Budget extends w2p_Core_BaseObject
         parent::__construct('budgets', 'budget_id', 'system');
     }
 
+    public function canEdit()
+    {
+        return canEdit('system');
+    }
+    public function canDelete()
+    {
+        return canDelete('system');
+    }
+    public function canCreate()
+    {
+        return canAdd('system');
+    }
+
     public function isValid()
     {
         $baseErrorMsg = get_class($this) . '::store-check failed - ';

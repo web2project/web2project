@@ -45,6 +45,16 @@ class CSystem_Bcode extends w2p_Core_BaseObject
         return $this->_perms->checkModuleItem('system', 'delete');
     }
 
+    public function canEdit()
+    {
+        return canEdit('system');
+    }
+
+    public function canCreate()
+    {
+        return canAdd('system');
+    }
+
     public function store()
     {
         $stored = false;
