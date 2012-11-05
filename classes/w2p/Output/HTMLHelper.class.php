@@ -190,6 +190,18 @@ class w2p_Output_HTMLHelper
             case '_creator':
 			case '_owner':
             case '_updator':
+                $suffix .= ' nowrap';
+                if ((int) $value) {
+                    $obj = new CContact();
+                    $obj->findContactByUserid($value);
+                    $mod = substr($suffix, 1);
+                    $suffix .= ' nowrap';
+                    $link = '?m=admin&a=viewuser&user_id='.$this->tableRowData['user_id'];
+                    $cell = '<a href="'.$link.'">'.$obj->contact_display_name.'</a>';
+                } else {
+                    $cell = $value;
+                }
+                break;
                 // The above are all contact/user display names, the below are numbers.
             case '_count':
             case '_duration':
