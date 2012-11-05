@@ -62,6 +62,7 @@ class w2p_Authenticators_LDAP extends w2p_Authenticators_Base {
                 $ldap_bind_dn = $this->ldap_complete_string;
             }
 	    	$ldap_bind_pw = empty($this->ldap_search_pass) ? null : $this->ldap_search_pass;
+            $ldap_bind_dn = $this->ldap_search_user;
 
 		    if (ldap_bind($rs, $ldap_bind_dn, $ldap_bind_pw)) {
 			    $filter_r = html_entity_decode(str_replace('%USERNAME%', $username, $this->filter), ENT_COMPAT, 'UTF-8');
