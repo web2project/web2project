@@ -161,6 +161,9 @@ if (count($fields) > 0) {
 		$none = true;
 		$projectArray = array();
 
+        $project_types = w2PgetSysVal('ProjectType');
+        $customLookups = array('project_status' => $project_statuses, 'project_type' => $project_types);
+
 		for ($i = ($page - 1) * $xpg_pagesize; $i < $page * $xpg_pagesize && $i < $xpg_totalrecs; $i++) {
 			$row = $projects[$i];
 			if (($show_all_projects || ($row['project_active'] && $row['project_status'] == $project_status_filter) && $is_tabbed) || //tabbed view
@@ -246,7 +249,9 @@ if (count($fields) > 0) {
                                 $s .= '</td>';
                                 break;
                             case 'department_list':
-                                $dept_array = CProject::getDepartments($AppUI, $row['project_id']);
+                            case 'project_departments':
+                                $tmpProject->project_id = $row['project_id'];
+                                $dept_array = $tmpProject->getDepartmentList();
                                 $s .= '<td class="data _list">';
                                 foreach ($dept_array as $dept) {
                                     $s .= '<a href="?m=departments&a=view&dept_id='.$dept['dept_id'].'">';
@@ -257,7 +262,7 @@ if (count($fields) > 0) {
                                 $s .= '</td>';
                                 break;
                             default:
-                                $s .= $htmlHelper->createCell($field, $row[$field]);
+                                $s .= $htmlHelper->createCell($field, $row[$field], $customLookups);
                         }
                     }
 
