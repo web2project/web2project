@@ -246,7 +246,9 @@ if (count($fields) > 0) {
                                 $s .= '</td>';
                                 break;
                             case 'department_list':
-                                $dept_array = CProject::getDepartments($AppUI, $row['project_id']);
+                            case 'project_departments':
+                                $tmpProject->project_id = $row['project_id'];
+                                $dept_array = $tmpProject->getDepartmentList();
                                 $s .= '<td class="data _list">';
                                 foreach ($dept_array as $dept) {
                                     $s .= '<a href="?m=departments&a=view&dept_id='.$dept['dept_id'].'">';
