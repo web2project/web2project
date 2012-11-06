@@ -168,9 +168,11 @@ class CCompany extends w2p_Core_BaseObject {
 
 		$q->addWhere('pr.project_active = '. (int) $active);
 
-		if (strpos($fields, $sort) !== false) {
+        if(property_exists('CProject', $sort) || strpos($fields, $sort) !== false) {
 			$q->addOrder($sort);
-		}
+		} else {
+            $q->addOrder('project_name');
+        }
 
 		return $q->loadList();
 	}
