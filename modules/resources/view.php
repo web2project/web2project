@@ -74,19 +74,19 @@ if ($canDelete) {
             <table cellspacing="1" cellpadding="2" width="50%">
                 <tr>
                     <td align="right" nowrap="nowrap" width="5%"><?php echo $AppUI->_('Resource ID'); ?>:</td>
-                    <?php echo $htmlHelper->createCell('resource_key', $resource->resource_key); ?>
+                    <?php echo $htmlHelper->createCell('resource_key', $obj->resource_key); ?>
                 </tr>
                 <tr>
                     <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Resource Name'); ?>:</td>
-                    <?php echo $htmlHelper->createCell('resource_name-nolink', $resource->resource_name); ?>
+                    <?php echo $htmlHelper->createCell('resource_name-nolink', $obj->resource_name); ?>
                 </tr>
                 <tr>
                     <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Type'); ?>:</td>
-                    <?php echo $htmlHelper->createCell('resource_type', $resource->resource_type, $customLookups); ?>
+                    <?php echo $htmlHelper->createCell('resource_type', $obj->resource_type, $customLookups); ?>
                 </tr>
                 <tr>
                     <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Max Allocation %'); ?>:</td>
-                    <?php echo $htmlHelper->createCell('allocation_assignment', $resource->resource_max_allocation); ?>
+                    <?php echo $htmlHelper->createCell('allocation_assignment', $obj->resource_max_allocation); ?>
                 </tr>
             </table>
         </td>
@@ -97,7 +97,7 @@ if ($canDelete) {
             <table cellspacing="0" cellpadding="2" border="0" width="100%">
                 <tr>
                     <td class="hilite">
-                        <?php echo w2p_textarea($resource->resource_note); ?>&nbsp;
+                        <?php echo w2p_textarea($obj->resource_note); ?>&nbsp;
                     </td>
                 </tr>
             </table>
