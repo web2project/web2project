@@ -1,12 +1,14 @@
 <?php /* $Id$ $URL$ */
 
-// If you experience a 'white screen of death' or other problems,
-// change the following line of code to this:
+/**
+ * If you experience a 'white screen of death' or other problems,
+ * change the following line of code to this:
+ */
 ini_set('display_errors', 1);
 ini_set('display_errors', 0);
 
-if(defined('E_DEPRECATED')){
-// since php 5.3
+if (defined('E_DEPRECATED')) {
+    // since php 5.3
     error_reporting(E_ALL & ~E_NOTICE & ~E_DEPRECATED);
 } else {
     error_reporting(E_ALL & ~ E_NOTICE);
@@ -18,7 +20,10 @@ define('MIN_PHP_VERSION', '5.2.0');
 //date_default_timezone_set('America/New_York');
 //Performance Debug Initialization
 if (W2P_PERFORMANCE_DEBUG) {
-    global $w2p_performance_time, $w2p_performance_dbtime, $w2p_performance_old_dbqueries, $w2p_performance_dbqueries, $w2p_performance_acltime, $w2p_performance_aclchecks, $w2p_performance_memory_marker, $w2p_performance_setuptime;
+    global $w2p_performance_time, $w2p_performance_dbtime,
+        $w2p_performance_old_dbqueries, $w2p_performance_dbqueries,
+        $w2p_performance_acltime, $w2p_performance_aclchecks,
+        $w2p_performance_memory_marker, $w2p_performance_setuptime;
     $w2p_performance_time = array_sum(explode(' ', microtime()));
     if (function_exists('memory_get_usage')) {
         $w2p_performance_memory_marker = memory_get_usage();
@@ -32,7 +37,9 @@ if (W2P_PERFORMANCE_DEBUG) {
 
 $baseDir = dirname(__file__);
 
-// only rely on env variables if not using a apache handler
+/*
+ * only rely on env variables if not using a apache handler
+ */
 function safe_get_env($name)
 {
     if (isset($_SERVER[$name])) {
@@ -45,11 +52,13 @@ function safe_get_env($name)
 }
 
 // automatically define the base url
-$baseUrl = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off') ? 'https://' : 'http://';
+$baseUrl = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off') ? 'https://' :
+    'http://';
 $baseUrl .= safe_get_env('HTTP_HOST');
 $baseUrl .= dirname(safe_get_env('SCRIPT_NAME'));
 $baseUrl = preg_replace('#/$#D', '', $baseUrl);
-// Note: This resolves http://bugs.web2project.net/view.php?id=1081 on IIS, but I'm not sure I like it..
+// Note: This resolves http://bugs.web2project.net/view.php?id=1081 on IIS,
+// but I'm not sure I like it..
 $baseUrl = stripslashes($baseUrl);
 
 // Defines to deprecate the global baseUrl/baseDir

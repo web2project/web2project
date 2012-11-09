@@ -6,7 +6,7 @@
  *	@version $Revision$
  */
 
-/*
+/**
  *  A simple iCal creator for web2project.
  *
  *  Lots  of thanks to Ben Fortuna for his fantastic iCal Validator - http:
@@ -15,24 +15,30 @@
  *
  */
 
-class w2p_API_iCalendar {
-
-    public static function formatCalendarItem($calendarItem, $module_name) {
+class w2p_API_iCalendar
+{
+    public static function formatCalendarItem($calendarItem, $module_name)
+    {
         global $AppUI;
 
         $name = $calendarItem['name'];
-        $uid = (isset( $calendarItem['UID'])) ? $calendarItem['UID'] : $module_name.'_'.$calendarItem['id'];
+        $uid = (isset( $calendarItem['UID'])) ? $calendarItem['UID'] : $module_name.
+            '_'.$calendarItem['id'];
         $description = '';
         $attachments = '';
 
         if ($calendarItem['project_id']) {
-            $description .= $AppUI->_('Project') . ': ' . $calendarItem['project_name'];
-            $attachments .= 'ATTACH;VALUE=URL:' . W2P_BASE_URL . '/index.php?m=projects&a=view&project_id=' . $calendarItem['project_id'] . "\r\n";
+            $description .= $AppUI->_('Project') . ': ' .
+                $calendarItem['project_name'];
+            $attachments .= 'ATTACH;VALUE=URL:' . W2P_BASE_URL .
+                '/index.php?m=projects&a=view&project_id=' .
+                $calendarItem['project_id'] . "\r\n";
         }
         $description .= '\r\n----------------------------------------\r\n';
         $description .= $AppUI->_('Description');
         $description .= '\r\n----------------------------------------\r\n';
-        $description .= strtr($calendarItem['description'], array("\n" => '\n', "\r\n" =>'\r\n'));
+        $description .= strtr($calendarItem['description'], array("\n" => '\n',
+                                                                  "\r\n" =>'\r\n'));
         $description .= '\r\n----------------------------------------\r\n';
         $description .= $AppUI->_('URL');
         $description .= '\r\n----------------------------------------\r\n';
@@ -45,13 +51,15 @@ class w2p_API_iCalendar {
 
         $eventItem = "BEGIN:VEVENT\r\nDTSTART;VALUE=DATE-TIME:{$startDate}\r\n" .
             "DTEND;VALUE=DATE-TIME:{$endDate}\r\nUID:{$uid}\r\nSUMMARY:{$name}\r\n" .
-            "DESCRIPTION:{$description}\r\n{$attachments}\r\nDTSTAMP:{$updatedDate}\r\nSEQUENCE:{$sequence}\r\nEND:VEVENT\r\n";
+            "DESCRIPTION:{$description}\r\n{$attachments}\r\n
+            DTSTAMP:{$updatedDate}\r\nSEQUENCE:{$sequence}\r\nEND:VEVENT\r\n";
 
         return $eventItem;
     }
 
     // TODO: This should get a review once we can make 5.3 our minimum version.
-    private function formatDate($mysqlDate) {
+    private function formatDate($mysqlDate)
+    {
         $myDate = new DateTime($mysqlDate);
 
         $timestamp = strtotime($mysqlDate);
