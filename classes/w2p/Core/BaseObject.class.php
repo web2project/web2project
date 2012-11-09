@@ -1,4 +1,4 @@
-<?php /* $Id$ $URL$ */
+<?php /** $Id$ $URL$ */
 
 /**
  * 	@package web2project
@@ -13,7 +13,8 @@
  * 	@author Andrew Eddie <eddieajau@users.sourceforge.net>
  * 	@abstract
  */
-abstract class w2p_Core_BaseObject extends w2p_Core_Event implements w2p_Core_ListenerInterface
+abstract class w2p_Core_BaseObject extends w2p_Core_Event
+    implements w2p_Core_ListenerInterface
 {
 
     /**
@@ -48,7 +49,8 @@ abstract class w2p_Core_BaseObject extends w2p_Core_Event implements w2p_Core_Li
     protected $_perms;
 
     /**
-     * @var string Internal name of the module as stored in the 'mod_directory' of the 'modules' table, and the 'value' field of the 'gacl_axo' table
+     * @var string Internal name of the module as stored in the 'mod_directory' of
+     * the 'modules' table, and the 'value' field of the 'gacl_axo' table
      */
     protected $_tbl_module;
     protected $_dispatcher;
@@ -57,11 +59,17 @@ abstract class w2p_Core_BaseObject extends w2p_Core_Event implements w2p_Core_Li
      * 	Object constructor to set table and key field
      *
      * 	Can be overloaded/supplemented by the child class
-     * 	@param string $table name of the table in the db schema relating to child class
+     * 	
+     * 	@param string $table name of the table in the db schema relating to child
+     * 	class
      * 	@param string $key name of the primary key field in the table
-     * 	@param (OPTIONAL) string $module name as stored in the 'mod_directory' of the 'modules' table, and the 'value' field of the 'gacl_axo' table.
-     *          It is used for permission checking in situations where the table name is different from the module folder name.
-     *          For compatibility sake this variable is set equal to the $table if not set as failsafe.
+     * 	@param (OPTIONAL) string $module name as stored in the 'mod_directory' of the
+     * 	'modules' table, and the 'value' field of the 'gacl_axo' table.
+     *
+     *  It is used for permission checking in situations where the table name is
+     *  different from the module folder name.
+     *  For compatibility sake this variable is set equal to the $table if not set as
+     *  failsafe.
      */
     public function __construct($table, $key, $module = '')
     {
@@ -149,19 +157,25 @@ abstract class w2p_Core_BaseObject extends w2p_Core_Event implements w2p_Core_Li
      * 	@param array $hash named array
      *  @param $prefix Defaults to null, prefix to use with hash keys
      *  @param $checkSlashes Defaults to true, strip any slashes from the hash values
-     *  @param $bindAll Bind all values regardless of their existance as defined instance variables
-     * 	@return null|string	null is operation was satisfactory, otherwise returns an error
+     *  @param $bindAll Bind all values regardless of their existance as defined
+     *  instance variables
+     * 	@return null|string	null is operation was satisfactory, otherwise returns
+     * 	an error
      */
-    public function bind($hash, $prefix = null, $checkSlashes = true, $bindAll = false)
+    public function bind($hash, $prefix = null, $checkSlashes = true,
+                         $bindAll = false)
     {
         if (!is_array($hash)) {
             $this->_error[] = get_class($this) . '::bind failed.';
             return false;
         } else {
             /*
-             * We need to filter out any object values from the array/hash so the bindHashToObject()
-             * doesn't die. We also avoid issues such as passing objects to non-object functions
-             * and copying object references instead of cloning objects. Object cloning (if needed)
+             * We need to filter out any object values from the array/hash so the
+             * bindHashToObject()
+             * doesn't die. We also avoid issues such as passing objects to
+             * non-object functions
+             * and copying object references instead of cloning objects. Object
+             * cloning (if needed)
              * should be handled seperatly anyway.
              */
             $filtered_hash = array();
@@ -172,7 +186,8 @@ abstract class w2p_Core_BaseObject extends w2p_Core_Event implements w2p_Core_Li
                 }
             }
             $q = $this->_getQuery();
-            $q->bindHashToObject($filtered_hash, $this, $prefix, $checkSlashes, $bindAll);
+            $q->bindHashToObject($filtered_hash, $this, $prefix, $checkSlashes,
+                                 $bindAll);
 
             return true;
         }
@@ -180,12 +195,14 @@ abstract class w2p_Core_BaseObject extends w2p_Core_Event implements w2p_Core_Li
 
     /**
      * 	Binds an array/hash to this object
-     * 	@param int $oid optional argument, if not specifed then the value of current key is used
+     * 	@param int $oid optional argument, if not specifed then the value of current
+     * 	key is used
      * 	@return any result from the database operation
      */
     public function load($oid = null, $strip = true)
     {
-        $this->_dispatcher->publish(new w2p_Core_Event(get_class($this), 'preLoadEvent'));
+        $this->_dispatcher->publish(new w2p_Core_Event(get_class($this),
+                                                       'preLoadEvent'));
 
         $k = $this->_tbl_key;
         if ($oid) {
@@ -205,7 +222,8 @@ abstract class w2p_Core_BaseObject extends w2p_Core_Event implements w2p_Core_Li
             return false;
         }
         $q->bindHashToObject($hash, $this, null, $strip);
-        $this->_dispatcher->publish(new w2p_Core_Event(get_class($this), 'postLoadEvent'));
+        $this->_dispatcher->publish(new w2p_Core_Event(get_class($this),
+                                                       'postLoadEvent'));
 
         return $this;
     }
@@ -277,7 +295,8 @@ abstract class w2p_Core_BaseObject extends w2p_Core_Event implements w2p_Core_Li
         /*
          *  PHP4 is no longer supported or allowed. The
          *    installer/upgrader/converter simply stops executing.
-         *  This method also appears (modified) in the w2p_Utilities_Date and w2p_Database_Query class.
+         *  This method also appears (modified) in the w2p_Utilities_Date and
+         *  w2p_Database_Query class.
          */
 
         $_key = $this->_tbl_key;
@@ -306,7 +325,8 @@ abstract class w2p_Core_BaseObject extends w2p_Core_Event implements w2p_Core_Li
     }
 
     /**
-     * 	Inserts a new row if id is zero or updates an existing row in the database table
+     * 	Inserts a new row if id is zero or updates an existing row in the database
+     * 	table
      *
      * 	Can be overloaded/supplemented by the child class
      * 	@return boolean - true if successful otherwise false, errors 
@@ -316,7 +336,8 @@ abstract class w2p_Core_BaseObject extends w2p_Core_Event implements w2p_Core_Li
         $result = false;
         $this->clearErrors();
 
-        $this->_dispatcher->publish(new w2p_Core_Event(get_class($this), 'preStoreEvent'));
+        $this->_dispatcher->publish(new w2p_Core_Event(get_class($this),
+                                                       'preStoreEvent'));
 
         $this->w2PTrimAll();
 
@@ -327,7 +348,8 @@ abstract class w2p_Core_BaseObject extends w2p_Core_Event implements w2p_Core_Li
         $k = $this->_tbl_key;
         // NOTE: I don't particularly like this but it wires things properly.
         $this->_event = ($this->$k) ? 'Update' : 'Create';
-        $this->_dispatcher->publish(new w2p_Core_Event(get_class($this), 'pre' . $this->_event . 'Event'));
+        $this->_dispatcher->publish(new w2p_Core_Event(get_class($this), 'pre' .
+                                                       $this->_event . 'Event'));
 
         $q = $this->_getQuery();
 
@@ -339,7 +361,8 @@ abstract class w2p_Core_BaseObject extends w2p_Core_Event implements w2p_Core_Li
          */
         if ($this->$k && $this->canEdit()) {
             $store_type = 'update';
-            $result = $q->updateObject($this->_tbl, $this, $this->_tbl_key, $updateNulls);
+            $result = $q->updateObject($this->_tbl, $this, $this->_tbl_key,
+                                       $updateNulls);
         }
         if (0 == $this->$k && $this->canCreate()) {
             $store_type = 'add';
@@ -348,9 +371,12 @@ abstract class w2p_Core_BaseObject extends w2p_Core_Event implements w2p_Core_Li
         $result = ('' == $result) ? true : $result;
 
         if ($result) {
-            // NOTE: I don't particularly like how the name is generated but it wires things properly.
-            $this->_dispatcher->publish(new w2p_Core_Event(get_class($this), 'post' . $this->_event . 'Event'));
-            $this->_dispatcher->publish(new w2p_Core_Event(get_class($this), 'postStoreEvent'));
+            // NOTE: I don't particularly like how the name is generated but it wires
+            // things properly.
+            $this->_dispatcher->publish(new w2p_Core_Event(get_class($this), 'post' .
+                                                           $this->_event . 'Event'));
+            $this->_dispatcher->publish(new w2p_Core_Event(get_class($this),
+                                                           'postStoreEvent'));
         } else {
             $this->_error['store'] = db_error();
         }
@@ -358,17 +384,23 @@ abstract class w2p_Core_BaseObject extends w2p_Core_Event implements w2p_Core_Li
         return $result;
     }
 
-    public function canAccess() {
+    public function canAccess()
+    {
         return $this->_perms->checkModuleItem($this->_tbl_module, 'access');
     }
-    public function canCreate() {
+    public function canCreate()
+    {
         return $this->_perms->checkModuleItem($this->_tbl_module, 'add');
     }
-    public function canEdit() { 
-        return $this->_perms->checkModuleItem($this->_tbl_module, 'edit', $this->{$this->_tbl_key});
+    public function canEdit()
+    { 
+        return $this->_perms->checkModuleItem($this->_tbl_module, 'edit',
+                                              $this->{$this->_tbl_key});
     }
-    public function canView() {
-        return $this->_perms->checkModuleItem($this->_tbl_module, 'view', $this->{$this->_tbl_key});
+    public function canView()
+    {
+        return $this->_perms->checkModuleItem($this->_tbl_module, 'view',
+                                              $this->{$this->_tbl_key});
     }
 
     /**
@@ -377,7 +409,8 @@ abstract class w2p_Core_BaseObject extends w2p_Core_Event implements w2p_Core_Li
      * 	Can be overloaded/supplemented by the child class
      * 	@param string $msg Error message returned
      * 	@param int Optional key index
-     * 	@param array Optional array to compiles standard joins: format [label=>'Label',name=>'table name',idfield=>'field',joinfield=>'field']
+     * 	@param array Optional array to compiles standard joins: format
+     * 	[label=>'Label',name=>'table name',idfield=>'field',joinfield=>'field']
      * 	@return true|false
      */
     public function canDelete($notUsed = '', $oid = null, $joins = null)
@@ -388,8 +421,10 @@ abstract class w2p_Core_BaseObject extends w2p_Core_Event implements w2p_Core_Li
         }
 
         // First things first.  Are we allowed to delete?
-        if (!$this->_perms->checkModuleItem($this->_tbl_module, 'delete', $this->$k)) {
-            $this->_error['noDeletePermission'] = $this->_AppUI->_('noDeletePermission');
+        if (!$this->_perms->checkModuleItem($this->_tbl_module, 'delete',
+                                            $this->$k)) {
+            $this->_error['noDeletePermission'] =
+                $this->_AppUI->_('noDeletePermission');
             return false;
         }
 
@@ -402,7 +437,8 @@ abstract class w2p_Core_BaseObject extends w2p_Core_Event implements w2p_Core_Li
                 $records = (int) $q->loadResult();
                 if ($records) {
                     $this->_error['noDeleteRecord-' . $table['label']] = 
-                            $this->_AppUI->_('You cannot delete this item. It is currently considered a ' . $table['label']);
+                            $this->_AppUI->_('You cannot delete this item. It is
+                                        currently considered a ' . $table['label']);
                 }
             }
         }
@@ -429,11 +465,13 @@ abstract class w2p_Core_BaseObject extends w2p_Core_Event implements w2p_Core_Li
         if (!$this->canDelete()) {
             //TODO: no clue why this is required..
             unset($this->_error['store']);
-            $this->_error['delete-check'] = get_class($this) . '::delete-check failed';
+            $this->_error['delete-check'] = get_class($this) .
+                '::delete-check failed';
             return false;
         }
 
-        $this->_dispatcher->publish(new w2p_Core_Event(get_class($this), 'preDeleteEvent'));
+        $this->_dispatcher->publish(new w2p_Core_Event(get_class($this),
+                                                       'preDeleteEvent'));
 
         $q = $this->_getQuery();
         $q->setDelete($this->_tbl);
@@ -441,7 +479,8 @@ abstract class w2p_Core_BaseObject extends w2p_Core_Event implements w2p_Core_Li
         $result = $q->exec();
 
         if ($result) {
-            $this->_dispatcher->publish(new w2p_Core_Event(get_class($this), 'postDeleteEvent'));
+            $this->_dispatcher->publish(new w2p_Core_Event(get_class($this),
+                                                           'postDeleteEvent'));
         } else {
             $this->_error['delete'] = db_error();
         }
@@ -457,7 +496,8 @@ abstract class w2p_Core_BaseObject extends w2p_Core_Event implements w2p_Core_Li
     public function getDeniedRecords($uid)
     {
         $uid = intval($uid);
-        $uid || exit('FATAL ERROR ' . get_class($this) . '::getDeniedRecords failed, user id = 0');
+        $uid || exit('FATAL ERROR ' . get_class($this) . '::getDeniedRecords failed,
+                     user id = 0');
 
         return $this->_perms->getDeniedItems($this->_tbl_module, $uid);
     }
@@ -468,13 +508,16 @@ abstract class w2p_Core_BaseObject extends w2p_Core_Event implements w2p_Core_Li
      * 	@param string Optional fields to be returned by the query, default is all
      * 	@param string Optional sort order for the query
      * 	@param string Optional name of field to index the returned array
-     * 	@param array Optional array of additional sql parameters (from and where supported)
+     * 	@param array Optional array of additional sql parameters (from and where
+     * 	supported)
      * 	@return array
      */
-    public function getAllowedRecords($uid, $fields = '*', $orderby = '', $index = null, $extra = null, $table_alias = '')
+    public function getAllowedRecords($uid, $fields = '*', $orderby = '',
+                                    $index = null, $extra = null, $table_alias = '')
     {
         $uid = intval($uid);
-        $uid || exit('FATAL ERROR ' . get_class($this) . '::getAllowedRecords failed');
+        $uid || exit('FATAL ERROR ' . get_class($this) .
+                     '::getAllowedRecords failed');
         $deny = $this->_perms->getDeniedItems($this->_tbl_module, $uid);
         $allow = $this->_perms->getAllowedItems($this->_tbl_module, $uid);
 
@@ -492,20 +535,29 @@ abstract class w2p_Core_BaseObject extends w2p_Core_Event implements w2p_Core_Li
 
         if (count($allow)) {
             if ((array_search('0', $allow)) === false) {
-                //If 0 (All Items of a module) are not permited then just add the allowed items only
-                $q->addWhere(($table_alias ? $table_alias . '.' : '') . $this->_tbl_key . ' IN (' . implode(',', $allow) . ')');
+                //If 0 (All Items of a module) are not permited then just add the
+                //allowed items only
+                $q->addWhere(($table_alias ? $table_alias . '.' : '') .
+                             $this->_tbl_key . ' IN (' . implode(',', $allow) . ')');
             } else {
-                //If 0 (All Items of a module) are permited then don't add a where clause so the user is permitted to see all
+                //If 0 (All Items of a module) are permited then don't add a where
+                //clause so the user is permitted to see all
             }
-            //Denials are only required if we were able to see anything in the first place so now we handle the denials
+            //Denials are only required if we were able to see anything in the first
+            //place so now we handle the denials
             if (count($deny)) {
                 if ((array_search('0', $deny)) === false) {
-                    //If 0 (All Items of a module) are not on the denial array then just deny the denied items
-                    $q->addWhere(($table_alias ? $table_alias . '.' : '') . $this->_tbl_key . ' NOT IN (' . implode(',', $deny) . ')');
+                    //If 0 (All Items of a module) are not on the denial array then
+                    //just deny the denied items
+                    $q->addWhere(($table_alias ? $table_alias . '.' : '') .
+                        $this->_tbl_key . ' NOT IN (' . implode(',', $deny) . ')');
                 } elseif ((array_search('0', $allow)) === false) {
-                    //If 0 (All Items of a module) are denied and we have granted some then implicit denial to everything else is already in place
+                    //If 0 (All Items of a module) are denied and we have
+                    //granted some then implicit denial to everything else is already
+                    //in place
                 } else {
-                    //if we allow everything and deny everything then denials have higher priority... Deny Everything!
+                    //if we allow everything and deny everything then denials have
+                    //higher priority... Deny Everything!
                     $q->addWhere('0=1');
                 }
             }
@@ -537,20 +589,27 @@ abstract class w2p_Core_BaseObject extends w2p_Core_Event implements w2p_Core_Li
         $where = array();
         if (count($allow)) {
             if ((array_search('0', $allow)) === false) {
-                //If 0 (All Items of a module) are not permited then just add the allowed items only
+                //If 0 (All Items of a module) are not permited then just add the
+                //allowed items only
                 $where[] = $index . ' IN (' . implode(',', $allow) . ')';
             } else {
-                //If 0 (All Items of a module) are permited then don't add a where clause so the user is permitted to see all
+                //If 0 (All Items of a module) are permited then don't add a where
+                //clause so the user is permitted to see all
             }
-            //Denials are only required if we were able to see anything in the first place so now we handle the denials
+            //Denials are only required if we were able to see anything in the first
+            //place so now we handle the denials
             if (count($deny)) {
                 if ((array_search('0', $deny)) === false) {
-                    //If 0 (All Items of a module) are not on the denial array then just deny the denied items
+                    //If 0 (All Items of a module) are not on the denial array then
+                    //just deny the denied items
                     $where[] = $index . ' NOT IN (' . implode(',', $deny) . ')';
                 } elseif ((array_search('0', $allow)) === false) {
-                    //If 0 (All Items of a module) are denied and we have granted some then implicit denial to everything else is already in place
+                    //If 0 (All Items of a module) are denied and we have granted
+                    //some then implicit denial to everything else is already in
+                    //place
                 } else {
-                    //if we allow everything and deny everything then denials have higher priority... Deny Everything!
+                    //if we allow everything and deny everything then denials have
+                    //higher priority... Deny Everything!
                     $where[] = '0=1';
                 }
             }
@@ -572,25 +631,35 @@ abstract class w2p_Core_BaseObject extends w2p_Core_Event implements w2p_Core_Li
             if (!$key) {
                 $key = substr($this->_tbl, 0, 2);
             }
-            $query->leftJoin($this->_tbl, $key, $key . '.' . $this->_tbl_key . ' = ' . $index);
+            $query->leftJoin($this->_tbl, $key, $key . '.' . $this->_tbl_key . ' = '
+                             . $index);
         }
 
         if (count($allow)) {
             if ((array_search('0', $allow)) === false) {
-                //If 0 (All Items of a module) are not permited then just add the allowed items only
-                $query->addWhere(((!$key) ? '' : $key . '.') . $this->_tbl_key . ' IN (' . implode(',', $allow) . ')');
+                //If 0 (All Items of a module) are not permited then just add the
+                //allowed items only
+                $query->addWhere(((!$key) ? '' : $key . '.') . $this->_tbl_key .
+                                 ' IN (' . implode(',', $allow) . ')');
             } else {
-                //If 0 (All Items of a module) are permited then don't add a where clause so the user is permitted to see all
+                //If 0 (All Items of a module) are permited then don't add a where
+                //clause so the user is permitted to see all
             }
-            //Denials are only required if we were able to see anything in the first place so now we handle the denials
+            //Denials are only required if we were able to see anything in the first
+            //place so now we handle the denials
             if (count($deny)) {
                 if ((array_search('0', $deny)) === false) {
-                    //If 0 (All Items of a module) are not on the denial array then just deny the denied items
-                    $query->addWhere(((!$key) ? '' : $key . '.') . $this->_tbl_key . ' NOT IN (' . implode(',', $deny) . ')');
+                    //If 0 (All Items of a module) are not on the denial array then
+                    //just deny the denied items
+                    $query->addWhere(((!$key) ? '' : $key . '.') . $this->_tbl_key
+                                     . ' NOT IN (' . implode(',', $deny) . ')');
                 } elseif ((array_search('0', $allow)) === false) {
-                    //If 0 (All Items of a module) are denied and we have granted some then implicit denial to everything else is already in place
+                    //If 0 (All Items of a module) are denied and we have granted
+                    //some then implicit denial to everything else is already in
+                    //place
                 } else {
-                    //if we allow everything and deny everything then denials have higher priority... Deny Everything!
+                    //if we allow everything and deny everything then denials have
+                    //higher priority... Deny Everything!
                     $query->addWhere('0=1');
                 }
             }
@@ -629,7 +698,8 @@ abstract class w2p_Core_BaseObject extends w2p_Core_Event implements w2p_Core_Li
      *  It is important to remember the hook_post* methods are called:
      *    -  if and only if the corresponding method executed successfully.
      *    -  For example, hook_postDelete() will execute only after the object is
-     *       deleted as expected. In this case, don't count on using object properties.
+     *       deleted as expected. In this case, don't count on using object
+     *       properties.
      *
      */
 
@@ -645,8 +715,9 @@ abstract class w2p_Core_BaseObject extends w2p_Core_Event implements w2p_Core_Li
         
         $name = isset($this->{$prefix . '_name'}) ? $this->{$prefix . '_name'} : '';
         addHistory($this->_tbl, $this->{$this->_tbl_key}, 'add', $name . ' - ' .
-                $this->_AppUI->_('ACTION') . ': ' . $this->_event . ' ' . $this->_AppUI->_('TABLE') . ': ' .
-                $this->_tbl . ' ' . $this->_AppUI->_('ID') . ': ' . $this->{$this->_tbl_key});
+                $this->_AppUI->_('ACTION') . ': ' . $this->_event . ' ' .
+                $this->_AppUI->_('TABLE') . ': ' . $this->_tbl . ' ' .
+                $this->_AppUI->_('ID') . ': ' . $this->{$this->_tbl_key});
 
         return $this;
     }
@@ -663,8 +734,9 @@ abstract class w2p_Core_BaseObject extends w2p_Core_Event implements w2p_Core_Li
         
         $name = isset($this->{$prefix . '_name'}) ? $this->{$prefix . '_name'} : '';
         addHistory($this->_tbl, $this->{$this->_tbl_key}, 'add', $name . ' - ' .
-                $this->_AppUI->_('ACTION') . ': ' . $this->_event . ' ' . $this->_AppUI->_('TABLE') . ': ' .
-                $this->_tbl . ' ' . $this->_AppUI->_('ID') . ': ' . $this->{$this->_tbl_key});
+                $this->_AppUI->_('ACTION') . ': ' . $this->_event . ' ' .
+                $this->_AppUI->_('TABLE') . ': ' . $this->_tbl . ' ' .
+                $this->_AppUI->_('ID') . ': ' . $this->{$this->_tbl_key});
 
         return $this;
     }
@@ -681,8 +753,9 @@ abstract class w2p_Core_BaseObject extends w2p_Core_Event implements w2p_Core_Li
         
         $name = isset($this->{$prefix . '_name'}) ? $this->{$prefix . '_name'} : '';
         addHistory($this->_tbl, $this->{$this->_tbl_key}, 'update', $name . ' - ' .
-                $this->_AppUI->_('ACTION') . ': ' . $this->_event . ' ' . $this->_AppUI->_('TABLE') . ': ' .
-                $this->_tbl . ' ' . $this->_AppUI->_('ID') . ': ' . $this->{$this->_tbl_key});
+                $this->_AppUI->_('ACTION') . ': ' . $this->_event . ' ' .
+                $this->_AppUI->_('TABLE') . ': ' . $this->_tbl . ' ' .
+                $this->_AppUI->_('ID') . ': ' . $this->{$this->_tbl_key});
         return $this;
     }
 
@@ -732,7 +805,8 @@ abstract class w2p_Core_BaseObject extends w2p_Core_Event implements w2p_Core_Li
             default:
             //do nothing
         }
-        //error_log("{$event->resourceName} published {$event->eventName} to call hook_$hook");
+        //error_log("{$event->resourceName} published {$event->eventName} to call
+        //hook_$hook");
     }
 
     /**

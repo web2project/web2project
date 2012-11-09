@@ -1,25 +1,29 @@
-<?php /* $Id$ $URL$ */
+<?php /** $Id$ $URL$ */
 
 /**
- *	@package web2project
- *	@subpackage core
- *	@version $Revision$
+ * @package web2project
+ * @subpackage core
+ * @version $Revision$
  *
- *	CustomFieldLabel Class.
+ * CustomFieldLabel Class.
  *
- *	Produces just a non editable label
+ * Produces just a non editable label
  *
  */
 
-class w2p_Core_CustomFieldLabel extends w2p_Core_CustomField {
+class w2p_Core_CustomFieldLabel extends w2p_Core_CustomField
+{
+    public function __construct($field_id, $field_name, $field_order,
+        $field_description, $field_extratags, $field_published)
+    {
+        parent::__construct($field_id, $field_name, $field_order, $field_description,
+                            $field_extratags, $field_published);
+        $this->field_htmltype = 'label';
+    }
 
-    public function __construct($field_id, $field_name, $field_order, $field_description, $field_extratags, $field_published) {
-		parent::__construct($field_id, $field_name, $field_order, $field_description, $field_extratags, $field_published);
-		$this->field_htmltype = 'label';
-	}
-
-	public function getHTML($mode) {
-		// We don't really care about its mode
-		return '<span ' . $this->fieldExtraTags() . '>' . $this->field_description . '</span>';
-	}
+    public function getHTML($mode) {
+        // We don't really care about its mode
+        return '<span ' . $this->fieldExtraTags() . '>' . $this->field_description .
+            '</span>';
+    }
 }
