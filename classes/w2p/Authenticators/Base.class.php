@@ -1,4 +1,4 @@
-<?php /* $Id$ $URL$ */
+<?php /** $Id$ $URL$ */
 
 /**
  *	@package web2project
@@ -11,6 +11,7 @@
  *
  *	Parent class for all authenticators
  *	@author Keith Casey <caseydk@users.sourceforge.net>
+ *	
  *	@abstract
  */
 abstract class w2p_Authenticators_Base
@@ -21,6 +22,7 @@ abstract class w2p_Authenticators_Base
      *    than just finding and updating all the instances.
      * 
      * @param type $password
+     * 
      * @return type 
      */
     public function hashPassword($password)
@@ -30,7 +32,8 @@ abstract class w2p_Authenticators_Base
         return $hash;
     }
 
-	public function userId() {
-		return (int) $this->user_id;
-	}
+    public function userId()
+    {
+        return (int) $this->user_id;
+    }
 }
