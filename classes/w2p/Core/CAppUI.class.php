@@ -1,12 +1,16 @@
 <?php
 
-// Message No Constants
+/**
+ * Message No Constants
+ */
 define('UI_MSG_OK', 1);
 define('UI_MSG_ALERT', 2);
 define('UI_MSG_WARNING', 3);
 define('UI_MSG_ERROR', 4);
 
-// global variable holding the translation array
+/**
+ * global variable holding the translation array
+ */
 $GLOBALS['translate'] = array();
 
 define('UI_CASE_MASK', 0x0F);
@@ -27,7 +31,6 @@ define('UI_OUTPUT_RAW', 0x20);
  */
 class w2p_Core_CAppUI
 {
-
     /**
       @var array generic array for holding the state of anything */
     public $state = null;
@@ -82,7 +85,8 @@ class w2p_Core_CAppUI
 
     /**
       @var string */
-    public $base_locale = 'en'; // do not change - the base 'keys' will always be in english
+    // do not change - the base 'keys' will always be in english
+    public $base_locale = 'en'; 
 
     /**
       @var string Message string */
@@ -154,8 +158,8 @@ class w2p_Core_CAppUI
         $this->user_type = 0;
         $this->user_is_admin = 0;
 
-        // cfg['locale_warn'] is the only cfgVariable stored in session data (for security reasons)
-        // this guarants the functionality of this->setWarning
+        // cfg['locale_warn'] is the only cfgVariable stored in session data (for 
+        // security reasons) this guarants the functionality of this->setWarning
         $this->cfg['locale_warn'] = w2PgetConfig('locale_warn');
 
         $this->project_id = 0;
@@ -173,7 +177,8 @@ class w2p_Core_CAppUI
      */
     public function getSystemClass($name = null)
     {
-        trigger_error("CAppUI->getSystemClass() has been deprecated in v2.0 and will be removed in v3.0", E_USER_NOTICE);
+        trigger_error("CAppUI->getSystemClass() has been deprecated in v2.0 and will
+                      be removed in v3.0", E_USER_NOTICE);
 
         if ($name) {
             return W2P_BASE_DIR . '/classes/' . $name . '.class.php';
@@ -228,7 +233,8 @@ class w2p_Core_CAppUI
             $this->version_major = $w2p_version_major;
             $this->version_minor = $w2p_version_minor;
             $this->version_patch = $w2p_version_patch;
-            $this->version_string = $this->version_major . '.' . $this->version_minor;
+            $this->version_string = $this->version_major . '.'
+                . $this->version_minor;
             if (isset($this->version_patch)) {
                 $this->version_string .= '.' . $this->version_patch;
             }
@@ -262,22 +268,28 @@ class w2p_Core_CAppUI
             global $AppUI;
 
             $timezoneOffset = $this->getPref('TIMEZONE');
-            $timezoneOffset = ('' == $timezoneOffset) ? 'America/New_York' : $timezoneOffset;
+            $timezoneOffset = ('' == $timezoneOffset) ? 'America/New_York' :
+                $timezoneOffset;
 
             $q = new w2p_Database_Query();
             $q->addTable('sysvals');
             $q->addQuery('sysval_value');
             $q->addWhere("sysval_value_id = '$timezoneOffset'");
             $userTimezone = $q->loadResult();
-            $userTimezone = (strlen($userTimezone) == 0) ? 'Europe/London' : $userTimezone;
+            $userTimezone = (strlen($userTimezone) == 0) ? 'Europe/London' :
+                $userTimezone;
 
             $userTZ = new DateTimeZone($userTimezone);
             echo '<span class="error"><strong>';
-            echo '<a href="./index.php?m=system">' . $AppUI->_('Your system probably needs to be upgraded.') . '</a>';
+            echo '<a href="./index.php?m=system">' . $AppUI->_('Your system probably
+                needs to be upgraded.') . '</a>';
             echo '<br />';
-            echo '<a href="./index.php?m=system&amp;a=addeditpref&amp;user_id=' . $AppUI->user_id . '">' . $AppUI->_('Your user-defined timezone must be set immediately.') . '</a>';
+            echo '<a href="./index.php?m=system&amp;a=addeditpref&amp;user_id=' .
+                $AppUI->user_id . '">' . $AppUI->_('Your user-defined timezone must
+                be set immediately.') . '</a>';
             echo '</strong></span><br />';
-            echo '<span class="error"><strong>Your system must be upgraded immediately.</strong></span><br />';
+            echo '<span class="error"><strong>Your system must be upgraded
+                immediately.</strong></span><br />';
         }
 
         $ts = new DateTime();
@@ -309,7 +321,8 @@ class w2p_Core_CAppUI
     {
         $userTimezone = $this->getPref('TIMEZONE');
         $userTZ = new DateTimeZone($userTimezone);
-        $systemTZ = new DateTimeZone(w2PgetConfig('system_timezone', 'Europe/London'));
+        $systemTZ = new DateTimeZone(w2PgetConfig('system_timezone',
+                                                  'Europe/London'));
         $ts = new DateTime($datetime, $systemTZ);
         $ts->setTimezone($userTZ);
 
@@ -340,9 +353,11 @@ class w2p_Core_CAppUI
     /**
      * Utility function to read the 'directories' under 'path'
      *
-     * This function is used to read the modules or locales installed on the file system.
+     * This function is used to read the modules or locales installed on the file
+     * system.
      * @param string The path to read.
-     * @return array A named array of the directories (the key and value are identical).
+     * @return array A named array of the directories (the key and value are
+     * identical).
      */
     public function readDirs($path)
     {
@@ -351,7 +366,8 @@ class w2p_Core_CAppUI
         if (is_dir(W2P_BASE_DIR . '/' . $path)) {
             $d = dir(W2P_BASE_DIR . '/' . $path);
             while (false !== ($name = $d->read())) {
-                if (is_dir(W2P_BASE_DIR . '/' . $path . '/' . $name) && $name != '.' && $name != '..' && $name != 'CVS' && $name != '.svn') {
+                if (is_dir(W2P_BASE_DIR . '/' . $path . '/' . $name) && $name != '.'
+                    && $name != '..' && $name != 'CVS' && $name != '.svn') {
                     $dirs[$name] = $name;
                 }
             }
@@ -372,7 +388,8 @@ class w2p_Core_CAppUI
 
         if (is_dir($path) && ($handle = opendir($path))) {
             while (false !== ($file = readdir($handle))) {
-                if ($file != '.' && $file != '..' && preg_match('/' . $filter . '/', $file)) {
+                if ($file != '.' && $file != '..' && preg_match('/' . $filter .
+                                                                '/', $file)) {
                     $files[$file] = $file;
                 }
             }
@@ -406,7 +423,8 @@ class w2p_Core_CAppUI
     /**
      * Utility function to make a file name 'safe'
      *
-     * Strips out mallicious insertion of relative directories (eg ../../dealyfile.php);
+     * Strips out mallicious insertion of relative directories
+     * (eg ../../dealyfile.php);
      * @param string The file name.
      * @return array A named array of the files (the key and value are identical).
      */
@@ -420,8 +438,10 @@ class w2p_Core_CAppUI
     /**
      * Sets the user locale.
      *
-     * Looks in the user preferences first.  If this value has not been set by the user it uses the system default set in config.php.
-     * @param string Locale abbreviation corresponding to the sub-directory name in the locales directory (usually the abbreviated language code).
+     * Looks in the user preferences first.  If this value has not been set by the
+     * user it uses the system default set in config.php.
+     * @param string Locale abbreviation corresponding to the sub-directory name in
+     * the locales directory (usually the abbreviated language code).
      */
     public function setUserLocale($loc = '', $set = true)
     {
@@ -430,14 +450,15 @@ class w2p_Core_CAppUI
         $LANGUAGES = $this->loadLanguages();
 
         if (!$loc) {
-            $loc = $this->user_prefs['LOCALE'] ? $this->user_prefs['LOCALE'] : w2PgetConfig('host_locale');
+            $loc = $this->user_prefs['LOCALE'] ? $this->user_prefs['LOCALE'] :
+                w2PgetConfig('host_locale');
         }
 
         if (isset($LANGUAGES[$loc])) {
             $lang = $LANGUAGES[$loc];
         } else {
-            // Need to try and find the language the user is using, find the first one
-            // that has this as the language part
+            // Need to try and find the language the user is using, find the first 
+            // one that has this as the language part
             if (strlen($loc) > 2) {
                 list($l, $c) = explode('_', $loc);
                 $loc = $this->findLanguage($l, $c);
@@ -518,9 +539,10 @@ class w2p_Core_CAppUI
      * This is the order of precedence:
      * <ul>
      * <li>If the key exists in the lang array, return the value of the key
-     * <li>If no key exists and the base lang is the same as the local lang, just return the string
-     * <li>If this is not the base lang, then return string with a red star appended to show
-     * that a translation is required.
+     * <li>If no key exists and the base lang is the same as the local lang, just
+     * return the string
+     * <li>If this is not the base lang, then return string with a red star appended
+     * to show that a translation is required.
      * </ul>
      * @param string The string to translate
      * @param int Option flags, can be case handling or'd with output styles
@@ -550,7 +572,8 @@ class w2p_Core_CAppUI
         if ($x) {
             $str = $x;
         } elseif (w2PgetConfig('locale_warn')) {
-            if ($this->base_locale != $this->user_locale || ($this->base_locale == $this->user_locale && !in_array($str, $GLOBALS['translate']))) {
+            if ($this->base_locale != $this->user_locale || ($this->base_locale ==
+                $this->user_locale && !in_array($str, $GLOBALS['translate']))) {
                 $str .= w2PgetConfig('locale_alert');
             }
         }
@@ -585,11 +608,13 @@ class w2p_Core_CAppUI
 
         switch ($flags & UI_OUTPUT_MASK) {
             case UI_OUTPUT_HTML:
-                $str = htmlspecialchars(stripslashes($str), ENT_COMPAT, $locale_char_set);
+                $str = htmlspecialchars(stripslashes($str), ENT_COMPAT,
+                                        $locale_char_set);
                 $str = nl2br($str);
                 break;
             case UI_OUTPUT_JS:
-                $str = addslashes(stripslashes($str)); //, ENT_COMPAT, $locale_char_set);
+                $str = addslashes(stripslashes($str));
+                //, ENT_COMPAT, $locale_char_set);
                 break;
             case UI_OUTPUT_RAW:
                 $str = stripslashes($str);
@@ -620,7 +645,8 @@ class w2p_Core_CAppUI
     public function savePlace($query = '')
     {
         $query = ($query == '') ? $_SERVER['QUERY_STRING'] : $query;
-        $saved = (isset($this->state['SAVEDPLACE'])) ? $this->state['SAVEDPLACE'] : '';
+        $saved = (isset($this->state['SAVEDPLACE'])) ?
+            $this->state['SAVEDPLACE'] : '';
 
         if ($query != $saved) {
             $this->state['SAVEDPLACE-1'] = $saved;
@@ -675,7 +701,8 @@ class w2p_Core_CAppUI
      * method deliberately does not use javascript to effect the redirect.
      *
      * @param string The URL query string to append to the URL
-     * @param string A marker for a historic 'place, only -1 or an empty string is valid.
+     * @param string A marker for a historic 'place, only -1 or an empty string is
+     * valid.
      */
     public function redirect($params = '', $hist = '')
     {
@@ -685,7 +712,8 @@ class w2p_Core_CAppUI
         // are the params empty
         if (!$params) {
             // has a place been saved
-            $params = !empty($this->state['SAVEDPLACE' . $hist]) ? $this->state['SAVEDPLACE' . $hist] : $this->defaultRedirect;
+            $params = !empty($this->state['SAVEDPLACE' . $hist]) ?
+                $this->state['SAVEDPLACE' . $hist] : $this->defaultRedirect;
         }
         // Fix to handle cookieless sessions
         if ($session_id != '') {
@@ -767,13 +795,16 @@ class w2p_Core_CAppUI
             $this->msg = '';
             $this->msgNo = 0;
         }
-        return $msg ? '<table cellspacing="0" cellpadding="1" border="0"><tr>' . '<td>' . $img . '</td>' . '<td class="' . $class . '">' . $msg . '</td>' . '</tr></table>' : '';
+        return $msg ? '<table cellspacing="0" cellpadding="1" border="0"><tr>' .
+            '<td>' . $img . '</td>' . '<td class="' . $class . '">' . $msg . '</td>'
+            . '</tr></table>' : '';
     }
 
     /**
      * Set the value of a temporary state variable.
      *
-     * The state is only held for the duration of a session.  It is not stored in the database.
+     * The state is only held for the duration of a session.  It is not stored in
+     * the database.
      * Also do not set the value if it is unset.
      * @param string The label or key of the state variable
      * @param mixed Value to assign to the label/key
@@ -804,7 +835,8 @@ class w2p_Core_CAppUI
         }
     }
 
-    public function processIntState($label, $valueArray = array(), $name = '', $default_value = 0)
+    public function processIntState($label, $valueArray = array(), $name = '',
+                                    $default_value = 0)
     {
         if (isset($valueArray)) {
             if (isset($valueArray[$name])) {
@@ -852,8 +884,8 @@ class w2p_Core_CAppUI
      *     SQL being executed
      * </ul>
      * The schema previously used the MySQL PASSWORD function for encryption.  This
-     * Method has been deprecated in favour of PHP's MD5() function for database independance.
-     * The check_legacy_password option is no longer valid
+     * Method has been deprecated in favour of PHP's MD5() function for database
+     * independance. The check_legacy_password option is no longer valid
      *
      * Upon a successful username and password match, several fields from the user
      * table are loaded in this object for convenient reference.  The style, locales
@@ -866,7 +898,8 @@ class w2p_Core_CAppUI
     public function login($username, $password)
     {
         $auth_method = w2PgetConfig('auth_method', 'sql');
-        if ($_POST['login'] != 'login' && $_POST['login'] != $this->_('login', UI_OUTPUT_RAW) && $_REQUEST['login'] != $auth_method) {
+        if ($_POST['login'] != 'login' && $_POST['login'] != $this->_('login',
+            UI_OUTPUT_RAW) && $_REQUEST['login'] != $auth_method) {
             die('You have chosen to log in using an unsupported or disabled login method');
         }
         $auth = &getauth($auth_method);
@@ -879,7 +912,8 @@ class w2p_Core_CAppUI
         }
 
         $user_id = $auth->userId($username);
-        $username = $auth->username; // Some authentication schemes may collect username in various ways.
+        // Some authentication schemes may collect username in various ways.
+        $username = $auth->username; 
         // Now that the password has been checked, see if they are allowed to
         // access the system
         if (!isset($GLOBALS['acl'])) {
@@ -892,9 +926,10 @@ class w2p_Core_CAppUI
 
         $q = new w2p_Database_Query;
         $q->addTable('users');
-        $q->addQuery('user_id, contact_first_name as user_first_name, 
-            contact_last_name as user_last_name, contact_display_name as user_display_name,
-            contact_company as user_company, contact_department as user_department, user_type');
+        $q->addQuery('user_id, contact_first_name as user_first_name,
+            contact_last_name as user_last_name, contact_display_name as
+            user_display_name, contact_company as user_company, contact_department
+            as user_department, user_type');
         $q->addJoin('contacts', 'con', 'con.contact_id = user_contact', 'inner');
 
         /* Begin Hack */
@@ -921,7 +956,8 @@ class w2p_Core_CAppUI
         }
         /* End Hack */
 
-        $q->addWhere('user_id = ' . (int) $user_id . ' AND user_username = \'' . $username . '\'');
+        $q->addWhere('user_id = ' . (int) $user_id . ' AND user_username = \'' .
+                     $username . '\'');
         $sql = $q->prepare();
 
         $q->loadObject($this);
@@ -944,7 +980,7 @@ class w2p_Core_CAppUI
         return true;
     }
 
-    /*     * **********************************************************************************************************************
+    /*     * ************************************************************************
       /**
      * @Function for regiser log in dotprojet table "user_access_log"
      */
@@ -968,8 +1004,10 @@ class w2p_Core_CAppUI
         if ($user_id > 0) {
             $q = new w2p_Database_Query;
             $q->addTable('user_access_log');
-            $q->addUpdate('date_time_out', "'" . $q->dbfnNowWithTZ() . "'", false, true);
-            $q->addWhere('user_id = ' . (int) $user_id . ' AND (date_time_out = \'0000-00-00 00:00:00\' OR ISNULL(date_time_out)) ');
+            $q->addUpdate('date_time_out', "'" . $q->dbfnNowWithTZ() . "'", false,
+                          true);
+            $q->addWhere('user_id = ' . (int) $user_id . ' AND (date_time_out =
+                         \'0000-00-00 00:00:00\' OR ISNULL(date_time_out)) ');
             $q->exec();
         }
     }
@@ -982,13 +1020,14 @@ class w2p_Core_CAppUI
         if ($last_insert_id > 0) {
             $q = new w2p_Database_Query;
             $q->addTable('user_access_log');
-            $q->addUpdate('date_time_last_action', "'" . $q->dbfnNowWithTZ() . "'", false, true);
+            $q->addUpdate('date_time_last_action', "'" . $q->dbfnNowWithTZ() . "'",
+                          false, true);
             $q->addWhere('user_access_log_id = ' . $last_insert_id);
             $q->exec();
         }
     }
 
-    /*     * **********************************************************************************************************************
+    /*     * ************************************************************************
       /**
      * @deprecated
      */
@@ -1029,7 +1068,8 @@ class w2p_Core_CAppUI
      * Loads the stored user preferences from the database into the internal
      * preferences variable.
      * @param int User id number
-     * @param bool If false (default) then sture internally, if true return pref array
+     * @param bool If false (default) then sture internally, if true return pref
+     * array
      */
     public function loadPrefs($uid = 0, $return = false)
     {
@@ -1054,7 +1094,7 @@ class w2p_Core_CAppUI
         $cal_df = str_replace('%', '', $cal_df);
         $prefs['FULLDATEFORMAT'] = $cal_df;
 
-        if($return) {
+        if ($return) {
             return $prefs;
         }
         else {
@@ -1100,7 +1140,8 @@ class w2p_Core_CAppUI
         $q = new w2p_Database_Query;
         $q->addTable('modules');
         $q->addQuery('mod_directory, mod_ui_name, mod_ui_icon');
-        $q->addWhere("mod_active > 0 AND mod_ui_active > 0 AND mod_directory <> 'public'");
+        $q->addWhere("mod_active > 0 AND mod_ui_active > 0 AND mod_directory <>
+                     'public'");
         $q->addWhere("mod_type <> 'utility'");
         $q->addOrder('mod_ui_order');
         return $q->loadList();
@@ -1125,7 +1166,8 @@ class w2p_Core_CAppUI
     {
         $q = new w2p_Database_Query;
         $q->addTable('modules', 'm');
-        $q->addQuery('mod_id, mod_name, permissions_item_table, permissions_item_field, permissions_item_label');
+        $q->addQuery('mod_id, mod_name, permissions_item_table,
+                     permissions_item_field, permissions_item_label');
         $q->addWhere('permissions_item_table is not null');
         $q->addWhere("permissions_item_table <> ''");
         return $q->loadHashList('mod_name');
@@ -1177,11 +1219,14 @@ class w2p_Core_CAppUI
             $base .= '/';
         }
         // Load the basic javascript used by all modules.
-        echo '<script type="text/javascript" src="' . $base . 'js/base.js"></script>';
+        echo '<script type="text/javascript" src="' . $base .
+            'js/base.js"></script>';
 
         // additionally load jquery
-        echo '<script type="text/javascript" src="' . $base . 'lib/jquery/jquery.js"></script>';
-        echo '<script type="text/javascript" src="' . $base . 'lib/jquery/jquery.tipTip.js"></script>';
+        echo '<script type="text/javascript" src="' . $base .
+            'lib/jquery/jquery.js"></script>';
+        echo '<script type="text/javascript" src="' . $base .
+            'lib/jquery/jquery.tipTip.js"></script>';
 
         $this->getModuleJS($m, $a, true);
     }
@@ -1197,12 +1242,16 @@ class w2p_Core_CAppUI
             $base .= '/';
         }
         if ($load_all || !$file) {
-            if (file_exists($root . 'modules/' . $module . '/' . $module . '.module.js')) {
-                echo '<script type="text/javascript" src="' . $base . 'modules/' . $module . '/' . $module . '.module.js"></script>';
+            if (file_exists($root . 'modules/' . $module . '/' . $module .
+                            '.module.js')) {
+                echo '<script type="text/javascript" src="' . $base . 'modules/'
+                . $module . '/' . $module . '.module.js"></script>';
             }
         }
-        if (isset($file) && file_exists($root . 'modules/' . $module . '/' . $file . '.js')) {
-            echo '<script type="text/javascript" src="' . $base . 'modules/' . $module . '/' . $file . '.js"></script>';
+        if (isset($file) && file_exists($root . 'modules/' . $module . '/'
+                                        . $file . '.js')) {
+            echo '<script type="text/javascript" src="' . $base . 'modules/'
+                . $module . '/' . $file . '.js"></script>';
         }
     }
 
@@ -1225,8 +1274,10 @@ class w2p_Core_CAppUI
         $s = '<script type="text/javascript">';
         $s .= '$(document).ready(function() {';
         // Attach tooltips to "span" elements
-        $s .= '	$("span").tipTip({maxWidth: "600px;", delay: 200, fadeIn: 150, fadeOut: 150});';
-        // Move the focus to the first textbox available, while avoiding the "Global Search..." textbox
+        $s .= '	$("span").tipTip({maxWidth: "600px;", delay: 200, fadeIn: 150,
+            fadeOut: 150});';
+        // Move the focus to the first textbox available, while avoiding the "Global
+        // Search..." textbox
         if (canAccess('smartsearch')) {
             $s .= '	$("input[type=\'text\']:eq(1)").focus();';
         } else {
@@ -1235,9 +1286,11 @@ class w2p_Core_CAppUI
         $s .= '});';
         $s .= '</script>';
 
-        if (is_array($this->footerJavascriptFiles) and !empty($this->footerJavascriptFiles)) {
+        if (is_array($this->footerJavascriptFiles) and
+            !empty($this->footerJavascriptFiles)) {
             while ($jsFile = array_pop($this->footerJavascriptFiles)) {
-                $s .= "<script type='text/javascript' src='" . $jsFile . "'></script>";
+                $s .= "<script type='text/javascript' src='" .
+                    $jsFile . "'></script>";
             }
         }
 
@@ -1248,17 +1301,23 @@ class w2p_Core_CAppUI
     {
         global $AppUI;
 
-        $s = '<style type="text/css">@import url(' . w2PgetConfig('base_url') . '/lib/jscalendar/skins/aqua/theme.css);</style>';
-        $s .= '<script type="text/javascript" src="' . w2PgetConfig('base_url') . '/js/calendar.js"></script>';
-        $s .= '<script type="text/javascript" src="' . w2PgetConfig('base_url') . '/lib/jscalendar/calendar.js"></script>';
-        if (file_exists(w2PgetConfig('root_dir') . '/lib/jscalendar/lang/calendar-' . $AppUI->user_locale . '.js')) {
-            $s .= '<script type="text/javascript" src="' . w2PgetConfig('base_url') . '/lib/jscalendar/lang/calendar-' . $AppUI->user_locale . '.js"></script>';
+        $s = '<style type="text/css">@import url(' . w2PgetConfig('base_url') .
+            '/lib/jscalendar/skins/aqua/theme.css);</style>';
+        $s .= '<script type="text/javascript" src="' . w2PgetConfig('base_url')
+            . '/js/calendar.js"></script>';
+        $s .= '<script type="text/javascript" src="' . w2PgetConfig('base_url')
+            . '/lib/jscalendar/calendar.js"></script>';
+        if (file_exists(w2PgetConfig('root_dir') . '/lib/jscalendar/lang/calendar-'
+                        . $AppUI->user_locale . '.js')) {
+            $s .= '<script type="text/javascript" src="' . w2PgetConfig('base_url')
+                . '/lib/jscalendar/lang/calendar-' . $AppUI->user_locale . '.js"></script>';
         } else {
-            $s .= '<script type="text/javascript" src="' . w2PgetConfig('base_url') . '/lib/jscalendar/lang/calendar-en.js"></script>';
+            $s .= '<script type="text/javascript" src="' . w2PgetConfig('base_url')
+                . '/lib/jscalendar/lang/calendar-en.js"></script>';
         }
-        $s .= '<script type="text/javascript" src="' . w2PgetConfig('base_url') . '/lib/jscalendar/calendar-setup.js"></script>';
+        $s .= '<script type="text/javascript" src="' . w2PgetConfig('base_url')
+            . '/lib/jscalendar/calendar-setup.js"></script>';
         echo $s;
         include w2PgetConfig('root_dir') . '/js/calendar.php';
     }
-
 }
