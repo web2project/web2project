@@ -1,4 +1,4 @@
-<?php /* $Id$ $URL$ */
+<?php /** $Id$ $URL$ */
 
 /**
  *	@package web2project
@@ -25,7 +25,8 @@ class w2p_Controllers_Base
     public $resultPath = '';
 
     public function __construct(w2p_Core_BaseObject $object, $delete,
-             $prefix, $successPath, $errorPath) {
+        $prefix, $successPath, $errorPath)
+    {
         $this->object = $object;
         $this->delete = $delete;
         $this->prefix = $prefix;
@@ -33,8 +34,8 @@ class w2p_Controllers_Base
         $this->errorPath = $errorPath;
     }
 
-    public function process(w2p_Core_CAppUI $AppUI, array $myArray) {
-
+    public function process(w2p_Core_CAppUI $AppUI, array $myArray)
+    {
         if (!$this->object->bind($myArray)) {
             $AppUI->setMsg($this->object->getError(), UI_MSG_ERROR);
             $this->resultPath = $this->errorPath;
@@ -42,7 +43,8 @@ class w2p_Controllers_Base
         }
 
         $action = ($this->delete) ? 'deleted' : 'stored';
-        $this->success = ($this->delete) ? $this->object->delete() : $this->object->store();
+        $this->success = ($this->delete) ? $this->object->delete() :
+            $this->object->store();
 
         if ($this->success) {
             $AppUI->setMsg($this->prefix.' '.$action, UI_MSG_OK, true);
