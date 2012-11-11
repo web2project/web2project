@@ -19,6 +19,7 @@ define('UI_OUTPUT_HTML', 0);
 define('UI_OUTPUT_JS', 0x10);
 define('UI_OUTPUT_RAW', 0x20);
 
+define('ACCESS_DENIED', 'm=public&a=access_denied');
 /**
  * The Application User Interface Class.
  *
