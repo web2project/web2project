@@ -7,10 +7,10 @@ $del = (int) w2PgetParam($_POST, 'del', 0);
 
 $perms = &$AppUI->acl();
 if (!canEdit('admin')) {
-    $AppUI->redirect('m=public&a=access_denied');
+    $AppUI->redirect(ACCESS_DENIED);
 }
 if (!canEdit('users')) {
-	$AppUI->redirect('m=public&a=access_denied');
+	$AppUI->redirect(ACCESS_DENIED);
 }
 
 $obj = &$AppUI->acl();

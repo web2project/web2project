@@ -17,7 +17,7 @@ if ($canEdit) {
 
 // check permissions
 if (!$canEdit && $user_id != $AppUI->user_id) {
-	$AppUI->redirect('m=public&a=access_denied');
+	$AppUI->redirect(ACCESS_DENIED);
 }
 
 $crole = new CSystem_Role;

@@ -398,7 +398,7 @@ class w2p_Core_CAppUI
         $bad_replace = '....'; // Needs the same number of chars as $bad_chars
         // check whether the filename contained bad characters
         if (strpos(strtr($file, $bad_chars, $bad_replace), '.') !== false) {
-            $AppUI->redirect('m=public&a=access_denied');
+            $AppUI->redirect(ACCESS_DENIED);
         } else {
             return $file;
         }

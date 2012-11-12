@@ -228,5 +228,5 @@ if ($result) {
 
     $AppUI->redirect('m=projects&a=view&project_id='.$obj->task_project);
 } else {
-    $AppUI->redirect('m=public&a=access_denied');
+    $AppUI->redirect(ACCESS_DENIED);
 }

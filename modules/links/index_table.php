@@ -34,7 +34,7 @@ if ($canRead) {
 	$link = new CLink();
 	$links = $link->getProjectTaskLinksByCategory(null, $project_id, $task_id, $tab, $search);
 } else {
-	$AppUI->redirect('m=public&a=access_denied');
+	$AppUI->redirect(ACCESS_DENIED);
 }
 
 $xpg_pagesize = w2PgetConfig('page_size', 50);

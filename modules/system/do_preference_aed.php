@@ -8,11 +8,11 @@ $pref_user = (int) w2PgetParam($_POST, 'pref_user', 0);
 
 $perms = &$AppUI->acl();
 if (!canEdit('system') && !$pref_user) {
-	$AppUI->redirect('m=public&a=access_denied');
+	$AppUI->redirect(ACCESS_DENIED);
 }
 
 if ((!($AppUI->user_id == $pref_user) && !canEdit('admin')) && $pref_user) {
-	$AppUI->redirect('m=public&a=access_denied');
+	$AppUI->redirect(ACCESS_DENIED);
 }
 $emails = (isset($_POST['tl_assign'])) ? 1 : 0;
 $emails += (isset($_POST['tl_task'])) ? 2 : 0;

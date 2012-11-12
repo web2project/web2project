@@ -5,7 +5,7 @@ if (!defined('W2P_BASE_DIR')) {
 
 $canEdit = canEdit('contacts');
 if (!$canEdit) {
-	$AppUI->redirect('m=public&a=access_denied');
+	$AppUI->redirect(ACCESS_DENIED);
 }
 
 // check whether vCard file should be fetched from source or parsed for vCardKeys; criteria: get parameters

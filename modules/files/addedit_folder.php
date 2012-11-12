@@ -13,12 +13,12 @@ $folder->file_folder_id = $folder_id;
 
 $canAuthor = $folder->canCreate();
 if (!$canAuthor && !$folder_id) {
-	$AppUI->redirect('m=public&a=access_denied');
+	$AppUI->redirect(ACCESS_DENIED);
 }
 
 $canEdit = $folder->canEdit();
 if (!$canEdit && $folder_id) {
-	$AppUI->redirect('m=public&a=access_denied');
+	$AppUI->redirect(ACCESS_DENIED);
 }
 
 // load the record data
@@ -44,7 +44,7 @@ if ($folder_id == 0) {
 	$canEdit = $canAuthor;
 }
 if (!$canEdit) {
-	$AppUI->redirect('m=public&a=access_denied');
+	$AppUI->redirect(ACCESS_DENIED);
 }
 
 $folders = getFolderSelectList();

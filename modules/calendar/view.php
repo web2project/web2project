@@ -17,7 +17,7 @@ $canAccess = $event->canAccess();
 $canDelete = $event->canDelete();
 
 if (!$canAccess || !$canRead) {
-	$AppUI->redirect('m=public&a=access_denied');
+	$AppUI->redirect(ACCESS_DENIED);
 }
 
 $event->loadFull($event_id);
@@ -37,7 +37,7 @@ $perms = &$AppUI->acl();
 
 //check if the user has view permission over the project
 if ($event->event_project && !$perms->checkModuleItem('projects', 'view', $event->event_project)) {
-	$AppUI->redirect('m=public&a=access_denied');
+	$AppUI->redirect(ACCESS_DENIED);
 }
 
 // load the event types

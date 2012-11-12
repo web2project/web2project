@@ -9,7 +9,7 @@ $report_type = w2PgetParam($_REQUEST, 'report_type', '');
 $canReport = canView('reports');
 $canRead = canView('projects', $project_id);
 if (!$canReport || !$canRead) {
-	$AppUI->redirect('m=public&a=access_denied');
+	$AppUI->redirect(ACCESS_DENIED);
 }
 
 $project_list = array('0' => $AppUI->_('All', UI_OUTPUT_RAW));

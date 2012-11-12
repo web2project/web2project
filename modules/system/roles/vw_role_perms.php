@@ -9,7 +9,7 @@ global $AppUI, $role_id, $canEdit, $canDelete, $tab;
 $perms = &$AppUI->acl();
 $canEdit = canEdit('roles');
 if (!$canEdit) {
-	$AppUI->redirect('m=public&a=access_denied');
+	$AppUI->redirect(ACCESS_DENIED);
 }
   
 $module_list = $perms->getModuleList();

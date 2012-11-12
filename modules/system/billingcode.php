@@ -7,7 +7,7 @@ $company_id = (int) w2PgetParam($_POST, 'company_id', -1);
 $billingcode_id = (int) w2PgetParam($_GET, 'billingcode_id', 0);
 
 if (!canEdit('system')) {
-	$AppUI->redirect('m=public&a=access_denied');
+	$AppUI->redirect(ACCESS_DENIED);
 }
 
 $bcode = new CSystem_Bcode();

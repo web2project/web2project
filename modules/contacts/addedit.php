@@ -14,12 +14,12 @@ $row->contact_id = $contact_id;
 //TODO: CContact->canCreate() needs tweaking
 $canAuthor = $row->canCreate();
 if (!$canAuthor && !$contact_id) {
-    $AppUI->redirect('m=public&a=access_denied');
+    $AppUI->redirect(ACCESS_DENIED);
 }
 
 $canEdit = $row->canEdit();
 if (!$canEdit && $contact_id) {
-    $AppUI->redirect('m=public&a=access_denied');
+    $AppUI->redirect(ACCESS_DENIED);
 }
 
 // load the record data

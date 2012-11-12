@@ -53,7 +53,7 @@ if (!$clashRedirect) {
         $AppUI->setMsg('Event '.$action, UI_MSG_OK, true);
         $redirect = 'm=calendar';
     } else {
-        $redirect = 'm=public&a=access_denied';
+        $redirect = ACCESS_DENIED;
     }
     $AppUI->redirect($redirect);
 }

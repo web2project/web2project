@@ -5,10 +5,10 @@ if (!defined('W2P_BASE_DIR')) {
 
 $perms = &$AppUI->acl();
 if (!canView('admin')) {
-	$AppUI->redirect('m=public&a=access_denied');
+	$AppUI->redirect(ACCESS_DENIED);
 }
 if (!canView('users')) {
-	$AppUI->redirect('m=public&a=access_denied');
+	$AppUI->redirect(ACCESS_DENIED);
 }
 
 $AppUI->savePlace();

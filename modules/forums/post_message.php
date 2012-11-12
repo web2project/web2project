@@ -14,7 +14,7 @@ $canEdit = $perms->checkModuleItem('forums', 'edit', $forum_id);
 
 // check permissions
 if (!$canEdit && !$canAdd) {
-	$AppUI->redirect('m=public&a=access_denied');
+	$AppUI->redirect(ACCESS_DENIED);
 }
 
 //Pull forum information

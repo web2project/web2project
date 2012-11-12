@@ -8,7 +8,7 @@ $AppUI->loadCalendarJS();
 
 // check permissions
 if (!$canEdit) {
-	$AppUI->redirect('m=public&a=access_denied');
+	$AppUI->redirect(ACCESS_DENIED);
 }
 
 $AppUI->savePlace();

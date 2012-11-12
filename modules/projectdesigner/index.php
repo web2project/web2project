@@ -29,7 +29,7 @@ $canView = canView($m);
 $canAddProject = $perms->checkModuleItem('projects', 'add', $project_id);
 
 if (!$canView) {
-	$AppUI->redirect('m=public&a=access_denied');
+	$AppUI->redirect(ACCESS_DENIED);
 }
 
 $AppUI->loadCalendarJS();
@@ -121,7 +121,7 @@ if (!$project_id) {
 	$canDeleteTasks = canDelete('tasks');
 
 	if (!$canReadProject) {
-		$AppUI->redirect('m=public&a=access_denied');
+		$AppUI->redirect(ACCESS_DENIED);
 	}
 
 	// check if this record has dependencies to prevent deletion
@@ -130,7 +130,7 @@ if (!$project_id) {
 	// Now check if the project is editable/viewable.
 	$denied = $obj->getDeniedRecords($AppUI->user_id);
 	if (in_array($project_id, $denied)) {
-		$AppUI->redirect('m=public&a=access_denied');
+		$AppUI->redirect(ACCESS_DENIED);
 	}
 
 	$canDeleteProject = $obj->canDelete($msg, $project_id);

@@ -5,7 +5,7 @@ if (!defined('W2P_BASE_DIR')) {
 
 $canRead = canView('contacts');
 if (!$canRead) {
-	$AppUI->redirect("m=public&a=access_denied");
+	$AppUI->redirect(ACCESS_DENIED);
 }
 
 // Fields 1 - 5

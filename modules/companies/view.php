@@ -17,7 +17,7 @@ $canAccess = $company->canAccess();
 $canDelete = $company->canDelete();
 $deletable = $canDelete;            //TODO: this should be removed once the $deletable variable is removed
 if (!$canAccess || !$canRead) {
-	$AppUI->redirect('m=public&a=access_denied');
+	$AppUI->redirect(ACCESS_DENIED);
 }
 
 $company->loadFull(null, $company_id);

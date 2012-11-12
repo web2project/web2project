@@ -17,7 +17,7 @@ $canAccess = $user->canAccess();
 $canDelete = $user->canDelete();
 
 if (!$canAccess || !$canRead) {
-	$AppUI->redirect('m=public&a=access_denied');
+	$AppUI->redirect(ACCESS_DENIED);
 }
 
 $user->loadFull($user_id);
@@ -36,7 +36,7 @@ global $addPwT, $company_id, $dept_ids, $department, $min_view, $m, $a;
 $utypes = w2PgetSysVal('UserType');
 
 if ($user_id != $AppUI->user_id && (!$perms->checkModuleItem('admin', 'view', $user_id) || !$perms->checkModuleItem('users', 'view', $user_id))) {
-	$AppUI->redirect('m=public&a=access_denied');
+	$AppUI->redirect(ACCESS_DENIED);
 }
 
 $AppUI->savePlace();

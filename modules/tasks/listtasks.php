@@ -5,7 +5,7 @@ if (!defined('W2P_BASE_DIR')) {
 
 $perms = &$AppUI->acl();
 if (!canView('tasks')) {
-	$AppUI->redirect('m=public&a=access_denied');
+	$AppUI->redirect(ACCESS_DENIED);
 }
 $proj = (int) w2PgetParam($_GET, 'project', 0);
 $userFilter = w2PgetParam($_GET, 'userFilter', false);

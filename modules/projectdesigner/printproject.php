@@ -11,7 +11,7 @@ $canRead = $perms->checkModuleItem('projects', 'view', $project_id);
 $canAddProject = $canRead;
 
 if (!$canRead) {
-	$AppUI->redirect('m=public&a=access_denied');
+	$AppUI->redirect(ACCESS_DENIED);
 }
 
 $task = new CTask();

@@ -13,12 +13,12 @@ $file->file_id = $file_id;
 
 $canAuthor = $file->canCreate();
 if (!$canAuthor && !$file_id) {
-	$AppUI->redirect('m=public&a=access_denied');
+	$AppUI->redirect(ACCESS_DENIED);
 }
 
 $canEdit = $file->canEdit();
 if (!$canEdit && $file_id) {
-	$AppUI->redirect('m=public&a=access_denied');
+	$AppUI->redirect(ACCESS_DENIED);
 }
 
 // load the record data
@@ -53,12 +53,12 @@ if ($file_id > 0) {
     $perms = &$AppUI->acl();
 	if ($file->file_task) {
 		if (!$perms->checkModuleItem('tasks', 'view', $file->file_task)) {
-			$AppUI->redirect('m=public&a=access_denied');
+			$AppUI->redirect(ACCESS_DENIED);
 		}
 	}
 	if ($file->file_project) {
 		if (!$perms->checkModuleItem('projects', 'view', $file->file_project)) {
-			$AppUI->redirect('m=public&a=access_denied');
+			$AppUI->redirect(ACCESS_DENIED);
 		}
 	}
 }
@@ -71,7 +71,7 @@ if (!$canAdmin)
 	$canAdmin = $file->canAdmin();
 
 if ($file->file_checkout == 'final' && !$canAdmin) {
-	$AppUI->redirect('m=public&a=access_denied');
+	$AppUI->redirect(ACCESS_DENIED);
 }
 // setup the title block
 $ttl = $file_id ? 'Edit File' : 'Add File';

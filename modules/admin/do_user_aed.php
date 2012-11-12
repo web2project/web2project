@@ -26,18 +26,18 @@ $perms = &$AppUI->acl();
 if ($del) {
 } elseif ($isNewUser) {
 	if (!canAdd('admin')) {
-		$AppUI->redirect('m=public&a=access_denied');
+		$AppUI->redirect(ACCESS_DENIED);
 	}
 	if (!canAdd('users')) {
-		$AppUI->redirect('m=public&a=access_denied');
+		$AppUI->redirect(ACCESS_DENIED);
 	}
 } else {
 	if ($user_id != $AppUI->user_id) {
 		if (!canEdit('admin')) {
-			$AppUI->redirect('m=public&a=access_denied');
+			$AppUI->redirect(ACCESS_DENIED);
 		}
 		if (!canEdit('users')) {
-			$AppUI->redirect('m=public&a=access_denied');
+			$AppUI->redirect(ACCESS_DENIED);
 		}
 	}
 }
@@ -48,7 +48,7 @@ $obj->user_username = strtolower($obj->user_username);
 if ($del) {
     $result = $obj->delete();
     $message = ($result) ? 'User deleted' : $obj->getError();
-    $redirect    = ($result) ? 'm=admin'      : 'm=public&a=access_denied';
+    $redirect    = ($result) ? 'm=admin'  : ACCESS_DENIED;
     $status  = ($result) ? UI_MSG_ALERT   : UI_MSG_ERROR;
 
     $AppUI->setMsg($message, $status);

@@ -9,7 +9,7 @@ $module_id = (int) w2PgetParam($_GET, 'module', 0);
 // check permissions
 $perms = $AppUI->acl();
 if (!canEdit('system')) {
-	$AppUI->redirect('m=public&a=access_denied');
+	$AppUI->redirect(ACCESS_DENIED);
 }
 
 // load the record data

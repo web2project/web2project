@@ -9,7 +9,7 @@ $perms = &$AppUI->acl();
 
 $canEdit = $perms->checkModuleItem($m, 'edit', $file_id);
 if (!$canEdit) {
-	$AppUI->redirect('m=public&a=access_denied');
+	$AppUI->redirect(ACCESS_DENIED);
 }
 $canAdmin = canEdit('system');
 

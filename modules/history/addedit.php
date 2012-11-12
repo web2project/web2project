@@ -6,7 +6,7 @@ if (!defined('W2P_BASE_DIR')) {
 $history_id = (int) w2PgetParam($_GET, 'history_id', 0);
 
 if (!$canEdit) {
-	$AppUI->redirect('m=public&a=access_denied');
+	$AppUI->redirect(ACCESS_DENIED);
 }
 
 $action = $_REQUEST['action'];
@@ -20,7 +20,7 @@ if ($action) {
 
 	if ($action == 'add') {
 		if (!canAdd('history')) {
-			$AppUI->redirect('m=public&a=access_denied');
+			$AppUI->redirect(ACCESS_DENIED);
 		}
 		$q->addTable('history');
 		$q->addInsert('history_table', "history");
@@ -32,7 +32,7 @@ if ($action) {
 		$okMsg = 'History added';
 	} elseif ($action == 'update') {
 		if (!canEdit('history')) {
-			$AppUI->redirect('m=public&a=access_denied');
+			$AppUI->redirect(ACCESS_DENIED);
 		}
 		$q->addTable('history');
 		$q->addUpdate('history_description', $history_description);
@@ -41,7 +41,7 @@ if ($action) {
 		$okMsg = 'History updated';
 	} elseif ($action == 'del') {
 		if (!canDelete('history')) {
-			$AppUI->redirect('m=public&a=access_denied');
+			$AppUI->redirect(ACCESS_DENIED);
 		}
 		$q->setDelete('history');
 		$q->addWhere('history_id =' . $history_id);

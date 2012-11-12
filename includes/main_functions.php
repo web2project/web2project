@@ -183,7 +183,7 @@ function w2PgetParam(&$arr, $name, $def = null)
             //Hack attempt detected
             //return isset($arr[$name]) ? str_replace(' ','',$arr[$name]) : $def;
             $AppUI->setMsg('Poisoning attempt to the URL detected. Issue logged.', UI_MSG_ALERT);
-            $AppUI->redirect('m=public&a=access_denied');
+            $AppUI->redirect(ACCESS_DENIED);
         }
     } else {
         return $def;

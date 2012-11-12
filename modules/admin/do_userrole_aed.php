@@ -10,10 +10,10 @@ $user_id = (int) w2PgetParam($_POST, 'user_id', 0);
 
 $perms = &$AppUI->acl();
 if (!canEdit('admin')) {
-	$AppUI->redirect('m=public&a=access_denied');
+	$AppUI->redirect(ACCESS_DENIED);
 }
 if (!canEdit('users')) {
-	$AppUI->redirect('m=public&a=access_denied');
+	$AppUI->redirect(ACCESS_DENIED);
 }
 
 // prepare (and translate) the module name ready for the suffix

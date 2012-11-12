@@ -11,11 +11,11 @@ $canEdit = $perms->checkModuleItem('resources', 'edit', $resource_id);
 
 // check permissions
 if (!$canAuthor && !$resource_id) {
-	$AppUI->redirect('m=public&a=access_denied');
+	$AppUI->redirect(ACCESS_DENIED);
 }
 
 if (!$canEdit && $resource_id) {
-	$AppUI->redirect('m=public&a=access_denied');
+	$AppUI->redirect(ACCESS_DENIED);
 }
 
 // load the record data

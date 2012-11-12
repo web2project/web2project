@@ -63,5 +63,5 @@ if ($result) {
     $AppUI->setMsg('Project '.$action, UI_MSG_OK, true);
     $AppUI->redirect('m=projects');
 } else {
-    $AppUI->redirect('m=public&a=access_denied');
+    $AppUI->redirect(ACCESS_DENIED);
 }

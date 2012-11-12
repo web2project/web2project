@@ -13,12 +13,12 @@ $log->task_log_id = $task_log_id;
 
 $canAuthor = $task->canCreate();
 if (!$canAuthor && !$task_id) {
-	$AppUI->redirect('m=public&a=access_denied');
+	$AppUI->redirect(ACCESS_DENIED);
 }
 
 $canEdit = $task->canEdit();
 if (!$canEdit && $task_id) {
-	$AppUI->redirect('m=public&a=access_denied');
+	$AppUI->redirect(ACCESS_DENIED);
 }
 
 $AppUI->loadCalendarJS();
@@ -30,12 +30,12 @@ $canViewTask = $perms->checkModuleItem('tasks', 'view', $obj->task_id);
 
 if ($task_log_id) {
 	if (!$canEdit || !$canViewTask) {
-		$AppUI->redirect('m=public&a=access_denied');
+		$AppUI->redirect(ACCESS_DENIED);
 	}
 	$log->load($task_log_id);
 } else {
 	if (!$canAuthor || !$canViewTask) {
-		$AppUI->redirect('m=public&a=access_denied');
+		$AppUI->redirect(ACCESS_DENIED);
 	}
 	$log->task_log_task = $obj->task_id;
 	$log->task_log_name = $obj->task_name;

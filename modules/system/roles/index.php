@@ -11,7 +11,7 @@ $perms = &$AppUI->acl();
 // Get the permissions for this module
 $canAccess = canAccess('roles');
 if (!$canAccess) {
-	$AppUI->redirect('m=public&a=access_denied');
+	$AppUI->redirect(ACCESS_DENIED);
 }
 $canRead = canView('roles');
 $canAdd = canAdd('roles');
