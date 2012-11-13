@@ -13,12 +13,12 @@ $department->dept_id = $dept_id;
 
 $canAuthor = $department->canCreate();
 if (!$canAuthor && !$dept_id) {
-	$AppUI->redirect('m=public&a=access_denied');
+	$AppUI->redirect(ACCESS_DENIED);
 }
 
 $canEdit = $department->canEdit();
 if (!$canEdit && $dept_id) {
-	$AppUI->redirect('m=public&a=access_denied');
+	$AppUI->redirect(ACCESS_DENIED);
 }
 
 // load the record data

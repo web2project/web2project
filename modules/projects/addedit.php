@@ -13,12 +13,12 @@ $project->project_id = $project_id;
 
 $canAuthor = $project->canCreate();
 if (!$canAuthor && !$project_id) {
-	$AppUI->redirect('m=public&a=access_denied');
+	$AppUI->redirect(ACCESS_DENIED);
 }
 
 $canEdit = $project->canEdit();
 if (!$canEdit && $project_id) {
-	$AppUI->redirect('m=public&a=access_denied');
+	$AppUI->redirect(ACCESS_DENIED);
 }
 
 // load the record data

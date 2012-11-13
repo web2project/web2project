@@ -9,7 +9,7 @@ $contact_id = (int) w2PgetParam($_GET, 'contact_id', 0);
 $canRead = canView('contacts');
 
 if (!$canRead) {
-	$AppUI->redirect('m=public&a=access_denied');
+	$AppUI->redirect(ACCESS_DENIED);
 }
 
 if ($contact_id) {

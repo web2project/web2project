@@ -8,7 +8,7 @@ $perms = &$AppUI->acl();
 $canRead = canView($m);
 
 if (!$canRead) {
-	$AppUI->redirect('m=public&a=access_denied');
+	$AppUI->redirect(ACCESS_DENIED);
 }
 
 global $tab, $locale_char_set, $date;

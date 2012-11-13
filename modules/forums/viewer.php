@@ -19,7 +19,7 @@ $canEdit = $perms->checkModuleItem('forums', 'edit', $forum_id);
 $canAdminEdit = canEdit('admin');
 
 if (!$canRead) {
-	$AppUI->redirect('m=public&a=access_denied');
+	$AppUI->redirect(ACCESS_DENIED);
 }
 
 $forum = new CForum();

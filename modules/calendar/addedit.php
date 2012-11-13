@@ -13,12 +13,12 @@ $obj->event_id = $event_id;
 
 $canAuthor = $obj->canCreate();
 if (!$canAuthor && !$event_id) {
-	$AppUI->redirect('m=public&a=access_denied');
+	$AppUI->redirect(ACCESS_DENIED);
 }
 
 $canEdit = $obj->canEdit();
 if (!$canEdit && $event_id) {
-	$AppUI->redirect('m=public&a=access_denied');
+	$AppUI->redirect(ACCESS_DENIED);
 }
 
 // get the passed timestamp (today if none)
@@ -71,7 +71,7 @@ if ($is_clash) {
 
 //check if the user has view permission over the project
 if ($obj->event_project && !$perms->checkModuleItem('projects', 'view', $obj->event_project)) {
-	$AppUI->redirect('m=public&a=access_denied');
+	$AppUI->redirect(ACCESS_DENIED);
 }
 
 // setup the title block

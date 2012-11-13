@@ -26,19 +26,19 @@ $notifyContacts = ($notifyContacts != '0') ? '1' : '0';
 $perms = &$AppUI->acl();
 if ($del) {
 	if (!$perms->checkModuleItem('files', 'delete', $file_id)) {
-		$AppUI->redirect('m=public&a=access_denied');
+		$AppUI->redirect(ACCESS_DENIED);
 	}
 } elseif ($cancel) {
 	if (!$perms->checkModuleItem('files', 'delete', $file_id)) {
-		$AppUI->redirect('m=public&a=access_denied');
+		$AppUI->redirect(ACCESS_DENIED);
 	}
 } elseif ($isNotNew) {
 	if (!$perms->checkModuleItem('files', 'edit', $file_id)) {
-		$AppUI->redirect('m=public&a=access_denied');
+		$AppUI->redirect(ACCESS_DENIED);
 	}
 } else {
 	if (!canAdd('files')) {
-		$AppUI->redirect('m=public&a=access_denied');
+		$AppUI->redirect(ACCESS_DENIED);
 	}
 }
 
@@ -170,5 +170,5 @@ if ($result) {
 	}
     $AppUI->redirect($redirect);
 } else {
-    $AppUI->redirect('m=public&a=access_denied');
+    $AppUI->redirect(ACCESS_DENIED);
 }

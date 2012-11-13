@@ -17,7 +17,7 @@ $canAccess = $project->canAccess();
 $canDelete = $project->canDelete();
 
 if (!$canAccess || !$canRead) {
-	$AppUI->redirect('m=public&a=access_denied');
+	$AppUI->redirect(ACCESS_DENIED);
 }
 
 $project->loadFull(null, $project_id);
@@ -35,7 +35,7 @@ $tab = $AppUI->processIntState('ProjVwTab', $_GET, 'tab', 0);
 // Now check if the proect is editable/viewable.
 $denied = $project->getDeniedRecords($AppUI->user_id);
 if (in_array($project_id, $denied)) {
-	$AppUI->redirect('m=public&a=access_denied');
+	$AppUI->redirect(ACCESS_DENIED);
 }
 
 // get ProjectPriority from sysvals

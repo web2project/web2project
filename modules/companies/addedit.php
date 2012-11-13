@@ -13,12 +13,12 @@ $company->company_id = $company_id;
 
 $canAuthor = $company->canCreate();
 if (!$canAuthor && !$company_id) {
-	$AppUI->redirect('m=public&a=access_denied');
+	$AppUI->redirect(ACCESS_DENIED);
 }
 
 $canEdit = $company->canEdit();
 if (!$canEdit && $company_id) {
-	$AppUI->redirect('m=public&a=access_denied');
+	$AppUI->redirect(ACCESS_DENIED);
 }
 
 // load the record data

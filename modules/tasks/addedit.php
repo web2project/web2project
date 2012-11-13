@@ -13,12 +13,12 @@ $task->task_id = $task_id;
 
 $canAuthor = $task->canCreate();
 if (!$canAuthor && !$task_id) {
-	$AppUI->redirect('m=public&a=access_denied');
+	$AppUI->redirect(ACCESS_DENIED);
 }
 
 $canEdit = $task->canEdit();
 if (!$canEdit && $task_id) {
-	$AppUI->redirect('m=public&a=access_denied');
+	$AppUI->redirect(ACCESS_DENIED);
 }
 
 // load the record data
@@ -63,7 +63,7 @@ if (!$task_id) {
 }
 
 if (!$canEdit) {
-	$AppUI->redirect('m=public&a=access_denied&err=noedit');
+	$AppUI->redirect(ACCESS_DENIED);
 }
 if (isset($task->task_represents_project) && $task->task_represents_project) {
     $AppUI->setMsg('The selected task represents a subproject. Please view/edit this project instead.', UI_MSG_ERROR);
@@ -77,7 +77,7 @@ $durnTypes = w2PgetSysVal('TaskDurationType');
 
 // check the document access (public, participant, private)
 if (!$task->canAccess($AppUI->user_id)) {
-	$AppUI->redirect('m=public&a=access_denied&err=noaccess');
+	$AppUI->redirect(ACCESS_DENIED);
 }
 
 // pull the related project

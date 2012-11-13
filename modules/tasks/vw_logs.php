@@ -7,7 +7,7 @@ global $AppUI, $task_id, $sf, $df, $canEdit, $m;
 
 $perms = &$AppUI->acl();
 if (!canView('task_log')) {
-	$AppUI->redirect('m=public&a=access_denied');
+	$AppUI->redirect(ACCESS_DENIED);
 }
 
 $problem = (int) w2PgetParam($_GET, 'problem', null);

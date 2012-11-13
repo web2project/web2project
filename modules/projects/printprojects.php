@@ -5,7 +5,7 @@ $perms = &$AppUI->acl();
 $canView = canView('projects');
 
 if (!$canView) {
-	$AppUI->redirect('m=public&a=access_denied');
+	$AppUI->redirect(ACCESS_DENIED);
 }
 
 $search_text = $AppUI->getState('projsearchtext') ? $AppUI->getState('projsearchtext') : '';

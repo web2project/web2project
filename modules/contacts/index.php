@@ -6,7 +6,7 @@ if (!defined('W2P_BASE_DIR')) {
 $AppUI->savePlace();
 
 if (!$canAccess) {
-	$AppUI->redirect('m=public&a=access_denied');
+	$AppUI->redirect(ACCESS_DENIED);
 }
 
 $perms = &$AppUI->acl();

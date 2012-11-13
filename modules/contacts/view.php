@@ -17,7 +17,7 @@ $canAccess = $contact->canAccess();
 $canDelete = $contact->canDelete();
 
 if (!$canAccess || !$canRead) {
-	$AppUI->redirect('m=public&a=access_denied');
+	$AppUI->redirect(ACCESS_DENIED);
 }
 
 $contact->load($contact_id);

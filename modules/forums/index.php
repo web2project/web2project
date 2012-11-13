@@ -7,7 +7,7 @@ $perms = &$AppUI->acl();
 
 $canRead = $perms->checkModuleItem('forums', 'view', null);
 if (!$canRead) {
-	$AppUI->redirect('m=public&a=access_denied');
+	$AppUI->redirect(ACCESS_DENIED);
 }
 
 $AppUI->savePlace();

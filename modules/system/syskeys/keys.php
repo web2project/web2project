@@ -6,7 +6,7 @@ if (!defined('W2P_BASE_DIR')) {
 // check permissions
 $perms = &$AppUI->acl();
 if (!canEdit('system')) {
-	$AppUI->redirect('m=public&a=access_denied');
+	$AppUI->redirect(ACCESS_DENIED);
 }
 
 $q = new w2p_Database_Query;

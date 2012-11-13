@@ -6,7 +6,7 @@ if (!defined('W2P_BASE_DIR')) {
 // deny all but system admins
 $canEdit = canEdit('system');
 if (!$canEdit) {
-	$AppUI->redirect('m=public&a=access_denied');
+	$AppUI->redirect(ACCESS_DENIED);
 }
 
 $AppUI->savePlace();
