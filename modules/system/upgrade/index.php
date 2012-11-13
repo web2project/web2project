@@ -6,7 +6,7 @@ $perms = $AppUI->acl();
 
 // let's see if the user has sys access
 if (!canEdit('system')) {
-	$AppUI->redirect('m=public&a=access_denied');
+	$AppUI->redirect(ACCESS_DENIED);
 }
 
 $titleBlock = new w2p_Theme_TitleBlock($AppUI->_('Upgrade System'), 'control-center.png', $m, $m . '.' . $a);

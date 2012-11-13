@@ -60,5 +60,5 @@ if ($result) {
     $AppUI->redirect('m=tasks&a=view&task_id=' . $obj->task_log_task . '&tab=0#tasklog' . $obj->task_log_id);
 
 } else {
-    $AppUI->redirect('m=public&a=access_denied');
+    $AppUI->redirect(ACCESS_DENIED);
 }

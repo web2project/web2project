@@ -17,7 +17,7 @@ $canAccess = $department->canAccess();
 $canDelete = $department->canDelete();
 
 if (!$canAccess || !$canRead) {
-	$AppUI->redirect('m=public&a=access_denied');
+	$AppUI->redirect(ACCESS_DENIED);
 }
 
 $department->loadFull(null, $dept_id);

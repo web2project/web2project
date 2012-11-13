@@ -4,6 +4,6 @@ if (!defined('W2P_BASE_DIR')) {
 }
 
 if (!canView('system')) { // let's see if the user has sys access
-	$AppUI->redirect('m=public&a=access_denied');
+	$AppUI->redirect(ACCESS_DENIED);
 }
 phpinfo();

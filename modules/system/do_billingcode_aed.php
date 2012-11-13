@@ -23,5 +23,5 @@ if ($result) {
     $AppUI->setMsg('Billing Codes '.$action, UI_MSG_OK, true);
     $AppUI->redirect('m=system&a=billingcode');
 } else {
-    $AppUI->redirect('m=public&a=access_denied');
+    $AppUI->redirect(ACCESS_DENIED);
 }

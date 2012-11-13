@@ -13,12 +13,12 @@ $link->link_id = $link_id;
 
 $canAuthor = $link->canCreate();
 if (!$canAuthor && !$link_id) {
-	$AppUI->redirect('m=public&a=access_denied');
+	$AppUI->redirect(ACCESS_DENIED);
 }
 
 $canEdit = $link->canEdit();
 if (!$canEdit && $link_id) {
-	$AppUI->redirect('m=public&a=access_denied');
+	$AppUI->redirect(ACCESS_DENIED);
 }
 
 

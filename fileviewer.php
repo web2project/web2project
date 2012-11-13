@@ -68,7 +68,7 @@ $perms = &$AppUI->acl();
 
 $canRead = canView('files');
 if (!$canRead) {
-	$AppUI->redirect('m=public&a=access_denied');
+	$AppUI->redirect(ACCESS_DENIED);
 }
 
 $file_id = (int) w2PgetParam($_GET, 'file_id', 0);
@@ -82,7 +82,7 @@ if ($file_id) {
 	$allowedFiles = $fileclass->getAllowedRecords($AppUI->user_id, 'file_id, file_name');
 
 	if (count($allowedFiles) && !array_key_exists($file_id, $allowedFiles)) {
-		$AppUI->redirect('m=public&a=access_denied');
+		$AppUI->redirect(ACCESS_DENIED);
 	}
 
 	$q = new w2p_Database_Query;
@@ -95,7 +95,7 @@ if ($file_id) {
 	$file = $q->loadHash();
 
 	if (!$file) {
-		$AppUI->redirect('m=public&a=access_denied');
+		$AppUI->redirect(ACCESS_DENIED);
 	}
 
 	$fname = W2P_BASE_DIR . '/files/' . $file['file_project'] . '/' . $file['file_real_filename'];

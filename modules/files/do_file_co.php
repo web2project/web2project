@@ -9,7 +9,7 @@ $coReason = w2PgetParam($_POST, 'file_co_reason', '');
 
 $perms = &$AppUI->acl();
 if (!$perms->checkModuleItem('files', 'edit', $file_id)) {
-	$AppUI->redirect('m=public&a=access_denied');
+	$AppUI->redirect(ACCESS_DENIED);
 }
 
 $obj = new CFile();

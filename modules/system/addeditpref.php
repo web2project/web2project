@@ -13,7 +13,7 @@ $perms = &$AppUI->acl();
 $canEdit = canEdit('system');
 // Check permissions
 if (!$canEdit && $user_id != $AppUI->user_id) {
-	$AppUI->redirect('m=public&a=access_denied');
+	$AppUI->redirect(ACCESS_DENIED);
 }
 
 // load the preferences

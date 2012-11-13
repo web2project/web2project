@@ -15,7 +15,7 @@ $canAccess = $obj->canAccess();
 $canDelete = $obj->canDelete();
 
 if (!$canAccess || !$canView) {
-	$AppUI->redirect('m=public&a=access_denied');
+	$AppUI->redirect(ACCESS_DENIED);
 }
 
 $obj->load($resource_id);

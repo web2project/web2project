@@ -8,7 +8,7 @@ global $m;
 
 // Deny all but system admins
 if (!canEdit('system')) {
-	$AppUI->redirect('m=public&a=access_denied');
+	$AppUI->redirect(ACCESS_DENIED);
 }
 
 $utypes = w2PgetSysVal('UserType');

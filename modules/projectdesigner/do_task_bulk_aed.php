@@ -38,7 +38,7 @@ $bulk_task_percent_complete = w2PgetParam($_POST, 'bulk_task_percent_complete', 
 
 $perms = &$AppUI->acl();
 if (!canEdit('tasks')) {
-	$AppUI->redirect('m=public&a=access_denied');
+	$AppUI->redirect(ACCESS_DENIED);
 }
 
 //Lets store the panels view options of the user:

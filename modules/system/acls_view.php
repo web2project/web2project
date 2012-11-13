@@ -6,7 +6,7 @@ global $AppUI, $m, $a;
 
 $perms = &$AppUI->acl();
 if (!canView('system')) {
-	$AppUI->redirect('m=public&a=access_denied');
+	$AppUI->redirect(ACCESS_DENIED);
 }
 
 $user_permissions = array();

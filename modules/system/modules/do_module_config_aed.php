@@ -6,7 +6,7 @@ if (!defined('W2P_BASE_DIR')) {
 $perms = $AppUI->acl();
 $canEdit = canEdit('system');
 if (!$canEdit) {
-	$AppUI->redirect('m=public&a=access_denied');
+	$AppUI->redirect(ACCESS_DENIED);
 }
 
 $mod_id = (int) w2PgetCleanParam($_POST, 'mod_id');

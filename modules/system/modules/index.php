@@ -8,7 +8,7 @@ $perms = &$AppUI->acl();
 $canEdit = canEdit('system');
 $canRead = canView('system');
 if (!$canRead) {
-	$AppUI->redirect('m=public&a=access_denied');
+	$AppUI->redirect(ACCESS_DENIED);
 }
 
 $AppUI->savePlace();

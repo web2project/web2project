@@ -19,6 +19,7 @@ define('UI_OUTPUT_HTML', 0);
 define('UI_OUTPUT_JS', 0x10);
 define('UI_OUTPUT_RAW', 0x20);
 
+define('ACCESS_DENIED', 'm=public&a=access_denied');
 /**
  * The Application User Interface Class.
  *
@@ -397,7 +398,7 @@ class w2p_Core_CAppUI
         $bad_replace = '....'; // Needs the same number of chars as $bad_chars
         // check whether the filename contained bad characters
         if (strpos(strtr($file, $bad_chars, $bad_replace), '.') !== false) {
-            $AppUI->redirect('m=public&a=access_denied');
+            $AppUI->redirect(ACCESS_DENIED);
         } else {
             return $file;
         }

@@ -8,7 +8,7 @@ $AppUI->savePlace();
 $canEdit = canEdit($m);
 $canRead = canView($m);
 if (!$canRead) {
-	$AppUI->redirect('m=public&a=access_denied');
+	$AppUI->redirect(ACCESS_DENIED);
 }
 
 $titleBlock = new w2p_Theme_TitleBlock('Import Contacts from LDAP Directory', '', 'admin', '');

@@ -13,12 +13,12 @@ $forum->forum_id = $forum_id;
 
 $canAuthor = $forum->canCreate();
 if (!$canAuthor && !$forum_id) {
-	$AppUI->redirect('m=public&a=access_denied');
+	$AppUI->redirect(ACCESS_DENIED);
 }
 
 $canEdit = $forum->canEdit();
 if (!$canEdit && $forum_id) {
-	$AppUI->redirect('m=public&a=access_denied');
+	$AppUI->redirect(ACCESS_DENIED);
 }
 
 

@@ -17,7 +17,7 @@ $canAccess = $obj->canAccess();
 $canDelete = $obj->canDelete();
 
 if (!$canAccess || !$canRead) {
-	$AppUI->redirect('m=public&a=access_denied');
+	$AppUI->redirect(ACCESS_DENIED);
 }
 
 $obj->loadFull(null, $task_id);

@@ -15,7 +15,7 @@ $trans = w2PgetParam($_POST, 'trans', array());
 
 // check permissions
 if (!canEdit('system')) {
-	$AppUI->redirect('m=public&a=access_denied');
+	$AppUI->redirect(ACCESS_DENIED);
 }
 
 // save to core locales if a translation exists there, otherwise save

@@ -8,7 +8,7 @@ $AppUI->loadCalendarJS();
 $budget_id = (int) w2PgetParam($_GET, 'budget_id', 0);
 
 if (!canEdit('system')) {
-	$AppUI->redirect('m=public&a=access_denied');
+	$AppUI->redirect(ACCESS_DENIED);
 }
 $df = $AppUI->getPref('SHDATEFORMAT');
 

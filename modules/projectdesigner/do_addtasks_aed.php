@@ -6,7 +6,7 @@ global $AppUI;
 
 $perms = &$AppUI->acl();
 if (!canAdd('tasks')) {
-	$AppUI->redirect('m=public&a=access_denied');
+	$AppUI->redirect(ACCESS_DENIED);
 }
 
 //Lets store the panels view options of the user:

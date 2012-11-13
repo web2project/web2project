@@ -11,7 +11,7 @@ $AppUI->loadCalendarJS();
 
 $perms = &$AppUI->acl();
 if (!canView('task_log')) {
-	$AppUI->redirect('m=public&a=access_denied');
+	$AppUI->redirect(ACCESS_DENIED);
 }
 $do_report = w2PgetParam($_GET, 'do_report', 0);
 $log_all = w2PgetParam($_GET, 'log_all', 0);
