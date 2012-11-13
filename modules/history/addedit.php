@@ -5,7 +5,14 @@ if (!defined('W2P_BASE_DIR')) {
 
 $history_id = (int) w2PgetParam($_GET, 'history_id', 0);
 
-if (!$canEdit) {
+$history = new CHistory();
+$history->history_id = $history_id;
+
+$obj = $history;
+$canAddEdit = $obj->canAddEdit();
+$canAuthor = $obj->canCreate();
+$canEdit = $obj->canEdit();
+if (!$canAddEdit) {
 	$AppUI->redirect(ACCESS_DENIED);
 }
 
@@ -19,9 +26,6 @@ if ($action) {
 	$perms = &$AppUI->acl();
 
 	if ($action == 'add') {
-		if (!canAdd('history')) {
-			$AppUI->redirect(ACCESS_DENIED);
-		}
 		$q->addTable('history');
 		$q->addInsert('history_table', "history");
 		$q->addInsert('history_action', "add");
@@ -31,45 +35,22 @@ if ($action) {
 		$q->addInsert('history_project', $history_project);
 		$okMsg = 'History added';
 	} elseif ($action == 'update') {
-		if (!canEdit('history')) {
-			$AppUI->redirect(ACCESS_DENIED);
-		}
-		$q->addTable('history');
-		$q->addUpdate('history_description', $history_description);
-		$q->addUpdate('history_project', $history_project);
-		$q->addWhere('history_id =' . $history_id);
-		$okMsg = 'History updated';
+		$AppUI->setMsg("History cannot be edited");
+        $AppUI->redirect(ACCESS_DENIED);
 	} elseif ($action == 'del') {
-		if (!canDelete('history')) {
-			$AppUI->redirect(ACCESS_DENIED);
-		}
-		$q->setDelete('history');
-		$q->addWhere('history_id =' . $history_id);
-		$okMsg = 'History deleted';
+		$AppUI->setMsg("History cannot be deleted");
+        $AppUI->redirect(ACCESS_DENIED);
 	}
 	if (!$q->exec()) {
 		$AppUI->setMsg(db_error());
-	} else {
-		$AppUI->setMsg($okMsg);
-		if ($action == 'add') {
-			$q->clear();
-		}
-		$q->addTable('history');
-		$q->addUpdate('history_item = history_id');
-		$q->addWhere('history_table = \'history\'');
-		$okMsg = 'History deleted';
 	}
-	$q->clear();
+
 	$AppUI->redirect();
 }
 
-$history = new CHistory();
-$history->load($history_id);
+$history->load();
 
 $titleBlock = new w2p_Theme_TitleBlock($history_id ? 'Edit history' : 'New history', 'stock_book_blue_48.png', 'history', 'history.' . $a);
-if ($canDelete) {
-	$titleBlock->addCrumbDelete('delete history', $canDelete, $msg);
-}
 $titleBlock->show();
 ?>
 

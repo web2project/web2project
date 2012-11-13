@@ -11,13 +11,11 @@ $contact_id = (int) w2PgetParam($_GET, 'contact_id', 0);
 $project = new CProject();
 $project->project_id = $project_id;
 
-$canAuthor = $project->canCreate();
-if (!$canAuthor && !$project_id) {
-	$AppUI->redirect(ACCESS_DENIED);
-}
-
-$canEdit = $project->canEdit();
-if (!$canEdit && $project_id) {
+$obj = $project;
+$canAddEdit = $obj->canAddEdit();
+$canAuthor = $obj->canCreate();
+$canEdit = $obj->canEdit();
+if (!$canAddEdit) {
 	$AppUI->redirect(ACCESS_DENIED);
 }
 

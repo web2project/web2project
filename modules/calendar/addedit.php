@@ -11,13 +11,10 @@ $is_clash = isset($_SESSION['event_is_clash']) ? $_SESSION['event_is_clash'] : f
 $obj = new CEvent();
 $obj->event_id = $event_id;
 
+$canAddEdit = $obj->canAddEdit();
 $canAuthor = $obj->canCreate();
-if (!$canAuthor && !$event_id) {
-	$AppUI->redirect(ACCESS_DENIED);
-}
-
 $canEdit = $obj->canEdit();
-if (!$canEdit && $event_id) {
+if (!$canAddEdit) {
 	$AppUI->redirect(ACCESS_DENIED);
 }
 

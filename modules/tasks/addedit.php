@@ -5,19 +5,14 @@ if (!defined('W2P_BASE_DIR')) {
 
 $task_id = (int) w2PgetParam($_GET, 'task_id', 0);
 
-
-
-
 $task = new CTask();
 $task->task_id = $task_id;
 
-$canAuthor = $task->canCreate();
-if (!$canAuthor && !$task_id) {
-	$AppUI->redirect(ACCESS_DENIED);
-}
-
-$canEdit = $task->canEdit();
-if (!$canEdit && $task_id) {
+$obj = $task;
+$canAddEdit = $obj->canAddEdit();
+$canAuthor = $obj->canCreate();
+$canEdit = $obj->canEdit();
+if (!$canAddEdit) {
 	$AppUI->redirect(ACCESS_DENIED);
 }
 

@@ -3,19 +3,24 @@ if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
 
-// check permissions
-$perms = &$AppUI->acl();
-$canEdit = canEdit('system');
-$canRead = canView('system');
-if (!$canRead) {
-	$AppUI->redirect(ACCESS_DENIED);
-}
-
 $mod_id = (int) w2PgetCleanParam($_GET, 'mod_id');
 $view   = w2PgetCleanParam($_GET, 'v');
 
 $module = new w2p_Core_Module();
-$module->load($mod_id);
+$module->mod_id = $mod_id;
+
+$obj = $module;
+$canAddEdit = $obj->canAddEdit();
+$canAuthor = $obj->canCreate();
+$canEdit = $obj->canEdit();
+$canRead = $obj->canView();
+if (!$canAddEdit) {
+	$AppUI->redirect(ACCESS_DENIED);
+}
+
+if (!$canRead) {
+	$AppUI->redirect(ACCESS_DENIED);
+}
 
 //TODO: generate per-module filter list
 $filter = array($module->permissions_item_field, 'user_password', 'user_parent',

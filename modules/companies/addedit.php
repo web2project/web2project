@@ -5,19 +5,14 @@ if (!defined('W2P_BASE_DIR')) {
 
 $company_id = (int) w2PgetParam($_GET, 'company_id', 0);
 
-
-
-
 $company = new CCompany();
 $company->company_id = $company_id;
 
-$canAuthor = $company->canCreate();
-if (!$canAuthor && !$company_id) {
-	$AppUI->redirect(ACCESS_DENIED);
-}
-
-$canEdit = $company->canEdit();
-if (!$canEdit && $company_id) {
+$obj = $company;
+$canAddEdit = $obj->canAddEdit();
+$canAuthor = $obj->canCreate();
+$canEdit = $obj->canEdit();
+if (!$canAddEdit) {
 	$AppUI->redirect(ACCESS_DENIED);
 }
 
@@ -34,24 +29,6 @@ if (!$company && $company_id > 0) {
     $AppUI->setMsg('invalidID', UI_MSG_ERROR, true);
 	$AppUI->redirect();
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // setup the title block
 $ttl = $company_id > 0 ? 'Edit Company' : 'Add Company';
