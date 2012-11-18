@@ -44,6 +44,12 @@ abstract class w2p_Core_Setup {
     public function remove()
     {
         $name = strtolower($this->_config['mod_name']);
+
+        $q = $this->_getQuery();
+        $q->setDelete('module_config');
+        $q->addWhere("module_name = 'risks'");
+        $q->exec();
+
         return $this->_perms->unregisterModule($name);
     }
 
