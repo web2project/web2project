@@ -539,7 +539,7 @@ if ($showEditCheckbox) {
 					  <td>
 					   <?php echo $open_link; ?>
 					  </td>
-					  <td colspan="<?php echo $cols; ?>">
+					  <td colspan="<?php echo ($w2Pconfig['direct_edit_assignment']) ? $cols - 3 : $cols; ?>">
 						  <table width="100%" border="0">
 							  <tr>
 									<!-- patch 2.12.04 display company name next to project name -->
