@@ -11,15 +11,12 @@ $dept_id = (int) w2PgetParam($_GET, 'dept_id', 0);
 $row = new CContact();
 $row->contact_id = $contact_id;
 
-//TODO: CContact->canCreate() needs tweaking
-$canAuthor = $row->canCreate();
-if (!$canAuthor && !$contact_id) {
-    $AppUI->redirect(ACCESS_DENIED);
-}
-
-$canEdit = $row->canEdit();
-if (!$canEdit && $contact_id) {
-    $AppUI->redirect(ACCESS_DENIED);
+$obj = $row;
+$canAddEdit = $obj->canAddEdit();
+$canAuthor = $obj->canCreate();
+$canEdit = $obj->canEdit();
+if (!$canAddEdit) {
+	$AppUI->redirect(ACCESS_DENIED);
 }
 
 // load the record data

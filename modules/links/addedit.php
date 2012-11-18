@@ -7,20 +7,16 @@ $link_id    = (int) w2PgetParam($_GET, 'link_id', 0);
 $task_id    = (int) w2PgetParam($_GET, 'task_id', 0);
 $project_id = (int) w2PgetParam($_GET, 'project_id', 0);
 
-
 $link = new CLink();
 $link->link_id = $link_id;
 
-$canAuthor = $link->canCreate();
-if (!$canAuthor && !$link_id) {
+$obj = $link;
+$canAddEdit = $obj->canAddEdit();
+$canAuthor = $obj->canCreate();
+$canEdit = $obj->canEdit();
+if (!$canAddEdit) {
 	$AppUI->redirect(ACCESS_DENIED);
 }
-
-$canEdit = $link->canEdit();
-if (!$canEdit && $link_id) {
-	$AppUI->redirect(ACCESS_DENIED);
-}
-
 
 $obj = $AppUI->restoreObject();
 if ($obj) {
@@ -48,10 +44,6 @@ if (0 == $link_id && ($project_id || $task_id)) {
         $link->task_name = $link_task->task_name;
     }
 }
-
-
-
-
 
 // setup the title block
 $ttl = $link_id ? 'Edit Link' : 'Add Link';

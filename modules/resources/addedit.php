@@ -5,21 +5,18 @@ if (!defined('W2P_BASE_DIR')) {
 
 $resource_id = (int) w2PgetParam($_GET, 'resource_id', 0);
 
-$perms = &$AppUI->acl();
-$canAuthor = canAdd('resources');
-$canEdit = $perms->checkModuleItem('resources', 'edit', $resource_id);
+$resource = new CResource();
+$resource->resource_id = $resource_id;
 
-// check permissions
-if (!$canAuthor && !$resource_id) {
-	$AppUI->redirect(ACCESS_DENIED);
-}
-
-if (!$canEdit && $resource_id) {
+$obj = $resource;
+$canAddEdit = $obj->canAddEdit();
+$canAuthor = $obj->canCreate();
+$canEdit = $obj->canEdit();
+if (!$canAddEdit) {
 	$AppUI->redirect(ACCESS_DENIED);
 }
 
 // load the record data
-$resource = new CResource();
 $obj = $AppUI->restoreObject();
 if ($obj) {
     $resource = $obj;

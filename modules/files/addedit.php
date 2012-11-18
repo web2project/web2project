@@ -11,13 +11,11 @@ $preserve = $w2Pconfig['files_ci_preserve_attr'];
 $file = new CFile();
 $file->file_id = $file_id;
 
-$canAuthor = $file->canCreate();
-if (!$canAuthor && !$file_id) {
-	$AppUI->redirect(ACCESS_DENIED);
-}
-
-$canEdit = $file->canEdit();
-if (!$canEdit && $file_id) {
+$obj = $file;
+$canAddEdit = $obj->canAddEdit();
+$canAuthor = $obj->canCreate();
+$canEdit = $obj->canEdit();
+if (!$canAddEdit) {
 	$AppUI->redirect(ACCESS_DENIED);
 }
 
