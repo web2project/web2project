@@ -6,18 +6,14 @@ if (!defined('W2P_BASE_DIR')) {
 $file_folder_parent = intval(w2PgetParam($_GET, 'file_folder_parent', 0));
 $folder_id = intval(w2PgetParam($_GET, 'folder', 0));
 
-
-
 $folder = new CFile_Folder();
 $folder->file_folder_id = $folder_id;
 
-$canAuthor = $folder->canCreate();
-if (!$canAuthor && !$folder_id) {
-	$AppUI->redirect(ACCESS_DENIED);
-}
-
-$canEdit = $folder->canEdit();
-if (!$canEdit && $folder_id) {
+$obj = $folder;
+$canAddEdit = $obj->canAddEdit();
+$canAuthor = $obj->canCreate();
+$canEdit = $obj->canEdit();
+if (!$canAddEdit) {
 	$AppUI->redirect(ACCESS_DENIED);
 }
 

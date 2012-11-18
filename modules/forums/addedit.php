@@ -5,22 +5,16 @@ if (!defined('W2P_BASE_DIR')) {
 
 $forum_id = (int) w2PgetParam($_GET, 'forum_id', 0);
 
-
-
-
 $forum = new CForum();
 $forum->forum_id = $forum_id;
 
-$canAuthor = $forum->canCreate();
-if (!$canAuthor && !$forum_id) {
+$obj = $forum;
+$canAddEdit = $obj->canAddEdit();
+$canAuthor = $obj->canCreate();
+$canEdit = $obj->canEdit();
+if (!$canAddEdit) {
 	$AppUI->redirect(ACCESS_DENIED);
 }
-
-$canEdit = $forum->canEdit();
-if (!$canEdit && $forum_id) {
-	$AppUI->redirect(ACCESS_DENIED);
-}
-
 
 $obj = $AppUI->restoreObject();
 if ($obj) {

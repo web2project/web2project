@@ -11,13 +11,11 @@ $company_id = (int) w2PgetParam($_GET, 'company_id', 0);
 $department = new CDepartment();
 $department->dept_id = $dept_id;
 
-$canAuthor = $department->canCreate();
-if (!$canAuthor && !$dept_id) {
-	$AppUI->redirect(ACCESS_DENIED);
-}
-
-$canEdit = $department->canEdit();
-if (!$canEdit && $dept_id) {
+$obj = $department;
+$canAddEdit = $obj->canAddEdit();
+$canAuthor = $obj->canCreate();
+$canEdit = $obj->canEdit();
+if (!$canAddEdit) {
 	$AppUI->redirect(ACCESS_DENIED);
 }
 

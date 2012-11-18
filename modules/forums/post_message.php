@@ -8,17 +8,18 @@ $message_parent = (int) w2PgetParam($_GET, 'message_parent', -1);
 $message_id = (int) w2PgetParam($_GET, 'message_id', 0);
 $forum_id = (int) w2PgetParam($_REQUEST, 'forum_id', 0);
 
-$perms = &$AppUI->acl();
-$canAdd = $perms->checkModuleItem('forums', 'add');
-$canEdit = $perms->checkModuleItem('forums', 'edit', $forum_id);
+$myForum = new CForum();
+$myForum->forum_id = $forum_id;
 
-// check permissions
-if (!$canEdit && !$canAdd) {
+$obj = $myForum;
+$canAddEdit = $obj->canAddEdit();
+$canAdd = $obj->canCreate();
+$canEdit = $obj->canEdit();
+if (!$canAddEdit) {
 	$AppUI->redirect(ACCESS_DENIED);
 }
 
 //Pull forum information
-$myForum = new CForum();
 $myForum->load(null, $forum_id);
 if (!$myForum) {
 	$AppUI->setMsg('Forum');
