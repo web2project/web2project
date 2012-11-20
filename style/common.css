@@ -58,6 +58,26 @@ div.std {
 }
 /* End: Header Bar & Navigation for all pages */
 
+.titleblock {
+    border-collapse: collapse;
+    border-spacing: 0;
+    width: 100%;
+}
+
+.titleblock td.icon {
+    width: 42px;
+}
+
+.titleblock td.left {
+    padding-top: 14px;
+    text-align: left;
+    white-space:nowrap;
+}
+.titleblock td.right {
+    padding-top: 14px;
+    text-align: right;
+    white-space:nowrap;
+}
 
 .system-info P {
 	color: #000000;

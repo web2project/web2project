@@ -84,16 +84,16 @@ class w2p_Theme_TitleBlock {
 		if (!$uistyle) {
 			$uistyle = 'web2project';
 		}
-		$s = '<table width="100%" border="0" cellpadding="1" cellspacing="1"><tr>';
+		$s = '<table class="titleblock"><tr>';
 		if ($this->icon) {
-			$s .= '<td width="42">';
+			$s .= '<td class="icon">';
 			$s .= w2PshowImage($this->icon, '', '', '', '', $this->module);
 			$s .= '</td>';
 		}
-		$s .= '<td align="left" width="100%" nowrap="nowrap"><h1>' . $AppUI->_($this->title) . '</h1></td>';
+		$s .= '<td class="left"><h1>' . $AppUI->_($this->title) . '</h1></td>';
 		foreach ($this->cells1 as $c) {
 			$s .= $c[2] ? $c[2] : '';
-			$s .= '<td align="right" nowrap="nowrap"' . ($c[0] ? (' ' . $c[0]) : '') . '>';
+			$s .= '<td class="right"' . ($c[0] ? (' ' . $c[0]) : '') . '>';
 			$s .= $c[1] ? $c[1] : '&nbsp;';
 			$s .= '</td>';
 			$s .= $c[3] ? $c[3] : '';
