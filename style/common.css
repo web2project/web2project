@@ -64,19 +64,24 @@ div.std {
     width: 100%;
 }
 
-.titleblock td.icon {
-    width: 42px;
+.titleblock .icon {
+    float: left;
+    margin: 3px;
 }
 
-.titleblock td.left {
-    padding-top: 14px;
-    text-align: left;
-    white-space:nowrap;
+.titleblock h1 {
+    float: left;
+    margin-top: 15px;
 }
-.titleblock td.right {
-    padding-top: 14px;
-    text-align: right;
-    white-space:nowrap;
+
+.crumb-right {
+    float: right;
+    margin: 10px 0;
+}
+
+.crumb-right li {
+    list-style-type: none;
+    margin: 0 3px;
 }
 
 .system-info P {

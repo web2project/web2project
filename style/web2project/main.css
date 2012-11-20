@@ -534,8 +534,7 @@ a.delete:active span {
 }
 
 .crumb ul {
-    list-style-type: none;
-    margin: 0px;
+    margin-left: 5px;
     padding: 0px;
 }
 .crumb ul li {
