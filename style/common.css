@@ -58,25 +58,36 @@ div.std {
 }
 /* End: Header Bar & Navigation for all pages */
 
-.titleblock {
+.module-title {
     border-collapse: collapse;
     border-spacing: 0;
     width: 100%;
 }
 
-.titleblock .icon {
+.module-title .icon {
     float: left;
     margin: 3px;
 }
 
-.titleblock h1 {
+.module-title h1 {
     float: left;
     margin-top: 15px;
 }
 
-.crumb-right {
+.module-nav {
+    float: left;
+    margin: -15px 0 5px;
+    width: 100%;
+}
+
+.module-title .crumb-right {
     float: right;
     margin: 10px 0;
+}
+
+.module-nav .crumb-right {
+    float: right;
+    margin: 0 10px;
 }
 
 .crumb-right li {

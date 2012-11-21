@@ -72,7 +72,7 @@ class w2p_Theme_TitleBlock {
 	 */
 	public function addCrumbDelete($title, $canDelete = '', $msg = '') {
 		global $AppUI;
-		$this->addCrumbRight('<table cellspacing="0" cellpadding="0" border="0"><tr><td>' . '<a class="delete" href="javascript:delIt()" title="' . ($canDelete ? '' : $msg) . '"><span>' . $AppUI->_($title) . '</span></a>' . '</td></tr></table>');
+		$this->addCrumbRight('<a class="delete" href="javascript:delIt()" title="' . ($canDelete ? '' : $msg) . '"><span>' . $AppUI->_($title) . '</span></a>');
 	}
 	/**
 	 * The drawing function
@@ -87,7 +87,7 @@ class w2p_Theme_TitleBlock {
 
         $s = '';
 
-        $s .= '<div class="titleblock">';
+        $s .= '<div class="module-title">';
 		if ($this->icon) {
 			$s .= '<div class="icon">';
 			$s .= w2PshowImage($this->icon, '', '', '', '', $this->module);
@@ -105,17 +105,18 @@ class w2p_Theme_TitleBlock {
         $s .= '</ul>';
         $s .= '</div>';
 
-		if (count($this->crumbs) || count($this->cells2)) {
-			$crumbs = array();
+        if (count($this->crumbs) || count($this->cells2)) {
+            $crumbs = array();
 
-			foreach ($this->crumbs as $k => $v) {
+            $s .= '<div class="module-nav">';
+            foreach ($this->crumbs as $k => $v) {
 				$t = $v[1] ? '<img src="' . w2PfindImage($v[1], $this->module) . '" border="" alt="" />&nbsp;' : '';
 				$t .= $AppUI->_($v[0]);
 				$crumbs[] = '<li><a href="'.$k.'"><span>'.$t.'</span></a></li>';
 			}
 
             $s .= '<div class="crumb"><ul>' . implode('', $crumbs) . '</ul></div>';
-            $s .= '<div class="crumb-right"><ul>';
+            $s .= '<ul class="crumb-right">';
             foreach ($this->cells2 as $c) {
                 $s .= $c[2] ? $c[2] : '';
                 $s .= '<li ' . ($c[0] ? " $c[0]" : '') . '>';
@@ -123,8 +124,11 @@ class w2p_Theme_TitleBlock {
                 $s .= '</li>';
                 $s .= $c[3] ? $c[3] : '';
             }
-            $s .= '</ul></div>';
-		}
+            $s .= '</ul>';
+            $s .= '</div>';
+        }
+
+
 		echo '' . $s;
 		if (($a != 'index' || $m == 'system' || $m == 'calendar' || $m == 'smartsearch') && !$AppUI->boxTopRendered && function_exists('styleRenderBoxTop')) {
 			echo styleRenderBoxTop();
