@@ -59,26 +59,13 @@ $style = (($actual_end_date > $end_date) && !empty($end_date)) ? 'style="color:r
 // setup the title block
 $titleBlock = new w2p_Theme_TitleBlock('View Project', 'applet3-48.png', $m, $m . '.' . $a);
 
-// patch 2.12.04 text to search entry box
-if (isset($_POST['searchtext'])) {
-	$AppUI->setState('searchtext', $_POST['searchtext']);
-}
-
-$search_text = $AppUI->getState('searchtext') ? $AppUI->getState('searchtext') : '';
-$titleBlock->addCell('&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' . $AppUI->_('Search') . ':');
-$titleBlock->addCell('<input type="text" class="text" SIZE="10" name="searchtext" onChange="document.searchfilter.submit();" value=' . "'$search_text'" . 'title="' . $AppUI->_('Search in name and description fields') . '"/>',
-		'', '<form action="?m=projects&a=view&project_id=' . $project_id . '" method="post" id="searchfilter" accept-charset="utf-8">', '</form>');
-
 $canEditT = canAdd('tasks');
 if ($canEditT) {
-	$titleBlock->addCell();
 	$titleBlock->addCell('<input type="submit" class="button" value="' . $AppUI->_('new task') . '" />', '', '<form action="?m=tasks&a=addedit&task_project=' . $project_id . '" method="post" accept-charset="utf-8">', '</form>');
 }
 if ($canEdit) {
-	$titleBlock->addCell();
 	$titleBlock->addCell('<input type="submit" class="button" value="' . $AppUI->_('new event') . '" />', '', '<form action="?m=calendar&a=addedit&event_project=' . $project_id . '" method="post" accept-charset="utf-8">', '</form>');
 
-	$titleBlock->addCell();
 	$titleBlock->addCell('<input type="submit" class="button" value="' . $AppUI->_('new file') . '" />', '', '<form action="?m=files&a=addedit&project_id=' . $project_id . '" method="post" accept-charset="utf-8">', '</form>');
 }
 $titleBlock->addCrumb('?m=projects', 'projects list');

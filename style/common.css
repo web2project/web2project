@@ -87,7 +87,7 @@ div.std {
 
 .module-nav .crumb-right {
     float: right;
-    margin: 0 10px;
+    margin: 0;
 }
 
 .crumb-right li {
