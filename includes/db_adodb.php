@@ -180,6 +180,12 @@ function db_dateTime2unix($time) {
 // make the connection to the db
 db_connect(w2PgetConfig('dbhost'), w2PgetConfig('dbname'), w2PgetConfig('dbuser'), w2PgetConfig('dbpass'), w2PgetConfig('dbpersist'));
 
+/** This explicitly sets the character set of the connection. */
+if('mysql' == w2PgetConfig('dbtype')) {
+    $sql = 'SET NAMES utf8';
+    $db->Execute($sql);
+}
+
 /*
 * Having successfully established the database connection now,
 * we will hurry up to load the system configuration details from the database.
