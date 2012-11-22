@@ -15,9 +15,16 @@ $manager = new w2p_Core_UpgradeManager();
 		<meta name="Description" content="web2Project Update Manager">
         <link rel="stylesheet" type="text/css" href="../style/common.css" media="all" charset="utf-8"/>
 	 	<link rel="stylesheet" type="text/css" href="../style/web2project/main.css" charset="utf-8"/>
+
+        <style>
+            .update td {
+                font-size: medium;
+            }
+        </style>
+
 	</head>
 	<body>
-		<table cellspacing="0" cellpadding="3" border="0" class="tbl" width="90%" align="center" style="margin-top: 20px;">
+		<table cellspacing="0" cellpadding="3" border="0" class="tbl update" width="90%" align="center" style="margin-top: 20px;">
 			<tr>
 			  <td class="item" colspan="2">Welcome to the web2Project Update Manager!</td>
 			</tr>
