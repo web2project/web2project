@@ -39,6 +39,12 @@ $canAdd = canAdd($m);
 if ($canAdd) {
 	$titleBlock->addCell('<input type="submit" class="button" value="' . $AppUI->_('new forum') . '">', '', '<form action="?m=forums&a=addedit" method="post" accept-charset="utf-8">', '</form>');
 }
+
+//TODO: this is a little hack to make sure the table header gets generated in the show() method below
+global $a;
+$a = 'list';
+// End of little hack
+
 $titleBlock->show();
 $htmlHelper = new w2p_Output_HTMLHelper($AppUI);
 
