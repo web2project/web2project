@@ -72,7 +72,7 @@ $titleBlock->addCrumb('?m=projects', 'projects list');
 if ($canEdit) {
 	$titleBlock->addCrumb('?m=projects&a=addedit&project_id=' . $project_id, 'edit this project');
 	if ($canDelete) {
-		$titleBlock->addCrumbDelete('delete project', $canDelete, $msg);
+		$titleBlock->addCrumbDelete('delete project', $canDelete);
 	}
 }
 $titleBlock->show();
