@@ -52,7 +52,7 @@ $ttl = $forum_id > 0 ? 'Edit Forum' : 'Add Forum';
 $titleBlock = new w2p_Theme_TitleBlock($ttl, 'support.png', $m, $m . '.' . $a);
 $titleBlock->addCrumb('?m=forums', 'forums list');
 if ($canDelete && ($forum_id > 0)) {
-	$titleBlock->addCrumbRight('<table cellspacing="0" cellpadding="0" border="0"?<tr><td><a class="delete" href="javascript:delIt()"><span>' . $AppUI->_('delete forum') . '</span></a></td></tr></table>');
+    $titleBlock->addCrumbDelete('delete forum', $canDelete);
 }
 $titleBlock->show();
 ?>
