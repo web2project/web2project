@@ -214,6 +214,16 @@ class CContact extends w2p_Core_BaseObject
 
     public function canEdit()
     {
+        $q = $this->_getQuery();
+        $q->addQuery('user_contact');
+        $q->addTable('users');
+        $q->addWhere('user_id = ' . $this->_AppUI->user_id);
+        $contact_id = $q->loadResult();
+        /* A user can *always* edit themselves. */
+        if ($this->contact_id == $contact_id) {
+            return true;
+        }
+
         $thisCanEdit = false;
         $baseCanEdit = parent::canEdit();
 
@@ -230,10 +240,6 @@ class CContact extends w2p_Core_BaseObject
                 ($tmp->contact_private && ($tmp->contact_owner == $this->_AppUI->user_id))) {
             $thisCanEdit = true;
         }
-        /* A user can *always* edit themselves. */
-        if ($tmp->contact_id == $this->_AppUI->user_id) {
-            $baseCanEdit = $thisCanEdit = true;
-         }
 
         return ($thisCanEdit && $baseCanEdit);
     }
