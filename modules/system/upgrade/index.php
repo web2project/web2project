@@ -18,7 +18,15 @@ $okImg = w2PshowImage('log-notice.gif', 16, 16, $AppUI->_('OK'));
 
 $continue = true;
 ?>
-<table class="tbl list">
+<style>
+.update td {
+    font-size: medium;
+}
+.update img {
+    float: left;
+}
+</style>
+<table class="tbl list update">
 	<tr>
 		<td class="title" colspan="2">Step 1: Check System Settings</td>
 	</tr>

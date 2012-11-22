@@ -8,7 +8,7 @@
 
 	$continue = true;
 ?>
-<table cellspacing="0" cellpadding="3" border="0" class="tbl update" width="90%" align="center" style="margin-top: 20px;">
+<table cellspacing="0" cellpadding="3" border="0" class="tbl update" align="center">
 	<tr>
 		<td class="title" colspan="2">Step 1: Check System Settings</td>
 	</tr>
