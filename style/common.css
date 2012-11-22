@@ -175,6 +175,11 @@ div.clear {
     border-radius:3px;
 }
 
+.addedit textarea.customfield {
+    height: 75px;
+    width:  100%;
+}
+
 .view ._date, .view ._owner, .view ._status {
     text-align: left;
 }
