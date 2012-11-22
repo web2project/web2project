@@ -121,7 +121,7 @@ class w2p_Core_UpgradeManager {
         $sql = "SELECT * FROM dpversion ORDER BY db_version DESC";
         $res = $dbConn->Execute($sql);
         if ($res && $res->RecordCount() > 0) {
-            $dpVersion = $res->fields['code_version'];
+            $dpVersion = substr($res->fields['code_version'], 0, 5);
         }
 
         switch ($dpVersion) {
@@ -145,6 +145,7 @@ class w2p_Core_UpgradeManager {
             case '2.1.4':
             case '2.1.5':
             case '2.1.6':
+            case '2.1.7':
                 $errorMessages = $this->_applySQLUpdates('dp_to_w2p1.sql', $dbConn);
                 $allErrors = array_merge($allErrors, $errorMessages);
 
