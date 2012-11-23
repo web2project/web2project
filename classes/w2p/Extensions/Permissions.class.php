@@ -6,7 +6,7 @@
  * been made, however the main one is to provide the database details from
  * the main w2P environment.
  */
-$AppUI = is_object($AppUI) ? $AppUI : new w2p_Core_CAppUI();
+$AppUI = (isset($AppUI) && is_object($AppUI)) ? $AppUI : new w2p_Core_CAppUI();
 include_once $AppUI->getLibraryClass('phpgacl/gacl.class');
 include_once $AppUI->getLibraryClass('phpgacl/gacl_api.class');
 
