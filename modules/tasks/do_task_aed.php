@@ -114,20 +114,16 @@ if (is_array($result)) {
 }
 
 if ($result) {
-	$billingCategory = w2PgetSysVal('BudgetCategory');
+    if (isset($hassign)) {
+        $obj->updateAssigned($hassign, $hperc_assign_ar);
+    }
+
+    $billingCategory = w2PgetSysVal('BudgetCategory');
 	$budgets = array();
 	foreach ($billingCategory as $id => $category) {
 		$budgets[$id] = w2PgetParam($_POST, 'budget_'.$id, 0);
 	}
 	$obj->storeBudget($budgets);
-
-	$task_parent = (int) w2PgetParam($_POST, 'task_parent', 0);
-    $old_task_parent = (int) w2PgetParam($_POST, 'old_task_parent', 0);
-    if ($task_parent != $old_task_parent) {
-        $oldTask = new CTask();
-        $oldTask->load($old_task_parent);
-        $oldTask->updateDynamics(false);
-    }
 
     $custom_fields = new w2p_Core_CustomFields($m, 'addedit', $obj->task_id, 'edit');
     $custom_fields->bind($_POST);
@@ -140,10 +136,6 @@ if ($result) {
         $obj->addReminder();
     }
     $AppUI->setMsg($task_id ? 'Task updated' : 'Task added', UI_MSG_OK);
-
-    if (isset($hassign)) {
-        $obj->updateAssigned($hassign, $hperc_assign_ar);
-    }
 
     // TODO: This is a hotfix for 1083, tasks_dosql.addedit.php is no longer run which is the root of the problem
     // as no pre or post_save function is defined anymore (i could not find the core reason for this so ergo hotfix
