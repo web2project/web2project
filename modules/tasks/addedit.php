@@ -150,6 +150,7 @@ $can_edit_time_information = $task->canUserEditTimeInformation($project->project
 //get list of projects, for task move drop down list.
 $tmpprojects = $project->getAllowedProjects($AppUI->user_id);
 $projects = array();
+$projects[0] = $AppUI->_('Do not move');
 foreach($tmpprojects as $proj) {
     $projects[$proj['project_id']] = $proj['project_name'];
 }
