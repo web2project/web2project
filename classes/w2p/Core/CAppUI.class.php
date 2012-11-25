@@ -304,13 +304,14 @@ class w2p_Core_CAppUI
     }
 
     /**
-     *
+     * This converts the date from the GMT/UTC value stored in the database to the
+     *   user-specific timezone specified by the user.
      */
     public function formatTZAwareTime($datetime = '', $format = '')
     {
         $userTimezone = $this->getPref('TIMEZONE');
         $userTZ = new DateTimeZone($userTimezone);
-        $systemTZ = new DateTimeZone(w2PgetConfig('system_timezone', 'Europe/London'));
+        $systemTZ = new DateTimeZone('Europe/London');
         $ts = new DateTime($datetime, $systemTZ);
         $ts->setTimezone($userTZ);
 
