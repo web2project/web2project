@@ -223,7 +223,55 @@ class CProject extends w2p_Core_BaseObject
     public function importTasks($from_project_id)
     {
         $errors = array();
+        $task_mapping = array();
 
+        $project_start_date = new w2p_Utilities_Date($this->project_start_date);
+        $timeOffset = 0;
+
+        $newTask = new CTask();
+        $task_list = $newTask->loadAll('task_start_date', "task_project = " . $from_project_id);
+
+echo '<table>';
+//echo '<pre>';
+        foreach($task_list as $orig_id => $orig_task) {
+echo '<tr><td colspan="2">';
+echo $orig_task['task_id'] . '--' . $orig_task['task_name'] . '--' . $orig_task['task_parent'] . '--' . $orig_task['task_start_date'] . $orig_task['task_end_date'] . "\n";
+echo '</td></tr>';
+echo '<tr>';
+            if ($orig_task == reset($task_list)) {
+
+                $original_start_date = new w2p_Utilities_Date($orig_task['task_start_date']);
+                $timeOffset = $original_start_date->dateDiff($project_start_date);
+
+echo "\nshifting " . $original_start_date->format(FMT_DATETIME_MYSQL) ." to " . $new_start_date->format(FMT_DATETIME_MYSQL) . " by $timeOffset days \n\n";
+
+                if (!$timeOffset) {
+                    break;
+                }
+            }
+            
+echo '<td><pre>';
+print_r($orig_task);
+echo '</pre></td>';
+            $orig_task['task_id'] = 0;
+            $orig_task['task_parent'] = 0;
+            $orig_start_date = '';
+            $orig_end_date = '';
+
+            $newTask->bind($orig_task);
+echo '<td><pre>';
+print_r($orig_task);
+echo '</pre></td>';
+            
+echo '</tr>';
+            //$task_mapping[$orig_id] = $newTask->task_id;
+        }
+  
+echo '</table>';
+//echo "\n";
+//print_r($task_list);
+die();
+/*
         // Load the original
         $origProject = new CProject();
         $origProject->overrideDatabase($this->_query);
@@ -321,6 +369,7 @@ class CProject extends w2p_Core_BaseObject
             // TODO Unsure if we should update the end date from tasks... Thoughts?
             $this->updateTaskCache($this->project_id, $importedTasks[$lastImportIndex], $this->project_actual_end_date, $numTasks);
         }
+*/
         return $errors;
     }
 
