@@ -226,6 +226,7 @@ class CProject extends w2p_Core_BaseObject
 
         $old_new_task_mapping = array();
         $old_dependencies = array();
+        $old_parents = array();
 
         $project_start_date = new w2p_Utilities_Date($this->project_start_date);
         $timeOffset = 0;
@@ -249,7 +250,7 @@ echo '<pre>';
             $orig_task['task_project'] = $this->project_id;
             $orig_task['task_sequence'] = 0;
 
-            
+            $old_parents[$orig_id] = $orig_task['task_parent'];
             $orig_task['task_parent'] = 0;
 
             $tz_start_date = $this->_AppUI->formatTZAwareTime($orig_task['task_start_date'], '%Y-%m-%d %T');
@@ -265,7 +266,7 @@ echo '<pre>';
             $orig_task['task_end_date'] = $orig_end_date->format(FMT_DATETIME_MYSQL);
 
             $newTask->bind($orig_task);
-            $newTask->store();
+            $result = $newTask->store();
 
             $old_dependencies[$orig_id] = array_keys($newTask->getDependentTaskList($orig_id));
             $old_new_task_mapping[$orig_id] = $newTask->task_id;
@@ -282,6 +283,15 @@ echo '<pre>';
                 $q->clear();
             }
         }
+
+        foreach($old_parents as $old_child => $old_parent) {
+            $q->addTable('tasks');
+            $q->addUpdate('task_parent', $old_new_task_mapping[$old_parent]);
+            $q->addWhere('task_id   = ' . $old_new_task_mapping[$old_child]);
+            $q->exec();
+            $q->clear();
+        }
+
 //TODO: handle errors, wipe out the tasks we've imported already
 die();
 
