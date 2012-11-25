@@ -307,7 +307,9 @@ class CTask extends w2p_Core_BaseObject
     public function load($oid = null, $strip = false, $skipUpdate = false)
     {
         if ($skipUpdate) {
-            trigger_error("The 'skipUpdate' parameter of load() has been deprecated in v3.0 and will be removed by v4.0. Please use load() without it instead.", E_USER_NOTICE);
+            trigger_error("The 'skipUpdate' parameter of load() has been
+                deprecated in v3.0 and will be removed by v4.0. Please use
+                load() without it instead.", E_USER_NOTICE);
         }
         return parent::load($oid, $strip);
     }
@@ -342,7 +344,8 @@ class CTask extends w2p_Core_BaseObject
 
     public function peek($oid = null, $strip = false)
     {
-        trigger_error("peek() has been deprecated in v3.0 and will be removed by v4.0. Please use load() instead.", E_USER_NOTICE);
+        trigger_error("peek() has been deprecated in v3.0 and will be removed by
+            v4.0. Please use load() instead.", E_USER_NOTICE);
         return $this->load($oid, $strip);
     }
 
@@ -1463,8 +1466,8 @@ class CTask extends w2p_Core_BaseObject
     public function shiftDependentTasks()
     {
         trigger_error("The CTask->shiftDependentTasks method has been deprecated
-            and will be removed in v4.0. Please use CTask->pushDependencies
-            instead", E_USER_NOTICE );
+            in v3.0 and will be removed in v4.0. Please use
+            CTask->pushDependencies instead", E_USER_NOTICE );
 
         $this->pushDependencies($this->task_id, $this->task_end_date);
     }
@@ -1480,8 +1483,8 @@ class CTask extends w2p_Core_BaseObject
         $newTask->load($task_id);
 
         trigger_error("The CTask->update_dep_dates method has been deprecated
-            and will be removed in v4.0. Please use CTask->pushDependencies
-            instead", E_USER_NOTICE );
+            in v3.0 and will be removed in v4.0. Please use
+            CTask->pushDependencies instead", E_USER_NOTICE );
 
         $this->pushDependencies($task_id, $newTask->task_end_date);
     }
