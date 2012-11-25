@@ -834,6 +834,7 @@ class CTask extends w2p_Core_BaseObject
     public function delete()
     {
         $result = false;
+        $this->clearErrors();
 
         if ($this->canDelete()) {
             //load it before deleting it because we need info on it to update the parents later on
