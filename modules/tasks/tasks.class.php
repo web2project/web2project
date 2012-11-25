@@ -1583,8 +1583,9 @@ class CTask extends w2p_Core_BaseObject
     }
 
     /**
-     * Function that returns the amount of hours this
-     * task consumes per user each week
+     * Function that returns the amount of hours this task consumes per user each week
+     *
+     * @todo wtf - dkc 25 Nov 2012
      */
     public function getTaskDurationPerWeek($use_percent_assigned = false)
     {
@@ -1617,18 +1618,21 @@ class CTask extends w2p_Core_BaseObject
     // unassign a user from task
     public function removeAssigned($user_id)
     {
-
         $q = $this->_getQuery();
         $q->setDelete('user_tasks');
         $q->addWhere('task_id = ' . (int) $this->task_id . ' AND user_id = ' . (int) $user_id);
         $q->exec();
     }
 
-    //using user allocation percentage ($perc_assign)
-    // @return returns the Names of the over-assigned users (if any), otherwise false
+    /*
+     * using user allocation percentage ($perc_assign)
+     *
+     * @return returns the Names of the over-assigned users (if any), otherwise false
+     *
+     * @todo - a given function/method should return one data type consistently - dkc 25 Nov 2012
+     */
     public function updateAssigned($cslist, $perc_assign, $del = true, $rmUsers = false)
     {
-
         $q = $this->_getQuery();
         // process assignees
         $tarr = explode(',', $cslist);

@@ -219,6 +219,9 @@ class CProject extends w2p_Core_BaseObject
      *
      * 	@param	int Project ID of the tasks come from.
      * 	@return	bool
+     *
+     *  @todo - this entire thing has nothing to do with projects.. it should move to the CTask class - dkc 25 Nov 2012
+     *  @todo - why are we returning either an array or a boolean? You make my head hurt. - dkc 25 Nov 2012
      * */
     public function importTasks($from_project_id)
     {
@@ -265,7 +268,7 @@ echo '<pre>';
             $orig_task['task_end_date'] = $orig_end_date->format(FMT_DATETIME_MYSQL);
 
             $newTask->bind($orig_task);
-            $result = $newTask->store();
+$result = $newTask->store();
             if (!$result) {
                 $errors = $newTask->getError();
                 break;
@@ -284,6 +287,22 @@ echo '<pre>';
             }
         } else {
             $q = $this->_getQuery();
+
+            foreach($old_new_task_mapping as $old_id => $new_id) {
+                $assigned = array();
+                $percent = array();
+
+                $assigneeList = $newTask->getAssignedUsers($old_id);
+
+                foreach($assigneeList as $id => $data) {
+                    $assigned[] = $id;
+                    $percent[$id]  = $data['perc_assignment'];
+                }
+
+                $newTask->task_id = $new_id;
+                $newTask->updateAssigned(implode(',', $assigned), $percent);
+            }
+
             foreach($old_dependencies as $from => $to_array) {
                 foreach($to_array as $to) {
                     $q->addTable('task_dependencies');
@@ -296,6 +315,10 @@ echo '<pre>';
             }
 
             foreach($old_parents as $old_child => $old_parent) {
+                if ($old_child == $old_parent) {
+                    /** Remember, this means skip the rest of the loop. */
+                    continue;
+                }
                 $q->addTable('tasks');
                 $q->addUpdate('task_parent', $old_new_task_mapping[$old_parent]);
                 $q->addWhere('task_id   = ' . $old_new_task_mapping[$old_child]);
@@ -303,7 +326,6 @@ echo '<pre>';
                 $q->clear();
             }
         }
-die();
 
         return $errors;
     }
