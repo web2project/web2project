@@ -45,28 +45,11 @@ class w2p_Authenticators_LDAP extends w2p_Authenticators_Base
             return false;
         }
 
-        if ($rs = ldap_connect($this->ldap_host, $this->ldap_port)) {
+        $rs = ldap_connect($this->ldap_host, $this->ldap_port);
+        if ($rs) {
             ldap_set_option($rs, LDAP_OPT_PROTOCOL_VERSION, $this->ldap_version);
             ldap_set_option($rs, LDAP_OPT_REFERRALS, 0);
 
-            if ('' == $this->ldap_complete_string) {
-                /*
-                 * This should be compliant with the old/previous LDAP settings
-                 *   that we've used all along.
-                 */
-                if (strpos($this->ldap_search_user, 'CN=') === false) {
-                    $ldap_bind_dn = 'CN='.$this->ldap_search_user.',OU=Users,'.
-                        $this->base_dn;
-                } else {
-                    $ldap_bind_dn = $this->ldap_search_user.','.$this->base_dn;
-                }
-            } else {
-                /*
-                 * In case the LDAP configuration is different than expected,
-                 *   we can configure a completely custom one.
-                 */
-                $ldap_bind_dn = $this->ldap_complete_string;
-            }
             $ldap_bind_pw = empty($this->ldap_search_pass) ? null :
                 $this->ldap_search_pass;
             $ldap_bind_dn = $this->ldap_search_user;
