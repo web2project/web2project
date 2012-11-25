@@ -223,7 +223,9 @@ class CProject extends w2p_Core_BaseObject
     public function importTasks($from_project_id)
     {
         $errors = array();
-        $task_mapping = array();
+
+        $old_new_task_mapping = array();
+        $old_dependencies = array();
 
         $project_start_date = new w2p_Utilities_Date($this->project_start_date);
         $timeOffset = 0;
@@ -231,145 +233,58 @@ class CProject extends w2p_Core_BaseObject
         $newTask = new CTask();
         $task_list = $newTask->loadAll('task_start_date', "task_project = " . $from_project_id);
 
-echo '<table>';
-//echo '<pre>';
+echo '<pre>';
         foreach($task_list as $orig_id => $orig_task) {
-echo '<tr><td colspan="2">';
-echo $orig_task['task_id'] . '--' . $orig_task['task_name'] . '--' . $orig_task['task_parent'] . '--' . $orig_task['task_start_date'] . $orig_task['task_end_date'] . "\n";
-echo '</td></tr>';
-echo '<tr>';
             if ($orig_task == reset($task_list)) {
 
                 $original_start_date = new w2p_Utilities_Date($orig_task['task_start_date']);
                 $timeOffset = $original_start_date->dateDiff($project_start_date);
 
-echo "\nshifting " . $original_start_date->format(FMT_DATETIME_MYSQL) ." to " . $new_start_date->format(FMT_DATETIME_MYSQL) . " by $timeOffset days \n\n";
-
                 if (!$timeOffset) {
                     break;
                 }
             }
-            
-echo '<td><pre>';
-print_r($orig_task);
-echo '</pre></td>';
+
             $orig_task['task_id'] = 0;
+            $orig_task['task_project'] = $this->project_id;
+            $orig_task['task_sequence'] = 0;
+
+            
             $orig_task['task_parent'] = 0;
-            $orig_start_date = '';
-            $orig_end_date = '';
+
+            $tz_start_date = $this->_AppUI->formatTZAwareTime($orig_task['task_start_date'], '%Y-%m-%d %T');
+            $orig_start_date = new w2p_Utilities_Date($tz_start_date);
+            $orig_start_date->addDays($timeOffset);
+            $orig_start_date->next_working_day();
+            $orig_task['task_start_date'] = $orig_start_date->format(FMT_DATETIME_MYSQL);
+
+            $tz_end_date = $this->_AppUI->formatTZAwareTime($orig_task['task_end_date'], '%Y-%m-%d %T');
+            $orig_end_date = new w2p_Utilities_Date($tz_end_date);
+            $orig_end_date->addDays($timeOffset);
+            $orig_end_date->prev_working_day();
+            $orig_task['task_end_date'] = $orig_end_date->format(FMT_DATETIME_MYSQL);
 
             $newTask->bind($orig_task);
-echo '<td><pre>';
-print_r($orig_task);
-echo '</pre></td>';
-            
-echo '</tr>';
-            //$task_mapping[$orig_id] = $newTask->task_id;
+            $newTask->store();
+
+            $old_dependencies[$orig_id] = array_keys($newTask->getDependentTaskList($orig_id));
+            $old_new_task_mapping[$orig_id] = $newTask->task_id;
         }
-  
-echo '</table>';
-//echo "\n";
-//print_r($task_list);
-die();
-/*
-        // Load the original
-        $origProject = new CProject();
-        $origProject->overrideDatabase($this->_query);
-        $origProject->load($from_project_id);
+
         $q = $this->_getQuery();
-        $q->addTable('tasks');
-        $q->addQuery('task_id');
-        $q->addWhere('task_project =' . (int) $from_project_id);
-        $tasks = array_flip($q->loadColumn());
-        $q->clear();
+        foreach($old_dependencies as $from => $to_array) {
+            foreach($to_array as $to) {
+                $q->addTable('task_dependencies');
+                $q->addInsert('dependencies_req_task_id', $old_new_task_mapping[$from]);
+                $q->addInsert('dependencies_task_id',     $old_new_task_mapping[$to]);
 
-        $origDate = new w2p_Utilities_Date($origProject->project_start_date);
-
-        $destDate = new w2p_Utilities_Date($this->project_start_date);
-
-        $timeOffset = $origDate->dateDiff($destDate);
-        if ($origDate->compare($origDate, $destDate) > 0) {
-            $timeOffset = -1 * $timeOffset;
+                $q->exec();
+                $q->clear();
+            }
         }
+//TODO: handle errors, wipe out the tasks we've imported already
+die();
 
-        // Dependencies array
-        $deps = array();
-
-        $objTask = new CTask();
-        $objTask->overrideDatabase($this->_query);
-        foreach ($tasks as $orig => $notUsed) {
-            $objTask->load($orig);
-            $destTask = $objTask->copy($this->project_id);
-            $destTask->task_parent = (0 == $destTask->task_parent) ? $destTask->task_id : $destTask->task_parent;
-            $destTask->store();
-            $tasks[$orig] = $destTask;
-            $deps[$orig] = $objTask->getDependencies();
-        }
-
-        // Fix record integrity
-        foreach ($tasks as $old_id => $newTask) {
-
-            // Fix parent Task
-            // This task had a parent task, adjust it to new parent task_id
-            if ($newTask->task_id != $newTask->task_parent) {
-                $newTask->task_parent = $tasks[$newTask->task_parent]->task_id;
-            }
-
-            // Fix task start date from project start date offset
-            $origDate->setDate($newTask->task_start_date);
-            $origDate->addDays($timeOffset);
-            $destDate = $origDate;
-            $newTask->task_start_date = $destDate->format(FMT_DATETIME_MYSQL);
-
-            // Fix task end date from start date + work duration
-            if (!empty($newTask->task_end_date) && $newTask->task_end_date != '0000-00-00 00:00:00') {
-                $origDate->setDate($newTask->task_end_date);
-                $origDate->addDays($timeOffset);
-                $destDate = $origDate;
-                $newTask->task_end_date = $destDate->format(FMT_DATETIME_MYSQL);
-            }
-
-            // Dependencies
-            if (!empty($deps[$old_id])) {
-                $oldDeps = explode(',', $deps[$old_id]);
-                // New dependencies array
-                $newDeps = array();
-                foreach ($oldDeps as $dep) {
-                    $newDeps[] = $tasks[$dep]->task_id;
-                }
-
-                // Update the new task dependencies
-                $csList = implode(',', $newDeps);
-                $newTask->updateDependencies($csList);
-            } // end of update dependencies
-            $result = $newTask->store();
-            $newTask->addReminder();
-            $importedTasks[] = $newTask->task_id;
-
-            if (is_array($result) && count($result)) {
-                foreach ($result as $notUsed => $error_msg) {
-                    $errors[] = $newTask->task_name . ': ' . $error_msg;
-                }
-            }
-        } // end Fix record integrity
-        // We have errors, so rollback everything we've done so far
-        if (count($errors)) {
-            $delTask = new CTask();
-            $delTask->overrideDatabase($this->_query);
-            foreach ($importedTasks as $badTask) {
-                $delTask->task_id = $badTask;
-                $delTask->delete();
-            }
-        } else {
-
-            // All is OK! Now update task cache
-            $numTasks = count($importedTasks);
-            $lastImportIndex = $numTasks-1;
-
-            // TODO Unsure if we should update the end date from tasks... Thoughts?
-            $this->updateTaskCache($this->project_id, $importedTasks[$lastImportIndex], $this->project_actual_end_date, $numTasks);
-        }
-*/
         return $errors;
     }
 
