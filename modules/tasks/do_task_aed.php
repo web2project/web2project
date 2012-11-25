@@ -114,20 +114,16 @@ if (is_array($result)) {
 }
 
 if ($result) {
-	$billingCategory = w2PgetSysVal('BudgetCategory');
+    if (isset($hassign)) {
+        $obj->updateAssigned($hassign, $hperc_assign_ar);
+    }
+
+    $billingCategory = w2PgetSysVal('BudgetCategory');
 	$budgets = array();
 	foreach ($billingCategory as $id => $category) {
 		$budgets[$id] = w2PgetParam($_POST, 'budget_'.$id, 0);
 	}
 	$obj->storeBudget($budgets);
-
-	$task_parent = (int) w2PgetParam($_POST, 'task_parent', 0);
-    $old_task_parent = (int) w2PgetParam($_POST, 'old_task_parent', 0);
-    if ($task_parent != $old_task_parent) {
-        $oldTask = new CTask();
-        $oldTask->load($old_task_parent);
-        $oldTask->updateDynamics(false);
-    }
 
     $custom_fields = new w2p_Core_CustomFields($m, 'addedit', $obj->task_id, 'edit');
     $custom_fields->bind($_POST);
@@ -141,69 +137,6 @@ if ($result) {
     }
     $AppUI->setMsg($task_id ? 'Task updated' : 'Task added', UI_MSG_OK);
 
-    if (isset($hassign)) {
-        $obj->updateAssigned($hassign, $hperc_assign_ar);
-    }
-
-    if (isset($hdependencies)) {
-        // there are dependencies set!
-
-        // backup initial start and end dates
-        $tsd = new w2p_Utilities_Date($obj->task_start_date, w2PgetConfig('system_timezone', 'Europe/London'));
-        $ted = new w2p_Utilities_Date($obj->task_end_date, w2PgetConfig('system_timezone', 'Europe/London'));
-
-        // updating the table recording the
-        // dependency relations with this task
-        $obj->updateDependencies($hdependencies, $task_parent);
-
-        // we will reset the task's start date based upon dependencies
-        // and shift the end date appropriately
-        if ($adjustStartDate && !is_null($hdependencies)) {
-
-            // load already stored task data for this task
-            $tempTask = new CTask();
-            $tempTask->load($obj->task_id);
-
-            // shift new start date to the last dependency end date
-            $nsd = new w2p_Utilities_Date($tempTask->get_deps_max_end_date($tempTask), w2PgetConfig('system_timezone', 'Europe/London'));
-
-            // prefer Wed 8:00 over Tue 16:00 as start date
-            $nsd = $nsd->next_working_day();
-
-            // prepare the creation of the end date
-            $ned = new w2p_Utilities_Date();
-            $ned->setTZ(w2PgetConfig('system_timezone', 'Europe/London'));
-            $ned->copy($nsd);
-
-            if (empty($obj->task_start_date)) {
-                // appropriately calculated end date via start+duration
-                $ned->addDuration($obj->task_duration, $obj->task_duration_type);
-            } else {
-                // calc task time span start - end
-                //$d = $tsd->calcDuration($ted);
-                $d = $obj->task_duration;
-                // Re-add (keep) task time span for end date.
-                // This is independent from $obj->task_duration.
-                // The value returned by Date::Duration() is always in hours ('1')
-                $ned->addDuration($d, '1');
-            }
-
-            // prefer tue 16:00 over wed 8:00 as an end date
-            $ned = $ned->prev_working_day();
-
-            $obj->task_start_date = $nsd->format(FMT_DATETIME_MYSQL);
-            $obj->task_end_date = $ned->format(FMT_DATETIME_MYSQL);
-            $obj->task_start_date = $AppUI->convertToSystemTZ($obj->task_start_date);
-            $obj->task_end_date = $AppUI->convertToSystemTZ($obj->task_end_date);
-
-            $updateTask = new CTask();
-            $updateTask->load((int)$obj->task_id);
-            $updateTask->task_start_date = $obj->task_start_date;
-            $updateTask->task_end_date = $obj->task_end_date;
-            $updateTask->store();
-        }
-        $obj->pushDependencies($obj->task_id, $obj->task_end_date);
-    }
     // TODO: This is a hotfix for 1083, tasks_dosql.addedit.php is no longer run which is the root of the problem
     // as no pre or post_save function is defined anymore (i could not find the core reason for this so ergo hotfix
     if($AppUI->isActiveModule('resources')) {

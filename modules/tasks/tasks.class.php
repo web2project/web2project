@@ -699,6 +699,11 @@ class CTask extends w2p_Core_BaseObject
             $last_task_data['last_date'],
             $this->getTaskCount($this->task_project)
         );
+
+        // update dependencies
+        if (!empty($this->task_id)) {
+            $this->updateDependencies($this->getDependencies(), $this->task_parent);
+        }
         $this->pushDependencies($this->task_id, $this->task_end_date);
 
         //split out related departments and store them seperatly.
@@ -752,11 +757,6 @@ class CTask extends w2p_Core_BaseObject
                 $old_parent->load($oTsk->task_parent);
                 $old_parent->updateDynamics();
             }
-        }
-
-        // update dependencies
-        if (!empty($this->task_id)) {
-            $this->updateDependencies($this->getDependencies(), $this->task_parent);
         }
     }
 
@@ -948,36 +948,55 @@ class CTask extends w2p_Core_BaseObject
      *
      * @todo TODO: This entire function needs to be timezone aware.. current it isn't.
      */
-    public function pushDependencies($taskId, $lastEndDate)
+    public function pushDependencies($task_id, $lastEndDate)
     {
-        $q = $this->_getQuery();
-        $q->addQuery('task_id, task_duration, task_duration_type');
-        $q->addTable('task_dependencies', 'td');
-        $q->rightJoin('tasks', 't', 't.task_id = td.dependencies_task_id');
-        $q->addWhere('td.dependencies_req_task_id = ' . (int) $taskId);
-        $q->addWhere("t.task_start_date < '$lastEndDate'");
-        $q->addWhere('t.task_dynamic = 31');
-        $q->addOrder('t.task_start_date');
-        $cascadingTasks = $q->loadList();
+        $task_end_int = strtotime($lastEndDate);
 
-        $lastEndDate = $this->_AppUI->formatTZAwareTime($lastEndDate, '%Y-%m-%d %T');
-        $nsd = new w2p_Utilities_Date($lastEndDate);
-        $nsd = $nsd->next_working_day();
+        $dependent_tasks = $this->getDependentTaskList($task_id);
 
-        $tmpTask = new CTask();
-        foreach ($cascadingTasks as $nextTask) {
-            $multiplier = ('24' == $nextTask['task_duration_type']) ? 3 : 1;
-            $d = $nextTask['task_duration'] * $multiplier;
+        foreach($dependent_tasks as $_task_id => $_task_data) {
+            $task_start_int = strtotime($_task_data['task_start_date']);
+
+            if ($task_start_int >= $task_end_int) {
+                /**
+                 * Remember, this continue just means 'skip this iteration and
+                 *   go to the next one.' In this case, we're skipping the
+                 *   iteration because either the dependent task's start date is
+                 *   already at or after the end date we have.
+                 */
+                continue;
+            }
+
+            $nsd = new w2p_Utilities_Date($lastEndDate);
+            // Because we prefer the beginning of the next day as opposed to the
+            //   end of the current for a task_start_date
+            $nsd = $nsd->next_working_day();
+
+            $multiplier = ('24' == $_task_data['task_duration_type']) ? 3 : 1;
+            $d = $_task_data['task_duration'] * $multiplier;
 
             $ned = new w2p_Utilities_Date();
             $ned->copy($nsd);
             $ned->addDuration($d);
+
+            // Because we prefer the end of the previous as opposed to the
+            //   beginning of the current for a task_end_date
             $ned = $ned->prev_working_day();
 
-            $tmpTask->load($nextTask['task_id']);
-            $tmpTask->task_start_date = $nsd->format(FMT_DATETIME_MYSQL);
-            $tmpTask->task_end_date   = $ned->format(FMT_DATETIME_MYSQL);
-            $tmpTask->store();
+            $new_start_date = $nsd->format(FMT_DATETIME_MYSQL);
+            $new_start_date = $this->_AppUI->convertToSystemTZ($new_start_date);
+            $new_end_date = $ned->format(FMT_DATETIME_MYSQL);
+            $new_end_date = $this->_AppUI->convertToSystemTZ($new_end_date);
+
+            $q = $this->_getQuery();
+            $q->addTable('tasks');
+            $q->addUpdate('task_start_date', $new_start_date);
+            $q->addUpdate('task_end_date', $new_end_date);
+            $q->addUpdate('task_updated', "'" . $q->dbfnNowWithTZ() . "'", false, true);
+            $q->addWhere('task_dynamic > 1 AND task_id = ' . (int) $_task_id);
+            $q->exec();
+            
+            $this->pushDependencies($_task_id, $new_end_date);
         }
     }
 
@@ -1435,46 +1454,21 @@ class CTask extends w2p_Core_BaseObject
 
 // end of dependentTasks()
 
-    /*
-     * 		 shift dependents tasks dates
-     * 		 @return void
+    /**
+     * @deprecated since version 3.0
      */
-
     public function shiftDependentTasks()
     {
-        // Get tasks that depend on this task
-        $csDeps = explode(',', $this->dependentTasks('', '', false));
+        trigger_error("The CTask->shiftDependentTasks method has been deprecated
+            and will be removed in v4.0. Please use CTask->pushDependencies
+            instead", E_USER_NOTICE );
 
-        if ($csDeps[0] == '') {
-            return;
-        }
-
-        // Stage 1: Update dependent task dates
-        foreach ($csDeps as $task_id) {
-            $this->update_dep_dates($task_id);
-        }
-
-        // Stage 2: Now shift the dependent tasks' dependents
-        foreach ($csDeps as $task_id) {
-            $newTask = new CTask();
-            $newTask->overrideDatabase($this->_query);
-            $newTask->load($task_id);
-            $newTask->shiftDependentTasks();
-        }
-
-        return;
+        $this->pushDependencies($this->task_id, $this->task_end_date);
     }
 
-// end of shiftDependentTasks()
-
-    /*
-     * 		  Update this task's dates in the DB.
-     * 		  start date:		  based on latest end date of dependencies
-     * 		  end date:			  based on start date + appropriate task time span
-     *
-     * 		  @param				integer task_id of task to update
+    /**
+     * @deprecated since version 3.0
      */
-
     public function update_dep_dates($task_id)
     {
 
@@ -1482,51 +1476,11 @@ class CTask extends w2p_Core_BaseObject
         $newTask->overrideDatabase($this->_query);
         $newTask->load($task_id);
 
-        // Do not update tasks that are not tracking dependencies
-        if (!in_array($newTask->task_dynamic, self::$tracking_dynamics)) {
-            return;
-        }
+        trigger_error("The CTask->update_dep_dates method has been deprecated
+            and will be removed in v4.0. Please use CTask->pushDependencies
+            instead", E_USER_NOTICE );
 
-        // load original task dates and calculate task time span
-        $tsd = new w2p_Utilities_Date($newTask->task_start_date);
-        $ted = new w2p_Utilities_Date($newTask->task_end_date);
-        $duration = $tsd->calcDuration($ted);
-
-        // reset start date
-        $nsd = new w2p_Utilities_Date($newTask->get_deps_max_end_date($newTask));
-
-        // prefer Wed 8:00 over Tue 16:00 as start date
-        $nsd = $nsd->next_working_day();
-        $new_start_date = $nsd->format(FMT_DATETIME_MYSQL);
-
-        // Add task time span to End Date again
-        $ned = new w2p_Utilities_Date();
-        $ned->copy($nsd);
-        $ned->addDuration($duration, '1');
-
-        // make sure one didn't land on a non-working day
-        $ned = $ned->next_working_day(true);
-
-        // prefer tue 16:00 over wed 8:00 as an end date
-        $ned = $ned->prev_working_day();
-
-        $new_end_date = $ned->format(FMT_DATETIME_MYSQL);
-
-        // update the db
-        $q = $this->_getQuery();
-        $q->addTable('tasks');
-        $q->addUpdate('task_start_date', $new_start_date);
-        $q->addUpdate('task_end_date', $new_end_date);
-        $q->addUpdate('task_updated', "'" . $q->dbfnNowWithTZ() . "'", false, true);
-        $q->addWhere('task_dynamic <> 1 AND task_id = ' . (int) $task_id);
-        $q->exec();
-        $q->clear();
-
-        if ($newTask->task_parent != $newTask->task_id) {
-            $newTask->updateDynamics();
-        }
-
-        return;
+        $this->pushDependencies($task_id, $newTask->task_end_date);
     }
 
     /*
@@ -1754,6 +1708,8 @@ class CTask extends w2p_Core_BaseObject
     {
         $q = $this->_getQuery();
         $q->addQuery('td.dependencies_task_id, t.task_name, t.task_percent_complete');
+        $q->addQuery('task_start_date, task_end_date, task_dynamic');
+        $q->addQuery('task_duration, task_duration_type');
         $q->addTable('tasks', 't');
         $q->addTable('task_dependencies', 'td');
         $q->addWhere('td.dependencies_task_id = t.task_id');

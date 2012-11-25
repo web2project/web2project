@@ -1634,7 +1634,6 @@ class w2p_Database_Query {
 			$values[$k] = $v;
 		}
 		if (count($values)) {
-
 			foreach ($fields as $field) {
 				if (!in_array($values[$field], $this->_db_funcs)) {
 					$this->addUpdate($field, $values[$field]);
@@ -1642,7 +1641,9 @@ class w2p_Database_Query {
 					$this->addUpdate($field, $values[$field], false, true);
 				}
 			}
-			return $this->exec();
+            if (!$this->exec()) {
+                return false;
+            }
 		}
 
         return true;
