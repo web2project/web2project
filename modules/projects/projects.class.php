@@ -236,14 +236,13 @@ class CProject extends w2p_Core_BaseObject
 
 echo '<pre>';
         foreach($task_list as $orig_id => $orig_task) {
+            /**
+             * This gets the first (earliest) task start date and figures out
+             *   how much we have to shift all the tasks by.
+             */
             if ($orig_task == reset($task_list)) {
-
                 $original_start_date = new w2p_Utilities_Date($orig_task['task_start_date']);
                 $timeOffset = $original_start_date->dateDiff($project_start_date);
-
-                if (!$timeOffset) {
-                    break;
-                }
             }
 
             $orig_task['task_id'] = 0;
@@ -267,32 +266,43 @@ echo '<pre>';
 
             $newTask->bind($orig_task);
             $result = $newTask->store();
+            if (!$result) {
+                $errors = $newTask->getError();
+                break;
+            }
 
             $old_dependencies[$orig_id] = array_keys($newTask->getDependentTaskList($orig_id));
             $old_new_task_mapping[$orig_id] = $newTask->task_id;
         }
 
-        $q = $this->_getQuery();
-        foreach($old_dependencies as $from => $to_array) {
-            foreach($to_array as $to) {
-                $q->addTable('task_dependencies');
-                $q->addInsert('dependencies_req_task_id', $old_new_task_mapping[$from]);
-                $q->addInsert('dependencies_task_id',     $old_new_task_mapping[$to]);
+        if (count($errors)) {
+            $this->_error = $errors;
 
+            foreach($old_new_task_mapping as $new_id) {
+                $newTask->task_id = $new_id;
+                $newTask->delete();
+            }
+        } else {
+            $q = $this->_getQuery();
+            foreach($old_dependencies as $from => $to_array) {
+                foreach($to_array as $to) {
+                    $q->addTable('task_dependencies');
+                    $q->addInsert('dependencies_req_task_id', $old_new_task_mapping[$from]);
+                    $q->addInsert('dependencies_task_id',     $old_new_task_mapping[$to]);
+
+                    $q->exec();
+                    $q->clear();
+                }
+            }
+
+            foreach($old_parents as $old_child => $old_parent) {
+                $q->addTable('tasks');
+                $q->addUpdate('task_parent', $old_new_task_mapping[$old_parent]);
+                $q->addWhere('task_id   = ' . $old_new_task_mapping[$old_child]);
                 $q->exec();
                 $q->clear();
             }
         }
-
-        foreach($old_parents as $old_child => $old_parent) {
-            $q->addTable('tasks');
-            $q->addUpdate('task_parent', $old_new_task_mapping[$old_parent]);
-            $q->addWhere('task_id   = ' . $old_new_task_mapping[$old_child]);
-            $q->exec();
-            $q->clear();
-        }
-
-//TODO: handle errors, wipe out the tasks we've imported already
 die();
 
         return $errors;
