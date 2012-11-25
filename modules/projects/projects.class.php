@@ -325,18 +325,8 @@ class CProject extends w2p_Core_BaseObject
 
             /* This copies the task assigness to the new tasks. */
             foreach($old_new_task_mapping as $old_id => $new_id) {
-                $assigned = array();
-                $percent = array();
-
-                $assigneeList = $newTask->getAssignedUsers($old_id);
-
-                foreach($assigneeList as $id => $data) {
-                    $assigned[] = $id;
-                    $percent[$id]  = $data['perc_assignment'];
-                }
-
-                $newTask->task_id = $new_id;
-                $newTask->updateAssigned(implode(',', $assigned), $percent);
+                $newTask->task_id = $old_id;
+                $newTask->copyAssignedUsers($new_id);
             }
         }
 
