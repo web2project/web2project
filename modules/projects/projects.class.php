@@ -222,6 +222,16 @@ class CProject extends w2p_Core_BaseObject
      *
      *  @todo - this entire thing has nothing to do with projects.. it should move to the CTask class - dkc 25 Nov 2012
      *  @todo - why are we returning either an array or a boolean? You make my head hurt. - dkc 25 Nov 2012
+     *
+     *  @todo - we should decide if we want to include the contacts associated with each task
+     *  @todo - we should decide if we want to include the files associated with each task
+     *  @todo - we should decide if we want to include the links associated with each task
+     *
+     * Of the three - contacts, files, and links - I can see a case made for
+     *   all three. Imagine you have a task which requires a particular form to
+     *   be filled out (Files) but there's also documentation you need about it
+     *   (Links) and once the task is underway, you need to let some people
+     *   know (Contacts). - dkc 25 Nov 2012
      * */
     public function importTasks($from_project_id)
     {
@@ -237,7 +247,6 @@ class CProject extends w2p_Core_BaseObject
         $newTask = new CTask();
         $task_list = $newTask->loadAll('task_start_date', "task_project = " . $from_project_id);
 
-echo '<pre>';
         foreach($task_list as $orig_id => $orig_task) {
             /**
              * This gets the first (earliest) task start date and figures out
@@ -268,7 +277,7 @@ echo '<pre>';
             $orig_task['task_end_date'] = $orig_end_date->format(FMT_DATETIME_MYSQL);
 
             $newTask->bind($orig_task);
-$result = $newTask->store();
+            $result = $newTask->store();
             if (!$result) {
                 $errors = $newTask->getError();
                 break;
@@ -281,6 +290,7 @@ $result = $newTask->store();
         if (count($errors)) {
             $this->_error = $errors;
 
+            /* If there's an error, this deletes the already imported tasks. */
             foreach($old_new_task_mapping as $new_id) {
                 $newTask->task_id = $new_id;
                 $newTask->delete();
@@ -288,6 +298,32 @@ $result = $newTask->store();
         } else {
             $q = $this->_getQuery();
 
+            /* This makes sure we have all the dependencies mapped out. */
+            foreach($old_dependencies as $from => $to_array) {
+                foreach($to_array as $to) {
+                    $q->addTable('task_dependencies');
+                    $q->addInsert('dependencies_req_task_id', $old_new_task_mapping[$from]);
+                    $q->addInsert('dependencies_task_id',     $old_new_task_mapping[$to]);
+
+                    $q->exec();
+                    $q->clear();
+                }
+            }
+
+            /* This makes sure all the parents are connected properly. */
+            foreach($old_parents as $old_child => $old_parent) {
+                if ($old_child == $old_parent) {
+                    /** Remember, this means skip the rest of the loop. */
+                    continue;
+                }
+                $q->addTable('tasks');
+                $q->addUpdate('task_parent', $old_new_task_mapping[$old_parent]);
+                $q->addWhere('task_id   = ' . $old_new_task_mapping[$old_child]);
+                $q->exec();
+                $q->clear();
+            }
+
+            /* This copies the task assigness to the new tasks. */
             foreach($old_new_task_mapping as $old_id => $new_id) {
                 $assigned = array();
                 $percent = array();
@@ -301,29 +337,6 @@ $result = $newTask->store();
 
                 $newTask->task_id = $new_id;
                 $newTask->updateAssigned(implode(',', $assigned), $percent);
-            }
-
-            foreach($old_dependencies as $from => $to_array) {
-                foreach($to_array as $to) {
-                    $q->addTable('task_dependencies');
-                    $q->addInsert('dependencies_req_task_id', $old_new_task_mapping[$from]);
-                    $q->addInsert('dependencies_task_id',     $old_new_task_mapping[$to]);
-
-                    $q->exec();
-                    $q->clear();
-                }
-            }
-
-            foreach($old_parents as $old_child => $old_parent) {
-                if ($old_child == $old_parent) {
-                    /** Remember, this means skip the rest of the loop. */
-                    continue;
-                }
-                $q->addTable('tasks');
-                $q->addUpdate('task_parent', $old_new_task_mapping[$old_parent]);
-                $q->addWhere('task_id   = ' . $old_new_task_mapping[$old_child]);
-                $q->exec();
-                $q->clear();
             }
         }
 
