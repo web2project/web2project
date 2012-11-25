@@ -36,7 +36,6 @@ if (!$project && $project_id > 0) {
 $pstatus = w2PgetSysVal('ProjectStatus');
 $ptype = w2PgetSysVal('ProjectType');
 
-$structprojs = getProjects();
 $structprojs = $project->getAllowedProjects($AppUI->user_id, false);
 unset($structprojs[$project_id]);
 $structprojs = array_map('temp_filterArrayForSelectTree', $structprojs);

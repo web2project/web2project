@@ -1396,7 +1396,7 @@ class TextProperty {
 		if (is_string($this->iText)) {
 			if (strlen($this->iText) == 0)
 				return 0;
-			$tmp = split("\t", $this->iText);
+			$tmp = preg_split("/\t/", $this->iText);
 			if (count($tmp) <= 1 || !$aUseTabs) {
 				return $aImg->GetTextWidth($this->iText) + 2 * $extra_margin;
 			} else {

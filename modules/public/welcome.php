@@ -30,19 +30,6 @@ $titleBlock->show();
 	</td>
 </tr>
 <th>
-	<strong><?php echo $AppUI->_('Terms of Use'); ?></strong>
-</th>
-<tr>
-	<td width="100%" valign="top">
-		<p><?php echo sprintf($AppUI->_('Each organization may have different Terms of Use for the %s software, depending on applicable law and regulations on each Country and/or State, and inner organization usage and workflow rules.'), '<b>web2Project</b>'); ?>
-		</p>
-		<p><?php echo $AppUI->_('Please contact your System Administrator to get a copy of the Terms of Use applicable to you.'); ?>
-		</p>
-		<p><b><?php echo $AppUI->_('All uses of this product against the Law are forbidden.'); ?></b>
-		</p>
-	</td>
-</tr>
-<th>
 	<strong><?php echo $AppUI->_('web2Project Online Assistance'); ?></strong>
 </th>
 <tr>
@@ -57,15 +44,28 @@ $titleBlock->show();
 	</td>
 </tr>
 <th>
+	<strong><?php echo $AppUI->_('Terms of Use'); ?></strong>
+</th>
+<tr>
+	<td width="100%" valign="top">
+		<p><?php echo sprintf($AppUI->_('Each organization may have different Terms of Use for the %s software, depending on applicable law and regulations on each Country and/or State, and inner organization usage and workflow rules.'), '<b>web2Project</b>'); ?>
+		</p>
+		<p><?php echo $AppUI->_('Please contact your System Administrator to get a copy of the Terms of Use applicable to you.'); ?>
+		</p>
+		<p><b><?php echo $AppUI->_('All uses of this product against the Law are forbidden.'); ?></b>
+		</p>
+	</td>
+</tr>
+<th>
 	<strong><?php echo $AppUI->_('License and Disclaimer or Warranty'); ?></strong>
 </th>
 <tr>
 	<td width="100%" valign="top">
-		<p><?php echo sprintf($AppUI->_('%s is free software. You can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 2 of the License, or (at your option) any later version.'), '<b>web2Project</b>'); ?>
+		<p><?php echo sprintf($AppUI->_('%s is free software. You can redistribute it and/or modify it under the terms of the Clear BSD License, a copy of which is available within the installation package..'), '<b>web2Project</b>'); ?>
 		<br /><?php echo $AppUI->_('web2Project is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.'); ?> 
-		<br /><?php echo $AppUI->_('See the GNU General Public License for more details.'); ?>
+		<br /><?php echo $AppUI->_('See the Clear BSD Public License for more details.'); ?>
 		<br />
-		<br /><?php echo $AppUI->_('You should have received a copy of the GNU General Public License along with web2Project. If not, write to the Free Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA'); ?></p>
+		<br /><?php echo $AppUI->_('You should have received a copy of the Clear BSD License along with web2Project. If not, you can download the <a href="http://labs.metacarta.com/license-explanation.html">Clear BSD License from MetaCarta</a>'); ?></p>
 		<p>
 		<b><?php echo $AppUI->_('The web2Project Team'); ?></b>
 		</p>
@@ -84,12 +84,11 @@ $titleBlock->show();
 		<ul>
 		<li><a href="http://adodb.sourceforge.net/" target="_blank">ADOdb</a> <?php echo $AppUI->_('is dual licensed using BSD and LGPL'); ?>.</li>
 		<li><a href="http://gifs.hu" target="_blank">Captcha</a> <?php echo $AppUI->_('by László Zsidi, no license information'); ?>.</li>
-		<li><a href="http://www.dotproject.net" target="_blank">dotProject</a> <?php echo $AppUI->_('licensed GPL 2'); ?>.</li>
+		<li><a href="http://www.dotproject.net" target="_blank">dotProject</a> <?php echo $AppUI->_('originally licensed BSD, then GPL 2'); ?>.</li>
 		<li><a href="http://www.ros.co.nz/pdf/" target="_blank">(ezpdf) PHP Pdf creation</a> <?php echo $AppUI->_('licensed Public Domain'); ?>.</li>
 		<li><a href="http://www.urwpp.de" target="_blank">Free UCS scalable fonts project</a> <?php echo $AppUI->_('licensed GPL'); ?>.</li>
 		<li><a href="http://www.aditus.nu/jpgraph/" target="_blank">JPGraph</a> <?php echo $AppUI->_('licensed Q PUBLIC LICENSE version 1.0'); ?>.</li>
 		<li><a href="http://dynarch.com/mishoo/calendar.epl" target="_blank">JSCalendar</a> <?php echo $AppUI->_('licensed GNU Lesser General Public License'); ?>.</li>
-		<li><a href="http://mootools.net/" target="_blank">Mootools</a> <?php echo $AppUI->_('licensed MIT-style'); ?>.</li>
 		<li><a href="http://www.php.net" target="_blank">Pear</a> <?php echo $AppUI->_('licensed PHP license 2'); ?>.</li>
 		<li><a href="http://phpgacl.sourceforge.net/" target="_blank">phpGACL</a> <?php echo $AppUI->_('licensed GNU Lesser General Public License'); ?>.</li>
 		<li><a href="http://phpmailer.codeworxtech.com/" target="_blank">PHPMailer</a> <?php echo $AppUI->_('licensed GNU Library or Lesser General Public License (LGPL)'); ?>.</li>
