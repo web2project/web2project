@@ -223,8 +223,19 @@ $gantt->localize();
 $pname = $projects[$project_id]['project_name'];
 $gantt->setTitle($pname, '#'.$projects[$project_id]['project_color_identifier']);
 $field = ($showWork == '1') ? 'Work' : 'Dur';
-$columnNames = array('Task name', $field, 'Start', 'Finish');
-$columnSizes = array(200, 50, 80, 80);
+
+if ($showTaskNameOnly == '1') {
+    $columnNames = array('Task name');
+    $columnSizes = array(300);
+} else {
+    if ($caller == 'todo') {
+        $columnNames = array('Task name', 'Project name', $field, 'Start', 'Finish');
+        $columnSizes = array(200, 160, 40, 75, 75);
+    } else {
+        $columnNames = array('Task name', $field, 'Start', 'Finish');
+        $columnSizes = array(200, 50, 80, 80);
+    }
+}
 $gantt->setColumnHeaders($columnNames, $columnSizes);
 $gantt->setProperties(array('showhgrid' => true));
 
@@ -241,10 +252,12 @@ if (!$start_date || !$end_date) {
         $d_start->Date($start);
         $d_end->Date($end);
 
-		if ($i == 0) {
-			$min_d_start = $d_start;
-			$max_d_end = $d_end;
-		} else {
+        if ($i == 0) {
+            $min_d_start = $d_start;
+            $max_d_end = $d_end;
+            $start_date = $start;
+            $end_date = $end;
+        } else {
             if (Date::compare($min_d_start, $d_start) > 0) {
                 $min_d_start = $d_start;
                 $start_date = $start;
@@ -334,7 +347,7 @@ for ($i = 0, $i_cmp = count($gantt_arr); $i < $i_cmp; $i++) {
         }
 
         if ($showLabels == '1') {
-            $res = $task->getAssignedUsers($task_id);
+            $res = $task->getAssignedUsers($a['task_id']);
             foreach ($res as $rw) {
                 switch ($rw['perc_assignment']) {
                     case 100:
@@ -350,6 +363,8 @@ for ($i = 0, $i_cmp = count($gantt_arr); $i < $i_cmp; $i++) {
         }
 
         if ($flags == 'm') {
+            // if hide milestones is ticked this bit is not processed//////////////////////////////////////////
+            if ($showNoMilestones != '1') {
                 $start = new w2p_Utilities_Date($start);
                 $start->addDays(0);
                 $start_mile = $start->getDate();
@@ -358,11 +373,21 @@ for ($i = 0, $i_cmp = count($gantt_arr); $i < $i_cmp; $i++) {
                 $mile_date_stamp = strtotime($start_mile);
 
                 $today = date('m/d/Y H:i:s');
-            $today = new w2p_Utilities_Date($AppUI->formatTZAwareTime($today, '%Y-%m-%d %T'));
-            $today_mile = $today->getDate();
-            $today_date = $today->format($df . ' ' . $AppUI->getPref('TIMEFORMAT'));
-            $today_date_stamp = strtotime($today_mile);
+                $today = new w2p_Utilities_Date($AppUI->formatTZAwareTime($today, '%Y-%m-%d %T'));
+                $today_mile = $today->getDate();
+                $today_date = $today->format($df . ' ' . $AppUI->getPref('TIMEFORMAT'));
+                $today_date_stamp = strtotime($today_mile);
 
+                // honour the choice to show task names only///////////////////////////////////////////////////
+                if ($showTaskNameOnly == '1') {
+                    $fieldArray = array($name);
+                } else {
+                    if ($caller == 'todo') {
+                        $fieldArray = array($name, $pname, '', $s, $s);
+                    } else {
+                        $fieldArray = array($name, '', $s, $s);
+                    }
+                }
             ///////////////////////////////////////////////////////////////////////////////////////
             //set color for milestone according to progress
             //red for 'not started' #990000
@@ -383,12 +408,6 @@ for ($i = 0, $i_cmp = count($gantt_arr); $i < $i_cmp; $i++) {
                 }
             }
 
-            if ($caller == 'todo') {
-                $fieldArray = array($name, $pname, '', $s, $s);
-            } else {
-                $fieldArray = array($name, '', $s, $s);
-            }
-
             // if the milestone is near the end of the date range for which we are showing the chart
             // make the caption go on the left side of the milestone marker
             $task_start_date = $AppUI->formatTZAwareTime($a['task_start_date'], '%Y-%m-%d %T');
@@ -406,6 +425,7 @@ for ($i = 0, $i_cmp = count($gantt_arr); $i < $i_cmp; $i++) {
                 $captionToTheLeft = true;
             }
             $gantt->addMilestone($fieldArray, $a['task_start_date'], $color, 0, $captionToTheLeft);
+            }
         } else {
             $type = $a['task_duration_type'];
             $dur = $a['task_duration'];
