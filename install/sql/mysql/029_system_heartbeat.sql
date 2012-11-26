@@ -15,4 +15,7 @@ DELETE FROM `config` WHERE `config_name` IN ('calendar', 'jpLocale',
 ALTER TABLE `contacts` ADD `contact_display_name` VARCHAR( 100 )
     NOT NULL AFTER `contact_last_name`;
 
+UPDATE contacts SET contact_order_by = CONCAT(contact_first_name, ' ', contact_last_name)
+    WHERE contact_order_by = '';
+
 UPDATE contacts SET contact_display_name = contact_order_by;
