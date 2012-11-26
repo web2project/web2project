@@ -122,9 +122,15 @@ if ($caller == 'todo') {
             $q->addWhere('project_company = ' . (int)$AppUI->user_company);
             break;
         case 'myinact':
+            $q->innerJoin('user_tasks', 'ut', 'ut.task_id = t.task_id');
+            $q->addWhere('task_project = p.project_id');
+            $q->addWhere('ut.user_id = ' . (int)$AppUI->user_id);
+            break;
         default:
             $q->innerJoin('user_tasks', 'ut', 'ut.task_id = t.task_id');
-            $q->addWhere('ut.user_id = '.$AppUI->user_id);
+            $q->addWhere('task_status > -1');
+            $q->addWhere('task_project = p.project_id');
+            $q->addWhere('ut.user_id = ' . (int)$AppUI->user_id);
             break;
     }
 
@@ -294,6 +300,18 @@ foreach ($projects as $p) {
         }
     }
 }
+$hide_task_groups = false;
+if ($hide_task_groups) {
+	for ($i = 0, $i_cmp = count($gantt_arr); $i < $i_cmp; $i++) {
+		// remove task groups
+		if ($i != count($gantt_arr) - 1 && $gantt_arr[$i + 1][1] > $gantt_arr[$i][1]) {
+			// it's not a leaf => remove
+			array_splice($gantt_arr, $i, 1);
+			continue;
+		}
+	}
+}
+
 $gantt->loadTaskArray($gantt_arr);
 
 $row = 0;
@@ -407,24 +425,24 @@ for ($i = 0, $i_cmp = count($gantt_arr); $i < $i_cmp; $i++) {
                     }
                 }
 
-                // if the milestone is near the end of the date range for which we are showing the chart
-                // make the caption go on the left side of the milestone marker
-                $task_start_date = $AppUI->formatTZAwareTime($a['task_start_date'], '%Y-%m-%d %T');
-                /*
-                 * TODO: This is an ugly hack to correct the placement of the
-                 *   milestones on the gantt charts. I have no clue why this
-                 *   adjustment is needed, but it is..
-                 *                  ~ caseydk 02 August 2012
-                 */
-                $my_time = strtotime($task_start_date) + 24 *60*60;
-                $task_start_date = date('Y-m-d', $my_time);
+            // if the milestone is near the end of the date range for which we are showing the chart
+            // make the caption go on the left side of the milestone marker
+            $task_start_date = $AppUI->formatTZAwareTime($a['task_start_date'], '%Y-%m-%d %T');
+            /*
+             * TODO: This is an ugly hack to correct the placement of the
+             *   milestones on the gantt charts. I have no clue why this
+             *   adjustment is needed, but it is..
+             *                  ~ caseydk 02 August 2012
+             */
+            $my_time = strtotime($task_start_date) + 24 *60*60;
+            $task_start_date = date('Y-m-d', $my_time);
 
-                $captionToTheLeft = false;
-                if ($mile_date_stamp + 72*60*60 >= strtotime($end_date)) {
-                    $captionToTheLeft = true;
-                }
-                $gantt->addMilestone($fieldArray, $task_start_date, $color, 0, $captionToTheLeft);
-            }    //this closes the code that is not processed if hide milestones is checked ///////////////
+            $captionToTheLeft = false;
+            if ($mile_date_stamp + 72*60*60 >= strtotime($end_date)) {
+                $captionToTheLeft = true;
+            }
+            $gantt->addMilestone($fieldArray, $a['task_start_date'], $color, 0, $captionToTheLeft);
+            }
         } else {
             $type = $a['task_duration_type'];
             $dur = $a['task_duration'];

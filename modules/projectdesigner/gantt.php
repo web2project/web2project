@@ -185,6 +185,10 @@ foreach ($proTasks as $row) {
     if ($ted->after(new w2p_Utilities_Date($end_max))) {
         $end_max = $row['task_end_date'];
     }
+    if ($ted->after(new w2p_Utilities_Date($projects[$row['task_project']]['project_end_date']))
+        || $projects[$row['task_project']]['project_end_date'] == '') {
+        $projects[$row['task_project']]['project_end_date'] = $row['task_end_date'];
+    }
 
     $projects[$row['task_project']]['tasks'][] = $row;
 }
@@ -271,17 +275,30 @@ if (!$start_date || !$end_date) {
 }
 $gantt->setDateRange($start_date, $end_date);
 
+$gantt_arr = array();
 reset($projects);
+$displayed = array();
 foreach ($projects as $p) {
     $tnums = count($p['tasks']);
 
-	for ($i = 0; $i < $tnums; $i++) {
-		$t = $p['tasks'][$i];
-		if ($t['task_parent'] == $t['task_id']) {
-			showgtask($t);
-			findchild_gantt($p['tasks'], $t['task_id']);
-		}
-	}
+    for ($i = 0; $i < $tnums; $i++) {
+        $t = $p['tasks'][$i];
+        if ($caller == 'todo') {
+            if ($showDynTasks) {
+                if ($t['task_parent'] == $t['task_id']) {
+                    showgtask($t);
+                    findchild_gantt($p['tasks'], $t['task_id']);
+                }
+            } else {
+                showgtask($t);
+            }
+        } else {
+            if ($t['task_parent'] == $t['task_id']) {
+                showgtask($t);
+                findchild_gantt($p['tasks'], $t['task_id']);
+            }
+        }
+    }
 }
 $hide_task_groups = false;
 if ($hide_task_groups) {
@@ -388,25 +405,25 @@ for ($i = 0, $i_cmp = count($gantt_arr); $i < $i_cmp; $i++) {
                         $fieldArray = array($name, '', $s, $s);
                     }
                 }
-            ///////////////////////////////////////////////////////////////////////////////////////
-            //set color for milestone according to progress
-            //red for 'not started' #990000
-            //yellow for 'in progress' #FF9900
-            //green for 'achieved' #006600
-            // blue for 'planned' #0000FF
-            if ($a['task_percent_complete'] == 100)  {
-                $color = '#006600';
-            } else {
-                if ($mile_date_stamp < $today_date_stamp) {
-                    $color = '#990000';
+                ///////////////////////////////////////////////////////////////////////////////////////
+                //set color for milestone according to progress
+                //red for 'not started' #990000
+                //yellow for 'in progress' #FF9900
+                //green for 'achieved' #006600
+                // blue for 'planned' #0000FF
+                if ($a['task_percent_complete'] == 100)  {
+                    $color = '#006600';
                 } else {
-                    if ($a['task_percent_complete'] == 0)  {
-                        $color = '#0000FF';
+                    if ($mile_date_stamp < $today_date_stamp) {
+                        $color = '#990000';
                     } else {
-                        $color = '#FF9900';
+                        if ($a['task_percent_complete'] == 0)  {
+                            $color = '#0000FF';
+                        } else {
+                            $color = '#FF9900';
+                        }
                     }
                 }
-            }
 
             // if the milestone is near the end of the date range for which we are showing the chart
             // make the caption go on the left side of the milestone marker
@@ -439,13 +456,17 @@ for ($i = 0, $i_cmp = count($gantt_arr); $i < $i_cmp; $i++) {
 
             $dur .= ' h';
             $height = ($a['task_dynamic'] == 1) ? 0.1 : 0.6;
-            if ($caller == 'todo') {
-                $columnValues = array('task_name' => $name, 'project_name' => $pname,
-                  'duration' => $dur, 'start_date' => $start, 'end_date' => $end,
-                  'actual_end' => '');
+            if ($showTaskNameOnly == '1') {
+                $columnValues = array('task_name' => $name);
             } else {
-                $columnValues = array('task_name' => $name, 'duration' => $dur,
-                  'start_date' => $start, 'end_date' => $end, 'actual_end' => '');
+                if ($caller == 'todo') {
+                    $columnValues = array('task_name' => $name, 'project_name' => $pname,
+                        'duration' => $dur, 'start_date' => $start, 'end_date' => $end,
+                        'actual_end' => '');
+                } else {
+                    $columnValues = array('task_name' => $name, 'duration' => $dur,
+                        'start_date' => $start, 'end_date' => $end, 'actual_end' => '');
+                }
             }
             $gantt->addBar($columnValues, $caption, $height, '8F8FBD', true, $progress, $a['task_id']);
         }
