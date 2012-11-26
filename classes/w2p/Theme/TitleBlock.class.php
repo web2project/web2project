@@ -26,7 +26,9 @@ class w2p_Theme_TitleBlock {
 	/**
  	@var string The reference for the context help system */
 	public $helpref = '';
-	/**
+
+    protected $_AppUI = null;
+    /**
 	 * The constructor
 	 *
 	 * Assigns the title, icon, module and help reference.  If the user does not
@@ -34,7 +36,10 @@ class w2p_Theme_TitleBlock {
 	 * not displayed.
 	 */
 	public function __construct($title, $icon = '', $module = '', $helpref = '') {
-		$this->title = $title;
+		global $AppUI;
+        $this->_AppUI = $AppUI;
+
+        $this->title = $title;
 		$this->icon = $icon;
 		$this->module = $module;
 		$this->helpref = $helpref;
@@ -71,16 +76,15 @@ class w2p_Theme_TitleBlock {
 	 * Creates a standarised, right-aligned delete bread-crumb and icon.
 	 */
 	public function addCrumbDelete($title, $canDelete = '', $msg = '') {
-		global $AppUI;
-		$this->addCrumbRight('<a class="delete" href="javascript:delIt()" title="' . ($canDelete ? '' : $msg) . '"><span>' . $AppUI->_($title) . '</span></a>');
+		$this->addCrumbRight('<a class="delete" href="javascript:delIt()" title="' . ($canDelete ? '' : $msg) . '"><span>' . $this->_AppUI->_($title) . '</span></a>');
 	}
 	/**
 	 * The drawing function
 	 */
 	public function show() {
-		global $AppUI, $a, $m, $w2Pconfig;
+		global $a, $m, $w2Pconfig;
 		$this->loadExtraCrumbs($m, $a);
-		$uistyle = $AppUI->getPref('UISTYLE') ? $AppUI->getPref('UISTYLE') : $w2Pconfig['host_style'];
+		$uistyle = $this->_AppUI->getPref('UISTYLE') ? $this->_AppUI->getPref('UISTYLE') : $w2Pconfig['host_style'];
 		if (!$uistyle) {
 			$uistyle = 'web2project';
 		}
@@ -93,7 +97,7 @@ class w2p_Theme_TitleBlock {
 			$s .= w2PshowImage($this->icon, '', '', '', '', $this->module);
 			$s .= '</div>';
 		}
-        $s .= '<h1>' . $AppUI->_($this->title) . '</h1>';
+        $s .= '<h1>' . $this->_AppUI->_($this->title) . '</h1>';
         $s .= '<ul class="crumb-right">';
 		foreach ($this->cells1 as $c) {
 			$s .= $c[2] ? $c[2] : '';
@@ -111,7 +115,7 @@ class w2p_Theme_TitleBlock {
             $s .= '<div class="module-nav">';
             foreach ($this->crumbs as $k => $v) {
 				$t = $v[1] ? '<img src="' . w2PfindImage($v[1], $this->module) . '" border="" alt="" />&nbsp;' : '';
-				$t .= $AppUI->_($v[0]);
+				$t .= $this->_AppUI->_($v[0]);
 				$crumbs[] = '<li><a href="'.$k.'"><span>'.$t.'</span></a></li>';
 			}
 
@@ -130,14 +134,13 @@ class w2p_Theme_TitleBlock {
 
 
 		echo '' . $s;
-		if (($a != 'index' || $m == 'system' || $m == 'calendar' || $m == 'smartsearch') && !$AppUI->boxTopRendered && function_exists('styleRenderBoxTop')) {
+		if (($a != 'index' || $m == 'system' || $m == 'calendar' || $m == 'smartsearch') && !$this->_AppUI->boxTopRendered && function_exists('styleRenderBoxTop')) {
 			echo styleRenderBoxTop();
-			$AppUI->boxTopRendered = true;
+			$this->_AppUI->boxTopRendered = true;
 		}
 	}
 
 	public function loadExtraCrumbs($module, $file = null) {
-		global $AppUI;
 		if (!isset($_SESSION['all_crumbs']) || !isset($_SESSION['all_crumbs'][$module])) {
 			return false;
 		}
@@ -153,7 +156,7 @@ class w2p_Theme_TitleBlock {
 		}
 		$crumb_count = 0;
 		foreach ($crumb_array as $crumb_elem) {
-			if (isset($crumb_elem['module']) && $AppUI->isActiveModule($crumb_elem['module'])) {
+			if (isset($crumb_elem['module']) && $this->_AppUI->isActiveModule($crumb_elem['module'])) {
 				$crumb_count++;
 				include_once ($crumb_elem['file'] . '.php');
 			}
