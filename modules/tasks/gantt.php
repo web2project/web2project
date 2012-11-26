@@ -186,6 +186,7 @@ foreach ($proTasks as $row) {
 
     $projects[$row['task_project']]['tasks'][] = $row;
 }
+$q->clear();
 
 $width = min(w2PgetParam($_GET, 'width', 600), 1400);
 $start_date = w2PgetParam($_GET, 'start_date', $start_min);
@@ -266,9 +267,6 @@ if (!$start_date || !$end_date) {
         }
     }
 }
-$start_date = $AppUI->formatTZAwareTime($start_date, '%Y-%m-%d %T');
-$end_date = $AppUI->formatTZAwareTime($end_date, '%Y-%m-%d %T');
-
 $gantt->setDateRange($start_date, $end_date);
 
 $gantt_arr = array();
@@ -308,6 +306,10 @@ for ($i = 0, $i_cmp = count($gantt_arr); $i < $i_cmp; $i++) {
     $tmpTask->load($a['task_id']);
     $canAccess = $tmpTask->canAccess();
     if ($canAccess) {
+        if ($hide_task_groups) {
+            $level = 0;
+        }
+
         $name = $a['task_name'];
         $name = ((mb_strlen($name) > 35) ? (mb_substr($name, 0, 30) . '...') : $name);
         $name = str_repeat(' ', $level) . $name;
