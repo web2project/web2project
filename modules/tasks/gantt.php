@@ -3,7 +3,8 @@ if (!defined('W2P_BASE_DIR')) {
     die('You should not access this file directly.');
 }
 
-global $gantt_arr, $w2Pconfig;
+global $caller, $showWork, $showLabels, $showPinned, $showArcProjs,
+        $showHoldProjs, $showDynTasks, $showLowTasks, $user_id;
 
 w2PsetExecutionConditions($w2Pconfig);
 
@@ -33,6 +34,7 @@ $monospacefont = (int) w2PgetParam($_REQUEST, 'monospacefont', 0);
 $df = $AppUI->getPref('SHDATEFORMAT');
 $project = new CProject();
 $criticalTasks = ($project_id > 0) ? $project->getCriticalTasks($project_id) : null;
+$criticalTasksInverted = ($project_id > 0) ? getCriticalTasksInverted($project_id) : null;
 
 // pull valid projects and their percent complete information
 $projects = $project->getAllowedProjects($AppUI->user_id, false);
@@ -84,7 +86,7 @@ if ($caller == 'todo') {
     $q->addOrder('t.task_end_date, t.task_priority DESC');
 } else {
     // pull tasks
-    $q = new w2p_Database_Query();
+    $q = new w2p_Database_Query;
     $q->addTable('tasks', 't');
     $q->addQuery('t.task_id, task_parent, task_name, task_start_date, task_end_date,'.
         ' task_duration, task_duration_type, task_priority, task_percent_complete,'.
@@ -133,8 +135,8 @@ if ($caller == 'todo') {
 $task = new CTask();
 $task->setAllowedSQL($AppUI->user_id, $q);
 $proTasks = $q->loadHashList('task_id');
+$orrarr[] = array('task_id' => 0, 'order_up' => 0, 'order' => '');
 
-$orrarr[] = array('task_id'=>0, 'order_up'=>0, 'order'=>'');
 $end_max = '0000-00-00 00:00:00';
 $start_min = date('Y-m-d H:i:s');
 
@@ -194,6 +196,16 @@ if ($caller != 'todo') {
     $start_min = $projects[$project_id]['project_start_date'];
     $end_max = (($projects[$project_id]['project_end_date'] > $criticalTasks[0]['task_end_date']) 
                 ? $projects[$project_id]['project_end_date'] : $criticalTasks[0]['task_end_date']);
+} else {
+    $start_min = substr($criticalTasksInverted[0]['task_start_date'], 0, 10);
+    if ($start_min == '0000-00-00' || !$start_min) {
+        $start_min = $projects[$project_id]['project_start_date'];
+    }
+    //	$end_max = ($projects[$project_id]['project_end_date'] > $criticalTasks[0]['task_end_date']) ? $projects[$project_id]['project_end_date'] : $criticalTasks[0]['task_end_date'];
+    $end_max = substr($criticalTasks[0]['task_end_date'], 0, 10);
+    if ($end_max == '0000-00-00' || !$end_max) {
+        $end_max = $projects[$project_id]['project_end_date'];
+    }
 }
 
 $count = 0;
@@ -205,7 +217,8 @@ if ($addLinksToGantt == '1') {
 
 $gantt = new w2p_Output_GanttRenderer($AppUI, $width);
 $gantt->localize();
-$gantt->setTitle($projects[$project_id]['project_name'], '#'.$projects[$project_id]['project_color_identifier']);
+$pname = $projects[$project_id]['project_name'];
+$gantt->setTitle($pname, '#'.$projects[$project_id]['project_color_identifier']);
 $field = ($showWork == '1') ? 'Work' : 'Dur';
 
 if ($showTaskNameOnly == '1') {
