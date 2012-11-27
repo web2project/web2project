@@ -1357,18 +1357,19 @@ class CTask extends w2p_Core_BaseObject
 
     public function canAccess($user_id = 0)
     {
+        $this->load($this->task_id);
         $user_id = ($user_id) ? $user_id : $this->_AppUI->user_id;
         // Let's see if this user has admin privileges
         if (canView('admin')) {
             return true;
         }
 
-        $q = $this->_getQuery();
         switch ($this->task_access) {
             case self::ACCESS_PUBLIC:
                 $retval = true;
                 break;
             case self::ACCESS_PROTECTED:
+                $q = $this->_getQuery();
                 $q->addTable('users');
                 $q->addQuery('user_company');
                 $q->addWhere('user_id=' . (int) $user_id . ' OR user_id=' . (int) $this->task_owner);
@@ -1382,6 +1383,7 @@ class CTask extends w2p_Core_BaseObject
 
             case self::ACCESS_PARTICIPANT:
                 $company_match = ((isset($company_match)) ? $company_match : true);
+                $q = $this->_getQuery();
                 $q->addTable('user_tasks');
                 $q->addQuery('COUNT(task_id)');
                 $q->addWhere('user_id=' . (int) $user_id . ' AND task_id=' . (int) $this->task_id);

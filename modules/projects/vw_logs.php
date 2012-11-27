@@ -136,8 +136,16 @@ $task_types = w2PgetSysVal('TaskType');
 $customLookups = array('budget_category' => $billingCategory, 'task_duration_type' => $durnTypes,
         'task_status' => $status, 'task_type' => $task_types);
 
+$task = new CTask();
+
 if (count($logs)) {
     foreach ($logs as $row) {
+        $task->task_id = $row['task_id'];
+        if (!$task->canAccess()) {
+            /** If the user isn't allowed to see the task, don't show the logs. */
+            continue;
+        }
+        
         $s .= '<tr bgcolor="white" valign="top"><td>';
         if ($canEdit) {
             $s .= '<a href="?m=tasks&a=view&task_id=' . $row['task_id'] . '&tab=1&task_log_id=' . $row['task_log_id'] . '">' . w2PshowImage('icons/stock_edit-16.png', 16, 16, '') . "\n\t\t</a>";
