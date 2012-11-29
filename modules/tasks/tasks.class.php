@@ -349,8 +349,6 @@ class CTask extends w2p_Core_BaseObject
     public function updateDynamics($fromChildren = false)
     {
         //Has a parent or children, we will check if it is dynamic so that it's info is updated also
-        $q = $this->_getQuery();
-        $q->clear();
         $modified_task = new CTask();
         $modified_task->overrideDatabase($this->_query);
 
@@ -361,6 +359,7 @@ class CTask extends w2p_Core_BaseObject
             $modified_task->htmlDecode();
         }
 
+        $q = $this->_getQuery();
         if ($modified_task->task_dynamic == '1') {
             //Update allocated hours based on children with duration type of 'hours'
             $q->addTable('tasks');
@@ -443,6 +442,7 @@ class CTask extends w2p_Core_BaseObject
             $q->clear();
             if ($d) {
                 $modified_task->task_start_date = $d;
+                $modified_task->task_start_date = $this->_AppUI->formatTZAwareTime($modified_task->task_start_date, '%Y-%m-%d %T');
             } else {
                 $modified_task->task_start_date = '0000-00-00 00:00:00';
             }
@@ -452,6 +452,7 @@ class CTask extends w2p_Core_BaseObject
             $q->addQuery('MAX(task_end_date)');
             $q->addWhere('task_parent = ' . (int) $modified_task->task_id . ' AND task_id <> ' . $modified_task->task_id . ' AND NOT ISNULL(task_end_date)');
             $modified_task->task_end_date = $q->loadResult();
+            $modified_task->task_end_date = $this->_AppUI->formatTZAwareTime($modified_task->task_end_date, '%Y-%m-%d %T');
             $q->clear();
 
             //If we are updating a dynamic task from its children we don't want to store() it
