@@ -214,114 +214,15 @@ class CProject extends w2p_Core_BaseObject
         parent::hook_preDelete();
     }
 
-    /** 	
+    /**
      * Import tasks from another project
-     *
-     * 	@param	int Project ID of the tasks come from.
-     * 	@return	bool
      * */
-    public function importTasks($from_project_id)
+    public function importTasks($from_project_id, CTask $newTask = null)
     {
-        $errors = array();
+        $newTask = is_object($newTask) ? $newTask : new CTask();
+        $newTask->overrideDatabase($this->_query);
 
-        // Load the original
-        $origProject = new CProject();
-        $origProject->overrideDatabase($this->_query);
-        $origProject->load($from_project_id);
-        $q = $this->_getQuery();
-        $q->addTable('tasks');
-        $q->addQuery('task_id');
-        $q->addWhere('task_project =' . (int) $from_project_id);
-        $tasks = array_flip($q->loadColumn());
-        $q->clear();
-
-        $origDate = new w2p_Utilities_Date($origProject->project_start_date);
-
-        $destDate = new w2p_Utilities_Date($this->project_start_date);
-
-        $timeOffset = $origDate->dateDiff($destDate);
-        if ($origDate->compare($origDate, $destDate) > 0) {
-            $timeOffset = -1 * $timeOffset;
-        }
-
-        // Dependencies array
-        $deps = array();
-
-        $objTask = new CTask();
-        $objTask->overrideDatabase($this->_query);
-        foreach ($tasks as $orig => $notUsed) {
-            $objTask->load($orig);
-            $destTask = $objTask->copy($this->project_id);
-            $destTask->task_parent = (0 == $destTask->task_parent) ? $destTask->task_id : $destTask->task_parent;
-            $destTask->store();
-            $tasks[$orig] = $destTask;
-            $deps[$orig] = $objTask->getDependencies();
-        }
-
-        // Fix record integrity
-        foreach ($tasks as $old_id => $newTask) {
-
-            // Fix parent Task
-            // This task had a parent task, adjust it to new parent task_id
-            if ($newTask->task_id != $newTask->task_parent) {
-                $newTask->task_parent = $tasks[$newTask->task_parent]->task_id;
-            }
-
-            // Fix task start date from project start date offset
-            $origDate->setDate($newTask->task_start_date);
-            $origDate->addDays($timeOffset);
-            $destDate = $origDate;
-            $newTask->task_start_date = $destDate->format(FMT_DATETIME_MYSQL);
-
-            // Fix task end date from start date + work duration
-            if (!empty($newTask->task_end_date) && $newTask->task_end_date != '0000-00-00 00:00:00') {
-                $origDate->setDate($newTask->task_end_date);
-                $origDate->addDays($timeOffset);
-                $destDate = $origDate;
-                $newTask->task_end_date = $destDate->format(FMT_DATETIME_MYSQL);
-            }
-
-            // Dependencies
-            if (!empty($deps[$old_id])) {
-                $oldDeps = explode(',', $deps[$old_id]);
-                // New dependencies array
-                $newDeps = array();
-                foreach ($oldDeps as $dep) {
-                    $newDeps[] = $tasks[$dep]->task_id;
-                }
-
-                // Update the new task dependencies
-                $csList = implode(',', $newDeps);
-                $newTask->updateDependencies($csList);
-            } // end of update dependencies
-            $result = $newTask->store();
-            $newTask->addReminder();
-            $importedTasks[] = $newTask->task_id;
-
-            if (is_array($result) && count($result)) {
-                foreach ($result as $notUsed => $error_msg) {
-                    $errors[] = $newTask->task_name . ': ' . $error_msg;
-                }
-            }
-        } // end Fix record integrity
-        // We have errors, so rollback everything we've done so far
-        if (count($errors)) {
-            $delTask = new CTask();
-            $delTask->overrideDatabase($this->_query);
-            foreach ($importedTasks as $badTask) {
-                $delTask->task_id = $badTask;
-                $delTask->delete();
-            }
-        } else {
-
-            // All is OK! Now update task cache
-            $numTasks = count($importedTasks);
-            $lastImportIndex = $numTasks-1;
-
-            // TODO Unsure if we should update the end date from tasks... Thoughts?
-            $this->updateTaskCache($this->project_id, $importedTasks[$lastImportIndex], $this->project_actual_end_date, $numTasks);
-        }
-        return $errors;
+        return $newTask->importTasks($from_project_id, $this->project_id, $this->project_start_date);
     }
 
     // end of importTasks

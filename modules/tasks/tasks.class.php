@@ -349,8 +349,6 @@ class CTask extends w2p_Core_BaseObject
     public function updateDynamics($fromChildren = false)
     {
         //Has a parent or children, we will check if it is dynamic so that it's info is updated also
-        $q = $this->_getQuery();
-        $q->clear();
         $modified_task = new CTask();
         $modified_task->overrideDatabase($this->_query);
 
@@ -361,6 +359,7 @@ class CTask extends w2p_Core_BaseObject
             $modified_task->htmlDecode();
         }
 
+        $q = $this->_getQuery();
         if ($modified_task->task_dynamic == '1') {
             //Update allocated hours based on children with duration type of 'hours'
             $q->addTable('tasks');
@@ -443,6 +442,7 @@ class CTask extends w2p_Core_BaseObject
             $q->clear();
             if ($d) {
                 $modified_task->task_start_date = $d;
+                $modified_task->task_start_date = $this->_AppUI->formatTZAwareTime($modified_task->task_start_date, '%Y-%m-%d %T');
             } else {
                 $modified_task->task_start_date = '0000-00-00 00:00:00';
             }
@@ -452,6 +452,7 @@ class CTask extends w2p_Core_BaseObject
             $q->addQuery('MAX(task_end_date)');
             $q->addWhere('task_parent = ' . (int) $modified_task->task_id . ' AND task_id <> ' . $modified_task->task_id . ' AND NOT ISNULL(task_end_date)');
             $modified_task->task_end_date = $q->loadResult();
+            $modified_task->task_end_date = $this->_AppUI->formatTZAwareTime($modified_task->task_end_date, '%Y-%m-%d %T');
             $q->clear();
 
             //If we are updating a dynamic task from its children we don't want to store() it
@@ -496,6 +497,129 @@ class CTask extends w2p_Core_BaseObject
     }
 
 // end of copy()
+
+    /**
+     * Import tasks from another project
+     *
+     * 	@param	int Project ID of the tasks come from.
+     * 	@return	bool
+     *
+     *  @todo - this entire thing has nothing to do with projects.. it should move to the CTask class - dkc 25 Nov 2012
+     *  @todo - why are we returning either an array or a boolean? You make my head hurt. - dkc 25 Nov 2012
+     *
+     *  @todo - we should decide if we want to include the contacts associated with each task
+     *  @todo - we should decide if we want to include the files associated with each task
+     *  @todo - we should decide if we want to include the links associated with each task
+     *
+     * Of the three - contacts, files, and links - I can see a case made for
+     *   all three. Imagine you have a task which requires a particular form to
+     *   be filled out (Files) but there's also documentation you need about it
+     *   (Links) and once the task is underway, you need to let some people
+     *   know (Contacts). - dkc 25 Nov 2012
+     * */
+    public function importTasks($from_project_id, $to_project_id, $project_start_date)
+    {
+        $errors = array();
+
+        $old_new_task_mapping = array();
+        $old_dependencies = array();
+        $old_parents = array();
+
+        $project_start_date = new w2p_Utilities_Date($project_start_date);
+        $timeOffset = 0;
+
+        $newTask = new CTask();
+        $task_list = $newTask->loadAll('task_start_date', "task_project = " . $from_project_id);
+
+        foreach($task_list as $orig_id => $orig_task) {
+            /**
+             * This gets the first (earliest) task start date and figures out
+             *   how much we have to shift all the tasks by.
+             */
+            if ($orig_task == reset($task_list)) {
+                $original_start_date = new w2p_Utilities_Date($orig_task['task_start_date']);
+                $timeOffset = $original_start_date->dateDiff($project_start_date);
+            }
+
+            $orig_task['task_id'] = 0;
+            $orig_task['task_project'] = $to_project_id;
+            $orig_task['task_sequence'] = 0;
+
+            $old_parents[$orig_id] = $orig_task['task_parent'];
+            $orig_task['task_parent'] = 0;
+
+            $tz_start_date = $this->_AppUI->formatTZAwareTime($orig_task['task_start_date'], '%Y-%m-%d %T');
+            $orig_start_date = new w2p_Utilities_Date($tz_start_date);
+            $orig_start_date->addDays($timeOffset);
+            $orig_start_date->next_working_day();
+            $orig_task['task_start_date'] = $orig_start_date->format(FMT_DATETIME_MYSQL);
+
+            $tz_end_date = $this->_AppUI->formatTZAwareTime($orig_task['task_end_date'], '%Y-%m-%d %T');
+            $orig_end_date = new w2p_Utilities_Date($tz_end_date);
+            $orig_end_date->addDays($timeOffset);
+            if (0 < $orig_start_date->dateDiff($orig_end_date)) {
+                $orig_end_date->prev_working_day();
+            }
+            $orig_task['task_end_date'] = $orig_end_date->format(FMT_DATETIME_MYSQL);
+
+            $newTask->bind($orig_task);
+            $result = $newTask->store();
+            if (!$result) {
+                $errors = $newTask->getError();
+                break;
+            }
+
+            $old_dependencies[$orig_id] = array_keys($newTask->getDependentTaskList($orig_id));
+            $old_new_task_mapping[$orig_id] = $newTask->task_id;
+        }
+
+        if (count($errors)) {
+            $this->_error = $errors;
+
+            /* If there's an error, this deletes the already imported tasks. */
+            foreach($old_new_task_mapping as $new_id) {
+                $newTask->task_id = $new_id;
+                $newTask->delete();
+            }
+        } else {
+            $q = $this->_getQuery();
+
+            /* This makes sure we have all the dependencies mapped out. */
+            foreach($old_dependencies as $from => $to_array) {
+                foreach($to_array as $to) {
+                    $q->addTable('task_dependencies');
+                    $q->addInsert('dependencies_req_task_id', $old_new_task_mapping[$from]);
+                    $q->addInsert('dependencies_task_id',     $old_new_task_mapping[$to]);
+
+                    $q->exec();
+                    $q->clear();
+                }
+            }
+
+            /* This makes sure all the parents are connected properly. */
+            foreach($old_parents as $old_child => $old_parent) {
+                if ($old_child == $old_parent) {
+                    /** Remember, this means skip the rest of the loop. */
+                    continue;
+                }
+                $q->addTable('tasks');
+                $q->addUpdate('task_parent', $old_new_task_mapping[$old_parent]);
+                $q->addWhere('task_id   = ' . $old_new_task_mapping[$old_child]);
+                $q->exec();
+                $q->clear();
+            }
+
+            /* This copies the task assigness to the new tasks. */
+            foreach($old_new_task_mapping as $old_id => $new_id) {
+                $newTask->task_id = $old_id;
+                $newTask->copyAssignedUsers($new_id);
+            }
+        }
+
+        return $errors;
+    }
+
+    // end of importTasks
 
     public function copyAssignedUsers($destTask_id)
     {
@@ -580,15 +704,6 @@ class CTask extends w2p_Core_BaseObject
     {
         $stored = false;
 
-        $this->w2PTrimAll();
-        if (!$this->task_owner) {
-            $this->task_owner = $this->_AppUI->user_id;
-        }
-
-        $this->importing_tasks = false;
-
-        $this->task_target_budget = filterCurrency($this->task_target_budget);
-
         $q = $this->_getQuery();
         $this->task_updated = $q->dbfnNowWithTZ();
 
@@ -625,14 +740,6 @@ class CTask extends w2p_Core_BaseObject
                 $this->updateDynamics(true);
             }
             $stored = parent::store();
-
-            if ($stored) {
-                // Milestone or task end date, or dynamic status has changed,
-                // shift the dates of the tasks that depend on this task
-                if (($this->task_end_date != $oTsk->task_end_date) || ($this->task_dynamic != $oTsk->task_dynamic) || ($this->task_milestone == '1')) {
-                    $this->shiftDependentTasks();
-                }
-            }
         }
 
         if (0 == $this->{$this->_tbl_key} && $this->canCreate()) {
@@ -644,21 +751,30 @@ class CTask extends w2p_Core_BaseObject
                 $this->task_end_date = '0000-00-00 00:00:00';
             }
             $stored = parent::store();
-
-            if ($stored) {
-                if ($this->task_parent) {
-                    // importing tasks do not update dynamics
-                    $this->importing_tasks = true;
-                }
-            }
         }
 
         return $stored;
     }
 
+    protected function hook_postCreate()
+    {
+        if ($this->task_parent) {
+            // importing tasks do not update dynamics
+            $this->importing_tasks = true;
+        }
+        
+        parent::hook_postCreate();
+    }
     protected function hook_preStore()
     {
-        parent::hook_preStore();
+        $this->w2PTrimAll();
+        if (!$this->task_owner) {
+            $this->task_owner = $this->_AppUI->user_id;
+        }
+
+        $this->importing_tasks = false;
+
+        $this->task_target_budget = filterCurrency($this->task_target_budget);
 
         if ($this->task_start_date != '' && $this->task_start_date != '0000-00-00 00:00:00') {
             $this->task_start_date = $this->_AppUI->convertToSystemTZ($this->task_start_date);
@@ -667,12 +783,12 @@ class CTask extends w2p_Core_BaseObject
             $this->task_end_date = $this->_AppUI->convertToSystemTZ($this->task_end_date);
         }
         $this->task_contacts = is_array($this->task_contacts) ? $this->task_contacts : explode(',', $this->task_contacts);
+
+        parent::hook_preStore();
     }
 
     protected function hook_postStore()
     {
-        parent::hook_postStore();
-
          // TODO $oTsk is a global set by store() and is the task before update.
          // Using it here as a global is probably a bad idea, but the only way until the old task is stored somewhere
          // else than a global variable...
@@ -758,11 +874,12 @@ class CTask extends w2p_Core_BaseObject
                 $old_parent->updateDynamics();
             }
         }
+
+        parent::hook_postStore();
     }
 
-    protected function  hook_postUpdate() {
-        parent::hook_postUpdate();
-
+    protected function hook_postUpdate()
+    {
         $q = $this->_query;
         /*
          * TODO: I don't like that we have to run an update immediately after the store
@@ -774,6 +891,8 @@ class CTask extends w2p_Core_BaseObject
         $q->addUpdate('task_updated', "'" . $q->dbfnNowWithTZ() . "'", false, true);
         $q->addWhere('task_id = ' . (int) $this->task_id);
         $q->exec();
+
+        parent::hook_postUpdate();
     }
 
     /**
@@ -834,6 +953,7 @@ class CTask extends w2p_Core_BaseObject
     public function delete()
     {
         $result = false;
+        $this->clearErrors();
 
         if ($this->canDelete()) {
             //load it before deleting it because we need info on it to update the parents later on
@@ -1461,9 +1581,7 @@ class CTask extends w2p_Core_BaseObject
      */
     public function shiftDependentTasks()
     {
-        trigger_error("The CTask->shiftDependentTasks method has been deprecated
-            and will be removed in v4.0. Please use CTask->pushDependencies
-            instead", E_USER_NOTICE );
+        trigger_error("The CTask->shiftDependentTasks method has been deprecated in v3.0 and will be removed in v4.0. Please use CTask->pushDependencies instead", E_USER_NOTICE );
 
         $this->pushDependencies($this->task_id, $this->task_end_date);
     }
@@ -1479,8 +1597,8 @@ class CTask extends w2p_Core_BaseObject
         $newTask->load($task_id);
 
         trigger_error("The CTask->update_dep_dates method has been deprecated
-            and will be removed in v4.0. Please use CTask->pushDependencies
-            instead", E_USER_NOTICE );
+            in v3.0 and will be removed in v4.0. Please use
+            CTask->pushDependencies instead", E_USER_NOTICE );
 
         $this->pushDependencies($task_id, $newTask->task_end_date);
     }
@@ -1581,8 +1699,9 @@ class CTask extends w2p_Core_BaseObject
     }
 
     /**
-     * Function that returns the amount of hours this
-     * task consumes per user each week
+     * Function that returns the amount of hours this task consumes per user each week
+     *
+     * @todo wtf - dkc 25 Nov 2012
      */
     public function getTaskDurationPerWeek($use_percent_assigned = false)
     {
@@ -1615,18 +1734,21 @@ class CTask extends w2p_Core_BaseObject
     // unassign a user from task
     public function removeAssigned($user_id)
     {
-
         $q = $this->_getQuery();
         $q->setDelete('user_tasks');
         $q->addWhere('task_id = ' . (int) $this->task_id . ' AND user_id = ' . (int) $user_id);
         $q->exec();
     }
 
-    //using user allocation percentage ($perc_assign)
-    // @return returns the Names of the over-assigned users (if any), otherwise false
+    /*
+     * using user allocation percentage ($perc_assign)
+     *
+     * @return returns the Names of the over-assigned users (if any), otherwise false
+     *
+     * @todo - a given function/method should return one data type consistently - dkc 25 Nov 2012
+     */
     public function updateAssigned($cslist, $perc_assign, $del = true, $rmUsers = false)
     {
-
         $q = $this->_getQuery();
         // process assignees
         $tarr = explode(',', $cslist);

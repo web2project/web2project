@@ -41,7 +41,7 @@ $canAdmin = canEdit('system');
 $referrerArray = parse_url($_SERVER['HTTP_REFERER']);
 $referrer = $referrerArray['query'];
 
-$file_task = (int) w2PgetParam($_GET, 'file_task', 0);
+$file_task = (int) w2PgetParam($_GET, 'file_task', $file->file_task);
 $file_parent = (int) w2PgetParam($_GET, 'file_parent', 0);
 $file_project = (int) w2PgetParam($_GET, 'project_id', 0);
 $file_helpdesk_item = (int) w2PgetParam($_GET, 'file_helpdesk_item', 0);
@@ -91,18 +91,11 @@ if ($ci) {
 if ($file->file_project) {
 	$file_project = $file->file_project;
 }
-if ($file->file_task) {
-	$file_task = $file->file_task;
-	$task_name = $file->getTaskName();
-} else {
-	if ($file_task) {
-		$task = new CTask();
-		$task->load($file_task);
-		$task_name = $task->task_name;
-	} else {
-		$task_name = '';
-	}
-}
+
+$task = new CTask();
+$task->load($file_task);
+$task_name = $task->task_name;
+
 if (isset($file->file_helpdesk_item)) {
 	$file_helpdesk_item = $file->file_helpdesk_item;
 }

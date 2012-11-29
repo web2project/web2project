@@ -12,7 +12,7 @@ $del = (int) w2PgetParam($_POST, 'del', 0);
 $task_id = (int) w2PgetParam($_POST, 'task_id', 0);
 $hassign = w2PgetParam($_POST, 'hassign');
 $hperc_assign = w2PgetParam($_POST, 'hperc_assign');
-$hdependencies = w2PgetParam($_POST, 'hdependencies');
+$hdependencies = w2PgetParam($_POST, 'hdependencies', '');
 $notify = (int) w2PgetParam($_POST, 'task_notify', 0);
 $comment = w2PgetParam($_POST, 'email_comment', '');
 $sub_form = (int) w2PgetParam($_POST, 'sub_form', 0);
@@ -116,6 +116,20 @@ if (is_array($result)) {
 if ($result) {
     if (isset($hassign)) {
         $obj->updateAssigned($hassign, $hperc_assign_ar);
+    }
+
+    if (isset($hdependencies) && '' != $hdependencies) {
+        // there are dependencies set!
+        $obj->updateDependencies($hdependencies,  $obj->task_id);
+
+        $nsd = new w2p_Utilities_Date($obj->get_deps_max_end_date($obj));
+        $obj->task_start_date = $nsd->format(FMT_DATETIME_MYSQL);
+        $obj->task_start_date = $AppUI->formatTZAwareTime($obj->task_start_date, '%Y-%m-%d %T');
+
+        $ned = new w2p_Utilities_Date($obj->task_start_date);
+        $ned->addDuration($obj->task_duration, $obj->task_duration_type);
+        $obj->task_end_date = $ned->format(FMT_DATETIME_MYSQL);
+        $obj->store();
     }
 
     $billingCategory = w2PgetSysVal('BudgetCategory');
