@@ -307,7 +307,6 @@ function addComponent() {
 	newtr.appendChild(oCell);
 	oCell = document.createElement('td');
 	htmltxt = '';
-	//	htmltxt +='<input type='hidden' id='add_task_duration_'+line_nr+'' name='add_task_duration_'+line_nr+'' value='' />';
 	htmltxt +='<input type="hidden" id="add_task_end_date_'+line_nr+'" name="add_task_end_date_'+line_nr+'" value="<?php $today->setDate($today->getTime() + 60 * 60, DATE_FORMAT_UNIXTIME);
 	echo $today->format(FMT_TIMESTAMP); ?>" />';
 	htmltxt +='<input type="text" onchange="setDate(\'editFrm\', \'end_date_'+line_nr+'\');" class="text" style="width:130px;" id="end_date_'+line_nr+'" name="end_date_'+line_nr+'" value="<?php echo $today->format($cf); ?>" />';
@@ -444,7 +443,8 @@ function calcDuration(f, start_date, end_date, duration_fld, durntype_fld) {
     var end_value = end_date.value;
 
     xajax_calcDuration(start_value.substring(0,8), start_value.substring(8,10), start_value.substring(10,12),
-                       end_value.substring(0,8), end_value.substring(8,10), end_value.substring(10,12), durntype_fld, duration_fld.name);
+                       end_value.substring(0,8), end_value.substring(8,10), end_value.substring(10,12),
+                       durntype_fld, duration_fld.name);
 }
 
 </script>
