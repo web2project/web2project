@@ -746,14 +746,6 @@ class CTask extends w2p_Core_BaseObject
                 $this->updateDynamics(true);
             }
             $stored = parent::store();
-
-            if ($stored) {
-                // Milestone or task end date, or dynamic status has changed,
-                // shift the dates of the tasks that depend on this task
-                if (($this->task_end_date != $oTsk->task_end_date) || ($this->task_dynamic != $oTsk->task_dynamic) || ($this->task_milestone == '1')) {
-                    $this->shiftDependentTasks();
-                }
-            }
         }
 
         if (0 == $this->{$this->_tbl_key} && $this->canCreate()) {
@@ -765,18 +757,20 @@ class CTask extends w2p_Core_BaseObject
                 $this->task_end_date = '0000-00-00 00:00:00';
             }
             $stored = parent::store();
-
-            if ($stored) {
-                if ($this->task_parent) {
-                    // importing tasks do not update dynamics
-                    $this->importing_tasks = true;
-                }
-            }
         }
 
         return $stored;
     }
 
+    protected function hook_postCreate()
+    {
+        if ($this->task_parent) {
+            // importing tasks do not update dynamics
+            $this->importing_tasks = true;
+        }
+        
+        parent::hook_postCreate();
+    }
     protected function hook_preStore()
     {
         parent::hook_preStore();
@@ -881,7 +875,8 @@ class CTask extends w2p_Core_BaseObject
         }
     }
 
-    protected function  hook_postUpdate() {
+    protected function hook_postUpdate()
+    {
         parent::hook_postUpdate();
 
         $q = $this->_query;
