@@ -2,60 +2,6 @@
 var calendarField = '';
 var calWin = null;
 
-/**
-setTasksStartDate sets new task's start date value which is maximum end date of all dependend tasks
-to do: date format should be taken from config
-*/
-function setTasksStartDate(form, datesForm) {
-
-	var td = form.task_dependencies.length -1;
-	var max_date = new Date('1970', '01', '01');
-	var max_id = -1;
-	
-	if (form.set_task_start_date.checked == true) {	
-		//build array of task dependencies
-		for (td; td > -1; td--) {
-			var i = form.task_dependencies.options[td].value;
-			var val = projTasksWithEndDates[i][0]; //format 05/03/2004
-			var sdate = new Date(val.substring(6,10),val.substring(3,5)-1, val.substring(0,2));
-			if (sdate > max_date) {
-				max_date = sdate;
-				max_id = i;
-			}
-		}
-		
-		//check end date of parent task 
-		// Why? Parent task is for updating dynamics or angle icon
-		if ( 0 && form.task_parent.options.selectedIndex!=0) {
-			var i = form.task_parent.options[form.task_parent.options.selectedIndex].value;	
-			var val = projTasksWithEndDates[i][0]; //format 05/03/2004	
-			var sdate = new Date(val.substring(6,10),val.substring(3,5)-1, val.substring(0,2));
-			if (sdate > max_date) {
-				max_date = sdate;
-				max_id = i;		
-			}
-		}
-		
-		if (max_id != -1) {
-			var hour  = projTasksWithEndDates[max_id][1];
-			var minute = projTasksWithEndDates[max_id][2];
-		
-			datesForm.start_date.value = projTasksWithEndDates[max_id][0];
-			datesForm.start_hour.value = hour;
-			datesForm.start_minute.value = minute;
-			
-			 var d = projTasksWithEndDates[max_id][0];
-			 //hardcoded date format Ymd
-			 datesForm.task_start_date.value = d.substring(6,10) + '' + d.substring(3,5) + '' + d.substring(0,2);	 
-		}	
-      	var urlst = 'index.php?m=public&a=date_format&dialog=1&field='+datesForm.name+'.start_date&date=' + datesForm.task_start_date.value;
-      	var threadst = window.frames['thread2']; //document.getElementById('thread2');
-      	threadst.location = urlst;
-		setAMPM(datesForm.start_hour);
-        calcFinish(datesForm);
-	}
-}
-
 function setContacts(contact_id_string) {
 	if(!contact_id_string) {
 		contact_id_string = '';
@@ -173,7 +119,6 @@ function addTaskDependency(form, datesForm) {
 	}
 	
 	checkForTaskDependencyNone(form.task_dependencies);
-	//setTasksStartDate(form, datesForm);
 }
 
 function removeTaskDependency(form, datesForm) {
@@ -184,8 +129,6 @@ function removeTaskDependency(form, datesForm) {
 			form.task_dependencies.options[td] = null;
 		}
 	}
-	
-	//setTasksStartDate(form, datesForm);
 }
 
 function setAMPM( field) {

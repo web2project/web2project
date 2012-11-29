@@ -4,7 +4,7 @@ if (!defined('W2P_BASE_DIR')) {
 }
 
 $contact_id = (int) w2PgetParam($_GET, 'contact_id', 0);
-$company_id = (int) w2PgetParam($_GET, 'company_id', $AppUI->user_company);
+$company_id = (int) w2PgetParam($_GET, 'company_id', 0);
 $dept_id = (int) w2PgetParam($_GET, 'dept_id', 0);
 
 
@@ -36,6 +36,10 @@ if (!$row && $contact_id > 0) {
 $company = new CCompany();
 $company->load($company_id);
 $company_name = $company->company_name;
+
+// get a list of permitted companies
+$companies = $company->getAllowedRecords($AppUI->user_id, 'company_id,company_name', 'company_name');
+$companies = arrayMerge(array('0' => ''), $companies);
 
 $dept = new CDepartment();
 $dept->load($dept_id);
@@ -80,7 +84,6 @@ $countries = array('' => $AppUI->_('(Select a Country)')) + w2PgetSysVal('Global
 <script language="javascript" type="text/javascript">
 <?php
 echo 'window.company_id=' . ((int) $company_detail['company_id']) . ";\n";
-echo 'window.company_value="' . $AppUI->__($company_detail['company_name'], UI_OUTPUT_JS) . '";';
 ?>
 
 function submitIt() {
@@ -127,31 +130,11 @@ function popDepartment() {
 	window.open('./index.php?m=contacts&a=select_contact_company&dialog=1&table_name=departments&company_id='+f.contact_company.value+'&dept_id='+f.contact_department.value, 'company', 'left=50,top=50,height=320,width=400,resizable');
 }
 
-function setDepartment( key, val ){
+function setDepartment( key ){
 	var f = document.changecontact;
- 	if (val != '') {
-    	f.contact_department.value = key;
-			f.contact_department_name.value = val;
-    }
-}
 
-function popCompany() {
-	var f = document.changecontact;
-	window.open('./index.php?m=contacts&a=select_contact_company&dialog=1&table_name=companies&company_id=<?php echo $company_detail['company_id']; ?>', 'company', 'left=50,top=50,height=320,width=400,resizable');
-}
-
-function setCompany( key, val ){
-	var f = document.changecontact;
- 	if (val != '') {
-    	f.contact_company.value = key;
-			f.contact_company_name.value = val;
-    	if ( window.company_id != key ){
-    		f.contact_department.value = '';
-				f.contact_department_name.value = '';
-    	}
-    	window.company_id = key;
-    	window.company_value = val;
-    }
+    f.contact_department.value = key;
+    xajax_getDepartment(f.contact_department.value, 'contact_department_name');
 }
 
 <?php if ($canDelete) { ?>
@@ -175,8 +158,10 @@ function orderByName( x ){
 
 function companyChange() {
 	var f = document.changecontact;
-	if ( f.contact_company.value != window.company_value ){
-		f.contact_department.value = '';
+
+	if ( f.contact_company.value != window.company_id ){
+        f.contact_department_name.value = '';
+		f.contact_department.value = '0';
 	}
 }
 
@@ -321,20 +306,19 @@ foreach ($fields as $key => $field): ?>
                     <tr>
                         <td align="right"><?php echo $AppUI->_('Company'); ?>:</td>
                         <td nowrap="nowrap">
-                            <input type="text" class="text" name="contact_company_name" value="<?php echo $company_detail['company_name'];?>" maxlength="100" size="25" />
-                            <input type="button" class="button" value="<?php echo $AppUI->_('select company...'); ?>..." onclick="popCompany()" />
-                            <input type='hidden' name='contact_company' value="<?php echo $company_detail['company_id']; ?>" />
-                            <a href="javascript: void(0);" onclick="orderByName('company')">[<?php echo $AppUI->_('use in display'); ?>]</a>
-                            </td>
+                            <?php echo arraySelect($companies, 'contact_company', 'class="text" size="1" onChange="companyChange();"', $company_detail['company_id']); ?>
+                        </td>
                     </tr>
+                    <?php if ($AppUI->isActiveModule('departments')) { ?>
                     <tr>
                         <td align="right"><?php echo $AppUI->_('Department'); ?>:</td>
                         <td nowrap="nowrap">
-                            <input type="text" class="text" name="contact_department_name" value="<?php echo $dept_detail['dept_name']; ?>" maxlength="100" size="25" />
+                            <input type="text" class="text" name="contact_department_name" id="contact_department_name" value="<?php echo $dept_detail['dept_name']; ?>" maxlength="100" size="25" />
                             <input type='hidden' name='contact_department' value='<?php echo $dept_detail['dept_id']; ?>' />
                             <input type="button" class="button" value="<?php echo $AppUI->_('select department...'); ?>" onclick="popDepartment()" />
-                            </td>
+                        </td>
                     </tr>
+                    <?php } ?>
                     <tr>
                         <td align="right"><?php echo $AppUI->_('Title'); ?>:</td>
                         <td><input type="text" class="text" name="contact_title" value="<?php echo $row->contact_title; ?>" maxlength="50" size="25" /></td>

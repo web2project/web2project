@@ -61,9 +61,20 @@ function calcDuration($start_date, $start_hour, $start_minute,
     $response->assign($duration_output_field, 'value', $duration);
 
     return $response;
-	
+}
+        
+function getDepartment($department_id, $fieldname)
+{
+    $department = new CDepartment();
+    $department->load((int) $department_id);
+
+    $response = new xajaxResponse();
+    $response->assign($fieldname,'value',$department->dept_name);
+
+    return $response;
 }
 
 $xajax->register(XAJAX_FUNCTION,'calcDuration');
 $xajax->register(XAJAX_FUNCTION,'calcFinish');
+$xajax->register(XAJAX_FUNCTION,'getDepartment');
 $xajax->processRequest();

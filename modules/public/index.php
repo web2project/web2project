@@ -1,1 +1,3 @@
-This is the repository of public pages and dialog boxes.
+<?php
+
+include W2P_BASE_DIR . '/modules/public/welcome.php';

@@ -10,6 +10,7 @@ $select_list = array();
 
 switch ($table_name) {
 	case 'companies':
+//TODO: deprecated
 		$id_field = 'company_id';
 		$name_field = 'company_name';
 		$selection_string = 'Company';
@@ -46,7 +47,7 @@ if ($myId) {
 	$r_data = $q->loadHash();
 	$q->clear();
 	$data_update_script = '';
-	$update_address = isset($_POST['overwrite_address']);
+	$update_address = (isset($_POST['overwrite_address'])) ? true : false;
 
 	if ($table_name == 'companies') {
 		$update_fields = array();
@@ -60,17 +61,8 @@ if ($myId) {
         }
 	} else {
 		if ($table_name == 'departments') {
-			$update_fields = array('dept_id' => 'contact_department');
-			if ($update_address) {
-				$update_fields = array('dept_address1' => 'contact_address1', 'dept_address2' => 'contact_address2', 'dept_city' => 'contact_city', 'dept_state' => 'contact_state', 'dept_zip' => 'contact_zip', 'dept_phone' => 'contact_phone', 'dept_fax' => 'contact_fax');
-			}
-			$data_update_script = 'opener.setDepartment(\'' . $myId . '\', \'' . db_escape($r_data[$name_field]) . "');\n";
+			$data_update_script = "opener.setDepartment($myId);";
 		}
-	}
-	// Let's figure out which fields are going to
-	// be updated
-	foreach ($update_fields as $record_field => $contact_field) {
-		$data_update_script .= 'opener.document.changecontact.' . $contact_field . '.value = \'' . $r_data[$record_field] . "';\n";
 	}
 	?>
 		<script language="javascript" type="text/javascript">
@@ -93,11 +85,6 @@ if ($myId) {
 						echo $AppUI->_('Select') . ' ' . $AppUI->_($selection_string) . ':<br />';
 						echo arraySelect($select_list, $id_field, 'class="text" style="width:300px" size="10"', $dataId);
 					?>
-				</td>
-			</tr>
-			<tr>
-				<td colspan="2" align="left">
-					<input type="checkbox" name="overwrite_address" id="overwrite_address" /> <label for="overwrite_address"><?php echo $AppUI->_('Overwrite contact address information'); ?></label>
 				</td>
 			</tr>
 			<tr>
