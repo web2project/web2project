@@ -118,6 +118,20 @@ if ($result) {
         $obj->updateAssigned($hassign, $hperc_assign_ar);
     }
 
+    if (isset($hdependencies)) {
+        // there are dependencies set!
+        $obj->updateDependencies($hdependencies,  $obj->task_id);
+
+        $nsd = new w2p_Utilities_Date($obj->get_deps_max_end_date($obj));
+        $obj->task_start_date = $nsd->format(FMT_DATETIME_MYSQL);
+        $obj->task_start_date = $AppUI->formatTZAwareTime($obj->task_start_date, '%Y-%m-%d %T');
+
+        $ned = new w2p_Utilities_Date($obj->task_start_date);
+        $ned->addDuration($obj->task_duration, $obj->task_duration_type);
+        $obj->task_end_date = $ned->format(FMT_DATETIME_MYSQL);
+        $obj->store();
+    }
+
     $billingCategory = w2PgetSysVal('BudgetCategory');
 	$budgets = array();
 	foreach ($billingCategory as $id => $category) {
