@@ -12,7 +12,7 @@ $del = (int) w2PgetParam($_POST, 'del', 0);
 $task_id = (int) w2PgetParam($_POST, 'task_id', 0);
 $hassign = w2PgetParam($_POST, 'hassign');
 $hperc_assign = w2PgetParam($_POST, 'hperc_assign');
-$hdependencies = w2PgetParam($_POST, 'hdependencies');
+$hdependencies = w2PgetParam($_POST, 'hdependencies', '');
 $notify = (int) w2PgetParam($_POST, 'task_notify', 0);
 $comment = w2PgetParam($_POST, 'email_comment', '');
 $sub_form = (int) w2PgetParam($_POST, 'sub_form', 0);
@@ -118,7 +118,7 @@ if ($result) {
         $obj->updateAssigned($hassign, $hperc_assign_ar);
     }
 
-    if (isset($hdependencies)) {
+    if (isset($hdependencies) && '' != $hdependencies) {
         // there are dependencies set!
         $obj->updateDependencies($hdependencies,  $obj->task_id);
 
