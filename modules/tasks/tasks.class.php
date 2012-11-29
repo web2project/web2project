@@ -701,15 +701,6 @@ class CTask extends w2p_Core_BaseObject
     {
         $stored = false;
 
-        $this->w2PTrimAll();
-        if (!$this->task_owner) {
-            $this->task_owner = $this->_AppUI->user_id;
-        }
-
-        $this->importing_tasks = false;
-
-        $this->task_target_budget = filterCurrency($this->task_target_budget);
-
         $q = $this->_getQuery();
         $this->task_updated = $q->dbfnNowWithTZ();
 
@@ -773,7 +764,14 @@ class CTask extends w2p_Core_BaseObject
     }
     protected function hook_preStore()
     {
-        parent::hook_preStore();
+        $this->w2PTrimAll();
+        if (!$this->task_owner) {
+            $this->task_owner = $this->_AppUI->user_id;
+        }
+
+        $this->importing_tasks = false;
+
+        $this->task_target_budget = filterCurrency($this->task_target_budget);
 
         if ($this->task_start_date != '' && $this->task_start_date != '0000-00-00 00:00:00') {
             $this->task_start_date = $this->_AppUI->convertToSystemTZ($this->task_start_date);
@@ -782,12 +780,12 @@ class CTask extends w2p_Core_BaseObject
             $this->task_end_date = $this->_AppUI->convertToSystemTZ($this->task_end_date);
         }
         $this->task_contacts = is_array($this->task_contacts) ? $this->task_contacts : explode(',', $this->task_contacts);
+
+        parent::hook_preStore();
     }
 
     protected function hook_postStore()
     {
-        parent::hook_postStore();
-
          // TODO $oTsk is a global set by store() and is the task before update.
          // Using it here as a global is probably a bad idea, but the only way until the old task is stored somewhere
          // else than a global variable...
@@ -873,12 +871,12 @@ class CTask extends w2p_Core_BaseObject
                 $old_parent->updateDynamics();
             }
         }
+
+        parent::hook_postStore();
     }
 
     protected function hook_postUpdate()
     {
-        parent::hook_postUpdate();
-
         $q = $this->_query;
         /*
          * TODO: I don't like that we have to run an update immediately after the store
@@ -890,6 +888,8 @@ class CTask extends w2p_Core_BaseObject
         $q->addUpdate('task_updated', "'" . $q->dbfnNowWithTZ() . "'", false, true);
         $q->addWhere('task_id = ' . (int) $this->task_id);
         $q->exec();
+
+        parent::hook_postUpdate();
     }
 
     /**
