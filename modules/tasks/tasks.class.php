@@ -556,7 +556,9 @@ class CTask extends w2p_Core_BaseObject
             $tz_end_date = $this->_AppUI->formatTZAwareTime($orig_task['task_end_date'], '%Y-%m-%d %T');
             $orig_end_date = new w2p_Utilities_Date($tz_end_date);
             $orig_end_date->addDays($timeOffset);
-            $orig_end_date->prev_working_day();
+            if (0 < $orig_start_date->dateDiff($orig_end_date)) {
+                $orig_end_date->prev_working_day();
+            }
             $orig_task['task_end_date'] = $orig_end_date->format(FMT_DATETIME_MYSQL);
 
             $newTask->bind($orig_task);
