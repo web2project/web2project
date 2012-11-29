@@ -602,24 +602,13 @@ class CFile extends w2p_Core_BaseObject {
 	}
 
 	public function getTaskName() {
-		$taskname = '';
-		if (!$this->file_task)
-			return $taskname;
+        trigger_error("The CTask->getTaskName method has been deprecated in v3.0
+            and will be removed in v4.0. Please use just load a CTask object
+            instead", E_USER_NOTICE );
 
-        $q = $this->_getQuery();
-		$q->clear();
-		$q->addTable('tasks');
-		$q->addQuery('task_name');
-		$q->addWhere('task_id = ' . (int)$this->file_task);
-		if ($qid = &$q->exec()) {
-			if ($qid->fields['task_name']) {
-				$taskname = $qid->fields['task_name'];
-			} else {
-				$taskname = $qid->fields[0];
-			}
-		}
-
-		return $taskname;
+        $task = new CTask();
+        $task->load((int)$this->file_task);
+        
+        return $task->task_name;
 	}
-
 }
