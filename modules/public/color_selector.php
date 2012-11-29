@@ -3,11 +3,10 @@ if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
 
-$callback = isset($_GET['callback']) ? w2PgetParam($_GET, 'callback', '') : 0;
 ?>
 <script language="javascript" type="text/javascript">
 	function setClose(color){
-		window.opener.<?php echo $callback; ?>(color);
+		window.opener.setColor(color);
 		window.close();
 	}
 </script>
