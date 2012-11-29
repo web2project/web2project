@@ -79,8 +79,11 @@ class w2p_Core_UpgradeManager {
     }
 
     public function upgradeSystem() {
+        global $AppUI;
+
         $allErrors = array();
         set_time_limit(0);
+        $version = '';
         //TODO: add support for database prefixes
 
         $dbConn = $this->_openDBConnection();
@@ -91,12 +94,17 @@ class w2p_Core_UpgradeManager {
 
             if ($currentVersion < count($migrations)) {
                 foreach ($migrations as $update) {
+                    if ($update == end($migrations)) {
+                        $version = $AppUI->getVersion();
+                    }
                     $myIndex = (int) substr($update, 0, 3);
                     if ($myIndex > $currentVersion) {
                         $this->updatesApplied[] = $update;
                         $errorMessages = $this->_applySQLUpdates($update, $dbConn);
                         $allErrors = array_merge($allErrors, $errorMessages);
-                        $sql = "INSERT INTO w2pversion (db_version, last_db_update) VALUES ($myIndex, now())";
+                        $sql = "INSERT INTO w2pversion " .
+                            " (db_version, code_version, last_db_update) " .
+                            " VALUES ($myIndex, '$version', now())";
                         $dbConn->Execute($sql);
                     }
                 }
