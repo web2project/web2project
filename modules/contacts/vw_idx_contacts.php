@@ -5,6 +5,9 @@ if (!defined('W2P_BASE_DIR')) {
 
 global $carr, $carrWidth, $carrHeight, $showfields, $contactMethods, $methodLabels, $tdw;
 
+$df = $AppUI->getPref('SHDATEFORMAT');
+$df .= ' ' . $AppUI->getPref('TIMEFORMAT');
+
 ?>
 <table width="100%" border="0" cellpadding="1" cellspacing="0" class="contacts">
 	<tr>
@@ -43,9 +46,6 @@ global $carr, $carrWidth, $carrHeight, $showfields, $contactMethods, $methodLabe
                                                     ?></a>
 													<?php
 														$projectList = CContact::getProjects($contactid);
-
-                                                        $df = $AppUI->getPref('SHDATEFORMAT');
-                                                        $df .= ' ' . $AppUI->getPref('TIMEFORMAT');
 
                                                         $contact_updatekey   = $carr[$z][$x]['contact_updatekey'];
                                                         $contact_lastupdate  = $carr[$z][$x]['contact_lastupdate'];
