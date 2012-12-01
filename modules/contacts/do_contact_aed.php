@@ -11,7 +11,7 @@ $controller = new w2p_Controllers_Base(
 
 $AppUI = $controller->process($AppUI, $_POST);
 
-if ($result && !$delete) {
+if ($controller->success && !$delete) {
     $updatekey = $controller->object->getUpdateKey();
     $notifyasked = w2PgetParam($_POST, 'contact_updateask', 0);
     if ($notifyasked && !strlen($updatekey)) {
