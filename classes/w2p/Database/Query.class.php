@@ -1295,23 +1295,23 @@ class w2p_Database_Query {
 	 * @param $checkSlashes Defaults to true, strip any slashes from the hash values
 	 * @param $bindAll Bind all values regardless of their existance as defined instance variables
 	 */
-	public function bindHashToObject($hash, &$obj, $prefix = null, $checkSlashes = true, $bindAll = false) {
+	public function bindHashToObject($hash, &$obj, $prefix = null, $notUsed = true, $bindAll = false) {
 		is_array($hash) or die('bindHashToObject : hash expected');
 		is_object($obj) or die('bindHashToObject : object expected');
 
 		if ($bindAll) {
-			foreach ($hash as $k => $v) {
+			foreach ($hash as $k => $notUsed2) {
 				$obj->$k = w2PHTMLDecode($hash[$k]);
 			}
 		} else {
 			if ($prefix) {
-				foreach (get_object_vars($obj) as $k => $v) {
+				foreach (get_object_vars($obj) as $k => $notUsed2) {
 					if (isset($hash[$prefix . $k])) {
 						$obj->$k = w2PHTMLDecode($hash[$k]);
 					}
 				}
 			} else {
-				foreach (get_object_vars($obj) as $k => $v) {
+				foreach (get_object_vars($obj) as $k => $notUsed2) {
 					if (isset($hash[$k])) {
                         $obj->$k = w2PHTMLDecode($hash[$k]);
 					}
