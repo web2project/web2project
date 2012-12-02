@@ -13,6 +13,7 @@ $obj = $module;
 $canAddEdit = $obj->canAddEdit();
 $canAuthor = $obj->canCreate();
 $canEdit = $obj->canEdit();
+$canRead = canView('system');
 
 if (!$canAddEdit) {
 	$AppUI->redirect(ACCESS_DENIED);
