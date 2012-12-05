@@ -346,6 +346,7 @@ foreach ($gtask_sliced as $gts) {
             $q->addQuery('c.contact_first_name, c.contact_last_name');
             $q->addWhere('ut.task_id = ' . (int)$a['task_id']);
             $res = $q->loadList();
+            $caption = '';
             foreach ($res as $rw) {
                 switch ($rw['perc_assignment']) {
                     case 100:
