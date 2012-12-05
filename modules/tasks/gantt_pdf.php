@@ -349,10 +349,10 @@ foreach ($gtask_sliced as $gts) {
             foreach ($res as $rw) {
                 switch ($rw['perc_assignment']) {
                     case 100:
-                        $caption .= $rw['contact_first_name'] . ' ' . $rw['contact_last_name'] . ';';
+                        $caption .= $rw['contact_display_name'] . ';';
                         break;
                     default:
-                        $caption .= $rw['contact_first_name'] . ' ' . $rw['contact_last_name'] . ' [' . $rw['perc_assignment'] . '%];';
+                        $caption .= $rw['contact_display_name'] . ' [' . $rw['perc_assignment'] . '%];';
                         break;
                 }
             }
