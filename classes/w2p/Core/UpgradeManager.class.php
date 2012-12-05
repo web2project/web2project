@@ -79,8 +79,11 @@ class w2p_Core_UpgradeManager {
     }
 
     public function upgradeSystem() {
+        global $AppUI;
+
         $allErrors = array();
         set_time_limit(0);
+        $version = '';
         //TODO: add support for database prefixes
 
         $dbConn = $this->_openDBConnection();
@@ -91,12 +94,17 @@ class w2p_Core_UpgradeManager {
 
             if ($currentVersion < count($migrations)) {
                 foreach ($migrations as $update) {
+                    if ($update == end($migrations)) {
+                        $version = $AppUI->getVersion();
+                    }
                     $myIndex = (int) substr($update, 0, 3);
                     if ($myIndex > $currentVersion) {
                         $this->updatesApplied[] = $update;
                         $errorMessages = $this->_applySQLUpdates($update, $dbConn);
                         $allErrors = array_merge($allErrors, $errorMessages);
-                        $sql = "INSERT INTO w2pversion (db_version, last_db_update) VALUES ($myIndex, now())";
+                        $sql = "INSERT INTO w2pversion " .
+                            " (db_version, code_version, last_db_update) " .
+                            " VALUES ($myIndex, '$version', now())";
                         $dbConn->Execute($sql);
                     }
                 }
@@ -121,7 +129,7 @@ class w2p_Core_UpgradeManager {
         $sql = "SELECT * FROM dpversion ORDER BY db_version DESC";
         $res = $dbConn->Execute($sql);
         if ($res && $res->RecordCount() > 0) {
-            $dpVersion = $res->fields['code_version'];
+            $dpVersion = substr($res->fields['code_version'], 0, 5);
         }
 
         switch ($dpVersion) {
@@ -145,6 +153,7 @@ class w2p_Core_UpgradeManager {
             case '2.1.4':
             case '2.1.5':
             case '2.1.6':
+            case '2.1.7':
                 $errorMessages = $this->_applySQLUpdates('dp_to_w2p1.sql', $dbConn);
                 $allErrors = array_merge($allErrors, $errorMessages);
 

@@ -69,13 +69,13 @@ class w2p_Mocks_Query extends w2p_Database_Query {
         $this->bindHashToObject($hash, $object, null, $strip, $bindAll);
     }
 
-    public function bindHashToObject($hash, &$obj, $prefix = null, $checkSlashes = true, $bindAll = false) {
-        foreach (get_object_vars($obj) as $k => $notUsed) {
+    public function bindHashToObject($hash, &$obj, $prefix = null, $notUsed = true, $bindAll = false) {
+        foreach (get_object_vars($obj) as $k => $notUsed2) {
             if (isset($hash[$k])) {
                 if (is_array(w2PHTMLDecode($hash[$k]))) {
                     $obj->$k = w2PHTMLDecode($hash[$k]);
                 } else {
-                    $obj->$k = ($checkSlashes && get_magic_quotes_gpc()) ? stripslashes(w2PHTMLDecode($hash[$k])) : w2PHTMLDecode($hash[$k]);
+                    $obj->$k = w2PHTMLDecode($hash[$k]);
                 }
             }
         }

@@ -36,7 +36,7 @@ $tab = $AppUI->processIntState('CompVwTab', $_GET, 'tab', 0);
 $titleBlock = new w2p_Theme_TitleBlock('View Company', 'handshake.png', $m, "$m.$a");
 $titleBlock->addCell();
 if ($canAdd) {
-  $titleBlock->addCell('<input type="submit" class="button" value="' . $AppUI->_('new company') . '" />', '', '<form action="?m=companies&a=addedit" method="post" accept-charset="utf-8">', '</form>');	
+    $titleBlock->addCell('<input type="submit" class="button" value="' . $AppUI->_('new company') . '" />', '', '<form action="?m=companies&a=addedit" method="post" accept-charset="utf-8">', '</form>');
 }
 if ($canEdit) {
 	$titleBlock->addCell('<input type="submit" class="button" value="' . $AppUI->_('new department') . '" />', '', '<form action="?m=departments&a=addedit&company_id=' . $company_id . '" method="post" accept-charset="utf-8">', '</form>');
@@ -53,8 +53,6 @@ if ($canEdit) {
 $titleBlock->show();
 $htmlHelper = new w2p_Output_HTMLHelper($AppUI);
 $htmlHelper->stageRowData(get_object_vars($company));
-?>
-<?php
 // security improvement:
 // some javascript functions may not appear on client side in case of user not having write permissions
 // else users would be able to arbitrarily run 'bad' functions
@@ -89,7 +87,7 @@ $countries = w2PgetSysVal('GlobalCountries');
 			<table cellspacing="1" cellpadding="2" width="100%">
 				<tr>
 					<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Company'); ?>:</td>
-                    <?php echo $htmlHelper->createCell('company_name', $company->company_name); ?>
+                    <?php echo $htmlHelper->createCell('company_name-nolink', $company->company_name); ?>
 				</tr>
 				<tr>
 					<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Owner'); ?>:</td>

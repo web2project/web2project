@@ -57,7 +57,7 @@ function clickWeek( uts, fdate ) {
 }
 </script>
 
-<table cellspacing="0" cellpadding="0" border="0" width="100%"><tr><td>
+<table cellspacing="0" cellpadding="0" border="0" width="100%" id="month-view"><tr><td>
 <?php
 // establish the focus 'date'
 $date = new w2p_Utilities_Date($date);

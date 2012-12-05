@@ -23,10 +23,10 @@ class w2p_Theme_TabBox {
 	/**
  	@var string The base path to prefix the include file */
 	public $baseInc;
-	/**
-
-	 * the active tab, and the selected tab **/
+	/** the active tab, and the selected tab **/
 	public $javascript = null;
+
+    protected $_AppUI = null;
 
 	/**
 	 * Constructor
@@ -37,7 +37,10 @@ class w2p_Theme_TabBox {
 	 *	Must support 2 arguments, currently active tab, new tab to activate.
 	 */
 	public function __construct($baseHRef = '', $baseInc = '', $active = 0, $javascript = null) {
-		$this->tabs = array();
+		global $AppUI;
+        $this->_AppUI = $AppUI;
+
+        $this->tabs = array();
 		$this->active = $active;
 		$this->baseHRef = ($baseHRef ? $baseHRef . '&amp;' : '?');
 		$this->javascript = $javascript;
@@ -65,8 +68,7 @@ class w2p_Theme_TabBox {
 	}
 
 	public function isTabbed() {
-		global $AppUI;
-		if ($this->active < 0 || $AppUI->getPref('TABVIEW') == 2) {
+		if ($this->active < 0 || $this->_AppUI->getPref('TABVIEW') == 2) {
 			return false;
 		}
 		return true;
@@ -80,15 +82,15 @@ class w2p_Theme_TabBox {
 	 * @param string Can't remember whether this was useful
 	 */
 	public function show($extra = '', $js_tabs = false) {
-		global $AppUI, $currentTabId, $currentTabName;
+		global $currentTabId, $currentTabName;
 		$this->loadExtras($notUsed, $notUsed2);
 		reset($this->tabs);
 		$s = '';
 		// tabbed / flat view options
-		if ($AppUI->getPref('TABVIEW') == 0) {
+		if ($this->_AppUI->getPref('TABVIEW') == 0) {
 			$s .= '<table border="0" cellpadding="2" cellspacing="0" width="100%"><tr><td nowrap="nowrap">';
-			$s .= '<a class="crumb" href="' . $this->baseHRef . 'tab=0"><span>' . $AppUI->_('tabbed') . '</span></a> ';
-			$s .= '<a class="crumb" href="' . $this->baseHRef . 'tab=-1"><span>' . $AppUI->_('flat') . '</span></a>';
+			$s .= '<a class="crumb" href="' . $this->baseHRef . 'tab=0"><span>' . $this->_AppUI->_('tabbed') . '</span></a> ';
+			$s .= '<a class="crumb" href="' . $this->baseHRef . 'tab=-1"><span>' . $this->_AppUI->_('flat') . '</span></a>';
 			$s .= '</td>' . $extra . '</tr></table>';
 			echo $s;
 		} else {
@@ -99,11 +101,11 @@ class w2p_Theme_TabBox {
 			}
 		}
 
-		if ($this->active < 0 || $AppUI->getPref('TABVIEW') == 2) {
+		if ($this->active < 0 || $this->_AppUI->getPref('TABVIEW') == 2) {
 			// flat view, active = -1
 			echo '<table border="0" cellpadding="2" cellspacing="0" width="100%">';
 			foreach ($this->tabs as $k => $v) {
-				echo '<tr><td><strong>' . ($v[2] ? $v[1] : $AppUI->_($v[1])) . '</strong></td></tr>';
+				echo '<tr><td><strong>' . ($v[2] ? $v[1] : $this->_AppUI->_($v[1])) . '</strong></td></tr>';
 				echo '<tr><td>';
 				$currentTabId = $k;
 				$currentTabName = $v[1];
@@ -133,7 +135,7 @@ class w2p_Theme_TabBox {
 				} else {
 					$s .= $this->baseHRef . "tab=$k";
 				}
-				$s .= '">' . ($v[2] ? $v[1] : $AppUI->_($v[1])) . '</a></td>';
+				$s .= '">' . ($v[2] ? $v[1] : $this->_AppUI->_($v[1])) . '</a></td>';
 			}
 			$s .= '<td nowrap="nowrap" class="tabsp">&nbsp;</td></tr>';
 			$s .= '<tr><td width="100%" colspan="' . (count($this->tabs) * 2 + 1) . '" class="tabox">';
@@ -158,7 +160,6 @@ class w2p_Theme_TabBox {
 	}
 
 	public function loadExtras($module, $file = null) {
-		global $AppUI;
 		if (!isset($_SESSION['all_tabs']) || !isset($_SESSION['all_tabs'][$module])) {
 			return false;
 		}
@@ -172,7 +173,7 @@ class w2p_Theme_TabBox {
 		} else {
 			$tab_array = &$_SESSION['all_tabs'][$module];
 		}
-        $modules = $AppUI->getActiveModules();
+        $modules = $this->_AppUI->getActiveModules();
 		$tab_count = 0;
 		foreach ($tab_array as $tab_elem) {
             if (isset($tab_elem['module']) && isset($modules[$tab_elem['module']])) {

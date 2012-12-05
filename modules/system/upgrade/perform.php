@@ -13,7 +13,15 @@ $titleBlock = new w2p_Theme_TitleBlock($AppUI->_('Upgrade System'), 'control-cen
 $titleBlock->addCrumb('?m=system', 'system admin');
 $titleBlock->show();
 ?>
-<table class="std list" width="100%" border="0" cellpadding="0" cellspacing="5">
+<style>
+.update td {
+    font-size: medium;
+}
+.update img {
+    float: left;
+}
+</style>
+<table class="std list update" width="100%" border="0" cellpadding="0" cellspacing="5">
 	<tr>
 		<td class="title" colspan="2">Step 2: Update Database</td>
 	</tr>

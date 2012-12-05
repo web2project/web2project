@@ -8,7 +8,7 @@
 	
 	$continue = true;
 ?>
-<table cellspacing="0" cellpadding="3" border="0" class="tbl" width="90%" align="center" style="margin-top: 20px;">
+<table cellspacing="0" cellpadding="3" border="0" class="tbl update" align="center">
 	<tr>
 		<td class="title" colspan="2">Step 1: Check System Settings</td>
 	</tr>
@@ -94,13 +94,16 @@
         </td>
     </tr>
 	<tr>
-		<td class="title" colspan="2"><br />Special note: Timezones in web2project vs dotProject</td>
+		<td class="title" colspan="2"><br />Special note: Time zones in web2project vs dotProject</td>
 	</tr>
     <tr>
         <td class="item" colspan="2">
-            To put it simply dotproject did not support time zone at all. Web2Project also did not support time zone until v2.0 in June 2010. Therefore, when you convert your dotProject system to web2project, you may have some oddities with things like Task & Event times.<br /><br />
-
-            Within Web2Project, there are three different time zone which work  together for everything to function properly:
+            To put it simply, dotproject did not support time zones at all.
+            Web2Project also did not support time zone until v2.0 in June 2010.
+            Therefore, when you convert your dotProject system to web2project,
+            you may have some oddities with things like Task & Event times.
+            Within Web2Project, there are three different time zone which work
+            together for everything to function properly:
             <ul>
                 <li>The first is the <strong>time zone in each User's Preferences</strong>. When you enter a time, the system will assume you've entered it relative to your own timezone and transparently adjust it to GMT/UTC for the database.</li>
                 <li>The second is the <strong>time zone in the System Configuration</strong>. Since many modules use "date created" or "date updated" fields, the system will use create timestamps on the server and use the Server Timezone to adjust them to GMT/UTC.</li>
