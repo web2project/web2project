@@ -20,7 +20,6 @@ require W2P_BASE_DIR . '/includes/ajax_functions.php';
         <title><?php echo @w2PgetConfig('page_title') . ' :: ' . $AppUI->_($m) . ' ' . $AppUI->_($a); ?></title>
         <link rel="stylesheet" type="text/css" href="./style/common.css" media="all" charset="utf-8"/>
         <link rel="stylesheet" type="text/css" href="./style/<?php echo $uistyle; ?>/main.css" media="all" charset="utf-8"/>
-        <style type="text/css" media="all">@import "./style/<?php echo $uistyle; ?>/main.css";</style>
         <link rel="shortcut icon" href="./style/<?php echo $uistyle; ?>/favicon.ico" type="image/ico" />
         <?php
             if (isset($xajax) && is_object($xajax)) {

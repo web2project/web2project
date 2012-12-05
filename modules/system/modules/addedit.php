@@ -7,13 +7,13 @@ $mod_id = (int) w2PgetCleanParam($_GET, 'mod_id');
 $view   = w2PgetCleanParam($_GET, 'v');
 
 $module = new w2p_Core_Module();
-$module->mod_id = $mod_id;
+$module->load($mod_id);
 
 $obj = $module;
 $canAddEdit = $obj->canAddEdit();
 $canAuthor = $obj->canCreate();
 $canEdit = $obj->canEdit();
-$canRead = $obj->canView();
+
 if (!$canAddEdit) {
 	$AppUI->redirect(ACCESS_DENIED);
 }
@@ -34,8 +34,14 @@ $filter = array($module->permissions_item_field, 'user_password', 'user_parent',
 //	'project_original_parent', 'project_departments', 'project_contacts',
 //	'project_private', 'project_type', 'project_last_task', 'project_scheduled_hours');
 
-$object = new $module->mod_main_class();
+//$object = new $module->mod_main_class();
 $properties = get_class_vars($module->mod_main_class);
+
+//TODO: Figure out a way to auto-load subclasses. Applicable for: Tasks, Files, Forum
+if ('CTask' == $module->mod_main_class) {
+    $properties = array_merge($properties, get_class_vars('CTask_Log'));
+}
+
 foreach ($filter as $field => $value) {
     unset($properties[$value]);
 }
@@ -110,6 +116,7 @@ $orderMax = count($properties) + count($fields);
   		<tr>
           	<td colspan="2">
           		<input class="button" type="button" name="cancel" value="<?php echo $AppUI->_('cancel'); ?>" />
+            </td>
           	<td colspan="2" class="center">
           		<input class="button" type="submit" name="submit" value="<?php echo $AppUI->_('save'); ?>" />
           	</td>

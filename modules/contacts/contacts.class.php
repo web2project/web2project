@@ -305,7 +305,6 @@ class CContact extends w2p_Core_BaseObject
 
     public function getCompanyDetails()
     {
-
         $company = new CCompany();
         $company->overrideDatabase($this->_query);
         $company->load((int) $this->contact_company);
@@ -315,7 +314,6 @@ class CContact extends w2p_Core_BaseObject
 
     public function getDepartmentDetails()
     {
-
         $dept = new CDepartment();
         $dept->overrideDatabase($this->_query);
         $dept->load((int) $this->contact_department);
@@ -332,9 +330,7 @@ class CContact extends w2p_Core_BaseObject
 
     public function clearUpdateKey()
     {
-        $q = $this->_getQuery();
         $this->contact_updatekey = '';
-        $this->contact_lastupdate = $q->dbfnNowWithTZ();
         $this->store();
     }
 

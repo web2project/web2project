@@ -275,3 +275,7 @@ table.list tr:hover td._name {
 .nowrap {
     white-space:nowrap;
 }
+
+#month-view span > img {
+    display: inline;
+}

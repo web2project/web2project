@@ -51,9 +51,9 @@ $titleBlock = new w2p_Theme_TitleBlock($AppUI->_($ttl), 'folder5.png', $m, $m . 
 $titleBlock->addCrumb('?m=' . $m, 'links list');
 $canDelete = $link->canDelete();
 if ($canDelete && $link_id) {
-        if (!isset($msg)) {
-            $msg = '';
-        }
+    if (!isset($msg)) {
+        $msg = '';
+    }
 	$titleBlock->addCrumbDelete('delete link', $canDelete, $msg);
 }
 $titleBlock->show();

@@ -76,11 +76,16 @@ class w2p_Output_MonthCalendar {
  	@var boolean Show highlighting in the calendar boxes */
 	public $showHighlightedDays;
 
+    protected $_AppUI = null;
+
 	/**
 	 * @param Date $date
 	 */
 	public function __construct($date = null) {
-		$this->setDate($date);
+		global $AppUI;
+        $this->_AppUI = $AppUI;
+        
+        $this->setDate($date);
 
 		$this->classes = array();
 		$this->callback = '';
@@ -111,8 +116,6 @@ class w2p_Output_MonthCalendar {
 	 * @param [type] $date
 	 */
 	public function setDate($date = null) {
-		global $AppUI;
-
         $this->this_month = new w2p_Utilities_Date($date);
 
 		$d = $this->this_month->getDay();
@@ -127,13 +130,13 @@ class w2p_Output_MonthCalendar {
 
 		setlocale(LC_TIME, 'en');
 		$date = Date_Calc::beginOfPrevMonth($d, $m, $y, FMT_TIMESTAMP_DATE);
-		setlocale(LC_ALL, $AppUI->user_lang);
+		setlocale(LC_ALL, $this->_AppUI->user_lang);
 
 		$this->prev_month = new w2p_Utilities_Date($date);
 
 		setlocale(LC_TIME, 'en');
 		$date = Date_Calc::beginOfNextMonth($d, $m, $y, FMT_TIMESTAMP_DATE);
-		setlocale(LC_ALL, $AppUI->user_lang);
+		setlocale(LC_ALL, $this->_AppUI->user_lang);
 		$this->next_month = new w2p_Utilities_Date($date);
 
 	}
@@ -225,7 +228,7 @@ class w2p_Output_MonthCalendar {
 	 *
 	 */
 	private function _drawTitle() {
-		global $AppUI, $m, $a;
+		global $m, $a;
 		$url = 'index.php?m=' . $m;
 		$url .= $a ? '&amp;a=' . $a : '';
 		$url .= isset($_GET['dialog']) ? '&amp;dialog=1' : '';
@@ -236,7 +239,7 @@ class w2p_Output_MonthCalendar {
 		if ($this->showArrows) {
 			$href = $url . '&amp;date=' . $this->prev_month->format(FMT_TIMESTAMP_DATE) . ($this->callback ? '&amp;callback=' . $this->callback : '') . ((count($this->highlightedDays) > 0) ? '&uts=' . key($this->highlightedDays) : '');
 			$s .= '<td align="left">';
-			$s .= '<a href="' . $href . '">' . w2PshowImage('prev.gif', 16, 16, $AppUI->_('previous month')) . '</a>';
+			$s .= '<a href="' . $href . '">' . w2PshowImage('prev.gif', 16, 16, $this->_AppUI->_('previous month')) . '</a>';
 			$s .= '</td>';
 		}
 
@@ -245,14 +248,14 @@ class w2p_Output_MonthCalendar {
 			$s .= '<a href="index.php?m=' . $m . '&amp;date=' . $this->this_month->format(FMT_TIMESTAMP_DATE) . '">';
 		}
 		setlocale(LC_TIME, 'C');
-		$s .= $AppUI->_($this->this_month->format('%B')) . ' ' . $this->this_month->format('%Y') . (($this->clickMonth) ? '</a>' : '');
-		setlocale(LC_ALL, $AppUI->user_lang);
+		$s .= $this->_AppUI->_($this->this_month->format('%B')) . ' ' . $this->this_month->format('%Y') . (($this->clickMonth) ? '</a>' : '');
+		setlocale(LC_ALL, $this->_AppUI->user_lang);
 		$s .= '</th>';
 
 		if ($this->showArrows) {
 			$href = ($url . '&amp;date=' . $this->next_month->format(FMT_TIMESTAMP_DATE) . (($this->callback) ? ('&amp;callback=' . $this->callback) : '') . ((count($this->highlightedDays) > 0) ? ('&amp;uts=' . key($this->highlightedDays)) : ''));
 			$s .= '<td align="right">';
-			$s .= ('<a href="' . $href . '">' . w2PshowImage('next.gif', 16, 16, $AppUI->_('next month')) . '</a>');
+			$s .= ('<a href="' . $href . '">' . w2PshowImage('next.gif', 16, 16, $this->_AppUI->_('next month')) . '</a>');
 			$s .= '</td>';
 		}
 
@@ -269,15 +272,13 @@ class w2p_Output_MonthCalendar {
 	 * @return string Returns table a row with the day names
 	 */
 	private function _drawDays() {
-		global $AppUI;
-
 		setlocale(LC_TIME, 'en');
 		$wk = Date_Calc::getCalendarWeek(null, null, null, '%a', LOCALE_FIRST_DAY);
-		setlocale(LC_ALL, $AppUI->user_lang);
+		setlocale(LC_ALL, $this->_AppUI->user_lang);
 
 		$s = (($this->showWeek) ? ('<th>&nbsp;</th>') : '');
 		foreach ($wk as $day) {
-			$s .= ('<th width="14%">' . $AppUI->_($day) . '</th>');
+			$s .= ('<th width="14%">' . $this->_AppUI->_($day) . '</th>');
 		}
 
 		return ('<tr>' . $s . '</tr>');
@@ -290,7 +291,6 @@ class w2p_Output_MonthCalendar {
 	 *
 	 */
 	private function _drawMain() {
-		global $AppUI;
 		$today = new w2p_Utilities_Date();
 		$today = $today->format('%Y%m%d%w');
 
@@ -300,9 +300,9 @@ class w2p_Output_MonthCalendar {
 		$this_year = intval($date->getYear());
 		setlocale(LC_TIME, 'en');
 		$cal = Date_Calc::getCalendarMonth($this_month, $this_year, '%Y%m%d%w', LOCALE_FIRST_DAY);
-		setlocale(LC_ALL, $AppUI->user_lang);
+		setlocale(LC_ALL, $this->_AppUI->user_lang);
 
-		$df = $AppUI->getPref('SHDATEFORMAT');
+		$df = $this->_AppUI->getPref('SHDATEFORMAT');
 
 		$html = '';
 		foreach ($cal as $week) {

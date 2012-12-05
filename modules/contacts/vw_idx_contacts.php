@@ -3,7 +3,52 @@ if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
 
-global $carr, $carrWidth, $carrHeight, $showfields, $contactMethods, $methodLabels, $tdw;
+global $rows;
+
+$carr[] = array();
+$carrWidth = 4;
+$carrHeight = 4;
+
+$rn = count($rows);
+$t = ceil($rn / $carrWidth);
+
+if ($rn < ($carrWidth * $carrHeight)) {
+	$i = 0;
+	for ($y = 0; $y < $carrWidth; $y++) {
+		$x = 0;
+		while (($x < $carrHeight) && isset($rows[$i]) && ($row = $rows[$i])) {
+			$carr[$y][] = $row;
+			$x++;
+			$i++;
+		}
+	}
+} else {
+	$i = 0;
+	for ($y = 0; $y <= $carrWidth; $y++) {
+		$x = 0;
+		while (($x < $t) && isset($rows[$i]) && ($row = $rows[$i])) {
+			$carr[$y][] = $row;
+			$x++;
+			$i++;
+		}
+	}
+}
+
+$tdw = floor(100 / $carrWidth);
+
+$df = $AppUI->getPref('SHDATEFORMAT');
+$df .= ' ' . $AppUI->getPref('TIMEFORMAT');
+
+// optional fields shown in the list (could be modified to allow brief and verbose, etc)
+$showfields = array('contact_address1' => 'contact_address1',
+	'contact_address2' => 'contact_address2', 'contact_city' => 'contact_city',
+	'contact_state' => 'contact_state', 'contact_zip' => 'contact_zip',
+	'contact_country' => 'contact_country', 'contact_company' => 'contact_company',
+	'company_name' => 'company_name', 'dept_name' => 'dept_name',
+    'contact_phone' => 'contact_phone', 'contact_email' => 'contact_email',
+    'contact_job'=>'contact_job');
+$contactMethods = array('phone_alt', 'phone_mobile', 'phone_fax');
+$methodLabels = w2PgetSysVal('ContactMethods');
 
 ?>
 <table width="100%" border="0" cellpadding="1" cellspacing="0" class="contacts">
@@ -43,9 +88,6 @@ global $carr, $carrWidth, $carrHeight, $showfields, $contactMethods, $methodLabe
                                                     ?></a>
 													<?php
 														$projectList = CContact::getProjects($contactid);
-
-                                                        $df = $AppUI->getPref('SHDATEFORMAT');
-                                                        $df .= ' ' . $AppUI->getPref('TIMEFORMAT');
 
                                                         $contact_updatekey   = $carr[$z][$x]['contact_updatekey'];
                                                         $contact_lastupdate  = $carr[$z][$x]['contact_lastupdate'];

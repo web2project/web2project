@@ -340,6 +340,7 @@ class CTask_Log extends w2p_Core_BaseObject
 	}
 
     public function canCreate() {
+//TODO: allow someone to add a log if they're assigned to the Task
         return $this->_perms->checkModuleItem($this->_tbl_module, 'view', $this->task_log_task);
     }
 
