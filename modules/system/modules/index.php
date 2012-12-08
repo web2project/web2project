@@ -108,7 +108,7 @@ $titleBlock->show();
         $s .= '<td>' . $AppUI->_($row['mod_ui_name']) . '</td>';
         $s .= '<td>' . $row['mod_ui_icon'] . '</td>';
 
-        $s .= '<td>';
+        $s .= '<td class="_status">';
         $s .= '<img src="' . w2PfindImage('/obj/' . ($row['mod_ui_active'] ? 'dotgreen.gif' : 'dotredanim.gif')) . '" alt="" />&nbsp;';
         if ($canEdit) {
             $s .= '<a href="' . $query_string . '&cmd=toggleMenu">';
@@ -119,7 +119,7 @@ $titleBlock->show();
         }
         $s .= '</td>';
 
-        $s .= '<td align="right">' . $row['mod_ui_order'] . '</td>';
+        $s .= '<td class="_count">' . $row['mod_ui_order'] . '</td>';
 
         echo '<tr>' . $s . '</tr>';
     }
@@ -145,7 +145,7 @@ $titleBlock->show();
     }
     ?>
     <tr>
-        <td colspan="9" style="text-align: center;">
+        <td colspan="10" style="text-align: center;">
             <?php echo $AppUI->_('Select a module to upload'); ?>:
             <form action="./index.php?m=system" method="post" enctype="multipart/form-data">
                 <input type="hidden" name="dosql" value="do_module_upload" />
