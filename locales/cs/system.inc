@@ -340,7 +340,7 @@
 'System Lookup Keys'=>'Klíče systémových seznamů',
 'System Lookup Values'=>'Hodnoty systémových seznamů',
 'System Status'=>'Stav systému',
-'system_timezone_title'=>'Časová zóna systému',
+'system_timezone_title'=>'Časová zóna serveru',
 'system_timezone_tooltip'=>'Nasatavte časovou zónu serveru, na kterém běží tato instalace web2Project. Toto nastavení je použito k porovnání časových zón, aby byl správně určen aktuální čas.',
 'system_update_day_title'=>'Zjišťovat nové verze (den)',
 'system_update_day_tooltip'=>'Den v týdnu, ve kterém zjišťovat, zda není dostupná nová verze: 0 = neděle, 1 = pondělí,  2 = úterý, atd.',

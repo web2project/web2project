@@ -284,6 +284,8 @@
 'syscfg_intro'=>'Man walte mit Vorsicht bei der Veränderung der folgenden Optionen. Man ist gut beraten, Optionen nicht zu verändern, wenn man deren Sinn oder Zweck nicht versteht. Zusätzliche, hilfreiche Informationen bekommt man, wenn man mit der Maus auf die Eingabefelder fährt bzw. auf das (?) hinter der jeweiligen Option klickt.',
 'system admin'=>'Systemverwaltung',
 'system configuration'=>'Systemkonfiguration',
+'system_timezone_title'=>'Server Timezone',
+'system_timezone_tooltip'=>'This is the timezone of the underlying server itself. This is used in timezone math to make sure \"now\" is accurate.',
 'task_reminder_group_title'=>'Aufgabenerinnerung',
 'task_reminder_control_title'=>'Aufgabenerinnerungen verschicken',
 'task_reminder_control_tooltip'=>'Falls aktiviert, erhalten alle Aufgabenbearbeiter eine E-Mail, wenn die Aufgabe fällig wird, und an jedem Tag, an dem diese überfällig ist, eine weitere Benachrichtigung.',

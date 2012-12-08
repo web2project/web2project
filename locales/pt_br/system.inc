@@ -348,7 +348,7 @@
 'system configuration'=>'configuração do sistema',
 'System Lookup Keys'=>'Chaves de procura no sistema',
 'System Lookup Values'=>'Valores de procura no sistema',
-'system_timezone_title'=>'Fuso-horário do Sistema',
+'system_timezone_title'=>'Fuso-horário do Servidor',
 'system_timezone_tooltip'=>'Este é o fuso-horário do servidor subjacente. Isto é usado pela matemática do fuso-horário para certificar que AGORA é importante.',
 'system_update_day_title'=>'Verificar atualizações (Dia)',
 'system_update_day_tooltip'=>'Este é o dia da semana que o sistema verificará por atualizações: 0 = Domingo, 1 = Segunda, 2 = Terça, etc',

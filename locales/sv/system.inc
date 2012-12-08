@@ -412,7 +412,7 @@
 'syscfg_intro'=>'Följande konfigurationsvariabler har en direkt påverkan på hur ditt system fungerar. Om du ändrar någon av dem på ett felaktigt sätt så kan det störa användningen av denna installation och kan kräva åtgärder utanför systemet. Vi uppmanar dig uttryckligen att inte ändra på något om du inte klart förstår vad det innebär eller har kontrollerat källkodens implikationer. Det finns mouseover-tips och (?)-popuper för varje fält med så mycket information som vi kan tillhandahålla.',
 'system admin'=>'Systemadministration',
 'system configuration'=>'Systemkonfiguration',
-'system_timezone_title'=>'Systemest tidszon',
+'system_timezone_title'=>'Systemest servern',
 'system_timezone_tooltip'=>'Detta är tidszonen för den underliggande servern. Denna används i tidszonsberäkningarna för att utröna om \"nu\" är relevant.',
 'system_update_check_title'=>'Leta efter officiella uppdateringar?',
 'system_update_day_title'=>'Leta uppdateringar (dag)',
