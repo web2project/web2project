@@ -106,19 +106,21 @@
 <!-- TODO: package tags in addition to master -->
         <property name="gitUrl" value="https://github.com/web2project/web2project.git" override="true"/>
         <echo message="Working with ${gitUrl}..." />
-   
         <gitclone repository="${gitUrl}" targetPath="${dir.package}/${phing.project.name}" />
 <!--        <exec command="git clone ${gitUrl} -b ${releaseName} -v" dir="unit_tests/packaging/web2project" />-->
 
         <delete dir="${dir.package}/${phing.project.name}/.git" />
 
+        <echo message="Copying Javascript to package" />
         <jsMin targetDir="${dir.package}/${phing.project.name}-${releaseName}" failOnError="false">
-            <fileset dir="..">
+            <fileset dir="${dir.package}/${phing.project.name}">
                 <include name="**/*.js"/>
             </fileset>
         </jsMin>
+
+        <echo message="Copying CSS to package" />
         <copy todir="${dir.package}/${phing.project.name}-${releaseName}" overwrite="true">
-            <fileset dir="${dir.package}">
+            <fileset dir="${dir.package}/${phing.project.name}">
                 <include name="**/*.css" />
                 <exclude name=".git" />
             </fileset>
@@ -130,8 +132,10 @@
                 </replaceregexp>
             </filterchain>
         </copy>
+
+        <echo message="Copying everything else to package" />
         <copy todir="${dir.package}/${phing.project.name}-${releaseName}" overwrite="true">
-            <fileset dir="${dir.package}">
+            <fileset dir="${dir.package}/${phing.project.name}">
                 <include name="**/**" />
                 <exclude name="**/*.css" />
                 <exclude name="**/*.js" />
@@ -149,13 +153,13 @@
             </fileset>
         </phplint>
 
-        <tar destfile="${phing.project.name}-${releaseName}.tar.gz" compression="gzip">
-            <fileset dir="unit_tests/packaging/">
+        <tar destfile="${dir.build}/${phing.project.name}-${releaseName}.tar.gz" compression="gzip">
+            <fileset dir="${dir.package}">
                 <include name="**/**" />
             </fileset>
         </tar>
-        <zip destfile="${phing.project.name}-${releaseName}.zip">
-            <fileset dir="unit_tests/packaging/">
+        <zip destfile="${dir.build}/${phing.project.name}-${releaseName}.zip">
+            <fileset dir="${dir.package}">
                 <include name="**/**" />
             </fileset>
         </zip>
