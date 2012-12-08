@@ -112,7 +112,7 @@
         <delete dir="${dir.package}/${phing.project.name}/.git" />
 
         <echo message="Copying Javascript to package" />
-        <jsMin targetDir="${dir.package}/${phing.project.name}-${releaseName}" failOnError="false">
+        <jsMin targetDir="${dir.package}/${phing.project.name}-${releaseName}" failOnError="false" suffix="">
             <fileset dir="${dir.package}/${phing.project.name}">
                 <include name="**/*.js"/>
             </fileset>
