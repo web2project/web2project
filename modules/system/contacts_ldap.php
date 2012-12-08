@@ -11,8 +11,9 @@ if (!$canRead) {
 	$AppUI->redirect(ACCESS_DENIED);
 }
 
-$titleBlock = new w2p_Theme_TitleBlock('Import Contacts from LDAP Directory', '', 'admin', '');
+$titleBlock = new w2p_Theme_TitleBlock('Import Contacts from LDAP Directory', '48_my_computer.png', $m, $m . '.' . $a);
 $titleBlock->addCrumb('?m=system', 'system admin');
+$titleBlock->addCrumb('?m=contacts', 'view contacts');
 $titleBlock->show();
 
 if (!function_exists('ldap_connect')) {
