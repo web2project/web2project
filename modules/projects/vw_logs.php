@@ -95,6 +95,9 @@ if (count($fields) > 0) {
 
     $module->storeSettings('tasks', 'task_logs_projects_view', $fieldList, $fieldNames);
 }
+
+$i = 0;
+$hours_index = 0;
 ?>
 <a name="task_logs-projects_view"> </a>
 <table class="tbl list">
@@ -108,6 +111,10 @@ if (count($fields) > 0) {
                     <?php echo $AppUI->_($fieldNames[$index]); ?>
 <!--                </a>-->
             </th><?php
+            if ('task_log_hours' == $fieldList[$index]) {
+                $hours_index = $i;
+            }
+            $i++;
         }
         echo '<th></th>';
         ?>
@@ -166,8 +173,9 @@ if (count($logs)) {
     }
 }
 $s .= '<tr bgcolor="white" valign="top">';
-$s .= '<td colspan="'.count($fieldList).'" align="right">' . $AppUI->_('Total Hours') . ' =</td>';
+$s .= '<td colspan="'.($hours_index + 1).'" align="right">' . $AppUI->_('Total Hours') . ' =</td>';
 $s .= $htmlHelper->createCell('total_duration', sprintf('%.2f', $hrs));
+$s .= str_repeat('<td></td>', count($fieldList) - $hours_index); ;
 $s .= '</tr>';
 echo $s;
 ?>
