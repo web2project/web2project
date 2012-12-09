@@ -279,3 +279,11 @@ table.list tr:hover td._name {
 #month-view span > img {
     display: inline;
 }
+
+.info span {
+    font-size: medium;
+    font-weight: bold;
+}
+.info p, .info li {
+    font-size: medium;
+}
