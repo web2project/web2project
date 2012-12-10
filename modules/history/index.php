@@ -3,13 +3,6 @@ if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
 
-##
-## History module
-## (c) Copyright
-## J. Christopher Pereira (kripper@imatronix.cl)
-## IMATRONIX
-##
-
 $filter_param = w2PgetParam($_REQUEST, 'filter', '');
 
 $options = array(' ' => $AppUI->_('Select Filter'), '0' => $AppUI->_('Show all'),
@@ -31,6 +24,6 @@ $titleBlock->addCell('<form name="filter" action="?m=history" method="post" acce
                       </form>');
 $titleBlock->show();
 
-$tabBox = new CTabBox('?m=history', W2P_BASE_DIR . '/modules/history/', $tab);
+$tabBox = new CTabBox('?m=history', W2P_BASE_DIR . '/modules/history/');
 $tabBox->add('index_table', $AppUI->_('History'));
 $tabBox->show();
