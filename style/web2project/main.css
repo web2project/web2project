@@ -262,12 +262,17 @@ table.std {
 table.std TH {	
 	background-color:#FFFFFF;
 	background-image:url(images/label.gif);
-	font: bold 12px Arial, Helvetica, sans-serif; 
-	text-align: center; color: #000; 
-	margin-bottom: 0; 
-	padding: 1px; 
-	list-style-type: disc; 
-	list-style-position: inside; 
+	font: bold 12px Arial, Helvetica, sans-serif;
+	text-align: center;
+    color: #000;
+	margin-bottom: 0;
+	padding: 1px;
+	list-style-type: disc;
+	list-style-position: inside;
+}
+
+table.addedit.pref td {
+    width: 50%;
 }
 
 table.std td.hilite {
