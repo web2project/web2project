@@ -42,7 +42,7 @@ if (count($fields) > 0) {
     <tr>
         <?php
         foreach ($fieldNames as $index => $name) {
-            ?><th nowrap="nowrap">
+            ?><th>
                 <a href="?m=companies&a=view&company_id=<?php echo $company_id; ?>&sort=<?php echo $fieldList[$index]; ?>#projects-company_view" class="hdr">
                     <?php echo $AppUI->_($fieldNames[$index]); ?>
                 </a>

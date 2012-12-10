@@ -54,17 +54,10 @@ if (count($fields) > 0) {
 ?>
 <table class="tbl list">
     <tr>
-        <?php
-//TODO: The link below is commented out because this module doesn't support sorting... yet.
-        echo '<th></th><th></th>';
-        foreach ($fieldNames as $index => $name) {
-            ?><th nowrap="nowrap">
-<!--                <a href="?m=links&orderby=<?php echo $fieldList[$index]; ?>" class="hdr">-->
-                    <?php echo $AppUI->_($fieldNames[$index]); ?>
-<!--                </a>-->
-            </th><?php
-        }
-        ?>
+        <th></th><th></th>
+        <?php foreach ($fieldNames as $index => $name) { ?>
+            <th><?php echo $AppUI->_($fieldNames[$index]); ?></th>
+        <?php } ?>
     </tr>
 <?php
 $fp = -1;

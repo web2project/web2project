@@ -73,41 +73,18 @@ if ($project_status_filter == -1) {
 
 <table width="100%" border="0" cellpadding="3" cellspacing="1" class="prjprint">
 <tr>
-    <th nowrap="nowrap">
-    	<?php echo $AppUI->_('Color'); ?>
-    </th>
-        <th nowrap="nowrap">
-		<?php echo $AppUI->_('P'); ?>
-	</th>
-	<th nowrap="nowrap">
-		<?php echo $AppUI->_('ID'); ?>
-	</th>
-	<th nowrap="nowrap">
-		<?php echo $AppUI->_('Project Name'); ?>
-	</th>
-	<th nowrap="nowrap">
-		<?php echo $AppUI->_('Company'); ?>
-	</th>
-        <th nowrap="nowrap">
-		<?php echo $AppUI->_('Start'); ?>
-	</th>
-        <th nowrap="nowrap">
-		<?php echo $AppUI->_('End'); ?>
-	</th>
-        <th nowrap="nowrap">
-		<?php echo $AppUI->_('Actual'); ?>
-	</th>
-	<th nowrap="nowrap">
-		<?php echo $AppUI->_('Owner'); ?>
-	</th>
-	<th nowrap="nowrap">
-		<?php echo $AppUI->_('Tasks'); ?>
-		(<?php echo $AppUI->_('My'); ?>)
-	</th>
+    <th><?php echo $AppUI->_('Color'); ?></th>
+    <th><?php echo $AppUI->_('P'); ?></th>
+    <th><?php echo $AppUI->_('ID'); ?></th>
+    <th><?php echo $AppUI->_('Project Name'); ?></th>
+    <th><?php echo $AppUI->_('Company'); ?></th>
+    <th><?php echo $AppUI->_('Start'); ?></th>
+    <th><?php echo $AppUI->_('End'); ?></th>
+    <th><?php echo $AppUI->_('Actual'); ?></th>
+    <th><?php echo $AppUI->_('Owner'); ?></th>
+    <th><?php echo $AppUI->_('Tasks'); ?></th>
 	<?php if ($project_status_filter < 0) { ?>
-    <th nowrap="nowrap">
-      <?php echo $AppUI->_('Status'); ?>
-    </th>
+    <th><?php echo $AppUI->_('Status'); ?></th>
   <?php } ?>
 </tr>
 
