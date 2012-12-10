@@ -115,7 +115,6 @@ if ($pages > 1) {
 ?>
 </form>
         </td>
-	<td align="right"><input class="button" type="button" value="<?php echo $AppUI->_('Add history'); ?>" onclick="window.location='?m=history&a=addedit'"></td>
 </table>
 
 <table class="tbl list">
