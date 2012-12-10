@@ -66,9 +66,7 @@ if ($project_status_filter == -1) {
 	}
 	$projects = $tmp_projects;
 	//The Status themselves
-} else {
 }
-
 ?>
 
 <table width="100%" border="0" cellpadding="3" cellspacing="1" class="prjprint">
@@ -116,7 +114,7 @@ foreach ($projects as $row) {
 		$s .= '<td align="center">' . ($start_date ? $start_date->format($df) : '-') . '</td><td align="center" nowrap="nowrap">' . ($end_date ? $end_date->format($df) : '-') . '</td><td align="center">';
 		$s .= $actual_end_date ? '<span ' . $style . '>' . $actual_end_date->format($df) . '</span>' : '-';
 		$s .= '</td><td nowrap="nowrap">' . htmlspecialchars($row['owner_name'], ENT_QUOTES) . '</td><td align="center" nowrap="nowrap">';
-		$s .= $row['total_tasks'] . ($row['my_tasks'] ? ' (' . $row['my_tasks'] . ')' : '');
+		$s .= $row['project_task_count'];
 		$s .= '</td>';
 
 		if ($show_all_projects) {
