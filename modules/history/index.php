@@ -5,10 +5,18 @@ if (!defined('W2P_BASE_DIR')) {
 
 $filter_param = w2PgetParam($_REQUEST, 'filter', '');
 
-$options = array(' ' => $AppUI->_('Select Filter'), '0' => $AppUI->_('Show all'),
-        'companies' => $AppUI->_('Companies'), 'projects' => $AppUI->_('Projects'),
-        'tasks' => $AppUI->_('Tasks'), 'files' => $AppUI->_('Files'),
-        'forums' => $AppUI->_('Forums'), 'login' => $AppUI->_('Login/Logouts'));
+$options = array();
+$options[-1] = $AppUI->_('Show all');
+$options = $options + $AppUI->getActiveModules();
+$options['login'] = $AppUI->_('Login/Logouts');
+
+/*
+ * This validates that anything provided via the filter_param is definitely an
+ *   active module and not some other crazy garbage.
+ */
+if (!isset($options[$filter_param])) {
+    $filter_param = 'projects';
+}
 
 $options_combo = arraySelect($options, 'filter', 'class="text" onchange="javascript:document.filter.submit()"', $filter_param, false);
 
