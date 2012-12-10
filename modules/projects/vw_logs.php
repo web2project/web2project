@@ -102,22 +102,17 @@ $hours_index = 0;
 <a name="task_logs-projects_view"> </a>
 <table class="tbl list">
     <tr>
+        <th></th>
         <?php
-//TODO: The link below is commented out because this module doesn't support sorting... yet.
-        echo '<th></th>';
         foreach ($fieldNames as $index => $name) {
-            ?><th nowrap="nowrap">
-<!--                <a href="?m=projects&a=view&project_id=<?php echo $project_id; ?>&sort=<?php echo $fieldList[$index]; ?>#task_logs-projects_view" class="hdr">-->
-                    <?php echo $AppUI->_($fieldNames[$index]); ?>
-<!--                </a>-->
-            </th><?php
+            ?><th><?php echo $AppUI->_($fieldNames[$index]); ?></th><?php
             if ('task_log_hours' == $fieldList[$index]) {
                 $hours_index = $i;
             }
             $i++;
         }
-        echo '<th></th>';
         ?>
+        <th></th>
     </tr>
 <?php
 // Winnow out the tasks we are not allowed to view.

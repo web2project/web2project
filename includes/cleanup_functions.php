@@ -2066,11 +2066,8 @@ function displayFiles($AppUI, $folder_id, $task_id, $project_id, $company_id) {
     $s  = '<tr>';
     $s .= '<th></th>';
     $s .= '<th>' . $AppUI->_('co') . '</th>';
-//TODO: The link below is commented out because this module doesn't support sorting... yet.
     foreach ($fieldNames as $index => $name) {
-        $s .= '<th nowrap="nowrap">';
-        $s .= $AppUI->_($fieldNames[$index]);
-        $s .= '</th>';
+        $s .= '<th>' . $AppUI->_($fieldNames[$index]) . '</th>';
     }
     $s .= '<th></th>';
 	$s .= '</tr>';
