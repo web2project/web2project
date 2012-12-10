@@ -122,24 +122,8 @@ input[type="checkbox"] {
  * These are the styles attached to the list screens which are urls like:
  *      ./index.php?m=projects
  *      ./index.php?m=companies
- * These two styles handle all of the mouseover highlighting for all lists
- *   whether it's projects, tasks, links, or anything else.
  */
-.list ._name {          width: 25%; }
-.list ._description {   width: 30%; }
-
-.list ._complete, .list ._created, .list ._date, .list ._datetime, .list ._duration,
-    .list ._hours, .list ._update, .list ._updated, .list ._worked, .list ._identifier,
-    .list ._size {
-    text-align: center;
-}
-.list ._author, .list ._creator, .list ._name, .list ._owner, .list ._updator,
-    .list ._size, .list ._birthday, .list ._date, .list ._created, .list ._datetime,
-    .list ._update, .list ._updated {
-        white-space:nowrap;
-}
-
-
+ 
 table.list {
     border-spacing: 1px;
     padding: 2px;
@@ -154,6 +138,31 @@ table.list tr:hover td {
 }
 table.list tr:hover td._name {
     font-weight: bold;
+}
+ 
+.list ._name {          width: 25%; }
+.list ._description {   width: 30%; }
+
+.list ._complete, .list ._created, .list ._date, .list ._datetime, .list ._duration,
+    .list ._hours, .list ._update, .list ._updated, .list ._worked, .list ._identifier,
+    .list ._size {
+    text-align: center;
+}
+.list th, .list ._author, .list ._creator, .list ._name, .list ._owner, .list ._updator,
+    .list ._size, .list ._birthday, .list ._date, .list ._created, .list ._datetime,
+    .list ._update, .list ._updated {
+        white-space:nowrap;
+}
+
+.list.history td.data._description {
+    width: 60%;
+}
+.list.history td.data {
+    margin-left: 20px;
+    padding: 0 5em 0 5em;
+}
+.list.history td.data._user {
+    text-align: center;
 }
 
 div.clear {
