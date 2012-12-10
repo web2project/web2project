@@ -492,8 +492,7 @@ class CContact extends w2p_Core_BaseObject
 
         $q = new w2p_Database_Query();
         $q->addTable('users');
-        $q->addQuery('contact_first_name, contact_last_name');
-        $q->addQuery('contact_display_name, contact_display_name as contact_name');
+        $q->addQuery('contact_display_name as contact_name');
         $q->addJoin('contacts', 'con', 'contact_id = user_contact', 'inner');
         $q->addWhere("user_username like '%$username%'");
         $q->setLimit(1);
@@ -522,8 +521,7 @@ class CContact extends w2p_Core_BaseObject
 
         $q = new w2p_Database_Query();
         $q->addTable('users');
-        $q->addQuery('contact_first_name, contact_last_name');
-        $q->addQuery('contact_display_name, contact_display_name as contact_name');
+        $q->addQuery('contact_display_name as contact_name');
         $q->addJoin('contacts', 'con', 'contact_id = user_contact', 'inner');
         $q->addWhere('user_id = ' . (int) $userId);
         $q->setLimit(1);
@@ -538,8 +536,7 @@ class CContact extends w2p_Core_BaseObject
 
         $q = new w2p_Database_Query();
         $q->addTable('users');
-        $q->addQuery('contact_first_name, contact_last_name');
-        $q->addQuery('contact_display_name, contact_display_name as contact_name');
+        $q->addQuery('contact_display_name as contact_name');
         $q->addJoin('contacts', 'con', 'contact_id = user_contact', 'inner');
 
         $q->leftJoin('contacts_methods', 'cm', 'cm.contact_id = user_contact');
