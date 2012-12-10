@@ -56,6 +56,10 @@ div.std {
 .quicknav a, form{
     margin: 0px 8px 0 8px;
 }
+form {
+	display: inline;
+	margin: 0;
+}
 /* End: Header Bar & Navigation for all pages */
 
 .module-title {
