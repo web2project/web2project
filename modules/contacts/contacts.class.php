@@ -526,7 +526,7 @@ class CContact extends w2p_Core_BaseObject
         $q->addWhere('user_id = ' . (int) $userId);
         $q->setLimit(1);
         $r = $q->loadList();
-        $result = (is_array($r)) ? (isset($r[0]) && $r[0]['contact_name']) : 'User Not Found';
+        $result = (is_array($r) && isset($r[0])) ? $r[0]['contact_name'] : 'User Not Found';
 
         return $result;
     }
