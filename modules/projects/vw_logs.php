@@ -95,22 +95,24 @@ if (count($fields) > 0) {
 
     $module->storeSettings('tasks', 'task_logs_projects_view', $fieldList, $fieldNames);
 }
+
+$i = 0;
+$hours_index = 0;
 ?>
 <a name="task_logs-projects_view"> </a>
 <table class="tbl list">
     <tr>
+        <th></th>
         <?php
-//TODO: The link below is commented out because this module doesn't support sorting... yet.
-        echo '<th></th>';
         foreach ($fieldNames as $index => $name) {
-            ?><th nowrap="nowrap">
-<!--                <a href="?m=projects&a=view&project_id=<?php echo $project_id; ?>&sort=<?php echo $fieldList[$index]; ?>#task_logs-projects_view" class="hdr">-->
-                    <?php echo $AppUI->_($fieldNames[$index]); ?>
-<!--                </a>-->
-            </th><?php
+            ?><th><?php echo $AppUI->_($fieldNames[$index]); ?></th><?php
+            if ('task_log_hours' == $fieldList[$index]) {
+                $hours_index = $i;
+            }
+            $i++;
         }
-        echo '<th></th>';
         ?>
+        <th></th>
     </tr>
 <?php
 // Winnow out the tasks we are not allowed to view.
@@ -166,8 +168,9 @@ if (count($logs)) {
     }
 }
 $s .= '<tr bgcolor="white" valign="top">';
-$s .= '<td colspan="'.count($fieldList).'" align="right">' . $AppUI->_('Total Hours') . ' =</td>';
+$s .= '<td colspan="'.($hours_index + 1).'" align="right">' . $AppUI->_('Total Hours') . ' =</td>';
 $s .= $htmlHelper->createCell('total_duration', sprintf('%.2f', $hrs));
+$s .= str_repeat('<td></td>', count($fieldList) - $hours_index); ;
 $s .= '</tr>';
 echo $s;
 ?>

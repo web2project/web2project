@@ -141,18 +141,18 @@ if (count($fields) > 0) {
             <?php
             foreach ($fieldNames as $index => $name) {
                 $column = ('project_color_identifier' == $fieldList[$index]) ? 'project_percent_complete' : $fieldList[$index];
-                ?><th nowrap="nowrap">
+                ?><th>
                     <a href="?m=projects&orderby=<?php echo $column; ?>" class="hdr">
                         <?php echo $AppUI->_($fieldNames[$index]); ?>
                     </a>
                 </th><?php
             }
             ?>
-			<th nowrap="nowrap">
+			<th>
 				<?php echo $AppUI->_('Selection'); ?>
 			</th>
 			<?php if ($show_all_projects) { ?>
-				<th nowrap="nowrap">
+				<th>
 					<?php echo $AppUI->_('Status'); ?>
 				</th>
 			<?php } ?>

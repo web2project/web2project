@@ -133,14 +133,14 @@ if ($caller == 'todo') {
             $q->addWhere('ut.user_id = ' . (int)$AppUI->user_id);
             break;
     }
-
-    
 }
 
 // get any specifically denied tasks
 $task = new CTask();
 $task->setAllowedSQL($AppUI->user_id, $q);
 $proTasks = $q->loadHashList('task_id');
+$q->clear();
+
 $orrarr[] = array('task_id' => 0, 'order_up' => 0, 'order' => '');
 
 $end_max = '0000-00-00 00:00:00';

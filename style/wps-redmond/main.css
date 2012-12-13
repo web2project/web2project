@@ -307,6 +307,11 @@ table.std TH {
     background-color    : #D4D0C8;
     background-image    : url("images/header_bg.png");
     background-image    : repeat-x;
+    text-align: center;
+}
+
+table.addedit.pref td {
+    width: 50%;
 }
 
 table.std td.hilite {
@@ -546,4 +551,9 @@ table.tbl td.event td {
     -moz-border-radius:4px;
     -webkit-border-radius:4px;
     border-radius:4px;
+}
+
+.spacer {
+    height: 60px;
+    width: 100%;
 }

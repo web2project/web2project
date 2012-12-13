@@ -31,18 +31,10 @@ if (count($fields) > 0) {
 <a name="contacts-department_view"> </a>
 <table class="tbl list">
     <tr>
-        <?php
-//TODO: The link below is commented out because this view doesn't support sorting... yet.
-        foreach ($fieldNames as $index => $name) {
-            ?><th nowrap="nowrap">
-<!--                <a href="?m=companies&a=view&company_id=<?php echo $company_id; ?>&sort=<?php echo $fieldList[$index]; ?>#contacts-company_view" class="hdr">-->
-                    <?php echo $AppUI->_($fieldNames[$index]); ?>
-<!--                </a>-->
-            </th><?php
-        }
-        ?>
+        <?php foreach ($fieldNames as $index => $name) { ?>
+            <th><?php echo $AppUI->_($fieldNames[$index]); ?></th>
+        <?php } ?>
     </tr>
-
 <?php
 if (count($contacts) > 0) {
 	$htmlHelper = new w2p_Output_HTMLHelper($AppUI);

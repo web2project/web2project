@@ -66,48 +66,23 @@ if ($project_status_filter == -1) {
 	}
 	$projects = $tmp_projects;
 	//The Status themselves
-} else {
 }
-
 ?>
 
 <table width="100%" border="0" cellpadding="3" cellspacing="1" class="prjprint">
 <tr>
-    <th nowrap="nowrap">
-    	<?php echo $AppUI->_('Color'); ?>
-    </th>
-        <th nowrap="nowrap">
-		<?php echo $AppUI->_('P'); ?>
-	</th>
-	<th nowrap="nowrap">
-		<?php echo $AppUI->_('ID'); ?>
-	</th>
-	<th nowrap="nowrap">
-		<?php echo $AppUI->_('Project Name'); ?>
-	</th>
-	<th nowrap="nowrap">
-		<?php echo $AppUI->_('Company'); ?>
-	</th>
-        <th nowrap="nowrap">
-		<?php echo $AppUI->_('Start'); ?>
-	</th>
-        <th nowrap="nowrap">
-		<?php echo $AppUI->_('End'); ?>
-	</th>
-        <th nowrap="nowrap">
-		<?php echo $AppUI->_('Actual'); ?>
-	</th>
-	<th nowrap="nowrap">
-		<?php echo $AppUI->_('Owner'); ?>
-	</th>
-	<th nowrap="nowrap">
-		<?php echo $AppUI->_('Tasks'); ?>
-		(<?php echo $AppUI->_('My'); ?>)
-	</th>
+    <th><?php echo $AppUI->_('Color'); ?></th>
+    <th><?php echo $AppUI->_('P'); ?></th>
+    <th><?php echo $AppUI->_('ID'); ?></th>
+    <th><?php echo $AppUI->_('Project Name'); ?></th>
+    <th><?php echo $AppUI->_('Company'); ?></th>
+    <th><?php echo $AppUI->_('Start'); ?></th>
+    <th><?php echo $AppUI->_('End'); ?></th>
+    <th><?php echo $AppUI->_('Actual'); ?></th>
+    <th><?php echo $AppUI->_('Owner'); ?></th>
+    <th><?php echo $AppUI->_('Tasks'); ?></th>
 	<?php if ($project_status_filter < 0) { ?>
-    <th nowrap="nowrap">
-      <?php echo $AppUI->_('Status'); ?>
-    </th>
+    <th><?php echo $AppUI->_('Status'); ?></th>
   <?php } ?>
 </tr>
 
@@ -139,7 +114,7 @@ foreach ($projects as $row) {
 		$s .= '<td align="center">' . ($start_date ? $start_date->format($df) : '-') . '</td><td align="center" nowrap="nowrap">' . ($end_date ? $end_date->format($df) : '-') . '</td><td align="center">';
 		$s .= $actual_end_date ? '<span ' . $style . '>' . $actual_end_date->format($df) . '</span>' : '-';
 		$s .= '</td><td nowrap="nowrap">' . htmlspecialchars($row['owner_name'], ENT_QUOTES) . '</td><td align="center" nowrap="nowrap">';
-		$s .= $row['total_tasks'] . ($row['my_tasks'] ? ' (' . $row['my_tasks'] . ')' : '');
+		$s .= $row['project_task_count'];
 		$s .= '</td>';
 
 		if ($show_all_projects) {

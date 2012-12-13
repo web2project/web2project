@@ -3,14 +3,17 @@ if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
 
-global $gantt_arr, $w2Pconfig, $project_id, $gtask_sliced, $printpdfhr, $showNoMilestones;
+global $gantt_arr, $w2Pconfig, $gtask_sliced, $printpdfhr, $showNoMilestones;
+
 
 w2PsetExecutionConditions($w2Pconfig);
 
+$project_id = (int) w2PgetParam($_REQUEST, 'project_id', 0);
 $f = w2PgetParam($_REQUEST, 'f', 0);
 
 $showLabels = (int) w2PgetParam($_REQUEST, 'showLabels', 0);
 $showWork = (int) w2PgetParam($_REQUEST, 'showWork', 0);
+
 
 $showPinned = (int) w2PgetParam( $_REQUEST, 'showPinned', false );
 $showArcProjs = (int) w2PgetParam( $_REQUEST, 'showArcProjs', false );
@@ -20,6 +23,7 @@ $showLowTasks = (int) w2PgetParam( $_REQUEST, 'showLowTasks', true);
 
 $project = new CProject();
 $criticalTasks = ($project_id > 0) ? $project->getCriticalTasks($project_id) : null;
+
 
 // pull valid projects and their percent complete information
 $projects = $project->getAllowedProjects($AppUI->user_id, false);
@@ -75,8 +79,8 @@ if ($caller == 'todo') {
 	$q->addTable('tasks', 't');
 	$q->addQuery('t.task_id, task_parent, task_name, task_start_date, task_end_date,'.
 		' task_duration, task_duration_type, task_priority, task_percent_complete,'.
-		' task_order, task_project, task_milestone, task_access, task_owner, '.
-        ' project_name, project_color_identifier, task_dynamic');
+        ' task_hours_worked, task_order, task_project, task_milestone, task_access,'.
+        ' task_owner, project_name, project_color_identifier, task_dynamic');
 	$q->addJoin('projects', 'p', 'project_id = t.task_project', 'inner');
     $q->addOrder('p.project_id, t.task_end_date');
 
@@ -108,11 +112,14 @@ if ($caller == 'todo') {
 			break;
 		case 'myinact':
 			$q->innerJoin('user_tasks', 'ut', 'ut.task_id = t.task_id');
+
 			$q->addWhere('ut.user_id = '.$AppUI->user_id);
 			break;
 		default:
 			$q->innerJoin('user_tasks', 'ut', 'ut.task_id = t.task_id');
-			$q->addWhere('ut.user_id = '.$AppUI->user_id);
+
+
+			$q->addWhere('ut.user_id = ' . (int)$AppUI->user_id);
 			break;
 	}
 }
@@ -123,7 +130,8 @@ $task->setAllowedSQL($AppUI->user_id, $q);
 $proTasks = $q->loadHashList('task_id');
 $q->clear();
 
-$orrarr[] = array('task_id'=>0, 'order_up'=>0, 'order'=>'');
+$orrarr[] = array('task_id' => 0, 'order_up' => 0, 'order' => '');
+
 $end_max = '0000-00-00 00:00:00';
 $start_min = date('Y-m-d H:i:s');
 
@@ -325,34 +333,26 @@ foreach ($gtask_sliced as $gts) {
 
         $flags = ($a['task_milestone'] ? 'm' : '');
 
-        $cap = '';
+        $caption = '';
         if (!$start || $start == '0000-00-00') {
             $start = !$end ? date('Y-m-d') : $end;
-            $cap .= '(no start date)';
+            $caption .= $AppUI->_('(no start date)');
         }
+
         if (!$end) {
             $end = $start;
-            $cap .= ' (no end date)';
-        } else {
-            $cap = '';
+            $caption .= ' ' . $AppUI->_('(no end date)');
         }
 
         if ($showLabels == '1') {
-            $q = new w2p_Database_Query;
-            $q->addTable('user_tasks', 'ut');
-            $q->innerJoin('users', 'u', 'u.user_id = ut.user_id');
-            $q->innerJoin('contacts', 'c', 'c.contact_id = u.user_contact');
-            $q->addQuery('ut.task_id, u.user_username, ut.perc_assignment');
-            $q->addQuery('c.contact_first_name, c.contact_last_name');
-            $q->addWhere('ut.task_id = ' . (int)$a['task_id']);
-            $res = $q->loadList();
+            $res = $task->getAssignedUsers($a['task_id']);
             foreach ($res as $rw) {
                 switch ($rw['perc_assignment']) {
                     case 100:
-                        $caption .= $rw['contact_first_name'] . ' ' . $rw['contact_last_name'] . ';';
+                        $caption .= $rw['contact_display_name'] . ';';
                         break;
                     default:
-                        $caption .= $rw['contact_first_name'] . ' ' . $rw['contact_last_name'] . ' [' . $rw['perc_assignment'] . '%];';
+                        $caption .= $rw['contact_display_name'] . ' [' . $rw['perc_assignment'] . '%];';
                         break;
                 }
             }
