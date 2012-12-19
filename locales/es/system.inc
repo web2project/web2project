@@ -371,6 +371,8 @@
 'syscfg_intro'=>'Las siguientes variables de configuración tienen un impacto directo sobre como funciona su sistema. Si usted ajusta cualquiera de estas opciones incorrectamente este puede afectar la operativa de su instalación y restaurar el ajuste puede requerir la acción externa. Sugeriríamos fuertemente que si cualquiera de estos elementos no es claramente entendido que sería más seguro dejarlos como están. Hay tooltips y (?) - cajas de información emergentes en cada uno de los campos que incluyen tanta información como somos capaces de proveer.',
 'system admin'=>'administrador del sistema',
 'system configuration'=>'configuración del sistema',
+'system_timezone_title'=>'Server Timezone',
+'system_timezone_tooltip'=>'This is the timezone of the underlying server itself. This is used in timezone math to make sure \"now\" is accurate.',
 'task_reminder_control_title'=>'enviar recordatorios de tareas',
 'task_reminder_control_tooltip'=>'Si está fijado, un email será enviado a todos los usuarios de tarea cuando una tarea es debida y diario es atrasada hasta terminado.',
 'task_reminder_days_before_title'=>'Número de días de aviso para vencimiento de tareas',

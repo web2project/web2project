@@ -399,7 +399,7 @@
 'syscfg_intro'=>'As seguintes variáveis têm impacto directo na forma de funcionamento do sistema. Se ajustar de forma errada as mesmas, poder� afectar a operacionalidade da instala��o e poder� necessitar de aux�lio externo. Certifique-se de que n�o corre riscos antes de prosseguir, e esteje atento �s ajudas disponibilizadas.',
 'system admin'=>'administração do sistema',
 'system configuration'=>'configuração do sistema',
-'system_timezone_title'=>'Fuso horário do Sistema',
+'system_timezone_title'=>'Fuso horário do Servidor',
 'system_timezone_tooltip'=>'Este é o fuso horário definido para o servidor, e serve de referência para o calcúlo correcto de datas.',
 'system_update_check_title'=>'',
 'system_update_day_title'=>'Verificar Actualizações (no Dia)',

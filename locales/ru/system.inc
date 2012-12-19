@@ -387,6 +387,8 @@
 'syscfg_intro'=>'Нижеследующие настройки напрямую влияют на функционал системы.Будьте внимательны при изменении параметров. Вы должны быть уверены в том, что знаете, что делаете. ',
 'system admin'=>'управление системой',
 'system configuration'=>'настройка системы',
+'system_timezone_title'=>'Server Timezone',
+'system_timezone_tooltip'=>'This is the timezone of the underlying server itself. This is used in timezone math to make sure \"now\" is accurate.',
 'task_reminder_control_title'=>'Отослать напоминание о задаче',
 'task_reminder_control_tooltip'=>'If set, an email will be sent to all assignees when a task is due and every day it is overdue until completed.',
 'task_reminder_days_before_title'=>'Напоминать за (количество дней)',

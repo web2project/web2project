@@ -403,7 +403,7 @@
 'syscfg_intro'=>'Les variables de configuration suivantes ont un impact direct sur le mode de fonctionnement de votre système. Si vous paramétrez de façon incorrecte l\'une de ces options, cela pourra engendrer des dysfonctionnements et la réinitialisation des paramétres de base pourrait nécessiter des interventions externes. Nous vous suggérons fortement de ne pas modifier les paramètres dont vous ne comprenez pas complétement la signification. Des aides contextuelles et des informations complémentaires (?) sont à votre disposition pour vous guider dans le paramétrage de votre environnement.',
 'system admin'=>'Administration Système',
 'system configuration'=>'Configuration Système',
-'system_timezone_title'=>'Fuseau horaire du système',
+'system_timezone_title'=>'Fuseau horaire du serveur',
 'system_timezone_tooltip'=>'C\'est le fuseau horaire du serveur. Il est utilisé dans les formules utilisant les fuseaux horaires pour s\'assurer que l\'heure actuelle est cohérente.',
 'system_update_check_title'=>'Vérifier les mises à jour \"Officielles\"',
 'system_update_day_title'=>'Jour des vérifications des mises à jour',
