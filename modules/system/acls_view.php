@@ -16,6 +16,15 @@ $user_id = (int) w2PgetParam($_POST, 'user', 0);
 $module = w2PgetParam($_POST, 'module', '');
 $action = w2PgetParam($_POST, 'action', '');
 
+$avail_modules = $perms->getModuleList();
+$modules = array();
+foreach ($avail_modules as $avail_module) {
+	$modules[$avail_module['value']] = $avail_module['value'];
+}
+$modules = array('all' => 'All Modules') + $modules;
+
+$actions = array('all' => 'All Actions', 'access' => 'access', 'add' => 'add', 'delete' => 'delete', 'edit' => 'edit', 'view' => 'view');
+
 if (isset($_POST['user']) && (int) $_POST['user'] > 0) {
     $q = new w2p_Database_Query;
     $q->addTable($perms->_db_acl_prefix . 'permissions', 'gp');
@@ -38,17 +47,21 @@ if (isset($_POST['user']) && (int) $_POST['user'] > 0) {
     $permissions = array();
 }
 
-$avail_modules = $perms->getModuleList();
-$modules = array();
-foreach ($avail_modules as $avail_module) {
-	$modules[$avail_module['value']] = $avail_module['value'];
-}
-$modules = array('all' => 'All Modules') + $modules;
+//TODO: float this right just like the filters on the Project Index
+$users = array('' => '(' . $AppUI->_('Select User') . ')') + $users;
+$user_selector = arraySelect($users, 'user', 'class="text" onchange="javascript:document.pickUser.submit()"', $user_id);
+$module_selector = arraySelect($modules, 'module', 'class="text" onchange="javascript:document.pickUser.submit()"', $module);
+$action_selector = arraySelect($actions, 'action', 'class="text" onchange="javascript:document.pickUser.submit()"', $action);
+echo $AppUI->_('View Users Permissions') . ':<form action="?m=system&a=acls_view" method="post" name="pickUser" accept-charset="utf-8">' . $user_selector . $AppUI->_('View by Module') . ':' . $module_selector . $AppUI->_('View by Action') . ':' . $action_selector . '</form><br />';
 
-$actions = array('all' => 'All Actions', 'access' => 'access', 'add' => 'add', 'delete' => 'delete', 'edit' => 'edit', 'view' => 'view');
+$titleBlock = new w2p_Theme_TitleBlock('Permission Result Table', '48_my_computer.png', $m, $m . '.' . $a);
+if ($canEdit) {
+	$titleBlock->addCrumb('?m=system', 'system admin');
+	$titleBlock->addCrumb('?m=system&u=roles', 'user roles');
+}
+$titleBlock->show();
 
 $table = '<table class="tbl view" width="100%" cellspacing="1" cellpadding="2" border="0">';
-$table .= '<tr><th colspan="9"><b>Permission Result Table</b></th></tr>';
 $table .= '<tr><th>UserID</th><th>User</th><th>User Name</th><th>Module</th><th>Item</th><th>Item Name</th><th>Action</th><th>Allow</th><th>ACL_ID</th></tr>';
 foreach ($permissions as $permission) {
 	$item = '';
@@ -70,9 +83,4 @@ foreach ($permissions as $permission) {
 	}
 }
 $table .= '</table>';
-$users = array('' => '(' . $AppUI->_('Select User') . ')') + $users;
-$user_selector = arraySelect($users, 'user', 'class="text" onchange="javascript:document.pickUser.submit()"', $user_id);
-$module_selector = arraySelect($modules, 'module', 'class="text" onchange="javascript:document.pickUser.submit()"', $module);
-$action_selector = arraySelect($actions, 'action', 'class="text" onchange="javascript:document.pickUser.submit()"', $action);
-echo $AppUI->_('View Users Permissions') . ':<form action="?m=system&a=acls_view" method="post" name="pickUser" accept-charset="utf-8">' . $user_selector . $AppUI->_('View by Module') . ':' . $module_selector . $AppUI->_('View by Action') . ':' . $action_selector . '</form><br />';
 echo $table;

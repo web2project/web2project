@@ -377,6 +377,8 @@
 'syscfg_intro'=>'The following configuration variables have a direct impact on how your system functions. If you adjust any of these options incorrectly this may affect the operation of your installation and restoring the setting may require external action. We would strongly suggest that if any of these items are not clearly understood that it would be safer to leave them as they are or check the code implications before proceeding. There are mouseover-tooltips and (?)-information popups with each of the fields that include as much information as we are able to provide.',
 'system admin'=>'Zarządzanie systemem',
 'system configuration'=>'Konfiguracja systemu',
+'system_timezone_title'=>'Server Timezone',
+'system_timezone_tooltip'=>'This is the timezone of the underlying server itself. This is used in timezone math to make sure \"now\" is accurate.',
 'task_reminder_control_title'=>'Wysyłaj przypomnienia o zadaniach',
 'task_reminder_control_tooltip'=>'If set, an email will be sent to all assignees when a task is due and every day it is overdue until completed.',
 'task_reminder_days_before_title'=>'Number of days warning for due tasks',

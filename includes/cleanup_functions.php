@@ -1367,8 +1367,8 @@ function showRoleRow($role = null) {
 		$s .= '<input type="hidden" name="role_id" value="' . $id . '" />';
 		$s .= '<tr><td>&nbsp;</td>';
 		$s .= '<td valign="top"><input type="text" size="20" name="role_name" value="' . $name . '" class="text" /></td>';
-		$s .= '<td valign="top"><input type="text" size="50" name="role_description" class="text" value="' . $description . '">' . ($id ? '' : '&nbsp;&nbsp;&nbsp;&nbsp;' . arraySelect($roles_arr, 'copy_role_id', 'class="text"', 0, true)) . '</td>';
-		$s .= '<td><input type="submit" value="' . $AppUI->_($id ? 'edit' : 'add') . '" class="button" /></td>';
+		$s .= '<td valign="top"><input type="text" size="50" name="role_description" class="text" value="' . $description . '">' . ($id ? '' : '&nbsp;&nbsp;&nbsp;&nbsp;' . arraySelect($roles_arr, 'copy_role_id', 'class="text"', 0, true));
+		$s .= '<input type="submit" value="' . $AppUI->_($id ? 'edit' : 'add') . '" class="button right" /></td>';
 	} else {
 		$s .= '<tr><td width="50" valign="top">';
 		if ($canEdit) {
@@ -1377,7 +1377,7 @@ function showRoleRow($role = null) {
 		if ($canDelete && strpos($name, 'admin') === false) {
 			$s .= '<a href=\'javascript:delIt(' . $id . ')\'>' . w2PshowImage('icons/stock_delete-16.png') . '</a>';
 		}
-		$s .= '</td><td valign="top">' . $name . '</td><td valign="top">' . $AppUI->_($description) . '</td><td valign="top" width="16">&nbsp;</td>';
+		$s .= '</td><td valign="top">' . $name . '</td><td valign="top">' . $AppUI->_($description) . '</td>';
 	}
 	$s .= '</tr>';
 	return $s;

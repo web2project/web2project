@@ -56,7 +56,6 @@ function delIt(id) {
 	<th>&nbsp;</th>
 	<th><?php echo $AppUI->_('Role ID'); ?></th>
 	<th><?php echo $AppUI->_('Description'); ?></th>
-	<th>&nbsp;</th>
 </tr>
 <?php
 
