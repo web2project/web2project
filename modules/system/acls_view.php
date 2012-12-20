@@ -4,9 +4,6 @@ if (!defined('W2P_BASE_DIR')) {
 }
 global $AppUI, $m, $a;
 
-$user_permissions = array();
-$users = w2PgetUsers();
-
 $user_id = (int) w2PgetParam($_POST, 'user', 0);
 $module = w2PgetParam($_POST, 'module', '');
 $action = w2PgetParam($_POST, 'action', '');
@@ -18,11 +15,10 @@ if (!$canView) { // let's see if the user has sys access
 
 $perms = &$AppUI->acl();
 $avail_modules = $perms->getModuleList();
-$modules = array();
+$modules = array('all' => 'All Modules');
 foreach ($avail_modules as $avail_module) {
 	$modules[$avail_module['value']] = $avail_module['value'];
 }
-$modules = array('all' => 'All Modules') + $modules;
 
 $actions = array('all' => 'All Actions', 'access' => 'access', 'add' => 'add', 'delete' => 'delete', 'edit' => 'edit', 'view' => 'view');
 
@@ -49,17 +45,15 @@ if (isset($_POST['user']) && (int) $_POST['user'] > 0) {
 }
 
 //TODO: float this right just like the filters on the Project Index
-$users = array('' => '(' . $AppUI->_('Select User') . ')') + $users;
+$users = array('' => '(' . $AppUI->_('Select User') . ')') + w2PgetUsers();
 $user_selector = arraySelect($users, 'user', 'class="text" onchange="javascript:document.pickUser.submit()"', $user_id);
 $module_selector = arraySelect($modules, 'module', 'class="text" onchange="javascript:document.pickUser.submit()"', $module);
 $action_selector = arraySelect($actions, 'action', 'class="text" onchange="javascript:document.pickUser.submit()"', $action);
 echo $AppUI->_('View Users Permissions') . ':<form action="?m=system&a=acls_view" method="post" name="pickUser" accept-charset="utf-8">' . $user_selector . $AppUI->_('View by Module') . ':' . $module_selector . $AppUI->_('View by Action') . ':' . $action_selector . '</form><br />';
 
 $titleBlock = new w2p_Theme_TitleBlock('Permission Result Table', '48_my_computer.png', $m, $m . '.' . $a);
-if ($canEdit) {
-	$titleBlock->addCrumb('?m=system', 'system admin');
-	$titleBlock->addCrumb('?m=system&u=roles', 'user roles');
-}
+$titleBlock->addCrumb('?m=system', 'system admin');
+$titleBlock->addCrumb('?m=system&u=roles', 'user roles');
 $titleBlock->show();
 
 $fieldNames = array('UserID', 'User', 'Display Name', 'Module', 'Item', 'Item Name', 'Action', 'Allow', 'ACL_ID');
