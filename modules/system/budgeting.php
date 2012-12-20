@@ -19,9 +19,6 @@ $company = new CCompany();
 $companies = $company->getAllowedRecords($AppUI->user_id, 'company_id,company_name', 'company_name');
 $companies = arrayMerge(array('0' => $AppUI->_('None specified')), $companies);
 
-$budgetCategory = w2PgetSysVal('BudgetCategory');
-$budgetCategory = arrayMerge(array('0' => $AppUI->_('None specified')), $budgetCategory);
-
 // load the record data
 $budget = new CSystem_Budget();
 $budget->load($budget_id);
@@ -58,41 +55,48 @@ function delIt(input) {
     <input type="hidden" name="dosql" value="do_budgeting_aed" />
     <input type="hidden" name="budget_id" value="<?php echo $budget_id; ?>" />
     <input type="hidden" name="datePicker" value="budget" />
-    <table width="100%" border="0" cellpadding="1" cellspacing="1" class="std">
+    <?php
+    $fieldList = array('company_name', 'budget_start_date', 'budget_end_date', 'budget_amount', 'budget_category');
+    $fieldNames = array('Company', 'Start Date', 'End Date', 'Amount', 'Billing Category');
+    
+    $htmlHelper = new w2p_Output_HTMLHelper($AppUI);
+    $budgetCategory = w2PgetSysVal('BudgetCategory');
+    $customLookups = array('budget_category' => $budgetCategory);
+
+    ?>
+    <table class="tbl list">
         <tr>
-            <th>&nbsp;</th>
-            <th><?php echo $AppUI->_('Company'); ?></th>
-			<!--<th><?php echo $AppUI->_('Department'); ?></th>-->
-            <th align="center"><?php echo $AppUI->_('Start Date'); ?></th>
-			<th align="center"><?php echo $AppUI->_('End Date'); ?></th>
-            <th><?php echo $AppUI->_('Amount'); ?></th>
-            <th><?php echo $AppUI->_('Billing Category'); ?></th>
-			<th>&nbsp;</th>
+            <th></th>
+            <?php foreach ($fieldNames as $index => $name) { ?>
+                <th><?php echo $AppUI->_($fieldNames[$index]); ?></th>
+            <?php } ?>
+            <th></th>
         </tr>
+
         <?php
 		$budgets = $budget->getBudgetAmounts();
-        foreach ($budgets as $amounts) {
-            $start_date = intval($amounts['budget_start_date']) ? new w2p_Utilities_Date($AppUI->formatTZAwareTime($amounts['budget_start_date'], '%Y-%m-%d')) : null;
-			$end_date = intval($amounts['budget_end_date']) ? new w2p_Utilities_Date($AppUI->formatTZAwareTime($amounts['budget_end_date'], '%Y-%m-%d')) : null;
-			?><tr>
-                <td>
-                    <a href="?m=system&a=budgeting&budget_id=<?php echo $amounts['budget_id']; ?>" title="<?php echo $AppUI->_('edit'); ?>">
-                        <img src="<?php echo w2PfindImage('icons/stock_edit-16.png'); ?>" border="0" alt="<?php echo $AppUI->_('edit'); ?>" />
-                    </a>
-                    <a href="javascript:delIt(<?php echo (int) $amounts['budget_id']; ?>)" title="<?php echo $AppUI->_('delete'); ?>">
-                        <img src="<?php echo w2PfindImage('icons/stock_delete-16.png'); ?>" border="0" alt="<?php echo $AppUI->_('edit'); ?>" style="float: right;" />
-                    </a>
-                </td>
-                <td align="left">&nbsp;<?php echo (('' != $amounts['company_name']) ? $amounts['company_name'] : 'None specified'); ?></td>
-                <td align="center">&nbsp;<?php echo $start_date ? $start_date->format($df) : '-'; ?></td>
-                <td align="center">&nbsp;<?php echo $end_date ? $end_date->format($df) : '-'; ?></td>
-                <td nowrap="nowrap" align="center"><?php echo $amounts['budget_amount']; ?></td>
-                <td nowrap="nowrap"><?php echo $budgetCategory[$amounts['budget_category']]; ?></td>
-            </tr><?php
+        foreach ($budgets as $row) {
+            echo '<tr>';
+            echo '<td>';
+            if ($canEdit) {
+                echo '<a href="?m=system&a=budgeting&budget_id=' . $row['budget_id'] . '" title="' . $AppUI->_('edit') . '">' . w2PshowImage('icons/stock_edit-16.png', '16', '16') . '</a>';
+            }
+            echo '</td>';
+
+            $htmlHelper->stageRowData($row);
+            foreach ($fieldList as $index => $column) {
+                echo $htmlHelper->createCell($fieldList[$index], $row[$fieldList[$index]], $customLookups);
+            }
+            
+            echo '<td>';
+            if ($canDelete) {
+                echo '<a href="javascript:delIt(' . $row['budget_id'] . ')" title="' . $AppUI->_('delete') . '">' . w2PshowImage('icons/stock_delete-16.png', '16', '16') . '</a>';
+            }
+            echo '</td>';
+            echo '</tr>';
         }
-		$start_date = intval($budget->budget_start_date) ? new w2p_Utilities_Date($AppUI->formatTZAwareTime($budget->budget_start_date, '%Y-%m-%d')) : null;
-		$end_date = intval($budget->budget_end_date) ? new w2p_Utilities_Date($AppUI->formatTZAwareTime($budget->budget_end_date, '%Y-%m-%d')) : null;
 		?>
+        <tr><td colspan="<?php echo (count($fieldList) + 2); ?>">&nbsp;</td></tr>
 		<tr>
 			<td>Add budgeting amount:</td>
 			<td align="center">

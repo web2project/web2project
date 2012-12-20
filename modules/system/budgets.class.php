@@ -49,7 +49,7 @@ class CSystem_Budget extends w2p_Core_BaseObject
     {
         $q = $this->_getQuery();
         $q->addTable('budgets', 'b');
-        $q->addQuery('b.*, c.company_name');
+        $q->addQuery('b.*, c.company_name, c.company_id');
         $q->leftJoin('companies', 'c', 'c.company_id = b.budget_company');
         $q->addOrder('budget_start_date, budget_end_date, company_name ASC');
         if ($company_id > -1) {
