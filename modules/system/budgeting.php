@@ -7,7 +7,9 @@ $AppUI->loadCalendarJS();
 
 $budget_id = (int) w2PgetParam($_GET, 'budget_id', 0);
 
-if (!canEdit('system')) {
+$canEdit   = canEdit('system');
+$canDelete = canView('system');
+if (!$canEdit) {
 	$AppUI->redirect(ACCESS_DENIED);
 }
 $df = $AppUI->getPref('SHDATEFORMAT');
