@@ -3,7 +3,6 @@ if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
 
-$perms = &$AppUI->acl();
 if (!canEdit('system')) {
 	$AppUI->redirect(ACCESS_DENIED);
 }
@@ -40,10 +39,10 @@ foreach ($_POST['w2Pcfg'] as $name => $value) {
     if ($update) {
         // prepare (and translate) the module name ready for the suffix
         $AppUI->setMsg('System Configuration');
-        if (($msg = $obj->store())) {
-            $AppUI->setMsg($msg, UI_MSG_ERROR);
-        } else {
+        if ($obj->store()) {
             $AppUI->setMsg('updated', UI_MSG_OK, true);
+        } else {
+            $AppUI->setMsg($obj->getError(), UI_MSG_ERROR);
         }
     }
 }
