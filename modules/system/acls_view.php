@@ -62,8 +62,15 @@ if ($canEdit) {
 }
 $titleBlock->show();
 
-$table = '<table class="tbl view" width="100%" cellspacing="1" cellpadding="2" border="0">';
-$table .= '<tr><th>UserID</th><th>User</th><th>User Name</th><th>Module</th><th>Item</th><th>Item Name</th><th>Action</th><th>Allow</th><th>ACL_ID</th></tr>';
+$fieldNames = array('UserID', 'User', 'Display Name', 'Module', 'Item', 'Item Name', 'Action', 'Allow', 'ACL_ID');
+?>
+<table class="tbl list">
+    <tr>
+        <?php foreach ($fieldNames as $index => $name) { ?>
+            <th><?php echo $AppUI->_($fieldNames[$index]); ?></th>
+        <?php } ?>
+    </tr>
+<?php
 foreach ($permissions as $permission) {
 	$item = '';
 	if ($permission['item_id']) {
