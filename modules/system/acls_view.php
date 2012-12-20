@@ -4,11 +4,6 @@ if (!defined('W2P_BASE_DIR')) {
 }
 global $AppUI, $m, $a;
 
-$perms = &$AppUI->acl();
-if (!canView('system')) {
-	$AppUI->redirect(ACCESS_DENIED);
-}
-
 $user_permissions = array();
 $users = w2PgetUsers();
 
@@ -16,6 +11,12 @@ $user_id = (int) w2PgetParam($_POST, 'user', 0);
 $module = w2PgetParam($_POST, 'module', '');
 $action = w2PgetParam($_POST, 'action', '');
 
+$canView = canView('system');
+if (!$canView) { // let's see if the user has sys access
+	$AppUI->redirect(ACCESS_DENIED);
+}
+
+$perms = &$AppUI->acl();
 $avail_modules = $perms->getModuleList();
 $modules = array();
 foreach ($avail_modules as $avail_module) {
