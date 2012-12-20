@@ -4,9 +4,9 @@ if (!defined('W2P_BASE_DIR')) {
 }
 global $AppUI, $m, $a;
 
-$user_id = (int) w2PgetParam($_POST, 'user', 0);
-$module = w2PgetParam($_POST, 'module', '');
-$action = w2PgetParam($_POST, 'action', '');
+$user_id = (int) w2PgetParam($_POST, 'user', $AppUI->user_id);
+$module = w2PgetParam($_POST, 'module', 'all');
+$action = w2PgetParam($_POST, 'action', 'all');
 
 $canView = canView('system');
 if (!$canView) { // let's see if the user has sys access
@@ -19,30 +19,28 @@ $modules = array('all' => 'All Modules');
 foreach ($avail_modules as $avail_module) {
 	$modules[$avail_module['value']] = $avail_module['value'];
 }
+$module = isset($modules[$module]) ? $module : 'all';
 
 $actions = array('all' => 'All Actions', 'access' => 'access', 'add' => 'add', 'delete' => 'delete', 'edit' => 'edit', 'view' => 'view');
+$action = isset($actions[$action]) ? $action : 'all';
 
-if (isset($_POST['user']) && (int) $_POST['user'] > 0) {
-    $q = new w2p_Database_Query;
-    $q->addTable($perms->_db_acl_prefix . 'permissions', 'gp');
-    $q->addQuery('gp.*');
-    $q->addWhere('user_id = ' . $user_id);
-    if ('all' != $module) {
-        $q->addWhere("module = '$module'");
-    }
-    if ('all' != $action) {
-        $q->addWhere("action = '$action'");
-    }
-
-    $q->addOrder('user_name');
-    $q->addOrder('module');
-    $q->addOrder('action');
-    $q->addOrder('item_id');
-    $q->addOrder('acl_id');
-    $permissions = $q->loadList();
-} else {
-    $permissions = array();
+$q = new w2p_Database_Query;
+$q->addTable($perms->_db_acl_prefix . 'permissions', 'gp');
+$q->addQuery('gp.*');
+$q->addWhere('user_id = ' . $user_id);
+if ('all' != $module) {
+    $q->addWhere("module = '$module'");
 }
+if ('all' != $action) {
+    $q->addWhere("action = '$action'");
+}
+
+$q->addOrder('user_name');
+$q->addOrder('module');
+$q->addOrder('action');
+$q->addOrder('item_id');
+$q->addOrder('acl_id');
+$permissions = $q->loadList();
 
 //TODO: float this right just like the filters on the Project Index
 $users = array('' => '(' . $AppUI->_('Select User') . ')') + w2PgetUsers();
