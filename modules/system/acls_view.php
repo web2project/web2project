@@ -24,6 +24,8 @@ $module = isset($modules[$module]) ? $module : 'all';
 $actions = array('all' => 'All Actions', 'access' => 'access', 'add' => 'add', 'delete' => 'delete', 'edit' => 'edit', 'view' => 'view');
 $action = isset($actions[$action]) ? $action : 'all';
 
+$users = array('' => '(' . $AppUI->_('Select User') . ')') + w2PgetUsers();
+
 $q = new w2p_Database_Query;
 $q->addTable($perms->_db_acl_prefix . 'permissions', 'gp');
 $q->addQuery('gp.*');
@@ -42,14 +44,14 @@ $q->addOrder('item_id');
 $q->addOrder('acl_id');
 $permissions = $q->loadList();
 
-//TODO: float this right just like the filters on the Project Index
-$users = array('' => '(' . $AppUI->_('Select User') . ')') + w2PgetUsers();
-$user_selector = arraySelect($users, 'user', 'class="text" onchange="javascript:document.pickUser.submit()"', $user_id);
-$module_selector = arraySelect($modules, 'module', 'class="text" onchange="javascript:document.pickUser.submit()"', $module);
-$action_selector = arraySelect($actions, 'action', 'class="text" onchange="javascript:document.pickUser.submit()"', $action);
-echo $AppUI->_('View Users Permissions') . ':<form action="?m=system&a=acls_view" method="post" name="pickUser" accept-charset="utf-8">' . $user_selector . $AppUI->_('View by Module') . ':' . $module_selector . $AppUI->_('View by Action') . ':' . $action_selector . '</form><br />';
-
 $titleBlock = new w2p_Theme_TitleBlock('Permission Result Table', '48_my_computer.png', $m, $m . '.' . $a);
+$titleBlock->addCell('
+    <form action="?m=system&a=acls_view" method="post" name="pickUser" accept-charset="utf-8">' .
+        $AppUI->_('View Users Permissions') . ': ' . arraySelect($users, 'user', 'class="text" onchange="javascript:document.pickUser.submit()"', $user_id) .
+        $AppUI->_('View by Module') . ': ' . arraySelect($modules, 'module', 'class="text" onchange="javascript:document.pickUser.submit()"', $module) .
+        $AppUI->_('View by Action') . ': ' . arraySelect($actions, 'action', 'class="text" onchange="javascript:document.pickUser.submit()"', $action) .
+    '</form>', '', '', '');
+
 $titleBlock->addCrumb('?m=system', 'system admin');
 $titleBlock->addCrumb('?m=system&u=roles', 'user roles');
 $titleBlock->show();
@@ -79,7 +81,7 @@ foreach ($permissions as $permission) {
 		$item = $q->loadResult();
 	}
 	if (!($permission['item_id'] && !$permission['acl_id'])) {
-		$table .= '<tr>' . '<td style="text-align:right;">' . $permission['user_id'] . '</td>' . '<td>' . $permission['user_name'] . '</td>' . '<td>' . $users[$permission['user_id']] . '</td>' . '<td>' . $permission['module'] . '</td>' . '<td style="text-align:right;">' . ($permission['item_id'] ? $permission['item_id'] : '') . '</td>' . '<td>' . ($item ? $item : 'ALL') . '</td>' . '<td>' . $permission['action'] . '</td>' . '<td ' . (!$permission['access'] ? 'style="text-align:right;background-color:red"' : 'style="text-align:right;background-color:green"') . '>' . $permission['access'] . '</td>' . '<td ' . ($permission['acl_id'] ? '' : 'style="background-color:gray"') . '>' . ($permission['acl_id'] ? $permission['acl_id'] : 'soft-denial') . '</td>' . '</tr>';
+		$table .= '<tr>' . '<td class="data _id">' . $permission['user_id'] . '</td>' . '<td>' . $permission['user_name'] . '</td>' . '<td>' . $users[$permission['user_id']] . '</td>' . '<td>' . $permission['module'] . '</td>' . '<td style="text-align:right;">' . ($permission['item_id'] ? $permission['item_id'] : '') . '</td>' . '<td>' . ($item ? $item : 'ALL') . '</td>' . '<td>' . $permission['action'] . '</td>' . '<td ' . (!$permission['access'] ? 'style="text-align:right;background-color:red"' : 'style="text-align:right;background-color:green"') . '>' . $permission['access'] . '</td>' . '<td ' . ($permission['acl_id'] ? '' : 'style="background-color:gray"') . '>' . ($permission['acl_id'] ? $permission['acl_id'] : 'soft-denial') . '</td>' . '</tr>';
 	}
 }
 $table .= '</table>';
