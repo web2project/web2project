@@ -7,7 +7,7 @@ if (!defined('W2P_BASE_DIR')) {
 // modified later by Pablo Roca (proca) in 18 August 2003 - added page support
 // Files modules: index page re-usable sub-table
 global $AppUI, $company_id, $project_id, $task_id;
-global $currentTabId, $m;
+global $currentTabId, $m, $showProject, $xpg_min, $xpg_pagesize, $page;
 
 $tab = ($m == 'files') ? $currentTabId-1 : -1;
 $page = w2PgetParam($_GET, 'page', 1);
@@ -29,7 +29,7 @@ $xpg_min = $xpg_pagesize * ($page - 1); // This is where we start our record set
 // counts total recs from selection
 $fileList = CFile::getFileList($AppUI, $company_id, $project_id, $task_id, $tab);
 $xpg_totalrecs = count($fileList);
-$pageNav = buildPaginationNav($AppUI, $m, $tab, $xpg_totalrecs, $xpg_pagesize, $page);
+$pageNav = buildPaginationNav($AppUI, $m, $tab+1, $xpg_totalrecs, $xpg_pagesize, $page);
 echo $pageNav;
 ?>
 <script language="javascript" type="text/javascript">
@@ -39,8 +39,7 @@ function expand(id){
 }
 </script>
 <table class="tbl list">
-    <?php 
-    global $showProject;
+    <?php
     $showProject = true;
     echo displayFiles($AppUI, 0, $task_id, $project_id, $company_id);
     ?>

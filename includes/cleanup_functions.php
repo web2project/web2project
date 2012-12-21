@@ -2029,16 +2029,8 @@ function displayFiles($AppUI, $folder_id, $task_id, $project_id, $company_id) {
 	$qv->leftJoin('contacts', 'co', 'co.contact_id = cu.user_contact');
 	$qv->addWhere('file_folder = ' . (int)$folder_id);
 
-	$files = array();
-	$file_versions = array();
     $files = $q->loadList();
     $file_versions = $qv->loadHashList('file_id');
-    $q->clear();
-    $qv->clear();
-
-	if ($files === array()) {
-		return 0;
-	}
 
     $fieldList = array();
     $fieldNames = array();
@@ -2080,7 +2072,7 @@ function displayFiles($AppUI, $folder_id, $task_id, $project_id, $company_id) {
     $customLookups = array('file_category' => $file_types);
 
 	foreach ($files as $row) {
-		$latest_file = $file_versions[$row['latest_id']];
+        $latest_file = $file_versions[$row['latest_id']];
 
 		if ($fp != $latest_file['file_project']) {
 			if (!$latest_file['file_project']) {
