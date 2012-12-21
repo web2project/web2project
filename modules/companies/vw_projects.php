@@ -29,7 +29,7 @@ if (count($fields) > 0) {
     // TODO: This is only in place to provide an pre-upgrade-safe
     //   state for versions earlier than v3.0
     //   At some point at/after v4.0, this should be deprecated
-    $fieldList = array('project_priority', 'project_name', 'contact_name',
+    $fieldList = array('project_priority', 'project_name', 'user_username',
         'project_start_date', 'project_status', 'project_target_budget');
     $fieldNames = array('P', 'Name', 'Owner', 'Started', 'Status',
         'Budget');
