@@ -571,6 +571,10 @@ a.delete:active span {
 	color: #FFFFFF;
 }
 
+.crumb-right div.crumb ul {
+    float: right;
+}
+
 /* Solves a Webkit issue with screwy overlapping spans - #299 */
 span > img {
     display: block;

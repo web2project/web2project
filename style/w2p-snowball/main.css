@@ -80,6 +80,28 @@ h3 {
     text-transform: uppercase;
 }
 
+.quicknav {
+    margin-top: 7px;
+}
+
+.quicknav img {
+    margin-top: 3px;
+}
+.quicknav input {
+    vertical-align: top;
+}
+
+div.crumb {
+    margin-top: 15px;
+}
+
+.module-nav {
+    margin-bottom: 7px;
+}
+.module-nav .crumb-right {
+    margin-top: -3px;
+}
+
 /* Begin: Header Bar & Navigation for all pages */
 div.titlebar {
     background: url(images/title_bkgd.jpg);
@@ -589,4 +611,8 @@ table.tbl td.event td {
     border: 1px solid #000000; /* Button Border */
     -moz-border-radius:4px;
     -webkit-border-radius:4px;
+}
+
+.crumb-right div.crumb {
+    margin-top: -10px;
 }

@@ -80,6 +80,9 @@ h3 {
     text-transform: uppercase;
 }
 
+div.crumb {
+    margin-top: 15px;
+}
 /* Begin: Header Bar & Navigation for all pages */
 div.titlebar {
     background: url(images/titlegrad.jpg);
@@ -89,6 +92,11 @@ div.header {
     background: url(images/nav_bkgd.gif);
     color:      #000;
     height:     24px;
+    padding-top:    3px;
+}
+
+div.header a {
+    margin: 0.7em;
 }
 
 div.shadow {
@@ -283,6 +291,7 @@ table.tbl TH {
     background-color    : #D4D0C8;
     background-image    : url("images/header_bg.png");
     background-image    : repeat-x;
+    height              : 22px;
 }
 
 table.tbl td {
@@ -299,6 +308,7 @@ table.std {
     -moz-border-radius : 4px;
     -webkit-border-radius:4px;
     border-radius: 4px;
+    margin-top: 15px;
 }
 table.std TH {
 	color            : #333;
@@ -509,6 +519,14 @@ table.tbl td.event td {
 	background-color: #fff0b0;
 }
 
+.crumb-right div.crumb {
+    margin-top: -10px;
+}
+
+.crumb-right div.crumb ul {
+    float: right;
+}
+
 .crumb ul {
     list-style-type: none;
     margin: 0px;
@@ -551,6 +569,28 @@ table.tbl td.event td {
     -moz-border-radius:4px;
     -webkit-border-radius:4px;
     border-radius:4px;
+}
+
+.quicknav {
+    margin-top: 7px;
+}
+
+.quicknav img {
+    margin-top: 3px;
+}
+.quicknav input {
+    vertical-align: top;
+}
+
+div.crumb {
+    margin-top: 15px;
+}
+
+.module-nav {
+    margin-bottom: 7px;
+}
+.module-nav .crumb-right {
+    margin-top: -3px;
 }
 
 .spacer {
