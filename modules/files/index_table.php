@@ -18,11 +18,6 @@ if (!isset($project_id)) {
 $xpg_pagesize = w2PgetConfig('page_size', 50);
 $xpg_min = $xpg_pagesize * ($page - 1); // This is where we start our record set from
 
-// load the following classes to retrieved denied records
-
-$project = new CProject();
-$task = new CTask();
-
 $df = $AppUI->getPref('SHDATEFORMAT');
 $tf = $AppUI->getPref('TIMEFORMAT');
 
@@ -42,40 +37,10 @@ if (($company_id || $project_id || $task_id) && !($m == 'files')) {
 	}
 }
 
-// Fetch permissions once for all queries
-$allowedProjects = $project->getAllowedSQL($AppUI->user_id, 'file_project');
-$allowedTasks = $task->getAllowedSQL($AppUI->user_id, 'file_task');
-
-// SQL text for count the total recs from the selected option
-$q = new w2p_Database_Query;
-$q->addQuery('count(file_id)');
-$q->addTable('files', 'f');
-$q->addJoin('projects', 'p', 'p.project_id = file_project');
-$q->addJoin('tasks', 't', 't.task_id = file_task');
-$q->leftJoin('project_departments', 'project_departments', 'p.project_id = project_departments.project_id OR project_departments.project_id IS NULL');
-$q->leftJoin('departments', 'departments', 'departments.dept_id = project_departments.department_id OR dept_id IS NULL');
-if (count($allowedProjects)) {
-	$q->addWhere('( ( ' . implode(' AND ', $allowedProjects) . ') OR file_project = 0 )');
-}
-if (count($allowedTasks)) {
-	$q->addWhere('( ( ' . implode(' AND ', $allowedTasks) . ') OR file_task = 0 )');
-}
-if ($catsql) {
-	$q->addWhere($catsql);
-}
-if ($company_id) {
-	$q->addWhere('project_company = ' . (int)$company_id);
-}
-if ($project_id) {
-	$q->addWhere('file_project = ' . (int)$project_id);
-}
-if ($task_id) {
-	$q->addWhere('file_task = ' . (int)$task_id);
-}
-$q->addGroup('file_version_id');
 
 // counts total recs from selection
-$xpg_totalrecs = count($q->loadList());
+$fileList = CFile::getFileList($AppUI, $company_id, $project_id, $task_id, $tab);
+$xpg_totalrecs = count($fileList);
 $pageNav = buildPaginationNav($AppUI, $m, $tab, $xpg_totalrecs, $xpg_pagesize, $page);
 echo $pageNav;
 ?>
