@@ -78,7 +78,7 @@ if ($canEdit && $project_id) {
 	$titleBlock->addCell('<input type="submit" class="button" value="' . $AppUI->_('new task') . '">', '', '<form action="?m=tasks&amp;a=addedit&amp;task_project=' . $project_id . '" method="post" accept-charset="utf-8">', '</form>');
 }
 
-$titleBlock->show();
+//$titleBlock->show();
 
 if (w2PgetParam($_GET, 'inactive', '') == 'toggle') {
 	$AppUI->setState('inactive', $AppUI->getState('inactive') == -1 ? 0 : -1);
@@ -86,7 +86,7 @@ if (w2PgetParam($_GET, 'inactive', '') == 'toggle') {
 $in = $AppUI->getState('inactive') == -1 ? '' : 'in';
 
 // use a new title block (a new row) to prevent from oversized sites
-$titleBlock = new w2p_Theme_TitleBlock('', 'shim.gif');
+//$titleBlock = new w2p_Theme_TitleBlock('', 'shim.gif');
 $titleBlock->showhelp = false;
 $titleBlock->addCell('&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' . $AppUI->_('Task Filter') . ':');
 $titleBlock->addCell(arraySelect($filters, 'f', 'size="1" class="text" onChange="document.taskFilter.submit();"', $f, true), '', '<form action="?m=tasks" method="post" name="taskFilter" accept-charset="utf-8">', '</form>');
