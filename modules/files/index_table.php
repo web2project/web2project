@@ -15,12 +15,6 @@ if (!isset($project_id)) {
 	$project_id = w2PgetParam($_REQUEST, 'project_id', 0);
 }
 
-$xpg_pagesize = w2PgetConfig('page_size', 50);
-$xpg_min = $xpg_pagesize * ($page - 1); // This is where we start our record set from
-
-$df = $AppUI->getPref('SHDATEFORMAT');
-$tf = $AppUI->getPref('TIMEFORMAT');
-
 $category_id = 0;
 if (($company_id || $project_id || $task_id) && !($m == 'files')) {
 	$category_id = 0;
@@ -29,6 +23,8 @@ if (($company_id || $project_id || $task_id) && !($m == 'files')) {
     $category_id = ($tab < 0) ? 0 : $tab + 1;
 }
 
+$xpg_pagesize = w2PgetConfig('page_size', 50);
+$xpg_min = $xpg_pagesize * ($page - 1); // This is where we start our record set from
 
 // counts total recs from selection
 $fileList = CFile::getFileList($AppUI, $company_id, $project_id, $task_id, $tab);
