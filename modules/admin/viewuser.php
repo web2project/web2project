@@ -16,7 +16,7 @@ $canAdd    = $user->canCreate();
 $canAccess = $user->canAccess();
 $canDelete = $user->canDelete();
 
-if (!$canAccess || !$canRead) {
+if (!$canAccess && !$canRead) {
 	$AppUI->redirect(ACCESS_DENIED);
 }
 
