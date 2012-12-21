@@ -6,26 +6,13 @@ if (!defined('W2P_BASE_DIR')) {
 /* FILES $Id$ */
 // modified later by Pablo Roca (proca) in 18 August 2003 - added page support
 // Files modules: index page re-usable sub-table
-global $AppUI, $deny1, $canRead, $canEdit, $canAdmin;
-global $company_id, $project_id, $task_id;
+global $AppUI, $company_id, $project_id, $task_id;
+global $currentTabId, $m;
 
-global $currentTabId;
-global $currentTabName;
-global $tabbed, $m;
-
-$tab = $currentTabId;
-
-// add to allow for returning to other modules besides Files
-$current_uriArray = parse_url($_SERVER['REQUEST_URI']);
-$current_uri = $current_uriArray['query'];
-
-$tab = ($m == 'files') ? $tab-1 : -1;
+$tab = ($m == 'files') ? $currentTabId-1 : -1;
 $page = w2PgetParam($_GET, 'page', 1);
 if (!isset($project_id)) {
 	$project_id = w2PgetParam($_REQUEST, 'project_id', 0);
-}
-if (!isset($showProject)) {
-	$showProject = true;
 }
 
 $xpg_pagesize = w2PgetConfig('page_size', 50);
