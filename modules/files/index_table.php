@@ -21,20 +21,12 @@ $xpg_min = $xpg_pagesize * ($page - 1); // This is where we start our record set
 $df = $AppUI->getPref('SHDATEFORMAT');
 $tf = $AppUI->getPref('TIMEFORMAT');
 
+$category_id = 0;
 if (($company_id || $project_id || $task_id) && !($m == 'files')) {
-	$catsql = false;
-} elseif ($tabbed) {
-	if ($tab <= 0) {
-		$catsql = false;
-	} else {
-		$catsql = 'file_category = ' . ($tab-1);
-	}
+	$category_id = 0;
 } else {
-	if ($tab < 0) {
-		$catsql = false;
-	} else {
-		$catsql = 'file_category = ' . $tab;
-	}
+	// TODO: the filtering is not working as expected in the flat view
+    $category_id = ($tab < 0) ? 0 : $tab + 1;
 }
 
 
