@@ -99,6 +99,10 @@ form {
     margin: 0 3px;
 }
 
+.crumb-right li select, .crumb-right li input {
+    margin-top: -2px;
+}
+
 .system-info P {
 	color: #000000;
 	font-size: 7pt;
