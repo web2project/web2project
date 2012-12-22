@@ -61,34 +61,26 @@ $titleBlock->addCell($AppUI->_('Search') . ':');
 
 // Let's see if this user has admin privileges
 if (canView('admin')) {
-	//$titleBlock->addCell();
 	$user_list = $perms->getPermittedUsers('tasks');
 	$titleBlock->addCell('<form action="?m=tasks" method="post" name="userIdForm" accept-charset="utf-8">' . arraySelect($user_list, 'user_id', 'size="1" class="text" onChange="document.userIdForm.submit();"', $user_id, false) . '</form>');
     $titleBlock->addCell($AppUI->_('User') . ':');
 }
 
-//$titleBlock->addCell();
 $titleBlock->addCell('<form action="?m=tasks" method="post" name="companyFilter" accept-charset="utf-8">' . arraySelect($filters2, 'f2', 'size="1" class="text" onChange="document.companyFilter.submit();"', $f2, false) . '</form>');
 $titleBlock->addCell($AppUI->_('Company') . ':');
 
-//$titleBlock->addCell();
 if ($canEdit && $project_id) {
 	$titleBlock->addCell('<form action="?m=tasks&amp;a=addedit&amp;task_project=' . $project_id . '" method="post" accept-charset="utf-8"><input type="submit" class="button" value="' . $AppUI->_('new task') . '"></form>');
 }
-
-//$titleBlock->show();
 
 if (w2PgetParam($_GET, 'inactive', '') == 'toggle') {
 	$AppUI->setState('inactive', $AppUI->getState('inactive') == -1 ? 0 : -1);
 }
 $in = $AppUI->getState('inactive') == -1 ? '' : 'in';
 
-// use a new title block (a new row) to prevent from oversized sites
-//$titleBlock = new w2p_Theme_TitleBlock('', 'shim.gif');
 $titleBlock->showhelp = false;
 $titleBlock->addCell('<form action="?m=tasks" method="post" name="taskFilter" accept-charset="utf-8">' . arraySelect($filters, 'f', 'size="1" class="text" onChange="document.taskFilter.submit();"', $f, true) . '</form>');
 $titleBlock->addCell($AppUI->_('Task Filter') . ':');
-//$titleBlock->addCell();
 
 $titleBlock->addCrumb('?m=tasks&amp;a=todo&amp;user_id=' . $user_id, 'my todo');
 if (w2PgetParam($_GET, 'pinned') == 1) {
@@ -99,11 +91,8 @@ if (w2PgetParam($_GET, 'pinned') == 1) {
 $titleBlock->addCrumb('?m=tasks&amp;inactive=toggle', 'show ' . $in . 'active tasks');
 $titleBlock->addCrumb('?m=tasks&amp;a=tasksperuser', 'tasks per user');
 if (!$project_id) {
-    if (!isset($query_string)) {
-        $query_string = '';
-    }
     $titleBlock->addCell('
-        <form name="task_list_options" method="post" action="'. $query_string . '" accept-charset="utf-8">
+        <form name="task_list_options" method="post" action="?m=tasks" accept-charset="utf-8">
             <input type="hidden" name="show_task_options" value="1" />
             <input type="checkbox" name="show_incomplete" id="show_incomplete" onclick="document.task_list_options.submit();"' .
                 ($showIncomplete ? 'checked="checked"' : '') . '/>
