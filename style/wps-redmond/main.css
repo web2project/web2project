@@ -89,7 +89,7 @@ div.titlebar {
 }
 
 div.header {
-    background: url(images/nav_bkgd.gif);
+    background: url(images/nav_bg.png);
     color:      #000;
     height:     24px;
     padding-top:    3px;
@@ -104,7 +104,7 @@ div.shadow {
 }
 
 .nav a:hover{
-	background: #2E91C6 url(images/nav_item_hover.gif) repeat-x scroll 0%;
+	background: #2E91C6 url(images/nav_shadow.jpg) repeat-x scroll 0%;
 	color:      #FFFFFF;
 	text-decoration:none;
 }

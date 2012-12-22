@@ -195,7 +195,6 @@ input:focus, textarea:focus {
   border-bottom : 1px solid #6F7777;
   border-right  : 1px solid #ACB5B5;
   width         : auto;
-  background    : url(images/button_bg.png) repeat-x;
   background-color : white;
   padding       : 2px 5px !important;
   padding       : 0px 0px;
@@ -220,7 +219,6 @@ input:focus, textarea:focus {
   border-bottom : 1px solid #6F7777;
   border-right  : 1px solid #ACB5B5;
   width         : auto;
-  background    : url(images/button_bg.png) repeat-x;
   background-color : white;
   padding       : 2px 5px !important;
   padding       : 0px 0px;
@@ -342,8 +340,6 @@ table.tbl TH {
 	border: outset #D1D1CD 0px;
 	font-weight         : normal;
     background-color    : #D4D0C8;
-    background-image    : url("images/header_bg.png");
-    background-image    : repeat-x;
 }
 
 table.tbl td {
@@ -366,8 +362,6 @@ table.std TH {
 	list-style-type  : disc;
 	list-style-position: inside;
     background-color    : #D4D0C8;
-    background-image    : url("images/header_bg.png");
-    background-image    : repeat-x;
     text-align: center;
 }
 
@@ -452,8 +446,6 @@ table.mocal th {
 	font-weight         : bold;
 	text-align          : center;
     background-color    : #bccfeb;
-    background-image    : url("images/header_bg.png");
-    background-image    : repeat-x;
 }
 table.mocal td {
 }
