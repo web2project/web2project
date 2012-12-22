@@ -269,8 +269,9 @@ class w2p_Output_GanttRenderer {
     {
         if ($markToday)
         {
-            $today = date('y-m-d');
-            $vline = new GanttVLine($today, $this->todayText);
+            $today = new w2p_Utilities_Date();
+            $today->addDays(-1);
+            $vline = new GanttVLine($today->format('%Y-%m-%d 12:00'), $this->todayText);
             $vline->title->setFont(FF_CUSTOM, FS_NORMAL, 8);
             $this->graph->Add($vline);
         }
