@@ -150,10 +150,21 @@ class w2p_Core_CustomFields {
 		}
 	}
 
-	public function bind(&$formvars) {
+    /**
+     * This method binds the $hash values to the Custom Fields. If you include a
+     *   field in the $hash, it will always get updated, even if the value is
+     *   null. If you don't want to update the field, don't include it.
+     *
+     * @param type $hash
+     */
+	public function bind($hash) {
 		if (!count($this->fields) == 0) {
-			foreach ($this->fields as $k => $notUsed) {
-				$this->fields[$k]->setValue(@$formvars[$k]);
+            foreach ($this->fields as $k => $notUsed) {
+                if (isset($hash[$k])) {
+                    $this->fields[$k]->setValue($hash[$k]);
+                } else {
+                    unset($this->fields[$k]);
+                }
 			}
 		}
 	}
