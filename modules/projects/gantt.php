@@ -117,6 +117,9 @@ if (!$start_date || !$end_date) {
     $projectCount = count($projects);
     for ($i = 0, $i_cmp = $projectCount; $i < $i_cmp; $i++) {
         $start = substr($projects[$i]['project_start_date'], 0, 10);
+        if (0 == strlen($start)) {
+            $start = date('Y-m-d');
+        }
         $end = substr($projects[$i]['project_end_date'], 0, 10);
         if (0 == strlen($end)) {
             $lastTask = $pjobj->getCriticalTasks($projects[$i]['project_id']);

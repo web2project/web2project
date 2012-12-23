@@ -66,14 +66,11 @@ $titleBlock->show();
 
 $file_types = w2PgetSysVal('FileType');
 
-$fts = $file_types;
-
 if ($tab != -1) {
 	array_unshift($file_types, 'All Files');
 }
 
 $tabBox = new CTabBox('?m=files', W2P_BASE_DIR . '/modules/files/', $tab);
-$tabbed = $tabBox->isTabbed();
 $i = -1;
 foreach ($file_types as $file_type) {
 	$fileList = CFile::getFileList($AppUI, $company_id, $project_id, $task_id, $i);

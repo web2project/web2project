@@ -11,17 +11,6 @@ if ($task_id && !$project_id) {
     $task->load($task_id);
     $project_id = $task->task_project;
 }
-// modified later by Pablo Roca (proca) in 18 August 2003 - added page support
-// Files modules: index page re-usable sub-table
-
-if ($canEdit && 'links' != $m) {
-    $titleBlock = new w2p_Theme_TitleBlock( '', '', $m, "$m.$a" );
-    $titleBlock->addCell(
-        '<input type="submit" class="button" value="'.$AppUI->_('new link').'">', '',
-        '<form action="?m=links&a=addedit&project_id='.$project_id.'&task_id='.$task_id.'" method="post" accept-charset="utf-8">', '</form>'
-    );
-    $titleBlock->show();
-}
 
 $page = (int) w2PgetParam($_GET, 'page', 1);
 $search = w2PgetParam($_POST, 'search', '');
@@ -65,17 +54,10 @@ if (count($fields) > 0) {
 ?>
 <table class="tbl list">
     <tr>
-        <?php
-//TODO: The link below is commented out because this module doesn't support sorting... yet.
-        echo '<th></th><th></th>';
-        foreach ($fieldNames as $index => $name) {
-            ?><th nowrap="nowrap">
-<!--                <a href="?m=links&orderby=<?php echo $fieldList[$index]; ?>" class="hdr">-->
-                    <?php echo $AppUI->_($fieldNames[$index]); ?>
-<!--                </a>-->
-            </th><?php
-        }
-        ?>
+        <th></th><th></th>
+        <?php foreach ($fieldNames as $index => $name) { ?>
+            <th><?php echo $AppUI->_($fieldNames[$index]); ?></th>
+        <?php } ?>
     </tr>
 <?php
 $fp = -1;
@@ -126,7 +108,15 @@ for ($i = ($page - 1) * $xpg_pagesize; $i < $page * $xpg_pagesize && $i < $xpg_t
         }
         ?>
     </tr>
-<?php } ?>
+<?php }
+
+    if ($canEdit && 'links' != $m) { ?>
+	<tr>
+		<td colspan="<?php echo 2 + count($fieldList); ?>" align="right" valign="top" style="background-color:#ffffff">
+			<input type="button" class=button value="<?php echo $AppUI->_('new link') ?>" onClick="javascript:window.location='./index.php?m=links&a=addedit&project_id=<?php echo $project_id; ?>&task_id=<?php echo $task_id; ?>'">
+		</td>
+	</tr>
+    <?php } ?>
 </table>
 <?php
 echo $pageNav;

@@ -4,65 +4,67 @@ if (!defined('W2P_BASE_DIR')) {
 }
 global $AppUI, $m, $a;
 
-$perms = &$AppUI->acl();
-if (!canView('system')) {
+$user_id = (int) w2PgetParam($_POST, 'user', $AppUI->user_id);
+$module = w2PgetParam($_POST, 'module', 'all');
+$action = w2PgetParam($_POST, 'action', 'all');
+
+$canView = canView('system');
+if (!$canView) { // let's see if the user has sys access
 	$AppUI->redirect(ACCESS_DENIED);
 }
 
-$user_permissions = array();
-$users = w2PgetUsers();
-
-$user_id = (int) w2PgetParam($_POST, 'user', 0);
-$module = w2PgetParam($_POST, 'module', '');
-$action = w2PgetParam($_POST, 'action', '');
-
+$perms = &$AppUI->acl();
 $avail_modules = $perms->getModuleList();
-$modules = array();
+$modules = array('all' => 'All Modules');
 foreach ($avail_modules as $avail_module) {
 	$modules[$avail_module['value']] = $avail_module['value'];
 }
-$modules = array('all' => 'All Modules') + $modules;
+$module = isset($modules[$module]) ? $module : 'all';
 
 $actions = array('all' => 'All Actions', 'access' => 'access', 'add' => 'add', 'delete' => 'delete', 'edit' => 'edit', 'view' => 'view');
+$action = isset($actions[$action]) ? $action : 'all';
 
-if (isset($_POST['user']) && (int) $_POST['user'] > 0) {
-    $q = new w2p_Database_Query;
-    $q->addTable($perms->_db_acl_prefix . 'permissions', 'gp');
-    $q->addQuery('gp.*');
-    $q->addWhere('user_id = ' . $user_id);
-    if ('all' != $module) {
-        $q->addWhere("module = '$module'");
-    }
-    if ('all' != $action) {
-        $q->addWhere("action = '$action'");
-    }
+$users = array('' => '(' . $AppUI->_('Select User') . ')') + w2PgetUsers();
 
-    $q->addOrder('user_name');
-    $q->addOrder('module');
-    $q->addOrder('action');
-    $q->addOrder('item_id');
-    $q->addOrder('acl_id');
-    $permissions = $q->loadList();
-} else {
-    $permissions = array();
+$q = new w2p_Database_Query;
+$q->addTable($perms->_db_acl_prefix . 'permissions', 'gp');
+$q->addQuery('gp.*');
+$q->addWhere('user_id = ' . $user_id);
+if ('all' != $module) {
+    $q->addWhere("module = '$module'");
+}
+if ('all' != $action) {
+    $q->addWhere("action = '$action'");
 }
 
-//TODO: float this right just like the filters on the Project Index
-$users = array('' => '(' . $AppUI->_('Select User') . ')') + $users;
-$user_selector = arraySelect($users, 'user', 'class="text" onchange="javascript:document.pickUser.submit()"', $user_id);
-$module_selector = arraySelect($modules, 'module', 'class="text" onchange="javascript:document.pickUser.submit()"', $module);
-$action_selector = arraySelect($actions, 'action', 'class="text" onchange="javascript:document.pickUser.submit()"', $action);
-echo $AppUI->_('View Users Permissions') . ':<form action="?m=system&a=acls_view" method="post" name="pickUser" accept-charset="utf-8">' . $user_selector . $AppUI->_('View by Module') . ':' . $module_selector . $AppUI->_('View by Action') . ':' . $action_selector . '</form><br />';
+$q->addOrder('user_name');
+$q->addOrder('module');
+$q->addOrder('action');
+$q->addOrder('item_id');
+$q->addOrder('acl_id');
+$permissions = $q->loadList();
 
 $titleBlock = new w2p_Theme_TitleBlock('Permission Result Table', '48_my_computer.png', $m, $m . '.' . $a);
-if ($canEdit) {
-	$titleBlock->addCrumb('?m=system', 'system admin');
-	$titleBlock->addCrumb('?m=system&u=roles', 'user roles');
-}
+$titleBlock->addCell('
+    <form action="?m=system&a=acls_view" method="post" name="pickUser" accept-charset="utf-8">' .
+        $AppUI->_('View Users Permissions') . ': ' . arraySelect($users, 'user', 'class="text" onchange="javascript:document.pickUser.submit()"', $user_id) .
+        $AppUI->_('View by Module') . ': ' . arraySelect($modules, 'module', 'class="text" onchange="javascript:document.pickUser.submit()"', $module) .
+        $AppUI->_('View by Action') . ': ' . arraySelect($actions, 'action', 'class="text" onchange="javascript:document.pickUser.submit()"', $action) .
+    '</form>', '', '', '');
+
+$titleBlock->addCrumb('?m=system', 'system admin');
+$titleBlock->addCrumb('?m=system&u=roles', 'user roles');
 $titleBlock->show();
 
-$table = '<table class="tbl view" width="100%" cellspacing="1" cellpadding="2" border="0">';
-$table .= '<tr><th>UserID</th><th>User</th><th>User Name</th><th>Module</th><th>Item</th><th>Item Name</th><th>Action</th><th>Allow</th><th>ACL_ID</th></tr>';
+$fieldNames = array('UserID', 'User', 'Display Name', 'Module', 'Item', 'Item Name', 'Action', 'Allow', 'ACL_ID');
+?>
+<table class="tbl list">
+    <tr>
+        <?php foreach ($fieldNames as $index => $name) { ?>
+            <th><?php echo $AppUI->_($fieldNames[$index]); ?></th>
+        <?php } ?>
+    </tr>
+<?php
 foreach ($permissions as $permission) {
 	$item = '';
 	if ($permission['item_id']) {
@@ -79,7 +81,7 @@ foreach ($permissions as $permission) {
 		$item = $q->loadResult();
 	}
 	if (!($permission['item_id'] && !$permission['acl_id'])) {
-		$table .= '<tr>' . '<td style="text-align:right;">' . $permission['user_id'] . '</td>' . '<td>' . $permission['user_name'] . '</td>' . '<td>' . $users[$permission['user_id']] . '</td>' . '<td>' . $permission['module'] . '</td>' . '<td style="text-align:right;">' . ($permission['item_id'] ? $permission['item_id'] : '') . '</td>' . '<td>' . ($item ? $item : 'ALL') . '</td>' . '<td>' . $permission['action'] . '</td>' . '<td ' . (!$permission['access'] ? 'style="text-align:right;background-color:red"' : 'style="text-align:right;background-color:green"') . '>' . $permission['access'] . '</td>' . '<td ' . ($permission['acl_id'] ? '' : 'style="background-color:gray"') . '>' . ($permission['acl_id'] ? $permission['acl_id'] : 'soft-denial') . '</td>' . '</tr>';
+		$table .= '<tr>' . '<td class="data _id">' . $permission['user_id'] . '</td>' . '<td>' . $permission['user_name'] . '</td>' . '<td>' . $users[$permission['user_id']] . '</td>' . '<td>' . $permission['module'] . '</td>' . '<td style="text-align:right;">' . ($permission['item_id'] ? $permission['item_id'] : '') . '</td>' . '<td>' . ($item ? $item : 'ALL') . '</td>' . '<td>' . $permission['action'] . '</td>' . '<td ' . (!$permission['access'] ? 'style="text-align:right;background-color:red"' : 'style="text-align:right;background-color:green"') . '>' . $permission['access'] . '</td>' . '<td ' . ($permission['acl_id'] ? '' : 'style="background-color:gray"') . '>' . ($permission['acl_id'] ? $permission['acl_id'] : 'soft-denial') . '</td>' . '</tr>';
 	}
 }
 $table .= '</table>';

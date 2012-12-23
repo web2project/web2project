@@ -5,7 +5,6 @@ if (!defined('W2P_BASE_DIR')) {
 }
 
 // check permissions
-$perms = &$AppUI->acl();
 if (!canEdit('system')) {
 	$AppUI->redirect(ACCESS_DENIED);
 }

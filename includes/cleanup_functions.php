@@ -2029,16 +2029,8 @@ function displayFiles($AppUI, $folder_id, $task_id, $project_id, $company_id) {
 	$qv->leftJoin('contacts', 'co', 'co.contact_id = cu.user_contact');
 	$qv->addWhere('file_folder = ' . (int)$folder_id);
 
-	$files = array();
-	$file_versions = array();
     $files = $q->loadList();
     $file_versions = $qv->loadHashList('file_id');
-    $q->clear();
-    $qv->clear();
-
-	if ($files === array()) {
-		return 0;
-	}
 
     $fieldList = array();
     $fieldNames = array();
@@ -2066,11 +2058,8 @@ function displayFiles($AppUI, $folder_id, $task_id, $project_id, $company_id) {
     $s  = '<tr>';
     $s .= '<th></th>';
     $s .= '<th>' . $AppUI->_('co') . '</th>';
-//TODO: The link below is commented out because this module doesn't support sorting... yet.
     foreach ($fieldNames as $index => $name) {
-        $s .= '<th nowrap="nowrap">';
-        $s .= $AppUI->_($fieldNames[$index]);
-        $s .= '</th>';
+        $s .= '<th>' . $AppUI->_($fieldNames[$index]) . '</th>';
     }
     $s .= '<th></th>';
 	$s .= '</tr>';
@@ -2083,7 +2072,7 @@ function displayFiles($AppUI, $folder_id, $task_id, $project_id, $company_id) {
     $customLookups = array('file_category' => $file_types);
 
 	foreach ($files as $row) {
-		$latest_file = $file_versions[$row['latest_id']];
+        $latest_file = $file_versions[$row['latest_id']];
 
 		if ($fp != $latest_file['file_project']) {
 			if (!$latest_file['file_project']) {
@@ -3370,11 +3359,11 @@ function addHistory($table, $id, $action = 'modify', $description = '', $project
 	$q = new w2p_Database_Query;
 	$q->addTable('history');
 	$q->addInsert('history_action', $action);
-	$q->addInsert('history_item', $id);
+	$q->addInsert('history_item', (int) $id);
 	$q->addInsert('history_description', $description);
-	$q->addInsert('history_user', $AppUI->user_id);
+	$q->addInsert('history_user', (int) $AppUI->user_id);
 	$q->addInsert('history_date', "'".$q->dbfnNowWithTZ()."'", false, true);
-	$q->addInsert('history_project', $project_id);
+	$q->addInsert('history_project', (int) $project_id);
 	$q->addInsert('history_table', $table);
 	$q->exec();
 	//echo db_error();

@@ -84,15 +84,15 @@ $q->clear();
 
 $tab = w2PgetParam($_REQUEST, 'tab', 0);
 
+$fieldList = array('user_username', 'contact_last_name', 'company_name', 'date_time_in', 'user_ip');
+$fieldNames = array('Login Name', 'Real Name', 'Company', 'Date Time IN', 'Internet Address');
 ?>
 <table class="tbl list">
     <tr>
         <th colspan="2">&nbsp; <?php echo $AppUI->_('sort by'); ?>:&nbsp;</th>
         <?php
-        $fieldList = array('user_username', 'contact_last_name', 'company_name', 'date_time_in', 'user_ip');
-        $fieldNames = array('Login Name', 'Real Name', 'Company', 'Date Time IN', 'Internet Address');
         foreach ($fieldNames as $index => $name) {
-            ?><th nowrap="nowrap">
+            ?><th>
                 <a href="?m=admin&orderby=<?php echo $fieldList[$index]; ?>" class="hdr">
                     <?php echo $AppUI->_($fieldNames[$index]); ?>
                 </a>

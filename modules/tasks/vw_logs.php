@@ -60,19 +60,11 @@ if (count($fields) > 0) {
 <a name="task_logs-tasks_view"> </a>
 <table class="tbl list">
     <tr>
-        <?php
-
-//TODO: The link below is commented out because this module doesn't support sorting... yet.
-        echo '<th></th>';
-        foreach ($fieldNames as $index => $name) {
-            ?><th nowrap="nowrap">
-<!--                <a href="?m=projects&a=view&project_id=<?php echo $project_id; ?>&sort=<?php echo $fieldList[$index]; ?>#task_logs-tasks_view" class="hdr">-->
-                    <?php echo $AppUI->_($fieldNames[$index]); ?>
-<!--                </a>-->
-            </th><?php
-        }
-        echo '<th></th>';
-        ?>
+        <th></th>
+        <?php foreach ($fieldNames as $index => $name) { ?>
+            <th><?php echo $AppUI->_($fieldNames[$index]); ?></th>
+        <?php } ?>
+        <th></th>
     </tr>
 <?php
 // Pull the task comments

@@ -262,12 +262,17 @@ table.std {
 table.std TH {	
 	background-color:#FFFFFF;
 	background-image:url(images/label.gif);
-	font: bold 12px Arial, Helvetica, sans-serif; 
-	text-align: center; color: #000; 
-	margin-bottom: 0; 
-	padding: 1px; 
-	list-style-type: disc; 
-	list-style-position: inside; 
+	font: bold 12px Arial, Helvetica, sans-serif;
+	text-align: center;
+    color: #000;
+	margin-bottom: 0;
+	padding: 1px;
+	list-style-type: disc;
+	list-style-position: inside;
+}
+
+table.addedit.pref td {
+    width: 50%;
 }
 
 table.std td.hilite {
@@ -566,6 +571,10 @@ a.delete:active span {
 	color: #FFFFFF;
 }
 
+.crumb-right div.crumb ul {
+    float: right;
+}
+
 /* Solves a Webkit issue with screwy overlapping spans - #299 */
 span > img {
     display: block;
@@ -701,11 +710,6 @@ h4 {
 }
 
 /*end_tooltip*/
-
-form {
-	display: inline; 
-	margin: 0;
-}
 
 img {
 	vertical-align: top;
