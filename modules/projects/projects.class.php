@@ -539,16 +539,19 @@ class CProject extends w2p_Core_BaseObject
                 }
             }
             $this->stored_contacts = $stored_contacts;
-
-            $custom_fields = new w2p_Core_CustomFields('projects', 'addedit', $this->project_id, 'edit');
-            $custom_fields->bind($_POST);
-            $custom_fields->store($this->project_id); // Store Custom Fields
-
-            CTask::storeTokenTask($this->_AppUI, $this->project_id);
         }
         return $stored;
     }
 
+    protected function hook_postStore() {
+        $custom_fields = new w2p_Core_CustomFields('projects', 'addedit', $this->project_id, 'edit');
+        $custom_fields->bind($_POST);
+        $custom_fields->store($this->project_id); // Store Custom Fields
+
+        CTask::storeTokenTask($this->_AppUI, $this->project_id);
+
+        parent::hook_postStore();
+    }
     public function notifyOwner($isNotNew)
     {
         global $locale_char_set;

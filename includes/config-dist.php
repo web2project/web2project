@@ -17,6 +17,7 @@ if (!defined('W2P_BASE_DIR')) {
 */
 
 $w2Pconfig['dbtype'] = '[DBTYPE]'; // ONLY MySQL is supported at present
+$w2Pconfig['dbchar'] = '[DBCHAR]'; // The character set used in the database
 $w2Pconfig['dbhost'] = '[DBHOST]';
 $w2Pconfig['dbname'] = '[DBNAME]'; // Your web2Project Database Name
 $w2Pconfig['dbuser'] = '[DBUSER]'; // Your MySQL Username

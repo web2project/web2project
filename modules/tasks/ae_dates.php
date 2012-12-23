@@ -14,15 +14,12 @@ $start = (int) w2PgetConfig('cal_day_start', 8);
 $end = (int) w2PgetConfig('cal_day_end', 17);
 $inc = (int) w2PgetConfig('cal_day_increment', 15);
 
+$ampm = stristr($AppUI->getPref('TIMEFORMAT'), '%p');
 $hours = array();
 for ($current = $start; $current < $end + 1; $current++) {
-	if ($current < 10) {
-		$current_key = "0" . $current;
-	} else {
-		$current_key = $current;
-	}
+    $current_key = ($current < 10) ? '0' . $current : $current;
 
-	if (stristr($AppUI->getPref('TIMEFORMAT'), '%p')) {
+    if ($ampm) {
 		//User time format in 12hr
 		$hours[$current_key] = ($current > 12 ? $current - 12 : $current);
 	} else {

@@ -56,6 +56,10 @@ div.std {
 .quicknav a, form{
     margin: 0px 8px 0 8px;
 }
+form {
+	display: inline;
+	margin: 0;
+}
 /* End: Header Bar & Navigation for all pages */
 
 .module-title {
@@ -95,6 +99,10 @@ div.std {
     margin: 0 3px;
 }
 
+.crumb-right li select, .crumb-right li input {
+    margin-top: -2px;
+}
+
 .system-info P {
 	color: #000000;
 	font-size: 7pt;
@@ -122,19 +130,14 @@ input[type="checkbox"] {
  * These are the styles attached to the list screens which are urls like:
  *      ./index.php?m=projects
  *      ./index.php?m=companies
- * These two styles handle all of the mouseover highlighting for all lists
- *   whether it's projects, tasks, links, or anything else.
  */
-.list ._name {          width: 25%; }
-.list ._description {   width: 30%; }
+ 
+table.list {
+    border-spacing: 1px;
+    padding: 2px;
+    width: 100%;
+}
 
-.list ._complete, .list ._created, .list ._date, .list ._datetime, .list ._duration,
-    .list ._hours, .list ._update, .list ._updated, .list ._worked  {
-    text-align: center;
-}
-.list ._author, .list ._creator, .list ._name, .list ._owner, .list ._updator {
-    white-space:nowrap;
-}
 /* These two styles handle all of the mouseover highlighting in the lists. */
 table.list tr:hover td {
     background-color: #ffffcc;
@@ -143,6 +146,31 @@ table.list tr:hover td {
 }
 table.list tr:hover td._name {
     font-weight: bold;
+}
+ 
+.list ._name {          width: 25%; }
+.list ._description {   width: 30%; }
+
+.list ._complete, .list ._created, .list ._date, .list ._datetime, .list ._duration,
+    .list ._hours, .list ._update, .list ._updated, .list ._worked, .list ._identifier,
+    .list ._size {
+    text-align: center;
+}
+.list th, .list ._author, .list ._creator, .list ._name, .list ._owner, .list ._updator,
+    .list ._size, .list ._birthday, .list ._date, .list ._created, .list ._datetime,
+    .list ._update, .list ._updated {
+        white-space:nowrap;
+}
+
+.list.history td.data._description {
+    width: 60%;
+}
+.list.history td.data {
+    margin-left: 20px;
+    padding: 0 5em 0 5em;
+}
+.list.history td.data._user {
+    text-align: center;
 }
 
 div.clear {
@@ -174,6 +202,9 @@ div.clear {
     -webkit-border-radius:3px;
     border-radius:3px;
 }
+.view .list td.data {
+    border-radius: 0px;
+}
 
 .addedit textarea.customfield {
     height: 75px;
@@ -183,35 +214,12 @@ div.clear {
 .view ._date, .view ._owner, .view ._status {
     text-align: left;
 }
-.list ._name {          width: 25%; }
-.list ._description {   width: 30%; }
 
-.list ._complete, .list ._created, .list ._date, .list ._datetime, .list ._duration,
-    .list ._hours, .list ._update, .list ._updated, .list ._worked, .list ._identifier,
-    .list ._size {
-    text-align: center;
-}
-.list ._author, .list ._creator, .list ._name, .list ._owner, .list ._updator,
-    .list ._size, .list ._birthday, .list ._date, .list ._created, .list ._datetime,
-    .list ._update, .list ._updated {
-        white-space:nowrap;
-}
 ._assignment, ._category, ._count, .countp, ._complete, ._in, .inactive,
     ._owner, ._priority, ._problem, ._problem, .replies, ._status, ._username,
     ._users, ._version {
     text-align: center;
 }
-._duration {
-    text-align: right;
-}
-._identifier {
-    border: outset #eeeeee 1px;
-}
-
-input[type="checkbox"] {
-    margin-left: 10px;
-}
-
 
 /*
  * These are the colors/formats for the tasks that are on time, overdue, etc.
@@ -232,25 +240,6 @@ tr.notstarted td._date, tr.notstarted td._datetime, tr.notstarted td._duration, 
 
 tr.active td._date, tr.active td._datetime, tr.active td._duration, tr.active td._in {
     background-color:#e6eedd;
-}
-
-table.list {
-    border-spacing: 1px;
-    padding: 2px;
-    width: 100%;
-}
-
-/*
- * These two styles handle all of the mouseover highlighting for all lists
- *   whether it's projects, tasks, links, or anything else.
- */
-table.list tr:hover td {
-    background-color: #ffffcc;
-    color: #000;
-    font-style: italic;
-}
-table.list tr:hover td._name {
-    font-weight: bold;
 }
 
 .highlight0 { background-color: #FFFF66; }
@@ -278,4 +267,12 @@ table.list tr:hover td._name {
 
 #month-view span > img {
     display: inline;
+}
+
+.info span {
+    font-size: medium;
+    font-weight: bold;
+}
+.info p, .info li {
+    font-size: medium;
 }

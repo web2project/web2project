@@ -29,7 +29,7 @@ if (count($fields) > 0) {
     // TODO: This is only in place to provide an pre-upgrade-safe
     //   state for versions earlier than v3.0
     //   At some point at/after v4.0, this should be deprecated
-    $fieldList = array('project_priority', 'project_name', 'contact_name',
+    $fieldList = array('project_priority', 'project_name', 'user_username',
         'project_start_date', 'project_status', 'project_target_budget');
     $fieldNames = array('P', 'Name', 'Owner', 'Started', 'Status',
         'Budget');
@@ -42,7 +42,7 @@ if (count($fields) > 0) {
     <tr>
         <?php
         foreach ($fieldNames as $index => $name) {
-            ?><th nowrap="nowrap">
+            ?><th>
                 <a href="?m=companies&a=view&company_id=<?php echo $company_id; ?>&sort=<?php echo $fieldList[$index]; ?>#projects-company_view" class="hdr">
                     <?php echo $AppUI->_($fieldNames[$index]); ?>
                 </a>

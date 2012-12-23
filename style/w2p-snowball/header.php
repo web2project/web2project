@@ -75,15 +75,15 @@ require W2P_BASE_DIR . '/includes/ajax_functions.php';
                                 }
                             }
 
-                            echo arraySelect($newItem, 'm', 'style="font-size:10px" onchange="f=document.frm_new;mod=f.m.options[f.m.selectedIndex].value;if (mod == \'admin\') document.frm_new.a.value=\'addedituser\';if(mod) f.submit();"', '', true);
+                            echo arraySelect($newItem, 'm', 'style="font-size:10px; margin-top: -2px;" onchange="f=document.frm_new;mod=f.m.options[f.m.selectedIndex].value;if (mod == \'admin\') document.frm_new.a.value=\'addedituser\';if(mod) f.submit();"', '', true);
                         }
                         ?>
                     </div>
                 </div>
                 <div class="std shadow">&nbsp;</div>
             </form>
-            <div>
-                <div class="left" style="margin: 5px;">
+            <div style="padding-left: 5px;">
+                <div class="left">
                     <?php
                         echo $AppUI->_('Welcome') . ' ' . ($AppUI->user_id > 0 ? $AppUI->user_display_name : $outsider);
                         echo '<br />';
@@ -94,7 +94,7 @@ require W2P_BASE_DIR . '/includes/ajax_functions.php';
                 </div>
                 <?php if ($AppUI->user_id > 0) { ?>
                     <div class="right quicknav">
-                        <div class="left">
+                        <div class="left" style="margin-top: -3px;">
                         <?php if (canAccess('smartsearch')) { ?>
                             <form name="frm_search" action="?m=smartsearch" method="post" accept-charset="utf-8">
                                 <img src="<?php echo w2PfindImage('search.png'); ?>" style="border: 0;" alt="" />&nbsp;<input class="text" size="20" type="text" id="keyword" name="keyword" value="<?php echo $AppUI->_('Global Search') . '...'; ?>" onclick="document.frm_search.keyword.value=''" onblur="document.frm_search.keyword.value='<?php echo $AppUI->_('Global Search') . '...'; ?>'" />

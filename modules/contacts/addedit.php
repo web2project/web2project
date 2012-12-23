@@ -372,12 +372,7 @@ foreach ($fields as $key => $field): ?>
                     <tr>
                         <td align="left"><?php echo w2PtoolTip('Contact Method', 'add new', false, 'add_contact_method') ?><a href="javascript:addContactMethod();"><img src="<?php echo w2PfindImage('icons/edit_add.png'); ?>" style="border: 0;" alt="" /></a><?php echo w2PendTip() ?></td>
                     </tr>
-					<tr id="custom_fields">
-						<th colspan="2">
-							<strong><?php echo $AppUI->_('Contacts Custom Fields'); ?></strong>
-						</th>
-					</tr>
-                    <tr>
+                    <tr id="custom_fields">
                         <td align="right" colspan="3">
                         <?php
                         $custom_fields = new w2p_Core_CustomFields($m, $a, $row->contact_id, "edit");

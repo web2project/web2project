@@ -131,12 +131,12 @@ function setPermItem( key, val ) {
 <table width="100%" border="0" cellpadding="2" cellspacing="0">
 <tr><td width="50%" valign="top">
 <table class="tbl list">
-<tr>
-	<th width="100%"><?php echo $AppUI->_('Item'); ?></th>
-	<th nowrap="nowrap"><?php echo $AppUI->_('Type'); ?></th>
-	<th nowrap="nowrap"><?php echo $AppUI->_('Status'); ?></th>
-	<th>&nbsp;</th>
-</tr>
+    <tr>
+        <th width="100%"><?php echo $AppUI->_('Item'); ?></th>
+        <th><?php echo $AppUI->_('Type'); ?></th>
+        <th><?php echo $AppUI->_('Status'); ?></th>
+        <th>&nbsp;</th>
+    </tr>
 
 <?php
 foreach ($user_acls as $acl) {
