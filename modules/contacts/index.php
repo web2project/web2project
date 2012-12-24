@@ -14,10 +14,8 @@ if (!$canAccess) {
 	$AppUI->redirect(ACCESS_DENIED);
 }
 
-$countries = w2PgetSysVal('GlobalCountries');
-
 // retrieve any state parameters
-$searchString = w2PgetParam($_GET, 'search_string', '');
+$searchString = w2PgetParam($_POST, 'search_string', '');
 if ('' == $searchString) {
     $searchString = ((0 < $tab) && ($tab < 27)) ? chr(64 + $tab) : '';
     $searchString = (0 == $tab) ? '' : $searchString;
@@ -31,23 +29,11 @@ $where = $AppUI->getState('ContIdxWhere') ? $AppUI->getState('ContIdxWhere') : '
 
 $rows = CContact::searchContacts($AppUI, $where, '', $days);
 
-/**
- * Contact search form
- */
-$form = '<form action="./index.php" method="get" accept-charset="utf-8">' . $AppUI->_('Search for') . '
-           <input type="text" class="text" name="search_string" value="' . $searchString . '" />
-		   <input type="hidden" name="m" value="contacts" />
-		   <input type="submit" value=">" />
-		   <a href="./index.php?m=contacts&amp;tab=0">' . $AppUI->_('Reset search') . '</a>
-		 </form>';
-// En of contact search form
-
-$a2z = '<table cellpadding="2" cellspacing="1" border="0">';
-$a2z .= '<tr><td>' . $form . '</td></tr></table>';
-
-// setup the title block
 $titleBlock = new w2p_Theme_TitleBlock('Contacts', 'monkeychat-48.png', $m, $m . '.' . $a);
-$titleBlock->addCell($a2z);
+$titleBlock->addCell('<a href="./index.php?m=contacts&amp;tab=0">' . $AppUI->_('Reset search') . '</a>');
+$titleBlock->addCell('<form action="index.php?m=contacts&tab=27" method="post" accept-charset="utf-8">' .
+        '<input type="text" name="search_string" class="text"value="' . $searchString . '" /></form>');
+$titleBlock->addCell($AppUI->_('Search') . ':');
 if ($canCreate) {
 	$titleBlock->addCell('<form action="?m=contacts&a=addedit" method="post" accept-charset="utf-8"><input type="submit" class="button" value="' . $AppUI->_('new contact') . '"></form>');
 	$titleBlock->addCrumb('?m=contacts&a=csvexport&suppressHeaders=1', 'CSV Download');
