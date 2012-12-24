@@ -221,7 +221,7 @@ class CFile extends w2p_Core_BaseObject {
     }
 
 	public function checkout($userId, $fileId, $coReason) {
-		$q = new w2p_Database_Query;
+		$q = $this->_getQuery();
 		$q->addTable('files');
 		$q->addUpdate('file_checkout', $userId);
 		$q->addUpdate('file_co_reason', $coReason);
@@ -232,7 +232,7 @@ class CFile extends w2p_Core_BaseObject {
 	}
 
 	public function cancelCheckout($fileId) {
-		$q = new w2p_Database_Query;
+		$q = $this->_getQuery();
 		$q->addTable('files');
 		$q->addUpdate('file_checkout', '');
 		$q->addWhere('file_id = ' . (int)$fileId);
@@ -428,7 +428,7 @@ class CFile extends w2p_Core_BaseObject {
                 $nwords_indexed = count($wordarr);
                 // insert the strings into the table
                 while (list($key, $val) = each($wordarr)) {
-                    $q = new w2p_Database_Query;
+                    $q = $this->_getQuery();
                     $q->addTable('files_index');
                     $q->addReplace('file_id', $this->file_id);
                     $q->addReplace('word', $key);
@@ -440,7 +440,7 @@ class CFile extends w2p_Core_BaseObject {
                 //TODO: if the file doesn't exist.. should we delete the db record?
             }
         }
-		$q = new w2p_Database_Query;
+		$q = $this->_getQuery();
 		$q->addTable('files');
 		$q->addUpdate('file_indexed', 1);
 		$q->addWhere('file_id = '. $this->file_id);

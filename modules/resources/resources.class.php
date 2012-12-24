@@ -86,7 +86,7 @@ class CResource extends w2p_Core_BaseObject {
 
     public function getTasksByResources($resources, $start_date, $end_date)
     {
-        $q = new w2p_Database_Query();
+        $q = $this->_getQuery();
         $q->addQuery('b.resource_id, sum(b.percent_allocated) as total_allocated');
         $q->addTable('tasks', 'a');
         $q->addJoin('resource_tasks', 'b', 'b.task_id = a.task_id', 'inner');
