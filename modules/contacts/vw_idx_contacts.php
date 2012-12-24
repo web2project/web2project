@@ -5,6 +5,8 @@ if (!defined('W2P_BASE_DIR')) {
 
 global $rows;
 
+$countries = w2PgetSysVal('GlobalCountries');
+
 $carr[] = array();
 $carrWidth = 4;
 $carrHeight = 4;

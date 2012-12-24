@@ -33,11 +33,12 @@ $forums = $forum->getAllowedForums($AppUI->user_id, $AppUI->user_company, $f, $o
 
 // setup the title block
 $titleBlock = new w2p_Theme_TitleBlock('Forums', 'support.png', $m, $m . '.' . $a);
-$titleBlock->addCell(arraySelect($filters, 'f', 'size="1" class="text" onChange="document.forum_filter.submit();"', $f, true), '', '<form name="forum_filter" action="?m=forums" method="post" accept-charset="utf-8">', '</form>');
+$titleBlock->addCell('<form name="forum_filter" action="?m=forums" method="post" accept-charset="utf-8">' . arraySelect($filters, 'f', 'size="1" class="text" onChange="document.forum_filter.submit();"', $f, true) . '</form>');
+$titleBlock->addCell($AppUI->_('Filter') . ':');
 
 $canAdd = canAdd($m);
 if ($canAdd) {
-	$titleBlock->addCell('<input type="submit" class="button" value="' . $AppUI->_('new forum') . '">', '', '<form action="?m=forums&a=addedit" method="post" accept-charset="utf-8">', '</form>');
+	$titleBlock->addCell('<form action="?m=forums&a=addedit" method="post" accept-charset="utf-8"><input type="submit" class="button" value="' . $AppUI->_('new forum') . '"></form>');
 }
 
 //TODO: this is a little hack to make sure the table header gets generated in the show() method below

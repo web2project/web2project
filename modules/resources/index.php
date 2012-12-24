@@ -17,12 +17,12 @@ if ($canEdit) {
 $titleBlock->show();
 
 $resource_types = w2PgetSysVal('ResourceTypes');
-if ($tab != -1) {
-	array_unshift($resource_types, 'All Resources');
-}
-array_map(array($AppUI, '_'), $resource_types);
 
 $tabBox = new CTabBox('?m=resources', W2P_BASE_DIR . '/modules/resources/', $tab);
+if ($tabBox->isTabbed()) {
+	array_unshift($resource_types, $AppUI->_('All Resources', UI_OUTPUT_RAW));
+}
+
 foreach ($resource_types as $resource_type) {
 	$tabBox->add('vw_resources', $resource_type);
 }

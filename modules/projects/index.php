@@ -3,7 +3,8 @@ if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
 
-$AppUI->savePlace();
+$tab = $AppUI->processIntState('ProjIdxTab', $_GET, 'tab', 1);
+
 $project = new CProject();
 $structprojs = $project->getProjects();
 
@@ -25,38 +26,10 @@ if (isset($_POST['projsearchtext'])) {
 }
 $search_text = $AppUI->getState('projsearchtext') !== null ? $AppUI->getState('projsearchtext') : '';
 
-$projectDesigner = $AppUI->getState('ProjIdxProjectDesigner') !== null ? $AppUI->getState('ProjIdxProjectDesigner') : 0;
-
-$tab = $AppUI->processIntState('ProjIdxTab', $_GET, 'tab', 1);
-
-$currentTabId = $tab;
-$active = intval(!$AppUI->getState('ProjIdxTab'));
-
-$oCompany = new CCompany;
-$allowedCompanies = $oCompany->getAllowedRecords($AppUI->user_id, 'company_id,company_name');
-
-if (isset($_POST['company_id'])) {
-	$AppUI->setState('ProjIdxCompany', intval($_POST['company_id']));
-}
-$company_id = $AppUI->getState('ProjIdxCompany') !== null ? $AppUI->getState('ProjIdxCompany') : ((isset($allowedCompanies[$AppUI->user_company])) ? $AppUI->user_company : 0);
-
-$company_prefix = 'company_';
-
-if (isset($_POST['department'])) {
-	$AppUI->setState('ProjIdxDepartment', $_POST['department']);
-
-	//if department is set, ignore the company_id field
-	unset($company_id);
-}
-$department = $AppUI->getState('ProjIdxDepartment') !== null ? $AppUI->getState('ProjIdxDepartment') : ((isset($allowedCompanies[$AppUI->user_company])) ? $company_prefix . $AppUI->user_company : $company_prefix . '0');
-
-//if $department contains the $company_prefix string that it's requesting a company and not a department.  So, clear the
-// $department variable, and populate the $company_id variable.
-if (!(strpos($department, $company_prefix) === false)) {
-	$company_id = substr($department, strlen($company_prefix));
-	$AppUI->setState('ProjIdxCompany', $company_id);
-	unset($department);
-}
+$company_id = $AppUI->processIntState('ProjIdxCompany', $_POST, 'project_company', $AppUI->user_company);
+$orderby = $AppUI->processIntState('ProjIdxOrderBy', $_POST, 'orderby', 'project_end_date');
+$project_type = $AppUI->processIntState('ProjIdxType', $_POST, 'project_type', -1);
+$owner = $AppUI->processIntState('ProjIdxowner', $_POST, 'project_owner', -1);
 
 $orderdir = $AppUI->getState('ProjIdxOrderDir') ? $AppUI->getState('ProjIdxOrderDir') : 'asc';
 if (isset($_GET['orderby'])) {
@@ -65,36 +38,38 @@ if (isset($_GET['orderby'])) {
 	} else {
 		$orderdir = 'asc';
 	}
-	$AppUI->setState('ProjIdxOrderBy', w2PgetParam($_GET, 'orderby', null));
 }
-$orderby = $AppUI->getState('ProjIdxOrderBy') ? $AppUI->getState('ProjIdxOrderBy') : 'project_end_date';
 $AppUI->setState('ProjIdxOrderDir', $orderdir);
-
-// prepare the type filter
-if (isset($_POST['project_type'])) {
-	$AppUI->setState('ProjIdxType', intval($_POST['project_type']));
-}
-$project_type = $AppUI->getState('ProjIdxType') !== null ? $AppUI->getState('ProjIdxType') : -1;
-
-// prepare the users filter
-if (isset($_POST['project_owner'])) {
-	$AppUI->setState('ProjIdxowner', intval($_POST['project_owner']));
-}
-$owner = $AppUI->getState('ProjIdxowner') !== null ? $AppUI->getState('ProjIdxowner') : 0;
-
-$user_list = array(0 => '(' . $AppUI->_('all') . ')') + CProject::getOwners();
 
 // collect the full projects list data via function in projects.class.php
 $projects = projects_list_data();
 
+$oCompany = new CCompany;
+$allowedCompanies[0] = $AppUI->_('all');
+$allowedCompanies += $oCompany->getAllowedRecords($AppUI->user_id, 'company_id,company_name', 'company_name');
+
 $project_types = array(-1 => '(' . $AppUI->_('all') . ')') + w2PgetSysVal('ProjectType');
+
+$user_list = array(0 => '(' . $AppUI->_('all') . ')') + CProject::getOwners();
 
 $bufferSearch = '<input type="text" class="text" size="20" name="projsearchtext" onChange="document.searchfilter.submit();" value=' . "'$search_text'" . 'title="' . $AppUI->_('Search in name and description fields') . '"/>';
 
 // setup the title block
 $titleBlock = new w2p_Theme_TitleBlock('Projects', 'applet3-48.png', $m, $m . '.' . $a);
-$titleBlock->addCell('<table><tr><form action="?m=projects" method="post" name="searchfilter" accept-charset="utf-8"><td nowrap="nowrap" align="right">' . $AppUI->_('Search') . ':</td><td nowrap="nowrap" align="left">' . $bufferSearch . '</form></tr><tr><form action="?m=projects" method="post" name="typeIdForm" accept-charset="utf-8"><td nowrap="nowrap" align="right">' . $AppUI->_('Type') . '</td><td nowrap="nowrap" align="left">' . arraySelect($project_types, 'project_type', 'size="1" class="text" onChange="document.typeIdForm.submit();"', $project_type, false) . '</td></form></tr></table>', '', '', '');
-$titleBlock->addCell('<table><tr><form action="?m=projects" method="post" name="pickCompany" accept-charset="utf-8"><td nowrap="nowrap" align="right">' . $AppUI->_('Company') . '</td><td nowrap="nowrap" align="left">' . $buffer . '</td></form></tr><tr><form action="?m=projects" method="post" name="userIdForm" accept-charset="utf-8"><td nowrap="nowrap" align="right">' . $AppUI->_('Owner') . '</td><td nowrap="nowrap" align="left">' . arraySelect($user_list, 'project_owner', 'size="1" class="text" onChange="document.userIdForm.submit();"', $owner, false) . '</td></form></tr></table>', '', '', '');
+$titleBlock->addCell('<form action="?m=projects" method="post" name="searchfilter" accept-charset="utf-8">' . $bufferSearch . '</form>');
+$titleBlock->addCell($AppUI->_('Search') . ':');
+$titleBlock->addCell('<form action="?m=projects" method="post" name="typeIdForm" accept-charset="utf-8">' .
+        arraySelect($project_types, 'project_type', 'size="1" class="text" onChange="document.typeIdForm.submit();"', $project_type, false) .
+        '</form>');
+$titleBlock->addCell($AppUI->_('Type') . ':');
+$titleBlock->addCell('<form action="?m=projects" method="post" name="pickCompany" accept-charset="utf-8">' .
+        arraySelect($allowedCompanies, 'project_company', 'size="1" class="text" onChange="document.pickCompany.submit();"', $company_id, false) .
+        '</form>');
+$titleBlock->addCell($AppUI->_('Company') . ':');
+$titleBlock->addCell('<form action="?m=projects" method="post" name="userIdForm" accept-charset="utf-8">' .
+        arraySelect($user_list, 'project_owner', 'size="1" class="text" onChange="document.userIdForm.submit();"', $owner, false) .
+        '</form>');
+$titleBlock->addCell($AppUI->_('Owner') . ':');
 if ($canAuthor) {
 	$titleBlock->addCell('<input type="submit" class="button" value="' . $AppUI->_('new project') . '">', '', '<form action="?m=projects&a=addedit" method="post" accept-charset="utf-8">', '</form>');
 }
@@ -146,7 +121,6 @@ if ($is_tabbed) {
 
 $project_status_file = array();
 
-// tabbed information boxes
 foreach ($project_statuses as $project_status) {
 	$tabBox->add('vw_idx_projects', mb_trim($project_status), true);
 }
