@@ -49,7 +49,7 @@ $a2z .= '<tr><td>' . $form . '</td></tr></table>';
 $titleBlock = new w2p_Theme_TitleBlock('Contacts', 'monkeychat-48.png', $m, $m . '.' . $a);
 $titleBlock->addCell($a2z);
 if ($canCreate) {
-	$titleBlock->addCell('<input type="submit" class="button" value="' . $AppUI->_('new contact') . '">', '', '<form action="?m=contacts&a=addedit" method="post" accept-charset="utf-8">', '</form>');
+	$titleBlock->addCell('<form action="?m=contacts&a=addedit" method="post" accept-charset="utf-8"><input type="submit" class="button" value="' . $AppUI->_('new contact') . '"></form>');
 	$titleBlock->addCrumb('?m=contacts&a=csvexport&suppressHeaders=1', 'CSV Download');
 	$titleBlock->addCrumb('?m=contacts&a=vcardimport&dialog=0', 'Import vCard');
 }

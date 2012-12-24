@@ -24,6 +24,7 @@ if (isset($_GET['stub'])) {
 }
 $stub = $AppUI->getState('UserIdxStub');
 $where = $AppUI->getState('UserIdxWhere');
+$where = w2PformSafe($where, true);
 
 if (isset($_GET['orderby'])) {
 	$AppUI->setState('UserIdxOrderby', w2PgetParam($_GET, 'orderby', null));
@@ -35,23 +36,18 @@ $orderby = ($tab == 3 || ($orderby != 'date_time_in' && $orderby != 'user_ip')) 
 $letters = CUser::getFirstLetters();
 $letters = $letters.CContact::getFirstLetters($AppUI->user_id, true);
 
-$a2z = '<table cellpadding="2" cellspacing="1" border="0"><tr>';
-$a2z .= '<td width="100%" align="right">' . $AppUI->_('Show') . ': </td>';
-$a2z .= '<td><a href="./index.php?m=admin&stub=0">' . $AppUI->_('All') . '</a></td>';
+$a2z = '<a href="./index.php?m=admin&stub=0">' . $AppUI->_('All') . '</a>&nbsp;&nbsp;&nbsp;&nbsp;';
 for ($c = 65; $c < 91; $c++) {
 	$cu = chr($c);
 	$cell = !(mb_strpos($letters, $cu) === false) ? '<a href="?m=admin&stub=' . $cu . '">' . $cu . '</a>' : '<font color="#999999">' . $cu . '</font>';
-	$a2z .= '<td>' . $cell . '</td>';
+	$a2z .= $cell.'&nbsp;';
 }
-$a2z .= '</tr></table>';
 
 // setup the title block
 $titleBlock = new w2p_Theme_TitleBlock('User Management', 'helix-setup-users.png', $m, "$m.$a");
-
-$where = w2PformSafe($where, true);
-
-$titleBlock->addCell('<input type="text" name="where" class="text" size="10" value="' . $where . '" />' . ' <input type="submit" value="' . $AppUI->_('search') . '" class="button" />', '', '<form action="index.php?m=admin" method="post" accept-charset="utf-8">', '</form>');
-
+$titleBlock->addCell('<form action="index.php?m=admin" method="post" accept-charset="utf-8">' .
+        '<input type="text" name="where" class="text" size="10" value="' . $where . '" /></form>');
+$titleBlock->addCell($AppUI->_('Search') . ':');
 $titleBlock->addCell($a2z);
 $titleBlock->show();
 

@@ -46,22 +46,17 @@ $owner_combo = arraySelect($owner_list, 'owner_filter_id', 'class="text" onchang
 
 // setup the title block
 $titleBlock = new w2p_Theme_TitleBlock('Departments', 'departments.png', $m, $m . '.' . $a);
-$titleBlock->addCell('<form name="searchform" action="?m=departments&amp;search_string=' . $search_string . '" method="post" accept-charset="utf-8">
-		<table>
-			<tr>
-				<td>
-					<strong>' . $AppUI->_('Search') . '</strong>
-					<input class="text" type="text" name="search_string" value="' . $search_string . '" /><br />
-					<a href="index.php?m=departments&search_string=-1">' . $AppUI->_('Reset search') . '</a>
-				</td>
-				<td valign="top">
-					<strong>'. $AppUI->_('Owner filter') . '</strong> ' . $owner_combo . '
-				</td>
-			</tr>
-		</table>
-	</form>');
+//TODO: search box doesn't work..
+//$titleBlock->addCell('<form name="searchform" action="?m=departments" method="post" accept-charset="utf-8">
+//                    <input type="text" class="text" name="search_string" value="' . $search_string . '" /></form>');
+//$titleBlock->addCell($AppUI->_('Search') . ':');
 
+$titleBlock->addCell('<form name="searchform2" action="?m=departments" method="post" accept-charset="utf-8">' .
+        arraySelect($owner_list, 'owner_filter_id', 'onChange="document.searchform2.submit()" size="1" class="text"', $owner_filter_id) .
+        '</form>');
+$titleBlock->addCell($AppUI->_('Owner filter') . ':');
 $titleBlock->show();
+
 if (isset($_GET['tab'])) {
 	$AppUI->setState('DeptIdxTab', w2PgetParam($_GET, 'tab', null));
 }
