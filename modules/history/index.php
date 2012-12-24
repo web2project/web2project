@@ -18,18 +18,11 @@ if (!isset($options[$filter_param])) {
     $filter_param = 'projects';
 }
 
-$options_combo = arraySelect($options, 'filter', 'class="text" onchange="javascript:document.filter.submit()"', $filter_param, false);
-
 $titleBlock = new w2p_Theme_TitleBlock('History', 'stock_book_blue_48.png', 'history', 'history.' . $a);
-$titleBlock->addCell('<form name="filter" action="?m=history" method="post" accept-charset="utf-8">
-						<table>
-							<tr>
-								<td valign="top">
-									<strong>' . $AppUI->_('Changes to') . '</strong> ' . $options_combo . '
-								</td>
-							</tr>
-						</table>
-                      </form>');
+$titleBlock->addCell('<form name="filter" action="?m=history" method="post" accept-charset="utf-8">' .
+        arraySelect($options, 'filter', 'size="1" class="text" onChange="document.filter.submit();"', $filter_param, true) .
+        '</form>');
+$titleBlock->addCell($AppUI->_('Changes to') . ':');
 $titleBlock->show();
 
 $tabBox = new CTabBox('?m=history', W2P_BASE_DIR . '/modules/history/');

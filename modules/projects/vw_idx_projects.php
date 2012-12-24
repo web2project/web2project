@@ -3,10 +3,9 @@ if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
 
-global $AppUI, $projects, $company_id, $pstatus, $project_statuses, $currentTabId, $currentTabName, $is_tabbed, $st_projects_arr;
+global $AppUI, $projects, $pstatus, $project_statuses, $tab, $is_tabbed, $st_projects_arr;
 
-$perms = &$AppUI->acl();
-$df = $AppUI->getPref('SHDATEFORMAT');
+$currentTabId = $tab;
 
 $page = w2PgetParam($_GET, 'page', 1);
 $xpg_pagesize = w2PgetConfig('page_size', 50);
@@ -238,14 +237,6 @@ if (count($fields) > 0) {
                                     $s .= (nl2br($row['project_description']) ? w2PtoolTip($row[$field], nl2br($row['project_description']), true) : w2PtoolTip($row[$field], $AppUI->_('No information available'), true));
                                     $s .= $row[$field] . (nl2br($row['project_description']) ? w2PendTip() : '') . '</a>';
                                 }
-                                $s .= '</td>';
-                                break;
-                            case 'project_actual_end_date':
-                                $myDate = intval($row[$field]) ? new w2p_Utilities_Date($row[$field]) : null;
-                                $s .= '<td class="data _date">';
-                                $s .= '<a href="?m=tasks&a=view&task_id=' . $row['critical_task'] . '">';
-                                $s .= ($myDate ? $myDate->format($df) : '-');
-                                $s .= '</a>';
                                 $s .= '</td>';
                                 break;
                             case 'department_list':

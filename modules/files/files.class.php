@@ -25,6 +25,7 @@ class CFile extends w2p_Core_BaseObject {
 	public $file_co_reason = null;
 	public $file_indexed = null;
 
+    protected $_file_id = 0;
 	// This "breaks" check-in/upload if helpdesk is not present class variable needs to be added "dymanically"
 	//public $file_helpdesk_item = NULL;
 
@@ -220,7 +221,7 @@ class CFile extends w2p_Core_BaseObject {
     }
 
 	public function checkout($userId, $fileId, $coReason) {
-		$q = new w2p_Database_Query;
+		$q = $this->_getQuery();
 		$q->addTable('files');
 		$q->addUpdate('file_checkout', $userId);
 		$q->addUpdate('file_co_reason', $coReason);
@@ -231,7 +232,7 @@ class CFile extends w2p_Core_BaseObject {
 	}
 
 	public function cancelCheckout($fileId) {
-		$q = new w2p_Database_Query;
+		$q = $this->_getQuery();
 		$q->addTable('files');
 		$q->addUpdate('file_checkout', '');
 		$q->addWhere('file_id = ' . (int)$fileId);
@@ -243,7 +244,6 @@ class CFile extends w2p_Core_BaseObject {
 
 	public function delete()
     {
-        global $helpdesk_available;
         $result = false;
 
         $this->_error = array();
@@ -255,23 +255,34 @@ class CFile extends w2p_Core_BaseObject {
                 return false;
             }
 
-            // delete any index entries
-            $q = $this->_query;
-            $q->setDelete('files_index');
-            $q->addQuery('*');
-            $q->addWhere('file_id = ' . (int)$this->file_id);
-            if (!$q->exec()) {
-                $this->_error['index-delete'] = db_error();
-                return false;
-            }
-            if ($helpdesk_available && $this->file_helpdesk_item != 0) {
-                $this->addHelpDeskTaskLog();
-            }
-
             $result = parent::delete();
         }
 		return $result;
 	}
+
+    protected function hook_preDelete()
+    {
+        global $helpdesk_available;
+
+        $this->_file_id = $this->file_id;
+
+        if ($helpdesk_available && $this->file_helpdesk_item != 0) {
+            $this->addHelpDeskTaskLog();
+        }
+
+        parent::hook_preDelete();
+    }
+
+    protected function hook_postDelete()
+    {
+        $q = $this->_getQuery();
+        $q->setDelete('files_index');
+        $q->addQuery('*');
+        $q->addWhere('file_id = ' . (int) $this->_file_id);
+        $q->exec();
+
+        parent::hook_postDelete();
+    }
 
 	// delete File from File System
 	public function deleteFile() {
@@ -417,7 +428,7 @@ class CFile extends w2p_Core_BaseObject {
                 $nwords_indexed = count($wordarr);
                 // insert the strings into the table
                 while (list($key, $val) = each($wordarr)) {
-                    $q = new w2p_Database_Query;
+                    $q = $this->_getQuery();
                     $q->addTable('files_index');
                     $q->addReplace('file_id', $this->file_id);
                     $q->addReplace('word', $key);
@@ -429,7 +440,7 @@ class CFile extends w2p_Core_BaseObject {
                 //TODO: if the file doesn't exist.. should we delete the db record?
             }
         }
-		$q = new w2p_Database_Query;
+		$q = $this->_getQuery();
 		$q->addTable('files');
 		$q->addUpdate('file_indexed', 1);
 		$q->addWhere('file_id = '. $this->file_id);

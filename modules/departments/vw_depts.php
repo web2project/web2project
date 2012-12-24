@@ -3,15 +3,12 @@ if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
 
-global $search_string, $owner_filter_id, $currentTabId, $orderby, $orderdir;
+global $search_string, $owner_filter_id, $tab, $orderby, $orderdir;
 
-$types = w2PgetSysVal('DepartmentType');
-$dept_type_filter = $currentTabId-1;
-
-// get any records denied from viewing
+$type_filter = $tab - 1;
 
 $dept = new CDepartment();
-$depts = $dept->getFilteredDepartmentList(null, $dept_type_filter, $search_string, $owner_filter_id, $orderby, $orderdir);
+$depts = $dept->getFilteredDepartmentList(null, $type_filter, $search_string, $owner_filter_id, $orderby, $orderdir);
 
 $fieldList = array();
 $fieldNames = array();
@@ -41,6 +38,9 @@ if (count($fields) > 0) {
 <?php
 if (count($depts)) {
 	$htmlHelper = new w2p_Output_HTMLHelper($AppUI);
+
+    $deptTypes = w2PgetSysVal('DepartmentType');
+    $customLookups = array('dept_type' => $deptTypes);
 
     foreach ($depts as $row) {
         echo '<tr>';
