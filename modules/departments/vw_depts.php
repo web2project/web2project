@@ -5,10 +5,7 @@ if (!defined('W2P_BASE_DIR')) {
 
 global $search_string, $owner_filter_id, $currentTabId, $orderby, $orderdir;
 
-$types = w2PgetSysVal('DepartmentType');
 $dept_type_filter = $currentTabId-1;
-
-// get any records denied from viewing
 
 $dept = new CDepartment();
 $depts = $dept->getFilteredDepartmentList(null, $dept_type_filter, $search_string, $owner_filter_id, $orderby, $orderdir);
@@ -41,6 +38,9 @@ if (count($fields) > 0) {
 <?php
 if (count($depts)) {
 	$htmlHelper = new w2p_Output_HTMLHelper($AppUI);
+
+    $deptTypes = w2PgetSysVal('DepartmentType');
+    $customLookups = array('dept_type' => $deptTypes);
 
     foreach ($depts as $row) {
         echo '<tr>';
