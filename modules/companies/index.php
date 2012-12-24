@@ -24,9 +24,6 @@ if (isset($_REQUEST['owner_filter_id'])) {
 		$AppUI->setState('owner_filter_id', $owner_filter_id);
 	}
 }
-// load the company types
-$types = w2PgetSysVal('CompanyType');
-
 
 $search_string = w2PgetParam($_POST, 'search_string', '');
 if ($search_string != '') {
@@ -57,15 +54,17 @@ if ($canEdit) {
 $titleBlock->show();
 
 $companiesTypeTab = $AppUI->processIntState('CompaniesIdxTab', $_GET, 'tab', 0);
-$companiesType = $companiesTypeTab;
+
+// load the company types
+$companyTypes = w2PgetSysVal('CompanyType');
 
 $tabBox = new CTabBox('?m=companies', W2P_BASE_DIR . '/modules/companies/', $companiesTypeTab);
-
 if ($tabBox->isTabbed()) {
-	array_unshift($types, $AppUI->_('All Companies', UI_OUTPUT_RAW));
+	array_unshift($companyTypes, $AppUI->_('All Companies', UI_OUTPUT_RAW));
 }
 
-foreach ($types as $type => $type_name) {
+// tabbed information boxes
+foreach ($companyTypes as $type_name) {
 	$tabBox->add('vw_companies', $type_name);
 }
 $tabBox->show();

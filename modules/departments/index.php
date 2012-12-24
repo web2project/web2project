@@ -46,11 +46,7 @@ $titleBlock->addCell('<form name="searchform2" action="?m=departments" method="p
 $titleBlock->addCell($AppUI->_('Owner filter') . ':');
 $titleBlock->show();
 
-if (isset($_GET['tab'])) {
-	$AppUI->setState('DeptIdxTab', w2PgetParam($_GET, 'tab', null));
-}
-$deptsTypeTab = defVal($AppUI->getState('DeptIdxTab'), 0);
-$deptsType = $deptsTypeTab;
+$deptsTypeTab = $AppUI->processIntState('DeptIdxTab', $_GET, 'tab', 0);
 
 // load the department types
 $deptTypes = w2PgetSysVal('DepartmentType');
