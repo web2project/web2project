@@ -29,27 +29,20 @@ if (isset($_REQUEST['owner_filter_id'])) {
 $obj = new CDepartment();
 $deny = $obj->getDeniedRecords($AppUI->user_id);
 
-// Company search by Kist
-$search_string = w2PgetParam($_REQUEST, 'search_string', '');
+$search_string = w2PgetParam($_POST, 'search_string', '');
 if ($search_string != '') {
-	$search_string = $search_string == '-1' ? '' : $search_string;
+	$search_string = ($search_string == '-1') ? '' : $search_string;
 	$AppUI->setState('dept_search_string', $search_string);
-} else {
-	$search_string = $AppUI->getState('dept_search_string');
 }
-
 $search_string = w2PformSafe($search_string, true);
 
 $perms = &$AppUI->acl();
 $owner_list = array(0 => $AppUI->_('All', UI_OUTPUT_RAW)) + $perms->getPermittedUsers('departments');
-$owner_combo = arraySelect($owner_list, 'owner_filter_id', 'class="text" onchange="javascript:document.searchform.submit()"', $owner_filter_id, false);
 
-// setup the title block
 $titleBlock = new w2p_Theme_TitleBlock('Departments', 'departments.png', $m, $m . '.' . $a);
-//TODO: search box doesn't work..
-//$titleBlock->addCell('<form name="searchform" action="?m=departments" method="post" accept-charset="utf-8">
-//                    <input type="text" class="text" name="search_string" value="' . $search_string . '" /></form>');
-//$titleBlock->addCell($AppUI->_('Search') . ':');
+$titleBlock->addCell('<form name="searchform" action="?m=departments" method="post" accept-charset="utf-8">
+                    <input type="text" class="text" name="search_string" value="' . $search_string . '" /></form>');
+$titleBlock->addCell($AppUI->_('Search') . ':');
 
 $titleBlock->addCell('<form name="searchform2" action="?m=departments" method="post" accept-charset="utf-8">' .
         arraySelect($owner_list, 'owner_filter_id', 'onChange="document.searchform2.submit()" size="1" class="text"', $owner_filter_id) .
