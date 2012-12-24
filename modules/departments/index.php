@@ -25,10 +25,6 @@ if (isset($_REQUEST['owner_filter_id'])) {
 	}
 }
 
-// get any records denied from viewing
-$obj = new CDepartment();
-$deny = $obj->getDeniedRecords($AppUI->user_id);
-
 $search_string = w2PgetParam($_POST, 'search_string', '');
 if ($search_string != '') {
 	$search_string = ($search_string == '-1') ? '' : $search_string;

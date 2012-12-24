@@ -27,9 +27,6 @@ if (isset($_REQUEST['owner_filter_id'])) {
 // load the company types
 $types = w2PgetSysVal('CompanyType');
 
-// get any records denied from viewing
-$obj = new CCompany();
-$deny = $obj->getDeniedRecords($AppUI->user_id);
 
 $search_string = w2PgetParam($_POST, 'search_string', '');
 if ($search_string != '') {
