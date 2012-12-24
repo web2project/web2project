@@ -25,16 +25,7 @@ if (isset($_POST['projsearchtext'])) {
 }
 $search_text = $AppUI->getState('projsearchtext') !== null ? $AppUI->getState('projsearchtext') : '';
 
-$projectDesigner = $AppUI->getState('ProjIdxProjectDesigner') !== null ? $AppUI->getState('ProjIdxProjectDesigner') : 0;
-
 $tab = $AppUI->processIntState('ProjIdxTab', $_GET, 'tab', 1);
-
-$currentTabId = $tab;
-$active = intval(!$AppUI->getState('ProjIdxTab'));
-
-$oCompany = new CCompany;
-$allowedCompanies[0] = $AppUI->_('all');
-$allowedCompanies += $oCompany->getAllowedRecords($AppUI->user_id, 'company_id,company_name', 'company_name');
 
 $company_id = $AppUI->processIntState('ProjIdxCompany', $_POST, 'project_company', $AppUI->user_company);
 $orderby = $AppUI->processIntState('ProjIdxOrderBy', $_POST, 'orderby', 'project_end_date');
@@ -51,12 +42,16 @@ if (isset($_GET['orderby'])) {
 }
 $AppUI->setState('ProjIdxOrderDir', $orderdir);
 
-$user_list = array(0 => '(' . $AppUI->_('all') . ')') + CProject::getOwners();
-
 // collect the full projects list data via function in projects.class.php
 $projects = projects_list_data();
 
+$oCompany = new CCompany;
+$allowedCompanies[0] = $AppUI->_('all');
+$allowedCompanies += $oCompany->getAllowedRecords($AppUI->user_id, 'company_id,company_name', 'company_name');
+
 $project_types = array(-1 => '(' . $AppUI->_('all') . ')') + w2PgetSysVal('ProjectType');
+
+$user_list = array(0 => '(' . $AppUI->_('all') . ')') + CProject::getOwners();
 
 $bufferSearch = '<input type="text" class="text" size="20" name="projsearchtext" onChange="document.searchfilter.submit();" value=' . "'$search_text'" . 'title="' . $AppUI->_('Search in name and description fields') . '"/>';
 
