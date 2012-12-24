@@ -121,7 +121,6 @@ if ($is_tabbed) {
 
 $project_status_file = array();
 
-// tabbed information boxes
 foreach ($project_statuses as $project_status) {
 	$tabBox->add('vw_idx_projects', mb_trim($project_status), true);
 }

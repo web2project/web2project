@@ -53,7 +53,6 @@ if ($tabBox->isTabbed()) {
 	array_unshift($deptTypes, $AppUI->_('All Departments', UI_OUTPUT_RAW));
 }
 
-// tabbed information boxes
 foreach ($deptTypes as $deptType) {
 	$tabBox->add('vw_depts', $deptType);
 }

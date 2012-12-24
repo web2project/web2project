@@ -60,7 +60,6 @@ if ($tabBox->isTabbed()) {
 	array_unshift($companyTypes, $AppUI->_('All Companies', UI_OUTPUT_RAW));
 }
 
-// tabbed information boxes
 foreach ($companyTypes as $type_name) {
 	$tabBox->add('vw_companies', $type_name);
 }
