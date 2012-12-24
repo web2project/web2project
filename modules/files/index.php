@@ -3,13 +3,11 @@ if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
 
-$AppUI->savePlace();
+$tab = $AppUI->processIntState('FileIdxTab', $_GET, 'tab', 0);
 
 $project_id = $AppUI->processIntState('FileIdxProject', $_REQUEST, 'project_id', 0);
 $company_id = (isset($company_id)) ? $company_id : 0;
 $task_id = (isset($task_id)) ? $task_id : 0;
-
-$tab = $AppUI->processIntState('FileIdxTab', $_GET, 'tab', 0);
 
 $active = intval(!$AppUI->getState('FileIdxTab'));
 

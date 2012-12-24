@@ -3,6 +3,8 @@ if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
 
+$tab = $AppUI->processIntState('UserIdxTab', $_GET, 'tab', 0);
+
 $perms = &$AppUI->acl();
 if (!canView('admin')) {
 	$AppUI->redirect(ACCESS_DENIED);
@@ -12,8 +14,6 @@ if (!canView('users')) {
 }
 
 $AppUI->savePlace();
-
-$tab = $AppUI->processIntState('UserIdxTab', $_GET, 'tab', 0);
 
 if (isset($_GET['stub'])) {
 	$AppUI->setState('UserIdxStub', w2PgetParam($_GET, 'stub', null));

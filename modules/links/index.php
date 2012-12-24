@@ -3,17 +3,12 @@ if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
 
-$AppUI->savePlace();
+$tab = $AppUI->processIntState('LinkIdxTab', $_GET, 'tab', 0);
 
-// retrieve any state parameters
 if (isset($_REQUEST['project_id'])) {
 	$AppUI->setState('LinkIdxProject', w2PgetParam($_REQUEST, 'project_id', null));
 }
-
 $project_id = $AppUI->getState('LinkIdxProject') !== null ? $AppUI->getState('LinkIdxProject') : 0;
-
-$tab = $AppUI->processIntState('LinkIdxTab', $_GET, 'tab', 0);
-$active = intval(!$AppUI->getState('LinkIdxTab'));
 
 // get the list of visible companies
 $extra = array('from' => 'links', 'where' => 'projects.project_id = link_project');
@@ -35,14 +30,13 @@ if ($canEdit) {
 }
 $titleBlock->show();
 
-$link_types = w2PgetSysVal('LinkType');
-if ($tab != -1) {
-	array_unshift($link_types, 'All Links');
-}
-array_map(array($AppUI, '_'), $link_types);
+$linkTypes = w2PgetSysVal('LinkType');
 
 $tabBox = new CTabBox('?m=links', W2P_BASE_DIR . '/modules/links/', $tab);
-foreach ($link_types as $link_type) {
+if ($tabBox->isTabbed()) {
+	array_unshift($linkTypes, $AppUI->_('All Links', UI_OUTPUT_RAW));
+}
+foreach ($linkTypes as $link_type) {
 	$tabBox->add('index_table', $link_type);
 }
 $showProject = true;

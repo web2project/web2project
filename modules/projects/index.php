@@ -3,7 +3,8 @@ if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
 
-$AppUI->savePlace();
+$tab = $AppUI->processIntState('ProjIdxTab', $_GET, 'tab', 1);
+
 $project = new CProject();
 $structprojs = $project->getProjects();
 
@@ -24,8 +25,6 @@ if (isset($_POST['projsearchtext'])) {
 	$AppUI->setState('projsearchtext', w2PformSafe($_POST['projsearchtext'], true));
 }
 $search_text = $AppUI->getState('projsearchtext') !== null ? $AppUI->getState('projsearchtext') : '';
-
-$tab = $AppUI->processIntState('ProjIdxTab', $_GET, 'tab', 1);
 
 $company_id = $AppUI->processIntState('ProjIdxCompany', $_POST, 'project_company', $AppUI->user_company);
 $orderby = $AppUI->processIntState('ProjIdxOrderBy', $_POST, 'orderby', 'project_end_date');

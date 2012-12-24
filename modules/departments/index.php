@@ -3,9 +3,8 @@ if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
 
-$AppUI->savePlace();
+$tab = $AppUI->processIntState('DeptIdxTab', $_GET, 'tab', 0);
 
-// retrieve any state parameters
 if (isset($_GET['orderby'])) {
 	$orderdir = $AppUI->getState('DeptIdxOrderDir') ? ($AppUI->getState('DeptIdxOrderDir') == 'asc' ? 'desc' : 'asc') : 'desc';
 	$AppUI->setState('DeptIdxOrderBy', w2PgetParam($_GET, 'orderby', null));
@@ -46,14 +45,12 @@ $titleBlock->addCell('<form name="searchform2" action="?m=departments" method="p
 $titleBlock->addCell($AppUI->_('Owner filter') . ':');
 $titleBlock->show();
 
-$deptsTypeTab = $AppUI->processIntState('DeptIdxTab', $_GET, 'tab', 0);
-
 // load the department types
 $deptTypes = w2PgetSysVal('DepartmentType');
 
-$tabBox = new CTabBox('?m=departments', W2P_BASE_DIR . '/modules/departments/', $deptsTypeTab);
+$tabBox = new CTabBox('?m=departments', W2P_BASE_DIR . '/modules/departments/', $tab);
 if ($tabBox->isTabbed()) {
-	array_unshift($deptTypes, $AppUI->_('All Departments', UI_OUTPUT_RAW));	
+	array_unshift($deptTypes, $AppUI->_('All Departments', UI_OUTPUT_RAW));
 }
 
 // tabbed information boxes

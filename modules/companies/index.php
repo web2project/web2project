@@ -3,9 +3,8 @@ if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
 
-$AppUI->savePlace();
+$tab = $AppUI->processIntState('CompanyIdxTab', $_GET, 'tab', 0);
 
-// retrieve any state parameters
 if (isset($_GET['orderby'])) {
 	$orderdir = $AppUI->getState('CompIdxOrderDir') ? ($AppUI->getState('CompIdxOrderDir') == 'asc' ? 'desc' : 'asc') : 'desc';
 	$AppUI->setState('CompIdxOrderBy', w2PgetParam($_GET, 'orderby', null));
@@ -53,12 +52,10 @@ if ($canEdit) {
 }
 $titleBlock->show();
 
-$companiesTypeTab = $AppUI->processIntState('CompaniesIdxTab', $_GET, 'tab', 0);
-
 // load the company types
 $companyTypes = w2PgetSysVal('CompanyType');
 
-$tabBox = new CTabBox('?m=companies', W2P_BASE_DIR . '/modules/companies/', $companiesTypeTab);
+$tabBox = new CTabBox('?m=companies', W2P_BASE_DIR . '/modules/companies/', $tab);
 if ($tabBox->isTabbed()) {
 	array_unshift($companyTypes, $AppUI->_('All Companies', UI_OUTPUT_RAW));
 }

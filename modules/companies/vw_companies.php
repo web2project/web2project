@@ -3,12 +3,12 @@ if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
 
-global $search_string, $owner_filter_id, $currentTabId, $orderby, $orderdir;
+global $search_string, $owner_filter_id, $tab, $orderby, $orderdir;
 
-$company_type_filter = $currentTabId - 1;
+$type_filter = $tab - 1;
 
 $company = new CCompany();
-$companyList = $company->getCompanyList(null, $company_type_filter, $search_string, $owner_filter_id, $orderby, $orderdir);
+$companyList = $company->getCompanyList(null, $type_filter, $search_string, $owner_filter_id, $orderby, $orderdir);
 
 $fieldList = array();
 $fieldNames = array();

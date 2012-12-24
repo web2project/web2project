@@ -2,9 +2,9 @@
 if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
-global $AppUI, $deny1, $canRead, $canEdit, $project_id, $task_id, $showProject, $tab;
+global $AppUI, $canRead, $canEdit, $project_id, $task_id, $showProject, $tab;
 
-$tab = ($m == 'links') ? $tab-1 : -1;
+$type_filter = ($m == 'links') ? $tab-1 : -1;
 
 if ($task_id && !$project_id) {
     $task = new CTask;
@@ -21,7 +21,7 @@ if (!isset($project_id)) {
 
 if ($canRead) {
 	$link = new CLink();
-	$links = $link->getProjectTaskLinksByCategory(null, $project_id, $task_id, $tab, $search);
+	$links = $link->getProjectTaskLinksByCategory(null, $project_id, $task_id, $type_filter, $search);
 } else {
 	$AppUI->redirect(ACCESS_DENIED);
 }
