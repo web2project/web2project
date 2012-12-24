@@ -60,21 +60,12 @@ $companiesTypeTab = $AppUI->processIntState('CompaniesIdxTab', $_GET, 'tab', 0);
 $companiesType = $companiesTypeTab;
 
 $tabBox = new CTabBox('?m=companies', W2P_BASE_DIR . '/modules/companies/', $companiesTypeTab);
-if ($tabbed = $tabBox->isTabbed()) {
-	$add_na = true;
-	if (isset($types[0])) { // They have a Not Applicable entry.
-		$add_na = false;
-		$types[] = $types[0];
-	}
-	$types[0] = 'All Companies';
-	if ($add_na) {
-		$types[] = 'Not Applicable';
-	}
-}
-$type_filter = array();
-foreach ($types as $type => $type_name) {
-	$type_filter[] = $type;
-	$tabBox->add('vw_companies', $type_name);
+
+if ($tabBox->isTabbed()) {
+	array_unshift($types, $AppUI->_('All Companies', UI_OUTPUT_RAW));
 }
 
+foreach ($types as $type => $type_name) {
+	$tabBox->add('vw_companies', $type_name);
+}
 $tabBox->show();

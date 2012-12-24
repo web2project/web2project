@@ -12,9 +12,7 @@ global $type_filter;
 global $orderby;
 global $orderdir;
 
-$company_type_filter = $currentTabId;
-$company_type_filter = ($currentTabName == 'Not Applicable') ? 0 : $company_type_filter;
-$company_type_filter = ($currentTabName == 'All Companies') ? -1 : $company_type_filter; 
+$company_type_filter = $currentTabId - 1;
 
 $company = new CCompany();
 $allowedCompanies = $company->getAllowedRecords($AppUI->user_id, 'company_id, company_name');
