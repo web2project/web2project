@@ -1,6 +1,8 @@
 <?php /* $Id$ $URL$ */
-global $AppUI, $w2Pconfig;
-// check permissions for this module
+if (!defined('W2P_BASE_DIR')) {
+	die('You should not access this file directly.');
+}
+
 $tab = $AppUI->processIntState('ProjIdxTab', $_GET, 'tab', 1);
 
 $perms = &$AppUI->acl();
@@ -30,7 +32,7 @@ $AppUI->setState('ProjIdxOrderDir', $orderdir);
 // collect the full projects list data via function in projects.class.php
 $projects = projects_list_data();
 
-
+$project_types = w2PgetSysVal('ProjectType');
 ?>
 <style type="text/css">
 /* Standard table 'spreadsheet' style */
