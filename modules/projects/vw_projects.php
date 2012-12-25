@@ -1,5 +1,5 @@
 <?php /* $Id$ $URL$ */
-global $AppUI, $projects, $company_id, $pstatus, $project_statuses, $project_status_filter, $currentTabId, $currentTabName, $projectDesigner;
+global $AppUI, $projects, $project_statuses, $project_status_filter, $currentTabId;
 
 $perms = &$AppUI->acl();
 $df = $AppUI->getPref('SHDATEFORMAT');
@@ -25,7 +25,6 @@ if ($currentTabId == 0 || $currentTabId == -1) {
 	$project_status_filter = ($projectStatuses[0] ? $currentTabId - 2 : $currentTabId - 1);
 }
 
-$show_all_projects = false;
 //If we are on All, All active or Archived then show the Status column
 if (($project_status_filter == -1 || $project_status_filter == -2 || $project_status_filter == -3)) {
 	$show_all_projects = true;
@@ -67,60 +66,70 @@ if ($project_status_filter == -1) {
 	$projects = $tmp_projects;
 	//The Status themselves
 }
+
+$module = new w2p_Core_Module();
+$fields = $module->loadSettings('projects', 'printview');
+
+if (count($fields) > 0) {
+    $fieldList = array_keys($fields);
+    $fieldNames = array_values($fields);
+} else {
+    // TODO: This is only in place to provide an pre-upgrade-safe
+    //   state for versions earlier than v2.3
+    //   At some point at/after v4.0, this should be deprecated
+    $fieldList = array('project_color_identifier', 'project_priority',
+        'project_id', 'project_name', 'company_name', 'project_start_date',
+        'project_end_date', 'project_actual_end_date', 'user_username',
+        'project_task_count', 'project_status');
+    $fieldNames = array('%', 'P', 'ID', 'Project Name',
+        'Company', 'Start', 'End', 'Actual', 'Owner', 'Tasks', 'Status');
+
+    $module->storeSettings('projects', 'printview', $fieldList, $fieldNames);
+}
 ?>
 
 <table width="100%" border="0" cellpadding="3" cellspacing="1" class="prjprint">
-<tr>
-    <th><?php echo $AppUI->_('Color'); ?></th>
-    <th><?php echo $AppUI->_('P'); ?></th>
-    <th><?php echo $AppUI->_('ID'); ?></th>
-    <th><?php echo $AppUI->_('Project Name'); ?></th>
-    <th><?php echo $AppUI->_('Company'); ?></th>
-    <th><?php echo $AppUI->_('Start'); ?></th>
-    <th><?php echo $AppUI->_('End'); ?></th>
-    <th><?php echo $AppUI->_('Actual'); ?></th>
-    <th><?php echo $AppUI->_('Owner'); ?></th>
-    <th><?php echo $AppUI->_('Tasks'); ?></th>
-	<?php if ($project_status_filter < 0) { ?>
-    <th><?php echo $AppUI->_('Status'); ?></th>
-  <?php } ?>
-</tr>
-
+    <tr>
+        <?php foreach ($fieldNames as $index => $name) { ?>
+            <th><?php echo $AppUI->_($fieldNames[$index]); ?></th>
+        <?php } ?>
+    </tr>
 <?php
 $none = true;
 
+$project_statuses = w2PgetSysVal('ProjectStatus');
+$project_types = w2PgetSysVal('ProjectType');
+$customLookups = array('project_status' => $project_statuses, 'project_type' => $project_types);
+
+$htmlHelper = new w2p_Output_HTMLHelper($AppUI);
+
 foreach ($projects as $row) {
-	if (($show_all_projects || ($row['project_active'] && $row['project_status'] == $project_status_filter)) || //tabbed view
+	$htmlHelper->stageRowData($row);
+
+    if (($show_all_projects || ($row['project_active'] && $row['project_status'] == $project_status_filter)) || //tabbed view
 		(($row['project_active'] && $row['project_status'] == $project_status_filter)) || //flat active projects
 		((!$row['project_active'] && $project_status_filter == -3)) //flat archived projects
 		) {
+
 		$none = false;
-		$start_date = intval($row['project_start_date']) ? new w2p_Utilities_Date($row['project_start_date']) : null;
 		$end_date = intval($row['project_end_date']) ? new w2p_Utilities_Date($row['project_end_date']) : null;
-		$adjusted_end_date = intval($row['project_end_date_adjusted']) ? new w2p_Utilities_Date($row['project_end_date_adjusted']) : null;
 		$actual_end_date = intval($row['project_actual_end_date']) ? new w2p_Utilities_Date($row['project_actual_end_date']) : null;
 		$style = (($actual_end_date > $end_date) && !empty($end_date)) ? 'style="color:red; font-weight:bold"' : '';
 
-		$s = '<tr><td width="65" align="center" style="border: outset #eeeeee 2px;background-color:#' . $row['project_color_identifier'] . '"><font color="' . bestColor($row['project_color_identifier']) . '">' . sprintf("%.1f%%", $row['project_percent_complete']) . '</font></td><td align="center">';
-		if ($row['project_priority'] < 0) {
-			$s .= '<img src="' . w2PfindImage('icons/priority-' . -$row['project_priority'] . '.gif') . '" width="13" height="16" alt="">';
-		} else
-			if ($row['project_priority'] > 0) {
-				$s .= '<img src="' . w2PfindImage('icons/priority+' . $row['project_priority'] . '.gif') . '"  width="13" height="16" alt="">';
-			}
-		$s .= '</td><td nowrap="nowrap">' . $row['project_id'] . '</td><td width="40%">' . htmlspecialchars($row['project_name']) . '</td>';
-		$s .= '<td width="30%">' . htmlspecialchars($row['company_name'], ENT_QUOTES) . '</td>';
+		$s = '<tr><td width="65" align="center" style="border: outset #eeeeee 2px;background-color:#' . $row['project_color_identifier'] . '"><font color="' . bestColor($row['project_color_identifier']) . '">' . sprintf("%.1f%%", $row['project_percent_complete']) . '</font></td>';
 
-		$s .= '<td align="center">' . ($start_date ? $start_date->format($df) : '-') . '</td><td align="center" nowrap="nowrap">' . ($end_date ? $end_date->format($df) : '-') . '</td><td align="center">';
-		$s .= $actual_end_date ? '<span ' . $style . '>' . $actual_end_date->format($df) . '</span>' : '-';
-		$s .= '</td><td nowrap="nowrap">' . htmlspecialchars($row['owner_name'], ENT_QUOTES) . '</td><td align="center" nowrap="nowrap">';
-		$s .= $row['project_task_count'];
-		$s .= '</td>';
+        $s .= $htmlHelper->createCell('project_priority',        $row['project_priority']);
+        $s .= $htmlHelper->createCell('project_id',              $row['project_id']);
+        $s .= $htmlHelper->createCell('na',                      $row['project_name']);
+        $s .= $htmlHelper->createCell('na',                      $row['company_name']);
+        $s .= $htmlHelper->createCell('project_start_date',      $row['project_start_date']);
+        $s .= $htmlHelper->createCell('project_end_date',        $row['project_end_date']);
+        $s .= $htmlHelper->createCell('project_actual_end_date', $row['project_actual_end_date']);
+        $s .= $htmlHelper->createCell('na',                      $row['owner_name']);
+        $s .= $htmlHelper->createCell('project_task_count',      $row['project_task_count']);
 
 		if ($show_all_projects) {
-			$s .= '<td align="center" nowrap="nowrap">';
-			$s .= $row['project_status'] == 0 ? $AppUI->_('Not Defined') : $projectStatuses[$row['project_status']];
-			$s .= '</td>';
+            $s .= $htmlHelper->createCell('project_status',      $row['project_status'], $customLookups);
 		}
 
 		$s .= '</tr>';
@@ -130,7 +139,7 @@ foreach ($projects as $row) {
 	}
 }
 if ($none) {
-	echo '<tr><td colspan="10">' . $AppUI->_('No projects available') . '</td></tr>';
+	echo '<tr><td colspan="'.count($fieldList).'">' . $AppUI->_('No projects available') . '</td></tr>';
 }
 ?>
 </table>
