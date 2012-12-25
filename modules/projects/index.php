@@ -45,7 +45,7 @@ $AppUI->setState('ProjIdxOrderDir', $orderdir);
 $projects = projects_list_data();
 
 $oCompany = new CCompany;
-$allowedCompanies[0] = $AppUI->_('all');
+$allowedCompanies[-1] = $AppUI->_('all');
 $allowedCompanies += $oCompany->getAllowedRecords($AppUI->user_id, 'company_id,company_name', 'company_name');
 
 $project_types = array(-1 => '(' . $AppUI->_('all') . ')') + w2PgetSysVal('ProjectType');
