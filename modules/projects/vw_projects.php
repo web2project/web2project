@@ -88,7 +88,7 @@ if (count($fields) > 0) {
 }
 ?>
 
-<table width="100%" border="0" cellpadding="3" cellspacing="1" class="prjprint">
+<table cellpadding="3" cellspacing="1" class="prjprint">
     <tr>
         <?php foreach ($fieldNames as $index => $name) { ?>
             <th><?php echo $AppUI->_($fieldNames[$index]); ?></th>
