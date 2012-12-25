@@ -1,6 +1,8 @@
 <?php /* $Id$ $URL$ */
 global $AppUI, $w2Pconfig;
 // check permissions for this module
+$tab = $AppUI->processIntState('ProjIdxTab', $_GET, 'tab', 1);
+
 $perms = &$AppUI->acl();
 $canView = canView('projects');
 
@@ -10,46 +12,20 @@ if (!$canView) {
 
 $search_text = $AppUI->getState('projsearchtext') ? $AppUI->getState('projsearchtext') : '';
 
-$projectDesigner = $AppUI->getState('ProjIdxProjectDesigner') !== null ? $AppUI->getState('ProjIdxProjectDesigner') : 0;
+$company_id = $AppUI->processIntState('ProjIdxCompany', $_GET, 'company_id', $AppUI->user_company);
+$orderby = $AppUI->processIntState('ProjIdxOrderBy', $_GET, 'orderby', 'project_end_date');
+$project_type = $AppUI->processIntState('ProjIdxType', $_GET, 'project_type', -1);
+$owner = $AppUI->processIntState('ProjIdxowner', $_GET, 'project_owner', -1);
 
-$tab = $AppUI->processIntState('ProjIdxTab', $_GET, 'tab', 1);
-$active = intval(!$AppUI->getState('ProjIdxTab'));
-
-$company_id = $AppUI->processIntState('ProjIdxCompany', $_POST, 'company_id', $AppUI->user_company);
-
-$company_prefix = 'company_';
-
-if (isset($_POST['department'])) {
-	$AppUI->setState('ProjIdxDepartment', $_POST['department']);
-
-	//if department is set, ignore the company_id field
-	unset($company_id);
-}
-$department = $AppUI->getState('ProjIdxDepartment') !== null ? $AppUI->getState('ProjIdxDepartment') : $company_prefix . $AppUI->user_company;
-
-//if $department contains the $company_prefix string that it's requesting a company and not a department.  So, clear the
-// $department variable, and populate the $company_id variable.
-if (!(strpos($department, $company_prefix) === false)) {
-	$company_id = substr($department, strlen($company_prefix));
-	$AppUI->setState('ProjIdxCompany', $company_id);
-	unset($department);
-}
-
-if (isset($_GET['orderby'])) {
-	$orderdir = $AppUI->getState('ProjIdxOrderDir') ? ($AppUI->getState('ProjIdxOrderDir') == 'asc' ? 'desc' : 'asc') : 'desc';
-	$AppUI->setState('ProjIdxOrderBy', w2PgetParam($_GET, 'orderby', null));
-	$AppUI->setState('ProjIdxOrderDir', $orderdir);
-}
-$orderby = $AppUI->getState('ProjIdxOrderBy') ? $AppUI->getState('ProjIdxOrderBy') : 'project_end_date';
 $orderdir = $AppUI->getState('ProjIdxOrderDir') ? $AppUI->getState('ProjIdxOrderDir') : 'asc';
-
-if (isset($_POST['project_owner'])) { // this means that
-	$AppUI->setState('ProjIdxowner', $_POST['project_owner']);
+if (isset($_GET['orderby'])) {
+	if ($AppUI->getState('ProjIdxOrderDir') == 'asc') {
+		$orderdir = 'desc';
+	} else {
+		$orderdir = 'asc';
+	}
 }
-$owner = $AppUI->getState('ProjIdxowner');
-
-$project_type = $AppUI->getState('ProjIdxType') !== null ? $AppUI->getState('ProjIdxType') : -1;
-$project_types = array(-1 => '(all)') + w2PgetSysVal('ProjectType');
+$AppUI->setState('ProjIdxOrderDir', $orderdir);
 
 // collect the full projects list data via function in projects.class.php
 $projects = projects_list_data();
