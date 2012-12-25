@@ -177,6 +177,7 @@ class w2p_Output_HTMLHelper
                 $page   = ($prefix == 'forum') ? 'viewer&message_id='.$this->tableRowData['message_id'] : 'view';
                 $link   = ($prefix == 'file') ? 'fileviewer.php?' : '?m='. w2p_pluralize($prefix) .'&a='.$page.'&';
                 $link   = ($prefix == 'event') ? '?m=calendar&a='.$page.'&' : $link;
+                $link   = ($prefix == 'user') ? '?m=admin&a=viewuser&' : $link;
                 $prefix = ($prefix == 'department') ? 'dept' : $prefix;
                 $link  .= $prefix.'_id='.$this->tableRowData[$prefix.'_id'];
                 $link  .= ($prefix == 'task_log') ? '&tab=1&task_id='.$this->tableRowData['task_id'] : '';
