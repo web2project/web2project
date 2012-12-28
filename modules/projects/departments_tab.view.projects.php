@@ -56,28 +56,12 @@ $project = new CProject();
 $projects = projects_list_data($user_id);
 $department = $tmpDepartments;
 
-$fieldList = array();
-$fieldNames = array();
-
-$module = new w2p_Core_Module();
-$fields = $module->loadSettings('departments', 'project-list');
-
-if (count($fields) > 0) {
-    $fieldList = array_keys($fields);
-    $fieldNames = array_values($fields);
-} else {
-    // TODO: This is only in place to provide an pre-upgrade-safe
-    //   state for versions earlier than v3.0
-    //   At some point at/after v4.0, this should be deprecated
-    $fieldList = array('project_color_identifier', 'project_priority',
-        'project_name', 'company_name', 'project_start_date', 'project_duration',
-        'project_end_date', 'project_actual_end_date', 'task_log_problem',
-        'user_username', 'project_task_count', 'project_status');
-    $fieldNames = array('Color', 'P', 'Project Name', 'Company', 'Start',
-        'Duration', 'End', 'Actual', 'LP', 'Owner', 'Tasks', 'Status');
-
-    $module->storeSettings('departments', 'project-list', $fieldList, $fieldNames);
-}
+$fieldList = array('project_color_identifier', 'project_priority',
+    'project_name', 'company_name', 'project_start_date', 'project_duration',
+    'project_end_date', 'project_actual_end_date', 'task_log_problem',
+    'user_username', 'project_task_count', 'project_status');
+$fieldNames = array('Color', 'P', 'Project Name', 'Company', 'Start',
+    'Duration', 'End', 'Actual', 'LP', 'Owner', 'Tasks', 'Status');
 ?>
 
 <table class="tbl list">
