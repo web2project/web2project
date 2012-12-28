@@ -66,35 +66,41 @@ function checkDate(){
 
 <?php
 if (w2PgetParam($_REQUEST, 'showdetails', 0) == 1) {
+    
+    $fieldList = array('user_username', 'contact_last_name', 'company_name', 'date_time_in', 'user_ip');
+    $fieldNames = array('First Name', 'Last Name', 'Internet Address', 'Date Time IN', 'Date Time OUT');
+    
     $start_date = date('Y-m-d', strtotime(w2PgetParam($_POST, 'log_start_date', date('Y-m-d'))));
     $start_date = $AppUI->convertToSystemTZ($start_date);
     $end_date = date('Y-m-d 23:59:59', strtotime(w2PgetParam($_POST, 'log_end_date', date('Y-m-d'))));
     $end_date = $AppUI->convertToSystemTZ($end_date);
     $user_id = isset($user_id) ? $user_id : 0;
     $user = new CUser();
-    $logs = $user->getLogList($user_id, $start_date, $end_date);
+    $rows = $user->getLogList($user_id, $start_date, $end_date);
     ?>
     <table class="tbl list center" width="50%">
         <tr>
-            <th nowrap="nowrap" ><?php echo $AppUI->_('Name(s)'); ?></th>
-            <th nowrap="nowrap" ><?php echo $AppUI->_('Last Name'); ?></th>
-            <th nowrap="nowrap" ><?php echo $AppUI->_('Internet Address'); ?></th>
-            <th nowrap="nowrap" ><?php echo $AppUI->_('Date Time IN'); ?></th>
-            <th nowrap="nowrap" ><?php echo $AppUI->_('Date Time OUT'); ?></th>
+            <?php foreach ($fieldNames as $index => $name) { ?>
+                <th><?php echo $AppUI->_($fieldNames[$index]); ?></th>
+            <?php } ?>
         </tr>
-        <?php foreach ($logs as $detail) { ?>
-            <tr>
-                <td><?php echo $detail['contact_first_name']; ?></td>
-                <td><?php echo $detail['contact_last_name']; ?></td>
-                <td><?php echo $detail['user_ip']; ?></td>
-                <td><?php echo $AppUI->formatTZAwareTime($detail['date_time_in']); ?></td>
-                <td>
-                    <?php if ($detail['date_time_out'] != '0000-00-00 00:00:00'): ?>
-                        <?php echo $AppUI->formatTZAwareTime($detail['date_time_out']); ?>
-                    <?php endif; ?>
-                </td>
-            </tr>
-        <?php } ?>
+        <?php
+        $htmlHelper = new w2p_Output_HTMLHelper($AppUI);
+
+        foreach ($rows as $row) {
+            $htmlHelper->stageRowData($row);
+            ?><tr><?php
+                echo $htmlHelper->createCell('na', $row['contact_first_name']);
+                echo $htmlHelper->createCell('na', $row['contact_last_name']);
+                echo $htmlHelper->createCell('user_ip', $row['user_ip']);
+                echo $htmlHelper->createCell('log_in_datetime', $row['date_time_in']);
+                if ($row['date_time_out'] != '0000-00-00 00:00:00') {
+                    echo $htmlHelper->createCell('log_out_datetime', $row['date_time_out']);
+                } else {
+                    echo '<td></td>';
+                }
+            ?></tr><?php
+        } ?>
     </table>
     <?php
 }

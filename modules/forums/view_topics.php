@@ -91,21 +91,12 @@ if (function_exists('styleRenderBoxTop')) {
             </table>
         </td></tr>
         <tr>
-            <?php
-            echo '<th></th>';
-            foreach ($fieldNames as $index => $name) {
-                ?><th nowrap="nowrap">
-                    <a href="?m=forums&a=viewer&forum_id=<?php echo $forum_id; ?>&orderby=<?php echo $fieldList[$index]; ?>" class="hdr">
-                        <?php echo $AppUI->_($fieldNames[$index]); ?>
-                    </a>
-                </th><?php
-            }
-            ?>
+            <th></th>
+            <?php foreach ($fieldNames as $index => $name) { ?>
+                <th><?php echo $AppUI->_($fieldNames[$index]); ?></th>
+            <?php } ?>
         </tr>
     <?php
-
-    $now = new w2p_Utilities_Date();
-
     foreach ($topics as $row) {
         if ($row["message_parent"] < 0) { ?>
             <tr bgcolor="white" valign="top">

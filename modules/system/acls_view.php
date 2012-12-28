@@ -56,7 +56,10 @@ $titleBlock->addCrumb('?m=system', 'system admin');
 $titleBlock->addCrumb('?m=system&u=roles', 'user roles');
 $titleBlock->show();
 
-$fieldNames = array('UserID', 'User', 'Display Name', 'Module', 'Item', 'Item Name', 'Action', 'Allow', 'ACL_ID');
+$fieldNames = array('UserID', 'User', 'Display Name', 'Module', 'Item',
+    'Item Name', 'Action', 'Allow', 'ACL_ID');
+
+$htmlHelper = new w2p_Output_HTMLHelper($AppUI);
 ?>
 <table class="tbl list">
     <tr>
@@ -65,23 +68,32 @@ $fieldNames = array('UserID', 'User', 'Display Name', 'Module', 'Item', 'Item Na
         <?php } ?>
     </tr>
 <?php
-foreach ($permissions as $permission) {
+foreach ($permissions as $row) {
 	$item = '';
-	if ($permission['item_id']) {
+	if ($row['item_id']) {
 		$q = new w2p_Database_Query;
 		$q->addTable('modules');
 		$q->addQuery('permissions_item_field,permissions_item_label');
-		$q->addWhere('mod_directory = \'' . $permission['module'] . '\'');
+		$q->addWhere('mod_directory = \'' . $row['module'] . '\'');
 		$field = $q->loadHash();
 
 		$q = new w2p_Database_Query;
-		$q->addTable($permission['module']);
+		$q->addTable($row['module']);
 		$q->addQuery($field['permissions_item_label']);
-		$q->addWhere($field['permissions_item_field'] . ' = \'' . $permission['item_id'] . '\'');
+		$q->addWhere($field['permissions_item_field'] . ' = \'' . $row['item_id'] . '\'');
 		$item = $q->loadResult();
 	}
-	if (!($permission['item_id'] && !$permission['acl_id'])) {
-		$table .= '<tr>' . '<td class="data _id">' . $permission['user_id'] . '</td>' . '<td>' . $permission['user_name'] . '</td>' . '<td>' . $users[$permission['user_id']] . '</td>' . '<td>' . $permission['module'] . '</td>' . '<td style="text-align:right;">' . ($permission['item_id'] ? $permission['item_id'] : '') . '</td>' . '<td>' . ($item ? $item : 'ALL') . '</td>' . '<td>' . $permission['action'] . '</td>' . '<td ' . (!$permission['access'] ? 'style="text-align:right;background-color:red"' : 'style="text-align:right;background-color:green"') . '>' . $permission['access'] . '</td>' . '<td ' . ($permission['acl_id'] ? '' : 'style="background-color:gray"') . '>' . ($permission['acl_id'] ? $permission['acl_id'] : 'soft-denial') . '</td>' . '</tr>';
+	if (!($row['item_id'] && !$row['acl_id'])) {
+		$table .= '<tr>' .
+                $htmlHelper->createCell('user_id', $row['user_id']) .
+                $htmlHelper->createCell('na', $row['user_name']) .
+                '<td>' . $users[$row['user_id']] . '</td>' .
+                $htmlHelper->createCell('module', $row['module']) .
+                '<td style="text-align:right;">' . ($row['item_id'] ? $row['item_id'] : '') . '</td>' .
+                '<td>' . ($item ? $item : 'ALL') . '</td>' .
+                $htmlHelper->createCell('action', $row['action']) .
+                '<td ' . (!$row['access'] ? 'style="text-align:right;background-color:red"' : 'style="text-align:right;background-color:green"') . '>' . $row['access'] . '</td>' . '<td ' . ($row['acl_id'] ? '' : 'style="background-color:gray"') . '>' . ($row['acl_id'] ? $row['acl_id'] : 'soft-denial') . '</td>' .
+                '</tr>';
 	}
 }
 $table .= '</table>';

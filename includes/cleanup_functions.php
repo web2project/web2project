@@ -2483,7 +2483,7 @@ function projects_list_data($user_id = false) {
 	if ($addProjectsWithAssignedTasks) {
 		$q->addJoin('tasks_users', 'tu', 'pr.project_id = tu.task_project');
 	}
-	if (!isset($department) && $company_id && !$addPwOiD) {
+	if (!isset($department) && $company_id > 0 && !$addPwOiD) {
 		$q->addWhere('pr.project_company = ' . (int)$company_id);
 	}
 	if ($project_type > -1) {

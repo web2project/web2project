@@ -44,30 +44,38 @@ function delIt(field_id) {
         </td>
     </tr>
     <?php
-    $custom_fields = $manager->getStructure($module['mod_name']);
+    
+    $fieldList = array('field_name', 'field_description', 'field_htmltype',
+        'field_published', 'field_order');
+    $fieldNames = array('Name', 'Description', 'Type', 'Published', 'Order');
+
+    $rows = $manager->getStructure($module['mod_name']);
+
+    $htmlHelper = new w2p_Output_HTMLHelper($AppUI);
 
     $s = '';
-	if (count($custom_fields)) {
-		$s .= '<th width="10"></th>';
-        $s .= '<th>' . $AppUI->_('Name') . '</th>';
-		$s .= '<th>' . $AppUI->_('Description') . '</th>';
-		$s .= '<th>' . $AppUI->_('Type') . '</th>';
-		$s .= '<th>' . $AppUI->_('Published') . '</th>';
-		$s .= '<th>' . $AppUI->_('Order') . '</th>';
-        $s .= '<th width="5"></th>';
-        foreach ($custom_fields as $field) {
+	if (count($rows)) {
+		$s .= '<tr><th width="10"></th>';
+        foreach ($fieldNames as $index => $name) {
+            $s .= '<th>' . $AppUI->_($fieldNames[$index]) . '</th>';
+        }
+        $s .= '<th width="10"></th></tr>';
+
+        foreach ($rows as $row) {
             $s .= '<tr><td class="hilite">';
             $s .= w2PtoolTip('', $AppUI->_('Click this icon to Edit this Custom Field.'), true);
-            $s .= '<a href="?m=system&u=customfields&a=addedit&module=' . $module['mod_id'] . '&field_id=' . $field['field_id'] . '"><img src="' . w2PfindImage('icons/stock_edit-16.png') . '" border="0" alt=""></a>';
+            $s .= '<a href="?m=system&u=customfields&a=addedit&module=' . $module['mod_id'] . '&field_id=' . $row['field_id'] . '"><img src="' . w2PfindImage('icons/stock_edit-16.png') . '" border="0" alt=""></a>';
             $s .= w2PendTip();
-            $s .= '<td>'.$field['field_name'].'</td>';
-            $s .= '<td>'.$field['field_description'].'</td>';
-            $s .= '<td>'.$AppUI->_($manager->getType($field['field_htmltype'])).'</td>';
-            $s .= '<td>'.($field['field_published'] ? $AppUI->_('Yes') : $AppUI->_('No')).'</td>';
-            $s .= '<td>'.$field['field_order'].'</td>';
+            $s .= $htmlHelper->createCell('na', $row['field_name']);
+            $s .= $htmlHelper->createCell('field_description', $row['field_description']);
+
+            $s .= '<td>'.$AppUI->_($manager->getType($row['field_htmltype'])).'</td>';
+            $s .= '<td>'.($row['field_published'] ? $AppUI->_('Yes') : $AppUI->_('No')).'</td>';
+
+            $s .= $htmlHelper->createCell('field_order', $row['field_order']);
             $s .= '<td>';
             $s .= w2PtoolTip('', $AppUI->_('Click this icon to Delete this Custom Field.'), true);
-            $s .= '<a href="javascript:delIt(' . $field['field_id'] . ');"><img src="' . w2PfindImage('icons/stock_delete-16.png') . '" border="0" alt=""></a>';
+            $s .= '<a href="javascript:delIt(' . $row['field_id'] . ');"><img src="' . w2PfindImage('icons/stock_delete-16.png') . '" border="0" alt=""></a>';
             $s .= w2PendTip();
             $s .= '</td></tr>';
         }

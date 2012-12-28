@@ -39,28 +39,12 @@ $extraGet = '&user_id=' . $user_id;
 $project = new CProject();
 $projects = projects_list_data($user_id);
 
-$fieldList = array();
-$fieldNames = array();
-
-$module = new w2p_Core_Module();
-$fields = $module->loadSettings('admin', 'project-list');
-
-if (count($fields) > 0) {
-    $fieldList = array_keys($fields);
-    $fieldNames = array_values($fields);
-} else {
-    // TODO: This is only in place to provide an pre-upgrade-safe
-    //   state for versions earlier than v3.0
-    //   At some point at/after v4.0, this should be deprecated
-    $fieldList = array('project_color_identifier', 'project_priority',
-        'project_name', 'company_name', 'project_start_date', 'project_duration',
-        'project_end_date', 'project_actual_end_date', 'task_log_problem',
-        'user_username', 'project_task_count', 'project_status');
-    $fieldNames = array('Color', 'P', 'Project Name', 'Company', 'Start',
-        'Duration', 'End', 'Actual', 'LP', 'Owner', 'Tasks', 'Status');
-
-    $module->storeSettings('admin', 'project-list', $fieldList, $fieldNames);
-}
+$fieldList = array('project_color_identifier', 'project_priority',
+    'project_name', 'company_name', 'project_start_date', 'project_duration',
+    'project_end_date', 'project_actual_end_date', 'task_log_problem',
+    'user_username', 'project_task_count', 'project_status');
+$fieldNames = array('Color', 'P', 'Project Name', 'Company', 'Start',
+    'Duration', 'End', 'Actual', 'LP', 'Owner', 'Tasks', 'Status');
 ?>
 
 <table class="tbl list">
@@ -87,29 +71,30 @@ if (count($fields) > 0) {
 
 <?php
 $none = true;
+$htmlHelper = new w2p_Output_HTMLHelper($AppUI);
+
+$customLookups = array('project_status' => $pstatus);
+
 foreach ($projects as $row) {
-	// We dont check the percent_completed == 100 because some projects
+    $htmlHelper->stageRowData($row);
+    // We dont check the percent_completed == 100 because some projects
 	// were being categorized as completed because not all the tasks
 	// have been created (for new projects)
 	if ($proFilter == -1 || $row['project_status'] == $proFilter || ($proFilter == -2 && $row['project_status'] != 3) || ($proFilter == -3 && $row['project_active'] != 0)) {
 		$none = false;
-		$start_date = intval($row['project_start_date']) ? new w2p_Utilities_Date($row['project_start_date']) : null;
+
 		$end_date = intval($row['project_end_date']) ? new w2p_Utilities_Date($row['project_end_date']) : null;
 		$actual_end_date = intval($row['project_actual_end_date']) ? new w2p_Utilities_Date($row['project_actual_end_date']) : null;
 		$style = (($actual_end_date > $end_date) && !empty($end_date)) ? 'style="color:red; font-weight:bold"' : '';
 
 		$s = '<tr><td width="65" align="right" style="border: outset #eeeeee 1px;background-color:#' . $row['project_color_identifier'] . '">';
-		$s .= '<font color="' . bestColor($row['project_color_identifier']) . '">' . sprintf('%.1f%%', $row['project_percent_complete']) . '</font></td><td align="center">';
-		if ($row['project_priority'] < 0) {
-			$s .= '<img src="' . w2PfindImage('icons/priority-' . -$row['project_priority'] . '.gif') . '" width="13" height="16" alt="">';
-		} elseif ($row['project_priority'] > 0) {
-			$s .= '<img src="' . w2PfindImage('icons/priority+' . $row['project_priority'] . '.gif') . '"  width="13" height="16" alt="">';
-		}
-		$s .= '</td><td width="40%"><a href="?m=projects&a=view&project_id=' . $row['project_id'] . '" ><span title="' . (nl2br(htmlspecialchars($row['project_description'])) ? htmlspecialchars($row['project_name'], ENT_QUOTES) . '::' . nl2br(htmlspecialchars($row['project_description'])) : '') . '" >' . htmlspecialchars($row['project_name'], ENT_QUOTES) . '</span></a></td>';
-		
-		$s .= '<td width="30%"><a href="?m=companies&a=view&company_id=' . $row['project_company'] . '" ><span title="' . (nl2br(htmlspecialchars($row['company_description'])) ? htmlspecialchars($row['company_name'], ENT_QUOTES) . '::' . nl2br(htmlspecialchars($row['company_description'])) : '') . '" >' . htmlspecialchars($row['company_name'], ENT_QUOTES) . '</span></a></td>';
-		$s .= '<td nowrap="nowrap" align="center">' . ($start_date ? $start_date->format($df) : '-') . '</td>';
-		$s .= '<td nowrap="nowrap" align="right">' . ($row['project_duration'] > 0 ? round($row['project_duration'], 0) . $AppUI->_('h') : '-') . '</td>';
+		$s .= '<font color="' . bestColor($row['project_color_identifier']) . '">' . sprintf('%.1f%%', $row['project_percent_complete']) . '</font></td>';
+
+        $s .= $htmlHelper->createCell('project_priority', $row['project_priority']);
+        $s .= $htmlHelper->createCell('project_name', $row['project_name']);
+        $s .= $htmlHelper->createCell('project_company', $row['project_company']);
+        $s .= $htmlHelper->createCell('project_start_date', $row['project_start_date']);
+        $s .= $htmlHelper->createCell('project_scheduled_hours', $row['project_scheduled_hours']);
 		$s .= '<td nowrap="nowrap" align="center" nowrap="nowrap" style="background-color:' . $priority[$row['project_priority']]['color'] . '">';
 		$s .= ($end_date ? $end_date->format($df) : '-');
 		$s .= '</td><td nowrap="nowrap" align="center">';
@@ -120,9 +105,11 @@ foreach ($projects as $row) {
 		$s .= $row['task_log_problem'] ? '<a href="?m=tasks&a=index&f=all&project_id=' . $row['project_id'] . '">' : '';
 		$s .= $row['task_log_problem'] ? w2PshowImage('icons/dialog-warning5.png', 16, 16, 'Problem', 'Problem') : '-';
 		$s .= $row['task_log_problem'] ? '</a>' : '';
-		$s .= '</td><td align="center" nowrap="nowrap">' . htmlspecialchars($row['owner_name'], ENT_QUOTES) . '</td><td align="center" nowrap="nowrap">';
-		$s .= $row['project_task_count'];
-		$s .= '</td><td align="left" nowrap="nowrap">' . $AppUI->_($pstatus[$row['project_status']]) . '</td></tr>';
+		$s .= '</td>';
+        $s .= $htmlHelper->createCell('project_owner', $row['project_owner']);
+        $s .= $htmlHelper->createCell('project_task_count', $row['project_task_count']);
+        $s .= $htmlHelper->createCell('project_status', $row['project_status'], $customLookups);
+        $s .= '</tr>';
 		echo $s;
 	}
 }
