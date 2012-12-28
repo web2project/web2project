@@ -30,21 +30,23 @@ $modFiles = $AppUI->readDirs('modules');
 $titleBlock = new w2p_Theme_TitleBlock('Modules', 'power-management.png', $m, "$m.$a");
 $titleBlock->addCrumb('?m=system', 'System Admin');
 $titleBlock->show();
+
+$fieldList = array('mod_name', 'mod_active', 'mod_customize', 'mod_type',
+    'mod_version', 'mod_ui_name', 'mod_ui_icon', 'mod_ui_active', 'mod_ui_order');
+$fieldNames = array('Module', 'Status', 'Customize', 'Type', 'Version',
+    'Menu Text', 'Menu Icon', 'Menu Status', 'Order');
+
+$htmlHelper = new w2p_Output_HTMLHelper($AppUI);
 ?>
 
 <table class="tbl list">
-    <tr>
-        <th colspan="2"><?php echo $AppUI->_('Module'); ?></th>
-        <th><?php echo $AppUI->_('Status'); ?></th>
-        <th><?php echo $AppUI->_('Customize'); ?></th>
-        <th><?php echo $AppUI->_('Type'); ?></th>
-        <th><?php echo $AppUI->_('Version'); ?></th>
-        <th><?php echo $AppUI->_('Menu Text'); ?></th>
-        <th><?php echo $AppUI->_('Menu Icon'); ?></th>
-        <th><?php echo $AppUI->_('Menu Status'); ?></th>
-        <th><?php echo $AppUI->_('#'); ?></th>
-    </tr>
     <?php
+    echo '<tr><th></th>';
+    foreach ($fieldNames as $index => $name) {
+        echo '<th>' . $AppUI->_($fieldNames[$index]) . '</th>';
+    }
+    echo '</tr>';
+
     // do the modules that are installed on the system
     foreach ($modules as $row) {
         // clear the file system entry
@@ -62,7 +64,7 @@ $titleBlock->show();
         }
         $s .= '</td>';
 
-        $s .= '<td width="1%" nowrap="nowrap">' . $AppUI->_($row['mod_name']) . '</td>';
+        $s .= $htmlHelper->createCell('na', $row['mod_name']);
         $s .= '<td>';
         $s .= '<img src="' . w2PfindImage('obj/dot' . ($row['mod_active'] ? 'green' : 'yellowanim') . '.gif') . '" alt="" />&nbsp;';
         if ($canEdit) {
@@ -103,11 +105,11 @@ $titleBlock->show();
         }
         
         $s .= '</td>';
-        $s .= '<td>' . $row['mod_type'] . '</td>';
-        $s .= '<td>' . $row['mod_version'] . '</td>';
-        $s .= '<td>' . $AppUI->_($row['mod_ui_name']) . '</td>';
-        $s .= '<td>' . $row['mod_ui_icon'] . '</td>';
-
+        $s .= $htmlHelper->createCell('na', $row['mod_type']);
+        $s .= $htmlHelper->createCell('na', $row['mod_version']);
+        $s .= $htmlHelper->createCell('na', $row['mod_ui_name']);
+        $s .= $htmlHelper->createCell('mod_ui_icon', $row['mod_ui_icon']);
+        
         $s .= '<td class="_status">';
         $s .= '<img src="' . w2PfindImage('/obj/' . ($row['mod_ui_active'] ? 'dotgreen.gif' : 'dotredanim.gif')) . '" alt="" />&nbsp;';
         if ($canEdit) {
@@ -119,7 +121,7 @@ $titleBlock->show();
         }
         $s .= '</td>';
 
-        $s .= '<td class="_count">' . $row['mod_ui_order'] . '</td>';
+        $s .= $htmlHelper->createCell('_count', $row['mod_ui_order']);
 
         echo '<tr>' . $s . '</tr>';
     }

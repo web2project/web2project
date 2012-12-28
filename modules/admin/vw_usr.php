@@ -2,13 +2,14 @@
 if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
-$utypes = w2PgetSysVal('UserType');
 
 $display_last_login = !((int) w2PgetParam($_REQUEST, 'tab', 0));
 
-        $fieldList = array();
+$fieldList = array();
 $fieldNames = array();
+
 $fields = w2p_Core_Module::getSettings('users', 'index_table');
+
 if (count($fields) > 0) {
     $fieldList = array_keys($fields);
     $fieldNames = array_values($fields);
@@ -16,10 +17,11 @@ if (count($fields) > 0) {
     // TODO: This is only in place to provide an pre-upgrade-safe
     //   state for versions earlier than v3.0
     //   At some point at/after v4.0, this should be deprecated
-    $fieldList = array('user_username', 'contact_last_name',
+    $fieldList = array('contact_display_name', 'user_username',
         'user_type', 'company_name', 'dept_name');
-    $fieldNames = array('Login Name', 'Real Name', 'Type',
+    $fieldNames = array('Real Name', 'Login Name', 'Type',
         'Company', 'Department');
+//TODO: This doesn't save the columns yet as we can't allow customization yet.
 }
 if ($display_last_login) {
     array_unshift($fieldList,  '');
@@ -40,11 +42,17 @@ array_unshift($fieldNames,  '');
     </tr>
 <?php
 
+$htmlHelper = new w2p_Output_HTMLHelper($AppUI);
+
+$types = w2PgetSysVal('UserType');
+$customLookups = array('user_type' => $types);
+
 $perms = &$AppUI->acl();
 foreach ($users as $row) {
 	if ($perms->isUserPermitted($row['user_id']) != $canLogin) {
 		continue;
 	}
+    $htmlHelper->stageRowData($row);
 ?>
 <tr>
 	<td width="30" align="center" nowrap="nowrap">
@@ -71,7 +79,7 @@ foreach ($users as $row) {
         <?php } ?>
 	</td>
 	<?php if (w2PgetParam($_REQUEST, 'tab', 0) == 0) { ?>
-	<td>
+	<td nowrap="nowrap">
 	       <?php
 		$q = new w2p_Database_Query;
 		$q->addTable('user_access_log', 'ual');
@@ -95,22 +103,16 @@ foreach ($users as $row) {
 		echo '</span>';
 	} ?>
 	</td>
-	<td>
-		<a href="./index.php?m=admin&a=viewuser&user_id=<?php echo $row['user_id']; ?>"><?php echo $row['user_username']; ?></a>
-	</td>
-	<td>
+	<td width="20%">
 		<a href="mailto:<?php echo $row['contact_email']; ?>"><img src="<?php echo w2PfindImage('obj/email.gif'); ?>" width="16" height="16" border="0" alt="email" /></a>
         <?php echo $row['contact_display_name']; ?>
 	</td>
-	<td>
-		<?php echo $utypes[$row['user_type']]; ?>
-	</td>
-	<td>
-		<a href="./index.php?m=companies&a=view&company_id=<?php echo $row['contact_company']; ?>"><?php echo $row['company_name']; ?></a>
-	</td>
-	<td>
-		<a href="./index.php?m=departments&a=view&dept_id=<?php echo $row['dept_id']; ?>"><?php echo $row['dept_name']; ?></a>
-	</td>
+    <?php
+        echo $htmlHelper->createCell('user_name', $row['user_username']);
+        echo $htmlHelper->createCell('user_type', $row['user_type'], $customLookups);
+        echo $htmlHelper->createCell('contact_company', $row['contact_company']);
+        echo $htmlHelper->createCell('dept_name', $row['dept_name']);
+    ?>
 </tr>
 <?php } ?>
 

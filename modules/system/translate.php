@@ -82,11 +82,12 @@ if(!is_writable($localeFolder)) {
     $titleBlock->addCell('', '', '<span class="warning">' . $AppUI->_("Locales folder ($localeFolder) is not writable.") . '</span>', '');
 }
 
-$titleBlock->addCell($AppUI->_('Module'), '', '<form action="?m=system&a=translate" method="post" name="modlang" accept-charset="utf-8">', '');
+$titleBlock->addCell('', '', '<form action="?m=system&a=translate" method="post" name="modlang" accept-charset="utf-8">', '');
 $titleBlock->addCell(arraySelect($modules, 'module', 'size="1" class="text" onchange="document.modlang.submit();"', $module));
-$titleBlock->addCell($AppUI->_('Language'));
+$titleBlock->addCell($AppUI->_('Module'));
 $temp = $AppUI->setWarning(false);
 $titleBlock->addCell(arraySelect($locales, 'lang', 'size="1" class="text" onchange="document.modlang.submit();"', $lang, true), '', '', '</form>');
+$titleBlock->addCell($AppUI->_('Language'));
 $AppUI->setWarning($temp);
 
 $titleBlock->addCrumb('?m=system', 'system admin');
