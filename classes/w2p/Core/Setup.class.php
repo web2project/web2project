@@ -47,7 +47,7 @@ abstract class w2p_Core_Setup {
 
         $q = $this->_getQuery();
         $q->setDelete('module_config');
-        $q->addWhere("module_name = 'risks'");
+        $q->addWhere("module_name = '$name'");
         $q->exec();
 
         return $this->_perms->unregisterModule($name);
