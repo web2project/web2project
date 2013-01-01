@@ -80,6 +80,7 @@ class w2p_Core_UpgradeManager {
 
     public function upgradeSystem() {
         global $AppUI;
+        $AppUI = is_object($AppUI) ? $AppUI : new w2p_Core_CAppUI();
 
         $allErrors = array();
         set_time_limit(0);
