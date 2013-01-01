@@ -3,8 +3,9 @@ if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
 
-global $AppUI, $user_id, $canEdit, $canDelete, $tab;
+global $AppUI, $user_id;
 
+$canEdit = canEdit('users');
 $perms = &$AppUI->acl();
 $module_list = $perms->getModuleList();
 
@@ -175,6 +176,9 @@ foreach ($user_acls as $acl) {
 				}
 			}
 		}
+        if (!canView($mod_data['section_value'], $mod_data['value'])) {
+            continue;
+        }
 		$buf .= implode('<br />', $modlist);
 		$buf .= '</td>';
 		// Item information TODO:  need to figure this one out.
@@ -196,6 +200,7 @@ foreach ($user_acls as $acl) {
 		// Allow or deny
 		$buf .= '<td>' . $AppUI->_($permission['allow'] ? 'allow' : 'deny') . '</td>';
 		$buf .= '<td nowrap="nowrap">';
+        $canDelete = (canEdit('users') && canEdit($mod_data['section_value'], $mod_data['value']));
 		if ($canDelete) {
 			$buf .= "<a href=\"javascript:delIt({$acl});\" title=\"" . $AppUI->_('delete') . "\">" . w2PshowImage('icons/stock_delete-16.png', 16, 16, '') . "</a>";
 		}
