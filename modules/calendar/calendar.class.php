@@ -182,14 +182,12 @@ class CEvent extends w2p_Core_BaseObject
         global $AppUI;
 
         // convert to default db time stamp
-		$db_start = $start_date->format(FMT_DATETIME_MYSQL);
-		$db_start = $AppUI->convertToSystemTZ($db_start);
-		$db_end = $end_date->format(FMT_DATETIME_MYSQL);
-		$db_end = $AppUI->convertToSystemTZ($db_end);
+		$raw_db_start = $start_date->format(FMT_DATETIME_MYSQL);
+		$db_start = $AppUI->convertToSystemTZ($raw_db_start);
+		$raw_db_end = $end_date->format(FMT_DATETIME_MYSQL);
+		$db_end = $AppUI->convertToSystemTZ($raw_db_end);
 
-		if (!isset($user_id)) {
-			$user_id = $AppUI->user_id;
-		}
+        $user_id = ((int) $user_id) ? $user_id : $AppUI->user_id;
 
 		$project = new CProject();
 		if ($project_id) {
@@ -201,7 +199,7 @@ class CEvent extends w2p_Core_BaseObject
 				$allowedProjects = array('1=0');
 			}
 		} else {
-			$allowedProjects = $project->getAllowedSQL(($user_id ? $user_id : $AppUI->user_id), 'event_project');
+			$allowedProjects = $project->getAllowedSQL($user_id, 'event_project');
 		}
 
 		//do similiar actions for recurring and non-recurring events
@@ -241,12 +239,12 @@ class CEvent extends w2p_Core_BaseObject
 					$$query_set->addWhere('(event_private = 0 OR event_owner=' . (int)$user_id . ')');
 			}
 
-			if ($query_set == 'q') { // assemble query for non-recursive events
+			if ($query_set == 'q') { // assemble query for non-recurring events
 				$$query_set->addWhere('(event_recurs <= 0)');
-				// following line is only good for *non-recursive* events
-				$$query_set->addWhere('(event_start_date <= \'' . $db_end . '\' AND event_end_date >= \'' . $db_start . '\' OR event_start_date BETWEEN \'' . $db_start . '\' AND \'' . $db_end . '\')');
+				// following line is only good for *non-recurring* events
+				$$query_set->addWhere("(event_start_date <= '$db_end' AND event_end_date >= '$db_start' OR event_start_date BETWEEN '$db_start' AND '$db_end')");
 				$eventList = $$query_set->loadList();
-			} elseif ($query_set == 'r') { // assemble query for recursive events
+			} elseif ($query_set == 'r') { // assemble query for recurring events
 				$$query_set->addWhere('(event_recurs > 0)');
 				$eventListRec = $$query_set->loadList();
 			}
