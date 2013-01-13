@@ -36,8 +36,17 @@ for ($current = 0 + $inc; $current < 60; $current += $inc) {
 
 // format dates
 $df = $AppUI->getPref('SHDATEFORMAT');
-$start_date = intval($task->task_start_date) ? new w2p_Utilities_Date($AppUI->formatTZAwareTime($task->task_start_date, '%Y-%m-%d %T')) : new w2p_Utilities_Date();
-$end_date = intval($task->task_end_date) ? new w2p_Utilities_Date($AppUI->formatTZAwareTime($task->task_end_date, '%Y-%m-%d %T')) : new w2p_Utilities_Date();
+
+$defaultDate = new w2p_Utilities_Date();
+$start_date = intval($task->task_start_date) ?
+    new w2p_Utilities_Date($AppUI->formatTZAwareTime($task->task_start_date, '%Y-%m-%d %T')) :
+        $defaultDate->calcFinish(1, $task->task_duration_type);
+
+$task->task_duration = isset($task->task_duration) ? $task->task_duration : 1;
+
+$end_date = intval($task->task_end_date) ?
+    new w2p_Utilities_Date($AppUI->formatTZAwareTime($task->task_end_date, '%Y-%m-%d %T')) :
+        $defaultDate->calcFinish($task->task_duration + 1, $task->task_duration_type);
 
 // convert the numeric calendar_working_days config array value to a human readable output format
 $cwd = explode(',', $w2Pconfig['cal_working_days']);
@@ -67,7 +76,7 @@ $cwd_hr = implode(', ', $cwd_conv);
                     <table><tr>
                     <?php
                         echo '<td>' . arraySelect($hours, 'start_hour', 'size="1" onchange="setAMPM(this)" class="text"', $start_date ? $start_date->getHour() : $start) . '</td><td> : </td>';
-                        echo '<td>' . arraySelect($minutes, 'start_minute', 'size="1" class="text"', $start_date ? $start_date->getMinute() : '0') . '</td>';
+                        echo '<td>' . arraySelect($minutes, 'start_minute', 'size="1" class="text"', $start_date ? $start_date->getMinute() : '00') . '</td>';
                         if (stristr($AppUI->getPref('TIMEFORMAT'), '%p')) {
                             echo '<td><input type="text" name="start_hour_ampm" id="start_hour_ampm" value="' . ($start_date ? $start_date->getAMPM() : ($start > 11 ? 'pm' : 'am')) . '" disabled="disabled" class="text" size="2" /></td>';
                         }
@@ -99,7 +108,7 @@ $cwd_hr = implode(', ', $cwd_conv);
             <tr>
                 <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Expected Duration'); ?>:</td>
                 <td nowrap="nowrap">
-					<input type="text" class="text" name="task_duration" id="task_duration" maxlength="8" size="6" value="<?php echo isset($task->task_duration) ? $task->task_duration : 1; ?>" />
+					<input type="text" class="text" name="task_duration" id="task_duration" maxlength="8" size="6" value="<?php echo $task->task_duration; ?>" />
                     <?php
                         echo arraySelect($durnTypes, 'task_duration_type', 'class="text"', $task->task_duration_type, true);
                     ?>
