@@ -6,17 +6,18 @@ if (!defined('W2P_BASE_DIR')) {
 global $AppUI, $obj, $percent, $can_edit_time_information, $cal_sdf;
 
 $task        = $obj;
+$task_id     = $task->task_id;
 $task_log_id = (int) w2PgetParam($_GET, 'task_log_id', 0);
 
 $log = new CTask_Log();
 $log->task_log_id = $task_log_id;
 
-$canAuthor = $task->canCreate();
+$canAuthor = $log->canCreate();
 if (!$canAuthor && !$task_id) {
 	$AppUI->redirect(ACCESS_DENIED);
 }
 
-$canEdit = $task->canEdit();
+$canEdit = $log->canEdit();
 if (!$canEdit && $task_id) {
 	$AppUI->redirect(ACCESS_DENIED);
 }
@@ -183,7 +184,7 @@ $log_date = new w2p_Utilities_Date($log->task_log_date);
                                     <option value=""></option>
                                     <?php
 //TODO: update for arraySelect()
-                                    foreach ($task->getAssignedUsers($task->task_id) as $task_user) {
+                                    foreach ($task->getAssignedUsers($task_id) as $task_user) {
                                         $task_user['user_id'] == $user_id ? $selected = 'selected="selected"' : $selected = '';
                                         ?>
                                         <option <?php echo $selected; ?> value="<?php echo $task_user['user_id']; ?>"><?php echo $task_user['contact_first_name'] . ' ' . $task_user['contact_last_name']; ?></option>
