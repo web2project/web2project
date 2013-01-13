@@ -10,7 +10,7 @@ require_once W2P_BASE_DIR . '/includes/session.php';
 $loginFromPage = 'fileviewer.php';
 
 w2PsessionStart();
-
+$AppUI = is_object($AppUI) ? $AppUI : new w2p_Core_CAppUI();
 // check if session has previously been initialised
 // if no ask for logging and do redirect
 if (!isset($_SESSION['AppUI']) || isset($_GET['logout'])) {
