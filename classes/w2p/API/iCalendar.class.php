@@ -51,8 +51,8 @@ class w2p_API_iCalendar
 
         $eventItem = "BEGIN:VEVENT\r\nDTSTART;VALUE=DATE-TIME:{$startDate}\r\n" .
             "DTEND;VALUE=DATE-TIME:{$endDate}\r\nUID:{$uid}\r\nSUMMARY:{$name}\r\n" .
-            "DESCRIPTION:{$description}\r\n{$attachments}\r\n
-            DTSTAMP:{$updatedDate}\r\nSEQUENCE:{$sequence}\r\nEND:VEVENT\r\n";
+            "DESCRIPTION:{$description}\r\n{$attachments}\r\n" .
+            "DTSTAMP:{$updatedDate}\r\nSEQUENCE:{$sequence}\r\nEND:VEVENT\r\n";
 
         return $eventItem;
     }

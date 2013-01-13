@@ -1052,20 +1052,19 @@ class w2p_Extensions_Permissions extends gacl_api
 
         $q = new w2p_Database_Query;
         $q->addTable($this->_db_acl_prefix . 'aco_sections', 'a');
-        $q->addQuery('a.value AS a_value, a.name AS a_name,
-					b.value AS b_value, b.name AS b_name,
-					c.value AS c_value, c.name AS c_name,
-					d.value AS d_value, d.name AS d_name,
-					e.value AS e_value, e.name AS e_name,
-					f.value AS f_value, f.name AS f_name
-				');
+        $q->addQuery('a.value AS a_value, a.name AS a_name, ' .
+					'b.value AS b_value, b.name AS b_name, ' .
+					'c.value AS c_value, c.name AS c_name, ' .
+					'd.value AS d_value, d.name AS d_name, ' .
+					'e.value AS e_value, e.name AS e_name, ' .
+					'f.value AS f_value, f.name AS f_name');
         $q->leftJoin($this->_db_acl_prefix . 'aco', 'b', 'a.value=b.section_value,' . w2PgetConfig('dbprefix') . $this->_db_acl_prefix . 'aro_sections c');
         $q->leftJoin($this->_db_acl_prefix . 'aro', 'd', 'c.value=d.section_value,' . w2PgetConfig('dbprefix') . $this->_db_acl_prefix . 'axo_sections e');
         $q->leftJoin($this->_db_acl_prefix . 'axo', 'f', 'e.value=f.section_value');
         if ($user_id) {
-            $q->addWhere('d.value = \'' . $user_id . '\'');
+            $q->addWhere("d.value = " . (int) $user_id);
         } elseif ($user_aro_id) {
-            $q->addWhere('d.id = \'' . $user_aro_id . '\'');
+            $q->addWhere("d.id = " . (int)  $user_aro_id);
         } else {
             //only recalculate permissions for users able to login (that have at least one role)
             $active_users = $this->getUsersWithRole();

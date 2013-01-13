@@ -476,18 +476,18 @@ class CEvent extends w2p_Core_BaseObject
         // Now build a query to find matching events.
         $q = $this->_getQuery();
         $q->addTable('events', 'e');
-        $q->addQuery('e.event_id, event_name, event_sequence, event_owner, event_description,
-            ue.user_id, event_cwd, event_start_date, event_end_date, event_updated, event_recurs');
+        $q->addQuery("e.event_id, event_name, event_sequence, event_owner, event_description, " .
+            "ue.user_id, event_cwd, event_start_date, event_end_date, event_updated, event_recurs");
         $q->addQuery('projects.project_id, projects.project_name');
         $q->addTable('events', 'e');
         $q->leftJoin('projects', 'projects', 'e.event_project = projects.project_id');
         $q->addJoin('user_events', 'ue', 'ue.event_id = e.event_id');
-        $q->addWhere('event_start_date >= \'' . $start_date . '\'
-     	  		AND event_end_date <= \'' . $end_date . '\'
-     	  		AND EXTRACT(HOUR_MINUTE FROM e.event_end_date) >= \'' . $start_time . '\'
-     	  		AND EXTRACT(HOUR_MINUTE FROM e.event_start_date) <= \'' . $end_time . '\'
-     	  		AND ( e.event_owner in (' . implode(',', $users) . ')
-     	 		OR ue.user_id in (' . implode(',', $users) . ') )');
+        $q->addWhere("event_start_date >= '$start_date' " .
+     	  		"AND event_end_date <= '$end_date' " .
+     	  		"AND EXTRACT(HOUR_MINUTE FROM e.event_end_date) >= '$start_time' " .
+     	  		"AND EXTRACT(HOUR_MINUTE FROM e.event_start_date) <= '$end_time' " .
+     	  		"AND ( e.event_owner in (" . implode(',', $users) . ") " .
+     	 		"OR ue.user_id in (" . implode(',', $users) . "))");
 
         return $q->loadList();
     }
