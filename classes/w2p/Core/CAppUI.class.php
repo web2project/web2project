@@ -1060,6 +1060,7 @@ class w2p_Core_CAppUI
             return $prefs;
         }
         else {
+            $this->user_prefs = is_array($this->user_prefs) ? $this->user_prefs : array();
             $this->user_prefs = array_merge($this->user_prefs, $prefs);
         }
     }
