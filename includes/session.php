@@ -69,19 +69,21 @@ function w2PsessionWrite($id, $data)
     $q->addQuery('count(session_id) as row_count');
     $q->addTable('sessions');
     $q->addWhere('session_id = \'' . $id . '\'');
+    $row_count = (int) $q->loadResult();
+    $q->clear();
 
-    if ($qid = &$q->exec() && ($qid->fields['row_count'] > 0 || $qid->fields[0] > 0)) {
-        $q->query = null;
+    if ($row_count) {
+        $q->addTable('sessions');
+        $q->addWhere('session_id = \'' . $id . '\'');
         $q->addUpdate('session_data', $data);
         if (isset($AppUI)) {
             $q->addUpdate('session_user', (int) $AppUI->last_insert_id);
         }
     } else {
-        $q->query = null;
-        $q->where = null;
+        $q->addTable('sessions');
         $q->addInsert('session_id', $id);
         $q->addInsert('session_data', $data);
-        $q->addInsert('session_created', date('Y-m-d H:i:s'));
+        $q->addInsert('session_created', $q->dbfnNowWithTZ());
     }
     $q->exec();
     $q->clear();
