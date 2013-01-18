@@ -1,22 +1,18 @@
 <?php
 
 /**
- *	@package web2project
- *	@subpackage output
- *	@version $Revision$
+ * Displays a configuration month calendar
+ * All Date objects are based on the PEAR Date package
  *
- *  As of v3.0, this class has moved from the Calendar module to its own structure.
+ * @since 3.0, this class has moved from the Calendar module to its own structure.
  *
+ * @package     web2project\output
+ * @author      D. Keith Casey, Jr. <caseydk@users.sourceforge.net>
  */
 
 $AppUI = is_object($AppUI) ? $AppUI : new w2p_Core_CAppUI();
 require_once $AppUI->getLibraryClass('PEAR/Date');
 
-/**
- * Displays a configuration month calendar
- *
- * All Date objects are based on the PEAR Date package
- */
 class w2p_Output_MonthCalendar {
 	/**#@+
 	* @var Date

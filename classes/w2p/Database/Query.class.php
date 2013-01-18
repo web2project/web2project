@@ -19,19 +19,14 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 }}}
  *
- *  @package    web2project
- *	@subpackage database
+ * Container for creating prefix-safe queries.  Allows build up of
+ * a select statement by adding components one at a time.
+ *
+ * @package     web2project\database
  *
  *  Note: Previously, this class may have been erroneously re-licensed by
  *    Keith Casey (caseydk). Its original copyright statement by Adam Donnison
  *    is being restored until this can be clarified and/or corrected.
- */
-
-/**
- * Database query class
- *
- * Container for creating prefix-safe queries.  Allows build up of
- * a select statement by adding components one at a time.
  */
 
 require_once W2P_BASE_DIR . '/lib/adodb/adodb.inc.php';

@@ -1,26 +1,6 @@
-<?php /* $Id$ $URL$ */
+<?php
 
 /**
- * 	@package web2Project
- * 	@subpackage modules
- * 	@version $Revision$
- */
-// project statii
-$pstatus = w2PgetSysVal('ProjectStatus');
-$ptype = w2PgetSysVal('ProjectType');
-
-$ppriority_name = w2PgetSysVal('ProjectPriority');
-$ppriority_color = w2PgetSysVal('ProjectPriorityColor');
-
-$priority = array();
-foreach ($ppriority_name as $key => $val) {
-    $priority[$key]['name'] = $val;
-}
-foreach ($ppriority_color as $key => $val) {
-    $priority[$key]['color'] = $val;
-}
-
-/*
   // kept for reference
   $priority = array(
   -1 => array(
@@ -40,11 +20,24 @@ foreach ($ppriority_color as $key => $val) {
   'color' => '#FF887C'
   )
   );
+ *
+ * @package     web2project\modules\core
  */
 
-/**
- * The Project Class
- */
+$pstatus = w2PgetSysVal('ProjectStatus');
+$ptype = w2PgetSysVal('ProjectType');
+
+$ppriority_name = w2PgetSysVal('ProjectPriority');
+$ppriority_color = w2PgetSysVal('ProjectPriorityColor');
+
+$priority = array();
+foreach ($ppriority_name as $key => $val) {
+    $priority[$key]['name'] = $val;
+}
+foreach ($ppriority_color as $key => $val) {
+    $priority[$key]['color'] = $val;
+}
+
 class CProject extends w2p_Core_BaseObject
 {
 

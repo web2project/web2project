@@ -1,13 +1,7 @@
 <?php
-/**
- *	@package web2project
- *	@subpackage core
- *	@version $Revision$
- */
 
 /**
- *	w2p_Core_Module Class.
-
+ * @package     web2project\core
  */
 
 class w2p_Core_Module extends w2p_Core_BaseObject {

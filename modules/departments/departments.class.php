@@ -1,8 +1,8 @@
-<?php /* $Id$ $URL$ */
+<?php
 
-##
-## CDepartment Class
-##
+/**
+ * @package     web2project\modules\misc
+ */
 
 class CDepartment extends w2p_Core_BaseObject {
 	public $dept_id = null;

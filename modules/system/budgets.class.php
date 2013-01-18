@@ -1,10 +1,9 @@
 <?php
 
 /**
- * 	@package web2project
- * 	@subpackage core
- * 	@version $Revision$
+ * @package     web2project\modules\core
  */
+
 class CSystem_Budget extends w2p_Core_BaseObject
 {
 

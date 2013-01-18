@@ -1,18 +1,12 @@
-<?php /** $Id$ $URL$ */
+<?php
 
 /**
- *	@package web2project
- *	@subpackage controllers
- *	@version $Revision$
+ * Parent class to all the controllers
+ *
+ * @package     web2project\controllers
+ * @author      Keith Casey <caseydk@sourceforge.net>
  */
 
-/**
- *	w2p_Controllers_Base Class.
- *
- *	Parent class to all the controllers
- *	@author Keith Casey <caseydk@sourceforge.net>
- *
- */
 class w2p_Controllers_Base
 {
     protected $delete = false;

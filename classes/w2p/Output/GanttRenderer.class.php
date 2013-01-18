@@ -1,9 +1,8 @@
-<?php /* $Id$ $URL$ */
+<?php
 
 /**
- *	@package web2project
- *	@subpackage output
- *	@version $Revision$
+ * @package     web2project\output
+ * @author      D. Keith Casey, Jr. <caseydk@users.sourceforge.net>
  */
 
 $AppUI = is_object($AppUI) ? $AppUI : new w2p_Core_CAppUI();

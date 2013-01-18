@@ -1,14 +1,9 @@
-<?php /* $Id$ $URL$ */
+<?php
 
 /**
- *	@package web2project
- *	@subpackage core
- *	@version $Revision$
+ * Produces an INPUT Element of the TEXT type in edit mode
  *
- *	CustomFieldText Class.
- *
- *	Produces an INPUT Element of the TEXT type in edit mode
- *	
+ * @package web2project\core
  */
 
 class w2p_Core_CustomFieldText extends w2p_Core_CustomField {
