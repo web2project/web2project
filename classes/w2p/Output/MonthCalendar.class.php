@@ -11,7 +11,6 @@
  */
 
 $AppUI = is_object($AppUI) ? $AppUI : new w2p_Core_CAppUI();
-require_once $AppUI->getLibraryClass('PEAR/Date');
 
 class w2p_Output_MonthCalendar {
 	/**#@+
