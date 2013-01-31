@@ -5,7 +5,6 @@
  */
 
 $AppUI = is_object($AppUI) ? $AppUI : new w2p_Core_CAppUI();
-require_once $AppUI->getLibraryClass('PEAR/Date');
 
 define('FMT_DATEISO', '%Y%m%dT%H%M%S');
 define('FMT_DATELDAP', '%Y%m%d%H%M%SZ');
@@ -185,20 +184,26 @@ class w2p_Utilities_Date extends Date {
 		return (($this->getHour() > 11) ? 'pm' : 'am');
 	}
 
-	/* Check if two dates belong to the same day */
+	/**
+     * Check if two dates belong to the same day
+     */
 	public function isSameDay($otherDay) {
 		return ($this->getDay() == $otherDay->getDay() &&
 			$this->getMonth() == $otherDay->getMonth() &&
 			$this->getYear() == $otherDay->getYear());
 	}
 
-	/* Return date diff in minutes */
+	/**
+     *  Return date diff in minutes
+     */
 	public function diff($otherDate) {
 		return abs($otherDate->getTime() - $this->getTime())/60.0;
 	}
 
-	/* Return date obj for the end of the next working day
-	** @param	bool	Determine whether to set time to start of day or preserve the time of the given object
+	/**
+     * Return date obj for the end of the next working day
+     *
+	 * @param	bool	Determine whether to set time to start of day or preserve the time of the given object
 	*/
 	public function next_working_day($preserveHours = false) {
 		$do = clone $this;
@@ -216,9 +221,10 @@ class w2p_Utilities_Date extends Date {
 		return $this;
 	}
 
-	/* Return date obj for the end of the previous working day
-	** @param	bool	Determine whether to set time to end of day or preserve the time of the given object
-	*/
+	/**
+     * Return date obj for the end of the previous working day
+	 * @param	bool	Determine whether to set time to end of day or preserve the time of the given object
+	 */
 	public function prev_working_day($preserveHours = false) {
 		$do = clone $this;
 		$end = (int) w2PgetConfig('cal_day_end');
@@ -234,14 +240,17 @@ class w2p_Utilities_Date extends Date {
 		return $this;
 	}
 
-	/* Calculating _robustly_ a date from a given date and duration
-	** Works in both directions: forwards/prospective and backwards/retrospective
-	** Respects non-working days
-	** @param	int	duration	(positive = forward, negative = backward)
-	** @param	int	durationType; 1 = hour; 24 = day;
-	** @return	obj	Shifted DateObj
-	*/
-
+	/**
+     *  Calculating _robustly_ a date from a given date and duration
+     *
+     * Works in both directions: forwards/prospective and backwards/retrospective
+     *
+     * Respects non-working days
+     *
+     * @param	int	duration	(positive = forward, negative = backward)
+     * @param	int	durationType; 1 = hour; 24 = day;
+     * @return	obj	Shifted DateObj
+	 */
 	public function addDuration($duration = '8', $durationType = '1') {
 		// using a sgn function lets us easily cover
 		// prospective and retrospective calcs at the same time
@@ -327,15 +336,16 @@ class w2p_Utilities_Date extends Date {
 		return $this->next_working_day();
 	}
 
-	/* Calculating _robustly_ the working duration between two dates
-	**
-	** Works in both directions: forwards/prospective and backwards/retrospective
-	** Respects non-working days
-	** SantosDiez - Credit for better variable names
-	**
-	** @param	obj	DateObject	may be viewed as end date
-	** @return	float				working duration in hours
-	*/
+	/**
+     * Calculating _robustly_ the working duration between two dates
+     *
+     * Works in both directions: forwards/prospective and backwards/retrospective
+     * Respects non-working days
+     * SantosDiez - Credit for better variable names
+     *
+     * @param	obj	DateObject	may be viewed as end date
+     * @return	float				working duration in hours
+	 */
 	public function calcDuration($endDate) {
 
 		// since one will alter the date ($this) one better copies it to a new instance
@@ -440,15 +450,16 @@ class w2p_Utilities_Date extends Date {
 		return clone ($this);
 	}
 
-	/* Calculating a future date considering a given duration
-	**
-	** Respects non-working days and the working hours and the begining and end of days
-	** SantosDiez - Credit for better variable names
-	**
-	** @param	duration		Duration to be added to the date
-	** @param	durationType	Duration Type: 1=hours, 24=days
-	** @return	w2p_Utilities_Date		The w2p_Utilities_Date object of the finish date
-	*/
+	/**
+     * Calculating a future date considering a given duration
+     *
+     * Respects non-working days and the working hours and the begining and end of days
+     * SantosDiez - Credit for better variable names
+     *
+     * @param	duration		Duration to be added to the date
+     * @param	durationType	Duration Type: 1=hours, 24=days
+     * @return	w2p_Utilities_Date		The w2p_Utilities_Date object of the finish date
+	 */
 	public function calcFinish($duration, $durationType) {
 
 		// since one will alter the date ($this) one better copies it to a new instance

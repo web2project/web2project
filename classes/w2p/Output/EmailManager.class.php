@@ -31,10 +31,9 @@ class w2p_Output_EmailManager
         $this->_AppUI = $AppUI;
     }
 
-    /*
+    /**
      * @deprecated
      */
-
     public function getCalendarConflictEmail(w2p_Core_CAppUI $AppUI = null)
     {
         trigger_error("getCalendarConflictEmail has been deprecated in v3.0 and will be removed by v4.0. Please use getEventNotify() instead.", E_USER_NOTICE);

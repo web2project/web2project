@@ -16,8 +16,6 @@
  */
 
 $AppUI = is_object($AppUI) ? $AppUI : new w2p_Core_CAppUI();
-include_once $AppUI->getLibraryClass('phpgacl/gacl.class');
-include_once $AppUI->getLibraryClass('phpgacl/gacl_api.class');
 
 class w2p_Extensions_Permissions extends gacl_api
 {
