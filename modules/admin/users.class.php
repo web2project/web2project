@@ -51,6 +51,13 @@ class CUser extends w2p_Core_BaseObject
     }
 
     protected function  hook_preCreate() {
+        $this->perm_func = 'addLogin';
+        $this->user_password = $this->authenticator->hashPassword($this->user_password);
+
+        parent::hook_preCreate();
+    }
+
+    protected function  hook_preUpdate() {
         $this->perm_func = 'updateLogin';
         $tmpUser = new CUser();
         $tmpUser->overrideDatabase($this->_query);
@@ -63,13 +70,6 @@ class CUser extends w2p_Core_BaseObject
         } else {
             $this->user_password = $tmpUser->user_password;
         }
-
-        parent::hook_preCreate();
-    }
-
-    protected function  hook_preUpdate() {
-        $this->perm_func = 'addLogin';
-        $this->user_password = $this->authenticator->hashPassword($this->user_password);
 
         parent::hook_preUpdate();
     }
