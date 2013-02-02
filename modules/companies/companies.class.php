@@ -41,6 +41,9 @@ class CCompany extends w2p_Core_BaseObject {
 	/**
  	@var int */
 	public $company_type = null;
+    /*
+     * @deprecated
+     */
 	public $company_custom = null;
 
 	public function __construct() {
