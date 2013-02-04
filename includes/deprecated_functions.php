@@ -233,7 +233,6 @@ function constructTaskTree_pd($task_data, $parents, $all_tasks, $depth = 0) {
 
 // from modules/tasks/tasks.class.php
 /**
- * canTaskAccess()
  * Used to check if a user has task_access to see the task in task list context
  * (This function was optimized to try to use the DB the least possible)
  * TODO:  Remove for v4.0 - caseydk 20 September 2012

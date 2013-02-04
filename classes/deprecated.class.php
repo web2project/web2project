@@ -8,6 +8,8 @@
  */
 
 /**
+ * @package web2project\deprecated
+ *
  * @deprecated
  */
 class bcode extends CSystem_Bcode
@@ -22,6 +24,8 @@ class bcode extends CSystem_Bcode
 }
 
 /**
+ * @package web2project\deprecated
+ *
  * @deprecated
  */
 class budgets extends CSystem_Budget
@@ -35,7 +39,9 @@ class budgets extends CSystem_Budget
 
 }
 
-/*
+/**
+ * @package web2project\deprecated
+ *
  * @deprecated
  */
 class CAppUI extends w2p_Core_CAppUI
@@ -48,6 +54,8 @@ class CAppUI extends w2p_Core_CAppUI
 }
 
 /**
+ * @package web2project\deprecated
+ *
  * @deprecated
  */
 class CCalendar extends CEvent
@@ -72,6 +80,8 @@ class CDate extends w2p_Utilities_Date
 }
 
 /**
+ * @package web2project\deprecated
+ *
  * @deprecated
  */
 class CFileFolder extends CFile_Folder
@@ -84,6 +94,8 @@ class CFileFolder extends CFile_Folder
 }
 
 /**
+ * @package web2project\deprecated
+ *
  * @deprecated
  */
 class CForumMessage extends CForum_Message
@@ -97,7 +109,9 @@ class CForumMessage extends CForum_Message
 
 }
 
-/*
+/**
+ * @package web2project\deprecated
+ *
  * @deprecated
  */
 class CInfoTabBox extends w2p_Theme_InfoTabBox
@@ -110,6 +124,8 @@ class CInfoTabBox extends w2p_Theme_InfoTabBox
 }
 
 /**
+ * @package web2project\deprecated
+ *
  * @deprecated
  */
 class CMonthCalendar extends w2p_Output_MonthCalendar
@@ -124,6 +140,8 @@ class CMonthCalendar extends w2p_Output_MonthCalendar
 }
 
 /**
+ * @package web2project\deprecated
+ *
  * @deprecated
  */
 class CProjectDesignerOptions extends CProjectDesigner
@@ -138,6 +156,8 @@ class CProjectDesignerOptions extends CProjectDesigner
 }
 
 /**
+ * @package web2project\deprecated
+ *
  * @deprecated
  */
 class CRole extends CSystem_Role
@@ -149,6 +169,8 @@ class CRole extends CSystem_Role
 }
 
 /**
+ * @package web2project\deprecated
+ *
  * @deprecated
  */
 class CSysKey extends CSystem_SysKey
@@ -161,6 +183,8 @@ class CSysKey extends CSystem_SysKey
 }
 
 /**
+ * @package web2project\deprecated
+ *
  * @deprecated
  */
 class CSysVal extends CSystem_SysVal
@@ -171,7 +195,9 @@ class CSysVal extends CSystem_SysVal
 	}
 }
 
-/*
+/**
+ * @package web2project\deprecated
+ *
  * @deprecated
  */
 class CTabBox_core extends w2p_Theme_TabBox
@@ -183,6 +209,8 @@ class CTabBox_core extends w2p_Theme_TabBox
 }
 
 /**
+ * @package web2project\deprecated
+ *
  * @deprecated
  */
 class CTaskLog extends CTask_Log
@@ -194,7 +222,9 @@ class CTaskLog extends CTask_Log
     }
 }
 
-/*
+/**
+ * @package web2project\deprecated
+ *
  * @deprecated
  */
 class CTitleBlock extends w2p_Theme_TitleBlock
@@ -205,7 +235,9 @@ class CTitleBlock extends w2p_Theme_TitleBlock
     }
 }
 
-/*
+/**
+ * @package web2project\deprecated
+ *
  * @deprecated
  */
 class CTitleBlock_core extends w2p_Theme_TitleBlock
@@ -217,7 +249,9 @@ class CTitleBlock_core extends w2p_Theme_TitleBlock
 	}
 }
 
-/*
+/**
+ * @package web2project\deprecated
+ *
  * @deprecated
  */
 class CW2pObject extends w2p_Core_BaseObject
@@ -229,7 +263,9 @@ class CW2pObject extends w2p_Core_BaseObject
 	}
 }
 
-/*
+/**
+ * @package web2project\deprecated
+ *
  * @deprecated
  */
 class CustomFields extends w2p_Core_CustomFields
@@ -242,7 +278,9 @@ class CustomFields extends w2p_Core_CustomFields
     }
 }
 
-/*
+/**
+ * @package web2project\deprecated
+ *
  * @deprecated
  */
 class DBQuery extends w2p_Database_Query
@@ -254,7 +292,9 @@ class DBQuery extends w2p_Database_Query
     }
 }
 
-/*
+/**
+ * @package web2project\deprecated
+ *
  * @deprecated
  */
 class Mail extends w2p_Utilities_Mail
@@ -267,6 +307,8 @@ class Mail extends w2p_Utilities_Mail
 }
 
 /**
+ * @package web2project\deprecated
+ *
  * @deprecated
  */
 class w2Pacl extends w2p_Extensions_Permissions
@@ -279,6 +321,8 @@ class w2Pacl extends w2p_Extensions_Permissions
 }
 
 /**
+ * @package web2project\deprecated
+ *
  * @deprecated
  */
 class w2PajaxResponse extends w2p_Extensions_AjaxResponse
