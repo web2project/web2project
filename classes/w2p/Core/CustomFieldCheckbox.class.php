@@ -1,14 +1,10 @@
-<?php /* $Id$ $URL$ */
+<?php
 
 /**
- *	@package web2project
- *	@subpackage core
- *	@version $Revision$
+ * Produces an INPUT Element of the CheckBox type in edit mode, view mode
+ *   indicates 'Yes' or 'No'
  *
- *	CustomFieldCheckBox Class.
- *
- *	Produces an INPUT Element of the CheckBox type in edit mode, view mode indicates 'Yes' or 'No'
- *
+ * @package     web2project\core
  */
 
 class  w2p_Core_CustomFieldCheckBox extends w2p_Core_CustomField {

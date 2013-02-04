@@ -1,15 +1,10 @@
-<?php /* $Id$ $URL$ */
+<?php
 
 /**
- *	@package web2project
- *	@subpackage core
- *	@version $Revision$
- *
- *	CustomFieldSelect Class.
- *
- *	Produces a SELECT list, extends the load method so that the option list
+ * Produces a SELECT list, extends the load method so that the option list
  *    can be loaded from a seperate table
  *
+ * @package     web2project\core
  */
 
 class w2p_Core_CustomFieldSelect extends w2p_Core_CustomField {

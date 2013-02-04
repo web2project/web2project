@@ -1,24 +1,24 @@
 <?php
 
-/* $Id$ $URL$ */
-/*
+/**
  * Permissions system extends the phpgacl class.  Very few changes have
  * been made, however the main one is to provide the database details from
  * the main w2P environment.
- */
-$AppUI = is_object($AppUI) ? $AppUI : new w2p_Core_CAppUI();
-include_once $AppUI->getLibraryClass('phpgacl/gacl.class');
-include_once $AppUI->getLibraryClass('phpgacl/gacl_api.class');
-
-// Now extend the class
-/**
+ *
  * Extend the gacl_api class.  There is an argument to separate this
  * into a gacl and gacl_api class on the premise that normal activity
  * only needs the functions in gacl, but it would appear that this is
  * not so for w2P, which tends to require reverse lookups rather than
  * just forward ones (i.e. looking up who is allowed to do x, rather
  * than is x allowed to do y).
+ *
+ * @package     web2project\extensions
  */
+
+$AppUI = is_object($AppUI) ? $AppUI : new w2p_Core_CAppUI();
+include_once $AppUI->getLibraryClass('phpgacl/gacl.class');
+include_once $AppUI->getLibraryClass('phpgacl/gacl_api.class');
+
 class w2p_Extensions_Permissions extends gacl_api
 {
 

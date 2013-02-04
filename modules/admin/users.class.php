@@ -1,15 +1,11 @@
-<?php /* $Id$ $URL$ */
-
-if (!defined('W2P_BASE_DIR')) {
-    die('You should not access this file directly.');
-}
-
-// user types
-$utypes = w2PgetSysVal('UserType');
+<?php
 
 /**
- * User Class
+ * @package     web2project\modules\core
  */
+
+$utypes = w2PgetSysVal('UserType');
+
 class CUser extends w2p_Core_BaseObject
 {
 

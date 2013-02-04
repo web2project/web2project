@@ -1,4 +1,8 @@
-<?php /* $Id$ $URL$ */
+<?php
+
+/**
+ * @package     web2project\modules\core
+ */
 
 class CSmartSearch {
 

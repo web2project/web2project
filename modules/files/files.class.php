@@ -1,8 +1,9 @@
-<?php /* $Id$ $URL$ */
+<?php
 
 /**
- * File Class
+ * @package     web2project\modules\core
  */
+
 class CFile extends w2p_Core_BaseObject {
 
 	public $file_id = null;

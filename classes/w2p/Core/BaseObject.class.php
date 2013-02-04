@@ -1,18 +1,14 @@
-<?php /* $Id$ $URL$ */
+<?php
 
 /**
- * 	@package web2project
- * 	@subpackage core
- * 	@version $Revision$
- */
-
-/**
- * 	w2p_Core_BaseObject Abstract Class.
+ * Parent class to all database table derived objects
  *
- * 	Parent class to all database table derived objects
- * 	@author Andrew Eddie <eddieajau@users.sourceforge.net>
- * 	@abstract
+ * @package     web2project\core
+ * @author      Andrew Eddie <eddieajau@users.sourceforge.net>
+ *
+ * @abstract
  */
+
 abstract class w2p_Core_BaseObject extends w2p_Core_Event implements w2p_Core_ListenerInterface
 {
 

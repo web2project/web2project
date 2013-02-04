@@ -1,12 +1,17 @@
 <?php
 
-// Message No Constants
+/**
+ * The Application User Interface Class.
+ *
+ * @package     web2project\core
+ * @author      Andrew Eddie <eddieajau@users.sourceforge.net>
+ */
+
 define('UI_MSG_OK', 1);
 define('UI_MSG_ALERT', 2);
 define('UI_MSG_WARNING', 3);
 define('UI_MSG_ERROR', 4);
 
-// global variable holding the translation array
 $GLOBALS['translate'] = array();
 
 define('UI_CASE_MASK', 0x0F);
@@ -20,12 +25,7 @@ define('UI_OUTPUT_JS', 0x10);
 define('UI_OUTPUT_RAW', 0x20);
 
 define('ACCESS_DENIED', 'm=public&a=access_denied');
-/**
- * The Application User Interface Class.
- *
- * @author Andrew Eddie <eddieajau@users.sourceforge.net>
- * @version $Revision$
- */
+
 class w2p_Core_CAppUI
 {
 

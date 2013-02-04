@@ -1,5 +1,11 @@
 <?php
 
+/**
+ * @package     web2project\core
+ *
+ * @abstract
+ */
+
 abstract class w2p_Core_Setup {
     
     protected $_errors;

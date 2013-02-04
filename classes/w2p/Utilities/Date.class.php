@@ -1,8 +1,7 @@
-<?php /* $Id$ $URL$ */
+<?php
 
 /**
- * @package web2project
- * @subpackage utilites
+ * @package     web2project\utilities
  */
 
 $AppUI = is_object($AppUI) ? $AppUI : new w2p_Core_CAppUI();

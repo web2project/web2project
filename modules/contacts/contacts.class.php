@@ -1,14 +1,9 @@
-<?php /* $Id$ $URL$ */
+<?php
 
 /**
- * 	@package web2Project
- * 	@subpackage modules
- * 	@version $Revision$
+ * @package     web2project\modules\core
  */
 
-/**
- * Contacts class
- */
 class CContact extends w2p_Core_BaseObject
 {
 

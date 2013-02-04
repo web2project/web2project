@@ -1,16 +1,11 @@
-<?php /* $Id$ $URL$ */
-##
-## Calendar classes
-##
+<?php
+
+/**
+ * @package     web2project\modules\core
+ */
 
 $event_filter_list = array('my' => 'My Events', 'own' => 'Events I Created', 'all' => 'All Events');
 
-/**
- * Event Class
- *
- * { Description }
- *
- */
 class CEvent extends w2p_Core_BaseObject
 {
 

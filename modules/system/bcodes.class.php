@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * @package     web2project\modules\core
+ */
+
 class CSystem_Bcode extends w2p_Core_BaseObject
 {
 
