@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Parent class to all database table derived objects
  *

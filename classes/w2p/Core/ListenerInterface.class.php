@@ -1,5 +1,4 @@
 <?php
-
 /**
  * This is the Dispatcher used for cross-module communications and heavily
  * based on http://dustint.com/post/38/building-a-php-publish-subscribe-system
