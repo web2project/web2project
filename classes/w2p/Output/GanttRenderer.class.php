@@ -1,5 +1,4 @@
 <?php
-
 /**
  * This is primarily a wrapper for the jpgraph class so we can generate Gantt
  * Charts. I chose this because working with it directly in the modules created

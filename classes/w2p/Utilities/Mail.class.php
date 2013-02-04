@@ -1,5 +1,4 @@
 <?php
-
 /**
  * This class encapsulates the PHP mail() function.
  *
