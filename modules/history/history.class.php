@@ -1,9 +1,7 @@
 <?php
 
 /**
- *	@package web2Project
- *	@subpackage modules
- *	@version $Revision$
+ * @package     web2project\modules\misc
  */
 
 class CHistory extends w2p_Core_BaseObject {
@@ -51,6 +49,12 @@ class CHistory extends w2p_Core_BaseObject {
         return true;
     }
 
+    /**
+     * Cean up this monstrousity to use the naming conventions.
+     *
+     * @param type $history
+     * @return string 
+     */
     public function show_history($history) {
         $id = $history['history_item'];
         $module = $history['history_table'];

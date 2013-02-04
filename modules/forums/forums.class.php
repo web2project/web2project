@@ -1,4 +1,8 @@
-<?php /* $Id$ $URL$ */
+<?php
+
+/**
+ * @package     web2project\modules\misc
+ */
 
 if (!isset($AppUI)) {
     $AppUI = new w2p_Core_CAppUI();

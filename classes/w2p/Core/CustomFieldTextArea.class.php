@@ -1,17 +1,11 @@
-<?php /* $Id$ $URL$ */
+<?php
 
 /**
- *	@package web2project
- *	@subpackage core
- *	@version $Revision$
+ * Produces a TEXTAREA Element in edit mode
  *
- *	CustomFieldTextArea Class.
- *
- *	Produces a TEXTAREA Element in edit mode
- *
+ * @package     web2project\core
  */
 
-//  - 
 class w2p_Core_CustomFieldTextArea extends w2p_Core_CustomField {
 
     public function __construct($field_id, $field_name, $field_order, $field_description, $field_extratags, $field_published) {

@@ -1,15 +1,8 @@
-<?php /* $Id$ $URL$ */
+<?php
 
 /**
- *	@package    web2project
- *	@subpackage database
- *	@version    $Revision$
- *  @license	Clear BSD
- *  @author     Keith casey
- */
-
-/**
- * Mock database query class
+ * @package     web2project\mocks
+ * @author      D. Keith Casey, Jr. <caseydk@users.sourceforge.net>
  */
 
 class w2p_Mocks_Query extends w2p_Database_Query {

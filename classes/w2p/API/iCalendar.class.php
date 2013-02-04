@@ -1,18 +1,13 @@
-<?php /* $Id$ $URL$ */
+<?php
 
 /**
- *	@package web2project
- *	@subpackage api
- *	@version $Revision$
- */
-
-/**
- *  A simple iCal creator for web2project.
+ * A simple iCal creator for web2project.
  *
- *  Lots  of thanks to Ben Fortuna for his fantastic iCal Validator - http:
- * //severinghaus.org/projects/icv/  It helped me discover and debug a number
- * of date issues and streamline the whole process.
+ * Lots  of thanks to Ben Fortuna for his fantastic iCal Validator -
+ * http://severinghaus.org/projects/icv/  It helped me discover and debug a
+ * number of date issues and streamline the whole process.
  *
+ * @package     web2project\api
  */
 
 class w2p_API_iCalendar

@@ -1,21 +1,13 @@
-<?php /* $Id$ $URL$ */
+<?php
 
 /**
- *	@package web2project
- *	@subpackage core
- *	@version $Revision$
- */
-
-/**
- *	w2p_Core_Event Class.
+ * This is the Dispatcher used for cross-module communications and heavily
+ * based on http://dustint.com/post/38/building-a-php-publish-subscribe-system
+ * from Dustin Thomson. Used here with permission received on 21 Aug 2011.
  *
- *	This is the Dispatcher used for cross-module communications and heavily 
- *    based on http://dustint.com/post/38/building-a-php-publish-subscribe-system
- *    from Dustin Thomson. Used here with permission received on 21 Aug 2011.
- *  
- *	@author Dustin Thomson <dustin@dustint.com>
- *	@author Keith Casey (maintainer) <caseydk@sourceforge.net>
- *
+ * @package     web2project\core
+ * @author      Dustin Thomson <dustin@dustint.com>
+ * @author      Keith Casey (maintainer) <caseydk@sourceforge.net>
  */
 class w2p_Core_Event {
 	/**

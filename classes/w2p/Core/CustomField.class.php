@@ -1,14 +1,9 @@
-<?php /* $Id$ $URL$ */
+<?php
 
 /**
- *	@package web2project
- *	@subpackage core
- *	@version $Revision$
- */
-
-/**
- *	CustomField Abstract Class.
+ * @package     web2project\core
  *
+ * @abstract
  */
 
 class w2p_Core_CustomField {

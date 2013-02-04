@@ -1,17 +1,12 @@
-<?php /* $Id$ $URL$ */
+<?php
 
 /**
- *	@package web2project
- *	@subpackage core
- *	@version $Revision$
+ * Loads all custom fields related to a module, produces a html table of all
+ * custom fields. Also loads values automatically if the obj_id parameter is
+ * supplied. The obj_id parameter is the ID of the module object
+ * eg. company_id for companies module
  *
- *	CustomFields Class.
- *
- *	Loads all custom fields related to a module, produces a html table of all
- *    custom fields. Also loads values automatically if the obj_id parameter is
- *    supplied. The obj_id parameter is the ID of the module object
- *    eg. company_id for companies module
- *
+ * @package     web2project\core
  */
 
 class w2p_Core_CustomFields {

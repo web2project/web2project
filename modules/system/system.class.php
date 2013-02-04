@@ -1,6 +1,9 @@
-<?php /* $Id$ $URL$ */
+<?php
 
-//fixed system SysVals to prevent their deletion
+/**
+ * @package     web2project\modules\core
+ */
+
 $fixedSysVals = array('CompanyType', 'EventType', 'FileType', 'GlobalCountries', 'GlobalYesNo', 'ProjectPriority', 'ProjectStatus', 'ProjectType', 'TaskDurationType', 'TaskLogReference', 'TaskPriority', 'TaskStatus', 'TaskType', 'UserType');
 
 class CSystem {
