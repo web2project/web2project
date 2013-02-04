@@ -1,4 +1,4 @@
-<?php /* $Id$ $URL$ */
+<?php
                     global $a, $AppUI;
                     if (function_exists('styleRenderBoxBottom') && (w2PgetParam($_GET, 'tab', 0) != -1)) {
                         echo styleRenderBoxBottom();

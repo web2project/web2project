@@ -1,4 +1,4 @@
-<?php /* $Id: lang.php 38 2008-02-11 11:38:51Z pedroix $ $URL: https://web2project.svn.sourceforge.net/svnroot/web2project/trunk/locales/de/lang.php $ */
+<?php
 // Entries in the LANGUAGES array are elements that describe the
 // countries and language variants supported by this locale pack.
 // Elements are keyed by the ISO 2 character language code in lowercase

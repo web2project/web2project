@@ -1,4 +1,4 @@
-<?php /* $Id$ $URL$ */
+<?php
 $dialog = w2PgetParam($_GET, 'dialog', 0);
 if ($dialog) {
 	$page_title = '';

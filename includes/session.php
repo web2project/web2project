@@ -1,5 +1,4 @@
-<?php /* $Id$ $URL$ */
-
+<?php
 ##
 ## Session Handling Functions
 ##

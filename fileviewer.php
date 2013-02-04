@@ -1,5 +1,4 @@
-<?php /* $Id$ $URL$ */
-
+<?php
 //file viewer
 require_once 'base.php';
 require_once W2P_BASE_DIR . '/includes/config.php';
