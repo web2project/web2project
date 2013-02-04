@@ -1,12 +1,10 @@
-<?php /* $Id$ $URL$ */
+<?php
 
 /**
- * @package web2project
- * @subpackage utilites
+ * @package     web2project\utilities
  */
 
 $AppUI = is_object($AppUI) ? $AppUI : new w2p_Core_CAppUI();
-require_once $AppUI->getLibraryClass('PEAR/Date');
 
 define('FMT_DATEISO', '%Y%m%dT%H%M%S');
 define('FMT_DATELDAP', '%Y%m%d%H%M%SZ');

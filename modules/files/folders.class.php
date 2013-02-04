@@ -1,8 +1,9 @@
 <?php
 
 /**
- * File Folder Class
+ * @package     web2project\modules\core
  */
+
 class CFile_Folder extends w2p_Core_BaseObject {
 	/**
  	@param int file_folder_id **/

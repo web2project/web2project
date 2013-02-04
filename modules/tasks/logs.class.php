@@ -1,18 +1,10 @@
 <?php
-/* vim: set expandtab tabstop=4 shiftwidth=4 softtabstop=4: */
 
 /**
  * Class for handling task log functionality
  *
- *
- * PHP version 5
- *
- * LICENSE: This source file is subject to Clear BSD License. Please see the
- *   LICENSE file in root of site for further details
- *
  * @category    CTask_Logs
- * @package     web2project
- * @subpackage  modules
+ * @package     web2project\modules\core
  * @copyright   2007-2012 The web2Project Development Team <w2p-developers@web2project.net>
  * @license     Clear BSD
  * @link        http://www.web2project.net

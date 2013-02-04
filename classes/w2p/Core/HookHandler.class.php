@@ -1,24 +1,15 @@
-<?php /* $Id$ $URL$ */
+<?php
 
 /**
- * 	@package web2project
- * 	@subpackage core
- * 	@version $Revision$
- */
-
-/**
- * 	w2p_Core_HookHandler Class
- *
  * This class processes all of the hooks in a consistent and error-resistant
- *   manner.
- * 
- * The original model for this functionality was based on Drupal's methods for
- *   laying out and interacting with hooks.  It should not be considered
- *   complete at this time.
+ * manner. The original model for this functionality was based on Drupal's
+ * methods for laying out and interacting with hooks.  It should not be
+ * considered complete at this time.
  *
- * 	@author Keith Casey <caseydk@sourceforge.net>
- *
+ * @package     web2project\core
+ * @author      Keith Casey <caseydk@sourceforge.net>
  */
+
 class w2p_Core_HookHandler
 {
 

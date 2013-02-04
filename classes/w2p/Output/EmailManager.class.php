@@ -1,20 +1,18 @@
 <?php
 
-/* $Id$ $URL$ */
-
 /**
- * 	@package web2project
- * 	@subpackage output
- * 	@version $Revision$
+ * As of v2.1, this class doesn't do much, it's just a place to collect all of
+ * the email templates from throughout the system. Immediately, this will make
+ * it easier for users to locate and update the email templates.
  *
- *  As of v2.1, this class doesn't do much, it's just a place to collect all
- *    of the email templates from throughout the system. Immediately, this will
- *    make it easier for users to locate and update the email templates.
- *  Sometime in the future, we'll replace these mostly static messages with an
- *    admin interface that allows templates to be edited and potentially even
- *    translated.
+ * Sometime in the future, we'll replace these mostly static messages with an
+ * admin interface that allows templates to be edited and potentially even
+ * translated.
  *
+ * @package     web2project\output
+ * @author      D. Keith Casey, Jr. <caseydk@users.sourceforge.net>
  */
+
 class w2p_Output_EmailManager
 {
 

@@ -1,11 +1,11 @@
-<?php /* $Id$ $URL$ */
-
-//Lets require the main classes needed
-include_once (W2P_BASE_DIR . '/modules/projectdesigner/config.php');
+<?php
 
 /**
- * CProjectDesigner Class
+ * @package     web2project\modules\misc
  */
+
+include_once (W2P_BASE_DIR . '/modules/projectdesigner/config.php');
+
 class CProjectDesigner extends w2p_Core_BaseObject
 {
 

@@ -1,12 +1,7 @@
-<?php /* $Id$ $URL$ */
+<?php
 
 /**
- *	@package web2project
- *	@subpackage core
- *	@version $Revision$
- *
- *	CustomFieldsParser
- *
+ * @package     web2project\core
  */
 class w2p_Core_CustomFieldsParser {
 	public $fields_array = array();

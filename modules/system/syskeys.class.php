@@ -1,8 +1,8 @@
-<?php /* $Id$ $URL$ */
+<?php
 
-##
-## CSysKey Class
-##
+/**
+ * @package     web2project\modules\core
+ */
 
 class CSystem_SysKey extends w2p_Core_BaseObject {
 	public $syskey_id = null;

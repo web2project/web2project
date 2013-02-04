@@ -1,13 +1,7 @@
-<?php /* $Id$ $URL$ */
+<?php
 
 /**
- *	@package web2project
- *	@subpackage theme
- *	@version $Revision$
- */
-
-/**
- * Title box abstract class
+ * @package     web2project\theme
  */
 
 class w2p_Theme_TitleBlock {

@@ -1,12 +1,7 @@
-<?php /* $Id$ $URL$ */
+<?php
 
 /**
- *	@package web2project
- *	@subpackage core
- *	@version $Revision$
- *
- *	CustomOptionList Class.
- *
+ * @package     web2project\core
  */
 
 class w2p_Core_CustomOptionList {

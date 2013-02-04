@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * @package     web2project\core
+ */
+
 class w2p_Core_CustomFieldManager extends w2p_Core_BaseObject {
 
     public $field_id = 0;
