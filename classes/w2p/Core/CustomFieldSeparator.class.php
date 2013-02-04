@@ -1,16 +1,11 @@
-<?php /* $Id$ $URL$ */
+<?php
 
 /**
- *	@package web2project
- *	@subpackage core
- *	@version $Revision$
+ * Produces just an horizontal line
  *
- *	CustomFieldSeparator Class.
- *
- *	Produces just an horizontal line
+ * @package     web2project\core
  */
 
-//  - 
 class w2p_Core_CustomFieldSeparator extends w2p_Core_CustomField {
 
     public function __construct($field_id, $field_name, $field_order, $field_description, $field_extratags, $field_published) {

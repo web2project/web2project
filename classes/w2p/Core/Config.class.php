@@ -1,7 +1,9 @@
 <?php
+
 /**
- * Configuration class
+ * @package     web2project\core
  */
+
 class w2p_Core_Config extends w2p_Core_BaseObject {
     protected $keepReminders = false;
     

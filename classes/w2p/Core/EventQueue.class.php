@@ -1,23 +1,16 @@
-<?php /* $Id$ $URL$ */
+<?php
 
 /**
- *	@package web2project
- *	@subpackage core
- *	@version $Revision$
- */
-
-/**
- * Event handling queue class.
- *
  * The event queue uses the table event_queue to manage
  * event notifications and other timed events, as well as
  * outgoing emails.
  *
- * Copyright 2005           dotproject team
- * Copyright 2007-2012      web2project team
+ * @package     web2project\core
+ * @copyright   (c) 2005, dotproject team
+ * @copyright   (c) 2007-2012 web2project team
  *
- * @todo TODO: This can probably be converted to extend the w2p_Core_BaseObject
- *    and just get rid of a bunch of this code. ~ dkc 28 Oct 2012
+ * @todo        TODO: This can probably be converted to extend the
+ * w2p_Core_BaseObject and just get rid of a bunch of this code. ~ dkc 28 Oct 2012
  */
 
 class w2p_Core_EventQueue {

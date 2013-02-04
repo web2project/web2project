@@ -1,11 +1,9 @@
-<?php /* $Id$ $URL$ */
+<?php
 
 /**
- * @package web2project
- * @subpackage utilites
- *
  * web2Project implementation of an HTTP handler
  *
+ * @package     web2project\utilities
  */
 
 class w2p_Utilities_HTTPRequest {

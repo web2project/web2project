@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * @package     web2project\modules\misc
+ */
+
 class CForum_Message extends w2p_Core_BaseObject
 {
 

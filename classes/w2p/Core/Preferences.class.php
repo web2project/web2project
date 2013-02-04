@@ -1,16 +1,11 @@
 <?php
-/**
- *	@package web2project
- *	@subpackage core
- *	@version $Revision$
- */
 
 /**
- *	w2p_Core_Preferences Class.
-
+ * @package     web2project\core
+ *
+ * @todo        TODO: couldn't this just extend the BaseObject?
  */
 
-//TODO: couldn't this just extend the BaseObject?
 class w2p_Core_Preferences {
 	public $pref_user = null;
 	public $pref_name = null;

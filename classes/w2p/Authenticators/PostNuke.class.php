@@ -1,15 +1,12 @@
-<?php /** $Id$ $URL$ */
+<?php
 
 /**
- * @package web2project
- * @subpackage authenticators
+ * PostNuke authentication has encoded information passed in on the login
+ * request. This needs to be extracted and verified.
+ *
+ * @package     web2project\authenticators
  */
 
-/**
- * PostNuke authentication has encoded information
- * passed in on the login request.  This needs to
- * be extracted and verified.
- */
 class w2p_Authenticators_PostNuke extends w2p_Authenticators_Base
 {
     public function __construct()
