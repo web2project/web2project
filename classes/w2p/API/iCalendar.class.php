@@ -12,6 +12,15 @@
 
 class w2p_API_iCalendar
 {
+    /**
+     * This takes a single array item at a time and transforms it into a proper
+     *  iCalendar VEVENT string and returns it.
+     * 
+     * @global type $AppUI
+     * @param type $calendarItem
+     * @param type $module_name
+     * @return string 
+     */
     public static function formatCalendarItem($calendarItem, $module_name)
     {
         global $AppUI;
@@ -52,7 +61,11 @@ class w2p_API_iCalendar
         return $eventItem;
     }
 
-    // TODO: This should get a review once we can make 5.3 our minimum version.
+    /**
+     * This is our kludgy pre-5.3 way of formatting datetimes.
+     *
+     * @todo This should get a review once we can make 5.3 our minimum version.
+     */
     private function formatDate($mysqlDate)
     {
         $myDate = new DateTime($mysqlDate);

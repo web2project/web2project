@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Authentication against the database is the default
  *
