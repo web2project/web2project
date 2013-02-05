@@ -1,5 +1,4 @@
 <?php
-
 /**
  * This class processes all of the hooks in a consistent and error-resistant
  * manner. The original model for this functionality was based on Drupal's
@@ -20,12 +19,13 @@ class w2p_Core_HookHandler
         $this->AppUI = $AppUI;
     }
 
-    /*
+    /**
      * This is the generic hook handler that counts on no result, feedback, etc.
      *   In general, this may be enough, but the additional methods may be
      *   useful too.
+     *
+     * @param type $name 
      */
-
     public function process($name)
     {
         $hookname = 'hook_' . $name;
@@ -41,6 +41,13 @@ class w2p_Core_HookHandler
         }
     }
 
+    /**
+     * This is a handler that creates an array of calendar items and then
+     *  combines them together to make a string that is used in the iCalendar
+     *  functionality.
+     *
+     * @return type 
+     */
     public function calendar()
     {
         $hookname = 'hook_calendar';
@@ -61,6 +68,11 @@ class w2p_Core_HookHandler
         return $buffer;
     }
 
+    /**
+     * This gets a list of calendar items.
+     *
+     * @return type 
+     */
     public function calendar_links()
     {
         $hookname = 'hook_calendar_links';

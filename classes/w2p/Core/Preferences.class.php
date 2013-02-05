@@ -1,24 +1,35 @@
 <?php
-
+/**
+ * This is the core preferences object that runs both the default and User-based preferences.
+ *
+ * @package     web2project\core 
+ */
 /**
  * @package     web2project\core
- *
  * @todo        TODO: couldn't this just extend the BaseObject?
  */
-
 class w2p_Core_Preferences {
-	public $pref_user = null;
+	/** This is the user_id */
+    public $pref_user = null;
+    /** There is no defined list of preferences, so we can add as needed */
 	public $pref_name = null;
+    /** This is the value itself */
 	public $pref_value = null;
 
     protected $_query = null;
 
+    /**
+     * @todo refactor
+     */
 	public function __construct()
     {
 		// empty constructor
         $this->_query = new w2p_Database_Query;
 	}
 
+    /**
+     * @todo refactor
+     */
 	public function bind($hash)
     {
 		if (!is_array($hash)) {
@@ -30,16 +41,25 @@ class w2p_Core_Preferences {
 		}
 	}
 
+    /**
+     * @todo refactor
+     */
     public function isValid()
     {
         return true;
     }
 
+    /**
+     * @todo refactor
+     */
 	public function check()
     {
 		return array();
 	}
 
+    /**
+     * @todo refactor
+     */
 	public function store()
     {
 		$q = $this->_getQuery();
@@ -55,6 +75,9 @@ class w2p_Core_Preferences {
 		}
 	}
 
+    /**
+     * @todo refactor
+     */
 	public function delete()
     {
 		$q = $this->_getQuery();
@@ -75,6 +98,7 @@ class w2p_Core_Preferences {
      * Clears out the query and then returns it for use
      *
      * @access protected
+     * @todo refactor
      *
      * @return w2p_Database_Query Clean query object
      */

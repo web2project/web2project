@@ -1,21 +1,32 @@
 <?php
-
 /**
  * Parent class to all the controllers
  *
  * @package     web2project\controllers
+ */
+/**
+ * This is the most common Controller and used by nearly every module
+ *  throughout the core system.
+ *
+ * @package     web2project\controllers
  * @author      Keith Casey <caseydk@sourceforge.net>
  */
-
 class w2p_Controllers_Base
 {
+    /** A boolean on whether or not this should delete */
     protected $delete = false;
+    /** A string that prepends the status message going back to the user */
     protected $prefix = '';
+    /** The path to use if the action succeeded */
     protected $successPath = '';
+    /** The path to use if the action failed */
     protected $errorPath = '';
 
+    /** This is the object actually acted upon */
     public $object = null;
+    /** A boolean stating whether the desired action worked or not */
     public $success = false;
+    /** Either the $successPath or $errorPath depending on what happened */
     public $resultPath = '';
 
     public function __construct(w2p_Core_BaseObject $object, $delete,

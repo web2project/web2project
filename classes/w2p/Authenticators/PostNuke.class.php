@@ -1,5 +1,4 @@
 <?php
-
 /**
  * PostNuke authentication has encoded information passed in on the login
  * request. This needs to be extracted and verified.
