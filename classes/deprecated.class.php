@@ -1,6 +1,13 @@
 <?php
 
 /**
+ * This is the central location for all deprecated classes within web2project.
+ *  When you add a class here, you may also have to update our Autoloader
+ *  (includes/main_functions.php) to make sure the old class name still resolves
+ *  properly.
+ */
+
+/**
  * @deprecated
  */
 class bcode extends CSystem_Bcode

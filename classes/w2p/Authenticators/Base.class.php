@@ -1,14 +1,19 @@
 <?php
-
 /**
- * Parent class for all authenticators
+ * This is the core of the authentication system. All other Authenticators
+ *  should extend it.
  *
  * @package     web2project\authenticators
+ */
+/**
+ * This class just collects the common functionality from across the
+ *  Authenticators. It will tend to grow as we support more auth options.
+ * 
  * @author      Keith Casey <caseydk@users.sourceforge.net>
  *
+ * @package     web2project\authenticators
  * @abstract
  */
-
 abstract class w2p_Authenticators_Base
 {
     /**
@@ -18,7 +23,7 @@ abstract class w2p_Authenticators_Base
      *
      * @param type $password
      *
-     * @return type
+     * @return md5hash
      */
     public function hashPassword($password)
     {
@@ -27,6 +32,11 @@ abstract class w2p_Authenticators_Base
         return $hash;
     }
 
+    /**
+     * This just returns the userId and will need to be overridden only rarely.
+     *
+     * @return int 
+     */
     public function userId()
     {
         return (int) $this->user_id;
