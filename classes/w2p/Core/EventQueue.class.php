@@ -7,7 +7,7 @@
  *
  * @package     web2project\core
  * @copyright   (c) 2005, dotproject team
- * @copyright   (c) 2007-2012 web2project team
+ * @copyright   (c) 2007-2013 web2project team
  *
  * @todo        TODO: This can probably be converted to extend the
  * w2p_Core_BaseObject and just get rid of a bunch of this code. ~ dkc 28 Oct 2012

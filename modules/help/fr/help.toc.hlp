@@ -1,4 +1,3 @@
-<!-- -->
 <table cellspacing="2" cellpadding="4" border="0" class="tbl" width="100%">
 <tr>
 	<td width="100%" valign="top">
@@ -7,7 +6,7 @@
 			<br />
 			<br />Nous mettons à votre disposition 3 plateformes pour vous assister. Merci de vous rappeler que les aides ne sont pas à sens unique: vous pouvez aussi aider les autres en contribuant.
 			<br />
-			<br />La <a href="http://wiki.web2project.net/" target="_blank">Documentation en ligne de web2Project</a>
+			<br />La <a href="https://github.com/web2project/web2project/wiki/Installation" target="_blank">Documentation en ligne de web2Project</a>
 			est destinée à vous fournir des informations sur l'utilisation de web2Project (par exemple: explication des modules, les fonctions, la formation ...).
 			<br />
 			<br />Une aide supplémentaire peut être trouvée dans les 
