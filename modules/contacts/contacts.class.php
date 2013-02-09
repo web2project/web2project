@@ -354,12 +354,12 @@ class CContact extends w2p_Core_BaseObject
     public function notify()
     {
         $result = false;
-        global $locale_char_set;
+
         $df = $this->_AppUI->getPref('SHDATEFORMAT');
         $df .= ' ' . $this->_AppUI->getPref('TIMEFORMAT');
 
         $mail = new w2p_Utilities_Mail();
-        $mail->Subject('Hello', $locale_char_set);
+        $mail->Subject('Hello', $this->_locale_char_set);
 
         if ($this->contact_email) {
             $emailManager = new w2p_Output_EmailManager($this->_AppUI);

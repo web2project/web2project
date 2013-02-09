@@ -357,7 +357,6 @@ class CTask_Log extends w2p_Core_BaseObject
 	/**
 	 * Get a list of task logs the current user is allowed to access
 	 *
-	 * @global AppUI $AppUI global user permissions
 	 * @param int $uid user id to test
 	 * @param string $fields optional fields to be returned by the query, default is all
 	 * @param string $orderby optional sort order for the query

@@ -354,8 +354,6 @@ class CEvent extends w2p_Core_BaseObject
 	}
 
 	public function notify($assignees, $update = false, $clash = false) {
-		global $locale_char_set;
-
 		$mail_owner = $this->_AppUI->getPref('MAILALL');
 		$assignee_list = explode(',', $assignees);
 		$owner_is_assigned = in_array($this->event_owner, $assignee_list);
@@ -384,15 +382,15 @@ class CEvent extends w2p_Core_BaseObject
         $mail = new w2p_Utilities_Mail();
         $type = $update ? $this->_AppUI->_('Updated') : $this->_AppUI->_('New');
         if ($clash) {
-            $mail->Subject($this->_AppUI->_('Requested Event') . ': ' . $this->event_name, $locale_char_set);
+            $mail->Subject($this->_AppUI->_('Requested Event') . ': ' . $this->event_name, $this->_locale_char_set);
         } else {
-            $mail->Subject($type . ' ' . $this->_AppUI->_('Event') . ': ' . $this->event_name, $locale_char_set);
+            $mail->Subject($type . ' ' . $this->_AppUI->_('Event') . ': ' . $this->event_name, $this->_locale_char_set);
         }
 
         $emailManager = new w2p_Output_EmailManager($this->_AppUI);
         $body = $emailManager->getEventNotify($this, $clash, $users);
 
-        $mail->Body($body, $locale_char_set);
+        $mail->Body($body, $this->_locale_char_set);
         foreach ($users as $user) {
             if (!$mail_owner && $user['user_id'] == $this->event_owner) {
                 continue;

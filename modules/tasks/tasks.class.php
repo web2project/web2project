@@ -1,5 +1,4 @@
 <?php
-
 /**
  * @package     web2project\modules\core
  */
@@ -1160,10 +1159,8 @@ class CTask extends w2p_Core_BaseObject
 
     public function notifyOwner()
     {
-        global $locale_char_set;
-
         $mail = new w2p_Utilities_Mail();
-        $mail->Subject($projname . '::' . $this->task_name . ' ' . $this->_AppUI->_($this->_action, UI_OUTPUT_RAW), $locale_char_set);
+        $mail->Subject($projname . '::' . $this->task_name . ' ' . $this->_AppUI->_($this->_action, UI_OUTPUT_RAW), $this->_locale_char_set);
 
         // c = creator
         // a = assignee
@@ -1207,14 +1204,12 @@ class CTask extends w2p_Core_BaseObject
 //TODO: should we resolve $projname ?
     public function notify($comment = '')
     {
-        global $locale_char_set;
-
         $mail = new w2p_Utilities_Mail();
 
 		$project = new CProject();
 		$projname = $project->load($this->task_project)->project_name;
 
-        $mail->Subject($projname . '::' . $this->task_name . ' ' . $this->_AppUI->_($this->_action, UI_OUTPUT_RAW), $locale_char_set);
+        $mail->Subject($projname . '::' . $this->task_name . ' ' . $this->_AppUI->_($this->_action, UI_OUTPUT_RAW), $this->_locale_char_set);
 
         // c = creator
         // a = assignee
@@ -1269,8 +1264,6 @@ class CTask extends w2p_Core_BaseObject
      */
     public function email_log(&$log, $assignees, $task_contacts, $project_contacts, $others, $extras, $specific_user = 0)
     {
-        global $locale_char_set;
-
         $mail_recipients = array();
         $q = $this->_getQuery();
         if ((int) $this->task_id > 0 && (int) $this->task_project > 0) {
@@ -1356,7 +1349,7 @@ class CTask extends w2p_Core_BaseObject
             }
 
             // Build the email and send it out.
-            $char_set = isset($locale_char_set) ? $locale_char_set : '';
+            $char_set = isset($this->_locale_char_set) ? $this->_locale_char_set : '';
             $mail = new w2p_Utilities_Mail();
             // Grab the subject from user preferences
             $prefix = $this->_AppUI->getPref('TASKLOGSUBJ');
@@ -2245,8 +2238,6 @@ class CTask extends w2p_Core_BaseObject
      */
     public function remind($notUsed = null, $notUsed2 = null, $id, $owner, $notUsed = null)
     {
-        global $locale_char_set;
-
         // At this stage we won't have an object yet
         if (!$this->load($id)) {
             return - 1; // No point it trying again later.
@@ -2309,7 +2300,7 @@ class CTask extends w2p_Core_BaseObject
         $body = $emailManager->getTaskRemind($this, $msg, $project_name, $contacts);
 
         $mail = new w2p_Utilities_Mail();
-        $mail->Subject($subject, $locale_char_set);
+        $mail->Subject($subject, $this->_locale_char_set);
 
         foreach ($contacts as $contact) {
             $user_id = $contact['user_id'];
@@ -2320,7 +2311,7 @@ class CTask extends w2p_Core_BaseObject
 
             $body = str_replace('START-TIME', $starts->convertTZ($tz)->format($df), $body);
             $body = str_replace('END-TIME', $expires->convertTZ($tz)->format($df), $body);
-            $mail->Body($body, $locale_char_set);
+            $mail->Body($body, $this->_locale_char_set);
 
             if ($mail->ValidEmail($contact['contact_email'])) {
                 $mail->To($contact['contact_email'], true);

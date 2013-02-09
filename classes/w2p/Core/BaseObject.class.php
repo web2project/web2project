@@ -48,6 +48,7 @@ abstract class w2p_Core_BaseObject extends w2p_Core_Event implements w2p_Core_Li
      */
     protected $_tbl_module;
     protected $_dispatcher;
+    protected $_locale_char_set;
 
     /**
      * 	Object constructor to set table and key field
@@ -79,6 +80,8 @@ abstract class w2p_Core_BaseObject extends w2p_Core_Event implements w2p_Core_Li
         $this->_perms = $this->_AppUI->acl();
         global $w2Pconfig;
         $this->_w2Pconfig;
+        global $locale_char_set;
+        $this->_locale_char_set = $locale_char_set;
 
         /*
          * This block does a lot and may need to be simplified.. but the point
