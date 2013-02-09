@@ -6,11 +6,16 @@
 
 $fixedSysVals = array('CompanyType', 'EventType', 'FileType', 'GlobalCountries', 'GlobalYesNo', 'ProjectPriority', 'ProjectStatus', 'ProjectType', 'TaskDurationType', 'TaskLogReference', 'TaskPriority', 'TaskStatus', 'TaskType', 'UserType');
 
-class CSystem {
+class CSystem
+{
     private $upgrader = null;
+    protected $_w2Pconfig;
 
 	public function __construct() {
         $this->upgrader = new w2p_Core_UpgradeManager();
+
+        global $w2Pconfig;
+        $this->_w2Pconfig = $w2Pconfig;
 	}
 
     public function upgradeRequired() {
@@ -29,8 +34,6 @@ class CSystem {
 
     public function hook_cron()
     {
-        global $w2Pconfig;
-
         if (w2PgetConfig('system_update_check', true)) {
             $lastCheck = w2PgetConfig('system_update_last_check', '');
             $nowDate = new DateTime("now");
@@ -54,7 +57,7 @@ class CSystem {
 
                 $configList['w2p_ver'] = $AppUI->getVersion();
                 $configList['php_ver'] = PHP_VERSION;
-                $configList['database'] = $w2Pconfig['dbtype'];
+                $configList['database'] = $this->_w2Pconfig['dbtype'];
                 $configList['server'] = $_SERVER['SERVER_SOFTWARE'];
                 $configList['connector'] = php_sapi_name();
                 $configList['database_ver'] = mysql_get_client_info();

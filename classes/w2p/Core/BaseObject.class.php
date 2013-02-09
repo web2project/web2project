@@ -41,6 +41,7 @@ abstract class w2p_Core_BaseObject extends w2p_Core_Event implements w2p_Core_Li
      */
     protected $_AppUI;
     protected $_perms;
+    protected $_w2Pconfig;
 
     /**
      * @var string Internal name of the module as stored in the 'mod_directory' of the 'modules' table, and the 'value' field of the 'gacl_axo' table
@@ -76,6 +77,8 @@ abstract class w2p_Core_BaseObject extends w2p_Core_Event implements w2p_Core_Li
         global $AppUI;
         $this->_AppUI = is_null($AppUI) ? new w2p_Core_CAppUI() : $AppUI;
         $this->_perms = $this->_AppUI->acl();
+        global $w2Pconfig;
+        $this->_w2Pconfig;
 
         /*
          * This block does a lot and may need to be simplified.. but the point
