@@ -1,5 +1,4 @@
 <?php
-
 /**
  * In addition to regular LDAP, this handles Active Directory.
  *

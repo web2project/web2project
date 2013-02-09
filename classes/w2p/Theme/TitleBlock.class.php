@@ -22,6 +22,7 @@ class w2p_Theme_TitleBlock {
 	public $helpref = '';
 
     protected $_AppUI = null;
+    protected $_w2Pconfig = null;
     /**
 	 * The constructor
 	 *
@@ -32,6 +33,8 @@ class w2p_Theme_TitleBlock {
 	public function __construct($title, $icon = '', $module = '', $helpref = '') {
 		global $AppUI;
         $this->_AppUI = $AppUI;
+        global $w2Pconfig;
+        $this->_w2Pconfig = $w2Pconfig;
 
         $this->title = $title;
 		$this->icon = $icon;
@@ -76,9 +79,9 @@ class w2p_Theme_TitleBlock {
 	 * The drawing function
 	 */
 	public function show() {
-		global $a, $m, $w2Pconfig;
+		global $a, $m;
 		$this->loadExtraCrumbs($m, $a);
-		$uistyle = $this->_AppUI->getPref('UISTYLE') ? $this->_AppUI->getPref('UISTYLE') : $w2Pconfig['host_style'];
+		$uistyle = $this->_AppUI->getPref('UISTYLE') ? $this->_AppUI->getPref('UISTYLE') : $this->_w2Pconfig['host_style'];
 		if (!$uistyle) {
 			$uistyle = 'web2project';
 		}

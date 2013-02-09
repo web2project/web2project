@@ -14,9 +14,13 @@ class w2p_Core_UpgradeManager {
     protected $configOptions = array();
     protected $updatesApplied = array();
 
-    public function getActionRequired() {
+    public function __construct()
+    {
         global $w2Pconfig;
+        $this->_w2Pconfig = $w2Pconfig;
+    }
 
+    public function getActionRequired() {
         if ($this->action == '') {
             $this->_prepareConfiguration();
             if (!file_exists($this->configFile) || filesize($this->configFile) == 0) {
@@ -26,8 +30,8 @@ class w2p_Core_UpgradeManager {
                 if (isset($dPconfig)) {
                     $this->configOptions = $dPconfig;
                     $this->action = 'conversion';
-                } elseif (isset($w2Pconfig)) {
-                    $this->configOptions = $w2Pconfig;
+                } elseif (isset($this->_w2Pconfig)) {
+                    $this->configOptions = $this->_w2Pconfig;
                     $this->action = 'upgrade';
                 } else {
                     /*
