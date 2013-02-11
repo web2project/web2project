@@ -1,4 +1,4 @@
-<?php /* $Id: header.php 2421 2012-04-11 03:36:52Z caseydk $ $URL: https://web2project.svn.sourceforge.net/svnroot/web2project/trunk/style/wps-redmond/header.php $ */
+<?php
 $dialog = w2PgetParam($_GET, 'dialog', 0);
 if ($dialog) {
 	$page_title = '';

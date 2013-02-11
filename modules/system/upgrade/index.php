@@ -1,4 +1,4 @@
-<?php /* $Id: index.php 202 2008-08-11 22:35:39Z pedroix $ $URL: https://web2project.svn.sourceforge.net/svnroot/web2project/branches/v1.0-rc1/modules/system/index.php $ */
+<?php
 if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }

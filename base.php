@@ -1,5 +1,4 @@
-<?php /* $Id$ $URL$ */
-
+<?php
 /**
  * If you experience a 'white screen of death' or other problems,
  * change the following line of code to this:

@@ -1,4 +1,4 @@
-<?php /* $Id$ $URL$ */
+<?php
 /*
 Based on Leo West's (west_leo@yahooREMOVEME.com):
 lib.DB
