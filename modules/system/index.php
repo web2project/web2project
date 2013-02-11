@@ -1,4 +1,4 @@
-<?php /* $Id$ $URL$ */
+<?php
 if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
@@ -59,7 +59,7 @@ $titleBlock->show();
             $availableVersion = w2PgetConfig('available_version', '');
             if (version_compare($AppUI->getVersion(), $availableVersion, '<')) {
                 ?>
-                <a href="http://sourceforge.net/projects/web2project/" target="_new"><?php echo $AppUI->_('Upgrade Available!'); ?></a> -
+                <a href="https://github.com/web2project/" target="_new"><?php echo $AppUI->_('Upgrade Available!'); ?></a> -
                 <span class="error"><?php echo $AppUI->_('Your system should be upgraded to v'.$availableVersion.'.  Please upgrade at your earliest convenience.'); ?></span>
                 <?php
             } else {

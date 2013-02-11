@@ -1,4 +1,4 @@
-<?php /* $Id$ $URL$ */
+<?php
 global $AppUI, $user_id, $user_name, $canEdit, $canDelete, $tab;
 
 if (!defined('W2P_BASE_DIR')) {

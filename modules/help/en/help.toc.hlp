@@ -1,4 +1,3 @@
-<!-- $Id: help.toc.hlp,v 1.12.12.2 2007/09/14 16:59:19 theideaman Exp $ -->
 <table cellspacing="2" cellpadding="4" border="0" class="tbl" width="100%">
 <tr>
 	<td width="100%" valign="top">
@@ -7,7 +6,7 @@
 			<br />
 			<br />We have 3 main places for your assistance. Please remember that all of these places are not one-way: You can help others as well by contributing.
 			<br />
-			<br />The <a href="http://wiki.web2project.net/" target="_blank">web2Project Online Documentation</a>
+			<br />The <a href="https://github.com/web2project/web2project/wiki/Installation" target="_blank">web2Project Online Documentation</a>
 			is intended to provide you with informations about how to use web2Project (e.g. explanation of modules, features, training ...).
 			<br />
 			<br />Further Assistance can be found in the

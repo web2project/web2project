@@ -1,4 +1,4 @@
-<?php /* $Id$ $URL$ */
+<?php
 global $AppUI, $projects, $project_statuses, $project_status_filter, $currentTabId;
 
 $perms = &$AppUI->acl();

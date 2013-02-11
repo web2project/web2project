@@ -1,4 +1,4 @@
-/* $Id$ $URL$ */
+
 function update_workspace(id) {
 	var tr = document.getElementById(id);
 	(tr.style.display == "none") ? eval('document.frmWorkspace.pd_option_view_'+id+'.value=0') : eval('document.frmWorkspace.pd_option_view_'+id+'.value=1');

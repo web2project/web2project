@@ -4,7 +4,7 @@ if (!defined('W2P_BASE_DIR')) {
 }
 
 /*
-    Copyright (c) 2007-2012 The web2Project Development Team <w2p-developers@web2project.net>
+    Copyright (c) 2007-2013 The web2Project Development Team <w2p-developers@web2project.net>
     Copyright (c) 2003-2007 The dotProject Development Team <core-developers@dotproject.net>
 
 	* *	 * INSTALLATION INSTRUCTIONS * * *

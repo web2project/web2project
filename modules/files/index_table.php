@@ -1,9 +1,8 @@
-<?php /* $Id$ $URL$ */
+<?php
 if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
 
-/* FILES $Id$ */
 // modified later by Pablo Roca (proca) in 18 August 2003 - added page support
 // Files modules: index page re-usable sub-table
 global $AppUI, $company_id, $project_id, $task_id;

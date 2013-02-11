@@ -1,4 +1,4 @@
-<?php /* $Id$ $URL$ */
+<?php
 
 ##
 ##  This overrides the show function of the CTabBox_core function

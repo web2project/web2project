@@ -1,5 +1,4 @@
-<?php /* $Id$ $URL$ */
-
+<?php
 // Set the version components separately.
 $w2p_version_major = 3;
 $w2p_version_minor = 0;

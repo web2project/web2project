@@ -1,7 +1,7 @@
-<?php /* $Id$ $URL$ */
+<?php
 /**
  * Processes the entries in the translation form.
- * @version $Revision$
+ *
  * @author Andrew Eddie <users.sourceforge.net>
  */
 
