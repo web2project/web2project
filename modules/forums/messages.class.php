@@ -91,6 +91,7 @@ class CForum_Message extends w2p_Core_BaseObject
         $result = false;
 
         if ($this->canDelete()) {
+            $q = $this->_getQuery();
             $q->addTable('forum_messages');
             $q->addQuery('message_forum');
             $q->addWhere('message_id = ' . (int) $this->message_id);
