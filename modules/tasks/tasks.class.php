@@ -1596,9 +1596,7 @@ class CTask extends w2p_Core_BaseObject
         $newTask->overrideDatabase($this->_query);
         $newTask->load($task_id);
 
-        trigger_error("The CTask->update_dep_dates method has been deprecated
-            in v3.0 and will be removed in v4.0. Please use
-            CTask->pushDependencies instead", E_USER_NOTICE );
+        trigger_error("The CTask->update_dep_dates method has been deprecated in v3.0 and will be removed in v4.0. Please use CTask->pushDependencies instead", E_USER_NOTICE );
 
         $this->pushDependencies($task_id, $newTask->task_end_date);
     }
