@@ -85,3 +85,48 @@ $w2Pconfig = array();
 if (function_exists('mb_internal_encoding')) {
     mb_internal_encoding('UTF-8');
 }
+
+define('FMT_DATEISO', '%Y%m%dT%H%M%S');
+define('FMT_DATELDAP', '%Y%m%d%H%M%SZ');
+define('FMT_DATETIME_MYSQL', '%Y-%m-%d %H:%M:%S');
+define('FMT_DATERFC822', '%a, %d %b %Y %H:%M:%S');
+define('FMT_TIMESTAMP', '%Y%m%d%H%M%S');
+define('FMT_TIMESTAMP_DATE', '%Y%m%d');
+define('FMT_TIMESTAMP_TIME', '%H%M%S');
+define('FMT_UNIX', '3');
+define('WDAY_SUNDAY', 0);
+define('WDAY_MONDAY', 1);
+define('WDAY_TUESDAY', 2);
+define('WDAY_WEDNESDAY', 3);
+define('WDAY_THURSDAY', 4);
+define('WDAY_FRIDAY', 5);
+define('WDAY_SATURDAY', 6);
+define('SEC_MINUTE', 60);
+define('SEC_HOUR', 3600);
+define('SEC_DAY', 86400);
+
+define('UI_MSG_OK', 1);
+define('UI_MSG_ALERT', 2);
+define('UI_MSG_WARNING', 3);
+define('UI_MSG_ERROR', 4);
+
+$GLOBALS['translate'] = array();
+
+define('UI_CASE_MASK', 0x0F);
+define('UI_CASE_UPPER', 1);
+define('UI_CASE_LOWER', 2);
+define('UI_CASE_UPPERFIRST', 3);
+
+define('UI_OUTPUT_MASK', 0xF0);
+define('UI_OUTPUT_HTML', 0);
+define('UI_OUTPUT_JS', 0x10);
+define('UI_OUTPUT_RAW', 0x20);
+
+define('ACCESS_DENIED', 'm=public&a=access_denied');
+
+/**
+ * This was previously set to ADODB_FETCH_NUM which was 1 in all cases.
+ *  Realistically, we should use the constant to make sure they stay the same
+ *  but we're trying to clean up some of the complexity in the loaded libraries.
+ */
+define('QUERY_STYLE_NUM', 1);

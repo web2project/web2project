@@ -31,7 +31,13 @@ $end_hour = w2PgetConfig('cal_day_end');
 foreach ($events as $row) {
     $start = new w2p_Utilities_Date($row['event_start_date']);
 	$end = new w2p_Utilities_Date($row['event_end_date']);
-	$events2[$start->format('%H%M%S')][] = $row;
+
+    $key = $start->format('%H%M%S');
+    if (-1 == $start->compare($start, $this_day)) {
+        $myhour = ($start_hour < 10) ? '0' . $start_hour : $start_hour;
+        $key = $myhour . '0000';
+    }
+    $events2[$key][] = $row;
 
 	if ($start_hour > $start->format('%H')) {
 		$start_hour = $start->format('%H');
@@ -77,6 +83,8 @@ if ($other_users) {
 
 require_once (W2P_BASE_DIR . '/modules/calendar/links_events.php');
 
+$event = new CEvent();
+
 $html .= '</form>';
 $html .= '<table cellspacing="1" cellpadding="2" border="0" width="100%" class="tbl">';
 $rows = 0;
@@ -93,8 +101,8 @@ for ($i = 0, $n = ($end - $start) * 60 / $inc; $i < $n; $i++) {
 			$row = $events2[$timeStamp][$j];
 
 			$et = new w2p_Utilities_Date($row['event_end_date']);
-			$rows = (($et->getHour() * 60 + $et->getMinute()) - ($this_day->getHour() * 60 + $this_day->getMinute())) / $inc;
 
+			$rows = $event->calculateRows($this_day, $et, $inc);
 			$href = '?m=calendar&a=view&event_id=' . $row['event_id'];
 			$alt = $row['event_description'];
 

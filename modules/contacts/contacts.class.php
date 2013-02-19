@@ -320,7 +320,7 @@ class CContact extends w2p_Core_BaseObject
     {
         $result = $this->loadAll('contact_id', 'contact_id = ' . (int) $this->contact_id);
 
-        return $result[$this->contact_id];
+        return $result[$this->contact_id]['contact_updatekey'];
     }
 
     public function clearUpdateKey()
