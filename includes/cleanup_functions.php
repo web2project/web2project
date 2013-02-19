@@ -2,7 +2,7 @@
 if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
-/*
+/**
 * This file exists in order to list individual functions which need to be
 *   cleaned up, reorganized or eliminated based on usage. Before you touch
 *   these, please ensure there are Unit Tests to validate that things work
@@ -14,11 +14,15 @@ if (!defined('W2P_BASE_DIR')) {
 *   this shouldn't be a problem.
 */
 
-
-//There is an issue with international UTF characters, when stored in the database an accented letter
-//actually takes up two letters per say in the field length, this is a problem with costcodes since
-//they are limited in size so saving a costcode as REDACI�N would actually save REDACI� since the accent takes
-//two characters, so lets unaccent them, other languages should add to the replacements array too...
+/**
+ * There is an issue with international UTF characters, when stored in the
+ *  database an accented letter actually takes up two letters per say in the
+ *  field length, this is a problem with costcodes since they are limited in
+ *  size so saving a costcode as REDACI�N would actually save REDACI� since the
+ *  accent takes two characters, so lets unaccent them, other languages should
+ *  add to the replacements array too...
+ */
+//
 function cleanText($text) {
 	//This text file is not utf, its iso so we have to decode/encode
 	$text = utf8_decode($text);
@@ -119,7 +123,7 @@ function strEzPdf($text) {
     }
 }
 
-/*
+/**
 * 	smart_slice : recursive function used to slice the task array whlie
 * 	minimizing the potential number of task dependencies between two sub_arrays
 * 	Each sub_array is LENGTH elements long maximum
@@ -179,7 +183,7 @@ function smart_slice( $arr, $showNoMilestones, $notUsed, $day_diff ) {
 *
 */
 
-/*
+/**
 *  This is a kludgy mess because of how the arraySelectTree function is used..
 *    it expects - nay, demands! - that the first element of the subarray is the
 *    id and the third is the parent id. In most cases, that is fine.. in this
@@ -205,9 +209,11 @@ function temp_filterArrayForSelectTree($projectData) {
     return array_values($projectData);
 }
 
-// The includes/permissions.php file has been ported here because it held a group of public functions for permission checking.
-// And that is so it stays on one place only.
-// Permission flags used in the DB
+/**
+ * The includes/permissions.php file has been ported here because it held a
+ *  group of public functions for permission checking. And that is so it stays
+ *  on one place only. Permission flags used in the DB
+ */
 
 define('PERM_DENY', '0');
 define('PERM_EDIT', '-1');
