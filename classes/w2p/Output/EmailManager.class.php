@@ -49,7 +49,7 @@ class w2p_Output_EmailManager
         return $body;
     }
 
-    public function getEventNotify(CEvent $event, $clash, $users, $types)
+    public function getEventNotify(CEvent $event, $clash, $users)
     {
 
         if ($clash) {
