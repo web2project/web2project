@@ -12,8 +12,8 @@ require_once W2P_BASE_DIR . '/includes/backcompat_functions.php';
 require_once W2P_BASE_DIR . '/includes/deprecated_functions.php';
 require_once W2P_BASE_DIR . '/includes/cleanup_functions.php';
 
-/*
- * TODO: Personally, I'm already hating this autoloader... while it's great in
+/**
+ * @todo Personally, I'm already hating this autoloader... while it's great in
  * concept, we don't have anything that resembles a real class naming convention
  * so this ends up being nasty and getting nastier.  Hopefully, we can clean
  * these things up for v3.x
@@ -116,10 +116,13 @@ function w2p_autoload($class_name)
     }
 }
 
-##
-## Merges arrays maintaining/overwriting shared numeric indicees
-##
-
+/**
+ * Merges arrays maintaining/overwriting shared numeric indicees
+ *
+ * @param type $a1
+ * @param type $a2
+ * @return type
+ */
 function arrayMerge($a1, $a2)
 {
     if (is_array($a1) && !is_array($a2)) {
@@ -164,7 +167,8 @@ function w2PgetConfig($key, $default = null)
 }
 
 /**
- * Utility function to return a value from a named array or a specified default, and avoid poisoning the URL by denying:
+ * Utility function to return a value from a named array or a specified
+ *  default, and avoid poisoning the URL by denying:
  * 1) the use of spaces (for SQL and XSS injection)
  * 2) the use of <, ", [, ; and { (for XSS injection)
  */
