@@ -24,12 +24,22 @@ class w2p_Utilities_Date extends Date {
 			$this->setTZ($tz);
 		}
 	}
-	/**
-	 * Overloaded compare method
-	 *
-	 * The convertTZ calls are time intensive calls.	 When a compare call is
-	 * made in a recussive loop the lag can be significant.
-	 */
+
+    /**
+     * This method simply compares the two dates input. Basically it works by
+     *  trying $d1 - $d2. If the result is negative (aka $d2 is after $d1),
+     *  this function returns -1. If the result is positive (aka $d1 is after
+     *  $d2), this function returns 1.
+     *
+     * If you're sure the two dates are in different timezones, you can use
+     *  the third parameter to convert them both to UTC prior to performing the
+     *  check.
+     *
+     * @param type $d1
+     * @param type $d2
+     * @param type $convertTZ
+     * @return type
+     */
 	public function compare($d1, $d2, $convertTZ = false) {
 		if ($convertTZ) {
 			$d1->convertTZ(new Date_TimeZone('UTC'));
