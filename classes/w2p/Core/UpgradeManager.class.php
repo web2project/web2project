@@ -1,10 +1,7 @@
 <?php
-
 /**
  * @package     web2project\core
  */
-
-require_once W2P_BASE_DIR . '/lib/adodb/adodb.inc.php';
 
 class w2p_Core_UpgradeManager {
     protected $action = '';

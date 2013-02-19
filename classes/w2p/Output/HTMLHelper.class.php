@@ -90,15 +90,15 @@ class w2p_Output_HTMLHelper
     public function stageRowData($myArray) {
         $this->tableRowData = $myArray;
     }
-    /*
+    /**
      * createColumn is handy because it can take any input $fieldName and use
      *   suffix to determine how the field should be displayed.
-     * 
-     * This allows us to treat project_description, task_description, 
-     *   company_description, or even some_other_crazy_waky_description in 
+     *
+     * This allows us to treat project_description, task_description,
+     *   company_description, or even some_other_crazy_waky_description in
      *   exactly the same way without additional lines of code or configuration.
      *   If you want to do your own, feel free... but this is probably easier.
-     *   differently, why not use everything after the last underscore (or suffix) 
+     *   differently, why not use everything after the last underscore (or suffix)
      *   to determine the display formatting? Basically the fields become self-descriptive.
      * 
      * Examples: _budget, _date, _name, _owner
@@ -283,8 +283,7 @@ class w2p_Output_HTMLHelper
         return $begin . $cell . $end;
     }
 
-    /*
-     *
+    /**
      * @deprecated
      */
     public function createColumn($fieldName, $value) {
@@ -293,11 +292,9 @@ class w2p_Output_HTMLHelper
         return $this->createCell($fieldName, $value[$fieldName]);
     }
 
-    /*
-     *
+    /**
      * @deprecated
      */
-
     public static function renderColumn(w2p_Core_CAppUI $AppUI, $fieldName, $row)
     {
         trigger_error("The static method renderColumn has been deprecated and will be removed by v4.0.", E_USER_NOTICE);

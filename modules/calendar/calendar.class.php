@@ -627,4 +627,31 @@ class CEvent extends w2p_Core_BaseObject
         return $eventList;
     }
 
+    /**
+     * This is used in the day event page to make sure we're marking the right hours.
+     *
+     * @param type $this_date
+     * @param type $end_date
+     * @param type $increment
+     * @return type
+     */
+    public function calculateRows($this_date, $end_date, $increment)
+    {
+        $start_hour = w2PgetConfig('cal_day_start');
+        $end_hour = w2PgetConfig('cal_day_end');
+
+        $calendar_end = clone $this_date;
+        $calendar_end->hour = $end_hour;
+
+        $ends_later = $calendar_end->compare($end_date, $calendar_end);
+
+        if (1 == $ends_later) {
+            $count = ($end_hour - $start_hour) * 60 / $increment;
+        } else {
+            $count = (($end_date->getHour() * 60 + $end_date->getMinute()) -
+                    ($this_date->getHour() * 60 + $this_date->getMinute())) / $increment;
+        }
+
+        return $count;
+    }
 }

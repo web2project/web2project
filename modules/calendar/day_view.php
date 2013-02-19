@@ -26,7 +26,7 @@ $df = $AppUI->getPref('SHDATEFORMAT');
 // get the passed timestamp (today if none)
 $ctoday = new w2p_Utilities_Date();
 $today = $ctoday->format(FMT_TIMESTAMP_DATE);
-$date = w2PgetParam($_GET, 'date', $today);
+$date = (int) w2PgetParam($_GET, 'date', $today);
 // establish the focus 'date'
 $this_day = new w2p_Utilities_Date($date);
 $dd = $this_day->getDay();
