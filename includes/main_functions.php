@@ -60,10 +60,6 @@ function w2p_autoload($class_name)
             break;
 
 
-        case 'xajax':
-            require_once W2P_BASE_DIR . '/lib/xajax/xajax_core/xajax.inc.php';
-            break;
-
         /*
          * The following are all wirings for module classes that don't follow
          * our naming conventions.

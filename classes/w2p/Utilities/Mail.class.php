@@ -26,8 +26,6 @@
  * @author      Pedro Azevedo - pedroa@web2project.net
  */
 
-$AppUI = is_object($AppUI) ? $AppUI : new w2p_Core_CAppUI();
-
 class w2p_Utilities_Mail extends PHPMailer
 {
 
