@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Permissions system extends the phpgacl class.  Very few changes have
  * been made, however the main one is to provide the database details from
@@ -14,8 +13,6 @@
  *
  * @package     web2project\extensions
  */
-
-$AppUI = is_object($AppUI) ? $AppUI : new w2p_Core_CAppUI();
 
 class w2p_Extensions_Permissions extends gacl_api
 {

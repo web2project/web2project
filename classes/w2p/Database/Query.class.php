@@ -29,10 +29,6 @@
  *
  */
 
-require_once W2P_BASE_DIR . '/lib/adodb/adodb.inc.php';
-
-define('QUERY_STYLE_NUM', ADODB_FETCH_NUM);
-
 class w2p_Database_Query {
 	/**< Contains the query after it has been built. */
 	public $query;

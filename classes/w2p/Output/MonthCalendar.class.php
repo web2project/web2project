@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Displays a configuration month calendar
  * All Date objects are based on the PEAR Date package
@@ -9,8 +8,6 @@
  * @package     web2project\output
  * @author      D. Keith Casey, Jr. <caseydk@users.sourceforge.net>
  */
-
-$AppUI = is_object($AppUI) ? $AppUI : new w2p_Core_CAppUI();
 
 class w2p_Output_MonthCalendar {
 	/**#@+

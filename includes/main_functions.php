@@ -11,6 +11,7 @@ define('SECONDS_PER_DAY', 86400);
 require_once W2P_BASE_DIR . '/includes/backcompat_functions.php';
 require_once W2P_BASE_DIR . '/includes/deprecated_functions.php';
 require_once W2P_BASE_DIR . '/includes/cleanup_functions.php';
+require_once W2P_BASE_DIR . '/lib/adodb/adodb.inc.php';
 
 /**
  * @todo Personally, I'm already hating this autoloader... while it's great in

@@ -1,35 +1,15 @@
 <?php
-
 /**
  * @package     web2project\utilities
  */
-
-$AppUI = is_object($AppUI) ? $AppUI : new w2p_Core_CAppUI();
-
-define('FMT_DATEISO', '%Y%m%dT%H%M%S');
-define('FMT_DATELDAP', '%Y%m%d%H%M%SZ');
-define('FMT_DATETIME_MYSQL', '%Y-%m-%d %H:%M:%S');
-define('FMT_DATERFC822', '%a, %d %b %Y %H:%M:%S');
-define('FMT_TIMESTAMP', '%Y%m%d%H%M%S');
-define('FMT_TIMESTAMP_DATE', '%Y%m%d');
-define('FMT_TIMESTAMP_TIME', '%H%M%S');
-define('FMT_UNIX', '3');
-define('WDAY_SUNDAY', 0);
-define('WDAY_MONDAY', 1);
-define('WDAY_TUESDAY', 2);
-define('WDAY_WEDNESDAY', 3);
-define('WDAY_THURSDAY', 4);
-define('WDAY_FRIDAY', 5);
-define('WDAY_SATURDAY', 6);
-define('SEC_MINUTE', 60);
-define('SEC_HOUR', 3600);
-define('SEC_DAY', 86400);
 
 /**
  * web2Project implementation of the Pear Date class
  *
  * This provides customised extensions to the Date class to leave the
  * Date package as 'pure' as possible
+ *
+ * @package     web2project\utilities
  */
 class w2p_Utilities_Date extends Date {
 

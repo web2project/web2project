@@ -10,8 +10,6 @@
  * @author      D. Keith Casey, Jr. <caseydk@users.sourceforge.net>
  */
 
-$AppUI = is_object($AppUI) ? $AppUI : new w2p_Core_CAppUI();
-
 class w2p_Output_GanttRenderer {
     private $graph = null;
     private $rowCount = null;
