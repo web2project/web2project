@@ -1,8 +1,7 @@
 <?php
-##
-## Session Handling Functions
-##
-/*
+/**
+ * Session Handling Functions
+ *
  * Please note that these functions assume that the database
  * is accessible and that a table called 'sessions' (with a prefix
  * if necessary) exists.  It also assumes MySQL date and time
