@@ -1,30 +1,10 @@
 <?php
-
 /**
  * The Application User Interface Class.
  *
  * @package     web2project\core
  * @author      Andrew Eddie <eddieajau@users.sourceforge.net>
  */
-
-define('UI_MSG_OK', 1);
-define('UI_MSG_ALERT', 2);
-define('UI_MSG_WARNING', 3);
-define('UI_MSG_ERROR', 4);
-
-$GLOBALS['translate'] = array();
-
-define('UI_CASE_MASK', 0x0F);
-define('UI_CASE_UPPER', 1);
-define('UI_CASE_LOWER', 2);
-define('UI_CASE_UPPERFIRST', 3);
-
-define('UI_OUTPUT_MASK', 0xF0);
-define('UI_OUTPUT_HTML', 0);
-define('UI_OUTPUT_JS', 0x10);
-define('UI_OUTPUT_RAW', 0x20);
-
-define('ACCESS_DENIED', 'm=public&a=access_denied');
 
 class w2p_Core_CAppUI
 {

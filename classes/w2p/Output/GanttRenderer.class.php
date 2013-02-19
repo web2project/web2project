@@ -1,13 +1,14 @@
 <?php
 
 /**
+ * This is primarily a wrapper for the jpgraph class so we can generate Gantt
+ * Charts. I chose this because working with it directly in the modules created
+ * a huge amount of duplicated code. In addition, as we evaluate alternatives,
+ * this will let us switch them out more easily.
+ *
  * @package     web2project\output
  * @author      D. Keith Casey, Jr. <caseydk@users.sourceforge.net>
  */
-
-$AppUI = is_object($AppUI) ? $AppUI : new w2p_Core_CAppUI();
-include_once $AppUI->getLibraryClass('jpgraph/src/jpgraph');
-include_once $AppUI->getLibraryClass('jpgraph/src/jpgraph_gantt');
 
 class w2p_Output_GanttRenderer {
     private $graph = null;
@@ -110,28 +111,37 @@ class w2p_Output_GanttRenderer {
         }
     }
 
+    /**
+     * The SetFont method changes the related bars caption text style and it
+     *  will have all bars from its calling through all below until a new
+     *  SetFont call is executed again on the same object e subobjects.
+     *
+     * LOGIC: $graph->scale->actinfo->SetFont(font name, font style, font size);
+     * EXAMPLE: $graph->scale->actinfo->SetFont(FF_CUSTOM, FS_BOLD, 10);
+     *
+     * Here is a list of possibilities you can use for the first parameter of
+     *  the SetFont method:
+     *
+     *  TTF Font families (you must have them installed to use them):
+     *    FF_COURIER, FF_VERDANA, FF_TIMES, FF_COMIC, FF_CUSTOM, FF_GEORGIA, FF_TREBUCHE
+     *  Internal fonts:
+     *    FF_FONT0, FF_FONT1, FF_FONT2
+     *
+     * For the second parameter you have the TTF font style that can be:
+     *  FS_NORMAL, FS_BOLD, FS_ITALIC, FS_BOLDIT, FS_BOLDITALIC
+     *
+     * @author Pedro A.
+     *
+     * @param array $columnNames
+     * @param array $columnSizes
+     */
     public function setColumnHeaders(array $columnNames, array $columnSizes)
     {
         $AppUI = $this->AppUI;
         foreach ($columnNames as $column) {
             $translatedColumns[] = $AppUI->_($column, UI_OUTPUT_RAW);
         }
-        // Pedro A.
-        //
-        // The SetFont method changes the related bars caption text style and it will have all bars from its calling through all below
-        // until a new SetFont call is executed again on the same object e subobjects.
-        //
-        // LOGIC: $graph->scale->actinfo->SetFont(font name, font style, font size);
-        // EXAMPLE: $graph->scale->actinfo->SetFont(FF_CUSTOM, FS_BOLD, 10);
-        //
-        // Here is a list of possibilities you can use for the first parameter of the SetFont method:
-        // TTF Font families (you must have them installed to use them):
-        // FF_COURIER, FF_VERDANA, FF_TIMES, FF_COMIC, FF_CUSTOM, FF_GEORGIA, FF_TREBUCHE
-        // Internal fonts:
-        // FF_FONT0, FF_FONT1, FF_FONT2
-        //
-        // For the second parameter you have the TTF font style that can be:
-        // FS_NORMAL, FS_BOLD, FS_ITALIC, FS_BOLDIT, FS_BOLDITALIC
+
         $this->graph->scale->actinfo->vgrid->SetColor('gray');
         $this->graph->scale->actinfo->SetColor('darkgray');
         $this->graph->scale->actinfo->SetColTitles($translatedColumns, $columnSizes);

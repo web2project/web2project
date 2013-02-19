@@ -11,6 +11,7 @@ define('SECONDS_PER_DAY', 86400);
 require_once W2P_BASE_DIR . '/includes/backcompat_functions.php';
 require_once W2P_BASE_DIR . '/includes/deprecated_functions.php';
 require_once W2P_BASE_DIR . '/includes/cleanup_functions.php';
+require_once W2P_BASE_DIR . '/lib/adodb/adodb.inc.php';
 
 /**
  * @todo Personally, I'm already hating this autoloader... while it's great in
@@ -60,10 +61,6 @@ function w2p_autoload($class_name)
             break;
 
 
-        case 'xajax':
-            require_once W2P_BASE_DIR . '/lib/xajax/xajax_core/xajax.inc.php';
-            break;
-
         /*
          * The following are all wirings for module classes that don't follow
          * our naming conventions.
@@ -77,6 +74,33 @@ function w2p_autoload($class_name)
             // Deprecated as of v3.0, TODO: remove this in v4.0
             require_once W2P_BASE_DIR . '/modules/admin/users.class.php';
             break;
+
+        /*
+         * These are our library helper libraries. They're included here to simplify usage.
+         */
+        case 'date':
+            require_once W2P_BASE_DIR . '/lib/PEAR/Date.php';
+            break;
+        case 'gacl':
+            require_once W2P_BASE_DIR . '/lib/phpgacl/gacl.class.php';
+            break;
+        case 'gacl_api':
+            require_once W2P_BASE_DIR . '/lib/phpgacl/gacl_api.class.php';
+            break;
+        case 'ganttgraph':
+            require_once W2P_BASE_DIR . '/lib/jpgraph/src/jpgraph.php';
+            require_once W2P_BASE_DIR . '/lib/jpgraph/src/jpgraph_gantt.php';
+            break;
+        case 'phpmailer':
+            require_once W2P_BASE_DIR . '/lib/PHPMailer/class.phpmailer.php';
+            break;
+        case 'xajax':
+            require_once W2P_BASE_DIR . '/lib/xajax/xajax_core/xajax.inc.php';
+            break;
+        case 'xajaxresponse':
+            require_once W2P_BASE_DIR . '/lib/xajax/xajax_core/xajaxResponse.inc.php';
+            break;
+
         default:
             if (file_exists(W2P_BASE_DIR . '/classes/' . $name . '.class.php')) {
                 // Deprecated as of v3.0, TODO: remove this in v4.0
