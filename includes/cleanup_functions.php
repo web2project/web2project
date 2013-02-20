@@ -1809,7 +1809,6 @@ function clash_mail(w2p_Core_CAppUI $AppUI) {
 * From modules/calendar/clash.php
 */
 function clash_accept(w2p_Core_CAppUI $AppUI) {
-    $AppUI->setMsg('Event');
 	$obj = new CEvent;
 	$obj->bind($_SESSION['add_event_post']);
 	$GLOBALS['a'] = $_SESSION['add_event_caller'];

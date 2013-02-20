@@ -6,8 +6,8 @@ if (!defined('W2P_BASE_DIR')) {
 global $this_day, $first_time, $last_time, $company_id, $m, $a;
 
 $links = array();
+
 // assemble the links for the tasks
-require_once (w2PgetConfig('root_dir') . '/modules/calendar/links_tasks.php');
 getTaskLinks($first_time, $last_time, $links, 100, $company_id);
 
 $s = '';
