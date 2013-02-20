@@ -512,7 +512,8 @@ class CEvent extends w2p_Core_BaseObject
         return parent::getAllowedRecords($uid, $fields, $orderby, $index, $extra);
     }
 
-    protected function hook_preStore() {
+    protected function hook_preStore()
+    {
         parent::hook_preStore();
 
         if (!$this->event_recurs) {
@@ -543,30 +544,12 @@ class CEvent extends w2p_Core_BaseObject
         $this->event_updated = $q->dbfnNowWithTZ();
     }
 
-    protected function hook_preCreate() {
+    protected function hook_preCreate()
+    {
         parent::hook_preCreate();
 
         $q = $this->_getQuery();
         $this->event_created = $q->dbfnNowWithTZ();
-    }
-
-    public function store()
-    {
-        $stored = false;
-        $q = $this->_getQuery();
-
-        /*
-         * TODO: I don't like the duplication on each of these two branches, but I
-         *   don't have a good idea on how to fix it at the moment...
-         */
-        if ($this->{$this->_tbl_key} && $this->canEdit()) {
-            $stored = parent::store();
-        }
-        if (0 == $this->{$this->_tbl_key} && $this->canCreate()) {
-            $stored = parent::store();
-        }
-
-        return $stored;
     }
 
     protected function hook_postStore()
@@ -581,7 +564,8 @@ class CEvent extends w2p_Core_BaseObject
         parent::hook_postStore();
     }
 
-    protected function  hook_postUpdate() {
+    protected function  hook_postUpdate()
+    {
         parent::hook_postUpdate();
 
         $q = $this->_query;

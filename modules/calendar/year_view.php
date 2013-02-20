@@ -11,12 +11,7 @@ if (!$canRead) {
 	$AppUI->redirect(ACCESS_DENIED);
 }
 
-$AppUI->savePlace();
-
 w2PsetMicroTime();
-
-require_once (w2PgetConfig('root_dir') . "/modules/calendar/links_tasks.php");
-require_once (w2PgetConfig('root_dir') . "/modules/calendar/links_events.php");
 
 // retrieve any state parameters
 if (isset($_REQUEST['company_id'])) {

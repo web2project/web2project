@@ -5,9 +5,6 @@ if (!defined('W2P_BASE_DIR')) {
 
 global $AppUI, $project_id, $deny, $canRead, $canEdit, $w2Pconfig, $start_date, $end_date, $this_day, $event_filter, $event_filter_list;
 
-//TODO: This is a hack until we can refactor getEventTooltip() somewhere else..
-include 'links_events.php';
-
 $perms = &$AppUI->acl();
 $user_id = $AppUI->user_id;
 $other_users = false;
