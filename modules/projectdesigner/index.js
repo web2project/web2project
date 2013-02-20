@@ -86,9 +86,11 @@ function addBulkComponent(li) {
 }
 
 function removeBulkComponent(li) {
-      var t = document.getElementById('tbl_bulk');
-      var old = document.getElementById('bulk_selected_task['+li+']');
-      t.removeChild(old);
+    var t = document.getElementById('tbl_bulk');
+    var old = document.getElementById('bulk_selected_task['+li+']');
+    if (old) {
+        t.removeChild(old);
+    }
 }
 
 
@@ -213,8 +215,8 @@ function select_row(box, id, form_name){
 function select_box(box, id, row_id, form_name){
     var f = eval('document.'+form_name);
 	if (eval('f.selected_task_'+id)) {
-		var check = eval('f.'+box+'_'+id+'.checked');
-		boxObj = eval('f.elements["'+box+'_'+id+'"]');
+        var prop = eval('f.elements["'+box+'_'+id+'"]');
+		boxObj = (prop) ? prop : eval('f.selected_task_'+id);
 		if ((is_check && boxObj.checked && !boxObj.disabled) || (!is_check && !boxObj.checked && !boxObj.disabled)) {
 			row = document.getElementById(row_id);
 			boxObj.checked = true;
