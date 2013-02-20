@@ -112,10 +112,8 @@ function clickDay( idate, fdate ) {
 	$last_time->setTime(23, 59, 59);
 
 	$links = array();
-    require_once (W2P_BASE_DIR . '/modules/calendar/links_tasks.php');
 	getTaskLinks($first_time, $last_time, $links, 20, $company_id, true);
 
-    require_once (W2P_BASE_DIR . '/modules/calendar/links_events.php');
 	getEventLinks($first_time, $last_time, $links, 20, true);
 	$minical->setEvents($links);
 

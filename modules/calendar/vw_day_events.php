@@ -81,8 +81,6 @@ if ($other_users) {
 
 }
 
-require_once (W2P_BASE_DIR . '/modules/calendar/links_events.php');
-
 $event = new CEvent();
 
 $html .= '</form>';

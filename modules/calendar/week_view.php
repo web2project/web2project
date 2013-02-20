@@ -46,11 +46,9 @@ $next_week = new w2p_Utilities_Date(Date_calc::beginOfNextWeek($dd, $mm, $yy, FM
 $links = array();
 
 // assemble the links for the tasks
-require_once (W2P_BASE_DIR . '/modules/calendar/links_tasks.php');
 getTaskLinks($first_time, $last_time, $links, 50, $company_id);
 
 // assemble the links for the events
-require_once (W2P_BASE_DIR . '/modules/calendar/links_events.php');
 getEventLinks($first_time, $last_time, $links, 50);
 
 $hooks = new w2p_Core_HookHandler($AppUI);
