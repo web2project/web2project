@@ -512,10 +512,8 @@ class CEvent extends w2p_Core_BaseObject
         return parent::getAllowedRecords($uid, $fields, $orderby, $index, $extra);
     }
 
-    public function store()
-    {
-        $stored = false;
-        $q = $this->_getQuery();
+    protected function hook_preStore() {
+        parent::hook_preStore();
 
         if (!$this->event_recurs) {
             $this->event_times_recuring = 0;
@@ -538,22 +536,33 @@ class CEvent extends w2p_Core_BaseObject
         $this->event_private = (int) $this->event_private;
         $this->event_type = (int) $this->event_type;
         $this->event_cwd = (int) $this->event_cwd;
-
         $this->event_start_date = $this->_AppUI->convertToSystemTZ($this->event_start_date);
         $this->event_end_date = $this->_AppUI->convertToSystemTZ($this->event_end_date);
+
+        $q = $this->_getQuery();
+        $this->event_updated = $q->dbfnNowWithTZ();
+    }
+
+    protected function hook_preCreate() {
+        parent::hook_preCreate();
+
+        $q = $this->_getQuery();
+        $this->event_created = $q->dbfnNowWithTZ();
+    }
+
+    public function store()
+    {
+        $stored = false;
+        $q = $this->_getQuery();
+
         /*
          * TODO: I don't like the duplication on each of these two branches, but I
          *   don't have a good idea on how to fix it at the moment...
          */
         if ($this->{$this->_tbl_key} && $this->canEdit()) {
-            $this->event_updated = $q->dbfnNowWithTZ();
-
             $stored = parent::store();
         }
         if (0 == $this->{$this->_tbl_key} && $this->canCreate()) {
-            $this->event_created = $q->dbfnNowWithTZ();
-            $this->event_updated = $this->event_created;
-
             $stored = parent::store();
         }
 
