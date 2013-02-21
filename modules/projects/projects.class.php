@@ -547,11 +547,11 @@ class CProject extends w2p_Core_BaseObject
     }
     public function notifyOwner($isNotNew)
     {
-        global $locale_char_set, $AppUI;
+        global $locale_char_set;
 
         $mail = new w2p_Utilities_Mail;
 
-        $subject = (intval($isNotNew)) ? $AppUI->_('Project updated') . ': ' . $this->project_name : $AppUI->_('Project submitted') . ': ' . $this->project_name;
+        $subject = (intval($isNotNew)) ? $this->_AppUI->_('Project updated') . ': ' . $this->project_name : $this->_AppUI->_('Project submitted') . ': ' . $this->project_name;
 
         $user = new CUser();
         $user->overrideDatabase($this->_query);
