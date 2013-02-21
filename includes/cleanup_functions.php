@@ -372,8 +372,7 @@ function cal_work_day_conv($val) {
 	setlocale(LC_ALL, $AppUI->user_lang);
 
 	$day_name = $AppUI->_($wk[($val - LOCALE_FIRST_DAY) % 7]);
-//  we have utf8 here yet...
-//	$day_name = utf8_encode($day_name);
+	$day_name = utf8_encode($day_name);
 
 	return htmlspecialchars($day_name, ENT_COMPAT, $locale_char_set);
 }
