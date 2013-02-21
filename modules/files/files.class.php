@@ -299,7 +299,7 @@ class CFile extends w2p_Core_BaseObject {
 	// move the file if the affiliated project was changed
 	public function moveFile($oldProj, $realname) {
 		if (!is_dir(W2P_BASE_DIR . '/files/' . $this->file_project)) {
-			$res = mkdir(W2P_BASE_DIR . '/files/' . $this->file_project, 0777);
+			$res = mkdir(W2P_BASE_DIR . '/files/' . $this->file_project, 0744);
 			if (!$res) {
 				$this->_AppUI->setMsg('Upload folder not setup to accept uploads - change permission on files/ directory.', UI_MSG_ALLERT);
 				return false;
@@ -316,7 +316,7 @@ class CFile extends w2p_Core_BaseObject {
 	// duplicate a file into root
 	public function duplicateFile($oldProj, $realname) {
 		if (!is_dir(W2P_BASE_DIR . '/files/0')) {
-			$res = mkdir(W2P_BASE_DIR . '/files/0', 0777);
+			$res = mkdir(W2P_BASE_DIR . '/files/0', 0744);
 			if (!$res) {
 				$this->_AppUI->setMsg('Upload folder not setup to accept uploads - change permission on files/ directory.', UI_MSG_ALLERT);
 				return false;
@@ -335,13 +335,13 @@ class CFile extends w2p_Core_BaseObject {
 	public function moveTemp($upload) {
 		// check that directories are created
 		if (!is_dir(W2P_BASE_DIR . '/files')) {
-			$res = mkdir(W2P_BASE_DIR . '/files', 0777);
+			$res = mkdir(W2P_BASE_DIR . '/files', 0744);
 			if (!$res) {
 				return false;
 			}
 		}
 		if (!is_dir(W2P_BASE_DIR . '/files/' . $this->file_project)) {
-			$res = mkdir(W2P_BASE_DIR . '/files/' . $this->file_project, 0777);
+			$res = mkdir(W2P_BASE_DIR . '/files/' . $this->file_project, 0744);
 			if (!$res) {
 				$this->_AppUI->setMsg('Upload folder not setup to accept uploads - change permission on files/ directory.', UI_MSG_ALLERT);
 				return false;
