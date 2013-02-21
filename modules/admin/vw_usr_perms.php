@@ -169,14 +169,14 @@ foreach ($user_acls as $acl) {
 						$q->addWhere($module['permissions_item_field'] . '=' . $mod_data['name']);
 						$data = $q->loadResult();
 						$q->clear();
-						$modlist[] = $AppUI->_(ucfirst($key)) . ': ' . w2PHTMLDecode($data);
+						$modlist[] = $AppUI->_(w2PHTMLDecode($data));
 					} else {
-						$modlist[] = $AppUI->_(ucfirst($key)) . ': ' . w2PHTMLDecode($mod_data['name']);
+						$modlist[] = $AppUI->_(w2PHTMLDecode($mod_data['name']));
 					}
 				}
 			}
 		}
-        if (!canView($mod_data['section_value'], $mod_data['value'])) {
+        if (!canView($mod_data['value'])) {
             continue;
         }
 		$buf .= implode('<br />', $modlist);
@@ -200,7 +200,7 @@ foreach ($user_acls as $acl) {
 		// Allow or deny
 		$buf .= '<td>' . $AppUI->_($permission['allow'] ? 'allow' : 'deny') . '</td>';
 		$buf .= '<td nowrap="nowrap">';
-        $canDelete = (canEdit('users') && canEdit($mod_data['section_value'], $mod_data['value']));
+        $canDelete = (canEdit('users') && canEdit($mod_data['value']));
 		if ($canDelete) {
 			$buf .= "<a href=\"javascript:delIt({$acl});\" title=\"" . $AppUI->_('delete') . "\">" . w2PshowImage('icons/stock_delete-16.png', 16, 16, '') . "</a>";
 		}
