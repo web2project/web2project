@@ -20,6 +20,7 @@ if (!$canAddEdit) {
 
 // get the passed timestamp (today if none)
 $date = w2PgetParam($_GET, 'date', null);
+$time = w2PgetParam($_GET, 'time', null);
 // get the passed timestamp (today if none)
 $event_project = (int) w2PgetParam($_GET, 'event_project', 0);
 
@@ -106,8 +107,16 @@ if (!$event_id && !$is_clash) {
 			$min = 0;
 			$h++;
 		}
+	}elseif(!empty($time)){
+		$h=(int)substr($time,0,2);
+		$min=intval((int)substr($time,2,2)/$inc);
+		$min *= $inc;
+		if ($min > 60) {
+			$min = 0;
+			$h++;
+		}
 	}
-	if ($h && $h < w2PgetConfig('cal_day_end')) {
+	if ($h && $h < w2PgetConfig('cal_day_end') && $h>w2PgetConfig('cal_day_start')) {
 		$seldate->setTime($h, $min, 0);
         $seldate->convertTZ('UTC');
 		$obj->event_start_date = $seldate->format(FMT_TIMESTAMP);
@@ -275,10 +284,7 @@ function removeUser() {
 					<a href="javascript: void(0);" onclick="return showCalendar('start_date', '<?php echo $df ?>', 'editFrm', null, true, true)">
 						<img src="<?php echo w2PfindImage('calendar.gif'); ?>" width="24" height="12" alt="<?php echo $AppUI->_('Calendar'); ?>" border="0" />
 					</a>
-				</td>
-				<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Time'); ?>:</td>
-				<td>
-					<?php echo arraySelect($times, 'start_time', 'size="1" class="text"', $AppUI->formatTZAwareTime($obj->event_start_date, '%H%M%S')); ?>
+					<?php echo '&nbsp;&nbsp;&nbsp;' .$AppUI->_('Time') . ':' . arraySelect($times, 'start_time', 'size="1" class="text"', $AppUI->formatTZAwareTime($obj->event_start_date, '%H%M%S')); ?>
 				</td>
 			</tr>
 
@@ -290,16 +296,14 @@ function removeUser() {
 					<a href="javascript: void(0);" onclick="return showCalendar('end_date', '<?php echo $df ?>', 'editFrm', null, true, true)">
 						<img src="<?php echo w2PfindImage('calendar.gif'); ?>" width="24" height="12" alt="<?php echo $AppUI->_('Calendar'); ?>" border="0" />
 					</a>
+					<?php echo '&nbsp;&nbsp;&nbsp;' . $AppUI->_('Time') . ':' . arraySelect($times, 'end_time', 'size="1" class="text"', $AppUI->formatTZAwareTime($obj->event_end_date, '%H%M%S')); ?>
 				</td>
-				<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Time'); ?>:</td>
-				<td><?php echo arraySelect($times, 'end_time', 'size="1" class="text"', $AppUI->formatTZAwareTime($obj->event_end_date, '%H%M%S')); ?></td>
 			</tr>
 			<tr>
 				<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Recurs'); ?>:</td>
-				<td><?php echo arraySelect($recurs, 'event_recurs', 'size="1" class="text"', $obj->event_recurs, true); ?></td>
-				<td align="right">x</td>
 				<td>
-					<input type="text" class="text" name="event_times_recuring" value="<?php echo ((isset($obj->event_times_recuring)) ? ($obj->event_times_recuring) : '1'); ?>" maxlength="2" size="3" /> <?php echo $AppUI->_('times'); ?>
+					<?php echo arraySelect($recurs, 'event_recurs', 'size="1" class="text"', $obj->event_recurs, true); ?>
+					&nbsp;&nbsp;&nbsp; x<input type="text" class="text" name="event_times_recuring" value="<?php echo ((isset($obj->event_times_recuring)) ? ($obj->event_times_recuring) : '1'); ?>" maxlength="2" size="3" /> <?php echo $AppUI->_('times'); ?>
 				</td>
 			</tr>
 			<tr>

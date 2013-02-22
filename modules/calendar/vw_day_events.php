@@ -90,7 +90,8 @@ for ($i = 0, $n = ($end - $start) * 60 / $inc; $i < $n; $i++) {
 	$html .= '<tr>';
 
 	$tm = $this_day->format($tf);
-	$html .= '<td width="1%" align="right" nowrap="nowrap">' . ($this_day->getMinute() ? $tm : '<b>' . $tm . '</b>') . '</td>';
+	$link=$_SERVER['SCRIPT_NAME'].'?m=calendar&a=addedit&date='.$dayStamp.'&time='.$this_day->format(FMT_TIMESTAMP_TIME);
+	$html .= '<td width="1%" align="right" nowrap="nowrap"><a href="' . $link . '" >' . ($this_day->getMinute() ? $tm : '<b>' . $tm . '</b>') . '</a></td>';
 
 	$timeStamp = $this_day->format('%H%M%S');
 	if (isset($events2[$timeStamp])) {
