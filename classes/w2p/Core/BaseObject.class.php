@@ -692,8 +692,8 @@ abstract class w2p_Core_BaseObject extends w2p_Core_Event implements w2p_Core_Li
     {
         //NOTE: This only happens if the create was successful.
         $prefix = $this->_getColumnPrefixFromTableName($this->_tbl);
-        
-        $name = isset($this->{$prefix . '_name'}) ? $this->{$prefix . '_name'} : '';
+
+        $name = ('' != $this->{$prefix . '_name'}) ? $this->{$prefix . '_name'} : '';
         addHistory($this->_tbl, $this->{$this->_tbl_key}, $this->_event, $name . ' - ' .
                 $this->_AppUI->_('ACTION') . ': ' . $this->_event . ' ' . $this->_AppUI->_('TABLE') . ': ' .
                 $this->_tbl . ' ' . $this->_AppUI->_('ID') . ': ' . $this->{$this->_tbl_key});
