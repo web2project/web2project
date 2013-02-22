@@ -430,14 +430,14 @@ abstract class w2p_Core_BaseObject extends w2p_Core_Event implements w2p_Core_Li
             $this->$k = intval($oid);
         }
 
+        $this->_dispatcher->publish(new w2p_Core_Event(get_class($this), 'preDeleteEvent'));
+
         if (!$this->canDelete()) {
             //TODO: no clue why this is required..
             unset($this->_error['store']);
             $this->_error['delete-check'] = get_class($this) . '::delete-check failed';
             return false;
         }
-
-        $this->_dispatcher->publish(new w2p_Core_Event(get_class($this), 'preDeleteEvent'));
 
         $q = $this->_getQuery();
         $q->setDelete($this->_tbl);
