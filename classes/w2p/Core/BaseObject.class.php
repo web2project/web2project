@@ -430,14 +430,14 @@ abstract class w2p_Core_BaseObject extends w2p_Core_Event implements w2p_Core_Li
             $this->$k = intval($oid);
         }
 
+        $this->_dispatcher->publish(new w2p_Core_Event(get_class($this), 'preDeleteEvent'));
+
         if (!$this->canDelete()) {
             //TODO: no clue why this is required..
             unset($this->_error['store']);
             $this->_error['delete-check'] = get_class($this) . '::delete-check failed';
             return false;
         }
-
-        $this->_dispatcher->publish(new w2p_Core_Event(get_class($this), 'preDeleteEvent'));
 
         $q = $this->_getQuery();
         $q->setDelete($this->_tbl);
@@ -620,7 +620,7 @@ abstract class w2p_Core_BaseObject extends w2p_Core_Event implements w2p_Core_Li
         }
     }
 
-    /*
+    /**
      *  This pre/post functions are only here for completeness. They are meant to
      *    be overridden by subclasses as needed.
      *
@@ -637,75 +637,88 @@ abstract class w2p_Core_BaseObject extends w2p_Core_Event implements w2p_Core_Li
      *
      */
 
-    protected function hook_preStore()
-    {
-        return $this;
-    }
+    /**
+     * This method is called within $this->store() but before we attempt to
+     *   store it. It is called regardless of whether or not the object is
+     *   valid or the user has permissions. You might use this to make an
+     *   object valid.
+     *
+     * @return \w2p_Core_BaseObject
+     */
+    protected function hook_preStore()      {   return $this;   }
+    /**
+     * This method is called after hook_preStore() but before we attempt to
+     *   store it. It is called regardless of whether or not the object is
+     *   valid or the user has permissions to create it. You might use this to
+     *   make an object valid or set a create date.
+     *
+     * @return \w2p_Core_BaseObject
+     */
+    protected function hook_preCreate()     {   return $this;   }
+    /**
+     * This method is called after hook_preStore() but before we attempt to
+     *   store it. It is called regardless of whether or not the object is
+     *   valid or the user has permissions to update it. You might use this to
+     *   make an object valid when it is being updated.
+     *
+     * @return \w2p_Core_BaseObject
+     */
+    protected function hook_preUpdate()     {   return $this;   }
 
+    /**
+     * This method is called within $this->store() but only after the object
+     *   was created properly. You might use this to send notifications or
+     *   update other objects.
+     *
+     * @return \w2p_Core_BaseObject
+     */
+    protected function hook_postCreate()    {   return $this;   }
+    /**
+     * This method is called within $this->store() but only after the object
+     *   was updated properly. You might use this to send notifications or
+     *   update other objects.
+     *
+     * @return \w2p_Core_BaseObject
+     */
+    protected function hook_postUpdate()    {   return $this;   }
+    /**
+     * This method is called within $this->store() but only after the object
+     *   was stored properly. You might use this to send notifications or
+     *   update other objects.
+     *
+     * @return \w2p_Core_BaseObject
+     */
     protected function hook_postStore()
     {
         //NOTE: This only happens if the create was successful.
         $prefix = $this->_getColumnPrefixFromTableName($this->_tbl);
-        
-        $name = isset($this->{$prefix . '_name'}) ? $this->{$prefix . '_name'} : '';
-        addHistory($this->_tbl, $this->{$this->_tbl_key}, 'add', $name . ' - ' .
+
+        $name = ('' != $this->{$prefix . '_name'}) ? $this->{$prefix . '_name'} : '';
+        addHistory($this->_tbl, $this->{$this->_tbl_key}, $this->_event, $name . ' - ' .
                 $this->_AppUI->_('ACTION') . ': ' . $this->_event . ' ' . $this->_AppUI->_('TABLE') . ': ' .
                 $this->_tbl . ' ' . $this->_AppUI->_('ID') . ': ' . $this->{$this->_tbl_key});
 
         return $this;
     }
 
-    protected function hook_preCreate()
-    {
-        return $this;
-    }
+    protected function hook_preLoad()       {   return $this;   }
+    //NOTE: This only happens if the load was successful.
+    protected function hook_postLoad()      {   return $this;   }
 
-    protected function hook_postCreate()
-    {
-        //NOTE: This only happens if the create was successful.
-        $prefix = $this->_getColumnPrefixFromTableName($this->_tbl);
-        
-        $name = isset($this->{$prefix . '_name'}) ? $this->{$prefix . '_name'} : '';
-        addHistory($this->_tbl, $this->{$this->_tbl_key}, 'add', $name . ' - ' .
-                $this->_AppUI->_('ACTION') . ': ' . $this->_event . ' ' . $this->_AppUI->_('TABLE') . ': ' .
-                $this->_tbl . ' ' . $this->_AppUI->_('ID') . ': ' . $this->{$this->_tbl_key});
-
-        return $this;
-    }
-
-    protected function hook_preUpdate()
-    {
-        return $this;
-    }
-
-    protected function hook_postUpdate()
-    {
-        //NOTE: This only happens if the update was successful.
-        $prefix = $this->_getColumnPrefixFromTableName($this->_tbl);
-        
-        $name = isset($this->{$prefix . '_name'}) ? $this->{$prefix . '_name'} : '';
-        addHistory($this->_tbl, $this->{$this->_tbl_key}, 'update', $name . ' - ' .
-                $this->_AppUI->_('ACTION') . ': ' . $this->_event . ' ' . $this->_AppUI->_('TABLE') . ': ' .
-                $this->_tbl . ' ' . $this->_AppUI->_('ID') . ': ' . $this->{$this->_tbl_key});
-        return $this;
-    }
-
-    protected function hook_preLoad()
-    {
-        return $this;
-    }
-
-    protected function hook_postLoad()
-    {
-        //NOTE: This only happens if the load was successful.
-        return $this;
-    }
-
-    protected function hook_preDelete()
-    {
-        return $this;
-    }
-
+    /**
+     * This method is called within $this->delete() but before we attempt to
+     *   delete it. It is called regardless of whether or not the object can be
+     *   deleted.. which may be determined by dependencies or permissions.
+     *
+     * @return \w2p_Core_BaseObject
+     */
+    protected function hook_preDelete()     {   return $this;   }
+    /**
+     * This method is called within $this->delete() after the delete was
+     *   successful. It is often used for cleanup elsewhere.
+     *
+     * @return \w2p_Core_BaseObject
+     */
     protected function hook_postDelete()
     {
         //NOTE: This only happens if the delete was successful.
