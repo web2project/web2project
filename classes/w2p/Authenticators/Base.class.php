@@ -21,21 +21,45 @@ abstract class w2p_Authenticators_Base
      * soon as possible. I did it this way so that replacement is easier than
      * just finding and updating all the instances.
      *
-     * @param type $password
+     * @param string $password
+     * @param string $salt unused but available @since 3.0
      *
      * @return md5hash
      */
-    public function hashPassword($password)
+    public function hashPassword($password, $salt = '')
     {
-        $hash = md5($password);
+        $hash = md5($password . $salt);
 
         return $hash;
     }
 
     /**
+     * This generates a new temporary password in order to send it to the user.
+     *   It should be considered temporary because we could be sent via email.
+     *
+     * @return string
+     */
+    public function createNewPassword()
+    {
+        $newPassword = '';
+        $salt = 'abchefghjkmnpqrstuvwxyz0123456789';
+        srand((double)microtime() * 1000000);
+
+        $i = 0;
+        while ($i <= 10) {
+            $num = rand() % 33;
+            $tmp = substr($salt, $num, 1);
+            $newPassword = $newPassword . $tmp;
+            $i++;
+        }
+
+        return $newPassword;
+    }
+
+    /**
      * This just returns the userId and will need to be overridden only rarely.
      *
-     * @return int 
+     * @return int
      */
     public function userId()
     {

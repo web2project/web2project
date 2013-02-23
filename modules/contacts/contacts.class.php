@@ -48,6 +48,18 @@ class CContact extends w2p_Core_BaseObject
         parent::__construct('contacts', 'contact_id');
     }
 
+    /**
+     * This exists *only* to make sure we can use $this->contact_name and keep
+     *   our code simpler.
+     *
+     * @param type $name
+     * @return type
+     */
+    public function __get($name)
+    {
+        return ('contact_name' == $name) ? $this->contact_display_name : '';
+    }
+
     public function loadFull($notUsed = null, $contactId)
     {
         $q = $this->_getQuery();
