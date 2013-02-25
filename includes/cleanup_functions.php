@@ -3981,9 +3981,12 @@ function sendNewPass() {
 		$AppUI->redirect();
 	}
 
-	$newpass = makePass();
+    $auth = new w2p_Authenticators_SQL();
+    $newpass = $auth->createNewPassword();
+    $hashed  = $auth->hashPassword($newpass);
+
 	$q->addTable('users');
-	$q->addUpdate('user_password', md5($newpass));
+	$q->addUpdate('user_password', $hashed);
 	$q->addWhere('user_id=' . $user_id);
 	$cur = $q->exec();
 
@@ -4001,20 +4004,6 @@ function sendNewPass() {
         $AppUI->setMsg('New User Password created and emailed to you');
 		$AppUI->redirect();
 	}
-}
-
-function makePass() {
-	$makepass = '';
-	$salt = 'abchefghjkmnpqrstuvwxyz0123456789';
-	srand((double)microtime() * 1000000);
-	$i = 0;
-	while ($i <= 7) {
-		$num = rand() % 33;
-		$tmp = substr($salt, $num, 1);
-		$makepass = $makepass . $tmp;
-		$i++;
-	}
-	return ($makepass);
 }
 
 // from modules/reports/overall.php
