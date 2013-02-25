@@ -1117,6 +1117,7 @@ class w2p_Database_Query {
 		}
 		$ADODB_FETCH_MODE = $style;
 		$this->clearQuery();
+		$this->_db->Execute('SET NAMES UTF8;');
 
 		if ($q = $this->prepare()) {
 			if ($debug) {

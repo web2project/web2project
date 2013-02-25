@@ -346,7 +346,7 @@ class CTask_Log extends w2p_Core_BaseObject
     public function canEdit() {
         if($this->_AppUI->user_id == $this->task_log_creator ||
                 $this->_AppUI->user_id == $this->task_log_record_creator ||
-                $this->_perms->checkModuleItem($this->_tbl_module, 'edit', $this->{$this->_tbl_key})) {
+                $this->_perms->checkModuleItem($this->_tbl, 'edit', $this->{$this->_tbl_key})) {
 
             return true;
         }
