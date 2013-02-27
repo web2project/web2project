@@ -52,8 +52,7 @@ function notifyHR($address, $notUsed, $uaddress, $uusername, $logname, $notUsed2
         if ($mail->ValidEmail($AppUI->user_email)) {
 			$email = $AppUI->user_email;
 		} else {
-//TODO: this email should be set to something sane
-            $email = 'web2project@web2project.net';
+            $email = w2PgetConfig('admin_email');
 		}
 
 		$mail->To($address);
@@ -73,8 +72,7 @@ function notifyNewUserCredentials($address, $username, $logname, $logpwd) {
         if ($mail->ValidEmail($AppUI->user_email)) {
 			$email = $AppUI->user_email;
 		} else {
-//TODO: this email should be set to something sane
-            $email = "web2project@" . $AppUI->cfg['site_domain'];
+            $email = w2PgetConfig('admin_email');
 		}
 
 		$mail->To($address);

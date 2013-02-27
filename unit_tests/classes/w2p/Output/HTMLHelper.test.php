@@ -94,13 +94,13 @@ class w2p_Output_HTMLHelper_Test extends CommonSetup
     {
         // The formatting for _author, _creator, _owner, and _updator are the same.
         $cell = $this->obj->createCell('x_author', 'default value');
-        $this->assertEquals('<td class="data _author">default value</td>', $cell);
+        $this->assertEquals('<td class="data _author nowrap">default value</td>', $cell);
         $cell = $this->obj->createCell('x_owner', 'default value');
-        $this->assertEquals('<td class="data _owner">default value</td>', $cell);
+        $this->assertEquals('<td class="data _owner nowrap">default value</td>', $cell);
         $cell = $this->obj->createCell('x_creator', 'default value');
-        $this->assertEquals('<td class="data _creator">default value</td>', $cell);
+        $this->assertEquals('<td class="data _creator nowrap">default value</td>', $cell);
         $cell = $this->obj->createCell('x_updator', 'default value');
-        $this->assertEquals('<td class="data _updator">default value</td>', $cell);
+        $this->assertEquals('<td class="data _updator nowrap">default value</td>', $cell);
 
         // The formatting for _count, _duration, and _hours are the same.
         $cell = $this->obj->createCell('x_count', 'default value');
