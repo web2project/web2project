@@ -871,6 +871,7 @@ class w2p_Extensions_Permissions extends gacl_api
         $mod_id = substr($_POST['permission_module'], 4);
         $item_id = (int) $_POST['permission_item'];
         $access = (int) $_POST['permission_access'];
+        $table  = (string) $_POST['permission_table'];
 
         $mod_group = null;
         $mod_mod = null;
@@ -879,14 +880,14 @@ class w2p_Extensions_Permissions extends gacl_api
         } else {
             if ($item_id) {
                 $mod_mod = array();
-                $mod_mod[$_POST['permission_table']][] = $item_id;
+                $mod_mod[$table][] = $item_id;
                 // check if the item already exists, if not create it.
                 // First need to check if the section exists.
-                if (!$this->get_object_section_section_id(null, $_POST['permission_table'], 'axo')) {
-                    $this->addModuleSection($_POST['permission_table']);
+                if (!$this->get_object_section_section_id(null, $table, 'axo')) {
+                    $this->addModuleSection($table);
                 }
-                if (!$this->get_object_id($_POST['permission_table'], $item_id, 'axo')) {
-                    $this->addModuleItem($_POST['permission_table'], $item_id, $item_id);
+                if (!$this->get_object_id($table, $item_id, 'axo')) {
+                    $this->addModuleItem($table, $item_id, $item_id);
                 }
             } else {
                 // Get the module information
@@ -927,6 +928,7 @@ class w2p_Extensions_Permissions extends gacl_api
         $mod_id = substr($_POST['permission_module'], 4);
         $item_id = (int) $_POST['permission_item'];
         $access = (int) $_POST['permission_access'];
+        $table  = (string) $_POST['permission_table'];
 
         $mod_group = null;
         $mod_mod = null;
@@ -935,14 +937,14 @@ class w2p_Extensions_Permissions extends gacl_api
         } else {
             if ($item_id) {
                 $mod_mod = array();
-                $mod_mod[$_POST['permission_table']][] = $item_id;
+                $mod_mod[$table][] = $item_id;
                 // check if the item already exists, if not create it.
                 // First need to check if the section exists.
-                if (!$this->get_object_section_section_id(null, $_POST['permission_table'], 'axo')) {
-                    $this->addModuleSection($_POST['permission_table']);
+                if (!$this->get_object_section_section_id(null, $table, 'axo')) {
+                    $this->addModuleSection($table);
                 }
-                if (!$this->get_object_id($_POST['permission_table'], $item_id, 'axo')) {
-                    $this->addModuleItem($_POST['permission_table'], $item_id, $item_id);
+                if (!$this->get_object_id($table, $item_id, 'axo')) {
+                    $this->addModuleItem($table, $item_id, $item_id);
                 }
             } else {
                 // Get the module information
