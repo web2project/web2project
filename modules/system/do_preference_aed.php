@@ -20,7 +20,7 @@ $emails += (isset($_POST['tl_proj'])) ? 4 : 0;
 $_POST['pref_name']['TASKLOGEMAIL'] = $emails;
 
 $obj = new w2p_Core_Preferences();
-$obj->pref_user = $pref_user;
+$obj->pref_user = (string) $pref_user;
 foreach ($_POST['pref_name'] as $name => $value) {
 	$obj->pref_name = $name;
 	$obj->pref_value = $value;

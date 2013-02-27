@@ -45,7 +45,6 @@
             <formatter type="plain" usefile="false"/>
             <batchtest>
                 <fileset dir="${dir.tests}/modules">
-                    <include name="**/*.test.php"/>
                     <include name="**/*Test.php"/>
                     <exclude name="**/CTasksTest.php"/>
                 </fileset>
@@ -64,7 +63,7 @@
 
                 <fileset dir="${dir.tests}/includes">
                     <include name="**/*.test.php"/>
-                    <include name="**/*Test.php"/>
+<!--                    <include name="**/*Test.php"/>-->
                 </fileset>
             </batchtest>
             <formatter  type="xml" todir="${dir.reports}" outfile="test-logs.xml"/>
