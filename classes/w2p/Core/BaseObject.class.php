@@ -341,7 +341,6 @@ abstract class w2p_Core_BaseObject extends w2p_Core_Event implements w2p_Core_Li
             $store_type = 'add';
             $result = $q->insertObject($this->_tbl, $this, $this->_tbl_key);
         }
-        $result = ('' == $result) ? true : $result;
 
         if ($result) {
             // NOTE: I don't particularly like how the name is generated but it wires things properly.
