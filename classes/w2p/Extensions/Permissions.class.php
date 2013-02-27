@@ -870,6 +870,7 @@ class w2p_Extensions_Permissions extends gacl_api
         $mod_type = substr($_POST['permission_module'], 0, 4);
         $mod_id = substr($_POST['permission_module'], 4);
         $item_id = (int) $_POST['permission_item'];
+        $access = (int) $_POST['permission_access'];
 
         $mod_group = null;
         $mod_mod = null;
@@ -905,7 +906,7 @@ class w2p_Extensions_Permissions extends gacl_api
                 $type_map[$t[0]][] = $t[1];
             }
         }
-        $res = $this->add_acl($type_map, $aro_map, null, $mod_mod, $mod_group, $_POST['permission_access'], 1, null, null, 'user');
+        $res = $this->add_acl($type_map, $aro_map, null, $mod_mod, $mod_group, $access, 1, null, null, 'user');
 
         $recalc = $this->recalcPermissions(null, $_POST['permission_user']);
         if (!$recalc) {
@@ -925,6 +926,7 @@ class w2p_Extensions_Permissions extends gacl_api
         $mod_type = substr($_POST['permission_module'], 0, 4);
         $mod_id = substr($_POST['permission_module'], 4);
         $item_id = (int) $_POST['permission_item'];
+        $access = (int) $_POST['permission_access'];
 
         $mod_group = null;
         $mod_mod = null;
@@ -958,7 +960,7 @@ class w2p_Extensions_Permissions extends gacl_api
                 $type_map[$t[0]][] = $t[1];
             }
         }
-        $res = $this->add_acl($type_map, null, $aro_map, $mod_mod, $mod_group, $_POST['permission_access'], 1, null, null, 'user');
+        $res = $this->add_acl($type_map, null, $aro_map, $mod_mod, $mod_group, $access, 1, null, null, 'user');
 
         $recalc = $this->recalcPermissions(null, null, $_POST['role_id']);
         if (!$recalc) {
