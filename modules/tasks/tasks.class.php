@@ -1215,6 +1215,9 @@ class CTask extends w2p_Core_BaseObject
 
         $mail = new w2p_Utilities_Mail();
 
+		$project = new CProject();
+		$projname = $project->load($this->task_project)->project_name;
+
         $mail->Subject($projname . '::' . $this->task_name . ' ' . $this->_AppUI->_($this->_action, UI_OUTPUT_RAW), $locale_char_set);
 
         // c = creator
@@ -1252,7 +1255,7 @@ class CTask extends w2p_Core_BaseObject
                 if ($mail->ValidEmail($row['assignee_email'])) {
 
                     $emailManager = new w2p_Output_EmailManager($this->_AppUI);
-                    $body = $emailManager->getTaskNotify($this, $row);
+                    $body = $emailManager->getTaskNotify($this, $row, $projname);
 
                     $mail->Body($body, (isset($GLOBALS['locale_char_set']) ? $GLOBALS['locale_char_set'] : ''));
 
