@@ -36,7 +36,7 @@ if ($del) {
             $obj->updateAssigned(explode(',', $_POST['event_assigned']));
         }
         if (isset($_POST['mail_invited'])) {
-            $obj->notify($_POST['event_assigned'], false);
+            $obj->notify($_POST['event_assigned'], ($obj->_event=='Update'?true:false));
         }
     }
 }
