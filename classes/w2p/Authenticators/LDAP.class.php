@@ -19,21 +19,22 @@ class w2p_Authenticators_LDAP extends w2p_Authenticators_Base
     public $user_id;
     public $username;
 
-    public function __construct() {
-        global $w2Pconfig;
+    public function __construct()
+    {
+        parent::__construct();
 
-        $this->fallback = isset($w2Pconfig['ldap_allow_login']) ?
-            $w2Pconfig['ldap_allow_login'] : false;
+        $this->fallback = isset($this->_w2Pconfig['ldap_allow_login']) ?
+            $this->_w2Pconfig['ldap_allow_login'] : false;
 
-        $this->ldap_host = $w2Pconfig['ldap_host'];
-        $this->ldap_port = $w2Pconfig['ldap_port'];
-        $this->ldap_version = $w2Pconfig['ldap_version'];
-        $this->base_dn = $w2Pconfig['ldap_base_dn'];
-        $this->ldap_search_user = $w2Pconfig['ldap_search_user'];
-        $this->ldap_search_pass = $w2Pconfig['ldap_search_pass'];
-        $this->filter = $w2Pconfig['ldap_user_filter'];
+        $this->ldap_host = $this->_w2Pconfig['ldap_host'];
+        $this->ldap_port = $this->_w2Pconfig['ldap_port'];
+        $this->ldap_version = $this->_w2Pconfig['ldap_version'];
+        $this->base_dn = $this->_w2Pconfig['ldap_base_dn'];
+        $this->ldap_search_user = $this->_w2Pconfig['ldap_search_user'];
+        $this->ldap_search_pass = $this->_w2Pconfig['ldap_search_pass'];
+        $this->filter = $this->_w2Pconfig['ldap_user_filter'];
 
-        $this->ldap_complete_string = $w2Pconfig['ldap_complete_string'];
+        $this->ldap_complete_string = $this->_w2Pconfig['ldap_complete_string'];
     }
 
     public function authenticate($username, $password)
@@ -118,7 +119,6 @@ class w2p_Authenticators_LDAP extends w2p_Authenticators_Base
 
     public function createsqluser($username, $password, $ldap_attribs = array())
     {
-        global $AppUI;
         $hash_pass = $this->hashPassword($password);
 
         $c = new CContact();
@@ -133,7 +133,7 @@ class w2p_Authenticators_LDAP extends w2p_Authenticators_Base
                 $c->contact_job = $ldap_attribs['title'][0];
                 $c->contact_email = $ldap_attribs['mail'][0];
                 $c->contact_phone = $ldap_attribs['telephonenumber'][0];
-                $c->contact_owner = $AppUI->user_id;
+                $c->contact_owner = $this->_AppUI->user_id;
                 $result = $c->store();
                 $contactArray = array('phone_mobile' => $ldap_attribs['mobile'][0]);
                 $c->setContactMethods($contactArray);
@@ -149,7 +149,7 @@ class w2p_Authenticators_LDAP extends w2p_Authenticators_Base
         $user_id = $u->user_id;
         $this->user_id = $user_id;
 
-        $acl = &$AppUI->acl();
+        $acl = &$this->_AppUI->acl();
         $acl->insertUserRole($acl->get_group_id('anon'), $this->user_id);
     }
 }

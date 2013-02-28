@@ -16,6 +16,17 @@
  */
 abstract class w2p_Authenticators_Base
 {
+    protected $_AppUI = null;
+    protected $_w2Pconfig = null;
+
+    public function __construct() {
+        global $AppUI;
+        global $w2Pconfig;
+
+        $this->_AppUI = $AppUI;
+        $this->_w2Pconfig = $w2Pconfig;
+    }
+    
     /**
      * This is a simple MD5 Hash but should be replaced with something better as
      * soon as possible. I did it this way so that replacement is easier than

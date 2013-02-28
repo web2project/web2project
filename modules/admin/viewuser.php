@@ -180,7 +180,7 @@ $titleBlock->show();
                         <input type="hidden" name="user_id" value="<?php echo (int) $user->user_id; ?>" />
                         <input type="hidden" name="dosql" value="do_user_token" />
                         <input type="hidden" name="token" value="<?php echo $user->feed_token; ?>" />
-                        <input type="submit" name="regenerate token" value="<?php echo $AppUI->_('regenerate feed url'); ?>" />
+                        <input type="submit" name="regenerate token" value="<?php echo $AppUI->_('regenerate feed url'); ?>" class="button" />
                     </form>
                 </td>
             </tr>
