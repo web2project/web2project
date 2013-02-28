@@ -382,11 +382,11 @@ class CEvent extends w2p_Core_BaseObject
         $users = $q->loadHashList('user_id');
 
         $mail = new w2p_Utilities_Mail();
-        $type = $update ? $this->_AppUI->_('Updated') : $this->_AppUI->_('New');
         if ($clash) {
             $mail->Subject($this->_AppUI->_('Requested Event') . ': ' . $this->event_name, $locale_char_set);
         } else {
-            $mail->Subject($type . ' ' . $this->_AppUI->_('Event') . ': ' . $this->event_name, $locale_char_set);
+			$type = $update ? $this->_AppUI->_('Event updated') : $this->_AppUI->_('New event');
+            $mail->Subject($type . ': ' . $this->event_name, $locale_char_set);
         }
 
         $emailManager = new w2p_Output_EmailManager($this->_AppUI);

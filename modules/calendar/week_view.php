@@ -71,7 +71,7 @@ $titleBlock->addCell('<form action="' . $_SERVER['REQUEST_URI'] . '" method="pos
 $titleBlock->addCell($AppUI->_('Company') . ':');
 $titleBlock->addCell('<form action="'.$_SERVER['REQUEST_URI'].'" method="post" name="pickFilter" accept-charset="utf-8">' . arraySelect($event_filter_list, 'event_filter', 'onchange="document.pickFilter.submit()" class="text"', $event_filter, true) . '</form>');
 $titleBlock->addCell($AppUI->_('Event Filter') . ':');
-$titleBlock->addCell('<form action="?m=calendar&a=addedit&date=' . $today . '" method="post" accept-charset="utf-8">' . '<input type="submit" class="button" value="' . $AppUI->_('new event') . '">' . '</form>');
+$titleBlock->addCell('<form action="?m=calendar&a=addedit&date=' . $today . '" method="post" accept-charset="utf-8">' . '<input type="submit" class="button" value="' . $AppUI->_('New event') . '">' . '</form>');
 $titleBlock->show();
 ?>
 <table border="0" cellspacing="0" cellpadding="2" width="100%" class="motitle">

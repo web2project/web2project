@@ -68,7 +68,7 @@ if ($canEdit) {
 	$titleBlock->addCell();
 	$titleBlock->addCell('
 		<form action="?m=calendar&amp;a=addedit" method="post" accept-charset="utf-8">
-			<input type="submit" class="button" value="' . $AppUI->_('new event') . '" />
+			<input type="submit" class="button" value="' . $AppUI->_('New event') . '" />
 		</form>', '', '', '');
 }
 $titleBlock->addCrumb('?m=calendar&a=year_view&date=' . $start_date->format(FMT_TIMESTAMP_DATE), 'year view');
