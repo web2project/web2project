@@ -869,21 +869,25 @@ class w2p_Extensions_Permissions extends gacl_api
 
         $mod_type = substr($_POST['permission_module'], 0, 4);
         $mod_id = substr($_POST['permission_module'], 4);
+        $item_id = (int) $_POST['permission_item'];
+        $access = (int) $_POST['permission_access'];
+        $table  = (string) $_POST['permission_table'];
+
         $mod_group = null;
         $mod_mod = null;
         if ($mod_type == 'grp,') {
             $mod_group = array($mod_id);
         } else {
-            if (isset($_POST['permission_item']) && $_POST['permission_item']) {
+            if ($item_id) {
                 $mod_mod = array();
-                $mod_mod[$_POST['permission_table']][] = $_POST['permission_item'];
+                $mod_mod[$table][] = $item_id;
                 // check if the item already exists, if not create it.
                 // First need to check if the section exists.
-                if (!$this->get_object_section_section_id(null, $_POST['permission_table'], 'axo')) {
-                    $this->addModuleSection($_POST['permission_table']);
+                if (!$this->get_object_section_section_id(null, $table, 'axo')) {
+                    $this->addModuleSection($table);
                 }
-                if (!$this->get_object_id($_POST['permission_table'], $_POST['permission_item'], 'axo')) {
-                    $this->addModuleItem($_POST['permission_table'], $_POST['permission_item'], $_POST['permission_item']);
+                if (!$this->get_object_id($table, $item_id, 'axo')) {
+                    $this->addModuleItem($table, $item_id, $item_id);
                 }
             } else {
                 // Get the module information
@@ -903,7 +907,7 @@ class w2p_Extensions_Permissions extends gacl_api
                 $type_map[$t[0]][] = $t[1];
             }
         }
-        $res = $this->add_acl($type_map, $aro_map, null, $mod_mod, $mod_group, $_POST['permission_access'], 1, null, null, 'user');
+        $res = $this->add_acl($type_map, $aro_map, null, $mod_mod, $mod_group, $access, 1, null, null, 'user');
 
         $recalc = $this->recalcPermissions(null, $_POST['permission_user']);
         if (!$recalc) {
@@ -922,21 +926,25 @@ class w2p_Extensions_Permissions extends gacl_api
 
         $mod_type = substr($_POST['permission_module'], 0, 4);
         $mod_id = substr($_POST['permission_module'], 4);
+        $item_id = (int) $_POST['permission_item'];
+        $access = (int) $_POST['permission_access'];
+        $table  = (string) $_POST['permission_table'];
+
         $mod_group = null;
         $mod_mod = null;
         if ($mod_type == 'grp,') {
             $mod_group = array($mod_id);
         } else {
-            if (isset($_POST['permission_item']) && $_POST['permission_item']) {
+            if ($item_id) {
                 $mod_mod = array();
-                $mod_mod[$_POST['permission_table']][] = $_POST['permission_item'];
+                $mod_mod[$table][] = $item_id;
                 // check if the item already exists, if not create it.
                 // First need to check if the section exists.
-                if (!$this->get_object_section_section_id(null, $_POST['permission_table'], 'axo')) {
-                    $this->addModuleSection($_POST['permission_table']);
+                if (!$this->get_object_section_section_id(null, $table, 'axo')) {
+                    $this->addModuleSection($table);
                 }
-                if (!$this->get_object_id($_POST['permission_table'], $_POST['permission_item'], 'axo')) {
-                    $this->addModuleItem($_POST['permission_table'], $_POST['permission_item'], $_POST['permission_item']);
+                if (!$this->get_object_id($table, $item_id, 'axo')) {
+                    $this->addModuleItem($table, $item_id, $item_id);
                 }
             } else {
                 // Get the module information
@@ -954,7 +962,7 @@ class w2p_Extensions_Permissions extends gacl_api
                 $type_map[$t[0]][] = $t[1];
             }
         }
-        $res = $this->add_acl($type_map, null, $aro_map, $mod_mod, $mod_group, $_POST['permission_access'], 1, null, null, 'user');
+        $res = $this->add_acl($type_map, null, $aro_map, $mod_mod, $mod_group, $access, 1, null, null, 'user');
 
         $recalc = $this->recalcPermissions(null, null, $_POST['role_id']);
         if (!$recalc) {
