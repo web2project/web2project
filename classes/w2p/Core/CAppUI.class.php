@@ -473,6 +473,18 @@ class w2p_Core_CAppUI
         return $first_entry;
     }
 
+	public function loadModuleLocalization($module)
+	{
+		global $m;
+		$last_m=$m;
+		$m=$module;
+		$AppUI=$this;
+		$perms = &$AppUI->acl();
+		@include ('./locales/' . $AppUI->user_locale . '/locales.php');
+		include ('./locales/core.php');
+		$m=$last_m;
+	}
+
     /**
      * Load the known language codes for loaded locales
      *
