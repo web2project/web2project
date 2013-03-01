@@ -1686,18 +1686,17 @@ function clash_process(w2p_Core_CAppUI $AppUI) {
         }
 	}
 
-	$start_date = new w2p_Utilities_Date($_POST['event_start_date'] . "000000");
-	$end_date = new w2p_Utilities_Date($_POST['event_end_date'] . "235959");
+	$start_date = new w2p_Utilities_Date($AppUI->convertToSystemTZ($_POST['event_start_date'] . $_POST['start_time']));
+	$end_date = new w2p_Utilities_Date($AppUI->convertToSystemTZ($_POST['event_end_date'] . $_POST['end_time']));
 
 	// First find any events in the range requested.
-	$event_list = $obj->getEventsInWindow($start_date->format(FMT_DATETIME_MYSQL), $end_date->format(FMT_DATETIME_MYSQL), (int)($_POST['start_time'] / 100), (int)($_POST['end_time'] / 100), $users);
-	$event_start_date = new w2p_Utilities_Date($_POST['event_start_date'] . $_POST['start_time']);
-	$event_end_date = new w2p_Utilities_Date($_POST['event_end_date'] . $_POST['end_time']);
+	$event_list = $obj->getEventsInWindow($start_date->format(FMT_DATETIME_MYSQL), $end_date->format(FMT_DATETIME_MYSQL), $start_date->format('%H%M'), $end_date->format('%H%M'), $users);
 
 	if (!$event_list || !count($event_list)) {
 		// First available date/time is OK, seed addEdit with the details.
-		$obj->event_start_date = $event_start_date->format(FMT_DATETIME_MYSQL);
-		$obj->event_end_date = $event_end_date->format(FMT_DATETIME_MYSQL);
+		$obj->event_start_date = $start_date->format(FMT_DATETIME_MYSQL);
+		$start_date->addSeconds($_POST['duration']*60);
+		$obj->event_end_date = $start_date->format(FMT_DATETIME_MYSQL);
 		$_SESSION['add_event_post'] = get_object_vars($obj);
 		$AppUI->setMsg('No clashes in suggested timespan', UI_MSG_OK);
 		$_SESSION['event_is_clash'] = true;
@@ -1711,11 +1710,11 @@ function clash_process(w2p_Core_CAppUI $AppUI) {
 	// Working in 30 minute increments from the start time, and remembering
 	// the end time stipulation, find the first hole in the times.
 	// Determine the duration in hours/minutes.
-	$start_hour = (int)($_POST['start_time'] / 10000);
-	$start_minutes = (int)(($_POST['start_time'] % 10000) / 100);
+	$start_hour = (int)$start_date->format('%H');
+	$start_minutes = (int)$start_date->format('%M');
 	$start_time = $start_hour * 60 + $start_minutes;
-	$end_hour = (int)($_POST['end_time'] / 10000);
-	$end_minutes = (int)(($_POST['end_time'] % 10000) / 100);
+	$end_hour = (int)$end_date->format('%H');
+	$end_minutes = (int)$end_date->format('%M');
 	$end_time = ($end_hour * 60 + $end_minutes) - $_POST['duration'];
 
 	// First, build a set of "slots" that give us the duration
@@ -1748,7 +1747,7 @@ function clash_process(w2p_Core_CAppUI $AppUI) {
 
 		// Now find the slots on that day that match
 		list($syear, $smonth, $sday, $shour, $sminute, $ssecond) = sscanf($event['event_start_date'], "%4d-%2d-%2d %2d:%2d:%2d");
-		list($eyear, $emonth, $eday, $ehour, $eminute, $esecond) = sscanf($event['event_start_date'], "%4d-%2d-%2d %2d:%2d:%2d");
+		list($eyear, $emonth, $eday, $ehour, $eminute, $esecond) = sscanf($event['event_end_date'], "%4d-%2d-%2d %2d:%2d:%2d");
 		$start_mins = $shour * 60 + $sminute;
 		$end_mins = $ehour * 60 + $eminute;
 		if (isset($slots[$day_offset])) {
@@ -1774,6 +1773,7 @@ function clash_process(w2p_Core_CAppUI $AppUI) {
 				$AppUI->setMsg('First available time slot', UI_MSG_OK);
 				$_SESSION['event_is_clash'] = true;
 				$_GET['event_id'] = $obj->event_id;
+				$GLOBALS['a']='addedit';
 				$do_include = W2P_BASE_DIR . '/modules/calendar/addedit.php';
 				return;
 			}

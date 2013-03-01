@@ -419,8 +419,8 @@ class CEvent extends w2p_Core_BaseObject
             return false;
         }
 
-        $start_date = new w2p_Utilities_Date($this->event_start_date);
-        $end_date = new w2p_Utilities_Date($this->event_end_date);
+        $start_date = new w2p_Utilities_Date($this->_AppUI->convertToSystemTZ($this->event_start_date));
+        $end_date = new w2p_Utilities_Date($this->_AppUI->convertToSystemTZ($this->event_end_date));
 
         // Now build a query to find matching events.
         $q = $this->_getQuery();
