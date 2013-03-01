@@ -13,7 +13,7 @@ if (!defined('W2P_BASE_DIR')) {
 
 $config = array();
 $config['mod_name']        = 'Resources';           // name the module
-$config['mod_version']     = '1.1.0';               // add a version number
+$config['mod_version']     = '1.1.1';               // add a version number
 $config['mod_directory']   = 'resources';           // tell web2project where to find this module
 $config['mod_setup_class'] = 'SResource';           // the name of the PHP setup class (used below)
 $config['mod_type']        = 'user';                // 'core' for modules distributed with w2p by standard, 'user' for additional modules
@@ -64,6 +64,17 @@ class SResource extends w2p_Core_Setup
 
         $this->addTypes();
 
+		$q->clear();
+		$q->createTable('event_resources');
+		$q->createDefinition("(
+			id integer not null auto_increment,
+			event_id integer not null,
+			resource_id integer not null,
+			primary key (id)
+		)");
+		if (!$q->exec()) {
+			return false;
+		}
         return parent::install();
     }
 
@@ -80,6 +91,10 @@ class SResource extends w2p_Core_Setup
 		$q->setDelete('sysvals');
 		$q->addWhere("sysval_title = 'ResourceTypes'");
         $q->exec();
+		$q->clear();
+		$q->dropTable('event_resources');
+		$q->exec();
+		$q->clear();
 
         return parent::remove();
     }
@@ -100,6 +115,17 @@ class SResource extends w2p_Core_Setup
                 $resource = new CResource();
                 $resource->convertTypes();
             case '1.1.0':
+				$sql = "(
+				id integer not null auto_increment,
+				event_id integer not null,
+				resource_id integer not null,
+				primary key (id)
+			)";
+				$q->createTable('event_resources');
+				$q->createDefinition($sql);
+				$q->exec();
+				$q->clear();
+			case "1.1.1":
                 //current version
             default:
                 break;
@@ -113,7 +139,7 @@ class SResource extends w2p_Core_Setup
         $q = new w2p_Database_Query();
 
         $i = 1;
-        $resourceTypes = array('All resources', 'Equipment', 'Tool', 'Venue');
+        $resourceTypes = array('Equipment', 'Tool', 'Venue');
         foreach ($resourceTypes as $type) {
             $q->addTable('sysvals');
             $q->addInsert('sysval_key_id', 1);
