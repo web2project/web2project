@@ -49,7 +49,7 @@ $report_type_var = w2PgetParam($_GET, 'report_type', '');
 if (!empty($report_type_var)) {
 	$report_type_var = '&amp;report_type=' . $report_type;
 }
-
+echo '<br /><br /><br /><br /><br />';
 if (!$suppressHeaders) {
 	if (!isset($display_project_name)) {
 		$display_project_name = $AppUI->_('All');
