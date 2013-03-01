@@ -64,10 +64,9 @@ if ($inc === null)
 
 $this_day->setTime($start, 0, 0);
 
-$html = '<form action="'.$_SERVER['REQUEST_URI'].'" method="post" name="pickFilter" accept-charset="utf-8">';
-$html .= $AppUI->_('Event Filter') . ':' . arraySelect($event_filter_list, 'event_filter', 'onChange="document.pickFilter.submit()" class="text"', $event_filter, true);
+$html = '<form action="'.$_SERVER['REQUEST_URI'].'" method="post" name="pickUser" accept-charset="utf-8">';
 if ($other_users) {
-	$html .= $AppUI->_('Show Events for') . ':' . '<select name="show_user_events" onchange="document.pickFilter.submit()" class="text">';
+	$html .= $AppUI->_('Show Events for') . ':' . '<select name="show_user_events" onchange="document.pickUser.submit()" class="text">';
 
 	if (($rows = w2PgetUsersList())) {
 		foreach ($rows as $row) {
