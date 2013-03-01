@@ -160,13 +160,13 @@ function submitIt(){
 		form.event_end_date.focus();
 		return;
 	}
-	if ( (!(form.event_times_recuring.value>0)) 
+	if ( (!(form.event_times_recuring.value>0))
 		&& (form.event_recurs[0].selected!=true) ) {
 		alert("<?php echo $AppUI->_('Please enter number of recurrences', UI_OUTPUT_JS); ?>");
 		form.event_times_recuring.value=1;
 		form.event_times_recuring.focus();
 		return;
-	} 
+	}
 	// Ensure that the assigned values are selected before submitting.
 	var assigned = form.assigned;
 	var len = assigned.length;
@@ -210,7 +210,7 @@ function removeUser() {
 	for (fl; fl > -1; fl--) {
 		if (form.assigned.options[fl].selected) {
 			//remove from hperc_assign
-			var selValue = form.assigned.options[fl].value;			
+			var selValue = form.assigned.options[fl].value;
 			var re = ".*("+selValue+"=[0-9]*;).*";
 			form.assigned.options[fl] = null;
 		}
@@ -301,6 +301,10 @@ function removeUser() {
 				<td>
 					<input type="text" class="text" name="event_times_recuring" value="<?php echo ((isset($obj->event_times_recuring)) ? ($obj->event_times_recuring) : '1'); ?>" maxlength="2" size="3" /> <?php echo $AppUI->_('times'); ?>
 				</td>
+			</tr>
+			<tr>
+				<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Remind Me'); ?>:</td>
+				<td><?php echo arraySelect($remind, 'event_remind', 'size="1" class="text"', $obj->event_remind); ?> <?php echo $AppUI->_('in advance'); ?></td>
 			</tr>
 			<tr>
 				<td align="right"><?php echo $AppUI->_('Resources'); ?>:</td>
