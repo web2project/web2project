@@ -42,30 +42,6 @@ $types = w2PgetSysVal('EventType');
 $perms = &$AppUI->acl();
 $users = $perms->getPermittedUsers('calendar');
 
-// Load the assignees
-$assigned = array();
-if ($is_clash) {
-	$assignee_list = $_SESSION['add_event_attendees'];
-	if (isset($assignee_list) && $assignee_list) {
-		$event = new CEvent();
-		$assigned = $event->getAssigneeList($assignee_list);
-	}
-	// Now that we have loaded the possible replacement event,  remove the stored
-	// details, NOTE: This could cause using a back button to make things break,
-	// but that is the least of our problems.
-    unset($_SESSION['add_event_post']);
-    unset($_SESSION['add_event_attendees']);
-    unset($_SESSION['add_event_mail']);
-    unset($_SESSION['add_event_clash']);
-    unset($_SESSION['event_is_clash']);
-} else {
-	if ($event_id == 0) {
-		$assigned[$AppUI->user_id] = $AppUI->user_display_name;
-	} else {
-		$assigned = $obj->getAssigned();
-	}
-}
-
 //check if the user has view permission over the project
 if ($obj->event_project && !$perms->checkModuleItem('projects', 'view', $obj->event_project)) {
 	$AppUI->redirect(ACCESS_DENIED);
@@ -142,80 +118,7 @@ for ($minutes = 0; $minutes < ((24 * 60) / $inc); $minutes++) {
 	$t->addSeconds($inc * 60);
 }
 ?>
-<script language="javascript" type="text/javascript">
-function submitIt(){
-	var form = document.editFrm;
-	if (form.event_name.value.length < 1) {
-		alert('<?php echo $AppUI->_('Please enter a valid event title', UI_OUTPUT_JS); ?>');
-		form.event_name.focus();
-		return;
-	}
-	if (form.event_start_date.value.length < 1){
-		alert('<?php echo $AppUI->_('Please enter a start date', UI_OUTPUT_JS); ?>');
-		form.event_start_date.focus();
-		return;
-	}
-	if (form.event_end_date.value.length < 1){
-		alert('<?php echo $AppUI->_('Please enter an end date', UI_OUTPUT_JS); ?>');
-		form.event_end_date.focus();
-		return;
-	}
-	if ( (!(form.event_times_recuring.value>0)) 
-		&& (form.event_recurs[0].selected!=true) ) {
-		alert("<?php echo $AppUI->_('Please enter number of recurrences', UI_OUTPUT_JS); ?>");
-		form.event_times_recuring.value=1;
-		form.event_times_recuring.focus();
-		return;
-	} 
-	// Ensure that the assigned values are selected before submitting.
-	var assigned = form.assigned;
-	var len = assigned.length;
-	var users = form.event_assigned;
-	users.value = '';
-	for (var i = 0; i < len; i++) {
-		if (i) {
-			users.value += ',';
-		}
-		users.value += assigned.options[i].value;
-	}
-	form.submit();
-}
-
-function addUser() {
-	var form = document.editFrm;
-	var fl = form.resources.length -1;
-	var au = form.assigned.length -1;
-	//gets value of percentage assignment of selected resource
-
-	var users = 'x';
-
-	//build array of assiged users
-	for (au; au > -1; au--) {
-		users = users + ',' + form.assigned.options[au].value + ','
-	}
-
-	//Pull selected resources and add them to list
-	for (fl; fl > -1; fl--) {
-		if (form.resources.options[fl].selected && users.indexOf( ',' + form.resources.options[fl].value + ',' ) == -1) {
-			t = form.assigned.length
-			opt = new Option( form.resources.options[fl].text, form.resources.options[fl].value);
-			form.assigned.options[t] = opt
-		}
-	}
-}
-
-function removeUser() {
-	var form = document.editFrm;
-	fl = form.assigned.length -1;
-	for (fl; fl > -1; fl--) {
-		if (form.assigned.options[fl].selected) {
-			//remove from hperc_assign
-			var selValue = form.assigned.options[fl].value;			
-			var re = ".*("+selValue+"=[0-9]*;).*";
-			form.assigned.options[fl] = null;
-		}
-	}
-}
+<script language="javascript" type="text/javascript" src="/modules/calendar/addedit.js">
 </script>
 <form name="editFrm" action="?m=calendar" method="post" accept-charset="utf-8">
 	<input type="hidden" name="dosql" value="do_event_aed" />
@@ -303,33 +206,10 @@ function removeUser() {
 				</td>
 			</tr>
 			<tr>
-				<td align="right"><?php echo $AppUI->_('Resources'); ?>:</td>
-				<td></td>
-				<td align="left"><?php echo $AppUI->_('Invited to Event'); ?>:</td>
-				<td></td>
-			</tr>
-			<tr>
-				<td width="50%" colspan="2" align="right">
-				<?php echo arraySelect($users, 'resources', 'style="width:220px" size="10" class="text" multiple="multiple" ', null); ?>
-				</td>
-				<td width="50%" colspan="2" align="left">
-				<?php echo arraySelect($assigned, 'assigned', 'style="width:220px" size="10" class="text" multiple="multiple" ', null); ?>
-				</td>
-			</tr>
-			<tr>
-				<td width="50%" colspan="2" align="right">
-					<input type="button" class="button" value="&gt;" onclick="addUser()" />
-				</td>
-				<td width="50%" colspan="2" align="left">
-					<input type="button" class="button" value="&lt;" onclick="removeUser()" />
-				</td>
-			</tr>
-			<tr>
 				<td align="right" nowrap="nowrap"><label for="event_cwd"><?php echo $AppUI->_('Show only on Working Days'); ?>:</label></td>
 				<td>
 					<input type="checkbox" value="1" name="event_cwd" id="event_cwd" <?php echo ($obj->event_cwd ? 'checked="checked"' : ''); ?> />
 				</td>
-				<td align="right"><label for="mail_invited"><?php echo $AppUI->_('Mail Attendees?'); ?></label> <input type="checkbox" name="mail_invited" id="mail_invited" checked="checked" /></td>
 			</tr>
 			<tr>
 				<td colspan="2" align="right">
@@ -353,3 +233,9 @@ function removeUser() {
 </table>
 
 </form>
+<?php
+
+$tabBox = new CTabBox();
+$tabBox->add(W2P_BASE_DIR . '/modules/calendar/ae_human_resource', 'Human Resources');
+$tabBox->show('', true);
+?>
