@@ -248,6 +248,7 @@ class w2p_Output_HTMLHelper
             case '_complete':
             case '_assignment':
             case '_allocated':
+            case '_allocation':
                 $cell = round($value).'%';
                 break;
             case '_password':

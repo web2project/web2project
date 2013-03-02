@@ -88,7 +88,7 @@ function submitIt() {
             <td align="center" >
                 <table>
                 <tr>
-                    <td align="right"><?php echo $AppUI->_('Resource ID'); ?></td>
+                    <td align="right"><?php echo $AppUI->_('Resource Identifier'); ?></td>
                     <td align="left"><input type="text" class="text" size="15" maxlength="64" name="resource_key" value="<?php echo w2PformSafe($resource->resource_key); ?>" /></td>
                 </tr>
                 <tr>

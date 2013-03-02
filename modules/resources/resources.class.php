@@ -23,7 +23,7 @@ class CResource extends w2p_Core_BaseObject {
         if ('' == trim($this->resource_name)) {
             $this->_error['resource_name'] = $baseErrorMsg . 'resource name is not set';
         }
-        if ((int) $this->resource_key == 0) {
+        if ('' == trim($this->resource_key)) {
             $this->_error['resource_key'] = $baseErrorMsg . 'resource key is not set';
         }
 

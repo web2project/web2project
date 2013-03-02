@@ -73,11 +73,11 @@ if ($canDelete) {
             <strong><?php echo $AppUI->_('Details'); ?></strong>
             <table cellspacing="1" cellpadding="2" width="50%">
                 <tr>
-                    <td align="right" nowrap="nowrap" width="5%"><?php echo $AppUI->_('Resource ID'); ?>:</td>
+                    <td align="right" nowrap="nowrap" width="5%"><?php echo $AppUI->_('Identifier'); ?>:</td>
                     <?php echo $htmlHelper->createCell('resource_key', $obj->resource_key); ?>
                 </tr>
                 <tr>
-                    <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Resource Name'); ?>:</td>
+                    <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Name'); ?>:</td>
                     <?php echo $htmlHelper->createCell('resource_name-nolink', $obj->resource_name); ?>
                 </tr>
                 <tr>
@@ -85,7 +85,7 @@ if ($canDelete) {
                     <?php echo $htmlHelper->createCell('resource_type', $obj->resource_type, $customLookups); ?>
                 </tr>
                 <tr>
-                    <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Max Allocation %'); ?>:</td>
+                    <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Max Allocation'); ?>:</td>
                     <?php echo $htmlHelper->createCell('allocation_assignment', $obj->resource_max_allocation); ?>
                 </tr>
             </table>

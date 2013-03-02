@@ -153,7 +153,7 @@ table.list tr:hover td._name {
 
 .list ._complete, .list ._created, .list ._date, .list ._datetime, .list ._duration,
     .list ._hours, .list ._update, .list ._updated, .list ._worked, .list ._identifier,
-    .list ._size {
+    .list ._size, .list ._allocation {
     text-align: center;
 }
 .list th, .list ._author, .list ._creator, .list ._name, .list ._owner, .list ._updator,
@@ -211,7 +211,7 @@ div.clear {
     width:  100%;
 }
 
-.view ._date, .view ._owner, .view ._status {
+.view ._date, .view ._owner, .view ._status, .view ._assignment {
     text-align: left;
 }
 
