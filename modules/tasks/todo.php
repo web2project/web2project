@@ -21,6 +21,26 @@ $user_id = $AppUI->user_id;
 $no_modify = false;
 $other_users = false;
 
+// retrieve any state parameters
+if (isset($_POST['show_form'])) {
+	$AppUI->setState('TaskDayShowArc', w2PgetParam($_POST, 'show_arc_proj', 0));
+	$AppUI->setState('TaskDayShowLow', w2PgetParam($_POST, 'show_low_task', 0));
+	$AppUI->setState('TaskDayShowHold', w2PgetParam($_POST, 'show_hold_proj', 0));
+	$AppUI->setState('TaskDayShowDyn', w2PgetParam($_POST, 'show_dyn_task', 0));
+	$AppUI->setState('TaskDayShowPin', w2PgetParam($_POST, 'show_pinned', 0));
+	$AppUI->setState('TaskDayShowEmptyDate', w2PgetParam($_POST, 'show_empty_date', 0));
+	$AppUI->setState('TaskDayShowInProgress', w2PgetParam($_POST, 'show_inprogress', 0));
+}
+
+// Required for today view.
+$showArcProjs = $AppUI->getState('TaskDayShowArc', 0);
+$showLowTasks = $AppUI->getState('TaskDayShowLow', 1);
+$showHoldProjs = $AppUI->getState('TaskDayShowHold', 0);
+$showDynTasks = $AppUI->getState('TaskDayShowDyn', 0);
+$showPinned = $AppUI->getState('TaskDayShowPin', 0);
+$showEmptyDate = $AppUI->getState('TaskDayShowEmptyDate', 0);
+$showInProgress = $AppUI->getState('TaskDayShowInProgress', 0);
+
 if (canView('admin')) { // let's see if the user has sysadmin access
 	$other_users = true;
 	if (($show_uid = w2PgetParam($_REQUEST, 'show_user_todo', 0)) != 0) { // lets see if the user wants to see anothers user mytodo
