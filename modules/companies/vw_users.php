@@ -23,8 +23,8 @@ if (count($fields) > 0) {
     // TODO: This is only in place to provide an pre-upgrade-safe
     //   state for versions earlier than v3.0
     //   At some point at/after v4.0, this should be deprecated
-    $fieldList = array('user_username', 'contact_name');
-    $fieldNames = array('Username', 'Name');
+    $fieldList = array('user_username', 'contact_name', 'user_type');
+    $fieldNames = array('Username', 'Name', 'Type');
 
     $module->storeSettings('admin', 'company_view', $fieldList, $fieldNames);
 }
