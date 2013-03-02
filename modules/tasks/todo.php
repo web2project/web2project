@@ -164,9 +164,7 @@ if (count($allowedProjects)) {
 	$q->addWhere($allowedProjects);
 }
 
-$q->addGroup('ta.task_id');
-$q->addOrder('ta.task_end_date');
-$q->addOrder('task_priority DESC');
+$q->addOrder('task_end_date, task_start_date, task_priority');
 $tasks = $q->loadList();
 
 /* we have to calculate the end_date via start_date+duration for
