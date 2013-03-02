@@ -26,7 +26,7 @@ global $AppUI, $w2Pconfig, $cal_df, $cf;
 // check permissions for this module
 $perms = &$AppUI->acl();
 $canView = canView($m);
-$canAddProject = $perms->checkModuleItem('projects', 'add', $project_id);
+$canAddProjects = $perms->checkModuleItem('projects', 'add', $project_id);
 
 if (!$canView) {
 	$AppUI->redirect(ACCESS_DENIED);
@@ -73,7 +73,7 @@ if (!$project_id) {
 	$titleBlock = new w2p_Theme_TitleBlock($ttl, 'projectdesigner.png', $m, $m . '.' . $a);
 	$titleBlock->addCrumb('?m=projects', 'projects list');
 	$titleBlock->addCell();
-	if ($canAddProject) {
+	if ($canAddProjects) {
 		$titleBlock->addCell('<input type="submit" class="button" value="' . $AppUI->_('new project') . '">', '', '<form action="?m=projects&a=addedit" method="post" accept-charset="utf-8">', '</form>');
 	}
 	$titleBlock->show();
@@ -177,7 +177,7 @@ if (!$project_id) {
 		$titleBlock->addCell('<input type="submit" class="button" value="' . $AppUI->_('new project') . '">', '', '<form action="?m=projects&a=addedit" method="post" accept-charset="utf-8">', '</form>');
 	}
 
-	if ($canAddTask) {
+	if ($canAddTasks) {
 		$titleBlock->addCell();
 		$titleBlock->addCell('<input type="submit" class="button" value="' . $AppUI->_('new task') . '">', '', '<form action="?m=tasks&a=addedit&task_project=' . $project_id . '" method="post" accept-charset="utf-8">', '</form>');
 	}
