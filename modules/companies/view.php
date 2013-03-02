@@ -39,7 +39,9 @@ if ($canAdd) {
     $titleBlock->addCell('<input type="submit" class="button" value="' . $AppUI->_('new company') . '" />', '', '<form action="?m=companies&a=addedit" method="post" accept-charset="utf-8">', '</form>');
 }
 if ($canEdit) {
-	$titleBlock->addCell('<input type="submit" class="button" value="' . $AppUI->_('new department') . '" />', '', '<form action="?m=departments&a=addedit&company_id=' . $company_id . '" method="post" accept-charset="utf-8">', '</form>');
+    if ( $AppUI->isActiveModule('departments') ) {
+        $titleBlock->addCell('<input type="submit" class="button" value="' . $AppUI->_('new department') . '" />', '', '<form action="?m=departments&a=addedit&company_id=' . $company_id . '" method="post" accept-charset="utf-8">', '</form>');
+    }
 	$titleBlock->addCell('<input type="submit" class="button" value="' . $AppUI->_('new project') . '" />', '', '<form action="?m=projects&a=addedit&company_id=' . $company_id . '" method="post" accept-charset="utf-8">', '</form>');
 }
 $titleBlock->addCrumb('?m=companies', 'company list');
