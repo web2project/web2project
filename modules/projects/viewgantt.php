@@ -119,7 +119,7 @@ function showFullProject() {
     <table class="tbl" width="100%" border="0" cellpadding="4" cellspacing="0">
         <tr>
             <td>
-                <table border="0" cellpadding="4" cellspacing="0" class="tbl">
+                <table border="0" cellpadding="4" cellspacing="0" align="center" class="tbl">
                     <tr>
                         <td align="left" valign="top" width="20">
                         <?php if ($display_option != "all") { ?>
