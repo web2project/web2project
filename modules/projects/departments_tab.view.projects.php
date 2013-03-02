@@ -101,49 +101,47 @@ $htmlHelper = new w2p_Output_HTMLHelper($AppUI);
 
 $customLookups = array('project_status' => $pstatus);
 
-foreach ($projects as $row) {
-	$htmlHelper->stageRowData($row);
+if (count($projects)) {
+    foreach ($projects as $row) {
+        $htmlHelper->stageRowData($row);
 
-    // We dont check the percent_completed == 100 because some projects
-	// were being categorized as completed because not all the tasks
-	// have been created (for new projects)
-	if ($proFilter == -1 || $row['project_status'] == $proFilter || ($proFilter == -2 && $row['project_status'] != 3) || ($proFilter == -3 && $row['project_active'] != 0)) {
-		$project->project_id = $row['project_id'];
-        $none = false;
+        // We dont check the percent_completed == 100 because some projects
+        // were being categorized as completed because not all the tasks
+        // have been created (for new projects)
+        if ($proFilter == -1 || $row['project_status'] == $proFilter || ($proFilter == -2 && $row['project_status'] != 3) || ($proFilter == -3 && $row['project_active'] != 0)) {
+            $project->project_id = $row['project_id'];
+            $none = false;
 
-		$end_date = intval($row['project_end_date']) ? new w2p_Utilities_Date($row['project_end_date']) : null;
-		$actual_end_date = intval($row['project_actual_end_date']) ? new w2p_Utilities_Date($row['project_actual_end_date']) : null;
-		$style = (($actual_end_date > $end_date) && !empty($end_date)) ? 'style="color:red; font-weight:bold"' : '';
+            $end_date = intval($row['project_end_date']) ? new w2p_Utilities_Date($row['project_end_date']) : null;
+            $actual_end_date = intval($row['project_actual_end_date']) ? new w2p_Utilities_Date($row['project_actual_end_date']) : null;
+            $style = (($actual_end_date > $end_date) && !empty($end_date)) ? 'style="color:red; font-weight:bold"' : '';
 
-		$s = '<tr><td width="65" align="right" style="border: outset #eeeeee 1px;background-color:#' . $row['project_color_identifier'] . '"><font color="' . bestColor($row['project_color_identifier']) . '">' . sprintf('%.1f%%', $row['project_percent_complete']) . '</font></td>';
-        $s .= $htmlHelper->createCell('project_priority', $row['project_priority']);
-        $s .= $htmlHelper->createCell('project_name', $row['project_name']);
-        $s .= $htmlHelper->createCell('project_company', $row['project_company']);
-		$s .= $htmlHelper->createCell('project_start_date', $row['project_start_date']);
-        $s .= $htmlHelper->createCell('project_scheduled_hours', $row['project_scheduled_hours']);
-		$s .= '<td nowrap="nowrap" align="center" nowrap="nowrap" style="background-color:' . $priority[$row['project_priority']]['color'] . '">';
-		$s .= ($end_date ? $end_date->format($df) : '-');
-		$s .= '</td><td nowrap="nowrap" align="center">';
-		$s .= $actual_end_date ? '<a href="?m=tasks&a=view&task_id=' . $row['critical_task'] . '">' : '';
-		$s .= $actual_end_date ? '<span ' . $style . '>' . $actual_end_date->format($df) . '</span>' : '-';
-		$s .= $actual_end_date ? '</a>' : '';
-		$s .= '</td><td align="center">';
-		$s .= $row['task_log_problem'] ? '<a href="?m=tasks&a=index&f=all&project_id=' . $row['project_id'] . '">' : '';
-		$s .= $row['task_log_problem'] ? w2PshowImage('icons/dialog-warning5.png', 16, 16, 'Problem', 'Problem') : '-';
-		$s .= $row['task_log_problem'] ? '</a>' : '';
-		$s .= '</td>';
-        $s .= $htmlHelper->createCell('project_owner', $row['project_owner']);
-        $s .= $htmlHelper->createCell('project_task_count', $row['project_task_count']);
-        $s .= $htmlHelper->createCell('project_status', $row['project_status'], $customLookups);
-		$s .= '</tr>';
-		echo $s;
-	}
-}
-if ($none) {
-	echo '<tr><td colspan="12">' . $AppUI->_('No projects available') . '</td></tr>';
+            $s = '<tr><td width="65" align="right" style="border: outset #eeeeee 1px;background-color:#' . $row['project_color_identifier'] . '"><font color="' . bestColor($row['project_color_identifier']) . '">' . sprintf('%.1f%%', $row['project_percent_complete']) . '</font></td>';
+            $s .= $htmlHelper->createCell('project_priority', $row['project_priority']);
+            $s .= $htmlHelper->createCell('project_name', $row['project_name']);
+            $s .= $htmlHelper->createCell('project_company', $row['project_company']);
+            $s .= $htmlHelper->createCell('project_start_date', $row['project_start_date']);
+            $s .= $htmlHelper->createCell('project_scheduled_hours', $row['project_scheduled_hours']);
+            $s .= '<td nowrap="nowrap" align="center" nowrap="nowrap" style="background-color:' . $priority[$row['project_priority']]['color'] . '">';
+            $s .= ($end_date ? $end_date->format($df) : '-');
+            $s .= '</td><td nowrap="nowrap" align="center">';
+            $s .= $actual_end_date ? '<a href="?m=tasks&a=view&task_id=' . $row['critical_task'] . '">' : '';
+            $s .= $actual_end_date ? '<span ' . $style . '>' . $actual_end_date->format($df) . '</span>' : '-';
+            $s .= $actual_end_date ? '</a>' : '';
+            $s .= '</td><td align="center">';
+            $s .= $row['task_log_problem'] ? '<a href="?m=tasks&a=index&f=all&project_id=' . $row['project_id'] . '">' : '';
+            $s .= $row['task_log_problem'] ? w2PshowImage('icons/dialog-warning5.png', 16, 16, 'Problem', 'Problem') : '-';
+            $s .= $row['task_log_problem'] ? '</a>' : '';
+            $s .= '</td>';
+            $s .= $htmlHelper->createCell('project_owner', $row['project_owner']);
+            $s .= $htmlHelper->createCell('project_task_count', $row['project_task_count']);
+            $s .= $htmlHelper->createCell('project_status', $row['project_status'], $customLookups);
+            $s .= '</tr>';
+            echo $s;
+        }
+    }
+} else {
+    echo '<tr><td colspan="'.count($fieldNames).'">' . $AppUI->_('No data available') . '</td></tr>';
 }
 ?>
-<tr>
-	<td colspan="12">&nbsp;</td>
-</tr>
 </table>

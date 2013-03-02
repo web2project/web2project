@@ -69,7 +69,7 @@ if (count($projects) > 0) {
         echo '</tr>';
 	}
 } else {
-	?><tr><td colspan="5"><?php echo $AppUI->_('No data available') . '<br />' . $AppUI->getMsg(); ?></td></tr><?php
+	echo '<tr><td colspan="'.count($fieldNames).'">' . $AppUI->_('No data available') . '</td></tr>';
 }
 ?>
 </table>
