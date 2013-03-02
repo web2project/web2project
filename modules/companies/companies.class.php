@@ -185,7 +185,7 @@ class CCompany extends w2p_Core_BaseObject {
 			$q = new w2p_Database_Query();
 			$q->addQuery('c.*');
             $q->addQuery('c.contact_display_name as contact_name');
-			$q->addQuery('dept_name');
+			$q->addQuery('dept_name, dept_id');
 			$q->addTable('contacts', 'c');
 			$q->leftJoin('companies', 'b', 'c.contact_company = b.company_id');
 			$q->leftJoin('departments', '', 'contact_department = dept_id');

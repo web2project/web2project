@@ -40,6 +40,9 @@ if (count($fields) > 0) {
 if (count($depts)) {
 	$htmlHelper = new w2p_Output_HTMLHelper($AppUI);
 
+    $dept_types = w2PgetSysVal('DepartmentType');
+    $customLookups = array('dept_type' => $dept_types);
+
     foreach ($depts as $row) {
         echo '<tr>';
         $htmlHelper->stageRowData($row);
@@ -52,13 +55,5 @@ if (count($depts)) {
 } else {
     echo '<tr><td colspan="'.count($fieldNames).'">' . $AppUI->_('No data available') . '</td></tr>';
 }
-
-echo '
-<tr>
-	<td colspan="'.count($fieldNames).'" nowrap="nowrap" rowspan="99" align="right" valign="top" style="background-color:#ffffff">';
-if ($canEdit) {
-	echo '<input type="button" class=button value="' . $AppUI->_('new department') . '" onclick="javascript:window.location=\'./index.php?m=departments&amp;a=addedit&amp;company_id=' . $company_id . '\';" />';
-}
-echo '</td></tr>';
 ?>
 </table>
