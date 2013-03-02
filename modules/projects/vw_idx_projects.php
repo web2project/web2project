@@ -161,7 +161,8 @@ if (count($fields) > 0) {
 		$projectArray = array();
 
         $project_types = w2PgetSysVal('ProjectType');
-        $customLookups = array('project_status' => $project_statuses, 'project_type' => $project_types);
+        $project_status = w2PgetSysVal('ProjectStatus');
+        $customLookups = array('project_status' => $project_status, 'project_type' => $project_types);
 
 		for ($i = ($page - 1) * $xpg_pagesize; $i < $page * $xpg_pagesize && $i < $xpg_totalrecs; $i++) {
 			$row = $projects[$i];
@@ -259,7 +260,7 @@ if (count($fields) > 0) {
 
 					if ($show_all_projects) {
 						$s .= '<td class="data _status" nowrap="nowrap">';
-						$s .= $row['project_status'] == 0 ? $AppUI->_('Not Defined') : ($projectStatuses[0] ? $AppUI->_($project_statuses[$row['project_status'] + 2]) : $AppUI->_($project_statuses[$row['project_status'] + 1]));
+                        $s .= $AppUI->_($project_status[$row['project_status']]);
 						$s .= '</td>';
 					}
                     $s .= '<td class="center"><input type="checkbox" name="project_id[]" value="' . $row['project_id'] . '" /></td>';
