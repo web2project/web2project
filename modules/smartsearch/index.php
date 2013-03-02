@@ -106,7 +106,7 @@ foreach ($hook_modules as $tmp) {
     $titleBlock->show();
 ?>
 <form name="frmSearch" action="?m=<?php echo $m; ?>"  method="post" accept-charset="utf-8">
-<table class="tbl list">
+<table class="tbl view">
 	<tr><td>
 			<table cellspacing="5" cellpadding="0" border="0">
 				<tr>
