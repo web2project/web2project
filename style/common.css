@@ -287,3 +287,29 @@ tr.active td._date, tr.active td._datetime, tr.active td._duration, tr.active td
 .info p, .info li {
     font-size: medium;
 }
+
+/**
+ * The styles below are used by the projectdesigner module
+ */
+table.prjprint {
+    background: #ffffff;
+}
+
+table.prjprint TH {
+    background-color: #ffffff;
+    color: black;
+    list-style-type: disc;
+    list-style-position: inside;
+    border:solid 1px;
+    font-weight: normal;
+    font-size:15px;
+}
+
+table.prjprint TD {
+    background-color: #ffffff;
+    font-size:14px;
+}
+
+table.prjprint TR {
+    padding:5px;
+}
