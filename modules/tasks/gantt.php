@@ -144,7 +144,7 @@ $q->clear();
 $orrarr[] = array('task_id' => 0, 'order_up' => 0, 'order' => '');
 
 $end_max = '0000-00-00 00:00:00';
-$start_min = date('Y-m-d H:i:s');
+$start_min = $AppUI->convertToSystemTZ(date('Y-m-d H:i:s'));
 
 //pull the tasks into an array
 if ($caller != 'todo') {
