@@ -206,6 +206,17 @@ div.clear {
     border-radius: 0px;
 }
 
+.view td.workingDay, .view td.otherDay {
+    border: #eeeeee solid thin;
+    height: 300px;
+    vertical-align: top;
+    width:14.29%;
+}
+
+.view td.otherDay {
+    background: silver;
+}
+
 .addedit textarea.customfield {
     height: 75px;
     width:  100%;

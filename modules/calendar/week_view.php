@@ -80,7 +80,7 @@ $titleBlock->show();
 		<a href="<?php echo '?m=calendar&a=week_view&date=' . $prev_week->format(FMT_TIMESTAMP_DATE); ?>"><img src="<?php echo w2PfindImage('prev.gif'); ?>" width="16" height="16" alt="pre" border="0"></a>
 	</td>
 	<th width="100%">
-		<span style="font-size:12pt"><?php echo $AppUI->_('Week') . ' ' . $first_time->format('%U - %Y') . ' - ' . $AppUI->_($first_time->format('%B')); ?></span>
+		<?php echo $AppUI->_('Week') . ' ' . $first_time->format('%U - %Y') . ' - ' . $AppUI->_($first_time->format('%B')); ?>
 	</th>
 	<td>
 		<a href="<?php echo '?m=calendar&a=week_view&date=' . $next_week->format(FMT_TIMESTAMP_DATE); ?>"><img src="<?php echo w2PfindImage('next.gif'); ?>" width="16" height="16" alt="next" border="0"></a>
@@ -90,23 +90,21 @@ $titleBlock->show();
 
 <table border="0" cellspacing="1" cellpadding="2" width="100%" style="margin-width:4px;background-color:white" class="view">
 <?php
+
+$workingDays = explode(',', w2PgetConfig('cal_working_days'));
+
 $show_day = $this_week;
 
 $s = '';
 $s .= '<tr>';
 for ($i = 0; $i < 7; $i++) {
-	$dayStamp = $show_day->format(FMT_TIMESTAMP_DATE);
 
-	$day = $show_day->getDay();
+    $class = (in_array($i, $workingDays)) ? 'workingDay' : 'otherDay';
+    $s .= '<td class="'.$class.'">';
+
+	$dayStamp = $show_day->format(FMT_TIMESTAMP_DATE);
 	$href = '?m=calendar&a=day_view&date='.$dayStamp.'&tab=0';
 
-	$dow = (int) $show_day->format('%w');
-	if ($dow == 0 || $dow == 6) {
-		$s .= '<td class="weekendDay" style="width:14.29%;">';
-	} else {
-		$s .= '<td class="weekDay" style="width:14.29%;">';
-	}
-	
 	$s .= '		<table style="width:100%;border-spacing:0;">';
 	$s .= '		<tr><td align="left"><a href="' . $href . '">';
 
