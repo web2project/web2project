@@ -110,7 +110,7 @@ class w2p_Theme_TitleBlock {
             foreach ($this->crumbs as $k => $v) {
 				$t = $v[1] ? '<img src="' . w2PfindImage($v[1], $this->module) . '" border="" alt="" />&nbsp;' : '';
 				$t .= $this->_AppUI->_($v[0]);
-				$crumbs[] = '<li><a href="'.$k.'"><span>'.$t.'</span></a></li>';
+				$crumbs[] = '<li><a href="'.$k.'"><div>'.$t.'</div></a></li>';
 			}
 
             $s .= '<div class="crumb"><ul>' . implode('', $crumbs) . '</ul></div>';

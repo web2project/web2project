@@ -468,6 +468,13 @@ table.tbl td.event td {
     background-color: #fff0b0;
 }
 
+a.button div {
+    background: transparent url('images/button_left.gif') no-repeat;
+    display: block;
+    line-height: 14px;
+    padding: 3px 0 5px 10px;
+}
+
 a.button {
     background: transparent url('images/button_right.gif') no-repeat scroll top right;
     color: #444;
@@ -554,7 +561,7 @@ a.delete:active span {
 	padding-right: 10px; /* sliding doors padding */
 	border:0px;
 }
-.crumb ul li span {
+.crumb ul li span, .crumb ul li div {
     background: transparent url('images/crumb_left.gif') no-repeat;
     display: block;
     line-height: 14px;

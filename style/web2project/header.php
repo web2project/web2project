@@ -102,16 +102,16 @@ require W2P_BASE_DIR . '/includes/ajax_functions.php';
                             </form>
                             <?php } ?>
                         </div>
-                        <a class="button" href="javascript: void(0);" onclick="javascript:window.open('?m=help&amp;dialog=1&amp;hid=', 'contexthelp', 'width=800, height=600, left=50, top=50, scrollbars=yes, resizable=yes')"><span><?php echo $AppUI->_('Help'); ?></span></a>
-                        <a class="button" href="./index.php?m=admin&amp;a=viewuser&amp;user_id=<?php echo $AppUI->user_id; ?>"><span><?php echo $AppUI->_('My Info'); ?></span></a>
+                        <a class="button" href="javascript: void(0);" onclick="javascript:window.open('?m=help&amp;dialog=1&amp;hid=', 'contexthelp', 'width=800, height=600, left=50, top=50, scrollbars=yes, resizable=yes')"><div><?php echo $AppUI->_('Help'); ?></div></a>
+                        <a class="button" href="./index.php?m=admin&amp;a=viewuser&amp;user_id=<?php echo $AppUI->user_id; ?>"><div><?php echo $AppUI->_('My Info'); ?></div></a>
                         <?php if (canAccess('tasks')) { ?>
-                            <a class="button" href="./index.php?m=tasks&amp;a=todo"><span><b><?php echo $AppUI->_('My Tasks'); ?></b></span></a>
+                            <a class="button" href="./index.php?m=tasks&amp;a=todo"><div><b><?php echo $AppUI->_('My Tasks'); ?></b></div></a>
                         <?php } ?>
                         <?php if (canAccess('calendar')) {
                             $now = new w2p_Utilities_Date(); ?>
-                            <a class="button" href="./index.php?m=calendar&amp;a=day_view&amp;date=<?php echo $now->format(FMT_TIMESTAMP_DATE); ?>"><span><?php echo $AppUI->_('Today'); ?></span></a>
+                            <a class="button" href="./index.php?m=calendar&amp;a=day_view&amp;date=<?php echo $now->format(FMT_TIMESTAMP_DATE); ?>"><div><?php echo $AppUI->_('Today'); ?></div></a>
                         <?php } ?>
-                        <a class="button" href="./index.php?logout=-1"><span><?php echo $AppUI->_('Logout'); ?></span></a>
+                        <a class="button" href="./index.php?logout=-1"><div><?php echo $AppUI->_('Logout'); ?></div></a>
                     </div>
                 <?php } ?>
             </div>

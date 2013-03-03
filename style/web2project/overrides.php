@@ -23,10 +23,10 @@ class CTabBox extends w2p_Theme_TabBox {
 				$s .= '<table border="0" cellpadding="2" cellspacing="0" width="100%">';
 				$s .= '<tr>';
 				$s .= '<td width="54" nowrap="nowrap">';
-				$s .= '<a class="button" href="' . $this->baseHRef . 'tab=0"><span>' . $AppUI->_('tabbed') . '</span></a>';
+				$s .= '<a class="button" href="' . $this->baseHRef . 'tab=0"><div>' . $AppUI->_('tabbed') . '</div></a>';
 				$s .= '</td>';
 				$s .= '<td nowrap="nowrap">';
-				$s .= '<a class="button" href="' . $this->baseHRef . 'tab=-1"><span>' . $AppUI->_('flat') . '</span></a>';
+				$s .= '<a class="button" href="' . $this->baseHRef . 'tab=-1"><div>' . $AppUI->_('flat') . '</div></a>';
 				$s .= '</td>' . $extra . '</tr></table>';
 				echo $s;
 			}

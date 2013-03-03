@@ -106,7 +106,7 @@ $allowedTasks = $tobj->getAllowedSQL($AppUI->user_id, 'ta.task_id');
 // query my sub-tasks (ignoring task parents)
 
 $q = new w2p_Database_Query;
-$q->addQuery('ta.*');
+$q->addQuery('distinct(ta.task_id), ta.*');
 $q->addQuery('project_name, pr.project_id, project_color_identifier');
 $q->addQuery('tp.task_pinned');
 $q->addQuery('ut.user_task_priority');
