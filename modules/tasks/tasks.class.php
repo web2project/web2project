@@ -549,18 +549,13 @@ class CTask extends w2p_Core_BaseObject
             $orig_task['task_parent'] = 0;
 
             $tz_start_date = $this->_AppUI->formatTZAwareTime($orig_task['task_start_date'], '%Y-%m-%d %T');
-            $orig_start_date = new w2p_Utilities_Date($tz_start_date);
-            $orig_start_date->addDays($timeOffset);
-            $orig_start_date->next_working_day();
-            $orig_task['task_start_date'] = $orig_start_date->format(FMT_DATETIME_MYSQL);
+            $new_start_date = new w2p_Utilities_Date($tz_start_date);
+            $new_start_date->addDays($timeOffset);
+            $new_start_date->next_working_day();
+            $orig_task['task_start_date'] = $new_start_date->format(FMT_DATETIME_MYSQL);
 
-            $tz_end_date = $this->_AppUI->formatTZAwareTime($orig_task['task_end_date'], '%Y-%m-%d %T');
-            $orig_end_date = new w2p_Utilities_Date($tz_end_date);
-            $orig_end_date->addDays($timeOffset);
-            if (0 < $orig_start_date->dateDiff($orig_end_date)) {
-                $orig_end_date->prev_working_day();
-            }
-            $orig_task['task_end_date'] = $orig_end_date->format(FMT_DATETIME_MYSQL);
+            $new_start_date->addDuration($orig_task['task_duration'], $orig_task['task_duration_type']);
+            $orig_task['task_end_date'] = $new_start_date->format(FMT_DATETIME_MYSQL);
 
             $newTask->bind($orig_task);
             $result = $newTask->store();
