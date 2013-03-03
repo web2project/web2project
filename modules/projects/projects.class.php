@@ -856,6 +856,7 @@ class CProject extends w2p_Core_BaseObject
         $q->addQuery('SUM(t1.task_duration * t1.task_percent_complete * IF(t1.task_duration_type = 24, ' . $working_hours . ', t1.task_duration_type)) / SUM(t1.task_duration * IF(t1.task_duration_type = 24, ' . $working_hours . ', t1.task_duration_type)) AS project_percent_complete');
         $q->addJoin('tasks', 't1', 'projects.project_id = t1.task_project', 'inner');
         $q->addWhere('project_id = ' . $project_id . ' AND t1.task_id = t1.task_parent');
+        $q->addWhere('task_status <> -1');
         $project_percent_complete = $q->loadResult();
         $q->clear();
 

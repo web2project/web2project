@@ -916,6 +916,7 @@ class CTask extends w2p_Core_BaseObject
             $q->addQuery('MIN(task_start_date) AS min_task_start_date');
             $q->addQuery('MAX(task_end_date) AS max_task_end_date');
             $q->addWhere('task_project = ' . $subProject->project_id);
+            $q->addWhere('task_status <> -1');
             $projectDates = $q->loadList();
 
             $q->clear();
