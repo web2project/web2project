@@ -456,12 +456,16 @@ class CContact extends w2p_Core_BaseObject
 				OR (contact_private=1 AND contact_owner=' . $AppUI->user_id . ')
 				OR contact_owner IS NULL OR contact_owner = 0
 			)');
-        $company = new CCompany;
-//TODO: We need to convert this from static to use ->overrideDatabase() for testing.
-        $company->setAllowedSQL($AppUI->user_id, $q);
 
-        $department = new CDepartment;
 //TODO: We need to convert this from static to use ->overrideDatabase() for testing.
+        $q2 = new w2p_Database_Query();
+        $company = new CCompany;
+        $company->setAllowedSQL($AppUI->user_id, $q2);
+        $q2->addWhere('company_id IS NULL');
+        $q->addWhere('(' . implode(' OR ', $q2->where) . ')');
+        
+//TODO: We need to convert this from static to use ->overrideDatabase() for testing.
+        $department = new CDepartment;
         $department->setAllowedSQL($AppUI->user_id, $q);
 
         $q->addOrder('contact_first_name');
