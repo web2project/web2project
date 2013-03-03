@@ -464,13 +464,13 @@ function calcDuration(f, start_date, end_date, duration_fld, durntype_fld) {
 <tr>
 	<td style="border: outset #d1d1cd 1px; background-color:#<?php echo $obj->project_color_identifier; ?>" colspan="2">
         <a href="javascript: void(0);" name="fp" style="display:block" onclick="expand_collapse('project', 'tblProjects');update_workspace('project');">
-            <span style="font-color: <?php echo bestColor($obj->project_color_identifier); ?>; font-weight: bold; padding-top: 5px;"><?php echo $AppUI->_('Project') . ': ' . $obj->project_name; ?></span>
-            <span class="right">
-            <img id="project_expand" src="<?php echo w2PfindImage('icons/expand.gif', $m); ?>" width="12" height="12" border="0"
-                 alt="" <?php echo (isset($view_options[0]['pd_option_view_project']) ? ($view_options[0]['pd_option_view_project'] ? 'style="display:none"' : 'style="display:"') : 'style="display:none"') ?>>
-            <img id="project_collapse" src="<?php echo w2PfindImage('icons/collapse.gif', $m); ?>" width="12" height="12" border="0"
-                 alt="" <?php echo (isset($view_options[0]['pd_option_view_project']) ? ($view_options[0]['pd_option_view_project'] ? 'style="display:"' : 'style="display:none"') : 'style="display:"') ?>>
-            </span>
+            <div class="left" style="font-color: <?php echo bestColor($obj->project_color_identifier); ?>; font-weight: bold; padding-top: 2px;"><?php echo $AppUI->_('Project') . ': ' . $obj->project_name; ?></div>
+            <div class="right">
+                <img id="project_expand" src="<?php echo w2PfindImage('icons/expand.gif', $m); ?>" width="12" height="12" border="0"
+                     alt="" <?php echo (isset($view_options[0]['pd_option_view_project']) ? ($view_options[0]['pd_option_view_project'] ? 'style="display:none"' : 'style="display:"') : 'style="display:none"') ?>>
+                <img id="project_collapse" src="<?php echo w2PfindImage('icons/collapse.gif', $m); ?>" width="12" height="12" border="0"
+                     alt="" <?php echo (isset($view_options[0]['pd_option_view_project']) ? ($view_options[0]['pd_option_view_project'] ? 'style="display:"' : 'style="display:none"') : 'style="display:"') ?>>
+            </div>
         </a>
 	</td>
 </tr>
@@ -499,13 +499,13 @@ function calcDuration(f, start_date, end_date, duration_fld, durntype_fld) {
 <tr>
 	<td style="border: outset #d1d1cd 1px;" colspan="2">
         <a href="javascript: void(0);" name="fg" style="display:block" onclick="expand_collapse('gantt', 'tblProjects');update_workspace('gantt');">
-            <span style="font-weight: bold;"><?php echo $AppUI->_('Gantt Chart'); ?></span>
-            <span class="right">
+            <strong class="left"><?php echo $AppUI->_('Gantt Chart'); ?></strong>
+            <div class="right">
                 <img id="gantt_expand" src="<?php echo w2PfindImage('icons/expand.gif', $m); ?>" width="12" height="12" border="0"
                      alt="" <?php echo (isset($view_options[0]['pd_option_view_gantt']) ? ($view_options[0]['pd_option_view_gantt'] ? 'style="display:none"' : 'style="display:"') : 'style="display:none"') ?>>
                 <img id="gantt_collapse" src="<?php echo w2PfindImage('icons/collapse.gif', $m); ?>" width="12" height="12" border="0"
                      <?php echo (isset($view_options[0]['pd_option_view_gantt']) ? ($view_options[0]['pd_option_view_gantt'] ? 'style="display:"' : 'style="display:none"') : 'style="display:"') ?>>
-            </span>
+            </div>
         </a>
 	</td>
 </tr>
@@ -536,13 +536,13 @@ function calcDuration(f, start_date, end_date, duration_fld, durntype_fld) {
 <tr>
 	<td style="border: outset #d1d1cd 1px;" colspan="2">
         <a href="javascript: void(0);" name="fg" style="display:block" onclick="expand_collapse('tasks', 'tblProjects');update_workspace('tasks');">
-            <span style="font-weight: bold;"><?php echo $AppUI->_('Tasks'); ?></span>
-            <span class="right">
+            <strong class="left"><?php echo $AppUI->_('Tasks'); ?></strong>
+            <div class="right">
                 <img id="tasks_expand" src="<?php echo w2PfindImage('icons/expand.gif', $m); ?>" width="12" height="12" border="0"
                      alt="" <?php echo (isset($view_options[0]['pd_option_view_tasks']) ? ($view_options[0]['pd_option_view_tasks'] ? 'style="display:none"' : 'style="display:"') : 'style="display:none"') ?>>
                 <img id="tasks_collapse" src="<?php echo w2PfindImage('icons/collapse.gif', $m); ?>" width="12" height="12" border="0"
                      <?php echo (isset($view_options[0]['pd_option_view_tasks']) ? ($view_options[0]['pd_option_view_tasks'] ? 'style="display:"' : 'style="display:none"') : 'style="display:"') ?>>
-            </span>
+            </div>
         </a>
 	</td>
 </tr>
@@ -573,13 +573,13 @@ function calcDuration(f, start_date, end_date, duration_fld, durntype_fld) {
 <tr>
 	<td style="border: outset #d1d1cd 1px;" colspan="2">
         <a href="javascript: void(0);" name="fg" style="display:block" onclick="expand_collapse('actions', 'tblProjects');update_workspace('actions');">
-            <span style="font-weight: bold;"><?php echo $AppUI->_('Actions'); ?></span>
-            <span class="right">
+            <strong class="left"><?php echo $AppUI->_('Actions'); ?></strong>
+            <div class="right">
                 <img id="actions_expand" src="<?php echo w2PfindImage('icons/expand.gif', $m); ?>" width="12" height="12" border="0"
                      alt="" <?php echo (isset($view_options[0]['pd_option_view_actions']) ? ($view_options[0]['pd_option_view_actions'] ? 'style="display:none"' : 'style="display:"') : 'style="display:none"') ?>>
                 <img id="actions_collapse" src="<?php echo w2PfindImage('icons/collapse.gif', $m); ?>" width="12" height="12" border="0"
                      <?php echo (isset($view_options[0]['pd_option_view_actions']) ? ($view_options[0]['pd_option_view_actions'] ? 'style="display:"' : 'style="display:none"') : 'style="display:"') ?>>
-            </span>
+            </div>
         </a>
 	</td>
 </tr>
@@ -610,13 +610,13 @@ function calcDuration(f, start_date, end_date, duration_fld, durntype_fld) {
 <tr>
 	<td style="border: outset #d1d1cd 1px;" colspan="2">
         <a href="javascript: void(0);" name="fg" style="display:block" onclick="expand_collapse('addtasks', 'tblProjects');update_workspace('addtasks');">
-            <span style="font-weight: bold;"><?php echo $AppUI->_('Add Tasks'); ?></span>
-            <span class="right">
+            <strong class="left"><?php echo $AppUI->_('Add Tasks'); ?></strong>
+            <div class="right">
                 <img id="addtasks_expand" src="<?php echo w2PfindImage('icons/expand.gif', $m); ?>" width="12" height="12" border="0"
                      alt="" <?php echo (isset($view_options[0]['pd_option_view_addtasks']) ? ($view_options[0]['pd_option_view_addtasks'] ? 'style="display:none"' : 'style="display:"') : 'style="display:none"') ?>>
                 <img id="addtasks_collapse" src="<?php echo w2PfindImage('icons/collapse.gif', $m); ?>" width="12" height="12" border="0"
                      <?php echo (isset($view_options[0]['pd_option_view_addtasks']) ? ($view_options[0]['pd_option_view_addtasks'] ? 'style="display:"' : 'style="display:none"') : 'style="display:"') ?>>
-            </span>
+            </div>
         </a>
 	</td>
 </tr>
@@ -647,13 +647,13 @@ function calcDuration(f, start_date, end_date, duration_fld, durntype_fld) {
 <tr>
 	<td style="border: outset #d1d1cd 1px;" colspan="2">
         <a href="javascript: void(0);" name="fg" style="display:block" onclick="expand_collapse('files', 'tblProjects');update_workspace('files');">
-            <span style="font-weight: bold;"><?php echo $AppUI->_('Files'); ?></span>
-            <span class="right">
+            <strong class="left"><?php echo $AppUI->_('Files'); ?></strong>
+            <div class="right">
                 <img id="files_expand" src="<?php echo w2PfindImage('icons/expand.gif', $m); ?>" width="12" height="12" border="0"
                      alt="" <?php echo (isset($view_options[0]['pd_option_view_files']) ? ($view_options[0]['pd_option_view_files'] ? 'style="display:none"' : 'style="display:"') : 'style="display:none"') ?>>
                 <img id="files_collapse" src="<?php echo w2PfindImage('icons/collapse.gif', $m); ?>" width="12" height="12" border="0"
                      <?php echo (isset($view_options[0]['pd_option_view_files']) ? ($view_options[0]['pd_option_view_files'] ? 'style="display:"' : 'style="display:none"') : 'style="display:"') ?>>
-            </span>
+            </div>
         </a>
 	</td>
 </tr>

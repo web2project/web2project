@@ -468,13 +468,6 @@ table.tbl td.event td {
     background-color: #fff0b0;
 }
 
-a.button div {
-    background: transparent url('images/button_left.gif') no-repeat;
-    display: block;
-    line-height: 14px;
-    padding: 3px 0 5px 10px;
-}
-
 a.button {
     background: transparent url('images/button_right.gif') no-repeat scroll top right;
     color: #444;
@@ -488,7 +481,7 @@ a.button {
     border:0px;
 }
 
-a.button span {
+a.button span, a.button div {
     background: transparent url('images/button_left.gif') no-repeat;
     display: block;
     line-height: 14px;
@@ -523,7 +516,7 @@ a.delete {
 	border:0px;
 }
 
-a.delete span {
+a.delete span, a.delete div {
     background: transparent url('images/delete_left.gif') no-repeat;
     display: block;
     line-height: 14px;
