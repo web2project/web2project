@@ -47,9 +47,9 @@ for ($i = ($page - 1) * $xpg_pagesize; $i < $page * $xpg_pagesize && $i < $xpg_t
 //TODO: do we care about linking when we have a create/update entry?
     echo '<tr>';
     $htmlHelper->stageRowData($row);
-    foreach ($fieldList as $index => $column) {
-        echo $htmlHelper->createCell($fieldList[$index], $row[$fieldList[$index]]);
-    }
+    echo $htmlHelper->createCell('history_datetime', $row['history_date']);
+    echo $htmlHelper->createCell('history_description', $row['history_description']);
+    echo $htmlHelper->createCell('history_user', $row['history_user']);
     echo '</tr>';
 }
 ?>
