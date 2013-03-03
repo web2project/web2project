@@ -81,7 +81,12 @@ if (function_exists('styleRenderBoxTop')) {
         <tr><td colspan="25">
             <table width="100%" cellspacing="1" cellpadding="2" border="0">
             <tr>
-                <td align="left" nowrap="nowrap"><?php echo breadCrumbs($crumbs); ?></td>
+                <td align="left" nowrap="nowrap">
+                    <?php
+                    // This is a hack to make sure we don't get the tooltips
+                    echo str_replace('span', 'div', breadCrumbs($crumbs));
+                    ?>
+                </td>
                 <td width="25%" align="right">
                 <?php if ($canAuthor) { ?>
                     <input type="button" class="button" value="<?php echo $AppUI->_('start a new topic'); ?>" onclick="javascript:window.location='./index.php?m=forums&a=viewer&forum_id=<?php echo $forum_id; ?>&post_message=1';" />
