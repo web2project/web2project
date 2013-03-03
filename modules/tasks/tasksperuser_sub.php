@@ -233,9 +233,28 @@ function chPriority(user_id) {
 </form>
 <br />
 <?php
-	if (function_exists('styleRenderBoxTop')) {
-		echo styleRenderBoxTop();
-	}
+if (function_exists('styleRenderBoxTop')) {
+    echo styleRenderBoxTop();
+}
+
+$fieldList = array();
+$fieldNames = array();
+
+$module = new w2p_Core_Module();
+$fields = $module->loadSettings('tasks', 'tasksperuser');
+
+if (count($fields) > 0) {
+    $fieldList = array_keys($fields);
+    $fieldNames = array_values($fields);
+} else {
+    // TODO: This is only in place to provide an pre-upgrade-safe
+    //   state for versions earlier than v3.0
+    //   At some point at/after v4.0, this should be deprecated
+    $fieldList = array('task_priority', 'task_name', 'task_project', 'task_duration', 'task_start_date', 'task_end_date');
+    $fieldNames = array('P', 'Task', 'Project', 'Duration', 'Start Date', 'End Date');
+
+    //$module->storeSettings('tasks', 'tasksperuser', $fieldList, $fieldNames);
+}
 
 if ($do_report) {
 	// Let's figure out which users we have
@@ -320,13 +339,20 @@ if ($do_report) {
 	if ($max_levels < 0) {
 		$max_levels = -1;
 	}
-
-	if (count($task_list) == 0) {
-		echo '<table width="100%" border="0" cellpadding="2" cellspacing="1" class="std">';
-		echo '<tr>' . '<td nowrap="nowrap">' . $AppUI->_('No data available') . '</td></tr>';
-		echo '</table>';
-	} else {
-
+//<table width="100%" border="0" cellpadding="2" cellspacing="1" class="std">
+    ?>
+    <table class="tbl list">
+        <tr>
+            <th></th>
+            <?php foreach ($fieldNames as $index => $name) { ?>
+                <th><?php echo $AppUI->_($fieldNames[$index]); ?></th>
+            <?php } ?>
+            <th><?php echo $AppUI->_('Current Assignees'); ?></th>
+            <th><?php echo $AppUI->_('Possible Assignees'); ?></th>
+        </tr>
+    <?php
+    
+    if (count($task_list)) {
 		$sss = $ss;
 		$sse = $se;
 		if ('on' != $use_period) {
@@ -349,15 +375,6 @@ if ($do_report) {
 			}
 		}
 
-		$table_header = '<tr>' . '<th nowrap="nowrap"></th>' .
-            '<th nowrap="nowrap">' . $AppUI->_('P') . '</th>' .
-            '<th nowrap="nowrap">' . $AppUI->_('Task') . '</th>' .
-            '<th nowrap="nowrap">' . $AppUI->_('Proj.') . '</th>' .
-            '<th nowrap="nowrap">' . $AppUI->_('Duration') . '</th>' .
-            '<th nowrap="nowrap">' . $AppUI->_('Start Date') . '</th>' .
-            '<th nowrap="nowrap">' . $AppUI->_('End[d]') . '</th>' . weekDates($display_week_hours, $sss, $sse) .
-            '<th nowrap="nowrap">' . $AppUI->_('Current Assignees') . '</th>' .
-            '<th nowrap="nowrap">' . $AppUI->_('Possible Assignees') . '</th></tr>';
 		$table_rows = '';
 
 		foreach ($user_list as $user_id => $user_data) {
@@ -428,14 +445,11 @@ if ($do_report) {
                 }
             }
 		}
-	}
+        echo $table_rows; //show tasks with existing assignees
+	} else {
+        echo '<tr><td colspan="'.(count($fieldNames) + 3).'">' . $AppUI->_('No data available') . '</td></tr>';
+    }
 }
-
-?>
-
-<center>
-	<table width="100%" border="0" cellpadding="2" cellspacing="1" class="std">
-		<?php echo $table_header . $table_rows; //show tasks with existing assignees
 
 // show orphaned tasks
 if ($show_orphaned == 'on') {
@@ -486,5 +500,4 @@ if ($show_orphaned == 'on') {
 } // end of show orphaned tasks
 
 ?>
-	</table>
-</center>
+</table>
