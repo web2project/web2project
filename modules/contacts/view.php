@@ -234,7 +234,3 @@ function delIt(){
 		</td>
 	</tr>
 </table>
-<?php
-if (function_exists('styleRenderBoxBottom')) {
-    echo styleRenderBoxBottom();
-}
