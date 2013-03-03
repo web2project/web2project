@@ -123,8 +123,7 @@ $titleBlock->show();
         <div class="left">
             <span class="subtitle"><?php echo $AppUI->_('Budgeting Setup'); ?></span><br />
             <a href="?m=system&a=billingcode"><?php echo $AppUI->_('Billing Code Table'); ?></a><br />
-            <a href="?m=system&a=budgeting"><?php echo $AppUI->_('Setup Budgets'); ?></a><br />
-            <a href="?m=system&a=budgeting_allocated"><?php echo $AppUI->_('Budget Allocated'); ?></a>
+            <a href="?m=system&a=budgeting"><?php echo $AppUI->_('Setup Budgets'); ?></a>
         </div>
     </div>
 </div>

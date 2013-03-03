@@ -62,7 +62,7 @@ function delIt2(id) {
     <input type="hidden" name="dosql" value="do_billingcode_aed" />
     <input type="hidden" name="del" value="0" />
     <input type="hidden" name="billingcode_status" value="0" />
-    <table width="100%" border="0" cellpadding="1" cellspacing="1" class="std">
+    <table width="100%" border="0" cellpadding="1" cellspacing="1" class="std list">
         <tr>
             <td>
                 <?php echo arraySelect($companies, 'billingcode_company', 'size="1" class="text" onchange="changeIt();"', $company_id, false); ?>

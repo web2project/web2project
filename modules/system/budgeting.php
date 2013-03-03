@@ -25,7 +25,6 @@ $budget->load($budget_id);
 
 $titleBlock = new w2p_Theme_TitleBlock('Setup Budgets', 'myevo-weather.png', $m, $m . '.' . $a);
 $titleBlock->addCrumb('?m=system', 'system admin');
-$titleBlock->addCrumb('?m=system&a=budgeting_allocated', 'budgets allocated');
 $titleBlock->show();
 ?>
 <script language="javascript" type="text/javascript">
@@ -64,7 +63,7 @@ function delIt(input) {
     $customLookups = array('budget_category' => $budgetCategory);
 
     ?>
-    <table class="tbl list">
+    <table width="100%" border="0" cellpadding="1" cellspacing="1" class="std list">
         <tr>
             <th></th>
             <?php foreach ($fieldNames as $index => $name) { ?>
