@@ -21,9 +21,6 @@ asort($modules);
 // read the installed languages
 $locales = $AppUI->readDirs('locales');
 
-$localeFolder = '';
-$localeFile = '';
-
 ob_start();
 // read language files from module's locale directory preferrably
 $localeFile = W2P_BASE_DIR . '/modules/' . $modules[$module] . '/locales/en/' . $modules[$module] . '.inc';
@@ -68,20 +65,20 @@ if ($lang != 'en') {
 }
 ksort($trans);
 
-$titleBlock = new w2p_Theme_TitleBlock('Translation Management', 'rdf2.png', $m, $m . '.' . $a);
-/*
- * TODO: While this implementation is close, I'd rather use the normal setMsg
- *   functionality as it handles marking the message as an error and inserting
- *   linebreaks, etc.
+/**
+ * TODO: I don't like that this error is handled outside the normal flow but
+ *   it's better than echo'ing which is what we had before.
  */
-if(file_exists($localeFile) && !is_writable($localeFile)) {
-    $titleBlock->addCell('', '', '<span class="error">' . $AppUI->_("Locales file ($localeFile) is not writable.") . '</span><br />', '');
-}
 $localeFolder = pathinfo($localeFile, PATHINFO_DIRNAME);
-if(!is_writable($localeFolder)) {
-    $titleBlock->addCell('', '', '<span class="warning">' . $AppUI->_("Locales folder ($localeFolder) is not writable.") . '</span>', '');
+if(file_exists($localeFile) && !is_writable($localeFile)) {
+    $AppUI->setMsg($AppUI->_("Locales file ($localeFile) is not writable."), UI_MSG_ERROR);
 }
+if(!is_writable($localeFolder)) {
+    $AppUI->setMsg($AppUI->_("Locales folder ($localeFolder) is not writable."), UI_MSG_ERROR);
+}
+echo ('' != $AppUI->msg) ? $AppUI->getMsg() : '';
 
+$titleBlock = new w2p_Theme_TitleBlock('Translation Management', 'rdf2.png', $m, $m . '.' . $a);
 $titleBlock->addCell('', '', '<form action="?m=system&a=translate" method="post" name="modlang" accept-charset="utf-8">', '');
 $titleBlock->addCell(arraySelect($modules, 'module', 'size="1" class="text" onchange="document.modlang.submit();"', $module));
 $titleBlock->addCell($AppUI->_('Module'));
