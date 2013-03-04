@@ -83,7 +83,6 @@ if ($caller == 'todo') {
     }
 
     $q->addGroup('t.task_id');
-    $q->addOrder('t.task_start_date, t.task_end_date, t.task_priority');
 } else {
     // pull tasks
     $q = new w2p_Database_Query;
@@ -132,8 +131,9 @@ if ($caller == 'todo') {
             $q->addWhere('ut.user_id = ' . (int)$AppUI->user_id);
             break;
     }
-    $q->addOrder('t.task_start_date, t.task_end_date, t.task_priority');
 }
+
+$q->addOrder('t.task_start_date, t.task_end_date, t.task_priority');
 
 // get any specifically denied tasks
 $task = new CTask();
