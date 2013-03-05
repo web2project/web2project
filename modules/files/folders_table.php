@@ -96,8 +96,7 @@ function removeBulkComponent(li) {
         		<?php endif; ?>
                 <li><a href="./index.php?m=<?php echo $m; ?>&amp;tab=<?php echo $tab; ?>&a=addedit_folder&folder=<?php echo $cfObj->file_folder_id; ?>" title="edit the <?php echo $cfObj->file_folder_name; ?> folder"><?php echo w2PshowImage('filesaveas.png', '22', '22', 'folder icon', 'edit folder', 'files'); ?></a></li>
                 <?php } ?>
-                <li><?php echo w2PshowImage('folder5_small.png', '22', '22', 'folder icon', 'back to root folder', 'files'); ?></li>
-                <li class="info-text"><strong><?php echo (isset($cfObj) && $cfObj->file_folder_name) ? $cfObj->file_folder_name : "Root"; ?></strong></li>
+                <li class="info-text"><?php echo w2PshowImage('folder5_small.png', '22', '22', '', '', 'files'); ?> <strong><?php echo (isset($cfObj) && $cfObj->file_folder_name) ? $cfObj->file_folder_name : "Root"; ?></strong></li>
                 <?php if (isset($cfObj) && $cfObj->file_folder_description != '') { ?>
                     <li class="info-text"><?php echo w2p_textarea($cfObj->file_folder_description); ?></li>
                 <?php } ?>

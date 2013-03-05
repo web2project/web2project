@@ -383,3 +383,7 @@ table.prjprint TR {
     font-size: medium;
     margin-left: 20px;
 }
+
+.small-delete {
+    float: right;
+}
