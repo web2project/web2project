@@ -1959,7 +1959,7 @@ function displayFiles($AppUI, $folder_id, $task_id, $project_id, $company_id) {
     // SETUP FOR FILE LIST
 	$q = new w2p_Database_Query();
 	$q->addQuery('f.*, max(f.file_id) as latest_id, count(f.file_version) as file_versions,
-        round(max(file_version), 2) as file_lastversion, u.user_username as file_owner');
+        round(max(file_version), 2) as file_lastversion, file_owner, user_id');
 	$q->addQuery('ff.*, max(file_version) as file_version, f.file_date as file_datetime');
 	$q->addTable('files', 'f');
 	$q->addJoin('file_folders', 'ff', 'ff.file_folder_id = file_folder');
@@ -2005,10 +2005,10 @@ function displayFiles($AppUI, $folder_id, $task_id, $project_id, $company_id) {
 	$qv = new w2p_Database_Query();
 	$qv->addTable('files');
 	$qv->addQuery('file_id, file_version, file_project, file_name, file_task,
-		file_description, u.user_username as file_owner, file_size, file_category,
+		file_description, file_owner, file_size, file_category,
 		task_name, file_version_id, file_date as file_datetime, file_checkout, file_co_reason, file_type,
 		file_date, cu.user_username as co_user, project_name,
-		project_color_identifier, project_owner,
+		project_color_identifier, project_owner, u.user_id,
         con.contact_first_name, con.contact_last_name, con.contact_display_name as contact_name,
         co.contact_first_name as co_contact_first_name, co.contact_last_name as co_contact_last_name,
         co.contact_display_name as co_contact_name ');
