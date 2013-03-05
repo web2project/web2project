@@ -1991,9 +1991,11 @@ function displayFiles($AppUI, $folder_id, $task_id, $project_id, $company_id) {
 	if ($company_id) {
 		$q->addWhere('project_company = ' . (int)$company_id);
 	}
-    $tab = ($m == 'files') ? $tab-1 : -1;
-    if ($tab >= 0) {
-        $q->addWhere('file_category = ' . (int)$tab);
+    //$tab = ($m == 'files') ? $tab-1 : -1;
+    $temp_tab = ($m == 'files') ? $tab - 1 : -1;
+    if (($temp_tab >= 0) and ((count($file_types) - 1) > $temp_tab)) {
+    //if ($tab >= 0) {
+        $q->addWhere('file_category = ' . (int)$temp_tab);
     }
 	$q->setLimit($xpg_pagesize, $xpg_min);
     if ($folder_id > -1) {
@@ -2026,8 +2028,9 @@ function displayFiles($AppUI, $folder_id, $task_id, $project_id, $company_id) {
 	if ($company_id) {
 		$qv->addWhere('project_company = ' . (int)$company_id);
 	}
-    if ($tab >= 0) {
-        $qv->addWhere('file_category = ' . (int)$tab);
+    if (($temp_tab >= 0) and ((count($file_types) - 1) > $temp_tab)) {
+    //if ($tab >= 0) {
+        $qv->addWhere('file_category = ' . (int)$temp_tab);
     }
 	$qv->leftJoin('users', 'cu', 'cu.user_id = file_checkout');
 	$qv->leftJoin('contacts', 'co', 'co.contact_id = cu.user_contact');
