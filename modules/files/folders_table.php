@@ -84,77 +84,7 @@ function removeBulkComponent(li) {
 	t.removeChild(old);
 }
 </script>
-<style>
-#folder-list {
-/*  margin-left: -25px;*/
-}
-#folder-list ul {
-	padding: 0;
-	margin: 0;
-}
-#folder-list ul li {
-	list-style: none;
-	margin-top: -1px;
-	margin-bottom: 0px;
-	border: 0px solid #CCC;
-}
-#folder-list ul li ul li {
-	margin-left: 25px;
-}
 
-.folder-name {
-	display: block;
-	height: 16px;
-	padding-top: 0px;
-	background: white;
-	border-bottom: 1px solid #333;
-	border-right: 1px solid #333;
-	margin-bottom: 0px;
-}
-
-.folder-name-current {
-	display: block;
-	margin-bottom: 5px;
-	font-weight: bold;
-	border-bottom: 1px solid #333;
-}
-
-.has-files {
-	font-weight: bold;
-}
-
-#folder-list .tbl {
-	margin-top: 2px;
-}
-#folder-list .tbl th {
-	border: none;
-}
-
-#folder-list p {
-	padding: 3px 5px;
-	margin-top: -5px;
-	margin-left: 25px;
-	margin-right: 25px;
-	border: 1px solid #CCC;
-	border-top: none;
-	background: #F9F9F9;
-}
-#tblFolders ul {
-    display: inline;
-    list-style-type: none;
-    margin: 0;
-    padding: 0;
-}
-#tblFolders ul li, #tblFolders ul li img {
-    display: inline;
-}
-#tblFolders ul li a { text-decoration: none; }
-
-#tblFolders .info-text {
-    font-size: medium;
-    margin-left: 20px;
-}
-</style>
 <table id="tblFolders" class="tbl list">
     <tr>
         <td nowrap="nowrap" colspan="20">
