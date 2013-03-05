@@ -2031,7 +2031,9 @@ function displayFiles($AppUI, $folder_id, $task_id, $project_id, $company_id) {
     }
 	$qv->leftJoin('users', 'cu', 'cu.user_id = file_checkout');
 	$qv->leftJoin('contacts', 'co', 'co.contact_id = cu.user_contact');
-	$qv->addWhere('file_folder = ' . (int)$folder_id);
+    if ($folder_id > -1) {
+        $qv->addWhere('file_folder = ' . (int)$folder_id);
+    }
 
     $files = $q->loadList();
     $file_versions = $qv->loadHashList('file_id');
