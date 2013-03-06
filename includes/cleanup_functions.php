@@ -2323,18 +2323,6 @@ function file_show_attr() {
 	return ($str_out);
 }
 
-//TODO: modules/projectdesigner/projectdesigner.class.php
-function get_dependencies_pd($task_id) {
-	// Pull tasks dependencies
-	$q = new w2p_Database_Query;
-	$q->addTable('tasks', 't');
-	$q->addTable('task_dependencies', 'td');
-	$q->addQuery('t.task_id, t.task_name');
-	$q->addWhere('td.dependencies_task_id = ' . (int)$task_id);
-	$q->addWhere('t.task_id = td.dependencies_req_task_id');
-	$q->loadHashList();
-}
-
 /** Retrieve tasks with first task_end_dates within given project
  * @param int Project_id
  * @param int SQL-limit to limit the number of returned tasks
