@@ -1153,7 +1153,7 @@ function weekDates_r($display_allocated_hours, $fromPeriod, $toPeriod) {
 	$s = new w2p_Utilities_Date($fromPeriod);
 	$e = new w2p_Utilities_Date($toPeriod);
 	$sw = getBeginWeek($s);
-	$ew = getEndWeek($e); //intval($e->Format('%U'));
+	$ew = getEndWeek($e);
 
 	$row = '';
 	for ($i = $sw; $i <= $ew; $i++) {
@@ -2252,8 +2252,8 @@ function getHelpdeskFolder() {
 	$q->addQuery('file_folder_id');
 	$q->addWhere('ff.file_folder_name = \'Helpdesk\'');
 	$ffid = $q->loadResult();
-	$q->clear();
-	return intval($ffid);
+
+	return (int) $ffid;
 }
 
 // From: modules/files/files.class.php
@@ -3872,7 +3872,7 @@ function seconds2HM($sec, $padHours = true) {
     // there are 3600 seconds in an hour, so if we
     // divide total seconds by 3600 and throw away
     // the remainder, we've got the number of hours
-    $hours = intval(intval($sec) / 3600);
+    $hours = (int) ($sec / 3600);
     // with the remaining seconds divide them by 60
     // and then round the floating number to get the precise minute
     $minutes = intval(round(($sec - ($hours * 3600)) / 60) ,0);
@@ -3887,10 +3887,7 @@ function seconds2HM($sec, $padHours = true) {
         $minutes = $minutes * (-1);
     }
     $HM .= str_pad($minutes, 2, "0", STR_PAD_LEFT);
-    //$seconds = intval($sec % 60);
 
-    // add to $hms, again with a leading 0 if needed
-    //$hms .= str_pad($seconds, 2, "0", STR_PAD_LEFT);
     return $HM;
 }
 
@@ -3901,7 +3898,6 @@ function HM2seconds ($HM) {
     $seconds = 0;
     $seconds += (intval($h) * 3600);
     $seconds += (intval($m) * 60);
-    //$seconds += (intval($s));
     return $seconds;
 }
 
