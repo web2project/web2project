@@ -120,6 +120,7 @@
 'Monday',
 'My',
 'My Info',
+'My Tasks',
 'n/a',
 'Name',
 'new department',
