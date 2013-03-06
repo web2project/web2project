@@ -21,7 +21,9 @@ foreach ($assignedUsers as $user_id => $data) {
         $displayName = $data['contact_name'];
         if (isset($data['contact_display_name'])) {
             $displayName = $data['contact_display_name'];
-        }
+        }else{
+			$displayName = $data['contact_name'];
+		}
 	$assigned[$user_id] = $displayName . ' [' . $data['perc_assignment'] . '%]';
 	$initPercAsignment .= "$user_id={$data['perc_assignment']};";
 }
