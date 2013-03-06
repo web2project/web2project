@@ -4156,16 +4156,16 @@ function getEventTooltip($event_id) {
 	$tt .= '		<table cellspacing="3" cellpadding="2" width="100%">';
 	$tt .= '		<tr>';
 	$tt .= '			<td class="tip-label">' . $AppUI->_('Type') . '</td>';
-	$tt .= '			<td width="100%">' . $AppUI->_($types[$event->event_type]) . '</td>';
+	$tt .= '			<td>' . $AppUI->_($types[$event->event_type]) . '</td>';
 	$tt .= '		</tr>	';
 	if ($event->event_project) {
 		$tt .= '		<tr>';
 		$tt .= '			<td class="tip-label">' . $AppUI->_('Company') . '</td>';
-		$tt .= '			<td width="100%">' . $event_company . '</td>';
+		$tt .= '			<td>' . $event_company . '</td>';
 		$tt .= '		</tr>';
 		$tt .= '		<tr>';
 		$tt .= '			<td class="tip-label">' . $AppUI->_('Project') . '</td>';
-		$tt .= '			<td width="100%">' . $event_project . '</td>';
+		$tt .= '			<td>' . $event_project . '</td>';
 		$tt .= '		</tr>';
 	}
 	$tt .= '		<tr>';
@@ -4303,7 +4303,12 @@ function getTaskTooltip($task_id, $starts = false, $ends = false ) {
 	// load the event types
 	$types = w2PgetSysVal('TaskType');
 
-	$assigned = $task->getAssigned();
+	$assignees = $task->getAssigned();
+    $assigned = array();
+    foreach ($assignees as $user) {
+        $assigned[] = $user['user_name'] . ' ' . $user['perc_assignment'] . '%';
+    }
+    
 
 	$start_date = (int)$task->task_start_date ? new w2p_Utilities_Date($AppUI->formatTZAwareTime($task->task_start_date, '%Y-%m-%d %T')) : null;
 	$end_date = (int)$task->task_end_date ? new w2p_Utilities_Date($AppUI->formatTZAwareTime($task->task_end_date, '%Y-%m-%d %T')) : null;
@@ -4319,42 +4324,32 @@ function getTaskTooltip($task_id, $starts = false, $ends = false ) {
 	$tt .= '		<table cellspacing="3" cellpadding="2" width="100%">';
 	$tt .= '		<tr>';
 	$tt .= '			<td class="tip-label">' . $AppUI->_('Company') . '</td>';
-	$tt .= '			<td width="100%">' . $task_company . '</td>';
+	$tt .= '			<td>' . $task_company . '</td>';
 	$tt .= '		</tr>';
 	$tt .= '		<tr>';
 	$tt .= '			<td class="tip-label">' . $AppUI->_('Project') . '</td>';
-	$tt .= '			<td width="100%">' . $task_project . '</td>';
+	$tt .= '			<td>' . $task_project . '</td>';
 	$tt .= '		</tr>';
 	$tt .= '		<tr>';
 	$tt .= '			<td class="tip-label">' . $AppUI->_('Type') . '</td>';
-	$tt .= '			<td width="100%">' . $AppUI->_($types[$task->task_type]) . '</td>';
+	$tt .= '			<td>' . $AppUI->_($types[$task->task_type]) . '</td>';
 	$tt .= '		</tr>	';
 	$tt .= '		<tr>';
 	$tt .= '			<td class="tip-label">' . $AppUI->_('Progress') . '</td>';
-	$tt .= '			<td width="100%"><strong>' . sprintf("%.1f%%", $task->task_percent_complete) . '</strong></td>';
+	$tt .= '			<td>' . sprintf("%.1f%%", $task->task_percent_complete) . '</td>';
 	$tt .= '		</tr>	';
 	$tt .= '		<tr>';
 	$tt .= '			<td class="tip-label">' . $AppUI->_('Starts') . '</td>';
-	$tt .= '			<td>' . ($starts ? '<strong>' : '') . ($start_date ? $start_date->format($df . ' ' . $tf) : '-') . ($starts ? '</strong>' : '') . '</td>';
+	$tt .= '			<td>' . ($start_date ? $start_date->format($df . ' ' . $tf) : '-') . '</td>';
 	$tt .= '		</tr>';
 	$tt .= '		<tr>';
 	$tt .= '			<td class="tip-label">' . $AppUI->_('Ends') . '</td>';
-	$tt .= '			<td>' . ($ends ? '<strong>' : '') . ($end_date ? $end_date->format($df . ' ' . $tf) : '-') . ($ends ? '</strong>' : '') . '</td>';
+	$tt .= '			<td>' . ($end_date ? $end_date->format($df . ' ' . $tf) : '-') . '</td>';
 	$tt .= '		</tr>';
 	$tt .= '		<tr>';
 	$tt .= '			<td class="tip-label">' . $AppUI->_('Assignees') . '</td>';
 	$tt .= '			<td>';
-	if (is_array($assigned)) {
-		$start = false;
-		foreach ($assigned as $user) {
-			if ($start) {
-				$tt .= '<br/>';
-			} else {
-				$start = true;
-			}
-			$tt .= $user['user_name'] . ' ' . $user['perc_assignment'] . '%';
-		}
-	}
+	$tt .= implode('<br />', $assigned);
 	$tt .= '		</tr>';
 	$tt .= '		</table>';
 	$tt .= '	</td>';
