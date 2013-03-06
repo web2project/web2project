@@ -4,7 +4,6 @@ if (!defined('W2P_BASE_DIR')) {
 }
 
 $tab = $AppUI->processIntState('ContactsIdxTab', $_GET, 'tab', 0);
-$days = ($tab == 0) ? 30 : 0;
 
 $contact = new CContact();
 $canCreate = $contact->canCreate();
@@ -13,21 +12,6 @@ $canAccess = $contact->canAccess();
 if (!$canAccess) {
 	$AppUI->redirect(ACCESS_DENIED);
 }
-
-// retrieve any state parameters
-$searchString = w2PgetParam($_POST, 'search_string', '');
-if ('' == $searchString) {
-    $searchString = ((0 < $tab) && ($tab < 27)) ? chr(64 + $tab) : '';
-    $searchString = (0 == $tab) ? '' : $searchString;
-} else {
-    $tab = 27;
-    $AppUI->setState('ContactsIdxTab', $tab);
-}
-
-$AppUI->setState('ContIdxWhere', $searchString);
-$where = $AppUI->getState('ContIdxWhere') ? $AppUI->getState('ContIdxWhere') : '%';
-
-$rows = CContact::searchContacts($AppUI, $where, '', $days);
 
 $titleBlock = new w2p_Theme_TitleBlock('Contacts', 'monkeychat-48.png', $m, $m . '.' . $a);
 $titleBlock->addCell('<a href="./index.php?m=contacts&amp;tab=0">' . $AppUI->_('Reset search') . '</a>');

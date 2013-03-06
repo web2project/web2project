@@ -40,7 +40,7 @@ function expand(id){
 <table class="tbl list">
     <?php
     $showProject = true;
-    echo displayFiles($AppUI, 0, $task_id, $project_id, $company_id);
+    echo displayFiles($AppUI, -1, $task_id, $project_id, $company_id);
     ?>
 </table>
 <?php

@@ -84,84 +84,25 @@ function removeBulkComponent(li) {
 	t.removeChild(old);
 }
 </script>
-<style>
-#folder-list {
-/*  margin-left: -25px;*/
-}
-#folder-list ul {
-	padding: 0;
-	margin: 0;
-}
-#folder-list ul li {
-	list-style: none;
-	margin-top: -1px;
-	margin-bottom: 0px;
-	border: 0px solid #CCC;
-}
-#folder-list ul li ul li {
-	margin-left: 25px;
-}
 
-.folder-name {
-	display: block;
-	height: 16px;
-	padding-top: 0px;
-	background: white;
-	border-bottom: 1px solid #333;
-	border-right: 1px solid #333;
-	margin-bottom: 0px;
-}
-
-.folder-name-current {
-	display: block;
-	margin-bottom: 5px;
-	font-weight: bold;
-	border-bottom: 1px solid #333;
-}
-
-.has-files {
-	font-weight: bold;
-}
-
-#folder-list .tbl {
-	margin-top: 2px;
-}
-#folder-list .tbl th {
-	border: none;
-}
-
-#folder-list p {
-	padding: 3px 5px;
-	margin-top: -5px;
-	margin-left: 25px;
-	margin-right: 25px;
-	border: 1px solid #CCC;
-	border-top: none;
-	background: #F9F9F9;
-}
-</style>
 <table id="tblFolders" class="tbl list">
-<?php
-    /**** Main Program ****/
-    if ($folder_id) { ?>
-	<tr>
-		<td nowrap="nowrap">
-			<a style="float:left;" href="./index.php?m=<?php echo $m; ?>&amp;&a=<?php echo $a; ?>&amp;tab=<?php echo $tab; ?>&folder=0"><?php echo w2PshowImage('home.png', '22', '22', 'folder icon', 'back to root folder', 'files'); ?></a>
-			<?php if (array_key_exists($cfObj->file_folder_parent, $allowed_folders_ary)): ?>
-			<a style="float:left;" href="./index.php?m=<?php echo $m; ?>&amp;&a=<?php echo $a; ?>&amp;tab=<?php echo $tab; ?>&folder=<?php echo $cfObj->file_folder_parent; ?>"><?php echo w2PshowImage('back.png', '22', '22', 'folder icon', 'back to parent folder', 'files'); ?></a>
-			<?php endif; ?>
-			<a style="float:left;" href="./index.php?m=<?php echo $m; ?>&amp;tab=<?php echo $tab; ?>&a=addedit_folder&folder=<?php echo $cfObj->file_folder_id; ?>" title="edit the <?php echo $cfObj->file_folder_name; ?> folder"><?php echo w2PshowImage('filesaveas.png', '22', '22', 'folder icon', 'edit folder', 'files'); ?></a>
-		</td>
-	</tr>
-    <?php } ?>
     <tr>
-        <td colspan="20">
-            <img src="<?php echo w2PfindImage('folder5_small.png', 'files'); ?>" width="16" height="16" style="float: left;" />
-            <span class="folder-name-current" style="float: left;"><?php echo (isset($cfObj) && $cfObj->file_folder_name) ? $cfObj->file_folder_name : "Root"; ?></span>
-            <?php if (isset($cfObj) && $cfObj->file_folder_description != '') { ?>
-                <p><?php echo w2p_textarea($cfObj->file_folder_description); ?></p>
-            <?php } ?>
+        <td nowrap="nowrap" colspan="20">
+            <ul>
+                <?php if ($folder_id) { ?>
+                <li><a href="./index.php?m=<?php echo $m; ?>&amp;&a=<?php echo $a; ?>&amp;tab=<?php echo $tab; ?>&folder=0"><?php echo w2PshowImage('home.png', '22', '22', 'back to root folder', '', 'files'); ?></a></li>
+                <?php if (array_key_exists($cfObj->file_folder_parent, $allowed_folders_ary)): ?>
+                    <li><a href="./index.php?m=<?php echo $m; ?>&amp;&a=<?php echo $a; ?>&amp;tab=<?php echo $tab; ?>&folder=<?php echo $cfObj->file_folder_parent; ?>"><?php echo w2PshowImage('back.png', '22', '22', 'folder icon', 'back to parent folder', 'files'); ?></a></li>
+        		<?php endif; ?>
+                <li><a href="./index.php?m=<?php echo $m; ?>&amp;tab=<?php echo $tab; ?>&a=addedit_folder&folder=<?php echo $cfObj->file_folder_id; ?>" title="edit the <?php echo $cfObj->file_folder_name; ?> folder"><?php echo w2PshowImage('filesaveas.png', '22', '22', 'folder icon', 'edit folder', 'files'); ?></a></li>
+                <?php } ?>
+                <li class="info-text"><?php echo w2PshowImage('folder5_small.png', '22', '22', '', '', 'files'); ?> <strong><?php echo (isset($cfObj) && $cfObj->file_folder_name) ? $cfObj->file_folder_name : "Root"; ?></strong></li>
+                <?php if (isset($cfObj) && $cfObj->file_folder_description != '') { ?>
+                    <li class="info-text"><?php echo w2p_textarea($cfObj->file_folder_description); ?></li>
+                <?php } ?>
+            </ul>
         </td>
+    </tr>
     </tr>
     <?php
     if (countFiles($folder) > 0) {

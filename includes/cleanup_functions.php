@@ -1882,26 +1882,29 @@ function getFolders($parent) {
             $file_count = countFiles($row['file_folder_id']);
 
             $s .= '<tr><td colspan="20">';
+            $s .= '<ul>';
+            $s .= '<li><a href="./index.php?m=files&amp;a=addedit_folder&amp;file_folder_parent=' . $row['file_folder_id'] . '&amp;file_folder_id=0">' . w2PshowImage('edit_add.png', '', '', 'new folder', 'add a new subfolder', 'files') . '</a></li>';
+            $s .= '<li><a href="./index.php?m=files&amp;a=addedit&amp;folder=' . $row['file_folder_id'] . '&amp;project_id=' . $project_id . '&amp;file_id=0">' . w2PshowImage('folder_new.png', '', '', 'new file', 'add new file to this folder', 'files') . '</a></li>';            
+            $s .= '<li><a href="./index.php?m=files&amp;a=addedit_folder&amp;folder=' . $row['file_folder_id'] . '">' . w2PshowImage('filesaveas.png', '', '', 'edit icon', 'edit this folder', 'files') . '</a></li>';
             if ($m == 'files') {
-                $s .= '<a href="./index.php?m=' . $m . '&amp;a=' . $a . '&amp;tab=' . $tab . '&folder=' . $row['file_folder_id'] . '" name="ff' . $row['file_folder_id'] . '">';
+                $s .= '<li class="info-text"><a href="./index.php?m=' . $m . '&amp;a=' . $a . '&amp;tab=' . $tab . '&folder=' . $row['file_folder_id'] . '" name="ff' . $row['file_folder_id'] . '">';
             }
-            $s .= '<img src="' . w2PfindImage('folder5_small.png', 'files') . '" width="16" height="16" style="float: left; border: 0px;" />';
+            $s .= w2PshowImage('folder5_small.png', '22', '22', '', '', 'files');
             $s .= $row['file_folder_name'];
             if ($m == 'files') {
-                $s .= '</a>';
+                $s .= '</a></li>';
             }
             if ($file_count > 0) {
-                $s .= ' <a href="javascript: void(0);" onClick="expand(\'files_' . $row['file_folder_id'] . '\')" class="has-files">(' . $file_count . ' files) +</a>';
+                $s .= '<li class="info-text"><a href="javascript: void(0);" onClick="expand(\'files_' . $row['file_folder_id'] . '\')" class="has-files">(' . $file_count . ' files) +</a></li>';
             }
             $s .= '<form name="frm_remove_folder_' . $row['file_folder_id'] . '" action="?m=files" method="post" accept-charset="utf-8">
                     <input type="hidden" name="dosql" value="do_folder_aed" />
                     <input type="hidden" name="del" value="1" />
                     <input type="hidden" name="file_folder_id" value="' . $row['file_folder_id'] . '" />
                     </form>';
-            $s .= '<a style="float:left;" href="./index.php?m=files&amp;a=addedit_folder&amp;folder=' . $row['file_folder_id'] . '">' . w2PshowImage('filesaveas.png', '16', '16', 'edit icon', 'edit this folder', 'files') . '</a>' .
-                  '<a style="float:left;" href="./index.php?m=files&amp;a=addedit_folder&amp;file_folder_parent=' . $row['file_folder_id'] . '&amp;file_folder_id=0">' . w2PshowImage('edit_add.png', '', '', 'new folder', 'add a new subfolder', 'files') . '</a>' .
-                  '<a style="float:right;" href="javascript: void(0);" onclick="if (confirm(\'Are you sure you want to delete this folder?\')) {document.frm_remove_folder_' . $row['file_folder_id'] . '.submit()}">' . w2PshowImage('remove.png', '', '', 'delete icon', 'delete this folder', 'files') . '</a>' .
-                  '<a style="float:left;" href="./index.php?m=files&amp;a=addedit&amp;folder=' . $row['file_folder_id'] . '&amp;project_id=' . $project_id . '&amp;file_id=0">' . w2PshowImage('folder_new.png', '', '', 'new file', 'add new file to this folder', 'files') . '</a>';
+
+            $s .= '</ul>';
+            $s .= '<a class="small-delete" href="javascript: void(0);" onclick="if (confirm(\'Are you sure you want to delete this folder?\')) {document.frm_remove_folder_' . $row['file_folder_id'] . '.submit()}">' . w2PshowImage('remove.png', '', '', 'delete icon', 'delete this folder', 'files') . '</a>';
             $s .= '</td></tr>';
             if ($file_count > 0) {
                 $s .= '<div class="files-list" id="files_' . $row['file_folder_id'] . '" style="display: none;">';
@@ -1959,7 +1962,7 @@ function displayFiles($AppUI, $folder_id, $task_id, $project_id, $company_id) {
     // SETUP FOR FILE LIST
 	$q = new w2p_Database_Query();
 	$q->addQuery('f.*, max(f.file_id) as latest_id, count(f.file_version) as file_versions,
-        round(max(file_version), 2) as file_lastversion, u.user_username as file_owner');
+        round(max(file_version), 2) as file_lastversion, file_owner, user_id');
 	$q->addQuery('ff.*, max(file_version) as file_version, f.file_date as file_datetime');
 	$q->addTable('files', 'f');
 	$q->addJoin('file_folders', 'ff', 'ff.file_folder_id = file_folder');
@@ -1991,9 +1994,11 @@ function displayFiles($AppUI, $folder_id, $task_id, $project_id, $company_id) {
 	if ($company_id) {
 		$q->addWhere('project_company = ' . (int)$company_id);
 	}
-    $tab = ($m == 'files') ? $tab-1 : -1;
-    if ($tab >= 0) {
-        $q->addWhere('file_category = ' . (int)$tab);
+    //$tab = ($m == 'files') ? $tab-1 : -1;
+    $temp_tab = ($m == 'files') ? $tab - 1 : -1;
+    if (($temp_tab >= 0) and ((count($file_types) - 1) > $temp_tab)) {
+    //if ($tab >= 0) {
+        $q->addWhere('file_category = ' . (int)$temp_tab);
     }
 	$q->setLimit($xpg_pagesize, $xpg_min);
     if ($folder_id > -1) {
@@ -2005,10 +2010,10 @@ function displayFiles($AppUI, $folder_id, $task_id, $project_id, $company_id) {
 	$qv = new w2p_Database_Query();
 	$qv->addTable('files');
 	$qv->addQuery('file_id, file_version, file_project, file_name, file_task,
-		file_description, u.user_username as file_owner, file_size, file_category,
+		file_description, file_owner, file_size, file_category,
 		task_name, file_version_id, file_date as file_datetime, file_checkout, file_co_reason, file_type,
 		file_date, cu.user_username as co_user, project_name,
-		project_color_identifier, project_owner,
+		project_color_identifier, project_owner, u.user_id,
         con.contact_first_name, con.contact_last_name, con.contact_display_name as contact_name,
         co.contact_first_name as co_contact_first_name, co.contact_last_name as co_contact_last_name,
         co.contact_display_name as co_contact_name ');
@@ -2026,12 +2031,15 @@ function displayFiles($AppUI, $folder_id, $task_id, $project_id, $company_id) {
 	if ($company_id) {
 		$qv->addWhere('project_company = ' . (int)$company_id);
 	}
-    if ($tab >= 0) {
-        $qv->addWhere('file_category = ' . (int)$tab);
+    if (($temp_tab >= 0) and ((count($file_types) - 1) > $temp_tab)) {
+    //if ($tab >= 0) {
+        $qv->addWhere('file_category = ' . (int)$temp_tab);
     }
 	$qv->leftJoin('users', 'cu', 'cu.user_id = file_checkout');
 	$qv->leftJoin('contacts', 'co', 'co.contact_id = cu.user_contact');
-	$qv->addWhere('file_folder = ' . (int)$folder_id);
+    if ($folder_id > -1) {
+        $qv->addWhere('file_folder = ' . (int)$folder_id);
+    }
 
     $files = $q->loadList();
     $file_versions = $qv->loadHashList('file_id');

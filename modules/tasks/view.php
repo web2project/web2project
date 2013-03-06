@@ -157,7 +157,7 @@ function delIt() {
                 </tr>
                 <tr>
                     <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Time Worked'); ?>:</td>
-                    <?php echo $htmlHelper->createCell('task_hours_worked', $obj->task_hours_worked); ?>
+                    <?php echo $htmlHelper->createCell('task_hours_worked', $obj->task_hours_worked . ' ' . $AppUI->_($durnTypes[$obj->task_duration_type])); ?>
                 </tr>
                 <tr>
                     <td nowrap="nowrap" colspan="2"><strong><?php echo $AppUI->_('Dates and Targets'); ?></strong></td>

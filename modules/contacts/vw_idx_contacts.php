@@ -3,11 +3,26 @@ if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
 
-global $rows;
+global $currentTabId;
+
+$days = ($currentTabId == 0) ? 30 : 0;
+$searchString = w2PgetParam($_POST, 'search_string', '');
+if ('' == $searchString) {
+    $searchString = ((0 < $currentTabId) && ($currentTabId < 27)) ? chr(64 + $currentTabId) : '';
+    $searchString = (0 == $currentTabId) ? '' : $searchString;
+} else {
+    $AppUI->setState('ContactsIdxTab', 27);
+}
+
+$AppUI->setState('ContIdxWhere', $searchString);
+
+$where = $AppUI->getState('ContIdxWhere') ? $AppUI->getState('ContIdxWhere') : '%';
+
+$rows = CContact::searchContacts($AppUI, $where, '', $days);
 
 $countries = w2PgetSysVal('GlobalCountries');
 
-$carr[] = array();
+unset($carr);
 $carrWidth = 4;
 $carrHeight = 4;
 

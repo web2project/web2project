@@ -18,7 +18,7 @@ if ($task_id == 0) {
 $initPercAsignment = '';
 $assigned = array();
 foreach ($assignedUsers as $user_id => $data) {
-        $displayName = '';
+        $displayName = $data['contact_name'];
         if (isset($data['contact_display_name'])) {
             $displayName = $data['contact_display_name'];
         }
