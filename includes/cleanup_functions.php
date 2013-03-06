@@ -4181,19 +4181,9 @@ function getEventTooltip($event_id) {
 	$tt .= '			<td>' . $AppUI->_($recurs[$event->event_recurs]) . ($event->event_recurs ? ' (' . $event->event_times_recuring . '&nbsp;' . $AppUI->_('times') . ')' : '') . '</td>';
 	$tt .= '		</tr>';
 	$tt .= '		<tr>';
-	if (is_array($assigned)) {
-		$start = false;
-		foreach ($assigned as $user) {
-			if ($start) {
-				$tt .= '<br />';
-			} else {
-				$start = true;
-			}
-			$tt .= $user;
-		}
-	}
 	$tt .= '			<td class="tip-label">' . $AppUI->_('Attendees') . '</td>';
 	$tt .= '			<td>';
+    $tt .= implode('<br />', $assigned);
 	$tt .= '		</tr>';
 	$tt .= '		</table>';
 	$tt .= '	</td>';
