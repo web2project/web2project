@@ -3935,8 +3935,7 @@ function sendNewPass() {
 	global $AppUI;
 
 	// ensure no malicous sql gets past
-	$checkusername = trim(w2PgetParam($_POST, 'checkusername', ''));
-	$checkusername = db_escape($checkusername);
+	$checkusername = preg_replace("/[^A-Za-z0-9]/", "", w2PgetParam($_POST, 'checkusername', ''));
 	$confirmEmail = trim(w2PgetParam($_POST, 'checkemail', ''));
 	$confirmEmail = strtolower(db_escape($confirmEmail));
 
@@ -3944,7 +3943,7 @@ function sendNewPass() {
 	$q->addTable('users');
 	$q->addJoin('contacts', 'con', 'user_contact = contact_id', 'inner');
 	$q->addQuery('user_id');
-	$q->addWhere('user_username = \'' . $checkusername . '\'');
+	$q->addWhere("user_username = '$checkusername'");
 
     /* Begin Hack */
     /*
