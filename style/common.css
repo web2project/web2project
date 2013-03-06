@@ -387,3 +387,20 @@ table.prjprint TR {
 .small-delete {
     float: right;
 }
+
+.tool-tip td {
+    color: white;
+    white-space:nowrap;
+}
+
+.tool-tip td.tip-label {
+    border: 1px solid white;
+    text-align: right;
+    -moz-border-radius:3.5px;
+    -webkit-border-radius:3.5px;
+}
+
+.tool-tip td.description {
+    text-align: left;
+    white-space: normal;
+}

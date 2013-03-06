@@ -4149,40 +4149,38 @@ function getEventTooltip($event_id) {
 		$event_company = $event->company_name;
 	}
 
-	$tt = '<table border="0" cellpadding="0" cellspacing="0" width="96%">';
+	$tt = '<table class="tool-tip">';
 	$tt .= '<tr>';
 	$tt .= '	<td valign="top" width="40%">';
 	$tt .= '		<strong>' . $AppUI->_('Details') . '</strong>';
 	$tt .= '		<table cellspacing="3" cellpadding="2" width="100%">';
 	$tt .= '		<tr>';
-	$tt .= '			<td style="text-color:white;border: 1px solid white;-moz-border-radius:3.5px;-webkit-border-radius:3.5px;" align="right" nowrap="nowrap">' . $AppUI->_('Type') . '</td>';
-	$tt .= '			<td width="100%" nowrap="nowrap">' . $AppUI->_($types[$event->event_type]) . '</td>';
+	$tt .= '			<td class="tip-label">' . $AppUI->_('Type') . '</td>';
+	$tt .= '			<td width="100%">' . $AppUI->_($types[$event->event_type]) . '</td>';
 	$tt .= '		</tr>	';
 	if ($event->event_project) {
 		$tt .= '		<tr>';
-		$tt .= '			<td style="border: 1px solid white;-moz-border-radius:3.5px;-webkit-border-radius:3.5px;" align="right" nowrap="nowrap">' . $AppUI->_('Company') . '</td>';
+		$tt .= '			<td class="tip-label">' . $AppUI->_('Company') . '</td>';
 		$tt .= '			<td width="100%">' . $event_company . '</td>';
 		$tt .= '		</tr>';
 		$tt .= '		<tr>';
-		$tt .= '			<td style="border: 1px solid white;-moz-border-radius:3.5px;-webkit-border-radius:3.5px;" align="right" nowrap="nowrap">' . $AppUI->_('Project') . '</td>';
+		$tt .= '			<td class="tip-label">' . $AppUI->_('Project') . '</td>';
 		$tt .= '			<td width="100%">' . $event_project . '</td>';
 		$tt .= '		</tr>';
 	}
 	$tt .= '		<tr>';
-	$tt .= '			<td style="border: 1px solid white;-moz-border-radius:3.5px;-webkit-border-radius:3.5px;" align="right" nowrap="nowrap">' . $AppUI->_('Starts') . '</td>';
-    $tt .= '			<td nowrap="nowrap">' . $AppUI->formatTZAwareTime($event->event_start_date, $df . ' ' . $tf) . '</td>';
+	$tt .= '			<td class="tip-label">' . $AppUI->_('Starts') . '</td>';
+    $tt .= '			<td>' . $AppUI->formatTZAwareTime($event->event_start_date, $df . ' ' . $tf) . '</td>';
 	$tt .= '		</tr>';
 	$tt .= '		<tr>';
-	$tt .= '			<td style="border: 1px solid white;-moz-border-radius:3.5px;-webkit-border-radius:3.5px;" align="right" nowrap="nowrap">' . $AppUI->_('Ends') . '</td>';
-    $tt .= '			<td nowrap="nowrap">' . $AppUI->formatTZAwareTime($event->event_end_date, $df . ' ' . $tf) . '</td>';
+	$tt .= '			<td class="tip-label">' . $AppUI->_('Ends') . '</td>';
+    $tt .= '			<td>' . $AppUI->formatTZAwareTime($event->event_end_date, $df . ' ' . $tf) . '</td>';
 	$tt .= '		</tr>';
 	$tt .= '		<tr>';
-	$tt .= '			<td style="border: 1px solid white;-moz-border-radius:3.5px;-webkit-border-radius:3.5px;" align="right" nowrap="nowrap">' . $AppUI->_('Recurs') . '</td>';
-	$tt .= '			<td nowrap="nowrap">' . $AppUI->_($recurs[$event->event_recurs]) . ($event->event_recurs ? ' (' . $event->event_times_recuring . '&nbsp;' . $AppUI->_('times') . ')' : '') . '</td>';
+	$tt .= '			<td class="tip-label">' . $AppUI->_('Recurs') . '</td>';
+	$tt .= '			<td>' . $AppUI->_($recurs[$event->event_recurs]) . ($event->event_recurs ? ' (' . $event->event_times_recuring . '&nbsp;' . $AppUI->_('times') . ')' : '') . '</td>';
 	$tt .= '		</tr>';
 	$tt .= '		<tr>';
-	$tt .= '			<td style="border: 1px solid white;-moz-border-radius:3.5px;-webkit-border-radius:3.5px;" align="right" nowrap="nowrap">' . $AppUI->_('Attendees') . '</td>';
-	$tt .= '			<td nowrap="nowrap">';
 	if (is_array($assigned)) {
 		$start = false;
 		foreach ($assigned as $user) {
@@ -4194,6 +4192,8 @@ function getEventTooltip($event_id) {
 			$tt .= $user;
 		}
 	}
+	$tt .= '			<td class="tip-label">' . $AppUI->_('Attendees') . '</td>';
+	$tt .= '			<td>';
 	$tt .= '		</tr>';
 	$tt .= '		</table>';
 	$tt .= '	</td>';
@@ -4201,7 +4201,7 @@ function getEventTooltip($event_id) {
 	$tt .= '		<strong>' . $AppUI->_('Note') . '</strong>';
 	$tt .= '		<table cellspacing="0" cellpadding="2" border="0" width="100%">';
 	$tt .= '		<tr>';
-	$tt .= '			<td style="border: 1px solid white;-moz-border-radius:3.5px;-webkit-border-radius:3.5px;">';
+	$tt .= '			<td class="tip-label description">';
 	$tt .= '				' . mb_str_replace(chr(10), "<br />", $event->event_description) . '&nbsp;';
 	$tt .= '			</td>';
 	$tt .= '		</tr>';
@@ -4322,38 +4322,38 @@ function getTaskTooltip($task_id, $starts = false, $ends = false ) {
 	$task_project = $task->project_name;
 	$task_company = $task->company_name;
 
-	$tt = '<table border="0" cellpadding="0" cellspacing="0" width="96%">';
+    $tt = '<table class="tool-tip">';
 	$tt .= '<tr>';
 	$tt .= '	<td valign="top" width="40%">';
 	$tt .= '		<strong>' . $AppUI->_('Details') . '</strong>';
 	$tt .= '		<table cellspacing="3" cellpadding="2" width="100%">';
 	$tt .= '		<tr>';
-	$tt .= '			<td style="border: 1px solid white;-moz-border-radius:3.5px;-webkit-border-radius:3.5px;" align="right" nowrap="nowrap">' . $AppUI->_('Company') . '</td>';
+	$tt .= '			<td class="tip-label">' . $AppUI->_('Company') . '</td>';
 	$tt .= '			<td width="100%">' . $task_company . '</td>';
 	$tt .= '		</tr>';
 	$tt .= '		<tr>';
-	$tt .= '			<td style="border: 1px solid white;-moz-border-radius:3.5px;-webkit-border-radius:3.5px;" align="right" nowrap="nowrap">' . $AppUI->_('Project') . '</td>';
+	$tt .= '			<td class="tip-label">' . $AppUI->_('Project') . '</td>';
 	$tt .= '			<td width="100%">' . $task_project . '</td>';
 	$tt .= '		</tr>';
 	$tt .= '		<tr>';
-	$tt .= '			<td style="border: 1px solid white;-moz-border-radius:3.5px;-webkit-border-radius:3.5px;" align="right" nowrap="nowrap">' . $AppUI->_('Type') . '</td>';
-	$tt .= '			<td width="100%" nowrap="nowrap">' . $AppUI->_($types[$task->task_type]) . '</td>';
+	$tt .= '			<td class="tip-label">' . $AppUI->_('Type') . '</td>';
+	$tt .= '			<td width="100%">' . $AppUI->_($types[$task->task_type]) . '</td>';
 	$tt .= '		</tr>	';
 	$tt .= '		<tr>';
-	$tt .= '			<td style="border: 1px solid white;-moz-border-radius:3.5px;-webkit-border-radius:3.5px;" align="right" nowrap="nowrap">' . $AppUI->_('Progress') . '</td>';
-	$tt .= '			<td width="100%" nowrap="nowrap"><strong>' . sprintf("%.1f%%", $task->task_percent_complete) . '</strong></td>';
+	$tt .= '			<td class="tip-label">' . $AppUI->_('Progress') . '</td>';
+	$tt .= '			<td width="100%"><strong>' . sprintf("%.1f%%", $task->task_percent_complete) . '</strong></td>';
 	$tt .= '		</tr>	';
 	$tt .= '		<tr>';
-	$tt .= '			<td style="border: 1px solid white;-moz-border-radius:3.5px;-webkit-border-radius:3.5px;" align="right" nowrap="nowrap">' . $AppUI->_('Starts') . '</td>';
-	$tt .= '			<td nowrap="nowrap">' . ($starts ? '<strong>' : '') . ($start_date ? $start_date->format($df . ' ' . $tf) : '-') . ($starts ? '</strong>' : '') . '</td>';
+	$tt .= '			<td class="tip-label">' . $AppUI->_('Starts') . '</td>';
+	$tt .= '			<td>' . ($starts ? '<strong>' : '') . ($start_date ? $start_date->format($df . ' ' . $tf) : '-') . ($starts ? '</strong>' : '') . '</td>';
 	$tt .= '		</tr>';
 	$tt .= '		<tr>';
-	$tt .= '			<td style="border: 1px solid white;-moz-border-radius:3.5px;-webkit-border-radius:3.5px;" align="right" nowrap="nowrap">' . $AppUI->_('Ends') . '</td>';
-	$tt .= '			<td nowrap="nowrap">' . ($ends ? '<strong>' : '') . ($end_date ? $end_date->format($df . ' ' . $tf) : '-') . ($ends ? '</strong>' : '') . '</td>';
+	$tt .= '			<td class="tip-label">' . $AppUI->_('Ends') . '</td>';
+	$tt .= '			<td>' . ($ends ? '<strong>' : '') . ($end_date ? $end_date->format($df . ' ' . $tf) : '-') . ($ends ? '</strong>' : '') . '</td>';
 	$tt .= '		</tr>';
 	$tt .= '		<tr>';
-	$tt .= '			<td style="border: 1px solid white;-moz-border-radius:3.5px;-webkit-border-radius:3.5px;" align="right" nowrap="nowrap">' . $AppUI->_('Assignees') . '</td>';
-	$tt .= '			<td nowrap="nowrap">';
+	$tt .= '			<td class="tip-label">' . $AppUI->_('Assignees') . '</td>';
+	$tt .= '			<td>';
 	if (is_array($assigned)) {
 		$start = false;
 		foreach ($assigned as $user) {
@@ -4372,7 +4372,7 @@ function getTaskTooltip($task_id, $starts = false, $ends = false ) {
 	$tt .= '		<strong>' . $AppUI->_('Description') . '</strong>';
 	$tt .= '		<table cellspacing="0" cellpadding="2" border="0" width="100%">';
 	$tt .= '		<tr>';
-	$tt .= '			<td style="border: 1px solid white;-moz-border-radius:3.5px;-webkit-border-radius:3.5px;">';
+	$tt .= '			<td class="tip-label description">';
 	$tt .= '				' . $task->task_description;
 	$tt .= '			</td>';
 	$tt .= '		</tr>';
