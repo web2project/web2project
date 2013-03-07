@@ -9,6 +9,10 @@
     float:      right;
 }
 
+.center {
+    text-align: center;
+}
+
 .icon {
     margin:     10px;
 }
@@ -16,6 +20,10 @@
 /* Begin: Structural styles */
 div {
     font-size:  8pt;
+}
+
+div.clear {
+    clear: both;
 }
 
 div.std {
@@ -27,12 +35,6 @@ div.std {
 /* End: Structural styles
 
 /* Begin: Header Bar & Navigation for all pages */
-.nav ul li {
-	float:      left;
-	margin:     0px 1px 0px 0px;
-	padding:    0px;
-}
-
 .nav ul {
     font:       bold 8pt helvetica,arial,sans-serif;
 	line-height:100%;
@@ -40,6 +42,12 @@ div.std {
 	list-style-position:outside;
 	list-style-type:none;
 	margin:     2px 0px 0px 0px;
+	padding:    0px;
+}
+
+.nav ul li {
+	float:      left;
+	margin:     0px 1px 0px 0px;
 	padding:    0px;
 }
 
@@ -68,25 +76,25 @@ form {
     width: 100%;
 }
 
+.module-title h1 {
+    float: left;
+    margin-top: 15px;
+}
+
 .module-title .icon {
     float: left;
     margin: 3px;
 }
 
-.module-title h1 {
-    float: left;
-    margin-top: 15px;
+.module-title .crumb-right {
+    float: right;
+    margin: 10px 0;
 }
 
 .module-nav {
     float: left;
     margin: -15px 0 5px;
     width: 100%;
-}
-
-.module-title .crumb-right {
-    float: right;
-    margin: 10px 0;
 }
 
 .module-nav .crumb-right {
@@ -112,16 +120,7 @@ form {
 .error,.warning {
     color:red
 }
-.center {
-    text-align: center;
-}
-._duration {
-    text-align: right;
-}
 
-._identifier {
-    border: outset #eeeeee 1px;
-}
 input[type="checkbox"] {
     margin-left: 10px;
 }
@@ -132,6 +131,14 @@ input[type="checkbox"] {
  *      ./index.php?m=companies
  */
  
+._duration {
+    text-align: right;
+}
+
+._identifier {
+    border: outset #eeeeee 1px;
+}
+
 table.list {
     border-spacing: 1px;
     padding: 2px;
@@ -171,10 +178,6 @@ table.list tr:hover td._name {
 }
 .list.history td.data._user {
     text-align: center;
-}
-
-div.clear {
-    clear: both;
 }
 
 /*
