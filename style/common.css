@@ -1,4 +1,81 @@
 
+body {
+    background-color: #f2f2f2;
+    color: #333;
+    font-family: Osaka,verdana,Sans-Serif;
+    font-size: 10pt;
+    margin-bottom: 10px;
+    margin-left: 0px;
+    margin-right: 0px;
+    margin-top: 0px;
+}
+
+em {
+    font-weight: bold;
+    text-decoration: none;
+    font-style: normal;
+}
+
+a:link {
+	color: #333333;
+	text-decoration: none;
+}
+
+a:visited {
+	color: #333333;
+	text-decoration: none;
+}
+
+a:active {
+	color: #333333;
+	text-decoration: none;
+}
+
+a:hover {
+	color: #666666;
+	text-decoration: none;
+}
+
+tr {
+	font-size: 8pt
+}
+
+td {
+	font-size: 8pt
+}
+
+h1, .title {
+    color: #333;
+    font-family: Trebuchet MS,Arial,Osaka,verdana,Sans-Serif;
+    font-size: 15px;
+    font-weight: bold;
+    margin-bottom: 0px;
+    margin-top: 5px;
+    text-transform: uppercase;
+}
+
+h2, .subtitle {
+    color: #333;
+    font-family: 'Trebuchet MS',arial,Osaka,verdana,Sans-Serif;
+    font-size: 12px;
+    font-weight: bold;
+	margin-bottom: 0px;
+	margin-top: 15px;
+    text-transform: uppercase;
+}
+
+h3 {
+    color: #333;
+    font-family: 'Trebuchet MS',arial,Osaka,verdana,Sans-Serif;
+    font-size: 12px;
+    font-weight: bold;
+	margin-bottom: 0px;
+	margin-top: 35px;
+}
+
+
+
+
 /* These are some default styles used throughout. */
 .left {
     float: left;
@@ -429,4 +506,8 @@ table.login tr th {
 table.login td {
     padding: 0;
     white-space:nowrap;
+}
+
+table.minititle th {
+    font-weight: normal;
 }

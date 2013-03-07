@@ -2,75 +2,42 @@
 /* WEB2PROJECT REQUIRED CLASSES */
 BODY {
     background-color: #70a5cc;
-    margin-top: 0px;
-    margin-left: 0px;
-    margin-right: 0px;
-    margin-bottom: 10px;
     font-family: verdana, arial, helvetica, sans-serif;
-    font-size: 10pt;
-    color: #333;
-}
-
-em {
-    font-weight: bold;
-    text-decoration: none;
-    font-style: normal;
 }
 
 A:link {
     color: #006;
-    text-decoration: none;
 }
 
 A:visited {
     color: #006;
-    text-decoration: none;
 }
 
 A:active {
     color: red;
-    text-decoration: none;
 }
 
 A:hover {
     color: #0F99AB;
 }
 
-TD {
-    font-family: verdana, arial, helvetica, sans-serif;
-    font-size: 8pt
-}
-
-TR {
-    font-family: verdana, arial, helvetica, sans-serif;
-    font-size: 8pt
-}
-
 h1, .title {
+    font-family:inherit;
     font-size: 16px;
-    font-weight: bold;
-    font-family: verdana, arial, helvetica, sans-serif;
-    color: #333;
-    margin-bottom: 0px;
-    margin-top: 5px;
+    text-transform: none;
 }
 
 h2, .subtitle {
-    font-size: 12px;
-    font-weight: bold;
-    font-family: verdana, arial, helvetica, sans-serif;
     color: #666;
-    margin-bottom: 0px;
-    margin-top: 15px;
+    font-family:inherit;
+    text-transform: none;
+    font-weight: bold;
 }
 
 h3 {
-    font-size: 12px;
-    font-weight: bold;
-    font-family: verdana, arial, helvetica, sans-serif;
     color: #08245b;
-    margin-bottom: 0px;
-    margin-top: 35px;
+    font-family:inherit;
+    text-transform: none;
 }
 
 /* Begin: Header Bar & Navigation for all pages */
@@ -149,7 +116,7 @@ input.button:active {
 }
 TEXTAREA {
     border: 1px #acacac solid;
-    font-family: verdana, arial, helvetica, sans-serif;
+    
     font-size: 9pt;
     -moz-border-radius:4px;
     -webkit-border-radius:4px;
@@ -157,7 +124,7 @@ TEXTAREA {
 }
 textarea.small {
     border: 1px #acacac solid;
-    font-family: verdana, arial, helvetica, sans-serif;
+    
     font-size: 8pt;
     -moz-border-radius:4px;
     -webkit-border-radius:4px;
@@ -392,13 +359,6 @@ table.mocal .event {
 }
 
 /* mini calendar - title area */
-table.minititle {
-}
-table.minititle td {
-}
-table.minititle th {
-    font-weight: normal;
-}
 
 table.minical {
 }
