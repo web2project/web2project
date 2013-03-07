@@ -49,14 +49,6 @@ div.shadow {
 }
 /* End: Header Bar & Navigation for all pages */
 
-bordertable {
-	border: 1px black solid;
-}
-
-.bordertable{
- border: 1px black solid;
-}
-
 .item {
 	color: #333;
 }

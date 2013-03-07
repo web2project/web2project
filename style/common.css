@@ -511,3 +511,7 @@ table.login td {
 table.minititle th {
     font-weight: normal;
 }
+
+bordertable, .bordertable{
+    border: 1px black solid;
+}
