@@ -404,3 +404,9 @@ table.prjprint TR {
     text-align: left;
     white-space: normal;
 }
+
+.login {
+    /**
+    <table style="border-style:none;" align="center" border="0" width="250" cellpadding="0" cellspacing="0" class="std login">
+    */
+}
