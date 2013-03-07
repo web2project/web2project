@@ -46,7 +46,7 @@ if (count($fields) > 0) {
     // TODO: This is only in place to provide an pre-upgrade-safe
     //   state for versions earlier than v3.0
     //   At some point at/after v4.0, this should be deprecated
-    $fieldList = array('link_name', 'link_description', 'link_category', 'link_task', 'contact_name', 'link_date');
+    $fieldList = array('link_name', 'link_description', 'link_category', 'link_task', 'link_owner', 'link_date');
     $fieldNames = array('Link Name', 'Description', 'Category', 'Task Name', 'Owner', 'Date');
 
     $module->storeSettings('links', 'index_list', $fieldList, $fieldNames);
