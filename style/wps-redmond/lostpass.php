@@ -42,24 +42,24 @@ if (!defined('W2P_BASE_DIR')) {
         <form method="post" name="lostpassform" accept-charset="utf-8">
             <input type="hidden" name="lostpass" value="1" />
             <input type="hidden" name="redirect" value="<?php echo isset($redirect) ? $redirect : ''; ?>" />
-            <table style="border-style:none;" align="center" border="0" width="250" cellpadding="0" cellspacing="0" class="std">
+            <table style="border-style:none;" cellspacing="0" class="std login">
                 <tr>
                     <td colspan="2"><?php echo styleRenderBoxTop(); ?></td>
                 </tr>
                 <tr>
-                    <th style="padding:6px" colspan="2"><em><?php echo $w2Pconfig['company_name']; ?></em></th>
+                    <th colspan="2"><em><?php echo $w2Pconfig['company_name']; ?></em></th>
                 </tr>
                 <tr>
-                    <td style="padding:6px" align="right" nowrap="nowrap"><?php echo $AppUI->_('Username'); ?>:</td>
-                    <td style="padding:6px" align="left" nowrap="nowrap"><input type="text" size="25" maxlength="255" name="checkusername" class="text" /></td>
+                    <td style="padding:6px" align="right"><?php echo $AppUI->_('Username'); ?>:</td>
+                    <td style="padding:6px" align="left"><input type="text" size="25" maxlength="255" name="checkusername" class="text" /></td>
                 </tr>
                 <tr>
-                    <td style="padding:6px" align="right" nowrap="nowrap"><?php echo $AppUI->_('EMail'); ?>:</td>
-                    <td style="padding:6px" align="left" nowrap="nowrap"><input type="email" size="25" maxlength="255" name="checkemail" class="text" /></td>
+                    <td style="padding:6px" align="right"><?php echo $AppUI->_('EMail'); ?>:</td>
+                    <td style="padding:6px" align="left"><input type="email" size="25" maxlength="255" name="checkemail" class="text" /></td>
                 </tr>
                 <tr>
-                    <td style="padding:6px" align="left" nowrap="nowrap"><a href="http://www.web2project.net/"><img src="./style/web2project/w2p_icon.ico" width="32" height="24" border="0" alt="web2Project logo" /></a></td>
-                    <td style="padding:6px" align="right" valign="bottom" nowrap="nowrap"><input type="submit" name="sendpass" value="<?php echo $AppUI->_('send password'); ?>" class="button" /></td>
+                    <td style="padding:6px" align="left"><a href="http://www.web2project.net/"><img src="./style/web2project/w2p_icon.ico" width="32" height="24" border="0" alt="web2Project logo" /></a></td>
+                    <td style="padding:6px" align="right" valign="bottom"><input type="submit" name="sendpass" value="<?php echo $AppUI->_('send password'); ?>" class="button" /></td>
                 </tr>
                 <tr>
                     <td colspan="2"><?php echo styleRenderBoxBottom(); ?></td>

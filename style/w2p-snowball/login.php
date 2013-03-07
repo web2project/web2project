@@ -50,7 +50,7 @@ if (!defined('W2P_BASE_DIR')) {
                     </td>
                 </tr>
                 <tr>
-                    <th style="padding:6px" colspan="2"><em><?php echo $w2Pconfig['company_name']; ?></em></th>
+                    <th colspan="2"><em><?php echo $w2Pconfig['company_name']; ?></em></th>
                 </tr>
                 <tr>
                     <td style="padding:6px" align="right"><?php echo $AppUI->_('Username'); ?>:</td>

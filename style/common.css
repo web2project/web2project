@@ -412,7 +412,12 @@ table.prjprint TR {
     width: 250px;
 }
 
-.login td, .login th {
+table.login tr th {
+    padding: 6px;
+    white-space:nowrap;
+}
+
+table.login td {
     padding: 0;
     white-space:nowrap;
 }
