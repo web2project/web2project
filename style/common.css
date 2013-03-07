@@ -130,13 +130,41 @@ input[type="checkbox"] {
  *      ./index.php?m=projects
  *      ./index.php?m=companies
  */
- 
+
+.data {
+    text-align: center;
+    white-space:nowrap;
+}
+
+._departments {
+    text-align: left;
+}
 ._duration {
     text-align: right;
 }
 
 ._identifier {
     border: outset #eeeeee 1px;
+}
+
+.list ._description {
+    text-align: left;
+    white-space: normal;
+}
+
+.list ._identifier {
+    padding: 5px;
+    width: 40px;
+}
+
+.list ._name {
+    text-align: left;
+    width: 25%;
+}
+
+.view ._assignment, .view ._date, .view ._description, .view ._hours,
+    .view ._owner, .view ._shortname, .view ._status, .view ._type {
+    text-align: left;
 }
 
 table.list {
@@ -155,19 +183,7 @@ table.list tr:hover td._name {
     font-weight: bold;
 }
  
-.list ._name {          width: 25%; }
 .list ._description {   width: 30%; }
-
-.list ._complete, .list ._created, .list ._date, .list ._datetime, .list ._duration,
-    .list ._hours, .list ._update, .list ._updated, .list ._worked, .list ._identifier,
-    .list ._size, .list ._allocation {
-    text-align: center;
-}
-.list th, .list ._author, .list ._creator, .list ._name, .list ._owner, .list ._updator,
-    .list ._size, .list ._birthday, .list ._date, .list ._created, .list ._datetime,
-    .list ._update, .list ._updated {
-        white-space:nowrap;
-}
 
 .list.history td.data._description {
     width: 60%;
@@ -223,16 +239,6 @@ table.list tr:hover td._name {
 .addedit textarea.customfield {
     height: 75px;
     width:  100%;
-}
-
-.view ._date, .view ._owner, .view ._status, .view ._assignment {
-    text-align: left;
-}
-
-._assignment, ._category, ._count, .countp, ._complete, ._in, .inactive,
-    ._owner, ._priority, ._problem, ._problem, .replies, ._status, ._username,
-    ._users, ._version {
-    text-align: center;
 }
 
 /*
