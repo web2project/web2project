@@ -7,6 +7,10 @@ global $showEditCheckbox, $priorities;
 global $m, $a, $date, $other_users, $user_id, $task_type;
 global $task_sort_item1, $task_sort_type1, $task_sort_order1;
 global $task_sort_item2, $task_sort_type2, $task_sort_order2;
+global $durnTypes;
+
+$durnTypes = w2PgetSysVal('TaskDurationType');
+
 
 // retrieve any state parameters
 if (isset($_POST['show_form'])) {
