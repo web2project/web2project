@@ -153,15 +153,23 @@ class CFile_Folder extends w2p_Core_BaseObject {
 
     // This is a hack to allow editing a folder. If the logged in user 
     // has a file inside of which it is the owner its assumed that (s)he 
-    // may edit the folder. This is done with a query.
+    // may edit the folder. But files must exist inside the subfolder.
+    // If no files exist in the subfolder anyone can edit it.
     public function canEdit() {
         $q = $this->_getQuery();
         $q->addTable('files');
         $q->addQuery('files.file_id');
-        $q->addWhere('file_folder = ' . (int)$file_folder_id);
-        $q->addWhere('file_owner = ' . $this->_AppUI->user_id);
-
-        // counts total recs from query
-        return count($q->loadList()) > 0;
+        $q->addQuery('files.file_owner');
+        $q->addWhere('file_folder = ' . (int)$this->file_folder_id);
+	   $r = $q->loadList();
+	   if (count($r) == 0) {
+		return True;
+	   }
+	   foreach ($r as $file) {
+		if ($file['file_owner'] == $this->_AppUI->user_id) {
+			return True;
+		}
+	   }
+	   return False;
     }
 }
