@@ -4236,7 +4236,8 @@ function getTaskLinks($startPeriod, $endPeriod, &$links, $strMaxLen, $company_id
 				$row['short_name'] = $row['task_name'];
 			}
 	
-			$link['text'] = '<span style="color:' . bestColor($row['color']) . ';background-color:#' . $row['color'] . '">' . $row['short_name'] . ($row['task_milestone'] ? '&nbsp;' . w2PshowImage('icons/milestone.gif') : '') . '</span>';
+			$link['td'] = 'style="background-color:#' . $row['color'] . ';"';
+			$link['text'] = '<span style="color:' . bestColor($row['color']) . '">' . $row['short_name'] . ($row['task_milestone'] ? '&nbsp;' . w2PshowImage('icons/milestone.gif') : '') . '</span>';
         }
 
 		// determine which day(s) to display the task
