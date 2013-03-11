@@ -470,7 +470,7 @@ function showtask(&$arr, $level = 0, $notUsed = true, $today_view = false) {
 	}
     $s .= '</td>';
 	if ($today_view) { // Show the project name
-		$s .= ('<td width="50%"><a href="./index.php?m=projects&amp;a=view&amp;project_id=' . $arr['task_project'] . '">' . '<div style="display:inline-block;padding: 2px 3px;background-color:#' . $arr['project_color_identifier'] . ';color:' . bestColor($arr['project_color_identifier']) . '">' . $arr['project_name'] . '</div>' . '</a></td>');
+		$s .= ('<td width="50%" style="background-color:#' . $arr['project_color_identifier'] . ';"><a href="./index.php?m=projects&amp;a=view&amp;project_id=' . $arr['task_project'] . '">' . '<span style="padding:2px;color:' . bestColor($arr['project_color_identifier']) . '">' . $arr['project_name'] . '</span>' . '</a></td>');
 	} else {
         $s .= $htmlHelper->createCell('task_owner', $arr['owner']);
 	}
