@@ -125,6 +125,24 @@ class CContact extends w2p_Core_BaseObject
         parent::hook_postStore();
     }
 
+    protected function hook_postDelete()
+    {
+	   // Delete contact methods belonging to the contact
+        $q = $this->_getQuery();
+        $q->setDelete('contacts_methods');
+        $q->addWhere('contact_id=' . (int) $this->contact_id);
+        $q->exec();
+        $q->clear();
+
+	   // Delete custom fields belonging to the contact
+        $custom_fields = new w2p_Core_CustomFields('contacts', 'addedit', $this->contact_id, 'delete');
+   	   foreach ($custom_fields->fields as $key => $notUsed) {
+		$custom_fields->deleteField($custom_fields->fields[$key]->field_id);
+	   }
+
+        parent::hook_postDelete();
+    }
+
     /*
      * This is an ugly bit of code that should handle *both* data structures..
      */

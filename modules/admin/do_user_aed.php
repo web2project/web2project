@@ -44,9 +44,15 @@ if ($del) {
 
 $obj->user_username = strtolower($obj->user_username);
 
-// !User's contact information not deleted - left for history.
 if ($del) {
+    // Load the contact object to be able to delete it later
+    $contact->findContactByUserid($user_id);
+    // Delete the user row first to orphan the contact from it.
+    // Otherwise the contact's canDelete method would prevent its deletion.
     $result = $obj->delete();
+    if ($result) {
+      $result = $contact->delete();
+    }
     $message = ($result) ? 'User deleted' : $obj->getError();
     $redirect    = ($result) ? 'm=admin'  : ACCESS_DENIED;
     $status  = ($result) ? UI_MSG_ALERT   : UI_MSG_ERROR;
