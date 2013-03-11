@@ -40,57 +40,51 @@ $canDelete = $perms->checkModuleItem($m, 'delete');
 ?>
 <form name="form_buttons" method="post" action="index.php?<?php echo 'm=' . $m . '&amp;a=' . $a . '&amp;date=' . $date; ?>" accept-charset="utf-8">
     <input type="hidden" name="show_form" value="1" />
-    <table width="100%" border="0" cellpadding="1" cellspacing="0">
+    <table width="100%" border="0" cellpadding="4" cellspacing="0">
         <tr>
-            <td width="50%">
+            <td align="left" width="30%">
+                <?php
+				if ($other_users) {
+					echo $AppUI->_('Show Tasks') . ':';
+				} else {
+					echo '<h1>' . $AppUI->_('Tasks assigned to me') . ':</h1>';
+				}
+			?>
+		 </td>
+            <td valign="bottom">
                 <?php
                     if ($other_users) {
                         $users = $perms->getPermittedUsers('tasks');
-                        echo arraySelect($users, 'show_user_todo', 'class="text" onchange="document.form_buttons.submit()"', $user_id);
+                        echo $AppUI->_('Assigned to') . ': ' . arraySelect($users, 'show_user_todo', 'class="text" onchange="document.form_buttons.submit()"', $user_id);
                     }
                 ?>
             </td>
-            <td align="right" width="50%">
-                <?php echo $AppUI->_('Show'); ?>:
+            <td valign="bottom">
+			<?php echo $AppUI->_('From Projects In Progress Only'). ':'; ?><br>
                 <input type="checkbox" name="show_inprogress" id="show_inprogress" onclick="document.form_buttons.submit()" <?php echo $showInProgress ? 'checked="checked"' : ''; ?> />
             </td>
-             <td nowrap="nowrap">
-                <label for="show_inprogress"><?php echo $AppUI->_('In Progress Only'); ?></label>
-            </td>
-            <td>
+            <td valign="bottom">
+			<?php echo $AppUI->_('Pinned Only') . ':'; ?><br>
                 <input type="checkbox" name="show_pinned" id="show_pinned" onclick="document.form_buttons.submit()" <?php echo $showPinned ? 'checked="checked"' : ''; ?> />
             </td>
-            <td nowrap="nowrap">
-                <label for="show_pinned"><?php echo $AppUI->_('Pinned Only'); ?></label>
-            </td>
-            <td>
+            <td valign="bottom">
+			<?php echo $AppUI->_('From Archived/Template Projects') . ':'; ?><br>
                 <input type="checkbox" name="show_arc_proj" id="show_arc_proj" onclick="document.form_buttons.submit()" <?php echo $showArcProjs ? 'checked="checked"' : ''; ?> />
             </td>
-            <td nowrap="nowrap">
-                <label for="show_arc_proj"><?php echo $AppUI->_('Archived/Template Projects'); ?></label>
-            </td>
-            <td>
+            <td valign="bottom">
+			<?php echo $AppUI->_('Dynamic Tasks') . ':'; ?><br>
                 <input type="checkbox" name="show_dyn_task" id="show_dyn_task" onclick="document.form_buttons.submit()" <?php echo $showDynTasks ? 'checked="checked"' : ''; ?> />
             </td>
-            <td nowrap="nowrap">
-                <label for="show_dyn_task"><?php echo $AppUI->_('Dynamic Tasks'); ?></label>
-            </td>
-            <td>
+            <td valign="bottom">
+			<?php echo $AppUI->_('Low Priority Tasks') . ':'; ?><br>
                 <input type="checkbox" name="show_low_task" id="show_low_task" onclick="document.form_buttons.submit()" <?php echo $showLowTasks ? 'checked="checked"' : ''; ?> />
             </td>
-            <td nowrap="nowrap">
-                <label for="show_low_task"><?php echo $AppUI->_('Low Priority Tasks'); ?></label>
-            </td>
-            <td>
+            <td valign="bottom">
+			<?php echo $AppUI->_('Empty Dates') . ':'; ?><br>
                 <input type="checkbox" name="show_empty_date" id="show_empty_date" onclick="document.form_buttons.submit()" <?php echo $showEmptyDate ? 'checked="checked"' : ''; ?> />
             </td>
-            <td nowrap="nowrap">
-                <label for="show_empty_date"><?php echo $AppUI->_('Empty Dates'); ?></label>
-            </td>
-        </tr>
-        <tr>
-            <td colspan = "12" align="right">
-            <?php
+            <td valign="bottom">
+			<?php echo $AppUI->_('Type') . ':<br>';
                 $types = array('' => '(Task Type Filter)') + w2PgetSysVal('TaskType');
                 echo arraySelect($types, 'task_type', 'class="text" onchange="document.form_buttons.submit()"', $task_type, true);
             ?>
