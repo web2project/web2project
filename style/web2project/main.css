@@ -2,42 +2,75 @@
 /* WEB2PROJECT REQUIRED CLASSES */
 BODY {
     background-color: #70a5cc;
+    margin-top: 0px;
+    margin-left: 0px;
+    margin-right: 0px;
+    margin-bottom: 10px;
     font-family: verdana, arial, helvetica, sans-serif;
+    font-size: 10pt;
+    color: #333;
+}
+
+em {
+    font-weight: bold;
+    text-decoration: none;
+    font-style: normal;
 }
 
 A:link {
     color: #006;
+    text-decoration: none;
 }
 
 A:visited {
     color: #006;
+    text-decoration: none;
 }
 
 A:active {
     color: red;
+    text-decoration: none;
 }
 
 A:hover {
     color: #0F99AB;
 }
 
+TD {
+    font-family: verdana, arial, helvetica, sans-serif;
+    font-size: 8pt
+}
+
+TR {
+    font-family: verdana, arial, helvetica, sans-serif;
+    font-size: 8pt
+}
+
 h1, .title {
-    font-family:inherit;
     font-size: 16px;
-    text-transform: none;
+    font-weight: bold;
+    font-family: verdana, arial, helvetica, sans-serif;
+    color: #333;
+    margin-bottom: 0px;
+    margin-top: 5px;
 }
 
 h2, .subtitle {
-    color: #666;
-    font-family:inherit;
-    text-transform: none;
+    font-size: 12px;
     font-weight: bold;
+    font-family: verdana, arial, helvetica, sans-serif;
+    color: #666;
+    margin-bottom: 0px;
+    margin-top: 15px;
 }
 
 h3 {
+    font-size: 12px;
+    font-weight: bold;
+    font-family: verdana, arial, helvetica, sans-serif;
     color: #08245b;
-    font-family:inherit;
-    text-transform: none;
+    margin-bottom: 0px;
+    margin-top: 35px;
 }
 
 /* Begin: Header Bar & Navigation for all pages */
@@ -62,10 +95,11 @@ div.shadow {
 }
 /* End: Header Bar & Navigation for all pages */
 
-.bordertable {
-     -moz-border-radius:3px;
-     -webkit-border-radius:3px;
-     border-radius:3px;
+.bordertable{
+ border: 1px black solid;
+ -moz-border-radius:3px;
+ -webkit-border-radius:3px;
+ border-radius:3px;
 }
 
 input.button {
@@ -115,7 +149,7 @@ input.button:active {
 }
 TEXTAREA {
     border: 1px #acacac solid;
-    
+    font-family: verdana, arial, helvetica, sans-serif;
     font-size: 9pt;
     -moz-border-radius:4px;
     -webkit-border-radius:4px;
@@ -123,7 +157,7 @@ TEXTAREA {
 }
 textarea.small {
     border: 1px #acacac solid;
-    
+    font-family: verdana, arial, helvetica, sans-serif;
     font-size: 8pt;
     -moz-border-radius:4px;
     -webkit-border-radius:4px;
@@ -303,7 +337,7 @@ table.motitle td {
 }
 table.motitle th {
     background-color: #f0f0f0;
-    font-size: 12pt;
+    font-size: 10pt;
 }
 
 table.mocal {
@@ -358,6 +392,13 @@ table.mocal .event {
 }
 
 /* mini calendar - title area */
+table.minititle {
+}
+table.minititle td {
+}
+table.minititle th {
+    font-weight: normal;
+}
 
 table.minical {
 }
@@ -440,7 +481,7 @@ a.button {
     border:0px;
 }
 
-a.button span, a.button div {
+a.button span {
     background: transparent url('images/button_left.gif') no-repeat;
     display: block;
     line-height: 14px;
@@ -475,7 +516,7 @@ a.delete {
 	border:0px;
 }
 
-a.delete span, a.delete div {
+a.delete span {
     background: transparent url('images/delete_left.gif') no-repeat;
     display: block;
     line-height: 14px;
@@ -497,31 +538,27 @@ a.delete:active span {
     padding: 4px 0 4px 10px; /* push text down 1px */
 }
 
-.crumb ul {
+.module-nav .crumb ul {
     margin-left: 5px;
-    padding: 0px;
+    padding: 0;
 }
-.crumb ul li {
-	margin: 2px 2px 2px;
+.module-nav .crumb ul li {
 	font-family:arial,sans-serif;
 	color: #000000;
 	text-decoration: none;
-	display: inline; /* Remove this line arrange the buttons vertically */
 	background: transparent url('images/crumb_right.gif') no-repeat scroll top right;
+	display: block;
 	float: left;
-	height: 22px;
-	padding-right: 10px; /* sliding doors padding */
-	border:0px;
+	height: 21px;
+	margin-right: 6px;
+	padding-right: 10px;
+	text-align: center;
 }
-.crumb ul li span, .crumb ul li div {
-    background: transparent url('images/crumb_left.gif') no-repeat;
-    display: block;
-    line-height: 14px;
-    padding: 2px 0 5px 10px;
-}
-.crumb ul li a {
-	display: inline;
-	color: #000000;
+.module-nav .crumb ul li a {
+	background: transparent url('images/crumb_left.gif') no-repeat;
+	display: block;
+	height: 14px;
+	padding: 2px 0px 5px 10px;
 }
 .crumb ul li a:active {
 	color: #AD0000;
@@ -530,9 +567,28 @@ a.delete:active span {
 	color: #FFFFFF;
 }
 
-.crumb-right div.crumb ul {
-    float: right;
+.module-nav .crumb-right li {
+	font-family:arial,sans-serif;
+	color: #000000;
+	text-decoration: none;
+	background: transparent url('images/delete_right.gif') no-repeat scroll top right;
+	display: block;
+	float: right;
+	height: 21px;
+	margin-right: 6px;
+	padding-right: 10px;
+	text-align: center;
 }
+.module-nav .crumb-right li a {
+	background: transparent url('images/delete_left.gif') no-repeat;
+	display: block;
+	height: 14px;
+	padding: 2px 0px 5px 10px;
+}
+
+/*.crumb-right div.crumb ul {
+    float: right;
+}*/
 
 /* Solves a Webkit issue with screwy overlapping spans - #299 */
 span > img {
@@ -680,4 +736,9 @@ label {
 
 .view td.data {
     background-color: #E8F3FE;
+}
+
+.list ._identifier {
+    padding: 5px;
+    width: 40px;
 }
