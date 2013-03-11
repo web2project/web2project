@@ -353,6 +353,9 @@ class w2p_Output_MonthCalendar {
 				}
 				$html .= ' onclick="' . $this->dayFunc . '(\'' . $day . '\',\'' . $this_day->format($df) . '\')' . '">';
 
+			if ($this->styleMain != 'minical') {
+				$d = '<strong>' . $d . '</strong>';
+			}
                 if ($this->dayFunc) {
                     $html .= "<a href=\"javascript:$this->dayFunc('$day','" . $this_day->format($df) . "')\" class=\"$class\">";
                     $html .= $d;
