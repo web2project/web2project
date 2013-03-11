@@ -379,7 +379,7 @@ function cal_work_day_conv($val) {
 //This kludgy function echos children tasks as threads
 function showtask(&$arr, $level = 0, $notUsed = true, $today_view = false) {
 	global $AppUI, $durnTypes, $userAlloc, $showEditCheckbox;
-	global $m, $a, $history_active, $expanded;
+	global $m, $a, $history_active, $expanded, $date;
 
     //Check for Tasks Access
     $tmpTask = new CTask();
@@ -395,7 +395,7 @@ function showtask(&$arr, $level = 0, $notUsed = true, $today_view = false) {
 	$show_all_assignees = w2PgetConfig('show_all_task_assignees', false);
 
 	// prepare coloured highlight of task time information
-	$class = w2pFindTaskComplete($arr['task_start_date'], $arr['task_end_date'], $arr['task_percent_complete']);
+	$class = w2pFindTaskComplete($arr['task_start_date'], $arr['task_end_date'], $arr['task_percent_complete'], strtotime($date,0));
 
     $jsTaskId = 'project_' . $arr['task_project'] . '_level-' . $level . '-task_' . $arr['task_id'] . '_';
 	if ($expanded) {
@@ -522,7 +522,7 @@ function showtask(&$arr, $level = 0, $notUsed = true, $today_view = false) {
 //TODO: modules/projectdesigner/projectdesigner.class.php
 function showtask_pd(&$arr, $level = 0, $today_view = false) {
 	global $AppUI, $w2Pconfig, $done, $durnTypes, $userAlloc, $showEditCheckbox;
-	global $task_access, $PROJDESIGN_CONFIG, $m, $expanded;
+	global $task_access, $PROJDESIGN_CONFIG, $m, $expanded, $date;
 
     //Check for Tasks Access
     $tmpTask = new CTask();
@@ -543,7 +543,7 @@ function showtask_pd(&$arr, $level = 0, $today_view = false) {
 	$done[] = $arr['task_id'];
 
 	// prepare coloured highlight of task time information
-    $class = w2pFindTaskComplete($arr['task_start_date'], $arr['task_end_date'], $arr['task_percent_complete']);
+    $class = w2pFindTaskComplete($arr['task_start_date'], $arr['task_end_date'], $arr['task_percent_complete'], strtotime($date,0));
 
 	$jsTaskId = 'task_proj_' . $arr['task_project'] . '_level-' . $level . '-task_' . $arr['task_id'] . '_';
 	if ($expanded) {
@@ -1994,10 +1994,8 @@ function displayFiles($AppUI, $folder_id, $task_id, $project_id, $company_id) {
 	if ($company_id) {
 		$q->addWhere('project_company = ' . (int)$company_id);
 	}
-    //$tab = ($m == 'files') ? $tab-1 : -1;
     $temp_tab = ($m == 'files') ? $tab - 1 : -1;
     if (($temp_tab >= 0) and ((count($file_types) - 1) > $temp_tab)) {
-    //if ($tab >= 0) {
         $q->addWhere('file_category = ' . (int)$temp_tab);
     }
 	$q->setLimit($xpg_pagesize, $xpg_min);
@@ -2032,7 +2030,6 @@ function displayFiles($AppUI, $folder_id, $task_id, $project_id, $company_id) {
 		$qv->addWhere('project_company = ' . (int)$company_id);
 	}
     if (($temp_tab >= 0) and ((count($file_types) - 1) > $temp_tab)) {
-    //if ($tab >= 0) {
         $qv->addWhere('file_category = ' . (int)$temp_tab);
     }
 	$qv->leftJoin('users', 'cu', 'cu.user_id = file_checkout');

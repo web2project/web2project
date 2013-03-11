@@ -308,10 +308,14 @@ function filterCurrency($number)
     return $number;
 }
 
-function w2pFindTaskComplete($start_date, $end_date, $percent) {
+function w2pFindTaskComplete($start_date, $end_date, $percent, $nowdate = 0) {
     $start = strtotime($start_date);
     $end   = strtotime($end_date);
-    $now   = time();
+    if ($nowdate == 0) {
+	    $now = time();
+    } else {
+	    $now = $nowdate;
+    }
 
     if ($percent >= 100) { return 'done'; }
     if ($now < $start)   { return ''; }
