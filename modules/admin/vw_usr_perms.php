@@ -157,6 +157,8 @@ foreach ($user_acls as $acl) {
 				$modlist[] = $AppUI->_($group_data[3]);
 			}
 		}
+           $_canEdit = True;
+           $_canView = True;
 		if (is_array($permission['axo'])) {
 			foreach ($permission['axo'] as $key => $section) {
 				foreach ($section as $id) {
@@ -170,15 +172,31 @@ foreach ($user_acls as $acl) {
 						$data = $q->loadResult();
 						$q->clear();
 						$modlist[] = $AppUI->_(ucfirst($key)) . ': ' . w2PHTMLDecode($data);
+						if (!canView($mod_data['section_value'], $mod_data['value'])) {
+							$_canView = False;
+						}
+						if (!canEdit($mod_data['section_value'], $mod_data['value'])) {
+							$_canEdit = False;
+						}
 					} else {
 						$modlist[] = $AppUI->_(ucfirst($key)) . ': ' . w2PHTMLDecode($mod_data['name']);
+						if (!canView($mod_data['value'])) {
+							$_canView = False;
+						}
+						if (!canEdit($mod_data['value'])) {
+							$_canEdit = False;
+						}
 					}
 				}
 			}
 		}
-        if (!canView($mod_data['section_value'], $mod_data['value'])) {
-            continue;
-        }
+		// This visibility test (and the edit permission below) 
+		// serves to make sure that the user currently logged in
+		// (which may not be the one whose permissions are being edited)
+		// can view the permission item and/or edit it.
+		if (!$_canView) {
+             continue;
+           }
 		$buf .= implode('<br />', $modlist);
 		$buf .= '</td>';
 		// Item information TODO:  need to figure this one out.
@@ -200,7 +218,7 @@ foreach ($user_acls as $acl) {
 		// Allow or deny
 		$buf .= '<td>' . $AppUI->_($permission['allow'] ? 'allow' : 'deny') . '</td>';
 		$buf .= '<td nowrap="nowrap">';
-        $canDelete = (canEdit('users') && canEdit($mod_data['section_value'], $mod_data['value']));
+           $canDelete = (canEdit('users') && $_canEdit);
 		if ($canDelete) {
 			$buf .= "<a href=\"javascript:delIt({$acl});\" title=\"" . $AppUI->_('delete') . "\">" . w2PshowImage('icons/stock_delete-16.png', 16, 16, '') . "</a>";
 		}
