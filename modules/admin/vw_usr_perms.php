@@ -21,7 +21,7 @@ foreach ($module_list as $module) {
 
     if (strpos($modName, 'Admin') === false && strpos($modName, 'All Modules') === false) {
         //non-admin modules
-        $addToList = true;
+	   $addToList = canView($module['value']) && canEdit($module['value']);
     } else {
         //admin module
         if ($perms->checkModuleItem('system', 'edit')) {
