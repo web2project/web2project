@@ -110,8 +110,6 @@ $q->addQuery('distinct(ta.task_id), ta.*');
 $q->addQuery('project_name, pr.project_id, project_color_identifier');
 $q->addQuery('tp.task_pinned');
 $q->addQuery('ut.user_task_priority');
-$dateDiffString = $q->dbfnDateDiff('ta.task_end_date', $q->dbfnNow()) . ' AS task_due_in';
-$q->addQuery($dateDiffString);
 
 $q->addTable('projects', 'pr');
 $q->addTable('tasks', 'ta');
@@ -122,7 +120,6 @@ $q->leftJoin('departments', 'departments', 'departments.dept_id = project_depart
 
 $q->addWhere('ut.task_id = ta.task_id');
 $q->addWhere('ut.user_id = ' . (int)$user_id);
-$q->addWhere('( ta.task_percent_complete < 100 or ta.task_percent_complete is null)');
 
 $q->addWhere('ta.task_status = 0');
 $q->addWhere('pr.project_id = ta.task_project');
@@ -178,6 +175,27 @@ for ($j = 0, $j_cmp = count($tasks); $j < $j_cmp; $j++) {
 			$tasks[$j]['task_end_date'] = '0000-00-00 00:00:00';
 		} else {
 			$tasks[$j]['task_end_date'] = calcEndByStartAndDuration($tasks[$j]);
+		}
+	}
+}
+
+// Compute the 'due_in' value. Previously was hardcoded into the query but
+// always using the now() date, which gives misleading results when using the
+// day view on dates <> now().
+$unix_date = strtotime((string)$date);
+for ($j = 0, $j_cmp = count($tasks); $j < $j_cmp; $j++) {
+	$tasks[$j]['task_due_in'] = (string)round((strtotime($tasks[0]['task_end_date']) - $unix_date) / 86400);
+     if ($tasks[$j]['task_due_in'] == -0) {
+		$tasks[$j]['task_due_in'] = '0';
+     }
+}
+
+// Now filter the $tasks array for dates and completion.
+// If a task is done it is taken out if the end date is <= than $date
+for ($j = 0, $j_cmp = count($tasks); $j < $j_cmp; $j++) {
+	if ($tasks[$j]['task_percent_complete'] == 100) {
+		if ($tasks[$j]['task_due_in'][0] == '-') {
+			unset($tasks[$j]);
 		}
 	}
 }
