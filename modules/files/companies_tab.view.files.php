@@ -21,4 +21,4 @@ if (!$limited) {
 	$canEdit = false;
 }
 $showProject = false;
-require (W2P_BASE_DIR . '/modules/files/folders_table.php');
+require (W2P_BASE_DIR . '/modules/files/index_table.php');
