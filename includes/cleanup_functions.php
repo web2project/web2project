@@ -2890,10 +2890,11 @@ function bestColor($bg, $lt = '#ffffff', $dk = '#000000') {
     $g = hexdec(substr($bg, 2, 2));
     $b = hexdec(substr($bg, 4, 2));
 
-    if ($r < $x && $g < $x || $r < $x && $b < $x || $b < $x && $g < $x) {
-        return $lt;
+    $y = 0.2126 * $r + 0.7152 * $g + 0.0722 * $b;
+    if ($y < $x) {
+	    return $lt;
     } else {
-        return $dk;
+	    return $dk;
     }
 }
 
