@@ -10,10 +10,9 @@ $folder = new CFile_Folder();
 $folder->file_folder_id = $folder_id;
 
 $obj = $folder;
-$canAddEdit = $obj->canAddEdit();
 $canAuthor = $obj->canCreate();
 $canEdit = $obj->canEdit();
-if (!$canAddEdit) {
+if ((($folder_id == 0) && !$canAuthor) || (($folder_id != 0) && !canEdit)) {
 	$AppUI->redirect(ACCESS_DENIED);
 }
 
