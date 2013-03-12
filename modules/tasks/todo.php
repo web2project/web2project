@@ -10,7 +10,7 @@ $tab = $AppUI->processIntState('ToDoTab', $_GET, 'tab', 0);
 if (isset($_POST['task_type'])) {
 	$AppUI->setState('ToDoTaskType', w2PgetParam($_POST, 'task_type', ''));
 }
-global $task_type, $min_view;
+global $task_type, $min_view, $company_id;
 $task_type = $AppUI->getState('ToDoTaskType') !== null ? $AppUI->getState('ToDoTaskType') : '';
 
 $project_id = (int) w2PgetParam($_GET, 'project_id', 0);
@@ -117,6 +117,10 @@ $q->addTable('user_tasks', 'ut');
 $q->leftJoin('user_task_pin', 'tp', 'tp.task_id = ta.task_id and tp.user_id = ' . (int)$user_id);
 $q->leftJoin('project_departments', 'project_departments', 'pr.project_id = project_departments.project_id OR project_departments.project_id IS NULL');
 $q->leftJoin('departments', 'departments', 'departments.dept_id = project_departments.department_id OR dept_id IS NULL');
+
+if ($company_id) {
+	$q->addWhere('pr.project_company = "' . (string)$company_id . '"');
+}
 
 $q->addWhere('ut.task_id = ta.task_id');
 $q->addWhere('ut.user_id = ' . (int)$user_id);
