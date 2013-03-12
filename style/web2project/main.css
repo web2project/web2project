@@ -481,7 +481,8 @@ a.button {
     border:0px;
 }
 
-a.button span {
+/* The div is used in the forum module */
+a.button span, a.button div {
     background: transparent url('images/button_left.gif') no-repeat;
     display: block;
     line-height: 14px;
