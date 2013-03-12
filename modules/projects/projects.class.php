@@ -1037,4 +1037,9 @@ class CProject extends w2p_Core_BaseObject
                 $projects[$key][2] = '';
         }
     }
+
+    public static function getHRef($project_id) 
+    {
+	   return 'm=projects&a=view&project_id=' . (string)$project_id . '&tab=0';
+    }
 }

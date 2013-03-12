@@ -238,4 +238,36 @@ class CForum extends w2p_Core_BaseObject
         return $search;
     }
 
+    public static function getWatchedMessages($start_date, $end_date, $user_id)
+    {
+        $db_start = $start_date->format(FMT_DATETIME_MYSQL);
+        $db_end = $end_date->format(FMT_DATETIME_MYSQL);
+
+	   // Get a list of projects that the user can access
+	   $prj = new CProject();
+	   $prjs = $prj->getAllowedRecords($user_id,'projects.project_id, project_name', '', null, null, 'projects');
+        if (count($prjs)) {
+            $prj_filter = 'AND (forum_project IN (' . implode(',', array_keys($prjs)) . ') OR forum_project IS NULL OR forum_project = \'\' OR forum_project = 0)';
+	   } else {
+	       $prj_filter = '';
+	   }
+
+        $q = new w2p_Database_Query;
+        $q->addTable('forum_messages');
+        $q->addTable('forums');
+        $q->addTable('forum_watch', 'check_forum');
+        $q->addTable('forum_watch', 'check_msg');
+        $q->addJoin('users', 'u', 'u.user_id = message_author');
+        $q->addJoin('contacts', 'cts', 'contact_id = u.user_contact');
+        $q->addJoin('projects', 'pr', 'pr.project_id = forum_project');
+        $q->addQuery('message_id, message_forum, message_title, message_date, message_author, forum_project, cts.contact_display_name, pr.project_name, forums.forum_name');
+        $q->addWhere('((forums.forum_id = check_forum.watch_forum) AND (check_forum.watch_user = "' . $user_id . '")) AND (forum_messages.message_forum = forums.forum_id) AND (((forum_messages.message_id = check_msg.watch_topic) OR (forum_messages.message_parent = check_msg.watch_topic)) AND check_msg.watch_user = "' . $user_id . '") AND (forum_messages.message_published = true) AND (forum_messages.message_date >= "' . $db_start .'") AND (forum_messages.message_date <= "' . $db_end .'")' . $prj_filter);
+
+        return $q->loadList();
+    }
+
+    public static function getHRef($forum_id)
+    {
+    	   return 'm=forums&a=viewer&forum_id=' . (string)$forum_id;
+    }
 }

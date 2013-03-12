@@ -212,4 +212,8 @@ class CForum_Message extends w2p_Core_BaseObject
         return;
     }
 
+    public static function getHRef($forum_id, $msg_id)
+    {
+	   return 'm=forums&a=viewer&forum_id=' . (string)$forum_id . '&message_id=' . (string)$msg_id . '&sort=asc';
+    }
 }

@@ -91,6 +91,7 @@ function clickDay( idate, fdate ) {
                 $tabBox = new CTabBox('?m=calendar&a=day_view&date=' . $this_day->format(FMT_TIMESTAMP_DATE), W2P_BASE_DIR . '/modules/calendar/', $tab);
                 $tabBox->add('vw_day_events', 'Events');
                 $tabBox->add('vw_day_tasks', 'Tasks');
+			$tabBox->add('vw_day_messages', 'Messages Posted');
                 $tabBox->show();
             ?>
         </td>

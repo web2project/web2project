@@ -444,7 +444,12 @@ class CUser extends w2p_Core_BaseObject
             }
         }
 		return $retres;
-  }
+    }
+
+    public static function getHRef($user_id)
+    {
+        return 'm=admin&a=viewuser&user_id=' . (string)$user_id;
+    }
 }
 
 class CAdmin_User extends CUser { }
