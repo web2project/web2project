@@ -20,5 +20,6 @@ if (!$limited) {
 } else {
 	$canEdit = false;
 }
-$showProject = false;
+global $showProject;
+$showProject = true;
 require (W2P_BASE_DIR . '/modules/files/index_table.php');

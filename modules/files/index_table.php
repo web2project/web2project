@@ -39,7 +39,6 @@ function expand(id){
 </script>
 <table class="tbl list">
     <?php
-    $showProject = true;
     echo displayFiles($AppUI, -1, $task_id, $project_id, $company_id);
     ?>
 </table>
