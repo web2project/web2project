@@ -1397,6 +1397,13 @@ class CTask extends w2p_Core_BaseObject
      * @param integer The target company
      *
      * WARNING: This is actually called staticly so $this is not available.
+     *
+     * 20130313 The $user_id parameter now has a different range:
+     *
+     *          null = Filter tasks assigned to currently logged in user
+     * 		0 = Tasks assigned to all users
+     *		> 0 = Tasks assigned to 'user_id'
+     *		< 0 = Tasks assigned to all other users except 'user_id'
      */
     public function getTasksForPeriod($start_date, $end_date, $company_id = 0, $user_id = null)
     {
@@ -1436,8 +1443,11 @@ class CTask extends w2p_Core_BaseObject
         if (($template_status = w2PgetConfig('template_projects_status_id')) != '') {
             $q->addWhere('project_status <> ' . $template_status);
         }
-        if ($user_id) {
+        if ($user_id > 0) {
             $q->addWhere('ut.user_id = ' . (int) $user_id);
+        }
+        if ($user_id < 0) {
+            $q->addWhere('ut.user_id != ' . -((int) $user_id));
         }
 
         if ($company_id) {

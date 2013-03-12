@@ -1874,7 +1874,6 @@ function getFolders($parent) {
 
     $file_folder = new CFile_Folder();
     $folders = $file_folder->getFoldersByParent($parent);
-
 	$s = '';
 	// display each child
 	foreach ($folders as $row) {
@@ -1958,7 +1957,6 @@ function countFiles($folder) {
 function displayFiles($AppUI, $folder_id, $task_id, $project_id, $company_id) {
 	global $m, $tab, $xpg_min, $xpg_pagesize, $showProject, $file_types,
             $company_id, $current_uri, $w2Pconfig, $canEdit;
-
     // SETUP FOR FILE LIST
 	$q = new w2p_Database_Query();
 	$q->addQuery('f.*, max(f.file_id) as latest_id, count(f.file_version) as file_versions,
@@ -4212,7 +4210,8 @@ function getEventTooltip($event_id) {
  */
 function getTaskLinks($startPeriod, $endPeriod, &$links, $strMaxLen, $company_id = 0, $minical = false) {
 	global $a, $AppUI;
-	$tasks = CTask::getTasksForPeriod($startPeriod, $endPeriod, $company_id, 0);
+	// List only tasks not belonging to the currently logged in user
+	$tasks = CTask::getTasksForPeriod($startPeriod, $endPeriod, $company_id, -$AppUI->user_id);
 	$tf = $AppUI->getPref('TIMEFORMAT');
 	//subtract one second so we don't have to compare the start dates for exact matches with the startPeriod which is 00:00 of a given day.
 	$startPeriod->subtractSeconds(1);
