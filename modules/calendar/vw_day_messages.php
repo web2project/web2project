@@ -3,10 +3,10 @@ if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
 
-global $first_time, $last_time;
+global $first_time, $last_time, $company_id;
 
 // Get the messages posted in topics/forums watched (and viewable) by the currently logged in user
-$msgs = CForum::getWatchedMessages($first_time, $last_time, $AppUI->user_id);
+$msgs = CForum::getWatchedMessages($first_time, $last_time, $AppUI->user_id, $company_id);
 
 echo '<table cellspacing="2" cellpadding="4" border="0" width="100%" class="tbl list">';
 if (count($msgs) > 0) {
