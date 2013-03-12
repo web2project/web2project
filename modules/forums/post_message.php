@@ -124,7 +124,7 @@ if (function_exists('styleRenderBoxTop')) {
             </table>
         </td></tr>
         <tr>
-            <th valign="top" colspan="2"><strong><?php
+            <th valign="top" colspan="3"><strong><?php
         echo $AppUI->_($message_id ? 'Edit Message' : 'Add Message');
         ?></strong></th>
         </tr>
@@ -135,16 +135,16 @@ if (function_exists('styleRenderBoxTop')) {
             ?>
             <tr>
                 <td align="right"><?php echo $AppUI->_('Author') ?>:</td>
-                <td align="left"><?php echo CContact::getContactByUserid($messageAuthor); ?> (<?php echo $AppUI->formatTZAwareTime($message->message_date, $df . ' ' . $tf); ?>)</td>
+                <td align="left"><?php echo CContact::getContactByUserid($messageAuthor); ?> (<?php echo $AppUI->formatTZAwareTime($message->message_date, $df . ' ' . $tf); ?>)</td><td width="100%">&nbsp;</td>
             </tr>
-            <tr><td align="right"><?php echo $AppUI->_('Subject') ?>:</td><td align="left"><?php echo $message->message_title ?></td></tr>
+            <tr><td align="right"><?php echo $AppUI->_('Subject') ?>:</td><td align="left"><?php echo $message->message_title ?></td><td width="100%">&nbsp;</td></tr>
             <tr><td align="right" valign="top"><?php echo $AppUI->_('Message') ?>:</td><td align="left">
             <?php
                 $messageBody = $bbparser->qparse($last_message->message_body);
                 $messageBody = nl2br($messageBody);
                 echo $messageBody;
-            ?></td></tr>
-            <tr><td colspan="2" align="left"><hr /></td></tr>
+            ?></td><td width="100%">&nbsp;</td></tr>
+            <tr><td colspan="3" align="left"><hr /></td></tr>
             <?php
         } //end of if-condition
 
@@ -153,13 +153,13 @@ if (function_exists('styleRenderBoxTop')) {
             <td align="right"><?php echo $AppUI->_('Subject'); ?>:</td>
             <td>
                 <input type="text" class="text" name="message_title" value="<?php echo ($message_id || $message_parent < 0 ? '' : 'Re: ') . $message->message_title; ?>" size="50" maxlength="250" />
-            </td>
+            </td><td width="100%">&nbsp;</td>
         </tr>
         <tr>
             <td align="right" valign="top"><?php echo $AppUI->_('Message'); ?>:</td>
             <td align="left" valign="top">
                <textarea cols="60" name="message_body" style="height:200px"><?php echo (($message_id == 0) and ($message_parent != -1)) ? "\n>" . $last_message->message_body . "\n\n" : $message->message_body; ?></textarea>
-            </td>
+            </td><td width="100%">&nbsp;</td>
         </tr>
         <tr>
             <td>
@@ -181,12 +181,12 @@ if (function_exists('styleRenderBoxTop')) {
                 [quote][/quote] Quoted Text. Example: [quote]<q>This text will be superscript</q>[/quote]<br />
                 [code][/code] Text in code format. Example: [code]//This is a code comment;[/code]<br />
                 '); ?>
-            </td>
+            </td><td width="100%">&nbsp;</td>
         </tr>
         <tr>
             <td>
                 <input type="button" value="<?php echo $AppUI->_('back'); ?>" class="button" onclick="javascript:window.location='./index.php?<?php echo $back_url; ?>';" />
-            </td>
+            </td><td width="100%">&nbsp;</td>
             <td align="right"><?php
             echo '<input type="button" value="' . $AppUI->_('submit') . '" class=button onclick="submitIt()">';
         ?></td>
