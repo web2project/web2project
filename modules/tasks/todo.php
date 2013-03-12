@@ -184,7 +184,7 @@ for ($j = 0, $j_cmp = count($tasks); $j < $j_cmp; $j++) {
 // day view on dates <> now().
 $unix_date = strtotime((string)$date);
 for ($j = 0, $j_cmp = count($tasks); $j < $j_cmp; $j++) {
-	$tasks[$j]['task_due_in'] = (string)round((strtotime($tasks[0]['task_end_date']) - $unix_date) / 86400);
+	$tasks[$j]['task_due_in'] = (string)round((strtotime($tasks[$j]['task_end_date']) - $unix_date) / 86400);
      if ($tasks[$j]['task_due_in'] == -0) {
 		$tasks[$j]['task_due_in'] = '0';
      }
