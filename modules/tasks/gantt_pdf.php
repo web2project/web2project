@@ -82,18 +82,8 @@ if ($caller == 'todo') {
         ' task_hours_worked, task_order, task_project, task_milestone, task_access,'.
         ' task_owner, project_name, project_color_identifier, task_dynamic');
 	$q->addJoin('projects', 'p', 'project_id = t.task_project', 'inner');
-    $q->addOrder('p.project_id, t.task_end_date');
+     $q->addOrder('p.project_id, t.task_end_date');
 
-
-
-
-
-
-
-
-
-
-    
 	if ($project_id) {
 		$q->addWhere('task_project = ' . (int)$project_id);
 	}
@@ -474,10 +464,10 @@ $show_gantt_taskdetails = ($showTaskNameOnly == '1') ? 0 : 1;
 $ganttfile = $outpfiles;
 
 // Initialize PDF document 
-$font_dir = W2P_BASE_DIR . '/lib/ezpdf/fonts';
+$font_dir = W2P_BASE_DIR . '/lib/ezpdf/src/fonts';
 $temp_dir = W2P_BASE_DIR . '/files/temp';
 $base_url = w2PgetConfig('base_url');
-require( $AppUI->getLibraryClass( 'ezpdf/class.ezpdf' ) );
+require( $AppUI->getLibraryClass( 'ezpdf/src/Cezpdf' ) );
 $pdf = new Cezpdf($paper='A4',$orientation='landscape');
 $pdf->ezSetCmMargins( 2, 1.5, 1.4, 1.4 ); //(top, bottom, left, right)
 /*
@@ -487,13 +477,15 @@ $pdf->saveState();
 if ( $skip_page ) $pdf->ezNewPage();
 $skip_page++;
 $page_header = $pdf->openObject();
-$pdf->selectFont( "$font_dir/Helvetica-Bold.afm" );
+$pdf->isUnicode = true;
+$pdf->selectFont( "$font_dir/FreeSerif" );
 $ypos= $pdf->ez['pageHeight'] - ( 30 + $pdf->getFontHeight(12) );
 $doc_title = strEzPdf( $projects[$project_id]['project_name'], UI_OUTPUT_RAW);
 $pwidth=$pdf->ez['pageWidth'];
 $xpos= round( ($pwidth - $pdf->getTextWidth( 12, $doc_title ))/2, 2 );
 $pdf->addText( $xpos, $ypos, 12, $doc_title) ;
-$pdf->selectFont( "$font_dir/Helvetica.afm" );
+$pdf->selectFont( "$font_dir/Helvetica" );
+$pdf->isUnicode = false;
 $date = new w2p_Utilities_Date();
 $xpos = round( $pwidth - $pdf->getTextWidth( 10, $date->format($df)) - $pdf->ez['rightMargin'] , 2);
 $doc_date = strEzPdf($date->format( $df ));
@@ -509,9 +501,9 @@ for ($i=0; $i < count($ganttfile); $i++) {
     $pdf->ezColumnsStart(array('num' =>1, 'gap' =>0));
     $pdf->ezImage( $gf, 0, 765, 'width', 'left'); // No pad, width = 800px, resize = 'none' (will go to next page if image height > remaining page space)
     if ($showNoMilestones == '1') {
-        $pdf->ezImage( $gpdfkeyNM, 0, 765, 'width', 'left');
+        $pdf->ezImage( $gpdfkeyNM, 10, 365, 'none', 'right');
     } else {
-        $pdf->ezImage( $gpdfkey, 0, 765, 'width', 'left');
+        $pdf->ezImage( $gpdfkey, 10, 365, 'none', 'right');
     }
     $pdf->ezColumnsStop();
 }
