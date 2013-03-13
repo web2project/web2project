@@ -19,9 +19,9 @@ if ($err = db_error()) {
 	$AppUI->redirect();
 }
 
-$font_dir = W2P_BASE_DIR . '/lib/ezpdf/fonts';
+$font_dir = W2P_BASE_DIR . '/lib/ezpdf/src/fonts';
 
-require ($AppUI->getLibraryClass('ezpdf/class.ezpdf'));
+require ($AppUI->getLibraryClass('ezpdf/src/Cezpdf'));
 
 $pdf = new Cezpdf($paper = 'A4', $orientation = 'landscape');
 $pdf->ezSetCmMargins(1, 2, 1.5, 1.5);

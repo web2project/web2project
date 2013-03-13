@@ -275,10 +275,10 @@ if ($do_report) {
 			$uname = 'All Users';
 		}
 
-		$font_dir = W2P_BASE_DIR . '/lib/ezpdf/fonts';
+		$font_dir = W2P_BASE_DIR . '/lib/ezpdf/src/fonts';
 		$temp_dir = W2P_BASE_DIR . '/files/temp';
 		$base_url = w2PgetConfig('base_url');
-		require ($AppUI->getLibraryClass('ezpdf/class.ezpdf'));
+		require ($AppUI->getLibraryClass('ezpdf/src/Cezpdf'));
 
 		$pdf = new Cezpdf();
 		$pdf->ezSetCmMargins(1, 2, 1.5, 1.5);

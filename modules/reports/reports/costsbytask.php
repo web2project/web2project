@@ -150,10 +150,10 @@ $billingCategory = w2PgetSysVal('BudgetCategory');
 
         if ($log_pdf) {
             // make the PDF file
-            $font_dir = W2P_BASE_DIR . '/lib/ezpdf/fonts';
+            $font_dir = W2P_BASE_DIR . '/lib/ezpdf/src/fonts';
             $temp_dir = W2P_BASE_DIR . '/files/temp';
 
-            require ($AppUI->getLibraryClass('ezpdf/class.ezpdf'));
+            require ($AppUI->getLibraryClass('ezpdf/src/Cezpdf'));
 
             $pdf = new Cezpdf($paper = 'A4', $orientation = 'landscape');
             $pdf->ezSetCmMargins(1, 1, 1, 1);
