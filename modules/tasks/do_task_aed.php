@@ -20,7 +20,6 @@ $new_task_project = (int) w2PgetParam($_POST, 'new_task_project', 0);
 $isNotNew = $task_id;
 
 $action = ($del) ? 'deleted' : 'stored';
-
 // Find the task if we are set
 $task_end_date = null;
 $obj = new CTask();
@@ -56,7 +55,6 @@ if ($obj->task_dynamic != 1) {
 if (!array_key_exists('task_dynamic', $_POST)) {
     $obj->task_dynamic = false;
 }
-
 // Make sure task milestone is set or reset as appropriate
 if (!isset($_POST['task_milestone'])) {
     $obj->task_milestone = false;
@@ -96,19 +94,17 @@ if ($obj->task_end_date) {
 // prepare (and translate) the module name ready for the suffix
 if ($del) {
     $result = $obj->delete();
-    if (is_array($result)) {
-        $AppUI->setMsg($msg, UI_MSG_ERROR);
+    if (!$result) {
+        $AppUI->setMsg($obj->getError(), UI_MSG_ERROR);
         $AppUI->redirect('m=tasks&a=view&task_id='.$task_id);
     } else {
         $AppUI->setMsg('Task deleted');
         $AppUI->redirect('m=projects&a=view&project_id='.$obj->task_project);
     }
 }
-
 $result = $obj->store();
-
-if (is_array($result)) {
-    $AppUI->setMsg($result, UI_MSG_ERROR, true);
+if (!$result) {
+    $AppUI->setMsg($obj->getError(),UI_MSG_ERROR, true);
     $AppUI->holdObject($obj);
     $AppUI->redirect('m=tasks&a=addedit');
 }
@@ -132,7 +128,6 @@ if ($result) {
                 $ned = new w2p_Utilities_Date($obj->task_start_date);
                 $ned->addDuration($obj->task_duration, $obj->task_duration_type);
                 $obj->task_end_date = $ned->format(FMT_DATETIME_MYSQL);
-
                 $obj->store();
             }
         }
