@@ -74,7 +74,7 @@ $cwd_hr = implode(', ', $cwd_conv);
                 <td>
                     <table><tr>
                     <?php
-                        echo '<td>' . arraySelect($hours, 'start_hour', 'size="1" onchange="setAMPM(this)" class="text"', $start_date ? $start_date->getHour() : $start) . '</td><td> : </td>';
+                        echo '<td>' . $AppUI->_('Start Time'). ':&nbsp;' . arraySelect($hours, 'start_hour', 'size="1" onchange="setAMPM(this)" class="text"', $start_date ? $start_date->getHour() : $start) . '</td><td> : </td>';
                         echo '<td>' . arraySelect($minutes, 'start_minute', 'size="1" class="text"', $start_date ? $start_date->getMinute() : '00') . '</td>';
                         if (stristr($AppUI->getPref('TIMEFORMAT'), '%p')) {
                             echo '<td><input type="text" name="start_hour_ampm" id="start_hour_ampm" value="' . ($start_date ? $start_date->getAMPM() : ($start > 11 ? 'pm' : 'am')) . '" disabled="disabled" class="text" size="2" /></td>';
@@ -95,7 +95,7 @@ $cwd_hr = implode(', ', $cwd_conv);
                     <td>
                         <table><tr>
                         <?php
-                            echo '<td>' . arraySelect($hours, 'end_hour', 'size="1" onchange="setAMPM(this)" class="text"', $end_date ? $end_date->getHour() : $end) . '</td><td> : </td>';
+                            echo '<td>' . $AppUI->_('End Time'). ':&nbsp;' .  arraySelect($hours, 'end_hour', 'size="1" onchange="setAMPM(this)" class="text"', $end_date ? $end_date->getHour() : $end) . '</td><td> : </td>';
                             echo '<td>' . arraySelect($minutes, 'end_minute', 'size="1" class="text"', $end_date ? $end_date->getMinute() : '00') . '</td>';
                             if (stristr($AppUI->getPref('TIMEFORMAT'), '%p')) {
                                 echo '<td><input type="text" name="end_hour_ampm" id="end_hour_ampm" value="' . ($end_date ? $end_date->getAMPM() : ($end > 11 ? 'pm' : 'am')) . '" disabled="disabled" class="text" size="2" /></td>';
