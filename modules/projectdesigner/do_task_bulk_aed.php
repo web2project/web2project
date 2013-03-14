@@ -307,7 +307,7 @@ if (is_array($selected) && count($selected)) {
 					//Option 99 (always at the bottom) - Delete
 				} elseif ($bulk_task_other == '99') {
 					$result = $upd_task->delete();
-                    if (is_array($result)) {
+                    if (!$result) {
                         break;
                     }
 				}
