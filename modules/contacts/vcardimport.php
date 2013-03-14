@@ -57,8 +57,8 @@ if (isset($_FILES['vcf']) && isset($_GET['suppressHeaders']) && (w2PgetParam($_G
 			}
 
 			// store vCard data for this object
-			if (($msg = $obj->store())) {
-				$AppUI->setMsg($msg, UI_MSG_ERROR);
+			if (!$obj->store()) {
+				$AppUI->setMsg($obj->getError(), UI_MSG_ERROR);
 			}
             $contactArray = array('email_alt' => $ci['EMAIL'][1]['value'][0][0],
                 'phone_alt' => $ci['TEL'][1]['value'][0][0],

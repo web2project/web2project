@@ -14,8 +14,8 @@ if (!$obj->bind($_POST)) {
 $action = ($del) ? 'deleted' : 'stored';
 $result = ($del) ? $obj->delete() : $obj->store();
 
-if (is_array($result)) {
-    $AppUI->setMsg($result, UI_MSG_ERROR, true);
+if (!$result) {
+    $AppUI->setMsg($obj->getError(), UI_MSG_ERROR, true);
     $AppUI->holdObject($obj);
     $AppUI->redirect('m=system&a=billingcode');
 }

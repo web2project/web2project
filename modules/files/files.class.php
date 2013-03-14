@@ -167,8 +167,8 @@ class CFile extends w2p_Core_BaseObject {
 			$task_log->task_log_creator = $this->_AppUI->user_id;
 			$date = new w2p_Utilities_Date();
 			$task_log->task_log_date = $date->format(FMT_DATETIME_MYSQL);
-			if ($msg = $task_log->store()) {
-				$this->_AppUI->setMsg($msg, UI_MSG_ERROR);
+			if (!$task_log->store()) {
+				$this->_AppUI->setMsg($task_log->getError(), UI_MSG_ERROR);
 			}
 		}
 		return null;
