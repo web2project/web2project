@@ -180,9 +180,6 @@ if ($project_id) {
 	$f = 'all';
 } else { 
 	$q->addWhere('project_active = 1');
-	if (($template_status = w2PgetConfig('template_projects_status_id')) != '') {
-		$q->addWhere('project_status <> ' . $template_status);
-	}
 }
 
 if ($task_id) {
@@ -318,7 +315,6 @@ if (!$project_id && !$task_id) {
 } else {
 	$q->addOrder('task_start_date, task_end_date');
 }
-//print_r($q->prepare());
 if ($canViewTask) {
 	$tasks = $q->loadList();
 }
