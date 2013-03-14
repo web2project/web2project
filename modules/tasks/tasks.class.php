@@ -325,6 +325,7 @@ class CTask extends w2p_Core_BaseObject
         $q->addQuery('company_name, project_name, project_color_identifier');
         $q->addQuery('contact_display_name as username');                       //TODO: deprecate?
         $q->addQuery('contact_display_name as task_owner_name');
+        $q->addQuery('project_status');
         $q->addGroup('task_id');
 
         $this->task_owner_name = '';

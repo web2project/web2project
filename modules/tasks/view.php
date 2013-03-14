@@ -420,23 +420,26 @@ function delIt() {
 <?php
 $query_string = '?m=tasks&a=view&task_id=' . $task_id;
 $tabBox = new CTabBox('?m=tasks&a=view&task_id=' . $task_id, '', $tab);
-
 $tabBox_show = 0;
+
+// A template project has no use for logs and task logs
 if ($obj->task_dynamic != 1 && 0 == $obj->task_represents_project) {
-	// tabbed information boxes
 	$tabBox_show = 1;
-	if (canView('task_log')) {
-		$tabBox->add(W2P_BASE_DIR . '/modules/tasks/vw_logs', 'Task Logs');
-	}
-	if ($task_log_id == 0) {
-		if (canAdd('task_log')) {
+	if ($obj->project_status != '6') {
+		// tabbed information boxes
+		if (canView('task_log')) {
+			$tabBox->add(W2P_BASE_DIR . '/modules/tasks/vw_logs', 'Task Logs');
+		}
+		if ($task_log_id == 0) {
+			if (canAdd('task_log')) {
+				$tabBox->add(W2P_BASE_DIR . '/modules/tasks/vw_log_update', 'Log');
+			}
+		} elseif (canEdit('task_log')) {
+			$tabBox->add(W2P_BASE_DIR . '/modules/tasks/vw_log_update', 'Edit Log');
+		} elseif (canAdd('task_log')) {
+			$tabBox_show = 1;
 			$tabBox->add(W2P_BASE_DIR . '/modules/tasks/vw_log_update', 'Log');
 		}
-	} elseif (canEdit('task_log')) {
-		$tabBox->add(W2P_BASE_DIR . '/modules/tasks/vw_log_update', 'Edit Log');
-	} elseif (canAdd('task_log')) {
-		$tabBox_show = 1;
-		$tabBox->add(W2P_BASE_DIR . '/modules/tasks/vw_log_update', 'Log');
 	}
 }
 
