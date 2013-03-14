@@ -718,11 +718,9 @@ class CTask extends w2p_Core_BaseObject
             if ($this->task_end_date == '') {
                 $this->task_end_date = '0000-00-00 00:00:00';
             }
-            if (($msg = parent::store())) {
-                $this->_error['store'] = $msg;
-                return $msg;
+            if (!parent::store()) {
+                return false;
             }
-
             // if task_status changed, then update subtasks
             if ($this->task_status != $oTsk->task_status) {
                 $this->updateSubTasksStatus($this->task_status);
