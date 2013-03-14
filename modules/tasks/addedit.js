@@ -157,19 +157,42 @@ function isInArray(myArray, intValue) {
 	return false;
 }
 
+/* Used below, controls visibility of <tr> from a specific class */
+function controlTRVisibility(matchClass,state) {
+    var elems = document.getElementsByTagName('tr'), i;
+    for (i in elems) {
+        if(elems[i].className == matchClass) {
+	    if (state) {
+	        elems[i].style.visibility = 'visible';
+	    } else {
+	        elems[i].style.visibility = 'hidden';
+	    }
+        }
+    }
+}
+
 /**
  * This function turns on/off the End Date field based on the milestone status.
  *   This came about as a result of http://bugs.web2project.net/view.php?id=328
  */
-function toggleMilestone() {
+function toggleMilestone(text_normal, text_milestone) {
     var milestone = document.getElementById('task_milestone').checked;
     if (milestone) {
         //set finish date
         document.getElementById('end_date').value = document.getElementById('start_date').value;
         document.getElementById('task_end_date').value = document.getElementById('task_start_date').value;
-        document.getElementById('end_date').disabled = true;
+	// Also the finish time should match the start time and should be disabled
+        document.getElementById('end_hour').value = document.getElementById('start_hour').value;
+        document.getElementById('end_minute').value = document.getElementById('start_minute').value;
+	if (document.getElementById('end_hour_ampm') != null) {
+            document.getElementById('end_hour_ampm').value = document.getElementById('start_hour_ampm').value;
+        }
+        document.getElementById('task_duration').value = 0;
+        document.getElementById('start_date_div').innerHTML = text_milestone;
+        controlTRVisibility('end_date_ctrls', false);
     } else {
-        document.getElementById('end_date').disabled = false;
+        document.getElementById('start_date_div').innerHTML = text_normal;
+        controlTRVisibility('end_date_ctrls', true);
     }
 }
 

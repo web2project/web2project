@@ -225,7 +225,7 @@ function popContacts() {
 
                     <td align="right" nowrap="nowrap"><label for="task_milestone"><?php echo $AppUI->_('Milestone'); ?>?</label></td>
                     <td>
-                        <input type="checkbox" value="1" name="task_milestone" id="task_milestone" <?php if ($task->task_milestone) { ?>checked="checked"<?php } ?> onClick="toggleMilestone()" />
+                        <input type="checkbox" value="1" name="task_milestone" id="task_milestone" <?php if ($task->task_milestone) { ?>checked="checked"<?php } ?> onClick="toggleMilestone('<?php echo $AppUI->_('Start Date'); ?>:', '<?php echo $AppUI->_('Milestone Date'); ?>:')" />
                     </td>
                 </tr>
                 </table>

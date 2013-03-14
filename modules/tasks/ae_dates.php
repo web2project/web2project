@@ -43,7 +43,6 @@ $start_date = intval($task->task_start_date) ?
         $defaultDate->calcFinish(1, $task->task_duration_type);
 
 $task->task_duration = isset($task->task_duration) ? $task->task_duration : 1;
-
 $end_date = intval($task->task_end_date) ?
     new w2p_Utilities_Date($AppUI->formatTZAwareTime($task->task_end_date, '%Y-%m-%d %T')) :
         $defaultDate->calcFinish($task->task_duration + 1, $task->task_duration_type);
@@ -64,12 +63,12 @@ $cwd_hr = implode(', ', $cwd_conv);
     <table width="100%" border="0" cellpadding="4" cellspacing="0" class="std addedit">
         <?php if ($can_edit_time_information) { ?>
             <tr>
-                <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Start Date'); ?></td>
+                <td align="right" nowrap="nowrap"><div id="start_date_div"><?php echo $AppUI->_('Start Date'); ?>:</div></td>
                 <td nowrap="nowrap">
                     <input type='hidden' id='task_start_date' name='task_start_date' value='<?php echo $start_date ? $start_date->format(FMT_TIMESTAMP_DATE) : ''; ?>' />
                     <input type='text' onchange="setDate_new('datesFrm', 'start_date');" class='text' style='width:120px;' id='start_date' name='start_date' value='<?php echo $start_date ? $start_date->format($df) : ''; ?>' />
                     <a onclick="return showCalendar('start_date', '<?php echo $df ?>', 'datesFrm', null, true, true)" href="javascript: void(0);">
-                        <img src="<?php echo w2PfindImage('calendar.gif'); ?>" width="24" height="12" alt="<?php echo $AppUI->_('Calendar'); ?>" border="0" />
+                        <img style="vertical-align: middle" src="<?php echo w2PfindImage('calendar.gif'); ?>" width="24" height="12" alt="<?php echo $AppUI->_('Calendar'); ?>" border="0" />
                     </a>
                 </td>
                 <td>
@@ -84,13 +83,13 @@ $cwd_hr = implode(', ', $cwd_conv);
                     </tr></table>
                 </td>
             </tr>
-            <tr>
-                <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Finish Date'); ?></td>
+            <tr class="end_date_ctrls" style="visibility: <?php echo $task->task_milestone ? 'hidden' : 'visible'; ?>">
+                <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Finish Date'); ?>:</td>
                 <td nowrap="nowrap">
                     <input type='hidden' id='task_end_date' name='task_end_date' value='<?php echo $end_date ? $end_date->format(FMT_TIMESTAMP_DATE) : ''; ?>' />
                     <input type='text' onchange="setDate_new('datesFrm', 'end_date');" class='text' style='width:120px;' id='end_date' name='end_date' value='<?php echo $end_date ? $end_date->format($df) : ''; ?>' />
                     <a onclick="return showCalendar('end_date', '<?php echo $df ?>', 'datesFrm', null, true, true)" href="javascript: void(0);">
-                        <img src="<?php echo w2PfindImage('calendar.gif'); ?>" width="24" height="12" alt="<?php echo $AppUI->_('Calendar'); ?>" border="0" />
+                        <img style="vertical-align: middle" src="<?php echo w2PfindImage('calendar.gif'); ?>" width="24" height="12" alt="<?php echo $AppUI->_('Calendar'); ?>" border="0" />
                     </a>
                 </td>
                     <td>
@@ -105,7 +104,7 @@ $cwd_hr = implode(', ', $cwd_conv);
                         </tr></table>
                     </td>
             </tr>
-            <tr>
+            <tr class="end_date_ctrls" style="visibility: <?php echo $task->task_milestone ? 'hidden' : 'visible'; ?>">
                 <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Expected Duration'); ?>:</td>
                 <td nowrap="nowrap">
 					<input type="text" class="text" name="task_duration" id="task_duration" maxlength="8" size="6" value="<?php echo $task->task_duration; ?>" />
@@ -115,7 +114,7 @@ $cwd_hr = implode(', ', $cwd_conv);
                 </td>
                 <td><?php echo $AppUI->_('Daily Working Hours') . ': ' . $w2Pconfig['daily_working_hours']; ?></td>
             </tr>
-            <tr>
+            <tr class="end_date_ctrls" style="visibility: <?php echo $task->task_milestone ? 'hidden' : 'visible'; ?>">
                 <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Calculate'); ?>:</td>
                 <td nowrap="nowrap">
                     <input type="button" value="<?php echo $AppUI->_('Duration'); ?>" onclick="xajax_calcDuration(document.datesFrm.task_start_date.value,document.datesFrm.start_hour.value,document.datesFrm.start_minute.value,document.datesFrm.task_end_date.value,document.datesFrm.end_hour.value,document.datesFrm.end_minute.value,document.datesFrm.task_duration_type.value);" class="button" />
