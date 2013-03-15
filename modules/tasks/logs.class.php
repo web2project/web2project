@@ -266,6 +266,7 @@ class CTask_Log extends w2p_Core_BaseObject
                 $this->_AppUI->setMsg($task->getError(), UI_MSG_ERROR, true);
             }
 
+	    $task->updateDynamics();
             $task->pushDependencies($task_id, $task->task_end_date);
         }
 
