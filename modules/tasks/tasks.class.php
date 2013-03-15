@@ -1077,7 +1077,6 @@ class CTask extends w2p_Core_BaseObject
         $task_end_int = strtotime($lastEndDate);
 
         $dependent_tasks = $this->getDependentTaskList($task_id);
-
         foreach($dependent_tasks as $_task_id => $_task_data) {
             $task_start_int = strtotime($_task_data['task_start_date']);
 
@@ -1119,6 +1118,14 @@ class CTask extends w2p_Core_BaseObject
             $q->addUpdate('task_updated', "'" . $q->dbfnNowWithTZ() . "'", false, true);
             $q->addWhere('task_dynamic > 1 AND task_id = ' . (int) $_task_id);
             $q->exec();
+
+	    // Before going on down the tree we need to make sure that parent
+	    // dynamic tasks are also updated. I am aware this will add a lot
+	    // of overhead...
+            $this_task = new CTask();
+            $this_task->overrideDatabase($this->_query);
+            $this_task->load($_task_id);
+            $this_task->updateDynamics();
             
             $this->pushDependencies($_task_id, $new_end_date);
         }
