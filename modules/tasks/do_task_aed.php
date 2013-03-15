@@ -106,7 +106,7 @@ $result = $obj->store();
 if (!$result) {
     $AppUI->setMsg($obj->getError(),UI_MSG_ERROR, true);
     $AppUI->holdObject($obj);
-    $AppUI->redirect('m=tasks&a=addedit');
+    $AppUI->redirect('m=tasks&a=addedit&task_id='.$task_id);
 }
 
 if ($result) {
@@ -114,9 +114,11 @@ if ($result) {
         $obj->updateAssigned($hassign, $hperc_assign_ar);
     }
 
+    // This call has to be here to make sure that old dependencies are
+    // cleared on save, even if there's no new dependencies
+    $obj->updateDependencies($hdependencies,  $obj->task_id);
     if (isset($hdependencies) && '' != $hdependencies) {
         // there are dependencies set!
-        $obj->updateDependencies($hdependencies,  $obj->task_id);
         $nsd = new w2p_Utilities_Date($obj->get_deps_max_end_date($obj));
 
         if (isset($start_date)) {
