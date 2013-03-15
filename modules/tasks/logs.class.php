@@ -220,7 +220,7 @@ class CTask_Log extends w2p_Core_BaseObject
     {
         $this->updateTaskSummary(null, $this->_task_id);
 
-        parent::hook_postStore();
+        parent::hook_postDelete();
     }
 	/**
 	 * Updates the variable information on the task.
@@ -236,17 +236,13 @@ class CTask_Log extends w2p_Core_BaseObject
         $q = $this->_getQuery();
 
         if($this->_perms->checkModuleItem('tasks', 'edit', $task_id)) {
-            if ($this->task_log_percent_complete < 100) {
-                $q->addQuery('task_log_percent_complete, task_log_date');
-                $q->addTable('task_log');
-                $q->addWhere('task_log_task = ' . (int)$task_id);
-                $q->addOrder('task_log_date DESC, task_log_id DESC');
-                $q->setLimit(1);
-                $results = $q->loadHash();
-                $percentComplete = $results['task_log_percent_complete'];
-            } else {
-                $percentComplete = 100;
-            }
+            $q->addQuery('task_log_percent_complete, task_log_date');
+            $q->addTable('task_log');
+            $q->addWhere('task_log_task = ' . (int)$task_id);
+            $q->addOrder('task_log_date DESC, task_log_id DESC');
+            $q->setLimit(1);
+            $results = $q->loadHash();
+            $percentComplete = $results['task_log_percent_complete'];
 
             $task = new CTask();
             $task->overrideDatabase($this->_query);
