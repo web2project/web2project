@@ -210,6 +210,7 @@ $count = 0;
 */
 $gtask_sliced = array() ;
 $gtask_sliced = smart_slice( $gantt_arr, $showNoMilestones, $printpdfhr, $e1->dateDiff($s1) );
+
 $page = 0 ;					// Numbering of output files
 $outpfiles = array();		// array of output files to be returned to caller
 $taskcount = 0 ;
@@ -220,6 +221,22 @@ if ( count( $gtask_sliced ) > 1 ) {
         $task_index[$gantt_arr[$i][0]['task_id']] = $i+1 ;
     }
     $ctflag = true;
+}
+
+// find out DateRange from gant_arr
+$tasks_start_date = new w2p_Utilities_Date('3000-12-31');
+$tasks_end_date = new w2p_Utilities_Date('1000-01-01'); 
+for ($i = 0, $i_cmp = count($gantt_arr); $i < $i_cmp; $i++) {
+    $a = $gantt_arr[$i][0];
+    $nsd = new w2p_Utilities_Date($a['task_start_date']);
+    $ned = new w2p_Utilities_Date($a['task_end_date']);
+	
+    if (Date::compare($tasks_start_date, $nsd) > 0) {
+        $tasks_start_date = $nsd;
+    }
+    if (Date::compare($tasks_end_date, $ned) < 0) {
+        $tasks_end_date = $ned;
+    }
 }
 
 foreach ($gtask_sliced as $gts) {
@@ -243,37 +260,7 @@ foreach ($gtask_sliced as $gts) {
 	$gantt->setColumnHeaders($columnNames, $columnSizes);
 	$gantt->setProperties(array('showhgrid' => true));
 
-    if (!$start_date || !$end_date) {
-        // find out DateRange from gant_arr
-        $d_start = new w2p_Utilities_Date();
-        $d_end = new w2p_Utilities_Date();
-        $taskArray = count($gantt_arr);
-        for ($i = 0, $i_cmp = $taskArray; $i < $i_cmp; $i++) {
-            $a = $gantt_arr[$i][0];
-            $start = substr($a['task_start_date'], 0, 10);
-            $end = substr($a['task_end_date'], 0, 10);
-
-            $d_start->Date($start);
-            $d_end->Date($end);
-
-            if ($i == 0) {
-                $min_d_start = $d_start;
-                $max_d_end = $d_end;
-                $start_date = $start;
-                $end_date = $end;
-            } else {
-                if (Date::compare($min_d_start, $d_start) > 0) {
-                    $min_d_start = $d_start;
-                    $start_date = $start;
-                }
-                if (Date::compare($max_d_end, $d_end) < 0) {
-                    $max_d_end = $d_end;
-                    $end_date = $end;
-                }
-            }
-        }
-    }
-    $gantt->setDateRange($start_date, $end_date);
+    $gantt->setDateRange($tasks_start_date, $tasks_end_date);
 
     reset($projects);
     foreach ($projects as $p) {
@@ -498,6 +485,9 @@ $gpdfkeyNM = W2P_BASE_DIR. '/modules/tasks/images/ganttpdf_keyNM.png';
 $pdf->ezStartPageNumbers( 802 , 30 , 10 ,'left','Page {PAGENUM} of {TOTALPAGENUM}') ;
 for ($i=0; $i < count($ganttfile); $i++) {
     $gf = $ganttfile[$i];
+    if ($i > 0) {
+	$pdf->ezNewPage();
+    }
     $pdf->ezColumnsStart(array('num' =>1, 'gap' =>0));
     $pdf->ezImage( $gf, 0, 765, 'width', 'left'); // No pad, width = 800px, resize = 'none' (will go to next page if image height > remaining page space)
     if ($showNoMilestones == '1') {

@@ -134,7 +134,7 @@ function strEzPdf($text) {
 function smart_slice( $arr, $showNoMilestones, $notUsed, $day_diff ) {
     global $gtask_sliced;
 
-    $length = ($showNoMilestones) ? 26 : 25;
+    $length = ($showNoMilestones) ? 52 : 50;
     if ($day_diff < 90) {
         $length = $length - 2;
     } else if ($day_diff >=90 && $day_diff < 1096) {
@@ -143,7 +143,7 @@ function smart_slice( $arr, $showNoMilestones, $notUsed, $day_diff ) {
         $length++;
     }
 
-    if ( count($arr) > $length ) {
+    while ( count($arr) > $length ) {
         $found = 0 ;
         for ( $i = $length-3 ; $i<$length ; $i++ ) {
             if ( $arr[$i][0]['task_dynamic'] != 0 ) {
@@ -169,9 +169,9 @@ function smart_slice( $arr, $showNoMilestones, $notUsed, $day_diff ) {
             $cut = $found ;									//include found dynamic task in higher level array
         }
         $gtask_sliced[] = array_slice( $arr, 0, $cut );
-    } else {
-        $gtask_sliced[] = $arr ;
+	$arr = array_slice( $arr, $cut );
     }
+    $gtask_sliced[] = $arr ;
     return $gtask_sliced ;
 }
 
