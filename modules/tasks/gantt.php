@@ -315,6 +315,8 @@ if ($hide_task_groups) {
 
 $gantt->loadTaskArray($gantt_arr);
 
+$durnTypes = w2PgetSysVal('TaskDurationType');
+
 $row = 0;
 for ($i = 0, $i_cmp = count($gantt_arr); $i < $i_cmp; $i++) {
     $a = $gantt_arr[$i][0];
@@ -445,17 +447,12 @@ for ($i = 0, $i_cmp = count($gantt_arr); $i < $i_cmp; $i++) {
             $gantt->addMilestone($fieldArray, $a['task_start_date'], $color, 0, $captionToTheLeft);
             }
         } else {
-            $type = $a['task_duration_type'];
-            $dur = $a['task_duration'];
-            if ($type == 24) {
-                $dur *= $w2Pconfig['daily_working_hours'];
-            }
+	    $dur = $a['task_duration'] . ' ' . mb_substr($AppUI->_($durnTypes[$a['task_duration_type']]), 0, 1);
 
             if ($showWork == '1') {
-                $dur = round($a['task_hours_worked'], 0);
+                $dur = round($a['task_hours_worked'], 0) . ' h';
             }
 
-            $dur .= ' h';
             $height = ($a['task_dynamic'] == 1) ? 0.1 : 0.6;
             if ($showTaskNameOnly == '1') {
                 $columnValues = array('task_name' => $name);

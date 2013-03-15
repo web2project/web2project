@@ -239,6 +239,8 @@ for ($i = 0, $i_cmp = count($gantt_arr); $i < $i_cmp; $i++) {
     }
 }
 
+$durnTypes = w2PgetSysVal('TaskDurationType');
+
 foreach ($gtask_sliced as $gts) {
 	$gantt = new w2p_Output_GanttRenderer($AppUI, $width);
 	$gantt->localize();
@@ -380,11 +382,7 @@ foreach ($gtask_sliced as $gts) {
                 $gantt->addMilestone($fieldArray, $a['task_start_date'], $color);
             } //this closes the code that is not processed if hide milestones is checked ///////////////
         } else {
-            $type = $a['task_duration_type'];
-            $dur = $a['task_duration'];
-            if ($type == 24) {
-                $dur *= $w2Pconfig['daily_working_hours'];
-            }
+	    $dur = $a['task_duration'] . ' ' . mb_substr($AppUI->_($durnTypes[$a['task_duration_type']]), 0, 1);
 
             if ($showWork == '1') {
                 $work_hours = 0;
@@ -409,10 +407,9 @@ foreach ($gtask_sliced as $gts) {
                 $work_hours += $wh2;
                 $q->clear();
                 //due to the round above, we don't want to print decimals unless they really exist
-                $dur = $work_hours;
+                $dur = $work_hours . ' h';
             }
 
-            $dur .= ' h';
             $enddate = new w2p_Utilities_Date($end);
             $startdate = new w2p_Utilities_Date($start);
             $height = ($a['task_dynamic'] == 1) ? 0.1 : 0.6;
