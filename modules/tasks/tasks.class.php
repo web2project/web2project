@@ -196,10 +196,7 @@ class CTask extends w2p_Core_BaseObject
          * to get things in a knot.
          * Note: some of these checks may be problematic and might have to be removed
          */
-        static $addedit;
-        if (!isset($addedit)) {
-            $addedit = w2PgetParam($_POST, 'dosql', '') == 'do_task_aed' ? true : false;
-        }
+        $addedit = w2PgetParam($_POST, 'dosql', '') == 'do_task_aed' ? true : false;
         $this_dependencies = array();
 
         /*
@@ -214,8 +211,6 @@ class CTask extends w2p_Core_BaseObject
         } else {
             $this_dependencies = explode(',', $this->getDependencies());
         }
-        // Set to false for recursive updateDynamic calls etc.
-        $addedit = false;
 
         // Have deps
         if (array_sum($this_dependencies)) {
