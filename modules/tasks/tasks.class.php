@@ -371,26 +371,35 @@ class CTask extends w2p_Core_BaseObject
             $q->clear();
 
             /*
-             * Update allocated hours based on children with duration type of 'days'
-             * use the daily working hours instead of the full 24 hours to calculate
-             * dynamic task duration!
+             * Update allocated hours based on children with duration type of 'days'. 
+	     * Previously the code converted the result to working hours, but now its kept in days.
              */
             $q->addTable('tasks');
-            $q->addQuery(' SUM(task_duration * ' . w2PgetConfig('daily_working_hours') . ')');
-            $q->addWhere('task_parent = ' . (int) $modified_task->task_id . ' AND task_id <> ' . $modified_task->task_id . ' AND task_duration_type <> 1 ');
+            $q->addQuery(' SUM(task_duration)');
+            $q->addWhere('task_parent = ' . (int) $modified_task->task_id . ' AND task_id <> ' . $modified_task->task_id . ' AND task_duration_type = 24 ');
             $q->addGroup('task_parent');
             $children_allocated_hours2 = (float) $q->loadResult();
             $q->clear();
 
-            // sum up the two distinct duration values for the children with duration type 'hrs'
-            // and for those with the duration type 'day'
-            $children_allocated_hours = $children_allocated_hours1 + $children_allocated_hours2;
+	    // If all the child tasks have their durations expressed in the same unit (hours or days),
+	    // then change this tasks' duration type to match.
 
-            if ($modified_task->task_duration_type == 1) {
-                $modified_task->task_duration = round($children_allocated_hours, 2);
-            } else {
-                $modified_task->task_duration = round($children_allocated_hours / w2PgetConfig('daily_working_hours'), 2);
-            }
+	    // If all are is hours...
+	    if (((int)$children_allocated_hours1 != 0) && ((int)$children_allocated_hours2 == 0)) {
+		$modified_task->task_duration_type = 1;
+		$modified_task->task_duration = round($children_allocated_hours1,2);
+	    } else if (((int)$children_allocated_hours1 == 0) && ((int)$children_allocated_hours2 != 0)) {
+		$modified_task->task_duration_type = 24;
+		$modified_task->task_duration = round($children_allocated_hours2,2);
+	    } else {
+		// Otherwise set the duration type to hours and convert everything to it
+		$modified_task->task_duration_type = 1;
+		/* Sum up the two distinct duration values for the children with duration type 'hrs'
+                 * and for those with the duration type 'day'. Use the daily working hours instead 
+		 * of the full 24 hours to calculate dynamic task duration!
+ 		 */
+                $modified_task->task_duration = round($children_allocated_hours1 + ($children_allocated_hours2 * w2PgetConfig('daily_working_hours')),2);
+	    }
 
             //Update worked hours based on children
             $q->addTable('tasks', 't');
@@ -420,7 +429,7 @@ class CTask extends w2p_Core_BaseObject
             //days
             $q->addTable('tasks');
             $q->addQuery('SUM(task_percent_complete * task_duration * ' . w2PgetConfig('daily_working_hours') . ')');
-            $q->addWhere('task_parent = ' . (int) $modified_task->task_id . ' AND task_id <> ' . $modified_task->task_id . ' AND task_duration_type <> 1 ');
+            $q->addWhere('task_parent = ' . (int) $modified_task->task_id . ' AND task_id <> ' . $modified_task->task_id . ' AND task_duration_type = 24 ');
             $real_children_hours_worked += (float) $q->loadResult();
             $q->clear();
 
