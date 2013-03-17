@@ -141,12 +141,6 @@ class CContact extends w2p_Core_BaseObject
         $q->setDelete('contacts_methods');
         $q->addWhere('contact_id=' . (int) $this->_contact_id);
         $q->exec();
-
-        /**
-         * @todo I don't like that we have to initialize this basically null object but it ensures that we delete the custom fields from the object we just deleted.
-         */
-        $custom_field = new w2p_Core_CustomField('notUsed', 'notUsed2', 'notUsed3', 'notUsed4', 'notUsed5', 'notUsed6');
-        $custom_field->deleteByObject($this->_contact_id);
         
         parent::hook_postDelete();
     }

@@ -709,19 +709,36 @@ abstract class w2p_Core_BaseObject extends w2p_Core_Event implements w2p_Core_Li
      *   delete it. It is called regardless of whether or not the object can be
      *   deleted.. which may be determined by dependencies or permissions.
      *
+     * We're grabbing the id here before we delete the object because we might
+     *   need it later.
+     *
      * @return \w2p_Core_BaseObject
      */
-    protected function hook_preDelete()     {   return $this;   }
+    protected function hook_preDelete()
+    {
+        $this->_old_key = $this->{$this->_tbl_key};
+
+        return $this;
+        
+    }
     /**
-     * This method is called within $this->delete() after the delete was
-     *   successful. It is often used for cleanup elsewhere.
+     * This method is called only if $this->delete() was successful. It is
+     *   often used for cleaning up other things like custom fields or related
+     *   objects.
      *
      * @return \w2p_Core_BaseObject
      */
     protected function hook_postDelete()
     {
-        //NOTE: This only happens if the delete was successful.
-
+        /**
+         * @todo I don't like that we have to initialize this null but it's
+         *   needed to delete the custom field values from the object we just
+         *   deleted.
+         */
+        $custom_field = new w2p_Core_CustomField('notUsed', 'notUsed2',
+                'notUsed3', 'notUsed4', 'notUsed5', 'notUsed6');
+        $custom_field->deleteByObject($this->_old_key);
+        
         addHistory($this->_tbl, $this->{$this->_tbl_key}, 'delete');
         return $this;
     }
