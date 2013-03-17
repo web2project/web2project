@@ -185,7 +185,7 @@ abstract class w2p_Core_BaseObject extends w2p_Core_Event implements w2p_Core_Li
 
         $k = $this->_tbl_key;
         if ($oid) {
-            $this->$k = intval($oid);
+            $this->$k = (int) $oid;
         }
         $oid = $this->$k;
         if ($oid === null) {
@@ -387,7 +387,7 @@ abstract class w2p_Core_BaseObject extends w2p_Core_Event implements w2p_Core_Li
     {
         $k = $this->_tbl_key;
         if ($oid) {
-            $this->$k = intval($oid);
+            $this->$k = (int) $oid;
         }
 
         // First things first.  Are we allowed to delete?
@@ -426,7 +426,7 @@ abstract class w2p_Core_BaseObject extends w2p_Core_Event implements w2p_Core_Li
 
         $k = $this->_tbl_key;
         if ($oid) {
-            $this->$k = intval($oid);
+            $this->$k = (int) $oid;
         }
 
         $this->_dispatcher->publish(new w2p_Core_Event(get_class($this), 'preDeleteEvent'));
@@ -476,7 +476,7 @@ abstract class w2p_Core_BaseObject extends w2p_Core_Event implements w2p_Core_Li
      */
     public function getAllowedRecords($uid, $fields = '*', $orderby = '', $index = null, $extra = null, $table_alias = '')
     {
-        $uid = intval($uid);
+        $uid = (int) $uid;
         $uid || exit('FATAL ERROR ' . get_class($this) . '::getAllowedRecords failed');
         $deny = $this->_perms->getDeniedItems($this->_tbl_module, $uid);
         $allow = $this->_perms->getAllowedItems($this->_tbl_module, $uid);

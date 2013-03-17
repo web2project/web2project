@@ -285,9 +285,9 @@ class w2p_Output_MonthCalendar {
 		$today = $today->format('%Y%m%d%w');
 
 		$date = $this->this_month;
-		$this_day = intval($date->getDay());
-		$this_month = intval($date->getMonth());
-		$this_year = intval($date->getYear());
+		$this_day = (int) $date->getDay();
+		$this_month = (int) $date->getMonth();
+		$this_year = (int) $date->getYear();
 		setlocale(LC_TIME, 'en');
 		$cal = Date_Calc::getCalendarMonth($this_month, $this_year, '%Y%m%d%w', LOCALE_FIRST_DAY);
 		setlocale(LC_ALL, $this->_AppUI->user_lang);
@@ -307,10 +307,10 @@ class w2p_Output_MonthCalendar {
 
 			foreach ($week as $day) {
 				$this_day = new w2p_Utilities_Date($day);
-				$m = intval(substr($day, 4, 2));
-				$d = intval(substr($day, 6, 2));
-				$dow = intval(substr($day, 8, 1));
-				$cday = intval(substr($day, 0, 8));
+				$m = (int) substr($day, 4, 2);
+				$d = (int) substr($day, 6, 2);
+				$dow = (int) substr($day, 8, 1);
+				$cday = (int) substr($day, 0, 8);
 
 				//If we are on minical mode and we find tasks or events for this day then lets color code the cell depending on that
 				if (array_key_exists($cday, $this->events) && $this->styleMain == 'minical') {

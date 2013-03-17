@@ -1,88 +1,32 @@
 /* $Id$ $URL$ */
 /* WEB2PROJECT REQUIRED CLASSES */
 BODY {
-	margin-top: 0px;
-	margin-left: 0px;
-	margin-right: 0px;
-	margin-bottom: 10px;
-	font-family: Osaka,verdana,Sans-Serif;
-	font-size: 10pt;
-	color: #333;
-    background-color    : #f2f2f2;
     background-position : bottom;
     background-repeat   : repeat-x;
 }
 
-em {
-	font-weight: bold;
-	text-decoration: none;
-	font-style: normal;
-	color: #333;
+.quicknav {
+    margin-top: 7px;
 }
 
-A:link {
-	color: #333333;
-	text-decoration: none;
+.quicknav img {
+    margin-top: 3px;
+}
+.quicknav input {
+    vertical-align: top;
 }
 
-A:visited {
-	color: #333333;
-	text-decoration: none;
+.module-nav {
+    margin-bottom: 7px;
 }
-
-A:active {
-	color: #333333;
-	text-decoration: none;
-}
-
-A:hover {
-	color: #666666;
-	text-decoration: none;
-}
-
-TD {
-	font-family: Osaka,verdana,Sans-Serif;
-	font-size: 8pt
-}
-
-TR {
-	font-family: Osaka,verdana,Sans-Serif;
-	font-size: 8pt
-}
-
-h1, .title {
-	font-size: 15px;
-	font-weight: bold;
-	font-family: 'Trebuchet MS',Arial,Osaka,verdana,Sans-Serif;
-	color: #333;
-	margin-bottom: 0px;
-	margin-top: 5px;
-    text-transform: uppercase;
-}
-
-h2, .subtitle {
-	font-size: 12px;
-	font-weight: bold;
-	font-family: 'Trebuchet MS',Arial,Osaka,verdana,Sans-Serif;
-	color: #333;
-	margin-bottom: 0px;
-	margin-top: 15px;
-    text-transform: uppercase;
-}
-
-h3 {
-	font-size: 12px;
-	font-weight: bold;
-	font-family: 'Trebuchet MS',Arial,Osaka,verdana,Sans-Serif;
-	color: #333;
-	margin-bottom: 0px;
-	margin-top: 35px;
-    text-transform: uppercase;
+.module-nav .crumb-right {
+    margin-top: -3px;
 }
 
 div.crumb {
     margin-top: 15px;
 }
+
 /* Begin: Header Bar & Navigation for all pages */
 div.titlebar {
     background: url(images/titlegrad.jpg);
@@ -109,15 +53,6 @@ div.shadow {
 	text-decoration:none;
 }
 /* End: Header Bar & Navigation for all pages */
-
-bordertable {
-	border: 1px black solid;
-}
-
-.bordertable{
- border: 1px black solid;
-}
-
 
 .item {
 	color: #333;
@@ -444,14 +379,6 @@ table.mocal .event {
 }
 
 /* mini calendar - title area */
-table.minititle {
-}
-table.minititle td {
-}
-table.minititle th {
-	font-weight: normal;
-}
-
 table.minical {
 	background-color: #f2f2f2;
 	border : 1px solid #cccccc;
@@ -569,28 +496,6 @@ table.tbl td.event td {
     -moz-border-radius:4px;
     -webkit-border-radius:4px;
     border-radius:4px;
-}
-
-.quicknav {
-    margin-top: 7px;
-}
-
-.quicknav img {
-    margin-top: 3px;
-}
-.quicknav input {
-    vertical-align: top;
-}
-
-div.crumb {
-    margin-top: 15px;
-}
-
-.module-nav {
-    margin-bottom: 7px;
-}
-.module-nav .crumb-right {
-    margin-top: -3px;
 }
 
 .spacer {

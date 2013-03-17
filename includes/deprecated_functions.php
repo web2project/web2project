@@ -310,3 +310,16 @@ function makePass() {
     
 	return $auth->createNewPassword();
 }
+
+/**
+ * The original method didn't return anything..
+ *
+ * @todo Remove for v4.0 - caseydk 06 March 2013
+ * @deprecated
+ */
+function get_dependencies_pd($task_id) {
+    trigger_error("get_dependencies_pd() has been deprecated in v3.0 and will be removed in v4.0. Use CTask->getDependencyList instead.", E_USER_NOTICE);
+
+    $task = new CTask();
+	return $task->getDependencyList($task_id);
+}

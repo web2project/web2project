@@ -458,9 +458,9 @@ function showtask(&$arr, $level = 0, $notUsed = true, $today_view = false) {
 			$s .= $open_link;
 		}
 		if ($arr['task_dynamic'] == '1') {
-			$s .= '&nbsp;<a href="./index.php?m=tasks&amp;a=view&amp;task_id=' . $arr['task_id'] . '" ><b><i>' . $arr['task_name'] . '</i></b></a>' . w2PendTip();
+			$s .= '&nbsp;<a href="./index.php?m=tasks&amp;a=view&amp;task_id=' . $arr['task_id'] . '" ><b><i>' . $arr['task_name'] . '</i></b></a>';
 		} else {
-			$s .= '&nbsp;<a href="./index.php?m=tasks&amp;a=view&amp;task_id=' . $arr['task_id'] . '" >' . $arr['task_name'] . '</a>' . w2PendTip();
+			$s .= '&nbsp;<a href="./index.php?m=tasks&amp;a=view&amp;task_id=' . $arr['task_id'] . '" >' . $arr['task_name'] . '</a>';
 		}
 	} else {
 		$s .= '&nbsp;<a href="./index.php?m=tasks&amp;a=view&amp;task_id=' . $arr['task_id'] . '" >' . $arr['task_name'] . '</a>';
@@ -1153,7 +1153,7 @@ function weekDates_r($display_allocated_hours, $fromPeriod, $toPeriod) {
 	$s = new w2p_Utilities_Date($fromPeriod);
 	$e = new w2p_Utilities_Date($toPeriod);
 	$sw = getBeginWeek($s);
-	$ew = getEndWeek($e); //intval($e->Format('%U'));
+	$ew = getEndWeek($e);
 
 	$row = '';
 	for ($i = $sw; $i <= $ew; $i++) {
@@ -2252,8 +2252,8 @@ function getHelpdeskFolder() {
 	$q->addQuery('file_folder_id');
 	$q->addWhere('ff.file_folder_name = \'Helpdesk\'');
 	$ffid = $q->loadResult();
-	$q->clear();
-	return intval($ffid);
+
+	return (int) $ffid;
 }
 
 // From: modules/files/files.class.php
@@ -2321,18 +2321,6 @@ function file_show_attr() {
 	}
 
 	return ($str_out);
-}
-
-//TODO: modules/projectdesigner/projectdesigner.class.php
-function get_dependencies_pd($task_id) {
-	// Pull tasks dependencies
-	$q = new w2p_Database_Query;
-	$q->addTable('tasks', 't');
-	$q->addTable('task_dependencies', 'td');
-	$q->addQuery('t.task_id, t.task_name');
-	$q->addWhere('td.dependencies_task_id = ' . (int)$task_id);
-	$q->addWhere('t.task_id = td.dependencies_req_task_id');
-	$q->loadHashList();
 }
 
 /** Retrieve tasks with first task_end_dates within given project
@@ -3884,7 +3872,7 @@ function seconds2HM($sec, $padHours = true) {
     // there are 3600 seconds in an hour, so if we
     // divide total seconds by 3600 and throw away
     // the remainder, we've got the number of hours
-    $hours = intval(intval($sec) / 3600);
+    $hours = (int) ($sec / 3600);
     // with the remaining seconds divide them by 60
     // and then round the floating number to get the precise minute
     $minutes = intval(round(($sec - ($hours * 3600)) / 60) ,0);
@@ -3899,10 +3887,7 @@ function seconds2HM($sec, $padHours = true) {
         $minutes = $minutes * (-1);
     }
     $HM .= str_pad($minutes, 2, "0", STR_PAD_LEFT);
-    //$seconds = intval($sec % 60);
 
-    // add to $hms, again with a leading 0 if needed
-    //$hms .= str_pad($seconds, 2, "0", STR_PAD_LEFT);
     return $HM;
 }
 
@@ -3913,7 +3898,6 @@ function HM2seconds ($HM) {
     $seconds = 0;
     $seconds += (intval($h) * 3600);
     $seconds += (intval($m) * 60);
-    //$seconds += (intval($s));
     return $seconds;
 }
 
@@ -3951,8 +3935,7 @@ function sendNewPass() {
 	global $AppUI;
 
 	// ensure no malicous sql gets past
-	$checkusername = trim(w2PgetParam($_POST, 'checkusername', ''));
-	$checkusername = db_escape($checkusername);
+	$checkusername = preg_replace("/[^A-Za-z0-9]/", "", w2PgetParam($_POST, 'checkusername', ''));
 	$confirmEmail = trim(w2PgetParam($_POST, 'checkemail', ''));
 	$confirmEmail = strtolower(db_escape($confirmEmail));
 
@@ -3960,7 +3943,7 @@ function sendNewPass() {
 	$q->addTable('users');
 	$q->addJoin('contacts', 'con', 'user_contact = contact_id', 'inner');
 	$q->addQuery('user_id');
-	$q->addWhere('user_username = \'' . $checkusername . '\'');
+	$q->addWhere("user_username = '$checkusername'");
 
     /* Begin Hack */
     /*
@@ -4166,51 +4149,41 @@ function getEventTooltip($event_id) {
 		$event_company = $event->company_name;
 	}
 
-	$tt = '<table border="0" cellpadding="0" cellspacing="0" width="96%">';
+	$tt = '<table class="tool-tip">';
 	$tt .= '<tr>';
 	$tt .= '	<td valign="top" width="40%">';
 	$tt .= '		<strong>' . $AppUI->_('Details') . '</strong>';
 	$tt .= '		<table cellspacing="3" cellpadding="2" width="100%">';
 	$tt .= '		<tr>';
-	$tt .= '			<td style="text-color:white;border: 1px solid white;-moz-border-radius:3.5px;-webkit-border-radius:3.5px;" align="right" nowrap="nowrap">' . $AppUI->_('Type') . '</td>';
-	$tt .= '			<td width="100%" nowrap="nowrap">' . $AppUI->_($types[$event->event_type]) . '</td>';
+	$tt .= '			<td class="tip-label">' . $AppUI->_('Type') . '</td>';
+	$tt .= '			<td>' . $AppUI->_($types[$event->event_type]) . '</td>';
 	$tt .= '		</tr>	';
 	if ($event->event_project) {
 		$tt .= '		<tr>';
-		$tt .= '			<td style="border: 1px solid white;-moz-border-radius:3.5px;-webkit-border-radius:3.5px;" align="right" nowrap="nowrap">' . $AppUI->_('Company') . '</td>';
-		$tt .= '			<td width="100%">' . $event_company . '</td>';
+		$tt .= '			<td class="tip-label">' . $AppUI->_('Company') . '</td>';
+		$tt .= '			<td>' . $event_company . '</td>';
 		$tt .= '		</tr>';
 		$tt .= '		<tr>';
-		$tt .= '			<td style="border: 1px solid white;-moz-border-radius:3.5px;-webkit-border-radius:3.5px;" align="right" nowrap="nowrap">' . $AppUI->_('Project') . '</td>';
-		$tt .= '			<td width="100%">' . $event_project . '</td>';
+		$tt .= '			<td class="tip-label">' . $AppUI->_('Project') . '</td>';
+		$tt .= '			<td>' . $event_project . '</td>';
 		$tt .= '		</tr>';
 	}
 	$tt .= '		<tr>';
-	$tt .= '			<td style="border: 1px solid white;-moz-border-radius:3.5px;-webkit-border-radius:3.5px;" align="right" nowrap="nowrap">' . $AppUI->_('Starts') . '</td>';
-    $tt .= '			<td nowrap="nowrap">' . $AppUI->formatTZAwareTime($event->event_start_date, $df . ' ' . $tf) . '</td>';
+	$tt .= '			<td class="tip-label">' . $AppUI->_('Starts') . '</td>';
+    $tt .= '			<td>' . $AppUI->formatTZAwareTime($event->event_start_date, $df . ' ' . $tf) . '</td>';
 	$tt .= '		</tr>';
 	$tt .= '		<tr>';
-	$tt .= '			<td style="border: 1px solid white;-moz-border-radius:3.5px;-webkit-border-radius:3.5px;" align="right" nowrap="nowrap">' . $AppUI->_('Ends') . '</td>';
-    $tt .= '			<td nowrap="nowrap">' . $AppUI->formatTZAwareTime($event->event_end_date, $df . ' ' . $tf) . '</td>';
+	$tt .= '			<td class="tip-label">' . $AppUI->_('Ends') . '</td>';
+    $tt .= '			<td>' . $AppUI->formatTZAwareTime($event->event_end_date, $df . ' ' . $tf) . '</td>';
 	$tt .= '		</tr>';
 	$tt .= '		<tr>';
-	$tt .= '			<td style="border: 1px solid white;-moz-border-radius:3.5px;-webkit-border-radius:3.5px;" align="right" nowrap="nowrap">' . $AppUI->_('Recurs') . '</td>';
-	$tt .= '			<td nowrap="nowrap">' . $AppUI->_($recurs[$event->event_recurs]) . ($event->event_recurs ? ' (' . $event->event_times_recuring . '&nbsp;' . $AppUI->_('times') . ')' : '') . '</td>';
+	$tt .= '			<td class="tip-label">' . $AppUI->_('Recurs') . '</td>';
+	$tt .= '			<td>' . $AppUI->_($recurs[$event->event_recurs]) . ($event->event_recurs ? ' (' . $event->event_times_recuring . '&nbsp;' . $AppUI->_('times') . ')' : '') . '</td>';
 	$tt .= '		</tr>';
 	$tt .= '		<tr>';
-	$tt .= '			<td style="border: 1px solid white;-moz-border-radius:3.5px;-webkit-border-radius:3.5px;" align="right" nowrap="nowrap">' . $AppUI->_('Attendees') . '</td>';
-	$tt .= '			<td nowrap="nowrap">';
-	if (is_array($assigned)) {
-		$start = false;
-		foreach ($assigned as $user) {
-			if ($start) {
-				$tt .= '<br />';
-			} else {
-				$start = true;
-			}
-			$tt .= $user;
-		}
-	}
+	$tt .= '			<td class="tip-label">' . $AppUI->_('Attendees') . '</td>';
+	$tt .= '			<td>';
+    $tt .= implode('<br />', $assigned);
 	$tt .= '		</tr>';
 	$tt .= '		</table>';
 	$tt .= '	</td>';
@@ -4218,7 +4191,7 @@ function getEventTooltip($event_id) {
 	$tt .= '		<strong>' . $AppUI->_('Note') . '</strong>';
 	$tt .= '		<table cellspacing="0" cellpadding="2" border="0" width="100%">';
 	$tt .= '		<tr>';
-	$tt .= '			<td style="border: 1px solid white;-moz-border-radius:3.5px;-webkit-border-radius:3.5px;">';
+	$tt .= '			<td class="tip-label description">';
 	$tt .= '				' . mb_str_replace(chr(10), "<br />", $event->event_description) . '&nbsp;';
 	$tt .= '			</td>';
 	$tt .= '		</tr>';
@@ -4330,7 +4303,12 @@ function getTaskTooltip($task_id, $starts = false, $ends = false ) {
 	// load the event types
 	$types = w2PgetSysVal('TaskType');
 
-	$assigned = $task->getAssigned();
+	$assignees = $task->getAssigned();
+    $assigned = array();
+    foreach ($assignees as $user) {
+        $assigned[] = $user['user_name'] . ' ' . $user['perc_assignment'] . '%';
+    }
+    
 
 	$start_date = (int)$task->task_start_date ? new w2p_Utilities_Date($AppUI->formatTZAwareTime($task->task_start_date, '%Y-%m-%d %T')) : null;
 	$end_date = (int)$task->task_end_date ? new w2p_Utilities_Date($AppUI->formatTZAwareTime($task->task_end_date, '%Y-%m-%d %T')) : null;
@@ -4339,49 +4317,39 @@ function getTaskTooltip($task_id, $starts = false, $ends = false ) {
 	$task_project = $task->project_name;
 	$task_company = $task->company_name;
 
-	$tt = '<table border="0" cellpadding="0" cellspacing="0" width="96%">';
+    $tt = '<table class="tool-tip">';
 	$tt .= '<tr>';
 	$tt .= '	<td valign="top" width="40%">';
 	$tt .= '		<strong>' . $AppUI->_('Details') . '</strong>';
 	$tt .= '		<table cellspacing="3" cellpadding="2" width="100%">';
 	$tt .= '		<tr>';
-	$tt .= '			<td style="border: 1px solid white;-moz-border-radius:3.5px;-webkit-border-radius:3.5px;" align="right" nowrap="nowrap">' . $AppUI->_('Company') . '</td>';
-	$tt .= '			<td width="100%">' . $task_company . '</td>';
+	$tt .= '			<td class="tip-label">' . $AppUI->_('Company') . '</td>';
+	$tt .= '			<td>' . $task_company . '</td>';
 	$tt .= '		</tr>';
 	$tt .= '		<tr>';
-	$tt .= '			<td style="border: 1px solid white;-moz-border-radius:3.5px;-webkit-border-radius:3.5px;" align="right" nowrap="nowrap">' . $AppUI->_('Project') . '</td>';
-	$tt .= '			<td width="100%">' . $task_project . '</td>';
+	$tt .= '			<td class="tip-label">' . $AppUI->_('Project') . '</td>';
+	$tt .= '			<td>' . $task_project . '</td>';
 	$tt .= '		</tr>';
 	$tt .= '		<tr>';
-	$tt .= '			<td style="border: 1px solid white;-moz-border-radius:3.5px;-webkit-border-radius:3.5px;" align="right" nowrap="nowrap">' . $AppUI->_('Type') . '</td>';
-	$tt .= '			<td width="100%" nowrap="nowrap">' . $AppUI->_($types[$task->task_type]) . '</td>';
+	$tt .= '			<td class="tip-label">' . $AppUI->_('Type') . '</td>';
+	$tt .= '			<td>' . $AppUI->_($types[$task->task_type]) . '</td>';
 	$tt .= '		</tr>	';
 	$tt .= '		<tr>';
-	$tt .= '			<td style="border: 1px solid white;-moz-border-radius:3.5px;-webkit-border-radius:3.5px;" align="right" nowrap="nowrap">' . $AppUI->_('Progress') . '</td>';
-	$tt .= '			<td width="100%" nowrap="nowrap"><strong>' . sprintf("%.1f%%", $task->task_percent_complete) . '</strong></td>';
+	$tt .= '			<td class="tip-label">' . $AppUI->_('Progress') . '</td>';
+	$tt .= '			<td>' . sprintf("%.1f%%", $task->task_percent_complete) . '</td>';
 	$tt .= '		</tr>	';
 	$tt .= '		<tr>';
-	$tt .= '			<td style="border: 1px solid white;-moz-border-radius:3.5px;-webkit-border-radius:3.5px;" align="right" nowrap="nowrap">' . $AppUI->_('Starts') . '</td>';
-	$tt .= '			<td nowrap="nowrap">' . ($starts ? '<strong>' : '') . ($start_date ? $start_date->format($df . ' ' . $tf) : '-') . ($starts ? '</strong>' : '') . '</td>';
+	$tt .= '			<td class="tip-label">' . $AppUI->_('Starts') . '</td>';
+	$tt .= '			<td>' . ($start_date ? $start_date->format($df . ' ' . $tf) : '-') . '</td>';
 	$tt .= '		</tr>';
 	$tt .= '		<tr>';
-	$tt .= '			<td style="border: 1px solid white;-moz-border-radius:3.5px;-webkit-border-radius:3.5px;" align="right" nowrap="nowrap">' . $AppUI->_('Ends') . '</td>';
-	$tt .= '			<td nowrap="nowrap">' . ($ends ? '<strong>' : '') . ($end_date ? $end_date->format($df . ' ' . $tf) : '-') . ($ends ? '</strong>' : '') . '</td>';
+	$tt .= '			<td class="tip-label">' . $AppUI->_('Ends') . '</td>';
+	$tt .= '			<td>' . ($end_date ? $end_date->format($df . ' ' . $tf) : '-') . '</td>';
 	$tt .= '		</tr>';
 	$tt .= '		<tr>';
-	$tt .= '			<td style="border: 1px solid white;-moz-border-radius:3.5px;-webkit-border-radius:3.5px;" align="right" nowrap="nowrap">' . $AppUI->_('Assignees') . '</td>';
-	$tt .= '			<td nowrap="nowrap">';
-	if (is_array($assigned)) {
-		$start = false;
-		foreach ($assigned as $user) {
-			if ($start) {
-				$tt .= '<br/>';
-			} else {
-				$start = true;
-			}
-			$tt .= $user['user_name'] . ' ' . $user['perc_assignment'] . '%';
-		}
-	}
+	$tt .= '			<td class="tip-label">' . $AppUI->_('Assignees') . '</td>';
+	$tt .= '			<td>';
+	$tt .= implode('<br />', $assigned);
 	$tt .= '		</tr>';
 	$tt .= '		</table>';
 	$tt .= '	</td>';
@@ -4389,7 +4357,7 @@ function getTaskTooltip($task_id, $starts = false, $ends = false ) {
 	$tt .= '		<strong>' . $AppUI->_('Description') . '</strong>';
 	$tt .= '		<table cellspacing="0" cellpadding="2" border="0" width="100%">';
 	$tt .= '		<tr>';
-	$tt .= '			<td style="border: 1px solid white;-moz-border-radius:3.5px;-webkit-border-radius:3.5px;">';
+	$tt .= '			<td class="tip-label description">';
 	$tt .= '				' . $task->task_description;
 	$tt .= '			</td>';
 	$tt .= '		</tr>';
