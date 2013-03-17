@@ -367,7 +367,7 @@ abstract class w2p_Core_BaseObject extends w2p_Core_Event implements w2p_Core_Li
     public function canCreate() {
         return $this->_perms->checkModuleItem($this->_tbl_module, 'add');
     }
-    public function canEdit() { 
+    public function canEdit() {
         return $this->_perms->checkModuleItem($this->_tbl_module, 'edit', $this->{$this->_tbl_key});
     }
     public function canView() {

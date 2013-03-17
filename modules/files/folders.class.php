@@ -54,6 +54,18 @@ class CFile_Folder extends w2p_Core_BaseObject {
 		return (count($this->_error)) ? false : true;
 	}
 
+    /**
+     * This needs a separate canEdit instead of the BaseObject one because the
+     *   CFile_Folder object doesn't support separate permissions from the Files
+     *   module itself.
+     *
+     * @return boolean
+     */
+    public function canEdit()
+    {
+        return $this->_perms->checkModuleItem($this->_tbl_module, 'edit');
+    }
+
     public function isValid()
     {
         $baseErrorMsg = get_class($this) . '::store-check failed - ';
