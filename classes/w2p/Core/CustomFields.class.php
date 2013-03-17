@@ -181,6 +181,14 @@ class w2p_Core_CustomFields {
 		}
 	}
 
+    /**
+     * This deletes the field itself, *not* just the data for a given object's
+     *  entry. Be *very* careful with it.
+     *
+     * @global type $db
+     * @param type $field_id
+     * @return type
+     */
 	public function deleteField($field_id) {
 		global $db;
 		$q = new w2p_Database_Query;
