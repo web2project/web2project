@@ -279,7 +279,7 @@ class CFile extends w2p_Core_BaseObject {
         $q = $this->_getQuery();
         $q->setDelete('files_index');
         $q->addQuery('*');
-        $q->addWhere('file_id = ' . (int) $this->_file_id);
+        $q->addWhere('file_id = ' . (int) $this->_old_key);
         $q->exec();
 
         parent::hook_postDelete();
