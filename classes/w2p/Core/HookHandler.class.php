@@ -58,8 +58,10 @@ class w2p_Core_HookHandler
                 $object = new $module['mod_main_class']();
                 if (is_callable(array($object, $hookname))) {
                     $itemList = $object->{$hookname}($this->AppUI->user_id);
-                    foreach ($itemList as $calendarItem) {
-                        $buffer .= w2p_API_iCalendar::formatCalendarItem($calendarItem, $module['mod_directory']);
+                    if (count($itemList)) {
+                        foreach ($itemList as $calendarItem) {
+                            $buffer .= w2p_API_iCalendar::formatCalendarItem($calendarItem, $module['mod_directory']);
+                        }
                     }
                 }
             }
