@@ -224,26 +224,6 @@ input[type="checkbox"] {
     border: outset #eeeeee 1px;
 }
 
-.list ._description {
-    text-align: left;
-    white-space: normal;
-}
-
-.list ._identifier {
-    padding: 5px;
-    width: 40px;
-}
-
-.list ._name {
-    text-align: left;
-    width: 25%;
-}
-
-.view ._assignment, .view ._date, .view ._description, .view ._hours,
-    .view ._owner, .view ._shortname, .view ._status, .view ._type {
-    text-align: left;
-}
-
 table.list {
     border-spacing: 1px;
     padding: 2px;
@@ -259,7 +239,22 @@ table.list tr:hover td {
 table.list tr:hover td._name {
     font-weight: bold;
 }
- 
+
+.list ._description {
+    text-align: left;
+    white-space: normal;
+}
+
+.list ._identifier {
+    padding: 5px;
+    width: 40px;
+}
+
+.list ._name {
+    text-align: left;
+    width: 25%;
+}
+
 .list ._description {   width: 30%; }
 
 .list.history td.data._description {
@@ -284,6 +279,7 @@ table.list tr:hover td._name {
     text-align: left;
     width: 100%;
 }
+
 #view-header {
     margin-bottom: 5px;
     padding: 4px;
@@ -297,7 +293,9 @@ table.list tr:hover td._name {
     -moz-border-radius:3px;
     -webkit-border-radius:3px;
     border-radius:3px;
+    text-align: left;
 }
+
 .view .list td.data {
     border-radius: 0px;
 }
