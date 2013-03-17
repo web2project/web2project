@@ -89,6 +89,13 @@ class w2p_Core_CustomField {
 		}
 	}
 
+    public function deleteByObject($object_id)
+    {
+        $q = new w2p_Database_Query;
+        $q->setDelete('custom_fields_values');
+        $q->addWhere('value_object_id=' . (int) $object_id);
+        $q->exec();
+    }
 	public function setIntValue($v) {
 		$this->value_intvalue = $v;
 	}
