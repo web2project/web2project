@@ -125,6 +125,26 @@ class CContact extends w2p_Core_BaseObject
         parent::hook_postStore();
     }
 
+    /**
+     * Since we want to use the _id later in the hook_postDelete(), we have to
+     *   capture the id here before delete() clears it.
+     */
+    protected function hook_preDelete()
+    {
+        $this->_contact_id = $this->contact_id;
+
+        parent::hook_preDelete();
+    }
+
+    protected function hook_postDelete() {
+        $q = $this->_getQuery();
+        $q->setDelete('contacts_methods');
+        $q->addWhere('contact_id=' . (int) $this->_contact_id);
+        $q->exec();
+
+        parent::hook_postDelete();
+    }
+
     /*
      * This is an ugly bit of code that should handle *both* data structures..
      */
