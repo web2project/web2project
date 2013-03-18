@@ -21,7 +21,7 @@ $action = ($del) ? 'deleted' : 'stored';
 $result = ($del) ? $obj->delete() : $obj->store();
 
 if (count($obj->getError())) {
-    $AppUI->setMsg($result, UI_MSG_ERROR, true);
+    $AppUI->setMsg($obj->getError(), UI_MSG_ERROR, true);
     $AppUI->holdObject($obj);
     $AppUI->redirect('m=tasks&a=view&task_id='.$obj->task_log_task);
 }
