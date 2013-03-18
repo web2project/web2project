@@ -132,6 +132,8 @@ class CTask_Log extends w2p_Core_BaseObject
 
     /**
      * Percent complete of a given task at the time of the specific tasklog
+     * 20130318 - These columns store the values relative to this task log, 
+     *            not the values previously in the task.
      *
      * @var int
      * @access public
@@ -154,8 +156,8 @@ class CTask_Log extends w2p_Core_BaseObject
 		$this->task_log_problem = (int) $this->task_log_problem;
 	}
 
-    protected function hook_preStore()
-    {
+	protected function hook_preStore()
+	{
 		$q = $this->_getQuery();
 		$this->task_log_updated = $q->dbfnNowWithTZ();
 
@@ -183,15 +185,15 @@ class CTask_Log extends w2p_Core_BaseObject
 			}
 		}
 
-        parent::hook_preStore();
-    }
+	        parent::hook_preStore();
+	}
 
-    protected function  hook_preCreate() {
-        $q = $this->_getQuery();
-        $this->task_log_created = $q->dbfnNowWithTZ();
+	protected function  hook_preCreate() {
+	        $q = $this->_getQuery();
+	        $this->task_log_created = $q->dbfnNowWithTZ();
 
-        parent::hook_preCreate();
-    }
+	        parent::hook_preCreate();
+	}
 
 	/**
 	 * Deletes the current task log from the database. Then updated total hours
@@ -206,22 +208,23 @@ class CTask_Log extends w2p_Core_BaseObject
 		$this->load($this->task_log_id);
 		$this->_task_id = $this->task_log_task;
 
-        return parent::delete();
+	        return parent::delete();
 	}
 
-    protected function hook_postStore()
-    {
-        $this->updateTaskSummary(null, $this->task_log_task);
+	protected function hook_postStore()
+	{
+	        $this->updateTaskSummary(null, $this->task_log_task);
 
-        parent::hook_postStore();
-    }
+	        parent::hook_postStore();
+	}
 
-    protected function hook_postDelete()
-    {
-        $this->updateTaskSummary(null, $this->_task_id);
+	protected function hook_postDelete()
+	{
+	        $this->updateTaskSummary(null, $this->_task_id);
 
-        parent::hook_postDelete();
-    }
+	        parent::hook_postDelete();
+	}
+
 	/**
 	 * Updates the variable information on the task.
 	 *
@@ -233,42 +236,44 @@ class CTask_Log extends w2p_Core_BaseObject
 	 */
 	protected function updateTaskSummary($notUsed = null, $task_id)
 	{
-        $q = $this->_getQuery();
+	        $q = $this->_getQuery();
 
-        if($this->_perms->checkModuleItem('tasks', 'edit', $task_id)) {
-            $q->addQuery('task_log_percent_complete, task_log_date');
-            $q->addTable('task_log');
-            $q->addWhere('task_log_task = ' . (int)$task_id);
-            $q->addOrder('task_log_date DESC, task_log_id DESC');
-            $q->setLimit(1);
-            $results = $q->loadHash();
-            $percentComplete = $results['task_log_percent_complete'];
+	        if($this->_perms->checkModuleItem('tasks', 'edit', $task_id)) {
+	            $q->addQuery('task_log_percent_complete, task_log_task_end_date, task_log_date');
+	            $q->addTable('task_log');
+	            $q->addWhere('task_log_task = ' . (int)$task_id);
+	            $q->addOrder('task_log_date DESC, task_log_id DESC');
+	            $q->setLimit(1);
+	            $results = $q->loadHash();
 
-            $task = new CTask();
-            $task->overrideDatabase($this->_query);
-            $task->load($task_id);
-            $diff = strtotime($this->task_log_task_end_date) - strtotime($task->task_end_date);
-            $task_end_date = (0 == $diff) ? $task->task_end_date : $this->task_log_task_end_date;
+	            $task = new CTask();
+	            $task->overrideDatabase($this->_query);
+	            $task->load($task_id);
 
-            /*
-             * We're using a database update here instead of store() because a
-             *   bunch of other things happen when you call store().. like the
-             *   processing of contacts, departments, etc.
-             */
-            $q = $this->_getQuery();
-            $q->addTable('tasks');
-            $q->addUpdate('task_percent_complete', $percentComplete);
-            $q->addUpdate('task_end_date', $task_end_date);
-            $q->addWhere('task_id = ' . (int)$task_id);
-            $success = $q->exec();
+	            /*
+	             * We're using a database update here instead of store() because a
+	             *   bunch of other things happen when you call store().. like the
+	             *   processing of contacts, departments, etc.
+	             */
+	            $q = $this->_getQuery();
+	            $q->addTable('tasks');
+		    if ($results) {
+		            $q->addUpdate('task_percent_complete', $results['task_log_percent_complete']);
+		            $q->addUpdate('task_end_date', $results['task_log_task_end_date']);
+		    } else {
+		            $q->addUpdate('task_percent_complete', $task->task_original_percent_complete);
+		            $q->addUpdate('task_end_date', $task->task_original_end_date);
+		    }
+	            $q->addWhere('task_id = ' . (int)$task_id);
+	            $success = $q->exec();
 
-            if (!$success) {
-                $this->_AppUI->setMsg($task->getError(), UI_MSG_ERROR, true);
-            }
+	            if (!$success) {
+	                $this->_AppUI->setMsg($task->getError(), UI_MSG_ERROR, true);
+	            }
 
-	    $task->updateDynamics();
-            $task->pushDependencies($task_id, $task->task_end_date);
-        }
+		    $task->updateDynamics();
+	            $task->pushDependencies($task_id, $task->task_end_date);
+	        }
 
 		$q->addQuery('SUM(task_log_hours)');
 		$q->addTable('task_log');
@@ -292,64 +297,64 @@ class CTask_Log extends w2p_Core_BaseObject
 		$this->task_log_description = $spacedDescription;
 	}
 
-    public function isValid()
-    {
-        $baseErrorMsg = get_class($this) . '::store-check failed - ';
+	public function isValid()
+	{
+	        $baseErrorMsg = get_class($this) . '::store-check failed - ';
 
-        if (0 == (int) $this->task_log_task) {
-            $this->_error['task_log_task'] = $baseErrorMsg . 'task log task is NULL';
-        }
-        if ('' == trim($this->task_log_name)) {
-            $this->_error['task_log_name'] = $baseErrorMsg . 'task log name is not set';
-        }
-        if (0 == (int) $this->task_log_creator) {
-            $this->_error['task_log_creator'] = $baseErrorMsg . 'task log creator is NULL';
-        }
+	        if (0 == (int) $this->task_log_task) {
+	            $this->_error['task_log_task'] = $baseErrorMsg . 'task log task is NULL';
+	        }
+	        if ('' == trim($this->task_log_name)) {
+	            $this->_error['task_log_name'] = $baseErrorMsg . 'task log name is not set';
+	        }
+	        if (0 == (int) $this->task_log_creator) {
+	            $this->_error['task_log_creator'] = $baseErrorMsg . 'task log creator is NULL';
+	        }
 
-        return (count($this->_error)) ? false : true;
-    }
+	        return (count($this->_error)) ? false : true;
+	}
 
 	/**
-     * You are allowed to delete a task log if you are:
-     *   a) the creator of the log; OR
-     *   b) the subject of the log; OR
-     *   c) have edit permissions on the corresponding task.
+	 * You are allowed to delete a task log if you are:
+	 *   a) the creator of the log; OR
+	 *   b) the subject of the log; OR
+	 *   c) have edit permissions on the corresponding task.
 	 *
 	 * @return bool
 	 */
 	public function canDelete(&$msg = '', $oid = null, $joins = null)
 	{
-        if($this->_AppUI->user_id == $this->task_log_creator ||
-                $this->_AppUI->user_id == $this->task_log_record_creator ||
-                $this->_perms->checkModuleItem($this->_tbl_module, 'edit', $this->{$this->_tbl_key})) {
-
-            return true;
-        }
+	        if($this->_AppUI->user_id == $this->task_log_creator ||
+	                $this->_AppUI->user_id == $this->task_log_record_creator ||
+	                $this->_perms->checkModuleItem($this->_tbl_module, 'edit', $this->{$this->_tbl_key})) {
+	
+        	    return true;
+	        }
 	}
 
-    public function canCreate() {
-//TODO: allow someone to add a log if they're assigned to the Task
-        return $this->_perms->checkModuleItem($this->_tbl_module, 'view', $this->task_log_task);
-    }
+	public function canCreate() {
+		//TODO: allow someone to add a log if they're assigned to the Task
+	        return $this->_perms->checkModuleItem($this->_tbl_module, 'view', $this->task_log_task);
+	}
 
-    /*
-     * You are allowed to edit a task log if you are:
-     *   a) the creator of the log; OR
-     *   b) the subject of the log; OR
-     *   c) have edit permissions on the corresponding task.
-     *
-     * @return bool
-     */
-    public function canEdit() {
-        if($this->_AppUI->user_id == $this->task_log_creator ||
-                $this->_AppUI->user_id == $this->task_log_record_creator ||
-                $this->_perms->checkModuleItem($this->_tbl_module, 'edit', $this->{$this->_tbl_key})) {
+	/*
+	 * You are allowed to edit a task log if you are:
+	 *   a) the creator of the log; OR
+	 *   b) the subject of the log; OR
+	 *   c) have edit permissions on the corresponding task.
+	 *
+	 * @return bool
+	 */
+	public function canEdit() {
+	        if($this->_AppUI->user_id == $this->task_log_creator ||
+	                $this->_AppUI->user_id == $this->task_log_record_creator ||
+	                $this->_perms->checkModuleItem($this->_tbl_module, 'edit', $this->{$this->_tbl_key})) {
+	
+	            return true;
+	        }
 
-            return true;
-        }
-
-        return false;
-    }
+	        return false;
+	}
 
 	/**
 	 * Get a list of task logs the current user is allowed to access
@@ -366,7 +371,7 @@ class CTask_Log extends w2p_Core_BaseObject
 	public function getAllowedRecords($uid, $fields = '*', $orderby = '', $index = null, $extra = null)
 	{
 		$oTsk = new CTask();
-        $oTsk->overrideDatabase($this->_query);
+	        $oTsk->overrideDatabase($this->_query);
 
 		$aTasks = $oTsk->getAllowedRecords($uid, 'task_id, task_name');
 		if (count($aTasks)) {

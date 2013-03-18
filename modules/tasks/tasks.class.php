@@ -67,6 +67,8 @@ class CTask extends w2p_Core_BaseObject
     public $task_updated = null;
     public $task_updator = null;
     public $task_allow_other_user_tasklogs;
+    public $task_original_end_date = null;
+    public $task_original_percent_complete = null;
 
     /*
      * TASK DYNAMIC VALUE:
@@ -781,6 +783,12 @@ class CTask extends w2p_Core_BaseObject
             $this->task_end_date = $this->_AppUI->convertToSystemTZ($this->task_end_date);
         }
         $this->task_contacts = is_array($this->task_contacts) ? $this->task_contacts : explode(',', $this->task_contacts);
+
+	// Copy the task's end data and percentage columns values into the cache columns.
+	// These values will be used to restore the original if existing task logs are
+	// deleted.
+	$this->task_original_percent_complete = $this->task_percent_complete;
+	$this->task_original_end_date = $this->task_end_date;
 
         parent::hook_preStore();
     }
