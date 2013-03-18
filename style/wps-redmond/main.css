@@ -65,24 +65,9 @@ div.header a {
     margin-top  : 2px;
 }
 
-TEXTAREA {
-	border: 1px #999999 solid;
-	font-family: arial,Osaka,verdana,helvetica,arial,sans-serif;
-	font-size: 8pt;
-    padding : 2px;
-}
-
 .textarea {
 	border: 1px #999999 solid;
 	font-family: arial, verdana,helvetica,arial,sans-serif;
-	font-size: 8pt;
-    padding : 2px;
-    margin-top  : 2px;
-}
-
-textarea.small {
-	border: 1px #999999 solid;
-	font-family: arial, verdana,Sans-Serif;
 	font-size: 8pt;
     padding : 2px;
     margin-top  : 2px;
