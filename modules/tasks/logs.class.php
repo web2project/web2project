@@ -184,6 +184,12 @@ class CTask_Log extends w2p_Core_BaseObject
 				$this->task_log_hours = 0;
 			}
 		}
+	
+		// Add the task's end time to the new end date, to avoid dates with 00:00 time.
+	        $task = new CTask();
+	        $task->overrideDatabase($this->_query);
+	        $task->load($this->task_log_task);
+		$this->task_log_task_end_date = date('Y-m-d H:i:s', strtotime($this->task_log_task_end_date) + (strtotime($task->task_original_end_date) % 86400));
 
 	        parent::hook_preStore();
 	}
