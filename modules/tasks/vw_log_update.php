@@ -139,7 +139,7 @@ $log_date = new w2p_Utilities_Date($log->task_log_date);
                             <input type="hidden" name="task_log_date" id="task_log_date" value="<?php echo $log_date ? $log_date->format(FMT_TIMESTAMP_DATE) : ''; ?>" />
                             <input type="text" name="log_date" id="log_date" onchange="setDate_new('editFrm', 'log_date');" value="<?php echo $log_date ? $log_date->format($df) : ''; ?>" class="text" />
                             <a href="javascript: void(0);" onclick="return showCalendar('log_date', '<?php echo $df ?>', 'editFrm', null, true, true)">
-                                <img src="<?php echo w2PfindImage('calendar.gif'); ?>" width="24" height="12" alt="<?php echo $AppUI->_('Calendar'); ?>" border="0" />
+                                <img style="vertical-align: middle" src="<?php echo w2PfindImage('calendar.gif'); ?>" width="24" height="12" alt="<?php echo $AppUI->_('Calendar'); ?>" border="0" />
                             </a>
                         </td>
                     </tr>
@@ -207,6 +207,7 @@ $log_date = new w2p_Utilities_Date($log->task_log_date);
                             <span id='timerStatus'></span>
                         </td>
                     </tr>
+		    <?php if (count($companyBC) || count($neutralBC)) { ?>
                     <tr>
                         <td align="right">
                             <?php echo $AppUI->_('Billing Code'); ?>
@@ -237,6 +238,7 @@ $log_date = new w2p_Utilities_Date($log->task_log_date);
                             <input type="hidden" name="task_log_costcode" value="<?php echo $log->task_log_costcode; ?>" />
                         </td>
                     </tr>
+		    <?php } ?>
                     <?php
                     if ($obj->canUserEditTimeInformation($project->project_owner, $AppUI->user_id) && $canEditTask) {
                         $end_date = intval($obj->task_end_date) ? new w2p_Utilities_Date($obj->task_end_date) : null;
@@ -249,7 +251,7 @@ $log_date = new w2p_Utilities_Date($log->task_log_date);
                                 <input type="hidden" name="task_end_date" id="task_end_date" value="<?php echo $end_date ? $end_date->format(FMT_TIMESTAMP_DATE) : ''; ?>" />
                                 <input type="text" name="end_date" id="end_date" onchange="setDate_new('editFrm', 'end_date', 'task');" value="<?php echo $end_date ? $end_date->format($df) : ''; ?>" class="text" />
                                 <a href="javascript: void(0);" onclick="return showCalendar('end_date', '<?php echo $df ?>', 'editFrm', null, true, true)">
-                                    <img src="<?php echo w2PfindImage('calendar.gif'); ?>" width="24" height="12" alt="<?php echo $AppUI->_('Calendar'); ?>" border="0" />
+                                    <img style="vertical-align: middle" src="<?php echo w2PfindImage('calendar.gif'); ?>" width="24" height="12" alt="<?php echo $AppUI->_('Calendar'); ?>" border="0" />
                                 </a>
                             </td>
                         </tr>
