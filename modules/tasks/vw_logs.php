@@ -89,7 +89,8 @@ $customLookups = array('budget_category' => $billingCategory, 'task_duration_typ
 
 if (count($logs)) {
     foreach ($logs as $row) {
-        $s .= '<tr bgcolor="white" valign="top"><td>';
+	$style = 'background-color: ' . ((bool)$row['task_log_problem'] ? '#CC6666' : 'white') . ';';
+        $s .= '<tr valign="top"><td style="' . $style . '">';
 
         if ($canEdit) {
             $s .= '<a href="?m=tasks&a=view&task_id=' . $task_id . '&tab=';
@@ -101,10 +102,10 @@ if (count($logs)) {
 
         $htmlHelper->stageRowData($row);
         foreach ($fieldList as $index => $column) {
-            $s .= $htmlHelper->createCell($fieldList[$index], $row[$fieldList[$index]], $customLookups);
+            $s .= $htmlHelper->createCell($fieldList[$index], $row[$fieldList[$index]], $customLookups, $style);
         }
 
-        $s .= '<td>';
+        $s .= '<td style="' . $style . '">';
         if ($canDelete) {
             $s .= '<a href="javascript:delIt2(' . $row['task_log_id'] . ');" title="' . $AppUI->_('delete log') . '">' . w2PshowImage('icons/stock_delete-16.png', 16, 16, '') . '</a>';
         }

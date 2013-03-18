@@ -108,8 +108,12 @@ class w2p_Output_HTMLHelper
      *   fields like project_company, dept_company because we still have a 
      *   common suffix.
      */
-    public function createCell($fieldName, $value, $custom = array()) {
-        $additional = '';
+    public function createCell($fieldName, $value, $custom = array(), $styling = '', $nolink = false) {
+	if ($styling != '') {
+	        $additional = 'style="' . $styling . '"';
+	} else {
+		$additional = '';
+	}
 
         $last_underscore = strrpos($fieldName, '_');
         $prefix = ($last_underscore !== false) ? substr($fieldName, 0, $last_underscore) : $fieldName;
@@ -131,7 +135,7 @@ class w2p_Output_HTMLHelper
                 $obj = new $class();
                 $obj->load($value);
                 $link = '?m='. w2p_pluralize($module) .'&a=view&'.$module.'_id='.$value;
-                $cell = '<a href="'.$link.'">'.$obj->{"$module".'_name'}.'</a>';
+                $cell = '<a ' . ($nolink ? '' : 'href="'.$link.'"') . '>'.$obj->{"$module".'_name'}.'</a>';
                 $suffix .= ' _name';
                 break;
             case '_department':
@@ -139,7 +143,7 @@ class w2p_Output_HTMLHelper
                 $obj->load($value);
                 $mod = substr($suffix, 1);
                 $link = '?m='. w2p_pluralize($mod) .'&a=view&dept_id='.$value;
-                $cell = '<a href="'.$link.'">'.$obj->dept_name.'</a>';
+                $cell = '<a ' . ($nolink ? '' : 'href="'.$link.'"') . '>'.$obj->dept_name.'</a>';
                 $suffix .= ' _name';
                 break;
             case '_folder':
@@ -148,7 +152,7 @@ class w2p_Output_HTMLHelper
                 $foldername = ($value) ? $obj->file_folder_name : 'Root';
                 $image = '<img src="'.w2PfindImage('folder5_small.png', 'files').'" />';
                 $link = '?m=files&tab=4&folder=' . $value;
-                $cell = '<a href="'.$link.'">' . $image . ' ' . $foldername . '</a>';
+                $cell = '<a ' . ($nolink ? '' : 'href="'.$link.'"') . '>' . $image . ' ' . $foldername . '</a>';
                 $suffix .= ' _name';
                 break;
             case '_user':
@@ -158,7 +162,7 @@ class w2p_Output_HTMLHelper
                 $mod = substr($suffix, 1);
                 $suffix .= ' nowrap';
                 $link = '?m=admin&a=viewuser&user_id='.$this->tableRowData['user_id'];
-                $cell = '<a href="'.$link.'">'.$obj->contact_display_name.'</a>';
+                $cell = '<a ' . ($nolink ? '' : 'href="'.$link.'"') . '>'.$obj->contact_display_name.'</a>';
                 break;
 //END: object-based linkings
 
@@ -183,7 +187,7 @@ class w2p_Output_HTMLHelper
                 $link  .= ($prefix == 'task_log') ? '&tab=1&task_id='.$this->tableRowData['task_id'] : '';
                 $icon   = ($fieldName == 'file_name') ? '<img src="' . 
                     w2PfindImage(getIcon($this->tableRowData['file_type']), 'files') . '" />&nbsp;' : '';
-                $cell   = '<a href="'.$link.'">'.$icon.$value.'</a>';
+                $cell   = '<a ' . ($nolink ? '' : 'href="'.$link.'"') . '>'.$icon.$value.'</a>';
 //TODO: task_logs are another oddball..
                 $cell = ($prefix == 'task_log') ? str_replace('task_logs', 'tasks', $cell) : $cell;
                 break;
@@ -198,7 +202,7 @@ class w2p_Output_HTMLHelper
                     $mod = substr($suffix, 1);
                     $suffix .= ' nowrap';
                     $link = '?m=admin&a=viewuser&user_id='.$this->tableRowData['user_id'];
-                    $cell = '<a href="'.$link.'">'.$obj->contact_display_name.'</a>';
+                    $cell = '<a ' . ($nolink ? '' : 'href="'.$link.'"') . '>'.$obj->contact_display_name.'</a>';
                 } else {
                     $cell = $value;
                 }
@@ -264,7 +268,7 @@ class w2p_Output_HTMLHelper
                 break;
             case '_problem':
                 if ($value) {
-                    $cell  = '<a href="?m=tasks&a=index&f=all&project_id=' . $this->tableRowData['project_id'] . '">';
+                    $cell  = '<a ' . ($nolink ? '' : 'href="?m=tasks&a=index&f=all&project_id=' . $this->tableRowData['project_id'] . '"') . '>';
                     $cell .= w2PshowImage('icons/dialog-warning5.png', 16, 16, 'Problem', 'Problem');
                     $cell .= '</a>';
                 } else {
@@ -278,7 +282,7 @@ class w2p_Output_HTMLHelper
 				$cell = htmlspecialchars($value, ENT_QUOTES);
 		}
 
-        $begin = '<td '.$additional.'class="data '.$suffix.'">';
+        $begin = '<td class="data '.$suffix.'" '.$additional.' >';
         $end = '</td>';
 
         return $begin . $cell . $end;
