@@ -39,12 +39,12 @@ div.header {
     padding-top:    3px;
 }
 
-div.header a {
-    margin: 0.7em;
-}
-
 div.shadow {
     background: url(images/nav_shadow.jpg);
+}
+
+div.header a {
+    margin: 0.7em;
 }
 
 .nav a:hover{
@@ -446,10 +446,6 @@ table.tbl td.event td {
 	background-color: #fff0b0;
 }
 
-.crumb-right div.crumb {
-    margin-top: -10px;
-}
-
 .crumb-right div.crumb ul {
     float: right;
 }
@@ -496,6 +492,10 @@ table.tbl td.event td {
     -moz-border-radius:4px;
     -webkit-border-radius:4px;
     border-radius:4px;
+}
+
+.crumb-right div.crumb {
+    margin-top: -10px;
 }
 
 .spacer {
