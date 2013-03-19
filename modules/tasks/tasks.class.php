@@ -1420,7 +1420,7 @@ class CTask extends w2p_Core_BaseObject
      *          null = Filter tasks assigned to currently logged in user
      * 		0 = Tasks assigned to all users
      *		> 0 = Tasks assigned to 'user_id'
-     *		< 0 = Tasks assigned to all other users except 'user_id'
+     *		< 0 = Tasks assigned to all other users except 'user_id', but from projects of which 'user_id' is the owner
      */
     public function getTasksForPeriod($start_date, $end_date, $company_id = 0, $user_id = null)
     {
@@ -1464,7 +1464,7 @@ class CTask extends w2p_Core_BaseObject
             $q->addWhere('ut.user_id = ' . (int) $user_id);
         }
         if ($user_id < 0) {
-            $q->addWhere('ut.user_id != ' . -((int) $user_id));
+            $q->addWhere('ut.user_id != ' . -((int) $user_id) . ' AND projects.project_owner = ' . -((int) $user_id));
         }
 
         if ($company_id) {
