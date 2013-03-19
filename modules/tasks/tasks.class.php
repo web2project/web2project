@@ -198,14 +198,13 @@ class CTask extends w2p_Core_BaseObject
          * to get things in a knot.
          * Note: some of these checks may be problematic and might have to be removed
          */
-        $addedit = w2PgetParam($_POST, 'dosql', '') == 'do_task_aed' ? true : false;
-        $this_dependencies = array();
 
-        /*
-         * If we are called from addedit then we want to use the incoming
-         * list of dependencies and attempt to stop bad deps from being created
-         */
-        if ($addedit) {
+	// This new code depends on the POSTed task id; if it matches with the
+	// task_id field of the object then use the POSTed dependencies. This
+	// neatly avoids problems with parent tasks being updated while still
+	// updating a children.
+        $this_dependencies = array();
+	if ((int) w2PgetParam($_POST, 'task_id', 0) == $this->task_id) {
             $hdependencies = w2PgetParam($_POST, 'hdependencies', '0');
             if ($hdependencies) {
                 $this_dependencies = explode(',', $hdependencies);
@@ -954,7 +953,7 @@ class CTask extends w2p_Core_BaseObject
     }
 
     /**
-     * @todo Parent store could be partially used
+     * @todo Parent delete could be partially used
      * @todo Can't delete a task with children
      */
     public function delete()
