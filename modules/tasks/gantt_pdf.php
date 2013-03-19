@@ -190,12 +190,6 @@ foreach ($projects as $p) {
     }
 }
 
-$width = 1600;
-$start_date = w2PgetParam($_GET, 'start_date', $start_min);
-$end_date = w2PgetParam($_GET, 'end_date', $end_max);
-$s1 = ($start_date) ? new w2p_Utilities_Date($start_date) : new w2p_Utilities_Date();
-$e1 = ($end_date) ? new w2p_Utilities_Date($end_date) : new w2p_Utilities_Date();
-
 //consider critical (concerning end date) tasks as well
 if ($caller != 'todo') {
 	$start_min = $projects[$project_id]['project_start_date'];
@@ -203,13 +197,38 @@ if ($caller != 'todo') {
 				? $projects[$project_id]['project_end_date'] : $criticalTasks[0]['task_end_date']);
 }
 
+$width = 1600;
+$start_date = w2PgetParam($_POST, 'start_date', $start_min);
+$end_date = w2PgetParam($_POST, 'end_date', $end_max);
+$tasks_start_date = ($start_date) ? new w2p_Utilities_Date($start_date) : new w2p_Utilities_Date();
+$tasks_end_date = ($end_date) ? new w2p_Utilities_Date($end_date) : new w2p_Utilities_Date();
+
 $count = 0;
 
 /*
 * 	Prepare Gantt_chart loop
 */
+
+// find out DateRange from gant_arr, if display_option = all
+if (w2PgetParam($_POST, 'display_option', '') == 'all') {
+	$tasks_start_date = new w2p_Utilities_Date('3000-12-31');
+	$tasks_end_date = new w2p_Utilities_Date('1000-01-01'); 
+	for ($i = 0, $i_cmp = count($gantt_arr); $i < $i_cmp; $i++) {
+	    $a = $gantt_arr[$i][0];
+	    $nsd = new w2p_Utilities_Date($a['task_start_date']);
+	    $ned = new w2p_Utilities_Date($a['task_end_date']);
+		
+	    if (Date::compare($tasks_start_date, $nsd) > 0) {
+	        $tasks_start_date = $nsd;
+	    }
+	    if (Date::compare($tasks_end_date, $ned) < 0) {
+	        $tasks_end_date = $ned;
+	    }
+	}
+}
+
 $gtask_sliced = array() ;
-$gtask_sliced = smart_slice( $gantt_arr, $showNoMilestones, $printpdfhr, $e1->dateDiff($s1) );
+$gtask_sliced = smart_slice( $gantt_arr, $showNoMilestones, $printpdfhr, $tasks_end_date->dateDiff($tasks_start_date) );
 
 $page = 0 ;					// Numbering of output files
 $outpfiles = array();		// array of output files to be returned to caller
@@ -221,22 +240,6 @@ if ( count( $gtask_sliced ) > 1 ) {
         $task_index[$gantt_arr[$i][0]['task_id']] = $i+1 ;
     }
     $ctflag = true;
-}
-
-// find out DateRange from gant_arr
-$tasks_start_date = new w2p_Utilities_Date('3000-12-31');
-$tasks_end_date = new w2p_Utilities_Date('1000-01-01'); 
-for ($i = 0, $i_cmp = count($gantt_arr); $i < $i_cmp; $i++) {
-    $a = $gantt_arr[$i][0];
-    $nsd = new w2p_Utilities_Date($a['task_start_date']);
-    $ned = new w2p_Utilities_Date($a['task_end_date']);
-	
-    if (Date::compare($tasks_start_date, $nsd) > 0) {
-        $tasks_start_date = $nsd;
-    }
-    if (Date::compare($tasks_end_date, $ned) < 0) {
-        $tasks_end_date = $ned;
-    }
 }
 
 $durnTypes = w2PgetSysVal('TaskDurationType');
