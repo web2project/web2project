@@ -443,8 +443,16 @@ table.minical td.task {
     background-color: #ababff;
     text-align: center;
 }
+table.minical td.taskothers {
+    background-color: #cbcbff;
+    text-align: center;
+}
 table.minical td.eventtask {
     background-color: #ffccff;
+    text-align: center;
+}
+table.minical td.eventtaskothers {
+    background-color: #ffecff;
     text-align: center;
 }
 table.minical td.eventtoday {
