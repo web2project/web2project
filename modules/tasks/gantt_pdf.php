@@ -4,6 +4,7 @@ if (!defined('W2P_BASE_DIR')) {
 }
 
 global $gantt_arr, $w2Pconfig, $gtask_sliced, $printpdfhr, $showNoMilestones;
+global $user_id;
 
 
 w2PsetExecutionConditions($w2Pconfig);
@@ -37,8 +38,6 @@ $projects = $project->getAllowedProjects($AppUI->user_id, false);
 $caller = w2PgetParam($_REQUEST, 'caller', null);
 
 if ($caller == 'todo') {
-	$user_id = w2PgetParam($_REQUEST, 'user_id', $AppUI->user_id);
-
 	$projects[$project_id]['project_name'] = $AppUI->_('Todo for') . ' ' . CContact::getContactByUserid($user_id);
 	$projects[$project_id]['project_color_identifier'] = 'ff6000';
 
@@ -47,8 +46,8 @@ if ($caller == 'todo') {
 	$q->addQuery('project_name, project_id, project_color_identifier');
 	$q->addQuery('tp.task_pinned');
 	$q->addTable('tasks', 't');
-    $q->innerJoin('projects', 'pr', 'pr.project_id = t.task_project');
- 	$q->leftJoin('user_tasks', 'ut', 'ut.task_id = t.task_id AND ut.user_id = ' . (int) $user_id);
+	$q->innerJoin('projects', 'pr', 'pr.project_id = t.task_project');
+ 	$q->innerJoin('user_tasks', 'ut', 'ut.task_id = t.task_id AND ut.user_id = ' . (int) $user_id);
 	$q->leftJoin('user_task_pin', 'tp', 'tp.task_id = t.task_id and tp.user_id = ' . (int)$user_id);
 	$q->addWhere('(t.task_percent_complete < 100 OR t.task_percent_complete IS NULL)');
 	$q->addWhere('t.task_status = 0');
@@ -71,18 +70,18 @@ if ($caller == 'todo') {
 		$q->addWhere('task_pinned = 1');
 	}
 
-    $q->addGroup('t.task_id');
-    $q->addOrder('t.task_end_date, t.task_priority DESC');
+	$q->addGroup('t.task_id');
+	$q->addOrder('t.task_end_date, t.task_priority DESC');
 } else {
 	// pull tasks
 	$q = new w2p_Database_Query();
 	$q->addTable('tasks', 't');
 	$q->addQuery('t.task_id, task_parent, task_name, task_start_date, task_end_date,'.
 		' task_duration, task_duration_type, task_priority, task_percent_complete,'.
-        ' task_hours_worked, task_order, task_project, task_milestone, task_access,'.
-        ' task_owner, project_name, project_color_identifier, task_dynamic');
+	        ' task_hours_worked, task_order, task_project, task_milestone, task_access,'.
+        	' task_owner, project_name, project_color_identifier, task_dynamic');
 	$q->addJoin('projects', 'p', 'project_id = t.task_project', 'inner');
-     $q->addOrder('p.project_id, t.task_end_date');
+	$q->addOrder('p.project_id, t.task_end_date');
 
 	if ($project_id) {
 		$q->addWhere('task_project = ' . (int)$project_id);
@@ -183,9 +182,20 @@ foreach ($projects as $p) {
         if (!(isset($parents[$t['task_parent']]))) {
             $parents[$t['task_parent']] = false;
         }
-        if ($t['task_parent'] == $t['task_id']) {
-            showgtask($t);
-            findchild_gantt($p['tasks'], $t['task_id']);
+        if ($caller == 'todo') {
+            if ($showDynTasks) {
+                if ($t['task_parent'] == $t['task_id']) {
+                    showgtask($t);
+                    findchild_gantt($p['tasks'], $t['task_id']);
+                }
+            } else {
+                showgtask($t);
+            }
+        } else {
+            if ($t['task_parent'] == $t['task_id']) {
+                showgtask($t);
+                findchild_gantt($p['tasks'], $t['task_id']);
+            }
         }
     }
 }
@@ -228,19 +238,11 @@ if (w2PgetParam($_POST, 'display_option', '') == 'all') {
 }
 
 $gtask_sliced = array() ;
-$gtask_sliced = smart_slice( $gantt_arr, $showNoMilestones, $printpdfhr, $tasks_end_date->dateDiff($tasks_start_date) );
+$gtask_sliced = smart_slice($gantt_arr, $showNoMilestones, $printpdfhr, $tasks_end_date->dateDiff($tasks_start_date));
 
 $page = 0 ;					// Numbering of output files
 $outpfiles = array();		// array of output files to be returned to caller
 $taskcount = 0 ;
-// Create task_index array
-$ctflag = false ;
-if ( count( $gtask_sliced ) > 1 ) {
-    for ( $i = 0; $i < count($gantt_arr); $i++ ) {
-        $task_index[$gantt_arr[$i][0]['task_id']] = $i+1 ;
-    }
-    $ctflag = true;
-}
 
 $durnTypes = w2PgetSysVal('TaskDurationType');
 
@@ -267,24 +269,7 @@ foreach ($gtask_sliced as $gts) {
 
     $gantt->setDateRange($tasks_start_date, $tasks_end_date);
 
-    reset($projects);
-    foreach ($projects as $p) {
-        $parents = array();
-        $tnums = count($p['tasks']);
-
-        for ($i = 0; $i < $tnums; $i++) {
-            $t = $p['tasks'][$i];
-            if (!isset($parents[$t['task_parent']])) {
-                $parents[$t['task_parent']] = false;
-            }
-            if ($t['task_parent'] == $t['task_id']) {
-                $parents[$t['task_parent']] = true;
-                showgtask($t);
-                findchild_gantt($p['tasks'], $t['task_id']);
-            }
-        }
-    }
-    $gantt->loadTaskArray($gantt_arr);
+    $gantt->loadTaskArray($gts);
 
     $row = 0;
     for($i = 0; $i < count($gts); $i ++) {
