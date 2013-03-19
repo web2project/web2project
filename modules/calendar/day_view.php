@@ -114,6 +114,7 @@ function clickDay( idate, fdate ) {
 
 	$links = array();
 	getTaskLinks($first_time, $last_time, $links, 20, $company_id, true, $AppUI->user_id);
+	getTaskLinks($first_time, $last_time, $links, 20, $company_id, true, -$AppUI->user_id);
 	getEventLinks($first_time, $last_time, $links, $event_filter, true, $AppUI->user_id);
 	$minical->setEvents($links);
 
@@ -131,6 +132,7 @@ function clickDay( idate, fdate ) {
 	$last_time->setTime(23, 59, 59);
 	$links = array();
 	getTaskLinks($first_time, $last_time, $links, 20, $company_id, true, $AppUI->user_id);
+	getTaskLinks($first_time, $last_time, $links, 20, $company_id, true, -$AppUI->user_id);
 	getEventLinks($first_time, $last_time, $links, $event_filter, true, $AppUI->user_id);
 	$minical->setEvents($links);
 
@@ -148,6 +150,7 @@ function clickDay( idate, fdate ) {
 	$last_time->setTime(23, 59, 59);
 	$links = array();
 	getTaskLinks($first_time, $last_time, $links, 20, $company_id, true, $AppUI->user_id);
+	getTaskLinks($first_time, $last_time, $links, 20, $company_id, true, -$AppUI->user_id);
 	getEventLinks($first_time, $last_time, $links, $event_filter, true, $AppUI->user_id);
 	$minical->setEvents($links);
 

@@ -48,9 +48,10 @@ $links = array();
 
 // assemble the links for the tasks
 getTaskLinks($first_time, $last_time, $links, 50, $company_id, false, $AppUI->user_id);
+getTaskLinks($first_time, $last_time, $links, 50, $company_id, false, -$AppUI->user_id);
 
 // assemble the links for the events
-getEventLinks($first_time, $last_time, $links, 50);
+getEventLinks($first_time, $last_time, $links, $event_filter, false, $AppUI->user_id);
 
 $hooks = new w2p_Core_HookHandler($AppUI);
 $hooks->links = $links;

@@ -312,27 +312,37 @@ class w2p_Output_MonthCalendar {
 				$dow = (int) substr($day, 8, 1);
 				$cday = (int) substr($day, 0, 8);
 
-				//If we are on minical mode and we find tasks or events for this day then lets color code the cell depending on that
+				// If we are on minical mode and we find tasks or events for this day then lets color code the cell depending on that
+				// Now the task counters are split between tasks assigned to me and assigned to others but from projects owned by me.
 				if (array_key_exists($cday, $this->events) && $this->styleMain == 'minical') {
-					$nr_tasks = 0;
+					$nr_tasks_my = 0;
+					$nr_tasks_other = 0;
 					$nr_events = 0;
 					//lets count tasks and events
 					foreach ($this->events[$cday] as $record) {
-						if ($record['task']) {
-							++$nr_tasks;
+						if (isset($record['task'])) {
+							++$nr_tasks_my;
+						} elseif (isset($record['taskothers'])) {
+							++$nr_tasks_other;
 						} else {
 							++$nr_events;
 						}
 					}
-					if ($nr_events && $nr_tasks) {
-						//if we find both
+					if ($nr_events && $nr_tasks_my) {
+						//if we find both (with tasks assigned to me)
 						$class = 'eventtask';
+					} elseif ($nr_events && $nr_tasks_other) {
+						//if we find both (with tasks assigned to others)
+						$class = 'eventtaskothers';
 					} elseif ($nr_events) {
 						//if we just find events
 						$class = 'event';
-					} elseif ($nr_tasks) {
-						//if we just find tasks
+					} elseif ($nr_tasks_my) {
+						//if we just find tasks assigned to me
 						$class = 'task';
+					} elseif ($nr_tasks_other) {
+						//if we just find tasks assigned to others
+						$class = 'taskothers';
 					}
 					if ($day == $today) {
 						$class .= 'today';

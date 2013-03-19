@@ -4250,7 +4250,11 @@ function getTaskLinks($startPeriod, $endPeriod, &$links, $strMaxLen, $company_id
 		// First we test if the Tasks Starts and Ends are on the same day, if so we don't need to go any further.
 		if (($start->after($startPeriod)) && ($end && $end->after($startPeriod) && $end->before($endPeriod) && !($start->dateDiff($end)))) {
 			if ($minical) {
-				$temp = array('task' => true);
+				if ($row['assigned_others']) {
+					$temp = array('taskothers' => true);
+				} else {
+					$temp = array('task' => true);
+				}
 			} else {
 				$temp = $link;
 				if ($a != 'day_view') {
@@ -4263,7 +4267,11 @@ function getTaskLinks($startPeriod, $endPeriod, &$links, $strMaxLen, $company_id
 			// If they aren't, we will now need to see if the Tasks Start date is between the requested period
 			if ($start->after($startPeriod) && $start->before($endPeriod)) {
 				if ($minical) {
-					$temp = array('task' => true);
+					if ($row['assigned_others']) {
+						$temp = array('taskothers' => true);
+					} else {
+						$temp = array('task' => true);
+					}
 				} else {
 					$temp = $link;
 					if ($a != 'day_view') {
@@ -4276,7 +4284,11 @@ function getTaskLinks($startPeriod, $endPeriod, &$links, $strMaxLen, $company_id
 			// And now the Tasks End date is checked if it is between the requested period too.
 			if ($end && $end->after($startPeriod) && $end->before($endPeriod) && $start->before($end)) {
 				if ($minical) {
-					$temp = array('task' => true);
+					if ($row['assigned_others']) {
+						$temp = array('taskothers' => true);
+					} else {
+						$temp = array('task' => true);
+					}
 				} else {
 					$temp = $link;
 					if ($a != 'day_view') {

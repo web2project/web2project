@@ -1492,6 +1492,12 @@ class CTask extends w2p_Core_BaseObject
             if (!$canAccess) {
                 continue;
             }
+	    // Pin a flag to signal the type of user filtering
+	    if ($user_id > 0) {
+		$row['assigned_others'] = false;
+	    } else if ($user_id < 0) {
+		$row['assigned_others'] = true;
+	    }
             $result[$key] = $row;
         }
         // execute and return
