@@ -347,8 +347,8 @@ if (!$min_view) {
 		<?php
 			$s = '<th align="center">';
 			setlocale(LC_TIME, 'C');
-			$s .= $this->_AppUI->_($start_date->format('%B')) . ' ' . $start_date->format('%Y');
-			setlocale(LC_ALL, $this->_AppUI->user_lang);
+			$s .= $AppUI->_($start_date->format('%B')) . ' ' . $start_date->format('%Y');
+			setlocale(LC_ALL, $AppUI->user_lang);
 			$s .= '</th>';
 			echo $s;
 		?>
