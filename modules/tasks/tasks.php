@@ -341,7 +341,8 @@ if (count($tasks) > 0) {
 	}
 }
 
-$showEditCheckbox = ((isset($canEdit) && $canEdit && w2PgetConfig('direct_edit_assignment')) ? true : false);
+// If in minimal view the rows cannot be edited
+$showEditCheckbox = ((isset($canEdit) && $canEdit && w2PgetConfig('direct_edit_assignment') && !$min_view) ? true : false);
 ?>
 
 <script language="javascript" type="text/javascript">
@@ -354,7 +355,7 @@ function toggle_users(id){
 // security improvement:
 // some javascript functions may not appear on client side in case of user not having write permissions
 // else users would be able to arbitrarily run 'bad' functions
-if (isset($canEdit) && $canEdit && $w2Pconfig['direct_edit_assignment']) { ?>
+if ($showEditCheckbox) { ?>
 	function checkAll(project_id) {
 		var f = eval('document.assFrm' + project_id);
 		var cFlag = f.master.checked ? false : true;
@@ -505,7 +506,7 @@ if ($showEditCheckbox) {
 	<?php
 		reset($projects);
 		
-		if ($w2Pconfig['direct_edit_assignment']) {
+		if ($showEditCheckbox) {
 			// get Users with all Allocation info (e.g. their freeCapacity)
 			// but do it only when direct_edit_assignment is on and only once.
 			$tempoTask = new CTask();
@@ -535,7 +536,7 @@ if ($showEditCheckbox) {
 					  <td>
 					   <?php echo $open_link; ?>
 					  </td>
-					  <td colspan="<?php echo ($w2Pconfig['direct_edit_assignment']) ? $cols - 3 : $cols; ?>">
+					  <td colspan="<?php echo ($showEditCheckbox) ? $cols - 3 : $cols; ?>">
 						  <table width="100%" border="0">
 							  <tr>
 									<!-- patch 2.12.04 display company name next to project name -->
@@ -552,7 +553,7 @@ if ($showEditCheckbox) {
 						  </table>
 					  </td>
 						<?php
-							if ($w2Pconfig['direct_edit_assignment']) {
+							if ($showEditCheckbox) {
 								?>
 							  <td colspan="3" align="right" valign="middle">
 								  <table width="100%" border="0">
