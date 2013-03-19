@@ -47,7 +47,7 @@ $next_week = new w2p_Utilities_Date(Date_calc::beginOfNextWeek($dd, $mm, $yy, FM
 $links = array();
 
 // assemble the links for the tasks
-getTaskLinks($first_time, $last_time, $links, 50, $company_id);
+getTaskLinks($first_time, $last_time, $links, 50, $company_id, false, $AppUI->user_id);
 
 // assemble the links for the events
 getEventLinks($first_time, $last_time, $links, 50);

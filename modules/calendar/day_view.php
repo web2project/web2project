@@ -113,9 +113,8 @@ function clickDay( idate, fdate ) {
 	$last_time->setTime(23, 59, 59);
 
 	$links = array();
-	getTaskLinks($first_time, $last_time, $links, 20, $company_id, true);
-
-	getEventLinks($first_time, $last_time, $links, 20, true);
+	getTaskLinks($first_time, $last_time, $links, 20, $company_id, true, $AppUI->user_id);
+	getEventLinks($first_time, $last_time, $links, $event_filter, true, $AppUI->user_id);
 	$minical->setEvents($links);
 
 	$minical->setDate($minical->prev_month);
@@ -131,8 +130,8 @@ function clickDay( idate, fdate ) {
 	$last_time->setDay($minical->next_month->getDaysInMonth());
 	$last_time->setTime(23, 59, 59);
 	$links = array();
-	getTaskLinks($first_time, $last_time, $links, 20, $company_id, true);
-	getEventLinks($first_time, $last_time, $links, 20, true);
+	getTaskLinks($first_time, $last_time, $links, 20, $company_id, true, $AppUI->user_id);
+	getEventLinks($first_time, $last_time, $links, $event_filter, true, $AppUI->user_id);
 	$minical->setEvents($links);
 
 	$minical->setDate($minical->next_month);
@@ -148,8 +147,8 @@ function clickDay( idate, fdate ) {
 	$last_time->setDay($minical->next_month->getDaysInMonth());
 	$last_time->setTime(23, 59, 59);
 	$links = array();
-	getTaskLinks($first_time, $last_time, $links, 20, $company_id, true);
-	getEventLinks($first_time, $last_time, $links, 20, true);
+	getTaskLinks($first_time, $last_time, $links, 20, $company_id, true, $AppUI->user_id);
+	getEventLinks($first_time, $last_time, $links, $event_filter, true, $AppUI->user_id);
 	$minical->setEvents($links);
 
 	$minical->setDate($minical->next_month);

@@ -3,12 +3,12 @@ if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
 
-global $this_day, $first_time, $last_time, $company_id, $m, $a;
+global $this_day, $first_time, $last_time, $company_id, $m, $a, $AppUI;
 
 $links = array();
 
 // assemble the links for the tasks
-getTaskLinks($first_time, $last_time, $links, 100, $company_id);
+getTaskLinks($first_time, $last_time, $links, 100, $company_id, false, -$AppUI->user_id);
 
 $s = '';
 $dayStamp = $this_day->format(FMT_TIMESTAMP_DATE);

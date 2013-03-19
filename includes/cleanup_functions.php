@@ -4082,12 +4082,16 @@ function showcompany($company, $restricted = false) {
  * @param Date the starting date of the period
  * @param Date the ending date of the period
  * @param array by-ref an array of links to append new items to
- * @param int the length to truncate entries by
+ * @param string filtering
  * @author Andrew Eddie <eddieajau@users.sourceforge.net>
  */
-function getEventLinks($startPeriod, $endPeriod, &$links, $notUsed = null, $minical = false) {
-	global $event_filter;
-	$events = CEvent::getEventsForPeriod($startPeriod, $endPeriod, $event_filter);
+function getEventLinks($startPeriod, $endPeriod, &$links, $event_filter = 'all', $minical = false, $user_id = null) {
+	global $AppUI;
+	if (!isset($user_id)) {
+		$user_id = $AppUI->user_id;
+	}
+	// List only tasks belonging to the specified user
+	$events = CEvent::getEventsForPeriod($startPeriod, $endPeriod, $event_filter, $user_id);
 	$cwd = explode(',', w2PgetConfig('cal_working_days'));
 
 	// assemble the links for the events
@@ -4208,10 +4212,13 @@ function getEventTooltip($event_id) {
  * @param int the company id to filter by
  * @author Andrew Eddie <eddieajau@users.sourceforge.net>
  */
-function getTaskLinks($startPeriod, $endPeriod, &$links, $strMaxLen, $company_id = 0, $minical = false) {
+function getTaskLinks($startPeriod, $endPeriod, &$links, $strMaxLen, $company_id = 0, $minical = false, $user_id = null) {
 	global $a, $AppUI;
-	// List only tasks not belonging to the currently logged in user
-	$tasks = CTask::getTasksForPeriod($startPeriod, $endPeriod, $company_id, -$AppUI->user_id);
+	if (!isset($user_id)) {
+		$user_id = $AppUI->user_id;
+	}
+	// List only tasks belonging to the specified user
+	$tasks = CTask::getTasksForPeriod($startPeriod, $endPeriod, $company_id, $user_id);
 	$tf = $AppUI->getPref('TIMEFORMAT');
 	//subtract one second so we don't have to compare the start dates for exact matches with the startPeriod which is 00:00 of a given day.
 	$startPeriod->subtractSeconds(1);
