@@ -14,10 +14,8 @@ if (!$canRead) {
 w2PsetMicroTime();
 
 // retrieve any state parameters
-if (isset($_REQUEST['company_id'])) {
-	$AppUI->setState('CalIdxCompany', intval(w2PgetParam($_REQUEST, 'company_id', 0)));
-}
-$company_id = $AppUI->getState('CalIdxCompany', $AppUI->user_company);
+$company_id = $AppUI->processIntState('CalIdxCompany', $_POST, 'company_id',
+				      (w2PgetConfig('company_filter_default', 'user') == 'user') ? $AppUI->user_company : '0');
 
 // Using simplified set/get semantics. Doesn't need as much code in the module.
 $event_filter = $AppUI->checkPrefState('CalIdxFilter', w2PgetParam($_REQUEST, 'event_filter', ''), 'EVENTFILTER', 'my');
