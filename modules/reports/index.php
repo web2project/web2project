@@ -32,6 +32,11 @@ $df = $AppUI->getPref('SHDATEFORMAT');
 
 $reports = $AppUI->readFiles(W2P_BASE_DIR . '/modules/reports/reports', '\.php$');
 
+$report_type_var = w2PgetParam($_GET, 'report_type', '');
+if (!empty($report_type_var)) {
+	$report_type_var = '&amp;report_type=' . $report_type;
+}
+
 // setup the title block
 if (!$suppressHeaders) {
 	$titleBlock = new w2p_Theme_TitleBlock('Project Reports', 'printer.png', $m, $m . '.' . $a);
@@ -42,26 +47,13 @@ if (!$suppressHeaders) {
 	if ($report_type) {
 		$titleBlock->addCrumb('?m=reports&amp;project_id=' . $project_id, 'reports index');
 	}
+	$titleBlock->addCell('<form name="changeMe" action="./index.php?m=reports' . $report_type_var . '" method="post" accept-charset="utf-8">' . arraySelect($project_list, 'project_id', 'size="1" class="text" onchange="changeIt();"', $project_id, false) . '</form>');
+	$titleBlock->addCell($AppUI->_('Project') . ':');
 	$titleBlock->show();
 }
 
-$report_type_var = w2PgetParam($_GET, 'report_type', '');
-if (!empty($report_type_var)) {
-	$report_type_var = '&amp;report_type=' . $report_type;
-}
 echo '<br /><br /><br /><br /><br />';
-if (!$suppressHeaders) {
-	if (!isset($display_project_name)) {
-		$display_project_name = $AppUI->_('All');
-	}
-	echo $AppUI->_('Selected Project') . ': <b>' . $display_project_name . '</b>';
-?>
-<form name="changeMe" action="./index.php?m=reports<?php echo $report_type_var; ?>" method="post" accept-charset="utf-8">
-<?php echo $AppUI->_('Projects') . ':' . arraySelect($project_list, 'project_id', 'size="1" class="text" onchange="changeIt();"', $project_id, false); ?>
-</form>
 
-<?php
-}
 if ($report_type) {
 	$report_type = $AppUI->checkFileName($report_type);
 	$report_type = str_replace(' ', '_', $report_type);
