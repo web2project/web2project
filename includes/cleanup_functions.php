@@ -799,6 +799,23 @@ function findchild_pd(&$tarr, $parent, $level = 0) {
 	}
 }
 
+//TODO: modules/projectdesigner/projectdesigner.class.php
+// NOTE: This function IS NOT an exact duplicate of 'findchild_pr'
+//       because it calls a different 'showtask_*' function.
+function findchild_pr(&$tarr, $parent, $level = 0) {
+	global $projects;
+
+	$level = $level + 1;
+	$n = count($tarr);
+
+	for ($x = 0; $x < $n; $x++) {
+		if ($tarr[$x]['task_parent'] == $parent && $tarr[$x]['task_parent'] != $tarr[$x]['task_id']) {
+			echo showtask_pr($tarr[$x], $level);
+			findchild_pr($tarr, $tarr[$x]['task_id'], $level);
+		}
+	}
+}
+
 // from modules/tasks/tasks.class.php
 function array_csort() { //coded by Ichier2003
 

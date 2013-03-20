@@ -268,7 +268,10 @@ echo '</tr>';
 reset($projects);
 
 foreach ($projects as $p) {
-	$tnums = count($p['tasks']);
+	$tnums = 0;
+	if (isset($p['tasks'])) {
+		$tnums = count($p['tasks']);
+	}
 
 	if ($tnums > 0 || $project_id == $p['project_id']) {
 		if ($task_sort_item1 != '') {
@@ -284,7 +287,7 @@ foreach ($projects as $p) {
 
 			if ($t['task_parent'] == $t['task_id']) {
 				echo showtask_pr($t, 0);
-				findchild_pd($p['tasks'], $t['task_id']);
+				findchild_pr($p['tasks'], $t['task_id']);
 			}
 		}
 	}
@@ -306,7 +309,7 @@ $projectStatus = w2PgetSysVal('ProjectStatus');
 <tr>
     <td align="center" colspan="20">
 <?php
-$src = "?m=projectdesigner&a=gantt&suppressHeaders=1&showLabels=1&proFilter=&showInactive=1showAllGantt=1&project_id=$project_id&width=' + ((navigator.appName=='Netscape'?window.innerWidth:document.body.offsetWidth)*0.90) + '";
+$src = "?m=tasks&a=gantt&suppressHeaders=1&showLabels=1&proFilter=&showInactive=1showAllGantt=1&project_id=$project_id&width=' + ((navigator.appName=='Netscape'?window.innerWidth:document.body.offsetWidth)*0.90) + '";
 echo "<script language=\"javascript\" type=\"text/javascript\">document.write('<img src=\"$src\">')</script>";
 ?>
 </td>

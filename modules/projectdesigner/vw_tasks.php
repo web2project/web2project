@@ -231,7 +231,7 @@ if (count($fields) > 0) {
         'task_owner', 'task_start_date', 'task_duration', 'task_end_date', 'task_4');
     $fieldNames = array('Work', 'P', 'U', 'A', 'T', 'R', 'I', 'Log',
         'Task Name', 'Task Owner', 'Start', 'Duration', 'Finish',
-        'Assgined Users');
+        'Assigned Users');
 
     $module->storeSettings('tasks', 'projectdesigner-view', $fieldList, $fieldNames);
 }
@@ -268,7 +268,10 @@ if (count($fields) > 0) {
 reset($projects);
 
 foreach ($projects as $k => $p) {
-	$tnums = count($p['tasks']);
+	$tnums = 0;
+	if (isset($p['tasks'])) {
+		$tnums = count($p['tasks']);
+	}
 	if ($tnums > 0 || $project_id == $p['project_id']) {
 		if ($task_sort_item1 != '') {
 			if ($task_sort_item2 != '' && $task_sort_item1 != $task_sort_item2) {
