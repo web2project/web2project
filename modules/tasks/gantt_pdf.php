@@ -175,8 +175,10 @@ unset($proTasks);
 foreach ($projects as $p) {
     global $parents, $task_id;
     $parents = array();
-    $tnums = count($p['tasks']);
-
+    $tnums = 0;
+    if (isset($p['tasks'])) {
+       $tnums = count($p['tasks']);
+    }
     for ($i=0; $i < $tnums; $i++) {
         $t = $p['tasks'][$i];
         if (!(isset($parents[$t['task_parent']]))) {
