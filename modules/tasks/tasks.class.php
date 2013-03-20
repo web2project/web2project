@@ -1368,7 +1368,6 @@ class CTask extends w2p_Core_BaseObject
             if (count($mail_recipients) == 0) {
                 return false;
             }
-
             // Build the email and send it out.
             $char_set = isset($locale_char_set) ? $locale_char_set : '';
             $mail = new w2p_Utilities_Mail();
@@ -2276,7 +2275,6 @@ class CTask extends w2p_Core_BaseObject
     public function remind($notUsed = null, $notUsed2 = null, $id, $owner, $notUsed = null)
     {
         global $locale_char_set;
-
         // At this stage we won't have an object yet
         if (!$this->load($id)) {
             return - 1; // No point it trying again later.
@@ -2341,6 +2339,7 @@ class CTask extends w2p_Core_BaseObject
         $mail = new w2p_Utilities_Mail();
         $mail->Subject($subject, $locale_char_set);
 
+	$sent = true;
         foreach ($contacts as $contact) {
             $user_id = $contact['user_id'];
             $this->_AppUI->loadPrefs($user_id);
@@ -2354,10 +2353,12 @@ class CTask extends w2p_Core_BaseObject
 
             if ($mail->ValidEmail($contact['contact_email'])) {
                 $mail->To($contact['contact_email'], true);
-                $mail->Send();
+		if (!$mail->Send()) {
+			$sent = false;
+		}
             }
         }
-        return true;
+        return $sent;
     }
 
     /**
