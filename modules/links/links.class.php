@@ -141,13 +141,13 @@ class CLink extends w2p_Core_BaseObject
 //TODO: We need to convert this from static to use ->overrideDatabase() for testing.
 	$allowedProjects = $project->getAllowedSQL($AppUI->user_id, 'link_project');
 	if (count($allowedProjects)) {
-		$q->addWhere('( ( ' . implode(' AND ', $allowedProjects) . ') OR file_project = 0 )');
+		$q->addWhere('( ( ' . implode(' AND ', $allowedProjects) . ') OR link_project = 0 )');
 	}
 	if (isset($company_id) && (int) $company_id > 0) {
 		$q->addWhere('project_company = ' . (int)$company_id);
 	}
 	if (isset($project_id) && (int) $project_id > 0) {
-		$q->addWhere('file_project = ' . (int)$project_id);
+		$q->addWhere('link_project = ' . (int)$project_id);
 	}
 	if (isset($task_id) && (int) $task_id > 0) {
 		$q->addWhere('file_task = ' . (int)$task_id);
