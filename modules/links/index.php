@@ -36,8 +36,11 @@ $tabBox = new CTabBox('?m=links', W2P_BASE_DIR . '/modules/links/', $tab);
 if ($tabBox->isTabbed()) {
 	array_unshift($linkTypes, $AppUI->_('All Links', UI_OUTPUT_RAW));
 }
+$i = -1;
 foreach ($linkTypes as $link_type) {
-	$tabBox->add('index_table', $link_type);
+	$linkList = CLink::getLinkList(0, $project_id, 0, $i);
+	$tabBox->add('index_table', $link_type . ' (' . count($linkList) . ')');
+	++$i;
 }
 $showProject = true;
 $tabBox->show();

@@ -125,4 +125,36 @@ class CLink extends w2p_Core_BaseObject
         return $search;
     }
 
+    public static function getLinkList($company_id = 0, $project_id = 0, $task_id = 0, $category_id = 0) 
+    {
+	global $AppUI;
+
+        $q = new w2p_Database_Query();
+	$q->addQuery('lnk.*');
+	$q->addTable('links', 'lnk');
+	$q->addJoin('projects', 'p', 'p.project_id = link_project');
+	$q->addJoin('project_departments', 'pd', 'p.project_id = pd.project_id');
+	$q->addJoin('departments', '', 'pd.department_id = dept_id');
+	$q->addJoin('tasks', 't', 't.task_id = link_task');
+
+	$project = new CProject();
+//TODO: We need to convert this from static to use ->overrideDatabase() for testing.
+	$allowedProjects = $project->getAllowedSQL($AppUI->user_id, 'link_project');
+	if (count($allowedProjects)) {
+		$q->addWhere('( ( ' . implode(' AND ', $allowedProjects) . ') OR file_project = 0 )');
+	}
+	if (isset($company_id) && (int) $company_id > 0) {
+		$q->addWhere('project_company = ' . (int)$company_id);
+	}
+	if (isset($project_id) && (int) $project_id > 0) {
+		$q->addWhere('file_project = ' . (int)$project_id);
+	}
+	if (isset($task_id) && (int) $task_id > 0) {
+		$q->addWhere('file_task = ' . (int)$task_id);
+	}
+	if ($category_id >= 0) {
+		$q->addWhere('link_category = ' . (int) $category_id);
+	}
+	return $q->loadList();
+    }
 }
