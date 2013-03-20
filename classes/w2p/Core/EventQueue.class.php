@@ -165,7 +165,7 @@ class w2p_Core_EventQueue {
 
 	public function update_event(&$fields) {
 		if ($fields['queue_repeat_interval'] && $fields['queue_repeat_count']) {
-			$fields['queue_start'] += $fields['queue_repeat_interval'];
+			$fields['queue_start'] = time() + $fields['queue_repeat_interval'];
 			$fields['queue_repeat_count']--;
 			$this->update_list[] = $fields;
 		} else {
