@@ -93,7 +93,7 @@ $htmlHelper->df .= ' ' . $tf;
 if ($canDelete) {
 ?>
 function delIt() {
-	if (confirm( "<?php echo $AppUI->_('eventDelete', UI_OUTPUT_JS); ?>" )) {
+	if (confirm( "<?php echo $AppUI->_('eventDelete', UI_OUTPUT_JS); ?>?" )) {
 		document.frmDelete.submit();
 	}
 }
