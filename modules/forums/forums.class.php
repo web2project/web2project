@@ -10,7 +10,7 @@ if (!isset($AppUI)) {
 require_once ($AppUI->getLibraryClass('PEAR/BBCodeParser'));
 $bbparser = new HTML_BBCodeParser();
 
-$filters = array('- Filters -');
+$filters = array('All Forums');
 
 if (isset($a) && $a == 'viewer') {
     array_push($filters, 'My Watched', 'Last 30 days');
