@@ -87,6 +87,7 @@ if (function_exists('styleRenderBoxTop')) {
                     echo str_replace('span', 'div', breadCrumbs($crumbs));
                     ?>
                 </td>
+		<td align="center" width="100%"><h1><?php echo $AppUI->_('Topics'); ?></h1></td>
                 <td width="25%" align="right">
                 <?php if ($canAuthor) { ?>
                     <input type="button" class="button" value="<?php echo $AppUI->_('start a new topic'); ?>" onclick="javascript:window.location='./index.php?m=forums&a=viewer&forum_id=<?php echo $forum_id; ?>&post_message=1';" />
