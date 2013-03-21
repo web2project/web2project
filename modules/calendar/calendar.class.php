@@ -210,10 +210,10 @@ class CEvent extends w2p_Core_BaseObject
 			$$query_set->leftJoin('project_departments', 'project_departments', 'p.project_id = project_departments.project_id OR project_departments.project_id IS NULL');
 			$$query_set->leftJoin('departments', 'departments', 'departments.dept_id = project_departments.department_id OR dept_id IS NULL');
 			if ($company_id) {
-				$$query_set->addWhere('project_company = ' . (int)$company_id);
+				$$query_set->addWhere('(project_company = ' . (int)$company_id . ' OR project_company = 0 OR project_company IS NULL)');
 			} else {
 				if (($AppUI->getState('CalIdxCompany'))) {
-					$$query_set->addWhere('project_company = ' . $AppUI->getState('CalIdxCompany'));
+					$$query_set->addWhere('(project_company = ' . $AppUI->getState('CalIdxCompany') . ' OR project_company = 0 OR project_company IS NULL)');
 				}
 			}
 
