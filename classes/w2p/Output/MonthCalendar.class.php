@@ -345,7 +345,7 @@ class w2p_Output_MonthCalendar {
 						$class = 'taskothers';
 					}
 					if ($day == $today) {
-						$class .= 'today';
+						$class .= ' today';
 					}
 				} elseif ($m != $this_month) {
 					$class = 'empty';
