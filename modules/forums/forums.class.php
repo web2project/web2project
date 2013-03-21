@@ -114,6 +114,7 @@ class CForum extends w2p_Core_BaseObject
         $q->addQuery('SUBSTRING(l.message_body,1,' . $max_msg_length . ') message_body');
         $q->addQuery('LENGTH(l.message_body) message_length, watch_user, l.message_parent, l.message_id');
         $q->addQuery('count(distinct v.visit_message) as visit_count, count(distinct c.message_id) as message_count');
+        $q->addQuery('w.notify_by_email');
 
         $q->addJoin('users', 'u', 'u.user_id = forum_owner');
         $q->addJoin('projects', 'pr', 'pr.project_id = forum_project');
@@ -243,32 +244,33 @@ class CForum extends w2p_Core_BaseObject
         $db_start = $start_date->format(FMT_DATETIME_MYSQL);
         $db_end = $end_date->format(FMT_DATETIME_MYSQL);
 
-	   $prj = new CProject();
-	   $prjs = $prj->getAllowedRecords($user_id,'projects.project_id, project_name', '', null, null, 'projects');
-	   if (count($prjs)) {
-	        $prj_filter = ' AND (forum_project IN (' . implode(',', array_keys($prjs)) . ') OR forum_project IS NULL OR forum_project = \'\' OR forum_project = 0)';
-	   } else {
-	       $prj_filter = ' AND False';
-	   }
+	$prj = new CProject();
+	$prjs = $prj->getAllowedRecords($user_id,'projects.project_id, project_name', '', null, null, 'projects');
+	if (count($prjs)) {
+		$prj_filter = ' AND (forum_project IN (' . implode(',', array_keys($prjs)) . ') OR forum_project IS NULL OR forum_project = \'\' OR forum_project = 0)';
+	} else {
+		$prj_filter = ' AND False';
+	}
 
-	   // Filter also by company, if needed
-	   if ($company_id) {
-		   $prj_filter .= ' AND (project_company = "' . (string)$company_id . '")';
-	   }
+	// Filter also by company, if needed
+	if ($company_id) {
+		$prj_filter .= ' AND (project_company = "' . (string)$company_id . '")';
+	}
 
         $q = new w2p_Database_Query;
-        $q->addTable('forum_messages');
-        $q->addTable('forums');
-        $q->addTable('forum_watch', 'check_forum');
-        $q->addTable('forum_watch', 'check_msg');
-        $q->addJoin('users', 'u', 'u.user_id = message_author');
-        $q->addJoin('contacts', 'cts', 'contact_id = u.user_contact');
-        $q->addJoin('projects', 'pr', 'pr.project_id = forum_project');
-	   if ($company_id) {
-		   $q->addJoin('companies', 'cmp', 'cmp.company_id = pr.project_company');
-	   }
-        $q->addQuery('message_id, message_forum, message_title, message_date, message_author, forum_project, cts.contact_display_name, pr.project_name, forums.forum_name');
-        $q->addWhere('((forums.forum_id = check_forum.watch_forum) AND (check_forum.watch_user = "' . $user_id . '")) AND (forum_messages.message_forum = forums.forum_id) AND (((forum_messages.message_id = check_msg.watch_topic) OR (forum_messages.message_parent = check_msg.watch_topic)) AND check_msg.watch_user = "' . $user_id . '") AND (forum_messages.message_published = true) AND (forum_messages.message_date >= "' . $db_start .'") AND (forum_messages.message_date <= "' . $db_end .'")' . $prj_filter);
+        $q->addTable('forum_messages', 'fm');
+	$q->leftJoin('forum_visits', 'fv', 'fm.message_id = fv.visit_message AND fm.message_forum = fv.visit_forum');
+        $q->leftJoin('forums', 'f', 'f.forum_id = fm.message_forum');
+        $q->leftJoin('users', 'u', 'u.user_id = fm.message_author');
+        $q->leftJoin('contacts', 'cts', 'cts.contact_id = u.user_contact');
+        $q->leftJoin('projects', 'pr', 'pr.project_id = f.forum_project');
+	if ($company_id) {
+		$q->leftJoin('companies', 'cmp', 'cmp.company_id = pr.project_company');
+	}
+	$q->innerJoin('forum_watch','fw','fm.message_parent = fw.watch_topic OR fm.message_id = fw.watch_topic OR fm.message_forum = fw.watch_forum');
+	$q->addGroup('fm.message_id');
+        $q->addQuery('fm.message_id, fm.message_forum, fm.message_parent, fm.message_title, fm.message_date, fm.message_author, f.forum_project, cts.contact_display_name, pr.project_name, f.forum_name');
+	$q->addWhere('fw.watch_user = ' . $user_id . ' AND fm.message_published = true AND fm.message_date <= "' . $db_end .'" AND (fv.visit_date > "' . $db_end .'" OR fv.visit_date IS NULL) ' . $prj_filter);
 
         return $q->loadList();
     }

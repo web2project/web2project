@@ -3210,11 +3210,11 @@ function w2PshowImage($src, $wid = '', $hgt = '', $alt = '', $title = '', $modul
 	if (!$alt && !$title) {
 		$result = '';
 	} elseif ($alt && $title) {
-		$result = w2PtoolTip($alt, $title);
+		$result = w2PtoolTip($alt, $title, false, '', 'inline-tooltip');
 	} elseif ($alt && !$title) {
-		$result = w2PtoolTip($m, $alt);
+		$result = w2PtoolTip($m, $alt, false, '', 'inline-tooltip');
 	} elseif (!$alt && $title) {
-		$result = w2PtoolTip($m, $title);
+		$result = w2PtoolTip($m, $title, false, '', 'inline-tooltip');
 	}
 	$result .= '<img src="' . $src . '" alt="' . $alt . '" ';
 	if ($wid) {
@@ -3795,14 +3795,15 @@ function w2PHTMLDecode($txt) {
 	return $txt;
 }
 
-function w2PtoolTip($header = '', $tip = '', $raw = false, $id = '') {
+function w2PtoolTip($header = '', $tip = '', $raw = false, $id = '', $class = '') {
 	global $AppUI;
 
-    $id = ('' == $id) ? '' : 'id="' . $id . '"';
+    $id = ('' == $id) ? '' : 'id="' . $id . '" ';
+    $class = ('' == $class) ? '' : 'class="' . $class . '"';
 	if ($raw) {
-		$starttip = '<span ' . $id . ' title="&lt;h4&gt;' . nl2br($AppUI->_($header)) . '&lt;/h4&gt; ' . nl2br($AppUI->_($tip)) . '">';
+		$starttip = '<span ' . $id . $class . ' title="&lt;h4&gt;' . nl2br($AppUI->_($header)) . '&lt;/h4&gt; ' . nl2br($AppUI->_($tip)) . '">';
 	} else {
-		$starttip = '<span ' . $id . ' title="&lt;h4&gt;' . nl2br(ucwords(strtolower($AppUI->_($header)))) . '&lt;/h4&gt; ' . nl2br(strtolower($AppUI->_($tip))) . '">';
+		$starttip = '<span ' . $id . $class . ' title="&lt;h4&gt;' . nl2br(ucwords(strtolower($AppUI->_($header)))) . '&lt;/h4&gt; ' . nl2br(strtolower($AppUI->_($tip))) . '">';
 	}
 	return $starttip;
 }

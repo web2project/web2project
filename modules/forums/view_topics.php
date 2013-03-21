@@ -22,7 +22,7 @@ $q->addQuery('COUNT(distinct fm2.message_id) AS replies');
 $q->addQuery('MAX(fm2.message_date) AS latest_reply');
 $q->addQuery('user_username, contact_first_name, contact_last_name, contact_display_name as contact_name, watch_user');
 $q->addQuery('count(distinct v1.visit_message) as reply_visits');
-$q->addQuery('v1.visit_user');
+$q->addQuery('v1.visit_user, fw.notify_by_email');
 $q->leftJoin('users', 'u', 'fm1.message_author = u.user_id');
 $q->leftJoin('contacts', 'con', 'contact_id = user_contact');
 $q->leftJoin('forum_messages', 'fm2', 'fm1.message_id = fm2.message_parent');
@@ -108,6 +108,7 @@ if (function_exists('styleRenderBoxTop')) {
             <tr bgcolor="white" valign="top">
                 <td nowrap="nowrap" align="center" width="1%">
                     <input type="checkbox" name="forum_<?php echo $row['message_id']; ?>" <?php echo $row['watch_user'] ? 'checked="checked"' : ''; ?> />
+		    <?php if ($row['notify_by_email']) { echo w2PshowImage('icons/mail.gif', 16, 16, 'Changes are reported by email'); } ?>
                 </td>
                 <?php
 //TODO: add the checkbox
@@ -124,7 +125,11 @@ if (function_exists('styleRenderBoxTop')) {
 
     <table width="100%" border="0" cellpadding="0" cellspacing="1" class="std">
         <tr>
-            <td align="left">
+            <td align="left" nowrap="nowrap">
+                <input type="checkbox" value="1" name="notifyByEMail">
+		<label for="notifyByEmail"><?php echo $AppUI->_('Notify by email on changes'); ?></label>&nbsp;&nbsp;&nbsp;&nbsp;
+            </td>
+            <td align="left" width="100%">
                 <input type="submit" class="button" value="<?php echo $AppUI->_('update watches'); ?>" />
             </td>
         </tr>

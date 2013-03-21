@@ -12,6 +12,7 @@ if (!canView('forums')) {
 ## Change forum watches
 ##
 $watch = w2PgetParam($_POST, 'watch', '');
+$notify = w2PgetParam($_POST, 'notifyByEMail', '0');
 
 if ($watch) {
 	// clear existing watches
@@ -29,6 +30,7 @@ if ($watch) {
 				$q->addTable('forum_watch');
 				$q->addInsert('watch_user', $AppUI->user_id);
 				$q->addInsert('watch_' . $watch, substr($k, 6));
+				$q->addInsert('notify_by_email', $notify);
 				if (!$q->exec()) {
 					$AppUI->setMsg(db_error(), UI_MSG_ERROR);
 				} else {

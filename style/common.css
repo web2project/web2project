@@ -513,3 +513,7 @@ table.minititle th {
 bordertable, .bordertable{
     border: 1px black solid;
 }
+
+.inline-tooltip {
+    display: inline-block;
+}

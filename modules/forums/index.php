@@ -114,15 +114,15 @@ if (count($fields) > 0) {
                     <?php if ($row["forum_owner"] == $AppUI->user_id || canAdd('forums')) { ?>
                         <a href="?m=forums&a=addedit&forum_id=<?php echo $row['forum_id']; ?>" title="<?php echo $AppUI->_('edit'); ?>">
                         <?php echo w2PshowImage('icons/stock_edit-16.png', 16, 16, ''); ?>
-                        </a>
-                    <?php }
+                        </a><?php }
                     if ($row['visit_count'] != $row['message_count']) {
-                        echo '&nbsp;' . w2PshowImage('icons/stock_new_small.png', false, false, 'You have unread messages in this forum');
+                        echo '&nbsp;' . w2PshowImage('icons/stock_new_small.png', 16, 16, 'You have unread messages in this forum');
                     } ?>
                 </td>
 
                 <td nowrap="nowrap" align="center">
                     <input type="checkbox" name="forum_<?php echo $row['forum_id']; ?>" <?php echo $row['watch_user'] ? 'checked="checked"' : ''; ?> />
+		    <?php if ($row['notify_by_email']) { echo w2PshowImage('icons/mail.gif', 16, 16, 'Changes are reported by email'); } ?>
                 </td>
 
                 <td>
@@ -151,7 +151,11 @@ if (count($fields) > 0) {
     <table width="100%" cellspacing="0" cellpadding="0" border="0" class="std">
 
         <tr>
-            <td align="left">
+            <td align="left" nowrap="nowrap">
+                <input type="checkbox" value="1" name="notifyByEMail">
+		<label for="notifyByEmail"><?php echo $AppUI->_('Notify by email on changes'); ?></label>&nbsp;&nbsp;&nbsp;&nbsp;
+            </td>
+            <td align="left" width="100%">
                 <input type="submit" class="button" value="<?php echo $AppUI->_('update watches'); ?>" />
             </td>
         </tr>

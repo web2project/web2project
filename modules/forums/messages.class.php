@@ -183,6 +183,7 @@ class CForum_Message extends w2p_Core_BaseObject
         if ($AllCount < 1) {
             //message is only delivered to users that checked the forum watch
             $q->addTable('forum_watch');
+            $q->addQuery('SUM(forum_watch.notify_by_email) AS notifies');
             $q->addWhere('user_id = watch_user AND (watch_forum = ' . (int) $this->message_forum . ' OR watch_topic = ' . (int) $this->message_parent . ')');
         }
 
@@ -203,7 +204,8 @@ class CForum_Message extends w2p_Core_BaseObject
         $mail->Body($body, isset($GLOBALS['locale_char_set']) ? $GLOBALS['locale_char_set'] : '');
 
         while ($row = $q->fetchRow()) {
-            if ($mail->ValidEmail($row['contact_email'])) {
+	    // If either the forum or the topic has a 'notify by email' flag set, do it
+            if ($row['notifies'] && $mail->ValidEmail($row['contact_email'])) {
                 $mail->To($row['contact_email'], true);
                 $mail->Send();
             }
