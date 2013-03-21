@@ -134,7 +134,7 @@ if (!$min_view) {
 	        <tr><td valign="top">
 			<strong><?php echo $AppUI->_('Period to display'); ?>:</strong><br><br>
 			<input type="radio" name="display_option" id="show_all" value="all" <?php echo $display_option == 'all' ? ' checked' : '';?> onclick="submitIt();" />
-			<label for="show_all"><?php echo $AppUI->_('The project\'s complete timeline'); ?></label><br>
+			<label for="show_all"><?php echo $AppUI->_('The project(s) complete timeline'); ?></label><br>
 			<input type="radio" name="display_option" id="single_month" value="this_month" <?php echo $display_option == 'this_month' ? ' checked' : '';?> onclick="submitIt();" />
 			<label for="single_month"><?php echo $AppUI->_('A single month'); ?></label><br>
 			<input type="radio" name="display_option" id="custom_period" value="custom" <?php echo $display_option == 'custom' ? ' checked' : '';?> onclick="submitIt();" />
@@ -157,7 +157,7 @@ if (!$min_view) {
 			<?php } ?>
 		</td><td valign="top">
 			<strong><?php echo $AppUI->_('Data to display'); ?>:</strong><br><br>
-			<div><?php echo $AppUI->_('Project type') . ':' . arraySelect($projFilter, 'proFilter', 'size="1" class="text"', $proFilter, true); ?></div><br>
+			<div><?php echo $AppUI->_('Project status') . ':&nbsp;' . arraySelect($projFilter, 'proFilter', 'size="1" class="text"', $proFilter, true); ?></div><br>
 			<input type="checkbox" name="showLabels" id="showLabels" value="1" <?php echo (($showLabels == 1) ? 'checked="checked"' : ""); ?> />
 			<label for="showLabels"><?php echo $AppUI->_('Show captions'); ?></label><br><br>
 			<input type="checkbox" name="showInactive" id="showInactive" <?php echo (($showInactive == 1) ? 'checked="checked"' : ''); ?> />
