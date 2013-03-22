@@ -3,6 +3,16 @@ if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
 
+
+function cmp($a, $b)
+{ 
+	if ($a['timestamp'] ==  $b['timestamp']) {
+		return 0 ; 
+	} 
+	return ($a['timestamp'] < $b['timestamp']) ? -1 : 1;
+} 
+
+
 // check permissions for this record
 $perms = &$AppUI->acl();
 $canRead = canView($m);
@@ -106,6 +116,11 @@ getTaskLinks($first_time, $last_time, $links, 20, $company_id, false, -$AppUI->u
 
 // assemble the links for the events
 getEventLinks($first_time, $last_time, $links, $event_filter, false, $AppUI->user_id);
+
+// Sort the links by timestamp
+foreach ($links as &$linkset) {
+	usort($linkset,'cmp');	
+}
 
 $hooks = new w2p_Core_HookHandler($AppUI);
 $hooks->links = $links;

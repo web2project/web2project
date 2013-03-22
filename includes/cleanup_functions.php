@@ -4110,7 +4110,7 @@ function getEventLinks($startPeriod, $endPeriod, &$links, $event_filter = 'all',
 	}
 	// List only tasks belonging to the specified user
 	$events = CEvent::getEventsForPeriod($startPeriod, $endPeriod, $event_filter, $user_id);
-	$cwd = explode(',', w2PgetConfig('cal_working_days'));
+	$tf = $AppUI->getPref('TIMEFORMAT');
 
 	// assemble the links for the events
 	foreach ($events as $row) {
@@ -4120,18 +4120,16 @@ function getEventLinks($startPeriod, $endPeriod, &$links, $event_filter = 'all',
 
 		for ($i = 0, $i_cmp = $start->dateDiff($end); $i <= $i_cmp; $i++) {
 			// the link
-			// optionally do not show events on non-working days
-			if (($row['event_cwd'] && in_array($date->getDayOfWeek(), $cwd)) || !$row['event_cwd']) {
-				if ($minical) {
-					$link = array();
-				} else {
-					$url = '?m=calendar&a=view&event_id=' . $row['event_id'];
-					$link['href'] = '';
-					$link['alt'] = '';
-					$link['text'] = w2PtoolTip($row['event_name'], getEventTooltip($row['event_id']), true) . w2PshowImage('event' . $row['event_type'] . '.png', 16, 16, '', '', 'calendar') . '</a>&nbsp;' . '<a href="' . $url . '"><span class="event">' . $row['event_name'] . '</span></a>' . w2PendTip();
-				}
-				$links[$date->format(FMT_TIMESTAMP_DATE)][] = $link;
+			if ($minical) {
+				$link = array();
+			} else {
+				$url = '?m=calendar&a=view&event_id=' . $row['event_id'];
+				$link['href'] = '';
+				$link['alt'] = '';
+				$link['text'] = w2PtoolTip($row['event_name'], getEventTooltip($row['event_id']), true) . w2PshowImage('event' . $row['event_type'] . '.png', 16, 16, '', '', 'calendar') . '</a>&nbsp;' . '<a href="' . $url . '"><span class="event">' . $start->format($tf) . ' ' . $row['event_name'] . '</span></a>' . w2PendTip();
+				$link['timestamp'] = $start->format(FMT_DATETIME_MYSQL);
 			}
+			$links[$date->format(FMT_TIMESTAMP_DATE)][] = $link;
 			$date = $date->getNextDay();
 		}
 	}
@@ -4280,6 +4278,7 @@ function getTaskLinks($startPeriod, $endPeriod, &$links, $strMaxLen, $company_id
                     $temp['text'].= '<a href="?m=tasks&amp;a=view&amp;task_id=' . $row['task_id'] . '&amp;tab=1&amp;date=' . $AppUI->formatTZAwareTime($row['task_end_date'], '%Y%m%d'). '">' . w2PtoolTip('Add Log', 'create a new log record against this task') . w2PshowImage('edit_add.png') . w2PendTip() . '</a>';
 				}
 			}
+			$temp['timestamp'] = $start->format(FMT_DATETIME_MYSQL);
 			$links[$end->format(FMT_TIMESTAMP_DATE)][] = $temp;
 		} else {
 			// If they aren't, we will now need to see if the Tasks Start date is between the requested period
@@ -4297,6 +4296,7 @@ function getTaskLinks($startPeriod, $endPeriod, &$links, $strMaxLen, $company_id
                         $temp['text'].= '<a href="?m=tasks&amp;a=view&amp;task_id=' . $row['task_id'] . '&amp;tab=1&amp;date=' . $AppUI->formatTZAwareTime($row['task_start_date'], '%Y%m%d'). '">' . w2PtoolTip('Add Log', 'create a new log record against this task') . w2PshowImage('edit_add.png') . w2PendTip() . '</a>';
 					}
 				}
+				$temp['timestamp'] = $start->format(FMT_DATETIME_MYSQL);
 				$links[$start->format(FMT_TIMESTAMP_DATE)][] = $temp;
 			}
 			// And now the Tasks End date is checked if it is between the requested period too.
@@ -4314,6 +4314,7 @@ function getTaskLinks($startPeriod, $endPeriod, &$links, $strMaxLen, $company_id
                         $temp['text'].= '<a href="?m=tasks&amp;a=view&amp;task_id=' . $row['task_id'] . '&amp;tab=1&amp;date=' . $AppUI->formatTZAwareTime($row['task_end_date'], '%Y%m%d'). '">' . w2PtoolTip('Add Log', 'create a new log record against this task') . w2PshowImage('edit_add.png') . w2PendTip() . '</a>';
 					}
 				}
+				$temp['timestamp'] = $start->format(FMT_DATETIME_MYSQL);
 				$links[$end->format(FMT_TIMESTAMP_DATE)][] = $temp;
 			}
 		}
