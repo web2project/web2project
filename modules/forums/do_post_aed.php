@@ -7,14 +7,10 @@ $delete = (int) w2PgetParam($_POST, 'del', 0);
 
 $message_forum = (int) w2PgetParam($_POST, 'message_forum', 0);
 $message_parent = (int) w2PgetParam($_POST, 'message_parent', 0);
-$successPath = ($delete) ? 'm=forums' : 'm=forums&a=viewer&forum_id='.
-        $message_forum.'&message_parent='.$message_parent;
-$errorPath = 'm=forums&a=viewer&forum_id='.$message_forum.'&message_parent='.
-        $message_parent.'&post_message=1';
+$successPath = 'm=forums&a=viewer&forum_id='.$message_forum.'&message_parent='.$message_parent;
+$errorPath = 'm=forums&a=viewer&forum_id='.$message_forum.'&message_parent='.$message_parent;
 
-$controller = new w2p_Controllers_Base(
-                    new CForum_Message(), $delete, 'Message', $successPath, $errorPath
-                  );
+$controller = new w2p_Controllers_Base(new CForum_Message(), $delete, 'Message', $successPath, $errorPath);
 
 $AppUI = $controller->process($AppUI, $_POST);
 $AppUI->redirect($controller->resultPath);

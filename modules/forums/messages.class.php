@@ -89,7 +89,6 @@ class CForum_Message extends w2p_Core_BaseObject
     public function delete()
     {
         $result = false;
-
         if ($this->canDelete()) {
             $q = $this->_getQuery();
             $q->addTable('forum_messages');
@@ -98,9 +97,6 @@ class CForum_Message extends w2p_Core_BaseObject
             $forumId = $q->loadResult();
             $q->clear();
 
-            $q->setDelete('forum_messages');
-            $q->addWhere('message_id = ' . (int) $this->message_id);
-            
             $result = parent::delete();
 
             $q->addTable('forum_messages');
@@ -124,6 +120,9 @@ class CForum_Message extends w2p_Core_BaseObject
         $q->addWhere('visit_message = ' . (int) $this->message_id);
         $q->exec(); // No error if this fails, it is not important.
         $q->clear();
+        $q->setDelete('forum_watch');
+        $q->addWhere('watch_topic = ' . (int) $this->message_id);
+        $q->exec(); // No error if this fails, it is not important.
     }
 
     public function loadByParent($parent_id = 0)
@@ -212,6 +211,36 @@ class CForum_Message extends w2p_Core_BaseObject
         }
         $q->clear();
         return;
+    }
+
+    // We can't check for edit permissions on individual messages. So the following users are allowed to edit/delete a forum message: 
+    //
+    //   1. Someone with edit permissions on the 'forums' module
+    //   2. The forum moderator  
+    //   3. A superuser with read-write access to 'all'
+    //   4. The message author
+    public function canEdit() 
+    {
+	$perms = &$this->_AppUI->acl();
+	return $perms->checkModuleItem('forums', 'edit', $forum_id) || ($this->_AppUI->user_id == $this->forum_moderated) || ($this->_AppUI->user_id == $this->message_author) || $perms->checkModuleItem('admin', 'edit', 0);
+    }
+
+    public function canDelete() 
+    {
+	// If there's replies to it don't let it be deleted.
+	if ($this->message_parent == -1) {
+	        $q = $this->_getQuery();
+	        $q->addTable('forum_messages');
+	        $q->addWhere('message_parent = ' . $this->message_id);
+	        $q->addQuery('count(message_id)');
+		$rep_cnt = $q->loadResult();
+		if ($rep_cnt) {
+	            $this->_error['cantDeleteParent'] = $this->_AppUI->_('A topic with replies cannot be deleted');
+		    return false;
+		}
+	}
+
+	return $this->canEdit();
     }
 
     public static function getHRef($forum_id, $msg_id)

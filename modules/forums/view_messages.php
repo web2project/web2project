@@ -35,11 +35,13 @@ $htmlHelper = new w2p_Output_HTMLHelper($AppUI);
 // else users would be able to arbitrarily run 'bad' functions
 if ($canAuthor || $canEdit) {
 ?>
-function delIt(id) {
+function delIt(id, forum, parent) {
 	var form = document.messageForm;
 	if (confirm( '<?php echo $AppUI->_('forumsDelete'); ?>' )) {
 		form.del.value = 1;
 		form.message_id.value = id;
+		form.message_forum.value = forum;
+		form.message_parent.value = parent;
 		form.submit();
 	}
 }
@@ -59,6 +61,8 @@ if (function_exists('styleRenderBoxTop')) {
 	<input type="hidden" name="dosql" value="do_post_aed" />
 	<input type="hidden" name="del" value="0" />
 	<input type="hidden" name="message_id" value="0" />
+	<input type="hidden" name="message_forum" value="0" />
+	<input type="hidden" name="message_parent" value="0" />
 </form>
 <table border="0" cellpadding="4" cellspacing="1" width="100%" class="std view" align="center">
 
@@ -187,7 +191,7 @@ foreach ($messages as $row) {
                 // table tag opening and closing.
                 $tableOpened = false;
                 $tableClosed = false;
-		//the following users are allowed to edit/delete a forum message: 1. the forum creator  2. a superuser with read-write access to 'all' 3. the message author
+		//the following users are allowed to edit/delete a forum message: 1. the forum moderator  2. a superuser with read-write access to 'all' 3. the message author
 		if ($canEdit || $AppUI->user_id == $row['forum_moderated'] || $AppUI->user_id == $row['message_author'] || $canAdminEdit) {
                     $tableOpened = true;
                     $s .= '<table cellspacing="0" cellpadding="0" border="0"><tr>';
@@ -202,7 +206,7 @@ foreach ($messages as $row) {
                         $s .= '<table cellspacing="0" cellpadding="0" border="0"><tr>';
                     }
                     // delete message
-                    $s .= '<td><a href="javascript:delIt(' . $row['message_id'] . ')" title="' . $AppUI->_('delete') . '">';
+                    $s .= '<td><a href="javascript:delIt(' . $row['message_id'] . ',' . $row['message_forum'] . ',' . $row['message_parent'] . ')" title="' . $AppUI->_('delete') . '">';
                     $s .= w2PshowImage('icons/stock_delete-16.png', '16', '16');
                     $s .= '</a>';
                     $s .= '</td></tr></table>';
