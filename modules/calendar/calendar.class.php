@@ -104,64 +104,54 @@ class CEvent extends w2p_Core_BaseObject
      * @param integer Time of Recurrence
      * @return array Calculated Start and End Dates for the recurrent Event for the given Period
      */
-    public function getRecurrentEventforPeriod($start_date, $end_date, $event_start_date, $event_end_date, $event_recurs, $event_times_recuring, $j)
+    public function getRecurrentEventforPeriod($event_start_date, $event_end_date, $event_recurs, $event_recurence)
     {
-
-        //this array will be returned
-        $transferredEvent = array();
-
         //create Date Objects for Event Start and Event End
         $eventStart = new w2p_Utilities_Date($event_start_date);
         $eventEnd = new w2p_Utilities_Date($event_end_date);
 
         //Time of Recurence = 0 (first occurence of event) has to be checked, too.
-        if ($j > 0) {
+        if ($event_recurence > 0) {
             switch ($event_recurs) {
                 case 1:
-                    $eventStart->addSpan(new Date_Span(3600 * $j));
-                    $eventEnd->addSpan(new Date_Span(3600 * $j));
+                    $eventStart->addSpan(new Date_Span(3600 * $event_recurence));
+                    $eventEnd->addSpan(new Date_Span(3600 * $event_recurence));
                     break;
                 case 2:
-                    $eventStart->addDays($j);
-                    $eventEnd->addDays($j);
+                    $eventStart->addDays($event_recurence);
+                    $eventEnd->addDays($event_recurence);
                     break;
                 case 3:
-                    $eventStart->addDays(7 * $j);
-                    $eventEnd->addDays(7 * $j);
+                    $eventStart->addDays(7 * $event_recurence);
+                    $eventEnd->addDays(7 * $event_recurence);
                     break;
                 case 4:
-                    $eventStart->addDays(14 * $j);
-                    $eventEnd->addDays(14 * $j);
+                    $eventStart->addDays(14 * $event_recurence);
+                    $eventEnd->addDays(14 * $event_recurence);
                     break;
                 case 5:
-                    $eventStart->addMonths($j);
-                    $eventEnd->addMonths($j);
+                    $eventStart->addMonths($event_recurence);
+                    $eventEnd->addMonths($event_recurence);
                     break;
                 case 6:
-                    $eventStart->addMonths(3 * $j);
-                    $eventEnd->addMonths(3 * $j);
+                    $eventStart->addMonths(3 * $event_recurence);
+                    $eventEnd->addMonths(3 * $event_recurence);
                     break;
                 case 7:
-                    $eventStart->addMonths(6 * $j);
-                    $eventEnd->addMonths(6 * $j);
+                    $eventStart->addMonths(6 * $event_recurence);
+                    $eventEnd->addMonths(6 * $event_recurence);
                     break;
                 case 8:
-                    $eventStart->addMonths(12 * $j);
-                    $eventEnd->addMonths(12 * $j);
+                    $eventStart->addMonths(12 * $event_recurence);
+                    $eventEnd->addMonths(12 * $event_recurence);
                     break;
                 default:
                     break;
             }
         }
 
-        if ($start_date->compare($start_date, $eventStart) <= 0 && $end_date->compare($end_date, $eventEnd) >= 0) {
-            // add temporarily moved Event Start and End dates to returnArray
-            $transferredEvent = array($eventStart, $eventEnd);
-        }
-
-        // return array with event start and end dates for given period (positive case)
-        // or an empty array (negative case)
-        return $transferredEvent;
+        // return array with event start and end dates for given period
+        return array($eventStart, $eventEnd);
     }
 
     /**
@@ -250,50 +240,74 @@ class CEvent extends w2p_Core_BaseObject
 		$periodLength = Date_Calc::dateDiff($start_date->getDay(), $start_date->getMonth(), $start_date->getYear(), $end_date->getDay(), $end_date->getMonth(), $end_date->getYear());
 		setlocale(LC_ALL, $AppUI->user_lang);
 
-		// AJD: Should this be going off the end of the array?  I don't think so.
-		// If it should then a comment to that effect would be nice.
-		for ($i = 0, $i_cmp = sizeof($eventListRec); $i < $i_cmp; $i++) {
-			//note from merlinyoda: j=0 is the original event according to getRecurrentEventforPeriod
-			// So, since the event is *recurring* x times, the loop condition should be j <= x, not j < x.
-			// This way the original and all recurrances are covered.
-			for ($j = 0, $j_cmp = intval($eventListRec[$i]['event_times_recuring']); $j <= $j_cmp; $j++) {
+		foreach ($eventListRec as $evt) {
+			$temp_list = array();
+			for ($j = 0, $j_cmp = (int)($evt['event_times_recuring']); $j <= $j_cmp; $j++) {
 				//Daily View
 				//show all
 				if ($periodLength <= 1) {
-					$recEventDate = CEvent::getRecurrentEventforPeriod($start_date, $end_date, $eventListRec[$i]['event_start_date'], $eventListRec[$i]['event_end_date'], $eventListRec[$i]['event_recurs'], $eventListRec[$i]['event_times_recuring'], $j);
+					$recEventDate = CEvent::getRecurrentEventforPeriod($evt['event_start_date'], $evt['event_end_date'], $evt['event_recurs'], $j);
 				}
 				//Weekly or Monthly View and Hourly Recurrent Events
 				//only show hourly recurrent event one time and add string 'hourly'
-				elseif ($periodLength > 1 && $eventListRec[$i]['event_recurs'] == 1 && $j == 0) {
-					$recEventDate = CEvent::getRecurrentEventforPeriod($start_date, $end_date, $eventListRec[$i]['event_start_date'], $eventListRec[$i]['event_end_date'], $eventListRec[$i]['event_recurs'], $eventListRec[$i]['event_times_recuring'], $j);
-					$eventListRec[$i]['event_name'] = $eventListRec[$i]['event_name'] . ' (' . $this->_AppUI->_('Hourly') . ')';
+				elseif ($periodLength > 1 && $evt['event_recurs'] == 1 && $j == 0) {
+					$recEventDate = CEvent::getRecurrentEventforPeriod($evt['event_start_date'], $evt['event_end_date'], $evt['event_recurs'], $j);
+					$evt['event_name'] = $evt['event_name'] . ' (' . $this->_AppUI->_('Hourly') . ')';
 				}
 				//Weekly and Monthly View and higher recurrence mode
 				//show all events of recurrence > 1
-				elseif ($periodLength > 1 && $eventListRec[$i]['event_recurs'] > 1) {
-					$recEventDate = CEvent::getRecurrentEventforPeriod($start_date, $end_date, $eventListRec[$i]['event_start_date'], $eventListRec[$i]['event_end_date'], $eventListRec[$i]['event_recurs'], $eventListRec[$i]['event_times_recuring'], $j);
+				elseif ($periodLength > 1 && $evt['event_recurs'] > 1) {
+					$recEventDate = CEvent::getRecurrentEventforPeriod($evt['event_start_date'], $evt['event_end_date'], $evt['event_recurs'], $j);
+				} else {
+					$recEventDate = array();
 				}
 
-				//add values to the eventsArray if check for recurrent event was positive
-				if (sizeof($recEventDate) > 0) {
-					$eList[0] = $eventListRec[$i];
-					$eList[0]['event_start_date'] = $recEventDate[0]->format(FMT_DATETIME_MYSQL);
-					$eList[0]['event_end_date'] = $recEventDate[1]->format(FMT_DATETIME_MYSQL);
-					$eventList = array_merge($eventList, $eList);
+				// Add values to the eventsArray if check for recurrent event was positive
+				if (count($recEventDate) > 0) {
+					$obj = $evt;
+					// Convert the start and end timestamp to local time
+					$obj['event_start_date'] = $AppUI->convertToSystemTZ($recEventDate[0]->format(FMT_DATETIME_MYSQL));
+					$obj['event_end_date'] = $AppUI->convertToSystemTZ($recEventDate[1]->format(FMT_DATETIME_MYSQL));
+					$temp_list[] = $obj;
 				}
-				// clear array of positive recurrent events for the case that next loop recEventDate is empty in order to avoid double display
-				$recEventDate = array();
 			}
 
+			// Now that all the events are in the list let's bump them, if needed, if they fall in a non working day.
+			// If the recurence is Hourly skip this.
+			if ($evt['event_recurs'] > 1) {
+				$bump = 0;
+				for ($i = 0, $i_cmp = count($temp_list); $i < $i_cmp; $i++) {
+					if ($temp_list[$i]['event_cwd']) {
+						// Create Date objects with them
+						$evtstart = new w2p_Utilities_Date($temp_list[$i]['event_start_date']);
+						$evtend = new w2p_Utilities_Date($temp_list[$i]['event_end_date']);
+						// Offset the dates
+						$evtstart->addDays($bump);
+						$evtend->addDays($bump);
+						// Bump the dates if the start or end are on a non-working day, up to 7 times
+						for ($bump_max = 7; $bump_max; $bump_max--) {
+							if (!$evtstart->isWorkingDay() || !$evtend->isWorkingDay()) {
+								$evtstart->addDays(1);
+								$evtend->addDays(1);
+								$bump++;
+							} else {
+								break;
+							}
+						}
+						// If the new date is off the requested range dump it
+					        if ($evtstart->compare($start_date, $evtstart) <= 0 && $evtend->compare($end_date, $evtend) >= 0) {
+							$temp_list[$i]['event_start_date'] = $evtstart->format(FMT_DATETIME_MYSQL);
+							$temp_list[$i]['event_end_date'] = $evtend->format(FMT_DATETIME_MYSQL);
+					
+        					} else {
+							unset($temp_list[$i]);
+						}
+					}
+				}
+			}
+			$eventList = array_merge($eventList, $temp_list);
 		}
 
-		$i = 0;
-		foreach($eventList as $event) {
-			$eventList[$i]['event_start_date'] = $AppUI->formatTZAwareTime($event['event_start_date'], '%Y-%m-%d %H:%M:%S');
-			$eventList[$i]['event_end_date'] = $AppUI->formatTZAwareTime($event['event_end_date'], '%Y-%m-%d %H:%M:%S');
-			$i++;
-		}
-//echo '<pre>'; print_r($eventList); echo '</pre>';
 		//return a list of non-recurrent and recurrent events
 		return $eventList;
 	}
