@@ -14,21 +14,40 @@ if (w2PgetParam($_POST, 'selected_contacts_id')) {
 }
 ?>
 <script language="javascript" type="text/javascript">
+function removeFromArray(arr, value) {
+	for (var i = 0, i_cmp = arr.length; i < i_cmp; i++) {
+		if (arr[i] == value) {
+			return arr.splice(0,i - 1).concat(arr.splice(i + 1));
+		}
+	}
+	return arr;
+}
+
+function insertIntoArray(arr, value) {
+	for (var i = 0, i_cmp = arr.length; i < i_cmp; i++) {
+		if (arr[i] == value) {
+			return arr;
+		}
+	}
+	return arr.concat(value);
+}
+
 // ECMA Script section Carsten Menke <menke@smp-synergie.de>
 function setContactIDs(method, querystring) {
 	var URL = 'index.php?m=public&a=contact_selector';
 	var field = document.getElementsByName('contact_id[]');
 	var selected_contacts_id = document.frmContactSelect.selected_contacts_id;
-	var tmp = new Array();
+	var tmp = selected_contacts_id.value.split(',');
 
 	if (method == 'GET' && querystring){
 		URL += '&' + querystring;
 	}
 
-	var count = 0;
-	for (i = 0, i_cmp = field.length; i < i_cmp; i++) {
+	for (var i = 0, i_cmp = field.length; i < i_cmp; i++) {
 		if (field[i].checked) {
-			tmp[count++] = field[i].value;
+			tmp = insertIntoArray(tmp,field[i].value);
+		} else {
+			tmp = removeFromArray(tmp,field[i].value);
 		}
 	}
 	selected_contacts_id.value = tmp.join(',');
@@ -117,7 +136,7 @@ $contacts = $q->loadHashList('contact_id');
 		$actual_department = '';
 		$actual_company = '';
 		$companies_names = array(0 => $AppUI->_('Select a company')) + $aCpies;
-		echo arraySelect($companies_names, 'company_id', 'onchange="document.frmContactSelect.contacts_submited.value=0; ' . 'setContactIDs(); document.frmContactSelect.submit();"', $company_id);
+		echo arraySelect($companies_names, 'company_id', 'onchange="document.frmContactSelect.contacts_submited.value=0; setContactIDs(); document.frmContactSelect.submit();"', $company_id);
 	?>
 	<br /><br />
 	<?php
