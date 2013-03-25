@@ -4126,7 +4126,8 @@ function getEventLinks($startPeriod, $endPeriod, &$links, $event_filter = 'all',
 				$url = '?m=calendar&a=view&event_id=' . $row['event_id'];
 				$link['href'] = '';
 				$link['alt'] = '';
-				$link['text'] = w2PtoolTip($row['event_name'], getEventTooltip($row['event_id']), true) . w2PshowImage('event' . $row['event_type'] . '.png', 16, 16, '', '', 'calendar') . '</a>&nbsp;' . '<a href="' . $url . '"><span class="event">' . $start->format($tf) . ' ' . $row['event_name'] . '</span></a>' . w2PendTip();
+				$link['text'] = '<table class="calendar_cell" cellspacing="0"><tr><td class="calendar_cell_dates">' . '<a href="' . $url . '">' . w2PtoolTip($row['event_name'], getEventTooltip($row['event_id']), true, '', 'inline-tooltip') . $start->format($tf) . w2PshowImage('event' . $row['event_type'] . '.png', 16, 16, '', '', 'calendar') . w2PendTip() . '</a></td>';
+				$link['text'] .= '<td style="' . $temp['td'] . '" class="calendar_cell_text">' . '<a href="' . $url . '">' . $row['event_name'] . '</a>' . '</a></td></tr></table>';
 				$link['timestamp'] = $start->format(FMT_DATETIME_MYSQL);
 			}
 			$links[$date->format(FMT_TIMESTAMP_DATE)][] = $link;
@@ -4255,7 +4256,7 @@ function getTaskLinks($startPeriod, $endPeriod, &$links, $strMaxLen, $company_id
 				$row['short_name'] = $row['task_name'];
 			}
 	
-			$link['td'] = 'style="background-color:#' . $row['color'] . ';"';
+			$link['td'] = 'background-color:#' . $row['color'] . '; ';
 			$link['text'] = '<span style="color:' . bestColor($row['color']) . '">' . $row['short_name'] . ($row['task_milestone'] ? '&nbsp;' . w2PshowImage('icons/milestone.gif') : '') . '</span>';
         }
 
@@ -4274,8 +4275,9 @@ function getTaskLinks($startPeriod, $endPeriod, &$links, $strMaxLen, $company_id
 			} else {
 				$temp = $link;
 				if ($a != 'day_view') {
-					$temp['text'] = w2PtoolTip($row['task_name'], getTaskTooltip($row['task_id'], true, true, $tasks), true) . w2PshowImage('block-start-16.png') . $start->format($tf) . ' ' . $temp['text'] . ' ' . $end->format($tf) . w2PshowImage('block-end-16.png') . w2PendTip();
-                    $temp['text'].= '<a href="?m=tasks&amp;a=view&amp;task_id=' . $row['task_id'] . '&amp;tab=1&amp;date=' . $AppUI->formatTZAwareTime($row['task_end_date'], '%Y%m%d'). '">' . w2PtoolTip('Add Log', 'create a new log record against this task') . w2PshowImage('edit_add.png') . w2PendTip() . '</a>';
+						$tmp = $temp['text'];
+						$temp['text'] = '<table class="calendar_cell" cellspacing="0"><tr><td class="calendar_cell_dates">' . w2PtoolTip($row['task_name'], getTaskTooltip($row['task_id'], true, true, $tasks), true, '', 'inline-tooltip') . $start->format($tf) . w2PshowImage('block-start-16.png') . '<br>' . w2PshowImage('block-end-16.png') . $end->format($tf) . w2PendTip() . '</td>';
+						$temp['text'] .= '<td style="' . $temp['td'] . '" class="calendar_cell_text">' . $tmp . '<a href="?m=tasks&amp;a=view&amp;task_id=' . $row['task_id'] . '&amp;tab=1&amp;date=' . $AppUI->formatTZAwareTime($row['task_end_date'], '%Y%m%d'). '">' . w2PtoolTip('Add Log', 'create a new log record against this task') . w2PshowImage('edit_add.png') . w2PendTip() . '</a></td></tr></table>';
 				}
 			}
 			$temp['timestamp'] = $start->format(FMT_DATETIME_MYSQL);
@@ -4292,8 +4294,9 @@ function getTaskLinks($startPeriod, $endPeriod, &$links, $strMaxLen, $company_id
 				} else {
 					$temp = $link;
 					if ($a != 'day_view') {
-						$temp['text'] = w2PtoolTip($row['task_name'], getTaskTooltip($row['task_id'], true, false, $tasks), true) . w2PshowImage('block-start-16.png') . $start->format($tf) . ' ' . $temp['text'] . w2PendTip();
-                        $temp['text'].= '<a href="?m=tasks&amp;a=view&amp;task_id=' . $row['task_id'] . '&amp;tab=1&amp;date=' . $AppUI->formatTZAwareTime($row['task_start_date'], '%Y%m%d'). '">' . w2PtoolTip('Add Log', 'create a new log record against this task') . w2PshowImage('edit_add.png') . w2PendTip() . '</a>';
+						$tmp = $temp['text'];
+						$temp['text'] = '<table class="calendar_cell" cellspacing="0"><tr><td class="calendar_cell_dates">' . w2PtoolTip($row['task_name'], getTaskTooltip($row['task_id'], true, false, $tasks), true, '', 'inline-tooltip') . $start->format($tf) . w2PshowImage('block-start-16.png') . w2PendTip() . '</td>';
+						$temp['text'] .= '<td style="' . $temp['td'] . '" class="calendar_cell_text">' . $tmp . '<a href="?m=tasks&amp;a=view&amp;task_id=' . $row['task_id'] . '&amp;tab=1&amp;date=' . $AppUI->formatTZAwareTime($row['task_start_date'], '%Y%m%d'). '">' . w2PtoolTip('Add Log', 'create a new log record against this task') . w2PshowImage('edit_add.png') . w2PendTip() . '</a>' . '</a></td></tr></table>';
 					}
 				}
 				$temp['timestamp'] = $start->format(FMT_DATETIME_MYSQL);
@@ -4310,11 +4313,12 @@ function getTaskLinks($startPeriod, $endPeriod, &$links, $strMaxLen, $company_id
 				} else {
 					$temp = $link;
 					if ($a != 'day_view') {
-						$temp['text'] = w2PtoolTip($row['task_name'], getTaskTooltip($row['task_id'], false, true, $tasks), true) . ' ' . $temp['text'] . ' ' . $end->format($tf) . w2PshowImage('block-end-16.png') . w2PendTip();
-                        $temp['text'].= '<a href="?m=tasks&amp;a=view&amp;task_id=' . $row['task_id'] . '&amp;tab=1&amp;date=' . $AppUI->formatTZAwareTime($row['task_end_date'], '%Y%m%d'). '">' . w2PtoolTip('Add Log', 'create a new log record against this task') . w2PshowImage('edit_add.png') . w2PendTip() . '</a>';
+						$tmp = $temp['text'];
+						$temp['text'] = '<table class="calendar_cell" cellspacing="0"><tr><td class="calendar_cell_dates">' . w2PtoolTip($row['task_name'], getTaskTooltip($row['task_id'], false, true, $tasks), true, '', 'inline-tooltip') . $end->format($tf) . w2PshowImage('block-end-16.png') . w2PendTip() . '</td>';
+						$temp['text'] .= '<td style="' . $temp['td'] . '" class="calendar_cell_text">' . $tmp . '<a href="?m=tasks&amp;a=view&amp;task_id=' . $row['task_id'] . '&amp;tab=1&amp;date=' . $AppUI->formatTZAwareTime($row['task_end_date'], '%Y%m%d'). '">' . w2PtoolTip('Add Log', 'create a new log record against this task') . w2PshowImage('edit_add.png') . w2PendTip() . '</a></td></tr></table>';
 					}
 				}
-				$temp['timestamp'] = $start->format(FMT_DATETIME_MYSQL);
+				$temp['timestamp'] = $end->format(FMT_DATETIME_MYSQL);
 				$links[$end->format(FMT_TIMESTAMP_DATE)][] = $temp;
 			}
 		}

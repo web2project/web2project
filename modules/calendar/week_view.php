@@ -136,7 +136,6 @@ for ($i = 0; $i < 7; $i++) {
 			$href = isset($e['href']) ? $e['href'] : null;
 			$alt = isset($e['alt']) ? $e['alt'] : null;
 
-			$s .= '<br />';
 			$s .= $href ? '<a href="'.$href.'" class="event" title="'.$alt.'">' : '';
 			$s .= $e['text'];
 			$s .= $href ? '</a>' : '';

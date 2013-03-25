@@ -24,7 +24,7 @@ if (isset($links[$dayStamp])) {
 		$href = isset($e['href']) ? $e['href'] : null;
 		$alt = isset($e['alt']) ? $e['alt'] : null;
 
-		$s .= '<tr><td ' . $e['td'] . '>';
+		$s .= '<tr><td style="' . $e['td'] . '">';
 		$s .= $href ? '<a href="' . $href . '" class="event" title="' . $alt . '">' : '';
 		$s .= $e['text'];
 		$s .= $href ? '</a>' : '';

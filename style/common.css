@@ -517,3 +517,18 @@ bordertable, .bordertable{
 .inline-tooltip {
     display: inline-block;
 }
+
+.calendar_cell {
+    width: 100%;
+}
+
+.calendar_cell_dates {
+    width: 15%;
+    border-top: 1px solid #CACACA;
+    white-space: nowrap;
+    padding-right: 4px;
+}
+
+.calendar_cell_text {
+    border-top: 1px solid #CACACA;
+}

@@ -400,7 +400,6 @@ class w2p_Output_MonthCalendar {
 			$href = isset($e['href']) ? $e['href'] : null;
 			$alt = isset($e['alt']) ? mb_str_replace("\n", ' ', $e['alt']) : null;
 
-			$s .= '<br />';
 			$s .= $href ? '<a href="'.$href.'" class="event" title="'.$alt.'">' : '';
 			$s .= $e['text'];
 			$s .= $href ? '</a>' : '';

@@ -599,17 +599,6 @@ a.delete:active span {
     float: right;
 }*/
 
-/* Solves a Webkit issue with screwy overlapping spans - #299 */
-span > img {
-    display: block;
-    overflow: hidden;
-    position: relative;
-}
-
-._problem span > img {
-    display: inherit;
-}
-
 /*tooltip*/
 
 h4 {
