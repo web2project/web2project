@@ -5,9 +5,6 @@ if (!defined('W2P_BASE_DIR')) {
 
 global $first_time, $last_time, $company_id;
 
-error_log($first_time->format(FMT_DATETIME_MYSQL));
-error_log($last_time->format(FMT_DATETIME_MYSQL));
-
 // Get the messages posted in topics/forums watched (and viewable) by the currently logged in user
 $msgs = CForum::getWatchedMessages($first_time, $last_time, $AppUI->user_id, $company_id);
 
