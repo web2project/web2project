@@ -244,43 +244,16 @@ if ($showTaskNameOnly == '1') {
 $gantt->setColumnHeaders($columnNames, $columnSizes);
 $gantt->setProperties(array('showhgrid' => true));
 
-if (!$start_date || !$end_date) {
-    // find out DateRange from gant_arr
-    $d_start = new w2p_Utilities_Date();
-    $d_end = new w2p_Utilities_Date();
-    $taskArray = count($gantt_arr);
-    for ($i = 0, $i_cmp = $taskArray; $i < $i_cmp; $i++) {
-        $a = $gantt_arr[$i][0];
-        $start = substr($a['task_start_date'], 0, 10);
-        $end = substr($a['task_end_date'], 0, 10);
-
-        $d_start->Date($start);
-        $d_end->Date($end);
-
-        if ($i == 0) {
-            $min_d_start = $d_start;
-            $max_d_end = $d_end;
-            $start_date = $start;
-            $end_date = $end;
-        } else {
-            if (Date::compare($min_d_start, $d_start) > 0) {
-                $min_d_start = $d_start;
-                $start_date = $start;
-            }
-            if (Date::compare($max_d_end, $d_end) < 0) {
-                $max_d_end = $d_end;
-                $end_date = $end;
-            }
-        }
-    }
-}
 $gantt->setDateRange($start_date, $end_date);
-
 $gantt_arr = array();
 reset($projects);
 $displayed = array();
 foreach ($projects as $p) {
-    $tnums = count($p['tasks']);
+    if (isset($p['tasks'])) {
+	$tnums = count($p['tasks']);
+    } else {
+        $tnums = 0;
+    }
 
     for ($i = 0; $i < $tnums; $i++) {
         $t = $p['tasks'][$i];
@@ -311,6 +284,37 @@ if ($hide_task_groups) {
 			continue;
 		}
 	}
+}
+
+if (!$start_date || !$end_date) {
+    // find out DateRange from gant_arr
+    $d_start = new w2p_Utilities_Date();
+    $d_end = new w2p_Utilities_Date();
+    $taskArray = count($gantt_arr);
+    for ($i = 0, $i_cmp = $taskArray; $i < $i_cmp; $i++) {
+        $a = $gantt_arr[$i][0];
+        $start = substr($a['task_start_date'], 0, 10);
+        $end = substr($a['task_end_date'], 0, 10);
+
+        $d_start->Date($start);
+        $d_end->Date($end);
+
+        if ($i == 0) {
+            $min_d_start = $d_start;
+            $max_d_end = $d_end;
+            $start_date = $start;
+            $end_date = $end;
+        } else {
+            if (Date::compare($min_d_start, $d_start) > 0) {
+                $min_d_start = $d_start;
+                $start_date = $start;
+            }
+            if (Date::compare($max_d_end, $d_end) < 0) {
+                $max_d_end = $d_end;
+                $end_date = $end;
+            }
+        }
+    }
 }
 
 $gantt->loadTaskArray($gantt_arr);
