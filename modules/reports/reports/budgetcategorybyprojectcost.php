@@ -127,7 +127,11 @@ $companies = arrayMerge(array('0' => 'All Companies'), $companies);
             $filterEnd = $end_date;
             $workingDaysInSpans = $filterStart->findDaysInRangeOverlap($pstart, $pend, $filterStart, $filterEnd);
             $workingDaysForProj = $pstart->workingDaysInSpan($pend);
-            $factor = $workingDaysInSpans/$workingDaysForProj;
+	    if ($workingDaysForProj) {
+	            $factor = $workingDaysInSpans/$workingDaysForProj;
+	    } else {
+		    $factor = 0;
+	    }
             $factor = ($factor > 1) ? 1 : $factor;
             $pdfRow = array();
             $pdfRow[] = sprintf('%.1f%%', $project->project_percent_complete);
@@ -138,7 +142,7 @@ $companies = arrayMerge(array('0' => 'All Companies'), $companies);
                 <td>
                     <a href="?m=projects&amp;a=view&amp;project_id=<?php echo $project->project_id; ?>">
                         <?php
-                        $projectName = htmlentities($project->project_name);
+                        $projectName = nl2br($project->project_name);
                         $pdfRow[] = '  '.$projectName;
                         echo $projectName;
                         ?>
@@ -225,10 +229,10 @@ $companies = arrayMerge(array('0' => 'All Companies'), $companies);
 
         if ($log_pdf) {
             // make the PDF file
-            $font_dir = W2P_BASE_DIR . '/lib/ezpdf/fonts';
+            $font_dir = W2P_BASE_DIR . '/lib/ezpdf/src/fonts';
             $temp_dir = W2P_BASE_DIR . '/files/temp';
 
-            require ($AppUI->getLibraryClass('ezpdf/class.ezpdf'));
+            require ($AppUI->getLibraryClass('ezpdf/src/Cezpdf'));
 
             $pdf = new Cezpdf($paper = 'A4', $orientation = 'landscape');
             $pdf->ezSetCmMargins(1, 1, 0.5, 0.5);
@@ -248,7 +252,7 @@ $companies = arrayMerge(array('0' => 'All Companies'), $companies);
                 $pdfheaders[] = $AppUI->_($category."\n".$AppUI->_('Budgetted', UI_OUTPUT_JS), UI_OUTPUT_JS);
                 $pdfheaders[] = "\n(".$AppUI->_('Used', UI_OUTPUT_JS).")";
                 $columns[] = array('justification' => 'center', 'width' => 45);
-                $columns[] = array('justification' => 'center', 'width' => 45);
+                $columns[] = array('justification' => 'center', 'width' => 30);
             }
             $pdfheaders[] = $AppUI->_("Unidentified\n(Used)", UI_OUTPUT_JS);
             $pdfheaders[] = $AppUI->_('Budgetted', UI_OUTPUT_JS);
