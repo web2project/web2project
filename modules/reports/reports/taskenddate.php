@@ -29,6 +29,8 @@ if (function_exists('styleRenderBoxTop')) {
 <input type="hidden" name="datePicker" value="log" />
 
 <table cellspacing="0" cellpadding="4" border="0" width="100%" class="std">
+<tr><td colspan="20"><h1><?php echo $AppUI->_('taskenddate_name'); ?></h1></td></tr>
+
 <tr>
 	<td align="right" nowrap="nowrap"><?php echo $AppUI->_('For period'); ?>:</td>
 	<td nowrap="nowrap">
@@ -62,7 +64,6 @@ echo arraySelect($users, 'user_id', 'class="text"', $user_id);
 </form>
 <?php
 if ($do_report) {
-
 	$q = new w2p_Database_Query;
 	$q->addTable('tasks', 't');
 	$q->addTable('users', 'u');
@@ -86,7 +87,7 @@ if ($do_report) {
 	}
 
 	$q->addWhere('p.project_id   = t.task_project');
-	$q->addWhere('t.task_dynamic = 0');
+	$q->addWhere('t.task_dynamic != 1');
 	$q->addWhere('t.task_owner = u.user_id');
 	$q->addWhere('task_end_date >= \'' . $start_date->format(FMT_DATETIME_MYSQL) . '\'');
 	$q->addWhere('task_end_date <= \'' . $end_date->format(FMT_DATETIME_MYSQL) . '\'');

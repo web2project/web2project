@@ -36,6 +36,8 @@ $billingCategory = w2PgetSysVal('BudgetCategory');
     }
     ?>
     <table cellspacing="0" cellpadding="4" border="0" width="100%" class="std">
+	<tr><td colspan="20"><h1><?php echo $AppUI->_('costsbytask_name'); ?></h1></td></tr>
+
         <tr>
             <td align="right" nowrap="nowrap"><?php echo $AppUI->_('For period'); ?>:</td>
             <td nowrap="nowrap">
@@ -104,8 +106,8 @@ $billingCategory = w2PgetSysVal('BudgetCategory');
                     <?php } ?>
                     <a href="?m=tasks&amp;a=view&amp;task_id=<?php echo $task->task_id; ?>">
                         <?php
-                        $taskName = htmlentities($task->task_name);
-                        echo $taskName;
+                        $taskName = $task->task_name;
+                        echo htmlentities($taskName, ENT_QUOTES, "UTF-8");
                         if ($task->task_id != $task->task_parent) {
                             $taskName = '--'.$taskName;
                         }
@@ -114,8 +116,8 @@ $billingCategory = w2PgetSysVal('BudgetCategory');
                 </td>
                 <td align="center" nowrap="nowrap">
                     <?php
-                        $contactName = htmlentities(CContact::getContactByUserid($task->task_owner));
-                        echo $contactName;
+                        $contactName = CContact::getContactByUserid($task->task_owner);
+                        echo htmlentities($contactName, ENT_QUOTES, "UTF-8");
                     ?>
                 </td>
                 <td><?php echo $AppUI->formatTZAwareTime($task->task_start_date, $df); ?></td>
@@ -185,22 +187,20 @@ $billingCategory = w2PgetSysVal('BudgetCategory');
             $pdf->ezTable($pdfdata, $pdfheaders, $title, $options);
 
             $w2pReport = new CReport();
+            echo '<tr><td colspan="13" align="center">';
             if ($fp = fopen($temp_dir . '/'.$w2pReport->getFilename().'.pdf', 'wb')) {
                 fwrite($fp, $pdf->ezOutput());
                 fclose($fp);
-                echo '<tr><td colspan="13">';
                 echo '<a href="' . W2P_BASE_URL . '/files/temp/' . $w2pReport->getFilename() . '.pdf" target="pdf">';
                 echo $AppUI->_('View PDF File');
                 echo '</a>';
-                echo '</td></tr>';
             } else {
-                echo '<tr><td colspan="13">';
                 echo 'Could not open file to save PDF.  ';
                 if (!is_writable($temp_dir)) {
                     echo 'The files/temp directory is not writable.  Check your file system permissions.';
                 }
-                echo '</td></tr>';
             }
+            echo '</td></tr>';
         }
     } else {
         echo '<tr><td colspan="13">'.$AppUI->_('There are no tasks on this project').'</td></tr>';

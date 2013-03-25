@@ -59,6 +59,8 @@ if (function_exists('styleRenderBoxTop')) {
 <input type="hidden" name="datePicker" value="log" />
 
 <table cellspacing="0" cellpadding="4" border="0" width="100%" class="std">
+<tr><td colspan="20"><h1><?php echo $AppUI->_('tasklogs_xp1_name'); ?></h1></td></tr>
+
 <tr>
 	<td align="right" nowrap="nowrap"><?php echo $AppUI->_('For period'); ?>:</td>
 	<td nowrap="nowrap">

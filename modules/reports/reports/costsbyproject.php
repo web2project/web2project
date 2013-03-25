@@ -44,6 +44,8 @@ $companies = arrayMerge(array('0' => 'All Companies'), $companies);
     }
     ?>
     <table cellspacing="0" cellpadding="4" border="0" width="100%" class="std">
+	<tr><td colspan="20"><h1><?php echo $AppUI->_('costsbyproject_name'); ?></h1></td></tr>
+
         <tr>
             <td align="right" nowrap="nowrap"><?php echo $AppUI->_('For Company'); ?>:</td>
             <td nowrap="nowrap">
@@ -114,7 +116,11 @@ $companies = arrayMerge(array('0' => 'All Companies'), $companies);
             $filterEnd = $end_date;
             $workingDaysInSpans = $filterStart->findDaysInRangeOverlap($pstart, $pend, $filterStart, $filterEnd);
             $workingDaysForProj = $pstart->workingDaysInSpan($pend);
-            $factor = $workingDaysInSpans/$workingDaysForProj;
+	    if ($workingDaysForProj) {
+	            $factor = $workingDaysInSpans/$workingDaysForProj;
+	    } else {
+		    $factor = 0;
+	    }
             $factor = ($factor > 1) ? 1 : $factor;
             ?><tr>
                 <td width="10" align="right" style="border: outset #eeeeee 1px;background-color:#<?php echo $project->project_color_identifier; ?>">
@@ -123,15 +129,15 @@ $companies = arrayMerge(array('0' => 'All Companies'), $companies);
                 <td>
                     <a href="?m=projects&amp;a=view&amp;project_id=<?php echo $project->project_id; ?>">
                         <?php
-                        $projectName = htmlentities($project->project_name);
-                        echo $projectName;
+                        $projectName = $project->project_name;
+                        echo htmlentities($projectName, ENT_QUOTES, "UTF-8");
                         ?>
                     </a>
                 </td>
                 <td align="center" nowrap="nowrap">
                     <?php
-                        $contactName = htmlentities(CContact::getContactByUserid($project->project_owner));
-                        echo $contactName;
+                        $contactName = CContact::getContactByUserid($project->project_owner);
+                        echo htmlentities($contactName, ENT_QUOTES, "UTF-8");
                     ?>
                 </td>
                 <td><?php echo $AppUI->formatTZAwareTime($project->project_start_date, $df); ?></td>
@@ -209,22 +215,20 @@ $companies = arrayMerge(array('0' => 'All Companies'), $companies);
             $pdf->ezTable($pdfdata, $pdfheaders, $title, $options);
 
             $w2pReport = new CReport();
+            echo '<tr><td colspan="13" align="center">';
             if ($fp = fopen($temp_dir . '/'.$w2pReport->getFilename().'.pdf', 'wb')) {
                 fwrite($fp, $pdf->ezOutput());
                 fclose($fp);
-                echo '<tr><td colspan="13">';
                 echo '<a href="' . W2P_BASE_URL . '/files/temp/' . $w2pReport->getFilename() . '.pdf" target="pdf">';
                 echo $AppUI->_('View PDF File');
                 echo '</a>';
-                echo '</td></tr>';
             } else {
-                echo '<tr><td colspan="13">';
                 echo 'Could not open file to save PDF.  ';
                 if (!is_writable($temp_dir)) {
                     echo 'The files/temp directory is not writable.  Check your file system permissions.';
                 }
-                echo '</td></tr>';
             }
+            echo '</td></tr>';
         }
     } else {
         echo '<tr><td colspan="13">'.$AppUI->_('There are no projects in this company').'</td></tr>';

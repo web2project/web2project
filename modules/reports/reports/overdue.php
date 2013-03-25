@@ -37,7 +37,8 @@ $pdf->selectFont($font_dir . '/Helvetica-Bold.afm');
 $pdf->ezText("\n" . $AppUI->_('Project Overdue Task Report'), 12);
 $pdf->ezText(utf8_decode($pname), 15);
 $pdf->ezText("\n");
-$pdf->selectFont($font_dir . '/Helvetica.afm');
+$pdf->selectFont($font_dir . '/FreeSerif');
+$pdf->Unicode = 1;
 
 $title = null;
 $options = array('showLines' => 2, 'showHeadings' => 1, 'fontSize' => 9, 'rowGap' => 4, 'colGap' => 5, 'xPos' => 50, 'xOrientation' => 'right', 'width' => '750', 'shaded' => 0, 'cols' => array(0 => array('justification' => 'left', 'width' => 250), 1 => array('justification' => 'left', 'width' => 120), 2 => array('justification' => 'center', 'width' => 120), 3 => array('justification' => 'center', 'width' => 75), 4 => array('justification' => 'center', 'width' => 75)));

@@ -131,6 +131,8 @@ $ontime = round(100 * (1 - ($tasks['overdue']/count($all_tasks)) - ($tasks['comp
 ?>
 
 <table width="100%" border="1" cellpadding="0" cellspacing="0" class="tbl">
+    <tr><td colspan="20"><h1><?php echo $AppUI->_('stats_name'); ?></h1></td></tr>
+
     <tr>
         <th colspan="3"><?php echo $AppUI->_('Progress Chart (completed/in progress/pending)'); ?></th>
     </tr>

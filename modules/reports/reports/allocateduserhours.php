@@ -31,6 +31,8 @@ if (function_exists('styleRenderBoxTop')) {
 
 <table cellspacing="0" cellpadding="4" border="0" width="100%" class="std">
 
+<tr><td colspan="20"><h1><?php echo $AppUI->_('allocateduserhours_name'); ?></h1></td></tr>
+
 <tr>
 	<td nowrap="nowrap"><?php echo $AppUI->_('For period'); ?>:
 		<input type="hidden" name="log_start_date" id="log_start_date" value="<?php echo $start_date ? $start_date->format(FMT_TIMESTAMP_DATE) : ''; ?>" />

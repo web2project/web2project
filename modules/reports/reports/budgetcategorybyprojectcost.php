@@ -44,6 +44,8 @@ $companies = arrayMerge(array('0' => 'All Companies'), $companies);
     }
     ?>
     <table cellspacing="0" cellpadding="4" border="0" width="100%" class="std">
+	<tr><td colspan="20"><h1><?php echo $AppUI->_('budgetcategorybyprojectcost_name'); ?></h1></td></tr>
+
         <tr>
             <td align="right" nowrap="nowrap"><?php echo $AppUI->_('For Company'); ?>:</td>
             <td nowrap="nowrap">
@@ -142,8 +144,8 @@ $companies = arrayMerge(array('0' => 'All Companies'), $companies);
                 <td>
                     <a href="?m=projects&amp;a=view&amp;project_id=<?php echo $project->project_id; ?>">
                         <?php
-                        $projectName = nl2br($project->project_name);
-                        $pdfRow[] = '  '.$projectName;
+                        $projectName = htmlentities($project->project_name, ENT_QUOTES, "UTF-8");
+                        $pdfRow[] = '  '.$project->project_name;
                         echo $projectName;
                         ?>
                     </a>

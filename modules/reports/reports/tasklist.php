@@ -71,6 +71,8 @@ $df = $AppUI->getPref('SHDATEFORMAT');
     <input type="hidden" name="datePicker" value="log" />
 
 <table cellspacing="0" cellpadding="4" border="0" width="100%" class="std">
+<tr><td colspan="20"><h1><?php echo $AppUI->_('tasklist_name'); ?></h1></td></tr>
+
 <tr>
     <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Default Actions'); ?>:</td>
     <td nowrap="nowrap">
@@ -151,7 +153,7 @@ if ($do_report) {
 	}
 	echo '<table cellspacing="0" cellpadding="4" border="0" width="100%" class="std">
 <tr>
-	<td>';
+	<td align="center">';
 
 	echo '<table cellspacing="1" cellpadding="4" border="0" class="tbl">';
 	if ($project_id == 0) {
@@ -191,7 +193,7 @@ if ($do_report) {
 		$str .= '<td>';
         $str .= ($Tasks['task_id'] == $Tasks['task_parent']) ? '' : '<img src="' . w2PfindImage('corner-dots.gif') . '" width="16" height="12" border="0" alt="" />';
         $str .= '&nbsp;<a href="?m=tasks&a=view&task_id=' . $Tasks['task_id'] . '">' . $Tasks['task_name'] . '</a></td>';
-		$str .= '<td>' . nl2br($Tasks['task_description']) . '</td>';
+		$str .= '<td>' . htmlentities($Tasks['task_description'], ENT_QUOTES, "UTF-8") . '</td>';
 		$str .= '<td>' . implode($users, ', ') . '</td>';
         $str .= $htmlHelper->createCell('task_start_date', $Tasks['task_start_date']);
         $str .= $htmlHelper->createCell('task_end_date', $Tasks['task_end_date']);
