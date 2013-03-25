@@ -13,8 +13,15 @@ $projectStatus = w2PgetSysVal('ProjectStatus');
 <tr>
     <td align="center" colspan="20">
 <?php
-$src = '?m=tasks&a=gantt&suppressHeaders=1&showLabels=0&proFilter=&showInactive=1&showAllGantt=1&project_id=' . $project_id . '&width=\' + ((navigator.appName==\'Netscape\'?window.innerWidth:document.body.offsetWidth)*0.90) + \'';
-echo '<script>document.write(\'<img src="' . $src . '">\')</script>';
+$project = new CProject();
+$project->load($project_id);
+
+if ($project->project_task_count > 0) {
+	$src = '?m=tasks&a=gantt&suppressHeaders=1&showLabels=0&proFilter=&showInactive=1&showAllGantt=1&project_id=' . $project_id . '&width=\' + ((navigator.appName==\'Netscape\'?window.innerWidth:document.body.offsetWidth)*0.90) + \'';
+	echo '<script>document.write(\'<img src="' . $src . '">\')</script>';
+} else {
+	echo $AppUI->_('No tasks to display');
+}
 ?>
 </td>
 </table>
