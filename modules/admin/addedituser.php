@@ -194,8 +194,7 @@ function setDept( key, val ) {
             <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Password Strength'); ?></td>
             <td>
                 <div class="text" style="width: 135px;">
-                    <div id="progressBar" style="font-size: 1px; height: 15px; width: 0px;">
-                    </div>
+                    <div id="progressBar"></div>
                 </div>
             </td>
         </tr>

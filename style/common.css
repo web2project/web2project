@@ -513,3 +513,9 @@ table.minititle th {
 bordertable, .bordertable{
     border: 1px black solid;
 }
+
+#progressBar {
+    font-size: 1px;
+    height: 15px;
+    width: 0px;
+}
