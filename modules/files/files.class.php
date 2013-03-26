@@ -26,7 +26,9 @@ class CFile extends w2p_Core_BaseObject {
 	public $file_co_reason = null;
 	public $file_indexed = null;
 
-    protected $_file_id = 0;
+	public $_metadata_only = false;
+
+	protected $_file_id = 0;
 	// This "breaks" check-in/upload if helpdesk is not present class variable needs to be added "dymanically"
 	//public $file_helpdesk_item = NULL;
 
@@ -75,13 +77,18 @@ class CFile extends w2p_Core_BaseObject {
      *   the current user.
      * If not then we are just editing the file information alone. So we should
      *   leave the file_id as it is.
+     * If we're moving a file around or linking it to a different project we need
+     * to leave the file_id alone.
      */
     protected function hook_preUpdate() {
         $this->file_parent = $this->file_id;
-        if ((int)$this->file_size > 0) {
+        if ((int)$this->file_size > 0 && !$this->_metadata_only) {
             $this->file_id = 0;
             $this->file_owner = $this->_AppUI->user_id;
+            $q = $this->_getQuery();
+	    $this->file_date = $q->dbfnNowWithTZ();
         }
+	$this->_metadata_only = false;
         parent::hook_preUpdate();
     }
 

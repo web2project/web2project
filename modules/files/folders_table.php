@@ -4,7 +4,7 @@ if (!defined('W2P_BASE_DIR')) {
 }
 global $AppUI, $deny1, $canRead, $canEdit, $allowed_folders_ary,
     $denied_folders_ary, $tab, $folder, $cfObj, $m, $a, $company_id,
-    $allowed_companies, $showProject;
+    $allowed_companies, $showProject, $current_uri;
 
 $canEdit = canEdit($m);
 $canRead = canView($m);
@@ -51,37 +51,29 @@ $myFolder = new CFile_Folder();
 $xpg_totalrecs = $myFolder->getFileCountByFolder(null, $folder_id, $task_id, $project_id, $company_id, $allowed_companies);
 ?>
 <script language="javascript" type="text/javascript">
-function expand(id){
-	var element = document.getElementById(id);
-	element.style.display = (element.style.display == '' || element.style.display == 'none') ? 'block' : 'none';
-}
-function addBulkComponent(li) {
-//IE
-	if (document.all || navigator.appName == 'Microsoft Internet Explorer') {
-		var form = document.frm_bulk;
-		var ni = document.getElementById('tbl_bulk');
-		var newitem = document.createElement('input');
-		var htmltxt = '';
-		newitem.id = 'bulk_selected_file['+li+']';
-		newitem.name = 'bulk_selected_file['+li+']';
-		newitem.type = 'hidden';
-		ni.appendChild(newitem);
-	} else {
-//Non IE
-		var form = document.frm_bulk;
-		var ni = document.getElementById('tbl_bulk');
-		var newitem = document.createElement('input');
-		newitem.setAttribute('id', 'bulk_selected_file['+li+']');
-		newitem.setAttribute('name', 'bulk_selected_file['+li+']');
-		newitem.setAttribute('type', 'hidden');
-		ni.appendChild(newitem);
+function doSubmit() {
+	if (confirm('<?php echo $AppUI->_('Are you sure you wish to apply the options on the selected files?') ?>')) {
+		// Let's compose the file list
+		var f = document.frm_bulk;
+		var files = new Array();
+	        // harvest all checked checkboxes (files to process)
+		var inputs = document.getElementsByName('file_sel');
+	        for (var i=0, i_cmp=inputs.length; i < i_cmp; i++) {
+	                var el1 = inputs[i];
+	                // only if it's a checkbox.
+	                if(el1.checked == true)
+	                {
+				files.push(el1.value);
+			}
+		}
+		f.bulk_selected_files.value = files.join(',');
+		f.submit();
 	}
 }
 
-function removeBulkComponent(li) {
-	var t = document.getElementById('tbl_bulk');
-	var old = document.getElementById('bulk_selected_file['+li+']');
-	t.removeChild(old);
+function expand(id){
+	var element = document.getElementById(id);
+	element.style.display = (element.style.display == '' || element.style.display == 'none') ? 'block' : 'none';
 }
 </script>
 
@@ -103,15 +95,14 @@ function removeBulkComponent(li) {
             </ul>
         </td>
     </tr>
-    </tr>
     <?php
     if (countFiles($folder) > 0) {
-        echo displayFiles($AppUI, $folder_id, $task_id, $project_id, $company_id);
+        echo displayFiles($AppUI, $folder_id, $task_id, $project_id, $company_id, true);
     } elseif ((!empty($limited) && !$limited) or $folder_id != 0) {
         echo '<tr><td colspan="20">' . $AppUI->_('no files') . '</td></tr>';
     }
 
-    echo getFolders($folder_id);
+    echo getFolders($folder_id, true);
 
     //Lets add our bulk form
     $folders_avail = getFolderSelectList();
@@ -127,13 +118,15 @@ function removeBulkComponent(li) {
     $sprojects = array('O' => '(' . $AppUI->_('Move to Project', UI_OUTPUT_RAW) . ')') + array('0' => '(' . $AppUI->_('All Projects', UI_OUTPUT_RAW) . ')') + $sprojects;
     ?>
 	<tr>
-	    <td colspan="50" align="right">
-            <form name="frm_bulk" method="post" action="?m=files&a=do_files_bulk_aed" accept-charset="utf-8">
+	    <form name="frm_bulk" method="post" action="?m=files&a=do_files_bulk_aed" accept-charset="utf-8">
                 <input type="hidden" name="redirect" value="<?php echo $current_uri; ?>" />
-                <?php echo arraySelect($sprojects, 'bulk_file_project', 'style="width:180px" class="text"', 'O'); ?>
-                <?php echo arraySelectTree($folders, 'bulk_file_folder', 'style="width:180px;" class="text"', 'O'); ?>
-                <input type="button" class="button" value="<?php echo $AppUI->_('Go'); ?>" onclick="if (confirm('Are you sure you wish to apply the options on the selected files?')) document.frm_bulk.submit();" />
-            </form>
-	    </td>
+                <input type="hidden" name="bulk_selected_files" value="" />
+	    	<td colspan="50" align="right">
+	            <?php echo arraySelect($sprojects, 'bulk_file_project', 'style="width:180px" class="text"', -1); ?>
+	            <?php echo arraySelectTree($folders, 'bulk_file_folder', 'style="width:180px;" class="text"', -1); ?>
+	            <input type="button" class="button" value="<?php echo $AppUI->_('Go'); ?>" onclick="doSubmit();" />
+		</td>
+	    </form>
 	</tr>
 </table>
+

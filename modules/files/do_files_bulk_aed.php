@@ -3,9 +3,9 @@ if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
 
-$selected = (int) w2PgetParam($_POST, 'bulk_selected_file', 0);
-$bulk_file_project = (int) w2PgetParam($_POST, 'bulk_file_project', 0);
-$bulk_file_folder = (int) w2PgetParam($_POST, 'bulk_file_folder', 0);
+$selected = explode(',', w2PgetParam($_POST, 'bulk_selected_files', ''));
+$bulk_file_project = w2PgetParam($_POST, 'bulk_file_project', 'O');
+$bulk_file_folder = w2PgetParam($_POST, 'bulk_file_folder', 'O');
 $redirect = w2PgetParam($_POST, 'redirect', '');
 
 global $AppUI;
@@ -14,12 +14,12 @@ $perms = &$AppUI->acl();
 if (is_array($selected) && count($selected)) {
 	$upd_file = new CFile();
 	foreach ($selected as $key => $val) {
-		if ($key) {
+		if ($val) {
 			//If user is not permitted to edit then fail silently
-			if (!$perms->checkModuleItem('files', 'edit', $key)) {
+			if (!$perms->checkModuleItem('files', 'edit', $val)) {
 				continue;
 			}
-			$upd_file->load($key);
+			$upd_file->load($val);
 		}
 
 		if (isset($_POST['bulk_file_project']) && $bulk_file_project != '' && $bulk_file_project != 'O') {
@@ -33,12 +33,14 @@ if (is_array($selected) && count($selected)) {
 						$AppUI->setMsg('At least one File could not be moved', UI_MSG_ERROR);
 					}
 				}
+				$upd_file->_metadata_only = true;
 				$upd_file->store();
 			}
 		}
 		if (isset($_POST['bulk_file_folder']) && $bulk_file_folder != '' && $bulk_file_folder != 'O') {
 			if ($upd_file->file_id) {
 				$upd_file->file_folder = $bulk_file_folder;
+				$upd_file->_metadata_only = true;
 				$upd_file->store();
 			}
 		}

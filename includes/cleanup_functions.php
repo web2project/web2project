@@ -1885,7 +1885,7 @@ function getFolderSelectList() {
  * $level is increased when we go deeper into the tree, used to display a nice indented tree
  */
 // From: modules/files/filefolder.class.php
-function getFolders($parent) {
+function getFolders($parent, $checkbox = false) {
 	global $AppUI, $allowed_folders_ary, $tab, $m, $a, $company_id, $project_id, $task_id;
 	// retrieve all children of $parent
 
@@ -1924,7 +1924,7 @@ function getFolders($parent) {
             $s .= '</td></tr>';
             if ($file_count > 0) {
                 $s .= '<div class="files-list" id="files_' . $row['file_folder_id'] . '" style="display: none;">';
-                $s .= displayFiles($AppUI, $row['file_folder_id'], $task_id, $project_id, $company_id);
+                $s .= displayFiles($AppUI, $row['file_folder_id'], $task_id, $project_id, $company_id, $checkbox);
                 $s .= "</div>";
             }
 		}
@@ -1971,7 +1971,7 @@ function countFiles($folder) {
 }
 
 // From: modules/files/filefolder.class.php
-function displayFiles($AppUI, $folder_id, $task_id, $project_id, $company_id) {
+function displayFiles($AppUI, $folder_id, $task_id, $project_id, $company_id, $checkbox = false) {
 	global $m, $tab, $xpg_min, $xpg_pagesize, $showProject, $file_types,
             $company_id, $current_uri, $w2Pconfig, $canEdit;
     // SETUP FOR FILE LIST
@@ -2052,6 +2052,7 @@ function displayFiles($AppUI, $folder_id, $task_id, $project_id, $company_id) {
     if ($folder_id > -1) {
         $qv->addWhere('file_folder = ' . (int)$folder_id);
     }
+	$qv->addOrder('file_version');
 
     $files = $q->loadList();
     $file_versions = $qv->loadHashList('file_id');
@@ -2071,7 +2072,7 @@ function displayFiles($AppUI, $folder_id, $task_id, $project_id, $company_id) {
         //   At some point at/after v4.0, this should be deprecated
         $fieldList = array('file_name', 'file_description',
             'file_version', 'file_category', 'file_folder', 'file_task',
-            'file_owner', 'file_size', 'file_type', 'file_datetime', 'file_checkout_reason');
+            'file_owner', 'file_size', 'file_type', 'file_datetime', 'file_co_reason');
         $fieldNames = array('File Name', 'Description', 'Version', 'Category',
             'Folder', 'Task Name', 'Owner', 'Size', 'Type', 'Date', 
             'Checkout Reason');
@@ -2085,8 +2086,11 @@ function displayFiles($AppUI, $folder_id, $task_id, $project_id, $company_id) {
     foreach ($fieldNames as $index => $name) {
         $s .= '<th>' . $AppUI->_($fieldNames[$index]) . '</th>';
     }
+    if ($checkbox) {
+	    $s .= '<th>Selection</th>';
+    }
     $s .= '<th></th>';
-	$s .= '</tr>';
+    $s .= '</tr>';
 
 	$fp = -1;
     $htmlHelper = new w2p_Output_HTMLHelper($AppUI);
@@ -2119,6 +2123,7 @@ function displayFiles($AppUI, $folder_id, $task_id, $project_id, $company_id) {
 		}
 		$fp = $latest_file['file_project'];
         $row['file_datetime'] = $latest_file['file_datetime'];
+        $row['file_id'] = $latest_file['file_id'];
         $htmlHelper->stageRowData($row);
 
         $s .= '<tr>';
@@ -2177,12 +2182,15 @@ function displayFiles($AppUI, $folder_id, $task_id, $project_id, $company_id) {
 		$s .= '</td>';
 
         foreach ($fieldList as $index => $column) {
-            $cell = $htmlHelper->createCell($fieldList[$index], $row[$fieldList[$index]], $customLookups);
+            $cell = $htmlHelper->createCell($fieldList[$index], $latest_file[$fieldList[$index]], $customLookups);
             if ('file_version' == $fieldList[$index]) {
                 $cell = str_replace('</td>', $version_link.'</td>', $cell);
             }
             $s .= $cell;
         }
+	   if ($checkbox) {
+		  $s .= '<td align="center"><input type="checkbox" name="file_sel" value="' . $latest_file['file_id'] . '"></td>';	   
+	   }
 
         $s .= '<td>';
         $s .= '<form name="frm_remove_file_' . $latest_file['file_id'] . '" action="?m=files" method="post" accept-charset="utf-8">
