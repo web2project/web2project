@@ -374,7 +374,8 @@ table.minical th {
 
 }
 table.minical td {
-	background-color: WHITE;
+	background-color: white;
+    text-align : center;
 }
 table.minical td.week {
 }
@@ -382,49 +383,39 @@ table.minical td.empty {
 	color: #aaaaaa;
     background-color: #E0E0E0;
 }
-table.minical td.day  {
-	text-align : center;
-}
+table.minical td.day  { }
 table.minical td.today {
-	text-align       : center;
 	border           : 2px dotted red;
 }
 table.minical td.weekend {
     background-color: #f0f0f0;
-	text-align: center;
 }
 table.minical .event {
 }
 table.minical td.event {
     background-color: #ffff99;
-    text-align: center;
 }
 table.minical td.task {
     background-color: #ababff;
-    text-align: center;
 }
 table.minical td.eventtask {
     background-color: #ffccff;
-    text-align: center;
 }
 table.minical td.eventtoday {
     background-color: #ffff99;
-    text-align: center;
     border           : 1px dotted red;
 }
 table.minical td.tasktoday {
     background-color: #ababff;
-    text-align: center;
     border           : 1px dotted red;
 }
 table.minical td.eventtasktoday {
     background-color: #ffccff;
-    text-align: center;
     border           : 1px dotted red;
 }
 /* daily calendar */
 table.tbl td.event {
-        background-color: #fff0b0;
+    background-color: #fff0b0;
 }
 
 table.tbl td.event td {
