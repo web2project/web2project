@@ -78,46 +78,51 @@ function checkAll(user_id) {
         }
 }
 
-
 function chAssignment(user_id, rmUser, del) {
         var f = eval( 'document.assFrm' + user_id );
-        var fl = f.add_users.length-1;
         var c = 0;
         var a = 0;
 
-        f.hassign.value = '';
-        f.htasks.value = '';
+        f.task_user_assign.value = '';
 
         // harvest all checked checkboxes (tasks to process)
-        for (var i=0, i_cmp=f.elements.length; i<i_cmp; i++){
-                var e = f.elements[i];
+        for (var i=0, i_cmp=f.elements.length; i < i_cmp; i++) {
+                var el1 = f.elements[i];
                 // only if it's a checkbox.
-                if(e.type == 'checkbox' && e.checked == true && e.name != 'master')
+                if(el1.type == 'checkbox' && el1.checked == true && el1.name != 'master')
                 {
-                         c++;
-                         f.htasks.value = f.htasks.value +','+ e.value;
-                }
-        }
-
-        // harvest all selected possible User Assignees
-        for (fl; fl > -1; fl--){
-                if (f.add_users.options[fl].selected) {
-                        a++;
-                        f.hassign.value = ',' + f.hassign.value +','+ f.add_users.options[fl].value;
-                }
-        }
+                        c++;
+			// now search for the corresponding 'select-multiple' with the name 'add_users[<user_id>_<el1.value>]'
+			// Multiple elements may be found if a child task is present, as its displayed multiple times
+			var el_list = document.getElementsByName('add_users[' + user_id + '_' + el1.value + ']');
+			var users = new Array();
+			for (var j=0, j_cmp=el_list.length; j < j_cmp; j++) {
+				var el2 = el_list[j];
+			        // harvest all selected possible User Assignees
+				for (var k=0, k_cmp=el2.options.length; k < k_cmp; k++) {
+					if (el2.options[k].selected) {
+						a++;
+			                        users.push(el2.options[k].value);
+					}
+				}
+			}
+			if (users.length > 0) {
+				f.task_user_assign.value = f.task_user_assign.value + '|' + el1.value + ':' + users.join(',');
+			}
+		}
+	}
 
         if (del == true) {
-                        if (c == 0) {
-                                 alert ('<?php echo $AppUI->_('Please select at least one Task!', UI_OUTPUT_JS); ?>');
-                        } else {
-                                if (confirm( '<?php echo $AppUI->_('Are you sure you want to unassign the User from Task(s)?', UI_OUTPUT_JS); ?>' )) {
-                                        f.del.value = 1;
-                                        f.rm.value = rmUser;
-                                        f.user_id.value = user_id;
-                                        f.submit();
-                                }
+                if (c == 0) {
+                         alert ('<?php echo $AppUI->_('Please select at least one Task!', UI_OUTPUT_JS); ?>');
+                } else {
+                         if (confirm( '<?php echo $AppUI->_('Are you sure you want to unassign the User from Task(s)?', UI_OUTPUT_JS); ?>' )) {
+                                f.del.value = 1;
+                                f.rm.value = rmUser;
+                                f.user_id.value = user_id;
+                                f.submit();
                         }
+                }
         } else {
 
                 if (c == 0) {
@@ -141,17 +146,17 @@ function chPriority(user_id) {
         var f = eval( 'document.assFrm' + user_id );
         var c = 0;
 
-        f.htasks.value = '';
+	f.task_user_assign.value = '';
 
         // harvest all checked checkboxes (tasks to process)
-        for (var i=0, i_cmp=f.elements.length; i<i_cmp; i++){
-                var e = f.elements[i];
+        for (var i=0, i_cmp=f.elements.length; i < i_cmp; i++) {
+                var el1 = f.elements[i];
                 // only if it's a checkbox.
-                if(e.type == 'checkbox' && e.checked == true && e.name != 'master')
+                if(el1.type == 'checkbox' && el1.checked == true && el1.name != 'master')
                 {
-                         c++;
-                         f.htasks.value = f.htasks.value +','+ e.value;
-                }
+                        c++;
+			f.task_user_assign.value = f.task_user_assign.value + '|' + el1.value + ':' + user_id;
+		}
         }
 
         if (c == 0) {
@@ -379,12 +384,12 @@ if ($do_report) {
 
 		foreach ($user_list as $user_id => $user_data) {
 			if ($log_userfilter == -1 || ($user_id == $log_userfilter)) {
-                $z = 0;
-                foreach ($task_list as $task) {
-                    if (isMemberOfTask($task_list, $Ntasks, $user_id, $task)) {
-                        $z++;
-                    }
-                }
+		                $z = 0;
+		                foreach ($task_list as $task) {
+		                    if (isMemberOfTask($task_list, $Ntasks, $user_id, $task)) {
+		                        $z++;
+		                    }
+		                }
                 $tmpuser = '<form name="assFrm' . $user_id . '" action="index.php?m=tasks&amp;a=tasksperuser" method="post" accept-charset="utf-8">
                         <input type="hidden" name="chUTP" value="0" />
               <input type="hidden" name="del" value="1" />
@@ -392,8 +397,8 @@ if ($do_report) {
               <input type="hidden" name="store" value="0" />
               <input type="hidden" name="dosql" value="do_task_assign_aed" />
               <input type="hidden" name="user_id" value="' . $user_id . '" />
-              <input type="hidden" name="hassign" />
-              <input type="hidden" name="htasks" />
+              <input type="hidden" name="task_user_assign" />
+              <input type="hidden" name="task_user_priority" />
               <tr>
               <td align="center" bgcolor="#D0D0D0"><input onclick="javascript:checkAll(' . $user_id . ');" type="checkbox" name="master" value="true"/></td>
               <td colspan="2" align="left" nowrap="nowrap" bgcolor="#D0D0D0">

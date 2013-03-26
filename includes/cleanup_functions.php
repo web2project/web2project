@@ -1048,8 +1048,8 @@ function displayTask($list, $task, $level, $display_week_hours, $fromPeriod, $to
 		$tmp .= '&nbsp;(<img src="' . w2PfindImage('icons/priority+' . $task->task_priority . '.gif') . '" width="13" height="16" alt="" />)';
 	}
 	$tmp .= '</td>';
-	$tmp .= '<td align="left">';
-	$tmp .= '<a href="?m=projects&a=view&project_id=' . $task->task_project . '" style="background-color:#' . $project['project_color_identifier'] . '; color:' . bestColor($project['project_color_identifier']) . '">' . $project['project_name'] . '</a>';
+	$tmp .= '<td align="left" style="background-color:#' . $project['project_color_identifier'] . ';">';
+	$tmp .= '<a style="color:' . bestColor($project['project_color_identifier']) . '" href="?m=projects&a=view&project_id=' . $task->task_project . '">' . $project['project_name'] . '</a>';
 	$tmp .= '</td>';
     $tmp .= $htmlHelper->createCell('task_duration', $task->task_duration . ' ' . mb_substr($AppUI->_($durnTypes[$task->task_duration_type]), 0, 1));
     $tmp .= $htmlHelper->createCell('task_start_date', $task->task_start_date);
@@ -1071,7 +1071,7 @@ function displayTask($list, $task, $level, $display_week_hours, $fromPeriod, $to
 	// create the list of possible assignees
 	$size = (count($active_users) > 5) ? 5 : 3;
 	$tmp .= '<td valign="top" align="center" nowrap="nowrap">';
-	$tmp .= '<select name="add_users" style="width:200px" size="'.$size.'" class="text" multiple="multiple" ondblclick="javascript:chAssignment(' . $user_id . ', 0, false)">';
+	$tmp .= '<select name="add_users[' . $user_id . '_' . $task->task_id . ']" style="width:200px" size="'.$size.'" class="text" multiple="multiple" ondblclick="javascript:chAssignment(' . $user_id . ', 0, false)">';
 	foreach ($active_users as $id => $name) {
 		$tmp .= '<option value="' . $id . '">' . $name . '</option>';
 	}

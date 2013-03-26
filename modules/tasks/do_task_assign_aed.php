@@ -10,37 +10,30 @@ $chUTP = (int) w2PgetParam($_POST, 'chUTP', 0);
 $percentage_assignment = (int) w2PgetParam($_POST, 'percentage_assignment', 0);
 $user_task_priority = (int) w2PgetParam($_POST, 'user_task_priority', 0);
 $user_id = (int) w2PgetParam($_POST, 'user_id', 0);
-$hassign = $_POST['hassign'];
-$htasks = $_POST['htasks'];
+$task_user_assign = $_POST['task_user_assign'];
 
 $perms = &$AppUI->acl();
 
-// prepare the percentage of assignment per user as required by CTask::updateAssigned()
+// Prepare a task array, containing an array with user ids for each task
+$tasks = explode('|', $task_user_assign);
+$task_list = array();
+foreach ($tasks as $task) {
+	if (isset($task) && $task != '') {
+		$task_list[substr($task, 0, strpos($task, ':'))] = explode(',', substr($task, strpos($task, ':') + 1));
+	}
+}
+
 $hperc_assign_ar = array();
-if (isset($hassign)) {
-	$tarr = explode(',', $hassign);
-	foreach ($tarr as $uid) {
-		if ((int) $uid) {
-			$hperc_assign_ar[$uid] = $percentage_assignment;
+foreach ($tasks as $task) {
+	if (isset($task) && $task != '') {
+		foreach (explode(',', substr($task, strpos($task, ':') + 1)) as $puid) {
+			$hperc_assign_ar[$puid] = $percentage_assignment;
 		}
 	}
 }
 
-// prepare a list of tasks to process
-$htasks_ar = array();
-if (isset($htasks)) {
-	$tarr = explode(',', $htasks);
-	foreach ($tarr as $tid) {
-		if ((int) $tid) {
-			$htasks_ar[] = $tid;
-		}
-	}
-}
-$sizeof = count($htasks_ar);
-for ($i = 0; $i <= $sizeof; $i++) {
-
-	$_POST['task_id'] = $htasks_ar[$i];
-
+foreach ($task_list as $task_id => $user_list) {
+	$_POST['task_id'] = $task_id;
 	// verify that task_id is not NULL
 	if ($_POST['task_id'] > 0) {
 		//check permissions, if user does not have permission then fail silently
@@ -55,32 +48,46 @@ for ($i = 0; $i <= $sizeof; $i++) {
 			$AppUI->redirect();
 		}
 
-		if ($rm && $del) {
-			$overAssignment = $obj->updateAssigned($hassign, $hperc_assign_ar, true, true);
-			if ($overAssignment) {
-				$AppUI->setMsg('Some Users could not be unassigned from Task', UI_MSG_ERROR);
-			}
-		} elseif (($rm || $del)) {
-			if (($msg = $obj->removeAssigned($user_id))) {
-				$AppUI->setMsg($msg, UI_MSG_ERROR);
-			} else {
-				$AppUI->setMsg('User unassigned from Task', UI_MSG_OK);
-			}
-		}
-		if (isset($hassign) && !$del == 1) {
-			$overAssignment = $obj->updateAssigned($hassign, $hperc_assign_ar, false, false);
-			//check if OverAssignment occured, database has not been updated in this case
-			if ($overAssignment) {
-				$AppUI->setMsg('The following Users have not been assigned in order to prevent from Over-Assignment:', UI_MSG_ERROR);
-				$AppUI->setMsg('<br>' . $overAssignment, UI_MSG_ERROR, true);
-			} else {
-				$AppUI->setMsg('User(s) assigned to Task', UI_MSG_OK);
-			}
-		}
 		// process the user specific task priority
 		if ($chUTP == 1) {
 			$obj->updateUserSpecificTaskPriority($user_task_priority, $user_id);
 			$AppUI->setMsg('User specific Task Priority updated', UI_MSG_OK, true);
+		} else {
+			// If '-' clicked...
+			if ($del) {
+				$ok = true;
+				foreach($user_list as $user_id) {
+					if (($msg = $obj->removeAssigned($user_id))) {
+						$AppUI->setMsg($msg, UI_MSG_ERROR);
+						$ok = false;
+					}
+				}
+				if ($ok) {
+					$AppUI->setMsg('User(s) unassigned from Task', UI_MSG_OK);
+				} else {
+					$AppUI->setMsg('Some User(s) could not be unassigned from Task', UI_MSG_ERROR);
+				}
+			// If '+' clicked...
+			} elseif (!$rm) {
+				$overAssignment = $obj->updateAssigned(implode(',', $user_list), $hperc_assign_ar, false, false);
+				//check if OverAssignment occured, database has not been updated in this case
+				if ($overAssignment) {
+					$AppUI->setMsg('The following Users have not been assigned in order to prevent from Over-Assignment:', UI_MSG_ERROR);
+					$AppUI->setMsg('<br>' . $overAssignment, UI_MSG_ERROR, true);
+				} else {
+					$AppUI->setMsg('User(s) assigned to Task', UI_MSG_OK);
+				}
+			// If '<->' clicked...
+			} elseif ($rm) {
+				$overAssignment = $obj->updateAssigned(implode(',', $user_list), $hperc_assign_ar, true, false);
+				//check if OverAssignment occured, database has not been updated in this case
+				if ($overAssignment) {
+					$AppUI->setMsg('The following Users have not been assigned in order to prevent from Over-Assignment:', UI_MSG_ERROR);
+					$AppUI->setMsg('<br>' . $overAssignment, UI_MSG_ERROR, true);
+				} else {
+					$AppUI->setMsg('User(s) assigned to Task', UI_MSG_OK);
+				}
+			}
 		}
 
 		if ($store == 1) {
@@ -91,8 +98,5 @@ for ($i = 0; $i <= $sizeof; $i++) {
 			}
 		}
 	}
-}
-if ($rm && $del) {
-	$AppUI->setMsg('User(s) unassigned from Task', UI_MSG_OK);
 }
 $AppUI->redirect();
