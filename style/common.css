@@ -519,3 +519,12 @@ bordertable, .bordertable{
     height: 15px;
     width: 0px;
 }
+
+table.week {
+    background-color:white;
+}
+
+table.week table {
+    border-spacing: 0;
+    width: 100%;
+}
