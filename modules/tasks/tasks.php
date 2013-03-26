@@ -372,44 +372,46 @@ if ($showEditCheckbox) { ?>
 	
 	function chAssignment(project_id, rmUser, del) {
 		var f = eval('document.assFrm' + project_id);
-		var fl = f.add_users.length-1;
-		var c = 0;
-		var a = 0;
-		
-		f.hassign.value = '';
-		f.htasks.value = '';
-		
-		// harvest all checked checkboxes (tasks to process)
-		for (var i=0, i_cmp=f.elements.length; i<i_cmp;i++) {
-			var e = f.elements[i];
-			// only if it's a checkbox.
-			if(e.type == 'checkbox' && e.checked == true && e.name != 'master') {
-				c++;
-				f.htasks.value = f.htasks.value +', '+ e.value;
+	        var c = 0;
+	        var a = 0;
+	
+	        f.task_user_assign.value = '';
+
+	        // harvest all checked checkboxes (tasks to process)
+	        for (var i=0, i_cmp=f.elements.length; i < i_cmp; i++) {
+	                var el1 = f.elements[i];
+	                // only if it's a checkbox.
+	                if(el1.type == 'checkbox' && el1.checked == true && el1.name != 'master')
+	                {
+        	                c++;
+				// now search for the corresponding 'select-multiple' with the name 'add_users[<project_id>]'
+				var el2 = document.getElementsByName('add_users[' + project_id + ']')[0];
+				var users = new Array();
+			        // harvest all selected possible User Assignees
+				for (var k=0, k_cmp=el2.options.length; k < k_cmp; k++) {
+					if (el2.options[k].selected) {
+						a++;
+			                        users.push(el2.options[k].value);
+					}
+				}
+				if (users.length > 0) {
+					f.task_user_assign.value = f.task_user_assign.value + '|' + el1.value + ':' + users.join(',');
+				}
 			}
 		}
-		
-		// harvest all selected possible User Assignees
-		for (fl; fl > -1; fl--) {
-			if (f.add_users.options[fl].selected) {
-				a++;
-				f.hassign.value = ', ' + f.hassign.value +', '+ f.add_users.options[fl].value;
-			}
-		}
-		
-		if (del == true) {
-			if (c == 0) {
-				alert ('<?php echo $AppUI->_('Please select at least one Task!', UI_OUTPUT_JS); ?>');
-			} else if (a == 0 && rmUser == 1){
-				alert ('<?php echo $AppUI->_('Please select at least one Assignee!', UI_OUTPUT_JS); ?>');
-			} else if (confirm('<?php echo $AppUI->_('Are you sure you want to unassign the User from Task(s)?', UI_OUTPUT_JS); ?>')) {
-				f.del.value = 1;
-				f.rm.value = rmUser;
-				f.project_id.value = project_id;
-				f.submit();
-			}
-		} else {
-			
+
+	        if (del == true) {
+	                if (c == 0) {
+	                        alert ('<?php echo $AppUI->_('Please select at least one Task!', UI_OUTPUT_JS); ?>');
+	                } else {
+	                        if (confirm( '<?php echo $AppUI->_('Are you sure you want to unassign the User from Task(s)?', UI_OUTPUT_JS); ?>' )) {
+					f.del.value = 1;
+					f.rm.value = rmUser;
+					f.project_id.value = project_id;
+					f.submit();
+				}
+	                }
+	        } else {
 			if (c == 0) {
 				alert ('<?php echo $AppUI->_('Please select at least one Task!', UI_OUTPUT_JS); ?>');
 			} else if (a == 0) {
@@ -420,7 +422,7 @@ if ($showEditCheckbox) { ?>
 				f.project_id.value = project_id;
 				f.submit();
 			}
-		}
+	        }
 	}
 <?php } ?>
 </script>
@@ -528,8 +530,7 @@ if ($showEditCheckbox) {
 							<input type="hidden" name="store" value="0" />
 							<input type="hidden" name="dosql" value="do_task_assign_aed" />
 							<input type="hidden" name="project_id" value="<?php echo ($p['project_id']); ?>" />
-							<input type="hidden" name="hassign" />
-							<input type="hidden" name="htasks" />
+							<input type="hidden" name="task_user_assign" />
 						</td>
 					</tr>
 					<tr>
@@ -559,7 +560,7 @@ if ($showEditCheckbox) {
 								  <table width="100%" border="0">
 									  <tr>
 											<td align="right">
-												<select name="add_users" style="width:200px" size="2" multiple="multiple" class="text" ondblclick="javascript:chAssignment(<?php echo ($p['project_id']); ?>, 0, false)">
+												<select name="add_users[<?php echo $p['project_id'] ?>]" style="width:200px" size="3" multiple="multiple" class="text" ondblclick="javascript:chAssignment(<?php echo ($p['project_id']); ?>, 0, false)">
 													<?php
 															foreach ($userAlloc as $v => $u) {
 																echo '<option value="' . $u['user_id'] . '">' . w2PformSafe($u['userFC']) . "</option>\n";
