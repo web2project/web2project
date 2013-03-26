@@ -81,7 +81,7 @@ if ($canEdit || $user_id == $AppUI->user_id) {
     $titleBlock->addCrumb('?m=admin&a=addedituser&user_id='.$user_id, 'edit this user');
     $titleBlock->addCrumb('?m=contacts&a=addedit&contact_id='.$user->contact_id, 'edit this contact');
     $titleBlock->addCrumb('?m=system&a=addeditpref&user_id='.$user_id, 'edit preferences');
-    $titleBlock->addCrumbRight('<div class="crumb"><ul style="float:right;"><li><a href="javascript: void(0);" onclick="popChgPwd();return false"><span>' . $AppUI->_('change password') . '</span></a></li></ul></div>');
+    $titleBlock->addCrumbRight('<div class="crumb"><ul><li><a href="javascript: void(0);" onclick="popChgPwd();return false"><span>' . $AppUI->_('change password') . '</span></a></li></ul></div>');
 }
 $titleBlock->show();
 ?>
