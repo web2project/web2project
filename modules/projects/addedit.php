@@ -32,6 +32,7 @@ if (!$project && $project_id > 0) {
 	$AppUI->setMsg('invalidID', UI_MSG_ERROR, true);
 	$AppUI->redirect();
 }
+$pci = $project->project_color_identifier ? $project->project_color_identifier : 'FFFFFF';
 
 $pstatus = w2PgetSysVal('ProjectStatus');
 $ptype = w2PgetSysVal('ProjectType');
@@ -370,7 +371,7 @@ function setDepartment(department_id_string){
                                 <tr>
                                     <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Color Identifier'); ?></td>
                                     <td nowrap="nowrap">
-                                        <input type="text" name="project_color_identifier" value="<?php echo ($project->project_color_identifier) ? $project->project_color_identifier : 'FFFFFF'; ?>" size="10" maxlength="6" onclick="newwin=window.open('./index.php?m=public&a=color_selector&dialog=1&callback=setColor', 'calwin', 'width=320, height=300, scrollbars=no');" class="text" style="color: <?php echo '#'.$project->project_color_identifier ?>; background-color: <?php echo '#'.$project->project_color_identifier ?>" readonly /> *
+                                        <input type="text" name="project_color_identifier" value="<?php echo $pci; ?>" size="10" maxlength="6" onclick="newwin=window.open('./index.php?m=public&a=color_selector&dialog=1&callback=setColor', 'calwin', 'width=320, height=300, scrollbars=no');" class="text" style="color: <?php echo '#'.$pci ?>; background-color: <?php echo '#'.$pci ?>" readonly /> *
                                     </td>
                                 </tr>
                                 <tr>
