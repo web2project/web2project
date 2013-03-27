@@ -834,23 +834,16 @@ function array_csort() { //coded by Ichier2003
 		if (is_string($arg)) {
 			for ($j = 0, $j_cmp = count($marray); $j < $j_cmp; $j++) {
 
-				/* we have to calculate the end_date via start_date+duration for
-				** end='0000-00-00 00:00:00' before sorting, see mantis #1509:
-
-				** Task definition writes the following to the DB:
-				** A without start date: start = end = NULL
-				** B with start date and empty end date: start = startdate,
-				end = '0000-00-00 00:00:00'
-				** C start + end date: start= startdate, end = end date
-
-				** A the end_date for the middle task (B) is ('dynamically') calculated on display
-				** via start_date+duration, it may be that the order gets wrong due to the fact
-				** that sorting has taken place _before_.
+				/* There used to be some code here to calculate a task's
+				   end date dynamically if it had no end date. The same
+				   was done at todo.php and todo_tasks_sub.php.
+				   Apparently this was a fix to DotProject's issue #1509.
+				   But now it is not possible to create a task without
+				   start and end date, even if it depends on another.
+				   So I'm taking the code out to simplify things and allow
+				   task due in date and completion status to be computed
+				   with a SQL query.
 				*/
-				if ($marray[$j]['task_end_date'] == '0000-00-00 00:00:00') {
-					$marray[$j]['task_end_date'] = calcEndByStartAndDuration($marray[$j]);
-				}
-                                
                                 // TODO: In some cases, $arg can be an empty string
                                 // which will throw a notice. Don't want to touch it
                                 // who knows what will break, it uses eval after all
@@ -867,18 +860,6 @@ function array_csort() { //coded by Ichier2003
 	eval($msortline);
 
 	return $marray;
-}
-
-// from modules/tasks/tasks.class.php
-/*
-** Calc End Date via Startdate + Duration
-** @param array task	A DB row from the earlier fetched tasklist
-** @return string	Return calculated end date in MySQL-TIMESTAMP format
-*/
-function calcEndByStartAndDuration($task) {
-	$end_date = new w2p_Utilities_Date($task['task_start_date']);
-	$end_date->addSeconds($task['task_duration'] * $task['task_duration_type'] * SEC_HOUR);
-	return $end_date->format(FMT_DATETIME_MYSQL);
 }
 
 // from modules/tasks/tasks.class.php

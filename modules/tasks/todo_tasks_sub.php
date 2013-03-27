@@ -121,23 +121,17 @@ $canDelete = $perms->checkModuleItem($m, 'delete');
             } else {
                 $tasks = array_csort($tasks, $task_sort_item1, $task_sort_order1, $task_sort_type1);
             }
-        } else { // All this appears to already be handled in todo.php ... should consider deleting this else block
-            /* we have to calculate the end_date via start_date+duration for
-            ** end='0000-00-00 00:00:00' if array_csort function is not used
-            ** as it is normally done in array_csort function in order to economise
-            ** cpu time as we have to go through the array there anyway
-            */
-            for ($j = 0, $j_cmp = count($tasks); $j < $j_cmp; $j++) {
-                if ($tasks[$j]['task_end_date'] == '0000-00-00 00:00:00' || $tasks[$j]['task_end_date'] == '') {
-                    if ($tasks[$j]['task_start_date'] == '0000-00-00 00:00:00' || $tasks[$j]['task_start_date'] == '') {
-                        $tasks[$j]['task_start_date'] = '0000-00-00 00:00:00'; //just to be sure start date is "zeroed"
-                        $tasks[$j]['task_end_date'] = '0000-00-00 00:00:00';
-                    } else {
-                        $tasks[$j]['task_end_date'] = calcEndByStartAndDuration($tasks[$j]);
-                    }
-                }
-            }
-        }
+        } 
+	/* There used to be some code here to calculate a task's
+	   end date dynamically if it had no end date. The same
+	   was done at todo.php and todo_tasks_sub.php.
+	   Apparently this was a fix to DotProject's issue #1509.
+	   But now it is not possible to create a task without
+	   start and end date, even if it depends on another.
+	   So I'm taking the code out to simplify things and allow
+	   task due in date and completion status to be computed
+	   with a SQL query.
+	*/
 
         $history_active = false;
         // showing tasks

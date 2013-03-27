@@ -110,6 +110,7 @@ $q->addQuery('distinct(ta.task_id), ta.*');
 $q->addQuery('project_name, pr.project_id, project_color_identifier');
 $q->addQuery('tp.task_pinned');
 $q->addQuery('ut.user_task_priority');
+$q->addQuery('DATEDIFF(ta.task_end_date, "' . date($date) . '") as task_due_in');
 
 $q->addTable('projects', 'pr');
 $q->addTable('tasks', 'ta');
@@ -165,44 +166,21 @@ if (count($allowedProjects)) {
 	$q->addWhere($allowedProjects);
 }
 
+$q->addHaving('(ROUND(task_percent_complete) <> 100) OR (task_due_in >= 0)');
+
 $q->addOrder('task_end_date, task_start_date, task_priority');
 $tasks = $q->loadList();
 
-/* we have to calculate the end_date via start_date+duration for
-** end='0000-00-00 00:00:00'
+/* There used to be some code here to calculate a task's
+   end date dynamically if it had no end date. The same
+   was done at todo.php and todo_tasks_sub.php.
+   Apparently this was a fix to DotProject's issue #1509.
+   But now it is not possible to create a task without
+   start and end date, even if it depends on another.
+   So I'm taking the code out to simplify things and allow
+   task due in date and completion status to be computed
+   with a SQL query.
 */
-for ($j = 0, $j_cmp = count($tasks); $j < $j_cmp; $j++) {
-
-	if ($tasks[$j]['task_end_date'] == '0000-00-00 00:00:00' || $tasks[$j]['task_end_date'] == '') {
-		if ($tasks[$j]['task_start_date'] == '0000-00-00 00:00:00' || $tasks[$j]['task_start_date'] == '') {
-			$tasks[$j]['task_start_date'] = '0000-00-00 00:00:00'; //just to be sure start date is "zeroed"
-			$tasks[$j]['task_end_date'] = '0000-00-00 00:00:00';
-		} else {
-			$tasks[$j]['task_end_date'] = calcEndByStartAndDuration($tasks[$j]);
-		}
-	}
-}
-
-// Compute the 'due_in' value. Previously was hardcoded into the query but
-// always using the now() date, which gives misleading results when using the
-// day view on dates <> now().
-$unix_date = strtotime((string)$date);
-for ($j = 0, $j_cmp = count($tasks); $j < $j_cmp; $j++) {
-	$tasks[$j]['task_due_in'] = (string)round((strtotime($tasks[$j]['task_end_date']) - $unix_date) / 86400);
-     if ($tasks[$j]['task_due_in'] == -0) {
-		$tasks[$j]['task_due_in'] = '0';
-     }
-}
-
-// Now filter the $tasks array for dates and completion.
-// If a task is done it is taken out if the end date is <= than $date
-for ($j = 0, $j_cmp = count($tasks); $j < $j_cmp; $j++) {
-	if ($tasks[$j]['task_percent_complete'] == 100) {
-		if ($tasks[$j]['task_due_in'][0] == '-') {
-			unset($tasks[$j]);
-		}
-	}
-}
 
 $priorities = array('1' => 'high', '0' => 'normal', '-1' => 'low');
 $durnTypes = w2PgetSysVal('TaskDurationType');
