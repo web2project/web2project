@@ -2003,7 +2003,7 @@ function displayFiles($AppUI, $folder_id, $task_id, $project_id, $company_id, $c
 
 	$qv = new w2p_Database_Query();
 	$qv->addTable('files');
-	$qv->addQuery('file_id, file_version, file_project, file_name, file_task,
+	$qv->addQuery('file_id, file_version, file_project, file_name, file_task, file_folder,
 		file_description, file_owner, file_size, file_category,
 		task_name, file_version_id, file_date as file_datetime, file_checkout, file_co_reason, file_type,
 		file_date, cu.user_username as co_user, project_name,
