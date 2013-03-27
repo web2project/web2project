@@ -46,12 +46,12 @@ $AppUI->setState('ProjIdxOrderDir', $orderdir);
 $projects = projects_list_data();
 
 $oCompany = new CCompany;
-$allowedCompanies[0] = '(' . $AppUI->_('all') . ')';
+$allowedCompanies[0] = $AppUI->_('All companies');
 $allowedCompanies += $oCompany->getAllowedRecords($AppUI->user_id, 'company_id,company_name', 'company_name');
 
-$project_types = array(-1 => '(' . $AppUI->_('all') . ')') + w2PgetSysVal('ProjectType');
+$project_types = array(-1 => $AppUI->_('All types')) + w2PgetSysVal('ProjectType');
 
-$user_list = array(0 => '(' . $AppUI->_('all') . ')') + CProject::getOwners();
+$user_list = array(0 => $AppUI->_('All users')) + CProject::getOwners();
 
 $bufferSearch = '<input type="text" class="text" size="20" name="projsearchtext" onChange="document.searchfilter.submit();" value=' . "'$search_text'" . 'title="' . $AppUI->_('Search in name and description fields') . '"/>';
 
