@@ -19,52 +19,76 @@ $perms = &$AppUI->acl();
     <input type="hidden" name="task_id" value="<?php echo $task_id; ?>" />
     <table class="std addedit" width="100%" border="1" cellpadding="4" cellspacing="0">
         <tr>
-            <td width="50%" valign='top'>
+            <td width="30%" valign="top">
                 <table border="0">
                     <tr>
-                        <td>
-                            <?php if ($can_edit_time_information) { ?>
-                                <?php echo $AppUI->_('Task Owner'); ?><br />
+                        <?php if ($can_edit_time_information) { ?>
+	                    <td align="right">
+                                <?php echo $AppUI->_('Task Owner'); ?>:
+			    </td><td>
                                 <?php echo arraySelect($users, 'task_owner', 'class="text"', !isset($task->task_owner) ? $AppUI->user_id : $task->task_owner); ?>
-                                <br />
-                            <?php } ?>
-                            <?php echo $AppUI->_('Access'); ?>
-                            <br />
-                            <?php if(is_array($task_access)) { ?>
-                                <?php echo arraySelect($task_access, 'task_access', 'class="text"', (int) $task->task_access, true); ?>
-                            <?php } else { ?>
-                                <input name="task_access" type="hidden" value="<?php echo (int) $task->task_access; ?>" />
-                            <?php } ?>
-                            <br /><?php echo $AppUI->_('Web Address'); ?>
-                            <br /><input type="text" class="text" name="task_related_url" value="<?php echo $task->task_related_url; ?>" size="40" maxlength="255" />
-                        </td>
-                        <td valign='top'>
-                            <?php echo $AppUI->_('Task Type'); ?><br />
+			    </td>
+                        <?php } ?>
+		    </tr><tr>
+			<td align="right">
+                            <?php echo $AppUI->_('Task Type'); ?>:
+			</td><td>
                             <?php
                                 $task_types = w2PgetSysVal('TaskType');
                                 echo arraySelect($task_types, 'task_type', 'class="text"', $task->task_type, false);
                             ?>
-                            <br /><br />
+			</td>
+		    </tr><tr>
+                        <?php if(is_array($task_access)) { ?>
+			    <td align="right">
+	                        <?php echo $AppUI->_('Access'); ?>:
+			    </td><td>
+                                <?php echo arraySelect($task_access, 'task_access', 'class="text"', (int) $task->task_access, true); ?>
+			    </td>
+                        <?php } else { ?>
+                            <input name="task_access" type="hidden" value="<?php echo (int) $task->task_access; ?>" />
+                        <?php } ?>
+		    </tr><tr>
+			<td align="right">
+			    <?php echo $AppUI->_('Web Address'); ?>:
+			</td><td>
+                            <input type="text" class="text" name="task_related_url" value="<?php echo $task->task_related_url; ?>" size="40" maxlength="255" />
+			</td>
+		    </tr><tr>
+			<td align="right">
+                            <?php echo $AppUI->_('Task Parent'); ?>:
+			</td><td>
+	                    <select name='task_parent' class='text'>
+        	                <option value='<?php echo $task->task_id; ?>'><?php echo $AppUI->_('None'); ?></option>
+                	        <?php echo $task_parent_options; ?>
+	                    </select>
+			</td>
+		    </tr><tr>
+	                <?php if ($task_id > 0) { ?>
+			    <td align="right">
+	                        <?php echo $AppUI->_('Move this task (and its children), to project'); ?>:
+			    </td><td>
+	                        <?php echo arraySelect($projects, 'new_task_project', 'size="1" class="text" id="medium" onchange="submitIt(document.editFrm)"', $task_project); ?>
+			    </td>
+			<?php } ?>
+		    </tr>
+		</table>
+   	    </td><td align="center">
+                <?php
+                    if ($AppUI->isActiveModule('contacts') && canView('contacts')) {
+                        echo '<input type="button" class="button" value="' . $AppUI->_('Select contacts...') . '" onclick="javascript:popContacts();" />';
+                    }
+                    // Let's check if the actual company has departments registered
+                    if (count($department_selection_list) > 1) { ?><br />
+                        <?php echo $AppUI->_('Department'); ?><br />
+                        <?php echo arraySelect($department_selection_list, 'dept_ids[]', 'class="text" size="1"', $task->task_departments); ?>
+                    <?php } ?>
+		    <br><br>
+                    <table>
+			<tr><td colspan="2" align="center">
+                       	    <?php echo $AppUI->_('Target Budgets'); ?>:
+			</td></tr>
                             <?php
-                            if ($AppUI->isActiveModule('contacts') && canView('contacts')) {
-                                echo '<input type="button" class="button" value="' . $AppUI->_('Select contacts...') . '" onclick="javascript:popContacts();" />';
-                            }
-                            // Let's check if the actual company has departments registered
-                            if (count($department_selection_list) > 1) { ?><br />
-                                <?php echo $AppUI->_('Department'); ?><br />
-                                <?php echo arraySelect($department_selection_list, 'dept_ids[]', 'class="text" size="1"', $task->task_departments); ?>
-                            <?php } ?>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td><?php echo $AppUI->_('Task Parent'); ?>:</td>
-                        <td rowspan="4">
-                            <table>
-                                <tr>
-                                    <td></td>
-                                    <td><?php echo $AppUI->_('Target Budgets'); ?>:</td>
-                                </tr>
-                                <?php
                                 $billingCategory = w2PgetSysVal('BudgetCategory');
                                 $totalBudget = 0;
                                 foreach ($billingCategory as $id => $category) {
@@ -72,47 +96,23 @@ $perms = &$AppUI->acl();
                                     $totalBudget += $amount;
                                     ?>
                                     <tr>
-                                        <td align="right" nowrap="nowrap"><?php echo $AppUI->_($category); ?></td>
+                                        <td align="right" nowrap="nowrap"><?php echo $AppUI->_($category); ?>:</td>
                                         <td nowrap="nowrap" style="text-align: left; padding-left: 40px;">
-                                            <?php echo $w2Pconfig['currency_symbol'] ?> <input name="budget_<?php echo $id; ?>" id="budget_<?php echo $id; ?>" type="text" value="<?php echo $amount; ?>" size="10" class="text" />
+                                        <?php echo $w2Pconfig['currency_symbol'] ?> <input name="budget_<?php echo $id; ?>" id="budget_<?php echo $id; ?>" type="text" value="<?php echo $amount; ?>" size="10" class="text" />
                                         </td>
                                     </tr>
                                     <?php
                                 }
-                                ?>
-                                <tr>
-                                    <td nowrap="nowrap"><?php echo $AppUI->_('Total Target Budget'); ?> <?php echo $w2Pconfig['currency_symbol'] ?></td>
-                                    <td align="right">
-                                        <?php echo $w2Pconfig['currency_symbol'] ?> <?php echo formatCurrency($totalBudget, $AppUI->getPref('CURRENCYFORM')); ?>
-                                    </td>
-                                </tr>
-                            </table>
-                        </td>
-                    </tr>
-                <tr>
-                    <td>
-                        <select name='task_parent' class='text'>
-                            <option value='<?php echo $task->task_id; ?>'><?php echo $AppUI->_('None'); ?></option>
-                            <?php echo $task_parent_options; ?>
-                        </select>
-                    </td>
-<!--                    <td><?php echo $w2Pconfig['currency_symbol'] ?><input type="text" class="text" name="task_target_budget" value="<?php echo $task->task_target_budget; ?>" size="10" maxlength="10" /></td>-->
-                </tr>
-            <?php if ($task_id > 0) { ?>
-                <tr>
-                    <td>
-                        <?php echo $AppUI->_('Move this task (and its children), to project'); ?>:
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <?php echo arraySelect($projects, 'new_task_project', 'size="1" class="text" id="medium" onchange="submitIt(document.editFrm)"', $task_project); ?>
-                    </td>
-                </tr>
-            <?php } ?>
-                </table>
-            </td>
-            <td valign="top" align="center">
+                            ?>
+                        <tr>
+                            <td nowrap="nowrap"><?php echo $AppUI->_('Total Target Budget'); ?>:</td>
+                            <td align="right">
+                            <?php echo $w2Pconfig['currency_symbol'] ?> <?php echo formatCurrency($totalBudget, $AppUI->getPref('CURRENCYFORM')); ?>
+                            </td>
+                        </tr>
+<!--                    <tr><td><?php echo $w2Pconfig['currency_symbol'] ?><input type="text" class="text" name="task_target_budget" value="<?php echo $task->task_target_budget; ?>" size="10" maxlength="10" /></td></tr>-->
+                    </table>
+	    </td><td valign="top" align="center">
                 <table><tr><td align="left">
                 <?php echo $AppUI->_('Description'); ?>:
                 <br />
