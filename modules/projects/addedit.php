@@ -110,8 +110,9 @@ function setColor(color) {
 	var f = document.editFrm;
 	if (color) {
 		f.project_color_identifier.value = color;
+		f.project_color_identifier.style.color = '#' + color;
+		f.project_color_identifier.style.background = '#' + color;
 	}
-	document.getElementById('test').style.background = '#' + f.project_color_identifier.value; 		//fix for mozilla: does this work with ie? opera ok.
 }
 
 function setShort() {
@@ -369,11 +370,7 @@ function setDepartment(department_id_string){
                                 <tr>
                                     <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Color Identifier'); ?></td>
                                     <td nowrap="nowrap">
-                                        <input type="text" name="project_color_identifier" value="<?php echo ($project->project_color_identifier) ? $project->project_color_identifier : 'FFFFFF'; ?>" size="10" maxlength="6" onblur="setColor();" class="text" /> *
-                                    </td>
-                                    <td nowrap="nowrap" align="left">
-                                        <a href="javascript: void(0);" onclick="newwin=window.open('./index.php?m=public&a=color_selector&dialog=1&callback=setColor', 'calwin', 'width=320, height=300, scrollbars=no');"><?php echo $AppUI->_('change color'); ?></a>
-                                        <a href="javascript: void(0);" onclick="newwin=window.open('./index.php?m=public&a=color_selector&dialog=1&callback=setColor', 'calwin', 'width=320, height=300, scrollbars=no');"><span id="test" style="border:solid;border-width:1;border-right-width:0;background:#<?php echo ($project->project_color_identifier) ? $project->project_color_identifier : 'FFFFFF'; ?>;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="border:solid;border-width:1;border-left-width:0;background:#FFFFFF">&nbsp;&nbsp;</span></a>
+                                        <input type="text" name="project_color_identifier" value="<?php echo ($project->project_color_identifier) ? $project->project_color_identifier : 'FFFFFF'; ?>" size="10" maxlength="6" onclick="newwin=window.open('./index.php?m=public&a=color_selector&dialog=1&callback=setColor', 'calwin', 'width=320, height=300, scrollbars=no');" class="text" style="color: <?php echo '#'.$project->project_color_identifier ?>; background-color: <?php echo '#'.$project->project_color_identifier ?>" readonly /> *
                                     </td>
                                 </tr>
                                 <tr>
