@@ -145,12 +145,6 @@ $next_year = (int)($next_year + 10000);
 					<td style="border-style:solid;border-width:1px" class="eventtask">&nbsp;&nbsp;</td>
 					<td nowrap="nowrap"><?php echo $AppUI->_('Event'); ?>+<?php echo $AppUI->_('My Task'); ?></td>
 					<td>&nbsp;</td>
-					<td style="border-style:solid;border-width:1px" class="taskothers">&nbsp;&nbsp;</td>
-					<td nowrap="nowrap"><?php echo $AppUI->_('Others Task'); ?></td>
-					<td>&nbsp;</td>
-					<td style="border-style:solid;border-width:1px" class="eventtaskothers">&nbsp;&nbsp;</td>
-					<td nowrap="nowrap"><?php echo $AppUI->_('Event'); ?>+<?php echo $AppUI->_('Others Task'); ?></td>
-					<td>&nbsp;</td>
 					<td style="border-style:solid;border-width:1px" class="weekend">&nbsp;&nbsp;</td>
 					<td nowrap="nowrap"><?php echo $AppUI->_('Weekend'); ?></td>
 					<td>&nbsp;</td>
