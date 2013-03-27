@@ -15,6 +15,8 @@ if (!w2PgetParam($_POST, 'project_departments', 0)) {
 	$obj->project_departments = implode(',', w2PgetParam($_POST, 'dept_ids', array()));
 }
 
+$obj->project_percent_complete = (double)$obj->project_percent_complete;
+
 $action   = ($del) ? 'deleted' : 'stored';
 $result   = ($del) ? $obj->delete() : $obj->store();
 $redirect = ($del) ? 'm=projects' : 'm=projects&a=view&project_id='.$obj->project_id;
