@@ -232,16 +232,21 @@ if ($do_report) {
 		if ($project_id != 0) {
 			$pdf->ezText($pname, 15);
 		}
+
+        $subhead = '';
 		if ($log_all) {
-			$pdf->ezText('All task entries', 9);
+            $subhead = $AppUI->_('All task entries');
 		} else {
 			if ($end_date != ' ') {
-				$pdf->ezText('Task entries from ' . $start_date->format($df) . ' to ' . $end_date->format($df), 9);
+                $subhead = $AppUI->_('Task entries from') . ' ' . $start_date->format($df) .
+                    $AppUI->_('to') . ' ' . $end_date->format($df);
 			} else {
-				$pdf->ezText('Task entries from ' . $start_date->format($df), 9);
+                $subhead = $AppUI->_('Task entries from') . ' ' . $start_date->format($df);
 			}
 		}
+        $pdf->ezText(utf8_decode($subhead), 9);
 		$pdf->ezText("\n");
+
 		$pdf->selectFont($font_dir . '/Helvetica.afm');
 		$title = null;
 		$options = array('showLines' => 2, 'showHeadings' => 1, 'fontSize' => 9, 'rowGap' => 4, 'colGap' => 5, 'xPos' => 50, 'xOrientation' => 'right', 'width' => '750', 'shaded' => 0, 'cols' => array(0 => array('justification' => 'left', 'width' => 100), 1 => array('justification' => 'left', 'width' => 100), 2 => array('justification' => 'left', 'width' => 260), 3 => array('justification' => 'left', 'width' => 80), 4 => array('justification' => 'center', 'width' => 80), 5 => array('justification' => 'center', 'width' => 80), 6 => array('justification' => 'right', 'width' => 60)));
