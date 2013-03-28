@@ -136,11 +136,11 @@ if ($result) {
     }
 
     $billingCategory = w2PgetSysVal('BudgetCategory');
-	$budgets = array();
-	foreach ($billingCategory as $id => $category) {
-		$budgets[$id] = w2PgetParam($_POST, 'budget_'.$id, 0);
-	}
-	$obj->storeBudget($budgets);
+    $budgets = array();
+    foreach ($billingCategory as $id => $category) {
+	$budgets[$id] = w2PgetParam($_POST, 'budget_'.$id, 0);
+    }
+    $obj->storeBudget($budgets);
 
     $custom_fields = new w2p_Core_CustomFields($m, 'addedit', $obj->task_id, 'edit');
     $custom_fields->bind($_POST);
