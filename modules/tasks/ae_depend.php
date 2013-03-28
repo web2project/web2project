@@ -78,7 +78,7 @@ $q->clear();
 	    </td><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 	    </td><td nowrap>
 		<input type="checkbox" name="task_dynamic" id="task_dynamic" value="1" <?php if ($task->task_dynamic == "1") { echo 'checked="checked"'; } ?> />
-		<label for="task_dynamic"><?php echo $AppUI->_('Dynamic Task'); ?>:</label><br>
+		<label for="task_dynamic"><?php echo $AppUI->_('Dynamic task'); ?></label><br>
 		<input type="checkbox" name="task_dynamic_nodelay" id="task_dynamic_nodelay" value="1" <?php if (($task->task_dynamic > '10') && ($task->task_dynamic < 30)) { echo 'checked="checked"'; } ?> />
 		<label for="task_dynamic_nodelay"><?php echo $AppUI->_('Do not track this task'); ?></label><br>
 		<input type="checkbox" name="set_task_start_date" id="set_task_start_date" <?php if ($task_id == 0 || $task->task_dynamic > '20') { echo "checked"; } ?> />
