@@ -75,6 +75,13 @@ function changeDyn() {
 		var el = elm[i];
 		el.style.display = dyn.checked ? 'none' : 'block';
 	}
+	// If we're coming out of a dynamic type, make sure the settings are sane
+	if (!dyn.checked) {
+		var ctl = document.getElementById('td_on');
+		ctl.checked = true;
+		ctl = document.getElementById('set_task_start_date');
+		ctl.checked = true;
+	}
 }
 
 </script>
@@ -107,7 +114,7 @@ function changeDyn() {
 		<div style="display: <?php echo $task->task_dynamic == '1' ? 'none' : 'block'; ?>" name="task_depend_nodyn">
 		<input type="checkbox" name="task_dynamic_nodelay" id="task_dynamic_nodelay" value="1" <?php if (($task->task_dynamic > '10') && ($task->task_dynamic < 30)) { echo 'checked="checked"'; } ?> />
 		<label for="task_dynamic_nodelay"><?php echo $AppUI->_('Do not track this task'); ?></label><br>
-		<input type="checkbox" name="set_task_start_date" id="set_task_start_date" <?php if ($task_id == 0 || $task->task_dynamic > '20') { echo "checked"; } ?> />
+		<input type="checkbox" name="set_task_start_date" id="set_task_start_date" <?php if ($task_id == 0 || $task->task_dynamic > '20') { echo "checked"; } ?> disabled="disabled" />
 		<label for="set_task_start_date"><?php echo $AppUI->_('Set task start date based on dependency'); ?></label>
 		</div>
 	    </td>
