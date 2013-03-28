@@ -762,7 +762,7 @@ class CTask extends w2p_Core_BaseObject
             // importing tasks do not update dynamics
             $this->importing_tasks = true;
         }
-        
+
         parent::hook_postCreate();
     }
     protected function hook_preStore()
@@ -789,6 +789,16 @@ class CTask extends w2p_Core_BaseObject
 	// deleted.
 	$this->task_original_percent_complete = $this->task_percent_complete;
 	$this->task_original_end_date = $this->task_end_date;
+
+	// If this is a dynamic task clear whatever dependencies that may have existed,
+	// to avoid tripping the isValid test.
+	if ((int)$this->task_dynamic == 1) {
+	    if ((int) w2PgetParam($_POST, 'task_id', 0) == $this->task_id) {
+	        unset($_POST['hdependencies']);
+	    } else {
+		$this->updateDependencies(null);
+	    }
+	}
 
         parent::hook_preStore();
     }
@@ -1048,6 +1058,11 @@ class CTask extends w2p_Core_BaseObject
         $q->addWhere('dependencies_task_id=' . (int) $this->task_id);
         $q->exec();
         $q->clear();
+
+	// If there's no dependencies to set bail out
+	if (!isset($cslist)) {
+		return;
+	}
 
         // process dependencies
         $tarr = explode(',', $cslist);

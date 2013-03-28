@@ -12,7 +12,6 @@ $del = (int) w2PgetParam($_POST, 'del', 0);
 $task_id = (int) w2PgetParam($_POST, 'task_id', 0);
 $hassign = w2PgetParam($_POST, 'hassign');
 $hperc_assign = w2PgetParam($_POST, 'hperc_assign');
-$hdependencies = w2PgetParam($_POST, 'hdependencies', '');
 $notify = (int) w2PgetParam($_POST, 'task_notify', 0);
 $comment = w2PgetParam($_POST, 'email_comment', '');
 $sub_form = (int) w2PgetParam($_POST, 'sub_form', 0);
@@ -108,6 +107,10 @@ if (!$result) {
     $AppUI->holdObject($obj);
     $AppUI->redirect('m=tasks&a=addedit&task_id='.$task_id);
 }
+
+// This line HAS to be here because the store method will clear this POST
+// variable on a dynamic task
+$hdependencies = w2PgetParam($_POST, 'hdependencies', '');
 
 if ($result) {
     if (isset($hassign)) {
