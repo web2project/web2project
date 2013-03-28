@@ -14,6 +14,27 @@ global $task_parent_options, $w2Pconfig, $projects, $task_project, $can_edit_tim
  */
 $perms = &$AppUI->acl();
 ?>
+
+<script language="javascript" type="text/javascript">
+
+function computeTotalBudget() {
+	var total = 0;
+	var amount = 0;
+	var f = document.detailFrm;
+        // harvest all budget categories
+	for (var i=0, i_cmp=f.elements.length; i < i_cmp; i++) {
+		var el = f.elements[i];
+		if (el.name.substr(0,7) == 'budget_' && el.tagName == 'INPUT' && el.type == 'text') {
+			amount = parseFloat('0' + el.value);
+			total += amount;
+			el.value = amount.toFixed(2);
+		}
+	}
+	f.task_target_budget.value = total.toFixed(2);
+}
+
+</script>
+
 <form action="?m=tasks&a=addedit&task_project=<?php echo $task_project; ?>" method="post" name="detailFrm" accept-charset="utf-8">
     <input type="hidden" name="dosql" value="do_task_aed" />
     <input type="hidden" name="task_id" value="<?php echo $task_id; ?>" />
@@ -90,15 +111,13 @@ $perms = &$AppUI->acl();
 			</td></tr>
                             <?php
                                 $billingCategory = w2PgetSysVal('BudgetCategory');
-                                $totalBudget = 0;
                                 foreach ($billingCategory as $id => $category) {
                                     $amount = $task->budget[$id]['budget_amount'];
-                                    $totalBudget += $amount;
                                     ?>
                                     <tr>
                                         <td align="right" nowrap="nowrap"><?php echo $AppUI->_($category); ?>:</td>
                                         <td nowrap="nowrap" style="text-align: left; padding-left: 40px;">
-                                        <?php echo $w2Pconfig['currency_symbol'] ?> <input name="budget_<?php echo $id; ?>" id="budget_<?php echo $id; ?>" type="text" value="<?php echo $amount; ?>" size="10" class="text" />
+                                        <?php echo $w2Pconfig['currency_symbol'] ?> <input name="budget_<?php echo $id; ?>" id="budget_<?php echo $id; ?>" type="text" value="<?php echo $amount != null ? $amount : '0.00'; ?>" size="10" class="text" style="text-align: right;" onblur="computeTotalBudget()"/>
                                         </td>
                                     </tr>
                                     <?php
@@ -107,10 +126,9 @@ $perms = &$AppUI->acl();
                         <tr>
                             <td nowrap="nowrap"><?php echo $AppUI->_('Total Target Budget'); ?>:</td>
                             <td align="right">
-                            <?php echo $w2Pconfig['currency_symbol'] ?> <?php echo formatCurrency($totalBudget, $AppUI->getPref('CURRENCYFORM')); ?>
+			    <?php echo $w2Pconfig['currency_symbol'] ?> <input type="text" class="text" name="task_target_budget" value="<?php echo $task->task_target_budget; ?>" style="text-align: right;" size="10" maxlength="10" readonly />
                             </td>
                         </tr>
-<!--                    <tr><td><?php echo $w2Pconfig['currency_symbol'] ?><input type="text" class="text" name="task_target_budget" value="<?php echo $task->task_target_budget; ?>" size="10" maxlength="10" /></td></tr>-->
                     </table>
 	    </td><td valign="top" align="center">
                 <table><tr><td align="left">
