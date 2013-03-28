@@ -23,7 +23,7 @@ $font_dir = W2P_BASE_DIR . '/lib/ezpdf/fonts';
 
 require ($AppUI->getLibraryClass('ezpdf/class.ezpdf'));
 
-$pdf = new Cezpdf($paper = 'A4', $orientation = 'landscape');
+$pdf = new Cezpdf('A4', 'landscape');
 $pdf->ezSetCmMargins(1, 2, 1.5, 1.5);
 $pdf->selectFont($font_dir . '/Helvetica.afm');
 $pdf->ezText(utf8_decode(w2PgetConfig('company_name')), 12);

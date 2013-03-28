@@ -178,7 +178,7 @@ $companies = arrayMerge(array('0' => 'All Companies'), $companies);
 
             require ($AppUI->getLibraryClass('ezpdf/class.ezpdf'));
 
-            $pdf = new Cezpdf($paper = 'A4', $orientation = 'landscape');
+            $pdf = new Cezpdf('A4', 'landscape');
             $pdf->ezSetCmMargins(1, 1, 1, 1);
 
             $pdf->selectFont($font_dir . '/Helvetica-Bold.afm');
