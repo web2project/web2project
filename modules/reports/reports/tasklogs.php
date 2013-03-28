@@ -142,9 +142,11 @@ if ($do_report) {
 
 	$q = new w2p_Database_Query;
 	$q->addTable('task_log', 't');
-	$q->addQuery('distinct(t.task_log_id), contact_display_name AS creator,
-        billingcode_value, billingcode_name, ROUND((billingcode_value * t.task_log_hours), 2) AS amount,
-        c.company_name, project_name, ts.task_name, task_log_task, task_log_hours, task_log_description');
+	$q->addQuery('distinct(t.task_log_id), contact_display_name AS creator');
+    $q->addQuery('billingcode_value, billingcode_name');
+    $q->addQuery('ROUND((billingcode_value * t.task_log_hours), 2) AS amount');
+    $q->addQuery('c.company_name, project_name');
+    $q->addQuery('ts.task_name, task_log_task, task_log_hours, task_log_description, task_log_date');
 
 	$q->addJoin('tasks', 'ts', 'ts.task_id = t.task_log_task');
 	$q->addJoin('projects', '', 'projects.project_id = ts.task_project');
