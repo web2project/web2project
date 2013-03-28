@@ -275,7 +275,6 @@ function addComponent() {
 	extra = extra.replace('extra0','extra_'+line_nr);
 	durntype = sel_durntype.replace('durntype0', 'durntype_'+line_nr);
 	durntype = durntype.replace('durntype0', 'durntype_'+line_nr);
-	durntype = durntype.replace('<select', '<select onclick="setDate(\'editFrm\', \'start_date_'+line_nr+'\');"');
 	
 	eval('oldType_'+line_nr+'=""');
 	
@@ -407,7 +406,7 @@ var daily_working_hours = <?php echo (int) w2PgetConfig('daily_working_hours'); 
 var oldProj = '<?php echo htmlentities($obj->project_name, ENT_QUOTES) . ':'; ?>';
 
 /* TODO: This needs to be refactored to use the core setDate_new function. */
-function setDate( frm_name, f_date ) {
+function setDate( frm_name, f_date) {
 	fld_date = eval( 'document.' + frm_name + '.' + f_date );
 	fld_task_date = eval( 'document.' + frm_name + '.' + 'add_task_' + f_date );
 	if (fld_date.value.length>0) {
@@ -445,7 +444,7 @@ function calcDuration(f, start_date, end_date, duration_fld, durntype_fld) {
 
     xajax_calcDuration(start_value.substring(0,8), start_value.substring(8,10), start_value.substring(10,12),
                        end_value.substring(0,8), end_value.substring(8,10), end_value.substring(10,12),
-                       durntype_fld.value, duration_fld.name);
+                       durntype_fld.value, duration_fld.name, durntype_fld.name);
 }
 
 </script>

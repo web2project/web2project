@@ -34,7 +34,8 @@ function calcFinish($start_date, $start_hour, $start_minute, $duration_type, $ta
 
 function calcDuration($start_date, $start_hour, $start_minute,
         $end_date, $end_hour, $end_minute, $duration_type,
-        $duration_output_field = 'task_duration') {
+        $duration_output_field = 'task_duration',
+        $duration_type_output_field = 'task_duration_type') {
 	
     $year = substr($start_date,0,4);
     $month = substr($start_date,4,2);
@@ -52,13 +53,20 @@ function calcDuration($start_date, $start_hour, $start_minute,
 
     $duration = $startDate->calcDuration($endDate);
 
-    if(intval($duration_type) == 24) {
-        $workHours = intval(w2PgetConfig('daily_working_hours'));
+    $workHours = intval(w2PgetConfig('daily_working_hours'));
+
+    // If the duration is larger than a working day and is a number of full working days
+    // (without leftover hours) then force the unit to 'days'. Otherwise force it to 'hours'.
+    if ((abs($duration) >= $workHours) && ($duration % $workHours) == 0) {
         $duration = $duration / $workHours;
+	$duration_type = 24;
+    } else {
+        $duration_type = 1;
     }
 
     $response = new xajaxResponse();
     $response->assign($duration_output_field, 'value', $duration);
+    $response->assign($duration_type_output_field, 'value', $duration_type);
 
     return $response;
 }
