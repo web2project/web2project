@@ -440,7 +440,7 @@ class CTask extends w2p_Core_BaseObject
                 $q->clear();
             }
 
-            //Update start date
+            //Update start date, if there are any sub-tasks. I see no point in clearing the start date otherwise.
             $q->addTable('tasks');
             $q->addQuery('MIN(task_start_date)');
             $q->addWhere('task_parent = ' . (int) $modified_task->task_id . ' AND task_id <> ' . $modified_task->task_id . ' AND NOT ISNULL(task_start_date)' . ' AND task_start_date <>	\'0000-00-00 00:00:00\'');
@@ -449,17 +449,18 @@ class CTask extends w2p_Core_BaseObject
             if ($d) {
                 $modified_task->task_start_date = $d;
                 $modified_task->task_start_date = $this->_AppUI->formatTZAwareTime($modified_task->task_start_date, '%Y-%m-%d %T');
-            } else {
-                $modified_task->task_start_date = '0000-00-00 00:00:00';
             }
 
             //Update end date
             $q->addTable('tasks');
             $q->addQuery('MAX(task_end_date)');
             $q->addWhere('task_parent = ' . (int) $modified_task->task_id . ' AND task_id <> ' . $modified_task->task_id . ' AND NOT ISNULL(task_end_date)');
-            $modified_task->task_end_date = $q->loadResult();
-            $modified_task->task_end_date = $this->_AppUI->formatTZAwareTime($modified_task->task_end_date, '%Y-%m-%d %T');
+            $d = $q->loadResult();
             $q->clear();
+            if ($d) {
+	        $modified_task->task_end_date = $d;
+	        $modified_task->task_end_date = $this->_AppUI->formatTZAwareTime($modified_task->task_end_date, '%Y-%m-%d %T');
+	    }
 
             //If we are updating a dynamic task from its children we don't want to store() it
             //when the method exists the next line in the store calling function will do that
