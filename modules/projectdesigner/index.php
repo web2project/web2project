@@ -275,6 +275,7 @@ function addComponent() {
 	extra = extra.replace('extra0','extra_'+line_nr);
 	durntype = sel_durntype.replace('durntype0', 'durntype_'+line_nr);
 	durntype = durntype.replace('durntype0', 'durntype_'+line_nr);
+	durntype = durntype.replace('<select', '<select onclick="setDate(\'editFrm\', \'start_date_'+line_nr+'\');"');
 	
 	eval('oldType_'+line_nr+'=""');
 	
@@ -444,7 +445,7 @@ function calcDuration(f, start_date, end_date, duration_fld, durntype_fld) {
 
     xajax_calcDuration(start_value.substring(0,8), start_value.substring(8,10), start_value.substring(10,12),
                        end_value.substring(0,8), end_value.substring(8,10), end_value.substring(10,12),
-                       durntype_fld, duration_fld.name);
+                       durntype_fld.value, duration_fld.name);
 }
 
 </script>
