@@ -119,13 +119,14 @@ for ($i = 0; $i < 7; $i++) {
 
 	if (isset($links[$dayStamp])) {
 		foreach ($links[$dayStamp] as $e) {
-			$href = isset($e['href']) ? $e['href'] : null;
-			$alt = isset($e['alt']) ? $e['alt'] : null;
+            $href = isset($e['href']) ? $e['href'] : null;
+            $alt = isset($e['alt']) ? $e['alt'] : null;
 
-			$s .= '<br />';
-			$s .= $href ? '<a href="'.$href.'" class="event" title="'.$alt.'">' : '';
-			$s .= $e['text'];
-			$s .= $href ? '</a>' : '';
+            $link  = $href ? '<a href="'.$href.'" title="'.$alt.'">' : '';
+            $link .= $e['text'];
+            $link .= $href ? '</a>' : '';
+
+            $s .= '<br /><span class="cal-item">' . $link . '</span>';
 		}
 	}
 

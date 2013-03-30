@@ -539,3 +539,12 @@ table.week table {
     border-spacing: 0;
     width: 100%;
 }
+
+span.cal-item * {
+    float: left;
+}
+
+span.cal-item a {
+    padding-left: 3px;
+    padding-right: 3px;
+}
