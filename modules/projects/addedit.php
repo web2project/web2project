@@ -186,7 +186,7 @@ function setDepartment(department_id_string){
                 <table width="100%">
                     <tr>
                         <td width="50%" valign="top">
-                            <table cellspacing="0" cellpadding="2" border="0">
+                            <table cellspacing="0" cellpadding="2">
                                 <tr>
                                     <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Project Name'); ?></td>
                                     <td width="100%" colspan="2">
@@ -273,33 +273,39 @@ function setDepartment(department_id_string){
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td colspan="2" align="center"><?php echo $AppUI->_('Target Budgets'); ?> </td>
-                                </tr>
-                                <?php
-                                    $billingCategory = w2PgetSysVal('BudgetCategory');
-                                    $totalBudget = 0;
-                                    foreach ($billingCategory as $id => $category) {
-                                        $amount = 0;
-                                        if (isset($project->budget[$id])) {
-                                            $amount = $project->budget[$id]['budget_amount'];
-                                        }
-                                        $totalBudget += $amount;
-                                        ?>
-                                        <tr>
-                                            <td align="right" nowrap="nowrap">
-                                                <?php echo $AppUI->_($category); ?>
-                                            </td>
-                                            <td nowrap="nowrap" style="text-align: left; padding-left: 40px;">
-                                                <?php echo $w2Pconfig['currency_symbol']; ?> <input name="budget_<?php echo $id; ?>" id="budget_<?php echo $id; ?>" type="text" value="<?php echo $amount; ?>" size="10" class="text" />
-                                            </td>
-                                        </tr>
-                                        <?php
-                                    }
-                                ?>
-                                <tr>
-                                    <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Total Target Budget'); ?> <?php echo $w2Pconfig['currency_symbol'] ?></td>
-                                    <td>
-                                        <?php echo formatCurrency($totalBudget, $AppUI->getPref('CURRENCYFORM')); ?>
+                                    <td colspan="2">
+                                        <table class="budgets nowrap">
+                                            <tr>
+                                                <td colspan="2"><?php echo $AppUI->_('Target Budgets'); ?> </td>
+                                            </tr>
+                                            <?php
+                                                $billingCategory = w2PgetSysVal('BudgetCategory');
+                                                $totalBudget = 0;
+                                                foreach ($billingCategory as $id => $category) {
+                                                    $amount = 0;
+                                                    if (isset($project->budget[$id])) {
+                                                        $amount = $project->budget[$id]['budget_amount'];
+                                                    }
+                                                    $totalBudget += $amount;
+                                                    ?>
+                                                    <tr>
+                                                        <td>
+                                                            <?php echo $AppUI->_($category); ?>
+                                                        </td>
+                                                        <td>
+                                                            <?php echo $w2Pconfig['currency_symbol']; ?> <input name="budget_<?php echo $id; ?>" id="budget_<?php echo $id; ?>" type="text" value="<?php echo $amount; ?>" class="text" />
+                                                        </td>
+                                                    </tr>
+                                                    <?php
+                                                }
+                                            ?>
+                                            <tr>
+                                                <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Total Target Budget'); ?></td>
+                                                <td>
+                                                    <?php echo $w2Pconfig['currency_symbol'] ?> <?php echo formatCurrency($totalBudget, $AppUI->getPref('CURRENCYFORM')); ?>
+                                                </td>
+                                            </tr>
+                                        </table>
                                     </td>
                                 </tr>
                                 <tr>

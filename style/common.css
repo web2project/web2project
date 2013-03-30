@@ -224,6 +224,16 @@ input[type="checkbox"] {
     border: outset #eeeeee 1px;
 }
 
+.budgets, .budgets input {
+    text-align: right;
+}
+.budgets tr:first-child {
+    text-align: center;
+}
+.budgets input {
+    width: 40pt;
+}
+
 table.list {
     background-color: white;
     border-spacing: 1px;
