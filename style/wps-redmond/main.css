@@ -212,6 +212,7 @@ table.tbl TH {
     background-image    : url("images/header_bg.png");
     background-image    : repeat-x;
     height              : 22px;
+    text-align: center;
 }
 
 table.tbl td {
