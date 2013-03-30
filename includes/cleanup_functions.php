@@ -551,10 +551,10 @@ function showtask_pd(&$arr, $level = 0, $today_view = false) {
 	} else {
 		$s = '<tr id="' . $jsTaskId . '" class="'.$class.'" onclick="select_row(\'selected_task\', \'' . $arr['task_id'] . '\', \'frm_tasks\')" ' . ($level ? 'style="display:none"' : '') . '>'; // edit icon
 	}
-	$s .= '<td>';
+	$s .= '<td class="data _edit">';
 	$canEdit = ($arr['task_represents_project']) ? false : true;
 	if ($canEdit) {
-		$s .= '<a href="?m=tasks&a=addedit&task_id=' . $arr['task_id'] . '">' . w2PtoolTip('edit tasks panel', 'click to edit this task') . w2PshowImage('icons/pencil.gif', 12, 12) . w2PendTip() . '</a>';
+		$s .= '<a href="?m=tasks&a=addedit&task_id=' . $arr['task_id'] . '">' . w2PshowImage('icons/pencil.gif', 12, 12) . '</a>';
 	}
 	$s .= '</td>';
 	// percent complete and priority
@@ -563,19 +563,19 @@ function showtask_pd(&$arr, $level = 0, $today_view = false) {
     $s .= $htmlHelper->createCell('user_task_priority', $arr['user_task_priority']);
 
 	// access
-	$s .= '<td nowrap="nowrap">';
+	$s .= '<td class="data">';
 	$s .= mb_substr($task_access[$arr['task_access']], 0, 3);
 	$s .= '</td>';
 	// type
-	$s .= '<td nowrap="nowrap">';
+	$s .= '<td class="data">';
 	$s .= mb_substr($types[$arr['task_type']], 0, 3);
 	$s .= '</td>';
 	// type
-	$s .= '<td nowrap="nowrap">';
+	$s .= '<td class="data">';
 	$s .= $arr['queue_id'] ? 'Yes' : '';
 	$s .= '</td>';
 	// inactive
-	$s .= '<td nowrap="nowrap">';
+	$s .= '<td class="data">';
 	$s .= $arr['task_status'] == '-1' ? 'Yes' : '';
 	$s .= '</td>';
 	// add log
@@ -667,12 +667,12 @@ function showtask_pd(&$arr, $level = 0, $today_view = false) {
 		}
 	} else {
 		// No users asigned to task
-		$s .= '<td align="center">-</td>';
+		$s .= '<td class="data">-</td>';
 	}
 
 	// Assignment checkbox
 	if ($showEditCheckbox && 0 == $arr['task_represents_project']) {
-		$s .= '<td align="center"><input type="checkbox" onclick="select_box(\'multi_check\', ' . $arr['task_id'] . ',\'project_' . $arr['task_project'] . '_level-' . $level . '-task_' . $arr['task_id'] . '_\',\'frm_tasks\')" onfocus="is_check=true;" onblur="is_check=false;" id="selected_task_' . $arr['task_id'] . '" name="selected_task" value="' . $arr['task_id'] . '"/></td>';
+		$s .= '<td class="data"><input type="checkbox" onclick="select_box(\'multi_check\', ' . $arr['task_id'] . ',\'project_' . $arr['task_project'] . '_level-' . $level . '-task_' . $arr['task_id'] . '_\',\'frm_tasks\')" onfocus="is_check=true;" onblur="is_check=false;" id="selected_task_' . $arr['task_id'] . '" name="selected_task" value="' . $arr['task_id'] . '"/></td>';
 	}
 	$s .= '</tr>';
 
