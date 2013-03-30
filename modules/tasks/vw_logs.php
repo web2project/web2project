@@ -89,8 +89,9 @@ $customLookups = array('budget_category' => $billingCategory, 'task_duration_typ
 
 if (count($logs)) {
     foreach ($logs as $row) {
-        $s .= '<tr bgcolor="white" valign="top"><td>';
+        $s .= '<tr>';
 
+        $s .= '<td class="data _edit">';
         if ($canEdit) {
             $s .= '<a href="?m=tasks&a=view&task_id=' . $task_id . '&tab=';
             $s .= ($tab == -1) ? $AppUI->getState('TaskLogVwTab') : '1';
@@ -104,19 +105,20 @@ if (count($logs)) {
             $s .= $htmlHelper->createCell($fieldList[$index], $row[$fieldList[$index]], $customLookups);
         }
 
-        $s .= '<td>';
+        $s .= '<td class="data _delete">';
         if ($canDelete) {
             $s .= '<a href="javascript:delIt2(' . $row['task_log_id'] . ');" title="' . $AppUI->_('delete log') . '">' . w2PshowImage('icons/stock_delete-16.png', 16, 16, '') . '</a>';
         }
+        $s .= '</td>';
 
-        $s .= '</td></tr>';
+        $s .= '</tr>';
         $hrs += (float)$row['task_log_hours'];
     }
 }
 
-$s .= '<tr bgcolor="white" valign="top">';
+$s .= '<tr>';
 $s .= '<td colspan="6" align="right">' . $AppUI->_('Total Hours') . ' =</td>';
-$s .= $htmlHelper->createCell('total_duration', sprintf('%.2f', $hrs));
+$s .= $htmlHelper->createCell('task_log_hours', sprintf('%.2f', $hrs));
 $s .= '<td align="right" colspan="3">';
 if ($perms->checkModuleItem('tasks', 'edit', $task_id)) {
 	$s .= '<form action="?m=tasks&a=view&tab=1&task_id=' . $task_id . '" method="post" accept-charset="utf-8">';

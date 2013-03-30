@@ -225,6 +225,7 @@ input[type="checkbox"] {
 }
 
 table.list {
+    background-color: white;
     border-spacing: 1px;
     padding: 2px;
     width: 100%;
