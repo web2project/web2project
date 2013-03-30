@@ -207,7 +207,7 @@ function setDepartment(department_id_string){
                                             $perms = &$AppUI->acl();
                                             $users = $perms->getPermittedUsers('projects');
                                             echo arraySelect($users, 'project_owner', 'size="1" style="width:200px;" class="text"', $project->project_owner ? $project->project_owner : $AppUI->user_id);
-                                        ?>
+                                        ?> *
                                     </td>
                                 </tr>
                                 <tr>
