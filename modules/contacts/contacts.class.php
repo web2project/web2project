@@ -468,12 +468,12 @@ class CContact extends w2p_Core_BaseObject
 			)');
 
 //TODO: We need to convert this from static to use ->overrideDatabase() for testing.
-        $q2 = new w2p_Database_Query();
         $company = new CCompany;
-        $company->setAllowedSQL($AppUI->user_id, $q2);
-        $q2->addWhere('company_id IS NULL');
-        $q->addWhere('(' . implode(' OR ', $q2->where) . ')');
-        
+        $allow_where = $company->getAllowedSQL($AppUI->user_id,'contact_company');
+        if (count($allow_where)) {
+            $q->addWhere('contact_company = 0 OR contact_company IS NULL OR (' . implode(' AND ', $allow_where). ')');
+        }
+
 //TODO: We need to convert this from static to use ->overrideDatabase() for testing.
         $department = new CDepartment;
         $department->setAllowedSQL($AppUI->user_id, $q);
