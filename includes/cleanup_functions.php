@@ -404,16 +404,16 @@ function showtask(&$arr, $level = 0, $notUsed = true, $today_view = false) {
 		$s = '<tr id="' . $jsTaskId . '" class="'.$class.'" ' . (($level > 0 && !($m == 'tasks' && $a == 'view')) ? 'style="display:none"' : '') . '>';
 	}
 	// edit icon
-	$s .= '<td align="center">';
+	$s .= '<td class="data _edit">';
 	$canEdit = ($arr['task_represents_project']) ? false : true;
 	$canViewLog = true;
 	if ($canEdit) {
-        $s .= '<a href="?m=tasks&a=addedit&task_id=' . $arr['task_id'] . '">' . w2PtoolTip('edit task', 'click to edit this task') . w2PshowImage('icons/pencil.gif', 12, 12) . w2PendTip() . '</a>' ;
+        $s .= '<a href="?m=tasks&a=addedit&task_id=' . $arr['task_id'] . '">' . w2PshowImage('icons/pencil.gif', 12, 12) . '</a>' ;
 	}
 	$s .= '</td>';
 	// pinned
 	$pin_prefix = $arr['task_pinned'] ? '' : 'un';
-	$s .= ('<td><a href="?m=tasks&amp;pin=' . ($arr['task_pinned'] ? 0 : 1) . '&amp;task_id=' . $arr['task_id'] . '">' . w2PtoolTip('Pin', 'pin/unpin task') . '<img src="' . w2PfindImage('icons/' . $pin_prefix . 'pin.gif') . '" border="0" alt="" />' . w2PendTip() . '</a></td>');
+	$s .= ('<td class="data _pin"><a href="?m=tasks&amp;pin=' . ($arr['task_pinned'] ? 0 : 1) . '&amp;task_id=' . $arr['task_id'] . '">' . '<img src="' . w2PfindImage('icons/' . $pin_prefix . 'pin.gif') . '" border="0" alt="" />' . '</a></td>');
 	// New Log
 	if (isset($arr['task_log_problem']) && $arr['task_log_problem'] > 0) {
 		$s .= ('<td valign="middle"><a href="?m=tasks&amp;a=view&amp;task_id=' . $arr['task_id'] . '&amp;tab=0&amp;problem=1">' . w2PshowImage('icons/dialog-warning5.png', 16, 16, 'Problem', 'Problem!') . '</a></td>');
