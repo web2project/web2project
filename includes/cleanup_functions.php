@@ -418,7 +418,7 @@ function showtask(&$arr, $level = 0, $notUsed = true, $today_view = false) {
 	if (isset($arr['task_log_problem']) && $arr['task_log_problem'] > 0) {
 		$s .= ('<td class="data"><a href="?m=tasks&amp;a=view&amp;task_id=' . $arr['task_id'] . '&amp;tab=0&amp;problem=1">' . w2PshowImage('icons/dialog-warning5.png', 16, 16, 'Problem', 'Problem!') . '</a></td>');
 	} elseif ($canViewLog && $arr['task_dynamic'] != 1 && 0 == $arr['task_represents_project']) {
-		$s .= ('<td class="data"><a href="?m=tasks&amp;a=view&amp;task_id=' . $arr['task_id'] . '&amp;tab=1">' . w2PtoolTip('Add Log', 'create a new log record against this task') . w2PshowImage('edit_add.png') . w2PendTip() . '</a></td>');
+		$s .= ('<td class="data"><a href="?m=tasks&amp;a=view&amp;task_id=' . $arr['task_id'] . '&amp;tab=1">' . w2PshowImage('edit_add.png') . '</a></td>');
 	} else {
 		$s .= '<td class="center">' . $AppUI->_('-') . '</td>';
 	}
