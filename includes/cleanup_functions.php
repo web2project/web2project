@@ -378,9 +378,10 @@ function cal_work_day_conv($val) {
 // from modules/tasks/tasks.class.php
 //This kludgy function echos children tasks as threads
 function showtask(&$arr, $level = 0, $notUsed = true, $today_view = false) {
-	global $AppUI, $durnTypes, $userAlloc, $showEditCheckbox;
+	global $AppUI, $userAlloc, $showEditCheckbox;
 	global $m, $a, $history_active, $expanded;
 
+    $durnTypes = w2PgetSysVal('TaskDurationType');
     //Check for Tasks Access
     $tmpTask = new CTask();
     $tmpTask->load($arr['task_id']);
@@ -500,6 +501,7 @@ function showtask(&$arr, $level = 0, $notUsed = true, $today_view = false) {
 		// No users asigned to task
 		$s .= '<td class="data">-</td>';
 	}
+
 	// duration or milestone
     $s .= $htmlHelper->createCell('task_start_datetime', $arr['task_start_date']);
     $s .= $htmlHelper->createCell('task_duration', $arr['task_duration'] . ' ' . mb_substr($AppUI->_($durnTypes[$arr['task_duration_type']]), 0, 1));
@@ -521,9 +523,10 @@ function showtask(&$arr, $level = 0, $notUsed = true, $today_view = false) {
 //This kludgy function echos children tasks as threads on project designer (_pd)
 //TODO: modules/projectdesigner/projectdesigner.class.php
 function showtask_pd(&$arr, $level = 0, $today_view = false) {
-	global $AppUI, $w2Pconfig, $done, $durnTypes, $userAlloc, $showEditCheckbox;
+	global $AppUI, $w2Pconfig, $done, $userAlloc, $showEditCheckbox;
 	global $task_access, $PROJDESIGN_CONFIG, $m, $expanded;
 
+    $durnTypes = w2PgetSysVal('TaskDurationType');
     //Check for Tasks Access
     $tmpTask = new CTask();
     $tmpTask->load($arr['task_id']);
