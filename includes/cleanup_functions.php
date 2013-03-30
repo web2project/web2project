@@ -416,11 +416,11 @@ function showtask(&$arr, $level = 0, $notUsed = true, $today_view = false) {
 	$s .= ('<td class="data _pin"><a href="?m=tasks&amp;pin=' . ($arr['task_pinned'] ? 0 : 1) . '&amp;task_id=' . $arr['task_id'] . '">' . '<img src="' . w2PfindImage('icons/' . $pin_prefix . 'pin.gif') . '" border="0" alt="" />' . '</a></td>');
 	// New Log
 	if (isset($arr['task_log_problem']) && $arr['task_log_problem'] > 0) {
-		$s .= ('<td valign="middle"><a href="?m=tasks&amp;a=view&amp;task_id=' . $arr['task_id'] . '&amp;tab=0&amp;problem=1">' . w2PshowImage('icons/dialog-warning5.png', 16, 16, 'Problem', 'Problem!') . '</a></td>');
+		$s .= ('<td class="data"><a href="?m=tasks&amp;a=view&amp;task_id=' . $arr['task_id'] . '&amp;tab=0&amp;problem=1">' . w2PshowImage('icons/dialog-warning5.png', 16, 16, 'Problem', 'Problem!') . '</a></td>');
 	} elseif ($canViewLog && $arr['task_dynamic'] != 1 && 0 == $arr['task_represents_project']) {
-		$s .= ('<td align="center"><a href="?m=tasks&amp;a=view&amp;task_id=' . $arr['task_id'] . '&amp;tab=1">' . w2PtoolTip('Add Log', 'create a new log record against this task') . w2PshowImage('edit_add.png') . w2PendTip() . '</a></td>');
+		$s .= ('<td class="data"><a href="?m=tasks&amp;a=view&amp;task_id=' . $arr['task_id'] . '&amp;tab=1">' . w2PtoolTip('Add Log', 'create a new log record against this task') . w2PshowImage('edit_add.png') . w2PendTip() . '</a></td>');
 	} else {
-		$s .= '<td align="center">' . $AppUI->_('-') . '</td>';
+		$s .= '<td class="center">' . $AppUI->_('-') . '</td>';
 	}
 	// percent complete and priority
     $s .= $htmlHelper->createCell('task_percent_complete', $arr['task_percent_complete']);
@@ -478,13 +478,13 @@ function showtask(&$arr, $level = 0, $notUsed = true, $today_view = false) {
         $assigned_users = $arr['task_assigned_users'];
         $a_u_tmp_array = array();
 		if ($show_all_assignees) {
-			$s .= '<td align="center" nowrap="nowrap">';
+			$s .= '<td>';
 			foreach ($assigned_users as $val) {
 				$a_u_tmp_array[] = ('<a href="?m=admin&amp;a=viewuser&amp;user_id=' . $val['user_id'] . '"' . 'title="' . (w2PgetConfig('check_overallocation') ? $AppUI->_('Extent of Assignment') . ':' . $userAlloc[$val['user_id']]['charge'] . '%; ' . $AppUI->_('Free Capacity') . ':' . $userAlloc[$val['user_id']]['freeCapacity'] . '%' : '') . '">' . $val['assignee'] . ' (' . $val['perc_assignment'] . '%)</a>');
 			}
 			$s .= join(', <br />', $a_u_tmp_array) . '</td>';
 		} else {
-			$s .= ('<td align="center" nowrap="nowrap">' . '<a href="?m=admin&amp;a=viewuser&amp;user_id=' . $assigned_users[0]['user_id'] . '" title="' . (w2PgetConfig('check_overallocation') ? $AppUI->_('Extent of Assignment') . ':' . $userAlloc[$assigned_users[0]['user_id']]['charge'] . '%; ' . $AppUI->_('Free Capacity') . ':' . $userAlloc[$assigned_users[0]['user_id']]['freeCapacity'] . '%' : '') . '">' . $assigned_users[0]['assignee'] . ' (' . $assigned_users[0]['perc_assignment'] . '%)</a>');
+			$s .= ('<td>' . '<a href="?m=admin&amp;a=viewuser&amp;user_id=' . $assigned_users[0]['user_id'] . '" title="' . (w2PgetConfig('check_overallocation') ? $AppUI->_('Extent of Assignment') . ':' . $userAlloc[$assigned_users[0]['user_id']]['charge'] . '%; ' . $AppUI->_('Free Capacity') . ':' . $userAlloc[$assigned_users[0]['user_id']]['freeCapacity'] . '%' : '') . '">' . $assigned_users[0]['assignee'] . ' (' . $assigned_users[0]['perc_assignment'] . '%)</a>');
 			if ($arr['assignee_count'] > 1) {
 				$s .= (' <a href="javascript: void(0);" onclick="toggle_users(' . "'users_" . $arr['task_id'] . "'" . ');" title="' . join(', ', $a_u_tmp_array) . '">(+' . ($arr['assignee_count'] - 1) . ')</a>' . '<span style="display: none" id="users_' . $arr['task_id'] . '">');
 				$a_u_tmp_array[] = $assigned_users[0]['assignee'];
@@ -498,7 +498,7 @@ function showtask(&$arr, $level = 0, $notUsed = true, $today_view = false) {
 		}
 	} elseif (!$today_view) {
 		// No users asigned to task
-		$s .= '<td align="center">-</td>';
+		$s .= '<td class="data">-</td>';
 	}
 	// duration or milestone
     $s .= $htmlHelper->createCell('task_start_datetime', $arr['task_start_date']);
@@ -512,7 +512,7 @@ function showtask(&$arr, $level = 0, $notUsed = true, $today_view = false) {
 
 	// Assignment checkbox
 	if ($showEditCheckbox) {
-		$s .= ('<td align="center">' . '<input type="checkbox" name="selected_task[' . $arr['task_id'] . ']" value="' . $arr['task_id'] . '"/></td>');
+		$s .= ('<td class="data">' . '<input type="checkbox" name="selected_task[' . $arr['task_id'] . ']" value="' . $arr['task_id'] . '"/></td>');
 	}
 	$s .= '</tr>'."\n";
 	return $s;

@@ -13,8 +13,6 @@ getTaskLinks($first_time, $last_time, $links, 100, $company_id);
 $s = '';
 $dayStamp = $this_day->format(FMT_TIMESTAMP_DATE);
 
-echo '<table cellspacing="1" cellpadding="2" border="0" width="100%" class="tbl">';
-
 if (isset($links[$dayStamp])) {
 	foreach ($links[$dayStamp] as $e) {
 		$href = isset($e['href']) ? $e['href'] : null;
@@ -28,7 +26,6 @@ if (isset($links[$dayStamp])) {
 	}
 }
 echo $s;
-echo '</table>';
 
 $min_view = 1;
 include W2P_BASE_DIR . '/modules/tasks/todo.php';
