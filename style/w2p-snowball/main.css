@@ -242,6 +242,7 @@ table.tbl TH {
 	border: outset #D1D1CD 0px;
 	font-weight         : normal;
     background-color    : #D4D0C8;
+    text-align: center;
 }
 
 table.tbl td {
