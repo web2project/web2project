@@ -112,7 +112,7 @@ function delIt() {
 			<table cellspacing="1" cellpadding="2" width="100%">
 			<tr>
 				<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Event Title'); ?>:</td>
-                <?php echo $htmlHelper->createCell('event_name', $event->event_name); ?>
+                <?php echo $htmlHelper->createCell('event_title', $event->event_name); ?>
 			</tr>
 			<tr>
 				<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Type'); ?>:</td>
@@ -130,11 +130,11 @@ function delIt() {
 			<?php } ?>
 			<tr>
 				<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Starts'); ?>:</td>
-				<td class="hilite"><?php echo $AppUI->formatTZAwareTime($event->event_start_date, $df . ' ' . $tf); ?></td>
+                <?php echo $htmlHelper->createCell('event_start_datetime', $event->event_start_date); ?>
 			</tr>
 			<tr>
 				<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Ends'); ?>:</td>
-				<td class="hilite"><?php echo $AppUI->formatTZAwareTime($event->event_end_date, $df . ' ' . $tf); ?></td>
+                <?php echo $htmlHelper->createCell('event_end_datetime', $event->event_end_date); ?>
 			</tr>
 			<tr>
 				<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Recurs'); ?>:</td>

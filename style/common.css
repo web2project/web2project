@@ -224,6 +224,10 @@ input[type="checkbox"] {
     border: outset #eeeeee 1px;
 }
 
+._description {
+    white-space: normal;
+}
+
 .budgets, .budgets input {
     text-align: right;
 }
