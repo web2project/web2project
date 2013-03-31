@@ -10,7 +10,7 @@ $task_id     = $task->task_id;
 $task_log_id = (int) w2PgetParam($_GET, 'task_log_id', 0);
 
 $log = new CTask_Log();
-$log->task_log_id = $task_log_id;
+$log->load($task_log_id);
 
 $canAuthor = $log->canCreate();
 if (!$canAuthor && !$task_id) {
