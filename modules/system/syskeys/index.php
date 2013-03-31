@@ -83,25 +83,25 @@ function delIt(id) {
 }
 <?php } ?>
 </script>
-
+<div style="height: 11px;"> </div>
 <form name="sysValFrm" method="post" action="?m=system&u=syskeys&a=do_sysval_aed" accept-charset="utf-8">
-  <input type="hidden" name="del" value="0" />
-  <table class="tbl list">
-    <tr>
-    	<th>&nbsp;</th>
-    	<th><?php echo $AppUI->_('Key Type'); ?></th>
-    	<th><?php echo $AppUI->_('Title'); ?></th>
-    	<th colspan="2"><?php echo $AppUI->_('Values'); ?></th>
-    	<th>&nbsp;</th>
-    </tr>
-    <?php
-    foreach ($values as $row) {
-      echo showRow($row['sysval_title'], $row['sysval_key_id'], $row['sysval_title'], $row['sysval_value']);
-    }
-    // add in the new key row:
-    if (!$sysval_id) {
-    	echo showRow();
-    }
-    ?>
-  </table>
+    <input type="hidden" name="del" value="0" />
+    <table class="tbl list">
+        <tr>
+            <th>&nbsp;</th>
+            <th><?php echo $AppUI->_('Key Type'); ?></th>
+            <th><?php echo $AppUI->_('Title'); ?></th>
+            <th colspan="2"><?php echo $AppUI->_('Values'); ?></th>
+            <th>&nbsp;</th>
+        </tr>
+        <?php
+        foreach ($values as $row) {
+            echo showRow($row['sysval_title'], $row['sysval_key_id'], $row['sysval_title'], $row['sysval_value']);
+        }
+        // add in the new key row:
+        if (!$sysval_id) {
+            echo showRow();
+        }
+        ?>
+    </table>
 </form>
