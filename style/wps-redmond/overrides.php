@@ -103,8 +103,6 @@ class CTabBox extends w2p_Theme_TabBox {
 	}
 }
 
-function styleRenderBoxTop() {
-	return '<div class="spacer">&nbsp;</div>';
-}
+function styleRenderBoxTop() { }
 
 function styleRenderBoxBottom() { }

@@ -239,6 +239,7 @@ table.std TH {
     background-image    : url("images/header_bg.png");
     background-image    : repeat-x;
     text-align: center;
+    white-space: nowrap;
 }
 
 table.addedit.pref td {
@@ -473,9 +474,4 @@ table.tbl td.event td {
 
 .crumb-right div.crumb {
     margin-top: -10px;
-}
-
-.spacer {
-    height: 60px;
-    width: 100%;
 }
