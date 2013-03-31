@@ -552,3 +552,27 @@ span.cal-item a {
     padding-left: 3px;
     padding-right: 3px;
 }
+
+.subprojects {
+    background-color: black;
+    border: 0px;
+    text-align: center;
+    white-space:nowrap;
+    width: 100%;
+}
+
+.subprojects tr:nth-child(even) {
+    background-color: #f0f0f0;
+}
+.subprojects tr:nth-child(odd) {
+    background-color: #fff;
+}
+
+.subprojects td.data {
+    background-color: inherit;
+    text-align: inherit;
+}
+
+.subprojects td._name {
+    text-align: left;
+}
