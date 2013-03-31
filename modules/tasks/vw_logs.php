@@ -52,7 +52,7 @@ if (count($fields) > 0) {
         'task_log_name', 'task_log_related_url', 'task_log_creator',
         'task_log_hours', 'task_log_costcode', 'task_log_description');
     $fieldNames = array('Date', 'Ref', 'Summary', 'URL', 'User',
-        'Hours', 'Cost Code', 'Comments', '');
+        'Hours', 'Cost Code', 'Comments');
 
     $module->storeSettings('tasks', 'task_logs_tasks_view', $fieldList, $fieldNames);
 }
