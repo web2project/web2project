@@ -215,8 +215,6 @@ foreach ($user_acls as $acl) {
 </td><td width="50%" valign="top">
 
 <?php if ($canEdit) { ?>
-
-<table cellspacing="1" cellpadding="2" border="0" class="std" width="100%">
 <form name="frmPerms" method="post" action="?m=admin" accept-charset="utf-8">
 	<input type="hidden" name="del" value="0" />
 	<input type="hidden" name="dosql" value="do_perms_aed" />
@@ -226,51 +224,53 @@ foreach ($user_acls as $acl) {
 	<input type="hidden" name="permission_item" value="0" />
 	<input type="hidden" name="permission_table" value="" />
 	<input type="hidden" name="permission_name" value="" />
-<tr>
-	<th colspan="2"><?php echo $AppUI->_('Add Permissions'); ?></th>
-</tr>
-<tr>
-	<td nowrap="nowrap" align="right"><?php echo $AppUI->_('Module'); ?>:</td>
-	<td width="100%"><?php echo arraySelect($modules, 'permission_module', 'size="1" class="text"', 'grp,all', true); ?></td>
-</tr>
-<tr>
-	<td nowrap="nowrap" align="right"><?php echo $AppUI->_('Item'); ?>:</td>
-	<td>
-		<input type="text" name="permission_item_name" class="text" size="30" value="all" disabled="disabled" />
-		<input type="button" name="" class="text" value="..." onclick="popPermItem();" />
-	</td>
-</tr>
-<tr>
-	<td nowrap="nowrap" align="right"><?php echo $AppUI->_('Access'); ?>:</td>
-	<td>
-		<select name="permission_access" class="text">
-			<option value='1'><?php echo $AppUI->_('allow'); ?></option>
-			<option value='0'><?php echo $AppUI->_('deny'); ?></option>
-		</select>
-	</td>
-</tr>
-<?php
-	foreach ($perm_list as $perm_id => $perm_name) {
-?>
-<tr>
-	<td nowrap="nowrap" align='right'><?php echo $AppUI->_($perm_name); ?>:</td>
-	<td>
-	  <input type="checkbox" name="permission_type[]" value="<?php echo $perm_id; ?>" />
-	</td>
-</tr>
-<?php
-	}
-?>
-<tr>
-	<td>
-		<input type="reset" value="<?php echo $AppUI->_('clear'); ?>" class="button" name="sqlaction" onclick="clearIt();" />
-	</td>
-	<td align="right">
-		<input type="submit" value="<?php echo $AppUI->_('add'); ?>" class="button" name="sqlaction2" />
-	</td>
-</tr>
+
+    <table cellspacing="1" cellpadding="2" border="0" class="std" width="100%">
+        <tr>
+            <th colspan="2"><?php echo $AppUI->_('Add Permissions'); ?></th>
+        </tr>
+        <tr>
+            <td nowrap="nowrap" align="right"><?php echo $AppUI->_('Module'); ?>:</td>
+            <td width="100%"><?php echo arraySelect($modules, 'permission_module', 'size="1" class="text"', 'grp,all', true); ?></td>
+        </tr>
+        <tr>
+            <td nowrap="nowrap" align="right"><?php echo $AppUI->_('Item'); ?>:</td>
+            <td>
+                <input type="text" name="permission_item_name" class="text" size="30" value="all" disabled="disabled" />
+                <input type="button" name="" class="text" value="..." onclick="popPermItem();" />
+            </td>
+        </tr>
+        <tr>
+            <td nowrap="nowrap" align="right"><?php echo $AppUI->_('Access'); ?>:</td>
+            <td>
+                <select name="permission_access" class="text">
+                    <option value='1'><?php echo $AppUI->_('allow'); ?></option>
+                    <option value='0'><?php echo $AppUI->_('deny'); ?></option>
+                </select>
+            </td>
+        </tr>
+        <?php
+            foreach ($perm_list as $perm_id => $perm_name) {
+            ?>
+            <tr>
+                <td nowrap="nowrap" align='right'><?php echo $AppUI->_($perm_name); ?>:</td>
+                <td>
+                  <input type="checkbox" name="permission_type[]" value="<?php echo $perm_id; ?>" />
+                </td>
+            </tr>
+            <?php
+            }
+        ?>
+        <tr>
+            <td>
+                <input type="reset" value="<?php echo $AppUI->_('clear'); ?>" class="button" name="sqlaction" onclick="clearIt();" />
+            </td>
+            <td align="right">
+                <input type="submit" value="<?php echo $AppUI->_('add'); ?>" class="button" name="sqlaction2" />
+            </td>
+        </tr>
+    </table>
 </form>
-</table>
 <?php } ?>
 </td>
 </tr>
