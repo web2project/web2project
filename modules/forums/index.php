@@ -60,13 +60,14 @@ if (count($fields) > 0) {
     // TODO: This is only in place to provide an pre-upgrade-safe
     //   state for versions earlier than v3.0
     //   At some point at/after v4.0, this should be deprecated
-    $fieldList = array('', 'watch_user', 'forum_name', 'forum_topics',
-        'forum_replies', 'forum_last_date');
-    $fieldNames = array('', 'Watch', 'Forum Name', 'Topics',
+    $fieldList = array('watch_user', 'forum_name', 'forum_description', 'forum_owner',
+        'forum_topics', 'forum_replies', 'forum_last_date');
+    $fieldNames = array('Watch', 'Forum Name', 'Description', 'Owner', 'Topics',
         'Replies', 'Last Post Info');
 
     $module->storeSettings('forums', 'index_list', $fieldList, $fieldNames);
 }
+$columnCount = 1 + count($fieldList);
 ?>
 
 <form name="watcher" action="./index.php?m=forums&f=<?php echo $f; ?>" method="post" accept-charset="utf-8">
@@ -75,6 +76,7 @@ if (count($fields) > 0) {
 
     <table class="tbl list">
         <tr>
+            <th></th>
             <?php
             foreach ($fieldNames as $index => $name) {
                 ?><th nowrap="nowrap">
@@ -87,17 +89,16 @@ if (count($fields) > 0) {
         </tr>
         <?php
         $p = '';
-        $now = new w2p_Utilities_Date();
+
         foreach ($forums as $row) {
-            $message_date = intval($row['forum_last_date']) ? new w2p_Utilities_Date($row['forum_last_date']) : null;
+            $htmlHelper->stageRowData($row);
 
             if ($p != $row['forum_project']) {
-                $create_date = $AppUI->formatTZAwareTime($row['forum_create_date'], $df);
                 $forum_project_name = ($row['project_name']) ? $row['project_name'] : 'No associated project';
                 $forum_project_color = ($row['project_color_identifier']) ? bestColor($row['project_color_identifier']) : '';
                 ?>
                 <tr>
-                    <td colspan="6" style="background-color:#<?php echo $row['project_color_identifier']; ?>">
+                    <td colspan="<?php echo $columnCount; ?>" style="background-color:#<?php echo $row['project_color_identifier']; ?>">
                         <a href="?m=projects&a=view&project_id=<?php echo $row['forum_project']; ?>">
                             <font color="<?php echo $forum_project_color; ?>">
                             <strong><?php echo $forum_project_name; ?></strong>
@@ -110,7 +111,7 @@ if (count($fields) > 0) {
             }
             ?>
             <tr>
-                <td nowrap="nowrap" align="center">
+                <td class="data">
                     <?php if ($row["forum_owner"] == $AppUI->user_id || canAdd('forums')) { ?>
                         <a href="?m=forums&a=addedit&forum_id=<?php echo $row['forum_id']; ?>" title="<?php echo $AppUI->_('edit'); ?>">
                         <?php echo w2PshowImage('icons/stock_edit-16.png', 16, 16, ''); ?>
@@ -121,37 +122,20 @@ if (count($fields) > 0) {
                     } ?>
                 </td>
 
-                <td nowrap="nowrap" align="center">
+                <td class="data">
                     <input type="checkbox" name="forum_<?php echo $row['forum_id']; ?>" <?php echo $row['watch_user'] ? 'checked="checked"' : ''; ?> />
                 </td>
 
-                <td>
-                    <span style="font-size:10pt;font-weight:bold">
-                        <a href="?m=forums&a=viewer&forum_id=<?php echo $row['forum_id']; ?>"><?php echo $row['forum_name']; ?></a>
-                    </span>
-                    <br /><?php echo w2p_textarea($row['forum_description']); ?>
-                    <br /><font color="#777777"><?php echo $AppUI->_('Owner') . ' ' . $row['owner_name']; ?>,
-                    <?php echo $AppUI->_('Started') . ' ' . $create_date; ?>
-                    </font>
-                </td>
+                <?php echo $htmlHelper->createCell('forum_name', $row['forum_name']); ?>
+                <?php echo $htmlHelper->createCell('forum_description', $row['forum_description']); ?>
+                <?php echo $htmlHelper->createCell('forum_owner', $row['forum_owner']); ?>
                 <?php echo $htmlHelper->createCell('topic_count', $row['forum_topics']); ?>
                 <?php echo $htmlHelper->createCell('reply_count', $row['forum_replies']); ?>
-                <td width="225">
-                    <?php
-                    if ($message_date !== null) {
-                        echo $AppUI->formatTZAwareTime($row['forum_last_date'], $df . ' ' . $tf);
-                    } else {
-                        echo $AppUI->_('No posts');
-                    } ?>
-                </td>
+                <?php echo $htmlHelper->createCell('forum_last_datetime', $row['forum_last_date']); ?>
             </tr>
         <?php } ?>
-    </table>
-
-    <table width="100%" cellspacing="0" cellpadding="0" border="0" class="std">
-
         <tr>
-            <td align="left">
+            <td align="left" colspan="<?php echo $columnCount; ?>">
                 <input type="submit" class="button" value="<?php echo $AppUI->_('update watches'); ?>" />
             </td>
         </tr>
