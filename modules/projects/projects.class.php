@@ -684,9 +684,10 @@ class CProject extends w2p_Core_BaseObject
 			$q->addTable('forums');
 			$q->addQuery('forum_id, forum_project, forum_description, forum_owner,
                 forum_name, forum_message_count, forum_create_date, forum_last_date,
-				project_name, project_color_identifier, project_id');
+				project_name, project_color_identifier, project_id, user_id');
             $q->addJoin('projects', 'p', 'project_id = forum_project', 'inner');
             $q->addWhere('forum_project = ' . (int) $this->project_id);
+            $q->addJoin('users', 'u', 'u.user_id = forum_owner');
             $q->addOrder('forum_project, forum_name');
 
             return $q->loadHashList('forum_id');

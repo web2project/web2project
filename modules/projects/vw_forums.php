@@ -21,8 +21,9 @@ if (count($fields) > 0) {
     // TODO: This is only in place to provide an pre-upgrade-safe
     //   state for versions earlier than v3.0
     //   At some point at/after v4.0, this should be deprecated
-    $fieldList = array('forum_name', 'forum_message_count', 'forum_last_date');
-    $fieldNames = array('Forum Name', 'Messages', 'Last Post');
+    $fieldList = array('forum_name', 'forum_description', 'forum_owner',
+        'forum_last_date');
+    $fieldNames = array('Forum Name', 'Description', 'Owner', 'Last Post Info');
 
     $module->storeSettings('forums', 'projects_view', $fieldList, $fieldNames);
 }
@@ -34,7 +35,6 @@ if (count($fields) > 0) {
         <?php foreach ($fieldNames as $index => $name) { ?>
             <th><?php echo $AppUI->_($fieldNames[$index]); ?></th>
         <?php } ?>
-        <th></th>
     </tr>
 	<?php
     if (count($forums) > 0) {
@@ -55,9 +55,8 @@ if (count($fields) > 0) {
                     echo $htmlHelper->createCell($fieldList[$index], $row[$fieldList[$index]], $customLookups);
                 }
                 ?>
-                <td></td>
             </tr>
-        <?php 
+        <?php
         }
     } ?>
 </table>
