@@ -148,7 +148,7 @@ if (count($logs)) {
             continue;
         }
         
-        $s .= '<tr bgcolor="white" valign="top"><td>';
+        $s .= '<tr bgcolor="white" valign="top"><td class="data _edit">';
         if ($canEdit) {
             $s .= '<a href="?m=tasks&a=view&task_id=' . $row['task_id'] . '&tab=1&task_log_id=' . $row['task_log_id'] . '">' . w2PshowImage('icons/stock_edit-16.png', 16, 16, '') . "\n\t\t</a>";
         }
@@ -158,7 +158,7 @@ if (count($logs)) {
             $s .= $htmlHelper->createCell($fieldList[$index], $row[$fieldList[$index]], $customLookups);
         }
 
-        $s .= '<td>';
+        $s .= '<td class="data _delete">';
         if ($canDelete) {
             $s .= '<a href="javascript:delIt2(' . $row['task_log_id'] . ');" title="' . $AppUI->_('delete log') . '">' . w2PshowImage('icons/stock_delete-16.png', 16, 16, '') . '</a>';
         }
@@ -169,7 +169,7 @@ if (count($logs)) {
 }
 $s .= '<tr bgcolor="white" valign="top">';
 $s .= '<td colspan="'.($hours_index + 1).'" align="right">' . $AppUI->_('Total Hours') . ' =</td>';
-$s .= $htmlHelper->createCell('total_duration', sprintf('%.2f', $hrs));
+$s .= $htmlHelper->createCell('task_log_hours', sprintf('%.2f', $hrs));
 $s .= str_repeat('<td></td>', count($fieldList) - $hours_index); ;
 $s .= '</tr>';
 echo $s;
