@@ -433,7 +433,7 @@ table.tbl td.event td {
 	display: inline; /* Remove this line arrange the buttons vertically */
 	float: left;
 	height: 22px;
-	padding-right: 10px; /* sliding doors padding */
+	padding-right: 5px; /* sliding doors padding */
 	border:0px;
 }
 .crumb ul li a {

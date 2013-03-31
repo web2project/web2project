@@ -103,6 +103,18 @@ class CTabBox extends w2p_Theme_TabBox {
 	}
 }
 
-function styleRenderBoxTop() { }
+function styleRenderBoxTop() {
+	global $AppUI, $currentInfoTabId;
+	$uistyle = $AppUI->getPref('UISTYLE') ? $AppUI->getPref('UISTYLE') : w2PgetConfig('host_style');
+	if (!$uistyle) {
+		$uistyle = 'web2project';
+	}
+	if ($currentInfoTabId) {
+		return '';
+	}
+    $ret = '<div style="height: 70px">&nbsp;</div>';
+
+	return $ret;
+}
 
 function styleRenderBoxBottom() { }
