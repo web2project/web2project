@@ -355,7 +355,8 @@ table.mocal td.weekend {
 	vertical-align: top;
 }
 
-table.mocal .event {
+table.mocal td img {
+    vertical-align: text-top;
 }
 
 /* mini calendar - title area */
