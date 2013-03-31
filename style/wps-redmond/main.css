@@ -16,15 +16,8 @@ BODY {
     vertical-align: top;
 }
 
-.module-nav {
-    margin-bottom: 7px;
-}
 .module-nav .crumb-right {
     margin-top: -3px;
-}
-
-div.crumb {
-    margin-top: 15px;
 }
 
 /* Begin: Header Bar & Navigation for all pages */
@@ -91,7 +84,7 @@ input:focus, textarea:focus {
     background-color : #FFFFCC;
 }
 
-.button{
+.button, .crumb ul li div, .crumb-right li div {
   font-family   : tahoma,verdana,arial,Sans-Serif;
   color         : #666;
   text-align    : center;
@@ -429,49 +422,30 @@ table.tbl td.event td {
 }
 
 .crumb ul {
-    list-style-type: none;
-    margin: 0px;
-    padding: 0px;
+    margin-left: 5px;
+    padding: 0;
 }
 .crumb ul li {
-    margin: 0px 0px 0px;
-    padding: 1px;
-    font-family: Verdana, Arial, Helvetica, sans-serif;
-    color: #000000;
-    text-decoration: none;
-    display: inline; /* Remove this line arrange the buttons vertically */
+	margin: 2px 2px 2px;
+	font-family:arial,sans-serif;
+	color: #000000;
+	text-decoration: none;
+	display: inline; /* Remove this line arrange the buttons vertically */
+	float: left;
+	height: 22px;
+	padding-right: 10px; /* sliding doors padding */
+	border:0px;
 }
 .crumb ul li a {
-    /*background-color: #F0F0E3; /* Change the background color*/
-    background-color    : #D4D0C8;
-    padding: 2px 3px; /* Increase or decrease width and height */
-    margin: 0px;
-    display: inline;
-    font-family: Verdana, Arial, Helvetica, sans-serif; /* Change the Font of the button */
-    font-size: 10px; /* Change the button text size */
-    border: 1px solid #D4D0C8; /* Button Border */
     color: #000000;
-    text-decoration: none;
-    -moz-border-radius:4px;
-    -webkit-border-radius:4px;
-    border-radius: 4px;
+    display: inline;
 }
-.crumb ul li a:active {
-    color: #AD0000;
-    border-top: 1px solid #BBBB88; /* Button border on mouse over*/
-    border-right: 1px solid #DDDDB0; /* Button border on mouse over*/
-    border-bottom: 1px solid #DDDDB0; /* Button border on mouse over*/
-    border-left: 1px solid #BBBB88; /* Button border on mouse over*/
-    border-style: inset;
-}
-.crumb ul li a:hover {
-    color: #FFFFFF;
-    border: 1px solid #000000; /* Button Border */
-    -moz-border-radius:4px;
-    -webkit-border-radius:4px;
-    border-radius:4px;
+.crumb ul li span, .crumb ul li div {
+    display: block;
+    line-height: 14px;
+    padding: 2px 0 5px 10px;
 }
 
-.crumb-right div.crumb {
-    margin-top: -10px;
+a.delete div {
+    color: red;
 }
