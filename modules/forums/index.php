@@ -99,10 +99,8 @@ $columnCount = 1 + count($fieldList);
                 ?>
                 <tr>
                     <td colspan="<?php echo $columnCount; ?>" style="background-color:#<?php echo $row['project_color_identifier']; ?>">
-                        <a href="?m=projects&a=view&project_id=<?php echo $row['forum_project']; ?>">
-                            <font color="<?php echo $forum_project_color; ?>">
+                        <a href="?m=projects&a=view&project_id=<?php echo $row['forum_project']; ?>" style="color:<?php echo $forum_project_color; ?>">
                             <strong><?php echo $forum_project_name; ?></strong>
-                            </font>
                         </a>
                     </td>
                 </tr>

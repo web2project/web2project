@@ -462,9 +462,9 @@ function calcDuration(f, start_date, end_date, duration_fld, durntype_fld) {
 
 <table border="0" cellpadding="4" cellspacing="0" width="100%" class="std view">
 <tr>
-	<td style="border: outset #d1d1cd 1px; background-color:#<?php echo $obj->project_color_identifier; ?>" colspan="2">
+	<td style="border: outset #d1d1cd 1px; background-color:#<?php echo $obj->project_color_identifier; ?>" colspan="2" class="data _identifier">
         <a href="javascript: void(0);" name="fp" style="display:block" onclick="expand_collapse('project', 'tblProjects');update_workspace('project');">
-            <div class="left" style="font-color: <?php echo bestColor($obj->project_color_identifier); ?>; font-weight: bold; padding-top: 2px;"><?php echo $AppUI->_('Project') . ': ' . $obj->project_name; ?></div>
+            <div class="left" style="color: <?php echo bestColor($obj->project_color_identifier); ?>; font-weight: bold; padding-top: 2px;"><?php echo $AppUI->_('Project') . ': ' . $obj->project_name; ?></div>
             <div class="right">
                 <img id="project_expand" src="<?php echo w2PfindImage('icons/expand.gif', $m); ?>" width="12" height="12" border="0"
                      alt="" <?php echo (isset($view_options[0]['pd_option_view_project']) ? ($view_options[0]['pd_option_view_project'] ? 'style="display:none"' : 'style="display:"') : 'style="display:none"') ?>>

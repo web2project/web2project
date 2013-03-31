@@ -116,7 +116,7 @@ if (count($projects)) {
             $actual_end_date = intval($row['project_actual_end_date']) ? new w2p_Utilities_Date($row['project_actual_end_date']) : null;
             $style = (($actual_end_date > $end_date) && !empty($end_date)) ? 'style="color:red; font-weight:bold"' : '';
 
-            $s = '<tr><td width="65" align="right" style="border: outset #eeeeee 1px;background-color:#' . $row['project_color_identifier'] . '"><font color="' . bestColor($row['project_color_identifier']) . '">' . sprintf('%.1f%%', $row['project_percent_complete']) . '</font></td>';
+            $s = '<tr><td class="data" width="65" style="border: outset #eeeeee 1px;background-color:#' . $row['project_color_identifier'] . ';color:' . bestColor($row['project_color_identifier']) . '">' . sprintf('%.1f%%', $row['project_percent_complete']) . '</td>';
             $s .= $htmlHelper->createCell('project_priority', $row['project_priority']);
             $s .= $htmlHelper->createCell('project_name', $row['project_name']);
             $s .= $htmlHelper->createCell('project_company', $row['project_company']);
