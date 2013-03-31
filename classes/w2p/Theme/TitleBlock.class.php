@@ -114,15 +114,17 @@ class w2p_Theme_TitleBlock {
 			}
 
             $s .= '<div class="crumb"><ul>' . implode('', $crumbs) . '</ul></div>';
-            $s .= '<ul class="crumb-right">';
-            foreach ($this->cells2 as $c) {
-                $s .= $c[2] ? $c[2] : '';
-                $s .= '<li ' . ($c[0] ? " $c[0]" : '') . '>';
-                $s .= $c[1] ? $c[1] : '&nbsp;';
-                $s .= '</li>';
-                $s .= $c[3] ? $c[3] : '';
+            if (count($this->cells2)) {
+                $s .= '<ul class="crumb-right">';
+                foreach ($this->cells2 as $c) {
+                    $s .= $c[2] ? $c[2] : '';
+                    $s .= '<li ' . ($c[0] ? " $c[0]" : '') . '>';
+                    $s .= $c[1] ? $c[1] : '&nbsp;';
+                    $s .= '</li>';
+                    $s .= $c[3] ? $c[3] : '';
+                }
+                $s .= '</ul>';
             }
-            $s .= '</ul>';
             $s .= '</div>';
         }
 
