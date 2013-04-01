@@ -191,7 +191,7 @@ class w2p_Utilities_Date extends Date {
 	}
 
 	/**
-     * Return date obj for the end of the next working day
+     * Return date obj for the beginning of the next working day
      *
 	 * @param	bool	Determine whether to set time to start of day or preserve the time of the given object
 	*/
@@ -199,7 +199,7 @@ class w2p_Utilities_Date extends Date {
 		$do = clone $this;
 		$end = (int) w2PgetConfig('cal_day_end');
 		$start = (int) w2PgetConfig('cal_day_start');
-		while (!$this->isWorkingDay() || $this->getHour() > $end || ($preserveHours == false && $this->getHour() == $end && $this->getMinute() == '0')) {
+		while (!$this->isWorkingDay() || $this->getHour() >= $end) {
 			$this->addDays(1);
 			$this->setTime($start, '0', '0');
 		}
@@ -219,10 +219,11 @@ class w2p_Utilities_Date extends Date {
 		$do = clone $this;
 		$end = (int) w2PgetConfig('cal_day_end');
 		$start = (int) w2PgetConfig('cal_day_start');
-		while (!$this->isWorkingDay() || ($this->getHour() < $start) || ($this->getHour() == $start && $this->getMinute() == '0')) {
+		while (!$this->isWorkingDay() || ($this->getHour() < $start)) {
 			$this->addDays(-1);
 			$this->setTime($end, '0', '0');
 		}
+
 		if ($preserveHours) {
 			$this->setTime($do->getHour(), '0', '0');
 		}
@@ -253,64 +254,62 @@ class w2p_Utilities_Date extends Date {
 
 		if ($durationType == '24') { // duration type is 24, full days, we're finished very quickly
 			$full_working_days = $duration;
-		} else
-			if ($durationType == '1') { // durationType is 1 hour
-				// get w2P time constants
-                $cal_day_start = (int) w2PgetConfig('cal_day_start');
-                $cal_day_end = (int) w2PgetConfig('cal_day_end');
-				$dwh = (int) w2PgetConfig('daily_working_hours');
+		} elseif ($durationType == '1') { // durationType is 1 hour
+			// get w2P time constants
+	                $cal_day_start = (int) w2PgetConfig('cal_day_start');
+	                $cal_day_end = (int) w2PgetConfig('cal_day_end');
+			$dwh = (int) w2PgetConfig('daily_working_hours');
 
-				// move to the next working day if the first day is a non-working day
-				($sgn > 0) ? $this->next_working_day() : $this->prev_working_day();
+			// move to the next working day if the first day is a non-working day
+			($sgn > 0) ? $this->next_working_day() : $this->prev_working_day();
 
-				// calculate the hours spent on the first day
-				$firstDay = ($sgn > 0) ? min($cal_day_end - $this->hour, $dwh) : min($this->hour - $cal_day_start, $dwh);
+			// calculate the hours spent on the first day
+			$firstDay = ($sgn > 0) ? min($cal_day_end - $this->hour, $dwh) : min($this->hour - $cal_day_start, $dwh);
 
-				/*
-				** Catch some possible inconsistencies:
-				** If we're later than cal_end_day or sooner than cal_start_day then we don't need to
-				** subtract any time from duration. The difference is greater than the # of daily working hours
-				*/
-				if ($firstDay < 0) {
-					$firstDay = 0;
-				}
-				// Intraday additions are handled easily by just changing the hour value
-				if ($duration <= $firstDay) {
-					($sgn > 0) ? $this->setHour($this->hour + $duration) : $this->setHour($this->hour - $duration);
-					return $this;
-				}
-
-				// the effective first day hours value
-				$firstAdj = min($dwh, $firstDay);
-
-				// subtract the first day hours from the total duration
-				$duration -= $firstAdj;
-
-				// we've already processed the first day; move by one day!
-				$this->addDays(1 * $sgn);
-
-				// make sure that we didn't move to a non-working day
-				($sgn > 0) ? $this->next_working_day() : $this->prev_working_day();
-
-				// end of proceeding the first day
-
-				// calc the remaining time and the full working days part of this residual
-				$hoursRemaining = ($duration > $dwh) ? ($duration % $dwh) : $duration;
-				$full_working_days = round(($duration - $hoursRemaining) / $dwh);
-
-				// (proceed the full days later)
-
-				// proceed the last day now
-
-				// we prefer wed 16:00 over thu 08:00 as end date :)
-				if ($hoursRemaining == 0 && $full_working_day > 0) {
-					$full_working_days--;
-					($sgn > 0) ? $this->setHour($cal_day_start + $dwh) : $this->setHour($cal_day_end - $dwh);
-				} else {
-					($sgn > 0) ? $this->setHour($cal_day_start + $hoursRemaining) : $this->setHour($cal_day_end - $hoursRemaining);
-				}
-				//end of proceeding the last day
+			/*
+			** Catch some possible inconsistencies:
+			** If we're later than cal_end_day or sooner than cal_start_day then we don't need to
+			** subtract any time from duration. The difference is greater than the # of daily working hours
+			*/
+			if ($firstDay < 0) {
+				$firstDay = 0;
 			}
+			// Intraday additions are handled easily by just changing the hour value
+			if ($duration <= $firstDay) {
+				($sgn > 0) ? $this->setHour($this->hour + $duration) : $this->setHour($this->hour - $duration);
+				return $this;
+			}
+
+			// the effective first day hours value
+			$firstAdj = min($dwh, $firstDay);
+
+			// subtract the first day hours from the total duration
+			$duration -= $firstAdj;
+
+			// we've already processed the first day; move by one day!
+			$this->addDays(1 * $sgn);
+
+			// make sure that we didn't move to a non-working day
+			($sgn > 0) ? $this->next_working_day() : $this->prev_working_day();
+
+			// end of proceeding the first day
+
+			// calc the remaining time and the full working days part of this residual
+			$hoursRemaining = ($duration > $dwh) ? ($duration % $dwh) : $duration;
+			$full_working_days = round(($duration - $hoursRemaining) / $dwh);
+
+			// (proceed the full days later)
+
+			// proceed the last day now
+
+			if ($sgn > 0) {
+				$this->setHour($cal_day_start + $hoursRemaining);
+			} else {
+				$this->setHour($cal_day_end - $hoursRemaining);
+			}
+
+			//end of proceeding the last day
+		}
 
 		// proceeding the fulldays finally which is easy
 		// Full days
@@ -441,68 +440,19 @@ class w2p_Utilities_Date extends Date {
 	}
 
 	/**
-     * Calculating a future date considering a given duration
-     *
-     * Respects non-working days and the working hours and the begining and end of days
-     * SantosDiez - Credit for better variable names
-     *
-     * @param	duration		Duration to be added to the date
-     * @param	durationType	Duration Type: 1=hours, 24=days
-     * @return	w2p_Utilities_Date		The w2p_Utilities_Date object of the finish date
+         * Calculating a future date considering a given duration
+         *
+         * Changed to call 'addDuration' for easier maintenance.
+         *
+         * @param	duration		Duration to be added to the date
+         * @param	durationType	Duration Type: 1=hours, 24=days
+         * @return	w2p_Utilities_Date		The w2p_Utilities_Date object of the finish date
 	 */
 	public function calcFinish($duration, $durationType) {
-
 		// since one will alter the date ($this) one better copies it to a new instance
 		$finishDate = new w2p_Utilities_Date();
 		$finishDate->copy($this);
-
-		// get w2P time constants
-		$day_start_hour = (int) w2PgetConfig('cal_day_start');
-		$day_end_hour   = (int) w2PgetConfig('cal_day_end');
-		$work_hours     = (int) w2PgetConfig('daily_working_hours');
-        $min_increment  = (int) w2PgetConfig('cal_day_increment');
-
-		$duration_in_minutes = ($durationType == 24) ? $duration*$work_hours*60 : $duration*60;
-
-		// Jump to the first working day
-		while(!$finishDate->isWorkingDay()) {
-			$finishDate->addDays(1);
-		}
-
-		$first_day_minutes = min($day_end_hour*60 - $finishDate->getHour()*60 - $finishDate->getMinute(), $work_hours*60, $duration_in_minutes);
-
-		$finishDate->addSeconds($first_day_minutes*60);
-
-		$duration_in_minutes -= $first_day_minutes;
-
-        $minutes = $this->getMinute();
-        $mod = $minutes % $min_increment;
-
-        if ($mod > $min_increment/2) {
-            $multiplier = (int) (1 + $minutes / $min_increment);
-        } else {
-            $multiplier = (int) ($minutes / $min_increment);
-        }
-        $finishDate->setMinute($multiplier * $min_increment);
-
-		while($duration_in_minutes != 0) {
-			// Jump to the next day
-			$finishDate->addDays(1);
-			// Reset date's time to the first hour in the morning
-			$finishDate->setTime($day_start_hour);
-			
-			// Jump all non-working days
-			while(!$finishDate->isWorkingDay()) {
-				$finishDate->addDays(1);
-			}
-			
-			$day_work_minutes = min($work_hours*60, $duration_in_minutes);
-
-			$finishDate->addSeconds($day_work_minutes*60);
-			$duration_in_minutes -= $day_work_minutes;
-		}
-
-		return $finishDate;
+		return $finishDate->addDuration($duration, $durationType);
 	}
 
 	/**
