@@ -110,7 +110,7 @@ $htmlHelper = new w2p_Output_HTMLHelper($AppUI);
         $s .= $htmlHelper->createCell('na', $row['mod_ui_name']);
         $s .= $htmlHelper->createCell('mod_ui_icon', $row['mod_ui_icon']);
         
-        $s .= '<td class="_status">';
+        $s .= '<td class="data _status">';
         $s .= '<img src="' . w2PfindImage('/obj/' . ($row['mod_ui_active'] ? 'dotgreen.gif' : 'dotredanim.gif')) . '" alt="" />&nbsp;';
         if ($canEdit) {
             $s .= '<a href="' . $query_string . '&cmd=toggleMenu">';
