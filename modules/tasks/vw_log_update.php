@@ -239,16 +239,16 @@ $log_date = new w2p_Utilities_Date($log->task_log_date);
                         </td>
                     </tr>
 		    <?php } ?>
+                    <?php $end_date = (int)$obj->task_end_date ? new w2p_Utilities_Date($obj->task_end_date) : null; ?>
+                    <input type="hidden" name="task_end_date" id="task_end_date" value="<?php echo $end_date ? $end_date->format(FMT_TIMESTAMP_DATE) : ''; ?>" />
                     <?php
                     if ($obj->canUserEditTimeInformation($project->project_owner, $AppUI->user_id) && $canEditTask) {
-                        $end_date = intval($obj->task_end_date) ? new w2p_Utilities_Date($obj->task_end_date) : null;
                         ?>
                         <tr>
                             <td align='right'>
                                 <?php echo $AppUI->_('Task end date'); ?>
                             </td>
                             <td>
-                                <input type="hidden" name="task_end_date" id="task_end_date" value="<?php echo $end_date ? $end_date->format(FMT_TIMESTAMP_DATE) : ''; ?>" />
                                 <input type="text" name="end_date" id="end_date" onchange="setDate_new('editFrm', 'end_date', 'task');" value="<?php echo $end_date ? $end_date->format($df) : ''; ?>" class="text" />
                                 <a href="javascript: void(0);" onclick="return showCalendar('end_date', '<?php echo $df ?>', 'editFrm', null, true, true)">
                                     <img style="vertical-align: middle" src="<?php echo w2PfindImage('calendar.gif'); ?>" width="24" height="12" alt="<?php echo $AppUI->_('Calendar'); ?>" border="0" />
@@ -256,7 +256,7 @@ $log_date = new w2p_Utilities_Date($log->task_log_date);
                             </td>
                         </tr>
                         <?php
-                    }
+		    }
                     ?>
                 </table>
             </td>
