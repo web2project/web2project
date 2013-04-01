@@ -49,6 +49,7 @@ $titleBlock->addCell('<form action="index.php?m=admin" method="post" accept-char
         '<input type="text" name="where" class="text" size="10" value="' . $where . '" /></form>');
 $titleBlock->addCell($AppUI->_('Search') . ':');
 $titleBlock->addCell($a2z);
+$titleBlock->addCell('<input type="button" class=button value="' . $AppUI->_('add user') . '" onClick="javascript:window.location=\'./index.php?m=admin&a=addedituser\';" />');
 $titleBlock->show();
 
 ?>
@@ -69,8 +70,6 @@ function delMe( x, y ) {
 </script>
 
 <?php
-$extra = '<td align="right" width="100%"><input type="button" class=button value="' . $AppUI->_('add user') . '" onClick="javascript:window.location=\'./index.php?m=admin&a=addedituser\';" /></td>';
-
 $tabBox = new CTabBox('?m=admin', W2P_BASE_DIR . '/modules/admin/', $tab);
 $tabBox->add('vw_active_usr', 'Active Users');
 $tabBox->add('vw_inactive_usr', 'Inactive Users');
@@ -78,7 +77,7 @@ $tabBox->add('vw_usr_log', 'User Log');
 if ($canEdit && $canDelete) {
 	$tabBox->add('vw_usr_sessions', 'Active Sessions');
 }
-$tabBox->show($extra);
+$tabBox->show();
 
 ?>
 
