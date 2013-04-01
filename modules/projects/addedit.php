@@ -176,6 +176,26 @@ function setDepartment(department_id_string){
 
 </script>
 
+<script language="javascript" type="text/javascript">
+
+function computeTotalBudget() {
+	var total = 0;
+	var amount = 0;
+	var f = document.editFrm;
+        // harvest all budget categories
+	for (var i=0, i_cmp=f.elements.length; i < i_cmp; i++) {
+		var el = f.elements[i];
+		if (el.name.substr(0,7) == 'budget_' && el.tagName == 'INPUT' && el.type == 'text') {
+			amount = parseFloat('0' + el.value);
+			total += amount;
+			el.value = amount.toFixed(2);
+		}
+	}
+	f.project_target_budget.value = total.toFixed(2);
+}
+
+</script>
+
 <form name="editFrm" action="./index.php?m=projects" method="post" accept-charset="utf-8">
 	<input type="hidden" name="dosql" value="do_project_aed" />
 	<input type="hidden" name="project_id" value="<?php echo $project_id; ?>" />
@@ -190,19 +210,19 @@ function setDepartment(department_id_string){
                         <td width="50%" valign="top">
                             <table cellspacing="0" cellpadding="2" border="0">
                                 <tr>
-                                    <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Project Name'); ?></td>
+                                    <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Project Name'); ?>:</td>
                                     <td width="100%" colspan="2">
                                         <input type="text" name="project_name" id="project_name" value="<?php echo htmlspecialchars($project->project_name, ENT_QUOTES); ?>" size="25" maxlength="255" onblur="setShort();" class="text" /> *
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Parent Project'); ?></td>
+                                    <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Parent Project'); ?>:</td>
                                     <td colspan="2">
                                         <?php echo arraySelectTree($structprojects, 'project_parent', 'style="width:250px;" class="text"', $project->project_parent ? $project->project_parent : 0) ?>
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Project Owner'); ?></td>
+                                    <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Project Owner'); ?>:</td>
                                     <td colspan="2">
                                         <?php
                                             // pull users
@@ -213,19 +233,19 @@ function setDepartment(department_id_string){
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Company'); ?></td>
+                                    <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Company'); ?>:</td>
                                     <td width="100%" nowrap="nowrap" colspan="2">
                                         <?php echo arraySelect($companies, 'project_company', 'class="text" size="1"', $project->project_company); ?> *
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Project Location'); ?></td>
+                                    <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Project Location'); ?>:</td>
                                     <td width="100%" colspan="2">
                                         <input type="text" name="project_location" value="<?php echo w2PformSafe($project->project_location); ?>" size="25" maxlength="50" class="text" />
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Start Date'); ?></td>
+                                    <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Start Date'); ?>:</td>
                                     <td nowrap="nowrap">
                                         <input type="hidden" name="project_start_date" id="project_start_date" value="<?php echo $start_date ? $start_date->format(FMT_TIMESTAMP_DATE) : ''; ?>" />
                                         <input type="text" name="start_date" id="start_date" onchange="setDate_new('editFrm', 'start_date');" value="<?php echo $start_date ? $start_date->format($df) : ''; ?>" class="text" />
@@ -261,7 +281,7 @@ function setDepartment(department_id_string){
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Target Finish Date'); ?></td>
+                                    <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Target Finish Date'); ?>:</td>
                                     <td nowrap="nowrap">
                                         <input type="hidden" name="project_end_date" id="project_end_date" value="<?php echo $end_date ? $end_date->format(FMT_TIMESTAMP_DATE) : ''; ?>" />
                                         <input type="text" name="end_date" id="end_date" onchange="setDate_new('editFrm', 'end_date');" value="<?php echo $end_date ? $end_date->format($df) : ''; ?>" class="text" />
@@ -271,40 +291,38 @@ function setDepartment(department_id_string){
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td colspan="2" align="center"><?php echo $AppUI->_('Target Budgets'); ?> </td>
+                                    <td colspan="2" style="text-align: left; padding-left: 10em;"><br><?php echo $AppUI->_('Target Budgets'); ?> </td>
                                 </tr>
                                 <?php
                                     $billingCategory = w2PgetSysVal('BudgetCategory');
-                                    $totalBudget = 0;
                                     foreach ($billingCategory as $id => $category) {
                                         $amount = 0;
                                         if (isset($project->budget[$id])) {
                                             $amount = $project->budget[$id]['budget_amount'];
                                         }
-                                        $totalBudget += $amount;
                                         ?>
                                         <tr>
                                             <td align="right" nowrap="nowrap">
-                                                <?php echo $AppUI->_($category); ?>
+                                                <?php echo $AppUI->_($category); ?>:
                                             </td>
                                             <td nowrap="nowrap" style="text-align: left; padding-left: 40px;">
-                                                <?php echo $w2Pconfig['currency_symbol']; ?> <input name="budget_<?php echo $id; ?>" id="budget_<?php echo $id; ?>" type="text" value="<?php echo $amount; ?>" size="10" class="text" />
+                                                <?php echo $w2Pconfig['currency_symbol']; ?> <input name="budget_<?php echo $id; ?>" id="budget_<?php echo $id; ?>" type="text" value="<?php echo $amount; ?>" size="10" class="text" style="text-align: right;" onblur="computeTotalBudget()" />
                                             </td>
                                         </tr>
                                         <?php
                                     }
                                 ?>
-                                <tr>
-                                    <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Total Target Budget'); ?> <?php echo $w2Pconfig['currency_symbol'] ?></td>
-                                    <td>
-                                        <?php echo formatCurrency($totalBudget, $AppUI->getPref('CURRENCYFORM')); ?>
-                                    </td>
-                                </tr>
+	                        <tr>
+	                            <td nowrap="nowrap"><?php echo $AppUI->_('Total Target Budget'); ?>:</td>
+	                            <td nowrap="nowrap" style="text-align: left; padding-left: 40px;">
+				    <?php echo $w2Pconfig['currency_symbol'] ?> <input type="text" class="text" name="project_target_budget" value="<?php echo $project->project_target_budget; ?>" style="text-align: right;" size="10" maxlength="10" readonly />
+	                            </td>
+	                        </tr>
                                 <tr>
                                     <td colspan="3"><hr noshade="noshade" size="1" /></td>
                                 </tr>
                                 <tr>
-                                    <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Actual Finish Date'); ?></td>
+                                    <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Actual Finish Date'); ?>:</td>
                                     <td nowrap="nowrap">
                                     <?php
                                         if ($project_id > 0) {
@@ -318,7 +336,7 @@ function setDepartment(department_id_string){
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Actual Budget'); ?> <?php echo $w2Pconfig['currency_symbol'] ?></td>
+                                    <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Actual Budget'); ?>: <?php echo $w2Pconfig['currency_symbol'] ?></td>
                                     <td nowrap="nowrap">
                                     <?php
                                         if ($project_id > 0) {
@@ -333,13 +351,13 @@ function setDepartment(department_id_string){
                                     <td colspan="3"><hr noshade="noshade" size="1" /></td>
                                 </tr>
                                 <tr>
-                                    <td align="right" nowrap="nowrap"><?php echo $AppUI->_('URL'); ?></td>
+                                    <td align="right" nowrap="nowrap"><?php echo $AppUI->_('URL'); ?>:</td>
                                     <td colspan="2">
                                         <input type="text" name="project_url" value='<?php echo $project->project_url; ?>' size="40" maxlength="255" class="text" />
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Staging URL'); ?></td>
+                                    <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Staging URL'); ?>:</td>
                                     <td colspan="2">
                                         <input type="Text" name="project_demo_url" value='<?php echo $project->project_demo_url; ?>' size="40" maxlength="255" class="text" />
                                     </td>
@@ -357,25 +375,25 @@ function setDepartment(department_id_string){
                         <td width="50%" valign="top">
                             <table cellspacing="0" cellpadding="2" border="0" width="100%">
                                 <tr>
-                                    <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Priority'); ?></td>
+                                    <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Priority'); ?>:</td>
                                     <td nowrap ="nowrap">
                                         <?php echo arraySelect($projectPriority, 'project_priority', 'size="1" class="text"', ($project->project_priority ? $project->project_priority : 0), true); ?> *
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Short Name'); ?></td>
+                                    <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Short Name'); ?>:</td>
                                     <td colspan="3">
                                         <input type="text" name="project_short_name" value="<?php echo w2PformSafe($project->project_short_name); ?>" size="10" maxlength="10" class="text" /> *
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Color Identifier'); ?></td>
+                                    <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Color Identifier'); ?>:</td>
                                     <td nowrap="nowrap">
                                         <input type="text" name="project_color_identifier" value="<?php echo $pci; ?>" size="10" maxlength="6" onclick="newwin=window.open('./index.php?m=public&a=color_selector&dialog=1&callback=setColor', 'calwin', 'width=320, height=300, scrollbars=no');" class="text" style="color: <?php echo '#'.$pci ?>; background-color: <?php echo '#'.$pci ?>" readonly /> *
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Project Type'); ?></td>
+                                    <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Project Type'); ?>:</td>
                                     <td colspan="3">
                                         <?php echo arraySelect($ptype, 'project_type', 'size="1" class="text"', $project->project_type, true); ?> *
                                     </td>
@@ -412,7 +430,7 @@ function setDepartment(department_id_string){
                                 </tr>
                                 <tr>
                                     <td colspan="4">
-                                        <?php echo $AppUI->_('Description'); ?><br />
+                                        <?php echo $AppUI->_('Description'); ?>:<br />
                                         <textarea name="project_description" cols="50" rows="10" class="textarea"><?php echo w2PformSafe($project->project_description); ?></textarea>
                                     </td>
                                 </tr>
