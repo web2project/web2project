@@ -266,9 +266,11 @@ class CTask_Log extends w2p_Core_BaseObject
 		    if ($results) {
 		            $q->addUpdate('task_percent_complete', $results['task_log_percent_complete']);
 		            $q->addUpdate('task_end_date', $results['task_log_task_end_date']);
+			    $end_date = $results['task_log_task_end_date'];
 		    } else {
 		            $q->addUpdate('task_percent_complete', $task->task_original_percent_complete);
 		            $q->addUpdate('task_end_date', $task->task_original_end_date);
+			    $end_date = $task->task_original_end_date;
 		    }
 	            $q->addWhere('task_id = ' . (int)$task_id);
 	            $success = $q->exec();
@@ -278,7 +280,7 @@ class CTask_Log extends w2p_Core_BaseObject
 	            }
 
 		    $task->updateDynamics();
-	            $task->pushDependencies($task_id, $task->task_end_date);
+	            $task->pushDependencies($task_id, $end_date);
 	        }
 
 		$q->addQuery('SUM(task_log_hours)');
