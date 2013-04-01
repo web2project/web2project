@@ -59,29 +59,33 @@ $q->clear();
 
 <script language="javascript" type="text/javascript">
 
-function changeDyn() {
-	// Look for the Dynamic Task checkbox
-	var dyns = document.getElementsByName('task_dynamic');
-	var dyn;
-	for (var i=0, i_cmp=dyns.length; i < i_cmp; i++) {
-		dyn = dyns[i];
-		if (dyn.type == 'checkbox') {
-			break;
-		}
+function changeCtrls() {
+	// Get the Dynamic setting from the fields
+	var td_on = document.getElementById('td_on');
+	var td_off = document.getElementById('td_off');
+	var td_dyn = document.getElementById('task_dynamic');
+	var setting = td_dyn.checked ? 1 : (td_on.checked ? 31 : 0);
+
+	// If we're coming out of a dynamic type, make sure the settings are sane
+	if (!td_on.checked && !td_off.checked) {
+		td_on.checked = true;
+		setting = 31;
 	}
+
 	// Apply the visibility
 	var elm = document.getElementsByName('task_depend_nodyn');
 	for (var i=0, i_cmp=elm.length; i < i_cmp; i++) {
 		var el = elm[i];
-		el.style.display = dyn.checked ? 'none' : 'block';
+		el.style.display = setting == 1 ? 'none' : 'block';
 	}
-	// If we're coming out of a dynamic type, make sure the settings are sane
-	if (!dyn.checked) {
-		var ctl = document.getElementById('td_on');
-		ctl.checked = true;
-		ctl = document.getElementById('set_task_start_date');
-		ctl.checked = true;
+	elm = document.getElementsByName('task_depend_nodyn_lists');
+	for (var i=0, i_cmp=elm.length; i < i_cmp; i++) {
+		var el = elm[i];
+		el.style.display = setting < 20 ? 'none' : 'block';
 	}
+
+	ctl = document.getElementById('set_task_start_date');
+	ctl.checked = setting > 20;
 }
 
 </script>
@@ -100,16 +104,16 @@ function changeDyn() {
 		<table><tr><td rowspan="2">
 		<?php echo $AppUI->_('Dependency Tracking'); ?>:
 		</td><td>
-		<input type="radio" name="task_dynamic" value="31" id="td_on" <?php if ($task_id == 0 || $task->task_dynamic > '20') { echo "checked"; } ?> />
+		<input type="radio" name="task_dynamic" value="31" id="td_on" <?php if ($task_id == 0 || $task->task_dynamic > '20') { echo "checked"; } ?> onclick="changeCtrls();" />
 		<label for="td_on"><?php echo $AppUI->_('On'); ?></label>
 		</td></tr><tr><td>
-		<input type="radio" name="task_dynamic" value="0" id="td_off" <?php if ($task_id && ($task->task_dynamic == '0' || $task->task_dynamic == '11')) { echo "checked"; } ?> />
+		<input type="radio" name="task_dynamic" value="0" id="td_off" <?php if ($task_id && ($task->task_dynamic == '0' || $task->task_dynamic == '11')) { echo "checked"; } ?> onclick="changeCtrls();" />
 		<label for="td_off"><?php echo $AppUI->_('Off'); ?></label>
 		</td></tr></table>
 		</div>
 	    </td><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 	    </td><td nowrap>
-		<input type="checkbox" name="task_dynamic" id="task_dynamic" value="1" <?php if ($task->task_dynamic == "1") { echo 'checked="checked"'; } ?> onclick="changeDyn();" />
+		<input type="checkbox" name="task_dynamic" id="task_dynamic" value="1" <?php if ($task->task_dynamic == "1") { echo 'checked="checked"'; } ?> onclick="changeCtrls();" />
 		<label for="task_dynamic"><?php echo $AppUI->_('Dynamic task'); ?></label><br>
 		<div style="display: <?php echo $task->task_dynamic == '1' ? 'none' : 'block'; ?>" name="task_depend_nodyn">
 		<input type="checkbox" name="task_dynamic_nodelay" id="task_dynamic_nodelay" value="1" <?php if (($task->task_dynamic > '10') && ($task->task_dynamic < 30)) { echo 'checked="checked"'; } ?> />
@@ -128,30 +132,30 @@ function changeDyn() {
 
 	<tr>
 	    <td width="50%">&nbsp;</td>
-	    <td><div style="display: <?php echo $task->task_dynamic == '1' ? 'none' : 'block'; ?>" name="task_depend_nodyn"><?php echo $AppUI->_('All Tasks'); ?>:</div></td>
+	    <td><div style="display: <?php echo (int)$task->task_dynamic < 20 ? 'none' : 'block'; ?>" name="task_depend_nodyn_lists"><?php echo $AppUI->_('All Tasks'); ?>:</div></td>
 	    <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
-	    <td><div style="display: <?php echo $task->task_dynamic == '1' ? 'none' : 'block'; ?>" name="task_depend_nodyn"><?php echo $AppUI->_('Task Dependencies'); ?>:</div></td>
+	    <td><div style="display: <?php echo (int)$task->task_dynamic < 20 ? 'none' : 'block'; ?>" name="task_depend_nodyn_lists"><?php echo $AppUI->_('Task Dependencies'); ?>:</div></td>
 	    <td width="50%">&nbsp;</td>
 	</tr><tr>
 	    <td width="50%">&nbsp;</td>
 	    <td>
-		<div style="display: <?php echo $task->task_dynamic == '1' ? 'none' : 'block'; ?>" name="task_depend_nodyn">
+		<div style="display: <?php echo (int)$task->task_dynamic < 20 ? 'none' : 'block'; ?>" name="task_depend_nodyn_lists">
 		<select name="all_tasks" class="text" style="width:220px" size="10" class="text" multiple="multiple">
 		<?php echo str_replace('selected', '', $task_parent_options); // we need to remove selected added from task_parent options ?>
 		</select>
 		</div>
 	    </td><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 	    </td><td>
-		<div style="display: <?php echo $task->task_dynamic == '1' ? 'none' : 'block'; ?>" name="task_depend_nodyn">
+		<div style="display: <?php echo (int)$task->task_dynamic < 20 ? 'none' : 'block'; ?>" name="task_depend_nodyn_lists">
 		<?php echo arraySelect($taskDep, 'task_dependencies', 'style="width:220px" size="10" class="text" multiple="multiple" ', null); ?>
 		</div>
 	   </td>
 	    <td width="50%">&nbsp;</td>
 	</tr><tr>
 	    <td width="50%">&nbsp;</td>
-	    <td align="right"><div style="display: <?php echo $task->task_dynamic == '1' ? 'none' : 'block'; ?>" name="task_depend_nodyn"><input type="button" class="button" value="&gt;" onclick="addTaskDependency(document.dependFrm, document.datesFrm)" /></div></td>
+	    <td align="right"><div style="display: <?php echo (int)$task->task_dynamic < 20 ? 'none' : 'block'; ?>" name="task_depend_nodyn_lists"><input type="button" class="button" value="&gt;" onclick="addTaskDependency(document.dependFrm, document.datesFrm)" /></div></td>
 	    <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
-	    <td align="left"><div style="display: <?php echo $task->task_dynamic == '1' ? 'none' : 'block'; ?>" name="task_depend_nodyn"><input type="button" class="button" value="&lt;" onclick="removeTaskDependency(document.dependFrm, document.datesFrm)" /></div></td>
+	    <td align="left"><div style="display: <?php echo (int)$task->task_dynamic < 20 ? 'none' : 'block'; ?>" name="task_depend_nodyn_lists"><input type="button" class="button" value="&lt;" onclick="removeTaskDependency(document.dependFrm, document.datesFrm)" /></div></td>
 	    <td width="50%">&nbsp;</td>
 	</tr>
     </table>
