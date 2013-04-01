@@ -2113,12 +2113,12 @@ function displayFiles($AppUI, $folder_id, $task_id, $project_id, $company_id) {
         $htmlHelper->stageRowData($row);
 
         $s .= '<tr>';
- 		$s .= '<td nowrap="nowrap" width="20">';
+ 		$s .= '<td class="data">';
 		if ($canEdit && (empty($latest_file['file_checkout']) || ($latest_file['file_checkout'] == 'final' && ($canEdit || $latest_file['project_owner'] == $AppUI->user_id)))) {
 			$s .= '<a href="./index.php?m=files&a=addedit&file_id=' . $latest_file['file_id'] . '">' . w2PshowImage('kedit.png', '16', '16', 'edit file', 'edit file', 'files') . '</a>';
         }
         $s .= '</td>';
-		$s .= '<td nowrap="nowrap">';
+		$s .= '<td class="data">';
 		if ($canEdit && empty($latest_file['file_checkout'])) {
             $s .= '<a href="?m=files&a=co&file_id=' . $latest_file['file_id'] . '">' . w2PshowImage('up.png', '16', '16', 'checkout', 'checkout file', 'files') . '</a>';
 		} else {
