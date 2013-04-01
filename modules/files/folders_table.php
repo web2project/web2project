@@ -58,18 +58,15 @@ function expand(id){
 function addBulkComponent(li) {
 //IE
 	if (document.all || navigator.appName == 'Microsoft Internet Explorer') {
-		var form = document.frm_bulk;
-		var ni = document.getElementById('tbl_bulk');
+		var ni = document.getElementById('frm_bulk');
 		var newitem = document.createElement('input');
-		var htmltxt = '';
 		newitem.id = 'bulk_selected_file['+li+']';
 		newitem.name = 'bulk_selected_file['+li+']';
 		newitem.type = 'hidden';
 		ni.appendChild(newitem);
 	} else {
 //Non IE
-		var form = document.frm_bulk;
-		var ni = document.getElementById('tbl_bulk');
+		var ni = document.getElementById('frm_bulk');
 		var newitem = document.createElement('input');
 		newitem.setAttribute('id', 'bulk_selected_file['+li+']');
 		newitem.setAttribute('name', 'bulk_selected_file['+li+']');
@@ -128,7 +125,7 @@ function removeBulkComponent(li) {
     ?>
 	<tr>
 	    <td colspan="50" align="right">
-            <form name="frm_bulk" method="post" action="?m=files&a=do_files_bulk_aed" accept-charset="utf-8">
+            <form name="frm_bulk" id="frm_bulk" method="post" action="?m=files&a=do_files_bulk_aed" accept-charset="utf-8">
                 <input type="hidden" name="redirect" value="<?php echo $current_uri; ?>" />
                 <?php echo arraySelect($sprojects, 'bulk_file_project', 'style="width:180px" class="text"', 'O'); ?>
                 <?php echo arraySelectTree($folders, 'bulk_file_folder', 'style="width:180px;" class="text"', 'O'); ?>

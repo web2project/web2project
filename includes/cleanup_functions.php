@@ -2076,7 +2076,7 @@ function displayFiles($AppUI, $folder_id, $task_id, $project_id, $company_id) {
     foreach ($fieldNames as $index => $name) {
         $s .= '<th>' . $AppUI->_($fieldNames[$index]) . '</th>';
     }
-    $s .= '<th></th>';
+    $s .= '<th></th><th></th>';
 	$s .= '</tr>';
 
 	$fp = -1;
@@ -2184,6 +2184,12 @@ function displayFiles($AppUI, $folder_id, $task_id, $project_id, $company_id) {
             </form>';
         $s .= '<a href="javascript: void(0);" onclick="if (confirm(\'' . $AppUI->_('Are you sure you want to delete this file?') . '\')) {document.frm_remove_file_' . $latest_file['file_id'] . '.submit()}">' . w2PshowImage('remove.png', '16', '16', 'delete file', 'delete file', 'files') . '</a>';
         $s .= '</td>';
+		$s .= '<td nowrap="nowrap" align="center" width="1">';
+		if ($canEdit && (empty($latest_file['file_checkout']) || ($latest_file['file_checkout'] == 'final' && ($canEdit || $latest_file['project_owner'] == $AppUI->user_id)))) {
+			$bulk_op = 'onchange="(this.checked) ? addBulkComponent(' . $latest_file['file_id'] . ') : removeBulkComponent(' . $latest_file['file_id'] . ')"';
+			$s .= '<input type="checkbox" ' . $bulk_op . ' name="chk_sel_file_' . $latest_file['file_id'] . '" />';
+		}
+		$s .= '</td>';
         $s .= '</tr>';
 		$s .= $hidden_table;
 		$hidden_table = '';

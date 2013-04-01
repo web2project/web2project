@@ -3,10 +3,9 @@ if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
 
-$selected = (int) w2PgetParam($_POST, 'bulk_selected_file', 0);
-$bulk_file_project = (int) w2PgetParam($_POST, 'bulk_file_project', 0);
-$bulk_file_folder = (int) w2PgetParam($_POST, 'bulk_file_folder', 0);
-$redirect = w2PgetParam($_POST, 'redirect', '');
+$selected = w2PgetParam($_POST, 'bulk_selected_file', 0);
+$bulk_file_project = w2PgetParam($_POST, 'bulk_file_project', 0);
+$bulk_file_folder =  w2PgetParam($_POST, 'bulk_file_folder', 0);
 
 global $AppUI;
 $perms = &$AppUI->acl();
@@ -21,13 +20,12 @@ if (is_array($selected) && count($selected)) {
 			}
 			$upd_file->load($key);
 		}
-
 		if (isset($_POST['bulk_file_project']) && $bulk_file_project != '' && $bulk_file_project != 'O') {
 			if ($upd_file->file_id) {
 				// move the file on filesystem if the affiliated project was changed
 				if ($upd_file->file_project != $bulk_file_project) {
 					$oldProject = $upd_file->file_project;
-					$upd_file->file_project = $bulk_file_project;
+					$upd_file->file_project = (int) $bulk_file_project;
 					$res = $upd_file->moveFile($oldProject, $upd_file->file_real_filename);
 					if (!$res) {
 						$AppUI->setMsg('At least one File could not be moved', UI_MSG_ERROR);
@@ -38,11 +36,12 @@ if (is_array($selected) && count($selected)) {
 		}
 		if (isset($_POST['bulk_file_folder']) && $bulk_file_folder != '' && $bulk_file_folder != 'O') {
 			if ($upd_file->file_id) {
-				$upd_file->file_folder = $bulk_file_folder;
+				$upd_file->file_folder = (int) $bulk_file_folder;
 				$upd_file->store();
 			}
 		}
 		echo db_error();
 	}
 }
-$AppUI->redirect($redirect);
+
+$AppUI->redirect('m=files');
