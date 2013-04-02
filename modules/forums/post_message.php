@@ -32,7 +32,8 @@ if (!$myForum) {
 // Build a back-url for when the back button is pressed
 $back_url_params = array();
 foreach ($_GET as $k => $v) {
-	if ($k != 'post_message') {
+	if ($k != 'post_message' && $k != 'message_id') {
+        if ($k == 'message_parent') $k = 'message_id';
 		$back_url_params[] = "$k=$v";
 	}
 }
