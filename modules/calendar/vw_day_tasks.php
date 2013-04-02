@@ -100,6 +100,7 @@ $q->addOrder('task_end_date, task_start_date, task_priority');
 $tasks = $q->loadList();
 
 ?>
+<?php if (count($tasks)) { ?>
 <br><br><h1><?php echo $AppUI->_('Tasks assigned to others') ?>:</h1>
 <table class="tbl list">
         <tr>
@@ -120,3 +121,4 @@ $tasks = $q->loadList();
         }
 	?>
 </table>
+<?php } ?>
