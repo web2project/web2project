@@ -94,7 +94,7 @@ $columnCount = 1 + count($fieldList);
             $htmlHelper->stageRowData($row);
 
             if ($p != $row['forum_project']) {
-                $forum_project_name = ($row['project_name']) ? $row['project_name'] : 'No associated project';
+                $forum_project_name = ($row['project_name']) ? $row['project_name'] : $AppUI->_('No associated project');
                 $forum_project_color = ($row['project_color_identifier']) ? bestColor($row['project_color_identifier']) : '';
                 ?>
                 <tr>

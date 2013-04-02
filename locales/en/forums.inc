@@ -55,6 +55,7 @@
 'My Watched',
 'new forum',
 'New Topic',
+'No associated project',
 'No posts',
 'No replies',
 'Normal',
