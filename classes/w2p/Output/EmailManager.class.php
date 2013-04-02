@@ -171,11 +171,8 @@ class w2p_Output_EmailManager
         return $this->getFileNotify($file);
     }
 
-    public function getTaskNotify(CTask $task, $user)
+    public function getTaskNotify(CTask $task, $user, $projname)
     {
-        $project = new CProject();
-        $projname = $project->load($task->task_project)->project_name;
-
         $body = $this->_AppUI->_('Project', UI_OUTPUT_RAW) . ":\t" . $projname . "\n";
         $body .= $this->_AppUI->_('Task', UI_OUTPUT_RAW) . ":\t\t" . $task->task_name . "\n";
 //TODO: Priority not working for some reason, will wait till later
