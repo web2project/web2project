@@ -1542,7 +1542,7 @@ class Date_Calc
             $month = Date_Calc::dateNow("%m");
         if(empty($day))
             $day = Date_Calc::dateNow("%d");
-        return substr(Date_Calc::getWeekdayFullname($day,$month,$year),0,$length);
+        return mb_substr(Date_Calc::getWeekdayFullname($day,$month,$year),0,$length);
     } // end func getWeekdayFullname
 
     /**
