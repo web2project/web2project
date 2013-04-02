@@ -281,16 +281,18 @@ class w2p_Output_EmailManager
 
         $status = (intval($isNotNew)) ? 'Updated' : 'Created';
 
-        $body = $this->_AppUI->_('Project') . ": $project->project_name Has Been $status Via Project Manager. You can view the Project by clicking: ";
+        $body = $this->_AppUI->_('Project') . ': ' . $project->project_name . ' ' . $this->_AppUI->_('has been') . ' ' . $this->_AppUI->_($status);
+		$body .= "\n" . $this->_AppUI->_('You can view the Project by clicking'). ':';
         $body .= "\n" . $this->_AppUI->_('URL') . ':     ' . w2PgetConfig('base_url') . '/index.php?m=projects&a=view&project_id=' . $project->project_id;
-        $body .= "\n\n(You are receiving this message because you are the owner of this Project)";
+        $body .= "\n\n(" . $this->_AppUI->_('You are receiving this message because you are the owner of this Project') . ")";
         $body .= "\n\n" . $this->_AppUI->_('Description') . ':' . "\n $project->project_description \n\n";
 
         $body .= (intval($isNotNew)) ? $this->_AppUI->_('Updater') : $this->_AppUI->_('Creator');
         $body .= ': ' . $this->_AppUI->user_display_name;
 
         if ($project->_message == 'deleted') {
-            $body .= "\n\nProject " . $project->project_name . ' was ' . $project->_message . ' by ' . $this->_AppUI->user_display_name;
+            $body .= "\n\n" . $this->_AppUI->_('Project') . $project->project_name . $this->_AppUI->_('was deleted') . '.';
+			$body .= "\n" . $this->_AppUI->_('deleted by') . ': ' . $this->_AppUI->user_display_name;
         }
 
         return $body;

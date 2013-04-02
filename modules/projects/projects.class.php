@@ -551,7 +551,7 @@ class CProject extends w2p_Core_BaseObject
 
         $mail = new w2p_Utilities_Mail;
 
-        $subject = (intval($isNotNew)) ? "Project Updated: $this->project_name " : "Project Submitted: $this->project_name ";
+        $subject = (intval($isNotNew)) ? $this->_AppUI->_('Project updated') . ': ' . $this->project_name : $this->_AppUI->_('Project submitted') . ': ' . $this->project_name;
 
         $user = new CUser();
         $user->overrideDatabase($this->_query);
