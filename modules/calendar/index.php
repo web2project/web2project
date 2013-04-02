@@ -28,7 +28,7 @@ $company_id = $AppUI->processIntState('CalIdxCompany', $_POST, 'company_id',
 				      (w2PgetConfig('company_filter_default', 'user') == 'user') ? $AppUI->user_company : '0');
 
 // Using simplified set/get semantics. Doesn't need as much code in the module.
-$event_filter = $AppUI->checkPrefState('CalIdxFilter', w2PgetParam($_REQUEST, 'event_filter', 'my'), 'EVENTFILTER', 'my');
+$event_filter = $AppUI->checkPrefState('CalIdxFilter', w2PgetParam($_REQUEST, 'event_filter', null), 'EVENTFILTER', 'my');
 
 // get the passed timestamp (today if none)
 $ctoday = new w2p_Utilities_Date();
