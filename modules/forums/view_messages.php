@@ -86,7 +86,7 @@ if (function_exists('styleRenderBoxTop')) {
                     $titleBlock = new w2p_Theme_TitleBlock('', '', $m, "$m.$a");
                     $titleBlock->addCrumb('?m=forums', 'forums list');
                     $titleBlock->addCrumb('?m=forums&a=viewer&forum_id=' . $forum_id, 'topics for this forum');
-                    $titleBlock->addCrumb('?m=forums&a=view_pdf&forum_id=' . $forum_id . '&message_id=' . $message_id . '&sort=' . $sort . '&suppressHeaders=1', 'view PDF file');
+//                    $titleBlock->addCrumb('?m=forums&a=view_pdf&forum_id=' . $forum_id . '&message_id=' . $message_id . '&sort=' . $sort . '&suppressHeaders=1', 'view PDF file');
                     $titleBlock->show();
                 ?>
             </td>
