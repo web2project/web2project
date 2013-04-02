@@ -4,13 +4,6 @@ if (!defined('W2P_BASE_DIR')) {
 }
 
 $file_id = intval(w2PgetParam($_GET, 'file_id', 0));
-// check permissions for this record
-$perms = &$AppUI->acl();
-
-$canEdit = $perms->checkModuleItem($m, 'edit', $file_id);
-if (!$canEdit) {
-	$AppUI->redirect(ACCESS_DENIED);
-}
 $canAdmin = canEdit('system');
 
 $file_parent = intval(w2PgetParam($_GET, 'file_parent', 0));
@@ -24,6 +17,11 @@ if ($file_id > 0 && !$obj->load($file_id)) {
 	$AppUI->setMsg('File');
 	$AppUI->setMsg('invalidID', UI_MSG_ERROR, true);
 	$AppUI->redirect();
+}
+
+// check permissions for this record
+if (!$obj->canEdit()) {
+	$AppUI->redirect(ACCESS_DENIED);
 }
 
 // setup the title block

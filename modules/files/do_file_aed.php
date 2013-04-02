@@ -3,13 +3,9 @@ if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
 
-$del = (int) w2PgetParam($_POST, 'del', 0);
+global $AppUI;
 
-$obj = new CFile();
-if (!$obj->bind($_POST)) {
-	$AppUI->setMsg($obj->getError(), UI_MSG_ERROR);
-	$AppUI->redirect();
-}
+$del = (int) w2PgetParam($_POST, 'del', 0);
 
 $action = ($del) ? 'deleted' : 'stored';
 $file_id = (int) w2PgetParam($_POST, 'file_id', 0);
@@ -23,23 +19,33 @@ $notify = ($notify != '0') ? '1' : '0';
 $notifyContacts = w2PgetParam($_POST, 'notify_contacts', 'off');
 $notifyContacts = ($notifyContacts != '0') ? '1' : '0';
 
+$obj = new CFile();
+if ($file_id) {
+    $obj->load($file_id);
+}
+
 $perms = &$AppUI->acl();
 if ($del) {
-	if (!$perms->checkModuleItem('files', 'delete', $file_id)) {
+	if (!$obj->canDelete()) {
 		$AppUI->redirect(ACCESS_DENIED);
 	}
 } elseif ($cancel) {
-	if (!$perms->checkModuleItem('files', 'delete', $file_id)) {
+	if (!$obj->canDelete()) {
 		$AppUI->redirect(ACCESS_DENIED);
 	}
 } elseif ($isNotNew) {
-	if (!$perms->checkModuleItem('files', 'edit', $file_id)) {
+	if (!$obj->canEdit()) {
 		$AppUI->redirect(ACCESS_DENIED);
 	}
 } else {
 	if (!canAdd('files')) {
 		$AppUI->redirect(ACCESS_DENIED);
 	}
+}
+
+if (!$obj->bind($_POST)) {
+	$AppUI->setMsg($obj->getError(), UI_MSG_ERROR);
+	$AppUI->redirect();
 }
 
 if ($file_id) {

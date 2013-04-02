@@ -3,6 +3,8 @@ if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
 
+global $AppUI;
+
 $folder = (int) w2PgetParam($_GET, 'folder', 0);
 $file_id = (int) w2PgetParam($_GET, 'file_id', 0);
 $ci = w2PgetParam($_GET, 'ci', 0) == 1 ? true : false;
@@ -12,13 +14,6 @@ $file = new CFile();
 $file->file_id = $file_id;
 
 $obj = $file;
-$canAddEdit = $obj->canAddEdit();
-$canAuthor = $obj->canCreate();
-$canEdit = $obj->canEdit();
-if (!$canAddEdit) {
-	$AppUI->redirect(ACCESS_DENIED);
-}
-
 // load the record data
 $obj = $AppUI->restoreObject();
 if ($obj) {
@@ -31,6 +26,12 @@ if (!$file && $file_id > 0) {
 	$AppUI->setMsg('File');
 	$AppUI->setMsg('invalidID', UI_MSG_ERROR, true);
 	$AppUI->redirect();
+}
+
+$canAuthor = $file->canCreate();
+$canEdit = $file->canEdit();
+if ((!$canAuthor && !$file_id) || (!$canEdit && $file->file_owner != $AppUI->user_id && $file_id)) {
+	$AppUI->redirect(ACCESS_DENIED);
 }
 
 if (file_exists(W2P_BASE_DIR . '/modules/helpdesk/config.php')) {

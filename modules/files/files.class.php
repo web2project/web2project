@@ -294,13 +294,10 @@ class CFile extends w2p_Core_BaseObject {
 
 	// delete File from File System
 	public function deleteFile() {
-        if ('' == $this->file_real_filename ||
-                !file_exists(W2P_BASE_DIR . '/files/' . $this->file_project . '/' . $this->file_real_filename)) {
-            return true;
-        }
-        if ($this->_perms->checkModuleItem('files', 'delete', $this->file_id)) {
-            return @unlink(W2P_BASE_DIR . '/files/' . $this->file_project . '/' . $this->file_real_filename);
-        }
+	        if ('' == $this->file_real_filename || !file_exists(W2P_BASE_DIR . '/files/' . $this->file_project . '/' . $this->file_real_filename)) {
+	            return true;
+	        }
+	        return @unlink(W2P_BASE_DIR . '/files/' . $this->file_project . '/' . $this->file_real_filename);
 	}
 
 	// move the file if the affiliated project was changed
@@ -629,5 +626,26 @@ class CFile extends w2p_Core_BaseObject {
         $task->load((int)$this->file_task);
         
         return $task->task_name;
+	}
+
+ 	public function canDelete($notUsed = '', $oid = null, $joins = null)
+	{
+		global $AppUI;
+
+		if ($this->file_owner == $AppUI->user_id) {
+			return true;
+		}
+
+		return parent::canDelete($notUsed, $oid, $joins);
+	}
+
+	public function canEdit() { 
+		global $AppUI;
+
+		if ($this->file_owner == $AppUI->user_id) {
+			return true;
+		}
+
+		return parent::canEdit();
 	}
 }

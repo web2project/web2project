@@ -7,18 +7,18 @@ if (!defined('W2P_BASE_DIR')) {
 $file_id = (int) w2PgetParam($_POST, 'file_id', 0);
 $coReason = w2PgetParam($_POST, 'file_co_reason', '');
 
-$perms = &$AppUI->acl();
-if (!$perms->checkModuleItem('files', 'edit', $file_id)) {
-	$AppUI->redirect(ACCESS_DENIED);
-}
-
 $obj = new CFile();
 if ($file_id) {
-	$obj->_message = 'updated';
 	$oldObj = new CFile();
 	$oldObj->load($file_id);
-
+	if (!$oldObj->canEdit()) {
+		$AppUI->redirect(ACCESS_DENIED);
+	}
+	$obj->_message = 'updated';
 } else {
+	if (!$obj->canAuthor()) {
+		$AppUI->redirect(ACCESS_DENIED);
+	}
 	$obj->_message = 'added';
 }
 
