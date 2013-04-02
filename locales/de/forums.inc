@@ -28,6 +28,7 @@
 'My Projects'=>'Meine Projekte',
 'My Watched'=>'Beobachtete Foren',
 'New Topic'=>'Neues Thema',
+'No associated project'=>'Allgemeines',
 'No posts'=>'Keine Beiträge',
 'No replies'=>'Keine Antwortbeiträge',
 'Normal'=>'Normal',
