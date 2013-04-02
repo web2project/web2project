@@ -3,6 +3,21 @@ if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
 
+function nl2p($str) {
+    return "<p>" .
+    str_replace(
+    "\r", "</p><p>",
+    str_replace(
+    "\n", "</p><p>",
+    str_replace(
+    "\r\n", "</p><p>",
+    str_replace(
+    "<q>", "</p><q><p>",
+    str_replace(
+    "</q>", "</p></q><p>",
+    $str))))) . "</p>";
+}
+
 $AppUI->savePlace();
 $sort = w2PgetParam($_REQUEST, 'sort', 'asc');
 $viewtype = w2PgetParam($_REQUEST, 'viewtype', 'normal');
@@ -171,7 +186,7 @@ foreach ($messages as $row) {
 		$s .= '<td valign="top" style="' . $style . '">';
 		$s .= '<font size="2"><strong>' . $row['message_title'] . '</strong><hr size=1>';
 		$row['message_body'] = $bbparser->qparse($row['message_body']);
-        $row['message_body'] = nl2br($row['message_body']);
+        $row['message_body'] = nl2p($row['message_body']);
 		$s .= $row['message_body'];
 		$s .= '</font></td>';
 

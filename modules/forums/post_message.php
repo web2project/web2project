@@ -3,6 +3,22 @@ if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
 
+function nl2p($str) {
+    return "<p>" .
+    str_replace(
+    "\r", "</p><p>",
+    str_replace(
+    "\n", "</p><p>",
+    str_replace(
+    "\r\n", "</p><p>",
+    str_replace(
+    "<q>", "</p><q><p>",
+    str_replace(
+    "</q>", "</p></q><p>",
+    $str))))) . "</p>";
+}
+
+
 // Add / Edit forum
 $message_parent = (int) w2PgetParam($_GET, 'message_parent', -1);
 $message_id = (int) w2PgetParam($_GET, 'message_id', 0);
@@ -47,12 +63,6 @@ $message->load($message_id);
 if ($message_parent != -1) {
     $last_message = new CForum_Message();
     $last_message->load($message_parent);
-    if (!$last_message->message_id) { // if it's first response, use original message
-        $last_message = clone $message;
-        $last_message->message_body = wordwrap($last_message->message_body, 50, "\n> ");
-    } else {
-        $last_message->message_body = mb_str_replace("\n", "\n> ", $last_message->message_body);
-    }
 }
 
 $crumbs = array();
@@ -138,11 +148,11 @@ if (function_exists('styleRenderBoxTop')) {
                 <td align="right"><?php echo $AppUI->_('Author') ?>:</td>
                 <td align="left"><?php echo CContact::getContactByUserid($messageAuthor); ?> (<?php echo $AppUI->formatTZAwareTime($message->message_date, $df . ' ' . $tf); ?>)</td>
             </tr>
-            <tr><td align="right"><?php echo $AppUI->_('Subject') ?>:</td><td align="left"><?php echo $message->message_title ?></td></tr>
+            <tr><td align="right"><?php echo $AppUI->_('Subject') ?>:</td><td align="left"><?php echo $last_message->message_title ?></td></tr>
             <tr><td align="right" valign="top"><?php echo $AppUI->_('Message') ?>:</td><td align="left">
             <?php
                 $messageBody = $bbparser->qparse($last_message->message_body);
-                $messageBody = nl2br($messageBody);
+                $messageBody = nl2p($messageBody);
                 echo $messageBody;
             ?></td></tr>
             <tr><td colspan="2" align="left"><hr /></td></tr>
@@ -153,13 +163,13 @@ if (function_exists('styleRenderBoxTop')) {
         <tr>
             <td align="right"><?php echo $AppUI->_('Subject'); ?>:</td>
             <td>
-                <input type="text" class="text" name="message_title" value="<?php echo ($message_id || $message_parent < 0 ? '' : 'Re: ') . $message->message_title; ?>" size="50" maxlength="250" />
+                <input type="text" class="text" name="message_title" value="<?php echo ($message_id || $message_parent < 0 ? $message->message_title : 'Re: '.$last_message->message_title); ?>" size="50" maxlength="250" />
             </td>
         </tr>
         <tr>
             <td align="right" valign="top"><?php echo $AppUI->_('Message'); ?>:</td>
             <td align="left" valign="top">
-               <textarea cols="60" name="message_body" style="height:200px"><?php echo (($message_id == 0) and ($message_parent != -1)) ? "\n>" . $last_message->message_body . "\n\n" : $message->message_body; ?></textarea>
+               <textarea cols="60" name="message_body" style="height:200px"><?php echo (($message_id == 0) and ($message_parent != -1)) ? "[quote]" . $last_message->message_body . "[/quote]\n " : $message->message_body; ?></textarea>
             </td>
         </tr>
         <tr>
