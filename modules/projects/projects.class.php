@@ -774,7 +774,7 @@ class CProject extends w2p_Core_BaseObject
         }
     }
 
-    public static function updateTaskCache($project_id, $task_id, $project_actual_end_date, $project_task_count)
+    public static function updateTaskCache($project_id, $task_id, $project_actual_end_date, $project_task_count, $diff_project_duration)
     {
 
         if ($project_id && $task_id) {
@@ -783,6 +783,7 @@ class CProject extends w2p_Core_BaseObject
             $q->addUpdate('project_last_task', $task_id);
             $q->addUpdate('project_actual_end_date', $project_actual_end_date);
             $q->addUpdate('project_task_count', $project_task_count);
+            $q->addUpdate('project_scheduled_hours', 'project_scheduled_hours + ' . $diff_project_duration, false, true);
             $q->addWhere('project_id   = ' . (int) $project_id);
             $q->exec();
             self::updatePercentComplete($project_id);

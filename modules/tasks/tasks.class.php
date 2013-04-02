@@ -42,6 +42,8 @@ class CTask extends w2p_Core_BaseObject
      */
     protected $importing_tasks = false; // Introduced this to address bug #1064. Used to keep var between store and postStore.
 
+    protected $_first_store = false;
+
     /**
      * @deprecated
      */
@@ -704,6 +706,7 @@ class CTask extends w2p_Core_BaseObject
      */
     public function store()
     {
+	$this->_first_store = true;
         $stored = false;
 
         $q = $this->_getQuery();
@@ -824,13 +827,19 @@ class CTask extends w2p_Core_BaseObject
             $q->clear();
         }
         $last_task_data = $this->getLastTaskData($this->task_project);
-        
+
+	// Calculate the time differential between the old task duration in hours and the new
+	$old_dur = $oTsk->task_duration * ($oTsk->task_duration_type == 1 ? 1 : w2PgetConfig('daily_working_hours'));
+	$new_dur = $this->task_duration * ($this->task_duration_type == 1 ? 1 : w2PgetConfig('daily_working_hours'));
+
         CProject::updateTaskCache(
             $this->task_project,
             $last_task_data['task_id'], 
             $last_task_data['last_date'],
-            $this->getTaskCount($this->task_project)
+            $this->getTaskCount($this->task_project),
+	    $this->_first_store && $this->task_dynamic != 1 ? $new_dur - $old_dur : 0
         );
+	$this->_first_store = false;
 
         // update dependencies
         if (!empty($this->task_id)) {
@@ -1023,8 +1032,11 @@ class CTask extends w2p_Core_BaseObject
             }
 
             $last_task_data = $this->getLastTaskData($this->task_project);
-            CProject::updateTaskCache(
-                    $this->task_project, $last_task_data['task_id'], $last_task_data['last_date'], $this->getTaskCount($this->task_project));
+
+	    // Calculate the task duration in hours
+    	    $dur = $this->task_duration * ($this->task_duration_type == 1 ? 1 : w2PgetConfig('daily_working_hours'));
+
+            CProject::updateTaskCache($this->task_project, $last_task_data['task_id'], $last_task_data['last_date'], $this->getTaskCount($this->task_project), -$dur);
         }
 
         return $result;
