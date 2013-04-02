@@ -242,46 +242,54 @@ class CTask_Log extends w2p_Core_BaseObject
 	 */
 	protected function updateTaskSummary($notUsed = null, $task_id)
 	{
+		$q = $this->_getQuery();
+
+		// The user's edit permission of the task was previously checked,
+		// forcing an user to have edit permission on a task just for
+		// updating its completion state and end date.
+		// I see no sense in this, so now this method always updates that
+		// information, being the responsability of the form setup code to
+		// ensure that if a user shouldn't change this data, them no field
+		// should be presented and the (hidden) fields should be initialized
+		// to the latest values, to avoid changes. I am aware that concurrent
+		// adding of task logs to the same task may screw this up but its
+		// worth it.
+		$q->addQuery('task_log_percent_complete, task_log_task_end_date, task_log_date');
+	        $q->addTable('task_log');
+	        $q->addWhere('task_log_task = ' . (int)$task_id);
+	        $q->addOrder('task_log_date DESC, task_log_id DESC');
+	        $q->setLimit(1);
+	        $results = $q->loadHash();
+
+	        $task = new CTask();
+	        $task->overrideDatabase($this->_query);
+	        $task->load($task_id);
+
+                /*
+                 * We're using a database update here instead of store() because a
+	         *   bunch of other things happen when you call store().. like the
+	         *   processing of contacts, departments, etc.
+	         */
 	        $q = $this->_getQuery();
+	        $q->addTable('tasks');
+		if ($results) {
+		        $q->addUpdate('task_percent_complete', $results['task_log_percent_complete']);
+		        $q->addUpdate('task_end_date', $results['task_log_task_end_date']);
+			$end_date = $results['task_log_task_end_date'];
+		} else {
+		        $q->addUpdate('task_percent_complete', $task->task_original_percent_complete);
+		        $q->addUpdate('task_end_date', $task->task_original_end_date);
+			$end_date = $task->task_original_end_date;
+		}
+	        $q->addWhere('task_id = ' . (int)$task_id);
+	        $success = $q->exec();
 
-	        if($this->_perms->checkModuleItem('tasks', 'edit', $task_id)) {
-	            $q->addQuery('task_log_percent_complete, task_log_task_end_date, task_log_date');
-	            $q->addTable('task_log');
-	            $q->addWhere('task_log_task = ' . (int)$task_id);
-	            $q->addOrder('task_log_date DESC, task_log_id DESC');
-	            $q->setLimit(1);
-	            $results = $q->loadHash();
-
-	            $task = new CTask();
-	            $task->overrideDatabase($this->_query);
-	            $task->load($task_id);
-
-	            /*
-	             * We're using a database update here instead of store() because a
-	             *   bunch of other things happen when you call store().. like the
-	             *   processing of contacts, departments, etc.
-	             */
-	            $q = $this->_getQuery();
-	            $q->addTable('tasks');
-		    if ($results) {
-		            $q->addUpdate('task_percent_complete', $results['task_log_percent_complete']);
-		            $q->addUpdate('task_end_date', $results['task_log_task_end_date']);
-			    $end_date = $results['task_log_task_end_date'];
-		    } else {
-		            $q->addUpdate('task_percent_complete', $task->task_original_percent_complete);
-		            $q->addUpdate('task_end_date', $task->task_original_end_date);
-			    $end_date = $task->task_original_end_date;
-		    }
-	            $q->addWhere('task_id = ' . (int)$task_id);
-	            $success = $q->exec();
-
-	            if (!$success) {
-	                $this->_AppUI->setMsg($task->getError(), UI_MSG_ERROR, true);
-	            }
-
-		    $task->updateDynamics();
-	            $task->pushDependencies($task_id, $end_date);
+	        if (!$success) {
+	            $this->_AppUI->setMsg($task->getError(), UI_MSG_ERROR, true);
 	        }
+
+		$task->updateDynamics();
+	        $task->pushDependencies($task_id, $end_date);
 
 		$q->addQuery('SUM(task_log_hours)');
 		$q->addTable('task_log');
@@ -340,9 +348,49 @@ class CTask_Log extends w2p_Core_BaseObject
 	        }
 	}
 
-	public function canCreate() {
-		//TODO: allow someone to add a log if they're assigned to the Task
-	        return $this->_perms->checkModuleItem($this->_tbl_module, 'view', $this->task_log_task);
+	public function canCreate($task_id) {
+		// Get the task's data to check who can add task logs to it.
+		// Only assigned users, the task's owner or an administrator are allowed,
+		// except if the task has the 'Allow users to add task logs for others'
+		// setting active. In that case anyone can add a task log.
+
+		// As an exception if the $task_id param is undefined then assume
+		// the user is allowed to create the task log.
+		if (!isset($task_id)) {
+			return true;
+		}
+
+	        $task = new CTask();
+	        $task->overrideDatabase($this->_query);
+	        $task->load($task_id);
+
+		// Is the '..task logs for others' setting on ?
+		if ($task->task_allow_other_user_tasklogs) {
+			return true;
+		}
+
+		// Is this user the task owner or an administrator ?
+		if (($this->_AppUI->user_id == $task->task_owner) || canView('admin')) {
+			return true;
+		}
+
+		// Is this user the project owner ?
+		$project = new CProject();
+		$project->overrideDatabase($this->_query);
+		$project->load($task->task_project);
+		if ($this->_AppUI->user_id == $project->project_owner) {
+			return true;
+		}
+
+		// Check if the user is an assignee
+		$assigned = $task->getAssignedUsers($task_id);
+		foreach ($assigned as $uid => $assignee) {
+			if ($uid == $this->_AppUI->user_id) {
+				return true;
+			}
+		}
+
+		return false;
 	}
 
 	/*

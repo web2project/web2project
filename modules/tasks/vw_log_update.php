@@ -5,41 +5,37 @@ if (!defined('W2P_BASE_DIR')) {
 
 global $AppUI, $obj, $percent, $can_edit_time_information, $cal_sdf;
 
+$AppUI->loadCalendarJS();
+
 $task        = $obj;
 $task_id     = $task->task_id;
 $task_log_id = (int) w2PgetParam($_GET, 'task_log_id', 0);
 
 $log = new CTask_Log();
 $log->task_log_id = $task_log_id;
+if ($task_log_id) {
+	$log->load($task_log_id);
+} else {
+	$log->task_log_task = $obj->task_id;
+	$log->task_log_name = $obj->task_name;
+}
 
-$canAuthor = $log->canCreate();
-if (!$canAuthor && !$task_id) {
+// check permissions
+$perms = &$AppUI->acl();
+$canViewTask = $perms->checkModuleItem('tasks', 'view', $obj->task_id);
+
+if (!$canViewTask) {
+	$AppUI->redirect(ACCESS_DENIED);
+}
+
+$canAuthor = $log->canCreate($task_id);
+if (!$canAuthor && !$task_log_id) {
 	$AppUI->redirect(ACCESS_DENIED);
 }
 
 $canEdit = $log->canEdit();
-if (!$canEdit && $task_id) {
+if (!$canEdit && $task_log_id) {
 	$AppUI->redirect(ACCESS_DENIED);
-}
-
-$AppUI->loadCalendarJS();
-
-// check permissions
-$perms = &$AppUI->acl();
-$canEditTask = $perms->checkModuleItem('tasks', 'edit', $obj->task_id);
-$canViewTask = $perms->checkModuleItem('tasks', 'view', $obj->task_id);
-
-if ($task_log_id) {
-	if (!$canEdit || !$canViewTask) {
-		$AppUI->redirect(ACCESS_DENIED);
-	}
-	$log->load($task_log_id);
-} else {
-	if (!$canAuthor || !$canViewTask) {
-		$AppUI->redirect(ACCESS_DENIED);
-	}
-	$log->task_log_task = $obj->task_id;
-	$log->task_log_name = $obj->task_name;
 }
 
 $project = new CProject();
@@ -133,7 +129,7 @@ $log_date = new w2p_Utilities_Date($log->task_log_date);
                 <table width='100%'>
                     <tr>
                         <td align="right">
-                            <?php echo $AppUI->_('Date'); ?>
+                            <?php echo $AppUI->_('Date'); ?>:
                         </td>
                         <td nowrap="nowrap">
                             <input type="hidden" name="task_log_date" id="task_log_date" value="<?php echo $log_date ? $log_date->format(FMT_TIMESTAMP_DATE) : ''; ?>" />
@@ -144,13 +140,13 @@ $log_date = new w2p_Utilities_Date($log->task_log_date);
                         </td>
                     </tr>
                     <tr>
-                        <td align="right"><?php echo ($canEditTask ? $AppUI->_('Progress') : ''); ?></td>
+                        <td align="right"><?php echo $AppUI->_('Progress'); ?>:</td>
                         <td>
                             <table>
                                 <tr>
                                     <td>
                                         <?php
-                                        echo ($canEditTask ? arraySelect($percent, 'task_percent_complete', 'size="1" class="text"', $obj->task_percent_complete) . '%' : '<input type="hidden" name="task_percent_complete" value="0" />');
+                                        echo arraySelect($percent, 'task_percent_complete', 'size="1" class="text"', $obj->task_percent_complete) . '%';
                                         ?>
                                     </td>
                                     <td valign="middle" >
@@ -198,7 +194,7 @@ $log_date = new w2p_Utilities_Date($log->task_log_date);
                     </tr>
                     <tr>
                         <td align="right">
-                            <?php echo $AppUI->_('Hours Worked'); ?>
+                            <?php echo $AppUI->_('Hours Worked'); ?>:
                         </td>
                         <td nowrap="nowrap">
                             <input type="text" style="text-align:right;" class="text" name="task_log_hours" value="<?php echo $log->task_log_hours; ?>" maxlength="8" size="4" />
@@ -210,7 +206,7 @@ $log_date = new w2p_Utilities_Date($log->task_log_date);
 		    <?php if (count($companyBC) || count($neutralBC)) { ?>
                     <tr>
                         <td align="right">
-                            <?php echo $AppUI->_('Billing Code'); ?>
+                            <?php echo $AppUI->_('Billing Code'); ?>:
                         </td>
                         <td>
                             <select name="task_log_costcodes" id="task_log_costcodes" size="1" class="text" onchange="javascript:task_log_costcode.value = this.options[this.selectedIndex].value;">
@@ -242,11 +238,11 @@ $log_date = new w2p_Utilities_Date($log->task_log_date);
                     <?php $end_date = (int)$obj->task_end_date ? new w2p_Utilities_Date($obj->task_end_date) : null; ?>
                     <input type="hidden" name="task_end_date" id="task_end_date" value="<?php echo $end_date ? $end_date->format(FMT_TIMESTAMP_DATE) : ''; ?>" />
                     <?php
-                    if ($obj->canUserEditTimeInformation($project->project_owner, $AppUI->user_id) && $canEditTask) {
+                    if ($obj->canUserEditTimeInformation($project->project_owner, $AppUI->user_id)) {
                         ?>
                         <tr>
                             <td align='right'>
-                                <?php echo $AppUI->_('Task end date'); ?>
+                                <?php echo $AppUI->_('Task end date'); ?>:
                             </td>
                             <td>
                                 <input type="text" name="end_date" id="end_date" onchange="setDate_new('editFrm', 'end_date', 'task');" value="<?php echo $end_date ? $end_date->format($df) : ''; ?>" class="text" />

@@ -179,7 +179,7 @@ function delIt() {
                     <?php echo $htmlHelper->createCell('task_type', $AppUI->_($task_types[$obj->task_type])); ?>
                 </tr>
 				<tr>
-                    <td align="center" nowrap="nowrap"><?php echo $AppUI->_('Finances'); ?>:</td>
+                    <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Finances'); ?>:</td>
                     <td align="center" nowrap="nowrap">
                         <table cellspacing="1" cellpadding="2" border="0" width="100%">
                             <tr>
@@ -201,7 +201,7 @@ function delIt() {
                                             ?>
                                             <tr>
                                                 <td align="right" nowrap="nowrap">
-                                                    <?php echo $AppUI->_($category); ?>
+                                                    <?php echo $AppUI->_($category); ?>:
                                                 </td>
                                                 <td nowrap="nowrap" style="text-align: right; padding-left: 40px;">
                                                     <?php echo $w2Pconfig['currency_symbol'] ?>&nbsp;
@@ -217,7 +217,7 @@ function delIt() {
                                         </tr>
                                         <tr>
                                             <td align="right" nowrap="nowrap">
-                                                <?php echo $AppUI->_('Total Budget'); ?>
+                                                <?php echo $AppUI->_('Total Budget'); ?>:
                                             </td>
                                             <td nowrap="nowrap" style="text-align: right; padding-left: 40px;">
                                                 <?php echo $w2Pconfig['currency_symbol'] ?>&nbsp;
@@ -235,7 +235,7 @@ function delIt() {
                                             ?>
                                             <tr>
                                                 <td align="right" nowrap="nowrap">
-                                                    <?php echo $AppUI->_($category); ?>
+                                                    <?php echo $AppUI->_($category); ?>:
                                                 </td>
                                                 <td nowrap="nowrap" style="text-align: right; padding-left: 40px;">
                                                     <?php echo $w2Pconfig['currency_symbol'] ?>&nbsp;
@@ -253,7 +253,7 @@ function delIt() {
                                         ?>
                                         <tr>
                                             <td align="right" nowrap="nowrap">
-                                                <?php echo $AppUI->_('Unidentified Costs'); ?>
+                                                <?php echo $AppUI->_('Unidentified Costs'); ?>:
                                             </td>
                                             <td nowrap="nowrap" style="text-align: right; padding-left: 40px;">
                                                 <?php echo $w2Pconfig['currency_symbol'] ?>&nbsp;
@@ -268,7 +268,7 @@ function delIt() {
                                         </tr>
                                         <tr>
                                             <td align="right" nowrap="nowrap">
-                                                <?php echo $AppUI->_('Total Cost'); ?>
+                                                <?php echo $AppUI->_('Total Cost'); ?>:
                                             </td>
                                             <td nowrap="nowrap" style="text-align: left; padding-left: 40px;">
                                                 <?php echo $w2Pconfig['currency_symbol'] ?>&nbsp;
@@ -422,6 +422,12 @@ $query_string = '?m=tasks&a=view&task_id=' . $task_id;
 $tabBox = new CTabBox('?m=tasks&a=view&task_id=' . $task_id, '', $tab);
 $tabBox_show = 0;
 
+$log = new CTask_Log();
+$log->task_log_id = $task_log_id;
+if ($task_log_id) {
+    $log->load($task_log_id);
+}
+
 // A template project has no use for logs and task logs
 if ($obj->task_dynamic != 1 && 0 == $obj->task_represents_project) {
 	$tabBox_show = 1;
@@ -431,12 +437,12 @@ if ($obj->task_dynamic != 1 && 0 == $obj->task_represents_project) {
 			$tabBox->add(W2P_BASE_DIR . '/modules/tasks/vw_logs', 'Task Logs');
 		}
 		if ($task_log_id == 0) {
-			if (canAdd('task_log')) {
+			if ($log->canCreate($task_id)) {
 				$tabBox->add(W2P_BASE_DIR . '/modules/tasks/vw_log_update', 'Log');
 			}
-		} elseif (canEdit('task_log')) {
+		} elseif ($log->canEdit()) {
 			$tabBox->add(W2P_BASE_DIR . '/modules/tasks/vw_log_update', 'Edit Log');
-		} elseif (canAdd('task_log')) {
+		} elseif ($log->canCreate($task_id)) {
 			$tabBox_show = 1;
 			$tabBox->add(W2P_BASE_DIR . '/modules/tasks/vw_log_update', 'Log');
 		}
