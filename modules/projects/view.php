@@ -29,6 +29,8 @@ if (!$project) {
 	$AppUI->savePlace();
 }
 
+$canViewFinancial = $canEdit || canView('admin');
+
 $tab = $AppUI->processIntState('ProjVwTab', $_GET, 'tab', 0);
 
 //TODO: is this different from the above checks for some reason?
@@ -246,6 +248,7 @@ function delIt() {
                     <?php echo $htmlHelper->createCell('project_worked_hours', $project->project_worked_hours); ?>
                 </tr>
                 <tr>
+		<?php if ($canViewFinancial) { ?>
                     <td align="center" nowrap="nowrap"><?php echo $AppUI->_('Finances'); ?>:</td>
                     <td align="center" nowrap="nowrap">
                         <table cellspacing="1" cellpadding="2" border="0" width="100%">
@@ -363,6 +366,7 @@ function delIt() {
                             <?php } ?>
                         </table>
                     </td>
+		<?php } ?>
                 </tr>
                 <?php
                 $depts = $project->getDepartmentList();

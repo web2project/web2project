@@ -38,6 +38,7 @@ if ($reminded) {
 
 //check permissions for the associated project
 $canReadProject = canView('projects', $obj->task_project);
+$canViewFinancial = canEdit('projects', $obj->task_project) || ($AppUI->user_id == $obj->task_owner) || canView('admin');
 
 $users = $obj->getAssignedUsers($task_id);
 
@@ -178,7 +179,8 @@ function delIt() {
                     <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Task Type'); ?> :</td>
                     <?php echo $htmlHelper->createCell('task_type', $AppUI->_($task_types[$obj->task_type])); ?>
                 </tr>
-				<tr>
+		<tr>
+		    <?php if ($canViewFinancial) { ?>
                     <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Finances'); ?>:</td>
                     <td align="center" nowrap="nowrap">
                         <table cellspacing="1" cellpadding="2" border="0" width="100%">
@@ -293,6 +295,7 @@ function delIt() {
                             <?php } ?>
                         </table>
                     </td>
+		    <?php } ?>
                 </tr>
             </table>
         </td>
