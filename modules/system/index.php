@@ -81,7 +81,7 @@ $titleBlock->show();
         </div>
     </div>
 
-    <div class="clear"/>
+    <div class="clear"></div>
 
     <div class="left main">
         <div class="left icon">
@@ -102,7 +102,7 @@ $titleBlock->show();
         </div>
     </div>
 
-    <div class="clear"/>
+    <div class="clear"></div>
 
     <div class="left main">
         <div class="left icon">
