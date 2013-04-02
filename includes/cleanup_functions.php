@@ -1893,15 +1893,16 @@ function getFolders($parent, $checkbox = false) {
             }
             if ($file_count > 0) {
                 $s .= '<li class="info-text"><a href="javascript: void(0);" onClick="expand(\'files_' . $row['file_folder_id'] . '\')" class="has-files">(' . $file_count . ' files) +</a></li>';
-            }
-            $s .= '<form name="frm_remove_folder_' . $row['file_folder_id'] . '" action="?m=files" method="post" accept-charset="utf-8">
+            } else {
+	            $s .= '<form name="frm_remove_folder_' . $row['file_folder_id'] . '" action="?m=files" method="post" accept-charset="utf-8">
                     <input type="hidden" name="dosql" value="do_folder_aed" />
                     <input type="hidden" name="del" value="1" />
                     <input type="hidden" name="file_folder_id" value="' . $row['file_folder_id'] . '" />
                     </form>';
 
-            $s .= '</ul>';
-            $s .= '<a class="small-delete" href="javascript: void(0);" onclick="if (confirm(\'Are you sure you want to delete this folder?\')) {document.frm_remove_folder_' . $row['file_folder_id'] . '.submit()}">' . w2PshowImage('remove.png', '', '', 'delete icon', 'delete this folder', 'files') . '</a>';
+     		       $s .= '</ul>';
+			  $s .= '<a class="small-delete" href="javascript: void(0);" onclick="if (confirm(\'Are you sure you want to delete this folder?\')) {document.frm_remove_folder_' . $row['file_folder_id'] . '.submit()}">' . w2PshowImage('remove.png', '', '', 'delete icon', 'delete this folder', 'files') . '</a>';
+		 }
             $s .= '</td></tr>';
             if ($file_count > 0) {
                 $s .= '<div class="files-list" id="files_' . $row['file_folder_id'] . '" style="display: none;">';
