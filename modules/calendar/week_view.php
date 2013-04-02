@@ -80,7 +80,7 @@ $titleBlock->show();
 		<a href="<?php echo '?m=calendar&a=week_view&date=' . $prev_week->format(FMT_TIMESTAMP_DATE); ?>"><img src="<?php echo w2PfindImage('prev.gif'); ?>" width="16" height="16" alt="pre" border="0"></a>
 	</td>
 	<th width="100%">
-		<?php echo $AppUI->_('Week') . ' ' . $first_time->format('%U - %Y') . ' - ' . $AppUI->_($first_time->format('%B')); ?>
+		<?php echo $AppUI->_('Week') . ' ' . $first_time->format('%U - %Y') . ' - ' . $first_time->format('%B'); ?>
 	</th>
 	<td>
 		<a href="<?php echo '?m=calendar&a=week_view&date=' . $next_week->format(FMT_TIMESTAMP_DATE); ?>"><img src="<?php echo w2PfindImage('next.gif'); ?>" width="16" height="16" alt="next" border="0"></a>
@@ -99,7 +99,7 @@ $s = '';
 $s .= '<tr>';
 for ($i = 0; $i < 7; $i++) {
 
-    $class = (in_array($i, $workingDays)) ? 'workingDay' : 'otherDay';
+    $class = (in_array(($i + LOCALE_FIRST_DAY)%7, $workingDays)) ? 'workingDay' : 'otherDay';
     $s .= '<td class="'.$class.'">';
 
 	$dayStamp = $show_day->format(FMT_TIMESTAMP_DATE);
@@ -110,7 +110,7 @@ for ($i = 0; $i < 7; $i++) {
 
 	$s .= $dayStamp == $today ? '<span style="color:red">' : '';
 	$day_string = "<strong>" . $show_day->format('%d') . '</strong>';
-	$day_name = $AppUI->_($show_day->format('%A'));
+	$day_name = $show_day->format('%A');
 	$s .= $day_string . ' ' . $day_name;
 	$s .= $dayStamp == $today ? '</span>' : '';
 	$s .= '</a></td></tr>';
