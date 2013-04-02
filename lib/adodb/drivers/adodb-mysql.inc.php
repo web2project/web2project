@@ -371,7 +371,7 @@ class ADODB_mysql extends ADOConnection {
 	
 		if ($this->_connectionID === false) return false;
 		if ($argDatabasename) return $this->SelectDB($argDatabasename);
-		return true;	
+		return true;
 	}
 	
 	// returns true or false
@@ -504,6 +504,7 @@ class ADODB_mysql extends ADOConnection {
 	{
 	//global $ADODB_COUNTRECS;
 		//if($ADODB_COUNTRECS) 
+		mysql_query('SET NAMES UTF8;',$this->_connectionID);
 		return mysql_query($sql,$this->_connectionID);
 		//else return @mysql_unbuffered_query($sql,$this->_connectionID); // requires PHP >= 4.0.6
 	}
