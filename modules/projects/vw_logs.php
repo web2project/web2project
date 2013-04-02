@@ -51,7 +51,6 @@ function delIt2(id) {
 <table border="0" cellpadding="2" cellspacing="1" width="100%" class="std">
 <form name="frmFilter" action="./index.php" method="get" accept-charset="utf-8">
 <tr>
-	<td width="98%">&nbsp;</td>
 	<td width="1%" nowrap="nowrap"><input type="checkbox" name="hide_inactive" id="hide_inactive" <?php echo $hide_inactive ? 'checked="checked"' : '' ?> onchange="document.frmFilter.submit()" /></td><td width="1%" nowrap="nowrap"><label for="hide_inactive"><?php echo $AppUI->_('Hide Inactive') ?></label></td>
 	<td width="1%" nowrap="nowrap"><input type="checkbox" name="hide_complete" id="hide_complete" <?php echo $hide_complete ? 'checked="checked"' : '' ?> onchange="document.frmFilter.submit()" /></td><td width="1%" nowrap="nowrap"><label for="hide_complete"><?php echo $AppUI->_('Hide 100% Complete') ?></label></td>
 	<!--
@@ -59,6 +58,7 @@ TODO: disabled this filter for now... something is wrong with the userId portion
 	<td width="1%" nowrap="nowrap"><?php echo $AppUI->_('User Filter') ?></td>
 	<td width="1%"><?php echo arraySelect($users, 'user_id', 'size="1" class="text" id="medium" onchange="document.frmFilter.submit()"', $user_id) ?></td>
 	-->
+	<td width="100%">&nbsp;&nbsp;&nbsp;&nbsp;</td>
 	<td width="1%" nowrap="nowrap"><?php echo $AppUI->_('Cost Code Filter') ?></td>
     <!-- TODO: add in optgroups to display company groupings for cost codes -->
 	<td width="1%"><?php echo arraySelect($task_log_costcodes, 'cost_code', 'size="1" class="text" onchange="document.frmFilter.submit()"', $cost_code) ?></td>
