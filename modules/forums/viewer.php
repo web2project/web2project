@@ -51,7 +51,7 @@ $titleBlock->show();
     </tr>
     <tr>
         <td align="left" nowrap="nowrap"><?php echo $AppUI->_('Related Project'); ?>:</td>
-        <td nowrap="nowrap"><strong><?php echo ($forum->project_name) ? $forum->project_name : 'No associated project'; ?></strong></td>
+        <td nowrap="nowrap"><strong><?php echo ($forum->project_name) ? $forum->project_name : $AppUI->_('No associated project'); ?></strong></td>
         <td valign="top" width="50%" rowspan="99">
             <strong><?php echo $AppUI->_('Description'); ?>:</strong><br />
             <?php echo $forum->forum_description; ?>
