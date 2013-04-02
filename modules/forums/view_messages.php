@@ -204,7 +204,7 @@ foreach ($messages as $row) {
                 $tableOpened = false;
                 $tableClosed = false;
 		//the following users are allowed to edit/delete a forum message: 1. the forum creator  2. a superuser with read-write access to 'all' 3. the message author
-		if ($canEdit || $AppUI->user_id == $row['forum_moderated'] || $AppUI->user_id == $row['message_author'] || $canAdminEdit) {
+		if ($AppUI->user_id == $row['forum_moderated'] || $AppUI->user_id == $row['message_author'] || $canAdminEdit) {
                     $tableOpened = true;
                     $s .= '<table cellspacing="0" cellpadding="0" border="0"><tr>';
                     // edit message
@@ -212,7 +212,7 @@ foreach ($messages as $row) {
                     $s .= w2PshowImage('icons/stock_edit-16.png', '16', '16');
                     $s .= '</td>';
 		}
-		if ($canDelete || $AppUI->user_id == $row['forum_moderated'] || $AppUI->user_id == $row['message_author'] || $canAdminEdit) {
+		if ($AppUI->user_id == $row['forum_moderated'] || $AppUI->user_id == $row['message_author'] || $canAdminEdit) {
                     $tableClosed = true;
                     if(!$tableOpened) {
                         $s .= '<table cellspacing="0" cellpadding="0" border="0"><tr>';
