@@ -1954,7 +1954,7 @@ function countFiles($folder) {
 // From: modules/files/filefolder.class.php
 function displayFiles($AppUI, $folder_id, $task_id, $project_id, $company_id, $checkbox = false) {
 	global $m, $tab, $xpg_min, $xpg_pagesize, $showProject, $file_types,
-            $company_id, $current_uri, $w2Pconfig, $canEdit;
+            $company_id, $current_uri, $w2Pconfig;
     // SETUP FOR FILE LIST
 	$q = new w2p_Database_Query();
 	$q->addQuery('f.*, max(f.file_id) as latest_id, count(f.file_version) as file_versions,
@@ -2069,19 +2069,26 @@ function displayFiles($AppUI, $folder_id, $task_id, $project_id, $company_id, $c
     }
     if ($checkbox) {
 	    $s .= '<th>Selection</th>';
+    } else {
+	    $s .= '<th></th>';
     }
     $s .= '<th></th>';
     $s .= '</tr>';
 
 	$fp = -1;
-    $htmlHelper = new w2p_Output_HTMLHelper($AppUI);
-    $htmlHelper->df .= ' ' . $AppUI->getPref('TIMEFORMAT');
+	$htmlHelper = new w2p_Output_HTMLHelper($AppUI);
+	$htmlHelper->df .= ' ' . $AppUI->getPref('TIMEFORMAT');
 
-    $file_types = w2PgetSysVal('FileType');
-    $customLookups = array('file_category' => $file_types);
+	$file_types = w2PgetSysVal('FileType');
+	$customLookups = array('file_category' => $file_types);
+
+	$perms = &$AppUI->acl();
 
 	foreach ($files as $row) {
-        $latest_file = $file_versions[$row['latest_id']];
+	     $latest_file = $file_versions[$row['latest_id']];
+
+		$caneditfile = $perms->checkModuleItem('files', 'edit', $latest_file['file_id']) || $latest_file['file_owner'] == $AppUI->user_id;
+		$candeletefile = $perms->checkModuleItem('files', 'delete', $latest_file['file_id']) || $latest_file['file_owner'] == $AppUI->user_id;
 
 		if ($fp != $latest_file['file_project']) {
 			if (!$latest_file['file_project']) {
@@ -2109,23 +2116,23 @@ function displayFiles($AppUI, $folder_id, $task_id, $project_id, $company_id, $c
 
         $s .= '<tr>';
  		$s .= '<td nowrap="nowrap" width="20">';
-		if ($canEdit && (empty($latest_file['file_checkout']) || ($latest_file['file_checkout'] == 'final' && ($canEdit || $latest_file['project_owner'] == $AppUI->user_id)))) {
+		if ($caneditfile && (empty($latest_file['file_checkout']) || ($latest_file['file_checkout'] == 'final' && ($caneditfile || $latest_file['project_owner'] == $AppUI->user_id)))) {
 			$s .= '<a href="./index.php?m=files&a=addedit&file_id=' . $latest_file['file_id'] . '">' . w2PshowImage('kedit.png', '16', '16', 'edit file', 'edit file', 'files') . '</a>';
         }
         $s .= '</td>';
 		$s .= '<td nowrap="nowrap">';
-		if ($canEdit && empty($latest_file['file_checkout'])) {
+		if ($caneditfile && empty($latest_file['file_checkout'])) {
             $s .= '<a href="?m=files&a=co&file_id=' . $latest_file['file_id'] . '">' . w2PshowImage('up.png', '16', '16', 'checkout', 'checkout file', 'files') . '</a>';
 		} else {
-            if ($latest_file['file_checkout'] == $AppUI->user_id) {
-                $s .= '<a href="?m=files&a=addedit&ci=1&file_id=' . $latest_file['file_id'] . '">' . w2PshowImage('down.png', '16', '16', 'checkin', 'checkin file', 'files') . '</a>';
-            } else {
-                if ($latest_file['file_checkout'] == 'final') {
-                    $s .= 'final';
-                } else {
-                    $s .= $latest_file['co_contact_name'] . '<br>(' . $latest_file['co_user'] . ')';
-                }
-            }
+			if ($latest_file['file_checkout'] == $AppUI->user_id) {
+           	     $s .= '<a href="?m=files&a=addedit&ci=1&file_id=' . $latest_file['file_id'] . '">' . w2PshowImage('down.png', '16', '16', 'checkin', 'checkin file', 'files') . '</a>';
+	           } else {
+     		           if ($latest_file['file_checkout'] == 'final') {
+     	     		          $s .= 'final';
+     				} else {
+	                    $s .= $latest_file['co_contact_name'];
+     	           }
+           }
         }
 
         $version_link = '';
@@ -2152,7 +2159,7 @@ function displayFiles($AppUI, $folder_id, $task_id, $project_id, $company_id, $c
                         $hidden_table .= $sub_htmlHelper->createCell($fieldList[$index], $file[$fieldList[$index]], $customLookups);
                     }
 
-                    if ($canEdit && $w2Pconfig['files_show_versions_edit']) {
+                    if ($caneditfile && $w2Pconfig['files_show_versions_edit']) {
                         $hidden_table .= '<a href="./index.php?m=files&a=addedit&file_id=' . $file['file_id'] . '">' . w2PshowImage('kedit.png', '16', '16', 'edit file', 'edit file', 'files') . "</a>";
                     }
                     $hidden_table .= '</td><tr>';
@@ -2169,18 +2176,22 @@ function displayFiles($AppUI, $folder_id, $task_id, $project_id, $company_id, $c
             }
             $s .= $cell;
         }
-	   if ($checkbox) {
+	   if ($checkbox && $caneditfile) {
 		  $s .= '<td align="center"><input type="checkbox" name="file_sel" value="' . $latest_file['file_id'] . '"></td>';	   
+	   } else {
+		  $s .= '<td></td>';
 	   }
 
         $s .= '<td>';
-        $s .= '<form name="frm_remove_file_' . $latest_file['file_id'] . '" action="?m=files" method="post" accept-charset="utf-8">
-            <input type="hidden" name="dosql" value="do_file_aed" />
-            <input type="hidden" name="del" value="1" />
-            <input type="hidden" name="file_id" value="' . $latest_file['file_id'] . '" />
-            <input type="hidden" name="redirect" value="' . $current_uri . '" />
-            </form>';
-        $s .= '<a href="javascript: void(0);" onclick="if (confirm(\'' . $AppUI->_('Are you sure you want to delete this file?') . '\')) {document.frm_remove_file_' . $latest_file['file_id'] . '.submit()}">' . w2PshowImage('remove.png', '16', '16', 'delete file', 'delete file', 'files') . '</a>';
+	   if ($candeletefile) {
+	        $s .= '<form name="frm_remove_file_' . $latest_file['file_id'] . '" action="?m=files" method="post" accept-charset="utf-8">
+	            <input type="hidden" name="dosql" value="do_file_aed" />
+	            <input type="hidden" name="del" value="1" />
+	            <input type="hidden" name="file_id" value="' . $latest_file['file_id'] . '" />
+	            <input type="hidden" name="redirect" value="' . $current_uri . '" />
+	            </form>';
+	        $s .= '<a href="javascript: void(0);" onclick="if (confirm(\'' . $AppUI->_('Are you sure you want to delete this file?') . '\')) {document.frm_remove_file_' . $latest_file['file_id'] . '.submit()}">' . w2PshowImage('remove.png', '16', '16', 'delete file', 'delete file', 'files') . '</a>';
+	   }
         $s .= '</td>';
         $s .= '</tr>';
 		$s .= $hidden_table;
