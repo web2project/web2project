@@ -88,7 +88,7 @@ function showCalendar(id, format, form_name, showsTime, showsOtherMonths, newSel
   return false;
 }
 
-var MONTH_NAMES=new Array('January','February','March','April','May','June','July','August','September','October','November','December','Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec');
+var MONTH_NAMES=new Array('Januar','Februar','März','April','Mai','Juni','Juli','August','September','Oktober','November','Dezember','Jan','Feb','Mär','Apr','Mai','Jun','Jul','Aug','Sep','Okt','Nov','Dez');
 var DAY_NAMES=new Array('Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sun','Mon','Tue','Wed','Thu','Fri','Sat');
 function LZ(x) {
 	return(x<0||x>9?"":"0")+x
