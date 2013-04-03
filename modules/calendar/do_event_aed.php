@@ -26,19 +26,28 @@ $clashRedirect = false;
 if ($del) {
     $result = $obj->delete();
 } else {
-    if ($_POST['event_assigned'] > '' && ($clash = $obj->checkClash($_POST['event_assigned']))) {
-		$last_a = $a;
-		$GLOBALS['a'] = "clash";
-        $clashRedirect = true;
-	} else {
-        $result = $obj->store();
-        if (isset($_POST['event_assigned'])) {
-            $obj->updateAssigned(explode(',', $_POST['event_assigned']));
-        }
-        if (isset($_POST['mail_invited'])) {
+	foreach (findTabModules('calendar', 'addedit') as $mod) {
+		$fname = (DP_BASE_DIR . '/modules/' . $mod . '/calendar_dosql.addedit.php');
+		dprint(__FILE__, __LINE__, 3, ('checking for ' . $fname));
+		if (file_exists($fname)) {
+			require_once $fname;
+		}
+	}
+	if (!$clashRedirect){
+		if ($_POST['event_assigned'] > '' && ($clash = $obj->checkClash($_POST['event_assigned']))) {
+			$last_a = $a;
+			$GLOBALS['a'] = "clash";
+			$clashRedirect = true;
+		} else {
+			$result = $obj->store();
+			if (isset($_POST['event_assigned'])) {
+				$obj->updateAssigned(explode(',', $_POST['event_assigned']));
+			}
+			if (isset($_POST['mail_invited'])) {
             $obj->notify($_POST['event_assigned'], false);
-        }
-    }
+			}
+		}
+	}
 }
 
 //TODO: I hate this clash param.. there should be a better way.
@@ -52,6 +61,11 @@ if (!$clashRedirect) {
     if ($result) {
         $AppUI->setMsg('Event '.$action, UI_MSG_OK, true);
         $redirect = 'm=calendar';
+		if (isset($post_save)) {
+			foreach ($post_save as $post_save_function) {
+				$post_save_function();
+			}
+		}
     } else {
         $redirect = ACCESS_DENIED;
     }
