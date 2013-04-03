@@ -77,7 +77,9 @@ if ($canRead) {
     $titleBlock->addCrumb('?m=admin', 'users list');
 }
 if ($canEdit || $user_id == $AppUI->user_id) {
-    $titleBlock->addCell('<input type="button" class=button value="' . $AppUI->_('add user') . '" onclick="javascript:window.location=\'./index.php?m=admin&a=addedituser\';" />');
+    if ($canAdd) {
+	$titleBlock->addCell('<input type="button" class=button value="' . $AppUI->_('add user') . '" onclick="javascript:window.location=\'./index.php?m=admin&a=addedituser\';" />');
+    }
     $titleBlock->addCrumb('?m=admin&a=addedituser&user_id='.$user_id, 'edit this user');
     $titleBlock->addCrumb('?m=contacts&a=addedit&contact_id='.$user->contact_id, 'edit this contact');
     $titleBlock->addCrumb('?m=system&a=addeditpref&user_id='.$user_id, 'edit preferences');
