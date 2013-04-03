@@ -116,6 +116,7 @@ $titleBlock->show();
             <a href="?m=system&a=phpinfo&suppressHeaders=1" target="_blank"><?php echo $AppUI->_('PHP Info'); ?></a>
         </div>
     </div>
+    <?php if (w2PgetConfig('budget_info_display', false)) { ?>
     <div class="right main">
         <div class="left icon">
             <?php echo w2PshowImage('control-center.png', 42, 42, ''); ?>
@@ -126,4 +127,5 @@ $titleBlock->show();
             <a href="?m=system&a=budgeting"><?php echo $AppUI->_('Setup Budgets'); ?></a>
         </div>
     </div>
+    <?php } ?>
 </div>

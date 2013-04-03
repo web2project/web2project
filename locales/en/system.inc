@@ -195,6 +195,8 @@
 'bad email address',
 'bg'=>'Bulgarian',
 'budgeting_group_title'=>'Budgeting',
+'budget_info_display_title'=>'Display Budget Information',
+'budget_info_display_tooltip'=>'This will toggle the budget information display on the Tasks, Projects, and other modules',
 'cal_day_end_title'=>'Calendar End Hour',
 'cal_day_end_tooltip'=>'The last hour of the working day - integer value from 0 to 23',
 'cal_day_increment_title'=>'Calendar Minute Increment',
