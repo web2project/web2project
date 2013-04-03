@@ -245,6 +245,7 @@ function delIt() {
                     <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Worked Hours'); ?>:</td>
                     <?php echo $htmlHelper->createCell('project_worked_hours', $project->project_worked_hours); ?>
                 </tr>
+                <?php if (w2PgetConfig('budget_info_display', false)) { ?>
                 <tr>
                     <td align="center" nowrap="nowrap"><?php echo $AppUI->_('Finances'); ?>:</td>
                     <td align="center" nowrap="nowrap">
@@ -364,6 +365,7 @@ function delIt() {
                         </table>
                     </td>
                 </tr>
+                <?php } ?>
                 <?php
                 $depts = $project->getDepartmentList();
 

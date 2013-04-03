@@ -176,6 +176,7 @@ function delIt() {
                     <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Task Type'); ?> :</td>
                     <?php echo $htmlHelper->createCell('task_type', $AppUI->_($task_types[$obj->task_type])); ?>
                 </tr>
+                <?php if (w2PgetConfig('budget_info_display', false)) { ?>
 				<tr>
                     <td align="center" nowrap="nowrap"><?php echo $AppUI->_('Finances'); ?>:</td>
                     <td align="center" nowrap="nowrap">
@@ -292,6 +293,7 @@ function delIt() {
                         </table>
                     </td>
                 </tr>
+                <?php } ?>
             </table>
         </td>
 

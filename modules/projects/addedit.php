@@ -272,6 +272,7 @@ function setDepartment(department_id_string){
                                         </a>
                                     </td>
                                 </tr>
+                                <?php if (w2PgetConfig('budget_info_display', false)) { ?>
                                 <tr>
                                     <td colspan="2">
                                         <table class="budgets nowrap">
@@ -311,6 +312,7 @@ function setDepartment(department_id_string){
                                 <tr>
                                     <td colspan="3"><hr noshade="noshade" size="1" /></td>
                                 </tr>
+                                <?php } ?>
                                 <tr>
                                     <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Actual Finish Date'); ?></td>
                                     <td nowrap="nowrap">
@@ -325,6 +327,7 @@ function setDepartment(department_id_string){
                                     ?>
                                     </td>
                                 </tr>
+                                <?php if (w2PgetConfig('budget_info_display', false)) { ?>
                                 <tr>
                                     <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Actual Budget'); ?> <?php echo $w2Pconfig['currency_symbol'] ?></td>
                                     <td nowrap="nowrap">
@@ -340,6 +343,7 @@ function setDepartment(department_id_string){
                                 <tr>
                                     <td colspan="3"><hr noshade="noshade" size="1" /></td>
                                 </tr>
+                                <?php } ?>
                                 <tr>
                                     <td align="right" nowrap="nowrap"><?php echo $AppUI->_('URL'); ?></td>
                                     <td colspan="2">

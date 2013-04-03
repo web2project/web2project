@@ -58,6 +58,7 @@ $perms = &$AppUI->acl();
                     </tr>
                     <tr>
                         <td><?php echo $AppUI->_('Task Parent'); ?>:</td>
+                        <?php if (w2PgetConfig('budget_info_display', false)) { ?>
                         <td rowspan="4">
                             <table class="budgets nowrap">
                                 <tr>
@@ -87,6 +88,7 @@ $perms = &$AppUI->acl();
                                 </tr>
                             </table>
                         </td>
+                        <?php } ?>
                     </tr>
                 <tr>
                     <td>
