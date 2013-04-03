@@ -141,9 +141,11 @@ foreach($deptList as $dept) {
 }
 $department_selection_list = arrayMerge(array('0' => ''), $department_selection_list);
 
-//Dynamic tasks are by default now off because of dangerous behavior if incorrectly used
+// Dynamic tasks are by default now off because of dangerous behavior if incorrectly used
+// Changed the default from 0 to 31 as the ae_depend.php code activates the DT on new tasks (implying a value of 31)
+// Otherwise the task lists would not be visible on entry.
 if (is_null($task->task_dynamic)) {
-	$task->task_dynamic = 0;
+	$task->task_dynamic = 31;
 }
 
 $can_edit_time_information = $task->canUserEditTimeInformation($project->project_owner, $AppUI->user_id);
