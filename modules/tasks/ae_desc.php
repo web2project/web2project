@@ -42,7 +42,7 @@ $perms = &$AppUI->acl();
                             <?php echo $AppUI->_('Task Type'); ?><br />
                             <?php
                                 $task_types = w2PgetSysVal('TaskType');
-                                echo arraySelect($task_types, 'task_type', 'class="text"', $task->task_type, false);
+                                echo arraySelect($task_types, 'task_type', 'class="text"', $task->task_type, true);
                             ?>
                             <br /><br />
                             <?php
