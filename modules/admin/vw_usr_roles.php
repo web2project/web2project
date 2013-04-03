@@ -1,10 +1,11 @@
 <?php
-global $AppUI, $user_id, $user_name, $canEdit, $canDelete, $tab;
+global $AppUI, $user_id, $user_name, $canDelete, $tab;
 
 if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
 
+$canEdit = canEdit('users');
 $perms = &$AppUI->acl();
 $user_roles = $perms->getUserRoles($user_id);
 $crole = new CSystem_Role;

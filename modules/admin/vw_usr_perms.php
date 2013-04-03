@@ -218,7 +218,7 @@ foreach ($user_acls as $acl) {
 		// Allow or deny
 		$buf .= '<td>' . $AppUI->_($permission['allow'] ? 'allow' : 'deny') . '</td>';
 		$buf .= '<td nowrap="nowrap">';
-           $canDelete = (canEdit('users') && $_canEdit);
+           $canDelete = ($canEdit && $_canEdit);
 		if ($canDelete) {
 			$buf .= "<a href=\"javascript:delIt({$acl});\" title=\"" . $AppUI->_('delete') . "\">" . w2PshowImage('icons/stock_delete-16.png', 16, 16, '') . "</a>";
 		}
