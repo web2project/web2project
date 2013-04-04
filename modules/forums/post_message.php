@@ -49,12 +49,6 @@ if ($message_parent != -1) {
     $last_message->message_body = mb_str_replace("\n", "\n> ", $last_message->message_body);
 }
 
-$crumbs = array();
-$crumbs['?m=forums'] = 'forums list';
-$crumbs['?m=forums&a=viewer&forum_id=' . $forum_id] = 'topics for this forum';
-if ($message_parent > -1) {
-	$crumbs['?m=forums&a=viewer&forum_id=' . $forum_id . '&message_id=' . $message_parent] = 'this topic';
-}
 ?>
 <script language="javascript" type="text/javascript">
 <?php
@@ -113,8 +107,17 @@ if (function_exists('styleRenderBoxTop')) {
         <tr><td>
             <table cellspacing="1" cellpadding="2" border="0" width="100%">
             <tr>
-                <td align="left" nowrap="nowrap"><?php echo breadCrumbs($crumbs); ?></td>
-                <td width="100%" align="right"></td>
+                <td align="left" nowrap="nowrap">
+		    <?php
+                    $titleBlock = new w2p_Theme_TitleBlock('', '', $m, "$m.$a");
+                    $titleBlock->addCrumb('?m=forums', 'forums list');
+                    $titleBlock->addCrumb('?m=forums&a=viewer&forum_id=' . $forum_id, 'topics for this forum');
+		    if ($message_parent > -1) {
+	                $titleBlock->addCrumb('?m=forums&a=viewer&forum_id=' . $forum_id . '&message_id=' . $message_parent, 'this topic');
+		    }
+                    $titleBlock->show();
+		    ?>
+                </td>
             </tr>
             </table>
         </td></tr>

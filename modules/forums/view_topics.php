@@ -42,8 +42,6 @@ $q->addGroup('fm1.message_id, fm1.message_parent');
 $q->addOrder($orderby . ' ' . $orderdir);
 $topics = $q->loadList();
 
-$crumbs = array();
-$crumbs['?m=forums'] = 'forums list';
 $htmlHelper = new w2p_Output_HTMLHelper($AppUI);
 //$htmlHelper->df .= ' ' . $AppUI->getPref('TIMEFORMAT');
 
@@ -82,10 +80,11 @@ if (function_exists('styleRenderBoxTop')) {
             <table width="100%" cellspacing="1" cellpadding="2" border="0">
             <tr>
                 <td align="left" nowrap="nowrap">
-                    <?php
-                    // This is a hack to make sure we don't get the tooltips
-                    echo str_replace('span', 'div', breadCrumbs($crumbs));
-                    ?>
+		    <?php
+                    $titleBlock = new w2p_Theme_TitleBlock('', '', $m, "$m.$a");
+                    $titleBlock->addCrumb('?m=forums', 'forums list');
+                    $titleBlock->show();
+		    ?>
                 </td>
 		<td align="center" width="100%"><h1><?php echo $AppUI->_('Topics'); ?></h1></td>
                 <td width="25%" align="right">
