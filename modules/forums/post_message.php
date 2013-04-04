@@ -46,12 +46,7 @@ $message->load($message_id);
 if ($message_parent != -1) {
     $last_message = new CForum_Message();
     $last_message->load($message_parent);
-    if (!$last_message->message_id) { // if it's first response, use original message
-        $last_message = clone $message;
-        $last_message->message_body = wordwrap($last_message->message_body, 50, "\n> ");
-    } else {
-        $last_message->message_body = mb_str_replace("\n", "\n> ", $last_message->message_body);
-    }
+    $last_message->message_body = mb_str_replace("\n", "\n> ", $last_message->message_body);
 }
 
 $crumbs = array();
@@ -129,15 +124,15 @@ if (function_exists('styleRenderBoxTop')) {
         ?></strong></th>
         </tr>
         <?php
-        if ($message_parent >= 0) { //check if this is a reply-post; if so, printout the original message
-            $messageAuthor = isset($message->message_author) ? $message->message_author : $AppUI->user_id;
-            $date = intval($message->message_date) ? new w2p_Utilities_Date($message->message_date) : new w2p_Utilities_Date();
+        if ($message_parent != -1) { //check if this is a reply-post; if so, printout the original message
+            $messageAuthor = isset($last_message->message_author) ? $last_message->message_author : $AppUI->user_id;
+            $date = (int)($last_message->message_date) ? new w2p_Utilities_Date($last_message->message_date) : new w2p_Utilities_Date();
             ?>
             <tr>
                 <td align="right"><?php echo $AppUI->_('Author') ?>:</td>
-                <td align="left"><?php echo CContact::getContactByUserid($messageAuthor); ?> (<?php echo $AppUI->formatTZAwareTime($message->message_date, $df . ' ' . $tf); ?>)</td><td width="100%">&nbsp;</td>
+                <td align="left"><?php echo CContact::getContactByUserid($messageAuthor); ?> (<?php echo $AppUI->formatTZAwareTime($date->format('%Y-%m-%d %H:%M:%S'), $df . ' ' . $tf); ?>)</td><td width="100%">&nbsp;</td>
             </tr>
-            <tr><td align="right"><?php echo $AppUI->_('Subject') ?>:</td><td align="left"><?php echo $message->message_title ?></td><td width="100%">&nbsp;</td></tr>
+            <tr><td align="right"><?php echo $AppUI->_('Subject') ?>:</td><td align="left"><?php echo $last_message->message_title ?></td><td width="100%">&nbsp;</td></tr>
             <tr><td align="right" valign="top"><?php echo $AppUI->_('Message') ?>:</td><td align="left">
             <?php
                 $messageBody = $bbparser->qparse($last_message->message_body);
@@ -152,13 +147,13 @@ if (function_exists('styleRenderBoxTop')) {
         <tr>
             <td align="right"><?php echo $AppUI->_('Subject'); ?>:</td>
             <td>
-                <input type="text" class="text" name="message_title" value="<?php echo ($message_id || $message_parent < 0 ? '' : 'Re: ') . $message->message_title; ?>" size="50" maxlength="250" />
+                <input type="text" class="text" name="message_title" value="<?php echo ($message_id || $message_parent == -1 ?  $message->message_title : 'Re: ' . $last_message->message_title); ?>" size="50" maxlength="250" />
             </td><td width="100%">&nbsp;</td>
         </tr>
         <tr>
             <td align="right" valign="top"><?php echo $AppUI->_('Message'); ?>:</td>
             <td align="left" valign="top">
-               <textarea cols="60" name="message_body" style="height:200px"><?php echo (($message_id == 0) and ($message_parent != -1)) ? "\n>" . $last_message->message_body . "\n\n" : $message->message_body; ?></textarea>
+               <textarea cols="60" name="message_body" style="height:200px"><?php echo (($message_id == 0) && ($message_parent != -1)) ? "\n>" . $last_message->message_body . "\n\n" : $message->message_body; ?></textarea>
             </td><td width="100%">&nbsp;</td>
         </tr>
         <tr>
