@@ -62,9 +62,11 @@ class CForum_Message extends w2p_Core_BaseObject
             $stored = parent::store();
 
             if ($stored) {
+		$q->clear();
                 $q->addTable('forum_messages');
                 $q->addQuery('count(message_id), MAX(message_date)');
                 $q->addWhere('message_forum = ' . (int) $this->message_forum);
+	        $q->exec();
                 $reply = $q->fetchRow();
 
                 //update forum descriptor
@@ -89,26 +91,33 @@ class CForum_Message extends w2p_Core_BaseObject
     public function delete()
     {
         $result = false;
-        if ($this->canDelete()) {
-            $q = $this->_getQuery();
-            $q->addTable('forum_messages');
-            $q->addQuery('message_forum');
-            $q->addWhere('message_id = ' . (int) $this->message_id);
-            $forumId = $q->loadResult();
-            $q->clear();
 
+        $q = $this->_getQuery();
+
+        if ($this->canDelete()) {
             $result = parent::delete();
 
-            $q->addTable('forum_messages');
-            $q->addQuery('COUNT(message_id)');
-            $q->addWhere('message_forum = ' . (int) $forumId);
-            $messageCount = $q->loadResult();
-            $q->clear();
+	    if ($result) {
+		$q->clear();
+                $q->addTable('forum_messages');
+                $q->addQuery('count(message_id), MAX(message_date)');
+                $q->addWhere('message_forum = ' . (int) $this->message_forum);
+	        $q->exec();
+                $reply = $q->fetchRow();
 
-            $q->addTable('forums');
-            $q->addUpdate('forum_message_count', $messageCount);
-            $q->addWhere('forum_id = ' . (int) $forumId);
-            $q->exec();
+                //update forum descriptor
+                $forum = new CForum();
+                $forum->overrideDatabase($this->_query);
+                $forum->load(null, $this->message_forum);
+                $forum->forum_message_count = $reply[0];
+                /*
+                 * Note: the message_date here has already been adjusted for the
+                 *    timezone above, so don't do it again!
+                 */
+                $forum->forum_last_date = $this->message_date;
+                $forum->forum_last_id = $this->message_id;
+                $forum->store();
+	    }
         }
         return $result;
     }
