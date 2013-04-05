@@ -88,7 +88,7 @@ if (isset($user_id) && isset($_GET['logout'])) {
 // set the default ui style
 $uistyle = $AppUI->getPref('UISTYLE') ? $AppUI->getPref('UISTYLE') : w2PgetConfig('host_style');
 
-// check is the user needs a new password
+// check if the user needs a new password
 if (w2PgetParam($_POST, 'lostpass', 0)) {
 	$AppUI->setUserLocale();
 	@include_once W2P_BASE_DIR . '/locales/' . $AppUI->user_locale . '/locales.php';
@@ -101,6 +101,106 @@ if (w2PgetParam($_POST, 'lostpass', 0)) {
 	}
 	exit();
 }
+
+// check if the user wants to register a new account
+if (w2PgetParam($_POST, 'signup', 0)) {
+	$AppUI->setUserLocale();
+	@include_once W2P_BASE_DIR . '/locales/' . $AppUI->user_locale . '/locales.php';
+	include_once W2P_BASE_DIR . '/locales/core.php';
+	setlocale(LC_TIME, $AppUI->user_lang);
+
+	if (w2PgetConfig('activate_external_user_creation') != 'true') {
+		die('You should not access this file directly');
+	}
+
+	$error = false;
+	if (w2PgetParam($_POST, 'user_username', 0)) {
+		require_once $AppUI->getLibraryClass('captcha/Functions');
+
+		$defaultTZ = w2PgetConfig('system_timezone', 'Europe/London');
+		$defaultTZ = ('' == $defaultTZ) ? 'Europe/London' : $defaultTZ;
+		date_default_timezone_set($defaultTZ);
+
+		if (!$_POST['spam_check']) {
+			$AppUI->setMsg("You didn't provide the Anti Spam Security ID. Please try again.", UI_MSG_ERROR);
+			$error = true;
+		}
+
+		// FIXME: md5_DEcrypt??? WTF? In fact, this is neither md5 nor encrypted nor secure.
+		$cid = md5_decrypt($_POST['cid']);
+		if (!$error && $cid != strtoupper($_POST['spam_check'])) {
+			$AppUI->setMsg("You didn't provide the correct Anti Spam Security ID or all required data. Please try again.", UI_MSG_ERROR);
+			$error = true;
+		}
+
+		$username = w2PgetParam($_POST, 'user_username', 0);
+		if (preg_match("/[^a-zA-Z0-9._-]/", $username)) {
+			$AppUI->setMsg('The username you selected contains invalid characters: '.$username, UI_MSG_ERROR);
+			$error = true;
+		}
+
+		$user = new CAdmin_User();
+		if (!$error && count($user->loadAll(null, "user_username = '$username'"))) {
+			$AppUI->setMsg('The username you selected already exists, please select another. If that user name is yours, request password recovery on the login page.', UI_MSG_ERROR);
+			$error = true;
+		}
+
+		$contact = new CContact();
+
+		// TODO: check if this is actually used; moved here from createuser.php for security reasons
+		$_POST["user_id"] = 0;
+		$_POST["contact_id"] = 0;
+		$_POST["username_min_len"] = w2PgetConfig('username_min_len');
+		$_POST["password_min_len"] = w2PgetConfig('password_min_len');
+
+		if (!$error && !$user->bind($_POST)) {
+			$AppUI->setMsg($user->getError(), UI_MSG_ERROR);
+			$error = true;
+		}
+
+		if (!$error && !$contact->bind($_POST)) {
+			$AppUI->setMsg($contact->getError(), UI_MSG_ERROR);
+			$error = true;
+		}
+
+		if (!$error) {
+			$result = $contact->store();
+			if (count($contact->getError())) {
+				$AppUI->setMsg($contact->getError(), UI_MSG_ERROR);
+				$error = true;
+			} else {
+				$user->user_contact = $contact->contact_id;
+				$result = $user->store(null, true);
+				if (count($user->getError())) {
+					$AppUI->setMsg($user->getError(), UI_MSG_ERROR);
+					$error = true;
+				} else {
+					notifyNewExternalUser($contact->contact_email, $contact->contact_first_name, $user->user_username, $_POST['user_password']);
+					notifyHR(w2PgetConfig('admin_email', 'admin@web2project.net'), 'w2P System Human Resources',
+					         $contact->contact_email, $contact->contact_first_name, $user->user_username,
+					         $_POST['user_password'], $user->user_id);
+					$AppUI->setMsg('The User Administrator has been notified to grant you access to the system and an email message was sent to you with your login info. Thank you.', UI_MSG_OK);
+					// return to login page on success.
+				}
+			}
+		}
+	} else {
+		$error = true;
+	}
+
+	if ($error) {
+		require_once $AppUI->getLibraryClass('captcha/Captcha.class');
+		require_once $AppUI->getLibraryClass('captcha/Functions');
+		
+		$rnd = strtoupper(rnd_string());
+		$uid = urlencode(md5_encrypt($rnd));
+		$cid = md5_encrypt($rnd);
+
+		include W2P_BASE_DIR . '/style/' . $uistyle . '/createuser.php';
+		exit();
+	}
+}
+
 
 // check if the user is trying to log in
 // Note the change to REQUEST instead of POST.  This is so that we can
