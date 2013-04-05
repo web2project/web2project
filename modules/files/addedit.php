@@ -140,12 +140,32 @@ function finalCI() {
 	}
 }
 
+var decodeEntities = (function() {
+  // this prevents any overhead from creating the object each time
+  var element = document.createElement('div');
+
+  function decodeHTMLEntities (str) {
+    if(str && typeof str === 'string') {
+      // strip script/html tags
+      str = str.replace(/<script[^>]*>([\S\s]*?)<\/script>/gmi, '');
+      str = str.replace(/<\/?\w(?:[^"'>]|"[^"]*"|'[^']*')*>/gmi, '');
+      element.innerHTML = str;
+      str = element.textContent;
+      element.textContent = '';
+    }
+
+    return str;
+  }
+
+  return decodeHTMLEntities;
+})();
+
 // Callback function for the generic selector
 function setTask( key, val ) {
 	var f = document.uploadFrm;
 	if (val != '') {
 		f.file_task.value = key;
-		f.task_name.value = val;
+		f.task_name.value = decodeEntities(val).replace(/(^\s+|\s+$)/g,' ');
 	} else {
 		f.file_task.value = '0';
 		f.task_name.value = '';
