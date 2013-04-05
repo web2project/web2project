@@ -576,3 +576,7 @@ span.cal-item a {
 .subprojects td._name {
     text-align: left;
 }
+
+table.mocal td a:first-child {
+    font-weight: bold;
+}
