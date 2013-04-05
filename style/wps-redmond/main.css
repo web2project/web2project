@@ -320,9 +320,9 @@ table.mocal th {
     background-image    : repeat-x;
 }
 table.mocal td {
+    vertical-align: top;
 }
 table.mocal td.week {
-	vertical-align: top;
 	background-color: #D4D0C8;
 	height: 80px;
 }
@@ -330,14 +330,12 @@ table.mocal td.empty {
 	background-color: #e0e0e0;
 	color: #aaaaaa;
 	text-align: left;
-	vertical-align: top;
 	height: 80px;
 }
 table.mocal td.day  {
 	background-color: #ffffff;
 	color: #333366;
 	text-align: left;
-	vertical-align: top;
 	height: 80px;
 }
 table.mocal td.today {
@@ -345,13 +343,11 @@ table.mocal td.today {
 	border           : 2px dotted red;
 	color            : #ffffff;
 	text-align       : left;
-	vertical-align   : top;
 }
 
 table.mocal td.weekend {
 	background-color: #f0f0f0;
 	text-align: left;
-	vertical-align: top;
 }
 
 table.mocal td img {
