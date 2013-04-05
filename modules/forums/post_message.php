@@ -3,41 +3,14 @@ if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
 
-function nl2p($str) {
-    return "<p>" .
-    str_replace(
-    "\r", "</p><p>",
-    str_replace(
-    "\n", "</p><p>",
-    str_replace(
-    "\r\n", "</p><p>",
-    str_replace(
-    "<q>", "</p><q><p>",
-    str_replace(
-    "</q>", "</p></q><p>",
-    $str))))) . "</p>";
-}
-
-
-// Add / Edit forum
-$message_parent = (int) w2PgetParam($_GET, 'message_parent', -1);
-$message_id = (int) w2PgetParam($_GET, 'message_id', 0);
-$forum_id = (int) w2PgetParam($_REQUEST, 'forum_id', 0);
-
-$myForum = new CForum();
-$myForum->forum_id = $forum_id;
-
-$obj = $myForum;
-$canAddEdit = $obj->canAddEdit();
-$canAdd = $obj->canCreate();
-$canEdit = $obj->canEdit();
+$canAddEdit = $forum->canAddEdit();
+$canAdd = $forum->canCreate();
+$canEdit = $forum->canEdit();
 if (!$canAddEdit) {
 	$AppUI->redirect(ACCESS_DENIED);
 }
 
-//Pull forum information
-$myForum->load(null, $forum_id);
-if (!$myForum) {
+if (!$forum) {
 	$AppUI->setMsg('Forum');
 	$AppUI->setMsg('invalidID', UI_MSG_ERROR, true);
 	$AppUI->redirect('m=forums');
@@ -65,20 +38,8 @@ if ($message_parent != -1) {
     $last_message->load($message_parent);
 }
 
-$crumbs = array();
-$crumbs['?m=forums'] = 'forums list';
-$crumbs['?m=forums&a=viewer&forum_id=' . $forum_id] = 'topics for this forum';
-if ($message_parent > -1) {
-	$crumbs['?m=forums&a=viewer&forum_id=' . $forum_id . '&message_id=' . $message_parent] = 'this topic';
-}
 ?>
 <script language="javascript" type="text/javascript">
-<?php
-// security improvement:
-// some javascript functions may not appear on client side in case of user not having write permissions
-// else users would be able to arbitrarily run 'bad' functions
-if ($canEdit || $canAdd) {
-?>
 function submitIt(){
 	var form = document.changeforum;
 	if (form.message_title.value.search(/^\s*$/) >= 0 ) {
@@ -88,119 +49,55 @@ function submitIt(){
 		alert("<?php echo $AppUI->_('forumTypeMessage', UI_OUTPUT_JS); ?>");
 		form.message_body.focus();
 	} else {
-		form.submit();
+		return true;
 	}
-}
-
-function delIt(){
-	var form = document.changeforum;
-	if (confirm( "<?php echo $AppUI->_('forumDeletePost', UI_OUTPUT_JS); ?>" )) {
-		form.del.value="<?php echo $message_id; ?>";
-		form.submit();
-	}
-}
-<?php } ?>
-function orderByName(x){
-	var form = document.changeforum;
-	if (x == 'name') {
-		form.forum_order_by.value = form.forum_last_name.value + ', ' + form.forum_name.value;
-	} else {
-		form.forum_order_by.value = form.forum_project.value;
-	}
+    return false;
 }
 </script>
-<br />
+
 <?php
 if (function_exists('styleRenderBoxTop')) {
 	echo styleRenderBoxTop();
 }
 ?>
 
-<form name="changeforum" action="?m=forums&forum_id=<?php echo $forum_id; ?>" method="post" accept-charset="utf-8">
+<form name="changeforum" action="?m=forums&forum_id=<?= $forum_id ?>" method="post" accept-charset="utf-8">
 	<input type="hidden" name="dosql" value="do_post_aed" />
 	<input type="hidden" name="del" value="0" />
-	<input type="hidden" name="message_forum" value="<?php echo $forum_id; ?>" />
-	<input type="hidden" name="message_parent" value="<?php echo $message_parent; ?>" />
-	<input type="hidden" name="message_published" value="<?php echo $myForum->forum_moderated ? '1' : '0'; ?>" />
-	<input type="hidden" name="message_author" value="<?php echo (isset($message->message_author) && ($message_id || $message_parent < 0)) ? $message->message_author : $AppUI->user_id; ?>" />
-	<input type="hidden" name="message_editor" value="<?php echo (isset($message->message_author) && ($message_id || $message_parent < 0)) ? $AppUI->user_id : '0'; ?>" />
-	<input type="hidden" name="message_id" value="<?php echo $message_id; ?>" />
-    <table cellspacing="0" cellpadding="3" border="0" width="100%" class="std addedit">
-        <tr><td>
-            <table cellspacing="1" cellpadding="2" border="0" width="100%">
-            <tr>
-                <td align="left" nowrap="nowrap"><?php echo breadCrumbs($crumbs); ?></td>
-                <td width="100%" align="right"></td>
-            </tr>
-            </table>
-        </td></tr>
-        <tr>
-            <th valign="top" colspan="2"><strong><?php
-        echo $AppUI->_($message_id ? 'Edit Message' : 'Add Message');
-        ?></strong></th>
-        </tr>
+	<input type="hidden" name="message_forum" value="<?= $forum_id ?>" />
+	<input type="hidden" name="message_parent" value="<?= $message_parent ?>" />
+	<input type="hidden" name="message_published" value="<?= $forum->forum_moderated ? '1' : '0' ?>" />
+	<input type="hidden" name="message_author" value="<?= (isset($message->message_author) && ($message_id || $message_parent < 0)) ? $message->message_author : $AppUI->user_id ?>" />
+	<input type="hidden" name="message_editor" value="<?= (isset($message->message_author) && ($message_id || $message_parent < 0)) ? $AppUI->user_id : '0' ?>" />
+	<input type="hidden" name="message_id" value="<?= $message_id ?>" />
+    <h2><?= $AppUI->_($message_id ? 'Edit Message' : 'Add Message') ?></h2>
+    <table class="std addedit">
         <?php
         if ($message_parent >= 0) { //check if this is a reply-post; if so, printout the original message
             $messageAuthor = isset($message->message_author) ? $message->message_author : $AppUI->user_id;
             $date = intval($message->message_date) ? new w2p_Utilities_Date($message->message_date) : new w2p_Utilities_Date();
             ?>
             <tr>
-                <td align="right"><?php echo $AppUI->_('Author') ?>:</td>
-                <td align="left"><?php echo CContact::getContactByUserid($messageAuthor); ?> (<?php echo $AppUI->formatTZAwareTime($message->message_date, $df . ' ' . $tf); ?>)</td>
+                <td><?= $AppUI->_('Author') ?>:</td>
+                <td><?= CContact::getContactByUserid($messageAuthor); ?> (<?php echo $AppUI->formatTZAwareTime($message->message_date, $df . ' ' . $tf) ?>)</td>
             </tr>
-            <tr><td align="right"><?php echo $AppUI->_('Subject') ?>:</td><td align="left"><?php echo $last_message->message_title ?></td></tr>
-            <tr><td align="right" valign="top"><?php echo $AppUI->_('Message') ?>:</td><td align="left">
+            <tr><td colspan="2"><hr /></td></tr>
             <?php
-                $messageBody = $bbparser->qparse($last_message->message_body);
-                $messageBody = nl2p($messageBody);
-                echo $messageBody;
-            ?></td></tr>
-            <tr><td colspan="2" align="left"><hr /></td></tr>
-            <?php
-        } //end of if-condition
-
+        }
         ?>
         <tr>
-            <td align="right"><?php echo $AppUI->_('Subject'); ?>:</td>
+            <td><?= $AppUI->_('Subject') ?>:</td>
             <td>
-                <input type="text" class="text" name="message_title" value="<?php echo ($message_id || $message_parent < 0 ? $message->message_title : 'Re: '.$last_message->message_title); ?>" size="50" maxlength="250" />
+                <input type="text" class="text" name="message_title" value="<?= $message->message_title ?>" size="50" maxlength="250" />
             </td>
         </tr>
         <tr>
-            <td align="right" valign="top"><?php echo $AppUI->_('Message'); ?>:</td>
-            <td align="left" valign="top">
-               <textarea cols="60" name="message_body" style="height:200px"><?php echo (($message_id == 0) and ($message_parent != -1)) ? "[quote]" . $last_message->message_body . "[/quote]\n " : $message->message_body; ?></textarea>
-            </td>
-        </tr>
-        <tr>
+            <td><?php echo $AppUI->_('Message'); ?>:</td>
             <td>
+               <textarea cols="60" name="message_body"><?= $message->message_body; ?></textarea>
+                <a class="button" href="./index.php?<?= $back_url ?>'"><?= $AppUI->_('back') ?></a>
+                <input type="submit" value="<?= $AppUI->_('submit') ?>" onclick="return submitIt()">
             </td>
-            <td align="left">
-                <small><b><?php echo $AppUI->_('BBCode Ready');?>!</b></small>
-                <?php echo w2PshowImage('log-info.gif','','','BBCode Tags Accepted','
-                [b][/b] Bold. Example: [b]<b>This text will be bold</b>[/b]<br />
-                [i][/i] Italic. Example: [i]<i>This text will be in italic</i>[/i]<br />
-                [u][/u] Underlined. Example: [u]<u>This text will be underlined</u>[/u]<br />
-                [s][/s] Scratched. Example: [s]<del>This text will be scratched</del>[/s]<br />
-                [sub][/sub] Subscript. Example: [sub]<sub>This text will be subscript</sub>[/sub]<br />
-                [sup][/sup] Superscript. Example: [sup]<sup>This text will be superscript</sup>[/sup]<br />
-                [email][/email] Email Address. Example: [email]my@mail.net[/email]<br />
-                [color=color_name][/color] Colorized Text. Example: [color=blue]I am Blue[/color]<br />
-                [size=size_value][/size], [font=font_name][/font] and [align=left|center|right][align] Format Text. Example: [align=right]I am on the Right[/align]<br />
-                [url=url_address][/url] Link. Example: [url=http://web2project.net]web2Project[/url]<br />
-                [list][/list],[ulist][/ulist] and [li][/li] Lists.<br />
-                [quote][/quote] Quoted Text. Example: [quote]<q>This text will be superscript</q>[/quote]<br />
-                [code][/code] Text in code format. Example: [code]//This is a code comment;[/code]<br />
-                '); ?>
-            </td>
-        </tr>
-        <tr>
-            <td>
-                <input type="button" value="<?php echo $AppUI->_('back'); ?>" class="button" onclick="javascript:window.location='./index.php?<?php echo $back_url; ?>';" />
-            </td>
-            <td align="right"><?php
-            echo '<input type="button" value="' . $AppUI->_('submit') . '" class=button onclick="submitIt()">';
-        ?></td>
         </tr>
     </table>
 </form>

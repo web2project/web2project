@@ -65,6 +65,7 @@
 'read-only',
 'Related Project',
 'Replies',
+'Reverse Order',
 '%s ago',
 'Single Message at a time',
 'Sort By Date',

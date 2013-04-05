@@ -42,8 +42,6 @@ $q->addGroup('fm1.message_id, fm1.message_parent');
 $q->addOrder($orderby . ' ' . $orderdir);
 $topics = $q->loadList();
 
-$crumbs = array();
-$crumbs['?m=forums'] = 'forums list';
 $htmlHelper = new w2p_Output_HTMLHelper($AppUI);
 //$htmlHelper->df .= ' ' . $AppUI->getPref('TIMEFORMAT');
 
@@ -68,7 +66,7 @@ if (count($fields) > 0) {
     $module->storeSettings('forums', 'view_topics', $fieldList, $fieldNames);
 }
 ?>
-<br />
+
 <?php
 if (function_exists('styleRenderBoxTop')) {
 	echo styleRenderBoxTop();
@@ -78,38 +76,20 @@ if (function_exists('styleRenderBoxTop')) {
     <input type="hidden" name="dosql" value="do_watch_forum" />
     <input type="hidden" name="watch" value="topic" />
     <table class="tbl list">
-        <tr><td colspan="25">
-            <table width="100%" cellspacing="1" cellpadding="2" border="0">
-            <tr>
-                <td align="left" nowrap="nowrap">
-                    <?php
-                    // This is a hack to make sure we don't get the tooltips
-                    echo str_replace('span', 'div', breadCrumbs($crumbs));
-                    ?>
-                </td>
-                <td width="25%" align="right">
-                <?php if ($canAuthor) { ?>
-                    <input type="button" class="button" value="<?php echo $AppUI->_('start a new topic'); ?>" onclick="javascript:window.location='./index.php?m=forums&a=viewer&forum_id=<?php echo $forum_id; ?>&post_message=1';" />
-                <?php } ?>
-                </td>
-            </tr>
-            </table>
-        </td></tr>
         <tr>
             <th></th>
             <?php foreach ($fieldNames as $index => $name) { ?>
-                <th><?php echo $AppUI->_($fieldNames[$index]); ?></th>
+            <th><?= $AppUI->_($fieldNames[$index]) ?></th>
             <?php } ?>
         </tr>
     <?php
     foreach ($topics as $row) {
         if ($row["message_parent"] < 0) { ?>
             <tr bgcolor="white" valign="top">
-                <td nowrap="nowrap" align="center" width="1%">
+                <td class="data watch">
                     <input type="checkbox" name="forum_<?php echo $row['message_id']; ?>" <?php echo $row['watch_user'] ? 'checked="checked"' : ''; ?> />
                 </td>
                 <?php
-//TODO: add the checkbox
                 $htmlHelper->stageRowData($row);
                 foreach ($fieldList as $index => $column) {
                     echo $htmlHelper->createCell($fieldList[$index], $row[$fieldList[$index]], $customLookups);
@@ -121,11 +101,5 @@ if (function_exists('styleRenderBoxTop')) {
     } ?>
     </table>
 
-    <table width="100%" border="0" cellpadding="0" cellspacing="1" class="std">
-        <tr>
-            <td align="left">
-                <input type="submit" class="button" value="<?php echo $AppUI->_('update watches'); ?>" />
-            </td>
-        </tr>
-    </table>
+    <input type="submit" class="button" value="<?= $AppUI->_('update watches') ?>" />
 </form>
