@@ -217,11 +217,14 @@ class CContact extends w2p_Core_BaseObject
 
     public function canCreate()
     {
+	    // Why should this be disallowed? People in the real world do share mail accounts
+	    /*
         $recordCount = $this->loadAll(null, "contact_email = '".$this->contact_email."'");
         if (count($recordCount) && $this->contact_email != null) {
             $this->_error['canCreate'] = 'A contact with this email address already exists';
             return false;
         }
+	    */
         if ('true' == w2PgetConfig('activate_external_user_creation')) {
             return true;
         }
