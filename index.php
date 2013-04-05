@@ -153,6 +153,11 @@ if ($AppUI->doLogin()) {
 }
 $AppUI->setUserLocale();
 
+if (w2PgetConfig('debug', 0) > 1) {
+	ini_set('display_errors', true);
+	ini_set('display_startup_errors', true);
+}
+
 // bring in the rest of the support and localisation files
 $perms = &$AppUI->acl();
 
