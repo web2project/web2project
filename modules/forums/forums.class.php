@@ -12,7 +12,7 @@ $bbparser = new HTML_BBCodeParser();
 
 $filters = array('- Filters -');
 
-if (isset($a) && $a == 'viewer') {
+if (isset($a) && $a == 'view') {
     array_push($filters, 'My Watched', 'Last 30 days');
 } else {
     array_push($filters, 'My Forums', 'My Watched', 'My Projects', 'My Company', 'Inactive Projects');
@@ -216,7 +216,7 @@ class CForum extends w2p_Core_BaseObject
         $search['table_alias'] = 'f';
         $search['table_module'] = 'forums';
         $search['table_key'] = 'f.forum_id';
-        $search['table_link'] = 'index.php?m=forums&a=viewer&forum_id='; // first part of link
+        $search['table_link'] = 'index.php?m=forums&a=view&forum_id='; // first part of link
         $search['table_key2'] = 'fm.message_id';
         $search['table_link2'] = '&message_id='; // second part of link
 

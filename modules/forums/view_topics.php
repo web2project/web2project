@@ -74,7 +74,7 @@ if (function_exists('styleRenderBoxTop')) {
 	echo styleRenderBoxTop();
 }
 ?>
-<form name="watcher" action="?m=forums&a=viewer&forum_id=<?php echo $forum_id; ?>&f=<?php echo $f; ?>" method="post" accept-charset="utf-8">
+<form name="watcher" action="?m=forums&a=view&forum_id=<?php echo $forum_id; ?>&f=<?php echo $f; ?>" method="post" accept-charset="utf-8">
     <input type="hidden" name="dosql" value="do_watch_forum" />
     <input type="hidden" name="watch" value="topic" />
     <table class="tbl list">
