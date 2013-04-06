@@ -3,10 +3,12 @@ if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
 
-global $showEditCheckbox, $priorities;
+global $priorities;
 global $m, $a, $date, $other_users, $user_id, $task_type;
 global $task_sort_item1, $task_sort_type1, $task_sort_order1;
 global $task_sort_item2, $task_sort_type2, $task_sort_order2;
+
+$showEditCheckbox = w2PgetConfig('direct_edit_assignment');
 
 // retrieve any state parameters
 if (isset($_POST['show_form'])) {

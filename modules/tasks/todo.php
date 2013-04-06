@@ -3,8 +3,6 @@ if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
 
-$showEditCheckbox = w2PgetConfig('direct_edit_assignment');
-
 $tab = $AppUI->processIntState('ToDoTab', $_GET, 'tab', 0);
 
 if (isset($_POST['task_type'])) {
