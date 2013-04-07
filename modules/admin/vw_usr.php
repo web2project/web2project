@@ -18,9 +18,8 @@ if (count($fields) > 0) {
     //   state for versions earlier than v3.0
     //   At some point at/after v4.0, this should be deprecated
     $fieldList = array('contact_display_name', 'user_username',
-        'user_type', 'company_name', 'dept_name');
-    $fieldNames = array('Real Name', 'Login Name', 'Type',
-        'Company', 'Department');
+        'company_name', 'dept_name');
+    $fieldNames = array('Real Name', 'Login Name', 'Company', 'Department');
 //TODO: This doesn't save the columns yet as we can't allow customization yet.
 }
 if ($display_last_login) {
@@ -109,7 +108,7 @@ foreach ($users as $row) {
 	</td>
     <?php
         echo $htmlHelper->createCell('user_name', $row['user_username']);
-        echo $htmlHelper->createCell('user_type', $row['user_type'], $customLookups);
+        //echo $htmlHelper->createCell('user_type', $row['user_type'], $customLookups);
         echo $htmlHelper->createCell('contact_company', $row['contact_company']);
         echo $htmlHelper->createCell('dept_name', $row['dept_name']);
     ?>
