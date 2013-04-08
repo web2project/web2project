@@ -411,7 +411,7 @@ if (!$min_view) {
 
 <table cellspacing="0" cellpadding="0" border="1" align="center" class="std" width="100%">
     <tr>
-        <td valign="top" align="center">
+        <td valign="top" align="center" id="gantt_holder">
             <?php
             if ($a != 'todo') {
                 $cnt[0]['N'] = $project->project_task_count;
@@ -423,8 +423,6 @@ if (!$min_view) {
 						 . (($display_option == 'all') ? ''
 						    : ('&start_date=' . $start_date->format('%Y-%m-%d')
 						       . '&end_date=' . $end_date->format('%Y-%m-%d')))
-						 . "&width=' + ((navigator.appName=='Netscape'"
-						 . "?window.innerWidth:document.body.offsetWidth)*0.95) + '"
 						 . '&showLabels=' . $showLabels . '&showWork=' . $showWork
 						 . '&showTaskNameOnly=' . $showTaskNameOnly
 						   . '&showhgrid=' . $showhgrid . '&showPinned=' . $showPinned
@@ -436,8 +434,13 @@ if (!$min_view) {
 						   . '&monospacefont=' . $monospacefont . '&showWork_days=' . $showWork_days);
 
                 ?>
-                <script language="javascript" type="text/javascript"> document.write('<img alt="Please wait while the Gantt chart is generated... (this might take a minute or two)" src="<?php echo htmlspecialchars($src); ?>" />') </script>
-                <?php
+            <img alt="Please wait while the Gantt chart is generated... (this might take a minute or two)" src="<?= htmlspecialchars($src) ?>" />
+            <script type="text/javascript">
+            $(function(){
+                $('#gantt_holder img')[0].src += "&width=" + ((window.innerWidth?window.innerWidth:document.body.offsetWidth)*0.95);
+            });
+            </script>
+            <?php
 
 				 //If we have a problem displaying this we need to display a warning.
 				 //Put it at the bottom just in case
