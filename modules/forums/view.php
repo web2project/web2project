@@ -80,9 +80,9 @@ $titleBlock->show();
 <div<?php if ($forum->project_color_identifier) { ?> style="background-color:#<?= $forum->project_color_identifier ?>;color:<?= bestColor($forum->project_color_identifier) ?>"<?php } ?> id="forum-info">
     <div id="forum-name"><?= $forum->forum_name ?></div>
     <div id="forum-project"><?= ($forum->project_name) ? $forum->project_name : $AppUI->_('No associated project') ?></div>
-    <div id="forum-description"><?= $forum->forum_description ?></div>
     <div id="forum-owner"><?= $forum->contact_display_name . ($forum_id? ' (' . $AppUI->_('moderated') . ') ' : '') ?></div>
     <div id="forum-date"><?= $start_date; ?></div>
+    <div id="forum-description"><?= $forum->forum_description ?></div>
 </div>
 
 <?php

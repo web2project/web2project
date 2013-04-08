@@ -577,6 +577,53 @@ span.cal-item a {
     text-align: left;
 }
 
+
 table.mocal td a:first-child {
     font-weight: bold;
+}
+
+tr.unread td._name {
+    padding-left: 20px;
+    background-image: url("web2project/images/icons/stock_new_small.png");
+    background-position: left center;
+    background-repeat: no-repeat;
+}
+
+#forum-info {
+    line-height: 1.2em;
+    background-color: white;
+    position: relative;
+    padding: .5ex;
+}
+
+#forum-name {
+    font-weight: bold;
+    white-space: nowrap;
+    margin-bottom: .5em;
+}
+
+#forum-project::before {
+    display: inline-block;
+    content: "Project: ";
+    width: 5em;
+}
+
+#forum-description {
+    margin: .5em 0 .5em 0;
+}
+
+#forum-owner::before {
+    display: inline-block;
+    content: "Owner: ";
+    width: 5em;
+}
+
+#forum-date {
+    position: absolute;
+    top: .5ex;
+    right: 1ex;
+}
+
+#gantt_holder {
+    text-align: center;
 }
