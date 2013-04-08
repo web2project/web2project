@@ -616,11 +616,8 @@ function show_tab(i) {
 		show_tab_function(i);
 		return;
 	}
-	var tab = document.getElementById('tab_' + i);
-	tab.style.display = 'block';
-	tab = document.getElementById('toptab_' + i);
-	tab.className = 'tabon';
-	tab.style = 'font-style:bold;';
+    $('#tab_' + i).css('display', 'block');
+    $('#toptab_' + i).removeClass('taboff').addClass('tabon');
 }
 
 function hide_tabs() {
@@ -628,21 +625,8 @@ function hide_tabs() {
 		hide_tab_function();
 		return;
 	}
-	var tabs = document.getElementsByTagName('td');
-	var i;
-	for(i = 0; i < tabs.length; i++) {
-		if (tabs[i].className == 'tabon') {
-			tabs[i].className = 'taboff';
-			tabs[i].style = 'font-style:normal;';
-		}
-	}
-
-	tabs = document.getElementsByTagName('div');
-	for(i = 0; i < tabs.length; i++) {
-		if (tabs[i].className == 'tab') {
-			tabs[i].style.display = 'none';
-		}
-	}
+    $('.tabon').removeClass('tabon').addClass('taboff');
+    $('div.tab').css('display', 'none');
 }
 hide_tab_function = gt_hide_tabs;
 show_tab_function = gt_show_tab;
