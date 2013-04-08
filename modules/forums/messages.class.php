@@ -17,9 +17,12 @@ class CForum_Message extends w2p_Core_BaseObject
     public $message_body = null;
     public $message_published = null;
 
+    public $_project_id = null;
+
     public function __construct()
     {
         parent::__construct('forum_messages', 'message_id', 'forums');
+	$this->_tbl_project_id = '_project_id';
     }
 
     public function isValid()
@@ -255,5 +258,26 @@ class CForum_Message extends w2p_Core_BaseObject
     public static function getHRef($forum_id, $msg_id)
     {
 	   return 'm=forums&a=viewer&forum_id=' . (string)$forum_id . '&message_id=' . (string)$msg_id . '&sort=asc';
+    }
+
+    protected function generateHistoryDescription($event) {
+        global $AppUI;
+
+	// Fill an aliased variable with the project associated with the forum containing this message
+        $forum = new CForum();
+        $forum->overrideDatabase($this->_query);
+        $forum->load(null, $this->message_forum);
+	$this->_project_id = $forum->forum_project;
+
+	$event = mb_strtolower($event);
+	if ($event == 'create') {
+		return $AppUI->_('Forum message') . ' \'' . $this->message_title . '\' ' . $AppUI->_('was created with ID') . ' ' . $this->message_id;
+	} elseif ($event == 'update') {
+		return $AppUI->_('Forum message') . ' \'' . $this->message_title . '\', ' . $AppUI->_('with ID') . ' ' . $this->message_id . ', ' . $AppUI->_('was edited');
+	} elseif ($event == 'delete') {
+		return $AppUI->_('Forum message') . ' \'' . $this->message_title . '\', ' . $AppUI->_('with ID') . ' ' . $this->message_id . ', ' . $AppUI->_('was deleted');
+	} else {
+		return parent::generateHistoryDescription($event);
+	}
     }
 }

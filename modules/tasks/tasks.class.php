@@ -113,6 +113,7 @@ class CTask extends w2p_Core_BaseObject
     public function __construct()
     {
         parent::__construct('tasks', 'task_id');
+	$this->_tbl_project_id = 'task_project';
     }
 
     public function __toString()
@@ -2637,6 +2638,20 @@ class CTask extends w2p_Core_BaseObject
         CProject::updateHoursWorked($project_id);
     }
 
+    protected function generateHistoryDescription($event) {
+        global $AppUI;
+
+	$event = mb_strtolower($event);
+	if ($event == 'create') {
+		return $AppUI->_('Task') . ' \'' . $this->task_name . '\' ' . $AppUI->_('was created with ID') . ' ' . $this->task_id;
+	} elseif ($event == 'update') {
+		return $AppUI->_('Task') . ' \'' . $this->task_name . '\', ' . $AppUI->_('with ID') . ' ' . $this->task_id . ', ' . $AppUI->_('was edited');
+	} elseif ($event == 'delete') {
+		return $AppUI->_('Task') . ' \'' . $this->task_name . '\', ' . $AppUI->_('with ID') . ' ' . $this->task_id . ', ' . $AppUI->_('was deleted');
+	} else {
+		return parent::generateHistoryDescription($event);
+	}
+    }
 }
 
 // user based access

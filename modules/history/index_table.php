@@ -5,9 +5,16 @@ if (!defined('W2P_BASE_DIR')) {
 global $AppUI, $filter_param;
 
 $page = (int) w2PgetParam($_GET, 'page', 1);
+$project_id = (int) w2PgetParam($_GET, 'project_id', 0);
 
 $history = new CHistory();
-$where = (-1 == $filter_param) ? '' : "history_table = '".$filter_param."'";
+if ((int)$filter_param == -1) {
+    $where = '';
+} elseif ($filter_param == 'project_id') {
+    $where = 'history_project = ' . $project_id;
+} else {
+    $where = 'history_table = \'' . $filter_param . '\'';
+}
 $histories = $history->loadAll('history_date DESC', $where);
 $items = array_values($histories);
 

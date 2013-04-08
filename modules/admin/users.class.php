@@ -450,6 +450,21 @@ class CUser extends w2p_Core_BaseObject
     {
         return 'm=admin&a=viewuser&user_id=' . (string)$user_id;
     }
+
+    protected function generateHistoryDescription($event) {
+        global $AppUI;
+
+	$event = mb_strtolower($event);
+	if ($event == 'create') {
+		return $AppUI->_('User') . ' \'' . $this->user_username . '\' ' . $AppUI->_('was created with ID') . ' ' . $this->user_id;
+	} elseif ($event == 'update') {
+		return $AppUI->_('User') . ' \'' . $this->user_username . '\', ' . $AppUI->_('with ID') . ' ' . $this->user_id . ', ' . $AppUI->_('was edited');
+	} elseif ($event == 'delete') {
+		return $AppUI->_('User') . ' \'' . $this->user_username . '\', ' . $AppUI->_('with ID') . ' ' . $this->user_id . ', ' . $AppUI->_('was deleted');
+	} else {
+		return parent::generateHistoryDescription($event);
+	}
+    }
 }
 
 class CAdmin_User extends CUser { }

@@ -172,4 +172,19 @@ class CFile_Folder extends w2p_Core_BaseObject {
 	   }
 	   return False;
     }
+
+    protected function generateHistoryDescription($event) {
+        global $AppUI;
+
+	$event = mb_strtolower($event);
+	if ($event == 'create') {
+		return $AppUI->_('Folder') . ' \'' . $this->file_folder_name . '\' ' . $AppUI->_('was created with ID') . ' ' . $this->file_folder_id;
+	} elseif ($event == 'update') {
+		return $AppUI->_('Folder') . ' \'' . $this->file_folder_name . '\', ' . $AppUI->_('with ID') . ' ' . $this->file_folder_id . ', ' . $AppUI->_('was edited');
+	} elseif ($event == 'delete') {
+		return $AppUI->_('Folder') . ' \'' . $this->file_folder_name . '\', ' . $AppUI->_('with ID') . ' ' . $this->file_folder_id . ', ' . $AppUI->_('was deleted');
+	} else {
+		return parent::generateHistoryDescription($event);
+	}
+    }
 }

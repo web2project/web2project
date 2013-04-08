@@ -154,6 +154,8 @@ class CTask_Log extends w2p_Core_BaseObject
 
 		// ensure changes to checkboxes are honoured
 		$this->task_log_problem = (int) $this->task_log_problem;
+
+		$this->_tbl_project_id = 'task_log_project';
 	}
 
 	protected function hook_preStore()
@@ -449,4 +451,19 @@ class CTask_Log extends w2p_Core_BaseObject
 		return parent::getAllowedRecords($uid, $fields, $orderby, $index, $extra);
 	}
 
+
+    protected function generateHistoryDescription($event) {
+        global $AppUI;
+
+	$event = mb_strtolower($event);
+	if ($event == 'create') {
+		return $AppUI->_('Task Log') . ' \'' . $this->task_log_name . '\' ' . $AppUI->_('was created with ID') . ' ' . $this->task_log_id;
+	} elseif ($event == 'update') {
+		return $AppUI->_('Task Log') . ' \'' . $this->task_log_name . '\', ' . $AppUI->_('with ID') . ' ' . $this->task_log_id . ', ' . $AppUI->_('was edited');
+	} elseif ($event == 'delete') {
+		return $AppUI->_('Task Log') . ' \'' . $this->task_log_name . '\', ' . $AppUI->_('with ID') . ' ' . $this->task_log_id . ', ' . $AppUI->_('was deleted');
+	} else {
+		return parent::generateHistoryDescription($event);
+	}
+    }
 }

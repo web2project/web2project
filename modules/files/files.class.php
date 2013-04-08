@@ -33,11 +33,13 @@ class CFile extends w2p_Core_BaseObject {
 	//public $file_helpdesk_item = NULL;
 
 	public function __construct() {
-        global $helpdesk_available;
-        if ($helpdesk_available) {
-          $this->file_helpdesk_item = null;
-        }
-        parent::__construct('files', 'file_id');
+	    global $helpdesk_available;
+
+	    if ($helpdesk_available) {
+	          $this->file_helpdesk_item = null;
+	    }
+	    parent::__construct('files', 'file_id');
+	    $this->_tbl_project_id = 'file_project';
 	}
 
     protected function hook_preStore() {
@@ -648,4 +650,19 @@ class CFile extends w2p_Core_BaseObject {
 
 		return parent::canEdit();
 	}
+
+    protected function generateHistoryDescription($event) {
+        global $AppUI;
+
+	$event = mb_strtolower($event);
+	if ($event == 'create') {
+		return $AppUI->_('File') . ' \'' . $this->file_name . '\' ' . $AppUI->_('was created with ID') . ' ' . $this->file_id;
+	} elseif ($event == 'update') {
+		return $AppUI->_('File') . ' \'' . $this->file_name . '\', ' . $AppUI->_('with ID') . ' ' . $this->file_id . ', ' . $AppUI->_('was edited');
+	} elseif ($event == 'delete') {
+		return $AppUI->_('File') . ' \'' . $this->file_name . '\', ' . $AppUI->_('with ID') . ' ' . $this->file_id . ', ' . $AppUI->_('was deleted');
+	} else {
+		return parent::generateHistoryDescription($event);
+	}
+    }
 }

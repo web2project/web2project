@@ -654,4 +654,19 @@ class CContact extends w2p_Core_BaseObject
         return array();
     }
 
+
+    protected function generateHistoryDescription($event) {
+        global $AppUI;
+
+	$event = mb_strtolower($event);
+	if ($event == 'create') {
+		return $AppUI->_('Contact') . ' \'' . $this->contact_display_name . '\' ' . $AppUI->_('was created with ID') . ' ' . $this->contact_id;
+	} elseif ($event == 'update') {
+		return $AppUI->_('Contact') . ' \'' . $this->contact_display_name . '\', ' . $AppUI->_('with ID') . ' ' . $this->contact_id . ', ' . $AppUI->_('was edited');
+	} elseif ($event == 'delete') {
+		return $AppUI->_('Contact') . ' \'' . $this->contact_display_name . '\', ' . $AppUI->_('with ID') . ' ' . $this->contact_id . ', ' . $AppUI->_('was deleted');
+	} else {
+		return parent::generateHistoryDescription($event);
+	}
+    }
 }

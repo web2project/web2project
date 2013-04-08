@@ -28,6 +28,11 @@ abstract class w2p_Core_BaseObject extends w2p_Core_Event implements w2p_Core_Li
     protected $_tbl_key = '';
 
     /**
+     * 	@var string Name of the project ID field in the table
+     */
+    protected $_tbl_project_id = null;
+
+    /**
      * 	@var string Error message
      */
     protected $_error = '';
@@ -690,12 +695,20 @@ abstract class w2p_Core_BaseObject extends w2p_Core_Event implements w2p_Core_Li
     protected function hook_postStore()
     {
         //NOTE: This only happens if the create was successful.
-        $prefix = $this->_getColumnPrefixFromTableName($this->_tbl);
 
-        $name = ('' != $this->{$prefix . '_name'}) ? $this->{$prefix . '_name'} : '';
-        addHistory($this->_tbl, $this->{$this->_tbl_key}, $this->_event, $name . ' - ' .
-                $this->_AppUI->_('ACTION') . ': ' . $this->_event . ' ' . $this->_AppUI->_('TABLE') . ': ' .
-                $this->_tbl . ' ' . $this->_AppUI->_('ID') . ': ' . $this->{$this->_tbl_key});
+	// Get the descriptive text
+	$__text = $this->generateHistoryDescription($this->_event);
+
+	// Get a project ID if this object has one. This code must be
+	// after the 'generateHistoryDescription' call as it can fill
+	// an aliased variable with a computed project ID.
+	if (isset($this->_tbl_project_id)) {
+		$__project_id = (int)$this->{$this->_tbl_project_id};
+	} else {
+		$__project_id = 0;
+	}
+
+        addHistory($this->_tbl, $this->{$this->_tbl_key}, $this->_event, $__text, $__project_id);
 
         return $this;
     }
@@ -722,7 +735,20 @@ abstract class w2p_Core_BaseObject extends w2p_Core_Event implements w2p_Core_Li
     {
         //NOTE: This only happens if the delete was successful.
 
-        addHistory($this->_tbl, $this->{$this->_tbl_key}, 'delete');
+	// Get the descriptive text
+	$__text = $this->generateHistoryDescription($this->_event);
+
+	// Get a project ID if this object has one. This code must be
+	// after the 'generateHistoryDescription' call as it can fill
+	// an aliased variable with a computed project ID.
+	if (isset($this->_tbl_project_id)) {
+		$__project_id = (int)$this->{$this->_tbl_project_id};
+	} else {
+		$__project_id = 0;
+	}
+
+        addHistory($this->_tbl, $this->{$this->_tbl_key}, 'Delete', $__text, $__project_id);
+
         return $this;
     }
 
@@ -748,7 +774,6 @@ abstract class w2p_Core_BaseObject extends w2p_Core_Event implements w2p_Core_Li
             default:
             //do nothing
         }
-        //error_log("{$event->resourceName} published {$event->eventName} to call hook_$hook");
     }
 
     /**
@@ -766,15 +791,18 @@ abstract class w2p_Core_BaseObject extends w2p_Core_Event implements w2p_Core_Li
         return $this->_query;
     }
 
-    // TODO: create a proper "unpluralize" from this?
-    protected function _getColumnPrefixFromTableName($tableName)
-    {
-        $prefix = substr($tableName, 0, -1);
-        // companies -> company
-        if (substr($prefix, -2) === 'ie') {
-            $prefix = substr($prefix, 0, -2) . 'y';
-        }
-        
-        return $prefix;
+    /**
+     * Returns a descriptive text to be stored on the history table.
+     * Each class is responsible for overriding this method and 
+     * returning a descriptive text (user-friendly, not a cryptic
+     * message understandable only by someone familiar with the code).
+     *
+     * @access protected
+     *
+     * @param string Event type (Create, Update, ...)
+     * @return Descriptive string
+     */
+    protected function generateHistoryDescription($event) {
+	return '';
     }
 }

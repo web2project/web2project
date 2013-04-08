@@ -22,6 +22,7 @@ class CLink extends w2p_Core_BaseObject
     public function __construct()
     {
         parent::__construct('links', 'link_id');
+	$this->_tbl_project_id = 'link_project';
     }
 
     public function loadFull($notUsed = null, $link_id)
@@ -156,5 +157,20 @@ class CLink extends w2p_Core_BaseObject
 		$q->addWhere('link_category = ' . (int) $category_id);
 	}
 	return $q->loadList();
+    }
+
+    protected function generateHistoryDescription($event) {
+        global $AppUI;
+
+	$event = mb_strtolower($event);
+	if ($event == 'create') {
+		return $AppUI->_('Link') . ' \'' . $this->link_name . '\' ' . $AppUI->_('was created with ID') . ' ' . $this->link_id;
+	} elseif ($event == 'update') {
+		return $AppUI->_('Link') . ' \'' . $this->link_name . '\', ' . $AppUI->_('with ID') . ' ' . $this->link_id . ', ' . $AppUI->_('was edited');
+	} elseif ($event == 'delete') {
+		return $AppUI->_('Link') . ' \'' . $this->link_name . '\', ' . $AppUI->_('with ID') . ' ' . $this->link_id . ', ' . $AppUI->_('was deleted');
+	} else {
+		return parent::generateHistoryDescription($event);
+	}
     }
 }

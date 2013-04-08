@@ -168,4 +168,18 @@ class CSystem_Bcode extends w2p_Core_BaseObject
         return $results;
     }
 
+    protected function generateHistoryDescription($event) {
+        global $AppUI;
+
+	$event = mb_strtolower($event);
+	if ($event == 'create') {
+		return $AppUI->_('Billing Code') . ' \'' . $this->billingcode_name . '\' ' . $AppUI->_('was created with ID') . ' ' . $this->billingcode_id;
+	} elseif ($event == 'update') {
+		return $AppUI->_('Billing Code') . ' \'' . $this->billingcode_name . '\', ' . $AppUI->_('with ID') . ' ' . $this->billingcode_id . ', ' . $AppUI->_('was edited');
+	} elseif ($event == 'delete') {
+		return $AppUI->_('Billing Code') . ' \'' . $this->billingcode_name . '\', ' . $AppUI->_('with ID') . ' ' . $this->billingcode_id . ', ' . $AppUI->_('was deleted');
+	} else {
+		return parent::generateHistoryDescription($event);
+	}
+    }
 }

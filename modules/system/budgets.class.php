@@ -73,4 +73,27 @@ class CSystem_Budget extends w2p_Core_BaseObject
 
         parent::hook_preStore();
     }
+
+    protected function generateHistoryDescription($event) {
+        global $AppUI;
+
+	if ($this->budget_company) {
+		$company = new CCompany();
+		$company->load($this->budget_company);
+		$company_name = $AppUI->_('for company') . ' \'' . $company->company_name . '\'';
+	} else {
+		$company_name = '';
+	}
+
+	$event = mb_strtolower($event);
+	if ($event == 'create') {
+		return $AppUI->_('Budget') . $company_name . ' ' . $AppUI->_('was created with ID') . ' ' . $this->budget_id;
+	} elseif ($event == 'update') {
+		return $AppUI->_('Budget') . $company_name . ', ' . $AppUI->_('with ID') . ' ' . $this->budget_id . ', ' . $AppUI->_('was edited');
+	} elseif ($event == 'delete') {
+		return $AppUI->_('Budget') . $company_name . ', ' . $AppUI->_('with ID') . ' ' . $this->budget_id . ', ' . $AppUI->_('was deleted');
+	} else {
+		return parent::generateHistoryDescription($event);
+	}
+    }
 }

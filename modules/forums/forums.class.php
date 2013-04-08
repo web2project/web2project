@@ -36,6 +36,7 @@ class CForum extends w2p_Core_BaseObject
     public function __construct()
     {
         parent::__construct('forums', 'forum_id');
+	$this->_tbl_project_id = 'forum_project';
     }
 
     public function isValid()
@@ -278,5 +279,20 @@ class CForum extends w2p_Core_BaseObject
     public static function getHRef($forum_id)
     {
     	   return 'm=forums&a=viewer&forum_id=' . (string)$forum_id;
+    }
+
+    protected function generateHistoryDescription($event) {
+        global $AppUI;
+
+	$event = mb_strtolower($event);
+	if ($event == 'create') {
+		return $AppUI->_('Forum') . ' \'' . $this->forum_name . '\' ' . $AppUI->_('was created with ID') . ' ' . $this->forum_id;
+	} elseif ($event == 'update') {
+		return $AppUI->_('Forum') . ' \'' . $this->forum_name . '\', ' . $AppUI->_('with ID') . ' ' . $this->forum_id . ', ' . $AppUI->_('was edited');
+	} elseif ($event == 'delete') {
+		return $AppUI->_('Forum') . ' \'' . $this->forum_name . '\', ' . $AppUI->_('with ID') . ' ' . $this->forum_id . ', ' . $AppUI->_('was deleted');
+	} else {
+		return parent::generateHistoryDescription($event);
+	}
     }
 }

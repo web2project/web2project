@@ -238,4 +238,19 @@ class CSystem_Role {
 		}
 		return true;
 	}
+
+    protected function generateHistoryDescription($event) {
+        global $AppUI;
+
+	$event = mb_strtolower($event);
+	if ($event == 'create') {
+		return $AppUI->_('Role') . ' \'' . $this->role_name . '\' ' . $AppUI->_('was created with ID') . ' ' . $this->role_id;
+	} elseif ($event == 'update') {
+		return $AppUI->_('Role') . ' \'' . $this->role_name . '\', ' . $AppUI->_('with ID') . ' ' . $this->role_id . ', ' . $AppUI->_('was edited');
+	} elseif ($event == 'delete') {
+		return $AppUI->_('Role') . ' \'' . $this->role_name . '\', ' . $AppUI->_('with ID') . ' ' . $this->role_id . ', ' . $AppUI->_('was deleted');
+	} else {
+		return parent::generateHistoryDescription($event);
+	}
+    }
 }

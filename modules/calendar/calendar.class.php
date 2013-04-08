@@ -39,6 +39,7 @@ class CEvent extends w2p_Core_BaseObject
     public function __construct()
     {
         parent::__construct('events', 'event_id', 'calendar');
+	$this->_tbl_project_id = 'event_project';
     }
 
     public function loadFull($event_id)
@@ -660,5 +661,20 @@ class CEvent extends w2p_Core_BaseObject
         }
 
         return $count;
+    }
+
+    protected function generateHistoryDescription($event) {
+        global $AppUI;
+
+	$event = mb_strtolower($event);
+	if ($event == 'create') {
+		return $AppUI->_('Event') . ' \'' . $this->event_name . '\' ' . $AppUI->_('was created with ID') . ' ' . $this->event_id;
+	} elseif ($event == 'update') {
+		return $AppUI->_('Event') . ' \'' . $this->event_name . '\', ' . $AppUI->_('with ID') . ' ' . $this->event_id . ', ' . $AppUI->_('was edited');
+	} elseif ($event == 'delete') {
+		return $AppUI->_('Event') . ' \'' . $this->event_name . '\', ' . $AppUI->_('with ID') . ' ' . $this->user_id . ', ' . $AppUI->_('was deleted');
+	} else {
+		return parent::generateHistoryDescription($event);
+	}
     }
 }

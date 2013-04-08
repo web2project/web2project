@@ -138,4 +138,19 @@ class CResource extends w2p_Core_BaseObject {
 
         return $search;
     }
+
+    protected function generateHistoryDescription($event) {
+        global $AppUI;
+
+	$event = mb_strtolower($event);
+	if ($event == 'create') {
+		return $AppUI->_('Resource') . ' \'' . $this->resource_name . '\' ' . $AppUI->_('was created with ID') . ' ' . $this->resource_id;
+	} elseif ($event == 'update') {
+		return $AppUI->_('Resource') . ' \'' . $this->resource_name . '\', ' . $AppUI->_('with ID') . ' ' . $this->resource_id . ', ' . $AppUI->_('was edited');
+	} elseif ($event == 'delete') {
+		return $AppUI->_('Resource') . ' \'' . $this->resource_name . '\', ' . $AppUI->_('with ID') . ' ' . $this->resource_id . ', ' . $AppUI->_('was deleted');
+	} else {
+		return parent::generateHistoryDescription($event);
+	}
+    }
 }
