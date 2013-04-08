@@ -21,7 +21,7 @@
 'Description Length on Tooltip'=>'',
 'Details'=>'',
 'Done'=>'Erledigt',
-'Dur.'=>'',
+'Dur.'=>'Dauer',
 'Duration'=>'Dauer',
 'Duration (Hours)'=>'',
 'Dynamically calculated'=>'',
