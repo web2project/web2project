@@ -3,10 +3,12 @@ if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
 
-global $showEditCheckbox, $priorities;
+global $priorities;
 global $m, $a, $date, $other_users, $user_id, $task_type;
 global $task_sort_item1, $task_sort_type1, $task_sort_order1;
 global $task_sort_item2, $task_sort_type2, $task_sort_order2;
+
+$showEditCheckbox = w2PgetConfig('direct_edit_assignment');
 
 // retrieve any state parameters
 if (isset($_POST['show_form'])) {
@@ -112,7 +114,7 @@ $canDelete = $perms->checkModuleItem($m, 'delete');
             <th nowrap="nowrap"><?php echo sort_by_item_title('Duration', 'task_duration', SORT_NUMERIC, '&amp;a=todo'); ?></th>
             <th nowrap="nowrap"><?php echo sort_by_item_title('Finish Date', 'task_end_date', SORT_NUMERIC, '&amp;a=todo'); ?></th>
             <th nowrap="nowrap"><?php echo sort_by_item_title('Due In', 'task_due_in', SORT_NUMERIC, '&amp;a=todo'); ?></th>
-            <?php if (w2PgetConfig('direct_edit_assignment')) { ?><th width="0">&nbsp;</th><?php } ?>
+            <?php if ($showEditCheckbox) { ?><th width="0">&nbsp;</th><?php } ?>
         </tr>
         <?php
 
@@ -147,13 +149,13 @@ $canDelete = $perms->checkModuleItem($m, 'delete');
         foreach ($tasks as $task) {
             echo showtask($task, 0, false, true);
         }
-        if (w2PgetConfig('direct_edit_assignment')) {
+        if ($showEditCheckbox) {
         ?>
         <tr>
             <td colspan="9" align="right" height="30">
                 <input type="submit" class="button" value="<?php echo $AppUI->_('update task'); ?>" />
             </td>
-            <td colspan="3" align="center">
+            <td colspan="4" align="center">
             <?php
                 if (is_array($priorities)) {
                     foreach ($priorities as $k => $v) {

@@ -3,7 +3,7 @@ if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
 
-global $showEditCheckbox, $tasks, $priorities;
+global $tasks, $priorities;
 global $m, $a, $date, $min_view, $other_users, $showPinned, $showArcProjs, $showHoldProjs, $showDynTasks, $showLowTasks, $showEmptyDate, $user_id;
 $perms = &$AppUI->acl();
 $canDelete = $perms->checkModuleItem($m, 'delete');

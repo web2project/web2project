@@ -110,7 +110,7 @@ function select_all_rows(cmbObj, elements_name) {
     var checkboxes = document.getElementsByName(elements_name);
 
     // check all
-    for (var i in checkboxes) {
+    for (var i = 0; i < checkboxes.length; i++) {
         id = checkboxes[i].value;
         checkboxes[i].checked = checked;
 

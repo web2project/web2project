@@ -162,17 +162,6 @@ function setDept( key, val ) {
             ?>
             </td>
         </tr>
-        <?php if ($canEdit) { // prevent users without read-write permissions from seeing and editing user type ?>
-        <tr>
-            <td align="right" nowrap="nowrap"> <?php echo $AppUI->_('User Type'); ?>:</td>
-            <td>
-                <?php
-                $utypes = w2PgetSysVal('UserType');
-                echo arraySelect($utypes, 'user_type', 'class=text size=1', $user['user_type'], true);
-                ?>
-            </td>
-        </tr>
-        <?php } // End of security ?>
         <?php if ($canEdit && !$user_id) { ?>
         <tr>
             <td align="right" nowrap="nowrap">* <?php echo $AppUI->_('User Role'); ?>:</td>

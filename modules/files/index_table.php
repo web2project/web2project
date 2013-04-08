@@ -8,7 +8,7 @@ if (!defined('W2P_BASE_DIR')) {
 global $AppUI, $company_id, $project_id, $task_id;
 global $currentTabId, $m, $showProject, $xpg_min, $xpg_pagesize, $page;
 
-$tab = ($m == 'files') ? $currentTabId-1 : -1;
+$tab = ($m == 'files') ? $currentTabId-1 : $currentTabId;
 $page = w2PgetParam($_GET, 'page', 1);
 if (!isset($project_id)) {
 	$project_id = w2PgetParam($_REQUEST, 'project_id', 0);
