@@ -2,9 +2,13 @@
 if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly');
 }
-global $uistyle;
+global $uistyle, $AppUI;
 ?>
 <script language="javascript" type="text/javascript">
+var w2p = {
+    lang: '<?= $AppUI->user_lang[3] ?>',
+    style: '<?= $uistyle ?>'
+};
 function gt_hide_tabs() {
     $('.tabon').removeClass('tabon').addClass('taboff');
     $('div.tab').css('display', 'none');
