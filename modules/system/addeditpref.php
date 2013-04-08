@@ -156,6 +156,8 @@ $f = '%d/%m/%Y';
 $dates[$f] = $ex->format($f);
 $f = '%d/%b/%Y';
 $dates[$f] = $ex->format($f);
+$f = '%e. %B %Y';
+$dates[$f] = $ex->format($f);
 $f = '%m/%d/%Y';
 $dates[$f] = $ex->format($f);
 $f = '%b/%d/%Y';
@@ -166,7 +168,7 @@ $f = '%m.%d.%Y';
 $dates[$f] = $ex->format($f);
 $f = '%Y/%b/%d';
 $dates[$f] = $ex->format($f);
-$f = '%Y/%m/%d';
+$f = '%Y-%m-%d'; // ISO 8601
 $dates[$f] = $ex->format($f);
 echo arraySelect($dates, 'pref_name[SHDATEFORMAT]', 'class=text size=1', $prefs['SHDATEFORMAT'], false);
 ?>
