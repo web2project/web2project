@@ -97,36 +97,39 @@ function expand(id){
     </tr>
     <?php
     if (countFiles($folder) > 0) {
-        echo displayFiles($AppUI, $folder_id, $task_id, $project_id, $company_id, true);
+        echo displayFiles($AppUI, $folder_id, $task_id, $project_id, $company_id, $canEdit);
     } elseif ((!empty($limited) && !$limited) or $folder_id != 0) {
         echo '<tr><td colspan="20">' . $AppUI->_('no files') . '</td></tr>';
     }
 
-    echo getFolders($folder_id, true);
+    echo getFolders($folder_id, $canEdit);
 
-    //Lets add our bulk form
-    $folders_avail = getFolderSelectList();
-    //used O (uppercase 0)instead of 0 (zero) to keep things in place
-    $folders = array('-1' => array(0 => 'O', 1 => '(Move to Folder)', 2 => -1)) + array('0' => array(0 => 0, 1 => 'Root', 2 => -1)) + $folders_avail;
+    if ($canEdit) {
 
-    $project = new CProject();
-    $sprojects = $project->getAllowedProjects($AppUI->user_id, false);
-    foreach ($sprojects as $prj_id => $proj_info) {
-        $sprojects[$prj_id] = $idx_companies[$prj_id] . ': ' . $proj_info['project_name'];
-    }
-    asort($sprojects);
-    $sprojects = array('O' => '(' . $AppUI->_('Move to Project', UI_OUTPUT_RAW) . ')') + array('0' => '(' . $AppUI->_('All Projects', UI_OUTPUT_RAW) . ')') + $sprojects;
-    ?>
-	<tr>
-	    <form name="frm_bulk" method="post" action="?m=files&a=do_files_bulk_aed" accept-charset="utf-8">
-                <input type="hidden" name="redirect" value="<?php echo $current_uri; ?>" />
-                <input type="hidden" name="bulk_selected_files" value="" />
-	    	<td colspan="50" align="right">
-	            <?php echo arraySelect($sprojects, 'bulk_file_project', 'style="width:180px" class="text"', -1); ?>
-	            <?php echo arraySelectTree($folders, 'bulk_file_folder', 'style="width:180px;" class="text"', -1); ?>
-	            <input type="button" class="button" value="<?php echo $AppUI->_('Go'); ?>" onclick="doSubmit();" />
-		</td>
-	    </form>
-	</tr>
+	    //Lets add our bulk form
+	    $folders_avail = getFolderSelectList();
+	    //used O (uppercase 0)instead of 0 (zero) to keep things in place
+	    $folders = array('-1' => array(0 => 'O', 1 => '(Move to Folder)', 2 => -1)) + array('0' => array(0 => 0, 1 => 'Root', 2 => -1)) + $folders_avail;
+
+	    $project = new CProject();
+	    $sprojects = $project->getAllowedProjects($AppUI->user_id, false);
+	    foreach ($sprojects as $prj_id => $proj_info) {
+	        $sprojects[$prj_id] = $idx_companies[$prj_id] . ': ' . $proj_info['project_name'];
+	    }
+	    asort($sprojects);
+	    $sprojects = array('O' => '(' . $AppUI->_('Move to Project', UI_OUTPUT_RAW) . ')') + array('0' => '(' . $AppUI->_('All Projects', UI_OUTPUT_RAW) . ')') + $sprojects;
+	    ?>
+		<tr>
+		    <form name="frm_bulk" method="post" action="?m=files&a=do_files_bulk_aed" accept-charset="utf-8">
+	                <input type="hidden" name="redirect" value="<?php echo $current_uri; ?>" />
+	                <input type="hidden" name="bulk_selected_files" value="" />
+		    	<td colspan="50" align="right">
+		            <?php echo arraySelect($sprojects, 'bulk_file_project', 'style="width:180px" class="text"', -1); ?>
+		            <?php echo arraySelectTree($folders, 'bulk_file_folder', 'style="width:180px;" class="text"', -1); ?>
+		            <input type="button" class="button" value="<?php echo $AppUI->_('Go'); ?>" onclick="doSubmit();" />
+			</td>
+		    </form>
+		</tr>
+	<?php } ?>
 </table>
 
