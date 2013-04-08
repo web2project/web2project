@@ -1166,6 +1166,16 @@ class w2p_Core_CAppUI
         echo '<script type="text/javascript" src="' . $base . 'lib/jquery/jquery.js"></script>';
         echo '<script type="text/javascript" src="' . $base . 'lib/jquery/jquery.tipTip.js"></script>';
 
+        // Internet Explorer support for more modern CSS features and other bugfixes
+        // see http://ie7-js.googlecode.com/svn/test/index.html
+        echo '<!--[if lt IE 9]>';
+        echo '<script type="text/javascript" src="' . $base . 'lib/ie7-js/IE9.js"></script>';
+        // The following script adds method document.recalc(); it needs to be
+        // called whenever the DOM changes through AJAX and those changes affect
+        // IE9.js features.
+        echo '<script type="text/javascript" src="' . $base . 'lib/ie7-js/ie7-recalc.js"></script>';
+        echo '<![endif]-->';
+
         $this->getModuleJS($m, $a, true);
     }
 
