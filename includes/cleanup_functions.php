@@ -2070,8 +2070,6 @@ function displayFiles($AppUI, $folder_id, $task_id, $project_id, $company_id, $c
     }
     if ($checkbox) {
 	    $s .= '<th>Selection</th>';
-    } else {
-	    $s .= '<th></th>';
     }
     $s .= '<th></th>';
     $s .= '</tr>';
@@ -2177,10 +2175,12 @@ function displayFiles($AppUI, $folder_id, $task_id, $project_id, $company_id, $c
             }
             $s .= $cell;
         }
-	   if ($checkbox && $caneditfile) {
-		  $s .= '<td align="center"><input type="checkbox" name="file_sel" value="' . $latest_file['file_id'] . '"></td>';	   
-	   } else {
-		  $s .= '<td></td>';
+	   if ($checkbox) {
+	  	  if ($caneditfile) {
+			  $s .= '<td align="center"><input type="checkbox" name="file_sel" value="' . $latest_file['file_id'] . '"></td>';
+		  } else {
+			  $s .= '<td></td>';
+		  }
 	   }
 
         $s .= '<td>';
