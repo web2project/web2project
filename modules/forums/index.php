@@ -74,7 +74,7 @@ $columnCount = 1 + count($fieldList);
     <input type="hidden" name="dosql" value="do_watch_forum" />
 	<input type="hidden" name="watch" value="forum" />
 
-    <table class="tbl list">
+    <table class="list">
         <tr>
             <?php foreach ($fieldNames as $index => $name) { ?>
             <th nowrap="nowrap"<?= ($index == 0)?' colspan="2"':'' /* first heading extends over icons */ ?>>

@@ -231,11 +231,11 @@ TD.nav {
 }
 
 /* Standard table 'spreadsheet' style */
-table.tbl {
+table.tbl, table.list {
 	background: #D4D0C8;
 }
 
-table.tbl TH {
+table.tbl TH, table.list TH {
 	color               : #333;
 	list-style-type     : disc;
 	list-style-position : inside;
@@ -245,11 +245,11 @@ table.tbl TH {
     text-align: center;
 }
 
-table.tbl td {
+table.tbl td, table.list td {
 	background-color: #ffffff;
 }
 
-table.tbl td.hilite {
+table.tbl td.hilite, table.list td.hilite {
   background-color: #ECEAE5;
 }
 
