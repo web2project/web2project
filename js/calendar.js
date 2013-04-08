@@ -88,8 +88,6 @@ function showCalendar(id, format, form_name, showsTime, showsOtherMonths, newSel
   return false;
 }
 
-var MONTH_NAMES=new Array('January','February','March','April','May','June','July','August','September','October','November','December','Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec');
-var DAY_NAMES=new Array('Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sun','Mon','Tue','Wed','Thu','Fri','Sat');
 function LZ(x) {
 	return(x<0||x>9?"":"0")+x
 }
@@ -121,7 +119,9 @@ function formatDate(date,format) {
       value["MMM"]=MONTH_NAMES[M-1];
       value["NNN"]=MONTH_NAMES[M+11];
       value["b"]=MONTH_NAMES[M+11];
+      value["B"]=MONTH_NAMES[M];
       value["d"]=d;
+      value["e"]=d;
       value["dd"]=LZ(d);
       value["E"]=DAY_NAMES[E+7];
       value["EE"]=DAY_NAMES[E];

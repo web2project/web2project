@@ -69,6 +69,7 @@ div.shadow {
 }
 
 input.button {
+    display: block;
     font-size:8pt;
     font-family: arial, helvetica, sans-serif;
     font-weight:bold;
@@ -180,11 +181,11 @@ td.item {
 }
 
 /* Standard table 'spreadsheet' style */
-table.tbl {
+table.tbl, table.list {
     background: #aeaeae;
 }
 
-table.tbl TH {
+table.tbl TH, table.list TH {
     background: url("images/lines_title_bar.gif");
     height: 22px;
     border-color: #a9d4ff;
@@ -201,7 +202,7 @@ table.tbl TH {
     list-style-position: inside;
 }
 
-table.tbl td {
+table.tbl td, table.list td {
     background-color: #ffffff;
 }
 
@@ -408,75 +409,49 @@ table.tbl td.event td {
     background-color: #fff0b0;
 }
 
-a.button {
-    background: transparent url('images/button_right.gif') no-repeat scroll top right;
+a.button, a.delete {
+    background: transparent url('images/button_right.gif') no-repeat scroll bottom right;
     color: #444;
     display: block;
     float: left;
     font: normal 8pt arial, sans-serif;
     height: 22px;
-    margin-right:0px;
-    padding-right: 10px; /* sliding doors padding */
+    margin-right: 0px;
+    padding: 0 10px 0 10px; /* sliding doors padding */
     text-decoration: none;
     border:0px;
+    line-height: 17px;
 }
 
-a.button span, a.button div {
-    background: transparent url('images/button_left.gif') no-repeat;
+a.button::before, a.delete::before {
+    background: transparent url('images/button_left.gif') no-repeat bottom left;
+    line-height: 17px;
+    content: " ";
     display: block;
-    line-height: 14px;
-    padding: 3px 0 5px 10px;
-} 
+    margin-bottom: -22px;
+    margin-left: -10px;
+    padding: 0 0 5px 0;
+}
 
-a.button:hover {
+a.button:hover, a.delete:hover {
 	color: #FFFFFF;
 }
 
-a.button:active {
-    background-position: bottom right;
+a.button:active, a.delete:active {
 	color: #FFFFFF;
     outline: none; /* hide dotted outline in Firefox */
+    padding-top: 1px;
+    margin-bottom: -1px;
 }
 
-a.button:active span {
-    background-position: bottom left;
-    padding: 4px 0 4px 10px; /* push text down 1px */
-}
-
-a.delete {
-    background: transparent url('images/delete_right.gif') no-repeat scroll top right;
+body a.delete {
+    background: transparent url('images/delete_right.gif') no-repeat scroll bottom right;
     color: #444;
-    display: block;
-    float: left;
-    font: normal 8pt arial, sans-serif;
-    height: 22px;
-    margin-right:0px;
-    padding-right: 10px; /* sliding doors padding */
-    text-decoration: none;
-	border:0px;
 }
 
-a.delete span, a.delete div {
-    background: transparent url('images/delete_left.gif') no-repeat;
-    display: block;
-    line-height: 14px;
-    padding: 3px 0 5px 10px;
+body a.delete::before {
+    background: transparent url('images/delete_left.gif') no-repeat bottom left;
 } 
-
-a.delete:hover {
-	color: #FFFFFF;
-}
-
-a.delete:active {
-    background-position: bottom right;
-	color: #FFFFFF;
-    outline: none; /* hide dotted outline in Firefox */
-}
-
-a.delete:active span {
-    background-position: bottom left;
-    padding: 4px 0 4px 10px; /* push text down 1px */
-}
 
 .crumb ul {
     margin-left: 5px;

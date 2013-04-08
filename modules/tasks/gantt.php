@@ -226,7 +226,7 @@ $gantt = new w2p_Output_GanttRenderer($AppUI, $width);
 $gantt->localize();
 $pname = $projects[$project_id]['project_name'];
 $gantt->setTitle($pname, '#'.$projects[$project_id]['project_color_identifier']);
-$field = ($showWork == '1') ? 'Work' : 'Dur';
+$field = ($showWork == '1') ? 'Work' : 'Dur.';
 
 if ($showTaskNameOnly == '1') {
     $columnNames = array('Task name');

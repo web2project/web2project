@@ -262,13 +262,11 @@ class w2p_Output_MonthCalendar {
 	 * @return string Returns table a row with the day names
 	 */
 	private function _drawDays() {
-		setlocale(LC_TIME, 'en');
 		$wk = Date_Calc::getCalendarWeek(null, null, null, '%a', LOCALE_FIRST_DAY);
-		setlocale(LC_ALL, $this->_AppUI->user_lang);
 
 		$s = (($this->showWeek) ? ('<th>&nbsp;</th>') : '');
 		foreach ($wk as $day) {
-			$s .= ('<th width="14%">' . $this->_AppUI->_($day) . '</th>');
+			$s .= ('<th width="14%">' . $day . '</th>');
 		}
 
 		return ('<tr>' . $s . '</tr>');
@@ -288,9 +286,7 @@ class w2p_Output_MonthCalendar {
 		$this_day = (int) $date->getDay();
 		$this_month = (int) $date->getMonth();
 		$this_year = (int) $date->getYear();
-		setlocale(LC_TIME, 'en');
 		$cal = Date_Calc::getCalendarMonth($this_month, $this_year, '%Y%m%d%w', LOCALE_FIRST_DAY);
-		setlocale(LC_ALL, $this->_AppUI->user_lang);
 
 		$df = $this->_AppUI->getPref('SHDATEFORMAT');
 

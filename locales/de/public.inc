@@ -1,13 +1,22 @@
 ##
 ## DO NOT MODIFY THIS FILE BY HAND!
 ##
-'Access Denied'=>'Zutritt verweigert',
+'Access Denied'=>'Zugriff verweigert',
+'Allowed Companies'=>'',
 'Color Selector'=>'Farbwähler',
 'Contacts for'=>'Kontakte für',
 'Continue'=>'Fortfahren',
+'Current Password'=>'Aktuelles Passwort',
+'New Password'=>'Neues Passwort',
 'Preset'=>'Zurücksetzen',
+'Repeat New Password'=>'Neues Passwort (wdh.)',
+'View all allowed companies'=>'',
 '[none]'=>'[nichts]',
 'accessDeniedMsg'=>'Für diesen Bereich der Anwendung besteht keine Zugangsberechtigung.',
+'chgpwLogin'=>'',
+'chgpwUpdated'=>'',
+'chgpwWrongPW'=>'',
 'colorLegend'=>'Bitte für die eindeutige Identifizierung eine Farbe wählen und dann den Farbwähler schließen.',
 'nodepartments, companies, permissions'=>'Keine Abteilungen, Firmen, Rechte vorhanden',
 'notasks'=>'Keine Aufgaben vorhanden',
+'submit'=>'Absenden',

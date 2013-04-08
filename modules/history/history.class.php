@@ -105,7 +105,7 @@ class CHistory extends w2p_Core_BaseObject {
                     $link = '&a=view&task_id=';
                     break;
                 case 'forums':
-                    $link = '&a=viewer&forum_id=';
+                    $link = '&a=view&forum_id=';
                     break;
                 case 'projects':
                     $link = '&a=view&project_id=';

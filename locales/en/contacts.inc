@@ -2,6 +2,7 @@
 ## DO NOT MODIFY THIS FILE BY HAND!
 ##
 'Add Contact',
+'All Contacts',
 'Address',
 'back',
 'Birthday',
@@ -48,6 +49,7 @@
 'Phone',
 'Postcode',
 'Private Entry',
+'Recently Updated',
 'Reset search',
 'Search for',
 'select company...',

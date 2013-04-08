@@ -166,17 +166,14 @@ class w2p_Output_HTMLHelper
  * TODO: These two prefix adjustments are an ugly hack because our departments 
  *   table doesn't follow the same convention as every other table we have. 
  *   This needs to be fixed in v4.0 - caseydk 13 Feb 2012
- *
- * TODO: And unfortunately, the forums module is screwy using 'viewer' instead 
- *   of our standard 'view' for the page. ~ caseydk 16 Feb 2012
 */
             case '_name':
                 $prefix = ($prefix == 'project_short')  ? 'project' : $prefix;
-                $prefix = ($prefix == 'dept')  ? 'department' : $prefix;
-                $prefix = ($prefix == 'message')  ? 'forum' : $prefix;
-                $page   = ($prefix == 'forum') ? 'viewer&message_id='.$this->tableRowData['message_id'] : 'view';
-                $link   = ($prefix == 'file') ? 'fileviewer.php?' : '?m='. w2p_pluralize($prefix) .'&a='.$page.'&';
-                $link   = ($prefix == 'event') ? '?m=calendar&a='.$page.'&' : $link;
+                $prefix = ($prefix == 'dept') ? 'department' : $prefix;
+                $link   = ($prefix == 'file') ? 'fileviewer.php?' : '?m='. w2p_pluralize($prefix) .'&a=view&';
+                $link   = ($prefix == 'message') ? '?m=forums&a=view&message_id='.$this->tableRowData['message_id'].'&' : $link;
+                $prefix = ($prefix == 'message') ? 'forum' : $prefix;
+                $link   = ($prefix == 'event') ? '?m=calendar&a=view&' : $link;
                 $link   = ($prefix == 'user') ? '?m=admin&a=viewuser&' : $link;
                 $prefix = ($prefix == 'department') ? 'dept' : $prefix;
                 $link  .= $prefix.'_id='.$this->tableRowData[$prefix.'_id'];

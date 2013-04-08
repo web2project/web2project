@@ -26,11 +26,11 @@ if ($canCreate) {
 $titleBlock->show();
 
 $tabBox = new CTabBox('?m=contacts', W2P_BASE_DIR . '/modules/contacts/', $tab);
-$tabBox->add('vw_idx_contacts', $AppUI->_('Recently Updated'));
+$tabBox->add('vw_idx_contacts', 'Recently Updated');
 for ($c = 65; $c < 91; $c++) {
-    $tabBox->add('vw_idx_contacts', $AppUI->_(chr($c)));
+	$tabBox->add('vw_idx_contacts', chr($c), true);
 }
-$tabBox->add('vw_idx_contacts', $AppUI->_('All Contacts'));
+$tabBox->add('vw_idx_contacts', 'All Contacts');
 $tabBox->show();
 
 // TODO: Check to see that the Edit function is separated.

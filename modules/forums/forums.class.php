@@ -12,7 +12,7 @@ $bbparser = new HTML_BBCodeParser();
 
 $filters = array('- Filters -');
 
-if (isset($a) && $a == 'viewer') {
+if (isset($a) && $a == 'view') {
     array_push($filters, 'My Watched', 'Last 30 days');
 } else {
     array_push($filters, 'My Forums', 'My Watched', 'My Projects', 'My Company', 'Inactive Projects');
@@ -30,6 +30,7 @@ class CForum extends w2p_Core_BaseObject
     public $forum_last_date = null;
     public $forum_last_id = null;
     public $forum_message_count = null;
+    public $forum_replies = null;
     public $forum_description = null;
     public $forum_moderated = null;
 
@@ -113,7 +114,7 @@ class CForum extends w2p_Core_BaseObject
         $q->addQuery('user_username, project_name, project_color_identifier, contact_display_name as owner_name, user_id');
         $q->addQuery('SUBSTRING(l.message_body,1,' . $max_msg_length . ') message_body');
         $q->addQuery('LENGTH(l.message_body) message_length, watch_user, l.message_parent, l.message_id');
-        $q->addQuery('count(distinct v.visit_message) as visit_count, count(distinct c.message_id) as message_count');
+        $q->addQuery('count(distinct v.visit_message) as visit_count, count(distinct c.message_id) as forum_message_count');
 
         $q->addJoin('users', 'u', 'u.user_id = forum_owner');
         $q->addJoin('projects', 'pr', 'pr.project_id = forum_project');
@@ -216,7 +217,7 @@ class CForum extends w2p_Core_BaseObject
         $search['table_alias'] = 'f';
         $search['table_module'] = 'forums';
         $search['table_key'] = 'f.forum_id';
-        $search['table_link'] = 'index.php?m=forums&a=viewer&forum_id='; // first part of link
+        $search['table_link'] = 'index.php?m=forums&a=view&forum_id='; // first part of link
         $search['table_key2'] = 'fm.message_id';
         $search['table_link2'] = '&message_id='; // second part of link
 

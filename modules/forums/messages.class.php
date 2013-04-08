@@ -86,6 +86,55 @@ class CForum_Message extends w2p_Core_BaseObject
         return $stored;
     }
 
+    public function canDelete($notUsed = '', $oid = null, $joins = null)
+    {
+	    global $AppUI;
+
+        $k = $this->_tbl_key;
+        if ($oid) {
+            $this->$k = (int) $oid;
+        }
+
+        $q = $this->_getQuery();
+        $q->addTable('forums');
+        $q->addTable('forum_messages');
+        $q->addQuery('forum_moderated, message_author, message_parent');
+        $q->addWhere('forum_id = message_forum AND (message_id = ' . (int) $this->$k . ')');
+        $rows = $q->loadList();
+
+        if ($AppUI->user_id == $rows[0]['forum_moderated'] || canEdit('admin')) return true;
+        if ($AppUI->user_id != $rows[0]['message_author']) return false;
+
+        // Message authors may only delete the top post (i.e., the whole thread) if there are no replies
+        $q = $this->_getQuery();
+        $q->addTable('forum_messages');
+        $q->addQuery('COUNT(*)');
+        $q->addWhere('message_parent = ' . (int) $this->$k);
+
+        return ((int)$q->loadResult()) == 0;
+    }
+
+    public function canEdit() { 
+	    global $AppUI;
+
+        $k = $this->_tbl_key;
+        if ($oid) {
+            $this->$k = (int) $oid;
+        }
+
+        $q = $this->_getQuery();
+        $q->addTable('forums');
+        $q->addTable('forum_messages');
+        $q->addQuery('forum_moderated, message_author');
+        $q->addWhere('forum_id = message_forum AND (message_id = ' . (int) $this->$k . ')');
+        $rows = $q->loadList();
+
+        return $AppUI->user_id == $rows[0]['forum_moderated'] || $AppUI->user_id == $rows[0]['message_author']
+	        || canEdit('admin');
+
+    }
+
+
     public function delete()
     {
         $result = false;
@@ -123,6 +172,18 @@ class CForum_Message extends w2p_Core_BaseObject
         $q->setDelete('forum_visits');
         $q->addWhere('visit_message = ' . (int) $this->message_id);
         $q->exec(); // No error if this fails, it is not important.
+        $q->clear();
+
+        $message = new CForum_Message();
+        $q = $this->_getQuery();
+        $q->addTable('forum_messages');
+        $q->addQuery('message_id');
+        $q->addWhere('message_parent = ' . (int) $this->message_id);
+        $q->exec();
+        while ($row = $q->fetchRow()) {
+	        $message->load($row['message_id']);
+	        $message->delete();
+        }
         $q->clear();
     }
 

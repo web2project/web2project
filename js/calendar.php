@@ -33,6 +33,8 @@ $cal_sdf = str_replace('%b', '%NNN', $cal_sdf);
 $cal_sdf = str_replace('%', '', $cal_sdf);
 ?>
 <script language="javascript" type="text/javascript">
+var MONTH_NAMES=new Array("<?=$AppUI->_('January')?>", "<?=$AppUI->_('February')?>", "<?=$AppUI->_('March')?>", "<?=$AppUI->_('April')?>", "<?=$AppUI->_('May')?>", "<?=$AppUI->_('June')?>", "<?=$AppUI->_('July')?>", "<?=$AppUI->_('August')?>", "<?=$AppUI->_('September')?>", "<?=$AppUI->_('October')?>", "<?=$AppUI->_('November')?>", "<?=$AppUI->_('December')?>", "<?=$AppUI->_('Jan')?>", "<?=$AppUI->_('Feb')?>", "<?=$AppUI->_('Mar')?>", "<?=$AppUI->_('Apr')?>", "<?=$AppUI->_('May')?>", "<?=$AppUI->_('Jun')?>", "<?=$AppUI->_('Jul')?>", "<?=$AppUI->_('Aug')?>", "<?=$AppUI->_('Sep')?>", "<?=$AppUI->_('Oct')?>", "<?=$AppUI->_('Nov')?>", "<?=$AppUI->_('Dec')?>");
+var DAY_NAMES=new Array("<?=$AppUI->_('Sunday')?>", "<?=$AppUI->_('Monday')?>", "<?=$AppUI->_('Tuesday')?>", "<?=$AppUI->_('Wednesday')?>", "<?=$AppUI->_('Thursday')?>", "<?=$AppUI->_('Friday')?>", "<?=$AppUI->_('Saturday')?>", "<?=$AppUI->_('Sun')?>", "<?=$AppUI->_('Mon')?>", "<?=$AppUI->_('Tue')?>", "<?=$AppUI->_('Wed')?>", "<?=$AppUI->_('Thu')?>", "<?=$AppUI->_('Fri')?>", "<?=$AppUI->_('Sat')?>");
 //w2P Related
 // ------------------------------------------------------------------
 // parseDate( date_string [, prefer_euro_format] )
