@@ -150,13 +150,13 @@ if (function_exists('styleRenderBoxTop')) {
         <tr>
             <td align="right"><?php echo $AppUI->_('Subject'); ?>:</td>
             <td>
-                <input type="text" class="text" name="message_title" value="<?php echo ($message_id || $message_parent == -1 ?  $message->message_title : 'Re: ' . $last_message->message_title); ?>" size="50" maxlength="250" />
+                <input type="text" class="text" name="message_title" value="<?php echo ($message_id || $message_parent == -1 ?  $message->message_title : 'Re: ' . $last_message->message_title); ?>" size="120" maxlength="250" />
             </td><td width="100%">&nbsp;</td>
         </tr>
         <tr>
             <td align="right" valign="top"><?php echo $AppUI->_('Message'); ?>:</td>
             <td align="left" valign="top">
-               <textarea cols="60" name="message_body" style="height:200px"><?php echo (($message_id == 0) && ($message_parent != -1)) ? "\n>" . $last_message->message_body . "\n\n" : $message->message_body; ?></textarea>
+               <textarea cols="101" name="message_body" style="height:200px"><?php echo (($message_id == 0) && ($message_parent != -1)) ? "\n>" . $last_message->message_body . "\n\n" : $message->message_body; ?></textarea>
             </td><td width="100%">&nbsp;</td>
         </tr>
         <tr>
