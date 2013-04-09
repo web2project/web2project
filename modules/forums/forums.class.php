@@ -260,7 +260,7 @@ class CForum extends w2p_Core_BaseObject
 
         $q = new w2p_Database_Query;
         $q->addTable('forum_messages', 'fm');
-	$q->leftJoin('forum_visits', 'fv', 'fm.message_id = fv.visit_message AND fm.message_forum = fv.visit_forum');
+	$q->leftJoin('forum_visits', 'fv', 'fm.message_id = fv.visit_message AND fm.message_forum = fv.visit_forum AND fv.visit_user = ' . $user_id);
         $q->leftJoin('forums', 'f', 'f.forum_id = fm.message_forum');
         $q->leftJoin('users', 'u', 'u.user_id = fm.message_author');
         $q->leftJoin('contacts', 'cts', 'cts.contact_id = u.user_contact');
