@@ -10,6 +10,11 @@ $hideEmail = w2PgetConfig('hide_email_addresses', false);
 
 $forum = new CForum();
 $messages = $forum->getMessages(null, $forum_id, $message_id, $sort);
+
+$message = new CForum_Message();
+$message->load($message_id);
+$message_parent = $message->message_parent == -1 ? $message_id : $message->message_parent;
+
 $htmlHelper = new w2p_Output_HTMLHelper($AppUI);
 ?>
 <script language="javascript" type="text/javascript">
@@ -90,7 +95,7 @@ if (function_exists('styleRenderBoxTop')) {
                 <?php $sort = ($sort == 'asc') ? 'desc' : 'asc'; ?>
                 <input type="button" class="button" value="<?php echo $AppUI->_('Sort By Date') . ' (' . $AppUI->_($sort) . ')'; ?>" onclick="javascript:window.location='./index.php?m=forums&a=viewer&forum_id=<?php echo $forum_id; ?>&message_id=<?php echo $message_id; ?>&sort=<?php echo $sort; ?>'" />
                 <?php if ($canAuthor) { ?>
-                    <input type="button" class="button" value="<?php echo $AppUI->_('Post Reply'); ?>" onclick="javascript:window.location='./index.php?m=forums&a=viewer&forum_id=<?php echo $forum_id; ?>&message_parent=<?php echo $message_id; ?>&post_message=1';" />
+                    <input type="button" class="button" value="<?php echo $AppUI->_('Post Reply'); ?>" onclick="javascript:window.location='./index.php?m=forums&a=viewer&forum_id=<?php echo $forum_id; ?>&message_parent=<?php echo $message_parent; ?>&post_message=1';" />
                     <input type="button" class="button" value="<?php echo $AppUI->_('New Topic'); ?>" onclick="javascript:window.location='./index.php?m=forums&a=viewer&forum_id=<?php echo $forum_id; ?>&message_id=0&post_message=1';" />
                 <?php } ?>
             </td>
@@ -123,7 +128,7 @@ foreach ($messages as $row) {
 	// Find the parent message - the topic.
 	if ($row['message_id'] == $message_id) {
 		$topic = $row['message_title'];
-    }
+	}
 
 	$q = new w2p_Database_Query;
 	$q->addTable('forum_messages');
@@ -145,13 +150,13 @@ foreach ($messages as $row) {
 		$s .= '<tr>';
 
 		$s .= '<td valign="top" style="' . $style . '" nowrap="nowrap">';
-        $s .= '<a href="?m=admin&a=viewuser&user_id='.$row['message_author'].'">';
-        $s .= $row['contact_name'];
-        $s .= '</a>';
+        	$s .= '<a href="?m=admin&a=viewuser&user_id='.$row['message_author'].'">';
+        	$s .= $row['contact_name'];
+        	$s .= '</a>';
 		if (!$hideEmail) {
 			$s .= '&nbsp;';
-            $s .= '<a href="mailto:' . $row['contact_email'] . '">';
-    		$s .= '<img src="' . w2PfindImage('email.gif') . '" width="16" height="16" border="0" alt="email" />';
+	            	$s .= '<a href="mailto:' . $row['contact_email'] . '">';
+	    		$s .= '<img src="' . w2PfindImage('email.gif') . '" width="16" height="16" border="0" alt="email" />';
 			$s .= '</a>';
 		}
 
@@ -174,7 +179,7 @@ foreach ($messages as $row) {
 		$s .= '<td valign="top" style="' . $style . '">';
 		$s .= '<font size="2"><strong>' . $row['message_title'] . '</strong><hr size=1>';
 		$row['message_body'] = $bbparser->qparse($row['message_body']);
-        $row['message_body'] = nl2br($row['message_body']);
+      		$row['message_body'] = nl2br($row['message_body']);
 		$s .= $row['message_body'];
 		$s .= '</font></td>';
 
@@ -218,56 +223,64 @@ foreach ($messages as $row) {
                 
 		$s .= '</td>';
 		$s .= '</tr>';
-	} else
-		if ($viewtype == 'short') {
-			$s .= "<tr>";
+	} elseif ($viewtype == 'short') {
+		$s .= "<tr>";
 
-			$s .= '<td valign="top" style="' . $style . '" >';
-			$s .= '<a href="mailto:' . $row['contact_email'] . '">';
-			$s .= '<font size="2">' . $row['contact_name'] . ' ' . $row['contact_name'] . '</font></a>';
-			$s .= ' (' . $AppUI->formatTZAwareTime($row['message_date'], $df . ' ' . $tf) . ') ';
-			if (sizeof($editor) > 0) {
-				$s .= '<br/>&nbsp;<br/>' . $AppUI->_('last edited by');
-				$s .= ':<br/><a href="mailto:' . $editor[0]['contact_email'] . '">';
-				$s .= '<font size="1">' . $editor[0]['contact_name'] . '</font></a>';
-			}
-			$s .= '<a name="' . $row['message_id'] . '" href="javascript: void(0);" onclick="toggle(' . $row['message_id'] . ')">';
-			$s .= '<span size="2"><strong>' . $row['message_title'] . '</strong></span></a>';
-			$s .= '<div class="message" id="' . $row['message_id'] . '" style="display: none">';
-			$row['message_body'] = $bbparser->qparse($row['message_body']);
-			$s .= $row['message_body'];
-			$s .= '</div></td>';
+		$s .= '<td valign="top" style="' . $style . '" >';
+		$s .= '<div><div style="float: left;">';
+		$s .= '<a href="mailto:' . $row['contact_email'] . '">';
+		$s .= '<font size="2">' . $row['contact_name'] . '</font></a>';
+		$s .= ' (' . $AppUI->formatTZAwareTime($row['message_date'], $df . ' ' . $tf) . ') ';
+		$s .= '</div>';
+		if (sizeof($editor) > 0) {
+			$s .= '<div style="float: right;">';
+			$s .= $AppUI->_('last edited by');
+			$s .= ':<br/><a href="mailto:' . $editor[0]['contact_email'] . '">';
+			$s .= '<font size="1">' . $editor[0]['contact_name'] . '</font></a>';
+			$s .= '</div>';
+		}
+		$s .= '</div><div style="clear: both">';
+		$s .= '<a name="' . $row['message_id'] . '" href="javascript: void(0);" onclick="toggle(' . $row['message_id'] . ')">';
+		$s .= '<span size="2"><strong>' . $row['message_title'] . '</strong></span></a>';
+		$s .= '</div>';
+		$s .= '<div class="message" id="' . $row['message_id'] . '" style="display: none; margin-top: 1em;">';
+		$row['message_body'] = $bbparser->qparse($row['message_body']);
+		$s .= nl2br($row['message_body']);
+		$s .= '</div></td>';
+		$s .= '</tr>';
+	} elseif ($viewtype == 'single') {
+		$s .= '<tr>';
 
-			$s .= '</tr>';
-		} else
-			if ($viewtype == 'single') {
-				$s .= '<tr>';
-
-				$s .= '<td valign="top" style="' . $style . '">';
-				$s .= $AppUI->formatTZAwareTime($row['message_date'], $df . ' ' . $tf) . ' - ';
-				$s .= '<a href="mailto:' . $row['contact_email'] . '">';
-				$s .= '<font size="2">' . $row['contact_name'] . '</font></a>';
-				$s .= '<br />';
-				if (sizeof($editor) > 0) {
-					$s .= '<br/>&nbsp;<br/>' . $AppUI->_('last edited by');
-					$s .= ':<br/><a href="mailto:' . $editor[0]['contact_email'] . '">';
-					$s .= '<font size="1">' . $editor[0]['contact_name'] . '</font></a>';
-				}
-				$s .= '<a href="javascript: void(0);" onclick="toggle(' . $row['message_id'] . ')">';
-				$s .= '<span size="2"><strong>' . $row['message_title'] . '</strong></span></a>';
-				$side .= '<div class="message" id="' . $row['message_id'] . '" style="display: none">';
-				$row['message_body'] = $bbparser->qparse($row['message_body']);
-				$side .= $row['message_body'];
-				$side .= '</div>';
-				$s .= '</td>';
-				if ($first) {
-					$s .= '<td rowspan="' . count($messages) . '" valign="top">';
-					echo $s;
-					$s = '';
-					$first = false;
-				}
-				$s .= '</tr>';
-			}
+		$s .= '<td valign="top" style="' . $style . '">';
+		$s .= '<div><div style="float: left;">';
+		$s .= $AppUI->formatTZAwareTime($row['message_date'], $df . ' ' . $tf) . ' - ';
+		$s .= '<a href="mailto:' . $row['contact_email'] . '">';
+		$s .= '<font size="2">' . $row['contact_name'] . '</font></a>';
+		$s .= '</div>';
+		if (sizeof($editor) > 0) {
+			$s .= '<div style="float: right;">';
+			$s .= $AppUI->_('last edited by');
+			$s .= ':<br/><a href="mailto:' . $editor[0]['contact_email'] . '">';
+			$s .= '<font size="1">' . $editor[0]['contact_name'] . '</font></a>';
+			$s .= '</div>';
+		}
+		$s .= '</div><div style="clear: both">';
+		$s .= '<a href="javascript: void(0);" onclick="toggle(' . $row['message_id'] . ')">';
+		$s .= '<span size="2"><strong>' . $row['message_title'] . '</strong></span></a>';
+		$s .= '</div>';
+		$side .= '<div class="message" id="' . $row['message_id'] . '" style="display: none">';
+		$row['message_body'] = $bbparser->qparse($row['message_body']);
+		$side .= nl2br($row['message_body']);
+		$side .= '</div>';
+		$s .= '</td>';
+		if ($first) {
+			$s .= '<td rowspan="' . count($messages) . '" valign="top">';
+			echo $s;
+			$s = '';
+			$first = false;
+		}
+		$s .= '</tr>';
+	}
 
 	if ($viewtype != 'single') {
 		echo $s;
