@@ -41,6 +41,7 @@ $start_date = $AppUI->formatTZAwareTime($forum->forum_create_date, $df);
 // setup the title block
 $titleBlock = new w2p_Theme_TitleBlock('Forum', 'support.png', $m, $m . '.' . $a);
 $titleBlock->addCell(arraySelect($filters, 'f', 'size="1" class="text" onchange="document.filterFrm.submit();"', $f, true), '', '<form action="?m=forums&a=viewer&forum_id=' . $forum_id . '" method="post" name="filterFrm" accept-charset="utf-8">', '</form>');
+$titleBlock->addCell($AppUI->_('Topics') . ':');
 $titleBlock->show();
 ?>
 <table width="100%" cellspacing="0" cellpadding="2" border="0" class="std view">
