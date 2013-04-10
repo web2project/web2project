@@ -62,12 +62,27 @@ if (count($fields) > 0) {
     //   At some point at/after v4.0, this should be deprecated
     $fieldList = array('', 'watch_user', 'forum_name', 'forum_topics',
         'forum_replies', 'forum_last_date');
-    $fieldNames = array('', 'Watch', 'Forum Name', 'Topics',
+    $fieldNames = array('', 'Watch / EMail', 'Forum Name', 'Topics',
         'Replies', 'Last Post Info');
 
     $module->storeSettings('forums', 'index_list', $fieldList, $fieldNames);
 }
 ?>
+
+<script language="javascript" type="text/javascript">
+
+function displayEMailCtrls(index) {
+	var ctl = document.getElementById('watch_' + index);
+	var span = document.getElementById('span_' + index);
+	var email = document.getElementById('email_' + index);
+
+	span.style.display = ctl.checked ? 'inline' : 'none';
+	if (!ctl.checked) {
+		email.checked = false;
+	}
+}
+
+</script>
 
 <form name="watcher" action="./index.php?m=forums&f=<?php echo $f; ?>" method="post" accept-charset="utf-8">
 	<input type="hidden" name="dosql" value="do_watch_forum" />
@@ -121,8 +136,11 @@ if (count($fields) > 0) {
                 </td>
 
                 <td nowrap="nowrap" align="center">
-                    <input type="checkbox" name="forum_<?php echo $row['forum_id']; ?>" <?php echo $row['watch_user'] ? 'checked="checked"' : ''; ?> />
-		    <?php if ($row['notify_by_email']) { echo w2PshowImage('icons/mail.gif', 16, 16, 'Changes are reported by email'); } ?>
+                    <input type="checkbox" name="watch_<?php echo $row['forum_id']; ?>" id="watch_<?php echo $row['forum_id']; ?>" <?php echo $row['watch_user'] ? 'checked="checked"' : ''; ?> onclick="displayEMailCtrls(<?php echo $row['forum_id']; ?>)"/>
+		    <span id="span_<?php echo $row['forum_id']; ?>" style="display: <?php echo $row['watch_user'] ? 'inline' : 'none'; ?>;">
+		    &nbsp;/&nbsp;
+                    <input type="checkbox" name="email_<?php echo $row['forum_id']; ?>" id="email_<?php echo $row['forum_id']; ?>" <?php echo $row['notify_by_email'] ? 'checked="checked"' : ''; ?> />
+		    </span>
                 </td>
 
                 <td>
@@ -151,11 +169,7 @@ if (count($fields) > 0) {
     <table width="100%" cellspacing="0" cellpadding="0" border="0" class="std">
 
         <tr>
-            <td align="left" nowrap="nowrap">
-                <input type="checkbox" value="1" name="notifyByEMail">
-		<label for="notifyByEmail"><?php echo $AppUI->_('Notify by email on changes'); ?></label>&nbsp;&nbsp;&nbsp;&nbsp;
-            </td>
-            <td align="left" width="100%">
+            <td align="right" width="100%">
                 <input type="submit" class="button" value="<?php echo $AppUI->_('update watches'); ?>" />
             </td>
         </tr>

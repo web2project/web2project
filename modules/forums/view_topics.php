@@ -66,6 +66,22 @@ if (count($fields) > 0) {
     $module->storeSettings('forums', 'view_topics', $fieldList, $fieldNames);
 }
 ?>
+
+<script language="javascript" type="text/javascript">
+
+function displayEMailCtrls(index) {
+	var ctl = document.getElementById('watch_' + index);
+	var span = document.getElementById('span_' + index);
+	var email = document.getElementById('email_' + index);
+
+	span.style.display = ctl.checked ? 'inline' : 'none';
+	if (!ctl.checked) {
+		email.checked = false;
+	}
+}
+
+</script>
+
 <br />
 <?php
 if (function_exists('styleRenderBoxTop')) {
@@ -96,7 +112,6 @@ if (function_exists('styleRenderBoxTop')) {
             </table>
         </td></tr>
         <tr>
-            <th></th>
             <?php foreach ($fieldNames as $index => $name) { ?>
                 <th><?php echo $AppUI->_($fieldNames[$index]); ?></th>
             <?php } ?>
@@ -105,15 +120,23 @@ if (function_exists('styleRenderBoxTop')) {
     foreach ($topics as $row) {
         if ($row["message_parent"] < 0) { ?>
             <tr bgcolor="white" valign="top">
-                <td nowrap="nowrap" align="center" width="1%">
-                    <input type="checkbox" name="forum_<?php echo $row['message_id']; ?>" <?php echo $row['watch_user'] ? 'checked="checked"' : ''; ?> />
-		    <?php if ($row['notify_by_email']) { echo w2PshowImage('icons/mail.gif', 16, 16, 'Changes are reported by email'); } ?>
-                </td>
                 <?php
 //TODO: add the checkbox
                 $htmlHelper->stageRowData($row);
                 foreach ($fieldList as $index => $column) {
-                    echo $htmlHelper->createCell($fieldList[$index], $row[$fieldList[$index]], $customLookups);
+		    if ($column == 'watch_user') {
+		?>
+                <td nowrap="nowrap" align="center" width="1%">
+                    <input type="checkbox" name="watch_<?php echo $row['message_id']; ?>" id="watch_<?php echo $row['message_id']; ?>" <?php echo $row['watch_user'] ? 'checked="checked"' : ''; ?> onclick="displayEMailCtrls(<?php echo $row['message_id']; ?>)"/>
+		    <span id="span_<?php echo $row['message_id']; ?>" style="display: <?php echo $row['watch_user'] ? 'inline' : 'none'; ?>;">
+		    &nbsp;/&nbsp;
+                    <input type="checkbox" name="email_<?php echo $row['message_id']; ?>" id="email_<?php echo $row['message_id']; ?>" <?php echo $row['notify_by_email'] ? 'checked="checked"' : ''; ?> />
+		    </span>
+                </td>
+		<?php
+		    } else {
+                    	echo $htmlHelper->createCell($fieldList[$index], $row[$fieldList[$index]], $customLookups);
+		    }
                 }
                 ?>
             </tr>
@@ -124,11 +147,7 @@ if (function_exists('styleRenderBoxTop')) {
 
     <table width="100%" border="0" cellpadding="0" cellspacing="1" class="std">
         <tr>
-            <td align="left" nowrap="nowrap">
-                <input type="checkbox" value="1" name="notifyByEMail">
-		<label for="notifyByEmail"><?php echo $AppUI->_('Notify by email on changes'); ?></label>&nbsp;&nbsp;&nbsp;&nbsp;
-            </td>
-            <td align="left" width="100%">
+            <td align="right" width="100%">
                 <input type="submit" class="button" value="<?php echo $AppUI->_('update watches'); ?>" />
             </td>
         </tr>
