@@ -103,7 +103,7 @@ if (function_exists('styleRenderBoxTop')) {
 	<input type="hidden" name="message_editor" value="<?php echo (isset($message->message_author) && ($message_id || $message_parent < 0)) ? $AppUI->user_id : '0'; ?>" />
 	<input type="hidden" name="message_id" value="<?php echo $message_id; ?>" />
     <table cellspacing="0" cellpadding="3" border="0" width="100%" class="std addedit">
-        <tr><td>
+        <tr><td colspan="3">
             <table cellspacing="1" cellpadding="2" border="0" width="100%">
             <tr>
                 <td align="left" nowrap="nowrap">
