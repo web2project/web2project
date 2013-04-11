@@ -105,7 +105,7 @@ function delIt(){
                     </td>
                 </tr>
                 <tr>
-                    <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Related Project'); ?></td>
+                    <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Related Project'); ?>:</td>
                     <td>
                         <?php echo arraySelect($projects, 'forum_project', 'size="1" class="text"', $forum->forum_project); ?>
                     </td>
