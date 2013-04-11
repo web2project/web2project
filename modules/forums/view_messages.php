@@ -95,7 +95,7 @@ if (function_exists('styleRenderBoxTop')) {
                         <input type="radio" name="viewtype" value="single" <?php echo ($viewtype == 'single') ? 'checked' : ''; ?> onclick="this.form.submit();" /><?php echo $AppUI->_('Single Message at a time') ?>
                 </form>
             </td>
-            <td width="30%" align="right">
+            <td align="right">
                 <?php $sort = ($sort == 'asc') ? 'desc' : 'asc'; ?>
                 <input type="button" class="button" value="<?php echo $AppUI->_('Sort By Date') . ' (' . $AppUI->_($sort) . ')'; ?>" onclick="javascript:window.location='./index.php?m=forums&a=viewer&forum_id=<?php echo $forum_id; ?>&message_id=<?php echo $message_id; ?>&sort=<?php echo $sort; ?>'" />
                 <?php if ($canAuthor) { ?>
