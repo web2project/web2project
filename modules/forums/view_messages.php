@@ -13,6 +13,10 @@ $messages = $forum->getMessages(null, $forum_id, $message_id, $sort);
 
 $message = new CForum_Message();
 $message->load($message_id);
+
+$canAuthor = $message->canCreate();
+$canEdit = $message->canEdit();
+
 $message_parent = $message->message_parent == -1 ? $message_id : $message->message_parent;
 
 $htmlHelper = new w2p_Output_HTMLHelper($AppUI);
@@ -138,6 +142,12 @@ foreach ($messages as $row) {
 	$q->addWhere('users.user_id = ' . (int)$row['message_editor']);
 	$editor = $q->loadList();
 
+	// Load the object to check permissions
+	$msg = new CForum_Message();
+	$msg->load($row['message_id']);
+	$canEdit = $msg->canEdit();
+	$canDelete = $msg->canDelete();
+
 	$date = intval($row['message_date']) ? new w2p_Utilities_Date($row['message_date']) : null;
 	if ($viewtype != 'single') {
 		$s = '';
@@ -196,8 +206,7 @@ foreach ($messages as $row) {
                 // table tag opening and closing.
                 $tableOpened = false;
                 $tableClosed = false;
-		//the following users are allowed to edit/delete a forum message: 1. the forum moderator  2. a superuser with read-write access to 'all' 3. the message author
-		if ($canEdit || $AppUI->user_id == $row['forum_moderated'] || $AppUI->user_id == $row['message_author'] || $canAdminEdit) {
+		if ($canEdit) {
                     $tableOpened = true;
                     $s .= '<table cellspacing="0" cellpadding="0" border="0"><tr>';
                     // edit message
@@ -205,7 +214,7 @@ foreach ($messages as $row) {
                     $s .= w2PshowImage('icons/stock_edit-16.png', '16', '16');
                     $s .= '</td>';
 		}
-		if ($canDelete || $AppUI->user_id == $row['forum_moderated'] || $AppUI->user_id == $row['message_author'] || $canAdminEdit) {
+		if ($canDelete) {
                     $tableClosed = true;
                     if(!$tableOpened) {
                         $s .= '<table cellspacing="0" cellpadding="0" border="0"><tr>';

@@ -21,7 +21,7 @@ class CForum_Message extends w2p_Core_BaseObject
 
     public function __construct()
     {
-        parent::__construct('forum_messages', 'message_id', 'forums');
+        parent::__construct('forum_messages', 'message_id');
 	$this->_tbl_project_id = '_project_id';
     }
 
@@ -225,18 +225,27 @@ class CForum_Message extends w2p_Core_BaseObject
         return;
     }
 
-    // We can't check for edit permissions on individual messages. So the following users are allowed to edit/delete a forum message: 
+    // We can now check for edit permissions on messages, but not individually. So the following users are allowed to edit a forum message: 
     //
-    //   1. Someone with edit permissions on the 'forums' module
-    //   2. The forum moderator  
-    //   3. A superuser with read-write access to 'all'
-    //   4. The message author
+    //   1. Someone with edit permissions over forum messages
+    //   2. The forum moderator
+    //   3. The message author
     public function canEdit() 
     {
-	$perms = &$this->_AppUI->acl();
-	return $perms->checkModuleItem('forums', 'edit', $forum_id) || ($this->_AppUI->user_id == $this->forum_moderated) || ($this->_AppUI->user_id == $this->message_author) || $perms->checkModuleItem('admin', 'edit', 0);
+        $forum = new CForum();
+        $forum->overrideDatabase($this->_query);
+        $forum->load(null, $this->message_forum);
+
+	return ($this->_AppUI->user_id == $forum->forum_moderated) || 
+               ($this->_AppUI->user_id == $this->message_author) || 
+	       $this->_perms->checkModule('forum_messages', 'edit');
     }
 
+    // We can now check for delete permissions on messages, but not individual. So the following users are allowed to delete a forum message: 
+    //
+    //   1. Someone with delete permissions over forum messages
+    //   2. The forum moderator
+    //   3. The message author
     public function canDelete() 
     {
 	// If there's replies to it don't let it be deleted.
@@ -252,7 +261,13 @@ class CForum_Message extends w2p_Core_BaseObject
 		}
 	}
 
-	return $this->canEdit();
+        $forum = new CForum();
+        $forum->overrideDatabase($this->_query);
+        $forum->load(null, $this->message_forum);
+
+	return ($this->_AppUI->user_id == $forum->forum_moderated) || 
+               ($this->_AppUI->user_id == $this->message_author) || 
+	       $this->_perms->checkModule('forum_messages', 'delete');
     }
 
     public static function getHRef($forum_id, $msg_id)

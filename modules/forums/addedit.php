@@ -8,14 +8,6 @@ $forum_id = (int) w2PgetParam($_GET, 'forum_id', 0);
 $forum = new CForum();
 $forum->forum_id = $forum_id;
 
-$obj = $forum;
-$canAddEdit = $obj->canAddEdit();
-$canAuthor = $obj->canCreate();
-$canEdit = $obj->canEdit();
-if (!$canAddEdit) {
-	$AppUI->redirect(ACCESS_DENIED);
-}
-
 $obj = $AppUI->restoreObject();
 if ($obj) {
     $forum = $obj;
@@ -27,6 +19,13 @@ if (!$forum && $forum_id > 0) {
     $AppUI->setMsg('Forum');
     $AppUI->setMsg('invalidID', UI_MSG_ERROR, true);
     $AppUI->redirect();
+}
+
+$canAddEdit = $forum->canAddEdit();
+$canAuthor = $forum->canCreate();
+$canEdit = $forum->canEdit();
+if (!$canAddEdit) {
+	$AppUI->redirect(ACCESS_DENIED);
 }
 
 $status = isset($forum->forum_status) ? $forum->forum_status : -1;

@@ -10,12 +10,10 @@ if (!isset($AppUI)) {
 require_once ($AppUI->getLibraryClass('PEAR/BBCodeParser'));
 $bbparser = new HTML_BBCodeParser();
 
-$filters = array('All Forums');
-
 if (isset($a) && $a == 'viewer') {
-    array_push($filters, 'My Watched', 'Last 30 days');
+    $filters = array('All Topics', 'My Watched', 'Last 30 days');
 } else {
-    array_push($filters, 'My Forums', 'My Watched', 'My Projects', 'My Company', 'Inactive Projects');
+    $filters = array('All Forums', 'My Forums', 'My Watched', 'My Projects', 'My Company', 'Inactive Projects');
 }
 
 class CForum extends w2p_Core_BaseObject
@@ -238,6 +236,16 @@ class CForum extends w2p_Core_BaseObject
         );
 
         return $search;
+    }
+
+    public function canEdit() 
+    {
+	return parent::canEdit() || ($this->_AppUI->user_id == $this->forum_owner);
+    }
+
+    public function canDelete() 
+    {
+	return parent::canDelete() || ($this->_AppUI->user_id == $this->forum_owner);
     }
 
     public static function getWatchedMessages($start_date, $end_date, $user_id, $company_id = 0)

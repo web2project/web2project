@@ -11,14 +11,6 @@ $forum_id = (int) w2PgetParam($_REQUEST, 'forum_id', 0);
 $myForum = new CForum();
 $myForum->forum_id = $forum_id;
 
-$obj = $myForum;
-$canAddEdit = $obj->canAddEdit();
-$canAdd = $obj->canCreate();
-$canEdit = $obj->canEdit();
-if (!$canAddEdit) {
-	$AppUI->redirect(ACCESS_DENIED);
-}
-
 //Pull forum information
 $myForum->load(null, $forum_id);
 if (!$myForum) {
@@ -40,9 +32,16 @@ $back_url = implode('&', $back_url_params);
 
 //pull message information
 $message = new CForum_Message();
-$message->load($message_id);
+if ($message_id) {
+	$message->load($message_id);
+}
 
-//pull message information from last response
+$canAddEdit = $message->canAddEdit();
+if (!$canAddEdit) {
+	$AppUI->redirect(ACCESS_DENIED);
+}
+
+//pull message information from parent (topic)
 if ($message_parent != -1) {
     $last_message = new CForum_Message();
     $last_message->load($message_parent);
@@ -55,7 +54,7 @@ if ($message_parent != -1) {
 // security improvement:
 // some javascript functions may not appear on client side in case of user not having write permissions
 // else users would be able to arbitrarily run 'bad' functions
-if ($canEdit || $canAdd) {
+if ($canAddEdit) {
 ?>
 function submitIt(){
 	var form = document.changeforum;
