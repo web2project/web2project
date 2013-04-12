@@ -18,6 +18,8 @@ require_once W2P_BASE_DIR . '/lib/adodb/adodb.inc.php';
  * concept, we don't have anything that resembles a real class naming convention
  * so this ends up being nasty and getting nastier.  Hopefully, we can clean
  * these things up for v3.x
+ *
+ * @todo move this into classes/w2p/autoload.php
  */
 spl_autoload_register('w2p_autoload');
 
