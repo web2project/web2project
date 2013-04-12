@@ -451,6 +451,7 @@ if ($obj->task_dynamic != 1 && 0 == $obj->task_represents_project) {
 		}
 	}
 }
+$tabBox->add(W2P_BASE_DIR . '/modules/tasks/vw_forum_messages', 'Forum Topics');
 
 if (count($obj->getChildren()) > 0) {
 	// Has children

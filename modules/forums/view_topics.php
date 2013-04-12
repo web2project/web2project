@@ -22,7 +22,7 @@ $q->addQuery('COUNT(distinct fm2.message_id) AS replies');
 $q->addQuery('MAX(fm2.message_date) AS latest_reply');
 $q->addQuery('user_username, contact_first_name, contact_last_name, contact_display_name as contact_name, watch_user');
 $q->addQuery('count(distinct v1.visit_message) as reply_visits');
-$q->addQuery('v1.visit_user, fw.notify_by_email');
+$q->addQuery('v1.visit_user, fw.notify_by_email, fm1.message_task');
 $q->leftJoin('users', 'u', 'fm1.message_author = u.user_id');
 $q->leftJoin('contacts', 'con', 'contact_id = user_contact');
 $q->leftJoin('forum_messages', 'fm2', 'fm1.message_id = fm2.message_parent');
@@ -59,9 +59,9 @@ if (count($fields) > 0) {
     //   state for versions earlier than v3.0
     //   At some point at/after v4.0, this should be deprecated
     $fieldList = array('watch_user', 'message_name',
-        'message_author', 'replies', 'latest_reply');
+        'message_author', 'message_task', 'replies', 'latest_reply');
     $fieldNames = array('Watch', 'Topics',
-        'Author', 'Replies', 'Last Post');
+        'Author', 'Related Task', 'Replies', 'Last Post');
 
     $module->storeSettings('forums', 'view_topics', $fieldList, $fieldNames);
 }

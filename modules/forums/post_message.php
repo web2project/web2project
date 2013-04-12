@@ -4,7 +4,7 @@ if (!defined('W2P_BASE_DIR')) {
 }
 
 // Add / Edit forum
-$message_parent = (int) w2PgetParam($_GET, 'message_parent', -1);
+$message_parent = (int) w2PgetParam($_GET, 'message_parent', -2);
 $message_id = (int) w2PgetParam($_GET, 'message_id', 0);
 $forum_id = (int) w2PgetParam($_REQUEST, 'forum_id', 0);
 
@@ -39,6 +39,34 @@ if ($message_id) {
 $canAddEdit = $message->canAddEdit();
 if (!$canAddEdit) {
 	$AppUI->redirect(ACCESS_DENIED);
+}
+
+// get the task list if this is a new topic
+$new_topic = false;
+if ($message_parent < 0 && $myForum->forum_project) {
+	$message_parent = -1;
+
+	if ($myForum->forum_project > 0) {
+		$new_topic = true;
+		$noTask = new CTask();
+		$task_list = $noTask->getAllowedTaskList(null, $myForum->forum_project);
+
+		$level = 0;
+		$task_options = array();
+		$last_parent = 0;
+		foreach ($task_list as $task) {
+		        if ($task['task_parent'] != $task['task_id']) {
+		      		if ($last_parent != $task['task_parent']) {
+		      			$last_parent = $task['task_parent'];
+      					$level++;
+		      		}
+		      	} else {
+		      		$last_parent = 0;
+      				$level = 0;
+		      	}
+		      	$task_options[$task['task_id']] = ($level ? str_repeat('&nbsp;&nbsp;', $level) : '') . $task['task_name'];
+		}
+	}
 }
 
 //pull message information from parent (topic)
@@ -146,6 +174,16 @@ if (function_exists('styleRenderBoxTop')) {
         } //end of if-condition
 
         ?>
+	<?php if (($new_topic || $message_parent == -1) && $myForum->forum_project) { ?>
+	    <tr>
+            	<td align="right"><?php echo $AppUI->_('Related task'); ?>:</td>
+            	<td>
+                    <?php echo arraySelect($task_options, 'message_task', 'size="1" class="text"', $message->message_task); ?>
+		</td>
+		<td width="100%">&nbsp;</td>
+	    </tr>
+	<?php } ?>
+
         <tr>
             <td align="right"><?php echo $AppUI->_('Subject'); ?>:</td>
             <td>

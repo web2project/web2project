@@ -187,11 +187,25 @@ foreach ($messages as $row) {
 		}
 		$s .= '</td>';
 		$s .= '<td valign="top" style="' . $style . '">';
-		$s .= '<font size="2"><strong>' . $row['message_title'] . '</strong><hr size=1>';
+		$s .= '<div style="float: left"><font size="2"><strong>' . $row['message_title'] . '</strong></div>';
+		// get the parent message, if there's one, to get the related task
+		if ($msg->message_parent == -1) {
+			$msg_parent = $msg;
+		} else {
+			$msg_parent = new CForum_Message();
+			$msg_parent->load($msg->message_parent);
+		}
+		if ($msg_parent->message_task) {
+			// get the task info
+			$task = new CTask();
+			$task->load($msg_parent->message_task);
+			$s .= '<div style="float: right"></font>' . $AppUI->_('Related to') . ':&nbsp\'' . $task->task_name . '\'<font size="2"></div>';
+		}
+		$s .= '<div style="clear:both"><hr size=1>';
 		$row['message_body'] = $bbparser->qparse($row['message_body']);
       		$row['message_body'] = nl2br($row['message_body']);
 		$s .= $row['message_body'];
-		$s .= '</font></td>';
+		$s .= '</font></div></td>';
 
 		$s .= '</tr><tr>';
 

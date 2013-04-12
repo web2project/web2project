@@ -12,6 +12,7 @@ class CForum_Message extends w2p_Core_BaseObject
     public $message_parent = null;
     public $message_author = null;
     public $message_editor = null;
+    public $message_task = null;
     public $message_title = null;
     public $message_date = null;
     public $message_body = null;
@@ -295,4 +296,18 @@ class CForum_Message extends w2p_Core_BaseObject
 		return parent::generateHistoryDescription($event);
 	}
     }
+
+    public static function getTopicsByTask($AppUI, $task_id) {
+        $q = new w2p_Database_Query();
+        $q->addTable('forum_messages', 'fm');
+	$q->leftJoin('forums', 'f', 'f.forum_id = fm.message_forum');
+	$q->leftJoin('forum_messages', 'fm2', 'fm.message_id = fm2.message_parent');
+	$q->leftJoin('users', 'u', 'fm.message_author = u.user_id');
+        $q->addWhere('fm.message_task = ' . $task_id);
+        $q->addQuery('f.forum_name, fm.message_title as message_name, fm.message_author');
+	$q->addQuery('COUNT(distinct fm2.message_id) AS replies, MAX(fm2.message_date) AS latest_reply');
+	$q->addQuery('u.user_id, fm.message_id, fm.message_forum as forum_id');
+	$q->addGroup('fm.message_id, fm.message_parent');
+	return $q->loadList();
+   }
 }
