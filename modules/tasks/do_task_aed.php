@@ -126,13 +126,16 @@ if ($result) {
 
         if (isset($start_date)) {
             $shift = $nsd->compare($start_date, $nsd);
-            if ($shift < 1) {
-                $obj->task_start_date = $nsd->format(FMT_DATETIME_MYSQL);
-                $obj->task_start_date = $AppUI->formatTZAwareTime($obj->task_start_date, '%Y-%m-%d %T');
-
+            if ($shift < 0) {
+		$obj->task_start_date = $nsd->format(FMT_DATETIME_MYSQL);
+		$obj->task_start_date = $AppUI->formatTZAwareTime($obj->task_start_date, '%Y-%m-%d %T');
                 $ned = new w2p_Utilities_Date($obj->task_start_date);
                 $ned->addDuration($obj->task_duration, $obj->task_duration_type);
-                $obj->task_end_date = $ned->format(FMT_DATETIME_MYSQL);
+
+		// Only change the end date if the computed one is posterior to the stored one.
+		if ($ned->compare($ned, new w2p_Utilities_Date($obj->task_end_date)) > 0) {
+	            $obj->task_end_date = $ned->format(FMT_DATETIME_MYSQL);
+		}
                 $obj->store();
             }
         }

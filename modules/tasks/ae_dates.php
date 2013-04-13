@@ -5,7 +5,7 @@ if (!defined('W2P_BASE_DIR')) {
 
 global $AppUI, $w2Pconfig, $task_parent_options, $loadFromTab;
 global $can_edit_time_information, $locale_char_set, $task;
-global $durnTypes, $task_project, $task_id, $tab;
+global $durnTypes, $task_project, $task_id, $tab, $project;
 global $cal_sdf;
 $AppUI->loadCalendarJS();
 
@@ -37,15 +37,17 @@ for ($current = 0 + $inc; $current < 60; $current += $inc) {
 // format dates
 $df = $AppUI->getPref('SHDATEFORMAT');
 
-$defaultDate = new w2p_Utilities_Date();
+// Get the new start date from the project's last end date or from the current date, if none
+$defaultDate = new w2p_Utilities_Date($project->project_actual_end_date ? $project->project_actual_end_date : null);
+
 $start_date = intval($task->task_start_date) ?
     new w2p_Utilities_Date($AppUI->formatTZAwareTime($task->task_start_date, '%Y-%m-%d %T')) :
-        $defaultDate->calcFinish(1, $task->task_duration_type);
+        $defaultDate;
 
 $task->task_duration = isset($task->task_duration) ? $task->task_duration : 1;
 $end_date = intval($task->task_end_date) ?
     new w2p_Utilities_Date($AppUI->formatTZAwareTime($task->task_end_date, '%Y-%m-%d %T')) :
-        $defaultDate->calcFinish($task->task_duration + 1, $task->task_duration_type);
+        $defaultDate->calcFinish($task->task_duration, $task->task_duration_type);
 
 // convert the numeric calendar_working_days config array value to a human readable output format
 $cwd = explode(',', $w2Pconfig['cal_working_days']);
