@@ -16,7 +16,7 @@ if (isset($_GET['out_user_id']) && $_GET['out_user_id']
         && $canEdit && $canDelete) {
 	$boot_user_id = w2PgetParam($_GET, 'out_user_id', null);
 	$boot_user_name = $_GET['out_name'];
-	$details = $boot_user_name . ' by ' . $AppUI->user_first_name . ' ' . $AppUI->user_last_name;
+	$details = $boot_user_name . ' ' . $AppUI->_('was logged out by') . ' ' . $AppUI->user_first_name . ' ' . $AppUI->user_last_name;
 
 	// one session or many?
 	if ($_GET['out_session'] && $_GET['out_user_log_id']) {
