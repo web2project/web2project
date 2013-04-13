@@ -243,4 +243,19 @@ class CCompany extends w2p_Core_BaseObject {
 			return $q->loadList();
 		}
 	}
+
+    protected function generateHistoryDescription($event) {
+        global $AppUI;
+
+	$event = mb_strtolower($event);
+	if ($event == 'create') {
+		return $AppUI->_('Company') . ' \'' . $this->company_name . '\' ' . $AppUI->_('was created with ID') . ' ' . $this->company_id;
+	} elseif ($event == 'update') {
+		return $AppUI->_('Company') . ' \'' . $this->company_name . '\', ' . $AppUI->_('with ID') . ' ' . $this->company_id . ', ' . $AppUI->_('was edited');
+	} elseif ($event == 'delete') {
+		return $AppUI->_('Company') . ' \'' . $this->company_name . '\', ' . $AppUI->_('with ID') . ' ' . $this->company_id . ', ' . $AppUI->_('was deleted');
+	} else {
+		return parent::generateHistoryDescription($event);
+	}
+    }
 }
