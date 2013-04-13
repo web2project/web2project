@@ -43,6 +43,7 @@ function selected_new(cal, date) {
 // or clicks on the "Close" button.  It just hides the calendar without
 // destroying it.
 function closeHandler(cal) {
+  cal.sel.onchange();
   cal.hide();                        // hide the calendar
   _dynarch_popupCalendar = null;
 }
