@@ -770,7 +770,7 @@ abstract class w2p_Core_BaseObject extends w2p_Core_Event implements w2p_Core_Li
             default:
             //do nothing
         }
-        //error_log("{$event->resourceName} published {$event->eventName} to call hook_$hook");
+        //error_log("{$event->resourceName} published {$event->eventName} with id: " . $this->{$this->_tbl_key});
     }
 
     /**
