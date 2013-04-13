@@ -84,32 +84,33 @@ $gantt->setColumnHeaders($columnNames, $columnSizes);
  *     easier than actual date math.
  *     ~ caseydk 22 Aug 2010
  */
+/*
+ *  Changed the code to have a default date range from now to one month back, 
+ *  centered around the current date. Also ignores null dates.
+ *  ~ Carlos Azevedo 13 April 2013
+ */
 if (!$start_date || !$end_date) {
-	$i = 0;
+	$start_date = new w2p_Utilities_Date($start_date ? $start_date : date('Y-m-d'));
+	$start_date->addDays(-15);
+	$end_date = new w2p_Utilities_Date($end_date ? $end_date : date('Y-m-d'));
+	$end_date->addDays(15);
 	foreach ($projects as $project) {
 		$start = substr($project["project_start_date"], 0, 10);
-        $lastTask = $pjobj->getCriticalTasks($project['project_id']);
-        $end = substr($lastTask[0]['task_end_date'], 0, 10);
+	        $lastTask = $pjobj->getCriticalTasks($project['project_id']);
+        	$end = substr($lastTask[0]['task_end_date'], 0, 10);
 
-        $d_start = strtotime($start);
-        $d_end = strtotime($end);
-		if ($i == 0) {
-			$min_d_start = $d_start;
-            $start_date = $start;
-			$max_d_end = $d_end;
-            $end_date = $end;
-		} else {
-            if ($d_start < $min_d_start) {
-                $min_d_start = $d_start;
-                $start_date = $start;
-            }
-            if ($d_end > $max_d_end) {
-                $max_d_end = $d_end;
-                $end_date = $end;
-            }
+	        $d_start = strtotime($start);
+        	$d_end = strtotime($end);
+
+		if ($d_start && $d_start < $start_date->getTime()) {
+			$start_date = new w2p_Utilities_Date(date('Ymd', $d_start));
 		}
-		$i++;
+		if ($d_end && $d_end > $end_date->getTime()) {
+			$end_date = new w2p_Utilities_Date(date('Ymd', $d_end));
+		}
 	}
+	$start_date = $start_date->format('%Y%m%d');
+	$end_date = $end_date->format('%Y%m%d');
 }
 $gantt->SetDateRange($start_date, $end_date);
 
