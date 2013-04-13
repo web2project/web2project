@@ -7,6 +7,10 @@ global $AppUI, $filter_param;
 $page = (int) w2PgetParam($_GET, 'page', 1);
 $project_id = (int) w2PgetParam($_GET, 'project_id', 0);
 
+$start_date = new w2p_Utilities_Date(w2PgetParam($_REQUEST, 'history_start_date', date('Ymd', time() - 2592000)));
+$end_date = new w2p_Utilities_Date(w2PgetParam($_REQUEST, 'history_end_date', date('Ymd')));
+$end_date->AddSeconds(86399);
+
 $history = new CHistory();
 if ((int)$filter_param == -1) {
     $where = '';
@@ -17,6 +21,39 @@ if ((int)$filter_param == -1) {
 }
 $histories = $history->loadAll('history_date DESC', $where);
 $items = array_values($histories);
+
+$perms = $AppUI->acl();
+
+// Strip whatever the user is not allowed to view. 
+// Doing it here allows accurate row counts on the page.
+for ($i = 0, $i_cmp = count($items); $i < $i_cmp; $i++) {
+    $row = $items[$i];
+    // Since there no individual permissions for forum messsages...
+    if ($row['history_table'] == 'forum_messages') {
+	if (!$perms->checkModuleItem($row['history_table'], 'view')) {
+	    unset($items[$i]);
+	}
+    } else if ($row['history_table'] == 'login') {
+	if (!$perms->checkModule('users', 'view')) {
+	    unset($items[$i]);
+	}
+    } else if ($row['history_table'] == 'modules') {
+	if (!$perms->checkModule('system', 'view')) {
+	    unset($items[$i]);
+	}
+    } else {
+	if (!$perms->checkModuleItem($row['history_table'], 'view', $row['history_item'])) {
+	    unset($items[$i]);
+	}
+    }
+    // Now check for period
+    $hist_date = new w2p_Utilities_Date($row['history_date']);
+    if ($start_date->compare($start_date, $hist_date) > 0 ||
+        $end_date->compare($end_date, $hist_date) < 0) {
+	unset($items[$i]);
+    }
+}
+$items = array_values($items);
 
 $xpg_pagesize = w2PgetConfig('page_size', 50);
 $xpg_min = $xpg_pagesize * ($page - 1); // This is where we start our record set from
@@ -41,16 +78,10 @@ $htmlHelper->df .= ' ' . $AppUI->getPref('TIMEFORMAT');
     </tr>
 <?php
 
-$perms = $AppUI->acl();
-
 for ($i = ($page - 1) * $xpg_pagesize; $i < $page * $xpg_pagesize && $i < $xpg_totalrecs; $i++) {
     $row = $items[$i];
     $row['user_id'] = $row['history_user'];
 
-//TODO: we need to make sure sub-modules are handled properly
-    if (!$perms->checkModuleItem($row['history_table'], 'view', $row['history_item'])) {
-        continue;
-    }
 //TODO: do we care about linking when we have a create/update entry?
     echo '<tr>';
     $htmlHelper->stageRowData($row);
