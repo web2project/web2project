@@ -77,6 +77,7 @@ class CProject extends w2p_Core_BaseObject
     public function __construct()
     {
         parent::__construct('projects', 'project_id');
+	$this->_tbl_project_id = 'project_id';
     }
 
     public function bind($hash, $prefix = null, $checkSlashes = true, $bindAll = false)
@@ -1042,5 +1043,20 @@ class CProject extends w2p_Core_BaseObject
     public static function getHRef($project_id) 
     {
 	   return 'm=projects&a=view&project_id=' . (string)$project_id . '&tab=0';
+    }
+
+    protected function generateHistoryDescription($event) {
+        global $AppUI;
+
+	$event = mb_strtolower($event);
+	if ($event == 'create') {
+		return $AppUI->_('Project') . ' \'' . $this->project_name . '\' ' . $AppUI->_('was created with ID') . ' ' . $this->project_id;
+	} elseif ($event == 'update') {
+		return $AppUI->_('Project') . ' \'' . $this->project_name . '\', ' . $AppUI->_('with ID') . ' ' . $this->project_id . ', ' . $AppUI->_('was edited');
+	} elseif ($event == 'delete') {
+		return $AppUI->_('Project') . ' \'' . $this->project_name . '\', ' . $AppUI->_('with ID') . ' ' . $this->project_id . ', ' . $AppUI->_('was deleted');
+	} else {
+		return parent::generateHistoryDescription($event);
+	}
     }
 }
