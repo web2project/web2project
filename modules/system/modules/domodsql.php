@@ -32,16 +32,18 @@ if (!$ok && $obj->mod_type != 'core') {
     }
     $AppUI->redirect();
 }
-include_once (W2P_BASE_DIR . '/modules/' . $obj->mod_directory . '/setup.php');
 
-$setupclass = $config['mod_setup_class'];
-if (!$setupclass) {
-	if ($obj->mod_type != 'core') {
-		$AppUI->setMsg('Module does not have a valid setup class defined', UI_MSG_ERROR);
-		$AppUI->redirect();
-	}
-} else {
-	$setup = new $setupclass($AppUI, $config, new w2p_Database_Query());
+if (file_exists(W2P_BASE_DIR . '/modules/' . $obj->mod_directory . '/setup.php')) {
+    include_once (W2P_BASE_DIR . '/modules/' . $obj->mod_directory . '/setup.php');
+    $setupclass = $config['mod_setup_class'];
+    if (!$setupclass) {
+        if ($obj->mod_type != 'core') {
+            $AppUI->setMsg('Module does not have a valid setup class defined', UI_MSG_ERROR);
+            $AppUI->redirect();
+        }
+    } else {
+        $setup = new $setupclass($AppUI, $config, new w2p_Database_Query());
+    }
 }
 
 switch ($cmd) {
