@@ -481,62 +481,71 @@ class CProject extends w2p_Core_BaseObject
         if (0 == $this->{$this->_tbl_key} && $this->canCreate()) {
             $this->project_created = $q->dbfnNowWithTZ();
             $stored = parent::store();
-            
-            if ($stored) {
-                if (0 == $this->project_parent || 0 == $this->project_original_parent) {
-                    $this->project_parent = $this->project_id;
-                    $this->project_original_parent = $this->project_id;
-//TODO: I *really* hate how we have to do the store() twice when we create the project.
-                    $stored = parent::store();
-                }
-            }
         }
 
-        if ($stored) {
-            //split out related departments and store them seperatly.
-            $q->setDelete('project_departments');
-            $q->addWhere('project_id=' . (int) $this->project_id);
-            $q->exec();
-            $q->clear();
-            $stored_departments = array();
-            if ($this->project_departments) {
-                foreach ($this->project_departments as $department) {
-                    if ($department) {
-                        $q->addTable('project_departments');
-                        $q->addInsert('project_id', $this->project_id);
-                        $q->addInsert('department_id', $department);
-                        $stored_departments[$department] = $this->project_id;
-                        $q->exec();
-                        $q->clear();
-                    }
-                }
-            }
-            $this->stored_departments = $stored_departments;
-
-            //split out related contacts and store them seperatly.
-            $q->setDelete('project_contacts');
-            $q->addWhere('project_id=' . (int) $this->project_id);
-            $q->exec();
-            $q->clear();
-            $stored_contacts = array();
-            if ($this->project_contacts) {
-                foreach ($this->project_contacts as $contact) {
-                    if ($contact) {
-                        $q->addTable('project_contacts');
-                        $q->addInsert('project_id', $this->project_id);
-                        $q->addInsert('contact_id', $contact);
-                        $stored_contacts[$contact] = $this->project_id;
-                        $q->exec();
-                        $q->clear();
-                    }
-                }
-            }
-            $this->stored_contacts = $stored_contacts;
-        }
         return $stored;
     }
 
-    protected function hook_postStore() {
+    /**
+     * @todo TODO: I *really* hate how we have to do the store() twice when we
+     *   create the project.. it's all because the stupid project_original_parent
+     *   has to equal its own project_id if this is a root project. Ugh.
+     */
+    protected function hook_postCreate()
+    {
+        if (0 == $this->project_parent || 0 == $this->project_original_parent) {
+            $this->project_parent = $this->project_id;
+            $this->project_original_parent = $this->project_id;
+
+            parent::store();
+        }
+
+        parent::hook_postCreate();
+    }
+
+    protected function hook_postStore()
+    {
+        $q = $this->_getQuery();
+        //split out related departments and store them seperatly.
+        $q->setDelete('project_departments');
+        $q->addWhere('project_id=' . (int) $this->project_id);
+        $q->exec();
+        $q->clear();
+        $stored_departments = array();
+        if ($this->project_departments) {
+            foreach ($this->project_departments as $department) {
+                if ($department) {
+                    $q->addTable('project_departments');
+                    $q->addInsert('project_id', $this->project_id);
+                    $q->addInsert('department_id', $department);
+                    $stored_departments[$department] = $this->project_id;
+                    $q->exec();
+                    $q->clear();
+                }
+            }
+        }
+        $this->stored_departments = $stored_departments;
+
+        //split out related contacts and store them seperatly.
+        $q->setDelete('project_contacts');
+        $q->addWhere('project_id=' . (int) $this->project_id);
+        $q->exec();
+        $q->clear();
+        $stored_contacts = array();
+        if ($this->project_contacts) {
+            foreach ($this->project_contacts as $contact) {
+                if ($contact) {
+                    $q->addTable('project_contacts');
+                    $q->addInsert('project_id', $this->project_id);
+                    $q->addInsert('contact_id', $contact);
+                    $stored_contacts[$contact] = $this->project_id;
+                    $q->exec();
+                    $q->clear();
+                }
+            }
+        }
+        $this->stored_contacts = $stored_contacts;
+
         CTask::storeTokenTask($this->_AppUI, $this->project_id);
 
         parent::hook_postStore();
