@@ -781,6 +781,9 @@ class CTask extends w2p_Core_BaseObject
         parent::hook_preStore();
     }
 
+    /**
+     * @todo TODO: I still don't like the POST here..
+     */
     protected function hook_postStore()
     {
          // TODO $oTsk is a global set by store() and is the task before update.
@@ -868,9 +871,10 @@ class CTask extends w2p_Core_BaseObject
                 $old_parent->updateDynamics();
             }
         }
-        $custom_fields = new w2p_Core_CustomFields('tasks', 'addedit', $obj->task_id, 'edit');
+
+        $custom_fields = new w2p_Core_CustomFields($this->_tbl_module, 'addedit', $this->{$this->_tbl_key}, 'edit');
         $custom_fields->bind($_POST);
-        $sql = $custom_fields->store($obj->task_id); // Store Custom Fields
+        $custom_fields->store($this->{$this->_tbl_key});
 
         parent::hook_postStore();
     }

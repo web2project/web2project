@@ -100,13 +100,15 @@ class CContact extends w2p_Core_BaseObject
         parent::hook_preStore();
     }
 
+    /**
+     * @todo TODO: I still don't like the POST here..
+     */
     protected function hook_postStore()
     {
         $methods = array();
         $fields = array();
         $values = array();
 
-        // TODO:  I *really* don't like using the POST inside here..
         $contact_methods = empty($_POST['contact_methods']) ? array() : $_POST['contact_methods'];
         if (count($contact_methods)) {
             foreach ($contact_methods['field'] as $key => $notUsed) {
@@ -118,9 +120,9 @@ class CContact extends w2p_Core_BaseObject
         $methods['values'] = $values;
         $this->setContactMethods($methods);
 
-        $custom_fields = new w2p_Core_CustomFields('contacts', 'addedit', $this->contact_id, 'edit');
+        $custom_fields = new w2p_Core_CustomFields($this->_tbl_module, 'addedit', $this->{$this->_tbl_key}, 'edit');
         $custom_fields->bind($_POST);
-        $custom_fields->store($this->contact_id); // Store Custom Fields
+        $custom_fields->store($this->{$this->_tbl_key});
 
         parent::hook_postStore();
     }
