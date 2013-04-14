@@ -147,10 +147,6 @@ if ($result) {
 	}
 	$obj->storeBudget($budgets);
 
-    $custom_fields = new w2p_Core_CustomFields($m, 'addedit', $obj->task_id, 'edit');
-    $custom_fields->bind($_POST);
-    $sql = $custom_fields->store($obj->task_id); // Store Custom Fields
-
     // Now add any task reminders
     // If there wasn't a task, but there is one now, and
     // that task date is set, we need to set a reminder.

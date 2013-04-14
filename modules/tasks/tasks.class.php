@@ -868,6 +868,9 @@ class CTask extends w2p_Core_BaseObject
                 $old_parent->updateDynamics();
             }
         }
+        $custom_fields = new w2p_Core_CustomFields('tasks', 'addedit', $obj->task_id, 'edit');
+        $custom_fields->bind($_POST);
+        $sql = $custom_fields->store($obj->task_id); // Store Custom Fields
 
         parent::hook_postStore();
     }
