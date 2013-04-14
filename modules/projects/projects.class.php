@@ -473,17 +473,29 @@ class CProject extends w2p_Core_BaseObject
          * TODO: I don't like the duplication on each of these two branches, but I
          *   don't have a good idea on how to fix it at the moment...
          */
-        $q = $this->_getQuery();
-        $this->project_updated = $q->dbfnNowWithTZ();
         if ($this->{$this->_tbl_key} && $this->canEdit()) {
             $stored = parent::store();
         }
         if (0 == $this->{$this->_tbl_key} && $this->canCreate()) {
-            $this->project_created = $q->dbfnNowWithTZ();
             $stored = parent::store();
         }
 
         return $stored;
+    }
+
+    protected function hook_preCreate()
+    {
+        $q = $this->_getQuery();
+        $this->project_created = $q->dbfnNowWithTZ();
+
+        parent::hook_preCreate();
+    }
+    protected function hook_preStore()
+    {
+        $q = $this->_getQuery();
+        $this->project_updated = $q->dbfnNowWithTZ();
+
+        parent::hook_preStore();
     }
 
     /**
