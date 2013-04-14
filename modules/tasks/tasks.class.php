@@ -698,9 +698,6 @@ class CTask extends w2p_Core_BaseObject
     {
         $stored = false;
 
-        $q = $this->_getQuery();
-        $this->task_updated = $q->dbfnNowWithTZ();
-
         if ($this->{$this->_tbl_key} && $this->canEdit()) {
 
             // Load and globalize the old, not yet updated task object
@@ -737,7 +734,6 @@ class CTask extends w2p_Core_BaseObject
         }
 
         if (0 == $this->{$this->_tbl_key} && $this->canCreate()) {
-            $this->task_created = $q->dbfnNowWithTZ();
             if ($this->task_start_date == '') {
                 $this->task_start_date = '0000-00-00 00:00:00';
             }
@@ -750,6 +746,12 @@ class CTask extends w2p_Core_BaseObject
         return $stored;
     }
 
+    protected function hook_preCreate() {
+        $q = $this->_getQuery();
+        $this->task_created = $q->dbfnNowWithTZ();
+
+        parent::hook_preCreate();
+    }
     protected function hook_postCreate()
     {
         if ($this->task_parent) {
@@ -768,6 +770,9 @@ class CTask extends w2p_Core_BaseObject
 
         $this->importing_tasks = false;
 
+
+        $q = $this->_getQuery();
+        $this->task_updated = $q->dbfnNowWithTZ();
         $this->task_target_budget = filterCurrency($this->task_target_budget);
 
         if ($this->task_start_date != '' && $this->task_start_date != '0000-00-00 00:00:00') {
