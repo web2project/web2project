@@ -904,24 +904,20 @@ class CTask extends w2p_Core_BaseObject
 //TODO: We need to convert this from static to use ->overrideDatabase() for testing.
         $subProject->load($project_id);
 
-        if ($subProject->project_id != $subProject->project_parent) {
+        if ($subProject->project_parent > 0 && ($subProject->project_id != $subProject->project_parent)) {
             $q = new w2p_Database_Query();
-            $q->addTable('tasks');
-            $q->addQuery('task_id');
-            $q->addWhere('task_represents_project = ' . $subProject->project_id);
-            $task_id = (int) $q->loadResult();
-
-            if (0 == $task_id) {
-                return;
-            }
-
-            $q->clear();
             $q->addTable('tasks');
             $q->addQuery('MIN(task_start_date) AS min_task_start_date');
             $q->addQuery('MAX(task_end_date) AS max_task_end_date');
             $q->addWhere('task_project = ' . $subProject->project_id);
             $q->addWhere('task_status <> -1');
             $projectDates = $q->loadList();
+
+            $q->clear();
+            $q->addTable('tasks');
+            $q->addQuery('task_id');
+            $q->addWhere('task_represents_project = ' . $subProject->project_id);
+            $task_id = (int) $q->loadResult();
 
             $task = new CTask();
 //TODO: We need to convert this from static to use ->overrideDatabase() for testing.
