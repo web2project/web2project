@@ -698,6 +698,13 @@ class CTask extends w2p_Core_BaseObject
     {
         $stored = false;
 
+        if ($this->task_start_date == '') {
+            $this->task_start_date = '0000-00-00 00:00:00';
+        }
+        if ($this->task_end_date == '') {
+            $this->task_end_date = '0000-00-00 00:00:00';
+        }
+
         if ($this->{$this->_tbl_key} && $this->canEdit()) {
 
             // Load and globalize the old, not yet updated task object
@@ -708,12 +715,6 @@ class CTask extends w2p_Core_BaseObject
             $oTsk->overrideDatabase($this->_query);
             $oTsk->load($this->task_id);
 
-            if ($this->task_start_date == '') {
-                $this->task_start_date = '0000-00-00 00:00:00';
-            }
-            if ($this->task_end_date == '') {
-                $this->task_end_date = '0000-00-00 00:00:00';
-            }
             if (($msg = parent::store())) {
                 $this->_error['store'] = $msg;
                 return $msg;
@@ -734,12 +735,6 @@ class CTask extends w2p_Core_BaseObject
         }
 
         if (0 == $this->{$this->_tbl_key} && $this->canCreate()) {
-            if ($this->task_start_date == '') {
-                $this->task_start_date = '0000-00-00 00:00:00';
-            }
-            if ($this->task_end_date == '') {
-                $this->task_end_date = '0000-00-00 00:00:00';
-            }
             $stored = parent::store();
         }
 
