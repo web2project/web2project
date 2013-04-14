@@ -418,16 +418,6 @@ class CProject extends w2p_Core_BaseObject
         return true;
     }
 
-    public function store()
-    {
-        $this->w2PTrimAll();
-        if (!$this->isValid()) {
-            return false;
-        }
-
-        return parent::store();
-    }
-
     protected function hook_preCreate()
     {
         $q = $this->_getQuery();
