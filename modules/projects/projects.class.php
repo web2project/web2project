@@ -425,6 +425,21 @@ class CProject extends w2p_Core_BaseObject
             return false;
         }
 
+        return parent::store();
+    }
+
+    protected function hook_preCreate()
+    {
+        $q = $this->_getQuery();
+        $this->project_created = $q->dbfnNowWithTZ();
+
+        parent::hook_preCreate();
+    }
+    protected function hook_preStore()
+    {
+        $q = $this->_getQuery();
+        $this->project_updated = $q->dbfnNowWithTZ();
+
         // ensure changes of state in checkboxes is captured
         $this->project_active = (int) $this->project_active;
         $this->project_private = (int) $this->project_private;
@@ -466,21 +481,6 @@ class CProject extends w2p_Core_BaseObject
         if (!$this->project_original_parent) {
             $this->project_original_parent = $this->project_id;
         }
-
-        return parent::store();
-    }
-
-    protected function hook_preCreate()
-    {
-        $q = $this->_getQuery();
-        $this->project_created = $q->dbfnNowWithTZ();
-
-        parent::hook_preCreate();
-    }
-    protected function hook_preStore()
-    {
-        $q = $this->_getQuery();
-        $this->project_updated = $q->dbfnNowWithTZ();
 
         parent::hook_preStore();
     }
