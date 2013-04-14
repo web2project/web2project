@@ -420,8 +420,6 @@ class CProject extends w2p_Core_BaseObject
 
     public function store()
     {
-        $stored = false;
-
         $this->w2PTrimAll();
         if (!$this->isValid()) {
             return false;
@@ -469,18 +467,7 @@ class CProject extends w2p_Core_BaseObject
             $this->project_original_parent = $this->project_id;
         }
 
-        /*
-         * TODO: I don't like the duplication on each of these two branches, but I
-         *   don't have a good idea on how to fix it at the moment...
-         */
-        if ($this->{$this->_tbl_key} && $this->canEdit()) {
-            $stored = parent::store();
-        }
-        if (0 == $this->{$this->_tbl_key} && $this->canCreate()) {
-            $stored = parent::store();
-        }
-
-        return $stored;
+        return parent::store();
     }
 
     protected function hook_preCreate()
