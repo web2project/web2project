@@ -553,11 +553,15 @@ span.cal-item a {
     padding-right: 3px;
 }
 
+.subprojects td.data {
+    background-color: white;
+    border-spacing: 0px;
+}
+
 .subprojects {
-    background-color: black;
-    border: 0px;
+    background-color: white;
+    border: 1px solid black;
     text-align: center;
-    white-space:nowrap;
     width: 100%;
 }
 

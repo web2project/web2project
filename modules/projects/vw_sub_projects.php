@@ -11,7 +11,7 @@ $original_project_id = $project->project_original_parent;
 $project->project_status = -1;
 $st_projects_arr = $project->getStructuredProjects();
 ?>
-<table cellpadding="5" cellspacing="1" class="list subprojects">
+<table cellpadding="5" cellspacing="0" class="list subprojects">
     <tr>
         <th width="12">&nbsp;</th>
         <th class="hilite" width="12"><?php echo $AppUI->_('ID'); ?></th>
@@ -40,8 +40,8 @@ if (is_array($st_projects_arr)) {
             $row['company_id'] = $row['project_company'];
             $htmlHelper->stageRowData($row);
 
-            $s .= '<tr><td><a href="./index.php?m=projects&a=addedit&project_id=' . $s_project->project_id . '"><img src="' . w2PfindImage('icons/' . ($project_id == $s_project->project_id ? 'pin' : 'pencil') . '.gif') . '" border="0" alt="" /></a></td>';
-            $s .= '<td>' . $s_project->project_id . '</td>';
+            $s .= '<tr><td class="data"><a href="./index.php?m=projects&a=addedit&project_id=' . $s_project->project_id . '"><img src="' . w2PfindImage('icons/' . ($project_id == $s_project->project_id ? 'pin' : 'pencil') . '.gif') . '" border="0" alt="" /></a></td>';
+            $s .= '<td class="data">' . $s_project->project_id . '</td>';
             if ($level) {
                 $sd = str_repeat('&nbsp;&nbsp;&nbsp;&nbsp;', ($level - 1)) . w2PshowImage('corner-dots.gif', 16, 12) . '&nbsp;' . '<a href="./index.php?m=projects&a=view&project_id=' . $s_project->project_id . '">' . $s_project->project_name . '</a>';
             } else {
