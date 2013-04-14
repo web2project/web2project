@@ -76,17 +76,6 @@ class CCompany extends w2p_Core_BaseObject {
         parent::hook_preStore();
     }
 
-    /**
-     * @todo TODO: I still don't like the POST here..
-     */
-    protected function hook_postStore() {
-        $custom_fields = new w2p_Core_CustomFields($this->_tbl_module, 'addedit', $this->{$this->_tbl_key}, 'edit');
-        $custom_fields->bind($_POST);
-        $custom_fields->store($this->{$this->_tbl_key});
-
-        parent::hook_postStore();
-    }
-
     public function hook_search() {
         $search['table'] = 'companies';
         $search['table_module'] = $search['table'];

@@ -689,14 +689,17 @@ abstract class w2p_Core_BaseObject extends w2p_Core_Event implements w2p_Core_Li
      * This method is called within $this->store() but only after the object
      *   was stored properly. You might use this to send notifications or
      *   update other objects.
+     * @todo TODO: I REALLY hate this $_POST here.. it's just asking for trouble.
      *
      * @return \w2p_Core_BaseObject
      */
     protected function hook_postStore()
     {
-        //NOTE: This only happens if the create was successful.
-        $prefix = $this->_getColumnPrefixFromTableName($this->_tbl);
+        $custom_fields = new w2p_Core_CustomFields($this->_tbl_module, 'addedit', $this->{$this->_tbl_key}, 'edit');
+        $custom_fields->bind($_POST);
+        $custom_fields->store($this->{$this->_tbl_key});
 
+        $prefix = $this->_getColumnPrefixFromTableName($this->_tbl);
         $name = ('' != $this->{$prefix . '_name'}) ? $this->{$prefix . '_name'} : '';
         addHistory($this->_tbl, $this->{$this->_tbl_key}, $this->_event, $name . ' - ' .
                 $this->_AppUI->_('ACTION') . ': ' . $this->_event . ' ' . $this->_AppUI->_('TABLE') . ': ' .

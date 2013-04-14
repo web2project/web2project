@@ -536,14 +536,7 @@ class CProject extends w2p_Core_BaseObject
         return $stored;
     }
 
-    /**
-     * @todo TODO: I still don't like the POST here..
-     */
     protected function hook_postStore() {
-        $custom_fields = new w2p_Core_CustomFields($this->_tbl_module, 'addedit', $this->{$this->_tbl_key}, 'edit');
-        $custom_fields->bind($_POST);
-        $custom_fields->store($this->{$this->_tbl_key});
-
         CTask::storeTokenTask($this->_AppUI, $this->project_id);
 
         parent::hook_postStore();

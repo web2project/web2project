@@ -550,16 +550,9 @@ class CEvent extends w2p_Core_BaseObject
         $this->event_created = $q->dbfnNowWithTZ();
     }
 
-    /**
-     * @todo TODO: I still don't like the POST here..
-     */
     protected function hook_postStore()
     {
         $this->updateAssigned(explode(',', $_POST['event_assigned']));
-
-        $custom_fields = new w2p_Core_CustomFields($this->_tbl_module, 'addedit', $this->{$this->_tbl_key}, 'edit');
-        $custom_fields->bind($_POST);
-        $custom_fields->store($this->{$this->_tbl_key});
 
         parent::hook_postStore();
     }
