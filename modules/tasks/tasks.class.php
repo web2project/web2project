@@ -763,17 +763,14 @@ class CTask extends w2p_Core_BaseObject
     }
     protected function hook_preStore()
     {
-        $this->w2PTrimAll();
-        if (!$this->task_owner) {
-            $this->task_owner = $this->_AppUI->user_id;
-        }
-
         $this->importing_tasks = false;
 
+        $this->w2PTrimAll();
 
         $q = $this->_getQuery();
         $this->task_updated = $q->dbfnNowWithTZ();
         $this->task_target_budget = filterCurrency($this->task_target_budget);
+        $this->task_owner = ($this->task_owner) ? $this->task_owner : $this->_AppUI->user_id;
 
         if ($this->task_start_date != '' && $this->task_start_date != '0000-00-00 00:00:00') {
             $this->task_start_date = $this->_AppUI->convertToSystemTZ($this->task_start_date);
