@@ -24,7 +24,7 @@ $notify_contacts = w2PgetParam($_POST, 'email_project_contacts_box', 'off');
 
 $importTask_projectId = (int) w2PgetParam($_POST, 'import_tasks_from', '0');
 
-if (is_array($result)) {
+if (!$result) {
     $AppUI->setMsg($result, UI_MSG_ERROR);
     $AppUI->holdObject($obj);
     $AppUI->redirect('m=projects&a=addedit');

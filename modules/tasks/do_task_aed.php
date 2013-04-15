@@ -99,18 +99,18 @@ if ($obj->task_end_date) {
 // prepare (and translate) the module name ready for the suffix
 if ($del) {
     $result = $obj->delete();
-    if (is_array($result)) {
-        $AppUI->setMsg($msg, UI_MSG_ERROR);
-        $AppUI->redirect('m=tasks&a=view&task_id='.$task_id);
-    } else {
+    if ($result) {
         $AppUI->setMsg('Task deleted');
         $AppUI->redirect('m=projects&a=view&project_id='.$obj->task_project);
+    } else {
+        $AppUI->setMsg($obj->getError(), UI_MSG_ERROR);
+        $AppUI->redirect('m=tasks&a=view&task_id='.$task_id);
     }
 }
 
 $result = $obj->store();
 
-if (is_array($result)) {
+if (!$result) {
     $AppUI->setMsg($result, UI_MSG_ERROR, true);
     $AppUI->holdObject($obj);
     $AppUI->redirect('m=tasks&a=addedit&task_id='.$task_id);

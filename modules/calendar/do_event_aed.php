@@ -43,7 +43,7 @@ if ($del) {
 
 //TODO: I hate this clash param.. there should be a better way.
 if (!$clashRedirect) {
-    if (is_array($result)) {
+    if (!$result) {
         $AppUI->setMsg($result, UI_MSG_ERROR, true);
         $AppUI->holdObject($obj);
         $AppUI->redirect('m=calendar&a=addedit');
