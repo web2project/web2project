@@ -111,6 +111,7 @@ $q->addQuery('project_name, pr.project_id, project_color_identifier');
 $q->addQuery('tp.task_pinned');
 $q->addQuery('ut.user_task_priority');
 $q->addQuery('DATEDIFF(ta.task_end_date, "' . date($date) . '") as task_due_in');
+$q->addQuery('tlog.task_log_problem');
 
 $q->addTable('projects', 'pr');
 $q->addTable('tasks', 'ta');
@@ -118,6 +119,7 @@ $q->addTable('user_tasks', 'ut');
 $q->leftJoin('user_task_pin', 'tp', 'tp.task_id = ta.task_id and tp.user_id = ' . (int)$user_id);
 $q->leftJoin('project_departments', 'project_departments', 'pr.project_id = project_departments.project_id OR project_departments.project_id IS NULL');
 $q->leftJoin('departments', 'departments', 'departments.dept_id = project_departments.department_id OR dept_id IS NULL');
+$q->leftJoin('task_log', 'tlog', 'tlog.task_log_task = ta.task_id AND tlog.task_log_problem > 0');
 
 if ($company_id) {
 	$q->addWhere('pr.project_company = "' . (string)$company_id . '"');

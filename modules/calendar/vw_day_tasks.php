@@ -14,7 +14,8 @@ $min_view = 1;
 include W2P_BASE_DIR . '/modules/tasks/todo.php';
 
 // The following code shows tasks that belong to projects of which
-// the current user is owner and that are late as of the specified date.
+// the current user is owner and that are late as of the specified date or
+// have a problem indication, regardless of lateness.
 
 $user_id = $AppUI->user_id;
 $showArcProjs = $AppUI->getState('TaskDayShowArc', 0);
@@ -33,6 +34,7 @@ $q->addQuery('project_name, pr.project_id, project_color_identifier');
 $q->addQuery('tp.task_pinned');
 $q->addQuery('ut.user_task_priority');
 $q->addQuery('DATEDIFF(ta.task_end_date, "' . date($date) . '") as task_due_in');
+$q->addQuery('tlog.task_log_problem');
 
 $q->addTable('projects', 'pr');
 $q->addTable('tasks', 'ta');
@@ -40,12 +42,13 @@ $q->addTable('user_tasks', 'ut');
 $q->leftJoin('user_task_pin', 'tp', 'tp.task_id = ta.task_id and tp.user_id = ' . (int)$user_id);
 $q->leftJoin('project_departments', 'project_departments', 'pr.project_id = project_departments.project_id OR project_departments.project_id IS NULL');
 $q->leftJoin('departments', 'departments', 'departments.dept_id = project_departments.department_id OR dept_id IS NULL');
+$q->leftJoin('task_log', 'tlog', 'tlog.task_log_task = ta.task_id AND tlog.task_log_problem > 0');
 
 if ($company_id) {
 	$q->addWhere('pr.project_company = "' . (string)$company_id . '"');
 }
 
-$q->addWhere('ut.task_id = ta.task_id');
+$q->addWhere('ut.task_id = ta.task_id AND ut.user_id != ' . (int)$user_id);
 $q->addWhere('pr.project_owner = ' . (int)$user_id);
 
 $q->addWhere('ta.task_status = 0');
@@ -94,7 +97,7 @@ if (count($allowedProjects)) {
 	$q->addWhere($allowedProjects);
 }
 
-$q->addHaving('(ROUND(task_percent_complete) <> 100) AND (task_due_in < 0)');
+$q->addHaving('((ROUND(task_percent_complete) <> 100) AND (task_due_in < 0)) OR (task_log_problem > 0)');
 
 $q->addOrder('task_end_date, task_start_date, task_priority');
 $tasks = $q->loadList();
