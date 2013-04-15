@@ -7,7 +7,7 @@ if (!defined('W2P_BASE_DIR')) {
  * TODO: This controller is doing a lot of non-controller things that are making
  *   things not reusable and generally difficult to maintain.
  */
-$adjustStartDate = w2PgetParam($_POST, 'set_task_start_date');
+//$adjustStartDate = w2PgetParam($_POST, 'set_task_start_date');
 $del = (int) w2PgetParam($_POST, 'del', 0);
 $task_id = (int) w2PgetParam($_POST, 'task_id', 0);
 $hassign = w2PgetParam($_POST, 'hassign');
@@ -15,11 +15,11 @@ $hperc_assign = w2PgetParam($_POST, 'hperc_assign');
 $hdependencies = w2PgetParam($_POST, 'hdependencies', '');
 $notify = (int) w2PgetParam($_POST, 'task_notify', 0);
 $comment = w2PgetParam($_POST, 'email_comment', '');
-$sub_form = (int) w2PgetParam($_POST, 'sub_form', 0);
+//$sub_form = (int) w2PgetParam($_POST, 'sub_form', 0);
 $new_task_project = (int) w2PgetParam($_POST, 'new_task_project', 0);
-$isNotNew = $task_id;
+//$isNotNew = $task_id;
 
-$action = ($del) ? 'deleted' : 'stored';
+//$action = ($del) ? 'deleted' : 'stored';
 
 // Find the task if we are set
 $task_end_date = null;
