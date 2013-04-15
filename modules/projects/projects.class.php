@@ -783,7 +783,7 @@ class CProject extends w2p_Core_BaseObject
     {
         trigger_error("CProject::updateTaskCount has been deprecated in v2.3 and will be removed by v4.0. Please use CProject::updateTaskCache instead.", E_USER_NOTICE);
 
-        if (intval($projectId) > 0 && intval($taskCount)) {
+        if ((int) $projectId) {
             $q = new w2p_Database_Query();
             $q->addTable('projects');
             $q->addUpdate('project_task_count', intval($taskCount));

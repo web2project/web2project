@@ -2087,10 +2087,30 @@ class CTask extends w2p_Core_BaseObject
     }
 
     /**
+     * This method handles moving the $task_id specified from $project_old to
+     *   $project_new and then updates the corresponding task counts and task
+     *   start/end dates for the projects.
+     *
+     * @param type $task_id
+     * @param type $project_old
+     * @param type $project_new
+     */
+    public function moveTaskBetweenProjects($task_id, $project_old, $project_new)
+    {
+        $this->updateSubTasksProject($project_new, $task_id);
+
+        $taskCount_oldProject = $this->getTaskCount($project_old);
+        CProject::updateTaskCount($project_old, $taskCount_oldProject);
+
+        $taskCount_newProject = $this->getTaskCount($project_new);
+        CProject::updateTaskCount($project_new, $taskCount_newProject);
+    }
+
+    /**
      * This function recursively updates all tasks project
      * to the one passed as parameter
      */
-    public function updateSubTasksProject($new_project, $task_id = 0)
+    protected function updateSubTasksProject($new_project, $task_id = 0)
     {
         if (!$task_id) {
             $task_id = $this->task_id;
