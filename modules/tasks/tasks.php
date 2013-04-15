@@ -319,8 +319,37 @@ if ($canViewTask) {
 	$tasks = $q->loadList();
 }
 
+// Recursive function for marking troubled parents, used below
+function markParent($task_id, &$worried_parents, &$tasks_by_id) {
+	$task = $tasks_by_id[$task_id];
+	if ($task['task_dynamic'] == 1) {
+		$worried_parents[$task_id] = true;
+	}
+	if ($task['task_parent'] != $task_id) {
+		markParent($task['task_parent'], $worried_parents, $tasks_by_id);
+	}
+}
+
+
 // POST PROCESSING TASKS
 if (count($tasks) > 0) {
+	// Activate the 'task_log_problem' field for dynamic parents with problematic children
+	// The code will move up the tree to find all dynamic parents
+	// (1) Create an array of rows, indexed by task_id
+	$tasks_by_id = array();
+	foreach ($tasks as $row) {
+		$tasks_by_id[$row['task_id']] = $row;
+	}
+	// (2) Scan the indexed array, marking up the tree any dynamic tasks with troubled children at any sub-level.
+	//     The result is an array of worried parents
+	$worried_parents = array();
+	foreach ($tasks_by_id as $row) {
+		if ($row['task_log_problem'] > 0) {
+			if ($row['task_parent'] != $row['task_id']) {
+				markParent($row['task_parent'], $worried_parents, $tasks_by_id);
+			}
+		}
+	}
 	foreach ($tasks as $row) {
 		//add information about assigned users into the page output
 		$q->clear();
@@ -336,6 +365,10 @@ if (count($tasks) > 0) {
 		$assigned_users = array();
 		$row['task_assigned_users'] = $q->loadList();
 	
+		// (2) Now mark then as such. Needs to be done in two steps because the parents may come after the children
+		if (array_key_exists($row['task_id'], $worried_parents)) {
+			$row['task_log_problem'] = 1;
+		}
 		//pull the final task row into array
 		$projects[$row['task_project']]['tasks'][] = $row;
 	}
