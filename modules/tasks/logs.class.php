@@ -187,12 +187,6 @@ class CTask_Log extends w2p_Core_BaseObject
 			}
 		}
 	
-		// Add the task's end time to the new end date, to avoid dates with 00:00 time.
-	        $task = new CTask();
-	        $task->overrideDatabase($this->_query);
-	        $task->load($this->task_log_task);
-		$this->task_log_task_end_date = date('Y-m-d H:i:s', strtotime($this->task_log_task_end_date) + (strtotime($task->task_original_end_date) % 86400));
-
 	        parent::hook_preStore();
 	}
 
@@ -328,7 +322,6 @@ class CTask_Log extends w2p_Core_BaseObject
 	        if (0 == (int) $this->task_log_creator) {
 	            $this->_error['task_log_creator'] = $baseErrorMsg . 'task log creator is NULL';
 	        }
-
 	        return (count($this->_error)) ? false : true;
 	}
 
@@ -350,21 +343,15 @@ class CTask_Log extends w2p_Core_BaseObject
 	        }
 	}
 
-	public function canCreate($task_id) {
+	public function canCreate() {
 		// Get the task's data to check who can add task logs to it.
 		// Only assigned users, the task's owner or an administrator are allowed,
 		// except if the task has the 'Allow users to add task logs for others'
 		// setting active. In that case anyone can add a task log.
 
-		// As an exception if the $task_id param is undefined then assume
-		// the user is allowed to create the task log.
-		if (!isset($task_id)) {
-			return true;
-		}
-
 	        $task = new CTask();
 	        $task->overrideDatabase($this->_query);
-	        $task->load($task_id);
+	        $task->load($this->task_log_task);
 
 		// Is the '..task logs for others' setting on ?
 		if ($task->task_allow_other_user_tasklogs) {

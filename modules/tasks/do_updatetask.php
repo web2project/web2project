@@ -8,7 +8,8 @@ $notify_owner = w2PgetParam($_POST, 'task_log_notify_owner', 'off');
 $isNotNew = (int) w2PgetParam($_POST, 'task_log_id', 0);
 
 // TODO: This is a dirty hack.
-$_POST['task_log_task_end_date'] = $_POST['task_end_date'];
+$end_date = new w2p_Utilities_Date($_POST['task_end_date'] . $_POST['end_hour'] . $_POST['end_minute']);
+$_POST['task_log_task_end_date'] = $end_date->format(FMT_DATETIME_MYSQL);
 $_POST['task_log_percent_complete'] = $_POST['task_percent_complete'];
 
 $obj = new CTask_Log();

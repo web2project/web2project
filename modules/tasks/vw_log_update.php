@@ -7,6 +7,31 @@ global $AppUI, $obj, $percent, $can_edit_time_information, $cal_sdf;
 
 $AppUI->loadCalendarJS();
 
+//Time arrays for selects
+$start = (int) w2PgetConfig('cal_day_start', 8);
+$end = (int) w2PgetConfig('cal_day_end', 17);
+$inc = (int) w2PgetConfig('cal_day_increment', 15);
+
+$ampm = stristr($AppUI->getPref('TIMEFORMAT'), '%p');
+$hours = array();
+for ($current = $start; $current < $end + 1; $current++) {
+    $current_key = ($current < 10) ? '0' . $current : $current;
+
+    if ($ampm) {
+		//User time format in 12hr
+		$hours[$current_key] = ($current > 12 ? $current - 12 : $current);
+	} else {
+		//User time format in 24hr
+		$hours[$current_key] = $current;
+	}
+}
+
+$minutes = array();
+$minutes['00'] = '00';
+for ($current = 0 + $inc; $current < 60; $current += $inc) {
+	$minutes[$current] = $current;
+}
+
 $task        = $obj;
 $task_id     = $task->task_id;
 $task_log_id = (int) w2PgetParam($_GET, 'task_log_id', 0);
@@ -28,7 +53,7 @@ if (!$canViewTask) {
 	$AppUI->redirect(ACCESS_DENIED);
 }
 
-$canAuthor = $log->canCreate($task_id);
+$canAuthor = $log->canCreate();
 if (!$canAuthor && !$task_log_id) {
 	$AppUI->redirect(ACCESS_DENIED);
 }
@@ -235,20 +260,27 @@ $log_date = new w2p_Utilities_Date($log->task_log_date);
                         </td>
                     </tr>
 		    <?php } ?>
-                    <?php $end_date = (int)$obj->task_end_date ? new w2p_Utilities_Date($obj->task_end_date) : null; ?>
+                    <?php $end_date = (int)$obj->task_end_date ? new w2p_Utilities_Date($AppUI->formatTZAwareTime($obj->task_end_date, '%Y-%m-%d %T')) : null; ?>
                     <input type="hidden" name="task_end_date" id="task_end_date" value="<?php echo $end_date ? $end_date->format(FMT_TIMESTAMP_DATE) : ''; ?>" />
                     <?php
                     if ($obj->canUserEditTimeInformation($project->project_owner, $AppUI->user_id)) {
                         ?>
                         <tr>
                             <td align='right'>
-                                <?php echo $AppUI->_('Task end date'); ?>:
+                                <?php echo $AppUI->_('Task end date/time'); ?>:
                             </td>
                             <td>
                                 <input type="text" name="end_date" id="end_date" onchange="setDate_new('editFrm', 'end_date', 'task');" value="<?php echo $end_date ? $end_date->format($df) : ''; ?>" class="text" />
                                 <a href="javascript: void(0);" onclick="return showCalendar('end_date', '<?php echo $df ?>', 'editFrm', null, true, true)">
                                     <img style="vertical-align: middle" src="<?php echo w2PfindImage('calendar.gif'); ?>" width="24" height="12" alt="<?php echo $AppUI->_('Calendar'); ?>" border="0" />
                                 </a>
+	                        <?php
+		  		    echo '/&nbsp;&nbsp;' . arraySelect($hours, 'end_hour', 'size="1" onchange="setAMPM(this)" class="text"', $end_date ? $end_date->getHour() : $start);
+	                            echo '&nbsp;:&nbsp;' . arraySelect($minutes, 'end_minute', 'size="1" class="text"', $end_date ? $end_date->getMinute() : '00');
+	                            if (stristr($AppUI->getPref('TIMEFORMAT'), '%p')) {
+	                                echo '<input type="text" name="end_hour_ampm" id="end_hour_ampm" value="' . ($end_date ? $end_date->getAMPM() : ($start > 11 ? 'pm' : 'am')) . '" disabled="disabled" class="text" size="2" />';
+	                            }
+             		        ?>
                             </td>
                         </tr>
                         <?php

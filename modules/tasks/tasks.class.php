@@ -450,8 +450,8 @@ class CTask extends w2p_Core_BaseObject
             $d = $q->loadResult();
             $q->clear();
             if ($d) {
-                $modified_task->task_start_date = $d;
-                $modified_task->task_start_date = $this->_AppUI->formatTZAwareTime($modified_task->task_start_date, '%Y-%m-%d %T');
+                $modified_task->task_start_date = new w2p_Utilities_Date($d);
+                $modified_task->task_start_date = $modified_task->task_start_date->format(FMT_DATETIME_MYSQL);
             }
 
             //Update end date
@@ -461,8 +461,8 @@ class CTask extends w2p_Core_BaseObject
             $d = $q->loadResult();
             $q->clear();
             if ($d) {
-	        $modified_task->task_end_date = $d;
-	        $modified_task->task_end_date = $this->_AppUI->formatTZAwareTime($modified_task->task_end_date, '%Y-%m-%d %T');
+	        $modified_task->task_end_date = new w2p_Utilities_Date($d);
+	        $modified_task->task_end_date = $modified_task->task_end_date->format(FMT_DATETIME_MYSQL);
 	    }
 
             //If we are updating a dynamic task from its children we don't want to store() it

@@ -429,6 +429,8 @@ $log = new CTask_Log();
 $log->task_log_id = $task_log_id;
 if ($task_log_id) {
     $log->load($task_log_id);
+} else {
+    $log->task_log_task = $task_id;
 }
 
 // A template project has no use for logs and task logs
@@ -440,12 +442,12 @@ if ($obj->task_dynamic != 1 && 0 == $obj->task_represents_project) {
 			$tabBox->add(W2P_BASE_DIR . '/modules/tasks/vw_logs', 'Task Logs');
 		}
 		if ($task_log_id == 0) {
-			if ($log->canCreate($task_id)) {
+			if ($log->canCreate()) {
 				$tabBox->add(W2P_BASE_DIR . '/modules/tasks/vw_log_update', 'Log');
 			}
 		} elseif ($log->canEdit()) {
 			$tabBox->add(W2P_BASE_DIR . '/modules/tasks/vw_log_update', 'Edit Log');
-		} elseif ($log->canCreate($task_id)) {
+		} elseif ($log->canCreate()) {
 			$tabBox_show = 1;
 			$tabBox->add(W2P_BASE_DIR . '/modules/tasks/vw_log_update', 'Log');
 		}
