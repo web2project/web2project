@@ -36,10 +36,20 @@ if (!$obj->bind($_POST)) {
 
 // Check to see if the task_project has changed
 if ($new_task_project != 0 and $obj->task_project != $new_task_project) {
-    $taskCount = $obj->getTaskCount($obj->task_project);
-    CProject::updateTaskCount($obj->task_project, --$taskCount);
-    $obj->task_project = $new_task_project;
-    $obj->task_parent = $obj->task_id;
+    $obj->updateSubTasksProject($new_task_project, $task_id);
+
+    $taskCount_oldProject = $obj->getTaskCount($obj->task_project);
+    CProject::updateTaskCount($obj->task_project, $taskCount_oldProject);
+
+    $taskCount_newProject = $obj->getTaskCount($new_task_project);
+    CProject::updateTaskCount($new_task_project, $taskCount_newProject);
+
+    /**
+     * We have to bail out for a redirect here or otherwise the store() below
+     *   will screw things up and assign the root task specified back to the
+     *   original project.
+     */
+    $AppUI->redirect('m=projects&a=view&project_id='.$new_task_project);
 }
 
 // Map task_dynamic checkboxes to task_dynamic values for task dependencies.

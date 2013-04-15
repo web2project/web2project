@@ -724,10 +724,6 @@ class CTask extends w2p_Core_BaseObject
             if ($this->task_status != $oTsk->task_status) {
                 $this->updateSubTasksStatus($this->task_status);
             }
-            // Moving this task to another project?
-            if ($this->task_project != $oTsk->task_project) {
-                $this->updateSubTasksProject($this->task_project);
-            }
             if ($this->task_dynamic == 1) {
                 $this->updateDynamics(true);
             }
@@ -1995,13 +1991,16 @@ class CTask extends w2p_Core_BaseObject
     }
 
     //Returns task children IDs
-    public function getChildren()
+    public function getChildren($task_id = 0)
     {
+        if (!$task_id) {
+            $task_id = $this->task_id;
+        }
 
         $q = $this->_getQuery();
         $q->addTable('tasks');
         $q->addQuery('task_id');
-        $q->addWhere('task_id <> ' . (int) $this->task_id . ' AND task_parent = ' . (int) $this->task_id);
+        $q->addWhere('task_id <> ' . (int) $task_id . ' AND task_parent = ' . (int) $task_id);
         $result = $q->loadColumn();
 
         return $result;
@@ -2091,35 +2090,21 @@ class CTask extends w2p_Core_BaseObject
      * This function recursively updates all tasks project
      * to the one passed as parameter
      */
-    public function updateSubTasksProject($new_project, $task_id = null)
+    public function updateSubTasksProject($new_project, $task_id = 0)
     {
-
-        if (is_null($task_id)) {
+        if (!$task_id) {
             $task_id = $this->task_id;
         }
 
         $q = $this->_getQuery();
         $q->addTable('tasks');
-        $q->addQuery('task_id');
-        $q->addWhere('task_parent = ' . (int) $task_id);
-        $tasks_id = $q->loadColumn();
-        $q->clear();
-
-        if (count($tasks_id) == 0) {
-            return true;
-        }
-
-        // update project of children
-        $q->addTable('tasks');
         $q->addUpdate('task_project', $new_project);
-        $q->addWhere('task_parent = ' . (int) $task_id);
+        $q->addWhere('task_id = ' . (int) $task_id);
         $q->exec();
-        $q->clear();
 
-        foreach ($tasks_id as $id) {
-            if ($id != $task_id) {
-                $this->updateSubTasksProject($new_project, $id);
-            }
+        $task_ids = $this->getChildren($task_id);
+        foreach ($task_ids as $id) {
+            $this->updateSubTasksProject($new_project, $id);
         }
     }
 
