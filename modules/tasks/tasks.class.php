@@ -1985,7 +1985,6 @@ class CTask extends w2p_Core_BaseObject
 
     public function getProject()
     {
-
         $q = $this->_getQuery();
         $q->addTable('projects');
         $q->addQuery('project_name, project_short_name, project_color_identifier');
@@ -2378,7 +2377,6 @@ class CTask extends w2p_Core_BaseObject
 //TODO: this method should be moved to CTaskLog
     public function getTaskLogs($taskId, $problem = false)
     {
-
         $q = $this->_getQuery();
         $q->addTable('task_log');
         $q->addQuery('task_log.*, task_log_task as task_id, user_username');
@@ -2510,7 +2508,6 @@ class CTask extends w2p_Core_BaseObject
 
     public function getTaskCount($projectId)
     {
-
         $q = $this->_getQuery();
         $q->addTable('tasks');
         $q->addQuery('COUNT(distinct tasks.task_id) AS total_tasks');
@@ -2520,7 +2517,6 @@ class CTask extends w2p_Core_BaseObject
 
     public static function pinUserTask($userId, $taskId)
     {
-
         $q = new w2p_Database_Query;
         $q->addTable('user_task_pin');
         $q->addInsert('user_id', (int) $userId);
@@ -2535,7 +2531,6 @@ class CTask extends w2p_Core_BaseObject
 
     public static function unpinUserTask($userId, $taskId)
     {
-
         $q = new w2p_Database_Query;
         $q->setDelete('user_task_pin');
         $q->addWhere('user_id = ' . (int) $userId);
@@ -2550,7 +2545,6 @@ class CTask extends w2p_Core_BaseObject
 
     public static function updateHoursWorked($taskId, $totalHours)
     {
-
         $q = new w2p_Database_Query;
         $q->addTable('tasks');
         $q->addUpdate('task_hours_worked', $totalHours + 0);

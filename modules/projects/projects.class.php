@@ -767,7 +767,6 @@ class CProject extends w2p_Core_BaseObject
 
     public static function updateTaskCache($project_id, $task_id, $project_actual_end_date, $project_task_count)
     {
-
         if ($project_id && $task_id) {
             $q = new w2p_Database_Query();
             $q->addTable('projects');
@@ -782,7 +781,6 @@ class CProject extends w2p_Core_BaseObject
 
     public static function updateTaskCount($projectId, $taskCount)
     {
-
         trigger_error("CProject::updateTaskCount has been deprecated in v2.3 and will be removed by v4.0. Please use CProject::updateTaskCache instead.", E_USER_NOTICE);
 
         if (intval($projectId) > 0 && intval($taskCount)) {
@@ -795,10 +793,15 @@ class CProject extends w2p_Core_BaseObject
         }
     }
 
+    /**
+     * Note that this returns the *count* of projects.  If this is zero, it is
+     *   evaluated as false, otherwise it is considered true.
+     *
+     * @param type $projectId
+     * @return type
+     */
     public function hasChildProjects($projectId = 0)
     {
-        // Note that this returns the *count* of projects.  If this is zero, it
-        //   is evaluated as false, otherwise it is considered true.
         $project_id = ($projectId) ? ($this->project_original_parent ? $this->project_original_parent : $this->project_id) : $projectId;
 
         $q = $this->_getQuery();
@@ -821,7 +824,6 @@ class CProject extends w2p_Core_BaseObject
 
     public static function updateHoursWorked($project_id)
     {
-
         $q = new w2p_Database_Query();
         $q->addTable('task_log');
         $q->addTable('tasks');
