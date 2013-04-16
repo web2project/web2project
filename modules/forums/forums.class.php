@@ -253,10 +253,10 @@ class CForum extends w2p_Core_BaseObject
         $db_start = $start_date->format(FMT_DATETIME_MYSQL);
         $db_end = $end_date->format(FMT_DATETIME_MYSQL);
 
-	$prj = new CProject();
-	$prjs = $prj->getAllowedRecords($user_id,'projects.project_id, project_name', '', null, null, 'projects');
-	if (count($prjs)) {
-		$prj_filter = ' AND (forum_project IN (' . implode(',', array_keys($prjs)) . ') OR forum_project IS NULL OR forum_project = \'\' OR forum_project = 0)';
+	$obj = new CForum();
+	$forums = $obj->getAllowedRecords($user_id, 'forums.forum_id, forum_name', '', null, null);
+	if (count($forums)) {
+		$prj_filter = ' AND (forum_id IN (' . implode(',', array_keys($forums)) . '))';
 	} else {
 		$prj_filter = ' AND False';
 	}
