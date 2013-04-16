@@ -2091,6 +2091,8 @@ class CTask extends w2p_Core_BaseObject
      *   $project_new and then updates the corresponding task counts and task
      *   start/end dates for the projects.
      *
+     * @todo Get the start/end dates for the cache.. - updateTaskCache
+     *
      * @param type $task_id
      * @param type $project_old
      * @param type $project_new
