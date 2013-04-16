@@ -372,7 +372,7 @@ class CTask_Log extends w2p_Core_BaseObject
 		}
 
 		// Check if the user is an assignee
-		$assigned = $task->getAssignedUsers($task_id);
+		$assigned = $task->getAssignedUsers($task->task_id);
 		foreach ($assigned as $uid => $assignee) {
 			if ($uid == $this->_AppUI->user_id) {
 				return true;
