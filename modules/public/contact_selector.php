@@ -37,7 +37,11 @@ function setContactIDs(method, querystring) {
 	var URL = 'index.php?m=public&a=contact_selector';
 	var field = document.getElementsByName('contact_id[]');
 	var selected_contacts_id = document.frmContactSelect.selected_contacts_id;
-	var tmp = selected_contacts_id.value.split(',');
+	if (selected_contacts_id.value.length == 0) {
+		var tmp = new Array();
+	} else {
+		var tmp = selected_contacts_id.value.split(',');
+	}
 
 	if (method == 'GET' && querystring){
 		URL += '&' + querystring;

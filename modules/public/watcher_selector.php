@@ -35,7 +35,11 @@ function setWatcherIDs(method, querystring) {
 	var URL = 'index.php?m=public&a=watcher_selector';
 	var field = document.getElementsByName('watcher_id[]');
 	var selected_watchers_id = document.frmWatcherSelect.selected_watchers_id;
-	var tmp = selected_watchers_id.value.split(',');
+	if (selected_watchers_id.value.length == 0) {
+		var tmp = new Array();
+	} else {
+		var tmp = selected_watchers_id.value.split(',');
+	}
 
 	if (method == 'GET' && querystring){
 		URL += '&' + querystring;
