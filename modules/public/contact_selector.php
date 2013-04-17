@@ -17,7 +17,7 @@ if (w2PgetParam($_POST, 'selected_contacts_id')) {
 function removeFromArray(arr, value) {
 	for (var i = 0, i_cmp = arr.length; i < i_cmp; i++) {
 		if (arr[i] == value) {
-			return arr.splice(0,i - 1).concat(arr.splice(i + 1));
+			return arr.splice(0,i).concat(arr.splice(i + 1));
 		}
 	}
 	return arr;
@@ -124,7 +124,7 @@ $where = $oDpt->getAllowedSQL($AppUI->user_id, 'contact_department');
 $q->addWhere($where);
 
 $q->addWhere('(contact_owner = ' . (int)$AppUI->user_id . ' OR contact_private = 0)');
-$q->addOrder('company_name, contact_company, dept_name, contact_department, contact_last_name'); // May need to review this.
+$q->addOrder('company_name, contact_company, dept_name, contact_department, contact_first_name, contact_last_name'); // May need to review this.
 
 $contacts = $q->loadHashList('contact_id');
 ?>
@@ -136,7 +136,7 @@ $contacts = $q->loadHashList('contact_id');
 		$actual_department = '';
 		$actual_company = '';
 		$companies_names = array(0 => $AppUI->_('Select a company')) + $aCpies;
-		echo arraySelect($companies_names, 'company_id', 'onchange="document.frmContactSelect.contacts_submited.value=0; setContactIDs(); document.frmContactSelect.submit();"', $company_id);
+		echo $AppUI->_('Contacts from company') . ': ' . arraySelect($companies_names, 'company_id', 'onchange="document.frmContactSelect.contacts_submited.value=0; setContactIDs(); document.frmContactSelect.submit();"', $company_id);
 	?>
 	<br /><br />
 	<?php
@@ -150,7 +150,7 @@ $contacts = $q->loadHashList('contact_id');
 				<h4><a href="javascript: void(0);" onclick="window.location.href=setContactIDs('GET','dialog=1&<?php if (!is_null($call_back))
 					echo 'call_back=' . $call_back . '&'; ?>show_all=1');"><?php echo $AppUI->_('View all allowed companies'); ?></a></h4>
 				<hr />
-				<h2><?php echo $AppUI->_('Contacts for'); ?> <?php echo $company_name ?></h2>
+				<h2><?php if (count($contacts)) { echo $AppUI->_('Contacts for') . ' ' . $company_name; } ?></h2>
 					<?php
 						foreach ($contacts as $contact_id => $contact_data) {
 							if (!$contact_data['company_name']) {
