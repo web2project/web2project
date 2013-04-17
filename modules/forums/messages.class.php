@@ -309,5 +309,52 @@ class CForum_Message extends w2p_Core_BaseObject
 	$q->addQuery('u.user_id, fm.message_id, fm.message_forum as forum_id');
 	$q->addGroup('fm.message_id, fm.message_parent');
 	return $q->loadList();
-   }
+    }
+
+    public function getWatchers() {
+        $q = $this->_getQuery();
+        $q->addTable('forum_watch');
+        $q->addQuery('watch_user');
+	$q->addWhere('watch_topic = ' . (int)$this->message_id);
+        return $q->loadColumn();
+    }
+
+    public function setWatchers() {
+	// This operation will be done in three steps to preserve the
+	// email notification settings of watchers already present.
+	$selected_watchers = w2PgetParam($_POST, 'topic_watchers', '');
+	// Delete any watcher not present on the new list
+        $q = $this->_getQuery();
+        $q->setDelete('forum_watch');
+	if (strlen($selected_watchers) > 0) {
+		$q->addWhere('watch_topic = ' . $this->message_id . ' AND watch_user NOT IN (' . $selected_watchers . ')');
+	} else {
+		$q->addWhere('watch_topic = ' . $this->message_id);
+	}
+	$q->exec();
+	$q->clear();
+	// Get the remaining watchers
+	$already = $this->getWatchers();
+	// Compute the difference so that we're left only with watchers not already set.
+	$watchers = explode(',', $selected_watchers);
+	$watchers = array_diff($watchers, $already);
+	// Insert the new watchers
+	foreach ($watchers as $watch) {
+		if ((int)$watch) {
+			$q->addTable('forum_watch');
+			$q->addInsert('watch_user', $watch);
+			$q->addInsert('watch_topic', $this->message_id);
+			$q->addInsert('notify_by_email', false);
+	                $q->exec();
+	                $q->clear();
+		}
+	}
+    }
+
+    protected function hook_postStore() {
+	if ($this->message_parent == -1) {
+		$this->setWatchers();
+	}
+        parent::hook_postStore();
+    }
 }

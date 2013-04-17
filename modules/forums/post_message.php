@@ -41,11 +41,11 @@ if (!$canAddEdit) {
 	$AppUI->redirect(ACCESS_DENIED);
 }
 
-// get the task list if this is a new topic
 $new_topic = false;
-if ($message_parent < 0 && $myForum->forum_project) {
+if ($message_parent < 0) {
 	$message_parent = -1;
 
+	// get the task list if this is a new topic
 	if ($myForum->forum_project > 0) {
 		$new_topic = true;
 		$noTask = new CTask();
@@ -67,6 +67,9 @@ if ($message_parent < 0 && $myForum->forum_project) {
 		      	$task_options[$task['task_id']] = ($level ? str_repeat('&nbsp;&nbsp;', $level) : '') . $task['task_name'];
 		}
 	}
+
+	// get the watcher list
+	$selected_watchers = $message->getWatchers();
 }
 
 //pull message information from parent (topic)
@@ -121,6 +124,23 @@ if (function_exists('styleRenderBoxTop')) {
 }
 ?>
 
+<script language="javascript" type="text/javascript">
+
+function popWatchers() {
+    var selected_watchers_id = document.getElementById('topic_watchers').value;
+    var url = './index.php?m=public&a=watcher_selector&dialog=1&call_back=setWatchers&selected_watchers_id='+selected_watchers_id;
+    window.open(url,'Watchers','height=600,width=400,resizable,scrollbars=yes');
+}
+
+function setWatchers(users_id_string){
+    if(!users_id_string) {
+	users_id_string = '';
+    }
+    document.changeforum.topic_watchers.value = users_id_string;
+}
+
+</script>
+
 <form name="changeforum" action="?m=forums&forum_id=<?php echo $forum_id; ?>" method="post" accept-charset="utf-8">
 	<input type="hidden" name="dosql" value="do_post_aed" />
 	<input type="hidden" name="del" value="0" />
@@ -130,6 +150,7 @@ if (function_exists('styleRenderBoxTop')) {
 	<input type="hidden" name="message_author" value="<?php echo (isset($message->message_author) && ($message_id || $message_parent < 0)) ? $message->message_author : $AppUI->user_id; ?>" />
 	<input type="hidden" name="message_editor" value="<?php echo (isset($message->message_author) && ($message_id || $message_parent < 0)) ? $AppUI->user_id : '0'; ?>" />
 	<input type="hidden" name="message_id" value="<?php echo $message_id; ?>" />
+	<input type="hidden" name="topic_watchers" id="topic_watchers" value="<?php echo implode(',', $selected_watchers); ?>" />
     <table cellspacing="0" cellpadding="3" border="0" width="100%" class="std addedit">
         <tr><td colspan="3">
             <table cellspacing="1" cellpadding="2" border="0" width="100%">
@@ -176,19 +197,24 @@ if (function_exists('styleRenderBoxTop')) {
         ?>
 	<?php if (($new_topic || $message_parent == -1) && $myForum->forum_project) { ?>
 	    <tr>
-            	<td align="right"><?php echo $AppUI->_('Related task'); ?>:</td>
-            	<td>
-                    <?php echo arraySelect($task_options, 'message_task', 'size="1" class="text"', $message->message_task); ?>
-		</td>
-		<td width="100%">&nbsp;</td>
+       		<td align="right"><?php echo $AppUI->_('Related task'); ?>:</td>
+       		<td><?php echo arraySelect($task_options, 'message_task', 'size="1" class="text"', $message->message_task); ?></td>
+	        <td width="100%">&nbsp;</td>
 	    </tr>
 	<?php } ?>
 
         <tr>
             <td align="right"><?php echo $AppUI->_('Subject'); ?>:</td>
-            <td>
-                <input type="text" class="text" name="message_title" value="<?php echo ($message_id || $message_parent == -1 ?  $message->message_title : 'Re: ' . $last_message->message_title); ?>" size="120" maxlength="250" />
-            </td><td width="100%">&nbsp;</td>
+            <td><input type="text" class="text" name="message_title" value="<?php echo ($message_id || $message_parent == -1 ?  $message->message_title : 'Re: ' . $last_message->message_title); ?>" size="120" maxlength="250" /></td>
+	    <td width="100%">
+	    <?php
+                    if ($AppUI->isActiveModule('admin') && canView('admin')) {
+			echo '<input type="button" class="button" value="' . $AppUI->_('Select watchers...') . '" onclick="javascript:popWatchers();" />';
+                    } else {
+		        echo '&nbsp;';
+		    }
+	    ?>
+	    </td>
         </tr>
         <tr>
             <td align="right" valign="top"><?php echo $AppUI->_('Message'); ?>:</td>
