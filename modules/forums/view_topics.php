@@ -14,6 +14,10 @@ if (isset($_GET['orderby'])) {
 $orderby = $AppUI->getState('ForumVwOrderBy') ? $AppUI->getState('ForumVwOrderBy') : 'latest_reply';
 $orderdir = $AppUI->getState('ForumVwOrderDir') ? $AppUI->getState('ForumVwOrderDir') : 'desc';
 
+
+$message = new CForum_Message();
+$canAuthor = $message->canCreate();
+
 //Pull All Messages
 $q = new w2p_Database_Query;
 $q->addTable('forum_messages', 'fm1');
