@@ -89,7 +89,9 @@ if (w2PgetParam($_GET, 'pinned') == 1) {
 	$titleBlock->addCrumb('?m=tasks&amp;pinned=1', 'my pinned tasks');
 }
 $titleBlock->addCrumb('?m=tasks&amp;inactive=toggle', 'show ' . $in . 'active tasks');
-$titleBlock->addCrumb('?m=tasks&amp;a=tasksperuser', 'tasks per user');
+if ($canEdit) {
+	$titleBlock->addCrumb('?m=tasks&amp;a=tasksperuser', 'tasks per user');
+}
 if (!$project_id) {
     $titleBlock->addCell('
         <form name="task_list_options" method="post" action="?m=tasks" accept-charset="utf-8">
