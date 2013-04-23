@@ -12,28 +12,18 @@ require_once W2P_BASE_DIR . '/includes/backcompat_functions.php';
 require_once W2P_BASE_DIR . '/includes/deprecated_functions.php';
 require_once W2P_BASE_DIR . '/includes/cleanup_functions.php';
 require_once W2P_BASE_DIR . '/lib/adodb/adodb.inc.php';
+require_once W2P_BASE_DIR . '/classes/w2p/web2project.php';
+
+spl_autoload_register('web2project_autoload');
+spl_autoload_register('w2p_old_autoload');
 
 /**
- * @todo Personally, I'm already hating this autoloader... while it's great in
- * concept, we don't have anything that resembles a real class naming convention
- * so this ends up being nasty and getting nastier.  Hopefully, we can clean
- * these things up for v3.x
- *
- * @todo move this into classes/w2p/autoload.php
+ * For all intents and purposes, this autoloader should be considered
+ *  deprecated. As we move forward, we'll continue to simplify and clean this
+ *  up so that it should eventually be nothing except the module autoloader.
  */
-spl_autoload_register('w2p_autoload');
-
-function w2p_autoload($class_name)
+function w2p_old_autoload($class_name)
 {
-    $name = $class_name;
-
-    if (false !== strpos($name, 'w2p_')) {
-        $name = str_replace('_', DIRECTORY_SEPARATOR, $name);
-        $classpath = W2P_BASE_DIR . '/classes/' . $name . '.class.php';
-        require_once $classpath;
-        return;
-    }
-
     $name = strtolower($class_name);
     switch ($name) {
         case 'bcode':                   // Deprecated as of v3.0, TODO: remove this in v4.0
