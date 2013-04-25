@@ -94,9 +94,8 @@ function submitIt(){
         alert("<?php echo $AppUI->_('adminValidUserName', UI_OUTPUT_JS); ?>"  + <?php echo w2PgetConfig('username_min_len'); ?>);
         form.user_username.focus();
 <?php if ($canEdit && !$user_id) { ?>
-    } else if (form.user_role.value <=0 ) {
-        alert("<?php echo $AppUI->_('adminValidRole', UI_OUTPUT_JS); ?>");
-        form.user_role.focus();     
+    } else if ((form.user_role.value <=0) && !confirm("<?php echo $AppUI->_('adminconfirmInvalidRole', UI_OUTPUT_JS); ?>")) {
+	form.user_role.focus();     
     } else if (form.user_password.value.length < <?php echo w2PgetConfig('password_min_len'); ?>) {
         alert("<?php echo $AppUI->_('adminValidPassword', UI_OUTPUT_JS); ?>" + <?php echo w2PgetConfig('password_min_len'); ?>);
         form.user_password.focus();

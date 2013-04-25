@@ -133,6 +133,7 @@
 'adminValidLastName'=>'Please enter a last name',
 'adminValidPassword'=>'Please enter a valid password.  It needs to have a minimal length of ',
 'adminValidRole'=>'Please select a role for the new user.  Every user must have a role assigned in order to log in.',
+'adminconfirmInvalidRole'=>'You have not chosen a role for this user, whom will not be able to login. Are you sure ?',  
 'adminValidUserName'=>'Please enter a valid user name.  It needs to have a minimal length of ',
 'all',
 'allow',
