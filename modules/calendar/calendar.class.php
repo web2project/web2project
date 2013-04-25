@@ -4,7 +4,11 @@
  * @package     web2project\modules\core
  */
 
-$event_filter_list = array('my' => 'My Events', 'own' => 'Events I Created', 'all' => 'All Events');
+if (canView("system")) {
+	$event_filter_list = array('my' => 'My Events', 'own' => 'Events I Created', 'all' => 'All Events');
+} else {
+	$event_filter_list = array('my' => 'My Events', 'own' => 'Events I Created');
+}
 
 class CEvent extends w2p_Core_BaseObject
 {
