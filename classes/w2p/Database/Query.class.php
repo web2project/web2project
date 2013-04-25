@@ -48,6 +48,8 @@ class w2p_Database_Query {
 	public $offset;
 	/**< JOIN component of the query */
 	public $join;
+	/**< prepared queries for a UNION query */
+	public $union;
 	/**< Query type eg. 'select', 'update' */
 	public $type;
 	/**< Array of fields->values to update */
@@ -60,6 +62,8 @@ class w2p_Database_Query {
 	public $create_definition;
 	/**< Boolean to count rows in query */
 	public $include_count = false;
+	/**< Union kind (ALL, DISTINCT) */
+	public $union_kind;
 	/**< Internal string, table prefix, prepended to all queries */
 	public $_table_prefix;
 	/**< Handle to the query result */
@@ -205,6 +209,20 @@ class w2p_Database_Query {
 			}
 		} else {
 			array_push($this->$clause, $value);
+		}
+	}
+
+	/** Add a full query for a UNION query
+	 *
+	 * E.g. '*', or 'a.*'
+	 * or 'a.field, b.field', etc.  You can call this multiple times
+	 * and it will correctly format a combined query.
+	 *
+	 * @param	$query	Prepared query string to use.
+	 */
+	public function addSelectQuery($query) {
+		if ($query->type == 'select') {
+			$this->addClause('union', '(' . $query->prepare() . ')');
 		}
 	}
 
@@ -364,6 +382,14 @@ class w2p_Database_Query {
 	public function dropTemp($table) {
 		$this->type = 'drop';
 		$this->create_table = $table;
+	}
+
+	/** Alter a database table
+	 * @param $table the name of the table to alter
+	 */
+	public function unionQuery($kind) {
+		$this->type = 'union';
+		$this->union_kind = $kind;
 	}
 
 	/** Alter a database table
@@ -732,6 +758,15 @@ class w2p_Database_Query {
 				break;
 			case 'drop':
 				$q = 'DROP TABLE IF EXISTS ' . $this->_table_prefix . $this->create_table;
+				break;
+			case 'union':
+				$q = implode(' UNION ' . $this->union_kind . ' ', $this->union);
+				$q .= $this->make_join($this->join);
+				$q .= $this->make_where_clause($this->where);
+				$q .= $this->make_group_clause($this->group_by);
+				$q .= $this->make_having_clause($this->having);
+				$q .= $this->make_order_clause($this->order_by);
+				$q .= $this->make_limit_clause($this->limit, $this->offset);
 				break;
 		}
 		if ($clear) {
