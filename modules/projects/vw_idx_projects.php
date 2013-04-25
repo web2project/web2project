@@ -280,6 +280,7 @@ if (count($fields) > 0) {
 		if ($none) {
 			echo '<tr><td colspan="25">' . $AppUI->_('No projects to display for this Company, Owner and Type, or your Search returned no results. Please check the filters above and try again.') . '</td></tr>';
 		} else {
+			$pstatus = array_merge($pstatus, array('Archived'));
 			?>
 				<tr>
 					<td colspan="25" align="right">

@@ -5,6 +5,8 @@ if (!defined('W2P_BASE_DIR')) {
 
 $tab = $AppUI->processIntState('ProjIdxTab', $_GET, 'tab', 1);
 
+$project_statuses = w2PgetSysVal('ProjectStatus');
+
 $project = new CProject();
 $structprojs = $project->getProjects();
 
@@ -16,7 +18,12 @@ if (isset($_GET['update_project_status']) && isset($_GET['project_status']) && i
 
 	foreach ($projects_id as $project_id) {
 		$project->load($project_id);
-		$project->project_status = $statusId;
+		if ($statusId >= count($project_statuses)) {
+			$project->project_active = false;
+		} else {
+			$project->project_status = $statusId;
+			$project->project_active = true;
+		}
 		$project->store();
 	}
 }
@@ -80,8 +87,6 @@ $titleBlock->addCell('<span title="' . $AppUI->_('Projects') . '::' . $AppUI->_(
 		</a></span>');
 
 $titleBlock->show();
-
-$project_statuses = w2PgetSysVal('ProjectStatus');
 
 $active = 0;
 $archived = 0;
