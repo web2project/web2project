@@ -201,6 +201,7 @@ function computeTotalBudget() {
 	<input type="hidden" name="project_id" value="<?php echo $project_id; ?>" />
 	<input type="hidden" name="project_creator" value="<?php echo is_null($project->project_creator) ? $AppUI->user_id : $project->project_creator; ?>" />
 	<input type="hidden" name="project_contacts" id="project_contacts" value="<?php echo implode(',', $selected_contacts); ?>" />
+	<input type="hidden" name="project_percent_complete" value="<?php echo $project->project_percent_complete; ?>" />
     <input type="hidden" name="datePicker" value="project" />
     <table cellspacing="1" cellpadding="1" border="0" width='100%' class="std addedit">
         <tr>
