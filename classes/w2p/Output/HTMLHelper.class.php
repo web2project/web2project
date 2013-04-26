@@ -193,7 +193,7 @@ class w2p_Output_HTMLHelper
                 break;
             case '_author':
             case '_creator':
-			case '_owner':
+	    case '_owner':
             case '_updator':
                 $suffix .= ' nowrap';
                 if ((int) $value) {
@@ -201,7 +201,7 @@ class w2p_Output_HTMLHelper
                     $obj->findContactByUserid($value);
                     $mod = substr($suffix, 1);
                     $suffix .= ' nowrap';
-                    $link = '?m=admin&a=viewuser&user_id='.$this->tableRowData['user_id'];
+                    $link = '?m=admin&a=viewuser&user_id='.$value;
                     $cell = '<a ' . ($nolink ? '' : 'href="'.$link.'"') . '>'.$obj->contact_display_name.'</a>';
                 } else {
                     $cell = $value;
@@ -217,30 +217,31 @@ class w2p_Output_HTMLHelper
                 $suffix .= ' nowrap';
                 $cell = file_size($value);
                 break;
-			case '_budget':
-				$cell = w2PgetConfig('currency_symbol');
-				$cell .= formatCurrency($value, $this->_AppUI->getPref('CURRENCYFORM'));
-				break;
-			case '_url':
-				$cell = w2p_url($value);
-				break;
+	    case '_budget':
+		$cell = w2PgetConfig('currency_symbol');
+		$cell .= formatCurrency($value, $this->_AppUI->getPref('CURRENCYFORM'));
+		break;
+	    case '_url':
+		$cell = w2p_url($value);
+		break;
             case '_email':
                 $cell = w2p_email($value);
                 break;
             case '_birthday':
-			case '_date':
+	    case '_date':
                 $suffix .= ' nowrap';
                 $myDate = intval($value) ? new w2p_Utilities_Date($value) : null;
-				$cell = $myDate ? $myDate->format($this->df) : '-';
-				break;
-			case '_created':
-            case '_datetime':
+		$cell = $myDate ? $myDate->format($this->df) : '-';
+		break;
+	    case '_created':
+	    case '_datetime':
             case '_update':
             case '_updated':
-				$suffix .= ' nowrap';
+            case '_date+time':
+		$suffix .= ' nowrap';
                 $myDate = intval($value) ? new w2p_Utilities_Date($this->_AppUI->formatTZAwareTime($value, '%Y-%m-%d %T')) : null;
-				$cell = $myDate ? $myDate->format($this->dtf) : '-';
-				break;
+		$cell = $myDate ? $myDate->format($this->dtf) : '-';
+		break;
             case '_description':
                 $cell = w2p_textarea($value);
                 break;
@@ -275,12 +276,12 @@ class w2p_Output_HTMLHelper
                     $cell = '-';
                 }
                 break;
-			default:
+	    default:
 //TODO: use this when we get a chance - http://www.w3schools.com/cssref/pr_text_white-space.asp ?
                 $suffix .= ' nowrap';
                 $value = (isset($custom[$fieldName])) ? $custom[$fieldName][$value] : $value;
 				$cell = htmlspecialchars($value, ENT_QUOTES);
-		}
+	}
 
         $begin = '<td class="data '.$suffix.'" '.$additional.' >';
         $end = '</td>';
