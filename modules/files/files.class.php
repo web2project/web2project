@@ -9,6 +9,7 @@ class CFile extends w2p_Core_BaseObject {
 	public $file_id = null;
 	public $file_version_id = null;
 	public $file_project = null;
+	public $file_company = null;
 	public $file_real_filename = null;
 	public $file_task = null;
 	public $file_name = null;
@@ -144,7 +145,7 @@ class CFile extends w2p_Core_BaseObject {
 			$q->addWhere('( ( ' . implode(' AND ', $allowedProjects) . ') OR file_project = 0 )');
 		}
 		if (isset($company_id) && (int) $company_id > 0) {
-			$q->addWhere('project_company = ' . (int)$company_id);
+			$q->addWhere('file_company = ' . (int)$company_id);
 		}
 		if (isset($project_id) && (int) $project_id > 0) {
 			$q->addWhere('file_project = ' . (int)$project_id);

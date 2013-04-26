@@ -20,6 +20,7 @@ if (!$limited) {
 } else {
 	$canEdit = false;
 }
-global $showProject;
+global $showProject, $showCompany;
 $showProject = true;
+$showCompany = true;
 require (W2P_BASE_DIR . '/modules/files/index_table.php');

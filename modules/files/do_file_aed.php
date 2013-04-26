@@ -48,6 +48,13 @@ if (!$obj->bind($_POST)) {
 	$AppUI->redirect();
 }
 
+// If a project is indicated, ignore and overwrite any company selection before storing
+if ($obj->file_project) {
+	$prj = new CProject();
+	$prj->load($obj->file_project);
+	$obj->file_company = $prj->project_company;
+}
+
 if ($file_id) {
 	$obj->_message = 'updated';
 	$oldObj = new CFile();

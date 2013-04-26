@@ -6,7 +6,7 @@ if (!defined('W2P_BASE_DIR')) {
 // modified later by Pablo Roca (proca) in 18 August 2003 - added page support
 // Files modules: index page re-usable sub-table
 global $AppUI, $company_id, $project_id, $task_id;
-global $currentTabId, $m, $showProject, $xpg_min, $xpg_pagesize, $page;
+global $currentTabId, $m, $showCompany, $showProject, $xpg_min, $xpg_pagesize, $page;
 
 $tab = ($m == 'files') ? $currentTabId-1 : -1;
 $page = w2PgetParam($_GET, 'page', 1);

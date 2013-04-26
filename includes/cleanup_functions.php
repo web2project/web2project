@@ -2025,7 +2025,7 @@ function countFiles($folder) {
 
 // From: modules/files/filefolder.class.php
 function displayFiles($AppUI, $folder_id, $task_id, $project_id, $company_id, $checkbox = false) {
-	global $m, $tab, $xpg_min, $xpg_pagesize, $showProject, $file_types,
+	global $m, $tab, $xpg_min, $xpg_pagesize, $showProject, $showCompany, $file_types,
             $company_id, $current_uri, $w2Pconfig;
     // SETUP FOR FILE LIST
 	$q = new w2p_Database_Query();
@@ -2060,7 +2060,7 @@ function displayFiles($AppUI, $folder_id, $task_id, $project_id, $company_id, $c
 		$q->addWhere('file_task = ' . (int)$task_id);
 	}
 	if ($company_id) {
-		$q->addWhere('project_company = ' . (int)$company_id);
+		$q->addWhere('file_company = ' . (int)$company_id);
 	}
     $temp_tab = ($m == 'files') ? $tab - 1 : -1;
     if (($temp_tab >= 0) and ((count($file_types) - 1) > $temp_tab)) {
@@ -2071,15 +2071,15 @@ function displayFiles($AppUI, $folder_id, $task_id, $project_id, $company_id, $c
         $q->addWhere('file_folder = ' . (int)$folder_id);
     }
 	$q->addGroup('file_version_id DESC');
-    $q->addOrder('file_project');
+    $q->addOrder('file_project, file_company');
 
 	$qv = new w2p_Database_Query();
 	$qv->addTable('files');
-	$qv->addQuery('file_id, file_version, file_project, file_name, file_task, file_folder,
+	$qv->addQuery('file_id, file_version, file_project, file_company, file_name, file_task, file_folder,
 		file_description, file_owner, file_size, file_category,
 		task_name, file_version_id, file_date as file_datetime, file_checkout, file_co_reason, file_type,
 		file_date, cu.user_username as co_user, project_name,
-		project_color_identifier, project_owner, u.user_id,
+		project_color_identifier, project_owner, u.user_id, cp.company_name,
         con.contact_first_name, con.contact_last_name, con.contact_display_name as contact_name,
         co.contact_first_name as co_contact_first_name, co.contact_last_name as co_contact_last_name,
         co.contact_display_name as co_contact_name ');
@@ -2088,6 +2088,7 @@ function displayFiles($AppUI, $folder_id, $task_id, $project_id, $company_id, $c
 	$qv->addJoin('contacts', 'con', 'con.contact_id = u.user_contact');
 	$qv->addJoin('tasks', 't', 't.task_id = file_task');
 	$qv->addJoin('file_folders', 'ff', 'ff.file_folder_id = file_folder');
+	$qv->addJoin('companies', 'cp', 'cp.company_id = file_company');
 	if ($project_id) {
 		$qv->addWhere('file_project = ' . (int)$project_id);
 	}
@@ -2095,7 +2096,7 @@ function displayFiles($AppUI, $folder_id, $task_id, $project_id, $company_id, $c
 		$qv->addWhere('file_task = ' . (int)$task_id);
 	}
 	if ($company_id) {
-		$qv->addWhere('project_company = ' . (int)$company_id);
+		$qv->addWhere('file_company = ' . (int)$company_id);
 	}
     if (($temp_tab >= 0) and ((count($file_types) - 1) > $temp_tab)) {
         $qv->addWhere('file_category = ' . (int)$temp_tab);
@@ -2146,6 +2147,7 @@ function displayFiles($AppUI, $folder_id, $task_id, $project_id, $company_id, $c
     $s .= '</tr>';
 
 	$fp = -1;
+	$fc = -1;
 	$htmlHelper = new w2p_Output_HTMLHelper($AppUI);
 	$htmlHelper->df .= ' ' . $AppUI->getPref('TIMEFORMAT');
 
@@ -2160,12 +2162,13 @@ function displayFiles($AppUI, $folder_id, $task_id, $project_id, $company_id, $c
 		$caneditfile = $perms->checkModuleItem('files', 'edit', $latest_file['file_id']) || $latest_file['file_owner'] == $AppUI->user_id;
 		$candeletefile = $perms->checkModuleItem('files', 'delete', $latest_file['file_id']) || $latest_file['file_owner'] == $AppUI->user_id;
 
+		if (empty($latest_file['file_project']) && empty($latest_file['file_company']) && ($fp != $latest_file['file_project']) && ($fp != $latest_file['file_company'])) {
+				$s .= '<tr><td colspan="20" style="border: outset 2px #eeeeee;background-color:#f4efe3;color:' . bestColor('f4efe3') . '">';
+				$s .= '<span style="background-color:#f4efe3;color:' . bestColor('f4efe3') . '">' . $AppUI->_('Not attached to a company nor a project') . '</span></a>';
+				$s .= '</td></tr>';
+		}
 		if ($fp != $latest_file['file_project']) {
-			if (!$latest_file['file_project']) {
-				$latest_file['project_name'] = $AppUI->_('Not attached to a project');
-				$latest_file['project_color_identifier'] = 'f4efe3';
-			}
-			if ($showProject) {
+			if ($showProject && (!empty($latest_file['file_project']))) {
 				$style = 'background-color:#' . $latest_file['project_color_identifier'] . ';color:' . bestColor($latest_file['project_color_identifier']);
 				$s .= '<tr>';
 				$s .= '<td colspan="20" style="border: outset 2px #eeeeee;' . $style . '">';
@@ -2175,11 +2178,27 @@ function displayFiles($AppUI, $folder_id, $task_id, $project_id, $company_id, $c
 					$href = './index.php?m=projects';
 				}
 				$s .= '<a href="' . $href . '">';
-				$s .= '<span style="' . $style . '">' . $latest_file['project_name'] . '</span></a>';
+				$s .= '<span style="' . $style . '">' . $AppUI->_('Project') . ' \'' . $latest_file['project_name'] . '\'</span></a>';
 				$s .= '</td></tr>';
 			}
 		}
 		$fp = $latest_file['file_project'];
+		if ($fc != $latest_file['file_company']) {
+			if ($showCompany && !empty($latest_file['file_company']) && empty($latest_file['file_project'])) {
+				$style = 'background-color:#f4efe3;color:' . bestColor('f4efe3');
+				$s .= '<tr>';
+				$s .= '<td colspan="20" style="border: outset 2px #eeeeee;' . $style . '">';
+				if ($latest_file['file_company'] > 0) {
+					$href = './index.php?m=companies&a=view&company_id=' . $latest_file['file_company'];
+				} else {
+					$href = './index.php?m=companies';
+				}
+				$s .= '<a href="' . $href . '">';
+				$s .= '<span style="' . $style . '">' . $AppUI->_('Attached to company \'') . $latest_file['company_name'] . '\'</span></a>';
+				$s .= '</td></tr>';
+			}
+		}
+		$fc = $latest_file['file_company'];
         $row['file_datetime'] = $latest_file['file_datetime'];
         $row['file_id'] = $latest_file['file_id'];
         $htmlHelper->stageRowData($row);
@@ -2341,8 +2360,8 @@ function getHelpdeskFolder() {
 }
 
 // From: modules/files/files.class.php
-function file_show_attr() {
-	global $AppUI, $obj, $ci, $canAdmin, $file_project, $file_task, $task_name, $preserve, $file_helpdesk_item;
+function file_show_attr(&$companies) {
+	global $AppUI, $obj, $ci, $canAdmin, $file_project, $file_company, $file_task, $task_name, $preserve, $file_helpdesk_item;
 
 	if ($ci) {
 		$str_out = '<tr><td align="right" nowrap="nowrap">' . $AppUI->_('Minor Revision') . '</td><td><input type="Radio" name="revision_type" value="minor" checked />' . '</td><tr><td align="right" nowrap="nowrap">' . $AppUI->_('Major Revision') . '</td><td><input type="Radio" name="revision_type" value="major" /></td>';
@@ -2394,14 +2413,18 @@ function file_show_attr() {
 		// Task
 		$str_out .= '<input type="hidden" name="file_task" value="0" />';
 	} else {
+		// Company
+		$str_out .= '<tr id="company_tr" style="display:' . ($file_project ? 'none' : '') . '"><td align="right" nowrap="nowrap">' . $AppUI->_('Company') . ':</td>';
+		$str_out .= '<td align="left">' . arraySelect($companies, 'file_company', 'class="text" onchange="controlChoice()"', $obj->file_company, true) . '</td></tr>';
+
 		// Project
-		$str_out .= '<tr><td align="right" nowrap="nowrap">' . $AppUI->_('Project') . ':</td>';
-		$str_out .= '<td align="left">' . projectSelectWithOptGroup($AppUI->user_id, 'file_project', 'size="1" class="text" style="width:270px"' . $select_disabled, $file_project) . '</td></tr>';
+		$str_out .= '<tr id="project_tr" style="display:' . ($file_company ? 'none' : '') . '"><td align="right" nowrap="nowrap">' . $AppUI->_('Project') . ':</td>';
+		$str_out .= '<td align="left">' . projectSelectWithOptGroup($AppUI->user_id, 'file_project', 'id="project_sel" size="1" class="text" style="width:270px" onchange="controlChoice()"' . $select_disabled, $file_project) . '</td></tr>';
 
 		// ---------------------------------------------------------------------------------
 
 		// Task
-		$str_out .= '<tr><td align="right" nowrap="nowrap">' . $AppUI->_('Task') . ':</td><td align="left" colspan="2" valign="top"><input type="hidden" name="file_task" value="' . $file_task . '" /><input type="text" class="text" name="task_name" value="' . $task_name . '" size="40" disabled /><input type="button" class="button" value="' . $AppUI->_('select task') . '..."' . $onclick_task . '/></td></tr>';
+		$str_out .= '<tr id="task_tr" style="display:' . ($file_company ? 'none' : '') . '"><td align="right" nowrap="nowrap">' . $AppUI->_('Task') . ':</td><td align="left" colspan="2" valign="top"><input type="hidden" name="file_task" id="task_id" value="' . $file_task . '" /><input type="text" class="text" name="task_name" id="task_name" value="' . $task_name . '" size="40" disabled /><input type="button" class="button" value="' . $AppUI->_('select task') . '..."' . $onclick_task . '/></td></tr>';
 	}
 
 	return ($str_out);

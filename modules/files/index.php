@@ -76,6 +76,7 @@ foreach ($file_types as $file_type) {
 	++$i;
 }
 $tabBox->add('folders_table', 'Folder Explorer');
-global $showProject;
+global $showCompany, $showProject;
+$showCompany = true;
 $showProject = true;
 $tabBox->show();

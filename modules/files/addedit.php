@@ -45,6 +45,7 @@ $referrer = $referrerArray['query'];
 $file_task = (int) w2PgetParam($_GET, 'file_task', $file->file_task);
 $file_parent = (int) w2PgetParam($_GET, 'file_parent', 0);
 $file_project = (int) w2PgetParam($_GET, 'project_id', 0);
+$file_company = 0;
 $file_helpdesk_item = (int) w2PgetParam($_GET, 'file_helpdesk_item', 0);
 
 if ($file_id > 0) {
@@ -93,6 +94,10 @@ if ($file->file_project) {
 	$file_project = $file->file_project;
 }
 
+if ($file->file_company) {
+	$file_company = $file->file_company;
+}
+
 $task = new CTask();
 $task->load($file_task);
 $task_name = $task->task_name;
@@ -102,6 +107,10 @@ if (isset($file->file_helpdesk_item)) {
 }
 $folders = getFolderSelectList();
 $htmlHelper = new w2p_Output_HTMLHelper($AppUI);
+
+$cmp = new CCompany();
+$companies = $cmp->getAllowedRecords($AppUI->user_id, 'company_id,company_name', 'company_name');
+$companies = arrayMerge(array('anycompany' => $AppUI->_('Any Company')), $companies);
 ?>
 <script language="javascript" type="text/javascript">
 function submitIt() {
@@ -171,6 +180,33 @@ function setTask( key, val ) {
 		f.task_name.value = '';
 	}
 }
+
+function controlChoice() {
+	var cmp = document.getElementById('company_tr');
+	var cmp_sel = document.getElementById('file_company');
+	var prj = document.getElementById('project_tr');
+	var prj_sel = document.getElementById('project_sel');
+	var tsk = document.getElementById('task_tr');
+	var tsk_id = document.getElementById('task_id');
+	var tsk_name = document.getElementById('task_name');
+
+	if (prj_sel.value != 0) {
+		cmp_sel.value = 0;
+		cmp.style.display = 'none';
+	} else {
+		cmp.style.display = '';
+	}
+	if (cmp_sel.value != 'anycompany') {
+		prj_sel.value = 0;
+		tsk_id.value = 0;
+		tsk_name.value = '';
+		prj.style.display = 'none';
+		tsk.style.display = 'none';
+	} else {
+		prj.style.display = '';
+		tsk.style.display = '';
+	}
+}
 </script>
 
 <form name="uploadFrm" action="?m=files" enctype="multipart/form-data" method="post">
@@ -217,7 +253,7 @@ function setTask( key, val ) {
                             <?php echo $htmlHelper->createCell('file_owner', $file->file_owner); ?>
 						</tr>
 					<?php } ?>
-					<?php echo file_show_attr(); ?>
+					<?php echo file_show_attr($companies); ?>
 					<tr>
 						<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Description'); ?>:</td>
 						<td align="left">
