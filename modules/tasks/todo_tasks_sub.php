@@ -11,6 +11,8 @@ global $durnTypes;
 
 $durnTypes = w2PgetSysVal('TaskDurationType');
 
+// get the tab _GET, when embedded in a Day View
+$tab = w2PgetParam($_GET, 'tab', '');
 
 // retrieve any state parameters
 if (isset($_POST['show_form'])) {
@@ -42,18 +44,12 @@ if(!isset($tasks) || !count($tasks)) {
 $perms = &$AppUI->acl();
 $canDelete = $perms->checkModuleItem($m, 'delete');
 ?>
-<form name="form_buttons" method="post" action="index.php?<?php echo 'm=' . $m . '&amp;a=' . $a . '&amp;date=' . $date; ?>" accept-charset="utf-8">
+<form name="form_buttons" method="post" action="index.php?<?php echo 'm=' . $m . '&amp;a=' . $a . '&amp;date=' . $date . (!empty($tab) ? '&tab=' . $tab : ''); ?>" accept-charset="utf-8">
     <input type="hidden" name="show_form" value="1" />
     <table width="100%" border="0" cellpadding="4" cellspacing="0">
         <tr>
             <td align="left" width="30%">
-                <?php
-				if ($other_users) {
-					echo $AppUI->_('Show Tasks') . ':';
-				} else {
-					echo '<h1>' . $AppUI->_('Tasks assigned to me') . ':</h1>';
-				}
-			?>
+                <?php echo $AppUI->_('Show Tasks') . ':'; ?>
 		 </td>
             <td valign="bottom">
                 <?php

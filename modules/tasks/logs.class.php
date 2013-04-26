@@ -122,6 +122,22 @@ class CTask_Log extends w2p_Core_BaseObject
 	public $task_log_updated = null;
 
     /**
+     * Id of delegation that created the record for this task log.
+     *
+     * @var int
+     * @access public
+     */
+    public $task_log_related_to_delegation_id;
+
+    /**
+     * Operation on the delegation that created the record for this task log.
+     *
+     * @var int
+     * @access public
+     */
+    public $task_log_related_to_delegation_op;
+
+    /**
      * Id of user that created the record for this task log.
      * For task logs when user is creating it for another user
      *
@@ -236,7 +252,7 @@ class CTask_Log extends w2p_Core_BaseObject
 	 *
 	 * @access protected
 	 */
-	protected function updateTaskSummary($notUsed = null, $task_id)
+	public function updateTaskSummary($skip_others = null, $task_id)
 	{
 		$q = $this->_getQuery();
 
@@ -250,16 +266,51 @@ class CTask_Log extends w2p_Core_BaseObject
 		// to the latest values, to avoid changes. I am aware that concurrent
 		// adding of task logs to the same task may screw this up but its
 		// worth it.
+
+		// This code was changed to support task logs linked to delegations.
+		// The completion status to be stored in the task is computed in one or two steps:
+		//
+		// 1. Find the most recent completion status. If there's one its used as the task's
+		//    completion status. The idea is that whomever put that task log in is aware of
+		//    the delegations and is taking their completion into consideration.
+		// 2. If no completion was found on the task logs use the delegation rows, adding up
+		//    completion values from non-rejected rows, also counting them. Afterwards the total
+		//    completion will be divided by the count, getting an average completion value.
+		//    So if we have 4 delegations and 2 of them are done (100%) then the task is 50% done
+		//    (the duration is not taken into account since its not expressed in the delegation).
+
+		// Step 1
 		$q->addQuery('task_log_percent_complete, task_log_task_end_date, task_log_date');
 	        $q->addTable('task_log');
-	        $q->addWhere('task_log_task = ' . (int)$task_id);
+	        $q->addWhere('task_log_task = ' . (int)$task_id . ' AND task_log_related_to_delegation_id = 0');
 	        $q->addOrder('task_log_date DESC, task_log_id DESC');
 	        $q->setLimit(1);
-	        $results = $q->loadHash();
+	        $results_tasklogs = $q->loadHash();
+		$q->clear();
+
+		// Step 2
+		if (!$results_tasklogs) {
+		        $q->addTable('user_delegations');
+			$q->addQuery('SUM(delegation_percent_complete) AS sum_percent, COUNT(delegation_id) AS num_delegs');
+		        $q->addWhere('delegation_task = ' . (int)$task_id . ' AND delegation_rejection_date IS NULL');
+		        $q->setLimit(1);
+		        $results_delegs = $q->loadHash();
+			$q->clear();
+		}
 
 	        $task = new CTask();
 	        $task->overrideDatabase($this->_query);
 	        $task->load($task_id);
+		$tpc = $task->task_original_percent_complete;
+		$ted = $task->task_original_end_date;
+
+		if ($results_tasklogs) {
+			$tpc = $results_tasklogs['task_log_percent_complete'];
+			$ted = $results_tasklogs['task_log_task_end_date'];
+		}
+		if ($results_delegs) {
+			$tpc = $results_delegs['sum_percent'] / ($results_delegs['num_delegs'] ? $results_delegs['num_delegs'] : 1);
+		}
 
                 /*
                  * We're using a database update here instead of store() because a
@@ -268,29 +319,39 @@ class CTask_Log extends w2p_Core_BaseObject
 	         */
 	        $q = $this->_getQuery();
 	        $q->addTable('tasks');
-		if ($results) {
-		        $q->addUpdate('task_percent_complete', $results['task_log_percent_complete']);
-		        $q->addUpdate('task_end_date', $results['task_log_task_end_date']);
-			$end_date = $results['task_log_task_end_date'];
-		} else {
-		        $q->addUpdate('task_percent_complete', $task->task_original_percent_complete);
-		        $q->addUpdate('task_end_date', $task->task_original_end_date);
-			$end_date = $task->task_original_end_date;
-		}
+	        $q->addUpdate('task_percent_complete', $tpc);
+	        $q->addUpdate('task_end_date', $ted);
+		$end_date = $ted;
 	        $q->addWhere('task_id = ' . (int)$task_id);
 	        $success = $q->exec();
+		$q->clear();
 
 	        if (!$success) {
 	            $this->_AppUI->setMsg($task->getError(), UI_MSG_ERROR, true);
 	        }
 
-		$task->updateDynamics();
-	        $task->pushDependencies($task_id, $end_date);
+		if ($skip_others) {
+			$task->updateDynamics();
+		        $task->pushDependencies($task_id, $end_date);
+		}
 
+		// Do the same thing we did for completion status on total worked hours, 
+		// but only using the task logs, as they're the ones with the 'time worked' info.
+
+		// Step 1
+	        $q->addTable('task_log');
 		$q->addQuery('SUM(task_log_hours)');
-		$q->addTable('task_log');
 		$q->addWhere('task_log_task = ' . (int)$task_id);
+	        $q->addWhere('task_log_related_to_delegation_id = 0');
 		$totalHours = $q->loadResult();
+
+		if (!$totalHours) {
+		        $q->addTable('task_log');
+			$q->addQuery('SUM(task_log_hours)');
+			$q->addWhere('task_log_task = ' . (int)$task_id);
+	        	$q->addWhere('task_log_related_to_delegation_id != 0');
+			$totalHours = $q->loadResult();
+		}
 
 		CTask::updateHoursWorked($task_id, $totalHours);
 	}
@@ -331,13 +392,16 @@ class CTask_Log extends w2p_Core_BaseObject
 	 *   b) the subject of the log; OR
 	 *   c) have edit permissions on the corresponding task.
 	 *
+	 * To support task logs created from delegations, they are not allowed to be manually deleted.
+	 *
 	 * @return bool
 	 */
 	public function canDelete(&$msg = '', $oid = null, $joins = null)
 	{
-	        if($this->_AppUI->user_id == $this->task_log_creator ||
-	                $this->_AppUI->user_id == $this->task_log_record_creator ||
-	                $this->_perms->checkModuleItem($this->_tbl_module, 'edit', $this->{$this->_tbl_key})) {
+	        if (($this->_AppUI->user_id == $this->task_log_creator ||
+	             $this->_AppUI->user_id == $this->task_log_record_creator ||
+	             $this->_perms->checkModuleItem($this->_tbl_module, 'edit', $this->{$this->_tbl_key})) && 
+                     empty($this->task_log_related_to_delegation_id)) {
 	
         	    return true;
 	        }
@@ -388,12 +452,15 @@ class CTask_Log extends w2p_Core_BaseObject
 	 *   b) the subject of the log; OR
 	 *   c) have edit permissions on the corresponding task.
 	 *
+	 * To support task logs created from delegations, they are not allowed to be manually edited.
+	 *
 	 * @return bool
 	 */
 	public function canEdit() {
-	        if($this->_AppUI->user_id == $this->task_log_creator ||
-	                $this->_AppUI->user_id == $this->task_log_record_creator ||
-	                $this->_perms->checkModuleItem($this->_tbl_module, 'edit', $this->{$this->_tbl_key})) {
+	        if (($this->_AppUI->user_id == $this->task_log_creator ||
+	             $this->_AppUI->user_id == $this->task_log_record_creator ||
+	             $this->_perms->checkModuleItem($this->_tbl_module, 'edit', $this->{$this->_tbl_key})) && 
+                     empty($this->task_log_related_to_delegation_id)) {
 	
 	            return true;
 	        }
@@ -452,5 +519,15 @@ class CTask_Log extends w2p_Core_BaseObject
 	} else {
 		return parent::generateHistoryDescription($event);
 	}
+    }
+
+    public static function deleteTaskLogsByDelegationId($delegation_id, $delegation_op = null) {
+        $q = new w2P_Database_Query();
+        $q->setDelete('task_log');
+        $q->addWhere('task_log_related_to_delegation_id = ' . (int)$delegation_id);
+	if (!empty($delegation_op)) {
+	        $q->addWhere('task_log_related_to_delegation_op = ' . (int)$delegation_op);
+	}
+	$q->exec();
     }
 }

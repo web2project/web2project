@@ -105,73 +105,149 @@ $allowedTasks = $tobj->getAllowedSQL($AppUI->user_id, 'ta.task_id');
 
 // query my sub-tasks (ignoring task parents)
 
-$q = new w2p_Database_Query;
-$q->addQuery('distinct(ta.task_id), ta.*');
-$q->addQuery('project_name, pr.project_id, project_color_identifier');
-$q->addQuery('tp.task_pinned');
-$q->addQuery('ut.user_task_priority');
-$q->addQuery('DATEDIFF(ta.task_end_date, "' . date($date) . '") as task_due_in');
-$q->addQuery('tlog.task_log_problem');
+$q_tasks = new w2p_Database_Query;
+$q_tasks->addQuery('distinct(ta.task_id), ta.task_percent_complete, ta.task_priority, ta.task_name, ta.task_owner');
+$q_tasks->addQuery('ta.task_start_date, ta.task_duration, ta.task_duration_type, ta.task_end_date');
+$q_tasks->addQuery('pr.project_name, pr.project_id, pr.project_color_identifier');
+$q_tasks->addQuery('tp.task_pinned, ut.user_task_priority, ta.task_description');
+$q_tasks->addQuery('DATEDIFF(ta.task_end_date, "' . date($date) . '") as task_due_in');
+$q_tasks->addQuery('tlog.task_log_problem, "task" as row_type, null as delegation_name');
 
-$q->addTable('projects', 'pr');
-$q->addTable('tasks', 'ta');
-$q->addTable('user_tasks', 'ut');
-$q->leftJoin('user_task_pin', 'tp', 'tp.task_id = ta.task_id and tp.user_id = ' . (int)$user_id);
-$q->leftJoin('project_departments', 'project_departments', 'pr.project_id = project_departments.project_id OR project_departments.project_id IS NULL');
-$q->leftJoin('departments', 'departments', 'departments.dept_id = project_departments.department_id OR dept_id IS NULL');
-$q->leftJoin('task_log', 'tlog', 'tlog.task_log_task = ta.task_id AND tlog.task_log_problem > 0');
+$q_tasks->addTable('projects', 'pr');
+$q_tasks->addTable('tasks', 'ta');
+$q_tasks->addTable('user_tasks', 'ut');
+$q_tasks->leftJoin('user_task_pin', 'tp', 'tp.task_id = ta.task_id and tp.user_id = ' . (int)$user_id);
+$q_tasks->leftJoin('project_departments', 'project_departments', 'pr.project_id = project_departments.project_id OR project_departments.project_id IS NULL');
+$q_tasks->leftJoin('departments', 'departments', 'departments.dept_id = project_departments.department_id OR dept_id IS NULL');
+$q_tasks->leftJoin('task_log', 'tlog', 'tlog.task_log_task = ta.task_id AND tlog.task_log_problem > 0');
 
 if ($company_id) {
-	$q->addWhere('pr.project_company = "' . (string)$company_id . '"');
+	$q_tasks->addWhere('pr.project_company = "' . (string)$company_id . '"');
 }
 
-$q->addWhere('ut.task_id = ta.task_id');
-$q->addWhere('ut.user_id = ' . (int)$user_id);
+$q_tasks->addWhere('ut.task_id = ta.task_id');
+$q_tasks->addWhere('ut.user_id = ' . (int)$user_id);
 
-$q->addWhere('ta.task_status = 0');
-$q->addWhere('pr.project_id = ta.task_project');
+$q_tasks->addWhere('ta.task_status = 0');
+$q_tasks->addWhere('pr.project_id = ta.task_project');
 if (!$showArcProjs) {
-	$q->addWhere('project_active = 1');
+	$q_tasks->addWhere('project_active = 1');
 	if (($template_status = w2PgetConfig('template_projects_status_id')) != '') {
-		$q->addWhere('project_status <> ' . (int)$template_status);
+		$q_tasks->addWhere('project_status <> ' . (int)$template_status);
 	}
 }
 if (!$showLowTasks) {
-	$q->addWhere('task_priority >= 0');
+	$q_tasks->addWhere('task_priority >= 0');
 }
 if ($showInProgress) {
-	$q->addWhere('project_status = 3');
+	$q_tasks->addWhere('project_status = 3');
 }
 if (!$showHoldProjs) {
 	if (($on_hold_status = w2PgetConfig('on_hold_projects_status_id')) != '') {
-		$q->addWhere('project_status <> ' . (int)$on_hold_status);
+		$q_tasks->addWhere('project_status <> ' . (int)$on_hold_status);
 	}
 }
 if (!$showDynTasks) {
-	$q->addWhere('task_dynamic <> 1');
+	$q_tasks->addWhere('task_dynamic <> 1');
 }
 if ($showPinned) {
-	$q->addWhere('task_pinned = 1');
+	$q_tasks->addWhere('task_pinned = 1');
 }
 if (!$showEmptyDate) {
-	$q->addWhere('ta.task_start_date <> \'\' AND ta.task_start_date <> \'0000-00-00 00:00:00\'');
+	$q_tasks->addWhere('ta.task_start_date <> \'\' AND ta.task_start_date <> \'0000-00-00 00:00:00\'');
 }
 if ($task_type != '') {
-	$q->addWhere('ta.task_type = ' . (int)$task_type);
+	$q_tasks->addWhere('ta.task_type = ' . (int)$task_type);
 }
 
 if (count($allowedTasks)) {
-	$q->addWhere($allowedTasks);
+	$q_tasks->addWhere($allowedTasks);
 }
 
 if (count($allowedProjects)) {
-	$q->addWhere($allowedProjects);
+	$q_tasks->addWhere($allowedProjects);
 }
 
-$q->addHaving('(ROUND(task_percent_complete) <> 100) OR (task_due_in >= 0)');
+$q_tasks->addHaving('(ROUND(task_percent_complete) <> 100) OR (task_due_in >= 0)');
 
+
+// Query for delegations, with the same filters as the tasks query
+$q_deleg = new w2p_Database_Query;
+$q_deleg->addTable('user_delegations','ud');
+$q_deleg->addTable('projects', 'pr');
+
+$q_deleg->addQuery('ud.delegation_id as task_id, ud.delegation_percent_complete as task_percent_complete');
+$q_deleg->addQuery('ta.task_priority, ta.task_name, ud.delegating_user_id as task_owner');
+$q_deleg->addQuery('ud.delegation_start_date as task_start_date, null as task_duration, null as task_duration_type');
+$q_deleg->addQuery('ta.task_end_date, pr.project_name, pr.project_id, pr.project_color_identifier, tp.task_pinned');
+$q_deleg->addQuery('ut.user_task_priority, ud.delegation_description as task_description');
+$q_deleg->addQuery('DATEDIFF(ta.task_end_date, "' . date($date) . '") as task_due_in');
+$q_deleg->addQuery('IF(ud.delegation_rejection_date IS NOT NULL,true,false) as task_log_problem, "delegation" as row_type');
+$q_deleg->addQuery('ud.delegation_name');
+
+$q_deleg->leftJoin('tasks', 'ta', 'ta.task_id = ud.delegation_task');
+$q_deleg->leftJoin('project_departments', 'project_departments', 'pr.project_id = project_departments.project_id OR project_departments.project_id IS NULL');
+$q_deleg->leftJoin('departments', 'departments', 'departments.dept_id = project_departments.department_id OR dept_id IS NULL');
+$q_deleg->leftJoin('user_task_pin', 'tp', 'tp.task_id = ta.task_id and tp.user_id = ' . (int)$user_id);
+$q_deleg->leftJoin('user_tasks', 'ut', 'ut.task_id = ta.task_id');
+
+$q_deleg->addWhere('ud.delegated_to_user_id = ' . (int)$user_id);
+
+if ($company_id) {
+	$q_deleg->addWhere('pr.project_company = "' . (string)$company_id . '"');
+}
+
+$q_deleg->addWhere('ta.task_status = 0');
+$q_deleg->addWhere('pr.project_id = ta.task_project');
+if (!$showArcProjs) {
+	$q_deleg->addWhere('project_active = 1');
+	if (($template_status = w2PgetConfig('template_projects_status_id')) != '') {
+		$q_deleg->addWhere('project_status <> ' . (int)$template_status);
+	}
+}
+if (!$showLowTasks) {
+	$q_deleg->addWhere('task_priority >= 0');
+}
+if ($showInProgress) {
+	$q_deleg->addWhere('project_status = 3');
+}
+if (!$showHoldProjs) {
+	if (($on_hold_status = w2PgetConfig('on_hold_projects_status_id')) != '') {
+		$q_deleg->addWhere('project_status <> ' . (int)$on_hold_status);
+	}
+}
+if (!$showDynTasks) {
+	$q_deleg->addWhere('task_dynamic <> 1');
+}
+if ($showPinned) {
+	$q_deleg->addWhere('task_pinned = 1');
+}
+if (!$showEmptyDate) {
+	$q_deleg->addWhere('ta.task_start_date <> \'\' AND ta.task_start_date <> \'0000-00-00 00:00:00\'');
+}
+if ($task_type != '') {
+	$q_deleg->addWhere('ta.task_type = ' . (int)$task_type);
+}
+
+if (count($allowedTasks)) {
+	$q_deleg->addWhere($allowedTasks);
+}
+
+if (count($allowedProjects)) {
+	$q_deleg->addWhere($allowedProjects);
+}
+
+$q_deleg->addHaving('(ROUND(task_percent_complete) <> 100) OR (task_due_in >= 0)');
+
+
+// UNION query for fusing both resuls together and sorting them
+$q = new w2p_Database_Query;
+$q->unionQuery('ALL');
+$q->addSelectQuery($q_tasks);
+$q->addSelectQuery($q_deleg);
 $q->addOrder('task_end_date, task_start_date, task_priority');
 $tasks = $q->loadList();
+
 
 /* There used to be some code here to calculate a task's
    end date dynamically if it had no end date. The same

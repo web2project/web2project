@@ -10,13 +10,86 @@ global $date, $company_id, $AppUI, $task_type;
 // have a problem indication, regardless of lateness.
 
 $user_id = $AppUI->user_id;
+
+// get the tab _GET, when embedded in a Day View
+$tab = w2PgetParam($_GET, 'tab', '');
+
+// retrieve any state parameters
+if (isset($_POST['show_form'])) {
+	$AppUI->setState('TaskDayShowArc', w2PgetParam($_POST, 'show_arc_proj', 0));
+	$AppUI->setState('TaskDayShowLow', w2PgetParam($_POST, 'show_low_task', 0));
+	$AppUI->setState('TaskDayShowHold', w2PgetParam($_POST, 'show_hold_proj', 0));
+	$AppUI->setState('TaskDayShowDyn', w2PgetParam($_POST, 'show_dyn_task', 0));
+	$AppUI->setState('TaskDayShowPin', w2PgetParam($_POST, 'show_pinned', 0));
+	$AppUI->setState('TaskDayShowEmptyDate', w2PgetParam($_POST, 'show_empty_date', 0));
+	$AppUI->setState('TaskDayShowInProgress', w2PgetParam($_POST, 'show_inprogress', 0));
+}
+
+if (isset($_POST['task_type'])) {
+	$AppUI->setState('ToDoTaskType', w2PgetParam($_POST, 'task_type', ''));
+}
+$task_type = $AppUI->getState('ToDoTaskType') !== null ? $AppUI->getState('ToDoTaskType') : '';
+
+// Required for today view.
 $showArcProjs = $AppUI->getState('TaskDayShowArc', 0);
 $showLowTasks = $AppUI->getState('TaskDayShowLow', 1);
-$showInProgress = $AppUI->getState('TaskDayShowInProgress', 0);
 $showHoldProjs = $AppUI->getState('TaskDayShowHold', 0);
 $showDynTasks = $AppUI->getState('TaskDayShowDyn', 0);
 $showPinned = $AppUI->getState('TaskDayShowPin', 0);
 $showEmptyDate = $AppUI->getState('TaskDayShowEmptyDate', 0);
+$showInProgress = $AppUI->getState('TaskDayShowInProgress', 0);
+
+?>
+<form name="form_buttons" method="post" action="index.php?<?php echo 'm=' . $m . '&amp;a=' . $a . '&amp;date=' . $date . (!empty($tab) ? '&tab=' . $tab : ''); ?>" accept-charset="utf-8">
+    <input type="hidden" name="show_form" value="1" />
+    <table width="100%" border="0" cellpadding="4" cellspacing="0">
+        <tr>
+            <td align="left" width="30%">
+                <?php echo $AppUI->_('Show Tasks') . ':'; ?>
+		 </td>
+            <td valign="bottom">
+                <?php
+                    if ($other_users) {
+                        $users = $perms->getPermittedUsers('tasks');
+                        echo $AppUI->_('Assigned to') . ': ' . arraySelect($users, 'show_user_todo', 'class="text" onchange="document.form_buttons.submit()"', $user_id);
+                    }
+                ?>
+            </td>
+            <td valign="bottom">
+			<?php echo $AppUI->_('From Projects In Progress Only'). ':'; ?><br>
+                <input type="checkbox" name="show_inprogress" id="show_inprogress" onclick="document.form_buttons.submit()" <?php echo $showInProgress ? 'checked="checked"' : ''; ?> />
+            </td>
+            <td valign="bottom">
+			<?php echo $AppUI->_('Pinned Only') . ':'; ?><br>
+                <input type="checkbox" name="show_pinned" id="show_pinned" onclick="document.form_buttons.submit()" <?php echo $showPinned ? 'checked="checked"' : ''; ?> />
+            </td>
+            <td valign="bottom">
+			<?php echo $AppUI->_('From Archived/Template Projects') . ':'; ?><br>
+                <input type="checkbox" name="show_arc_proj" id="show_arc_proj" onclick="document.form_buttons.submit()" <?php echo $showArcProjs ? 'checked="checked"' : ''; ?> />
+            </td>
+            <td valign="bottom">
+			<?php echo $AppUI->_('Dynamic Tasks') . ':'; ?><br>
+                <input type="checkbox" name="show_dyn_task" id="show_dyn_task" onclick="document.form_buttons.submit()" <?php echo $showDynTasks ? 'checked="checked"' : ''; ?> />
+            </td>
+            <td valign="bottom">
+			<?php echo $AppUI->_('Low Priority Tasks') . ':'; ?><br>
+                <input type="checkbox" name="show_low_task" id="show_low_task" onclick="document.form_buttons.submit()" <?php echo $showLowTasks ? 'checked="checked"' : ''; ?> />
+            </td>
+            <td valign="bottom">
+			<?php echo $AppUI->_('Empty Dates') . ':'; ?><br>
+                <input type="checkbox" name="show_empty_date" id="show_empty_date" onclick="document.form_buttons.submit()" <?php echo $showEmptyDate ? 'checked="checked"' : ''; ?> />
+            </td>
+            <td valign="bottom">
+			<?php echo $AppUI->_('Type') . ':<br>';
+                $types = array('' => $AppUI->_('All types')) + w2PgetSysVal('TaskType');
+                echo arraySelect($types, 'task_type', 'class="text" onchange="document.form_buttons.submit()"', $task_type, true);
+            ?>
+            </td>
+        </tr>
+    </table>
+</form>
+
+<?php
 
 // query my sub-tasks (ignoring task parents)
 
@@ -95,8 +168,6 @@ $q->addOrder('task_end_date, task_start_date, task_priority');
 $tasks = $q->loadList();
 
 ?>
-<?php if (count($tasks)) { ?>
-<br><br><h1><?php echo $AppUI->_('Tasks assigned to others') ?>:</h1>
 <table class="tbl list">
         <tr>
             <th width="10">&nbsp;</th>
@@ -116,4 +187,18 @@ $tasks = $q->loadList();
         }
 	?>
 </table>
-<?php } ?>
+<table>
+    <tr>
+        <td>&nbsp; &nbsp;</td>
+        <td style="border-style:solid;border-width:1px" bgcolor="#ffffff">&nbsp; &nbsp;</td>
+        <td>=<?php echo $AppUI->_('Future Task'); ?></td>
+        <td>&nbsp; &nbsp;</td>
+        <td style="border-style:solid;border-width:1px" bgcolor="#e6eedd">&nbsp; &nbsp;</td>
+        <td>=<?php echo $AppUI->_('Started and on time'); ?></td>
+        <td style="border-style:solid;border-width:1px" bgcolor="#ffeebb">&nbsp; &nbsp;</td>
+        <td>=<?php echo $AppUI->_('Should have started'); ?></td>
+        <td>&nbsp; &nbsp;</td>
+        <td style="border-style:solid;border-width:1px" bgcolor="#CC6666">&nbsp; &nbsp;</td>
+        <td>=<?php echo $AppUI->_('Overdue'); ?></td>
+    </tr>
+</table>

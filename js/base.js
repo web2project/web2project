@@ -861,3 +861,17 @@ AllByTag.show = function(tagName,dispType) {
 AllByTag.hide = function(tagName,dispType) {
   AllByTag.setStyleDisplay(tagName, 'none');
 };
+
+function setShortTaskDescription(id) {
+	var div_short = document.getElementById('short_task_desc_' + id);
+	var div_long = document.getElementById('long_task_desc_' + id);
+	div_short.style.display = 'block';
+	div_long.style.display = 'none';
+}
+
+function setLongTaskDescription(id) {
+	var div_short = document.getElementById('short_task_desc_' + id);
+	var div_long = document.getElementById('long_task_desc_' + id);
+	div_long.style.display = 'block';
+	div_short.style.display = 'none';
+}

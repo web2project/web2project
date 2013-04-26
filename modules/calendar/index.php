@@ -113,6 +113,9 @@ $links = array();
 // assemble the links for the tasks
 getTaskLinks($first_time, $last_time, $links, 20, $company_id, false, $AppUI->user_id);
 
+// assemble the links for the delegations
+getDelegationLinks($first_time, $last_time, $links, 20, $company_id, false, $AppUI->user_id);
+
 // assemble the links for the events
 getEventLinks($first_time, $last_time, $links, $event_filter, false, $AppUI->user_id);
 
@@ -150,6 +153,7 @@ $last_time->setDay($cal->prev_month->getDaysInMonth());
 $last_time->setTime(23, 59, 59);
 $links = array();
 getTaskLinks($first_time, $last_time, $links, 20, $company_id, true, $AppUI->user_id);
+getDelegationLinks($first_time, $last_time, $links, 20, $company_id, true, $AppUI->user_id);
 getEventLinks($first_time, $last_time, $links, $event_filter, false, $AppUI->user_id);
 $minical->setEvents($links);
 
@@ -166,6 +170,7 @@ $last_time->setDay($cal->next_month->getDaysInMonth());
 $last_time->setTime(23, 59, 59);
 $links = array();
 getTaskLinks($first_time, $last_time, $links, 20, $company_id, true, $AppUI->user_id);
+getDelegationLinks($first_time, $last_time, $links, 20, $company_id, true, $AppUI->user_id);
 getEventLinks($first_time, $last_time, $links, $event_filter, true, $AppUI->user_id);
 $minical->setEvents($links);
 

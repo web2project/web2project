@@ -314,21 +314,25 @@ class w2p_Output_MonthCalendar {
 
 				// If we are on minical mode and we find tasks or events for this day then lets color code the cell depending on that
 				// Now the task counters are split between tasks assigned to me and assigned to others but from projects owned by me.
+				// 20130426 - Support was added for delegations by treating them as tasks, signalling-wise.
 				if (array_key_exists($cday, $this->events) && $this->styleMain == 'minical') {
 					$nr_tasks_my = 0;
 					$nr_tasks_other = 0;
 					$nr_events = 0;
+					$nr_delegs = 0;
 					//lets count tasks and events
 					foreach ($this->events[$cday] as $record) {
 						if (isset($record['task'])) {
 							++$nr_tasks_my;
 						} elseif (isset($record['taskothers'])) {
 							++$nr_tasks_other;
+						} elseif (isset($record['delegation'])) {
+							++$nr_delegs;
 						} else {
 							++$nr_events;
 						}
 					}
-					if ($nr_events && $nr_tasks_my) {
+					if ($nr_events && ($nr_tasks_my || $nr_delegs)) {
 						//if we find both (with tasks assigned to me)
 						$class = 'eventtask';
 					} elseif ($nr_events && $nr_tasks_other) {
@@ -337,7 +341,7 @@ class w2p_Output_MonthCalendar {
 					} elseif ($nr_events) {
 						//if we just find events
 						$class = 'event';
-					} elseif ($nr_tasks_my) {
+					} elseif ($nr_tasks_my || $nr_delegs) {
 						//if we just find tasks assigned to me
 						$class = 'task';
 					} elseif ($nr_tasks_other) {

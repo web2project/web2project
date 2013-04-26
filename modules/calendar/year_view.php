@@ -116,6 +116,7 @@ $next_year = (int)($next_year + 10000);
 						// assemble the links for the events
 						//Pedro A.
 						getTaskLinks($first_time, $last_time, $links, 20, $company_id, true, $AppUI->user_id);
+						getDelegationLinks($first_time, $last_time, $links, 20, $company_id, true, $AppUI->user_id);
 						getEventLinks($first_time, $last_time, $links, $event_filter, true, $AppUI->user_id);
 						$minical->setEvents($links);
 						$minical->setDate($date);

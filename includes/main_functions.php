@@ -426,3 +426,161 @@ function notifyNewUser($emailAddress, $username, $emailUtility = null) {
 		$mail->Send();
 	}
 }
+
+/**
+ * Function to collect delegations within a period
+ *
+ * @param Date the starting date of the period
+ * @param Date the ending date of the period
+ * @param array by-ref an array of links to append new items to
+ * @param int the length to truncate entries by
+ * @param int the company id to filter by
+ */
+function getDelegationLinks($startPeriod, $endPeriod, &$links, $strMaxLen, $company_id = 0, $minical = false, $user_id = null) {
+	global $a, $AppUI;
+	if (!isset($user_id)) {
+		$user_id = $AppUI->user_id;
+	}
+	// List only delegations to the specified user
+	$delegs = CDelegation::getDelegationsForPeriod($startPeriod, $endPeriod, $company_id, $user_id);
+	$tf = $AppUI->getPref('TIMEFORMAT');
+	//subtract one second so we don't have to compare the start dates for exact matches with the startPeriod which is 00:00 of a given day.
+	$startPeriod->subtractSeconds(1);
+
+	$link = array();
+	
+	// assemble the links for the tasks
+	foreach ($delegs as $row) {
+		// the link
+		$link['delegation'] = true;
+
+		if (!$minical) {
+			$link['href'] = '?m=delegations&a=view&delegation_id=' . $row['delegation_id'];
+			// the link text
+			if (mb_strlen($row['delegation_name']) > $strMaxLen) {
+				$row['short_name'] = mb_substr($row['delegation_name'], 0, $strMaxLen) . '...';
+			} else {
+				$row['short_name'] = $row['delegation_name'];
+			}
+	
+			$link['td'] = 'background-color:#' . $row['project_color_identifier'] . '; ';
+			$link['text'] = '<span style="color:' . bestColor($row['project_color_identifier']) . '">' . $row['short_name'] . '</span>';
+	        }
+
+		// determine which day(s) to display the task
+		$start = new w2p_Utilities_Date($AppUI->formatTZAwareTime($row['delegation_start_date'], '%Y-%m-%d %T'));
+		$end = $row['task_end_date'] ? new w2p_Utilities_Date($AppUI->formatTZAwareTime($row['task_end_date'], '%Y-%m-%d %T')) : null;
+
+		// First we test if the Tasks Starts and Ends are on the same day, if so we don't need to go any further.
+		if (($start->after($startPeriod)) && ($end && $end->after($startPeriod) && $end->before($endPeriod) && !($start->dateDiff($end)))) {
+			$temp = $link;
+			if (!$minical) {
+				if ($a != 'day_view') {
+						$tmp = $temp['text'];
+						$temp['text'] = '<table class="calendar_cell" cellspacing="0"><tr><td class="calendar_cell_dates">' . w2PtoolTip($row['delegation_name'], getDelegationTooltip($row['delegation_id'], true, true, $delegs), true, '', 'inline-tooltip') . $start->format($tf) . w2PshowImage('deleg-start-16.png') . '<br>' . w2PshowImage('deleg-end-16.png') . $end->format($tf) . w2PendTip() . '</td>';
+						$temp['text'] .= '<td style="' . $temp['td'] . '" class="calendar_cell_text">' . $tmp . '<a href="?m=delegations&amp;a=view&amp;delegation_id=' . $row['delegation_id'] . '"></a></td></tr></table>';
+				}
+			}
+			$temp['timestamp'] = $start->format(FMT_DATETIME_MYSQL);
+			$links[$end->format(FMT_TIMESTAMP_DATE)][] = $temp;
+		} else {
+			// If they aren't, we will now need to see if the Tasks Start date is between the requested period
+			if ($start->after($startPeriod) && $start->before($endPeriod)) {
+				$temp = $link;
+				if (!$minical) {
+					if ($a != 'day_view') {
+						$tmp = $temp['text'];
+						$temp['text'] = '<table class="calendar_cell" cellspacing="0"><tr><td class="calendar_cell_dates">' . w2PtoolTip($row['delegation_name'], getDelegationTooltip($row['delegation_id'], true, false, $delegs), true, '', 'inline-tooltip') . $start->format($tf) . w2PshowImage('deleg-start-16.png') . w2PendTip() . '</td>';
+						$temp['text'] .= '<td style="' . $temp['td'] . '" class="calendar_cell_text">' . $tmp . '<a href="?m=delegations&amp;a=view&amp;delegation_id=' . $row['delegation_id'] . '"></a></td></tr></table>';
+					}
+				}
+				$temp['timestamp'] = $start->format(FMT_DATETIME_MYSQL);
+				$links[$start->format(FMT_TIMESTAMP_DATE)][] = $temp;
+			}
+			// And now the Tasks End date is checked if it is between the requested period too.
+			if ($end && $end->after($startPeriod) && $end->before($endPeriod) && $start->before($end)) {
+				$temp = $link;
+				if (!$minical) {
+					if ($a != 'day_view') {
+						$tmp = $temp['text'];
+						$temp['text'] = '<table class="calendar_cell" cellspacing="0"><tr><td class="calendar_cell_dates">' . w2PtoolTip($row['delegation_name'], getDelegationTooltip($row['delegation_id'], false, true, $delegs), true, '', 'inline-tooltip') . $end->format($tf) . w2PshowImage('deleg-end-16.png') . w2PendTip() . '</td>';
+						$temp['text'] .= '<td style="' . $temp['td'] . '" class="calendar_cell_text">' . $tmp . '<a href="?m=delegations&amp;a=view&amp;delegation_id=' . $row['delegation_id'] . '"></a></td></tr></table>';
+					}
+				}
+				$temp['timestamp'] = $end->format(FMT_DATETIME_MYSQL);
+				$links[$end->format(FMT_TIMESTAMP_DATE)][] = $temp;
+			}
+		}
+	}
+}
+
+function getDelegationTooltip($delegation_id, $starts = false, $ends = false ) {
+	global $AppUI;
+
+	if (!$delegation_id) {
+		return '';
+	}
+
+	$df = $AppUI->getPref('SHDATEFORMAT');
+	$tf = $AppUI->getPref('TIMEFORMAT');
+
+	// load the record data
+	$deleg = new CDelegation();
+	$deleg->load($delegation_id);
+
+	// get some info from the task
+	$task = new CTask();
+	$task->load($deleg->delegation_task);
+
+	$start_date = (int)$deleg->delegation_start_date ? new w2p_Utilities_Date($AppUI->formatTZAwareTime($deleg->delegation_start_date, '%Y-%m-%d %T')) : null;
+	$end_date = (int)$task->task_end_date ? new w2p_Utilities_Date($AppUI->formatTZAwareTime($task->task_end_date, '%Y-%m-%d %T')) : null;
+
+	// load the record data
+	$deleg_project = $task->project_name;
+	$deleg_company = $task->company_name;
+
+	$tt = '<table class="tool-tip">';
+	$tt .= '<tr>';
+	$tt .= '	<td valign="top" width="40%">';
+	$tt .= '		<strong>' . $AppUI->_('Details') . '</strong>';
+	$tt .= '		<table cellspacing="3" cellpadding="2" width="100%">';
+	$tt .= '		<tr>';
+	$tt .= '			<td class="tip-label">' . $AppUI->_('Company') . '</td>';
+	$tt .= '			<td>' . $deleg_company . '</td>';
+	$tt .= '		</tr>';
+	$tt .= '		<tr>';
+	$tt .= '			<td class="tip-label">' . $AppUI->_('Project') . '</td>';
+	$tt .= '			<td>' . $deleg_project . '</td>';
+	$tt .= '		</tr>';
+	$tt .= '		<tr>';
+	$tt .= '			<td class="tip-label">' . $AppUI->_('Delegated from') . '</td>';
+	$tt .= '			<td>' . CContact::getContactByUserid($deleg->delegating_user_id) . '</td>';
+	$tt .= '		</tr>	';
+	$tt .= '		<tr>';
+	$tt .= '			<td class="tip-label">' . $AppUI->_('Progress') . '</td>';
+	$tt .= '			<td>' . sprintf("%.1f%%", $deleg->delegation_percent_complete) . '</td>';
+	$tt .= '		</tr>	';
+	$tt .= '		<tr>';
+	$tt .= '			<td class="tip-label">' . $AppUI->_('Starts') . '</td>';
+	$tt .= '			<td>' . ($start_date ? $start_date->format($df . ' ' . $tf) : '-') . '</td>';
+	$tt .= '		</tr>';
+	$tt .= '		<tr>';
+	$tt .= '			<td class="tip-label">' . $AppUI->_('Ends') . '</td>';
+	$tt .= '			<td>' . ($end_date ? $end_date->format($df . ' ' . $tf) : '-') . '</td>';
+	$tt .= '		</tr>';
+	$tt .= '		</table>';
+	$tt .= '	</td>';
+	$tt .= '	<td width="60%" valign="top">';
+	$tt .= '		<strong>' . $AppUI->_('Description') . '</strong>';
+	$tt .= '		<table cellspacing="0" cellpadding="2" border="0" width="100%">';
+	$tt .= '		<tr>';
+	$tt .= '			<td class="tip-label description">';
+	$tt .= '				' . $deleg->delegation_description;
+	$tt .= '			</td>';
+	$tt .= '		</tr>';
+	$tt .= '		</table>';
+	$tt .= '	</td>';
+	$tt .= '</tr>';
+	$tt .= '</table>';
+	return $tt;
+}
