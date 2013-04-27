@@ -191,7 +191,7 @@ function controlChoice() {
 	var tsk_name = document.getElementById('task_name');
 
 	if (prj_sel.value != 0) {
-		cmp_sel.value = 0;
+		cmp_sel.value = 'anycompany';
 		cmp.style.display = 'none';
 	} else {
 		cmp.style.display = '';
