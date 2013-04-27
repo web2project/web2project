@@ -219,14 +219,15 @@ if (count($fields) > 0) {
                         switch ($field) {
                             case 'project_name':
                                 $s .= '<td width="40%" class="data _name">';
+				$pd = str_replace(array("\r\n", "\r", "\n"), "<br />", $row['project_description']);
                                 if ($level) {
                                     $s .= str_repeat('&nbsp;&nbsp;&nbsp;&nbsp;', ($level - 1));
                                     $s .= '<img src="' . w2PfindImage('corner-dots.gif') . '" width="16" height="12" border="0">&nbsp;';
                                     $s .= '<a href="./index.php?m=projects&a=view&project_id=' . $row["project_id"] . '">';
-                                    $s .= (nl2br($row['project_description']) ? w2PtoolTip($row[$field], nl2br($row['project_description']), true) : w2PtoolTip($row[$field], $AppUI->_('No information available'), true));
+                                    $s .= ($pd) ? w2PtoolTip($row[$field], $pd, true) : w2PtoolTip($row[$field], $AppUI->_('No information available'), true);
                                     $s .= $row[$field] . (nl2br($row['project_description']) ? w2PendTip() : '') . '</a>';
                                 } elseif ($count_projects > 0 && !$level) {
-                                    $s .= w2PtoolTip($row[$field], nl2br($row['project_description']) .'<br />'.
+                                    $s .= w2PtoolTip($row[$field], $pd .'<br />'.
                                             '<i>'.$AppUI->_('this project is a parent on a multi-project structure').'</i><br />'.
                                             '<i>'.$AppUI->_('click to show/hide its children').'</i>');
                                     $s .= '<a href="javascript: void(0);" onclick="expand_collapse(\'multiproject_tr_' . $row["project_id"] . '_\', \'tblProjects\')">';
@@ -235,7 +236,7 @@ if (count($fields) > 0) {
                                     $s .= '<a href="./index.php?m=projects&a=view&project_id=' . $row["project_id"] . '">' . (nl2br($row['project_description']) ? w2PtoolTip($row[$field], nl2br($row['project_description']), true) : '') . $row[$field] . (nl2br($row['project_description']) ? w2PendTip() : '') . '</a>' . w2PendTip();
                                 } else {
                                     $s .= '<a href="./index.php?m=projects&a=view&project_id=' . $row["project_id"] . '">';
-                                    $s .= (nl2br($row['project_description']) ? w2PtoolTip($row[$field], nl2br($row['project_description']), true) : w2PtoolTip($row[$field], $AppUI->_('No information available'), true));
+                                    $s .= ($pd) ? w2PtoolTip($row[$field], $pd, true) : w2PtoolTip($row[$field], $AppUI->_('No information available'), true);
                                     $s .= $row[$field] . (nl2br($row['project_description']) ? w2PendTip() : '') . '</a>';
                                 }
                                 $s .= '</td>';
