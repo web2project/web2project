@@ -261,7 +261,7 @@ function controlChoice() {
 						</td>
 					</tr>
 					<tr>
-						<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Upload File'); ?>:</td>
+						<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Upload File'); ?>:<br />(<?php echo $AppUI->_('Maximum file size:') . ' ' . ini_get('post_max_size'); ?>)</td>
 						<td align="left"><input type="File" name="formfile" style="width:270px" /></td>
 					</tr>
 					<?php if ($ci || ($canAdmin && $file->file_checkout == 'final')) { ?>
