@@ -82,7 +82,7 @@ abstract class w2p_Core_Setup {
      *     array('require' => 'curl',        'comparator' => 'exists'));
      * @return boolean
      */
-    protected function _checkRequirements()
+    protected function _meetsRequirements()
     {
         $result = true;
 
@@ -154,6 +154,12 @@ abstract class w2p_Core_Setup {
             
         }
         return $result;
+    }
+
+    protected function _checkRequirements()
+    {
+        trigger_error("The _checkRequirements method has been deprecated. Please use meetsRequirements instead.", E_USER_NOTICE );
+        return $this->_meetsRequirements();
     }
 
     /**
