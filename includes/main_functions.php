@@ -94,13 +94,6 @@ function w2p_old_autoload($class_name)
             break;
 
         default:
-            if (file_exists(W2P_BASE_DIR . '/classes/' . $name . '.class.php')) {
-                // Deprecated as of v3.0, TODO: remove this in v4.0
-                trigger_error("The /classes/$name.class.php 'naming convention' has been deprecated in v3.0 and will be removed by v4.0.", E_USER_NOTICE);
-                require_once W2P_BASE_DIR . '/classes/' . $name . '.class.php';
-                return;
-            }
-
             if ($name[0] == 'c') {
                 $name = substr($name, 1);
             }
