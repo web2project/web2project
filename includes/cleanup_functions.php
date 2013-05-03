@@ -499,7 +499,7 @@ function showtask(&$arr, $level = 0, $notUsed = true, $today_view = false) {
 		}
 	} elseif (!$today_view) {
 		// No users asigned to task
-		$s .= '<td class="data">-</td>';
+        $s .= $htmlHelper->createCell('other', '-');
 	}
 
 	// duration or milestone
@@ -560,27 +560,16 @@ function showtask_pd(&$arr, $level = 0, $today_view = false) {
 		$s .= '<a href="?m=tasks&a=addedit&task_id=' . $arr['task_id'] . '">' . w2PshowImage('icons/pencil.gif', 12, 12) . '</a>';
 	}
 	$s .= '</td>';
-	// percent complete and priority
+
     $s .= $htmlHelper->createCell('task_percent_complete', $arr['task_percent_complete']);
     $s .= $htmlHelper->createCell('task_priority', $arr['task_priority']);
     $s .= $htmlHelper->createCell('user_task_priority', $arr['user_task_priority']);
+    $s .= $htmlHelper->createCell('other', mb_substr($task_access[$arr['task_access']], 0, 3));
+    $s .= $htmlHelper->createCell('other', mb_substr($types[$arr['task_type']], 0, 3));
+    // reminders set
+    $s .= $htmlHelper->createCell('other', ($arr['queue_id']) ? 'Yes' : '');
+    $s .= $htmlHelper->createCell('other', ($arr['task_status'] == -1) ? 'Yes' : '');
 
-	// access
-	$s .= '<td class="data">';
-	$s .= mb_substr($task_access[$arr['task_access']], 0, 3);
-	$s .= '</td>';
-	// type
-	$s .= '<td class="data">';
-	$s .= mb_substr($types[$arr['task_type']], 0, 3);
-	$s .= '</td>';
-	// type
-	$s .= '<td class="data">';
-	$s .= $arr['queue_id'] ? 'Yes' : '';
-	$s .= '</td>';
-	// inactive
-	$s .= '<td class="data">';
-	$s .= $arr['task_status'] == '-1' ? 'Yes' : '';
-	$s .= '</td>';
 	// add log
 	$s .= '<td align="center" nowrap="nowrap">';
 	if ($arr['task_dynamic'] != 1 && 0 == $arr['task_represents_project']) {
