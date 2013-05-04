@@ -27,7 +27,6 @@ require_once W2P_BASE_DIR . '/includes/db_adodb.php';
 $defaultTZ = w2PgetConfig('system_timezone', 'Europe/London');
 $defaultTZ = ('' == $defaultTZ) ? 'Europe/London' : $defaultTZ;
 date_default_timezone_set($defaultTZ);
-require_once W2P_BASE_DIR . '/includes/session.php';
 
 if (file_exists('PHPUnit/Framework.php')) {
     //PHPUnit 3.5.15
