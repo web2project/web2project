@@ -106,7 +106,7 @@ class CContact extends w2p_Core_BaseObject
         $fields = array();
         $values = array();
 
-        $contact_methods = empty($_POST['contact_methods']) ? array() : $_POST['contact_methods'];
+        $contact_methods = $this->_contact_methods;
         if (count($contact_methods)) {
             foreach ($contact_methods['field'] as $key => $notUsed) {
                 $fields[] = $contact_methods['field'][$key];
