@@ -659,6 +659,11 @@ label {
 	vertical-align: 25%;
 }
 
+.view th, .list th {
+    background: #CCC;
+    font-weight: bold;
+}
+
 .view td.data {
     background-color: #E8F3FE;
 }

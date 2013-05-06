@@ -82,10 +82,13 @@ $types = w2PgetSysVal('CompanyType');
 $countries = w2PgetSysVal('GlobalCountries');
 ?>
 
-<table border="0" cellpadding="4" cellspacing="0" width="100%" class="std view">
+<table border="0" cellpadding="4" cellspacing="0" class="std view">
+    <tr>
+        <th><?php echo $AppUI->_('Details'); ?></th>
+        <th><?php echo $AppUI->_('Description'); ?></th>
+    </tr>
 	<tr>
 		<td valign="top" width="50%">
-			<strong><?php echo $AppUI->_('Details'); ?></strong>
 			<table cellspacing="1" cellpadding="2" width="100%">
 				<tr>
 					<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Company'); ?>:</td>
@@ -130,8 +133,7 @@ $countries = w2PgetSysVal('GlobalCountries');
 				</tr>
 			</table>
 		</td>
-		<td width="50%" valign="top">
-			<strong><?php echo $AppUI->_('Description'); ?></strong>
+		<td valign="top" width="50%">
 			<table cellspacing="0" cellpadding="2" border="0" width="100%">
 				<tr>
                     <?php echo $htmlHelper->createCell('company_description', $company->company_description); ?>
