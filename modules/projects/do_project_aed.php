@@ -24,11 +24,6 @@ $notify_contacts = w2PgetParam($_POST, 'email_project_contacts_box', 'off');
 
 $importTask_projectId = (int) w2PgetParam($_POST, 'import_tasks_from', '0');
 
-if (!$result) {
-    $AppUI->setMsg($result, UI_MSG_ERROR);
-    $AppUI->holdObject($obj);
-    $AppUI->redirect('m=projects&a=addedit');
-}
 if ($result) {
     if (!$del) {
         $billingCategory = w2PgetSysVal('BudgetCategory');
@@ -49,19 +44,19 @@ if ($result) {
         }
 
         if ('on' == $notify_owner) {
-            if ($msg = $obj->notifyOwner($notfiyTrigger)) {
-                $AppUI->setMsg($msg, UI_MSG_ERROR);
-            }
+            $obj->notifyOwner($notfiyTrigger);
         }
         if ('on' == $notify_contacts) {
-            if ($msg = $obj->notifyContacts($notfiyTrigger)) {
-                $AppUI->setMsg($msg, UI_MSG_ERROR);
-            }
+            $obj->notifyContacts($notfiyTrigger);
         }
     }
 
     $AppUI->setMsg('Project '.$action, UI_MSG_OK, true);
-    $AppUI->redirect('m=projects');
+    $redirect = 'm=projects';
 } else {
-    $AppUI->redirect(ACCESS_DENIED);
+    $AppUI->setMsg($result, UI_MSG_ERROR);
+    $AppUI->holdObject($obj);
+    $redirect = 'm=projects&a=addedit';
 }
+
+$AppUI->redirect($redirect);

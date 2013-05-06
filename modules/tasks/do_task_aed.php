@@ -110,12 +110,6 @@ if ($del) {
 
 $result = $obj->store();
 
-if (!$result) {
-    $AppUI->setMsg($result, UI_MSG_ERROR, true);
-    $AppUI->holdObject($obj);
-    $AppUI->redirect('m=tasks&a=addedit&task_id='.$task_id);
-}
-
 if ($result) {
     if (isset($hassign)) {
         $obj->updateAssigned($hassign, $hperc_assign_ar);
@@ -175,12 +169,14 @@ if ($result) {
     }
 
     if ($notify) {
-        if ($msg = $obj->notify($comment)) {
-            $AppUI->setMsg($msg, UI_MSG_ERROR);
-        }
+        $obj->notify($comment);
     }
 
-    $AppUI->redirect('m=projects&a=view&project_id='.$obj->task_project);
+    $redirect = 'm=projects&a=view&project_id='.$obj->task_project;
 } else {
-    $AppUI->redirect(ACCESS_DENIED);
+    $AppUI->setMsg($result, UI_MSG_ERROR, true);
+    $AppUI->holdObject($obj);
+    $redirect = 'm=tasks&a=addedit&task_id='.$task_id;
 }
+
+$AppUI->redirect($redirect);
