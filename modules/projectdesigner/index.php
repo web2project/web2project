@@ -99,17 +99,15 @@ if (!$project_id) {
 		echo styleRenderBoxTop();
 	}
 ?>
-	<table border="1" cellpadding="4" cellspacing="0" width="100%" class="std">
-	<form name="prjFrm" action="?m=projectdesigner" method="post" accept-charset="utf-8">
-	<tr>
-		<td nowrap="nowrap" style="border: outset #eeeeee 1px;background-color:#fffff" >
-			<font color="<?php echo bestColor('#ffffff'); ?>">
-				<strong><?php echo $AppUI->_('Project'); ?>: <?php echo arraySelect($projects, 'project_id', 'onchange="submitIt()" class="text" style="width:500px"', 0); ?></strong>
-			</font>
-		</td>
-	</tr>            
-	</form>
-	</table>
+    <form name="prjFrm" action="?m=projectdesigner" method="post" accept-charset="utf-8">
+        <table border="1" cellpadding="4" cellspacing="0" width="100%" class="std">
+            <tr>
+                <td class="projectdesigner">
+                    <?php echo $AppUI->_('Project'); ?>: <?php echo arraySelect($projects, 'project_id', 'onchange="submitIt()" class="text"', 0); ?>
+                </td>
+            </tr>
+        </table>
+    </form>
 <?php
 } else {
 	// check permissions for this record

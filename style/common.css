@@ -584,3 +584,15 @@ span.cal-item a {
 table.mocal td a:first-child {
     font-weight: bold;
 }
+
+.projectdesigner {
+    background-color: inherit;
+    border: outset #eeeeee 1px;
+    color: black;
+    font-weight: bold;
+    white-space: nowrap;
+}
+.projectdesigner select {
+    height: 25px;
+    width: 500px;
+}
