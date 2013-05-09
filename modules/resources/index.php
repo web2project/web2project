@@ -12,7 +12,7 @@ $canEdit = canEdit('resources');
 
 $titleBlock = new w2p_Theme_TitleBlock('Resources', 'resources.png', $m, $m . '.' . $a);
 if ($canEdit) {
-	$titleBlock->addCell('<input type="submit" class="button" value="' . $AppUI->_('new resource') . '">', '', '<form action="?m=resources&a=addedit" method="post" accept-charset="utf-8">', '</form>');
+	$titleBlock->addCell('<input type="submit" class="button btn btn-small dropdown-toggle" value="' . $AppUI->_('new resource') . '">', '', '<form action="?m=resources&a=addedit" method="post" accept-charset="utf-8">', '</form>');
 }
 $titleBlock->show();
 

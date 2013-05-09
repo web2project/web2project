@@ -19,7 +19,7 @@ $titleBlock->addCell('<form action="index.php?m=contacts&tab=27" method="post" a
         '<input type="text" name="search_string" class="text"value="' . $searchString . '" /></form>');
 $titleBlock->addCell($AppUI->_('Search') . ':');
 if ($canCreate) {
-	$titleBlock->addCell('<form action="?m=contacts&a=addedit" method="post" accept-charset="utf-8"><input type="submit" class="button" value="' . $AppUI->_('new contact') . '"></form>');
+	$titleBlock->addCell('<form action="?m=contacts&a=addedit" method="post" accept-charset="utf-8"><input type="submit" class="button btn btn-small dropdown-toggle" value="' . $AppUI->_('new contact') . '"></form>');
 	$titleBlock->addCrumb('?m=contacts&a=csvexport&suppressHeaders=1', 'CSV Download');
 	$titleBlock->addCrumb('?m=contacts&a=vcardimport&dialog=0', 'Import vCard');
 }

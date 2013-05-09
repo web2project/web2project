@@ -36,13 +36,13 @@ $tab = $AppUI->processIntState('CompVwTab', $_GET, 'tab', 0);
 $titleBlock = new w2p_Theme_TitleBlock('View Company', 'handshake.png', $m, "$m.$a");
 $titleBlock->addCell();
 if ($canAdd) {
-    $titleBlock->addCell('<input type="submit" class="button" value="' . $AppUI->_('new company') . '" />', '', '<form action="?m=companies&a=addedit" method="post" accept-charset="utf-8">', '</form>');
+    $titleBlock->addCell('<input type="submit" class="button btn btn-small dropdown-toggle" value="' . $AppUI->_('new company') . '" />', '', '<form action="?m=companies&a=addedit" method="post" accept-charset="utf-8">', '</form>');
 }
 if ($canEdit) {
     if ( $AppUI->isActiveModule('departments') ) {
-        $titleBlock->addCell('<input type="submit" class="button" value="' . $AppUI->_('new department') . '" />', '', '<form action="?m=departments&a=addedit&company_id=' . $company_id . '" method="post" accept-charset="utf-8">', '</form>');
+        $titleBlock->addCell('<input type="submit" class="button btn btn-small dropdown-toggle" value="' . $AppUI->_('new department') . '" />', '', '<form action="?m=departments&a=addedit&company_id=' . $company_id . '" method="post" accept-charset="utf-8">', '</form>');
     }
-	$titleBlock->addCell('<input type="submit" class="button" value="' . $AppUI->_('new project') . '" />', '', '<form action="?m=projects&a=addedit&company_id=' . $company_id . '" method="post" accept-charset="utf-8">', '</form>');
+	$titleBlock->addCell('<input type="submit" class="button btn btn-small dropdown-toggle" value="' . $AppUI->_('new project') . '" />', '', '<form action="?m=projects&a=addedit&company_id=' . $company_id . '" method="post" accept-charset="utf-8">', '</form>');
 }
 $titleBlock->addCrumb('?m=companies', 'company list');
 if ($canEdit) {

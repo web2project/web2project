@@ -69,7 +69,7 @@ function delMe( x, y ) {
 </script>
 
 <?php
-$extra = '<td align="right" width="100%"><input type="button" class=button value="' . $AppUI->_('add user') . '" onClick="javascript:window.location=\'./index.php?m=admin&a=addedituser\';" /></td>';
+$extra = '<td align="right" width="100%"><input type="button" class="button btn btn-small dropdown-toggle" value="' . $AppUI->_('add user') . '" onClick="javascript:window.location=\'./index.php?m=admin&a=addedituser\';" /></td>';
 
 $tabBox = new CTabBox('?m=admin', W2P_BASE_DIR . '/modules/admin/', $tab);
 $tabBox->add('vw_active_usr', 'Active Users');
