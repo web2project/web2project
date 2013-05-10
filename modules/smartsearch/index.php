@@ -213,7 +213,7 @@ if (isset($_POST['keyword'])) {
 	}
 
   ?>
-  <table class="tbl list">
+  <table class="tbl list smartsearch">
   	<?php
     	$perms = &$AppUI->acl();
     	$reccount = 0;

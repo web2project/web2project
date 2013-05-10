@@ -272,7 +272,7 @@ class w2p_Output_HTMLHelper
 				$cell = htmlspecialchars($value, ENT_QUOTES);
 		}
 
-        $begin = '<td '.$additional.'class="data '.$suffix.'">';
+        $begin = '<td '.$additional.'class="'.$suffix.'">';
         $end = '</td>';
 
         return $begin . $cell . $end;

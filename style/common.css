@@ -207,10 +207,12 @@ input[type="checkbox"] {
  *      ./index.php?m=projects
  *      ./index.php?m=companies
  */
-
-.data {
+.list td {
     text-align: center;
     white-space:nowrap;
+}
+table.smartsearch td {
+    text-align: left;
 }
 
 ._departments {
