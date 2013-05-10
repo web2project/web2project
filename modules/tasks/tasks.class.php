@@ -2049,6 +2049,29 @@ class CTask extends w2p_Core_BaseObject
         return array();
     }
 
+    public function getTaskTree($project_id, $task_id = 0)
+    {
+        $q = $this->_getQuery();
+        $q->addTable('tasks');
+        $q->addQuery('task_id, task_name, task_end_date, task_start_date');
+        $q->addQuery('task_milestone, task_parent, task_dynamic');
+        $q->addWhere('task_project = ' . (int) $project_id);
+        $q->addWhere('task_id = task_parent');
+        if ($task_id) {
+            $q->addWhere('task_parent = ' . (int) $task_id);
+        }
+        $q->addOrder('task_start_date');
+
+        $tasks = $q->loadHashList('task_id');
+        foreach ($tasks as $task) {
+            $taskTree[$task['task_id']] = $task;
+            $taskTree += $this->getTaskTree($project_id, $task['task_id']);
+        }
+        // + $this->getTaskTree($project_id);
+
+        return $taskTree;
+    }
+
     /**
      * This function, recursively, updates all tasks status
      * to the one passed as parameter
