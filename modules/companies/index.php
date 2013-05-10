@@ -48,7 +48,7 @@ $titleBlock->addCell('<form name="searchform2" action="?m=companies" method="pos
         '</form>');
 $titleBlock->addCell($AppUI->_('Owner filter') . ':');
 if ($canEdit) {
-	$titleBlock->addCell('<input type="submit" class="button" value="' . $AppUI->_('new company') . '">', '', '<form action="?m=companies&a=addedit" method="post" accept-charset="utf-8">', '</form>');
+	$titleBlock->addCell('<input type="submit" class="button btn btn-small dropdown-toggle" value="' . $AppUI->_('new company') . '">', '', '<form action="?m=companies&a=addedit" method="post" accept-charset="utf-8">', '</form>');
 }
 $titleBlock->show();
 

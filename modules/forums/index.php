@@ -38,7 +38,7 @@ $titleBlock->addCell($AppUI->_('Filter') . ':');
 
 $canAdd = canAdd($m);
 if ($canAdd) {
-	$titleBlock->addCell('<form action="?m=forums&a=addedit" method="post" accept-charset="utf-8"><input type="submit" class="button" value="' . $AppUI->_('new forum') . '"></form>');
+	$titleBlock->addCell('<form action="?m=forums&a=addedit" method="post" accept-charset="utf-8"><input type="submit" class="button btn btn-small dropdown-toggle" value="' . $AppUI->_('new forum') . '"></form>');
 }
 
 //TODO: this is a little hack to make sure the table header gets generated in the show() method below
