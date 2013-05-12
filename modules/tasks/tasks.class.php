@@ -76,6 +76,7 @@ class CTask extends w2p_Core_BaseObject
      * 31 = ON, dep tracking, others do track
      */
 
+    protected $_depth = 0;
     /**
      * When calculating a task's start date only consider
      * end dates of tasks with these dynamic values.
@@ -2051,23 +2052,29 @@ class CTask extends w2p_Core_BaseObject
 
     public function getTaskTree($project_id, $task_id = 0)
     {
+        $this->_depth++;
+
         $q = $this->_getQuery();
         $q->addTable('tasks');
-        $q->addQuery('task_id, task_name, task_end_date, task_start_date');
-        $q->addQuery('task_milestone, task_parent, task_dynamic');
+        $q->addQuery('task_id, task_name, task_description, task_end_date, task_start_date');
+        $q->addQuery('task_milestone, task_parent, task_dynamic, task_percent_complete');
         $q->addWhere('task_project = ' . (int) $project_id);
-        $q->addWhere('task_id = task_parent');
+        
         if ($task_id) {
             $q->addWhere('task_parent = ' . (int) $task_id);
+            $q->addWhere('task_id != ' . (int) $task_id);
+        } else {
+            $q->addWhere('(task_id = task_parent OR task_parent = 0)');
         }
-        $q->addOrder('task_start_date');
+        $q->addOrder('task_start_date, task_end_date');
 
         $tasks = $q->loadHashList('task_id');
         foreach ($tasks as $task) {
+            $task['depth'] = $this->_depth;
             $taskTree[$task['task_id']] = $task;
-            $taskTree += $this->getTaskTree($project_id, $task['task_id']);
+            $taskTree = arrayMerge($taskTree, $this->getTaskTree($project_id, $task['task_id']));
         }
-        // + $this->getTaskTree($project_id);
+        $this->_depth--;
 
         return $taskTree;
     }

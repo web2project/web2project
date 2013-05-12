@@ -170,42 +170,39 @@ if ($do_report) {
 	if ($project_id == 0) {
 		array_unshift($columns, '<b>' . $AppUI->_('Project Name') . '</b>');
 	}
-	while ($Tasks = db_fetch_assoc($Task_List)) {
-		$start_date = intval($Tasks['task_start_date']) ? new w2p_Utilities_Date($Tasks['task_start_date']) : ' ';
-		$end_date = intval($Tasks['task_end_date']) ? new w2p_Utilities_Date($Tasks['task_end_date']) : ' ';
-		$task_id = $Tasks['task_id'];
 
-		$q = new w2p_Database_Query;
-		$q->addTable('user_tasks');
-		$q->addWhere('task_id = ' . (int)$task_id);
-		$sql_user = $q->exec();
-
-		$users = array();
-		while ($Task_User = db_fetch_assoc($sql_user)) {
-            $users[] = CContact::getContactByUserid((int)$Task_User['user_id']);
-		}
+    $taskTree = $obj->getTaskTree($project_id, 0);
+    foreach($taskTree as $task) {
 		$str = '<tr>';
 		if ($project_id == 0) {
-			$str .= '<td>' . $Tasks['project_name'] . '</td>';
+			$str .= '<td>' . $task['project_name'] . '</td>';
 		}
 		$str .= '<td>';
-        $str .= ($Tasks['task_id'] == $Tasks['task_parent']) ? '' : '<img src="' . w2PfindImage('corner-dots.gif') . '" width="16" height="12" border="0" alt="" />';
-        $str .= '&nbsp;<a href="?m=tasks&a=view&task_id=' . $Tasks['task_id'] . '">' . $Tasks['task_name'] . '</a></td>';
-		$str .= '<td>' . nl2br($Tasks['task_description']) . '</td>';
-		$str .= '<td>' . implode($users, ', ') . '</td>';
-        $str .= $htmlHelper->createCell('task_start_date', $Tasks['task_start_date']);
-        $str .= $htmlHelper->createCell('task_end_date', $Tasks['task_end_date']);
-        $str .= $htmlHelper->createCell('task_percent_complete', $Tasks['task_percent_complete']);
+        $str .= ($task['task_id'] == $task['task_parent']) ? '' : '<img src="' . w2PfindImage('corner-dots.gif') . '" width="16" height="12" border="0" alt="" />';
+        $str .= '&nbsp;<a href="?m=tasks&a=view&task_id=' . $task['task_id'] . '">' . $task['task_name'] . '</a></td>';
+		$str .= '<td>' . nl2br($task['task_description']) . '</td>';
+
+        $users = array();
+        $assignees = $obj->getAssignedUsers($task['task_id']);
+        foreach($assignees as $assignee) {
+            $users[] = $assignee['contact_name'];
+        }
+        $str .= '<td>' . implode($users, ', ') . '</td>';
+
+        $str .= $htmlHelper->createCell('task_start_date', $task['task_start_date']);
+        $str .= $htmlHelper->createCell('task_end_date', $task['task_end_date']);
+        $str .= $htmlHelper->createCell('task_percent_complete', $task['task_percent_complete']);
 		$str .= '</tr>';
 		echo $str;
 
-        $users = implode(",", $users);
 		if ($project_id == 0) {
-			$pdfdata[] = array($Tasks['project_name'], $Tasks['task_name'], $Tasks['task_description'], $users, (($start_date != ' ') ? $start_date->format($df) : ' '), (($end_date != ' ') ? $end_date->format($df) : ' '), $Tasks['task_percent_complete'] . '%', );
+			$pdfdata[] = array($task['project_name'], $task['task_name'], $task['task_description'], $users, (($start_date != ' ') ? $start_date->format($df) : ' '), (($end_date != ' ') ? $end_date->format($df) : ' '), $task['task_percent_complete'] . '%', );
 		} else {
-			$pdfdata[] = array($Tasks['task_name'], $Tasks['task_description'], $users, (($start_date != ' ') ? $start_date->format($df) : ' '), (($end_date != ' ') ? $end_date->format($df) : ' '), $Tasks['task_percent_complete'] . '%', );
+            $spacer = str_repeat('  ', $task['depth']);
+			$pdfdata[] = array($spacer . $task['task_name'], $task['task_description'], $users, (($start_date != ' ') ? $start_date->format($df) : ' '), (($end_date != ' ') ? $end_date->format($df) : ' '), $task['task_percent_complete'] . '%', );
 		}
-	}
+    }
+
 	echo '</table>';
 	if ($log_pdf) {
 		// make the PDF file
@@ -249,7 +246,15 @@ if ($do_report) {
 
 		$pdf->selectFont($font_dir . '/Helvetica.afm');
 		$title = null;
-		$options = array('showLines' => 2, 'showHeadings' => 1, 'fontSize' => 9, 'rowGap' => 4, 'colGap' => 5, 'xPos' => 50, 'xOrientation' => 'right', 'width' => '750', 'shaded' => 0, 'cols' => array(0 => array('justification' => 'left', 'width' => 100), 1 => array('justification' => 'left', 'width' => 100), 2 => array('justification' => 'left', 'width' => 260), 3 => array('justification' => 'left', 'width' => 80), 4 => array('justification' => 'center', 'width' => 80), 5 => array('justification' => 'center', 'width' => 80), 6 => array('justification' => 'right', 'width' => 60)));
+		$options = array('showLines' => 2, 'showHeadings' => 1, 'fontSize' => 9,
+            'rowGap' => 4, 'colGap' => 5, 'xPos' => 50, 'xOrientation' => 'right',
+            'width' => '750', 'shaded' => 0,
+            'cols' => array(array('justification' => 'left', 'width' => 225),
+                            array('justification' => 'left', 'width' => 225),
+                            array('justification' => 'left', 'width' => 80),
+                            array('justification' => 'center', 'width' => 80),
+                            array('justification' => 'center', 'width' => 80),
+                            array('justification' => 'center', 'width' => 70)));
 
 		$pdf->ezTable($pdfdata, $columns, $title, $options);
 
