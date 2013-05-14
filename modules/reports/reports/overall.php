@@ -124,8 +124,6 @@ if ($do_report) {
 		$font_dir = W2P_BASE_DIR . '/lib/ezpdf/fonts';
 		$temp_dir = W2P_BASE_DIR . '/files/temp';
 
-		require ($AppUI->getLibraryClass('ezpdf/class.ezpdf'));
-
 		$pdf = new Cezpdf();
 		$pdf->ezSetCmMargins(1, 2, 1.5, 1.5);
 		$pdf->selectFont($font_dir . '/Helvetica.afm');

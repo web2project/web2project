@@ -153,8 +153,6 @@ $billingCategory = w2PgetSysVal('BudgetCategory');
             $font_dir = W2P_BASE_DIR . '/lib/ezpdf/fonts';
             $temp_dir = W2P_BASE_DIR . '/files/temp';
 
-            require ($AppUI->getLibraryClass('ezpdf/class.ezpdf'));
-
             $pdf = new Cezpdf('A4', 'landscape');
             $pdf->ezSetCmMargins(1, 1, 1, 1);
             $pdf->selectFont($font_dir . '/Helvetica-Bold.afm');

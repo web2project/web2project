@@ -1,7 +1,5 @@
 <?php
 
-require_once( $AppUI->getLibraryClass( 'ezpdf/class.pdf') );
-
 class Cezpdf extends Cpdf {
 //==============================================================================
 // this class will take the basic interaction facilities of the Cpdf class

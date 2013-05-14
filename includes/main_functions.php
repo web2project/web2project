@@ -70,6 +70,12 @@ function w2p_old_autoload($class_name)
         /*
          * These are our library helper libraries. They're included here to simplify usage.
          */
+        case 'cezpdf':
+            require_once W2P_BASE_DIR . '/lib/ezpdf/class.ezpdf.php';
+            break;
+        case 'cpdf':
+            require_once W2P_BASE_DIR . '/lib/ezpdf/class.pdf.php';
+            break;
         case 'date':
             require_once W2P_BASE_DIR . '/lib/PEAR/Date.php';
             break;
