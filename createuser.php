@@ -3,8 +3,7 @@ if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly');
 }
 
-require_once $AppUI->getLibraryClass('captcha/Captcha.class');
-require_once $AppUI->getLibraryClass('captcha/Functions');
+require_once W2P_BASE_DIR . '/lib/captcha/Functions.php';
 require_once W2P_BASE_DIR . '/style/' . $uistyle . '/overrides.php';
 
 $AppUI = new w2p_Core_CAppUI();

@@ -7,9 +7,9 @@ if (!defined('W2P_BASE_DIR')) {
 require_once W2P_BASE_DIR . '/includes/config.php';
 require_once W2P_BASE_DIR . '/includes/main_functions.php';
 require_once W2P_BASE_DIR . '/includes/db_adodb.php';
-$AppUI = new w2p_Core_CAppUI();
-require_once $AppUI->getLibraryClass('captcha/Functions');
+require_once W2P_BASE_DIR . '/lib/captcha/Functions.php';
 
+$AppUI = new w2p_Core_CAppUI();
 $defaultTZ = w2PgetConfig('system_timezone', 'Europe/London');
 $defaultTZ = ('' == $defaultTZ) ? 'Europe/London' : $defaultTZ;
 date_default_timezone_set($defaultTZ);
