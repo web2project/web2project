@@ -19,6 +19,9 @@ $cid = md5_encrypt($rnd);
 $msg = w2PgetParam($_GET, 'msg', '');
 
 switch($msg) {
+    case '':
+        //No message, do nothing
+        break;
     case 'data':
         $msg = "You didn't provide the correct Anti Spam Security ID or all required data. Please try again.";
         break;
