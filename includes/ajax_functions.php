@@ -1,6 +1,4 @@
 <?php
-require_once $AppUI->getLibraryClass('xajax/xajax_core/xajax.inc');
-
 $xajax = new xajax();
 $xajax->configure('javascript URI',w2PgetConfig('base_url').'/lib/xajax/');
 
