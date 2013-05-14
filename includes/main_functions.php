@@ -69,20 +69,35 @@ function w2p_old_autoload($class_name)
         /*
          * These are our library helper libraries. They're included here to simplify usage.
          */
+        case 'date':
+            require_once W2P_BASE_DIR . '/lib/PEAR/Date.php';
+            break;
         case 'html_bbcodeparser':
             require_once W2P_BASE_DIR . '/lib/PEAR/BBCodeParser.php';
             break;
         case 'html_bbcodeparser_filter':
-            require_once W2P_BASE_DIR . '/lib/PEAR/BBCodeParser/Filter.php';
+            require_once W2P_BASE_DIR . '/lib/PEAR/HTML/BBCodeParser/Filter.php';
+            break;
+        case 'html_bbcodeparser_filter_basic':
+            require_once W2P_BASE_DIR . '/lib/PEAR/HTML/BBCodeParser/Filter/Basic.php';
+            break;
+        case 'html_bbcodeparser_filter_email':
+            require_once W2P_BASE_DIR . '/lib/PEAR/HTML/BBCodeParser/Filter/Email.php';
+            break;
+        case 'html_bbcodeparser_filter_extended':
+            require_once W2P_BASE_DIR . '/lib/PEAR/HTML/BBCodeParser/Filter/Extended.php';
+            break;
+        case 'html_bbcodeparser_filter_links':
+            require_once W2P_BASE_DIR . '/lib/PEAR/HTML/BBCodeParser/Filter/Links.php';
+            break;
+        case 'html_bbcodeparser_filter_lists':
+            require_once W2P_BASE_DIR . '/lib/PEAR/HTML/BBCodeParser/Filter/Lists.php';
             break;
         case 'cezpdf':
             require_once W2P_BASE_DIR . '/lib/ezpdf/class.ezpdf.php';
             break;
         case 'cpdf':
             require_once W2P_BASE_DIR . '/lib/ezpdf/class.pdf.php';
-            break;
-        case 'date':
-            require_once W2P_BASE_DIR . '/lib/PEAR/Date.php';
             break;
         case 'gacl':
             require_once W2P_BASE_DIR . '/lib/phpgacl/gacl.class.php';

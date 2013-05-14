@@ -219,7 +219,6 @@ class HTML_BBCodeParser
         $filter = ucfirst($filter);
         if (!array_key_exists($filter, $this->_filters)) {
             $class = 'HTML_BBCodeParser_Filter_'.$filter;
-			include_once($AppUI->getLibraryClass('PEAR/HTML/BBCodeParser/Filter/'.$filter));
             if (!class_exists($class)) {
                 echo ("Failed to load filter $filter");
             }
