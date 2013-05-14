@@ -81,6 +81,18 @@ function w2p_old_autoload($class_name)
         case 'date':
             require_once W2P_BASE_DIR . '/lib/PEAR/Date.php';
             break;
+        case 'date_calc':
+            require_once W2P_BASE_DIR . '/lib/PEAR/Date/Calc.php';
+            break;
+        case 'date_human':
+            require_once W2P_BASE_DIR . '/lib/PEAR/Date/HUman.php';
+            break;
+        case 'date_span':
+            require_once W2P_BASE_DIR . '/lib/PEAR/Date/Span.php';
+            break;
+        case 'date_timezone':
+            require_once W2P_BASE_DIR . '/lib/PEAR/Date/Timezone.php';
+            break;
         case 'html_bbcodeparser':
             require_once W2P_BASE_DIR . '/lib/PEAR/BBCodeParser.php';
             break;

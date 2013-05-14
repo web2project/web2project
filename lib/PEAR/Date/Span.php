@@ -19,12 +19,6 @@
 // PEAR CVS Id: Span.php,v 1.4 2003/04/30 03:56:26 llucax Exp 
 //
 
-// web2Project CVS $Id$
-// The following lines are modified to correctly load the libraries
-// from the web2Project distribution
-require_once( $AppUI->getLibraryClass( 'PEAR/Date' ) );
-require_once( $AppUI->getLibraryClass( 'PEAR/Date/Calc' ) );
-
 /**
 * Non Numeric Separated Values (NNSV) Input Format.
 *

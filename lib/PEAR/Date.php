@@ -22,14 +22,6 @@
 // Date Class
 //
 
-// web2Project CVS $Id$
-// The following lines are modified to correctly load the libraries
-// from the web2Project distribution
-$AppUI = (isset($AppUI) && is_object($AppUI)) ? $AppUI : new w2p_Core_CAppUI();
-require_once( $AppUI->getLibraryClass( 'PEAR/Date/TimeZone' ) );
-require_once( $AppUI->getLibraryClass( 'PEAR/Date/Calc' ) );
-require_once( $AppUI->getLibraryClass( 'PEAR/Date/Span' ) );
-
 /**
 * "YYYY-MM-DD HH:MM:SS"
 */
