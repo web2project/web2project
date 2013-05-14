@@ -32,7 +32,7 @@ $titleBlock->show();
             echo '<br />';
             if ($system->upgradeRequired()) {
               ?>
-              <a href="?m=system&u=upgrade"><?php echo $AppUI->_('Apply System Updates'); ?></a> -
+              <a href="?m=system&u=upgrade"><?php echo $AppUI->_('Apply System Updates'); ?></a> -<br />
               <span class="error"><?php echo $AppUI->_('Your upgrade is not complete. Please apply the updates immediately.'); ?></span>
               <?php
             } else {
