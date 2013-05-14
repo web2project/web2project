@@ -73,7 +73,7 @@ class w2p_Theme_TitleBlock {
 	 * Creates a standarised, right-aligned delete bread-crumb and icon.
 	 */
 	public function addCrumbDelete($title, $canDelete = '', $msg = '') {
-		$this->addCrumbRight('<a class="delete" href="javascript:delIt()" title="' . ($canDelete ? '' : $msg) . '"><button class="btn btn-small btn-danger"><div>' . $this->_AppUI->_($title) . '</div></button></a>');
+        $this->addCrumbRight('<a class="delete" href="javascript:delIt()" title="' . ($canDelete ? '' : $msg) . '"><div>' . $this->_AppUI->_($title) . '</div></a>');
 	}
 	/**
 	 * The drawing function
