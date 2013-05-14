@@ -24,12 +24,6 @@
 * @author   Stijn de Reede  <sjr@gmx.co.uk>
 */
 
-
-require_once($AppUI->getLibraryClass('PEAR/HTML/BBCodeParser/Filter'));
-
-
-
-
 class HTML_BBCodeParser_Filter_Email extends HTML_BBCodeParser_Filter
 {
 
@@ -77,9 +71,4 @@ class HTML_BBCodeParser_Filter_Email extends HTML_BBCodeParser_Filter
                             $o."email=\\2\\1\\2".$o."/email".$c);
         $this->_preparsed = preg_replace($pattern, $replace, $this->_text);
     }
-
-
 }
-
-
-?>

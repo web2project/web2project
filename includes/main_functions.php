@@ -52,7 +52,6 @@ function w2p_old_autoload($class_name)
             require_once W2P_BASE_DIR . '/classes/deprecated.class.php';
             break;
 
-
         /*
          * The following are all wirings for module classes that don't follow
          * our naming conventions.
@@ -70,6 +69,12 @@ function w2p_old_autoload($class_name)
         /*
          * These are our library helper libraries. They're included here to simplify usage.
          */
+        case 'html_bbcodeparser':
+            require_once W2P_BASE_DIR . '/lib/PEAR/BBCodeParser.php';
+            break;
+        case 'html_bbcodeparser_filter':
+            require_once W2P_BASE_DIR . '/lib/PEAR/BBCodeParser/Filter.php';
+            break;
         case 'cezpdf':
             require_once W2P_BASE_DIR . '/lib/ezpdf/class.ezpdf.php';
             break;

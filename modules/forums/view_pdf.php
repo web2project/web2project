@@ -36,7 +36,6 @@ foreach ($messages as $row) {
 
 $font_dir = W2P_BASE_DIR . '/lib/ezpdf/fonts';
 $temp_dir = W2P_BASE_DIR . '/files/temp';
-require ($AppUI->getLibraryClass('ezpdf/class.ezpdf'));
 
 $pdf = new Cezpdf($paper = 'A4', $orientation = 'portrait');
 $pdf->ezSetCmMargins(1, 1, 1, 1);

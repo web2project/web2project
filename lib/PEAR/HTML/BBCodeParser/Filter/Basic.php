@@ -24,12 +24,6 @@
 * @author   Stijn de Reede  <sjr@gmx.co.uk>
 */
 
-
-require_once($AppUI->getLibraryClass('PEAR/HTML/BBCodeParser/Filter'));
-
-
-
-
 class HTML_BBCodeParser_Filter_Basic extends HTML_BBCodeParser_Filter
 {
 
@@ -66,6 +60,3 @@ class HTML_BBCodeParser_Filter_Basic extends HTML_BBCodeParser_Filter
                             );
 
 }
-
-
-?>

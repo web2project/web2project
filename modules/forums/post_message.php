@@ -60,6 +60,8 @@ $crumbs['?m=forums&a=viewer&forum_id=' . $forum_id] = 'topics for this forum';
 if ($message_parent > -1) {
 	$crumbs['?m=forums&a=viewer&forum_id=' . $forum_id . '&message_id=' . $message_parent] = 'this topic';
 }
+
+$bbparser = new HTML_BBCodeParser();
 ?>
 <script language="javascript" type="text/javascript">
 <?php

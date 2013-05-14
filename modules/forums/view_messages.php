@@ -135,6 +135,7 @@ foreach ($messages as $row) {
 	}
 	$style = $x ? 'background-color:#eeeeee' : '';
 
+    $bbparser = new HTML_BBCodeParser();
 	//!!! Different table building for the three different views
 	// To be cleaned up, and reuse common code at later stage.
 	if ($viewtype == 'normal') {

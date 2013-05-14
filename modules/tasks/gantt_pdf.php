@@ -477,7 +477,7 @@ $ganttfile = $outpfiles;
 $font_dir = W2P_BASE_DIR . '/lib/ezpdf/fonts';
 $temp_dir = W2P_BASE_DIR . '/files/temp';
 $base_url = w2PgetConfig('base_url');
-require( $AppUI->getLibraryClass( 'ezpdf/class.ezpdf' ) );
+
 $pdf = new Cezpdf($paper='A4',$orientation='landscape');
 $pdf->ezSetCmMargins( 2, 1.5, 1.4, 1.4 ); //(top, bottom, left, right)
 /*

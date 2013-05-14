@@ -25,8 +25,6 @@
 * @author   Stijn de Reede  <sjr@gmx.co.uk>
 */
 
-require_once($AppUI->getLibraryClass('PEAR/HTML/BBCodeParser/Filter'));
-
 /**
  * 
  */
@@ -103,6 +101,3 @@ class HTML_BBCodeParser_Filter_Lists extends HTML_BBCodeParser_Filter
         $this->_preparsed = preg_replace($pattern, $replace, $this->_text);
     }
 }
-
-
-?>

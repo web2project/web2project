@@ -23,7 +23,6 @@
 * @package  HTML_BBCodeParser
 * @author   Stijn de Reede  <sjr@gmx.co.uk>
 */
-require_once($AppUI->getLibraryClass('PEAR/HTML/BBCodeParser/Filter'));
 
 /**
  *
@@ -197,4 +196,3 @@ class HTML_BBCodeParser_Filter_Links extends HTML_BBCodeParser_Filter
         return $matches[6];
     }
 }
-?>
