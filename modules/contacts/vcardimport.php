@@ -12,8 +12,6 @@ if (!$canEdit) {
 if (isset($_FILES['vcf']) && isset($_GET['suppressHeaders']) && (w2PgetParam($_GET, 'suppressHeaders', null) == 'true')) { //parse and store vCard file
 
 	$vcf = $_FILES['vcf'];
-	// include PEAR vCard class
-	require_once ($AppUI->getLibraryClass('PEAR/Contact_Vcard_Parse'));
 
 	if (is_uploaded_file($vcf['tmp_name'])) {
 

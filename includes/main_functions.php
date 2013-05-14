@@ -69,6 +69,12 @@ function w2p_old_autoload($class_name)
         /*
          * These are our library helper libraries. They're included here to simplify usage.
          */
+        case 'contact_vcard_build':
+            require_once W2P_BASE_DIR . '/lib/PEAR/Contact_Vcard_Build.php';
+            break;
+        case 'contact_vcard_parse':
+            require_once W2P_BASE_DIR . '/lib/PEAR/Contact_Vcard_Parse.php';
+            break;
         case 'date':
             require_once W2P_BASE_DIR . '/lib/PEAR/Date.php';
             break;

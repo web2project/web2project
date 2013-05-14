@@ -17,9 +17,6 @@ if ($contact_id) {
 	$contact = new CContact();
 	$contact->loadFull(null, $contact_id);
     $contactMethods = $contact->getContactMethods();
-	
-	// include PEAR vCard class
-	require_once ($AppUI->getLibraryClass('PEAR/Contact_Vcard_Build'));
 
 	// instantiate a builder object
 	// (defaults to version 3.0)
