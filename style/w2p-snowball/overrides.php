@@ -1,8 +1,16 @@
 <?php
+if (!defined('W2P_BASE_DIR')) {
+	die('You should not access this file directly.');
+}
 
-##
-##  This overrides the show function of the CTabBox_core function
-##
+class style_w2psnowball extends w2p_Theme_Base
+{
+    
+}
+
+/**
+ * This overrides the show function of the CTabBox_core function
+ */
 class CTabBox extends w2p_Theme_TabBox {
 	function show($extra = '', $js_tabs = false, $alignment = 'left', $opt_flat = true) {
 		global $AppUI, $w2Pconfig, $currentTabId, $currentTabName, $m, $a;
