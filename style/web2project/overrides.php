@@ -5,7 +5,59 @@ if (!defined('W2P_BASE_DIR')) {
 
 class style_web2project extends w2p_Theme_Base
 {
-    
+    public function styleRenderBoxTop() {
+        global $currentInfoTabId;
+        if ($currentInfoTabId) {
+            return '';
+        }
+        if ('help' == $this->_m) {
+            return '';
+        }
+
+        $uistyle = 'web2project';
+
+        $ret = '<table width="100%" cellspacing="0" cellpadding="0" border="0">';
+        $ret .= '<tbody>';
+        $ret .= '<tr>';
+        $ret .= '	<td valign="bottom" height="17" style="background:url(./style/' . $uistyle . '/images/box_left_corner.jpg);" align="left">';
+        $ret .= '		<img width="19" height="17" alt="" src="./style/' . $uistyle . '/images/box_left_corner.jpg"/>';
+        $ret .= '	</td>';
+        $ret .= '	<td valign="bottom" width="100%" style="background:url(./style/' . $uistyle . '/images/box_top.jpg);" align="left">';
+        $ret .= '		<img width="19" height="17" alt="" src="./style/' . $uistyle . '/images/box_top.jpg"/>';
+        $ret .= '	</td>';
+        $ret .= '	<td valign="bottom" style="background:url(./style/' . $uistyle . '/images/box_right_corner.jpg);" align="right">';
+        $ret .= '		<img width="19" height="17" alt="" src="./style/' . $uistyle . '/images/box_right_corner.jpg"/>';
+        $ret .= '	</td>';
+        $ret .= '</tr>';
+        $ret .= '</tbody>';
+        $ret .= '</table>';
+        return $ret;
+    }
+
+    public function styleRenderBoxBottom($tab) {
+        if (-1 == $tab) {
+            return '';
+        }
+
+        $uistyle = 'web2project';
+
+        $ret = '<table width="100%" cellspacing="0" cellpadding="0" border="0">';
+        $ret .= '<tbody>';
+        $ret .= '<tr>';
+        $ret .= '	<td valign="top" height="35" style="background:url(./style/' . $uistyle . '/images/shadow_bttm_left_corner.jpg) no-repeat;" align="left">';
+        $ret .= '		<img width="19" height="35" alt="" src="./style/' . $uistyle . '/images/shadow_bttm_left_corner.jpg"/>';
+        $ret .= '	</td>';
+        $ret .= '	<td valign="top" width="100%" style="background: repeat-x url(./style/' . $uistyle . '/images/shadow_bottom.jpg);" align="left">';
+        $ret .= '		<img width="19" height="35" alt="" src="./style/' . $uistyle . '/images/shadow_bottom.jpg"/>';
+        $ret .= '	</td>';
+        $ret .= '	<td valign="top" style="background:url(./style/' . $uistyle . '/images/shadow_bttm_right_corner.jpg) no-repeat;" align="right">';
+        $ret .= '		<img width="19" height="35" alt="" src="./style/' . $uistyle . '/images/shadow_bttm_right_corner.jpg"/>';
+        $ret .= '	</td>';
+        $ret .= '</tr>';
+        $ret .= '</tbody>';
+        $ret .= '</table>';
+        return $ret;
+    }
 }
 
 /**
@@ -127,52 +179,17 @@ class CTabBox extends w2p_Theme_TabBox {
 }
 
 function styleRenderBoxTop() {
-	global $AppUI, $currentInfoTabId;
-	$uistyle = $AppUI->getPref('UISTYLE') ? $AppUI->getPref('UISTYLE') : w2PgetConfig('host_style');
-	if (!$uistyle) {
-		$uistyle = 'web2project';
-	}
-	if ($currentInfoTabId) {
-		return '';
-	}
-	$ret = '<table width="100%" cellspacing="0" cellpadding="0" border="0">';
-	$ret .= '<tbody>';
-	$ret .= '<tr>';
-	$ret .= '	<td valign="bottom" height="17" style="background:url(./style/' . $uistyle . '/images/box_left_corner.jpg);" align="left">';
-	$ret .= '		<img width="19" height="17" alt="" src="./style/' . $uistyle . '/images/box_left_corner.jpg"/>';
-	$ret .= '	</td>';
-	$ret .= '	<td valign="bottom" width="100%" style="background:url(./style/' . $uistyle . '/images/box_top.jpg);" align="left">';
-	$ret .= '		<img width="19" height="17" alt="" src="./style/' . $uistyle . '/images/box_top.jpg"/>';
-	$ret .= '	</td>';
-	$ret .= '	<td valign="bottom" style="background:url(./style/' . $uistyle . '/images/box_right_corner.jpg);" align="right">';
-	$ret .= '		<img width="19" height="17" alt="" src="./style/' . $uistyle . '/images/box_right_corner.jpg"/>';
-	$ret .= '	</td>';
-	$ret .= '</tr>';
-	$ret .= '</tbody>';
-	$ret .= '</table>';
-	return $ret;
+    trigger_error("The styleRenderBoxTop function has been deprecated and will be removed in v4.0.", E_USER_NOTICE );
+
+    global $AppUI;
+    $theme = new style_web2project($AppUI);
+    return $theme->styleRenderBoxTop();
 }
 
 function styleRenderBoxBottom() {
-	global $AppUI;
-	$uistyle = $AppUI->getPref('UISTYLE') ? $AppUI->getPref('UISTYLE') : w2PgetConfig('host_style');
-	if (!$uistyle) {
-		$uistyle = 'web2project';
-	}
-	$ret = '<table width="100%" cellspacing="0" cellpadding="0" border="0">';
-	$ret .= '<tbody>';
-	$ret .= '<tr>';
-	$ret .= '	<td valign="top" height="35" style="background:url(./style/' . $uistyle . '/images/shadow_bttm_left_corner.jpg) no-repeat;" align="left">';
-	$ret .= '		<img width="19" height="35" alt="" src="./style/' . $uistyle . '/images/shadow_bttm_left_corner.jpg"/>';
-	$ret .= '	</td>';
-	$ret .= '	<td valign="top" width="100%" style="background: repeat-x url(./style/' . $uistyle . '/images/shadow_bottom.jpg);" align="left">';
-	$ret .= '		<img width="19" height="35" alt="" src="./style/' . $uistyle . '/images/shadow_bottom.jpg"/>';
-	$ret .= '	</td>';
-	$ret .= '	<td valign="top" style="background:url(./style/' . $uistyle . '/images/shadow_bttm_right_corner.jpg) no-repeat;" align="right">';
-	$ret .= '		<img width="19" height="35" alt="" src="./style/' . $uistyle . '/images/shadow_bttm_right_corner.jpg"/>';
-	$ret .= '	</td>';
-	$ret .= '</tr>';
-	$ret .= '</tbody>';
-	$ret .= '</table>';
-	return $ret;
+    trigger_error("The styleRenderBoxBottom function has been deprecated and will be removed in v4.0.", E_USER_NOTICE );
+
+    global $AppUI;
+    $theme = new style_web2project($AppUI);
+    return $theme->styleRenderBoxBottom();
 }

@@ -1,8 +1,11 @@
 <?php
                     global $a, $AppUI;
-                    if (function_exists('styleRenderBoxBottom') && (w2PgetParam($_GET, 'tab', 0) != -1)) {
-                        echo styleRenderBoxBottom();
-                    }
+
+                    $tab = (int) w2PgetParam($_GET, 'tab', 0);
+
+                    $theme = new style_web2project($AppUI);
+                    echo $theme->styleRenderBoxBottom($tab);
+                    
                     $AppUI->loadFooterJS();
                     echo $AppUI->getMsg();
                     ?>
