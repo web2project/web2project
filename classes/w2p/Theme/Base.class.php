@@ -35,4 +35,6 @@ class w2p_Theme_Base
 
         return $s;
     }
+
+    public function messageHandler($reset = true) { return ''; }
 }
