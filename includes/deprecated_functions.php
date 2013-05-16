@@ -338,6 +338,6 @@ function get_dependencies_pd($task_id) {
 function buildHeaderNavigation($AppUI, $rootTag = '', $innerTag = '', $dividingToken = '', $m = '') {
     trigger_error("The buildHeaderNavigation function has been deprecated and will be removed in v4.0. Please use w2p_Theme_Base->buildHeaderNavigation() instead.", E_USER_NOTICE );
 
-    $theme = new w2p_Theme_Base($AppUI);
-    return $theme->buildHeaderNavigation($rootTag, $innerTag, $dividingToken, $m);
+    $theme = new w2p_Theme_Base($AppUI, $m);
+    return $theme->buildHeaderNavigation($rootTag, $innerTag, $dividingToken);
 }

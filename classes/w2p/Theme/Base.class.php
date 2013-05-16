@@ -7,12 +7,14 @@
 class w2p_Theme_Base
 {
     protected $_AppUI = null;
+    protected $_m     = null;
 
-    public function __construct($AppUI) {
+    public function __construct($AppUI, $m = '') {
         $this->_AppUI = $AppUI;
+        $this->_m = $m;
     }
 
-    public function buildHeaderNavigation($rootTag = '', $innerTag = '', $dividingToken = '', $m = '') {
+    public function buildHeaderNavigation($rootTag = '', $innerTag = '', $dividingToken = '') {
         $s = '';
         $nav = $this->_AppUI->getMenuModules();
 
@@ -21,7 +23,7 @@ class w2p_Theme_Base
         foreach ($nav as $module) {
             if (canAccess($module['mod_directory'])) {
                 $link = ($innerTag != '') ? "<$innerTag>" : '';
-                $class = ($m == $module['mod_directory']) ? ' class="module"' : '';
+                $class = ($this->_m == $module['mod_directory']) ? ' class="module"' : '';
                 $link .= '<a href="?m=' . $module['mod_directory'] . '"'.$class.'>' .
                         $this->_AppUI->_($module['mod_ui_name']) . '</a>';
                 $link .= ($innerTag != '') ? "</$innerTag>" : '';
