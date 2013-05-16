@@ -11,7 +11,7 @@ class style_wpsredmond extends w2p_Theme_Base
         parent::__construct($AppUI, $m);
     }
 
-    public function styleRenderBoxBottom() { }
+    public function styleRenderBoxBottom() { return ''; }
 }
 
 /**
