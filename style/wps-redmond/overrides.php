@@ -5,7 +5,7 @@ if (!defined('W2P_BASE_DIR')) {
 
 class style_wpsredmond extends w2p_Theme_Base
 {
-    
+    public function styleRenderBoxBottom() { }
 }
 
 /**
@@ -126,4 +126,10 @@ function styleRenderBoxTop() {
 	return $ret;
 }
 
-function styleRenderBoxBottom() { }
+function styleRenderBoxBottom() {
+    //trigger_error("The styleRenderBoxBottom function has been deprecated and will be removed in v4.0.", E_USER_NOTICE );
+
+    global $AppUI;
+    $theme = new style_wpsredmond($AppUI);
+    return $theme->styleRenderBoxBottom();
+}

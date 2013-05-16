@@ -34,7 +34,7 @@ class style_web2project extends w2p_Theme_Base
         return $ret;
     }
 
-    public function styleRenderBoxBottom($tab) {
+    public function styleRenderBoxBottom($tab = 0) {
         if (-1 == $tab) {
             return '';
         }
