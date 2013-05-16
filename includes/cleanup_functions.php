@@ -3303,27 +3303,6 @@ function buildPaginationNav($AppUI, $m, $tab, $xpg_totalrecs, $xpg_pagesize, $pa
   return $s;
 }
 
-function buildHeaderNavigation($AppUI, $rootTag = '', $innerTag = '', $dividingToken = '', $m = '') {
-    $s = '';
-    $nav = $AppUI->getMenuModules();
-
-    $s .= ($rootTag != '') ? "<$rootTag id=\"headerNav\">" : '';
-    $links = array();
-    foreach ($nav as $module) {
-        if (canAccess($module['mod_directory'])) {
-            $link = ($innerTag != '') ? "<$innerTag>" : '';
-            $class = ($m == $module['mod_directory']) ? ' class="module"' : '';
-            $link .= '<a href="?m=' . $module['mod_directory'] . '"'.$class.'>' . $AppUI->_($module['mod_ui_name']) . '</a>';
-            $link .= ($innerTag != '') ? "</$innerTag>" : '';
-            $links[] = $link;
-        }
-    }
-    $s .= implode($dividingToken, $links);
-    $s .= ($rootTag != '') ? "</$rootTag>" : '';
-
-    return $s;
-}
-
 /**
  * function to return a default value if a variable is not set
  */
