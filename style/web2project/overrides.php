@@ -39,19 +39,17 @@ class style_web2project extends w2p_Theme_Base
             return '';
         }
 
-        $uistyle = 'web2project';
-
         $ret = '<table width="100%" cellspacing="0" cellpadding="0" border="0">';
         $ret .= '<tbody>';
         $ret .= '<tr>';
-        $ret .= '	<td valign="top" height="35" style="background:url(./style/' . $uistyle . '/images/shadow_bttm_left_corner.jpg) no-repeat;" align="left">';
-        $ret .= '		<img width="19" height="35" alt="" src="./style/' . $uistyle . '/images/shadow_bttm_left_corner.jpg"/>';
+        $ret .= '	<td valign="top" height="35" style="background:url(./style/' . $this->_uistyle . '/images/shadow_bttm_left_corner.jpg) no-repeat;" align="left">';
+        $ret .= '		<img width="19" height="35" alt="" src="./style/' . $this->_uistyle . '/images/shadow_bttm_left_corner.jpg"/>';
         $ret .= '	</td>';
-        $ret .= '	<td valign="top" width="100%" style="background: repeat-x url(./style/' . $uistyle . '/images/shadow_bottom.jpg);" align="left">';
-        $ret .= '		<img width="19" height="35" alt="" src="./style/' . $uistyle . '/images/shadow_bottom.jpg"/>';
+        $ret .= '	<td valign="top" width="100%" style="background: repeat-x url(./style/' . $this->_uistyle . '/images/shadow_bottom.jpg);" align="left">';
+        $ret .= '		<img width="19" height="35" alt="" src="./style/' . $this->_uistyle . '/images/shadow_bottom.jpg"/>';
         $ret .= '	</td>';
-        $ret .= '	<td valign="top" style="background:url(./style/' . $uistyle . '/images/shadow_bttm_right_corner.jpg) no-repeat;" align="right">';
-        $ret .= '		<img width="19" height="35" alt="" src="./style/' . $uistyle . '/images/shadow_bttm_right_corner.jpg"/>';
+        $ret .= '	<td valign="top" style="background:url(./style/' . $this->_uistyle . '/images/shadow_bttm_right_corner.jpg) no-repeat;" align="right">';
+        $ret .= '		<img width="19" height="35" alt="" src="./style/' . $this->_uistyle . '/images/shadow_bttm_right_corner.jpg"/>';
         $ret .= '	</td>';
         $ret .= '</tr>';
         $ret .= '</tbody>';

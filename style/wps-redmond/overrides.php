@@ -5,6 +5,12 @@ if (!defined('W2P_BASE_DIR')) {
 
 class style_wpsredmond extends w2p_Theme_Base
 {
+    public function __construct($AppUI, $m = '') {
+        $this->_uistyle = 'wps-redmond';
+
+        parent::__construct($AppUI, $m);
+    }
+
     public function styleRenderBoxBottom() { }
 }
 
