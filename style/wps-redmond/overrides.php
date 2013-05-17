@@ -19,10 +19,10 @@ class style_wpsredmond extends w2p_Theme_Base
  * This overrides the show function of the CTabBox_core function
  */
 class CTabBox extends w2p_Theme_TabBox {
-	function show($extra = '', $js_tabs = false) {
-		global $AppUI, $w2Pconfig, $currentTabId, $currentTabName, $m, $a;
+	public function show($extra = '', $js_tabs = false) {
+		global $w2Pconfig, $currentTabId, $currentTabName, $m, $a;
 		$this->loadExtras($m, $a);
-		$uistyle = $AppUI->getPref('UISTYLE') ? $AppUI->getPref('UISTYLE') : $w2Pconfig['host_style'];
+		$uistyle = $this->_AppUI->getPref('UISTYLE') ? $this->_AppUI->getPref('UISTYLE') : $w2Pconfig['host_style'];
 		if (!$uistyle) {
 			$uistyle = 'web2project';
 		}
@@ -34,10 +34,10 @@ class CTabBox extends w2p_Theme_TabBox {
 		reset($this->tabs);
 		$s = '';
 		// tabbed / flat view options
-		if ($AppUI->getPref('TABVIEW') == 0) {
+		if ($this->_AppUI->getPref('TABVIEW') == 0) {
 			$s .= '<table border="0" cellpadding="2" cellspacing="0" width="100%"><tr><td nowrap="nowrap">';
-			$s .= '<a href="' . $this->baseHRef . 'tab=0">' . $AppUI->_('tabbed') . '</a> : ';
-			$s .= '<a href="' . $this->baseHRef . 'tab=-1">' . $AppUI->_('flat') . '</a>';
+			$s .= '<a href="' . $this->baseHRef . 'tab=0">' . $this->_AppUI->_('tabbed') . '</a> : ';
+			$s .= '<a href="' . $this->baseHRef . 'tab=-1">' . $this->_AppUI->_('flat') . '</a>';
 			$s .= '</td>' . $extra . '</tr></table>';
 			echo $s;
 		} else {
@@ -48,11 +48,11 @@ class CTabBox extends w2p_Theme_TabBox {
 			}
 		}
 
-		if ($this->active < 0 || $AppUI->getPref('TABVIEW') == 2) {
+		if ($this->active < 0 || $this->_AppUI->getPref('TABVIEW') == 2) {
 			// flat view, active = -1
 			echo '<table border="0" cellpadding="2" cellspacing="0" width="100%">';
 			foreach ($this->tabs as $k => $v) {
-				echo '<tr><td><strong>' . ($v[2] ? $v[1] : $AppUI->_($v[1])) . '</strong></td></tr><tr><td>';
+				echo '<tr><td><strong>' . ($v[2] ? $v[1] : $this->_AppUI->_($v[1])) . '</strong></td></tr><tr><td>';
 				$currentTabId = $k;
 				$currentTabName = $v[1];
 				include $this->baseInc . $v[0] . '.php';
@@ -85,7 +85,7 @@ class CTabBox extends w2p_Theme_TabBox {
 				} else {
 					$s .= $this->baseHRef . 'tab=' . $k;
 				}
-				$s .= '">' . ($v[2] ? $v[1] : $AppUI->_($v[1])) . '</a>&nbsp;</td>';
+				$s .= '">' . ($v[2] ? $v[1] : $this->_AppUI->_($v[1])) . '</a>&nbsp;</td>';
 				$s .= '<td valign="middle" width="3"><img id="righttab_' . $k . '" src="./style/' . $uistyle . '/images/tab' . $sel . 'Right.png" width="3" height="28" border="0" alt="" /></td>';
 				$s .= '<td width="3" class="tabsp"><img src="./style/'.$uistyle.'/images/shim.gif" height="1" width="3" alt=""/></td>';
 			}

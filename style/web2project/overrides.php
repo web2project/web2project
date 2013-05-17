@@ -12,10 +12,10 @@ class style_web2project extends w2p_Theme_Base
  * This overrides the show function of the CTabBox_core function
  */
 class CTabBox extends w2p_Theme_TabBox {
-	function show($extra = '', $js_tabs = false, $alignment = 'left', $opt_flat = true) {
-		global $AppUI, $w2Pconfig, $currentTabId, $currentTabName, $m, $a;
+	public function show($extra = '', $js_tabs = false, $alignment = 'left', $opt_flat = true) {
+		global $w2Pconfig, $currentTabId, $currentTabName, $m, $a;
 		$this->loadExtras($m, $a);
-		$uistyle = $AppUI->getPref('UISTYLE') ? $AppUI->getPref('UISTYLE') : $w2Pconfig['host_style'];
+		$uistyle = $this->_AppUI->getPref('UISTYLE') ? $this->_AppUI->getPref('UISTYLE') : $w2Pconfig['host_style'];
 		if (!$uistyle) {
 			$uistyle = 'web2project';
 		}
@@ -27,15 +27,15 @@ class CTabBox extends w2p_Theme_TabBox {
 		reset($this->tabs);
 		$s = '';
 		// tabbed / flat view options
-		if ($AppUI->getPref('TABVIEW') == 0) {
+		if ($this->_AppUI->getPref('TABVIEW') == 0) {
 			if ($opt_flat) {
 				$s .= '<table border="0" cellpadding="2" cellspacing="0" width="100%">';
 				$s .= '<tr>';
 				$s .= '<td width="54" nowrap="nowrap">';
-				$s .= '<a class="button" href="' . $this->baseHRef . 'tab=0"><div>' . $AppUI->_('tabbed') . '</div></a>';
+				$s .= '<a class="button" href="' . $this->baseHRef . 'tab=0"><div>' . $this->_AppUI->_('tabbed') . '</div></a>';
 				$s .= '</td>';
 				$s .= '<td nowrap="nowrap">';
-				$s .= '<a class="button" href="' . $this->baseHRef . 'tab=-1"><div>' . $AppUI->_('flat') . '</div></a>';
+				$s .= '<a class="button" href="' . $this->baseHRef . 'tab=-1"><div>' . $this->_AppUI->_('flat') . '</div></a>';
 				$s .= '</td>' . $extra . '</tr></table>';
 				echo $s;
 			}
@@ -45,11 +45,11 @@ class CTabBox extends w2p_Theme_TabBox {
 			}
 		}
 
-		if ($this->active < 0 || $AppUI->getPref('TABVIEW') == 2) {
+		if ($this->active < 0 || $this->_AppUI->getPref('TABVIEW') == 2) {
 			// flat view, active = -1
 			echo '<table border="0" cellpadding="2" cellspacing="0" width="100%">';
 			foreach ($this->tabs as $k => $v) {
-				echo '<tr><td><strong>' . ($v[2] ? $v[1] : $AppUI->_($v[1])) . '</strong></td></tr>';
+				echo '<tr><td><strong>' . ($v[2] ? $v[1] : $this->_AppUI->_($v[1])) . '</strong></td></tr>';
                 echo '<tr><td>';
 				$currentTabId = $k;
 				$currentTabName = $v[1];
@@ -78,7 +78,7 @@ class CTabBox extends w2p_Theme_TabBox {
 				} else {
 					$s .= $this->baseHRef . 'tab=' . $k;
 				}
-				$s .= '">' . ($v[2] ? $v[1] : $AppUI->_($v[1])) . '</a>&nbsp;</td>';
+				$s .= '">' . ($v[2] ? $v[1] : $this->_AppUI->_($v[1])) . '</a>&nbsp;</td>';
 				$s .= '<td valign="middle" ><img id="righttab_' . $k . '" src="./style/' . $uistyle . '/images/bar_top_' . $sel . 'right.gif" border="0" alt="" /></td>';
 				$s .= '<td class="tabsp"><img src="' . w2PfindImage('shim.gif') . '" alt=""/></td>';
 			}

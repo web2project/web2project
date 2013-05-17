@@ -78,7 +78,16 @@ class w2p_Theme_TabBox {
 	public function show($extra = '', $js_tabs = false) {
 		global $currentTabId, $currentTabName;
 		$this->loadExtras($notUsed, $notUsed2);
-		reset($this->tabs);
+
+        
+        
+        
+        
+        
+        
+        
+        
+        reset($this->tabs);
 		$s = '';
 		// tabbed / flat view options
 		if ($this->_AppUI->getPref('TABVIEW') == 0) {
