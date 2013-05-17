@@ -10,9 +10,6 @@ class style_web2project extends w2p_Theme_Base
         if ($currentInfoTabId) {
             return '';
         }
-        if ('help' == $this->_m) {
-            return '';
-        }
 
         $uistyle = 'web2project';
 

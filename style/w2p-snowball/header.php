@@ -124,7 +124,7 @@ $theme = new style_w2psnowball($AppUI, $m);
                     <?php
                         echo $AppUI->getMsg();
                         $AppUI->boxTopRendered = false;
-                        if ($m == 'help' && function_exists('styleRenderBoxTop')) {
-                            echo styleRenderBoxTop();
+                        if ($m == 'help') {
+                            echo $theme->styleRenderBoxTop();
                         }
 //TODO: Basically this entire file is exactly the same as the other two header.php files in core web2project.. - caseydk 2012-07-01
