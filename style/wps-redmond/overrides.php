@@ -11,22 +11,8 @@ class style_wpsredmond extends w2p_Theme_Base
         parent::__construct($AppUI, $m);
     }
 
-
-    public function styleRenderBoxTop() {
-        global $AppUI, $currentInfoTabId, $m;
-        $uistyle = $AppUI->getPref('UISTYLE') ? $AppUI->getPref('UISTYLE') : w2PgetConfig('host_style');
-        if (!$uistyle) {
-            $uistyle = 'web2project';
-        }
-        if ($currentInfoTabId || $m == 'projectdesigner') {
-            return '';
-        }
-        //$ret = '<div style="height: 70px">&nbsp;</div>';
-
-        return $ret;
-    }
-
-    public function styleRenderBoxBottom() { return ''; }
+    public function styleRenderBoxTop() {       return ''; }
+    public function styleRenderBoxBottom() {    return ''; }
 }
 
 /**

@@ -5,31 +5,7 @@ if (!defined('W2P_BASE_DIR')) {
 
 class style_web2project extends w2p_Theme_Base
 {
-    public function styleRenderBoxTop() {
-        global $currentInfoTabId;
-        if ($currentInfoTabId) {
-            return '';
-        }
 
-        $uistyle = 'web2project';
-
-        $ret = '<table width="100%" cellspacing="0" cellpadding="0" border="0">';
-        $ret .= '<tbody>';
-        $ret .= '<tr>';
-        $ret .= '	<td valign="bottom" height="17" style="background:url(./style/' . $this->_uistyle . '/images/box_left_corner.jpg);" align="left">';
-        $ret .= '		<img width="19" height="17" alt="" src="./style/' . $this->_uistyle . '/images/box_left_corner.jpg"/>';
-        $ret .= '	</td>';
-        $ret .= '	<td valign="bottom" width="100%" style="background:url(./style/' . $this->_uistyle . '/images/box_top.jpg);" align="left">';
-        $ret .= '		<img width="19" height="17" alt="" src="./style/' . $this->_uistyle . '/images/box_top.jpg"/>';
-        $ret .= '	</td>';
-        $ret .= '	<td valign="bottom" style="background:url(./style/' . $this->_uistyle . '/images/box_right_corner.jpg);" align="right">';
-        $ret .= '		<img width="19" height="17" alt="" src="./style/' . $this->_uistyle . '/images/box_right_corner.jpg"/>';
-        $ret .= '	</td>';
-        $ret .= '</tr>';
-        $ret .= '</tbody>';
-        $ret .= '</table>';
-        return $ret;
-    }
 }
 
 /**
