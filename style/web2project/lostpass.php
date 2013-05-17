@@ -2,6 +2,8 @@
 if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly');
 }
+
+$theme = new style_web2project($AppUI);
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
 	   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -37,14 +39,13 @@ if (!defined('W2P_BASE_DIR')) {
             </tbody>
         </table>
         <br /><br /><br /><br />
-        <?php include ('overrides.php'); ?>
         <!--please leave action argument empty -->
         <form method="post" name="lostpassform" accept-charset="utf-8">
             <input type="hidden" name="lostpass" value="1" />
             <input type="hidden" name="redirect" value="<?php echo isset($redirect) ? $redirect : ''; ?>" />
             <table style="border-style:none;" cellspacing="0" class="std login">
                 <tr>
-                    <td colspan="2"><?php echo styleRenderBoxTop(); ?></td>
+                    <td colspan="2"><?php echo $theme->styleRenderBoxTop(); ?></td>
                 </tr>
                 <tr>
                     <th colspan="2"><em><?php echo $w2Pconfig['company_name']; ?></em></th>
@@ -62,7 +63,7 @@ if (!defined('W2P_BASE_DIR')) {
                     <td style="padding:6px" align="right" valign="bottom"><input type="submit" name="sendpass" value="<?php echo $AppUI->_('send password'); ?>" class="button" /></td>
                 </tr>
                 <tr>
-                    <td colspan="2"><?php echo styleRenderBoxBottom(); ?></td>
+                    <td colspan="2"><?php echo $theme->styleRenderBoxBottom(); ?></td>
                 </tr>
             </table>
             <?php if ($AppUI->getVersion()) { ?>

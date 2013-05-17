@@ -11,6 +11,21 @@ class style_wpsredmond extends w2p_Theme_Base
         parent::__construct($AppUI, $m);
     }
 
+
+    public function styleRenderBoxTop() {
+        global $AppUI, $currentInfoTabId, $m;
+        $uistyle = $AppUI->getPref('UISTYLE') ? $AppUI->getPref('UISTYLE') : w2PgetConfig('host_style');
+        if (!$uistyle) {
+            $uistyle = 'web2project';
+        }
+        if ($currentInfoTabId || $m == 'projectdesigner') {
+            return '';
+        }
+        //$ret = '<div style="height: 70px">&nbsp;</div>';
+
+        return $ret;
+    }
+
     public function styleRenderBoxBottom() { return ''; }
 }
 
@@ -119,17 +134,11 @@ class CTabBox extends w2p_Theme_TabBox {
 }
 
 function styleRenderBoxTop() {
-	global $AppUI, $currentInfoTabId, $m;
-	$uistyle = $AppUI->getPref('UISTYLE') ? $AppUI->getPref('UISTYLE') : w2PgetConfig('host_style');
-	if (!$uistyle) {
-		$uistyle = 'web2project';
-	}
-	if ($currentInfoTabId || $m == 'projectdesigner') {
-		return '';
-	}
-    $ret = '<div style="height: 70px">&nbsp;</div>';
+    //trigger_error("The styleRenderBoxTop function has been deprecated and will be removed in v4.0.", E_USER_NOTICE );
 
-	return $ret;
+    global $AppUI;
+    $theme = new style_wpsredmond($AppUI);
+    return $theme->styleRenderBoxTop();
 }
 
 function styleRenderBoxBottom() {

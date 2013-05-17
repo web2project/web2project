@@ -86,6 +86,7 @@ if (isset($user_id) && isset($_GET['logout'])) {
 
 // set the default ui style
 $uistyle = $AppUI->getPref('UISTYLE') ? $AppUI->getPref('UISTYLE') : w2PgetConfig('host_style');
+include W2P_BASE_DIR . '/style/' . $uistyle . '/overrides.php';
 
 // check is the user needs a new password
 if (w2PgetParam($_POST, 'lostpass', 0)) {
@@ -243,7 +244,6 @@ if (isset($_POST['dosql'])) {
 }
 
 // start output proper
-include W2P_BASE_DIR . '/style/' . $uistyle . '/overrides.php';
 if (isset($_POST['dosql']) && $_POST['dosql'] == 'do_file_co') {
 	ob_start();
 } else {

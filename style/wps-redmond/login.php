@@ -2,6 +2,8 @@
 if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly');
 }
+
+$theme = new style_wpsredmond($AppUI);
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
 	   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -37,7 +39,6 @@ if (!defined('W2P_BASE_DIR')) {
             </tbody>
         </table>
         <br /><br /><br /><br />
-        <?php include ('overrides.php'); ?>
         <!--please leave action argument empty -->
         <form method="post" action="<?php echo $loginFromPage; ?>" name="loginform" accept-charset="utf-8">
             <table style="border-style:none;" cellspacing="0" class="std login">
@@ -46,7 +47,7 @@ if (!defined('W2P_BASE_DIR')) {
                 <input type="hidden" name="redirect" value="<?php echo $redirect; ?>" />
                 <tr>
                     <td colspan="2">
-                        <?php echo styleRenderBoxTop(); ?>
+                        <?php echo $theme->styleRenderBoxTop(); ?>
                     </td>
                 </tr>
                 <tr>
@@ -74,7 +75,7 @@ if (!defined('W2P_BASE_DIR')) {
                 <?php } ?>
                 <tr>
                     <td colspan="2">
-                        <?php echo styleRenderBoxBottom(); ?>
+                        <?php echo $theme->styleRenderBoxBottom(); ?>
                     </td>
                 </tr>
             </table>
