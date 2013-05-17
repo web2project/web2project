@@ -20,12 +20,8 @@ class style_wpsredmond extends w2p_Theme_Base
  */
 class CTabBox extends w2p_Theme_TabBox {
 	public function show($extra = '', $js_tabs = false) {
-		global $w2Pconfig, $currentTabId, $currentTabName, $m, $a;
+		global $currentTabId, $currentTabName, $m, $a;
 		$this->loadExtras($m, $a);
-		$uistyle = $this->_AppUI->getPref('UISTYLE') ? $this->_AppUI->getPref('UISTYLE') : $w2Pconfig['host_style'];
-		if (!$uistyle) {
-			$uistyle = 'web2project';
-		}
 
 
 
@@ -44,7 +40,7 @@ class CTabBox extends w2p_Theme_TabBox {
 			if ($extra) {
 				echo '<table border="0" cellpadding="2" cellspacing="0" width="100%"><tr>' . $extra . '</tr></table>';
 			} else {
-				echo '<img src="./style/'.$uistyle.'/images/shim.gif" height="10" width="1" alt="" />';
+				echo '<img src="./style/'.$this->_uistyle.'/images/shim.gif" height="10" width="1" alt="" />';
 			}
 		}
 
@@ -70,12 +66,12 @@ class CTabBox extends w2p_Theme_TabBox {
 			foreach ($this->tabs as $k => $v) {
 				$class = ($k == $this->active) ? 'tabon' : 'taboff';
 				$sel = ($k == $this->active) ? 'Selected' : '';
-				$s .= '<td height="28" valign="middle" width="3"><img src="./style/' . $uistyle . '/images/tab' . $sel . 'Left.png" width="3" height="28" id="lefttab_' . $k . '"border="0" alt="" /></td>';
+				$s .= '<td height="28" valign="middle" width="3"><img src="./style/' . $this->_uistyle . '/images/tab' . $sel . 'Left.png" width="3" height="28" id="lefttab_' . $k . '"border="0" alt="" /></td>';
 				$s .= '<td id="toptab_' . $k . '" valign="middle" nowrap="nowrap"';
 				if ($js_tabs) {
 					$s .= ' class="' . $class . '"';
 				} else {
-					$s .= ' background="./style/' . $uistyle . '/images/tab' . $sel . 'Bg.png"';
+					$s .= ' background="./style/' . $this->_uistyle . '/images/tab' . $sel . 'Bg.png"';
 				}
 				$s .= '>&nbsp;<a href="';
 				if ($this->javascript) {
@@ -86,8 +82,8 @@ class CTabBox extends w2p_Theme_TabBox {
 					$s .= $this->baseHRef . 'tab=' . $k;
 				}
 				$s .= '">' . ($v[2] ? $v[1] : $this->_AppUI->_($v[1])) . '</a>&nbsp;</td>';
-				$s .= '<td valign="middle" width="3"><img id="righttab_' . $k . '" src="./style/' . $uistyle . '/images/tab' . $sel . 'Right.png" width="3" height="28" border="0" alt="" /></td>';
-				$s .= '<td width="3" class="tabsp"><img src="./style/'.$uistyle.'/images/shim.gif" height="1" width="3" alt=""/></td>';
+				$s .= '<td valign="middle" width="3"><img id="righttab_' . $k . '" src="./style/' . $this->_uistyle . '/images/tab' . $sel . 'Right.png" width="3" height="28" border="0" alt="" /></td>';
+				$s .= '<td width="3" class="tabsp"><img src="./style/'.$this->_uistyle.'/images/shim.gif" height="1" width="3" alt=""/></td>';
 			}
 			$s .= '</table></td></tr>';
 			$s .= '<tr><td width="100%" colspan="' . (count($this->tabs) * 4 + 1) . '" class="tabox">';

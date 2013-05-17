@@ -13,12 +13,8 @@ class style_web2project extends w2p_Theme_Base
  */
 class CTabBox extends w2p_Theme_TabBox {
 	public function show($extra = '', $js_tabs = false, $alignment = 'left', $opt_flat = true) {
-		global $w2Pconfig, $currentTabId, $currentTabName, $m, $a;
+		global $currentTabId, $currentTabName, $m, $a;
 		$this->loadExtras($m, $a);
-		$uistyle = $this->_AppUI->getPref('UISTYLE') ? $this->_AppUI->getPref('UISTYLE') : $w2Pconfig['host_style'];
-		if (!$uistyle) {
-			$uistyle = 'web2project';
-		}
 
 		if (($a == 'addedit' || $a == 'view' || $a == 'viewuser') && function_exists('styleRenderBoxBottom')) {
 			echo styleRenderBoxBottom();
@@ -69,7 +65,7 @@ class CTabBox extends w2p_Theme_TabBox {
 			foreach ($this->tabs as $k => $v) {
 				$class = ($k == $this->active) ? 'tabon' : 'taboff';
 				$sel = ($k == $this->active) ? 'Selected' : '';
-				$s .= '<td valign="middle"><img src="./style/' . $uistyle . '/images/bar_top_' . $sel . 'left.gif" id="lefttab_' . $k . '" border="0" alt="" /></td>';
+				$s .= '<td valign="middle"><img src="./style/' . $this->_uistyle . '/images/bar_top_' . $sel . 'left.gif" id="lefttab_' . $k . '" border="0" alt="" /></td>';
 				$s .= '<td id="toptab_' . $k . '" valign="middle" nowrap="nowrap" class="' . $class . '">&nbsp;<a href="';
 				if ($this->javascript) {
 					$s .= 'javascript:' . $this->javascript . '(' . $this->active . ', ' . $k . ')';
@@ -79,7 +75,7 @@ class CTabBox extends w2p_Theme_TabBox {
 					$s .= $this->baseHRef . 'tab=' . $k;
 				}
 				$s .= '">' . ($v[2] ? $v[1] : $this->_AppUI->_($v[1])) . '</a>&nbsp;</td>';
-				$s .= '<td valign="middle" ><img id="righttab_' . $k . '" src="./style/' . $uistyle . '/images/bar_top_' . $sel . 'right.gif" border="0" alt="" /></td>';
+				$s .= '<td valign="middle" ><img id="righttab_' . $k . '" src="./style/' . $this->_uistyle . '/images/bar_top_' . $sel . 'right.gif" border="0" alt="" /></td>';
 				$s .= '<td class="tabsp"><img src="' . w2PfindImage('shim.gif') . '" alt=""/></td>';
 			}
 			$s .= '</tr></table></td></tr>';
@@ -89,8 +85,8 @@ class CTabBox extends w2p_Theme_TabBox {
 			$s .= '<table width="100%" cellspacing="0" cellpadding="0" border="0">';
 			$s .= '<tbody>';
 			$s .= '<tr>';
-			$s .= '	<td valign="bottom" width="100%" background="./style/' . $uistyle . '/images/tabbox_top.jpg" align="left">';
-			$s .= '		<img src="./style/' . $uistyle . '/images/tabbox_top.jpg" alt=""/>';
+			$s .= '	<td valign="bottom" width="100%" background="./style/' . $this->_uistyle . '/images/tabbox_top.jpg" align="left">';
+			$s .= '		<img src="./style/' . $this->_uistyle . '/images/tabbox_top.jpg" alt=""/>';
 			$s .= '	</td>';
 			$s .= '</tr>';
 			$s .= '</tbody>';
