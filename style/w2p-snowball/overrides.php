@@ -49,7 +49,8 @@ class CTabBox extends w2p_Theme_TabBox {
 			// flat view, active = -1
 			echo '<table border="0" cellpadding="2" cellspacing="0" width="100%">';
 			foreach ($this->tabs as $k => $v) {
-				echo '<tr><td><strong>' . ($v[2] ? $v[1] : $this->_AppUI->_($v[1])) . '</strong></td></tr><tr><td>';
+				echo '<tr><td><strong>' . ($v[2] ? $v[1] : $this->_AppUI->_($v[1])) . '</strong></td></tr>';
+                echo '<tr><td>';
 				$currentTabId = $k;
 				$currentTabName = $v[1];
 				include $this->baseInc . $v[0] . '.php';
