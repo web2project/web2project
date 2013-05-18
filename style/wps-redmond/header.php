@@ -6,9 +6,6 @@ if ($dialog) {
 	$page_title = ($w2Pconfig['page_title'] == 'web2Project') ? $w2Pconfig['page_title'] . '&nbsp;' . $AppUI->getVersion() : $w2Pconfig['page_title'];
 }
 
-// Include the file first of all, so that the AJAX methods are printed through xajax below
-require W2P_BASE_DIR . '/includes/ajax_functions.php';
-
 $theme = new style_wpsredmond($AppUI, $m);
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"

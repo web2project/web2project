@@ -17,6 +17,8 @@ require_once W2P_BASE_DIR . '/classes/w2p/web2project.php';
 spl_autoload_register('web2project_autoload');
 spl_autoload_register('w2p_old_autoload');
 
+require_once W2P_BASE_DIR . '/includes/ajax_functions.php';
+
 /**
  * For all intents and purposes, this autoloader should be considered
  *  deprecated. As we move forward, we'll continue to simplify and clean this
