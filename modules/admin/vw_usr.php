@@ -3,6 +3,8 @@ if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
 
+global $AppUI;
+
 $display_last_login = !((int) w2PgetParam($_REQUEST, 'tab', 0));
 
 $fieldList = array();

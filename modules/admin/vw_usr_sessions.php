@@ -3,7 +3,7 @@ if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
 
-global $w2Pconfig, $canEdit, $canDelete, $stub, $where, $orderby;
+global $AppUI, $w2Pconfig, $canEdit, $canDelete, $stub, $where, $orderby;
 
 /*
 * Flag value to determine if "logout user" button should show. 

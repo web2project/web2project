@@ -8,8 +8,8 @@ $start_date = intval($date_reg) ? new w2p_Utilities_Date(w2PgetParam($_REQUEST, 
 $end_date = intval($date_reg) ? new w2p_Utilities_Date(w2PgetParam($_REQUEST, 'log_end_date', date('Y-m-d'))) : null;
 $user_id = (int) w2PgetParam($_REQUEST, 'user_id', 0);
 
+global $AppUI, $currentTabId, $cal_sdf;
 $df = $AppUI->getPref('SHDATEFORMAT');
-global $currentTabId, $cal_sdf;
 
 $a = ($user_id) ? '&a=viewuser&user_id=' . $user_id : '';
 $a .= '&tab=' . $currentTabId . '&showdetails=1';
