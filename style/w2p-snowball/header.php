@@ -1,9 +1,6 @@
 <?php
-$dialog = w2PgetParam($_GET, 'dialog', 0);
-if ($dialog) {
-	$page_title = '';
-} else {
-	$page_title = ($w2Pconfig['page_title'] == 'web2Project') ? $w2Pconfig['page_title'] . '&nbsp;' . $AppUI->getVersion() : $w2Pconfig['page_title'];
+if (!defined('W2P_BASE_DIR')) {
+    die('You should not access this file directly.');
 }
 
 $theme = new style_w2psnowball($AppUI, $m);
