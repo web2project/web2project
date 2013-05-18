@@ -3,7 +3,7 @@ if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
 
-global $search_string, $owner_filter_id, $tab, $orderby, $orderdir;
+global $AppUI, $search_string, $owner_filter_id, $tab, $orderby, $orderdir;
 
 $type_filter = $tab - 1;
 
