@@ -90,7 +90,6 @@ $AppUI->setWarning($temp);
 $titleBlock->addCrumb('?m=system', 'system admin');
 $titleBlock->show();
 ?>
-<div style="height: 11px;"> </div>
 <form action="?m=system&a=translate_save" method="post" name="editlang" accept-charset="utf-8">
     <input type="hidden" name="module" value="<?php echo $modules[$module]; ?>" />
     <input type="hidden" name="lang" value="<?php echo $lang; ?>" />

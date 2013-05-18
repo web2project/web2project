@@ -39,7 +39,7 @@ $fieldNames = array('Module', 'Status', 'Customize', 'Type', 'Version',
 $htmlHelper = new w2p_Output_HTMLHelper($AppUI);
 ?>
 
-<table class="tbl list">
+<table class="tbl list modules">
     <?php
     echo '<tr><th></th>';
     foreach ($fieldNames as $index => $name) {
