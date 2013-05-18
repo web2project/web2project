@@ -34,7 +34,7 @@ $mm = $this_day->getMonth();
 $yy = $this_day->getYear();
 
 // get current week
-$this_week = Date_calc::beginOfWeek($dd, $mm, $yy, FMT_TIMESTAMP_DATE, LOCALE_FIRST_DAY);
+$this_week = Date_Calc::beginOfWeek($dd, $mm, $yy, FMT_TIMESTAMP_DATE, LOCALE_FIRST_DAY);
 
 // prepare time period for 'events'
 $first_time =  clone $this_day;
@@ -43,8 +43,8 @@ $first_time->setTime(0, 0, 0);
 $last_time = clone $this_day;
 $last_time->setTime(23, 59, 59);
 
-$prev_day = new w2p_Utilities_Date(Date_calc::prevDay($dd, $mm, $yy, FMT_TIMESTAMP_DATE));
-$next_day = new w2p_Utilities_Date(Date_calc::nextDay($dd, $mm, $yy, FMT_TIMESTAMP_DATE));
+$prev_day = new w2p_Utilities_Date(Date_Calc::prevDay($dd, $mm, $yy, FMT_TIMESTAMP_DATE));
+$next_day = new w2p_Utilities_Date(Date_Calc::nextDay($dd, $mm, $yy, FMT_TIMESTAMP_DATE));
 
 // get the list of visible companies
 $company = new CCompany();

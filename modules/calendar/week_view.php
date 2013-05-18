@@ -36,13 +36,13 @@ $mm = $this_week->getMonth();
 $yy = $this_week->getYear();
 
 // prepare time period for 'events'
-$first_time = new w2p_Utilities_Date(Date_calc::beginOfWeek($dd, $mm, $yy, FMT_TIMESTAMP_DATE, LOCALE_FIRST_DAY));
+$first_time = new w2p_Utilities_Date(Date_Calc::beginOfWeek($dd, $mm, $yy, FMT_TIMESTAMP_DATE, LOCALE_FIRST_DAY));
 $first_time->setTime(0, 0, 0);
-$last_time = new w2p_Utilities_Date(Date_calc::endOfWeek($dd, $mm, $yy, FMT_TIMESTAMP_DATE, LOCALE_FIRST_DAY));
+$last_time = new w2p_Utilities_Date(Date_Calc::endOfWeek($dd, $mm, $yy, FMT_TIMESTAMP_DATE, LOCALE_FIRST_DAY));
 $last_time->setTime(23, 59, 59);
 
-$prev_week = new w2p_Utilities_Date(Date_calc::beginOfPrevWeek($dd, $mm, $yy, FMT_TIMESTAMP_DATE, LOCALE_FIRST_DAY));
-$next_week = new w2p_Utilities_Date(Date_calc::beginOfNextWeek($dd, $mm, $yy, FMT_TIMESTAMP_DATE, LOCALE_FIRST_DAY));
+$prev_week = new w2p_Utilities_Date(Date_Calc::beginOfPrevWeek($dd, $mm, $yy, FMT_TIMESTAMP_DATE, LOCALE_FIRST_DAY));
+$next_week = new w2p_Utilities_Date(Date_Calc::beginOfNextWeek($dd, $mm, $yy, FMT_TIMESTAMP_DATE, LOCALE_FIRST_DAY));
 
 $links = array();
 
