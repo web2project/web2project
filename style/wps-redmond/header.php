@@ -121,7 +121,7 @@ $theme = new style_wpsredmond($AppUI, $m);
             <tr>
                 <td valign="top" align="left" width="98%">
                     <?php
-                        echo $AppUI->getMsg();
+                        echo $theme->messageHandler();
                         $AppUI->boxTopRendered = false;
                         if ($m == 'help') {
                             echo $theme->styleRenderBoxTop();
