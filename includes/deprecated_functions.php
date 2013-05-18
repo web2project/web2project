@@ -336,8 +336,31 @@ function get_dependencies_pd($task_id) {
  * @return type 
  */
 function buildHeaderNavigation($AppUI, $rootTag = '', $innerTag = '', $dividingToken = '', $m = '') {
-    trigger_error("The buildHeaderNavigation function has been deprecated and will be removed in v4.0. Please use w2p_Theme_Base->buildHeaderNavigation() instead.", E_USER_NOTICE );
+    //trigger_error("The buildHeaderNavigation function has been deprecated and will be removed in v4.0. Please use w2p_Theme_Base->buildHeaderNavigation() instead.", E_USER_NOTICE );
 
-    $theme = new w2p_Theme_Base($AppUI, $m);
+    $uistyle = $AppUI->getPref('UISTYLE') ? $AppUI->getPref('UISTYLE') : w2PgetConfig('host_style');
+    $style = 'style_' . str_replace('-', '', $uistyle);
+    $theme = new $style($AppUI, $m);
     return $theme->buildHeaderNavigation($rootTag, $innerTag, $dividingToken);
+}
+
+
+function styleRenderBoxTop() {
+    //trigger_error("The styleRenderBoxTop function has been deprecated and will be removed in v4.0.", E_USER_NOTICE );
+
+    global $AppUI;
+    $uistyle = $AppUI->getPref('UISTYLE') ? $AppUI->getPref('UISTYLE') : w2PgetConfig('host_style');
+    $style = 'style_' . str_replace('-', '', $uistyle);
+    $theme = new $style($AppUI);
+    return $theme->styleRenderBoxTop();
+}
+
+function styleRenderBoxBottom() {
+    //trigger_error("The styleRenderBoxBottom function has been deprecated and will be removed in v4.0.", E_USER_NOTICE );
+
+    global $AppUI;
+    $uistyle = $AppUI->getPref('UISTYLE') ? $AppUI->getPref('UISTYLE') : w2PgetConfig('host_style');
+    $style = 'style_' . str_replace('-', '', $uistyle);
+    $theme = new $style($AppUI);
+    return $theme->styleRenderBoxBottom();
 }

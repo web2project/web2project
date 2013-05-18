@@ -125,19 +125,3 @@ class CTabBox extends w2p_Theme_TabBox {
 		}
 	}
 }
-
-function styleRenderBoxTop() {
-    //trigger_error("The styleRenderBoxTop function has been deprecated and will be removed in v4.0.", E_USER_NOTICE );
-
-    global $AppUI;
-    $theme = new style_w2psnowball($AppUI);
-    return $theme->styleRenderBoxTop();
-}
-
-function styleRenderBoxBottom() {
-    //trigger_error("The styleRenderBoxBottom function has been deprecated and will be removed in v4.0.", E_USER_NOTICE );
-
-    global $AppUI;
-    $theme = new style_w2psnowball($AppUI);
-    return $theme->styleRenderBoxBottom();
-}
