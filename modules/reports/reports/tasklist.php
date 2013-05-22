@@ -198,8 +198,14 @@ if ($do_report) {
 		if ($project_id == 0) {
 			$pdfdata[] = array($task['project_name'], $task['task_name'], $task['task_description'], $users, (($start_date != ' ') ? $start_date->format($df) : ' '), (($end_date != ' ') ? $end_date->format($df) : ' '), $task['task_percent_complete'] . '%', );
 		} else {
+            $start_date = new w2p_Utilities_Date($task['task_start_date']);
+            $end_date = new w2p_Utilities_Date($task['task_end_date']);
             $spacer = str_repeat('  ', $task['depth']);
-			$pdfdata[] = array($spacer . $task['task_name'], $task['task_description'], $users, (($start_date != ' ') ? $start_date->format($df) : ' '), (($end_date != ' ') ? $end_date->format($df) : ' '), $task['task_percent_complete'] . '%', );
+			$pdfdata[] = array($spacer . $task['task_name'], $task['task_description'],
+                implode($users, ', '),
+                (($start_date != ' ') ? $start_date->format($df) : ' '),
+                (($end_date != ' ') ? $end_date->format($df) : ' '),
+                $task['task_percent_complete'] . '%', );
 		}
     }
 
