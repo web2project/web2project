@@ -598,3 +598,16 @@ table.mocal td a:first-child {
     height: 25px;
     width: 500px;
 }
+
+.syskeys td:nth-child(3) {
+    text-align: left;
+}
+
+.sysvals td:nth-child(4) {
+    text-align: left;
+    white-space: normal;
+}
+
+.modules td:nth-child(3) {
+    text-align: left;
+}

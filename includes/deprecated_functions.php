@@ -343,24 +343,3 @@ function buildHeaderNavigation($AppUI, $rootTag = '', $innerTag = '', $dividingT
     $theme = new $style($AppUI, $m);
     return $theme->buildHeaderNavigation($rootTag, $innerTag, $dividingToken);
 }
-
-
-function styleRenderBoxTop() {
-    //trigger_error("The styleRenderBoxTop function has been deprecated and will be removed in v4.0.", E_USER_NOTICE );
-
-    global $AppUI;
-    $uistyle = $AppUI->getPref('UISTYLE') ? $AppUI->getPref('UISTYLE') : w2PgetConfig('host_style');
-    $style = 'style_' . str_replace('-', '', $uistyle);
-    $theme = new $style($AppUI);
-    return $theme->styleRenderBoxTop();
-}
-
-function styleRenderBoxBottom() {
-    //trigger_error("The styleRenderBoxBottom function has been deprecated and will be removed in v4.0.", E_USER_NOTICE );
-
-    global $AppUI;
-    $uistyle = $AppUI->getPref('UISTYLE') ? $AppUI->getPref('UISTYLE') : w2PgetConfig('host_style');
-    $style = 'style_' . str_replace('-', '', $uistyle);
-    $theme = new $style($AppUI);
-    return $theme->styleRenderBoxBottom();
-}

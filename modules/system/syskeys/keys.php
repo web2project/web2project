@@ -40,7 +40,7 @@ function delIt(id) {
 <?php } ?>
 </script>
 
-<table class="tbl list">
+<table class="tbl list syskeys">
 <tr>
 	<th>&nbsp;</th>
 	<th><?php echo $AppUI->_('Name'); ?></th>

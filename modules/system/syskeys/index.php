@@ -83,10 +83,9 @@ function delIt(id) {
 }
 <?php } ?>
 </script>
-<div style="height: 11px;"> </div>
 <form name="sysValFrm" method="post" action="?m=system&u=syskeys&a=do_sysval_aed" accept-charset="utf-8">
     <input type="hidden" name="del" value="0" />
-    <table class="tbl list">
+    <table class="tbl list sysvals">
         <tr>
             <th>&nbsp;</th>
             <th><?php echo $AppUI->_('Key Type'); ?></th>

@@ -3,7 +3,7 @@ if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
 
-global $currentTabId;
+global $AppUI, $currentTabId;
 
 $days = ($currentTabId == 0) ? 30 : 0;
 $searchString = w2PgetParam($_POST, 'search_string', '');
