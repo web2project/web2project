@@ -2151,7 +2151,7 @@ function displayFiles($AppUI, $folder_id, $task_id, $project_id, $company_id, $c
 	$htmlHelper = new w2p_Output_HTMLHelper($AppUI);
 	$htmlHelper->df .= ' ' . $AppUI->getPref('TIMEFORMAT');
 
-	$file_types = w2PgetSysVal('FileType');
+	$file_types = w2PgetSysVal('FileType') + array(9998 => $AppUI->_('Project Pictures'), 9999 => $AppUI->_('Main Project Picture'));
 	$customLookups = array('file_category' => $file_types);
 
 	$perms = &$AppUI->acl();
@@ -2360,7 +2360,7 @@ function getHelpdeskFolder() {
 }
 
 // From: modules/files/files.class.php
-function file_show_attr(&$companies) {
+function file_show_attr(&$companies, $file_categs) {
 	global $AppUI, $obj, $ci, $canAdmin, $file_project, $file_company, $file_task, $task_name, $preserve, $file_helpdesk_item;
 
 	if ($ci) {
@@ -2397,7 +2397,7 @@ function file_show_attr(&$companies) {
 
 	// Category
 	$str_out .= '<tr><td align="right" nowrap="nowrap">' . $AppUI->_('Category') . ':</td>';
-	$str_out .= '<td align="left">' . arraySelect(w2PgetSysVal('FileType'), 'file_category', 'class="text"' . $select_disabled, $obj->file_category, true) . '<td>';
+	$str_out .= '<td align="left">' . arraySelect($file_categs, 'file_category', 'class="text"' . $select_disabled, $obj->file_category, true) . '<td>';
 
 	// ---------------------------------------------------------------------------------
 
