@@ -266,7 +266,7 @@ $log_date = new w2p_Utilities_Date($log->task_log_date);
                             <table width="100%">
                                 <tr>
                                     <td align="left">
-                                        <input type="text" class="text" name="task_log_name" value="<?php echo $log->task_log_name; ?>" maxlength="255" size="30" />
+                                        <input type="text" class="text" name="task_log_name" value="<?php echo htmlentities($log->task_log_name); ?>" maxlength="255" size="30" />
                                     </td>
                                     <td align="center"><label for="task_log_problem"><?php echo $AppUI->_('Problem'); ?>:</label>
                                         <input type="checkbox" value="1" name="task_log_problem" id="task_log_problem" <?php echo ($log->task_log_problem ? 'checked="checked"' : ''); ?> />
