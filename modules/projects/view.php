@@ -213,7 +213,7 @@ function delIt() {
                 </tr>
             </table>
         </td>
-        <td width="50%" valign="top" rowspan="1" class="view-column">
+        <td width="50%" valign="top" class="view-column">
             <strong><?php echo $AppUI->_('Summary'); ?></strong><br />
             <table cellspacing="1" cellpadding="2" border="0" width="100%" class="well">
                 <tr>

@@ -50,27 +50,44 @@ $titleBlock->show();
         </td>
     </tr>
     <tr>
-        <td align="left" nowrap="nowrap"><?php echo $AppUI->_('Related Project'); ?>:</td>
-        <td nowrap="nowrap"><strong><?php echo ($forum->project_name) ? $forum->project_name : 'No associated project'; ?></strong></td>
-        <td valign="top" width="50%" rowspan="99">
-            <strong><?php echo $AppUI->_('Description'); ?>:</strong><br />
-            <?php echo $forum->forum_description; ?>
+        <td width="50%" valign="top" class="view-column">
+            <strong><?php echo $AppUI->_('Details'); ?></strong>
+            <table cellspacing="1" cellpadding="2" border="0" width="100%" class="well">
+                <tr>
+                    <td align="left" nowrap="nowrap"><?php echo $AppUI->_('Related Project'); ?>:</td>
+                    <td nowrap="nowrap"><strong><?php echo ($forum->project_name) ? $forum->project_name : 'No associated project'; ?></strong></td>
+                </tr>
+                <tr>
+                    <td align="left"><?php echo $AppUI->_('Owner'); ?>:</td>
+                    <td nowrap="nowrap">
+                        <?php
+                        echo $forum->contact_display_name;
+                        if ($forum_id) {
+                            echo ' (' . $AppUI->_('moderated') . ') ';
+                        } ?>
+                    </td>
+                </tr>
+                <tr>
+                    <td align="left"><?php echo $AppUI->_('Created On'); ?>:</td>
+                    <td nowrap="nowrap"><?php echo $start_date; ?></td>
+                </tr>
+            </table>
         </td>
-    </tr>
-    <tr>
-        <td align="left"><?php echo $AppUI->_('Owner'); ?>:</td>
-        <td nowrap="nowrap">
-            <?php
-            echo $forum->contact_display_name;
-            if ($forum_id) {
-                echo ' (' . $AppUI->_('moderated') . ') ';
-            } ?>
+        <td width="50%" valign="top" class="view-column">
+            <strong><?php echo $AppUI->_('Description'); ?></strong>
+            <table cellspacing="1" cellpadding="2" border="0" width="100%" class="well">
+                <tr>
+                    <td class="hilite">
+                        <?php echo $forum->forum_description; ?>
+                    </td>
+                </tr>
+            </table>
         </td>
+        
+
     </tr>
-    <tr>
-        <td align="left"><?php echo $AppUI->_('Created On'); ?>:</td>
-        <td nowrap="nowrap"><?php echo $start_date; ?></td>
-    </tr>
+
+
 </table>
 <?php
 if (function_exists('styleRenderBoxBottom')) {

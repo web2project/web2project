@@ -69,9 +69,9 @@ if ($canDelete) {
 
 <table border="0" cellpadding="4" cellspacing="0" width="100%" class="std view">
     <tr>
-        <td valign="top" width="100%">
+        <td width="50%" valign="top" class="view-column">
             <strong><?php echo $AppUI->_('Details'); ?></strong>
-            <table cellspacing="1" cellpadding="2" width="50%">
+            <table cellspacing="1" cellpadding="2" border="0" width="100%" class="well">
                 <tr>
                     <td align="right" nowrap="nowrap" width="5%"><?php echo $AppUI->_('Identifier'); ?>:</td>
                     <?php echo $htmlHelper->createCell('resource_key', $obj->resource_key); ?>
@@ -90,11 +90,9 @@ if ($canDelete) {
                 </tr>
             </table>
         </td>
-    </tr>
-    <tr>
         <td width="100%" valign="top">
             <strong><?php echo $AppUI->_('Description'); ?></strong>
-            <table cellspacing="0" cellpadding="2" border="0" width="100%">
+            <table cellspacing="1" cellpadding="2" border="0" width="100%" class="well">
                 <tr>
                     <td class="hilite">
                         <?php echo w2p_textarea($obj->resource_note); ?>&nbsp;
