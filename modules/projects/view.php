@@ -116,106 +116,106 @@ function delIt() {
 	<input type="hidden" name="project_id" value="<?php echo $project_id; ?>" />
 </form>
 <table id="tblProjects" border="0" cellpadding="4" cellspacing="0" width="100%" class="std view">
-<tr>
-	<td style="border: outset #d1d1cd 1px;background-color:#<?php echo $project->project_color_identifier; ?>" colspan="2" id="view-header">
-	<?php
-        echo '<font color="' . bestColor($project->project_color_identifier) . '"><strong>' . $project->project_name . '<strong></font>';
-    ?>
-	</td>
-</tr>
-<tr>
-	<td width="50%" valign="top" class="view-column">
-		<strong><?php echo $AppUI->_('Details'); ?></strong>
-		<table cellspacing="1" cellpadding="2" border="0" width="100%">
-		<tr>
-			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Company'); ?>:</td>
-            <?php
-            $perms = &$AppUI->acl();
-            if ($perms->checkModuleItem('companies', 'access', $project->project_company)) { ?>
-                <td class="hilite" width="100%">
-                    <?php echo '<a href="?m=companies&a=view&company_id=' . $project->project_company . '">' . htmlspecialchars($project->company_name, ENT_QUOTES) . '</a>'; ?>
-                </td>
-            <?php } else { ?>
-                <?php echo $htmlHelper->createCell('company_name', $project->company_name); ?>
-            <?php } ?>
-		</tr>
-		<tr>
-			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Project Location'); ?>:</td>
-            <?php echo $htmlHelper->createCell('project_location', $project->project_location); ?>
-		</tr>
-		<tr>
-			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Short Name'); ?>:</td>
-            <?php
+    <tr>
+        <td style="border: outset #d1d1cd 1px;background-color:#<?php echo $project->project_color_identifier; ?>" colspan="2" id="view-header">
+        <?php
+            echo '<font color="' . bestColor($project->project_color_identifier) . '"><strong>' . $project->project_name . '<strong></font>';
+        ?>
+        </td>
+    </tr>
+    <tr>
+        <td width="50%" valign="top" class="view-column">
+            <strong><?php echo $AppUI->_('Details'); ?></strong>
+            <table cellspacing="1" cellpadding="2" border="0" width="100%" class="well">
+                <tr>
+                    <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Company'); ?>:</td>
+                    <?php
+                    $perms = &$AppUI->acl();
+                    if ($perms->checkModuleItem('companies', 'access', $project->project_company)) { ?>
+                        <td class="hilite" width="100%">
+                            <?php echo '<a href="?m=companies&a=view&company_id=' . $project->project_company . '">' . htmlspecialchars($project->company_name, ENT_QUOTES) . '</a>'; ?>
+                        </td>
+                    <?php } else { ?>
+                        <?php echo $htmlHelper->createCell('company_name', $project->company_name); ?>
+                    <?php } ?>
+                </tr>
+                <tr>
+                    <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Project Location'); ?>:</td>
+                    <?php echo $htmlHelper->createCell('project_location', $project->project_location); ?>
+                </tr>
+                <tr>
+                    <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Short Name'); ?>:</td>
+                    <?php
 
-            // TODO Need to rename field to avoid confusing HTMLhelper
-            echo $htmlHelper->createCell('project_shortname', $project->project_short_name);
-            ?>
-		</tr>
-		<tr>
-			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Start Date'); ?>:</td>
-            <?php echo $htmlHelper->createCell('project_start_date', $project->project_start_date); ?>
-		</tr>
-		<tr>
-			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Target End Date'); ?>:</td>
-            <?php echo $htmlHelper->createCell('project_end_date', $project->project_end_date); ?>
-		</tr>
-		<tr>
-			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Actual End Date'); ?>:</td>
-			<td class="hilite">
-				<?php
-					if ($project_id > 0 && $project->project_last_task > 0) {
-						echo $actual_end_date ? '<a href="?m=tasks&a=view&task_id='. $project->project_last_task . '">' : '';
-						echo $actual_end_date ? '<span ' . $style . '>' . $actual_end_date->format($df) . '</span>' : '-';
-						echo $actual_end_date ? '</a>' : '';
-					} else {
-						echo $AppUI->_('Dynamically calculated');
-					}
-				?>
-			</td>
-		</tr>
-		<tr>
-			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Project Owner'); ?>:</td>
-            <td class="hilite">
-                <?php
-                $pusername = $project->user_name;
-                $puserid = $project->project_owner;
+                    // TODO Need to rename field to avoid confusing HTMLhelper
+                    echo $htmlHelper->createCell('project_shortname', $project->project_short_name);
+                    ?>
+                </tr>
+                <tr>
+                    <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Start Date'); ?>:</td>
+                    <?php echo $htmlHelper->createCell('project_start_date', $project->project_start_date); ?>
+                </tr>
+                <tr>
+                    <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Target End Date'); ?>:</td>
+                    <?php echo $htmlHelper->createCell('project_end_date', $project->project_end_date); ?>
+                </tr>
+                <tr>
+                    <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Actual End Date'); ?>:</td>
+                    <td class="hilite">
+                        <?php
+                            if ($project_id > 0 && $project->project_last_task > 0) {
+                                echo $actual_end_date ? '<a href="?m=tasks&a=view&task_id='. $project->project_last_task . '">' : '';
+                                echo $actual_end_date ? '<span ' . $style . '>' . $actual_end_date->format($df) . '</span>' : '-';
+                                echo $actual_end_date ? '</a>' : '';
+                            } else {
+                                echo $AppUI->_('Dynamically calculated');
+                            }
+                        ?>
+                    </td>
+                </tr>
+                <tr>
+                    <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Project Owner'); ?>:</td>
+                    <td class="hilite">
+                        <?php
+                        $pusername = $project->user_name;
+                        $puserid = $project->project_owner;
 
-                //TODO HTML helper not working properly due to field having suffix _owner, avoiding helper until fix
-                echo "<a href=\"?m=admin&a=viewuser&user_id=$puserid\" alt=\"$pusername\">$pusername</a>";
-                ?>
-            </td>
-		</tr>
-		<tr>
-			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('URL'); ?>:</td>
-            <?php echo $htmlHelper->createCell('project_url', $project->project_url); ?>
-		</tr>
-		<tr>
-			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Staging URL'); ?>:</td>
-            <?php echo $htmlHelper->createCell('project_demo_url', $project->project_demo_url); ?>
-		</tr>
-		<tr>
-			<td colspan="2">
-				<?php
-					$custom_fields = new w2p_Core_CustomFields($m, $a, $project->project_id, 'view');
-					$custom_fields->printHTML();
-				?>
-			</td>
-		</tr>
-		<tr>
-			<td colspan="2">
-			<strong><?php echo $AppUI->_('Description'); ?></strong><br />
-			<table cellspacing="0" cellpadding="2" border="0" width="100%">
-			<tr>
-                <?php echo $htmlHelper->createCell('project_description', $project->project_description); ?>
-			</tr>
-			</table>
-			</td>
-		</tr>
-		</table>
-	</td>
-    <td width="50%" valign="top" rowspan="1" class="view-column">
+                        //TODO HTML helper not working properly due to field having suffix _owner, avoiding helper until fix
+                        echo "<a href=\"?m=admin&a=viewuser&user_id=$puserid\" alt=\"$pusername\">$pusername</a>";
+                        ?>
+                    </td>
+                </tr>
+                <tr>
+                    <td align="right" nowrap="nowrap"><?php echo $AppUI->_('URL'); ?>:</td>
+                    <?php echo $htmlHelper->createCell('project_url', $project->project_url); ?>
+                </tr>
+                <tr>
+                    <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Staging URL'); ?>:</td>
+                    <?php echo $htmlHelper->createCell('project_demo_url', $project->project_demo_url); ?>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <?php
+                            $custom_fields = new w2p_Core_CustomFields($m, $a, $project->project_id, 'view');
+                            $custom_fields->printHTML();
+                        ?>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                    <strong><?php echo $AppUI->_('Description'); ?></strong><br />
+                    <table cellspacing="0" cellpadding="2" border="0" width="100%">
+                    <tr>
+                        <?php echo $htmlHelper->createCell('project_description', $project->project_description); ?>
+                    </tr>
+                    </table>
+                    </td>
+                </tr>
+            </table>
+        </td>
+        <td width="50%" valign="top" rowspan="1" class="view-column">
             <strong><?php echo $AppUI->_('Summary'); ?></strong><br />
-            <table cellspacing="1" cellpadding="2" border="0" width="100%">
+            <table cellspacing="1" cellpadding="2" border="0" width="100%" class="well">
                 <tr>
                     <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Status'); ?>:</td>
                     <?php echo $htmlHelper->createCell('project_status', $AppUI->_($pstatus[$project->project_status])); ?>
@@ -230,7 +230,7 @@ function delIt() {
                 </tr>
                 <tr>
                     <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Progress'); ?>:</td>
-<!-- TODO: we can't use the createCell helper here because it centers things while we need it left-aligned -->
+    <!-- TODO: we can't use the createCell helper here because it centers things while we need it left-aligned -->
                     <td class="hilite" width="100%"><?php printf('%.1f%%', $project->project_percent_complete); ?></td>
                 </tr>
                 <tr>
@@ -399,31 +399,31 @@ function delIt() {
                 }
                 ?>
                 </table>
-            </td>
-        </tr>
-        <?php
-        //lets add the subprojects table
-        $canReadMultiProjects = canView('admin');
-        if ($project->hasChildProjects($project_id) && $canReadMultiProjects) { ?>
-            <tr>
-                <td colspan="2">
-                    <?php
-                        echo w2PtoolTip('Multiproject', 'Click to Show/Hide Structure', true) . '<a href="javascript: void(0);" onclick="expand_collapse(\'multiproject\', \'tblProjects\')"><img id="multiproject_expand" src="' . w2PfindImage('icons/expand.gif') . '" width="12" height="12" border="0" alt=""><img id="multiproject_collapse" src="' . w2PfindImage('icons/collapse.gif') . '" width="12" height="12" border="0" style="display:none"></a>&nbsp;' . w2PendTip();
-                        echo '<strong>' . $AppUI->_('This Project is Part of the Following Multi-Project Structure') . ':<strong>';
-                    ?>
-                </td>
-            </tr>
-            <tr id="multiproject" style="visibility:collapse;display:none;">
-                <td colspan="2" class="hilite">
-                    <?php
-                        require W2P_BASE_DIR . '/modules/projects/vw_sub_projects.php';
-                    ?>
-                </td>
-            </tr>
-        <?php }
-        //here finishes the subproject structure
-        ?>
-        </table>
+        </td>
+    </tr>
+<?php
+//lets add the subprojects table
+$canReadMultiProjects = canView('admin');
+if ($project->hasChildProjects($project_id) && $canReadMultiProjects) { ?>
+    <tr>
+        <td colspan="2">
+            <?php
+                echo w2PtoolTip('Multiproject', 'Click to Show/Hide Structure', true) . '<a href="javascript: void(0);" onclick="expand_collapse(\'multiproject\', \'tblProjects\')"><img id="multiproject_expand" src="' . w2PfindImage('icons/expand.gif') . '" width="12" height="12" border="0" alt=""><img id="multiproject_collapse" src="' . w2PfindImage('icons/collapse.gif') . '" width="12" height="12" border="0" style="display:none"></a>&nbsp;' . w2PendTip();
+                echo '<strong>' . $AppUI->_('This Project is Part of the Following Multi-Project Structure') . ':<strong>';
+            ?>
+        </td>
+    </tr>
+    <tr id="multiproject" style="visibility:collapse;display:none;">
+        <td colspan="2" class="hilite">
+            <?php
+                require W2P_BASE_DIR . '/modules/projects/vw_sub_projects.php';
+            ?>
+        </td>
+    </tr>
+<?php }
+//here finishes the subproject structure
+?>
+</table>
 
 <?php
 $tabBox = new CTabBox('?m=projects&a=view&project_id=' . $project_id, '', $tab);

@@ -98,103 +98,95 @@ $titleBlock->show();
 	<?php } ?>
 </script>
 <table border="0" cellpadding="4" cellspacing="0" width="100%" class="std view">
-<tr valign="top">
-	<td width="50%">
-		<table cellspacing="1" cellpadding="2" border="0" width="100%">
-		<tr>
-			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Login Name'); ?>:</td>
-			<td class="hilite" width="100%"><?php echo $user->user_username; ?></td>
-		</tr>
-		<tr>
-			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('User Type'); ?>:</td>
-			<td class="hilite" width="100%"><?php echo $AppUI->_($utypes[$user->user_type]); ?></td>
-		</tr>
-		<tr>
-			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Real Name'); ?>:</td>
-			<td class="hilite" width="100%"><?php echo $user->contact_display_name; ?></td>
-		</tr>
-		<tr>
-			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Company'); ?>:</td>
-			<td class="hilite" width="100%">
-				<a href="?m=companies&a=view&company_id=<?php echo $user->contact_company; ?>"><?php echo $user->company_name; ?></a>
-			</td>
-		</tr>
-		<tr>
-			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Department'); ?>:</td>
-			<td class="hilite" width="100%">
-				<a href="?m=departments&a=view&dept_id=<?php echo $user->contact_department; ?>"><?php echo $user->dept_name; ?></a>
-			</td>
-		</tr>
-		<tr>
-			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Phone'); ?>:</td>
-			<td class="hilite" width="100%"><?php echo $user->contact_phone; ?></td>
-		</tr>
-		<tr>
-			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Home Phone'); ?>:</td>
-			<td class="hilite" width="100%"><?php echo isset($user->contact_phone2) ? $user->contact_phone2 : ''; ?></td>
-		</tr>
-		<tr>
-			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Mobile'); ?>:</td>
-			<td class="hilite" width="100%"><?php echo isset($user->contact_mobile) ? $user->contact_mobile : ''; ?></td>
-		</tr>
-		<tr valign="top">
-			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Address'); ?>:</td>
-			<td class="hilite" width="100%">
-				<?php echo $user->contact_address1; ?><br />
-                <?php echo ($user->contact_address2 == '') ? '' : $user->contact_address2.'<br />'; ?>
-                <?php echo $user->contact_city . ', ' . $user->contact_state . ' ' . $user->contact_zip; ?><br />
-                <?php echo isset($countries[$user->contact_country]) ? $countries[$user->contact_country] : $user->contact_country; ?>
-			</td>
-		</tr>
-		</table>
-
-	</td>
-	<td width="50%">
-		<table width="100%">
-            <tr>
-                <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Birthday'); ?>:</td>
-                <?php echo $helper->createCell('_date', $user->contact_birthday); ?>
-            </tr>
-            <tr>
-                <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Email'); ?>:</td>
-                <?php echo $helper->createCell('contact_email', $user->contact_email); ?>
-            </tr>
-            <?php
-                $fields = $methods['fields'];
-                foreach ($fields as $key => $field): ?>
+    <tr>
+        <th colspan="2"><?php echo $user->user_username; ?></th>
+    </tr>
+    <tr valign="top">
+        <td width="50%">
+            <strong><?php echo $AppUI->_('Details'); ?></strong>
+            <table cellspacing="1" cellpadding="2" border="0" width="100%" class="well">
                 <tr>
-                    <td align="right" width="100" nowrap="nowrap"><?php echo $AppUI->_($methodLabels[$field]); ?>:</td>
-                    <?php echo $helper->createCell('_'.substr($field, 0, strpos($field, '_')), $methods['values'][$key]); ?>
+                    <td align="right" nowrap="nowrap"><?php echo $AppUI->_('User Type'); ?>:</td>
+                    <td class="hilite" width="100%"><?php echo $AppUI->_($utypes[$user->user_type]); ?></td>
                 </tr>
-            <?php endforeach; ?>
-            <tr>
-                <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Calendar Feed'); ?>:</td>
-                <td class="hilite" width="100%">
-                    <?php if ($user->feed_token != '') {
-                        $calendarFeed = W2P_BASE_URL.'/calendar.php?token='.$user->feed_token.'&amp;ext=.ics';
-                        ?>
-                        <a href="<?php echo $calendarFeed; ?>">calendar feed</a>
-                    <?php } ?>
-                    &nbsp;&nbsp;&nbsp;
-                    <form name="regenerateToken" action="./index.php?m=admin" method="post" accept-charset="utf-8">
-                        <input type="hidden" name="user_id" value="<?php echo (int) $user->user_id; ?>" />
-                        <input type="hidden" name="dosql" value="do_user_token" />
-                        <input type="hidden" name="token" value="<?php echo $user->feed_token; ?>" />
-                        <input type="submit" name="regenerate token" value="<?php echo $AppUI->_('regenerate feed url'); ?>" class="button" />
-                    </form>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="2"><strong><?php echo $AppUI->_('Signature'); ?>:</strong></td>
-            </tr>
-            <tr>
-                <td class="hilite" width="100%" colspan="2">
-                    <?php echo w2p_textarea($user->user_signature); ?>&nbsp;
-                </td>
-            </tr>
-		</table>
-	</td>
-</tr>
+                <tr>
+                    <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Real Name'); ?>:</td>
+                    <td class="hilite" width="100%"><?php echo $user->contact_display_name; ?></td>
+                </tr>
+                <tr>
+                    <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Company'); ?>:</td>
+                    <td class="hilite" width="100%">
+                        <a href="?m=companies&a=view&company_id=<?php echo $user->contact_company; ?>"><?php echo $user->company_name; ?></a>
+                    </td>
+                </tr>
+                <tr>
+                    <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Department'); ?>:</td>
+                    <td class="hilite" width="100%">
+                        <a href="?m=departments&a=view&dept_id=<?php echo $user->contact_department; ?>"><?php echo $user->dept_name; ?></a>
+                    </td>
+                </tr>
+                <tr>
+                    <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Phone'); ?>:</td>
+                    <td class="hilite" width="100%"><?php echo $user->contact_phone; ?></td>
+                </tr>
+                <tr>
+                    <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Email'); ?>:</td>
+                    <?php echo $helper->createCell('contact_email', $user->contact_email); ?>
+                </tr>
+                <tr valign="top">
+                    <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Address'); ?>:</td>
+                    <td class="hilite" width="100%">
+                        <?php echo $user->contact_address1; ?><br />
+                        <?php echo ($user->contact_address2 == '') ? '' : $user->contact_address2.'<br />'; ?>
+                        <?php echo $user->contact_city . ', ' . $user->contact_state . ' ' . $user->contact_zip; ?><br />
+                        <?php echo isset($countries[$user->contact_country]) ? $countries[$user->contact_country] : $user->contact_country; ?>
+                    </td>
+                </tr>
+                <tr>
+                    <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Birthday'); ?>:</td>
+                    <?php echo $helper->createCell('_date', $user->contact_birthday); ?>
+                </tr>
+            </table>
+        </td>
+        <td width="50%">
+            <strong><?php echo $AppUI->_('Contact Information'); ?></strong>
+            <table cellspacing="1" cellpadding="2" border="0" width="100%" class="well">
+                <?php
+                    $fields = $methods['fields'];
+                    foreach ($fields as $key => $field): ?>
+                    <tr>
+                        <td align="right" width="100" nowrap="nowrap"><?php echo $AppUI->_($methodLabels[$field]); ?>:</td>
+                        <?php echo $helper->createCell('_'.substr($field, 0, strpos($field, '_')), $methods['values'][$key]); ?>
+                    </tr>
+                <?php endforeach; ?>
+                <tr>
+                    <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Calendar Feed'); ?>:</td>
+                    <td class="hilite" width="100%">
+                        <?php if ($user->feed_token != '') {
+                            $calendarFeed = W2P_BASE_URL.'/calendar.php?token='.$user->feed_token.'&amp;ext=.ics';
+                            ?>
+                            <a href="<?php echo $calendarFeed; ?>">calendar feed</a>
+                        <?php } ?>
+                        &nbsp;&nbsp;&nbsp;
+                        <form name="regenerateToken" action="./index.php?m=admin" method="post" accept-charset="utf-8">
+                            <input type="hidden" name="user_id" value="<?php echo (int) $user->user_id; ?>" />
+                            <input type="hidden" name="dosql" value="do_user_token" />
+                            <input type="hidden" name="token" value="<?php echo $user->feed_token; ?>" />
+                            <input type="submit" name="regenerate token" value="<?php echo $AppUI->_('regenerate feed url'); ?>" class="button" />
+                        </form>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2"><strong><?php echo $AppUI->_('Signature'); ?>:</strong></td>
+                </tr>
+                <tr>
+                    <td class="hilite" width="100%" colspan="2">
+                        <?php echo w2p_textarea($user->user_signature); ?>&nbsp;
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
 </table>
 
 <?php

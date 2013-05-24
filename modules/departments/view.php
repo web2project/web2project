@@ -81,10 +81,13 @@ function delIt() {
 </form>
 
 <table border="0" cellpadding="4" cellspacing="0" width="100%" class="std view">
-	<tr valign="top">
+    <tr>
+        <th colspan="2"><?php echo $department->dept_name; ?></th>
+    </tr>
+    <tr valign="top">
 		<td width="50%">
 			<strong><?php echo $AppUI->_('Details'); ?></strong>
-			<table cellspacing="1" cellpadding="2" border="0" width="100%">
+			<table cellspacing="1" cellpadding="2" border="0" width="100%" class="well">
 				<tr>
 					<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Company'); ?>:</td>
 					<td class="hilite" width="100%">
@@ -94,10 +97,6 @@ function delIt() {
 							<?php echo htmlspecialchars($department->company_name, ENT_QUOTES); ?>
 						<?php } ?>
 					</td>
-				</tr>
-				<tr>
-					<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Department'); ?>:</td>
-                    <?php echo $htmlHelper->createCell('dept_name', $department->dept_name); ?>
 				</tr>
 				<tr>
 					<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Owner'); ?>:</td>
@@ -135,7 +134,7 @@ function delIt() {
 		</td>
 		<td width="50%">
 			<strong><?php echo $AppUI->_('Description'); ?></strong>
-			<table cellspacing="1" cellpadding="2" border="0" width="100%">
+			<table cellspacing="1" cellpadding="2" border="0" width="100%" class="well">
 			<tr>
                 <?php echo $htmlHelper->createCell('dept_desc', $department->dept_desc); ?>
 			</tr>

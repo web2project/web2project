@@ -84,16 +84,12 @@ $countries = w2PgetSysVal('GlobalCountries');
 
 <table border="0" cellpadding="4" cellspacing="0" class="std view">
     <tr>
-        <th><?php echo $AppUI->_('Details'); ?></th>
-        <th><?php echo $AppUI->_('Description'); ?></th>
+        <th colspan="2"><?php echo $company->company_name; ?></th>
     </tr>
 	<tr>
 		<td valign="top" width="50%">
-			<table cellspacing="1" cellpadding="2" width="100%">
-				<tr>
-					<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Company'); ?>:</td>
-                    <?php echo $htmlHelper->createCell('company_name-nolink', $company->company_name); ?>
-				</tr>
+            <strong><?php echo $AppUI->_('Details'); ?></strong>
+			<table cellspacing="1" cellpadding="2" width="100%" class="well">
 				<tr>
 					<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Owner'); ?>:</td>
                     <?php echo $htmlHelper->createCell('contact_displayname', $company->contact_name); ?>
@@ -134,7 +130,8 @@ $countries = w2PgetSysVal('GlobalCountries');
 			</table>
 		</td>
 		<td valign="top" width="50%">
-			<table cellspacing="0" cellpadding="2" border="0" width="100%">
+            <strong><?php echo $AppUI->_('Description'); ?></strong>
+			<table cellspacing="0" cellpadding="2" border="0" width="100%" class="well">
 				<tr>
                     <?php echo $htmlHelper->createCell('company_description', $company->company_description); ?>
 				</tr>		

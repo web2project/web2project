@@ -92,11 +92,12 @@ function delIt() {
 
 <table border="0" cellpadding="4" cellspacing="0" width="100%" class="std view">
     <tr>
+        <th colspan="2"><?php echo $obj->task_name; ?></th>
+    </tr>
+    <tr>
         <td width="50%" valign="top" class="view-column">
-            <table width="100%" cellspacing="1" cellpadding="2">
-                <tr>
-                    <td nowrap="nowrap" colspan="2"><strong><?php echo $AppUI->_('Details'); ?></strong></td>
-                </tr>
+            <strong><?php echo $AppUI->_('Details'); ?></strong>
+            <table width="100%" cellspacing="1" cellpadding="2" class="well">
                 <tr>
                     <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Project'); ?>:</td>
                     <td style="background-color:#<?php echo $obj->project_color_identifier; ?>">
@@ -108,10 +109,6 @@ function delIt() {
                             <?php echo htmlspecialchars($company_detail['company_name'], ENT_QUOTES); ?>
                         <?php } ?>
                     </td>
-                </tr>
-                <tr>
-                    <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Task'); ?>:</td>
-                    <td class="hilite"><strong><?php echo $obj->task_name; ?></strong></td>
                 </tr>
                 <?php if ($obj->task_parent != $obj->task_id) {
                     $obj_parent = new CTask();
@@ -157,9 +154,9 @@ function delIt() {
                     <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Time Worked'); ?>:</td>
                     <?php echo $htmlHelper->createCell('task_hours_worked', $obj->task_hours_worked . ' ' . $AppUI->_('hours')); ?>
                 </tr>
-                <tr>
-                    <td nowrap="nowrap" colspan="2"><strong><?php echo $AppUI->_('Dates and Targets'); ?></strong></td>
-                </tr>
+            </table>
+            <strong><?php echo $AppUI->_('Dates and Targets'); ?></strong>
+            <table width="100%" cellspacing="1" cellpadding="2" class="well">
                 <tr>
                     <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Start Date'); ?>:</td>
                     <?php echo $htmlHelper->createCell('task_start_datetime', $obj->task_start_date); ?>
@@ -298,10 +295,8 @@ function delIt() {
         </td>
 
         <td width="50%" valign="top" class="view-column">
-            <table cellspacing="1" cellpadding="2" border="0" width="100%">
-                <tr>
-                    <td colspan="3"><strong><?php echo $AppUI->_('Assigned Users'); ?></strong></td>
-                </tr>
+            <strong><?php echo $AppUI->_('Assigned Users'); ?></strong>
+            <table cellspacing="1" cellpadding="2" border="0" width="100%" class="well">
                 <tr>
                     <td colspan="3">
                         <?php
@@ -319,14 +314,14 @@ function delIt() {
                         ?>
                     </td>
                 </tr>
-                <tr>
-                    <td colspan="3"><strong><?php echo $AppUI->_('Dependencies'); ?></strong></td>
-                </tr>
+            </table>
+            <strong><?php echo $AppUI->_('Dependencies'); ?></strong>
+            <table width="100%" cellspacing="1" cellpadding="2" class="well">
                 <tr>
                     <td colspan="3">
                     <?php
                         $taskDep = $obj->getDependencyList($task_id);
-                        $s = count($taskDep) == 0 ? '<tr><td bgcolor="#ffffff">' . $AppUI->_('none') . '</td></tr>' : '';
+                        $s = count($taskDep) == 0 ? '<tr><td>' . $AppUI->_('none') . '</td></tr>' : '';
                         foreach ($taskDep as $key => $array) {
                             $s .= '<tr><td class="hilite" width=80%>';
                             $s .= '<a href="./index.php?m=tasks&a=view&task_id=' . $key . '">' . $array['task_name'] . '</a>';
@@ -339,14 +334,14 @@ function delIt() {
                     ?>
                     </td>
                 </tr>
-                <tr>
-                    <td colspan="3"><strong><?php echo $AppUI->_('Tasks depending on this Task'); ?></strong></td>
-                </tr>
+            </table>
+            <strong><?php echo $AppUI->_('Tasks depending on this Task'); ?></strong>
+            <table width="100%" cellspacing="1" cellpadding="2" class="well">
                 <tr>
                     <td colspan="3">
                     <?php
                         $dependingTasks = $obj->getDependentTaskList($task_id);
-                        $s = count($dependingTasks) == 0 ? '<tr><td bgcolor="#ffffff">' . $AppUI->_('none') . '</td></tr>' : '';
+                        $s = count($dependingTasks) == 0 ? '<tr><td>' . $AppUI->_('none') . '</td></tr>' : '';
                         foreach ($dependingTasks as $key => $array) {
                             $s .= '<tr><td class="hilite" width=80%>';
                             $s .= '<a href="./index.php?m=tasks&a=view&task_id=' . $key . '">' . $array['task_name'] . '</a>';
@@ -358,11 +353,9 @@ function delIt() {
                     ?>
                     </td>
                 </tr>
-                <tr>
-                    <td colspan="3" nowrap="nowrap">
-                        <strong><?php echo $AppUI->_('Description'); ?></strong><br />
-                    </td>
-                 </tr>
+            </table>
+            <strong><?php echo $AppUI->_('Description'); ?></strong>
+            <table width="100%" cellspacing="1" cellpadding="2" class="well">
                 <tr>
                     <?php echo $htmlHelper->createCell('task_description', $obj->task_description); ?>
                 </tr>
