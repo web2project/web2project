@@ -34,6 +34,7 @@ $htmlHelper->df .= ' ' . $AppUI->getPref('TIMEFORMAT');
     </tr>
 <?php
 
+$items_displayed = false;
 $perms = $AppUI->acl();
 
 for ($i = ($page - 1) * $xpg_pagesize; $i < $page * $xpg_pagesize && $i < $xpg_totalrecs; $i++) {
@@ -51,6 +52,10 @@ for ($i = ($page - 1) * $xpg_pagesize; $i < $page * $xpg_pagesize && $i < $xpg_t
     echo $htmlHelper->createCell('history_description', $row['history_description']);
     echo $htmlHelper->createCell('history_user', $row['history_user']);
     echo '</tr>';
+    $items_displayed = true;
+}
+if (!$items_displayed) {
+	echo '<tr><td colspan="'.count($fieldNames).'">' . $AppUI->_('No data available') . '</td></tr>';
 }
 ?>
 </table>

@@ -2183,6 +2183,9 @@ function displayFiles($AppUI, $folder_id, $task_id, $project_id, $company_id) {
 		$s .= $hidden_table;
 		$hidden_table = '';
 	}
+    if (0 == count($files)) {
+        $s .= '<tr><td colspan="' . (count($fieldNames) + 3 ) . '">' . $AppUI->_('No data available') . '</td></tr>';
+    }
 	return $s;
 }
 
