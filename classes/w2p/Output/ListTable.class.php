@@ -8,18 +8,18 @@
  * @author      D. Keith Casey, Jr. <contrib@caseysoftware.com>
  */
 
-class w2p_Output_ListTable
+class w2p_Output_ListTable extends w2p_Output_HTMLHelper
 {
     protected $_AppUI = null;
-    protected $_m     = null;
 
     protected $_fieldKeys = array();
     protected $_fieldNames = array();
 
-    public function __construct($AppUI, $m)
+    public function __construct($AppUI)
     {
         $this->_AppUI = $AppUI;
-        $this->_m = $m;
+
+        parent::__construct($AppUI);
     }
 
     public function startTable($classes = 'tbl list')
@@ -35,7 +35,7 @@ class w2p_Output_ListTable
         $cells = '';
         foreach ($this->_fieldNames as $index => $name) {
             $link = ($sortable) ? '<a href="?m=' . $m . '&orderby=' . $this->_fieldKeys[$index] . '" class="hdr">' : '';
-            $link .= $this->_AppUI->_($this->_fieldNames[$index]);
+            $link .= $this->_AppUI->_($name);
             $link .= ($sortable) ? '</a>' : '';
             $cells .= '<th>' . $link . '</th>';
         }
@@ -43,12 +43,27 @@ class w2p_Output_ListTable
         return '<tr>' . $cells . '</tr>';
     }
 
-    public function buildRow($data, $htmlHelper, $customLookups)
+    public function buildRows($allRows, $customLookups = array())
+    {
+        $body = '';
+
+        if (count($allRows) > 0) {
+            foreach ($allRows as $row) {
+                $body .= $this->buildRow($row, $customLookups);
+            }
+        } else {
+            $body .= $this->buildEmptyRow();
+        }
+
+        return $body;
+    }
+
+    public function buildRow($rowData, $customLookups = array())
     {
         $row = '<tr>';
-        $htmlHelper->stageRowData($data);
-        foreach ($this->_fieldKeys as $index => $column) {
-            $row .= $htmlHelper->createCell($this->_fieldKeys[$index], $data[$this->_fieldKeys[$index]], $customLookups);
+        $this->stageRowData($rowData);
+        foreach ($this->_fieldKeys as $column) {
+            $row .= $this->createCell($column, $rowData[$column], $customLookups);
         }
         $row .= '</tr>';
 
