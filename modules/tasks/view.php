@@ -330,7 +330,7 @@ function delIt() {
                             $s .= '</tr>';
 
                         }
-                        echo '<table width="100%" cellspacing="1" bgcolor="black">' . $s . '</table>';
+                        echo '<table width="100%" cellspacing="1" class="list">' . $s . '</table>';
                     ?>
                     </td>
                 </tr>
@@ -349,7 +349,7 @@ function delIt() {
                             $s .= $htmlHelper->createCell('task_percent_complete', $array['task_percent_complete']);
                             $s .= '</tr>';
                         }
-                        echo '<table width="100%" cellspacing="1" bgcolor="black" class="list">' . $s . '</table>';
+                        echo '<table width="100%" cellspacing="1" class="list">' . $s . '</table>';
                     ?>
                     </td>
                 </tr>
