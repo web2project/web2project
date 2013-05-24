@@ -3,7 +3,7 @@ if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
 
-global $dept_id, $dept, $company_id;
+global $AppUI, $dept_id, $dept, $company_id;
 
 $contacts = CDepartment::getContactList($AppUI, $dept_id);
 

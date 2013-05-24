@@ -3,7 +3,7 @@ if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
 
-global $a, $addPwOiD, $buffer, $dept_id, $department, $min_view,
+global $AppUI, $a, $addPwOiD, $buffer, $dept_id, $department, $min_view,
 	$m, $priority, $projects, $tab, $user_id, $orderdir, $orderby;
 
 $perms = &$AppUI->acl();
