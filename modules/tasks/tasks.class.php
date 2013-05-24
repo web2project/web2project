@@ -1799,6 +1799,7 @@ class CTask extends w2p_Core_BaseObject
     {
         $q = $this->_getQuery();
         $q->addQuery('td.dependencies_req_task_id, t.task_name, t.task_percent_complete');
+        $q->addQuery('t.task_id, t.task_start_date, t.task_end_date');
         $q->addTable('tasks', 't');
         $q->addTable('task_dependencies', 'td');
         $q->addWhere('td.dependencies_req_task_id = t.task_id');
@@ -1816,6 +1817,7 @@ class CTask extends w2p_Core_BaseObject
     {
         $q = $this->_getQuery();
         $q->addQuery('td.dependencies_task_id, t.task_name, t.task_percent_complete');
+        $q->addQuery('t.task_id, t.task_start_date, t.task_end_date');
         $q->addQuery('task_start_date, task_end_date, task_dynamic');
         $q->addQuery('task_duration, task_duration_type');
         $q->addTable('tasks', 't');

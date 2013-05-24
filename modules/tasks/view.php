@@ -297,62 +297,61 @@ function delIt() {
         <td width="50%" valign="top" class="view-column">
             <strong><?php echo $AppUI->_('Assigned Users'); ?></strong>
             <table cellspacing="1" cellpadding="2" border="0" width="100%" class="well">
-                <tr>
-                    <td colspan="3">
-                        <?php
-                            $s = '';
-                            $s = count($users) == 0 ? '<tr><td bgcolor="#ffffff">' . $AppUI->_('none') . '</td></tr>' : '';
-                            foreach ($users as $row) {
-                                $s .= '<tr>';
-                                $s .= '<td class="hilite" width=80%>';
-                                $s .= w2p_email($row['user_email'], $row['contact_display_name']);
-                                $s .= '</td>';
-                                $s .= $htmlHelper->createCell('perc_assignment', $row['perc_assignment']);
-                                $s .= '</tr>';
-                            }
-                            echo '<table width="100%" cellspacing="1" bgcolor="black">' . $s . '</table>';
-                        ?>
-                    </td>
-                </tr>
+                <?php
+                $s = count($users) == 0 ? '<tr><td bgcolor="#ffffff">' . $AppUI->_('none') . '</td></tr>' : '';
+                foreach ($users as $row) {
+                    $s .= '<tr>';
+                    $s .= '<td class="hilite" width=80%>';
+                    $s .= w2p_email($row['user_email'], $row['contact_display_name']);
+                    $s .= '</td>';
+                    $s .= $htmlHelper->createCell('perc_assignment', $row['perc_assignment']);
+                    $s .= '</tr>';
+                }
+                echo $s;
+                ?>
             </table>
             <strong><?php echo $AppUI->_('Dependencies'); ?></strong>
-            <table width="100%" cellspacing="1" cellpadding="2" class="well">
-                <tr>
-                    <td colspan="3">
-                    <?php
-                        $taskDep = $obj->getDependencyList($task_id);
-                        $s = count($taskDep) == 0 ? '<tr><td>' . $AppUI->_('none') . '</td></tr>' : '';
-                        foreach ($taskDep as $key => $array) {
-                            $s .= '<tr><td class="hilite" width=80%>';
-                            $s .= '<a href="./index.php?m=tasks&a=view&task_id=' . $key . '">' . $array['task_name'] . '</a>';
-							$s .= '</td>';
-                            $s .= $htmlHelper->createCell('task_percent_complete', $array['task_percent_complete']);
-                            $s .= '</tr>';
+            <table width="100%" cellspacing="1" cellpadding="2" class="tbl list well">
+                <?php
+                $taskDep = $obj->getDependencyList($task_id);
+                $s = count($taskDep) == 0 ? '<tr><td>' . $AppUI->_('none') . '</td></tr>' :
+                    '<tr><th>' . $AppUI->_('Task') . '</th>' .
+                    '<th>' . $AppUI->_('Work') . '</th>' .
+                    '<th>' . $AppUI->_('Start Date') . '</th>' .
+                    '<th>' . $AppUI->_('End Date') . '</th></tr>';
+                foreach ($taskDep as $key => $array) {
+                    $htmlHelper->stageRowData($array);
+                    $s .= '<tr>';
+                    $s .= $htmlHelper->createCell('task_name', $array['task_name']);
+                    $s .= $htmlHelper->createCell('task_percent_complete', $array['task_percent_complete']);
+                    $s .= $htmlHelper->createCell('task_start_date', $array['task_start_date']);
+                    $s .= $htmlHelper->createCell('task_end_date', $array['task_end_date']);
+                    $s .= '</tr>';
 
-                        }
-                        echo '<table width="100%" cellspacing="1" class="list">' . $s . '</table>';
-                    ?>
-                    </td>
-                </tr>
+                }
+                echo $s;
+                ?>
             </table>
             <strong><?php echo $AppUI->_('Tasks depending on this Task'); ?></strong>
-            <table width="100%" cellspacing="1" cellpadding="2" class="well">
-                <tr>
-                    <td colspan="3">
-                    <?php
-                        $dependingTasks = $obj->getDependentTaskList($task_id);
-                        $s = count($dependingTasks) == 0 ? '<tr><td>' . $AppUI->_('none') . '</td></tr>' : '';
-                        foreach ($dependingTasks as $key => $array) {
-                            $s .= '<tr><td class="hilite" width=80%>';
-                            $s .= '<a href="./index.php?m=tasks&a=view&task_id=' . $key . '">' . $array['task_name'] . '</a>';
-							$s .= '</td>';
-                            $s .= $htmlHelper->createCell('task_percent_complete', $array['task_percent_complete']);
-                            $s .= '</tr>';
-                        }
-                        echo '<table width="100%" cellspacing="1" class="list">' . $s . '</table>';
-                    ?>
-                    </td>
-                </tr>
+            <table width="100%" cellspacing="1" cellpadding="2" class="tbl list well">
+                <?php
+                $dependingTasks = $obj->getDependentTaskList($task_id);
+                $s = count($dependingTasks) == 0 ? '<tr><td>' . $AppUI->_('none') . '</td></tr>' :
+                    '<tr><th>' . $AppUI->_('Task') . '</th>' .
+                    '<th>' . $AppUI->_('Work') . '</th>' .
+                    '<th>' . $AppUI->_('Start Date') . '</th>' .
+                    '<th>' . $AppUI->_('End Date') . '</th></tr>';
+                foreach ($dependingTasks as $key => $array) {
+                    $htmlHelper->stageRowData($array);
+                    $s .= '<tr>';
+                    $s .= $htmlHelper->createCell('task_name', $array['task_name']);
+                    $s .= $htmlHelper->createCell('task_percent_complete', $array['task_percent_complete']);
+                    $s .= $htmlHelper->createCell('task_start_date', $array['task_start_date']);
+                    $s .= $htmlHelper->createCell('task_end_date', $array['task_end_date']);
+                    $s .= '</tr>';
+                }
+                echo $s;
+                ?>
             </table>
             <strong><?php echo $AppUI->_('Description'); ?></strong>
             <table width="100%" cellspacing="1" cellpadding="2" class="well">
