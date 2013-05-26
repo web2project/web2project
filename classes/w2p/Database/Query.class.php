@@ -40,4 +40,12 @@ class w2p_Database_Query extends w2p_Database_oldQuery
 
 		$this->clear();
 	}
+
+	/** Prepare the SELECT component of the SQL query
+	 */
+	public function prepareSelect() {
+        $sql = 'SELECT ';
+
+        return $sql;
+	}
 }

@@ -578,62 +578,6 @@ class w2p_Database_oldQuery {
 		dprint(__file__, __line__, 2, $q);
 	}
 
-	/** Prepare the SELECT component of the SQL query
-	 */
-	public function prepareSelect() {
-        $q = 'SELECT ';
-        if ($this->include_count) {
-            $q .= 'SQL_CALC_FOUND_ROWS ';
-        }
-        if (isset($this->query)) {
-            if (is_array($this->query)) {
-                $inselect = false;
-                $q .= implode(',', $this->query);
-            } else {
-                $q .= $this->query;
-            }
-        } else {
-            $q .= '*';
-        }
-        $q .= ' FROM (';
-        if (isset($this->table_list)) {
-            if (is_array($this->table_list)) {
-                $intable = false;
-                /* added brackets for MySQL > 5.0.12 compatibility
-                 ** patch #1358907 submitted to sf.net on 2005-11-17 04:12 by ilgiz
-                 */
-                $q .= '(';
-                foreach ($this->table_list as $table_id => $table) {
-                    if ($intable) {
-                        $q .= ',';
-                    } else {
-                        $intable = true;
-                    }
-                    $q .= $this->quote_db($this->_table_prefix . $table);
-                    if (!is_numeric($table_id)) {
-                        $q .= ' AS ' . $table_id;
-                    }
-                }
-                /* added brackets for MySQL > 5.0.12 compatibility
-                 ** patch #1358907 submitted to sf.net on 2005-11-17 04:12 by ilgiz
-                 */
-                $q .= ')';
-            } else {
-                $q .= $this->_table_prefix . $this->table_list;
-            }
-            $q .= ')';
-        } else {
-            return false;
-        }
-        $q .= $this->make_join($this->join);
-        $q .= $this->make_where_clause($this->where);
-        $q .= $this->make_group_clause($this->group_by);
-        $q .= $this->make_having_clause($this->having);
-        $q .= $this->make_order_clause($this->order_by);
-        $q .= $this->make_limit_clause($this->limit, $this->offset);
-        return $q;
-	}
-
 	/** Prepare the UPDATE component of the SQL query
 	 */
 	public function prepareUpdate() {
