@@ -129,29 +129,6 @@ class w2p_Database_oldQuery {
 		$this->_query_id = null;
 	}
 
-	/**
-     * Instead of concatenating here, retrieve the relevant fields and do
-     *   it in PHP. It won't necessarily be faster but should be more
-     *   supportable cross-databasewise.
-	 * @deprecated
-	 */
-	public function concat() {
-		trigger_error("concat() has been deprecated in v3.0 and will be removed by v4.0. Please concatenate in PHP instead.", E_USER_NOTICE );
-        $arr = func_get_args();
-		$conc_str = call_user_func_array(array(&$this->_db, 'Concat'), $arr);
-		return $conc_str;
-	}
-
-	/** Get database specific SQL used to check for null values.
-	 *
-	 * Calls the ADODB IfNull method
-	 * @return String containing SQL to check for null field value
-	 */
-	public function ifNull($field, $nullReplacementValue) {
-        trigger_error("ifNull() has been deprecated in v3.0 and will be removed by v4.0. There is no replacement.", E_USER_NOTICE );
-        return $this->_db->IfNull($field, $nullReplacementValue);
-	}
-
 	/** Add item to an internal associative array
 	 *
 	 * Used internally with w2p_Database_Query
@@ -374,82 +351,6 @@ class w2p_Database_oldQuery {
 		$this->type = 'alter';
 	}
 
-	/** Add a field definition for usage with table creation/alteration
-	 * @param $name The name of the field
-	 * @param $type The type of field to create
-	 */
-	public function addField($name, $type) {
-		if (!is_array($this->create_definition)) {
-			$this->create_definition = array();
-		}
-		$this->create_definition[] = array('action' => 'ADD', 'type' => '', 'spec' => $name . ' ' . $type);
-        trigger_error("w2p_Database_Query->addField() has been deprecated in v3.0 and will be removed by v4.0.", E_USER_NOTICE );
-	}
-
-	/**
-	 * Alter a field definition for usage with table alteration
-	 * @param $name The name of the field
-	 * @param $type The type of the field
-	 */
-	public function alterField($name, $type) {
-		if (!is_array($this->create_definition)) {
-			$this->create_definition = array();
-		}
-		$this->create_definition[] = array('action' => 'CHANGE', 'type' => '', 'spec' => $name . ' ' . $name . ' ' . $type);
-        trigger_error("w2p_Database_Query->alterField() has been deprecated in v3.0 and will be removed by v4.0.", E_USER_NOTICE );
-	}
-
-	/** Drop a field from table definition or from an existing table
-	 * @param $name The name of the field to drop
-	 */
-	public function dropField($name) {
-		if (!is_array($this->create_definition)) {
-			$this->create_definition = array();
-		}
-		$this->create_definition[] = array('action' => 'DROP', 'type' => '', 'spec' => $name);
-        trigger_error("w2p_Database_Query->dropField() has been deprecated in v3.0 and will be removed by v4.0.", E_USER_NOTICE );
-	}
-
-	/** Add an index. Fields should be separated by commas to create a multi-field index
-	 */
-	public function addIndex($name, $type) {
-		if (!is_array($this->create_definition)) {
-			$this->create_definition = array();
-		}
-		$this->create_definition[] = array('action' => 'ADD', 'type' => 'INDEX', 'spec' => '(' . $name . ') ' . $type);
-        trigger_error("w2p_Database_Query->addIndex() has been deprecated in v3.0 and will be removed by v4.0.", E_USER_NOTICE );
-	}
-
-	/** Add a primary key attribute. Fields should be separated by commas to create a multi-field primary key
-	 */
-	public function addPrimary($name) {
-		if (!is_array($this->create_definition)) {
-			$this->create_definition = array();
-		}
-		$this->create_definition[] = array('action' => 'ADD', 'type' => 'PRIMARY KEY', 'spec' => '(' . $name . ')');
-        trigger_error("w2p_Database_Query->addPrimary() has been deprecated in v3.0 and will be removed by v4.0.", E_USER_NOTICE );
-	}
-
-	/** Drop an index
-	 */
-	public function dropIndex($name) {
-		if (!is_array($this->create_definition)) {
-			$this->create_definition = array();
-		}
-		$this->create_definition[] = array('action' => 'DROP', 'type' => 'INDEX', 'spec' => $name);
-        trigger_error("w2p_Database_Query->dropIndex() has been deprecated in v3.0 and will be removed by v4.0.", E_USER_NOTICE );
-	}
-
-	/** Remove a primary key attribute from a field
-	 */
-	public function dropPrimary() {
-		if (!is_array($this->create_definition)) {
-			$this->create_definition = array();
-		}
-		$this->create_definition[] = array('action' => 'DROP', 'type' => 'PRIMARY KEY', 'spec' => '');
-        trigger_error("w2p_Database_Query->dropPrimary() has been deprecated in v3.0 and will be removed by v4.0.", E_USER_NOTICE );
-	}
-
 	/** Set a table creation definition from supplied array
 	 * @param $def Array containing table definition
 	 */
@@ -583,49 +484,24 @@ class w2p_Database_oldQuery {
         return $ts->format($df);
     }
 
-	/** Generates the token representing the 'now' datetime
-	 *
-	 * The 'now' datetime is represented just a bit differently from database
-	 * engine to engine.  Therefore this method checks to see what database is
-	 * being used and returns the string to calculate the value.  It does *not*
-	 * calculate the value itself.
+	/**
+     * Generates the token representing the 'now' datetime
 	 */
 	public function dbfnNow() {
-		$dbType = strtolower(trim(w2PgetConfig('dbtype')));
-
-		switch ($dbType) {
-			case 'oci8':
-			case 'oracle':
-				return 'current_date';
-            case 'mysql':
-			default:
-				return 'NOW()';
-		}
+        return 'NOW()';
 	}
 
-	/** Add a date difference clause and name the result
-	 *
-	 * Each database engine represents date math just a little bit differently.
-	 * Therefore, this method checks to see what database is being used and adds a
-	 * date difference appropriately.
+	/**
+     * Add a date difference clause and name the result
 	 *
 	 * @param	$date1			This is the starting date
 	 * @param	$date2			This is the ending date
 	 */
 	public function dbfnDateDiff($date1 = '', $date2 = '') {
-		$dbType = strtolower(trim(w2PgetConfig('dbtype')));
-
 		$date1 = ($date1 == '') ? $this->dbfnNow() : $date1;
 		$date2 = ($date2 == '') ? $this->dbfnNow() : $date2;
 
-		switch ($dbType) {
-			case 'oci8':
-			case 'oracle':
-				return $date1 . ' - ' . $date2;
-            case 'mysql':
-			default:
-				return 'DATEDIFF(' . $date1 . ', ' . $date2 . ')';
-		}
+        return 'DATEDIFF(' . $date1 . ', ' . $date2 . ')';
 	}
 
 	/** Adds a given unit interval to a date
@@ -635,18 +511,9 @@ class w2p_Database_oldQuery {
 	 * @param	$unit			This is the type of unit we are adding to the date
 	 */
 	public function dbfnDateAdd($date, $interval = 0, $unit = 'DAY') {
-		$dbType = strtolower(trim(w2PgetConfig('dbtype')));
-
 		$date = ($date == '') ? $this->dbfnNow() : $date;
 
-		switch ($dbType) {
-			case 'oci8':
-			case 'oracle':
-				return '(' . $date . ' + interval \'' . $unit . '\' ' . $interval . ')';
-            case 'mysql':
-			default:
-				return 'DATE_ADD(' . $date . ', INTERVAL ' . $interval . ' ' . $unit . ')';
-		}
+        return 'DATE_ADD(' . $date . ', INTERVAL ' . $interval . ' ' . $unit . ')';
 	}
 
 	/** Set a row limit on the query
@@ -744,218 +611,112 @@ class w2p_Database_oldQuery {
 	/** Prepare the SELECT component of the SQL query
 	 */
 	public function prepareSelect() {
-		switch (strtolower(trim(w2PgetConfig('dbtype')))) {
-			case 'oci8':
-			case 'oracle':
-				$q = 'SELECT ';
-				if (isset($this->query)) {
-					if (is_array($this->query)) {
-						$inselect = false;
-						$q .= implode(',', $this->query);
-					} else {
-						$q .= $this->query;
-					}
-				} else {
-					$q .= '*';
-				}
-				$q .= ' FROM ';
-				if (isset($this->table_list)) {
-					if (is_array($this->table_list)) {
-						$intable = false;
-						foreach ($this->table_list as $table_id => $table) {
-							if ($intable) {
-								$q .= ',';
-							} else {
-								$intable = true;
-							}
-							$q .= $this->_table_prefix . $table;
-							if (!is_numeric($table_id)) {
-								$q .= ' ' . $table_id;
-							}
-						}
-					} else {
-						$q .= $this->_table_prefix . $this->table_list;
-					}
-				} else {
-					return false;
-				}
-				$q .= $this->make_join($this->join);
-				$q .= $this->make_where_clause($this->where);
-				$q .= $this->make_group_clause($this->group_by);
-				$q .= $this->make_having_clause($this->having);
-				$q .= $this->make_order_clause($this->order_by);
-				$q .= $this->make_limit_clause($this->limit, $this->offset);
-				return $q;
-				break;
-			default:
-				//mySQL
-				$q = 'SELECT ';
-				if ($this->include_count) {
-					$q .= 'SQL_CALC_FOUND_ROWS ';
-				}
-				if (isset($this->query)) {
-					if (is_array($this->query)) {
-						$inselect = false;
-						$q .= implode(',', $this->query);
-					} else {
-						$q .= $this->query;
-					}
-				} else {
-					$q .= '*';
-				}
-				$q .= ' FROM (';
-				if (isset($this->table_list)) {
-					if (is_array($this->table_list)) {
-						$intable = false;
-						/* added brackets for MySQL > 5.0.12 compatibility
-						 ** patch #1358907 submitted to sf.net on 2005-11-17 04:12 by ilgiz
-						 */
-						$q .= '(';
-						foreach ($this->table_list as $table_id => $table) {
-							if ($intable) {
-								$q .= ',';
-							} else {
-								$intable = true;
-							}
-							$q .= $this->quote_db($this->_table_prefix . $table);
-							if (!is_numeric($table_id)) {
-								$q .= ' AS ' . $table_id;
-							}
-						}
-						/* added brackets for MySQL > 5.0.12 compatibility
-						 ** patch #1358907 submitted to sf.net on 2005-11-17 04:12 by ilgiz
-						 */
-						$q .= ')';
-					} else {
-						$q .= $this->_table_prefix . $this->table_list;
-					}
-					$q .= ')';
-				} else {
-					return false;
-				}
-				$q .= $this->make_join($this->join);
-				$q .= $this->make_where_clause($this->where);
-				$q .= $this->make_group_clause($this->group_by);
-				$q .= $this->make_having_clause($this->having);
-				$q .= $this->make_order_clause($this->order_by);
-				$q .= $this->make_limit_clause($this->limit, $this->offset);
-				return $q;
-		}
+        $q = 'SELECT ';
+        if ($this->include_count) {
+            $q .= 'SQL_CALC_FOUND_ROWS ';
+        }
+        if (isset($this->query)) {
+            if (is_array($this->query)) {
+                $inselect = false;
+                $q .= implode(',', $this->query);
+            } else {
+                $q .= $this->query;
+            }
+        } else {
+            $q .= '*';
+        }
+        $q .= ' FROM (';
+        if (isset($this->table_list)) {
+            if (is_array($this->table_list)) {
+                $intable = false;
+                /* added brackets for MySQL > 5.0.12 compatibility
+                 ** patch #1358907 submitted to sf.net on 2005-11-17 04:12 by ilgiz
+                 */
+                $q .= '(';
+                foreach ($this->table_list as $table_id => $table) {
+                    if ($intable) {
+                        $q .= ',';
+                    } else {
+                        $intable = true;
+                    }
+                    $q .= $this->quote_db($this->_table_prefix . $table);
+                    if (!is_numeric($table_id)) {
+                        $q .= ' AS ' . $table_id;
+                    }
+                }
+                /* added brackets for MySQL > 5.0.12 compatibility
+                 ** patch #1358907 submitted to sf.net on 2005-11-17 04:12 by ilgiz
+                 */
+                $q .= ')';
+            } else {
+                $q .= $this->_table_prefix . $this->table_list;
+            }
+            $q .= ')';
+        } else {
+            return false;
+        }
+        $q .= $this->make_join($this->join);
+        $q .= $this->make_where_clause($this->where);
+        $q .= $this->make_group_clause($this->group_by);
+        $q .= $this->make_having_clause($this->having);
+        $q .= $this->make_order_clause($this->order_by);
+        $q .= $this->make_limit_clause($this->limit, $this->offset);
+        return $q;
 	}
 
 	/** Prepare the UPDATE component of the SQL query
 	 */
 	public function prepareUpdate() {
-		// You can only update one table, so we get the table detail
-		switch (strtolower(trim(w2PgetConfig('dbtype')))) {
-			case 'oci8':
-			case 'oracle':
-				$q = 'UPDATE ';
-				if (isset($this->table_list)) {
-					if (is_array($this->table_list)) {
-						reset($this->table_list);
-						// Grab the first record
-						list($key, $table) = each($this->table_list);
-					} else {
-						$table = $this->table_list;
-					}
-				} else {
-					return false;
-				}
-				$q .= $this->_table_prefix . $table;
+        $q = 'UPDATE ';
+        if (isset($this->table_list)) {
+            if (is_array($this->table_list)) {
+                reset($this->table_list);
+                // Grab the first record
+                list($key, $table) = each($this->table_list);
+            } else {
+                $table = $this->table_list;
+            }
+        } else {
+            return false;
+        }
+        $q .= $this->quote_db($this->_table_prefix . $table);
 
-				$q .= ' SET ';
-				$sets = '';
-				foreach ($this->update_list as $field => $value) {
-					if ($sets) {
-						$sets .= ', ';
-					}
-					$sets .= $field . ' = ' . $this->quote($value);
-				}
-				$q .= $sets;
-				$q .= $this->make_where_clause($this->where);
-				return $q;
-				break;
-			default:
-				//mySQL
-				$q = 'UPDATE ';
-				if (isset($this->table_list)) {
-					if (is_array($this->table_list)) {
-						reset($this->table_list);
-						// Grab the first record
-						list($key, $table) = each($this->table_list);
-					} else {
-						$table = $this->table_list;
-					}
-				} else {
-					return false;
-				}
-				$q .= $this->quote_db($this->_table_prefix . $table);
-
-				$q .= ' SET ';
-				$sets = '';
-				foreach ($this->update_list as $field => $value) {
-					if ($sets) {
-						$sets .= ', ';
-					}
-					$sets .= $this->quote_db($field) . ' = ' . $value;
-				}
-				$q .= $sets;
-				$q .= $this->make_where_clause($this->where);
-				return $q;
-		}
+        $q .= ' SET ';
+        $sets = '';
+        foreach ($this->update_list as $field => $value) {
+            if ($sets) {
+                $sets .= ', ';
+            }
+            $sets .= $this->quote_db($field) . ' = ' . $value;
+        }
+        $q .= $sets;
+        $q .= $this->make_where_clause($this->where);
+        return $q;
 	}
 
 	/** Prepare the INSERT component of the SQL query
 	 */
 	public function prepareInsert() {
-		switch (strtolower(trim(w2PgetConfig('dbtype')))) {
-			case 'oci8':
-			case 'oracle':
-				$q = 'INSERT INTO ';
-				if (isset($this->table_list)) {
-					if (is_array($this->table_list)) {
-						reset($this->table_list);
-						// Grab the first record
-						list($key, $table) = each($this->table_list);
-					} else {
-						$table = $this->table_list;
-					}
-				} else {
-					return false;
-				}
-				$q .= $this->_table_prefix . $table;
+        $q = 'INSERT INTO ';
+        if (isset($this->table_list)) {
+            if (is_array($this->table_list)) {
+                reset($this->table_list);
+                // Grab the first record
+                list($key, $table) = each($this->table_list);
+            } else {
+                $table = $this->table_list;
+            }
+        } else {
+            return false;
+        }
+        $q .= $this->quote_db($this->_table_prefix . $table);
 
-                $quotedFieldnames = array_map(array($this, 'quote_db'), array_keys($this->value_list));
-                $fieldlist = implode(',', $quotedFieldnames);
-                $valuelist = implode(',', $this->value_list);
+        $quotedFieldnames = array_map(array($this, 'quote_db'), array_keys($this->value_list));
+        $fieldlist = implode(',', $quotedFieldnames);
+        $valuelist = implode(',', $this->value_list);
 
-				$q .= '(' . $fieldlist . ') VALUES (' . $valuelist . ')';
-				return $q;
-				break;
-			default:
-				//mySQL
-				$q = 'INSERT INTO ';
-				if (isset($this->table_list)) {
-					if (is_array($this->table_list)) {
-						reset($this->table_list);
-						// Grab the first record
-						list($key, $table) = each($this->table_list);
-					} else {
-						$table = $this->table_list;
-					}
-				} else {
-					return false;
-				}
-				$q .= $this->quote_db($this->_table_prefix . $table);
-
-                $quotedFieldnames = array_map(array($this, 'quote_db'), array_keys($this->value_list));
-                $fieldlist = implode(',', $quotedFieldnames);
-                $valuelist = implode(',', $this->value_list);
-
-				$q .= '(' . $fieldlist . ') VALUES (' . $valuelist . ')';
-				return $q;
-		}
+        $q .= '(' . $fieldlist . ') VALUES (' . $valuelist . ')';
+        return $q;
 	}
 
 	/** Prepare the INSERT component of the SQL query
@@ -986,94 +747,46 @@ class w2p_Database_oldQuery {
 	/** Prepare the REPLACE component of the SQL query
 	 */
 	public function prepareReplace() {
-		switch (strtolower(trim(w2PgetConfig('dbtype')))) {
-			case 'oci8':
-			case 'oracle':
-				$q = 'REPLACE INTO ';
-				if (isset($this->table_list)) {
-					if (is_array($this->table_list)) {
-						reset($this->table_list);
-						// Grab the first record
-						list($key, $table) = each($this->table_list);
-					} else {
-						$table = $this->table_list;
-					}
-				} else {
-					return false;
-				}
-				$q .= $this->_table_prefix . $table;
+        $q = 'REPLACE INTO ';
+        if (isset($this->table_list)) {
+            if (is_array($this->table_list)) {
+                reset($this->table_list);
+                // Grab the first record
+                list($key, $table) = each($this->table_list);
+            } else {
+                $table = $this->table_list;
+            }
+        } else {
+            return false;
+        }
+        $q .= $this->quote_db($this->_table_prefix . $table);
 
-				$quotedFieldnames = array_map(array($this, 'quote_db'), array_keys($this->value_list));
-                $fieldlist = implode(',', $quotedFieldnames);
-                $valuelist = implode(',', $this->value_list);
-
-				$q .= '(' . $fieldlist . ') VALUES (' . $valuelist . ')';
-				return $q;
-				break;
-			default:
-				//mySQL
-				$q = 'REPLACE INTO ';
-				if (isset($this->table_list)) {
-					if (is_array($this->table_list)) {
-						reset($this->table_list);
-						// Grab the first record
-						list($key, $table) = each($this->table_list);
-					} else {
-						$table = $this->table_list;
-					}
-				} else {
-					return false;
-				}
-				$q .= $this->quote_db($this->_table_prefix . $table);
-
-				$quotedFieldnames = array_map(array($this, 'quote_db'), array_keys($this->value_list));
-                $fieldlist = implode(',', $quotedFieldnames);
-                $valuelist = implode(',', $this->value_list);
+        $quotedFieldnames = array_map(array($this, 'quote_db'), array_keys($this->value_list));
+        $fieldlist = implode(',', $quotedFieldnames);
+        $valuelist = implode(',', $this->value_list);
 
 
-				$q .= '(' . $fieldlist . ') VALUES (' . $valuelist . ')';
-				return $q;
-		}
+        $q .= '(' . $fieldlist . ') VALUES (' . $valuelist . ')';
+        return $q;
 	}
 
 	/** Prepare the DELETE component of the SQL query
 	 */
 	public function prepareDelete() {
-		switch (strtolower(trim(w2PgetConfig('dbtype')))) {
-			case 'oci8':
-			case 'oracle':
-				$q = 'DELETE FROM ';
-				if (isset($this->table_list)) {
-					if (is_array($this->table_list)) {
-						// Grab the first record
-						list($key, $table) = each($this->table_list);
-					} else {
-						$table = $this->table_list;
-					}
-				} else {
-					return false;
-				}
-				$q .= $this->_table_prefix . $table;
-				$q .= $this->make_where_clause($this->where);
-				return $q;
-				break;
-			default:
-				//mySQL
-				$q = 'DELETE FROM ';
-				if (isset($this->table_list)) {
-					if (is_array($this->table_list)) {
-						// Grab the first record
-						list($key, $table) = each($this->table_list);
-					} else {
-						$table = $this->table_list;
-					}
-				} else {
-					return false;
-				}
-				$q .= $this->quote_db($this->_table_prefix . $table);
-				$q .= $this->make_where_clause($this->where);
-				return $q;
-		}
+        $q = 'DELETE FROM ';
+        if (isset($this->table_list)) {
+            if (is_array($this->table_list)) {
+                // Grab the first record
+                list($key, $table) = each($this->table_list);
+            } else {
+                $table = $this->table_list;
+            }
+        } else {
+            return false;
+        }
+        $q .= $this->quote_db($this->_table_prefix . $table);
+        $q .= $this->make_where_clause($this->where);
+        return $q;
 	}
 
 	/** Prepare the ALTER component of the SQL query
@@ -1240,14 +953,6 @@ class w2p_Database_oldQuery {
 		return $hash;
 	}
 
-	/**
-	 *
-	 * @deprecated
-	 */
-	public function loadArrayList() {
-        trigger_error("loadArrayList has been deprecated in v3.0 to comply with the license change.", E_USER_NOTICE );
-	}
-
 	/** Load an indexed array containing the first column of results only
 	 * @return Indexed array of first column values
 	 */
@@ -1324,13 +1029,6 @@ class w2p_Database_oldQuery {
 				}
 			}
 		}
-	}
-
-	/**
-	 * @deprecated
-	 */
-	public function execXML() {
-		trigger_error("execXML has been deprecated in v3.0 to comply with the license change.", E_USER_NOTICE );
 	}
 
 	/** Load a single column result from a single row
@@ -1664,5 +1362,147 @@ class w2p_Database_oldQuery {
         *  This method also appears in the w2p_Utilities_Date and w2p_Core_BaseObject (modified) class.
         */
 		return clone ($this);
+	}
+
+// Everything below this line is deprecated and should no longer be used.
+
+	/**
+     * Instead of concatenating here, retrieve the relevant fields and do
+     *   it in PHP. It won't necessarily be faster but should be more
+     *   supportable cross-databasewise.
+     *
+	 * @deprecated
+	 */
+	public function concat() {
+		trigger_error("concat() has been deprecated in v3.0 and will be removed by v4.0. Please concatenate in PHP instead.", E_USER_NOTICE );
+        $arr = func_get_args();
+		$conc_str = call_user_func_array(array(&$this->_db, 'Concat'), $arr);
+		return $conc_str;
+	}
+
+	/**
+     * Get database specific SQL used to check for null values.
+	 *
+     * @deprecated
+     *
+	 * @return String containing SQL to check for null field value
+	 */
+	public function ifNull($field, $nullReplacementValue) {
+        trigger_error("ifNull() has been deprecated in v3.0 and will be removed by v4.0. There is no replacement.", E_USER_NOTICE );
+        return $this->_db->IfNull($field, $nullReplacementValue);
+	}
+
+	/**
+     * Add a field definition for usage with table creation/alteration
+     *
+     * @deprecated
+     *
+	 * @param $name The name of the field
+	 * @param $type The type of field to create
+	 */
+	public function addField($name, $type) {
+		if (!is_array($this->create_definition)) {
+			$this->create_definition = array();
+		}
+		$this->create_definition[] = array('action' => 'ADD', 'type' => '', 'spec' => $name . ' ' . $type);
+        trigger_error("w2p_Database_Query->addField() has been deprecated in v3.0 and will be removed by v4.0.", E_USER_NOTICE );
+	}
+
+	/**
+	 * Alter a field definition for usage with table alteration
+     *
+     * @deprecated
+     *
+	 * @param $name The name of the field
+	 * @param $type The type of the field
+	 */
+	public function alterField($name, $type) {
+		if (!is_array($this->create_definition)) {
+			$this->create_definition = array();
+		}
+		$this->create_definition[] = array('action' => 'CHANGE', 'type' => '', 'spec' => $name . ' ' . $name . ' ' . $type);
+        trigger_error("w2p_Database_Query->alterField() has been deprecated in v3.0 and will be removed by v4.0.", E_USER_NOTICE );
+	}
+
+	/**
+     * Drop a field from table definition or from an existing table
+     *
+     * @deprecated
+     *
+	 * @param $name The name of the field to drop
+	 */
+	public function dropField($name) {
+		if (!is_array($this->create_definition)) {
+			$this->create_definition = array();
+		}
+		$this->create_definition[] = array('action' => 'DROP', 'type' => '', 'spec' => $name);
+        trigger_error("w2p_Database_Query->dropField() has been deprecated in v3.0 and will be removed by v4.0.", E_USER_NOTICE );
+	}
+
+	/**
+     * Add an index. Fields should be separated by commas to create a multi-field index
+     *
+     * @deprecated
+	 */
+	public function addIndex($name, $type) {
+		if (!is_array($this->create_definition)) {
+			$this->create_definition = array();
+		}
+		$this->create_definition[] = array('action' => 'ADD', 'type' => 'INDEX', 'spec' => '(' . $name . ') ' . $type);
+        trigger_error("w2p_Database_Query->addIndex() has been deprecated in v3.0 and will be removed by v4.0.", E_USER_NOTICE );
+	}
+
+	/**
+     * Add a primary key attribute. Fields should be separated by commas to create a multi-field primary key
+     *
+     * @deprecated
+	 */
+	public function addPrimary($name) {
+		if (!is_array($this->create_definition)) {
+			$this->create_definition = array();
+		}
+		$this->create_definition[] = array('action' => 'ADD', 'type' => 'PRIMARY KEY', 'spec' => '(' . $name . ')');
+        trigger_error("w2p_Database_Query->addPrimary() has been deprecated in v3.0 and will be removed by v4.0.", E_USER_NOTICE );
+	}
+
+	/**
+     * Drop an index
+     *
+     * @deprecated
+	 */
+	public function dropIndex($name) {
+		if (!is_array($this->create_definition)) {
+			$this->create_definition = array();
+		}
+		$this->create_definition[] = array('action' => 'DROP', 'type' => 'INDEX', 'spec' => $name);
+        trigger_error("w2p_Database_Query->dropIndex() has been deprecated in v3.0 and will be removed by v4.0.", E_USER_NOTICE );
+	}
+
+	/**
+     * Remove a primary key attribute from a field
+     *
+     * @deprecated
+	 */
+	public function dropPrimary() {
+		if (!is_array($this->create_definition)) {
+			$this->create_definition = array();
+		}
+		$this->create_definition[] = array('action' => 'DROP', 'type' => 'PRIMARY KEY', 'spec' => '');
+        trigger_error("w2p_Database_Query->dropPrimary() has been deprecated in v3.0 and will be removed by v4.0.", E_USER_NOTICE );
+	}
+
+	/**
+	 *
+	 * @deprecated
+	 */
+	public function loadArrayList() {
+        trigger_error("loadArrayList has been deprecated in v3.0 to comply with the license change.", E_USER_NOTICE );
+	}
+
+	/**
+	 * @deprecated
+	 */
+	public function execXML() {
+		trigger_error("execXML has been deprecated in v3.0 to comply with the license change.", E_USER_NOTICE );
 	}
 }
