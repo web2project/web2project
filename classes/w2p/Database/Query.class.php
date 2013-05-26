@@ -12,5 +12,32 @@
 
 class w2p_Database_Query extends w2p_Database_oldQuery
 {
+    protected $_table_prefix;
 
+	/**< Handle to the database connection */
+	protected $_db = null;
+	/**
+	 * Array of db function names
+	 * @access private
+	 * @var array
+	 */
+    protected $_db_funcs = array();
+
+	/**
+     * w2p_Database_Query constructor
+	 *
+	 * @param $prefix Database table prefix
+	 */
+	public function __construct($prefix = '')
+    {
+		global $db;
+        $this->_db = $db;
+
+        $this->_table_prefix = ('' != $prefix) ?
+                $prefix : w2PgetConfig('dbprefix', '');
+
+		$this->_db_funcs = array($this->dbfnNow());
+
+		$this->clear();
+	}
 }
