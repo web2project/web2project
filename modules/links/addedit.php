@@ -105,7 +105,8 @@ function setTask( key, val ) {
     <input type="hidden" name="dosql" value="do_link_aed" />
     <input type="hidden" name="del" value="0" />
     <input type="hidden" name="link_id" value="<?php echo $link_id; ?>" />
-    <input type="hidden" name="link_owner" value="<?php echo $AppUI->user_id; ?>" />
+<!-- TODO: Right now, link owner is hard coded, we should make this a select box like elsewhere. -->
+    <input type="hidden" name="link_owner" value="<?php echo $link->link_owner; ?>" />
 
     <table width="100%" border="0" cellpadding="3" cellspacing="3" class="std addedit">
         <tr>
