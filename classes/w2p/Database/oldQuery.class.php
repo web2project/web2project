@@ -60,40 +60,10 @@ class w2p_Database_oldQuery {
 	public $create_definition;
 	/**< Boolean to count rows in query */
 	public $include_count = false;
-	/**< Internal string, table prefix, prepended to all queries */
-	public $_table_prefix;
 	/**< Handle to the query result */
 	public $_query_id = null;
 	/**< Use the old style of fetch mode with ADODB */
 	public $_old_style = null;
-	/**< Handle to the database connection */
-	public $_db = null;
-
-	/**
-	 * Array of db function names
-	 * @access private
-	 * @var array
-	 */
-	protected $_db_funcs;
-
-	/** w2p_Database_Query constructor
-	 *
-	 * @param $prefix Database table prefix - will be appended to all web2project table names
-	 * @param $query_db Database type
-	 */
-	public function __construct($prefix = null, $query_db = null) {
-		global $db;
-
-		if (isset($prefix)) {
-			$this->_table_prefix = $prefix;
-		} else {
-			$this->_table_prefix = w2PgetConfig('dbprefix', '');
-		}
-		$this->_db = isset($query_db) ? $query_db : $db;
-		$this->_db_funcs = array($this->dbfnNow());
-
-		$this->clear();
-	}
 
 	/** Clear the current query and all set options
 	 */
