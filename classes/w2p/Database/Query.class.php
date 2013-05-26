@@ -65,10 +65,9 @@ class w2p_Database_Query extends w2p_Database_oldQuery
 
         $fields = count($this->_fields) ? implode(',' , $this->_fields) : '*';
         $tables = implode(',', $this->_tables);
-//TODO: handle the case of zero where clauses
-        $where  = implode(' AND ', $this->_where);
+        $where = count($this->_where) ? 'WHERE ' . implode(' AND ' , $this->_where) : '';
 
-        $sql = "SELECT $fields FROM $tables WHERE $where";
+        $sql = "SELECT $fields FROM $tables $where";
 
         return $sql;
 	}
