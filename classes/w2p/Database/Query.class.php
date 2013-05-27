@@ -49,6 +49,18 @@ class w2p_Database_Query extends w2p_Database_oldQuery
 		$this->clear();
 	}
 
+    public function clear()
+    {
+        $this->_tables = array();
+        $this->_fields = array();
+        $this->_where  = array();
+        $this->_joins  = array();
+        $this->_group_by = array();
+        $this->_order_by = array();
+
+        parent::clear();
+    }
+
     /**
      * This method checks to see if the query is in the old structure and - if
      *   so - transforms it to the new structure. Therefore it should be pretty
