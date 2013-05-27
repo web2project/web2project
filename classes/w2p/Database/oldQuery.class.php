@@ -627,25 +627,6 @@ class w2p_Database_oldQuery {
         return $q;
 	}
 
-	/** Prepare the DELETE component of the SQL query
-	 */
-	public function prepareDelete() {
-        $q = 'DELETE FROM ';
-        if (isset($this->table_list)) {
-            if (is_array($this->table_list)) {
-                // Grab the first record
-                list($key, $table) = each($this->table_list);
-            } else {
-                $table = $this->table_list;
-            }
-        } else {
-            return false;
-        }
-        $q .= $this->quote_db($this->_table_prefix . $table);
-        $q .= $this->make_where_clause($this->where);
-        return $q;
-	}
-
 	/** Prepare the ALTER component of the SQL query
 	 * @todo add ALTER DROP/CHANGE/MODIFY/IMPORT/DISCARD/.. definitions: http://dev.mysql.com/doc/mysql/en/alter-table.html
 	 */
@@ -902,45 +883,6 @@ class w2p_Database_oldQuery {
 			$result = $data[0];
 		}
 		$this->clear();
-		return $result;
-	}
-
-	/** Create a where clause based upon supplied field.
-	 *
-	 * @param	$where_clause Either string or array of subclauses.
-	 * @return SQL WHERE clause as a string.
-	 */
-	public function make_where_clause($where_clause) {
-		$result = '';
-		if (!isset($where_clause)) {
-			return $result;
-		}
-		if (is_array($where_clause)) {
-			if (count($where_clause)) {
-				$result = ' WHERE ' . implode(' AND ', $where_clause);
-			}
-		} elseif (strlen($where_clause) > 0) {
-			$result = ' WHERE ' . $where_clause;
-		}
-		return $result;
-	}
-
-	/** Create an order by clause based upon supplied field.
-	 *
-	 * @param	$order_clause	Either string or array of subclauses.
-	 * @return SQL ORDER BY clause as a string.
-	 */
-	public function make_order_clause($order_clause) {
-		$result = '';
-		if (!isset($order_clause)) {
-			return $result;
-		}
-
-		if (is_array($order_clause)) {
-			$result = ' ORDER BY ' . implode(',', $order_clause);
-		} elseif (strlen($order_clause) > 0) {
-			$result = ' ORDER BY ' . $order_clause;
-		}
 		return $result;
 	}
 
@@ -1361,5 +1303,25 @@ class w2p_Database_oldQuery {
 	 */
 	public function execXML() {
 		trigger_error("execXML has been deprecated in v3.0 to comply with the license change.", E_USER_NOTICE );
+	}
+
+	/**
+	 * @deprecated
+	 */
+	public function make_where_clause($where_clause) {
+		trigger_error("make_order_clause has been deprecated in v3.0.", E_USER_NOTICE );
+        $this->_convertFromOldStructure();
+
+        return $this->_buildWhere();
+	}
+
+	/**
+	 * @deprecated
+	 */
+	public function make_order_clause($order_clause) {
+		trigger_error("make_order_clause has been deprecated in v3.0.", E_USER_NOTICE );
+        $this->_convertFromOldStructure();
+
+        return $this->_buildOrder();
 	}
 }
