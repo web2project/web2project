@@ -92,6 +92,7 @@ class w2p_Database_Query extends w2p_Database_oldQuery
         $where = $this->_buildWhere();
         $joins = $this->_buildJoins();
         $limit = $this->_buildLimit();
+        $order = $this->_buildOrder();
 
         $fields = count($this->_fields) ? implode(',' , $this->_fields) : '*';
         $aliases = array();
@@ -101,9 +102,8 @@ class w2p_Database_Query extends w2p_Database_oldQuery
         $tables = implode(',', $aliases);
 
         $group_by = count($this->_group_by) ? 'GROUP BY ' . implode(',' , $this->_group_by) : '';
-        $order_by = count($this->_order_by) ? 'ORDER BY ' . implode(',' , $this->_order_by) : '';
 
-        $sql = "SELECT $fields FROM ($tables) $joins $where $group_by $order_by $limit";
+        $sql = "SELECT $fields FROM ($tables) $joins $where $group_by $order $limit";
 
         return $sql;
 	}
@@ -215,5 +215,15 @@ class w2p_Database_Query extends w2p_Database_oldQuery
         }
 
         return $limit;
+    }
+
+    protected function _buildOrder()
+    {
+        $order = '';
+        if(count($this->_order_by)) {
+            $order = 'ORDER BY ' . implode(',' , $this->_order_by);
+        }
+
+        return $order;
     }
 }
