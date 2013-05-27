@@ -93,14 +93,14 @@ class w2p_Database_Query extends w2p_Database_oldQuery
         $fields = count($this->_fields) ? implode(',' , $this->_fields) : '*';
         $aliases = array();
         foreach($this->_tables as $alias => $table) {
-            $aliases[] = "$table AS $alias";
+            $aliases[] = "($table AS $alias)";
         }
         $tables = implode(',', $aliases);
 
         $group_by = count($this->_group_by) ? 'GROUP BY ' . implode(',' , $this->_group_by) : '';
         $order_by = count($this->_order_by) ? 'ORDER BY ' . implode(',' , $this->_order_by) : '';
 
-        $sql = "SELECT $fields FROM $tables $joins $where $group_by $order_by";
+        $sql = "SELECT $fields FROM ($tables) $joins $where $group_by $order_by";
 
         return $sql;
 	}
