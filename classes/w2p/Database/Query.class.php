@@ -19,6 +19,7 @@ class w2p_Database_Query extends w2p_Database_oldQuery
     protected $_fields = array();
     protected $_where  = array();
     protected $_joins  = array();
+    protected $_group_by = array();
 
 	/**< Handle to the database connection */
 	protected $_db = null;
@@ -57,6 +58,7 @@ class w2p_Database_Query extends w2p_Database_oldQuery
         $this->_fields = $this->query;
         $this->_where  = $this->where;
         $this->_joins  = $this->join;
+        $this->_group_by = $this->group_by;
     }
 
 	/**
@@ -64,7 +66,6 @@ class w2p_Database_Query extends w2p_Database_oldQuery
      *
      * @todo quote fields and tables?
      * @todo add ORDER BY
-     * @todo add GROUP BY
 	 */
 	protected function prepareSelect()
     {
@@ -86,7 +87,9 @@ class w2p_Database_Query extends w2p_Database_oldQuery
             }
         }
 
-        $sql = "SELECT $fields FROM $tables $joins $where";
+        $group_by = count($this->_group_by) ? 'GROUP BY ' . implode(',' , $this->_group_by) : '';
+
+        $sql = "SELECT $fields FROM $tables $joins $where $group_by $order_by";
 
         return $sql;
 	}
