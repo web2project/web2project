@@ -21,6 +21,7 @@ class w2p_Database_Query extends w2p_Database_oldQuery
     protected $_joins  = array();
     protected $_group_by = array();
     protected $_order_by = array();
+    protected $_limit  = 0;
 
 	/**< Handle to the database connection */
 	protected $_db = null;
@@ -57,6 +58,7 @@ class w2p_Database_Query extends w2p_Database_oldQuery
         $this->_joins  = array();
         $this->_group_by = array();
         $this->_order_by = array();
+        $this->_limit  = 0;
 
         parent::clear();
     }
@@ -89,6 +91,7 @@ class w2p_Database_Query extends w2p_Database_oldQuery
 
         $where = $this->_buildWhere();
         $joins = $this->_buildJoins();
+        $limit = $this->_buildLimit();
 
         $fields = count($this->_fields) ? implode(',' , $this->_fields) : '*';
         $aliases = array();
@@ -100,7 +103,7 @@ class w2p_Database_Query extends w2p_Database_oldQuery
         $group_by = count($this->_group_by) ? 'GROUP BY ' . implode(',' , $this->_group_by) : '';
         $order_by = count($this->_order_by) ? 'ORDER BY ' . implode(',' , $this->_order_by) : '';
 
-        $sql = "SELECT $fields FROM ($tables) $joins $where $group_by $order_by";
+        $sql = "SELECT $fields FROM ($tables) $joins $where $group_by $order_by $limit";
 
         return $sql;
 	}
@@ -126,6 +129,18 @@ class w2p_Database_Query extends w2p_Database_oldQuery
     {
         if('' != $field) {
             $this->_order_by[] = $field;
+        }
+    }
+
+    /**
+     * Sets a result limit on the query
+     *
+     * @param type $limit
+     */
+    public function setLimit($limit)
+    {
+        if ((int) $limit > 0) {
+            $this->_limit = (int) $limit;
         }
     }
 
@@ -190,5 +205,15 @@ class w2p_Database_Query extends w2p_Database_oldQuery
         }
 
         return $joins;
+    }
+
+    protected function _buildLimit()
+    {
+        $limit = '';
+        if ($this->_limit) {
+            $limit = " LIMIT " . (int) $this->_limit;
+        }
+
+        return $limit;
     }
 }
