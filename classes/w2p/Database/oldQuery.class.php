@@ -1310,7 +1310,6 @@ class w2p_Database_oldQuery {
 	 */
 	public function make_where_clause($where_clause) {
 		trigger_error("make_order_clause has been deprecated in v3.0.", E_USER_NOTICE );
-        $this->_convertFromOldStructure();
 
         return $this->_buildWhere();
 	}
@@ -1320,7 +1319,6 @@ class w2p_Database_oldQuery {
 	 */
 	public function make_order_clause($order_clause) {
 		trigger_error("make_order_clause has been deprecated in v3.0.", E_USER_NOTICE );
-        $this->_convertFromOldStructure();
 
         return $this->_buildOrder();
 	}

@@ -80,6 +80,12 @@ class w2p_Database_Query extends w2p_Database_oldQuery
         $this->_order_by = count($this->order_by) ? $this->order_by : $this->_order_by;
     }
 
+    public function prepare($clear = false)
+    {
+        $this->_convertFromOldStructure();
+
+        return parent::prepare($clear);
+    }
 	/**
      * Prepare the SELECT component of the SQL query
      *
@@ -87,8 +93,6 @@ class w2p_Database_Query extends w2p_Database_oldQuery
 	 */
 	protected function prepareSelect()
     {
-        $this->_convertFromOldStructure();
-
         $where = $this->_buildWhere();
         $joins = $this->_buildJoins();
         $limit = $this->_buildLimit();
@@ -115,8 +119,6 @@ class w2p_Database_Query extends w2p_Database_oldQuery
 	 */
     protected function prepareDelete()
     {
-        $this->_convertFromOldStructure();
-
         $where = $this->_buildWhere();
         $limit = $this->_buildLimit();
         $tables = $this->_tables[0];
