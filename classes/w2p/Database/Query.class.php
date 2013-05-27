@@ -88,6 +88,7 @@ class w2p_Database_Query extends w2p_Database_oldQuery
         $this->_convertFromOldStructure();
 
         $where = $this->_buildWhere();
+        $joins = $this->_buildJoins();
 
         $fields = count($this->_fields) ? implode(',' , $this->_fields) : '*';
         $aliases = array();
@@ -95,13 +96,6 @@ class w2p_Database_Query extends w2p_Database_oldQuery
             $aliases[] = "$table AS $alias";
         }
         $tables = implode(',', $aliases);
-
-        $joins = '';
-        if (count($this->join)) {
-            foreach ($this->join as $join) {
-                $joins .= strtoupper($join['type']) . " JOIN " . $join['table'] . " AS " . $join['alias'] . " ON " . $join['condition'] . " ";
-            }
-        }
 
         $group_by = count($this->_group_by) ? 'GROUP BY ' . implode(',' , $this->_group_by) : '';
         $order_by = count($this->_order_by) ? 'ORDER BY ' . implode(',' , $this->_order_by) : '';
@@ -171,5 +165,18 @@ class w2p_Database_Query extends w2p_Database_oldQuery
         }
 
         return count($simple) ? ' WHERE ' . implode(' AND ' , $simple) : '';
+    }
+
+    protected function _buildJoins()
+    {
+        $joins = '';
+        if (count($this->join)) {
+            foreach ($this->join as $join) {
+                $join['alias'] = ('' == $join['alias']) ? $join['table'] : $join['alias'];
+                $joins .= strtoupper($join['type']) . " JOIN " . $join['table'] . " AS " . $join['alias'] . " ON " . $join['condition'] . " ";
+            }
+        }
+
+        return $joins;
     }
 }
