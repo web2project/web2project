@@ -109,6 +109,24 @@ class w2p_Database_Query extends w2p_Database_oldQuery
 	}
 
 	/**
+     * Prepare the DELETE component of the SQL query
+     *
+     * @todo quote fields and tables?
+	 */
+    protected function prepareDelete()
+    {
+        $this->_convertFromOldStructure();
+
+        $where = $this->_buildWhere();
+        $limit = $this->_buildLimit();
+        $tables = $this->_tables[0];
+
+        $sql = "DELETE FROM $tables $where $limit";
+
+        return $sql;
+    }
+
+	/**
      * Adds a table to the query
      *
 	 * @param	$name	Name of table, without prefix
