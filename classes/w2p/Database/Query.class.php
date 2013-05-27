@@ -19,6 +19,7 @@ class w2p_Database_Query extends w2p_Database_oldQuery
     protected $_where  = array();
     protected $_joins  = array();
     protected $_group_by = array();
+    protected $_order_by = array();
 
 	/**< Handle to the database connection */
 	protected $_db = null;
@@ -58,13 +59,13 @@ class w2p_Database_Query extends w2p_Database_oldQuery
         $this->_where  = $this->where;
         $this->_joins  = $this->join;
         $this->_group_by = $this->group_by;
+        $this->_order_by = $this->order_by;
     }
 
 	/**
      * Prepare the SELECT component of the SQL query
      *
      * @todo quote fields and tables?
-     * @todo add ORDER BY
 	 */
 	protected function prepareSelect()
     {
@@ -87,6 +88,7 @@ class w2p_Database_Query extends w2p_Database_oldQuery
         }
 
         $group_by = count($this->_group_by) ? 'GROUP BY ' . implode(',' , $this->_group_by) : '';
+        $order_by = count($this->_order_by) ? 'ORDER BY ' . implode(',' , $this->_order_by) : '';
 
         $sql = "SELECT $fields FROM $tables $joins $where $group_by $order_by";
 
