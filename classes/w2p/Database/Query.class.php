@@ -70,8 +70,13 @@ class w2p_Database_Query extends w2p_Database_oldQuery
         $this->_convertFromOldStructure();
 
         $fields = count($this->_fields) ? implode(',' , $this->_fields) : '*';
-        $tables = implode(',', $this->_tables);
         $where = count($this->_where) ? 'WHERE ' . implode(' AND ' , $this->_where) : '';
+
+        $aliases = array();
+        foreach($this->_tables as $alias => $table) {
+            $aliases[] = "$table AS $alias";
+        }
+        $tables = implode(',', $aliases);
 
         $joins = '';
         if (count($this->join)) {
