@@ -74,9 +74,9 @@ class w2p_Database_Query extends w2p_Database_oldQuery
     {
         $this->_convertFromOldStructure();
 
-        $fields = count($this->_fields) ? implode(',' , $this->_fields) : '*';
-        $where = count($this->_where) ? 'WHERE ' . implode(' AND ' , $this->_where) : '';
+        $where = $this->_buildWhere();
 
+        $fields = count($this->_fields) ? implode(',' , $this->_fields) : '*';
         $aliases = array();
         foreach($this->_tables as $alias => $table) {
             $aliases[] = "$table AS $alias";
@@ -132,5 +132,31 @@ class w2p_Database_Query extends w2p_Database_oldQuery
         if('' != $field) {
             $this->_where[] = $field;
         }
+    }
+
+    /**
+     * This combines all the where clauses into a single statement. I don't
+     *   like the nested loops but since this array can only be two levels deep,
+     *   recursion is probably excessive.
+     *
+     * @return type 
+     */
+    protected function _buildWhere()
+    {
+        $simple = array();
+
+        if (count($this->_where)) {
+            foreach($this->_where as $where) {
+                if (is_array($where)) {
+                    foreach($where as $subwhere) {
+                        $simple[] = $subwhere;
+                    }
+                } else {
+                    $simple[] = $where;
+                }
+            }
+        }
+
+        return count($simple) ? ' WHERE ' . implode(' AND ' , $simple) : '';
     }
 }
