@@ -17,6 +17,7 @@ class w2p_Database_Query extends w2p_Database_oldQuery
     protected $_tables = array();
     protected $_fields = array();
     protected $_where  = array();
+    protected $_joins  = array();
 
 	/**< Handle to the database connection */
 	protected $_db = null;
@@ -54,9 +55,15 @@ class w2p_Database_Query extends w2p_Database_oldQuery
         $this->_tables = $this->table_list;
         $this->_fields = $this->query;
         $this->_where  = $this->where;
+        $this->_joins  = $this->join;
     }
 
-	/** Prepare the SELECT component of the SQL query
+	/**
+     * Prepare the SELECT component of the SQL query
+     *
+     * @todo quote fields and tables?
+     * @todo add ORDER BY
+     * @todo add GROUP BY
 	 */
 	protected function prepareSelect()
     {
@@ -66,7 +73,14 @@ class w2p_Database_Query extends w2p_Database_oldQuery
         $tables = implode(',', $this->_tables);
         $where = count($this->_where) ? 'WHERE ' . implode(' AND ' , $this->_where) : '';
 
-        $sql = "SELECT $fields FROM $tables $where";
+        $joins = '';
+        if (count($this->join)) {
+            foreach ($this->join as $join) {
+                $joins .= strtoupper($join['type']) . " JOIN " . $join['table'] . " AS " . $join['alias'] . " ON " . $join['condition'] . " ";
+            }
+        }
+
+        $sql = "SELECT $fields FROM $tables $joins $where";
 
         return $sql;
 	}
