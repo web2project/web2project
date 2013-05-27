@@ -54,7 +54,7 @@ class CLink extends w2p_Core_BaseObject
         $q = $this->_getQuery();
         $q->addQuery('DISTINCT links.*');
         $q->addQuery('contact_first_name, contact_last_name, contact_display_name as contact_name');
-        $q->addQuery('project_name, project_color_identifier, project_status');
+        $q->addQuery('project_name, project_color_identifier, project_status, user_id');
         $q->addQuery('task_name, task_id');
 
         $q->addTable('links');
