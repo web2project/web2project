@@ -288,4 +288,50 @@ class w2p_Database_Query extends w2p_Database_oldQuery
 
         return $order;
     }
+
+    public function dbfnNowWithTZ()
+    {
+        $df = 'Y-m-d H:i:s';
+        $defaultTZ = 'Europe/London';
+        $systemTZ = new DateTimeZone($defaultTZ);
+        $ts = new DateTime();
+        $ts->setTimezone($systemTZ);
+
+        return $ts->format($df);
+    }
+
+	/**
+     * Generates the token representing the 'now' datetime
+	 */
+	public function dbfnNow()
+    {
+        return 'NOW()';
+	}
+
+	/**
+     * Add a date difference clause and name the result
+	 *
+	 * @param	$date1			This is the starting date
+	 * @param	$date2			This is the ending date
+	 */
+	public function dbfnDateDiff($date1 = '', $date2 = '')
+    {
+		$date1 = ($date1 == '') ? $this->dbfnNow() : $date1;
+		$date2 = ($date2 == '') ? $this->dbfnNow() : $date2;
+
+        return 'DATEDIFF(' . $date1 . ', ' . $date2 . ')';
+	}
+
+	/** Adds a given unit interval to a date
+	 *
+	 * @param	$date			This is the date we want to add to
+	 * @param	$interval		This is how much units we will be adding to the date
+	 * @param	$unit			This is the type of unit we are adding to the date
+	 */
+	public function dbfnDateAdd($date, $interval = 0, $unit = 'DAY')
+    {
+		$date = ($date == '') ? $this->dbfnNow() : $date;
+
+        return 'DATE_ADD(' . $date . ', INTERVAL ' . $interval . ' ' . $unit . ')';
+	}
 }
