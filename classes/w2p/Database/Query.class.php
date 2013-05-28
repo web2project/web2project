@@ -238,10 +238,46 @@ class w2p_Database_Query extends w2p_Database_oldQuery
         }
     }
 
+	/** Add a JOIN
+	 *
+	 * Adds a join to the query.  This only implements a left join by default
+     *   but you can either specify others or use one of the shorthand methods
+     *   below.
+	 *
+	 * @param	$table	Name of table (without prefix)
+	 * @param	$alias	Alias to use instead of table name (required).
+	 * @param	$join	Join condition (e.g. 'a.id = b.other_id')
+	 *				or array of join fieldnames, e.g. array('id', 'name);
+	 *				Both are correctly converted into a join clause.
+	 */
     public function addJoin($table, $alias, $join, $type = 'left')
     {
         $this->join[] = array('table' => $table, 'alias' => $alias,
                             'condition' => $join, 'type' => $type);
+    }
+
+	/**
+     * Works the same as addJoin except defaults to an INNER join.
+	 */
+    public function innerJoin($table, $alias, $join)
+    {
+        $this->addJoin($table, $alias, $join, 'inner');
+    }
+
+	/**
+     * Works the same as addJoin except defaults to a LEFT join.
+	 */
+    public function leftJoin($table, $alias, $join)
+    {
+        $this->addJoin($table, $alias, $join, 'left');
+    }
+
+	/**
+     * Works the same as addJoin except defaults to a RIGHT join.
+	 */
+    public function rightJoin($table, $alias, $join)
+    {
+        $this->addJoin($table, $alias, $join, 'right');
     }
 
     protected function _buildQuery()
