@@ -86,6 +86,7 @@ class w2p_Database_Query extends w2p_Database_oldQuery
 
         return parent::prepare($clear);
     }
+
 	/**
      * Prepare the SELECT component of the SQL query
      *
@@ -137,6 +138,20 @@ class w2p_Database_Query extends w2p_Database_oldQuery
         $values = implode(',', $fieldValues);
 
         $sql = "INSERT INTO $table ($fields) VALUES ($values)";
+
+        return $sql;
+    }
+
+    protected function prepareReplace()
+    {
+        //NOTE: This functions the same as prepareInsert..
+        $table = array_shift($this->_tables);
+        $fieldList = array_keys($this->value_list);
+        $fields = implode(',', $fieldList);
+        $fieldValues = array_values($this->value_list);
+        $values = implode(',', $fieldValues);
+
+        $sql = "REPLACE INTO $table ($fields) VALUES ($values)";
 
         return $sql;
     }
