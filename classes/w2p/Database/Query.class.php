@@ -94,17 +94,13 @@ class w2p_Database_Query extends w2p_Database_oldQuery
 	 */
 	protected function prepareSelect()
     {
+        $tables = $this->_buildTable();
         $where = $this->_buildWhere();
         $joins = $this->_buildJoins();
         $limit = $this->_buildLimit();
         $order = $this->_buildOrder();
 
         $fields = count($this->_fields) ? implode(',' , $this->_fields) : '*';
-        $aliases = array();
-        foreach($this->_tables as $alias => $table) {
-            $aliases[] = "($table AS $alias)";
-        }
-        $tables = implode(',', $aliases);
 
         $group_by = count($this->_group_by) ? 'GROUP BY ' . implode(',' , $this->_group_by) : '';
 
@@ -125,18 +121,19 @@ class w2p_Database_Query extends w2p_Database_oldQuery
 	 */
     protected function prepareDelete()
     {
+        $table = $this->_buildTable(true);
         $where = $this->_buildWhere();
         $limit = $this->_buildLimit();
-        $tables = $this->_tables[0];
 
-        $sql = "DELETE FROM $tables $where $limit";
+        $sql = "DELETE FROM $table $where $limit";
 
         return $sql;
     }
 
     protected function prepareInsert()
     {
-        $table = array_shift($this->_tables);
+        $table = $this->_buildTable(true);
+
         $fieldList = array_keys($this->value_list);
         $fields = implode(',', $fieldList);
         $fieldValues = array_values($this->value_list);
@@ -150,7 +147,8 @@ class w2p_Database_Query extends w2p_Database_oldQuery
     protected function prepareReplace()
     {
         //NOTE: This functions the same as prepareInsert..
-        $table = array_shift($this->_tables);
+        $table = $this->_buildTable(true);
+
         $fieldList = array_keys($this->value_list);
         $fields = implode(',', $fieldList);
         $fieldValues = array_values($this->value_list);
@@ -163,7 +161,7 @@ class w2p_Database_Query extends w2p_Database_oldQuery
 
     protected function prepareUpdate()
     {
-        $table = array_shift($this->_tables);
+        $table = $this->_buildTable(true);
         $where = $this->_buildWhere();
 
         foreach($this->update_list as $field => $value) {
@@ -293,6 +291,21 @@ class w2p_Database_Query extends w2p_Database_oldQuery
         }
 
         return $order;
+    }
+
+    protected function _buildTable($first_table = false)
+    {
+        if ($first_table) {
+            $tables = array_shift($this->_tables);
+        } else {
+            $aliases = array();
+            foreach($this->_tables as $alias => $table) {
+                $aliases[] = "($table AS $alias)";
+            }
+            $tables = implode(',', $aliases);
+        }
+
+        return $tables;
     }
 
     public function dbfnNowWithTZ()
