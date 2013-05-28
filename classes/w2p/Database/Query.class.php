@@ -95,13 +95,12 @@ class w2p_Database_Query extends w2p_Database_oldQuery
 	protected function prepareSelect()
     {
         $tables = $this->_buildTable();
+        $fields = $this->_buildQuery();
         $where = $this->_buildWhere();
         $joins = $this->_buildJoins();
         $limit = $this->_buildLimit();
         $order = $this->_buildOrder();
         $group_by = $this->_buildGroup();
-
-        $fields = count($this->_fields) ? implode(',' , $this->_fields) : '*';
 
         $sql = "SELECT $fields FROM ($tables) $joins $where $group_by $order $limit";
 
@@ -240,6 +239,25 @@ class w2p_Database_Query extends w2p_Database_oldQuery
         }
     }
 
+    protected function _buildQuery()
+    {
+        $simple = array();
+
+        if (count($this->_fields)) {
+            foreach($this->_fields as $field) {
+                if (is_array($field)) {
+                    foreach($field as $subfield) {
+                        $simple[] = $subfield;
+                    }
+                } else {
+                    $simple[] = $field;
+                }
+            }
+        }
+
+        return count($simple) ? implode(',' , $simple) : '*';
+    }
+
     /**
      * This combines all the where clauses into a single statement. I don't
      *   like the nested loops but since this array can only be two levels deep,
@@ -281,12 +299,7 @@ class w2p_Database_Query extends w2p_Database_oldQuery
 
     protected function _buildLimit()
     {
-        $limit = '';
-        if ($this->_limit) {
-            $limit = " LIMIT " . (int) $this->_limit;
-        }
-
-        return $limit;
+        return ($this->_limit) ? ' LIMIT ' . (int) $this->_limit : '';
     }
 
     protected function _buildOrder()
