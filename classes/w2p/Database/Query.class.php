@@ -140,6 +140,21 @@ class w2p_Database_Query extends w2p_Database_oldQuery
         return $sql;
     }
 
+    protected function prepareUpdate()
+    {
+        $table = array_shift($this->_tables);
+        $where = $this->_buildWhere();
+
+        foreach($this->update_list as $field => $value) {
+            $fieldValues[] = "$field = $value";
+        }
+        $field_values = implode(',', $fieldValues);
+        
+        $sql = "UPDATE $table SET $field_values $where";
+
+        return $sql;
+    }
+
 	/**
      * Adds a table to the query
      *
