@@ -139,18 +139,6 @@ class w2p_Database_oldQuery {
 		}
 	}
 
-	/** Add the select part (fields, functions) to the query
-	 *
-	 * E.g. '*', or 'a.*'
-	 * or 'a.field, b.field', etc.  You can call this multiple times
-	 * and it will correctly format a combined query.
-	 *
-	 * @param	$query	Query string to use.
-	 */
-	public function addQuery($query) {
-		$this->addClause('query', $query);
-	}
-
 	/** Insert a value into the database
 	 * @param $field The field to insert the value into
 	 * @param $value The specified value
@@ -241,134 +229,9 @@ class w2p_Database_oldQuery {
 		$this->type = 'update';
 	}
 
-	/** Create a database table
-	 * @param $table the name of the table to create
-	 */
-	public function createTable($table, $def = null) {
-		$this->type = 'createPermanent';
-		$this->create_table = $table;
-		if ($def) {
-			$this->create_definition = $def;
-		}
-	}
-
-	public function createDatabase($database) {
-		$dict = NewDataDictionary($this->_db, w2PgetConfig('dbtype'));
-		$dict->CreateDatabase($database);
-	}
-
-	public function DDcreateTable($table, $def, $opts) {
-		$dict = NewDataDictionary($this->_db, w2PgetConfig('dbtype'));
-		$query_array = $dict->ChangeTableSQL(w2PgetConfig('dbprefix') . $table, $def, $opts);
-		//returns 0 - failed, 1 - executed with errors, 2 - success
-		return $dict->ExecuteSQLArray($query_array);
-	}
-
-	public function DDcreateIndex($name, $table, $cols, $opts) {
-		$dict = NewDataDictionary($this->_db, w2PgetConfig('dbtype'));
-		$query_array = $dict->CreateIndexSQL($name, $table, $cols, $opts);
-		//returns 0 - failed, 1 - executed with errors, 2 - success
-		return $dict->ExecuteSQLArray($query_array);
-	}
-
-	/** Create a temporary database table
-	 * @param $table the name of the temporary table to create.
-	 */
-	public function createTemp($table) {
-		$this->type = 'createTemporary';
-		$this->create_table = $table;
-	}
-
-	/** Drop a table from the database
-	 *
-	 * Use dropTemp() to drop temporary tables
-	 * @param $table the name of the table to drop.
-	 */
-	public function dropTable($table) {
-		$this->type = 'drop';
-		$this->create_table = $table;
-	}
-
-	/** Drop a temporary table from the database
-	 * @param $table the name of the temporary table to drop
-	 */
-	public function dropTemp($table) {
-		$this->type = 'drop';
-		$this->create_table = $table;
-	}
-
-	/** Alter a database table
-	 * @param $table the name of the table to alter
-	 */
-	public function alterTable($table) {
-		$this->create_table = $table;
-		$this->type = 'alter';
-	}
-
-	/** Set a table creation definition from supplied array
-	 * @param $def Array containing table definition
-	 */
-	public function createDefinition($def) {
-		$this->create_definition = $def;
-	}
-
 	public function setDelete($table) {
 		$this->type = 'delete';
 		$this->addMap('table_list', $table, null);
-	}
-
-	/** Add a JOIN condition
-	 *
-	 * Add a join condition to the query.  This only implements
-	 * left join, however most other joins are either synonymns or
-	 * can be emulated with where clauses.
-	 *
-	 * @param	$table	Name of table (without prefix)
-	 * @param	$alias	Alias to use instead of table name (required).
-	 * @param	$join	Join condition (e.g. 'a.id = b.other_id')
-	 *				or array of join fieldnames, e.g. array('id', 'name);
-	 *				Both are correctly converted into a join clause.
-	 */
-	public function addJoin($table, $alias, $join, $type = 'left') {
-		$var = array('table' => $table, 'alias' => $alias, 'condition' => $join, 'type' => $type);
-
-		$this->addClause('join', $var, false);
-	}
-
-	/** Add a left join condition
-	 *
-	 * Helper method to add a left join
-	 * @see addJoin()
-	 * @param $table Name of table (without prefix)
-	 * @param $alias Alias to use instead of table name
-	 * @param $join Join condition
-	 */
-	public function leftJoin($table, $alias, $join) {
-		$this->addJoin($table, $alias, $join, 'left');
-	}
-
-	/** Add a right join condition
-	 *
-	 * Helper method to add a right join
-	 * @see addJoin()
-	 * @param $table Name of table (without prefix)
-	 * @param $alias Alias to use instead of table name
-	 * @param $join Join condition
-	 */
-	public function rightJoin($table, $alias, $join) {
-		$this->addJoin($table, $alias, $join, 'right');
-	}
-
-	/** Add an inner join condition
-	 *
-	 * Helper method to add an inner join
-	 * @see addJoin()
-	 * @param $table Name of table (without prefix)
-	 * @param $alias Alias to use instead of table name
-	 * @param $join Join condition
-	 */
-	public function innerJoin($table, $alias, $join) {
-		$this->addJoin($table, $alias, $join, 'inner');
 	}
 
 	/** Add a HAVING sub clause
@@ -479,28 +342,115 @@ class w2p_Database_oldQuery {
 		dprint(__file__, __line__, 2, $q);
 	}
 
-	/** Prepare the ALTER component of the SQL query
-	 * @todo add ALTER DROP/CHANGE/MODIFY/IMPORT/DISCARD/.. definitions: http://dev.mysql.com/doc/mysql/en/alter-table.html
+	/** Create a join condition based upon supplied fields.
+	 *
+	 * @param	$join_clause	Either string or array of subclauses.
+	 * @return SQL JOIN condition as a string.
 	 */
-	public function prepareAlter() {
-		$q = 'ALTER TABLE ' . $this->quote_db($this->_table_prefix . $this->create_table) . ' ';
-		if (isset($this->create_definition)) {
-			if (is_array($this->create_definition)) {
-				$first = true;
-				foreach ($this->create_definition as $def) {
-					if ($first) {
-						$first = false;
-					} else {
-						$q .= ', ';
-					}
-					$q .= $def['action'] . ' ' . $def['type'] . ' ' . $def['spec'];
-				}
-			} else {
-				$q .= 'ADD ' . $this->create_definition;
-			}
+	public function make_join($join_clause) {
+		$result = '';
+		if (!isset($join_clause)) {
+			return $result;
 		}
-		return $q;
+		if (is_array($join_clause)) {
+			foreach ($join_clause as $join) {
+				$result .= ' ' . strtoupper($join['type']) . ' JOIN ' . $this->quote_db($this->_table_prefix . $join['table']);
+				if ($join['alias']) {
+					$result .= ' AS ' . $join['alias'];
+				} else {
+					$result .= ' AS ' . $join['table'];
+				}
+				if (is_array($join['condition'])) {
+					$result .= ' USING (' . implode(',', $join['condition']) . ')';
+				} else {
+					$result .= ' ON ' . $join['condition'];
+				}
+			}
+		} else {
+			$result .= ' LEFT JOIN ' . $this->quote_db($this->_table_prefix . $join_clause);
+		}
+		return $result;
 	}
+
+	/** Create a having clause based upon supplied field.
+	 *
+	 * @param	$having_clause Either string or array of subclauses.
+	 * @return SQL HAVING clause as a string.
+	 */
+	public function make_having_clause($having_clause) {
+		$result = '';
+		if (!isset($having_clause)) {
+			return $result;
+		}
+		if (is_array($having_clause)) {
+			if (count($having_clause)) {
+				$result = ' HAVING ' . implode(' AND ', $having_clause);
+			}
+		} elseif (strlen($having_clause) > 0) {
+			$result = ' HAVING ' . $having_clause;
+		}
+		return $result;
+	}
+
+	/** Create a limit clause
+	 *
+	 * @param	$limit	Either integer with nr of records to retrieve or array with offset and nr of records to retrieve .
+	 * @param	$offset	integer of offset from where it should start retrieving.
+	 * @return	SQL LIMIT clause as a string.
+	 */
+	public function make_limit_clause($limit, $offset) {
+		$result = '';
+		if (!isset($limit)) {
+			return $result;
+		}
+
+		if (is_array($limit) && (count($limit) == 2)) {
+			$result = ' LIMIT ' . implode(',', $limit);
+		} elseif (isset($limit) && ($offset <= 0)) {
+			$result = ' LIMIT ' . (int) $limit;
+		} elseif (isset($limit) && ($offset > 0)) {
+			$result = ' LIMIT ' . (int) $offset . ', ' . (int) $limit;
+		}
+		return $result;
+	}
+
+	/** Add quotes to a string
+	 *
+	 * @param	$string	A string to add quotes to.
+	 * @return The quoted string
+	 */
+	public function quote($string) {
+		if (is_int($string)) {
+			return $string;
+		} else {
+			return $this->_db->qstr($string, get_magic_quotes_runtime());
+		}
+	}
+
+	/** Add quotes to a database identifier
+	 * @param $string The identifier to quote
+	 * @return The quoted identifier
+	 */
+	public function quote_db($string) {
+		return $this->_db->nameQuote . $string . $this->_db->nameQuote;
+	}
+
+	/**
+	 *	Clone the current query
+	 *
+	 *	@return	object	The new record object or null if error
+	 **/
+	public function duplicate() {
+
+        /*
+        *  PHP4 is no longer supported or allowed. The
+        *    installer/upgrader/converter simply stops executing.
+        *  This method also appears in the w2p_Utilities_Date and w2p_Core_BaseObject (modified) class.
+        */
+		return clone ($this);
+	}
+
+// Everything from here to the table structure area is about data retrieval, not query building
 
 	/** Execute the query
 	 *
@@ -738,97 +688,6 @@ class w2p_Database_oldQuery {
 		return $result;
 	}
 
-	/** Create a group by clause based upon supplied field.
-	 *
-	 * @param	$group_clause	Either string or array of subclauses.
-	 * @return SQL GROUP BY clause as a string.
-	 */
-	public function make_group_clause($group_clause) {
-		$result = '';
-		if (!isset($group_clause)) {
-			return $result;
-		}
-
-		if (is_array($group_clause)) {
-			$result = ' GROUP BY ' . implode(',', $group_clause);
-		} elseif (strlen($group_clause) > 0) {
-			$result = ' GROUP BY ' . $group_clause;
-		}
-		return $result;
-	}
-
-	/** Create a join condition based upon supplied fields.
-	 *
-	 * @param	$join_clause	Either string or array of subclauses.
-	 * @return SQL JOIN condition as a string.
-	 */
-	public function make_join($join_clause) {
-		$result = '';
-		if (!isset($join_clause)) {
-			return $result;
-		}
-		if (is_array($join_clause)) {
-			foreach ($join_clause as $join) {
-				$result .= ' ' . strtoupper($join['type']) . ' JOIN ' . $this->quote_db($this->_table_prefix . $join['table']);
-				if ($join['alias']) {
-					$result .= ' AS ' . $join['alias'];
-				} else {
-					$result .= ' AS ' . $join['table'];
-				}
-				if (is_array($join['condition'])) {
-					$result .= ' USING (' . implode(',', $join['condition']) . ')';
-				} else {
-					$result .= ' ON ' . $join['condition'];
-				}
-			}
-		} else {
-			$result .= ' LEFT JOIN ' . $this->quote_db($this->_table_prefix . $join_clause);
-		}
-		return $result;
-	}
-
-	/** Create a having clause based upon supplied field.
-	 *
-	 * @param	$having_clause Either string or array of subclauses.
-	 * @return SQL HAVING clause as a string.
-	 */
-	public function make_having_clause($having_clause) {
-		$result = '';
-		if (!isset($having_clause)) {
-			return $result;
-		}
-		if (is_array($having_clause)) {
-			if (count($having_clause)) {
-				$result = ' HAVING ' . implode(' AND ', $having_clause);
-			}
-		} elseif (strlen($having_clause) > 0) {
-			$result = ' HAVING ' . $having_clause;
-		}
-		return $result;
-	}
-
-	/** Create a limit clause
-	 *
-	 * @param	$limit	Either integer with nr of records to retrieve or array with offset and nr of records to retrieve .
-	 * @param	$offset	integer of offset from where it should start retrieving.
-	 * @return	SQL LIMIT clause as a string.
-	 */
-	public function make_limit_clause($limit, $offset) {
-		$result = '';
-		if (!isset($limit)) {
-			return $result;
-		}
-
-		if (is_array($limit) && (count($limit) == 2)) {
-			$result = ' LIMIT ' . implode(',', $limit);
-		} elseif (isset($limit) && ($offset <= 0)) {
-			$result = ' LIMIT ' . (int) $limit;
-		} elseif (isset($limit) && ($offset > 0)) {
-			$result = ' LIMIT ' . (int) $offset . ', ' . (int) $limit;
-		}
-		return $result;
-	}
-
 	public function foundRows() {
 		global $db;
 		$result = false;
@@ -839,27 +698,6 @@ class w2p_Database_oldQuery {
 			}
 		}
 		return $result;
-	}
-
-	/** Add quotes to a string
-	 *
-	 * @param	$string	A string to add quotes to.
-	 * @return The quoted string
-	 */
-	public function quote($string) {
-		if (is_int($string)) {
-			return $string;
-		} else {
-			return $this->_db->qstr($string, get_magic_quotes_runtime());
-		}
-	}
-
-	/** Add quotes to a database identifier
-	 * @param $string The identifier to quote
-	 * @return The quoted identifier
-	 */
-	public function quote_db($string) {
-		return $this->_db->nameQuote . $string . $this->_db->nameQuote;
 	}
 
 	/**
@@ -1000,21 +838,102 @@ class w2p_Database_oldQuery {
         return true;
 	}
 
-	/**
-	 *	Clone the current query
-	 *
-	 *	@return	object	The new record object or null if error
-	 **/
-	public function duplicate() {
+// Everything below this line until the deprecated area is related to table structure not content
 
-        /*
-        *  PHP4 is no longer supported or allowed. The
-        *    installer/upgrader/converter simply stops executing.
-        *  This method also appears in the w2p_Utilities_Date and w2p_Core_BaseObject (modified) class.
-        */
-		return clone ($this);
+	/** Create a database table
+	 * @param $table the name of the table to create
+	 */
+	public function createTable($table, $def = null) {
+		$this->type = 'createPermanent';
+		$this->create_table = $table;
+		if ($def) {
+			$this->create_definition = $def;
+		}
 	}
 
+	public function createDatabase($database) {
+		$dict = NewDataDictionary($this->_db, w2PgetConfig('dbtype'));
+		$dict->CreateDatabase($database);
+	}
+
+	public function DDcreateTable($table, $def, $opts) {
+		$dict = NewDataDictionary($this->_db, w2PgetConfig('dbtype'));
+		$query_array = $dict->ChangeTableSQL(w2PgetConfig('dbprefix') . $table, $def, $opts);
+		//returns 0 - failed, 1 - executed with errors, 2 - success
+		return $dict->ExecuteSQLArray($query_array);
+	}
+
+	public function DDcreateIndex($name, $table, $cols, $opts) {
+		$dict = NewDataDictionary($this->_db, w2PgetConfig('dbtype'));
+		$query_array = $dict->CreateIndexSQL($name, $table, $cols, $opts);
+		//returns 0 - failed, 1 - executed with errors, 2 - success
+		return $dict->ExecuteSQLArray($query_array);
+	}
+
+	/** Create a temporary database table
+	 * @param $table the name of the temporary table to create.
+	 */
+	public function createTemp($table) {
+		$this->type = 'createTemporary';
+		$this->create_table = $table;
+	}
+
+	/** Drop a table from the database
+	 *
+	 * Use dropTemp() to drop temporary tables
+	 * @param $table the name of the table to drop.
+	 */
+	public function dropTable($table) {
+		$this->type = 'drop';
+		$this->create_table = $table;
+	}
+
+	/** Drop a temporary table from the database
+	 * @param $table the name of the temporary table to drop
+	 */
+	public function dropTemp($table) {
+		$this->type = 'drop';
+		$this->create_table = $table;
+	}
+
+	/** Alter a database table
+	 * @param $table the name of the table to alter
+	 */
+	public function alterTable($table) {
+		$this->create_table = $table;
+		$this->type = 'alter';
+	}
+
+	/** Set a table creation definition from supplied array
+	 * @param $def Array containing table definition
+	 */
+	public function createDefinition($def) {
+		$this->create_definition = $def;
+	}    
+    
+	/** Prepare the ALTER component of the SQL query
+	 * @todo add ALTER DROP/CHANGE/MODIFY/IMPORT/DISCARD/.. definitions: http://dev.mysql.com/doc/mysql/en/alter-table.html
+	 */
+	public function prepareAlter() {
+		$q = 'ALTER TABLE ' . $this->quote_db($this->_table_prefix . $this->create_table) . ' ';
+		if (isset($this->create_definition)) {
+			if (is_array($this->create_definition)) {
+				$first = true;
+				foreach ($this->create_definition as $def) {
+					if ($first) {
+						$first = false;
+					} else {
+						$q .= ', ';
+					}
+					$q .= $def['action'] . ' ' . $def['type'] . ' ' . $def['spec'];
+				}
+			} else {
+				$q .= 'ADD ' . $this->create_definition;
+			}
+		}
+		return $q;
+	}
+    
 // Everything below this line is deprecated and should no longer be used.
 
 	/**
@@ -1162,6 +1081,7 @@ class w2p_Database_oldQuery {
 	 */
 	public function make_where_clause($where_clause) {
 		trigger_error("make_order_clause has been deprecated in v3.0.", E_USER_NOTICE );
+        $this->_convertFromOldStructure();
 
         return $this->_buildWhere();
 	}
@@ -1171,7 +1091,18 @@ class w2p_Database_oldQuery {
 	 */
 	public function make_order_clause($order_clause) {
 		trigger_error("make_order_clause has been deprecated in v3.0.", E_USER_NOTICE );
+        $this->_convertFromOldStructure();
 
         return $this->_buildOrder();
+	}
+
+	/**
+	 * @deprecated
+	 */
+	public function make_group_clause($group_clause) {
+		trigger_error("make_group_clause has been deprecated in v3.0.", E_USER_NOTICE );
+        $this->_convertFromOldStructure();
+
+        return $this->_buildGroup();
 	}
 }
