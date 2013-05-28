@@ -98,10 +98,9 @@ class w2p_Database_Query extends w2p_Database_oldQuery
         $joins = $this->_buildJoins();
         $limit = $this->_buildLimit();
         $order = $this->_buildOrder();
+        $group_by = $this->_buildGroup();
 
         $fields = count($this->_fields) ? implode(',' , $this->_fields) : '*';
-
-        $group_by = count($this->_group_by) ? 'GROUP BY ' . implode(',' , $this->_group_by) : '';
 
         $sql = "SELECT $fields FROM ($tables) $joins $where $group_by $order $limit";
 
@@ -284,12 +283,12 @@ class w2p_Database_Query extends w2p_Database_oldQuery
 
     protected function _buildOrder()
     {
-        $order = '';
-        if(count($this->_order_by)) {
-            $order = 'ORDER BY ' . implode(',' , $this->_order_by);
-        }
+        return count($this->_order_by) ? 'ORDER BY ' . implode(',' , $this->_order_by) : '';
+    }
 
-        return $order;
+    protected function _buildGroup()
+    {
+        return count($this->_group_by) ? 'GROUP BY ' . implode(',' , $this->_group_by) : '';
     }
 
     protected function _buildTable($first_table = false)
