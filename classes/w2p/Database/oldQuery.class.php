@@ -521,36 +521,6 @@ class w2p_Database_oldQuery {
 		dprint(__file__, __line__, 2, $q);
 	}
 
-	/** Prepare the UPDATE component of the SQL query
-	 */
-	public function prepareUpdate() {
-        $q = 'UPDATE ';
-        if (isset($this->table_list)) {
-            if (is_array($this->table_list)) {
-                reset($this->table_list);
-                // Grab the first record
-                list($key, $table) = each($this->table_list);
-            } else {
-                $table = $this->table_list;
-            }
-        } else {
-            return false;
-        }
-        $q .= $this->quote_db($this->_table_prefix . $table);
-
-        $q .= ' SET ';
-        $sets = '';
-        foreach ($this->update_list as $field => $value) {
-            if ($sets) {
-                $sets .= ', ';
-            }
-            $sets .= $this->quote_db($field) . ' = ' . $value;
-        }
-        $q .= $sets;
-        $q .= $this->make_where_clause($this->where);
-        return $q;
-	}
-
 	/** Prepare the INSERT component of the SQL query
 	 */
 	public function prepareInsertSelect() {
@@ -574,32 +544,6 @@ class w2p_Database_oldQuery {
 
 		$q .= '(' . $fieldlist . ') VALUES (' . $valuelist . ')';
 		return $q;
-	}
-
-	/** Prepare the REPLACE component of the SQL query
-	 */
-	public function prepareReplace() {
-        $q = 'REPLACE INTO ';
-        if (isset($this->table_list)) {
-            if (is_array($this->table_list)) {
-                reset($this->table_list);
-                // Grab the first record
-                list($key, $table) = each($this->table_list);
-            } else {
-                $table = $this->table_list;
-            }
-        } else {
-            return false;
-        }
-        $q .= $this->quote_db($this->_table_prefix . $table);
-
-        $quotedFieldnames = array_map(array($this, 'quote_db'), array_keys($this->value_list));
-        $fieldlist = implode(',', $quotedFieldnames);
-        $valuelist = implode(',', $this->value_list);
-
-
-        $q .= '(' . $fieldlist . ') VALUES (' . $valuelist . ')';
-        return $q;
 	}
 
 	/** Prepare the ALTER component of the SQL query
