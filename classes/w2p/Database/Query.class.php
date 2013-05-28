@@ -112,6 +112,11 @@ class w2p_Database_Query extends w2p_Database_oldQuery
         return $sql;
 	}
 
+    protected function prepareInsertSelect()
+    {
+        return $this->prepareInsert();
+    }
+
 	/**
      * Prepare the DELETE component of the SQL query
      *

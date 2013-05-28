@@ -479,31 +479,6 @@ class w2p_Database_oldQuery {
 		dprint(__file__, __line__, 2, $q);
 	}
 
-	/** Prepare the INSERT component of the SQL query
-	 */
-	public function prepareInsertSelect() {
-		$q = 'INSERT INTO ';
-		if (isset($this->table_list)) {
-			if (is_array($this->table_list)) {
-				reset($this->table_list);
-				// Grab the first record
-				list($notUsed, $table) = each($this->table_list);
-			} else {
-				$table = $this->table_list;
-			}
-		} else {
-			return false;
-		}
-		$q .= $this->quote_db($this->_table_prefix . $table);
-
-        $quotedFieldnames = array_map(array($this, 'quote_db'), array_keys($this->value_list));
-        $fieldlist = implode(',', $quotedFieldnames);
-        $valuelist = implode(',', $this->value_list);
-
-		$q .= '(' . $fieldlist . ') VALUES (' . $valuelist . ')';
-		return $q;
-	}
-
 	/** Prepare the ALTER component of the SQL query
 	 * @todo add ALTER DROP/CHANGE/MODIFY/IMPORT/DISCARD/.. definitions: http://dev.mysql.com/doc/mysql/en/alter-table.html
 	 */
