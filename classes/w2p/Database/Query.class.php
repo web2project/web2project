@@ -239,6 +239,12 @@ class w2p_Database_Query extends w2p_Database_oldQuery
         }
     }
 
+    public function addJoin($table, $alias, $join, $type = 'left')
+    {
+        $this->join[] = array('table' => $table, 'alias' => $alias,
+                            'condition' => $join, 'type' => $type);
+    }
+
     protected function _buildQuery()
     {
         $simple = array();
