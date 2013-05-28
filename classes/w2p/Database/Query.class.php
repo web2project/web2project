@@ -129,7 +129,20 @@ class w2p_Database_Query extends w2p_Database_oldQuery
 
     protected function prepareInsert()
     {
-        
+        /*
+         * NOTE: I really don't like using implode here as it implies there
+         *   could be multiple tables.. when in fact there can only be one.
+         */
+        $table = implode(',', $this->_tables);
+
+        $fieldList = array_keys($this->value_list);
+        $fields = implode(',', $fieldList);
+        $fieldValues = array_values($this->value_list);
+        $values = implode(',', $fieldValues);
+
+        $sql = "INSERT INTO $table ($fields) VALUES ($values)";
+
+        return $sql;
     }
 
 	/**
