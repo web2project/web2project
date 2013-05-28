@@ -184,6 +184,13 @@ class w2p_Database_Query extends w2p_Database_oldQuery
         $this->_tables[$alias] = $table;
 	}
 
+    public function addQuery($field)
+    {
+        if('' != $field) {
+            $this->_fields[] = $field;
+        }
+    }
+
     /**
      * Allows you to order query results by a field, can be used multiple times
      *
