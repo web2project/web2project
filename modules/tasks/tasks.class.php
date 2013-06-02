@@ -659,6 +659,13 @@ class CTask extends w2p_Core_BaseObject
     {
         parent::bind($hash, $prefix, $checkSlashes, $bindAll);
 
+        if ($this->task_start_date != '' && $this->task_start_date != '0000-00-00 00:00:00') {
+            $this->task_start_date = $this->_AppUI->convertToSystemTZ($this->task_start_date);
+        }
+        if ($this->task_end_date != '' && $this->task_end_date != '0000-00-00 00:00:00') {
+            $this->task_end_date = $this->_AppUI->convertToSystemTZ($this->task_end_date);
+        }
+
         return true;
     }
 
@@ -763,13 +770,6 @@ class CTask extends w2p_Core_BaseObject
         $this->task_updated = $q->dbfnNowWithTZ();
         $this->task_target_budget = filterCurrency($this->task_target_budget);
         $this->task_owner = ($this->task_owner) ? $this->task_owner : $this->_AppUI->user_id;
-
-        if ($this->task_start_date != '' && $this->task_start_date != '0000-00-00 00:00:00') {
-            $this->task_start_date = $this->_AppUI->convertToSystemTZ($this->task_start_date);
-        }
-        if ($this->task_end_date != '' && $this->task_end_date != '0000-00-00 00:00:00') {
-            $this->task_end_date = $this->_AppUI->convertToSystemTZ($this->task_end_date);
-        }
         $this->task_contacts = is_array($this->task_contacts) ? $this->task_contacts : explode(',', $this->task_contacts);
 
         parent::hook_preStore();
