@@ -3336,6 +3336,9 @@ function addHistory($table, $id, $action = 'modify', $description = '', $project
 	if (!$AppUI->isActiveModule('history')) {
 		return;
 	}
+    if (is_null($action)) {
+        $action = 'delete';
+    }
 
 	$q = new w2p_Database_Query;
 	$q->addTable('history');
