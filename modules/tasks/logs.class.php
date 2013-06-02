@@ -279,6 +279,10 @@ class CTask_Log extends w2p_Core_BaseObject
 		$totalHours = $q->loadResult();
 
 		CTask::updateHoursWorked($task_id, $totalHours);
+
+        $task = new CTask();
+        $task->load($task_id);
+        $task->updateDynamics();
 	}
 
 	/**
