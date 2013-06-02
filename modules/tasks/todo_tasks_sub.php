@@ -22,6 +22,7 @@ if (isset($_POST['show_form'])) {
 }
 
 // Required for today view.
+$AppUI = is_object($AppUI) ? $AppUI : new w2p_Core_CAppUI();
 $showArcProjs = $AppUI->getState('TaskDayShowArc', 0);
 $showLowTasks = $AppUI->getState('TaskDayShowLow', 1);
 $showHoldProjs = $AppUI->getState('TaskDayShowHold', 0);
