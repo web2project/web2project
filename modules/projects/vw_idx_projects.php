@@ -187,6 +187,9 @@ if (count($fields) > 0) {
 				}
 
                 $htmlHelper = new w2p_Output_HTMLHelper($AppUI);
+                if (!is_array($st_projects_arr)) {
+                    continue;
+                }
 				foreach ($st_projects_arr as $st_project) {
                     $multiproject_id = 0;
                     $project_id = (isset($st_project[0])) ? $st_project[0]['project_id'] : 0;
