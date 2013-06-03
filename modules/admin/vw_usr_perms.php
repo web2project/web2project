@@ -21,7 +21,7 @@ foreach ($module_list as $module) {
 
     if (strpos($modName, 'Admin') === false && strpos($modName, 'All Modules') === false) {
         //non-admin modules
-        $addToList = true;
+        $addToList = canView($module['value']) && canEdit($module['value']);
     } else {
         //admin module
         if ($perms->checkModuleItem('system', 'edit')) {
@@ -30,7 +30,7 @@ foreach ($module_list as $module) {
     }
     if ($addToList) {
         $modules[$module['type'] . ',' . $module['id']] = $module['name'];
-        if ($module['type'] = 'mod' && isset($pgo_list[$module['name']])) {
+        if ($module['type'] == 'mod' && isset($pgo_list[$module['name']])) {
             $pgos[$offset] = $pgo_list[$module['name']]['permissions_item_table'];
         }
         $offset++;
@@ -157,26 +157,40 @@ foreach ($user_acls as $acl) {
 				$modlist[] = $AppUI->_($group_data[3]);
 			}
 		}
+        $_canEdit = true;
+        $_canView = true;
 		if (is_array($permission['axo'])) {
-			foreach ($permission['axo'] as $key => $section) {
-				foreach ($section as $id) {
+            foreach ($permission['axo'] as $key => $section) {
+                foreach ($section as $id) {
 					$mod_data = $perms->get_object_full($id, $key, 1, 'axo');
-					if (is_numeric($mod_data['name'])) {
+					if (is_numeric($mod_data['value'])) {
 						$module = $pgo_list[ucfirst($key)];
 						$q = new w2p_Database_Query();
 						$q->addTable($module['permissions_item_table']);
 						$q->addQuery($module['permissions_item_label']);
-						$q->addWhere($module['permissions_item_field'] . '=' . $mod_data['name']);
+						$q->addWhere($module['permissions_item_field'] . '=' . $mod_data['value']);
 						$data = $q->loadResult();
 						$q->clear();
 						$modlist[] = $AppUI->_(ucfirst($key)) . ': ' . w2PHTMLDecode($data);
+                        if (!canView($mod_data['section_value'], $mod_data['value'])) {
+                            $_canView = false;
+                        }
+                        if (!canEdit($mod_data['section_value'], $mod_data['value'])) {
+                            $_canEdit = false;
+                        }
 					} else {
 						$modlist[] = $AppUI->_(ucfirst($key)) . ': ' . w2PHTMLDecode($mod_data['name']);
+                        if (!canView($mod_data['value'])) {
+                            $_canView = false;
+                        }
+                        if (!canEdit($mod_data['value'])) {
+                            $_canEdit = false;
+                        }
 					}
 				}
 			}
 		}
-        if (!canView($mod_data['section_value'], $mod_data['value'])) {
+        if (!$_canView) {
             continue;
         }
 		$buf .= implode('<br />', $modlist);
@@ -200,7 +214,7 @@ foreach ($user_acls as $acl) {
 		// Allow or deny
 		$buf .= '<td>' . $AppUI->_($permission['allow'] ? 'allow' : 'deny') . '</td>';
 		$buf .= '<td nowrap="nowrap">';
-        $canDelete = (canEdit('users') && canEdit($mod_data['section_value'], $mod_data['value']));
+        $canDelete = (canEdit('users') && $_canEdit);
 		if ($canDelete) {
 			$buf .= "<a href=\"javascript:delIt({$acl});\" title=\"" . $AppUI->_('delete') . "\">" . w2PshowImage('icons/stock_delete-16.png', 16, 16, '') . "</a>";
 		}
