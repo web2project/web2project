@@ -81,6 +81,18 @@ class w2p_Extensions_Permissions extends gacl_api
 
     public function checkModuleItem($module, $op, $item = null, $userid = null)
     {
+        if ('system' == $module) {
+            /**
+             * I don't like this particular hack but it resolves:
+             *   http://bugs.web2project.net/view.php?id=1324
+             * The problem comes from the fact that all the other modules
+             *   extend the w2p_Core_BaseObject class and therefore their
+             *   permissions are checkable as you'd expect from whichever
+             *   controllers. The System module is standalone.
+             */
+            $_function_name = 'can' . ucfirst($op);
+            return $_function_name('system');
+        }
         if (!$userid) {
             $userid = $GLOBALS['AppUI']->user_id;
         }
