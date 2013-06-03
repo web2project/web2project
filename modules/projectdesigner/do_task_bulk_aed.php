@@ -54,8 +54,6 @@ if (is_array($selected) && count($selected)) {
     foreach ($selected as $key => $val) {
         if ($key) {
             $upd_task->load($key);
-            $upd_task->task_start_date= ($AppUI->formatTZAwareTime($upd_task->task_start_date, '%Y-%m-%d %T'));
-            $upd_task->task_end_date= $AppUI->formatTZAwareTime($upd_task->task_end_date, '%Y-%m-%d %T');
         }
 
         foreach ($updateFields as $name => $value) {
