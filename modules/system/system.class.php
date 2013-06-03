@@ -100,18 +100,3 @@ class CSystem
         }
     }
 }
-
-/**
- * @deprecated
- */
-class CPreferences extends w2p_Core_Preferences {
-	public function __construct() {
-		parent::__construct();
-        trigger_error("CPreferences has been deprecated in v3.0 and will be removed by v4.0. Please use w2p_Core_Preferences instead.", E_USER_NOTICE );
-	}
-}
-
-/**
- * @deprecated
- */
-class CConfig extends w2p_Core_Config { }

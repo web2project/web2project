@@ -30,11 +30,13 @@ function w2p_old_autoload($class_name)
         case 'budgets':                 // Deprecated as of v3.0, TODO: remove this in v4.0
         case 'cappui':                  // Deprecated as of v3.0, TODO: remove this in v4.0
         case 'ccalendar':               // Deprecated as of v3.0, TODO: remove this in v4.0
+        case 'cconfig':                 // Deprecated as of v3.0, TODO: remove this in v4.0
         case 'cdate':                   // Deprecated as of v3.0, TODO: remove this in v4.0
         case 'cfilefolder':             // Deprecated as of v3.0, TODO: remove this in v4.0
         case 'cforummessage':           // Deprecated as of v3.0, TODO: remove this in v4.0
         case 'cinfotabbox':             // Deprecated as of v3.0, TODO: remove this in v4.0
         case 'cmonthcalendar':          // Deprecated as of v3.0, TODO: remove this in v4.0
+        case 'cpreferences':            // Deprecated as of v3.0, TODO: remove this in v4.0
         case 'cprojectdesigneroptions': // Deprecated as of v3.0, TODO: remove this in v4.0
         case 'crole':                   // Deprecated as of v3.0, TODO: remove this in v4.0
         case 'csyskey':                 // Deprecated as of v3.0, TODO: remove this in v4.0

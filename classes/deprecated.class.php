@@ -68,6 +68,21 @@ class CCalendar extends CEvent
 }
 
 /**
+ * @package web2project\deprecated
+ *
+ * @deprecated
+ */
+class CConfig extends w2p_Core_Config
+{
+    public function __construct() {
+        parent::__construct();
+        trigger_error("CConfig has been deprecated in v3.0 and will be removed by v4.0. Please use w2p_Core_Config instead.", E_USER_NOTICE);
+    }
+}
+
+/**
+ * @package web2project\deprecated
+ *
  * @deprecated
  */
 class CDate extends w2p_Utilities_Date
@@ -137,6 +152,18 @@ class CMonthCalendar extends w2p_Output_MonthCalendar
         trigger_error("CMonthCalendar has been deprecated in v3.0 and will be removed by v4.0. Please use w2p_Output_MonthCalendar instead.", E_USER_NOTICE);
     }
 
+}
+
+/**
+ * @package web2project\deprecated
+ *
+ * @deprecated
+ */
+class CPreferences extends w2p_Core_Preferences {
+	public function __construct() {
+		parent::__construct();
+        trigger_error("CPreferences has been deprecated in v3.0 and will be removed by v4.0. Please use w2p_Core_Preferences instead.", E_USER_NOTICE );
+	}
 }
 
 /**
