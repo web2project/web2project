@@ -138,11 +138,13 @@ class w2p_Core_CustomFields {
 	}
 
 	public function fieldWithId($field_id) {
-		foreach ($this->fields as $k => $notUsed) {
-			if ($this->fields[$k]->field_id == $field_id) {
-				return $this->fields[$k];
-			}
-		}
+		if (count($this->fields)) {
+            foreach ($this->fields as $k => $notUsed) {
+                if ($this->fields[$k]->field_id == $field_id) {
+                    return $this->fields[$k];
+                }
+            }
+        }
 	}
 
     /**
