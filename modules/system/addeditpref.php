@@ -152,21 +152,23 @@ echo arraySelect($tabview, 'pref_name[TABVIEW]', 'class=text size=1', $prefs['TA
 $ex = new w2p_Utilities_Date();
 
 $dates = array();
-$f = '%d/%m/%Y';
-$dates[$f] = $ex->format($f);
 $f = '%d/%b/%Y';
 $dates[$f] = $ex->format($f);
-$f = '%m/%d/%Y';
-$dates[$f] = $ex->format($f);
-$f = '%b/%d/%Y';
+$f = '%d/%m/%Y';
 $dates[$f] = $ex->format($f);
 $f = '%d.%m.%Y';
 $dates[$f] = $ex->format($f);
+$f = '%b/%d/%Y';
+$dates[$f] = $ex->format($f);
 $f = '%m.%d.%Y';
+$dates[$f] = $ex->format($f);
+$f = '%m/%d/%Y';
 $dates[$f] = $ex->format($f);
 $f = '%Y/%b/%d';
 $dates[$f] = $ex->format($f);
 $f = '%Y/%m/%d';
+$dates[$f] = $ex->format($f);
+$f = '%Y-%m-%d';
 $dates[$f] = $ex->format($f);
 echo arraySelect($dates, 'pref_name[SHDATEFORMAT]', 'class=text size=1', $prefs['SHDATEFORMAT'], false);
 ?>
