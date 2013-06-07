@@ -2318,7 +2318,7 @@ function file_show_attr() {
 		// ---------------------------------------------------------------------------------
 
 		// Task
-		$str_out .= '<tr><td align="right" nowrap="nowrap">' . $AppUI->_('Task') . ':</td><td align="left" colspan="2" valign="top"><input type="hidden" name="file_task" value="' . $file_task . '" /><input type="text" class="text" name="task_name" value="' . $task_name . '" size="40" disabled /><input type="button" class="button" value="' . $AppUI->_('select task') . '..."' . $onclick_task . '/></td></tr>';
+		$str_out .= '<tr><td align="right" nowrap="nowrap">' . $AppUI->_('Task') . ':</td><td align="left" colspan="2" valign="top"><input type="hidden" name="file_task" value="' . $file_task . '" /><input type="text" class="text" name="task_name" value="' . $task_name . '" size="40" disabled /><input type="button" class="btn btn-primary btn-mini" value="' . $AppUI->_('select task') . '..."' . $onclick_task . '/></td></tr>';
 	}
 
 	return ($str_out);

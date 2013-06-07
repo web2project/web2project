@@ -90,7 +90,7 @@ function delIt() {
     <table width="100%" border="0" cellpadding="3" cellspacing="3" class="std addedit">
         <tr>
             <td width="100%" valign="top" align="center">
-                <table cellspacing="1" cellpadding="2" width="60%">
+                <table cellspacing="1" cellpadding="2" width="100%" class="well">
                     <tr>
                         <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Subfolder of'); ?>:</td>
                         <td align="left">
@@ -117,10 +117,10 @@ function delIt() {
         </tr>
         <tr>
             <td>
-                <input class="button" type="button" name="cancel" value="<?php echo $AppUI->_('cancel'); ?>" onclick="javascript:if(confirm('<?php echo $AppUI->_('Are you sure you want to cancel?'); ?>')){location.href = '?<?php echo $referrer; ?>';}" />
+                <input class="btn btn-danger" type="button" name="cancel" value="<?php echo $AppUI->_('cancel'); ?>" onclick="javascript:if(confirm('<?php echo $AppUI->_('Are you sure you want to cancel?'); ?>')){location.href = '?<?php echo $referrer; ?>';}" />
             </td>
             <td align="right">
-                <input type="button" class="button" value="<?php echo $AppUI->_('submit'); ?>" onclick="submitIt()" />
+                <input type="button" class="btn btn-primary" value="<?php echo $AppUI->_('submit'); ?>" onclick="submitIt()" />
             </td>
         </tr>
     </table>
