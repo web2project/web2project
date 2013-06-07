@@ -226,7 +226,7 @@ function removeUser() {
 <table border="0" cellpadding="4" cellspacing="0" width="100%" class="std addedit">
 <tr>
 	<td colspan="2">
-		<table width="100%" border="0" cellpadding="1" cellspacing="1">
+		<table cellspacing="1" cellpadding="2" width="100%" class="well">
 			<tr>
 				<td width="20%" align="right" nowrap="nowrap"><?php echo $AppUI->_('Event Title'); ?>:</td>
 				<td width="20%">
@@ -318,10 +318,10 @@ function removeUser() {
 			</tr>
 			<tr>
 				<td width="50%" colspan="2" align="right">
-					<input type="button" class="button" value="&gt;" onclick="addUser()" />
+					<input type="button" class="btn btn-primary" value="&gt;" onclick="addUser()" />
 				</td>
 				<td width="50%" colspan="2" align="left">
-					<input type="button" class="button" value="&lt;" onclick="removeUser()" />
+					<input type="button" class="btn btn-primary" value="&lt;" onclick="removeUser()" />
 				</td>
 			</tr>
 			<tr>
@@ -341,10 +341,10 @@ function removeUser() {
 				</td>
 			<tr>
 				<td colspan="2">
-					<input type="button" value="<?php echo $AppUI->_('back'); ?>" class="button" onclick="javascript:history.back();" />
+					<input type="button" value="<?php echo $AppUI->_('back'); ?>" class="btn btn-danger" onclick="javascript:history.back();" />
 				</td>
 				<td align="right" colspan="2">
-					<input type="button" value="<?php echo $AppUI->_('submit'); ?>" class="button" onclick="submitIt()" />
+					<input type="button" value="<?php echo $AppUI->_('submit'); ?>" class="btn btn-primary" onclick="submitIt()" />
 				</td>
 			</tr>
 		</table>
