@@ -182,284 +182,277 @@ function setDepartment(department_id_string){
     <input type="hidden" name="datePicker" value="project" />
     <table cellspacing="1" cellpadding="1" border="0" width='100%' class="std addedit">
         <tr>
-            <td>
-                <table width="100%">
+            <td width="50%" valign="top">
+                <table cellspacing="1" cellpadding="2" width="100%" class="well">
                     <tr>
-                        <td width="50%" valign="top">
-                            <table cellspacing="0" cellpadding="2">
-                                <tr>
-                                    <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Project Name'); ?></td>
-                                    <td width="100%" colspan="2">
-                                        <input type="text" name="project_name" id="project_name" value="<?php echo htmlspecialchars($project->project_name, ENT_QUOTES); ?>" size="25" maxlength="255" onblur="setShort();" class="text" /> *
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Parent Project'); ?></td>
-                                    <td colspan="2">
-                                        <?php echo arraySelectTree($structprojects, 'project_parent', 'style="width:250px;" class="text"', $project->project_parent ? $project->project_parent : 0) ?>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Project Owner'); ?></td>
-                                    <td colspan="2">
-                                        <?php
-                                            // pull users
-                                            $perms = &$AppUI->acl();
-                                            $users = $perms->getPermittedUsers('projects');
-                                            echo arraySelect($users, 'project_owner', 'size="1" style="width:200px;" class="text"', $project->project_owner ? $project->project_owner : $AppUI->user_id);
-                                        ?> *
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Company'); ?></td>
-                                    <td width="100%" nowrap="nowrap" colspan="2">
-                                        <?php echo arraySelect($companies, 'project_company', 'class="text" size="1"', $project->project_company); ?> *
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Project Location'); ?></td>
-                                    <td width="100%" colspan="2">
-                                        <input type="text" name="project_location" value="<?php echo w2PformSafe($project->project_location); ?>" size="25" maxlength="50" class="text" />
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Start Date'); ?></td>
-                                    <td nowrap="nowrap">
-                                        <input type="hidden" name="project_start_date" id="project_start_date" value="<?php echo $start_date ? $start_date->format(FMT_TIMESTAMP_DATE) : ''; ?>" />
-                                        <input type="text" name="start_date" id="start_date" onchange="setDate_new('editFrm', 'start_date');" value="<?php echo $start_date ? $start_date->format($df) : ''; ?>" class="text" />
-                                        <a href="javascript: void(0);" onclick="return showCalendar('start_date', '<?php echo $df ?>', 'editFrm', null, true, true)">
-                                            <img src="<?php echo w2PfindImage('calendar.gif'); ?>" width="24" height="12" alt="<?php echo $AppUI->_('Calendar'); ?>" border="0" />
-                                        </a>
-                                    </td>
-                                    <td rowspan="6" valign="top">
-                                        <?php
-                                            if ($AppUI->isActiveModule('contacts') && canView('contacts')) {
-                                                echo '<input type="button" class="button" value="' . $AppUI->_('Select contacts...') . '" onclick="javascript:popContacts();" />';
-                                            }
-
-                                            if ($AppUI->isActiveModule('departments') && canAccess('departments')) {
-                                                //Build display list for departments
-                                                $company_id = $project->project_company;
-                                                $selected_departments = array();
-                                                if ($project_id) {
-                                                    $myDepartments = $project->getDepartmentList();
-                                                    $selected_departments = (count($myDepartments) > 0) ? array_keys($myDepartments) : array();
-                                                }
-
-                                                $departments_count = 0;
-                                                $department_selection_list = getDepartmentSelectionList($company_id, $selected_departments);
-                                                if ($department_selection_list != '' || $project_id) {
-                                                    $department_selection_list = ($AppUI->_('Departments') . '<br /><select name="project_departments[]" multiple="multiple" class="text"><option value="0"></option>' . $department_selection_list . '</select>');
-                                                } else {
-                                                    $department_selection_list = '<input type="button" class="button" value="' . $AppUI->_('Select department...') . '" onclick="javascript:popDepartment();" /><input type="hidden" name="project_departments"';
-                                                }
-
-                                                // Let's check if the actual company has departments registered
-                                                if ($department_selection_list != '') {
-                                                    echo '<br />' . $department_selection_list;
-                                                }
-                                            }
-                                        ?>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Target Finish Date'); ?></td>
-                                    <td nowrap="nowrap">
-                                        <input type="hidden" name="project_end_date" id="project_end_date" value="<?php echo $end_date ? $end_date->format(FMT_TIMESTAMP_DATE) : ''; ?>" />
-                                        <input type="text" name="end_date" id="end_date" onchange="setDate_new('editFrm', 'end_date');" value="<?php echo $end_date ? $end_date->format($df) : ''; ?>" class="text" />
-                                        <a href="javascript: void(0);" onclick="return showCalendar('end_date', '<?php echo $df ?>', 'editFrm', null, true, true)">
-                                            <img src="<?php echo w2PfindImage('calendar.gif'); ?>" width="24" height="12" alt="<?php echo $AppUI->_('Calendar'); ?>" border="0" />
-                                        </a>
-                                    </td>
-                                </tr>
-                                <?php if (w2PgetConfig('budget_info_display', false)) { ?>
-                                <tr>
-                                    <td colspan="2">
-                                        <table class="budgets nowrap">
-                                            <tr>
-                                                <td colspan="2"><?php echo $AppUI->_('Target Budgets'); ?> </td>
-                                            </tr>
-                                            <?php
-                                                $billingCategory = w2PgetSysVal('BudgetCategory');
-                                                $totalBudget = 0;
-                                                foreach ($billingCategory as $id => $category) {
-                                                    $amount = 0;
-                                                    if (isset($project->budget[$id])) {
-                                                        $amount = $project->budget[$id]['budget_amount'];
-                                                    }
-                                                    $totalBudget += $amount;
-                                                    ?>
-                                                    <tr>
-                                                        <td>
-                                                            <?php echo $AppUI->_($category); ?>
-                                                        </td>
-                                                        <td>
-                                                            <?php echo $w2Pconfig['currency_symbol']; ?> <input name="budget_<?php echo $id; ?>" id="budget_<?php echo $id; ?>" type="text" value="<?php echo $amount; ?>" class="text" />
-                                                        </td>
-                                                    </tr>
-                                                    <?php
-                                                }
-                                            ?>
-                                            <tr>
-                                                <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Total Target Budget'); ?></td>
-                                                <td>
-                                                    <?php echo $w2Pconfig['currency_symbol'] ?> <?php echo formatCurrency($totalBudget, $AppUI->getPref('CURRENCYFORM')); ?>
-                                                </td>
-                                            </tr>
-                                        </table>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td colspan="3"><hr noshade="noshade" size="1" /></td>
-                                </tr>
-                                <?php } ?>
-                                <tr>
-                                    <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Actual Finish Date'); ?></td>
-                                    <td nowrap="nowrap">
-                                    <?php
-                                        if ($project_id > 0) {
-                                            echo $actual_end_date ? '<a href="?m=tasks&a=view&task_id=' . $criticalTasks[0]['task_id'] . '">' : '';
-                                            echo $actual_end_date ? '<span ' . $style . '>' . $actual_end_date->format($df) . '</span>' : '-';
-                                            echo $actual_end_date ? '</a>' : '';
-                                        } else {
-                                            echo $AppUI->_('Dynamically calculated');
-                                        }
-                                    ?>
-                                    </td>
-                                </tr>
-                                <?php if (w2PgetConfig('budget_info_display', false)) { ?>
-                                <tr>
-                                    <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Actual Budget'); ?> <?php echo $w2Pconfig['currency_symbol'] ?></td>
-                                    <td nowrap="nowrap">
-                                    <?php
-                                        if ($project_id > 0) {
-                                            echo formatCurrency($project->project_actual_budget, $AppUI->getPref('CURRENCYFORM'));
-                                        } else {
-                                            echo $AppUI->_('Dynamically calculated');
-                                        }
-                                    ?>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td colspan="3"><hr noshade="noshade" size="1" /></td>
-                                </tr>
-                                <?php } ?>
-                                <tr>
-                                    <td align="right" nowrap="nowrap"><?php echo $AppUI->_('URL'); ?></td>
-                                    <td colspan="2">
-                                        <input type="text" name="project_url" value='<?php echo $project->project_url; ?>' size="40" maxlength="255" class="text" />
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Staging URL'); ?></td>
-                                    <td colspan="2">
-                                        <input type="Text" name="project_demo_url" value='<?php echo $project->project_demo_url; ?>' size="40" maxlength="255" class="text" />
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td align="right" colspan="3">
-                                    <?php
-                                        $custom_fields = new w2p_Core_CustomFields($m, $a, $project->project_id, 'edit');
-                                        $custom_fields->printHTML();
-                                        ?>
-                                    </td>
-                                </tr>
-                            </table>
+                        <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Project Name'); ?></td>
+                        <td width="100%" colspan="2">
+                            <input type="text" name="project_name" id="project_name" value="<?php echo htmlspecialchars($project->project_name, ENT_QUOTES); ?>" size="25" maxlength="255" onblur="setShort();" class="text" /> *
                         </td>
-                        <td width="50%" valign="top">
-                            <table cellspacing="0" cellpadding="2" border="0" width="100%">
+                    </tr>
+                    <tr>
+                        <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Parent Project'); ?></td>
+                        <td colspan="2">
+                            <?php echo arraySelectTree($structprojects, 'project_parent', 'style="width:250px;" class="text"', $project->project_parent ? $project->project_parent : 0) ?>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Project Owner'); ?></td>
+                        <td colspan="2">
+                            <?php
+                                // pull users
+                                $perms = &$AppUI->acl();
+                                $users = $perms->getPermittedUsers('projects');
+                                echo arraySelect($users, 'project_owner', 'size="1" style="width:200px;" class="text"', $project->project_owner ? $project->project_owner : $AppUI->user_id);
+                            ?> *
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Company'); ?></td>
+                        <td width="100%" nowrap="nowrap" colspan="2">
+                            <?php echo arraySelect($companies, 'project_company', 'class="text" size="1"', $project->project_company); ?> *
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Project Location'); ?></td>
+                        <td width="100%" colspan="2">
+                            <input type="text" name="project_location" value="<?php echo w2PformSafe($project->project_location); ?>" size="25" maxlength="50" class="text" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Start Date'); ?></td>
+                        <td nowrap="nowrap">
+                            <input type="hidden" name="project_start_date" id="project_start_date" value="<?php echo $start_date ? $start_date->format(FMT_TIMESTAMP_DATE) : ''; ?>" />
+                            <input type="text" name="start_date" id="start_date" onchange="setDate_new('editFrm', 'start_date');" value="<?php echo $start_date ? $start_date->format($df) : ''; ?>" class="text" />
+                            <a href="javascript: void(0);" onclick="return showCalendar('start_date', '<?php echo $df ?>', 'editFrm', null, true, true)">
+                                <img src="<?php echo w2PfindImage('calendar.gif'); ?>" width="24" height="12" alt="<?php echo $AppUI->_('Calendar'); ?>" border="0" />
+                            </a>
+                        </td>
+                        <td rowspan="6" valign="top">
+                            <?php
+                                if ($AppUI->isActiveModule('contacts') && canView('contacts')) {
+                                    echo '<input type="button" class="btn btn-primary btn-mini" value="' . $AppUI->_('Select contacts...') . '" onclick="javascript:popContacts();" />';
+                                }
+
+                                if ($AppUI->isActiveModule('departments') && canAccess('departments')) {
+                                    //Build display list for departments
+                                    $company_id = $project->project_company;
+                                    $selected_departments = array();
+                                    if ($project_id) {
+                                        $myDepartments = $project->getDepartmentList();
+                                        $selected_departments = (count($myDepartments) > 0) ? array_keys($myDepartments) : array();
+                                    }
+
+                                    $departments_count = 0;
+                                    $department_selection_list = getDepartmentSelectionList($company_id, $selected_departments);
+                                    if ($department_selection_list != '' || $project_id) {
+                                        $department_selection_list = ($AppUI->_('Departments') . '<br /><select name="project_departments[]" multiple="multiple" class="text"><option value="0"></option>' . $department_selection_list . '</select>');
+                                    } else {
+                                        $department_selection_list = '<input type="button" class="button" value="' . $AppUI->_('Select department...') . '" onclick="javascript:popDepartment();" /><input type="hidden" name="project_departments"';
+                                    }
+
+                                    // Let's check if the actual company has departments registered
+                                    if ($department_selection_list != '') {
+                                        echo '<br />' . $department_selection_list;
+                                    }
+                                }
+                            ?>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Target Finish Date'); ?></td>
+                        <td nowrap="nowrap">
+                            <input type="hidden" name="project_end_date" id="project_end_date" value="<?php echo $end_date ? $end_date->format(FMT_TIMESTAMP_DATE) : ''; ?>" />
+                            <input type="text" name="end_date" id="end_date" onchange="setDate_new('editFrm', 'end_date');" value="<?php echo $end_date ? $end_date->format($df) : ''; ?>" class="text" />
+                            <a href="javascript: void(0);" onclick="return showCalendar('end_date', '<?php echo $df ?>', 'editFrm', null, true, true)">
+                                <img src="<?php echo w2PfindImage('calendar.gif'); ?>" width="24" height="12" alt="<?php echo $AppUI->_('Calendar'); ?>" border="0" />
+                            </a>
+                        </td>
+                    </tr>
+                    <?php if (w2PgetConfig('budget_info_display', false)) { ?>
+                    <tr>
+                        <td colspan="2">
+                            <table class="budgets nowrap">
                                 <tr>
-                                    <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Priority'); ?></td>
-                                    <td nowrap ="nowrap">
-                                        <?php echo arraySelect($projectPriority, 'project_priority', 'size="1" class="text"', ($project->project_priority ? $project->project_priority : 0), true); ?> *
-                                    </td>
+                                    <td colspan="2"><?php echo $AppUI->_('Target Budgets'); ?> </td>
                                 </tr>
+                                <?php
+                                    $billingCategory = w2PgetSysVal('BudgetCategory');
+                                    $totalBudget = 0;
+                                    foreach ($billingCategory as $id => $category) {
+                                        $amount = 0;
+                                        if (isset($project->budget[$id])) {
+                                            $amount = $project->budget[$id]['budget_amount'];
+                                        }
+                                        $totalBudget += $amount;
+                                        ?>
+                                        <tr>
+                                            <td>
+                                                <?php echo $AppUI->_($category); ?>
+                                            </td>
+                                            <td>
+                                                <?php echo $w2Pconfig['currency_symbol']; ?> <input name="budget_<?php echo $id; ?>" id="budget_<?php echo $id; ?>" type="text" value="<?php echo $amount; ?>" class="text" />
+                                            </td>
+                                        </tr>
+                                        <?php
+                                    }
+                                ?>
                                 <tr>
-                                    <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Short Name'); ?></td>
-                                    <td colspan="3">
-                                        <input type="text" name="project_short_name" value="<?php echo w2PformSafe($project->project_short_name); ?>" size="10" maxlength="10" class="text" /> *
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Color Identifier'); ?></td>
-                                    <td nowrap="nowrap">
-                                        <input type="text" name="project_color_identifier" value="<?php echo ($project->project_color_identifier) ? $project->project_color_identifier : 'FFFFFF'; ?>" size="10" maxlength="6" onblur="setColor();" class="text" /> *
-                                    </td>
-                                    <td nowrap="nowrap" align="left">
-                                        <a href="javascript: void(0);" onclick="newwin=window.open('./index.php?m=public&a=color_selector&dialog=1&callback=setColor', 'calwin', 'width=320, height=300, scrollbars=no');"><?php echo $AppUI->_('change color'); ?></a>
-                                        <a href="javascript: void(0);" onclick="newwin=window.open('./index.php?m=public&a=color_selector&dialog=1&callback=setColor', 'calwin', 'width=320, height=300, scrollbars=no');"><span id="test" style="border:solid;border-width:1;border-right-width:0;background:#<?php echo ($project->project_color_identifier) ? $project->project_color_identifier : 'FFFFFF'; ?>;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="border:solid;border-width:1;border-left-width:0;background:#FFFFFF">&nbsp;&nbsp;</span></a>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Project Type'); ?></td>
-                                    <td colspan="3">
-                                        <?php echo arraySelect($ptype, 'project_type', 'size="1" class="text"', $project->project_type, true); ?> *
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td colspan="4">
-                                        <table width="100%" bgcolor="#cccccc">
-                                            <tr>
-                                                <td><?php echo $AppUI->_('Status'); ?> *</td>
-                                                <td nowrap="nowrap"><?php echo $AppUI->_('Progress'); ?></td>
-                                                <td><?php echo $AppUI->_('Active'); ?>?</td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <?php echo arraySelect($pstatus, 'project_status', 'size="1" class="text"', $project->project_status, true); ?>
-                                                </td>
-                                                <td>
-                                                    <strong><?php echo sprintf("%.1f%%", $project->project_percent_complete); ?></strong>
-                                                </td>
-                                                <td>
-                                                    <input type="checkbox" value="1" name="project_active" <?php echo $project->project_active || $project_id == 0 ? 'checked="checked"' : ''; ?> />
-                                                </td>
-                                            </tr>
-                                        </table>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td align="left" nowrap="nowrap">
-                                        <?php echo $AppUI->_('Import tasks from'); ?>:<br/>
-                                    </td>
-                                    <td colspan="3">
-                                        <?php echo projectSelectWithOptGroup($AppUI->user_id, 'import_tasks_from', 'size="1" class="text"', false, $project_id); ?>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td colspan="4">
-                                        <?php echo $AppUI->_('Description'); ?><br />
-                                        <textarea name="project_description" cols="50" rows="10" class="textarea"><?php echo w2PformSafe($project->project_description); ?></textarea>
-                                    </td>
-                                </tr>
-                                <tr valign="middle">
-                                    <td colspan="4">
-                                        <table cellspacing="0" cellpadding="2" border="0" width="100%">
-                                            <tr>
-                                                <td valign="middle"><?php echo $AppUI->_('Notify by Email'); ?>:
-                                                    <input type="checkbox" name="email_project_owner_box" id="email_project_owner_box" <?php echo ($tt ? 'checked="checked"' : '');?> />
-                                                    <?php echo $AppUI->_('Project Owner'); ?>
-                                                    <input type="hidden" name="email_project_owner" id="email_project_owner" value="<?php echo ($project->project_owner ? $project->project_owner : '0');?>" />
-                                                    <input type='checkbox' name='email_project_contacts_box' id='email_project_contacts_box' <?php echo ($tp ? 'checked="checked"' : ''); ?> />
-                                                    <?php echo $AppUI->_('Project Contacts'); ?>
-                                                </td>
-                                            </tr>
-                                        </table>
+                                    <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Total Target Budget'); ?></td>
+                                    <td>
+                                        <?php echo $w2Pconfig['currency_symbol'] ?> <?php echo formatCurrency($totalBudget, $AppUI->getPref('CURRENCYFORM')); ?>
                                     </td>
                                 </tr>
                             </table>
                         </td>
                     </tr>
                     <tr>
-                        <td>
-                            <input class="button" type="button" name="cancel" value="<?php echo $AppUI->_('cancel'); ?>" onclick="javascript:if(confirm('Are you sure you want to cancel.')){location.href = './index.php?m=projects';}" />
+                        <td colspan="3"><hr noshade="noshade" size="1" /></td>
+                    </tr>
+                    <?php } ?>
+                    <tr>
+                        <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Actual Finish Date'); ?></td>
+                        <td nowrap="nowrap">
+                        <?php
+                            if ($project_id > 0) {
+                                echo $actual_end_date ? '<a href="?m=tasks&a=view&task_id=' . $criticalTasks[0]['task_id'] . '">' : '';
+                                echo $actual_end_date ? '<span ' . $style . '>' . $actual_end_date->format($df) . '</span>' : '-';
+                                echo $actual_end_date ? '</a>' : '';
+                            } else {
+                                echo $AppUI->_('Dynamically calculated');
+                            }
+                        ?>
                         </td>
-                        <td class="right">
-                            * <?php echo $AppUI->_('requiredField'); ?><br />
-                            <input class="button" type="button" name="btnFuseAction" value="<?php echo $AppUI->_('submit'); ?>" onclick="submitIt();" />
+                    </tr>
+                    <?php if (w2PgetConfig('budget_info_display', false)) { ?>
+                    <tr>
+                        <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Actual Budget'); ?> <?php echo $w2Pconfig['currency_symbol'] ?></td>
+                        <td nowrap="nowrap">
+                        <?php
+                            if ($project_id > 0) {
+                                echo formatCurrency($project->project_actual_budget, $AppUI->getPref('CURRENCYFORM'));
+                            } else {
+                                echo $AppUI->_('Dynamically calculated');
+                            }
+                        ?>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="3"><hr noshade="noshade" size="1" /></td>
+                    </tr>
+                    <?php } ?>
+                    <tr>
+                        <td align="right" nowrap="nowrap"><?php echo $AppUI->_('URL'); ?></td>
+                        <td colspan="2">
+                            <input type="text" name="project_url" value='<?php echo $project->project_url; ?>' size="40" maxlength="255" class="text" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Staging URL'); ?></td>
+                        <td colspan="2">
+                            <input type="Text" name="project_demo_url" value='<?php echo $project->project_demo_url; ?>' size="40" maxlength="255" class="text" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right" colspan="3">
+                        <?php
+                            $custom_fields = new w2p_Core_CustomFields($m, $a, $project->project_id, 'edit');
+                            $custom_fields->printHTML();
+                            ?>
                         </td>
                     </tr>
                 </table>
+            </td>
+            <td width="50%" valign="top">
+                <table cellspacing="1" cellpadding="2" width="100%" class="well">
+                    <tr>
+                        <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Priority'); ?></td>
+                        <td nowrap ="nowrap">
+                            <?php echo arraySelect($projectPriority, 'project_priority', 'size="1" class="text"', ($project->project_priority ? $project->project_priority : 0), true); ?> *
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Short Name'); ?></td>
+                        <td colspan="3">
+                            <input type="text" name="project_short_name" value="<?php echo w2PformSafe($project->project_short_name); ?>" size="10" maxlength="10" class="text" /> *
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Color Identifier'); ?></td>
+                        <td nowrap="nowrap">
+                            <input type="text" name="project_color_identifier" value="<?php echo ($project->project_color_identifier) ? $project->project_color_identifier : 'FFFFFF'; ?>" size="10" maxlength="6" onblur="setColor();" class="text" /> *
+                        </td>
+                        <td nowrap="nowrap" align="left">
+                            <a href="javascript: void(0);" onclick="newwin=window.open('./index.php?m=public&a=color_selector&dialog=1&callback=setColor', 'calwin', 'width=320, height=300, scrollbars=no');"><?php echo $AppUI->_('change color'); ?></a>
+                            <a href="javascript: void(0);" onclick="newwin=window.open('./index.php?m=public&a=color_selector&dialog=1&callback=setColor', 'calwin', 'width=320, height=300, scrollbars=no');"><span id="test" style="border:solid;border-width:1;border-right-width:0;background:#<?php echo ($project->project_color_identifier) ? $project->project_color_identifier : 'FFFFFF'; ?>;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="border:solid;border-width:1;border-left-width:0;background:#FFFFFF">&nbsp;&nbsp;</span></a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Project Type'); ?></td>
+                        <td colspan="3">
+                            <?php echo arraySelect($ptype, 'project_type', 'size="1" class="text"', $project->project_type, true); ?> *
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="4">
+                            <table width="100%" bgcolor="#cccccc">
+                                <tr>
+                                    <td><?php echo $AppUI->_('Status'); ?> *</td>
+                                    <td nowrap="nowrap"><?php echo $AppUI->_('Progress'); ?></td>
+                                    <td><?php echo $AppUI->_('Active'); ?>?</td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <?php echo arraySelect($pstatus, 'project_status', 'size="1" class="text"', $project->project_status, true); ?>
+                                    </td>
+                                    <td>
+                                        <strong><?php echo sprintf("%.1f%%", $project->project_percent_complete); ?></strong>
+                                    </td>
+                                    <td>
+                                        <input type="checkbox" value="1" name="project_active" <?php echo $project->project_active || $project_id == 0 ? 'checked="checked"' : ''; ?> />
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="left" nowrap="nowrap">
+                            <?php echo $AppUI->_('Import tasks from'); ?>:<br/>
+                        </td>
+                        <td colspan="3">
+                            <?php echo projectSelectWithOptGroup($AppUI->user_id, 'import_tasks_from', 'size="1" class="text"', false, $project_id); ?>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="4">
+                            <?php echo $AppUI->_('Description'); ?><br />
+                            <textarea name="project_description" cols="50" rows="10" class="textarea"><?php echo w2PformSafe($project->project_description); ?></textarea>
+                        </td>
+                    </tr>
+                    <tr valign="middle">
+                        <td colspan="4">
+                            <table cellspacing="0" cellpadding="2" border="0" width="100%">
+                                <tr>
+                                    <td valign="middle"><?php echo $AppUI->_('Notify by Email'); ?>:
+                                        <input type="checkbox" name="email_project_owner_box" id="email_project_owner_box" <?php echo ($tt ? 'checked="checked"' : '');?> />
+                                        <?php echo $AppUI->_('Project Owner'); ?>
+                                        <input type="hidden" name="email_project_owner" id="email_project_owner" value="<?php echo ($project->project_owner ? $project->project_owner : '0');?>" />
+                                        <input type='checkbox' name='email_project_contacts_box' id='email_project_contacts_box' <?php echo ($tp ? 'checked="checked"' : ''); ?> />
+                                        <?php echo $AppUI->_('Project Contacts'); ?>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <input class="btn btn-danger" type="button" name="cancel" value="<?php echo $AppUI->_('cancel'); ?>" onclick="javascript:if(confirm('Are you sure you want to cancel.')){location.href = './index.php?m=projects';}" />
+            </td>
+            <td class="right">
+                <input class="btn btn-primary" type="button" name="btnFuseAction" value="<?php echo $AppUI->_('submit'); ?>" onclick="submitIt();" />
             </td>
         </tr>
     </table>

@@ -5,7 +5,7 @@ if (!defined('W2P_BASE_DIR')) {
 ?>
 	<td width="50%" valign="top">
 		<strong><?php echo $AppUI->_('Details'); ?></strong>
-		<table cellspacing="1" cellpadding="2" border="0" width="100%">
+		<table cellspacing="1" cellpadding="2" border="0" width="100%" class="well">
             <tr>
                 <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Company'); ?>:</td>
                 <td class="hilite" width="100%"> <?php echo "<a href='?m=companies&a=view&company_id=" . $obj->project_company . "'>" . htmlspecialchars($obj->company_name, ENT_QUOTES) . '</a>'; ?></td>
@@ -79,7 +79,7 @@ if (!defined('W2P_BASE_DIR')) {
 	</td>
 	<td width="50%" rowspan="9" valign="top">
 		<strong><?php echo $AppUI->_('Summary'); ?></strong><br />
-		<table cellspacing="1" cellpadding="2" border="0" width="100%">
+		<table cellspacing="1" cellpadding="2" border="0" width="100%" class="well">
             <tr>
                 <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Status'); ?>:</td>
                 <td class="hilite" width="100%"><?php echo $AppUI->_($pstatus[$obj->project_status]); ?></td>

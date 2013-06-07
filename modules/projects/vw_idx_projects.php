@@ -286,7 +286,7 @@ if (count($fields) > 0) {
 			?>
 				<tr>
 					<td colspan="25" align="right">
-                        <input type="submit" class="button" value="<?php echo $AppUI->_('Update projects status'); ?>" />
+                        <input type="submit" class="btn btn-primary btn-mini" value="<?php echo $AppUI->_('Update projects status'); ?>" />
                         <input type="hidden" name="update_project_status" value="1" />
                         <input type="hidden" name="m" value="projects" />
                         <?php echo arraySelect($pstatus, 'project_status', 'size="1" class="text"', $project_status_filter + 1, true); ?>

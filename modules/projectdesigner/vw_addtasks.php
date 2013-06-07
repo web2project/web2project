@@ -125,7 +125,7 @@ function addTasks() {
                     </tr>
                     <tr>
                         <td colspan="5" valign="bottom" align="right">
-                            <input type="button" class="button" value="<?php echo $AppUI->_('add'); ?>" onclick="addTasks()" />
+                            <input type="button" class="btn btn-primary btn-small" value="<?php echo $AppUI->_('add'); ?>" onclick="addTasks()" />
                         </td>
                     </tr>
                 </table>

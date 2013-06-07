@@ -85,7 +85,7 @@ $spercent = arrayMerge(array('' => '('.$AppUI->_('Progress').')'), $percent);
     <input type="hidden" name="pd_option_view_addtasks" value="<?php echo (isset($view_options[0]['pd_option_view_addtasks']) ? $view_options[0]['pd_option_view_addtasks'] : 1); ?>" />
     <input type="hidden" name="pd_option_view_files" value="<?php echo (isset($view_options[0]['pd_option_view_files']) ? $view_options[0]['pd_option_view_files'] : 1); ?>" />
     <input type="hidden" name="bulk_task_hperc_assign" value="" />
-    <table id="tbl_bulk" width="100%">
+    <table id="tbl_bulk" width="100%" class="well">
         <tr>
             <th width="15%"><?php echo $AppUI->_('Start Date'); ?>&nbsp;</th>
             <td width="160" nowrap="nowrap">
@@ -194,7 +194,7 @@ $spercent = arrayMerge(array('' => '('.$AppUI->_('Progress').')'), $percent);
                     <option value="0"><?php echo $AppUI->_('No'); ?></option>
                 </select>
             </td>
-            <td colspan="18" align="right"><input type="button" class="button" value="<?php echo $AppUI->_('update'); ?>" onclick="if (confirm('Are you sure you wish to apply the update(s) to the selected task(s)?')) document.frm_bulk.submit();" /></td>
+            <td colspan="18" align="right"><input type="button" class="btn btn-primary btn-small" value="<?php echo $AppUI->_('update'); ?>" onclick="if (confirm('Are you sure you wish to apply the update(s) to the selected task(s)?')) document.frm_bulk.submit();" /></td>
         </tr>
     </table>
 </form>
