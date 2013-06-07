@@ -42,10 +42,10 @@ for ($i = 1, $i_cmp = sizeof($keys); $i < $i_cmp; $i++) {
     <input type="hidden" name="dosql" value="do_task_aed" />
     <input name="hperc_assign" type="hidden" value="<?php echo $initPercAsignment; ?>"/>
     <input type="hidden" name="hassign" />
-    <table width="100%" border="1" cellpadding="4" cellspacing="0" class="std addedit">
+    <table width="100%" border="1" cellpadding="4" cellspacing="0" class="std addedit well">
         <tr>
             <td valign="top" align="center">
-                <table cellspacing="0" cellpadding="2" border="0">
+                <table cellspacing="0" cellpadding="2" border="0" class="well">
                     <tr>
                         <td><?php echo $AppUI->_('Human Resources'); ?>:</td>
                         <td><?php echo $AppUI->_('Assigned to Task'); ?>:</td>
@@ -62,7 +62,7 @@ for ($i = 1, $i_cmp = sizeof($keys); $i < $i_cmp; $i++) {
                         <td colspan="2" align="center">
                             <table>
                             <tr>
-                                <td align="right"><input type="button" class="button" value="&gt;" onclick="addUser(document.resourceFrm)" /></td>
+                                <td align="right"><input type="button" class="btn btn-primary btn-mini" value="&gt;" onclick="addUser(document.resourceFrm)" /></td>
                                 <td>
                                     <select name="percentage_assignment" class="text">
                                     <?php
@@ -72,7 +72,7 @@ for ($i = 1, $i_cmp = sizeof($keys); $i < $i_cmp; $i++) {
                                     ?>
                                     </select>
                                 </td>
-                                <td align="left"><input type="button" class="button" value="&lt;" onclick="removeUser(document.resourceFrm)" /></td>
+                                <td align="left"><input type="button" class="btn btn-primary btn-mini" value="&lt;" onclick="removeUser(document.resourceFrm)" /></td>
                             </tr>
                             </table>
                         </td>
@@ -80,7 +80,7 @@ for ($i = 1, $i_cmp = sizeof($keys); $i < $i_cmp; $i++) {
                 </table>
             </td>
             <td valign="top" align="center">
-                <table>
+                <table cellspacing="1" cellpadding="2" width="100%" class="well">
                     <tr>
                         <td align="left">
                             <?php echo $AppUI->_('Additional Email Comments'); ?>:

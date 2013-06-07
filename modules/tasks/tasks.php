@@ -660,9 +660,9 @@ if ($showEditCheckbox) {
 					?>
 					<tr>
                         <td colspan="<?php echo $cols; ?>" align="right">
-                            <input type="button" class="button" value="<?php echo $AppUI->_('Reports'); ?>" 
+                            <input type="button" class="btn btn-primary btn-mini" value="<?php echo $AppUI->_('Reports'); ?>" 
                                    onclick="javascript:window.location='index.php?m=reports&amp;project_id=<?php echo $k; ?>';" />
-                            <input type="button" class="button" value="<?php echo $AppUI->_('Gantt Chart'); ?>" 
+                            <input type="button" class="btn btn-primary btn-mini" value="<?php echo $AppUI->_('Gantt Chart'); ?>" 
                                    onclick="javascript:window.location='index.php?m=tasks&amp;a=viewgantt&amp;project_id=<?php echo $k; ?>';" />
                         </td>
 					</tr>

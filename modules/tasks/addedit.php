@@ -205,7 +205,7 @@ function popContacts() {
                 <br /><input type="text" class="text" name="task_name" value="<?php echo htmlspecialchars($task->task_name, ENT_QUOTES); ?>" size="40" maxlength="255" />
             </td>
             <td>
-                <table cellspacing="0" cellpadding="2" border="0" width="100%">
+                <table cellspacing="0" cellpadding="2" border="0" width="100%" class="well">
                 <tr>
                     <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Status'); ?></td>
                     <td>
@@ -233,7 +233,7 @@ function popContacts() {
         </tr>
         <tr>
             <td colspan="2">
-                <table border="0" cellspacing="0" cellpadding="3" width="100%">
+                <table cellspacing="1" cellpadding="2" width="100%" class="well">
                 <tr>
                     <td height="40" width="35%">
                         * <?php echo $AppUI->_('requiredField'); ?>
@@ -243,10 +243,10 @@ function popContacts() {
                         <table>
                         <tr>
                             <td>
-                                <input class="button" type="button" name="cancel" value="<?php echo $AppUI->_('cancel'); ?>" onclick="if(confirm('<?php echo $AppUI->_('taskCancel', UI_OUTPUT_JS); ?>')){location.href = '?<?php echo $AppUI->getPlace(); ?>';}" />
+                                <input class="btn btn-danger" type="button" name="cancel" value="<?php echo $AppUI->_('cancel'); ?>" onclick="if(confirm('<?php echo $AppUI->_('taskCancel', UI_OUTPUT_JS); ?>')){location.href = '?<?php echo $AppUI->getPlace(); ?>';}" />
                             </td>
                             <td>
-                                <input class="button" type="button" name="btnFuseAction" value="<?php echo $AppUI->_('save'); ?>" onclick="submitIt(document.editFrm);" />
+                                <input class="btn btn-primary" type="button" name="btnFuseAction" value="<?php echo $AppUI->_('save'); ?>" onclick="submitIt(document.editFrm);" />
                             </td>
                         </tr>
                         </table>

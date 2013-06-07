@@ -20,7 +20,7 @@ $perms = &$AppUI->acl();
     <table class="std addedit" width="100%" border="1" cellpadding="4" cellspacing="0">
         <tr>
             <td width="50%" valign='top'>
-                <table border="0">
+                <table cellspacing="0" cellpadding="2" border="0" width="100%" class="well">
                     <tr>
                         <td>
                             <?php if ($can_edit_time_information) { ?>
@@ -47,7 +47,7 @@ $perms = &$AppUI->acl();
                             <br /><br />
                             <?php
                             if ($AppUI->isActiveModule('contacts') && canView('contacts')) {
-                                echo '<input type="button" class="button" value="' . $AppUI->_('Select contacts...') . '" onclick="javascript:popContacts();" />';
+                                echo '<input type="button" class="btn btn-primary btn-mini" value="' . $AppUI->_('Select contacts...') . '" onclick="javascript:popContacts();" />';
                             }
                             // Let's check if the actual company has departments registered
                             if (count($department_selection_list) > 1) { ?><br />

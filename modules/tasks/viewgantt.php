@@ -269,7 +269,7 @@ if (!$min_view) {
 	<input type="hidden" name="caller" value="<?php echo $a; ?>" />
     <input type="hidden" name="datePicker" value="project" />
 
-    <table border="0" cellpadding="4" cellspacing="0" class="std" width="100%">
+    <table border="0" cellpadding="4" cellspacing="0" class="std well" width="100%">
         <tr>
             <td align="left" valign="top" width="20">
                 <?php if ($display_option != "all") { ?>
@@ -297,8 +297,8 @@ if (!$min_view) {
 				<input type="checkbox" name="showLabels" id="showLabels" value="1" <?php echo (($showLabels == 1) ? 'checked="checked"' : ""); ?> /><td><label for="showLabels"><?php echo $AppUI->_('Show captions'); ?></label>
 			</td>
             <td align="left">
-                <input type="button" class="button" value="<?php echo $AppUI->_('submit'); ?>" onclick='document.editFrm.display_option.value="custom";submitIt();' style="float: left;" />
-                <input type="button" class="button" value="<?php echo $AppUI->_('Print to PDF');?>" onclick='javascript:printPDFHR()' style="float: right;" />
+                <input type="button" class="btn btn-primary btn-mini" value="<?php echo $AppUI->_('submit'); ?>" onclick='document.editFrm.display_option.value="custom";submitIt();' style="float: left;" />
+                <input type="button" class="btn btn-primary btn-mini" value="<?php echo $AppUI->_('Print to PDF');?>" onclick='javascript:printPDFHR()' style="float: right;" />
             </td>
             <td align="right" valign="top" width="20">
                 <?php if ($display_option != 'all') { ?>
