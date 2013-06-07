@@ -68,7 +68,7 @@ for ($i = 1, $i_cmp = sizeof($keys); $i < $i_cmp; $i++) {
     <table width="100%" border="1" cellpadding="4" cellspacing="0" class="std addedit">
         <tr>
             <td valign="top" align="center">
-                <table cellspacing="0" cellpadding="2" border="0">
+                <table cellspacing="0" cellpadding="2" border="0" class="well">
                     <tr>
                         <td><?php echo $AppUI->_('Resources'); ?>:</td>
                         <td><?php echo $AppUI->_('Assigned to Task'); ?>:</td>
@@ -85,11 +85,11 @@ for ($i = 1, $i_cmp = sizeof($keys); $i < $i_cmp; $i++) {
                         <td colspan="2" align="center">
                             <table>
                             <tr>
-                                <td align="right"><input type="button" class="button" value="&gt;" onclick="addResource(document.otherFrm)" /></td>
+                                <td align="right"><input type="button" class="btn btn-primary btn-mini" value="&gt;" onclick="addResource(document.otherFrm)" /></td>
                                 <td>
                                     <?php echo arraySelect($percent, 'resource_assignment', 'size="1" class="text"', 100) . '%'; ?>
                                 </td>
-                                <td align="left"><input type="button" class="button" value="&lt;" onclick="removeResource(document.otherFrm)" /></td>
+                                <td align="left"><input type="button" class="btn btn-primary btn-mini" value="&lt;" onclick="removeResource(document.otherFrm)" /></td>
                             </tr>
                             </table>
                         </td>

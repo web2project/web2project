@@ -113,7 +113,7 @@ for ($i = ($page - 1) * $xpg_pagesize; $i < $page * $xpg_pagesize && $i < $xpg_t
     if ($canEdit && 'links' != $m) { ?>
 	<tr>
 		<td colspan="<?php echo $columnCount; ?>" align="right" valign="top" style="background-color:#ffffff">
-			<input type="button" class=button value="<?php echo $AppUI->_('new link') ?>" onClick="javascript:window.location='./index.php?m=links&a=addedit&project_id=<?php echo $project_id; ?>&task_id=<?php echo $task_id; ?>'">
+			<input type="button" class="btn btn-primary btn-mini" value="<?php echo $AppUI->_('new link') ?>" onClick="javascript:window.location='./index.php?m=links&a=addedit&project_id=<?php echo $project_id; ?>&task_id=<?php echo $task_id; ?>'">
 		</td>
 	</tr>
     <?php } ?>
