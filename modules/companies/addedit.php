@@ -66,14 +66,14 @@ function testURL( x ) {
 }
 </script>
 
-<form name="changeclient" action="?m=companies" method="post" accept-charset="utf-8">
+<form name="changeclient" action="?m=companies" method="post" accept-charset="utf-8" class="form-horizontal">
 	<input type="hidden" name="dosql" value="do_company_aed" />
 	<input type="hidden" name="company_id" value="<?php echo $company_id; ?>" />
 
 	<table cellspacing="1" cellpadding="1" border="0" width="100%" class="std addedit">
 		<tr>
-			<td>
-				<table>				
+			<td width="50%" style="vertical-align: top">
+				<table cellspacing="1" cellpadding="2" width="100%" class="well">
 					<tr>
 						<td align="right"><?php echo $AppUI->_('Company Name'); ?>:</td>
 						<td>
@@ -105,9 +105,18 @@ function testURL( x ) {
 						</td>
 					</tr>
 					<tr>
+						<td align="right" valign="top"><?php echo $AppUI->_('Description'); ?>:</td>
+						<td align="left">
+							<textarea rows="10" name="company_description"><?php echo $company->company_description; ?></textarea>
+						</td>
+					</tr>
+                </table>
+            </td>
+            <td width="50%" style="vertical-align: top">
+                <table cellspacing="1" cellpadding="2" width="100%" class="well">
+					<tr>
 						<td colspan="2" align="center">
-							<img src="<?php echo w2PfindImage('shim.gif'); ?>" width="50" height="1" alt="" /><?php echo $AppUI->_('Address'); ?><br />
-							<hr width="500" align="center" size="1" />
+							<?php echo $AppUI->_('Address'); ?>
 						</td>
 					</tr>
 					<tr>
@@ -162,12 +171,6 @@ function testURL( x ) {
 							?>
 						</td>
 					</tr>
-					<tr>
-						<td align="right" valign="top"><?php echo $AppUI->_('Description'); ?>:</td>
-						<td align="left">
-							<textarea cols="70" rows="10" class="textarea" name="company_description"><?php echo $company->company_description; ?></textarea>
-						</td>
-					</tr>
 				</table>
 			</td>
 			<td align='left'>
@@ -178,8 +181,8 @@ function testURL( x ) {
 			</td>
 		</tr>
 		<tr>
-			<td><input type="button" value="<?php echo $AppUI->_('back'); ?>" class="button" onclick="javascript:history.back(-1);" /></td>
-			<td align="right"><input type="button" value="<?php echo $AppUI->_('submit'); ?>" class="button" onclick="submitIt()" /></td>
+			<td><input type="button" value="<?php echo $AppUI->_('back'); ?>" class="btn btn-danger" onclick="javascript:history.back(-1);" /></td>
+			<td align="right"><input type="button" value="<?php echo $AppUI->_('submit'); ?>" class="btn btn-primary" onclick="submitIt()" /></td>
 		</tr>
 	</table>
 </form>
