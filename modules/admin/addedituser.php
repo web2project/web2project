@@ -148,7 +148,7 @@ function setDept( key, val ) {
 	<input type="hidden" name="dosql" value="do_user_aed" />
 	<input type="hidden" name="username_min_len" value="<?php echo w2PgetConfig('username_min_len'); ?>)" />
 	<input type="hidden" name="password_min_len" value="<?php echo w2PgetConfig('password_min_len'); ?>)" />
-    <table width="100%" border="0" cellpadding="0" cellspacing="1" class="std addedit">
+    <table width="100%" border="0" cellpadding="0" cellspacing="1" class="std addedit well">
         <tr>
             <td align="right" width="35%" nowrap="nowrap">* <?php echo $AppUI->_('Login Name'); ?>:</td>
             <td>
@@ -208,7 +208,7 @@ function setDept( key, val ) {
             <td>
                 <input type="hidden" name="contact_department" value="<?php echo $user['contact_department']; ?>" />
                 <input type="text" class="text" name="dept_name" value="<?php echo $user['dept_name']; ?>" size="40" disabled="disabled" />
-                <input type="button" class="button" value="<?php echo $AppUI->_('select dept'); ?>..." onclick="popDept()" />
+                <input type="button" class="btn btn-primary btn-mini" value="<?php echo $AppUI->_('select dept'); ?>..." onclick="popDept()" />
             </td>
         </tr>
         <tr>
@@ -230,7 +230,7 @@ function setDept( key, val ) {
             <td></td>
         <tr>
             <td align="left">
-                <input type="button" value="<?php echo $AppUI->_('back'); ?>" onclick="javascript:history.back(-1);" class="button" />
+                <input type="button" value="<?php echo $AppUI->_('back'); ?>" onclick="javascript:history.back(-1);" class="btn btn-danger" />
             </td>
             <?php if ($canEdit && !$user_id) { ?>
                 <td width="100%">
@@ -244,7 +244,7 @@ function setDept( key, val ) {
                 <?php if ($canEdit && !$user_id) { ?>
                     <input type="checkbox" value="1" name="send_user_mail" id="send_user_mail" />&nbsp;&nbsp;&nbsp;
                 <?php } ?>
-                <input type="button" value="<?php echo $AppUI->_('submit'); ?>" onclick="submitIt()" class="button" />
+                <input type="button" value="<?php echo $AppUI->_('submit'); ?>" onclick="submitIt()" class="btn btn-primary" />
             </td>
         </tr>
         <?php } ?>

@@ -68,7 +68,7 @@ $orderMax = count($properties) + count($fields);
 	<input type="hidden" name="mod_id" value="<?php echo $mod_id; ?>" />
 	<input type="hidden" name="module_config_name" value="<?php echo $view ?>" />
 
-	<table id="tblConfig" border="0" cellpadding="4" cellspacing="0" width="100%" class="std">
+	<table id="tblConfig" border="0" cellpadding="4" cellspacing="0" width="100%" class="std well">
 		<tr>
 			<th colspan="2"><?php echo $AppUI->_('Order'); ?></th>
 			<th><?php echo $AppUI->_('Object Property'); ?></th>
@@ -116,10 +116,10 @@ $orderMax = count($properties) + count($fields);
 		?>
   		<tr>
           	<td colspan="2">
-          		<input class="button" type="button" name="cancel" value="<?php echo $AppUI->_('cancel'); ?>" />
+          		<input class="btn btn-danger" type="button" name="cancel" value="<?php echo $AppUI->_('cancel'); ?>" />
             </td>
           	<td colspan="2" class="center">
-          		<input class="button" type="submit" name="submit" value="<?php echo $AppUI->_('save'); ?>" />
+          		<input class="btn btn-primary" type="submit" name="submit" value="<?php echo $AppUI->_('save'); ?>" />
           	</td>
     	</tr>
 	</table>

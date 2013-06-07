@@ -77,7 +77,7 @@ function submitIt() {
 	<input type="hidden" name="dosql" value="do_preference_aed" />
 	<input type="hidden" name="pref_user" value="<?php echo $user_id; ?>" />
 	<input type="hidden" name="del" value="0" />
-<table width="100%" border="0" cellpadding="1" cellspacing="1" class="std addedit pref">
+<table width="100%" border="0" cellpadding="1" cellspacing="1" class="std addedit pref well">
     <tr>
         <th colspan="2"><?php echo $AppUI->_('User Preferences'); ?>: <?php echo $user_id ? $user : $AppUI->_('Default'); ?></th>
     </tr>
@@ -312,8 +312,8 @@ echo ' />';
 	</td>
 </tr>
 <tr>
-	<td align="left"><input class="button"  type="button" value="<?php echo $AppUI->_('back'); ?>" onclick="javascript:history.back(-1);" /></td>
-	<td align="right"><input class="button" type="button" value="<?php echo $AppUI->_('submit'); ?>" onclick="submitIt()" /></td>
+	<td align="left"><input class="btn btn-danger"  type="button" value="<?php echo $AppUI->_('back'); ?>" onclick="javascript:history.back(-1);" /></td>
+	<td align="right"><input class="btn btn-primary" type="button" value="<?php echo $AppUI->_('submit'); ?>" onclick="submitIt()" /></td>
 </tr>
 </table>
 </form>

@@ -96,11 +96,11 @@ foreach ($rs as $c) {
 ?>
 <form name="cfgFrm" action="index.php?m=system&a=systemconfig" method="post" accept-charset="utf-8">
 	<input type="hidden" name="dosql" value="do_systemconfig_aed" />
-	<table cellspacing="0" cellpadding="3" border="0" class="std view" width="100%" align="center">
+	<table cellspacing="0" cellpadding="3" border="0" class="std view well" width="100%" align="center">
 		<tr><td colspan="4"><?php echo $AppUI->_('syscfg_intro'); ?></td></tr>
 		<?php echo $output; ?>
 		<tr>
-	 		<td align="right" colspan="4"><input class="button" type="submit" name="do_save_cfg" value="<?php echo $AppUI->_('Save'); ?>" /></td>
+	 		<td align="right" colspan="4"><input class="btn btn-primary" type="submit" name="do_save_cfg" value="<?php echo $AppUI->_('Save'); ?>" /></td>
 		</tr>
 	</table>
 </form>

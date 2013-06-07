@@ -37,7 +37,7 @@ function checkDate(){
 <form action="index.php?m=admin<?php echo $a; ?>" method="post" name="frmDate" accept-charset="utf-8">
     <input type="hidden" name="user_id" id="user_id" value="<?php echo $user_id; ?>" />
     <input type="hidden" name="datePicker" value="log" />
-    <table align="center" width="100%">
+    <table align="center" cellspacing="1" cellpadding="2" border="0" width="100%" class="well">
         <tr align="center">
             <td align="right" width="45%" ><?php echo $AppUI->_('Start Date'); ?></td>
             <td width="55%" align="left">
@@ -56,10 +56,8 @@ function checkDate(){
                 <img src="<?php echo w2PfindImage('calendar.gif'); ?>" width="24" height="12" alt="<?php echo $AppUI->_('Calendar'); ?>" border="0" /></a>
             </td>
         </tr>
-    </table>
-    <table align="center">
         <tr align="center">
-            <td><input type="submit" class="button" value="<?php echo $AppUI->_('Submit'); ?>" onclick="return checkDate('start','end')" /></td>
+            <td colspan="2"><input type="submit" class="btn btn-primary btn-mini" value="<?php echo $AppUI->_('Submit'); ?>" onclick="return checkDate('start','end')" /></td>
         </tr>
     </table>
 </form>

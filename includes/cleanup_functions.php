@@ -1365,7 +1365,7 @@ function showRoleRow($role = null) {
 		$s .= '<tr><td>&nbsp;</td>';
 		$s .= '<td valign="top"><input type="text" size="20" name="role_name" value="' . $name . '" class="text" /></td>';
 		$s .= '<td valign="top"><input type="text" size="50" name="role_description" class="text" value="' . $description . '">' . ($id ? '' : '&nbsp;&nbsp;&nbsp;&nbsp;' . arraySelect($roles_arr, 'copy_role_id', 'class="text"', 0, true));
-		$s .= '<input type="submit" value="' . $AppUI->_($id ? 'edit' : 'add') . '" class="button right" /></td>';
+		$s .= '<input type="submit" value="' . $AppUI->_($id ? 'edit' : 'add') . '" class="btn btn-primary btn-mini right" /></td>';
 	} else {
 		$s .= '<tr><td width="50" valign="top">';
 		if ($canEdit) {
@@ -2798,7 +2798,7 @@ function showRow($id = '', $key = 0, $title = '', $value = '') {
     $s .= '<td valign="top"><a name="'.$title.'"> </a>' . arraySelect($keys, 'sysval_key_id', 'size="1" class="text"', $key) . '</td>';
     $s .= '<td valign="top"><input type="text" name="sysval_title" value="' . w2PformSafe($title) . '" class="text" /></td>';
     $s .= '<td valign="top"><textarea name="sysval_value" class="small" rows="5" cols="40">' . $value . '</textarea></td>';
-    $s .= '<td><input type="submit" value="' . $AppUI->_($id ? 'save' : 'add') . '" class="button" /></td><td>&nbsp;</td>';
+    $s .= '<td><input type="submit" value="' . $AppUI->_($id ? 'save' : 'add') . '" class="btn btn-primary btn-mini" /></td><td>&nbsp;</td>';
   } else {
     $s = '<tr><td width="12" valign="top">';
     if ($canEdit) {
@@ -2829,7 +2829,7 @@ function showRow_keys($id = 0, $name = '', $label = '') {
 		$s .= '<td>&nbsp;</td>';
 		$s .= '<td><input type="text" name="syskey_name" value="' . $name . '" class="text" /></td>';
 		$s .= '<td><textarea name="syskey_label" class="small" rows="2" cols="40">' . $label . '</textarea></td>';
-		$s .= '<td><input type="submit" value="' . $AppUI->_($id ? 'edit' : 'add') . '" class="button" /></td>';
+		$s .= '<td><input type="submit" value="' . $AppUI->_($id ? 'edit' : 'add') . '" class="btn btn-primary btn-mini" /></td>';
 		$s .= '<td>&nbsp;</td>';
 	} else {
 		$s .= '<tr>';

@@ -67,7 +67,7 @@ $proto = $AppUI->getState('LDAPProto', '3');
 
 ?>
 <form method="post" accept-charset="utf-8">
-<table border="0" cellpadding="2" cellspacing="1" width="100%" class="std">
+<table border="0" cellpadding="2" cellspacing="1" width="100%" class="std well">
 	<tr>
 		<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Server'); ?>:</td>
 		<td><input type="text" class="text" name="server" value="<?php echo $server; ?>" size="50" /></td>
@@ -110,8 +110,8 @@ $proto = $AppUI->getState('LDAPProto', '3');
 	</tr>
 	<tr>
 		<td colspan="2" align="right">
-            <input type="submit" name="test" class="text" value="<?php echo $AppUI->_('Test Connection and Query'); ?>" />
-            <input type="submit" name="import" class="text" value="<?php echo $AppUI->_('Import Contacts'); ?>" />
+            <input type="submit" name="test" class="btn btn-primary" value="<?php echo $AppUI->_('Test Connection and Query'); ?>" />
+            <input type="submit" name="import" class="btn btn-primary" value="<?php echo $AppUI->_('Import Contacts'); ?>" />
         </td>
 	</tr>
 	<tr>

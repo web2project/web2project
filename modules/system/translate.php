@@ -154,7 +154,7 @@ $titleBlock->show();
         ?>
         <tr>
             <td colspan="4" align="right">
-                <input type="submit" value="<?php echo $AppUI->_('submit'); ?>" class="button" />
+                <input type="submit" value="<?php echo $AppUI->_('submit'); ?>" class="btn btn-primary" />
             </td>
         </tr>
     </table>
