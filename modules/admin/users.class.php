@@ -446,5 +446,3 @@ class CUser extends w2p_Core_BaseObject
 		return $retres;
   }
 }
-
-class CAdmin_User extends CUser { }

@@ -44,6 +44,20 @@ class budgets extends CSystem_Budget
  *
  * @deprecated
  */
+class CAdmin_User extends CUser
+{
+    public function __construct()
+    {
+        parent::__construct();
+        trigger_error("CAdmin_User has been deprecated in v3.0 and will be removed by v4.0. Please use CUser instead.", E_USER_NOTICE );
+    }
+}
+
+/**
+ * @package web2project\deprecated
+ *
+ * @deprecated
+ */
 class CAppUI extends w2p_Core_CAppUI
 {
     public function __construct()

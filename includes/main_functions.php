@@ -28,6 +28,7 @@ function w2p_old_autoload($class_name)
     switch ($name) {
         case 'bcode':                   // Deprecated as of v3.0, TODO: remove this in v4.0
         case 'budgets':                 // Deprecated as of v3.0, TODO: remove this in v4.0
+        case 'cadmin_user':             // Deprecated as of v3.0, TODO: remove this in v4.0
         case 'cappui':                  // Deprecated as of v3.0, TODO: remove this in v4.0
         case 'ccalendar':               // Deprecated as of v3.0, TODO: remove this in v4.0
         case 'cconfig':                 // Deprecated as of v3.0, TODO: remove this in v4.0
@@ -62,7 +63,6 @@ function w2p_old_autoload($class_name)
             // Deprecated as of v3.0, TODO: remove this in v4.0
             require_once W2P_BASE_DIR . '/modules/calendar/calendar.class.php';
             break;
-        case 'cadmin_user':
         case 'cuser':
             // Deprecated as of v3.0, TODO: remove this in v4.0
             require_once W2P_BASE_DIR . '/modules/admin/users.class.php';
