@@ -451,8 +451,9 @@ for ($i = 0, $i_cmp = count($gantt_arr); $i < $i_cmp; $i++) {
             }
 
             if ($showWork == '1') {
-                $dur = round($a['task_hours_worked'], 0);
+                $dur = $a['task_hours_worked'];
             }
+            $dur = round($dur, 0);
 
             $dur .= ' h';
             $height = ($a['task_dynamic'] == 1) ? 0.1 : 0.6;
