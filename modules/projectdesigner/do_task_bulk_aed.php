@@ -22,13 +22,19 @@ $bulk_task_durntype                  = w2PgetParam($_POST, 'bulk_task_durntype',
 $bulk_task_start_date                = w2PgetParam($_POST, 'add_task_bulk_start_date', '');
 $bulk_task_allow_other_user_tasklogs = w2PgetParam($_POST, 'bulk_task_allow_other_user_tasklogs', '');
 
+$userTZ = $AppUI->getPref('TIMEZONE');
+
 if ($bulk_task_start_date) {
-	$start_date = new w2p_Utilities_Date($bulk_task_start_date);
+	$start_date = new w2p_Utilities_Date($bulk_task_start_date,$userTZ);
+        $start_date->convertTZ('Europe/London');
 	$bulk_start_date = $start_date->format(FMT_DATETIME_MYSQL);
+ //       $bulk_start_date=$CAppUI->convertToSystemTZ($bulk_start_date);
+
 }
 $bulk_task_end_date = w2PgetParam($_POST, 'add_task_bulk_end_date', '');
 if ($bulk_task_end_date) {
-	$end_date = new w2p_Utilities_Date($bulk_task_end_date);
+	$end_date = new w2p_Utilities_Date($bulk_task_end_date,$userTZ);
+        $end_date->convertTZ('Europe/London');
 	$bulk_end_date = $end_date->format(FMT_DATETIME_MYSQL);
 }
 $bulk_move_date = (int) w2PgetParam($_POST, 'bulk_move_date', '0');
