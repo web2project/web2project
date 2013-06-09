@@ -56,6 +56,22 @@ $taskDep = $q->loadHashList();
 $q->clear();
 
 ?>
+<script>
+    function toggleDependencies()
+    {
+        if(document.getElementById('task_dynamic').checked) {
+            document.getElementById('dep-row-1').style.display = "none";
+            document.getElementById('dep-row-2').style.display = "none";
+            document.getElementById('dep-row-3').style.display = "none";
+            //TODO: clear dependencies
+        } else {
+            document.getElementById('dep-row-1').style.display = "";
+            document.getElementById('dep-row-2').style.display = "";
+            document.getElementById('dep-row-3').style.display = "";
+            //TODO: reset dependencies?
+        }
+    }
+</script>
 <form name="dependFrm" action="?m=tasks&a=addedit&task_project=<?php echo $task_project; ?>" method="post" accept-charset="utf-8">
     <input name="dosql" type="hidden" value="do_task_aed" />
     <input name="task_id" type="hidden" value="<?php echo $task_id; ?>" />
@@ -78,7 +94,7 @@ $q->clear();
                 <input type="radio" name="task_dynamic" value="0" <?php if ($task_id && ($task->task_dynamic == '0' || $task->task_dynamic == '11')) { echo "checked"; } ?> />
             </td>
         </tr>
-        <tr>
+        <tr onclick="toggleDependencies();">
             <td align="right" nowrap="nowrap"><label for="task_dynamic"><?php echo $AppUI->_('Dynamic Task'); ?></label></td>
             <td nowrap="nowrap">
                 <input type="checkbox" name="task_dynamic" id="task_dynamic" value="1" <?php if ($task->task_dynamic == "1") { echo 'checked="checked"'; } ?> />
@@ -96,11 +112,11 @@ $q->clear();
         </tr>
         <?php } // end of can_edit_time_information ?>
 
-        <tr>
+        <tr id="dep-row-1">
             <td><?php echo $AppUI->_('All Tasks'); ?>:</td>
             <td><?php echo $AppUI->_('Task Dependencies'); ?>:</td>
         </tr>
-        <tr>
+        <tr id="dep-row-2">
             <td>
                 <select name="all_tasks" class="text" style="width:220px" size="10" class="text" multiple="multiple">
                     <?php echo str_replace('selected', '', $task_parent_options); // we need to remove selected added from task_parent options ?>
@@ -110,7 +126,7 @@ $q->clear();
                 <?php echo arraySelect($taskDep, 'task_dependencies', 'style="width:220px" size="10" class="text" multiple="multiple" ', null); ?>
             </td>
         </tr>
-        <tr>
+        <tr id="dep-row-3">
             <td colspan="2">
             <input type="checkbox" name="set_task_start_date" id="set_task_start_date" <?php if ($task_id == 0 || $task->task_dynamic > '20') { echo "checked"; } ?>  /><label for="set_task_start_date"><?php echo $AppUI->_('Set task start date based on dependency'); ?></label>
             </td>
