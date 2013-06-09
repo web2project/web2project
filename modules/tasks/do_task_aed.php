@@ -176,7 +176,7 @@ if ($result) {
 } else {
     $AppUI->setMsg($result, UI_MSG_ERROR, true);
     $AppUI->holdObject($obj);
-    $redirect = 'm=tasks&a=addedit&task_id='.$task_id;
+    $redirect = 'm=tasks&a=addedit&task_id='.$obj->task_id;
 }
 
 $AppUI->redirect($redirect);

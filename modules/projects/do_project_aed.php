@@ -39,7 +39,7 @@ if ($result) {
             if (is_array($import_result) && count($import_result)) {
                 $AppUI->setMsg($import_result, UI_MSG_ERROR, true);
                 $AppUI->holdObject($obj);
-                $AppUI->redirect('m=projects&a=addedit');
+                $AppUI->redirect('m=projects&a=addedit&project_id=' . $obj->project_id);
             }
         }
 
@@ -56,7 +56,7 @@ if ($result) {
 } else {
     $AppUI->setMsg($result, UI_MSG_ERROR);
     $AppUI->holdObject($obj);
-    $redirect = 'm=projects&a=addedit';
+    $redirect = 'm=projects&a=addedit&project_id=' . $obj->project_id;
 }
 
 $AppUI->redirect($redirect);
