@@ -57,7 +57,7 @@ function checkDate(){
             </td>
         </tr>
         <tr align="center">
-            <td colspan="2"><input type="submit" class="btn btn-primary btn-mini" value="<?php echo $AppUI->_('Submit'); ?>" onclick="return checkDate('start','end')" /></td>
+            <td colspan="2"><input type="submit" class="button btn btn-primary btn-mini" value="<?php echo $AppUI->_('Submit'); ?>" onclick="return checkDate('start','end')" /></td>
         </tr>
     </table>
 </form>

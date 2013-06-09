@@ -122,7 +122,7 @@ $s .= $htmlHelper->createCell('task_log_hours', sprintf('%.2f', $hrs));
 $s .= '<td align="right" colspan="3">';
 if ($perms->checkModuleItem('tasks', 'edit', $task_id)) {
 	$s .= '<form action="?m=tasks&a=view&tab=1&task_id=' . $task_id . '" method="post" accept-charset="utf-8">';
-    $s .= '<input type="submit" class="btn btn-primary btn-mini" value="' . $AppUI->_('new log') . '"></form>';
+    $s .= '<input type="submit" class="button btn btn-primary btn-mini" value="' . $AppUI->_('new log') . '"></form>';
 }
 $s .= '</td></tr>';
 

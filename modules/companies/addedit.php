@@ -107,7 +107,7 @@ function testURL( x ) {
 					<tr>
 						<td align="right" valign="top"><?php echo $AppUI->_('Description'); ?>:</td>
 						<td align="left">
-							<textarea rows="10" name="company_description"><?php echo $company->company_description; ?></textarea>
+							<textarea cols="50" rows="5" name="company_description"><?php echo $company->company_description; ?></textarea>
 						</td>
 					</tr>
                 </table>
@@ -181,8 +181,8 @@ function testURL( x ) {
 			</td>
 		</tr>
 		<tr>
-			<td><input type="button" value="<?php echo $AppUI->_('back'); ?>" class="btn btn-danger" onclick="javascript:history.back(-1);" /></td>
-			<td align="right"><input type="button" value="<?php echo $AppUI->_('submit'); ?>" class="btn btn-primary" onclick="submitIt()" /></td>
+			<td><input type="button" value="<?php echo $AppUI->_('back'); ?>" class="button btn btn-danger" onclick="javascript:history.back(-1);" /></td>
+			<td align="right"><input type="button" value="<?php echo $AppUI->_('submit'); ?>" class="button btn btn-primary" onclick="submitIt()" /></td>
 		</tr>
 	</table>
 </form>

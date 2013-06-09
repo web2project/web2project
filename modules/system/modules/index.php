@@ -153,7 +153,7 @@ $htmlHelper = new w2p_Output_HTMLHelper($AppUI);
                 <input type="hidden" name="dosql" value="do_module_upload" />
                 <input type="file" name="module_upload" size="50" maxlength="1000000" class="text" />
                 <?php if (is_writable(W2P_BASE_DIR.'/files')) { ?>
-                <input type="submit" value="<?php echo $AppUI->_('Upload'); ?>" class="btn btn-primary btn-mini" />
+                <input type="submit" value="<?php echo $AppUI->_('Upload'); ?>" class="button btn btn-primary btn-mini" />
                 <?php } else { ?>
                     <span class="error">
                         <?php echo $AppUI->_('Module uploads are not allowed. Please check permissions on the /modules directory.'); ?>

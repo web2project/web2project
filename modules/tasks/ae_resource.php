@@ -62,7 +62,7 @@ for ($i = 1, $i_cmp = sizeof($keys); $i < $i_cmp; $i++) {
                         <td colspan="2" align="center">
                             <table>
                             <tr>
-                                <td align="right"><input type="button" class="btn btn-primary btn-mini" value="&gt;" onclick="addUser(document.resourceFrm)" /></td>
+                                <td align="right"><input type="button" class="button btn btn-primary btn-mini" value="&gt;" onclick="addUser(document.resourceFrm)" /></td>
                                 <td>
                                     <select name="percentage_assignment" class="text">
                                     <?php
@@ -72,7 +72,7 @@ for ($i = 1, $i_cmp = sizeof($keys); $i < $i_cmp; $i++) {
                                     ?>
                                     </select>
                                 </td>
-                                <td align="left"><input type="button" class="btn btn-primary btn-mini" value="&lt;" onclick="removeUser(document.resourceFrm)" /></td>
+                                <td align="left"><input type="button" class="button btn btn-primary btn-mini" value="&lt;" onclick="removeUser(document.resourceFrm)" /></td>
                             </tr>
                             </table>
                         </td>

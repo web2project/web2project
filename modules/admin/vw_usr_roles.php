@@ -93,7 +93,7 @@ foreach ($user_roles as $row) {
 		</tr>
 		<tr>
 			<td>
-				<input type="reset" value="<?php echo $AppUI->_('clear'); ?>" class="btn btn-danger" name="sqlaction" onclick="clearIt();" />
+				<input type="reset" value="<?php echo $AppUI->_('clear'); ?>" class="button btn btn-danger" name="sqlaction" onclick="clearIt();" />
 			</td>
 			<td align="right">
 				<?php
@@ -102,7 +102,7 @@ foreach ($user_roles as $row) {
 						?> <input type='checkbox' name='notify_new_user' />&nbsp;&nbsp;&nbsp;&nbsp;<?php
 					}
 				?>
-				<input type="submit" value="<?php echo $AppUI->_('add'); ?>" class="btn btn-primary" name="sqlaction2" />
+				<input type="submit" value="<?php echo $AppUI->_('add'); ?>" class="button btn btn-primary" name="sqlaction2" />
 			</td>
 		</tr>
 	</table>

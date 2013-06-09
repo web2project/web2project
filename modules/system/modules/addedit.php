@@ -116,10 +116,10 @@ $orderMax = count($properties) + count($fields);
 		?>
   		<tr>
           	<td colspan="2">
-          		<input class="btn btn-danger" type="button" name="cancel" value="<?php echo $AppUI->_('cancel'); ?>" />
+          		<input class="button btn btn-danger" type="button" name="cancel" value="<?php echo $AppUI->_('cancel'); ?>" />
             </td>
           	<td colspan="2" class="center">
-          		<input class="btn btn-primary" type="submit" name="submit" value="<?php echo $AppUI->_('save'); ?>" />
+          		<input class="button btn btn-primary" type="submit" name="submit" value="<?php echo $AppUI->_('save'); ?>" />
           	</td>
     	</tr>
 	</table>

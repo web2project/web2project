@@ -47,7 +47,7 @@ $perms = &$AppUI->acl();
                             <br /><br />
                             <?php
                             if ($AppUI->isActiveModule('contacts') && canView('contacts')) {
-                                echo '<input type="button" class="btn btn-primary btn-mini" value="' . $AppUI->_('Select contacts...') . '" onclick="javascript:popContacts();" />';
+                                echo '<input type="button" class="button btn btn-primary btn-mini" value="' . $AppUI->_('Select contacts...') . '" onclick="javascript:popContacts();" />';
                             }
                             // Let's check if the actual company has departments registered
                             if (count($department_selection_list) > 1) { ?><br />

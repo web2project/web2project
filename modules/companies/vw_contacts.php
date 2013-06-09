@@ -59,7 +59,7 @@ if (count($contacts) > 0) {
 
 	<tr>
 		<td colspan="<?php echo count($fieldList); ?>" align="right" valign="top" style="background-color:#ffffff">
-			<input type="button" class="btn btn-primary btn-mini" value="<?php echo $AppUI->_('new contact') ?>" onClick="javascript:window.location='./index.php?m=contacts&a=addedit&company_id=<?php echo $company->company_id; ?>'">
+			<input type="button" class="button btn btn-primary btn-mini" value="<?php echo $AppUI->_('new contact') ?>" onClick="javascript:window.location='./index.php?m=contacts&a=addedit&company_id=<?php echo $company->company_id; ?>'">
 		</td>
 	</tr>
 </table>

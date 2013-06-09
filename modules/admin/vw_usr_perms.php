@@ -251,7 +251,7 @@ foreach ($user_acls as $acl) {
             <td nowrap="nowrap" align="right"><?php echo $AppUI->_('Item'); ?>:</td>
             <td>
                 <input type="text" name="permission_item_name" class="text" size="30" value="all" disabled="disabled" />
-                <input type="button" name="" class="btn btn-primary btn-mini" value="..." onclick="popPermItem();" />
+                <input type="button" name="" class="button btn btn-primary btn-mini" value="..." onclick="popPermItem();" />
             </td>
         </tr>
         <tr>
@@ -277,10 +277,10 @@ foreach ($user_acls as $acl) {
         ?>
         <tr>
             <td>
-                <input type="reset" value="<?php echo $AppUI->_('clear'); ?>" class="btn btn-danger" name="sqlaction" onclick="clearIt();" />
+                <input type="reset" value="<?php echo $AppUI->_('clear'); ?>" class="button btn btn-danger" name="sqlaction" onclick="clearIt();" />
             </td>
             <td align="right">
-                <input type="submit" value="<?php echo $AppUI->_('add'); ?>" class="btn btn-primary" name="sqlaction2" />
+                <input type="submit" value="<?php echo $AppUI->_('add'); ?>" class="button btn btn-primary" name="sqlaction2" />
             </td>
         </tr>
     </table>

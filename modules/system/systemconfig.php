@@ -100,7 +100,7 @@ foreach ($rs as $c) {
 		<tr><td colspan="4"><?php echo $AppUI->_('syscfg_intro'); ?></td></tr>
 		<?php echo $output; ?>
 		<tr>
-	 		<td align="right" colspan="4"><input class="btn btn-primary" type="submit" name="do_save_cfg" value="<?php echo $AppUI->_('Save'); ?>" /></td>
+	 		<td align="right" colspan="4"><input class="button btn btn-primary" type="submit" name="do_save_cfg" value="<?php echo $AppUI->_('Save'); ?>" /></td>
 		</tr>
 	</table>
 </form>

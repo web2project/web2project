@@ -208,7 +208,7 @@ function setDept( key, val ) {
             <td>
                 <input type="hidden" name="contact_department" value="<?php echo $user['contact_department']; ?>" />
                 <input type="text" class="text" name="dept_name" value="<?php echo $user['dept_name']; ?>" size="40" disabled="disabled" />
-                <input type="button" class="btn btn-primary btn-mini" value="<?php echo $AppUI->_('select dept'); ?>..." onclick="popDept()" />
+                <input type="button" class="button btn btn-primary btn-mini" value="<?php echo $AppUI->_('select dept'); ?>..." onclick="popDept()" />
             </td>
         </tr>
         <tr>
@@ -230,7 +230,7 @@ function setDept( key, val ) {
             <td></td>
         <tr>
             <td align="left">
-                <input type="button" value="<?php echo $AppUI->_('back'); ?>" onclick="javascript:history.back(-1);" class="btn btn-danger" />
+                <input type="button" value="<?php echo $AppUI->_('back'); ?>" onclick="javascript:history.back(-1);" class="button btn btn-danger" />
             </td>
             <?php if ($canEdit && !$user_id) { ?>
                 <td width="100%">
@@ -244,7 +244,7 @@ function setDept( key, val ) {
                 <?php if ($canEdit && !$user_id) { ?>
                     <input type="checkbox" value="1" name="send_user_mail" id="send_user_mail" />&nbsp;&nbsp;&nbsp;
                 <?php } ?>
-                <input type="button" value="<?php echo $AppUI->_('submit'); ?>" onclick="submitIt()" class="btn btn-primary" />
+                <input type="button" value="<?php echo $AppUI->_('submit'); ?>" onclick="submitIt()" class="button btn btn-primary" />
             </td>
         </tr>
         <?php } ?>

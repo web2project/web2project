@@ -231,7 +231,7 @@ function setDepartment(department_id_string){
                         <td rowspan="6" valign="top">
                             <?php
                                 if ($AppUI->isActiveModule('contacts') && canView('contacts')) {
-                                    echo '<input type="button" class="btn btn-primary btn-mini" value="' . $AppUI->_('Select contacts...') . '" onclick="javascript:popContacts();" />';
+                                    echo '<input type="button" class="button btn btn-primary btn-mini" value="' . $AppUI->_('Select contacts...') . '" onclick="javascript:popContacts();" />';
                                 }
 
                                 if ($AppUI->isActiveModule('departments') && canAccess('departments')) {
@@ -449,10 +449,10 @@ function setDepartment(department_id_string){
         </tr>
         <tr>
             <td>
-                <input class="btn btn-danger" type="button" name="cancel" value="<?php echo $AppUI->_('cancel'); ?>" onclick="javascript:if(confirm('Are you sure you want to cancel.')){location.href = './index.php?m=projects';}" />
+                <input class="button btn btn-danger" type="button" name="cancel" value="<?php echo $AppUI->_('cancel'); ?>" onclick="javascript:if(confirm('Are you sure you want to cancel.')){location.href = './index.php?m=projects';}" />
             </td>
             <td class="right">
-                <input class="btn btn-primary" type="button" name="btnFuseAction" value="<?php echo $AppUI->_('submit'); ?>" onclick="submitIt();" />
+                <input class="button btn btn-primary" type="button" name="btnFuseAction" value="<?php echo $AppUI->_('submit'); ?>" onclick="submitIt();" />
             </td>
         </tr>
     </table>

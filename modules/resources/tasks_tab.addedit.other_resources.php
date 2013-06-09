@@ -85,11 +85,11 @@ for ($i = 1, $i_cmp = sizeof($keys); $i < $i_cmp; $i++) {
                         <td colspan="2" align="center">
                             <table>
                             <tr>
-                                <td align="right"><input type="button" class="btn btn-primary btn-mini" value="&gt;" onclick="addResource(document.otherFrm)" /></td>
+                                <td align="right"><input type="button" class="button btn btn-primary btn-mini" value="&gt;" onclick="addResource(document.otherFrm)" /></td>
                                 <td>
                                     <?php echo arraySelect($percent, 'resource_assignment', 'size="1" class="text"', 100) . '%'; ?>
                                 </td>
-                                <td align="left"><input type="button" class="btn btn-primary btn-mini" value="&lt;" onclick="removeResource(document.otherFrm)" /></td>
+                                <td align="left"><input type="button" class="button btn btn-primary btn-mini" value="&lt;" onclick="removeResource(document.otherFrm)" /></td>
                             </tr>
                             </table>
                         </td>

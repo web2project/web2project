@@ -222,19 +222,19 @@ function setTask( key, val ) {
 			<td valign="top" align="right">
 				<?php
 				if ($file->file_id && $file->file_checkout <> '' && ((int) $file->file_checkout == $AppUI->user_id || $canAdmin)) {
-					?><input type="button" class="btn btn-danger btn-mini" value="<?php echo $AppUI->_('cancel checkout'); ?>" onclick="cancelIt()" /><?php
+					?><input type="button" class="button btn btn-danger btn-mini" value="<?php echo $AppUI->_('cancel checkout'); ?>" onclick="cancelIt()" /><?php
 				}
 				?>
 			</td>
 		</tr>
 		<tr>
 			<td>
-				<input class="btn btn-danger" type="button" name="cancel" value="<?php echo $AppUI->_('cancel'); ?>" onclick="javascript:if(confirm('<?php echo $AppUI->_('Are you sure you want to cancel?', UI_OUTPUT_JS); ?>')){location.href = '?<?php echo $AppUI->getPlace(); ?>'; }" />
+				<input class="button btn btn-danger" type="button" name="cancel" value="<?php echo $AppUI->_('cancel'); ?>" onclick="javascript:if(confirm('<?php echo $AppUI->_('Are you sure you want to cancel?', UI_OUTPUT_JS); ?>')){location.href = '?<?php echo $AppUI->getPlace(); ?>'; }" />
 			</td>
 			<td align="right">
 				<?php
 				if (is_writable(W2P_BASE_DIR.'/files')) {
-					?><input type="button" class="btn btn-primary" value="<?php echo $AppUI->_('submit'); ?>" onclick="submitIt()" /><?php
+					?><input type="button" class="button btn btn-primary" value="<?php echo $AppUI->_('submit'); ?>" onclick="submitIt()" /><?php
 				} else {
 					?><span class="error">File uploads not allowed. Please check permissions on the /files directory.</span><?php
 				}

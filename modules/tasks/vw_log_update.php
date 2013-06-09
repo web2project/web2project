@@ -343,7 +343,7 @@ $log_date = new w2p_Utilities_Date($log->task_log_date);
                             <input type="checkbox" name="email_log_user" id="email_log_user" /><label for="email_log_user"><?php echo $AppUI->_('User Assigned to Log'); ?></label>
                             <input type='hidden' name='email_others' id='email_others' value='' />
                             <?php if ($AppUI->isActiveModule('contacts') && canView('contacts')) { ?>
-                                <input type='button' class="btn btn-primary btn-mini" value='<?php echo $AppUI->_('Other Contacts...'); ?>' onclick='javascript:popEmailContacts();' />
+                                <input type='button' class="button btn btn-primary btn-mini" value='<?php echo $AppUI->_('Other Contacts...'); ?>' onclick='javascript:popEmailContacts();' />
                             <?php } ?>
                         </td>
                     </tr>
@@ -355,7 +355,7 @@ $log_date = new w2p_Utilities_Date($log->task_log_date);
                     </tr>
                     <tr>
                         <td colspan="2" valign="bottom" align="right">
-                            <input type="button" class="btn btn-primary" value="<?php echo $AppUI->_('update task'); ?>" onclick="updateTask()" />
+                            <input type="button" class="button btn btn-primary" value="<?php echo $AppUI->_('update task'); ?>" onclick="updateTask()" />
                         </td>
                     </tr>
                 </table>

@@ -110,8 +110,8 @@ $proto = $AppUI->getState('LDAPProto', '3');
 	</tr>
 	<tr>
 		<td colspan="2" align="right">
-            <input type="submit" name="test" class="btn btn-primary" value="<?php echo $AppUI->_('Test Connection and Query'); ?>" />
-            <input type="submit" name="import" class="btn btn-primary" value="<?php echo $AppUI->_('Import Contacts'); ?>" />
+            <input type="submit" name="test" class="button btn btn-primary" value="<?php echo $AppUI->_('Test Connection and Query'); ?>" />
+            <input type="submit" name="import" class="button btn btn-primary" value="<?php echo $AppUI->_('Import Contacts'); ?>" />
         </td>
 	</tr>
 	<tr>

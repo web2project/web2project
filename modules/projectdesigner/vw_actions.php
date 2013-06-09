@@ -194,7 +194,7 @@ $spercent = arrayMerge(array('' => '('.$AppUI->_('Progress').')'), $percent);
                     <option value="0"><?php echo $AppUI->_('No'); ?></option>
                 </select>
             </td>
-            <td colspan="18" align="right"><input type="button" class="btn btn-primary btn-small" value="<?php echo $AppUI->_('update'); ?>" onclick="if (confirm('Are you sure you wish to apply the update(s) to the selected task(s)?')) document.frm_bulk.submit();" /></td>
+            <td colspan="18" align="right"><input type="button" class="button btn btn-primary btn-small" value="<?php echo $AppUI->_('update'); ?>" onclick="if (confirm('Are you sure you wish to apply the update(s) to the selected task(s)?')) document.frm_bulk.submit();" /></td>
         </tr>
     </table>
 </form>

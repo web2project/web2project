@@ -275,7 +275,7 @@ foreach ($fields as $key => $field): ?>
                     <td nowrap="nowrap">
                         <input type="text" class="text" name="contact_department_name" id="contact_department_name" value="<?php echo $dept_detail['dept_name']; ?>" maxlength="100" size="25" />
                         <input type='hidden' name='contact_department' value='<?php echo $dept_detail['dept_id']; ?>' />
-                        <input type="button" class="btn btn-primary btn-mini" value="<?php echo $AppUI->_('select department...'); ?>" onclick="popDepartment()" />
+                        <input type="button" class="button btn btn-primary btn-mini" value="<?php echo $AppUI->_('select department...'); ?>" onclick="popDepartment()" />
                     </td>
                 </tr>
                 <?php } ?>
@@ -391,10 +391,10 @@ foreach ($fields as $key => $field): ?>
         </tr>
         <tr>
             <td>
-                <input type="button" value="<?php echo $AppUI->_('back'); ?>" class="btn btn-danger" onclick="javascript:window.location='./index.php?m=contacts';" />
+                <input type="button" value="<?php echo $AppUI->_('back'); ?>" class="button btn btn-danger" onclick="javascript:window.location='./index.php?m=contacts';" />
             </td>
             <td colspan="2" align="right">
-                <input type="button" value="<?php echo $AppUI->_('submit'); ?>" class="btn btn-primary" onclick="submitIt()" />
+                <input type="button" value="<?php echo $AppUI->_('submit'); ?>" class="button btn btn-primary" onclick="submitIt()" />
             </td>
         </tr>
     </table>
