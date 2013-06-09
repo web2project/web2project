@@ -1047,15 +1047,15 @@ class CTask extends w2p_Core_BaseObject
         }
     }
 
-    /*
+    /**
      * This function is run immediately after a Task is stored. It uses that Task's
      *    end date and checks for dependent tasks beginning before that date.
-     *
      * If there are any dependencies that match those criteria, it updates those
      *    and recurses.
      * If not, it returns.
      *
-     * @todo TODO: This entire function needs to be timezone aware.. current it isn't.
+     * @param type $task_id
+     * @param type $lastEndDate
      */
     public function pushDependencies($task_id, $lastEndDate)
     {
