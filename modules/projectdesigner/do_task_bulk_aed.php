@@ -21,11 +21,11 @@ $bulk_task_duration                  = w2PgetParam($_POST, 'bulk_task_duration',
 $bulk_task_durntype                  = w2PgetParam($_POST, 'bulk_task_durntype', '');
 $bulk_task_start_date                = w2PgetParam($_POST, 'add_task_bulk_start_date', '');
 $bulk_task_allow_other_user_tasklogs = w2PgetParam($_POST, 'bulk_task_allow_other_user_tasklogs', '');
-
+$add_task_bulk_time_keep             = w2PgetParam($_POST, 'add_task_bulk_time_keep', '0');
 $userTZ = $AppUI->getPref('TIMEZONE');
 
 if ($bulk_task_start_date) {
-	$start_date = new w2p_Utilities_Date($bulk_task_start_date,$userTZ);
+	$start_date_userTZ = $start_date = new w2p_Utilities_Date($bulk_task_start_date,$userTZ);
         $start_date->convertTZ('Europe/London');
 	$bulk_start_date = $start_date->format(FMT_DATETIME_MYSQL);
  //       $bulk_start_date=$CAppUI->convertToSystemTZ($bulk_start_date);
@@ -33,7 +33,7 @@ if ($bulk_task_start_date) {
 }
 $bulk_task_end_date = w2PgetParam($_POST, 'add_task_bulk_end_date', '');
 if ($bulk_task_end_date) {
-	$end_date = new w2p_Utilities_Date($bulk_task_end_date,$userTZ);
+	$end_date_userTZ = $end_date = new w2p_Utilities_Date($bulk_task_end_date,$userTZ);
         $end_date->convertTZ('Europe/London');
 	$bulk_end_date = $end_date->format(FMT_DATETIME_MYSQL);
 }
@@ -94,7 +94,17 @@ if (is_array($selected) && count($selected)) {
         //Action: Modify End Date
         if (isset($_POST['add_task_bulk_end_date']) && $bulk_task_end_date != '' && $bulk_end_date) {
             if ($upd_task->task_id) {
+              if ($add_task_bulk_time_keep) {
+                $end_date_old = new w2p_Utilities_Date($upd_task->task_end_date, $userTZ);
+                $end_date_userTZ->setHour($end_date_old->getHour());
+                $end_date_userTZ->setMinute($end_date_old->getMinute());
+                $end_date_userTZ->convertTZ('Europe/London');
+                $bulk_end_date = $end_date_userTZ->format(FMT_DATETIME_MYSQL);
                 $upd_task->task_end_date = $bulk_end_date;
+             
+              }
+                else {  $upd_task->task_end_date = $bulk_end_date;
+                };
                 $result = $upd_task->store();
                 if (!$result) {
                     break;
@@ -105,6 +115,14 @@ if (is_array($selected) && count($selected)) {
         //Action: Modify Start Date
         if (isset($_POST['add_task_bulk_start_date']) && $bulk_task_start_date != '' && $bulk_start_date) {
             if ($upd_task->task_id) {
+              if ($add_task_bulk_time_keep) {
+                $start_date_old = new w2p_Utilities_Date($upd_task->task_start_date, $userTZ);
+                $start_date_userTZ->setHour($start_date_old->getHour());
+                $start_date_userTZ->setMinute($start_date_old->getMinute());
+                $start_date_userTZ->convertTZ('Europe/London');
+                $bulk_start_date = $start_date_userTZ->format(FMT_DATETIME_MYSQL);
+             
+              };
                 $upd_task->task_start_date = $bulk_start_date;
                 $result = $upd_task->store();
                 if (!$result) {

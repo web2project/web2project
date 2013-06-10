@@ -103,7 +103,12 @@ $spercent = arrayMerge(array('' => '('.$AppUI->_('Progress').')'), $percent);
                     <img src='<?php echo w2PfindImage('calendar.gif'); ?>' width='24' height='12' alt='<?php echo $AppUI->_('Calendar'); ?>' border='0' />
                 </a>
             </td>
-            <th width="15%" nowrap="nowrap"><?php echo $AppUI->_('Duration'); ?>&nbsp;</th>
+            <th width="15%" nowrap="nowrap"><?php echo $AppUI->_('Keep daytimes'); ?>&nbsp;</th>
+           <td width="160" nowrap="nowrap">
+                <input type='checkbox' id='add_task_bulk_time_keep' name='add_task_bulk_time_keep' value='1' checked />
+             </td>
+       </tr>
+        <tr>            <th width="15%" nowrap="nowrap"><?php echo $AppUI->_('Duration'); ?>&nbsp;</th>
             <td width="250" nowrap="nowrap">
                 <input type='text' class='text' style='width:120px;text-align:right;' id='bulk_task_duration' name='bulk_task_duration' value='' />&nbsp;
                 <?php echo arraySelect($sdurntype, 'bulk_task_durntype', 'style="width=120px" size="1" class="text"', '', true); ?>
