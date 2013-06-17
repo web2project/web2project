@@ -15,6 +15,16 @@ abstract class w2p_Theme_Base
         $this->_m = $m;
     }
 
+    public function resolveTemplate($template)
+    {
+        $filepath = W2P_BASE_DIR . '/style/' . $this->_uistyle . '/' . $template . '.php';
+        if (!file_exists($filepath)) {
+            $filepath = W2P_BASE_DIR . '/style/_common/' . $template . '.php';
+        }
+
+        return $filepath;
+    }
+
     public function buildHeaderNavigation($rootTag = '', $innerTag = '', $dividingToken = '') {
         $s = '';
         $nav = $this->_AppUI->getMenuModules();

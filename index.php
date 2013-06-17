@@ -88,6 +88,9 @@ if (isset($user_id) && isset($_GET['logout'])) {
 $uistyle = $AppUI->getPref('UISTYLE') ? $AppUI->getPref('UISTYLE') : w2PgetConfig('host_style');
 include W2P_BASE_DIR . '/style/' . $uistyle . '/overrides.php';
 
+$uiClass = 'style_' . $uistyle;
+$theme = new $uiClass($AppUI);
+
 // check is the user needs a new password
 if (w2PgetParam($_POST, 'lostpass', 0)) {
 	$AppUI->setUserLocale();
@@ -97,7 +100,7 @@ if (w2PgetParam($_POST, 'lostpass', 0)) {
 	if (w2PgetParam($_POST, 'sendpass', 0)) {
 		sendNewPass();
 	} else {
-		require W2P_BASE_DIR . '/style/' . $uistyle . '/lostpass.php';
+        require $theme->resolveTemplate('lostpass');
 	}
 	exit();
 }
@@ -145,7 +148,7 @@ if ($AppUI->doLogin()) {
 		header('Content-type: text/html;charset=' . $locale_char_set);
 	}
 
-	require W2P_BASE_DIR . '/style/' . $uistyle . '/login.php';
+    require $theme->resolveTemplate('login');
 	// destroy the current session and output login page
 	session_unset();
 	session_destroy();
@@ -253,7 +256,7 @@ if (isset($_POST['dosql']) && $_POST['dosql'] == 'do_file_co') {
 }
 
 if (!$suppressHeaders) {
-	require W2P_BASE_DIR . '/style/' . $uistyle . '/header.php';
+	require $theme->resolveTemplate('header');
 }
 
 if (W2P_PERFORMANCE_DEBUG) {
@@ -288,7 +291,7 @@ if (!$suppressHeaders) {
 	echo '<iframe name="thread" src="' . W2P_BASE_URL . '/modules/index.html" width="0" height="0" frameborder="0"></iframe>';
 	echo '<iframe name="thread2" src="' . W2P_BASE_URL . '/modules/index.html" width="0" height="0" frameborder="0"></iframe>';
  	//Theme footer goes before the performance box
-	require W2P_BASE_DIR . '/style/' . $uistyle . '/footer.php';
+    require $theme->resolveTemplate('footer');
 	if (W2P_PERFORMANCE_DEBUG) {
 		$db_info = $db->ServerInfo();
 		print ('<table width="100%" cellspacing="0" cellpadding="4" border="0"  class="system-info">');
