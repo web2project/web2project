@@ -433,8 +433,13 @@ class w2p_Database_Query extends w2p_Database_oldQuery
      */
     public function loadResult()
     {
-        $row = $this->exec()->fetchRow();
+        $result = false;
 
-        return ($row) ? $row[0] : false;
+        if($this->exec()) {
+            $row = $this->fetchRow();
+            $result = ($row) ? $row[0] : $result;
+        }
+
+        return $result;
     }
 }
