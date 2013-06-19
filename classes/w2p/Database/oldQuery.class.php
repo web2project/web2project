@@ -25,7 +25,7 @@
  *    Keith Casey (caseydk). Its original copyright statement by Adam Donnison
  *    is being restored until this can be clarified and/or corrected.
  *
- * @package     web2project\database
+ * @package     web2project\deprecated
  *
  */
 
@@ -108,6 +108,7 @@ class w2p_Database_oldQuery {
 	 * @param	$id	Index to use in array.
 	 */
 	public function addMap($varname, $name, $id) {
+        error_log(__FUNCTION__ . ' has been deprecated', E_USER_WARNING);
 		if (!isset($this->$varname)) {
 			$this->$varname = array();
 		}
@@ -127,7 +128,8 @@ class w2p_Database_oldQuery {
 	 * @param $check_array defaults to true, iterates through each element in $value and adds them seperately to the clause
 	 */
 	public function addClause($clause, $value, $check_array = true) {
-		if (!isset($this->$clause)) {
+        error_log(__FUNCTION__ . ' has been deprecated', E_USER_WARNING);
+        if (!isset($this->$clause)) {
 			$this->$clause = array();
 		}
 		if ($check_array && is_array($value)) {
@@ -146,7 +148,8 @@ class w2p_Database_oldQuery {
 	 * @param $func Defaults to false. If true will not use quotation marks around the value - to be used when the value being inserted includes a function
 	 */
 	public function addInsert($field, $value = null, $set = false, $func = false) {
-		if (is_array($field) && $value == null) {
+        error_log(__FUNCTION__ . ' has been deprecated', E_USER_WARNING);
+        if (is_array($field) && $value == null) {
 			foreach ($field as $f => $v) {
 				$this->addMap('value_list', $f, $v);
 			}
@@ -176,7 +179,8 @@ class w2p_Database_oldQuery {
 	}
 
 	public function addInsertSelect($table) {
-		$this->create_table = $table;
+        error_log(__FUNCTION__ . ' has been deprecated', E_USER_WARNING);
+        $this->create_table = $table;
 		$this->type = 'insert_select';
 	}
 
@@ -188,7 +192,8 @@ class w2p_Database_oldQuery {
 	 * @param $func Defaults to false. If true will not use quotation marks around the value - to be used when the value being inserted includes a function
 	 */
 	public function addReplace($field, $value, $set = false, $func = false) {
-		$this->addInsert($field, $value, $set, $func);
+        error_log(__FUNCTION__ . ' has been deprecated', E_USER_WARNING);
+        $this->addInsert($field, $value, $set, $func);
 		$this->type = 'replace';
 	}
 
@@ -199,7 +204,8 @@ class w2p_Database_oldQuery {
 	 * @param $func Defaults to false. If true will not use quotation marks around the value - to be used when the value being updated includes a function
 	 */
 	public function addUpdate($field, $value = null, $set = false, $func = false) {
-		if (is_array($field) && $value == null) {
+        error_log(__FUNCTION__ . ' has been deprecated', E_USER_WARNING);
+        if (is_array($field) && $value == null) {
 			foreach ($field as $f => $v) {
 				$this->addMap('update_list', $f, $v);
 			}
@@ -230,7 +236,8 @@ class w2p_Database_oldQuery {
 	}
 
 	public function setDelete($table) {
-		$this->type = 'delete';
+        error_log(__FUNCTION__ . ' has been deprecated', E_USER_WARNING);
+        $this->type = 'delete';
 		$this->addMap('table_list', $table, null);
 	}
 
@@ -247,7 +254,8 @@ class w2p_Database_oldQuery {
 	 * @param	$query	HAVING subclause to use, not including HAVING keyword
 	 */
 	public function addHaving($query) {
-		$this->addClause('having', $query);
+        error_log(__FUNCTION__ . ' has been deprecated', E_USER_WARNING);
+        $this->addClause('having', $query);
 	}
 
 	/** Set a row limit on the query
@@ -259,7 +267,8 @@ class w2p_Database_oldQuery {
 	 * @param	$start	First row to start extraction(row offset).
 	 */
 	public function setLimit($limit, $start = -1) {
-		$this->limit = $limit;
+        error_log(__FUNCTION__ . ' has been deprecated', E_USER_WARNING);
+        $this->limit = $limit;
 		$this->offset = $start;
 	}
 
@@ -268,7 +277,8 @@ class w2p_Database_oldQuery {
 	 * would have been returned had no limit been set.
 	 */
 	public function includeCount() {
-		$this->include_count = true;
+        error_log(__FUNCTION__ . ' has been deprecated', E_USER_WARNING);
+        $this->include_count = true;
 	}
 	/** Set a limit on the query based on pagination.
 	 *
@@ -276,7 +286,8 @@ class w2p_Database_oldQuery {
 	 * @param $pagesize the size of pages
 	 */
 	public function setPageLimit($page = 0, $pagesize = 0) {
-		if ($page == 0) {
+        error_log(__FUNCTION__ . ' has been deprecated', E_USER_WARNING);
+        if ($page == 0) {
 			global $tpl;
 			$page = $tpl->page;
 		}
@@ -293,7 +304,8 @@ class w2p_Database_oldQuery {
 	 * @return String containing the SQL statement
 	 */
 	public function prepare($clear = false) {
-		switch ($this->type) {
+        error_log(__FUNCTION__ . ' has been deprecated', E_USER_WARNING);
+        switch ($this->type) {
 			case 'select':
 				$q = $this->prepareSelect();
 				break;
@@ -348,7 +360,8 @@ class w2p_Database_oldQuery {
 	 * @return SQL JOIN condition as a string.
 	 */
 	public function make_join($join_clause) {
-		$result = '';
+        error_log(__FUNCTION__ . ' has been deprecated', E_USER_WARNING);
+        $result = '';
 		if (!isset($join_clause)) {
 			return $result;
 		}
@@ -378,7 +391,8 @@ class w2p_Database_oldQuery {
 	 * @return SQL HAVING clause as a string.
 	 */
 	public function make_having_clause($having_clause) {
-		$result = '';
+        error_log(__FUNCTION__ . ' has been deprecated', E_USER_WARNING);
+        $result = '';
 		if (!isset($having_clause)) {
 			return $result;
 		}
@@ -399,7 +413,8 @@ class w2p_Database_oldQuery {
 	 * @return	SQL LIMIT clause as a string.
 	 */
 	public function make_limit_clause($limit, $offset) {
-		$result = '';
+        error_log(__FUNCTION__ . ' has been deprecated', E_USER_WARNING);
+        $result = '';
 		if (!isset($limit)) {
 			return $result;
 		}
@@ -420,7 +435,8 @@ class w2p_Database_oldQuery {
 	 * @return The quoted string
 	 */
 	public function quote($string) {
-		if (is_int($string)) {
+        error_log(__FUNCTION__ . ' has been deprecated', E_USER_WARNING);
+        if (is_int($string)) {
 			return $string;
 		} else {
 			return $this->_db->qstr($string, get_magic_quotes_runtime());
@@ -432,7 +448,8 @@ class w2p_Database_oldQuery {
 	 * @return The quoted identifier
 	 */
 	public function quote_db($string) {
-		return $this->_db->nameQuote . $string . $this->_db->nameQuote;
+        error_log(__FUNCTION__ . ' has been deprecated', E_USER_WARNING);
+        return $this->_db->nameQuote . $string . $this->_db->nameQuote;
 	}
 
 	/**
@@ -441,7 +458,7 @@ class w2p_Database_oldQuery {
 	 *	@return	object	The new record object or null if error
 	 **/
 	public function duplicate() {
-
+        error_log(__FUNCTION__ . ' has been deprecated', E_USER_WARNING);
         /*
         *  PHP4 is no longer supported or allowed. The
         *    installer/upgrader/converter simply stops executing.
@@ -460,7 +477,8 @@ class w2p_Database_oldQuery {
 	 * @return Handle to the query result
 	 */
 	public function &exec($style = ADODB_FETCH_BOTH, $debug = false) {
-		global $ADODB_FETCH_MODE, $w2p_performance_dbtime, $w2p_performance_dbqueries;
+        error_log(__FUNCTION__ . ' has been deprecated', E_USER_WARNING);
+        global $ADODB_FETCH_MODE, $w2p_performance_dbtime, $w2p_performance_dbqueries;
 
 		if (W2P_PERFORMANCE_DEBUG) {
 			$startTime = array_sum(explode(' ', microtime()));
@@ -508,7 +526,8 @@ class w2p_Database_oldQuery {
 	 * @return First row as array
 	 */
 	public function fetchRow() {
-		if (!$this->_query_id) {
+        error_log(__FUNCTION__ . ' has been deprecated', E_USER_WARNING);
+        if (!$this->_query_id) {
 			return false;
 		}
 		return $this->_query_id->FetchRow();
@@ -522,7 +541,8 @@ class w2p_Database_oldQuery {
 	 * @return Array of associative arrays containing row field values
 	 */
 	public function loadList($maxrows = -1, $index = -1) {
-		global $AppUI;
+        error_log(__FUNCTION__ . ' has been deprecated', E_USER_WARNING);
+        global $AppUI;
 
 		if (!$this->exec(ADODB_FETCH_ASSOC)) {
 			$AppUI->setMsg($this->_db->ErrorMsg(), UI_MSG_ERROR);
@@ -552,7 +572,8 @@ class w2p_Database_oldQuery {
 	 * @return Associative array of rows, keyed with the field indicated by the $index parameter
 	 */
 	public function loadHashList($index = null) {
-		if (!$this->exec(ADODB_FETCH_ASSOC)) {
+        error_log(__FUNCTION__ . ' has been deprecated', E_USER_WARNING);
+        if (!$this->exec(ADODB_FETCH_ASSOC)) {
 			exit($this->_db->ErrorMsg());
 		}
 		$hashlist = array();
@@ -585,7 +606,8 @@ class w2p_Database_oldQuery {
 	 * @return Associative array of field names to values
 	 */
 	public function loadHash() {
-		if (!$this->exec(ADODB_FETCH_ASSOC)) {
+        error_log(__FUNCTION__ . ' has been deprecated', E_USER_WARNING);
+        if (!$this->exec(ADODB_FETCH_ASSOC)) {
 			exit($this->_db->ErrorMsg());
 		}
 		$hash = $this->fetchRow();
@@ -597,7 +619,8 @@ class w2p_Database_oldQuery {
 	 * @return Indexed array of first column values
 	 */
 	public function loadColumn() {
-		if (!$this->exec(ADODB_FETCH_NUM)) {
+        error_log(__FUNCTION__ . ' has been deprecated', E_USER_WARNING);
+        if (!$this->exec(ADODB_FETCH_NUM)) {
 			die($this->_db->ErrorMsg());
 		}
 		$result = array();
@@ -615,7 +638,8 @@ class w2p_Database_oldQuery {
 	 * @return True on success.
 	 */
 	public function loadObject(&$object, $bindAll = false, $strip = true) {
-		if (!$this->exec(ADODB_FETCH_NUM)) {
+        error_log(__FUNCTION__ . ' has been deprecated', E_USER_WARNING);
+        if (!$this->exec(ADODB_FETCH_NUM)) {
 			die($this->_db->ErrorMsg());
 		}
 		if ($object != null) {
@@ -675,7 +699,8 @@ class w2p_Database_oldQuery {
 	 * @return Value of the row column
 	 */
 	public function loadResult() {
-		global $AppUI;
+        error_log(__FUNCTION__ . ' has been deprecated', E_USER_WARNING);
+        global $AppUI;
 
 		$result = false;
 
@@ -689,7 +714,8 @@ class w2p_Database_oldQuery {
 	}
 
 	public function foundRows() {
-		global $db;
+        error_log(__FUNCTION__ . ' has been deprecated', E_USER_WARNING);
+        global $db;
 		$result = false;
 		if ($this->include_count) {
 			if ($qid = $db->Execute('SELECT FOUND_ROWS() as rc')) {
@@ -704,7 +730,8 @@ class w2p_Database_oldQuery {
 	 * Document::insertArray()
 	 */
 	public function insertArray($table, &$hash) {
-		$this->addTable($table);
+        error_log(__FUNCTION__ . ' has been deprecated', E_USER_WARNING);
+        $this->addTable($table);
 		foreach ($hash as $k => $v) {
 			if (is_array($v) or is_object($v) or $v == null) {
 				continue;
@@ -731,7 +758,8 @@ class w2p_Database_oldQuery {
 	 * Document::updateArray()
 	 */
 	public function updateArray($table, &$hash, $keyName) {
-		$this->addTable($table);
+        error_log(__FUNCTION__ . ' has been deprecated', E_USER_WARNING);
+        $this->addTable($table);
 		foreach ($hash as $k => $v) {
 			if (is_array($v) or is_object($v) or $k[0] == '_') { // internal or NA field
 				continue;
@@ -770,7 +798,8 @@ class w2p_Database_oldQuery {
 	 * @param [type] $verbose
 	 */
 	public function insertObject($table, &$object, $keyName = null, $verbose = false) {
-		$this->addTable($table);
+        error_log(__FUNCTION__ . ' has been deprecated', E_USER_WARNING);
+        $this->addTable($table);
 		foreach (get_object_vars($object) as $k => $v) {
 			if (is_array($v) or is_object($v) or $v == null) {
 				continue;
@@ -807,7 +836,8 @@ class w2p_Database_oldQuery {
 	 * @param [type] $updateNulls
 	 */
 	public function updateObject($table, &$object, $keyName, $updateNulls = true) {
-		$this->addTable($table);
+        error_log(__FUNCTION__ . ' has been deprecated', E_USER_WARNING);
+        $this->addTable($table);
 		foreach (get_object_vars($object) as $k => $v) {
 			if (is_array($v) or is_object($v) or $k[0] == '_') { // internal or NA field
 				continue;
@@ -844,7 +874,7 @@ class w2p_Database_oldQuery {
 	 * @param $table the name of the table to create
 	 */
 	public function createTable($table, $def = null) {
-		$this->type = 'createPermanent';
+        $this->type = 'createPermanent';
 		$this->create_table = $table;
 		if ($def) {
 			$this->create_definition = $def;
