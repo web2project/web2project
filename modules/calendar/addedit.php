@@ -34,6 +34,8 @@ if ($is_clash) {
 	}
 }
 $obj->event_project = ($event_project) ? $event_project : $obj->event_project;
+$start_date = intval($obj->event_start_date) ? new w2p_Utilities_Date($AppUI->formatTZAwareTime($obj->event_start_date, '%Y-%m-%d %T')) : null;
+$end_date = intval($obj->event_end_date) ? new w2p_Utilities_Date($AppUI->formatTZAwareTime($obj->event_end_date, '%Y-%m-%d %T')) : $start_date;
 
 // load the event types
 $types = w2PgetSysVal('EventType');
@@ -73,7 +75,10 @@ if ($obj->event_project && !$perms->checkModuleItem('projects', 'view', $obj->ev
 
 // setup the title block
 $titleBlock = new w2p_Theme_TitleBlock(($event_id ? 'Edit Event' : 'Add Event'), 'myevo-appointments.png', $m, $m . '.' . $a);
-$titleBlock->addCrumb('?m=calendar', 'month view');
+$titleBlock->addCrumb('?m=calendar&a=year_view&date=' . $start_date->format(FMT_TIMESTAMP_DATE), 'year view');
+$titleBlock->addCrumb('?m=calendar&amp;date=' . $start_date->format(FMT_TIMESTAMP_DATE), 'month view');
+$titleBlock->addCrumb('?m=calendar&a=week_view&date=' . $start_date->format(FMT_TIMESTAMP_DATE), 'week view');
+$titleBlock->addCrumb('?m=calendar&amp;a=day_view&amp;date=' . $start_date->format(FMT_TIMESTAMP_DATE) . '&amp;tab=0', 'day view');
 if ($event_id) {
 	$titleBlock->addCrumb('?m=calendar&amp;a=view&event_id=' . $event_id, 'view this event');
 }
@@ -124,9 +129,6 @@ if (!$event_id && !$is_clash) {
 		$obj->event_end_date = $seldate->format(FMT_TIMESTAMP);
 	}
 }
-
-$start_date = intval($obj->event_start_date) ? new w2p_Utilities_Date($AppUI->formatTZAwareTime($obj->event_start_date, '%Y-%m-%d %T')) : null;
-$end_date = intval($obj->event_end_date) ? new w2p_Utilities_Date($AppUI->formatTZAwareTime($obj->event_end_date, '%Y-%m-%d %T')) : $start_date;
 
 $recurs = array('Never', 'Hourly', 'Daily', 'Weekly', 'Bi-Weekly', 'Every Month', 'Quarterly', 'Every 6 months', 'Every Year');
 
