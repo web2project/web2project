@@ -99,7 +99,7 @@ $columnCount = 1 + count($fieldList);
                 ?>
                 <tr>
                     <td colspan="<?php echo $columnCount; ?>" style="background-color:#<?php echo $row['project_color_identifier']; ?>">
-                        <a href="?m=projects&a=view&project_id=<?php echo $row['forum_project']; ?>" style="color:<?php echo $forum_project_color; ?>">
+                        <a href="?m=projects&a=view&project_id=<?php echo $row['forum_project']; ?>" style="color:<?php echo $forum_project_color; ?>" class="left">
                             <strong><?php echo $forum_project_name; ?></strong>
                         </a>
                     </td>
@@ -133,7 +133,7 @@ $columnCount = 1 + count($fieldList);
             </tr>
         <?php } ?>
         <tr>
-            <td align="left" colspan="<?php echo $columnCount; ?>">
+            <td colspan="<?php echo $columnCount; ?>">
                 <input type="submit" class="button" value="<?php echo $AppUI->_('update watches'); ?>" />
             </td>
         </tr>

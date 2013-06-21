@@ -81,9 +81,6 @@ $titleBlock->addCrumb('?m=projects', 'projects list');
 $canDelete = $project->canDelete();
 if ($project_id != 0) {
 	$titleBlock->addCrumb('?m=projects&a=view&project_id=' . $project_id, 'view this project');
-    if ($canDelete) {
-        $titleBlock->addCrumbDelete('delete project', $canDelete, $msg);
-    }
 }
 $titleBlock->show();
 

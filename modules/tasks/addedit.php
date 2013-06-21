@@ -115,7 +115,6 @@ foreach ($root_tasks as $root_task) {
 // setup the title block
 $ttl = $task_id > 0 ? 'Edit Task' : 'Add Task';
 $titleBlock = new w2p_Theme_TitleBlock($ttl, 'applet-48.png', $m, $m . '.' . $a);
-$titleBlock->addCrumb('?m=tasks', 'tasks list');
 if ($canReadProject) {
 	$titleBlock->addCrumb('?m=projects&a=view&project_id=' . $task_project, 'view this project');
 }

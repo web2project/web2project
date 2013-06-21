@@ -213,6 +213,7 @@ echo arraySelect($currencies, 'pref_name[CURRENCYFORM]', 'class=text size=1', $p
 <?php
 $uis = $prefs['UISTYLE'] ? $prefs['UISTYLE'] : 'default';
 $styles = $AppUI->readDirs('style');
+unset($styles['_common']);
 $temp = $AppUI->setWarning(false);
 echo arraySelect($styles, 'pref_name[UISTYLE]', 'class=text size=1', $uis, true, true);
 $AppUI->setWarning($temp);
