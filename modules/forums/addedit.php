@@ -51,8 +51,8 @@ $users = $perms->getPermittedUsers('forums');
 $ttl = $forum_id > 0 ? 'Edit Forum' : 'Add Forum';
 $titleBlock = new w2p_Theme_TitleBlock($ttl, 'support.png', $m, $m . '.' . $a);
 $titleBlock->addCrumb('?m=forums', 'forums list');
-if ($canDelete && ($forum_id > 0)) {
-    $titleBlock->addCrumbDelete('delete forum', $canDelete);
+if ($forum_id) {
+    $titleBlock->addCrumb('?m=forums&a=viewer&forum_id=' . $forum_id, 'view this forum');
 }
 $titleBlock->show();
 ?>

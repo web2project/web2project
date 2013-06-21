@@ -92,11 +92,7 @@ if (w2PgetParam($_REQUEST, 'showdetails', 0) == 1) {
                 echo $htmlHelper->createCell('na', $row['contact_last_name']);
                 echo $htmlHelper->createCell('user_ip', $row['user_ip']);
                 echo $htmlHelper->createCell('log_in_datetime', $row['date_time_in']);
-                if ($row['date_time_out'] != '0000-00-00 00:00:00') {
-                    echo $htmlHelper->createCell('log_out_datetime', $row['date_time_out']);
-                } else {
-                    echo '<td></td>';
-                }
+                echo $htmlHelper->createCell('log_out_datetime', $row['date_time_out']);
             ?></tr><?php
         } ?>
     </table>
