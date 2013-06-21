@@ -22,6 +22,13 @@ if (!$canRead) {
 	$AppUI->redirect(ACCESS_DENIED);
 }
 
+$message = new CForum_Message();
+$message->loadFull(null, $message_id);
+
+if (0 == $forum_id) {
+    $forum_id = $message->message_forum;
+}
+
 $forum = new CForum();
 $forum->loadFull(null, $forum_id);
 
@@ -41,6 +48,9 @@ $start_date = $AppUI->formatTZAwareTime($forum->forum_create_date, $df);
 // setup the title block
 $titleBlock = new w2p_Theme_TitleBlock('Forum', 'support.png', $m, $m . '.' . $a);
 $titleBlock->addCrumb('?m=forums', 'forums list');
+if ($message_id) {
+    $titleBlock->addCrumb('?m=forums&a=viewer&forum_id=' . $forum_id, 'topics for this forum');
+}
 if ($canEdit) {
     $titleBlock->addCrumb('?m=forums&a=addedit&forum_id=' . $forum_id, 'edit this forum');
 
