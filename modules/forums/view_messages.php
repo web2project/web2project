@@ -60,37 +60,34 @@ if (function_exists('styleRenderBoxTop')) {
 	<input type="hidden" name="del" value="0" />
 	<input type="hidden" name="message_id" value="0" />
 </form>
-<table border="0" cellpadding="4" cellspacing="1" width="100%" class="std view" align="center">
 
-<tr><td colspan="2">
-	<table width="100%" cellspacing="1" cellpadding="2" border="0" align="center">
-        <tr>
-            <td align="left" nowrap="nowrap">
-                <?php
-                    $titleBlock = new w2p_Theme_TitleBlock('', '', $m, "$m.$a");
-                    $titleBlock->addCrumb('?m=forums&a=view_pdf&forum_id=' . $forum_id . '&message_id=' . $message_id . '&sort=' . $sort . '&suppressHeaders=1', 'view PDF file');
-                    $titleBlock->show();
-                ?>
-            </td>
-            <td nowrap="nowrap">
-                <form action="<?php echo $thispage; ?>" method="post" accept-charset="utf-8">
-                        <?php echo $AppUI->_('View') ?>:
-                        <input type="radio" name="viewtype" value="normal" <?php echo ($viewtype == 'normal') ? 'checked' : ''; ?> onclick="this.form.submit();" /><?php echo $AppUI->_('Normal') ?>
-                        <input type="radio" name="viewtype" value="short" <?php echo ($viewtype == 'short') ? 'checked' : ''; ?> onclick="this.form.submit();" /><?php echo $AppUI->_('Collapsed') ?>
-                        <input type="radio" name="viewtype" value="single" <?php echo ($viewtype == 'single') ? 'checked' : ''; ?> onclick="this.form.submit();" /><?php echo $AppUI->_('Single Message at a time') ?>
-                </form>
-            </td>
-            <td width="30%" align="right">
-                <?php $sort = ($sort == 'asc') ? 'desc' : 'asc'; ?>
-                <input type="button" class="button" value="<?php echo $AppUI->_('Sort By Date') . ' (' . $AppUI->_($sort) . ')'; ?>" onclick="javascript:window.location='./index.php?m=forums&a=viewer&forum_id=<?php echo $forum_id; ?>&message_id=<?php echo $message_id; ?>&sort=<?php echo $sort; ?>'" />
-                <?php if ($canAuthor) { ?>
-                    <input type="button" class="button" value="<?php echo $AppUI->_('Post Reply'); ?>" onclick="javascript:window.location='./index.php?m=forums&a=viewer&forum_id=<?php echo $forum_id; ?>&message_parent=<?php echo $message_id; ?>&post_message=1';" />
-                    <input type="button" class="button" value="<?php echo $AppUI->_('New Topic'); ?>" onclick="javascript:window.location='./index.php?m=forums&a=viewer&forum_id=<?php echo $forum_id; ?>&message_id=0&post_message=1';" />
-                <?php } ?>
-            </td>
-        </tr>
-	</table>
-</td></tr>
+<table border="1" cellpadding="4" cellspacing="1" width="100%" class="std view" align="center">
+<tr>
+    <td colspan="2">
+        <div class="left">
+            <?php
+            $titleBlock = new w2p_Theme_TitleBlock('', '', $m, "$m.$a");
+            $titleBlock->addCrumb('?m=forums&a=view_pdf&forum_id=' . $forum_id . '&message_id=' . $message_id . '&sort=' . $sort . '&suppressHeaders=1', 'view PDF file');
+            $titleBlock->show();
+            ?>
+        </div>
+        <div class="left" style="padding-left: 20px;">
+            <form action="<?php echo $thispage; ?>" method="post" accept-charset="utf-8">
+                <?php echo $AppUI->_('View') ?>:
+                <input type="radio" name="viewtype" value="normal" <?php echo ($viewtype == 'normal') ? 'checked' : ''; ?> onclick="this.form.submit();" /><?php echo $AppUI->_('Normal') ?>
+                <input type="radio" name="viewtype" value="short" <?php echo ($viewtype == 'short') ? 'checked' : ''; ?> onclick="this.form.submit();" /><?php echo $AppUI->_('Collapsed') ?>
+                <input type="radio" name="viewtype" value="single" <?php echo ($viewtype == 'single') ? 'checked' : ''; ?> onclick="this.form.submit();" /><?php echo $AppUI->_('Single Message at a time') ?>
+            </form>
+        </div>
+        <div class="right">
+            <input type="button" class="button" value="<?php echo $AppUI->_('Sort By Date') . ' (' . $AppUI->_($sort) . ')'; ?>" onclick="javascript:window.location='./index.php?m=forums&a=viewer&forum_id=<?php echo $forum_id; ?>&message_id=<?php echo $message_id; ?>&sort=<?php echo $sort; ?>'" />
+            <?php if ($canAuthor) { ?>
+                <input type="button" class="button" value="<?php echo $AppUI->_('Post Reply'); ?>" onclick="javascript:window.location='./index.php?m=forums&a=viewer&forum_id=<?php echo $forum_id; ?>&message_parent=<?php echo $message_id; ?>&post_message=1';" />
+                <input type="button" class="button" value="<?php echo $AppUI->_('New Topic'); ?>" onclick="javascript:window.location='./index.php?m=forums&a=viewer&forum_id=<?php echo $forum_id; ?>&message_id=0&post_message=1';" />
+            <?php } ?>
+        </div>
+    </td>
+</tr>
 
 <tr>
 <?php
@@ -275,19 +272,17 @@ if ($viewtype == 'single') {
 }
 ?>
 
-<tr><td colspan="2">
-	<table border="0" cellpadding="2" cellspacing="1" width="100%">
-	<tr>
-		<td width="100%" align="right">
-			<input type="button" class="button" value="<?php echo $AppUI->_('Sort By Date') . ' (' . $AppUI->_($sort) . ')'; ?>" onclick="javascript:window.location='./index.php?m=forums&a=viewer&forum_id=<?php echo $forum_id; ?>&message_id=<?php echo $message_id; ?>&sort=<?php echo $sort; ?>'" />
-		<?php if ($canAuthor) { ?>
-			<input type="button" class="button" value="<?php echo $AppUI->_('Post Reply'); ?>" onclick="javascript:window.location='./index.php?m=forums&a=viewer&forum_id=<?php echo $forum_id; ?>&message_parent=<?php echo $message_id; ?>&post_message=1';" />
-			<input type="button" class="button" value="<?php echo $AppUI->_('New Topic'); ?>" onclick="javascript:window.location='./index.php?m=forums&a=viewer&forum_id=<?php echo $forum_id; ?>&message_id=0&post_message=1';" />
-		<?php } ?>
-		</td>
-	</tr>
-	</table>
-</td></tr>
+<tr>
+    <td colspan="2">
+        <div class="right">
+            <input type="button" class="button" value="<?php echo $AppUI->_('Sort By Date') . ' (' . $AppUI->_($sort) . ')'; ?>" onclick="javascript:window.location='./index.php?m=forums&a=viewer&forum_id=<?php echo $forum_id; ?>&message_id=<?php echo $message_id; ?>&sort=<?php echo $sort; ?>'" />
+            <?php if ($canAuthor) { ?>
+                <input type="button" class="button" value="<?php echo $AppUI->_('Post Reply'); ?>" onclick="javascript:window.location='./index.php?m=forums&a=viewer&forum_id=<?php echo $forum_id; ?>&message_parent=<?php echo $message_id; ?>&post_message=1';" />
+                <input type="button" class="button" value="<?php echo $AppUI->_('New Topic'); ?>" onclick="javascript:window.location='./index.php?m=forums&a=viewer&forum_id=<?php echo $forum_id; ?>&message_id=0&post_message=1';" />
+            <?php } ?>
+        </div>
+    </td>
+</tr>
 </table>
 <?php
 // Now we need to update the forum visits with the new messages so they don't show again.
