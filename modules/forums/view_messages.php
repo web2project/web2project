@@ -64,13 +64,6 @@ if (function_exists('styleRenderBoxTop')) {
 <table border="1" cellpadding="4" cellspacing="1" width="100%" class="std view" align="center">
 <tr>
     <td colspan="2">
-        <div class="left">
-            <?php
-            $titleBlock = new w2p_Theme_TitleBlock('', '', $m, "$m.$a");
-            $titleBlock->addCrumb('?m=forums&a=view_pdf&forum_id=' . $forum_id . '&message_id=' . $message_id . '&sort=' . $sort . '&suppressHeaders=1', 'view PDF file');
-            $titleBlock->show();
-            ?>
-        </div>
         <div class="left" style="padding-left: 20px;">
             <form action="<?php echo $thispage; ?>" method="post" accept-charset="utf-8">
                 <?php echo $AppUI->_('View') ?>:
