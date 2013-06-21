@@ -21,7 +21,7 @@ if (!$canAddEdit) {
 // get the passed timestamp (today if none)
 $date = w2PgetParam($_GET, 'date', null);
 // get the passed timestamp (today if none)
-$event_project = (int) w2PgetParam($_GET, 'event_project', 0);
+$event_project = (int) w2PgetParam($_GET, 'project_id', 0);
 
 // load the record data
 if ($is_clash) {
