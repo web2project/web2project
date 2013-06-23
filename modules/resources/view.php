@@ -28,11 +28,6 @@ if (!$obj) {
 }
 
 $titleBlock = new w2p_Theme_TitleBlock('View Resource', 'resources.png', $m, $m . '.' . $a);
-
-if ($canAdd) {
-	$titleBlock->addCell('<input type="submit" class="button btn btn-small dropdown-toggle" value="' . $AppUI->_('new resource') . '" />', '', '<form action="?m=resources&a=addedit" method="post" accept-charset="utf-8">', '</form>');
-}
-
 $titleBlock->addCrumb('?m=' . $m, 'resource list');
 if ($canEdit) {
 	$titleBlock->addCrumb('?m=resources&a=addedit&resource_id=' . $resource_id, 'edit this resource');
