@@ -63,7 +63,7 @@ class CSystem_Role {
 		return array(); // object is ok
 	}
 
-	public function store() {
+	public function store($unused = null) {
         $stored = false;
 
         $this->_error = $this->check();

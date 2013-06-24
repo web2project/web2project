@@ -35,7 +35,7 @@ class CHistory extends w2p_Core_BaseObject {
      *
      * @return boolean
      */
-    public function store() {
+    public function store($unused = null) {
         return true;
     }
 

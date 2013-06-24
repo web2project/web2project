@@ -58,7 +58,7 @@ class CSystem_Bcode extends w2p_Core_BaseObject
         return canAdd('system');
     }
 
-    public function store()
+    public function store($unused = null)
     {
         $stored = false;
 

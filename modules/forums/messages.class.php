@@ -41,7 +41,7 @@ class CForum_Message extends w2p_Core_BaseObject
         return (count($this->_error)) ? false : true;
     }
 
-    public function store()
+    public function store($unused = null)
     {
         $stored = false;
 

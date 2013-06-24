@@ -702,7 +702,7 @@ class CTask extends w2p_Core_BaseObject
     /**
      * @todo Parent store could be partially used
      */
-    public function store()
+    public function store($unused = null)
     {
         $stored = false;
 
