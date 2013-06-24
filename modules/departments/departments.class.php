@@ -139,7 +139,7 @@ class CDepartment extends w2p_Core_BaseObject {
         return (count($this->_error)) ? false : true;
     }
 
-    public function canDelete()
+    public function canDelete($notUsed = null, $notUsed2 = null, $notUsed3 = null)
     {
         $rows = $this->loadAll('dept_id', 'dept_parent = '. (int)$this->dept_id);
         if (count($rows)) {

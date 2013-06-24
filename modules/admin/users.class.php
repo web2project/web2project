@@ -136,7 +136,7 @@ class CUser extends w2p_Core_BaseObject
         return false;
     }
 
-    public function canDelete()
+    public function canDelete($notUsed = null, $notUsed2 = null, $notUsed3 = null)
     {
         $tables[] = array('label' => 'Company Owner', 'name' => 'companies', 'idfield' => 'company_id', 'joinfield' => 'company_owner');
         $tables[] = array('label' => 'Department Owner', 'name' => 'departments', 'idfield' => 'dept_id', 'joinfield' => 'dept_owner');
@@ -156,7 +156,7 @@ class CUser extends w2p_Core_BaseObject
         $tables[] = array('label' => 'Forum Message Editor', 'name' => 'forum_messages', 'idfield' => 'message_id', 'joinfield' => 'message_editor');
         $tables[] = array('label' => 'Link Owner', 'name' => 'links', 'idfield' => 'link_id', 'joinfield' => 'link_owner');
 
-        return parent::canDelete(null, $this->user_id, $tables);
+        return parent::canDelete('', null, $tables);
     }
 
     protected function hook_preDelete()

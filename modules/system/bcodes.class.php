@@ -43,7 +43,7 @@ class CSystem_Bcode extends w2p_Core_BaseObject
         return $result;
     }
 
-    public function canDelete()
+    public function canDelete($notUsed = null, $notUsed2 = null, $notUsed3 = null)
     {
         return $this->_perms->checkModuleItem('system', 'delete');
     }

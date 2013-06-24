@@ -383,10 +383,11 @@ abstract class w2p_Core_BaseObject extends w2p_Core_Event implements w2p_Core_Li
      * 	Generic check for whether dependencies exist for this object in the db schema
      *
      * 	Can be overloaded/supplemented by the child class
-     * 	@param string $msg Error message returned
-     * 	@param int Optional key index
-     * 	@param array Optional array to compiles standard joins: format [label=>'Label',name=>'table name',idfield=>'field',joinfield=>'field']
-     * 	@return true|false
+     * 	@param  null    unused
+     * 	@param  int     Optional key index
+     * 	@param  array   Optional array to compiles standard joins format
+*                      [label=>'Label',name=>'table name',idfield=>'field',joinfield=>'field']
+     * 	@return boolean true|false
      */
     public function canDelete($notUsed = '', $oid = null, $joins = null)
     {

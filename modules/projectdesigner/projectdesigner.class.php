@@ -45,5 +45,5 @@ class CProjectDesigner extends w2p_Core_BaseObject
      */
     public function canCreate() {   return true;    }
     public function canEdit()   {   return true;    }
-    public function canDelete() {   return true;    }
+    public function canDelete($notUsed = null, $notUsed2 = null, $notUsed3 = null) {   return true;    }
 }

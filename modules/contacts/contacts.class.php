@@ -256,11 +256,11 @@ class CContact extends w2p_Core_BaseObject
 
         return ($thisCanEdit && $baseCanEdit);
     }
-    public function canDelete($msg = '', $oid = null, $joins = null)
+    public function canDelete($notUsed = null, $notUsed2 = null, $notUsed3 = null)
     {
         $tables[] = array('label' => 'Users', 'name' => 'users', 'idfield' => 'user_id', 'joinfield' => 'user_contact');
 
-        return parent::canDelete($msg, $this->user_id, $tables);
+        return parent::canDelete('', null, $tables);
     }
 
     public function isUser($oid = null)

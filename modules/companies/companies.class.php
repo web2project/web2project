@@ -59,15 +59,15 @@ class CCompany extends w2p_Core_BaseObject {
 
         return (count($this->_error)) ? false : true;
     }
-    
-	// overload canDelete
-	public function canDelete($msg = '', $oid = null, $joins = null) {
+
+    public function canDelete($notUsed = null, $notUsed2 = null, $notUsed3 = null)
+    {
 		$tables[] = array('label' => 'Projects', 'name' => 'projects', 'idfield' => 'project_id', 'joinfield' => 'project_company');
 		$tables[] = array('label' => 'Departments', 'name' => 'departments', 'idfield' => 'dept_id', 'joinfield' => 'dept_company');
 		$tables[] = array('label' => 'Users', 'name' => 'users', 'idfield' => 'user_id', 'joinfield' => 'user_company');
         $tables[] = array('label' => 'Contacts', 'name' => 'contacts', 'idfield' => 'contact_id', 'joinfield' => 'contact_company');
 		// call the parent class method to assign the oid
-		return parent::canDelete($msg, $oid, $tables);
+		return parent::canDelete('', null, $tables);
 	}
 
     protected function  hook_preStore() {

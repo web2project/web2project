@@ -24,7 +24,7 @@ class CSystem_Budget extends w2p_Core_BaseObject
     {
         return canEdit('system');
     }
-    public function canDelete()
+    public function canDelete($notUsed = null, $notUsed2 = null, $notUsed3 = null)
     {
         return canDelete('system');
     }
