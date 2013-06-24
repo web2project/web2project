@@ -66,7 +66,7 @@ function testURL( x ) {
 }
 </script>
 
-<form name="changeclient" action="?m=companies" method="post" accept-charset="utf-8" class="form-horizontal">
+<form name="changeclient" action="?m=<?php echo $m; ?>" method="post" accept-charset="utf-8" class="form-horizontal">
 	<input type="hidden" name="dosql" value="do_company_aed" />
 	<input type="hidden" name="company_id" value="<?php echo $company_id; ?>" />
 

@@ -171,7 +171,7 @@ function setDepartment(department_id_string){
 
 </script>
 
-<form name="editFrm" action="./index.php?m=projects" method="post" accept-charset="utf-8">
+<form name="editFrm" action="?m=<?php echo $m; ?>" method="post" accept-charset="utf-8">
 	<input type="hidden" name="dosql" value="do_project_aed" />
 	<input type="hidden" name="project_id" value="<?php echo $project_id; ?>" />
 	<input type="hidden" name="project_creator" value="<?php echo is_null($project->project_creator) ? $AppUI->user_id : $project->project_creator; ?>" />

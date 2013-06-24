@@ -2,7 +2,7 @@
 if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
-
+//TODO: @todo I think this file should actually be named 'addedit_message.php'
 // Add / Edit forum
 $message_parent = (int) w2PgetParam($_GET, 'message_parent', -1);
 $message_id = (int) w2PgetParam($_GET, 'message_id', 0);
@@ -107,7 +107,7 @@ if (function_exists('styleRenderBoxTop')) {
 }
 ?>
 
-<form name="changeforum" action="?m=forums&forum_id=<?php echo $forum_id; ?>" method="post" accept-charset="utf-8">
+<form name="changeforum" action="?m=<?php echo $m; ?>&forum_id=<?php echo $forum_id; ?>" method="post" accept-charset="utf-8">
 	<input type="hidden" name="dosql" value="do_post_aed" />
 	<input type="hidden" name="del" value="0" />
 	<input type="hidden" name="message_forum" value="<?php echo $forum_id; ?>" />

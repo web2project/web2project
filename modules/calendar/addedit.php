@@ -219,7 +219,7 @@ function removeUser() {
 	}
 }
 </script>
-<form name="editFrm" action="?m=calendar" method="post" accept-charset="utf-8">
+<form name="editFrm" action="?m=<?php echo $m; ?>" method="post" accept-charset="utf-8">
 	<input type="hidden" name="dosql" value="do_event_aed" />
 	<input type="hidden" name="event_id" value="<?php echo $event_id; ?>" />
 	<input type="hidden" name="event_assigned" value="" />

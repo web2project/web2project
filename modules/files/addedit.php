@@ -152,7 +152,7 @@ function setTask( key, val ) {
 }
 </script>
 
-<form name="uploadFrm" action="?m=files" enctype="multipart/form-data" method="post">
+<form name="uploadFrm" action="?m=<?php echo $m; ?>" enctype="multipart/form-data" method="post">
 	<input type="hidden" name="dosql" value="do_file_aed" />
 	<input type="hidden" name="del" value="0" />
 	<input type="hidden" name="cancel" value="0" />

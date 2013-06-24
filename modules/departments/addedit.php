@@ -88,7 +88,7 @@ function submitIt() {
 }
 </script>
 
-<form name="editFrm" action="?m=departments" method="post" accept-charset="utf-8">
+<form name="editFrm" action="?m=<?php echo $m; ?>" method="post" accept-charset="utf-8">
 	<input type="hidden" name="dosql" value="do_dept_aed" />
 	<input type="hidden" name="dept_id" value="<?php echo $dept_id; ?>" />
 	<input type="hidden" name="dept_company" value="<?php echo $company_id; ?>" />

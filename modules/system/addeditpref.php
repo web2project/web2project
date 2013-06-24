@@ -73,7 +73,7 @@ function submitIt() {
 }
 </script>
 
-<form name="changeuser" action="./index.php?m=system" method="post" accept-charset="utf-8">
+<form name="changeuser" action="./index.php?m=<?php echo $m; ?>" method="post" accept-charset="utf-8">
 	<input type="hidden" name="dosql" value="do_preference_aed" />
 	<input type="hidden" name="pref_user" value="<?php echo $user_id; ?>" />
 	<input type="hidden" name="del" value="0" />

@@ -224,7 +224,7 @@ foreach ($fields as $key => $field): ?>
 });
 </script>
 
-<form name="changecontact" action="?m=contacts" method="post" accept-charset="utf-8">
+<form name="changecontact" action="?m=<?php echo $m; ?>" method="post" accept-charset="utf-8">
     <input type="hidden" name="dosql" value="do_contact_aed" />
     <input type="hidden" name="del" value="0" />
     <input type="hidden" name="contact_project" value="0" />

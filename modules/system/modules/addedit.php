@@ -63,7 +63,8 @@ foreach ($fields as $field => $text) {
 $orderMax = count($properties) + count($fields);
 //?m=system&u=syskeys&a=do_syskey_aed
 ?>
-<form name="frmConfig" id="frmConfig" action="./index.php?m=system&u=modules" method="post" accept-charset="utf-8">
+
+<form name="frmConfig" id="frmConfig" action="?m=<?php echo $m; ?>"&u=modules" method="post" accept-charset="utf-8">
 	<input type="hidden" name="dosql" value="do_module_config_aed" />
 	<input type="hidden" name="mod_id" value="<?php echo $mod_id; ?>" />
 	<input type="hidden" name="module_config_name" value="<?php echo $view ?>" />
