@@ -15,7 +15,7 @@ if (!isset($_SESSION['AppUI']) || isset($_GET['logout'])) {
 	$_SESSION['AppUI'] = new w2p_Core_CAppUI();
 	$AppUI = &$_SESSION['AppUI'];
 	$AppUI->setConfig($w2Pconfig);
-	$AppUI->checkStyle();
+	$AppUI->setStyle();
 
 	if ($AppUI->doLogin()) {
 		$AppUI->loadPrefs(0);

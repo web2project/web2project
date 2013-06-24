@@ -318,6 +318,8 @@ class w2p_Core_CAppUI
 
     /**
      * Checks that the current user preferred style is valid/exists.
+     *
+     * @deprecated
      */
     public function checkStyle()
     {
@@ -924,7 +926,7 @@ class w2p_Core_CAppUI
         // load the user preferences
         $this->loadPrefs($this->user_id);
         $this->setUserLocale();
-        $this->checkStyle();
+        $this->setStyle();
 
         // Let's see if this user has admin privileges
         if (canView('admin')) {

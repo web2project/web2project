@@ -520,7 +520,7 @@ class w2p_Core_CAppUITest extends CommonSetup
         global $AppUI;
 
         $AppUI->setPref('UISTYLE', 'wps-redmond');
-        $AppUI->checkStyle();
+        $AppUI->setStyle();
 
         $this->assertEquals('wps-redmond', $AppUI->getPref('UISTYLE'));
     }
@@ -533,7 +533,7 @@ class w2p_Core_CAppUITest extends CommonSetup
         global $AppUI;
 
         $AppUI->setPref('UISTYLE', 'trevors-style');
-        $AppUI->checkStyle();
+        $AppUI->setStyle();
 
         $this->assertEquals('web2project', $AppUI->getPref('UISTYLE'));
     }
