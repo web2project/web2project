@@ -65,6 +65,7 @@ foreach ($projects as $project_id => $project_info) {
 }
 $projects = arrayMerge(array('0' => $AppUI->_('All', UI_OUTPUT_JS)), $projects);
 
+$link_type = w2PgetSysVal('LinkType');
 ?>
 <script language="javascript" type="text/javascript">
 function submitIt() {
@@ -130,7 +131,7 @@ function setTask( key, val ) {
                 <tr>
                   <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Category'); ?>:</td>
                   <td align="left">
-                    <?php echo arraySelect(w2PgetSysVal('LinkType'), 'link_category', 'size="1" class="text"', $link->link_category, true); ?>
+                    <?php echo arraySelect($link_type, 'link_category', 'size="1" class="text"', $link->link_category, true); ?>
                   <td>
                 </tr>
                 <tr>
