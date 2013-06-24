@@ -201,7 +201,7 @@ class CTask_Log extends w2p_Core_BaseObject
 	 *
 	 * @access public
 	 */
-	public function delete()
+    public function delete($unused = null)
 	{
 		$this->load($this->task_log_id);
 		$this->_task_id = $this->task_log_task;

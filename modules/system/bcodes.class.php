@@ -25,7 +25,7 @@ class CSystem_Bcode extends w2p_Core_BaseObject
      *    don't want to destroy the old data. We just want to deactivate the
      *    billing code.
      */
-    public function delete()
+    public function delete($unused = null)
     {
         $result = false;
 

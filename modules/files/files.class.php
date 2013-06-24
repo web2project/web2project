@@ -242,7 +242,7 @@ class CFile extends w2p_Core_BaseObject {
 
 	}
 
-	public function delete()
+	public function delete($unused = null)
     {
         $result = false;
 

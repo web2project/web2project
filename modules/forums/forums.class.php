@@ -156,7 +156,7 @@ class CForum extends w2p_Core_BaseObject
         parent::hook_preCreate();
     }
 
-    public function delete()
+    public function delete($unused = null)
     {
         $result = false;
 

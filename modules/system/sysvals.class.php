@@ -80,7 +80,8 @@ class CSystem_SysVal extends w2p_Core_BaseObject {
 		return true;
 	}
 
-	public function delete() {
+    public function delete($unused = null)
+    {
         $result = false;
 
 		if ($this->sysval_title) {

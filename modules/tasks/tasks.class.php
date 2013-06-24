@@ -939,7 +939,7 @@ class CTask extends w2p_Core_BaseObject
      * @todo Parent store could be partially used
      * @todo Can't delete a task with children
      */
-    public function delete()
+    public function delete($unused = null)
     {
         $result = false;
         $this->clearErrors();

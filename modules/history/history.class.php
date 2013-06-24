@@ -25,7 +25,7 @@ class CHistory extends w2p_Core_BaseObject {
      *
      * @return boolean
      */
-    public function delete()    {   return false;   }
+    public function delete($unused = null)   {   return false;   }
     public function canDelete($notUsed = null, $notUsed2 = null, $notUsed3 = null) {   return false;   }
     public function canCreate() {   return true;    }
     public function canEdit()   {   return false;   }
