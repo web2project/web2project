@@ -127,8 +127,6 @@ class Date_TimeZone
     }
 
     /**
-     * Return a TimeZone object representing the system default time zone
-     *
      * Return a TimeZone object representing the system default time zone,
      * which is initialized during the loading of TimeZone.php.
      *
@@ -144,8 +142,6 @@ class Date_TimeZone
     /**
      * Sets the system default time zone to the time zone in $id
      *
-     * Sets the system default time zone to the time zone in $id
-     *
      * @access public
      * @param string $id the time zone id to use
      */
@@ -158,8 +154,6 @@ class Date_TimeZone
     }
 
     /**
-     * Tests if given id is represented in the $_DATE_TIMEZONE_DATA time zone data
-     *
      * Tests if given id is represented in the $_DATE_TIMEZONE_DATA time zone data
      *
      * @access public
@@ -220,8 +214,6 @@ class Date_TimeZone
     }
 
     /**
-     * Returns true if this zone observes daylight savings time
-     *
      * Returns true if this zone observes daylight savings time
      *
      * @access public
@@ -295,8 +287,6 @@ class Date_TimeZone
     /**
      * Returns the list of valid time zone id strings
      *
-     * Returns the list of valid time zone id strings
-     *
      * @access public
      * @return mixed an array of strings with the valid time zone IDs
      */
@@ -307,9 +297,7 @@ class Date_TimeZone
     }
 
     /**
-     * Returns the id for this time zone
-     *
-     * Returns the time zone id  for this time zone, i.e. "America/Chicago"
+     * Returns the time zone id for this time zone, i.e. "America/Chicago"
      *
      * @access public
      * @return string the id
@@ -320,8 +308,6 @@ class Date_TimeZone
     }
 
     /**
-     * Returns the long name for this time zone
-     *
      * Returns the long name for this time zone,
      * i.e. "Central Standard Time"
      *
@@ -334,8 +320,6 @@ class Date_TimeZone
     }
 
     /**
-     * Returns the short name for this time zone
-     *
      * Returns the short name for this time zone, i.e. "CST"
      *
      * @access public
@@ -347,8 +331,6 @@ class Date_TimeZone
     }
 
     /**
-     * Returns the DST long name for this time zone
-     *
      * Returns the DST long name for this time zone, i.e. "Central Daylight Time"
      *
      * @access public
@@ -360,8 +342,6 @@ class Date_TimeZone
     }
 
     /**
-     * Returns the DST short name for this time zone
-     *
      * Returns the DST short name for this time zone, i.e. "CDT"
      *
      * @access public
@@ -373,8 +353,6 @@ class Date_TimeZone
     }
 
     /**
-     * Returns the raw (non-DST-corrected) offset from UTC/GMT for this time zone
-     *
      * Returns the raw (non-DST-corrected) offset from UTC/GMT for this time zone
      *
      * @access public
@@ -3632,6 +3610,3 @@ if(isset($_DATE_TIMEZONE_DEFAULT)
 } else {
     $result = Date_TimeZone::setDefault('UTC');
 }
-//
-// END
-?>
