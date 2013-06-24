@@ -74,7 +74,7 @@ class CDepartment extends w2p_Core_BaseObject {
 		if ($removeDeptId > 0) {
 			$q->addWhere('dep.dept_id <> ' . $removeDeptId);
 		}
-		$this->setAllowedSQL($this->_AppUI->user_id, $q);
+		$q = $this->setAllowedSQL($this->_AppUI->user_id, $q);
         $q->addOrder('dept_name');
         $deptList = $q->loadList();
 
@@ -313,7 +313,7 @@ class CDepartment extends w2p_Core_BaseObject {
 		$q->addOrder('dept_name');
 		$department = new CDepartment;
 //TODO: We need to convert this from static to use ->overrideDatabase() for testing.
-		$department->setAllowedSQL($AppUI->user_id, $q);
+		$q = $department->setAllowedSQL($AppUI->user_id, $q);
 
 		return $q->loadHashList('dept_id');
 	}

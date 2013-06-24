@@ -2512,7 +2512,7 @@ function projects_list_data($user_id = false) {
 	$q->addGroup('pr.project_id');
 	$q->addOrder($orderby . ' ' .$orderdir);
 	$prj = new CProject();
-	$prj->setAllowedSQL($AppUI->user_id, $q, null, 'pr');
+    $q = $prj->setAllowedSQL($AppUI->user_id, $q, null, 'pr');
 	$dpt = new CDepartment();
 	$projects = $q->loadList();
 
@@ -2526,8 +2526,8 @@ function projects_list_data($user_id = false) {
 	$q->addQuery('company_id, company_name, dep.*');
 	$q->addJoin('departments', 'dep', 'companies.company_id = dep.dept_company');
 	$q->addOrder('company_name,dept_parent,dept_name');
-	$obj->setAllowedSQL($AppUI->user_id, $q);
-	$dpt->setAllowedSQL($AppUI->user_id, $q);
+    $q = $obj->setAllowedSQL($AppUI->user_id, $q);
+    $q = $dpt->setAllowedSQL($AppUI->user_id, $q);
 	$rows = $q->loadList();
 
 	//display the select list
@@ -2985,7 +2985,7 @@ function projectSelectWithOptGroup($user_id, $select_name, $select_attribs, $sel
 		$q->addWhere('pr.project_id <> ' . $excludeProjWithId);
 	}
 	$proj = new CProject();
-	$proj->setAllowedSQL($user_id, $q, null, 'pr');
+    $q = $proj->setAllowedSQL($user_id, $q, null, 'pr');
 	$q->addOrder('co.company_name, project_name');
 	$projects = $q->loadList();
 	$s = '<select name="' . $select_name . '" ' . $select_attribs . '>';

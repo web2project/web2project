@@ -126,7 +126,7 @@ if ($caller == 'todo') {
 
 // get any specifically denied tasks
 $task = new CTask();
-$task->setAllowedSQL($AppUI->user_id, $q);
+$q = $task->setAllowedSQL($AppUI->user_id, $q);
 $proTasks = $q->loadHashList('task_id');
 $q->clear();
 

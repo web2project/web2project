@@ -1840,7 +1840,7 @@ class CTask extends w2p_Core_BaseObject
 
             $department = new CDepartment;
             $department->overrideDatabase($this->_query);
-            $department->setAllowedSQL($this->_AppUI->user_id, $q);
+            $q = $department->setAllowedSQL($this->_AppUI->user_id, $q);
 
             return $q->loadHashList('dept_id');
         }
@@ -1864,7 +1864,7 @@ class CTask extends w2p_Core_BaseObject
 
             $department = new CDepartment;
             $department->overrideDatabase($this->_query);
-            $department->setAllowedSQL($this->_AppUI->user_id, $q);
+            $q = $department->setAllowedSQL($this->_AppUI->user_id, $q);
 
             return $q->loadHashList('contact_id');
         }

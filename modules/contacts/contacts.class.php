@@ -472,7 +472,7 @@ class CContact extends w2p_Core_BaseObject
 
 //TODO: We need to convert this from static to use ->overrideDatabase() for testing.
         $department = new CDepartment;
-        $department->setAllowedSQL($AppUI->user_id, $q);
+        $q = $department->setAllowedSQL($AppUI->user_id, $q);
 
         $q->addOrder('contact_first_name');
         $q->addOrder('contact_last_name');

@@ -140,10 +140,10 @@ if ($do_report) {
 	}
 
 	$proj = new CProject();
-	$proj->setAllowedSQL($AppUI->user_id, $q, null, 'pr');
+    $q = $proj->setAllowedSQL($AppUI->user_id, $q, null, 'pr');
 
 	$obj = new CTask();
-	$obj->setAllowedSQL($AppUI->user_id, $q);
+    $q = $obj->setAllowedSQL($AppUI->user_id, $q);
 
 	$task_list_hash = $q->loadHashList('task_id');
 
