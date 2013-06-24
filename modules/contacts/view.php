@@ -20,7 +20,7 @@ if (!$canAccess || !$canRead) {
 	$AppUI->redirect(ACCESS_DENIED);
 }
 
-$contact->load($contact_id);
+$contact->loadFull(null, $contact_id);
 if (!$contact) {
 	$AppUI->setMsg('Contact');
 	$AppUI->setMsg('invalidID', UI_MSG_ERROR, true);
@@ -53,6 +53,9 @@ $titleBlock = new w2p_Theme_TitleBlock($ttl, 'monkeychat-48.png', $m, $m . '.' .
 $titleBlock->addCrumb('?m=contacts', 'contacts list');
 if ($canEdit && $contact_id) {
 	$titleBlock->addCrumb('?m=contacts&a=addedit&contact_id='.$contact_id, 'edit this contact');
+}
+if ($contact->user_id) {
+    $titleBlock->addCrumb('?m=admin&a=viewuser&user_id='.$contact->user_id, 'view this user');
 }
 if ($canDelete && $contact_id) {
 	$titleBlock->addCrumbDelete('delete contact', $canDelete, $msg);
