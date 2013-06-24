@@ -101,7 +101,8 @@ class Date
      */
     function Date($date = null)
     {
-        $this->tz = Date_TimeZone::getDefault();
+        $timezone = new Date_TimeZone('UTC');
+        $this->tz = $timezone->getDefault();
         if (is_null($date)) {
             $this->setDate(date('Y-m-d H:i:s'));
 // following line has been modified by Andrew Eddie to support extending the Date class
@@ -434,7 +435,8 @@ class Date
         if(Date_TimeZone::isValidID($id)) {
             $this->tz = new Date_TimeZone($id);
         } else {
-            $this->tz = Date_TimeZone::getDefault();
+            $timezone = new Date_TimeZone('UTC');
+            $this->tz = $timezone->getDefault();
         }
     }
 
@@ -511,12 +513,13 @@ class Date
      */
     function convertTZbyID($id)
     {
-       if(Date_TimeZone::isValidID($id)) {
-          $tz = new Date_TimeZone($id);
-       } else {
-          $tz = Date_TimeZone::getDefault();
-       }
-       $this->convertTZ($tz);
+        if(Date_TimeZone::isValidID($id)) {
+            $tz = new Date_TimeZone($id);
+        } else {
+            $timezone = new Date_TimeZone('UTC');
+            $tz = $timezone->getDefault();
+        }
+        $this->convertTZ($tz);
     }
 
     /**
