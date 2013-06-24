@@ -295,6 +295,8 @@ class CProject extends w2p_Core_BaseObject
         $oDpt->overrideDatabase($this->_query);
         $query->leftJoin('project_departments', '', $key . '.project_id = project_departments.project_id');
         $oDpt->setAllowedSQL($uid, $query, 'project_departments.department_id');
+
+        return $query;
     }
 
     /**

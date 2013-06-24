@@ -258,7 +258,8 @@ class CDepartment extends w2p_Core_BaseObject {
 		return $where;
 	}
 
-	public function setAllowedSQL($uid, &$query, $index = null, $key = null) {
+	public function setAllowedSQL($uid, &$query, $index = null, $key = null)
+    {
 		$uid = (int) $uid;
 		$uid || exit('FATAL ERROR ' . get_class($this) . '::getAllowedSQL failed');
 		$deny = $this->_perms->getDeniedItems($this->_tbl, $uid);
@@ -295,6 +296,8 @@ class CDepartment extends w2p_Core_BaseObject {
 			//if there are no allowances, only show NULL joins!
 			$query->addWhere('((0=1) OR ' . ((!$key) ? '' : $key . '.') . $this->_tbl_key . ' IS NULL)');
 		}
+
+        return $query;
 	}
 
 	public static function getDepartmentList($AppUI = null, $companyId, $departmentId = 0) {

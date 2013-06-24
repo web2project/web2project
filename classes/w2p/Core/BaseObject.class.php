@@ -570,6 +570,21 @@ abstract class w2p_Core_BaseObject extends w2p_Core_Event implements w2p_Core_Li
         return $where;
     }
 
+    /**
+     * This method applies permissions to the SQL statement on the fly
+     *   respecting the object hierarchy.
+     *
+     * Currently this handles the $query with a pass by reference and so you
+     *   didn't need to pass the object back. I've added a return so we can
+     *   get rid of the pbr at some point.
+     *
+     * @param int                   $uid
+     * @param w2p_Database_Query    $query
+     * @param string                $index
+     * @param string                $key
+     *
+     * @return  w2p_Database_Query
+     */
     public function setAllowedSQL($uid, $query, $index = null, $key = null)
     {
         $uid = (int) $uid;
@@ -607,6 +622,8 @@ abstract class w2p_Core_BaseObject extends w2p_Core_Event implements w2p_Core_Li
             //if there are no allowances, deny!
             $query->addWhere('0=1');
         }
+
+        return $query;
     }
 
     /*
