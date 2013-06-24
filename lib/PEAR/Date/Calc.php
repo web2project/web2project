@@ -1334,6 +1334,7 @@ class Date_Calc
         }
 
         $output = "";
+        $myTime = mktime(0, 0, 0, $month, $day, $year);
 
         for($strpos = 0; $strpos < strlen($format); $strpos++)
         {
@@ -1344,16 +1345,18 @@ class Date_Calc
                 switch($nextchar)
                 {
                     case "a":
-                        $output .= Date_Calc::getWeekdayAbbrname($day,$month,$year);
+                        $output .= date('D', $myTime);
                         break;
                     case "A":
-                        $output .= Date_Calc::getWeekdayFullname($day,$month,$year);
+                        $output .= date('l', $myTime);
                         break;
                     case "b":
-                        $output .= Date_Calc::getMonthAbbrname($month);
+                        setlocale(LC_TIME, 'en');
+                        $output .= date('M', $myTime);
+                        setlocale(LC_ALL, $AppUI->user_lang);
                         break;
                     case "B":
-                        $output .= Date_Calc::getMonthFullname($month);
+                        $output .= date('F', $myTime);
                         break;
                     case "d":
                         $output .= sprintf("%02d",$day);
@@ -1365,7 +1368,7 @@ class Date_Calc
                         $output .= Date_Calc::dateToDays($day,$month,$year);
                         break;
                     case "j":
-                        $output .= Date_Calc::julianDate($day,$month,$year);
+                        $output .= date('z', $myTime);
                         break;
                     case "m":
                         $output .= sprintf("%02d",$month);
@@ -1377,13 +1380,13 @@ class Date_Calc
                         $output .= "\t";
                         break;
                     case "w":
-                        $output .= Date_Calc::dayOfWeek($day,$month,$year);
+                        $output .= date('w', $myTime);
                         break;
                     case "U":
-                        $output .= Date_Calc::weekOfYear($day,$month,$year);
+                        $output .= date('W', $myTime);
                         break;
                     case "y":
-                        $output .= substr($year,2,2);
+                        $output .= date('y', $myTime);
                         break;
                     case "Y":
                         $output .= $year;
