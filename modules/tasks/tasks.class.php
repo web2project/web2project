@@ -524,9 +524,14 @@ class CTask extends w2p_Core_BaseObject
         $old_new_task_mapping = array();
         $old_dependencies = array();
         $old_parents = array();
+        $oldProj=new CProject;
+        $oldProj->load($from_project_id);
+        $from_project_start_date=$oldProj->project_start_date;
 
         $project_start_date = new w2p_Utilities_Date($project_start_date);
+        $from_project_start_date = new w2p_Utilities_Date($from_project_start_date);
         $timeOffset = 0;
+        $timeOffset = $project_start_date->dateDiff($from_project_start_date);
 
         $newTask = new CTask();
         $task_list = $newTask->loadAll('task_start_date', "task_project = " . $from_project_id);
@@ -536,11 +541,12 @@ class CTask extends w2p_Core_BaseObject
              * This gets the first (earliest) task start date and figures out
              *   how much we have to shift all the tasks by.
              */
-            if ($orig_task == reset($task_list)) {
+/*
+ *             if ($orig_task == reset($task_list)) {
                 $original_start_date = new w2p_Utilities_Date($orig_task['task_start_date']);
-                $timeOffset = $original_start_date->dateDiff($project_start_date);
+       //         $timeOffset = $original_start_date->dateDiff($project_start_date);
             }
-
+*/
             $orig_task['task_id'] = 0;
             $orig_task['task_project'] = $to_project_id;
             $orig_task['task_sequence'] = 0;
@@ -554,7 +560,14 @@ class CTask extends w2p_Core_BaseObject
             $new_start_date->next_working_day();
             $orig_task['task_start_date'] = $new_start_date->format(FMT_DATETIME_MYSQL);
 
-            $new_end_date = $new_start_date->addDuration($orig_task['task_duration'], $orig_task['task_duration_type']);
+    //        $new_end_date = $new_start_date->addDuration($orig_task['task_duration'], $orig_task['task_duration_type']);
+
+            $tz_end_date = $this->_AppUI->formatTZAwareTime($orig_task['task_end_date'], '%Y-%m-%d %T');
+            $new_end_date = new w2p_Utilities_Date($tz_end_date);
+            $new_end_date->addDays($timeOffset);
+            $new_end_date->next_working_day();
+            
+            
             $orig_task['task_end_date'] = $new_end_date->format(FMT_DATETIME_MYSQL);
 
             $newTask->bind($orig_task);
