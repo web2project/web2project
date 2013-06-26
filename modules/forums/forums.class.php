@@ -120,8 +120,8 @@ class CForum extends w2p_Core_BaseObject
         $q->addJoin('forum_visits', 'v', 'visit_user = ' . $user_id . ' AND visit_forum = forum_id and visit_message = c.message_id');
         $q->addJoin('contacts', 'cts', 'contact_id = u.user_contact');
 
-        $project->setAllowedSQL($user_id, $q, null, 'pr');
-        $this->setAllowedSQL($user_id, $q);
+        $q = $project->setAllowedSQL($user_id, $q, null, 'pr');
+        $q = $this->setAllowedSQL($user_id, $q);
 
         switch ($filter) {
             case 1:
@@ -156,7 +156,7 @@ class CForum extends w2p_Core_BaseObject
         parent::hook_preCreate();
     }
 
-    public function delete()
+    public function delete($unused = null)
     {
         $result = false;
 

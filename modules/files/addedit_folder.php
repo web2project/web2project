@@ -82,7 +82,8 @@ function delIt() {
 	}
 }
 </script>
-<form name="folderFrm" action="?m=files" enctype="multipart/form-data" method="post">
+
+<form name="folderFrm" action="?m=<?php echo $m; ?>" enctype="multipart/form-data" method="post">
 	<input type="hidden" name="dosql" value="do_folder_aed" />
 	<input type="hidden" name="del" value="0" />
 	<input type="hidden" name="file_folder_id" value="<?php echo $folder_id; ?>" />

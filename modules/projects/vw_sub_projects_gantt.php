@@ -51,7 +51,7 @@ if (!($department > 0) && $company_id != 0) {
 
 $q->addWhere('project_original_parent = ' . (int)$original_project_id);
 
-$pjobj->setAllowedSQL($AppUI->user_id, $q, null, 'pr');
+$q = $pjobj->setAllowedSQL($AppUI->user_id, $q, null, 'pr');
 $q->addGroup('pr.project_id');
 $q->addOrder('project_start_date, project_end_date, project_name');
 
@@ -136,7 +136,7 @@ if (!is_array($projects) || sizeof($projects) == 0) {
 
             //$tasks = $q->loadList();
             $task = new CTask();
-            $task->setAllowedSQL($AppUI->user_id, $q);
+            $q = $task->setAllowedSQL($AppUI->user_id, $q);
 
             $proTasks = $q->loadHashList('task_id');
             $orrarr[] = array('task_id' => 0, 'order_up' => 0, 'order' => '');

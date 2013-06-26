@@ -59,10 +59,8 @@ $df .= ' ' . $AppUI->getPref('TIMEFORMAT');
 $ttl = $contact_id > 0 ? 'Edit Contact' : 'Add Contact';
 $titleBlock = new w2p_Theme_TitleBlock($ttl, 'monkeychat-48.png', $m, $m . '.' . $a);
 $titleBlock->addCrumb('?m=contacts', 'contacts list');
+$titleBlock->addCrumb('?m=contacts&a=view&contact_id=' . $contact_id, 'view contact');
 $canDelete = $row->canDelete();
-if ($canDelete && $contact_id) {
-	$titleBlock->addCrumbDelete('delete contact', $canDelete, $msg);
-}
 
 $titleBlock->show();
 $company_detail = $row->getCompanyDetails();
@@ -226,7 +224,7 @@ foreach ($fields as $key => $field): ?>
 });
 </script>
 
-<form name="changecontact" action="?m=contacts" method="post" accept-charset="utf-8">
+<form name="changecontact" action="?m=<?php echo $m; ?>" method="post" accept-charset="utf-8">
     <input type="hidden" name="dosql" value="do_contact_aed" />
     <input type="hidden" name="del" value="0" />
     <input type="hidden" name="contact_project" value="0" />

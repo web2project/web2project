@@ -74,7 +74,7 @@ class CDepartment extends w2p_Core_BaseObject {
 		if ($removeDeptId > 0) {
 			$q->addWhere('dep.dept_id <> ' . $removeDeptId);
 		}
-		$this->setAllowedSQL($this->_AppUI->user_id, $q);
+		$q = $this->setAllowedSQL($this->_AppUI->user_id, $q);
         $q->addOrder('dept_name');
         $deptList = $q->loadList();
 
@@ -139,7 +139,7 @@ class CDepartment extends w2p_Core_BaseObject {
         return (count($this->_error)) ? false : true;
     }
 
-    public function canDelete()
+    public function canDelete($notUsed = null, $notUsed2 = null, $notUsed3 = null)
     {
         $rows = $this->loadAll('dept_id', 'dept_parent = '. (int)$this->dept_id);
         if (count($rows)) {
@@ -258,7 +258,8 @@ class CDepartment extends w2p_Core_BaseObject {
 		return $where;
 	}
 
-	public function setAllowedSQL($uid, &$query, $index = null, $key = null) {
+	public function setAllowedSQL($uid, &$query, $index = null, $key = null)
+    {
 		$uid = (int) $uid;
 		$uid || exit('FATAL ERROR ' . get_class($this) . '::getAllowedSQL failed');
 		$deny = $this->_perms->getDeniedItems($this->_tbl, $uid);
@@ -295,6 +296,8 @@ class CDepartment extends w2p_Core_BaseObject {
 			//if there are no allowances, only show NULL joins!
 			$query->addWhere('((0=1) OR ' . ((!$key) ? '' : $key . '.') . $this->_tbl_key . ' IS NULL)');
 		}
+
+        return $query;
 	}
 
 	public static function getDepartmentList($AppUI = null, $companyId, $departmentId = 0) {
@@ -310,7 +313,7 @@ class CDepartment extends w2p_Core_BaseObject {
 		$q->addOrder('dept_name');
 		$department = new CDepartment;
 //TODO: We need to convert this from static to use ->overrideDatabase() for testing.
-		$department->setAllowedSQL($AppUI->user_id, $q);
+		$q = $department->setAllowedSQL($AppUI->user_id, $q);
 
 		return $q->loadHashList('dept_id');
 	}

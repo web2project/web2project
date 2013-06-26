@@ -305,10 +305,7 @@ class w2p_Core_CAppUI
         return $ts->format($df);
     }
 
-    /**
-     * Checks that the current user preferred style is valid/exists.
-     */
-    public function checkStyle()
+    public function setStyle()
     {
         // check if default user's uistyle is installed
         $uistyle = $this->getPref('UISTYLE');
@@ -317,6 +314,18 @@ class w2p_Core_CAppUI
             // fall back to host_style if user style is not installed
             $this->setPref('UISTYLE', w2PgetConfig('host_style'));
         }
+    }
+
+    /**
+     * Checks that the current user preferred style is valid/exists.
+     *
+     * @deprecated
+     */
+    public function checkStyle()
+    {
+        trigger_error("AppUI->checkStyle() has been deprecated in v3.0 and will be removed by v4.0. Please use AppUI->setStyle() instead.", E_USER_NOTICE);
+
+        $this->setStyle();
     }
 
     /**
@@ -917,7 +926,7 @@ class w2p_Core_CAppUI
         // load the user preferences
         $this->loadPrefs($this->user_id);
         $this->setUserLocale();
-        $this->checkStyle();
+        $this->setStyle();
 
         // Let's see if this user has admin privileges
         if (canView('admin')) {

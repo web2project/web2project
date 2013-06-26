@@ -101,7 +101,8 @@ class Date
      */
     function Date($date = null)
     {
-        $this->tz = Date_TimeZone::getDefault();
+        $timezone = new Date_TimeZone('UTC');
+        $this->tz = $timezone->getDefault();
         if (is_null($date)) {
             $this->setDate(date('Y-m-d H:i:s'));
 // following line has been modified by Andrew Eddie to support extending the Date class
@@ -265,6 +266,7 @@ class Date
     {
         global $AppUI;
         $output = "";
+        $myTime = mktime($this->hour, $this->minute, $this->second, $this->month, $this->day, $this->year);
 
         for($strpos = 0; $strpos < strlen($format); $strpos++) {
             $char = substr($format,$strpos,1);
@@ -272,18 +274,18 @@ class Date
                 $nextchar = substr($format,$strpos + 1,1);
                 switch($nextchar) {
                     case "a":
-                        $output .= Date_Calc::getWeekdayAbbrname($this->day,$this->month,$this->year);
+                        $output .= date('D', $myTime);
                         break;
                     case "A":
-                        $output .= Date_Calc::getWeekdayFullname($this->day,$this->month,$this->year);
+                        $output .= date('l', $myTime);
                         break;
                     case "b":
-												setlocale(LC_TIME, 'en');
-                        $output .= Date_Calc::getMonthAbbrname($this->month);
-												setlocale(LC_ALL, $AppUI->user_lang);
+                        setlocale(LC_TIME, 'en');
+                        $output .= date('M', $myTime);
+                        setlocale(LC_ALL, $AppUI->user_lang);
                         break;
                     case "B":
-                        $output .= Date_Calc::getMonthFullname($this->month);
+                        $output .= date('F', $myTime);
                         break;
                     case "C":
                         $output .= sprintf("%02d",intval($this->year/100));
@@ -308,7 +310,7 @@ class Date
                         $output .= sprintf("%02d", $hour==0 ? 12 : $hour);
                         break;
                     case "j":
-                        $output .= Date_Calc::julianDate($this->day,$this->month,$this->year);
+                        $output .= date('z', $myTime);
                         break;
                     case "m":
                         $output .= sprintf("%02d",$this->month);
@@ -336,41 +338,40 @@ class Date
                         $output .= sprintf("%s%02d:%02d", $direction, $hours, $minutes);
                         break;
                     case "p":
-                        $output .= $this->hour >= 12 ? "pm" : "am";
+                        $output .= date('a', $myTime);
                         break;
                     case "P":
-                        $output .= $this->hour >= 12 ? "PM" : "AM";
+                        $output .= date('A', $myTime);
                         break;
                     case "r":
-                        $hour = ($this->hour + 1) > 12 ? $this->hour - 12 : $this->hour;
-                        $output .= sprintf("%02d:%02d:%02d %s", $hour==0 ?  12 : $hour, $this->minute, $this->second, $this->hour >= 12 ? "PM" : "AM");
+                        $output .= date('h:i:s A', $myTime);
                         break;
                     case "R":
-                        $output .= sprintf("%02d:%02d", $this->hour, $this->minute);
+                        $output .= date('H:i', $myTime);
                         break;
                     case "S":
-                        $output .= sprintf("%02d", $this->second);
+                        $output .= date('s', $myTime);
                         break;
                     case "t":
                         $output .= "\t";
                         break;
                     case "T":
-                        $output .= sprintf("%02d:%02d:%02d", $this->hour, $this->minute, $this->second);
+                        $output .= date('H:i:s', $myTime);
                         break;
                     case "w":
-                        $output .= Date_Calc::dayOfWeek($this->day,$this->month,$this->year);
+                        $output .= date('w', $myTime);
                         break;
                     case "U":
-                        $output .= Date_Calc::weekOfYear($this->day,$this->month,$this->year);
+                        $output .= date('W', $myTime);
                         break;
                     case "y":
-                        $output .= substr($this->year,2,2);
+                        $output .= date('y', $myTime);
                         break;
                     case "Y":
                         $output .= $this->year;
                         break;
                     case "Z":
-                        $output .= $this->tz->inDaylightTime($this) ? $this->tz->getDSTShortName() : $this->tz->getShortName();
+                        $output .= date('T', $myTime);
                         break;
                     case "%":
                         $output .= "%";
@@ -434,7 +435,8 @@ class Date
         if(Date_TimeZone::isValidID($id)) {
             $this->tz = new Date_TimeZone($id);
         } else {
-            $this->tz = Date_TimeZone::getDefault();
+            $timezone = new Date_TimeZone('UTC');
+            $this->tz = $timezone->getDefault();
         }
     }
 
@@ -511,12 +513,13 @@ class Date
      */
     function convertTZbyID($id)
     {
-       if(Date_TimeZone::isValidID($id)) {
-          $tz = new Date_TimeZone($id);
-       } else {
-          $tz = Date_TimeZone::getDefault();
-       }
-       $this->convertTZ($tz);
+        if(Date_TimeZone::isValidID($id)) {
+            $tz = new Date_TimeZone($id);
+        } else {
+            $timezone = new Date_TimeZone('UTC');
+            $tz = $timezone->getDefault();
+        }
+        $this->convertTZ($tz);
     }
 
     /**

@@ -39,14 +39,6 @@ $titleBlock->addCrumb('?m=' . $m, $m . ' list');
 if ($resource_id) {
 	$titleBlock->addCrumb('?m=resources&a=view&resource_id=' . $resource_id, 'view this resource');
 }
-
-$canDelete = $perms->checkModuleItem($m, 'delete', $resource_id);
-if ($canDelete && $resource_id) {
-    if (!isset($msg)) {
-        $msg = '';
-    }
-	$titleBlock->addCrumbDelete('delete resource', $canDelete, $msg);
-}
 $titleBlock->show();
 
 $percent = array(0 => '0', 5 => '5', 10 => '10', 15 => '15', 20 => '20', 25 => '25', 30 => '30', 35 => '35', 40 => '40', 45 => '45', 50 => '50', 55 => '55', 60 => '60', 65 => '65', 70 => '70', 75 => '75', 80 => '80', 85 => '85', 90 => '90', 95 => '95', 100 => '100');
@@ -63,22 +55,8 @@ function submitIt() {
 	}
 }
 </script>
-<?php if ($canDelete) { ?>
-  <script language="javascript" type="text/javascript">
-    function delIt() {
-    	if (confirm( '<?php echo $AppUI->_('doDelete') . ' ' . $AppUI->_('Resource') . '?'; ?>' )) {
-    		document.frmDelete.submit();
-    	}
-    }
-  </script>
 
-	<form name="frmDelete" action="./index.php?m=resources" method="post" accept-charset="utf-8">
-		<input type="hidden" name="dosql" value="do_resource_aed" />
-		<input type="hidden" name="del" value="1" />
-		<input type="hidden" name="resource_id" value="<?php echo $resource_id; ?>" />
-	</form>
-<?php } ?>
-<form name="editfrm" action="?m=resources" method="post" accept-charset="utf-8">
+<form name="editFrm" action="?m=<?php echo $m; ?>" method="post" accept-charset="utf-8">
     <input type="hidden" name="dosql" value="do_resource_aed" />
     <input type="hidden" name="del" value="0" />
     <input type="hidden" name="resource_id" value="<?php echo $resource_id; ?>" />

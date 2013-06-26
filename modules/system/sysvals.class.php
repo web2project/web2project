@@ -49,7 +49,7 @@ class CSystem_SysVal extends w2p_Core_BaseObject {
 		}
 	}
 
-	public function store() {
+	public function store($unused = null) {
         $this->w2PTrimAll();
 
 		$values = parseFormatSysval($this->sysval_value, $this->sysval_key_id);
@@ -80,7 +80,8 @@ class CSystem_SysVal extends w2p_Core_BaseObject {
 		return true;
 	}
 
-	public function delete() {
+    public function delete($unused = null)
+    {
         $result = false;
 
 		if ($this->sysval_title) {

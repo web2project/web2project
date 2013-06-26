@@ -288,13 +288,15 @@ class CProject extends w2p_Core_BaseObject
     {
         $oCpy = new CCompany;
         $oCpy->overrideDatabase($this->_query);
-        parent::setAllowedSQL($uid, $query, $index, $key);
-        $oCpy->setAllowedSQL($uid, $query, ($key ? $key . '.' : '') . 'project_company');
+        $query = parent::setAllowedSQL($uid, $query, $index, $key);
+        $query = $oCpy->setAllowedSQL($uid, $query, ($key ? $key . '.' : '') . 'project_company');
         //Department permissions
         $oDpt = new CDepartment();
         $oDpt->overrideDatabase($this->_query);
         $query->leftJoin('project_departments', '', $key . '.project_id = project_departments.project_id');
-        $oDpt->setAllowedSQL($uid, $query, 'project_departments.department_id');
+        $query = $oDpt->setAllowedSQL($uid, $query, 'project_departments.department_id');
+
+        return $query;
     }
 
     /**
@@ -363,7 +365,7 @@ class CProject extends w2p_Core_BaseObject
         $q->addQuery('pr.project_id, project_status, project_name, project_description, project_short_name');
         $q->addTable('projects', 'pr');
         $q->addOrder('project_short_name');
-        $this->setAllowedSQL($userId, $q, null, 'pr');
+        $q = $this->setAllowedSQL($userId, $q, null, 'pr');
         $allowedProjectRows = $q->exec();
         $q->clear();
 
@@ -594,7 +596,7 @@ class CProject extends w2p_Core_BaseObject
         }
         $q->addGroup('pr.project_id');
         $q->addOrder('project_name');
-        $this->setAllowedSQL($userId, $q, null, 'pr');
+        $q = $this->setAllowedSQL($userId, $q, null, 'pr');
 
         return $q->loadHashList('project_id');
     }
@@ -622,7 +624,7 @@ class CProject extends w2p_Core_BaseObject
             $department = new CDepartment;
             $department->overrideDatabase($this->_query);
             //TODO: We need to convert this from static to use ->overrideDatabase() for testing.
-            $department->setAllowedSQL($this->_AppUI->user_id, $q);
+            $q = $department->setAllowedSQL($this->_AppUI->user_id, $q);
 
             return $q->loadHashList('contact_id');
         }
@@ -650,7 +652,7 @@ class CProject extends w2p_Core_BaseObject
 
             $department = new CDepartment();
             $department->overrideDatabase($this->_query);
-            $department->setAllowedSQL($this->_AppUI->user_id, $q);
+            $q = $department->setAllowedSQL($this->_AppUI->user_id, $q);
 
             return $q->loadHashList('dept_id');
         }
@@ -917,7 +919,7 @@ class CProject extends w2p_Core_BaseObject
 		}
 		$q->addOrder('task_log_date');
 		$q->addOrder('task_log_created');
-		$this->setAllowedSQL($this->_AppUI->user_id, $q, 'task_project');
+		$q = $this->setAllowedSQL($this->_AppUI->user_id, $q, 'task_project');
 
 		return $q->loadList();
 	}
@@ -972,11 +974,11 @@ class CProject extends w2p_Core_BaseObject
 
         $obj = new CCompany();
         $obj->overrideDatabase($this->_query);
-        $obj->setAllowedSQL($this->_AppUI->user_id, $q);
+        $q = $obj->setAllowedSQL($this->_AppUI->user_id, $q);
 
         $dpt = new CDepartment();
         $dpt->overrideDatabase($this->_query);
-        $dpt->setAllowedSQL($this->_AppUI->user_id, $q);
+        $q = $dpt->setAllowedSQL($this->_AppUI->user_id, $q);
 
         $q->leftJoin('project_departments', 'pd', 'pd.project_id = projects.project_id' );
         $q->leftJoin('departments', 'd', 'd.dept_id = pd.department_id' );

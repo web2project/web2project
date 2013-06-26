@@ -96,7 +96,7 @@ if ($project_id) {
      $q->addWhere('task_project = ' . $project_id);
 }
 $task = new CTask;
-$task->setAllowedSQL($AppUI->user_id, $q);
+$q = $task->setAllowedSQL($AppUI->user_id, $q);
 $proTasks = $q->loadHashList('task_id');
 $q->clear();
 $filter_task_list = array ();

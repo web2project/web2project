@@ -117,8 +117,8 @@ $log_date = new w2p_Utilities_Date($log->task_log_date);
 <!-- END OF TIMER RELATED SCRIPTS -->
 
 <a name="log"></a>
-<form name="editFrm" action="?m=tasks&amp;a=view&amp;task_id=<?php echo $obj->task_id; ?>" method="post"
-  onsubmit="updateEmailContacts();" accept-charset="utf-8">
+<form name="editFrm" action="?m=<?php echo $m; ?>&amp;a=view&amp;task_id=<?php echo $obj->task_id; ?>" method="post"
+    onsubmit="updateEmailContacts();" accept-charset="utf-8">
 	<input type="hidden" name="uniqueid" value="<?php echo uniqid(''); ?>" />
 	<input type="hidden" name="dosql" value="do_updatetask" />
 	<input type="hidden" name="task_log_id" value="<?php echo $log->task_log_id; ?>" />

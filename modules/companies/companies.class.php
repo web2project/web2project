@@ -59,15 +59,15 @@ class CCompany extends w2p_Core_BaseObject {
 
         return (count($this->_error)) ? false : true;
     }
-    
-	// overload canDelete
-	public function canDelete($msg = '', $oid = null, $joins = null) {
+
+    public function canDelete($notUsed = null, $notUsed2 = null, $notUsed3 = null)
+    {
 		$tables[] = array('label' => 'Projects', 'name' => 'projects', 'idfield' => 'project_id', 'joinfield' => 'project_company');
 		$tables[] = array('label' => 'Departments', 'name' => 'departments', 'idfield' => 'dept_id', 'joinfield' => 'dept_company');
 		$tables[] = array('label' => 'Users', 'name' => 'users', 'idfield' => 'user_id', 'joinfield' => 'user_company');
         $tables[] = array('label' => 'Contacts', 'name' => 'contacts', 'idfield' => 'contact_id', 'joinfield' => 'contact_company');
 		// call the parent class method to assign the oid
-		return parent::canDelete($msg, $oid, $tables);
+		return parent::canDelete('', null, $tables);
 	}
 
     protected function  hook_preStore() {
@@ -111,7 +111,7 @@ class CCompany extends w2p_Core_BaseObject {
         $q->addTable('companies', 'c');
         $q->addQuery('c.*, count(distinct p.project_id) as countp, ' .
             'count(distinct p2.project_id) as inactive, con.contact_first_name, ' .
-            'con.contact_last_name, con.contact_display_name');
+            'con.contact_last_name, con.contact_display_name, user_id');
         $q->addJoin('projects', 'p', 'c.company_id = p.project_company AND p.project_active = 1');
         $q->addJoin('users', 'u', 'c.company_owner = u.user_id');
         $q->addJoin('contacts', 'con', 'u.user_contact = con.contact_id');
@@ -157,7 +157,7 @@ class CCompany extends w2p_Core_BaseObject {
 
 		$projObj = new CProject();
 //TODO: We need to convert this from static to use ->overrideDatabase() for testing.
-		$projObj->setAllowedSQL($AppUI->user_id, $q, null, 'pr');
+		$q = $projObj->setAllowedSQL($AppUI->user_id, $q, null, 'pr');
 
 		$q->addWhere('pr.project_active = '. (int) $active);
 
@@ -189,7 +189,7 @@ class CCompany extends w2p_Core_BaseObject {
 				)');
 			$department = new CDepartment;
 //TODO: We need to convert this from static to use ->overrideDatabase() for testing.
-			$department->setAllowedSQL($AppUI->user_id, $q);
+            $q = $department->setAllowedSQL($AppUI->user_id, $q);
 
 			$q->addOrder('contact_first_name');
 			$q->addOrder('contact_last_name');
@@ -213,7 +213,7 @@ class CCompany extends w2p_Core_BaseObject {
 
 		$department = new CDepartment;
 //TODO: We need to convert this from static to use ->overrideDatabase() for testing.
-		$department->setAllowedSQL($AppUI->user_id, $q);
+        $q = $department->setAllowedSQL($AppUI->user_id, $q);
 
 		return $q->loadHashList('user_id');
 	}
@@ -230,7 +230,7 @@ class CCompany extends w2p_Core_BaseObject {
 
 			$department = new CDepartment;
 //TODO: We need to convert this from static to use ->overrideDatabase() for testing.
-			$department->setAllowedSQL($AppUI->user_id, $q);
+            $q = $department->setAllowedSQL($AppUI->user_id, $q);
 
 			return $q->loadList();
 		}

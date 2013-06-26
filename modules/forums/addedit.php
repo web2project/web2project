@@ -51,8 +51,8 @@ $users = $perms->getPermittedUsers('forums');
 $ttl = $forum_id > 0 ? 'Edit Forum' : 'Add Forum';
 $titleBlock = new w2p_Theme_TitleBlock($ttl, 'support.png', $m, $m . '.' . $a);
 $titleBlock->addCrumb('?m=forums', 'forums list');
-if ($canDelete && ($forum_id > 0)) {
-    $titleBlock->addCrumbDelete('delete forum', $canDelete);
+if ($forum_id) {
+    $titleBlock->addCrumb('?m=forums&a=viewer&forum_id=' . $forum_id, 'view this forum');
 }
 $titleBlock->show();
 ?>
@@ -84,7 +84,7 @@ function delIt(){
 ?>
 </script>
 
-<form name="changeforum" action="?m=forums" method="post" accept-charset="utf-8">
+<form name="changeforum" action="?m=<?php echo $m; ?>" method="post" accept-charset="utf-8">
 	<input type="hidden" name="dosql" value="do_forum_aed" />
 	<input type="hidden" name="del" value="0" />
 	<input type="hidden" name="forum_unique_update" value="<?php echo uniqid(''); ?>" />

@@ -70,7 +70,7 @@ if (!isset($_SESSION['AppUI']) || isset($_GET['logout'])) {
 $AppUI = &$_SESSION['AppUI'];
 $last_insert_id = $AppUI->last_insert_id;
 
-$AppUI->checkStyle();
+$AppUI->setStyle();
 
 //Function for update lost action in user_access_log
 $AppUI->updateLastAction($last_insert_id);

@@ -201,7 +201,7 @@ class CTask_Log extends w2p_Core_BaseObject
 	 *
 	 * @access public
 	 */
-	public function delete()
+    public function delete($unused = null)
 	{
 		$this->load($this->task_log_id);
 		$this->_task_id = $this->task_log_task;
@@ -324,7 +324,7 @@ class CTask_Log extends w2p_Core_BaseObject
 	 *
 	 * @return bool
 	 */
-	public function canDelete(&$msg = '', $oid = null, $joins = null)
+    public function canDelete($notUsed = null, $notUsed2 = null, $notUsed3 = null)
 	{
         if($this->_AppUI->user_id == $this->task_log_creator ||
                 $this->_AppUI->user_id == $this->task_log_record_creator ||
@@ -332,6 +332,8 @@ class CTask_Log extends w2p_Core_BaseObject
 
             return true;
         }
+
+        return false;
 	}
 
     public function canCreate() {

@@ -4,7 +4,7 @@
  * @package     web2project\theme
  */
 
-class w2p_Theme_Base
+abstract class w2p_Theme_Base
 {
     protected $_AppUI = null;
     protected $_m     = null;

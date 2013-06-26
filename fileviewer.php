@@ -15,7 +15,7 @@ if (!isset($_SESSION['AppUI']) || isset($_GET['logout'])) {
 	$_SESSION['AppUI'] = new w2p_Core_CAppUI();
 	$AppUI = &$_SESSION['AppUI'];
 	$AppUI->setConfig($w2Pconfig);
-	$AppUI->checkStyle();
+	$AppUI->setStyle();
 
 	if ($AppUI->doLogin()) {
 		$AppUI->loadPrefs(0);
@@ -86,7 +86,7 @@ if ($file_id) {
 	$q = new w2p_Database_Query;
 	$q->addTable('files');
 	if ($fileclass->file_project) {
-		$project->setAllowedSQL($AppUI->user_id, $q, 'file_project');
+		$q = $project->setAllowedSQL($AppUI->user_id, $q, 'file_project');
 	}
 	$q->addWhere('file_id = ' . $file_id);
 

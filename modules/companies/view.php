@@ -20,6 +20,9 @@ if (!$canAccess || !$canRead) {
 	$AppUI->redirect(ACCESS_DENIED);
 }
 
+$contact = new CContact();
+$canCreateContacts = $contact->canCreate();
+
 $company->loadFull(null, $company_id);
 if (!$company) {
 	$AppUI->setMsg('Company');
@@ -35,8 +38,8 @@ $tab = $AppUI->processIntState('CompVwTab', $_GET, 'tab', 0);
 // setup the title block
 $titleBlock = new w2p_Theme_TitleBlock('View Company', 'handshake.png', $m, "$m.$a");
 $titleBlock->addCell();
-if ($canAdd) {
-    $titleBlock->addCell('<input type="submit" class="button btn btn-small dropdown-toggle" value="' . $AppUI->_('new company') . '" />', '', '<form action="?m=companies&a=addedit" method="post" accept-charset="utf-8">', '</form>');
+if ($canCreateContacts) {
+    $titleBlock->addCell('<input type="submit" class="button btn btn-small dropdown-toggle" value="' . $AppUI->_('new contact') . '" />', '', '<form action="?m=contacts&a=addedit&company_id=' . $company_id . '" method="post" accept-charset="utf-8">', '</form>');
 }
 if ($canEdit) {
     if ( $AppUI->isActiveModule('departments') ) {

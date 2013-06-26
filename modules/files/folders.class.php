@@ -30,7 +30,7 @@ class CFile_Folder extends w2p_Core_BaseObject {
 		return $q->loadHashList();
 	}
 
-	public function canDelete()
+    public function canDelete($notUsed = null, $notUsed2 = null, $notUsed3 = null)
     {
 		$q = $this->_getQuery();
 		$q->addTable('file_folders');

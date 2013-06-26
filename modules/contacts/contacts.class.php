@@ -65,6 +65,7 @@ class CContact extends w2p_Core_BaseObject
         $q = $this->_getQuery();
         $q->addTable('contacts');
         $q->addJoin('companies', 'cp', 'cp.company_id = contact_company');
+        $q->addJoin('users', 'u', 'u.user_contact = contact_id', 'left');
         $q->addWhere('contact_id = ' . (int) $contactId);
         $q->loadObject($this, true, false);
     }
@@ -255,11 +256,11 @@ class CContact extends w2p_Core_BaseObject
 
         return ($thisCanEdit && $baseCanEdit);
     }
-    public function canDelete($msg = '', $oid = null, $joins = null)
+    public function canDelete($notUsed = null, $notUsed2 = null, $notUsed3 = null)
     {
         $tables[] = array('label' => 'Users', 'name' => 'users', 'idfield' => 'user_id', 'joinfield' => 'user_contact');
 
-        return parent::canDelete($msg, $this->user_id, $tables);
+        return parent::canDelete('', null, $tables);
     }
 
     public function isUser($oid = null)
@@ -471,7 +472,7 @@ class CContact extends w2p_Core_BaseObject
 
 //TODO: We need to convert this from static to use ->overrideDatabase() for testing.
         $department = new CDepartment;
-        $department->setAllowedSQL($AppUI->user_id, $q);
+        $q = $department->setAllowedSQL($AppUI->user_id, $q);
 
         $q->addOrder('contact_first_name');
         $q->addOrder('contact_last_name');

@@ -65,21 +65,22 @@ foreach ($projects as $project_id => $project_info) {
 }
 $projects = arrayMerge(array('0' => $AppUI->_('All', UI_OUTPUT_JS)), $projects);
 
+$link_type = w2PgetSysVal('LinkType');
 ?>
 <script language="javascript" type="text/javascript">
 function submitIt() {
-	var f = document.uploadFrm;
+	var f = document.editFrm;
 	f.submit();
 }
 function delIt() {
 	if (confirm( "<?php echo $AppUI->_('linksDelete', UI_OUTPUT_JS); ?>" )) {
-		var f = document.uploadFrm;
+		var f = document.editFrm;
 		f.del.value='1';
 		f.submit();
 	}
 }
 function popTask() {
-    var f = document.uploadFrm;
+    var f = document.editFrm;
     if (f.link_project.selectedIndex == 0) {
         alert( "<?php echo $AppUI->_('Please select a project first!', UI_OUTPUT_JS); ?>" );
     } else {
@@ -90,7 +91,7 @@ function popTask() {
 
 // Callback function for the generic selector
 function setTask( key, val ) {
-    var f = document.uploadFrm;
+    var f = document.editFrm;
     if (val != '') {
         f.link_task.value = key;
         f.task_name.value = val;
@@ -101,7 +102,7 @@ function setTask( key, val ) {
 }
 </script>
 
-<form name="uploadFrm" action="?m=links" method="post" accept-charset="utf-8">
+<form name="editFrm" action="?m=<?php echo $m; ?>" method="post" accept-charset="utf-8">
     <input type="hidden" name="dosql" value="do_link_aed" />
     <input type="hidden" name="del" value="0" />
     <input type="hidden" name="link_id" value="<?php echo $link_id; ?>" />
@@ -130,7 +131,7 @@ function setTask( key, val ) {
                 <tr>
                   <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Category'); ?>:</td>
                   <td align="left">
-                    <?php echo arraySelect(w2PgetSysVal('LinkType'), 'link_category', 'size="1" class="text"', $link->link_category, true); ?>
+                    <?php echo arraySelect($link_type, 'link_category', 'size="1" class="text"', $link->link_category, true); ?>
                   <td>
                 </tr>
                 <tr>

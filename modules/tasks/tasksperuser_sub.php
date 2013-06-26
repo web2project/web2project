@@ -296,7 +296,7 @@ if ($do_report) {
 	$q->addOrder('task_project');
 	$q->addOrder('task_end_date');
 	$q->addOrder('task_start_date');
-	$proj->setAllowedSQL($AppUI->user_id, $q, null, 'pr');
+    $q = $proj->setAllowedSQL($AppUI->user_id, $q, null, 'pr');
 
 	$task_list_hash = $q->loadHashList('task_id');
 

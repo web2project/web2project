@@ -702,7 +702,7 @@ class CTask extends w2p_Core_BaseObject
     /**
      * @todo Parent store could be partially used
      */
-    public function store()
+    public function store($unused = null)
     {
         $stored = false;
 
@@ -939,7 +939,7 @@ class CTask extends w2p_Core_BaseObject
      * @todo Parent store could be partially used
      * @todo Can't delete a task with children
      */
-    public function delete()
+    public function delete($unused = null)
     {
         $result = false;
         $this->clearErrors();
@@ -1840,7 +1840,7 @@ class CTask extends w2p_Core_BaseObject
 
             $department = new CDepartment;
             $department->overrideDatabase($this->_query);
-            $department->setAllowedSQL($this->_AppUI->user_id, $q);
+            $q = $department->setAllowedSQL($this->_AppUI->user_id, $q);
 
             return $q->loadHashList('dept_id');
         }
@@ -1864,7 +1864,7 @@ class CTask extends w2p_Core_BaseObject
 
             $department = new CDepartment;
             $department->overrideDatabase($this->_query);
-            $department->setAllowedSQL($this->_AppUI->user_id, $q);
+            $q = $department->setAllowedSQL($this->_AppUI->user_id, $q);
 
             return $q->loadHashList('contact_id');
         }

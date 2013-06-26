@@ -137,7 +137,7 @@ $q->addOrder('t.task_start_date, t.task_end_date, t.task_priority');
 
 // get any specifically denied tasks
 $task = new CTask();
-$task->setAllowedSQL($AppUI->user_id, $q);
+$q = $task->setAllowedSQL($AppUI->user_id, $q);
 $proTasks = $q->loadHashList('task_id');
 $q->clear();
 

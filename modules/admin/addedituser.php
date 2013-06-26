@@ -142,7 +142,7 @@ function setDept( key, val ) {
 }
 </script>
 
-<form name="editFrm" action="./index.php?m=admin" method="post" accept-charset="utf-8">
+<form name="editFrm" action="?m=<?php echo $m; ?>" method="post" accept-charset="utf-8">
 	<input type="hidden" name="user_id" value="<?php echo (int) $user['user_id']; ?>" />
 	<input type="hidden" name="contact_id" value="<?php echo (int) $user['contact_id']; ?>" />
 	<input type="hidden" name="dosql" value="do_user_aed" />
