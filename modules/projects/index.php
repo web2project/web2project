@@ -17,6 +17,12 @@ if (isset($_GET['update_project_status']) && isset($_GET['project_status']) && i
 	foreach ($projects_id as $project_id) {
 		$project->load($project_id);
 		$project->project_status = $statusId;
+		foreach ($project->getContactList() as $contact_data){
+			$project->project_contacts[]=$contact_data['contact_id'];
+		}
+		foreach ($project->getDepartmentList() as $department_data){
+			$project->project_departments[]=$department_data['dept_id'];
+		}
 		$project->store();
 	}
 }
