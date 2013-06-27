@@ -1159,12 +1159,12 @@ class w2p_Core_CAppUI
         if (substr($base, -1) != '/') {
             $base .= '/';
         }
-        // Load the basic javascript used by all modules.
-        echo '<script type="text/javascript" src="' . $base . 'js/base.js"></script>';
-
         // additionally load jquery
         echo '<script type="text/javascript" src="' . $base . 'lib/jquery/jquery.js"></script>';
         echo '<script type="text/javascript" src="' . $base . 'lib/jquery/jquery.tipTip.js"></script>';
+
+		// Load the basic javascript used by all modules.
+		echo '<script type="text/javascript" src="' . $base . 'js/base.js"></script>';
 
         $this->getModuleJS($m, $a, true);
     }
