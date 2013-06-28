@@ -557,14 +557,17 @@ class CTask extends w2p_Core_BaseObject
             $tz_start_date = $this->_AppUI->formatTZAwareTime($orig_task['task_start_date'], '%Y-%m-%d %T');
             $new_start_date = new w2p_Utilities_Date($tz_start_date);
             $new_start_date->addDays($timeOffset);
+            $new_start_date_before_work_shift=new w2p_Utilities_Date($new_start_date);
             $new_start_date->next_working_day();
             $orig_task['task_start_date'] = $new_start_date->format(FMT_DATETIME_MYSQL);
+            $shift_of_stat_dueto_workday=$new_start_date->dateDiff($new_start_date_before_work_shift);
 
     //        $new_end_date = $new_start_date->addDuration($orig_task['task_duration'], $orig_task['task_duration_type']);
 
             $tz_end_date = $this->_AppUI->formatTZAwareTime($orig_task['task_end_date'], '%Y-%m-%d %T');
             $new_end_date = new w2p_Utilities_Date($tz_end_date);
             $new_end_date->addDays($timeOffset);
+            $new_end_date->addDays($shift_of_stat_dueto_workday);
             $new_end_date->next_working_day();
             
             
