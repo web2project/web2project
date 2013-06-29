@@ -515,7 +515,6 @@ table.prjprint TR {
 
 table.login tr th {
     padding: 6px;
-    white-space:nowrap;
 }
 
 table.login td {
@@ -525,6 +524,7 @@ table.login td {
 
 table.minititle th {
     font-weight: normal;
+    text-align: center;
 }
 
 bordertable, .bordertable{
