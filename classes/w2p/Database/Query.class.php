@@ -264,14 +264,14 @@ class w2p_Database_Query extends w2p_Database_oldQuery
 	 *
 	 * @param	$table	Name of table (without prefix)
 	 * @param	$alias	Alias to use instead of table name (required).
-	 * @param	$join	Join condition (e.g. 'a.id = b.other_id')
+	 * @param	$condition	Join condition (e.g. 'a.id = b.other_id')
 	 *				or array of join fieldnames, e.g. array('id', 'name);
 	 *				Both are correctly converted into a join clause.
 	 */
-    public function addJoin($table, $alias, $join, $type = 'left')
+    public function addJoin($table, $alias, $condition, $type = 'left')
     {
         $this->join[] = array('table' => $table, 'alias' => $alias,
-                            'condition' => $join, 'type' => $type);
+                            'condition' => $condition, 'type' => $type);
     }
 
 	/**
@@ -526,4 +526,105 @@ class w2p_Database_Query extends w2p_Database_oldQuery
     {
         return $this->_db->qstr($string);
     }
+
+    /**
+     * EVERYTHING BELOW HERE IS DEPRECATED.
+     *
+     * Previously it was all in the oldQuery class but since it uses protected functions from this class, it doesn't make sense.
+     */
+
+    /**
+     * @deprecated
+     */
+    public function make_where_clause($where_clause) {
+        trigger_error("make_order_clause has been deprecated in v3.0.", E_USER_NOTICE );
+        $this->_convertFromOldStructure();
+
+        return $this->_buildWhere();
+    }
+
+    /**
+     * @deprecated
+     */
+    public function make_order_clause($order_clause) {
+        trigger_error("make_order_clause has been deprecated in v3.0.", E_USER_NOTICE );
+        $this->_convertFromOldStructure();
+
+        return $this->_buildOrder();
+    }
+
+    /**
+     * @deprecated
+     */
+    public function make_group_clause($group_clause) {
+        trigger_error("make_group_clause has been deprecated in v3.0.", E_USER_NOTICE );
+        $this->_convertFromOldStructure();
+
+        return $this->_buildGroup();
+    }
+
+    /**
+     * @deprecated
+     */
+    public function setPageLimit($page = 0, $pagesize = 0) {
+        trigger_error(__FUNCTION__ . " has been deprecated in v3.0.", E_USER_NOTICE );
+        if ($page == 0) {
+            global $tpl;
+            $page = $tpl->page;
+        }
+
+        if ($pagesize == 0) {
+            $pagesize = w2PgetConfig('page_size');
+        }
+
+        $this->setLimit($pagesize, ($page - 1) * $pagesize);
+    }
+
+    /**
+     * @deprecated
+     */
+    public function make_limit_clause($limit, $offset) {
+        trigger_error(__FUNCTION__ . " has been deprecated in v3.0.", E_USER_NOTICE );
+
+        $this->setLimit($limit, $offset);
+
+        return $this->_buildLimit();
+    }
+
+    /**
+     * @deprecated
+     */
+    public function make_having_clause($having_clause) {
+        trigger_error(__FUNCTION__ . " has been deprecated in v3.0.", E_USER_NOTICE );
+
+        if (is_array($having_clause)) {
+            foreach($having_clause as $having) {
+                $this->addHaving($having);
+            }
+        }
+        if (is_string($having_clause)) {
+            $this->addHaving($having_clause);
+        }
+
+        return $this->_buildHaving();
+    }
+
+    /** Create a join condition based upon supplied fields.
+     *
+     * @param	$join_clause	Either string or array of subclauses.
+     * @return SQL JOIN condition as a string.
+     */
+    public function make_join($join_clause) {
+        trigger_error(__FUNCTION__ . " has been deprecated in v3.0.", E_USER_NOTICE );
+
+        if (is_array($join_clause)) {
+            foreach($join_clause as $join) {
+                //$this->addHaving($having);
+                $this->addJoin($join['table'], $join['alias'], $join['condition'], $join['type']);
+            }
+        }
+
+        return $this->_buildJoins();
+    }
+
 }
