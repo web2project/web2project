@@ -23,4 +23,9 @@ $displayNames	= w2PgetParam($_POST, 'displayNames', array());
 $result = w2p_Core_Module::saveSettings($moduleName, $configName,
 		$displayColumns, $displayOrder, $displayFields, $displayNames);
 
+if ($result) {
+    $AppUI->setMsg('The module settings were saved successfully', UI_MSG_OK, true);
+} else {
+    $AppUI->setMsg('There was an error saving the module settings', UI_MSG_ERROR);
+}
 $AppUI->redirect('m=system&u=modules&a=addedit&mod_id='.$mod_id.'&v='.$configName);

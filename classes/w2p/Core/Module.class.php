@@ -350,5 +350,6 @@ class w2p_Core_Module extends w2p_Core_BaseObject {
 				$i++;
 			}
 		}
+        return true;
     }
 }

@@ -64,7 +64,7 @@ $orderMax = count($properties) + count($fields);
 //?m=system&u=syskeys&a=do_syskey_aed
 ?>
 
-<form name="frmConfig" id="frmConfig" action="?m=<?php echo $m; ?>"&u=modules" method="post" accept-charset="utf-8">
+<form name="frmConfig" id="frmConfig" action="?m=<?php echo $m; ?>&u=modules" method="post" accept-charset="utf-8">
 	<input type="hidden" name="dosql" value="do_module_config_aed" />
 	<input type="hidden" name="mod_id" value="<?php echo $mod_id; ?>" />
 	<input type="hidden" name="module_config_name" value="<?php echo $view ?>" />
@@ -97,7 +97,8 @@ $orderMax = count($properties) + count($fields);
 			unset($properties[$field]);
 		}
 		foreach ($properties as $property => $value) {
-			?><tr>
+			$value = ucwords(str_replace('_', ' ', $property));
+            ?><tr>
 				<td>
 					<input type="checkbox" name="display[<?php echo $property; ?>]" />
 				</td>
@@ -109,7 +110,7 @@ $orderMax = count($properties) + count($fields);
 					<?php echo $property; ?>
 				</td>
 				<td class="center">
-					<input type="text" name="displayNames[]" value="<?php echo $AppUI->_($property); ?>" size="25" maxlength="50" class="text" />
+					<input type="text" name="displayNames[]" value="<?php echo $AppUI->_($value); ?>" size="25" maxlength="50" class="text" />
 				</td>
 			</tr><?php
 			$order++;
