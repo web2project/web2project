@@ -305,37 +305,6 @@ class w2p_Database_oldQuery {
 		dprint(__file__, __line__, 2, $q);
 	}
 
-	/** Create a join condition based upon supplied fields.
-	 *
-	 * @param	$join_clause	Either string or array of subclauses.
-	 * @return SQL JOIN condition as a string.
-	 */
-	public function make_join($join_clause) {
-        error_log(__FUNCTION__ . ' has been deprecated', E_USER_WARNING);
-        $result = '';
-		if (!isset($join_clause)) {
-			return $result;
-		}
-		if (is_array($join_clause)) {
-			foreach ($join_clause as $join) {
-				$result .= ' ' . strtoupper($join['type']) . ' JOIN ' . $this->quote_db($this->_table_prefix . $join['table']);
-				if ($join['alias']) {
-					$result .= ' AS ' . $join['alias'];
-				} else {
-					$result .= ' AS ' . $join['table'];
-				}
-				if (is_array($join['condition'])) {
-					$result .= ' USING (' . implode(',', $join['condition']) . ')';
-				} else {
-					$result .= ' ON ' . $join['condition'];
-				}
-			}
-		} else {
-			$result .= ' LEFT JOIN ' . $this->quote_db($this->_table_prefix . $join_clause);
-		}
-		return $result;
-	}
-
 	/** Add quotes to a database identifier
 	 * @param $string The identifier to quote
 	 * @return The quoted identifier
@@ -922,82 +891,6 @@ class w2p_Database_oldQuery {
 	public function execXML() {
 		trigger_error("execXML has been deprecated in v3.0 to comply with the license change.", E_USER_NOTICE );
 	}
-
-	/**
-	 * @deprecated
-	 */
-	public function make_where_clause($where_clause) {
-		trigger_error("make_order_clause has been deprecated in v3.0.", E_USER_NOTICE );
-        $this->_convertFromOldStructure();
-
-        return $this->_buildWhere();
-	}
-
-	/**
-	 * @deprecated
-	 */
-	public function make_order_clause($order_clause) {
-		trigger_error("make_order_clause has been deprecated in v3.0.", E_USER_NOTICE );
-        $this->_convertFromOldStructure();
-
-        return $this->_buildOrder();
-	}
-
-	/**
-	 * @deprecated
-	 */
-	public function make_group_clause($group_clause) {
-		trigger_error("make_group_clause has been deprecated in v3.0.", E_USER_NOTICE );
-        $this->_convertFromOldStructure();
-
-        return $this->_buildGroup();
-	}
-
-    /**
-     * @deprecated
-     */
-    public function setPageLimit($page = 0, $pagesize = 0) {
-        trigger_error(__FUNCTION__ . " has been deprecated in v3.0.", E_USER_NOTICE );
-        if ($page == 0) {
-            global $tpl;
-            $page = $tpl->page;
-        }
-
-        if ($pagesize == 0) {
-            $pagesize = w2PgetConfig('page_size');
-        }
-
-        $this->setLimit($pagesize, ($page - 1) * $pagesize);
-    }
-
-    /**
-     * @deprecated
-     */
-    public function make_limit_clause($limit, $offset) {
-        trigger_error(__FUNCTION__ . " has been deprecated in v3.0.", E_USER_NOTICE );
-
-        $this->setLimit($limit, $offset);
-
-        return $this->_buildLimit();
-    }
-
-    /**
-     * @deprecated
-     */
-    public function make_having_clause($having_clause) {
-        trigger_error(__FUNCTION__ . " has been deprecated in v3.0.", E_USER_NOTICE );
-
-        if (is_array($having_clause)) {
-            foreach($having_clause as $having) {
-                $this->addHaving($having);
-            }
-        }
-        if (is_string($having_clause)) {
-            $this->addHaving($having_clause);
-        }
-
-        return $this->_buildHaving();
-    }
 
     /**
      * @deprecated
