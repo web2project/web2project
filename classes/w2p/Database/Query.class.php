@@ -634,4 +634,17 @@ class w2p_Database_Query extends w2p_Database_oldQuery
 
         return $this->quote($string);
     }
+
+    public function __call($name, $params)
+    {
+        switch($name) {
+            case 'execXML':
+            case 'includeCount':
+            case 'loadArrayList':
+                error_log("$name has been deprecated in v3.0. There is no replacement.", E_USER_WARNING);
+                break;
+            default:
+                throw new w2p_Database_Exception("The $name method has not been implemented.");
+        }
+    }
 }

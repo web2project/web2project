@@ -241,15 +241,6 @@ class w2p_Database_oldQuery {
 		$this->addMap('table_list', $table, null);
 	}
 
-	/**
-	 * Set include count feature, grabs the count of rows that
-	 * would have been returned had no limit been set.
-	 */
-	public function includeCount() {
-        error_log(__FUNCTION__ . ' has been deprecated', E_USER_WARNING);
-        $this->include_count = true;
-	}
-
 	/** Prepare query for execution
 	 * @param $clear Boolean, Clear the query after it has been executed
 	 * @return String containing the SQL statement
@@ -866,21 +857,6 @@ class w2p_Database_oldQuery {
 		}
 		$this->create_definition[] = array('action' => 'DROP', 'type' => 'PRIMARY KEY', 'spec' => '');
         trigger_error("w2p_Database_Query->dropPrimary() has been deprecated in v3.0 and will be removed by v4.0.", E_USER_NOTICE );
-	}
-
-	/**
-	 *
-	 * @deprecated
-	 */
-	public function loadArrayList() {
-        trigger_error("loadArrayList has been deprecated in v3.0 to comply with the license change.", E_USER_NOTICE );
-	}
-
-	/**
-	 * @deprecated
-	 */
-	public function execXML() {
-		trigger_error("execXML has been deprecated in v3.0 to comply with the license change.", E_USER_NOTICE );
 	}
 
     /**
