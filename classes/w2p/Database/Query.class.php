@@ -84,9 +84,12 @@ class w2p_Database_Query extends w2p_Database_oldQuery
 
     public function prepare($clear = false)
     {
-        $this->_convertFromOldStructure();
+        switch($this->type) {
+            default:
+                throw new w2p_Database_Exception("The {$this->type} query type has not been implemented.");
+        }
 
-        return parent::prepare($clear);
+        return $this->clear();
     }
 
 	/**
