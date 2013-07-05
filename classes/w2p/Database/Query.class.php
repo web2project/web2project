@@ -91,6 +91,9 @@ class w2p_Database_Query extends w2p_Database_oldQuery
             case 'insert':
                 $q = $this->prepareInsert();
                 break;
+            case 'update':
+                $q = $this->prepareUpdate();
+                break;
             default:
                 throw new w2p_Database_Exception("The {$this->type} query type has not been implemented.");
         }
