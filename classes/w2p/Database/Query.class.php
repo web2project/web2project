@@ -20,7 +20,8 @@ class w2p_Database_Query extends w2p_Database_oldQuery
     protected $_joins  = array();
     protected $_group_by = array();
     protected $_order_by = array();
-    protected $_limit  = 0;
+    protected $_limit   = 0;
+    protected $_offset  = 0;
 
 	/**< Handle to the database connection */
 	protected $_db = null;
@@ -207,11 +208,13 @@ class w2p_Database_Query extends w2p_Database_oldQuery
      *
      * @param type $limit
      */
-    public function setLimit($limit)
+    public function setLimit($limit, $offset = 0)
     {
         if ((int) $limit > 0) {
             $this->_limit = (int) $limit;
         }
+
+        $this->_offset = max(0, (int) $offset);
     }
 
     /**
@@ -340,7 +343,8 @@ class w2p_Database_Query extends w2p_Database_oldQuery
 
     protected function _buildLimit()
     {
-        return ($this->_limit) ? ' LIMIT ' . (int) $this->_limit : '';
+        return ($this->_limit) ?
+            ' LIMIT ' . (int) $this->_limit . ', ' . (int) $this->_offset : '';
     }
 
     protected function _buildOrder()
