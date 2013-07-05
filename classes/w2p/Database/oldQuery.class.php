@@ -241,61 +241,6 @@ class w2p_Database_oldQuery {
 		$this->addMap('table_list', $table, null);
 	}
 
-	/** Prepare query for execution
-	 * @param $clear Boolean, Clear the query after it has been executed
-	 * @return String containing the SQL statement
-	 */
-	public function prepare($clear = false) {
-        error_log(__FUNCTION__ . ' has been deprecated', E_USER_WARNING);
-        switch ($this->type) {
-			case 'select':
-				$q = $this->prepareSelect();
-				break;
-			case 'update':
-				$q = $this->prepareUpdate();
-				break;
-			case 'insert':
-				$q = $this->prepareInsert();
-				break;
-			case 'insert_select':
-				$s = $this->prepareSelect();
-				$q = 'INSERT INTO ' . $this->_table_prefix . $this->create_table;
-				$q .= ' ' . $s;
-				break;
-			case 'replace':
-				$q = $this->prepareReplace();
-				break;
-			case 'delete':
-				$q = $this->prepareDelete();
-				break;
-			case 'createTemporary': // Create a temporary table
-				$s = $this->prepareSelect();
-				$q = 'CREATE TEMPORARY TABLE ' . $this->_table_prefix . $this->create_table;
-				if (!empty($this->create_definition)) {
-					$q .= ' ' . $this->create_definition;
-                }
-				$q .= ' ' . $s;
-				break;
-			case 'alter':
-				$q = $this->prepareAlter();
-				break;
-			case 'createPermanent': // Create a permanent table
-				$q = 'CREATE TABLE ' . $this->_table_prefix . $this->create_table;
-				if (!empty($this->create_definition)) {
-					$q .= ' ' . $this->create_definition;
-				}
-				break;
-			case 'drop':
-				$q = 'DROP TABLE IF EXISTS ' . $this->_table_prefix . $this->create_table;
-				break;
-		}
-		if ($clear) {
-			$this->clear();
-		}
-		return $q;
-		dprint(__file__, __line__, 2, $q);
-	}
-
 // Everything from here to the table structure area is about data retrieval, not query building
 
 	/** Execute the query
