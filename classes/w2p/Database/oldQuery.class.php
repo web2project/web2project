@@ -305,15 +305,6 @@ class w2p_Database_oldQuery {
 		dprint(__file__, __line__, 2, $q);
 	}
 
-	/** Add quotes to a database identifier
-	 * @param $string The identifier to quote
-	 * @return The quoted identifier
-	 */
-	public function quote_db($string) {
-        error_log(__FUNCTION__ . ' has been deprecated', E_USER_WARNING);
-        return $this->_db->nameQuote . $string . $this->_db->nameQuote;
-	}
-
 // Everything from here to the table structure area is about data retrieval, not query building
 
 	/** Execute the query

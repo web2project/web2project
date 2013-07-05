@@ -627,4 +627,12 @@ class w2p_Database_Query extends w2p_Database_oldQuery
         return $this->_buildJoins();
     }
 
+    /**
+     * @deprecated
+     */
+    public function quote_db($string) {
+        trigger_error(__FUNCTION__ . " has been deprecated in v3.0.", E_USER_NOTICE );
+
+        return $this->quote($string);
+    }
 }
