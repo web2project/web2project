@@ -241,23 +241,6 @@ class w2p_Database_oldQuery {
 		$this->addMap('table_list', $table, null);
 	}
 
-	/** Add a HAVING sub clause
-	 *
-	 * The having clause can be built up one
-	 * part at a time and the resultant query will put in the 'and'
-	 * between each component.
-	 *
-	 * Remember:
-	 * "the SQL standard requires that HAVING must reference only columns in the
-	 * GROUP BY clause or columns used in aggregate functions"
-	 *
-	 * @param	$query	HAVING subclause to use, not including HAVING keyword
-	 */
-	public function addHaving($query) {
-        error_log(__FUNCTION__ . ' has been deprecated', E_USER_WARNING);
-        $this->addClause('having', $query);
-	}
-
 	/**
 	 * Set include count feature, grabs the count of rows that
 	 * would have been returned had no limit been set.

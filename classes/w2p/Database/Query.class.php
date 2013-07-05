@@ -17,6 +17,7 @@ class w2p_Database_Query extends w2p_Database_oldQuery
     protected $_tables = array();
     protected $_fields = array();
     protected $_where  = array();
+    protected $_having = array();
     protected $_joins  = array();
     protected $_group_by = array();
     protected $_order_by = array();
@@ -75,6 +76,7 @@ class w2p_Database_Query extends w2p_Database_oldQuery
         $this->_tables = count($this->table_list) ? $this->table_list : $this->_tables;
         $this->_fields = count($this->query) ? $this->query : $this->_fields;
         $this->_where  = count($this->where) ? $this->where : $this->_where;
+        $this->_having  = count($this->having) ? $this->having : $this->_having;
         $this->_joins  = count($this->join) ? $this->join : $this->_joins;
         $this->_group_by = count($this->group_by) ? $this->group_by : $this->_group_by;
         $this->_order_by = count($this->order_by) ? $this->order_by : $this->_order_by;
@@ -241,6 +243,18 @@ class w2p_Database_Query extends w2p_Database_oldQuery
         }
     }
 
+    /**
+     * Allows you to filter query results by a aggregate field, can be used multiple times
+     *
+     * @param type  $field
+     */
+    public function addHaving($field = '')
+    {
+        if('' != $field) {
+            $this->_having[] = $field;
+        }
+    }
+
 	/** Add a JOIN
 	 *
 	 * Adds a join to the query.  This only implements a left join by default
@@ -326,6 +340,33 @@ class w2p_Database_Query extends w2p_Database_oldQuery
         }
 
         return count($simple) ? ' WHERE ' . implode(' AND ' , $simple) : '';
+    }
+
+    /**
+     * This combines all the having clauses into a single statement. I don't
+     *   like the nested loops but since this array can only be two levels deep,
+     *   recursion is probably excessive.
+     * And yes, it looks the same as _buildWhere() because it basically is.
+     *
+     * @return type
+     */
+    protected function _buildHaving()
+    {
+        $simple = array();
+
+        if (count($this->_having)) {
+            foreach($this->_having as $having) {
+                if (is_array($having)) {
+                    foreach($having as $subhaving) {
+                        $simple[] = $subhaving;
+                    }
+                } else {
+                    $simple[] = $having;
+                }
+            }
+        }
+
+        return count($simple) ? ' HAVING ' . implode(' AND ' , $simple) : '';
     }
 
     protected function _buildJoins()
