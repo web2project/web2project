@@ -258,20 +258,6 @@ class w2p_Database_oldQuery {
         $this->addClause('having', $query);
 	}
 
-	/** Set a row limit on the query
-	 *
-	 * Set a limit on the query.  This is done in a database-independent
-	 * fashion.
-	 *
-	 * @param	$limit	Number of rows to limit.
-	 * @param	$start	First row to start extraction(row offset).
-	 */
-	public function setLimit($limit, $start = -1) {
-        error_log(__FUNCTION__ . ' has been deprecated', E_USER_WARNING);
-        $this->limit = $limit;
-		$this->offset = $start;
-	}
-
 	/**
 	 * Set include count feature, grabs the count of rows that
 	 * would have been returned had no limit been set.
@@ -279,24 +265,6 @@ class w2p_Database_oldQuery {
 	public function includeCount() {
         error_log(__FUNCTION__ . ' has been deprecated', E_USER_WARNING);
         $this->include_count = true;
-	}
-	/** Set a limit on the query based on pagination.
-	 *
-	 * @param $page     the current page
-	 * @param $pagesize the size of pages
-	 */
-	public function setPageLimit($page = 0, $pagesize = 0) {
-        error_log(__FUNCTION__ . ' has been deprecated', E_USER_WARNING);
-        if ($page == 0) {
-			global $tpl;
-			$page = $tpl->page;
-		}
-
-		if ($pagesize == 0) {
-			$pagesize = w2PgetConfig('page_size');
-		}
-
-		$this->setLimit($pagesize, ($page - 1) * $pagesize);
 	}
 
 	/** Prepare query for execution
@@ -385,50 +353,6 @@ class w2p_Database_oldQuery {
 		return $result;
 	}
 
-	/** Create a having clause based upon supplied field.
-	 *
-	 * @param	$having_clause Either string or array of subclauses.
-	 * @return SQL HAVING clause as a string.
-	 */
-	public function make_having_clause($having_clause) {
-        error_log(__FUNCTION__ . ' has been deprecated', E_USER_WARNING);
-        $result = '';
-		if (!isset($having_clause)) {
-			return $result;
-		}
-		if (is_array($having_clause)) {
-			if (count($having_clause)) {
-				$result = ' HAVING ' . implode(' AND ', $having_clause);
-			}
-		} elseif (strlen($having_clause) > 0) {
-			$result = ' HAVING ' . $having_clause;
-		}
-		return $result;
-	}
-
-	/** Create a limit clause
-	 *
-	 * @param	$limit	Either integer with nr of records to retrieve or array with offset and nr of records to retrieve .
-	 * @param	$offset	integer of offset from where it should start retrieving.
-	 * @return	SQL LIMIT clause as a string.
-	 */
-	public function make_limit_clause($limit, $offset) {
-        error_log(__FUNCTION__ . ' has been deprecated', E_USER_WARNING);
-        $result = '';
-		if (!isset($limit)) {
-			return $result;
-		}
-
-		if (is_array($limit) && (count($limit) == 2)) {
-			$result = ' LIMIT ' . implode(',', $limit);
-		} elseif (isset($limit) && ($offset <= 0)) {
-			$result = ' LIMIT ' . (int) $limit;
-		} elseif (isset($limit) && ($offset > 0)) {
-			$result = ' LIMIT ' . (int) $offset . ', ' . (int) $limit;
-		}
-		return $result;
-	}
-
 	/** Add quotes to a database identifier
 	 * @param $string The identifier to quote
 	 * @return The quoted identifier
@@ -436,21 +360,6 @@ class w2p_Database_oldQuery {
 	public function quote_db($string) {
         error_log(__FUNCTION__ . ' has been deprecated', E_USER_WARNING);
         return $this->_db->nameQuote . $string . $this->_db->nameQuote;
-	}
-
-	/**
-	 *	Clone the current query
-	 *
-	 *	@return	object	The new record object or null if error
-	 **/
-	public function duplicate() {
-        error_log(__FUNCTION__ . ' has been deprecated', E_USER_WARNING);
-        /*
-        *  PHP4 is no longer supported or allowed. The
-        *    installer/upgrader/converter simply stops executing.
-        *  This method also appears in the w2p_Utilities_Date and w2p_Core_BaseObject (modified) class.
-        */
-		return clone ($this);
 	}
 
 // Everything from here to the table structure area is about data retrieval, not query building
@@ -1060,4 +969,59 @@ class w2p_Database_oldQuery {
 
         return $this->_buildGroup();
 	}
+
+    /**
+     * @deprecated
+     */
+    public function setPageLimit($page = 0, $pagesize = 0) {
+        trigger_error(__FUNCTION__ . " has been deprecated in v3.0.", E_USER_NOTICE );
+        if ($page == 0) {
+            global $tpl;
+            $page = $tpl->page;
+        }
+
+        if ($pagesize == 0) {
+            $pagesize = w2PgetConfig('page_size');
+        }
+
+        $this->setLimit($pagesize, ($page - 1) * $pagesize);
+    }
+
+    /**
+     * @deprecated
+     */
+    public function make_limit_clause($limit, $offset) {
+        trigger_error(__FUNCTION__ . " has been deprecated in v3.0.", E_USER_NOTICE );
+
+        $this->setLimit($limit, $offset);
+
+        return $this->_buildLimit();
+    }
+
+    /**
+     * @deprecated
+     */
+    public function make_having_clause($having_clause) {
+        trigger_error(__FUNCTION__ . " has been deprecated in v3.0.", E_USER_NOTICE );
+
+        if (is_array($having_clause)) {
+            foreach($having_clause as $having) {
+                $this->addHaving($having);
+            }
+        }
+        if (is_string($having_clause)) {
+            $this->addHaving($having_clause);
+        }
+
+        return $this->_buildHaving();
+    }
+
+    /**
+     * @deprecated
+     **/
+    public function duplicate() {
+        trigger_error(__FUNCTION__ . " has been deprecated in v3.0.", E_USER_NOTICE );
+
+        return clone ($this);
+    }
 }
