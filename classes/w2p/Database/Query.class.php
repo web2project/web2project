@@ -85,6 +85,8 @@ class w2p_Database_Query extends w2p_Database_oldQuery
 
     public function prepare($clear = false)
     {
+        $this->_convertFromOldStructure();
+
         switch($this->type) {
             case 'select':
                 $q = $this->prepareSelect();
@@ -94,6 +96,9 @@ class w2p_Database_Query extends w2p_Database_oldQuery
                 break;
             case 'update':
                 $q = $this->prepareUpdate();
+                break;
+            case 'delete':
+                $q = $this->prepareDelete();
                 break;
             default:
                 throw new w2p_Database_Exception("The {$this->type} query type has not been implemented.");
