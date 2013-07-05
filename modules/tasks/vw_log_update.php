@@ -181,7 +181,6 @@ $log_date = new w2p_Utilities_Date($log->task_log_date);
                             </td>
                             <td>
                                 <select name="task_log_creator" class="text">
-                                    <option value=""></option>
                                     <?php
 //TODO: update for arraySelect()
                                     foreach ($task->getAssignedUsers($task_id) as $task_user) {
