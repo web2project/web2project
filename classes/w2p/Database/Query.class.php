@@ -94,8 +94,11 @@ class w2p_Database_Query extends w2p_Database_oldQuery
             default:
                 throw new w2p_Database_Exception("The {$this->type} query type has not been implemented.");
         }
+        if ($clear) {
+            $this->clear();
+        }
 
-        return $this->clear();
+        return $q;
     }
 
 	/**
