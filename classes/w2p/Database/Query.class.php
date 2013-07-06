@@ -425,4 +425,16 @@ class w2p_Database_Query extends w2p_Database_oldQuery
     {
         return $this->_query_id->FetchRow();
     }
+
+    /**
+     * This gives you the first value from a single row
+     *
+     * @return Value of the row column
+     */
+    public function loadResult()
+    {
+        $row = $this->exec()->fetchRow();
+
+        return ($row) ? $row[0] : false;
+    }
 }
