@@ -493,7 +493,7 @@ class w2p_Database_oldQuery {
         return true;
 	}
 
-// Everything below this line until the deprecated area is related to table structure not content
+// Everything below this line is deprecated and/or related to table structure not content
 
 	/** Create a database table
 	 * @param $table the name of the table to create
@@ -715,13 +715,4 @@ class w2p_Database_oldQuery {
 		$this->create_definition[] = array('action' => 'DROP', 'type' => 'PRIMARY KEY', 'spec' => '');
         trigger_error("w2p_Database_Query->dropPrimary() has been deprecated in v3.0 and will be removed by v4.0.", E_USER_NOTICE );
 	}
-
-    /**
-     * @deprecated
-     **/
-    public function duplicate() {
-        trigger_error(__FUNCTION__ . " has been deprecated in v3.0.", E_USER_NOTICE );
-
-        return clone ($this);
-    }
 }
