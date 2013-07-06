@@ -32,36 +32,12 @@
 class w2p_Database_oldQuery {
 	/**< Contains the query after it has been built. */
 	public $query;
-	/**< Array of tables to be queried */
-	public $table_list;
-	/**< WHERE component of the query */
-	public $where;
-	/**< ORDER BY component of the query */
-	public $order_by;
-	/**< GROUP BY component of the query */
-	public $group_by;
-	/**< HAVING component of the query */
-	public $having;
-	/**< LIMIT component of the query */
-	public $limit;
-	/**< offset of the LIMIT component */
-	public $offset;
-	/**< JOIN component of the query */
-	public $join;
-	/**< Query type eg. 'select', 'update' */
-	public $type;
-	/**< Array of fields->values to update */
-	public $update_list;
 	/**< Array of values used in INSERT or REPLACE statements */
 	public $value_list;
 	/**< Name of the table to create */
 	public $create_table;
 	/**< Array containing information about the table definition */
 	public $create_definition;
-	/**< Boolean to count rows in query */
-	public $include_count = false;
-	/**< Handle to the query result */
-	public $_query_id = null;
 	/**< Use the old style of fetch mode with ADODB */
 	public $_old_style = null;
 
@@ -116,28 +92,6 @@ class w2p_Database_oldQuery {
 			$this->{$varname}[$id] = $name;
 		} else {
 			$this->{$varname}[] = $name;
-		}
-	}
-
-	/** Add a clause to an internal array
-	 *
-	 * Checks to see variable exists first.
-	 * then pushes the new data onto the end of the array.
-	 * @param $clause the type of clause to add
-	 * @param $value the clause value
-	 * @param $check_array defaults to true, iterates through each element in $value and adds them seperately to the clause
-	 */
-	public function addClause($clause, $value, $check_array = true) {
-        error_log(__FUNCTION__ . ' has been deprecated', E_USER_WARNING);
-        if (!isset($this->$clause)) {
-			$this->$clause = array();
-		}
-		if ($check_array && is_array($value)) {
-			foreach ($value as $v) {
-				array_push($this->$clause, $v);
-			}
-		} else {
-			array_push($this->$clause, $value);
 		}
 	}
 
@@ -332,19 +286,6 @@ class w2p_Database_oldQuery {
 		}
 	}
 
-	public function foundRows() {
-        error_log(__FUNCTION__ . ' has been deprecated', E_USER_WARNING);
-        global $db;
-		$result = false;
-		if ($this->include_count) {
-			if ($qid = $db->Execute('SELECT FOUND_ROWS() as rc')) {
-				$data = $qid->FetchRow();
-				$result = isset($data['rc']) ? $data['rc'] : $data[0];
-			}
-		}
-		return $result;
-	}
-
 	/**
 	 * Document::insertArray()
 	 */
@@ -500,33 +441,6 @@ class w2p_Database_oldQuery {
 		}
 	}
 
-	public function createDatabase($database) {
-		$dict = NewDataDictionary($this->_db, w2PgetConfig('dbtype'));
-		$dict->CreateDatabase($database);
-	}
-
-	public function DDcreateTable($table, $def, $opts) {
-		$dict = NewDataDictionary($this->_db, w2PgetConfig('dbtype'));
-		$query_array = $dict->ChangeTableSQL(w2PgetConfig('dbprefix') . $table, $def, $opts);
-		//returns 0 - failed, 1 - executed with errors, 2 - success
-		return $dict->ExecuteSQLArray($query_array);
-	}
-
-	public function DDcreateIndex($name, $table, $cols, $opts) {
-		$dict = NewDataDictionary($this->_db, w2PgetConfig('dbtype'));
-		$query_array = $dict->CreateIndexSQL($name, $table, $cols, $opts);
-		//returns 0 - failed, 1 - executed with errors, 2 - success
-		return $dict->ExecuteSQLArray($query_array);
-	}
-
-	/** Create a temporary database table
-	 * @param $table the name of the temporary table to create.
-	 */
-	public function createTemp($table) {
-		$this->type = 'createTemporary';
-		$this->create_table = $table;
-	}
-
 	/** Drop a table from the database
 	 *
 	 * Use dropTemp() to drop temporary tables
@@ -537,55 +451,82 @@ class w2p_Database_oldQuery {
 		$this->create_table = $table;
 	}
 
-	/** Drop a temporary table from the database
-	 * @param $table the name of the temporary table to drop
-	 */
-	public function dropTemp($table) {
-		$this->type = 'drop';
-		$this->create_table = $table;
-	}
-
-	/** Alter a database table
-	 * @param $table the name of the table to alter
-	 */
-	public function alterTable($table) {
-		$this->create_table = $table;
-		$this->type = 'alter';
-	}
-
 	/** Set a table creation definition from supplied array
 	 * @param $def Array containing table definition
 	 */
 	public function createDefinition($def) {
 		$this->create_definition = $def;
-	}    
-    
-	/** Prepare the ALTER component of the SQL query
-	 * @todo add ALTER DROP/CHANGE/MODIFY/IMPORT/DISCARD/.. definitions: http://dev.mysql.com/doc/mysql/en/alter-table.html
-	 */
-	public function prepareAlter() {
-		$q = 'ALTER TABLE ' . $this->quote_db($this->_table_prefix . $this->create_table) . ' ';
-		if (isset($this->create_definition)) {
-			if (is_array($this->create_definition)) {
-				$first = true;
-				foreach ($this->create_definition as $def) {
-					if ($first) {
-						$first = false;
-					} else {
-						$q .= ', ';
-					}
-					$q .= $def['action'] . ' ' . $def['type'] . ' ' . $def['spec'];
-				}
-			} else {
-				$q .= 'ADD ' . $this->create_definition;
-			}
-		}
-		return $q;
 	}
     
-// Everything below this line is deprecated and should no longer be used.
+// Everything below this line is deprecated and no longer used in core
 
-	/**
+    public function createDatabase($database) {
+        $dict = NewDataDictionary($this->_db, w2PgetConfig('dbtype'));
+        $dict->CreateDatabase($database);
+    }
+
+    /** Alter a database table
+     * @param $table the name of the table to alter
+     */
+    public function alterTable($table) {
+        $this->create_table = $table;
+        $this->type = 'alter';
+    }
+
+    /** Prepare the ALTER component of the SQL query
+     * @todo add ALTER DROP/CHANGE/MODIFY/IMPORT/DISCARD/.. definitions: http://dev.mysql.com/doc/mysql/en/alter-table.html
+     */
+    public function prepareAlter() {
+        $q = 'ALTER TABLE ' . $this->quote_db($this->_table_prefix . $this->create_table) . ' ';
+        if (isset($this->create_definition)) {
+            if (is_array($this->create_definition)) {
+                $first = true;
+                foreach ($this->create_definition as $def) {
+                    if ($first) {
+                        $first = false;
+                    } else {
+                        $q .= ', ';
+                    }
+                    $q .= $def['action'] . ' ' . $def['type'] . ' ' . $def['spec'];
+                }
+            } else {
+                $q .= 'ADD ' . $this->create_definition;
+            }
+        }
+        return $q;
+    }
+
+    public function DDcreateTable($table, $def, $opts) {
+        $dict = NewDataDictionary($this->_db, w2PgetConfig('dbtype'));
+        $query_array = $dict->ChangeTableSQL(w2PgetConfig('dbprefix') . $table, $def, $opts);
+        //returns 0 - failed, 1 - executed with errors, 2 - success
+        return $dict->ExecuteSQLArray($query_array);
+    }
+
+    public function DDcreateIndex($name, $table, $cols, $opts) {
+        $dict = NewDataDictionary($this->_db, w2PgetConfig('dbtype'));
+        $query_array = $dict->CreateIndexSQL($name, $table, $cols, $opts);
+        //returns 0 - failed, 1 - executed with errors, 2 - success
+        return $dict->ExecuteSQLArray($query_array);
+    }
+
+    /** Create a temporary database table
+     * @param $table the name of the temporary table to create.
+     */
+    public function createTemp($table) {
+        $this->type = 'createTemporary';
+        $this->create_table = $table;
+    }
+
+    /** Drop a temporary table from the database
+     * @param $table the name of the temporary table to drop
+     */
+    public function dropTemp($table) {
+        $this->type = 'drop';
+        $this->create_table = $table;
+    }
+
+    /**
      * Instead of concatenating here, retrieve the relevant fields and do
      *   it in PHP. It won't necessarily be faster but should be more
      *   supportable cross-databasewise.
@@ -709,4 +650,34 @@ class w2p_Database_oldQuery {
 		$this->create_definition[] = array('action' => 'DROP', 'type' => 'PRIMARY KEY', 'spec' => '');
         trigger_error("w2p_Database_Query->dropPrimary() has been deprecated in v3.0 and will be removed by v4.0.", E_USER_NOTICE );
 	}
+
+    /**
+     * @deprecated
+     */
+    public function addClause($clause, $value, $check_array = true) {
+        error_log(__FUNCTION__ . ' has been deprecated in v3.0. There is no replacement.', E_USER_WARNING);
+        if (!isset($this->$clause)) {
+            $this->$clause = array();
+        }
+        if ($check_array && is_array($value)) {
+            foreach ($value as $v) {
+                array_push($this->$clause, $v);
+            }
+        } else {
+            array_push($this->$clause, $value);
+        }
+    }
+
+    public function foundRows() {
+        error_log(__FUNCTION__ . ' has been deprecated', E_USER_WARNING);
+        global $db;
+        $result = false;
+        if ($this->include_count) {
+            if ($qid = $db->Execute('SELECT FOUND_ROWS() as rc')) {
+                $data = $qid->FetchRow();
+                $result = isset($data['rc']) ? $data['rc'] : $data[0];
+            }
+        }
+        return $result;
+    }
 }
