@@ -414,4 +414,16 @@ class w2p_Database_Query extends w2p_Database_oldQuery
 
         return 'DATE_ADD(' . $date . ', INTERVAL ' . $interval . ' ' . $unit . ')';
 	}
+
+    /**
+     * This is simply a wrapper for the adodb FetchRow method and doesn't add
+     *   any new real functionality. I have no clue why you'd do this at the
+     *   moment..
+     *
+     * @return  array
+     */
+    public function fetchRow()
+    {
+        return $this->_query_id->FetchRow();
+    }
 }
