@@ -197,12 +197,6 @@ class w2p_Database_oldQuery {
 		$this->type = 'replace';
 	}
 
-	public function setDelete($table) {
-        error_log(__FUNCTION__ . ' has been deprecated', E_USER_WARNING);
-        $this->type = 'delete';
-		$this->addMap('table_list', $table, null);
-	}
-
 // Everything from here to the table structure area is about data retrieval, not query building
 
 	/** Execute the query
