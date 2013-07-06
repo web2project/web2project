@@ -25,6 +25,8 @@ class w2p_Database_Query extends w2p_Database_oldQuery
     protected $_limit   = 0;
     protected $_offset  = 0;
 
+    protected $_update_list = array();
+
 	/**< Handle to the database connection */
 	protected $_db = null;
 	/**
@@ -61,6 +63,8 @@ class w2p_Database_Query extends w2p_Database_oldQuery
         $this->_group_by = array();
         $this->_order_by = array();
         $this->_limit  = 0;
+
+        $this->_update_list = array();
 
         parent::clear();
     }
@@ -185,8 +189,8 @@ class w2p_Database_Query extends w2p_Database_oldQuery
         $table = $this->_buildTable(true);
         $where = $this->_buildWhere();
 
-        foreach($this->update_list as $field => $value) {
-            $fieldValues[] = "$field = $value";
+        foreach($this->_update_list as $field => $value) {
+            $fieldValues[] = "$field = " . $this->quote($value);
         }
         $field_values = implode(',', $fieldValues);
         
@@ -316,6 +320,13 @@ class w2p_Database_Query extends w2p_Database_oldQuery
     public function rightJoin($table, $alias, $join)
     {
         $this->addJoin($table, $alias, $join, 'right');
+    }
+
+    public function addUpdate($field, $value = null, $set = false, $func = false) {
+        $this->type = 'update';
+        if ('' != $field) {
+            $this->_update_list[$field] = $value;
+        }
     }
 
     protected function _buildQuery()
