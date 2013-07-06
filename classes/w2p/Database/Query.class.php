@@ -546,6 +546,21 @@ class w2p_Database_Query extends w2p_Database_oldQuery
     }
 
     /**
+     * This returns an associative array representing a single row of a query.
+     *
+     */
+    public function loadHash()
+    {
+        $hash = array();
+
+        $result = $this->exec(ADODB_FETCH_ASSOC);
+        if ($result) {
+            $hash = $this->fetchRow();
+        }
+        return $hash;
+    }
+
+    /**
      * This is simply a wrapper for the adodb qstr method and doesn't add
      *   any new real functionality. I have no clue why you'd do this at the
      *   moment..
