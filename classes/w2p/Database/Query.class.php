@@ -98,4 +98,16 @@ class w2p_Database_Query extends w2p_Database_oldQuery
 
         return $sql;
 	}
+
+    /**
+     * Allows you to order query results by a field, can be used multiple times
+     *
+     * @param type  $field 
+     */
+    public function addOrder($field = '')
+    {
+        if('' != $field) {
+            $this->_order_by[] = $field;
+        }
+    }
 }
