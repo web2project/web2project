@@ -122,4 +122,16 @@ class w2p_Database_Query extends w2p_Database_oldQuery
             $this->_group_by[] = $field;
         }
     }
+
+    /**
+     * Allows you to filter query results by a field, can be used multiple times
+     *
+     * @param type  $field 
+     */
+    public function addWhere($field = '')
+    {
+        if('' != $field) {
+            $this->_where[] = $field;
+        }
+    }
 }
