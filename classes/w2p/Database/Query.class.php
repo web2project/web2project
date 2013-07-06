@@ -445,6 +445,31 @@ class w2p_Database_Query extends w2p_Database_oldQuery
     }
 
     /**
+     * Load database results as an array of associative arrays
+     *
+     * @param   $maxrows        Maximum number of rows to return
+     * @param   $index          Can be used to set the keys of the resulting arrays, useful to find records by primary key
+     * @return                  array of associative arrays containing row field values
+     */
+    public function loadList($maxrows = -1, $index = -1)
+    {
+        $results = array();
+        if ($this->exec()) {
+            $actualRows = $this->_query_id->NumRows();
+            $upperLimit = ($maxrows > 0) ? min($maxrows, $actualRows) : $actualRows;
+            $rows = $this->_query_id->GetAll($upperLimit);
+            foreach ($rows as $row) {
+                if (-1 == $index) {
+                    $results[] = $row;
+                } else {
+                    $results[$row[$index]] = $row;
+                }
+            }
+        }
+        return $results;
+    }
+
+    /**
      * This is simply a wrapper for the adodb qstr method and doesn't add
      *   any new real functionality. I have no clue why you'd do this at the
      *   moment..
