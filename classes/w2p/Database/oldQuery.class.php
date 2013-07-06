@@ -118,22 +118,6 @@ class w2p_Database_oldQuery {
 		}
 	}
 
-	/** Add a table to the query
-	 *
-	 * A table is normally addressed by an
-	 * alias.  If you don't supply the alias chances are your code will
-	 * break.  You can add as many tables as are needed for the query.
-	 * E.g. addTable('something', 'a') will result in an SQL statement
-	 * of {PREFIX}table as a.
-	 * Where {PREFIX} is the system defined table prefix.
-	 *
-	 * @param	$name	Name of table, without prefix.
-	 * @param	$id	Alias for use in query/where/group clauses.
-	 */
-	public function addTable($name, $id = null) {
-		$this->addMap('table_list', $name, ($id ? $id : $name));
-	}
-
 	/** Add a clause to an internal array
 	 *
 	 * Checks to see variable exists first.
@@ -333,22 +317,6 @@ class w2p_Database_oldQuery {
 		$this->addMap('table_list', $table, null);
 	}
 
-	/** Add a WHERE sub clause
-	 *
-	 * The where clause can be built up one
-	 * part at a time and the resultant query will put in the 'and'
-	 * between each component.
-	 *
-	 * Make sure you use table aliases.
-	 *
-	 * @param	$query	Where subclause to use, not including WHERE keyword
-	 */
-	public function addWhere($query) {
-		if (isset($query)) {
-			$this->addClause('where', $query);
-		}
-	}
-
 	/** Add a JOIN condition
 	 *
 	 * Add a join condition to the query.  This only implements
@@ -401,31 +369,6 @@ class w2p_Database_oldQuery {
 	 */
 	public function innerJoin($table, $alias, $join) {
 		$this->addJoin($table, $alias, $join, 'inner');
-	}
-
-	/** Add an ORDER BY clause
-	 *
-	 * Again, only the fieldname is required, and
-	 * it should include an alias if a table has been added.
-	 * May be called multiple times.
-	 *
-	 * @param	$order	Order by field.
-	 */
-	public function addOrder($order) {
-		if (isset($order)) {
-			$this->addClause('order_by', $order);
-		}
-	}
-
-	/** Add a GROUP BY clause
-	 *
-	 * Only the fieldname is required.
-	 * May be called multiple times.  Use table aliases as required.
-	 *
-	 * @param	$group	Field name to group by.
-	 */
-	public function addGroup($group) {
-		$this->addClause('group_by', $group);
 	}
 
 	/** Add a HAVING sub clause
