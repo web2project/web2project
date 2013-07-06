@@ -197,44 +197,6 @@ class w2p_Database_oldQuery {
 		$this->type = 'replace';
 	}
 
-	/** Update a database value
-	 * @param $field The field to update
-	 * @param $value The value to set $field to
-	 * @param $set Defaults to false. If true will check to see if the fields or values supplied are comma delimited strings instead of arrays
-	 * @param $func Defaults to false. If true will not use quotation marks around the value - to be used when the value being updated includes a function
-	 */
-	public function addUpdate($field, $value = null, $set = false, $func = false) {
-        error_log(__FUNCTION__ . ' has been deprecated', E_USER_WARNING);
-        if (is_array($field) && $value == null) {
-			foreach ($field as $f => $v) {
-				$this->addMap('update_list', $f, $v);
-			}
-		} elseif ($set) {
-			if (is_array($field)) {
-				$fields = $field;
-			} else {
-				$fields = explode(',', $field);
-			}
-
-			if (is_array($value)) {
-				$values = $value;
-			} else {
-				$values = explode(',', $value);
-			}
-
-			for ($i = 0, $i_cmp = count($fields); $i < $i_cmp; $i++) {
-				$this->addMap('update_list', $values[$i], $fields[$i]);
-			}
-		} else {
-			if (!$func) {
-				$this->addMap('update_list', $this->quote($value), $field);
-			} else {
-				$this->addMap('update_list', $value, $field);
-			}
-		}
-		$this->type = 'update';
-	}
-
 	public function setDelete($table) {
         error_log(__FUNCTION__ . ' has been deprecated', E_USER_WARNING);
         $this->type = 'delete';
@@ -294,56 +256,6 @@ class w2p_Database_oldQuery {
 			}
 			return $this->_query_id;
 		}
-	}
-
-	/** Load database results as an associative array, using the supplied field name as the array's keys
-	 *
-	 * Replaces the db_loadHashList() function
-	 * @param $index Defaults to null, the field to use for array keys
-	 * @return Associative array of rows, keyed with the field indicated by the $index parameter
-	 */
-	public function loadHashList($index = null) {
-        error_log(__FUNCTION__ . ' has been deprecated', E_USER_WARNING);
-        if (!$this->exec(ADODB_FETCH_ASSOC)) {
-			exit($this->_db->ErrorMsg());
-		}
-		$hashlist = array();
-		$keys = null;
-
-		while ($hash = $this->fetchRow()) {
-			if ($index) {
-				$hashlist[$hash[$index]] = $hash;
-				//Lets add the hash fields in numerial keys:
-				//This is so that the arraySelectList works correctly with the results of DBQueries loadHashList method
-				$key = 0;
-				foreach ($hash as $field) {
-					$hashlist[$hash[$index]][$key] = $field;
-					$key++;
-				}
-			} else {
-				// If we are using fetch mode of ASSOC, then we don't
-				// have an array index we can use, so we need to get one
-				if (!$keys) {
-					$keys = array_keys($hash);
-				}
-				$hashlist[$hash[$keys[0]]] = $hash[$keys[1]];
-			}
-		}
-		$this->clear();
-		return $hashlist;
-	}
-
-	/** Load a single result row as an associative array
-	 * @return Associative array of field names to values
-	 */
-	public function loadHash() {
-        error_log(__FUNCTION__ . ' has been deprecated', E_USER_WARNING);
-        if (!$this->exec(ADODB_FETCH_ASSOC)) {
-			exit($this->_db->ErrorMsg());
-		}
-		$hash = $this->fetchRow();
-		$this->clear();
-		return $hash;
 	}
 
 	/** Load an indexed array containing the first column of results only
