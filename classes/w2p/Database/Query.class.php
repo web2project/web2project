@@ -500,7 +500,28 @@ class w2p_Database_Query extends w2p_Database_oldQuery
      */
     public function fetchRow()
     {
+        error_log(__FUNCTION__ . ' has been deprecated. Use the appropriate load* method instead.', E_USER_WARNING);
+
         return $this->_query_id->FetchRow();
+    }
+    public function fetchAllRows()
+    {
+        error_log(__FUNCTION__ . ' has been deprecated. Use the appropriate load* method instead.', E_USER_WARNING);
+
+        return $this->_query_id->GetAll();
+    }
+
+    protected function _fetchRow()
+    {
+        return $this->_query_id->FetchRow();
+    }
+    protected function _fetchAllRows($upperLimit = -1)
+    {
+        return $this->_query_id->GetAll();
+    }
+    protected function _fetchRowCount()
+    {
+        return $this->_query_id->NumRows();
     }
 
     /**
@@ -513,7 +534,7 @@ class w2p_Database_Query extends w2p_Database_oldQuery
         $result = false;
 
         if($this->exec()) {
-            $row = $this->fetchRow();
+            $row = $this->_fetchRow();
             $result = ($row) ? $row[0] : $result;
         }
 
@@ -531,9 +552,9 @@ class w2p_Database_Query extends w2p_Database_oldQuery
     {
         $results = array();
         if ($this->exec()) {
-            $actualRows = $this->_query_id->NumRows();
+            $actualRows = $this->_fetchRowCount();
             $upperLimit = ($maxrows > 0) ? min($maxrows, $actualRows) : $actualRows;
-            $rows = $this->_query_id->GetAll($upperLimit);
+            $rows = $this->_fetchAllRows($upperLimit);
             foreach ($rows as $row) {
                 if (-1 == $index) {
                     $results[] = $row;
@@ -555,7 +576,7 @@ class w2p_Database_Query extends w2p_Database_oldQuery
 
         $result = $this->exec(ADODB_FETCH_ASSOC);
         if ($result) {
-            $hash = $this->fetchRow();
+            $hash = $this->_fetchRow();
         }
         return $hash;
     }
