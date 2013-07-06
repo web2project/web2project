@@ -443,4 +443,17 @@ class w2p_Database_Query extends w2p_Database_oldQuery
 
         return $result;
     }
+
+    /**
+     * This is simply a wrapper for the adodb qstr method and doesn't add
+     *   any new real functionality. I have no clue why you'd do this at the
+     *   moment..
+     *
+     * @param   $string         The string to be quoted
+     * @return  $string         The quoted string
+     */
+    public function quote($string)
+    {
+        return $this->_db->qstr($string);
+    }
 }
