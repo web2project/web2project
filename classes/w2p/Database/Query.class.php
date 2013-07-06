@@ -127,6 +127,11 @@ class w2p_Database_Query extends w2p_Database_oldQuery
         return $sql;
     }
 
+    protected function prepareInsert()
+    {
+        
+    }
+
 	/**
      * Adds a table to the query
      *
