@@ -577,7 +577,33 @@ class w2p_Database_Query extends w2p_Database_oldQuery
         if ($result) {
             $hash = $this->_fetchRow();
         }
+
         return $hash;
+    }
+
+    public function loadHashList($index = null)
+    {
+        $hashlist = array();
+
+        $result = $this->exec(ADODB_FETCH_ASSOC);
+        if ($result) {
+            $rows = $this->_fetchAllRows();
+            if (isset($index)) {
+                foreach($rows as $row) {
+                    $hashlist[$row[$index]] = $row;
+                }
+            } else {
+                foreach($rows as $row) {
+                    $keys = array_keys($row);
+
+                    $hash_key = $row[$keys[0]];
+                    $hash_value = $row[$keys[1]];
+                    $hashlist[$hash_key] = $hash_value;
+                }
+            }
+        }
+
+        return $hashlist;
     }
 
     /**
