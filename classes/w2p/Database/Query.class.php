@@ -13,6 +13,8 @@
 
 class w2p_Database_Query extends w2p_Database_oldQuery
 {
+    public $query = '';
+
     protected $_table_prefix;
 
     protected $_tables = array();
@@ -56,6 +58,7 @@ class w2p_Database_Query extends w2p_Database_oldQuery
 
     public function clear()
     {
+        $this->query = '';
         $this->_tables = array();
         $this->_fields = array();
         $this->_where  = array();
@@ -110,6 +113,7 @@ class w2p_Database_Query extends w2p_Database_oldQuery
         if ($clear) {
             $this->clear();
         }
+        $this->query = $q;
 
         return $q;
     }
@@ -528,6 +532,20 @@ class w2p_Database_Query extends w2p_Database_oldQuery
     protected function _fetchRowCount()
     {
         return $this->_query_id->NumRows();
+    }
+
+    public function loadColumn()
+    {
+        $results = array();
+
+        if($this->exec()) {
+            $rows = $this->_fetchAllRows();
+            foreach($rows as $row) {
+                $results[] = $row[0];
+            }
+        }
+
+        return $results;
     }
 
     /**
