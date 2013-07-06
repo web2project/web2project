@@ -534,6 +534,7 @@ class w2p_Database_Query extends w2p_Database_oldQuery
         return $this->_query_id->NumRows();
     }
 
+    /** This loads a single column of a recordset. It doesn't matter how many columns there actually are.. you'll get the first one only. */
     public function loadColumn()
     {
         $results = array();
@@ -606,6 +607,7 @@ class w2p_Database_Query extends w2p_Database_oldQuery
         return $hash;
     }
 
+    /** This returns an array of associative arrays, possibly indexed by the $index specified. */
     public function loadHashList($index = null)
     {
         $hashlist = array();
