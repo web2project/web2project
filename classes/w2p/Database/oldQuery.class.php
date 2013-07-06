@@ -429,20 +429,6 @@ class w2p_Database_oldQuery {
 		return $result;
 	}
 
-	/** Add quotes to a string
-	 *
-	 * @param	$string	A string to add quotes to.
-	 * @return The quoted string
-	 */
-	public function quote($string) {
-        error_log(__FUNCTION__ . ' has been deprecated', E_USER_WARNING);
-        if (is_int($string)) {
-			return $string;
-		} else {
-			return $this->_db->qstr($string, get_magic_quotes_runtime());
-		}
-	}
-
 	/** Add quotes to a database identifier
 	 * @param $string The identifier to quote
 	 * @return The quoted identifier
@@ -520,49 +506,6 @@ class w2p_Database_oldQuery {
 			}
 			return $this->_query_id;
 		}
-	}
-
-	/** Fetch the first row of the results
-	 * @return First row as array
-	 */
-	public function fetchRow() {
-        error_log(__FUNCTION__ . ' has been deprecated', E_USER_WARNING);
-        if (!$this->_query_id) {
-			return false;
-		}
-		return $this->_query_id->FetchRow();
-	}
-
-	/** Load database results as an array of associative arrays
-	 *
-	 * Replaces the db_loadList() function
-	 * @param $maxrows Maximum number of rows to return
-	 * @param $index Can be used to set the keys of the resulting arrays, useful to find records by primary key.
-	 * @return Array of associative arrays containing row field values
-	 */
-	public function loadList($maxrows = -1, $index = -1) {
-        error_log(__FUNCTION__ . ' has been deprecated', E_USER_WARNING);
-        global $AppUI;
-
-		if (!$this->exec(ADODB_FETCH_ASSOC)) {
-			$AppUI->setMsg($this->_db->ErrorMsg(), UI_MSG_ERROR);
-			$this->clear();
-			return false;
-		}
-
-		$list = array();
-		$list = $this->_query_id->GetArray($maxrows);
-		if ($index != -1) {
-			$indexed_list = array();
-			foreach ($list as $record) {
-				$indexed_list[$record[$index]] = $record;
-			}
-			unset($list);
-			$list = array();
-			$list = $indexed_list;
-		}
-		$this->clear();
-		return $list;
 	}
 
 	/** Load database results as an associative array, using the supplied field name as the array's keys
@@ -693,24 +636,6 @@ class w2p_Database_oldQuery {
 				}
 			}
 		}
-	}
-
-	/** Load a single column result from a single row
-	 * @return Value of the row column
-	 */
-	public function loadResult() {
-        error_log(__FUNCTION__ . ' has been deprecated', E_USER_WARNING);
-        global $AppUI;
-
-		$result = false;
-
-		if (!$this->exec(ADODB_FETCH_NUM)) {
-			$AppUI->setMsg($this->_db->ErrorMsg(), UI_MSG_ERROR);
-		} elseif ($data = $this->fetchRow()) {
-			$result = $data[0];
-		}
-		$this->clear();
-		return $result;
 	}
 
 	public function foundRows() {
