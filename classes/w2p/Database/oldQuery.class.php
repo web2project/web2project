@@ -206,22 +206,6 @@ class w2p_Database_oldQuery {
 		}
 	}
 
-	/** Load an indexed array containing the first column of results only
-	 * @return Indexed array of first column values
-	 */
-	public function loadColumn() {
-        error_log(__FUNCTION__ . ' has been deprecated', E_USER_WARNING);
-        if (!$this->exec(ADODB_FETCH_NUM)) {
-			die($this->_db->ErrorMsg());
-		}
-		$result = array();
-		while ($row = $this->fetchRow()) {
-			$result[] = $row[0];
-		}
-		$this->clear();
-		return $result;
-	}
-
 	/** Load database results into a w2p_Core_BaseObject based object
 	 * @param &$object Reference to the object to propagate with database results
 	 * @param $bindAll Defaults to false, Bind every field returned to the referenced object
