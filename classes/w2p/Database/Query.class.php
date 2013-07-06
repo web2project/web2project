@@ -104,6 +104,18 @@ class w2p_Database_Query extends w2p_Database_oldQuery
         return $sql;
 	}
 
+	/**
+     * Adds a table to the query
+     *
+	 * @param	$name	Name of table, without prefix
+	 * @param	$alias	Alias for use in query/where/group clauses
+	 */
+	public function addTable($table, $alias = '')
+    {
+        $alias = ('' == $alias) ? $table : $alias;
+        $this->_tables[$alias] = $table;
+	}
+
     /**
      * Allows you to order query results by a field, can be used multiple times
      *
