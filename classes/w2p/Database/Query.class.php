@@ -211,6 +211,12 @@ class w2p_Database_Query extends w2p_Database_oldQuery
         $this->_tables[$alias] = $table;
 	}
 
+    public function setDelete($table)
+    {
+        $this->type = 'delete';
+        $this->addTable($table);
+    }
+
     public function addQuery($field)
     {
         if('' != $field) {
