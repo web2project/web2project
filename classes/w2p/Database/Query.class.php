@@ -109,4 +109,16 @@ class w2p_Database_Query extends w2p_Database_oldQuery
             $this->_order_by[] = $field;
         }
     }
+
+    /**
+     * Allows you to group query results by a field, can be used multiple times
+     *
+     * @param type  $field 
+     */
+    public function addGroup($field = '')
+    {
+        if('' != $field) {
+            $this->_group_by[] = $field;
+        }
+    }
 }
