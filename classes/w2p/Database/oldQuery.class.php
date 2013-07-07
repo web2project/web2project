@@ -132,12 +132,6 @@ class w2p_Database_oldQuery {
 			$this->type = 'insert';
 	}
 
-	public function addInsertSelect($table) {
-        error_log(__FUNCTION__ . ' has been deprecated', E_USER_WARNING);
-        $this->create_table = $table;
-		$this->type = 'insert_select';
-	}
-
 	// implemented addReplace() on top of addInsert()
 	/** Insert a value into the database, to replace an existing row.
 	 * @param $field The field to insert the value into
