@@ -34,7 +34,7 @@ if ($is_clash) {
 	}
 }
 $obj->event_project = ($event_project) ? $event_project : $obj->event_project;
-$start_date = intval($obj->event_start_date) ? new w2p_Utilities_Date($AppUI->formatTZAwareTime($obj->event_start_date, '%Y-%m-%d %T')) : null;
+$start_date = intval($obj->event_start_date) ? new w2p_Utilities_Date($AppUI->formatTZAwareTime($obj->event_start_date, '%Y-%m-%d %T')) : new w2p_Utilities_Date();
 $end_date = intval($obj->event_end_date) ? new w2p_Utilities_Date($AppUI->formatTZAwareTime($obj->event_end_date, '%Y-%m-%d %T')) : $start_date;
 
 // load the event types
