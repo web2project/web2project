@@ -21,12 +21,13 @@ class CFile_Folder extends w2p_Core_BaseObject {
         parent::__construct('file_folders', 'file_folder_id', 'files');
 	}
 
-	public function getAllowedRecords($uid) {
+	public function getAllowedRecords($uid, $fields = '*',
+          $orderby = 'file_folder_parent, file_folder_name', $unused = null, $unused2 = null, $unused3 = '')
+    {
         $q = $this->_getQuery();
 		$q->addTable('file_folders');
-		$q->addQuery('*');
-		$q->addOrder('file_folder_parent');
-		$q->addOrder('file_folder_name');
+		$q->addQuery($fields);
+		$q->addOrder($orderby);
 		return $q->loadHashList();
 	}
 
