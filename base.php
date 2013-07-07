@@ -6,12 +6,11 @@
 ini_set('display_errors', 1);
 ini_set('display_errors', 0);
 
-if (defined('E_DEPRECATED')) {
-    // since php 5.3
-    error_reporting(E_ALL & ~E_NOTICE & ~E_DEPRECATED);
-} else {
-    error_reporting(E_ALL & ~ E_NOTICE);
+if (!defined('E_DEPRECATED')) {
+    // If we hit this, we're still running on PHP 5.2.x
+    define('E_DEPRECATED', 8192);
 }
+error_reporting(E_ALL & ~E_DEPRECATED & ~E_NOTICE & ~E_STRICT);
 //error_reporting(-1);
 
 define('W2P_PERFORMANCE_DEBUG', false);
