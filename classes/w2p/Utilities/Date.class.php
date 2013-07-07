@@ -46,8 +46,9 @@ class w2p_Utilities_Date extends Date {
 			$d2->convertTZ(new Date_TimeZone('UTC'));
 		}
 
-		$days1 = Date_Calc::dateToDays($d1->day, $d1->month, $d1->year);
-		$days2 = Date_Calc::dateToDays($d2->day, $d2->month, $d2->year);
+        $date_calc = new Date_Calc();
+        $days1 = $date_calc->dateToDays($d1->day, $d1->month, $d1->year);
+        $days2 = $date_calc->dateToDays($d2->day, $d2->month, $d2->year);
 
         $comp_value = 0;
 		if ($days1 - $days2) {
