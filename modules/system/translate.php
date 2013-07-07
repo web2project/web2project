@@ -79,7 +79,7 @@ if(!is_writable($localeFolder)) {
 echo ('' != $AppUI->msg) ? $AppUI->getMsg() : '';
 
 $titleBlock = new w2p_Theme_TitleBlock('Translation Management', 'rdf2.png', $m, $m . '.' . $a);
-$titleBlock->addCell('', '', '<form action="?m=system&a=translate" method="post" name="modlang" accept-charset="utf-8">', '');
+$titleBlock->addCell(' ', '', '<form action="?m=system&a=translate" method="post" name="modlang" accept-charset="utf-8">', '');
 $titleBlock->addCell(arraySelect($modules, 'module', 'size="1" class="text" onchange="document.modlang.submit();"', $module));
 $titleBlock->addCell($AppUI->_('Module'));
 $temp = $AppUI->setWarning(false);
