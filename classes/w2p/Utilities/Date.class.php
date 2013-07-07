@@ -114,7 +114,9 @@ class w2p_Utilities_Date extends Date {
 		if (!is_object($when)) {
 			return false;
 		}
-		return Date_Calc::dateDiff($this->getDay(), $this->getMonth(), $this->getYear(), $when->getDay(), $when->getMonth(), $when->getYear());
+
+        $date_calc = new Date_Calc();
+		return $date_calc->dateDiff($this->getDay(), $this->getMonth(), $this->getYear(), $when->getDay(), $when->getMonth(), $when->getYear());
 	}
 
 	/**
