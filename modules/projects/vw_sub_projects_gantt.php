@@ -224,6 +224,9 @@ if (!is_array($projects) || sizeof($projects) == 0) {
                 // cycle for tasks for each project
                 for ($i = 0, $i_cmp = count($gantt_arr[$p['project_id']]); $i < $i_cmp; $i++) {
                     $t = $gantt_arr[$p['project_id']][$i][0];
+                    if (!is_array($t)) {
+                        continue;
+                    }
                     $level = $gantt_arr[$p['project_id']][$i][1];
                     if ($t['task_end_date'] == null) {
                         $t['task_end_date'] = $t['task_start_date'];
