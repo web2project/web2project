@@ -172,7 +172,7 @@ class CDepartment extends w2p_Core_BaseObject {
 	 */
 	// returns a list of records exposed to the user
 //TODO: this modifies the core $_query property
-	public function getAllowedRecords($uid, $fields = '*', $orderby = '', $index = null, $extra = null) {
+	public function getAllowedRecords($uid, $fields = '*', $orderby = '', $index = null, $extra = null, $unused = '') {
 		$uid = (int) $uid;
 		$uid || exit('FATAL ERROR<br />' . get_class($this) . '::getAllowedRecords failed');
 		$deny = $this->_perms->getDeniedItems($this->_tbl, $uid);
