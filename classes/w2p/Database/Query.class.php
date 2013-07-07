@@ -641,6 +641,32 @@ class w2p_Database_Query extends w2p_Database_oldQuery
         return $hashlist;
     }
 
+    /** Load database results into a w2p_Core_BaseObject based object
+     * @param &$object Reference to the object to propagate with database results
+     * @param $bindAll Defaults to false, Bind every field returned to the referenced object
+     * @param $strip Defaults to true
+     * @return True on success.
+     */
+    public function loadObject(&$object, $bindAll = false, $strip = true)
+    {
+        if (!is_object($object)) {
+            throw new w2p_Database_Exception("The loadObject method expects an object to load.");
+        }
+        $result = $this->exec(ADODB_FETCH_ASSOC);
+        if ($result) {
+            $hash = $this->loadHash();
+            $properties = get_object_vars($object);
+
+            foreach($properties as $property => $value) {
+                $object->$property = $hash[$property];
+            }
+        } else {
+            return false;
+        }
+
+        return true;
+    }
+
     /**
      * This is simply a wrapper for the adodb qstr method and doesn't add
      *   any new real functionality. I have no clue why you'd do this at the
