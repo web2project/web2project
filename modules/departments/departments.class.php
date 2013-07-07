@@ -258,7 +258,7 @@ class CDepartment extends w2p_Core_BaseObject {
 		return $where;
 	}
 
-	public function setAllowedSQL($uid, &$query, $index = null, $key = null)
+	public function setAllowedSQL($uid, $query, $index = null, $key = null)
     {
 		$uid = (int) $uid;
 		$uid || exit('FATAL ERROR ' . get_class($this) . '::getAllowedSQL failed');

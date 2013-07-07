@@ -284,7 +284,7 @@ class CProject extends w2p_Core_BaseObject
         return array_merge($where, $project_where);
     }
 
-    public function setAllowedSQL($uid, &$query, $index = null, $key = 'pr')
+    public function setAllowedSQL($uid, $query, $index = null, $key = 'pr')
     {
         $oCpy = new CCompany;
         $oCpy->overrideDatabase($this->_query);
