@@ -101,6 +101,9 @@ class w2p_Database_Query extends w2p_Database_oldQuery
             case 'insert':
                 $q = $this->prepareInsert();
                 break;
+            case 'insert_select':
+                $q = $this->prepareInsertSelect();
+                break;
             case 'update':
                 $q = $this->prepareUpdate();
                 break;
@@ -214,6 +217,11 @@ class w2p_Database_Query extends w2p_Database_oldQuery
         $alias = ('' == $alias) ? $table : $alias;
         $this->_tables[$alias] = $table;
 	}
+
+    public function addInsertSelect($table) {
+        $this->addTable($table);
+        $this->type = 'insert_select';
+    }
 
     public function setDelete($table)
     {
