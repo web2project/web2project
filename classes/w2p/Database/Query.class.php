@@ -343,7 +343,7 @@ class w2p_Database_Query extends w2p_Database_oldQuery
     {
         $simple = array();
 
-        if (count($this->_fields)) {
+        if (is_array($this->_fields) && count($this->_fields)) {
             foreach($this->_fields as $field) {
                 if (is_array($field)) {
                     foreach($field as $subfield) {
