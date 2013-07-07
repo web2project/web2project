@@ -63,24 +63,24 @@ class w2p_Output_GanttRenderer {
             //more than 3 years, show only the year scale
             $this->graph->ShowHeaders(GANTT_HYEAR);
             $this->graph->scale->year->grid->Show ();
-            $this->graph->scale->year->grid->SetStyle (longdashed);
-            $this->graph->scale->year->grid->SetColor ('lightgray');
+            $this->graph->scale->year->grid->SetStyle('longdashed');
+            $this->graph->scale->year->grid->SetColor('lightgray');
             $this->graph->scale->year->SetFont(FF_CUSTOM, FS_NORMAL,  12);
         } else if ($day_diff > 480) {
             //more than 480 days show only the firstletter of the month
             $this->graph->ShowHeaders(GANTT_HYEAR | GANTT_HMONTH);
             $this->graph->scale->month->SetStyle(MONTHSTYLE_SHORTNAME);
             $this->graph->scale->month->grid->Show ();
-            $this->graph->scale->month->grid->SetStyle (longdashed);
-            $this->graph->scale->month->grid->SetColor ('lightgray');
+            $this->graph->scale->month->grid->SetStyle('longdashed');
+            $this->graph->scale->month->grid->SetColor('lightgray');
             $this->graph->scale->month->SetFont(FF_CUSTOM, FS_NORMAL, 10);
         } else if($day_diff > 240) {
             //more than 240 days and less than 481 show the month short name eg: Jan
             $this->graph->ShowHeaders(GANTT_HYEAR | GANTT_HMONTH);
             $this->graph->scale->month->SetStyle(MONTHSTYLE_SHORTNAME);
             $this->graph->scale->month->grid->Show ();
-            $this->graph->scale->month->grid->SetStyle (longdashed);
-            $this->graph->scale->month->grid->SetColor ('lightgray');
+            $this->graph->scale->month->grid->SetStyle('longdashed');
+            $this->graph->scale->month->grid->SetColor('lightgray');
             $this->graph->scale->month->SetFont(FF_CUSTOM, FS_NORMAL, 10);
         } else if ($day_diff > 90) {
             //more than 90 days and less of 241

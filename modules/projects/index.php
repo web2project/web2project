@@ -27,7 +27,7 @@ if (isset($_POST['projsearchtext'])) {
 $search_text = $AppUI->getState('projsearchtext') !== null ? $AppUI->getState('projsearchtext') : '';
 
 $company_id = $AppUI->processIntState('ProjIdxCompany', $_POST, 'project_company', $AppUI->user_company);
-$orderby = (property_exists('CProject', $_GET['orderby'])) ? $_GET['orderby'] : 'project_company';
+$orderby = (isset($_GET['orderby']) && property_exists('CProject', $_GET['orderby'])) ? $_GET['orderby'] : 'project_company';
 $project_type = $AppUI->processIntState('ProjIdxType', $_POST, 'project_type', -1);
 $owner = $AppUI->processIntState('ProjIdxowner', $_POST, 'project_owner', -1);
 

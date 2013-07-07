@@ -279,7 +279,7 @@ $gantt_arr = array();
 reset($projects);
 $displayed = array();
 foreach ($projects as $p) {
-    $tnums = count($p['tasks']);
+    $tnums = isset($p['tasks']) ? count($p['tasks']) : 0;
 
     for ($i = 0; $i < $tnums; $i++) {
         $t = $p['tasks'][$i];

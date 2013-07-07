@@ -318,7 +318,7 @@ class w2p_Output_MonthCalendar {
 					$nr_events = 0;
 					//lets count tasks and events
 					foreach ($this->events[$cday] as $record) {
-						if ($record['task']) {
+						if (isset($record['task']) && $record['task']) {
 							++$nr_tasks;
 						} else {
 							++$nr_events;

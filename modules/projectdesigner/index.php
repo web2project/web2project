@@ -26,7 +26,7 @@ global $AppUI, $w2Pconfig, $cal_df, $cf;
 // check permissions for this module
 $perms = &$AppUI->acl();
 $canView = canView($m);
-$canAddProjects = $perms->checkModuleItem('projects', 'add', $project_id);
+$canAddProjects = $perms->checkModuleItem('projects', 'add');
 
 if (!$canView) {
 	$AppUI->redirect(ACCESS_DENIED);

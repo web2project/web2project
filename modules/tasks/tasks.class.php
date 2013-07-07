@@ -2382,7 +2382,7 @@ class CTask extends w2p_Core_BaseObject
         if (count($aPrjs)) {
             $buffer = '(task_project IN (' . implode(',', array_keys($aPrjs)) . '))';
 
-            if ($extra['where'] != '') {
+            if (isset($extra['where']) && $extra['where'] != '') {
                 $extra['where'] = $extra['where'] . ' AND ' . $buffer;
             } else {
                 $extra['where'] = $buffer;
