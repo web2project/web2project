@@ -200,36 +200,6 @@ class w2p_Database_oldQuery {
 		}
 	}
 
-	/** Load database results into a w2p_Core_BaseObject based object
-	 * @param &$object Reference to the object to propagate with database results
-	 * @param $bindAll Defaults to false, Bind every field returned to the referenced object
-	 * @param $strip Defaults to true
-	 * @return True on success.
-	 */
-	public function loadObject(&$object, $bindAll = false, $strip = true) {
-        error_log(__FUNCTION__ . ' has been deprecated', E_USER_WARNING);
-        if (!$this->exec(ADODB_FETCH_NUM)) {
-			die($this->_db->ErrorMsg());
-		}
-		if ($object != null) {
-			$hash = $this->loadHash();
-			$this->clear();
-			if (!$hash) {
-				return false;
-			}
-			$this->bindHashToObject($hash, $object, null, $strip, $bindAll);
-			return true;
-		} else {
-			if ($object = $this->_query_id->FetchNextObject(false)) {
-				$this->clear();
-				return true;
-			} else {
-				$object = null;
-				return false;
-			}
-		}
-	}
-
 	/** Bind a hash to an object
 	 *
 	 * Takes the hash/associative array specified by $hash and turns the fields into instance properties of $obj
