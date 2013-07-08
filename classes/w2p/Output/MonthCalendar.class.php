@@ -10,348 +10,348 @@
  */
 
 class w2p_Output_MonthCalendar {
-	/**#@+
-	* @var Date
-	*/
-	public $this_month;
-	public $prev_month;
-	public $next_month;
-	public $prev_year;
-	public $next_year;
-	/**#@-*/
+    /**#@+
+    * @var Date
+    */
+    public $this_month;
+    public $prev_month;
+    public $next_month;
+    public $prev_year;
+    public $next_year;
+    /**#@-*/
 
-	/**
- 	@var string The css style name of the Title */
-	public $styleTitle;
+    /**
+     @var string The css style name of the Title */
+    public $styleTitle;
 
-	/**
- 	@var string The css style name of the main calendar */
-	public $styleMain;
+    /**
+     @var string The css style name of the main calendar */
+    public $styleMain;
 
-	/**
- 	@var string The name of the javascript function that a 'day' link should call when clicked */
-	public $callback;
+    /**
+     @var string The name of the javascript function that a 'day' link should call when clicked */
+    public $callback;
 
-	/**
- 	@var boolean Show the heading */
-	public $showHeader;
+    /**
+     @var boolean Show the heading */
+    public $showHeader;
 
-	/**
- 	@var boolean Show the previous/next month arrows */
-	public $showArrows;
+    /**
+     @var boolean Show the previous/next month arrows */
+    public $showArrows;
 
-	/**
- 	@var boolean Show the day name column headings */
-	public $showDays;
+    /**
+     @var boolean Show the day name column headings */
+    public $showDays;
 
-	/**
- 	@var boolean Show the week link (no pun intended) in the first column */
-	public $showWeek;
+    /**
+     @var boolean Show the week link (no pun intended) in the first column */
+    public $showWeek;
 
-	/**
- 	@var boolean Show the month name as link */
-	public $clickMonth;
+    /**
+     @var boolean Show the month name as link */
+    public $clickMonth;
 
-	/**
- 	@var boolean Show events in the calendar boxes */
-	public $showEvents;
+    /**
+     @var boolean Show events in the calendar boxes */
+    public $showEvents;
 
-	/**
- 	@var string */
-	public $dayFunc;
+    /**
+     @var string */
+    public $dayFunc;
 
-	/**
- 	@var string */
-	public $weekFunc;
+    /**
+     @var string */
+    public $weekFunc;
 
-	/**
- 	@var boolean Show highlighting in the calendar boxes */
-	public $showHighlightedDays;
+    /**
+     @var boolean Show highlighting in the calendar boxes */
+    public $showHighlightedDays;
 
     protected $_AppUI = null;
 
-	/**
-	 * @param Date $date
-	 */
-	public function __construct($date = null) {
-		global $AppUI;
+    /**
+     * @param Date $date
+     */
+    public function __construct($date = null) {
+        global $AppUI;
         $this->_AppUI = $AppUI;
         
         $this->setDate($date);
 
-		$this->classes = array();
-		$this->callback = '';
-		$this->showTitle = true;
-		$this->showArrows = true;
-		$this->showDays = true;
-		$this->showWeek = true;
-		$this->showEvents = true;
-		$this->showHighlightedDays = true;
+        $this->classes = array();
+        $this->callback = '';
+        $this->showTitle = true;
+        $this->showArrows = true;
+        $this->showDays = true;
+        $this->showWeek = true;
+        $this->showEvents = true;
+        $this->showHighlightedDays = true;
 
-		$this->styleTitle = '';
-		$this->styleMain = '';
+        $this->styleTitle = '';
+        $this->styleMain = '';
 
-		$this->dayFunc = '';
-		$this->weekFunc = '';
+        $this->dayFunc = '';
+        $this->weekFunc = '';
 
-		$this->events = array();
-		$this->highlightedDays = array();
-	}
+        $this->events = array();
+        $this->highlightedDays = array();
+    }
 
-	/**
-	 * w2p_Output_MonthCalendar::setDate()
-	 *
-	 * { Description }
-	 *
-	 * @param [type] $date
-	 */
-	public function setDate($date = null) {
+    /**
+     * w2p_Output_MonthCalendar::setDate()
+     *
+     * { Description }
+     *
+     * @param [type] $date
+     */
+    public function setDate($date = null) {
         $this->this_month = new w2p_Utilities_Date($date);
 
-		$d = $this->this_month->getDay();
-		$m = $this->this_month->getMonth();
-		$y = $this->this_month->getYear();
+        $d = $this->this_month->getDay();
+        $m = $this->this_month->getMonth();
+        $y = $this->this_month->getYear();
 
-		$this->prev_year = new w2p_Utilities_Date($date);
-		$this->prev_year->setYear($this->prev_year->getYear() - 1);
+        $this->prev_year = new w2p_Utilities_Date($date);
+        $this->prev_year->setYear($this->prev_year->getYear() - 1);
 
-		$this->next_year = new w2p_Utilities_Date($date);
-		$this->next_year->setYear($this->next_year->getYear() + 1);
+        $this->next_year = new w2p_Utilities_Date($date);
+        $this->next_year->setYear($this->next_year->getYear() + 1);
 
-		setlocale(LC_TIME, 'en');
-		$date = Date_Calc::beginOfPrevMonth($d, $m, $y, FMT_TIMESTAMP_DATE);
-		setlocale(LC_ALL, $this->_AppUI->user_lang);
+        setlocale(LC_TIME, 'en');
+        $date = Date_Calc::beginOfPrevMonth($d, $m, $y, FMT_TIMESTAMP_DATE);
+        setlocale(LC_ALL, $this->_AppUI->user_lang);
 
-		$this->prev_month = new w2p_Utilities_Date($date);
+        $this->prev_month = new w2p_Utilities_Date($date);
 
-		setlocale(LC_TIME, 'en');
-		$date = Date_Calc::beginOfNextMonth($d, $m, $y, FMT_TIMESTAMP_DATE);
-		setlocale(LC_ALL, $this->_AppUI->user_lang);
-		$this->next_month = new w2p_Utilities_Date($date);
+        setlocale(LC_TIME, 'en');
+        $date = Date_Calc::beginOfNextMonth($d, $m, $y, FMT_TIMESTAMP_DATE);
+        setlocale(LC_ALL, $this->_AppUI->user_lang);
+        $this->next_month = new w2p_Utilities_Date($date);
 
-	}
+    }
 
-	/**
-	 * w2p_Output_MonthCalendar::setStyles()
-	 *
-	 * { Description }
-	 *
-	 */
-	public function setStyles($title, $main) {
-		$this->styleTitle = $title;
-		$this->styleMain = $main;
-	}
+    /**
+     * w2p_Output_MonthCalendar::setStyles()
+     *
+     * { Description }
+     *
+     */
+    public function setStyles($title, $main) {
+        $this->styleTitle = $title;
+        $this->styleMain = $main;
+    }
 
-	/**
-	 * w2p_Output_MonthCalendar::setLinkFunctions()
-	 *
-	 * { Description }
-	 *
-	 * @param string $day
-	 * @param string $week
-	 */
-	public function setLinkFunctions($day = '', $week = '') {
-		$this->dayFunc = $day;
-		$this->weekFunc = $week;
-	}
+    /**
+     * w2p_Output_MonthCalendar::setLinkFunctions()
+     *
+     * { Description }
+     *
+     * @param string $day
+     * @param string $week
+     */
+    public function setLinkFunctions($day = '', $week = '') {
+        $this->dayFunc = $day;
+        $this->weekFunc = $week;
+    }
 
-	/**
-	 * w2p_Output_MonthCalendar::setCallback()
-	 *
-	 * { Description }
-	 *
-	 */
-	public function setCallback($function) {
-		$this->callback = $function;
-	}
+    /**
+     * w2p_Output_MonthCalendar::setCallback()
+     *
+     * { Description }
+     *
+     */
+    public function setCallback($function) {
+        $this->callback = $function;
+    }
 
-	/**
-	 * w2p_Output_MonthCalendar::setEvents()
-	 *
-	 * { Description }
-	 *
-	 */
-	public function setEvents($e) {
-		$this->events = $e;
-	}
+    /**
+     * w2p_Output_MonthCalendar::setEvents()
+     *
+     * { Description }
+     *
+     */
+    public function setEvents($e) {
+        $this->events = $e;
+    }
 
-	/**
-	 * w2p_Output_MonthCalendar::setHighlightedDays()
-	 * ie 	['20040517'] => '#ff0000',
-	 *
-	 * { Description }
-	 *
-	 */
-	public function setHighlightedDays($hd) {
-		$this->highlightedDays = $hd;
-	}
+    /**
+     * w2p_Output_MonthCalendar::setHighlightedDays()
+     * ie     ['20040517'] => '#ff0000',
+     *
+     * { Description }
+     *
+     */
+    public function setHighlightedDays($hd) {
+        $this->highlightedDays = $hd;
+    }
 
-	// drawing functions
-	/**
-	 * w2p_Output_MonthCalendar::show()
-	 *
-	 * { Description }
-	 *
-	 */
-	public function show() {
-		$s = '';
-		if ($this->showTitle) {
-			$s .= $this->_drawTitle();
-		}
-		$s .= '<table border="0" cellspacing="1" cellpadding="2" width="100%" class="' . $this->styleMain . '">';
+    // drawing functions
+    /**
+     * w2p_Output_MonthCalendar::show()
+     *
+     * { Description }
+     *
+     */
+    public function show() {
+        $s = '';
+        if ($this->showTitle) {
+            $s .= $this->_drawTitle();
+        }
+        $s .= '<table border="0" cellspacing="1" cellpadding="2" width="100%" class="' . $this->styleMain . '">';
 
-		if ($this->showDays) {
-			$s .= $this->_drawDays();
-		}
+        if ($this->showDays) {
+            $s .= $this->_drawDays();
+        }
 
-		$s .= $this->_drawMain();
+        $s .= $this->_drawMain();
 
-		$s .= '</table>';
+        $s .= '</table>';
 
-		return $s;
-	}
+        return $s;
+    }
 
-	/**
-	 * w2p_Output_MonthCalendar::_drawTitle()
-	 *
-	 * { Description }
-	 *
-	 */
-	private function _drawTitle() {
-		global $m, $a;
-		$url = 'index.php?m=' . $m;
-		$url .= $a ? '&amp;a=' . $a : '';
-		$url .= isset($_GET['dialog']) ? '&amp;dialog=1' : '';
+    /**
+     * w2p_Output_MonthCalendar::_drawTitle()
+     *
+     * { Description }
+     *
+     */
+    private function _drawTitle() {
+        global $m, $a;
+        $url = 'index.php?m=' . $m;
+        $url .= $a ? '&amp;a=' . $a : '';
+        $url .= isset($_GET['dialog']) ? '&amp;dialog=1' : '';
 
-		$s = '<table border="0" cellspacing="0" cellpadding="3" width="100%" class="' . $this->styleTitle . '">';
-		$s .= '<tr>';
+        $s = '<table border="0" cellspacing="0" cellpadding="3" width="100%" class="' . $this->styleTitle . '">';
+        $s .= '<tr>';
 
-		if ($this->showArrows) {
-			$href = $url . '&amp;date=' . $this->prev_month->format(FMT_TIMESTAMP_DATE) . ($this->callback ? '&amp;callback=' . $this->callback : '') . ((count($this->highlightedDays) > 0) ? '&uts=' . key($this->highlightedDays) : '');
-			$s .= '<td align="left">';
-			$s .= '<a href="' . $href . '">' . w2PshowImage('prev.gif', 16, 16, $this->_AppUI->_('previous month')) . '</a>';
-			$s .= '</td>';
-		}
+        if ($this->showArrows) {
+            $href = $url . '&amp;date=' . $this->prev_month->format(FMT_TIMESTAMP_DATE) . ($this->callback ? '&amp;callback=' . $this->callback : '') . ((count($this->highlightedDays) > 0) ? '&uts=' . key($this->highlightedDays) : '');
+            $s .= '<td align="left">';
+            $s .= '<a href="' . $href . '">' . w2PshowImage('prev.gif', 16, 16, $this->_AppUI->_('previous month')) . '</a>';
+            $s .= '</td>';
+        }
 
-		$s .= '<th width="99%" align="center">';
-		if ($this->clickMonth) {
-			$s .= '<a href="index.php?m=' . $m . '&amp;date=' . $this->this_month->format(FMT_TIMESTAMP_DATE) . '">';
-		}
-		setlocale(LC_TIME, 'C');
-		$s .= $this->_AppUI->_($this->this_month->format('%B')) . ' ' . $this->this_month->format('%Y') . (($this->clickMonth) ? '</a>' : '');
-		setlocale(LC_ALL, $this->_AppUI->user_lang);
-		$s .= '</th>';
+        $s .= '<th width="99%" align="center">';
+        if ($this->clickMonth) {
+            $s .= '<a href="index.php?m=' . $m . '&amp;date=' . $this->this_month->format(FMT_TIMESTAMP_DATE) . '">';
+        }
+        setlocale(LC_TIME, 'C');
+        $s .= $this->_AppUI->_($this->this_month->format('%B')) . ' ' . $this->this_month->format('%Y') . (($this->clickMonth) ? '</a>' : '');
+        setlocale(LC_ALL, $this->_AppUI->user_lang);
+        $s .= '</th>';
 
-		if ($this->showArrows) {
-			$href = ($url . '&amp;date=' . $this->next_month->format(FMT_TIMESTAMP_DATE) . (($this->callback) ? ('&amp;callback=' . $this->callback) : '') . ((count($this->highlightedDays) > 0) ? ('&amp;uts=' . key($this->highlightedDays)) : ''));
-			$s .= '<td align="right">';
-			$s .= ('<a href="' . $href . '">' . w2PshowImage('next.gif', 16, 16, $this->_AppUI->_('next month')) . '</a>');
-			$s .= '</td>';
-		}
+        if ($this->showArrows) {
+            $href = ($url . '&amp;date=' . $this->next_month->format(FMT_TIMESTAMP_DATE) . (($this->callback) ? ('&amp;callback=' . $this->callback) : '') . ((count($this->highlightedDays) > 0) ? ('&amp;uts=' . key($this->highlightedDays)) : ''));
+            $s .= '<td align="right">';
+            $s .= ('<a href="' . $href . '">' . w2PshowImage('next.gif', 16, 16, $this->_AppUI->_('next month')) . '</a>');
+            $s .= '</td>';
+        }
 
-		$s .= '</tr>';
-		$s .= '</table>';
+        $s .= '</tr>';
+        $s .= '</table>';
 
-		return $s;
-	}
-	/**
-	 * w2p_Output_MonthCalendar::_drawDays()
-	 *
-	 * { Description }
-	 *
-	 * @return string Returns table a row with the day names
-	 */
-	private function _drawDays() {
-		setlocale(LC_TIME, 'en');
-		$wk = Date_Calc::getCalendarWeek(null, null, null, '%a', LOCALE_FIRST_DAY);
-		setlocale(LC_ALL, $this->_AppUI->user_lang);
+        return $s;
+    }
+    /**
+     * w2p_Output_MonthCalendar::_drawDays()
+     *
+     * { Description }
+     *
+     * @return string Returns table a row with the day names
+     */
+    private function _drawDays() {
+        setlocale(LC_TIME, 'en');
+        $wk = Date_Calc::getCalendarWeek(null, null, null, '%a', LOCALE_FIRST_DAY);
+        setlocale(LC_ALL, $this->_AppUI->user_lang);
 
-		$s = (($this->showWeek) ? ('<th>&nbsp;</th>') : '');
-		foreach ($wk as $day) {
-			$s .= ('<th width="14%">' . $this->_AppUI->_($day) . '</th>');
-		}
+        $s = (($this->showWeek) ? ('<th>&nbsp;</th>') : '');
+        foreach ($wk as $day) {
+            $s .= ('<th width="14%">' . $this->_AppUI->_($day) . '</th>');
+        }
 
-		return ('<tr>' . $s . '</tr>');
-	}
+        return ('<tr>' . $s . '</tr>');
+    }
 
-	/**
-	 * w2p_Output_MonthCalendar::_drawMain()
-	 *
-	 * { Description }
-	 *
-	 */
-	private function _drawMain() {
-		$today = new w2p_Utilities_Date();
-		$today = $today->format('%Y%m%d%w');
+    /**
+     * w2p_Output_MonthCalendar::_drawMain()
+     *
+     * { Description }
+     *
+     */
+    private function _drawMain() {
+        $today = new w2p_Utilities_Date();
+        $today = $today->format('%Y%m%d%w');
 
-		$date = $this->this_month;
-		$this_day = (int) $date->getDay();
-		$this_month = (int) $date->getMonth();
-		$this_year = (int) $date->getYear();
-		setlocale(LC_TIME, 'en');
-		$cal = Date_Calc::getCalendarMonth($this_month, $this_year, '%Y%m%d%w', LOCALE_FIRST_DAY);
-		setlocale(LC_ALL, $this->_AppUI->user_lang);
+        $date = $this->this_month;
+        $this_day = (int) $date->getDay();
+        $this_month = (int) $date->getMonth();
+        $this_year = (int) $date->getYear();
+        setlocale(LC_TIME, 'en');
+        $cal = Date_Calc::getCalendarMonth($this_month, $this_year, '%Y%m%d%w', LOCALE_FIRST_DAY);
+        setlocale(LC_ALL, $this->_AppUI->user_lang);
 
-		$df = $this->_AppUI->getPref('SHDATEFORMAT');
+        $df = $this->_AppUI->getPref('SHDATEFORMAT');
 
-		$html = '';
-		foreach ($cal as $week) {
-			$html .= '<tr>';
-			if ($this->showWeek) {
-				$html .= '<td class="week">';
-				$html .= $this->dayFunc ? "<a href=\"javascript:$this->weekFunc('$week[0]')\">" : '';
-				$html .= '<img src="' . w2PfindImage('view.week.gif') . '" width="16" height="15" border="0" alt="Week View" /></a>';
-				$html .= $this->dayFunc ? '</a>' : '';
-				$html .= '</td>';
-			}
+        $html = '';
+        foreach ($cal as $week) {
+            $html .= '<tr>';
+            if ($this->showWeek) {
+                $html .= '<td class="week">';
+                $html .= $this->dayFunc ? "<a href=\"javascript:$this->weekFunc('$week[0]')\">" : '';
+                $html .= '<img src="' . w2PfindImage('view.week.gif') . '" width="16" height="15" border="0" alt="Week View" /></a>';
+                $html .= $this->dayFunc ? '</a>' : '';
+                $html .= '</td>';
+            }
 
-			foreach ($week as $day) {
-				$this_day = new w2p_Utilities_Date($day);
-				$m = (int) substr($day, 4, 2);
-				$d = (int) substr($day, 6, 2);
-				$dow = (int) substr($day, 8, 1);
-				$cday = (int) substr($day, 0, 8);
+            foreach ($week as $day) {
+                $this_day = new w2p_Utilities_Date($day);
+                $m = (int) substr($day, 4, 2);
+                $d = (int) substr($day, 6, 2);
+                $dow = (int) substr($day, 8, 1);
+                $cday = (int) substr($day, 0, 8);
 
-				//If we are on minical mode and we find tasks or events for this day then lets color code the cell depending on that
-				if (array_key_exists($cday, $this->events) && $this->styleMain == 'minical') {
-					$nr_tasks = 0;
-					$nr_events = 0;
-					//lets count tasks and events
-					foreach ($this->events[$cday] as $record) {
-						if (isset($record['task']) && $record['task']) {
-							++$nr_tasks;
-						} else {
-							++$nr_events;
-						}
-					}
-					if ($nr_events && $nr_tasks) {
-						//if we find both
-						$class = 'eventtask';
-					} elseif ($nr_events) {
-						//if we just find events
-						$class = 'event';
-					} elseif ($nr_tasks) {
-						//if we just find tasks
-						$class = 'task';
-					}
-					if ($day == $today) {
-						$class .= 'today';
-					}
-				} elseif ($m != $this_month) {
-					$class = 'empty';
-				} elseif ($day == $today) {
-					$class = 'today';
-				} elseif ($dow == 0 || $dow == 6) {
-					$class = 'weekend';
-				} else {
-					$class = 'day';
-				}
-				$day = substr($day, 0, 8);
-				$html .= '<td class="' . $class . '"';
-				if ($this->showHighlightedDays && isset($this->highlightedDays[$day])) {
-					$html .= ' style="border: 1px solid ' . $this->highlightedDays[$day] . '"';
-				}
-				$html .= ' onclick="' . $this->dayFunc . '(\'' . $day . '\',\'' . $this_day->format($df) . '\')' . '">';
+                //If we are on minical mode and we find tasks or events for this day then lets color code the cell depending on that
+                if (array_key_exists($cday, $this->events) && $this->styleMain == 'minical') {
+                    $nr_tasks = 0;
+                    $nr_events = 0;
+                    //lets count tasks and events
+                    foreach ($this->events[$cday] as $record) {
+                        if (isset($record['task']) && $record['task']) {
+                            ++$nr_tasks;
+                        } else {
+                            ++$nr_events;
+                        }
+                    }
+                    if ($nr_events && $nr_tasks) {
+                        //if we find both
+                        $class = 'eventtask';
+                    } elseif ($nr_events) {
+                        //if we just find events
+                        $class = 'event';
+                    } elseif ($nr_tasks) {
+                        //if we just find tasks
+                        $class = 'task';
+                    }
+                    if ($day == $today) {
+                        $class .= 'today';
+                    }
+                } elseif ($m != $this_month) {
+                    $class = 'empty';
+                } elseif ($day == $today) {
+                    $class = 'today';
+                } elseif ($dow == 0 || $dow == 6) {
+                    $class = 'weekend';
+                } else {
+                    $class = 'day';
+                }
+                $day = substr($day, 0, 8);
+                $html .= '<td class="' . $class . '"';
+                if ($this->showHighlightedDays && isset($this->highlightedDays[$day])) {
+                    $html .= ' style="border: 1px solid ' . $this->highlightedDays[$day] . '"';
+                }
+                $html .= ' onclick="' . $this->dayFunc . '(\'' . $day . '\',\'' . $this_day->format($df) . '\')' . '">';
 
                 if ($this->dayFunc) {
                     $html .= "<a href=\"javascript:$this->dayFunc('$day','" . $this_day->format($df) . "')\" class=\"$class\">";
@@ -364,34 +364,34 @@ class w2p_Output_MonthCalendar {
                     $html .= $this->_drawEvents(substr($day, 0, 8));
                 }
 
-				$html .= '</td>';
-			}
-			$html .= '</tr>';
-		}
-		return $html;
-	}
+                $html .= '</td>';
+            }
+            $html .= '</tr>';
+        }
+        return $html;
+    }
 
-	/**
-	 * w2p_Output_MonthCalendar::_drawEvents()
-	 *
-	 * { Description }
-	 *
-	 */
-	private function _drawEvents($day) {
-		$s = '';
-		if (!isset($this->events[$day]) || $this->styleMain == 'minical') {
-			return '';
-		}
-		$events = $this->events[$day];
-		foreach ($events as $e) {
-			$href = isset($e['href']) ? $e['href'] : null;
-			$alt = isset($e['alt']) ? mb_str_replace("\n", ' ', $e['alt']) : null;
+    /**
+     * w2p_Output_MonthCalendar::_drawEvents()
+     *
+     * { Description }
+     *
+     */
+    private function _drawEvents($day) {
+        $s = '';
+        if (!isset($this->events[$day]) || $this->styleMain == 'minical') {
+            return '';
+        }
+        $events = $this->events[$day];
+        foreach ($events as $e) {
+            $href = isset($e['href']) ? $e['href'] : null;
+            $alt = isset($e['alt']) ? mb_str_replace("\n", ' ', $e['alt']) : null;
 
-			$s .= '<br />';
-			$s .= $href ? '<a href="'.$href.'" class="event" title="'.$alt.'">' : '';
-			$s .= $e['text'];
-			$s .= $href ? '</a>' : '';
-		}
-		return $s;
-	}
+            $s .= '<br />';
+            $s .= $href ? '<a href="'.$href.'" class="event" title="'.$alt.'">' : '';
+            $s .= $e['text'];
+            $s .= $href ? '</a>' : '';
+        }
+        return $s;
+    }
 }
