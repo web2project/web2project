@@ -215,17 +215,21 @@ class w2p_Database_Query extends w2p_Database_oldQuery
     {
         $alias = ('' == $alias) ? $table : $alias;
         $this->_tables[$alias] = $table;
+        return $this;
 	}
 
-    public function addInsertSelect($table) {
+    public function addInsertSelect($table)
+    {
         $this->addTable($table);
         $this->type = 'insert_select';
+        return $this;
     }
 
     public function setDelete($table)
     {
         $this->type = 'delete';
         $this->addTable($table);
+        return $this;
     }
 
     public function addQuery($field)
@@ -233,6 +237,7 @@ class w2p_Database_Query extends w2p_Database_oldQuery
         if('' != $field) {
             $this->_fields[] = $field;
         }
+        return $this;
     }
 
     /**
@@ -245,6 +250,7 @@ class w2p_Database_Query extends w2p_Database_oldQuery
         if('' != $field) {
             $this->_order_by[] = $field;
         }
+        return $this;
     }
 
     /**
@@ -257,8 +263,8 @@ class w2p_Database_Query extends w2p_Database_oldQuery
         if ((int) $limit > 0) {
             $this->_limit = (int) $limit;
         }
-
         $this->_offset = max(0, (int) $offset);
+        return $this;
     }
 
     /**
@@ -271,6 +277,7 @@ class w2p_Database_Query extends w2p_Database_oldQuery
         if('' != $field) {
             $this->_group_by[] = $field;
         }
+        return $this;
     }
 
     /**
@@ -283,6 +290,7 @@ class w2p_Database_Query extends w2p_Database_oldQuery
         if('' != $field) {
             $this->_where[] = $field;
         }
+        return $this;
     }
 
     /**
@@ -295,6 +303,7 @@ class w2p_Database_Query extends w2p_Database_oldQuery
         if('' != $field) {
             $this->_having[] = $field;
         }
+        return $this;
     }
 
 	/** Add a JOIN
@@ -313,6 +322,7 @@ class w2p_Database_Query extends w2p_Database_oldQuery
     {
         $this->join[] = array('table' => $table, 'alias' => $alias,
                             'condition' => $condition, 'type' => $type);
+        return $this;
     }
 
 	/**
@@ -321,6 +331,7 @@ class w2p_Database_Query extends w2p_Database_oldQuery
     public function innerJoin($table, $alias, $join)
     {
         $this->addJoin($table, $alias, $join, 'inner');
+        return $this;
     }
 
 	/**
@@ -329,6 +340,7 @@ class w2p_Database_Query extends w2p_Database_oldQuery
     public function leftJoin($table, $alias, $join)
     {
         $this->addJoin($table, $alias, $join, 'left');
+        return $this;
     }
 
 	/**
@@ -337,6 +349,7 @@ class w2p_Database_Query extends w2p_Database_oldQuery
     public function rightJoin($table, $alias, $join)
     {
         $this->addJoin($table, $alias, $join, 'right');
+        return $this;
     }
 
     public function addUpdate($field, $value = null, $set = false, $func = false) {
@@ -344,6 +357,7 @@ class w2p_Database_Query extends w2p_Database_oldQuery
         if ('' != $field) {
             $this->_update_list[$field] = $value;
         }
+        return $this;
     }
 
     protected function _buildQuery()
