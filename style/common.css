@@ -328,7 +328,7 @@ table.list tr:hover td._name {
     background: silver;
 }
 
-.addedit textarea.customfield {
+.addedit textarea {
     height: 75px;
     width:  100%;
 }

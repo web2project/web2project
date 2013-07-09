@@ -107,7 +107,7 @@ function testURL( x ) {
 					<tr>
 						<td align="right" valign="top"><?php echo $AppUI->_('Description'); ?>:</td>
 						<td align="left">
-							<textarea cols="50" rows="5" name="company_description"><?php echo $company->company_description; ?></textarea>
+							<textarea name="company_description"><?php echo $company->company_description; ?></textarea>
 						</td>
 					</tr>
                 </table>
