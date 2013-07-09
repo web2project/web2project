@@ -270,7 +270,7 @@ class CTask_Log extends w2p_Core_BaseObject
                 $this->_AppUI->setMsg($task->getError(), UI_MSG_ERROR, true);
             }
 
-            $task->pushDependencies($task_id, $task->task_end_date);
+            $task->pushDependencies($task_id, $task_end_date);
         }
 
 		$q->addQuery('SUM(task_log_hours)');
