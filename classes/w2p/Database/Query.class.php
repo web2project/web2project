@@ -68,6 +68,7 @@ class w2p_Database_Query {
 	public $_old_style = null;
 	/**< Handle to the database connection */
 	public $_db = null;
+    public $direct_query = true;
 
 	/**
 	 * Array of db function names

@@ -806,6 +806,7 @@ abstract class w2p_Core_BaseObject extends w2p_Core_Event implements w2p_Core_Li
     protected function _getQuery()
     {
         $this->_query->clear();
+        $this->_query->direct_query = false;
         return $this->_query;
     }
 
