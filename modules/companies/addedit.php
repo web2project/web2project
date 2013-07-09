@@ -99,10 +99,10 @@ function testURL( x ) {
 						</td>
 					</tr>
 					<tr>
-						<td align="right"><?php echo $AppUI->_('Fax'); ?>:</td>
-						<td>
-							<input type="text" class="text" name="company_fax" value="<?php echo w2PformSafe($company->company_fax); ?>" maxlength="30" />
-						</td>
+                        <td align="right">
+                            URL http://<a name="x"></a></td><td><input type="text" class="text" value="<?php echo w2PformSafe($company->company_primary_url); ?>" name="company_primary_url" size="50" maxlength="255" />
+                            <a href="javascript: void(0);" onclick="testURL('CompanyURLOne')">[<?php echo $AppUI->_('test'); ?>]</a>
+                        </td>
 					</tr>
 					<tr>
 						<td align="right" valign="top"><?php echo $AppUI->_('Description'); ?>:</td>
@@ -148,10 +148,10 @@ function testURL( x ) {
 						</td>
 					</tr>
 					<tr>
-						<td align="right">
-							URL http://<a name="x"></a></td><td><input type="text" class="text" value="<?php echo w2PformSafe($company->company_primary_url); ?>" name="company_primary_url" size="50" maxlength="255" />
-							<a href="javascript: void(0);" onclick="testURL('CompanyURLOne')">[<?php echo $AppUI->_('test'); ?>]</a>
-						</td>
+                        <td align="right"><?php echo $AppUI->_('Fax'); ?>:</td>
+                        <td>
+                            <input type="text" class="text" name="company_fax" value="<?php echo w2PformSafe($company->company_fax); ?>" maxlength="30" />
+                        </td>
 					</tr>	
 					<tr>
 						<td align="right"><?php echo $AppUI->_('Company Owner'); ?>:</td>
