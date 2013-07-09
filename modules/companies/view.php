@@ -115,7 +115,7 @@ $countries = w2PgetSysVal('GlobalCountries');
 				</tr>
 				<tr valign="top">
 					<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Address'); ?>:</td>
-					<td class="hilite">
+					<td>
 					<a href="http://maps.google.com/maps?q=<?php echo $company->company_address1; ?>+<?php echo $company->company_address2; ?>+<?php echo $company->company_city; ?>+<?php echo $company->company_state; ?>+<?php echo $company->company_zip; ?>+<?php echo $company->company_country; ?>" target="_blank">
 					<img align="right" border="0" src="<?php echo w2PfindImage('googlemaps.gif'); ?>" width="55" height="22" alt="Find It on Google" /></a>
 					<?php

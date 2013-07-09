@@ -107,27 +107,27 @@ $titleBlock->show();
             <table cellspacing="1" cellpadding="2" border="0" width="100%" class="well">
                 <tr>
                     <td align="right" nowrap="nowrap"><?php echo $AppUI->_('User Type'); ?>:</td>
-                    <td class="hilite" width="100%"><?php echo $AppUI->_($utypes[$user->user_type]); ?></td>
+                    <td width="100%"><?php echo $AppUI->_($utypes[$user->user_type]); ?></td>
                 </tr>
                 <tr>
                     <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Real Name'); ?>:</td>
-                    <td class="hilite" width="100%"><?php echo $user->contact_display_name; ?></td>
+                    <td width="100%"><?php echo $user->contact_display_name; ?></td>
                 </tr>
                 <tr>
                     <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Company'); ?>:</td>
-                    <td class="hilite" width="100%">
+                    <td width="100%">
                         <a href="?m=companies&a=view&company_id=<?php echo $user->contact_company; ?>"><?php echo $user->company_name; ?></a>
                     </td>
                 </tr>
                 <tr>
                     <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Department'); ?>:</td>
-                    <td class="hilite" width="100%">
+                    <td width="100%">
                         <a href="?m=departments&a=view&dept_id=<?php echo $user->contact_department; ?>"><?php echo $user->dept_name; ?></a>
                     </td>
                 </tr>
                 <tr>
                     <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Phone'); ?>:</td>
-                    <td class="hilite" width="100%"><?php echo $user->contact_phone; ?></td>
+                    <td width="100%"><?php echo $user->contact_phone; ?></td>
                 </tr>
                 <tr>
                     <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Email'); ?>:</td>
@@ -135,7 +135,7 @@ $titleBlock->show();
                 </tr>
                 <tr valign="top">
                     <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Address'); ?>:</td>
-                    <td class="hilite" width="100%">
+                    <td width="100%">
                         <?php echo $user->contact_address1; ?><br />
                         <?php echo ($user->contact_address2 == '') ? '' : $user->contact_address2.'<br />'; ?>
                         <?php echo $user->contact_city . ', ' . $user->contact_state . ' ' . $user->contact_zip; ?><br />
@@ -161,7 +161,7 @@ $titleBlock->show();
                 <?php endforeach; ?>
                 <tr>
                     <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Calendar Feed'); ?>:</td>
-                    <td class="hilite" width="100%">
+                    <td width="100%">
                         <?php if ($user->feed_token != '') {
                             $calendarFeed = W2P_BASE_URL.'/calendar.php?token='.$user->feed_token.'&amp;ext=.ics';
                             ?>
@@ -180,7 +180,7 @@ $titleBlock->show();
                     <td colspan="2"><strong><?php echo $AppUI->_('Signature'); ?>:</strong></td>
                 </tr>
                 <tr>
-                    <td class="hilite" width="100%" colspan="2">
+                    <td width="100%" colspan="2">
                         <?php echo w2p_textarea($user->user_signature); ?>&nbsp;
                     </td>
                 </tr>

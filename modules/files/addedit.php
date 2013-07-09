@@ -178,7 +178,7 @@ function setTask( key, val ) {
 					<?php if ($file->file_id) { ?>
 						<tr>
 							<td align="right" nowrap="nowrap"><?php echo $AppUI->_('File Name'); ?>:</td>
-							<td align="left" class="hilite"><?php echo strlen($file->file_name) == 0 ? 'n/a' : $file->file_name; ?></td>
+							<td align="left"><?php echo strlen($file->file_name) == 0 ? 'n/a' : $file->file_name; ?></td>
 							<td>
 								<a href="./fileviewer.php?file_id=<?php echo $file->file_id; ?>"><?php echo $AppUI->_('download'); ?></a>
 							</td>

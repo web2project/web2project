@@ -118,7 +118,7 @@ function delIt() {
                 ?>
                 <tr>
                     <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Task Parent'); ?>:</td>
-                    <td class="hilite"><a href="<?php echo "./index.php?m=tasks&a=view&task_id=" . $obj_parent->task_id; ?>"><?php echo $obj_parent->task_name; ?></a></td>
+                    <td><a href="<?php echo "./index.php?m=tasks&a=view&task_id=" . $obj_parent->task_id; ?>"><?php echo $obj_parent->task_name; ?></a></td>
                 </tr>
                 <?php } ?>
                 <tr>
@@ -127,7 +127,7 @@ function delIt() {
                 </tr>
                 <tr>
                     <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Priority'); ?>:</td>
-                    <td class="hilite">
+                    <td>
                         <?php
                             $task_priotities = w2PgetSysVal('TaskPriority');
                             echo $AppUI->_($task_priotities[$obj->task_priority]);
@@ -140,7 +140,7 @@ function delIt() {
                 </tr>
                 <tr>
                     <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Milestone'); ?>:</td>
-                    <td class="hilite" width="300">
+                    <td width="300">
                         <?php if ($obj->task_milestone) {
                             echo $AppUI->_('Yes');
                         } else {
@@ -150,7 +150,7 @@ function delIt() {
                 </tr>
                 <tr>
                     <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Progress'); ?>:</td>
-                    <td class="hilite" width="300"><?php echo ($obj->task_percent_complete) ? $obj->task_percent_complete : 0; ?>%</td>
+                    <td idth="300"><?php echo ($obj->task_percent_complete) ? $obj->task_percent_complete : 0; ?>%</td>
                 </tr>
                 <tr>
                     <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Time Worked'); ?>:</td>
@@ -169,7 +169,7 @@ function delIt() {
                 </tr>
                 <tr>
                     <td align="right" nowrap="nowrap" valign="top"><?php echo $AppUI->_('Expected Duration'); ?>:</td>
-                    <td class="hilite" width="300"><?php echo $obj->task_duration . ' ' . $AppUI->_($durnTypes[$obj->task_duration_type]); ?></td>
+                    <td width="300"><?php echo $obj->task_duration . ' ' . $AppUI->_($durnTypes[$obj->task_duration_type]); ?></td>
                 </tr>
                 <tr>
                     <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Task Type'); ?> :</td>
@@ -181,15 +181,15 @@ function delIt() {
                     <td align="center" nowrap="nowrap">
                         <table cellspacing="1" cellpadding="2" border="0" width="100%">
                             <tr>
-                                <td class="hilite" align="center">
+                                <td align="center">
                                     <?php echo $AppUI->_('Target Budgets'); ?>:
                                 </td>
-                                <td class="hilite" align="center">
+                                <td align="center">
                                     <?php echo $AppUI->_('Actual Costs'); ?>:
                                 </td>
                             </tr>
                             <tr>
-                                <td class="hilite">
+                                <td>
                                     <table cellspacing="1" cellpadding="2" border="0" width="100%">
                                         <?php
                                         $totalBudget = 0;
@@ -224,7 +224,7 @@ function delIt() {
                                         </tr>
                                     </table>
                                 </td>
-                                <td class="hilite">
+                                <td>
                                     <table cellspacing="1" cellpadding="2" border="0" width="100%">
                                         <?php
                                         $bcode = new CSystem_Bcode();
@@ -284,7 +284,7 @@ function delIt() {
                             </tr>
                             <?php if (isset($results['uncountedHours']) && $results['uncountedHours']) { ?>
                             <tr>
-                                <td colspan="2" align="center" class="hilite">
+                                <td colspan="2" align="center">
                                     <?php echo '<span style="float:right; font-style: italic;">'.$results['uncountedHours'].' hours without billing codes</span>'; ?>
                                 </td>
                             </tr>
@@ -303,7 +303,7 @@ function delIt() {
                 $s = count($users) == 0 ? '<tr><td bgcolor="#ffffff">' . $AppUI->_('none') . '</td></tr>' : '';
                 foreach ($users as $row) {
                     $s .= '<tr>';
-                    $s .= '<td class="hilite" width=80%>';
+                    $s .= '<td width=80%>';
                     $s .= w2p_email($row['user_email'], $row['contact_display_name']);
                     $s .= '</td>';
                     $s .= $htmlHelper->createCell('perc_assignment', $row['perc_assignment']);
@@ -367,7 +367,7 @@ function delIt() {
                     <td><strong><?php echo $AppUI->_('Departments'); ?></strong></td>
                 </tr>
                 <tr>
-                    <td colspan="3" class="hilite">
+                    <td colspan="3">
                     <?php
                     foreach ($depts as $dept_id => $dept_info) {
                         echo '<div>' . $dept_info['dept_name'];
@@ -383,7 +383,7 @@ function delIt() {
                 $contacts = $obj->getContacts(null, $task_id);
                 if (count($contacts)) {
                     echo '<tr><td colspan="3"><strong>' . $AppUI->_('Task Contacts') . '</strong></td></tr>';
-                    echo '<tr><td colspan="3" class="hilite">';
+                    echo '<tr><td colspan="3">';
                     echo $htmlHelper->renderContactTable('tasks', $contacts);
                     echo '</td></tr>';
                 }
@@ -393,7 +393,7 @@ function delIt() {
                 $contacts = $project->getContactList();
                 if (count($contacts)) {
                     echo '<tr><td colspan="3"><strong>' . $AppUI->_('Project Contacts') . '</strong></td></tr>';
-                    echo '<tr><td colspan="3" class="hilite">';
+                    echo '<tr><td colspan="3">';
                     echo $htmlHelper->renderContactTable('projects', $contacts);
                     echo '</td></tr>';
                 }

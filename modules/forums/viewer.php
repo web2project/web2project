@@ -95,7 +95,7 @@ $titleBlock->show();
             <strong><?php echo $AppUI->_('Description'); ?></strong>
             <table cellspacing="1" cellpadding="2" border="0" width="100%" class="well">
                 <tr>
-                    <td class="hilite">
+                    <td>
                         <?php echo $forum->forum_description; ?>
                     </td>
                 </tr>

@@ -137,11 +137,11 @@ function delIt() {
                 </tr>
                 <tr>
                     <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Recurs'); ?>:</td>
-                    <td class="hilite"><?php echo $AppUI->_($recurs[$event->event_recurs]) . ($event->event_recurs ? ' (' . $event->event_times_recuring . '&nbsp;' . $AppUI->_('times') . ')' : ''); ?></td>
+                    <td><?php echo $AppUI->_($recurs[$event->event_recurs]) . ($event->event_recurs ? ' (' . $event->event_times_recuring . '&nbsp;' . $AppUI->_('times') . ')' : ''); ?></td>
                 </tr>
                 <tr>
                     <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Attendees'); ?>:</td>
-                    <td class="hilite">
+                    <td>
                         <?php
                             if (is_array($assigned)) {
                                 $start = false;

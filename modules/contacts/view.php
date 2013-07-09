@@ -117,7 +117,7 @@ function delIt(){
 				</tr>
 				<tr>
 					<td align="right" width="100"><?php echo $AppUI->_('Company'); ?>:</td>
-					<td nowrap="nowrap" class="hilite" width="100%">
+					<td nowrap="nowrap" width="100%">
 						<?php
                         $perms = &$AppUI->acl();
                         if ($perms->checkModuleItem('companies', 'access', $contact->contact_company)) { ?>
@@ -141,7 +141,7 @@ function delIt(){
 				</tr>
 				<tr>
 					<td align="right" valign="top" width="100"><?php echo $AppUI->_('Address'); ?>:</td>
-					<td class="hilite" width="100%">
+					<td width="100%">
 						<?php echo $contact->contact_address1; ?><br />
                         <?php echo $contact->contact_address2; ?><br />
                         <?php echo $contact->contact_city . ', ' . $contact->contact_state . ' ' . $contact->contact_zip; ?><br />
@@ -150,7 +150,7 @@ function delIt(){
 				</tr>
 				<tr>
 					<td align="right" width="100"><?php echo $AppUI->_('Map Address'); ?>:</td>
-					<td class="hilite" width="100%"><a target="_blank" href="http://maps.google.com/maps?q=<?php echo $contact->contact_address1; ?>+<?php echo $contact->contact_address2; ?>+<?php echo $contact->contact_city; ?>+<?php echo $contact->contact_state; ?>+<?php echo $contact->contact_zip; ?>+<?php echo $contact->contact_country; ?>"><?php echo w2PshowImage('googlemaps.gif', 55, 22, 'Find It on Google'); ?></a></td>
+					<td width="100%"><a target="_blank" href="http://maps.google.com/maps?q=<?php echo $contact->contact_address1; ?>+<?php echo $contact->contact_address2; ?>+<?php echo $contact->contact_city; ?>+<?php echo $contact->contact_state; ?>+<?php echo $contact->contact_zip; ?>+<?php echo $contact->contact_country; ?>"><?php echo w2PshowImage('googlemaps.gif', 55, 22, 'Find It on Google'); ?></a></td>
 				</tr>
 			</table>
 		</td>

@@ -90,7 +90,7 @@ function delIt() {
 			<table cellspacing="1" cellpadding="2" border="0" width="100%" class="well">
 				<tr>
 					<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Company'); ?>:</td>
-					<td class="hilite" width="100%">
+					<td width="100%">
 						<?php if ($perms->checkModuleItem('companies', 'access', $department->dept_company)) { ?>
 							<?php echo '<a href="?m=companies&a=view&company_id=' . $department->dept_company . '">' . htmlspecialchars($department->company_name, ENT_QUOTES) . '</a>'; ?>
 						<?php } else { ?>
@@ -120,7 +120,7 @@ function delIt() {
 				</tr>
 				<tr valign="top">
 					<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Address'); ?>:</td>
-					<td class="hilite">
+					<td>
 						<a href="http://maps.google.com/maps?q=<?php echo $department->dept_address1; ?>+<?php echo $department->dept_address2; ?>+<?php echo $department->dept_city; ?>+<?php echo $department->dept_state; ?>+<?php echo $department->dept_zip; ?>+<?php echo $department->dept_country; ?>" target="_blank">
 						<img align="right" border="0" src="<?php echo w2PfindImage('googlemaps.gif'); ?>" width="55" height="22" alt="Find It on Google" /></a>
 						<?php	echo $department->dept_address1 . (($department->dept_address2) ? '<br />' . $department->dept_address2 : '') . '<br />' . $department->dept_city . '&nbsp;&nbsp;' . $department->dept_state . '&nbsp;&nbsp;' . $department->dept_zip . (($department->dept_country) ? '<br />' . $countries[$department->dept_country] : '');?>

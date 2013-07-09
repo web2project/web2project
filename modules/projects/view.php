@@ -133,7 +133,7 @@ function delIt() {
                     <?php
                     $perms = &$AppUI->acl();
                     if ($perms->checkModuleItem('companies', 'access', $project->project_company)) { ?>
-                        <td class="hilite" width="100%">
+                        <td width="100%">
                             <?php echo '<a href="?m=companies&a=view&company_id=' . $project->project_company . '">' . htmlspecialchars($project->company_name, ENT_QUOTES) . '</a>'; ?>
                         </td>
                     <?php } else { ?>
@@ -162,7 +162,7 @@ function delIt() {
                 </tr>
                 <tr>
                     <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Actual End Date'); ?>:</td>
-                    <td class="hilite">
+                    <td>
                         <?php
                             if ($project_id > 0 && $project->project_last_task > 0) {
                                 echo $actual_end_date ? '<a href="?m=tasks&a=view&task_id='. $project->project_last_task . '">' : '';
@@ -176,7 +176,7 @@ function delIt() {
                 </tr>
                 <tr>
                     <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Project Owner'); ?>:</td>
-                    <td class="hilite">
+                    <td>
                         <?php
                         $pusername = $project->user_name;
                         $puserid = $project->project_owner;
@@ -227,16 +227,16 @@ function delIt() {
                 </tr>
                 <tr>
                     <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Priority'); ?>:</td>
-                    <td class="hilite" width="100%" style="background-color:<?php echo $projectPriorityColor[$project->project_priority] ?>"><?php echo $AppUI->_($projectPriority[$project->project_priority]); ?></td>
+                    <td width="100%" style="background-color:<?php echo $projectPriorityColor[$project->project_priority] ?>"><?php echo $AppUI->_($projectPriority[$project->project_priority]); ?></td>
                 </tr>
                 <tr>
                     <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Progress'); ?>:</td>
     <!-- TODO: we can't use the createCell helper here because it centers things while we need it left-aligned -->
-                    <td class="hilite" width="100%"><?php printf('%.1f%%', $project->project_percent_complete); ?></td>
+                    <td width="100%"><?php printf('%.1f%%', $project->project_percent_complete); ?></td>
                 </tr>
                 <tr>
                     <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Active'); ?>:</td>
-                    <td class="hilite" width="100%"><?php echo $project->project_active ? $AppUI->_('Yes') : $AppUI->_('No'); ?></td>
+                    <td width="100%"><?php echo $project->project_active ? $AppUI->_('Yes') : $AppUI->_('No'); ?></td>
                 </tr>
                 <tr>
                     <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Scheduled Hours'); ?>:</td>
@@ -252,15 +252,15 @@ function delIt() {
                     <td align="center" nowrap="nowrap">
                         <table cellspacing="1" cellpadding="2" border="0" width="100%">
                             <tr>
-                                <td class="hilite" align="center">
+                                <td align="center">
                                     <?php echo $AppUI->_('Target Budgets'); ?>:
                                 </td>
-                                <td class="hilite" align="center">
+                                <td align="center">
                                     <?php echo $AppUI->_('Actual Costs'); ?>:
                                 </td>
                             </tr>
                             <tr>
-                                <td class="hilite">
+                                <td>
                                     <table cellspacing="1" cellpadding="2" border="0" width="100%">
                                         <?php
                                         $totalBudget = 0;
@@ -298,7 +298,7 @@ function delIt() {
                                         </tr>
                                     </table>
                                 </td>
-                                <td class="hilite">
+                                <td>
                                     <table cellspacing="1" cellpadding="2" border="0" width="100%">
                                         <?php
                                         $bcode = new CSystem_Bcode();
@@ -358,7 +358,7 @@ function delIt() {
                             </tr>
                             <?php if (isset($results['uncountedHours']) && $results['uncountedHours']) { ?>
                             <tr>
-                                <td colspan="2" align="center" class="hilite">
+                                <td colspan="2" align="center">
                                     <?php echo '<span style="float:right; font-style: italic;">'.$results['uncountedHours'].' hours without billing codes</span>'; ?>
                                 </td>
                             </tr>
@@ -375,7 +375,7 @@ function delIt() {
                         <td><strong><?php echo $AppUI->_('Departments'); ?></strong></td>
                     </tr>
                     <tr>
-                        <td colspan='3' class="hilite">
+                        <td colspan='3'>
                             <?php
                                     foreach ($depts as $dept_id => $dept_info) {
                                         echo '<div>';
@@ -394,7 +394,7 @@ function delIt() {
                 $contacts = $project->getContactList();
                 if (count($contacts)) {
                     echo '<tr><td colspan="3"><strong>' . $AppUI->_('Project Contacts') . '</strong></td></tr>';
-                    echo '<tr><td colspan="3" class="hilite">';
+                    echo '<tr><td colspan="3">';
                     echo $htmlHelper->renderContactTable('projects', $contacts);
                     echo '</td></tr>';
                 }

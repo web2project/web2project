@@ -125,7 +125,7 @@ function setTask( key, val ) {
                 <?php if ($link_id) { ?>
                     <tr>
                         <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Uploaded By'); ?>:</td>
-                        <td align="left" class="hilite"><?php echo $link->contact_first_name . ' ' . $link->contact_last_name; ?></td>
+                        <td align="left"><?php echo $link->contact_first_name . ' ' . $link->contact_last_name; ?></td>
                     </tr>
                 <?php } ?>
                 <tr>
