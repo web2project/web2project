@@ -611,3 +611,8 @@ table.mocal td a:first-child {
 .modules td:nth-child(3) {
     text-align: left;
 }
+
+.view-column {
+    vertical-align: top;
+    width: 50%;
+}
