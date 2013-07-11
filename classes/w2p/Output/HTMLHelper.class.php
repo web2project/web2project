@@ -188,7 +188,7 @@ class w2p_Output_HTMLHelper
                 break;
             case '_author':
             case '_creator':
-			case '_owner':
+            case '_owner':
             case '_updator':
                 if ((int) $value) {
                     $obj = new CContact();
@@ -210,28 +210,28 @@ class w2p_Output_HTMLHelper
             case '_size':
                 $cell = file_size($value);
                 break;
-			case '_budget':
-				$cell = w2PgetConfig('currency_symbol');
-				$cell .= formatCurrency($value, $this->_AppUI->getPref('CURRENCYFORM'));
-				break;
-			case '_url':
-				$cell = w2p_url($value);
-				break;
+            case '_budget':
+                $cell = w2PgetConfig('currency_symbol');
+                $cell .= formatCurrency($value, $this->_AppUI->getPref('CURRENCYFORM'));
+                break;
+            case '_url':
+                $cell = w2p_url($value);
+                break;
             case '_email':
                 $cell = w2p_email($value);
                 break;
             case '_birthday':
-			case '_date':
+            case '_date':
                 $myDate = intval($value) ? new w2p_Utilities_Date($value) : null;
-				$cell = $myDate ? $myDate->format($this->df) : '-';
-				break;
-			case '_created':
+                $cell = $myDate ? $myDate->format($this->df) : '-';
+                break;
+            case '_created':
             case '_datetime':
             case '_update':
             case '_updated':
                 $myDate = intval($value) ? new w2p_Utilities_Date($this->_AppUI->formatTZAwareTime($value, '%Y-%m-%d %T')) : null;
-				$cell = $myDate ? $myDate->format($this->dtf) : '-';
-				break;
+                $cell = $myDate ? $myDate->format($this->dtf) : '-';
+                break;
             case '_description':
                 $cell = w2p_textarea($value);
                 break;
@@ -266,11 +266,11 @@ class w2p_Output_HTMLHelper
                     $cell = '-';
                 }
                 break;
-			default:
+            default:
 //TODO: use this when we get a chance - http://www.w3schools.com/cssref/pr_text_white-space.asp ?
                 $value = (isset($custom[$fieldName])) ? $custom[$fieldName][$value] : $value;
-				$cell = htmlspecialchars($value, ENT_QUOTES);
-		}
+                $cell = htmlspecialchars($value, ENT_QUOTES);
+        }
 
         $begin = '<td '.$additional.'class="'.$suffix.'">';
         $end = '</td>';
@@ -298,35 +298,35 @@ class w2p_Output_HTMLHelper
         $suffix = ($last_underscore !== false) ? substr($fieldName, $last_underscore) : $fieldName;
 
         switch ($suffix) {
-			case '_creator':
-			case '_owner':
-				$s .= '<td nowrap="nowrap">';
-				$s .= w2PgetUsernameFromID($row[$fieldName]);
-				$s .= '</td>';
-				break;
-			case '_budget':
-				$s .= '<td>';
+            case '_creator':
+            case '_owner':
+                $s .= '<td nowrap="nowrap">';
+                $s .= w2PgetUsernameFromID($row[$fieldName]);
+                $s .= '</td>';
+                break;
+            case '_budget':
+                $s .= '<td>';
                 global $w2Pconfig;
-				$s .= $w2Pconfig['currency_symbol'];
-				$s .= formatCurrency($row[$fieldName], $AppUI->getPref('CURRENCYFORM'));
-				$s .= '</td>';
-				break;
-			case '_url':
-				$s .= '<td>';
-				$s .= w2p_url($row[$fieldName]);
-				$s .= '</td>';
-				break;
-			case '_date':
-				$df = $AppUI->getPref('SHDATEFORMAT');
-				$myDate = intval($row[$fieldName]) ? new w2p_Utilities_Date($row[$fieldName]) : null;
-				$s .= '<td nowrap="nowrap" class="center">' . ($myDate ? $myDate->format($df) : '-') . '</td>';
-				break;
-			default:
-				$s .= '<td nowrap="nowrap" class="center">';
-				$s .= htmlspecialchars($row[$fieldName], ENT_QUOTES);
-				$s .= '</td>';
-		}
+                $s .= $w2Pconfig['currency_symbol'];
+                $s .= formatCurrency($row[$fieldName], $AppUI->getPref('CURRENCYFORM'));
+                $s .= '</td>';
+                break;
+            case '_url':
+                $s .= '<td>';
+                $s .= w2p_url($row[$fieldName]);
+                $s .= '</td>';
+                break;
+            case '_date':
+                $df = $AppUI->getPref('SHDATEFORMAT');
+                $myDate = intval($row[$fieldName]) ? new w2p_Utilities_Date($row[$fieldName]) : null;
+                $s .= '<td nowrap="nowrap" class="center">' . ($myDate ? $myDate->format($df) : '-') . '</td>';
+                break;
+            default:
+                $s .= '<td nowrap="nowrap" class="center">';
+                $s .= htmlspecialchars($row[$fieldName], ENT_QUOTES);
+                $s .= '</td>';
+        }
 
-		return $s;
-	}
+        return $s;
+    }
 }

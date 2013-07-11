@@ -213,7 +213,7 @@ class w2p_Output_EmailManager
         $projname = $project->load($task->task_project)->project_name;
 
         $body = $this->_AppUI->_('Project', UI_OUTPUT_RAW) . ':     ' . $projname . "\n";
-        $body .= $this->_AppUI->_('Task', UI_OUTPUT_RAW) . ':	     ' . $task->task_name . "\n";
+        $body .= $this->_AppUI->_('Task', UI_OUTPUT_RAW) . ':         ' . $task->task_name . "\n";
         $body .= $this->_AppUI->_('URL', UI_OUTPUT_RAW) . ':         ' . W2P_BASE_URL . '/index.php?m=tasks&a=view&task_id=' . $task->task_id . "\n\n";
         $body .= $this->_AppUI->_('Task Description', UI_OUTPUT_RAW) . ":\n" . $task->task_description . "\n";
         $body .= $this->_AppUI->_('Creator', UI_OUTPUT_RAW) . ': ' . $this->_AppUI->user_display_name . "\n\n";
@@ -282,7 +282,7 @@ class w2p_Output_EmailManager
         $status = (intval($isNotNew)) ? 'Updated' : 'Created';
 
         $body = $this->_AppUI->_('Project') . ': ' . $project->project_name . ' ' . $this->_AppUI->_('has been') . ' ' . $this->_AppUI->_($status);
-		$body .= "\n" . $this->_AppUI->_('You can view the Project by clicking'). ':';
+        $body .= "\n" . $this->_AppUI->_('You can view the Project by clicking'). ':';
         $body .= "\n" . $this->_AppUI->_('URL') . ':     ' . w2PgetConfig('base_url') . '/index.php?m=projects&a=view&project_id=' . $project->project_id;
         $body .= "\n\n(" . $this->_AppUI->_('You are receiving this message because you are the owner of this Project') . ")";
         $body .= "\n\n" . $this->_AppUI->_('Description') . ':' . "\n $project->project_description \n\n";
@@ -292,7 +292,7 @@ class w2p_Output_EmailManager
 
         if ($project->_message == 'deleted') {
             $body .= "\n\n" . $this->_AppUI->_('Project') . $project->project_name . $this->_AppUI->_('was deleted') . '.';
-			$body .= "\n" . $this->_AppUI->_('deleted by') . ': ' . $this->_AppUI->user_display_name;
+            $body .= "\n" . $this->_AppUI->_('deleted by') . ': ' . $this->_AppUI->user_display_name;
         }
 
         return $body;
@@ -336,8 +336,8 @@ class w2p_Output_EmailManager
     {
         $body = 'A new user has signed up on ' . w2PgetConfig('company_name');
         $body .= ". Please go through the user details below:\n";
-        $body .= 'Name:	' . $username . "\n" . 'Username:	' . $logname . "\n";
-        $body .= 'Email:	' . $address . "\n\n";
+        $body .= 'Name:    ' . $username . "\n" . 'Username:    ' . $logname . "\n";
+        $body .= 'Email:    ' . $address . "\n\n";
         $body .= 'You may check this account at the following URL: ' . W2P_BASE_URL;
         $body .= '/index.php?m=admin&a=viewuser&user_id=' . $userid . "\n\n";
         $body .= "Thank you very much.\n\n" . 'The ' . w2PgetConfig('company_name');
@@ -351,7 +351,7 @@ class w2p_Output_EmailManager
         $body = 'You have signed up for a new account on ' . w2PgetConfig('company_name');
         $body .= ".\n\n" . "Once the administrator approves your request, you will receive an email with confirmation.\n";
         $body .= "Your login information are below for your own record:\n\n";
-        $body .= 'Username:	' . $logname . "\n" . 'Password:	' . $logpwd . "\n\n";
+        $body .= 'Username:    ' . $logname . "\n" . 'Password:    ' . $logpwd . "\n\n";
         $body .= "You may login at the following URL: " . W2P_BASE_URL;
         $body .= "\n\n" . "Thank you very much.\n\n" . 'The ' . w2PgetConfig('company_name');
         $body .= " Support Staff.\n\n" . '****PLEASE KEEP THIS EMAIL FOR YOUR RECORDS****';
