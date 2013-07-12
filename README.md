@@ -1,3 +1,4 @@
+[![Stories in Ready](http://badge.waffle.io/web2project/web2project.png)](http://waffle.io/web2project/web2project)  
 web2Project
 ================
 
