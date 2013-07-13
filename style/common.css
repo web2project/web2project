@@ -336,20 +336,40 @@ table.list tr:hover td._name {
 /*
  * These are the colors/formats for the tasks that are on time, overdue, etc.
  */
+td.done {
+    background-color:#aaddaa;
+    border-style:solid;
+    border-width:1px
+}
 tr.done td._date, tr.done td._datetime, tr.done td._duration, tr.done td._in {
     background-color:#aaddaa;
     color:#00000;
 }
 
+td.late {
+    background-color: #CC6666;
+    border-style:solid;
+    border-width:1px;
+}
 tr.late td._date, tr.late td._datetime, tr.late td._duration, tr.late td._in {
     background-color:#cc6666;
     color: #fff;
 }
 
+td.notstarted {
+    background-color: #ffeebb;
+    border-style:solid;
+    border-width:1px;
+}
 tr.notstarted td._date, tr.notstarted td._datetime, tr.notstarted td._duration, tr.notstarted td._in {
     background-color:#ffeebb;
 }
 
+td.active {
+    background-color: #e6eedd;
+    border-style:solid;
+    border-width:1px;
+}
 tr.active td._date, tr.active td._datetime, tr.active td._duration, tr.active td._in {
     background-color:#e6eedd;
 }
@@ -616,3 +636,19 @@ table.mocal td a:first-child {
     vertical-align: top;
     width: 50%;
 }
+
+/*
+        <td class="future" style="border-style:solid;border-width:1px" bgcolor="#ffffff">&nbsp; &nbsp;</td>
+        <td>=<?php echo $AppUI->_('Future Task'); ?></td>
+        <td>&nbsp; &nbsp;</td>
+        <td class="started" style="border-style:solid;border-width:1px" bgcolor="#e6eedd">&nbsp; &nbsp;</td>
+        <td>=<?php echo $AppUI->_('Started and on time'); ?></td>
+        <td class="should" style="border-style:solid;border-width:1px" bgcolor="#ffeebb">&nbsp; &nbsp;</td>
+        <td>=<?php echo $AppUI->_('Should have started'); ?></td>
+        <td>&nbsp; &nbsp;</td>
+        <td class="overdue" style="border-style:solid;border-width:1px" bgcolor="#CC6666">&nbsp; &nbsp;</td>
+        <td>=<?php echo $AppUI->_('Overdue'); ?></td>
+        <td>&nbsp; &nbsp;</td>
+        <td class="done" style="border-style:solid;border-width:1px" bgcolor="#aaddaa">&nbsp; &nbsp;</td>
+        <td>=<?php echo $AppUI->_('Done'); ?></td>
+        */

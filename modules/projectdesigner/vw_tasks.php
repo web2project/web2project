@@ -292,7 +292,7 @@ foreach ($projects as $k => $p) {
 </form>
 <table>
 <tr>
-        <td><?php echo $AppUI->_('Key'); ?>:</td>
+        <td><?php echo $AppUI->_('Key'); ?>:ss</td>
         <th>&nbsp;P&nbsp;</th>
         <td>=<?php echo $AppUI->_('Overall Priority'); ?></td>
         <th>&nbsp;U&nbsp;</th>
@@ -306,18 +306,18 @@ foreach ($projects as $k => $p) {
         <th>&nbsp;I&nbsp;</th>
         <td>=<?php echo $AppUI->_('Inactive'); ?></td>
         <td>&nbsp; &nbsp;</td>
-        <td style="border-style:solid;border-width:1px" bgcolor="#ffffff">&nbsp; &nbsp;</td>
+        <td>&nbsp; &nbsp;</td>
         <td>=<?php echo $AppUI->_('Future Task'); ?></td>
         <td>&nbsp; &nbsp;</td>
-        <td class="started" style="border-style:solid;border-width:1px" bgcolor="#e6eedd">&nbsp; &nbsp;</td>
+        <td class="active">&nbsp; &nbsp;</td>
         <td>=<?php echo $AppUI->_('Started and on time'); ?></td>
-        <td class="should" style="border-style:solid;border-width:1px" bgcolor="#ffeebb">&nbsp; &nbsp;</td>
+        <td class="notstarted">&nbsp; &nbsp;</td>
         <td>=<?php echo $AppUI->_('Should have started'); ?></td>
         <td>&nbsp; &nbsp;</td>
-        <td class="overdue" style="border-style:solid;border-width:1px" bgcolor="#CC6666">&nbsp; &nbsp;</td>
+        <td class="late">&nbsp; &nbsp;</td>
         <td>=<?php echo $AppUI->_('Overdue'); ?></td>
         <td>&nbsp; &nbsp;</td>
-        <td class="done" style="border-style:solid;border-width:1px" bgcolor="#aaddaa">&nbsp; &nbsp;</td>
+        <td class="done">&nbsp; &nbsp;</td>
         <td>=<?php echo $AppUI->_('Done'); ?></td>
 </tr>
 </table>
