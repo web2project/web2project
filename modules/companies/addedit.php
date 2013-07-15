@@ -110,6 +110,14 @@ function testURL( x ) {
 							<textarea name="company_description"><?php echo $company->company_description; ?></textarea>
 						</td>
 					</tr>
+                    <tr>
+                        <td align="left" colspan="2">
+                            <?php
+                            $custom_fields = new w2p_Core_CustomFields($m, $a, $company->company_id, "edit");
+                            $custom_fields->printHTML();
+                            ?>
+                        </td>
+                    </tr>
                 </table>
             </td>
             <td width="50%" style="vertical-align: top">
@@ -172,12 +180,6 @@ function testURL( x ) {
 						</td>
 					</tr>
 				</table>
-			</td>
-			<td align='left'>
-				<?php
-					$custom_fields = new w2p_Core_CustomFields($m, $a, $company->company_id, "edit");
-					$custom_fields->printHTML();
-				?>
 			</td>
 		</tr>
 		<tr>
