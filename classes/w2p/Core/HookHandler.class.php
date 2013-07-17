@@ -60,7 +60,7 @@ class w2p_Core_HookHandler
                     $itemList = $object->{$hookname}($this->AppUI->user_id);
                     if (count($itemList)) {
                         foreach ($itemList as $calendarItem) {
-                            $buffer .= w2p_API_iCalendar::formatCalendarItem($calendarItem, $module['mod_directory']);
+                            $buffer .= w2p_Output_iCalendar::formatCalendarItem($calendarItem, $module['mod_directory']);
                         }
                     }
                 }
