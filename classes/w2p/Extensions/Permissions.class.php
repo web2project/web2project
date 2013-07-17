@@ -259,12 +259,12 @@ class w2p_Extensions_Permissions extends gacl_api
      * * Deleting all module-associated entries from the phpgacl tables
      * * such as gacl_aco_maps, gacl_acl and gacl_aro_map
      * *
-     * * @author 	gregorerhardt
-     * * @date		20070927
-     * * @cause		#2140
+     * * @author     gregorerhardt
+     * * @date        20070927
+     * * @cause        #2140
      * *
-     * * @access 	public
-     * * @param	string	module (directory) name
+     * * @access     public
+     * * @param    string    module (directory) name
      * * @return
      */
 
@@ -698,7 +698,7 @@ class w2p_Extensions_Permissions extends gacl_api
     }
 
     /* ======================================================================*\
-      Function:	get_object()
+      Function:    get_object()
       \*====================================================================== */
 
     public function get_object_full($value = null, $section_value = null, $return_hidden = 1, $object_type = null)
@@ -758,8 +758,8 @@ class w2p_Extensions_Permissions extends gacl_api
     }
 
     /* ======================================================================*\
-      Function:	get_objects ()
-      Purpose:	Grabs all Objects in the database, or specific to a section_value
+      Function:    get_objects ()
+      Purpose:    Grabs all Objects in the database, or specific to a section_value
       returns format suitable for add_acl and is_conflicting_acl
       \*====================================================================== */
 
@@ -1068,11 +1068,11 @@ class w2p_Extensions_Permissions extends gacl_api
         $q = new w2p_Database_Query;
         $q->addTable($this->_db_acl_prefix . 'aco_sections', 'a');
         $q->addQuery('a.value AS a_value, a.name AS a_name, ' .
-					'b.value AS b_value, b.name AS b_name, ' .
-					'c.value AS c_value, c.name AS c_name, ' .
-					'd.value AS d_value, d.name AS d_name, ' .
-					'e.value AS e_value, e.name AS e_name, ' .
-					'f.value AS f_value, f.name AS f_name');
+                    'b.value AS b_value, b.name AS b_name, ' .
+                    'c.value AS c_value, c.name AS c_name, ' .
+                    'd.value AS d_value, d.name AS d_name, ' .
+                    'e.value AS e_value, e.name AS e_name, ' .
+                    'f.value AS f_value, f.name AS f_name');
         $q->leftJoin($this->_db_acl_prefix . 'aco', 'b', 'a.value=b.section_value,' . w2PgetConfig('dbprefix') . $this->_db_acl_prefix . 'aro_sections c');
         $q->leftJoin($this->_db_acl_prefix . 'aro', 'd', 'c.value=d.section_value,' . w2PgetConfig('dbprefix') . $this->_db_acl_prefix . 'axo_sections e');
         $q->leftJoin($this->_db_acl_prefix . 'axo', 'f', 'e.value=f.section_value');

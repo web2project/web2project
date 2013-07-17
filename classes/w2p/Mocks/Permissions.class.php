@@ -11,7 +11,7 @@
 
 class w2p_Mocks_Permissions extends w2p_Extensions_Permissions {
 
-	public function __construct($opts = null) {
+    public function __construct($opts = null) {
         parent::__construct($opts);
     }
 
