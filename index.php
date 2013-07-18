@@ -101,7 +101,7 @@ if (w2PgetParam($_POST, 'lostpass', 0)) {
 	if (w2PgetParam($_POST, 'sendpass', 0)) {
 		sendNewPass();
 	} else {
-        require $theme->resolveTemplate('lostpass');
+        include $theme->resolveTemplate('lostpass');
 	}
 	exit();
 }
@@ -149,7 +149,7 @@ if ($AppUI->doLogin()) {
 		header('Content-type: text/html;charset=' . $locale_char_set);
 	}
 
-    require $theme->resolveTemplate('login');
+    include $theme->resolveTemplate('login');
 	// destroy the current session and output login page
 	session_unset();
 	session_destroy();
@@ -257,7 +257,7 @@ if (isset($_POST['dosql']) && $_POST['dosql'] == 'do_file_co') {
 }
 
 if (!$suppressHeaders) {
-	require $theme->resolveTemplate('header');
+	include $theme->resolveTemplate('header');
 }
 
 if (W2P_PERFORMANCE_DEBUG) {
@@ -292,7 +292,7 @@ if (!$suppressHeaders) {
 	echo '<iframe name="thread" src="' . W2P_BASE_URL . '/modules/index.html" width="0" height="0" frameborder="0"></iframe>';
 	echo '<iframe name="thread2" src="' . W2P_BASE_URL . '/modules/index.html" width="0" height="0" frameborder="0"></iframe>';
  	//Theme footer goes before the performance box
-    require $theme->resolveTemplate('footer');
+    include $theme->resolveTemplate('footer');
 	if (W2P_PERFORMANCE_DEBUG) {
 		$db_info = $db->ServerInfo();
 		print ('<table width="100%" cellspacing="0" cellpadding="4" border="0"  class="system-info">');
