@@ -311,15 +311,7 @@ if (!$suppressHeaders) {
 		print ('		<p>Server Protocol | Gateway Interface: ' . safe_get_env('SERVER_PROTOCOL') . ' | ' . safe_get_env('GATEWAY_INTERFACE') . '</p>');
 		print ('		<p>Client Browser: ' . safe_get_env('HTTP_USER_AGENT') . '</p>');
 		print ('		<p>URL Query: ' . safe_get_env('QUERY_STRING') . '</p>');
-        if (file_exists($module_file)) {
-            $script_handle = fopen($module_file, "r");
-            if ($script_handle) {
-                $script_first_line = fgets($script_handle, 4096);
-                fclose($script_handle);
-            }
-            $script_first_line = substr(trim($script_first_line), 10, -4);
-            print ('		<p>File Version ' . $script_first_line . '</p>');
-        }
+
 		$right_now_is = new w2p_Utilities_Date();
 		print ('		<p>Server Time | Timezone: ' . $right_now_is->format(FMT_DATERFC822) . ' | ' . date('T') . '</p>');
 		print ('		<p>PHP Max. Execution Time: ' . ini_get('max_execution_time') . ' seconds</p>');
@@ -331,14 +323,10 @@ if (!$suppressHeaders) {
 		print ('	</tr>');
 		print ('	<tr valign="top">');
 		print ('	<td width="100%">');
-		if (is_callable('memory_get_usage')) {
-			print ('	<p>Memory Used: ' . sprintf('%01.2f Mb', memory_get_usage() / pow(1024, 2)) . '</p>');
-			print ('	<p>Memory Unused: ' . sprintf('%01d Kb', (memory_get_usage() - $w2p_performance_memory_marker) / 1024) . '</p>');
-		}
-		if (is_callable('memory_get_peak_usage')) {
-			print ('	<p>Memory Peak: ' . sprintf('%01d Kb', (memory_get_peak_usage() - $w2p_performance_memory_marker) / 1024) . '</p>');
-		}
-        print ('    <p>Page (Buffer) Size: ' . sprintf('%01.2f kb', ob_get_length() / 1024, 2) . '</p>');
+        print ('	    <p>Memory Used: ' . sprintf('%01.2f Mb', memory_get_usage() / pow(1024, 2)) . '</p>');
+        print ('	    <p>Memory Unused: ' . sprintf('%01d Kb', (memory_get_usage() - $w2p_performance_memory_marker) / 1024) . '</p>');
+        print ('	    <p>Memory Peak: ' . sprintf('%01d Kb', (memory_get_peak_usage() - $w2p_performance_memory_marker) / 1024) . '</p>');
+        print ('        <p>Page (Buffer) Size: ' . sprintf('%01.2f kb', ob_get_length() / 1024, 2) . '</p>');
 		printf('		<p>Setup in %.3f seconds</p>', $w2p_performance_setuptime);
 		printf('		<p>ACLs checked in %.3f seconds</p>', $w2p_performance_acltime);
 		print ('		<p>ACLs nr of checks: ' . $w2p_performance_aclchecks . '</p>');
