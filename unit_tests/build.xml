@@ -81,6 +81,7 @@
         <phingcall target="phpmd" />
         <phingcall target="depend" />
         <phingcall target="codesniffer" />
+        <phingcall target="churn-grep" />
     </target>
 
     <target name="standards" depends="lint, metrics" />
@@ -177,10 +178,10 @@
     </target>
 
     <target name="cpd" depends="prepare">
-<!--        <phpcpd>
+        <phpcpd>
             <fileset refid="project.source" />
             <formatter type="default" outfile="${dir.reports}/cpd.xml" />
-        </phpcpd>-->
+        </phpcpd>
     </target>
 
     <target name="phpmd" depends="prepare">
@@ -205,7 +206,20 @@
             <formatter type="summary" outfile="${dir.reports}/codesniffer-summary.xml"/>
         </phpcodesniffer>
     </target>
-    
+
+    <!-- This one looks like an odd ball but what it does is:
+            - looks at the git log file, retrieving just the filenames;
+            - greps to extract those filenames, excluding anything from the old SVN /trunk structure;
+            - sorts the list of files to get the duplicates together;
+            - eliminates the duplicates but keeps a count of them;
+            - resorts the file names by that count; and
+            - retrieves the top 25 entries.
+
+        It's a variant of Katrina Owen's one-liner here: https://twitter.com/kytrinyx/status/358065717179973634
+    -->
+    <target name="churn-grep" depends="prepare">
+        <exec command="git log --name-only | grep php --exclude=trunk | sort | uniq -c | sort -nr | head -n 25 > ${dir.reports}/churn.txt" />
+    </target>
     <target name="phploc" depends="prepare">
         <exec command="phploc --log-xml ${dir.reports}/phploc.xml --exclude xxx ${project.basedir}/" />
     </target>
