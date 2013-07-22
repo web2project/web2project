@@ -141,7 +141,14 @@ function setDept( key, val ) {
     }
 }
 </script>
-
+<?php
+    /**
+     * Note: This is an ugly little hack which makes sure the form stays on the screen in firefox for the wps-redmond
+     *   theme. There must be a better way. It also appears in system/addeditpref.php and nowhere else.
+     */
+    $spacing = ('wps-redmond' == $AppUI->getPref('UISTYLE')) ? 70 : 0;
+    echo '<div style="padding-top: ' . $spacing . 'px;"> </div>';
+?>
 <form name="editFrm" action="?m=<?php echo $m; ?>" method="post" accept-charset="utf-8">
 	<input type="hidden" name="user_id" value="<?php echo (int) $user['user_id']; ?>" />
 	<input type="hidden" name="contact_id" value="<?php echo (int) $user['contact_id']; ?>" />
