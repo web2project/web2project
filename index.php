@@ -87,8 +87,9 @@ if (isset($user_id) && isset($_GET['logout'])) {
 // set the default ui style
 $uistyle = $AppUI->getPref('UISTYLE') ? $AppUI->getPref('UISTYLE') : w2PgetConfig('host_style');
 include W2P_BASE_DIR . '/style/' . $uistyle . '/overrides.php';
+$uiName = str_replace('-', '', $uistyle);
 
-$uiClass = 'style_' . $uistyle;
+$uiClass = 'style_' . $uiName;
 $theme = new $uiClass($AppUI);
 
 // check is the user needs a new password
