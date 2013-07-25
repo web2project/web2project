@@ -86,7 +86,7 @@ input:focus, textarea:focus {
     background-color : #FFFFCC;
 }
 
-.button, .crumb ul li div, .crumb-right li div {
+.button, .crumb ul li div, .crumb ul li span {
   font-family   : tahoma,verdana,arial,Sans-Serif;
   color         : #666;
   text-align    : center;
