@@ -93,6 +93,12 @@ function submitIt() {
             foreach ($LANGUAGES as $lang => $langinfo) {
                 $langlist[$lang] = $langinfo[1];
             }
+            /*
+             * NOTE: While it may seem egocentric to force US English as the default language, without this line, the
+             *   language defaults to whatever is first in the dropdown.. which is Czech at the time of this writing.
+             *   Since English is more widespread, I don't feel bad. ~ caseysoftware/caseydk 24 July 2013
+             */
+            $prefs['LOCALE'] = ('' == $prefs['LOCALE']) ? 'en_US' : $prefs['LOCALE'];
             echo arraySelect($langlist, 'pref_name[LOCALE]', 'class=text size=1', $prefs['LOCALE'], true);
             $AppUI->setWarning($temp);
         ?>
@@ -104,6 +110,11 @@ function submitIt() {
 	<td>
         <?php
             $timezones = w2PgetSysVal('Timezones');
+            /*
+             * NOTE: While it may seem egocentric to force Europe/London as the default timezone, without this line,
+             *    the timezone defaults to whatever is first in the dropdown. ~ caseysoftware/caseydk 24 July 2013
+             */
+            $prefs['TIMEZONE'] = ('' == $prefs['TIMEZONE']) ? 'Europe/London' : $prefs['TIMEZONE'];
             echo arraySelect($timezones, 'pref_name[TIMEZONE]', 'class=text size=1', $prefs['TIMEZONE'], true);
         ?>
 	</td>
