@@ -1083,10 +1083,13 @@ class CTask extends w2p_Core_BaseObject
 
             $multiplier = ('24' == $_task_data['task_duration_type']) ? 3 : 1;
             $d = $_task_data['task_duration'] * $multiplier;
+         
+            $osd = new w2p_Utilities_Date($_task_data['task_start_date']);
 
-            $ned = new w2p_Utilities_Date();
+            $ned = new w2p_Utilities_Date($_task_data['task_end_date']);
+            $dur=-$ned->calcDuration($osd);
             $ned->copy($nsd);
-            $ned->addDuration($d);
+            $ned->addDuration($dur,1);
 
             // Because we prefer the end of the previous as opposed to the
             //   beginning of the current for a task_end_date
