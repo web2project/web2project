@@ -1080,9 +1080,6 @@ class CTask extends w2p_Core_BaseObject
             // Because we prefer the beginning of the next day as opposed to the
             //   end of the current for a task_start_date
             $nsd = $nsd->next_working_day();
-
-            $multiplier = ('24' == $_task_data['task_duration_type']) ? 3 : 1;
-            $d = $_task_data['task_duration'] * $multiplier;
          
             $osd = new w2p_Utilities_Date($_task_data['task_start_date']);
 
