@@ -120,12 +120,20 @@ if ($result) {
         if (isset($start_date)) {
             $shift = $nsd->compare($start_date, $nsd);
             if ($shift < 1) {
-                $obj->task_start_date = $nsd->format(FMT_DATETIME_MYSQL);
-                $obj->task_start_date = $AppUI->formatTZAwareTime($obj->task_start_date, '%Y-%m-%d %T');
+                
+                //$obj->task_start_date = $nsd->format(FMT_DATETIME_MYSQL);
+                $osd = new w2p_Utilities_Date($obj->task_start_date);
+                $ned = new w2p_Utilities_Date($obj->task_end_date);
 
-                $ned = new w2p_Utilities_Date($obj->task_start_date);
-                $ned->addDuration($obj->task_duration, $obj->task_duration_type);
-                $obj->task_end_date = $ned->format(FMT_DATETIME_MYSQL);
+                $dur=-$ned->calcDuration($osd);
+                $ned->copy($nsd);
+                $ned->addDuration($dur,1);
+
+                $new_start_date = $nsd->format(FMT_DATETIME_MYSQL);
+                $obj->task_start_date = $this->_AppUI->formatTZAwareTime($new_start_date, '%Y-%m-%d %T');
+
+                $new_end_date = $nsd->format(FMT_DATETIME_MYSQL);
+                $obj->task_end_date = $this->_AppUI->formatTZAwareTime($new_end_date, '%Y-%m-%d %T');
 
                 $obj->store();
             }
