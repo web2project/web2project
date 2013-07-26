@@ -478,7 +478,7 @@ if (count($fields) > 0) {
     $fieldNames = array('Work', 'P', 'U', 'Task Name', 'Task Owner',
         'Assigned Users', 'Start Date', 'Duration', 'Finish Date');
 
-    $module->storeSettings('tasks', 'index_list', $fieldList, $fieldNames);
+    //$module->storeSettings('tasks', 'index_list', $fieldList, $fieldNames);
 }
 if ($history_active) {
     $fieldList[] = 'last_update';
