@@ -1077,9 +1077,6 @@ class CTask extends w2p_Core_BaseObject
             }
 
             $nsd = new w2p_Utilities_Date($lastEndDate);
-            // Because we prefer the beginning of the next day as opposed to the
-            //   end of the current for a task_start_date
-            $nsd = $nsd->next_working_day();
          
             $osd = new w2p_Utilities_Date($_task_data['task_start_date']);
 
@@ -1087,10 +1084,6 @@ class CTask extends w2p_Core_BaseObject
             $dur=-$ned->calcDuration($osd);
             $ned->copy($nsd);
             $ned->addDuration($dur,1);
-
-            // Because we prefer the end of the previous as opposed to the
-            //   beginning of the current for a task_end_date
-            $ned = $ned->prev_working_day();
 
             $new_start_date = $nsd->format(FMT_DATETIME_MYSQL);
             $new_start_date = $this->_AppUI->convertToSystemTZ($new_start_date);
