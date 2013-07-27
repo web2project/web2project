@@ -147,7 +147,7 @@ class w2p_Output_HTMLHelper
                 $obj->load($value);
                 $foldername = ($value) ? $obj->file_folder_name : 'Root';
                 $image = '<img src="'.w2PfindImage('folder5_small.png', 'files').'" />';
-                $link = '?m=files&tab=4&folder=' . $value;
+                $link = '?m=files&tab=4&folder=' . (int) $value;
                 $cell = '<a href="'.$link.'">' . $image . ' ' . $foldername . '</a>';
                 $suffix .= ' _name';
                 break;
