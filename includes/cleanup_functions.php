@@ -1995,7 +1995,7 @@ function displayFiles($AppUI, $folder_id, $task_id, $project_id, $company_id) {
         $q->addWhere('file_folder = ' . (int)$folder_id);
     }
 	$q->addGroup('file_version_id DESC');
-    $q->addOrder('file_project');
+    $q->addOrder('project_name ASC, file_id DESC');
 
 	$qv = new w2p_Database_Query();
 	$qv->addTable('files');
