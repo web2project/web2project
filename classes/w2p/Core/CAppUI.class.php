@@ -317,6 +317,23 @@ class w2p_Core_CAppUI
     }
 
     /**
+     * This creates and returns a theme object (which extends w2p_Theme_Base)
+     *  which is then used for all templating, etc.
+     *
+     * @return w2p_Theme_Base object
+     */
+    public function getTheme()
+    {
+        $this->setStyle();
+        $uistyle = $this->getPref('UISTYLE');
+        $uiClass = 'style_' . str_replace('-', '', $uistyle);
+
+        $theme = new $uiClass($this);
+
+        return $theme;
+    }
+
+    /**
      * Checks that the current user preferred style is valid/exists.
      *
      * @deprecated
