@@ -1995,7 +1995,7 @@ function displayFiles($AppUI, $folder_id, $task_id, $project_id, $company_id) {
         $q->addWhere('file_folder = ' . (int)$folder_id);
     }
 	$q->addGroup('file_version_id DESC');
-    $q->addOrder('project_name ASC, file_id DESC');
+    $q->addOrder('project_name ASC, file_parent ASC, file_id DESC');
 
 	$qv = new w2p_Database_Query();
 	$qv->addTable('files');
@@ -2097,6 +2097,7 @@ function displayFiles($AppUI, $folder_id, $task_id, $project_id, $company_id) {
 		}
 		$fp = $latest_file['file_project'];
         $row['file_datetime'] = $latest_file['file_datetime'];
+        $row['file_id'] = $latest_file['file_id'];
         $htmlHelper->stageRowData($row);
 
         $s .= '<tr>';
