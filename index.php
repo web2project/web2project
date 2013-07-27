@@ -101,7 +101,7 @@ if (w2PgetParam($_POST, 'lostpass', 0)) {
 	if (w2PgetParam($_POST, 'sendpass', 0)) {
 		sendNewPass();
 	} else {
-        include $theme->resolveTemplate('lostpass');
+        include $AppUI->getTheme()->resolveTemplate('lostpass');
 	}
 	exit();
 }
@@ -149,7 +149,7 @@ if ($AppUI->doLogin()) {
 		header('Content-type: text/html;charset=' . $locale_char_set);
 	}
 
-    include $theme->resolveTemplate('login');
+    include $AppUI->getTheme()->resolveTemplate('login');
 	// destroy the current session and output login page
 	session_unset();
 	session_destroy();
@@ -257,7 +257,7 @@ if (isset($_POST['dosql']) && $_POST['dosql'] == 'do_file_co') {
 }
 
 if (!$suppressHeaders) {
-	include $theme->resolveTemplate('header');
+	include $AppUI->getTheme()->resolveTemplate('header');
 }
 
 if (W2P_PERFORMANCE_DEBUG) {
@@ -292,73 +292,12 @@ if (!$suppressHeaders) {
 	echo '<iframe name="thread" src="' . W2P_BASE_URL . '/modules/index.html" width="0" height="0" frameborder="0"></iframe>';
 	echo '<iframe name="thread2" src="' . W2P_BASE_URL . '/modules/index.html" width="0" height="0" frameborder="0"></iframe>';
  	//Theme footer goes before the performance box
-    include $theme->resolveTemplate('footer');
+    include $AppUI->getTheme()->resolveTemplate('footer');
 	if (W2P_PERFORMANCE_DEBUG) {
-		$db_info = $db->ServerInfo();
-		print ('<table width="100%" cellspacing="0" cellpadding="4" border="0"  class="system-info">');
-		print ('<tr valign="top">');
-		print ('<td align="center" width="100%">');
-		print ('	<table width="100%" cellspacing="0" cellpadding="4" border="0" class="std">');
-		print ('	<tr valign="top">');
-		print ('		<th width="100%">System Environment</th>');
-		print ('	</tr>');
-		print ('	<tr valign="top">');
-		print ('	<td width="100%">');
-		print ('		<p><b>web2Project ' . $AppUI->getVersion() . '</b></p>');
-		print ('		<p>PHP version nr: ' . PHP_VERSION . '</p>');
-		print ('		<p>DB provider and version nr: ' . $db->dataProvider . ' ' . $db_info['version']. ' (' . $db_info['description'] . ')</p>');
-		print ('		<p>DB Table Prefix: "' . w2PgetConfig('dbprefix') . '"</p>');
-		print ('		<p>Web Server: ' . safe_get_env('SERVER_SOFTWARE') . '</p>');
-		print ('		<p>Server Protocol | Gateway Interface: ' . safe_get_env('SERVER_PROTOCOL') . ' | ' . safe_get_env('GATEWAY_INTERFACE') . '</p>');
-		print ('		<p>Client Browser: ' . safe_get_env('HTTP_USER_AGENT') . '</p>');
-		print ('		<p>URL Query: ' . safe_get_env('QUERY_STRING') . '</p>');
-
-		$right_now_is = new w2p_Utilities_Date();
-		print ('		<p>Server Time | Timezone: ' . $right_now_is->format(FMT_DATERFC822) . ' | ' . date('T') . '</p>');
-		print ('		<p>PHP Max. Execution Time: ' . ini_get('max_execution_time') . ' seconds</p>');
-		print ('		<p>Memory Limit: ' . (ini_get('memory_limit') ? str_replace('M', ' Mb', ini_get('memory_limit')) : 'Not Defined') . '</p>');
-		print ('	</td>');
-		print ('	</tr>');
-		print ('	<tr valign="top">');
-		print ('		<th width="100%">Performance</th>');
-		print ('	</tr>');
-		print ('	<tr valign="top">');
-		print ('	<td width="100%">');
-        print ('	    <p>Memory Used: ' . sprintf('%01.2f Mb', memory_get_usage() / pow(1024, 2)) . '</p>');
-        print ('	    <p>Memory Unused: ' . sprintf('%01d Kb', (memory_get_usage() - $w2p_performance_memory_marker) / 1024) . '</p>');
-        print ('	    <p>Memory Peak: ' . sprintf('%01d Kb', (memory_get_peak_usage() - $w2p_performance_memory_marker) / 1024) . '</p>');
-        print ('        <p>Page (Buffer) Size: ' . sprintf('%01.2f kb', ob_get_length() / 1024, 2) . '</p>');
-		printf('		<p>Setup in %.3f seconds</p>', $w2p_performance_setuptime);
-		printf('		<p>ACLs checked in %.3f seconds</p>', $w2p_performance_acltime);
-		print ('		<p>ACLs nr of checks: ' . $w2p_performance_aclchecks . '</p>');
-		printf('		<p>w2P Data checked in %.3f seconds</p>', $w2p_performance_dbtime);
-		print ('		<p>w2P DBQueries executed: ' . $w2p_performance_dbqueries . ' queries</p>');
-		print ('		<p>w2P Old Queries executed: ' . $w2p_performance_old_dbqueries . ' queries</p>');
-		print ('		<p>w2P Total Queries executed: ' . (int)($w2p_performance_old_dbqueries + $w2p_performance_dbqueries) . ' queries</p>');
-		printf('		<p><b>Page generated in %.3f seconds</b></p>', (array_sum(explode(' ', microtime())) - $w2p_performance_time));
-		print ('	</td>');
-		print ('	</tr>');
-		print ('	</table>');
-		print ('</td>');
-		print ('</tr>');
-		print ('</table>');
+		include $AppUI->getTheme()->resolveTemplate('performance');
 	}
-	echo '
-		<!--AJAX loading messagebox -->
-		<div id="loadingMessage" style="alpha(opacity=100);opacity:1;position: fixed; left: 0px; top: 1px;display: none;">
-		<table width="80" cellpadding="1" cellspacing="1" border="0">
-		<tr>
-			<td>';
-	echo w2PshowImage('ajax-loader.gif', '', '', 'web2Project', 'Server Connection Running, Please wait...');
-	echo '
-			</td>
-			<td>
-				<b>' . $AppUI->_('Loading') . '</b>
-			</td>
-		</tr>
-		</table>
-		</div>
-		<!--End AJAX loading messagebox -->';
+    include $AppUI->getTheme()->resolveTemplate('message_loading');
+
 	//close the body and html here, instead of on the theme footer.
 	echo '</body>
           </html>';
