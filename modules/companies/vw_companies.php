@@ -34,8 +34,4 @@ if (count($fields) > 0) {
 $company_types = w2PgetSysVal('CompanyType');
 $customLookups = array('company_type' => $company_types);
 
-$listTable = new w2p_Output_ListTable($AppUI);
-echo $listTable->startTable();
-echo $listTable->buildHeader($fields, true, 'companies');
-echo $listTable->buildRows($companyList, $customLookups);
-echo $listTable->endTable();
+include $AppUI->getTheme()->resolveTemplate('companies/list');
