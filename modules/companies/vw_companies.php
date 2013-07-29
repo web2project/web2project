@@ -27,36 +27,15 @@ if (count($fields) > 0) {
     $fieldNames = array('Company Name', 'Active Projects', 'Archived Projects', 'Type');
 
     $module->storeSettings('companies', 'index_list', $fieldList, $fieldNames);
-}
-?>
-<table class="tbl list">
-    <tr>
-        <?php foreach ($fieldNames as $index => $name) { ?>
-            <th>
-                <a href="?m=companies&orderby=<?php echo $fieldList[$index]; ?>" class="hdr">
-                    <?php echo $AppUI->_($fieldNames[$index]); ?>
-                </a>
-            </th>
-        <?php } ?>
-    </tr>
-<?php
-if (count($companyList) > 0) {
-    $htmlHelper = new w2p_Output_HTMLHelper($AppUI);
 
-    $company_types = w2PgetSysVal('CompanyType');
-    $customLookups = array('company_type' => $company_types);
-
-    foreach ($companyList as $row) {
-        echo '<tr>';
-        $htmlHelper->stageRowData($row);
-//TODO: The company_name used to have a Tool Tip with the description.. let's see if anyone notices/cares.
-        foreach ($fieldList as $index => $column) {
-            echo $htmlHelper->createCell($fieldList[$index], $row[$fieldList[$index]], $customLookups);
-        }
-        echo '</tr>';
-    }
-} else {
-    echo '<tr><td colspan="'.count($fieldNames).'">' . $AppUI->_('No data available') . '</td></tr>';
+    $fields = array_combine($fieldList, $fieldNames);
 }
-?>
-</table>
+
+$company_types = w2PgetSysVal('CompanyType');
+$customLookups = array('company_type' => $company_types);
+
+$listTable = new w2p_Output_ListTable($AppUI);
+echo $listTable->startTable();
+echo $listTable->buildHeader($fields, true, 'companies');
+echo $listTable->buildRows($companyList, $customLookups);
+echo $listTable->endTable();
