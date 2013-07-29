@@ -8,21 +8,12 @@ global $AppUI, $search_string, $owner_filter_id, $tab, $orderby, $orderdir;
 $type_filter = $tab - 1;
 
 $company = new CCompany();
-$companyList = $company->getCompanyList(null, $type_filter, $search_string, $owner_filter_id, $orderby, $orderdir);
-
-$fieldList = array();
-$fieldNames = array();
+$items = $company->getCompanyList(null, $type_filter, $search_string, $owner_filter_id, $orderby, $orderdir);
 
 $module = new w2p_Core_Module();
 $fields = $module->loadSettings('companies', 'index_list');
 
-if (count($fields) > 0) {
-    $fieldList = array_keys($fields);
-    $fieldNames = array_values($fields);
-} else {
-    // TODO: This is only in place to provide an pre-upgrade-safe
-    //   state for versions earlier than v3.0
-    //   At some point at/after v4.0, this should be deprecated
+if (0 == count($fields)) {
     $fieldList = array('company_name', 'countp', 'inactive', 'company_type');
     $fieldNames = array('Company Name', 'Active Projects', 'Archived Projects', 'Type');
 
