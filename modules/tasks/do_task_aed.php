@@ -13,6 +13,7 @@ $hassign = w2PgetParam($_POST, 'hassign');
 $hperc_assign = w2PgetParam($_POST, 'hperc_assign');
 $hdependencies = w2PgetParam($_POST, 'hdependencies', '');
 $notify = (int) w2PgetParam($_POST, 'task_notify', 0);
+$_POST['task_notify'] = $notify;
 $comment = w2PgetParam($_POST, 'email_comment', '');
 $new_task_project = (int) w2PgetParam($_POST, 'new_task_project', 0);
 
