@@ -98,6 +98,7 @@
 'Monday'=>'Maandag',
 'My'=>'Mijn',
 'My Info'=>'Mijn info',
+'My Tasks'=>'Mijn Taken',
 'Name'=>'Naam',
 'New Password'=>'Nieuw wachtwoord',
 'New User Password created and emailed to you'=>'Nieuw wachtwoord is aangemaakt en naar je geemaild',

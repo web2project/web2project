@@ -1,8 +1,11 @@
 ##
 ## DO NOT MODIFY THIS FILE BY HAND!
 ##
+''=>'Voeg resource toe',
 'Add Resource'=>'Voeg resource toe',
 'All Resources'=>'Alle resources',
+'Allocation'=>'Toewijzingen',
+'Assigned to event'=>'Toegewezen aan afspraak',
 'Description'=>'Omschrijving',
 'Details'=>'Details',
 'Equipment'=>'Apparatuur',
@@ -11,10 +14,13 @@
 'Max Allocation %'=>'Max toegewezen %',
 'Maximum Allocation Percentage'=>'Maximum toegewezen percentage',
 'Notes'=>'Aantekeningen',
+'OVERALLOCATED'=>'OVERBEZET',
+'Other resources'=>'Andere resources',
+'Resource'=>'Resource',
 'Resource ID'=>'Resource ID',
 'Resource Name'=>'Resource naam',
+'Resource Type'=>'Resource type',
 'Tool'=>'Gereedschap',
-''=>'Voeg resource toe',
 'Type'=>'Type',
 'Venue'=>'Zaal',
 'back'=>'terug',
