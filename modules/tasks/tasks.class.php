@@ -867,6 +867,28 @@ class CTask extends w2p_Core_BaseObject
         parent::hook_postStore();
     }
 
+    protected function _updatePathEnumeration()
+    {
+        $q = $this->_getQuery();
+
+        if ($this->task_id == $this->task_parent) {
+            $path = $this->task_id;
+        } else {
+            $q->addQuery('task_path_enumeration');
+            $q->addTable('tasks');
+            $q->addWhere('task_id = ' . $this->task_parent);
+            $parent = $q->loadResult();
+            $path = $parent . '/' . $this->task_id;
+        }
+        $q->clear();
+
+        $q->addTable('tasks');
+        $q->addUpdate('task_path_enumeration', $path);
+        $q->addUpdate('task_updated', "'" . $q->dbfnNowWithTZ() . "'", false, true);
+        $q->addWhere('task_id = ' . (int) $this->task_id);
+        $q->exec();
+    }
+
     protected function hook_postUpdate()
     {
         $q = $this->_query;
