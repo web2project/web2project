@@ -347,120 +347,94 @@ class CTask extends w2p_Core_BaseObject
         return $this->load($oid, $strip);
     }
 
-    public function updateDynamics($fromChildren = false)
+    public function updateDynamics()
     {
-        //Has a parent or children, we will check if it is dynamic so that it's info is updated also
-        $modified_task = new CTask();
-        $modified_task->overrideDatabase($this->_query);
-
-        if ($fromChildren) {
-            $modified_task = &$this;
-        } else {
-            $modified_task->load($this->task_parent);
-            $modified_task->htmlDecode();
-        }
-
         $q = $this->_getQuery();
-        if ($modified_task->task_dynamic == '1') {
-            //Update allocated hours based on children with duration type of 'hours'
+        $q->addTable('tasks');
+        $q->addQuery('task_id, task_path_enumeration, task_duration_type');
+        $q->addWhere('task_dynamic = 1');
+        $q->addWhere('task_project = ' . $this->task_project);
+        $q->addOrder('length(task_path_enumeration)');
+        $dynamics = $q->loadList(-1, 'task_id');
+
+        foreach($dynamics as $key => $data) {
+            $path = $data['task_path_enumeration'];
+
+            $q->clear();
+            $q->addTable('tasks');
+            $q->addQuery('MIN(task_start_date) as min_date');
+            $q->addQuery('MAX(task_end_date) as max_date');
+            $q->addWhere("task_path_enumeration LIKE '$path%' ");
+            $dates = $q->loadHash();
+
+            $min_date = $dates['min_date'];
+            $max_date = $dates['max_date'];
+
+            //Collect allocated hours based on children with duration type of 'hours'
+            $q->clear();
             $q->addTable('tasks');
             $q->addQuery('SUM(task_duration * task_duration_type)');
-            $q->addWhere('task_parent = ' . (int) $modified_task->task_id . ' AND task_id <> ' . $modified_task->task_id . ' AND task_duration_type = 1 ');
-            $q->addGroup('task_parent');
-            $children_allocated_hours1 = (float) $q->loadResult();
+            $q->addWhere("task_path_enumeration LIKE '$path/%' AND task_duration_type = 1 ");
+            $children_allocated_hours = (float) $q->loadResult();
+            //Collect allocated hours based on children with duration type of 'days'
             $q->clear();
-
-            /*
-             * Update allocated hours based on children with duration type of 'days'
-             * use the daily working hours instead of the full 24 hours to calculate
-             * dynamic task duration!
-             */
             $q->addTable('tasks');
             $q->addQuery(' SUM(task_duration * ' . w2PgetConfig('daily_working_hours') . ')');
-            $q->addWhere('task_parent = ' . (int) $modified_task->task_id . ' AND task_id <> ' . $modified_task->task_id . ' AND task_duration_type <> 1 ');
+            $q->addWhere("task_path_enumeration LIKE '$path/%' AND task_duration_type <> 1 ");
             $q->addGroup('task_parent');
-            $children_allocated_hours2 = (float) $q->loadResult();
-            $q->clear();
+            $children_allocated_days = (float) $q->loadResult();
 
-            // sum up the two distinct duration values for the children with duration type 'hrs'
-            // and for those with the duration type 'day'
-            $children_allocated_hours = $children_allocated_hours1 + $children_allocated_hours2;
-
-            if ($modified_task->task_duration_type == 1) {
-                $modified_task->task_duration = round($children_allocated_hours, 2);
+            /**
+             * Sum up the two distinct duration values for the children with
+             *   duration type 'hrs' and for those with the duration type 'day'
+             */
+            $children_allocated_total = $children_allocated_hours + $children_allocated_days;
+            if (1 == $data['task_duration_type']) {
+                $children_allocated_total = round($children_allocated_total, 2);
+                $duration_type = 1;
             } else {
-                $modified_task->task_duration = round($children_allocated_hours / w2PgetConfig('daily_working_hours'), 2);
+                $children_allocated_total = round($children_allocated_total / w2PgetConfig('daily_working_hours'), 2);
+                $duration_type = 24;
             }
 
-            //Update worked hours based on children
+            //Collect the hours worked for non-dynamic tasks
+            $q->clear();
             $q->addTable('tasks', 't');
             $q->innerJoin('task_log', 'tl', 't.task_id = tl.task_log_task');
             $q->addQuery('SUM(task_log_hours)');
-            $q->addWhere('task_parent = ' . (int) $modified_task->task_id . ' AND task_id <> ' . $modified_task->task_id . ' AND task_dynamic <> 1 ');
+            $q->addWhere("task_path_enumeration LIKE '$path/%' AND task_dynamic <> 1");
             $children_hours_worked = (float) $q->loadResult();
+            //Collect worked hours based on dynamic children tasks
             $q->clear();
-
-            //Update worked hours based on dynamic children tasks
             $q->addTable('tasks');
             $q->addQuery('SUM(task_hours_worked)');
-            $q->addWhere('task_parent = ' . (int) $modified_task->task_id . ' AND task_id <> ' . $modified_task->task_id . ' AND task_dynamic = 1 ');
+            $q->addWhere("task_path_enumeration LIKE '$path/%' AND task_dynamic = 1");
             $children_hours_worked += (float) $q->loadResult();
+
+            //Collect percent complete based on tasks with duration type of 'hours'
             $q->clear();
-
-            $modified_task->task_hours_worked = $children_hours_worked;
-
-            //Update percent complete
-            //hours
             $q->addTable('tasks');
             $q->addQuery('SUM(task_percent_complete * task_duration * task_duration_type)');
-            $q->addWhere('task_parent = ' . (int) $modified_task->task_id . ' AND task_id <> ' . $modified_task->task_id . ' AND task_duration_type = 1 ');
-            $real_children_hours_worked = (float) $q->loadResult();
+            $q->addWhere("task_path_enumeration LIKE '$path/%' AND task_duration_type = 1 ");
+            $weighted_hours_worked = (float) $q->loadResult();
+            //Collect percent complete based on tasks with duration type of 'days'
             $q->clear();
-
-            //days
             $q->addTable('tasks');
             $q->addQuery('SUM(task_percent_complete * task_duration * ' . w2PgetConfig('daily_working_hours') . ')');
-            $q->addWhere('task_parent = ' . (int) $modified_task->task_id . ' AND task_id <> ' . $modified_task->task_id . ' AND task_duration_type <> 1 ');
-            $real_children_hours_worked += (float) $q->loadResult();
+            $q->addWhere("task_path_enumeration LIKE '$path/%' AND task_duration_type <> 1 ");
+            $weighted_hours_worked += (float) $q->loadResult();
+            $percent_complete = ceil($weighted_hours_worked / $children_allocated_total);
+
             $q->clear();
-
-            $total_hours_allocated = (float) ($modified_task->task_duration * (($modified_task->task_duration_type > 1) ? w2PgetConfig('daily_working_hours') : 1));
-            if ($total_hours_allocated > 0) {
-                $modified_task->task_percent_complete = ceil($real_children_hours_worked / $total_hours_allocated);
-            } else {
-                $q->addTable('tasks');
-                $q->addQuery('AVG(task_percent_complete)');
-                $q->addWhere('task_parent = ' . (int) $modified_task->task_id . ' AND task_id <> ' . $modified_task->task_id);
-                $modified_task->task_percent_complete = $q->loadResult();
-                $q->clear();
-            }
-
-            //Update start date
             $q->addTable('tasks');
-            $q->addQuery('MIN(task_start_date)');
-            $q->addWhere('task_parent = ' . (int) $modified_task->task_id . ' AND task_id <> ' . $modified_task->task_id . ' AND NOT ISNULL(task_start_date)' . ' AND task_start_date <>	\'0000-00-00 00:00:00\'');
-            $d = $q->loadResult();
-            $q->clear();
-            if ($d) {
-                $modified_task->task_start_date = $d;
-                $modified_task->task_start_date = $this->_AppUI->formatTZAwareTime($modified_task->task_start_date, '%Y-%m-%d %T');
-            } else {
-                $modified_task->task_start_date = '0000-00-00 00:00:00';
-            }
-
-            //Update end date
-            $q->addTable('tasks');
-            $q->addQuery('MAX(task_end_date)');
-            $q->addWhere('task_parent = ' . (int) $modified_task->task_id . ' AND task_id <> ' . $modified_task->task_id . ' AND NOT ISNULL(task_end_date)');
-            $modified_task->task_end_date = $q->loadResult();
-            $modified_task->task_end_date = $this->_AppUI->formatTZAwareTime($modified_task->task_end_date, '%Y-%m-%d %T');
-            $q->clear();
-
-            //If we are updating a dynamic task from its children we don't want to store() it
-            //when the method exists the next line in the store calling function will do that
-            if ($fromChildren == false) {
-                $modified_task->store();
-            }
+            $q->addUpdate('task_start_date',        $min_date);
+            $q->addUpdate('task_end_date',          $max_date);
+            $q->addUpdate('task_duration',          $children_allocated_total);
+            $q->addUpdate('task_duration_type',     $duration_type);
+            $q->addUpdate('task_hours_worked',      $children_hours_worked);
+            $q->addUpdate('task_percent_complete',  $percent_complete);
+            $q->addWhere("task_id = $key");
+            $q->exec();
         }
     }
 
@@ -863,6 +837,7 @@ class CTask extends w2p_Core_BaseObject
                 $old_parent->updateDynamics();
             }
         }
+        $this->_updatePathEnumeration();
 
         parent::hook_postStore();
     }
@@ -871,7 +846,7 @@ class CTask extends w2p_Core_BaseObject
     {
         $q = $this->_getQuery();
 
-        if ($this->task_id == $this->task_parent) {
+        if (0 == (int) $this->task_parent || $this->task_id == $this->task_parent) {
             $path = $this->task_id;
         } else {
             $q->addQuery('task_path_enumeration');
