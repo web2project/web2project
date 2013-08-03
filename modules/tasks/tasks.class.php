@@ -436,6 +436,8 @@ class CTask extends w2p_Core_BaseObject
             $q->addWhere("task_id = $key");
             $q->exec();
         }
+
+        CProject::updateHoursWorked($this->task_project);
     }
 
     /*
