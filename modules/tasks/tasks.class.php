@@ -354,7 +354,7 @@ class CTask extends w2p_Core_BaseObject
         $q->addQuery('task_id, task_path_enumeration, task_duration_type');
         $q->addWhere('task_dynamic = 1');
         $q->addWhere('task_project = ' . (int) $this->task_project);
-        $q->addOrder('length(task_path_enumeration)');
+        $q->addOrder('length(task_path_enumeration) DESC');
         $dynamics = $q->loadList(-1, 'task_id');
 
         foreach($dynamics as $key => $data) {
@@ -376,13 +376,13 @@ class CTask extends w2p_Core_BaseObject
             $q->clear();
             $q->addTable('tasks');
             $q->addQuery('SUM(task_duration * task_duration_type)');
-            $q->addWhere("task_path_enumeration LIKE '$path/%' AND task_duration_type = 1 ");
+            $q->addWhere("task_path_enumeration LIKE '$path/%' AND task_duration_type = 1 AND task_dynamic <> 1");
             $children_allocated_hours = (float) $q->loadResult();
             //Collect allocated hours based on children with duration type of 'days'
             $q->clear();
             $q->addTable('tasks');
             $q->addQuery(' SUM(task_duration * ' . w2PgetConfig('daily_working_hours') . ')');
-            $q->addWhere("task_path_enumeration LIKE '$path/%' AND task_duration_type <> 1 ");
+            $q->addWhere("task_path_enumeration LIKE '$path/%' AND task_duration_type <> 1 AND task_dynamic <> 1");
             $children_allocated_days = (float) $q->loadResult();
 
             /**
