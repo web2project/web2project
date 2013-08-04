@@ -364,7 +364,9 @@ class CTask extends w2p_Core_BaseObject
             $q->addTable('tasks');
             $q->addQuery('MIN(task_start_date) as min_date');
             $q->addQuery('MAX(task_end_date) as max_date');
-            $q->addWhere("task_path_enumeration LIKE '$path%' ");
+            $q->addWhere("task_path_enumeration LIKE '$path/%' ");
+            $q->addWhere("task_start_date <> '0000-00-00 00:00:00'");
+            $q->addWhere("task_end_date <> '0000-00-00 00:00:00'");
             $dates = $q->loadHash();
 
             $min_date = $dates['min_date'];
@@ -381,7 +383,6 @@ class CTask extends w2p_Core_BaseObject
             $q->addTable('tasks');
             $q->addQuery(' SUM(task_duration * ' . w2PgetConfig('daily_working_hours') . ')');
             $q->addWhere("task_path_enumeration LIKE '$path/%' AND task_duration_type <> 1 ");
-            $q->addGroup('task_parent');
             $children_allocated_days = (float) $q->loadResult();
 
             /**
@@ -783,14 +784,6 @@ class CTask extends w2p_Core_BaseObject
             $q->exec();
             $q->clear();
         }
-        $last_task_data = $this->getLastTaskData($this->task_project);
-        
-        CProject::updateTaskCache(
-            $this->task_project,
-            $last_task_data['task_id'], 
-            $last_task_data['last_date'],
-            $this->getTaskCount($this->task_project)
-        );
 
         // update dependencies
         if (!empty($this->task_id)) {
@@ -838,11 +831,6 @@ class CTask extends w2p_Core_BaseObject
                 $this->updateDynamics();
             }
 
-            $pTask = new CTask();
-            $pTask->overrideDatabase($this->_query);
-            $pTask->load($this->task_parent);
-            $pTask->updateDynamics();
-
             if ($oTsk->task_parent != $this->task_parent) {
                 $old_parent = new CTask();
                 $old_parent->overrideDatabase($this->_query);
@@ -851,14 +839,16 @@ class CTask extends w2p_Core_BaseObject
             }
         }
 
+        $this->_updatePathEnumeration();
+        $this->updateDynamics();
+
+        $last_task_data = $this->getLastTaskData($this->task_project);
         CProject::updateTaskCache(
             $this->task_project,
             $this->task_id,
             $last_task_data['last_date'],
             $this->getTaskCount($this->task_project)
         );
-        $this->_updatePathEnumeration();
-        $this->updateDynamics();
 
         parent::hook_postStore();
     }
