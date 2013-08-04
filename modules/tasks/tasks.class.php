@@ -713,9 +713,7 @@ class CTask extends w2p_Core_BaseObject
             if ($this->task_status != $oTsk->task_status) {
                 $this->updateSubTasksStatus($this->task_status);
             }
-            if ($this->task_dynamic == 1) {
-                $this->updateDynamics(true);
-            }
+
             $stored = parent::store();
         }
 
@@ -726,12 +724,21 @@ class CTask extends w2p_Core_BaseObject
         return $stored;
     }
 
-    protected function hook_preCreate() {
+    protected function hook_preCreate()
+    {
         $q = $this->_getQuery();
         $this->task_created = $q->dbfnNowWithTZ();
 
         parent::hook_preCreate();
     }
+
+    protected function hook_preDelete()
+    {
+        $this->_project_id = $this->task_project;
+
+        parent::hook_preDelete();
+    }
+
     protected function hook_postCreate()
     {
         if ($this->task_parent) {
@@ -843,21 +850,24 @@ class CTask extends w2p_Core_BaseObject
                 $old_parent->updateDynamics();
             }
         }
+
+        CProject::updateTaskCache(
+            $this->task_project,
+            $this->task_id,
+            $last_task_data['last_date'],
+            $this->getTaskCount($this->task_project)
+        );
         $this->_updatePathEnumeration();
+        $this->updateDynamics();
 
         parent::hook_postStore();
     }
 
     public function hook_postDelete()
     {
-        CProject::updateTaskCache(
-            $this->task_project,
-            $last_task_data['task_id'],
-            $last_task_data['last_date'],
-            $this->getTaskCount($this->task_project)
-        );
-
-        $this->_updatePathEnumeration();
+        $this->task_id = $this->_old_key;
+        $this->task_project = $this->_project_id;
+        $this->updateDynamics();
 
         parent::hook_postDelete();
     }
@@ -1007,10 +1017,6 @@ class CTask extends w2p_Core_BaseObject
             }
 
             $result = parent::delete();
-
-            if ($this->task_parent != $this->task_id) {
-                $this->updateDynamics();
-            }
 
             $last_task_data = $this->getLastTaskData($this->task_project);
             CProject::updateTaskCache(
