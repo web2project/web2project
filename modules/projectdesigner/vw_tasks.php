@@ -292,7 +292,7 @@ foreach ($projects as $k => $p) {
 </form>
 <table>
 <tr>
-        <td><?php echo $AppUI->_('Key'); ?>:ss</td>
+        <td><?php echo $AppUI->_('Key'); ?>:</td>
         <th>&nbsp;P&nbsp;</th>
         <td>=<?php echo $AppUI->_('Overall Priority'); ?></td>
         <th>&nbsp;U&nbsp;</th>
