@@ -507,7 +507,9 @@ class CTask extends w2p_Core_BaseObject
         $old_dependencies = array();
         $old_parents = array();
 
-        $project_start_date = new w2p_Utilities_Date($project_start_date);
+        $project_start_date = new w2p_Utilities_Date(
+            $this->_AppUI->convertToSystemTZ($project_start_date));
+        $project_start_date->next_working_day();
         $timeOffset = 0;
 
         $newTask = new CTask();
@@ -519,7 +521,7 @@ class CTask extends w2p_Core_BaseObject
          *   how much we have to shift all the tasks by.
          */
         $original_start_date = new w2p_Utilities_Date($first_task['task_start_date']);
-        $timeOffset = $original_start_date->dateDiff($project_start_date);
+        $timeOffset = $original_start_date->dateDiff($project_start_date) + 1;
 
         array_unshift($task_list, $first_task);
         foreach($task_list as $orig_task) {
