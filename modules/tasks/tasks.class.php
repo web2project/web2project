@@ -523,8 +523,7 @@ class CTask extends w2p_Core_BaseObject
 
         array_unshift($task_list, $first_task);
         foreach($task_list as $orig_task) {
-echo $orig_task['task_id'] . " -> " . $orig_task['task_start_date'] .
-    '  --  ' . $orig_task['task_end_date'] . '  --  ' . $orig_task['task_name'] . '<br />';
+            $orig_id = $orig_task['task_id'];
 
             $new_start_date = new w2p_Utilities_Date($orig_task['task_start_date']);
             $new_start_date->addDays($timeOffset);
@@ -532,11 +531,13 @@ echo $orig_task['task_id'] . " -> " . $orig_task['task_start_date'] .
             $new_end_date   = new w2p_Utilities_Date($orig_task['task_end_date']);
             $new_end_date->addDays($timeOffset);
 
-            $orig_task['task_id'] = '0000';
-            //$orig_task['task_id'] = 0;
+            $old_parents[$orig_id] = $orig_task['task_parent'];
+
+            $orig_task['task_id'] = 0;
             $orig_task['task_parent'] = 0;
             $orig_task['task_project'] = $to_project_id;
             $orig_task['task_sequence'] = 0;
+            $orig_task['task_path_enumeration'] = '';
 
             // This is necessary because we're using bind() and it shifts by timezone
             $orig_task['task_start_date'] =
@@ -544,24 +545,64 @@ echo $orig_task['task_id'] . " -> " . $orig_task['task_start_date'] .
             $orig_task['task_end_date'] =
                 $this->_AppUI->formatTZAwareTime($new_end_date->format(FMT_DATETIME_MYSQL),   '%Y-%m-%d %T');
 
+            $_newTask = new CTask();
+            $_newTask->bind($orig_task);
+            $_newTask->store();
 
-echo $orig_task['task_id'] . " -> " . $orig_task['task_start_date'] .
-    '  --  ' . $orig_task['task_end_date'] . '  --  ' . $orig_task['task_name'] . '<br />';
+            $task_map[$orig_id] = $_newTask->task_id;
 
-            $newTask = new CTask();
-            $newTask->bind($orig_task);
-            $newTask->store();
-
-echo '0000' . " -> " . $newTask->task_start_date .
-    '  --  ' . $newTask->task_end_date . '  --  ' . $newTask->task_name . '<br /><hr /><br />';
+            $old_dependencies[$orig_id] = array_keys($_newTask->getDependentTaskList($orig_id));
+            $old_new_task_mapping[$orig_id] = $_newTask->task_id;
         }
 
         if (count($errors)) {
-            // @todo delete all imported tasks
+            $this->_error = $errors;
+            foreach($old_new_task_mapping as $new_id) {
+                $newTask->task_id = $new_id;
+                $newTask->delete();
+            }
         } else {
-            // @todo continue with any normal processing
+            $q = $this->_getQuery();
+
+            /* This makes sure we have all the dependencies mapped out. */
+            foreach($old_dependencies as $from => $to_array) {
+                foreach($to_array as $to) {
+                    $q->addTable('task_dependencies');
+                    $q->addInsert('dependencies_req_task_id', $old_new_task_mapping[$from]);
+                    $q->addInsert('dependencies_task_id',     $old_new_task_mapping[$to]);
+                    $q->exec();
+                    $q->clear();
+                }
+            }
+
+            /* This makes sure all the parents are connected properly. */
+            foreach($old_parents as $old_child => $old_parent) {
+                if ($old_child == $old_parent) {
+                    /** Remember, this means skip the rest of the loop. */
+                    continue;
+                }
+                $q->addTable('tasks');
+                $q->addUpdate('task_parent', $old_new_task_mapping[$old_parent]);
+                $q->addWhere('task_id   = ' . $old_new_task_mapping[$old_child]);
+                $q->exec();
+                $q->clear();
+            }
+
+            /* This copies the task assigness to the new tasks. */
+            foreach($old_new_task_mapping as $old_id => $new_id) {
+                $newTask->task_id = $old_id;
+                $newTask->copyAssignedUsers($new_id);
+            }
         }
-die();
+
+        $_task = new CTask();
+        $task_list = $_task->loadAll('task_parent, task_id', "task_project = " . $to_project_id);
+        foreach($task_list as $key => $data) {
+            $_task->load($key);
+            $_task->_updatePathEnumeration();
+            $_task->updateDynamics();
+        }
+
         return $errors;
     }
 
