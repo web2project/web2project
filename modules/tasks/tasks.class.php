@@ -715,9 +715,9 @@ class CTask extends w2p_Core_BaseObject
             $oTsk->overrideDatabase($this->_query);
             $oTsk->load($this->task_id);
 
-            if (($msg = parent::store())) {
-                $this->_error['store'] = $msg;
-                return $msg;
+            if (!parent::store()) {
+                $this->_error['store'] = "There was an error in storing this object.";
+                return false;
             }
 
             // if task_status changed, then update subtasks
