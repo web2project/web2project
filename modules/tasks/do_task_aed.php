@@ -142,6 +142,7 @@ if ($result) {
             }
         }
     }
+    $obj->updateDynamics();
 
     $billingCategory = w2PgetSysVal('BudgetCategory');
 	$budgets = array();
