@@ -512,91 +512,58 @@ class CTask extends w2p_Core_BaseObject
 
         $newTask = new CTask();
         $task_list = $newTask->loadAll('task_start_date', "task_project = " . $from_project_id);
+        $first_task = array_shift($task_list);
 
-        foreach($task_list as $orig_id => $orig_task) {
-            /**
-             * This gets the first (earliest) task start date and figures out
-             *   how much we have to shift all the tasks by.
-             */
-            if ($orig_task == reset($task_list)) {
-                $original_start_date = new w2p_Utilities_Date($orig_task['task_start_date']);
-                $timeOffset = $original_start_date->dateDiff($project_start_date);
-            }
+        /**
+         * This gets the first (earliest) task start date and figures out
+         *   how much we have to shift all the tasks by.
+         */
+        $original_start_date = new w2p_Utilities_Date($first_task['task_start_date']);
+        $timeOffset = $original_start_date->dateDiff($project_start_date);
 
-            $orig_task['task_id'] = 0;
+        array_unshift($task_list, $first_task);
+        foreach($task_list as $orig_task) {
+echo $orig_task['task_id'] . " -> " . $orig_task['task_start_date'] .
+    '  --  ' . $orig_task['task_end_date'] . '  --  ' . $orig_task['task_name'] . '<br />';
+
+            $new_start_date = new w2p_Utilities_Date($orig_task['task_start_date']);
+            $new_start_date->addDays($timeOffset);
+
+            $new_end_date   = new w2p_Utilities_Date($orig_task['task_end_date']);
+            $new_end_date->addDays($timeOffset);
+
+            $orig_task['task_id'] = '0000';
+            //$orig_task['task_id'] = 0;
+            $orig_task['task_parent'] = 0;
             $orig_task['task_project'] = $to_project_id;
             $orig_task['task_sequence'] = 0;
 
-            $old_parents[$orig_id] = $orig_task['task_parent'];
-            $orig_task['task_parent'] = 0;
+            // This is necessary because we're using bind() and it shifts by timezone
+            $orig_task['task_start_date'] =
+                $this->_AppUI->formatTZAwareTime($new_start_date->format(FMT_DATETIME_MYSQL), '%Y-%m-%d %T');
+            $orig_task['task_end_date'] =
+                $this->_AppUI->formatTZAwareTime($new_end_date->format(FMT_DATETIME_MYSQL),   '%Y-%m-%d %T');
 
-            $tz_start_date = $this->_AppUI->formatTZAwareTime($orig_task['task_start_date'], '%Y-%m-%d %T');
-            $new_start_date = new w2p_Utilities_Date($tz_start_date);
-            $new_start_date->addDays($timeOffset);
-            $new_start_date->next_working_day();
-            $orig_task['task_start_date'] = $new_start_date->format(FMT_DATETIME_MYSQL);
 
-            $new_end_date = $new_start_date->addDuration($orig_task['task_duration'], $orig_task['task_duration_type']);
-            $orig_task['task_end_date'] = $new_end_date->format(FMT_DATETIME_MYSQL);
+echo $orig_task['task_id'] . " -> " . $orig_task['task_start_date'] .
+    '  --  ' . $orig_task['task_end_date'] . '  --  ' . $orig_task['task_name'] . '<br />';
 
+            $newTask = new CTask();
             $newTask->bind($orig_task);
-            $result = $newTask->store();
-            if (!$result) {
-                $errors = $newTask->getError();
-                break;
-            }
+            $newTask->store();
 
-            $old_dependencies[$orig_id] = array_keys($newTask->getDependentTaskList($orig_id));
-            $old_new_task_mapping[$orig_id] = $newTask->task_id;
+echo '0000' . " -> " . $newTask->task_start_date .
+    '  --  ' . $newTask->task_end_date . '  --  ' . $newTask->task_name . '<br /><hr /><br />';
         }
 
         if (count($errors)) {
-            $this->_error = $errors;
-
-            /* If there's an error, this deletes the already imported tasks. */
-            foreach($old_new_task_mapping as $new_id) {
-                $newTask->task_id = $new_id;
-                $newTask->delete();
-            }
+            // @todo delete all imported tasks
         } else {
-            $q = $this->_getQuery();
-
-            /* This makes sure we have all the dependencies mapped out. */
-            foreach($old_dependencies as $from => $to_array) {
-                foreach($to_array as $to) {
-                    $q->addTable('task_dependencies');
-                    $q->addInsert('dependencies_req_task_id', $old_new_task_mapping[$from]);
-                    $q->addInsert('dependencies_task_id',     $old_new_task_mapping[$to]);
-
-                    $q->exec();
-                    $q->clear();
-                }
-            }
-
-            /* This makes sure all the parents are connected properly. */
-            foreach($old_parents as $old_child => $old_parent) {
-                if ($old_child == $old_parent) {
-                    /** Remember, this means skip the rest of the loop. */
-                    continue;
-                }
-                $q->addTable('tasks');
-                $q->addUpdate('task_parent', $old_new_task_mapping[$old_parent]);
-                $q->addWhere('task_id   = ' . $old_new_task_mapping[$old_child]);
-                $q->exec();
-                $q->clear();
-            }
-
-            /* This copies the task assigness to the new tasks. */
-            foreach($old_new_task_mapping as $old_id => $new_id) {
-                $newTask->task_id = $old_id;
-                $newTask->copyAssignedUsers($new_id);
-            }
+            // @todo continue with any normal processing
         }
-
+die();
         return $errors;
     }
-
-    // end of importTasks
 
     public function copyAssignedUsers($destTask_id)
     {
