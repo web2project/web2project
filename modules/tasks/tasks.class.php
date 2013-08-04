@@ -353,7 +353,7 @@ class CTask extends w2p_Core_BaseObject
         $q->addTable('tasks');
         $q->addQuery('task_id, task_path_enumeration, task_duration_type');
         $q->addWhere('task_dynamic = 1');
-        $q->addWhere('task_project = ' . $this->task_project);
+        $q->addWhere('task_project = ' . (int) $this->task_project);
         $q->addOrder('length(task_path_enumeration)');
         $dynamics = $q->loadList(-1, 'task_id');
 
@@ -423,7 +423,11 @@ class CTask extends w2p_Core_BaseObject
             $q->addQuery('SUM(task_percent_complete * task_duration * ' . w2PgetConfig('daily_working_hours') . ')');
             $q->addWhere("task_path_enumeration LIKE '$path/%' AND task_duration_type <> 1 ");
             $weighted_hours_worked += (float) $q->loadResult();
-            $percent_complete = ceil($weighted_hours_worked / $children_allocated_total);
+            if (0 == $children_allocated_total) {
+                $percent_complete = 0;
+            } else {
+                $percent_complete = ceil($weighted_hours_worked / $children_allocated_total);
+            }
 
             $q->clear();
             $q->addTable('tasks');
@@ -437,7 +441,7 @@ class CTask extends w2p_Core_BaseObject
             $q->exec();
         }
 
-        CProject::updateHoursWorked($this->task_project);
+        CProject::updateHoursWorked((int) $this->task_project);
     }
 
     /*
@@ -842,6 +846,20 @@ class CTask extends w2p_Core_BaseObject
         $this->_updatePathEnumeration();
 
         parent::hook_postStore();
+    }
+
+    public function hook_postDelete()
+    {
+        CProject::updateTaskCache(
+            $this->task_project,
+            $last_task_data['task_id'],
+            $last_task_data['last_date'],
+            $this->getTaskCount($this->task_project)
+        );
+
+        $this->_updatePathEnumeration();
+
+        parent::hook_postDelete();
     }
 
     protected function _updatePathEnumeration()
