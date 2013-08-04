@@ -64,6 +64,8 @@ if ($inc === null)
 
 $this_day->setTime($start, 0, 0);
 
+$event = new CEvent();
+
 $html = '<form action="'.$_SERVER['REQUEST_URI'].'" method="post" name="pickFilter" accept-charset="utf-8">';
 $html .= $AppUI->_('Event Filter') . ':' . arraySelect($event_filter_list, 'event_filter', 'onChange="document.pickFilter.submit()" class="text"', $event_filter, true);
 if ($other_users) {
@@ -80,8 +82,6 @@ if ($other_users) {
 	$html .= '</select>';
 
 }
-
-$event = new CEvent();
 
 $html .= '</form>';
 $html .= '<table cellspacing="1" cellpadding="2" border="0" width="100%" class="tbl">';
