@@ -118,7 +118,7 @@ for ($i = 0, $n = ($end - $start) * 60 / $inc; $i < $n; $i++) {
 		}
 	} else {
 		if (--$rows <= 0) {
-			$html .= '<td></td>';
+			$html .= '<td colspan="20"></td>';
 		}
 	}
 
