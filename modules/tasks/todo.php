@@ -3,12 +3,15 @@ if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
 
+global $AppUI, $task_type, $min_view;
+
+
 $tab = $AppUI->processIntState('ToDoTab', $_GET, 'tab', 0);
 
 if (isset($_POST['task_type'])) {
 	$AppUI->setState('ToDoTaskType', w2PgetParam($_POST, 'task_type', ''));
 }
-global $task_type, $min_view;
+
 $task_type = $AppUI->getState('ToDoTaskType') !== null ? $AppUI->getState('ToDoTaskType') : '';
 
 $project_id = (int) w2PgetParam($_GET, 'project_id', 0);
