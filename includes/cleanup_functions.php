@@ -833,6 +833,9 @@ function array_csort() { //coded by Ichier2003
 		} else {
 			$sortarr[$i] = $arg;
 		}
+        if (!is_array($sortarr[$i])) {
+            continue;
+        }
 		$msortline .= '$sortarr[' . $i . '],';
 	}
 	$msortline .= '$marray));';
