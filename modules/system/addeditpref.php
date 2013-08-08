@@ -126,31 +126,6 @@ echo '<div style="padding-top: ' . $spacing . 'px;"> </div>';
         ?>
 	</td>
 </tr>
-<tr>
-	<td align="right"><?php echo $AppUI->_('Daylight Savings?'); ?>:</td>
-	<td>
-		<input type="hidden" name="pref_name[DAYLIGHTSAVINGS]" id="daylight_savings" value="<?php echo $prefs['DAYLIGHTSAVINGS']; ?>" />
-        <?php
-            echo '<input type="checkbox" name="daylightsavings"';
-            if ($prefs['DAYLIGHTSAVINGS']) {
-                echo ' checked="checked"';
-            }
-            echo ' />';
-        ?>
-	</td>
-</tr>
-<tr>
-    <td>&nbsp;</td>
-    <td colspan="2">
-        <?php
-            if (version_compare($AppUI->getVersion(), '2.0', '<' )) {
-                echo '&nbsp;&nbsp;';
-                echo $AppUI->_('As of web2project v1.3, timezones are included for information purposes only.');
-                echo $AppUI->_('No calculations or displayes are affected by setting a timezones.');
-            }
-        ?>
-    </td>
-</tr>
 
 <?php if ($user_id && $prefs['TABVIEW'] != 1) { ?>
 <tr>
