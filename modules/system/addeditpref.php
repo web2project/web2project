@@ -152,6 +152,7 @@ echo '<div style="padding-top: ' . $spacing . 'px;"> </div>';
     </td>
 </tr>
 
+<?php if ($user_id && $prefs['TABVIEW'] != 1) { ?>
 <tr>
 	<td align="right"><?php echo $AppUI->_('Tabbed Box View'); ?>:</td>
 	<td>
@@ -161,6 +162,9 @@ echo arraySelect($tabview, 'pref_name[TABVIEW]', 'class=text size=1', $prefs['TA
 ?>
 	</td>
 </tr>
+<?php } else { ?>
+    <input type="hidden" name="pref_name[TABVIEW]" value="1" />
+<?php } ?>
 
 <tr>
 	<td align="right"><?php echo $AppUI->_('Short Date Format'); ?>:</td>
