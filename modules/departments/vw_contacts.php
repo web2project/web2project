@@ -5,7 +5,7 @@ if (!defined('W2P_BASE_DIR')) {
 
 global $AppUI, $dept_id, $dept, $company_id;
 
-$contacts = CDepartment::getContactList($AppUI, $dept_id);
+$items = CDepartment::getContactList($AppUI, $dept_id);
 
 $fieldList = array();
 $fieldNames = array();
@@ -26,35 +26,14 @@ if (count($fields) > 0) {
         'Department');
 
     $module->storeSettings('contacts', 'department_view', $fieldList, $fieldNames);
-}
-?>
-<a name="contacts-department_view"> </a>
-<table class="tbl list">
-    <tr>
-        <?php foreach ($fieldNames as $index => $name) { ?>
-            <th><?php echo $AppUI->_($fieldNames[$index]); ?></th>
-        <?php } ?>
-    </tr>
-<?php
-if (count($contacts) > 0) {
-	$htmlHelper = new w2p_Output_HTMLHelper($AppUI);
 
-    foreach ($contacts as $row) {
-        echo '<tr>';
-        $htmlHelper->stageRowData($row);        
-        foreach ($fieldList as $index => $column) {
-            echo $htmlHelper->createCell($fieldList[$index], $row[$fieldList[$index]]);
-        }
-        echo '</tr>';
-	}
-} else {
-	echo '<tr><td colspan="'.count($fieldNames).'">' . $AppUI->_('No data available') . '</td></tr>';
+    $fields = array_combine($fieldList, $fieldNames);
 }
-?>
 
-	<tr>
-		<td colspan="<?php echo count($fieldList); ?>" align="right" valign="top" style="background-color:#ffffff">
-			<input type="button" class=button value="<?php echo $AppUI->_('new contact') ?>" onClick="javascript:window.location='./index.php?m=contacts&a=addedit&company_id=<?php echo $company->company_id; ?>'">
-		</td>
-	</tr>
-</table>
+?><a name="contacts-department_view"> </a><?php
+
+$listTable = new w2p_Output_ListTable($AppUI);
+echo $listTable->startTable();
+echo $listTable->buildHeader($fields);
+echo $listTable->buildRows($items, $customLookups);
+echo $listTable->endTable();
