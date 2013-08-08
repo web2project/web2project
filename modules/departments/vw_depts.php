@@ -10,19 +10,10 @@ $type_filter = $tab - 1;
 $dept = new CDepartment();
 $items = $dept->getFilteredDepartmentList(null, $type_filter, $search_string, $owner_filter_id, $orderby, $orderdir);
 
-$fieldList = array();
-$fieldNames = array();
-
 $module = new w2p_Core_Module();
 $fields = $module->loadSettings('departments', 'index_list');
 
-if (count($fields) > 0) {
-    $fieldList = array_keys($fields);
-    $fieldNames = array_values($fields);
-} else {
-    // TODO: This is only in place to provide an pre-upgrade-safe
-    //   state for versions earlier than v3.0
-    //   At some point at/after v4.0, this should be deprecated
+if (0 == count($fields)) {
     $fieldList = array('dept_name', 'countp', 'inactive', 'dept_type');
     $fieldNames = array('Department Name', 'Active Projects', 'Archived Projects', 'Type');
 
