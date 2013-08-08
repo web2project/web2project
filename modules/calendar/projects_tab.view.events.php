@@ -5,8 +5,8 @@ if (!defined('W2P_BASE_DIR')) {
 
 global $AppUI, $project_id;
 
-$start_date =  new w2p_Utilities_Date('2001-01-01 00:00:00');
-$end_date =  new w2p_Utilities_Date('2100-12-31 23:59:59');
+$start_date = new w2p_Utilities_Date('2001-01-01 00:00:00');
+$end_date = new w2p_Utilities_Date('2100-12-31 23:59:59');
 
 $items = CEvent::getEventsForPeriod($start_date, $end_date, 'all', 0, $project_id);
 

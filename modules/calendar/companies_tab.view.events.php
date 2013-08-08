@@ -8,7 +8,6 @@ global $AppUI, $company_id;
 $start_date = new w2p_Utilities_Date('1999-12-31 00:00:00');
 $end_date = new w2p_Utilities_Date('2036-12-31 00:00:00');
 
-// assemble the links for the events
 $items = CEvent::getEventsForPeriod($start_date, $end_date, 'all', 0, 0, $company_id);
 
 $module = new w2p_Core_Module();
@@ -23,6 +22,8 @@ if (0 == count($fields)) {
 
     $fields = array_combine($fieldList, $fieldNames);
 }
+
+
 
 $event_types = w2PgetSysVal('EventType');
 $customLookups = array('event_type' => $event_types);
