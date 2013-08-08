@@ -12,6 +12,7 @@ class CForum_Message extends w2p_Core_BaseObject
     public $message_author = null;
     public $message_editor = null;
     public $message_title = null;
+    // @todo this should be message_datetime to take advantage of our templating
     public $message_date = null;
     public $message_body = null;
     public $message_published = null;

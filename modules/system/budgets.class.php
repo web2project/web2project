@@ -9,6 +9,7 @@ class CSystem_Budget extends w2p_Core_BaseObject
 
     public $budget_id = null;
     public $budget_company = null;
+    // @todo convert this to budget_department for v4.0
     public $budget_dept = null;
     public $budget_start_date = null;
     public $budget_end_date = null;

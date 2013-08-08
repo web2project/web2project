@@ -40,10 +40,10 @@ foreach ($ppriority_color as $key => $val) {
 
 class CProject extends w2p_Core_BaseObject
 {
-
     public $project_id = null;
     public $project_company = null;
     public $project_name = null;
+    // @todo convert this to project_shortname for v4.0
     public $project_short_name = null;
     public $project_owner = null;
     public $project_url = null;

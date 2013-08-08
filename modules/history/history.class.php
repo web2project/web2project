@@ -3,8 +3,10 @@
  * @package     web2project\modules\misc
  */
 
-class CHistory extends w2p_Core_BaseObject {
+class CHistory extends w2p_Core_BaseObject
+{
     public $history_id = null;
+    // @todo this should be history_datetime to take advantage of our templating
     public $history_date = null;
     public $history_user = null;
     public $history_action = null;

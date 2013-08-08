@@ -32,6 +32,7 @@ class CTask extends w2p_Core_BaseObject
     public $task_milestone = null;
     public $task_project = null;
     public $task_owner = null;
+    // @todo this should be task_start_datetime to take advantage of our templating
     public $task_start_date = null;
     public $task_duration = null;
     public $task_duration_type = null;
@@ -45,6 +46,7 @@ class CTask extends w2p_Core_BaseObject
      * @deprecated
      */
     public $task_hours_worked = null;
+    // @todo this should be task_end_datetime to take advantage of our templating
     public $task_end_date = null;
     public $task_status = null;
     public $task_priority = null;

@@ -18,7 +18,9 @@ class CEvent extends w2p_Core_BaseObject
       @var string The title of the event */
     //TODO: because this is title instead of name, it doesn't match our convention. Ugh. - kc 19 Sept 2011
     public $event_name = null;
+    // @todo this should be event_start_datetime to take advantage of our templating
     public $event_start_date = null;
+    // @todo this should be event_end_datetime to take advantage of our templating
     public $event_end_date = null;
     public $event_parent = null;
     public $event_description = null;

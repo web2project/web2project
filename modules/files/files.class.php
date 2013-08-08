@@ -15,6 +15,7 @@ class CFile extends w2p_Core_BaseObject {
 	public $file_description = null;
 	public $file_type = null;
 	public $file_owner = null;
+    // @todo this should be file_datetime to take advantage of our templating
 	public $file_date = null;
 	public $file_size = null;
 	public $file_version = null;

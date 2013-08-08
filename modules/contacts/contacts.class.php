@@ -11,12 +11,10 @@ class CContact extends w2p_Core_BaseObject
       @public int */
     public $contact_id = null;
 
-    /**
-      @public string */
+    // @todo this should be contact_firstname to take advantage of our templating
     public $contact_first_name = null;
 
-    /**
-      @public string */
+    // @todo this should be contact_lastname to take advantage of our templating
     public $contact_last_name = null;
     public $contact_display_name = null;
     public $contact_title = null;

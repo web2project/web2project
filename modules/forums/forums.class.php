@@ -23,7 +23,9 @@ class CForum extends w2p_Core_BaseObject
     public $forum_status = null;
     public $forum_owner = null;
     public $forum_name = null;
+    // @todo this should be forum_create_datetime to take advantage of our templating
     public $forum_create_date = null;
+    // @todo this should be forum_last_datetime to take advantage of our templating
     public $forum_last_date = null;
     public $forum_last_id = null;
     public $forum_message_count = null;

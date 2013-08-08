@@ -3,8 +3,12 @@
  * @package     web2project\modules\misc
  */
 
-class CDepartment extends w2p_Core_BaseObject {
-	public $dept_id = null;
+class CDepartment extends w2p_Core_BaseObject
+{
+    /**
+     * @todo these parameters should use department_ not dept_ as the prefix
+     */
+    public $dept_id = null;
 	public $dept_parent = null;
 	public $dept_company = null;
 	public $dept_name = null;

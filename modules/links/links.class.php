@@ -14,6 +14,7 @@ class CLink extends w2p_Core_BaseObject
     public $link_parent = null;
     public $link_description = null;
     public $link_owner = null;
+    // @todo this should be link_datetime to take advantage of our templating
     public $link_date = null;
     public $link_icon = null;
     public $link_category = null;

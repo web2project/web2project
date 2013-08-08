@@ -137,6 +137,7 @@ class CTask_Log extends w2p_Core_BaseObject
      * @access public
      */
     public $task_log_percent_complete;
+    // @todo this should be task_log_task_end_datetime to take advantage of our templating
     public $task_log_task_end_date;
 
     /**
