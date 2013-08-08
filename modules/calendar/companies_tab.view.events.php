@@ -14,14 +14,13 @@ $start_date = new w2p_Utilities_Date('1999-12-31 00:00:00');
 $end_date = new w2p_Utilities_Date('2036-12-31 00:00:00');
 
 // assemble the links for the events
-$events = CEvent::getEventsForPeriod($start_date, $end_date, 'all', 0, 0, $company_id);
+$items = CEvent::getEventsForPeriod($start_date, $end_date, 'all', 0, 0, $company_id);
 
 $start_hour = w2PgetConfig('cal_day_start');
 $end_hour = w2PgetConfig('cal_day_end');
 
 $tf = $AppUI->getPref('TIMEFORMAT');
 $df = $AppUI->getPref('SHDATEFORMAT');
-$types = w2PgetSysVal('EventType');
 
 $fieldList = array();
 $fieldNames = array();
@@ -40,46 +39,17 @@ if (count($fields) > 0) {
         'event_name');
     $fieldNames = array('Starting Time', 'Ending Time', 'Type', 'Name');
 
-    $module->storeSettings('events', 'company_view', $fieldList, $fieldNames);
+    //$module->storeSettings('events', 'company_view', $fieldList, $fieldNames);
+
+    $fields = array_combine($fieldList, $fieldNames);
 }
-?>
-<table class="tbl list">
-    <tr>
-        <?php
-        foreach ($fieldNames as $index => $name) {
-            ?><th nowrap="nowrap">
-                    <?php echo $AppUI->_($fieldNames[$index]); ?>
-            </th><?php
-        }
-        ?>
-    </tr>
-<?php
 
-$html = '';
-if (count($events)) {
-    $htmlHelper = new w2p_Output_HTMLHelper($AppUI);
-    $htmlHelper->df .= ' ' . $AppUI->getPref('TIMEFORMAT');
+$event_types = w2PgetSysVal('EventType');
+$customLookups = array('event_type' => $event_types);
 
-    foreach ($events as $row) {
-        $html .= '<tr>';
-        $html .= $htmlHelper->createCell('event_start_date', $row['event_start_date']);
-        $html .= $htmlHelper->createCell('event_start_date', $row['event_end_date']);
-
-        $href = '?m=calendar&a=view&event_id=' . $row['event_id'];
-        $alt = $row['event_description'];
-
-        $html .= '<td width="10%" nowrap="nowrap">';
-        $html .= w2PshowImage('event' . $row['event_type'] . '.png', 16, 16, '', '', 'calendar');
-        $html .= '&nbsp;<b>' . $AppUI->_($types[$row['event_type']]) . '</b><td>';
-        $html .= $href ? '<a href="' . $href . '" class="event" title="' . $alt . '">' : '';
-        $html .= $row['event_name'];
-        $html .= $href ? '</a>' : '';
-
-        $html .= '</td></tr>';
-    }
-} else {
-    echo '<tr><td colspan="'.count($fieldNames).'">' . $AppUI->_('No data available') . '</td></tr>';
-}
-echo $html;
-?>
-</table>
+$listTable = new w2p_Output_ListTable($AppUI);
+$listTable->df .= ' ' . $AppUI->getPref('TIMEFORMAT');      // @todo cleanup this hack
+echo $listTable->startTable();
+echo $listTable->buildHeader($fields);
+echo $listTable->buildRows($items, $customLookups);
+echo $listTable->endTable();
