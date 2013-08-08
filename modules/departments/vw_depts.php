@@ -8,7 +8,7 @@ global $AppUI, $search_string, $owner_filter_id, $tab, $orderby, $orderdir;
 $type_filter = $tab - 1;
 
 $dept = new CDepartment();
-$depts = $dept->getFilteredDepartmentList(null, $type_filter, $search_string, $owner_filter_id, $orderby, $orderdir);
+$items = $dept->getFilteredDepartmentList(null, $type_filter, $search_string, $owner_filter_id, $orderby, $orderdir);
 
 $fieldList = array();
 $fieldNames = array();
@@ -27,32 +27,15 @@ if (count($fields) > 0) {
     $fieldNames = array('Department Name', 'Active Projects', 'Archived Projects', 'Type');
 
     $module->storeSettings('departments', 'index_list', $fieldList, $fieldNames);
-}
-?>
-<table class="tbl list">
-    <tr>
-        <?php foreach ($fieldNames as $index => $name) { ?>
-            <th><?php echo $AppUI->_($fieldNames[$index]); ?></th>
-        <?php } ?>
-    </tr>
-<?php
-if (count($depts)) {
-	$htmlHelper = new w2p_Output_HTMLHelper($AppUI);
 
-    $deptTypes = w2PgetSysVal('DepartmentType');
-    $customLookups = array('dept_type' => $deptTypes);
-
-    foreach ($depts as $row) {
-        echo '<tr>';
-        $htmlHelper->stageRowData($row);
-//TODO: how do we tweak this to get the parent/child relationship to display?
-        foreach ($fieldList as $index => $column) {
-            echo $htmlHelper->createCell($fieldList[$index], $row[$fieldList[$index]], $customLookups);
-        }
-        echo '</tr>';
-	}
-} else {
-    echo '<tr><td colspan="'.count($fieldNames).'">' . $AppUI->_('No data available') . '</td></tr>';
+    $fields = array_combine($fieldList, $fieldNames);
 }
-?>
-</table>
+
+$deptTypes = w2PgetSysVal('DepartmentType');
+$customLookups = array('dept_type' => $deptTypes);
+
+$listTable = new w2p_Output_ListTable($AppUI);
+echo $listTable->startTable();
+echo $listTable->buildHeader($fields);
+echo $listTable->buildRows($items, $customLookups);
+echo $listTable->endTable();
