@@ -173,7 +173,7 @@ class w2p_Output_HTMLHelper
                 $prefix = ($prefix == 'project_short')  ? 'project' : $prefix;
                 $prefix = ($prefix == 'dept')  ? 'department' : $prefix;
                 $page   = ($prefix == 'forum' || $prefix == 'message') ? 'viewer' : 'view';
-                $link   = ($prefix == 'file') ? 'fileviewer.php?' : '?m='. w2p_pluralize($prefix) .'&a='.$page.'&';
+                $link   = '?m='. w2p_pluralize($prefix) .'&a='.$page.'&';
                 $link   = ($prefix == 'event') ? '?m=calendar&a='.$page.'&' : $link;
                 $link   = ($prefix == 'user') ? '?m=admin&a=viewuser&' : $link;
                 $link   = ($prefix == 'message') ? '?m=forums&a='.$page . '&' : $link;
