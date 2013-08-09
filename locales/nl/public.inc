@@ -1,0 +1,23 @@
+##
+## DO NOT MODIFY THIS FILE BY HAND!
+##
+'Access Denied'=>'Toegang geweigerd',
+'Allowed Companies'=>'Toegestane bedrijven',
+'Color Selector'=>'Kleurkiezer',
+'Contacts for'=>'Contacten voor',
+'Continue'=>'Ga door',
+'Current Password'=>'Huidig wachtwoord',
+'New Password'=>'Nieuw wachtwoord',
+'Preset'=>'Voorgedefinieerd',
+''=>'Toegang geweigerd',
+'Repeat New Password'=>'Herhaal nieuw wachtwoord',
+'View all allowed companies'=>'Toon alle toegestane bedrijven',
+'[none]'=>'[geen]',
+'accessDeniedMsg'=>'Je hebt getracht een item in Web2Project te benaderen zonder de daartoe benodigde rechten. Neem svp contact op met de Web2Project systeembeheerder.',
+'chgpwLogin'=>'Gebruiker bestaat niet',
+'chgpwUpdated'=>'Je wachtwoord is gewijzigd',
+'chgpwWrongPW'=>'Je hebt het verkeerde oude wachtwoord ingevoerd',
+'colorLegend'=>'Kies een kleur die uniek is voor je selectie en sluit de Kleurkiezer.',
+'nodepartments, companies, permissions'=>'geen afdelingen, bedrijven, rechten',
+'notasks'=>'Geen taken voorhande',
+'submit'=>'Verstuur',
