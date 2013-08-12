@@ -63,12 +63,6 @@ function submitIt() {
 	expanded.value = mask;
 
 	defs.value = mask;
-	var daylight = document.getElementById('daylight_savings');
-	var mask = 0;
-	if (form.daylightsavings.checked) {
-		mask += 1;
-	}
-	daylight.value = mask;
 	form.submit();
 }
 </script>
