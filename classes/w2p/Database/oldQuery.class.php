@@ -75,26 +75,6 @@ class w2p_Database_oldQuery {
 		$this->_query_id = null;
 	}
 
-	/** Add item to an internal associative array
-	 *
-	 * Used internally with w2p_Database_Query
-	 *
-	 * @param	$varname	Name of variable to add/create
-	 * @param	$name	Data to add
-	 * @param	$id	Index to use in array.
-	 */
-	public function addMap($varname, $name, $id) {
-        error_log(__FUNCTION__ . ' has been deprecated', E_USER_WARNING);
-		if (!isset($this->$varname)) {
-			$this->$varname = array();
-		}
-		if (isset($id)) {
-			$this->{$varname}[$id] = $name;
-		} else {
-			$this->{$varname}[] = $name;
-		}
-	}
-
 	/** Insert a value into the database
 	 * @param $field The field to insert the value into
 	 * @param $value The specified value
@@ -593,5 +573,25 @@ class w2p_Database_oldQuery {
             }
         }
         return $result;
+    }
+
+    /** Add item to an internal associative array
+     *
+     * Used internally with w2p_Database_Query
+     *
+     * @param	$varname	Name of variable to add/create
+     * @param	$name	Data to add
+     * @param	$id	Index to use in array.
+     */
+    public function addMap($varname, $name, $id) {
+        error_log(__FUNCTION__ . ' has been deprecated', E_USER_WARNING);
+        if (!isset($this->$varname)) {
+            $this->$varname = array();
+        }
+        if (isset($id)) {
+            $this->{$varname}[$id] = $name;
+        } else {
+            $this->{$varname}[] = $name;
+        }
     }
 }
