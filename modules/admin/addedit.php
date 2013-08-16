@@ -35,25 +35,15 @@ foreach ($roles as $role) {
 }
 $roles_arr = arrayMerge(array(0 => ''), $roles_arr);
 
-//TODO: These queries should be replaced with the standard load methods.
 if ($contact_id) {
-    $q = new w2p_Database_Query;
-    $q->addTable('contacts', 'con');
-    $q->addQuery('con.*, company_id, company_name, dept_name');
-    $q->addJoin('companies', 'com', 'contact_company = company_id');
-    $q->addJoin('departments', 'dep', 'dept_id = contact_department');
-    $q->addWhere('con.contact_id = ' . (int)$contact_id);
+    $contact = new CContact();
+    $contact->loadFull(null, $contact_id);
+    $user = get_object_vars($contact);
 } else {
-    $q = new w2p_Database_Query;
-    $q->addTable('users', 'u');
-    $q->addQuery('u.*');
-    $q->addQuery('con.*, company_id, company_name, dept_name');
-    $q->addJoin('contacts', 'con', 'user_contact = contact_id', 'inner');
-    $q->addJoin('companies', 'com', 'contact_company = company_id');
-    $q->addJoin('departments', 'dep', 'dept_id = contact_department');
-    $q->addWhere('u.user_id = ' . (int)$user_id);
+    $user = new CUser();
+    $user->loadFull($user_id);
+    $user = get_object_vars($user);
 }
-$user = $q->loadHash();
 
 if (!$user && $user_id > 0) {
     $titleBlock = new w2p_Theme_TitleBlock('Invalid User ID', 'helix-setup-user.png', $m, $m . '.' . $a);
