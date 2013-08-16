@@ -8,15 +8,7 @@ $event_filter_list = array('my' => 'My Events', 'own' => 'Events I Created', 'al
 
 class CEvent extends w2p_Core_BaseObject
 {
-
-    /**
-     * @var int
-     */
     public $event_id = null;
-
-    /**
-      @var string The title of the event */
-    //TODO: because this is title instead of name, it doesn't match our convention. Ugh. - kc 19 Sept 2011
     public $event_name = null;
     // @todo this should be event_start_datetime to take advantage of our templating
     public $event_start_date = null;
