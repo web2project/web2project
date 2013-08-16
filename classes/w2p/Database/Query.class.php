@@ -542,6 +542,25 @@ class w2p_Database_Query extends w2p_Database_oldQuery
         return $this->_query_id->GetAll();
     }
 
+    public function bindHashToObject($hash, &$obj, $notUsed = null, $notUsed2 = true, $bindAll = false) {
+        is_array($hash) or die('bindHashToObject : hash expected');
+        is_object($obj) or die('bindHashToObject : object expected');
+
+        if ($bindAll) {
+            $properties = array_keys($hash);
+        } else {
+            $properties = array_keys(get_object_vars($obj));
+        }
+
+        foreach($properties as $key) {
+            if (isset($hash[$key])) {
+                $obj->$key = w2PHTMLDecode($hash[$key]);
+            }
+        }
+
+        return $obj;
+    }
+
     protected function _fetchRow()
     {
         return $this->_query_id->FetchRow();
