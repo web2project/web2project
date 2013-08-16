@@ -200,40 +200,6 @@ class w2p_Database_oldQuery {
 		}
 	}
 
-	/** Bind a hash to an object
-	 *
-	 * Takes the hash/associative array specified by $hash and turns the fields into instance properties of $obj
-	 * @param $hash The hash to bind
-	 * @param &$obj A reference to the object to bind the hash to
-	 * @param $prefix Defaults to null, prefix to use with hash keys
-	 * @param $checkSlashes Defaults to true, strip any slashes from the hash values
-	 * @param $bindAll Bind all values regardless of their existance as defined instance variables
-	 */
-	public function bindHashToObject($hash, &$obj, $prefix = null, $notUsed = true, $bindAll = false) {
-		is_array($hash) or die('bindHashToObject : hash expected');
-		is_object($obj) or die('bindHashToObject : object expected');
-
-		if ($bindAll) {
-			foreach ($hash as $k => $notUsed2) {
-				$obj->$k = w2PHTMLDecode($hash[$k]);
-			}
-		} else {
-			if ($prefix) {
-				foreach (get_object_vars($obj) as $k => $notUsed2) {
-					if (isset($hash[$prefix . $k])) {
-						$obj->$k = w2PHTMLDecode($hash[$k]);
-					}
-				}
-			} else {
-				foreach (get_object_vars($obj) as $k => $notUsed2) {
-					if (isset($hash[$k])) {
-                        $obj->$k = w2PHTMLDecode($hash[$k]);
-					}
-				}
-			}
-		}
-	}
-
 	/**
 	 * Document::insertArray()
 	 */
