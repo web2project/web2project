@@ -135,13 +135,13 @@ $projects = array();
 if ($canViewTasks) {
 	$prc = $q->exec();
 	echo db_error();
-	while ($row = $q->fetchRow()) {
+	while ($row = $q->loadHash()) {
 		$projects[$row['project_id']] = $row;
 	}
 
 	$prc2 = $q2->exec();
 	echo db_error();
-	while ($row2 = $q2->fetchRow()) {
+	while ($row2 = $q2->loadHash()) {
 		$projects[$row2['project_id']] = ((!($projects[$row2['project_id']])) ? array() : $projects[$row2['project_id']]);
 		array_push($projects[$row2['project_id']], $row2);
 	}

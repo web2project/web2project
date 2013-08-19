@@ -37,7 +37,7 @@ if (isset($_GET['out_user_id']) && $_GET['out_user_id']
 
 			//execute query and fetch results
 			$r->exec();
-			$boot_query_row = $r->fetchRow();
+			$boot_query_row = $r->loadHash();
 			if ($boot_query_row) {
 				$boot_user_session = $boot_query_row['session_id'];
 				$boot_user_log_id = $boot_query_row['user_access_log_id'];
@@ -56,7 +56,7 @@ if (isset($_GET['out_user_id']) && $_GET['out_user_id']
 		}
 
 		if ($boot_query_row) {
-			$boot_query_row = $r->fetchRow();
+			$boot_query_row = $r->loadHash();
 			if ($boot_query_row) {
 				$boot_user_session = $boot_query_row['session_id'];
 				$boot_user_log_id = $boot_query_row['user_access_log_id'];
