@@ -181,69 +181,6 @@ class w2p_Database_oldQuery {
 	}
 
 	/**
-	 * Document::insertArray()
-	 */
-	public function insertArray($table, &$hash) {
-        error_log(__FUNCTION__ . ' has been deprecated', E_USER_WARNING);
-        $this->addTable($table);
-		foreach ($hash as $k => $v) {
-			if (is_array($v) or is_object($v) or $v == null) {
-				continue;
-			}
-			$fields[] = $k;
-			$values[$k] = $v;
-		}
-		foreach ($fields as $field) {
-			if (!in_array($values[$field], $this->_db_funcs)) {
-				$this->addInsert($field, $values[$field]);
-			} else {
-				$this->addInsert($field, $values[$field], false, true);
-			}
-		}
-
-		if (!$this->exec()) {
-			return false;
-		}
-		$id = db_insert_id();
-		return $id;
-	}
-
-	/**
-	 * Document::updateArray()
-	 */
-	public function updateArray($table, &$hash, $keyName) {
-        error_log(__FUNCTION__ . ' has been deprecated', E_USER_WARNING);
-        $this->addTable($table);
-		foreach ($hash as $k => $v) {
-			if (is_array($v) or is_object($v) or $k[0] == '_') { // internal or NA field
-				continue;
-			}
-
-			if ($k == $keyName) { // PK not to be updated
-				$this->addWhere($keyName . ' = \'' . db_escape($v) . '\'');
-				continue;
-			}
-			$fields[] = $k;
-			if ($v == '') {
-				$values[$k] = 'NULL';
-			} else {
-				$values[$k] = $v;
-			}
-		}
-		if (count($values)) {
-			foreach ($fields as $field) {
-				if (!in_array($values[$field], $this->_db_funcs)) {
-					$this->addUpdate($field, $values[$field]);
-				} else {
-					$this->addUpdate($field, $values[$field], false, true);
-				}
-			}
-			$ret = $this->exec();
-		}
-		return $ret;
-	}
-
-	/**
 	 * Document::insertObject()
 	 *
 	 * { Description }
@@ -353,6 +290,69 @@ class w2p_Database_oldQuery {
 	}
     
 // Everything below this line is deprecated and no longer used in core
+
+    /**
+     * @deprecated
+     */
+    public function insertArray($table, &$hash) {
+        error_log(__FUNCTION__ . ' has been deprecated', E_USER_WARNING);
+        $this->addTable($table);
+        foreach ($hash as $k => $v) {
+            if (is_array($v) or is_object($v) or $v == null) {
+                continue;
+            }
+            $fields[] = $k;
+            $values[$k] = $v;
+        }
+        foreach ($fields as $field) {
+            if (!in_array($values[$field], $this->_db_funcs)) {
+                $this->addInsert($field, $values[$field]);
+            } else {
+                $this->addInsert($field, $values[$field], false, true);
+            }
+        }
+
+        if (!$this->exec()) {
+            return false;
+        }
+        $id = db_insert_id();
+        return $id;
+    }
+
+    /**
+     * @deprecated
+     */
+    public function updateArray($table, &$hash, $keyName) {
+        error_log(__FUNCTION__ . ' has been deprecated', E_USER_WARNING);
+        $this->addTable($table);
+        foreach ($hash as $k => $v) {
+            if (is_array($v) or is_object($v) or $k[0] == '_') { // internal or NA field
+                continue;
+            }
+
+            if ($k == $keyName) { // PK not to be updated
+                $this->addWhere($keyName . ' = \'' . db_escape($v) . '\'');
+                continue;
+            }
+            $fields[] = $k;
+            if ($v == '') {
+                $values[$k] = 'NULL';
+            } else {
+                $values[$k] = $v;
+            }
+        }
+        if (count($values)) {
+            foreach ($fields as $field) {
+                if (!in_array($values[$field], $this->_db_funcs)) {
+                    $this->addUpdate($field, $values[$field]);
+                } else {
+                    $this->addUpdate($field, $values[$field], false, true);
+                }
+            }
+            $ret = $this->exec();
+        }
+        return $ret;
+    }
 
     public function createDatabase($database) {
         $dict = NewDataDictionary($this->_db, w2PgetConfig('dbtype'));
