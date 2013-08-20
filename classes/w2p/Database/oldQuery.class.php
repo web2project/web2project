@@ -259,11 +259,7 @@ class w2p_Database_oldQuery {
         return true;
 	}
 
-// Everything below this line is deprecated and/or related to table structure not content
-
-	/** Create a database table
-	 * @param $table the name of the table to create
-	 */
+    /** @deprecated */
 	public function createTable($table, $def = null) {
         $this->type = 'createPermanent';
 		$this->create_table = $table;
@@ -272,28 +268,18 @@ class w2p_Database_oldQuery {
 		}
 	}
 
-	/** Drop a table from the database
-	 *
-	 * Use dropTemp() to drop temporary tables
-	 * @param $table the name of the table to drop.
-	 */
+	/** @deprecated */
 	public function dropTable($table) {
 		$this->type = 'drop';
 		$this->create_table = $table;
 	}
 
-	/** Set a table creation definition from supplied array
-	 * @param $def Array containing table definition
-	 */
+    /** @deprecated */
 	public function createDefinition($def) {
 		$this->create_definition = $def;
 	}
-    
-// Everything below this line is deprecated and no longer used in core
 
-    /**
-     * @deprecated
-     */
+    /** @deprecated */
     public function insertArray($table, &$hash) {
         error_log(__FUNCTION__ . ' has been deprecated', E_USER_WARNING);
         $this->addTable($table);
@@ -319,9 +305,7 @@ class w2p_Database_oldQuery {
         return $id;
     }
 
-    /**
-     * @deprecated
-     */
+    /** @deprecated */
     public function updateArray($table, &$hash, $keyName) {
         error_log(__FUNCTION__ . ' has been deprecated', E_USER_WARNING);
         $this->addTable($table);
@@ -354,22 +338,19 @@ class w2p_Database_oldQuery {
         return $ret;
     }
 
+    /** @deprecated */
     public function createDatabase($database) {
         $dict = NewDataDictionary($this->_db, w2PgetConfig('dbtype'));
         $dict->CreateDatabase($database);
     }
 
-    /** Alter a database table
-     * @param $table the name of the table to alter
-     */
+    /** @deprecated */
     public function alterTable($table) {
         $this->create_table = $table;
         $this->type = 'alter';
     }
 
-    /** Prepare the ALTER component of the SQL query
-     * @todo add ALTER DROP/CHANGE/MODIFY/IMPORT/DISCARD/.. definitions: http://dev.mysql.com/doc/mysql/en/alter-table.html
-     */
+    /** @deprecated */
     public function prepareAlter() {
         $q = 'ALTER TABLE ' . $this->quote_db($this->_table_prefix . $this->create_table) . ' ';
         if (isset($this->create_definition)) {
@@ -390,6 +371,7 @@ class w2p_Database_oldQuery {
         return $q;
     }
 
+    /** @deprecated */
     public function DDcreateTable($table, $def, $opts) {
         $dict = NewDataDictionary($this->_db, w2PgetConfig('dbtype'));
         $query_array = $dict->ChangeTableSQL(w2PgetConfig('dbprefix') . $table, $def, $opts);
@@ -397,6 +379,7 @@ class w2p_Database_oldQuery {
         return $dict->ExecuteSQLArray($query_array);
     }
 
+    /** @deprecated */
     public function DDcreateIndex($name, $table, $cols, $opts) {
         $dict = NewDataDictionary($this->_db, w2PgetConfig('dbtype'));
         $query_array = $dict->CreateIndexSQL($name, $table, $cols, $opts);
@@ -404,29 +387,19 @@ class w2p_Database_oldQuery {
         return $dict->ExecuteSQLArray($query_array);
     }
 
-    /** Create a temporary database table
-     * @param $table the name of the temporary table to create.
-     */
+    /** @deprecated */
     public function createTemp($table) {
         $this->type = 'createTemporary';
         $this->create_table = $table;
     }
 
-    /** Drop a temporary table from the database
-     * @param $table the name of the temporary table to drop
-     */
+    /** @deprecated */
     public function dropTemp($table) {
         $this->type = 'drop';
         $this->create_table = $table;
     }
 
-    /**
-     * Instead of concatenating here, retrieve the relevant fields and do
-     *   it in PHP. It won't necessarily be faster but should be more
-     *   supportable cross-databasewise.
-     *
-	 * @deprecated
-	 */
+    /** @deprecated */
 	public function concat() {
 		trigger_error("concat() has been deprecated in v3.0 and will be removed by v4.0. Please concatenate in PHP instead.", E_USER_NOTICE );
         $arr = func_get_args();
@@ -434,26 +407,13 @@ class w2p_Database_oldQuery {
 		return $conc_str;
 	}
 
-	/**
-     * Get database specific SQL used to check for null values.
-	 *
-     * @deprecated
-     *
-	 * @return String containing SQL to check for null field value
-	 */
+    /** @deprecated */
 	public function ifNull($field, $nullReplacementValue) {
         trigger_error("ifNull() has been deprecated in v3.0 and will be removed by v4.0. There is no replacement.", E_USER_NOTICE );
         return $this->_db->IfNull($field, $nullReplacementValue);
 	}
 
-	/**
-     * Add a field definition for usage with table creation/alteration
-     *
-     * @deprecated
-     *
-	 * @param $name The name of the field
-	 * @param $type The type of field to create
-	 */
+    /** @deprecated */
 	public function addField($name, $type) {
 		if (!is_array($this->create_definition)) {
 			$this->create_definition = array();
@@ -462,14 +422,7 @@ class w2p_Database_oldQuery {
         trigger_error("w2p_Database_Query->addField() has been deprecated in v3.0 and will be removed by v4.0.", E_USER_NOTICE );
 	}
 
-	/**
-	 * Alter a field definition for usage with table alteration
-     *
-     * @deprecated
-     *
-	 * @param $name The name of the field
-	 * @param $type The type of the field
-	 */
+    /** @deprecated */
 	public function alterField($name, $type) {
 		if (!is_array($this->create_definition)) {
 			$this->create_definition = array();
@@ -478,13 +431,7 @@ class w2p_Database_oldQuery {
         trigger_error("w2p_Database_Query->alterField() has been deprecated in v3.0 and will be removed by v4.0.", E_USER_NOTICE );
 	}
 
-	/**
-     * Drop a field from table definition or from an existing table
-     *
-     * @deprecated
-     *
-	 * @param $name The name of the field to drop
-	 */
+    /** @deprecated */
 	public function dropField($name) {
 		if (!is_array($this->create_definition)) {
 			$this->create_definition = array();
@@ -493,11 +440,7 @@ class w2p_Database_oldQuery {
         trigger_error("w2p_Database_Query->dropField() has been deprecated in v3.0 and will be removed by v4.0.", E_USER_NOTICE );
 	}
 
-	/**
-     * Add an index. Fields should be separated by commas to create a multi-field index
-     *
-     * @deprecated
-	 */
+    /** @deprecated */
 	public function addIndex($name, $type) {
 		if (!is_array($this->create_definition)) {
 			$this->create_definition = array();
@@ -506,11 +449,7 @@ class w2p_Database_oldQuery {
         trigger_error("w2p_Database_Query->addIndex() has been deprecated in v3.0 and will be removed by v4.0.", E_USER_NOTICE );
 	}
 
-	/**
-     * Add a primary key attribute. Fields should be separated by commas to create a multi-field primary key
-     *
-     * @deprecated
-	 */
+    /** @deprecated */
 	public function addPrimary($name) {
 		if (!is_array($this->create_definition)) {
 			$this->create_definition = array();
@@ -519,11 +458,7 @@ class w2p_Database_oldQuery {
         trigger_error("w2p_Database_Query->addPrimary() has been deprecated in v3.0 and will be removed by v4.0.", E_USER_NOTICE );
 	}
 
-	/**
-     * Drop an index
-     *
-     * @deprecated
-	 */
+    /** @deprecated */
 	public function dropIndex($name) {
 		if (!is_array($this->create_definition)) {
 			$this->create_definition = array();
@@ -532,11 +467,7 @@ class w2p_Database_oldQuery {
         trigger_error("w2p_Database_Query->dropIndex() has been deprecated in v3.0 and will be removed by v4.0.", E_USER_NOTICE );
 	}
 
-	/**
-     * Remove a primary key attribute from a field
-     *
-     * @deprecated
-	 */
+    /** @deprecated */
 	public function dropPrimary() {
 		if (!is_array($this->create_definition)) {
 			$this->create_definition = array();
@@ -545,9 +476,7 @@ class w2p_Database_oldQuery {
         trigger_error("w2p_Database_Query->dropPrimary() has been deprecated in v3.0 and will be removed by v4.0.", E_USER_NOTICE );
 	}
 
-    /**
-     * @deprecated
-     */
+    /** @deprecated */
     public function addClause($clause, $value, $check_array = true) {
         error_log(__FUNCTION__ . ' has been deprecated in v3.0. There is no replacement.', E_USER_WARNING);
         if (!isset($this->$clause)) {
@@ -562,6 +491,7 @@ class w2p_Database_oldQuery {
         }
     }
 
+    /** @deprecated */
     public function foundRows() {
         error_log(__FUNCTION__ . ' has been deprecated', E_USER_WARNING);
         global $db;
@@ -575,14 +505,7 @@ class w2p_Database_oldQuery {
         return $result;
     }
 
-    /** Add item to an internal associative array
-     *
-     * Used internally with w2p_Database_Query
-     *
-     * @param	$varname	Name of variable to add/create
-     * @param	$name	Data to add
-     * @param	$id	Index to use in array.
-     */
+    /** @deprecated */
     public function addMap($varname, $name, $id) {
         error_log(__FUNCTION__ . ' has been deprecated', E_USER_WARNING);
         if (!isset($this->$varname)) {
