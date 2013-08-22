@@ -58,25 +58,6 @@ foreach ($users as $row) {
 <tr>
 	<td width="30" align="center" nowrap="nowrap">
         <?php if ($canEdit) { ?>
-		<table cellspacing="0" cellpadding="0" border="0">
-		<tr>
-			<td>
-				<a href="./index.php?m=admin&a=addedituser&user_id=<?php echo $row['user_id']; ?>" title="<?php echo $AppUI->_('edit'); ?>">
-					<?php echo w2PshowImage('icons/stock_edit-16.png', 16, 16, ''); ?>
-				</a>
-			</td>
-			<td>
-				<a href="?m=admin&a=viewuser&user_id=<?php echo $row['user_id']; ?>&tab=1" title="">
-					<img src="<?php echo w2PfindImage('obj/lock.gif'); ?>" width="16" height="16" border="0" alt="<?php echo $AppUI->_('edit permissions'); ?>" />
-				</a>
-			</td>
-			<td>
-				<a href="javascript:delMe(<?php echo $row['user_id']; ?>, '<?php echo addslashes($row['contact_display_name']); ?>')" title="<?php echo $AppUI->_('delete'); ?>">
-					<?php echo w2PshowImage('icons/stock_delete-16.png', 16, 16, ''); ?>
-				</a>
-			</td>
-		</tr>
-		</table>
         <?php } ?>
 	</td>
 	<?php if (w2PgetParam($_REQUEST, 'tab', 0) == 0) { ?>
