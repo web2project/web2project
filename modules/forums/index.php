@@ -3,14 +3,13 @@ if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly');
 }
 
-$perms = &$AppUI->acl();
+$forum = new CForum();
+$canRead = $forum->canView();
+$canAdd  = $forum->canCreate();
 
-$canRead = $perms->checkModuleItem('forums', 'view', null);
 if (!$canRead) {
 	$AppUI->redirect(ACCESS_DENIED);
 }
-
-$AppUI->savePlace();
 
 // retrieve any state parameters
 if (isset($_GET['orderby'])) {
@@ -21,14 +20,8 @@ if (isset($_GET['orderby'])) {
 $orderby = $AppUI->getState('ForumIdxOrderBy') ? $AppUI->getState('ForumIdxOrderBy') : 'forum_name';
 $orderdir = $AppUI->getState('ForumIdxOrderDir') ? $AppUI->getState('ForumIdxOrderDir') : 'asc';
 
-$perms = &$AppUI->acl();
-
-$df = $AppUI->getPref('SHDATEFORMAT');
-$tf = $AppUI->getPref('TIMEFORMAT');
-
 $f = w2PgetParam($_POST, 'f', 0);
 
-$forum = new CForum();
 $forums = $forum->getAllowedForums($AppUI->user_id, $AppUI->user_company, $f, $orderby, $orderdir);
 
 // setup the title block
@@ -36,7 +29,6 @@ $titleBlock = new w2p_Theme_TitleBlock('Forums', 'support.png', $m, $m . '.' . $
 $titleBlock->addCell('<form name="forum_filter" action="?m=forums" method="post" accept-charset="utf-8">' . arraySelect($filters, 'f', 'size="1" class="text" onChange="document.forum_filter.submit();"', $f, true) . '</form>');
 $titleBlock->addCell($AppUI->_('Filter') . ':');
 
-$canAdd = canAdd($m);
 if ($canAdd) {
 	$titleBlock->addCell('<form action="?m=forums&a=addedit" method="post" accept-charset="utf-8"><input type="submit" class="button btn btn-small dropdown-toggle" value="' . $AppUI->_('new forum') . '"></form>');
 }
