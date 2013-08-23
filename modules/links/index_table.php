@@ -21,7 +21,7 @@ if (!isset($project_id)) {
 
 if ($canRead) {
 	$link = new CLink();
-	$links = $link->getProjectTaskLinksByCategory(null, $project_id, $task_id, $type_filter, $search);
+	$items = $link->getProjectTaskLinksByCategory(null, $project_id, $task_id, $type_filter, $search);
 } else {
 	$AppUI->redirect(ACCESS_DENIED);
 }
@@ -42,7 +42,7 @@ if (count($fields) > 0) {
     $fieldList = array('link_name', 'link_description', 'link_category', 'link_task', 'link_owner', 'link_date');
     $fieldNames = array('Link Name', 'Description', 'Category', 'Task Name', 'Owner', 'Date');
 
-    $module->storeSettings('links', 'index_list', $fieldList, $fieldNames);
+    //$module->storeSettings('links', 'index_list', $fieldList, $fieldNames);
     $fields = array_combine($fieldList, $fieldNames);
 }
 $columnCount = 2 + count($fieldList);
@@ -51,10 +51,14 @@ $xpg_pagesize = w2PgetConfig('page_size', 50);
 $xpg_min = $xpg_pagesize * ($page - 1); // This is where we start our record set from
 // counts total recs from selection
 $xpg_totalrecs = count($links);
+$items = array_slice($items, $xpg_min, $xpg_pagesize);
+
 $pageNav = buildPaginationNav($AppUI, $m, $tab, $xpg_totalrecs, $xpg_pagesize, $page);
 echo $pageNav;
 
-$listHelper = new w2p_Output_ListTable($AppUI);
+$listTable = new w2p_Output_ListTable($AppUI);
+$listTable->addBefore('edit', 'link_id');
+$listTable->addBefore('url');
 ?>
 <table class="tbl list">
     <tr>
@@ -66,52 +70,53 @@ $listHelper = new w2p_Output_ListTable($AppUI);
 <?php
 $fp = -1;
 
-$listHelper->df .= ' ' . $AppUI->getPref('TIMEFORMAT');
+$listTable->df .= ' ' . $AppUI->getPref('TIMEFORMAT');
 
 $link_types = w2PgetSysVal('LinkType');
 $customLookups = array('link_category' => $link_types);
 
 $id = 0;
 //TODO:  put columns in order
-for ($i = ($page - 1) * $xpg_pagesize; $i < $page * $xpg_pagesize && $i < $xpg_totalrecs; $i++) {
-	$row = $links[$i];
+foreach ($items as $item) {
+    $row = $item;
 
-	if ($fp != $row['link_project']) {
-		if (!$row['project_name']) {
-			$row['project_name'] = $AppUI->_('No Project Specified');
-			$row['project_color_identifier'] = 'f4efe3';
-		}
-		if ($showProject) {
-			$s = '<tr>';
-			$s .= '<td colspan="' . $columnCount . '" style=" border: outset #d1d1cd 1px; background-color:#' . $row['project_color_identifier'] . ';">';
-			if ($row['link_project'] > 0) {
-				$s .= '<a href="?m=projects&a=view&project_id=' . $row['link_project'] . '" style="color:'.bestColor($row['project_color_identifier']) . '; font-weight: bold; padding-top: 2px;">' . $row['project_name'] . '</a>';
+    if ($fp != $row['link_project']) {
+        if (!$row['project_name']) {
+            $row['project_name'] = $AppUI->_('No Project Specified');
+            $row['project_color_identifier'] = 'f4efe3';
+        }
+        if ($showProject) {
+            $s = '<tr>';
+            $s .= '<td colspan="' . $columnCount . '" style=" border: outset #d1d1cd 1px; background-color:#' . $row['project_color_identifier'] . ';">';
+            if ($row['link_project'] > 0) {
+                $s .= '<a href="?m=projects&a=view&project_id=' . $row['link_project'] . '" style="color:'.bestColor($row['project_color_identifier']) . '; font-weight: bold; padding-top: 2px;">' . $row['project_name'] . '</a>';
             } else {
-				$s .= $row['project_name'];
+                $s .= $row['project_name'];
             }
-			$s .= '</td></tr>';
-			echo $s;
-		}
-	}
-	$fp = $row['link_project'];
+            $s .= '</td></tr>';
+            echo $s;
+        }
+    }
+    $fp = $row['link_project'];
     ?>
     <tr>
         <td class="data _edit">
-        <?php if ($canEdit) {
-            echo '<a href="./index.php?m=' . $m . '&a=addedit&link_id=' . $row['link_id'] . '">' . w2PshowImage('icons/stock_edit-16.png', '16', '16') . '</a>';
-        }
-        echo '</td><td class="data">';
-        echo '<a href="' . $row['link_url'] . '" target="_blank">' . w2PshowImage('forward.png', '16', '16') . '</a>';
-        ?>
+            <?php if ($canEdit) {
+                echo '<a href="./index.php?m=' . $m . '&a=addedit&link_id=' . $row['link_id'] . '">' . w2PshowImage('icons/stock_edit-16.png', '16', '16') . '</a>';
+            }
+            echo '</td><td class="data">';
+            echo '<a href="' . $row['link_url'] . '" target="_blank">' . w2PshowImage('forward.png', '16', '16') . '</a>';
+            ?>
         </td>
         <?php
-        $listHelper->stageRowData($row);
+        $listTable->stageRowData($row);
         foreach ($fieldList as $index => $column) {
-            echo $listHelper->createCell($fieldList[$index], $row[$fieldList[$index]], $customLookups);
+            echo $listTable->createCell($fieldList[$index], $row[$fieldList[$index]], $customLookups);
         }
         ?>
     </tr>
-<?php }
+    <?php
+}
 ?>
 </table>
 <?php
