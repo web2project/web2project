@@ -51,8 +51,10 @@ $htmlHelper = new w2p_Output_HTMLHelper($AppUI);
 
 $fieldList = array();
 $fieldNames = array();
+
 $module = new w2p_Core_Module();
 $fields = $module->loadSettings('forums', 'index_list');
+
 if (count($fields) > 0) {
     $fieldList = array_keys($fields);
     $fieldNames = array_values($fields);
@@ -65,7 +67,8 @@ if (count($fields) > 0) {
     $fieldNames = array('Watch', 'Forum Name', 'Description', 'Owner', 'Topics',
         'Replies', 'Last Post Info');
 
-    $module->storeSettings('forums', 'index_list', $fieldList, $fieldNames);
+    //$module->storeSettings('forums', 'index_list', $fieldList, $fieldNames);
+    $fields = array_combine($fieldList, $fieldNames);
 }
 $columnCount = 1 + count($fieldList);
 ?>
@@ -76,7 +79,6 @@ $columnCount = 1 + count($fieldList);
 
     <table class="tbl list">
         <tr>
-            <th></th>
             <?php
             foreach ($fieldNames as $index => $name) {
                 ?><th nowrap="nowrap">
