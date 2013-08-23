@@ -58,10 +58,8 @@ if (count($fields) > 0) {
     // TODO: This is only in place to provide an pre-upgrade-safe
     //   state for versions earlier than v3.0
     //   At some point at/after v4.0, this should be deprecated
-    $fieldList = array('watch_user', 'message_name',
-        'message_author', 'replies', 'latest_reply');
-    $fieldNames = array('Watch', 'Topics',
-        'Author', 'Replies', 'Last Post');
+    $fieldList = array('message_name', 'message_author', 'replies', 'latest_reply');
+    $fieldNames = array('Topics', 'Author', 'Replies', 'Last Post');
 
     $module->storeSettings('forums', 'view_topics', $fieldList, $fieldNames);
 
