@@ -90,6 +90,12 @@ class w2p_Output_ListTable extends w2p_Output_HTMLHelper
 
         foreach ($this->_before as $type => $value) {
             switch($type) {
+                case 'url':
+                    $contents  = '<td class="_'.$type.'">';
+                    $contents .= '<a href="' . $this->tableRowData[$value] . '" target="_blank">' .
+                        w2PshowImage('forward.png', '16', '16') . '</a>';
+                    $contents .= '</td>';
+                    break;
                 case 'watch':
                     $contents  = '<td class="_'.$type.'">';
                     $contents .= '<input type="checkbox" name="forum_' .

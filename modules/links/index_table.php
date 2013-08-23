@@ -58,7 +58,7 @@ echo $pageNav;
 
 $listTable = new w2p_Output_ListTable($AppUI);
 $listTable->addBefore('edit', 'link_id');
-$listTable->addBefore('url');
+$listTable->addBefore('url', 'link_url');
 
 $listTable->df .= ' ' . $AppUI->getPref('TIMEFORMAT');
 
