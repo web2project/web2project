@@ -64,6 +64,8 @@ if (count($fields) > 0) {
         'Author', 'Replies', 'Last Post');
 
     $module->storeSettings('forums', 'view_topics', $fieldList, $fieldNames);
+
+    $fields = array_combine($fieldList, $fieldNames);
 }
 ?>
 <br />
@@ -73,19 +75,17 @@ if (function_exists('styleRenderBoxTop')) {
 }
 
 $listHelper = new w2p_Output_ListTable($AppUI);
+$listHelper->addBefore('edit');
 
 ?>
 <form name="watcher" action="?m=forums&a=viewer&forum_id=<?php echo $forum_id; ?>&f=<?php echo $f; ?>" method="post" accept-charset="utf-8">
     <input type="hidden" name="dosql" value="do_watch_forum" />
     <input type="hidden" name="watch" value="topic" />
-    <table class="tbl list">
-        <tr>
-            <th></th>
-            <?php foreach ($fieldNames as $index => $name) { ?>
-                <th><?php echo $AppUI->_($fieldNames[$index]); ?></th>
-            <?php } ?>
-        </tr>
     <?php
+
+    echo $listHelper->startTable();
+    echo $listHelper->buildHeader($fields);
+
     foreach ($topics as $row) {
         if ($row["message_parent"] < 0) { ?>
             <tr bgcolor="white" valign="top">
