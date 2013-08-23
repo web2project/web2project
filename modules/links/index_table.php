@@ -59,18 +59,15 @@ echo $pageNav;
 $listTable = new w2p_Output_ListTable($AppUI);
 $listTable->addBefore('edit', 'link_id');
 $listTable->addBefore('url');
-?>
-<table class="tbl list">
-    <tr>
-        <th></th><th></th>
-        <?php foreach ($fieldNames as $index => $name) { ?>
-            <th><?php echo $AppUI->_($fieldNames[$index]); ?></th>
-        <?php } ?>
-    </tr>
-<?php
-$fp = -1;
 
 $listTable->df .= ' ' . $AppUI->getPref('TIMEFORMAT');
+
+echo $listTable->startTable();
+echo $listTable->buildHeader($fields);
+
+$fp = -1;
+
+
 
 $link_types = w2PgetSysVal('LinkType');
 $customLookups = array('link_category' => $link_types);
@@ -98,6 +95,7 @@ foreach ($items as $item) {
         }
     }
     $fp = $row['link_project'];
+    echo $listTable->buildRow($row, $customLookups);
     ?>
     <tr>
         <td class="data _edit">
