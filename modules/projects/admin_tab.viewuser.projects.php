@@ -5,7 +5,6 @@ if (!defined('W2P_BASE_DIR')) {
 
 global $a, $addPwT, $AppUI, $buffer, $company_id, $department, $min_view, $m, $priority, $projects, $tab, $user_id, $orderdir, $orderby;
 
-$perms = &$AppUI->acl();
 $df = $AppUI->getPref('SHDATEFORMAT');
 
 $pstatus = w2PgetSysVal('ProjectStatus');
@@ -84,25 +83,16 @@ foreach ($projects as $row) {
 		$actual_end_date = intval($row['project_actual_end_date']) ? new w2p_Utilities_Date($row['project_actual_end_date']) : null;
 		$style = (($actual_end_date > $end_date) && !empty($end_date)) ? 'style="color:red; font-weight:bold"' : '';
 
-		$s = '<tr><td width="65" class="data _identifier" style="background-color:#' . $row['project_color_identifier'] . '">';
-		$s .= '<font color="' . bestColor($row['project_color_identifier']) . '">' . sprintf('%.1f%%', $row['project_percent_complete']) . '</font></td>';
-
+		$s = '<tr>';
+        $s .= $listHelper->createCell('project_color_identifier', $row['project_color_identifier']);
         $s .= $listHelper->createCell('project_priority', $row['project_priority']);
         $s .= $listHelper->createCell('project_name', $row['project_name']);
         $s .= $listHelper->createCell('project_company', $row['project_company']);
         $s .= $listHelper->createCell('project_start_date', $row['project_start_date']);
         $s .= $listHelper->createCell('project_scheduled_hours', $row['project_scheduled_hours']);
-		$s .= '<td nowrap="nowrap" align="center" nowrap="nowrap" style="background-color:' . $priority[$row['project_priority']]['color'] . '">';
-		$s .= ($end_date ? $end_date->format($df) : '-');
-		$s .= '</td><td nowrap="nowrap" align="center">';
-		$s .= $actual_end_date ? '<a href="?m=tasks&a=view&task_id=' . $row['critical_task'] . '">' : '';
-		$s .= $actual_end_date ? '<span ' . $style . '>' . $actual_end_date->format($df) . '</span>' : '-';
-		$s .= $actual_end_date ? '</a>' : '';
-		$s .= '</td><td align="center">';
-		$s .= $row['task_log_problem'] ? '<a href="?m=tasks&a=index&f=all&project_id=' . $row['project_id'] . '">' : '';
-		$s .= $row['task_log_problem'] ? w2PshowImage('icons/dialog-warning5.png', 16, 16, 'Problem', 'Problem') : '-';
-		$s .= $row['task_log_problem'] ? '</a>' : '';
-		$s .= '</td>';
+        $s .= $listHelper->createCell('project_end_date', $row['project_end_date']);
+        $s .= $listHelper->createCell('project_end_actual', $row['project_actual_end_date']);
+        $s .= $listHelper->createCell('task_log_problem', $row['task_log_problem']);
         $s .= $listHelper->createCell('project_owner', $row['project_owner']);
         $s .= $listHelper->createCell('project_task_count', $row['project_task_count']);
         $s .= $listHelper->createCell('project_status', $row['project_status'], $customLookups);
@@ -111,6 +101,6 @@ foreach ($projects as $row) {
 	}
 }
 if ($none) {
-	echo '<tr><td colspan="12">' . $AppUI->_('No projects available') . '</td></tr>';
+    echo $listHelper->buildEmptyRow();
 }
 echo $listHelper->endTable();
