@@ -3,8 +3,6 @@ if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
 
-$AppUI->savePlace();
-
 // retrieve any state parameters
 if (isset($_GET['orderby'])) {
 	$orderdir = $AppUI->getState('ForumVwOrderDir') ? ($AppUI->getState('ForumVwOrderDir') == 'asc' ? 'desc' : 'asc') : 'desc';
@@ -46,19 +44,10 @@ $items = $q->loadList();
 $crumbs = array();
 $crumbs['?m=forums'] = 'forums list';
 
-$fieldList = array();
-$fieldNames = array();
-
 $module = new w2p_Core_Module();
 $fields = $module->loadSettings('forums', 'view_topics');
 
-if (count($fields) > 0) {
-    $fieldList = array_keys($fields);
-    $fieldNames = array_values($fields);
-} else {
-    // TODO: This is only in place to provide an pre-upgrade-safe
-    //   state for versions earlier than v3.0
-    //   At some point at/after v4.0, this should be deprecated
+if (0 == count($fields)) {
     $fieldList = array('message_name', 'message_author', 'replies', 'latest_reply');
     $fieldNames = array('Topics', 'Author', 'Replies', 'Last Post');
 
