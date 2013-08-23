@@ -29,6 +29,7 @@ $q->leftJoin('forum_messages', 'fm2', 'fm1.message_id = fm2.message_parent');
 $q->leftJoin('forum_watch', 'fw', 'watch_user = ' . (int)$AppUI->user_id . ' AND watch_topic = fm1.message_id');
 $q->leftJoin('forum_visits', 'v1', 'v1.visit_user = ' . (int)$AppUI->user_id . ' AND v1.visit_message = fm1.message_id');
 $q->addWhere('fm1.message_forum = ' . (int)$forum_id);
+$q->addWhere('fm1.message_parent < 1');
 
 switch ($f) {
 	case 1:
@@ -40,7 +41,7 @@ switch ($f) {
 }
 $q->addGroup('fm1.message_id, fm1.message_parent');
 $q->addOrder($orderby . ' ' . $orderdir);
-$topics = $q->loadList();
+$items = $q->loadList();
 
 $crumbs = array();
 $crumbs['?m=forums'] = 'forums list';
@@ -72,36 +73,21 @@ if (function_exists('styleRenderBoxTop')) {
 	echo styleRenderBoxTop();
 }
 
-$listHelper = new w2p_Output_ListTable($AppUI);
-$listHelper->addBefore('edit');
-
 ?>
 <form name="watcher" action="?m=forums&a=viewer&forum_id=<?php echo $forum_id; ?>&f=<?php echo $f; ?>" method="post" accept-charset="utf-8">
     <input type="hidden" name="dosql" value="do_watch_forum" />
     <input type="hidden" name="watch" value="topic" />
     <?php
 
+    $listHelper = new w2p_Output_ListTable($AppUI);
+    $listHelper->addBefore('watch', 'message_id');
+
     echo $listHelper->startTable();
     echo $listHelper->buildHeader($fields);
+    echo $listHelper->buildRows($items);
+    echo $listHelper->endTable();
 
-    foreach ($topics as $row) {
-        if ($row["message_parent"] < 0) { ?>
-            <tr bgcolor="white" valign="top">
-                <td nowrap="nowrap" align="center" width="1%">
-                    <input type="checkbox" name="forum_<?php echo $row['message_id']; ?>" <?php echo $row['watch_user'] ? 'checked="checked"' : ''; ?> />
-                </td>
-                <?php
-//TODO: add the checkbox
-                $listHelper->stageRowData($row);
-                foreach ($fieldList as $index => $column) {
-                    echo $listHelper->createCell($fieldList[$index], $row[$fieldList[$index]], $customLookups);
-                }
-                ?>
-            </tr>
-            <?php
-        }
-    } ?>
-    </table>
+    ?>
     <table width="100%" border="0" cellpadding="0" cellspacing="1" class="std">
         <tr>
             <td align="left">
