@@ -4,6 +4,10 @@ if (!defined('W2P_BASE_DIR')) {
 }
 global $AppUI, $canRead, $canEdit, $project_id, $task_id, $showProject, $tab;
 
+if (!$canRead) {
+    $AppUI->redirect(ACCESS_DENIED);
+}
+
 $type_filter = ($m == 'links') ? $tab-1 : -1;
 
 if ($task_id && !$project_id) {
@@ -19,33 +23,19 @@ if (!isset($project_id)) {
 	$project_id = (int) w2PgetParam($_POST, 'project_id', 0);
 }
 
-if ($canRead) {
-	$link = new CLink();
-	$items = $link->getProjectTaskLinksByCategory(null, $project_id, $task_id, $type_filter, $search);
-} else {
-	$AppUI->redirect(ACCESS_DENIED);
-}
-
-$fieldList = array();
-$fieldNames = array();
+$link = new CLink();
+$items = $link->getProjectTaskLinksByCategory(null, $project_id, $task_id, $type_filter, $search);
 
 $module = new w2p_Core_Module();
 $fields = $module->loadSettings('links', 'index_list');
 
-if (count($fields) > 0) {
-    $fieldList = array_keys($fields);
-    $fieldNames = array_values($fields);
-} else {
-    // TODO: This is only in place to provide an pre-upgrade-safe
-    //   state for versions earlier than v3.0
-    //   At some point at/after v4.0, this should be deprecated
+if (0 == count($fields)) {
     $fieldList = array('link_name', 'link_description', 'link_category', 'link_project', 'link_task', 'link_owner', 'link_date');
     $fieldNames = array('Link Name', 'Description', 'Category', 'Project Task', 'Task Name', 'Owner', 'Date');
 
-    //$module->storeSettings('links', 'index_list', $fieldList, $fieldNames);
+    $module->storeSettings('links', 'index_list', $fieldList, $fieldNames);
     $fields = array_combine($fieldList, $fieldNames);
 }
-$columnCount = 2 + count($fieldList);
 
 $xpg_pagesize = w2PgetConfig('page_size', 50);
 $xpg_min = $xpg_pagesize * ($page - 1); // This is where we start our record set from
