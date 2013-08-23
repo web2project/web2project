@@ -26,13 +26,6 @@ if ($canRead) {
 	$AppUI->redirect(ACCESS_DENIED);
 }
 
-$xpg_pagesize = w2PgetConfig('page_size', 50);
-$xpg_min = $xpg_pagesize * ($page - 1); // This is where we start our record set from
-// counts total recs from selection
-$xpg_totalrecs = count($links);
-$pageNav = buildPaginationNav($AppUI, $m, $tab, $xpg_totalrecs, $xpg_pagesize, $page);
-echo $pageNav;
-
 $fieldList = array();
 $fieldNames = array();
 
@@ -53,6 +46,13 @@ if (count($fields) > 0) {
     $fields = array_combine($fieldList, $fieldNames);
 }
 $columnCount = 2 + count($fieldList);
+
+$xpg_pagesize = w2PgetConfig('page_size', 50);
+$xpg_min = $xpg_pagesize * ($page - 1); // This is where we start our record set from
+// counts total recs from selection
+$xpg_totalrecs = count($links);
+$pageNav = buildPaginationNav($AppUI, $m, $tab, $xpg_totalrecs, $xpg_pagesize, $page);
+echo $pageNav;
 
 $listHelper = new w2p_Output_ListTable($AppUI);
 ?>
