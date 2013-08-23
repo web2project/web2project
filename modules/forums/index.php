@@ -49,11 +49,9 @@ if (0 == count($fields)) {
     $fieldNames = array('Project', 'Forum Name', 'Description', 'Owner', 'Topics',
         'Replies', 'Last Post Info');
 
-    //$module->storeSettings('forums', 'index_list', $fieldList, $fieldNames);
+    $module->storeSettings('forums', 'index_list', $fieldList, $fieldNames);
     $fields = array_combine($fieldList, $fieldNames);
 }
-$columnCount = 1 + count($fieldList);
-
 ?>
 
 <form name="watcher" action="./index.php?m=forums&f=<?php echo $f; ?>" method="post" accept-charset="utf-8">
@@ -68,7 +66,7 @@ $columnCount = 1 + count($fieldList);
     echo $listTable->buildRows($items);
     ?>
     <tr>
-        <td colspan="<?php echo $columnCount; ?>">
+        <td colspan="<?php echo $listTable->cellCount; ?>">
             <input type="submit" class="button" value="<?php echo $AppUI->_('update watches'); ?>" />
         </td>
     </tr>
