@@ -95,21 +95,7 @@ $none = true;
 $listHelper = new w2p_Output_ListTable($AppUI);
 
 echo $listHelper->startTable();
-?>
-    <tr>
-        <?php
-        $baseUrl = '?m='.$m.(isset($a) ? '&a=' . $a : '').(isset($extraGet) ? $extraGet : '');
-        foreach ($fieldNames as $index => $name) {
-            ?><th nowrap="nowrap">
-                <a href="<?php echo $baseUrl; ?>&orderby=<?php echo $fieldList[$index]; ?>" class="hdr">
-                    <?php echo $AppUI->_($fieldNames[$index]); ?>
-                </a>
-            </th><?php
-        }
-        ?>
-    </tr>
-
-<?php
+echo $listHelper->buildHeader($fields, true, 'departments&a=view&dept_id=' . $dept_id);
 
 if (count($projects)) {
     foreach ($projects as $row) {
