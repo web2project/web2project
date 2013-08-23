@@ -15,6 +15,8 @@ class w2p_Output_ListTable extends w2p_Output_HTMLHelper
     protected $_fieldKeys = array();
     protected $_fieldNames = array();
 
+    protected $_before = array();
+
     public function __construct($AppUI)
     {
         $this->_AppUI = $AppUI;
@@ -40,7 +42,8 @@ class w2p_Output_ListTable extends w2p_Output_HTMLHelper
             $cells .= '<th>' . $link . '</th>';
         }
 
-        return '<tr>' . $cells . '</tr>';
+        return '<tr>' . str_repeat('<th></th>', count($this->_before)) .
+                $cells . '</tr>';
     }
 
     public function buildRows($allRows, $customLookups = array())
@@ -60,14 +63,32 @@ class w2p_Output_ListTable extends w2p_Output_HTMLHelper
 
     public function buildRow($rowData, $customLookups = array())
     {
-        $row = '<tr>';
         $this->stageRowData($rowData);
+
+        $row = '<tr>';
+        $row .= $this->_buildBeforeCells();
         foreach ($this->_fieldKeys as $column) {
             $row .= $this->createCell($column, $rowData[$column], $customLookups);
         }
         $row .= '</tr>';
 
         return $row;
+    }
+
+    public function addBefore($type)
+    {
+        $this->_before[] = $type;
+    }
+
+    protected function _buildBeforeCells()
+    {
+        $cells = '';
+
+        foreach ($this->_before as $cell) {
+            $cells .= '<td></td>';
+        }
+
+        return $cells;
     }
 
     public function buildEmptyRow()
