@@ -15,7 +15,9 @@ class w2p_Output_ListTable extends w2p_Output_HTMLHelper
     protected $_fieldKeys = array();
     protected $_fieldNames = array();
 
+    public $cellCount = 0;
     protected $_before = array();
+    protected $_after  = array();
 
     public function __construct($AppUI)
     {
@@ -41,6 +43,8 @@ class w2p_Output_ListTable extends w2p_Output_HTMLHelper
             $link .= ($sortable) ? '</a>' : '';
             $cells .= '<th>' . $link . '</th>';
         }
+
+        $this->cellCount = count($this->_before) + count($fields) + count($this->_after);
 
         return '<tr>' . str_repeat('<th></th>', count($this->_before)) .
                 $cells . '</tr>';
