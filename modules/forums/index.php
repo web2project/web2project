@@ -44,9 +44,9 @@ $module = new w2p_Core_Module();
 $fields = $module->loadSettings('forums', 'index_list');
 
 if (0 == count($fields)) {
-    $fieldList = array('watch_user', 'forum_name', 'forum_project', 'forum_description', 'forum_owner',
+    $fieldList = array('watch_user', 'forum_project', 'forum_name', 'forum_description', 'forum_owner',
         'forum_topics', 'forum_replies', 'forum_last_date');
-    $fieldNames = array('Watch', 'Forum Name', 'Project', 'Description', 'Owner', 'Topics',
+    $fieldNames = array('Watch', 'Project', 'Forum Name', 'Description', 'Owner', 'Topics',
         'Replies', 'Last Post Info');
 
     //$module->storeSettings('forums', 'index_list', $fieldList, $fieldNames);
@@ -77,8 +77,8 @@ $listTable = new w2p_Output_ListTable($AppUI);
             </td>
 
             <?php
-            echo $listTable->createCell('forum_name', $row['forum_name']);
             echo $listTable->createCell('forum_project', $row['forum_project']);
+            echo $listTable->createCell('forum_name', $row['forum_name']);
             echo $listTable->createCell('forum_description', $row['forum_description']);
             echo $listTable->createCell('forum_owner', $row['forum_owner']);
             echo $listTable->createCell('topic_count', $row['forum_topics']);
