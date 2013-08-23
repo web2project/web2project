@@ -69,8 +69,8 @@ $customLookups = array('project_status' => $pstatus);
 $none = true;
 $listHelper = new w2p_Output_ListTable($AppUI);
 
+echo $listHelper->startTable();
 ?>
-<table class="tbl list">
     <tr>
         <?php
         $baseUrl = '?m='.$m.(isset($a) ? '&a=' . $a : '').(isset($extraGet) ? $extraGet : '');
@@ -127,8 +127,4 @@ foreach ($projects as $row) {
 if ($none) {
 	echo '<tr><td colspan="12">' . $AppUI->_('No projects available') . '</td></tr>';
 }
-?>
-<tr>
-	<td colspan="12">&nbsp;</td>
-</tr>
-</table>
+echo $listHelper->endTable();

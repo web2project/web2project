@@ -93,8 +93,9 @@ $customLookups = array('project_status' => $pstatus);
 
 $none = true;
 $listHelper = new w2p_Output_ListTable($AppUI);
+
+echo $listHelper->startTable();
 ?>
-<table class="tbl list">
     <tr>
         <?php
         $baseUrl = '?m='.$m.(isset($a) ? '&a=' . $a : '').(isset($extraGet) ? $extraGet : '');
@@ -152,5 +153,4 @@ if (count($projects)) {
 } else {
     echo '<tr><td colspan="'.count($fieldNames).'">' . $AppUI->_('No data available') . '</td></tr>';
 }
-?>
-</table>
+echo $listHelper->endTable();
