@@ -39,21 +39,11 @@ $a = 'list';
 // End of little hack
 
 $titleBlock->show();
-$htmlHelper = new w2p_Output_HTMLHelper($AppUI);
-
-$fieldList = array();
-$fieldNames = array();
 
 $module = new w2p_Core_Module();
 $fields = $module->loadSettings('forums', 'index_list');
 
-if (count($fields) > 0) {
-    $fieldList = array_keys($fields);
-    $fieldNames = array_values($fields);
-} else {
-    // TODO: This is only in place to provide an pre-upgrade-safe
-    //   state for versions earlier than v3.0
-    //   At some point at/after v4.0, this should be deprecated
+if (0 == count($fields)) {
     $fieldList = array('watch_user', 'forum_name', 'forum_project', 'forum_description', 'forum_owner',
         'forum_topics', 'forum_replies', 'forum_last_date');
     $fieldNames = array('Watch', 'Forum Name', 'Project', 'Description', 'Owner', 'Topics',
@@ -79,7 +69,7 @@ $listTable = new w2p_Output_ListTable($AppUI);
     $p = '';
 
     foreach ($forums as $row) {
-        $htmlHelper->stageRowData($row);
+        $listTable->stageRowData($row);
         ?>
         <tr>
             <td class="data">
@@ -87,13 +77,13 @@ $listTable = new w2p_Output_ListTable($AppUI);
             </td>
 
             <?php
-            echo $htmlHelper->createCell('forum_name', $row['forum_name']);
-            echo $htmlHelper->createCell('forum_project', $row['forum_project']);
-            echo $htmlHelper->createCell('forum_description', $row['forum_description']);
-            echo $htmlHelper->createCell('forum_owner', $row['forum_owner']);
-            echo $htmlHelper->createCell('topic_count', $row['forum_topics']);
-            echo $htmlHelper->createCell('reply_count', $row['forum_replies']);
-            echo $htmlHelper->createCell('forum_last_datetime', $row['forum_last_date']);
+            echo $listTable->createCell('forum_name', $row['forum_name']);
+            echo $listTable->createCell('forum_project', $row['forum_project']);
+            echo $listTable->createCell('forum_description', $row['forum_description']);
+            echo $listTable->createCell('forum_owner', $row['forum_owner']);
+            echo $listTable->createCell('topic_count', $row['forum_topics']);
+            echo $listTable->createCell('reply_count', $row['forum_replies']);
+            echo $listTable->createCell('forum_last_datetime', $row['forum_last_date']);
             ?>
         </tr>
     <?php } ?>
