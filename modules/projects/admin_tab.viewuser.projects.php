@@ -39,12 +39,19 @@ $extraGet = '&user_id=' . $user_id;
 $project = new CProject();
 $projects = projects_list_data($user_id);
 
-$fieldList = array('project_color_identifier', 'project_priority',
-    'project_name', 'company_name', 'project_start_date', 'project_duration',
-    'project_end_date', 'project_actual_end_date', 'task_log_problem',
-    'user_username', 'project_task_count', 'project_status');
-$fieldNames = array('Color', 'P', 'Project Name', 'Company', 'Start',
-    'Duration', 'End', 'Actual', 'LP', 'Owner', 'Tasks', 'Status');
+$module = new w2p_Core_Module();
+$fields = $module->loadSettings('projects', 'admin_view');
+
+if (0 == count($fields)) {
+    $fieldList = array('project_color_identifier', 'project_priority',
+        'project_name', 'company_name', 'project_start_date', 'project_duration',
+        'project_end_date', 'project_actual_end_date', 'task_log_problem',
+        'user_username', 'project_task_count', 'project_status');
+    $fieldNames = array('Color', 'P', 'Project Name', 'Company', 'Start',
+        'Duration', 'End', 'Actual', 'LP', 'Owner', 'Tasks', 'Status');
+
+    $fields = array_combine($fieldList, $fieldNames);
+}
 ?>
 
 <table class="tbl list">
@@ -55,6 +62,14 @@ $fieldNames = array('Color', 'P', 'Project Name', 'Company', 'Start',
 	<td align="right" nowrap="nowrap"><form action="?m=admin&a=viewuser&user_id=<?php echo $user_id; ?>&tab=<?php echo $tab; ?>" method="post" name="pickProject" accept-charset="utf-8"><?php echo arraySelect($projFilter, 'proFilter', 'size=1 class=text onChange="document.pickProject.submit()"', $proFilter, true); ?></form></td>
 </tr>
 </table>
+<?php
+
+$customLookups = array('project_status' => $pstatus);
+
+$none = true;
+$listHelper = new w2p_Output_ListTable($AppUI);
+
+?>
 <table class="tbl list">
     <tr>
         <?php
@@ -70,13 +85,9 @@ $fieldNames = array('Color', 'P', 'Project Name', 'Company', 'Start',
     </tr>
 
 <?php
-$none = true;
-$htmlHelper = new w2p_Output_HTMLHelper($AppUI);
-
-$customLookups = array('project_status' => $pstatus);
 
 foreach ($projects as $row) {
-    $htmlHelper->stageRowData($row);
+    $listHelper->stageRowData($row);
     // We dont check the percent_completed == 100 because some projects
 	// were being categorized as completed because not all the tasks
 	// have been created (for new projects)
@@ -90,11 +101,11 @@ foreach ($projects as $row) {
 		$s = '<tr><td width="65" class="data _identifier" style="background-color:#' . $row['project_color_identifier'] . '">';
 		$s .= '<font color="' . bestColor($row['project_color_identifier']) . '">' . sprintf('%.1f%%', $row['project_percent_complete']) . '</font></td>';
 
-        $s .= $htmlHelper->createCell('project_priority', $row['project_priority']);
-        $s .= $htmlHelper->createCell('project_name', $row['project_name']);
-        $s .= $htmlHelper->createCell('project_company', $row['project_company']);
-        $s .= $htmlHelper->createCell('project_start_date', $row['project_start_date']);
-        $s .= $htmlHelper->createCell('project_scheduled_hours', $row['project_scheduled_hours']);
+        $s .= $listHelper->createCell('project_priority', $row['project_priority']);
+        $s .= $listHelper->createCell('project_name', $row['project_name']);
+        $s .= $listHelper->createCell('project_company', $row['project_company']);
+        $s .= $listHelper->createCell('project_start_date', $row['project_start_date']);
+        $s .= $listHelper->createCell('project_scheduled_hours', $row['project_scheduled_hours']);
 		$s .= '<td nowrap="nowrap" align="center" nowrap="nowrap" style="background-color:' . $priority[$row['project_priority']]['color'] . '">';
 		$s .= ($end_date ? $end_date->format($df) : '-');
 		$s .= '</td><td nowrap="nowrap" align="center">';
@@ -106,9 +117,9 @@ foreach ($projects as $row) {
 		$s .= $row['task_log_problem'] ? w2PshowImage('icons/dialog-warning5.png', 16, 16, 'Problem', 'Problem') : '-';
 		$s .= $row['task_log_problem'] ? '</a>' : '';
 		$s .= '</td>';
-        $s .= $htmlHelper->createCell('project_owner', $row['project_owner']);
-        $s .= $htmlHelper->createCell('project_task_count', $row['project_task_count']);
-        $s .= $htmlHelper->createCell('project_status', $row['project_status'], $customLookups);
+        $s .= $listHelper->createCell('project_owner', $row['project_owner']);
+        $s .= $listHelper->createCell('project_task_count', $row['project_task_count']);
+        $s .= $listHelper->createCell('project_status', $row['project_status'], $customLookups);
         $s .= '</tr>';
 		echo $s;
 	}
