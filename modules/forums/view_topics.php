@@ -44,8 +44,6 @@ $topics = $q->loadList();
 
 $crumbs = array();
 $crumbs['?m=forums'] = 'forums list';
-$htmlHelper = new w2p_Output_HTMLHelper($AppUI);
-//$htmlHelper->df .= ' ' . $AppUI->getPref('TIMEFORMAT');
 
 $fieldList = array();
 $fieldNames = array();
@@ -73,6 +71,9 @@ if (count($fields) > 0) {
 if (function_exists('styleRenderBoxTop')) {
 	echo styleRenderBoxTop();
 }
+
+$listHelper = new w2p_Output_ListTable($AppUI);
+
 ?>
 <form name="watcher" action="?m=forums&a=viewer&forum_id=<?php echo $forum_id; ?>&f=<?php echo $f; ?>" method="post" accept-charset="utf-8">
     <input type="hidden" name="dosql" value="do_watch_forum" />
@@ -93,9 +94,9 @@ if (function_exists('styleRenderBoxTop')) {
                 </td>
                 <?php
 //TODO: add the checkbox
-                $htmlHelper->stageRowData($row);
+                $listHelper->stageRowData($row);
                 foreach ($fieldList as $index => $column) {
-                    echo $htmlHelper->createCell($fieldList[$index], $row[$fieldList[$index]], $customLookups);
+                    echo $listHelper->createCell($fieldList[$index], $row[$fieldList[$index]], $customLookups);
                 }
                 ?>
             </tr>
@@ -103,7 +104,6 @@ if (function_exists('styleRenderBoxTop')) {
         }
     } ?>
     </table>
-
     <table width="100%" border="0" cellpadding="0" cellspacing="1" class="std">
         <tr>
             <td align="left">
