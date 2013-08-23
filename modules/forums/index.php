@@ -80,21 +80,6 @@ $listTable = new w2p_Output_ListTable($AppUI);
 
         foreach ($forums as $row) {
             $htmlHelper->stageRowData($row);
-
-            if ($p != $row['forum_project']) {
-                $forum_project_name = ($row['project_name']) ? $row['project_name'] : 'No associated project';
-                $forum_project_color = ($row['project_color_identifier']) ? bestColor($row['project_color_identifier']) : '';
-                ?>
-                <tr>
-                    <td colspan="<?php echo $columnCount; ?>" style="background-color:#<?php echo $row['project_color_identifier']; ?>">
-                        <a href="?m=projects&a=view&project_id=<?php echo $row['forum_project']; ?>" style="color:<?php echo $forum_project_color; ?>" class="left">
-                            <strong><?php echo $forum_project_name; ?></strong>
-                        </a>
-                    </td>
-                </tr>
-                <?php
-                $p = $row['forum_project'];
-            }
             ?>
             <tr>
                 <td class="data">
