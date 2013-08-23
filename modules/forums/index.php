@@ -44,17 +44,15 @@ $module = new w2p_Core_Module();
 $fields = $module->loadSettings('forums', 'index_list');
 
 if (0 == count($fields)) {
-    $fieldList = array('watch_user', 'forum_project', 'forum_name', 'forum_description', 'forum_owner',
+    $fieldList = array('forum_project', 'forum_name', 'forum_description', 'forum_owner',
         'forum_topics', 'forum_replies', 'forum_last_date');
-    $fieldNames = array('Watch', 'Project', 'Forum Name', 'Description', 'Owner', 'Topics',
+    $fieldNames = array('Project', 'Forum Name', 'Description', 'Owner', 'Topics',
         'Replies', 'Last Post Info');
 
     //$module->storeSettings('forums', 'index_list', $fieldList, $fieldNames);
     $fields = array_combine($fieldList, $fieldNames);
 }
 $columnCount = 1 + count($fieldList);
-
-$listTable = new w2p_Output_ListTable($AppUI);
 
 ?>
 
@@ -63,6 +61,8 @@ $listTable = new w2p_Output_ListTable($AppUI);
 	<input type="hidden" name="watch" value="forum" />
 
     <?php
+    $listTable = new w2p_Output_ListTable($AppUI);
+    $listTable->addBefore('watch', 'forum_id');
     echo $listTable->startTable();
     echo $listTable->buildHeader($fields, true, 'forums');
 
