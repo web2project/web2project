@@ -78,7 +78,6 @@ if (function_exists('styleRenderBoxTop')) {
     <input type="hidden" name="dosql" value="do_watch_forum" />
     <input type="hidden" name="watch" value="topic" />
     <table class="tbl list">
-        </td></tr>
         <tr>
             <th></th>
             <?php foreach ($fieldNames as $index => $name) { ?>
