@@ -75,21 +75,21 @@ class w2p_Output_ListTable extends w2p_Output_HTMLHelper
         return $row;
     }
 
-    public function addBefore($type)
+    public function addBefore($type, $value = '')
     {
-        $this->_before[] = $type;
+        $this->_before[$type] = $value;
     }
 
     protected function _buildBeforeCells()
     {
         $cells = '';
 
-        foreach ($this->_before as $cell) {
-            switch($cell) {
+        foreach ($this->_before as $type => $value) {
+            switch($type) {
                 case 'watch':
-                    $contents  = '<td class="_'.$cell.'">';
+                    $contents  = '<td class="_'.$type.'">';
                     $contents .= '<input type="checkbox" name="forum_' .
-                        $this->tableRowData['message_id'] . '"' .
+                        $this->tableRowData[$value] . '"' .
                         ($this->tableRowData['watch_user'] ? 'checked="checked"' : '') . ' />';
                     $contents .= '</td>';
                     break;
