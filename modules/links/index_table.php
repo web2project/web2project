@@ -50,8 +50,11 @@ if (count($fields) > 0) {
     $fieldNames = array('Link Name', 'Description', 'Category', 'Task Name', 'Owner', 'Date');
 
     $module->storeSettings('links', 'index_list', $fieldList, $fieldNames);
+    $fields = array_combine($fieldList, $fieldNames);
 }
 $columnCount = 2 + count($fieldList);
+
+$listHelper = new w2p_Output_ListTable($AppUI);
 ?>
 <table class="tbl list">
     <tr>
@@ -62,8 +65,8 @@ $columnCount = 2 + count($fieldList);
     </tr>
 <?php
 $fp = -1;
-$htmlHelper = new w2p_Output_HTMLHelper($AppUI);
-$htmlHelper->df .= ' ' . $AppUI->getPref('TIMEFORMAT');
+
+$listHelper->df .= ' ' . $AppUI->getPref('TIMEFORMAT');
 
 $link_types = w2PgetSysVal('LinkType');
 $customLookups = array('link_category' => $link_types);
@@ -102,9 +105,9 @@ for ($i = ($page - 1) * $xpg_pagesize; $i < $page * $xpg_pagesize && $i < $xpg_t
         ?>
         </td>
         <?php
-        $htmlHelper->stageRowData($row);
+        $listHelper->stageRowData($row);
         foreach ($fieldList as $index => $column) {
-            echo $htmlHelper->createCell($fieldList[$index], $row[$fieldList[$index]], $customLookups);
+            echo $listHelper->createCell($fieldList[$index], $row[$fieldList[$index]], $customLookups);
         }
         ?>
     </tr>
