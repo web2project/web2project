@@ -28,22 +28,11 @@ if ($display_last_login) {
     array_unshift($fieldList,  '');
     array_unshift($fieldNames, 'Login History');
 }
-/*
-* TODO: This is an oddity because the inserted column (login history) has to
-*   get inserted as the *second* entry instead of the first.. ugh.
-*
-*/
-array_unshift($fieldNames,  '');
-?>
-<table class="tbl list">
-    <tr>
-        <?php foreach ($fieldNames as $index => $name) { ?>
-            <th><?php echo $AppUI->_($fieldNames[$index]); ?></th>
-        <?php } ?>
-    </tr>
-<?php
+$fields = array_combine($fieldList, $fieldNames);
 
-$htmlHelper = new w2p_Output_HTMLHelper($AppUI);
+$listTable = new w2p_Output_ListTable($AppUI);
+echo $listTable->startTable();
+echo $listTable->buildHeader($fields, false, $m);
 
 $types = w2PgetSysVal('UserType');
 $customLookups = array('user_type' => $types);
@@ -53,13 +42,9 @@ foreach ($users as $row) {
 	if ($perms->isUserPermitted($row['user_id']) != $canLogin) {
 		continue;
 	}
-    $htmlHelper->stageRowData($row);
+    $listTable->stageRowData($row);
 ?>
 <tr>
-	<td width="30" align="center" nowrap="nowrap">
-        <?php if ($canEdit) { ?>
-        <?php } ?>
-	</td>
 	<?php if (w2PgetParam($_REQUEST, 'tab', 0) == 0) { ?>
 	<td nowrap="nowrap">
 	       <?php
@@ -90,12 +75,11 @@ foreach ($users as $row) {
         <?php echo $row['contact_display_name']; ?>
 	</td>
     <?php
-        echo $htmlHelper->createCell('user_name', $row['user_username']);
-        //echo $htmlHelper->createCell('user_type', $row['user_type'], $customLookups);
-        echo $htmlHelper->createCell('contact_company', $row['contact_company']);
-        echo $htmlHelper->createCell('dept_name', $row['dept_name']);
+        echo $listTable->createCell('user_name', $row['user_username']);
+        echo $listTable->createCell('contact_company', $row['contact_company']);
+        echo $listTable->createCell('dept_name', $row['dept_name']);
     ?>
 </tr>
-<?php } ?>
+<?php }
 
-</table>
+echo $listTable->endTable();
