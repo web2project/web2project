@@ -90,6 +90,14 @@ class w2p_Output_ListTable extends w2p_Output_HTMLHelper
 
         foreach ($this->_before as $type => $value) {
             switch($type) {
+                case 'edit':
+                    // @note This module determination *only* works if you've followed our naming conventions.
+                    $module    = w2p_pluralize(explode('_', $value)[0]);
+                    $contents  = '<td class="_'.$type.'">';
+                    $contents .= '<a href="./index.php?m='.$module.'&a=addedit&' . $value . '=' . $this->tableRowData[$value] .'">' .
+                        w2PshowImage('icons/stock_edit-16.png', '16', '16') . '</a>';
+                    $contents .= '</td>';
+                    break;
                 case 'url':
                     $contents  = '<td class="_'.$type.'">';
                     $contents .= '<a href="' . $this->tableRowData[$value] . '" target="_blank">' .
