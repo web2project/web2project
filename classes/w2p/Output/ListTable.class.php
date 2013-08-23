@@ -85,7 +85,18 @@ class w2p_Output_ListTable extends w2p_Output_HTMLHelper
         $cells = '';
 
         foreach ($this->_before as $cell) {
-            $cells .= '<td></td>';
+            switch($cell) {
+                case 'watch':
+                    $contents  = '<td class="_'.$cell.'">';
+                    $contents .= '<input type="checkbox" name="forum_' .
+                        $this->tableRowData['message_id'] . '"' .
+                        ($this->tableRowData['watch_user'] ? 'checked="checked"' : '') . ' />';
+                    $contents .= '</td>';
+                    break;
+                default:
+                    $contents = '<td></td>';
+            }
+            $cells .= $contents;
         }
 
         return $cells;
