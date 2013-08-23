@@ -30,31 +30,15 @@ if (count($fields) > 0) {
         'Type', 'Notes');
 
     $module->storeSettings('resources', 'index_list', $fieldList, $fieldNames);
-}
-?>
-<table class="tbl list">
-    <tr>
-        <?php foreach ($fieldNames as $index => $name) { ?>
-            <th><?php echo $AppUI->_($fieldNames[$index]); ?></th>
-        <?php } ?>
-    </tr>
-    <?php
-if (count($items)) {
-    $htmlHelper = new w2p_Output_HTMLHelper($AppUI);
 
-    $resource_types = w2PgetSysVal('ResourceTypes');
-    $customLookups = array('resource_type' => $resource_types);
-
-    foreach ($items as $row) {
-        $htmlHelper->stageRowData($row);
-        echo '<tr>';
-        foreach ($fieldList as $index => $column) {
-            echo $htmlHelper->createCell($fieldList[$index], $row[$fieldList[$index]], $customLookups);
-        }
-        echo '</tr>';
-    }
-} else {
-    echo '<tr><td colspan="'.count($fieldNames).'">' . $AppUI->_('No data available') . '</td></tr>';
+    $fields = array_combine($fieldList, $fieldNames);
 }
-?>
-</table>
+
+$resource_types = w2PgetSysVal('ResourceTypes');
+$customLookups = array('resource_type' => $resource_types);
+
+$listTable = new w2p_Output_ListTable($AppUI);
+echo $listTable->startTable();
+echo $listTable->buildHeader($fields);
+echo $listTable->buildRows($items, $customLookups);
+echo $listTable->endTable();

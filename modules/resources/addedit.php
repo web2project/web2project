@@ -56,7 +56,7 @@ function submitIt() {
 }
 </script>
 
-<form name="editFrm" action="?m=<?php echo $m; ?>" method="post" accept-charset="utf-8">
+<form name="editfrm" action="?m=<?php echo $m; ?>" method="post" accept-charset="utf-8">
     <input type="hidden" name="dosql" value="do_resource_aed" />
     <input type="hidden" name="del" value="0" />
     <input type="hidden" name="resource_id" value="<?php echo $resource_id; ?>" />
