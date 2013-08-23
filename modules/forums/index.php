@@ -76,32 +76,32 @@ $listTable = new w2p_Output_ListTable($AppUI);
     echo $listTable->startTable();
     echo $listTable->buildHeader($fields, true, 'forums');
 
-        $p = '';
+    $p = '';
 
-        foreach ($forums as $row) {
-            $htmlHelper->stageRowData($row);
-            ?>
-            <tr>
-                <td class="data">
-                    <input type="checkbox" name="forum_<?php echo $row['forum_id']; ?>" <?php echo $row['watch_user'] ? 'checked="checked"' : ''; ?> />
-                </td>
-
-                <?php
-                echo $htmlHelper->createCell('forum_name', $row['forum_name']);
-                echo $htmlHelper->createCell('forum_project', $row['forum_project']);
-                echo $htmlHelper->createCell('forum_description', $row['forum_description']);
-                echo $htmlHelper->createCell('forum_owner', $row['forum_owner']);
-                echo $htmlHelper->createCell('topic_count', $row['forum_topics']);
-                echo $htmlHelper->createCell('reply_count', $row['forum_replies']);
-                echo $htmlHelper->createCell('forum_last_datetime', $row['forum_last_date']);
-                ?>
-            </tr>
-        <?php } ?>
+    foreach ($forums as $row) {
+        $htmlHelper->stageRowData($row);
+        ?>
         <tr>
-            <td colspan="<?php echo $columnCount; ?>">
-                <input type="submit" class="button" value="<?php echo $AppUI->_('update watches'); ?>" />
+            <td class="data">
+                <input type="checkbox" name="forum_<?php echo $row['forum_id']; ?>" <?php echo $row['watch_user'] ? 'checked="checked"' : ''; ?> />
             </td>
+
+            <?php
+            echo $htmlHelper->createCell('forum_name', $row['forum_name']);
+            echo $htmlHelper->createCell('forum_project', $row['forum_project']);
+            echo $htmlHelper->createCell('forum_description', $row['forum_description']);
+            echo $htmlHelper->createCell('forum_owner', $row['forum_owner']);
+            echo $htmlHelper->createCell('topic_count', $row['forum_topics']);
+            echo $htmlHelper->createCell('reply_count', $row['forum_replies']);
+            echo $htmlHelper->createCell('forum_last_datetime', $row['forum_last_date']);
+            ?>
         </tr>
+    <?php } ?>
+    <tr>
+        <td colspan="<?php echo $columnCount; ?>">
+            <input type="submit" class="button" value="<?php echo $AppUI->_('update watches'); ?>" />
+        </td>
+    </tr>
     <?php
     echo $listTable->endTable();
     ?>
