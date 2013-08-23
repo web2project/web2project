@@ -22,7 +22,7 @@ $orderdir = $AppUI->getState('ForumIdxOrderDir') ? $AppUI->getState('ForumIdxOrd
 
 $f = w2PgetParam($_POST, 'f', 0);
 
-$forums = $forum->getAllowedForums($AppUI->user_id, $AppUI->user_company, $f, $orderby, $orderdir);
+$items = $forum->getAllowedForums($AppUI->user_id, $AppUI->user_company, $f, $orderby, $orderdir);
 
 // setup the title block
 $titleBlock = new w2p_Theme_TitleBlock('Forums', 'support.png', $m, $m . '.' . $a);
@@ -65,28 +65,8 @@ $columnCount = 1 + count($fieldList);
     $listTable->addBefore('watch', 'forum_id');
     echo $listTable->startTable();
     echo $listTable->buildHeader($fields, true, 'forums');
-
-    $p = '';
-
-    foreach ($forums as $row) {
-        $listTable->stageRowData($row);
-        ?>
-        <tr>
-            <td class="data">
-                <input type="checkbox" name="forum_<?php echo $row['forum_id']; ?>" <?php echo $row['watch_user'] ? 'checked="checked"' : ''; ?> />
-            </td>
-
-            <?php
-            echo $listTable->createCell('forum_project', $row['forum_project']);
-            echo $listTable->createCell('forum_name', $row['forum_name']);
-            echo $listTable->createCell('forum_description', $row['forum_description']);
-            echo $listTable->createCell('forum_owner', $row['forum_owner']);
-            echo $listTable->createCell('topic_count', $row['forum_topics']);
-            echo $listTable->createCell('reply_count', $row['forum_replies']);
-            echo $listTable->createCell('forum_last_datetime', $row['forum_last_date']);
-            ?>
-        </tr>
-    <?php } ?>
+    echo $listTable->buildRows($items);
+    ?>
     <tr>
         <td colspan="<?php echo $columnCount; ?>">
             <input type="submit" class="button" value="<?php echo $AppUI->_('update watches'); ?>" />
