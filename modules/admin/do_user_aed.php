@@ -77,7 +77,7 @@ if ($result) {
 			}
 		}
 		$AppUI->setMsg($isNewUser ? 'User added' : 'User updated', UI_MSG_OK, true);
-        $redirect = 'm=admin&a=viewuser&user_id='.$obj->user_id.'&tab=2';
+        $redirect = 'm=admin&a=view&user_id='.$obj->user_id.'&tab=2';
     } else {
         $AppUI->setMsg($obj->getError(), UI_MSG_ERROR);
         $redirect = 'm=admin';

@@ -182,7 +182,7 @@ function delIt() {
                         $puserid = $project->project_owner;
 
                         //TODO HTML helper not working properly due to field having suffix _owner, avoiding helper until fix
-                        echo "<a href=\"?m=admin&a=viewuser&user_id=$puserid\" alt=\"$pusername\">$pusername</a>";
+                        echo "<a href=\"?m=admin&a=view&user_id=$puserid\" alt=\"$pusername\">$pusername</a>";
                         ?>
                     </td>
                 </tr>

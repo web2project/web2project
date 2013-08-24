@@ -93,7 +93,7 @@ $methodLabels = w2PgetSysVal('ContactMethods');
                                                     <span>
                                                     <?php
                                                     if ($carr[$z][$x]['user_id']) {
-														echo '<a href="./index.php?m=admin&a=viewuser&user_id=' . $carr[$z][$x]['user_id'] . '" style="float: right;">';
+														echo '<a href="./index.php?m=admin&a=view&user_id=' . $carr[$z][$x]['user_id'] . '" style="float: right;">';
                                                         echo w2PtoolTip($m, 'This Contact is also a User, click to view its details.') . w2PshowImage('icons/users.gif') . w2PendTip();
                                                         echo '</a>';
 													}

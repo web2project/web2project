@@ -38,6 +38,6 @@ $customLookups = array('project_status' => $pstatus);
 $listHelper = new w2p_Output_ListTable($AppUI);
 
 echo $listHelper->startTable();
-echo $listHelper->buildHeader($fields, true, 'admin&a=viewuser&user_id=' . $user_id);
+echo $listHelper->buildHeader($fields, true, 'admin&a=view&user_id=' . $user_id);
 echo $listHelper->buildRows($items, $customLookups);
 echo $listHelper->endTable();

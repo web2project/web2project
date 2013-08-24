@@ -192,7 +192,7 @@ $titleBlock->show();
 <?php
 // tabbed information boxes
 $min_view = true;
-$tabBox = new CTabBox('?m=admin&a=viewuser&user_id='.$user_id, '', $tab);
+$tabBox = new CTabBox('?m=admin&a=view&user_id='.$user_id, '', $tab);
 $tabBox->add(W2P_BASE_DIR . '/modules/admin/vw_usr_log', 'User Log');
 $tabBox->add(W2P_BASE_DIR . '/modules/admin/vw_usr_perms', 'Permissions');
 $tabBox->add(W2P_BASE_DIR . '/modules/admin/vw_usr_roles', 'Roles');

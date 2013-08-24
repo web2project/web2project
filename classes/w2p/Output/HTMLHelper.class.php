@@ -159,7 +159,7 @@ class w2p_Output_HTMLHelper
                 $obj = new CContact();
                 $obj->findContactByUserid($this->tableRowData['user_id']);
                 $mod = substr($suffix, 1);
-                $link = '?m=admin&a=viewuser&user_id='.$this->tableRowData['user_id'];
+                $link = '?m=admin&a=view&user_id='.$this->tableRowData['user_id'];
                 $cell = '<a href="'.$link.'">'.$obj->contact_display_name.'</a>';
                 break;
 //END: object-based linkings
@@ -178,7 +178,6 @@ class w2p_Output_HTMLHelper
                 $page   = ($prefix == 'forum' || $prefix == 'message') ? 'viewer' : 'view';
                 $link   = '?m='. w2p_pluralize($prefix) .'&a='.$page.'&';
                 $link   = ($prefix == 'event') ? '?m=calendar&a='.$page.'&' : $link;
-                $link   = ($prefix == 'user') ? '?m=admin&a=viewuser&' : $link;
                 $link   = ($prefix == 'message') ? '?m=forums&a='.$page . '&' : $link;
                 $prefix = ($prefix == 'department') ? 'dept' : $prefix;
                 $link  .= $prefix.'_id='.$this->tableRowData[$prefix.'_id'];
@@ -198,7 +197,7 @@ class w2p_Output_HTMLHelper
                     $obj->findContactByUserid($value);
                     $mod = substr($suffix, 1);
                     $suffix .= ' nowrap';
-                    $link = '?m=admin&a=viewuser&user_id='.$this->tableRowData['user_id'];
+                    $link = '?m=admin&a=view&user_id='.$this->tableRowData['user_id'];
                     $cell = '<a href="'.$link.'">'.$obj->contact_display_name.'</a>';
                 } else {
                     $cell = $value;

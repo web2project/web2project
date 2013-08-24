@@ -11,7 +11,7 @@ $user_id = (int) w2PgetParam($_REQUEST, 'user_id', 0);
 global $AppUI, $currentTabId, $cal_sdf;
 $df = $AppUI->getPref('SHDATEFORMAT');
 
-$a = ($user_id) ? '&a=viewuser&user_id=' . $user_id : '';
+$a = ($user_id) ? '&a=view&user_id=' . $user_id : '';
 $a .= '&tab=' . $currentTabId . '&showdetails=1';
 
 $AppUI->loadCalendarJS();

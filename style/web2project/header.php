@@ -102,7 +102,7 @@ $theme = new style_web2project($AppUI, $m);
                             <?php } ?>
                         </div>
                         <a class="button" href="javascript: void(0);" onclick="javascript:window.open('?m=help&amp;dialog=1&amp;hid=', 'contexthelp', 'width=800, height=600, left=50, top=50, scrollbars=yes, resizable=yes')"><div><?php echo $AppUI->_('Help'); ?></div></a>
-                        <a class="button" href="./index.php?m=admin&amp;a=viewuser&amp;user_id=<?php echo $AppUI->user_id; ?>"><div><?php echo $AppUI->_('My Info'); ?></div></a>
+                        <a class="button" href="./index.php?m=admin&amp;a=view&amp;user_id=<?php echo $AppUI->user_id; ?>"><div><?php echo $AppUI->_('My Info'); ?></div></a>
                         <?php if (canAccess('tasks')) { ?>
                             <a class="button" href="./index.php?m=tasks&amp;a=todo"><div><b><?php echo $AppUI->_('My Tasks'); ?></b></div></a>
                         <?php } ?>

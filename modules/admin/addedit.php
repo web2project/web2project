@@ -65,7 +65,7 @@ if (canView('admin') && canView('users')) {
     $titleBlock->addCrumb('?m=admin', 'users list');
 }
 if ($user_id) {
-    $titleBlock->addCrumb('?m=admin&a=viewuser&user_id=' . $user_id, 'view this user');
+    $titleBlock->addCrumb('?m=admin&a=view&user_id=' . $user_id, 'view this user');
     if ($user['contact_id'] > 0) {
         $titleBlock->addCrumb('?m=contacts&a=view&contact_id='.$user['contact_id'], 'view this contact');
     }
