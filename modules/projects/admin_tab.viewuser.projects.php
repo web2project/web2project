@@ -22,8 +22,8 @@ $fields = $module->loadSettings('projects', 'admin_view');
 if (0 == count($fields)) {
     $fieldList = array('project_color_identifier', 'project_priority',
         'project_name', 'company_name', 'project_start_date', 'project_duration',
-        'project_end_date', 'project_actual_end_date', 'task_log_problem',
-        'user_username', 'project_task_count', 'project_status');
+        'project_end_date', 'project_end_actual', 'task_log_problem',
+        'project_owner', 'project_task_count', 'project_status');
     $fieldNames = array('Color', 'P', 'Project Name', 'Company', 'Start',
         'Duration', 'End', 'Actual', 'LP', 'Owner', 'Tasks', 'Status');
 
@@ -49,7 +49,7 @@ foreach ($projects as $row) {
     $s .= $listHelper->createCell('project_start_date', $row['project_start_date']);
     $s .= $listHelper->createCell('project_scheduled_hours', $row['project_scheduled_hours']);
     $s .= $listHelper->createCell('project_end_date', $row['project_end_date']);
-    $s .= $listHelper->createCell('project_end_actual', $row['project_actual_end_date']);
+    $s .= $listHelper->createCell('project_end_actual', $row['project_end_actual']);
     $s .= $listHelper->createCell('task_log_problem', $row['task_log_problem']);
     $s .= $listHelper->createCell('project_owner', $row['project_owner']);
     $s .= $listHelper->createCell('project_task_count', $row['project_task_count']);

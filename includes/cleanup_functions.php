@@ -2471,6 +2471,7 @@ function projects_list_data($user_id = false) {
 
 	$q->addTable('projects', 'pr');
 	$q->addQuery('pr.*, project_scheduled_hours as project_duration,
+	    project_actual_end_date as project_end_actual,
         company_id, company_name, project_last_task as critical_task,
         tp.task_log_problem, user_username, task_log_problem, u.user_id');
 
