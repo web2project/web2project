@@ -92,14 +92,12 @@ class w2p_Output_HTMLHelper
     }
     /**
      * createColumn is handy because it can take any input $fieldName and use
-     *   suffix to determine how the field should be displayed.
+     *   its suffix to determine how the field should be displayed.
      *
      * This allows us to treat project_description, task_description,
-     *   company_description, or even some_other_crazy_waky_description in
+     *   company_description, or even some_other_crazy_wacky_description in
      *   exactly the same way without additional lines of code or configuration.
      *   If you want to do your own, feel free... but this is probably easier.
-     *   differently, why not use everything after the last underscore (or suffix)
-     *   to determine the display formatting? Basically the fields become self-descriptive.
      * 
      * Examples: _budget, _date, _name, _owner
      * 
@@ -107,6 +105,12 @@ class w2p_Output_HTMLHelper
      *   actually just references to look up tables, ... but should work on
      *   fields like project_company, dept_company because we still have a 
      *   common suffix.
+     *
+     * @note I'm kind of annoyed about the complexity and sheer number of
+     *   paths of this method but overall I think it's laid out reasonably
+     *   well. I think the more important part is that I've been able to
+     *   encapsulate it all here instead of spreading it all over the modules
+     *   and views.
      */
     public function createCell($fieldName, $value, $custom = array()) {
         $additional = '';
@@ -223,6 +227,16 @@ class w2p_Output_HTMLHelper
             case '_date':
                 $myDate = intval($value) ? new w2p_Utilities_Date($value) : null;
                 $cell = $myDate ? $myDate->format($this->df) : '-';
+                break;
+            case '_actual':
+                $end_date = intval($this->tableRowData['project_end_date']) ? new w2p_Utilities_Date($this->tableRowData['project_end_date']) : null;
+                $actual_end_date = intval($this->tableRowData['project_actual_end_date']) ? new w2p_Utilities_Date($this->tableRowData['project_actual_end_date']) : null;
+                $style = (($actual_end_date > $end_date) && !empty($end_date)) ? 'style="color:red; font-weight:bold"' : '';
+                if ($actual_end_date) {
+                    $cell = '<a href="?m=tasks&a=view&task_id=' . $this->tableRowData['critical_task'] . '" ' . $style . '>' . $actual_end_date->format($this->df) . '</a>';
+                } else {
+                    $cell = '-';
+                }
                 break;
             case '_created':
             case '_datetime':

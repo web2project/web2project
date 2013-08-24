@@ -107,10 +107,6 @@ if (count($projects)) {
             $project->project_id = $row['project_id'];
             $none = false;
 
-            $end_date = intval($row['project_end_date']) ? new w2p_Utilities_Date($row['project_end_date']) : null;
-            $actual_end_date = intval($row['project_actual_end_date']) ? new w2p_Utilities_Date($row['project_actual_end_date']) : null;
-            $style = (($actual_end_date > $end_date) && !empty($end_date)) ? 'style="color:red; font-weight:bold"' : '';
-
             $s = '<tr>';
             $s .= $listHelper->createCell('project_color_identifier', $row['project_color_identifier']);
             $s .= $listHelper->createCell('project_priority', $row['project_priority']);
@@ -119,11 +115,7 @@ if (count($projects)) {
             $s .= $listHelper->createCell('project_start_date', $row['project_start_date']);
             $s .= $listHelper->createCell('project_scheduled_hours', $row['project_scheduled_hours']);
             $s .= $listHelper->createCell('project_end_date', $row['project_end_date']);
-            $s .= '<td nowrap="nowrap" align="center">';
-            $s .= $actual_end_date ? '<a href="?m=tasks&a=view&task_id=' . $row['critical_task'] . '">' : '';
-            $s .= $actual_end_date ? '<span ' . $style . '>' . $actual_end_date->format($df) . '</span>' : '-';
-            $s .= $actual_end_date ? '</a>' : '';
-            $s .= '</td>';
+            $s .= $listHelper->createCell('project_end_actual', $row['project_actual_end_date']);
             $s .= $listHelper->createCell('task_log_problem', $row['task_log_problem']);
             $s .= $listHelper->createCell('project_owner', $row['project_owner']);
             $s .= $listHelper->createCell('project_task_count', $row['project_task_count']);

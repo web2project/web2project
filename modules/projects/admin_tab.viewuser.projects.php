@@ -79,10 +79,6 @@ foreach ($projects as $row) {
 	if ($proFilter == -1 || $row['project_status'] == $proFilter || ($proFilter == -2 && $row['project_status'] != 3) || ($proFilter == -3 && $row['project_active'] != 0)) {
 		$none = false;
 
-		$end_date = intval($row['project_end_date']) ? new w2p_Utilities_Date($row['project_end_date']) : null;
-		$actual_end_date = intval($row['project_actual_end_date']) ? new w2p_Utilities_Date($row['project_actual_end_date']) : null;
-		$style = (($actual_end_date > $end_date) && !empty($end_date)) ? 'style="color:red; font-weight:bold"' : '';
-
 		$s = '<tr>';
         $s .= $listHelper->createCell('project_color_identifier', $row['project_color_identifier']);
         $s .= $listHelper->createCell('project_priority', $row['project_priority']);
