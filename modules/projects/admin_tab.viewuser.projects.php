@@ -5,25 +5,6 @@ if (!defined('W2P_BASE_DIR')) {
 
 global $a, $addPwT, $AppUI, $buffer, $company_id, $department, $min_view, $m, $priority, $projects, $tab, $user_id, $orderdir, $orderby;
 
-$df = $AppUI->getPref('SHDATEFORMAT');
-
-$pstatus = w2PgetSysVal('ProjectStatus');
-
-if (isset($_POST['proFilter'])) {
-	$AppUI->setState('UsrProjectIdxFilter', $_POST['proFilter']);
-}
-$proFilter = $AppUI->getState('UsrProjectIdxFilter') !== null ? $AppUI->getState('UsrProjectIdxFilter') : '-3';
-
-$projFilter = arrayMerge(array('-1' => 'All Projects'), $pstatus);
-$projFilter = arrayMerge(array('-2' => 'All w/o in progress'), $projFilter);
-$projFilter = arrayMerge(array('-3' => 'All w/o archived'), $projFilter);
-natsort($projFilter);
-
-// retrieve any state parameters
-if (isset($_GET['tab'])) {
-	$AppUI->setState('UsrProjIdxTab', w2PgetParam($_GET, 'tab', null));
-}
-
 if (isset($_GET['orderby'])) {
 	$orderdir = $AppUI->getState('UsrProjIdxOrderDir') ? ($AppUI->getState('UsrProjIdxOrderDir') == 'asc' ? 'desc' : 'asc') : 'desc';
 	$AppUI->setState('UsrProjIdxOrderBy', w2PgetParam($_GET, 'orderby', null));
@@ -32,9 +13,6 @@ if (isset($_GET['orderby'])) {
 $orderby = $AppUI->getState('UsrProjIdxOrderBy') ? $AppUI->getState('UsrProjIdxOrderBy') : 'project_end_date';
 $orderdir = $AppUI->getState('UsrProjIdxOrderDir') ? $AppUI->getState('UsrProjIdxOrderDir') : 'asc';
 
-$extraGet = '&user_id=' . $user_id;
-
-// collect the full projects list data via function in projects.class.php
 $project = new CProject();
 $projects = projects_list_data($user_id);
 
@@ -52,9 +30,9 @@ if (0 == count($fields)) {
     $fields = array_combine($fieldList, $fieldNames);
 }
 
+$pstatus = w2PgetSysVal('ProjectStatus');
 $customLookups = array('project_status' => $pstatus);
 
-$none = true;
 $listHelper = new w2p_Output_ListTable($AppUI);
 
 echo $listHelper->startTable();
@@ -62,8 +40,6 @@ echo $listHelper->buildHeader($fields, true, 'admin&a=viewuser&user_id=' . $user
 
 foreach ($projects as $row) {
     $listHelper->stageRowData($row);
-
-    $none = false;
 
     $s = '<tr>';
     $s .= $listHelper->createCell('project_color_identifier', $row['project_color_identifier']);

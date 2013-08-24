@@ -6,25 +6,6 @@ if (!defined('W2P_BASE_DIR')) {
 global $AppUI, $a, $addPwOiD, $buffer, $dept_id, $department, $min_view,
 	$m, $priority, $projects, $tab, $user_id, $orderdir, $orderby;
 
-$df = $AppUI->getPref('SHDATEFORMAT');
-
-$pstatus = w2PgetSysVal('ProjectStatus');
-
-if (isset($_POST['proFilter'])) {
-	$AppUI->setState('DeptProjectIdxFilter', $_POST['proFilter']);
-}
-$proFilter = $AppUI->getState('DeptProjectIdxFilter') !== null ? $AppUI->getState('DeptProjectIdxFilter') : '-1';
-
-$projFilter = arrayMerge(array('-1' => 'All Projects'), $pstatus);
-$projFilter = arrayMerge(array('-2' => 'All w/o in progress'), $projFilter);
-$projFilter = arrayMerge(array('-3' => 'All w/o archived'), $projFilter);
-natsort($projFilter);
-
-// retrieve any state parameters
-if (isset($_GET['tab'])) {
-	$AppUI->setState('DeptProjIdxTab', w2PgetParam($_GET, 'tab', null));
-}
-
 if (isset($_GET['orderby'])) {
 	$orderdir = $AppUI->getState('DeptProjIdxOrderDir') ? ($AppUI->getState('DeptProjIdxOrderDir') == 'asc' ? 'desc' : 'asc') : 'desc';
 	$AppUI->setState('DeptProjIdxOrderBy', w2PgetParam($_GET, 'orderby', null));
@@ -33,15 +14,6 @@ if (isset($_GET['orderby'])) {
 $orderby = $AppUI->getState('DeptProjIdxOrderBy') ? $AppUI->getState('DeptProjIdxOrderBy') : 'project_end_date';
 $orderdir = $AppUI->getState('DeptProjIdxOrderDir') ? $AppUI->getState('DeptProjIdxOrderDir') : 'asc';
 
-if (isset($_POST['show_form'])) {
-	$AppUI->setState('addProjWithOwnerInDep', w2PgetParam($_POST, 'add_pwoid', 0));
-}
-$addPwT = $AppUI->getState('addProjWithTasks', 0);
-$addPwOiD = $AppUI->getState('addProjWithOwnerInDep', 0);
-
-$extraGet = '&user_id=' . $user_id;
-
-// collect the full projects list data via function in projects.class.php
 /*
  *  TODO:  This is a *nasty* *nasty* kludge that should be cleaned up.
  * Unfortunately due to the global variables from dotProject, we're stuck with
@@ -68,9 +40,9 @@ if (0 == count($fields)) {
     $fields = array_combine($fieldList, $fieldNames);
 }
 
+$pstatus = w2PgetSysVal('ProjectStatus');
 $customLookups = array('project_status' => $pstatus);
 
-$none = true;
 $listHelper = new w2p_Output_ListTable($AppUI);
 
 echo $listHelper->startTable();
@@ -79,9 +51,6 @@ echo $listHelper->buildHeader($fields, true, 'departments&a=view&dept_id=' . $de
 if (count($projects)) {
     foreach ($projects as $row) {
         $listHelper->stageRowData($row);
-
-        $project->project_id = $row['project_id'];
-        $none = false;
 
         $s = '<tr>';
         $s .= $listHelper->createCell('project_color_identifier', $row['project_color_identifier']);
