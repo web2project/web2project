@@ -51,17 +51,6 @@ if (0 == count($fields)) {
 
     $fields = array_combine($fieldList, $fieldNames);
 }
-?>
-
-<table class="tbl list">
-<tr>
-	<td align="center" width="100%" nowrap="nowrap" colspan="7">&nbsp;</td>
-	<td align="right" nowrap="nowrap"><form action="?m=admin&a=viewuser&user_id=<?php echo $user_id; ?>&tab=<?php echo $tab; ?>" method="post" name="checkPwT" accept-charset="utf-8"><input type="checkbox" name="add_pwt" id="add_pwt" onclick="document.checkPwT.submit()" <?php echo $addPwT ? 'checked="checked"' : ''; ?> /></td><td align="right" nowrap="nowrap"><label for="add_pwt"><?php echo $AppUI->_('Show Projects with assigned Tasks'); ?>?</label><input type="hidden" name="show_form" value="1" /></form></td>
-	<td align="right" nowrap="nowrap"><form action="?m=admin&a=viewuser&user_id=<?php echo $user_id; ?>&tab=<?php echo $tab; ?>" method="post" name="pickCompany" accept-charset="utf-8"><?php echo $buffer; ?></form></td>
-	<td align="right" nowrap="nowrap"><form action="?m=admin&a=viewuser&user_id=<?php echo $user_id; ?>&tab=<?php echo $tab; ?>" method="post" name="pickProject" accept-charset="utf-8"><?php echo arraySelect($projFilter, 'proFilter', 'size=1 class=text onChange="document.pickProject.submit()"', $proFilter, true); ?></form></td>
-</tr>
-</table>
-<?php
 
 $customLookups = array('project_status' => $pstatus);
 
@@ -73,28 +62,24 @@ echo $listHelper->buildHeader($fields, true, 'admin&a=viewuser&user_id=' . $user
 
 foreach ($projects as $row) {
     $listHelper->stageRowData($row);
-    // We dont check the percent_completed == 100 because some projects
-	// were being categorized as completed because not all the tasks
-	// have been created (for new projects)
-	if ($proFilter == -1 || $row['project_status'] == $proFilter || ($proFilter == -2 && $row['project_status'] != 3) || ($proFilter == -3 && $row['project_active'] != 0)) {
-		$none = false;
 
-		$s = '<tr>';
-        $s .= $listHelper->createCell('project_color_identifier', $row['project_color_identifier']);
-        $s .= $listHelper->createCell('project_priority', $row['project_priority']);
-        $s .= $listHelper->createCell('project_name', $row['project_name']);
-        $s .= $listHelper->createCell('project_company', $row['project_company']);
-        $s .= $listHelper->createCell('project_start_date', $row['project_start_date']);
-        $s .= $listHelper->createCell('project_scheduled_hours', $row['project_scheduled_hours']);
-        $s .= $listHelper->createCell('project_end_date', $row['project_end_date']);
-        $s .= $listHelper->createCell('project_end_actual', $row['project_actual_end_date']);
-        $s .= $listHelper->createCell('task_log_problem', $row['task_log_problem']);
-        $s .= $listHelper->createCell('project_owner', $row['project_owner']);
-        $s .= $listHelper->createCell('project_task_count', $row['project_task_count']);
-        $s .= $listHelper->createCell('project_status', $row['project_status'], $customLookups);
-        $s .= '</tr>';
-		echo $s;
-	}
+    $none = false;
+
+    $s = '<tr>';
+    $s .= $listHelper->createCell('project_color_identifier', $row['project_color_identifier']);
+    $s .= $listHelper->createCell('project_priority', $row['project_priority']);
+    $s .= $listHelper->createCell('project_name', $row['project_name']);
+    $s .= $listHelper->createCell('project_company', $row['project_company']);
+    $s .= $listHelper->createCell('project_start_date', $row['project_start_date']);
+    $s .= $listHelper->createCell('project_scheduled_hours', $row['project_scheduled_hours']);
+    $s .= $listHelper->createCell('project_end_date', $row['project_end_date']);
+    $s .= $listHelper->createCell('project_end_actual', $row['project_actual_end_date']);
+    $s .= $listHelper->createCell('task_log_problem', $row['task_log_problem']);
+    $s .= $listHelper->createCell('project_owner', $row['project_owner']);
+    $s .= $listHelper->createCell('project_task_count', $row['project_task_count']);
+    $s .= $listHelper->createCell('project_status', $row['project_status'], $customLookups);
+    $s .= '</tr>';
+    echo $s;
 }
 if ($none) {
     echo $listHelper->buildEmptyRow();

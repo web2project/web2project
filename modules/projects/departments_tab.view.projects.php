@@ -67,26 +67,6 @@ if (0 == count($fields)) {
         'Duration', 'End', 'Actual', 'LP', 'Owner', 'Tasks', 'Status');
     $fields = array_combine($fieldList, $fieldNames);
 }
-?>
-
-<table class="tbl list">
-<tr>
-	<td align="right" width="65" nowrap="nowrap">&nbsp;<?php echo $AppUI->_('sort by'); ?>:&nbsp;</td>
-	<td align="center" width="100%" nowrap="nowrap" colspan="6">&nbsp;</td>
-    <td align="right" nowrap="nowrap">
-        <form action="?m=departments&a=view&dept_id=<?php echo $dept_id; ?>&tab=<?php echo $tab; ?>" method="post" name="form_cb" accept-charset="utf-8">
-            <input type="hidden" name="show_form" value="1" />
-            <input type="checkbox" name="add_pwoid" id="add_pwoid" onclick="document.form_cb.submit()" <?php echo $addPwOiD ? 'checked="checked"' : ''; ?> /><label for="add_pwoid"><?php echo $AppUI->_('Show Projects whose Owner is Member of the Dep.'); ?>?</label>
-        </form>
-    </td>
-	<td align="right" nowrap="nowrap">
-        <form action="?m=departments&a=view&dept_id=<?php echo $dept_id; ?>&tab=<?php echo $tab; ?>" method="post" name="pickProject" accept-charset="utf-8">
-            <?php echo arraySelect($projFilter, 'proFilter', 'size=1 class=text onChange="document.pickProject.submit()"', $proFilter, true); ?>
-        </form>
-    </td>
-</tr>
-</table>
-<?php
 
 $customLookups = array('project_status' => $pstatus);
 
@@ -100,29 +80,24 @@ if (count($projects)) {
     foreach ($projects as $row) {
         $listHelper->stageRowData($row);
 
-        // We dont check the percent_completed == 100 because some projects
-        // were being categorized as completed because not all the tasks
-        // have been created (for new projects)
-        if ($proFilter == -1 || $row['project_status'] == $proFilter || ($proFilter == -2 && $row['project_status'] != 3) || ($proFilter == -3 && $row['project_active'] != 0)) {
-            $project->project_id = $row['project_id'];
-            $none = false;
+        $project->project_id = $row['project_id'];
+        $none = false;
 
-            $s = '<tr>';
-            $s .= $listHelper->createCell('project_color_identifier', $row['project_color_identifier']);
-            $s .= $listHelper->createCell('project_priority', $row['project_priority']);
-            $s .= $listHelper->createCell('project_name', $row['project_name']);
-            $s .= $listHelper->createCell('project_company', $row['project_company']);
-            $s .= $listHelper->createCell('project_start_date', $row['project_start_date']);
-            $s .= $listHelper->createCell('project_scheduled_hours', $row['project_scheduled_hours']);
-            $s .= $listHelper->createCell('project_end_date', $row['project_end_date']);
-            $s .= $listHelper->createCell('project_end_actual', $row['project_actual_end_date']);
-            $s .= $listHelper->createCell('task_log_problem', $row['task_log_problem']);
-            $s .= $listHelper->createCell('project_owner', $row['project_owner']);
-            $s .= $listHelper->createCell('project_task_count', $row['project_task_count']);
-            $s .= $listHelper->createCell('project_status', $row['project_status'], $customLookups);
-            $s .= '</tr>';
-            echo $s;
-        }
+        $s = '<tr>';
+        $s .= $listHelper->createCell('project_color_identifier', $row['project_color_identifier']);
+        $s .= $listHelper->createCell('project_priority', $row['project_priority']);
+        $s .= $listHelper->createCell('project_name', $row['project_name']);
+        $s .= $listHelper->createCell('project_company', $row['project_company']);
+        $s .= $listHelper->createCell('project_start_date', $row['project_start_date']);
+        $s .= $listHelper->createCell('project_scheduled_hours', $row['project_scheduled_hours']);
+        $s .= $listHelper->createCell('project_end_date', $row['project_end_date']);
+        $s .= $listHelper->createCell('project_end_actual', $row['project_actual_end_date']);
+        $s .= $listHelper->createCell('task_log_problem', $row['task_log_problem']);
+        $s .= $listHelper->createCell('project_owner', $row['project_owner']);
+        $s .= $listHelper->createCell('project_task_count', $row['project_task_count']);
+        $s .= $listHelper->createCell('project_status', $row['project_status'], $customLookups);
+        $s .= '</tr>';
+        echo $s;
     }
 } else {
     echo $listHelper->buildEmptyRow();
