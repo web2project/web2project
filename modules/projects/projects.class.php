@@ -855,8 +855,12 @@ class CProject extends w2p_Core_BaseObject
         $project_percent_complete = $q->loadResult();
         $q->clear();
 
+        $task = new CTask();
+        $project_scheduled_hours = $task->getHoursScheduled($project_id);
+
         $q->addTable('projects');
-        $q->addUpdate('project_percent_complete', $project_percent_complete);
+        $q->addUpdate('project_percent_complete',   $project_percent_complete);
+        $q->addUpdate('project_scheduled_hours',    $project_scheduled_hours);
         $q->addWhere('project_id  = ' . (int) $project_id);
         $q->exec();
 

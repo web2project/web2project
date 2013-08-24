@@ -349,6 +349,26 @@ class CTask extends w2p_Core_BaseObject
         return $this->load($oid, $strip);
     }
 
+    public function getHoursScheduled($project_id)
+    {
+        $q = $this->_getQuery();
+        $q->addTable('tasks');
+        $q->addQuery('SUM(task_duration * task_duration_type)');
+        $q->addWhere("task_project = $project_id AND task_duration_type = 1 AND task_dynamic <> 1");
+        $children_allocated_hours = (float) $q->loadResult();
+        //Collect allocated hours based on children with duration type of 'days'
+        $q->clear();
+        $q->addTable('tasks');
+        $q->addQuery(' SUM(task_duration * ' . w2PgetConfig('daily_working_hours') . ')');
+        $q->addWhere("task_project = $project_id AND task_duration_type <> 1 AND task_dynamic <> 1");
+        $children_allocated_days = (float) $q->loadResult();
+
+        /**
+         * Sum up the two distinct duration values for the children with
+         *   duration type 'hrs' and for those with the duration type 'day'
+         */
+        return $children_allocated_hours + $children_allocated_days;
+    }
     public function updateDynamics()
     {
         $q = $this->_getQuery();
