@@ -15,6 +15,7 @@ $orderdir = $AppUI->getState('UsrProjIdxOrderDir') ? $AppUI->getState('UsrProjId
 
 $project = new CProject();
 $projects = projects_list_data($user_id);
+$items = $projects;
 
 $module = new w2p_Core_Module();
 $fields = $module->loadSettings('projects', 'admin_view');
@@ -37,27 +38,5 @@ $listHelper = new w2p_Output_ListTable($AppUI);
 
 echo $listHelper->startTable();
 echo $listHelper->buildHeader($fields, true, 'admin&a=viewuser&user_id=' . $user_id);
-
-foreach ($projects as $row) {
-    $listHelper->stageRowData($row);
-
-    $s = '<tr>';
-    $s .= $listHelper->createCell('project_color_identifier', $row['project_color_identifier']);
-    $s .= $listHelper->createCell('project_priority', $row['project_priority']);
-    $s .= $listHelper->createCell('project_name', $row['project_name']);
-    $s .= $listHelper->createCell('project_company', $row['project_company']);
-    $s .= $listHelper->createCell('project_start_date', $row['project_start_date']);
-    $s .= $listHelper->createCell('project_scheduled_hours', $row['project_scheduled_hours']);
-    $s .= $listHelper->createCell('project_end_date', $row['project_end_date']);
-    $s .= $listHelper->createCell('project_end_actual', $row['project_end_actual']);
-    $s .= $listHelper->createCell('task_log_problem', $row['task_log_problem']);
-    $s .= $listHelper->createCell('project_owner', $row['project_owner']);
-    $s .= $listHelper->createCell('project_task_count', $row['project_task_count']);
-    $s .= $listHelper->createCell('project_status', $row['project_status'], $customLookups);
-    $s .= '</tr>';
-    echo $s;
-}
-if ($none) {
-    echo $listHelper->buildEmptyRow();
-}
+echo $listHelper->buildRows($items, $customLookups);
 echo $listHelper->endTable();
