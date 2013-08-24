@@ -39,6 +39,7 @@ if (0 == count($fields)) {
     $fieldNames = array('Color', 'P', 'Project Name', 'Company', 'Start',
         'Duration', 'End', 'Actual', 'LP', 'Owner', 'Tasks', 'Status');
 
+    $module->storeSettings('projects', 'department_view', $fieldList, $fieldNames);
     $fields = array_combine($fieldList, $fieldNames);
 }
 

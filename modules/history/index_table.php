@@ -29,6 +29,7 @@ if (0 == count($fields)) {
     $fieldList = array('history_date', 'history_description', 'history_user');
     $fieldNames = array('Date', 'Description', 'Owner');
 
+    $module->storeSettings('history', 'index_list', $fieldList, $fieldNames);
     $fields = array_combine($fieldList, $fieldNames);
 }
 
