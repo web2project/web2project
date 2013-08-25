@@ -133,15 +133,6 @@ if (!$project_id) {
 
 	$canDeleteProject = $obj->canDelete($msg, $project_id);
 
-	// get critical tasks (criteria: task_end_date)
-	$criticalTasks = ($project_id > 0) ? $obj->getCriticalTasks($project_id) : null;
-
-	// get ProjectPriority from sysvals
-	$projectPriority = w2PgetSysVal('ProjectPriority');
-	$projectPriorityColor = w2PgetSysVal('ProjectPriorityColor');
-	$pstatus = w2PgetSysVal('ProjectStatus');
-	$ptype = w2PgetSysVal('ProjectType');
-
 	// load the record data
 	$obj->loadFull(null, $project_id);
 
@@ -152,16 +143,6 @@ if (!$project_id) {
 	} else {
 		$AppUI->savePlace();
 	}
-
-	$worked_hours = $obj->project_worked_hours;
-	$total_project_hours = $total_hours = $obj->project_scheduled_hours;
-
-	// create Date objects from the datetime fields
-	$start_date = intval($obj->project_start_date) ? new w2p_Utilities_Date($obj->project_start_date) : null;
-	$end_date = intval($obj->project_end_date) ? new w2p_Utilities_Date($obj->project_end_date) : null;
-	$actual_end_date = intval($criticalTasks[0]['task_end_date']) ? new w2p_Utilities_Date($criticalTasks[0]['task_end_date']) : null;
-	$style = (($actual_end_date > $end_date) && !empty($end_date)) ? 'style="color:red; font-weight:bold"' : '';
-	$style = (($obj->project_percent_complete < 99.99 && $today > $end_date) && !empty($end_date)) ? 'style="color:red; font-weight:bold"' : $style;
 
 	// setup the title block
 	$ttl = 'ProjectDesigner';
