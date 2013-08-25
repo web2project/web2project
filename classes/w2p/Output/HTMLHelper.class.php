@@ -318,6 +318,7 @@ class w2p_Output_HTMLHelper
      */
     public static function renderColumn(w2p_Core_CAppUI $AppUI, $fieldName, $row)
     {
+        global $w2Pconfig;
         trigger_error("The static method renderColumn has been deprecated and will be removed by v4.0.", E_USER_NOTICE);
 
         $last_underscore = strrpos($fieldName, '_');
@@ -326,33 +327,24 @@ class w2p_Output_HTMLHelper
         switch ($suffix) {
             case '_creator':
             case '_owner':
-                $s .= '<td nowrap="nowrap">';
                 $s .= w2PgetUsernameFromID($row[$fieldName]);
-                $s .= '</td>';
                 break;
             case '_budget':
-                $s .= '<td>';
-                global $w2Pconfig;
-                $s .= $w2Pconfig['currency_symbol'];
+                $s = $w2Pconfig['currency_symbol'];
                 $s .= formatCurrency($row[$fieldName], $AppUI->getPref('CURRENCYFORM'));
-                $s .= '</td>';
                 break;
             case '_url':
-                $s .= '<td>';
-                $s .= w2p_url($row[$fieldName]);
-                $s .= '</td>';
+                $s = w2p_url($row[$fieldName]);
                 break;
             case '_date':
                 $df = $AppUI->getPref('SHDATEFORMAT');
                 $myDate = intval($row[$fieldName]) ? new w2p_Utilities_Date($row[$fieldName]) : null;
-                $s .= '<td nowrap="nowrap" class="center">' . ($myDate ? $myDate->format($df) : '-') . '</td>';
+                $s = ($myDate ? $myDate->format($df) : '-');
                 break;
             default:
-                $s .= '<td nowrap="nowrap" class="center">';
-                $s .= htmlspecialchars($row[$fieldName], ENT_QUOTES);
-                $s .= '</td>';
+                $s = htmlspecialchars($row[$fieldName], ENT_QUOTES);
         }
 
-        return $s;
+        return '<td nowrap="nowrap">' . $s . '</td>';
     }
 }
