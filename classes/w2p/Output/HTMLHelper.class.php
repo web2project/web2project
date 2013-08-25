@@ -115,6 +115,10 @@ class w2p_Output_HTMLHelper
     public function createCell($fieldName, $value, $custom = array()) {
         $additional = '';
 
+        if ('' == $value) {
+            return '<td>-</td>';
+        }
+
         $last_underscore = strrpos($fieldName, '_');
         $prefix = ($last_underscore !== false) ? substr($fieldName, 0, $last_underscore) : $fieldName;
         $suffix = ($last_underscore !== false) ? substr($fieldName, $last_underscore) : $fieldName;
