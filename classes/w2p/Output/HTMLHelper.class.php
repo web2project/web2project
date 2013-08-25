@@ -158,7 +158,6 @@ class w2p_Output_HTMLHelper
             case '_username':
                 $obj = new CContact();
                 $obj->findContactByUserid($this->tableRowData['user_id']);
-                $mod = substr($suffix, 1);
                 $link = '?m=admin&a=view&user_id='.$this->tableRowData['user_id'];
                 $cell = '<a href="'.$link.'">'.$obj->contact_display_name.'</a>';
                 break;
@@ -195,9 +194,8 @@ class w2p_Output_HTMLHelper
                 if ((int) $value) {
                     $obj = new CContact();
                     $obj->findContactByUserid($value);
-                    $mod = substr($suffix, 1);
                     $suffix .= ' nowrap';
-                    $link = '?m=admin&a=view&user_id='.$this->tableRowData['user_id'];
+                    $link = '?m=admin&a=view&user_id='.$value;
                     $cell = '<a href="'.$link.'">'.$obj->contact_display_name.'</a>';
                 } else {
                     $cell = $value;
