@@ -673,7 +673,7 @@ function showtask_pd(&$arr, $level = 0, $today_view = false) {
 
 //TODO: modules/projectdesigner/projectdesigner.class.php
 function showtask_pr(&$arr, $level = 0, $today_view = false) {
-	global $AppUI, $w2Pconfig, $done;
+	global $AppUI, $done;
 
     //Check for Tasks Access
     $tmpTask = new CTask();
@@ -763,8 +763,6 @@ function findchild(&$tarr, $parent, $level = 0) {
 }
 
 function findchild_gantt(&$tarr, $parent, $level = 0) {
-    global $projects;
-
     $level = $level + 1;
     $n = count($tarr);
 
@@ -778,8 +776,6 @@ function findchild_gantt(&$tarr, $parent, $level = 0) {
 
 //TODO: modules/projectdesigner/projectdesigner.class.php
 function findchild_pd(&$tarr, $parent, $level = 0) {
-	global $projects;
-
 	$level = $level + 1;
 	$n = count($tarr);
 
@@ -1330,7 +1326,6 @@ function showfiltertask(&$a, $level=0) {
 }
 // from modules/tasks/viewgantt.php
 function findfiltertaskchild(&$tarr, $parent, $level=0) {
-     global $filter_task_list;
      $level = $level + 1;
      $n = count($tarr);
      for ($x=0; $x < $n; $x++) {
@@ -1452,7 +1447,6 @@ function highlight($text, $keyval) {
 	global $ssearch;
 
 	$txt = $text;
-	$keys = array();
 	$keys = (!is_array($keyval)) ? array($keyval) : $keyval;
 
 	foreach ($keys as $key_idx => $key) {
@@ -4272,7 +4266,7 @@ function getTaskLinks($startPeriod, $endPeriod, &$links, $strMaxLen, $company_id
 	}
 }
 
-function getTaskTooltip($task_id, $starts = false, $ends = false ) {
+function getTaskTooltip($task_id) {
 	global $AppUI;
 
 	if (!$task_id) {
