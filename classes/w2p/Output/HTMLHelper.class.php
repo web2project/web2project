@@ -234,7 +234,7 @@ class w2p_Output_HTMLHelper
                 $actual_end_date = intval($this->tableRowData['project_actual_end_date']) ? new w2p_Utilities_Date($this->tableRowData['project_actual_end_date']) : null;
                 $style = (($actual_end_date > $end_date) && !empty($end_date)) ? 'style="color:red; font-weight:bold"' : '';
                 if ($actual_end_date) {
-                    $cell = '<a href="?m=tasks&a=view&task_id=' . $this->tableRowData['critical_task'] . '" ' . $style . '>' . $actual_end_date->format($this->df) . '</a>';
+                    $cell = '<a href="?m=tasks&a=view&task_id=' . $this->tableRowData['project_last_task'] . '" ' . $style . '>' . $actual_end_date->format($this->df) . '</a>';
                 } else {
                     $cell = '-';
                 }
