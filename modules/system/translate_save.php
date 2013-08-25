@@ -79,4 +79,4 @@ fwrite($fp, $txt);
 fclose($fp);
 
 $AppUI->setMsg('Locales file saved', UI_MSG_OK);
-$AppUI->redirect('m=system&a=translate');
+$AppUI->redirect('m=system&a=translate&module=' . $module);
