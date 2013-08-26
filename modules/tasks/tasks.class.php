@@ -2565,11 +2565,9 @@ class CTask extends w2p_Core_BaseObject
         if ($task_project) {
             $q->addWhere('task_project = ' . (int) $task_project);
         }
-        if ($orderby == '') {
-            $q->addOrder('task_parent, task_parent = task_id desc');
-        } else {
-            $q->addOrder($orderby);
-        }
+        $orderby = (property_exists($this, $orderby)) ? $orderby : 'task_parent, task_id desc';
+        $q->addOrder($orderby);
+
         $task_list = $q->loadList();
 
         $obj = new CTask();

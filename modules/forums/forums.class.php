@@ -147,6 +147,7 @@ class CForum extends w2p_Core_BaseObject
         }
 
         $q->addGroup('forum_id');
+        $orderby = (property_exists($this, $orderby)) ? $orderby : 'forum_name';
         $q->addOrder($orderby . ' ' . $orderdir);
 
         return $q->loadList();

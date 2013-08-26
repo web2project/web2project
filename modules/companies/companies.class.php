@@ -130,6 +130,8 @@ class CCompany extends w2p_Core_BaseObject {
         $q->addWhere('c.company_owner = '.$ownerId);
         }
         $q->addGroup('c.company_id');
+        $orderby = (property_exists($this, $orderby) || in_array($orderby, array('countp', 'inactive')))
+            ? $orderby : 'company_name';
         $q->addOrder($orderby . ' ' . $orderdir);
 
         return $q->loadList();

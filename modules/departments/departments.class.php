@@ -89,7 +89,7 @@ class CDepartment extends w2p_Core_BaseObject
 	}
 
 	public function getFilteredDepartmentList($notUsed = null, $deptType = -1, $searchString = '', $ownerId = 0, $orderby = 'dept_name', $orderdir = 'ASC') {
-        $orderby = (in_array($orderby, array('dept_name', 'dept_type', 'countp', 'inactive'))) ? $orderby : 'dept_name';
+
         $q = $this->_getQuery();
         $q->addTable('departments');
         $q->addQuery('departments.*, COUNT(ct.contact_department) dept_users, count(distinct p.project_id) as countp, count(distinct p2.project_id) as inactive, con.contact_first_name, con.contact_last_name');
@@ -118,6 +118,8 @@ class CDepartment extends w2p_Core_BaseObject
             $q->addWhere('dept_owner = '.$ownerId);
         }
         $q->addGroup('dept_id');
+        $orderby = (property_exists($this, $orderby) || in_array($orderby, array('countp', 'inactive')))
+            ? $orderby : 'dept_name';
         $q->addOrder($orderby . ' ' . $orderdir);
 
         return $q->loadList();

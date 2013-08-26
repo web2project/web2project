@@ -219,7 +219,7 @@ abstract class w2p_Core_BaseObject extends w2p_Core_Event implements w2p_Core_Li
     {
         $q = $this->_getQuery();
         $q->addTable($this->_tbl);
-        if ($order) {
+        if ($order && property_exists($this, $order)) {
             $q->addOrder($order);
         }
         if ($where) {

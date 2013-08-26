@@ -27,6 +27,7 @@ class CFile_Folder extends w2p_Core_BaseObject {
         $q = $this->_getQuery();
 		$q->addTable('file_folders');
 		$q->addQuery($fields);
+        $orderby = (property_exists($this, $orderby)) ? $orderby : 'file_folder_name';
 		$q->addOrder($orderby);
 		return $q->loadHashList();
 	}
