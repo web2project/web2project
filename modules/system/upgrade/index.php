@@ -26,7 +26,7 @@ $continue = true;
     float: left;
 }
 </style>
-<table class="tbl list update">
+<table class="tbl update">
 	<tr>
 		<td class="title" colspan="2">Step 1: Check System Settings</td>
 	</tr>
