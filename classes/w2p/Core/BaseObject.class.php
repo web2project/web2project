@@ -402,6 +402,9 @@ abstract class w2p_Core_BaseObject extends w2p_Core_Event implements w2p_Core_Li
             return false;
         }
 
+        /**
+        * @todo This should confirm that the module is actually active and available befor executing the query below
+        */
         if (is_array($joins)) {
             foreach ($joins as $table) {
                 $q = $this->_getQuery();
