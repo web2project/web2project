@@ -4,7 +4,14 @@
  * @package     web2project\core
  */
 
-class w2p_Core_Config extends w2p_Core_BaseObject {
+class w2p_Core_Config extends w2p_Core_BaseObject
+{
+    public $config_id;
+    public $config_name;
+    public $config_value;
+    public $config_group;
+    public $config_type;
+
     protected $keepReminders = false;
     
 	public function __construct() {
