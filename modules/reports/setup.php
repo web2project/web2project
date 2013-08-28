@@ -5,7 +5,7 @@ if (!defined('W2P_BASE_DIR')) {
 
 $config = array();
 $config['mod_name'] = 'Reports';
-$config['mod_version'] = '0.1';
+$config['mod_version'] = '3.0.0';
 $config['mod_directory'] = 'reports';
 $config['mod_setup_class'] = 'CSetupReports';
 $config['mod_type'] = 'user';

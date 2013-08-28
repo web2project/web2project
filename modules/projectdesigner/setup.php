@@ -6,7 +6,7 @@ if (!defined('W2P_BASE_DIR')) {
 // MODULE CONFIGURATION DEFINITION
 $config = array();
 $config['mod_name'] = 'ProjectDesigner';
-$config['mod_version'] = '1.0';
+$config['mod_version'] = '3.0.0';
 $config['mod_directory'] = 'projectdesigner';
 $config['mod_setup_class'] = 'projectDesigner';
 $config['mod_type'] = 'user';

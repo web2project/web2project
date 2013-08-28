@@ -3,10 +3,9 @@ if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
 
-// MODULE CONFIGURATION DEFINITION
 $config = array();
 $config['mod_name'] = 'SmartSearch';
-$config['mod_version'] = '2.0';
+$config['mod_version'] = '3.0.0';
 $config['mod_directory'] = 'smartsearch';
 $config['mod_setup_class'] = 'SSearchNS';
 $config['mod_type'] = 'user';

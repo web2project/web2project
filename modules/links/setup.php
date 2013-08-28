@@ -3,18 +3,9 @@ if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
 
-/**
- *  Name: Links
- *  Directory: links
- *  Version 1.0
- *  Type: user
- *  UI Name: Links
- *  UI Icon: ?
- */
-
 $config = array();
 $config['mod_name'] = 'Links';
-$config['mod_version'] = '1.0';
+$config['mod_version'] = '3.0.0';
 $config['mod_directory'] = 'links';                     // tell web2Project where to find this module
 $config['mod_setup_class'] = 'CSetupLinks';             // the name of the PHP setup class (used below)
 $config['mod_type'] = 'user';                           // 'core' for modules distributed with w2P by standard, 'user' for additional modules from dotmods
