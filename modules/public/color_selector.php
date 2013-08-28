@@ -4,6 +4,12 @@ if (!defined('W2P_BASE_DIR')) {
 }
 
 ?>
+<style>
+    div[class="std titlebar"], form[name="frm_new"],
+    body div:nth-child(2), div[class="left"] {
+        display: none;
+    }
+</style>
 <script language="javascript" type="text/javascript">
 	function setClose(color){
 		window.opener.setColor(color);

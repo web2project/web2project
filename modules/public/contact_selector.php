@@ -13,6 +13,12 @@ if (w2PgetParam($_POST, 'selected_contacts_id')) {
 	$selected_contacts_id = w2PgetParam($_POST, 'selected_contacts_id');
 }
 ?>
+<style>
+    div[class="std titlebar"], form[name="frm_new"],
+    body div:nth-child(2), div[class="left"] {
+        display: none;
+    }
+</style>
 <script language="javascript" type="text/javascript">
 // ECMA Script section Carsten Menke <menke@smp-synergie.de>
 function setContactIDs(method, querystring) {
