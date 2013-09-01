@@ -90,9 +90,7 @@ $canDelete = $perms->checkModuleItem($m, 'delete');
             <td nowrap="nowrap">
                 <label for="show_empty_date"><?php echo $AppUI->_('Empty Dates'); ?></label>
             </td>
-        </tr>
-        <tr>
-            <td colspan = "12" align="right">
+            <td>
             <?php
                 $types = array('' => '(Task Type Filter)') + w2PgetSysVal('TaskType');
                 echo arraySelect($types, 'task_type', 'class="text" onchange="document.form_buttons.submit()"', $task_type, true);

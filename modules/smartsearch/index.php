@@ -106,14 +106,14 @@ foreach ($hook_modules as $tmp) {
     $titleBlock->show();
 ?>
 <form name="frmSearch" action="?m=<?php echo $m; ?>"  method="post" accept-charset="utf-8">
-<table class="tbl view">
+<table class="tbl view smartsearch">
 	<tr><td>
 			<table cellspacing="5" cellpadding="0" border="0">
 				<tr>
 					<td align="left" valign="middle">
 					<div id="div_advancedsearch1" id="div_advancedsearch1"  style="<?php echo ($ssearch['advanced_search'] == "on" ? 'visibility:visible' : 'visibility:hidden'); ?> "> 1. </div></td>
 					<td align="left"><input class="text" size="18" type="text" id="keyword" name="keyword" value="<?php echo $keyword; ?>" /></td>
-					<td align="left"><input class="button" type="submit" value="<?php echo $AppUI->_('Search'); ?>" /></td>
+					<td align="left"><input class="button btn btn-small dropdown-toggle" type="submit" value="<?php echo $AppUI->_('Search'); ?>" /></td>
 					<td align="left"><input name="allwords" id="allwords" type="checkbox"  <?php echo ($ssearch['all_words'] == "on" ? 'checked="checked"' : ''); ?> /></td> <td align="left"><label for="allwords"><?php echo $AppUI->_('All words'); ?></label></td>
 					<td align="left"><input name="modselection" id="modselection" type="checkbox"  <?php echo ($ssearch['mod_selection'] == "on" ? 'checked="checked"' : ''); ?> onclick="toggleModules(this)" /></td> <td align="left"><label for="modselection"><?php echo $AppUI->_('Modules selection'); ?></label></td>
 					<td align="left"><input name="advancedsearch" id="advancedsearch" type="checkbox" <?php echo ($ssearch['advanced_search'] == "on" ? 'checked="checked"' : ''); ?> onclick="toggleStatus(this)" /></td> <td align="left"><label for="advancedsearch"><?php echo $AppUI->_('Advanced search'); ?></label></td>
