@@ -62,7 +62,7 @@ $bufferSearch = '<input type="text" class="text" size="20" name="projsearchtext"
 
 // setup the title block
 $titleBlock = new w2p_Theme_TitleBlock('Projects', 'applet3-48.png', $m, $m . '.' . $a);
-$titleBlock->addCell('<form action="?m=projects" method="post" name="searchfilter" accept-charset="utf-8">' . $bufferSearch . '</form>');
+$titleBlock->addCell('<form action="?m=projects" method="post" name="searchform" accept-charset="utf-8">' . $bufferSearch . '</form>');
 $titleBlock->addCell($AppUI->_('Search') . ':');
 $titleBlock->addCell('<form action="?m=projects" method="post" name="typeIdForm" accept-charset="utf-8">' .
         arraySelect($project_types, 'project_type', 'size="1" class="text" onChange="document.typeIdForm.submit();"', $project_type, false) .

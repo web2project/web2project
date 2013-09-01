@@ -15,8 +15,8 @@ if (!$canAccess) {
 
 $titleBlock = new w2p_Theme_TitleBlock('Contacts', 'monkeychat-48.png', $m, $m . '.' . $a);
 $titleBlock->addCell('<a href="./index.php?m=contacts&amp;tab=0">' . $AppUI->_('Reset search') . '</a>');
-$titleBlock->addCell('<form action="index.php?m=contacts&tab=27" method="post" accept-charset="utf-8">' .
-        '<input type="text" name="search_string" class="text"value="' . $searchString . '" /></form>');
+$titleBlock->addCell('<form action="index.php?m=contacts&tab=27" method="post" accept-charset="utf-8" name="searchform">' .
+        '<input type="text" class="text"value="' . $searchString . '" /></form>');
 $titleBlock->addCell($AppUI->_('Search') . ':');
 if ($canCreate) {
 	$titleBlock->addCell('<form action="?m=contacts&a=addedit" method="post" accept-charset="utf-8"><input type="submit" class="button btn btn-small dropdown-toggle" value="' . $AppUI->_('new contact') . '"></form>');

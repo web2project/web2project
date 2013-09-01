@@ -21,7 +21,7 @@ $projects = arrayMerge(array('0' => $AppUI->_('All', UI_OUTPUT_JS)), $projects);
 $titleBlock = new w2p_Theme_TitleBlock('Links', 'folder5.png', $m, "$m.$a");
 
 $search = '';
-$titleBlock->addCell('<form action="?m=links" method="post" id="searchfilter" accept-charset="utf-8"><input type="text" class="text" SIZE="10" name="search" onChange="document.searchfilter.submit();" value=' . "'$search'" . 'title="' . $AppUI->_('Search in name and description fields', UI_OUTPUT_JS) . '"/>' . '</form>');
+$titleBlock->addCell('<form action="?m=links" method="post" id="searchfilter" name="searchform" accept-charset="utf-8"><input type="text" class="text" SIZE="10" name="search" onChange="document.searchfilter.submit();" value=' . "'$search'" . 'title="' . $AppUI->_('Search in name and description fields', UI_OUTPUT_JS) . '"/>' . '</form>');
 $titleBlock->addCell($AppUI->_('Search') . ':');
 $titleBlock->addCell('<form name="pickProject" action="?m=links" method="post" accept-charset="utf-8">' . arraySelect($projects, 'project_id', 'onChange="document.pickProject.submit()" size="1" class="text"', $project_id) . '</form>');
 $titleBlock->addCell($AppUI->_('Filter') . ':');

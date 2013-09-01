@@ -56,7 +56,7 @@ if (isset($_POST['searchtext'])) {
 $search_text = $AppUI->getState('searchtext') ? $AppUI->getState('searchtext') : '';
 $search_text = w2PformSafe($search_text, true);
 
-$titleBlock->addCell('<form action="?m=tasks" method="post" id="searchfilter" accept-charset="utf-8"><input type="text" class="text" size="20" name="searchtext" onChange="document.searchfilter.submit();" value="' . $search_text . '" title="' . $AppUI->_('Search in name and description fields') . '"/></form>');
+$titleBlock->addCell('<form action="?m=tasks" method="post" id="searchfilter" name="searchform" accept-charset="utf-8"><input type="text" class="text" size="20" name="searchtext" onChange="document.searchfilter.submit();" value="' . $search_text . '" title="' . $AppUI->_('Search in name and description fields') . '"/></form>');
 $titleBlock->addCell($AppUI->_('Search') . ':');
 
 // Let's see if this user has admin privileges
