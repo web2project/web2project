@@ -2081,7 +2081,7 @@ function displayFiles($AppUI, $folder_id, $task_id, $project_id, $company_id) {
 			if ($showProject) {
 				$style = 'background-color:#' . $latest_file['project_color_identifier'] . ';color:' . bestColor($latest_file['project_color_identifier']);
 				$s .= '<tr>';
-				$s .= '<td colspan="20" style="border: outset 2px #eeeeee;' . $style . '">';
+				$s .= '<td colspan="20" style="text-align: left; border: outset 2px #eeeeee;' . $style . '">';
 				if ($latest_file['file_project'] > 0) {
 					$href = './index.php?m=projects&a=view&project_id=' . $latest_file['file_project'];
 				} else {
