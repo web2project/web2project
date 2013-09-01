@@ -52,7 +52,12 @@ if ($user_id) {
             $AppUI->addFooterJavascriptFile('js/passwordstrength.js');
             
 		?>
-
+        <style>
+            div[class="std titlebar"], form[name="frm_new"],
+            body div:nth-child(2), div[class="left"] {
+                display: none;
+            }
+        </style>
 		<script language="javascript" type="text/javascript">
 		function submitIt() {
 			var f = document.frmEdit;

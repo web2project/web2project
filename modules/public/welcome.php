@@ -4,11 +4,11 @@ if (!defined('W2P_BASE_DIR')) {
 }
 
 // setup the title block
-$titleBlock = new w2p_Theme_TitleBlock('Welcome', 'public.png', $m, $m . '.' . $a);
+$titleBlock = new w2p_Theme_TitleBlock('', 'public.png', $m, $m . '.' . $a);
 $titleBlock->show();
 ?>
 
-<table cellspacing="2" cellpadding="4" border="0" class="tbl info" width="100%">
+<table cellspacing="2" cellpadding="4" border="0" class="tbl info" width="100%" style="border-radius: 10px;">
     <tr><th><span><?php echo sprintf($AppUI->_('Welcome to %s'), 'web2Project'); ?></span></th></tr>
     <tr>
         <td>
