@@ -169,9 +169,9 @@ function setTask( key, val ) {
 						<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Folder'); ?>:</td>
 						<td align="left">
 							<?php if ($file_id == 0 && !$ci) { ?>
-								<?php echo arraySelectTree($folders, 'file_folder', 'style="width:175px;" class="text"', ($file_helpdesk_item ? getHelpdeskFolder() : $folder)); ?>
+								<?php echo arraySelectTree($folders, 'file_folder', 'class="text"', ($file_helpdesk_item ? getHelpdeskFolder() : $folder)); ?>
 							<?php } else { ?>
-								<?php echo arraySelectTree($folders, 'file_folder', 'style="width:175px;" class="text"', ($file_helpdesk_item ? getHelpdeskFolder() : $file->file_folder)); ?>
+								<?php echo arraySelectTree($folders, 'file_folder', 'class="text"', ($file_helpdesk_item ? getHelpdeskFolder() : $file->file_folder)); ?>
 							<?php } ?>
 						</td>
 					</tr>		

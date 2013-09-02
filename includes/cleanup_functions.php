@@ -2309,7 +2309,7 @@ function file_show_attr() {
 	} else {
 		// Project
 		$str_out .= '<tr><td align="right" nowrap="nowrap">' . $AppUI->_('Project') . ':</td>';
-		$str_out .= '<td align="left">' . projectSelectWithOptGroup($AppUI->user_id, 'file_project', 'size="1" class="text" style="width:270px"' . $select_disabled, $file_project) . '</td></tr>';
+		$str_out .= '<td align="left">' . projectSelectWithOptGroup($AppUI->user_id, 'file_project', 'size="1" class="text"' . $select_disabled, $file_project) . '</td></tr>';
 
 		// ---------------------------------------------------------------------------------
 

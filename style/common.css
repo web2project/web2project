@@ -199,7 +199,7 @@ form {
 }
 
 input[type="checkbox"] {
-    /**margin-left: 10px;*/
+    vertical-align: top;
 }
 
 /*
