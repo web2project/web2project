@@ -218,6 +218,7 @@ table.std {
 	-moz-border-radius:3px; 
     -webkit-border-radius:3px;
     border-radius:3px;
+    width: 100%;
 }
 
 table.std TH {	
