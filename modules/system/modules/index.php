@@ -84,7 +84,7 @@ $htmlHelper = new w2p_Output_HTMLHelper($AppUI);
             include_once (W2P_BASE_DIR . '/modules/' . $row['mod_directory'] . '/setup.php');
 
             // check for upgrades
-            if ($config['mod_version'] != $row['mod_version'] && $canEdit) {
+            if (version_compare($config['mod_version'], $row['mod_version']) == 1  && $canEdit) {
                 $s .= ' | <a href="' . $query_string . '&cmd=upgrade" onclick="return window.confirm(' . "'" . $AppUI->_('Are you sure?') . "'" . ');" >' . $AppUI->_('upgrade') . '</a>';
             }
             // check for configuration
