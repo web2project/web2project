@@ -44,6 +44,7 @@ class CFile extends w2p_Core_BaseObject {
         if ($helpdesk_available && $this->file_helpdesk_item != 0) {
             $this->addHelpDeskTaskLog();
         }
+        $this->file_parent = (int) $this->file_parent;
 
         parent::hook_preStore();
 	}
