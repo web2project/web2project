@@ -75,7 +75,7 @@ foreach ($users as $row) {
         <?php echo $row['contact_display_name']; ?>
 	</td>
     <?php
-        echo $listTable->createCell('user_name', $row['user_username']);
+        echo $listTable->createCell('user_user', $row['user_username']);
         echo $listTable->createCell('contact_company', $row['contact_company']);
         echo $listTable->createCell('dept_name', $row['dept_name']);
     ?>
