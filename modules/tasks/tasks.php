@@ -2,6 +2,8 @@
 if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
+// @todo    convert to template
+// @todo    remove database query
 
 global $AppUI, $m, $a, $project_id, $f, $min_view, $query_string, $durnTypes;
 global $task_sort_item1, $task_sort_type1, $task_sort_order1;

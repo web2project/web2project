@@ -7,6 +7,8 @@
  * @package     web2project\core
  * @author      Dustin Thomson <dustin@dustint.com>
  * @author      Keith Casey (maintainer) <caseydk@sourceforge.net>
+ *
+ * @todo    refactor to w2p/System/ListenerInterface
  */
 
 interface w2p_Core_ListenerInterface

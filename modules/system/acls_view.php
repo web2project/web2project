@@ -2,6 +2,8 @@
 if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
+// @todo    remove database query
+
 global $AppUI, $m, $a;
 
 $user_id = (int) w2PgetParam($_POST, 'user', $AppUI->user_id);

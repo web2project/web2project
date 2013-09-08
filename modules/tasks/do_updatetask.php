@@ -2,6 +2,7 @@
 if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
+// @todo    refactor to use a core controller
 
 $del = (int) w2PgetParam($_POST, 'del', 0);
 $notify_owner = w2PgetParam($_POST, 'task_log_notify_owner', 'off');

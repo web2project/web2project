@@ -2,11 +2,10 @@
 /**
  * This is the core preferences object that runs both the default and User-based preferences.
  *
- * @package     web2project\core 
- */
-/**
  * @package     web2project\core
- * @todo        TODO: couldn't this just extend the BaseObject?
+ *
+ * @todo    refactor to w2p/System/Preferences
+ * @todo    couldn't this just extend the BaseObject?
  */
 class w2p_Core_Preferences {
     /** This is the user_id */

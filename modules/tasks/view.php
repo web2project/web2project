@@ -2,6 +2,7 @@
 if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
+// @todo    convert to template
 
 $task_id = (int) w2PgetParam($_GET, 'task_id', 0);
 $task_log_id = (int) w2PgetParam($_GET, 'task_log_id', 0);

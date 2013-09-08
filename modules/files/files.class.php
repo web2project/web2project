@@ -1,6 +1,9 @@
 <?php
 /**
  * @package     web2project\modules\core
+ *
+ * @todo    new query object
+ * @todo    refactor static methods
  */
 
 class CFile extends w2p_Core_BaseObject {

@@ -2,6 +2,8 @@
 if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
+// @todo    convert to template
+// @todo    remove database query
 
 global $AppUI, $obj, $percent, $can_edit_time_information, $cal_sdf;
 

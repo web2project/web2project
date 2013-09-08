@@ -2,6 +2,7 @@
 if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
+// @todo    get rid of the odd file inclusion structure
 
 $hid = w2PgetParam($_GET, 'hid', 'help.toc');
 

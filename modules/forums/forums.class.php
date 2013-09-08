@@ -1,6 +1,7 @@
 <?php
 /**
  * @package     web2project\modules\misc
+ * @todo    remove declarations before the class
  */
 
 if (!isset($AppUI)) {

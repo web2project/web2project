@@ -2,10 +2,9 @@
 if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
+// @todo    convert to template
 
 $dept_id = (int) w2PgetParam($_GET, 'dept_id', 0);
-
-
 
 $department = new CDepartment();
 $department->dept_id = $dept_id;
@@ -30,10 +29,6 @@ if (!$department) {
 }
 
 $tab = $AppUI->processIntState('DeptVwTab', $_GET, 'tab', 0);
-
-
-
-
 
 $countries = w2PgetSysVal('GlobalCountries');
 $types = w2PgetSysVal('DepartmentType');

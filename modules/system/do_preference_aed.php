@@ -2,6 +2,7 @@
 if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
+// @todo    refactor to use a core controller
 
 $del = (int) w2PgetParam($_POST, 'del', 0);
 $pref_user = (int) w2PgetParam($_POST, 'pref_user', 0);

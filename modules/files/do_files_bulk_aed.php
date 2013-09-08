@@ -2,6 +2,7 @@
 if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
+// @todo    refactor to use a core controller
 
 $selected = w2PgetParam($_POST, 'bulk_selected_file', 0);
 $bulk_file_project = w2PgetParam($_POST, 'bulk_file_project', 0);

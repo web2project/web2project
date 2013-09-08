@@ -2,6 +2,8 @@
 if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
+// @todo    convert to template
+// @todo    remove database query
 
 global $m, $a, $project_id, $f, $task_status, $min_view, $query_string, $durnTypes, $tpl;
 global $task_sort_item1, $task_sort_type1, $task_sort_order1;
@@ -13,16 +15,6 @@ global $history_active;
  * TODO: This file looks a *lot* like the common task list rendering code in 
  *   tasks/tasks.php
  */
-
-
-
-
-
-
-
-
-
-
 
 if (empty($query_string)) {
 	$query_string = '?m=' . $m . '&amp;a=' . $a;

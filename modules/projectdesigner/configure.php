@@ -2,6 +2,8 @@
 if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
+// @todo    convert to template
+
 /* This file will write a php config file to be included during execution of
 * all Project designer files which require the configuration options. */
 global $m;

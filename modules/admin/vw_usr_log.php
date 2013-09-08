@@ -2,6 +2,7 @@
 if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
+// @todo    convert to template
 
 $date_reg = date('Y-m-d');
 $start_date = intval($date_reg) ? new w2p_Utilities_Date(w2PgetParam($_REQUEST, 'log_start_date', date('Y-m-d'))) : null;

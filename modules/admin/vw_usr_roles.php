@@ -1,9 +1,10 @@
 <?php
-global $AppUI, $user_id, $user_name, $canEdit, $canDelete, $tab;
-
 if (!defined('W2P_BASE_DIR')) {
-	die('You should not access this file directly.');
+    die('You should not access this file directly.');
 }
+// @todo    convert to template
+
+global $AppUI, $user_id, $user_name, $canEdit, $canDelete, $tab;
 
 $perms = &$AppUI->acl();
 $user_roles = $perms->getUserRoles($user_id);

@@ -1,27 +1,10 @@
 <?php
-
 /**
-  // kept for reference
-  $priority = array(
-  -1 => array(
-  'name' => 'low',
-  'color' => '#E5F7FF'
-  ),
-  0 => array(
-  'name' => 'normal',
-  'color' => ''//#CCFFCA
-  ),
-  1 => array(
-  'name' => 'high',
-  'color' => '#FFDCB3'
-  ),
-  2 => array(
-  'name' => 'immediate',
-  'color' => '#FF887C'
-  )
-  );
  *
  * @package     web2project\modules\core
+ * @todo    new query object
+ * @todo    refactor static methods
+ * @todo    remove declarations before the class
  */
 
 $pstatus = w2PgetSysVal('ProjectStatus');

@@ -2,6 +2,7 @@
 if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
+// @todo    remove database query
 
 global $AppUI, $min_view, $m, $a, $user_id, $tab, $tasks, $cal_sdf;
 GLOBAL $gantt_map, $currentGanttImgSource, $filter_task_list, $caller;

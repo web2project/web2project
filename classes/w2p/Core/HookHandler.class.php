@@ -7,6 +7,8 @@
  *
  * @package     web2project\core
  * @author      Keith Casey <caseydk@sourceforge.net>
+ *
+ * @todo    refactor to w2p/System/HookHandler
  */
 
 class w2p_Core_HookHandler

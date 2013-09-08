@@ -2,6 +2,7 @@
 if (!defined('W2P_BASE_DIR')) {
     die('You should not access this file directly.');
 }
+// @todo    update version information
 
 /*
  * The original work is copyright 2004 by Adam Donnison <adam@saki.com.au> on

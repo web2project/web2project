@@ -3,7 +3,9 @@
 /**
  * @package     web2project\modules\core
  *
- * @todo Move the 'address' fields to a generic table
+ * @todo    Move the 'address' fields to a generic table
+ * @todo    new query object
+ * @todo    refactor static methods
  */
 
 class CCompany extends w2p_Core_BaseObject {

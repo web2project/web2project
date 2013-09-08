@@ -2,6 +2,7 @@
 if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
+// @todo    convert to template
 
 // modified later by Pablo Roca (proca) in 18 August 2003 - added page support
 // Files modules: index page re-usable sub-table

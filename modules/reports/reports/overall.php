@@ -2,6 +2,8 @@
 if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
+// @todo    convert to template
+
 global $AppUI, $cal_sdf;
 $AppUI->loadCalendarJS();
 

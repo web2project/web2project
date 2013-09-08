@@ -2,6 +2,7 @@
 if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
+// @todo    convert to template
 
 global $AppUI, $projects, $pstatus, $project_statuses, $tab, $is_tabbed, $st_projects_arr;
 

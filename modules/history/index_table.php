@@ -2,6 +2,8 @@
 if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
+// @todo    convert to template
+
 global $AppUI, $filter_param;
 
 $page = (int) w2PgetParam($_GET, 'page', 1);

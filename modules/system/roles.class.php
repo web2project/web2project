@@ -25,6 +25,7 @@
  * @todo TODO: This should probably extend our w2p_Core_BaseObject class as
  *   there is a lot of duplicated functionality that we could just eliminate
  *   from here.
+ * @todo    new query object
  */
 
 class CSystem_Role {

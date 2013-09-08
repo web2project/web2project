@@ -2,7 +2,11 @@
 if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
+// @todo    refactor to use a core controller
+// @todo    remove database query
+
 global $AppUI;
+
 $project_id                          = w2PgetParam($_POST, 'project_id', 0);
 $selected                            = w2PgetParam($_POST, 'bulk_selected_task', 0);
 $bulk_task_project                   = w2PgetParam($_POST, 'bulk_task_project', '');

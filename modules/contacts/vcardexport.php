@@ -2,6 +2,7 @@
 if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
+// @todo    convert to template
 
 // get GETPARAMETER for contact_id
 $contact_id = (int) w2PgetParam($_GET, 'contact_id', 0);

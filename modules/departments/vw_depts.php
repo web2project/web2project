@@ -2,6 +2,7 @@
 if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
+// @todo    convert to template
 
 global $AppUI, $search_string, $owner_filter_id, $tab, $orderby, $orderdir;
 

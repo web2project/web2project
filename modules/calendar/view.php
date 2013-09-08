@@ -2,10 +2,9 @@
 if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
+// @todo    convert to template
 
 $event_id = (int) w2PgetParam($_GET, 'event_id', 0);
-
-
 
 $event = new CEvent();
 $event->event_id = $event_id;

@@ -2,6 +2,8 @@
 if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
+// @todo    convert to template
+
 global $AppUI, $deny1, $canRead, $canEdit, $allowed_folders_ary,
     $denied_folders_ary, $tab, $folder, $cfObj, $m, $a, $company_id,
     $allowed_companies, $showProject;

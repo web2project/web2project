@@ -2,6 +2,9 @@
 
 /**
  * @package     web2project\modules\core
+ *
+ * @todo    new query object
+ * @todo    refactor static methods
  */
 
 class CContact extends w2p_Core_BaseObject

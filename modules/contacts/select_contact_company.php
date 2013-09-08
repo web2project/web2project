@@ -2,6 +2,7 @@
 if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
+// @todo    convert to template
 
 $table_name = w2PgetParam($_GET, 'table_name', 'companies');
 $company_id = (int) w2PgetParam($_GET, 'company_id', 0);

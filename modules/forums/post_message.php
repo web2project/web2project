@@ -2,8 +2,9 @@
 if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
-//TODO: @todo I think this file should actually be named 'addedit_message.php'
-// Add / Edit forum
+// @todo    convert to template
+// @todo    I think this file should actually be named 'addedit_message.php'
+
 $message_parent = (int) w2PgetParam($_GET, 'message_parent', -1);
 $message_id = (int) w2PgetParam($_GET, 'message_id', 0);
 $forum_id = (int) w2PgetParam($_REQUEST, 'forum_id', 0);

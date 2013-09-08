@@ -1,5 +1,4 @@
 <?php
-
 /**
  * This is the Dispatcher used for cross-module communications and heavily
  * based on http://dustint.com/post/38/building-a-php-publish-subscribe-system
@@ -8,7 +7,10 @@
  * @package     web2project\core
  * @author      Dustin Thomson <dustin@dustint.com>
  * @author      Keith Casey (maintainer) <caseydk@sourceforge.net>
+ *
+ * @todo    refactor to w2p/System/Event
  */
+
 class w2p_Core_Event {
 	/**
 	 * The name of the resource publishing this event

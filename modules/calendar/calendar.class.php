@@ -1,7 +1,11 @@
 <?php
-
 /**
  * @package     web2project\modules\core
+ *
+ * @todo    refactor to modules/events
+ * @todo    new query object
+ * @todo    refactor static methods
+ * @todo    remove declarations before the class
  */
 
 $event_filter_list = array('my' => 'My Events', 'own' => 'Events I Created', 'all' => 'All Events');

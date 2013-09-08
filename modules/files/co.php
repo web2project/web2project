@@ -2,6 +2,8 @@
 if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
+// @todo    convert to template
+// @todo    remove database query
 
 $file_id = intval(w2PgetParam($_GET, 'file_id', 0));
 // check permissions for this record

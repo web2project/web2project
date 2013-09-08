@@ -2,6 +2,8 @@
 if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
+// @todo    convert to template
+
 global $AppUI, $canRead, $canEdit, $project_id, $task_id, $showProject, $tab;
 
 if (!$canRead) {

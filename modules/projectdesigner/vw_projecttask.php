@@ -2,6 +2,9 @@
 if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
+// @todo    convert to template
+// @todo    remove database query
+
 $df = $AppUI->getPref('SHDATEFORMAT');
 $start_date = intval($obj->project_start_date) ? new w2p_Utilities_Date($obj->project_start_date) : null;
 $end_date = intval($obj->project_end_date) ? new w2p_Utilities_Date($obj->project_end_date) : null;

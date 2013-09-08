@@ -1,7 +1,7 @@
 <?php
-
 /**
  * @package     web2project\modules\misc
+ * @todo    remove declarations before the class
  */
 
 include_once (W2P_BASE_DIR . '/modules/projectdesigner/config.php');

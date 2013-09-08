@@ -2,6 +2,7 @@
 if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
+// @todo    convert to template
 
 $folder = (int) w2PgetParam($_GET, 'folder', 0);
 $file_id = (int) w2PgetParam($_GET, 'file_id', 0);

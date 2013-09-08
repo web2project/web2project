@@ -1,6 +1,8 @@
 <?php
 /**
  * @package     web2project\core
+ *
+ * @todo    refactor to w2p/System/UpgradeManager
  */
 
 class w2p_Core_UpgradeManager {

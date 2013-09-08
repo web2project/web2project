@@ -4,6 +4,8 @@
  *
  * @package     web2project\core
  * @author      Andrew Eddie <eddieajau@users.sourceforge.net>
+ *
+ * @todo    refactor to w2p/System/AppUI
  */
 
 class w2p_Core_CAppUI

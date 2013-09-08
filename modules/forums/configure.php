@@ -2,6 +2,7 @@
 if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
+// @todo    remove database query
 
 // deny all but system admins
 $canEdit = canEdit('system');

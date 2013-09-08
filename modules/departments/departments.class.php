@@ -1,12 +1,15 @@
 <?php
 /**
  * @package     web2project\modules\misc
+ *
+ * @todo    new query object
+ * @todo    refactor static methods
  */
 
 class CDepartment extends w2p_Core_BaseObject
 {
     /**
-     * @todo these parameters should use department_ not dept_ as the prefix
+     * @todo    these parameters should use department_ not dept_ as the prefix
      */
     public $dept_id = null;
 	public $dept_parent = null;

@@ -1,9 +1,10 @@
 <?php
-
 /**
  * @package     web2project\core
  *
  * @abstract
+ *
+ * @todo    refactor to w2p/System/Setup
  */
 
 abstract class w2p_Core_Setup {

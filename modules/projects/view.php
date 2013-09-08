@@ -2,10 +2,9 @@
 if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
+// @todo    convert to template
 
 $project_id = (int) w2PgetParam($_GET, 'project_id', 0);
-
-
 
 $project = new CProject();
 $project->project_id = $project_id;

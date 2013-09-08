@@ -1,7 +1,8 @@
 <?php
-
 /**
  * @package     web2project\core
+ *
+ * @todo    refactor to w2p/System/Module
  */
 
 class w2p_Core_Module extends w2p_Core_BaseObject {

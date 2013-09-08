@@ -2,6 +2,7 @@
 if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
+// @todo    convert to template
 
 global $AppUI, $w2Pconfig, $task_parent_options, $loadFromTab;
 global $can_edit_time_information, $locale_char_set, $task;

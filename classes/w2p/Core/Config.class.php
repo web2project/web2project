@@ -1,7 +1,8 @@
 <?php
-
 /**
  * @package     web2project\core
+ *
+ * @todo    refactor to w2p/System/Config
  */
 
 class w2p_Core_Config extends w2p_Core_BaseObject

@@ -2,11 +2,8 @@
 if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
+// @todo    refactor to use a core controller
 
-/*
- * TODO: This controller is doing a lot of non-controller things that are making
- *   things not reusable and generally difficult to maintain.
- */
 $del = (int) w2PgetParam($_POST, 'del', 0);
 $task_id = (int) w2PgetParam($_POST, 'task_id', 0);
 $hassign = w2PgetParam($_POST, 'hassign');

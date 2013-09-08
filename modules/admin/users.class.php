@@ -1,7 +1,11 @@
 <?php
-
 /**
  * @package     web2project\modules\core
+ *
+ * @todo    refactor modules/admin to modules/users
+ * @todo    new query object
+ * @todo    refactor static methods
+ * @todo    remove declarations before the class
  */
 
 $utypes = w2PgetSysVal('UserType');

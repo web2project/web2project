@@ -22,6 +22,9 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly');
 }
+// @todo    convert to template
+// @todo    remove database query
+
 global $AppUI, $w2Pconfig, $cal_df, $cf;
 // check permissions for this module
 $perms = &$AppUI->acl();
