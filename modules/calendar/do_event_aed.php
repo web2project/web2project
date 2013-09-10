@@ -33,12 +33,6 @@ if ($del) {
         $clashRedirect = true;
 	} else {
         $result = $obj->store();
-        if (isset($_POST['event_assigned'])) {
-            $obj->updateAssigned(explode(',', $_POST['event_assigned']));
-        }
-        if (isset($_POST['mail_invited'])) {
-            $obj->notify($_POST['event_assigned'], ($obj->_event=='Update'?true:false));
-        }
     }
 }
 

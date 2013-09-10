@@ -552,6 +552,10 @@ class CEvent extends w2p_Core_BaseObject
     {
         $this->updateAssigned(explode(',', $_POST['event_assigned']));
 
+        if (isset($_POST['mail_invited'])) {
+            $this->notify($_POST['event_assigned'], ($this->_event=='Update' ? true : false));
+        }
+
         parent::hook_postStore();
     }
 
