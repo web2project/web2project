@@ -224,7 +224,7 @@ function submitIt() {
                 <input type="button" value="<?php echo $AppUI->_('back'); ?>" class="button" onclick="javascript:history.back(-1);" />
             </td>
             <td align="right">
-                <input type="button" value="<?php echo $AppUI->_('submit'); ?>" class="button" onclick="submitIt()" />
+                <input type="button" value="<?php echo $AppUI->_('save'); ?>" class="button" onclick="submitIt()" />
             </td>
         </tr>
     </table>

@@ -99,7 +99,7 @@ function submitIt() {
                 <input class="button btn btn-danger" type="button" name="cancel" value="<?php echo $AppUI->_('cancel'); ?>" onclick="javascript:if(confirm('<?php echo $AppUI->_('Are you sure you want to cancel?', UI_OUTPUT_JS); ?>')){location.href = './index.php?m=resources';}" />
             </td>
             <td align="right">
-                <input type="button" class="button btn btn-primary" value="<?php echo $AppUI->_('submit'); ?>" onclick="submitIt()" />
+                <input type="button" class="button btn btn-primary" value="<?php echo $AppUI->_('save'); ?>" onclick="submitIt()" />
             </td>
         </tr>
     </table>

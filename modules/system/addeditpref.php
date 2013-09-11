@@ -306,7 +306,7 @@ echo ' />';
 </tr>
 <tr>
 	<td align="left"><input class="button btn btn-danger"  type="button" value="<?php echo $AppUI->_('back'); ?>" onclick="javascript:history.back(-1);" /></td>
-	<td align="right"><input class="button btn btn-primary" type="button" value="<?php echo $AppUI->_('submit'); ?>" onclick="submitIt()" /></td>
+	<td align="right"><input class="button btn btn-primary" type="button" value="<?php echo $AppUI->_('save'); ?>" onclick="submitIt()" /></td>
 </tr>
 </table>
 </form>

@@ -241,7 +241,7 @@ echo '<div style="padding-top: ' . $spacing . 'px;"> </div>';
                 <?php if ($canEdit && !$user_id) { ?>
                     <input type="checkbox" value="1" name="send_user_mail" id="send_user_mail" />&nbsp;&nbsp;&nbsp;
                 <?php } ?>
-                <input type="button" value="<?php echo $AppUI->_('submit'); ?>" onclick="submitIt()" class="button btn btn-primary" />
+                <input type="button" value="<?php echo $AppUI->_('save'); ?>" onclick="submitIt()" class="button btn btn-primary" />
             </td>
         </tr>
         <?php } ?>

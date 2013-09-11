@@ -155,7 +155,7 @@ function delIt(){
             </td>
             <td align="right" colspan="2">
                 <?php if ($AppUI->user_id == $forum->forum_owner || $forum_id == 0) {
-                    echo '<input type="button" value="' . $AppUI->_('submit') . '" class=button onclick="submitIt()" />';
+                    echo '<input type="button" value="' . $AppUI->_('save') . '" class=button onclick="submitIt()" />';
                 } ?>
             </td>
         </tr>

@@ -451,7 +451,7 @@ function setDepartment(department_id_string){
                 <input class="button btn btn-danger" type="button" name="cancel" value="<?php echo $AppUI->_('cancel'); ?>" onclick="javascript:if(confirm('Are you sure you want to cancel.')){location.href = './index.php?m=projects';}" />
             </td>
             <td class="right">
-                <input class="button btn btn-primary" type="button" name="btnFuseAction" value="<?php echo $AppUI->_('submit'); ?>" onclick="submitIt();" />
+                <input class="button btn btn-primary" type="button" name="btnFuseAction" value="<?php echo $AppUI->_('save'); ?>" onclick="submitIt();" />
             </td>
         </tr>
     </table>

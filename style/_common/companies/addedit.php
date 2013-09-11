@@ -116,7 +116,7 @@
 		</tr>
 		<tr>
 			<td><input type="button" value="<?php echo $AppUI->_('back'); ?>" class="button btn btn-danger" onclick="javascript:history.back(-1);" /></td>
-			<td align="right"><input type="button" value="<?php echo $AppUI->_('submit'); ?>" class="button btn btn-primary" onclick="submitIt()" /></td>
+			<td align="right"><input type="button" value="<?php echo $AppUI->_('save'); ?>" class="button btn btn-primary" onclick="submitIt()" /></td>
 		</tr>
 	</table>
 </form>

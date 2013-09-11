@@ -191,7 +191,7 @@ if (function_exists('styleRenderBoxTop')) {
                 <input type="button" value="<?php echo $AppUI->_('back'); ?>" class="button" onclick="javascript:window.location='./index.php?<?php echo $back_url; ?>';" />
             </td>
             <td align="right"><?php
-            echo '<input type="button" value="' . $AppUI->_('submit') . '" class=button onclick="submitIt()">';
+            echo '<input type="button" value="' . $AppUI->_('save') . '" class=button onclick="submitIt()">';
         ?></td>
         </tr>
     </table>
