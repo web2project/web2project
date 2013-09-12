@@ -53,6 +53,14 @@ class w2p_Theme_TitleBlock {
     public function addCell($data = '', $attribs = '', $prefix = '', $suffix = '') {
         $this->cells1[] = array($attribs, $data, $prefix, $suffix);
     }
+
+    public function addSearchCell($search)
+    {
+        $this->addCell('<form name="searchform" action="?m=' . $this->module . '" method="post" accept-charset="utf-8">
+                <input type="text" class="text" name="search_string" value="' . $search . '" /></form>');
+        $this->addCell($this->_AppUI->_('Search') . ':');
+    }
+
     /**
      * Adds a table 'cell' to left-aligned bread-crumbs
      *
