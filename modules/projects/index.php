@@ -4,7 +4,7 @@ if (!defined('W2P_BASE_DIR')) {
 }
 
 $tab = $AppUI->processIntState('ProjIdxTab', $_GET, 'tab', 1);
-
+//echo '<pre>'; print_r($_POST); die();
 $project = new CProject();
 $structprojs = $project->getProjects();
 
@@ -27,10 +27,9 @@ if (isset($_GET['update_project_status']) && isset($_GET['project_status']) && i
 	}
 }
 
-if (isset($_POST['projsearchtext'])) {
-	$AppUI->setState('projsearchtext', w2PformSafe($_POST['projsearchtext'], true));
-}
-$search_text = $AppUI->getState('projsearchtext') !== null ? $AppUI->getState('projsearchtext') : '';
+$search_string = w2PgetParam($_POST, 'search_string', '');
+$AppUI->setState($m . '_search_string', $search_string);
+$search_string = w2PformSafe($search_string, true);
 
 $company_id = $AppUI->processIntState('ProjIdxCompany', $_POST, 'project_company', $AppUI->user_company);
 $orderby = (isset($_GET['orderby']) && property_exists('CProject', $_GET['orderby'])) ? $_GET['orderby'] : 'project_company';
@@ -48,6 +47,7 @@ if (isset($_GET['orderby'])) {
 $AppUI->setState('ProjIdxOrderDir', $orderdir);
 
 // collect the full projects list data via function in projects.class.php
+$search_text = $search_string;      // @note this is only because the projects_list_data function takes a bunch of globals
 $projects = projects_list_data();
 
 $oCompany = new CCompany;
@@ -58,12 +58,10 @@ $project_types = array(-1 => '(' . $AppUI->_('all') . ')') + w2PgetSysVal('Proje
 
 $user_list = array(0 => '(' . $AppUI->_('all') . ')') + CProject::getOwners();
 
-$bufferSearch = '<input type="text" class="text" size="20" name="projsearchtext" onChange="document.searchfilter.submit();" value=' . "'$search_text'" . 'title="' . $AppUI->_('Search in name and description fields') . '"/>';
-
 // setup the title block
 $titleBlock = new w2p_Theme_TitleBlock('Projects', 'applet3-48.png', $m, $m . '.' . $a);
-$titleBlock->addCell('<form action="?m=projects" method="post" name="searchform" accept-charset="utf-8">' . $bufferSearch . '</form>');
-$titleBlock->addCell($AppUI->_('Search') . ':');
+$titleBlock->addSearchCell($search_string);
+
 $titleBlock->addCell('<form action="?m=projects" method="post" name="typeIdForm" accept-charset="utf-8">' .
         arraySelect($project_types, 'project_type', 'size="1" class="text" onChange="document.typeIdForm.submit();"', $project_type, false) .
         '</form>');

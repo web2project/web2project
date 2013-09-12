@@ -4,7 +4,7 @@ if (!defined('W2P_BASE_DIR')) {
 }
 // @todo    convert to template
 
-global $AppUI, $canRead, $canEdit, $project_id, $task_id, $showProject, $tab;
+global $AppUI, $canRead, $canEdit, $project_id, $task_id, $showProject, $tab, $search_string;
 
 if (!$canRead) {
     $AppUI->redirect(ACCESS_DENIED);
@@ -19,14 +19,13 @@ if ($task_id && !$project_id) {
 }
 
 $page = (int) w2PgetParam($_GET, 'page', 1);
-$search = w2PgetParam($_POST, 'search', '');
 
 if (!isset($project_id)) {
 	$project_id = (int) w2PgetParam($_POST, 'project_id', 0);
 }
 
 $link = new CLink();
-$items = $link->getProjectTaskLinksByCategory(null, $project_id, $task_id, $type_filter, $search);
+$items = $link->getProjectTaskLinksByCategory(null, $project_id, $task_id, $type_filter, $search_string);
 
 $module = new w2p_Core_Module();
 $fields = $module->loadSettings('links', 'index_list');

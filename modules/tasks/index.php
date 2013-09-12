@@ -45,19 +45,13 @@ $obj = new CCompany();
 $companies = $obj->getAllowedRecords($AppUI->user_id, 'company_id,company_name', 'company_name');
 $filters2 = arrayMerge(array('allcompanies' => $AppUI->_('All Companies', UI_OUTPUT_RAW)), $companies);
 
+$search_string = w2PgetParam($_POST, 'search_string', '');
+$AppUI->setState($m . '_search_string', $search_string);
+$search_string = w2PformSafe($search_string, true);
+
 // setup the title block
 $titleBlock = new w2p_Theme_TitleBlock('Tasks', 'applet-48.png', $m, $m . '.' . $a);
-
-// patch 2.12.04 text to search entry box
-if (isset($_POST['searchtext'])) {
-	$AppUI->setState('searchtext', $_POST['searchtext']);
-}
-
-$search_text = $AppUI->getState('searchtext') ? $AppUI->getState('searchtext') : '';
-$search_text = w2PformSafe($search_text, true);
-
-$titleBlock->addCell('<form action="?m=tasks" method="post" id="searchfilter" name="searchform" accept-charset="utf-8"><input type="text" class="text" size="20" name="searchtext" onChange="document.searchfilter.submit();" value="' . $search_text . '" title="' . $AppUI->_('Search in name and description fields') . '"/></form>');
-$titleBlock->addCell($AppUI->_('Search') . ':');
+$titleBlock->addSearchCell($search_string);
 
 // Let's see if this user has admin privileges
 if (canView('admin')) {

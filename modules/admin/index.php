@@ -18,8 +18,8 @@ $AppUI->savePlace();
 if (isset($_GET['stub'])) {
 	$AppUI->setState('UserIdxStub', w2PgetParam($_GET, 'stub', null));
 	$AppUI->setState('UserIdxWhere', '');
-} elseif (isset($_POST['where'])) {
-	$AppUI->setState('UserIdxWhere', $_POST['where']);
+} elseif (isset($_POST['search_string'])) {
+	$AppUI->setState('UserIdxWhere', $_POST['search_string']);
 	$AppUI->setState('UserIdxStub', '');
 }
 $stub = $AppUI->getState('UserIdxStub');
@@ -45,9 +45,8 @@ for ($c = 65; $c < 91; $c++) {
 
 // setup the title block
 $titleBlock = new w2p_Theme_TitleBlock('User Management', 'helix-setup-users.png', $m, "$m.$a");
-$titleBlock->addCell('<form action="index.php?m=admin" method="post" accept-charset="utf-8">' .
-        '<input type="text" name="where" class="text" size="10" value="' . $where . '" /></form>');
-$titleBlock->addCell($AppUI->_('Search') . ':');
+$titleBlock->addSearchCell($where);
+
 $titleBlock->addCell($a2z);
 $titleBlock->show();
 
