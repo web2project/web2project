@@ -337,6 +337,7 @@ class CFile extends w2p_Core_BaseObject {
 
 	// move a file from a temporary (uploaded) location to the file system
 	public function moveTemp($upload) {
+        $this->file_real_filename = uniqid(rand());
 		// check that directories are created
 		if (!is_dir(W2P_BASE_DIR . '/files')) {
 			$res = mkdir(W2P_BASE_DIR . '/files', 0744);
