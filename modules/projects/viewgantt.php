@@ -62,7 +62,7 @@ if ($display_option == 'custom') {
 
 // setup the title block
 if (!$min_view) {
-	$titleBlock = new w2p_Theme_TitleBlock('Gantt Chart', 'applet-48.png', $m, $m . '.' . $a);
+	$titleBlock = new w2p_Theme_TitleBlock('Gantt Chart', 'icon.png', $m, $m . '.' . $a);
 	$titleBlock->addCrumb('?m=' . $m, 'projects list');
 	$titleBlock->show();
 }

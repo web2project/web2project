@@ -44,9 +44,8 @@ for ($c = 65; $c < 91; $c++) {
 }
 
 // setup the title block
-$titleBlock = new w2p_Theme_TitleBlock('User Management', 'helix-setup-users.png', $m, "$m.$a");
+$titleBlock = new w2p_Theme_TitleBlock('User Management', 'icon.png', $m, "$m.$a");
 $titleBlock->addSearchCell($where);
-
 $titleBlock->addCell($a2z);
 $titleBlock->show();
 

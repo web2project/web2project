@@ -47,7 +47,7 @@ $task_types = w2PgetSysVal('TaskType');
 $billingCategory = w2PgetSysVal('BudgetCategory');
 
 // setup the title block
-$titleBlock = new w2p_Theme_TitleBlock('View Task', 'applet-48.png', $m, $m . '.' . $a);
+$titleBlock = new w2p_Theme_TitleBlock('View Task', 'icon.png', $m, $m . '.' . $a);
 $titleBlock->addCell();
 if ($canEdit) {
     $titleBlock->addCell('<input type="submit" class="button btn btn-small dropdown-toggle" value="' . $AppUI->_('new log') . '">', '', '<form action="?m=tasks&a=view&task_id=' . $task_id . '&tab=1" method="post" accept-charset="utf-8">', '</form>');

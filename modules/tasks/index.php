@@ -50,7 +50,7 @@ $AppUI->setState($m . '_search_string', $search_string);
 $search_string = w2PformSafe($search_string, true);
 
 // setup the title block
-$titleBlock = new w2p_Theme_TitleBlock('Tasks', 'applet-48.png', $m, $m . '.' . $a);
+$titleBlock = new w2p_Theme_TitleBlock('Tasks', 'icon.png', $m, $m . '.' . $a);
 $titleBlock->addSearchCell($search_string);
 
 // Let's see if this user has admin privileges

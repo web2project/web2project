@@ -73,7 +73,7 @@ $helper = new w2p_Output_HTMLHelper($AppUI);
 
 $countries = w2PgetSysVal('GlobalCountries');
 // setup the title block
-$titleBlock = new w2p_Theme_TitleBlock('View User', 'helix-setup-user.png', $m, "$m.$a");
+$titleBlock = new w2p_Theme_TitleBlock('View User', 'icon.png', $m, "$m.$a");
 if ($canRead) {
     $titleBlock->addCrumb('?m=admin', 'users list');
 }

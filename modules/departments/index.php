@@ -31,7 +31,7 @@ $search_string = w2PformSafe($search_string, true);
 $perms = &$AppUI->acl();
 $owner_list = array(0 => $AppUI->_('All', UI_OUTPUT_RAW)) + $perms->getPermittedUsers('departments');
 
-$titleBlock = new w2p_Theme_TitleBlock('Departments', 'departments.png', $m, $m . '.' . $a);
+$titleBlock = new w2p_Theme_TitleBlock('Departments', 'icon.png', $m, $m . '.' . $a);
 $titleBlock->addSearchCell($search_string);
 
 $titleBlock->addCell('<form name="searchform2" action="?m=departments" method="post" accept-charset="utf-8">' .

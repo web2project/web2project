@@ -36,7 +36,7 @@ $task = new CTask();
 $allowedTasks = $task->getAllowedSQL($AppUI->user_id, 'file_task');
 
 // setup the title block
-$titleBlock = new w2p_Theme_TitleBlock('Files', 'folder5.png', $m, "$m.$a");
+$titleBlock = new w2p_Theme_TitleBlock('Files', 'icon.png', $m, "$m.$a");
 $titleBlock->addCell('<form name="pickProject" action="?m=files" method="post" accept-charset="utf-8">' . arraySelect($projects, 'project_id', 'onChange="document.pickProject.submit()" size="1" class="text"', $project_id) . '</form>');
 $titleBlock->addCell($AppUI->_('Filter') . ':');
 

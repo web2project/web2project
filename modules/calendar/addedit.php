@@ -76,7 +76,7 @@ if ($obj->event_project && !$perms->checkModuleItem('projects', 'view', $obj->ev
 }
 
 // setup the title block
-$titleBlock = new w2p_Theme_TitleBlock(($event_id ? 'Edit Event' : 'Add Event'), 'myevo-appointments.png', $m, $m . '.' . $a);
+$titleBlock = new w2p_Theme_TitleBlock(($event_id ? 'Edit Event' : 'Add Event'), 'icon.png', $m, $m . '.' . $a);
 $titleBlock->addCrumb('?m=calendar&a=year_view&date=' . $start_date->format(FMT_TIMESTAMP_DATE), 'year view');
 $titleBlock->addCrumb('?m=calendar&amp;date=' . $start_date->format(FMT_TIMESTAMP_DATE), 'month view');
 $titleBlock->addCrumb('?m=calendar&a=week_view&date=' . $start_date->format(FMT_TIMESTAMP_DATE), 'week view');

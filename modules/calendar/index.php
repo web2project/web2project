@@ -34,7 +34,7 @@ $companies = $company->getAllowedRecords($AppUI->user_id, 'company_id,company_na
 $companies = arrayMerge(array('0' => $AppUI->_('All')), $companies);
 
 // setup the title block
-$titleBlock = new w2p_Theme_TitleBlock('Monthly Calendar', 'myevo-appointments.png', $m, $m . '.' . $a);
+$titleBlock = new w2p_Theme_TitleBlock('Monthly Calendar', 'icon.png', $m, $m . '.' . $a);
 $titleBlock->addCrumb('?m=calendar&a=year_view&date=' . $date, 'year view');
 $titleBlock->addCrumb('?m=calendar&date=' . $date, 'month view');
 $titleBlock->addCrumb('?m=calendar&a=week_view&date=' . $date, 'week view');

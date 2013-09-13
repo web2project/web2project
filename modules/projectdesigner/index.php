@@ -73,7 +73,7 @@ $tasks = arrayMerge(array('0' => $AppUI->_('(None)', UI_OUTPUT_RAW)), $tasks);
 if (!$project_id) {
 	// setup the title block
 	$ttl = 'ProjectDesigner';
-	$titleBlock = new w2p_Theme_TitleBlock($ttl, 'projectdesigner.png', $m, $m . '.' . $a);
+	$titleBlock = new w2p_Theme_TitleBlock($ttl, 'icon.png', $m, $m . '.' . $a);
 	$titleBlock->addCrumb('?m=projects', 'projects list');
 	$titleBlock->addCell();
 	if ($canAddProjects) {
@@ -149,7 +149,7 @@ if (!$project_id) {
 
 	// setup the title block
 	$ttl = 'ProjectDesigner';
-	$titleBlock = new w2p_Theme_TitleBlock($ttl, 'projectdesigner.png', $m, $m . '.' . $a);
+	$titleBlock = new w2p_Theme_TitleBlock($ttl, 'icon.png', $m, $m . '.' . $a);
 	$titleBlock->addCrumb('?m=projects', 'projects list');
 	$titleBlock->addCrumb('?m=' . $m, 'select another project');
 	$titleBlock->addCrumb('?m=projects&a=view&bypass=1&project_id=' . $project_id, 'normal view project');

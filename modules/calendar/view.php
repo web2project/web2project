@@ -62,7 +62,7 @@ if ($event->event_project) {
 }
 
 // setup the title block
-$titleBlock = new w2p_Theme_TitleBlock('View Event', 'myevo-appointments.png', $m, $m . '.' . $a);
+$titleBlock = new w2p_Theme_TitleBlock('View Event', 'icon.png', $m, $m . '.' . $a);
 if ($canEdit) {
 	$titleBlock->addCell();
 	$titleBlock->addCell('

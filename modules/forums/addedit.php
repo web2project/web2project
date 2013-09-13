@@ -50,7 +50,7 @@ $users = $perms->getPermittedUsers('forums');
 
 // setup the title block
 $ttl = $forum_id > 0 ? 'Edit Forum' : 'Add Forum';
-$titleBlock = new w2p_Theme_TitleBlock($ttl, 'support.png', $m, $m . '.' . $a);
+$titleBlock = new w2p_Theme_TitleBlock($ttl, 'icon.png', $m, $m . '.' . $a);
 $titleBlock->addCrumb('?m=forums', 'forums list');
 if ($forum_id) {
     $titleBlock->addCrumb('?m=forums&a=viewer&forum_id=' . $forum_id, 'view this forum');

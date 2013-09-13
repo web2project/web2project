@@ -59,7 +59,7 @@ $project_types = array(-1 => '(' . $AppUI->_('all') . ')') + w2PgetSysVal('Proje
 $user_list = array(0 => '(' . $AppUI->_('all') . ')') + CProject::getOwners();
 
 // setup the title block
-$titleBlock = new w2p_Theme_TitleBlock('Projects', 'applet3-48.png', $m, $m . '.' . $a);
+$titleBlock = new w2p_Theme_TitleBlock('Projects', 'icon.png', $m, $m . '.' . $a);
 $titleBlock->addSearchCell($search_string);
 
 $titleBlock->addCell('<form action="?m=projects" method="post" name="typeIdForm" accept-charset="utf-8">' .

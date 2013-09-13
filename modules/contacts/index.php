@@ -13,7 +13,7 @@ if (!$canAccess) {
 	$AppUI->redirect(ACCESS_DENIED);
 }
 
-$titleBlock = new w2p_Theme_TitleBlock('Contacts', 'monkeychat-48.png', $m, $m . '.' . $a);
+$titleBlock = new w2p_Theme_TitleBlock('Contacts', 'icon.png', $m, $m . '.' . $a);
 $titleBlock->addCell('<a href="./index.php?m=contacts&amp;tab=0">' . $AppUI->_('Reset search') . '</a>');
 $titleBlock->addCell('<form action="index.php?m=contacts&tab=27" method="post" accept-charset="utf-8" name="searchform">' .
         '<input type="text" class="text"value="' . $searchString . '" /></form>');

@@ -28,7 +28,7 @@ if (!$obj) {
 	$AppUI->savePlace();
 }
 
-$titleBlock = new w2p_Theme_TitleBlock('View Resource', 'resources.png', $m, $m . '.' . $a);
+$titleBlock = new w2p_Theme_TitleBlock('View Resource', 'icon.png', $m, $m . '.' . $a);
 $titleBlock->addCrumb('?m=' . $m, 'resource list');
 if ($canEdit) {
 	$titleBlock->addCrumb('?m=resources&a=addedit&resource_id=' . $resource_id, 'edit this resource');

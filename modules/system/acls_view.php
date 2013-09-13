@@ -46,7 +46,7 @@ $q->addOrder('item_id');
 $q->addOrder('acl_id');
 $permissions = $q->loadList();
 
-$titleBlock = new w2p_Theme_TitleBlock('Permission Result Table', '48_my_computer.png', $m, $m . '.' . $a);
+$titleBlock = new w2p_Theme_TitleBlock('Permission Result Table', 'icon.png', $m, $m . '.' . $a);
 $titleBlock->addCell('
     <form action="?m=system&a=acls_view" method="post" name="pickUser" accept-charset="utf-8">' .
         $AppUI->_('View Users Permissions') . ': ' . arraySelect($users, 'user', 'class="text" onchange="javascript:document.pickUser.submit()"', $user_id) .

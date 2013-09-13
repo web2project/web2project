@@ -35,7 +35,7 @@ $allowedArray = $perms->getPermittedUsers('companies');
 $owner_list = is_array($allowedArray) ? ($baseArray + $allowedArray) : $baseArray;
 
 // setup the title block
-$titleBlock = new w2p_Theme_TitleBlock('Companies', 'handshake.png', $m, $m . '.' . $a);
+$titleBlock = new w2p_Theme_TitleBlock('Companies', 'icon.png', $m, $m . '.' . $a);
 $titleBlock->addSearchCell($search_string);
 
 $titleBlock->addCell('<form name="searchform2" action="?m=companies" method="post" accept-charset="utf-8">' .

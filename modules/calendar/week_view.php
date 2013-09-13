@@ -63,7 +63,7 @@ $companies = $company->getAllowedRecords($AppUI->user_id, 'company_id,company_na
 $companies = arrayMerge(array('0' => $AppUI->_('All')), $companies);
 
 // setup the title block
-$titleBlock = new w2p_Theme_TitleBlock('Week View', 'myevo-appointments.png', $m, "$m.$a");
+$titleBlock = new w2p_Theme_TitleBlock('Week View', 'icon.png', $m, "$m.$a");
 $titleBlock->addCrumb('?m=calendar&a=year_view&date=' . $this_week->format(FMT_TIMESTAMP_DATE), 'year view');
 $titleBlock->addCrumb('?m=calendar&date=' . $this_week->format(FMT_TIMESTAMP_DATE), 'month view');
 $titleBlock->addCrumb('?m=calendar&a=week_view&date=' . $this_week->format(FMT_TIMESTAMP_DATE), 'week view');

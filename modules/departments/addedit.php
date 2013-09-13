@@ -54,7 +54,7 @@ if ($company_id) {
 
 // setup the title block
 $ttl = $dept_id > 0 ? 'Edit Department' : 'Add Department';
-$titleBlock = new w2p_Theme_TitleBlock($ttl, 'departments.png', $m, $m . '.' . $a);
+$titleBlock = new w2p_Theme_TitleBlock($ttl, 'icon.png', $m, $m . '.' . $a);
 $titleBlock->addCrumb('?m=companies', 'companies list');
 $titleBlock->addCrumb('?m=companies&a=view&company_id=' . $company_id, 'view this company');
 $titleBlock->addCrumb('?m=departments', 'department list');

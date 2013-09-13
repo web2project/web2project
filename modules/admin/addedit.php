@@ -60,7 +60,7 @@ $companies = arrayMerge(array('0' => ''), $companies);
 
 // setup the title block
 $ttl = $user_id ? 'Edit User' : 'Add User';
-$titleBlock = new w2p_Theme_TitleBlock($ttl, 'helix-setup-user.png', $m, $m . '.' . $a);
+$titleBlock = new w2p_Theme_TitleBlock($ttl, 'icon.png', $m, $m . '.' . $a);
 if (canView('admin') && canView('users')) {
     $titleBlock->addCrumb('?m=admin', 'users list');
 }
