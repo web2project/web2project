@@ -148,14 +148,14 @@ if (count($fields) > 0) {
                 </th><?php
             }
             ?>
-			<th>
-				<?php echo $AppUI->_('Selection'); ?>
-			</th>
 			<?php if ($show_all_projects) { ?>
 				<th>
 					<?php echo $AppUI->_('Status'); ?>
 				</th>
 			<?php } ?>
+            <th>
+                <?php echo $AppUI->_('Selection'); ?>
+            </th>
 		</tr>
 		<?php
 		$none = true;

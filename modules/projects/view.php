@@ -435,7 +435,7 @@ $canViewTaskLog = canView('task_log');
 
 //TODO: This whole structure is hard-coded based on the TaskStatus SelectList.
 $status = w2PgetSysVal('TaskStatus');
-if ($canViewTask) {
+if ($canViewTask && $AppUI->isActiveModule('tasks')) {
 	$tabBox->add(W2P_BASE_DIR . '/modules/tasks/tasks', 'Tasks');
     unset($status[0]);
     $tabBox->add(W2P_BASE_DIR . '/modules/tasks/tasks', 'Tasks (Inactive)');
@@ -444,17 +444,16 @@ if ($canViewTask) {
     foreach ($status as $id => $statusName) {
         $tabBox->add(W2P_BASE_DIR . '/modules/tasks/tasks', $AppUI->_('Tasks') . ' (' . $AppUI->_($statusName) . ')');
     }
-}
-if ( $AppUI->isActiveModule('forums') ) {
-	if (canView('forums')) {
-		$tabBox->add(W2P_BASE_DIR . '/modules/projects/vw_forums', 'Forums');
-	}
-}
-if ($canViewTask) {
+
 	$tabBox->add(W2P_BASE_DIR . '/modules/tasks/viewgantt', 'Gantt Chart');
 	if ($canViewTaskLog) {
 		$tabBox->add(W2P_BASE_DIR . '/modules/projects/vw_logs', 'Task Logs');
 	}
+}
+if ( $AppUI->isActiveModule('forums') ) {
+    if (canView('forums')) {
+        $tabBox->add(W2P_BASE_DIR . '/modules/projects/vw_forums', 'Forums');
+    }
 }
 $f = 'all';
 $min_view = true;
