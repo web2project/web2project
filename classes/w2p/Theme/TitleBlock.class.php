@@ -44,6 +44,7 @@ class w2p_Theme_TitleBlock {
         $this->cells2 = array();
         $this->crumbs = array();
         $this->showhelp = canView('help');
+        $this->count = 0;
     }
     /**
      * Adds a table 'cell' beside the Title string
@@ -59,6 +60,18 @@ class w2p_Theme_TitleBlock {
         $this->addCell('<form name="searchform" action="?m=' . $this->module . '" method="post" accept-charset="utf-8">
                 <input type="text" class="text" name="search_string" value="' . $search . '" /></form>');
         $this->addCell($this->_AppUI->_('Search') . ':');
+    }
+
+    public function addFilterCell($label, $field, $values, $value)
+    {
+        $form = 'filter' . $this->count;
+
+        $this->addCell('<form action="?m=' . $this->module . '" method="post" name="'.$form.'" accept-charset="utf-8">' .
+            arraySelect($values, $field, 'size="1" class="text" onChange="document.'.$form.'.submit();"', $value, false) .
+            '</form>');
+        $this->addCell($this->_AppUI->_($label) . ':');
+
+        $this->count++;
     }
 
     /**
