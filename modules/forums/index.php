@@ -27,8 +27,7 @@ $items = $forum->getAllowedForums($AppUI->user_id, $AppUI->user_company, $f, $or
 
 // setup the title block
 $titleBlock = new w2p_Theme_TitleBlock('Forums', 'icon.png', $m, $m . '.' . $a);
-$titleBlock->addCell('<form name="forum_filter" action="?m=forums" method="post" accept-charset="utf-8">' . arraySelect($filters, 'f', 'size="1" class="text" onChange="document.forum_filter.submit();"', $f, true) . '</form>');
-$titleBlock->addCell($AppUI->_('Filter') . ':');
+$titleBlock->addFilterCell('Filter', 'f', $filters, $f);
 
 if ($canAdd) {
 	$titleBlock->addCell('<form action="?m=forums&a=addedit" method="post" accept-charset="utf-8"><input type="submit" class="button btn btn-small dropdown-toggle" value="' . $AppUI->_('new forum') . '"></form>');

@@ -19,10 +19,7 @@ if (!isset($options[$filter_param])) {
 }
 
 $titleBlock = new w2p_Theme_TitleBlock('History', 'icon.png', 'history', 'history.' . $a);
-$titleBlock->addCell('<form name="filter" action="?m=history" method="post" accept-charset="utf-8">' .
-        arraySelect($options, 'filter', 'size="1" class="text" onChange="document.filter.submit();"', $filter_param, true) .
-        '</form>');
-$titleBlock->addCell($AppUI->_('Changes to') . ':');
+$titleBlock->addFilterCell('Changes to', 'filter', $options, $filter_param);
 $titleBlock->show();
 
 $tabBox = new CTabBox('?m=history', W2P_BASE_DIR . '/modules/history/');

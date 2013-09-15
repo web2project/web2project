@@ -39,10 +39,10 @@ $titleBlock->addCrumb('?m=calendar&a=year_view&date=' . $date, 'year view');
 $titleBlock->addCrumb('?m=calendar&date=' . $date, 'month view');
 $titleBlock->addCrumb('?m=calendar&a=week_view&date=' . $date, 'week view');
 $titleBlock->addCrumb('?m=calendar&a=day_view&date=' . $date, 'day view');
-$titleBlock->addCell('<form action="?m=calendar" method="post" name="pickCompany" accept-charset="utf-8">' . arraySelect($companies, 'company_id', 'onChange="document.pickCompany.submit()" class="text"', $company_id) . '</form>');
-$titleBlock->addCell($AppUI->_('Company') . ':');
-$titleBlock->addCell( '<form action="?m=calendar" method="post" name="pickFilter" accept-charset="utf-8">' . arraySelect($event_filter_list, 'event_filter', 'onChange="document.pickFilter.submit()" class="text"', $event_filter, true) . '</form>');
-$titleBlock->addCell($AppUI->_('Event Filter') . ':');
+
+$titleBlock->addFilterCell('Company', 'company_id', $companies, $company_id);
+$titleBlock->addFilterCell('Event Filter', 'event_filter', $event_filter_list, $event_filter);
+
 $titleBlock->addCell('<form action="?m=calendar&a=addedit&date=' . $today . '" method="post" accept-charset="utf-8"><input type="submit" class="button btn btn-small dropdown-toggle" value="' . $AppUI->_('New event') . '">' . '</form>');
 $titleBlock->show();
 ?>

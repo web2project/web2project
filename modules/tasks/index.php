@@ -56,12 +56,10 @@ $titleBlock->addSearchCell($search_string);
 // Let's see if this user has admin privileges
 if (canView('admin')) {
 	$user_list = $perms->getPermittedUsers('tasks');
-	$titleBlock->addCell('<form action="?m=tasks" method="post" name="userIdForm" accept-charset="utf-8">' . arraySelect($user_list, 'user_id', 'size="1" class="text" onChange="document.userIdForm.submit();"', $user_id, false) . '</form>');
-    $titleBlock->addCell($AppUI->_('User') . ':');
+    $titleBlock->addFilterCell('User', 'user_id', $user_list, $user_id);
 }
 
-$titleBlock->addCell('<form action="?m=tasks" method="post" name="companyFilter" accept-charset="utf-8">' . arraySelect($filters2, 'f2', 'size="1" class="text" onChange="document.companyFilter.submit();"', $f2, false) . '</form>');
-$titleBlock->addCell($AppUI->_('Company') . ':');
+$titleBlock->addFilterCell('Company', 'f2', $filters2, $f2);
 
 if ($canEdit && $project_id) {
 	$titleBlock->addCell('<form action="?m=tasks&amp;a=addedit&amp;task_project=' . $project_id . '" method="post" accept-charset="utf-8"><input type="submit" class="button" value="' . $AppUI->_('new task') . '"></form>');

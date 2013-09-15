@@ -24,9 +24,8 @@ $search_string = w2PformSafe($search_string, true);
 // setup the title block
 $titleBlock = new w2p_Theme_TitleBlock('Links', 'icon.png', $m, "$m.$a");
 $titleBlock->addSearchCell($search_string);
+$titleBlock->addFilterCell('Filter', 'project_id', $projects, $project_id);
 
-$titleBlock->addCell('<form name="pickProject" action="?m=links" method="post" accept-charset="utf-8">' . arraySelect($projects, 'project_id', 'onChange="document.pickProject.submit()" size="1" class="text"', $project_id) . '</form>');
-$titleBlock->addCell($AppUI->_('Filter') . ':');
 if ($canEdit) {
 	$titleBlock->addCell('<form action="?m=links&a=addedit" method="post" accept-charset="utf-8"><input type="submit" class="button btn btn-small dropdown-toggle" value="' . $AppUI->_('new link') . '"></form>');
 }

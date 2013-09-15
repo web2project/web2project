@@ -37,8 +37,7 @@ $allowedTasks = $task->getAllowedSQL($AppUI->user_id, 'file_task');
 
 // setup the title block
 $titleBlock = new w2p_Theme_TitleBlock('Files', 'icon.png', $m, "$m.$a");
-$titleBlock->addCell('<form name="pickProject" action="?m=files" method="post" accept-charset="utf-8">' . arraySelect($projects, 'project_id', 'onChange="document.pickProject.submit()" size="1" class="text"', $project_id) . '</form>');
-$titleBlock->addCell($AppUI->_('Filter') . ':');
+$titleBlock->addFilterCell('Filter', 'project_id', $projects, $project_id);
 
 // override the $canEdit variable passed from the main index.php in order to check folder permissions
 /** get permitted folders **/

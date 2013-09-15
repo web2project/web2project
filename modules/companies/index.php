@@ -37,11 +37,8 @@ $owner_list = is_array($allowedArray) ? ($baseArray + $allowedArray) : $baseArra
 // setup the title block
 $titleBlock = new w2p_Theme_TitleBlock('Companies', 'icon.png', $m, $m . '.' . $a);
 $titleBlock->addSearchCell($search_string);
+$titleBlock->addFilterCell('Owner', 'owner_filter_id', $owner_list, $owner_filter_id);
 
-$titleBlock->addCell('<form name="searchform2" action="?m=companies" method="post" accept-charset="utf-8">' .
-        arraySelect($owner_list, 'owner_filter_id', 'onChange="document.searchform2.submit()" size="1" class="text"', $owner_filter_id) .
-        '</form>');
-$titleBlock->addCell($AppUI->_('Owner filter') . ':');
 if ($canEdit) {
 	$titleBlock->addCell('<input type="submit" class="button btn btn-small dropdown-toggle" value="' . $AppUI->_('new company') . '">', '', '<form action="?m=companies&a=addedit" method="post" accept-charset="utf-8">', '</form>');
 }
