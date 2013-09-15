@@ -61,19 +61,10 @@ $user_list = array(0 => '(' . $AppUI->_('all') . ')') + CProject::getOwners();
 // setup the title block
 $titleBlock = new w2p_Theme_TitleBlock('Projects', 'icon.png', $m, $m . '.' . $a);
 $titleBlock->addSearchCell($search_string);
+$titleBlock->addFilterCell('Type', 'project_type', $project_types, $project_type);
+$titleBlock->addFilterCell('Company', 'project_company', $allowedCompanies, $company_id);
+$titleBlock->addFilterCell('Owner', 'project_owner', $user_list, $owner);
 
-$titleBlock->addCell('<form action="?m=projects" method="post" name="typeIdForm" accept-charset="utf-8">' .
-        arraySelect($project_types, 'project_type', 'size="1" class="text" onChange="document.typeIdForm.submit();"', $project_type, false) .
-        '</form>');
-$titleBlock->addCell($AppUI->_('Type') . ':');
-$titleBlock->addCell('<form action="?m=projects" method="post" name="pickCompany" accept-charset="utf-8">' .
-        arraySelect($allowedCompanies, 'project_company', 'size="1" class="text" onChange="document.pickCompany.submit();"', $company_id, false) .
-        '</form>');
-$titleBlock->addCell($AppUI->_('Company') . ':');
-$titleBlock->addCell('<form action="?m=projects" method="post" name="userIdForm" accept-charset="utf-8">' .
-        arraySelect($user_list, 'project_owner', 'size="1" class="text" onChange="document.userIdForm.submit();"', $owner, false) .
-        '</form>');
-$titleBlock->addCell($AppUI->_('Owner') . ':');
 if ($canAuthor) {
 	$titleBlock->addCell('<input type="submit" class="button btn btn-small dropdown-toggle" value="' . $AppUI->_('new project') . '">', '', '<form action="?m=projects&a=addedit" method="post" accept-charset="utf-8">', '</form>');
 }
