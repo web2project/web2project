@@ -468,7 +468,7 @@ class CContact extends w2p_Core_BaseObject
         $company = new CCompany;
         $allow_where = $company->getAllowedSQL($AppUI->user_id,'contact_company');
         if (count($allow_where)) {
-            $q->addWhere('contact_company = 0 OR contact_company IS NULL OR (' . implode(' AND ', $allow_where). ')');
+            $q->addWhere('(contact_company = 0 OR contact_company IS NULL OR (' . implode(' AND ', $allow_where). '))');
         }
 
 //TODO: We need to convert this from static to use ->overrideDatabase() for testing.
