@@ -77,8 +77,8 @@ if (!$project_id) {
 	$titleBlock->addCrumb('?m=projects', 'projects list');
 	$titleBlock->addCell();
 	if ($canAddProjects) {
-		$titleBlock->addCell('<input type="submit" class="button btn btn-small dropdown-toggle" value="' . $AppUI->_('new project') . '">', '', '<form action="?m=projects&a=addedit" method="post" accept-charset="utf-8">', '</form>');
-	}
+        $titleBlock->addButton('New project', '?m=projects&a=addedit');
+    }
 	$titleBlock->show();
 ?>
 	<script language="javascript" type="text/javascript">
@@ -156,19 +156,19 @@ if (!$project_id) {
 
 	if ($canAddProjects) {
 		$titleBlock->addCell();
-		$titleBlock->addCell('<input type="submit" class="button btn btn-small dropdown-toggle" value="' . $AppUI->_('new project') . '">', '', '<form action="?m=projects&a=addedit" method="post" accept-charset="utf-8">', '</form>');
-	}
+        $titleBlock->addButton('New project', '?m=projects&a=addedit');
+    }
 
 	if ($canAddTasks) {
 		$titleBlock->addCell();
-		$titleBlock->addCell('<input type="submit" class="button btn btn-small dropdown-toggle" value="' . $AppUI->_('new task') . '">', '', '<form action="?m=tasks&a=addedit&task_project=' . $project_id . '" method="post" accept-charset="utf-8">', '</form>');
+        $titleBlock->addButton('New task', '?m=tasks&a=addedit&task_project=' . $project_id);
 	}
 	if ($canEditProject) {
 		$titleBlock->addCell();
-		$titleBlock->addCell('<input type="submit" class="button btn btn-small dropdown-toggle" value="' . $AppUI->_('new event') . '">', '', '<form action="?m=calendar&a=addedit&event_project=' . $project_id . '" method="post" accept-charset="utf-8">', '</form>');
+        $titleBlock->addButton('New event', '?m=calendar&a=addedit&event_project=' . $project_id);
 
 		$titleBlock->addCell();
-		$titleBlock->addCell('<input type="submit" class="button btn btn-small dropdown-toggle" value="' . $AppUI->_('new file') . '">', '', '<form action="?m=files&a=addedit&project_id=' . $project_id . '" method="post" accept-charset="utf-8">', '</form>');
+        $titleBlock->addButton('New file', '?m=files&a=addedit&project_id=' . $project_id);
 		$titleBlock->addCrumb('?m=projects&a=addedit&project_id=' . $project_id, 'edit this project');
 		if ($canDeleteProject) {
 			$titleBlock->addCrumbDelete('delete project', $canDelete, $msg);

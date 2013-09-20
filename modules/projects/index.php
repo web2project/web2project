@@ -66,7 +66,7 @@ $titleBlock->addFilterCell('Company', 'project_company', $allowedCompanies, $com
 $titleBlock->addFilterCell('Owner', 'project_owner', $user_list, $owner);
 
 if ($canAuthor) {
-	$titleBlock->addCell('<input type="submit" class="button btn btn-small dropdown-toggle" value="' . $AppUI->_('new project') . '">', '', '<form action="?m=projects&a=addedit" method="post" accept-charset="utf-8">', '</form>');
+    $titleBlock->addButton('new project', '?m=projects&a=addedit');
 }
 $titleBlock->addCell('<span title="' . $AppUI->_('Projects') . '::' . $AppUI->_('Print projects list') . '.">' .
         '<a href="javascript: void(0);" onclick ="window.open(\'index.php?m=projects&a=printprojects&dialog=1&suppressHeaders=1&company_id='.$company_id.'&project_type='.$project_type.'&project_owner='.$owner.'\', \'printprojects\',\'width=1200, height=600, menubar=1, scrollbars=1\')">

@@ -47,6 +47,7 @@ for ($c = 65; $c < 91; $c++) {
 $titleBlock = new w2p_Theme_TitleBlock('User Management', 'icon.png', $m, "$m.$a");
 $titleBlock->addSearchCell($where);
 $titleBlock->addCell($a2z);
+$titleBlock->addButton('New user', '?m=admin&a=addedit');
 $titleBlock->show();
 
 ?>
@@ -67,8 +68,6 @@ function delMe( x, y ) {
 </script>
 
 <?php
-$extra = '<td align="right" width="100%"><input type="button" class="button btn btn-small dropdown-toggle" value="' . $AppUI->_('add user') . '" onClick="javascript:window.location=\'./index.php?m=admin&a=addedituser\';" /></td>';
-
 $tabBox = new CTabBox('?m=admin', W2P_BASE_DIR . '/modules/admin/', $tab);
 $tabBox->add('vw_active_usr', 'Active Users');
 $tabBox->add('vw_inactive_usr', 'Inactive Users');
@@ -76,7 +75,7 @@ $tabBox->add('vw_usr_log', 'User Log');
 if ($canEdit && $canDelete) {
 	$tabBox->add('vw_usr_sessions', 'Active Sessions');
 }
-$tabBox->show($extra);
+$tabBox->show();
 
 ?>
 

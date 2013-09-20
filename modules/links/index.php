@@ -27,7 +27,7 @@ $titleBlock->addSearchCell($search_string);
 $titleBlock->addFilterCell('Filter', 'project_id', $projects, $project_id);
 
 if ($canEdit) {
-	$titleBlock->addCell('<form action="?m=links&a=addedit" method="post" accept-charset="utf-8"><input type="submit" class="button btn btn-small dropdown-toggle" value="' . $AppUI->_('new link') . '"></form>');
+    $titleBlock->addButton('New link', '?m=links&a=addedit');
 }
 $titleBlock->show();
 

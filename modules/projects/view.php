@@ -59,14 +59,13 @@ $style = (($actual_end_date > $end_date) && !empty($end_date)) ? 'style="color:r
 $titleBlock = new w2p_Theme_TitleBlock('View Project', 'icon.png', $m, $m . '.' . $a);
 
 if ($canEdit) {
-    $titleBlock->addCell('<input type="submit" class="button btn btn-small dropdown-toggle" value="' . $AppUI->_('new link') . '" />', '', '<form action="?m=links&a=addedit&project_id=' . $project_id . '" method="post" accept-charset="utf-8">', '</form>');
-	$titleBlock->addCell('<input type="submit" class="button btn btn-small dropdown-toggle" value="' . $AppUI->_('new event') . '" />', '', '<form action="?m=calendar&a=addedit&project_id=' . $project_id . '" method="post" accept-charset="utf-8">', '</form>');
-
-	$titleBlock->addCell('<input type="submit" class="button btn btn-small dropdown-toggle" value="' . $AppUI->_('new file') . '" />', '', '<form action="?m=files&a=addedit&project_id=' . $project_id . '" method="post" accept-charset="utf-8">', '</form>');
+    $titleBlock->addButton('new link', '?m=links&a=addedit&project_id=' . $project_id);
+    $titleBlock->addButton('new event', '?m=calendar&a=addedit&project_id=' . $project_id);
+    $titleBlock->addButton('new file', '?m=files&a=addedit&project_id=' . $project_id);
 }
 
 if (canAdd('tasks')) {
-    $titleBlock->addCell('<input type="submit" class="button btn btn-small dropdown-toggle" value="' . $AppUI->_('new task') . '" />', '', '<form action="?m=tasks&a=addedit&task_project=' . $project_id . '" method="post" accept-charset="utf-8">', '</form>');
+    $titleBlock->addButton('new task', '?m=tasks&a=addedit&task_project=' . $project_id);
 }
 $titleBlock->addCrumb('?m=projects', 'projects list');
 if ($canEdit) {

@@ -43,7 +43,7 @@ $titleBlock->addCrumb('?m=calendar&a=day_view&date=' . $date, 'day view');
 $titleBlock->addFilterCell('Company', 'company_id', $companies, $company_id);
 $titleBlock->addFilterCell('Event Filter', 'event_filter', $event_filter_list, $event_filter);
 
-$titleBlock->addCell('<form action="?m=calendar&a=addedit&date=' . $today . '" method="post" accept-charset="utf-8"><input type="submit" class="button btn btn-small dropdown-toggle" value="' . $AppUI->_('New event') . '">' . '</form>');
+$titleBlock->addButton('New event', '?m=calendar&a=addedit&date=' . $today);
 $titleBlock->show();
 ?>
 

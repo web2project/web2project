@@ -40,7 +40,7 @@ $titleBlock->addSearchCell($search_string);
 $titleBlock->addFilterCell('Owner', 'owner_filter_id', $owner_list, $owner_filter_id);
 
 if ($canEdit) {
-	$titleBlock->addCell('<input type="submit" class="button btn btn-small dropdown-toggle" value="' . $AppUI->_('new company') . '">', '', '<form action="?m=companies&a=addedit" method="post" accept-charset="utf-8">', '</form>');
+    $titleBlock->addButton('new company', '?m=companies&a=addedit');
 }
 $titleBlock->show();
 

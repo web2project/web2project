@@ -7,5 +7,5 @@ $perms = &$AppUI->acl();
 $canAddUsers = canAdd('admin');
 
 if ($canAddUsers && $contact_id && !$is_user) {
-    $titleBlock->addCell('<form action="?m=admin&a=addedituser&contact_id=' . $contact_id . '" method="post" accept-charset="utf-8"><input type="submit" class="button btn btn-small dropdown-toggle" value="' . $AppUI->_('create user') . '"></form>');
+    $titleBlock->addButton('create user', '?m=admin&a=addedit&contact_id=' . $contact_id);
 }

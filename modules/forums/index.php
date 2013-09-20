@@ -30,7 +30,7 @@ $titleBlock = new w2p_Theme_TitleBlock('Forums', 'icon.png', $m, $m . '.' . $a);
 $titleBlock->addFilterCell('Filter', 'f', $filters, $f);
 
 if ($canAdd) {
-	$titleBlock->addCell('<form action="?m=forums&a=addedit" method="post" accept-charset="utf-8"><input type="submit" class="button btn btn-small dropdown-toggle" value="' . $AppUI->_('new forum') . '"></form>');
+    $titleBlock->addButton('New forum', '?m=forums&a=addedit');
 }
 
 //TODO: this is a little hack to make sure the table header gets generated in the show() method below
