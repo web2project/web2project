@@ -59,7 +59,7 @@ class w2p_Output_EmailManager
             $body .= "and confirm if you can or can not make the requested time.\n\n";
         }
 
-        $body .= $this->_AppUI->_('Event') . ":\t" . $event->event_title . "\n";
+        $body .= $this->_AppUI->_('Event') . ":\t" . $event->event_name . "\n";
         if (!$clash) {
             $body .= $this->_AppUI->_('URL') . ":\t" . w2PgetConfig('base_url') . "/index.php?m=calendar&a=view&event_id=" . $event->event_id . "\n";
         }
