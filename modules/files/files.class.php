@@ -291,13 +291,18 @@ class CFile extends w2p_Core_BaseObject {
 
 	// delete File from File System
 	public function deleteFile() {
+        $this->load();
+
         if ('' == $this->file_real_filename ||
                 !file_exists(W2P_BASE_DIR . '/files/' . $this->file_project . '/' . $this->file_real_filename)) {
             return true;
         }
+
         if ($this->_perms->checkModuleItem('files', 'delete', $this->file_id)) {
             return @unlink(W2P_BASE_DIR . '/files/' . $this->file_project . '/' . $this->file_real_filename);
         }
+
+        return false;
 	}
 
 	// move the file if the affiliated project was changed
