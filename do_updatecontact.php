@@ -24,9 +24,6 @@ if (!$contact->bind($_POST)) {
     if (is_array($result)) {
         $msg = $AppUI->_('There was an error recording your contact data, please contact the system administrator. Thank you very much.');
     } else {
-        $custom_fields = new w2p_Core_CustomFields('contacts', 'addedit', $contact->contact_id, 'edit', 1);
-        $custom_fields->bind($_POST);
-        $custom_fields->store($contact->contact_id);
         $contact->clearUpdateKey();
 
         $msg = $AppUI->_('Your contact data has been recorded successfully. Your may now close your browser window.  Thank you very much, ' . $contact->contact_first_name);
