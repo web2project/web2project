@@ -4,19 +4,17 @@
  * based on http://dustint.com/post/38/building-a-php-publish-subscribe-system
  * from Dustin Thomson. Used here with permission received on 21 Aug 2011.
  *
- * @package     web2project\core
+ * @package     web2project\system
  * @author      Dustin Thomson <dustin@dustint.com>
  * @author      Keith Casey (maintainer) <caseydk@sourceforge.net>
- *
- * @todo    refactor to w2p/System/ListenerInterface
  */
 
-interface w2p_Core_ListenerInterface
+interface w2p_System_ListenerInterface
 {
 	/**
 	 * Accepts an event and does something with it
 	 *
 	 * @param Event $event	The event to process
 	 */
-	public function publish(w2p_Core_Event $event);
+	public function publish(w2p_System_Event $event);
 }

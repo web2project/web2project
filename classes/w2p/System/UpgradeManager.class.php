@@ -1,11 +1,9 @@
 <?php
 /**
- * @package     web2project\core
- *
- * @todo    refactor to w2p/System/UpgradeManager
+ * @package     web2project\system
  */
 
-class w2p_Core_UpgradeManager {
+class w2p_System_UpgradeManager {
     protected $action = '';
 
     protected $configDir = '';

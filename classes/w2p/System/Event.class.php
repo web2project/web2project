@@ -4,14 +4,12 @@
  * based on http://dustint.com/post/38/building-a-php-publish-subscribe-system
  * from Dustin Thomson. Used here with permission received on 21 Aug 2011.
  *
- * @package     web2project\core
+ * @package     web2project\system
  * @author      Dustin Thomson <dustin@dustint.com>
  * @author      Keith Casey (maintainer) <caseydk@sourceforge.net>
- *
- * @todo    refactor to w2p/System/Event
  */
 
-class w2p_Core_Event {
+class w2p_System_Event {
 	/**
 	 * The name of the resource publishing this event
 	 * @var string

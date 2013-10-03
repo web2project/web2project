@@ -4,23 +4,19 @@
  * event notifications and other timed events, as well as
  * outgoing emails.
  *
- * @package     web2project\core
+ * @package     web2project\system
  * @copyright   (c) 2005, dotproject team
  * @copyright   (c) 2007-2013 web2project team
  *
  * @todo    This can probably be converted to extend the w2p_Core_BaseObject and just get rid of a bunch of this code. ~ dkc 28 Oct 2012
- * @todo    refactor to w2p/System/EventQueue
  */
 
-class w2p_Core_EventQueue {
+class w2p_System_EventQueue {
 
 	public $table = 'event_queue';
 	public $update_list = array();
 	public $delete_list = array();
 	public $event_count = 0;
-
-	public function __construct() {
-	}
 
 	/**
 	 * Add an event to the queue.

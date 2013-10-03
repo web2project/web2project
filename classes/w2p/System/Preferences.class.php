@@ -2,12 +2,11 @@
 /**
  * This is the core preferences object that runs both the default and User-based preferences.
  *
- * @package     web2project\core
+ * @package     web2project\system
  *
- * @todo    refactor to w2p/System/Preferences
  * @todo    couldn't this just extend the BaseObject?
  */
-class w2p_Core_Preferences {
+class w2p_System_Preferences {
     /** This is the user_id */
     public $pref_user = null;
     /** There is no defined list of preferences, so we can add as needed */
@@ -32,7 +31,7 @@ class w2p_Core_Preferences {
     public function bind($hash)
     {
         if (!is_array($hash)) {
-            return 'w2p_Core_Preferences::bind failed';
+            return 'w2p_System_Preferences::bind failed';
         } else {
             $q = new w2p_Database_Query;
             $q->bindHashToObject($hash, $this);

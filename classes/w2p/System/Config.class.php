@@ -1,11 +1,9 @@
 <?php
 /**
- * @package     web2project\core
- *
- * @todo    refactor to w2p/System/Config
+ * @package     web2project\system
  */
 
-class w2p_Core_Config extends w2p_Core_BaseObject
+class w2p_System_Config extends w2p_Core_BaseObject
 {
     public $config_id;
     public $config_name;
@@ -46,7 +44,7 @@ class w2p_Core_Config extends w2p_Core_BaseObject
     public function cleanUp()
     {
         if (!$this->keepReminders) {
-            $queue = new w2p_Core_EventQueue();
+            $queue = new w2p_System_EventQueue();
             $reminders = $queue->find('tasks', 'remind');
             $queue->delete_list = array_keys($reminders);
             $queue->commit_updates();

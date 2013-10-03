@@ -1,11 +1,9 @@
 <?php
 /**
- * @package     web2project\core
- *
- * @todo    refactor to w2p/System/Module
+ * @package     web2project\system
  */
 
-class w2p_Core_Module extends w2p_Core_BaseObject {
+class w2p_System_Module extends w2p_Core_BaseObject {
     public $mod_id = null;
     public $mod_name = null;
     public $mod_directory = null;

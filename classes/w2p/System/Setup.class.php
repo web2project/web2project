@@ -1,13 +1,11 @@
 <?php
 /**
- * @package     web2project\core
+ * @package     web2project\system
  *
  * @abstract
- *
- * @todo    refactor to w2p/System/Setup
  */
 
-abstract class w2p_Core_Setup {
+abstract class w2p_System_Setup {
     
     protected $_errors;
     protected $_AppUI;

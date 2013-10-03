@@ -5,13 +5,11 @@
  * methods for laying out and interacting with hooks.  It should not be
  * considered complete at this time.
  *
- * @package     web2project\core
+ * @package     web2project\system
  * @author      Keith Casey <caseydk@sourceforge.net>
- *
- * @todo    refactor to w2p/System/HookHandler
  */
 
-class w2p_Core_HookHandler
+class w2p_System_HookHandler
 {
 
     protected $AppUI = null;

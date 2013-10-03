@@ -4,14 +4,12 @@
  * based on http://dustint.com/post/38/building-a-php-publish-subscribe-system
  * from Dustin Thomson. Used here with permission received on 21 Aug 2011.
  * 
- * @package     web2project\core
+ * @package     web2project\system
  * @author      Dustin Thomson <dustin@dustint.com>
  * @author      Keith Casey (maintainer) <caseydk@sourceforge.net>
- *
- * @todo    refactor to w2p/System/Dispatcher
  */
 
-class w2p_Core_Dispatcher
+class w2p_System_Dispatcher
 {
     /**
      * Associative array of listeners.
@@ -33,7 +31,7 @@ class w2p_Core_Dispatcher
      * @param Mixed $event
      * @return Dispatcher
      */
-    public function subscribe(w2p_Core_ListenerInterface $listener, $resourceName='*', $event='*'){
+    public function subscribe(w2p_System_ListenerInterface $listener, $resourceName='*', $event='*'){
     	$this->_listeners[$resourceName][$event][spl_object_hash($listener)] = $listener;
     	return $this;
     }
@@ -46,7 +44,7 @@ class w2p_Core_Dispatcher
      * @param Mixed $event
      * @return Dispatcher
      */
-    public function unsubscribe(w2p_Core_ListenerInterface $listener, $resourceName='*', $event='*'){
+    public function unsubscribe(w2p_System_ListenerInterface $listener, $resourceName='*', $event='*'){
     	unset($this->_listeners[$resourceName][$event][spl_object_hash($listener)]);
     	return $this;
     }
@@ -54,10 +52,10 @@ class w2p_Core_Dispatcher
     /**
      * Publishes an event to all the listeners listening to the specified event for the specified resource
      *
-     * @param w2p_Core_Event $event
+     * @param w2p_System_Event $event
      * @return Dispatcher
      */
-    public function publish(w2p_Core_Event $event ){
+    public function publish(w2p_System_Event $event ){
     	$resourceName = $event->getResourceName();
     	$eventName = $event->getEventName();
 
