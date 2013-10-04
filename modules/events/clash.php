@@ -61,7 +61,7 @@ if (isset($_REQUEST['clash_action'])) {
 		$s .= '<tr><td>' . $user . '</td></tr>';
 	}
 	
-	$calurl = W2P_BASE_URL . '/index.php?m=calendar&a=clash&event_id=' . $obj->event_id;
+	$calurl = W2P_BASE_URL . '/index.php?m=events&a=clash&event_id=' . $obj->event_id;
     $s .= '<tr><td>';
 	$s .= '<a href="javascript: void(0);" onclick="set_clash_action(\'suggest\');">' . $AppUI->_('Suggest Alternative') . '</a> : ';
 	$s .= '<a href="javascript: void(0);" onclick="set_clash_action(\'cancel\');">' . $AppUI->_('Cancel') . '</a> : ';
@@ -78,7 +78,7 @@ if (isset($_REQUEST['clash_action'])) {
 /*
 * display a form
 * 
-* From modules/calendar/clash.php
+* From modules/events/clash.php
 * 
 * TODO: I wanted to move this one but it's a big hairy mess..
 */
@@ -96,7 +96,7 @@ function clash_suggest(w2p_Core_CAppUI $AppUI, $cal_sdf) {
 
 	$titleBlock = new w2p_Theme_TitleBlock('Suggest Alternative Event Time', 'myevo-appointments.png', $m, $m . '.' . $a);
 	$titleBlock->show();
-	$calurl = W2P_BASE_URL . '/index.php?m=calendar&a=clash&event_id=' . $obj->event_id;
+	$calurl = W2P_BASE_URL . '/index.php?m=events&a=clash&event_id=' . $obj->event_id;
 	$times = array();
 	$t = new w2p_Utilities_Date();
 	$t->setTime(0, 0, 0);

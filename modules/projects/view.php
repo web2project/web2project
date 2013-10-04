@@ -60,7 +60,7 @@ $titleBlock = new w2p_Theme_TitleBlock('View Project', 'icon.png', $m, $m . '.' 
 
 if ($canEdit) {
     $titleBlock->addButton('new link', '?m=links&a=addedit&project_id=' . $project_id);
-    $titleBlock->addButton('new event', '?m=calendar&a=addedit&project_id=' . $project_id);
+    $titleBlock->addButton('new event', '?m=events&a=addedit&project_id=' . $project_id);
     $titleBlock->addButton('new file', '?m=files&a=addedit&project_id=' . $project_id);
 }
 

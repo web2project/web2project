@@ -35,24 +35,24 @@ $companies = arrayMerge(array('0' => $AppUI->_('All')), $companies);
 
 // setup the title block
 $titleBlock = new w2p_Theme_TitleBlock('Monthly Calendar', 'icon.png', $m, $m . '.' . $a);
-$titleBlock->addCrumb('?m=calendar&a=year_view&date=' . $date, 'year view');
-$titleBlock->addCrumb('?m=calendar&date=' . $date, 'month view');
-$titleBlock->addCrumb('?m=calendar&a=week_view&date=' . $date, 'week view');
-$titleBlock->addCrumb('?m=calendar&a=day_view&date=' . $date, 'day view');
+$titleBlock->addCrumb('?m=events&a=year_view&date=' . $date, 'year view');
+$titleBlock->addCrumb('?m=events&date=' . $date, 'month view');
+$titleBlock->addCrumb('?m=events&a=week_view&date=' . $date, 'week view');
+$titleBlock->addCrumb('?m=events&a=day_view&date=' . $date, 'day view');
 
 $titleBlock->addFilterCell('Company', 'company_id', $companies, $company_id);
 $titleBlock->addFilterCell('Event Filter', 'event_filter', $event_filter_list, $event_filter);
 
-$titleBlock->addButton('New event', '?m=calendar&a=addedit&date=' . $today);
+$titleBlock->addButton('New event', '?m=events&a=addedit&date=' . $today);
 $titleBlock->show();
 ?>
 
 <script language="javascript" type="text/javascript">
 function clickDay( uts, fdate ) {
-	window.location = './index.php?m=calendar&a=day_view&date='+uts+'&tab=0';
+	window.location = './index.php?m=events&a=day_view&date='+uts+'&tab=0';
 }
 function clickWeek( uts, fdate ) {
-	window.location = './index.php?m=calendar&a=week_view&date='+uts;
+	window.location = './index.php?m=events&a=week_view&date='+uts;
 }
 </script>
 

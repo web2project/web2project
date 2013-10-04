@@ -55,18 +55,18 @@ $companies = arrayMerge(array('0' => $AppUI->_('All')), $companies);
 
 // setup the title block
 $titleBlock = new w2p_Theme_TitleBlock('Day View', 'icon.png', $m, $m.'.'.$a);
-$titleBlock->addCrumb('?m=calendar&a=year_view&date=' . $this_day->format(FMT_TIMESTAMP_DATE), 'year view');
-$titleBlock->addCrumb('?m=calendar&date=' . $this_day->format(FMT_TIMESTAMP_DATE), 'month view');
-$titleBlock->addCrumb('?m=calendar&a=week_view&date=' . $this_week, 'week view');
-$titleBlock->addCrumb('?m=calendar&a=day_view&date=' . $this_day->format(FMT_TIMESTAMP_DATE), 'day view');
+$titleBlock->addCrumb('?m=events&a=year_view&date=' . $this_day->format(FMT_TIMESTAMP_DATE), 'year view');
+$titleBlock->addCrumb('?m=events&date=' . $this_day->format(FMT_TIMESTAMP_DATE), 'month view');
+$titleBlock->addCrumb('?m=events&a=week_view&date=' . $this_week, 'week view');
+$titleBlock->addCrumb('?m=events&a=day_view&date=' . $this_day->format(FMT_TIMESTAMP_DATE), 'day view');
 $titleBlock->addCell(arraySelect($companies, 'company_id', 'onChange="document.pickCompany.submit()" class="text"', $company_id), '', '<form action="' . $_SERVER['REQUEST_URI'] . '" method="post" name="pickCompany" accept-charset="utf-8">', '</form>');
 $titleBlock->addCell($AppUI->_('Company') . ':');
-$titleBlock->addButton('New event', '?m=calendar&a=addedit&date=' . $today);
+$titleBlock->addButton('New event', '?m=events&a=addedit&date=' . $today);
 $titleBlock->show();
 ?>
 <script language="javascript">
 function clickDay( idate, fdate ) {
-        window.location = './index.php?m=calendar&a=day_view&date='+idate+'&tab=0';
+        window.location = './index.php?m=events&a=day_view&date='+idate+'&tab=0';
 }
 </script>
 
@@ -76,20 +76,20 @@ function clickDay( idate, fdate ) {
             <table border="0" cellspacing="1" cellpadding="2" width="100%" class="motitle">
                 <tr>
                     <td>
-                        <a href="<?php echo '?m=calendar&a=day_view&date=' . $prev_day->format(FMT_TIMESTAMP_DATE); ?>"><img src="<?php echo w2PfindImage('prev.gif'); ?>" width="16" height="16" alt="pre" border="0"></a>
+                        <a href="<?php echo '?m=events&a=day_view&date=' . $prev_day->format(FMT_TIMESTAMP_DATE); ?>"><img src="<?php echo w2PfindImage('prev.gif'); ?>" width="16" height="16" alt="pre" border="0"></a>
                     </td>
                     <th width="100%">
                         <?php echo $AppUI->_(htmlspecialchars($this_day->format('%A'), ENT_COMPAT, $locale_char_set)) . ', ' . $this_day->format($df); ?>
                     </th>
                     <td>
-                        <a href="<?php echo '?m=calendar&a=day_view&date=' . $next_day->format(FMT_TIMESTAMP_DATE); ?>"><img src="<?php echo w2PfindImage('next.gif'); ?>" width="16" height="16" alt="next" border="0"></a>
+                        <a href="<?php echo '?m=events&a=day_view&date=' . $next_day->format(FMT_TIMESTAMP_DATE); ?>"><img src="<?php echo w2PfindImage('next.gif'); ?>" width="16" height="16" alt="next" border="0"></a>
                     </td>
                 </tr>
             </table>
 
             <?php
                 // tabbed information boxes
-                $tabBox = new CTabBox('?m=calendar&a=day_view&date=' . $this_day->format(FMT_TIMESTAMP_DATE), W2P_BASE_DIR . '/modules/calendar/', $tab);
+                $tabBox = new CTabBox('?m=events&a=day_view&date=' . $this_day->format(FMT_TIMESTAMP_DATE), W2P_BASE_DIR . '/modules/events/', $tab);
                 $tabBox->add('vw_day_events', 'Events');
                 $tabBox->add('vw_day_tasks', 'Tasks');
                 $tabBox->show();

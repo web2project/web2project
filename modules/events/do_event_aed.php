@@ -41,12 +41,12 @@ if (!$clashRedirect) {
     if (!$result) {
         $AppUI->setMsg($result, UI_MSG_ERROR, true);
         $AppUI->holdObject($obj);
-        $AppUI->redirect('m=calendar&a=addedit&event_id=' . $obj->event_id);
+        $AppUI->redirect('m=events&a=addedit&event_id=' . $obj->event_id);
     }
 
     if ($result) {
         $AppUI->setMsg('Event '.$action, UI_MSG_OK, true);
-        $redirect = 'm=calendar';
+        $redirect = 'm=events';
     } else {
         $redirect = ACCESS_DENIED;
     }

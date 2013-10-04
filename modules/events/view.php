@@ -66,16 +66,16 @@ $titleBlock = new w2p_Theme_TitleBlock('View Event', 'icon.png', $m, $m . '.' . 
 if ($canEdit) {
 	$titleBlock->addCell();
 	$titleBlock->addCell('
-		<form action="?m=calendar&amp;a=addedit" method="post" accept-charset="utf-8">
+		<form action="?m=events&amp;a=addedit" method="post" accept-charset="utf-8">
 			<input type="submit" class="button" value="' . $AppUI->_('New event') . '" />
 		</form>', '', '', '');
 }
-$titleBlock->addCrumb('?m=calendar&a=year_view&date=' . $start_date->format(FMT_TIMESTAMP_DATE), 'year view');
-$titleBlock->addCrumb('?m=calendar&amp;date=' . $start_date->format(FMT_TIMESTAMP_DATE), 'month view');
-$titleBlock->addCrumb('?m=calendar&a=week_view&date=' . $start_date->format(FMT_TIMESTAMP_DATE), 'week view');
-$titleBlock->addCrumb('?m=calendar&amp;a=day_view&amp;date=' . $start_date->format(FMT_TIMESTAMP_DATE) . '&amp;tab=0', 'day view');
+$titleBlock->addCrumb('?m=events&a=year_view&date=' . $start_date->format(FMT_TIMESTAMP_DATE), 'year view');
+$titleBlock->addCrumb('?m=events&amp;date=' . $start_date->format(FMT_TIMESTAMP_DATE), 'month view');
+$titleBlock->addCrumb('?m=events&a=week_view&date=' . $start_date->format(FMT_TIMESTAMP_DATE), 'week view');
+$titleBlock->addCrumb('?m=events&amp;a=day_view&amp;date=' . $start_date->format(FMT_TIMESTAMP_DATE) . '&amp;tab=0', 'day view');
 if ($canEdit) {
-	$titleBlock->addCrumb('?m=calendar&amp;a=addedit&amp;event_id=' . $event_id, 'edit this event');
+	$titleBlock->addCrumb('?m=events&amp;a=addedit&amp;event_id=' . $event_id, 'edit this event');
 	if ($canDelete) {
 		$titleBlock->addCrumbDelete('delete event', $canDelete, $msg);
 	}
@@ -99,7 +99,7 @@ function delIt() {
 <?php } ?>
 </script>
 
-<form name="frmDelete" action="./index.php?m=calendar" method="post" accept-charset="utf-8">
+<form name="frmDelete" action="./index.php?m=events" method="post" accept-charset="utf-8">
 	<input type="hidden" name="dosql" value="do_event_aed" />
 	<input type="hidden" name="del" value="1" />
 	<input type="hidden" name="event_id" value="<?php echo $event_id; ?>" />

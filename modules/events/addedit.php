@@ -44,7 +44,7 @@ $types = w2PgetSysVal('EventType');
 
 // Load the users
 $perms = &$AppUI->acl();
-$users = $perms->getPermittedUsers('calendar');
+$users = $perms->getPermittedUsers('events');
 
 // Load the assignees
 $assigned = array();
@@ -77,12 +77,12 @@ if ($obj->event_project && !$perms->checkModuleItem('projects', 'view', $obj->ev
 
 // setup the title block
 $titleBlock = new w2p_Theme_TitleBlock(($event_id ? 'Edit Event' : 'Add Event'), 'icon.png', $m, $m . '.' . $a);
-$titleBlock->addCrumb('?m=calendar&a=year_view&date=' . $start_date->format(FMT_TIMESTAMP_DATE), 'year view');
-$titleBlock->addCrumb('?m=calendar&amp;date=' . $start_date->format(FMT_TIMESTAMP_DATE), 'month view');
-$titleBlock->addCrumb('?m=calendar&a=week_view&date=' . $start_date->format(FMT_TIMESTAMP_DATE), 'week view');
-$titleBlock->addCrumb('?m=calendar&amp;a=day_view&amp;date=' . $start_date->format(FMT_TIMESTAMP_DATE) . '&amp;tab=0', 'day view');
+$titleBlock->addCrumb('?m=events&a=year_view&date=' . $start_date->format(FMT_TIMESTAMP_DATE), 'year view');
+$titleBlock->addCrumb('?m=events&amp;date=' . $start_date->format(FMT_TIMESTAMP_DATE), 'month view');
+$titleBlock->addCrumb('?m=events&a=week_view&date=' . $start_date->format(FMT_TIMESTAMP_DATE), 'week view');
+$titleBlock->addCrumb('?m=events&amp;a=day_view&amp;date=' . $start_date->format(FMT_TIMESTAMP_DATE) . '&amp;tab=0', 'day view');
 if ($event_id) {
-	$titleBlock->addCrumb('?m=calendar&amp;a=view&event_id=' . $event_id, 'view this event');
+	$titleBlock->addCrumb('?m=events&amp;a=view&event_id=' . $event_id, 'view this event');
 }
 $titleBlock->show();
 
@@ -339,7 +339,7 @@ function removeUser() {
 				<td colspan="2" align="right">
 					<?php
 					  // $m does not equal 'calendar' here???
-					  $custom_fields = new w2p_Core_CustomFields('calendar', 'addedit', $obj->event_id, 'edit');
+					  $custom_fields = new w2p_Core_CustomFields('events', 'addedit', $obj->event_id, 'edit');
 					  $custom_fields->printHTML();
 					  ?>
 				</td>

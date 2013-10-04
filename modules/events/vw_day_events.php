@@ -102,13 +102,13 @@ for ($i = 0, $n = ($end - $start) * 60 / $inc; $i < $n; $i++) {
 			$et = new w2p_Utilities_Date($row['event_end_date']);
 
 			$rows = $event->calculateRows($this_day, $et, $inc);
-			$href = '?m=calendar&a=view&event_id=' . $row['event_id'];
+			$href = '?m=events&a=view&event_id=' . $row['event_id'];
 			$alt = $row['event_description'];
 
 			$html .= '<td class="event" rowspan="' . $rows . '" valign="top">';
 
 			$html .= '<table cellspacing="0" cellpadding="0" border="0"><tr>';
-			$html .= '<td>' . w2PshowImage('event' . $row['event_type'] . '.png', 16, 16, '', '', 'calendar');
+			$html .= '<td>' . w2PshowImage('event' . $row['event_type'] . '.png', 16, 16, '', '', 'events');
 			$html .= '</td><td>&nbsp;<b>' . $AppUI->_($types[$row['event_type']]) . '</b></td></tr></table>';
 			$html .= w2PtoolTip($row['event_name'], getEventTooltip($row['event_id']), true);
 			$html .= $href ? '<a href="' . $href . '" class="event">' : '';

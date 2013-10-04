@@ -163,7 +163,7 @@ if (!$project_id) {
 	}
 	if ($canEditProject) {
 		$titleBlock->addCell();
-        $titleBlock->addButton('New event', '?m=calendar&a=addedit&event_project=' . $project_id);
+        $titleBlock->addButton('New event', '?m=events&a=addedit&event_project=' . $project_id);
 
 		$titleBlock->addCell();
         $titleBlock->addButton('New file', '?m=files&a=addedit&project_id=' . $project_id);

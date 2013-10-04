@@ -64,27 +64,27 @@ $companies = arrayMerge(array('0' => $AppUI->_('All')), $companies);
 
 // setup the title block
 $titleBlock = new w2p_Theme_TitleBlock('Week View', 'icon.png', $m, "$m.$a");
-$titleBlock->addCrumb('?m=calendar&a=year_view&date=' . $this_week->format(FMT_TIMESTAMP_DATE), 'year view');
-$titleBlock->addCrumb('?m=calendar&date=' . $this_week->format(FMT_TIMESTAMP_DATE), 'month view');
-$titleBlock->addCrumb('?m=calendar&a=week_view&date=' . $this_week->format(FMT_TIMESTAMP_DATE), 'week view');
-$titleBlock->addCrumb('?m=calendar&a=day_view&date=' . $this_week->format(FMT_TIMESTAMP_DATE), 'day view');
+$titleBlock->addCrumb('?m=events&a=year_view&date=' . $this_week->format(FMT_TIMESTAMP_DATE), 'year view');
+$titleBlock->addCrumb('?m=events&date=' . $this_week->format(FMT_TIMESTAMP_DATE), 'month view');
+$titleBlock->addCrumb('?m=events&a=week_view&date=' . $this_week->format(FMT_TIMESTAMP_DATE), 'week view');
+$titleBlock->addCrumb('?m=events&a=day_view&date=' . $this_week->format(FMT_TIMESTAMP_DATE), 'day view');
 $titleBlock->addCell('<form action="' . $_SERVER['REQUEST_URI'] . '" method="post" name="pickCompany" accept-charset="utf-8">' . arraySelect($companies, 'company_id', 'onchange="document.pickCompany.submit()" class="text"', $company_id) . '</form>');
 $titleBlock->addCell($AppUI->_('Company') . ':');
 $titleBlock->addCell('<form action="'.$_SERVER['REQUEST_URI'].'" method="post" name="pickFilter" accept-charset="utf-8">' . arraySelect($event_filter_list, 'event_filter', 'onchange="document.pickFilter.submit()" class="text"', $event_filter, true) . '</form>');
 $titleBlock->addCell($AppUI->_('Event Filter') . ':');
-$titleBlock->addButton('New event', '?m=calendar&a=addedit&date=' . $today);
+$titleBlock->addButton('New event', '?m=events&a=addedit&date=' . $today);
 $titleBlock->show();
 ?>
 <table border="0" cellspacing="0" cellpadding="2" width="100%" class="motitle">
 <tr>
 	<td>
-		<a href="<?php echo '?m=calendar&a=week_view&date=' . $prev_week->format(FMT_TIMESTAMP_DATE); ?>"><img src="<?php echo w2PfindImage('prev.gif'); ?>" width="16" height="16" alt="pre" border="0"></a>
+		<a href="<?php echo '?m=events&a=week_view&date=' . $prev_week->format(FMT_TIMESTAMP_DATE); ?>"><img src="<?php echo w2PfindImage('prev.gif'); ?>" width="16" height="16" alt="pre" border="0"></a>
 	</td>
 	<th width="100%">
 		<?php echo $AppUI->_('Week') . ' ' . $first_time->format('%U - %Y') . ' - ' . $AppUI->_($first_time->format('%B')); ?>
 	</th>
 	<td>
-		<a href="<?php echo '?m=calendar&a=week_view&date=' . $next_week->format(FMT_TIMESTAMP_DATE); ?>"><img src="<?php echo w2PfindImage('next.gif'); ?>" width="16" height="16" alt="next" border="0"></a>
+		<a href="<?php echo '?m=events&a=week_view&date=' . $next_week->format(FMT_TIMESTAMP_DATE); ?>"><img src="<?php echo w2PfindImage('next.gif'); ?>" width="16" height="16" alt="next" border="0"></a>
 	</td>
 </tr>
 </table>
@@ -104,7 +104,7 @@ for ($i = 0; $i < 7; $i++) {
     $s .= '<td class="'.$class.'">';
 
 	$dayStamp = $show_day->format(FMT_TIMESTAMP_DATE);
-	$href = '?m=calendar&a=day_view&date='.$dayStamp.'&tab=0';
+	$href = '?m=events&a=day_view&date='.$dayStamp.'&tab=0';
 
 	$s .= '		<table>';
 	$s .= '		<tr><td align="left"><a href="' . $href . '">';
@@ -143,7 +143,7 @@ echo $s;
 ?>
 <tr>
 	<td colspan="7" align="right" bgcolor="#efefe7">
-		<a href="./index.php?m=calendar&a=day_view"><?php echo $AppUI->_('today'); ?></a>
+		<a href="./index.php?m=events&a=day_view"><?php echo $AppUI->_('today'); ?></a>
 	</td>
 </tr>
 </table>

@@ -12,19 +12,19 @@ $end_date = new w2p_Utilities_Date('2100-12-31 23:59:59');
 $items = CEvent::getEventsForPeriod($start_date, $end_date, 'all', 0, $project_id);
 
 $module = new w2p_System_Module();
-$fields = $module->loadSettings('calendar', 'project_view');
+$fields = $module->loadSettings('events', 'project_view');
 
 if (0 == count($fields)) {
     $fieldList = array('event_start_date', 'event_end_date', 'event_type',
         'event_name');
     $fieldNames = array('Start Date', 'End Date', 'Type', 'Event');
 
-    $module->storeSettings('calendar', 'project_view', $fieldList, $fieldNames);
+    $module->storeSettings('events', 'project_view', $fieldList, $fieldNames);
 
     $fields = array_combine($fieldList, $fieldNames);
 }
 
-?><a name="calendar-project_view"> </a><?php
+?><a name="events-project_view"> </a><?php
 
 $event_types = w2PgetSysVal('EventType');
 $customLookups = array('event_type' => $event_types);

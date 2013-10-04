@@ -880,7 +880,7 @@ function sort_by_item_title($title, $item_name, $item_type, $a = '') {
 	if ($m == 'tasks') {
 		$s .= '<a href="./index.php?m=tasks' . (($task_id > 0) ? ('&amp;a=view&amp;task_id=' . $task_id) : $a);
 	} elseif ($m == 'calendar') {
-		$s .= '<a href="./index.php?m=calendar&amp;a=day_view';
+		$s .= '<a href="./index.php?m=events&amp;a=day_view';
 	} else {
 		$s .= '<a href="./index.php?m=projects&amp;bypass=1' . (($project_id > 0) ? ('&amp;a=view&amp;project_id=' . $project_id) : '');
 	}
@@ -4088,7 +4088,7 @@ function getEventLinks($startPeriod, $endPeriod, &$links, $notUsed = null, $mini
 				if ($minical) {
 					$link = array();
 				} else {
-					$url = '?m=calendar&a=view&event_id=' . $row['event_id'];
+					$url = '?m=events&a=view&event_id=' . $row['event_id'];
 					$link['href'] = '';
 					$link['alt'] = '';
 					$link['text'] = w2PtoolTip($row['event_name'], getEventTooltip($row['event_id']), true) . w2PshowImage('event' . $row['event_type'] . '.png', 16, 16, '', '', 'calendar') . '</a>&nbsp;' . '<a href="' . $url . '"><span class="event">' . $row['event_name'] . '</span></a>' . w2PendTip();

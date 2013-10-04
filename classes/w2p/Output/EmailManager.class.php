@@ -61,7 +61,7 @@ class w2p_Output_EmailManager
 
         $body .= $this->_AppUI->_('Event') . ":\t" . $event->event_name . "\n";
         if (!$clash) {
-            $body .= $this->_AppUI->_('URL') . ":\t" . w2PgetConfig('base_url') . "/index.php?m=calendar&a=view&event_id=" . $event->event_id . "\n";
+            $body .= $this->_AppUI->_('URL') . ":\t" . w2PgetConfig('base_url') . "/index.php?m=events&a=view&event_id=" . $event->event_id . "\n";
         }
 
         $date_format = $this->_AppUI->getPref('SHDATEFORMAT');

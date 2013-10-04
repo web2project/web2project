@@ -36,7 +36,7 @@ class CEvent extends w2p_Core_BaseObject
 
     public function __construct()
     {
-        parent::__construct('events', 'event_id', 'calendar');
+        parent::__construct('events', 'event_id', 'events');
     }
 
     public function loadFull($event_id)
@@ -77,9 +77,9 @@ class CEvent extends w2p_Core_BaseObject
     {
         $search['table'] = 'events';
         $search['table_alias'] = '';
-        $search['table_module'] = 'calendar';
+        $search['table_module'] = 'events';
         $search['table_key'] = 'event_id'; // primary key in searched table
-        $search['table_link'] = 'index.php?m=calendar&a=view&event_id='; // first part of link
+        $search['table_link'] = 'index.php?m=events&a=view&event_id='; // first part of link
         $search['table_title'] = 'Events';
         $search['table_orderby'] = 'event_start_date';
         $search['search_fields'] = array(
@@ -604,7 +604,7 @@ class CEvent extends w2p_Core_BaseObject
                  * updatedDate - are named specifically for the iCal creation.
                  * If you change them, it's probably going to break.  So don't do that.
                  */
-                $url = W2P_BASE_URL . '/index.php?m=calendar&a=view&event_id=' . $event['event_id'];
+                $url = W2P_BASE_URL . '/index.php?m=events&a=view&event_id=' . $event['event_id'];
                 $eventList[] = array('id' => $event['event_id'], 'name' => $event['event_name'],
                             'sequence' => $event['event_sequence'], 'description' => $event['event_description'],
                             'startDate' => $myDates[0]->format(FMT_DATETIME_MYSQL), 'endDate' => $myDates[1]->format(FMT_DATETIME_MYSQL),

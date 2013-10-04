@@ -36,24 +36,24 @@ $companies = arrayMerge(array('0' => $AppUI->_('All')), $companies);
 
 // setup the title block
 $titleBlock = new w2p_Theme_TitleBlock('Yearly Calendar', 'icon.png', $m, "$m.$a");
-$titleBlock->addCrumb('?m=calendar&a=year_view&date=' . $date, 'year view');
-$titleBlock->addCrumb('?m=calendar&date=' . $date, 'month view');
-$titleBlock->addCrumb('?m=calendar&a=week_view&date=' . $date, 'week view');
-$titleBlock->addCrumb('?m=calendar&a=day_view&date=' . $date, 'day view');
+$titleBlock->addCrumb('?m=events&a=year_view&date=' . $date, 'year view');
+$titleBlock->addCrumb('?m=events&date=' . $date, 'month view');
+$titleBlock->addCrumb('?m=events&a=week_view&date=' . $date, 'week view');
+$titleBlock->addCrumb('?m=events&a=day_view&date=' . $date, 'day view');
 $titleBlock->addCell('<form action="' . $_SERVER['REQUEST_URI'] . '" method="post" name="pickCompany" accept-charset="utf-8">' . arraySelect($companies, 'company_id', 'onChange="document.pickCompany.submit()" class="text"', $company_id) . '</form>');
 $titleBlock->addCell($AppUI->_('Company') . ':');
 $titleBlock->addCell(arraySelect($event_filter_list, 'event_filter', 'onChange="document.pickFilter.submit()" class="text"', $event_filter, true), '', '<form action="'.$_SERVER['REQUEST_URI'].'" method="post" name="pickFilter" accept-charset="utf-8">', '</form>');
 $titleBlock->addCell($AppUI->_('Event Filter') . ':');
-$titleBlock->addButton('New event', '?m=calendar&a=addedit&date=' . $today);
+$titleBlock->addButton('New event', '?m=events&a=addedit&date=' . $today);
 $titleBlock->show();
 ?>
 
 <script language="javascript" type="text/javascript">
 function clickDay( uts, fdate ) {
-	window.location = './index.php?m=calendar&a=day_view&date='+uts;
+	window.location = './index.php?m=events&a=day_view&date='+uts;
 }
 function clickWeek( uts, fdate ) {
-	window.location = './index.php?m=calendar&a=week_view&date='+uts;
+	window.location = './index.php?m=events&a=week_view&date='+uts;
 }
 </script>
 
@@ -81,13 +81,13 @@ $next_year = (int)($next_year + 10000);
 				    	<table border="0" cellspacing="1" cellpadding="2" width="100%" class="motitle">
 				        	<tr>
 				            	<td>
-				                	<a href="<?php echo '?m=calendar&a=year_view&date=' . $prev_year; ?>"><img src="<?php echo w2PfindImage('prev.gif'); ?>" width="16" height="16" alt="pre" title="pre" border="0"></a>
+				                	<a href="<?php echo '?m=events&a=year_view&date=' . $prev_year; ?>"><img src="<?php echo w2PfindImage('prev.gif'); ?>" width="16" height="16" alt="pre" title="pre" border="0"></a>
 				                </td>
 				                <th width="100%" align="center">
 				                	<?php echo htmlspecialchars($date->format('%Y')); ?>
 				                </th>
 				                <td>
-				                	<a href="<?php echo '?m=calendar&a=year_view&date=' . $next_year; ?>"><img src="<?php echo w2PfindImage('next.gif'); ?>" width="16" height="16" alt="next" title="next" border="0"></a>
+				                	<a href="<?php echo '?m=events&a=year_view&date=' . $next_year; ?>"><img src="<?php echo w2PfindImage('next.gif'); ?>" width="16" height="16" alt="next" title="next" border="0"></a>
 				                </td>
 				            </tr>
 				        </table>
