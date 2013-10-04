@@ -10,7 +10,7 @@ if (!$canEdit) {
 }
 
 $mod_id = (int) w2PgetCleanParam($_POST, 'mod_id');
-$module = new w2p_Core_Module();
+$module = new w2p_System_Module();
 $module->load($mod_id);
 
 $moduleName		= $module->mod_directory;
@@ -20,7 +20,7 @@ $displayOrder	= w2PgetParam($_POST, 'order', array());
 $displayFields	= w2PgetParam($_POST, 'displayFields', array());
 $displayNames	= w2PgetParam($_POST, 'displayNames', array());
 
-$result = w2p_Core_Module::saveSettings($moduleName, $configName,
+$result = w2p_System_Module::saveSettings($moduleName, $configName,
 		$displayColumns, $displayOrder, $displayFields, $displayNames);
 
 if ($result) {

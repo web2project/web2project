@@ -11,7 +11,7 @@ $end_date = new w2p_Utilities_Date('2100-12-31 23:59:59');
 
 $items = CEvent::getEventsForPeriod($start_date, $end_date, 'all', 0, $project_id);
 
-$module = new w2p_Core_Module();
+$module = new w2p_System_Module();
 $fields = $module->loadSettings('calendar', 'project_view');
 
 if (0 == count($fields)) {

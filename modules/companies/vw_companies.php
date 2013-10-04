@@ -10,7 +10,7 @@ $type_filter = $tab - 1;
 $company = new CCompany();
 $items = $company->getCompanyList(null, $type_filter, $search_string, $owner_filter_id, $orderby, $orderdir);
 
-$module = new w2p_Core_Module();
+$module = new w2p_System_Module();
 $fields = $module->loadSettings('companies', 'index_list');
 
 if (0 == count($fields)) {

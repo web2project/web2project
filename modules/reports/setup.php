@@ -17,4 +17,4 @@ if ($a == 'setup') {
 	echo w2PshowModuleConfig($config);
 }
 
-class CSetupReports extends w2p_Core_Setup { }
+class CSetupReports extends w2p_System_Setup { }

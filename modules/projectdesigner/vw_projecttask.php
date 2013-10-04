@@ -243,7 +243,7 @@ $userAlloc = $tempoTask->getAllocation('user_id');
 $fieldList = array();
 $fieldNames = array();
 
-$module = new w2p_Core_Module();
+$module = new w2p_System_Module();
 $fields = $module->loadSettings('projectdesigner', 'task_list_print');
 
 if (count($fields) > 0) {

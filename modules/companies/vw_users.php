@@ -7,7 +7,7 @@ global $AppUI, $company_id;
 
 $items = CCompany::getUsers($AppUI, $company_id);
 
-$module = new w2p_Core_Module();
+$module = new w2p_System_Module();
 $fields = $module->loadSettings('admin', 'company_view');
 
 if (0 == count($fields)) {

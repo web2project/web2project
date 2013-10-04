@@ -21,7 +21,7 @@ if ($obj) {
 } else {
     $field->load(null, $field_id);
 }
-$module = new w2p_Core_Module();
+$module = new w2p_System_Module();
 $module->load($module_id);
 
 $ttl = $field_id ? 'Edit Custom Fields' : 'Add Custom Fields';

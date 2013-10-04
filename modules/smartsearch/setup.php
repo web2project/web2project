@@ -17,4 +17,4 @@ if ($a == 'setup') {
 	echo w2PshowModuleConfig($config);
 }
 
-class SSearchNS extends w2p_Core_Setup { }
+class SSearchNS extends w2p_System_Setup { }

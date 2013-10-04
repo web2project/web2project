@@ -11,7 +11,7 @@ $end_date = new w2p_Utilities_Date('2036-12-31 00:00:00');
 
 $items = CEvent::getEventsForPeriod($start_date, $end_date, 'all', 0, 0, $company_id);
 
-$module = new w2p_Core_Module();
+$module = new w2p_System_Module();
 $fields = $module->loadSettings('events', 'company_view');
 
 if (0 == count($fields)) {

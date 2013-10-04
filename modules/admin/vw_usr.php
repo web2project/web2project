@@ -12,7 +12,7 @@ $display_last_login = !((int) w2PgetParam($_REQUEST, 'tab', 0));
 $fieldList = array();
 $fieldNames = array();
 
-$fields = w2p_Core_Module::getSettings('users', 'index_table');
+$fields = w2p_System_Module::getSettings('users', 'index_table');
 
 if (count($fields) > 0) {
     $fieldList = array_keys($fields);

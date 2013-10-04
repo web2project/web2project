@@ -7,7 +7,7 @@ global $AppUI, $company_id, $canEdit;
 
 $items = CCompany::getDepartments($AppUI, $company_id);
 
-$module = new w2p_Core_Module();
+$module = new w2p_System_Module();
 $fields = $module->loadSettings('departments', 'company_view');
 
 if (0 == count($fields)) {

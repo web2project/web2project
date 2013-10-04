@@ -10,7 +10,7 @@ $obj = new CResource();
 $where = ($tab) ? 'resource_type = '. $tab : '';
 $items = $obj->loadAll('resource_name', $where);
 
-$module = new w2p_Core_Module();
+$module = new w2p_System_Module();
 $fields = $module->loadSettings('resources', 'index_list');
 
 if (0 == count($fields)) {

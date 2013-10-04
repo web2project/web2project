@@ -113,7 +113,7 @@ if ($is_tabbed) {
 $fieldList = array();
 $fieldNames = array();
 
-$module = new w2p_Core_Module();
+$module = new w2p_System_Module();
 $fields = $module->loadSettings('projects', 'index_list');
 
 if (count($fields) > 0) {
@@ -130,7 +130,7 @@ if (count($fields) > 0) {
     $fieldNames = array('%', 'P', 'Project Name', 'Company',
         'Start', 'End', 'Actual', 'LP', 'Owner', 'Tasks');
 
-    $module = new w2p_Core_Module();
+    $module = new w2p_System_Module();
     $module->storeSettings('projects', 'index_list', $fieldList, $fieldNames);
 }
 ?>

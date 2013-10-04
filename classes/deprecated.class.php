@@ -86,11 +86,11 @@ class CCalendar extends CEvent
  *
  * @deprecated
  */
-class CConfig extends w2p_Core_Config
+class CConfig extends w2p_System_Config
 {
     public function __construct() {
         parent::__construct();
-        trigger_error("CConfig has been deprecated in v3.0 and will be removed by v4.0. Please use w2p_Core_Config instead.", E_USER_NOTICE);
+        trigger_error("CConfig has been deprecated in v3.0 and will be removed by v4.0. Please use w2p_System_Config instead.", E_USER_NOTICE);
     }
 }
 
@@ -173,10 +173,10 @@ class CMonthCalendar extends w2p_Output_MonthCalendar
  *
  * @deprecated
  */
-class CPreferences extends w2p_Core_Preferences {
+class CPreferences extends w2p_System_Preferences {
 	public function __construct() {
 		parent::__construct();
-        trigger_error("CPreferences has been deprecated in v3.0 and will be removed by v4.0. Please use w2p_Core_Preferences instead.", E_USER_NOTICE );
+        trigger_error("CPreferences has been deprecated in v3.0 and will be removed by v4.0. Please use w2p_System_Preferences instead.", E_USER_NOTICE );
 	}
 }
 
@@ -295,12 +295,12 @@ class CTitleBlock_core extends w2p_Theme_TitleBlock
  *
  * @deprecated
  */
-class CW2pObject extends w2p_Core_BaseObject
+class CW2pObject extends w2p_System_BaseObject
 {
 	public function __construct($table, $key, $module = '')
 	{
 		parent::__construct($table, $key, $module);
-		trigger_error("CW2pObject has been deprecated in v2.0 and will be removed by v4.0. Please use w2p_Core_BaseObject instead.", E_USER_NOTICE );
+		trigger_error("CW2pObject has been deprecated in v2.0 and will be removed by v4.0. Please use w2p_System_BaseObject instead.", E_USER_NOTICE );
 	}
 }
 

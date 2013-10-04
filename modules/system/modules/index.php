@@ -14,7 +14,7 @@ if (!$canRead) {
 
 $AppUI->savePlace();
 
-$module = new w2p_Core_Module();
+$module = new w2p_System_Module();
 
 $hidden_modules = array('public', 'install', );
 $q = new w2p_Database_Query;

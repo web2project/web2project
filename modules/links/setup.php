@@ -22,7 +22,7 @@ if ($a == 'setup') {
 	echo w2PshowModuleConfig($config);
 }
 
-class CSetupLinks extends w2p_Core_Setup
+class CSetupLinks extends w2p_System_Setup
 {
 	public function remove()
     {

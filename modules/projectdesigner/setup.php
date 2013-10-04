@@ -19,7 +19,7 @@ if ($a == 'setup') {
 	echo w2PshowModuleConfig($config);
 }
 
-class projectDesigner extends w2p_Core_Setup
+class projectDesigner extends w2p_System_Setup
 {
 	public function install() {
 		$result = $this->_checkRequirements();

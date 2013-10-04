@@ -9,7 +9,7 @@ if (!canEdit('system')) {
 	$AppUI->redirect(ACCESS_DENIED);
 }
 
-$obj = new w2p_Core_Config();
+$obj = new w2p_System_Config();
 
 // set all checkboxes to false
 // overwrite the true/enabled/checked checkboxes later

@@ -45,7 +45,7 @@ class w2p_Output_HTMLHelper
         $fieldList = array();
         $fieldNames = array();
 
-        $module = new w2p_Core_Module();
+        $module = new w2p_System_Module();
         $fields = $module->loadSettings('contacts', $moduleName.'_view');
 
         if (count($fields) > 0) {

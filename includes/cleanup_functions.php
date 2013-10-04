@@ -2034,7 +2034,7 @@ function displayFiles($AppUI, $folder_id, $task_id, $project_id, $company_id) {
     $fieldList = array();
     $fieldNames = array();
 
-    $module = new w2p_Core_Module();
+    $module = new w2p_System_Module();
     $fields = $module->loadSettings('files', 'index_list');
 
     if (count($fields) > 0) {
@@ -2469,7 +2469,7 @@ function projects_list_data($user_id = false) {
         company_id, company_name, project_last_task as critical_task,
         tp.task_log_problem, user_username, task_log_problem, u.user_id');
 
-	$fields = w2p_Core_Module::getSettings('projects', 'index_list');
+	$fields = w2p_System_Module::getSettings('projects', 'index_list');
 	unset($fields['department_list']);  // added as an alias below
 	foreach ($fields as $field => $notUsed) {
 		$q->addQuery($field);
@@ -4483,7 +4483,7 @@ function w2PsessionGC()
         // queue scanner.
         if (!isset($AppUI)) {
             $AppUI = new w2p_Core_CAppUI();
-            $queue = new w2p_Core_EventQueue();
+            $queue = new w2p_System_EventQueue();
             $queue->scan();
         }
     }

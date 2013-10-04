@@ -40,7 +40,7 @@ $a = 'list';
 
 $titleBlock->show();
 
-$module = new w2p_Core_Module();
+$module = new w2p_System_Module();
 $fields = $module->loadSettings('forums', 'index_list');
 
 if (0 == count($fields)) {

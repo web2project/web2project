@@ -27,7 +27,7 @@ if (!isset($project_id)) {
 $link = new CLink();
 $items = $link->getProjectTaskLinksByCategory(null, $project_id, $task_id, $type_filter, $search_string);
 
-$module = new w2p_Core_Module();
+$module = new w2p_System_Module();
 $fields = $module->loadSettings('links', 'index_list');
 
 if (0 == count($fields)) {

@@ -8,7 +8,7 @@
  * @abstract
  */
 
-abstract class w2p_Core_BaseObject extends w2p_Core_Event implements w2p_Core_ListenerInterface
+abstract class w2p_Core_BaseObject extends w2p_System_Event implements w2p_System_ListenerInterface
 {
 
     /**
@@ -89,7 +89,7 @@ abstract class w2p_Core_BaseObject extends w2p_Core_Event implements w2p_Core_Li
          *   logging, etc. We also need a way to enable Core Modules (CProject,
          *   CTask, etc) and Add On Modules to add their own hooks.
          */
-        $this->_dispatcher = new w2p_Core_Dispatcher();
+        $this->_dispatcher = new w2p_System_Dispatcher();
         $this->_dispatcher->subscribe($this, get_class($this), 'preStoreEvent');
         $this->_dispatcher->subscribe($this, get_class($this), 'postStoreEvent');
         $this->_dispatcher->subscribe($this, get_class($this), 'preCreateEvent');
@@ -186,7 +186,7 @@ abstract class w2p_Core_BaseObject extends w2p_Core_Event implements w2p_Core_Li
      */
     public function load($oid = null, $strip = true)
     {
-        $this->_dispatcher->publish(new w2p_Core_Event(get_class($this), 'preLoadEvent'));
+        $this->_dispatcher->publish(new w2p_System_Event(get_class($this), 'preLoadEvent'));
 
         $k = $this->_tbl_key;
         if ($oid) {
@@ -206,7 +206,7 @@ abstract class w2p_Core_BaseObject extends w2p_Core_Event implements w2p_Core_Li
             return false;
         }
         $q->bindHashToObject($hash, $this, null, $strip);
-        $this->_dispatcher->publish(new w2p_Core_Event(get_class($this), 'postLoadEvent'));
+        $this->_dispatcher->publish(new w2p_System_Event(get_class($this), 'postLoadEvent'));
 
         return $this;
     }
@@ -317,7 +317,7 @@ abstract class w2p_Core_BaseObject extends w2p_Core_Event implements w2p_Core_Li
         $result = false;
         $this->clearErrors();
 
-        $this->_dispatcher->publish(new w2p_Core_Event(get_class($this), 'preStoreEvent'));
+        $this->_dispatcher->publish(new w2p_System_Event(get_class($this), 'preStoreEvent'));
 
         $this->w2PTrimAll();
 
@@ -328,7 +328,7 @@ abstract class w2p_Core_BaseObject extends w2p_Core_Event implements w2p_Core_Li
         $k = $this->_tbl_key;
         // NOTE: I don't particularly like this but it wires things properly.
         $this->_event = ($this->$k) ? 'Update' : 'Create';
-        $this->_dispatcher->publish(new w2p_Core_Event(get_class($this), 'pre' . $this->_event . 'Event'));
+        $this->_dispatcher->publish(new w2p_System_Event(get_class($this), 'pre' . $this->_event . 'Event'));
 
         $q = $this->_getQuery();
 
@@ -349,8 +349,8 @@ abstract class w2p_Core_BaseObject extends w2p_Core_Event implements w2p_Core_Li
 
         if ($result) {
             // NOTE: I don't particularly like how the name is generated but it wires things properly.
-            $this->_dispatcher->publish(new w2p_Core_Event(get_class($this), 'post' . $this->_event . 'Event'));
-            $this->_dispatcher->publish(new w2p_Core_Event(get_class($this), 'postStoreEvent'));
+            $this->_dispatcher->publish(new w2p_System_Event(get_class($this), 'post' . $this->_event . 'Event'));
+            $this->_dispatcher->publish(new w2p_System_Event(get_class($this), 'postStoreEvent'));
         } else {
             $this->_error['store'] = db_error();
         }
@@ -438,7 +438,7 @@ abstract class w2p_Core_BaseObject extends w2p_Core_Event implements w2p_Core_Li
             $this->$k = (int) $oid;
         }
 
-        $this->_dispatcher->publish(new w2p_Core_Event(get_class($this), 'preDeleteEvent'));
+        $this->_dispatcher->publish(new w2p_System_Event(get_class($this), 'preDeleteEvent'));
 
         if (!$this->canDelete()) {
             //TODO: no clue why this is required..
@@ -453,7 +453,7 @@ abstract class w2p_Core_BaseObject extends w2p_Core_Event implements w2p_Core_Li
         $result = $q->exec();
 
         if ($result) {
-            $this->_dispatcher->publish(new w2p_Core_Event(get_class($this), 'postDeleteEvent'));
+            $this->_dispatcher->publish(new w2p_System_Event(get_class($this), 'postDeleteEvent'));
         } else {
             $this->_error['delete'] = db_error();
         }
@@ -772,7 +772,7 @@ abstract class w2p_Core_BaseObject extends w2p_Core_Event implements w2p_Core_Li
         return $this;
     }
 
-    public function publish(w2p_Core_Event $event)
+    public function publish(w2p_System_Event $event)
     {
         $hook = substr($event->getEventName(), 0, -5);
 

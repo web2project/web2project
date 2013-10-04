@@ -53,7 +53,7 @@ getTaskLinks($first_time, $last_time, $links, 50, $company_id);
 // assemble the links for the events
 getEventLinks($first_time, $last_time, $links, 50);
 
-$hooks = new w2p_Core_HookHandler($AppUI);
+$hooks = new w2p_System_HookHandler($AppUI);
 $hooks->links = $links;
 $links = $hooks->calendar_links();
 

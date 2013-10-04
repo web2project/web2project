@@ -2268,7 +2268,7 @@ class CTask extends w2p_Core_BaseObject
             return $this->clearReminder(true);
         }
 
-        $eq = new w2p_Core_EventQueue();
+        $eq = new w2p_System_EventQueue();
         $pre_charge = w2PgetConfig('task_reminder_days_before', 1);
         $repeat = w2PgetConfig('task_reminder_repeat', 100);
 
@@ -2405,7 +2405,7 @@ class CTask extends w2p_Core_BaseObject
      */
     public function clearReminder($dont_check = false)
     {
-        $ev = new w2p_Core_EventQueue();
+        $ev = new w2p_System_EventQueue();
 
         $event_list = $ev->find('tasks', 'remind', $this->task_id);
         if (count($event_list)) {

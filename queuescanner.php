@@ -11,7 +11,7 @@ date_default_timezone_set($defaultTZ);
 $AppUI = new w2p_Core_CAppUI();
 $AppUI->setUserLocale();
 
-$queue = new w2p_Core_EventQueue();
+$queue = new w2p_System_EventQueue();
 $queue->scan();
 
 /*
@@ -21,5 +21,5 @@ $queue->scan();
 
 */
 
-$hooks = new w2p_Core_HookHandler($AppUI);
+$hooks = new w2p_System_HookHandler($AppUI);
 $hooks->process('cron');

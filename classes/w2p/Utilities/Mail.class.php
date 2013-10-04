@@ -364,7 +364,7 @@ class w2p_Utilities_Mail extends PHPMailer
      */
     private function QueueMail()
     {
-        $ec = new w2p_Core_EventQueue();
+        $ec = new w2p_System_EventQueue();
         $vars = get_object_vars($this);
         return $ec->add(array('w2p_Utilities_Mail', 'SendQueuedMail'), $vars, 'w2p_Utilities_Mail', true);
     }

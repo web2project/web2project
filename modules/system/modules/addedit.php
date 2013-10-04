@@ -6,7 +6,7 @@ if (!defined('W2P_BASE_DIR')) {
 $mod_id = (int) w2PgetCleanParam($_GET, 'mod_id');
 $view   = w2PgetCleanParam($_GET, 'v');
 
-$module = new w2p_Core_Module();
+$module = new w2p_System_Module();
 $module->load($mod_id);
 
 $obj = $module;
@@ -54,7 +54,7 @@ $titleBlock->addCrumb('?m=system', 'system admin');
 $titleBlock->addCrumb('?m=system&a=viewmods', 'modules list');
 $titleBlock->show();
 
-$fields = w2p_Core_Module::getSettings($module->mod_directory, $view);
+$fields = w2p_System_Module::getSettings($module->mod_directory, $view);
 $fields = array_diff($fields, $filter);
 foreach ($fields as $field => $text) {
     $fieldList[] = $field;

@@ -45,7 +45,7 @@ $items = $q->loadList();
 $crumbs = array();
 $crumbs['?m=forums'] = 'forums list';
 
-$module = new w2p_Core_Module();
+$module = new w2p_System_Module();
 $fields = $module->loadSettings('forums', 'view_topics');
 
 if (0 == count($fields)) {

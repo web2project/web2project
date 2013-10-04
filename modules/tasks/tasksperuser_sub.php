@@ -242,7 +242,7 @@ if (function_exists('styleRenderBoxTop')) {
 $fieldList = array();
 $fieldNames = array();
 
-$module = new w2p_Core_Module();
+$module = new w2p_System_Module();
 $fields = $module->loadSettings('tasks', 'tasksperuser');
 
 if (count($fields) > 0) {

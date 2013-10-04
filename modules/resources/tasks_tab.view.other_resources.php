@@ -22,7 +22,7 @@ if (count($resources)) {
 $fieldList = array();
 $fieldNames = array();
 
-$module = new w2p_Core_Module();
+$module = new w2p_System_Module();
 $fields = $module->loadSettings('resources', 'task_view');
 if (count($fields) > 0) {
     $fieldList = array_keys($fields);
