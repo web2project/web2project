@@ -226,7 +226,8 @@ class CTask_Log extends w2p_Core_BaseObject
 	/**
 	 * Updates the variable information on the task.
 	 *
-	 * @param int $task_log_task that task id of task this task log is for
+	 * @param int $notUsed not used
+     * @param int $task_id that task id of task this task log is for
 	 *
 	 * @return void
 	 *
