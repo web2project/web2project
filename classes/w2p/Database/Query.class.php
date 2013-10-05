@@ -1299,7 +1299,7 @@ class w2p_Database_Query {
 	 * @param $hash The hash to bind
 	 * @param &$obj A reference to the object to bind the hash to
 	 * @param $prefix Defaults to null, prefix to use with hash keys
-	 * @param $checkSlashes Defaults to true, strip any slashes from the hash values
+	 * @param $notUsed Defaults to true but isn't used anyway
 	 * @param $bindAll Bind all values regardless of their existance as defined instance variables
 	 */
 	public function bindHashToObject($hash, &$obj, $prefix = null, $notUsed = true, $bindAll = false) {

@@ -941,7 +941,7 @@ class CTask extends w2p_Core_BaseObject
     /**
      *
      * @param w2p_Core_CAppUI $AppUI
-     * @param CProject $projectId
+     * @param CProject $project_id
      *
      * The point of this function is to create/update a task to represent a
      *   subproject.
@@ -1054,8 +1054,8 @@ class CTask extends w2p_Core_BaseObject
     }
 
     /** Retrieve tasks with latest task_end_dates within given project
-     * @param int Project_id
-     * @param int SQL-limit to limit the number of returned tasks
+     * @param int $project_id
+     *
      * @return array List of criticalTasks
      */
     public function getLastTaskData($project_id)
@@ -2306,13 +2306,14 @@ class CTask extends w2p_Core_BaseObject
     /**
      * Called by the Event Queue processor to process a reminder
      * on a task.
-     * @access		  public
-     * @param		 string		   $module		  Module name (not used)
-     * @param		 string		   $type Type of event (not used)
-     * @param		 integer		$id ID of task being reminded
-     * @param		 integer		$owner		  Originator of event
-     * @param		 mixed		  $args event-specific arguments.
-     * @return		  mixed		   true, dequeue event, false, event stays in queue.
+     * @access  public
+     * @param   string  $notUsed    Module name (not used)
+     * @param   string  $notUsed2   Type of event (not used)
+     * @param   integer $id         ID of task being reminded
+     * @param   integer $owner      Originator of event
+     * @param   mixed   $notUsed    event-specific arguments.
+     *
+     * @return  mixed   true, dequeue event, false, event stays in queue.
      * -1, event is destroyed.
      */
     public function remind($notUsed = null, $notUsed2 = null, $id, $owner, $notUsed = null)
