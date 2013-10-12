@@ -6,20 +6,19 @@ if (!defined('W2P_BASE_DIR')) {
 // Include the file first of all, so that the AJAX methods are printed through xajax below
 require W2P_BASE_DIR . '/includes/ajax_functions.php';
 
-$theme = new style_w2psnowball($AppUI, $m);
+$theme = $AppUI->getTheme();
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
 	   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
     <head>
-        <meta name="Description" content="web2Project Snowball Style" />
         <meta name="Version" content="<?php echo $AppUI->getVersion(); ?>" />
         <meta http-equiv="Content-Type" content="text/html;charset=<?php echo isset($locale_char_set) ? $locale_char_set : 'UTF-8'; ?>" />
         <meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7" />
         <title><?php echo @w2PgetConfig('page_title') . ' :: ' . $AppUI->_($m) . ' ' . $AppUI->_($a); ?></title>
         <link rel="stylesheet" type="text/css" href="./style/common.css" media="all" charset="utf-8"/>
-        <link rel="stylesheet" type="text/css" href="./style/<?php echo $uistyle; ?>/main.css" media="all" charset="utf-8"/>
-        <link rel="shortcut icon" href="./style/<?php echo $uistyle; ?>/favicon.ico" type="image/ico" />
+        <link rel="stylesheet" type="text/css" href="./style/<?php echo $theme; ?>/main.css" media="all" charset="utf-8"/>
+        <link rel="shortcut icon" href="./style/<?php echo $theme; ?>/favicon.ico" type="image/ico" />
         <?php
             if (isset($xajax) && is_object($xajax)) {
                 $xajax->printJavascript(w2PgetConfig('base_url') . '/lib/xajax');
@@ -33,7 +32,7 @@ $theme = new style_w2psnowball($AppUI, $m);
             <div class="right">
                 <a href="http://www.web2project.net/" target="_new">
                     <?php echo w2PtoolTip('web2Project v. ' . $AppUI->getVersion(), 'click to visit web2Project site', true);?>
-                        <img src="style/<?php echo $uistyle; ?>/images/title.jpg" border="0" class="banner" align="left" alt="click to visit web2Project site" />
+                        <img src="style/<?php echo $theme; ?>/images/title.jpg" border="0" class="banner" align="left" alt="click to visit web2Project site" />
                     <?php echo w2PendTip();?>
                 </a>
             </div>
