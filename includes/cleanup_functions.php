@@ -4783,3 +4783,40 @@ function getPreferences($user_id)
 
     return $prefs;
 }
+
+/**
+ * @param $obj
+ *
+ * @return array
+ */
+function getTaskLogContacts($obj)
+{
+    $q = new w2p_Database_Query();
+    $q->addTable('task_contacts', 'tc');
+    $q->addJoin('contacts', 'c', 'c.contact_id = tc.contact_id', 'inner');
+    $q->addWhere('tc.task_id = ' . (int)$obj->task_id);
+    $q->addQuery('tc.contact_id');
+    $q->addQuery('c.contact_first_name, c.contact_last_name');
+    $req = & $q->exec();
+
+    return $req;
+}
+
+
+/**
+ * @param $obj
+ *
+ * @return array
+ */
+function getContactsfromProjects($obj)
+{
+    $q = new w2p_Database_Query();
+    $q->addTable('project_contacts', 'pc');
+    $q->addJoin('contacts', 'c', 'c.contact_id = pc.contact_id', 'inner');
+    $q->addWhere('pc.project_id = ' . (int)$obj->task_project);
+    $q->addQuery('pc.contact_id');
+    $q->addQuery('c.contact_first_name, c.contact_last_name');
+    $req = & $q->exec();
+
+    return $req;
+}
