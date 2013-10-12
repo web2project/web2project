@@ -40,14 +40,8 @@ for ($current = $start; $current < $end + 1; $current++) {
 }
 
 // Pull tasks dependencies
-$q = new w2p_Database_Query;
-$q->addTable('tasks', 't');
-$q->addTable('task_dependencies', 'td');
-$q->addQuery('t.task_id, t.task_name');
-$q->addWhere('td.dependencies_task_id = ' . (int)$task_id);
-$q->addWhere('t.task_id = td.dependencies_req_task_id');
-$taskDep = $q->loadHashList();
-$q->clear();
+$deps = false;
+$taskDep = __extract_from_ae_depend2($task_id);
 
 ?>
 <script>
