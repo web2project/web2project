@@ -4998,3 +4998,64 @@ function __extract_from_tasks1()
     return $subquery;
 }
 
+/**
+ * @return w2p_Database_Query
+ */
+function __extract_from_syskeys_index1()
+{
+// pull all the key types
+    $q = new w2p_Database_Query;
+    $q->addTable('syskeys');
+    $q->addQuery('syskey_id,syskey_name');
+    $q->addOrder('syskey_name');
+    $keys = arrayMerge(array(0 => '- Select Type -'), $q->loadHashList());
+
+    return $keys;
+}
+
+/**
+ * @return array
+ */
+function __extract_from_syskeys_index2()
+{
+    $q = new w2p_Database_Query;
+    $q->addTable('syskeys');
+    $q->addTable('sysvals');
+    $q->addQuery('DISTINCT sysval_title, sysval_key_id, syskeys.*');
+    $q->addWhere('sysval_key_id = syskey_id');
+    $q->addOrder('sysval_title');
+    $q->addOrder('sysval_id');
+    return $q->loadList();
+}
+
+
+/**
+ * @return Array
+ */
+function __extract_frmo_syskeys_index3()
+{
+    $q = new w2p_Database_Query;
+    $q->addTable('sysvals');
+    $q->addTable('syskeys');
+    $q->addQuery('sysval_title, sysval_value_id, sysval_value, syskey_sep1, syskey_sep2');
+    $q->addWhere('sysval_key_id = syskey_id');
+    $q->addOrder('sysval_title');
+    $q->addOrder('sysval_id');
+    $vals = $q->loadList();
+
+    return $vals;
+}
+
+/**
+ * @return Array
+ */
+function __extract_from_syskeys_syskey()
+{
+    $q = new w2p_Database_Query;
+    $q->addTable('syskeys');
+    $q->addQuery('*');
+    $q->addOrder('syskey_name');
+    $keys = $q->loadList();
+
+    return $keys;
+}

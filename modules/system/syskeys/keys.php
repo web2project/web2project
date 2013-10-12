@@ -2,7 +2,6 @@
 if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
-// @todo    remove database query
 
 // check permissions
 $perms = &$AppUI->acl();
@@ -10,12 +9,7 @@ if (!canEdit('system')) {
 	$AppUI->redirect(ACCESS_DENIED);
 }
 
-$q = new w2p_Database_Query;
-$q->addTable('syskeys');
-$q->addQuery('*');
-$q->addOrder('syskey_name');
-$keys = $q->loadList();
-$q->clear();
+$keys = __extract_from_syskeys_syskey();
 
 $syskey_id = (int) w2PgetParam($_GET, 'syskey_id', 0);
 
