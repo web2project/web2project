@@ -4703,3 +4703,67 @@ function db_dateTime2unix($time) {
 	//		return -1;
 	//	}
 }
+
+/**
+ * @param $perms
+ * @param $user_id
+ * @param $module
+ * @param $action
+ *
+ * @return array
+ */
+function getPermissions($perms, $user_id, $module, $action)
+{
+    $q = new w2p_Database_Query;
+    $q->addTable($perms->_db_acl_prefix . 'permissions', 'gp');
+    $q->addQuery('gp.*');
+    $q->addWhere('user_id = ' . $user_id);
+    if ('all' != $module) {
+        $q->addWhere("module = '$module'");
+    }
+    if ('all' != $action) {
+        $q->addWhere("action = '$action'");
+    }
+
+    $q->addOrder('user_name');
+    $q->addOrder('module');
+    $q->addOrder('action');
+    $q->addOrder('item_id');
+    $q->addOrder('acl_id');
+    $permissions = $q->loadList();
+
+    return $permissions;
+}
+
+/**
+ * @param $row
+ *
+ * @return array
+ */
+function getPermissionField($row)
+{
+    $q = new w2p_Database_Query;
+    $q->addTable('modules');
+    $q->addQuery('permissions_item_field,permissions_item_label');
+    $q->addWhere('mod_directory = \'' . $row['module'] . '\'');
+    $field = $q->loadHash();
+
+    return $field;
+}
+
+/**
+ * @param $row
+ * @param $field
+ *
+ * @return Value
+ */
+function getPermissionItem($row, $field)
+{
+    $q = new w2p_Database_Query;
+    $q->addTable($row['module']);
+    $q->addQuery($field['permissions_item_label']);
+    $q->addWhere($field['permissions_item_field'] . ' = \'' . $row['item_id'] . '\'');
+    $item = $q->loadResult();
+
+    return $item;
+}

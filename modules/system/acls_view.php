@@ -28,23 +28,7 @@ $action = isset($actions[$action]) ? $action : 'all';
 
 $users = array('' => '(' . $AppUI->_('Select User') . ')') + w2PgetUsers();
 
-$q = new w2p_Database_Query;
-$q->addTable($perms->_db_acl_prefix . 'permissions', 'gp');
-$q->addQuery('gp.*');
-$q->addWhere('user_id = ' . $user_id);
-if ('all' != $module) {
-    $q->addWhere("module = '$module'");
-}
-if ('all' != $action) {
-    $q->addWhere("action = '$action'");
-}
-
-$q->addOrder('user_name');
-$q->addOrder('module');
-$q->addOrder('action');
-$q->addOrder('item_id');
-$q->addOrder('acl_id');
-$permissions = $q->loadList();
+$permissions = getPermissions($perms, $user_id, $module, $action);
 
 $titleBlock = new w2p_Theme_TitleBlock('Permission Result Table', 'icon.png', $m, $m . '.' . $a);
 $titleBlock->addCell('
@@ -70,20 +54,13 @@ $htmlHelper = new w2p_Output_HTMLHelper($AppUI);
         <?php } ?>
     </tr>
 <?php
+
 foreach ($permissions as $row) {
 	$item = '';
 	if ($row['item_id']) {
-		$q = new w2p_Database_Query;
-		$q->addTable('modules');
-		$q->addQuery('permissions_item_field,permissions_item_label');
-		$q->addWhere('mod_directory = \'' . $row['module'] . '\'');
-		$field = $q->loadHash();
+        $field = getPermissionField($row);
 
-		$q = new w2p_Database_Query;
-		$q->addTable($row['module']);
-		$q->addQuery($field['permissions_item_label']);
-		$q->addWhere($field['permissions_item_field'] . ' = \'' . $row['item_id'] . '\'');
-		$item = $q->loadResult();
+        $item = getPermissionItem($row, $field);
 	}
 	if (!($row['item_id'] && !$row['acl_id'])) {
 		$table .= '<tr>' .
