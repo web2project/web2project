@@ -352,7 +352,6 @@ if (!function_exists('styleRenderBoxTop')) {
         trigger_error("styleRenderBoxTop() has been deprecated in v3.1 and will be removed in v4.0. Use AppUI->getTheme()->styleRenderBoxTop instead.", E_USER_NOTICE);
 
         global $AppUI;
-
         echo $AppUI->getTheme()->styleRenderBoxTop();
     }
 }
@@ -365,7 +364,6 @@ if (!function_exists('styleRenderBoxBottom')) {
         trigger_error("styleRenderBoxTop() has been deprecated in v3.1 and will be removed in v4.0. Use AppUI->getTheme()->styleRenderBoxBottom instead.", E_USER_NOTICE);
 
         global $AppUI;
-
         echo $AppUI->getTheme()->styleRenderBoxBottom();
     }
 }
