@@ -5465,3 +5465,146 @@ function __extract_from_gantt_pdf4($project_id, $f, $AppUI, $task)
     return $proTasks;
 }
 
+/**
+ * @param $department
+ *
+ * @return array
+ */
+function __extract_from_projects_gantt($department)
+{
+    $q = new w2p_Database_Query;
+    $q->addTable('users');
+    $q->addQuery('user_id');
+    $q->addJoin('contacts', 'c', 'c.contact_id = user_contact', 'inner');
+    $q->addWhere('c.contact_department = ' . (int)$department);
+    $owner_ids = $q->loadColumn();
+
+    return $owner_ids;
+}
+
+/**
+ * @param $department
+ * @param $addPwOiD
+ * @param $project_type
+ * @param $owner
+ * @param $statusFilter
+ * @param $company_id
+ * @param $owner_ids
+ * @param $showInactive
+ * @param $AppUI
+ * @param $pjobj
+ *
+ * @return mixed
+ */
+function __extract_from_projects_gantt2($department, $addPwOiD, $project_type, $owner, $statusFilter, $company_id, $owner_ids, $showInactive, $AppUI, $pjobj)
+{
+// pull valid projects and their percent complete information
+    $q = new w2p_Database_Query;
+    $q->addTable('projects', 'pr');
+    $q->addQuery('DISTINCT pr.project_id, project_color_identifier, project_name, project_start_date, project_end_date,
+                max(t1.task_end_date) AS project_actual_end_date, project_percent_complete,
+                project_status, project_active');
+    $q->addJoin('tasks', 't1', 'pr.project_id = t1.task_project');
+    $q->addJoin('companies', 'c1', 'pr.project_company = c1.company_id');
+    if ($department > 0 && !$addPwOiD) {
+        $q->addWhere('project_departments.department_id = ' . (int)$department);
+    }
+    if ($project_type > -1) {
+        $q->addWhere('pr.project_type = ' . (int)$project_type);
+    }
+    if ($owner > 0) {
+        $q->addWhere('pr.project_owner = ' . (int)$owner);
+    }
+    if ($statusFilter > -1) {
+        $q->addWhere('pr.project_status = ' . (int)$statusFilter);
+    }
+    if (!($department > 0) && $company_id != 0 && !$addPwOiD) {
+        $q->addWhere('pr.project_company = ' . (int)$company_id);
+    }
+// Show Projects where the Project Owner is in the given department
+    if ($addPwOiD && !empty($owner_ids)) {
+        $q->addWhere('pr.project_owner IN (' . implode(',', $owner_ids) . ')');
+    }
+
+    if ($showInactive != '1') {
+        $q->addWhere('pr.project_active = 1');
+        if (($template_status = w2PgetConfig('template_projects_status_id')) != '') {
+            $q->addWhere('pr.project_status <> ' . $template_status);
+        }
+    }
+    $search_text = $AppUI->getState('projsearchtext') !== null ? $AppUI->getState('projsearchtext') : '';
+    if (mb_trim($search_text)) {
+        $q->addWhere('pr.project_name LIKE \'%' . $search_text . '%\' OR pr.project_description LIKE \'%' . $search_text . '%\'');
+    }
+    $q = $pjobj->setAllowedSQL($AppUI->user_id, $q, null, 'pr');
+    $q->addGroup('pr.project_id');
+    $q->addOrder('pr.project_name, task_end_date DESC');
+
+    $projects = $q->loadList();
+
+    return $projects;
+}
+
+/**
+ * @param $department
+ * @param $company_id
+ * @param $original_project_id
+ * @param $pjobj
+ * @param $AppUI
+ *
+ * @return array
+ */
+function __extract_from_subprojects_gantt($department, $company_id, $original_project_id, $pjobj, $AppUI)
+{
+// pull valid projects and their percent complete information
+// GJB: Note that we have to special case duration type 24 and this refers to the hours in a day, NOT 24 hours
+
+    $q = new w2p_Database_Query;
+    $q->addTable('projects', 'pr');
+    $q->addQuery('DISTINCT pr.project_id, project_color_identifier, project_name, project_start_date, project_end_date,
+                max(t1.task_end_date) AS project_actual_end_date, project_percent_complete, project_status, project_active');
+    $q->addJoin('tasks', 't1', 'pr.project_id = t1.task_project');
+    $q->addJoin('companies', 'c1', 'pr.project_company = c1.company_id');
+    if ($department > 0) {
+        $q->addWhere('project_departments.department_id = ' . (int)$department);
+    }
+
+    if (!($department > 0) && $company_id != 0) {
+        $q->addWhere('project_company = ' . (int)$company_id);
+    }
+
+    $q->addWhere('project_original_parent = ' . (int)$original_project_id);
+
+    $q = $pjobj->setAllowedSQL($AppUI->user_id, $q, null, 'pr');
+    $q->addGroup('pr.project_id');
+    $q->addOrder('project_start_date, project_end_date, project_name');
+
+    $projects = $q->loadHashList('project_id');
+
+    return $projects;
+}
+
+/**
+ * @param $original_project_id
+ * @param $task
+ * @param $AppUI
+ *
+ * @return array
+ */
+function __extract_from_subprojects_gantt2($original_project_id, $task, $AppUI)
+{
+// insert tasks into Gantt Chart
+    // select for tasks for each project
+    // pull tasks
+    $q = new w2p_Database_Query;
+    $q->addTable('tasks', 't');
+    $q->addQuery('t.task_id, task_parent, task_name, task_start_date, task_end_date, task_duration, task_duration_type, task_priority, task_percent_complete, task_order, task_project, task_milestone, project_id, project_name, task_dynamic');
+    $q->addJoin('projects', 'p', 'project_id = t.task_project');
+    $q->addOrder('project_id, task_start_date');
+    $q->addWhere('project_original_parent = ' . (int)$original_project_id);
+    $q = $task->setAllowedSQL($AppUI->user_id, $q);
+    $proTasks = $q->loadHashList('task_id');
+
+    return array($q, $proTasks);
+}
+

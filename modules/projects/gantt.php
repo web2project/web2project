@@ -41,60 +41,12 @@ $pjobj = new CProject();
 ** wants to see the ProjectsWithOwnerInDeparment (PwOiD)
 ** instead of the projects related to the given department.
 */
+
 if ($addPwOiD && $department > 0) {
-	$owner_ids = array();
-	$q = new w2p_Database_Query;
-	$q->addTable('users');
-	$q->addQuery('user_id');
-	$q->addJoin('contacts', 'c', 'c.contact_id = user_contact', 'inner');
-	$q->addWhere('c.contact_department = ' . (int)$department);
-	$owner_ids = $q->loadColumn();
-	$q->clear();
+    $owner_ids = __extract_from_projects_gantt($department);
 }
 
-// pull valid projects and their percent complete information
-$q = new w2p_Database_Query;
-$q->addTable('projects', 'pr');
-$q->addQuery('DISTINCT pr.project_id, project_color_identifier, project_name, project_start_date, project_end_date,
-                max(t1.task_end_date) AS project_actual_end_date, project_percent_complete,
-                project_status, project_active');
-$q->addJoin('tasks', 't1', 'pr.project_id = t1.task_project');
-$q->addJoin('companies', 'c1', 'pr.project_company = c1.company_id');
-if ($department > 0 && !$addPwOiD) {
-	$q->addWhere('project_departments.department_id = ' . (int)$department);
-}
-if ($project_type > -1) {
-	$q->addWhere('pr.project_type = ' . (int)$project_type);
-}
-if ($owner > 0) {
-	$q->addWhere('pr.project_owner = ' . (int)$owner);
-}
-if ($statusFilter > -1) {
-	$q->addWhere('pr.project_status = ' . (int)$statusFilter);
-}
-if (!($department > 0) && $company_id != 0 && !$addPwOiD) {
-	$q->addWhere('pr.project_company = ' . (int)$company_id);
-}
-// Show Projects where the Project Owner is in the given department
-if ($addPwOiD && !empty($owner_ids)) {
-	$q->addWhere('pr.project_owner IN (' . implode(',', $owner_ids) . ')');
-}
-
-if ($showInactive != '1') {
-	$q->addWhere('pr.project_active = 1');
-	if (($template_status = w2PgetConfig('template_projects_status_id')) != '') {
-		$q->addWhere('pr.project_status <> ' . $template_status);
-	}
-}
-$search_text = $AppUI->getState('projsearchtext') !== null ? $AppUI->getState('projsearchtext') : '';
-if (mb_trim($search_text)) {
-    $q->addWhere('pr.project_name LIKE \'%' . $search_text . '%\' OR pr.project_description LIKE \'%' . $search_text . '%\'');
-}
-$q = $pjobj->setAllowedSQL($AppUI->user_id, $q, null, 'pr');
-$q->addGroup('pr.project_id');
-$q->addOrder('pr.project_name, task_end_date DESC');
-
-$projects = $q->loadList();
+$projects = __extract_from_projects_gantt2($department, $addPwOiD, $project_type, $owner, $statusFilter, $company_id, $owner_ids, $showInactive, $AppUI, $pjobj);
 
 // Don't push the width higher than about 1200 pixels, otherwise it may not display.
 $width = min(w2PgetParam($_GET, 'width', 600), 1400);
