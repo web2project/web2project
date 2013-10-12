@@ -5323,3 +5323,145 @@ function __extract_from_tasks_gantt2($showNoMilestones, $showMilestonesOnly, $ga
     return $proTasks;
 }
 
+/**
+ * @param $a
+ *
+ * @return array
+ */
+function __extract_from_gantt_pdf($a)
+{
+    $q = new w2p_Database_Query;
+    $q->addTable('tasks', 't');
+    $q->addJoin('user_tasks', 'u', 't.task_id = u.task_id');
+    $q->addQuery('ROUND(SUM(t.task_duration*u.perc_assignment/100),2) AS wh');
+    $q->addWhere('t.task_duration_type = 24');
+    $q->addWhere('t.task_id = ' . (int)$a['task_id']);
+    $wh = $q->loadResult();
+
+    return $wh;
+}
+
+/**
+ * @param $a
+ *
+ * @return array
+ */
+function __extract_from_gantt_pdf2($a)
+{
+    $q = new w2p_Database_Query;
+    $q->addTable('tasks', 't');
+    $q->addJoin('user_tasks', 'u', 't.task_id = u.task_id');
+    $q->addQuery('ROUND(SUM(t.task_duration*u.perc_assignment/100),2) AS wh');
+    $q->addWhere('t.task_duration_type = 1');
+    $q->addWhere('t.task_id = ' . (int)$a['task_id']);
+    $wh2 = $q->loadResult();
+
+    return $wh2;
+}
+
+/**
+ * @param $user_id
+ * @param $showArcProjs
+ * @param $showLowTasks
+ * @param $showHoldProjs
+ * @param $showDynTasks
+ * @param $showPinned
+ * @param $task
+ * @param $AppUI
+ *
+ * @return array
+ */
+function __extract_from_gantt_pdf3($user_id, $showArcProjs, $showLowTasks, $showHoldProjs, $showDynTasks, $showPinned, $task, $AppUI)
+{
+    $q = new w2p_Database_Query;
+    $q->addQuery('t.*');
+    $q->addQuery('project_name, project_id, project_color_identifier');
+    $q->addQuery('tp.task_pinned');
+    $q->addTable('tasks', 't');
+    $q->innerJoin('projects', 'pr', 'pr.project_id = t.task_project');
+    $q->leftJoin('user_tasks', 'ut', 'ut.task_id = t.task_id AND ut.user_id = ' . (int)$user_id);
+    $q->leftJoin('user_task_pin', 'tp', 'tp.task_id = t.task_id and tp.user_id = ' . (int)$user_id);
+    $q->addWhere('(t.task_percent_complete < 100 OR t.task_percent_complete IS NULL)');
+    $q->addWhere('t.task_status = 0');
+    if (!$showArcProjs) {
+        $q->addWhere('pr.project_active = 1');
+        if (($template_status = w2PgetConfig('template_projects_status_id')) != '') {
+            $q->addWhere('pr.project_status <> ' . (int)$template_status);
+        }
+    }
+    if (!$showLowTasks) {
+        $q->addWhere('task_priority >= 0');
+    }
+    if (!$showHoldProjs) {
+        $q->addWhere('project_active = 1');
+    }
+    if (!$showDynTasks) {
+        $q->addWhere('task_dynamic <> 1');
+    }
+    if ($showPinned) {
+        $q->addWhere('task_pinned = 1');
+    }
+
+    $q->addGroup('t.task_id');
+    $q->addOrder('t.task_end_date, t.task_priority DESC');
+    $q = $task->setAllowedSQL($AppUI->user_id, $q);
+    $proTasks = $q->loadHashList('task_id');
+
+    return $proTasks;
+}
+
+
+/**
+ * @param $project_id
+ * @param $f
+ * @param $AppUI
+ * @param $task
+ *
+ * @return array
+ */
+function __extract_from_gantt_pdf4($project_id, $f, $AppUI, $task)
+{
+// pull tasks
+    $q = new w2p_Database_Query();
+    $q->addTable('tasks', 't');
+    $q->addQuery('t.task_id, task_parent, task_name, task_start_date, task_end_date,' .
+    ' task_duration, task_duration_type, task_priority, task_percent_complete,' .
+    ' task_hours_worked, task_order, task_project, task_milestone, task_access,' .
+    ' task_owner, project_name, project_color_identifier, task_dynamic');
+    $q->addJoin('projects', 'p', 'project_id = t.task_project', 'inner');
+    $q->addOrder('p.project_id, t.task_end_date');
+
+    if ($project_id) {
+        $q->addWhere('task_project = ' . (int)$project_id);
+    }
+
+    switch ($f) {
+        case 'all':
+            $q->addWhere('task_status > -1');
+            break;
+        case 'myproj':
+            $q->addWhere('task_status > -1');
+            $q->addWhere('project_owner = ' . (int)$AppUI->user_id);
+            break;
+        case 'mycomp':
+            $q->addWhere('task_status > -1');
+            $q->addWhere('project_company = ' . (int)$AppUI->user_company);
+            break;
+        case 'myinact':
+            $q->innerJoin('user_tasks', 'ut', 'ut.task_id = t.task_id');
+
+            $q->addWhere('ut.user_id = ' . $AppUI->user_id);
+            break;
+        default:
+            $q->innerJoin('user_tasks', 'ut', 'ut.task_id = t.task_id');
+
+
+            $q->addWhere('ut.user_id = ' . (int)$AppUI->user_id);
+            break;
+    }
+    $q = $task->setAllowedSQL($AppUI->user_id, $q);
+    $proTasks = $q->loadHashList('task_id');
+
+    return $proTasks;
+}
+
