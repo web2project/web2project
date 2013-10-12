@@ -4767,3 +4767,19 @@ function getPermissionItem($row, $field)
 
     return $item;
 }
+
+/**
+ * @param $user_id
+ *
+ * @return array
+ */
+function getPreferences($user_id)
+{
+    $q = new w2p_Database_Query;
+    $q->addTable('user_preferences');
+    $q->addQuery('pref_name, pref_value');
+    $q->addWhere('pref_user = ' . (int)$user_id);
+    $prefs = $q->loadHashList();
+
+    return $prefs;
+}
