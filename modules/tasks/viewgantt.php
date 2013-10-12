@@ -84,21 +84,8 @@ $filter_task_list = array();
 $projectObject = new CProject();
 $projects = $projectObject->getAllowedProjects($AppUI->user_id);
 
-$q = new w2p_Database_Query;
-$q->addTable('tasks', 't');
-$q->addJoin('projects', 'p', 'p.project_id = t.task_project');
-$q->addQuery('t.task_id, task_parent, task_name, task_start_date, task_end_date'
-             . ', task_duration, task_duration_type, task_priority, task_percent_complete'
-             . ', task_order, task_project, task_milestone, project_name, task_dynamic');
+$proTasks = __extract_from_tasks_viewgantt($project_id, $AppUI);
 
-$q->addWhere('project_status != 7 AND task_dynamic = 1');
-if ($project_id) {
-     $q->addWhere('task_project = ' . $project_id);
-}
-$task = new CTask;
-$q = $task->setAllowedSQL($AppUI->user_id, $q);
-$proTasks = $q->loadHashList('task_id');
-$q->clear();
 $filter_task_list = array ();
 $orrarr[] = array('task_id'=>0, 'order_up'=>0, 'order'=>'');
 foreach ($proTasks as $row) {
