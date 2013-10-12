@@ -4930,3 +4930,71 @@ function __extract_from_todo($user_id, $showArcProjs, $showLowTasks, $showInProg
 
     return $tasks;
 }
+
+
+/**
+ * @param $use_period
+ * @param $ss
+ * @param $se
+ * @param $log_userfilter
+ * @param $project_id
+ * @param $company_id
+ * @param $proj
+ * @param $AppUI
+ *
+ * @return mixed
+ */
+function __extract_from_tasksperuser($use_period, $ss, $se, $log_userfilter, $project_id, $company_id, $proj, $AppUI)
+{
+    $q = new w2p_Database_Query;
+    $q->addTable('tasks', 't');
+    $q->addQuery('t.*');
+    $q->addJoin('projects', 'pr', 'pr.project_id = t.task_project', 'inner');
+    $q->addWhere('pr.project_active = 1');
+    if (($template_status = w2PgetConfig('template_projects_status_id')) != '') {
+        $q->addWhere('pr.project_status <> ' . (int)$template_status);
+    }
+
+    if ('on' == $use_period) {
+        $q->addWhere('(( task_start_date >= ' . $ss . ' AND task_start_date <= ' . $se . ' ) OR ' . '  ( task_end_date <= ' . $se . ' AND task_end_date >= ' . $ss . ' ))');
+    }
+    $q->addWhere('(task_percent_complete < 100)');
+
+    $q->addJoin('user_tasks', 'ut', 'ut.task_id = t.task_id');
+    if ($log_userfilter > -1) {
+        $q->addWhere('ut.user_id = ' . $log_userfilter);
+    }
+
+    if ($project_id != 'all') {
+        $q->addWhere('t.task_project=' . (int)$project_id);
+    }
+
+    if ($company_id != 'all') {
+        $q->addWhere('pr.project_company = ' . (int)$company_id);
+    }
+
+    $q->addOrder('task_project');
+    $q->addOrder('task_end_date');
+    $q->addOrder('task_start_date');
+    $q = $proj->setAllowedSQL($AppUI->user_id, $q, null, 'pr');
+
+    $task_list_hash = $q->loadHashList('task_id');
+
+    return $task_list_hash;
+}
+
+/**
+ * @return String
+ */
+function __extract_from_tasks1()
+{
+//subquery the parent state
+    $sq = new w2p_Database_Query;
+    $sq->addTable('tasks', 'stasks');
+    $sq->addQuery('COUNT(stasks.task_id)');
+    $sq->addWhere('stasks.task_id <> tasks.task_id AND stasks.task_parent = tasks.task_id');
+    $subquery = $sq->prepare();
+
+    return $subquery;
+}
+

@@ -37,7 +37,6 @@ $history_active = !empty($mods['history']) && canView('history');
 */
 $task_id = (int) w2PgetParam($_GET, 'task_id', 0);
 
-$q = new w2p_Database_Query;
 $pinned_only = (int) w2PgetParam($_GET, 'pinned', 0);
 if (isset($_GET['pin'])) {
 	$pin = (int) w2PgetParam($_GET, 'pin', 0);
@@ -126,9 +125,9 @@ if ($canViewTask) {
 		}
 	}
 }
-$q->clear();
 $q2->clear();
 
+$q = new w2p_Database_Query;
 $q->addQuery('tasks.task_id, task_parent, task_name');
 $q->addQuery('task_start_date, task_end_date, task_dynamic');
 $q->addQuery('task_pinned, pin.user_id as pin_user');
@@ -148,13 +147,7 @@ $q->addQuery('count(distinct f.file_task) as file_count');
 $q->addQuery('tlog.task_log_problem');
 $q->addQuery('task_access');
 
-//subquery the parent state
-$sq = new w2p_Database_Query;
-$sq->addTable('tasks', 'stasks');
-$sq->addQuery('COUNT(stasks.task_id)');
-$sq->addWhere('stasks.task_id <> tasks.task_id AND stasks.task_parent = tasks.task_id');
-$subquery = $sq->prepare();
-$sq->clear();
+$subquery = __extract_from_tasks1();
 
 $q->addQuery('(' . $subquery . ') AS task_nr_of_children');
 
@@ -329,7 +322,7 @@ if ($canViewTask) {
 if (count($tasks) > 0) {
 	foreach ($tasks as $row) {
 		//add information about assigned users into the page output
-		$q->clear();
+        $q = new w2p_Database_Query;
 		$q->addQuery('ut.user_id,	u.user_username');
 		$q->addQuery('ut.perc_assignment');
 		$q->addQuery('contact_display_name AS assignee, contact_email');
