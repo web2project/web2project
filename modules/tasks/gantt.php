@@ -61,8 +61,6 @@ if ($caller == 'todo') {
     $proTasks = __extract_from_tasks_gantt2($showNoMilestones, $showMilestonesOnly, $ganttTaskFilter, $where, $project_id, $f, $AppUI, $task);
 }
 
-$q = new w2p_Database_Query;
-
 $orrarr[] = array('task_id' => 0, 'order_up' => 0, 'order' => '');
 
 $end_max = '0000-00-00 00:00:00';
@@ -114,7 +112,6 @@ foreach ($proTasks as $row) {
 
     $projects[$row['task_project']]['tasks'][] = $row;
 }
-$q->clear();
 
 $width = min(w2PgetParam($_GET, 'width', 600), 1400);
 $start_date = w2PgetParam($_GET, 'start_date', $start_min);
@@ -303,7 +300,6 @@ for ($i = 0, $i_cmp = count($gantt_arr); $i < $i_cmp; $i++) {
                         break;
                 }
             }
-            $q->clear();
             $caption = mb_substr($caption, 0, mb_strlen($caption) - 1);
         }
 
@@ -399,7 +395,6 @@ for ($i = 0, $i_cmp = count($gantt_arr); $i < $i_cmp; $i++) {
             }
             $gantt->addBar($columnValues, $caption, $height, '8F8FBD', true, $progress, $a['task_id']);
         }
-        $q->clear();
     }
 }
 
