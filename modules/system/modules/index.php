@@ -15,14 +15,8 @@ if (!$canRead) {
 $module = new w2p_System_Module();
 
 $hidden_modules = array('public', 'install', );
-$q = new w2p_Database_Query;
-$q->addQuery('*');
-$q->addTable('modules');
-foreach ($hidden_modules as $no_show) {
-	$q->addWhere('mod_directory <> \'' . $no_show . '\'');
-}
-$q->addOrder('mod_ui_order');
-$modules = $q->loadList();
+
+$modules = __extract_from_modules_index($hidden_modules);
 // get the modules actually installed on the file system
 $loader = new w2p_FileSystem_Loader();
 $modFiles = $loader->readDirs('modules');

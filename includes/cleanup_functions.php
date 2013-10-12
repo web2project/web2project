@@ -5071,3 +5071,22 @@ function __extract_from_systemconfig_aed()
     $rs = $q->loadResult();
 }
 
+/**
+ * @param $hidden_modules
+ *
+ * @return Array
+ */
+function __extract_from_modules_index($hidden_modules)
+{
+    $q = new w2p_Database_Query;
+    $q->addQuery('*');
+    $q->addTable('modules');
+    foreach ($hidden_modules as $no_show) {
+        $q->addWhere('mod_directory <> \'' . $no_show . '\'');
+    }
+    $q->addOrder('mod_ui_order');
+    $modules = $q->loadList();
+
+    return $modules;
+}
+
