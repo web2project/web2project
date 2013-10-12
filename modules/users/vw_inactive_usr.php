@@ -8,4 +8,4 @@ global $w2Pconfig, $canEdit, $stub, $where, $orderby;
 $users = w2PgetUsersList($stub, $where, $orderby);
 $canLogin = false;
 
-require W2P_BASE_DIR . '/modules/admin/vw_usr.php';
+require W2P_BASE_DIR . '/modules/users/vw_usr.php';

@@ -54,7 +54,7 @@ if ($canEdit && $contact_id) {
 	$titleBlock->addCrumb('?m=contacts&a=addedit&contact_id='.$contact_id, 'edit this contact');
 }
 if ($contact->user_id) {
-    $titleBlock->addCrumb('?m=admin&a=view&user_id='.$contact->user_id, 'view this user');
+    $titleBlock->addCrumb('?m=users&a=view&user_id='.$contact->user_id, 'view this user');
 }
 if ($canDelete && $contact_id) {
 	$titleBlock->addCrumbDelete('delete contact', $canDelete, $msg);

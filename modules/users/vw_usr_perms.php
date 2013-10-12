@@ -231,7 +231,7 @@ foreach ($user_acls as $acl) {
 </td><td width="50%" valign="top">
 
 <?php if ($canEdit) { ?>
-<form name="frmPerms" method="post" action="?m=admin" accept-charset="utf-8">
+<form name="frmPerms" method="post" action="?m=users" accept-charset="utf-8">
 	<input type="hidden" name="del" value="0" />
 	<input type="hidden" name="dosql" value="do_perms_aed" />
 	<input type="hidden" name="user_id" value="<?php echo $user_id; ?>" />

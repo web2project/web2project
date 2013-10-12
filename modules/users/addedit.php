@@ -47,7 +47,7 @@ if ($contact_id) {
 
 if (!$user && $user_id > 0) {
     $titleBlock = new w2p_Theme_TitleBlock('Invalid User ID', 'helix-setup-user.png', $m, $m . '.' . $a);
-    $titleBlock->addCrumb('?m=admin', 'users list');
+    $titleBlock->addCrumb('?m=users', 'users list');
     $titleBlock->show();
 } else {
 if (!$user_id && !$contact_id) {
@@ -62,10 +62,10 @@ $companies = arrayMerge(array('0' => ''), $companies);
 $ttl = $user_id ? 'Edit User' : 'Add User';
 $titleBlock = new w2p_Theme_TitleBlock($ttl, 'icon.png', $m, $m . '.' . $a);
 if (canView('admin') && canView('users')) {
-    $titleBlock->addCrumb('?m=admin', 'users list');
+    $titleBlock->addCrumb('?m=users', 'users list');
 }
 if ($user_id) {
-    $titleBlock->addCrumb('?m=admin&a=view&user_id=' . $user_id, 'view this user');
+    $titleBlock->addCrumb('?m=users&a=view&user_id=' . $user_id, 'view this user');
     if ($user['contact_id'] > 0) {
         $titleBlock->addCrumb('?m=contacts&a=view&contact_id='.$user['contact_id'], 'view this contact');
     }

@@ -7,5 +7,5 @@ $perms = &$AppUI->acl();
 $canAddUsers = canAdd('admin');
 
 if ($canAddUsers && $contact_id && !$is_user) {
-    $titleBlock->addButton('create user', '?m=admin&a=addedit&contact_id=' . $contact_id);
+    $titleBlock->addButton('create user', '?m=users&a=addedit&contact_id=' . $contact_id);
 }

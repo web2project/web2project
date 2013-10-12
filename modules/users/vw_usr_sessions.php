@@ -67,7 +67,7 @@ if (isset($_GET['out_user_id']) && $_GET['out_user_id']
 
 	$msg = $boot_user_name . ' logged out by ' . $AppUI->user_first_name . ' ' . $AppUI->user_last_name;
 	$AppUI->setMsg($msg, UI_MSG_OK);
-	$AppUI->redirect('m=admin&tab=3');
+	$AppUI->redirect('m=users&tab=3');
 }
 
 $q = new w2p_Database_Query;
@@ -93,7 +93,7 @@ $fieldNames = array('Login Name', 'Real Name', 'Company', 'Date Time IN', 'Inter
     <tr>
         <th colspan="2">&nbsp; <?php echo $AppUI->_('sort by'); ?>:&nbsp;</th>
         <?php foreach ($fieldNames as $index => $name) { ?><th>
-            <a href="?m=admin&orderby=<?php echo $fieldList[$index]; ?>" class="hdr">
+            <a href="?m=users&orderby=<?php echo $fieldList[$index]; ?>" class="hdr">
                 <?php echo $AppUI->_($fieldNames[$index]); ?>
             </a>
         </th><?php } ?>
@@ -108,11 +108,11 @@ foreach ($rows as $row) {
     $s = '<tr>';
 	$s .= '<td align="center" nowrap="nowrap">';
 	if ($canEdit && $canDelete) {
-		$s .= '<input type="button" class="button" value="' . $AppUI->_('logout_session') . '" onclick="javascript:window.location=\'./index.php?m=admin&tab=3&out_session=' . $row['session_id'] . '&out_user_log_id=' . $row['user_access_log_id'] . '&out_user_id=' . $row['u_user_id'] . '&out_name=' . addslashes($row['contact_display_name']). '\';"></input>';
+		$s .= '<input type="button" class="button" value="' . $AppUI->_('logout_session') . '" onclick="javascript:window.location=\'./index.php?m=users&tab=3&out_session=' . $row['session_id'] . '&out_user_log_id=' . $row['user_access_log_id'] . '&out_user_id=' . $row['u_user_id'] . '&out_name=' . addslashes($row['contact_display_name']). '\';"></input>';
 	}
 	$s .= '</td><td align="center" nowrap="nowrap">';
 	if ($canEdit && $canDelete && $logoutUserFlag) {
-		$s .= '<input type="button" class=button value="' . $AppUI->_('logout_user') . '" onclick="javascript:window.location=\'./index.php?m=admin&tab=3&out_user_id=' . $row['u_user_id'] . '&out_name=' . addslashes($row['contact_display_name']) . '\';"></input>';
+		$s .= '<input type="button" class=button value="' . $AppUI->_('logout_user') . '" onclick="javascript:window.location=\'./index.php?m=users&tab=3&out_user_id=' . $row['u_user_id'] . '&out_name=' . addslashes($row['contact_display_name']) . '\';"></input>';
 	}
 	$s .= '</td>';
     $s .= $htmlHelper->createCell('na', $row['user_username']);

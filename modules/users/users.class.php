@@ -176,9 +176,9 @@ class CUser extends w2p_Core_BaseObject
     public function hook_search()
     {
         $search['table'] = 'users';
-        $search['table_module'] = 'admin';
+        $search['table_module'] = 'users';
         $search['table_key'] = 'user_id'; // primary key in searched table
-        $search['table_link'] = 'index.php?m=admin&a=view&user_id='; // first part of link
+        $search['table_link'] = 'index.php?m=users&a=view&user_id='; // first part of link
         $search['table_title'] = 'Users';
         $search['table_orderby'] = 'user_username';
         $search['search_fields'] = array('user_username', 'user_signature');

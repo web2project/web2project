@@ -36,7 +36,7 @@ global $addPwT, $company_id, $dept_ids, $department, $min_view, $m, $a;
 
 $utypes = w2PgetSysVal('UserType');
 
-if ($user_id != $AppUI->user_id && (!$perms->checkModuleItem('admin', 'view', $user_id) || !$perms->checkModuleItem('users', 'view', $user_id))) {
+if ($user_id != $AppUI->user_id && (!$perms->checkModuleItem('users', 'view', $user_id) || !$perms->checkModuleItem('users', 'view', $user_id))) {
     $AppUI->redirect(ACCESS_DENIED);
 }
 
@@ -75,11 +75,11 @@ $countries = w2PgetSysVal('GlobalCountries');
 // setup the title block
 $titleBlock = new w2p_Theme_TitleBlock('View User', 'icon.png', $m, "$m.$a");
 if ($canRead) {
-    $titleBlock->addCrumb('?m=admin', 'users list');
+    $titleBlock->addCrumb('?m=users', 'users list');
 }
 if ($canEdit || $user_id == $AppUI->user_id) {
-    $titleBlock->addCell('<input type="button" class="button  btn btn-small dropdown-toggle" value="' . $AppUI->_('add user') . '" onclick="javascript:window.location=\'./index.php?m=admin&a=addedituser\';" />');
-    $titleBlock->addCrumb('?m=admin&a=addedituser&user_id='.$user_id, 'edit this user');
+    $titleBlock->addCell('<input type="button" class="button  btn btn-small dropdown-toggle" value="' . $AppUI->_('add user') . '" onclick="javascript:window.location=\'./index.php?m=users&a=addedituser\';" />');
+    $titleBlock->addCrumb('?m=users&a=addedituser&user_id='.$user_id, 'edit this user');
     $titleBlock->addCrumb('?m=contacts&a=addedit&contact_id='.$user->contact_id, 'edit this contact');
     $titleBlock->addCrumb('?m=system&a=addeditpref&user_id='.$user_id, 'edit preferences');
     $titleBlock->addCrumbRight('<div class="crumb"><ul><li><a href="javascript: void(0);" onclick="popChgPwd();return false"><span>' . $AppUI->_('change password') . '</span></a></li></ul></div>');
@@ -169,7 +169,7 @@ $titleBlock->show();
                                 <a href="<?php echo $calendarFeed; ?>">calendar feed</a>
                             <?php } ?>
                             &nbsp;&nbsp;&nbsp;
-                            <form name="regenerateToken" action="./index.php?m=admin" method="post" accept-charset="utf-8">
+                            <form name="regenerateToken" action="./index.php?m=users" method="post" accept-charset="utf-8">
                                 <input type="hidden" name="user_id" value="<?php echo (int) $user->user_id; ?>" />
                                 <input type="hidden" name="dosql" value="do_user_token" />
                                 <input type="hidden" name="token" value="<?php echo $user->feed_token; ?>" />
@@ -193,8 +193,8 @@ $titleBlock->show();
 <?php
 // tabbed information boxes
 $min_view = true;
-$tabBox = new CTabBox('?m=admin&a=view&user_id='.$user_id, '', $tab);
-$tabBox->add(W2P_BASE_DIR . '/modules/admin/vw_usr_log', 'User Log');
-$tabBox->add(W2P_BASE_DIR . '/modules/admin/vw_usr_perms', 'Permissions');
-$tabBox->add(W2P_BASE_DIR . '/modules/admin/vw_usr_roles', 'Roles');
+$tabBox = new CTabBox('?m=users&a=view&user_id='.$user_id, '', $tab);
+$tabBox->add(W2P_BASE_DIR . '/modules/users/vw_usr_log', 'User Log');
+$tabBox->add(W2P_BASE_DIR . '/modules/users/vw_usr_perms', 'Permissions');
+$tabBox->add(W2P_BASE_DIR . '/modules/users/vw_usr_roles', 'Roles');
 $tabBox->show();

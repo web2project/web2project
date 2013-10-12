@@ -36,10 +36,10 @@ $orderby = ($tab == 3 || ($orderby != 'date_time_in' && $orderby != 'user_ip')) 
 $letters = CUser::getFirstLetters();
 $letters = $letters.CContact::getFirstLetters($AppUI->user_id, true);
 
-$a2z = '<a href="./index.php?m=admin&stub=0">' . $AppUI->_('All') . '</a>&nbsp;&nbsp;&nbsp;&nbsp;';
+$a2z = '<a href="./index.php?m=users&stub=0">' . $AppUI->_('All') . '</a>&nbsp;&nbsp;&nbsp;&nbsp;';
 for ($c = 65; $c < 91; $c++) {
 	$cu = chr($c);
-	$cell = !(mb_strpos($letters, $cu) === false) ? '<a href="?m=admin&stub=' . $cu . '">' . $cu . '</a>' : '<font color="#999999">' . $cu . '</font>';
+	$cell = !(mb_strpos($letters, $cu) === false) ? '<a href="?m=users&stub=' . $cu . '">' . $cu . '</a>' : '<font color="#999999">' . $cu . '</font>';
 	$a2z .= $cell.'&nbsp;';
 }
 
@@ -47,7 +47,7 @@ for ($c = 65; $c < 91; $c++) {
 $titleBlock = new w2p_Theme_TitleBlock('User Management', 'icon.png', $m, "$m.$a");
 $titleBlock->addSearchCell($where);
 $titleBlock->addCell($a2z);
-$titleBlock->addButton('New user', '?m=admin&a=addedit');
+$titleBlock->addButton('New user', '?m=users&a=addedit');
 $titleBlock->show();
 
 ?>
@@ -68,7 +68,7 @@ function delMe( x, y ) {
 </script>
 
 <?php
-$tabBox = new CTabBox('?m=admin', W2P_BASE_DIR . '/modules/admin/', $tab);
+$tabBox = new CTabBox('?m=users', W2P_BASE_DIR . '/modules/users/', $tab);
 $tabBox->add('vw_active_usr', 'Active Users');
 $tabBox->add('vw_inactive_usr', 'Inactive Users');
 $tabBox->add('vw_usr_log', 'User Log');
@@ -79,7 +79,7 @@ $tabBox->show();
 
 ?>
 
-<form name="frmDelete" action="./index.php?m=admin" method="post" accept-charset="utf-8">
+<form name="frmDelete" action="./index.php?m=users" method="post" accept-charset="utf-8">
 	<input type="hidden" name="dosql" value="do_user_aed" />
 	<input type="hidden" name="del" value="1" />
 	<input type="hidden" name="user_id" value="0" />

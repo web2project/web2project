@@ -130,7 +130,7 @@ foreach ($messages as $row) {
 		$s .= '<tr>';
 
 		$s .= '<td valign="top" style="' . $style . '" nowrap="nowrap">';
-        $s .= '<a href="?m=admin&a=view&user_id='.$row['message_author'].'">';
+        $s .= '<a href="?m=users&a=view&user_id='.$row['message_author'].'">';
         $s .= $row['contact_name'];
         $s .= '</a>';
 		if (!$hideEmail) {

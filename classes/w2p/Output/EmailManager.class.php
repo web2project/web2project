@@ -339,7 +339,7 @@ class w2p_Output_EmailManager
         $body .= 'Name:    ' . $username . "\n" . 'Username:    ' . $logname . "\n";
         $body .= 'Email:    ' . $address . "\n\n";
         $body .= 'You may check this account at the following URL: ' . W2P_BASE_URL;
-        $body .= '/index.php?m=admin&a=view&user_id=' . $userid . "\n\n";
+        $body .= '/index.php?m=users&a=view&user_id=' . $userid . "\n\n";
         $body .= "Thank you very much.\n\n" . 'The ' . w2PgetConfig('company_name');
         $body .= " Taskforce.\n\n" . '****PLEASE KEEP THIS EMAIL FOR YOUR RECORDS****';
 

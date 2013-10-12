@@ -162,7 +162,7 @@ class w2p_Output_HTMLHelper
             case '_username':
                 $obj = new CContact();
                 $obj->findContactByUserid($this->tableRowData['user_id']);
-                $link = '?m=admin&a=view&user_id='.$this->tableRowData['user_id'];
+                $link = '?m=users&a=view&user_id='.$this->tableRowData['user_id'];
                 $cell = '<a href="'.$link.'">'.$obj->contact_display_name.'</a>';
                 break;
 //END: object-based linkings
@@ -198,7 +198,7 @@ class w2p_Output_HTMLHelper
                     $obj = new CContact();
                     $obj->findContactByUserid($value);
                     $suffix .= ' nowrap';
-                    $link = '?m=admin&a=view&user_id='.$value;
+                    $link = '?m=users&a=view&user_id='.$value;
                     $cell = '<a href="'.$link.'">'.$obj->contact_display_name.'</a>';
                 } else {
                     $cell = $value;

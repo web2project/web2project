@@ -49,7 +49,7 @@ $obj->user_username = strtolower($obj->user_username);
 if ($del) {
     $result = $obj->delete();
     $message = ($result) ? 'User deleted' : $obj->getError();
-    $redirect    = ($result) ? 'm=admin'  : ACCESS_DENIED;
+    $redirect    = ($result) ? 'm=users'  : ACCESS_DENIED;
     $status  = ($result) ? UI_MSG_ALERT   : UI_MSG_ERROR;
 
     $AppUI->setMsg($message, $status);
@@ -78,14 +78,14 @@ if ($result) {
 			}
 		}
 		$AppUI->setMsg($isNewUser ? 'User added' : 'User updated', UI_MSG_OK, true);
-        $redirect = 'm=admin&a=view&user_id='.$obj->user_id.'&tab=2';
+        $redirect = 'm=users&a=view&user_id='.$obj->user_id.'&tab=2';
     } else {
         $AppUI->setMsg($obj->getError(), UI_MSG_ERROR);
-        $redirect = 'm=admin';
+        $redirect = 'm=users';
     }
 } else {
     $AppUI->setMsg($contact->getError(), UI_MSG_ERROR);
-    $redirect = 'm=admin&a=addedituser&user_id='.$obj->user_id;
+    $redirect = 'm=users&a=addedituser&user_id='.$obj->user_id;
 }
 
 $AppUI->redirect($redirect);
