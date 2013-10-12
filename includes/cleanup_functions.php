@@ -5605,6 +5605,36 @@ function __extract_from_subprojects_gantt2($original_project_id, $task, $AppUI)
     $q = $task->setAllowedSQL($AppUI->user_id, $q);
     $proTasks = $q->loadHashList('task_id');
 
-    return array($q, $proTasks);
+    return $proTasks;
 }
 
+/**
+ * @param $AppUI
+ *
+ * @return array
+ */
+function __extract_from_projectdesigner1($AppUI)
+{
+//Lets load the users panel viewing options
+    $q = new w2p_Database_Query;
+    $q->addTable('project_designer_options', 'pdo');
+    $q->addQuery('pdo.*');
+    $q->addWhere('pdo.pd_option_user = ' . (int)$AppUI->user_id);
+    $view_options = $q->loadList();
+
+    return $view_options;
+}
+
+/**
+ * @return array
+ */
+function __extract_from_projectdesigner2()
+{
+    $q = new w2p_Database_Query;
+    $q->addTable('projects');
+    $q->addQuery('projects.project_id, company_name');
+    $q->addJoin('companies', 'co', 'co.company_id = project_company');
+    $idx_companies = $q->loadHashList();
+
+    return $idx_companies;
+}
