@@ -3,7 +3,6 @@ if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
 // @todo    refactor to use a core controller
-// @todo    remove database query
 
 if (!canEdit('system')) {
 	$AppUI->redirect(ACCESS_DENIED);
@@ -11,14 +10,8 @@ if (!canEdit('system')) {
 
 $obj = new w2p_System_Config();
 
-// set all checkboxes to false
-// overwrite the true/enabled/checked checkboxes later
-$q = new w2p_Database_Query;
-$q->addTable('config');
-$q->addUpdate('config_value', 'false');
-$q->addWhere("config_type = 'checkbox'");
-$rs = $q->loadResult();
-$q->clear();
+__extract_from_systemconfig_aed();
+
 
 foreach ($_POST['w2Pcfg'] as $name => $value) {
     $obj->config_name = $name;
