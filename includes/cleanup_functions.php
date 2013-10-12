@@ -5090,3 +5090,21 @@ function __extract_from_modules_index($hidden_modules)
     return $modules;
 }
 
+/**
+ * @param $module
+ * @param $mod_data
+ *
+ * @return Value
+ */
+function __extract_from_role_perms($module, $mod_data)
+{
+    $q = new w2p_Database_Query();
+    $q->addTable($module['permissions_item_table']);
+    $q->addQuery($module['permissions_item_label']);
+    $q->addWhere($module['permissions_item_field'] . '=' . $mod_data['name']);
+    $data = $q->loadResult();
+    $q->clear();
+
+    return $data;
+}
+
