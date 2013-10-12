@@ -4847,3 +4847,86 @@ function __extract_from_tasks_viewgantt($project_id, $AppUI)
     return $proTasks;
 }
 
+/**
+ * @param $user_id
+ * @param $showArcProjs
+ * @param $showLowTasks
+ * @param $showInProgress
+ * @param $showHoldProjs
+ * @param $showDynTasks
+ * @param $showPinned
+ * @param $showEmptyDate
+ * @param $task_type
+ * @param $allowedTasks
+ * @param $allowedProjects
+ *
+ * @return Array
+ */
+function __extract_from_todo($user_id, $showArcProjs, $showLowTasks, $showInProgress, $showHoldProjs, $showDynTasks, $showPinned, $showEmptyDate, $task_type, $allowedTasks, $allowedProjects)
+{
+// query my sub-tasks (ignoring task parents)
+
+    $q = new w2p_Database_Query;
+    $q->addQuery('distinct(ta.task_id), ta.*');
+    $q->addQuery('project_name, pr.project_id, project_color_identifier');
+    $q->addQuery('tp.task_pinned');
+    $q->addQuery('ut.user_task_priority');
+    $dateDiffString = $q->dbfnDateDiff('ta.task_end_date', $q->dbfnNow()) . ' AS task_due_in';
+    $q->addQuery($dateDiffString);
+
+    $q->addTable('projects', 'pr');
+    $q->addTable('tasks', 'ta');
+    $q->addTable('user_tasks', 'ut');
+    $q->leftJoin('user_task_pin', 'tp', 'tp.task_id = ta.task_id and tp.user_id = ' . (int)$user_id);
+    $q->leftJoin('project_departments', 'project_departments', 'pr.project_id = project_departments.project_id OR project_departments.project_id IS NULL');
+    $q->leftJoin('departments', 'departments', 'departments.dept_id = project_departments.department_id OR dept_id IS NULL');
+
+    $q->addWhere('ut.task_id = ta.task_id');
+    $q->addWhere('ut.user_id = ' . (int)$user_id);
+    $q->addWhere('( ta.task_percent_complete < 100 or ta.task_percent_complete is null)');
+
+    $q->addWhere('ta.task_status = 0');
+    $q->addWhere('pr.project_id = ta.task_project');
+    if (!$showArcProjs) {
+        $q->addWhere('project_active = 1');
+        if (($template_status = w2PgetConfig('template_projects_status_id')) != '') {
+            $q->addWhere('project_status <> ' . (int)$template_status);
+        }
+    }
+    if (!$showLowTasks) {
+        $q->addWhere('task_priority >= 0');
+    }
+    if ($showInProgress) {
+        $q->addWhere('project_status = 3');
+    }
+    if (!$showHoldProjs) {
+        if (($on_hold_status = w2PgetConfig('on_hold_projects_status_id')) != '') {
+            $q->addWhere('project_status <> ' . (int)$on_hold_status);
+        }
+    }
+    if (!$showDynTasks) {
+        $q->addWhere('task_dynamic <> 1');
+    }
+    if ($showPinned) {
+        $q->addWhere('task_pinned = 1');
+    }
+    if (!$showEmptyDate) {
+        $q->addWhere('ta.task_start_date <> \'\' AND ta.task_start_date <> \'0000-00-00 00:00:00\'');
+    }
+    if ($task_type != '') {
+        $q->addWhere('ta.task_type = ' . (int)$task_type);
+    }
+
+    if (count($allowedTasks)) {
+        $q->addWhere($allowedTasks);
+    }
+
+    if (count($allowedProjects)) {
+        $q->addWhere($allowedProjects);
+    }
+
+    $q->addOrder('task_end_date, task_start_date, task_priority');
+    $tasks = $q->loadList();
+
+    return $tasks;
+}
