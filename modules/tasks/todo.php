@@ -69,30 +69,7 @@ $task_priority = w2PgetParam($_POST, 'task_priority', 99);
 $selected = w2PgetParam($_POST, 'selected_task', 0);
 
 if (is_array($selected) && count($selected)) {
-    $q = new w2p_Database_Query;
-    foreach ($selected as $key => $val) {
-		if ($task_priority == 'c') {
-			// mark task as completed
-			$q->addTable('tasks');
-			$q->addUpdate('task_percent_complete', '100');
-			$q->addWhere('task_id=' . (int)$val);
-		} else {
-			if ($task_priority == 'd') {
-				// delete task
-				$q->setDelete('tasks');
-				$q->addWhere('task_id=' . (int)$val);
-			} else
-				if ($task_priority > -2 && $task_priority < 2) {
-					// set priority
-					$q->addTable('tasks');
-					$q->addUpdate('task_priority', $task_priority);
-					$q->addWhere('task_id=' . (int)$val);
-				}
-        }
-		$q->exec();
-		echo db_error();
-		$q->clear();
-	}
+    __extract_from_tasks_todo($selected, $task_priority);
 }
 
 $proj = new CProject;

@@ -4998,6 +4998,64 @@ function __extract_from_tasks1()
     return $subquery;
 }
 
+
+/**
+ * @param $userFilter
+ * @param $AppUI
+ * @param $proj
+ *
+ * @return Array
+ */
+function __extract_from_listtasks($userFilter, $AppUI, $proj)
+{
+    $q = new w2p_Database_Query();
+    $q->addQuery('t.task_id, t.task_name');
+    $q->addTable('tasks', 't');
+
+    if ($userFilter) {
+        $q->addJoin('user_tasks', 'ut', 'ut.task_id = t.task_id');
+        $q->addWhere('ut.user_id = ' . (int)$AppUI->user_id);
+    }
+    if ($proj != 0) {
+        $q->addWhere('task_project = ' . (int)$proj);
+    }
+    $tasks = $q->loadList();
+
+    return $tasks;
+}
+
+/**
+ * @param $selected
+ * @param $task_priority
+ */
+function __extract_from_tasks_todo($selected, $task_priority)
+{
+    $q = new w2p_Database_Query;
+    foreach ($selected as $key => $val) {
+        if ($task_priority == 'c') {
+            // mark task as completed
+            $q->addTable('tasks');
+            $q->addUpdate('task_percent_complete', '100');
+            $q->addWhere('task_id=' . (int)$val);
+        } else {
+            if ($task_priority == 'd') {
+                // delete task
+                $q->setDelete('tasks');
+                $q->addWhere('task_id=' . (int)$val);
+            } else
+                if ($task_priority > -2 && $task_priority < 2) {
+                    // set priority
+                    $q->addTable('tasks');
+                    $q->addUpdate('task_priority', $task_priority);
+                    $q->addWhere('task_id=' . (int)$val);
+                }
+        }
+        $q->exec();
+        echo db_error();
+        $q->clear();
+    }
+}
+
 /**
  * @return w2p_Database_Query
  */
