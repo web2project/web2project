@@ -56,15 +56,6 @@ function w2p_old_autoload($class_name)
             break;
 
         /*
-         * The following are all wirings for module classes that don't follow
-         * our naming conventions.
-         */
-        case 'cuser':
-            // Deprecated as of v3.0, TODO: remove this in v4.0
-            require_once W2P_BASE_DIR . '/modules/admin/users.class.php';
-            break;
-
-        /*
          * These are our library helper libraries. They're included here to simplify usage.
          */
         case 'captcha':
