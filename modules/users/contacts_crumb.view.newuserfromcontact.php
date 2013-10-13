@@ -4,7 +4,7 @@ if (!defined('W2P_BASE_DIR')) {
 }
 global $AppUI, $titleBlock, $contact_id, $is_user;
 $perms = &$AppUI->acl();
-$canAddUsers = canAdd('admin');
+$canAddUsers = canAdd('users');
 
 if ($canAddUsers && $contact_id && !$is_user) {
     $titleBlock->addButton('create user', '?m=users&a=addedit&contact_id=' . $contact_id);

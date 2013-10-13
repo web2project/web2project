@@ -10,9 +10,7 @@ $notify_new_user = w2PgetParam($_POST, 'notify_new_user', 'off');
 $user_id = (int) w2PgetParam($_POST, 'user_id', 0);
 
 $perms = &$AppUI->acl();
-if (!canEdit('admin')) {
-	$AppUI->redirect(ACCESS_DENIED);
-}
+// @todo shouldn't this check for the specific user?
 if (!canEdit('users')) {
 	$AppUI->redirect(ACCESS_DENIED);
 }

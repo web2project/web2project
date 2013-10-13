@@ -6,9 +6,6 @@ if (!defined('W2P_BASE_DIR')) {
 $tab = $AppUI->processIntState('UserIdxTab', $_GET, 'tab', 0);
 
 $perms = &$AppUI->acl();
-if (!canView('admin')) {
-	$AppUI->redirect(ACCESS_DENIED);
-}
 if (!canView('users')) {
 	$AppUI->redirect(ACCESS_DENIED);
 }

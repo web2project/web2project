@@ -25,18 +25,14 @@ $isNewUser = !$user_id;
 
 $perms = &$AppUI->acl();
 if ($del) {
+
 } elseif ($isNewUser) {
-	if (!canAdd('admin')) {
-		$AppUI->redirect(ACCESS_DENIED);
-	}
 	if (!canAdd('users')) {
 		$AppUI->redirect(ACCESS_DENIED);
 	}
 } else {
 	if ($user_id != $AppUI->user_id) {
-		if (!canEdit('admin')) {
-			$AppUI->redirect(ACCESS_DENIED);
-		}
+        // @todo shouldn't this check for the specific user?
 		if (!canEdit('users')) {
 			$AppUI->redirect(ACCESS_DENIED);
 		}

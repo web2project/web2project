@@ -7,9 +7,7 @@ if (!defined('W2P_BASE_DIR')) {
 $del = (int) w2PgetParam($_POST, 'del', 0);
 
 $perms = &$AppUI->acl();
-if (!canEdit('admin')) {
-    $AppUI->redirect(ACCESS_DENIED);
-}
+// @todo shouldn't this check for the specific user?
 if (!canEdit('users')) {
 	$AppUI->redirect(ACCESS_DENIED);
 }
