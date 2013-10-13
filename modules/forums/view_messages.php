@@ -53,9 +53,7 @@ $thispage = '?m=' . $m . '&a=viewer&forum_id=' . $forum_id . '&message_id=' . $m
 ?>
 <br />
 <?php
-if (function_exists('styleRenderBoxTop')) {
-	echo styleRenderBoxTop();
-}
+echo $AppUI->getTheme()->styleRenderBoxTop();
 ?>
 <form name="messageForm" method="post" action="?m=forums&forum_id=<?php echo $forum_id; ?>" accept-charset="utf-8">
 	<input type="hidden" name="dosql" value="do_post_aed" />

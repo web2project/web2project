@@ -128,9 +128,7 @@ $contacts = $q->loadHashList('contact_id');
 	?>
 	<br /><br />
 	<?php
-		if (function_exists('styleRenderBoxTop')) {
-			echo styleRenderBoxTop();
-		}
+    echo $AppUI->getTheme()->styleRenderBoxTop();
 	?>
 	<table width="100%" class="std">
 		<tr>

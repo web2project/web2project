@@ -277,9 +277,7 @@ if (file_exists($module_file)) {
 	$titleBlock = new w2p_Theme_TitleBlock($AppUI->_('Warning'), 'log-error.gif');
 	$titleBlock->show();
 
-	if (is_callable('styleRenderBoxTop')) {
-		echo styleRenderBoxTop();
-	}
+    echo $AppUI->getTheme()->styleRenderBoxTop();
 	echo '<table width="100%" cellspacing="0" cellpadding="3" border="0" class="std">';
 	echo '<tr>';
 	echo '	<td>';

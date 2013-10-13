@@ -48,9 +48,7 @@ foreach ($rows as $row) {
 	$task_log_costcodes[$row['billingcode_id']] = $row['billingcode_name'];
 }
 
-if (function_exists('styleRenderBoxTop')) {
-	echo styleRenderBoxTop();
-}
+echo $AppUI->getTheme()->styleRenderBoxTop();
 ?>
 <form name="editFrm" action="" method="get" accept-charset="utf-8">
 <input type="hidden" name="m" value="reports" />
@@ -132,9 +130,7 @@ if ($do_report) {
 		echo styleRenderBoxBottom();
 	}
 	echo '<br />';
-	if (function_exists('styleRenderBoxTop')) {
-		echo styleRenderBoxTop();
-	}
+    echo $AppUI->getTheme()->styleRenderBoxTop();
 	echo '<table cellspacing="0" cellpadding="4" border="0" width="100%" class="std">
 	<tr>
 		<td>';

@@ -98,9 +98,7 @@ if (!$project_id) {
 	}
 	</script>
 <?php
-	if (function_exists('styleRenderBoxTop')) {
-		echo styleRenderBoxTop();
-	}
+    echo $AppUI->getTheme()->styleRenderBoxTop();
 ?>
     <form name="prjFrm" action="?m=projectdesigner" method="post" accept-charset="utf-8">
         <table border="1" cellpadding="4" cellspacing="0" width="100%" class="std">
@@ -432,9 +430,7 @@ function calcDuration(f, start_date, end_date, duration_fld, durntype_fld) {
 </script>
 
 <?php
-	if (function_exists('styleRenderBoxTop')) {
-		echo styleRenderBoxTop();
-	}
+    echo $AppUI->getTheme()->styleRenderBoxTop();
 ?>
 <form name="frmDelete" action="./index.php?m=projects" method="post" accept-charset="utf-8">
 	<input type="hidden" name="dosql" value="do_project_aed" />
@@ -473,9 +469,7 @@ function calcDuration(f, start_date, end_date, duration_fld, durntype_fld) {
 ?>
 <br />
 <?php
-	if (function_exists('styleRenderBoxTop')) {
-		echo styleRenderBoxTop();
-	}
+    echo $AppUI->getTheme()->styleRenderBoxTop();
 ?>
 <table border="0" cellpadding="4" cellspacing="0" width="100%" class="std">
 <tr>
@@ -510,9 +504,7 @@ function calcDuration(f, start_date, end_date, duration_fld, durntype_fld) {
 ?>
 <br />
 <?php
-	if (function_exists('styleRenderBoxTop')) {
-		echo styleRenderBoxTop();
-	}
+    echo $AppUI->getTheme()->styleRenderBoxTop();
 ?>
 <table border="0" cellpadding="4" cellspacing="0" width="100%" class="std">
 <tr>
@@ -547,9 +539,7 @@ function calcDuration(f, start_date, end_date, duration_fld, durntype_fld) {
 ?>
 <br />
 <?php
-	if (function_exists('styleRenderBoxTop')) {
-		echo styleRenderBoxTop();
-	}
+    echo $AppUI->getTheme()->styleRenderBoxTop();
 ?>
 <table border="0" cellpadding="4" cellspacing="0" width="100%" class="std">
 <tr>
@@ -584,9 +574,7 @@ function calcDuration(f, start_date, end_date, duration_fld, durntype_fld) {
 ?>
 <br />
 <?php
-	if (function_exists('styleRenderBoxTop')) {
-		echo styleRenderBoxTop();
-	}
+    echo $AppUI->getTheme()->styleRenderBoxTop();
 ?>
 <table border="0" cellpadding="4" cellspacing="0" width="100%" class="std">
 <tr>
@@ -621,9 +609,7 @@ function calcDuration(f, start_date, end_date, duration_fld, durntype_fld) {
 ?>
 <br />
 <?php
-	if (function_exists('styleRenderBoxTop')) {
-		echo styleRenderBoxTop();
-	}
+    echo $AppUI->getTheme()->styleRenderBoxTop();
 ?>
 <table border="0" cellpadding="4" cellspacing="0" width="100%" class="std">
 <tr>

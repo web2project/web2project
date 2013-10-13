@@ -61,9 +61,7 @@ if (!$log_start_date) {
 }
 $end_date->setTime(23, 59, 59);
 
-if (function_exists('styleRenderBoxTop')) {
-	echo styleRenderBoxTop();
-}
+echo $AppUI->getTheme()->styleRenderBoxTop();
 
 $df = $AppUI->getPref('SHDATEFORMAT');
 ?>
@@ -148,9 +146,7 @@ if ($do_report) {
 		echo styleRenderBoxBottom();
 	}
 	echo '<br />';
-	if (function_exists('styleRenderBoxTop')) {
-		echo styleRenderBoxTop();
-	}
+    echo $AppUI->getTheme()->styleRenderBoxTop();
 	echo '<table cellspacing="0" cellpadding="4" border="0" width="100%" class="std">
 <tr>
 	<td>';

@@ -75,9 +75,7 @@ if ($myId) {
 	?>
 		<form name="frmSelector" action="./index.php?m=contacts&a=select_contact_company&dialog=1&table_name=<?php echo $table_name . '&' . $additional_get_information; ?>" method="post" accept-charset="utf-8">
 			<?php
-				if (function_exists('styleRenderBoxTop')) {
-					echo styleRenderBoxTop();
-				}
+            echo $AppUI->getTheme()->styleRenderBoxTop();
 			?>
 			<table width="100%" cellspacing="0" cellpadding="3" border="0" class="std">
 			<tr>

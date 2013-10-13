@@ -40,9 +40,7 @@ $companies = arrayMerge(array('0' => 'All Companies'), $companies);
     <input type="hidden" name="datePicker" value="log" />
 
     <?php
-    if (function_exists('styleRenderBoxTop')) {
-        echo styleRenderBoxTop();
-    }
+    echo $AppUI->getTheme()->styleRenderBoxTop();
     ?>
     <table cellspacing="0" cellpadding="4" border="0" width="100%" class="std">
         <tr>

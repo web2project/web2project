@@ -235,9 +235,7 @@ function chPriority(user_id) {
 </form>
 <br />
 <?php
-if (function_exists('styleRenderBoxTop')) {
-    echo styleRenderBoxTop();
-}
+echo $AppUI->getTheme()->styleRenderBoxTop();
 
 $fieldList = array();
 $fieldNames = array();

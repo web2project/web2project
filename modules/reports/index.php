@@ -67,9 +67,7 @@ if ($report_type) {
 	$report_type = str_replace(' ', '_', $report_type);
 	require W2P_BASE_DIR . '/modules/reports/reports/' . $report_type . '.php';
 } else {
-	if (function_exists('styleRenderBoxTop')) {
-		echo styleRenderBoxTop();
-	}
+    echo $AppUI->getTheme()->styleRenderBoxTop();
 	$s = '';
 	$s .= '<table width="100%" class="std">';
 	$s .= '<tr><td><h2>' . $AppUI->_('Reports Available') . '</h2></td></tr>';

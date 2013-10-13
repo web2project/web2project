@@ -103,9 +103,7 @@ function orderByName(x){
 </script>
 <br />
 <?php
-if (function_exists('styleRenderBoxTop')) {
-	echo styleRenderBoxTop();
-}
+echo $AppUI->getTheme()->styleRenderBoxTop();
 ?>
 
 <form name="changeforum" action="?m=<?php echo $m; ?>&forum_id=<?php echo $forum_id; ?>" method="post" accept-charset="utf-8">

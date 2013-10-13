@@ -166,8 +166,8 @@ class w2p_Theme_TitleBlock {
 
 
         echo '' . $s;
-        if (($a != 'index' || $m == 'system' || $m == 'calendar' || $m == 'smartsearch') && !$this->_AppUI->boxTopRendered && function_exists('styleRenderBoxTop')) {
-            echo styleRenderBoxTop();
+        if (($a != 'index' || $m == 'system' || $m == 'calendar' || $m == 'smartsearch') && !$this->_AppUI->boxTopRendered) {
+            echo $this->_AppUI->getTheme()->styleRenderBoxTop();
             $this->_AppUI->boxTopRendered = true;
         }
     }

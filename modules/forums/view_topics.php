@@ -59,9 +59,7 @@ if (0 == count($fields)) {
 ?>
 <br />
 <?php
-if (function_exists('styleRenderBoxTop')) {
-	echo styleRenderBoxTop();
-}
+echo $AppUI->getTheme()->styleRenderBoxTop();
 
 ?>
 <form name="watcher" action="?m=forums&a=viewer&forum_id=<?php echo $forum_id; ?>&f=<?php echo $f; ?>" method="post" accept-charset="utf-8">
