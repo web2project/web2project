@@ -463,9 +463,7 @@ function calcDuration(f, start_date, end_date, duration_fld, durntype_fld) {
 </tr>
 </table>
 <?php
-	if (function_exists('styleRenderBoxBottom')) {
-		echo styleRenderBoxBottom();
-	}
+    echo $AppUI->getTheme()->styleRenderBoxBottom();
 ?>
 <br />
 <?php
@@ -498,9 +496,7 @@ function calcDuration(f, start_date, end_date, duration_fld, durntype_fld) {
 </tr>
 </table>
 <?php
-	if (function_exists('styleRenderBoxBottom')) {
-		echo styleRenderBoxBottom();
-	}
+    echo $AppUI->getTheme()->styleRenderBoxBottom();
 ?>
 <br />
 <?php
@@ -533,9 +529,7 @@ function calcDuration(f, start_date, end_date, duration_fld, durntype_fld) {
 </tr>
 </table>
 <?php
-	if (function_exists('styleRenderBoxBottom')) {
-		echo styleRenderBoxBottom();
-	}
+    echo $AppUI->getTheme()->styleRenderBoxBottom();
 ?>
 <br />
 <?php
@@ -568,9 +562,7 @@ function calcDuration(f, start_date, end_date, duration_fld, durntype_fld) {
 </tr>
 </table>
 <?php
-	if (function_exists('styleRenderBoxBottom')) {
-		echo styleRenderBoxBottom();
-	}
+    echo $AppUI->getTheme()->styleRenderBoxBottom();
 ?>
 <br />
 <?php
@@ -603,9 +595,7 @@ function calcDuration(f, start_date, end_date, duration_fld, durntype_fld) {
 </tr>
 </table>
 <?php
-	if (function_exists('styleRenderBoxBottom')) {
-		echo styleRenderBoxBottom();
-	}
+    echo $AppUI->getTheme()->styleRenderBoxBottom();
 ?>
 <br />
 <?php

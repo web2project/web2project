@@ -228,9 +228,7 @@ function chPriority(user_id) {
 		</tr>
 	</table>
 	<?php
-		if (function_exists('styleRenderBoxBottom')) {
-			echo styleRenderBoxBottom();
-		}
+    echo $AppUI->getTheme()->styleRenderBoxBottom();
 	?>
 </form>
 <br />

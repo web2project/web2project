@@ -142,9 +142,7 @@ if ($do_report) {
 	$q->addOrder('task_project, task_start_date, task_end_date');
 	$Task_List = $q->exec();
 
-	if (function_exists('styleRenderBoxBottom')) {
-		echo styleRenderBoxBottom();
-	}
+    echo $AppUI->getTheme()->styleRenderBoxBottom();
 	echo '<br />';
     echo $AppUI->getTheme()->styleRenderBoxTop();
 	echo '<table cellspacing="0" cellpadding="4" border="0" width="100%" class="std">

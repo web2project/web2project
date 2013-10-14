@@ -109,9 +109,7 @@ $titleBlock->show();
 
 </table>
 <?php
-if (function_exists('styleRenderBoxBottom')) {
-	echo styleRenderBoxBottom();
-}
+echo $AppUI->getTheme()->styleRenderBoxBottom();
 if ($post_message) {
 	include (W2P_BASE_DIR . '/modules/forums/post_message.php');
 } else {

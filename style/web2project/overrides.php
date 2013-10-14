@@ -16,7 +16,7 @@ class CTabBox extends w2p_Theme_TabBox {
 		global $currentTabId, $currentTabName, $m, $a;
 		$this->loadExtras($m, $a);
 
-		if (($a == 'addedit' || $a == 'view' || $a == 'viewuser') && function_exists('styleRenderBoxBottom')) {
+		if (($a == 'addedit' || $a == 'view' || $a == 'viewuser')) {
 			echo styleRenderBoxBottom();
 		}
 

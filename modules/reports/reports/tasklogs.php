@@ -128,9 +128,7 @@ if (($log_userfilter_users = w2PgetUsersList())) {
 <?php
 if ($do_report) {
 
-	if (function_exists('styleRenderBoxBottom')) {
-		echo styleRenderBoxBottom();
-	}
+    echo $AppUI->getTheme()->styleRenderBoxBottom();
 	echo '<br />';
     echo $AppUI->getTheme()->styleRenderBoxTop();
 	echo '<table cellspacing="0" cellpadding="4" border="0" width="100%" class="std">

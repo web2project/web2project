@@ -31,9 +31,7 @@ if (!is_array($role)) {
 		</tr>
 </table>
 <?php
-	if (function_exists('styleRenderBoxBottom')) {
-		echo styleRenderBoxBottom();
-	}
+    echo $AppUI->getTheme()->styleRenderBoxBottom();
 	$tabBox = new CTabBox('?m=system&u=roles&a=viewrole&role_id=' . $role_id, W2P_BASE_DIR . '/modules/system/roles/', $tab);
 	$tabBox->add('vw_role_perms', 'Permissions');
 	$tabBox->show();
