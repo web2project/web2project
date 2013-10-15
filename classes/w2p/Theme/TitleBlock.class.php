@@ -166,7 +166,7 @@ class w2p_Theme_TitleBlock {
 
 
         echo '' . $s;
-        if (($a != 'index' || $m == 'system' || $m == 'calendar' || $m == 'smartsearch') && !$this->_AppUI->boxTopRendered) {
+        if (($a != 'index' || $m == 'system' || $m == 'events' || $m == 'smartsearch') && !$this->_AppUI->boxTopRendered) {
             echo $this->_AppUI->getTheme()->styleRenderBoxTop();
             $this->_AppUI->boxTopRendered = true;
         }
