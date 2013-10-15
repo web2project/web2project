@@ -1,3 +1,8 @@
+<?php
+if (!defined('W2P_BASE_DIR')) {
+    die('You should not access this file directly.');
+}
+?>
 <table cellspacing="2" cellpadding="4" border="0" class="tbl" width="100%">
 <tr>
 	<td width="100%" valign="top">
