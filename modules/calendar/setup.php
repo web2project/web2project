@@ -33,55 +33,33 @@ class CSetupEvents extends w2p_System_Setup
     public function upgrade($old_version) {
         $result = false;
 
-        $q = $this->_getQuery();
-
         // NOTE: All cases should fall through so all updates are executed.
         switch ($old_version) {
             case '3.0.0':
-                $q = new w2p_Database_Query();
-                $q->addTable('modules');
-                $q->addUpdate('mod_directory', 'events');
-                $q->addWhere("mod_directory = 'calendar'");
-                $q->exec();
+                $this->_renameModule('modules', 'mod_directory');
 
-                $q = new w2p_Database_Query();
-                $q->addTable('gacl_axo');
-                $q->addUpdate('value', 'events');
-                $q->addWhere("value = 'calendar'");
-                $q->exec();
+                $this->_renameModule('gacl_axo', 'value');
+                $this->_renameModule('gacl_axo', 'section_value');
+                $this->_renameModule('gacl_axo_map', 'value');
+                $this->_renameModule('gacl_axo_map', 'section_value');
+                $this->_renameModule('gacl_permissions', 'module');
 
-                $q = new w2p_Database_Query();
-                $q->addTable('gacl_axo');
-                $q->addUpdate('section_value', 'events');
-                $q->addWhere("section_value = 'calendar'");
-                $q->exec();
-
-                $q = new w2p_Database_Query();
-                $q->addTable('gacl_axo_map');
-                $q->addUpdate('value', 'events');
-                $q->addWhere("value = 'calendar'");
-                $q->exec();
-
-                $q = new w2p_Database_Query();
-                $q->addTable('gacl_axo_map');
-                $q->addUpdate('section_value', 'events');
-                $q->addWhere("section_value = 'calendar'");
-                $q->exec();
-
-                $q = new w2p_Database_Query();
-                $q->addTable('gacl_permissions');
-                $q->addUpdate('module', 'events');
-                $q->addWhere("module = 'calendar'");
-                $q->exec();
-
-                $q = new w2p_Database_Query();
-                $q->addTable('module_config');
-                $q->addUpdate('module_name', 'events');
-                $q->addWhere("module_name = 'calendar'");
-                $q->exec();
+                $this->_renameModule('module_config', 'module_name');
             default:
                 break;
         }
         return $result;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function _renameModule($table, $field)
+    {
+        $q = $this->_getQuery();
+        $q->addTable($table);
+        $q->addUpdate($field, 'events');
+        $q->addWhere("$field = 'calendar'");
+        return $q->exec();
     }
 }
