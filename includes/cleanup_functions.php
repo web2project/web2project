@@ -7,7 +7,7 @@ if (!defined('W2P_BASE_DIR')) {
 *   cleaned up, reorganized or eliminated based on usage. Before you touch
 *   these, please ensure there are Unit Tests to validate that things work
 *   before and after.
-*
+* @todo/TODO: Every single function in this file.
 *
 * WARNING: The functions in this file are likely to move to other files as they
 *   are updated. Since this file is included within main_functions.php
@@ -5637,4 +5637,22 @@ function __extract_from_projectdesigner2()
     $idx_companies = $q->loadHashList();
 
     return $idx_companies;
+}
+
+/**
+ * @param $controller
+ */
+function __extract_from_contact_controller($controller)
+{
+    $updatekey = $controller->object->getUpdateKey();
+    $notifyasked = w2PgetParam($_POST, 'contact_updateask', 0);
+    if ($notifyasked && !strlen($updatekey)) {
+        $rnow = new w2p_Utilities_Date();
+        $controller->object->contact_updatekey = MD5($rnow->format(FMT_DATEISO));
+        $controller->object->contact_updateasked = $rnow->format(FMT_DATETIME_MYSQL);
+        $controller->object->contact_lastupdate = '';
+        $controller->object->store();
+        $controller->object->notify();
+    }
+    return $controller;
 }

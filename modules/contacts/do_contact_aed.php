@@ -16,17 +16,7 @@ $controller = new w2p_Controllers_Base(
 $AppUI = $controller->process($AppUI, $_POST);
 
 if ($controller->success && !$delete) {
-    $updatekey = $controller->object->getUpdateKey();
-    $notifyasked = w2PgetParam($_POST, 'contact_updateask', 0);
-    if ($notifyasked && !strlen($updatekey)) {
-        $rnow = new w2p_Utilities_Date();
-        $controller->object->contact_updatekey = MD5($rnow->format(FMT_DATEISO));
-        $controller->object->contact_updateasked = $rnow->format(FMT_DATETIME_MYSQL);
-        $controller->object->contact_lastupdate = '';
-        $controller->object->store();
-        $controller->object->notify();
-        $action .= '. Update request sent';
-    }
+    $controller = __extract_from_contact_controller($controller);
 }
 
 $AppUI->redirect($controller->resultPath);
