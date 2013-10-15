@@ -59,10 +59,6 @@ function w2p_old_autoload($class_name)
          * The following are all wirings for module classes that don't follow
          * our naming conventions.
          */
-        case 'cevent':
-            // Deprecated as of v3.0, TODO: remove this in v4.0
-            require_once W2P_BASE_DIR . '/modules/calendar/calendar.class.php';
-            break;
         case 'cuser':
             // Deprecated as of v3.0, TODO: remove this in v4.0
             require_once W2P_BASE_DIR . '/modules/admin/users.class.php';
