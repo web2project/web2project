@@ -2,23 +2,19 @@
 if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
-// @todo    get rid of the odd file inclusion structure
 
-$hid = w2PgetParam($_GET, 'hid', 'help.toc');
-
-$inc = W2P_BASE_DIR . '/modules/help/' . $AppUI->user_locale . '/' . $hid . '.hlp';
+$inc = W2P_BASE_DIR . '/locales/' . $AppUI->user_locale . '/help.php';
 
 if (!file_exists($inc)) {
-	$inc = W2P_BASE_DIR . '/modules/help/en/' . $hid . '.hlp';
-	if (!file_exists($inc)) {
-		$hid = "help.toc";
-		$inc = W2P_BASE_DIR . '/modules/help/' . $AppUI->user_locale . '/' . $hid . '.hlp';
-		if (!file_exists($inc)) {
-			$inc = W2P_BASE_DIR . '/modules/help/en/' . $hid . '.hlp';
-		}
-	}
+	$inc = W2P_BASE_DIR . '/locales/en/help.hlp';
 }
-if ($hid != 'help.toc') {
-	echo '<a href="?m=help&amp;dialog=1">' . $AppUI->_('index') . '</a>';
-}
-readfile($inc);
+?>
+    <style>
+        div[class="std titlebar"], form[name="frm_new"],
+        body div:nth-child(2), div[class="left"] {
+            display: none;
+        }
+    </style>
+
+<?php
+include $inc;
