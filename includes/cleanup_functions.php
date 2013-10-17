@@ -3515,19 +3515,17 @@ function formatCurrency($number, $format) {
     return function_exists('money_format') ? money_format('%i', $number) : number_format($number, 2);
 }
 
-function format_backtrace($bt, $file, $line, $msg) {
-	echo '<pre>';
-	echo 'ERROR: ' . $file . '(' . $line . ') : ' . $msg . "\n";
-	echo 'Backtrace:' . "\n";
+function format_backtrace($bt, $file, $line, $msg)
+{
+    trigger_error('ERROR: ' . $file . '(' . $line . ') : ' . $msg, E_USER_WARNING);
+    trigger_error('Backtrace:', E_USER_WARNING);
 	foreach ($bt as $level => $frame) {
-		echo $level . ' ' . $frame['file'] . ':' . $frame['line'] . ' ' . $frame['function'] . "()\n";
+        trigger_error($level . ' ' . $frame['file'] . ':' . $frame['line'] . ' ' . $frame['function'] . "()", E_USER_WARNING);
 	}
-    echo '</pre>';
 }
 
 function dprint($file, $line, $level, $msg) {
-	$max_level = 0;
-	$max_level = (int)w2PgetConfig('debug');
+	$max_level = (int) w2PgetConfig('debug');
 	$display_debug = w2PgetConfig('display_debug', false);
 	if ($level <= $max_level) {
 		error_log($file . '(' . $line . '): ' . $msg);
