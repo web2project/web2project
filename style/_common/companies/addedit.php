@@ -2,7 +2,7 @@
 	<input type="hidden" name="dosql" value="do_company_aed" />
 	<input type="hidden" name="company_id" value="<?php echo $company_id; ?>" />
 
-	<table cellspacing="1" cellpadding="1" border="0" width="100%" class="std addedit companies">
+	<table class="std addedit companies">
 		<tr>
 			<td width="50%" style="vertical-align: top">
 				<table cellspacing="1" cellpadding="2" width="100%" class="well">

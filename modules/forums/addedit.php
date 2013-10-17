@@ -90,7 +90,7 @@ function delIt(){
 	<input type="hidden" name="del" value="0" />
 	<input type="hidden" name="forum_unique_update" value="<?php echo uniqid(''); ?>" />
 	<input type="hidden" name="forum_id" value="<?php echo $forum_id; ?>" />
-    <table cellspacing="0" cellpadding="4" border="0" width="100%" class="std addedit forums">
+    <table class="std addedit forums">
         <tr>
             <th valign="top" colspan="3">
                 <strong><?php echo $AppUI->_($forum_id ? 'Edit' : 'Add') . ' ' . $AppUI->_('Forum'); ?></strong>

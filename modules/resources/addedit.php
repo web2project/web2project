@@ -62,7 +62,7 @@ function submitIt() {
     <input type="hidden" name="del" value="0" />
     <input type="hidden" name="resource_id" value="<?php echo $resource_id; ?>" />
 
-    <table cellspacing="1" cellpadding="1" border="0" width="100%" class="std addedit resources">
+    <table class="std addedit resources">
         <tr>
             <td align="center" >
                 <table>

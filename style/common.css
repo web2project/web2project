@@ -328,6 +328,10 @@ table.list tr:hover td._name {
     background: silver;
 }
 
+.addedit {
+    border-collapse: collapse;
+    width: 100%;
+}
 .addedit textarea {
     height: 75px;
     width:  80%;

@@ -179,7 +179,7 @@ function setDepartment(department_id_string){
 	<input type="hidden" name="project_creator" value="<?php echo is_null($project->project_creator) ? $AppUI->user_id : $project->project_creator; ?>" />
 	<input type="hidden" name="project_contacts" id="project_contacts" value="<?php echo implode(',', $selected_contacts); ?>" />
     <input type="hidden" name="datePicker" value="project" />
-    <table cellspacing="1" cellpadding="1" border="0" width="100%" class="std addedit projects">
+    <table class="std addedit projects">
         <tr>
             <td width="50%" style="vertical-align: top">
                 <table border="0" cellspacing="1" cellpadding="2" width="100%" class="well">

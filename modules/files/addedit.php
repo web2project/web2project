@@ -162,7 +162,7 @@ function setTask( key, val ) {
 	<input type="hidden" name="file_version_id" value="<?php echo $file->file_version_id; ?>" />
 	<input type="hidden" name="redirect" value="<?php echo $referrer; ?>" />
 	<input type="hidden" name="file_helpdesk_item" value="<?php echo $file_helpdesk_item; ?>" />
-	<table width="100%" border="0" cellpadding="3" cellspacing="3" class="std addedit files">
+	<table class="std addedit files">
 		<tr>
 			<td width="80%" valign="top" align="center">
 				<table cellspacing="1" cellpadding="2" width="100%" class="well">

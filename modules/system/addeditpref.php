@@ -79,7 +79,7 @@ echo '<div style="padding-top: ' . $spacing . 'px;"> </div>';
 	<input type="hidden" name="dosql" value="do_preference_aed" />
 	<input type="hidden" name="pref_user" value="<?php echo $user_id; ?>" />
 	<input type="hidden" name="del" value="0" />
-<table width="100%" border="0" cellpadding="1" cellspacing="1" class="std addedit pref well preference">
+<table class="std addedit pref well preference">
     <tr>
         <th colspan="2"><?php echo $AppUI->_('User Preferences'); ?>: <?php echo $user_id ? $user : $AppUI->_('Default'); ?></th>
     </tr>

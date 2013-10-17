@@ -129,7 +129,7 @@ $log_date = new w2p_Utilities_Date($log->task_log_date);
     <input type="hidden" name="task_log_record_creator" value="<?php echo (0 == $task_log_id ? $AppUI->user_id : $log->task_log_record_creator); ?>" />
     <input type="hidden" name="datePicker" value="task" />
 
-    <table cellspacing="1" cellpadding="2" border="0" width="100%" class="addedit tasks-tasklog">
+    <table class="addedit tasks-tasklog">
         <tr>
             <td width='40%' valign='top'>
                 <table cellspacing="1" cellpadding="2" width="100%" class="well">

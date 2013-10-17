@@ -110,7 +110,7 @@ function setTask( key, val ) {
 <!-- TODO: Right now, link owner is hard coded, we should make this a select box like elsewhere. -->
     <input type="hidden" name="link_owner" value="<?php echo $link->link_owner; ?>" />
 
-    <table width="100%" border="0" cellpadding="3" cellspacing="3" class="std addedit links">
+    <table class="std addedit links">
         <tr>
             <td width="100%" valign="top" align="center">
               <table cellspacing="1" cellpadding="2" width="100%" class="well">

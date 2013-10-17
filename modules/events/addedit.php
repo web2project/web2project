@@ -227,7 +227,7 @@ function removeUser() {
 	<input type="hidden" name="event_assigned" value="" />
     <input type="hidden" name="datePicker" value="event" />
 
-<table border="0" cellpadding="4" cellspacing="0" width="100%" class="std addedit events">
+<table class="std addedit events">
 <tr>
 	<td colspan="2">
 		<table cellspacing="1" cellpadding="2" width="100%" class="well">
