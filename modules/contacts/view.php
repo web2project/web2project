@@ -85,7 +85,7 @@ function delIt(){
 </script>
 <?php } ?>
 
-<table border="0" cellpadding="4" cellspacing="0" width="100%" class="std view">
+<table border="0" cellpadding="4" cellspacing="0" width="100%" class="std view contacts">
 	<tr>
 		<td valign="top">
 			<table border="0" cellpadding="1" cellspacing="1">

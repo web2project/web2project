@@ -61,7 +61,7 @@ echo $AppUI->getTheme()->styleRenderBoxTop();
 	<input type="hidden" name="message_id" value="0" />
 </form>
 
-<table border="1" cellpadding="4" cellspacing="1" width="100%" class="std view" align="center">
+<table border="1" cellpadding="4" cellspacing="1" width="100%" class="std view forums-message" align="center">
 <tr>
     <td colspan="2">
         <div class="left" style="padding-left: 20px;">

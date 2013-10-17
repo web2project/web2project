@@ -63,7 +63,7 @@ if ($canDelete) {
 	</form>
 <?php } ?>
 
-<table border="0" cellpadding="4" cellspacing="0" width="100%" class="std view">
+<table border="0" cellpadding="4" cellspacing="0" width="100%" class="std view resources">
     <tr>
         <td width="50%" valign="top" class="view-column">
             <strong><?php echo $AppUI->_('Details'); ?></strong>

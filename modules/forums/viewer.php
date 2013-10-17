@@ -62,7 +62,7 @@ if ($canEdit) {
 $titleBlock->addCell(arraySelect($filters, 'f', 'size="1" class="text" onchange="document.filterFrm.submit();"', $f, true), '', '<form action="?m=forums&a=viewer&forum_id=' . $forum_id . '" method="post" name="filterFrm" accept-charset="utf-8">', '</form>');
 $titleBlock->show();
 ?>
-<table width="100%" cellspacing="0" cellpadding="2" border="0" class="std view">
+<table width="100%" cellspacing="0" cellpadding="2" border="0" class="std view forums">
     <tr>
         <td height="20" colspan="3" style="border: outset #D1D1CD 1px;background-color:#<?php echo $forum->project_color_identifier; ?>">
             <font size="2" color="<?php echo bestColor($forum->project_color_identifier); ?>"><strong><?php echo $forum->forum_name; ?></strong></font>

@@ -98,7 +98,7 @@ $titleBlock->show();
         }
         <?php } ?>
     </script>
-    <table border="0" cellpadding="4" cellspacing="0" width="100%" class="std view">
+    <table border="0" cellpadding="4" cellspacing="0" width="100%" class="std view admin">
         <tr>
             <th colspan="2"><?php echo $user->user_username; ?></th>
         </tr>

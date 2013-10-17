@@ -114,7 +114,7 @@ function delIt() {
 	<input type="hidden" name="del" value="1" />
 	<input type="hidden" name="project_id" value="<?php echo $project_id; ?>" />
 </form>
-<table id="tblProjects" border="0" cellpadding="4" cellspacing="0" width="100%" class="std view">
+<table id="tblProjects" border="0" cellpadding="4" cellspacing="0" width="100%" class="std view projects">
     <tr>
         <td style="border: outset #d1d1cd 1px;background-color:#<?php echo $project->project_color_identifier; ?>" colspan="2" id="view-header">
         <?php

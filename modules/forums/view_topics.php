@@ -76,7 +76,7 @@ echo $AppUI->getTheme()->styleRenderBoxTop();
     echo $listHelper->endTable();
 
     ?>
-    <table width="100%" border="0" cellpadding="0" cellspacing="1" class="std">
+    <table width="100%" border="0" cellpadding="0" cellspacing="1" class="std forums-topic">
         <tr>
             <td align="left">
                 <input type="submit" class="button" value="<?php echo $AppUI->_('update watches'); ?>" />

@@ -93,7 +93,7 @@ function delIt() {
 	<input type="hidden" name="task_id" value="<?php echo $task_id; ?>" />
 </form>
 
-<table border="0" cellpadding="4" cellspacing="0" width="100%" class="std view">
+<table border="0" cellpadding="4" cellspacing="0" width="100%" class="std view tasks">
     <tr>
         <th colspan="2"><?php echo $obj->task_name; ?></th>
     </tr>
