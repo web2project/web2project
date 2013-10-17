@@ -75,7 +75,7 @@ function delIt() {
 	<input type="hidden" name="dept_id" value="<?php echo $dept_id; ?>" />
 </form>
 
-<table border="0" cellpadding="4" cellspacing="0" width="100%" class="std view departments">
+<table class="std view departments">
     <tr>
         <th colspan="2"><?php echo $department->dept_name; ?></th>
     </tr>

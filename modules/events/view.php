@@ -104,7 +104,7 @@ function delIt() {
 	<input type="hidden" name="del" value="1" />
 	<input type="hidden" name="event_id" value="<?php echo $event_id; ?>" />
 </form>
-<table border="0" cellpadding="4" cellspacing="0" width="100%" class="std view events">
+<table class="std view events">
     <tr>
         <th colspan="2"><?php echo $event->event_name; ?></th>
     </tr>
