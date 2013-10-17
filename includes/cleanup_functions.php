@@ -3522,6 +3522,7 @@ function format_backtrace($bt, $file, $line, $msg) {
 	foreach ($bt as $level => $frame) {
 		echo $level . ' ' . $frame['file'] . ':' . $frame['line'] . ' ' . $frame['function'] . "()\n";
 	}
+    echo '</pre>';
 }
 
 function dprint($file, $line, $level, $msg) {
