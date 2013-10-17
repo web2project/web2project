@@ -3524,7 +3524,8 @@ function format_backtrace($bt, $file, $line, $msg)
 	}
 }
 
-function dprint($file, $line, $level, $msg) {
+function dprint($file, $line, $level, $msg)
+{
 	$max_level = (int) w2PgetConfig('debug');
 	$display_debug = w2PgetConfig('display_debug', false);
 	if ($level <= $max_level) {
