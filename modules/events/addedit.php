@@ -221,13 +221,13 @@ function removeUser() {
 	}
 }
 </script>
-<form name="editFrm" action="?m=<?php echo $m; ?>" method="post" accept-charset="utf-8">
+<form name="editFrm" action="?m=<?php echo $m; ?>" method="post" accept-charset="utf-8" class="addedit events">
 	<input type="hidden" name="dosql" value="do_event_aed" />
 	<input type="hidden" name="event_id" value="<?php echo $event_id; ?>" />
 	<input type="hidden" name="event_assigned" value="" />
     <input type="hidden" name="datePicker" value="event" />
 
-<table border="0" cellpadding="4" cellspacing="0" width="100%" class="std addedit">
+<table border="0" cellpadding="4" cellspacing="0" width="100%" class="std addedit events">
 <tr>
 	<td colspan="2">
 		<table cellspacing="1" cellpadding="2" width="100%" class="well">

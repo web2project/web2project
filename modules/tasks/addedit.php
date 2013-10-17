@@ -184,13 +184,13 @@ function popContacts() {
 }
 </script>
 
-<form name="editFrm" action="?m=<?php echo $m; ?>&project_id=<?php echo $task_project; ?>" method="post" onSubmit="return submitIt(document.editFrm);" accept-charset="utf-8">
+<form name="editFrm" action="?m=<?php echo $m; ?>&project_id=<?php echo $task_project; ?>" method="post" onSubmit="return submitIt(document.editFrm);" accept-charset="utf-8" class="addedit tasks">
 	<input name="dosql" type="hidden" value="do_task_aed" />
 	<input name="task_id" type="hidden" value="<?php echo $task_id; ?>" />
 	<input name="task_project" type="hidden" value="<?php echo $task_project; ?>" />
 	<input name="old_task_parent" type="hidden" value="<?php echo $task->task_parent; ?>" />
 	<input name='task_contacts' id='task_contacts' type='hidden' value="<?php echo implode(',', $selected_contacts); ?>" />
-    <table border="1" cellpadding="4" cellspacing="0" width="100%" class="std addedit">
+    <table border="1" cellpadding="4" cellspacing="0" width="100%" class="std addedit tasks">
         <tr>
             <td colspan="2" style="border: outset #eeeeee 1px;background-color:#<?php echo $project->project_color_identifier; ?>" >
                 <font color="<?php echo bestColor($project->project_color_identifier); ?>">

@@ -120,7 +120,7 @@ $log_date = new w2p_Utilities_Date($log->task_log_date);
 
 <a name="log"></a>
 <form name="editFrm" action="?m=<?php echo $m; ?>&amp;a=view&amp;task_id=<?php echo $obj->task_id; ?>" method="post"
-    onsubmit="updateEmailContacts();" accept-charset="utf-8">
+    onsubmit="updateEmailContacts();" accept-charset="utf-8" class="addedit tasks-tasklog">
 	<input type="hidden" name="uniqueid" value="<?php echo uniqid(''); ?>" />
 	<input type="hidden" name="dosql" value="do_updatetask" />
 	<input type="hidden" name="task_log_id" value="<?php echo $log->task_log_id; ?>" />
@@ -129,7 +129,7 @@ $log_date = new w2p_Utilities_Date($log->task_log_date);
     <input type="hidden" name="task_log_record_creator" value="<?php echo (0 == $task_log_id ? $AppUI->user_id : $log->task_log_record_creator); ?>" />
     <input type="hidden" name="datePicker" value="task" />
 
-    <table cellspacing="1" cellpadding="2" border="0" width="100%">
+    <table cellspacing="1" cellpadding="2" border="0" width="100%" class="addedit tasks-tasklog">
         <tr>
             <td width='40%' valign='top'>
                 <table cellspacing="1" cellpadding="2" width="100%" class="well">

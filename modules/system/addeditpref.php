@@ -75,11 +75,11 @@ function submitIt() {
 $spacing = ('wps-redmond' == $AppUI->getPref('UISTYLE')) ? 70 : 0;
 echo '<div style="padding-top: ' . $spacing . 'px;"> </div>';
 ?>
-<form name="changeuser" action="./index.php?m=<?php echo $m; ?>" method="post" accept-charset="utf-8">
+<form name="changeuser" action="./index.php?m=<?php echo $m; ?>" method="post" accept-charset="utf-8" classes="addedit system-preference">
 	<input type="hidden" name="dosql" value="do_preference_aed" />
 	<input type="hidden" name="pref_user" value="<?php echo $user_id; ?>" />
 	<input type="hidden" name="del" value="0" />
-<table width="100%" border="0" cellpadding="1" cellspacing="1" class="std addedit pref well">
+<table width="100%" border="0" cellpadding="1" cellspacing="1" class="std addedit pref well preference">
     <tr>
         <th colspan="2"><?php echo $AppUI->_('User Preferences'); ?>: <?php echo $user_id ? $user : $AppUI->_('Default'); ?></th>
     </tr>

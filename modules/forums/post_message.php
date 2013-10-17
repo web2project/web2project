@@ -106,7 +106,7 @@ function orderByName(x){
 echo $AppUI->getTheme()->styleRenderBoxTop();
 ?>
 
-<form name="changeforum" action="?m=<?php echo $m; ?>&forum_id=<?php echo $forum_id; ?>" method="post" accept-charset="utf-8">
+<form name="changeforum" action="?m=<?php echo $m; ?>&forum_id=<?php echo $forum_id; ?>" method="post" accept-charset="utf-8" class="addedit forums-message">
 	<input type="hidden" name="dosql" value="do_post_aed" />
 	<input type="hidden" name="del" value="0" />
 	<input type="hidden" name="message_forum" value="<?php echo $forum_id; ?>" />
@@ -115,7 +115,7 @@ echo $AppUI->getTheme()->styleRenderBoxTop();
 	<input type="hidden" name="message_author" value="<?php echo (isset($message->message_author) && ($message_id || $message_parent < 0)) ? $message->message_author : $AppUI->user_id; ?>" />
 	<input type="hidden" name="message_editor" value="<?php echo (isset($message->message_author) && ($message_id || $message_parent < 0)) ? $AppUI->user_id : '0'; ?>" />
 	<input type="hidden" name="message_id" value="<?php echo $message_id; ?>" />
-    <table cellspacing="0" cellpadding="3" border="0" width="100%" class="std addedit">
+    <table cellspacing="0" cellpadding="3" border="0" width="100%" class="std addedit forums-message">
         <tr><td>
             <table cellspacing="1" cellpadding="2" border="0" width="100%">
             <tr>

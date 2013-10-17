@@ -85,12 +85,12 @@ function delIt(){
 ?>
 </script>
 
-<form name="changeforum" action="?m=<?php echo $m; ?>" method="post" accept-charset="utf-8">
+<form name="changeforum" action="?m=<?php echo $m; ?>" method="post" accept-charset="utf-8" class="addedit forums">
 	<input type="hidden" name="dosql" value="do_forum_aed" />
 	<input type="hidden" name="del" value="0" />
 	<input type="hidden" name="forum_unique_update" value="<?php echo uniqid(''); ?>" />
 	<input type="hidden" name="forum_id" value="<?php echo $forum_id; ?>" />
-    <table cellspacing="0" cellpadding="4" border="0" width="100%" class="std addedit">
+    <table cellspacing="0" cellpadding="4" border="0" width="100%" class="std addedit forums">
         <tr>
             <th valign="top" colspan="3">
                 <strong><?php echo $AppUI->_($forum_id ? 'Edit' : 'Add') . ' ' . $AppUI->_('Forum'); ?></strong>

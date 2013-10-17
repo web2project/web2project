@@ -84,12 +84,12 @@ function delIt() {
 }
 </script>
 
-<form name="folderFrm" action="?m=<?php echo $m; ?>" enctype="multipart/form-data" method="post">
+<form name="folderFrm" action="?m=<?php echo $m; ?>" enctype="multipart/form-data" method="post" class="addedit files-folder">
 	<input type="hidden" name="dosql" value="do_folder_aed" />
 	<input type="hidden" name="del" value="0" />
 	<input type="hidden" name="file_folder_id" value="<?php echo $folder_id; ?>" />
 	<input type="hidden" name="redirect" value="<?php echo $referrer; ?>" />
-    <table width="100%" border="0" cellpadding="3" cellspacing="3" class="std addedit">
+    <table width="100%" border="0" cellpadding="3" cellspacing="3" class="std addedit files-folder">
         <tr>
             <td width="100%" valign="top" align="center">
                 <table cellspacing="1" cellpadding="2" width="100%" class="well">

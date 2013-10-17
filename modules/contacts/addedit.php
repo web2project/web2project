@@ -225,7 +225,7 @@ foreach ($fields as $key => $field): ?>
 });
 </script>
 
-<form name="changecontact" action="?m=<?php echo $m; ?>" method="post" accept-charset="utf-8">
+<form name="changecontact" action="?m=<?php echo $m; ?>" method="post" accept-charset="utf-8" class="contacts addedit">
     <input type="hidden" name="dosql" value="do_contact_aed" />
     <input type="hidden" name="del" value="0" />
     <input type="hidden" name="contact_project" value="0" />
@@ -233,7 +233,7 @@ foreach ($fields as $key => $field): ?>
     <input type="hidden" name="contact_id" value="<?php echo $contact_id; ?>" />
     <input type="hidden" name="contact_owner" value="<?php echo $row->contact_owner ? $row->contact_owner : $AppUI->user_id; ?>" />
 
-    <table border="0" cellpadding="4" cellspacing="0" width="100%" class="std addedit">
+    <table border="0" cellpadding="4" cellspacing="0" width="100%" class="std addedit contacts">
         <tr>
             <td valign="top" align="right">
                 <table cellspacing="1" cellpadding="2" width="100%" class="well">

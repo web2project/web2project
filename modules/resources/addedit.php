@@ -57,12 +57,12 @@ function submitIt() {
 }
 </script>
 
-<form name="editfrm" action="?m=<?php echo $m; ?>" method="post" accept-charset="utf-8">
+<form name="editfrm" action="?m=<?php echo $m; ?>" method="post" accept-charset="utf-8" class="addedit resources">
     <input type="hidden" name="dosql" value="do_resource_aed" />
     <input type="hidden" name="del" value="0" />
     <input type="hidden" name="resource_id" value="<?php echo $resource_id; ?>" />
 
-    <table cellspacing="1" cellpadding="1" border="0" width="100%" class="std addedit">
+    <table cellspacing="1" cellpadding="1" border="0" width="100%" class="std addedit resources">
         <tr>
             <td align="center" >
                 <table>

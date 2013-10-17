@@ -89,12 +89,12 @@ function submitIt() {
 }
 </script>
 
-<form name="editFrm" action="?m=<?php echo $m; ?>" method="post" accept-charset="utf-8">
+<form name="editFrm" action="?m=<?php echo $m; ?>" method="post" accept-charset="utf-8" class="addedit departments">
 	<input type="hidden" name="dosql" value="do_dept_aed" />
 	<input type="hidden" name="dept_id" value="<?php echo $dept_id; ?>" />
 	<input type="hidden" name="dept_company" value="<?php echo $company_id; ?>" />
 
-    <table cellspacing="1" cellpadding="1" border="0" width="100%" class="std addedit">
+    <table cellspacing="1" cellpadding="1" border="0" width="100%" class="std addedit departments">
         <tr>
             <td width="50%" style="vertical-align: top">
                 <table cellspacing="1" cellpadding="2" width="100%" class="well">
