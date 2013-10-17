@@ -1201,7 +1201,7 @@ class w2p_Database_Query {
 	 */
 	public function loadHashList($index = null) {
 		if (!$this->exec(ADODB_FETCH_ASSOC)) {
-			exit($this->_db->ErrorMsg());
+			return array();
 		}
 		$hashlist = array();
 		$keys = null;
@@ -1234,7 +1234,7 @@ class w2p_Database_Query {
 	 */
 	public function loadHash() {
 		if (!$this->exec(ADODB_FETCH_ASSOC)) {
-			exit($this->_db->ErrorMsg());
+            return array();
 		}
 		$hash = $this->fetchRow();
 		$this->clear();
@@ -1254,7 +1254,7 @@ class w2p_Database_Query {
 	 */
 	public function loadColumn() {
 		if (!$this->exec(ADODB_FETCH_NUM)) {
-			die($this->_db->ErrorMsg());
+            return array();
 		}
 		$result = array();
 		while ($row = $this->fetchRow()) {
@@ -1272,7 +1272,8 @@ class w2p_Database_Query {
 	 */
 	public function loadObject(&$object, $bindAll = false, $strip = true) {
 		if (!$this->exec(ADODB_FETCH_NUM)) {
-			die($this->_db->ErrorMsg());
+            $object = null;
+            return false;
 		}
 		if ($object != null) {
 			$hash = $this->loadHash();
