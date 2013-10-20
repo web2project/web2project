@@ -97,7 +97,7 @@ function submitIt() {
     <table class="std addedit departments">
         <tr>
             <td width="50%" style="vertical-align: top">
-                <table cellspacing="1" cellpadding="2" width="100%" class="well">
+                <table class="well">
                     <tr>
                         <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Department Company'); ?>:</td>
                         <td><strong><?php echo $companyName; ?></strong></td>
@@ -154,7 +154,7 @@ function submitIt() {
                 </table>
             </td>
             <td width="50%" style="vertical-align: top">
-                <table cellspacing="1" cellpadding="2" width="100%" class="well">
+                <table class="well">
                     <tr>
                         <td colspan="2" align="center">
                             <?php echo $AppUI->_('Address'); ?>

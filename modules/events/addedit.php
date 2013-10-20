@@ -230,7 +230,7 @@ function removeUser() {
 <table class="std addedit events">
 <tr>
 	<td colspan="2">
-		<table cellspacing="1" cellpadding="2" width="100%" class="well">
+		<table class="well">
 			<tr>
 				<td width="20%" align="right" nowrap="nowrap"><?php echo $AppUI->_('Event Title'); ?>:</td>
 				<td width="20%">

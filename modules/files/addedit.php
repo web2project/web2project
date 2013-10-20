@@ -164,8 +164,8 @@ function setTask( key, val ) {
 	<input type="hidden" name="file_helpdesk_item" value="<?php echo $file_helpdesk_item; ?>" />
 	<table class="std addedit files">
 		<tr>
-			<td width="80%" valign="top" align="center">
-				<table cellspacing="1" cellpadding="2" width="100%" class="well">
+			<td width="100%" valign="top" align="center">
+				<table class="well">
 					<tr>
 						<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Folder'); ?>:</td>
 						<td align="left">

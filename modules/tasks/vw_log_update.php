@@ -132,7 +132,7 @@ $log_date = new w2p_Utilities_Date($log->task_log_date);
     <table class="addedit tasks-tasklog">
         <tr>
             <td width='40%' valign='top'>
-                <table cellspacing="1" cellpadding="2" width="100%" class="well">
+                <table class="well">
                     <tr>
                         <td align="right">
                             <?php echo $AppUI->_('Date'); ?>
@@ -260,7 +260,7 @@ $log_date = new w2p_Utilities_Date($log->task_log_date);
                 </table>
             </td>
             <td width='60%' valign='top'>
-                <table cellspacing="1" cellpadding="2" width="100%" class="well">
+                <table class="well">
                     <tr>
                         <td align="right"><?php echo $AppUI->_('Summary'); ?>:</td>
                         <td valign="middle">

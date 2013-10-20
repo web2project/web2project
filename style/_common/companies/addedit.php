@@ -5,7 +5,7 @@
 	<table class="std addedit companies">
 		<tr>
 			<td width="50%" style="vertical-align: top">
-				<table cellspacing="1" cellpadding="2" width="100%" class="well">
+				<table class="well">
 					<tr>
 						<td align="right"><?php echo $AppUI->_('Company Name'); ?>:</td>
 						<td>
@@ -53,7 +53,7 @@
                 </table>
             </td>
             <td width="50%" style="vertical-align: top">
-                <table cellspacing="1" cellpadding="2" width="100%" class="well">
+                <table class="well">
 					<tr>
 						<td colspan="2" align="center">
 							<?php echo $AppUI->_('Address'); ?>

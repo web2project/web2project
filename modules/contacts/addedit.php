@@ -236,7 +236,7 @@ foreach ($fields as $key => $field): ?>
     <table class="std addedit contacts">
         <tr>
             <td valign="top" align="right">
-                <table cellspacing="1" cellpadding="2" width="100%" class="well">
+                <table class="well">
                 <tr>
                     <td align="right"><?php echo $AppUI->_('First Name'); ?>:</td>
                     <td>
@@ -331,7 +331,7 @@ foreach ($fields as $key => $field): ?>
                 </table>
             </td>
             <td valign="top" align="right">
-                <table cellspacing="1" cellpadding="2" width="100%" class="well">
+                <table class="well">
                 <th colspan="2">
                     <strong><?php echo $AppUI->_('Contact Update Info'); ?></strong>
                 </th>
@@ -378,13 +378,6 @@ foreach ($fields as $key => $field): ?>
                     ?>
                     </td>
                 </tr>
-                </table>
-            </td>
-        </tr>
-        <tr>
-            <td valign="top" width="50%">
-                <table border="0" cellpadding="1" cellspacing="1" class="well" width="100%">
-
                 </table>
             </td>
         </tr>

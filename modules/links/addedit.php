@@ -113,7 +113,7 @@ function setTask( key, val ) {
     <table class="std addedit links">
         <tr>
             <td width="100%" valign="top" align="center">
-              <table cellspacing="1" cellpadding="2" width="100%" class="well">
+              <table class="well">
                 <tr>
                     <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Link Name'); ?>:</td>
                     <td align="left"><input type="text" class="text" name="link_name" value="<?php echo $link->link_name; ?>"></td>

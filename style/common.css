@@ -332,6 +332,13 @@ table.list tr:hover td._name {
     border-collapse: collapse;
     width: 100%;
 }
+.addedit table {
+    width: 100%;
+}
+.addedit table td, .addedit table th {
+    border-spacing: 1px;
+    padding: 1px;
+}
 .addedit textarea {
     height: 75px;
     width:  80%;

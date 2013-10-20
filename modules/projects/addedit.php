@@ -182,7 +182,7 @@ function setDepartment(department_id_string){
     <table class="std addedit projects">
         <tr>
             <td width="50%" style="vertical-align: top">
-                <table border="0" cellspacing="1" cellpadding="2" width="100%" class="well">
+                <table class="well">
                     <tr>
                         <td><label><?php echo $AppUI->_('Project Name'); ?></label></td>
                         <td width="100%" colspan="2">
@@ -363,7 +363,7 @@ function setDepartment(department_id_string){
                 </table>
             </td>
             <td width="50%" valign="top">
-                <table cellspacing="1" cellpadding="2" width="100%" class="well">
+                <table class="well">
                     <tr>
                         <td><label><?php echo $AppUI->_('Priority'); ?></label></td>
                         <td nowrap ="nowrap">

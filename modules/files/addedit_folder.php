@@ -91,8 +91,8 @@ function delIt() {
 	<input type="hidden" name="redirect" value="<?php echo $referrer; ?>" />
     <table class="std addedit files-folder">
         <tr>
-            <td width="100%" valign="top" align="center">
-                <table cellspacing="1" cellpadding="2" width="100%" class="well">
+            <td width="50%" valign="top" align="center">
+                <table class="well">
                     <tr>
                         <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Subfolder of'); ?>:</td>
                         <td align="left">
