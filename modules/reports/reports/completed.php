@@ -6,11 +6,9 @@ if (!defined('W2P_BASE_DIR')) {
 // Output the PDF
 // make the PDF file
 if ($project_id != 0) {
-	$q = new w2p_Database_Query;
-	$q->addTable('projects');
-	$q->addQuery('project_name');
-	$q->addWhere('project_id=' . $project_id);
-	$pname = 'Project: ' . $q->loadResult();
+	$project = new CProject();
+    $project->load($project_id);
+	$pname = 'Project: ' . $project->project_name;
 } else {
 	$pname = $AppUI->_('All Projects');
 }
