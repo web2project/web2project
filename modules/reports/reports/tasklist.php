@@ -212,41 +212,31 @@ if ($do_report) {
         $project->load((int)$project_id);
 		$pname = $project->project_name;
 
-		$font_dir = W2P_BASE_DIR . '/lib/ezpdf/fonts';
 		$temp_dir = W2P_BASE_DIR . '/files/temp';
 
         $output = new w2p_Output_PDFRenderer('A4', 'landscape');
+        $output->addTitle($AppUI->_('Project Task Report'));
+        $output->addDate($df);
+        $output->addSubtitle(w2PgetConfig('company_name'));
+        if ($project_id != 0) {
+            $output->addSubtitle($pname);
+        }
+
         $pdf = $output->getPDF();
-
-		$pdf->selectFont($font_dir . '/Helvetica.afm');
-
-		$pdf->ezText(w2PgetConfig('company_name'), 12);
-
-		$date = new w2p_Utilities_Date();
-		$pdf->ezText("\n" . $date->format($df), 8);
-
-		$pdf->selectFont($font_dir . '/Helvetica-Bold.afm');
-		$pdf->ezText("\n" . $AppUI->_('Project Task Report'), 12);
-		if ($project_id != 0) {
-			$pdf->ezText($pname, 15);
-		}
+        $pdf->ezText("\n");
 
         $subhead = '';
 		if ($log_all) {
-            $subhead = $AppUI->_('All task entries');
+            $title = $AppUI->_('All task entries');
 		} else {
 			if ($end_date != ' ') {
-                $subhead = $AppUI->_('Task entries from') . ' ' . $start_date->format($df) .
+                $title = $AppUI->_('Task entries from') . ' ' . $start_date->format($df) .
                     $AppUI->_('to') . ' ' . $end_date->format($df);
 			} else {
-                $subhead = $AppUI->_('Task entries from') . ' ' . $start_date->format($df);
+                $title = $AppUI->_('Task entries from') . ' ' . $start_date->format($df);
 			}
 		}
-        $pdf->ezText(utf8_decode($subhead), 9);
-		$pdf->ezText("\n");
 
-		$pdf->selectFont($font_dir . '/Helvetica.afm');
-		$title = null;
 		$options = array('showLines' => 2, 'showHeadings' => 1, 'fontSize' => 9,
             'rowGap' => 4, 'colGap' => 5, 'xPos' => 50, 'xOrientation' => 'right',
             'width' => '750', 'shaded' => 0,

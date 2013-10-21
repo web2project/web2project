@@ -116,28 +116,23 @@ if ($do_report) {
 
 	if ($log_pdf) {
 		// make the PDF file
-
-		$font_dir = W2P_BASE_DIR . '/lib/ezpdf/fonts';
 		$temp_dir = W2P_BASE_DIR . '/files/temp';
 
         $output = new w2p_Output_PDFRenderer();
+        $output->addTitle($AppUI->_('Overall Report'));
+        $output->addDate($df);
+
         $pdf = $output->getPDF();
-
-		$pdf->selectFont($font_dir . '/Helvetica.afm');
-
-		$pdf->ezText(w2PgetConfig('company_name'), 12);
+        $pdf->ezText("\n");
 
 		if ($log_all) {
 			$date = new w2p_Utilities_Date();
-			$pdf->ezText("\nAll hours as of " . $date->format($df), 8);
+			$title = "All hours as of " . $date->format($df);
 		} else {
 			$sdate = new w2p_Utilities_Date($log_start_date);
 			$edate = new w2p_Utilities_Date($log_end_date);
-			$pdf->ezText("\nHours from " . $sdate->format($df) . ' to ' . $edate->format($df), 8);
+			$title = "Hours from " . $sdate->format($df) . ' to ' . $edate->format($df);
 		}
-
-		$pdf->selectFont($font_dir . '/Helvetica-Bold.afm');
-		$pdf->ezText("\n" . $AppUI->_('Overall Report'), 12);
 
 		foreach ($allpdfdata as $company => $data) {
 			$title = $company;

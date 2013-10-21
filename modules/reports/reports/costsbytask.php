@@ -149,17 +149,15 @@ $billingCategory = w2PgetSysVal('BudgetCategory');
 
         if ($log_pdf) {
             // make the PDF file
-            $font_dir = W2P_BASE_DIR . '/lib/ezpdf/fonts';
             $temp_dir = W2P_BASE_DIR . '/files/temp';
 
             $output = new w2p_Output_PDFRenderer('A4', 'landscape');
+            $output->addTitle($AppUI->_('Costs By Task'));
+            $output->addDate($df);
+            $output->addSubtitle($projectList[$project_id]['project_name']);
+
             $pdf = $output->getPDF();
-
-            $pdf->selectFont($font_dir . '/Helvetica-Bold.afm');
-            $pdf->ezText($projectList[$project_id]['project_name'], 14);
-
-            $pdf->selectFont($font_dir . '/Helvetica.afm');
-            $pdf->ezText($AppUI->_('Costs By Task') . "\n", 12);
+            $pdf->ezText("\n");
 
             $pdfheaders = array($AppUI->_('Work', UI_OUTPUT_JS),
                 '  '.$AppUI->_('Project Name', UI_OUTPUT_JS), $AppUI->_('Project Owner', UI_OUTPUT_JS),

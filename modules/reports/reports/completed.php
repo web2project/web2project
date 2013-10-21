@@ -19,27 +19,22 @@ if ($err = db_error()) {
 	$AppUI->redirect();
 }
 
-$font_dir = W2P_BASE_DIR . '/lib/ezpdf/fonts';
-
 $output = new w2p_Output_PDFRenderer('A4', 'landscape');
-$pdf = $output->getPDF();
+$output->addTitle($AppUI->_('Project Completed Task Report'));
+$output->addDate($df);
+$output->addSubtitle(w2PgetConfig('company_name'));
+$output->addSubtitle($pname);
 
-$pdf->selectFont($font_dir . '/Helvetica.afm');
-$pdf->ezText(utf8_decode(w2PgetConfig('company_name')), 12);
+$pdf = $output->getPDF();
+$pdf->ezText("\n");
+
 
 $date = new w2p_Utilities_Date();
-$pdf->ezText("\n" . $date->format($df), 8);
 $last_week = new w2p_Utilities_Date($date);
 $last_week->subtractSpan(new Date_Span(array(7, 0, 0, 0)));
 
-$pdf->selectFont($font_dir . '/Helvetica-Bold.afm');
-$pdf->ezText("\n" . $AppUI->_('Project Completed Task Report'), 12);
-$pdf->ezText(utf8_decode($pname), 15);
-$pdf->ezText($AppUI->_('Tasks Completed Since') . ' ' . $last_week->format($df), 10);
-$pdf->ezText("\n");
-$pdf->selectFont($font_dir . '/Helvetica.afm');
+$title = $AppUI->_('Tasks Completed Since') . ' ' . $last_week->format($df);
 
-$title = null;
 $options = array('showLines' => 2, 'showHeadings' => 1, 'fontSize' => 9, 'rowGap' => 4, 'colGap' => 5, 'xPos' => 50, 'xOrientation' => 'right', 'width' => '750', 'shaded' => 0, 'cols' => array(0 => array('justification' => 'left', 'width' => 250), 1 => array('justification' => 'left', 'width' => 120), 2 => array('justification' => 'center', 'width' => 120), 3 => array('justification' => 'center', 'width' => 75), 4 => array('justification' => 'center', 'width' => 75)));
 
 $hasResources = $AppUI->isActiveModule('resources');

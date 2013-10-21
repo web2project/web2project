@@ -224,17 +224,15 @@ $companies = arrayMerge(array('0' => 'All Companies'), $companies);
 
         if ($log_pdf) {
             // make the PDF file
-            $font_dir = W2P_BASE_DIR . '/lib/ezpdf/fonts';
             $temp_dir = W2P_BASE_DIR . '/files/temp';
 
             $output = new w2p_Output_PDFRenderer('A4', 'landscape');
+            $output->addTitle($AppUI->_('Costs By Project and Billing Category'));
+            $output->addDate($df);
+            $output->addSubtitle($companies[$company_id]);
+
             $pdf = $output->getPDF();
-
-            $pdf->selectFont($font_dir . '/Helvetica-Bold.afm');
-            $pdf->ezText($companies[$company_id], 14);
-
-            $pdf->selectFont($font_dir . '/Helvetica.afm');
-            $pdf->ezText($AppUI->_('Costs By Project and Billing Category') . "\n", 12);
+            $pdf->ezText("\n");
 
             $columns = array();
             $pdfheaders = array($AppUI->_('Work', UI_OUTPUT_JS),
