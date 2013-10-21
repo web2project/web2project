@@ -283,7 +283,6 @@ if ($do_report) {
         $output = new w2p_Output_PDFRenderer();
         $pdf = $output->getPDF();
 
-		$pdf->ezSetCmMargins(1, 2, 1.5, 1.5);
 		$pdf->selectFont($font_dir . '/Helvetica.afm', 'none');
 
 		$pdf->ezText(w2PgetConfig('company_name'), 12);

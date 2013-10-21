@@ -40,7 +40,6 @@ $temp_dir = W2P_BASE_DIR . '/files/temp';
 $output = new w2p_Output_PDFRenderer();
 $pdf = $output->getPDF();
 
-$pdf->ezSetCmMargins(1, 1, 1, 1);
 $pdf->selectFont($font_dir . '/Helvetica.afm');
 $pdf->ezText('Project: ' . $forum->project_name);
 $pdf->ezText('Forum: ' . $forum->forum_name);

@@ -24,7 +24,6 @@ $font_dir = W2P_BASE_DIR . '/lib/ezpdf/fonts';
 $output = new w2p_Output_PDFRenderer('A4', 'landscape');
 $pdf = $output->getPDF();
 
-$pdf->ezSetCmMargins(1, 2, 1.5, 1.5);
 $pdf->selectFont($font_dir . '/Helvetica.afm');
 $pdf->ezText(utf8_decode(w2PgetConfig('company_name')), 12);
 

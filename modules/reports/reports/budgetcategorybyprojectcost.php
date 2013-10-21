@@ -230,8 +230,6 @@ $companies = arrayMerge(array('0' => 'All Companies'), $companies);
             $output = new w2p_Output_PDFRenderer('A4', 'landscape');
             $pdf = $output->getPDF();
 
-            $pdf->ezSetCmMargins(1, 1, 0.5, 0.5);
-
             $pdf->selectFont($font_dir . '/Helvetica-Bold.afm');
             $pdf->ezText($companies[$company_id], 14);
 

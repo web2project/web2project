@@ -155,7 +155,6 @@ $billingCategory = w2PgetSysVal('BudgetCategory');
             $output = new w2p_Output_PDFRenderer('A4', 'landscape');
             $pdf = $output->getPDF();
 
-            $pdf->ezSetCmMargins(1, 1, 1, 1);
             $pdf->selectFont($font_dir . '/Helvetica-Bold.afm');
             $pdf->ezText($projectList[$project_id]['project_name'], 14);
 
