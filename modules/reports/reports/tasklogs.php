@@ -272,39 +272,25 @@ if ($do_report) {
 			$uname = 'All Users';
 		}
 
-		$font_dir = W2P_BASE_DIR . '/lib/ezpdf/fonts';
 		$temp_dir = W2P_BASE_DIR . '/files/temp';
 		$base_url = w2PgetConfig('base_url');
 
         $output = new w2p_Output_PDFRenderer();
+        $output->addTitle($AppUI->_('Task Log Report'));
+        $output->addDate($df);
+
+        $subtitle = ($company_id) ? $cname : $pname;
+        $output->addSubtitle($subtitle);
+        $output->addSubtitle($uname);
+
         $pdf = $output->getPDF();
-
-		$pdf->selectFont($font_dir . '/Helvetica.afm');
-
-		$pdf->ezText(w2PgetConfig('company_name'), 12);
-
-		$date = new w2p_Utilities_Date();
-		$pdf->ezText("\n" . $date->format($df), 8);
-
-		$pdf->selectFont($font_dir . '/Helvetica-Bold.afm');
-		$pdf->ezText("\n" . $AppUI->_('Task Log Report'), 12);
-
-		if ($company_id) {
-			$pdf->ezText($cname, 10);
-		} else {
-			$pdf->ezText($pname, 10);
-		}
-
-		$pdf->ezText($uname, 10);
+        $pdf->ezText("\n");
 
 		if ($log_all) {
-			$pdf->ezText('All Task Log entries', 9);
+			$title = 'All Task Log entries';
 		} else {
-			$pdf->ezText('Task Log entries from ' . $start_date->format($df) . ' to ' . $end_date->format($df), 9);
+			$title = 'Task Log entries from ' . $start_date->format($df) . ' to ' . $end_date->format($df);
 		}
-		$pdf->ezText("\n\n");
-
-		$title = 'Task Logs';
 
 		$pdfheaders = array($AppUI->_('Creator', UI_OUTPUT_JS), $AppUI->_('Company', UI_OUTPUT_JS), $AppUI->_('Project', UI_OUTPUT_JS), $AppUI->_('Task', UI_OUTPUT_JS), $AppUI->_('Date', UI_OUTPUT_JS), $AppUI->_('Description', UI_OUTPUT_JS), $AppUI->_('Billing Code', UI_OUTPUT_JS), $AppUI->_('Hours', UI_OUTPUT_JS), );
 
@@ -312,11 +298,11 @@ if ($do_report) {
 
 		$pdf->ezTable($pdfdata, $pdfheaders, $title, $options);
 
-    $w2pReport = new CReport();
-    if ($fp = fopen($temp_dir . '/'.$w2pReport->getFilename().'.pdf', 'wb')) {
+        $w2pReport = new CReport();
+        if ($fp = fopen($temp_dir . '/'.$w2pReport->getFilename().'.pdf', 'wb')) {
 			fwrite($fp, $pdf->ezOutput());
 			fclose($fp);
-      echo '<a href="' . W2P_BASE_URL . '/files/temp/' . $w2pReport->getFilename() . '.pdf" target="pdf">';
+            echo '<a href="' . W2P_BASE_URL . '/files/temp/' . $w2pReport->getFilename() . '.pdf" target="pdf">';
 			echo $AppUI->_('View PDF File');
 			echo '</a>';
 		} else {
