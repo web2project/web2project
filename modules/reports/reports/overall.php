@@ -120,7 +120,9 @@ if ($do_report) {
 		$font_dir = W2P_BASE_DIR . '/lib/ezpdf/fonts';
 		$temp_dir = W2P_BASE_DIR . '/files/temp';
 
-		$pdf = new Cezpdf();
+        $output = new w2p_Output_PDFRenderer();
+        $pdf = $output->getPDF();
+
 		$pdf->ezSetCmMargins(1, 2, 1.5, 1.5);
 		$pdf->selectFont($font_dir . '/Helvetica.afm');
 

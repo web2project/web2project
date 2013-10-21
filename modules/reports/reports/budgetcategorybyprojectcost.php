@@ -227,7 +227,9 @@ $companies = arrayMerge(array('0' => 'All Companies'), $companies);
             $font_dir = W2P_BASE_DIR . '/lib/ezpdf/fonts';
             $temp_dir = W2P_BASE_DIR . '/files/temp';
 
-            $pdf = new Cezpdf('A4', 'landscape');
+            $output = new w2p_Output_PDFRenderer('A4', 'landscape');
+            $pdf = $output->getPDF();
+
             $pdf->ezSetCmMargins(1, 1, 0.5, 0.5);
 
             $pdf->selectFont($font_dir . '/Helvetica-Bold.afm');

@@ -479,7 +479,9 @@ $font_dir = W2P_BASE_DIR . '/lib/ezpdf/fonts';
 $temp_dir = W2P_BASE_DIR . '/files/temp';
 $base_url = w2PgetConfig('base_url');
 
-$pdf = new Cezpdf($paper='A4',$orientation='landscape');
+$output = new w2p_Output_PDFRenderer('A4', 'landscape');
+$pdf = $output->getPDF();
+
 $pdf->ezSetCmMargins( 2, 1.5, 1.4, 1.4 ); //(top, bottom, left, right)
 /*
 * 		Define page header to be displayed on top of each page
