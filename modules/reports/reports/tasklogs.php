@@ -294,12 +294,9 @@ if ($do_report) {
 		$options = array('showLines' => 1, 'fontSize' => 7, 'rowGap' => 1, 'colGap' => 1, 'xPos' => 50, 'xOrientation' => 'right', 'width' => '500', 'cols' => array(0 => array('justification' => 'left', 'width' => 50), 1 => array('justification' => 'left', 'width' => 60), 2 => array('justification' => 'left', 'width' => 60), 3 => array('justification' => 'left', 'width' => 60), 4 => array('justification' => 'center', 'width' => 40), 5 => array('justification' => 'left', 'width' => 170), 6 => array('justification' => 'left', 'width' => 30), 7 => array('justification' => 'right', 'width' => 30), ));
 
         $output->addTable($title, $pdfheaders, $pdfdata, $options);
-        $pdf = $output->getPDF();
 
         $w2pReport = new CReport();
-        if ($fp = fopen($temp_dir . '/'.$w2pReport->getFilename().'.pdf', 'wb')) {
-			fwrite($fp, $pdf->ezOutput());
-			fclose($fp);
+        if ($output->writeFile($w2pReport->getFilename())) {
             echo '<a href="' . W2P_BASE_URL . '/files/temp/' . $w2pReport->getFilename() . '.pdf" target="pdf">';
 			echo $AppUI->_('View PDF File');
 			echo '</a>';

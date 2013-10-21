@@ -49,6 +49,40 @@ class w2p_Output_PDFRenderer
         $this->pdf->ezTable($data, $headers, $title, $options);
     }
 
+    public function getStream()
+    {
+        return $this->pdf->ezStream();
+    }
+    public function getOutput()
+    {
+        return $this->pdf->ezOutput();
+    }
+
+    /**
+     * @param $filename
+     *
+     * @return bool
+     */
+    public function writeFile($filename)
+    {
+        $filepath = $this->temp_dir . '/' . $filename . '.pdf';
+
+        if ($fp = fopen($filepath, 'wb')) {
+            fwrite($fp, $this->getOutput());
+            fclose($fp);
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * This is used to assist in the refactoring effort and should probably not be used.
+     *
+     * @deprecated
+     *
+     * @return Cezpdf|null
+     */
     public function getPDF()
     {
         return $this->pdf;

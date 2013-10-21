@@ -176,12 +176,9 @@ $billingCategory = w2PgetSysVal('BudgetCategory');
                     ));
 
             $output->addTable($title, $pdfheaders, $pdfdata, $options);
-            $pdf = $output->getPDF();
 
             $w2pReport = new CReport();
-            if ($fp = fopen($temp_dir . '/'.$w2pReport->getFilename().'.pdf', 'wb')) {
-                fwrite($fp, $pdf->ezOutput());
-                fclose($fp);
+            if ($output->writeFile($w2pReport->getFilename())) {
                 echo '<tr><td colspan="13">';
                 echo '<a href="' . W2P_BASE_URL . '/files/temp/' . $w2pReport->getFilename() . '.pdf" target="pdf">';
                 echo $AppUI->_('View PDF File');

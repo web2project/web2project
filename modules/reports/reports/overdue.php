@@ -142,6 +142,4 @@ foreach ($tasks as $task_id => $detail) {
 }
 
 $output->addTable($title, $columns, $pdfdata, $options);
-$pdf = $output->getPDF();
-
-$pdf->ezStream();
+$output->getStream();
