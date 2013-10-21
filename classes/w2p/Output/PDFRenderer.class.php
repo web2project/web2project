@@ -43,6 +43,12 @@ class w2p_Output_PDFRenderer
         $this->pdf->ezText($date->format($dateformat), 8, array('justification' => 'right', 'width' => 45));
     }
 
+    public function addTable($title, $headers, $data, $options)
+    {
+        $this->pdf->ezText("\n");
+        $this->pdf->ezTable($data, $headers, $title, $options);
+    }
+
     public function getPDF()
     {
         return $this->pdf;

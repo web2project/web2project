@@ -231,9 +231,6 @@ $companies = arrayMerge(array('0' => 'All Companies'), $companies);
             $output->addDate($df);
             $output->addSubtitle($companies[$company_id]);
 
-            $pdf = $output->getPDF();
-            $pdf->ezText("\n");
-
             $columns = array();
             $pdfheaders = array($AppUI->_('Work', UI_OUTPUT_JS),
                 '  '.$AppUI->_('Project Name', UI_OUTPUT_JS));
@@ -258,7 +255,8 @@ $companies = arrayMerge(array('0' => 'All Companies'), $companies);
                 'colGap' => 1, 'xPos' => 25, 'xOrientation' => 'right', 'width' => '500',
                 'cols' => $columns);
 
-            $pdf->ezTable($pdfdata, $pdfheaders, $title, $options);
+            $output->addTable($title, $pdfheaders, $pdfdata, $options);
+            $pdf = $output->getPDF();
 
             $w2pReport = new CReport();
             echo '<tr><td colspan="20" align="center">';

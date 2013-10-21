@@ -287,9 +287,6 @@ if ($do_report) {
         $output->addSubtitle($subtitle1);
         $output->addSubtitle($uname);
 
-        $pdf = $output->getPDF();
-        $pdf->ezText("\n");
-
 		if ($log_all) {
             $title = 'All Task Log entries';
 		} else {
@@ -300,7 +297,8 @@ if ($do_report) {
 
 		$options = array('showLines' => 1, 'fontSize' => 7, 'rowGap' => 1, 'colGap' => 1, 'xPos' => 50, 'xOrientation' => 'right', 'width' => '500', 'cols' => array(0 => array('justification' => 'left', 'width' => 50), 1 => array('justification' => 'left', 'width' => 60), 2 => array('justification' => 'left', 'width' => 60), 3 => array('justification' => 'left', 'width' => 60), 4 => array('justification' => 'center', 'width' => 40), 5 => array('justification' => 'left', 'width' => 110), 6 => array('justification' => 'left', 'width' => 30), 7 => array('justification' => 'right', 'width' => 30), 8 => array('justification' => 'right', 'width' => 30), 9 => array('justification' => 'right', 'width' => 40), ));
 
-		$pdf->ezTable($pdfdata, $pdfheaders, $title, $options);
+        $output->addTable($title, $pdfheaders, $pdfdata, $options);
+        $pdf = $output->getPDF();
 
         $w2pReport = new CReport();
         if ($fp = fopen($temp_dir . '/'.$w2pReport->getFilename().'.pdf', 'wb')) {

@@ -222,9 +222,6 @@ if ($do_report) {
             $output->addSubtitle($pname);
         }
 
-        $pdf = $output->getPDF();
-        $pdf->ezText("\n");
-
         $subhead = '';
 		if ($log_all) {
             $title = $AppUI->_('All task entries');
@@ -247,7 +244,8 @@ if ($do_report) {
                             array('justification' => 'center', 'width' => 80),
                             array('justification' => 'center', 'width' => 70)));
 
-		$pdf->ezTable($pdfdata, $columns, $title, $options);
+        $output->addTable($title, $columns, $pdfdata, $options);
+        $pdf = $output->getPDF();
 
         $w2pReport = new CReport();
         if ($fp = fopen($temp_dir . '/'.$w2pReport->getFilename().'.pdf', 'wb')) {

@@ -122,9 +122,6 @@ if ($do_report) {
         $output->addTitle($AppUI->_('Overall Report'));
         $output->addDate($df);
 
-        $pdf = $output->getPDF();
-        $pdf->ezText("\n");
-
 		if ($log_all) {
 			$date = new w2p_Utilities_Date();
 			$title = "All hours as of " . $date->format($df);
@@ -138,8 +135,10 @@ if ($do_report) {
 			$title = $company;
 			$options = array('showLines' => 1, 'showHeadings' => 0, 'fontSize' => 8, 'rowGap' => 2, 'colGap' => 5, 'xPos' => 50, 'xOrientation' => 'right', 'width' => '500', 'cols' => array(0 => array('justification' => 'left', 'width' => 250), 1 => array('justification' => 'right', 'width' => 120)));
 
-			$pdf->ezTable($data, null, $title, $options);
+            $output->addTable($title, null, $data, $options);
 		}
+
+        $pdf = $output->getPDF();
 
 		$w2pReport = new CReport();
 		if ($fp = fopen($temp_dir . '/'.$w2pReport->getFilename().'.pdf', 'wb')) {

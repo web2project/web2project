@@ -27,9 +27,6 @@ $output->addDate($df);
 $output->addSubtitle(w2PgetConfig('company_name'));
 $output->addSubtitle($pname);
 
-$pdf = $output->getPDF();
-$pdf->ezText("\n");
-
 $next_week = new w2p_Utilities_Date($date);
 $next_week->addSpan(new Date_Span(array(7, 0, 0, 0)));
 
@@ -144,6 +141,7 @@ foreach ($tasks as $task_id => $detail) {
 	$row[] = $end_date->format($df);
 }
 
-$pdf->ezTable($pdfdata, $columns, $title, $options);
+$output->addTable($title, $columns, $pdfdata, $options);
+$pdf = $output->getPDF();
 
 $pdf->ezStream();
