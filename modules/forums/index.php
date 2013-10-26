@@ -21,7 +21,7 @@ if (isset($_GET['orderby'])) {
 $orderby = $AppUI->getState('ForumIdxOrderBy') ? $AppUI->getState('ForumIdxOrderBy') : 'forum_name';
 $orderdir = $AppUI->getState('ForumIdxOrderDir') ? $AppUI->getState('ForumIdxOrderDir') : 'asc';
 
-$f = w2PgetParam($_POST, 'f', 0);
+$f = w2PgetParam($_REQUEST, 'f', 0);
 
 $items = $forum->getAllowedForums($AppUI->user_id, $AppUI->user_company, $f, $orderby, $orderdir);
 
@@ -63,7 +63,7 @@ if (0 == count($fields)) {
     $listTable = new w2p_Output_ListTable($AppUI);
     $listTable->addBefore('watch', 'forum_id');
     echo $listTable->startTable();
-    echo $listTable->buildHeader($fields, true, 'forums');
+    echo $listTable->buildHeader($fields, true, 'forums&f=' . $f);
     echo $listTable->buildRows($items);
     ?>
     <tr>

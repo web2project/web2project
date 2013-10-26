@@ -128,16 +128,16 @@ class CForum extends w2p_Core_BaseObject
 
         switch ($filter) {
             case 1:
-                $q->addWhere('(project_active = 1 OR forum_project = 0) AND forum_owner = ' . $user_id);
+                $q->addWhere('forum_owner = ' . $user_id);
                 break;
             case 2:
-                $q->addWhere('(project_active = 1 OR forum_project = 0) AND watch_user IS NOT NULL');
+                $q->addWhere('watch_user = ' . $user_id);
                 break;
             case 3:
-                $q->addWhere('(project_active = 1 OR forum_project = 0) AND project_owner = ' . $user_id);
+                $q->addWhere('project_owner = ' . $user_id);
                 break;
             case 4:
-                $q->addWhere('(project_active = 1 OR forum_project = 0) AND project_company = ' . $company_id);
+                $q->addWhere('project_company = ' . $company_id);
                 break;
             case 5:
                 $q->addWhere('(project_active = 0 OR forum_project = 0)');
