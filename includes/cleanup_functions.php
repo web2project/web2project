@@ -5656,3 +5656,61 @@ function __extract_from_contact_controller($controller)
     }
     return $controller;
 }
+
+/**
+ * @param $row
+ *
+ * @return Array
+ */
+function __extract_from_vw_usr($row)
+{
+    $q = new w2p_Database_Query;
+    $q->addTable('user_access_log', 'ual');
+    $q->addQuery('user_access_log_id, ( unix_timestamp( \'' . $q->dbfnNowWithTZ() . '\' ) - unix_timestamp( date_time_in ) ) / 3600 as 		hours, ( unix_timestamp( \'' . $q->dbfnNowWithTZ() . '\' ) - unix_timestamp( date_time_last_action ) ) / 3600 as idle, if(isnull(date_time_out) or date_time_out =\'0000-00-00 00:00:00\',\'1\',\'0\') as online');
+    $q->addWhere('user_id = ' . (int)$row['user_id']);
+    $q->addOrder('user_access_log_id DESC');
+    $q->setLimit(1);
+    $user_logs = $q->loadList();
+
+    return $user_logs;
+}
+
+/**
+ * @param $module
+ * @param $mod_data
+ *
+ * @return Value
+ */
+function __extract_from_vw_usr_perms($module, $mod_data)
+{
+    $q = new w2p_Database_Query();
+    $q->addTable($module['permissions_item_table']);
+    $q->addQuery($module['permissions_item_label']);
+    $q->addWhere($module['permissions_item_field'] . '=' . $mod_data['value']);
+    $data = $q->loadResult();
+
+    return $data;
+}
+
+/**
+ * @param $orderby
+ *
+ * @return Array
+ */
+function __extract_from_vw_usr_sessions($orderby)
+{
+    $q = new w2p_Database_Query;
+    $q->addTable('sessions', 's');
+    $q->addQuery('DISTINCT(session_id), user_access_log_id, u.user_id, u.user_id as u_user_id,
+    user_username, contact_last_name, contact_display_name, contact_first_name,
+    company_name, contact_company, date_time_in, user_ip');
+
+    $q->addJoin('user_access_log', 'ual', 'session_user = user_access_log_id');
+    $q->addJoin('users', 'u', 'ual.user_id = u.user_id');
+    $q->addJoin('contacts', 'con', 'u.user_contact = contact_id');
+    $q->addJoin('companies', 'com', 'contact_company = company_id');
+    $q->addOrder($orderby);
+    $rows = $q->loadList();
+
+    return $rows;
+}

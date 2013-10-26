@@ -167,12 +167,8 @@ foreach ($user_acls as $acl) {
 					$mod_data = $perms->get_object_full($id, $key, 1, 'axo');
 					if (is_numeric($mod_data['value'])) {
 						$module = $pgo_list[ucfirst($key)];
-						$q = new w2p_Database_Query();
-						$q->addTable($module['permissions_item_table']);
-						$q->addQuery($module['permissions_item_label']);
-						$q->addWhere($module['permissions_item_field'] . '=' . $mod_data['value']);
-						$data = $q->loadResult();
-						$q->clear();
+                        $data = __extract_from_vw_usr_perms($module, $mod_data);
+
 						$modlist[] = $AppUI->_(ucfirst($key)) . ': ' . w2PHTMLDecode($data);
                         if (!canView($mod_data['section_value'], $mod_data['value'])) {
                             $_canView = false;
