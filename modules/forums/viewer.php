@@ -14,7 +14,7 @@ $f = w2PgetParam($_POST, 'f', 0);
 // check permissions
 $perms = &$AppUI->acl();
 $canAuthor = canAdd('forums');
-$canDelete = canDelete('forums');
+$canDelete = canDelete('forums', $forum_id);
 $canRead = $perms->checkModuleItem('forums', 'view', $forum_id);
 $canEdit = $perms->checkModuleItem('forums', 'edit', $forum_id);
 $canAdminEdit = canEdit('admin');
@@ -102,12 +102,24 @@ $titleBlock->show();
                 </tr>
             </table>
         </td>
-        
-
     </tr>
-
-
 </table>
+<?php if ($canDelete && ($forum_id > 0)) { ?>
+<script language="javascript" type="text/javascript">
+function delIt(){
+    var form = document.frmDelete;
+    if (confirm( "<?php echo $AppUI->_('forumDeleteForum', UI_OUTPUT_JS); ?>" )) {
+        form.del.value="<?php echo $forum_id; ?>";
+        form.submit();
+    }
+}
+</script>
+<form name="frmDelete" action="./index.php?m=forums" method="post" accept-charset="utf-8">
+    <input type="hidden" name="dosql" value="do_forum_aed" />
+    <input type="hidden" name="del" value="1" />
+    <input type="hidden" name="forum_id" value="<?php echo $forum_id; ?>" />
+</form>
+<?php } ?>
 <?php
 if (function_exists('styleRenderBoxBottom')) {
 	echo styleRenderBoxBottom();

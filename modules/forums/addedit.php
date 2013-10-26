@@ -70,19 +70,6 @@ function submitIt(){
 		form.submit();
 	}
 }
-<?php
-if ($canDelete && ($forum_id > 0)) {
-?>
-function delIt(){
-	var form = document.changeforum;
-	if (confirm( "<?php echo $AppUI->_('forumDeleteForum', UI_OUTPUT_JS); ?>" )) {
-		form.del.value="<?php echo $forum_id; ?>";
-		form.submit();
-	}
-}
-<?php
-}
-?>
 </script>
 
 <form name="changeforum" action="?m=<?php echo $m; ?>" method="post" accept-charset="utf-8">
