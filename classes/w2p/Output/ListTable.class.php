@@ -123,7 +123,7 @@ class w2p_Output_ListTable extends w2p_Output_HTMLHelper
 
     public function buildEmptyRow()
     {
-        $row = '<tr><td colspan="'.count($this->_fieldNames).'">' .
+        $row = '<tr><td colspan="'.$this->cellCount.'">' .
                 $this->_AppUI->_('No data available') . '</td></tr>';
 
         return $row;
