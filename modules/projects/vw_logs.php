@@ -4,9 +4,9 @@ if (!defined('W2P_BASE_DIR')) {
 }
 // @todo    convert to template
 
-global $AppUI, $project_id, $canEdit, $m, $tab;
+global $AppUI, $project, $project_id, $canEdit, $m, $tab;
 
-$company_id = CProject::getCompany($project_id);
+$company_id = $project->company();
 
 $task_log_costcodes =  array(0 => '(all)') + CProject::getBillingCodes($company_id, true);
 

@@ -363,6 +363,9 @@ class CProject extends w2p_Core_BaseObject
         return array_merge($aBuf1, $aBuf2);
     }
 
+    /**
+     * @deprecated
+     */
     public function getAllowedProjectsInRows($userId)
     {
         trigger_error("CProject->getAllowedProjectsInRows() has been deprecated in v3.0 and will be removed in v4.0", E_USER_NOTICE);
@@ -645,6 +648,9 @@ class CProject extends w2p_Core_BaseObject
         }
     }
 
+    /**
+     * @deprecated
+     */
     public static function getContacts($notUsed = null, $projectId)
     {
         trigger_error("CProject::getContacts has been deprecated in v3.0 and will be removed by v4.0. Please use CProject->getContactList() instead.", E_USER_NOTICE);
@@ -673,6 +679,9 @@ class CProject extends w2p_Core_BaseObject
         }
     }
 
+    /**
+     * @deprecated
+     */
     public static function getDepartments($notUsed = null, $projectId)
     {
         trigger_error("CProject::getDepartments has been deprecated in v3.0 and will be removed by v4.0. Please use CProject->getDepartmentList() instead.", E_USER_NOTICE);
@@ -701,6 +710,9 @@ class CProject extends w2p_Core_BaseObject
         }
     }
 
+    /**
+     * @deprecated
+     */
     public static function getForums($notUsed = null, $projectId)
     {
         trigger_error("CProject::getForums has been deprecated in v3.0 and will be removed by v4.0. Please use CProject->getForumList() instead.", E_USER_NOTICE);
@@ -712,15 +724,23 @@ class CProject extends w2p_Core_BaseObject
         return $project->getForumList();
     }
 
+    public function company()
+    {
+        $this->load();
+        return $this->project_company;
+    }
+
+    /**
+     * @deprecated
+     */
     public static function getCompany($projectId)
     {
+        trigger_error("CProject::getCompany has been deprecated in v3.1 and will be removed by v4.0. Please use CProject->company() instead.", E_USER_NOTICE);
 
-        $q = new w2p_Database_Query();
-        $q->addQuery('project_company');
-        $q->addTable('projects');
-        $q->addWhere('project_id = ' . (int) $projectId);
+        $project = new CProject();
+        $project->project_id = $projectId;
 
-        return $q->loadResult();
+        return $project->company();
     }
 
     public static function getBillingCodes($companyId, $all = false)
@@ -796,6 +816,9 @@ class CProject extends w2p_Core_BaseObject
         }
     }
 
+    /**
+     * @deprecated
+     */
     public static function updateTaskCount($projectId, $taskCount)
     {
         trigger_error("CProject::updateTaskCount has been deprecated in v2.3 and will be removed by v4.0. Please use CProject::updateTaskCache instead.", E_USER_NOTICE);
@@ -830,6 +853,9 @@ class CProject extends w2p_Core_BaseObject
         return $q->loadResult();
     }
 
+    /**
+     * @deprecated
+     */
     public static function hasTasks($projectId, $override = null)
     {
         trigger_error("CProject::hasTasks() has been deprecated in v3.0 and will be removed in v4.0. Please use CTask->getTaskCount() instead.", E_USER_NOTICE);
