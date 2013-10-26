@@ -5714,3 +5714,82 @@ function __extract_from_vw_usr_sessions($orderby)
 
     return $rows;
 }
+
+/**
+ * @param $row
+ *
+ * @return array
+ */
+function __extract_from_forums_view_messages($row)
+{
+    $q = new w2p_Database_Query;
+    $q->addTable('forum_messages');
+    $q->addTable('users');
+    $q->addQuery('DISTINCT contact_first_name, contact_last_name, contact_display_name as contact_name, user_username, contact_email');
+    $q->addJoin('contacts', 'con', 'contact_id = user_contact', 'inner');
+    $q->addWhere('users.user_id = ' . (int)$row['message_editor']);
+    $editor = $q->loadList();
+
+    return $editor;
+}
+
+// Now we need to update the forum visits with the new messages so they don't show again.
+/**
+ * @param $AppUI
+ * @param $forum_id
+ * @param $msg_id
+ * @param $date
+ */
+function __extract_from_forums_view_messages2($AppUI, $forum_id, $msg_id, $date)
+{
+    $q = new w2p_Database_Query;
+    $q->addTable('forum_visits');
+    $q->addInsert('visit_user', $AppUI->user_id);
+    $q->addInsert('visit_forum', $forum_id);
+    $q->addInsert('visit_message', $msg_id);
+    $q->addInsert('visit_date', $date->getDate());
+    $q->exec();
+}
+
+/**
+ * @param $AppUI
+ * @param $forum_id
+ * @param $f
+ * @param $orderby
+ * @param $orderdir
+ *
+ * @return Array
+ */
+function __extract_from_forums_view_topics($AppUI, $forum_id, $f, $orderby, $orderdir)
+{
+//Pull All Messages
+    $q = new w2p_Database_Query;
+    $q->addTable('forum_messages', 'fm1');
+    $q->addQuery('fm1.*, u.*, fm1.message_title as message_name, fm1.message_forum as forum_id');
+    $q->addQuery('COUNT(distinct fm2.message_id) AS replies');
+    $q->addQuery('MAX(fm2.message_date) AS latest_reply');
+    $q->addQuery('user_username, contact_first_name, contact_last_name, contact_display_name as contact_name, watch_user');
+    $q->addQuery('count(distinct v1.visit_message) as reply_visits');
+    $q->addQuery('v1.visit_user');
+    $q->leftJoin('users', 'u', 'fm1.message_author = u.user_id');
+    $q->leftJoin('contacts', 'con', 'contact_id = user_contact');
+    $q->leftJoin('forum_messages', 'fm2', 'fm1.message_id = fm2.message_parent');
+    $q->leftJoin('forum_watch', 'fw', 'watch_user = ' . (int)$AppUI->user_id . ' AND watch_topic = fm1.message_id');
+    $q->leftJoin('forum_visits', 'v1', 'v1.visit_user = ' . (int)$AppUI->user_id . ' AND v1.visit_message = fm1.message_id');
+    $q->addWhere('fm1.message_forum = ' . (int)$forum_id);
+    $q->addWhere('fm1.message_parent < 1');
+
+    switch ($f) {
+        case 1:
+            $q->addWhere('watch_user IS NOT NULL');
+            break;
+        case 2:
+            $q->addWhere('(NOW() < DATE_ADD(fm2.message_date, INTERVAL 30 DAY) OR NOW() < DATE_ADD(fm1.message_date, INTERVAL 30 DAY))');
+            break;
+    }
+    $q->addGroup('fm1.message_id, fm1.message_parent');
+    $q->addOrder($orderby . ' ' . $orderdir);
+    $items = $q->loadList();
+
+    return $items;
+}
