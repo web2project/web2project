@@ -295,12 +295,12 @@ class CTitleBlock_core extends w2p_Theme_TitleBlock
  *
  * @deprecated
  */
-class CW2pObject extends w2p_System_BaseObject
+class CW2pObject extends w2p_Core_BaseObject
 {
 	public function __construct($table, $key, $module = '')
 	{
 		parent::__construct($table, $key, $module);
-		trigger_error("CW2pObject has been deprecated in v2.0 and will be removed by v4.0. Please use w2p_System_BaseObject instead.", E_USER_NOTICE );
+		trigger_error("CW2pObject has been deprecated in v2.0 and will be removed by v4.0. Please use w2p_Core_BaseObject instead.", E_USER_NOTICE );
 	}
 }
 
