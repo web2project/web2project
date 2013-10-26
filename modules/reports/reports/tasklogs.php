@@ -82,10 +82,11 @@ echo $AppUI->getTheme()->styleRenderBoxTop();
         <select name="log_userfilter" class="text" style="width: 200px">
   
 <?php
+//TODO: don't we have a function to simplify this?
 if ($log_userfilter == 0)
-	echo '<option value="0" selected="selected">' . $AppUI->_('All users');
+	echo '<option value="0" selected="selected">' . $AppUI->_('All users') . '</option>';
 else
-	echo '<option value="0">All users';
+	echo '<option value="0">All users</option>';
 
 if (($log_userfilter_users = w2PgetUsersList())) {
 	foreach ($log_userfilter_users as $row) {
@@ -272,9 +273,6 @@ if ($do_report) {
 			$uname = 'All Users';
 		}
 
-		$temp_dir = W2P_BASE_DIR . '/files/temp';
-		$base_url = w2PgetConfig('base_url');
-
         $output = new w2p_Output_PDFRenderer();
         $output->addTitle($AppUI->_('Task Log Report'));
         $output->addDate($df);
@@ -302,9 +300,6 @@ if ($do_report) {
 			echo '</a>';
 		} else {
 			echo 'Could not open file to save PDF.  ';
-			if (!is_writable($temp_dir)) {
-				'The files/temp directory is not writable.  Check your file system permissions.';
-			}
 		}
 	}
 	echo '</td>
