@@ -176,7 +176,8 @@ class w2p_Output_EmailManager
         $body = $this->_AppUI->_('Project', UI_OUTPUT_RAW) . ":\t" . $projname . "\n";
         $body .= $this->_AppUI->_('Task', UI_OUTPUT_RAW) . ":\t\t" . $task->task_name . "\n";
 //TODO: Priority not working for some reason, will wait till later
-
+        $body .= $this->_AppUI->_('Priority', UI_OUTPUT_RAW) . ":\t\t" . $task->task_priority . "\n";
+//Priority does work now
         $tmp_tz = $this->_AppUI->getPref('TIMEZONE');
         $user_prefs = $this->_AppUI->loadPrefs($user['assignee_id'], true);
         $this->_AppUI->user_prefs['TIMEZONE'] = $user_prefs['TIMEZONE'];
