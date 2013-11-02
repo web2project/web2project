@@ -112,8 +112,7 @@ $project = new CProject();
 $allowedProjects = $project->getAllowedSQL($AppUI->user_id);
 $working_hours = ($w2Pconfig['daily_working_hours'] ? $w2Pconfig['daily_working_hours'] : 8);
 
-$q->addQuery('projects.project_id, project_color_identifier, project_name');
-$q->addQuery('SUM(task_duration * task_percent_complete * IF(task_duration_type = 24, ' . $working_hours . ', task_duration_type)) / SUM(task_duration * IF(task_duration_type = 24, ' . $working_hours . ', task_duration_type)) AS project_percent_complete');
+$q->addQuery('projects.project_id, project_color_identifier, project_name, project_percent_complete');
 $q->addQuery('company_name');
 $q->addTable('projects');
 $q->leftJoin('tasks', 't1', 'projects.project_id = t1.task_project');
