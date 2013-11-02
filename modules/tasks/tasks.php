@@ -127,6 +127,8 @@ if ($canViewTask) {
 }
 $q2->clear();
 
+$subquery = __extract_from_tasks1();
+
 $q = new w2p_Database_Query;
 $q->addQuery('tasks.task_id, task_parent, task_name');
 $q->addQuery('task_start_date, task_end_date, task_dynamic');
@@ -146,11 +148,7 @@ $q->addQuery('task_milestone');
 $q->addQuery('count(distinct f.file_task) as file_count');
 $q->addQuery('tlog.task_log_problem');
 $q->addQuery('task_access');
-
-$subquery = __extract_from_tasks1();
-
 $q->addQuery('(' . $subquery . ') AS task_nr_of_children');
-
 $q->addTable('tasks');
 
 if ($history_active) {
@@ -322,18 +320,9 @@ if ($canViewTask) {
 if (count($tasks) > 0) {
 	foreach ($tasks as $row) {
 		//add information about assigned users into the page output
-        $q = new w2p_Database_Query;
-		$q->addQuery('ut.user_id,	u.user_username');
-		$q->addQuery('ut.perc_assignment');
-		$q->addQuery('contact_display_name AS assignee, contact_email');
-		$q->addTable('user_tasks', 'ut');
-		$q->addJoin('users', 'u', 'u.user_id = ut.user_id', 'inner');
-		$q->addJoin('contacts', 'c', 'u.user_contact = c.contact_id', 'inner');
-		$q->addWhere('ut.task_id = ' . (int)$row['task_id']);
-		$q->addOrder('perc_assignment desc, contact_first_name, contact_last_name');
+        $assigned_users = __extract_from_tasks2($row);
 
-		$assigned_users = array();
-		$row['task_assigned_users'] = $q->loadList();
+		$row['task_assigned_users'] = $assigned_users;
 	
 		//pull the final task row into array
 		$projects[$row['task_project']]['tasks'][] = $row;
