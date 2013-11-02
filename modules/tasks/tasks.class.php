@@ -2601,37 +2601,59 @@ class CTask extends w2p_Core_BaseObject
         return $q->loadResult();
     }
 
+    /**
+     * @deprecated
+     */
     public static function pinUserTask($userId, $taskId)
     {
-        $q = new w2p_Database_Query;
+        trigger_error("CTask::pinUserTask() has been deprecated in v3.1 and will be removed by v4.0. Please use CTask->pinTask() instead.", E_USER_NOTICE);
+
+        $task = new CTask();
+        return $task->pinTask($userId, $taskId);
+    }
+    public function pinTask($userId, $taskId)
+    {
+        $q = $this->_getQuery();
         $q->addTable('user_task_pin');
         $q->addInsert('user_id', (int) $userId);
         $q->addInsert('task_id', (int) $taskId);
 
-        if (!$q->exec()) {
-            return 'Error pinning task';
-        } else {
-            return true;
-        }
+        return (!$q->exec()) ? false : true;
     }
 
+    /**
+     * @deprecated
+     */
     public static function unpinUserTask($userId, $taskId)
     {
-        $q = new w2p_Database_Query;
+        trigger_error("CTask::unpinUserTask() has been deprecated in v3.1 and will be removed by v4.0. Please use CTask->unpinTask() instead.", E_USER_NOTICE);
+
+        $task = new CTask();
+        return $task->unpinTask($userId, $taskId);
+    }
+    public function unpinTask($userId, $taskId)
+    {
+        $q = $this->_getQuery();
         $q->setDelete('user_task_pin');
         $q->addWhere('user_id = ' . (int) $userId);
         $q->addWhere('task_id = ' . (int) $taskId);
 
-        if (!$q->exec()) {
-            return 'Error unpinning task';
-        } else {
-            return true;
-        }
+        return (!$q->exec()) ? false : true;
     }
 
+    /**
+     * @deprecated
+     */
     public static function updateHoursWorked($taskId, $totalHours)
     {
-        $q = new w2p_Database_Query;
+        trigger_error("CTask::updateHoursWorked() has been deprecated in v3.1 and will be removed by v4.0. Please use CTask->updateHoursWorked2() instead.", E_USER_NOTICE);
+
+        $task = new CTask();
+        $task->updateHoursWorked2($taskId, $totalHours);
+    }
+    public function updateHoursWorked2($taskId, $totalHours)
+    {
+        $q = $this->_getQuery();
         $q->addTable('tasks');
         $q->addUpdate('task_hours_worked', $totalHours + 0);
         $q->addWhere('task_id = ' . $taskId);
@@ -2645,7 +2667,6 @@ class CTask extends w2p_Core_BaseObject
 
         CProject::updateHoursWorked($project_id);
     }
-
 }
 
 // user based access
