@@ -62,12 +62,9 @@ foreach ($root_tasks as $root_task) {
 
 $project = new CProject();
 $sprojects = $project->getAllowedRecords($AppUI->user_id, 'projects.project_id,project_name', 'project_name', null, $extra, 'projects');
-$q = new w2p_Database_Query;
-$q->addTable('projects');
-$q->addQuery('projects.project_id, company_name');
-$q->addJoin('companies', 'co', 'co.company_id = project_company');
-$idx_companies = $q->loadHashList();
-$q->clear();
+
+$idx_companies = __extract_from_vw_actions();
+
 foreach ($sprojects as $prj_id => $prj_name) {
 	$sprojects[$prj_id] = $idx_companies[$prj_id] . ': ' . $prj_name;
 }

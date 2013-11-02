@@ -5815,3 +5815,16 @@ function __extract_from_tasks2($row)
     return $assigned_users;
 }
 
+/**
+ * @return array
+ */
+function __extract_from_vw_actions()
+{
+    $q = new w2p_Database_Query;
+    $q->addTable('projects');
+    $q->addQuery('projects.project_id, company_name');
+    $q->addJoin('companies', 'co', 'co.company_id = project_company');
+
+    return $q->loadHashList();
+}
+
