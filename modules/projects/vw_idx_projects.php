@@ -4,7 +4,7 @@ if (!defined('W2P_BASE_DIR')) {
 }
 // @todo    convert to template
 
-global $AppUI, $project, $project_statuses, $tab, $company_id;
+global $AppUI, $project, $project_statuses, $tab, $company_id, $orderby;
 
 $currentTabId = $tab;
 
@@ -24,8 +24,9 @@ switch($tab) {
 }
 
 $filter .= (($company_id > 0) ? ' AND project_company = ' . $company_id : '');
+$orderby = property_exists('CProject', $orderby) ? $orderby : 'project_name';
 
-$projects = $project->loadAll('project_name', $filter);
+$projects = $project->loadAll($orderby, $filter);
 $projects = array_values($projects);
 
 $fieldList = array();
