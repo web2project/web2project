@@ -48,7 +48,7 @@ $AppUI->setState('ProjIdxOrderDir', $orderdir);
 
 // collect the full projects list data via function in projects.class.php
 $search_text = $search_string;      // @note this is only because the projects_list_data function takes a bunch of globals
-$projects = projects_list_data();
+//$projects = projects_list_data();
 
 $oCompany = new CCompany;
 $allowedCompanies[-1] = $AppUI->_('all');
@@ -60,7 +60,7 @@ $user_list = array(0 => '(' . $AppUI->_('all') . ')') + CProject::getOwners();
 
 // setup the title block
 $titleBlock = new w2p_Theme_TitleBlock('Projects', 'icon.png', $m, $m . '.' . $a);
-$titleBlock->addSearchCell($search_string);
+//$titleBlock->addSearchCell($search_string);
 $titleBlock->addFilterCell('Type', 'project_type', $project_types, $project_type);
 $titleBlock->addFilterCell('Company', 'project_company', $allowedCompanies, $company_id);
 $titleBlock->addFilterCell('Owner', 'project_owner', $user_list, $owner);
@@ -75,49 +75,25 @@ $titleBlock->addCell('<span title="' . $AppUI->_('Projects') . '::' . $AppUI->_(
 
 $titleBlock->show();
 
+$project_statuses = array();
 $project_statuses = w2PgetSysVal('ProjectStatus');
+$project_statuses[-2] = 'All Projects';
+$project_statuses[-1] = 'All Active';
+$project_statuses[] = 'Archived';
 
-$active = 0;
-$archived = 0;
+ksort($project_statuses);
 
-foreach ($project_statuses as $key => $value) {
-	$counter[$key] = 0;
-	if (is_array($projects)) {
-		foreach ($projects as $p) {
-			if ($p['project_status'] == $key && $p['project_active'] > 0) {
-				++$counter[$key];
-			}
-		}
-	}
-	$project_statuses[$key] = $AppUI->_($project_statuses[$key], UI_OUTPUT_RAW) . ' (' . $counter[$key] . ')';
-}
+$project = new CProject();
+$counts = $project->getProjectsByStatus($company_id);
+$counts[-2] = count($project->loadAll(null, ($company_id > 0) ? 'project_company = ' . $company_id: ''));
+$counts[-1] = count($project->loadAll(null, 'project_active = 1' . (($company_id > 0) ? ' AND project_company = ' . $company_id : '')));
+$counts[count($project_statuses) - 3]   = $counts[-2] - $counts[-1];
 
-if (is_array($projects)) {
-	foreach ($projects as $p) {
-		if ($p['project_active'] == 0) {
-			++$archived;
-		} else {
-			++$active;
-		}
-	}
-}
-
-$project_statuses[] = $AppUI->_('Archived', UI_OUTPUT_RAW) . ' (' . $archived . ')';
-
-// Only display the All option in tabbed view, in plain mode it would just repeat everything else
-// already in the page
 $tabBox = new CTabBox('?m=projects', W2P_BASE_DIR . '/modules/projects/', $tab);
-$is_tabbed = $tabBox->isTabbed();
-if ($is_tabbed) {
-	// This will overwrited the initial tab, so we need to add that separately.
-	$allactive = (int)count($projects) - (int)($archived);
-	array_unshift($project_statuses, $AppUI->_('All Projects', UI_OUTPUT_RAW) . ' (' . count($projects) . ')', $AppUI->_('All Active', UI_OUTPUT_RAW) . ' (' . $allactive . ')');
-}
 
-$project_status_file = array();
-
-foreach ($project_statuses as $project_status) {
-	$tabBox->add('vw_idx_projects', mb_trim($project_status), true);
+foreach ($project_statuses as $key => $project_status) {
+	$tabname = $project_status . '(' . (int) $counts[$key] . ')';
+    $tabBox->add('vw_idx_projects', mb_trim($tabname), true);
 }
 $min_view = true;
 $tabBox->add('viewgantt', 'Gantt');
