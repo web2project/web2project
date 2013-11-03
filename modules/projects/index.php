@@ -48,7 +48,7 @@ $AppUI->setState('ProjIdxOrderDir', $orderdir);
 
 // collect the full projects list data via function in projects.class.php
 $search_text = $search_string;      // @note this is only because the projects_list_data function takes a bunch of globals
-$projects = projects_list_data();
+//$projects = projects_list_data();
 
 $oCompany = new CCompany;
 $allowedCompanies[-1] = $AppUI->_('all');
@@ -60,7 +60,7 @@ $user_list = array(0 => '(' . $AppUI->_('all') . ')') + CProject::getOwners();
 
 // setup the title block
 $titleBlock = new w2p_Theme_TitleBlock('Projects', 'icon.png', $m, $m . '.' . $a);
-$titleBlock->addSearchCell($search_string);
+//$titleBlock->addSearchCell($search_string);
 $titleBlock->addFilterCell('Type', 'project_type', $project_types, $project_type);
 $titleBlock->addFilterCell('Company', 'project_company', $allowedCompanies, $company_id);
 $titleBlock->addFilterCell('Owner', 'project_owner', $user_list, $owner);
