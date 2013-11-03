@@ -1022,4 +1022,23 @@ class CProject extends w2p_Core_BaseObject
                 $projects[$key][2] = '';
         }
     }
+
+    public function getProjectsByStatus($company_id = 0)
+    {
+        $q = $this->_getQuery();
+        $q->addTable('projects');
+        $q->addQuery('project_status, count(*) as count');
+        $q->addWhere('project_active = 1');
+        if ($company_id > 0) {
+            $q->addWhere('project_company = ' . $company_id);
+        }
+        $q->addGroup('project_status');
+
+        $statuses = $q->loadList(-1, 'project_status');
+        foreach ($statuses as $key => $array) {
+            $statuses[$key] = $array['count'];
+        }
+
+        return $statuses;
+    }
 }
