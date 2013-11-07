@@ -6,6 +6,9 @@
 ini_set('display_errors', 1);
 ini_set('display_errors', 0);
 
+/*
+ * We should add a notice about old versions of PHP.
+ */
 if (!defined('E_DEPRECATED')) {
     // If we hit this, we're still running on PHP 5.2.x
     define('E_DEPRECATED', 8192);
