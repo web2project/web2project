@@ -163,26 +163,21 @@ class w2p_Core_CAppUI
         }
     }
 
-    /**
-     * Used to load a php class file from the lib directory
-     *
-     * @param string $name The class root file name (excluding .class.php)
-     * @return string The path to the include file
-     */
+    /** @deprecated */
     public function getLibraryClass($name = null)
     {
+        trigger_error("CAppUI->getLibraryClass() has been deprecated in v3.1 and will be removed in v4.0", E_USER_NOTICE);
+
         if ($name) {
             return W2P_BASE_DIR . '/lib/' . $name . '.php';
         }
     }
 
-    /**
-     * Used to load a php class file from the module directory
-     * @param string $name The class root file name (excluding .class.php)
-     * @return string The path to the include file
-     */
+    /** @deprecated */
     public function getModuleClass($name = null)
     {
+        trigger_error("CAppUI->getModuleClass() has been deprecated in v3.1 and will be removed in v4.0", E_USER_NOTICE);
+
         if ($name) {
             return W2P_BASE_DIR . '/modules/' . $name . '/' . $name . '.class.php';
         }
