@@ -8,38 +8,39 @@
 
 class CFile extends w2p_Core_BaseObject {
 
-	public $file_id = null;
-	public $file_version_id = null;
-	public $file_project = null;
-	public $file_real_filename = null;
-	public $file_task = null;
-	public $file_name = null;
-	public $file_parent = null;
-	public $file_description = null;
-	public $file_type = null;
-	public $file_owner = null;
+    public $file_id = null;
+    public $file_version_id = null;
+    public $file_project = null;
+    public $file_real_filename = null;
+    public $file_task = null;
+    public $file_name = null;
+    public $file_parent = null;
+    public $file_description = null;
+    public $file_type = null;
+    public $file_owner = null;
     // @todo this should be file_datetime to take advantage of our templating
-	public $file_date = null;
-	public $file_size = null;
-	public $file_version = null;
-	public $file_icon = null;
-	public $file_category = null;
-	public $file_folder = null;
-	public $file_checkout = null;
-	public $file_co_reason = null;
-	public $file_indexed = null;
+    public $file_date = null;
+    public $file_size = null;
+    public $file_version = null;
+    public $file_icon = null;
+    public $file_category = null;
+    public $file_folder = null;
+    public $file_checkout = null;
+    public $file_co_reason = null;
+    public $file_indexed = null;
 
     protected $_file_id = 0;
-	// This "breaks" check-in/upload if helpdesk is not present class variable needs to be added "dymanically"
-	//public $file_helpdesk_item = NULL;
+    protected $_file_system = null;
+    // This "breaks" check-in/upload if helpdesk is not present class variable needs to be added "dymanically"
+    //public $file_helpdesk_item = NULL;
 
-	public function __construct() {
+    public function __construct() {
         global $helpdesk_available;
         if ($helpdesk_available) {
-          $this->file_helpdesk_item = null;
+            $this->file_helpdesk_item = null;
         }
         parent::__construct('files', 'file_id');
-	}
+    }
 
     protected function hook_preStore() {
         global $helpdesk_available;
@@ -50,7 +51,7 @@ class CFile extends w2p_Core_BaseObject {
         $this->file_parent = (int) $this->file_parent;
 
         parent::hook_preStore();
-	}
+    }
 
     protected function hook_preCreate() {
         $q = $this->_getQuery();
@@ -67,7 +68,7 @@ class CFile extends w2p_Core_BaseObject {
             $q->addUpdate('file_checkout', '');
             $q->addWhere('file_version_id = ' . (int)$this->file_version_id);
             $q->exec();
-         }
+        }
 
         $this->file_date = $q->dbfnNowWithTZ();
         parent::hook_preCreate();
@@ -89,19 +90,19 @@ class CFile extends w2p_Core_BaseObject {
         parent::hook_preUpdate();
     }
 
-	public function hook_cron()
-	{
-		$q = $this->_getQuery();
-		$q->addQuery('file_id, file_name');
-		$q->addTable('files');
-		$q->addWhere('file_indexed = 0');
-		$unindexedFiles = $q->loadList(5, 'file_id');
+    public function hook_cron()
+    {
+        $q = $this->_getQuery();
+        $q->addQuery('file_id, file_name');
+        $q->addTable('files');
+        $q->addWhere('file_indexed = 0');
+        $unindexedFiles = $q->loadList(5, 'file_id');
 
-		foreach($unindexedFiles as $file_id => $notUsed) {
-			$this->load($file_id);
-			$this->indexStrings($this->_AppUI);
-		}
-	}
+        foreach($unindexedFiles as $file_id => $notUsed) {
+            $this->load($file_id);
+            $this->indexStrings($this->_AppUI);
+        }
+    }
 
     public function hook_search()
     {
@@ -121,18 +122,18 @@ class CFile extends w2p_Core_BaseObject {
         return $search;
     }
 
-	public static function getFileList($AppUI = null, $company_id = 0, $project_id = 0, $task_id = 0, $category_id = 0) {
-		global $AppUI;
+    public static function getFileList($AppUI = null, $company_id = 0, $project_id = 0, $task_id = 0, $category_id = 0) {
+        global $AppUI;
 
         $q = new w2p_Database_Query();
-		$q->addQuery('f.*');
-		$q->addTable('files', 'f');
-		$q->addJoin('projects', 'p', 'p.project_id = file_project');
-		$q->addJoin('project_departments', 'pd', 'p.project_id = pd.project_id');
-		$q->addJoin('departments', '', 'pd.department_id = dept_id');
-		$q->addJoin('tasks', 't', 't.task_id = file_task');
+        $q->addQuery('f.*');
+        $q->addTable('files', 'f');
+        $q->addJoin('projects', 'p', 'p.project_id = file_project');
+        $q->addJoin('project_departments', 'pd', 'p.project_id = pd.project_id');
+        $q->addJoin('departments', '', 'pd.department_id = dept_id');
+        $q->addJoin('tasks', 't', 't.task_id = file_task');
 
-		$project = new CProject();
+        $project = new CProject();
 //TODO: We need to convert this from static to use ->overrideDatabase() for testing.
 		$allowedProjects = $project->getAllowedSQL($AppUI->user_id, 'file_project');
 		if (count($allowedProjects)) {
