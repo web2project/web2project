@@ -14,7 +14,7 @@ error_reporting(E_ALL & ~E_DEPRECATED & ~E_NOTICE & ~E_STRICT);
 //error_reporting(-1);
 
 define('W2P_PERFORMANCE_DEBUG', false);
-define('MIN_PHP_VERSION', '5.2.0');
+define('MIN_PHP_VERSION', '5.3.8');
 //date_default_timezone_set('America/New_York');
 //Performance Debug Initialization
 if (W2P_PERFORMANCE_DEBUG) {
