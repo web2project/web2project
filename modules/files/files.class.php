@@ -42,6 +42,20 @@ class CFile extends w2p_Core_BaseObject {
         parent::__construct('files', 'file_id');
     }
 
+    public function setFileSystem($filesystem)
+    {
+        $this->_file_system = $filesystem;
+    }
+
+    public function getFileSystem()
+    {
+        if (is_null($this->_file_system)) {
+            $this->setFileSystem(new w2p_FileSystem_Local());
+        }
+
+        return $this->_file_system;
+    }
+
     protected function hook_preStore() {
         global $helpdesk_available;
 
@@ -290,83 +304,30 @@ class CFile extends w2p_Core_BaseObject {
         parent::hook_postDelete();
     }
 
-	// delete File from File System
-	public function deleteFile() {
+    /** @deprecated */
+    public function deleteFile()
+    {
         $this->load();
+        return $this->getFileSystem()->delete($this);
+    }
 
-        if ('' == $this->file_real_filename ||
-                !file_exists(W2P_BASE_DIR . '/files/' . $this->file_project . '/' . $this->file_real_filename)) {
-            return true;
-        }
+    /** @deprecated */
+    public function moveFile($oldProj, $realname)
+    {
+        return $this->getFileSystem()->move($this, $oldProj, $realname);
+    }
 
-        if ($this->_perms->checkModuleItem('files', 'delete', $this->file_id)) {
-            return @unlink(W2P_BASE_DIR . '/files/' . $this->file_project . '/' . $this->file_real_filename);
-        }
+    /** @deprecated */
+    public function duplicateFile($oldProj, $realname)
+    {
+        return $this->getFileSystem()->duplicate($oldProj, $realname, $this->_AppUI);
+    }
 
-        return false;
-	}
-
-	// move the file if the affiliated project was changed
-	public function moveFile($oldProj, $realname) {
-		if (!is_dir(W2P_BASE_DIR . '/files/' . $this->file_project)) {
-			$res = mkdir(W2P_BASE_DIR . '/files/' . $this->file_project, 0744);
-			if (!$res) {
-				$this->_AppUI->setMsg('Upload folder not setup to accept uploads - change permission on files/ directory.', UI_MSG_ALLERT);
-				return false;
-			}
-		}
-		$res = rename(W2P_BASE_DIR . '/files/' . $oldProj . '/' . $realname, W2P_BASE_DIR . '/files/' . $this->file_project . '/' . $realname);
-
-		if (!$res) {
-			return false;
-		}
-		return true;
-	}
-
-	// duplicate a file into root
-	public function duplicateFile($oldProj, $realname) {
-		if (!is_dir(W2P_BASE_DIR . '/files/0')) {
-			$res = mkdir(W2P_BASE_DIR . '/files/0', 0744);
-			if (!$res) {
-				$this->_AppUI->setMsg('Upload folder not setup to accept uploads - change permission on files/ directory.', UI_MSG_ALLERT);
-				return false;
-			}
-		}
-		$dest_realname = uniqid(rand());
-		$res = copy(W2P_BASE_DIR . '/files/' . $oldProj . '/' . $realname, W2P_BASE_DIR . '/files/0/' . $dest_realname);
-
-		if (!$res) {
-			return false;
-		}
-		return $dest_realname;
-	}
-
-	// move a file from a temporary (uploaded) location to the file system
-	public function moveTemp($upload) {
-        $this->file_real_filename = uniqid(rand());
-		// check that directories are created
-		if (!is_dir(W2P_BASE_DIR . '/files')) {
-			$res = mkdir(W2P_BASE_DIR . '/files', 0744);
-			if (!$res) {
-				return false;
-			}
-		}
-		if (!is_dir(W2P_BASE_DIR . '/files/' . $this->file_project)) {
-			$res = mkdir(W2P_BASE_DIR . '/files/' . $this->file_project, 0744);
-			if (!$res) {
-				$this->_AppUI->setMsg('Upload folder not setup to accept uploads - change permission on files/ directory.', UI_MSG_ALLERT);
-				return false;
-			}
-		}
-
-		$this->_filepath = W2P_BASE_DIR . '/files/' . $this->file_project . '/' . $this->file_real_filename;
-		// move it
-		$res = move_uploaded_file($upload['tmp_name'], $this->_filepath);
-		if (!$res) {
-			return false;
-		}
-		return true;
-	}
+    /** @deprecated */
+    public function moveTemp($upload)
+    {
+        return $this->getFileSystem()->moveTemp($this, $upload, $this->_AppUI);
+    }
 
     /**
      * parse file for indexing
@@ -461,6 +422,12 @@ class CFile extends w2p_Core_BaseObject {
         $q->exec();
 
         return $nwords_indexed;
+    }
+
+    /** @deprecated */
+    public function isWritable()
+    {
+        return $this->getFileSystem()->isWritable();
     }
 
     //function notifies about file changing
