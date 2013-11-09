@@ -93,9 +93,6 @@ class CLink extends w2p_Core_BaseObject
         if (7 >= strlen(trim($this->link_url))) {
             $this->_error['link_url'] = $baseErrorMsg . 'link url is not set';
         }
-        if (0 == (int) $this->link_owner) {
-            $this->_error['link_owner'] = $baseErrorMsg . 'link owner is not set';
-        }
 
         return (count($this->_error)) ? false : true;
     }
