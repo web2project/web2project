@@ -855,54 +855,6 @@ $this->obj->overrideDatabase($this->mockDB);
     }
 
     /**
-     * Tests finding company of project
-     */
-    public function testGetCompany()
-    {
-        $company = CProject::getCompany(1);
-
-        $this->assertEquals(1, $company);
-    }
-
-    /**
-     * Tests getting billing codes with all set to false, so any
-     * billing codes that match this company, or have no company assigned
-     * and billingcode_status = 1
-     */
-    public function testGetBillingCodes()
-    {
-        $billing_codes = CProject::getBillingCodes(1);
-
-        $this->assertEquals(1,          count($billing_codes));
-        $this->assertEquals('Cheap',    $billing_codes[1]);
-    }
-
-    /**
-     * Tests getting billing codes with all set to true, so any billing
-     * codes with this company id or no company assigned.
-     */
-    public function testGetBillingCodesAll()
-    {
-        $billing_codes = CProject::getBillingCodes(1, true);
-
-        $this->assertEquals(3,              count($billing_codes));
-        $this->assertEquals('Cheap',        $billing_codes[1]);
-        $this->assertEquals('Medium',       $billing_codes[2]);
-        $this->assertEquals('Expensive',    $billing_codes[3]);
-    }
-
-    /**
-     * Tests getting a list of project owners.
-     */
-    public function testGetOwners()
-    {
-        $owners = CProject::getOwners();
-
-        $this->assertEquals(1,              count($owners));
-        $this->assertEquals('Admin Person', $owners[1]);
-    }
-
-    /**
      * Tests updating a projects status
      *
      * @expectedException PHPUnit_Framework_Error
