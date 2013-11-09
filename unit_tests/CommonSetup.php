@@ -62,6 +62,7 @@ class CommonSetup extends PHPUnit_Framework_TestCase {
 
         global $AppUI;
         $this->_AppUI  = $AppUI;
+        $this->_AppUI->restoreObject();
 
         $this->mockDB = new w2p_Mocks_Query();
     }
