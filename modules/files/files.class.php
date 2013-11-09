@@ -227,9 +227,6 @@ class CFile extends w2p_Core_BaseObject {
         if ($this->file_id == 0 && '' == $this->file_name) {
             $this->_error['file_name'] = $baseErrorMsg . 'file name is not set';
         }
-        if (!is_int($this->file_parent) && '' == $this->file_parent) {
-            $this->_error['file_parent'] = $baseErrorMsg . 'file parent id is not set';
-        }
         if ($this->file_id == 0 && !is_int($this->file_size) && '' == $this->file_size) {
             $this->_error['file_size'] = $baseErrorMsg . 'file size is not set';
         }

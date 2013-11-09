@@ -105,26 +105,6 @@ class CFiles_Test extends CommonSetup
     }
 
     /**
-     * Tests that the proper error message is returned when no parent is passed.
-     */
-    public function testCreateFileNoParent()
-    {
-        unset($this->post_data['file_parent']);
-        $this->obj->bind($this->post_data);
-
-        /**
-        * Verify we got the proper error message
-        */
-        $this->assertFalse($this->obj->store());
-        $this->assertArrayHasKey('file_parent', $this->obj->getError());
-
-        /**
-        * Verify that project id was not set
-        */
-        $this->AssertEquals(0, $this->obj->file_id);
-    }
-
-    /**
      * Tests that the proper error message is returned when no type is passed.
      */
     public function testCreateFileNoType()
@@ -181,10 +161,9 @@ class CFiles_Test extends CommonSetup
         /**
         * Verify we got the proper error message
         */
-        $this->AssertEquals(5, count($errorArray));
+        $this->AssertEquals(4, count($errorArray));
         $this->assertArrayHasKey('file_real_filename', $errorArray);
         $this->assertArrayHasKey('file_name',          $errorArray);
-        $this->assertArrayHasKey('file_parent',        $errorArray);
         $this->assertArrayHasKey('file_type',          $errorArray);
         $this->assertArrayHasKey('file_size',          $errorArray);
     }
