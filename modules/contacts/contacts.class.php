@@ -79,7 +79,6 @@ class CContact extends w2p_Core_BaseObject
 
         $this->contact_first_name = ($this->contact_first_name == null) ? '' : $this->contact_first_name;
         $this->contact_last_name = ($this->contact_last_name == null) ? '' : $this->contact_last_name;
-        $this->contact_order_by = ($this->contact_order_by == null) ? '' : $this->contact_order_by;
         $this->contact_display_name = ($this->contact_display_name == null) ? '' : $this->contact_display_name;
         $this->contact_birthday = ($this->contact_birthday == '') ? null : $this->contact_birthday;
 
@@ -89,9 +88,6 @@ class CContact extends w2p_Core_BaseObject
          * mostly required when Contacts are generated via programatic methods and
          * not through the add/edit UI.
          */
-        if (mb_strlen($this->contact_order_by) <= 1) {
-            $this->contact_order_by = mb_trim($this->contact_first_name . ' ' . $this->contact_last_name);
-        }
         if (mb_strlen($this->contact_display_name) <= 1) {
             $this->contact_display_name = mb_trim($this->contact_first_name . ' ' . $this->contact_last_name);
         }
@@ -444,7 +440,7 @@ class CContact extends w2p_Core_BaseObject
         }
         // assemble the sql statement
         $q = new w2p_Database_Query();
-        $q->addQuery('contact_id, contact_order_by');
+        $q->addQuery('contact_id');
         $q->addQuery($showfields);
         $q->addQuery('contact_first_name, contact_last_name, contact_title');
         $q->addQuery('contact_updatekey, contact_updateasked, contact_lastupdate');
