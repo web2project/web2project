@@ -83,10 +83,12 @@ class w2p_Mocks_Query extends w2p_Database_Query {
 
         parent::insertObject($table, $object, $keyName, $verbose);
         $object->{$keyName} = 1;
+        return true;
     }
 
     public function updateObject($table, &$object, $keyName, $updateNulls = true) {
 
         parent::updateObject($table, $object, $keyName, $updateNulls);
+        return true;
     }
 }
