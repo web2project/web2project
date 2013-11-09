@@ -812,13 +812,17 @@ $this->obj->overrideDatabase($this->mockDB);
         $this->obj->project_id = 1;
         $departments = $this->obj->getDepartmentList();
 
-        $this->assertEquals(2,              count($departments));
-        $this->assertEquals(1,              $departments[1]['dept_id']);
-        $this->assertEquals('Department 1', $departments[1]['dept_name']);
-        $this->assertEquals('',             $departments[1]['dept_phone']);
-        $this->assertEquals(2,              $departments[2]['dept_id']);
-        $this->assertEquals('Department 2', $departments[2]['dept_name']);
-        $this->assertEquals('',             $departments[2]['dept_phone']);
+        if ($this->_AppUI->isActiveModule('departments')) {
+            $this->assertEquals(2,              count($departments));
+            $this->assertEquals(1,              $departments[1]['dept_id']);
+            $this->assertEquals('Department 1', $departments[1]['dept_name']);
+            $this->assertEquals('',             $departments[1]['dept_phone']);
+            $this->assertEquals(2,              $departments[2]['dept_id']);
+            $this->assertEquals('Department 2', $departments[2]['dept_name']);
+            $this->assertEquals('',             $departments[2]['dept_phone']);
+        } else {
+            $this->assertEquals(0,              count($departments));
+        }
     }
 
     /**
@@ -835,15 +839,19 @@ $this->obj->overrideDatabase($this->mockDB);
         $this->obj->project_id = 1;
         $forums = $this->obj->getForumList();
 
-        $this->assertEquals(1,                  count($forums));
-        $this->assertEquals(1,                  $forums[1]['forum_id']);
-        $this->assertEquals(1,                  $forums[1]['forum_project']);
-        $this->assertEquals(1,                  $forums[1]['forum_owner']);
-        $this->assertEquals('Test Forum',       $forums[1]['forum_name']);
-        $this->assertEquals(1,                  $forums[1]['forum_message_count']);
-        $this->assertEquals('04-Aug-2009 17:03',$forums[1]['forum_last_date']);
-        $this->assertEquals('Test Project',     $forums[1]['project_name']);
-        $this->assertEquals(1,                  $forums[1]['project_id']);
+        if ($this->_AppUI->isActiveModule('forums')) {
+            $this->assertEquals(1,                  count($forums));
+            $this->assertEquals(1,                  $forums[1]['forum_id']);
+            $this->assertEquals(1,                  $forums[1]['forum_project']);
+            $this->assertEquals(1,                  $forums[1]['forum_owner']);
+            $this->assertEquals('Test Forum',       $forums[1]['forum_name']);
+            $this->assertEquals(1,                  $forums[1]['forum_message_count']);
+            $this->assertEquals('04-Aug-2009 17:03',$forums[1]['forum_last_date']);
+            $this->assertEquals('Test Project',     $forums[1]['project_name']);
+            $this->assertEquals(1,                  $forums[1]['project_id']);
+        } else {
+            $this->assertEquals(0,                  count($forums));
+        }
     }
 
     /**
@@ -1353,7 +1361,11 @@ $this->obj->overrideDatabase($this->mockDB);
 
         $options = getDepartmentSelectionList(1);
 
-        $this->assertEquals('<option value="1">Department 1</option>', $options);
+        if ($this->_AppUI->isActiveModule('departments')) {
+            $this->assertEquals('<option value="1">Department 1</option>', $options);
+        } else {
+            $this->assertEquals('', $options);
+        }
     }
 
     /**
@@ -1367,7 +1379,11 @@ $this->obj->overrideDatabase($this->mockDB);
 
         $options = getDepartmentSelectionList(1, $checked);
 
-        $this->assertEquals('<option value="1" selected="selected">Department 1</option>', $options);
+        if ($this->_AppUI->isActiveModule('departments')) {
+            $this->assertEquals('<option value="1" selected="selected">Department 1</option>', $options);
+        } else {
+            $this->assertEquals('', $options);
+        }
     }
 
     /**
@@ -1394,10 +1410,18 @@ $this->obj->overrideDatabase($this->mockDB);
 
         $options = getDepartmentSelectionList(1, array(), 0, 1);
 
-        $this->assertEquals('<option value="1">&nbsp;Department 1</option>', $options);
+        if ($this->_AppUI->isActiveModule('departments')) {
+            $this->assertEquals('<option value="1">&nbsp;Department 1</option>', $options);
+        } else {
+            $this->assertEquals('', $options);
+        }
 
         $options = getDepartmentSelectionList(1, array(), 0, 5);
 
-        $this->assertEquals('<option value="1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Department 1</option>', $options);
+        if ($this->_AppUI->isActiveModule('departments')) {
+            $this->assertEquals('<option value="1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Department 1</option>', $options);
+        } else {
+            $this->assertEquals('', $options);
+        }
     }
 }
