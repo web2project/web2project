@@ -41,7 +41,6 @@ class CSystem_Role {
 	public function __construct($name = '', $description = '') {
 		$this->role_name = $name;
 		$this->role_description = $description;
-		$this->perms = &$GLOBALS['AppUI']->acl();
 
         global $AppUI;
         $this->_AppUI = $AppUI;
@@ -239,4 +238,18 @@ class CSystem_Role {
 		}
 		return true;
 	}
+
+    /**
+     * Since Dependency injection isn't feasible due to the sheer number of
+     *   calls to the above constructor, this is a way to hijack the current
+     *   $this->_query and manipulate it however we want.
+     *
+     *   @param Object A database connection (real or mocked)
+     */
+    public function overrideDatabase($override)
+    {
+        if (!is_null($override)) {
+            $this->_query = $override;
+        }
+    }
 }
