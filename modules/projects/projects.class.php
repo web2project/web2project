@@ -77,9 +77,6 @@ class CProject extends w2p_Core_BaseObject
         if ('' == $this->project_name) {
             $this->_error['project_name'] = $baseErrorMsg . 'project name is not set';
         }
-        if ('' == $this->project_short_name) {
-            $this->_error['project_short_name'] = $baseErrorMsg . 'project short name is not set';
-        }
         if (0 == (int) $this->project_company) {
             $this->_error['project_company'] = $baseErrorMsg . 'project company is not set';
         }

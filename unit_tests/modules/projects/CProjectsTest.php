@@ -139,26 +139,6 @@ $this->obj->overrideDatabase($this->mockDB);
     }
 
     /**
-     * Tests that the proper error message is returned when no short name is passed.
-     */
-    public function testCreateProjectNoShortName()
-    {
-		unset($this->post_data['project_short_name']);
-        $this->obj->bind($this->post_data);
-
-        /**
-         * Verify we got the proper error message
-         */
-		$this->assertFalse($this->obj->store());
-        $this->assertArrayHasKey('project_short_name', $this->obj->getError());
-
-        /**
-         * Verify that project id was not set
-         */
-        $this->AssertEquals(0, $this->obj->project_id);
-    }
-
-    /**
      * Tests that the proper error message is returned when no color identifier is passed.
      */
     public function testCreateProjectNoColorIdentifier()
