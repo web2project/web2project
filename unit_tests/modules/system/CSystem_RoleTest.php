@@ -56,9 +56,7 @@ class CSystemRole_Test extends CommonSetup
 
     public function testBindFail()
     {
-        $result = $this->obj->bind(null);
-
-        $this->assertEquals('CSystem_Role::bind failed',    $result);
+        $this->assertFalse($this->obj->bind(null));
     }
 
     public function testCheck()

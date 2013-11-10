@@ -22,9 +22,6 @@
  *
  * @package     web2project\modules\core
  *
- * @todo TODO: This should probably extend our w2p_Core_BaseObject class as
- *   there is a lot of duplicated functionality that we could just eliminate
- *   from here.
  * @todo    new query object
  */
 
@@ -32,11 +29,6 @@ class CSystem_Role extends w2p_Core_BaseObject {
 	public $role_id = null;
 	public $role_name = null;
 	public $role_description = null;
-	public $perms = null;
-    /**
-     * @var object permissions/preference/translation object
-     */
-    protected $_AppUI;
 
 	public function __construct($name = '', $description = '') {
 		$this->role_name = $name;
@@ -44,18 +36,7 @@ class CSystem_Role extends w2p_Core_BaseObject {
 
         global $AppUI;
         $this->_AppUI = $AppUI;
-        $this->perms = $this->_AppUI->acl();
-	}
-
-	public function bind($hash) {
-		if (!is_array($hash)) {
-			return get_class($this) . "::bind failed";
-		} else {
-			$q = new w2p_Database_Query;
-			$q->bindHashToObject($hash, $this);
-			$q->clear();
-			return null;
-		}
+        $this->_perms = $this->_AppUI->acl();
 	}
 
 	public function check() {
@@ -72,9 +53,9 @@ class CSystem_Role extends w2p_Core_BaseObject {
         }
 
 		if ($this->role_id) {
-			$ret = $this->perms->updateRole($this->role_id, $this->role_name, $this->role_description);
+			$ret = $this->_perms->updateRole($this->role_id, $this->role_name, $this->role_description);
 		} else {
-			$ret = $this->perms->insertRole($this->role_name, $this->role_description);
+			$ret = $this->_perms->insertRole($this->role_name, $this->role_description);
             $this->role_id = db_insert_id();
 		}
 
@@ -92,7 +73,7 @@ class CSystem_Role extends w2p_Core_BaseObject {
 		// with this role, and all of the group data for the role.
 		if (canDelete('roles')) {
 			// Delete all the children from this group
-			return $this->perms->deleteRole($this->role_id);
+			return $this->_perms->deleteRole($this->role_id);
 		} else {
 			return false; //get_class($this) . '::delete failed - You do not have permission to delete this role';
 		}
@@ -112,8 +93,8 @@ class CSystem_Role extends w2p_Core_BaseObject {
 	 * Return a list of known roles.
 	 */
 	public function getRoles() {
-		$role_parent = $this->perms->get_group_id('role');
-		$roles = $this->perms->getChildren($role_parent);
+		$role_parent = $this->_perms->get_group_id('role');
+		$roles = $this->_perms->getChildren($role_parent);
 		return $roles;
 	}
 
@@ -145,7 +126,7 @@ class CSystem_Role extends w2p_Core_BaseObject {
 		}
 		
 		//catch to be copied Role ACLs IDs
-		$role_acls = $this->perms->getRoleACLs($copy_role_id);
+		$role_acls = $this->_perms->getRoleACLs($copy_role_id);
 		
 		foreach ($role_acls as $acl) {
 			//initialize acl data, so we don't fall on the situation of bleeding permissions from one ACL rule to the other.
@@ -167,7 +148,7 @@ class CSystem_Role extends w2p_Core_BaseObject {
 					foreach ($permission['axo_groups'] as $group_id) {
 						//catche Group of Permissions (All, All Non-Admin, and Admin) or Module Permissions
 						//ex: Array ( [0] => 13 [id] => 13 [1] => 10 [parent_id] => 10 [2] => non_admin [value] => non_admin [3] => Non-Admin Modules [name] => Non-Admin Modules [4] => 6 [lft] => 6 [5] => 7 [rgt] => 7 ) 
-						$group_data = $this->perms->get_group_data($group_id, 'axo');
+						$group_data = $this->_perms->get_group_data($group_id, 'axo');
 					}
 				}
 				if (is_array($permission['axo'])) {
@@ -175,7 +156,7 @@ class CSystem_Role extends w2p_Core_BaseObject {
 						foreach ($section as $id) {
 							//catch Module and Module Item permissions
 							//ex.: Array ( [id] => 36 [section_value] => companies [name] => 6 [value] => 6 [order_value] => 0 [hidden] => 0 ) 
-							$mod_data = $this->perms->get_object_full($id, $key, 1, 'axo');
+							$mod_data = $this->_perms->get_object_full($id, $key, 1, 'axo');
 						}
 					}
 				}
@@ -184,7 +165,7 @@ class CSystem_Role extends w2p_Core_BaseObject {
 						foreach ($section as $value) {
 							//catch Actions of the Permission.
 							//ex: Array ( [id] => 11 [section_value] => application [name] => Access [value] => access [order_value] => 1 [hidden] => 0 ) 
-							$perm = $this->perms->get_object_full($value, $key, 1, 'aco');
+							$perm = $this->_perms->get_object_full($value, $key, 1, 'aco');
 							$permission_type[] = $perm['id'];
 						}
 					}
@@ -212,15 +193,15 @@ class CSystem_Role extends w2p_Core_BaseObject {
 						$mod_mod[$permission_table][] = $permission_item;
 						// check if the item already exists, if not create it.
 						// First need to check if the section exists.
-						if (!$this->perms->get_object_section_section_id(null, $permission_table, 'axo')) {
-							$this->perms->addModuleSection($permission_table);
+						if (!$this->_perms->get_object_section_section_id(null, $permission_table, 'axo')) {
+							$this->_perms->addModuleSection($permission_table);
 						}
-						if (!$this->perms->get_object_id($permission_table, $permission_item, 'axo')) {
-							$this->perms->addModuleItem($permission_table, $permission_item, $permission_item);
+						if (!$this->_perms->get_object_id($permission_table, $permission_item, 'axo')) {
+							$this->_perms->addModuleItem($permission_table, $permission_item, $permission_item);
 						}
 					} else {
 						// Get the module information
-						$mod_info = $this->perms->get_object_data($mod_id, 'axo');
+						$mod_info = $this->_perms->get_object_data($mod_id, 'axo');
 						$mod_mod = array();
 						$mod_mod[$mod_info[0][0]][] = $mod_info[0][1];
 					}
@@ -229,28 +210,14 @@ class CSystem_Role extends w2p_Core_BaseObject {
 				// Build the permissions info
 				$type_map = array();
 				foreach ($permission_type as $tid) {
-					$type = $this->perms->get_object_data($tid, 'aco');
+					$type = $this->_perms->get_object_data($tid, 'aco');
 					foreach ($type as $t) {
 						$type_map[$t[0]][] = $t[1];
 					}
 				}
-				$this->perms->add_acl($type_map, null, $aro_map, $mod_mod, $mod_group, $permission_access, 1, null, null, 'user');
+				$this->_perms->add_acl($type_map, null, $aro_map, $mod_mod, $mod_group, $permission_access, 1, null, null, 'user');
 			}
 		}
 		return true;
 	}
-
-    /**
-     * Since Dependency injection isn't feasible due to the sheer number of
-     *   calls to the above constructor, this is a way to hijack the current
-     *   $this->_query and manipulate it however we want.
-     *
-     *   @param Object A database connection (real or mocked)
-     */
-    public function overrideDatabase($override)
-    {
-        if (!is_null($override)) {
-            $this->_query = $override;
-        }
-    }
 }
