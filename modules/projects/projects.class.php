@@ -885,6 +885,9 @@ class CProject extends w2p_Core_BaseObject
 
     public static function updatePercentComplete($project_id)
     {
+        if (!$project_id) {
+            return;
+        }
         $working_hours = (w2PgetConfig('daily_working_hours') ? w2PgetConfig('daily_working_hours') : 8);
 
         $q = new w2p_Database_Query();
