@@ -208,7 +208,7 @@ $this->markTestIncomplete('These tests have yet to be written because we need to
     {
         $result = $this->obj->renderContactTable('companies', array());
 
-        $this->assertEquals('<table class="tbl list"><tr><th>Name</th><th>Email</th><th>Phone</th><th>Department</th></tr></table>',     $result);
+        $this->assertEquals('<table class="tbl list"><tr><th>Name</th><th>Email</th><th>Phone</th><th>Department</th></tr><tr><td colspan="4">No data available</td></tr></table>',     $result);
     }
 
     public function testRenderContactTable()

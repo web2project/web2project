@@ -57,16 +57,7 @@ class w2p_Output_HTMLHelper
 
         $output  = $listTable->startTable();
         $output .= $listTable->buildHeader($fields);
-
-        $fieldList = array_keys($fields);
-        foreach ($contactList as $row) {
-            $output .= '<tr>';
-            $this->stageRowData($row);
-            foreach ($fieldList as $index => $notUsed) {
-                $output .= $this->createCell($fieldList[$index], $row[$fieldList[$index]]);
-            }
-            $output .= '</tr>';
-        }
+        $output .= $listTable->buildRows($contactList);
         $output .= $listTable->endTable();
 
         return $output;
