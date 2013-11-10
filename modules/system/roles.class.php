@@ -75,6 +75,7 @@ class CSystem_Role {
 			$ret = $this->perms->updateRole($this->role_id, $this->role_name, $this->role_description);
 		} else {
 			$ret = $this->perms->insertRole($this->role_name, $this->role_description);
+            $this->role_id = db_insert_id();
 		}
 
 		if (!$ret) {
