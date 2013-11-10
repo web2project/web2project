@@ -203,4 +203,18 @@ class w2p_Output_HTMLHelperTest extends CommonSetup
         //case '_username':
 $this->markTestIncomplete('These tests have yet to be written because we need to think about dependency injection for our database mock..');
     }
+
+    public function testRenderContactTableEmpty()
+    {
+        $result = $this->obj->renderContactTable('companies', array());
+
+        $this->assertEquals('<table cellspacing="1" cellpadding="2" border="0" width="100%" class="tbl"><tr><th nowrap="nowrap">Name</th><th nowrap="nowrap">Email</th><th nowrap="nowrap">Phone</th><th nowrap="nowrap">Department</th></tr></table>',     $result);
+    }
+
+    public function testRenderContactTable()
+    {
+        $result = $this->obj->renderContactTable('companies', array( 1 => array('contact_id' => 1, 'contact_name' => 'Tony Stark', 'contact_email' => 'iron.man@example.com', 'contact_phone' => '1212555IRON')));
+
+        $this->assertEquals('<table cellspacing="1" cellpadding="2" border="0" width="100%" class="tbl"><tr><th nowrap="nowrap">Name</th><th nowrap="nowrap">Email</th><th nowrap="nowrap">Phone</th><th nowrap="nowrap">Department</th></tr><tr><td class="_name"><a href="?m=contacts&a=view&contact_id=1">Tony Stark</a></td><td class="_email"><a href="mailto:iron.man@example.com">iron.man@example.com</a></td><td class="_phone">1212555IRON</td><td>-</td></tr></table>',     $result);
+    }
 }
