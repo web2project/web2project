@@ -60,7 +60,10 @@ class w2p_Output_HTMLHelper
 
             $module->storeSettings('contacts', $moduleName.'_view', $fieldList, $fieldNames);
         }
-        $output  = '<table cellspacing="1" cellpadding="2" border="0" width="100%" class="tbl">';
+
+        $listTable = new w2p_Output_ListTable($this->_AppUI);
+
+        $output  = $listTable->startTable();
         $output .= '<tr>';
         foreach ($fieldNames as $index => $notUsed) {
             $output .= '<th nowrap="nowrap">';
@@ -78,7 +81,7 @@ class w2p_Output_HTMLHelper
             }
             $output .= '</tr>';
         }
-        $output .= '</table>';
+        $output .= $listTable->endTable();
 
         return $output;
     }
