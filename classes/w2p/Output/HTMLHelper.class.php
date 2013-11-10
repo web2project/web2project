@@ -40,39 +40,25 @@ class w2p_Output_HTMLHelper
         return $output;
     }
 
-    public function renderContactTable($moduleName, array $contactList) {
-
-        $fieldList = array();
-        $fieldNames = array();
-
+    public function renderContactTable($moduleName, array $contactList)
+    {
         $module = new w2p_System_Module();
         $fields = $module->loadSettings('contacts', $moduleName.'_view');
 
-        if (count($fields) > 0) {
-            $fieldList = array_keys($fields);
-            $fieldNames = array_values($fields);
-        } else {
-            // TODO: This is only in place to provide an pre-upgrade-safe 
-            //   state for versions earlier than v3.0
-            //   At some point at/after v4.0, this should be deprecated
+        if (0 == count($fields)) {
             $fieldList = array('contact_name', 'contact_email', 'contact_phone', 'dept_name');
             $fieldNames = array('Name', 'Email', 'Phone', 'Department');
 
             $module->storeSettings('contacts', $moduleName.'_view', $fieldList, $fieldNames);
+            $fields = array_combine($fieldList, $fieldNames);
         }
 
         $listTable = new w2p_Output_ListTable($this->_AppUI);
 
         $output  = $listTable->startTable();
-        $output .= '<tr>';
-        foreach ($fieldNames as $index => $notUsed) {
-            $output .= '<th nowrap="nowrap">';
-//TODO: Should we support sorting here?
-            $output .= $this->_AppUI->_($fieldNames[$index]);
-            $output .= '</th>';
-        }
-        $output .= '</tr>';
-        
+        $output .= $listTable->buildHeader($fields);
+
+        $fieldList = array_keys($fields);
         foreach ($contactList as $row) {
             $output .= '<tr>';
             $this->stageRowData($row);
