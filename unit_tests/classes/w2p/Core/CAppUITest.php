@@ -550,20 +550,6 @@ class w2p_Core_CAppUITest extends CommonSetup
     }
 
     /**
-     * Test reding directories from an invalid path
-     *
-     */
-    public function testReadDirsInvalidPath()
-    {
-        $AppUI = $this->_AppUI;
-
-        $dirs = $AppUI->readDirs('blah');
-
-		$this->assertEquals(0,				count($dirs));
-    }
-
-
-    /**
      * @todo Implement testGetSystemClass().
      */
     public function testGetSystemClass() {
@@ -627,46 +613,6 @@ class w2p_Core_CAppUITest extends CommonSetup
      * @todo Implement testCheckStyle().
      */
     public function testCheckStyle() {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-                'This test has not been implemented yet.'
-        );
-    }
-
-    /**
-     * @todo Implement testReadDirs().
-     */
-    public function testReadDirs() {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-                'This test has not been implemented yet.'
-        );
-    }
-
-    /**
-     * @todo Implement testReadFiles().
-     */
-    public function testReadFiles() {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-                'This test has not been implemented yet.'
-        );
-    }
-
-    /**
-     * @todo Implement testCheckFileName().
-     */
-    public function testCheckFileName() {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-                'This test has not been implemented yet.'
-        );
-    }
-
-    /**
-     * @todo Implement testMakeFileNameSafe().
-     */
-    public function testMakeFileNameSafe() {
         // Remove the following lines when you implement this test.
         $this->markTestIncomplete(
                 'This test has not been implemented yet.'
