@@ -2580,18 +2580,20 @@ function getDepartmentSelectionList($company_id, $checked_array = array(), $dept
 	global $departments_count, $AppUI;
 	$parsed = '';
 
-	if ($departments_count < 6) {
-		$departments_count++;
-	}
+    if ($AppUI->isActiveModule('departments') && canView('departments')) {
+        if ($departments_count < 6) {
+            $departments_count++;
+        }
 
-	$depts_list = CDepartment::getDepartmentList($AppUI, $company_id, $dept_parent);
+        $depts_list = CDepartment::getDepartmentList($AppUI, $company_id, $dept_parent);
 
-	foreach ($depts_list as $dept_id => $dept_info) {
-		$selected = in_array($dept_id, $checked_array) ? ' selected="selected"' : '';
+        foreach ($depts_list as $dept_id => $dept_info) {
+            $selected = in_array($dept_id, $checked_array) ? ' selected="selected"' : '';
 
-		$parsed .= '<option value="' . $dept_id . '"' . $selected . '>' . str_repeat('&nbsp;', $spaces) . $dept_info['dept_name'] . '</option>';
-		$parsed .= getDepartmentSelectionList($company_id, $checked_array, $dept_id, $spaces + 5);
-	}
+            $parsed .= '<option value="' . $dept_id . '"' . $selected . '>' . str_repeat('&nbsp;', $spaces) . $dept_info['dept_name'] . '</option>';
+            $parsed .= getDepartmentSelectionList($company_id, $checked_array, $dept_id, $spaces + 5);
+        }
+    }
 
 	return $parsed;
 }
