@@ -280,7 +280,7 @@ class CTask_Log extends w2p_Core_BaseObject
 		$q->addWhere('task_log_task = ' . (int)$task_id);
 		$totalHours = $q->loadResult();
 
-		CTask::updateHoursWorked($task_id, $totalHours);
+        $task->updateHoursWorked2($task_id, $totalHours);
 
         $task = new CTask();
         $task->load($task_id);
