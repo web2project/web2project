@@ -82,14 +82,11 @@ class w2p_Output_HTMLHelper
 
         return $output;
     }
-    /*
-     * I really hate this option, but I'm not sure of a better way to get the 
-     *   _name case of createCell's switch statement. I'm option to suggestions.
-     *          ~ caseydk 09 Feb 2012
-     */
+
     public function stageRowData($myArray) {
         $this->tableRowData = $myArray;
     }
+
     /**
      * createColumn is handy because it can take any input $fieldName and use
      *   its suffix to determine how the field should be displayed.
@@ -119,9 +116,9 @@ class w2p_Output_HTMLHelper
             return '<td>-</td>';
         }
 
-        $last_underscore = strrpos($fieldName, '_');
-        $prefix = ($last_underscore !== false) ? substr($fieldName, 0, $last_underscore) : $fieldName;
-        $suffix = ($last_underscore !== false) ? substr($fieldName, $last_underscore) : $fieldName;
+        $pieces = explode('_', $fieldName);
+        $prefix = $pieces[0];
+        $suffix = '_'.end($pieces);
 
         switch ($suffix) {
 //BEGIN: object-based linkings
@@ -292,7 +289,6 @@ class w2p_Output_HTMLHelper
                 }
                 break;
             default:
-//TODO: use this when we get a chance - http://www.w3schools.com/cssref/pr_text_white-space.asp ?
                 $value = (isset($custom[$fieldName])) ? $custom[$fieldName][$value] : $value;
                 $cell = htmlspecialchars($value, ENT_QUOTES);
         }
