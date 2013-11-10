@@ -342,84 +342,40 @@ class w2p_Core_CAppUI
         $this->setStyle();
     }
 
-    /**
-     * Utility function to read the 'directories' under 'path'
-     *
-     * This function is used to read the modules or locales installed on the file system.
-     * @param string The path to read.
-     * @return array A named array of the directories (the key and value are identical).
-     */
+    /** @deprecated */
     public function readDirs($path)
     {
-        $dirs = array();
+        trigger_error("AppUI->readDirs() has been deprecated in v3.0 and will be removed by v4.0. Please use w2p_FileSystem_Loader->readDirs() instead.", E_USER_NOTICE);
 
-        if (is_dir(W2P_BASE_DIR . '/' . $path)) {
-            $d = dir(W2P_BASE_DIR . '/' . $path);
-            while (false !== ($name = $d->read())) {
-                if (is_dir(W2P_BASE_DIR . '/' . $path . '/' . $name) && $name != '.' && $name != '..' && $name != 'CVS' && $name != '.svn') {
-                    $dirs[$name] = $name;
-                }
-            }
-            $d->close();
-        }
-        return $dirs;
+        $loader = new w2p_FileSystem_Loader();
+        return $loader->readDirs($path);
     }
 
-    /**
-     * Utility function to read the 'files' under 'path'
-     * @param string The path to read.
-     * @param string A regular expression to filter by.
-     * @return array A named array of the files (the key and value are identical).
-     */
+    /** @deprecated */
     public function readFiles($path, $filter = '.')
     {
-        $files = array();
+        trigger_error("AppUI->readFiles() has been deprecated in v3.0 and will be removed by v4.0. Please use w2p_FileSystem_Loader->readFiles() instead.", E_USER_NOTICE);
 
-        if (is_dir($path) && ($handle = opendir($path))) {
-            while (false !== ($file = readdir($handle))) {
-                if ($file != '.' && $file != '..' && preg_match('/' . $filter . '/', $file)) {
-                    $files[$file] = $file;
-                }
-            }
-            closedir($handle);
-        }
-        return $files;
+        $loader = new w2p_FileSystem_Loader();
+        return $loader->readFiles($path, $filter);
     }
 
-    /**
-     * Utility function to check whether a file name is 'safe'
-     *
-     * Prevents from access to relative directories (eg ../../dealyfile.php);
-     * @param string The file name.
-     * @return array A named array of the files (the key and value are identical).
-     */
+    /** @deprecated */
     public function checkFileName($file)
     {
-        global $AppUI;
+        trigger_error("AppUI->checkFileName() has been deprecated in v3.0 and will be removed by v4.0. Please use w2p_FileSystem_Loader->checkFileName() instead.", E_USER_NOTICE);
 
-        // define bad characters and their replacement
-        $bad_chars = ";/\\";
-        $bad_replace = '....'; // Needs the same number of chars as $bad_chars
-        // check whether the filename contained bad characters
-        if (strpos(strtr($file, $bad_chars, $bad_replace), '.') !== false) {
-            $AppUI->redirect(ACCESS_DENIED);
-        } else {
-            return $file;
-        }
+        $loader = new w2p_FileSystem_Loader();
+        return $loader->checkFileName($file);
     }
 
-    /**
-     * Utility function to make a file name 'safe'
-     *
-     * Strips out mallicious insertion of relative directories (eg ../../dealyfile.php);
-     * @param string The file name.
-     * @return array A named array of the files (the key and value are identical).
-     */
+    /** @deprecated */
     public function makeFileNameSafe($file)
     {
-        $file = str_replace('../', '', $file);
-        $file = str_replace('..\\', '', $file);
-        return $file;
+        trigger_error("AppUI->makeFileNameSafe() has been deprecated in v3.0 and will be removed by v4.0. Please use w2p_FileSystem_Loader->makeFileNameSafe() instead.", E_USER_NOTICE);
+
+        $loader = new w2p_FileSystem_Loader();
+        return $loader->makeFileNameSafe($file);
     }
 
     /**
@@ -1266,5 +1222,4 @@ class w2p_Core_CAppUI
         echo $s;
         include w2PgetConfig('root_dir') . '/js/calendar.php';
     }
-
 }
