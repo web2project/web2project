@@ -28,7 +28,7 @@
  * @todo    new query object
  */
 
-class CSystem_Role {
+class CSystem_Role extends w2p_Core_BaseObject {
 	public $role_id = null;
 	public $role_name = null;
 	public $role_description = null;

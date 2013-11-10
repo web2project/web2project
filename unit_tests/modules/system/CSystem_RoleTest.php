@@ -42,9 +42,8 @@ class CSystemRole_Test extends CommonSetup
         $this->obj->role_name = null;
         $this->obj->role_description = null;
         $this->obj->perms = null;
-        $this->obj->_query = null;
 
-        parent::objectPropertiesTest('CSystem_Role', 5, $unset);
+        parent::objectPropertiesTest('CSystem_Role', 4, $unset);
     }
 
     public function testBind()
