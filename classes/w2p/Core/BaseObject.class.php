@@ -584,46 +584,14 @@ abstract class w2p_Core_BaseObject extends w2p_System_Event implements w2p_Syste
      * @param int                   $uid
      * @param w2p_Database_Query    $query
      * @param string                $index
-     * @param string                $key
      *
      * @return  w2p_Database_Query
      */
-    public function setAllowedSQL($uid, $query, $index = null, $key = null)
+    public function setAllowedSQL($uid, $query, $index = null)
     {
-        $uid = (int) $uid;
-        $uid || exit('FATAL ERROR ' . get_class($this) . '::getAllowedSQL failed');
-        $deny = $this->_perms->getDeniedItems($this->_tbl_module, $uid);
-        $allow = $this->_perms->getAllowedItems($this->_tbl_module, $uid);
-        // Make sure that we add the table otherwise dependencies break
-        if (isset($index)) {
-            if (!$key) {
-                $key = substr($this->_tbl, 0, 2);
-            }
-            $query->leftJoin($this->_tbl, $key, $key . '.' . $this->_tbl_key . ' = ' . $index);
-        }
-
-        if (count($allow)) {
-            if ((array_search('0', $allow)) === false) {
-                //If 0 (All Items of a module) are not permited then just add the allowed items only
-                $query->addWhere(((!$key) ? '' : $key . '.') . $this->_tbl_key . ' IN (' . implode(',', $allow) . ')');
-            } else {
-                //If 0 (All Items of a module) are permited then don't add a where clause so the user is permitted to see all
-            }
-            //Denials are only required if we were able to see anything in the first place so now we handle the denials
-            if (count($deny)) {
-                if ((array_search('0', $deny)) === false) {
-                    //If 0 (All Items of a module) are not on the denial array then just deny the denied items
-                    $query->addWhere(((!$key) ? '' : $key . '.') . $this->_tbl_key . ' NOT IN (' . implode(',', $deny) . ')');
-                } elseif ((array_search('0', $allow)) === false) {
-                    //If 0 (All Items of a module) are denied and we have granted some then implicit denial to everything else is already in place
-                } else {
-                    //if we allow everything and deny everything then denials have higher priority... Deny Everything!
-                    $query->addWhere('0=1');
-                }
-            }
-        } else {
-            //if there are no allowances, deny!
-            $query->addWhere('0=1');
+        $where = $this->getAllowedSQL($uid, $index);
+        foreach($where as $criteria) {
+            $query->addWhere($criteria);
         }
 
         return $query;
