@@ -100,7 +100,7 @@ class w2p_Output_GanttRenderer {
         $this->graph->SetDateRange($start_date, $end_date);
     }
 
-    public function setTitle($tableTitle = '', $notUsed = null)
+    public function setTitle($tableTitle = '')
     {
         $this->graph->title->Set($tableTitle);
         // Use TTF font if it exists
@@ -173,8 +173,6 @@ class w2p_Output_GanttRenderer {
                         $rowValues[] = $actual_endDate->format($this->df);
                     }
                     break;
-                case 'project_name':
-                case 'task_name':
                 default:
                     $rowValues[] = $value;
             }
