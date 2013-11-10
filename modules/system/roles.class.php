@@ -30,19 +30,15 @@ class CSystem_Role extends w2p_Core_BaseObject {
 	public $role_name = null;
 	public $role_description = null;
 
-	public function __construct($name = '', $description = '') {
+	public function __construct($name = '', $description = '')
+    {
 		$this->role_name = $name;
 		$this->role_description = $description;
 
         parent::__construct('not-a-table', 'role_id');
 	}
 
-	public function check() {
-		// Not really much to check, just return OK for this iteration.
-		return array(); // object is ok
-	}
-
-	public function store($unused = null)
+	public function store()
     {
         if (!$this->isValid()) {
             return false;
@@ -76,8 +72,8 @@ class CSystem_Role extends w2p_Core_BaseObject {
      *
      * @return bool|null|string
      */
-    public function delete() {
-
+    public function delete()
+    {
 		if (canDelete('roles')) {
 			// Delete all the children from this group
 			return $this->_perms->deleteRole($this->role_id);
@@ -86,39 +82,43 @@ class CSystem_Role extends w2p_Core_BaseObject {
 		}
 	}
 
-	public function __sleep() {
-		return array('role_id', 'role_name', 'role_description');
+	public function __sleep()
+    {
+        return array('role_id', 'role_name', 'role_description');
 	}
 
-	public function __wakeup() {
+    public function __wakeup()
+    {
         global $AppUI;
         $this->_AppUI = $AppUI;
         $this->perms = $this->_AppUI->acl();
 	}
 
-	/**
-	 * Return a list of known roles.
-	 */
-	public function getRoles() {
-		$role_parent = $this->_perms->get_group_id('role');
-		$roles = $this->_perms->getChildren($role_parent);
-		return $roles;
-	}
+    /**
+    * Return a list of known roles.
+    */
+    public function getRoles()
+    {
+        $role_parent = $this->_perms->get_group_id('role');
+        $roles = $this->_perms->getChildren($role_parent);
+        return $roles;
+    }
 
     /** @deprecated */
-	public function rename_array(&$roles, $from, $to) {
-		if (count($from) != count($to)) {
-			return false;
-		}
-		foreach ($roles as $key => $val) {
-			// 4.2 and before return NULL on fail, later returns false.
-			if (($k = array_search($k, $from)) !== false && $k !== null) {
-				unset($roles[$key]);
-				$roles[$to[$k]] = $val;
-			}
-		}
-		return true;
-	}
+    public function rename_array(&$roles, $from, $to)
+    {
+        if (count($from) != count($to)) {
+            return false;
+        }
+        foreach ($roles as $key => $val) {
+            // 4.2 and before return NULL on fail, later returns false.
+            if (($k = array_search($k, $from)) !== false && $k !== null) {
+                unset($roles[$key]);
+                $roles[$to[$k]] = $val;
+            }
+        }
+        return true;
+    }
 	
 	/**
 	 * CRole::copyPermissions()
@@ -128,7 +128,8 @@ class CSystem_Role extends w2p_Core_BaseObject {
 	 * @param integer $role_id of the Role we are copying permissions to
 	 * @return true if sucessful
 	 */
-	public function copyPermissions($copy_role_id = null, $role_id = null) {
+	public function copyPermissions($copy_role_id = null, $role_id = null)
+    {
 		if (!$copy_role_id || !$role_id) {
 			return false;
 		}
