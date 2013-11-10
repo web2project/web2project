@@ -302,6 +302,8 @@ class w2p_Core_CAppUITest extends CommonSetup
 
     /**
      * Test getting a library class
+     *
+     * @expectedException PHPUnit_Framework_Error
      */
     public function testGetLibraryClassValid()
     {
@@ -312,6 +314,8 @@ class w2p_Core_CAppUITest extends CommonSetup
 
     /**
      * Tests getting a library class when no library name is passed
+     *
+     * @expectedException PHPUnit_Framework_Error
      */
     public function testGetLibraryClassNoName()
     {
@@ -322,6 +326,8 @@ class w2p_Core_CAppUITest extends CommonSetup
 
     /**
      * Tests getting a module class
+     *
+     * @expectedException PHPUnit_Framework_Error
      */
     public function testGetModuleClassValid()
     {
@@ -332,6 +338,8 @@ class w2p_Core_CAppUITest extends CommonSetup
 
     /**
      * Tests getting a module class when no name is passed
+     *
+     * @expectedException PHPUnit_Framework_Error
      */
     public function testGetModuleClassNoName()
     {
