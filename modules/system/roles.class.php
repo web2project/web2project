@@ -91,7 +91,7 @@ class CSystem_Role extends w2p_Core_BaseObject {
     {
         global $AppUI;
         $this->_AppUI = $AppUI;
-        $this->perms = $this->_AppUI->acl();
+        $this->_perms = $this->_AppUI->acl();
 	}
 
     /**
@@ -150,7 +150,7 @@ class CSystem_Role extends w2p_Core_BaseObject {
 			
 			//catch the permissions of that acl.
 			//ex: Array ( [note] => [return_value] => [enabled] => 1 [allow] => 1 [acl_id] => 14 [aco] => Array ( [application] => Array ( [0] => access ) ) [aro] => Array ( ) [axo] => Array ( ) [aro_groups] => Array ( [0] => 12 ) [axo_groups] => Array ( [0] => 13 ) ) 
-			$permission = $this->perms->get_acl($acl);
+			$permission = $this->_perms->get_acl($acl);
 		
 			if (is_array($permission)) {
 				if (is_array($permission['axo_groups'])) {
@@ -218,12 +218,14 @@ class CSystem_Role extends w2p_Core_BaseObject {
 				$aro_map = array($role_id);
 				// Build the permissions info
 				$type_map = array();
-				foreach ($permission_type as $tid) {
-					$type = $this->_perms->get_object_data($tid, 'aco');
-					foreach ($type as $t) {
-						$type_map[$t[0]][] = $t[1];
-					}
-				}
+                if (is_array($permission_type)) {
+                    foreach ($permission_type as $tid) {
+                        $type = $this->_perms->get_object_data($tid, 'aco');
+                        foreach ($type as $t) {
+                            $type_map[$t[0]][] = $t[1];
+                        }
+                    }
+                }
 				$this->_perms->add_acl($type_map, null, $aro_map, $mod_mod, $mod_group, $permission_access, 1, null, null, 'user');
 			}
 		}

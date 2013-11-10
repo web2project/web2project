@@ -73,13 +73,6 @@ class CSystemRole_Test extends CommonSetup
         $this->assertContains('role_description',   $result);
     }
 
-    public function testWakeup()
-    {
-        $this->obj->__wakeup();
-
-        $this->AssertEquals(1,                      count($this->obj->perms));
-    }
-
     /**
      * @todo Implement testStore().
      */
