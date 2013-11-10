@@ -34,9 +34,7 @@ class CSystem_Role extends w2p_Core_BaseObject {
 		$this->role_name = $name;
 		$this->role_description = $description;
 
-        global $AppUI;
-        $this->_AppUI = $AppUI;
-        $this->_perms = $this->_AppUI->acl();
+        parent::__construct('not-a-table', 'role_id');
 	}
 
 	public function check() {
@@ -44,33 +42,42 @@ class CSystem_Role extends w2p_Core_BaseObject {
 		return array(); // object is ok
 	}
 
-	public function store($unused = null) {
-        $stored = false;
-
-        $this->_error = $this->check();
-        if (count($this->_error)) {
+	public function store($unused = null)
+    {
+        if (!$this->isValid()) {
             return false;
         }
 
+        // NOTE: I don't particularly like this but it wires things properly.
+        $this->_event = ($this->role_id) ? 'Update' : 'Create';
+        $this->_dispatcher->publish(new w2p_System_Event(get_class($this), 'pre' . $this->_event . 'Event'));
+
 		if ($this->role_id) {
-			$ret = $this->_perms->updateRole($this->role_id, $this->role_name, $this->role_description);
+			$result = $this->_perms->updateRole($this->role_id, $this->role_name, $this->role_description);
 		} else {
-			$ret = $this->_perms->insertRole($this->role_name, $this->role_description);
+            $result = $this->_perms->insertRole($this->role_name, $this->role_description);
             $this->role_id = db_insert_id();
 		}
 
-		if (!$ret) {
-            $this->_error['store-check'] = get_class($this) . '::store failed';
+		if ($result) {
+            // NOTE: I don't particularly like how the name is generated but it wires things properly.
+            $this->_dispatcher->publish(new w2p_System_Event(get_class($this), 'post' . $this->_event . 'Event'));
+            $this->_dispatcher->publish(new w2p_System_Event(get_class($this), 'postStoreEvent'));
 		} else {
-			$stored = true;
+            $this->_error['store'] = get_class($this) . '::store failed';
 		}
         
-        return $stored;
+        return $result;
 	}
 
-	public function delete() {
-		// Delete a role requires deleting all of the ACLs associated
-		// with this role, and all of the group data for the role.
+    /**
+     * Delete a role requires deleting all of the ACLs associated with this
+     *  role, and all of the group data for the role.
+     *
+     * @return bool|null|string
+     */
+    public function delete() {
+
 		if (canDelete('roles')) {
 			// Delete all the children from this group
 			return $this->_perms->deleteRole($this->role_id);
@@ -98,6 +105,7 @@ class CSystem_Role extends w2p_Core_BaseObject {
 		return $roles;
 	}
 
+    /** @deprecated */
 	public function rename_array(&$roles, $from, $to) {
 		if (count($from) != count($to)) {
 			return false;
