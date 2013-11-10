@@ -51,14 +51,11 @@ abstract class w2p_Core_BaseObject extends w2p_System_Event implements w2p_Syste
     protected $_locale_char_set;
 
     /**
-     * 	Object constructor to set table and key field
+     * 	Object constructor to set table and key field. This should be overridden by all submodules
      *
-     * 	Can be overloaded/supplemented by the child class
-     * 	@param string $table name of the table in the db schema relating to child class
-     * 	@param string $key name of the primary key field in the table
-     * 	@param (OPTIONAL) string $module name as stored in the 'mod_directory' of the 'modules' table, and the 'value' field of the 'gacl_axo' table.
-     *          It is used for permission checking in situations where the table name is different from the module folder name.
-     *          For compatibility sake this variable is set equal to the $table if not set as failsafe.
+     * @param string $table     name of the table in the db schema relating to child class
+     * @param string $key       name of the primary key field in the table
+     * @param string $module    name as stored in the 'mod_directory' of the 'modules' table, and the 'value' field of the 'gacl_axo' table. It is used for permission checking in situations where the table name is different from the module folder name. For compatibility sake this variable is set equal to the $table if not set as failsafe.
      */
     public function __construct($table, $key, $module = '')
     {
@@ -70,7 +67,7 @@ abstract class w2p_Core_BaseObject extends w2p_System_Event implements w2p_Syste
         $this->_tbl_prefix = w2PgetConfig('dbprefix', '');
         $this->_query = new w2p_Database_Query;
 
-        /*
+        /**
          * I hate this global but this will allow us to get rid of all the
          *   others, so I think it's the best approach for now.
          *                                           ~ caseydk 27 Dec 2011
@@ -78,12 +75,10 @@ abstract class w2p_Core_BaseObject extends w2p_System_Event implements w2p_Syste
         global $AppUI;
         $this->_AppUI = is_null($AppUI) ? new w2p_Core_CAppUI() : $AppUI;
         $this->_perms = $this->_AppUI->acl();
-        global $w2Pconfig;
-        $this->_w2Pconfig;
         global $locale_char_set;
         $this->_locale_char_set = $locale_char_set;
 
-        /*
+        /**
          * This block does a lot and may need to be simplified.. but the point
          *   is that it sets up all of our base Events for later notifications,
          *   logging, etc. We also need a way to enable Core Modules (CProject,
@@ -146,12 +141,12 @@ abstract class w2p_Core_BaseObject extends w2p_System_Event implements w2p_Syste
     /**
      * 	Binds a named array/hash to this object
      *
-     * 	can be overloaded/supplemented by the child class
-     * 	@param array $hash named array
-     *  @param $prefix Defaults to null, prefix to use with hash keys
-     *  @param $checkSlashes Defaults to true, strip any slashes from the hash values
-     *  @param $bindAll Bind all values regardless of their existance as defined instance variables
-     * 	@return null|string	null is operation was satisfactory, otherwise returns an error
+     * @param      $hash
+     * @param null $prefix          Defaults to null, prefix to use with hash keys
+     * @param bool $checkSlashes    Defaults to true, strip any slashes from the hash values
+     * @param bool $bindAll
+     *
+     * @return bool
      */
     public function bind($hash, $prefix = null, $checkSlashes = true, $bindAll = false)
     {
@@ -159,7 +154,7 @@ abstract class w2p_Core_BaseObject extends w2p_System_Event implements w2p_Syste
             $this->_error[] = get_class($this) . '::bind failed.';
             return false;
         } else {
-            /*
+            /**
              * We need to filter out any object values from the array/hash so the bindHashToObject()
              * doesn't die. We also avoid issues such as passing objects to non-object functions
              * and copying object references instead of cloning objects. Object cloning (if needed)
@@ -181,8 +176,11 @@ abstract class w2p_Core_BaseObject extends w2p_System_Event implements w2p_Syste
 
     /**
      * 	Binds an array/hash to this object
-     * 	@param int $oid optional argument, if not specifed then the value of current key is used
-     * 	@return any result from the database operation
+     *
+     * @param null $oid     optional argument, if not specifed then the value of current key is used
+     * @param bool $strip
+     *
+     * @return $this|bool
      */
     public function load($oid = null, $strip = true)
     {
@@ -214,6 +212,11 @@ abstract class w2p_Core_BaseObject extends w2p_System_Event implements w2p_Syste
     /**
      * 	Returns an array, keyed by the key field, of all elements that meet
      * 	the where clause provided. Ordered by $order key.
+     *
+     * @param null $order
+     * @param null $where
+     *
+     * @return Associative
      */
     public function loadAll($order = null, $where = null)
     {
@@ -243,9 +246,8 @@ abstract class w2p_Core_BaseObject extends w2p_System_Event implements w2p_Syste
     }
 
     /**
-     * 	Generic check method
+     * 	Generic check method, overload as needed
      *
-     * 	Can be overloaded/supplemented by the child class
      * 	@return array() of size zero if the object is ok
      */
     public function check()
@@ -255,7 +257,7 @@ abstract class w2p_Core_BaseObject extends w2p_System_Event implements w2p_Syste
         return $this->getError();
     }
 
-    /*
+    /**
      * This function does just what you think it does. The nice thing is that
      *    since it always returns a boolean (storing the errors in the
      *    $this->_errors, we can make decisions based on it even if we don't
@@ -275,7 +277,7 @@ abstract class w2p_Core_BaseObject extends w2p_System_Event implements w2p_Syste
      * */
     public function duplicate()
     {
-        /*
+        /**
          *  PHP4 is no longer supported or allowed. The
          *    installer/upgrader/converter simply stops executing.
          *  This method also appears (modified) in the w2p_Utilities_Date and w2p_Database_Query class.
@@ -293,7 +295,7 @@ abstract class w2p_Core_BaseObject extends w2p_System_Event implements w2p_Syste
      * 	Default trimming method for class variables of type string
      *
      * 	@param object Object to trim class variables for
-     * 	Can be overloaded/supplemented by the child class
+     *
      * 	@return none
      */
     public function w2PTrimAll()
@@ -309,8 +311,9 @@ abstract class w2p_Core_BaseObject extends w2p_System_Event implements w2p_Syste
     /**
      * 	Inserts a new row if id is zero or updates an existing row in the database table
      *
-     * 	Can be overloaded/supplemented by the child class
-     * 	@return boolean - true if successful otherwise false, errors 
+     * @param bool $updateNulls
+     *
+     * @return bool
      */
     public function store($updateNulls = false)
     {
@@ -332,7 +335,7 @@ abstract class w2p_Core_BaseObject extends w2p_System_Event implements w2p_Syste
 
         $q = $this->_getQuery();
 
-        /*
+        /**
          * Note that we have to check and perform the edit *first* because the
          *    create/add fills in the id that we're checking. Therefore, if we
          *    did the create/add first, we'd have a valid id and then we'd
@@ -358,6 +361,7 @@ abstract class w2p_Core_BaseObject extends w2p_System_Event implements w2p_Syste
         return $result;
     }
 
+    /** @deprecated */
     public function canAddEdit()
     {
         if ($this->_tbl_key) {
@@ -366,28 +370,40 @@ abstract class w2p_Core_BaseObject extends w2p_System_Event implements w2p_Syste
             return $this->canCreate();
         }
     }
+
+    /**
+     * @return boolean
+     */
     public function canAccess() {
         return $this->_perms->checkModuleItem($this->_tbl_module, 'access');
     }
+    /**
+     * @return boolean
+     */
     public function canCreate() {
         return $this->_perms->checkModuleItem($this->_tbl_module, 'add');
     }
+    /**
+     * @return boolean
+     */
     public function canEdit() {
         return $this->_perms->checkModuleItem($this->_tbl_module, 'edit', $this->{$this->_tbl_key});
     }
+    /**
+     * @return boolean
+     */
     public function canView() {
         return $this->_perms->checkModuleItem($this->_tbl_module, 'view', $this->{$this->_tbl_key});
     }
 
     /**
-     * 	Generic check for whether dependencies exist for this object in the db schema
+     * 	Generic check for whether dependencies exist for this object in the db schema, overload as needed
      *
-     * 	Can be overloaded/supplemented by the child class
-     * 	@param  null    unused
-     * 	@param  int     Optional key index
-     * 	@param  array   Optional array to compiles standard joins format
-*                      [label=>'Label',name=>'table name',idfield=>'field',joinfield=>'field']
-     * 	@return boolean true|false
+     * @param string $notUsed
+     * @param null   $oid
+     * @param null   $joins
+     *
+     * @return bool
      */
     public function canDelete($notUsed = '', $oid = null, $joins = null)
     {
@@ -403,7 +419,7 @@ abstract class w2p_Core_BaseObject extends w2p_System_Event implements w2p_Syste
         }
 
         /**
-        * @todo This should confirm that the module is actually active and available befor executing the query below
+        * @todo This should confirm that the module is actually active and available before executing the query below
         */
         if (is_array($joins)) {
             foreach ($joins as $table) {
@@ -425,8 +441,9 @@ abstract class w2p_Core_BaseObject extends w2p_System_Event implements w2p_Syste
     /**
      * 	Default delete method
      *
-     * 	Can be overloaded/supplemented by the child class
-     * 	@return null|string null if successful otherwise returns and error message
+     * @param null $oid
+     *
+     * @return bool|Handle
      */
     public function delete($oid = null)
     {
@@ -475,13 +492,16 @@ abstract class w2p_Core_BaseObject extends w2p_System_Event implements w2p_Syste
     }
 
     /**
-     * 	Returns a list of records exposed to the user
-     * 	@param int User id number
-     * 	@param string Optional fields to be returned by the query, default is all
-     * 	@param string Optional sort order for the query
-     * 	@param string Optional name of field to index the returned array
-     * 	@param array Optional array of additional sql parameters (from and where supported)
-     * 	@return array
+     * 	Returns a list of records visible to the user
+     *
+     * @param        $uid
+     * @param string $fields        fields to be returned by the query, default is all
+     * @param string $orderby       sort order for the query
+     * @param null   $index         name of field to index the returned array
+     * @param null   $extra         array of additional sql parameters (from and where supported)
+     * @param string $table_alias
+     *
+     * @return Associative
      */
     public function getAllowedRecords($uid, $fields = '*', $orderby = '', $index = null, $extra = null, $table_alias = '')
     {
