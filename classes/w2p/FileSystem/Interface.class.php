@@ -3,6 +3,8 @@
  * Class w2p_FileSystem_Interface
  *
  * This is the standard interface for all of the filesystem operations.
+ *
+ * @package     web2project\filesystem
  */
 interface w2p_FileSystem_Interface
 {

@@ -3,6 +3,8 @@
  * Class w2p_FileSystem_Local
  *
  * This is the base implementation of the storage backend for the Files module.
+ *
+ * @package     web2project\filesystem
  */
 class w2p_FileSystem_Local implements w2p_FileSystem_Interface
 {
