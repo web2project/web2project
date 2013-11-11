@@ -22,7 +22,8 @@ class w2p_Output_PageHandler {
                 if (!canAccess($dir)) {
                     continue;
                 }
-                $modules_items = $AppUI->readFiles(W2P_BASE_DIR . '/modules/' . $dir . '/',
+                $loader = new w2p_FileSystem_Loader();
+                $modules_items = $loader->readFiles(W2P_BASE_DIR . '/modules/' . $dir . '/',
                         '^' . $m . '_'.substr($type, 0, -1).'.*\.php');
                 foreach ($modules_items as $item) {
                     // Get the name as the subextension

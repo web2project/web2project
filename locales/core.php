@@ -12,7 +12,8 @@ if (isset($perms)) {
     if (!canAccess($dir)) {
       continue;
     }
-    $modules_tabs_crumbs = $AppUI->readFiles(W2P_BASE_DIR . '/modules/' . $dir . '/', '^' . $m . '_(tab|crumb).*\.php');
+    $loader = new w2p_FileSystem_Loader();
+    $modules_tabs_crumbs = $loader->readFiles(W2P_BASE_DIR . '/modules/' . $dir . '/', '^' . $m . '_(tab|crumb).*\.php');
     if (count($modules_tabs_crumbs) > 0) {
       if (file_exists(W2P_BASE_DIR . '/modules/' . $dir . '/locales/' . $AppUI->user_locale . '/' . $dir . '.inc')) {
         readfile(W2P_BASE_DIR . '/modules/' . $dir . '/locales/' . $AppUI->user_locale . '/' . $dir . '.inc');

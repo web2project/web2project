@@ -30,7 +30,8 @@ foreach ($projectList as $pr) {
 // get the prefered date format
 $df = $AppUI->getPref('SHDATEFORMAT');
 
-$reports = $AppUI->readFiles(W2P_BASE_DIR . '/modules/reports/reports', '\.php$');
+$loader = new w2p_FileSystem_Loader();
+$reports = $loader->readFiles(W2P_BASE_DIR . '/modules/reports/reports', '\.php$');
 
 // setup the title block
 if (!$suppressHeaders) {
@@ -63,7 +64,7 @@ if (!$suppressHeaders) {
 <?php
 }
 if ($report_type) {
-	$report_type = $AppUI->checkFileName($report_type);
+	$report_type = $loader->checkFileName($report_type);
 	$report_type = str_replace(' ', '_', $report_type);
 	require W2P_BASE_DIR . '/modules/reports/reports/' . $report_type . '.php';
 } else {
