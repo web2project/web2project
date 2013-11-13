@@ -156,6 +156,7 @@ class w2p_Core_UpgradeManager {
             case '2.1.5':
             case '2.1.6':
             case '2.1.7':
+            case '2.1.8':
                 $errorMessages = $this->_applySQLUpdates('dp_to_w2p1.sql', $dbConn);
                 $allErrors = array_merge($allErrors, $errorMessages);
 
