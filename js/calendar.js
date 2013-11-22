@@ -371,7 +371,7 @@ function HM2Seconds(HM) { // h:m
     if (parseInt(H, 10) > 23 && parseInt(H, 10) < 0) H = 0;
     if (parseInt(M, 10) > 59 && parseInt(M, 10) < 0) M = 0;
 
-    return (H*60 + +M)*60; 
+    return (H*60 + M)*60;
 }
 
 function seconds2HM(intSecondsToConvert) {
