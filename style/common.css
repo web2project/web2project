@@ -307,8 +307,6 @@ table.list tr:hover td._name {
 }
 .view td.data {
     background-color: #FFFFFF;
-    -moz-border-radius:3px;
-    -webkit-border-radius:3px;
     border-radius:3px;
     text-align: left;
 }
@@ -528,8 +526,7 @@ table.prjprint TR {
 .tool-tip td.tip-label {
     border: 1px solid white;
     text-align: right;
-    -moz-border-radius:3.5px;
-    -webkit-border-radius:3.5px;
+    border-radius: 3.5px;
 }
 
 .tool-tip td.description {
