@@ -462,7 +462,8 @@ class w2p_Core_CAppUI
             $LANGUAGES = &$_SESSION['LANGUAGES'];
         } else {
             $LANGUAGES = array();
-            $langs = $this->readDirs('locales');
+            $loader = new w2p_FileSystem_Loader();
+            $langs = $loader->readDirs('locales');
             foreach ($langs as $lang) {
                 if (file_exists(W2P_BASE_DIR . '/locales/' . $lang . '/lang.php')) {
                     include_once W2P_BASE_DIR . '/locales/' . $lang . '/lang.php';
