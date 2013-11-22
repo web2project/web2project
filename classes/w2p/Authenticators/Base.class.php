@@ -25,6 +25,7 @@ abstract class w2p_Authenticators_Base
 
         $this->_AppUI = $AppUI;
         $this->_w2Pconfig = $w2Pconfig;
+        $this->_query = new w2p_Database_Query;
     }
     
     /**
