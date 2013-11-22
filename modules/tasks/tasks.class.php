@@ -981,7 +981,7 @@ class CTask extends w2p_Core_BaseObject
             }
             $task->task_name = $AppUI->_('Subproject') . ': ' . $subProject->project_name;
             $task->task_duration_type = 1;
-            $task->task_duration = $subProject->project_worked_hours;
+            $task->task_duration = $subProject->project_scheduled_hours;
             $task->task_start_date = $projectDates[0]['min_task_start_date'];
             $task->task_end_date = $projectDates[0]['max_task_end_date'];
             $task->task_percent_complete = $subProject->project_percent_complete;
