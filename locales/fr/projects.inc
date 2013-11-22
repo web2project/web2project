@@ -291,3 +291,4 @@
 'translation'=>'Traduction',
 'users'=>'Utilisateurs',
 'view this project'=>'Voir ce projet',
+'Help Desk'=>'Centre d\'assistance',

@@ -61,3 +61,5 @@
 'new file'=>'Nouveau fichier',
 'new folder'=>'Nouveau dossier',
 'select task'=>'sélectionner une tâche',
+'Links'=>'Liens',
+'Not attached to a project'=>'Non associé à un projet',

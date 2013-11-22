@@ -16,3 +16,4 @@
 'Show empty'=>'Montrer les vides',
 'Task Log'=>'Temps passé',
 'Total records found'=>'Nombre d\'enregistrements trouvé',
+'Links'=>'Liens',

@@ -48,7 +48,7 @@
 'Watch Forced'=>'Observation verrouillée',
 'Watch Unforced'=>'Observation déverrouillée',
 'Watch updated'=>'Observation mise à jour',
-'You have unread messages in this forum'=>'Vous avez des messages non-lus dans de ce forum',
+'You have unread messages in this forum'=>'Vous avez des messages non-lus dans ce forum',
 'add new forum'=>'Ajouter un nouveau forum',
 'back'=>'Retour',
 'closed'=>'fermé',
@@ -84,3 +84,4 @@
 'topics for this forum'=>'Discussions de ce forum',
 'update watches'=>'Mise à jour des observations',
 'view PDF file'=>'Voir le fichier PDF',
+'Links'=>'Liens',
