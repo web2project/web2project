@@ -32,7 +32,7 @@ $AppUI->setState($m . '_search_string', $search_string);
 $search_string = w2PformSafe($search_string, true);
 
 $company_id = $AppUI->processIntState('ProjIdxCompany', $_POST, 'project_company', $AppUI->user_company);
-$orderby = (isset($_GET['orderby']) && property_exists('CProject', $_GET['orderby'])) ? $_GET['orderby'] : 'project_company';
+$orderby = (isset($_GET['orderby']) && property_exists('CProject', $_GET['orderby'])) ? $_GET['orderby'] : 'project_name';
 $project_type = $AppUI->processIntState('ProjIdxType', $_POST, 'project_type', -1);
 $owner = $AppUI->processIntState('ProjIdxowner', $_POST, 'project_owner', -1);
 
