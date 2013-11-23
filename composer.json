@@ -22,7 +22,8 @@
         "source": "http://github.com/web2project/web2project"
     },
     "require": {
-        "aws/aws-sdk-php": "dev-master"
+        "aws/aws-sdk-php": "dev-master",
+        "dropbox/dropbox-sdk": "1.1.*"
     },
     "autoload": {
         "psr-0": {
