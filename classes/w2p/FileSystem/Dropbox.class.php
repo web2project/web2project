@@ -32,33 +32,43 @@ class w2p_FileSystem_Dropbox implements w2p_FileSystem_Interface
 
     public function isWritable()
     {
-        //todo: create folder
-        //todo: return success or not
         return is_object($this->_client);
     }
 
     public function move(CFile $file, $old_project_id, $actual_file_name)
     {
+        error_log(__FILE__ . ' -- ' . __LINE__);
         return false;
     }
     public function duplicate($old_project_id, $actual_file_name, $AppUI)
     {
+        error_log(__FILE__ . ' -- ' . __LINE__);
         return false;
     }
     public function moveTemp(CFile $file, $upload_info, $AppUI)
     {
-        return false;
+        $file->file_real_filename = uniqid(rand());
+        $path = '/' . $file->file_project . '/' . $file->file_real_filename;
+
+        $file_upload = fopen($upload_info['tmp_name'], "rb");
+        $result = $this->_client->uploadFile($path, dbx\WriteMode::add(), $file_upload);
+        fclose($file_upload);
+
+        return (isset($result['size']));
     }
     public function delete(CFile $file)
     {
+        error_log(__FILE__ . ' -- ' . __LINE__);
         return false;
     }
     public function exists($project_id, $filename)
     {
+        error_log(__FILE__ . ' -- ' . __LINE__);
         return false;
     }
     public function read($project_id, $filename)
     {
+        error_log(__FILE__ . ' -- ' . __LINE__);
         return false;
     }
 }
