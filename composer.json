@@ -1,8 +1,33 @@
 {
+<<<<<<< HEAD
     "require": {
 
     },
     "autoload": {
         "psr-0": { "Web2project": "src/"}
+=======
+    "name": "web2project/core",
+    "type": "application",
+    "keywords": ["web2project", "project management", "gantt"],
+    "homepage": "http://github.com/web2project/web2project",
+    "license": "BSD",
+    "authors": [
+        {
+            "name": "Keith Casey",
+            "email": "contrib@caseysoftware.com"
+        }
+    ],
+    "support": {
+        "issues": "http://bugs.web2project.net",
+        "source": "http://github.com/web2project/web2project"
+    },
+    "require": {
+        "aws/aws-sdk-php": "dev-master"
+    },
+    "autoload": {
+        "psr-0": {
+            "w2p_": ""
+        }
+>>>>>>> added the composer components
     }
 }
