@@ -301,31 +301,6 @@ class CFile extends w2p_Core_BaseObject {
         parent::hook_postDelete();
     }
 
-    /** @deprecated */
-    public function deleteFile()
-    {
-        $this->load();
-        return $this->getFileSystem()->delete($this);
-    }
-
-    /** @deprecated */
-    public function moveFile($oldProj, $realname)
-    {
-        return $this->getFileSystem()->move($this, $oldProj, $realname);
-    }
-
-    /** @deprecated */
-    public function duplicateFile($oldProj, $realname)
-    {
-        return $this->getFileSystem()->duplicate($oldProj, $realname, $this->_AppUI);
-    }
-
-    /** @deprecated */
-    public function moveTemp($upload)
-    {
-        return $this->getFileSystem()->moveTemp($this, $upload, $this->_AppUI);
-    }
-
     /**
      * parse file for indexing
      * @todo convert to using the FileSystem methods
@@ -419,12 +394,6 @@ class CFile extends w2p_Core_BaseObject {
         $q->exec();
 
         return $nwords_indexed;
-    }
-
-    /** @deprecated */
-    public function isWritable()
-    {
-        return $this->getFileSystem()->isWritable();
     }
 
     //function notifies about file changing
@@ -597,5 +566,36 @@ class CFile extends w2p_Core_BaseObject {
         $task->load((int)$this->file_task);
 
         return $task->task_name;
+    }
+
+    /** @deprecated */
+    public function isWritable()
+    {
+        return $this->getFileSystem()->isWritable();
+    }
+
+    /** @deprecated */
+    public function deleteFile()
+    {
+        $this->load();
+        return $this->getFileSystem()->delete($this);
+    }
+
+    /** @deprecated */
+    public function moveFile($oldProj, $realname)
+    {
+        return $this->getFileSystem()->move($this, $oldProj, $realname);
+    }
+
+    /** @deprecated */
+    public function duplicateFile($oldProj, $realname)
+    {
+        return $this->getFileSystem()->duplicate($oldProj, $realname, $this->_AppUI);
+    }
+
+    /** @deprecated */
+    public function moveTemp($upload)
+    {
+        return $this->getFileSystem()->moveTemp($this, $upload, $this->_AppUI);
     }
 }
