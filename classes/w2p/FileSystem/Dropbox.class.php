@@ -61,11 +61,15 @@ class w2p_FileSystem_Dropbox implements w2p_FileSystem_Interface
         error_log(__FILE__ . ' -- ' . __LINE__);
         return false;
     }
+
     public function exists($project_id, $filename)
     {
-        error_log(__FILE__ . ' -- ' . __LINE__);
-        return false;
+        $path = '/' . $project_id . '/' . $filename;
+        $fileMetadata = $this->_client->getMetadata($path);;
+
+        return (isset($fileMetadata['size']));
     }
+
     public function read($project_id, $filename)
     {
         error_log(__FILE__ . ' -- ' . __LINE__);
