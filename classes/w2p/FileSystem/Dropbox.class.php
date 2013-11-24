@@ -86,7 +86,13 @@ class w2p_FileSystem_Dropbox implements w2p_FileSystem_Interface
 
     public function read($project_id, $filename)
     {
-        error_log(__FILE__ . ' -- ' . __LINE__);
-        return false;
+        $path = '/' . $project_id . '/' . $filename;
+
+        $f = fopen("php://memory", "w+b");
+        $this->_client->getFile($path, $f);
+        rewind($f);
+        echo stream_get_contents($f);
+
+        return true;
     }
 }
