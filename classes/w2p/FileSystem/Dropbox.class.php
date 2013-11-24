@@ -56,10 +56,24 @@ class w2p_FileSystem_Dropbox implements w2p_FileSystem_Interface
 
         return (isset($result['size']));
     }
+
     public function delete(CFile $file)
     {
-        error_log(__FILE__ . ' -- ' . __LINE__);
-        return false;
+        $path = '/' . $file->file_project . '/' . $file->file_real_filename;
+        try {
+            $fileMetadata = $this->_client->delete($path);
+        } catch (Dropbox\Exception_BadResponse $exc) {
+            $message = $exc->getMessage();
+            if (strpos($message, '404')) {
+                /**
+                 * The file was not found.. so we're going to assume that the delete actually worked, it's just trying
+                 *   to double-delete for some reason.
+                 */
+                return true;
+            }
+        }
+
+        return (1 == $fileMetadata['is_deleted']);
     }
 
     public function exists($project_id, $filename)
