@@ -794,24 +794,23 @@ class CProject extends w2p_Core_BaseObject
 
         $perms = $AppUI->acl();
         if ($perms->checkModuleItem('projects', 'edit', $projectId) && $projectId > 0 && $statusId >= 0) {
-            $q = new w2p_Database_Query();
-            $q->addTable('projects');
-            $q->addUpdate('project_status', $statusId);
-            $q->addWhere('project_id   = ' . (int) $projectId);
-            $q->exec();
+            $project = new CProject();
+            $project->load($projectId);
+            $project->project_status = $statusId;
+            $project->store();
         }
     }
 
     public static function updateTaskCache($project_id, $task_id, $project_actual_end_date, $project_task_count)
     {
         if ($project_id && $task_id) {
-            $q = new w2p_Database_Query();
-            $q->addTable('projects');
-            $q->addUpdate('project_last_task', $task_id);
-            $q->addUpdate('project_actual_end_date', $project_actual_end_date);
-            $q->addUpdate('project_task_count', $project_task_count);
-            $q->addWhere('project_id   = ' . (int) $project_id);
-            $q->exec();
+            $project = new CProject();
+            $project->load($project_id);
+            $project->project_last_task = $task_id;
+            $project->project_actual_end_date = $project_actual_end_date;
+            $project->project_task_count = $project_task_count;
+            $project->store();
+
             self::updatePercentComplete($project_id);
         }
     }
@@ -824,11 +823,11 @@ class CProject extends w2p_Core_BaseObject
         trigger_error("CProject::updateTaskCount has been deprecated in v2.3 and will be removed by v4.0. Please use CProject::updateTaskCache instead.", E_USER_NOTICE);
 
         if ((int) $projectId) {
-            $q = new w2p_Database_Query();
-            $q->addTable('projects');
-            $q->addUpdate('project_task_count', intval($taskCount));
-            $q->addWhere('project_id   = ' . (int) $projectId);
-            $q->exec();
+            $project = new CProject();
+            $project->load($projectId);
+            $project->project_task_count = $taskCount;
+            $project->store();
+
             self::updatePercentComplete($projectId);
         }
     }
@@ -876,10 +875,11 @@ class CProject extends w2p_Core_BaseObject
         $worked_hours = rtrim($worked_hours, '.');
         $q->clear();
 
-        $q->addTable('projects');
-        $q->addUpdate('project_worked_hours', $worked_hours);
-        $q->addWhere('project_id  = ' . (int) $project_id);
-        $q->exec();
+        $project = new CProject();
+        $project->load($project_id);
+        $project->project_worked_hours = $worked_hours;
+        $project->store();
+
         self::updatePercentComplete($project_id);
     }
 
@@ -902,17 +902,17 @@ class CProject extends w2p_Core_BaseObject
         $task = new CTask();
         $project_scheduled_hours = $task->getHoursScheduled($project_id);
 
-        $q->addTable('projects');
-        $q->addUpdate('project_percent_complete',   $project_percent_complete);
-        $q->addUpdate('project_scheduled_hours',    $project_scheduled_hours);
-        $q->addWhere('project_id  = ' . (int) $project_id);
-        $q->exec();
+        $project = new CProject();
+        $project->load($project_id);
+        $project->project_percent_complete = $project_percent_complete;
+        $project->project_scheduled_hours = $project_scheduled_hours;
+        $project->store();
 
         global $AppUI;
         CTask::storeTokenTask($AppUI, $project_id);
     }
 
-    /*
+    /**
      * This is an unnecessary function as of v2.x. Instead of calculating this on
      *   demand every single time, we calculate it when a Task is created or deleted
      *   and then store it on the projects table. Then we can just return that column.
