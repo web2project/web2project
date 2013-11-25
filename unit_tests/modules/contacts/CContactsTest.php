@@ -239,7 +239,7 @@ class CContacts_Test extends CommonSetup
         $this->obj->contact_id = 1;
         $this->mockDB->stageHashList($this->obj->contact_id, 'ASDFASDFASDF');
 
-        $this->assertEquals('A',         $this->obj->getUpdateKey());
+        $this->assertEquals('ASDFASDFASDF',         $this->obj->getUpdateKey());
     }
 
     public function testClearUpdateKey() {
