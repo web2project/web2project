@@ -428,61 +428,59 @@ class CContact extends w2p_Core_BaseObject
         return parent::getAllowedRecords($uid, $fields, $orderby, $index, $extra);
     }
 
-    public static function searchContacts($AppUI = null, $where = '', $searchString = '', $days = 0)
+    public function search($search, $days = 0)
     {
-        global $AppUI;
+        $hook = $this->hook_search();
+        $searchfields = $hook['search_fields'];
 
-        $showfields = array('contact_address1' => 'contact_address1',
-            'contact_address2' => 'contact_address2', 'contact_city' => 'contact_city',
-            'contact_state' => 'contact_state', 'contact_zip' => 'contact_zip',
-            'contact_country' => 'contact_country', 'contact_company' => 'contact_company',
-            'company_name' => 'company_name', 'dept_name' => 'dept_name');
-        $additional_filter = '';
-
-        if ($searchString != '') {
-            $additional_filter = "OR contact_first_name like '%$searchString%'
-                                  OR contact_last_name  like '%$searchString%'
-			                      OR contact_display_name like '%$searchString%'
-                                  OR company_name like '%$searchString%'
-                                  OR contact_notes like '%$searchString%'";
+        foreach($searchfields as $key => $field) {
+            $searchfields[$key] = "$field like '%$search%'";
         }
-        // assemble the sql statement
-        $q = new w2p_Database_Query();
-        $q->addQuery('contact_id');
-        $q->addQuery($showfields);
-        $q->addQuery('contact_first_name, contact_last_name, contact_title');
-        $q->addQuery('contact_updatekey, contact_updateasked, contact_lastupdate');
-        $q->addQuery('contact_email, contact_phone');
+        $where = implode(' OR ', $searchfields);
+
+        $q = $this->_getQuery();
+        $q->addQuery('distinct(c.contact_id)');
+        $q->addQuery('c.*');
         $q->addQuery('user_id');
-        $q->addTable('contacts', 'a');
-        $q->leftJoin('companies', 'b', 'a.contact_company = b.company_id');
-        $q->leftJoin('departments', '', 'contact_department = dept_id');
+        $q->addTable('contacts', 'c');
+        $q->leftJoin('companies', 'b', 'c.contact_company = b.company_id');
+        $q->leftJoin('departments', '', 'c.contact_department = dept_id');
         $q->leftJoin('users', '', 'contact_id = user_contact');
-        $q->addWhere("(contact_first_name LIKE '$where%' OR contact_last_name LIKE '$where%' " . $additional_filter . ")");
+        $q->leftJoin('contacts_methods', 'cm', 'c.contact_id = cm.contact_id');
+        $q->addWhere('(' . $where . ')');
         if ($days) {
             $q->addWhere('contact_lastupdate >= ' . $q->dbfnDateAdd($q->dbfnNow(), -$days, 'DAY'));
         }
         $q->addWhere('
 			(contact_private=0
-				OR (contact_private=1 AND contact_owner=' . $AppUI->user_id . ')
+				OR (contact_private=1 AND contact_owner=' . $this->_AppUI->user_id . ')
 				OR contact_owner IS NULL OR contact_owner = 0
 			)');
 
 //TODO: We need to convert this from static to use ->overrideDatabase() for testing.
         $company = new CCompany;
-        $allow_where = $company->getAllowedSQL($AppUI->user_id,'contact_company');
+        $allow_where = $company->getAllowedSQL($this->_AppUI->user_id,'contact_company');
         if (count($allow_where)) {
             $q->addWhere('(contact_company = 0 OR contact_company IS NULL OR (' . implode(' AND ', $allow_where). '))');
         }
 
 //TODO: We need to convert this from static to use ->overrideDatabase() for testing.
         $department = new CDepartment;
-        $q = $department->setAllowedSQL($AppUI->user_id, $q);
+        $q = $department->setAllowedSQL($this->_AppUI->user_id, $q);
 
         $q->addOrder('contact_first_name');
         $q->addOrder('contact_last_name');
 
         return $q->loadList();
+    }
+
+    public static function searchContacts($unUsed = null, $where = '', $unUsed2 = '', $days = 0)
+    {
+        trigger_error("The CContact::searchContacts() method has been deprecated and will be removed in v4.0. Use CContact->search() instead.", E_USER_NOTICE );
+
+        $contact = new CContact();
+
+        return $contact->search($where, $days);
     }
 
     public static function getFirstLetters($userId, $onlyUsers = false)
