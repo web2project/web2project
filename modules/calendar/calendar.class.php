@@ -8,8 +8,6 @@
  * @todo    remove declarations before the class
  */
 
-$event_filter_list = array('my' => 'My Events', 'own' => 'Events I Created', 'all' => 'All Events');
-
 class CEvent extends w2p_Core_BaseObject
 {
     public $event_id = null;
