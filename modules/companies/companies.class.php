@@ -249,6 +249,9 @@ class CCompany extends w2p_Core_BaseObject {
         return $q->loadHashList('user_id');
     }
 
+    /**
+     * @deprecated
+     */
 	public static function getUsers(w2p_Core_CAppUI $AppUI, $companyId) {
         trigger_error("The CCompany::getUsers static method has been deprecated in 3.1 and will be removed in v4.0. Please use CCompany->users() instead.", E_USER_NOTICE );
 
@@ -274,6 +277,9 @@ class CCompany extends w2p_Core_BaseObject {
         }
     }
 
+    /**
+     * @deprecated
+     */
 	public static function getDepartments(w2p_Core_CAppUI $AppUI, $companyId)
     {
         trigger_error("The CCompany::getDepartments static method has been deprecated in 3.1 and will be removed in v4.0. Please use CCompany->departments() instead.", E_USER_NOTICE );
