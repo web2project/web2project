@@ -1072,7 +1072,7 @@ class CTask extends w2p_Core_BaseObject
         return $q->loadHash();
     }
 
-    public function updateDependencies($cslist, $parent_id = 0)
+    public function removeDependencies()
     {
 
         $q = $this->_getQuery();
@@ -1081,6 +1081,12 @@ class CTask extends w2p_Core_BaseObject
         $q->addWhere('dependencies_task_id=' . (int) $this->task_id);
         $q->exec();
         $q->clear();
+	}
+
+    public function updateDependencies($cslist, $parent_id = 0)
+    {
+
+        $this->removeDependencies();
 
         // process dependencies
         $tarr = explode(',', $cslist);
@@ -2176,6 +2182,10 @@ class CTask extends w2p_Core_BaseObject
     public function moveTaskBetweenProjects($task_id, $project_old, $project_new)
     {
         $this->updateSubTasksProject($project_new, $task_id);
+		$this->removeDependencies();
+		$this->task_project=$project_new;
+		$this->task_parent=$this->task_id;
+		$this->store();
 
         $taskCount_oldProject = $this->getTaskCount($project_old);
         CProject::updateTaskCount($project_old, $taskCount_oldProject);
