@@ -151,13 +151,16 @@ if (is_array($selected) && count($selected)) {
         //Action: Move to Project
         if (isset($_POST['bulk_task_project']) && $bulk_task_project != '' && $bulk_task_project) {
             if ($upd_task->task_id) {
-                $upd_task->task_project = $bulk_task_project;
+				$upd_task->moveTaskBetweenProjects($upd_task->task_id,$upd_task->task_project,$bulk_task_project);
+               
+			   /* $upd_task->task_project = $bulk_task_project;
                 //Set parent to self task
                 $upd_task->task_parent = $key;
                 $result = $upd_task->store();
                 if (!$result) {
                     break;
                 }
+				*/
             }
         }
 
