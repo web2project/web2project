@@ -38,7 +38,9 @@ if (!$canView) {
 $AppUI->loadCalendarJS();
 
 $today = new w2p_Utilities_Date();
-$today->convertTZ($AppUI->getPref('TIMEZONE'));
+$today->addDays(1);
+$today->setHour($w2Pconfig['cal_day_start']);
+$today->setMinute(0);
 
 //Lets load the users panel viewing options
 $q = new w2p_Database_Query;
