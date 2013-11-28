@@ -178,75 +178,11 @@ if ($project_id) {
 	}
 }
 
-if ($task_id) {
-	//if we are on a task context make sure we show ALL the children tasks
-	$f = 'deepchildren';
-}
 if ($pinned_only) {
 	$q->addWhere('task_pinned = 1');
 }
 
-$f = (($f) ? $f : '');
-switch ($f) {
-	case 'all':
-		break;
-	case 'myfinished7days':
-		$q->addWhere('ut.user_id = ' . (int)$user_id);
-	case 'allfinished7days': // patch 2.12.04 tasks finished in the last 7 days
-		//$q->addTable('user_tasks');
-		$q->addTable('user_tasks');
-		$q->addWhere('user_tasks.user_id = ' . (int)$user_id);
-		$q->addWhere('user_tasks.task_id = tasks.task_id');
-
-		$q->addWhere('task_percent_complete = 100');
-		//TODO: use date class to construct date.
-		$q->addWhere('task_end_date >= \'' . date('Y-m-d 00:00:00', mktime(0, 0, 0, date('m'), date('d') - 7, date('Y'))) . '\'');
-		break;
-	case 'children':
-		$q->addWhere('task_parent = ' . (int)$task_id);
-		$q->addWhere('tasks.task_id <> ' . $task_id);
-		break;
-	case 'deepchildren':
-		$taskobj = new CTask;
-		$taskobj->load((int)$task_id);
-		$deepchildren = $taskobj->getDeepChildren();
-		$q->addWhere('tasks.task_id IN (' . implode(',', $deepchildren) . ')');
-		$q->addWhere('tasks.task_id <> ' . $task_id);
-		break;
-	case 'myproj':
-		$q->addWhere('project_owner = ' . (int)$user_id);
-		break;
-	case 'mycomp':
-		if (!$AppUI->user_company) {
-			$AppUI->user_company = 0;
-		}
-		$q->addWhere('project_company = ' . (int)$AppUI->user_company);
-		break;
-	case 'myunfinished':
-		$q->addTable('user_tasks');
-		$q->addWhere('user_tasks.user_id = ' . (int)$user_id);
-		$q->addWhere('user_tasks.task_id = tasks.task_id');
-		$q->addWhere('(task_percent_complete < 100 OR task_end_date = \'\')');
-		break;
-	case 'allunfinished':
-		$q->addWhere('(task_percent_complete < 100 OR task_end_date = \'\')');
-		break;
-	case 'unassigned':
-		$q->leftJoin('user_tasks', 'ut_empty', 'tasks.task_id = ut_empty.task_id');
-		$q->addWhere('ut_empty.task_id IS NULL');
-		break;
-	case 'taskcreated':
-		$q->addWhere('task_creator = ' . (int)$user_id);
-		break;
-	case 'taskowned':
-		$q->addWhere('task_owner = ' . (int)$user_id);
-		break;
-	default:
-		$q->addTable('user_tasks');
-		$q->addWhere('user_tasks.user_id = ' . (int)$user_id);
-		$q->addWhere('user_tasks.task_id = tasks.task_id');
-		break;
-}
+$q = __extract_from_tasks3($f, $q, $user_id, $task_id, $AppUI);
 
 if ($showIncomplete) {
 	$q->addWhere('( task_percent_complete < 100 OR task_percent_complete IS NULL)');
