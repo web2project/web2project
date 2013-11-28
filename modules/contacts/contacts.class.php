@@ -519,12 +519,13 @@ class CContact extends w2p_Core_BaseObject
     public function findContactByUserid($userId)
     {
         $q = $this->_query;
-        $q->addTable('users');
-        $q->addQuery('con.*, contact_display_name as contact_name');
+        $q->addTable('users', 'u');
+        $q->addQuery('u.*, con.*, contact_display_name as contact_name');
         $q->addJoin('contacts', 'con', 'contact_id = user_contact', 'inner');
         $q->addWhere('user_id = ' . (int) $userId);
         $result = $q->loadHash();
 
+        $this->user_username = '';
         $this->bind($result);
 
         return $this;

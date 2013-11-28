@@ -140,7 +140,7 @@ class w2p_Output_HTMLHelper
                 $obj = new CContact();
                 $obj->findContactByUserid($this->tableRowData['user_id']);
                 $link = '?m=users&a=view&user_id='.$this->tableRowData['user_id'];
-                $cell = '<a href="'.$link.'">'.$obj->contact_display_name.'</a>';
+                $cell = '<a href="'.$link.'">'.$obj->user_username.'</a>';
                 break;
 //END: object-based linkings
 
