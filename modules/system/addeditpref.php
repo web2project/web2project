@@ -194,6 +194,7 @@ $currEx = 1234567.89;
 foreach (array_keys($LANGUAGES) as $lang) {
 	$currencies[$lang] = formatCurrency($currEx, $AppUI->setUserLocale($lang, false));
 }
+$prefs['CURRENCYFORM'] = ('' == $prefs['CURRENCYFORM']) ? 'en_US' : $prefs['CURRENCYFORM'];
 echo arraySelect($currencies, 'pref_name[CURRENCYFORM]', 'class=text size=1', $prefs['CURRENCYFORM'], false);
 ?>
 	</td>
@@ -203,7 +204,7 @@ echo arraySelect($currencies, 'pref_name[CURRENCYFORM]', 'class=text size=1', $p
 	<td align="right"><?php echo $AppUI->_('User Interface Style'); ?>:</td>
 	<td>
 <?php
-$uis = $prefs['UISTYLE'] ? $prefs['UISTYLE'] : 'default';
+$uis = $prefs['UISTYLE'] ? $prefs['UISTYLE'] : 'web2project';
 $styles = $AppUI->readDirs('style');
 unset($styles['_common']);
 $temp = $AppUI->setWarning(false);
