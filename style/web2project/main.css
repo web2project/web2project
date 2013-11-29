@@ -649,28 +649,3 @@ label {
 .view td.data {
     background-color: #E8F3FE;
 }
-
-
-div.column {
-    width: 50%;
-}
-div.column:nth-child(1) {
-    float: left;
-}
-div.column:nth-child(2) {
-    float: right;
-}
-label
-{
-    width: 10em;
-    float: left;
-    text-align: right;
-    margin-right: 0.5em;
-    display: block
-}
-div.addedit textarea {
-    width: 80%;
-}
-div.addedit input.save {
-    float: right;
-}

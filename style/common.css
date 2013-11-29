@@ -645,12 +645,30 @@ table.mocal td a:first-child {
     width: 50%;
 }
 
-label {
-    font-size: 8pt;
-    text-align: right;
+.history tr td:nth-child(2) {
     white-space: nowrap;
 }
 
-.history tr td:nth-child(2) {
+div.column {
+    width: 50%;
+}
+div.column:nth-child(1) {
+    float: left;
+}
+div.column:nth-child(2) {
+    float: right;
+}
+label {
+    display: block;
+    float: left;
+    margin-right: 0.5em;
+    text-align: right;
     white-space: nowrap;
+    width: 10em;
+}
+div.addedit textarea {
+    width: 80%;
+}
+div.addedit input.save {
+    float: right;
 }
