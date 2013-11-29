@@ -18,8 +18,8 @@ $AppUI->setUserLocale();
 @include_once W2P_BASE_DIR . '/locales/' . $AppUI->user_locale . '/locales.php';
 include_once W2P_BASE_DIR . '/locales/core.php';
 
-$defaultTZ = w2PgetConfig('system_timezone', 'Europe/London');
-$defaultTZ = ('' == $defaultTZ) ? 'Europe/London' : $defaultTZ;
+$defaultTZ = w2PgetConfig('system_timezone', 'UTC');
+$defaultTZ = ('' == $defaultTZ) ? 'UTC' : $defaultTZ;
 date_default_timezone_set($defaultTZ);
 
 switch ($format) {
@@ -34,7 +34,7 @@ switch ($format) {
 
 if ($userId > 0) {
     $myTimezoneName = date('e');
-    $calendarHeader = "BEGIN:VCALENDAR\nPRODID:-//web2project//EN\nVERSION:2.0\nCALSCALE:GREGORIAN\nMETHOD:PUBLISH\nX-WR-TIMEZONE:Europe/London\n";
+    $calendarHeader = "BEGIN:VCALENDAR\nPRODID:-//web2project//EN\nVERSION:2.0\nCALSCALE:GREGORIAN\nMETHOD:PUBLISH\nX-WR-TIMEZONE:UTC\n";
     $calendarFooter = "END:VCALENDAR";
 
     $hooks = new w2p_Core_HookHandler($AppUI);

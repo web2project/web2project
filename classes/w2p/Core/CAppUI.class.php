@@ -252,7 +252,7 @@ class w2p_Core_CAppUI
             $q->addQuery('sysval_value');
             $q->addWhere("sysval_value_id = '$timezoneOffset'");
             $userTimezone = $q->loadResult();
-            $userTimezone = (strlen($userTimezone) == 0) ? 'Europe/London' : $userTimezone;
+            $userTimezone = (strlen($userTimezone) == 0) ? 'UTC' : $userTimezone;
 
             $userTZ = new DateTimeZone($userTimezone);
             echo '<span class="error"><strong>';
@@ -277,7 +277,7 @@ class w2p_Core_CAppUI
         $userTZ = $this->getPref('TIMEZONE');
         $userTimezone = new DateTimeZone($userTZ);
 
-        $systemTimezone = new DateTimeZone('Europe/London');
+        $systemTimezone = new DateTimeZone('UTC');
 
         $ts = new DateTime($datetime, $userTimezone);
         $ts->setTimezone($systemTimezone);
@@ -293,7 +293,7 @@ class w2p_Core_CAppUI
     {
         $userTimezone = $this->getPref('TIMEZONE');
         $userTZ = new DateTimeZone($userTimezone);
-        $systemTZ = new DateTimeZone('Europe/London');
+        $systemTZ = new DateTimeZone('UTC');
         $ts = new DateTime($datetime, $systemTZ);
         $ts->setTimezone($userTZ);
 

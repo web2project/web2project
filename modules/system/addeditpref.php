@@ -113,10 +113,10 @@ echo '<div style="padding-top: ' . $spacing . 'px;"> </div>';
         <?php
             $timezones = w2PgetSysVal('Timezones');
             /*
-             * NOTE: While it may seem egocentric to force Europe/London as the default timezone, without this line,
+             * NOTE: While it may seem egocentric to force UTC as the default timezone, without this line,
              *    the timezone defaults to whatever is first in the dropdown. ~ caseysoftware/caseydk 24 July 2013
              */
-            $prefs['TIMEZONE'] = ('' == $prefs['TIMEZONE']) ? 'Europe/London' : $prefs['TIMEZONE'];
+            $prefs['TIMEZONE'] = ('' == $prefs['TIMEZONE']) ? 'UTC' : $prefs['TIMEZONE'];
             echo arraySelect($timezones, 'pref_name[TIMEZONE]', 'class=text size=1', $prefs['TIMEZONE'], true);
         ?>
 	</td>

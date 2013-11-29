@@ -36,8 +36,8 @@ if (is_file(W2P_BASE_DIR . '/includes/config.php') && filesize(W2P_BASE_DIR . '/
 require_once W2P_BASE_DIR . '/includes/main_functions.php';
 require_once W2P_BASE_DIR . '/includes/db_adodb.php';
 
-$defaultTZ = w2PgetConfig('system_timezone', 'Europe/London');
-$defaultTZ = ('' == $defaultTZ) ? 'Europe/London' : $defaultTZ;
+$defaultTZ = w2PgetConfig('system_timezone', 'UTC');
+$defaultTZ = ('' == $defaultTZ) ? 'UTC' : $defaultTZ;
 date_default_timezone_set($defaultTZ);
 
 // don't output anything. Usefull for fileviewer.php, gantt.php, etc.

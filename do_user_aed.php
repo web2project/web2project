@@ -10,8 +10,8 @@ require_once W2P_BASE_DIR . '/includes/db_adodb.php';
 require_once W2P_BASE_DIR . '/lib/captcha/Functions.php';
 
 $AppUI = new w2p_Core_CAppUI();
-$defaultTZ = w2PgetConfig('system_timezone', 'Europe/London');
-$defaultTZ = ('' == $defaultTZ) ? 'Europe/London' : $defaultTZ;
+$defaultTZ = w2PgetConfig('system_timezone', 'UTC');
+$defaultTZ = ('' == $defaultTZ) ? 'UTC' : $defaultTZ;
 date_default_timezone_set($defaultTZ);
 
 /*

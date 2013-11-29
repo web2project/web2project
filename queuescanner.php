@@ -5,7 +5,7 @@ require_once W2P_BASE_DIR . '/includes/config.php';
 require_once W2P_BASE_DIR . '/includes/main_functions.php';
 require_once W2P_BASE_DIR . '/includes/db_adodb.php';
 
-$defaultTZ = w2PgetConfig('system_timezone', 'Europe/London');
+$defaultTZ = w2PgetConfig('system_timezone', 'UTC');
 date_default_timezone_set($defaultTZ);
 
 $AppUI = new w2p_Core_CAppUI();

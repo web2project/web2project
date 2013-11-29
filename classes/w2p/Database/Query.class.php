@@ -576,7 +576,7 @@ class w2p_Database_Query {
 
     public function dbfnNowWithTZ() {
         $df = 'Y-m-d H:i:s';
-        $defaultTZ = 'Europe/London';
+        $defaultTZ = 'UTC';
         $systemTZ = new DateTimeZone($defaultTZ);
         $ts = new DateTime();
         $ts->setTimezone($systemTZ);
