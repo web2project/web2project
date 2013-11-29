@@ -322,7 +322,7 @@ class w2p_Core_CAppUI
     public function getTheme()
     {
         $this->setStyle();
-        $uistyle = $this->getPref('UISTYLE');
+        $uistyle = ('' == $this->getPref('UISTYLE')) ? 'web2project' : $this->getPref('UISTYLE');
         $uiClass = 'style_' . str_replace('-', '', $uistyle);
 
         $theme = new $uiClass($this);
