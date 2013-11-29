@@ -166,18 +166,13 @@ class w2p_Database_oldQuery {
 				dprint(__file__, __line__, 0, "query failed($q)" . ' - error was: <span style="color:red">' . $error . '</span>');
 				return $this->_query_id;
 			}
-			if (W2P_PERFORMANCE_DEBUG) {
-				++$w2p_performance_dbqueries;
-				$w2p_performance_dbtime += array_sum(explode(' ', microtime())) - $startTime;
-			}
-			return $this->_query_id;
-		} else {
-			if (W2P_PERFORMANCE_DEBUG) {
-				++$w2p_performance_dbqueries;
-				$w2p_performance_dbtime += array_sum(explode(' ', microtime())) - $startTime;
-			}
-			return $this->_query_id;
 		}
+
+        if (W2P_PERFORMANCE_DEBUG) {
+            ++$w2p_performance_dbqueries;
+            $w2p_performance_dbtime += array_sum(explode(' ', microtime())) - $startTime;
+        }
+        return $this->_query_id;
 	}
 
 	/**
