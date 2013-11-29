@@ -34,6 +34,7 @@ $fields = array_combine($fieldList, $fieldNames);
 
 $listTable = new w2p_Output_ListTable($AppUI);
 echo $listTable->startTable();
+$listTable->addBefore(1);
 echo $listTable->buildHeader($fields, false, $m);
 
 $types = w2PgetSysVal('UserType');
@@ -47,6 +48,10 @@ foreach ($users as $row) {
     $listTable->stageRowData($row);
 ?>
 <tr>
+    <td>
+        <a href="./index.php?m=users&a=addedit&user_id=<?php echo $row['user_id']; ?>"><img src="<?php echo w2PfindImage('icons/stock_edit-16.png'); ?>" width="16" height="16" border="0" alt="email" /></a>
+        <a href="./index.php?m=users&a=view&tab=1&user_id=<?php echo $row['user_id']; ?>"><img src="<?php echo w2PfindImage('obj/lock.gif'); ?>" width="16" height="16" border="0" alt="email" /></a>
+    </td>
 	<?php if (w2PgetParam($_REQUEST, 'tab', 0) == 0) { ?>
 	<td nowrap="nowrap">
 	       <?php
