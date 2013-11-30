@@ -41,6 +41,15 @@ class w2p_Output_HTML_FormHelper
         return $output;
     }
 
+    public function addRow($fieldName, $fieldValue, $options = array(), $values = array())
+    {
+        $pieces = explode('_', $fieldName);
+        $suffix = end($pieces);
+
+        return '<p>' . $this->addLabel(ucwords($suffix)) .
+            $this->addField($fieldName, $fieldValue, $options, $values) . '</p>';
+    }
+
     public function addCancelButton()
     {
         $output = '<input type="button" value="' . $this->AppUI->_('back') . '" class="cancel button btn btn-danger" onclick="javascript:history.back(-1);" />';
