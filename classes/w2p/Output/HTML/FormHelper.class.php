@@ -33,6 +33,11 @@ class w2p_Output_HTML_FormHelper
             case 'type':
                 $output  = arraySelect($values, $fieldName, 'size="1" class="text '.$suffix.'"', $fieldValue);
                 break;
+            case 'url':
+                $output  = '<input type="text" class="text '. $suffix . '" ';
+                $output .= 'name="' . $fieldName. '" value="' . w2PformSafe($fieldValue) . '" ' .$params .' />';
+                $output .= '<a href="javascript: void(0);" onclick="testURL()">[' . $this->AppUI->_('test') . ']</a>';
+                break;
             default:
                 $output  = '<input type="text" class="text '. $suffix . '" ';
                 $output .= 'name="' . $fieldName. '" value="' . w2PformSafe($fieldValue) . '" ' .$params .' />';
