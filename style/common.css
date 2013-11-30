@@ -672,3 +672,11 @@ div.addedit textarea {
 div.addedit input.save {
     float: right;
 }
+
+input.name, input.url {
+    width: 250px;
+}
+
+input.state, input.zip {
+    width: 50px;
+}
