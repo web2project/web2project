@@ -361,7 +361,7 @@ if (!function_exists('styleRenderBoxBottom')) {
      * @deprecated
      */
     function styleRenderBoxBottom() {
-        trigger_error("styleRenderBoxTop() has been deprecated in v3.1 and will be removed in v4.0. Use AppUI->getTheme()->styleRenderBoxBottom instead.", E_USER_NOTICE);
+        trigger_error("styleRenderBoxBottom() has been deprecated in v3.1 and will be removed in v4.0. Use AppUI->getTheme()->styleRenderBoxBottom instead.", E_USER_NOTICE);
 
         global $AppUI;
         echo $AppUI->getTheme()->styleRenderBoxBottom();
