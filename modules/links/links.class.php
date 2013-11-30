@@ -62,6 +62,8 @@ class CLink extends w2p_Core_BaseObject
 
         $q->leftJoin('users', 'u', 'user_id = link_owner');
         $q->leftJoin('contacts', 'c', 'user_contact = contact_id');
+        $q->leftJoin('projects', 'pr', 'project_id = link_project');
+        $q->leftJoin('tasks', 't', 'task_id = link_task');
 
         if ($search != '') {
             $q->addWhere('(link_name LIKE \'%' . $search . '%\' OR link_description LIKE \'%' . $search . '%\')');
