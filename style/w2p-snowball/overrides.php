@@ -21,7 +21,7 @@ class CTabBox extends w2p_Theme_TabBox {
 		$this->loadExtras($m, $a);
 
 		if (($a == 'addedit' || $a == 'view' || $a == 'viewuser')) {
-			echo styleRenderBoxBottom();
+			echo $this->_AppUI->getTheme()->styleRenderBoxBottom();
 		}
 
 		reset($this->tabs);
