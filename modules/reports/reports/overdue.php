@@ -6,11 +6,9 @@ if (!defined('W2P_BASE_DIR')) {
 // Output the PDF
 // make the PDF file
 if ($project_id != 0) {
-	$q = new w2p_Database_Query;
-	$q->addTable('projects');
-	$q->addQuery('project_name');
-	$q->addWhere('project_id=' . $project_id);
-	$pname = 'Project: ' . $q->loadResult();
+    $project = new CProject();
+    $project->load($project_id);
+    $pname = 'Project: ' . $project->project_name;
 } else {
 	$pname = $AppUI->_('All Projects');
 }
@@ -21,21 +19,14 @@ if ($err = db_error()) {
 
 $font_dir = W2P_BASE_DIR . '/lib/ezpdf/fonts';
 
-$pdf = new Cezpdf('A4', 'landscape');
-$pdf->ezSetCmMargins(1, 2, 1.5, 1.5);
-$pdf->selectFont($font_dir . '/Helvetica.afm');
-$pdf->ezText(utf8_decode(w2PgetConfig('company_name')), 12);
+$output = new w2p_Output_PDFRenderer('A4', 'landscape');
+$output->addTitle($AppUI->_('Project Overdue Task Report'));
+$output->addDate($df);
+$output->addSubtitle(w2PgetConfig('company_name'));
+$output->addSubtitle($pname);
 
-$date = new w2p_Utilities_Date();
-$pdf->ezText("\n" . $date->format($df), 8);
 $next_week = new w2p_Utilities_Date($date);
 $next_week->addSpan(new Date_Span(array(7, 0, 0, 0)));
-
-$pdf->selectFont($font_dir . '/Helvetica-Bold.afm');
-$pdf->ezText("\n" . $AppUI->_('Project Overdue Task Report'), 12);
-$pdf->ezText(utf8_decode($pname), 15);
-$pdf->ezText("\n");
-$pdf->selectFont($font_dir . '/Helvetica.afm');
 
 $title = null;
 $options = array('showLines' => 2, 'showHeadings' => 1, 'fontSize' => 9, 'rowGap' => 4, 'colGap' => 5, 'xPos' => 50, 'xOrientation' => 'right', 'width' => '750', 'shaded' => 0, 'cols' => array(0 => array('justification' => 'left', 'width' => 250), 1 => array('justification' => 'left', 'width' => 120), 2 => array('justification' => 'center', 'width' => 120), 3 => array('justification' => 'center', 'width' => 75), 4 => array('justification' => 'center', 'width' => 75)));
@@ -73,6 +64,7 @@ if (($template_status = w2PgetConfig('template_projects_status_id')) != '') {
 if ($project_id != 0) {
 	$q->addWhere('task_project = ' . (int)$project_id);
 }
+$date = new w2p_Utilities_Date();
 $q->addWhere('task_end_date < \'' . $date->format(FMT_DATETIME_MYSQL) . '\'');
 $proj = new CProject();
 $q = $proj->setAllowedSQL($AppUI->user_id, $q, null, 'pr');
@@ -147,6 +139,5 @@ foreach ($tasks as $task_id => $detail) {
 	$row[] = $end_date->format($df);
 }
 
-$pdf->ezTable($pdfdata, $columns, $title, $options);
-
-$pdf->ezStream();
+$output->addTable($title, $columns, $pdfdata, $options);
+$output->getStream();

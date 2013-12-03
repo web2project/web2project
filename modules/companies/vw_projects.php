@@ -12,7 +12,7 @@ if ($sort == 'project_priority') {
 
 $items = CCompany::getProjects($AppUI, $company_id, !$tab, $sort);
 
-$module = new w2p_Core_Module();
+$module = new w2p_System_Module();
 $fields = $module->loadSettings('projects', 'company_view');
 
 if (0 == count($fields)) {

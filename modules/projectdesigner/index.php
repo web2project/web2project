@@ -38,7 +38,9 @@ if (!$canView) {
 $AppUI->loadCalendarJS();
 
 $today = new w2p_Utilities_Date();
-$today->convertTZ($AppUI->getPref('TIMEZONE'));
+$today->addDays(1);
+$today->setHour($w2Pconfig['cal_day_start']);
+$today->setMinute(0);
 
 //Lets load the users panel viewing options
 $q = new w2p_Database_Query;
@@ -73,12 +75,12 @@ $tasks = arrayMerge(array('0' => $AppUI->_('(None)', UI_OUTPUT_RAW)), $tasks);
 if (!$project_id) {
 	// setup the title block
 	$ttl = 'ProjectDesigner';
-	$titleBlock = new w2p_Theme_TitleBlock($ttl, 'projectdesigner.png', $m, $m . '.' . $a);
+	$titleBlock = new w2p_Theme_TitleBlock($ttl, 'icon.png', $m, $m . '.' . $a);
 	$titleBlock->addCrumb('?m=projects', 'projects list');
 	$titleBlock->addCell();
 	if ($canAddProjects) {
-		$titleBlock->addCell('<input type="submit" class="button btn btn-small dropdown-toggle" value="' . $AppUI->_('new project') . '">', '', '<form action="?m=projects&a=addedit" method="post" accept-charset="utf-8">', '</form>');
-	}
+        $titleBlock->addButton('New project', '?m=projects&a=addedit');
+    }
 	$titleBlock->show();
 ?>
 	<script language="javascript" type="text/javascript">
@@ -98,9 +100,7 @@ if (!$project_id) {
 	}
 	</script>
 <?php
-	if (function_exists('styleRenderBoxTop')) {
-		echo styleRenderBoxTop();
-	}
+    echo $AppUI->getTheme()->styleRenderBoxTop();
 ?>
     <form name="prjFrm" action="?m=projectdesigner" method="post" accept-charset="utf-8">
         <table border="1" cellpadding="4" cellspacing="0" width="100%" class="std">
@@ -149,26 +149,26 @@ if (!$project_id) {
 
 	// setup the title block
 	$ttl = 'ProjectDesigner';
-	$titleBlock = new w2p_Theme_TitleBlock($ttl, 'projectdesigner.png', $m, $m . '.' . $a);
+	$titleBlock = new w2p_Theme_TitleBlock($ttl, 'icon.png', $m, $m . '.' . $a);
 	$titleBlock->addCrumb('?m=projects', 'projects list');
 	$titleBlock->addCrumb('?m=' . $m, 'select another project');
 	$titleBlock->addCrumb('?m=projects&a=view&bypass=1&project_id=' . $project_id, 'normal view project');
 
 	if ($canAddProjects) {
 		$titleBlock->addCell();
-		$titleBlock->addCell('<input type="submit" class="button btn btn-small dropdown-toggle" value="' . $AppUI->_('new project') . '">', '', '<form action="?m=projects&a=addedit" method="post" accept-charset="utf-8">', '</form>');
-	}
+        $titleBlock->addButton('New project', '?m=projects&a=addedit');
+    }
 
 	if ($canAddTasks) {
 		$titleBlock->addCell();
-		$titleBlock->addCell('<input type="submit" class="button btn btn-small dropdown-toggle" value="' . $AppUI->_('new task') . '">', '', '<form action="?m=tasks&a=addedit&task_project=' . $project_id . '" method="post" accept-charset="utf-8">', '</form>');
+        $titleBlock->addButton('New task', '?m=tasks&a=addedit&task_project=' . $project_id);
 	}
 	if ($canEditProject) {
 		$titleBlock->addCell();
-		$titleBlock->addCell('<input type="submit" class="button btn btn-small dropdown-toggle" value="' . $AppUI->_('new event') . '">', '', '<form action="?m=calendar&a=addedit&event_project=' . $project_id . '" method="post" accept-charset="utf-8">', '</form>');
+        $titleBlock->addButton('New event', '?m=events&a=addedit&event_project=' . $project_id);
 
 		$titleBlock->addCell();
-		$titleBlock->addCell('<input type="submit" class="button btn btn-small dropdown-toggle" value="' . $AppUI->_('new file') . '">', '', '<form action="?m=files&a=addedit&project_id=' . $project_id . '" method="post" accept-charset="utf-8">', '</form>');
+        $titleBlock->addButton('New file', '?m=files&a=addedit&project_id=' . $project_id);
 		$titleBlock->addCrumb('?m=projects&a=addedit&project_id=' . $project_id, 'edit this project');
 		if ($canDeleteProject) {
 			$titleBlock->addCrumbDelete('delete project', $canDelete, $msg);
@@ -432,9 +432,7 @@ function calcDuration(f, start_date, end_date, duration_fld, durntype_fld) {
 </script>
 
 <?php
-	if (function_exists('styleRenderBoxTop')) {
-		echo styleRenderBoxTop();
-	}
+    echo $AppUI->getTheme()->styleRenderBoxTop();
 ?>
 <form name="frmDelete" action="./index.php?m=projects" method="post" accept-charset="utf-8">
 	<input type="hidden" name="dosql" value="do_project_aed" />
@@ -467,15 +465,11 @@ function calcDuration(f, start_date, end_date, duration_fld, durntype_fld) {
 </tr>
 </table>
 <?php
-	if (function_exists('styleRenderBoxBottom')) {
-		echo styleRenderBoxBottom();
-	}
+    echo $AppUI->getTheme()->styleRenderBoxBottom();
 ?>
 <br />
 <?php
-	if (function_exists('styleRenderBoxTop')) {
-		echo styleRenderBoxTop();
-	}
+    echo $AppUI->getTheme()->styleRenderBoxTop();
 ?>
 <table border="0" cellpadding="4" cellspacing="0" width="100%" class="std">
 <tr>
@@ -504,15 +498,11 @@ function calcDuration(f, start_date, end_date, duration_fld, durntype_fld) {
 </tr>
 </table>
 <?php
-	if (function_exists('styleRenderBoxBottom')) {
-		echo styleRenderBoxBottom();
-	}
+    echo $AppUI->getTheme()->styleRenderBoxBottom();
 ?>
 <br />
 <?php
-	if (function_exists('styleRenderBoxTop')) {
-		echo styleRenderBoxTop();
-	}
+    echo $AppUI->getTheme()->styleRenderBoxTop();
 ?>
 <table border="0" cellpadding="4" cellspacing="0" width="100%" class="std">
 <tr>
@@ -541,15 +531,11 @@ function calcDuration(f, start_date, end_date, duration_fld, durntype_fld) {
 </tr>
 </table>
 <?php
-	if (function_exists('styleRenderBoxBottom')) {
-		echo styleRenderBoxBottom();
-	}
+    echo $AppUI->getTheme()->styleRenderBoxBottom();
 ?>
 <br />
 <?php
-	if (function_exists('styleRenderBoxTop')) {
-		echo styleRenderBoxTop();
-	}
+    echo $AppUI->getTheme()->styleRenderBoxTop();
 ?>
 <table border="0" cellpadding="4" cellspacing="0" width="100%" class="std">
 <tr>
@@ -578,15 +564,11 @@ function calcDuration(f, start_date, end_date, duration_fld, durntype_fld) {
 </tr>
 </table>
 <?php
-	if (function_exists('styleRenderBoxBottom')) {
-		echo styleRenderBoxBottom();
-	}
+    echo $AppUI->getTheme()->styleRenderBoxBottom();
 ?>
 <br />
 <?php
-	if (function_exists('styleRenderBoxTop')) {
-		echo styleRenderBoxTop();
-	}
+    echo $AppUI->getTheme()->styleRenderBoxTop();
 ?>
 <table border="0" cellpadding="4" cellspacing="0" width="100%" class="std">
 <tr>
@@ -615,15 +597,11 @@ function calcDuration(f, start_date, end_date, duration_fld, durntype_fld) {
 </tr>
 </table>
 <?php
-	if (function_exists('styleRenderBoxBottom')) {
-		echo styleRenderBoxBottom();
-	}
+    echo $AppUI->getTheme()->styleRenderBoxBottom();
 ?>
 <br />
 <?php
-	if (function_exists('styleRenderBoxTop')) {
-		echo styleRenderBoxTop();
-	}
+    echo $AppUI->getTheme()->styleRenderBoxTop();
 ?>
 <table border="0" cellpadding="4" cellspacing="0" width="100%" class="std">
 <tr>

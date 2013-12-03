@@ -44,6 +44,7 @@ class w2p_Theme_TitleBlock {
         $this->cells2 = array();
         $this->crumbs = array();
         $this->showhelp = canView('help');
+        $this->count = 0;
     }
     /**
      * Adds a table 'cell' beside the Title string
@@ -53,6 +54,34 @@ class w2p_Theme_TitleBlock {
     public function addCell($data = '', $attribs = '', $prefix = '', $suffix = '') {
         $this->cells1[] = array($attribs, $data, $prefix, $suffix);
     }
+
+    public function addSearchCell($search)
+    {
+        $this->addCell('<form name="searchform" action="?m=' . $this->module . '" method="post" accept-charset="utf-8">
+                <input type="text" class="text" name="search_string" value="' . $search . '" /></form>');
+        $this->addCell($this->_AppUI->_('Search') . ':');
+    }
+
+    public function addFilterCell($label, $field, $values, $value)
+    {
+        $form = 'filter' . $this->count;
+
+        $this->addCell('<form action="?m=' . $this->module . '" method="post" name="'.$form.'" accept-charset="utf-8">' .
+            arraySelect($values, $field, 'size="1" class="text" onChange="document.'.$form.'.submit();"', $value, false) .
+            '</form>');
+        $this->addCell($this->_AppUI->_($label) . ':');
+
+        $this->count++;
+    }
+
+    public function addButton($label, $url)
+    {
+        $button = '<input type="submit" class="button btn btn-small dropdown-toggle" value="' . $this->_AppUI->_($label) . '">';
+        $form = '<form action="' . $url . '" method="post" accept-charset="utf-8">' . $button . '</form>';
+
+        $this->addCell($form);
+    }
+
     /**
      * Adds a table 'cell' to left-aligned bread-crumbs
      *
@@ -137,8 +166,8 @@ class w2p_Theme_TitleBlock {
 
 
         echo '' . $s;
-        if (($a != 'index' || $m == 'system' || $m == 'calendar' || $m == 'smartsearch') && !$this->_AppUI->boxTopRendered && function_exists('styleRenderBoxTop')) {
-            echo styleRenderBoxTop();
+        if (($a != 'index' || $m == 'system' || $m == 'events' || $m == 'smartsearch') && !$this->_AppUI->boxTopRendered) {
+            echo $this->_AppUI->getTheme()->styleRenderBoxTop();
             $this->_AppUI->boxTopRendered = true;
         }
     }

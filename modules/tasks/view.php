@@ -47,13 +47,13 @@ $task_types = w2PgetSysVal('TaskType');
 $billingCategory = w2PgetSysVal('BudgetCategory');
 
 // setup the title block
-$titleBlock = new w2p_Theme_TitleBlock('View Task', 'applet-48.png', $m, $m . '.' . $a);
+$titleBlock = new w2p_Theme_TitleBlock('View Task', 'icon.png', $m, $m . '.' . $a);
 $titleBlock->addCell();
 if ($canEdit) {
-    $titleBlock->addCell('<input type="submit" class="button btn btn-small dropdown-toggle" value="' . $AppUI->_('new log') . '">', '', '<form action="?m=tasks&a=view&task_id=' . $task_id . '&tab=1" method="post" accept-charset="utf-8">', '</form>');
-    $titleBlock->addCell('<input type="submit" class="button btn btn-small dropdown-toggle" value="' . $AppUI->_('new link') . '">', '', '<form action="?m=links&a=addedit&task_id=' . $task_id . '&project_id=' . $obj->task_project . '" method="post" accept-charset="utf-8">', '</form>');
-    $titleBlock->addCell('<input type="submit" class="button btn btn-small dropdown-toggle" value="' . $AppUI->_('new file') . '">', '', '<form action="?m=files&a=addedit&project_id=' . $obj->task_project . '&file_task=' . $obj->task_id . '" method="post" accept-charset="utf-8">', '</form>');
-	$titleBlock->addCell('<input type="submit" class="button btn btn-small dropdown-toggle" value="' . $AppUI->_('new task') . '">', '', '<form action="?m=tasks&a=addedit&task_project=' . $obj->task_project . '&task_parent=' . $task_id . '" method="post" accept-charset="utf-8">', '</form>');
+    $titleBlock->addButton('new log',  '?m=tasks&a=view&task_id=' . $task_id . '&tab=1');
+    $titleBlock->addButton('new link', '?m=links&a=addedit&task_id=' . $task_id . '&project_id=' . $obj->task_project);
+    $titleBlock->addButton('new file', '?m=files&a=addedit&project_id=' . $obj->task_project . '&file_task=' . $obj->task_id);
+    $titleBlock->addButton('new task', '?m=tasks&a=addedit&task_project=' . $obj->task_project . '&task_parent=' . $task_id);
 }
 
 if ($canReadProject) {
@@ -93,7 +93,7 @@ function delIt() {
 	<input type="hidden" name="task_id" value="<?php echo $task_id; ?>" />
 </form>
 
-<table border="0" cellpadding="4" cellspacing="0" width="100%" class="std view">
+<table class="std view tasks">
     <tr>
         <th colspan="2"><?php echo $obj->task_name; ?></th>
     </tr>
@@ -151,7 +151,7 @@ function delIt() {
                 </tr>
                 <tr>
                     <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Progress'); ?>:</td>
-                    <td idth="300"><?php echo ($obj->task_percent_complete) ? $obj->task_percent_complete : 0; ?>%</td>
+                    <td width="300"><?php echo ($obj->task_percent_complete) ? $obj->task_percent_complete : 0; ?>%</td>
                 </tr>
                 <tr>
                     <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Time Worked'); ?>:</td>

@@ -86,11 +86,11 @@ class CCalendar extends CEvent
  *
  * @deprecated
  */
-class CConfig extends w2p_Core_Config
+class CConfig extends w2p_System_Config
 {
     public function __construct() {
         parent::__construct();
-        trigger_error("CConfig has been deprecated in v3.0 and will be removed by v4.0. Please use w2p_Core_Config instead.", E_USER_NOTICE);
+        trigger_error("CConfig has been deprecated in v3.0 and will be removed by v4.0. Please use w2p_System_Config instead.", E_USER_NOTICE);
     }
 }
 
@@ -173,10 +173,10 @@ class CMonthCalendar extends w2p_Output_MonthCalendar
  *
  * @deprecated
  */
-class CPreferences extends w2p_Core_Preferences {
+class CPreferences extends w2p_System_Preferences {
 	public function __construct() {
 		parent::__construct();
-        trigger_error("CPreferences has been deprecated in v3.0 and will be removed by v4.0. Please use w2p_Core_Preferences instead.", E_USER_NOTICE );
+        trigger_error("CPreferences has been deprecated in v3.0 and will be removed by v4.0. Please use w2p_System_Preferences instead.", E_USER_NOTICE );
 	}
 }
 
@@ -372,5 +372,137 @@ class w2PajaxResponse extends w2p_Extensions_AjaxResponse
     {
         parent::addCreateOptions($sSelectId, $options);
         trigger_error("w2PajaxResponse has been deprecated in v2.3 and will be removed by v4.0. Please use w2p_Extensions_AjaxResponse instead.", E_USER_NOTICE );
+    }
+}
+
+/**
+ * @package web2project\deprecated
+ * @deprecated
+ */
+class w2p_Core_Config extends w2p_System_Config
+{
+    public function __construct()
+    {
+        parent::__construct();
+        trigger_error(get_class($this) . " has been deprecated in v3.1 and will be removed by v4.0. Please use " . get_parent_class($this) . " instead.", E_USER_NOTICE);
+    }
+}
+
+/**
+ * @package web2project\deprecated
+ * @deprecated
+ */
+class w2p_Core_Dispatcher extends w2p_System_Dispatcher
+{
+    public function __construct()
+    {
+        parent::__construct();
+        trigger_error(get_class($this) . " has been deprecated in v3.1 and will be removed by v4.0. Please use " . get_parent_class($this) . " instead.", E_USER_NOTICE);
+    }
+}
+
+/**
+ * @package web2project\deprecated
+ * @deprecated
+ */
+class w2p_Core_Event extends w2p_System_Event
+{
+    public function __construct($resourceName, $eventName, $data=null)
+    {
+        parent::__construct($resourceName, $eventName, $data);
+        trigger_error(get_class($this) . " has been deprecated in v3.1 and will be removed by v4.0. Please use " . get_parent_class($this) . " instead.", E_USER_NOTICE);
+    }
+}
+
+/**
+ * @package web2project\deprecated
+ * @deprecated
+ */
+class w2p_Core_EventQueue extends w2p_System_EventQueue
+{
+    public function __construct()
+    {
+        parent::__construct();
+        trigger_error(get_class($this) . " has been deprecated in v3.1 and will be removed by v4.0. Please use " . get_parent_class($this) . " instead.", E_USER_NOTICE);
+    }
+}
+
+/**
+ * @package web2project\deprecated
+ * @deprecated
+ */
+class w2p_Core_HookHandler extends w2p_System_HookHandler
+{
+    public function __construct(w2p_Core_CAppUI $AppUI)
+    {
+        parent::__construct($AppUI);
+        trigger_error(get_class($this) . " has been deprecated in v3.1 and will be removed by v4.0. Please use " . get_parent_class($this) . " instead.", E_USER_NOTICE);
+    }
+}
+
+/**
+ * @package web2project\deprecated
+ * @deprecated
+ */
+class w2p_Core_Module extends w2p_System_Module
+{
+    public function __construct()
+    {
+        parent::__construct();
+        trigger_error(get_class($this) . " has been deprecated in v3.1 and will be removed by v4.0. Please use " . get_parent_class($this) . " instead.", E_USER_NOTICE);
+    }
+}
+
+/**
+ * @package web2project\deprecated
+ * @deprecated
+ */
+class w2p_Core_Preferences extends w2p_System_Preferences
+{
+    public function __construct()
+    {
+        parent::__construct();
+        trigger_error(get_class($this) . " has been deprecated in v3.1 and will be removed by v4.0. Please use " . get_parent_class($this) . " instead.", E_USER_NOTICE);
+    }
+}
+
+/**
+ * @package web2project\deprecated
+ * @deprecated
+ */
+class w2p_Core_Setup extends w2p_System_Setup
+{
+    public function __construct(w2p_Core_CAppUI $AppUI = null,
+                                array $config = null, w2p_Database_Query $query = null)
+    {
+        parent::__construct($AppUI, $config, $query);
+        trigger_error(get_class($this) . " has been deprecated in v3.1 and will be removed by v4.0. Please use " . get_parent_class($this) . " instead.", E_USER_NOTICE);
+    }
+}
+
+/**
+ * @package web2project\deprecated
+ * @deprecated
+ */
+class w2p_Core_UpgradeManager extends w2p_System_UpgradeManager
+{
+    public function __construct()
+    {
+        parent::__construct();
+        trigger_error(get_class($this) . " has been deprecated in v3.1 and will be removed by v4.0. Please use " . get_parent_class($this) . " instead.", E_USER_NOTICE);
+    }
+}
+
+/**
+ * @package     web2project\deprecated
+ * @deprecated since version 3.0
+ */
+class w2p_API_iCalendar extends w2p_Output_iCalendar
+{
+    public static function formatCalendarItem($calendarItem, $module_name)
+    {
+        trigger_error("w2p_API_iCalendar has been deprecated in v3.0 and will be removed by v4.0. Please use w2p_Output_iCalendar instead.", E_USER_NOTICE);
+
+        return parent::formatCalendarItem($calendarItem, $module_name);
     }
 }

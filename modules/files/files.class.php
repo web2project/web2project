@@ -8,38 +8,53 @@
 
 class CFile extends w2p_Core_BaseObject {
 
-	public $file_id = null;
-	public $file_version_id = null;
-	public $file_project = null;
-	public $file_real_filename = null;
-	public $file_task = null;
-	public $file_name = null;
-	public $file_parent = null;
-	public $file_description = null;
-	public $file_type = null;
-	public $file_owner = null;
+    public $file_id = null;
+    public $file_version_id = null;
+    public $file_project = null;
+    public $file_real_filename = null;
+    public $file_task = null;
+    public $file_name = null;
+    public $file_parent = null;
+    public $file_description = null;
+    public $file_type = null;
+    public $file_owner = null;
     // @todo this should be file_datetime to take advantage of our templating
-	public $file_date = null;
-	public $file_size = null;
-	public $file_version = null;
-	public $file_icon = null;
-	public $file_category = null;
-	public $file_folder = null;
-	public $file_checkout = null;
-	public $file_co_reason = null;
-	public $file_indexed = null;
+    public $file_date = null;
+    public $file_size = null;
+    public $file_version = null;
+    public $file_icon = null;
+    public $file_category = null;
+    public $file_folder = null;
+    public $file_checkout = null;
+    public $file_co_reason = null;
+    public $file_indexed = null;
 
     protected $_file_id = 0;
-	// This "breaks" check-in/upload if helpdesk is not present class variable needs to be added "dymanically"
-	//public $file_helpdesk_item = NULL;
+    protected $_file_system = null;
+    // This "breaks" check-in/upload if helpdesk is not present class variable needs to be added "dymanically"
+    //public $file_helpdesk_item = NULL;
 
-	public function __construct() {
+    public function __construct() {
         global $helpdesk_available;
         if ($helpdesk_available) {
-          $this->file_helpdesk_item = null;
+            $this->file_helpdesk_item = null;
         }
         parent::__construct('files', 'file_id');
-	}
+    }
+
+    public function setFileSystem($filesystem)
+    {
+        $this->_file_system = $filesystem;
+    }
+
+    public function getFileSystem()
+    {
+        if (is_null($this->_file_system)) {
+            $this->setFileSystem(new w2p_FileSystem_Local());
+        }
+
+        return $this->_file_system;
+    }
 
     protected function hook_preStore() {
         global $helpdesk_available;
@@ -50,7 +65,7 @@ class CFile extends w2p_Core_BaseObject {
         $this->file_parent = (int) $this->file_parent;
 
         parent::hook_preStore();
-	}
+    }
 
     protected function hook_preCreate() {
         $q = $this->_getQuery();
@@ -67,7 +82,7 @@ class CFile extends w2p_Core_BaseObject {
             $q->addUpdate('file_checkout', '');
             $q->addWhere('file_version_id = ' . (int)$this->file_version_id);
             $q->exec();
-         }
+        }
 
         $this->file_date = $q->dbfnNowWithTZ();
         parent::hook_preCreate();
@@ -89,19 +104,19 @@ class CFile extends w2p_Core_BaseObject {
         parent::hook_preUpdate();
     }
 
-	public function hook_cron()
-	{
-		$q = $this->_getQuery();
-		$q->addQuery('file_id, file_name');
-		$q->addTable('files');
-		$q->addWhere('file_indexed = 0');
-		$unindexedFiles = $q->loadList(5, 'file_id');
+    public function hook_cron()
+    {
+        $q = $this->_getQuery();
+        $q->addQuery('file_id, file_name');
+        $q->addTable('files');
+        $q->addWhere('file_indexed = 0');
+        $unindexedFiles = $q->loadList(5, 'file_id');
 
-		foreach($unindexedFiles as $file_id => $notUsed) {
-			$this->load($file_id);
-			$this->indexStrings($this->_AppUI);
-		}
-	}
+        foreach($unindexedFiles as $file_id => $notUsed) {
+            $this->load($file_id);
+            $this->indexStrings($this->_AppUI);
+        }
+    }
 
     public function hook_search()
     {
@@ -121,86 +136,86 @@ class CFile extends w2p_Core_BaseObject {
         return $search;
     }
 
-	public static function getFileList($AppUI = null, $company_id = 0, $project_id = 0, $task_id = 0, $category_id = 0) {
-		global $AppUI;
+    public static function getFileList($AppUI = null, $company_id = 0, $project_id = 0, $task_id = 0, $category_id = 0) {
+        global $AppUI;
 
         $q = new w2p_Database_Query();
-		$q->addQuery('f.*');
-		$q->addTable('files', 'f');
-		$q->addJoin('projects', 'p', 'p.project_id = file_project');
-		$q->addJoin('project_departments', 'pd', 'p.project_id = pd.project_id');
-		$q->addJoin('departments', '', 'pd.department_id = dept_id');
-		$q->addJoin('tasks', 't', 't.task_id = file_task');
+        $q->addQuery('f.*');
+        $q->addTable('files', 'f');
+        $q->addJoin('projects', 'p', 'p.project_id = file_project');
+        $q->addJoin('project_departments', 'pd', 'p.project_id = pd.project_id');
+        $q->addJoin('departments', '', 'pd.department_id = dept_id');
+        $q->addJoin('tasks', 't', 't.task_id = file_task');
 
-		$project = new CProject();
+        $project = new CProject();
 //TODO: We need to convert this from static to use ->overrideDatabase() for testing.
-		$allowedProjects = $project->getAllowedSQL($AppUI->user_id, 'file_project');
-		if (count($allowedProjects)) {
-			$q->addWhere('( ( ' . implode(' AND ', $allowedProjects) . ') OR file_project = 0 )');
-		}
-		if (isset($company_id) && (int) $company_id > 0) {
-			$q->addWhere('project_company = ' . (int)$company_id);
-		}
-		if (isset($project_id) && (int) $project_id > 0) {
-			$q->addWhere('file_project = ' . (int)$project_id);
-		}
-		if (isset($task_id) && (int) $task_id > 0) {
-			$q->addWhere('file_task = ' . (int)$task_id);
-		}
-		if ($category_id >= 0) {
-			$q->addWhere('file_category = ' . (int) $category_id);
-		}
+        $allowedProjects = $project->getAllowedSQL($AppUI->user_id, 'file_project');
+        if (count($allowedProjects)) {
+            $q->addWhere('( ( ' . implode(' AND ', $allowedProjects) . ') OR file_project = 0 )');
+        }
+        if (isset($company_id) && (int) $company_id > 0) {
+            $q->addWhere('project_company = ' . (int)$company_id);
+        }
+        if (isset($project_id) && (int) $project_id > 0) {
+            $q->addWhere('file_project = ' . (int)$project_id);
+        }
+        if (isset($task_id) && (int) $task_id > 0) {
+            $q->addWhere('file_task = ' . (int)$task_id);
+        }
+        if ($category_id >= 0) {
+            $q->addWhere('file_category = ' . (int) $category_id);
+        }
 
-		return $q->loadList();
-	}
+        return $q->loadList();
+    }
 
-	public function addHelpDeskTaskLog() {
-		global $helpdesk_available;
-		if ($helpdesk_available && $this->file_helpdesk_item != 0) {
+    public function addHelpDeskTaskLog() {
+        global $helpdesk_available;
+        if ($helpdesk_available && $this->file_helpdesk_item != 0) {
 
-			// create task log with information about the file that was uploaded
-			$task_log = new CHDTaskLog();
+            // create task log with information about the file that was uploaded
+            $task_log = new CHDTaskLog();
             $task_log->overrideDatabase($this->_query);
-			$task_log->task_log_help_desk_id = $this->_hditem->item_id;
-			if ($this->_message != 'deleted') {
-				$task_log->task_log_name = 'File ' . $this->file_name . ' uploaded';
-			} else {
-				$task_log->task_log_name = 'File ' . $this->file_name . ' deleted';
-			}
-			$task_log->task_log_description = $this->file_description;
-			$task_log->task_log_creator = $this->_AppUI->user_id;
-			$date = new w2p_Utilities_Date();
-			$task_log->task_log_date = $date->format(FMT_DATETIME_MYSQL);
-			if ($msg = $task_log->store()) {
-				$this->_AppUI->setMsg($msg, UI_MSG_ERROR);
-			}
-		}
-		return null;
-	}
+            $task_log->task_log_help_desk_id = $this->_hditem->item_id;
+            if ($this->_message != 'deleted') {
+                $task_log->task_log_name = 'File ' . $this->file_name . ' uploaded';
+            } else {
+                $task_log->task_log_name = 'File ' . $this->file_name . ' deleted';
+            }
+            $task_log->task_log_description = $this->file_description;
+            $task_log->task_log_creator = $this->_AppUI->user_id;
+            $date = new w2p_Utilities_Date();
+            $task_log->task_log_date = $date->format(FMT_DATETIME_MYSQL);
+            if ($msg = $task_log->store()) {
+                $this->_AppUI->setMsg($msg, UI_MSG_ERROR);
+            }
+        }
+        return null;
+    }
 
-	public function canAdmin() {
-		if (!$this->file_project) {
-			return false;
-		}
-		if (!$this->file_id) {
-			return false;
-		}
+    public function canAdmin() {
+        if (!$this->file_project) {
+            return false;
+        }
+        if (!$this->file_id) {
+            return false;
+        }
 
-		$result = false;
+        $result = false;
         $q = $this->_getQuery();
-		$q->clear();
-		$q->addTable('projects');
-		$q->addQuery('project_owner');
-		$q->addWhere('project_id = ' . (int)$this->file_project);
-		$res = $q->exec(ADODB_FETCH_ASSOC);
-		if ($res && $row = $q->fetchRow()) {
-			if ($row['project_owner'] == $this->_AppUI->user_id) {
-				$result = true;
-			}
-		}
+        $q->clear();
+        $q->addTable('projects');
+        $q->addQuery('project_owner');
+        $q->addWhere('project_id = ' . (int)$this->file_project);
+        $res = $q->exec(ADODB_FETCH_ASSOC);
+        if ($res && $row = $q->fetchRow()) {
+            if ($row['project_owner'] == $this->_AppUI->user_id) {
+                $result = true;
+            }
+        }
 
-		return $result;
-	}
+        return $result;
+    }
 
     public function isValid()
     {
@@ -212,9 +227,6 @@ class CFile extends w2p_Core_BaseObject {
         if ($this->file_id == 0 && '' == $this->file_name) {
             $this->_error['file_name'] = $baseErrorMsg . 'file name is not set';
         }
-        if (!is_int($this->file_parent) && '' == $this->file_parent) {
-            $this->_error['file_parent'] = $baseErrorMsg . 'file parent id is not set';
-        }
         if ($this->file_id == 0 && !is_int($this->file_size) && '' == $this->file_size) {
             $this->_error['file_size'] = $baseErrorMsg . 'file size is not set';
         }
@@ -225,29 +237,29 @@ class CFile extends w2p_Core_BaseObject {
         return (count($this->_error)) ? false : true;
     }
 
-	public function checkout($userId, $fileId, $coReason) {
-		$q = $this->_getQuery();
-		$q->addTable('files');
-		$q->addUpdate('file_checkout', $userId);
-		$q->addUpdate('file_co_reason', $coReason);
-		$q->addWhere('file_id = ' . (int)$fileId);
-		$q->exec();
+    public function checkout($userId, $fileId, $coReason) {
+        $q = $this->_getQuery();
+        $q->addTable('files');
+        $q->addUpdate('file_checkout', $userId);
+        $q->addUpdate('file_co_reason', $coReason);
+        $q->addWhere('file_id = ' . (int)$fileId);
+        $q->exec();
 
-		return true;
-	}
+        return true;
+    }
 
-	public function cancelCheckout($fileId) {
-		$q = $this->_getQuery();
-		$q->addTable('files');
-		$q->addUpdate('file_checkout', '');
-		$q->addWhere('file_id = ' . (int)$fileId);
-		$q->exec();
+    public function cancelCheckout($fileId) {
+        $q = $this->_getQuery();
+        $q->addTable('files');
+        $q->addUpdate('file_checkout', '');
+        $q->addWhere('file_id = ' . (int)$fileId);
+        $q->exec();
 
-		return true;
+        return true;
 
-	}
+    }
 
-	public function delete($unused = null)
+    public function delete($unused = null)
     {
         $result = false;
 
@@ -262,8 +274,8 @@ class CFile extends w2p_Core_BaseObject {
 
             $result = parent::delete();
         }
-		return $result;
-	}
+        return $result;
+    }
 
     protected function hook_preDelete()
     {
@@ -289,85 +301,11 @@ class CFile extends w2p_Core_BaseObject {
         parent::hook_postDelete();
     }
 
-	// delete File from File System
-	public function deleteFile() {
-        $this->load();
-
-        if ('' == $this->file_real_filename ||
-                !file_exists(W2P_BASE_DIR . '/files/' . $this->file_project . '/' . $this->file_real_filename)) {
-            return true;
-        }
-
-        if ($this->_perms->checkModuleItem('files', 'delete', $this->file_id)) {
-            return @unlink(W2P_BASE_DIR . '/files/' . $this->file_project . '/' . $this->file_real_filename);
-        }
-
-        return false;
-	}
-
-	// move the file if the affiliated project was changed
-	public function moveFile($oldProj, $realname) {
-		if (!is_dir(W2P_BASE_DIR . '/files/' . $this->file_project)) {
-			$res = mkdir(W2P_BASE_DIR . '/files/' . $this->file_project, 0744);
-			if (!$res) {
-				$this->_AppUI->setMsg('Upload folder not setup to accept uploads - change permission on files/ directory.', UI_MSG_ALLERT);
-				return false;
-			}
-		}
-		$res = rename(W2P_BASE_DIR . '/files/' . $oldProj . '/' . $realname, W2P_BASE_DIR . '/files/' . $this->file_project . '/' . $realname);
-
-		if (!$res) {
-			return false;
-		}
-		return true;
-	}
-
-	// duplicate a file into root
-	public function duplicateFile($oldProj, $realname) {
-		if (!is_dir(W2P_BASE_DIR . '/files/0')) {
-			$res = mkdir(W2P_BASE_DIR . '/files/0', 0744);
-			if (!$res) {
-				$this->_AppUI->setMsg('Upload folder not setup to accept uploads - change permission on files/ directory.', UI_MSG_ALLERT);
-				return false;
-			}
-		}
-		$dest_realname = uniqid(rand());
-		$res = copy(W2P_BASE_DIR . '/files/' . $oldProj . '/' . $realname, W2P_BASE_DIR . '/files/0/' . $dest_realname);
-
-		if (!$res) {
-			return false;
-		}
-		return $dest_realname;
-	}
-
-	// move a file from a temporary (uploaded) location to the file system
-	public function moveTemp($upload) {
-		// check that directories are created
-		if (!is_dir(W2P_BASE_DIR . '/files')) {
-			$res = mkdir(W2P_BASE_DIR . '/files', 0744);
-			if (!$res) {
-				return false;
-			}
-		}
-		if (!is_dir(W2P_BASE_DIR . '/files/' . $this->file_project)) {
-			$res = mkdir(W2P_BASE_DIR . '/files/' . $this->file_project, 0744);
-			if (!$res) {
-				$this->_AppUI->setMsg('Upload folder not setup to accept uploads - change permission on files/ directory.', UI_MSG_ALLERT);
-				return false;
-			}
-		}
-
-		$this->_filepath = W2P_BASE_DIR . '/files/' . $this->file_project . '/' . $this->file_real_filename;
-		// move it
-		$res = move_uploaded_file($upload['tmp_name'], $this->_filepath);
-		if (!$res) {
-			return false;
-		}
-		return true;
-	}
-
-	// parse file for indexing
-	public function indexStrings() {
+    /**
+     * parse file for indexing
+     * @todo convert to using the FileSystem methods
+     */
+    public function indexStrings() {
         $nwords_indexed = 0;
 
         /* Workaround for indexing large files:
@@ -422,7 +360,7 @@ class CFile extends w2p_Core_BaseObject {
                     if (!preg_match('[!"#$%&\'()*+,\-./:;<=>?@[\\\]^_`{|}~]', $newword)
                         && mb_strlen(mb_trim($newword)) > 2
                         && !preg_match('[0-9]', $newword)) {
-                            $wordarr[$newword] = $x;
+                        $wordarr[$newword] = $x;
                     }
                 }
 
@@ -449,17 +387,17 @@ class CFile extends w2p_Core_BaseObject {
                 //TODO: if the file doesn't exist.. should we delete the db record?
             }
         }
-		$q = $this->_getQuery();
-		$q->addTable('files');
-		$q->addUpdate('file_indexed', 1);
-		$q->addWhere('file_id = '. $this->file_id);
-		$q->exec();
+        $q = $this->_getQuery();
+        $q->addTable('files');
+        $q->addUpdate('file_indexed', 1);
+        $q->addWhere('file_id = '. $this->file_id);
+        $q->exec();
 
-		return $nwords_indexed;
-	}
+        return $nwords_indexed;
+    }
 
-	//function notifies about file changing
-	public function notify($notify) {
+    //function notifies about file changing
+    public function notify($notify) {
         global $helpdesk_available;
 
         if ($notify == '1') {
@@ -514,7 +452,7 @@ class CFile extends w2p_Core_BaseObject {
                     $q->addJoin('users', 'a', 'a.user_id = u.user_id');
                     $q->addJoin('contacts', 'ac', 'a.user_contact = ac.contact_id');
                     $q->addWhere('t.task_id = ' . (int)$this->_task->task_id);
-                    
+
                 } else {
                     //find project owner and notify him about new or modified file
                     $q->addTable('users', 'u');
@@ -546,9 +484,9 @@ class CFile extends w2p_Core_BaseObject {
                 }
             }
         }
-	} //notify
+    } //notify
 
-	public function notifyContacts($notifyContacts) {
+    public function notifyContacts($notifyContacts) {
         if ($notifyContacts) {
             //if no project specified than we will not do anything
             if ($this->file_project != 0) {
@@ -558,12 +496,12 @@ class CFile extends w2p_Core_BaseObject {
                 $mail = new w2p_Utilities_Mail();
 
                 if ($this->file_task == 0) { //notify all developers
-                  $mail->Subject($this->_AppUI->_('Project') . ': ' . $this->_project->project_name . '::' . $this->file_name, $this->_locale_char_set);
+                    $mail->Subject($this->_AppUI->_('Project') . ': ' . $this->_project->project_name . '::' . $this->file_name, $this->_locale_char_set);
                 } else { //notify all assigned users
-                  $this->_task = new CTask();
-                  $this->_task->overrideDatabase($this->_query);
-                  $this->_task->load($this->file_task);
-                  $mail->Subject($this->_AppUI->_('Project') . ': ' . $this->_project->project_name . '::' . $this->_task->task_name . '::' . $this->file_name, $this->_locale_char_set);
+                    $this->_task = new CTask();
+                    $this->_task->overrideDatabase($this->_query);
+                    $this->_task->load($this->file_task);
+                    $mail->Subject($this->_AppUI->_('Project') . ': ' . $this->_project->project_name . '::' . $this->_task->task_name . '::' . $this->file_name, $this->_locale_char_set);
                 }
 
                 $emailManager = new w2p_Output_EmailManager($this->_AppUI);
@@ -600,33 +538,64 @@ class CFile extends w2p_Core_BaseObject {
                 return '';
             }
         }
-	}
+    }
 
-	public function getOwner() {
-		$owner = '';
-		if (!$this->file_owner)
-			return $owner;
+    public function getOwner() {
+        $owner = '';
+        if (!$this->file_owner)
+            return $owner;
 
-		$q = $this->_getQuery();
-		$q->addTable('users', 'a');
-		$q->addJoin('contacts', 'b', 'b.contact_id = a.user_contact', 'inner');
-		$q->addQuery('contact_first_name, contact_last_name, contact_display_name as contact_name');
-		$q->addWhere('a.user_id = ' . (int)$this->file_owner);
-		if ($qid = &$q->exec()) {
-			$owner = $qid->fields['contact_name'];
-		}
+        $q = $this->_getQuery();
+        $q->addTable('users', 'a');
+        $q->addJoin('contacts', 'b', 'b.contact_id = a.user_contact', 'inner');
+        $q->addQuery('contact_first_name, contact_last_name, contact_display_name as contact_name');
+        $q->addWhere('a.user_id = ' . (int)$this->file_owner);
+        if ($qid = &$q->exec()) {
+            $owner = $qid->fields['contact_name'];
+        }
 
-		return $owner;
-	}
+        return $owner;
+    }
 
-	public function getTaskName() {
+    public function getTaskName() {
         trigger_error("The CTask->getTaskName method has been deprecated in v3.0
             and will be removed in v4.0. Please use just load a CTask object
             instead", E_USER_NOTICE );
 
         $task = new CTask();
         $task->load((int)$this->file_task);
-        
+
         return $task->task_name;
-	}
+    }
+
+    /** @deprecated */
+    public function isWritable()
+    {
+        return $this->getFileSystem()->isWritable();
+    }
+
+    /** @deprecated */
+    public function deleteFile()
+    {
+        $this->load();
+        return $this->getFileSystem()->delete($this);
+    }
+
+    /** @deprecated */
+    public function moveFile($oldProj, $realname)
+    {
+        return $this->getFileSystem()->move($this, $oldProj, $realname);
+    }
+
+    /** @deprecated */
+    public function duplicateFile($oldProj, $realname)
+    {
+        return $this->getFileSystem()->duplicate($oldProj, $realname, $this->_AppUI);
+    }
+
+    /** @deprecated */
+    public function moveTemp($upload)
+    {
+        return $this->getFileSystem()->moveTemp($this, $upload, $this->_AppUI);
+    }
 }

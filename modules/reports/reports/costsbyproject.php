@@ -40,9 +40,7 @@ $companies = arrayMerge(array('0' => 'All Companies'), $companies);
     <input type="hidden" name="datePicker" value="log" />
 
     <?php
-    if (function_exists('styleRenderBoxTop')) {
-        echo styleRenderBoxTop();
-    }
+    echo $AppUI->getTheme()->styleRenderBoxTop();
     ?>
     <table cellspacing="0" cellpadding="4" border="0" width="100%" class="std">
         <tr>
@@ -174,17 +172,12 @@ $companies = arrayMerge(array('0' => 'All Companies'), $companies);
 
         if ($log_pdf) {
             // make the PDF file
-            $font_dir = W2P_BASE_DIR . '/lib/ezpdf/fonts';
             $temp_dir = W2P_BASE_DIR . '/files/temp';
 
-            $pdf = new Cezpdf('A4', 'landscape');
-            $pdf->ezSetCmMargins(1, 1, 1, 1);
-
-            $pdf->selectFont($font_dir . '/Helvetica-Bold.afm');
-            $pdf->ezText($companies[$company_id], 14);
-
-            $pdf->selectFont($font_dir . '/Helvetica.afm');
-            $pdf->ezText($AppUI->_('Costs By Project') . "\n", 12);
+            $output = new w2p_Output_PDFRenderer('A4', 'landscape');
+            $output->addTitle($AppUI->_('Costs By Project'));
+            $output->addDate($df);
+            $output->addSubtitle($companies[$company_id]);
 
             $pdfheaders = array($AppUI->_('Work', UI_OUTPUT_JS),
                 '  '.$AppUI->_('Project Name', UI_OUTPUT_JS), $AppUI->_('Project Owner', UI_OUTPUT_JS),
@@ -205,12 +198,10 @@ $companies = arrayMerge(array('0' => 'All Companies'), $companies);
                             7 => array('justification' => 'center', 'width' => 65),
                     ));
 
-            $pdf->ezTable($pdfdata, $pdfheaders, $title, $options);
+            $output->addTable($title, $pdfheaders, $pdfdata, $options);
 
             $w2pReport = new CReport();
-            if ($fp = fopen($temp_dir . '/'.$w2pReport->getFilename().'.pdf', 'wb')) {
-                fwrite($fp, $pdf->ezOutput());
-                fclose($fp);
+            if ($output->writeFile($w2pReport->getFilename())) {
                 echo '<tr><td colspan="13">';
                 echo '<a href="' . W2P_BASE_URL . '/files/temp/' . $w2pReport->getFilename() . '.pdf" target="pdf">';
                 echo $AppUI->_('View PDF File');

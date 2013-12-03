@@ -107,7 +107,7 @@ function submitIt(){
 	<input type="hidden" name="cid" value="<?php echo $cid ?>" />
 
     <table style="border-style:none;" align="center" border="0" width="700" cellpadding="0" cellspacing="0" class="std">
-		<tr><td colspan="5"><?php echo styleRenderBoxTop(); ?></td></tr>
+		<tr><td colspan="5"><?php echo $AppUI->getTheme()->styleRenderBoxTop(); ?></td></tr>
 		<tr>
             <td align="right" width="230">* <?php echo $AppUI->_('Login Name'); ?>:</td>
             <td colspan="2">

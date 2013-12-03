@@ -51,9 +51,7 @@ $outsider = $row->contact_display_name;
 require W2P_BASE_DIR . '/style/' . $uistyle . '/overrides.php';
 require W2P_BASE_DIR . '/style/' . $uistyle . '/header.php';
 
-if (is_callable('styleRenderBoxTop')) {
-	echo styleRenderBoxTop();
-}
+echo $AppUI->getTheme()->styleRenderBoxTop();
 ?>
 
 <script language="javascript">
@@ -254,6 +252,6 @@ function orderByName( x ){
 	</table>
 </form>
 <?php
-if (is_callable('styleRenderBoxTop')) {
+if (is_callable('styleRenderBoxBottom')) {
 	echo styleRenderBoxBottom();
 }

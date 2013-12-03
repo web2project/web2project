@@ -307,8 +307,6 @@ table.list tr:hover td._name {
 }
 .view td.data {
     background-color: #FFFFFF;
-    -moz-border-radius:3px;
-    -webkit-border-radius:3px;
     border-radius:3px;
     text-align: left;
 }
@@ -328,6 +326,17 @@ table.list tr:hover td._name {
     background: silver;
 }
 
+.addedit {
+    border-collapse: collapse;
+    width: 100%;
+}
+.addedit table {
+    width: 100%;
+}
+.addedit table td, .addedit table th {
+    border-spacing: 1px;
+    padding: 1px;
+}
 .addedit textarea {
     height: 75px;
     width:  80%;
@@ -517,8 +526,7 @@ table.prjprint TR {
 .tool-tip td.tip-label {
     border: 1px solid white;
     text-align: right;
-    -moz-border-radius:3.5px;
-    -webkit-border-radius:3.5px;
+    border-radius: 3.5px;
 }
 
 .tool-tip td.description {
@@ -637,12 +645,38 @@ table.mocal td a:first-child {
     width: 50%;
 }
 
-label {
-    font-size: 8pt;
-    text-align: right;
+.history tr td:nth-child(2) {
     white-space: nowrap;
 }
 
-.history tr td:nth-child(2) {
+div.column {
+    width: 50%;
+}
+div.column:nth-child(1) {
+    float: left;
+}
+div.column:nth-child(2) {
+    float: right;
+}
+label {
+    display: block;
+    float: left;
+    margin-right: 0.5em;
+    text-align: right;
     white-space: nowrap;
+    width: 10em;
+}
+div.addedit textarea {
+    width: 80%;
+}
+div.addedit input.save {
+    float: right;
+}
+
+input.name, input.url {
+    width: 250px;
+}
+
+input.state, input.zip {
+    width: 50px;
 }

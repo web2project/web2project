@@ -30,11 +30,12 @@ foreach ($projectList as $pr) {
 // get the prefered date format
 $df = $AppUI->getPref('SHDATEFORMAT');
 
-$reports = $AppUI->readFiles(W2P_BASE_DIR . '/modules/reports/reports', '\.php$');
+$loader = new w2p_FileSystem_Loader();
+$reports = $loader->readFiles(W2P_BASE_DIR . '/modules/reports/reports', '\.php$');
 
 // setup the title block
 if (!$suppressHeaders) {
-	$titleBlock = new w2p_Theme_TitleBlock('Project Reports', 'printer.png', $m, $m . '.' . $a);
+	$titleBlock = new w2p_Theme_TitleBlock('Project Reports', 'icon.png', $m, $m . '.' . $a);
 	$titleBlock->addCrumb('?m=projects', 'projects list');
 	if ($project_id) {
 		$titleBlock->addCrumb('?m=projects&amp;a=view&amp;project_id=' . $project_id, 'view this project');
@@ -63,13 +64,11 @@ if (!$suppressHeaders) {
 <?php
 }
 if ($report_type) {
-	$report_type = $AppUI->checkFileName($report_type);
+	$report_type = $loader->checkFileName($report_type);
 	$report_type = str_replace(' ', '_', $report_type);
 	require W2P_BASE_DIR . '/modules/reports/reports/' . $report_type . '.php';
 } else {
-	if (function_exists('styleRenderBoxTop')) {
-		echo styleRenderBoxTop();
-	}
+    echo $AppUI->getTheme()->styleRenderBoxTop();
 	$s = '';
 	$s .= '<table width="100%" class="std">';
 	$s .= '<tr><td><h2>' . $AppUI->_('Reports Available') . '</h2></td></tr>';

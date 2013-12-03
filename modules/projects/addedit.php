@@ -78,7 +78,7 @@ $style = (($actual_end_date > $end_date) && !empty($end_date)) ? 'style="color:r
 
 // setup the title block
 $ttl = $project_id > 0 ? 'Edit Project' : 'New Project';
-$titleBlock = new w2p_Theme_TitleBlock($ttl, 'applet3-48.png', $m, $m . '.' . $a);
+$titleBlock = new w2p_Theme_TitleBlock($ttl, 'icon.png', $m, $m . '.' . $a);
 $titleBlock->addCrumb('?m=projects', 'projects list');
 $canDelete = $project->canDelete();
 if ($project_id != 0) {
@@ -173,16 +173,16 @@ function setDepartment(department_id_string){
 
 </script>
 
-<form name="editFrm" action="?m=<?php echo $m; ?>" method="post" accept-charset="utf-8">
+<form name="editFrm" action="?m=<?php echo $m; ?>" method="post" accept-charset="utf-8" class="addedit projects">
 	<input type="hidden" name="dosql" value="do_project_aed" />
 	<input type="hidden" name="project_id" value="<?php echo $project_id; ?>" />
 	<input type="hidden" name="project_creator" value="<?php echo is_null($project->project_creator) ? $AppUI->user_id : $project->project_creator; ?>" />
 	<input type="hidden" name="project_contacts" id="project_contacts" value="<?php echo implode(',', $selected_contacts); ?>" />
     <input type="hidden" name="datePicker" value="project" />
-    <table cellspacing="1" cellpadding="1" border="0" width="100%" class="std addedit">
+    <table class="std addedit projects">
         <tr>
             <td width="50%" style="vertical-align: top">
-                <table border="0" cellspacing="1" cellpadding="2" width="100%" class="well">
+                <table class="well">
                     <tr>
                         <td><label><?php echo $AppUI->_('Project Name'); ?></label></td>
                         <td width="100%" colspan="2">
@@ -363,7 +363,7 @@ function setDepartment(department_id_string){
                 </table>
             </td>
             <td width="50%" valign="top">
-                <table cellspacing="1" cellpadding="2" width="100%" class="well">
+                <table class="well">
                     <tr>
                         <td><label><?php echo $AppUI->_('Priority'); ?></label></td>
                         <td nowrap ="nowrap">
@@ -451,7 +451,7 @@ function setDepartment(department_id_string){
                 <input class="button btn btn-danger" type="button" name="cancel" value="<?php echo $AppUI->_('cancel'); ?>" onclick="javascript:if(confirm('Are you sure you want to cancel.')){location.href = './index.php?m=projects';}" />
             </td>
             <td class="right">
-                <input class="button btn btn-primary" type="button" name="btnFuseAction" value="<?php echo $AppUI->_('submit'); ?>" onclick="submitIt();" />
+                <input class="button btn btn-primary" type="button" name="btnFuseAction" value="<?php echo $AppUI->_('save'); ?>" onclick="submitIt();" />
             </td>
         </tr>
     </table>

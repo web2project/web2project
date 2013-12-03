@@ -47,7 +47,7 @@ $tf = $AppUI->getPref('TIMEFORMAT');
 $start_date = $AppUI->formatTZAwareTime($forum->forum_create_date, $df);
 
 // setup the title block
-$titleBlock = new w2p_Theme_TitleBlock('Forum', 'support.png', $m, $m . '.' . $a);
+$titleBlock = new w2p_Theme_TitleBlock('Forum', 'icon.png', $m, $m . '.' . $a);
 $titleBlock->addCrumb('?m=forums', 'forums list');
 if ($message_id) {
     $titleBlock->addCrumb('?m=forums&a=viewer&forum_id=' . $forum_id, 'topics for this forum');
@@ -62,7 +62,7 @@ if ($canEdit) {
 $titleBlock->addCell(arraySelect($filters, 'f', 'size="1" class="text" onchange="document.filterFrm.submit();"', $f, true), '', '<form action="?m=forums&a=viewer&forum_id=' . $forum_id . '" method="post" name="filterFrm" accept-charset="utf-8">', '</form>');
 $titleBlock->show();
 ?>
-<table width="100%" cellspacing="0" cellpadding="2" border="0" class="std view">
+<table class="std view forums">
     <tr>
         <td height="20" colspan="3" style="border: outset #D1D1CD 1px;background-color:#<?php echo $forum->project_color_identifier; ?>">
             <font size="2" color="<?php echo bestColor($forum->project_color_identifier); ?>"><strong><?php echo $forum->forum_name; ?></strong></font>
@@ -121,9 +121,7 @@ function delIt(){
 </form>
 <?php } ?>
 <?php
-if (function_exists('styleRenderBoxBottom')) {
-	echo styleRenderBoxBottom();
-}
+echo $AppUI->getTheme()->styleRenderBoxBottom();
 if ($post_message) {
 	include (W2P_BASE_DIR . '/modules/forums/post_message.php');
 } else {

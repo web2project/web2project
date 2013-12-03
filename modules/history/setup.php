@@ -28,7 +28,7 @@ if ($a == 'setup') {
 	echo w2PshowModuleConfig($config);
 }
 
-class CSetupHistory extends w2p_Core_Setup
+class CSetupHistory extends w2p_System_Setup
 {
 	public function install() {
 		$q = $this->_getQuery();

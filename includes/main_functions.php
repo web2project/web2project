@@ -13,6 +13,7 @@ require_once W2P_BASE_DIR . '/includes/deprecated_functions.php';
 require_once W2P_BASE_DIR . '/includes/cleanup_functions.php';
 require_once W2P_BASE_DIR . '/lib/adodb/adodb.inc.php';
 require_once W2P_BASE_DIR . '/classes/w2p/web2project.php';
+require_once W2P_BASE_DIR . '/vendor/autoload.php';
 
 spl_autoload_register('web2project_autoload');
 spl_autoload_register('w2p_old_autoload');
@@ -53,19 +54,6 @@ function w2p_old_autoload($class_name)
         case 'w2pacl':                  // Deprecated as of v3.0, TODO: remove this in v4.0
         case 'w2pajaxresponse':         // Deprecated as of v3.0, TODO: remove this in v4.0
             require_once W2P_BASE_DIR . '/classes/deprecated.class.php';
-            break;
-
-        /*
-         * The following are all wirings for module classes that don't follow
-         * our naming conventions.
-         */
-        case 'cevent':
-            // Deprecated as of v3.0, TODO: remove this in v4.0
-            require_once W2P_BASE_DIR . '/modules/calendar/calendar.class.php';
-            break;
-        case 'cuser':
-            // Deprecated as of v3.0, TODO: remove this in v4.0
-            require_once W2P_BASE_DIR . '/modules/admin/users.class.php';
             break;
 
         /*
@@ -190,12 +178,12 @@ function w2PgetConfig($key, $default = null)
         return $w2Pconfig[$key];
     } else {
 //TODO: This block had to be removed because if the w2pgetConfig was called before
-//  we had a valid database object, creating the w2p_Core_Config object below would
+//  we had a valid database object, creating the w2p_System_Config object below would
 //  call its parent - w2p_Core_BaseObject - which would try to get an w2p_Core_AppUI
 //  which would in turn get back to here.. nasty loop.
 //
 //        if (!is_null($default)) {
-//            $obj = new w2p_Core_Config();
+//            $obj = new w2p_System_Config();
 //            $obj->overrideDatabase($dbConn);
 //            $obj->config_name = $key;
 //            $obj->config_value = $default;

@@ -294,3 +294,4 @@
 'view project'=>'voir un projet',
 'view this project'=>'voir ce projet',
 'view this task'=>'voir cette tâche',
+'Help Desk'=>'Centre d\'assistance',

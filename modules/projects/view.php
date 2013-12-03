@@ -56,17 +56,16 @@ if (isset($criticalTasks)) {
 $style = (($actual_end_date > $end_date) && !empty($end_date)) ? 'style="color:red; font-weight:bold"' : '';
 
 // setup the title block
-$titleBlock = new w2p_Theme_TitleBlock('View Project', 'applet3-48.png', $m, $m . '.' . $a);
+$titleBlock = new w2p_Theme_TitleBlock('View Project', 'icon.png', $m, $m . '.' . $a);
 
 if ($canEdit) {
-    $titleBlock->addCell('<input type="submit" class="button btn btn-small dropdown-toggle" value="' . $AppUI->_('new link') . '" />', '', '<form action="?m=links&a=addedit&project_id=' . $project_id . '" method="post" accept-charset="utf-8">', '</form>');
-	$titleBlock->addCell('<input type="submit" class="button btn btn-small dropdown-toggle" value="' . $AppUI->_('new event') . '" />', '', '<form action="?m=calendar&a=addedit&project_id=' . $project_id . '" method="post" accept-charset="utf-8">', '</form>');
-
-	$titleBlock->addCell('<input type="submit" class="button btn btn-small dropdown-toggle" value="' . $AppUI->_('new file') . '" />', '', '<form action="?m=files&a=addedit&project_id=' . $project_id . '" method="post" accept-charset="utf-8">', '</form>');
+    $titleBlock->addButton('new link', '?m=links&a=addedit&project_id=' . $project_id);
+    $titleBlock->addButton('new event', '?m=events&a=addedit&project_id=' . $project_id);
+    $titleBlock->addButton('new file', '?m=files&a=addedit&project_id=' . $project_id);
 }
 
 if (canAdd('tasks')) {
-    $titleBlock->addCell('<input type="submit" class="button btn btn-small dropdown-toggle" value="' . $AppUI->_('new task') . '" />', '', '<form action="?m=tasks&a=addedit&task_project=' . $project_id . '" method="post" accept-charset="utf-8">', '</form>');
+    $titleBlock->addButton('new task', '?m=tasks&a=addedit&task_project=' . $project_id);
 }
 $titleBlock->addCrumb('?m=projects', 'projects list');
 if ($canEdit) {
@@ -115,7 +114,7 @@ function delIt() {
 	<input type="hidden" name="del" value="1" />
 	<input type="hidden" name="project_id" value="<?php echo $project_id; ?>" />
 </form>
-<table id="tblProjects" border="0" cellpadding="4" cellspacing="0" width="100%" class="std view">
+<table id="tblProjects" class="std view projects">
     <tr>
         <td style="border: outset #d1d1cd 1px;background-color:#<?php echo $project->project_color_identifier; ?>" colspan="2" id="view-header">
         <?php
@@ -181,7 +180,7 @@ function delIt() {
                         $puserid = $project->project_owner;
 
                         //TODO HTML helper not working properly due to field having suffix _owner, avoiding helper until fix
-                        echo "<a href=\"?m=admin&a=view&user_id=$puserid\" alt=\"$pusername\">$pusername</a>";
+                        echo "<a href=\"?m=users&a=view&user_id=$puserid\" alt=\"$pusername\">$pusername</a>";
                         ?>
                     </td>
                 </tr>
@@ -435,7 +434,7 @@ $canViewTaskLog = canView('task_log');
 
 //TODO: This whole structure is hard-coded based on the TaskStatus SelectList.
 $status = w2PgetSysVal('TaskStatus');
-if ($canViewTask) {
+if ($canViewTask && $AppUI->isActiveModule('tasks')) {
 	$tabBox->add(W2P_BASE_DIR . '/modules/tasks/tasks', 'Tasks');
     unset($status[0]);
     $tabBox->add(W2P_BASE_DIR . '/modules/tasks/tasks', 'Tasks (Inactive)');
@@ -444,17 +443,16 @@ if ($canViewTask) {
     foreach ($status as $id => $statusName) {
         $tabBox->add(W2P_BASE_DIR . '/modules/tasks/tasks', $AppUI->_('Tasks') . ' (' . $AppUI->_($statusName) . ')');
     }
-}
-if ( $AppUI->isActiveModule('forums') ) {
-	if (canView('forums')) {
-		$tabBox->add(W2P_BASE_DIR . '/modules/projects/vw_forums', 'Forums');
-	}
-}
-if ($canViewTask) {
+
 	$tabBox->add(W2P_BASE_DIR . '/modules/tasks/viewgantt', 'Gantt Chart');
 	if ($canViewTaskLog) {
 		$tabBox->add(W2P_BASE_DIR . '/modules/projects/vw_logs', 'Task Logs');
 	}
+}
+if ( $AppUI->isActiveModule('forums') ) {
+    if (canView('forums')) {
+        $tabBox->add(W2P_BASE_DIR . '/modules/projects/vw_forums', 'Forums');
+    }
 }
 $f = 'all';
 $min_view = true;

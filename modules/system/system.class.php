@@ -13,7 +13,7 @@ class CSystem
     protected $_w2Pconfig;
 
 	public function __construct() {
-        $this->upgrader = new w2p_Core_UpgradeManager();
+        $this->upgrader = new w2p_System_UpgradeManager();
 
         global $w2Pconfig;
         $this->_w2Pconfig = $w2Pconfig;

@@ -287,7 +287,7 @@ if (isset($task_owner) && (int) $task_owner > 0) {
 }
 
 if (($project_id || !$task_id) && !$min_view) {
-	if ($search_text = $AppUI->getState('searchtext')) {
+	if ($search_text = $AppUI->getState('tasks_search_string')) {
 		$q->addWhere('( task_name LIKE (\'%' . $search_text . '%\') OR task_description LIKE (\'%' . $search_text . '%\') )');
 	}
 }
@@ -464,7 +464,7 @@ $open_link = w2PtoolTip($m, 'click to expand/collapse all the tasks for this pro
 $fieldList = array();
 $fieldNames = array();
 
-$module = new w2p_Core_Module();
+$module = new w2p_System_Module();
 $fields = $module->loadSettings('tasks', 'index_list');
 
 if (count($fields) > 0) {

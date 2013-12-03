@@ -208,7 +208,7 @@ $open_link = w2PtoolTip($m, 'click to expand/collapse all the tasks for this pro
 $fieldList = array();
 $fieldNames = array();
 
-$module = new w2p_Core_Module();
+$module = new w2p_System_Module();
 $fields = $module->loadSettings('tasks', 'projectdesigner-view');
 
 if (count($fields) > 0) {

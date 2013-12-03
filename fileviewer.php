@@ -96,31 +96,26 @@ if ($file_id) {
 		$AppUI->redirect(ACCESS_DENIED);
 	}
 
-	$fname = W2P_BASE_DIR . '/files/' . $file['file_project'] . '/' . $file['file_real_filename'];
-	if (!file_exists($fname)) {
-		$AppUI->setMsg('fileIdError', UI_MSG_ERROR);
-		$AppUI->redirect();
-	}
+    $exists = $fileclass->getFileSystem()->exists($file['file_project'], $file['file_real_filename']);
 
-	ob_end_clean();
-	header('MIME-Version: 1.0');
-	header('Pragma: ');
-	header('Cache-Control: public');
-	header('Content-length: ' . $file['file_size']);
-	header('Content-type: ' . $file['file_type']);
-	header('Content-transfer-encoding: 8bit');
-	header('Content-disposition: attachment; filename="' . $file['file_name'] . '"');
+    if (!$exists) {
+        $AppUI->setMsg('fileIdError', UI_MSG_ERROR);
+        $AppUI->redirect();
+    }
 
-	// read and output the file in chunks to bypass limiting settings in php.ini
-	$handle = fopen(W2P_BASE_DIR . '/files/' . $file['file_project'] . '/' . $file['file_real_filename'], 'rb');
-	if ($handle) {
-		while (!feof($handle)) {
-			print fread($handle, 8192);
-		}
-		fclose($handle);
-	}
-	flush();
+    ob_end_clean();
+    header('MIME-Version: 1.0');
+    header('Pragma: ');
+    header('Cache-Control: public');
+    header('Content-length: ' . $file['file_size']);
+    header('Content-type: ' . $file['file_type']);
+    header('Content-transfer-encoding: 8bit');
+    header('Content-disposition: attachment; filename="' . $file['file_name'] . '"');
+
+    $fileclass->getFileSystem()->read($file['file_project'], $file['file_real_filename']);
+
+    flush();
 } else {
-	$AppUI->setMsg('fileIdError', UI_MSG_ERROR);
-	$AppUI->redirect();
+    $AppUI->setMsg('fileIdError', UI_MSG_ERROR);
+    $AppUI->redirect();
 }

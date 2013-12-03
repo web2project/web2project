@@ -11,7 +11,7 @@
  *   LICENSE file in root of site for further details
  *
  * @author      D. Keith Casey, Jr.<caseydk@users.sourceforge.net>
- * @category    w2p_Core_UpgradeManager
+ * @category    w2p_System_UpgradeManager
  * @package     web2project
  * @subpackage  unit_tests
  * @copyright   2007-2012 The web2Project Development Team <w2p-developers@web2project.net>
@@ -28,7 +28,7 @@ class w2p_Core_UpgradeManagerTest extends CommonSetup
 	{
         parent::setUp();
 
-        $this->obj = new w2p_Core_UpgradeManager();
+        $this->obj = new w2p_System_UpgradeManager();
     }
 
 	public function testManagerSetup()
@@ -108,7 +108,7 @@ class w2p_Core_UpgradeManagerTest extends CommonSetup
 				break;
 
 			default:
-				$this->fail('w2p_Core_UpgradeManager action was not matched.');
+				$this->fail('w2p_System_UpgradeManager action was not matched.');
 		}
 	}
 

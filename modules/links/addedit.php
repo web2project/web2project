@@ -48,7 +48,7 @@ if (0 == $link_id && ($project_id || $task_id)) {
 
 // setup the title block
 $ttl = $link_id ? 'Edit Link' : 'Add Link';
-$titleBlock = new w2p_Theme_TitleBlock($AppUI->_($ttl), 'folder5.png', $m, $m . '.' . $a);
+$titleBlock = new w2p_Theme_TitleBlock($AppUI->_($ttl), 'icon.png', $m, $m . '.' . $a);
 $titleBlock->addCrumb('?m=' . $m, 'links list');
 $canDelete = $link->canDelete();
 if ($canDelete && $link_id) {
@@ -103,17 +103,17 @@ function setTask( key, val ) {
 }
 </script>
 
-<form name="editFrm" action="?m=<?php echo $m; ?>" method="post" accept-charset="utf-8">
+<form name="editFrm" action="?m=<?php echo $m; ?>" method="post" accept-charset="utf-8" class="addedit links">
     <input type="hidden" name="dosql" value="do_link_aed" />
     <input type="hidden" name="del" value="0" />
     <input type="hidden" name="link_id" value="<?php echo $link_id; ?>" />
 <!-- TODO: Right now, link owner is hard coded, we should make this a select box like elsewhere. -->
     <input type="hidden" name="link_owner" value="<?php echo $link->link_owner; ?>" />
 
-    <table width="100%" border="0" cellpadding="3" cellspacing="3" class="std addedit">
+    <table class="std addedit links">
         <tr>
             <td width="100%" valign="top" align="center">
-              <table cellspacing="1" cellpadding="2" width="100%" class="well">
+              <table class="well">
                 <tr>
                     <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Link Name'); ?>:</td>
                     <td align="left"><input type="text" class="text" name="link_name" value="<?php echo $link->link_name; ?>"></td>
@@ -167,7 +167,7 @@ function setTask( key, val ) {
                 <input class="button btn btn-danger" type="button" name="cancel" value="<?php echo $AppUI->_('cancel'); ?>" onclick="javascript:if(confirm('<?php echo $AppUI->_('Are you sure you want to cancel?', UI_OUTPUT_JS); ?>')){location.href = './index.php?m=links';}" />
             </td>
             <td align="right">
-                <input type="button" class="button btn btn-primary" value="<?php echo $AppUI->_('submit'); ?>" onclick="submitIt()" />
+                <input type="button" class="button btn btn-primary" value="<?php echo $AppUI->_('save'); ?>" onclick="submitIt()" />
             </td>
         </tr>
     </table>

@@ -481,17 +481,17 @@ function showtask(&$arr, $level = 0, $notUsed = true, $today_view = false) {
 		if ($show_all_assignees) {
 			$s .= '<td class="data">';
 			foreach ($assigned_users as $val) {
-				$a_u_tmp_array[] = ('<a href="?m=admin&amp;a=view&amp;user_id=' . $val['user_id'] . '"' . 'title="' . (w2PgetConfig('check_overallocation') ? $AppUI->_('Extent of Assignment') . ':' . $userAlloc[$val['user_id']]['charge'] . '%; ' . $AppUI->_('Free Capacity') . ':' . $userAlloc[$val['user_id']]['freeCapacity'] . '%' : '') . '">' . $val['assignee'] . ' (' . $val['perc_assignment'] . '%)</a>');
+				$a_u_tmp_array[] = ('<a href="?m=users&amp;a=view&amp;user_id=' . $val['user_id'] . '"' . 'title="' . (w2PgetConfig('check_overallocation') ? $AppUI->_('Extent of Assignment') . ':' . $userAlloc[$val['user_id']]['charge'] . '%; ' . $AppUI->_('Free Capacity') . ':' . $userAlloc[$val['user_id']]['freeCapacity'] . '%' : '') . '">' . $val['assignee'] . ' (' . $val['perc_assignment'] . '%)</a>');
 			}
 			$s .= join(', <br />', $a_u_tmp_array) . '</td>';
 		} else {
-			$s .= ('<td class="data">' . '<a href="?m=admin&amp;a=view&amp;user_id=' . $assigned_users[0]['user_id'] . '" title="' . (w2PgetConfig('check_overallocation') ? $AppUI->_('Extent of Assignment') . ':' . $userAlloc[$assigned_users[0]['user_id']]['charge'] . '%; ' . $AppUI->_('Free Capacity') . ':' . $userAlloc[$assigned_users[0]['user_id']]['freeCapacity'] . '%' : '') . '">' . $assigned_users[0]['assignee'] . ' (' . $assigned_users[0]['perc_assignment'] . '%)</a>');
+			$s .= ('<td class="data">' . '<a href="?m=users&amp;a=view&amp;user_id=' . $assigned_users[0]['user_id'] . '" title="' . (w2PgetConfig('check_overallocation') ? $AppUI->_('Extent of Assignment') . ':' . $userAlloc[$assigned_users[0]['user_id']]['charge'] . '%; ' . $AppUI->_('Free Capacity') . ':' . $userAlloc[$assigned_users[0]['user_id']]['freeCapacity'] . '%' : '') . '">' . $assigned_users[0]['assignee'] . ' (' . $assigned_users[0]['perc_assignment'] . '%)</a>');
 			if ($arr['assignee_count'] > 1) {
 				$s .= (' <a href="javascript: void(0);" onclick="toggle_users(' . "'users_" . $arr['task_id'] . "'" . ');" title="' . join(', ', $a_u_tmp_array) . '">(+' . ($arr['assignee_count'] - 1) . ')</a>' . '<span style="display: none" id="users_' . $arr['task_id'] . '">');
 				$a_u_tmp_array[] = $assigned_users[0]['assignee'];
 				for ($i = 1, $i_cmp = count($assigned_users); $i < $i_cmp; $i++) {
 					$a_u_tmp_array[] = $assigned_users[$i]['assignee'];
-					$s .= ('<br /><a href="?m=admin&amp;a=view&amp;user_id=' . $assigned_users[$i]['user_id'] . '" title="' . (w2PgetConfig('check_overallocation') ? $AppUI->_('Extent of Assignment') . ':' . $userAlloc[$assigned_users[$i]['user_id']]['charge'] . '%; ' . $AppUI->_('Free Capacity') . ':' . $userAlloc[$assigned_users[$i]['user_id']]['freeCapacity'] . '%' : '') . '">' . $assigned_users[$i]['assignee'] . ' (' . $assigned_users[$i]['perc_assignment'] . '%)</a>');
+					$s .= ('<br /><a href="?m=users&amp;a=view&amp;user_id=' . $assigned_users[$i]['user_id'] . '" title="' . (w2PgetConfig('check_overallocation') ? $AppUI->_('Extent of Assignment') . ':' . $userAlloc[$assigned_users[$i]['user_id']]['charge'] . '%; ' . $AppUI->_('Free Capacity') . ':' . $userAlloc[$assigned_users[$i]['user_id']]['freeCapacity'] . '%' : '') . '">' . $assigned_users[$i]['assignee'] . ' (' . $assigned_users[$i]['perc_assignment'] . '%)</a>');
 				}
 				$s .= '</span>';
 			}
@@ -630,7 +630,7 @@ function showtask_pd(&$arr, $level = 0, $today_view = false) {
 		if ($show_all_assignees) {
 			$s .= '<td align="left">';
 			foreach ($assigned_users as $val) {
-				$aInfo = '<a href="?m=admin&a=view&user_id=' . $val['user_id'] . '"';
+				$aInfo = '<a href="?m=users&a=view&user_id=' . $val['user_id'] . '"';
 				$aInfo .= 'title="' . (w2PgetConfig('check_overallocation') ? $AppUI->_('Extent of Assignment') . ':' . $userAlloc[$val['user_id']]['charge'] . '%; ' . $AppUI->_('Free Capacity') . ':' . $userAlloc[$val['user_id']]['freeCapacity'] . '%' : '') . '">';
 				$aInfo .= $val['contact_name'] . ' (' . $val['perc_assignment'] . '%)</a>';
 				$a_u_tmp_array[] = $aInfo;
@@ -639,7 +639,7 @@ function showtask_pd(&$arr, $level = 0, $today_view = false) {
 			$s .= '</td>';
 		} else {
 			$s .= '<td align="left" nowrap="nowrap">';
-			$s .= '<a href="?m=admin&a=view&user_id=' . $assigned_users[0]['user_id'] . '"';
+			$s .= '<a href="?m=users&a=view&user_id=' . $assigned_users[0]['user_id'] . '"';
 			$s .= 'title="' . (w2PgetConfig('check_overallocation') ? $AppUI->_('Extent of Assignment') . ':' . $userAlloc[$assigned_users[0]['user_id']]['charge'] . '%; ' . $AppUI->_('Free Capacity') . ':' . $userAlloc[$assigned_users[0]['user_id']]['freeCapacity'] . '%' : '') . '">';
 			$s .= $assigned_users[0]['contact_name'] . ' (' . $assigned_users[0]['perc_assignment'] . '%)</a>';
 			if ($arr['assignee_count'] > 1) {
@@ -649,7 +649,7 @@ function showtask_pd(&$arr, $level = 0, $today_view = false) {
 				$a_u_tmp_array[] = $assigned_users[0]['user_username'];
 				for ($i = 1, $i_cmp = count($assigned_users); $i < $i_cmp; $i++) {
 					$a_u_tmp_array[] = $assigned_users[$i]['user_username'];
-					$s .= '<br /><a href="?m=admin&a=view&user_id=';
+					$s .= '<br /><a href="?m=users&a=view&user_id=';
 					$s .= $assigned_users[$i]['user_id'] . '" title="' . (w2PgetConfig('check_overallocation') ? $AppUI->_('Extent of Assignment') . ':' . $userAlloc[$assigned_users[$i]['user_id']]['charge'] . '%; ' . $AppUI->_('Free Capacity') . ':' . $userAlloc[$assigned_users[$i]['user_id']]['freeCapacity'] . '%' : '') . '">';
 					$s .= $assigned_users[$i]['contact_name'] . ' (' . $assigned_users[$i]['perc_assignment'] . '%)</a>';
 				}
@@ -880,7 +880,7 @@ function sort_by_item_title($title, $item_name, $item_type, $a = '') {
 	if ($m == 'tasks') {
 		$s .= '<a href="./index.php?m=tasks' . (($task_id > 0) ? ('&amp;a=view&amp;task_id=' . $task_id) : $a);
 	} elseif ($m == 'calendar') {
-		$s .= '<a href="./index.php?m=calendar&amp;a=day_view';
+		$s .= '<a href="./index.php?m=events&amp;a=day_view';
 	} else {
 		$s .= '<a href="./index.php?m=projects&amp;bypass=1' . (($project_id > 0) ? ('&amp;a=view&amp;project_id=' . $project_id) : '');
 	}
@@ -1033,7 +1033,7 @@ function displayTask($list, $task, $level, $display_week_hours, $fromPeriod, $to
 	$sep = $us = '';
 	foreach ($users as $notUsed => $row) {
 		if ($row['user_id']) {
-			$us .= '<a href="?m=admin&a=view&user_id=' . $row[0] . '">' . $sep . $row['contact_name'] . '&nbsp;(' . $row['perc_assignment'] . '%)</a>';
+			$us .= '<a href="?m=users&a=view&user_id=' . $row[0] . '">' . $sep . $row['contact_name'] . '&nbsp;(' . $row['perc_assignment'] . '%)</a>';
 			$sep = ', ';
 		}
 	}
@@ -2034,7 +2034,7 @@ function displayFiles($AppUI, $folder_id, $task_id, $project_id, $company_id) {
     $fieldList = array();
     $fieldNames = array();
 
-    $module = new w2p_Core_Module();
+    $module = new w2p_System_Module();
     $fields = $module->loadSettings('files', 'index_list');
 
     if (count($fields) > 0) {
@@ -2469,7 +2469,7 @@ function projects_list_data($user_id = false) {
         company_id, company_name, project_last_task as critical_task,
         tp.task_log_problem, user_username, task_log_problem, u.user_id');
 
-	$fields = w2p_Core_Module::getSettings('projects', 'index_list');
+	$fields = w2p_System_Module::getSettings('projects', 'index_list');
 	unset($fields['department_list']);  // added as an alias below
 	foreach ($fields as $field => $notUsed) {
 		$q->addQuery($field);
@@ -2580,18 +2580,20 @@ function getDepartmentSelectionList($company_id, $checked_array = array(), $dept
 	global $departments_count, $AppUI;
 	$parsed = '';
 
-	if ($departments_count < 6) {
-		$departments_count++;
-	}
+    if ($AppUI->isActiveModule('departments') && canView('departments')) {
+        if ($departments_count < 6) {
+            $departments_count++;
+        }
 
-	$depts_list = CDepartment::getDepartmentList($AppUI, $company_id, $dept_parent);
+        $depts_list = CDepartment::getDepartmentList($AppUI, $company_id, $dept_parent);
 
-	foreach ($depts_list as $dept_id => $dept_info) {
-		$selected = in_array($dept_id, $checked_array) ? ' selected="selected"' : '';
+        foreach ($depts_list as $dept_id => $dept_info) {
+            $selected = in_array($dept_id, $checked_array) ? ' selected="selected"' : '';
 
-		$parsed .= '<option value="' . $dept_id . '"' . $selected . '>' . str_repeat('&nbsp;', $spaces) . $dept_info['dept_name'] . '</option>';
-		$parsed .= getDepartmentSelectionList($company_id, $checked_array, $dept_id, $spaces + 5);
-	}
+            $parsed .= '<option value="' . $dept_id . '"' . $selected . '>' . str_repeat('&nbsp;', $spaces) . $dept_info['dept_name'] . '</option>';
+            $parsed .= getDepartmentSelectionList($company_id, $checked_array, $dept_id, $spaces + 5);
+        }
+    }
 
 	return $parsed;
 }
@@ -3515,18 +3517,18 @@ function formatCurrency($number, $format) {
     return function_exists('money_format') ? money_format('%i', $number) : number_format($number, 2);
 }
 
-function format_backtrace($bt, $file, $line, $msg) {
-	echo '<pre>';
-	echo 'ERROR: ' . $file . '(' . $line . ') : ' . $msg . "\n";
-	echo 'Backtrace:' . "\n";
+function format_backtrace($bt, $file, $line, $msg)
+{
+    trigger_error('ERROR: ' . $file . '(' . $line . ') : ' . $msg, E_USER_WARNING);
+    trigger_error('Backtrace:', E_USER_WARNING);
 	foreach ($bt as $level => $frame) {
-		echo $level . ' ' . $frame['file'] . ':' . $frame['line'] . ' ' . $frame['function'] . "()\n";
+        trigger_error($level . ' ' . $frame['file'] . ':' . $frame['line'] . ' ' . $frame['function'] . "()", E_USER_WARNING);
 	}
 }
 
-function dprint($file, $line, $level, $msg) {
-	$max_level = 0;
-	$max_level = (int)w2PgetConfig('debug');
+function dprint($file, $line, $level, $msg)
+{
+	$max_level = (int) w2PgetConfig('debug');
 	$display_debug = w2PgetConfig('display_debug', false);
 	if ($level <= $max_level) {
 		error_log($file . '(' . $line . '): ' . $msg);
@@ -4088,7 +4090,7 @@ function getEventLinks($startPeriod, $endPeriod, &$links, $notUsed = null, $mini
 				if ($minical) {
 					$link = array();
 				} else {
-					$url = '?m=calendar&a=view&event_id=' . $row['event_id'];
+					$url = '?m=events&a=view&event_id=' . $row['event_id'];
 					$link['href'] = '';
 					$link['alt'] = '';
 					$link['text'] = w2PtoolTip($row['event_name'], getEventTooltip($row['event_id']), true) . w2PshowImage('event' . $row['event_type'] . '.png', 16, 16, '', '', 'calendar') . '</a>&nbsp;' . '<a href="' . $url . '"><span class="event">' . $row['event_name'] . '</span></a>' . w2PendTip();
@@ -4483,7 +4485,7 @@ function w2PsessionGC()
         // queue scanner.
         if (!isset($AppUI)) {
             $AppUI = new w2p_Core_CAppUI();
-            $queue = new w2p_Core_EventQueue();
+            $queue = new w2p_System_EventQueue();
             $queue->scan();
         }
     }

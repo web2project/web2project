@@ -101,7 +101,7 @@ if (w2PgetParam($_POST, 'lostpass', 0)) {
 	if (w2PgetParam($_POST, 'sendpass', 0)) {
 		sendNewPass();
 	} else {
-        include $AppUI->getTheme()->resolveTemplate('lostpass');
+        include $theme->resolveTemplate('lostpass');
 	}
 	exit();
 }
@@ -149,7 +149,7 @@ if ($AppUI->doLogin()) {
 		header('Content-type: text/html;charset=' . $locale_char_set);
 	}
 
-    include $AppUI->getTheme()->resolveTemplate('login');
+    include $theme->resolveTemplate('login');
 	// destroy the current session and output login page
 	session_unset();
 	session_destroy();
@@ -160,7 +160,8 @@ $AppUI->setUserLocale();
 // bring in the rest of the support and localisation files
 $perms = &$AppUI->acl();
 
-/*
+$loader = new w2p_FileSystem_Loader();
+/**
  * TODO: We should validate that the module identified by $m is actually
  *   installed & active. If not, we should go back to the defaults.
  */
@@ -176,10 +177,10 @@ if (!isset($_GET['m']) && !empty($w2Pconfig['default_view_m'])) {
 	}
 } else {
 	// set the module from the url
-	$m = $AppUI->checkFileName(w2PgetCleanParam($_GET, 'm', getReadableModule()));
+	$m = $loader->checkFileName(w2PgetCleanParam($_GET, 'm', getReadableModule()));
 }
 // set the action from the url
-$a = $AppUI->checkFileName(w2PgetCleanParam($_GET, 'a', $def_a));
+$a = $loader->checkFileName(w2PgetCleanParam($_GET, 'a', $def_a));
 if ($m == 'projects' && $a == 'view' && $w2Pconfig['projectdesigner_view_project'] && !w2PgetParam($_GET, 'bypass') && !(isset($_GET['tab']))) {
 	if ($AppUI->isActiveModule('projectdesigner')) {
 		$m = 'projectdesigner';
@@ -194,7 +195,7 @@ if ($m == 'projects' && $a == 'view' && $w2Pconfig['projectdesigner_view_project
 * not allowed in the request parameters.
 */
 
-$u = $AppUI->checkFileName(w2PgetCleanParam($_GET, 'u', ''));
+$u = $loader->checkFileName(w2PgetCleanParam($_GET, 'u', ''));
 
 // load module based locale settings
 @include_once W2P_BASE_DIR . '/locales/' . $AppUI->user_locale . '/locales.php';
@@ -222,10 +223,10 @@ if (!$suppressHeaders) {
 // include the module class file - we use file_exists instead of @ so
 // that any parse errors in the file are reported, rather than errors
 // further down the track.
-$modclass = $AppUI->getModuleClass($m);
-if (file_exists($modclass)) {
-	include_once ($modclass);
-}
+//$modclass = $AppUI->getModuleClass($m);
+//if (file_exists($modclass)) {
+//	include_once ($modclass);
+//}
 if ($u && file_exists(W2P_BASE_DIR . '/modules/' . $m . '/' . $u . '/' . $u . '.class.php')) {
 	include_once W2P_BASE_DIR . '/modules/' . $m . '/' . $u . '/' . $u . '.class.php';
 }
@@ -244,7 +245,7 @@ if ($u && file_exists(W2P_BASE_DIR . '/modules/' . $m . '/' . $u . '/' . $u . '.
 // do some db work if dosql is set
 // TODO - MUST MOVE THESE INTO THE MODULE DIRECTORY
 if (isset($_POST['dosql'])) {
-	require W2P_BASE_DIR . '/modules/' . $m . '/' . ($u ? ($u . '/') : '') . $AppUI->checkFileName($_POST['dosql']) . '.php';
+	require W2P_BASE_DIR . '/modules/' . $m . '/' . ($u ? ($u . '/') : '') . $loader->checkFileName($_POST['dosql']) . '.php';
 }
 
 // start output proper
@@ -257,7 +258,7 @@ if (isset($_POST['dosql']) && $_POST['dosql'] == 'do_file_co') {
 }
 
 if (!$suppressHeaders) {
-	include $AppUI->getTheme()->resolveTemplate('header');
+	include $theme->resolveTemplate('header');
 }
 
 if (W2P_PERFORMANCE_DEBUG) {
@@ -277,9 +278,7 @@ if (file_exists($module_file)) {
 	$titleBlock = new w2p_Theme_TitleBlock($AppUI->_('Warning'), 'log-error.gif');
 	$titleBlock->show();
 
-	if (is_callable('styleRenderBoxTop')) {
-		echo styleRenderBoxTop();
-	}
+    echo $theme->styleRenderBoxTop();
 	echo '<table width="100%" cellspacing="0" cellpadding="3" border="0" class="std">';
 	echo '<tr>';
 	echo '	<td>';
@@ -292,11 +291,11 @@ if (!$suppressHeaders) {
 	echo '<iframe name="thread" src="' . W2P_BASE_URL . '/modules/index.html" width="0" height="0" frameborder="0"></iframe>';
 	echo '<iframe name="thread2" src="' . W2P_BASE_URL . '/modules/index.html" width="0" height="0" frameborder="0"></iframe>';
  	//Theme footer goes before the performance box
-    include $AppUI->getTheme()->resolveTemplate('footer');
+    include $theme->resolveTemplate('footer');
 	if (W2P_PERFORMANCE_DEBUG) {
-		include $AppUI->getTheme()->resolveTemplate('performance');
+		include $theme->resolveTemplate('performance');
 	}
-    include $AppUI->getTheme()->resolveTemplate('message_loading');
+    include $theme->resolveTemplate('message_loading');
 
 	//close the body and html here, instead of on the theme footer.
 	echo '</body>

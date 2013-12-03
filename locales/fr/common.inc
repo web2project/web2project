@@ -262,3 +262,5 @@
 'todos'=>'A faire',
 'updated'=>'mis à jour',
 'view this project'=>'voir ce projet',
+'Help Desk'=>'Centre d\'assistance',
+'My Tasks'=>'Mes tâches',

@@ -129,7 +129,6 @@ if (isset($_FILES['formfile'])) {
 		$obj->file_name = $upload['name'];
 		$obj->file_type = $upload['type'];
 		$obj->file_size = $upload['size'];
-		$obj->file_real_filename = uniqid(rand());
 
 		$res = $obj->moveTemp($upload);
 		if (!$res) {

@@ -8,7 +8,7 @@ global $AppUI, $project_id;
 
 $items = CProject::getForums($AppUI, $project_id);
 
-$module = new w2p_Core_Module();
+$module = new w2p_System_Module();
 $fields = $module->loadSettings('forums', 'projects_view');
 
 if (0 == count($fields)) {

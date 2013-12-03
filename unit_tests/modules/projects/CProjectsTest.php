@@ -139,26 +139,6 @@ $this->obj->overrideDatabase($this->mockDB);
     }
 
     /**
-     * Tests that the proper error message is returned when no short name is passed.
-     */
-    public function testCreateProjectNoShortName()
-    {
-		unset($this->post_data['project_short_name']);
-        $this->obj->bind($this->post_data);
-
-        /**
-         * Verify we got the proper error message
-         */
-		$this->assertFalse($this->obj->store());
-        $this->assertArrayHasKey('project_short_name', $this->obj->getError());
-
-        /**
-         * Verify that project id was not set
-         */
-        $this->AssertEquals(0, $this->obj->project_id);
-    }
-
-    /**
      * Tests that the proper error message is returned when no color identifier is passed.
      */
     public function testCreateProjectNoColorIdentifier()
@@ -832,13 +812,17 @@ $this->obj->overrideDatabase($this->mockDB);
         $this->obj->project_id = 1;
         $departments = $this->obj->getDepartmentList();
 
-        $this->assertEquals(2,              count($departments));
-        $this->assertEquals(1,              $departments[1]['dept_id']);
-        $this->assertEquals('Department 1', $departments[1]['dept_name']);
-        $this->assertEquals('',             $departments[1]['dept_phone']);
-        $this->assertEquals(2,              $departments[2]['dept_id']);
-        $this->assertEquals('Department 2', $departments[2]['dept_name']);
-        $this->assertEquals('',             $departments[2]['dept_phone']);
+        if ($this->_AppUI->isActiveModule('departments')) {
+            $this->assertEquals(2,              count($departments));
+            $this->assertEquals(1,              $departments[1]['dept_id']);
+            $this->assertEquals('Department 1', $departments[1]['dept_name']);
+            $this->assertEquals('',             $departments[1]['dept_phone']);
+            $this->assertEquals(2,              $departments[2]['dept_id']);
+            $this->assertEquals('Department 2', $departments[2]['dept_name']);
+            $this->assertEquals('',             $departments[2]['dept_phone']);
+        } else {
+            $this->assertEquals(0,              count($departments));
+        }
     }
 
     /**
@@ -855,63 +839,19 @@ $this->obj->overrideDatabase($this->mockDB);
         $this->obj->project_id = 1;
         $forums = $this->obj->getForumList();
 
-        $this->assertEquals(1,                  count($forums));
-        $this->assertEquals(1,                  $forums[1]['forum_id']);
-        $this->assertEquals(1,                  $forums[1]['forum_project']);
-        $this->assertEquals(1,                  $forums[1]['forum_owner']);
-        $this->assertEquals('Test Forum',       $forums[1]['forum_name']);
-        $this->assertEquals(1,                  $forums[1]['forum_message_count']);
-        $this->assertEquals('04-Aug-2009 17:03',$forums[1]['forum_last_date']);
-        $this->assertEquals('Test Project',     $forums[1]['project_name']);
-        $this->assertEquals(1,                  $forums[1]['project_id']);
-    }
-
-    /**
-     * Tests finding company of project
-     */
-    public function testGetCompany()
-    {
-        $company = CProject::getCompany(1);
-
-        $this->assertEquals(1, $company);
-    }
-
-    /**
-     * Tests getting billing codes with all set to false, so any
-     * billing codes that match this company, or have no company assigned
-     * and billingcode_status = 1
-     */
-    public function testGetBillingCodes()
-    {
-        $billing_codes = CProject::getBillingCodes(1);
-
-        $this->assertEquals(1,          count($billing_codes));
-        $this->assertEquals('Cheap',    $billing_codes[1]);
-    }
-
-    /**
-     * Tests getting billing codes with all set to true, so any billing
-     * codes with this company id or no company assigned.
-     */
-    public function testGetBillingCodesAll()
-    {
-        $billing_codes = CProject::getBillingCodes(1, true);
-
-        $this->assertEquals(3,              count($billing_codes));
-        $this->assertEquals('Cheap',        $billing_codes[1]);
-        $this->assertEquals('Medium',       $billing_codes[2]);
-        $this->assertEquals('Expensive',    $billing_codes[3]);
-    }
-
-    /**
-     * Tests getting a list of project owners.
-     */
-    public function testGetOwners()
-    {
-        $owners = CProject::getOwners();
-
-        $this->assertEquals(1,              count($owners));
-        $this->assertEquals('Admin Person', $owners[1]);
+        if ($this->_AppUI->isActiveModule('forums')) {
+            $this->assertEquals(1,                  count($forums));
+            $this->assertEquals(1,                  $forums[1]['forum_id']);
+            $this->assertEquals(1,                  $forums[1]['forum_project']);
+            $this->assertEquals(1,                  $forums[1]['forum_owner']);
+            $this->assertEquals('Test Forum',       $forums[1]['forum_name']);
+            $this->assertEquals(1,                  $forums[1]['forum_message_count']);
+            $this->assertEquals('04-Aug-2009 17:03',$forums[1]['forum_last_date']);
+            $this->assertEquals('Test Project',     $forums[1]['project_name']);
+            $this->assertEquals(1,                  $forums[1]['project_id']);
+        } else {
+            $this->assertEquals(0,                  count($forums));
+        }
     }
 
     /**
@@ -1361,63 +1301,5 @@ $this->obj->overrideDatabase($this->mockDB);
         $project_index = getProjectIndex($array, 2);
 
         $this->assertEquals(1, $project_index);
-    }
-
-    /**
-     * Tests generating options for a department selection list.
-     */
-    public function testGetDepartmentSelectionListIDOnly()
-    {
-        global $departments_count;
-        $departments_count = 0;
-
-        $options = getDepartmentSelectionList(1);
-
-        $this->assertEquals('<option value="1">Department 1</option>', $options);
-    }
-
-    /**
-     * Tests generating options for a department selection list with some checked
-     */
-    public function testGetDepartmentSelectionListCheckedArray()
-    {
-        global $departments_count;
-        $departments_count = 0;
-        $checked = array(1);
-
-        $options = getDepartmentSelectionList(1, $checked);
-
-        $this->assertEquals('<option value="1" selected="selected">Department 1</option>', $options);
-    }
-
-    /**
-     * Tests generating options for a department selection list with a dept parent passed
-     */
-    public function testGetDepartmentSelectionListDeptParent()
-    {
-        global $departments_count;
-        $departments_count = 0;
-
-        $options = getDepartmentSelectionList(1, array(), 1);
-
-        $this->assertEquals('', $options);
-    }
-
-    /**
-     * Tests generating options for a department selection list with
-     * set spaces in front to the option
-     */
-    public function testGetDepartmentSelectionListSpaces()
-    {
-        global $departments_count;
-        $departments_count = 0;
-
-        $options = getDepartmentSelectionList(1, array(), 0, 1);
-
-        $this->assertEquals('<option value="1">&nbsp;Department 1</option>', $options);
-
-        $options = getDepartmentSelectionList(1, array(), 0, 5);
-
-        $this->assertEquals('<option value="1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Department 1</option>', $options);
     }
 }

@@ -75,7 +75,7 @@ if ($file->file_checkout == 'final' && !$canAdmin) {
 // setup the title block
 $ttl = $file_id ? 'Edit File' : 'Add File';
 $ttl = $ci ? 'Checking in' : $ttl;
-$titleBlock = new w2p_Theme_TitleBlock($ttl, 'folder5.png', $m, $m . '.' . $a);
+$titleBlock = new w2p_Theme_TitleBlock($ttl, 'icon.png', $m, $m . '.' . $a);
 $titleBlock->addCrumb('?m=files', 'files list');
 $canDelete = $file->canDelete();
 
@@ -153,7 +153,7 @@ function setTask( key, val ) {
 }
 </script>
 
-<form name="uploadFrm" action="?m=<?php echo $m; ?>" enctype="multipart/form-data" method="post">
+<form name="uploadFrm" action="?m=<?php echo $m; ?>" enctype="multipart/form-data" method="post" class="addedit files">
 	<input type="hidden" name="dosql" value="do_file_aed" />
 	<input type="hidden" name="del" value="0" />
 	<input type="hidden" name="cancel" value="0" />
@@ -162,10 +162,10 @@ function setTask( key, val ) {
 	<input type="hidden" name="file_version_id" value="<?php echo $file->file_version_id; ?>" />
 	<input type="hidden" name="redirect" value="<?php echo $referrer; ?>" />
 	<input type="hidden" name="file_helpdesk_item" value="<?php echo $file_helpdesk_item; ?>" />
-	<table width="100%" border="0" cellpadding="3" cellspacing="3" class="std addedit">
+	<table class="std addedit files">
 		<tr>
-			<td width="80%" valign="top" align="center">
-				<table cellspacing="1" cellpadding="2" width="100%" class="well">
+			<td width="100%" valign="top" align="center">
+				<table class="well">
 					<tr>
 						<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Folder'); ?>:</td>
 						<td align="left">
@@ -235,7 +235,7 @@ function setTask( key, val ) {
 			<td align="right">
 				<?php
 				if (is_writable(W2P_BASE_DIR.'/files')) {
-					?><input type="button" class="button btn btn-primary" value="<?php echo $AppUI->_('submit'); ?>" onclick="submitIt()" /><?php
+					?><input type="button" class="button btn btn-primary" value="<?php echo $AppUI->_('save'); ?>" onclick="submitIt()" /><?php
 				} else {
 					?><span class="error">File uploads not allowed. Please check permissions on the /files directory.</span><?php
 				}

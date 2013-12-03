@@ -5,7 +5,9 @@ if (!defined('W2P_BASE_DIR')) {
 // @todo    convert to template
 // @todo    remove database query
 
-global $AppUI, $obj, $percent, $can_edit_time_information, $cal_sdf;
+global $AppUI, $obj, $can_edit_time_information, $cal_sdf;
+
+$percent = array(0 => '0', 5 => '5', 10 => '10', 15 => '15', 20 => '20', 25 => '25', 30 => '30', 35 => '35', 40 => '40', 45 => '45', 50 => '50', 55 => '55', 60 => '60', 65 => '65', 70 => '70', 75 => '75', 80 => '80', 85 => '85', 90 => '90', 95 => '95', 100 => '100');
 
 $task        = $obj;
 $task_id     = $task->task_id;
@@ -120,7 +122,7 @@ $log_date = new w2p_Utilities_Date($log->task_log_date);
 
 <a name="log"></a>
 <form name="editFrm" action="?m=<?php echo $m; ?>&amp;a=view&amp;task_id=<?php echo $obj->task_id; ?>" method="post"
-    onsubmit="updateEmailContacts();" accept-charset="utf-8">
+    onsubmit="updateEmailContacts();" accept-charset="utf-8" class="addedit tasks-tasklog">
 	<input type="hidden" name="uniqueid" value="<?php echo uniqid(''); ?>" />
 	<input type="hidden" name="dosql" value="do_updatetask" />
 	<input type="hidden" name="task_log_id" value="<?php echo $log->task_log_id; ?>" />
@@ -129,10 +131,10 @@ $log_date = new w2p_Utilities_Date($log->task_log_date);
     <input type="hidden" name="task_log_record_creator" value="<?php echo (0 == $task_log_id ? $AppUI->user_id : $log->task_log_record_creator); ?>" />
     <input type="hidden" name="datePicker" value="task" />
 
-    <table cellspacing="1" cellpadding="2" border="0" width="100%">
+    <table class="addedit tasks-tasklog">
         <tr>
             <td width='40%' valign='top'>
-                <table cellspacing="1" cellpadding="2" width="100%" class="well">
+                <table class="well">
                     <tr>
                         <td align="right">
                             <?php echo $AppUI->_('Date'); ?>
@@ -260,14 +262,14 @@ $log_date = new w2p_Utilities_Date($log->task_log_date);
                 </table>
             </td>
             <td width='60%' valign='top'>
-                <table cellspacing="1" cellpadding="2" width="100%" class="well">
+                <table class="well">
                     <tr>
                         <td align="right"><?php echo $AppUI->_('Summary'); ?>:</td>
                         <td valign="middle">
                             <table width="100%">
                                 <tr>
                                     <td align="left">
-                                        <input type="text" class="text" name="task_log_name" value="<?php echo htmlentities($log->task_log_name); ?>" maxlength="255" size="30" />
+                                        <input type="text" class="text" name="task_log_name" value="<?php echo htmlentities($log->task_log_name, ENT_COMPAT, 'UTF-8'); ?>" maxlength="255" size="30" />
                                     </td>
                                     <td align="center"><label for="task_log_problem"><?php echo $AppUI->_('Problem'); ?>:</label>
                                         <input type="checkbox" value="1" name="task_log_problem" id="task_log_problem" <?php echo ($log->task_log_problem ? 'checked="checked"' : ''); ?> />

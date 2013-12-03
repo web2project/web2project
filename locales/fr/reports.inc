@@ -150,3 +150,5 @@
 'costsbyproject_desc'=>'Gives an overall snapshot of budgeted vs actual costs for all projects within a company',
 'costsbytask_name'=>'Costs By Task',
 'costsbytask_desc'=>'Gives an overall snapshot of budgeted vs actual costs for all tasks within a project',
+'Links'=>'Liens',
+'Help Desk'=>'Centre d\'assistance',

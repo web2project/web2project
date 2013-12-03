@@ -10,7 +10,7 @@ if (!defined('W2P_BASE_DIR')) {
 $_POST['field_datatype'] = 'alpha';
 $_POST['field_page'] = 'addedit';
 $module_id = (int) w2PgetParam($_POST, 'module', 0);
-$module = new w2p_Core_Module();
+$module = new w2p_System_Module();
 $module->load($module_id);
 $_POST['field_module'] = $module->mod_name;
 

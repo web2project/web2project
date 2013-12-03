@@ -22,114 +22,103 @@
  *
  * @package     web2project\modules\core
  *
- * @todo TODO: This should probably extend our w2p_Core_BaseObject class as
- *   there is a lot of duplicated functionality that we could just eliminate
- *   from here.
  * @todo    new query object
  */
 
-class CSystem_Role {
+class CSystem_Role extends w2p_Core_BaseObject {
 	public $role_id = null;
 	public $role_name = null;
 	public $role_description = null;
-	public $perms = null;
-    /**
-     * @var object permissions/preference/translation object
-     */
-    protected $_AppUI;
 
-	public function __construct($name = '', $description = '') {
+	public function __construct($name = '', $description = '')
+    {
 		$this->role_name = $name;
 		$this->role_description = $description;
-		$this->perms = &$GLOBALS['AppUI']->acl();
 
-        global $AppUI;
-        $this->_AppUI = $AppUI;
-        $this->perms = $this->_AppUI->acl();
+        parent::__construct('not-a-table', 'role_id');
 	}
 
-	public function bind($hash) {
-		if (!is_array($hash)) {
-			return get_class($this) . "::bind failed";
-		} else {
-			$q = new w2p_Database_Query;
-			$q->bindHashToObject($hash, $this);
-			$q->clear();
-			return null;
-		}
-	}
-
-	public function check() {
-		// Not really much to check, just return OK for this iteration.
-		return array(); // object is ok
-	}
-
-	public function store($unused = null) {
-        $stored = false;
-
-        $this->_error = $this->check();
-        if (count($this->_error)) {
+	public function store()
+    {
+        if (!$this->isValid()) {
             return false;
         }
 
+        // NOTE: I don't particularly like this but it wires things properly.
+        $this->_event = ($this->role_id) ? 'Update' : 'Create';
+        $this->_dispatcher->publish(new w2p_System_Event(get_class($this), 'pre' . $this->_event . 'Event'));
+
 		if ($this->role_id) {
-			$ret = $this->perms->updateRole($this->role_id, $this->role_name, $this->role_description);
+			$result = $this->_perms->updateRole($this->role_id, $this->role_name, $this->role_description);
 		} else {
-			$ret = $this->perms->insertRole($this->role_name, $this->role_description);
+            $result = $this->_perms->insertRole($this->role_name, $this->role_description);
+            $this->role_id = db_insert_id();
 		}
 
-		if (!$ret) {
-            $this->_error['store-check'] = get_class($this) . '::store failed';
+		if ($result) {
+            // NOTE: I don't particularly like how the name is generated but it wires things properly.
+            $this->_dispatcher->publish(new w2p_System_Event(get_class($this), 'post' . $this->_event . 'Event'));
+            $this->_dispatcher->publish(new w2p_System_Event(get_class($this), 'postStoreEvent'));
 		} else {
-			$stored = true;
+            $this->_error['store'] = get_class($this) . '::store failed';
 		}
         
-        return $stored;
+        return $result;
 	}
 
-	public function delete() {
-		// Delete a role requires deleting all of the ACLs associated
-		// with this role, and all of the group data for the role.
+    /**
+     * Delete a role requires deleting all of the ACLs associated with this
+     *  role, and all of the group data for the role.
+     *
+     * @return bool|null|string
+     */
+    public function delete()
+    {
 		if (canDelete('roles')) {
 			// Delete all the children from this group
-			return $this->perms->deleteRole($this->role_id);
+			return $this->_perms->deleteRole($this->role_id);
 		} else {
 			return false; //get_class($this) . '::delete failed - You do not have permission to delete this role';
 		}
 	}
 
-	public function __sleep() {
-		return array('role_id', 'role_name', 'role_description');
+	public function __sleep()
+    {
+        return array('role_id', 'role_name', 'role_description');
 	}
 
-	public function __wakeup() {
+    public function __wakeup()
+    {
         global $AppUI;
         $this->_AppUI = $AppUI;
-        $this->perms = $this->_AppUI->acl();
+        $this->_perms = $this->_AppUI->acl();
 	}
 
-	/**
-	 * Return a list of known roles.
-	 */
-	public function getRoles() {
-		$role_parent = $this->perms->get_group_id('role');
-		$roles = $this->perms->getChildren($role_parent);
-		return $roles;
-	}
+    /**
+    * Return a list of known roles.
+    */
+    public function getRoles()
+    {
+        $role_parent = $this->_perms->get_group_id('role');
+        $roles = $this->_perms->getChildren($role_parent);
+        return $roles;
+    }
 
-	public function rename_array(&$roles, $from, $to) {
-		if (count($from) != count($to)) {
-			return false;
-		}
-		foreach ($roles as $key => $val) {
-			// 4.2 and before return NULL on fail, later returns false.
-			if (($k = array_search($k, $from)) !== false && $k !== null) {
-				unset($roles[$key]);
-				$roles[$to[$k]] = $val;
-			}
-		}
-		return true;
-	}
+    /** @deprecated */
+    public function rename_array(&$roles, $from, $to)
+    {
+        if (count($from) != count($to)) {
+            return false;
+        }
+        foreach ($roles as $key => $val) {
+            // 4.2 and before return NULL on fail, later returns false.
+            if (($k = array_search($k, $from)) !== false && $k !== null) {
+                unset($roles[$key]);
+                $roles[$to[$k]] = $val;
+            }
+        }
+        return true;
+    }
 	
 	/**
 	 * CRole::copyPermissions()
@@ -139,13 +128,14 @@ class CSystem_Role {
 	 * @param integer $role_id of the Role we are copying permissions to
 	 * @return true if sucessful
 	 */
-	public function copyPermissions($copy_role_id = null, $role_id = null) {
+	public function copyPermissions($copy_role_id = null, $role_id = null)
+    {
 		if (!$copy_role_id || !$role_id) {
 			return false;
 		}
 		
 		//catch to be copied Role ACLs IDs
-		$role_acls = $this->perms->getRoleACLs($copy_role_id);
+		$role_acls = $this->_perms->getRoleACLs($copy_role_id);
 		
 		foreach ($role_acls as $acl) {
 			//initialize acl data, so we don't fall on the situation of bleeding permissions from one ACL rule to the other.
@@ -160,14 +150,14 @@ class CSystem_Role {
 			
 			//catch the permissions of that acl.
 			//ex: Array ( [note] => [return_value] => [enabled] => 1 [allow] => 1 [acl_id] => 14 [aco] => Array ( [application] => Array ( [0] => access ) ) [aro] => Array ( ) [axo] => Array ( ) [aro_groups] => Array ( [0] => 12 ) [axo_groups] => Array ( [0] => 13 ) ) 
-			$permission = $this->perms->get_acl($acl);
+			$permission = $this->_perms->get_acl($acl);
 		
 			if (is_array($permission)) {
 				if (is_array($permission['axo_groups'])) {
 					foreach ($permission['axo_groups'] as $group_id) {
 						//catche Group of Permissions (All, All Non-Admin, and Admin) or Module Permissions
 						//ex: Array ( [0] => 13 [id] => 13 [1] => 10 [parent_id] => 10 [2] => non_admin [value] => non_admin [3] => Non-Admin Modules [name] => Non-Admin Modules [4] => 6 [lft] => 6 [5] => 7 [rgt] => 7 ) 
-						$group_data = $this->perms->get_group_data($group_id, 'axo');
+						$group_data = $this->_perms->get_group_data($group_id, 'axo');
 					}
 				}
 				if (is_array($permission['axo'])) {
@@ -175,7 +165,7 @@ class CSystem_Role {
 						foreach ($section as $id) {
 							//catch Module and Module Item permissions
 							//ex.: Array ( [id] => 36 [section_value] => companies [name] => 6 [value] => 6 [order_value] => 0 [hidden] => 0 ) 
-							$mod_data = $this->perms->get_object_full($id, $key, 1, 'axo');
+							$mod_data = $this->_perms->get_object_full($id, $key, 1, 'axo');
 						}
 					}
 				}
@@ -184,7 +174,7 @@ class CSystem_Role {
 						foreach ($section as $value) {
 							//catch Actions of the Permission.
 							//ex: Array ( [id] => 11 [section_value] => application [name] => Access [value] => access [order_value] => 1 [hidden] => 0 ) 
-							$perm = $this->perms->get_object_full($value, $key, 1, 'aco');
+							$perm = $this->_perms->get_object_full($value, $key, 1, 'aco');
 							$permission_type[] = $perm['id'];
 						}
 					}
@@ -212,15 +202,15 @@ class CSystem_Role {
 						$mod_mod[$permission_table][] = $permission_item;
 						// check if the item already exists, if not create it.
 						// First need to check if the section exists.
-						if (!$this->perms->get_object_section_section_id(null, $permission_table, 'axo')) {
-							$this->perms->addModuleSection($permission_table);
+						if (!$this->_perms->get_object_section_section_id(null, $permission_table, 'axo')) {
+							$this->_perms->addModuleSection($permission_table);
 						}
-						if (!$this->perms->get_object_id($permission_table, $permission_item, 'axo')) {
-							$this->perms->addModuleItem($permission_table, $permission_item, $permission_item);
+						if (!$this->_perms->get_object_id($permission_table, $permission_item, 'axo')) {
+							$this->_perms->addModuleItem($permission_table, $permission_item, $permission_item);
 						}
 					} else {
 						// Get the module information
-						$mod_info = $this->perms->get_object_data($mod_id, 'axo');
+						$mod_info = $this->_perms->get_object_data($mod_id, 'axo');
 						$mod_mod = array();
 						$mod_mod[$mod_info[0][0]][] = $mod_info[0][1];
 					}
@@ -228,13 +218,15 @@ class CSystem_Role {
 				$aro_map = array($role_id);
 				// Build the permissions info
 				$type_map = array();
-				foreach ($permission_type as $tid) {
-					$type = $this->perms->get_object_data($tid, 'aco');
-					foreach ($type as $t) {
-						$type_map[$t[0]][] = $t[1];
-					}
-				}
-				$this->perms->add_acl($type_map, null, $aro_map, $mod_mod, $mod_group, $permission_access, 1, null, null, 'user');
+                if (is_array($permission_type)) {
+                    foreach ($permission_type as $tid) {
+                        $type = $this->_perms->get_object_data($tid, 'aco');
+                        foreach ($type as $t) {
+                            $type_map[$t[0]][] = $t[1];
+                        }
+                    }
+                }
+				$this->_perms->add_acl($type_map, null, $aro_map, $mod_mod, $mod_group, $permission_access, 1, null, null, 'user');
 			}
 		}
 		return true;

@@ -39,7 +39,7 @@ function delIt2(id) {
 $fieldList = array();
 $fieldNames = array();
 
-$module = new w2p_Core_Module();
+$module = new w2p_System_Module();
 $fields = $module->loadSettings('tasks', 'task_logs_tasks_view');
 
 if (count($fields) > 0) {

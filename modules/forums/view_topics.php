@@ -45,7 +45,7 @@ $items = $q->loadList();
 $crumbs = array();
 $crumbs['?m=forums'] = 'forums list';
 
-$module = new w2p_Core_Module();
+$module = new w2p_System_Module();
 $fields = $module->loadSettings('forums', 'view_topics');
 
 if (0 == count($fields)) {
@@ -59,9 +59,7 @@ if (0 == count($fields)) {
 ?>
 <br />
 <?php
-if (function_exists('styleRenderBoxTop')) {
-	echo styleRenderBoxTop();
-}
+echo $AppUI->getTheme()->styleRenderBoxTop();
 
 ?>
 <form name="watcher" action="?m=forums&a=viewer&forum_id=<?php echo $forum_id; ?>&f=<?php echo $f; ?>" method="post" accept-charset="utf-8">
@@ -78,7 +76,7 @@ if (function_exists('styleRenderBoxTop')) {
     echo $listHelper->endTable();
 
     ?>
-    <table width="100%" border="0" cellpadding="0" cellspacing="1" class="std">
+    <table class="std forums-topic">
         <tr>
             <td align="left">
                 <input type="submit" class="button" value="<?php echo $AppUI->_('update watches'); ?>" />

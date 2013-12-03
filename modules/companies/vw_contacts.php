@@ -10,7 +10,7 @@ $items = CCompany::getContacts($AppUI, $company->company_id);
 $fieldList = array();
 $fieldNames = array();
 
-$module = new w2p_Core_Module();
+$module = new w2p_System_Module();
 $fields = $module->loadSettings('contacts', 'company_view');
 
 if (0 == count($fields)) {

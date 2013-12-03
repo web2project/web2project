@@ -40,56 +40,33 @@ class w2p_Output_HTMLHelper
         return $output;
     }
 
-    public function renderContactTable($moduleName, array $contactList) {
-
-        $fieldList = array();
-        $fieldNames = array();
-
-        $module = new w2p_Core_Module();
+    public function renderContactTable($moduleName, array $contactList)
+    {
+        $module = new w2p_System_Module();
         $fields = $module->loadSettings('contacts', $moduleName.'_view');
 
-        if (count($fields) > 0) {
-            $fieldList = array_keys($fields);
-            $fieldNames = array_values($fields);
-        } else {
-            // TODO: This is only in place to provide an pre-upgrade-safe 
-            //   state for versions earlier than v3.0
-            //   At some point at/after v4.0, this should be deprecated
+        if (0 == count($fields)) {
             $fieldList = array('contact_name', 'contact_email', 'contact_phone', 'dept_name');
             $fieldNames = array('Name', 'Email', 'Phone', 'Department');
 
             $module->storeSettings('contacts', $moduleName.'_view', $fieldList, $fieldNames);
+            $fields = array_combine($fieldList, $fieldNames);
         }
-        $output  = '<table cellspacing="1" cellpadding="2" border="0" width="100%" class="tbl">';
-        $output .= '<tr>';
-        foreach ($fieldNames as $index => $notUsed) {
-            $output .= '<th nowrap="nowrap">';
-//TODO: Should we support sorting here?
-            $output .= $this->_AppUI->_($fieldNames[$index]);
-            $output .= '</th>';
-        }
-        $output .= '</tr>';
-        
-        foreach ($contactList as $row) {
-            $output .= '<tr>';
-            $this->stageRowData($row);
-            foreach ($fieldList as $index => $notUsed) {
-                $output .= $this->createCell($fieldList[$index], $row[$fieldList[$index]]);
-            }
-            $output .= '</tr>';
-        }
-        $output .= '</table>';
+
+        $listTable = new w2p_Output_ListTable($this->_AppUI);
+
+        $output  = $listTable->startTable();
+        $output .= $listTable->buildHeader($fields);
+        $output .= $listTable->buildRows($contactList);
+        $output .= $listTable->endTable();
 
         return $output;
     }
-    /*
-     * I really hate this option, but I'm not sure of a better way to get the 
-     *   _name case of createCell's switch statement. I'm option to suggestions.
-     *          ~ caseydk 09 Feb 2012
-     */
+
     public function stageRowData($myArray) {
         $this->tableRowData = $myArray;
     }
+
     /**
      * createColumn is handy because it can take any input $fieldName and use
      *   its suffix to determine how the field should be displayed.
@@ -119,9 +96,9 @@ class w2p_Output_HTMLHelper
             return '<td>-</td>';
         }
 
-        $last_underscore = strrpos($fieldName, '_');
-        $prefix = ($last_underscore !== false) ? substr($fieldName, 0, $last_underscore) : $fieldName;
-        $suffix = ($last_underscore !== false) ? substr($fieldName, $last_underscore) : $fieldName;
+        $pieces = explode('_', $fieldName);
+        $prefix = $pieces[0];
+        $suffix = '_'.end($pieces);
 
         switch ($suffix) {
 //BEGIN: object-based linkings
@@ -162,8 +139,8 @@ class w2p_Output_HTMLHelper
             case '_username':
                 $obj = new CContact();
                 $obj->findContactByUserid($this->tableRowData['user_id']);
-                $link = '?m=admin&a=view&user_id='.$this->tableRowData['user_id'];
-                $cell = '<a href="'.$link.'">'.$obj->contact_display_name.'</a>';
+                $link = '?m=users&a=view&user_id='.$this->tableRowData['user_id'];
+                $cell = '<a href="'.$link.'">'.$obj->user_username.'</a>';
                 break;
 //END: object-based linkings
 
@@ -180,7 +157,6 @@ class w2p_Output_HTMLHelper
                 $prefix = ($prefix == 'dept')  ? 'department' : $prefix;
                 $page   = ($prefix == 'forum' || $prefix == 'message') ? 'viewer' : 'view';
                 $link   = '?m='. w2p_pluralize($prefix) .'&a='.$page.'&';
-                $link   = ($prefix == 'event') ? '?m=calendar&a='.$page.'&' : $link;
                 $link   = ($prefix == 'message') ? '?m=forums&a='.$page . '&' : $link;
                 $prefix = ($prefix == 'department') ? 'dept' : $prefix;
                 $link  .= $prefix.'_id='.$this->tableRowData[$prefix.'_id'];
@@ -199,7 +175,7 @@ class w2p_Output_HTMLHelper
                     $obj = new CContact();
                     $obj->findContactByUserid($value);
                     $suffix .= ' nowrap';
-                    $link = '?m=admin&a=view&user_id='.$value;
+                    $link = '?m=users&a=view&user_id='.$value;
                     $cell = '<a href="'.$link.'">'.$obj->contact_display_name.'</a>';
                 } else {
                     $cell = $value;
@@ -293,7 +269,6 @@ class w2p_Output_HTMLHelper
                 }
                 break;
             default:
-//TODO: use this when we get a chance - http://www.w3schools.com/cssref/pr_text_white-space.asp ?
                 $value = (isset($custom[$fieldName])) ? $custom[$fieldName][$value] : $value;
                 $cell = htmlspecialchars($value, ENT_QUOTES);
         }

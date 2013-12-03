@@ -45,29 +45,21 @@ $obj = new CCompany();
 $companies = $obj->getAllowedRecords($AppUI->user_id, 'company_id,company_name', 'company_name');
 $filters2 = arrayMerge(array('allcompanies' => $AppUI->_('All Companies', UI_OUTPUT_RAW)), $companies);
 
+$search_string = w2PgetParam($_POST, 'search_string', '');
+$AppUI->setState($m . '_search_string', $search_string);
+$search_string = w2PformSafe($search_string, true);
+
 // setup the title block
-$titleBlock = new w2p_Theme_TitleBlock('Tasks', 'applet-48.png', $m, $m . '.' . $a);
-
-// patch 2.12.04 text to search entry box
-if (isset($_POST['searchtext'])) {
-	$AppUI->setState('searchtext', $_POST['searchtext']);
-}
-
-$search_text = $AppUI->getState('searchtext') ? $AppUI->getState('searchtext') : '';
-$search_text = w2PformSafe($search_text, true);
-
-$titleBlock->addCell('<form action="?m=tasks" method="post" id="searchfilter" name="searchform" accept-charset="utf-8"><input type="text" class="text" size="20" name="searchtext" onChange="document.searchfilter.submit();" value="' . $search_text . '" title="' . $AppUI->_('Search in name and description fields') . '"/></form>');
-$titleBlock->addCell($AppUI->_('Search') . ':');
+$titleBlock = new w2p_Theme_TitleBlock('Tasks', 'icon.png', $m, $m . '.' . $a);
+$titleBlock->addSearchCell($search_string);
 
 // Let's see if this user has admin privileges
 if (canView('admin')) {
 	$user_list = $perms->getPermittedUsers('tasks');
-	$titleBlock->addCell('<form action="?m=tasks" method="post" name="userIdForm" accept-charset="utf-8">' . arraySelect($user_list, 'user_id', 'size="1" class="text" onChange="document.userIdForm.submit();"', $user_id, false) . '</form>');
-    $titleBlock->addCell($AppUI->_('User') . ':');
+    $titleBlock->addFilterCell('User', 'user_id', $user_list, $user_id);
 }
 
-$titleBlock->addCell('<form action="?m=tasks" method="post" name="companyFilter" accept-charset="utf-8">' . arraySelect($filters2, 'f2', 'size="1" class="text" onChange="document.companyFilter.submit();"', $f2, false) . '</form>');
-$titleBlock->addCell($AppUI->_('Company') . ':');
+$titleBlock->addFilterCell('Company', 'f2', $filters2, $f2);
 
 if ($canEdit && $project_id) {
 	$titleBlock->addCell('<form action="?m=tasks&amp;a=addedit&amp;task_project=' . $project_id . '" method="post" accept-charset="utf-8"><input type="submit" class="button" value="' . $AppUI->_('new task') . '"></form>');

@@ -103,7 +103,7 @@ foreach ($hook_modules as $tmp) {
 </script>
 
 <?php
-    $titleBlock = new w2p_Theme_TitleBlock('SmartSearch', 'kfind.png', $m, $m . '.' . $a);
+    $titleBlock = new w2p_Theme_TitleBlock('SmartSearch', 'icon.png', $m, $m . '.' . $a);
     $titleBlock->show();
 ?>
 <form name="frmSearch" action="?m=<?php echo $m; ?>"  method="post" accept-charset="utf-8">

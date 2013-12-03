@@ -1201,7 +1201,7 @@ class w2p_Database_Query {
 	 */
 	public function loadHashList($index = null) {
 		if (!$this->exec(ADODB_FETCH_ASSOC)) {
-			exit($this->_db->ErrorMsg());
+			return array();
 		}
 		$hashlist = array();
 		$keys = null;
@@ -1234,7 +1234,7 @@ class w2p_Database_Query {
 	 */
 	public function loadHash() {
 		if (!$this->exec(ADODB_FETCH_ASSOC)) {
-			exit($this->_db->ErrorMsg());
+            return array();
 		}
 		$hash = $this->fetchRow();
 		$this->clear();
@@ -1254,7 +1254,7 @@ class w2p_Database_Query {
 	 */
 	public function loadColumn() {
 		if (!$this->exec(ADODB_FETCH_NUM)) {
-			die($this->_db->ErrorMsg());
+            return array();
 		}
 		$result = array();
 		while ($row = $this->fetchRow()) {
@@ -1272,7 +1272,8 @@ class w2p_Database_Query {
 	 */
 	public function loadObject(&$object, $bindAll = false, $strip = true) {
 		if (!$this->exec(ADODB_FETCH_NUM)) {
-			die($this->_db->ErrorMsg());
+            $object = null;
+            return false;
 		}
 		if ($object != null) {
 			$hash = $this->loadHash();
@@ -1299,7 +1300,7 @@ class w2p_Database_Query {
 	 * @param $hash The hash to bind
 	 * @param &$obj A reference to the object to bind the hash to
 	 * @param $prefix Defaults to null, prefix to use with hash keys
-	 * @param $checkSlashes Defaults to true, strip any slashes from the hash values
+	 * @param $notUsed Defaults to true but isn't used anyway
 	 * @param $bindAll Bind all values regardless of their existance as defined instance variables
 	 */
 	public function bindHashToObject($hash, &$obj, $prefix = null, $notUsed = true, $bindAll = false) {

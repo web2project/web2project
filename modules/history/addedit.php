@@ -52,7 +52,7 @@ if ($action) {
 
 $history->load();
 
-$titleBlock = new w2p_Theme_TitleBlock($history_id ? 'Edit history' : 'New history', 'stock_book_blue_48.png', 'history', 'history.' . $a);
+$titleBlock = new w2p_Theme_TitleBlock($history_id ? 'Edit history' : 'New history', 'icon.png', 'history', 'history.' . $a);
 $titleBlock->show();
 ?>
 

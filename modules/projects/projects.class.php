@@ -77,9 +77,6 @@ class CProject extends w2p_Core_BaseObject
         if ('' == $this->project_name) {
             $this->_error['project_name'] = $baseErrorMsg . 'project name is not set';
         }
-        if ('' == $this->project_short_name) {
-            $this->_error['project_short_name'] = $baseErrorMsg . 'project short name is not set';
-        }
         if (0 == (int) $this->project_company) {
             $this->_error['project_company'] = $baseErrorMsg . 'project company is not set';
         }
@@ -1021,5 +1018,24 @@ class CProject extends w2p_Core_BaseObject
             if ($project['project_id'] == $project['project_parent'])
                 $projects[$key][2] = '';
         }
+    }
+
+    public function getProjectsByStatus($company_id = 0)
+    {
+        $q = $this->_getQuery();
+        $q->addTable('projects');
+        $q->addQuery('project_status, count(*) as count');
+        $q->addWhere('project_active = 1');
+        if ($company_id > 0) {
+            $q->addWhere('project_company = ' . $company_id);
+        }
+        $q->addGroup('project_status');
+
+        $statuses = $q->loadList(-1, 'project_status');
+        foreach ($statuses as $key => $array) {
+            $statuses[$key] = $array['count'];
+        }
+
+        return $statuses;
     }
 }

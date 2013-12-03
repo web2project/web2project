@@ -32,7 +32,7 @@ if ($a == 'setup') {
     echo w2PshowModuleConfig($config);
 }
 
-class SResource extends w2p_Core_Setup
+class SResource extends w2p_System_Setup
 {
     public function install() {
         $q = $this->_getQuery();

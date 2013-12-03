@@ -126,7 +126,7 @@ class w2p_Output_HTMLHelperTest extends CommonSetup
     public function testCreateCell_common()
     {
         $cell = $this->obj->createCell('x_budget', 12345.67);
-        $this->assertEquals('<td class="_budget">$USD 12,345.67</td>', $cell);
+        $this->assertEquals('<td class="_budget">$USD12,345.67</td>', $cell);
 
         $cell = $this->obj->createCell('x_url', 'http://web2project.net');
         $this->assertEquals('<td class="_url"><a href="http://web2project.net" target="_new">http://web2project.net</a></td>', $cell);
@@ -202,5 +202,25 @@ class w2p_Output_HTMLHelperTest extends CommonSetup
         //case '_user':
         //case '_username':
 $this->markTestIncomplete('These tests have yet to be written because we need to think about dependency injection for our database mock..');
+    }
+
+    public function testRenderContactTableEmpty()
+    {
+        $result = $this->obj->renderContactTable('companies', array());
+
+        $this->assertEquals('<table class="tbl list"><tr><th>Name</th><th>Email</th><th>Phone</th><th>Department</th></tr><tr><td colspan="4">No data available</td></tr></table>',     $result);
+    }
+
+    public function testRenderContactTable()
+    {
+        $result = $this->obj->renderContactTable('companies',
+            array(
+                1 => array( 'contact_id' => 1,
+                            'contact_name' => 'Tony Stark',
+                            'contact_email' => 'iron.man@example.com',
+                            'contact_phone' => '1212555IRON')
+            ));
+
+        $this->assertEquals('<table class="tbl list"><tr><th>Name</th><th>Email</th><th>Phone</th><th>Department</th></tr><tr><td class="_name"><a href="?m=contacts&a=view&contact_id=1">Tony Stark</a></td><td class="_email"><a href="mailto:iron.man@example.com">iron.man@example.com</a></td><td class="_phone">1212555IRON</td><td>-</td></tr></table>',     $result);
     }
 }

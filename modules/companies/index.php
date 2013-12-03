@@ -25,10 +25,7 @@ if (isset($_REQUEST['owner_filter_id'])) {
 }
 
 $search_string = w2PgetParam($_POST, 'search_string', '');
-if ($search_string != '') {
-	$search_string = ($search_string == '-1') ? '' : $search_string;
-	$AppUI->setState('dept_search_string', $search_string);
-}
+$AppUI->setState($m . '_search_string', $search_string);
 $search_string = w2PformSafe($search_string, true);
 
 $perms = &$AppUI->acl();
@@ -38,17 +35,12 @@ $allowedArray = $perms->getPermittedUsers('companies');
 $owner_list = is_array($allowedArray) ? ($baseArray + $allowedArray) : $baseArray;
 
 // setup the title block
-$titleBlock = new w2p_Theme_TitleBlock('Companies', 'handshake.png', $m, $m . '.' . $a);
-$titleBlock->addCell('<form name="searchform" action="?m=companies" method="post" accept-charset="utf-8">
-                    <input type="text" class="text" name="search_string" value="' . $search_string . '" /></form>');
-$titleBlock->addCell($AppUI->_('Search') . ':');
+$titleBlock = new w2p_Theme_TitleBlock('Companies', 'icon.png', $m, $m . '.' . $a);
+$titleBlock->addSearchCell($search_string);
+$titleBlock->addFilterCell('Owner', 'owner_filter_id', $owner_list, $owner_filter_id);
 
-$titleBlock->addCell('<form name="searchform2" action="?m=companies" method="post" accept-charset="utf-8">' .
-        arraySelect($owner_list, 'owner_filter_id', 'onChange="document.searchform2.submit()" size="1" class="text"', $owner_filter_id) .
-        '</form>');
-$titleBlock->addCell($AppUI->_('Owner filter') . ':');
 if ($canEdit) {
-	$titleBlock->addCell('<input type="submit" class="button btn btn-small dropdown-toggle" value="' . $AppUI->_('new company') . '">', '', '<form action="?m=companies&a=addedit" method="post" accept-charset="utf-8">', '</form>');
+    $titleBlock->addButton('new company', '?m=companies&a=addedit');
 }
 $titleBlock->show();
 

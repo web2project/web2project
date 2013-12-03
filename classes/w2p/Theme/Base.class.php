@@ -15,6 +15,11 @@ abstract class w2p_Theme_Base
         $this->_m = $m;
     }
 
+    public function __toString()
+    {
+        return $this->_uistyle;
+    }
+
     public function resolveTemplate($template)
     {
         $filepath = W2P_BASE_DIR . '/style/' . $this->_uistyle . '/' . $template . '.php';

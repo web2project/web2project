@@ -40,20 +40,12 @@ for ($current = $start; $current < $end + 1; $current++) {
 }
 
 // Pull tasks dependencies
-$deps = false;
-if ($deps) {
-	$q = new w2p_Database_Query;
-	$q->addTable('tasks');
-	$q->addQuery('task_id, task_name');
-	$q->addWhere('task_id IN (' . $deps . ')');
-} else {
-	$q = new w2p_Database_Query;
-	$q->addTable('tasks', 't');
-	$q->addTable('task_dependencies', 'td');
-	$q->addQuery('t.task_id, t.task_name');
-	$q->addWhere('td.dependencies_task_id = ' . (int)$task_id);
-	$q->addWhere('t.task_id = td.dependencies_req_task_id');
-}
+$q = new w2p_Database_Query;
+$q->addTable('tasks', 't');
+$q->addTable('task_dependencies', 'td');
+$q->addQuery('t.task_id, t.task_name');
+$q->addWhere('td.dependencies_task_id = ' . (int)$task_id);
+$q->addWhere('t.task_id = td.dependencies_req_task_id');
 $taskDep = $q->loadHashList();
 $q->clear();
 
@@ -79,7 +71,7 @@ $q->clear();
     <input name="task_id" type="hidden" value="<?php echo $task_id; ?>" />
     <input type="hidden" name="hdependencies" />
 
-    <table width="100%" border="0" cellpadding="4" cellspacing="0" class="std addedit well">
+    <table class="std addedit well">
         <?php if ($can_edit_time_information) { ?>
         <tr>
             <td align="center" nowrap="nowrap" colspan="3"><b><?php echo $AppUI->_('Dependency Tracking'); ?></b></td>

@@ -5,13 +5,14 @@ if (!defined('W2P_BASE_DIR')) {
 // @todo    convert to template
 // @todo    remove database query
 
-$df = $AppUI->getPref('SHDATEFORMAT');
-$start_date = intval($obj->project_start_date) ? new w2p_Utilities_Date($obj->project_start_date) : null;
-$end_date = intval($obj->project_end_date) ? new w2p_Utilities_Date($obj->project_end_date) : null;
-$actual_end_date = intval($criticalTasks[0]['task_end_date']) ? new w2p_Utilities_Date($criticalTasks[0]['task_end_date']) : null;
-$today = new w2p_Utilities_Date();
-$style = (($actual_end_date > $end_date) && !empty($end_date)) ? 'style="color:red; font-weight:bold"' : '';
-$style = (($obj->project_percent_complete < 99.99 && $today > $end_date) && !empty($end_date)) ? 'style="color:red; font-weight:bold"' : $style;
+$project_statuses = w2PgetSysVal('ProjectStatus');
+$project_types = w2PgetSysVal('ProjectType');
+$customLookups = array('project_status' => $pstatus, 'project_type' => $ptype);
+
+$params = get_object_vars($obj);
+
+$htmlHelper = new w2p_Output_HTMLHelper($AppUI);
+$htmlHelper->stageRowData($params);
 ?>	
 <table width="100%" border="0" cellpadding="1" cellspacing="3" class="prjprint">
 <tr>
@@ -20,31 +21,31 @@ $style = (($obj->project_percent_complete < 99.99 && $today > $end_date) && !emp
 		<table cellspacing="1" cellpadding="2" border="0" width="100%">
 		<tr>
 			<td align="right" nowrap="nowrap"><strong><?php echo $AppUI->_('Project Name'); ?>:&nbsp;</strong></td>
-			<td class="hilite"><?php echo htmlspecialchars($obj->project_name, ENT_QUOTES); ?></td>
+            <?php echo $htmlHelper->createCell('project_name', $obj->project_name); ?>
 		</tr>
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Company'); ?>:</td>
-            <td class="hilite" width="100%"><?php echo htmlspecialchars($obj->company_name, ENT_QUOTES); ?></td>
+            <?php echo $htmlHelper->createCell('company_name', $obj->company_name); ?>
 		</tr>
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Short Name'); ?>:</td>
-			<td class="hilite"><?php echo htmlspecialchars($obj->project_short_name, ENT_QUOTES); ?></td>
+            <?php echo $htmlHelper->createCell('project_short_name', $obj->project_short_name); ?>
 		</tr>
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Start Date'); ?>:</td>
-			<td class="hilite"><?php echo $start_date ? $start_date->format($df) : '-'; ?></td>
+            <?php echo $htmlHelper->createCell('project_start_date', $obj->project_start_date); ?>
 		</tr>
 		<tr>
 			<td align="right" nowrap="nowrap"><strong><?php echo $AppUI->_('Target End Date'); ?>:&nbsp;</strong></td>
-			<td class="hilite"><?php echo $end_date ? $end_date->format($df) : '-'; ?></td>
+            <?php echo $htmlHelper->createCell('project_start_date', $obj->project_start_date); ?>
 		</tr>
 		<tr>
 			<td align="right" nowrap="nowrap"><strong><?php echo $AppUI->_('Status'); ?>:&nbsp;</strong></td>
-			<td class="hilite" width="100%"><?php echo $AppUI->_($pstatus[$obj->project_status]); ?></td>
+            <?php echo $htmlHelper->createCell('project_status', $obj->project_status, $customLookups); ?>
 		</tr>
 		<tr>
 			<td align="right" nowrap="nowrap"><strong><?php echo $AppUI->_('Progress'); ?>:&nbsp;</strong></td>
-			<td class="hilite" width="100%"><?php printf("%.1f%%", $obj->project_percent_complete); ?></td>
+            <?php echo $htmlHelper->createCell('project_percent_complete', $obj->project_percent_complete); ?>
 		</tr>
 <?php
 global $m, $a, $project_id, $f, $task_status, $min_view, $query_string, $durnTypes, $tpl;
@@ -243,7 +244,7 @@ $userAlloc = $tempoTask->getAllocation('user_id');
 $fieldList = array();
 $fieldNames = array();
 
-$module = new w2p_Core_Module();
+$module = new w2p_System_Module();
 $fields = $module->loadSettings('projectdesigner', 'task_list_print');
 
 if (count($fields) > 0) {

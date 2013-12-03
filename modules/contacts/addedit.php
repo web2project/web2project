@@ -58,7 +58,7 @@ $df .= ' ' . $AppUI->getPref('TIMEFORMAT');
 
 // setup the title block
 $ttl = $contact_id > 0 ? 'Edit Contact' : 'Add Contact';
-$titleBlock = new w2p_Theme_TitleBlock($ttl, 'monkeychat-48.png', $m, $m . '.' . $a);
+$titleBlock = new w2p_Theme_TitleBlock($ttl, 'icon.png', $m, $m . '.' . $a);
 $titleBlock->addCrumb('?m=contacts', 'contacts list');
 $titleBlock->addCrumb('?m=contacts&a=view&contact_id=' . $contact_id, 'view contact');
 $canDelete = $row->canDelete();
@@ -225,7 +225,7 @@ foreach ($fields as $key => $field): ?>
 });
 </script>
 
-<form name="changecontact" action="?m=<?php echo $m; ?>" method="post" accept-charset="utf-8">
+<form name="changecontact" action="?m=<?php echo $m; ?>" method="post" accept-charset="utf-8" class="contacts addedit">
     <input type="hidden" name="dosql" value="do_contact_aed" />
     <input type="hidden" name="del" value="0" />
     <input type="hidden" name="contact_project" value="0" />
@@ -233,10 +233,10 @@ foreach ($fields as $key => $field): ?>
     <input type="hidden" name="contact_id" value="<?php echo $contact_id; ?>" />
     <input type="hidden" name="contact_owner" value="<?php echo $row->contact_owner ? $row->contact_owner : $AppUI->user_id; ?>" />
 
-    <table border="0" cellpadding="4" cellspacing="0" width="100%" class="std addedit">
+    <table class="std addedit contacts">
         <tr>
             <td valign="top" align="right">
-                <table cellspacing="1" cellpadding="2" width="100%" class="well">
+                <table class="well">
                 <tr>
                     <td align="right"><?php echo $AppUI->_('First Name'); ?>:</td>
                     <td>
@@ -331,7 +331,7 @@ foreach ($fields as $key => $field): ?>
                 </table>
             </td>
             <td valign="top" align="right">
-                <table cellspacing="1" cellpadding="2" width="100%" class="well">
+                <table class="well">
                 <th colspan="2">
                     <strong><?php echo $AppUI->_('Contact Update Info'); ?></strong>
                 </th>
@@ -382,18 +382,11 @@ foreach ($fields as $key => $field): ?>
             </td>
         </tr>
         <tr>
-            <td valign="top" width="50%">
-                <table border="0" cellpadding="1" cellspacing="1" class="well" width="100%">
-
-                </table>
-            </td>
-        </tr>
-        <tr>
             <td>
                 <input type="button" value="<?php echo $AppUI->_('back'); ?>" class="button btn btn-danger" onclick="javascript:window.location='./index.php?m=contacts';" />
             </td>
             <td colspan="2" align="right">
-                <input type="button" value="<?php echo $AppUI->_('submit'); ?>" class="button btn btn-primary" onclick="submitIt()" />
+                <input type="button" value="<?php echo $AppUI->_('save'); ?>" class="button btn btn-primary" onclick="submitIt()" />
             </td>
         </tr>
     </table>

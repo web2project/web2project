@@ -28,7 +28,7 @@ if (!$obj) {
 	$AppUI->savePlace();
 }
 
-$titleBlock = new w2p_Theme_TitleBlock('View Resource', 'resources.png', $m, $m . '.' . $a);
+$titleBlock = new w2p_Theme_TitleBlock('View Resource', 'icon.png', $m, $m . '.' . $a);
 $titleBlock->addCrumb('?m=' . $m, 'resource list');
 if ($canEdit) {
 	$titleBlock->addCrumb('?m=resources&a=addedit&resource_id=' . $resource_id, 'edit this resource');
@@ -63,7 +63,7 @@ if ($canDelete) {
 	</form>
 <?php } ?>
 
-<table border="0" cellpadding="4" cellspacing="0" width="100%" class="std view">
+<table class="std view resources">
     <tr>
         <td width="50%" valign="top" class="view-column">
             <strong><?php echo $AppUI->_('Details'); ?></strong>

@@ -26,12 +26,11 @@ $f = w2PgetParam($_REQUEST, 'f', 0);
 $items = $forum->getAllowedForums($AppUI->user_id, $AppUI->user_company, $f, $orderby, $orderdir);
 
 // setup the title block
-$titleBlock = new w2p_Theme_TitleBlock('Forums', 'support.png', $m, $m . '.' . $a);
-$titleBlock->addCell('<form name="forum_filter" action="?m=forums" method="post" accept-charset="utf-8">' . arraySelect($filters, 'f', 'size="1" class="text" onChange="document.forum_filter.submit();"', $f, true) . '</form>');
-$titleBlock->addCell($AppUI->_('Filter') . ':');
+$titleBlock = new w2p_Theme_TitleBlock('Forums', 'icon.png', $m, $m . '.' . $a);
+$titleBlock->addFilterCell('Filter', 'f', $filters, $f);
 
 if ($canAdd) {
-	$titleBlock->addCell('<form action="?m=forums&a=addedit" method="post" accept-charset="utf-8"><input type="submit" class="button btn btn-small dropdown-toggle" value="' . $AppUI->_('new forum') . '"></form>');
+    $titleBlock->addButton('New forum', '?m=forums&a=addedit');
 }
 
 //TODO: this is a little hack to make sure the table header gets generated in the show() method below
@@ -41,7 +40,7 @@ $a = 'list';
 
 $titleBlock->show();
 
-$module = new w2p_Core_Module();
+$module = new w2p_System_Module();
 $fields = $module->loadSettings('forums', 'index_list');
 
 if (0 == count($fields)) {

@@ -32,7 +32,7 @@ class w2p_Core_CAppUITest extends CommonSetup
     {
         global $w2Pconfig;
 
-        $AppUI = new w2p_Core_CAppUI();
+        $AppUI = $this->_AppUI;
 
         $this->assertInstanceOf('w2p_Core_CAppUI',          $AppUI);
         $this->assertObjectHasAttribute('state',            $AppUI);
@@ -119,7 +119,8 @@ class w2p_Core_CAppUITest extends CommonSetup
      */
 	public function test__()
 	{
-		global $AppUI, $w2Pconfig;
+        $AppUI = $this->_AppUI;
+		global $w2Pconfig;
 
 		$w2Pconfig['locale_warn'] = false;
 		$this->assertEquals('Company',        $AppUI->__('Company'));
@@ -149,9 +150,9 @@ class w2p_Core_CAppUITest extends CommonSetup
      */
 	public function testGetPref()
 	{
-		global $AppUI;
+        $AppUI = $this->_AppUI;
 
-		$this->assertEquals('en', $AppUI->getPref('LOCALE'));
+		$this->assertEquals('en_US', $AppUI->getPref('LOCALE'));
 		$this->assertEquals('',   $AppUI->getPref('NotGonnaBeThere'));
 	}
 
@@ -160,9 +161,9 @@ class w2p_Core_CAppUITest extends CommonSetup
      */
 	public function testSetPref()
 	{
-		global $AppUI;
+        $AppUI = $this->_AppUI;
 
-		$this->assertEquals('en',     $AppUI->getPref('LOCALE'));
+		$this->assertEquals('en_US',     $AppUI->getPref('LOCALE'));
 		$AppUI->setPref('AddingThis', 'Monkey');
 		$this->assertEquals('Monkey', $AppUI->getPref('AddingThis'));
 	}
@@ -172,7 +173,7 @@ class w2p_Core_CAppUITest extends CommonSetup
      */
     public function testSetState()
     {
-        global $AppUI;
+        $AppUI = $this->_AppUI;
 
         $AppUI->setState('testSetState',    'someValue');
         $this->assertEquals('someValue',    $AppUI->getState('testSetState'));
@@ -185,7 +186,8 @@ class w2p_Core_CAppUITest extends CommonSetup
      */
     public function testProcessTabState()
     {
-        global $AppUI;
+        $AppUI = $this->_AppUI;
+
         $myArray = array('existingKey' => 13, 'existingKey2' => 42);
 
         $AppUI->processIntState('testProcessState', null,     'existingKey', 9);
@@ -206,7 +208,7 @@ class w2p_Core_CAppUITest extends CommonSetup
      */
 	public function testSavePlace()
 	{
-		global $AppUI;
+        $AppUI = $this->_AppUI;
 
 		$_SERVER['QUERY_STRING'] = 'testUrl';
 		$AppUI->savePlace();
@@ -221,7 +223,7 @@ class w2p_Core_CAppUITest extends CommonSetup
      */
 	public function testResetPlace()
 	{
-		global $AppUI;
+        $AppUI = $this->_AppUI;
 
 		$_SERVER['QUERY_STRING'] = 'testUrl';
 		$AppUI->savePlace();
@@ -235,7 +237,7 @@ class w2p_Core_CAppUITest extends CommonSetup
      */
 	public function testHoldRestoreObject()
 	{
-	  global $AppUI;
+        $AppUI = $this->_AppUI;
 
 	  $this->assertNull($AppUI->restoreObject());
 	  $myArray = array('one' => 'something', 2 => 'another');
@@ -253,7 +255,8 @@ class w2p_Core_CAppUITest extends CommonSetup
      */
 	public function testSetMsg()
 	{
-	  global $AppUI, $w2Pconfig;
+        $AppUI = $this->_AppUI;
+        global $w2Pconfig;
 
       $w2Pconfig['locale_warn'] = false;
 
@@ -280,7 +283,7 @@ class w2p_Core_CAppUITest extends CommonSetup
      */
     public function testGetSystemClassValid()
     {
-        global $AppUI;
+        $AppUI = $this->_AppUI;
 
         $this->assertEquals(W2P_BASE_DIR . '/classes/cdate.class.php', $AppUI->getSystemClass('cdate'));
     }
@@ -292,47 +295,55 @@ class w2p_Core_CAppUITest extends CommonSetup
      */
     public function testGetSystemClassNoName()
     {
-        global $AppUI;
+        $AppUI = $this->_AppUI;
 
         $this->assertNull($AppUI->getSystemClass());
     }
 
     /**
      * Test getting a library class
+     *
+     * @expectedException PHPUnit_Framework_Error
      */
     public function testGetLibraryClassValid()
     {
-        global $AppUI;
+        $AppUI = $this->_AppUI;
 
         $this->assertEquals(W2P_BASE_DIR . '/lib/PEAR/Date.php', $AppUI->getLibraryClass('PEAR/Date'));
     }
 
     /**
      * Tests getting a library class when no library name is passed
+     *
+     * @expectedException PHPUnit_Framework_Error
      */
     public function testGetLibraryClassNoName()
     {
-        global $AppUI;
+        $AppUI = $this->_AppUI;
 
         $this->assertNull($AppUI->getLibraryClass());
     }
 
     /**
      * Tests getting a module class
+     *
+     * @expectedException PHPUnit_Framework_Error
      */
     public function testGetModuleClassValid()
     {
-        global $AppUI;
+        $AppUI = $this->_AppUI;
 
         $this->assertEquals(W2P_BASE_DIR . '/modules/tasks/tasks.class.php', $AppUI->getModuleClass('tasks'));
     }
 
     /**
      * Tests getting a module class when no name is passed
+     *
+     * @expectedException PHPUnit_Framework_Error
      */
     public function testGetModuleClassNoName()
     {
-        global $AppUI;
+        $AppUI = $this->_AppUI;
 
         $this->assertNull($AppUI->getModuleClass());
     }
@@ -342,7 +353,7 @@ class w2p_Core_CAppUITest extends CommonSetup
      */
     public function testGetModuleAjaxValid()
     {
-        global $AppUI;
+        $AppUI = $this->_AppUI;
 
         $this->assertEquals(W2P_BASE_DIR . '/modules/tasks/tasks.ajax.php', $AppUI->getModuleAjax('tasks'));
     }
@@ -352,7 +363,7 @@ class w2p_Core_CAppUITest extends CommonSetup
      */
     public function testGetModuleAjaxNoName()
     {
-        global $AppUI;
+        $AppUI = $this->_AppUI;
 
         $this->assertNull($AppUI->getModuleAjax());
     }
@@ -362,7 +373,7 @@ class w2p_Core_CAppUITest extends CommonSetup
      */
     public function testGetVersion()
     {
-        global $AppUI;
+        $AppUI = $this->_AppUI;
 
         include W2P_BASE_DIR . '/includes/version.php';
 
@@ -382,7 +393,7 @@ class w2p_Core_CAppUITest extends CommonSetup
      */
     public function testGetTZAwareTime()
     {
-        global $AppUI;
+        $AppUI = $this->_AppUI;
 
         $timezone     = $AppUI->getPref('TIMEZONE');
         $datetimezone = new DateTimeZone($timezone);
@@ -397,7 +408,7 @@ class w2p_Core_CAppUITest extends CommonSetup
      */
     public function testConvertToSystemTZNoParams()
     {
-        global $AppUI;
+        $AppUI = $this->_AppUI;
 
         $timezone     = $AppUI->getPref('TIMEZONE');
         $datetimezone = new DateTimeZone($timezone);
@@ -412,7 +423,7 @@ class w2p_Core_CAppUITest extends CommonSetup
      */
     public function testConvertToSystemTZWithDateTime()
     {
-        global $AppUI;
+        $AppUI = $this->_AppUI;
 
         $timezone     = $AppUI->getPref('TIMEZONE');
         $datetimezone = new DateTimeZone($timezone);
@@ -427,7 +438,7 @@ class w2p_Core_CAppUITest extends CommonSetup
      */
     public function testConvertToSystemTZWithFormat()
     {
-        global $AppUI;
+        $AppUI = $this->_AppUI;
 
         $timezone     = $AppUI->getPref('TIMEZONE');
         $datetimezone = new DateTimeZone($timezone);
@@ -442,7 +453,7 @@ class w2p_Core_CAppUITest extends CommonSetup
      */
     public function testConvertToSystemTZWithDateTimeAndFormat()
     {
-        global $AppUI;
+        $AppUI = $this->_AppUI;
 
         $timezone     = $AppUI->getPref('TIMEZONE');
         $datetimezone = new DateTimeZone($timezone);
@@ -457,7 +468,7 @@ class w2p_Core_CAppUITest extends CommonSetup
      */
     public function testFormatTZAwareTimeNoParams()
     {
-        global $AppUI;
+        $AppUI = $this->_AppUI;
 
         $timezone     = $AppUI->getPref('TIMEZONE');
         $datetimezone = new DateTimeZone($timezone);
@@ -471,7 +482,7 @@ class w2p_Core_CAppUITest extends CommonSetup
      */
     public function testFormatTZAwareTimeWithDateTime()
     {
-        global $AppUI;
+        $AppUI = $this->_AppUI;
 
         $timezone     = new DateTimezone($AppUI->getPref('TIMEZONE'));
         $datetimezone = new DateTimeZone('Europe/London');
@@ -486,7 +497,7 @@ class w2p_Core_CAppUITest extends CommonSetup
      */
     public function testFormatTZAwareTimeWithFormat()
     {
-        global $AppUI;
+        $AppUI = $this->_AppUI;
 
         $timezone     = $AppUI->getPref('TIMEZONE');
         $datetimezone = new DateTimeZone($timezone);
@@ -500,7 +511,7 @@ class w2p_Core_CAppUITest extends CommonSetup
      */
     public function testFormatTZAwareTimeWithDateTimeAndFormat()
     {
-        global $AppUI;
+        $AppUI = $this->_AppUI;
 
         $timezone     = new DateTimeZone($AppUI->getPref('TIMEZONE'));
         $datetimezone = new DateTimeZone('Europe/London');
@@ -517,7 +528,7 @@ class w2p_Core_CAppUITest extends CommonSetup
      */
     public function testCheckStyleValidStyle()
     {
-        global $AppUI;
+        $AppUI = $this->_AppUI;
 
         $AppUI->setPref('UISTYLE', 'wps-redmond');
         $AppUI->setStyle();
@@ -530,27 +541,13 @@ class w2p_Core_CAppUITest extends CommonSetup
      */
     public function testCheckStyleInvalidStyle()
     {
-        global $AppUI;
+        $AppUI = $this->_AppUI;
 
         $AppUI->setPref('UISTYLE', 'trevors-style');
         $AppUI->setStyle();
 
         $this->assertEquals('web2project', $AppUI->getPref('UISTYLE'));
     }
-
-    /**
-     * Test reding directories from an invalid path
-     *
-     */
-    public function testReadDirsInvalidPath()
-    {
-        global $AppUI;
-
-        $dirs = $AppUI->readDirs('blah');
-
-		$this->assertEquals(0,				count($dirs));
-    }
-
 
     /**
      * @todo Implement testGetSystemClass().
@@ -616,46 +613,6 @@ class w2p_Core_CAppUITest extends CommonSetup
      * @todo Implement testCheckStyle().
      */
     public function testCheckStyle() {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-                'This test has not been implemented yet.'
-        );
-    }
-
-    /**
-     * @todo Implement testReadDirs().
-     */
-    public function testReadDirs() {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-                'This test has not been implemented yet.'
-        );
-    }
-
-    /**
-     * @todo Implement testReadFiles().
-     */
-    public function testReadFiles() {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-                'This test has not been implemented yet.'
-        );
-    }
-
-    /**
-     * @todo Implement testCheckFileName().
-     */
-    public function testCheckFileName() {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-                'This test has not been implemented yet.'
-        );
-    }
-
-    /**
-     * @todo Implement testMakeFileNameSafe().
-     */
-    public function testMakeFileNameSafe() {
         // Remove the following lines when you implement this test.
         $this->markTestIncomplete(
                 'This test has not been implemented yet.'

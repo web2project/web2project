@@ -72,7 +72,7 @@ if ($project_status_filter == -1) {
 	//The Status themselves
 }
 
-$module = new w2p_Core_Module();
+$module = new w2p_System_Module();
 $fields = $module->loadSettings('projects', 'printview');
 
 if (count($fields) > 0) {

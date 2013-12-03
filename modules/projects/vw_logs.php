@@ -79,7 +79,7 @@ TODO: disabled this filter for now... something is wrong with the userId portion
 $fieldList = array();
 $fieldNames = array();
 
-$module = new w2p_Core_Module();
+$module = new w2p_System_Module();
 $fields = $module->loadSettings('tasks', 'task_logs_projects_view');
 
 if (count($fields) > 0) {

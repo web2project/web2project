@@ -52,7 +52,7 @@ $folders = getFolderSelectList();
 
 // setup the title block
 $ttl = $folder_id ? 'Edit File Folder' : 'Add File Folder';
-$titleBlock = new w2p_Theme_TitleBlock($ttl, 'folder5.png', $m, $m . '.' . $a);
+$titleBlock = new w2p_Theme_TitleBlock($ttl, 'icon.png', $m, $m . '.' . $a);
 $titleBlock->addCrumb('?m=files', 'files list');
 $canDelete = $folder->canDelete();
 if ($canDelete) {
@@ -84,15 +84,15 @@ function delIt() {
 }
 </script>
 
-<form name="folderFrm" action="?m=<?php echo $m; ?>" enctype="multipart/form-data" method="post">
+<form name="folderFrm" action="?m=<?php echo $m; ?>" enctype="multipart/form-data" method="post" class="addedit files-folder">
 	<input type="hidden" name="dosql" value="do_folder_aed" />
 	<input type="hidden" name="del" value="0" />
 	<input type="hidden" name="file_folder_id" value="<?php echo $folder_id; ?>" />
 	<input type="hidden" name="redirect" value="<?php echo $referrer; ?>" />
-    <table width="100%" border="0" cellpadding="3" cellspacing="3" class="std addedit">
+    <table class="std addedit files-folder">
         <tr>
-            <td width="100%" valign="top" align="center">
-                <table cellspacing="1" cellpadding="2" width="100%" class="well">
+            <td width="50%" valign="top" align="center">
+                <table class="well">
                     <tr>
                         <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Subfolder of'); ?>:</td>
                         <td align="left">

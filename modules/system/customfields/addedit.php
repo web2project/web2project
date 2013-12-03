@@ -21,7 +21,7 @@ if ($obj) {
 } else {
     $field->load($field_id);
 }
-$module = new w2p_Core_Module();
+$module = new w2p_System_Module();
 $module->load($module_id);
 
 $ttl = $field_id ? 'Edit Custom Fields' : 'Add Custom Fields';
@@ -185,7 +185,7 @@ function deleteItem(id) {
                 <input class="button btn btn-danger" type="button" name="cancel" value="<?php echo $AppUI->_('cancel'); ?>" onclick="javascript:if(confirm('<?php echo $AppUI->_('Are you sure you want to cancel?', UI_OUTPUT_JS); ?>')){location.href = './index.php?m=system&u=customfields';}" />
             </td>
             <td align="right">
-                <input type="button" class="button btn btn-primary" value="<?php echo $AppUI->_('submit'); ?>" onclick="submitIt()" />
+                <input type="button" class="button btn btn-primary" value="<?php echo $AppUI->_('save'); ?>" onclick="submitIt()" />
             </td>
         </tr>
     </table>

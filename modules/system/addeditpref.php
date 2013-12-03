@@ -75,11 +75,11 @@ function submitIt() {
 $spacing = ('wps-redmond' == $AppUI->getPref('UISTYLE')) ? 70 : 0;
 echo '<div style="padding-top: ' . $spacing . 'px;"> </div>';
 ?>
-<form name="changeuser" action="./index.php?m=<?php echo $m; ?>" method="post" accept-charset="utf-8">
+<form name="changeuser" action="./index.php?m=<?php echo $m; ?>" method="post" accept-charset="utf-8" classes="addedit system-preference">
 	<input type="hidden" name="dosql" value="do_preference_aed" />
 	<input type="hidden" name="pref_user" value="<?php echo $user_id; ?>" />
 	<input type="hidden" name="del" value="0" />
-<table width="100%" border="0" cellpadding="1" cellspacing="1" class="std addedit pref well">
+<table class="std addedit pref well preference">
     <tr>
         <th colspan="2"><?php echo $AppUI->_('User Preferences'); ?>: <?php echo $user_id ? $user : $AppUI->_('Default'); ?></th>
     </tr>
@@ -194,6 +194,7 @@ $currEx = 1234567.89;
 foreach (array_keys($LANGUAGES) as $lang) {
 	$currencies[$lang] = formatCurrency($currEx, $AppUI->setUserLocale($lang, false));
 }
+$prefs['CURRENCYFORM'] = ('' == $prefs['CURRENCYFORM']) ? 'en_US' : $prefs['CURRENCYFORM'];
 echo arraySelect($currencies, 'pref_name[CURRENCYFORM]', 'class=text size=1', $prefs['CURRENCYFORM'], false);
 ?>
 	</td>
@@ -203,7 +204,7 @@ echo arraySelect($currencies, 'pref_name[CURRENCYFORM]', 'class=text size=1', $p
 	<td align="right"><?php echo $AppUI->_('User Interface Style'); ?>:</td>
 	<td>
 <?php
-$uis = $prefs['UISTYLE'] ? $prefs['UISTYLE'] : 'default';
+$uis = $prefs['UISTYLE'] ? $prefs['UISTYLE'] : 'web2project';
 $styles = $AppUI->readDirs('style');
 unset($styles['_common']);
 $temp = $AppUI->setWarning(false);
@@ -306,7 +307,7 @@ echo ' />';
 </tr>
 <tr>
 	<td align="left"><input class="button btn btn-danger"  type="button" value="<?php echo $AppUI->_('back'); ?>" onclick="javascript:history.back(-1);" /></td>
-	<td align="right"><input class="button btn btn-primary" type="button" value="<?php echo $AppUI->_('submit'); ?>" onclick="submitIt()" /></td>
+	<td align="right"><input class="button btn btn-primary" type="button" value="<?php echo $AppUI->_('save'); ?>" onclick="submitIt()" /></td>
 </tr>
 </table>
 </form>

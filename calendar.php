@@ -37,7 +37,7 @@ if ($userId > 0) {
     $calendarHeader = "BEGIN:VCALENDAR\nPRODID:-//web2project//EN\nVERSION:2.0\nCALSCALE:GREGORIAN\nMETHOD:PUBLISH\nX-WR-TIMEZONE:UTC\n";
     $calendarFooter = "END:VCALENDAR";
 
-    $hooks = new w2p_Core_HookHandler($AppUI);
+    $hooks = new w2p_System_HookHandler($AppUI);
     $buffer = $hooks->calendar();
 
     echo $calendarHeader.$buffer.$calendarFooter;

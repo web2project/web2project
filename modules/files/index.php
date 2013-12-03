@@ -36,9 +36,8 @@ $task = new CTask();
 $allowedTasks = $task->getAllowedSQL($AppUI->user_id, 'file_task');
 
 // setup the title block
-$titleBlock = new w2p_Theme_TitleBlock('Files', 'folder5.png', $m, "$m.$a");
-$titleBlock->addCell('<form name="pickProject" action="?m=files" method="post" accept-charset="utf-8">' . arraySelect($projects, 'project_id', 'onChange="document.pickProject.submit()" size="1" class="text"', $project_id) . '</form>');
-$titleBlock->addCell($AppUI->_('Filter') . ':');
+$titleBlock = new w2p_Theme_TitleBlock('Files', 'icon.png', $m, "$m.$a");
+$titleBlock->addFilterCell('Filter', 'project_id', $projects, $project_id);
 
 // override the $canEdit variable passed from the main index.php in order to check folder permissions
 /** get permitted folders **/
@@ -57,8 +56,8 @@ if (!$limited) {
 }
 
 if ($canEdit) {
-    $titleBlock->addCell('<form action="?m=files&a=addedit_folder" method="post" accept-charset="utf-8"><input type="submit" class="button btn btn-small dropdown-toggle" value="' . $AppUI->_('new folder') . '"></form>');
-	$titleBlock->addCell('<form action="?m=files&a=addedit&folder=' . $folder . '" method="post" accept-charset="utf-8"><input type="submit" class="button btn btn-small dropdown-toggle" value="' . $AppUI->_('new file') . '"></form>');
+    $titleBlock->addButton('new folder', '?m=files&a=addedit_folder');
+    $titleBlock->addButton('new file', '?m=files&a=addedit&folder=' . $folder);
 }
 $titleBlock->show();
 

@@ -54,7 +54,7 @@ if ($company_id) {
 
 // setup the title block
 $ttl = $dept_id > 0 ? 'Edit Department' : 'Add Department';
-$titleBlock = new w2p_Theme_TitleBlock($ttl, 'departments.png', $m, $m . '.' . $a);
+$titleBlock = new w2p_Theme_TitleBlock($ttl, 'icon.png', $m, $m . '.' . $a);
 $titleBlock->addCrumb('?m=companies', 'companies list');
 $titleBlock->addCrumb('?m=companies&a=view&company_id=' . $company_id, 'view this company');
 $titleBlock->addCrumb('?m=departments', 'department list');
@@ -89,15 +89,15 @@ function submitIt() {
 }
 </script>
 
-<form name="editFrm" action="?m=<?php echo $m; ?>" method="post" accept-charset="utf-8">
+<form name="editFrm" action="?m=<?php echo $m; ?>" method="post" accept-charset="utf-8" class="addedit departments">
 	<input type="hidden" name="dosql" value="do_dept_aed" />
 	<input type="hidden" name="dept_id" value="<?php echo $dept_id; ?>" />
 	<input type="hidden" name="dept_company" value="<?php echo $company_id; ?>" />
 
-    <table cellspacing="1" cellpadding="1" border="0" width="100%" class="std addedit">
+    <table class="std addedit departments">
         <tr>
             <td width="50%" style="vertical-align: top">
-                <table cellspacing="1" cellpadding="2" width="100%" class="well">
+                <table class="well">
                     <tr>
                         <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Department Company'); ?>:</td>
                         <td><strong><?php echo $companyName; ?></strong></td>
@@ -154,7 +154,7 @@ function submitIt() {
                 </table>
             </td>
             <td width="50%" style="vertical-align: top">
-                <table cellspacing="1" cellpadding="2" width="100%" class="well">
+                <table class="well">
                     <tr>
                         <td colspan="2" align="center">
                             <?php echo $AppUI->_('Address'); ?>
@@ -224,7 +224,7 @@ function submitIt() {
                 <input type="button" value="<?php echo $AppUI->_('back'); ?>" class="button" onclick="javascript:history.back(-1);" />
             </td>
             <td align="right">
-                <input type="button" value="<?php echo $AppUI->_('submit'); ?>" class="button" onclick="submitIt()" />
+                <input type="button" value="<?php echo $AppUI->_('save'); ?>" class="button" onclick="submitIt()" />
             </td>
         </tr>
     </table>

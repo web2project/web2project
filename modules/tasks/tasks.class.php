@@ -941,7 +941,7 @@ class CTask extends w2p_Core_BaseObject
     /**
      *
      * @param w2p_Core_CAppUI $AppUI
-     * @param CProject $projectId
+     * @param CProject $project_id
      *
      * The point of this function is to create/update a task to represent a
      *   subproject.
@@ -981,7 +981,7 @@ class CTask extends w2p_Core_BaseObject
             }
             $task->task_name = $AppUI->_('Subproject') . ': ' . $subProject->project_name;
             $task->task_duration_type = 1;
-            $task->task_duration = $subProject->project_worked_hours;
+            $task->task_duration = $subProject->project_scheduled_hours;
             $task->task_start_date = $projectDates[0]['min_task_start_date'];
             $task->task_end_date = $projectDates[0]['max_task_end_date'];
             $task->task_percent_complete = $subProject->project_percent_complete;
@@ -1054,8 +1054,8 @@ class CTask extends w2p_Core_BaseObject
     }
 
     /** Retrieve tasks with latest task_end_dates within given project
-     * @param int Project_id
-     * @param int SQL-limit to limit the number of returned tasks
+     * @param int $project_id
+     *
      * @return array List of criticalTasks
      */
     public function getLastTaskData($project_id)
@@ -2278,7 +2278,7 @@ class CTask extends w2p_Core_BaseObject
             return $this->clearReminder(true);
         }
 
-        $eq = new w2p_Core_EventQueue();
+        $eq = new w2p_System_EventQueue();
         $pre_charge = w2PgetConfig('task_reminder_days_before', 1);
         $repeat = w2PgetConfig('task_reminder_repeat', 100);
 
@@ -2316,13 +2316,14 @@ class CTask extends w2p_Core_BaseObject
     /**
      * Called by the Event Queue processor to process a reminder
      * on a task.
-     * @access		  public
-     * @param		 string		   $module		  Module name (not used)
-     * @param		 string		   $type Type of event (not used)
-     * @param		 integer		$id ID of task being reminded
-     * @param		 integer		$owner		  Originator of event
-     * @param		 mixed		  $args event-specific arguments.
-     * @return		  mixed		   true, dequeue event, false, event stays in queue.
+     * @access  public
+     * @param   string  $notUsed    Module name (not used)
+     * @param   string  $notUsed2   Type of event (not used)
+     * @param   integer $id         ID of task being reminded
+     * @param   integer $owner      Originator of event
+     * @param   mixed   $notUsed    event-specific arguments.
+     *
+     * @return  mixed   true, dequeue event, false, event stays in queue.
      * -1, event is destroyed.
      */
     public function remind($notUsed = null, $notUsed2 = null, $id, $owner, $notUsed = null)
@@ -2415,7 +2416,7 @@ class CTask extends w2p_Core_BaseObject
      */
     public function clearReminder($dont_check = false)
     {
-        $ev = new w2p_Core_EventQueue();
+        $ev = new w2p_System_EventQueue();
 
         $event_list = $ev->find('tasks', 'remind', $this->task_id);
         if (count($event_list)) {

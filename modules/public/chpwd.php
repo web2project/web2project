@@ -35,16 +35,12 @@ if ($user_id) {
                 <?php
 			} else {
                 echo '<h1>' . $AppUI->_('Change User Password') . '</h1>';
-				if (function_exists('styleRenderBoxTop')) {
-					echo styleRenderBoxTop();
-				}
+                echo $AppUI->getTheme()->styleRenderBoxTop();
 				echo '<table width="100%" cellspacing="0" cellpadding="4" border="0" class="std"><tr><td>' . $AppUI->_('chgpwUpdated') . '</td></tr></table>';
 			}
 		} else {
 			echo '<h1>' . $AppUI->_('Change User Password') . '</h1>';
-			if (function_exists('styleRenderBoxTop')) {
-				echo styleRenderBoxTop();
-			}
+            echo $AppUI->getTheme()->styleRenderBoxTop();
 			echo '<table width="100%" cellspacing="0" cellpadding="4" border="0" class="std"><tr><td>' . $AppUI->_('chgpwWrongPW') . '</td></tr></table>';
 		}
 	} else {
@@ -80,9 +76,7 @@ if ($user_id) {
 		</script>
 		<h1><?php echo $AppUI->_('Change User Password'); ?></h1>
 		<?php
-			if (function_exists('styleRenderBoxTop')) {
-				echo styleRenderBoxTop();
-			}
+        echo $AppUI->getTheme()->styleRenderBoxTop();
 		?>
 		<form name="frmEdit" method="post" onsubmit="return false" accept-charset="utf-8">
 			<input type="hidden" name="user_id" value="<?php echo $user_id; ?>" />
@@ -119,8 +113,6 @@ if ($user_id) {
 	}
 } else {
 	echo '<h1>' . $AppUI->_('Change User Password') . '</h1>';
-	if (function_exists('styleRenderBoxTop')) {
-		echo styleRenderBoxTop();
-	}
+    echo $AppUI->getTheme()->styleRenderBoxTop();
 	echo '<table width="100%" cellspacing="0" cellpadding="4" border="0" class="std"><tr><td>' . $AppUI->_('chgpwLogin') . '</td></tr></table>';
 }

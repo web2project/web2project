@@ -48,13 +48,13 @@ $methodLabels = w2PgetSysVal('ContactMethods');
 
 // setup the title block
 $ttl = 'View Contact';
-$titleBlock = new w2p_Theme_TitleBlock($ttl, 'monkeychat-48.png', $m, $m . '.' . $a);
+$titleBlock = new w2p_Theme_TitleBlock($ttl, 'icon.png', $m, $m . '.' . $a);
 $titleBlock->addCrumb('?m=contacts', 'contacts list');
 if ($canEdit && $contact_id) {
 	$titleBlock->addCrumb('?m=contacts&a=addedit&contact_id='.$contact_id, 'edit this contact');
 }
 if ($contact->user_id) {
-    $titleBlock->addCrumb('?m=admin&a=view&user_id='.$contact->user_id, 'view this user');
+    $titleBlock->addCrumb('?m=users&a=view&user_id='.$contact->user_id, 'view this user');
 }
 if ($canDelete && $contact_id) {
 	$titleBlock->addCrumbDelete('delete contact', $canDelete, $msg);
@@ -85,7 +85,7 @@ function delIt(){
 </script>
 <?php } ?>
 
-<table border="0" cellpadding="4" cellspacing="0" width="100%" class="std view">
+<table class="std view contacts">
 	<tr>
 		<td valign="top">
 			<table border="0" cellpadding="1" cellspacing="1">

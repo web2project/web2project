@@ -158,9 +158,7 @@ if (!$ok) {
 <form name="frmSelector" accept-charset="utf-8">
 <b><?php echo $AppUI->_('Select') . ' ' . $AppUI->_($title) . ':' ?></b>
 <?php
-	if (function_exists('styleRenderBoxTop')) {
-		echo styleRenderBoxTop();
-	}
+echo $AppUI->getTheme()->styleRenderBoxTop();
 ?>
 <table class="std" width="100%">
 <tr>

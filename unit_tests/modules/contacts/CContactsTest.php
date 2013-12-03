@@ -168,11 +168,11 @@ class CContacts_Test extends CommonSetup
         $this->mockDB->stageResult(1);
         $this->assertTrue($this->obj->isUser());
 
-        $contact->contact_id = 13;
+        $this->obj->contact_id = 13;
         $this->mockDB->stageResult(0);
         $this->assertFalse($this->obj->isUser());
 
-        $contact->contact_id = 'monkey!';
+        $this->obj->contact_id = 'monkey!';
         $this->mockDB->stageResult(0);
         $this->assertFalse($this->obj->isUser());
     }

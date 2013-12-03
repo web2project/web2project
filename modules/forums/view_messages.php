@@ -53,9 +53,7 @@ $thispage = '?m=' . $m . '&a=viewer&forum_id=' . $forum_id . '&message_id=' . $m
 ?>
 <br />
 <?php
-if (function_exists('styleRenderBoxTop')) {
-	echo styleRenderBoxTop();
-}
+echo $AppUI->getTheme()->styleRenderBoxTop();
 ?>
 <form name="messageForm" method="post" action="?m=forums&forum_id=<?php echo $forum_id; ?>" accept-charset="utf-8">
 	<input type="hidden" name="dosql" value="do_post_aed" />
@@ -63,7 +61,7 @@ if (function_exists('styleRenderBoxTop')) {
 	<input type="hidden" name="message_id" value="0" />
 </form>
 
-<table border="1" cellpadding="4" cellspacing="1" width="100%" class="std view" align="center">
+<table class="std view forums-message">
 <tr>
     <td colspan="2">
         <div class="left" style="padding-left: 20px;">
@@ -132,7 +130,7 @@ foreach ($messages as $row) {
 		$s .= '<tr>';
 
 		$s .= '<td valign="top" style="' . $style . '" nowrap="nowrap">';
-        $s .= '<a href="?m=admin&a=view&user_id='.$row['message_author'].'">';
+        $s .= '<a href="?m=users&a=view&user_id='.$row['message_author'].'">';
         $s .= $row['contact_name'];
         $s .= '</a>';
 		if (!$hideEmail) {

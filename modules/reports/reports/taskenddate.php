@@ -21,9 +21,7 @@ if (!$log_start_date) {
 }
 $end_date->setTime(23, 59, 59);
 
-if (function_exists('styleRenderBoxTop')) {
-	echo styleRenderBoxTop();
-}
+echo $AppUI->getTheme()->styleRenderBoxTop();
 ?>
 <form name="editFrm" action="index.php?m=reports" method="post" accept-charset="utf-8">
 <input type="hidden" name="project_id" value="<?php echo $project_id; ?>" />
@@ -103,13 +101,9 @@ if ($do_report) {
 	$first_task = true;
 	$task_log = array();
 
-	if (function_exists('styleRenderBoxBottom')) {
-		echo styleRenderBoxBottom();
-	}
+    echo $AppUI->getTheme()->styleRenderBoxBottom();
 	echo '<br />';
-	if (function_exists('styleRenderBoxTop')) {
-		echo styleRenderBoxTop();
-	}
+    echo $AppUI->getTheme()->styleRenderBoxTop();
 	echo '<table cellspacing="0" cellpadding="4" border="0" width="100%" class="std">
 <tr>
 	<td>';

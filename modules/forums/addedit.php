@@ -50,7 +50,7 @@ $users = $perms->getPermittedUsers('forums');
 
 // setup the title block
 $ttl = $forum_id > 0 ? 'Edit Forum' : 'Add Forum';
-$titleBlock = new w2p_Theme_TitleBlock($ttl, 'support.png', $m, $m . '.' . $a);
+$titleBlock = new w2p_Theme_TitleBlock($ttl, 'icon.png', $m, $m . '.' . $a);
 $titleBlock->addCrumb('?m=forums', 'forums list');
 if ($forum_id) {
     $titleBlock->addCrumb('?m=forums&a=viewer&forum_id=' . $forum_id, 'view this forum');
@@ -72,12 +72,12 @@ function submitIt(){
 }
 </script>
 
-<form name="changeforum" action="?m=<?php echo $m; ?>" method="post" accept-charset="utf-8">
+<form name="changeforum" action="?m=<?php echo $m; ?>" method="post" accept-charset="utf-8" class="addedit forums">
 	<input type="hidden" name="dosql" value="do_forum_aed" />
 	<input type="hidden" name="del" value="0" />
 	<input type="hidden" name="forum_unique_update" value="<?php echo uniqid(''); ?>" />
 	<input type="hidden" name="forum_id" value="<?php echo $forum_id; ?>" />
-    <table cellspacing="0" cellpadding="4" border="0" width="100%" class="std addedit">
+    <table class="std addedit forums">
         <tr>
             <th valign="top" colspan="3">
                 <strong><?php echo $AppUI->_($forum_id ? 'Edit' : 'Add') . ' ' . $AppUI->_('Forum'); ?></strong>
@@ -142,7 +142,7 @@ function submitIt(){
             </td>
             <td align="right" colspan="2">
                 <?php if ($AppUI->user_id == $forum->forum_owner || $forum_id == 0) {
-                    echo '<input type="button" value="' . $AppUI->_('submit') . '" class=button onclick="submitIt()" />';
+                    echo '<input type="button" value="' . $AppUI->_('save') . '" class=button onclick="submitIt()" />';
                 } ?>
             </td>
         </tr>

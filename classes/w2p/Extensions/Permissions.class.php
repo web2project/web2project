@@ -999,7 +999,7 @@ class w2p_Extensions_Permissions extends gacl_api
     /**
      * w2Pacl::removeACLPermissions() Removes the permissions for a given ACL ID
      *
-     * @param mixed $module
+     * @param mixed $acl_id
      * @return
      */
     public function removeACLPermissions($acl_id = null)
@@ -1193,11 +1193,11 @@ class w2p_Extensions_Permissions extends gacl_api
      * w2Pacl::w2Pacl_check()
      * //w2Pacl_check is used for modules only
      *
-     * @param mixed $application it passes 'application' string by default and is not used
+     * @param mixed $notUsed it passes 'application' string by default and is not used
      * @param mixed $op one of the acos 'access','view','add','delete','edit'
-     * @param mixed $user it passes 'user' string by default and is not used
+     * @param mixed $notUsed2 it passes 'user' string by default and is not used
      * @param mixed $userid it passes the user_id
-     * @param mixed $app it passes 'app' string by default and is not used
+     * @param mixed $notUsed3 it passes 'app' string by default and is not used
      * @param mixed $module it passes the modules name
      * @return
      */
@@ -1269,9 +1269,9 @@ class w2p_Extensions_Permissions extends gacl_api
      * w2p_Extensions_Permissions::w2Pacl_query()
      * //w2Pacl_query is used for items only
      *
-     * @param string $application
+     * @param string $notUsed
      * @param mixed $op
-     * @param string $user
+     * @param string $notUsed2
      * @param mixed $userid
      * @param mixed $module
      * @param mixed $item

@@ -34,7 +34,7 @@ if (!$resource_id && $resource_id > 0) {
 
 // setup the title block
 $ttl = $resource_id ? 'Edit Resource' : 'Add Resource';
-$titleBlock = new w2p_Theme_TitleBlock($AppUI->_($ttl), 'resources.png', $m, $m . '.' . $a);
+$titleBlock = new w2p_Theme_TitleBlock($AppUI->_($ttl), 'icon.png', $m, $m . '.' . $a);
 $titleBlock->addCrumb('?m=' . $m, $m . ' list');
 
 if ($resource_id) {
@@ -57,40 +57,40 @@ function submitIt() {
 }
 </script>
 
-<form name="editfrm" action="?m=<?php echo $m; ?>" method="post" accept-charset="utf-8">
+<form name="editfrm" action="?m=<?php echo $m; ?>" method="post" accept-charset="utf-8" class="addedit resources">
     <input type="hidden" name="dosql" value="do_resource_aed" />
     <input type="hidden" name="del" value="0" />
     <input type="hidden" name="resource_id" value="<?php echo $resource_id; ?>" />
 
-    <table cellspacing="1" cellpadding="1" border="0" width="100%" class="std addedit">
+    <table class="std addedit resources">
         <tr>
             <td align="center" >
-                <table>
-                <tr>
-                    <td align="right"><?php echo $AppUI->_('Resource Identifier'); ?></td>
-                    <td align="left"><input type="text" class="text" size="15" maxlength="64" name="resource_key" value="<?php echo w2PformSafe($resource->resource_key); ?>" /></td>
-                </tr>
-                <tr>
-                    <td align="right"><?php echo $AppUI->_('Resource Name'); ?></td>
-                    <td align="left"><input type="text" class="text" size="30" maxlength="255" name="resource_name" value="<?php echo w2PformSafe($resource->resource_name); ?>" /></td>
-                </tr>
-                <tr>
-                    <td align="right"><?php echo $AppUI->_('Type'); ?></td>
-                    <td align="left"><?php echo arraySelect($typelist, 'resource_type', 'class="text"', $resource->resource_type, true); ?></td>
-                </tr>
-                <?php
-                $resource->resource_max_allocation = ($resource->resource_max_allocation) ? $resource->resource_max_allocation : 100;
-                ?>
-                <tr>
-                    <td align="right"><?php echo $AppUI->_('Maximum Allocation Percentage'); ?></td>
-                    <td>
-                        <?php echo arraySelect($percent, 'resource_max_allocation', 'size="1" class="text"', $resource->resource_max_allocation) . '%'; ?>
-                    </td>
-                </tr>
-                <tr>
-                    <td align="right"><?php echo $AppUI->_('Notes'); ?></td>
-                    <td><textarea name="resource_note" cols="60" rows="7"><?php echo w2PformSafe($resource->resource_note); ?></textarea></td>
-                </tr>
+                <table class="well">
+                    <tr>
+                        <td align="right"><?php echo $AppUI->_('Resource Identifier'); ?></td>
+                        <td align="left"><input type="text" class="text" size="15" maxlength="64" name="resource_key" value="<?php echo w2PformSafe($resource->resource_key); ?>" /></td>
+                    </tr>
+                    <tr>
+                        <td align="right"><?php echo $AppUI->_('Resource Name'); ?></td>
+                        <td align="left"><input type="text" class="text" size="30" maxlength="255" name="resource_name" value="<?php echo w2PformSafe($resource->resource_name); ?>" /></td>
+                    </tr>
+                    <tr>
+                        <td align="right"><?php echo $AppUI->_('Type'); ?></td>
+                        <td align="left"><?php echo arraySelect($typelist, 'resource_type', 'class="text"', $resource->resource_type, true); ?></td>
+                    </tr>
+                    <?php
+                    $resource->resource_max_allocation = ($resource->resource_max_allocation) ? $resource->resource_max_allocation : 100;
+                    ?>
+                    <tr>
+                        <td align="right"><?php echo $AppUI->_('Maximum Allocation Percentage'); ?></td>
+                        <td>
+                            <?php echo arraySelect($percent, 'resource_max_allocation', 'size="1" class="text"', $resource->resource_max_allocation) . '%'; ?>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right"><?php echo $AppUI->_('Notes'); ?></td>
+                        <td><textarea name="resource_note" cols="60" rows="7"><?php echo w2PformSafe($resource->resource_note); ?></textarea></td>
+                    </tr>
                 </table>
             </td>
         </tr>
@@ -99,7 +99,7 @@ function submitIt() {
                 <input class="button btn btn-danger" type="button" name="cancel" value="<?php echo $AppUI->_('cancel'); ?>" onclick="javascript:if(confirm('<?php echo $AppUI->_('Are you sure you want to cancel?', UI_OUTPUT_JS); ?>')){location.href = './index.php?m=resources';}" />
             </td>
             <td align="right">
-                <input type="button" class="button btn btn-primary" value="<?php echo $AppUI->_('submit'); ?>" onclick="submitIt()" />
+                <input type="button" class="button btn btn-primary" value="<?php echo $AppUI->_('save'); ?>" onclick="submitIt()" />
             </td>
         </tr>
     </table>

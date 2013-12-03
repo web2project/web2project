@@ -28,9 +28,7 @@ $end_date->setTime(23, 59, 59);
 
 $fullaccess = ($AppUI->user_type == 1);
 
-if (function_exists('styleRenderBoxTop')) {
-	echo styleRenderBoxTop();
-}
+echo $AppUI->getTheme()->styleRenderBoxTop();
 ?>
 <form name="editFrm" action="index.php?m=reports" method="post" accept-charset="utf-8">
 <input type="hidden" name="project_id" value="<?php echo $project_id; ?>" />
@@ -77,13 +75,9 @@ if (function_exists('styleRenderBoxTop')) {
 $allpdfdata = array();
 
 if ($do_report) {
-	if (function_exists('styleRenderBoxBottom')) {
-		echo styleRenderBoxBottom();
-	}
+    echo $AppUI->getTheme()->styleRenderBoxBottom();
 	echo '<br />';
-	if (function_exists('styleRenderBoxTop')) {
-		echo styleRenderBoxTop();
-	}
+    echo $AppUI->getTheme()->styleRenderBoxTop();
 	echo '<table cellspacing="0" cellpadding="4" border="0" width="100%" class="std">
 	<tr>
 		<td>';
@@ -122,39 +116,30 @@ if ($do_report) {
 
 	if ($log_pdf) {
 		// make the PDF file
-
-		$font_dir = W2P_BASE_DIR . '/lib/ezpdf/fonts';
 		$temp_dir = W2P_BASE_DIR . '/files/temp';
 
-		$pdf = new Cezpdf();
-		$pdf->ezSetCmMargins(1, 2, 1.5, 1.5);
-		$pdf->selectFont($font_dir . '/Helvetica.afm');
-
-		$pdf->ezText(w2PgetConfig('company_name'), 12);
+        $output = new w2p_Output_PDFRenderer();
+        $output->addTitle($AppUI->_('Overall Report'));
+        $output->addDate($df);
 
 		if ($log_all) {
 			$date = new w2p_Utilities_Date();
-			$pdf->ezText("\nAll hours as of " . $date->format($df), 8);
+			$title = "All hours as of " . $date->format($df);
 		} else {
 			$sdate = new w2p_Utilities_Date($log_start_date);
 			$edate = new w2p_Utilities_Date($log_end_date);
-			$pdf->ezText("\nHours from " . $sdate->format($df) . ' to ' . $edate->format($df), 8);
+			$title = "Hours from " . $sdate->format($df) . ' to ' . $edate->format($df);
 		}
-
-		$pdf->selectFont($font_dir . '/Helvetica-Bold.afm');
-		$pdf->ezText("\n" . $AppUI->_('Overall Report'), 12);
 
 		foreach ($allpdfdata as $company => $data) {
 			$title = $company;
 			$options = array('showLines' => 1, 'showHeadings' => 0, 'fontSize' => 8, 'rowGap' => 2, 'colGap' => 5, 'xPos' => 50, 'xOrientation' => 'right', 'width' => '500', 'cols' => array(0 => array('justification' => 'left', 'width' => 250), 1 => array('justification' => 'right', 'width' => 120)));
 
-			$pdf->ezTable($data, null, $title, $options);
+            $output->addTable($title, null, $data, $options);
 		}
 
 		$w2pReport = new CReport();
-		if ($fp = fopen($temp_dir . '/'.$w2pReport->getFilename().'.pdf', 'wb')) {
-			fwrite($fp, $pdf->ezOutput());
-			fclose($fp);
+        if ($output->writeFile($w2pReport->getFilename())) {
 			echo '<a href="' . W2P_BASE_URL . '/files/temp/' . $w2pReport->getFilename() . '.pdf" target="pdf">';
 			echo $AppUI->_('View PDF File');
 			echo '</a>';

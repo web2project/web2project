@@ -115,15 +115,3 @@ class CTabBox extends w2p_Theme_TabBox {
 		}
 	}
 }
-
-function styleRenderBoxTop() {
-    global $AppUI;
-    $theme = new style_wpsredmond($AppUI);
-    return $theme->styleRenderBoxTop();
-}
-
-function styleRenderBoxBottom() {
-    global $AppUI;
-    $theme = new style_wpsredmond($AppUI);
-    return $theme->styleRenderBoxBottom();
-}

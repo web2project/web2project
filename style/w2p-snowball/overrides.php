@@ -20,8 +20,8 @@ class CTabBox extends w2p_Theme_TabBox {
 		global $currentTabId, $currentTabName, $m, $a;
 		$this->loadExtras($m, $a);
 
-		if (($a == 'addedit' || $a == 'view' || $a == 'viewuser') && function_exists('styleRenderBoxBottom')) {
-			echo styleRenderBoxBottom();
+		if (($a == 'addedit' || $a == 'view' || $a == 'viewuser')) {
+			echo $this->_AppUI->getTheme()->styleRenderBoxBottom();
 		}
 
 		reset($this->tabs);
@@ -124,16 +124,4 @@ class CTabBox extends w2p_Theme_TabBox {
 			echo '</td></tr></table>';
 		}
 	}
-}
-
-function styleRenderBoxTop() {
-    global $AppUI;
-    $theme = new style_w2psnowball($AppUI);
-    return $theme->styleRenderBoxTop();
-}
-
-function styleRenderBoxBottom() {
-    global $AppUI;
-    $theme = new style_w2psnowball($AppUI);
-    return $theme->styleRenderBoxBottom();
 }

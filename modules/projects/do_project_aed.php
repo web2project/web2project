@@ -53,7 +53,7 @@ if ($result) {
     }
 
     $AppUI->setMsg('Project '.$action, UI_MSG_OK, true);
-    $redirect = 'm=projects';
+    $redirect = 'm=projects&a=view&project_id=' . $obj->project_id;
 } else {
     $AppUI->setMsg($result, UI_MSG_ERROR);
     $AppUI->holdObject($obj);

@@ -37,8 +37,9 @@ foreach ($messages as $row) {
 $font_dir = W2P_BASE_DIR . '/lib/ezpdf/fonts';
 $temp_dir = W2P_BASE_DIR . '/files/temp';
 
-$pdf = new Cezpdf($paper = 'A4', $orientation = 'portrait');
-$pdf->ezSetCmMargins(1, 1, 1, 1);
+$output = new w2p_Output_PDFRenderer();
+$pdf = $output->getPDF();
+
 $pdf->selectFont($font_dir . '/Helvetica.afm');
 $pdf->ezText('Project: ' . $forum->project_name);
 $pdf->ezText('Forum: ' . $forum->forum_name);

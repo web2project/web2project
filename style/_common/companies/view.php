@@ -1,4 +1,4 @@
-<table border="0" cellpadding="4" cellspacing="0" class="std view">
+<table class="std view companies">
     <tr>
         <th colspan="2"><?php echo $company->company_name; ?></th>
     </tr>

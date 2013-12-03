@@ -98,27 +98,6 @@ class CLinks_Test extends CommonSetup
     }
 
     /**
-     * Tests that the proper error message is returned when a link is attempted
-     * to be created without an owner.
-     */
-    public function testCreateLinkNoOwner()
-    {
-        unset($this->post_data['link_owner']);
-        $this->obj->bind($this->post_data);
-
-        /**
-        * Verify we got the proper error message
-        */
-		$this->assertFalse($this->obj->store());
-        $this->assertArrayHasKey('link_owner', $this->obj->getError());
-
-        /**
-        * Verify that link id was not set
-        */
-        $this->AssertEquals(0, $this->obj->link_id);
-    }
-
-    /**
      * Tests the proper creation of a link
      */
     public function testStoreCreate()

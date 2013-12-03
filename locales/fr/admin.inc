@@ -170,3 +170,4 @@
 'users list'=>'Liste des utilisateurs',
 'view this contact'=>'Voir ce contact',
 'view this user'=>'Voir cet utilisateur',
+'Help Desk'=>'Centre d\'assistance',

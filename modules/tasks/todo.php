@@ -188,7 +188,7 @@ $priorities = array('1' => 'high', '0' => 'normal', '-1' => 'low');
 $durnTypes = w2PgetSysVal('TaskDurationType');
 
 if ('todo' == $a) {
-	$titleBlock = new w2p_Theme_TitleBlock('My Tasks To Do', 'applet-48.png', $m, $m . '.' . $a);
+	$titleBlock = new w2p_Theme_TitleBlock('My Tasks To Do', 'icon.png', $m, $m . '.' . $a);
 	$titleBlock->addCrumb('?m=tasks', 'tasks list');
 	$titleBlock->show();
 }

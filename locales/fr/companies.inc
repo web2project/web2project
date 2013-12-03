@@ -43,7 +43,7 @@
 'co'=>'co',
 'companies list'=>'Liste des sociétés',
 'company list'=>'Liste des sociétés',
-'companyDelete'=>'Êtes-vous sûre de vouloir effacer cette société?',
+'companyDelete'=>'Êtes-vous sûr de vouloir effacer cette société?',
 'companyValidName'=>'Veuillez saisir un nom de société valide',
 'delete company'=>'effacer cette société',
 'doDelete'=>'Effacer',

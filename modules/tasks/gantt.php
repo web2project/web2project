@@ -274,6 +274,12 @@ if (!$start_date || !$end_date) {
         }
     }
 }
+if ('0000-00-00' == substr($start_date, 0, 10)) {
+    $start_date = date('Y-m-d', time() - 60 * 60 * 24 * 7);
+}
+if ('0000-00-00' == substr($end_date, 0, 10)) {
+    $end_date = date('Y-m-d', time() + 60 * 60 * 24 * 7);
+}
 $gantt->setDateRange($start_date, $end_date);
 
 $gantt_arr = array();
