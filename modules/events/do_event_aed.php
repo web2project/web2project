@@ -39,7 +39,7 @@ if ($del) {
 //TODO: I hate this clash param.. there should be a better way.
 if (!$clashRedirect) {
     if (!$result) {
-        $AppUI->setMsg($result, UI_MSG_ERROR, true);
+        $AppUI->setMsg($obj->getError(), UI_MSG_ERROR, true);
         $AppUI->holdObject($obj);
         $AppUI->redirect('m=events&a=addedit&event_id=' . $obj->event_id);
     }
