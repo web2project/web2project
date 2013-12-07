@@ -204,6 +204,7 @@ $xpg_totalrecs = count($projects);
                 }
             }
 		}
+        $pstatus = w2PgetSysVal('ProjectStatus');
 		if ($none) {
 			echo '<tr><td colspan="25">' . $AppUI->_('No projects to display for this Company, Owner and Type, or your Search returned no results. Please check the filters above and try again.') . '</td></tr>';
 		} else {
