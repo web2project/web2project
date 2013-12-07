@@ -31,6 +31,7 @@ class w2p_Database_Query extends w2p_Database_oldQuery
 
 	/**< Handle to the database connection */
 	protected $_db = null;
+    protected $_query_id = null;
 	/**
 	 * Array of db function names
 	 * @access private
@@ -204,6 +205,25 @@ class w2p_Database_Query extends w2p_Database_oldQuery
         $sql = "UPDATE $table SET $field_values $where";
 
         return $sql;
+    }
+
+    public function exec($style = ADODB_FETCH_BOTH, $debug = false)
+    {
+        global $ADODB_FETCH_MODE;
+
+        $ADODB_FETCH_MODE = $style;
+        $this->clearQuery();
+
+        $query = $this->prepare();
+
+        $this->_query_id = $this->_db->Execute($query);
+        if (!$this->_query_id) {
+            $error = $this->_db->ErrorMsg();
+
+            throw new w2p_Database_Exception($error);
+        }
+
+        return $this->_query_id;
     }
 
 	/**
