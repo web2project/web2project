@@ -69,13 +69,14 @@ class w2p_Database_oldQuery {
 			for ($i = 0, $i_cmp = count($fields); $i < $i_cmp; $i++) {
 				$this->addMap('value_list', $this->quote($values[$i]), $fields[$i]);
 			}
-		} else
+		} else {
 			if (!$func) {
 				$this->addMap('value_list', $this->quote($value), $field);
 			} else {
 				$this->addMap('value_list', $value, $field);
 			}
-			$this->type = 'insert';
+        }
+        $this->type = 'insert';
 	}
 
 	// implemented addReplace() on top of addInsert()
