@@ -127,13 +127,7 @@ class w2p_Database_oldQuery {
 
 // Everything from here to the table structure area is about data retrieval, not query building
 
-	/** Execute the query
-	 *
-	 * Execute the query and return a handle.  Supplants the db_exec query
-	 * @param $style ADODB fetch style. Can be ADODB_FETCH_BOTH, ADODB_FETCH_NUM or ADODB_FETCH_ASSOC
-	 * @param $debug Defaults to false. If true, debug output includes explanation of query
-	 * @return Handle to the query result
-	 */
+	/** @deprecated */
 	public function &exec($style = ADODB_FETCH_BOTH, $debug = false) {
         error_log(__FUNCTION__ . ' has been deprecated', E_USER_WARNING);
         global $ADODB_FETCH_MODE, $w2p_performance_dbtime, $w2p_performance_dbqueries;
