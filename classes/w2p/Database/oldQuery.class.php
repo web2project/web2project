@@ -41,40 +41,6 @@ class w2p_Database_oldQuery {
 	/**< Use the old style of fetch mode with ADODB */
 	public $_old_style = null;
 
-	/** Clear the current query and all set options
-	 */
-	public function clear() {
-		global $ADODB_FETCH_MODE;
-		if (isset($this->_old_style)) {
-			$ADODB_FETCH_MODE = $this->_old_style;
-			$this->_old_style = null;
-		}
-		$this->type = 'select';
-		$this->query = null;
-		$this->table_list = null;
-		$this->where = null;
-		$this->order_by = null;
-		$this->group_by = null;
-		$this->limit = null;
-		$this->offset = -1;
-		$this->join = null;
-		$this->value_list = null;
-		$this->update_list = null;
-		$this->create_table = null;
-		$this->create_definition = null;
-		if ($this->_query_id) {
-			$this->_query_id->Close();
-		}
-		$this->_query_id = null;
-	}
-
-	public function clearQuery() {
-		if ($this->_query_id) {
-			$this->_query_id->Close();
-		}
-		$this->_query_id = null;
-	}
-
 	/** Insert a value into the database
 	 * @param $field The field to insert the value into
 	 * @param $value The specified value
@@ -126,48 +92,6 @@ class w2p_Database_oldQuery {
 	}
 
 // Everything from here to the table structure area is about data retrieval, not query building
-
-	/** @deprecated */
-	public function &exec($style = ADODB_FETCH_BOTH, $debug = false) {
-        error_log(__FUNCTION__ . ' has been deprecated', E_USER_WARNING);
-        global $ADODB_FETCH_MODE, $w2p_performance_dbtime, $w2p_performance_dbqueries;
-
-		if (W2P_PERFORMANCE_DEBUG) {
-			$startTime = array_sum(explode(' ', microtime()));
-		}
-		if (!isset($this->_old_style)) {
-			$this->_old_style = $ADODB_FETCH_MODE;
-		}
-		$ADODB_FETCH_MODE = $style;
-		$this->clearQuery();
-
-		if ($q = $this->prepare()) {
-			if ($debug) {
-				// Before running the query, explain the query and return the details.
-				$qid = $this->_db->Execute('EXPLAIN ' . $q);
-				if ($qid) {
-					$res = array();
-					while ($row = $this->loadHash()) {
-						$res[] = $row;
-					}
-					dprint(__file__, __line__, 0, 'QUERY DEBUG: ' . var_export($res, true));
-					$qid->Close();
-				}
-			}
-			$this->_query_id = $this->_db->_Execute($q);
-			if (!$this->_query_id) {
-				$error = $this->_db->ErrorMsg();
-				dprint(__file__, __line__, 0, "query failed($q)" . ' - error was: <span style="color:red">' . $error . '</span>');
-				return $this->_query_id;
-			}
-		}
-
-        if (W2P_PERFORMANCE_DEBUG) {
-            ++$w2p_performance_dbqueries;
-            $w2p_performance_dbtime += array_sum(explode(' ', microtime())) - $startTime;
-        }
-        return $this->_query_id;
-	}
 
 	/**
 	 * Document::insertObject()
@@ -247,6 +171,80 @@ class w2p_Database_oldQuery {
 
         return true;
 	}
+
+    /** @deprecated */
+    public function clear() {
+        global $ADODB_FETCH_MODE;
+        if (isset($this->_old_style)) {
+            $ADODB_FETCH_MODE = $this->_old_style;
+            $this->_old_style = null;
+        }
+        $this->type = 'select';
+        $this->query = null;
+        $this->table_list = null;
+        $this->where = null;
+        $this->order_by = null;
+        $this->group_by = null;
+        $this->limit = null;
+        $this->offset = -1;
+        $this->join = null;
+        $this->value_list = null;
+        $this->update_list = null;
+        $this->create_table = null;
+        $this->create_definition = null;
+
+        $this->clearQuery();
+    }
+
+    /** @deprecated */
+    public function clearQuery() {
+        if ($this->_query_id) {
+            $this->_query_id->Close();
+        }
+        $this->_query_id = null;
+    }
+
+    /** @deprecated */
+    public function &exec($style = ADODB_FETCH_BOTH, $debug = false) {
+        error_log(__FUNCTION__ . ' has been deprecated', E_USER_WARNING);
+        global $ADODB_FETCH_MODE, $w2p_performance_dbtime, $w2p_performance_dbqueries;
+
+        if (W2P_PERFORMANCE_DEBUG) {
+            $startTime = array_sum(explode(' ', microtime()));
+        }
+        if (!isset($this->_old_style)) {
+            $this->_old_style = $ADODB_FETCH_MODE;
+        }
+        $ADODB_FETCH_MODE = $style;
+        $this->clearQuery();
+
+        if ($q = $this->prepare()) {
+            if ($debug) {
+                // Before running the query, explain the query and return the details.
+                $qid = $this->_db->Execute('EXPLAIN ' . $q);
+                if ($qid) {
+                    $res = array();
+                    while ($row = $this->loadHash()) {
+                        $res[] = $row;
+                    }
+                    dprint(__file__, __line__, 0, 'QUERY DEBUG: ' . var_export($res, true));
+                    $qid->Close();
+                }
+            }
+            $this->_query_id = $this->_db->_Execute($q);
+            if (!$this->_query_id) {
+                $error = $this->_db->ErrorMsg();
+                dprint(__file__, __line__, 0, "query failed($q)" . ' - error was: <span style="color:red">' . $error . '</span>');
+                return $this->_query_id;
+            }
+        }
+
+        if (W2P_PERFORMANCE_DEBUG) {
+            ++$w2p_performance_dbqueries;
+            $w2p_performance_dbtime += array_sum(explode(' ', microtime())) - $startTime;
+        }
+        return $this->_query_id;
+    }
 
     /** @deprecated */
 	public function createTable($table, $def = null) {
