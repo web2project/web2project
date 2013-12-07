@@ -603,6 +603,88 @@ class w2p_Database_Query extends w2p_Database_oldQuery
         return $obj;
     }
 
+    /**
+     * Document::insertObject()
+     *
+     * @param $table
+     * @param $object
+     * @param null $keyName
+     * @param bool $verbose
+     * @return bool
+     */
+    public function insertObject($table, &$object, $keyName = null, $verbose = false) {
+        error_log(__FUNCTION__ . ' has been deprecated', E_USER_WARNING);
+        $this->addTable($table);
+        foreach (get_object_vars($object) as $k => $v) {
+            if (is_array($v) or is_object($v) or $v == null) {
+                continue;
+            }
+            if ($k[0] == '_') { // internal field
+                continue;
+            }
+            $fields[] = $k;
+            $values[$k] = $v;
+        }
+        foreach ($fields as $field) {
+            if (!in_array($values[$field], $this->_db_funcs)) {
+                $this->addInsert($field, $values[$field]);
+            } else {
+                $this->addInsert($field, $values[$field], false, true);
+            }
+        }
+        if (!$this->exec()) {
+            return false;
+        }
+        $id = db_insert_id();
+        ($verbose) && print 'id=[' . $id . '] ';
+        if ($keyName && $id) {
+            $object->$keyName = $id;
+        }
+        return true;
+    }
+
+    /**
+     * Document::updateObject()
+     *
+     * @param $table
+     * @param $object
+     * @param $keyName
+     * @param bool $updateNulls
+     * @return bool
+     */
+    public function updateObject($table, &$object, $keyName, $updateNulls = true) {
+        error_log(__FUNCTION__ . ' has been deprecated', E_USER_WARNING);
+        $this->addTable($table);
+        foreach (get_object_vars($object) as $k => $v) {
+            if (is_array($v) or is_object($v) or $k[0] == '_') { // internal or NA field
+                continue;
+            }
+            if ($k == $keyName) { // PK not to be updated
+                $this->addWhere($keyName . ' = \'' . db_escape($v) . '\'');
+                continue;
+            }
+            if ($v === null && !$updateNulls) {
+                continue;
+            }
+            $fields[] = $k;
+            $values[$k] = $v;
+        }
+        if (count($values)) {
+            foreach ($fields as $field) {
+                if (!in_array($values[$field], $this->_db_funcs)) {
+                    $this->addUpdate($field, $values[$field]);
+                } else {
+                    $this->addUpdate($field, $values[$field], false, true);
+                }
+            }
+            if (!$this->exec()) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
     protected function _fetchRow()
     {
         return $this->_query_id->FetchRow();
