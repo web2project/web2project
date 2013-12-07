@@ -39,12 +39,10 @@ class w2p_Database_Query extends w2p_Database_oldQuery
 	 */
     protected $_db_funcs = array();
 
-	/**
-     * w2p_Database_Query constructor
-	 *
-	 * @param $prefix Database table prefix
-	 */
-	public function __construct($prefix = '')
+    /**
+     * @param string $prefix Database table prefix
+     */
+    public function __construct($prefix = '')
     {
 		global $db;
         $this->_db = $db;
@@ -226,13 +224,14 @@ class w2p_Database_Query extends w2p_Database_oldQuery
         return $this->_query_id;
     }
 
-	/**
+    /**
      * Adds a table to the query
      *
-	 * @param	$name	Name of table, without prefix
-	 * @param	$alias	Alias for use in query/where/group clauses
-	 */
-	public function addTable($table, $alias = '')
+     * @param $table Name of table, without prefix
+     * @param string $alias Alias for use in query/where/group clauses
+     * @return $this
+     */
+    public function addTable($table, $alias = '')
     {
         $alias = ('' == $alias) ? $table : $alias;
         $this->_tables[$alias] = $table;
@@ -264,7 +263,8 @@ class w2p_Database_Query extends w2p_Database_oldQuery
     /**
      * Allows you to order query results by a field, can be used multiple times
      *
-     * @param type  $field 
+     * @param string $field
+     * @return $this
      */
     public function addOrder($field = '')
     {
@@ -277,7 +277,9 @@ class w2p_Database_Query extends w2p_Database_oldQuery
     /**
      * Sets a result limit on the query
      *
-     * @param type $limit
+     * @param $limit
+     * @param int $offset
+     * @return $this
      */
     public function setLimit($limit, $offset = 0)
     {
@@ -291,7 +293,8 @@ class w2p_Database_Query extends w2p_Database_oldQuery
     /**
      * Allows you to group query results by a field, can be used multiple times
      *
-     * @param type  $field 
+     * @param string $field
+     * @return $this
      */
     public function addGroup($field = '')
     {
@@ -304,7 +307,8 @@ class w2p_Database_Query extends w2p_Database_oldQuery
     /**
      * Allows you to filter query results by a field, can be used multiple times
      *
-     * @param type  $field 
+     * @param string $field
+     * @return $this
      */
     public function addWhere($field = '')
     {
@@ -317,7 +321,8 @@ class w2p_Database_Query extends w2p_Database_oldQuery
     /**
      * Allows you to filter query results by a aggregate field, can be used multiple times
      *
-     * @param type  $field
+     * @param string $field
+     * @return $this
      */
     public function addHaving($field = '')
     {
@@ -327,18 +332,17 @@ class w2p_Database_Query extends w2p_Database_oldQuery
         return $this;
     }
 
-	/** Add a JOIN
-	 *
-	 * Adds a join to the query.  This only implements a left join by default
+    /**
+     * Adds a join to the query.  This only implements a left join by default
      *   but you can either specify others or use one of the shorthand methods
      *   below.
-	 *
-	 * @param	$table	Name of table (without prefix)
-	 * @param	$alias	Alias to use instead of table name (required).
-	 * @param	$condition	Join condition (e.g. 'a.id = b.other_id')
-	 *				or array of join fieldnames, e.g. array('id', 'name);
-	 *				Both are correctly converted into a join clause.
-	 */
+     *
+     * @param $table
+     * @param $alias
+     * @param $condition
+     * @param string $type
+     * @return $this
+     */
     public function addJoin($table, $alias, $condition, $type = 'left')
     {
         $this->join[] = array('table' => $table, 'alias' => $alias,
@@ -516,13 +520,14 @@ class w2p_Database_Query extends w2p_Database_oldQuery
         return 'NOW()';
 	}
 
-	/**
+    /**
      * Add a date difference clause and name the result
-	 *
-	 * @param	$date1			This is the starting date
-	 * @param	$date2			This is the ending date
-	 */
-	public function dbfnDateDiff($date1 = '', $date2 = '')
+     *
+     * @param string $date1 This is the starting date
+     * @param string $date2 This is the ending date
+     * @return string
+     */
+    public function dbfnDateDiff($date1 = '', $date2 = '')
     {
 		$date1 = ($date1 == '') ? $this->dbfnNow() : $date1;
 		$date2 = ($date2 == '') ? $this->dbfnNow() : $date2;
@@ -530,13 +535,15 @@ class w2p_Database_Query extends w2p_Database_oldQuery
         return 'DATEDIFF(' . $date1 . ', ' . $date2 . ')';
 	}
 
-	/** Adds a given unit interval to a date
-	 *
-	 * @param	$date			This is the date we want to add to
-	 * @param	$interval		This is how much units we will be adding to the date
-	 * @param	$unit			This is the type of unit we are adding to the date
-	 */
-	public function dbfnDateAdd($date, $interval = 0, $unit = 'DAY')
+    /**
+     * Adds a given unit interval to a date
+     *
+     * @param $date This is the date we want to add to
+     * @param int $interval This is how much units we will be adding to the date
+     * @param string $unit This is the type of unit we are adding to the date
+     * @return string
+     */
+    public function dbfnDateAdd($date, $interval = 0, $unit = 'DAY')
     {
 		$date = ($date == '') ? $this->dbfnNow() : $date;
 
@@ -694,13 +701,14 @@ class w2p_Database_Query extends w2p_Database_oldQuery
         return $hashlist;
     }
 
-    /** Load database results into a w2p_Core_BaseObject based object
-     * @param &$object Reference to the object to propagate with database results
-     * @param $bindAll Defaults to false, Bind every field returned to the referenced object
-     * @param $strip Defaults to true
-     * @return True on success.
+    /**
+     * Load database results into a w2p_Core_BaseObject based object
+     *
+     * @param $object
+     * @return bool
+     * @throws w2p_Database_Exception
      */
-    public function loadObject(&$object, $bindAll = false, $strip = true)
+    public function loadObject(&$object)
     {
         if (!is_object($object)) {
             throw new w2p_Database_Exception("The loadObject method expects an object to load.");
