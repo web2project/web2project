@@ -22,12 +22,14 @@ class w2p_Database_Query extends w2p_Database_oldQuery
     protected $_where  = array();
     protected $_having = array();
     protected $_joins  = array();
+    protected $join    = array();
     protected $_group_by = array();
     protected $_order_by = array();
     protected $_limit   = 0;
     protected $_offset  = 0;
 
     protected $_update_list = array();
+    protected $_value_list = array();
 
 	/**< Handle to the database connection */
 	protected $_db = null;
@@ -57,18 +59,30 @@ class w2p_Database_Query extends w2p_Database_oldQuery
 
     public function clear()
     {
-        $this->query = '';
+        $this->type = 'select';
+        $this->query = null;
         $this->_tables = array();
         $this->_fields = array();
         $this->_where  = array();
         $this->_joins  = array();
+        $this->join = null;             // This is a subtle one.. :(
         $this->_group_by = array();
         $this->_order_by = array();
         $this->_limit  = 0;
+        $this->_offset = -1;
 
         $this->_update_list = array();
+        $this->_value_list = array();
 
-        parent::clear();
+        $this->clearQuery();
+    }
+
+    public function clearQuery()
+    {
+        if ($this->_query_id) {
+            $this->_query_id->Close();
+        }
+        $this->_query_id = null;
     }
 
     /**
