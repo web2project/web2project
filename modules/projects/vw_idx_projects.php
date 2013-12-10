@@ -4,7 +4,7 @@ if (!defined('W2P_BASE_DIR')) {
 }
 // @todo    convert to template
 
-global $AppUI, $project, $project_statuses, $tab, $company_id, $orderby;
+global $AppUI, $project, $project_statuses, $tab, $company_id, $owner, $project_type, $orderby;
 
 $currentTabId = $tab;
 
@@ -24,6 +24,8 @@ switch($tab) {
 }
 
 $filter .= (($company_id > 0) ? ' AND project_company = ' . $company_id : '');
+$filter .= (($owner > 0) ? ' AND project_owner = ' . $owner : '');
+$filter .= (($project_type > -1) ? ' AND project_type = ' . $project_type : '');
 $orderby = property_exists('CProject', $orderby) ? $orderby : 'project_name';
 
 $projects = $project->loadAll($orderby, $filter);

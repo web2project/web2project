@@ -4,7 +4,7 @@ if (!defined('W2P_BASE_DIR')) {
 }
 
 $tab = $AppUI->processIntState('ProjIdxTab', $_GET, 'tab', 1);
-//echo '<pre>'; print_r($_POST); die();
+
 $project = new CProject();
 $structprojs = $project->getProjects();
 
