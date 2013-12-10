@@ -397,6 +397,9 @@ class CProject extends w2p_Core_BaseObject
             $q->clear();
         }
 
+        $this->project_actual_budget = array_sum($budgets);
+        $this->store();
+
         return true;
     }
 
