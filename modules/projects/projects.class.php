@@ -420,6 +420,8 @@ class CProject extends w2p_Core_BaseObject
         $this->project_private = (int) $this->project_private;
 
         $this->project_target_budget = filterCurrency($this->project_target_budget);
+        $this->project_url = str_replace(array('"', '"', '<', '>'), '', $this->project_url);
+        $this->project_demo_url = str_replace(array('"', '"', '<', '>'), '', $this->project_demo_url);
 
         // Make sure project_short_name is the right size (issue for languages with encoded characters)
         if ('' == $this->project_short_name) {
