@@ -83,12 +83,18 @@ function delIt() {
 	}
 }
 </script>
+<?php
 
+$form = new w2p_Output_HTML_FormHelper($AppUI);
+
+?>
 <form name="folderFrm" action="?m=<?php echo $m; ?>" enctype="multipart/form-data" method="post" class="addedit files-folder">
 	<input type="hidden" name="dosql" value="do_folder_aed" />
 	<input type="hidden" name="del" value="0" />
 	<input type="hidden" name="file_folder_id" value="<?php echo $folder_id; ?>" />
 	<input type="hidden" name="redirect" value="<?php echo $referrer; ?>" />
+    <?php echo $form->addNonce(); ?>
+
     <table class="std addedit files-folder">
         <tr>
             <td width="50%" valign="top" align="center">

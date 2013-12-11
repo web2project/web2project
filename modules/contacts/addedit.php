@@ -224,7 +224,11 @@ foreach ($fields as $key => $field): ?>
     addContactMethod();
 });
 </script>
+<?php
 
+$form = new w2p_Output_HTML_FormHelper($AppUI);
+
+?>
 <form name="changecontact" action="?m=<?php echo $m; ?>" method="post" accept-charset="utf-8" class="contacts addedit">
     <input type="hidden" name="dosql" value="do_contact_aed" />
     <input type="hidden" name="del" value="0" />
@@ -232,6 +236,7 @@ foreach ($fields as $key => $field): ?>
     <input type="hidden" name="contact_unique_update" value="<?php echo uniqid(''); ?>" />
     <input type="hidden" name="contact_id" value="<?php echo $contact_id; ?>" />
     <input type="hidden" name="contact_owner" value="<?php echo $row->contact_owner ? $row->contact_owner : $AppUI->user_id; ?>" />
+    <?php echo $form->addNonce(); ?>
 
     <table class="std addedit contacts">
         <tr>

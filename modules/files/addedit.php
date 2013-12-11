@@ -152,7 +152,11 @@ function setTask( key, val ) {
 	}
 }
 </script>
+<?php
 
+$form = new w2p_Output_HTML_FormHelper($AppUI);
+
+?>
 <form name="uploadFrm" action="?m=<?php echo $m; ?>" enctype="multipart/form-data" method="post" class="addedit files">
 	<input type="hidden" name="dosql" value="do_file_aed" />
 	<input type="hidden" name="del" value="0" />
@@ -162,6 +166,8 @@ function setTask( key, val ) {
 	<input type="hidden" name="file_version_id" value="<?php echo $file->file_version_id; ?>" />
 	<input type="hidden" name="redirect" value="<?php echo $referrer; ?>" />
 	<input type="hidden" name="file_helpdesk_item" value="<?php echo $file_helpdesk_item; ?>" />
+    <?php echo $form->addNonce(); ?>
+
 	<table class="std addedit files">
 		<tr>
 			<td width="100%" valign="top" align="center">
