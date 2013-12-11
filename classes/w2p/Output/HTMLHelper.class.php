@@ -195,8 +195,7 @@ class w2p_Output_HTMLHelper
                 $cell .= formatCurrency($value, $this->_AppUI->getPref('CURRENCYFORM'));
                 break;
             case '_url':
-                $value = str_replace('"', '', $value);
-                $value = str_replace("'", '', $value);
+                $value = str_replace(array('"', '"', '<', '>'), '', $value);
                 $cell = w2p_url($value);
                 break;
             case '_email':

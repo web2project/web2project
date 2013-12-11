@@ -74,6 +74,7 @@ class CCompany extends w2p_Core_BaseObject {
 
     protected function  hook_preStore() {
         $this->company_id = (int) $this->company_id;
+        $this->company_primary_url = str_replace(array('"', '"', '<', '>'), '', $this->company_primary_url);
 
         parent::hook_preStore();
     }

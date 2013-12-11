@@ -345,6 +345,11 @@ class CDepartment extends w2p_Core_BaseObject
 		return $results;
 	}
 
+    protected function hook_preStore()
+    {
+        $this->dept_url = str_replace(array('"', '"', '<', '>'), '', $this->dept_url);
+    }
+
     public function hook_search() {
         $search['table'] = 'departments';
         $search['table_module'] = 'departments';
