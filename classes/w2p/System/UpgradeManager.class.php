@@ -139,22 +139,14 @@ class w2p_System_UpgradeManager {
             case '2.0.1':
                 $errorMessages = $this->_applySQLUpdates('dp201_to_202.sql', $dbConn);
                 $allErrors = array_merge($allErrors, $errorMessages);
-            case '2.0.2':
-            case '2.0.3':
-            case '2.0.4':
-            case '2.1-rc1':
+            /**
+             * This default case will handle any other version of dotproject but has been validated to handle:
+             *     2.0.2, 2.0.3, 2.0.4, 2.1-rc1, 2.1-rc2, 2.1, 2.1.1, 2.1.2, 2.1.3, 2.1.4, 2.1.5, 2.1.6, 2.1.7, 2.1.8
+             */
+            default:
                 $errorMessages = $this->_applySQLUpdates('dp21rc1_to_21rc2.sql', $dbConn);
                 $allErrors = array_merge($allErrors, $errorMessages);
-            case '2.1-rc2':
-            case '2.1':
-            case '2.1.1':
-            case '2.1.2':
-            case '2.1.3':
-            case '2.1.4':
-            case '2.1.5':
-            case '2.1.6':
-            case '2.1.7':
-            case '2.1.8':
+
                 $errorMessages = $this->_applySQLUpdates('dp_to_w2p1.sql', $dbConn);
                 $allErrors = array_merge($allErrors, $errorMessages);
 
@@ -165,12 +157,6 @@ class w2p_System_UpgradeManager {
 
                 $errorMessages = $this->upgradeSystem($dbConn);
                 $allErrors = array_merge($allErrors, $errorMessages);
-
-                break;
-            default:
-                $allErrors['version_fail'] = "Unfortunately, we can't determine which version of dotProject you're using.  To be safe, we're not going to do anything.";
-                $allErrors[] = "If you are using dotProject 1.x, please use their methods to upgrade to dotProject v2.x before you go any further.";
-                $allErrors[] = "If you really are using dotProject 2.x, please check to see that you are on an official release and/or contact the web2project forums.";
         }
 
         return $allErrors;
