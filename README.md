@@ -1,4 +1,5 @@
-[![Stories in Ready](http://badge.waffle.io/web2project/web2project.png)](http://waffle.io/web2project/web2project)  
+[![Stories in Ready](http://badge.waffle.io/web2project/web2project.png)](http://waffle.io/web2project/web2project)
+
 web2Project
 ================
 
@@ -27,7 +28,7 @@ http://www.web2project.net/ is our homepage. This is where the latest and greate
 
 https://github.com/web2project/web2project/wiki is our documentation wiki. We always try to keep the most up to date documentation here. Sometimes it's not always the best, but that's the joy of a wiki. You're welcome to help make things better.
 
-http://forums.web2project.net/ are our support forums. Whenever you have a question not addressed by the documentation, this is the first place to go. It's not acceptable to private message someone without their permission. Although the core development team is smart, our community is even smarter and it's possible - if not likely - that someone has found and solved your problem before. Remember that polite requests always go farther than terse commands.
+http://support.web2project.net/ are our support forums. Whenever you have a question not addressed by the documentation, this is the first place to go. It's not acceptable to private message someone without their permission. Although the core development team is smart, our community is even smarter and it's possible - if not likely - that someone has found and solved your problem before. Remember that polite requests always go farther than terse commands.
 
 http://bugs.web2project.net/ is where we collect and track bug reports. No software is perfect and nothing always behaves exactly as you expect 100% of the time. If you find something that doesn't work as expected or is broken, file a report here. Remember, the more specific you are, the easier it is for others to reproduce and eventually fix it.
 

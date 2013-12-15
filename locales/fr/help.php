@@ -10,7 +10,7 @@
 			est destinée à vous fournir des informations sur l'utilisation de web2Project (par exemple: explication des modules, les fonctions, la formation ...).
 			<br />
 			<br />Une aide supplémentaire peut être trouvée dans les 
-			<a href="http://forums.web2project.net/" target="_blank">Forums de support web2Project</a>.
+			<a href="http://support.web2project.net/" target="_blank">Forums de support web2Project</a>.
 			<br />
 			<br />Des informations sur les problèmes connus et des améliorations suggérées peuvent être lues et soumises sur le site
 			<a href="http://bugs.web2project.net/" target="_blank"Bugs &amp; Suggestions >web2Project</a>.
