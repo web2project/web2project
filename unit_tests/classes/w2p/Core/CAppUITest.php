@@ -58,7 +58,6 @@ class w2p_Core_CAppUITest extends CommonSetup
         $this->assertObjectHasAttribute('version_string',   $AppUI);
         $this->assertObjectHasAttribute('last_insert_id',   $AppUI);
         $this->assertObjectHasAttribute('user_style',       $AppUI);
-        $this->assertObjectHasAttribute('user_is_admin',    $AppUI);
         $this->assertObjectHasAttribute('long_date_format', $AppUI);
         $this->assertObjectHasAttribute('objStore',         $AppUI);
         $this->assertObjectHasAttribute('project_id',       $AppUI);
@@ -205,6 +204,8 @@ class w2p_Core_CAppUITest extends CommonSetup
 
     /**
      * Tests saving the place(url)
+     *
+     * @expectedException PHPUnit_Framework_Error
      */
 	public function testSavePlace()
 	{
@@ -220,6 +221,8 @@ class w2p_Core_CAppUITest extends CommonSetup
 
     /**
      * Tests reseting the place(url)
+     *
+     * @expectedException PHPUnit_Framework_Error
      */
 	public function testResetPlace()
 	{
