@@ -217,51 +217,10 @@ class w2p_Core_CAppUI
         return $this->version_string;
     }
 
-    /**
-     *
-     */
+    /** @deprecated */
     public function getTZAwareTime()
     {
-        $df = $this->getPref('FULLDATEFORMAT');
-
-        /*
-         * This try/catch is a nasty little hack to cover the issue where some
-         *   timezones were set up incorrectly in the v1.3 release (caseydk's
-         *   fault!). They've since been corrected for 2.0 but people upgrading
-         *   will have a problem here without this.
-         *                                            ~ caseydk June 2010
-         *
-         * TODO: This should be killed off in v2.2 or v2.3 or so..
-         */
-        try {
-            $userTimezone = $this->getPref('TIMEZONE');
-            $userTZ = new DateTimeZone($userTimezone);
-        } catch (Exception $e) {
-            global $AppUI;
-
-            $timezoneOffset = $this->getPref('TIMEZONE');
-            $timezoneOffset = ('' == $timezoneOffset) ? 'America/New_York' : $timezoneOffset;
-
-            $q = new w2p_Database_Query();
-            $q->addTable('sysvals');
-            $q->addQuery('sysval_value');
-            $q->addWhere("sysval_value_id = '$timezoneOffset'");
-            $userTimezone = $q->loadResult();
-            $userTimezone = (strlen($userTimezone) == 0) ? 'UTC' : $userTimezone;
-
-            $userTZ = new DateTimeZone($userTimezone);
-            echo '<span class="error"><strong>';
-            echo '<a href="./index.php?m=system">' . $AppUI->_('Your system probably needs to be upgraded.') . '</a>';
-            echo '<br />';
-            echo '<a href="./index.php?m=system&amp;a=addeditpref&amp;user_id=' . $AppUI->user_id . '">' . $AppUI->_('Your user-defined timezone must be set immediately.') . '</a>';
-            echo '</strong></span><br />';
-            echo '<span class="error"><strong>Your system must be upgraded immediately.</strong></span><br />';
-        }
-
-        $ts = new DateTime();
-        $ts->setTimezone($userTZ);
-
-        return $ts->format($df);
+        return $this->formatTZAwareTime();
     }
 
     /**

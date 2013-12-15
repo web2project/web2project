@@ -100,6 +100,10 @@ class w2p_Output_HTMLHelper
         $prefix = $pieces[0];
         $suffix = '_'.end($pieces);
 
+        if ($fieldName == 'project_actual_end_date') {
+            $suffix='_actual';
+        }
+
         switch ($suffix) {
 //BEGIN: object-based linkings
 /*
