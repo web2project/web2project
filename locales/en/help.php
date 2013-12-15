@@ -15,7 +15,7 @@ if (!defined('W2P_BASE_DIR')) {
 			is intended to provide you with informations about how to use web2Project (e.g. explanation of modules, features, training ...).
 			<br />
 			<br />Further Assistance can be found in the
-			<a href="http://forums.web2project.net/" target="_blank">web2Project Support Forums</a>.
+			<a href="http://support.web2project.net/" target="_blank">web2Project Support Forums</a>.
 			<br />
 			<br />Information about known problems and suggested enhancements can be read and submitted at the
 			<a href="http://bugs.web2project.net/" target="_blank">web2Project Bugs &amp; Suggestions</a> site.
