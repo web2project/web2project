@@ -578,6 +578,8 @@ abstract class w2p_Core_BaseObject extends w2p_System_Event implements w2p_Syste
             if (count($deny)) {
                 if ((array_search('0', $deny)) === false) {
                     //If 0 (All Items of a module) are not on the denial array then just deny the denied items
+                    // TODO: The following line needs to be reworked/removed at some point.
+                    $index = ('project_id' == $index) ? 'pr.project_id' : $index;
                     $where[] = $index . ' NOT IN (' . implode(',', $deny) . ')';
                 } elseif ((array_search('0', $allow)) === false) {
                     //If 0 (All Items of a module) are denied and we have granted some then implicit denial to everything else is already in place

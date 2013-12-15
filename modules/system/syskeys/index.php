@@ -84,8 +84,9 @@ function delIt(id) {
 }
 <?php } ?>
 </script>
-<form name="sysValFrm" method="post" action="?m=system&u=syskeys&a=do_sysval_aed" accept-charset="utf-8">
+<form name="sysValFrm" method="post" action="?m=system&u=syskeys" accept-charset="utf-8">
     <input type="hidden" name="del" value="0" />
+    <input type="hidden" name="dosql" value="do_sysval_aed" />
     <table class="tbl list sysvals">
         <tr>
             <th>&nbsp;</th>

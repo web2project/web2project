@@ -25,6 +25,14 @@ $f = w2PgetParam($_REQUEST, 'f', 0);
 
 $items = $forum->getAllowedForums($AppUI->user_id, $AppUI->user_company, $f, $orderby, $orderdir);
 
+$filters = array('- Filters -');
+
+if (isset($a) && $a == 'viewer') {
+    array_push($filters, 'My Watched', 'Last 30 days');
+} else {
+    array_push($filters, 'My Forums', 'My Watched', 'My Projects', 'My Company', 'Inactive Projects');
+}
+
 // setup the title block
 $titleBlock = new w2p_Theme_TitleBlock('Forums', 'icon.png', $m, $m . '.' . $a);
 $titleBlock->addFilterCell('Filter', 'f', $filters, $f);
