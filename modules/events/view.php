@@ -24,11 +24,7 @@ if (!$event) {
 	$AppUI->setMsg('Event');
 	$AppUI->setMsg('invalidID', UI_MSG_ERROR, true);
 	$AppUI->redirect();
-} else {
-	$AppUI->savePlace();
 }
-
-
 
 // check permissions for this record
 $perms = &$AppUI->acl();

@@ -26,8 +26,6 @@ if (!$obj) {
 	$AppUI->setMsg('Task');
 	$AppUI->setMsg('invalidID', UI_MSG_ERROR, true);
 	$AppUI->redirect();
-} else {
-	$AppUI->savePlace();
 }
 
 $tab = $AppUI->processIntState('TaskLogVwTab', $_GET, 'tab', 0);

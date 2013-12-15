@@ -10,7 +10,6 @@ if (!$canEdit) {
 	$AppUI->redirect(ACCESS_DENIED);
 }
 
-$AppUI->savePlace();
 $q = new w2p_Database_Query;
 
 if (isset($_POST['forcewatch']) && isset($_POST['forcesubmit'])) { // insert row into forum_watch for forcing Watch

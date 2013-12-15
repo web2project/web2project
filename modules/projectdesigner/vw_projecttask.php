@@ -92,8 +92,6 @@ if (isset($_GET['pin'])) {
 	$AppUI->redirect('', -1);
 }
 
-$AppUI->savePlace();
-
 $durnTypes = w2PgetSysVal('TaskDurationType');
 $taskPriority = w2PgetSysVal('TaskPriority');
 

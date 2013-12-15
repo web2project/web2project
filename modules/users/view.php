@@ -26,8 +26,6 @@ if (!$user) {
     $AppUI->setMsg('User');
     $AppUI->setMsg('invalidID', UI_MSG_ERROR, true);
     $AppUI->redirect();
-} else {
-    $AppUI->savePlace();
 }
 
 $tab = $AppUI->processIntState('UserVwTab', $_GET, 'tab', 0);
@@ -39,8 +37,6 @@ $utypes = w2PgetSysVal('UserType');
 if ($user_id != $AppUI->user_id && (!$perms->checkModuleItem('users', 'view', $user_id) || !$perms->checkModuleItem('users', 'view', $user_id))) {
     $AppUI->redirect(ACCESS_DENIED);
 }
-
-$AppUI->savePlace();
 
 $addPwT = $AppUI->processIntState('addProjWithTasks', $_POST, 'add_pwt', 0);
 

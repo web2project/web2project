@@ -24,8 +24,6 @@ if (!$project) {
 	$AppUI->setMsg('Project');
 	$AppUI->setMsg('invalidID', UI_MSG_ERROR, true);
 	$AppUI->redirect();
-} else {
-	$AppUI->savePlace();
 }
 
 $tab = $AppUI->processIntState('ProjVwTab', $_GET, 'tab', 0);

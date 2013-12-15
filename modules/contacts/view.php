@@ -24,8 +24,6 @@ if (!$contact) {
 	$AppUI->setMsg('Contact');
 	$AppUI->setMsg('invalidID', UI_MSG_ERROR, true);
 	$AppUI->redirect();
-} else {
-	$AppUI->savePlace();
 }
 
 $tab = $AppUI->processIntState('ContactVwTab', $_GET, 'tab', 0);

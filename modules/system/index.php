@@ -6,8 +6,7 @@ $perms = &$AppUI->acl();
 if (!canView('system')) { // let's see if the user has sys access
 	$AppUI->redirect(ACCESS_DENIED);
 }
-//TODO: fix the capitalization of 'system admin' vs 'System Admin' throughout thsi module
-$AppUI->savePlace();
+//TODO: fix the capitalization of 'system admin' vs 'System Admin' throughout this module
 
 $titleBlock = new w2p_Theme_TitleBlock('System Administration', 'icon.png', $m, $m . '.' . $a);
 $titleBlock->show();

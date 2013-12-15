@@ -24,8 +24,6 @@ if (!$obj) {
 	$AppUI->setMsg('Resource');
 	$AppUI->setMsg('invalidID', UI_MSG_ERROR, true);
 	$AppUI->redirect();
-} else {
-	$AppUI->savePlace();
 }
 
 $titleBlock = new w2p_Theme_TitleBlock('View Resource', 'icon.png', $m, $m . '.' . $a);

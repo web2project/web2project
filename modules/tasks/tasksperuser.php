@@ -3,8 +3,6 @@ if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
 
-$AppUI->savePlace();
-
 if (isset($_POST['company_id'])) {
 	$AppUI->setState('CompanyIdxFilter', $_POST['company_id']);
 }

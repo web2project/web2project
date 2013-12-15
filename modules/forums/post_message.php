@@ -26,8 +26,6 @@ if (!$myForum) {
 	$AppUI->setMsg('Forum');
 	$AppUI->setMsg('invalidID', UI_MSG_ERROR, true);
 	$AppUI->redirect('m=forums');
-} else {
-	$AppUI->savePlace();
 }
 
 // Build a back-url for when the back button is pressed

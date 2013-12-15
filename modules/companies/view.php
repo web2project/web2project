@@ -28,8 +28,6 @@ if (!$company) {
 	$AppUI->setMsg('Company');
 	$AppUI->setMsg('invalidID', UI_MSG_ERROR, true);
 	$AppUI->redirect();
-} else {
-	$AppUI->savePlace();
 }
 
 $tab = $AppUI->processIntState('CompVwTab', $_GET, 'tab', 0);

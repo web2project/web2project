@@ -12,8 +12,6 @@ if (!canEdit('system')) {
 $module = w2PgetParam($_REQUEST, 'module', 'admin');
 $lang = w2PgetParam($_REQUEST, 'lang', $AppUI->user_locale);
 
-$AppUI->savePlace('m=system&a=translate&module=' . $module . '&lang=' . $lang);
-
 // read the installed modules
 $modules = arrayMerge($AppUI->readDirs('modules'), array('common' => 'common', 'styles' => 'styles'));
 asort($modules);

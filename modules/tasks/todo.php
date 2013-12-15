@@ -97,8 +97,6 @@ if (is_array($selected) && count($selected)) {
 	}
 }
 
-$AppUI->savePlace();
-
 $proj = new CProject;
 $tobj = new CTask;
 

@@ -12,8 +12,6 @@ if (!$canRead) {
 	$AppUI->redirect(ACCESS_DENIED);
 }
 
-$AppUI->savePlace();
-
 $module = new w2p_System_Module();
 
 $hidden_modules = array('public', 'install', );

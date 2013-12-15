@@ -673,7 +673,6 @@ if ($showEditCheckbox) {
 				}
 			}
 		}
-		$AppUI->savePlace();
 	?>
 </table>
 <table width="100%" class="std">

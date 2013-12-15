@@ -13,8 +13,6 @@ if (!$canEdit) {
 	$AppUI->redirect(ACCESS_DENIED);
 }
 
-$AppUI->savePlace();
-
 $do_report = w2PgetParam($_POST, 'do_report', true);
 $log_start_date = w2PgetParam($_POST, 'log_start_date', 0);
 $log_end_date = w2PgetParam($_POST, 'log_end_date', 0);

@@ -11,7 +11,6 @@ if (!canEdit('system')) {
 }
 
 global $fixedSysVals;
-$AppUI->savePlace();
 
 // pull all the key types
 $q = new w2p_Database_Query;

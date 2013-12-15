@@ -37,8 +37,6 @@ if (!$forum) {
 	$AppUI->setMsg('Forum');
 	$AppUI->setMsg('invalidID', UI_MSG_ERROR, true);
 	$AppUI->redirect();
-} else {
-	$AppUI->savePlace();
 }
 
 $df = $AppUI->getPref('SHDATEFORMAT');
