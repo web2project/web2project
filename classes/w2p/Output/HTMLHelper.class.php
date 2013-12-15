@@ -123,10 +123,17 @@ class w2p_Output_HTMLHelper
                 $suffix .= ' _name';
                 break;
             case '_department':
-                $obj = new CDepartment();
+                $module = substr($suffix, 1);
+                $class  = 'C'.ucfirst($module);
+
+                $obj = new $class();
                 $obj->load($value);
-                $mod = substr($suffix, 1);
-                $link = '?m='. w2p_pluralize($mod) .'&a=view&dept_id='.$value;
+                /**
+                 * This is a branch separate from _company, _contact, etc above because although the module is called
+                 *   departments, the fields are dept_id and dept_name. :(
+                 *                                                              ~ caseydk, Dec 11 2013
+                 */
+                $link = '?m='. w2p_pluralize($module) .'&a=view&dept_id='.$value;
                 $cell = '<a href="'.$link.'">'.$obj->dept_name.'</a>';
                 $suffix .= ' _name';
                 break;
