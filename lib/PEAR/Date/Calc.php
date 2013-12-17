@@ -656,7 +656,7 @@ class Date_Calc
      * @return string date in given format
      */
 
-    function nextDay($day="",$month="",$year="",$format="%Y%m%d")
+    public static function nextDay($day="",$month="",$year="",$format="%Y%m%d")
     {
         if(empty($year))
             $year = Date_Calc::dateNow("%Y");
