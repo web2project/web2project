@@ -367,7 +367,7 @@ function w2p_textarea($content)
 
     if ($content != '') {
         $result = $content;
-        $result = htmlentities($result, ENT_QUOTES |ENT_SUBSTITUTE|ENT_IGNORE, 'UTF-8',false);
+        $result = htmlentities($result, ENT_QUOTES |8|ENT_IGNORE, 'UTF-8',false);
 
         /*
          * Thanks to Alison Gianotto for two regular expressions to make our
