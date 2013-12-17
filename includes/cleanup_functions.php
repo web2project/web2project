@@ -2046,7 +2046,7 @@ function displayFiles($AppUI, $folder_id, $task_id, $project_id, $company_id) {
         //   At some point at/after v4.0, this should be deprecated
         $fieldList = array('file_name', 'file_description',
             'file_version', 'file_category', 'file_folder', 'file_task',
-            'file_owner', 'file_size', 'file_type', 'file_datetime', 'file_checkout_reason');
+            'file_owner', 'file_size', 'file_type', 'file_datetime', 'file_co_reason');
         $fieldNames = array('File Name', 'Description', 'Version', 'Category',
             'Folder', 'Task Name', 'Owner', 'Size', 'Type', 'Date', 
             'Checkout Reason');
