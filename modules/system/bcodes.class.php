@@ -148,6 +148,7 @@ class CSystem_Bcode extends w2p_Core_BaseObject
         $logs = $q->loadList();
 
         $results = array();
+        $results['uncountedHours'] = 0;
         foreach ($logs as $tasklog) {
             if (is_null($tasklog['billingcode_value'])) {
                 $results['uncountedHours'] += $tasklog['task_log_hours'];
