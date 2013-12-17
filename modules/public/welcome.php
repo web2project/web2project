@@ -28,13 +28,29 @@ $titleBlock->show();
     <tr><th><span><?php echo $AppUI->_('web2Project Online Assistance'); ?></span></th></tr>
     <tr>
         <td>
-            <p><?php echo $AppUI->_('We have 3 main places for your assistance. Please remember that all of these places are not one-way: You can help others as well by contributing.'); ?></p>
+            <p><?php echo $AppUI->_('We have 3 main places for your assistance, and 1 link for custom development help. Please remember that all of these places are our community. You can help others as well by contributing your thoughts and problems you\'re having, as well as the solutions you develop. This is "open source software" at it\'s best; we\'re all in this together.'); ?></p>
+            <p><?php echo $AppUI->_('Here are several places where you can find help online:'); ?></p>
+
+            <h1>web2Project Online Documentation/Wiki</h1>
             <ul>
-                <li><?php echo sprintf($AppUI->_('The %1$s%3s Online Documentation%2$s is intended to provide you with informations about how to use %3$s (e.g. explanation of modules, features, training ...).'), '<a href="http://wiki.web2Project.net/" target="_blank">', '</a>', '<b>web2Project</b>'); ?></li>
-                <li><?php echo sprintf($AppUI->_('Further Assistance can be found in the %1$s%2$s Support Forums%3$s.'), '<a href="http://forums.web2Project.net/" target="_blank">', '<b>web2Project</b>', '</a>'); ?></li>
-                <li><?php echo sprintf($AppUI->_('Information about known problems and suggested enhancements can be read and submitted at the %1$s%2$s Bugs & Suggestions%3$s site.'), '<a href="http://bugs.web2Project.net/" target="_blank">', '<b>web2Project</b>', '</a>'); ?></li>
+                <li>The <a href="http://wiki.web2project.net/index.php?title=Main_Page">Wiki contains information about how to use web2Project</a> (e.g. explanation of modules, features, training, etc). The wiki is also a community project and you are invited to contribute to it. Learn more about <a href="http://wiki.web2project.net/index.php?title=Join_the_Team">becoming a member of the team, just click here</a>.</li>
+                <li>Find some <a href="http://sourceforge.net/projects/web2project/files/">additional community created User Guides (pictures and everything!) right here</a>. Download them and open the files! They're a few years old at this point but you may still find the answer you're looking for in there.</li>
+                <li>For those of you new to web2Project, you'll find some pretty darn good <a href="http://wiki.web2project.net/index.php?title=Installation#Video_Training">web2project training videos here</a>.</li>
             </ul>
-            <p><?php echo sprintf($AppUI->_('If you\'re looking for Professional Support concerning %s consider getting in touch with the developers directly on the forums.'), '<a href="http://www.web2Project.net/" target="_blank"><b>web2Project</b></a>'); ?></p>
+            <h1>web2Project Support Forums</h1>
+            <ul>
+                <li>Find the <a href="http://support.web2project.net/">current support forum here</a>.</li>
+                <li>Our <a href="http://forums.web2project.net/">previous support forum</a> has a lot of good information in it, and can still be accessed. This one is not officially supported anymore so don't drop anything new in it and expect an answer!</li>
+            </ul>
+            <h1>web2Project Known Bugs, Bug Submissions, and Feature Suggestion/Submission</h1>
+            <ul>
+                <li>For those of you who are a bit more advanced in your open source software involvement, information about known problems and suggested enhancements can be read and submitted at <a href="http://bugs.web2project.net/my_view_page.php">our Mantis site account</a>.</li>
+            </ul>
+            <h1>Professional Support and/or Project Development</h1>
+            <ul>
+                <li>If you're looking for Professional Support concerning web2Project, or have a custom coding project you'd like someone to work on, consider getting in touch with the top contributors directly on the support forums.</li>
+            </ul>
+            <p>Thanks for using web2Project!</p>
         </td>
     </tr>
     <tr><th><span><?php echo $AppUI->_('Terms of Use'); ?></span></th></tr>
