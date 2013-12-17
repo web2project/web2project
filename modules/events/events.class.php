@@ -168,7 +168,7 @@ class CEvent extends w2p_Core_BaseObject
      *
      * WARNING: This is actually called staticly so $this is not available.
      */
-    public function getEventsForPeriod($start_date, $end_date, $filter = 'all', $user_id = null, $project_id = 0, $company_id = 0)
+    public static function getEventsForPeriod($start_date, $end_date, $filter = 'all', $user_id = null, $project_id = 0, $company_id = 0)
     {
         global $AppUI;
 
