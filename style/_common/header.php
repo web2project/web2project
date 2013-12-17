@@ -37,82 +37,79 @@ $theme = $AppUI->getTheme();
                 </a>
             </div>
         </div>
-        <?php
-        if (!$dialog) {
-            $perms = &$AppUI->acl(); ?>
-            <form name="frm_new" method="get" action="./index.php" accept-charset="utf-8">
-                <input type="hidden" name="a" value="addedit" />
-                <?php
-                    //build URI string
-                    if (isset($company_id)) {
-                        echo '<input type="hidden" name="company_id" value="' . $company_id . '" />';
-                    }
-                    if (isset($task_id)) {
-                        echo '<input type="hidden" name="task_parent" value="' . $task_id . '" />';
-                    }
-                    if (isset($file_id)) {
-                        echo '<input type="hidden" name="file_id" value="' . $file_id . '" />';
-                    }
-                ?>
-                <div class="header">
-                    <div class="left nav">
-                        <?php echo $theme->buildHeaderNavigation('ul', 'li'); ?>
-                    </div>
-                    <div class="right" style="margin: 4px;">
-                        <?php
-                        if ($AppUI->user_id > 0) {
-                            //Do this check in case we are not using any user id, for example for external uses
-                            $newItem = array('' => '- New Item -');
-
-                            $items = array('companies' => 'Company', 'projects' => 'Project',
-                                'contacts' => 'Contact', 'calendar' => 'Events', 'files' => 'File',
-                                'admin' => 'User');
-                            foreach ($items as $module => $name) {
-                                if (canAdd($module)) {
-                                    $newItem[$module] = $name;
-                                }
-                            }
-
-                            echo arraySelect($newItem, 'm', 'style="font-size:10px" onchange="f=document.frm_new;mod=f.m.options[f.m.selectedIndex].value;if (mod == \'admin\') document.frm_new.a.value=\'addedituser\';if(mod) f.submit();"', '', true);
-                        }
-                        ?>
-                    </div>
+        <?php $perms = &$AppUI->acl(); ?>
+        <form name="frm_new" method="get" action="./index.php" accept-charset="utf-8">
+            <input type="hidden" name="a" value="addedit" />
+            <?php
+                //build URI string
+                if (isset($company_id)) {
+                    echo '<input type="hidden" name="company_id" value="' . $company_id . '" />';
+                }
+                if (isset($task_id)) {
+                    echo '<input type="hidden" name="task_parent" value="' . $task_id . '" />';
+                }
+                if (isset($file_id)) {
+                    echo '<input type="hidden" name="file_id" value="' . $file_id . '" />';
+                }
+            ?>
+            <div class="header">
+                <div class="left nav">
+                    <?php echo $theme->buildHeaderNavigation('ul', 'li'); ?>
                 </div>
-                <div class="std shadow">&nbsp;</div>
-            </form>
-            <div style="padding-left: 5px;">
-                <div class="left">
+                <div class="right" style="margin: 4px;">
                     <?php
-                        echo $AppUI->_('Welcome') . ' ' . ($AppUI->user_id > 0 ? $AppUI->user_display_name : $outsider);
-                        echo '<br />';
-                        if ($AppUI->user_id > 0) {
-                            echo $AppUI->_('Server time is') . ' ' . $AppUI->getTZAwareTime();
+                    if ($AppUI->user_id > 0) {
+                        //Do this check in case we are not using any user id, for example for external uses
+                        $newItem = array('' => '- New Item -');
+
+                        $items = array('companies' => 'Company', 'projects' => 'Project',
+                            'contacts' => 'Contact', 'calendar' => 'Events', 'files' => 'File',
+                            'admin' => 'User');
+                        foreach ($items as $module => $name) {
+                            if (canAdd($module)) {
+                                $newItem[$module] = $name;
+                            }
                         }
+
+                        echo arraySelect($newItem, 'm', 'style="font-size:10px" onchange="f=document.frm_new;mod=f.m.options[f.m.selectedIndex].value;if (mod == \'admin\') document.frm_new.a.value=\'addedituser\';if(mod) f.submit();"', '', true);
+                    }
                     ?>
                 </div>
-                <?php if ($AppUI->user_id > 0) { ?>
-                    <div class="right quicknav">
-                        <div class="left" style="margin-top: -3px;">
-                        <?php if (canAccess('smartsearch')) { ?>
-                            <form name="frm_search" action="?m=smartsearch" method="post" accept-charset="utf-8">
-                                <img src="<?php echo w2PfindImage('search.png'); ?>" style="border: 0;" alt="" />&nbsp;<input class="text" size="20" type="text" id="keyword" name="keyword" value="<?php echo $AppUI->_('Global Search') . '...'; ?>" onclick="document.frm_search.keyword.value=''" onblur="document.frm_search.keyword.value='<?php echo $AppUI->_('Global Search') . '...'; ?>'" />
-                            </form>
-                            <?php } ?>
-                        </div>
-                        <a class="button" href="javascript: void(0);" onclick="javascript:window.open('?m=help&amp;dialog=1&amp;hid=', 'contexthelp', 'width=800, height=300, left=50, top=50, scrollbars=yes, resizable=yes')"><span><?php echo $AppUI->_('Help'); ?></span></a>
-                        <a class="button" href="./index.php?m=admin&amp;a=view&amp;user_id=<?php echo $AppUI->user_id; ?>"><span><?php echo $AppUI->_('My Info'); ?></span></a>
-                        <?php if (canAccess('tasks')) { ?>
-                            <a class="button" href="./index.php?m=tasks&amp;a=todo"><span><b><?php echo $AppUI->_('My Tasks'); ?></b></span></a>
-                        <?php } ?>
-                        <?php if (canAccess('calendar')) {
-                            $now = new w2p_Utilities_Date(); ?>
-                            <a class="button" href="./index.php?m=calendar&amp;a=day_view&amp;date=<?php echo $now->format(FMT_TIMESTAMP_DATE); ?>"><span><?php echo $AppUI->_('Today'); ?></span></a>
-                        <?php } ?>
-                        <a class="button" href="./index.php?logout=-1"><span><?php echo $AppUI->_('Logout'); ?></span></a>
-                    </div>
-                <?php } ?>
             </div>
-        <?php } ?>
+            <div class="std shadow">&nbsp;</div>
+        </form>
+        <div style="padding-left: 5px;">
+            <div class="left">
+                <?php
+                    echo $AppUI->_('Welcome') . ' ' . ($AppUI->user_id > 0 ? $AppUI->user_display_name : $outsider);
+                    echo '<br />';
+                    if ($AppUI->user_id > 0) {
+                        echo $AppUI->_('Server time is') . ' ' . $AppUI->getTZAwareTime();
+                    }
+                ?>
+            </div>
+            <?php if ($AppUI->user_id > 0) { ?>
+                <div class="right quicknav">
+                    <div class="left" style="margin-top: -3px;">
+                    <?php if (canAccess('smartsearch')) { ?>
+                        <form name="frm_search" action="?m=smartsearch" method="post" accept-charset="utf-8">
+                            <img src="<?php echo w2PfindImage('search.png'); ?>" style="border: 0;" alt="" />&nbsp;<input class="text" size="20" type="text" id="keyword" name="keyword" value="<?php echo $AppUI->_('Global Search') . '...'; ?>" onclick="document.frm_search.keyword.value=''" onblur="document.frm_search.keyword.value='<?php echo $AppUI->_('Global Search') . '...'; ?>'" />
+                        </form>
+                        <?php } ?>
+                    </div>
+                    <a class="button" href="javascript: void(0);" onclick="javascript:window.open('?m=help&amp;dialog=1&amp;hid=', 'contexthelp', 'width=800, height=300, left=50, top=50, scrollbars=yes, resizable=yes')"><span><?php echo $AppUI->_('Help'); ?></span></a>
+                    <a class="button" href="./index.php?m=admin&amp;a=view&amp;user_id=<?php echo $AppUI->user_id; ?>"><span><?php echo $AppUI->_('My Info'); ?></span></a>
+                    <?php if (canAccess('tasks')) { ?>
+                        <a class="button" href="./index.php?m=tasks&amp;a=todo"><span><b><?php echo $AppUI->_('My Tasks'); ?></b></span></a>
+                    <?php } ?>
+                    <?php if (canAccess('calendar')) {
+                        $now = new w2p_Utilities_Date(); ?>
+                        <a class="button" href="./index.php?m=calendar&amp;a=day_view&amp;date=<?php echo $now->format(FMT_TIMESTAMP_DATE); ?>"><span><?php echo $AppUI->_('Today'); ?></span></a>
+                    <?php } ?>
+                    <a class="button" href="./index.php?logout=-1"><span><?php echo $AppUI->_('Logout'); ?></span></a>
+                </div>
+            <?php } ?>
+        </div>
 
         <table width="100%" cellspacing="0" cellpadding="4" border="0">
             <tr>
