@@ -22,7 +22,7 @@ if ($obj) {
     $forum = $obj;
     $forum_id = $forum->forum_id;
 } else {
-    $forum->load(null, $forum_id);
+    $forum->load($forum_id);
 }
 if (!$forum && $forum_id > 0) {
     $AppUI->setMsg('Forum');
