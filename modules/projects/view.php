@@ -41,6 +41,8 @@ if (in_array($project_id, $denied)) {
 $projectPriority = w2PgetSysVal('ProjectPriority');
 $projectPriorityColor = w2PgetSysVal('ProjectPriorityColor');
 $billingCategory = w2PgetSysVal('BudgetCategory');
+$pstatus = w2PgetSysVal('ProjectStatus');
+$ptype = w2PgetSysVal('ProjectType');
 
 // get the prefered date format
 $df = $AppUI->getPref('SHDATEFORMAT');

@@ -26,7 +26,8 @@ foreach ($hidden_modules as $no_show) {
 $q->addOrder('mod_ui_order');
 $modules = $q->loadList();
 // get the modules actually installed on the file system
-$modFiles = $AppUI->readDirs('modules');
+$loader = new w2p_FileSystem_Loader();
+$modFiles = $loader->readDirs('modules');
 
 $titleBlock = new w2p_Theme_TitleBlock('Modules', 'power-management.png', $m, "$m.$a");
 $titleBlock->addCrumb('?m=system', 'System Admin');

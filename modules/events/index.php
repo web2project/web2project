@@ -32,6 +32,7 @@ $date = w2PgetParam($_GET, 'date', $today);
 $company = new CCompany();
 $companies = $company->getAllowedRecords($AppUI->user_id, 'company_id,company_name', 'company_name');
 $companies = arrayMerge(array('0' => $AppUI->_('All')), $companies);
+$event_filter_list = array('my' => 'My Events', 'own' => 'Events I Created', 'all' => 'All Events');
 
 // setup the title block
 $titleBlock = new w2p_Theme_TitleBlock('Monthly Calendar', 'icon.png', $m, $m . '.' . $a);

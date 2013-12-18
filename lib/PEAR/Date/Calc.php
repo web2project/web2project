@@ -42,7 +42,7 @@ class Date_Calc
      * @return string the current date in specified format
      */
 
-    function dateNow($format="%Y%m%d")
+    public static function dateNow($format="%Y%m%d")
     {
         return(strftime($format,time()));
 
@@ -60,7 +60,7 @@ class Date_Calc
      * @return boolean true/false
      */
 
-    function isValidDate($day, $month, $year)
+    public static function isValidDate($day, $month, $year)
     {
         if($year < 0 || $year > 9999)
             return false;
@@ -172,7 +172,7 @@ class Date_Calc
      * @return int $weekday_number
      */
 
-    function dayOfWeek($day="",$month="",$year="")
+    public static function dayOfWeek($day="",$month="",$year="")
     {
 
         if(empty($year))
@@ -306,7 +306,7 @@ class Date_Calc
      * @return string date in given format
      */
 
-    function beginOfNextMonth($day="",$month="",$year="",$format="%Y%m%d")
+    public static function beginOfNextMonth($day="",$month="",$year="",$format="%Y%m%d")
     {
         if(empty($year))
             $year = Date_Calc::dateNow("%Y");
@@ -383,7 +383,7 @@ class Date_Calc
      * @return string date in given format
      */
 
-    function beginOfPrevMonth($day="",$month="",$year="",$format="%Y%m%d")
+    public static function beginOfPrevMonth($day="",$month="",$year="",$format="%Y%m%d")
     {
         if(empty($year))
             $year = Date_Calc::dateNow("%Y");
@@ -656,7 +656,7 @@ class Date_Calc
      * @return string date in given format
      */
 
-    function nextDay($day="",$month="",$year="",$format="%Y%m%d")
+    public static function nextDay($day="",$month="",$year="",$format="%Y%m%d")
     {
         if(empty($year))
             $year = Date_Calc::dateNow("%Y");
@@ -684,7 +684,7 @@ class Date_Calc
      * @return string date in given format
      */
 
-    function prevDay($day="",$month="",$year="",$format="%Y%m%d")
+    public static function prevDay($day="",$month="",$year="",$format="%Y%m%d")
     {
         if(empty($year))
             $year = Date_Calc::dateNow("%Y");
@@ -737,7 +737,7 @@ class Date_Calc
      *      -1 if there is an error.
      */
 
-    function dateDiff($day1,$month1,$year1,$day2,$month2,$year2)
+    public static function dateDiff($day1,$month1,$year1,$day2,$month2,$year2)
     {
         if(!Date_Calc::isValidDate($day1,$month1,$year1))
             return -1;
@@ -782,7 +782,7 @@ class Date_Calc
      * @return int number of days
      */
 
-    function daysInMonth($month="",$year="")
+    public static function daysInMonth($month="",$year="")
     {
         if(empty($year))
             $year = Date_Calc::dateNow("%Y");
@@ -815,7 +815,7 @@ class Date_Calc
      * @return int number of weeks
      */
 
-    function weeksInMonth($month="",$year="",$fdow=null)
+    public static function weeksInMonth($month="",$year="",$fdow=null)
     {
         if(empty($year))
             $year = Date_Calc::dateNow("%Y");
@@ -851,7 +851,7 @@ class Date_Calc
      * @return int number of weekday for the first day, 0=Sunday
      */
 
-    function firstOfMonthWeekday($month="",$year="")
+    public static function firstOfMonthWeekday($month="",$year="")
     {
         if(empty($year))
             $year = Date_Calc::dateNow("%Y");
@@ -899,7 +899,7 @@ class Date_Calc
      * @return string date in given format
      */
 
-    function beginOfWeek($day="",$month="",$year="",$format="%Y%m%d",$fdow=null)
+    public static function beginOfWeek($day="",$month="",$year="",$format="%Y%m%d",$fdow=null)
     {
         if(empty($year))
             $year = Date_Calc::dateNow("%Y");
@@ -1060,7 +1060,7 @@ class Date_Calc
      * @return array $week[$weekday]
      */
 
-    function getCalendarWeek($day="",$month="",$year="",$format="%Y%m%d",$fdow=null)
+    public static function getCalendarWeek($day="",$month="",$year="",$format="%Y%m%d",$fdow=null)
     {
         if(empty($year))
             $year = Date_Calc::dateNow("%Y");
@@ -1100,7 +1100,7 @@ class Date_Calc
      * @return array $month[$row][$col]
      */
 
-    function getCalendarMonth($month="",$year="",$format="%Y%m%d",$fdow=null)
+    public static function getCalendarMonth($month="",$year="",$format="%Y%m%d",$fdow=null)
     {
         if(empty($year))
             $year = Date_Calc::dateNow("%Y");
@@ -1180,7 +1180,7 @@ class Date_Calc
      * @return integer number of days
      */
 
-    function dateToDays($day,$month,$year)
+    public static function dateToDays($day,$month,$year)
     {
 
         $century = substr($year,0,2);
@@ -1217,7 +1217,7 @@ class Date_Calc
      * @return string date in specified format
      */
 
-    function daysToDate($days,$format="%Y%m%d")
+    public static function daysToDate($days,$format="%Y%m%d")
     {
 
         $days     -=   1721119;
@@ -1324,7 +1324,7 @@ class Date_Calc
      * @return string date in given format
      */
 
-    function dateFormat($day,$month,$year,$format)
+    public static function dateFormat($day,$month,$year,$format)
     {
         if(!Date_Calc::isValidDate($day,$month,$year))
         {

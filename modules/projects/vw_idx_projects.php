@@ -7,6 +7,8 @@ if (!defined('W2P_BASE_DIR')) {
 global $AppUI, $project, $project_statuses, $tab, $company_id, $owner, $project_type, $orderby;
 
 $currentTabId = $tab;
+$is_tabbed = false;
+$project_status_filter = $currentTabId - 1;
 
 switch($tab) {
     case 0:
@@ -74,11 +76,6 @@ $xpg_totalrecs = count($projects);
                 </th><?php
             }
             ?>
-			<?php if ($show_all_projects) { ?>
-				<th>
-					<?php echo $AppUI->_('Status'); ?>
-				</th>
-			<?php } ?>
             <th>
                 <?php echo $AppUI->_('Selection'); ?>
             </th>
@@ -188,11 +185,6 @@ $xpg_totalrecs = count($projects);
                     }
                 }
 
-                if ($show_all_projects) {
-                    $s .= '<td class="data _status" nowrap="nowrap">';
-                    $s .= $AppUI->_($project_status[$row['project_status']]);
-                    $s .= '</td>';
-                }
                 $s .= '<td class="center"><input type="checkbox" name="project_id[]" value="' . $row['project_id'] . '" /></td>';
 
                 if ($level) {

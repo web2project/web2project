@@ -21,7 +21,7 @@ if (!$canAddEdit) {
 }
 
 //Pull forum information
-$myForum->load(null, $forum_id);
+$myForum->load($forum_id);
 if (!$myForum) {
 	$AppUI->setMsg('Forum');
 	$AppUI->setMsg('invalidID', UI_MSG_ERROR, true);

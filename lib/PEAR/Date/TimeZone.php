@@ -145,7 +145,7 @@ class Date_TimeZone
      * @access public
      * @param string $id the time zone id to use
      */
-    function setDefault($id)
+    public static function setDefault($id)
     {
         global $default;
         if($res = Date_TimeZone::isValidID($id)) {
@@ -160,7 +160,7 @@ class Date_TimeZone
      * @param string $id the id to test
      * @return boolean true if the supplied ID is valid
      */
-    function isValidID($id)
+    public static function isValidID($id)
     {
         global $_DATE_TIMEZONE_DATA;
         if(isset($_DATE_TIMEZONE_DATA[$id])) {

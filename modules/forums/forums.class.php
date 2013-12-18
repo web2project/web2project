@@ -68,15 +68,6 @@ class CForum extends w2p_Core_BaseObject
         return $q->loadList();
     }
 
-    public function load($notUsed = null, $forum_id)
-    {
-        $q = $this->_getQuery();
-        $q->addQuery('*');
-        $q->addTable('forums');
-        $q->addWhere('forum_id = ' . (int) $forum_id);
-        $q->loadObject($this, true, false);
-    }
-
     public function loadFull($notUsed = null, $forum_id)
     {
         $q = $this->_getQuery();
