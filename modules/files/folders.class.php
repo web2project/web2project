@@ -3,18 +3,11 @@
  * @package     web2project\modules\core
  */
 
-class CFile_Folder extends w2p_Core_BaseObject {
-	/**
- 	@param int file_folder_id **/
+class CFile_Folder extends w2p_Core_BaseObject
+{
 	public $file_folder_id = null;
-	/**
- 	@param int file_folder_parent The id of the parent folder **/
 	public $file_folder_parent = null;
-	/**
- 	@param string file_folder_name The folder's name **/
 	public $file_folder_name = null;
-	/**
- 	@param string file_folder_description The folder's description **/
 	public $file_folder_description = null;
 
 	public function __construct() {

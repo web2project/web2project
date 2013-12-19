@@ -68,7 +68,7 @@ class CCompany extends w2p_Core_BaseObject {
 		return parent::canDelete('', null, $tables);
 	}
 
-    protected function  hook_preStore() {
+    protected function hook_preStore() {
         $this->company_id = (int) $this->company_id;
         $this->company_primary_url = str_replace(array('"', '"', '<', '>'), '', $this->company_primary_url);
 
@@ -180,17 +180,6 @@ class CCompany extends w2p_Core_BaseObject {
         return $q->loadList();
     }
 
-    /**
-     * @deprecated
-     */
-    public static function getProjects(w2p_Core_CAppUI $AppUI, $companyId, $active = 1, $sort = 'project_name')
-    {
-        trigger_error("The CCompany::getProjects static method has been deprecated in 3.1 and will be removed in v4.0. Please use CCompany->projects() instead.", E_USER_NOTICE );
-
-		$company = new CCompany();
-		return $company->projects($AppUI, $companyId, $active, $sort);
-	}
-
     public function contacts($companyId)
     {
         $results = array();
@@ -222,15 +211,6 @@ class CCompany extends w2p_Core_BaseObject {
         return $results;
     }
 
-    /**
-     * @deprecated
-     */
-    public static function getContacts(w2p_Core_CAppUI $AppUI, $companyId)
-    {
-		$company = new CCompany();
-        return $company->contacts($companyId);
-	}
-
     public function users($companyId)
     {
         $q = $this->_getQuery();
@@ -248,16 +228,6 @@ class CCompany extends w2p_Core_BaseObject {
 
         return $q->loadHashList('user_id');
     }
-
-    /**
-     * @deprecated
-     */
-	public static function getUsers(w2p_Core_CAppUI $AppUI, $companyId) {
-        trigger_error("The CCompany::getUsers static method has been deprecated in 3.1 and will be removed in v4.0. Please use CCompany->users() instead.", E_USER_NOTICE );
-
-        $company = new CCompany();
-        return $company->users($companyId);
-	}
 
     public function departments($companyId)
     {
@@ -277,6 +247,33 @@ class CCompany extends w2p_Core_BaseObject {
         }
     }
 
+    /**
+     * @deprecated
+     */
+    public static function getProjects(w2p_Core_CAppUI $AppUI, $companyId, $active = 1, $sort = 'project_name')
+    {
+        trigger_error("The CCompany::getProjects static method has been deprecated in 3.1 and will be removed in v4.0. Please use CCompany->projects() instead.", E_USER_NOTICE );
+
+        $company = new CCompany();
+        return $company->projects($AppUI, $companyId, $active, $sort);
+    }
+    /**
+     * @deprecated
+     */
+    public static function getContacts(w2p_Core_CAppUI $AppUI, $companyId)
+    {
+        $company = new CCompany();
+        return $company->contacts($companyId);
+    }
+    /**
+     * @deprecated
+     */
+    public static function getUsers(w2p_Core_CAppUI $AppUI, $companyId) {
+        trigger_error("The CCompany::getUsers static method has been deprecated in 3.1 and will be removed in v4.0. Please use CCompany->users() instead.", E_USER_NOTICE );
+
+        $company = new CCompany();
+        return $company->users($companyId);
+    }
     /**
      * @deprecated
      */

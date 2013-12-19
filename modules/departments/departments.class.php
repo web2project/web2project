@@ -52,7 +52,7 @@ class CDepartment extends w2p_Core_BaseObject
 		$q->loadObject($this);
 	}
 
-    /*
+    /**
      * I already don't like this one..
      *
      * @deprecated
@@ -180,7 +180,6 @@ class CDepartment extends w2p_Core_BaseObject
 	 *	@param array Optional array of additional sql parameters (from and where supported)
 	 *	@return array
 	 */
-	// returns a list of records exposed to the user
 //TODO: this modifies the core $_query property
 	public function getAllowedRecords($uid, $fields = '*', $orderby = '', $index = null, $extra = null, $unused = '') {
 		$uid = (int) $uid;
@@ -332,17 +331,6 @@ class CDepartment extends w2p_Core_BaseObject
         return $q->loadHashList('dept_id');
     }
 
-    /**
-     * @deprecated
-     */
-    public static function getDepartmentList($AppUI = null, $companyId, $departmentId = 0)
-    {
-        trigger_error("The CDepartment::getDepartmentList static method has been deprecated in 3.1 and will be removed in v4.0. Please use CDepartment->departments() instead.", E_USER_NOTICE );
-
-		$department = new CDepartment();
-        return $department->departments($companyId, $departmentId);
-	}
-
     public function contacts($departmentId)
     {
         $results = array();
@@ -361,17 +349,6 @@ class CDepartment extends w2p_Core_BaseObject
         return $results;
     }
 
-    /**
-     * @deprecated
-     */
-	public static function getContactList($AppUI = null, $deptId)
-    {
-        trigger_error("The CDepartment::getContactList static method has been deprecated in 3.1 and will be removed in v4.0. Please use CDepartment->contacts() instead.", E_USER_NOTICE );
-
-        $department = new CDepartment();
-        return $department->contacts($deptId);
-	}
-
     protected function hook_preStore()
     {
         $this->dept_url = str_replace(array('"', '"', '<', '>'), '', $this->dept_url);
@@ -389,5 +366,27 @@ class CDepartment extends w2p_Core_BaseObject
         $search['display_fields'] = $search['search_fields'];
 
         return $search;
+    }
+
+    /**
+     * @deprecated
+     */
+    public static function getContactList($AppUI = null, $deptId)
+    {
+        trigger_error("The CDepartment::getContactList static method has been deprecated in 3.1 and will be removed in v4.0. Please use CDepartment->contacts() instead.", E_USER_NOTICE );
+
+        $department = new CDepartment();
+        return $department->contacts($deptId);
+    }
+
+    /**
+     * @deprecated
+     */
+    public static function getDepartmentList($AppUI = null, $companyId, $departmentId = 0)
+    {
+        trigger_error("The CDepartment::getDepartmentList static method has been deprecated in 3.1 and will be removed in v4.0. Please use CDepartment->departments() instead.", E_USER_NOTICE );
+
+        $department = new CDepartment();
+        return $department->departments($companyId, $departmentId);
     }
 }

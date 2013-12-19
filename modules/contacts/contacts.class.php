@@ -129,10 +129,9 @@ class CContact extends w2p_Core_BaseObject
         parent::hook_postDelete();
     }
 
-    /*
+    /**
      * This is an ugly bit of code that should handle *both* data structures..
      */
-
     public function setContactMethods(array $methods)
     {
         $q = $this->_getQuery();
@@ -286,39 +285,6 @@ class CContact extends w2p_Core_BaseObject
         } else {
             return false;
         }
-    }
-
-    /*
-     * @deprecated
-     */
-    public function is_alpha($val)
-    {
-        trigger_error("is_alpha() has been deprecated in v2.3 and will be removed by v4.0. Please cast values with (int) instead.", E_USER_NOTICE);
-        return (is_int($val) || ctype_digit($val));
-    }
-
-    /*
-     * @deprecated
-     */
-
-    public function getCompanyID()
-    {
-        trigger_error("getCompanyID() has been deprecated in v3.0 and will be removed by v4.0. Please just use the object property itself.", E_USER_NOTICE);
-        return (int) $this->contact_company;
-    }
-
-    /*
-     * @deprecated
-     */
-    public function getCompanyName()
-    {
-        trigger_error("getCompanyName has been deprecated and will be removed in v4.0. Please use getCompanyDetails() instead.", E_USER_NOTICE);
-
-        $company = new CCompany();
-        $company->overrideDatabase($this->_query);
-        $company->load((int) $this->contact_company);
-
-        return $company->company_name;
     }
 
     public function getCompanyDetails()
@@ -645,9 +611,35 @@ class CContact extends w2p_Core_BaseObject
         return $search;
     }
 
-    public function hook_calendar($userId)
+    /**
+     * @deprecated
+     */
+    public function is_alpha($val)
     {
-        return array();
+        trigger_error("is_alpha() has been deprecated in v2.3 and will be removed by v4.0. Please cast values with (int) instead.", E_USER_NOTICE);
+        return (is_int($val) || ctype_digit($val));
     }
 
+    /**
+     * @deprecated
+     */
+    public function getCompanyID()
+    {
+        trigger_error("getCompanyID() has been deprecated in v3.0 and will be removed by v4.0. Please just use the object property itself.", E_USER_NOTICE);
+        return (int) $this->contact_company;
+    }
+
+    /**
+     * @deprecated
+     */
+    public function getCompanyName()
+    {
+        trigger_error("getCompanyName has been deprecated and will be removed in v4.0. Please use getCompanyDetails() instead.", E_USER_NOTICE);
+
+        $company = new CCompany();
+        $company->overrideDatabase($this->_query);
+        $company->load((int) $this->contact_company);
+
+        return $company->company_name;
+    }
 }
