@@ -111,7 +111,7 @@ class SResource extends w2p_System_Setup
     private function addTypes()
     {
 //TODO: refactor as proper sysvals handling
-        $q = new w2p_Database_Query();
+        $q = $this->_getQuery();
 
         $i = 1;
         $resourceTypes = array('All resources', 'Equipment', 'Tool', 'Venue');
