@@ -3,9 +3,9 @@ if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
 
-global $AppUI, $company_id;
+global $AppUI, $company;
 
-$items = CCompany::getUsers($AppUI, $company_id);
+$items = $company->users($company->company_id);
 
 $module = new w2p_System_Module();
 $fields = $module->loadSettings('admin', 'company_view');

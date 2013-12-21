@@ -5,7 +5,7 @@ if (!defined('W2P_BASE_DIR')) {
 
 global $AppUI, $company;
 
-$items = CCompany::getContacts($AppUI, $company->company_id);
+$items = $company->contacts($company->company_id);
 
 $fieldList = array();
 $fieldNames = array();

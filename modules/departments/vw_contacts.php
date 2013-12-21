@@ -4,12 +4,9 @@ if (!defined('W2P_BASE_DIR')) {
 }
 // @todo    convert to template
 
-global $AppUI, $dept_id;
+global $AppUI, $department;
 
-$items = CDepartment::getContactList($AppUI, $dept_id);
-
-
-
+$items = $department->contacts($department->dept_id);
 
 $module = new w2p_System_Module();
 $fields = $module->loadSettings('contacts', 'department_view');
