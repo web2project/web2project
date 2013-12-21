@@ -1948,8 +1948,7 @@ function displayFiles($AppUI, $folder_id, $task_id, $project_id, $company_id) {
 
     // SETUP FOR FILE LIST
 	$q = new w2p_Database_Query();
-	$q->addQuery('f.*, max(f.file_id) as latest_id, count(f.file_version) as file_versions,
-        round(max(file_version), 2) as file_lastversion, file_owner, user_id');
+	$q->addQuery('f.*, max(f.file_id) as latest_id, count(f.file_version) as file_versions, round(max(file_version), 2) as file_lastversion, file_owner, user_id');
 	$q->addQuery('ff.*, max(file_version) as file_version, f.file_date as file_datetime');
 	$q->addTable('files', 'f');
 	$q->addJoin('file_folders', 'ff', 'ff.file_folder_id = file_folder');
@@ -2030,9 +2029,6 @@ function displayFiles($AppUI, $folder_id, $task_id, $project_id, $company_id) {
 
     $files = $q->loadList();
     $file_versions = $qv->loadHashList('file_id');
-
-    $fieldList = array();
-    $fieldNames = array();
 
     $module = new w2p_System_Module();
     $fields = $module->loadSettings('files', 'index_list');
