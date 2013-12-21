@@ -2204,38 +2204,48 @@ function getIcon($file_type) {
     if (is_file(W2P_BASE_DIR . '/styles/' . $uistyle . '/images/modules/files/icons/' . $icon . '.png')) {
         $result = 'icons/' . $icon . '.png';
     } else {
-        $mime = explode('/', $file_type);
-        switch ($mime[0]) {
-            case 'audio':
-                $result = 'icons/wav.png';
-                break;
-            case 'image':
-                $result = 'icons/image.png';
-                break;
-            case 'text':
-                $result = 'icons/text.png';
-                break;
-            case 'video':
-                $result = 'icons/video.png';
-                break;
-            case 'application':
-                switch ($mime[1]) {
-                    case 'vnd.ms-excel':
-                        $result = 'icons/spreadsheet.png';
-                        break;
-                    case 'vnd.ms-powerpoint':
-                        $result = 'icons/quicktime.png';
-                        break;
-                    case 'octet-stream':
-                        $result = 'icons/source_c.png';
-                        break;
-                    default:
-                        $result = 'icons/documents.png';
-                }
-                break;
-        }
+        $result = __extract_from_files_index_table($file_type);
     }
 
+    return $result;
+}
+
+/**
+ * @param $file_type
+ * @return string
+ */
+function __extract_from_files_index_table($file_type)
+{
+    $mime = explode('/', $file_type);
+    switch ($mime[0]) {
+        case 'audio':
+            $result = 'icons/wav.png';
+            break;
+        case 'image':
+            $result = 'icons/image.png';
+            break;
+        case 'text':
+            $result = 'icons/text.png';
+            break;
+        case 'video':
+            $result = 'icons/video.png';
+            break;
+        case 'application':
+            switch ($mime[1]) {
+                case 'vnd.ms-excel':
+                    $result = 'icons/spreadsheet.png';
+                    break;
+                case 'vnd.ms-powerpoint':
+                    $result = 'icons/quicktime.png';
+                    break;
+                case 'octet-stream':
+                    $result = 'icons/source_c.png';
+                    break;
+                default:
+                    $result = 'icons/documents.png';
+            }
+            break;
+    }
     return $result;
 }
 
