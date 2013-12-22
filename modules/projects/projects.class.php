@@ -127,6 +127,31 @@ class CProject extends w2p_Core_BaseObject
         $this->budget = $this->getBudget();
     }
 
+    /**
+     * 	Returns an array, keyed by the key field, of all elements that meet
+     * 	the where clause provided. Ordered by $order key.
+     *
+     * @param null $order
+     * @param null $where
+     *
+     * @return Associative
+     */
+    public function loadAll($order = null, $where = null)
+    {
+        $q = $this->_getQuery();
+        $q->addTable($this->_tbl);
+        if ($order && property_exists($this, $order)) {
+            $q->addOrder($order);
+        }
+        if ($where) {
+            $q->addWhere($where);
+        }
+        $where = $this->getAllowedSQL($this->_AppUI->user_id, 'projects.project_id');
+        $q->addWhere($where);
+
+        return $q->loadHashList($this->_tbl_key);
+    }
+
     protected function hook_preDelete()
     {
         $q = $this->_getQuery();
@@ -1028,6 +1053,11 @@ class CProject extends w2p_Core_BaseObject
         }
     }
 
+    /**
+     * FILTER
+     * @param int $company_id
+     * @return Array
+     */
     public function getProjectsByStatus($company_id = 0)
     {
         $q = $this->_getQuery();
