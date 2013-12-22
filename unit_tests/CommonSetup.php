@@ -24,8 +24,8 @@ require_once W2P_BASE_DIR . '/includes/db_adodb.php';
 /*
  * Need this to not get the annoying timezone warnings in tests.
  */
-$defaultTZ = w2PgetConfig('system_timezone', 'Europe/London');
-$defaultTZ = ('' == $defaultTZ) ? 'Europe/London' : $defaultTZ;
+$defaultTZ = w2PgetConfig('system_timezone', 'UTC');
+$defaultTZ = ('' == $defaultTZ) ? 'UTC' : $defaultTZ;
 date_default_timezone_set($defaultTZ);
 
 if (file_exists('PHPUnit/Framework.php')) {

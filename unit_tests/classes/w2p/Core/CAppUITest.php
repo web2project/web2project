@@ -413,7 +413,7 @@ class w2p_Core_CAppUITest extends CommonSetup
         $timezone     = $AppUI->getPref('TIMEZONE');
         $datetimezone = new DateTimeZone($timezone);
         $datetime     = new DateTime('now', $datetimezone);
-        $datetime->setTimezone(new DateTimeZone('Europe/London'));
+        $datetime->setTimezone(new DateTimeZone('UTC'));
 
         $this->assertEquals($datetime->format('Y-m-d H:i:s'), $AppUI->convertToSystemTZ());
     }
@@ -428,7 +428,7 @@ class w2p_Core_CAppUITest extends CommonSetup
         $timezone     = $AppUI->getPref('TIMEZONE');
         $datetimezone = new DateTimeZone($timezone);
         $datetime     = new DateTime('2011-01-01 10:00:00', $datetimezone);
-        $datetime->setTimezone(new DateTimeZone('Europe/London'));
+        $datetime->setTimezone(new DateTimeZone('UTC'));
 
         $this->assertEquals($datetime->format('Y-m-d H:i:s'), $AppUI->convertToSystemTZ('2011-01-01 10:00:00'));
     }
@@ -443,7 +443,7 @@ class w2p_Core_CAppUITest extends CommonSetup
         $timezone     = $AppUI->getPref('TIMEZONE');
         $datetimezone = new DateTimeZone($timezone);
         $datetime     = new DateTime('now', $datetimezone);
-        $datetime->setTimeZone(new DateTimeZone('Europe/London'));
+        $datetime->setTimeZone(new DateTimeZone('UTC'));
 
         $this->assertEquals($datetime->format('d/m/Y h:i:s a'), $AppUI->convertToSystemTZ('', 'd/m/Y h:i:s a'));
     }
@@ -458,7 +458,7 @@ class w2p_Core_CAppUITest extends CommonSetup
         $timezone     = $AppUI->getPref('TIMEZONE');
         $datetimezone = new DateTimeZone($timezone);
         $datetime     = new DateTime('2011-01-1 10:00:00', $datetimezone);
-        $datetime->setTimezone(new DateTimeZone('Europe/London'));
+        $datetime->setTimezone(new DateTimeZone('UTC'));
 
         $this->assertEquals($datetime->format('d/m/Y h:i:s a'), $AppUI->convertToSystemTZ('2011-01-01 10:00:00', 'd/m/Y h:i:s a'));
     }
@@ -485,7 +485,7 @@ class w2p_Core_CAppUITest extends CommonSetup
         $AppUI = $this->_AppUI;
 
         $timezone     = new DateTimezone($AppUI->getPref('TIMEZONE'));
-        $datetimezone = new DateTimeZone('Europe/London');
+        $datetimezone = new DateTimeZone('UTC');
         $datetime     = new DateTime('2011-01-01 10:00:00', $datetimezone);
         $datetime->setTimeZone($timezone);
 
@@ -514,7 +514,7 @@ class w2p_Core_CAppUITest extends CommonSetup
         $AppUI = $this->_AppUI;
 
         $timezone     = new DateTimeZone($AppUI->getPref('TIMEZONE'));
-        $datetimezone = new DateTimeZone('Europe/London');
+        $datetimezone = new DateTimeZone('UTC');
         $datetime     = new DateTime('2011-01-1 10:00:00', $datetimezone);
         $datetime->setTimeZone($timezone);
         $this->markTestIncomplete(
