@@ -146,14 +146,21 @@ class CContact extends w2p_Core_BaseObject
             if (isset($methods['fields'])) {
                 foreach ($methods['fields'] as $key => $field) {
                     if ('' != $field || '' != $methods['values'][$key]) {
-                        $q->addInsert('method_name', $field);
-                        $q->addInsert('method_value', strtolower($methods['values'][$key]));
+                        $name = preg_replace("/[^A-Za-z0-9_]/", "", $field);
+                        $value = $methods['values'][$key];
+                        $value = filter_var($value, FILTER_SANITIZE_STRING);
+
+                        $q->addInsert('method_name', $name);
+                        $q->addInsert('method_value', strtolower($value));
                         $q->exec();
                     }
                 }
             } else {
                 foreach ($methods as $name => $value) {
                     if (!empty($value)) {
+                        $name = preg_replace("/[^A-Za-z0-9_]/", "", $name);
+                        $value = filter_var($value, FILTER_SANITIZE_STRING);
+
                         $q->addInsert('method_name', $name);
                         $q->addInsert('method_value', strtolower($value));
                         $q->exec();

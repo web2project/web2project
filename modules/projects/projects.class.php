@@ -885,6 +885,7 @@ class CProject extends w2p_Core_BaseObject
     {
         $q = $this->_getQuery();
 		$q->addTable('task_log');
+        $q->addTable('projects', 'pr');
 		$q->addQuery('DISTINCT task_log.*, user_username, t.*');
 //BEGIN: We can probably drop these lines, the fields are unneeded
 		$q->addQuery("contact_display_name AS real_name");

@@ -34,6 +34,7 @@ if (w2PgetConfig('activate_external_user_creation') != 'true') {
 }
 
 $username = w2PgetParam($_POST, 'user_username', 0);
+$username = preg_replace("/[^A-Za-z0-9]/", "", $username);
 $user = new CAdmin_User();
 $result = $user->loadAll(null, "user_username = '$username'");
 if (count($result)) {
