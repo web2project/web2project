@@ -47,11 +47,10 @@ if (count($fields) > 0) {
     //   state for versions earlier than v2.3
     //   At some point at/after v4.0, this should be deprecated
     $fieldList = array('project_color_identifier', 'project_priority',
-        'project_name', 'company_name', 'project_start_date',
-        'project_end_date', 'project_actual_end_date', 'task_log_problem',
-        'user_username', 'project_task_count');
+        'project_name', 'project_company', 'project_start_date',
+        'project_end_date', 'project_actual_end_date', 'project_owner', 'project_task_count');
     $fieldNames = array('%', 'P', 'Project Name', 'Company',
-        'Start', 'End', 'Actual', 'LP', 'Owner', 'Tasks');
+        'Start', 'End', 'Actual', 'Owner', 'Tasks');
 
     $module = new w2p_System_Module();
     $module->storeSettings('projects', 'index_list', $fieldList, $fieldNames);
