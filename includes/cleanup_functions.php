@@ -578,7 +578,7 @@ function showtask_pd(&$arr, $level = 0, $today_view = false) {
 	$s .= '</td>';
 
 	// dots
-    $s .= '<td style="width: ' . (($today_view) ? '20%' : '50%') . '" class="data _name">';
+    $s .= '<td class="data _name">';
 	for ($y = 0; $y < $level; $y++) {
 		if ($y + 1 == $level) {
 			$image = w2PfindImage('corner-dots.gif', $m);
@@ -691,7 +691,7 @@ function showtask_pr(&$arr, $level = 0, $today_view = false) {
 	$s = '<tr>';
 
 	// dots
-    $s .= '<td style="width: ' . (($today_view) ? '20%' : '50%') . '" class="data _name">';
+    $s .= '<td class="data _name">';
 	for ($y = 0; $y < $level; $y++) {
 		if ($y + 1 == $level) {
 			$image = w2PfindImage('corner-dots.gif', $m);
@@ -709,7 +709,7 @@ function showtask_pr(&$arr, $level = 0, $today_view = false) {
 
 	$open_link = w2PshowImage('collapse.gif');
 	if ($arr['task_milestone'] > 0) {
-		$s .= '&nbsp;<b>' . $arr["task_name"] . '</b><!--</a>--> <img src="' . w2PfindImage('icons/milestone.gif', $m) . '" border="0" alt="" />';
+		$s .= '&nbsp;<b>' . $arr["task_name"] . '</b><img src="' . w2PfindImage('icons/milestone.gif', $m) . '" border="0" alt="" />';
 	} elseif ($arr['task_dynamic'] == '1') {
 		$s .= $open_link;
 		$s .= '<strong>' . $arr['task_name'] . '</strong>';
