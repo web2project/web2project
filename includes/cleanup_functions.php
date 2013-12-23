@@ -477,13 +477,13 @@ function __extract_from_showtask(&$arr, $level, $today_view)
             }
             $s .= join(', <br />', $a_u_tmp_array) . '</td>';
         } else {
-            $s .= ('<td class="data">' . '<a href="?m=users&amp;a=view&amp;user_id=' . $assigned_users[0]['user_id'] . '" title="' . (w2PgetConfig('check_overallocation') ? $AppUI->_('Extent of Assignment') . ':' . $userAlloc[$assigned_users[0]['user_id']]['charge'] . '%; ' . $AppUI->_('Free Capacity') . ':' . $userAlloc[$assigned_users[0]['user_id']]['freeCapacity'] . '%' : '') . '">' . $assigned_users[0]['assignee'] . ' (' . $assigned_users[0]['perc_assignment'] . '%)</a>');
+            $s .= ('<td class="data">' . '<a href="?m=users&amp;a=view&amp;user_id=' . $assigned_users[0]['user_id'] . '" title="' . (w2PgetConfig('check_overallocation') ? $AppUI->_('Extent of Assignment') . ':' . $userAlloc[$assigned_users[0]['user_id']]['charge'] . '%; ' . $AppUI->_('Free Capacity') . ':' . $userAlloc[$assigned_users[0]['user_id']]['freeCapacity'] . '%' : '') . '">' . $assigned_users[0]['contact_name'] . ' (' . $assigned_users[0]['perc_assignment'] . '%)</a>');
             if ($arr['assignee_count'] > 1) {
                 $s .= (' <a href="javascript: void(0);" onclick="toggle_users(' . "'users_" . $arr['task_id'] . "'" . ');" title="' . join(', ', $a_u_tmp_array) . '">(+' . ($arr['assignee_count'] - 1) . ')</a>' . '<span style="display: none" id="users_' . $arr['task_id'] . '">');
                 $a_u_tmp_array[] = $assigned_users[0]['assignee'];
                 for ($i = 1, $i_cmp = count($assigned_users); $i < $i_cmp; $i++) {
                     $a_u_tmp_array[] = $assigned_users[$i]['assignee'];
-                    $s .= ('<br /><a href="?m=users&amp;a=view&amp;user_id=' . $assigned_users[$i]['user_id'] . '" title="' . (w2PgetConfig('check_overallocation') ? $AppUI->_('Extent of Assignment') . ':' . $userAlloc[$assigned_users[$i]['user_id']]['charge'] . '%; ' . $AppUI->_('Free Capacity') . ':' . $userAlloc[$assigned_users[$i]['user_id']]['freeCapacity'] . '%' : '') . '">' . $assigned_users[$i]['assignee'] . ' (' . $assigned_users[$i]['perc_assignment'] . '%)</a>');
+                    $s .= ('<br /><a href="?m=users&amp;a=view&amp;user_id=' . $assigned_users[$i]['user_id'] . '" title="' . (w2PgetConfig('check_overallocation') ? $AppUI->_('Extent of Assignment') . ':' . $userAlloc[$assigned_users[$i]['user_id']]['charge'] . '%; ' . $AppUI->_('Free Capacity') . ':' . $userAlloc[$assigned_users[$i]['user_id']]['freeCapacity'] . '%' : '') . '">' . $assigned_users[$i]['contact_name'] . ' (' . $assigned_users[$i]['perc_assignment'] . '%)</a>');
                 }
                 $s .= '</span>';
             }
