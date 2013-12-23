@@ -179,10 +179,10 @@ if (!isset($_GET['m']) && !empty($w2Pconfig['default_view_m'])) {
 	// set the module from the url
 	$m = $loader->checkFileName(w2PgetCleanParam($_GET, 'm', getReadableModule()));
 }
-$m = preg_replace("/[^a-z0-9]/", "", $m);
+$m = preg_replace("/[^a-z0-9_]/", "", $m);
 // set the action from the url
 $a = $loader->checkFileName(w2PgetCleanParam($_GET, 'a', $def_a));
-$a = preg_replace("/[^a-z0-9]/", "", $a);
+$a = preg_replace("/[^a-z0-9_]/", "", $a);
 if ($m == 'projects' && $a == 'view' && $w2Pconfig['projectdesigner_view_project'] && !w2PgetParam($_GET, 'bypass') && !(isset($_GET['tab']))) {
 	if ($AppUI->isActiveModule('projectdesigner')) {
 		$m = 'projectdesigner';
@@ -198,6 +198,7 @@ if ($m == 'projects' && $a == 'view' && $w2Pconfig['projectdesigner_view_project
 */
 
 $u = $loader->checkFileName(w2PgetCleanParam($_GET, 'u', ''));
+$u = preg_replace("/[^a-z0-9_]/", "", $u);
 
 // load module based locale settings
 @include_once W2P_BASE_DIR . '/locales/' . $AppUI->user_locale . '/locales.php';
