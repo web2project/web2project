@@ -405,7 +405,7 @@ function __extract_from_showtask(&$arr, $level, $today_view)
     $s .= ('<td class="data _pin"><a href="?m=tasks&amp;pin=' . ($arr['task_pinned'] ? 0 : 1) . '&amp;task_id=' . $arr['task_id'] . '">' . '<img src="' . w2PfindImage('icons/' . $pin_prefix . 'pin.gif') . '" border="0" alt="" />' . '</a></td>');
 
     // New Log
-    $s . = '<td class="data">';
+    $s .= '<td class="data">';
     if (isset($arr['task_log_problem']) && $arr['task_log_problem'] > 0) {
         $s .= ('<a href="?m=tasks&amp;a=view&amp;task_id=' . $arr['task_id'] . '&amp;tab=0&amp;problem=1">' . w2PshowImage('icons/dialog-warning5.png', 16, 16, 'Problem', 'Problem!') . '</a>');
     } elseif ($arr['task_dynamic'] != 1 && 0 == $arr['task_represents_project']) {
@@ -413,7 +413,7 @@ function __extract_from_showtask(&$arr, $level, $today_view)
     } else {
         $s .= $AppUI->_('-');
     }
-    $s . = '</td>';
+    $s .= '</td>';
 
     // percent complete and priority
     $s .= $htmlHelper->createCell('task_percent_complete', $arr['task_percent_complete']);
