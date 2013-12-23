@@ -377,7 +377,7 @@ function cal_work_day_conv($val) {
 
 function __extract_from_showtask(&$arr, $level, $today_view)
 {
-    global $AppUI;
+    global $AppUI, $m;
 
     $tmpTask = new CTask();
     $tmpTask->load($arr['task_id']);
@@ -465,7 +465,7 @@ function __extract_from_showtask(&$arr, $level, $today_view)
     if ($today_view) { // Show the project name
         $s .= ('<td class="_name" width="50%"><a href="./index.php?m=projects&amp;a=view&amp;project_id=' . $arr['task_project'] . '">' . '<div style="display:inline-block;padding: 2px 3px;background-color:#' . $arr['project_color_identifier'] . ';color:' . bestColor($arr['project_color_identifier']) . '">' . $arr['project_name'] . '</div>' . '</a></td>');
     } else {
-        $s .= $htmlHelper->createCell('task_owner', $arr['owner']);
+        $s .= $htmlHelper->createCell('task_owner', $arr['task_owner']);
     }
     if (isset($arr['task_assigned_users']) && count($arr['task_assigned_users'])) {
         $assigned_users = $arr['task_assigned_users'];
@@ -490,7 +490,7 @@ function __extract_from_showtask(&$arr, $level, $today_view)
             $s .= '</td>';
         }
     } elseif (!$today_view) {
-        // No users asigned to task
+        // No users assigned to task
         $s .= $htmlHelper->createCell('other', '-');
     }
 
@@ -505,7 +505,7 @@ function __extract_from_showtask(&$arr, $level, $today_view)
     }
 
     // Assignment checkbox
-    if ($showEditCheckbox) {
+    if ('projectdesigner' == $m) {
         $s .= ('<td class="data">' . '<input type="checkbox" name="selected_task[' . $arr['task_id'] . ']" value="' . $arr['task_id'] . '"/></td>');
     }
     $s .= '</tr>'."\n";

@@ -217,14 +217,13 @@ if (count($fields) > 0) {
     // TODO: This is only in place to provide an pre-upgrade-safe
     //   state for versions earlier than v3.0
     //   At some point at/after v4.0, this should be deprecated
-    $fieldList = array('task_percent_complete', 'task_priority', 'user_task_priority',
-        'task_access', 'task_type', 'task_1', 'task_2', 'task_3', 'task_name',
-        'task_owner', 'task_start_date', 'task_duration', 'task_end_date', 'task_4');
-    $fieldNames = array('Work', 'P', 'U', 'A', 'T', 'R', 'I', 'Log',
-        'Task Name', 'Task Owner', 'Start', 'Duration', 'Finish',
-        'Assgined Users');
+    $fieldList = array('task_percent_complete', 'task_pinned', 'task_percent_complete',
+        'task_priority', 'user_task_priority', 'task_name',
+        'task_owner', 'task_start_date', 'task_duration', 'task_end_date', 'task_1');
+    $fieldNames = array('Pin', 'Log', 'Progress', 'P', 'U', 'Task Name',
+        'Task Owner', 'Assigned Users', 'Start', 'Duration', 'Finish');
 
-    $module->storeSettings('tasks', 'projectdesigner-view', $fieldList, $fieldNames);
+    //$module->storeSettings('tasks', 'projectdesigner-view', $fieldList, $fieldNames);
 }
 ?>
 <form name="frm_tasks" accept-charset="utf-8"">
