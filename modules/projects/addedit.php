@@ -419,7 +419,14 @@ function setDepartment(department_id_string){
                             <?php echo $AppUI->_('Import tasks from'); ?>:<br/>
                         </td>
                         <td colspan="3">
-                            <?php echo projectSelectWithOptGroup($AppUI->user_id, 'import_tasks_from', 'size="1" class="text"', false, $project_id); ?>
+                            <?php
+                            $templates = $project->loadAll('project_name', 'project_status = ' . w2PgetConfig('template_projects_status_id'));
+                            $options[] = '';
+                            foreach($templates as $key => $data) {
+                                $options[$key] = $data['project_name'];
+                            }
+                            echo arraySelect($options, 'import_tasks_from', 'size="1" class="text"', -1, false);
+                            ?>
                         </td>
                     </tr>
                     <tr>
