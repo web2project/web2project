@@ -391,10 +391,10 @@ function __extract_from_showtask(&$arr, $level, $today_view)
     $class = w2pFindTaskComplete($arr['task_start_date'], $arr['task_end_date'], $arr['task_percent_complete']);
     $jsTaskId = 'project_' . $arr['task_project'] . '_level-' . $level . '-task_' . $arr['task_id'] . '_';
     $s = '<tr id="' . $jsTaskId . '" class="'.$class.'" ' . (($level > 0 && !($m == 'tasks' && $a == 'view')) ? 'style="display:none"' : '') . '>';
+
     // edit icon
     $s .= '<td class="data _edit">';
     $canEdit = ($arr['task_represents_project']) ? false : true;
-    $canViewLog = true;
     if ($canEdit) {
         $s .= '<a href="?m=tasks&a=addedit&task_id=' . $arr['task_id'] . '">' . w2PshowImage('icons/pencil.gif', 12, 12) . '</a>' ;
     }
@@ -403,14 +403,19 @@ function __extract_from_showtask(&$arr, $level, $today_view)
     // pinned
     $pin_prefix = $arr['task_pinned'] ? '' : 'un';
     $s .= ('<td class="data _pin"><a href="?m=tasks&amp;pin=' . ($arr['task_pinned'] ? 0 : 1) . '&amp;task_id=' . $arr['task_id'] . '">' . '<img src="' . w2PfindImage('icons/' . $pin_prefix . 'pin.gif') . '" border="0" alt="" />' . '</a></td>');
+
+    $canViewLog = true;
     // New Log
+    $s . = '<td class="data">';
     if (isset($arr['task_log_problem']) && $arr['task_log_problem'] > 0) {
-        $s .= ('<td class="data"><a href="?m=tasks&amp;a=view&amp;task_id=' . $arr['task_id'] . '&amp;tab=0&amp;problem=1">' . w2PshowImage('icons/dialog-warning5.png', 16, 16, 'Problem', 'Problem!') . '</a></td>');
+        $s .= ('<a href="?m=tasks&amp;a=view&amp;task_id=' . $arr['task_id'] . '&amp;tab=0&amp;problem=1">' . w2PshowImage('icons/dialog-warning5.png', 16, 16, 'Problem', 'Problem!') . '</a>');
     } elseif ($canViewLog && $arr['task_dynamic'] != 1 && 0 == $arr['task_represents_project']) {
-        $s .= ('<td class="data"><a href="?m=tasks&amp;a=view&amp;task_id=' . $arr['task_id'] . '&amp;tab=1">' . w2PshowImage('edit_add.png') . '</a></td>');
+        $s .= ('<a href="?m=tasks&amp;a=view&amp;task_id=' . $arr['task_id'] . '&amp;tab=1">' . w2PshowImage('edit_add.png') . '</a>');
     } else {
-        $s .= '<td class="center">' . $AppUI->_('-') . '</td>';
+        $s .= $AppUI->_('-');
     }
+    $s . = '</td>';
+
     // percent complete and priority
     $s .= $htmlHelper->createCell('task_percent_complete', $arr['task_percent_complete']);
     $s .= $htmlHelper->createCell('task_priority', $arr['task_priority']);
