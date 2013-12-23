@@ -523,7 +523,7 @@ function showtask(&$arr, $level = 0, $notUsed = true, $today_view = false) {
 //This kludgy function echos children tasks as threads on project designer (_pd)
 //TODO: modules/projectdesigner/projectdesigner.class.php
 function showtask_pd(&$arr, $level = 0, $today_view = false) {
-	global $AppUI, $w2Pconfig, $done, $userAlloc, $showEditCheckbox;
+	global $AppUI, $done, $userAlloc, $showEditCheckbox;
 	global $task_access, $PROJDESIGN_CONFIG, $m, $expanded;
 
     $durnTypes = w2PgetSysVal('TaskDurationType');
@@ -541,7 +541,7 @@ function showtask_pd(&$arr, $level = 0, $today_view = false) {
 
 	$types = w2Pgetsysval('TaskType');
 
-	$show_all_assignees = $w2Pconfig['show_all_task_assignees'] ? true : false;
+	$show_all_assignees = w2PgetConfig('show_all_task_assignees') ? true : false;
 
 	$done[] = $arr['task_id'];
 
@@ -1944,7 +1944,7 @@ function countFiles($folder) {
 // From: modules/files/filefolder.class.php
 function displayFiles($AppUI, $folder_id, $task_id, $project_id, $company_id) {
 	global $m, $tab, $xpg_min, $xpg_pagesize, $showProject, $file_types,
-            $company_id, $current_uri, $w2Pconfig, $canEdit;
+            $company_id, $current_uri, $canEdit;
 
     // SETUP FOR FILE LIST
 	$q = new w2p_Database_Query();
@@ -2139,7 +2139,7 @@ function displayFiles($AppUI, $folder_id, $task_id, $project_id, $company_id) {
                         $hidden_table .= $sub_htmlHelper->createCell($fieldList[$index], $file[$fieldList[$index]], $customLookups);
                     }
 
-                    if ($canEdit && $w2Pconfig['files_show_versions_edit']) {
+                    if ($canEdit && w2PgetConfig('files_show_versions_edit')) {
                         $hidden_table .= '<a href="./index.php?m=files&a=addedit&file_id=' . $file['file_id'] . '">' . w2PshowImage('kedit.png', '16', '16', 'edit file', 'edit file', 'files') . "</a>";
                     }
                     $hidden_table .= '</td><tr>';
@@ -3416,9 +3416,9 @@ function w2PsetMicroTime() {
 	$microTimeSet = (float)$usec + (float)$sec;
 }
 
-function w2PsetExecutionConditions($w2Pconfig) {
+function w2PsetExecutionConditions() {
 
-	$memoryLimt = ($w2Pconfig['reset_memory_limit'] != '') ? $w2Pconfig['reset_memory_limit'] : '64M';
+	$memoryLimt = (w2PgetConfig('reset_memory_limit') != '') ? w2PgetConfig('reset_memory_limit') : '64M';
 	ini_set('max_execution_time', 180);
 	ini_set('memory_limit', $memoryLimt);
 }
@@ -3715,10 +3715,10 @@ function w2PgetBytes($str) {
  */
 function w2PcheckMem($min = 0, $revert = false) {
 	// First of all check if we have the minimum memory requirement.
-	$want = w2PgetBytes($GLOBALS['w2Pconfig']['reset_memory_limit']);
+	$want = w2PgetBytes(w2PgetConfig('reset_memory_limit'));
 	$have = ini_get('memory_limit');
 	// Try upping the memory limit based on our config
-	ini_set('memory_limit', $GLOBALS['w2Pconfig']['reset_memory_limit']);
+	ini_set('memory_limit', w2PgetConfig('reset_memory_limit'));
 	$now = w2PgetBytes(ini_get('memory_limit'));
 	// Revert, if necessary, back to the original after testing.
 	if ($revert) {
