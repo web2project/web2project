@@ -443,7 +443,7 @@ function showtask(&$arr, $level = 0, $notUsed = true, $today_view = false) {
         $s .= '<img src="' . $image . '" width="16" height="12"  border="0" alt="" />';
 	}
 	if ($arr['task_description']) {
-		$s .= w2PtoolTip('Task Description', $arr['task_description'], true);
+		$s .= w2PtoolTip('Task Description', substr($arr['task_description'], 0, 1000), true);
 	}
 
 	$open_link = '<a href="javascript: void(0);"><img onclick="expand_collapse(\'' . $jsTaskId . '\', \'tblProjects\',\'\',' . ($level + 1) . ');" id="' . $jsTaskId . '_collapse" src="' . w2PfindImage('icons/collapse.gif') . '" border="0" align="center" ' . (!$expanded ? 'style="display:none"' : '') . ' alt="" /><img onclick="expand_collapse(\'' . $jsTaskId . '\', \'tblProjects\',\'\',' . ($level + 1) . ');" id="' . $jsTaskId . '_expand" src="' . w2PfindImage('icons/expand.gif') . '" border="0" align="center" ' . ($expanded ? 'style="display:none"' : '') . ' alt="" /></a>';
