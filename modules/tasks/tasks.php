@@ -318,9 +318,9 @@ $q->addGroup('tasks.task_id');
 if (!$project_id && !$task_id) {
 	$q->addOrder('p.project_id, task_start_date, task_end_date');
 } else {
-	$q->addOrder('task_start_date, task_end_date');
+    $q->addOrder('task_start_date, task_end_date, task_name');
 }
-//print_r($q->prepare());
+
 if ($canViewTask) {
 	$tasks = $q->loadList();
 }

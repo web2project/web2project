@@ -161,7 +161,8 @@ if (count($allowedTasks)) {
 	$q->addWhere($allowedTasks);
 }
 $q->addGroup('tasks.task_id');
-$q->addOrder('task_start_date');
+
+$q->addOrder('task_start_date, task_end_date, task_name');
 if ($canViewTasks) {
 	$tasks = $q->loadList();
 }
