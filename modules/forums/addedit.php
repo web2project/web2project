@@ -83,74 +83,50 @@ $form = new w2p_Output_HTML_FormHelper($AppUI);
 	<input type="hidden" name="forum_id" value="<?php echo $forum_id; ?>" />
     <?php echo $form->addNonce(); ?>
 
-    <table class="std addedit forums">
-        <tr>
-            <th valign="top" colspan="3">
-                <strong><?php echo $AppUI->_($forum_id ? 'Edit' : 'Add') . ' ' . $AppUI->_('Forum'); ?></strong>
-            </th>
-        </tr>
-        <tr>
-            <td valign="top" width="50%">
-                <strong><?php echo $AppUI->_('Details'); ?></strong>
-                <table cellspacing="1" cellpadding="2" width="100%">
-                <tr>
-                    <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Forum Name'); ?>:</td>
-                    <td>
-                        <input type="text" class="text" size="25" name="forum_name" value="<?php echo $forum->forum_name; ?>" maxlength="50" style="width:200px;" />
-                    </td>
-                </tr>
-                <tr>
-                    <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Related Project'); ?></td>
-                    <td>
-                        <?php echo arraySelect($projects, 'forum_project', 'size="1" class="text"', $forum->forum_project); ?>
-                    </td>
-                </tr>
-                <tr>
-                    <td align="right"><?php echo $AppUI->_('Owner'); ?>:</td>
-                    <td>
-                        <?php echo arraySelect($users, 'forum_owner', 'size="1" class="text"', $forum->forum_owner ? $forum->forum_owner : $AppUI->user_id); ?>
-                    </td>
-                </tr>
-                <tr>
-                    <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Moderator'); ?>:</td>
-                    <td>
-                        <?php echo arraySelect($users, 'forum_moderated', 'size="1" class="text"', $forum->forum_moderated); ?>
-                    </td>
-                </tr>
-                <?php if ($forum_id) { ?>
-                <tr>
-                    <td align="right"><?php echo $AppUI->_('Created On'); ?></td>
-                    <td bgcolor="#ffffff">
-                        <?php
-                            echo $AppUI->formatTZAwareTime($forum->forum_create_date);
-                        ?>
-                    </td>
-                </tr>
-                <tr>
-                    <td align="right"><?php echo $AppUI->_('Last Post'); ?>:</td>
-                    <td bgcolor="#ffffff"><?php echo $forum->forum_last_date; ?></td>
-                </tr>
-                <tr>
-                    <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Message Count'); ?>:</td>
-                    <td bgcolor="#ffffff"><?php echo $forum->forum_message_count; ?></td>
-                </tr>
-                <?php } ?>
-                </table>
-            </td>
-            <td valign="top" width="50%">
-                <strong><?php echo $AppUI->_('Description'); ?></strong><br />
-                <textarea class="textarea" cols="50" rows="7" name="forum_description"><?php echo $forum->forum_description; ?></textarea>
-            </td>
-        </tr>
-        <tr>
-            <td align="left">
+    <div class="std addedit departments">
+        <div class="column left">
+            <p>
+                <label><?php echo $AppUI->_('Forum Name'); ?>:</label>
+                <input type="text" class="text" size="25" name="forum_name" value="<?php echo $forum->forum_name; ?>" maxlength="50" style="width:200px;" />
+            </p>
+            <p>
+                <label><?php echo $AppUI->_('Related Project'); ?>:</label>
+                <?php echo arraySelect($projects, 'forum_project', 'size="1" class="text"', $forum->forum_project); ?>
+            </p>
+            <p>
+                <label><?php echo $AppUI->_('Owner'); ?>:</label>
+                <?php echo arraySelect($users, 'forum_owner', 'size="1" class="text"', $forum->forum_owner ? $forum->forum_owner : $AppUI->user_id); ?>
+            </p>
+            <p>
+                <label><?php echo $AppUI->_('Moderator'); ?>:</label>
+                <?php echo arraySelect($users, 'forum_moderated', 'size="1" class="text"', $forum->forum_moderated); ?>
+            </p>
+            <?php if ($forum_id) { ?>
+                <p>
+                    <label><?php echo $AppUI->_('Message Count'); ?>:</label>
+                    <?php echo $forum->forum_message_count; ?>
+                </p>
+            <?php } ?>
+            <p>
                 <input type="button" value="<?php echo $AppUI->_('back'); ?>" class="button" onclick="javascript:window.location='./index.php?m=forums';" />
-            </td>
-            <td align="right" colspan="2">
-                <?php if ($AppUI->user_id == $forum->forum_owner || $forum_id == 0) {
-                    echo '<input type="button" value="' . $AppUI->_('save') . '" class=button onclick="submitIt()" />';
-                } ?>
-            </td>
-        </tr>
-    </table>
+            </p>
+        </div>
+        <div class="column right">
+            <p>
+                <label><?php echo $AppUI->_('Description'); ?>:</label>
+                <textarea class="textarea" cols="50" rows="7" name="forum_description"><?php echo $forum->forum_description; ?></textarea>
+            </p>
+            <?php if ($forum_id) { ?>
+                <p>
+                    <label><?php echo $AppUI->_('Created On'); ?>:</label>
+                    <?php echo $AppUI->formatTZAwareTime($forum->forum_create_date); ?>
+                </p>
+                <p>
+                    <label><?php echo $AppUI->_('Last Post'); ?>:</label>
+                    <?php echo $AppUI->formatTZAwareTime($forum->forum_last_date); ?>
+                </p>
+            <?php } ?>
+            <p><input type="button" value="save" class="save button btn btn-primary" onclick="submitIt()" /></p>
+        </div>
+    </div>
 </form>
