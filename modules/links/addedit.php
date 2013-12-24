@@ -115,65 +115,49 @@ $form = new w2p_Output_HTML_FormHelper($AppUI);
     <input type="hidden" name="link_owner" value="<?php echo $link->link_owner; ?>" />
     <?php echo $form->addNonce(); ?>
 
-    <table class="std addedit links">
-        <tr>
-            <td width="100%" valign="top" align="center">
-              <table class="well">
-                <tr>
-                    <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Link Name'); ?>:</td>
-                    <td align="left"><input type="text" class="text" name="link_name" value="<?php echo $link->link_name; ?>"></td>
-                  <?php if ($link_id) { ?>
-                  <td>
-                    <a href="<?php echo $link->link_url; ?>" target="_blank"><?php echo $AppUI->_('go'); ?></a>
-                  </td>
-                    <?php } ?>
-                </tr>
+    <div class="std addedit links">
+        <div class="column left">
+            <p>
+                <label><?php echo $AppUI->_('Link Name'); ?>:</label>
+                <input type="text" class="text" name="link_name" value="<?php echo $link->link_name; ?>">
                 <?php if ($link_id) { ?>
-                    <tr>
-                        <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Uploaded By'); ?>:</td>
-                        <td align="left"><?php echo $link->contact_first_name . ' ' . $link->contact_last_name; ?></td>
-                    </tr>
+                    <a href="<?php echo $link->link_url; ?>" target="_blank"><?php echo $AppUI->_('go'); ?></a>
                 <?php } ?>
-                <tr>
-                  <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Category'); ?>:</td>
-                  <td align="left">
-                    <?php echo arraySelect($link_type, 'link_category', 'size="1" class="text"', $link->link_category, true); ?>
-                  <td>
-                </tr>
-                <tr>
-                  <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Project'); ?>:</td>
-                  <td align="left">
-                      <?php echo arraySelect($projects, 'link_project', 'size="1" class="text" style="width:270px"', $link->link_project); ?>
-                  </td>
-                </tr>
-                <tr>
-                  <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Task'); ?>:</td>
-                  <td align="left" colspan="2" valign="top">
-                    <input type="hidden" name="link_task" value="<?php echo $link->link_task; ?>" />
-                    <input type="text" class="text" name="task_name" value="<?php echo isset($link->task_name) ? $link->task_name : ''; ?>" size="40" disabled="disabled" />
-                    <input type="button" class="button btn btn-primary btn-mini" value="<?php echo $AppUI->_('select task'); ?>..." onclick="popTask()" />
-                  </td>
-                </tr>
-                <tr>
-                  <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Description'); ?>:</td>
-                  <td align="left">
-                    <textarea name="link_description" class="textarea" rows="4" style="width:270px"><?php echo $link->link_description; ?></textarea>
-                  </td>
-                </tr>
-                <tr>
-                  <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Link URL'); ?>:</td>
-                  <td align="left"><input type="text" class="text" name="link_url" style="width:270px" value="<?php echo $link->link_url ?>"></td>
-                </tr>
-              </table>
-            </td>
-        </tr>
-        <tr>
-            <td>
+            </p>
+            <?php if ($link_id) { ?>
+            <p>
+                <label><?php echo $AppUI->_('Created By'); ?>:</label>
+                <?php echo $link->contact_first_name . ' ' . $link->contact_last_name; ?>
+            </p>
+            <?php } ?>
+            <p>
+                <label><?php echo $AppUI->_('Category'); ?>:</label>
+                <?php echo arraySelect($link_type, 'link_category', 'size="1" class="text"', $link->link_category, true); ?>
+            </p>
+            <p>
+                <label><?php echo $AppUI->_('Project'); ?>:</label>
+                <?php echo arraySelect($projects, 'link_project', 'size="1" class="text" style="width:270px"', $link->link_project); ?>
+            </p>
+            <p>
+                <label><?php echo $AppUI->_('Task'); ?>:</label>
+                <input type="hidden" name="link_task" value="<?php echo $link->link_task; ?>" />
+                <input type="text" class="text" name="task_name" value="<?php echo isset($link->task_name) ? $link->task_name : ''; ?>" size="40" disabled="disabled" />
+                <input type="button" class="button btn btn-primary btn-mini" value="<?php echo $AppUI->_('select task'); ?>..." onclick="popTask()" />
+            </p>
+            <p>
+                <label><?php echo $AppUI->_('Description'); ?>:</label>
+                <textarea name="link_description" class="textarea" rows="4" style="width:270px"><?php echo $link->link_description; ?></textarea>
+            </p>
+            <p>
+                <label><?php echo $AppUI->_('Link URL'); ?>:</label>
+                <input type="text" class="text" name="link_url" style="width:270px" value="<?php echo $link->link_url ?>">
+            </p>
+            <p>
+                <input type="button" class="button btn btn-primary" style="float: right;" value="<?php echo $AppUI->_('save'); ?>" onclick="submitIt()" />
+            </p>
+            <p>
                 <input class="button btn btn-danger" type="button" name="cancel" value="<?php echo $AppUI->_('cancel'); ?>" onclick="javascript:if(confirm('<?php echo $AppUI->_('Are you sure you want to cancel?', UI_OUTPUT_JS); ?>')){location.href = './index.php?m=links';}" />
-            </td>
-            <td align="right">
-                <input type="button" class="button btn btn-primary" value="<?php echo $AppUI->_('save'); ?>" onclick="submitIt()" />
-            </td>
-        </tr>
-    </table>
+            </p>
+        </div>
+    </div>
 </form>
