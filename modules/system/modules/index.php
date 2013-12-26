@@ -130,6 +130,9 @@ $htmlHelper = new w2p_Output_HTMLHelper($AppUI);
 
     foreach ($modFiles as $v) {
         // clear the file system entry
+        if ($v == 'admin' || $v == 'calendar') {
+            continue;
+        }
         if ($v && !in_array($v, $hidden_modules)) {
             $s = '';
             $s .= '<td></td>';
