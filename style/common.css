@@ -680,3 +680,7 @@ input.name, input.url {
 input.state, input.zip {
     width: 50px;
 }
+
+.tasks-depends label, .tasks-resources label {
+    width: 18em;
+}

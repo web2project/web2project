@@ -62,76 +62,65 @@ $cwd_hr = implode(', ', $cwd_conv);
     <input name="task_id" type="hidden" value="<?php echo $task_id; ?>" />
     <input type="hidden" name="datePicker" value="task" />
 
-    <table class="std addedit well">
-        <?php if ($can_edit_time_information) { ?>
-            <tr>
-                <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Start Date'); ?></td>
-                <td nowrap="nowrap">
-                    <input type='hidden' id='task_start_date' name='task_start_date' value='<?php echo $start_date ? $start_date->format(FMT_TIMESTAMP_DATE) : ''; ?>' />
-                    <input type='text' onchange="setDate_new('datesFrm', 'start_date');" class='text' style='width:120px;' id='start_date' name='start_date' value='<?php echo $start_date ? $start_date->format($df) : ''; ?>' />
-                    <a onclick="return showCalendar('start_date', '<?php echo $df ?>', 'datesFrm', null, true, true)" href="javascript: void(0);">
-                        <img src="<?php echo w2PfindImage('calendar.gif'); ?>" width="24" height="12" alt="<?php echo $AppUI->_('Calendar'); ?>" border="0" />
-                    </a>
-                </td>
-                <td>
-                    <table><tr>
-                    <?php
-                        echo '<td>' . arraySelect($hours, 'start_hour', 'size="1" onchange="setAMPM(this)" class="text"', $start_date ? $start_date->getHour() : $start) . '</td><td> : </td>';
-                        echo '<td>' . arraySelect($minutes, 'start_minute', 'size="1" class="text"', $start_date ? $start_date->getMinute() : '00') . '</td>';
-                        if (stristr($AppUI->getPref('TIMEFORMAT'), '%p')) {
-                            echo '<td><input type="text" name="start_hour_ampm" id="start_hour_ampm" value="' . ($start_date ? $start_date->getAMPM() : ($start > 11 ? 'pm' : 'am')) . '" disabled="disabled" class="text" size="2" /></td>';
-                        }
-                    ?>
-                    </tr></table>
-                </td>
-            </tr>
-            <tr>
-                <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Finish Date'); ?></td>
-                <td nowrap="nowrap">
-                    <input type='hidden' id='task_end_date' name='task_end_date' value='<?php echo $end_date ? $end_date->format(FMT_TIMESTAMP_DATE) : ''; ?>' />
-                    <input type='text' onchange="setDate_new('datesFrm', 'end_date');" class='text' style='width:120px;' id='end_date' name='end_date' value='<?php echo $end_date ? $end_date->format($df) : ''; ?>' />
-                    <a onclick="return showCalendar('end_date', '<?php echo $df ?>', 'datesFrm', null, true, true)" href="javascript: void(0);">
-                        <img src="<?php echo w2PfindImage('calendar.gif'); ?>" width="24" height="12" alt="<?php echo $AppUI->_('Calendar'); ?>" border="0" />
-                    </a>
-                </td>
-                    <td>
-                        <table><tr>
-                        <?php
-                            echo '<td>' . arraySelect($hours, 'end_hour', 'size="1" onchange="setAMPM(this)" class="text"', $end_date ? $end_date->getHour() : $end) . '</td><td> : </td>';
-                            echo '<td>' . arraySelect($minutes, 'end_minute', 'size="1" class="text"', $end_date ? $end_date->getMinute() : '00') . '</td>';
-                            if (stristr($AppUI->getPref('TIMEFORMAT'), '%p')) {
-                                echo '<td><input type="text" name="end_hour_ampm" id="end_hour_ampm" value="' . ($end_date ? $end_date->getAMPM() : ($end > 11 ? 'pm' : 'am')) . '" disabled="disabled" class="text" size="2" /></td>';
-                            }
-                        ?>
-                        </tr></table>
-                    </td>
-            </tr>
-            <tr>
-                <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Expected Duration'); ?>:</td>
-                <td nowrap="nowrap">
-					<input type="text" class="text" name="task_duration" id="task_duration" maxlength="8" size="6" value="<?php echo $task->task_duration; ?>" />
-                    <?php
-                        echo arraySelect($durnTypes, 'task_duration_type', 'class="text"', $task->task_duration_type, true);
-                    ?>
-                </td>
-                <td><?php echo $AppUI->_('Daily Working Hours') . ': ' . $w2Pconfig['daily_working_hours']; ?></td>
-            </tr>
-            <tr>
-                <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Calculate'); ?>:</td>
-                <td nowrap="nowrap">
-                    <input type="button" value="<?php echo $AppUI->_('Duration'); ?>" onclick="xajax_calcDuration(document.datesFrm.task_start_date.value,document.datesFrm.start_hour.value,document.datesFrm.start_minute.value,document.datesFrm.task_end_date.value,document.datesFrm.end_hour.value,document.datesFrm.end_minute.value,document.datesFrm.task_duration_type.value);" class="button btn btn-primary btn-mini" />
-                    <input type="button" value="<?php echo $AppUI->_('Finish Date'); ?>" onclick="xajax_calcFinish(document.datesFrm.task_start_date.value,document.datesFrm.start_hour.value,document.datesFrm.start_minute.value,document.datesFrm.task_duration_type.value,document.datesFrm.task_duration.value)" class="button btn btn-primary btn-mini" />
-                </td>
-                <td><?php echo $AppUI->_('Working Days') . ': ' . $cwd_hr; ?></td>
-            </tr>
-        <?php } else { ?>
-            <tr>
-                <td colspan='2'>
-                    <?php echo $AppUI->_('Only the task owner, project owner, or system administrator is able to edit time related information.'); ?>
-                </td>
-            </tr>
-        <?php } // end of can_edit_time_information ?>
-    </table>
+    <div class="std addedit tasks-dates">
+        <div class="column left">
+            <?php if ($can_edit_time_information) { ?>
+            <p>
+                <label><?php echo $AppUI->_('Start Date'); ?>:</label>
+                <input type='hidden' id='task_start_date' name='task_start_date' value='<?php echo $start_date ? $start_date->format(FMT_TIMESTAMP_DATE) : ''; ?>' />
+                <input type='text' onchange="setDate_new('datesFrm', 'start_date');" class='text' style='width:120px;' id='start_date' name='start_date' value='<?php echo $start_date ? $start_date->format($df) : ''; ?>' />
+                <a onclick="return showCalendar('start_date', '<?php echo $df ?>', 'datesFrm', null, true, true)" href="javascript: void(0);">
+                    <img src="<?php echo w2PfindImage('calendar.gif'); ?>" width="24" height="12" alt="<?php echo $AppUI->_('Calendar'); ?>" border="0" />
+                </a>
+                <?php
+                echo arraySelect($hours, 'start_hour', 'size="1" onchange="setAMPM(this)" class="text"', $start_date ? $start_date->getHour() : $start);
+                echo arraySelect($minutes, 'start_minute', 'size="1" class="text"', $start_date ? $start_date->getMinute() : '00');
+                if (stristr($AppUI->getPref('TIMEFORMAT'), '%p')) {
+                    echo '<input type="text" name="start_hour_ampm" id="start_hour_ampm" value="' . ($start_date ? $start_date->getAMPM() : ($start > 11 ? 'pm' : 'am')) . '" disabled="disabled" class="text" size="2" />';
+                }
+
+                ?>
+            </p>
+            <p>
+                <label><?php echo $AppUI->_('Finish Date'); ?>:</label>
+                <input type='hidden' id='task_end_date' name='task_end_date' value='<?php echo $end_date ? $end_date->format(FMT_TIMESTAMP_DATE) : ''; ?>' />
+                <input type='text' onchange="setDate_new('datesFrm', 'end_date');" class='text' style='width:120px;' id='end_date' name='end_date' value='<?php echo $end_date ? $end_date->format($df) : ''; ?>' />
+                <a onclick="return showCalendar('end_date', '<?php echo $df ?>', 'datesFrm', null, true, true)" href="javascript: void(0);">
+                    <img src="<?php echo w2PfindImage('calendar.gif'); ?>" width="24" height="12" alt="<?php echo $AppUI->_('Calendar'); ?>" border="0" />
+                </a>
+                <?php
+                echo arraySelect($hours, 'end_hour', 'size="1" onchange="setAMPM(this)" class="text"', $end_date ? $end_date->getHour() : $end);
+                echo arraySelect($minutes, 'end_minute', 'size="1" class="text"', $end_date ? $end_date->getMinute() : '00');
+                if (stristr($AppUI->getPref('TIMEFORMAT'), '%p')) {
+                    echo '<input type="text" name="end_hour_ampm" id="end_hour_ampm" value="' . ($end_date ? $end_date->getAMPM() : ($end > 11 ? 'pm' : 'am')) . '" disabled="disabled" class="text" size="2" />';
+                }
+                ?>
+            </p>
+            <p>
+                <label><?php echo $AppUI->_('Calculate'); ?>:</label>
+                <input type="button" value="<?php echo $AppUI->_('Duration'); ?>" onclick="xajax_calcDuration(document.datesFrm.task_start_date.value,document.datesFrm.start_hour.value,document.datesFrm.start_minute.value,document.datesFrm.task_end_date.value,document.datesFrm.end_hour.value,document.datesFrm.end_minute.value,document.datesFrm.task_duration_type.value);" class="button btn btn-primary btn-mini" />
+                <input type="button" value="<?php echo $AppUI->_('Finish Date'); ?>" onclick="xajax_calcFinish(document.datesFrm.task_start_date.value,document.datesFrm.start_hour.value,document.datesFrm.start_minute.value,document.datesFrm.task_duration_type.value,document.datesFrm.task_duration.value)" class="button btn btn-primary btn-mini" />
+            </p>
+            <?php } ?>
+        </div>
+        <div class="column right">
+            <p>
+                <label><?php echo $AppUI->_('Expected Duration'); ?>:</label>
+                <input type="text" class="text" name="task_duration" id="task_duration" maxlength="8" size="6" value="<?php echo $task->task_duration; ?>" />
+                <?php
+                echo arraySelect($durnTypes, 'task_duration_type', 'class="text"', $task->task_duration_type, true);
+                ?>
+            </p>
+            <p>
+                <label><?php echo $AppUI->_('Daily Working Hours'); ?>:</label>
+                <?php echo $w2Pconfig['daily_working_hours']; ?>
+            </p>
+            <p>
+                <label><?php echo $AppUI->_('Working Days'); ?>:</label>
+                <?php echo $cwd_hr; ?>
+            </p>
+        </div>
+    </div>
 </form>
 <script language="javascript">
 	subForm.push(new FormDefinition(<?php echo $tab; ?>, document.datesFrm, checkDates, saveDates));
