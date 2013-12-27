@@ -3,28 +3,23 @@ if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
 // @todo    convert to template
-
 $project_id = (int) w2PgetParam($_GET, 'project_id', 0);
 
 $project = new CProject();
-$project->project_id = $project_id;
+
+if (!$project->load($project_id)) {
+    $AppUI->redirect(ACCESS_DENIED);
+}
+
+if (!$project) {
+    $AppUI->setMsg('Project');
+    $AppUI->setMsg('invalidID', UI_MSG_ERROR, true);
+    $AppUI->redirect();
+}
 
 $canEdit   = $project->canEdit();
-$canRead   = $project->canView();
-$canCreate = $project->canCreate();
-$canAccess = $project->canAccess();
 $canDelete = $project->canDelete();
 
-if (!$canAccess || !$canRead) {
-	$AppUI->redirect(ACCESS_DENIED);
-}
-
-$project->loadFull(null, $project_id);
-if (!$project) {
-	$AppUI->setMsg('Project');
-	$AppUI->setMsg('invalidID', UI_MSG_ERROR, true);
-	$AppUI->redirect();
-}
 
 $tab = $AppUI->processIntState('ProjVwTab', $_GET, 'tab', 0);
 
