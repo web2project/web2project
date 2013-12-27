@@ -128,15 +128,7 @@ function delIt() {
             <table cellspacing="1" cellpadding="2" border="0" width="100%" class="well">
                 <tr>
                     <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Company'); ?>:</td>
-                    <?php
-                    $perms = &$AppUI->acl();
-                    if ($perms->checkModuleItem('companies', 'access', $project->project_company)) { ?>
-                        <td width="100%">
-                            <?php echo '<a href="?m=companies&a=view&company_id=' . $project->project_company . '">' . htmlspecialchars($project->company_name, ENT_QUOTES) . '</a>'; ?>
-                        </td>
-                    <?php } else { ?>
-                        <?php echo $htmlHelper->createCell('company_name', $project->company_name); ?>
-                    <?php } ?>
+                    <?php echo $htmlHelper->createCell('project_company', $project->project_company); ?>
                 </tr>
                 <tr>
                     <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Project Location'); ?>:</td>
@@ -174,15 +166,7 @@ function delIt() {
                 </tr>
                 <tr>
                     <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Project Owner'); ?>:</td>
-                    <td>
-                        <?php
-                        $pusername = $project->user_name;
-                        $puserid = $project->project_owner;
-
-                        //TODO HTML helper not working properly due to field having suffix _owner, avoiding helper until fix
-                        echo "<a href=\"?m=users&a=view&user_id=$puserid\" alt=\"$pusername\">$pusername</a>";
-                        ?>
-                    </td>
+                    <?php echo $htmlHelper->createCell('project_owner', $project->project_owner); ?>
                 </tr>
                 <tr>
                     <td align="right" nowrap="nowrap"><?php echo $AppUI->_('URL'); ?>:</td>
