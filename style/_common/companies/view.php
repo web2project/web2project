@@ -8,7 +8,7 @@
 			<table cellspacing="1" cellpadding="2" width="100%" class="well">
 				<tr>
 					<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Owner'); ?>:</td>
-                    <?php echo $htmlHelper->createCell('contact_displayname', $company->contact_name); ?>
+                    <?php echo $htmlHelper->createCell('company_owner', $company->company_owner); ?>
 				</tr>
 				<tr>
 					<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Email'); ?>:</td>

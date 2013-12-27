@@ -5,33 +5,26 @@ if (!defined('W2P_BASE_DIR')) {
 
 $company_id = (int) w2PgetParam($_GET, 'company_id', 0);
 
-
-
 $company = new CCompany();
-$company->company_id = $company_id;
+
+if (!$company->load($company_id)) {
+    $AppUI->redirect(ACCESS_DENIED);
+}
+
+if (!$company) {
+    $AppUI->setMsg('Company');
+    $AppUI->setMsg('invalidID', UI_MSG_ERROR, true);
+    $AppUI->redirect();
+}
 
 $canEdit   = $company->canEdit();
-$canRead   = $company->canView();
-$canAdd    = $company->canCreate();
-$canAccess = $company->canAccess();
 $canDelete = $company->canDelete();
 $deletable = $canDelete;            //TODO: this should be removed once the $deletable variable is removed
-if (!$canAccess || !$canRead) {
-	$AppUI->redirect(ACCESS_DENIED);
-}
-
-$contact = new CContact();
-$canCreateContacts = $contact->canCreate();
-
-$company->loadFull(null, $company_id);
-if (!$company) {
-	$AppUI->setMsg('Company');
-	$AppUI->setMsg('invalidID', UI_MSG_ERROR, true);
-	$AppUI->redirect();
-}
 
 $tab = $AppUI->processIntState('CompVwTab', $_GET, 'tab', 0);
 
+$contact = new CContact();
+$canCreateContacts = $contact->canCreate();
 
 // setup the title block
 $titleBlock = new w2p_Theme_TitleBlock('View Company', 'icon.png', $m, "$m.$a");
