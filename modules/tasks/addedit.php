@@ -3,8 +3,9 @@ if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
 // @todo    convert to template
-
 $task_id = (int) w2PgetParam($_GET, 'task_id', 0);
+
+
 
 $task = new CTask();
 $task->task_id = $task_id;
@@ -17,7 +18,6 @@ if (!$canAddEdit) {
 	$AppUI->redirect(ACCESS_DENIED);
 }
 
-// load the record data
 $obj = $AppUI->restoreObject();
 if ($obj) {
     $task = $obj;

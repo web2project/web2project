@@ -3,11 +3,9 @@ if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
 // @todo    convert to template
-
 $contact_id = (int) w2PgetParam($_GET, 'contact_id', 0);
 $company_id = (int) w2PgetParam($_GET, 'company_id', 0);
 $dept_id = (int) w2PgetParam($_GET, 'dept_id', 0);
-
 
 $row = new CContact();
 $row->contact_id = $contact_id;

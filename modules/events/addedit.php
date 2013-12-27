@@ -3,15 +3,13 @@ if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
 // @todo    convert to template
-
-global $AppUI, $cal_sdf;
-$AppUI->loadCalendarJS();
-
 $event_id = intval(w2PgetParam($_GET, 'event_id', 0));
 $is_clash = isset($_SESSION['event_is_clash']) ? $_SESSION['event_is_clash'] : false;
 
+
 $obj = new CEvent();
 $obj->event_id = $event_id;
+
 
 $canAddEdit = $obj->canAddEdit();
 $canAuthor = $obj->canCreate();
@@ -19,6 +17,10 @@ $canEdit = $obj->canEdit();
 if (!$canAddEdit) {
 	$AppUI->redirect(ACCESS_DENIED);
 }
+
+global $AppUI, $cal_sdf;
+$AppUI->loadCalendarJS();
+
 
 // get the passed timestamp (today if none)
 $date = w2PgetParam($_GET, 'date', null);

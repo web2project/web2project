@@ -3,13 +3,10 @@ if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
 // @todo    convert to template
-
-global $AppUI, $cal_sdf;
-$AppUI->loadCalendarJS();
-
 $project_id = (int) w2PgetParam($_GET, 'project_id', 0);
 $company_id = (int) w2PgetParam($_GET, 'company_id', $AppUI->user_company);
 $contact_id = (int) w2PgetParam($_GET, 'contact_id', 0);
+
 $project = new CProject();
 $project->project_id = $project_id;
 
@@ -21,7 +18,6 @@ if (!$canAddEdit) {
 	$AppUI->redirect(ACCESS_DENIED);
 }
 
-// load the record data
 $obj = $AppUI->restoreObject();
 if ($obj) {
     $project = $obj;
@@ -34,6 +30,10 @@ if (!$project && $project_id > 0) {
 	$AppUI->setMsg('invalidID', UI_MSG_ERROR, true);
 	$AppUI->redirect();
 }
+
+global $AppUI, $cal_sdf;
+$AppUI->loadCalendarJS();
+
 
 $pstatus = w2PgetSysVal('ProjectStatus');
 $ptype = w2PgetSysVal('ProjectType');

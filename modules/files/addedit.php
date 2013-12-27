@@ -3,12 +3,10 @@ if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
 // @todo    convert to template
-
 $folder = (int) w2PgetParam($_GET, 'folder', 0);
 $file_id = (int) w2PgetParam($_GET, 'file_id', 0);
 $ci = w2PgetParam($_GET, 'ci', 0) == 1 ? true : false;
 $preserve = $w2Pconfig['files_ci_preserve_attr'];
-
 $file = new CFile();
 $file->file_id = $file_id;
 
@@ -20,7 +18,6 @@ if (!$canAddEdit) {
 	$AppUI->redirect(ACCESS_DENIED);
 }
 
-// load the record data
 $obj = $AppUI->restoreObject();
 if ($obj) {
     $file = $obj;

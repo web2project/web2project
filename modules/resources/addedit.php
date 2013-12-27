@@ -3,8 +3,9 @@ if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
 // @todo    convert to template
-
 $resource_id = (int) w2PgetParam($_GET, 'resource_id', 0);
+
+
 
 $resource = new CResource();
 $resource->resource_id = $resource_id;
@@ -17,7 +18,6 @@ if (!$canAddEdit) {
 	$AppUI->redirect(ACCESS_DENIED);
 }
 
-// load the record data
 $obj = $AppUI->restoreObject();
 if ($obj) {
     $resource = $obj;
@@ -25,7 +25,6 @@ if ($obj) {
 } else {
     $resource->load($resource_id);
 }
-
 if (!$resource_id && $resource_id > 0) {
     $AppUI->setMsg('Resource');
     $AppUI->setMsg('invalidID', UI_MSG_ERROR, true);

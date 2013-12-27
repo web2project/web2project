@@ -5,6 +5,8 @@ if (!defined('W2P_BASE_DIR')) {
 
 $company_id = (int) w2PgetParam($_GET, 'company_id', 0);
 
+
+
 $company = new CCompany();
 $company->company_id = $company_id;
 

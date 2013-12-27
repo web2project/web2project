@@ -3,8 +3,9 @@ if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
 // @todo    convert to template
-
 $forum_id = (int) w2PgetParam($_GET, 'forum_id', 0);
+
+
 
 $forum = new CForum();
 $forum->forum_id = $forum_id;

@@ -3,8 +3,6 @@ if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
 // @todo    convert to template
-
-// Add / Edit Company
 $dept_id = (int) w2PgetParam($_GET, 'dept_id', 0);
 $dept_parent = (int) w2PgetParam($_GET, 'dept_parent', 0);
 $company_id = (int) w2PgetParam($_GET, 'company_id', 0);
@@ -20,7 +18,6 @@ if (!$canAddEdit) {
 	$AppUI->redirect(ACCESS_DENIED);
 }
 
-// load the record data
 $obj = $AppUI->restoreObject();
 if ($obj) {
     $department = $obj;
