@@ -48,6 +48,33 @@ class CEvent extends w2p_Core_BaseObject
         $q->loadObject($this, true, false);
     }
 
+    /**
+     * We have to override the load() method here because we have event-level permissions AND project-level
+     *   permissions AND the event_private bit. I'm not sure this approach will be the official/recommendation but it
+     *   Works For Now(tm).
+     *
+     * @param null $oid
+     * @param bool $strip
+     * @return $this|bool
+     */
+    public function load($oid = null, $strip = true)
+    {
+        if (false == parent::load($oid, $strip)) {
+            return false;
+        }
+
+        // @todo This should eventually check to see if the user is *any* of the invitees.
+        if ($this->event_private && ($this->event_owner != $this->_AppUI->user_id)) {
+            return false;
+        }
+        $perms = $this->_AppUI->acl();
+        if ($this->event_project && !$perms->checkModuleItem('projects', 'view', $event->event_project)) {
+            return false;
+        }
+
+        return true;
+    }
+
     public function isValid()
     {
         $baseErrorMsg = get_class($this) . '::store-check failed - ';
