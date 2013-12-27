@@ -3,32 +3,27 @@ if (!defined('W2P_BASE_DIR')) {
     die('You should not access this file directly.');
 }
 // @todo    convert to template
-
 $user_id = (int) w2PgetParam($_GET, 'user_id', 0);
 
-
-
 $user = new CUser();
-$user->user_id = $user_id;
 
-$canEdit   = $user->canEdit();
-$canRead   = $user->canView();
-$canAdd    = $user->canCreate();
-$canAccess = $user->canAccess();
-$canDelete = $user->canDelete();
-
-if (!$canAccess && !$canRead) {
+if (!$user->load($user_id)) {
     $AppUI->redirect(ACCESS_DENIED);
 }
 
-$user->loadFull($user_id);
 if (!$user) {
     $AppUI->setMsg('User');
     $AppUI->setMsg('invalidID', UI_MSG_ERROR, true);
     $AppUI->redirect();
 }
 
+$canEdit   = $user->canEdit();
+
+
+
 $tab = $AppUI->processIntState('UserVwTab', $_GET, 'tab', 0);
+
+$user->loadFull($user_id);
 
 global $addPwT, $company_id, $dept_ids, $department, $min_view, $m, $a;
 
@@ -70,9 +65,7 @@ $helper = new w2p_Output_HTMLHelper($AppUI);
 $countries = w2PgetSysVal('GlobalCountries');
 // setup the title block
 $titleBlock = new w2p_Theme_TitleBlock('View User', 'icon.png', $m, "$m.$a");
-if ($canRead) {
-    $titleBlock->addCrumb('?m=users', 'users list');
-}
+$titleBlock->addCrumb('?m=users', 'users list');
 if ($canEdit || $user_id == $AppUI->user_id) {
     $titleBlock->addCell('<input type="button" class="button  btn btn-small dropdown-toggle" value="' . $AppUI->_('add user') . '" onclick="javascript:window.location=\'./index.php?m=users&a=addedituser\';" />');
     $titleBlock->addCrumb('?m=users&a=addedit&user_id='.$user_id, 'edit this user');
