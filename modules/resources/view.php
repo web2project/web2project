@@ -3,28 +3,22 @@ if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
 // @todo    convert to template
-
 $resource_id = (int) w2PgetParam($_GET, 'resource_id', 0);
 
 $obj = new CResource();
-$obj->resource_id = $resource_id;
+
+if (!$obj->load($resource_id)) {
+    $AppUI->redirect(ACCESS_DENIED);
+}
+
+if (!$obj) {
+    $AppUI->setMsg('Resource');
+    $AppUI->setMsg('invalidID', UI_MSG_ERROR, true);
+    $AppUI->redirect();
+}
 
 $canEdit   = $obj->canEdit();
-$canView   = $obj->canView();
-$canAdd    = $obj->canCreate();
-$canAccess = $obj->canAccess();
 $canDelete = $obj->canDelete();
-
-if (!$canAccess || !$canView) {
-	$AppUI->redirect(ACCESS_DENIED);
-}
-
-$obj->load($resource_id);
-if (!$obj) {
-	$AppUI->setMsg('Resource');
-	$AppUI->setMsg('invalidID', UI_MSG_ERROR, true);
-	$AppUI->redirect();
-}
 
 $titleBlock = new w2p_Theme_TitleBlock('View Resource', 'icon.png', $m, $m . '.' . $a);
 $titleBlock->addCrumb('?m=' . $m, 'resource list');
