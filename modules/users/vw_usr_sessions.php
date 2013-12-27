@@ -25,7 +25,7 @@ if (isset($_GET['out_user_id']) && $_GET['out_user_id']
 		$boot_user_session = $_GET['out_session'];
 		$boot_user_log_id = w2PgetParam($_GET, 'out_user_log_id', null);
 		$boot_query_row = false;
-	} else
+	} else {
 		if ($canEdit && $canDelete && $logoutUserFlag) {
 			// query for all sessions open for a given user
 			$r = new w2p_Database_Query;
@@ -43,6 +43,7 @@ if (isset($_GET['out_user_id']) && $_GET['out_user_id']
 				$boot_user_log_id = $boot_query_row['user_access_log_id'];
 			}
 		}
+    }
 
 	do {
 		if ($boot_user_id == $AppUI->user_id && $boot_user_session == $_COOKIE['PHPSESSID']) {
