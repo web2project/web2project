@@ -60,8 +60,6 @@ $contact->contact_id = $user->user_contact;
 $methods = $contact->getContactMethods();
 $methodLabels = w2PgetSysVal('ContactMethods');
 
-$helper = new w2p_Output_HTMLHelper($AppUI);
-
 $countries = w2PgetSysVal('GlobalCountries');
 // setup the title block
 $titleBlock = new w2p_Theme_TitleBlock('View User', 'icon.png', $m, "$m.$a");
@@ -74,6 +72,9 @@ if ($canEdit || $user_id == $AppUI->user_id) {
     $titleBlock->addCrumbRight('<div class="crumb"><ul><li><a href="javascript: void(0);" onclick="popChgPwd();return false"><span>' . $AppUI->_('change password') . '</span></a></li></ul></div>');
 }
 $titleBlock->show();
+
+$htmlHelper = new w2p_Output_HTMLHelper($AppUI);
+$htmlHelper->stageRowData((array) $user);
 ?>
     <script language="javascript" type="text/javascript">
         <?php
@@ -97,31 +98,27 @@ $titleBlock->show();
                 <table cellspacing="1" cellpadding="2" border="0" width="100%" class="well">
                     <tr>
                         <td align="right" nowrap="nowrap"><?php echo $AppUI->_('User Type'); ?>:</td>
-                        <td width="100%"><?php echo $AppUI->_($utypes[$user->user_type]); ?></td>
+                        <?php echo $htmlHelper->createCell('user_type', $AppUI->_($utypes[$user->user_type])); ?>
                     </tr>
                     <tr>
                         <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Real Name'); ?>:</td>
-                        <td width="100%"><?php echo $user->contact_display_name; ?></td>
+                        <?php echo $htmlHelper->createCell('contact_displayname', $user->contact_display_name); ?>
                     </tr>
                     <tr>
                         <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Company'); ?>:</td>
-                        <td width="100%">
-                            <a href="?m=companies&a=view&company_id=<?php echo $user->contact_company; ?>"><?php echo $user->company_name; ?></a>
-                        </td>
+                        <?php echo $htmlHelper->createCell('contact_company', $user->contact_company); ?>
                     </tr>
                     <tr>
                         <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Department'); ?>:</td>
-                        <td width="100%">
-                            <a href="?m=departments&a=view&dept_id=<?php echo $user->contact_department; ?>"><?php echo $user->dept_name; ?></a>
-                        </td>
+                        <?php echo $htmlHelper->createCell('contact_department', $user->contact_department); ?>
                     </tr>
                     <tr>
                         <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Phone'); ?>:</td>
-                        <td width="100%"><?php echo $user->contact_phone; ?></td>
+                        <?php echo $htmlHelper->createCell('contact_phone', $user->contact_phone); ?>
                     </tr>
                     <tr>
                         <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Email'); ?>:</td>
-                        <?php echo $helper->createCell('contact_email', $user->contact_email); ?>
+                        <?php echo $htmlHelper->createCell('contact_email', $user->contact_email); ?>
                     </tr>
                     <tr valign="top">
                         <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Address'); ?>:</td>
@@ -134,7 +131,7 @@ $titleBlock->show();
                     </tr>
                     <tr>
                         <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Birthday'); ?>:</td>
-                        <?php echo $helper->createCell('_date', $user->contact_birthday); ?>
+                        <?php echo $htmlHelper->createCell('_date', $user->contact_birthday); ?>
                     </tr>
                 </table>
             </td>
@@ -146,7 +143,7 @@ $titleBlock->show();
                     foreach ($fields as $key => $field): ?>
                         <tr>
                             <td align="right" width="100" nowrap="nowrap"><?php echo $AppUI->_($methodLabels[$field]); ?>:</td>
-                            <?php echo $helper->createCell('_'.substr($field, 0, strpos($field, '_')), $methods['values'][$key]); ?>
+                            <?php echo $htmlHelper->createCell('_'.substr($field, 0, strpos($field, '_')), $methods['values'][$key]); ?>
                         </tr>
                     <?php endforeach; ?>
                     <tr>
