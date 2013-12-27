@@ -83,17 +83,11 @@ function delIt() {
 			<table cellspacing="1" cellpadding="2" border="0" width="100%" class="well">
 				<tr>
 					<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Company'); ?>:</td>
-					<td width="100%">
-						<?php if ($perms->checkModuleItem('companies', 'access', $department->dept_company)) { ?>
-							<?php echo '<a href="?m=companies&a=view&company_id=' . $department->dept_company . '">' . htmlspecialchars($department->company_name, ENT_QUOTES) . '</a>'; ?>
-						<?php } else { ?>
-							<?php echo htmlspecialchars($department->company_name, ENT_QUOTES); ?>
-						<?php } ?>
-					</td>
+                    <?php echo $htmlHelper->createCell('dept_company', $department->dept_company); ?>
 				</tr>
 				<tr>
 					<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Owner'); ?>:</td>
-                    <?php echo $htmlHelper->createCell('contact_name', $department->contact_name); ?>
+                    <?php echo $htmlHelper->createCell('dept_owner', $department->dept_owner); ?>
 				</tr>
 				<tr>
 					<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Type'); ?>:</td>
