@@ -101,15 +101,7 @@ function delIt() {
             <table width="100%" cellspacing="1" cellpadding="2" class="well">
                 <tr>
                     <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Project'); ?>:</td>
-                    <td style="background-color:#<?php echo $obj->project_color_identifier; ?>">
-                        <?php
-                        $perms = &$AppUI->acl();
-                        if ($perms->checkModuleItem('projects', 'access', $obj->task_project)) { ?>
-                            <?php echo "<a href='?m=projects&a=view&project_id=" . $obj->task_project . "' style='color: " . bestColor($obj->project_color_identifier) ."'>" . htmlspecialchars($obj->project_name, ENT_QUOTES) . '</a>'; ?>
-                        <?php } else { ?>
-                            <?php echo htmlspecialchars($company_detail['company_name'], ENT_QUOTES); ?>
-                        <?php } ?>
-                    </td>
+                    <?php echo $htmlHelper->createCell('task_project', $obj->task_project); ?>
                 </tr>
                 <?php if ($obj->task_parent != $obj->task_id) {
                     $obj_parent = new CTask();
@@ -122,7 +114,7 @@ function delIt() {
                 <?php } ?>
                 <tr>
                     <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Owner'); ?>:</td>
-                    <?php echo $htmlHelper->createCell('task_owner', $obj->task_owner_name); ?>
+                    <?php echo $htmlHelper->createCell('task_owner', $obj->task_owner); ?>
                 </tr>
                 <tr>
                     <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Priority'); ?>:</td>
