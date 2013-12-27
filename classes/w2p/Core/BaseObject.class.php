@@ -194,6 +194,9 @@ abstract class w2p_Core_BaseObject extends w2p_System_Event implements w2p_Syste
         if ($oid === null) {
             return false;
         }
+        if (!$this->canView()) {
+            return false;
+        }
         $q = $this->_getQuery();
         $q->addTable($this->_tbl);
         $q->addWhere($this->_tbl_key . ' = ' . $oid);
@@ -206,7 +209,7 @@ abstract class w2p_Core_BaseObject extends w2p_System_Event implements w2p_Syste
         $q->bindHashToObject($hash, $this, null, $strip);
         $this->_dispatcher->publish(new w2p_System_Event(get_class($this), 'postLoadEvent'));
 
-        return $this;
+        return true;
     }
 
     /**
