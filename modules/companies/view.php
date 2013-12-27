@@ -36,6 +36,8 @@ $tab = $AppUI->processIntState('CompVwTab', $_GET, 'tab', 0);
 // setup the title block
 $titleBlock = new w2p_Theme_TitleBlock('View Company', 'icon.png', $m, "$m.$a");
 $titleBlock->addCell();
+$titleBlock->addCrumb('?m=companies', 'company list');
+
 if ($canCreateContacts) {
     $titleBlock->addButton('New contact', '?m=contacts&a=addedit&company_id=' . $company_id);
 }
@@ -44,9 +46,7 @@ if ($canEdit) {
         $titleBlock->addButton('New department', '?m=departments&a=addedit&company_id=' . $company_id);
     }
     $titleBlock->addButton('New project', '?m=projects&a=addedit&company_id=' . $company_id);
-}
-$titleBlock->addCrumb('?m=companies', 'company list');
-if ($canEdit) {
+
 	$titleBlock->addCrumb('?m=companies&a=addedit&company_id=' . $company_id, 'edit this company');
 
 	if ($canDelete && $deletable) {
