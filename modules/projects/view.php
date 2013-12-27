@@ -29,7 +29,7 @@ if (!$project) {
 $tab = $AppUI->processIntState('ProjVwTab', $_GET, 'tab', 0);
 
 //TODO: is this different from the above checks for some reason?
-// Now check if the proect is editable/viewable.
+// Now check if the project is editable/viewable.
 $denied = $project->getDeniedRecords($AppUI->user_id);
 if (in_array($project_id, $denied)) {
 	$AppUI->redirect(ACCESS_DENIED);
@@ -58,21 +58,19 @@ $style = (($actual_end_date > $end_date) && !empty($end_date)) ? 'style="color:r
 // setup the title block
 $titleBlock = new w2p_Theme_TitleBlock('View Project', 'icon.png', $m, $m . '.' . $a);
 
+$titleBlock->addCrumb('?m=projects', 'projects list');
+
 if ($canEdit) {
     $titleBlock->addButton('new link', '?m=links&a=addedit&project_id=' . $project_id);
     $titleBlock->addButton('new event', '?m=events&a=addedit&project_id=' . $project_id);
     $titleBlock->addButton('new file', '?m=files&a=addedit&project_id=' . $project_id);
-}
-
-if (canAdd('tasks')) {
-    $titleBlock->addButton('new task', '?m=tasks&a=addedit&task_project=' . $project_id);
-}
-$titleBlock->addCrumb('?m=projects', 'projects list');
-if ($canEdit) {
 	$titleBlock->addCrumb('?m=projects&a=addedit&project_id=' . $project_id, 'edit this project');
 	if ($canDelete) {
 		$titleBlock->addCrumbDelete('delete project', $canDelete);
 	}
+}
+if (canAdd('tasks')) {
+    $titleBlock->addButton('new task', '?m=tasks&a=addedit&task_project=' . $project_id);
 }
 $titleBlock->show();
 
