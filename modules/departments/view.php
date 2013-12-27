@@ -3,28 +3,23 @@ if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
 // @todo    convert to template
-
 $dept_id = (int) w2PgetParam($_GET, 'dept_id', 0);
 
 $department = new CDepartment();
-$department->dept_id = $dept_id;
+
+if (!$department->load($dept_id)) {
+    $AppUI->redirect(ACCESS_DENIED);
+}
+
+if (!$department) {
+    $AppUI->setMsg('Department');
+    $AppUI->setMsg('invalidID', UI_MSG_ERROR, true);
+    $AppUI->redirect();
+}
 
 $canEdit   = $department->canEdit();
-$canRead   = $department->canView();
-$canCreate = $department->canCreate();
-$canAccess = $department->canAccess();
 $canDelete = $department->canDelete();
 
-if (!$canAccess || !$canRead) {
-	$AppUI->redirect(ACCESS_DENIED);
-}
-
-$department->loadFull(null, $dept_id);
-if (!$department) {
-	$AppUI->setMsg('Department');
-	$AppUI->setMsg('invalidID', UI_MSG_ERROR, true);
-	$AppUI->redirect();
-}
 
 $tab = $AppUI->processIntState('DeptVwTab', $_GET, 'tab', 0);
 
@@ -32,15 +27,13 @@ $countries = w2PgetSysVal('GlobalCountries');
 $types = w2PgetSysVal('DepartmentType');
 
 $titleBlock = new w2p_Theme_TitleBlock('View Department', 'icon.png', $m, $m . '.' . $a);
-if ($canEdit) {
-    $titleBlock->addCell();
-    $titleBlock->addButton('New department', '?m=departments&a=addedit&company_id=' . $department->dept_company . '&dept_parent=' . $dept_id);
-}
-
 $titleBlock->addCrumb('?m=companies', 'company list');
 $titleBlock->addCrumb('?m=companies&a=view&company_id=' . $department->dept_company, 'view this company');
 $titleBlock->addCrumb('?m=departments', 'department list');
+
 if ($canEdit) {
+    $titleBlock->addCell();
+    $titleBlock->addButton('New department', '?m=departments&a=addedit&company_id=' . $department->dept_company . '&dept_parent=' . $dept_id);
     $titleBlock->addCrumb('?m=departments&a=addedit&dept_id=' . $dept_id, 'edit this department');
 
     if ($canDelete) {
