@@ -11,12 +11,6 @@ if (!$company->load($company_id)) {
     $AppUI->redirect(ACCESS_DENIED);
 }
 
-if (!$company) {
-    $AppUI->setMsg('Company');
-    $AppUI->setMsg('invalidID', UI_MSG_ERROR, true);
-    $AppUI->redirect();
-}
-
 $canEdit   = $company->canEdit();
 $canDelete = $company->canDelete();
 $deletable = $canDelete;            //TODO: this should be removed once the $deletable variable is removed

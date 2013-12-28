@@ -11,12 +11,6 @@ if (!$project->load($project_id)) {
     $AppUI->redirect(ACCESS_DENIED);
 }
 
-if (!$project) {
-    $AppUI->setMsg('Project');
-    $AppUI->setMsg('invalidID', UI_MSG_ERROR, true);
-    $AppUI->redirect();
-}
-
 $canEdit   = $project->canEdit();
 $canDelete = $project->canDelete();
 

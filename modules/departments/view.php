@@ -11,12 +11,6 @@ if (!$department->load($dept_id)) {
     $AppUI->redirect(ACCESS_DENIED);
 }
 
-if (!$department) {
-    $AppUI->setMsg('Department');
-    $AppUI->setMsg('invalidID', UI_MSG_ERROR, true);
-    $AppUI->redirect();
-}
-
 $canEdit   = $department->canEdit();
 $canDelete = $department->canDelete();
 

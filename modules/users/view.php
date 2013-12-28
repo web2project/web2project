@@ -11,12 +11,6 @@ if (!$user->load($user_id)) {
     $AppUI->redirect(ACCESS_DENIED);
 }
 
-if (!$user) {
-    $AppUI->setMsg('User');
-    $AppUI->setMsg('invalidID', UI_MSG_ERROR, true);
-    $AppUI->redirect();
-}
-
 $canEdit   = $user->canEdit();
 
 

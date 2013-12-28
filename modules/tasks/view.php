@@ -11,12 +11,6 @@ if (!$obj->load($task_id)) {
     $AppUI->redirect(ACCESS_DENIED);
 }
 
-if (!$obj) {
-    $AppUI->setMsg('Task');
-    $AppUI->setMsg('invalidID', UI_MSG_ERROR, true);
-    $AppUI->redirect();
-}
-
 $canEdit   = $obj->canEdit();
 $canDelete = $obj->canDelete();
 

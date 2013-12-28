@@ -11,12 +11,6 @@ if (!$obj->load($resource_id)) {
     $AppUI->redirect(ACCESS_DENIED);
 }
 
-if (!$obj) {
-    $AppUI->setMsg('Resource');
-    $AppUI->setMsg('invalidID', UI_MSG_ERROR, true);
-    $AppUI->redirect();
-}
-
 $canEdit   = $obj->canEdit();
 $canDelete = $obj->canDelete();
 

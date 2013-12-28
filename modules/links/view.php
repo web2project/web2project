@@ -11,10 +11,4 @@ if (!$link->load($link_id)) {
     $AppUI->redirect(ACCESS_DENIED);
 }
 
-if (!$link) {
-    $AppUI->setMsg('Link');
-    $AppUI->setMsg('invalidID', UI_MSG_ERROR, true);
-    $AppUI->redirect();
-}
-
 header("Location: " . $link->link_url);

@@ -11,12 +11,6 @@ if (!$event->load($event_id)) {
     $AppUI->redirect(ACCESS_DENIED);
 }
 
-if (!$event) {
-    $AppUI->setMsg('Event');
-    $AppUI->setMsg('invalidID', UI_MSG_ERROR, true);
-    $AppUI->redirect();
-}
-
 $canEdit   = $event->canEdit();
 $canDelete = $event->canDelete();
 
