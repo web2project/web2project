@@ -2981,6 +2981,7 @@ function projectSelectWithOptGroup($user_id, $select_name, $select_attribs, $sel
 	$q = new w2p_Database_Query();
 	$q->addTable('projects', 'pr');
 	$q->addQuery('DISTINCT pr.project_id, co.company_name, project_name');
+    $q->addJoin('companies', 'co', 'co.company_id = pr.project_company');
 	if (!empty($excludeProjWithId)) {
 		$q->addWhere('pr.project_id <> ' . $excludeProjWithId);
 	}
