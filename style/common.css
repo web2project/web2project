@@ -684,3 +684,7 @@ input.state, input.zip {
 .tasks-depends label, .tasks-resources label, .users label {
     width: 18em;
 }
+
+.files label {
+    width: 24em;
+}

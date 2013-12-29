@@ -2259,12 +2259,10 @@ function file_show_attr() {
 	global $AppUI, $obj, $ci, $canAdmin, $file_project, $file_task, $task_name, $preserve, $file_helpdesk_item;
 
 	if ($ci) {
-		$str_out = '<tr><td align="right" nowrap="nowrap">' . $AppUI->_('Minor Revision') . '</td><td><input type="Radio" name="revision_type" value="minor" checked />' . '</td><tr><td align="right" nowrap="nowrap">' . $AppUI->_('Major Revision') . '</td><td><input type="Radio" name="revision_type" value="major" /></td>';
+		$str_out = '<p><label>' . $AppUI->_('Minor Revision') . '</label><input type="Radio" name="revision_type" value="minor" checked />' . '</p><p><label>' . $AppUI->_('Major Revision') . '</label><input type="Radio" name="revision_type" value="major" />';
 	} else {
-		$str_out = '<tr><td align="right" nowrap="nowrap">' . $AppUI->_('Version') . ':</td>';
+		$str_out = '<p><label>' . $AppUI->_('Version') . ':</label>';
 	}
-
-	$str_out .= '<td align="left">';
 
 	if ($ci || ($canAdmin && $obj->file_checkout == 'final')) {
 		$str_out .= '<input type="hidden" name="file_checkout" value="" /><input type="hidden" name="file_co_reason" value="" />';
@@ -2278,7 +2276,7 @@ function file_show_attr() {
 		$str_out .= '<input type="text" name="file_version" maxlength="10" size="5" value="' . $the_value . '" class="text" />';
 	}
 
-	$str_out .= '</td>';
+	$str_out .= '</p>';
 
 	$select_disabled = ' ';
 	$onclick_task = ' onclick="popTask()" ';
@@ -2291,32 +2289,18 @@ function file_show_attr() {
 	}
 
 	// Category
-	$str_out .= '<tr><td align="right" nowrap="nowrap">' . $AppUI->_('Category') . ':</td>';
-	$str_out .= '<td align="left">' . arraySelect(w2PgetSysVal('FileType'), 'file_category', 'class="text"' . $select_disabled, $obj->file_category, true) . '<td>';
+	$str_out .= '<p><label>' . $AppUI->_('Category') . ':</label>';
+	$str_out .= arraySelect(w2PgetSysVal('FileType'), 'file_category', 'class="text"' . $select_disabled, $obj->file_category, true) . '</p>';
 
 	// ---------------------------------------------------------------------------------
 
-	if ($file_helpdesk_item) {
-		$hd_item = new CHelpDeskItem();
-		$hd_item->load($file_helpdesk_item);
-		//Helpdesk Item
-		$str_out .= '<tr><td align="right" nowrap="nowrap">' . $AppUI->_('Helpdesk Item') . ':</td>';
-		$str_out .= '<td align="left"><strong>' . $hd_item->item_id . ' - ' . $hd_item->item_title . '</strong></td></tr>';
-		// Project
-		$str_out .= '<input type="hidden" name="file_project" value="' . $file_project . '" />';
+    $str_out .= '<p><label>' . $AppUI->_('Project') . ':</label>';
+    $str_out .= projectSelectWithOptGroup($AppUI->user_id, 'file_project', 'size="1" class="text"' . $select_disabled, $file_project) . '</p>';
 
-		// Task
-		$str_out .= '<input type="hidden" name="file_task" value="0" />';
-	} else {
-		// Project
-		$str_out .= '<tr><td align="right" nowrap="nowrap">' . $AppUI->_('Project') . ':</td>';
-		$str_out .= '<td align="left">' . projectSelectWithOptGroup($AppUI->user_id, 'file_project', 'size="1" class="text"' . $select_disabled, $file_project) . '</td></tr>';
+    // ---------------------------------------------------------------------------------
 
-		// ---------------------------------------------------------------------------------
-
-		// Task
-		$str_out .= '<tr><td align="right" nowrap="nowrap">' . $AppUI->_('Task') . ':</td><td align="left" colspan="2" valign="top"><input type="hidden" name="file_task" value="' . $file_task . '" /><input type="text" class="text" name="task_name" value="' . $task_name . '" size="40" disabled /><input type="button" class="button btn btn-primary btn-mini" value="' . $AppUI->_('select task') . '..."' . $onclick_task . '/></td></tr>';
-	}
+    // Task
+    $str_out .= '<p><label>' . $AppUI->_('Task') . ':</label><input type="hidden" name="file_task" value="' . $file_task . '" /><input type="text" class="text" name="task_name" value="' . $task_name . '" size="40" disabled /><input type="button" class="button btn btn-primary btn-mini" value="' . $AppUI->_('select task') . '..."' . $onclick_task . '/></p>';
 
 	return ($str_out);
 }
