@@ -1,6 +1,6 @@
 <?php
 $xajax = new xajax();
-$xajax->configure('javascript URI',w2PgetConfig('base_url').'/lib/xajax/');
+$xajax->configure('javascript URI', W2P_BASE_URL.'/lib/xajax/');
 
 function calcFinish($start_date, $start_hour, $start_minute, $duration_type, $task_duration) {
     global $AppUI;

@@ -1170,15 +1170,15 @@ class w2p_Core_CAppUI
     {
         global $AppUI;
 
-        $s = '<style type="text/css">@import url(' . w2PgetConfig('base_url') . '/lib/jscalendar/skins/aqua/theme.css);</style>';
-        $s .= '<script type="text/javascript" src="' . w2PgetConfig('base_url') . '/js/calendar.js"></script>';
-        $s .= '<script type="text/javascript" src="' . w2PgetConfig('base_url') . '/lib/jscalendar/calendar.js"></script>';
+        $s = '<style type="text/css">@import url(' . W2P_BASE_URL . '/lib/jscalendar/skins/aqua/theme.css);</style>';
+        $s .= '<script type="text/javascript" src="' . W2P_BASE_URL . '/js/calendar.js"></script>';
+        $s .= '<script type="text/javascript" src="' . W2P_BASE_URL . '/lib/jscalendar/calendar.js"></script>';
         if (file_exists(w2PgetConfig('root_dir') . '/lib/jscalendar/lang/calendar-' . $AppUI->user_locale . '.js')) {
-            $s .= '<script type="text/javascript" src="' . w2PgetConfig('base_url') . '/lib/jscalendar/lang/calendar-' . $AppUI->user_locale . '.js"></script>';
+            $s .= '<script type="text/javascript" src="' . W2P_BASE_URL . '/lib/jscalendar/lang/calendar-' . $AppUI->user_locale . '.js"></script>';
         } else {
-            $s .= '<script type="text/javascript" src="' . w2PgetConfig('base_url') . '/lib/jscalendar/lang/calendar-en.js"></script>';
+            $s .= '<script type="text/javascript" src="' . W2P_BASE_URL . '/lib/jscalendar/lang/calendar-en.js"></script>';
         }
-        $s .= '<script type="text/javascript" src="' . w2PgetConfig('base_url') . '/lib/jscalendar/calendar-setup.js"></script>';
+        $s .= '<script type="text/javascript" src="' . W2P_BASE_URL . '/lib/jscalendar/calendar-setup.js"></script>';
         echo $s;
         include w2PgetConfig('root_dir') . '/js/calendar.php';
     }

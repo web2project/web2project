@@ -477,7 +477,6 @@ $ganttfile = $outpfiles;
 // Initialize PDF document 
 $font_dir = W2P_BASE_DIR . '/lib/ezpdf/fonts';
 $temp_dir = W2P_BASE_DIR . '/files/temp';
-$base_url = w2PgetConfig('base_url');
 
 $output = new w2p_Output_PDFRenderer('A4', 'landscape');
 $pdf = $output->getPDF();

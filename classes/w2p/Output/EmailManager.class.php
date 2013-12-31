@@ -61,7 +61,7 @@ class w2p_Output_EmailManager
 
         $body .= $this->_AppUI->_('Event') . ":\t" . $event->event_name . "\n";
         if (!$clash) {
-            $body .= $this->_AppUI->_('URL') . ":\t" . w2PgetConfig('base_url') . "/index.php?m=events&a=view&event_id=" . $event->event_id . "\n";
+            $body .= $this->_AppUI->_('URL') . ":\t" . W2P_BASE_URL . "/index.php?m=events&a=view&event_id=" . $event->event_id . "\n";
         }
 
         $date_format = $this->_AppUI->getPref('SHDATEFORMAT');
@@ -285,7 +285,7 @@ class w2p_Output_EmailManager
 
         $body = $this->_AppUI->_('Project') . ': ' . $project->project_name . ' ' . $this->_AppUI->_('has been') . ' ' . $this->_AppUI->_($status);
         $body .= "\n" . $this->_AppUI->_('You can view the Project by clicking'). ':';
-        $body .= "\n" . $this->_AppUI->_('URL') . ':     ' . w2PgetConfig('base_url') . '/index.php?m=projects&a=view&project_id=' . $project->project_id;
+        $body .= "\n" . $this->_AppUI->_('URL') . ':     ' . W2P_BASE_URL . '/index.php?m=projects&a=view&project_id=' . $project->project_id;
         $body .= "\n\n(" . $this->_AppUI->_('You are receiving this message because you are the owner of this Project') . ")";
         $body .= "\n\n" . $this->_AppUI->_('Description') . ':' . "\n $project->project_description \n\n";
 
@@ -306,7 +306,7 @@ class w2p_Output_EmailManager
         $status = (intval($isNotNew)) ? 'Updated' : 'Created';
 
         $body = $this->_AppUI->_('Project') . ": $project->project_name Has Been $status Via Project Manager. You can view the Project by clicking: ";
-        $body .= "\n" . $this->_AppUI->_('URL') . ':     ' . w2PgetConfig('base_url') . '/index.php?m=projects&a=view&project_id=' . $project->project_id;
+        $body .= "\n" . $this->_AppUI->_('URL') . ':     ' . W2P_BASE_URL . '/index.php?m=projects&a=view&project_id=' . $project->project_id;
         $body .= "\n\n(You are receiving this message because you are a contact or assignee for this Project)";
         $body .= "\n\n" . $this->_AppUI->_('Description') . ':' . "\n $project->project_description \n\n";
 
@@ -365,7 +365,7 @@ class w2p_Output_EmailManager
     {
         $body = $username . ",\n\n";
         $body .= "An access account has been created for you in our web2Project project management system.\n\n";
-        $body .= "You can access it here at " . w2PgetConfig('base_url');
+        $body .= "You can access it here at " . W2P_BASE_URL;
         $body .= "\n\n" . "Your username is: " . $logname . "\n";
         $body .= "Your password is: " . $logpwd . "\n\n";
         $body .= "This account will allow you to see and interact with projects. If you have any questions please contact us.";
@@ -375,11 +375,9 @@ class w2p_Output_EmailManager
 
     public function notifyPasswordReset($username, $password)
     {
-        $_live_site = w2PgetConfig('base_url');
-
         $body = $this->_AppUI->_('sendpass0', UI_OUTPUT_RAW) . ' ' .
                 $username . ' ' . $this->_AppUI->_('sendpass1', UI_OUTPUT_RAW) . ' ' .
-                $_live_site . ' ' . $this->_AppUI->_('sendpass2', UI_OUTPUT_RAW) . ' ' .
+                W2P_BASE_URL . ' ' . $this->_AppUI->_('sendpass2', UI_OUTPUT_RAW) . ' ' .
                 $password . ' ' . $this->_AppUI->_('sendpass3', UI_OUTPUT_RAW);
 
         return $body;

@@ -4527,7 +4527,7 @@ function w2PsessionStart()
     $cookie_dir = '';
 
     // Try and get the correct path to the base URL.
-    preg_match('_^(https?://)([^/]+)(:0-9]+)?(/.*)?$_i', w2PgetConfig('base_url'), $url_parts);
+    preg_match('_^(https?://)([^/]+)(:0-9]+)?(/.*)?$_i', W2P_BASE_URL, $url_parts);
 
     if (isset($url_parts[4])) {
         $cookie_dir = $url_parts[4];

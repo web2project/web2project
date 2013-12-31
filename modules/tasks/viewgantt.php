@@ -8,7 +8,6 @@ global $AppUI, $min_view, $m, $a, $user_id, $tab, $tasks, $cal_sdf;
 GLOBAL $gantt_map, $currentGanttImgSource, $filter_task_list, $caller;
 $AppUI->loadCalendarJS();
 
-$base_url = w2PgetConfig('base_url');
 $min_view = defVal($min_view, false);
 
 $project_id = (int) w2PgetParam($_GET, 'project_id', 0);

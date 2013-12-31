@@ -6,7 +6,7 @@
 $timezones = w2PgetTimezonesForInstall();
         
 ?>
-<form action="<?php echo $baseUrl; ?>/index.php" method="post" name="form" id="form" accept-charset="utf-8">
+<form action="<?php echo W2P_BASE_URL; ?>/index.php" method="post" name="form" id="form" accept-charset="utf-8">
 	<input type="hidden" name="step" value="perform" />
     <table cellspacing="0" cellpadding="3" border="0" class="tbl update" align="center">
 		<tr>
