@@ -44,9 +44,10 @@ for ($i = 1, $i_cmp = sizeof($keys); $i < $i_cmp; $i++) {
     <input name="hperc_assign" type="hidden" value="<?php echo $initPercAsignment; ?>"/>
     <input type="hidden" name="hassign" />
 
-    <table class="std addedit well">
-        <tr>
-            <td valign="top" align="center">
+    <div class="std addedit tasks-resources">
+        <div class="column left">
+            <p>
+                <label>&nbsp;</label>
                 <table cellspacing="0" cellpadding="2" border="0" class="well">
                     <tr>
                         <td><?php echo $AppUI->_('Human Resources'); ?>:</td>
@@ -63,45 +64,40 @@ for ($i = 1, $i_cmp = sizeof($keys); $i < $i_cmp; $i++) {
                     <tr>
                         <td colspan="2" align="center">
                             <table>
-                            <tr>
-                                <td align="right"><input type="button" class="button btn btn-primary btn-mini" value="&gt;" onclick="addUser(document.resourceFrm)" /></td>
-                                <td>
-                                    <select name="percentage_assignment" class="text">
-                                    <?php
-                                    for ($i = 5; $i <= 100; $i += 5) {
-                                        echo '<option ' . (($i == 100) ? 'selected="true"' : '') . ' value="' . $i . '">' . $i . '%</option>';
-                                    }
-                                    ?>
-                                    </select>
-                                </td>
-                                <td align="left"><input type="button" class="button btn btn-primary btn-mini" value="&lt;" onclick="removeUser(document.resourceFrm)" /></td>
-                            </tr>
+                                <tr>
+                                    <td align="right"><input type="button" class="button btn btn-primary btn-mini" value="&gt;" onclick="addUser(document.resourceFrm)" /></td>
+                                    <td>
+                                        <select name="percentage_assignment" class="text">
+                                            <?php
+                                            for ($i = 5; $i <= 100; $i += 5) {
+                                                echo '<option ' . (($i == 100) ? 'selected="true"' : '') . ' value="' . $i . '">' . $i . '%</option>';
+                                            }
+                                            ?>
+                                        </select>
+                                    </td>
+                                    <td align="left"><input type="button" class="button btn btn-primary btn-mini" value="&lt;" onclick="removeUser(document.resourceFrm)" /></td>
+                                </tr>
                             </table>
                         </td>
                     </tr>
                 </table>
-            </td>
-            <td valign="top" align="center">
-                <table class="well">
-                    <tr>
-                        <td align="left">
-                            <?php echo $AppUI->_('Additional Email Comments'); ?>:
-                            <br />
-                            <textarea name="email_comment" class="textarea" cols="60" rows="10"></textarea><br />
-                            <input type="checkbox" name="task_notify" id="task_notify" value="1" <?php if ($task->task_notify != '0') echo 'checked="checked"' ?> />
-                            <label for="task_notify"><?php echo $AppUI->_('notifyChange'); ?></label>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td align="left">
-                            <input type="checkbox" value="1" name="task_allow_other_user_tasklogs" <?php echo $task->task_allow_other_user_tasklogs ? 'checked="checked"' : ''; ?> />
-                            <label for="task_allow_other_user_tasklogs"><?php echo $AppUI->_('Allow users to add task logs for others'); ?></label>
-                        </td>
-                    </tr>
-                </table>
-            </td>
-        </tr>
-    </table>
+            </p>
+        </div>
+        <div class="column right">
+            <p>
+                <label><?php echo $AppUI->_('Additional Email Comments'); ?>:</label>
+                <textarea name="email_comment" class="textarea" cols="60" rows="10"></textarea>
+            </p>
+            <p>
+                <label><?php echo $AppUI->_('notifyChange'); ?>:</label>
+                <input type="checkbox" name="task_notify" id="task_notify" value="1" <?php if ($task->task_notify != '0') echo 'checked="checked"' ?> />
+            </p>
+            <p>
+                <label><?php echo $AppUI->_('Allow users to add task logs for others'); ?>:</label>
+                <input type="checkbox" value="1" name="task_allow_other_user_tasklogs" <?php echo $task->task_allow_other_user_tasklogs ? 'checked="checked"' : ''; ?> />
+            </p>
+        </div>
+    </div>
 </form>
 <script language="javascript" type="text/javascript">
 	subForm.push(new FormDefinition(<?php echo $tab; ?>, document.resourceFrm, checkResource, saveResource));

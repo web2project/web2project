@@ -339,7 +339,7 @@ table.list tr:hover td._name {
 }
 .addedit textarea {
     height: 75px;
-    width:  80%;
+    width:  65%;
 }
 
 /*
@@ -667,7 +667,7 @@ label {
     width: 10em;
 }
 div.addedit textarea {
-    width: 80%;
+    width: 65%;
 }
 div.addedit input.save {
     float: right;
@@ -679,4 +679,12 @@ input.name, input.url {
 
 input.state, input.zip {
     width: 50px;
+}
+
+.tasks-depends label, .tasks-resources label, .users label {
+    width: 18em;
+}
+
+.files label {
+    width: 24em;
 }

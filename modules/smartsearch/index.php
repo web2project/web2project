@@ -106,9 +106,16 @@ foreach ($hook_modules as $tmp) {
     $titleBlock = new w2p_Theme_TitleBlock('SmartSearch', 'icon.png', $m, $m . '.' . $a);
     $titleBlock->show();
 ?>
+<?php
+
+$form = new w2p_Output_HTML_FormHelper($AppUI);
+
+?>
 <form name="frmSearch" action="?m=<?php echo $m; ?>"  method="post" accept-charset="utf-8">
-<table class="tbl view smartsearch">
-	<tr><td>
+    <?php echo $form->addNonce(); ?>
+
+    <table class="tbl view smartsearch">
+        <tr><td>
 			<table cellspacing="5" cellpadding="0" border="0">
 				<tr>
 					<td align="left" valign="middle">

@@ -83,47 +83,37 @@ function delIt() {
 	}
 }
 </script>
+<?php
 
+$form = new w2p_Output_HTML_FormHelper($AppUI);
+
+?>
 <form name="folderFrm" action="?m=<?php echo $m; ?>" enctype="multipart/form-data" method="post" class="addedit files-folder">
 	<input type="hidden" name="dosql" value="do_folder_aed" />
 	<input type="hidden" name="del" value="0" />
 	<input type="hidden" name="file_folder_id" value="<?php echo $folder_id; ?>" />
 	<input type="hidden" name="redirect" value="<?php echo $referrer; ?>" />
-    <table class="std addedit files-folder">
-        <tr>
-            <td width="50%" valign="top" align="center">
-                <table class="well">
-                    <tr>
-                        <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Subfolder of'); ?>:</td>
-                        <td align="left">
-                        <?php
-                            $parent_folder = ($folder_id > 0) ? $folder->file_folder_parent : $file_folder_parent;
-                            echo arraySelectTree($folders, 'file_folder_parent', 'style="width:175px;" class="text"', $parent_folder);
-                        ?>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Folder Name'); ?>:</td>
-                        <td align="left">
-                            <input type="text" class="text" id="ffn" name="file_folder_name" value="<?php echo $folder->file_folder_name; ?>" maxlength="255" />
-                        </td>
-                    </tr>
-                    <tr>
-                        <td align="right" valign="top" nowrap="nowrap"><?php echo $AppUI->_('Description'); ?>:</td>
-                        <td align="left">
-                            <textarea name="file_folder_description" class="textarea" rows="4" style="width:270px"><?php echo $folder->file_folder_description; ?></textarea>
-                        </td>
-                    </tr>
-                </table>
-            </td>
-        </tr>
-        <tr>
-            <td>
-                <input class="button btn btn-danger" type="button" name="cancel" value="<?php echo $AppUI->_('cancel'); ?>" onclick="javascript:if(confirm('<?php echo $AppUI->_('Are you sure you want to cancel?'); ?>')){location.href = '?<?php echo $referrer; ?>';}" />
-            </td>
-            <td align="right">
-                <input type="button" class="button btn btn-primary" value="<?php echo $AppUI->_('submit'); ?>" onclick="submitIt()" />
-            </td>
-        </tr>
-    </table>
+    <?php echo $form->addNonce(); ?>
+
+    <div class="std addedit departments">
+        <div class="column left">
+            <p>
+                <label><?php echo $AppUI->_('Subfolder of'); ?>:</label>
+                <?php
+                $parent_folder = ($folder_id > 0) ? $folder->file_folder_parent : $file_folder_parent;
+                echo arraySelectTree($folders, 'file_folder_parent', 'style="width:175px;" class="text"', $parent_folder);
+                ?>
+            </p>
+            <p>
+                <label><?php echo $AppUI->_('Folder Name'); ?>:</label>
+                <input type="text" class="text" id="ffn" name="file_folder_name" value="<?php echo $folder->file_folder_name; ?>" maxlength="255" />
+            </p>
+            <p>
+                <label><?php echo $AppUI->_('Description'); ?>:</label>
+                <textarea name="file_folder_description" class="textarea" rows="4" style="width:270px"><?php echo $folder->file_folder_description; ?></textarea>
+            </p>
+            <input class="button btn btn-danger" type="button" name="cancel" value="<?php echo $AppUI->_('cancel'); ?>" onclick="javascript:if(confirm('<?php echo $AppUI->_('Are you sure you want to cancel?'); ?>')){location.href = '?<?php echo $referrer; ?>';}" />
+            <input type="button" style="float: right;" class="button btn btn-primary" value="<?php echo $AppUI->_('submit'); ?>" onclick="submitIt()" />
+        </div>
+    </div>
 </form>

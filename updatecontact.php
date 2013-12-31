@@ -74,7 +74,11 @@ function orderByName( x ){
 	}
 }
 </script>
+<?php
 
+$form = new w2p_Output_HTML_FormHelper($AppUI);
+
+?>
 <form name="changecontact" action="do_updatecontact.php" method="post" accept-charset="utf-8">
 	<input type="hidden" name="contact_project" value="0" />
 	<input type="hidden" name="contact_unique_update" value="<?php echo uniqid(''); ?>" />
@@ -83,6 +87,7 @@ function orderByName( x ){
 	<input type="hidden" name="contact_owner" value="<?php echo $row->contact_owner ? $row->contact_owner : $AppUI->user_id; ?>" />
 	<input type="hidden" name="contact_company" value="<?php echo $row->contact_company ? $row->contact_company : 0; ?>" />
 	<input type="hidden" name="contact_department" value="<?php echo $row->contact_department ? $row->contact_department : 0; ?>" />
+    <?php echo $form->addNonce(); ?>
 
 	<table border="0" cellpadding="4" cellspacing="0" width="100%" class="std">
 		<tr>

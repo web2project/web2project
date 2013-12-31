@@ -196,12 +196,12 @@ function addContactMethod(field, value) {
     }
 
     /* Create a new table row */
-    $('<tr id="contact_methods_' + index + '_" />').insertBefore('#custom_fields');
+    $('<p id="contact_methods_' + index + '_" />').insertBefore('#custom_fields');
 
     /* Add contact method type menu to the table row */
-    $('#contact_methods_' + index + '_').append('<td align="right"><select id="method_select_' + index + '" name="contact_methods[field][' + index + ']" size="1" class="text" /></td>');
+    $('#contact_methods_' + index + '_').append('<label><select id="method_select_' + index + '" name="contact_methods[field][' + index + ']" size="1" class="text" /></label>');
     /* Add text field for the contact method value to the table row */
-    $('#contact_methods_' + index + '_').append('<td><input type="text" name="contact_methods[value][' + index + ']" size="25" maxlength="255" class="text" value="' + (value ? value : "") + '" /><?php echo w2PtoolTip('Contact Method', 'Remove') ?><a id="remove_contact_method" href="javascript:removeContactMethod(\'' + index + '\')"><img src="<?php echo w2PfindImage('icons/remove.png'); ?>" style="border: 0;" alt="" /></a><?php echo w2PendTip() ?></td>');
+    $('#contact_methods_' + index + '_').append('<input type="text" name="contact_methods[value][' + index + ']" size="25" maxlength="255" class="text" value="' + (value ? value : "") + '" /><?php echo w2PtoolTip('Contact Method', 'Remove') ?><a id="remove_contact_method" href="javascript:removeContactMethod(\'' + index + '\')"><img src="<?php echo w2PfindImage('icons/remove.png'); ?>" style="border: 0;" alt="" /></a><?php echo w2PendTip() ?>');
     addOption('#method_select_' + index, "", "");
     <?php foreach ($methodLabels as $value => $text): ?>
     addOption('#method_select_' + index, "<?php echo $value; ?>", "<?php echo $text; ?>", field);
@@ -224,7 +224,11 @@ foreach ($fields as $key => $field): ?>
     addContactMethod();
 });
 </script>
+<?php
 
+$form = new w2p_Output_HTML_FormHelper($AppUI);
+
+?>
 <form name="changecontact" action="?m=<?php echo $m; ?>" method="post" accept-charset="utf-8" class="contacts addedit">
     <input type="hidden" name="dosql" value="do_contact_aed" />
     <input type="hidden" name="del" value="0" />
@@ -232,162 +236,119 @@ foreach ($fields as $key => $field): ?>
     <input type="hidden" name="contact_unique_update" value="<?php echo uniqid(''); ?>" />
     <input type="hidden" name="contact_id" value="<?php echo $contact_id; ?>" />
     <input type="hidden" name="contact_owner" value="<?php echo $row->contact_owner ? $row->contact_owner : $AppUI->user_id; ?>" />
+    <?php echo $form->addNonce(); ?>
 
-    <table class="std addedit contacts">
-        <tr>
-            <td valign="top" align="right">
-                <table class="well">
-                <tr>
-                    <td align="right"><?php echo $AppUI->_('First Name'); ?>:</td>
-                    <td>
-                        <input type="text" class="text" size="25" name="contact_first_name" value="<?php echo $row->contact_first_name; ?>" maxlength="50" />
-                    </td>
-                </tr>
-                <tr>
-                    <td align="right">&nbsp;&nbsp;<?php echo $AppUI->_('Last Name'); ?>:</td>
-                    <td>
-                        <input type="text" class="text" size="25" name="contact_last_name" value="<?php echo $row->contact_last_name; ?>" maxlength="50" <?php if ($contact_id == 0) { ?> onBlur="orderByName('name')"<?php } ?> />
-                        <a href="javascript: void(0);" onclick="orderByName('name')">[<?php echo $AppUI->_('use in display'); ?>]</a>
-                    </td>
-                </tr>
-                <tr>
-                    <td align="right"><?php echo $AppUI->_('Display Name'); ?>: </td>
-                    <td>
-                        <input type="text" class="text" size="25" name="contact_display_name" value="<?php echo $row->contact_display_name; ?>" maxlength="50" />
-                    </td>
-                </tr>
-                <tr>
-                    <td align="right"><?php echo $AppUI->_('Job Title'); ?>:</td>
-                    <td nowrap="nowrap">
-                        <input type="text" class="text" name="contact_job" value="<?php echo $row->contact_job; ?>" maxlength="100" size="25" />
-                    </td>
-                </tr>
-                <tr>
-                    <td align="right"><?php echo $AppUI->_('Company'); ?>:</td>
-                    <td nowrap="nowrap">
-                        <?php echo arraySelect($companies, 'contact_company', 'class="text" size="1" onChange="companyChange();"', $company_detail['company_id']); ?>
-                    </td>
-                </tr>
-                <?php if ($AppUI->isActiveModule('departments')) { ?>
-                <tr>
-                    <td align="right"><?php echo $AppUI->_('Department'); ?>:</td>
-                    <td nowrap="nowrap">
-                        <input type="text" class="text" name="contact_department_name" id="contact_department_name" value="<?php echo $dept_detail['dept_name']; ?>" maxlength="100" size="25" />
-                        <input type='hidden' name='contact_department' value='<?php echo $dept_detail['dept_id']; ?>' />
-                        <input type="button" class="button btn btn-primary btn-mini" value="<?php echo $AppUI->_('select department...'); ?>" onclick="popDepartment()" />
-                    </td>
-                </tr>
-                <?php } ?>
-                <tr>
-                    <td align="right"><?php echo $AppUI->_('Title'); ?>:</td>
-                    <td><input type="text" class="text" name="contact_title" value="<?php echo $row->contact_title; ?>" maxlength="50" size="25" /></td>
-                </tr>
-                <tr>
-                    <td align="right"><?php echo $AppUI->_('Type'); ?>:</td>
-                    <td><input type="text" class="text" name="contact_type" value="<?php echo $row->contact_type; ?>" maxlength="50" size="25" /></td>
-                </tr>
-                <tr>
-                    <td align="right"><?php echo $AppUI->_('Address'); ?>1:</td>
-                    <td><input type="text" class="text" name="contact_address1" value="<?php echo $row->contact_address1; ?>" maxlength="60" size="25" /></td>
-                </tr>
-                <tr>
-                    <td align="right"><?php echo $AppUI->_('Address'); ?>2:</td>
-                    <td><input type="text" class="text" name="contact_address2" value="<?php echo $row->contact_address2; ?>" maxlength="60" size="25" /></td>
-                </tr>
-                <tr>
-                    <td align="right"><?php echo $AppUI->_('City'); ?>:</td>
-                    <td><input type="text" class="text" name="contact_city" value="<?php echo $row->contact_city; ?>" maxlength="30" size="25" /></td>
-                </tr>
-                <tr>
-                    <td align="right"><?php echo $AppUI->_('State'); ?>:</td>
-                    <td><input type="text" class="text" name="contact_state" value="<?php echo $row->contact_state; ?>" maxlength="30" size="25" /></td>
-                </tr>
-                <tr>
-                    <td align="right"><?php echo $AppUI->_('Postcode') . ' / ' . $AppUI->_('Zip'); ?>:</td>
-                    <td><input type="text" class="text" name="contact_zip" value="<?php echo $row->contact_zip; ?>" maxlength="11" size="25" /></td>
-                </tr>
-                <tr>
-                    <td align="right"><?php echo $AppUI->_('Country'); ?>:</td>
-                    <td>
-                    <?php
-                    echo arraySelect($countries, 'contact_country', 'size="1" class="text"', $row->contact_country ? $row->contact_country : 0);
-                    ?>
-                    </td>
-                </tr>
-                <tr>
-                    <td align="right"><?php echo $AppUI->_('Birthday'); ?>:</td>
-                    <td nowrap="nowrap">
-                        <input type="text" class="text" name="contact_birthday" value="<?php echo @substr($row->contact_birthday, 0, 10); ?>" maxlength="10" size="25" />(<?php echo $AppUI->_('yyyy-mm-dd'); ?>)
-                    </td>
-                </tr>
-                <tr>
-                    <td align="right"><?php echo $AppUI->_('Phone'); ?>:</td>
-                    <td><input type="text" class="text" name="contact_phone" value="<?php echo $row->contact_phone; ?>" maxlength="50" size="25" /></td>
-                </tr>
-                <tr>
-                    <td align="right"><?php echo $AppUI->_('Email'); ?>1:</td>
-                    <td><input type="text" class="text" name="contact_email" value="<?php echo $row->contact_email; ?>" maxlength="60" size="25" /></td>
-                </tr>
-                </table>
-            </td>
-            <td valign="top" align="right">
-                <table class="well">
-                <th colspan="2">
-                    <strong><?php echo $AppUI->_('Contact Update Info'); ?></strong>
-                </th>
-                <tr>
-                    <td align="right" width="50%" nowrap="nowrap"><?php echo $AppUI->_('Waiting Update'); ?>?:</td>
-                    <td>
-                        <input type="checkbox" value="1" name="contact_updateask" <?php echo $row->contact_updatekey ? 'checked="checked"' : ''; ?> onclick="updateVerify()"/>
-                    </td>
-                </tr>
-                <tr>
-                    <?php $last_ask = new w2p_Utilities_Date($row->contact_updateasked); ?>
-                    <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Last Update Requested'); ?>:</td>
-                    <td align="center" nowrap="nowrap"><?php echo $row->contact_updateasked ? $last_ask->format($df) : ''; ?></td>
-                </tr>
-                <tr>
-                    <?php $lastupdated = new w2p_Utilities_Date($row->contact_lastupdate); ?>
-                    <td align="right" width="100" nowrap="nowrap"><?php echo $AppUI->_('Last Updated'); ?>:</td>
-					<td align="center" nowrap="nowrap">
-                        <?php
-                            echo ($row->contact_lastupdate && !($row->contact_lastupdate == 0)) ? $AppUI->formatTZAwareTime($row->contact_lastupdate) : '';
-                        ?>
-                    </td>
-                </tr>
-                <tr>
-                    <td align="right"><?php echo $AppUI->_('Private Entry'); ?>:</td>
-                    <td>
-                        <input type="checkbox" value="1" name="contact_private" id="contact_private" <?php echo ($row->contact_private ? 'checked="checked"' : ''); ?> />
-                    </td>
-                </tr>
-                <tr>
-                    <td align="right"><strong><?php echo $AppUI->_('Contact Notes'); ?></strong></td>
-                    <td>
-                        <textarea class="textarea" name="contact_notes" rows="20" cols="40"><?php echo $row->contact_notes; ?></textarea>
-                    </td>
-                </tr>
-                <tr>
-                    <td align="left"><?php echo w2PtoolTip('Contact Method', 'add new', false, 'add_contact_method') ?><a href="javascript:addContactMethod();"><img src="<?php echo w2PfindImage('icons/edit_add.png'); ?>" style="border: 0;" alt="" /></a><?php echo w2PendTip() ?></td>
-                </tr>
-                <tr id="custom_fields">
-                    <td align="right" colspan="3">
-                    <?php
-                    $custom_fields = new w2p_Core_CustomFields($m, $a, $row->contact_id, "edit");
-                    $custom_fields->printHTML();
-                    ?>
-                    </td>
-                </tr>
-                </table>
-            </td>
-        </tr>
-        <tr>
-            <td>
-                <input type="button" value="<?php echo $AppUI->_('back'); ?>" class="button btn btn-danger" onclick="javascript:window.location='./index.php?m=contacts';" />
-            </td>
-            <td colspan="2" align="right">
-                <input type="button" value="<?php echo $AppUI->_('save'); ?>" class="button btn btn-primary" onclick="submitIt()" />
-            </td>
-        </tr>
-    </table>
+    <div class="std addedit contacts">
+        <div class="column left">
+            <p>
+                <label><?php echo $AppUI->_('First Name'); ?>:</label>
+                <input type="text" class="text" size="25" name="contact_first_name" value="<?php echo $row->contact_first_name; ?>" maxlength="50" />
+            </p>
+            <p>
+                <label><?php echo $AppUI->_('Last Name'); ?>:</label>
+                <input type="text" class="text" size="25" name="contact_last_name" value="<?php echo $row->contact_last_name; ?>" maxlength="50" <?php if ($contact_id == 0) { ?> onBlur="orderByName('name')"<?php } ?> />
+                <a href="javascript: void(0);" onclick="orderByName('name')">[<?php echo $AppUI->_('use in display'); ?>]</a>
+            </p>
+            <p>
+                <label><?php echo $AppUI->_('Display Name'); ?>:</label>
+                <input type="text" class="text" size="25" name="contact_display_name" value="<?php echo $row->contact_display_name; ?>" maxlength="50" />
+            </p>
+            <p>
+                <label><?php echo $AppUI->_('Title'); ?>:</label>
+                <input type="text" class="text" name="contact_title" value="<?php echo $row->contact_title; ?>" maxlength="50" size="25" />
+            </p>
+            <p>
+                <label><?php echo $AppUI->_('Email'); ?>:</label>
+                <input type="text" class="text" name="contact_email" value="<?php echo $row->contact_email; ?>" maxlength="60" size="25" />
+            </p>
+            <p>
+                <label><?php echo $AppUI->_('Phone'); ?>:</label>
+                <input type="text" class="text" name="contact_phone" value="<?php echo $row->contact_phone; ?>" maxlength="50" size="25" />
+            </p>
+            <p>
+                <label><?php echo $AppUI->_('Company'); ?>:</label>
+                <?php echo arraySelect($companies, 'contact_company', 'class="text" size="1" onChange="companyChange();"', $company_detail['company_id']); ?>
+            </p>
+            <?php if ($AppUI->isActiveModule('departments')) { ?>
+            <p>
+                <label><?php echo $AppUI->_('Department'); ?>:</label>
+                <input type="text" class="text" name="contact_department_name" id="contact_department_name" value="<?php echo $dept_detail['dept_name']; ?>" maxlength="100" size="25" />
+                <input type='hidden' name='contact_department' value='<?php echo $dept_detail['dept_id']; ?>' />
+                <input type="button" class="button btn btn-primary btn-mini" value="<?php echo $AppUI->_('select department...'); ?>" onclick="popDepartment()" />
+            </p>
+            <?php } ?>
+            <p>
+                <label><?php echo $AppUI->_('Job Title'); ?>:</label>
+                <input type="text" class="text" name="contact_job" value="<?php echo $row->contact_job; ?>" maxlength="100" size="25" />
+            </p>
+            <p>
+                <label><?php echo $AppUI->_('Contact Notes'); ?>:</label>
+                <textarea class="textarea" name="contact_notes" rows="20" cols="40"><?php echo $row->contact_notes; ?></textarea>
+            </p>
+            <?php
+            $custom_fields = new w2p_Core_CustomFields($m, $a, $row->contact_id, "edit");
+            echo '<p>' . $custom_fields->getHTML() . '</p>';
+            ?>
+            <p><input type="button" value="back" class="cancel button btn btn-danger" onclick="javascript:history.back(-1);" /></p>
+        </div>
+        <div class="column right">
+            <p>
+                <label><?php echo $AppUI->_('Address'); ?>1:</label>
+                <input type="text" class="text" name="contact_address1" value="<?php echo $row->contact_address1; ?>" maxlength="60" size="25" />
+            </p>
+            <p>
+                <label><?php echo $AppUI->_('Address'); ?>2:</label>
+                <input type="text" class="text" name="contact_address2" value="<?php echo $row->contact_address2; ?>" maxlength="60" size="25" />
+            </p>
+            <p>
+                <label><?php echo $AppUI->_('City'); ?>:</label>
+                <input type="text" class="text" name="contact_city" value="<?php echo $row->contact_city; ?>" maxlength="30" size="25" />
+            </p>
+            <p>
+                <label><?php echo $AppUI->_('State'); ?>:</label>
+                <input type="text" class="text" name="contact_state" value="<?php echo $row->contact_state; ?>" maxlength="30" size="25" />
+            </p>
+            <p>
+                <label><?php echo $AppUI->_('Zip'); ?>:</label>
+                <input type="text" class="text" name="contact_zip" value="<?php echo $row->contact_zip; ?>" maxlength="11" size="25" />
+            </p>
+            <p>
+                <label><?php echo $AppUI->_('Country'); ?>:</label>
+                <?php
+                echo arraySelect($countries, 'contact_country', 'size="1" class="text"', $row->contact_country ? $row->contact_country : 0);
+                ?>
+            </p>
+            <p>
+                <label><?php echo $AppUI->_('Birthday'); ?>:</label>
+                <input type="text" class="text" name="contact_birthday" value="<?php echo @substr($row->contact_birthday, 0, 10); ?>" maxlength="10" size="25" />(<?php echo $AppUI->_('yyyy-mm-dd'); ?>)
+            </p>
+            <p><strong><?php echo $AppUI->_('Contact Update Info'); ?></strong></p>
+            <p>
+                <label><?php echo $AppUI->_('Waiting Update'); ?>?:</label>
+                <input type="checkbox" value="1" name="contact_updateask" <?php echo $row->contact_updatekey ? 'checked="checked"' : ''; ?> onclick="updateVerify()"/>
+            </p>
+            <p>
+                <label><?php echo $AppUI->_('Update Requested'); ?>:</label>
+                <?php $last_ask = new w2p_Utilities_Date($row->contact_updateasked); ?>
+                <?php echo $row->contact_updateasked ? $last_ask->format($df) : '&nbsp;'; ?>
+            </p>
+            <p>
+                <label><?php echo $AppUI->_('Last Updated'); ?>:</label>
+                <?php $lastupdated = new w2p_Utilities_Date($row->contact_lastupdate);
+                echo ($row->contact_lastupdate && !($row->contact_lastupdate == 0)) ? $AppUI->formatTZAwareTime($row->contact_lastupdate) : '&nbsp;';
+                ?>
+            </p>
+            <p>
+                <label><?php echo $AppUI->_('Private Entry'); ?>:</label>
+                <input type="checkbox" value="1" name="contact_private" id="contact_private" <?php echo ($row->contact_private ? 'checked="checked"' : ''); ?> />
+            </p>
+            <p>
+                <label><?php echo $AppUI->_('Contact Methods'); ?>:</label>
+                <?php echo w2PtoolTip('Contact Method', 'add new', false, 'add_contact_method') ?><a href="javascript:addContactMethod();"><img src="<?php echo w2PfindImage('icons/edit_add.png'); ?>" style="border: 0;" alt="" /></a><?php echo w2PendTip() ?>
+            </p>
+            <p id="custom_fields"></p>
+
+            <p><input type="button" value="save" class="save button btn btn-primary" onclick="submitIt()" /></p>
+        </div>
+    </div>
 </form>

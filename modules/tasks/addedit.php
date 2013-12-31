@@ -183,80 +183,53 @@ function popContacts() {
 	window.open('./index.php?m=public&a=contact_selector&dialog=1&call_back=setContacts&selected_contacts_id='+selected_contacts_id+'&company_id='+project_company, 'contacts','height=600,width=400,resizable,scrollbars=yes');
 }
 </script>
+<?php
 
+$form = new w2p_Output_HTML_FormHelper($AppUI);
+
+?>
 <form name="editFrm" action="?m=<?php echo $m; ?>&project_id=<?php echo $task_project; ?>" method="post" onSubmit="return submitIt(document.editFrm);" accept-charset="utf-8" class="addedit tasks">
 	<input name="dosql" type="hidden" value="do_task_aed" />
 	<input name="task_id" type="hidden" value="<?php echo $task_id; ?>" />
 	<input name="task_project" type="hidden" value="<?php echo $task_project; ?>" />
 	<input name="old_task_parent" type="hidden" value="<?php echo $task->task_parent; ?>" />
 	<input name='task_contacts' id='task_contacts' type='hidden' value="<?php echo implode(',', $selected_contacts); ?>" />
+    <?php echo $form->addNonce(); ?>
 
-    <table class="std addedit tasks">
-        <tr>
-            <td colspan="2" style="border: outset #eeeeee 1px;background-color:#<?php echo $project->project_color_identifier; ?>" >
-                <font color="<?php echo bestColor($project->project_color_identifier); ?>">
+    <div class="std addedit tasks">
+        <div class="column left">
+            <p >
+                <label>&nbsp;</label>
+                <span style="padding: 5px; border: outset #eeeeee 1px;background-color:#<?php echo $project->project_color_identifier; ?>; color: <?php echo bestColor($project->project_color_identifier); ?>;">
                     <strong><?php echo $AppUI->_('Project'); ?>: <?php echo $project->project_name; ?></strong>
-                </font>
-            </td>
-        </tr>
-
-        <tr valign="top">
-            <td>
-                <?php echo $AppUI->_('Task Name'); ?> *
-                <br /><input type="text" class="text" name="task_name" value="<?php echo htmlspecialchars($task->task_name, ENT_QUOTES); ?>" size="40" maxlength="255" />
-            </td>
-            <td>
-                <table class="well">
-                    <tr>
-                        <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Status'); ?></td>
-                        <td>
-                            <?php echo arraySelect($status, 'task_status', 'size="1" class="text"', ($task->task_status ? $task->task_status : 0) , true); ?>
-                        </td>
-
-                        <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Priority'); ?> *</td>
-                        <td nowrap="nowrap">
-                            <?php echo arraySelect($priority, 'task_priority', 'size="1" class="text"', ($task->task_priority ? $task->task_priority : 0) , true); ?>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Progress'); ?></td>
-                        <td>
-                            <?php echo arraySelect($percent, 'task_percent_complete', 'size="1" class="text"', $task->task_percent_complete) . '%'; ?>
-                        </td>
-
-                        <td align="right" nowrap="nowrap"><label for="task_milestone"><?php echo $AppUI->_('Milestone'); ?>?</label></td>
-                        <td>
-                            <input type="checkbox" value="1" name="task_milestone" id="task_milestone" <?php if ($task->task_milestone) { ?>checked="checked"<?php } ?> onClick="toggleMilestone()" />
-                        </td>
-                    </tr>
-                </table>
-            </td>
-        </tr>
-        <tr>
-            <td colspan="2">
-                <table class="well">
-                    <tr>
-                        <td height="40" width="35%">
-                            * <?php echo $AppUI->_('requiredField'); ?>
-                        </td>
-                        <td height="40" width="30%">&nbsp;</td>
-                        <td  height="40" width="35%" align="right">
-                            <table>
-                            <tr>
-                                <td>
-                                    <input class="button btn btn-danger" type="button" name="cancel" value="<?php echo $AppUI->_('cancel'); ?>" onclick="if(confirm('<?php echo $AppUI->_('taskCancel', UI_OUTPUT_JS); ?>')){location.href = '?<?php echo $AppUI->getPlace(); ?>';}" />
-                                </td>
-                                <td>
-                                    <input class="button btn btn-primary" type="button" name="btnFuseAction" value="<?php echo $AppUI->_('save'); ?>" onclick="submitIt(document.editFrm);" />
-                                </td>
-                            </tr>
-                            </table>
-                        </td>
-                    </tr>
-                </table>
-            </td>
-        </tr>
-    </table>
+                </span>
+            </p>
+            <p>
+                <label><?php echo $AppUI->_('Task Name'); ?> *</label>
+                <input type="text" class="text" name="task_name" value="<?php echo htmlspecialchars($task->task_name, ENT_QUOTES); ?>" size="40" maxlength="255" />
+            </p>
+            <p>
+                <label><?php echo $AppUI->_('Priority'); ?></label>
+                <?php echo arraySelect($priority, 'task_priority', 'size="1" class="text"', ($task->task_priority ? $task->task_priority : 0) , true); ?>
+            </p>
+            <p><input class="button btn btn-danger" type="button" name="cancel" value="<?php echo $AppUI->_('cancel'); ?>" onclick="if(confirm('<?php echo $AppUI->_('taskCancel', UI_OUTPUT_JS); ?>')){location.href = '?<?php echo $AppUI->getPlace(); ?>';}" /></p>
+        </div>
+        <div class="column right">
+            <p>
+                <label><?php echo $AppUI->_('Status'); ?></label>
+                <?php echo arraySelect($status, 'task_status', 'size="1" class="text"', ($task->task_status ? $task->task_status : 0) , true); ?>
+            </p>
+            <p>
+                <label><?php echo $AppUI->_('Progress'); ?></label>
+                <?php echo arraySelect($percent, 'task_percent_complete', 'size="1" class="text"', $task->task_percent_complete) . '%'; ?>
+            </p>
+            <p>
+                <label><?php echo $AppUI->_('Milestone'); ?>?</label>
+                <input type="checkbox" value="1" name="task_milestone" id="task_milestone" <?php if ($task->task_milestone) { ?>checked="checked"<?php } ?> onClick="toggleMilestone()" />
+            </p>
+            <p><input class="button btn btn-primary" type="button" name="btnFuseAction" value="<?php echo $AppUI->_('save'); ?>" onclick="submitIt(document.editFrm);" /></p>
+        </div>
+    </div>
     <div name="hiddenSubforms" id="hiddenSubforms" style="display: none;"></div>
 </form>
 <?php

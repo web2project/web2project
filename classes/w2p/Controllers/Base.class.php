@@ -47,6 +47,13 @@ class w2p_Controllers_Base
             return $AppUI;
         }
 
+//        if (('' != $AppUI->__nonce) && ($AppUI->__nonce != $myArray['__nonce'])) {
+//            $AppUI->setMsg("There was an error processing the form. Please submit again.", UI_MSG_ERROR);
+//            $AppUI->holdObject($this->object);
+//            $this->resultPath = $this->errorPath;
+//            return $AppUI;
+//        }
+
         $action = ($this->delete) ? 'deleted' : 'stored';
         $this->success = ($this->delete) ? $this->object->delete() :
             $this->object->store();
