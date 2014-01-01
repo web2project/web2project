@@ -196,6 +196,10 @@ $form = new w2p_Output_HTML_FormHelper($AppUI);
                 <?php echo arraySelectTree($structprojects, 'project_parent', 'size="1" style="width:250px;" class="text"', $project->project_parent ? $project->project_parent : 0) ?>
             </p>
             <p>
+                <label><?php echo $AppUI->_('Company'); ?></label>
+                <?php echo arraySelect($companies, 'project_company', 'class="text" size="1"', $project->project_company); ?>
+            </p>
+            <p>
                 <label><?php echo $AppUI->_('Project Owner'); ?></label>
                 <?php
                 // pull users
