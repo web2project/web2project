@@ -150,7 +150,7 @@ $form = new w2p_Output_HTML_FormHelper($AppUI);
           foreach ($hook_modules as $tmp) {
           ?>
     		<tr>
-              <td width="10" align="left"><input name="mod_<?php echo $tmp; ?>" id="mod_<?php echo $tmp; ?>" type="checkbox"
+              <td width="10" align="left"><input name="mod_<?php echo $tmp; ?>" id="mod_<?php echo $tmp; ?>" type="checkbox" />;
       				  <?php
                   echo ($ssearch['mod_' . $tmp] == 'on') ? 'checked="checked"' : '';
     	             echo ' /></td><td align="left"><label for="mod_' . $tmp . '">' . $AppUI->_(ucfirst($tmp)) . '</label>';
