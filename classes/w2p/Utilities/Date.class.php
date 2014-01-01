@@ -35,10 +35,10 @@ class w2p_Utilities_Date extends Date {
      *  the third parameter to convert them both to UTC prior to performing the
      *  check.
      *
-     * @param type $d1
-     * @param type $d2
-     * @param type $convertTZ
-     * @return type
+     * @param $d1
+     * @param $d2
+     * @param bool $convertTZ
+     * @return int
      */
     public function compare($d1, $d2, $convertTZ = false) {
         if ($convertTZ) {
@@ -107,8 +107,10 @@ class w2p_Utilities_Date extends Date {
 
     /**
      * New method to get the difference in days the stored date
-     * @param Date The date to compare to
      * @author Andrew Eddie <eddieajau@users.sourceforge.net>
+     *
+     * @param $when
+     * @return bool|int
      */
     public function dateDiff($when) {
         if (!is_object($when)) {
@@ -196,7 +198,8 @@ class w2p_Utilities_Date extends Date {
     /**
      * Return date obj for the end of the next working day
      *
-     * @param    bool    Determine whether to set time to start of day or preserve the time of the given object
+     * @param   bool    $preserveHours  Determine whether to set time to start of day or preserve the time of the given object
+     * @return  $this
     */
     public function next_working_day($preserveHours = false) {
         $do = clone $this;
@@ -216,7 +219,8 @@ class w2p_Utilities_Date extends Date {
 
     /**
      * Return date obj for the end of the previous working day
-     * @param    bool    Determine whether to set time to end of day or preserve the time of the given object
+     * @param   bool    $preserveHours  Determine whether to set time to end of day or preserve the time of the given object
+     * @return $this
      */
     public function prev_working_day($preserveHours = false) {
         $do = clone $this;
@@ -237,12 +241,11 @@ class w2p_Utilities_Date extends Date {
      *  Calculating _robustly_ a date from a given date and duration
      *
      * Works in both directions: forwards/prospective and backwards/retrospective
+     *   Respects non-working days
      *
-     * Respects non-working days
-     *
-     * @param    int    duration    (positive = forward, negative = backward)
-     * @param    int    durationType; 1 = hour; 24 = day;
-     * @return    obj    Shifted DateObj
+     * @param   string  $duration       (positive = forward, negative = backward)
+     * @param   string  $durationType   1 = hour; 24 = day;
+     * @return  $this                   Shifted DateObj
      */
     public function addDuration($duration = '8', $durationType = '1') {
         // using a sgn function lets us easily cover
@@ -449,9 +452,9 @@ class w2p_Utilities_Date extends Date {
      * Respects non-working days and the working hours and the begining and end of days
      * SantosDiez - Credit for better variable names
      *
-     * @param    duration        Duration to be added to the date
-     * @param    durationType    Duration Type: 1=hours, 24=days
-     * @return    w2p_Utilities_Date        The w2p_Utilities_Date object of the finish date
+     * @param   $duration           Duration to be added to the date
+     * @param   $durationType       Duration Type: 1=hours, 24=days
+     * @return  w2p_Utilities_Date  The w2p_Utilities_Date object of the finish date
      */
     public function calcFinish($duration, $durationType) {
 
@@ -515,8 +518,8 @@ class w2p_Utilities_Date extends Date {
      * WARNING: This may not work correctly if your system does not allow
      * putenv() or if localtime() does not work in your environment.
      *
-     * @access public
-     * @param string $tz the time zone ID - index in $GLOBALS['_DATE_TIMEZONE_DATA']
+     * @param   $tz
+     * @return  $this|void   the time zone ID - index in $GLOBALS['_DATE_TIMEZONE_DATA']
      */
     public function convertTZ($tz)
     {
