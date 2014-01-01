@@ -160,13 +160,3 @@ class CSmartSearch {
 		}
 	}
 }
-
-/**
- * @deprecated
- */
-class smartsearch extends CSmartSearch {
-    
-	public function __construct() {
-        trigger_error("smartsearch has been deprecated in v3.0 and will be removed by v4.0. Please use CSmartSearch instead.", E_USER_NOTICE );
-	}
-}

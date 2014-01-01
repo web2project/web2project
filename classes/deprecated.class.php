@@ -495,7 +495,7 @@ class w2p_Core_UpgradeManager extends w2p_System_UpgradeManager
 
 /**
  * @package     web2project\deprecated
- * @deprecated since version 3.0
+ * @deprecated  since version 3.0
  */
 class w2p_API_iCalendar extends w2p_Output_iCalendar
 {
@@ -504,5 +504,16 @@ class w2p_API_iCalendar extends w2p_Output_iCalendar
         trigger_error("w2p_API_iCalendar has been deprecated in v3.0 and will be removed by v4.0. Please use w2p_Output_iCalendar instead.", E_USER_NOTICE);
 
         return parent::formatCalendarItem($calendarItem, $module_name);
+    }
+}
+
+/**
+ * @package     web2project\deprecated
+ * @deprecated  since version 3.0
+ */
+class smartsearch extends CSmartSearch {
+
+    public function __construct() {
+        trigger_error("smartsearch has been deprecated in v3.0 and will be removed by v4.0. Please use CSmartSearch instead.", E_USER_NOTICE );
     }
 }

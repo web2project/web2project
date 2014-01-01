@@ -51,6 +51,7 @@ function w2p_old_autoload($class_name)
         case 'cw2pobject':              // Deprecated as of v3.0, TODO: remove this in v4.0
         case 'dbquery':                 // Deprecated as of v3.0, TODO: remove this in v4.0
         case 'libmail':                 // Deprecated as of v2.3, TODO: remove this in v4.0
+        case 'smartsearch':             // Deprecated as of v2.3, TODO: remove this in v4.0
         case 'w2pacl':                  // Deprecated as of v3.0, TODO: remove this in v4.0
         case 'w2pajaxresponse':         // Deprecated as of v3.0, TODO: remove this in v4.0
             require_once W2P_BASE_DIR . '/classes/deprecated.class.php';
