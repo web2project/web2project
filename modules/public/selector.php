@@ -8,6 +8,7 @@ $debug = false;
 $callback = w2PgetParam($_GET, 'callback', 0);
 $table = w2PgetParam($_GET, 'table', 0);
 $user_id = w2PgetParam($_GET, 'user_id', 0);
+$dialog = (int) w2PgetParam($_GET, 'dialog', 0);
 
 $ok = $callback & $table;
 
@@ -185,3 +186,9 @@ echo $AppUI->getTheme()->styleRenderBoxTop();
 </table>
 </form>
 <?php } ?>
+<style>
+    div[class="std titlebar"], form[name="frm_new"],
+    body div:nth-child(2), div[class="left"] {
+        <?php if (1 == $dialog) { ?> display: none; <?php } ?>
+    }
+</style>
