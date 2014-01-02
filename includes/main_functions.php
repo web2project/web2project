@@ -178,18 +178,6 @@ function w2PgetConfig($key, $default = null)
     if (isset($w2Pconfig[$key])) {
         return $w2Pconfig[$key];
     } else {
-//TODO: This block had to be removed because if the w2pgetConfig was called before
-//  we had a valid database object, creating the w2p_System_Config object below would
-//  call its parent - w2p_Core_BaseObject - which would try to get an w2p_Core_AppUI
-//  which would in turn get back to here.. nasty loop.
-//
-//        if (!is_null($default)) {
-//            $obj = new w2p_System_Config();
-//            $obj->overrideDatabase($dbConn);
-//            $obj->config_name = $key;
-//            $obj->config_value = $default;
-//            $obj->store();
-//        }
         return $default;
     }
 }
@@ -390,13 +378,6 @@ function notifyNewExternalUser($emailAddress, $username, $logname,
     global $AppUI;
 	$mail = (!is_null($emailUtility)) ? $emailUtility : new w2p_Utilities_Mail();
 	if ($mail->ValidEmail($emailAddress)) {
-//TODO: why aren't we actually using this $email variable?
-        if ($mail->ValidEmail($AppUI->user_email)) {
-			$email = $AppUI->user_email;
-		} else {
-//TODO: this email should be set to something sane
-            $email = 'web2project@web2project.net';
-		}
 		$mail->To($emailAddress);
         $emailManager = new w2p_Output_EmailManager($AppUI);
         $body = $emailManager->notifyNewExternalUser($logname, $logpwd);
@@ -410,14 +391,6 @@ function notifyNewUser($emailAddress, $username, $emailUtility = null) {
 	global $AppUI;
 	$mail = (!is_null($emailUtility)) ? $emailUtility : new w2p_Utilities_Mail();
 	if ($mail->ValidEmail($emailAddress)) {
-//TODO: why aren't we actually using this $email variable?
-        if ($mail->ValidEmail($AppUI->user_email)) {
-			$email = $AppUI->user_email;
-		} else {
-//TODO: this email should be set to something sane
-            return false;
-		}
-
 		$mail->To($emailAddress);
         $emailManager = new w2p_Output_EmailManager($AppUI);
         $body = $emailManager->getNotifyNewUser($username);
