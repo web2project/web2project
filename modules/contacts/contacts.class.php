@@ -107,10 +107,12 @@ class CContact extends w2p_Core_BaseObject
         $contact_methods = $this->contact_methods;
         if (count($contact_methods)) {
             foreach ($contact_methods['field'] as $key => $notUsed) {
-                $fields[] = $contact_methods['field'][$key];
-                $values[] = $contact_methods['value'][$key];
+                $fields[] = preg_replace("/[^A-Za-z0-9_]/", "", $contact_methods['field'][$key]);
+                //$values[] = $contact_methods['value'][$key];
+                $values[] = preg_replace("/[^A-Za-z0-9@:_ \/\-\+\.\&\=\?]/", "", $contact_methods['value'][$key]);
             }
         }
+
         $methods['fields'] = $fields;
         $methods['values'] = $values;
         $this->setContactMethods($methods);
@@ -151,7 +153,7 @@ class CContact extends w2p_Core_BaseObject
                         $value = filter_var($value, FILTER_SANITIZE_STRING);
 
                         $q->addInsert('method_name', $name);
-                        $q->addInsert('method_value', strtolower($value));
+                        $q->addInsert('method_value', $value);
                         $q->exec();
                     }
                 }
@@ -162,7 +164,7 @@ class CContact extends w2p_Core_BaseObject
                         $value = filter_var($value, FILTER_SANITIZE_STRING);
 
                         $q->addInsert('method_name', $name);
-                        $q->addInsert('method_value', strtolower($value));
+                        $q->addInsert('method_value', $value);
                         $q->exec();
                     }
                 }
