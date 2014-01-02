@@ -8,32 +8,33 @@ ob_start();
 $AppUI->user_locale = ('' == $AppUI->user_locale) ? 'en' : $AppUI->user_locale;
 
 if (isset($perms)) {
-  foreach ($AppUI->getActiveModules() as $dir => $module) {
-    if (!canAccess($dir)) {
-      continue;
+    foreach ($AppUI->getActiveModules() as $dir => $module) {
+        if (!canAccess($dir)) {
+            continue;
+        }
+        $loader = new w2p_FileSystem_Loader();
+        $modules_tabs_crumbs = $loader->readFiles(W2P_BASE_DIR . '/modules/' . $dir . '/', '^' . $m . '_(tab|crumb).*\.php');
+        if (count($modules_tabs_crumbs) > 0) {
+            if (file_exists(W2P_BASE_DIR . '/modules/' . $dir . '/locales/' . $AppUI->user_locale . '/' . $dir . '.inc')) {
+                readfile(W2P_BASE_DIR . '/modules/' . $dir . '/locales/' . $AppUI->user_locale . '/' . $dir . '.inc');
+            } elseif (file_exists(W2P_BASE_DIR . '/locales/' . $AppUI->user_locale . '/' . $dir . '.inc')) {
+                readfile(W2P_BASE_DIR . '/locales/' . $AppUI->user_locale . '/' . $dir . '.inc');
+            } elseif (file_exists(W2P_BASE_DIR . '/modules/' . $dir . '/locales/' . $AppUI->user_locale . '.inc')) {
+                readfile(W2P_BASE_DIR . '/modules/' . $dir . '/locales/' . $AppUI->user_locale . '.inc');
+            }
+        }
     }
-    $loader = new w2p_FileSystem_Loader();
-    $modules_tabs_crumbs = $loader->readFiles(W2P_BASE_DIR . '/modules/' . $dir . '/', '^' . $m . '_(tab|crumb).*\.php');
-    if (count($modules_tabs_crumbs) > 0) {
-      if (file_exists(W2P_BASE_DIR . '/modules/' . $dir . '/locales/' . $AppUI->user_locale . '/' . $dir . '.inc')) {
-        readfile(W2P_BASE_DIR . '/modules/' . $dir . '/locales/' . $AppUI->user_locale . '/' . $dir . '.inc');
-      } elseif (file_exists(W2P_BASE_DIR . '/locales/' . $AppUI->user_locale . '/' . $dir . '.inc')) {
-        readfile(W2P_BASE_DIR . '/locales/' . $AppUI->user_locale . '/' . $dir . '.inc');
-      } elseif (file_exists(W2P_BASE_DIR . '/modules/' . $dir . '/locales/' . $AppUI->user_locale . '.inc')) {
-      	readfile(W2P_BASE_DIR . '/modules/' . $dir . '/locales/' . $AppUI->user_locale . '.inc');
-      }
-    }
-  }
 }
 
 if (W2P_BASE_DIR . '/locales/' . $AppUI->user_locale . '/common.inc') {
 	readfile(W2P_BASE_DIR . '/locales/' . $AppUI->user_locale . '/common.inc');
 }
 
-// language files for specific locales and specific modules (for external modules) should be
-// put in modules/[the-module]/locales/[the-locale]/[the-module].inc or
-//        modules/[the-module]/locales/[the-locale].inc
-// this allows for module specific translations to be distributed with the module
+/**
+ * language files for specific locales and specific modules (for external modules) should be put in
+ *   modules/[the-module]/locales/[the-locale]/[the-module].inc or modules/[the-module]/locales/[the-locale].inc
+ *   this allows for module specific translations to be distributed with the module
+ */
 
 if (file_exists(W2P_BASE_DIR . '/modules/' . $m . '/locales/' . $AppUI->user_locale . '/' . $m . '.inc')) {
 	readfile(W2P_BASE_DIR . '/modules/' . $m . '/locales/' . $AppUI->user_locale . '/' . $m . '.inc');

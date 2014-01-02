@@ -196,6 +196,32 @@ $form = new w2p_Output_HTML_FormHelper($AppUI);
                 <?php echo arraySelectTree($structprojects, 'project_parent', 'size="1" style="width:250px;" class="text"', $project->project_parent ? $project->project_parent : 0) ?>
             </p>
             <p>
+                <label><?php echo $AppUI->_('Company'); ?></label>
+                <?php echo arraySelect($companies, 'project_company', 'class="text" size="1"', $project->project_company); ?>
+            </p>
+            <?php
+            if ($AppUI->isActiveModule('departments') && canAccess('departments')) {
+                //Build display list for departments
+                $company_id = $project->project_company;
+                $selected_departments = array();
+                if ($project_id) {
+                    $myDepartments = $project->getDepartmentList();
+                    $selected_departments = (count($myDepartments) > 0) ? array_keys($myDepartments) : array();
+                }
+                $departments_count = 0;
+                $department_selection_list = getDepartmentSelectionList($company_id, $selected_departments);
+                if ($department_selection_list != '' || $project_id) {
+                    $department_selection_list = '<p><label>' . $AppUI->_('Departments') . '</label><select name="project_departments[]" multiple="multiple" class="text"><option value="0"></option>' . $department_selection_list . '</select></p>';
+                } else {
+                    $department_selection_list = '<input type="button" class="button" value="' . $AppUI->_('Select department...') . '" onclick="javascript:popDepartment();" /><input type="hidden" name="project_departments"';
+                }
+                // Let's check if the actual company has departments registered
+                if ($department_selection_list != '') {
+                    echo $department_selection_list;
+                }
+            }
+            ?>
+            <p>
                 <label><?php echo $AppUI->_('Project Owner'); ?></label>
                 <?php
                 // pull users
@@ -205,8 +231,8 @@ $form = new w2p_Output_HTML_FormHelper($AppUI);
                 ?> *
             </p>
             <p>
-                <label><?php echo $AppUI->_('Project Location'); ?></label>
-                <input type="text" name="project_location" value="<?php echo w2PformSafe($project->project_location); ?>" size="25" maxlength="50" class="text" />
+                <label>Contacts</label>
+                <input type="button" class="button btn btn-primary btn-mini" value="<?php echo $AppUI->_('Select contacts...'); ?>" onclick="javascript:popContacts();" />
             </p>
             <p>
                 <label><?php echo $AppUI->_('Start Date'); ?></label>
@@ -235,6 +261,10 @@ $form = new w2p_Output_HTML_FormHelper($AppUI);
                     echo $AppUI->_('Dynamically calculated');
                 }
                 ?>
+            </p>
+            <p>
+                <label><?php echo $AppUI->_('Project Location'); ?></label>
+                <input type="text" name="project_location" value="<?php echo w2PformSafe($project->project_location); ?>" size="25" maxlength="50" class="text" />
             </p>
             <?php if (w2PgetConfig('budget_info_display', false)) { ?>
             <p>

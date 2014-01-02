@@ -166,7 +166,8 @@ $form = new w2p_Output_HTML_FormHelper($AppUI);
 <?php
 if (isset($_POST['keyword'])) {
 	$search = new CSmartSearch();
-  $search->keyword = addslashes($_POST['keyword']);
+    $search->keyword = addslashes($_POST['keyword']);
+    $search->keyword = preg_replace("/[^A-Za-z0-9 ]/", "", $search->keyword);
 
 	if (isset($_POST['keyword']) && mb_strlen($_POST['keyword']) > 0) {
 		$or_keywords = preg_split('/[\s,;]+/', addslashes($_POST['keyword']));
