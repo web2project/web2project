@@ -300,10 +300,12 @@ foreach ($projects as $k => $p) {
         <td>=<?php echo $AppUI->_('Inactive'); ?></td>
         <td>&nbsp; &nbsp;</td>
         <td>&nbsp; &nbsp;</td>
+        <td class="future">&nbsp; &nbsp;</td>
         <td>=<?php echo $AppUI->_('Future Task'); ?></td>
         <td>&nbsp; &nbsp;</td>
         <td class="active">&nbsp; &nbsp;</td>
         <td>=<?php echo $AppUI->_('Started and on time'); ?></td>
+        <td>&nbsp; &nbsp;</td>
         <td class="notstarted">&nbsp; &nbsp;</td>
         <td>=<?php echo $AppUI->_('Should have started'); ?></td>
         <td>&nbsp; &nbsp;</td>
