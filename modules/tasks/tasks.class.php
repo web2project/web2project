@@ -1067,6 +1067,7 @@ class CTask extends w2p_Core_BaseObject
         $tarr = array_flip($tarr);
         unset($tarr[$parent_id]);
 
+        $q = $this->_getQuery();
         foreach ($tarr as $task_id => $notUsed) {
             if ((int) $task_id) {
                 $q->addTable('task_dependencies');
