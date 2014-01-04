@@ -37,15 +37,9 @@ class CEvent extends w2p_Core_BaseObject
         parent::__construct('events', 'event_id', 'events');
     }
 
-    public function loadFull($event_id)
-    {
-        $q = $this->_getQuery();
-        $q->addTable('events', 'e');
-        $q->addQuery('e.*, project_name, project_color_identifier, company_name');
-        $q->leftJoin('projects', 'p', 'event_project = project_id');
-        $q->leftJoin('companies', 'c', 'project_company = company_id');
-        $q->addWhere('event_id = ' . (int) $event_id);
-        $q->loadObject($this, true, false);
+    /** @deprecated - this has a different method signature than the others */
+    public function loadFull($event_id) {
+        $this->load($event_id);
     }
 
     public function canView()
