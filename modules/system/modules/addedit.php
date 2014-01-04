@@ -61,7 +61,6 @@ foreach ($fields as $field => $text) {
     $fieldNames[] = $text;
 }
 $orderMax = count($properties) + count($fields);
-//?m=system&u=syskeys&a=do_syskey_aed
 ?>
 
 <form name="frmConfig" id="frmConfig" action="?m=<?php echo $m; ?>&u=modules" method="post" accept-charset="utf-8">
@@ -97,7 +96,9 @@ $orderMax = count($properties) + count($fields);
 			unset($properties[$field]);
 		}
 		foreach ($properties as $property => $value) {
-			$value = ucwords(str_replace('_', ' ', $property));
+			$fieldname_pieces = explode('_', $property);
+            unset($fieldname_pieces[0]);
+            $value = ucwords(implode(' ', $fieldname_pieces));
             ?><tr>
 				<td>
 					<input type="checkbox" name="display[<?php echo $property; ?>]" />
