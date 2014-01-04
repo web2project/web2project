@@ -41,7 +41,7 @@ if (0 == count($fields)) {
 $xpg_pagesize = w2PgetConfig('page_size', 50);
 $xpg_min = $xpg_pagesize * ($page - 1); // This is where we start our record set from
 // counts total recs from selection
-$xpg_totalrecs = count($links);
+$xpg_totalrecs = count($items);
 $items = array_slice($items, $xpg_min, $xpg_pagesize);
 
 $pageNav = buildPaginationNav($AppUI, $m, $tab, $xpg_totalrecs, $xpg_pagesize, $page);
