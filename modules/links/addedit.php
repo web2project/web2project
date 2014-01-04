@@ -66,6 +66,10 @@ foreach ($projects as $project_id => $project_info) {
 $projects = arrayMerge(array('0' => $AppUI->_('All', UI_OUTPUT_JS)), $projects);
 
 $link_type = w2PgetSysVal('LinkType');
+
+// Load the users
+$perms = &$AppUI->acl();
+$users = $perms->getPermittedUsers('links');
 ?>
 <script language="javascript" type="text/javascript">
 function submitIt() {
@@ -126,7 +130,9 @@ $form = new w2p_Output_HTML_FormHelper($AppUI);
             <?php if ($link_id) { ?>
             <p>
                 <label><?php echo $AppUI->_('Created By'); ?>:</label>
-                <?php echo $link->contact_first_name . ' ' . $link->contact_last_name; ?>
+                <?php
+                echo arraySelect($users, 'link_owner', 'size="1" class="text"', ($link->link_owner ? $link->link_owner : $AppUI->user_id));
+                ?>
             </p>
             <?php } ?>
             <p>
