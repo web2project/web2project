@@ -90,11 +90,6 @@ class CCompany extends w2p_Core_BaseObject {
         return $search;
     }
 
-    /** @deprecated */
-    public function loadFull($notUsed = null, $companyId) {
-        $this->load($companyId);
-    }
-
     public function getCompanyList($notUsed = null, $companyType = -1, $searchString = '', $ownerId = 0, $orderby = 'company_name', $orderdir = 'ASC') {
 
         $q = $this->_getQuery();

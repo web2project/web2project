@@ -39,7 +39,7 @@ class CEvent extends w2p_Core_BaseObject
 
     /** @deprecated - this has a different method signature than the others */
     public function loadFull($event_id) {
-        $this->load($event_id);
+        parent::loadFull(null, $event_id);
     }
 
     public function canView()

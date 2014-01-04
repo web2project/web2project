@@ -24,12 +24,6 @@ class CLink extends w2p_Core_BaseObject
         parent::__construct('links', 'link_id');
     }
 
-    /** @deprecated */
-    public function loadFull($notUsed = null, $link_id)
-    {
-        $this->load($link_id);
-    }
-
     public function getProjectTaskLinksByCategory($notUsed = null, $project_id = 0, $task_id = 0, $category_id = 0, $search = '')
     {
         // load the following classes to retrieved denied records

@@ -33,11 +33,6 @@ class CDepartment extends w2p_Core_BaseObject
         parent::__construct('departments', 'dept_id');
 	}
 
-    /** @deprecated */
-	public function loadFull($notUsed = null, $deptId) {
-		$this->load($deptId);
-	}
-
     /**
      * I already don't like this one..
      *

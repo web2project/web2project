@@ -213,6 +213,13 @@ abstract class w2p_Core_BaseObject extends w2p_System_Event implements w2p_Syste
     }
 
     /**
+     * Although this is a new method in this class, it is deprecated because it is replacing all the subclass
+     *   implementations.
+     * @deprecated
+     */
+    public function loadFull($notUsed = null, $object_id) {     $this->load($object_id);        }
+
+    /**
      * 	Returns an array, keyed by the key field, of all elements that meet
      * 	the where clause provided. Ordered by $order key.
      *
