@@ -11,12 +11,6 @@ if (!$contact->load($contact_id)) {
     $AppUI->redirect(ACCESS_DENIED);
 }
 
-if (!$contact) {
-    $AppUI->setMsg('Contact');
-    $AppUI->setMsg('invalidID', UI_MSG_ERROR, true);
-    $AppUI->redirect();
-}
-
 $canEdit   = $contact->canEdit();
 $canDelete = $contact->canDelete();
 
