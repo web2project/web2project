@@ -33,23 +33,9 @@ class CDepartment extends w2p_Core_BaseObject
         parent::__construct('departments', 'dept_id');
 	}
 
+    /** @deprecated */
 	public function loadFull($notUsed = null, $deptId) {
-		$q = $this->_getQuery();
-		$q->addQuery('dep.*, company_name, con.contact_id');
-		$q->addQuery('con.contact_first_name, con.contact_last_name, con.contact_display_name as contact_name');
-        $q->addTable('departments', 'dep');
-		$q->addJoin('users', '', 'user_id = dep.dept_owner');
-        $q->addJoin('contacts', 'con', 'con.contact_id = user_contact');
-        $q->addJoin('companies', 'com', 'company_id = dep.dept_company');
-		$q->addWhere('dep.dept_id = ' . (int) $deptId);
-
-		$this->company_name = '';
-		$this->contact_first_name = '';
-		$this->contact_last_name = '';
-        $this->contact_name = '';
-        $this->contact_id = '';
-
-		$q->loadObject($this);
+		$this->load($deptId);
 	}
 
     /**

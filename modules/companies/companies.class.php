@@ -90,18 +90,9 @@ class CCompany extends w2p_Core_BaseObject {
         return $search;
     }
 
+    /** @deprecated */
     public function loadFull($notUsed = null, $companyId) {
-        $q = $this->_getQuery();
-        $q->addTable('companies');
-        $q->addQuery('companies.*');
-        $q->addQuery('con.contact_first_name');
-        $q->addQuery('con.contact_last_name');
-        $q->addQuery('con.contact_display_name as contact_name');
-        $q->leftJoin('users', 'u', 'u.user_id = companies.company_owner');
-        $q->leftJoin('contacts', 'con', 'u.user_contact = con.contact_id');
-        $q->addWhere('companies.company_id = ' . (int) $companyId);
-
-        $q->loadObject($this, true, false);
+        $this->load($companyId);
     }
 
     public function getCompanyList($notUsed = null, $companyType = -1, $searchString = '', $ownerId = 0, $orderby = 'company_name', $orderdir = 'ASC') {

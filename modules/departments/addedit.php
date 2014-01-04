@@ -23,7 +23,7 @@ if ($obj) {
     $department = $obj;
     $dept_id = $department->dept_id;
 } else {
-    $department->loadFull(null, $dept_id);
+    $department->load($dept_id);
 }
 if (!$department && $dept_id > 0) {
     $AppUI->setMsg('Department');
@@ -31,9 +31,7 @@ if (!$department && $dept_id > 0) {
     $AppUI->redirect();
 }
 
-$companyName = $department->company_name;
-
-$company_id = $dept_id ? $department->dept_company : $company_id;
+$company_id = $department->dept_id ? $department->dept_company : $company_id;
 
 if (!$dept_id && $department->company_name === null) {
     $AppUI->setMsg('badCompany', UI_MSG_ERROR);
@@ -43,7 +41,7 @@ if (!$dept_id && $department->company_name === null) {
 // collect all the departments in the company
 if ($company_id) {
     $company = new CCompany();
-    $company->loadFull(null, $company_id);
+    $company->load($company_id);
     $companyName = $company->company_name;
     $depts = $department->loadOtherDepts(null, $company_id, 0);
     $depts = arrayMerge(array('0' => '- ' . $AppUI->_('Select Department') . ' -'), $depts);

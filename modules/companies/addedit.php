@@ -24,7 +24,7 @@ if ($obj) {
     $company = $obj;
     $company_id = $company->company_id;
 } else {
-    $company->loadFull(null, $company_id);
+    $company->load($company_id);
 }
 if (!$company && $company_id > 0) {
 	$AppUI->setMsg('Company');

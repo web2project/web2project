@@ -24,7 +24,7 @@ if ($obj) {
     $row = $obj;
     $contact_id = $row->contact_id;
 } else {
-    $row->loadFull(null, $contact_id);
+    $row->load($contact_id);
 }
 if (!$row && $contact_id > 0) {
     $AppUI->setMsg('Contact');
