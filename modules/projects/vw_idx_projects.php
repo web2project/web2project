@@ -39,10 +39,7 @@ $fieldNames = array();
 $module = new w2p_System_Module();
 $fields = $module->loadSettings('projects', 'index_list');
 
-if (count($fields) > 0) {
-    $fieldList = array_keys($fields);
-    $fieldNames = array_values($fields);
-} else {
+if (0 == count($fields)) {
     // TODO: This is only in place to provide an pre-upgrade-safe
     //   state for versions earlier than v2.3
     //   At some point at/after v4.0, this should be deprecated
@@ -52,9 +49,11 @@ if (count($fields) > 0) {
     $fieldNames = array('%', 'P', 'Project Name', 'Company',
         'Start', 'End', 'Actual', 'Owner', 'Tasks');
 
-    $module = new w2p_System_Module();
     $module->storeSettings('projects', 'index_list', $fieldList, $fieldNames);
+    $fields = array_combine($fieldList, $fieldNames);
 }
+$fieldList = array_keys($fields);
+$fieldNames = array_values($fields);
 
 $page = (int) w2PgetParam($_GET, 'page', 1);
 $xpg_pagesize = w2PgetConfig('page_size', 50);
@@ -164,7 +163,6 @@ $xpg_totalrecs = count($projects);
                             }
                             $s .= '</td>';
                             break;
-                        case 'department_list':
                         case 'project_departments':
                             $tmpProject->project_id = $row['project_id'];
                             $dept_array = $tmpProject->getDepartmentList();
