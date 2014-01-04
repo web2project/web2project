@@ -23,7 +23,7 @@ if ($obj) {
     $task = $obj;
     $task_id = $task->task_id;
 } else {
-    $task->loadFull(null, $task_id);
+    $task->load($task_id);
 }
 if (!$task && $task_id > 0) {
 	$AppUI->setMsg('Task');

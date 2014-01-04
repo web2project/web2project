@@ -320,34 +320,14 @@ class CTask extends w2p_Core_BaseObject
         return parent::load($oid, $strip);
     }
 
-    public function loadFull($notUsed = null, $taskId)
+    protected function hook_postLoad()
     {
-        $q = $this->_getQuery();
-        $q->addTable('tasks');
-        $q->leftJoin('users', 'u1', 'u1.user_id = task_owner', 'outer');
-        $q->leftJoin('contacts', 'ct', 'ct.contact_id = u1.user_contact', 'outer');
-        $q->innerJoin('projects', 'p', 'p.project_id = task_project');
-        $q->innerJoin('companies', 'co', 'co.company_id = project_company');
-        $q->addWhere('task_id = ' . (int) $taskId);
-        $q->addQuery('tasks.*');
-        $q->addQuery('company_name, project_name, project_color_identifier');
-        $q->addQuery('contact_display_name as username');                       //TODO: deprecate?
-        $q->addQuery('contact_display_name as task_owner_name');
-        $q->addGroup('task_id');
-
-        $this->task_owner_name = '';
-
-        $q->loadObject($this, true, false);
-        $this->task_hours_worked += 0;
         $this->budget = $this->getBudget();
     }
 
-    /*
-     * This used to feed different parameters into load() but now we just do it.
-     *
+    /**
      * @deprecated
      */
-
     public function peek($oid = null, $strip = false)
     {
         trigger_error("peek() has been deprecated in v3.0 and will be removed by v4.0. Please use load() instead.", E_USER_NOTICE);
