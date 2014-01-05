@@ -50,10 +50,13 @@ if ($result) {
         if ('on' == $notify_contacts) {
             $obj->notifyContacts($notfiyTrigger);
         }
+
+        $redirect = 'm=projects&a=view&project_id=' . $obj->project_id;
+    } else {
+        $redirect = 'm=projects';
     }
 
     $AppUI->setMsg('Project '.$action, UI_MSG_OK, true);
-    $redirect = 'm=projects&a=view&project_id=' . $obj->project_id;
 } else {
     $AppUI->setMsg($result, UI_MSG_ERROR);
     $AppUI->holdObject($obj);
