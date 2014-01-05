@@ -547,7 +547,7 @@ if ($showEditCheckbox) {
 	
 							echo showtask_new($t1);
 							$shown_tasks[$t1['task_id']] = $t1['task_id'];
-							findchild($p['tasks'], $t1['task_id']);
+                            findchild_new($p['tasks'], $t1['task_id']);
 						} elseif ($t1['task_parent'] == $task_id && $task_id) {
 							//Here we are on a task view context
 		
@@ -556,7 +556,7 @@ if ($showEditCheckbox) {
 	
 							echo showtask_new($t1);
 							$shown_tasks[$t1['task_id']] = $t1['task_id'];
-							findchild($p['tasks'], $t1['task_id']);
+                            findchild_new($p['tasks'], $t1['task_id']);
 						}
 					}
 					reset($p);

@@ -545,7 +545,7 @@ function findchild_new(&$tarr, $parent, $level = 0) {
         if ($tarr[$x]['task_parent'] == $parent && $tarr[$x]['task_parent'] != $tarr[$x]['task_id']) {
             echo showtask_new($tarr[$x], $level, true);
             $shown_tasks[$tarr[$x]['task_id']] = $tarr[$x]['task_id'];
-            findchild($tarr, $tarr[$x]['task_id'], $level);
+            findchild_new($tarr, $tarr[$x]['task_id'], $level);
         }
     }
 }

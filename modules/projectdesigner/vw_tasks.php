@@ -272,7 +272,7 @@ foreach ($projects as $k => $p) {
 			$t = $p['tasks'][$i];
 			if ($t['task_parent'] == $t['task_id']) {
 				echo showtask_new($t, 0);
-				findchild_pd($p['tasks'], $t['task_id']);
+                findchild_new($p['tasks'], $t['task_id']);
 			}
 		}
 	}

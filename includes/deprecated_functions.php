@@ -87,13 +87,14 @@ function remove_invalid($arr) {
  *   so this version has been deprecated.
  * Original location: modules/projectdesigner/projectdesigner.class.php
  * TODO:  Remove for v4.0 - caseydk 21 March 2012
- * 
+ *
  * @deprecated
- * 
+ *
  */
 function findchild_pr(&$tarr, $parent, $level = 0) {
-	trigger_error("The findchild_pr function has been deprecated and will be removed in v4.0. Please use findchild_pd instead.", E_USER_NOTICE );
-    findchild_pd($tarr, $parent, $level = 0);
+	trigger_error("The findchild_pr function has been deprecated and will be removed in v4.0. Please use findchild_new instead.", E_USER_NOTICE );
+
+    findchild_new($tarr, $parent, $level = 0);
 }
 
 /**
