@@ -147,7 +147,7 @@ $canDelete = $perms->checkModuleItem($m, 'delete');
         // showing tasks
         $tasks = is_array($tasks) ? $tasks : array();
         foreach ($tasks as $task) {
-            echo showtask($task, 0, false, true);
+            echo showtask_new($task, 0, true);
         }
         if ($showEditCheckbox) {
         ?>

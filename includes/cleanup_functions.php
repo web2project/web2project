@@ -544,7 +544,7 @@ function findchild(&$tarr, $parent, $level = 0) {
 
 	for ($x = 0; $x < $n; $x++) {
 		if ($tarr[$x]['task_parent'] == $parent && $tarr[$x]['task_parent'] != $tarr[$x]['task_id']) {
-			echo showtask($tarr[$x], $level, true);
+			echo showtask_new($tarr[$x], $level, true);
 			$shown_tasks[$tarr[$x]['task_id']] = $tarr[$x]['task_id'];
 			findchild($tarr, $tarr[$x]['task_id'], $level);
 		}
@@ -570,7 +570,7 @@ function findchild_pd(&$tarr, $parent, $level = 0) {
 
 	for ($x = 0; $x < $n; $x++) {
 		if ($tarr[$x]['task_parent'] == $parent && $tarr[$x]['task_parent'] != $tarr[$x]['task_id']) {
-			echo showtask_pd($tarr[$x], $level);
+			echo showtask_new($tarr[$x], $level);
 			findchild_pd($tarr, $tarr[$x]['task_id'], $level);
 		}
 	}
