@@ -195,7 +195,7 @@ if (!$user && $user_id > 0) {
                     <label>asdfasdfas</label>
                     adsfasdfasd
                 </p>
-                <p><input type="button" value="<?php echo $AppUI->_('back'); ?>" onclick="javascript:history.back(-1);" class="button btn btn-danger" /></p>
+                <p><input type="button" value="<?php echo $AppUI->_('back'); ?>" onclick="javascript:history.back(-1);" class="cancel button btn btn-danger" /></p>
             </div>
             <div class="column right">
                 <?php if ($canEdit && !$user_id) { ?>
@@ -224,7 +224,7 @@ if (!$user && $user_id > 0) {
                     <label><?php echo $AppUI->_('Inform new user of their account details?'); ?>:</label>
                     <input type="checkbox" value="1" name="send_user_mail" id="send_user_mail" />
                 </p>
-                <p><input type="button" value="<?php echo $AppUI->_('save'); ?>" onclick="submitIt()" class="button btn btn-primary" style="float: right" /></p>
+                <p><input type="button" value="<?php echo $AppUI->_('save'); ?>" onclick="submitIt()" class="save button btn btn-primary" /></p>
             </div>
         </div>
 

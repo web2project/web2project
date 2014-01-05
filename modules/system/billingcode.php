@@ -117,10 +117,10 @@ function delIt2(id) {
         </tr>
         <tr>
             <td align="left">
-                <input class="button"  type="button" value="<?php echo $AppUI->_('back'); ?>" onclick="javascript:history.back(-1);" />
+                <input type="button" class="cancel button"   value="<?php echo $AppUI->_('cancel'); ?>" onclick="javascript:history.back(-1);" />
             </td>
             <td colspan="3" align="right">
-                <input class="button" type="button" value="<?php echo $AppUI->_('submit'); ?>" onclick="submitIt()" />
+                <input type="button" class="save button" value="<?php echo $AppUI->_('save'); ?>" onclick="submitIt()" />
             </td>
         </tr>
     </table>

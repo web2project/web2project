@@ -126,7 +126,7 @@ function delIt(input) {
                 ?>
 			</td>
 			<td align="right" width="20">
-				<input class="button" type="button" value="<?php echo $AppUI->_('submit'); ?>" onclick="submitIt()" />
+				<input class="save button" type="button" value="<?php echo $AppUI->_('save'); ?>" onclick="submitIt()" />
 			</td>
 		</tr>
 	</table>

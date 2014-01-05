@@ -212,7 +212,7 @@ $form = new w2p_Output_HTML_FormHelper($AppUI);
                 <label><?php echo $AppUI->_('Priority'); ?></label>
                 <?php echo arraySelect($priority, 'task_priority', 'size="1" class="text"', ($task->task_priority ? $task->task_priority : 0) , true); ?>
             </p>
-            <p><input class="button btn btn-danger" type="button" name="cancel" value="<?php echo $AppUI->_('cancel'); ?>" onclick="if(confirm('<?php echo $AppUI->_('taskCancel', UI_OUTPUT_JS); ?>')){location.href = '?<?php echo $AppUI->getPlace(); ?>';}" /></p>
+            <p><input class="cancel button btn btn-danger" type="button" name="cancel" value="<?php echo $AppUI->_('cancel'); ?>" onclick="if(confirm('<?php echo $AppUI->_('taskCancel', UI_OUTPUT_JS); ?>')){location.href = '?<?php echo $AppUI->getPlace(); ?>';}" /></p>
         </div>
         <div class="column right">
             <p>
@@ -227,7 +227,7 @@ $form = new w2p_Output_HTML_FormHelper($AppUI);
                 <label><?php echo $AppUI->_('Milestone'); ?>?</label>
                 <input type="checkbox" value="1" name="task_milestone" id="task_milestone" <?php if ($task->task_milestone) { ?>checked="checked"<?php } ?> onClick="toggleMilestone()" />
             </p>
-            <p><input class="button btn btn-primary" type="button" name="btnFuseAction" value="<?php echo $AppUI->_('save'); ?>" onclick="submitIt(document.editFrm);" /></p>
+            <p><input class="save button btn btn-primary" type="button" name="btnFuseAction" value="<?php echo $AppUI->_('save'); ?>" onclick="submitIt(document.editFrm);" /></p>
         </div>
     </div>
     <div name="hiddenSubforms" id="hiddenSubforms" style="display: none;"></div>
