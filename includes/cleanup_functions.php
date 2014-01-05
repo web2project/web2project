@@ -512,20 +512,7 @@ function __extract_from_showtask(&$arr, $level, $today_view)
     return $s;
 }
 
-// from modules/tasks/tasks.class.php
-//This kludgy function echos children tasks as threads
-function showtask(&$arr, $level = 0, $notUsed = true, $today_view = false) {
-    return __extract_from_showtask($arr, $level, $today_view);
-}
-
-//This kludgy function echos children tasks as threads on project designer (_pd)
-//TODO: modules/projectdesigner/projectdesigner.class.php
-function showtask_pd(&$arr, $level = 0, $today_view = false) {
-	return __extract_from_showtask($arr, $level, $today_view);
-}
-
-//TODO: modules/projectdesigner/projectdesigner.class.php
-function showtask_pr(&$arr, $level = 0, $today_view = false) {
+function showtask_new(&$arr, $level = 0, $today_view = false) {
     return __extract_from_showtask($arr, $level, $today_view);
 }
 

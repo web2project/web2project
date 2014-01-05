@@ -394,3 +394,24 @@ function w2PgetUsernameFromID($userId) {
 
     return CContact::getContactByUserid($userId);
 }
+
+/** @deprecated */
+function showtask_pd(&$arr, $level = 0, $today_view = false) {
+    trigger_error("showtask_pd() has been deprecated in v3.1 and will be removed by v5.0. Please use showtask_new() instead.", E_USER_NOTICE);
+
+    return showtask_new($arr, $level, $today_view);
+}
+
+/** @deprecated */
+function showtask_pr(&$arr, $level = 0, $today_view = false) {
+    trigger_error("showtask_pr() has been deprecated in v3.1 and will be removed by v5.0. Please use showtask_new() instead.", E_USER_NOTICE);
+
+    return showtask_new($arr, $level, $today_view);
+}
+
+/** @deprecated */
+function showtask(&$arr, $level = 0, $notUsed = true, $today_view = false) {
+    trigger_error("showtask() has been deprecated in v3.1 and will be removed by v5.0. Please use showtask_new() instead.", E_USER_NOTICE);
+
+    return showtask_new($arr, $level, $today_view);
+}
