@@ -15,7 +15,7 @@ $keys = __extract_from_syskeys_index1();
 
 $values = __extract_from_syskeys_index2();
 
-$vals = __extract_frmo_syskeys_index3();
+$vals = __extract_from_syskeys_index3();
 
 foreach ($values as $key => $value) {
 	$values[$key]['sysval_value'] = '';

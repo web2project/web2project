@@ -4564,7 +4564,6 @@ function getTaskLogContacts($obj)
     return $req;
 }
 
-
 /**
  * @param $obj
  *
@@ -4693,7 +4692,6 @@ function __extract_from_todo($user_id, $showArcProjs, $showLowTasks, $showInProg
     return $tasks;
 }
 
-
 /**
  * @param $use_period
  * @param $ss
@@ -4759,7 +4757,6 @@ function __extract_from_tasks1()
 
     return $subquery;
 }
-
 
 /**
  * @param $userFilter
@@ -4848,11 +4845,10 @@ function __extract_from_syskeys_index2()
     return $q->loadList();
 }
 
-
 /**
  * @return Array
  */
-function __extract_frmo_syskeys_index3()
+function __extract_from_syskeys_index3()
 {
     $q = new w2p_Database_Query;
     $q->addTable('sysvals');
