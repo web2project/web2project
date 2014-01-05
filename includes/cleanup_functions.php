@@ -2807,25 +2807,6 @@ function breadCrumbs(&$arr) {
 	}
 	return implode('</td><td align="left" nowrap="nowrap">', $crumbs);
 }
-##
-## generate link for context help -- old version
-##
-function contextHelp($title, $link = '') {
-	return w2PcontextHelp($title, $link);
-}
-
-function w2PcontextHelp($title, $link = '') {
-	global $AppUI;
-	return '<a href="#' . $link . '" onclick="javascript:window.open(\'?m=help&amp;dialog=1&amp;hid=' . $link . '\', \'contexthelp\', \'width=400, height=400, left=50, top=50, scrollbars=yes, resizable=yes\')">' . $AppUI->_($title) . '</a>';
-}
-
-function w2PgetUsername($username) {
-	return CContact::getContactByUsername($username);
-}
-
-function w2PgetUsernameFromID($userId) {
-	return CContact::getContactByUserid($userId);
-}
 
 function w2PgetUsers() {
 	global $AppUI;

@@ -336,7 +336,7 @@ function get_dependencies_pd($task_id) {
  * @return type 
  */
 function buildHeaderNavigation($AppUI, $rootTag = '', $innerTag = '', $dividingToken = '', $m = '') {
-    //trigger_error("The buildHeaderNavigation function has been deprecated and will be removed in v4.0. Please use w2p_Theme_Base->buildHeaderNavigation() instead.", E_USER_NOTICE );
+    trigger_error("The buildHeaderNavigation function has been deprecated in v3.1 and will be removed by v5.0. Please use w2p_Theme_Base->buildHeaderNavigation() instead.", E_USER_NOTICE );
 
     $uistyle = $AppUI->getPref('UISTYLE') ? $AppUI->getPref('UISTYLE') : w2PgetConfig('host_style');
     $style = 'style_' . str_replace('-', '', $uistyle);
@@ -349,7 +349,7 @@ if (!function_exists('styleRenderBoxTop')) {
      * @deprecated
      */
     function styleRenderBoxTop() {
-        trigger_error("styleRenderBoxTop() has been deprecated in v3.1 and will be removed in v4.0. Use AppUI->getTheme()->styleRenderBoxTop instead.", E_USER_NOTICE);
+        trigger_error("styleRenderBoxTop() has been deprecated in v3.1 and will be removed by v5.0. Use AppUI->getTheme()->styleRenderBoxTop instead.", E_USER_NOTICE);
 
         global $AppUI;
         echo $AppUI->getTheme()->styleRenderBoxTop();
@@ -361,9 +361,36 @@ if (!function_exists('styleRenderBoxBottom')) {
      * @deprecated
      */
     function styleRenderBoxBottom() {
-        trigger_error("styleRenderBoxBottom() has been deprecated in v3.1 and will be removed in v4.0. Use AppUI->getTheme()->styleRenderBoxBottom instead.", E_USER_NOTICE);
+        trigger_error("styleRenderBoxBottom() has been deprecated in v3.1 and will be removed by v5.0. Use AppUI->getTheme()->styleRenderBoxBottom instead.", E_USER_NOTICE);
 
         global $AppUI;
         echo $AppUI->getTheme()->styleRenderBoxBottom();
     }
+}
+
+/** @deprecated */
+function contextHelp($title, $link = '') {
+    trigger_error("contextHelp() has been deprecated in v3.1 and will be removed by v5.0", E_USER_NOTICE);
+
+    return w2PcontextHelp($title, $link);
+}
+
+function w2PcontextHelp($title, $link = '') {
+    global $AppUI;
+    trigger_error("w2PcontextHelp() has been deprecated in v3.1 and will be removed by v5.0", E_USER_NOTICE);
+
+    return '<a href="#' . $link . '" onclick="javascript:window.open(\'?m=help&amp;dialog=1&amp;hid=' . $link . '\', \'contexthelp\', \'width=400, height=400, left=50, top=50, scrollbars=yes, resizable=yes\')">' . $AppUI->_($title) . '</a>';
+}
+
+
+function w2PgetUsername($username) {
+    trigger_error("w2PgetUsername() has been deprecated in v3.1 and will be removed by v5.0. Please use CContact::getContactByUsername() instead.", E_USER_NOTICE);
+
+    return CContact::getContactByUsername($username);
+}
+
+function w2PgetUsernameFromID($userId) {
+    trigger_error("w2PcontextHelp() has been deprecated in v3.1 and will be removed by v5.0. Please use CContact::getContactByUserid() instead.", E_USER_NOTICE);
+
+    return CContact::getContactByUserid($userId);
 }
