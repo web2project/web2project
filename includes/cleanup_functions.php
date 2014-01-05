@@ -535,20 +535,19 @@ function showgtask(&$a, $level = 0, $notUsed = 0) {
     }
 }
 
-// from modules/tasks/tasks.class.php
-function findchild(&$tarr, $parent, $level = 0) {
-	global $shown_tasks;
+function findchild_new(&$tarr, $parent, $level = 0) {
+    global $shown_tasks;
 
-	$level = $level + 1;
-	$n = count($tarr);
+    $level = $level + 1;
+    $n = count($tarr);
 
-	for ($x = 0; $x < $n; $x++) {
-		if ($tarr[$x]['task_parent'] == $parent && $tarr[$x]['task_parent'] != $tarr[$x]['task_id']) {
-			echo showtask_new($tarr[$x], $level, true);
-			$shown_tasks[$tarr[$x]['task_id']] = $tarr[$x]['task_id'];
-			findchild($tarr, $tarr[$x]['task_id'], $level);
-		}
-	}
+    for ($x = 0; $x < $n; $x++) {
+        if ($tarr[$x]['task_parent'] == $parent && $tarr[$x]['task_parent'] != $tarr[$x]['task_id']) {
+            echo showtask_new($tarr[$x], $level, true);
+            $shown_tasks[$tarr[$x]['task_id']] = $tarr[$x]['task_id'];
+            findchild($tarr, $tarr[$x]['task_id'], $level);
+        }
+    }
 }
 
 function findchild_gantt(&$tarr, $parent, $level = 0) {
@@ -561,19 +560,6 @@ function findchild_gantt(&$tarr, $parent, $level = 0) {
             findchild_gantt($tarr, $tarr[$x]['task_id'], $tarr[$x]['project_id'], $level);
         }
     }
-}
-
-//TODO: modules/projectdesigner/projectdesigner.class.php
-function findchild_pd(&$tarr, $parent, $level = 0) {
-	$level = $level + 1;
-	$n = count($tarr);
-
-	for ($x = 0; $x < $n; $x++) {
-		if ($tarr[$x]['task_parent'] == $parent && $tarr[$x]['task_parent'] != $tarr[$x]['task_id']) {
-			echo showtask_new($tarr[$x], $level);
-			findchild_pd($tarr, $tarr[$x]['task_id'], $level);
-		}
-	}
 }
 
 // from modules/tasks/tasks.class.php
