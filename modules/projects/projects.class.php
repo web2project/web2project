@@ -104,26 +104,7 @@ class CProject extends w2p_Core_BaseObject
         return (count($this->_error)) ? false : true;
     }
 
-    public function loadFull($notUsed = null, $projectId)
-    {
-
-        $q = $this->_getQuery();
-        $q->addTable('projects');
-        $q->addQuery('company_name, projects.*');
-        $q->addQuery('contact_display_name as user_name');                      //TODO: deprecate?
-        $q->addQuery('contact_display_name as project_owner_name');
-        $q->addJoin('companies', 'com', 'company_id = project_company', 'inner');
-        $q->leftJoin('users', 'u', 'user_id = project_owner');
-        $q->leftJoin('contacts', 'con', 'contact_id = user_contact');
-        $q->addWhere('project_id = ' . (int) $projectId);
-        $q->addGroup('project_id');
-
-        $this->company_name = '';
-        $this->project_owner_name = '';
-        $this->project_last_task = 0;
-        $this->user_name = '';
-
-        $q->loadObject($this);
+    protected function hook_postLoad() {
         $this->budget = $this->getBudget();
     }
 
@@ -427,7 +408,7 @@ class CProject extends w2p_Core_BaseObject
             $q->clear();
         }
 
-        $this->project_actual_budget = array_sum($budgets);
+        $this->project_target_budget = array_sum($budgets);
         $this->store();
 
         return true;
