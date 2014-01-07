@@ -53,15 +53,9 @@ class CLink extends w2p_Core_BaseObject
 
         // SETUP FOR LINK LIST
         $q = $this->_getQuery();
-        $q->addQuery('DISTINCT links.*');
-        $q->addQuery('contact_first_name, contact_last_name, contact_display_name as contact_name');
-        $q->addQuery('project_name, project_color_identifier, project_status, user_id');
-        $q->addQuery('task_name, task_id');
-
+        $q->addQuery('links.*');
         $q->addTable('links');
 
-        $q->leftJoin('users', 'u', 'user_id = link_owner');
-        $q->leftJoin('contacts', 'c', 'user_contact = contact_id');
         $q->leftJoin('projects', 'pr', 'project_id = link_project');
         $q->leftJoin('tasks', 't', 'task_id = link_task');
 
@@ -69,9 +63,11 @@ class CLink extends w2p_Core_BaseObject
             $q->addWhere('(link_name LIKE \'%' . $search . '%\' OR link_description LIKE \'%' . $search . '%\')');
         }
         if ($project_id > 0) { // Project
+            $q->addQuery('project_name, project_color_identifier, project_status');
             $q->addWhere('link_project = ' . (int) $project_id);
         }
         if ($task_id > 0) { // Task
+            $q->addQuery('task_name, task_id');
             $q->addWhere('link_task = ' . (int) $task_id);
         }
         if ($category_id >= 0) { // Category
