@@ -420,11 +420,11 @@ function showtask(&$arr, $level = 0, $notUsed = true, $today_view = false) {
 function findchild(&$tarr, $parent, $level = 0) {
     trigger_error("findchild() has been deprecated in v3.1 and will be removed by v5.0. Please use findchild_new() instead.", E_USER_NOTICE);
 
-    findchild_new(&$tarr, $parent, $level);
+    findchild_new($tarr, $parent, $level);
 }
 
 function findchild_pd(&$tarr, $parent, $level = 0) {
     trigger_error("findchild_pd() has been deprecated in v3.1 and will be removed by v5.0. Please use findchild_new() instead.", E_USER_NOTICE);
 
-    findchild_new(&$tarr, $parent, $level);
+    findchild_new($tarr, $parent, $level);
 }
