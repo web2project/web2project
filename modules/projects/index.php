@@ -8,25 +8,6 @@ $tab = $AppUI->processIntState('ProjIdxTab', $_GET, 'tab', 1);
 $project = new CProject();
 $structprojs = $project->getProjects();
 
-// Let's update project status!
-if (isset($_GET['update_project_status']) && isset($_GET['project_status']) && isset($_GET['project_id'])) {
-	$projects_id = w2PgetParam($_GET, 'project_id', array()); // This must be an array
-	$statusId = w2PgetParam($_GET, 'project_status', 0);
-	$project = new CProject();
-
-	foreach ($projects_id as $project_id) {
-		$project->load($project_id);
-		$project->project_status = $statusId;
-		foreach ($project->getContactList() as $contact_data){
-			$project->project_contacts[]=$contact_data['contact_id'];
-		}
-		foreach ($project->getDepartmentList() as $department_data){
-			$project->project_departments[]=$department_data['dept_id'];
-		}
-		$project->store();
-	}
-}
-
 $search_string = w2PgetParam($_POST, 'search_string', '');
 $AppUI->setState($m . '_search_string', $search_string);
 $search_string = w2PformSafe($search_string, true);

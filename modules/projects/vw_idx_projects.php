@@ -62,7 +62,7 @@ $xpg_min = $xpg_pagesize * ($page - 1); // This is where we start our record set
 $xpg_totalrecs = count($projects);
 ?>
 
-<form action="./index.php" method="get" accept-charset="utf-8">
+<form action="./index.php?m=projects" method="post" accept-charset="utf-8">
     <table id="tblProjects-list" class="tbl list">
 		<tr>
             <?php
@@ -184,7 +184,7 @@ $xpg_totalrecs = count($projects);
                     }
                 }
 
-                $s .= '<td class="center"><input type="checkbox" name="project_id[]" value="' . $row['project_id'] . '" /></td>';
+                $s .= '<td class="center"><input type="checkbox" name="project_ids[]" value="' . $row['project_id'] . '" /></td>';
 
                 if ($level) {
                     $s .= '</div>';
@@ -205,7 +205,7 @@ $xpg_totalrecs = count($projects);
 				<tr>
 					<td colspan="25" align="right">
                         <input type="submit" class="btn btn-primary btn-mini" value="<?php echo $AppUI->_('Update projects status'); ?>" />
-                        <input type="hidden" name="update_project_status" value="1" />
+                        <input type="hidden" name="dosql" value="do_project_action" />
                         <input type="hidden" name="m" value="projects" />
                         <?php echo arraySelect($pstatus, 'project_status', 'size="1" class="text"', $project_status_filter + 1, true); ?>
 					</td>
