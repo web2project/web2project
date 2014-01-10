@@ -22,7 +22,7 @@ switch($tab) {
         $filter = 'project_active = 0';
         break;
     default:
-        $filter = 'project_status = ' . ($tab - 2);
+        $filter = 'project_active = 1 AND project_status = ' . ($tab - 2);
 }
 
 $filter .= (($company_id > 0) ? ' AND project_company = ' . $company_id : '');
