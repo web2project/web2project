@@ -39,9 +39,7 @@ $companies = arrayMerge(array('0' => 'All Companies'), $companies);
     <input type="hidden" name="report_type" value="<?php echo $report_type; ?>" />
     <input type="hidden" name="datePicker" value="log" />
 
-    <?php
-    echo $AppUI->getTheme()->styleRenderBoxTop();
-    ?>
+    <?php echo $AppUI->getTheme()->styleRenderBoxTop(); ?>
     <table cellspacing="0" cellpadding="4" border="0" width="100%" class="std">
         <tr>
             <td align="right" nowrap="nowrap"><?php echo $AppUI->_('For Company'); ?>:</td>

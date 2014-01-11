@@ -52,79 +52,74 @@ echo $AppUI->getTheme()->styleRenderBoxTop();
 ?>
 
 <form name="editFrm" action="" method="get" accept-charset="utf-8">
-<input type="hidden" name="m" value="reports" />
-<input type="hidden" name="company_id" value="<?php echo $company_id; ?>" />
-<input type="hidden" name="project_id" value="<?php echo $project_id; ?>" />
-<input type="hidden" name="report_type" value="<?php echo $report_type; ?>" />
-<input type="hidden" name="datePicker" value="log" />
+    <input type="hidden" name="m" value="reports" />
+    <input type="hidden" name="company_id" value="<?php echo $company_id; ?>" />
+    <input type="hidden" name="project_id" value="<?php echo $project_id; ?>" />
+    <input type="hidden" name="report_type" value="<?php echo $report_type; ?>" />
+    <input type="hidden" name="datePicker" value="log" />
 
-<table cellspacing="0" cellpadding="4" border="0" width="100%" class="std">
-<tr>
-	<td align="right" nowrap="nowrap"><?php echo $AppUI->_('For period'); ?>:</td>
-	<td nowrap="nowrap">
-		<input type="hidden" name="log_start_date" id="log_start_date" value="<?php echo $start_date ? $start_date->format(FMT_TIMESTAMP_DATE) : ''; ?>" />
-		<input type="text" name="start_date" id="start_date" onchange="setDate_new('editFrm', 'start_date');" value="<?php echo $start_date ? $start_date->format($df) : ''; ?>" class="text" />
-		<a href="javascript: void(0);" onclick="return showCalendar('start_date', '<?php echo $df ?>', 'editFrm', null, true, true)">
-			<img src="<?php echo w2PfindImage('calendar.gif'); ?>" width="24" height="12" alt="<?php echo $AppUI->_('Calendar'); ?>" border="0" />
-		</a>
-	</td>
-	<td align="right" nowrap="nowrap"><?php echo $AppUI->_('to'); ?></td>
-	<td nowrap="nowrap">
-		<input type="hidden" name="log_end_date" id="log_end_date" value="<?php echo $end_date ? $end_date->format(FMT_TIMESTAMP_DATE) : ''; ?>" />
-		<input type="text" name="end_date" id="end_date" onchange="setDate_new('editFrm', 'end_date');" value="<?php echo $end_date ? $end_date->format($df) : ''; ?>" class="text" />
-		<a href="javascript: void(0);" onclick="return showCalendar('end_date', '<?php echo $df ?>', 'editFrm', null, true, true)">
-			<img src="<?php echo w2PfindImage('calendar.gif'); ?>" width="24" height="12" alt="<?php echo $AppUI->_('Calendar'); ?>" border="0" />
-		</a>
-	</td>
+    <table cellspacing="0" cellpadding="4" border="0" width="100%" class="std">
+        <tr>
+            <td align="right" nowrap="nowrap"><?php echo $AppUI->_('For period'); ?>:</td>
+            <td nowrap="nowrap">
+                <input type="hidden" name="log_start_date" id="log_start_date" value="<?php echo $start_date ? $start_date->format(FMT_TIMESTAMP_DATE) : ''; ?>" />
+                <input type="text" name="start_date" id="start_date" onchange="setDate_new('editFrm', 'start_date');" value="<?php echo $start_date ? $start_date->format($df) : ''; ?>" class="text" />
+                <a href="javascript: void(0);" onclick="return showCalendar('start_date', '<?php echo $df ?>', 'editFrm', null, true, true)">
+                    <img src="<?php echo w2PfindImage('calendar.gif'); ?>" width="24" height="12" alt="<?php echo $AppUI->_('Calendar'); ?>" border="0" />
+                </a>
+            </td>
+            <td align="right" nowrap="nowrap"><?php echo $AppUI->_('to'); ?></td>
+            <td nowrap="nowrap">
+                <input type="hidden" name="log_end_date" id="log_end_date" value="<?php echo $end_date ? $end_date->format(FMT_TIMESTAMP_DATE) : ''; ?>" />
+                <input type="text" name="end_date" id="end_date" onchange="setDate_new('editFrm', 'end_date');" value="<?php echo $end_date ? $end_date->format($df) : ''; ?>" class="text" />
+                <a href="javascript: void(0);" onclick="return showCalendar('end_date', '<?php echo $df ?>', 'editFrm', null, true, true)">
+                    <img src="<?php echo w2PfindImage('calendar.gif'); ?>" width="24" height="12" alt="<?php echo $AppUI->_('Calendar'); ?>" border="0" />
+                </a>
+            </td>
 
-	<td nowrap="nowrap">
-		<?php echo $AppUI->_('User'); ?>:
-        <select name="log_userfilter" class="text" style="width: 200px">
-  
-<?php
-//TODO: don't we have a function to simplify this?
-if ($log_userfilter == 0)
-	echo '<option value="0" selected="selected">' . $AppUI->_('All users') . '</option>';
-else
-	echo '<option value="0">All users</option>';
+            <td nowrap="nowrap">
+                <?php echo $AppUI->_('User'); ?>:
+                <select name="log_userfilter" class="text" style="width: 200px">
+                    <?php
+                    //TODO: don't we have a function to simplify this?
+                    if ($log_userfilter == 0)
+                        echo '<option value="0" selected="selected">' . $AppUI->_('All users') . '</option>';
+                    else
+                        echo '<option value="0">All users</option>';
 
-if (($log_userfilter_users = w2PgetUsersList())) {
-	foreach ($log_userfilter_users as $row) {
-		$selected = '';
-		if ($log_userfilter == $row['user_id']) {
-			$selected = ' selected="selected"';
-		}
-		echo '<option value="' . $row['user_id'] . '"' . $selected . '>' . $row['contact_first_name'] . ' ' . $row['contact_last_name'];
-	}
-}
+                    if (($log_userfilter_users = w2PgetUsersList())) {
+                        foreach ($log_userfilter_users as $row) {
+                            $selected = '';
+                            if ($log_userfilter == $row['user_id']) {
+                                $selected = ' selected="selected"';
+                            }
+                            echo '<option value="' . $row['user_id'] . '"' . $selected . '>' . $row['contact_first_name'] . ' ' . $row['contact_last_name'];
+                        }
+                    }
+                    ?>
+                </select>
+            </td>
 
-?>
+            <td nowrap="nowrap">
+                <input type="checkbox" name="log_all" <?php if ($log_all) echo "checked" ?> />
+                <?php echo $AppUI->_('Log All'); ?>
+            </td>
 
-		</select>
-	</td>
+            <td nowrap="nowrap">
+                <input type="checkbox" name="log_pdf" <?php if ($log_pdf) echo "checked" ?> />
+                <?php echo $AppUI->_('Make PDF'); ?>
+            </td>
 
-	<td nowrap="nowrap">
-		<input type="checkbox" name="log_all" <?php if ($log_all)
-	echo "checked" ?> />
-		<?php echo $AppUI->_('Log All'); ?>
-	</td>
+            <td nowrap="nowrap">
+                <input type="checkbox" name="log_ignore" />
+                <?php echo $AppUI->_('Ignore 0 hours'); ?>
+            </td>
 
-	<td nowrap="nowrap">
-		<input type="checkbox" name="log_pdf" <?php if ($log_pdf)
-	echo "checked" ?> />
-		<?php echo $AppUI->_('Make PDF'); ?>
-	</td>
-
-	<td nowrap="nowrap">
-		<input type="checkbox" name="log_ignore" />
-		<?php echo $AppUI->_('Ignore 0 hours'); ?>
-	</td>
-
-	<td align="right" width="50%" nowrap="nowrap">
-		<input class="button" type="submit" name="do_report" value="<?php echo $AppUI->_('submit'); ?>" />
-	</td>
-</tr>
-</table>
+            <td align="right" width="50%" nowrap="nowrap">
+                <input class="button" type="submit" name="do_report" value="<?php echo $AppUI->_('submit'); ?>" />
+            </td>
+        </tr>
+    </table>
 </form>
 <?php
 if ($do_report) {
