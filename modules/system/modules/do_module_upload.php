@@ -21,4 +21,4 @@ if (isset($_FILES['module_upload'])) {
     }
 }
 
-$AppUI->redirect('m=system&u=modules&a=viewmods');
+$AppUI->redirect('m=system&u=modules');

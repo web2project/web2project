@@ -31,7 +31,7 @@ if (!$ok && $obj->mod_type != 'core') {
         $obj->remove();
         $AppUI->setMsg('Module has been removed from the modules list - please check your database for additional tables that may need to be removed', UI_MSG_ERROR);
     }
-    $AppUI->redirect();
+    $AppUI->redirect('m=system&u=modules');
 }
 
 if (file_exists(W2P_BASE_DIR . '/modules/' . $obj->mod_directory . '/setup.php')) {
@@ -113,4 +113,4 @@ switch ($cmd) {
 		$AppUI->setMsg('Unknown Command', UI_MSG_ERROR);
 		break;
 }
-$AppUI->redirect();
+$AppUI->redirect('m=system&u=modules');

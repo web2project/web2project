@@ -47,7 +47,7 @@ class w2p_Output_ListTable extends w2p_Output_HTMLHelper
         $this->cellCount = count($this->_before) + count($fields) + count($this->_after);
 
         return '<tr>' . str_repeat('<th></th>', count($this->_before)) .
-                $cells . '</tr>';
+                $cells . str_repeat('<th></th>', count($this->_after)) . '</tr>';
     }
 
     public function buildRows($allRows, $customLookups = array())
@@ -70,10 +70,11 @@ class w2p_Output_ListTable extends w2p_Output_HTMLHelper
         $this->stageRowData($rowData);
 
         $row = '<tr>';
-        $row .= $this->_buildBeforeCells();
+        $row .= $this->_buildBeforeCells($this->_before);
         foreach ($this->_fieldKeys as $column) {
             $row .= $this->createCell($column, $rowData[$column], $customLookups);
         }
+        $row .= $this->_buildBeforeCells($this->_after);
         $row .= '</tr>';
 
         return $row;
@@ -84,11 +85,20 @@ class w2p_Output_ListTable extends w2p_Output_HTMLHelper
         $this->_before[$type] = $value;
     }
 
-    protected function _buildBeforeCells()
+    public function addAfter($type, $value = '')
+    {
+        $this->_after[$type] = $value;
+    }
+
+    protected function _buildBeforeCells($array = array())
     {
         $cells = '';
 
-        foreach ($this->_before as $type => $value) {
+        /**
+         * Note: We can't refactor the actual td/class stuff out to the return statement because we may have multiple
+         *   inserted cells processed together.. and we need them to remain separate cells.
+         */
+        foreach ($array as $type => $value) {
             switch($type) {
                 case 'edit':
                     // @note This module determination *only* works if you've followed our naming conventions.
@@ -97,6 +107,11 @@ class w2p_Output_ListTable extends w2p_Output_HTMLHelper
                     $contents  = '<td class="_'.$type.'">';
                     $contents .= '<a href="./index.php?m='.$module.'&a=addedit&' . $value . '=' . $this->tableRowData[$value] .'">' .
                         w2PshowImage('icons/stock_edit-16.png', '16', '16') . '</a>';
+                    $contents .= '</td>';
+                    break;
+                case 'select':
+                    $contents  = '<td class="_'.$type.'">';
+                    $contents .= '<input type="checkbox" value="' . $this->tableRowData[$value] . '" name="' . $value . '[]" />';
                     $contents .= '</td>';
                     break;
                 case 'url':
