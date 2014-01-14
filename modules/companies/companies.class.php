@@ -122,10 +122,12 @@ class CCompany extends w2p_Core_BaseObject {
         return $q->loadList();
     }
 
-    public function getCompanies() {
-        $where = $this->getAllowedSQL($this->_AppUI->user_id, 'company_id');
+    public function loadAll($order = 'company_name', $where = null)
+    {
+        $filter = $this->getAllowedSQL($this->_AppUI->user_id, 'company_id');
+        $filter .= ($where) ? ' AND ' . $where : '';
 
-        return $this->loadAll('company_id', $where);
+        return parent::loadAll($order, $filter);
     }
 
     /**
@@ -233,6 +235,10 @@ class CCompany extends w2p_Core_BaseObject {
         }
     }
 
+    /** @deprecated */
+    public function getCompanies() {
+        return $this->loadAll();
+    }
     /**
      * @deprecated
      */
