@@ -33,7 +33,7 @@ if (!$department && $dept_id > 0) {
 
 $company_id = $department->dept_id ? $department->dept_company : $company_id;
 
-if (!$dept_id && $department->company_name === null) {
+if (!$dept_id && !$company_id) {
     $AppUI->setMsg('badCompany', UI_MSG_ERROR);
     $AppUI->redirect();
 }
