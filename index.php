@@ -1,20 +1,10 @@
 <?php
-/*
-Copyright (c) 2007-2013 The web2Project Development Team <w2p-developers@web2project.net>
-Copyright (c) 2003-2007 The dotProject Development Team <core-developers@dotproject.net>
-
-This file is part of web2Project.
-
-web2Project is free software; you can redistribute it and/or modify
-it under the terms of the Clear BSD License as published by MetaCarta. The
-full text of this license is included in LICENSE.
-
-web2Project is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-Clear BSD License for more details.
-
-*/
+/**
+ * This file is part of web2Project.
+ *
+ * web2Project is free software; you can redistribute it and/or modify it under the terms of the Clear BSD License as
+ *  published by MetaCarta. The full text of this license is included in LICENSE.
+ */
 
 $loginFromPage = 'index.php';
 require_once 'base.php';

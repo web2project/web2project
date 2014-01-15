@@ -11,7 +11,6 @@
  * @category    CSystem_Role
  * @package     web2project
  * @subpackage  unit_tests
- * @copyright   2007-2013 The web2Project Development Team <w2p-developers@web2project.net>
  * @license     Clear BSD
  * @link        http://www.web2project.net
  */
