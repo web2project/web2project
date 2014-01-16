@@ -76,7 +76,6 @@
 
     <target name="metrics" depends="prepare">
         <echo message="Some of these targets are *very* memory intensive. You may have to increase your memory_limit in php.ini" />
-        <phingcall target="cpd" />
         <phingcall target="phploc" />
         <phingcall target="phpmd" />
         <phingcall target="depend" />
@@ -187,7 +186,7 @@
     <target name="phpmd" depends="prepare">
         <phpmd>
             <fileset refid="project.source" />
-            <formatter type="html" outfile="${dir.reports}/pmd.html"/>
+            <formatter type="xml" outfile="${dir.reports}/pmd.xml"/>
         </phpmd>
     </target>
 
