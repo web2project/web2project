@@ -18,6 +18,11 @@ $config['permissions_item_table'] = 'events';
 $config['permissions_item_field'] = 'event_id';
 $config['permissions_item_label'] = 'event_name';
 
+/**
+ * Class CSetupEvents
+ *
+ * @package     web2project\modules\deprecated
+ */
 class CSetupEvents extends w2p_System_Setup
 {
     public function remove()

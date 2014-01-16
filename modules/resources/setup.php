@@ -16,7 +16,7 @@ $config = array();
 $config['mod_name']        = 'Resources';           // name the module
 $config['mod_version']     = '1.1.0';               // add a version number
 $config['mod_directory']   = 'resources';           // tell web2project where to find this module
-$config['mod_setup_class'] = 'SResource';           // the name of the PHP setup class (used below)
+$config['mod_setup_class'] = 'CSetupResources';     // the name of the PHP setup class (used below)
 $config['mod_type']        = 'user';                // 'core' for modules distributed with w2p by standard, 'user' for additional modules
 $config['mod_ui_name']	   = $config['mod_name'];   // the name that is shown in the main menu of the User Interface
 $config['mod_ui_icon']     = 'resources.png';       // name of a related icon
@@ -32,7 +32,12 @@ if ($a == 'setup') {
     echo w2PshowModuleConfig($config);
 }
 
-class SResource extends w2p_System_Setup
+/**
+ * Class SResource
+ *
+ * @package     web2project\modules\misc
+ */
+class CSetupResources extends w2p_System_Setup
 {
     public function install() {
         $q = $this->_getQuery();

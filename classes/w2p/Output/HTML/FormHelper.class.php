@@ -1,5 +1,10 @@
 <?php
-
+/**
+ * Class w2p_Output_HTML_FormHelper
+ *
+ * @package     web2project\output
+ * @author      D. Keith Casey, Jr. <caseydk@users.sourceforge.net>
+ */
 class w2p_Output_HTML_FormHelper
 {
     protected $AppUI = null;

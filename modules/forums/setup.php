@@ -4,15 +4,6 @@ if (!defined('W2P_BASE_DIR')) {
 }
 // @todo    update version information
 
-/*
-* Name:      Forums
-* Directory: forums
-* Version:   1.0.0
-* Class:     core
-* UI Name:   Forums
-* UI Icon:   communicate.gif
-*/
-
 // MODULE CONFIGURATION DEFINITION
 $config = array();
 $config['mod_name'] = 'Forums';
@@ -29,6 +20,11 @@ if ($a == 'setup') {
 	echo w2PshowModuleConfig($config);
 }
 
+/**
+ * Class CSetupForums
+ *
+ * @package     web2project\modules\misc
+ */
 class CSetupForums extends w2p_System_Setup
 {
 	public function configure() { // configure this module

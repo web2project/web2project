@@ -2,16 +2,6 @@
 if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
-// @todo    update version information
-
-/*
-* Name:      History
-* Directory: history
-* Version:   0.32
-* Class:     user
-* UI Name:   History
-* UI Icon:
-*/
 
 // MODULE CONFIGURATION DEFINITION
 $config = array();
@@ -28,6 +18,11 @@ if ($a == 'setup') {
 	echo w2PshowModuleConfig($config);
 }
 
+/**
+ * Class CSetupHistory
+ *
+ * @package     web2project\modules\misc
+ */
 class CSetupHistory extends w2p_System_Setup
 {
 	public function install() {

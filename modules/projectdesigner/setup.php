@@ -8,7 +8,7 @@ $config = array();
 $config['mod_name'] = 'ProjectDesigner';
 $config['mod_version'] = '3.0.0';
 $config['mod_directory'] = 'projectdesigner';
-$config['mod_setup_class'] = 'projectDesigner';
+$config['mod_setup_class'] = 'CSetupProjectDesigner';
 $config['mod_type'] = 'user';
 $config['mod_ui_name'] = 'ProjectDesigner';
 $config['mod_ui_icon'] = 'projectdesigner.jpg';
@@ -19,7 +19,12 @@ if ($a == 'setup') {
 	echo w2PshowModuleConfig($config);
 }
 
-class projectDesigner extends w2p_System_Setup
+/**
+ * Class CSetupProjectDesigner
+ *
+ * @package     web2project\modules\misc
+ */
+class CSetupProjectDesigner extends w2p_System_Setup
 {
 	public function install() {
 		$result = $this->_checkRequirements();

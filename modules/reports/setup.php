@@ -17,4 +17,9 @@ if ($a == 'setup') {
 	echo w2PshowModuleConfig($config);
 }
 
+/**
+ * Class CSetupReports
+ *
+ * @package     web2project\modules\misc
+ */
 class CSetupReports extends w2p_System_Setup { }

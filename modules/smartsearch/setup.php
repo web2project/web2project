@@ -7,7 +7,7 @@ $config = array();
 $config['mod_name'] = 'SmartSearch';
 $config['mod_version'] = '3.0.0';
 $config['mod_directory'] = 'smartsearch';
-$config['mod_setup_class'] = 'SSearchNS';
+$config['mod_setup_class'] = 'CSetupSmartsearch';
 $config['mod_type'] = 'user';
 $config['mod_ui_name']     = $config['mod_name'];
 $config['mod_ui_icon'] = 'kfind.png';
@@ -17,4 +17,9 @@ if ($a == 'setup') {
 	echo w2PshowModuleConfig($config);
 }
 
-class SSearchNS extends w2p_System_Setup { }
+/**
+ * Class CSetupSmartsearch
+ *
+ * @package     web2project\modules\core
+ */
+class CSetupSmartsearch extends w2p_System_Setup { }
