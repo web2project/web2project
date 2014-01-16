@@ -784,29 +784,31 @@ class CProject extends w2p_Core_BaseObject
 
     public static function updateTaskCache($project_id, $task_id, $project_actual_end_date, $project_task_count)
     {
+        $project_id = (int) $project_id;
         if ($project_id && $task_id) {
             $q = new w2p_Database_Query();
             $q->addTable('projects');
             $q->addUpdate('project_last_task', $task_id);
             $q->addUpdate('project_actual_end_date', $project_actual_end_date);
             $q->addUpdate('project_task_count', $project_task_count);
-            $q->addWhere('project_id   = ' . (int) $project_id);
+            $q->addWhere('project_id   = ' . $project_id);
             $q->exec();
             self::updatePercentComplete($project_id);
         }
     }
 
-    public static function updateTaskCount($projectId, $taskCount)
+    public static function updateTaskCount($project_id, $taskCount)
     {
         trigger_error("CProject::updateTaskCount has been deprecated in v2.3 and will be removed by v4.0. Please use CProject::updateTaskCache instead.", E_USER_NOTICE);
 
-        if ((int) $projectId) {
+        $project_id = (int) $project_id;
+        if ($project_id) {
             $q = new w2p_Database_Query();
             $q->addTable('projects');
             $q->addUpdate('project_task_count', intval($taskCount));
-            $q->addWhere('project_id   = ' . (int) $projectId);
+            $q->addWhere('project_id   = ' . (int) $project_id);
             $q->exec();
-            self::updatePercentComplete($projectId);
+            self::updatePercentComplete($project_id);
         }
     }
 
@@ -841,18 +843,20 @@ class CProject extends w2p_Core_BaseObject
 
     public static function updateHoursWorked($project_id)
     {
+        $project_id = (int) $project_id;
+
         $q = new w2p_Database_Query();
         $q->addTable('task_log');
         $q->addTable('tasks');
         $q->addQuery('ROUND(SUM(task_log_hours),2)');
-        $q->addWhere('task_log_task = task_id AND task_project = ' . (int) $project_id);
+        $q->addWhere('task_log_task = task_id AND task_project = ' . $project_id);
         $worked_hours = 0 + $q->loadResult();
         $worked_hours = rtrim($worked_hours, '.');
         $q->clear();
 
         $q->addTable('projects');
         $q->addUpdate('project_worked_hours', $worked_hours);
-        $q->addWhere('project_id  = ' . (int) $project_id);
+        $q->addWhere('project_id  = ' . $project_id);
         $q->exec();
         self::updatePercentComplete($project_id);
     }
