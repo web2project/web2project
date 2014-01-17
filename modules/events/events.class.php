@@ -402,63 +402,6 @@ class CEvent extends w2p_Core_BaseObject
         }
     }
 
-    public function checkClash($userlist = null)
-    {
-        if (!isset($userlist)) {
-            return false;
-        }
-        $users = explode(',', $userlist);
-
-        // Now, remove the owner from the list, as we will always clash on this.
-        $key = array_search($this->_AppUI->user_id, $users);
-        if (isset($key) && $key !== false) { // Need both for change in php 4.2.0
-            unset($users[$key]);
-        }
-
-        if (!count($users)) {
-            return false;
-        }
-
-        $start_date = new w2p_Utilities_Date($this->event_start_date);
-        $end_date = new w2p_Utilities_Date($this->event_end_date);
-
-        // Now build a query to find matching events.
-        $q = $this->_getQuery();
-        $q->addTable('events', 'e');
-        $q->addQuery('e.event_owner, ue.user_id, e.event_cwd, e.event_id, e.event_start_date, e.event_end_date');
-        $q->addJoin('user_events', 'ue', 'ue.event_id = e.event_id');
-        $q->addWhere('event_start_date <= \'' . $end_date->format(FMT_DATETIME_MYSQL) . '\'');
-        $q->addWhere('event_end_date >= \'' . $start_date->format(FMT_DATETIME_MYSQL) . '\'');
-        $q->addWhere('(e.event_owner IN (' . implode(',', $users) . ') OR ue.user_id IN (' . implode(',', $users) . ') )');
-        $q->addWhere('e.event_id <>' . $this->event_id);
-
-        $result = $q->exec();
-        if (!$result) {
-            return false;
-        }
-
-        $clashes = array();
-        while ($row = $q->fetchRow()) {
-            array_push($clashes, $row['event_owner']);
-            if ($row['user_id']) {
-                array_push($clashes, $row['user_id']);
-            }
-        }
-        $clash = array_unique($clashes);
-        $q->clear();
-        if (count($clash)) {
-            $q->addTable('users', 'u');
-            $q->addTable('contacts', 'con');
-            $q->addQuery('user_id');
-            $q->addQuery('contact_display_name');
-            $q->addWhere('user_id IN (' . implode(',', $clash) . ')');
-            $q->addWhere('user_contact = contact_id');
-            return $q->loadHashList();
-        } else {
-            return false;
-        }
-    }
-
     public function getEventsInWindow($start_date, $end_date, $start_time, $end_time, $users = null)
     {
         if (!isset($users)) {
@@ -646,5 +589,11 @@ class CEvent extends w2p_Core_BaseObject
         }
 
         return $count;
+    }
+
+    /** @deprecated */
+    public function checkClash($userlist = null)
+    {
+        return false;
     }
 }
