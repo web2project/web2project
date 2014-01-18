@@ -5,6 +5,7 @@ if (!defined('W2P_BASE_DIR')) {
 // @todo    convert to template
 
 global $AppUI, $users, $task_id, $task_project, $task, $projTasksWithEndDates, $tab, $loadFromTab;
+global $form;
 
 // Make sure that we can see users that are allocated to the task.
 
@@ -85,15 +86,15 @@ for ($i = 1, $i_cmp = sizeof($keys); $i < $i_cmp; $i++) {
         </div>
         <div class="column right">
             <p>
-                <label><?php echo $AppUI->_('Additional Email Comments'); ?>:</label>
+                <?php $form->showLabel('Additional Email Comments'); ?>
                 <textarea name="email_comment" class="textarea" cols="60" rows="10"></textarea>
             </p>
             <p>
-                <label><?php echo $AppUI->_('notifyChange'); ?>:</label>
+                <?php $form->showLabel('notifyChange'); ?>
                 <input type="checkbox" name="task_notify" id="task_notify" value="1" <?php if ($task->task_notify != '0') echo 'checked="checked"' ?> />
             </p>
             <p>
-                <label><?php echo $AppUI->_('Allow users to add task logs for others'); ?>:</label>
+                <?php $form->showLabel('Allow users to add task logs for others'); ?>
                 <input type="checkbox" value="1" name="task_allow_other_user_tasklogs" <?php echo $task->task_allow_other_user_tasklogs ? 'checked="checked"' : ''; ?> />
             </p>
         </div>

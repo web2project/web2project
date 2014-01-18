@@ -70,27 +70,26 @@ $form = new w2p_Output_HTML_FormHelper($AppUI);
     <div class="std addedit resources">
         <div class="column left">
             <p>
-                <label><?php echo $AppUI->_('Resource Identifier'); ?></label>
+                <?php $form->showLabel('Resource Identifier'); ?>
                 <input type="text" class="text" size="15" maxlength="64" name="resource_key" value="<?php echo w2PformSafe($resource->resource_key); ?>" />
             </p>
             <p>
-                <label><?php echo $AppUI->_('Resource Name'); ?></label>
+                <?php $form->showLabel('Resource Name'); ?>
                 <input type="text" class="text" size="30" maxlength="255" name="resource_name" value="<?php echo w2PformSafe($resource->resource_name); ?>" />
             </p>
-            <p>
-                <label><?php echo $AppUI->_('Type'); ?></label>
+            <p><?php $form->showLabel('Type'); ?>
                 <?php echo arraySelect($typelist, 'resource_type', 'class="text"', $resource->resource_type, true); ?>
             </p>
             <p>
-                <label><?php echo $AppUI->_('Maximum Allocation'); ?></label>
+                <?php $form->showLabel('Max Allocation'); ?>
                 <?php echo arraySelect($percent, 'resource_max_allocation', 'size="1" class="text"', $resource->resource_max_allocation) . '%'; ?>
             </p>
             <p>
-                <label><?php echo $AppUI->_('Notes'); ?></label>
+                <?php $form->showLabel('Notes'); ?>
                 <textarea name="resource_note" cols="60" rows="7"><?php echo w2PformSafe($resource->resource_note); ?></textarea>
             </p>
-            <input class="button btn btn-danger" type="button" name="cancel" value="<?php echo $AppUI->_('cancel'); ?>" onclick="javascript:if(confirm('<?php echo $AppUI->_('Are you sure you want to cancel?', UI_OUTPUT_JS); ?>')){location.href = './index.php?m=resources';}" />
-            <input style="float: right;" type="button" class="button btn btn-primary" value="<?php echo $AppUI->_('save'); ?>" onclick="submitIt()" />
+            <input class="button btn btn-danger cancel" type="button" name="cancel" value="<?php echo $AppUI->_('cancel'); ?>" onclick="javascript:if(confirm('<?php echo $AppUI->_('Are you sure you want to cancel?', UI_OUTPUT_JS); ?>')){location.href = './index.php?m=resources';}" />
+            <input style="float: right;" type="button" class="button btn btn-primary save" value="<?php echo $AppUI->_('save'); ?>" onclick="submitIt()" />
         </div>
     </div>
 </form>

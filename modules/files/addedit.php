@@ -168,7 +168,7 @@ $form = new w2p_Output_HTML_FormHelper($AppUI);
     <div class="std addedit files">
         <div class="column left">
             <p>
-                <label><?php echo $AppUI->_('Folder'); ?>:</label>
+                <?php $form->showLabel('Folder'); ?>
                 <?php if ($file_id == 0 && !$ci) { ?>
                     <?php echo arraySelectTree($folders, 'file_folder', 'class="text"', ($file_helpdesk_item ? getHelpdeskFolder() : $folder)); ?>
                 <?php } else { ?>
@@ -177,45 +177,45 @@ $form = new w2p_Output_HTML_FormHelper($AppUI);
             </p>
             <?php if ($file->file_id) { ?>
             <p>
-                <label><?php echo $AppUI->_('File Name'); ?>:</label>
+                <?php $form->showLabel('File Name'); ?>
                 <?php echo strlen($file->file_name) == 0 ? 'n/a' : $file->file_name; ?>
             </p>
             <p>
-                <label><?php echo $AppUI->_('Type'); ?>:</label>
+                <?php $form->showLabel('Type'); ?>
                 <?php echo $file->file_type; ?>
             </p>
             <p>
-                <label><?php echo $AppUI->_('Size'); ?>:</label>
+                <?php $form->showLabel('Size'); ?>
                 <?php echo $file->file_size; ?> <?php echo $AppUI->_('bytes'); ?>
             </p>
             <p>
-                <label><?php echo $AppUI->_('Uploaded By'); ?>:</label>
+                <?php $form->showLabel('Uploaded By'); ?>
                 <?php echo $file->file_owner; ?>
                 <!-- @TODO lookup this value -->
             </p>
             <?php echo file_show_attr(); ?>
             <?php } ?>
             <p>
-                <label><?php echo $AppUI->_('Description'); ?>:</label>
+                <?php $form->showLabel('Description'); ?>
                 <textarea name="file_description" class="textarea" rows="4" style="width:270px"><?php echo $file->file_description; ?></textarea>
             </p>
             <p>
-                <label><?php echo $AppUI->_('Upload File'); ?>:</label>
+                <?php $form->showLabel('Upload File'); ?>
                 <input type="File" name="formfile" style="width:270px" />
             </p>
             <?php if ($ci || ($canAdmin && $file->file_checkout == 'final')) { ?>
             <p>
-                <label><?php echo $AppUI->_('Final Version'); ?></label>
+                <?php $form->showLabel('Final Version'); ?>
                 <input type="checkbox" name="final_ci" id="final_ci" onclick="finalCI()" />
             </p>
             <?php } ?>
             <p>
-                <label><?php echo $AppUI->_('Notify Assignees of Task or Project Owner by Email'); ?></label>
+                <?php $form->showLabel('Notify Assignees of Task or Project Owner by Email'); ?>
                 <input type="checkbox" name="notify" id="notify" checked="checked" />
             </p>
             <?php if ($file->file_id && $file->file_checkout <> '' && ((int) $file->file_checkout == $AppUI->user_id || $canAdmin)) { ?>
             <p>
-                <label>&nbsp;</label>
+                <?php $form->showLabel('&nbsp;'); ?>
                 <input type="button" class="button btn btn-danger btn-mini" value="<?php echo $AppUI->_('cancel checkout'); ?>" onclick="cancelIt()" />
             </p>
             <?php } ?>

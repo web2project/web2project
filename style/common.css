@@ -691,10 +691,12 @@ input.state, input.zip {
     width: 50px;
 }
 
-.tasks-depends label, .tasks-resources label, .users label {
-    width: 18em;
-}
-
-.files label {
+.tasks-depends label, .tasks-dates label, .tasks-resources label, .users label {
     width: 24em;
+}
+.files label {
+    width: 28em;
+}
+.users label {
+    width: 20em;
 }

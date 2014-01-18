@@ -14,6 +14,11 @@ class w2p_Output_HTML_FormHelper
         return '<label>' . $this->AppUI->_($label) . ':</label>';
     }
 
+    public function showLabel($label)
+    {
+        echo $this->addLabel($label);
+    }
+
     public function addField($fieldName, $fieldValue, $options = array(), $values = array())
     {
         $pieces = explode('_', $fieldName);

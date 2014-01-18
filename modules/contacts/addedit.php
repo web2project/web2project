@@ -239,48 +239,48 @@ $form = new w2p_Output_HTML_FormHelper($AppUI);
     <div class="std addedit contacts">
         <div class="column left">
             <p>
-                <label><?php echo $AppUI->_('First Name'); ?>:</label>
+                <?php $form->showLabel('First Name'); ?>
                 <input type="text" class="text" size="25" name="contact_first_name" value="<?php echo $row->contact_first_name; ?>" maxlength="50" />
             </p>
             <p>
-                <label><?php echo $AppUI->_('Last Name'); ?>:</label>
+                <?php $form->showLabel('Last Name'); ?>
                 <input type="text" class="text" size="25" name="contact_last_name" value="<?php echo $row->contact_last_name; ?>" maxlength="50" <?php if ($contact_id == 0) { ?> onBlur="orderByName('name')"<?php } ?> />
                 <a href="javascript: void(0);" onclick="orderByName('name')">[<?php echo $AppUI->_('use in display'); ?>]</a>
             </p>
             <p>
-                <label><?php echo $AppUI->_('Display Name'); ?>:</label>
+                <?php $form->showLabel('Display Name'); ?>
                 <input type="text" class="text" size="25" name="contact_display_name" value="<?php echo $row->contact_display_name; ?>" maxlength="50" />
             </p>
             <p>
-                <label><?php echo $AppUI->_('Title'); ?>:</label>
+                <?php $form->showLabel('Title'); ?>
                 <input type="text" class="text" name="contact_title" value="<?php echo $row->contact_title; ?>" maxlength="50" size="25" />
             </p>
             <p>
-                <label><?php echo $AppUI->_('Email'); ?>:</label>
+                <?php $form->showLabel('Email'); ?>
                 <input type="text" class="text" name="contact_email" value="<?php echo $row->contact_email; ?>" maxlength="60" size="25" />
             </p>
             <p>
-                <label><?php echo $AppUI->_('Phone'); ?>:</label>
+                <?php $form->showLabel('Email'); ?>
                 <input type="text" class="text" name="contact_phone" value="<?php echo $row->contact_phone; ?>" maxlength="50" size="25" />
             </p>
             <p>
-                <label><?php echo $AppUI->_('Company'); ?>:</label>
+                <?php $form->showLabel('Company'); ?>
                 <?php echo arraySelect($companies, 'contact_company', 'class="text" size="1" onChange="companyChange();"', $company_detail['company_id']); ?>
             </p>
             <?php if ($AppUI->isActiveModule('departments')) { ?>
             <p>
-                <label><?php echo $AppUI->_('Department'); ?>:</label>
+                <?php $form->showLabel('Department'); ?>
                 <input type="text" class="text" name="contact_department_name" id="contact_department_name" value="<?php echo $dept_detail['dept_name']; ?>" maxlength="100" size="25" />
                 <input type='hidden' name='contact_department' value='<?php echo $dept_detail['dept_id']; ?>' />
                 <input type="button" class="button btn btn-primary btn-mini" value="<?php echo $AppUI->_('select department...'); ?>" onclick="popDepartment()" />
             </p>
             <?php } ?>
             <p>
-                <label><?php echo $AppUI->_('Job Title'); ?>:</label>
+                <?php $form->showLabel('Job Title'); ?>
                 <input type="text" class="text" name="contact_job" value="<?php echo $row->contact_job; ?>" maxlength="100" size="25" />
             </p>
             <p>
-                <label><?php echo $AppUI->_('Contact Notes'); ?>:</label>
+                <?php $form->showLabel('Contact Notes'); ?>
                 <textarea class="textarea" name="contact_notes" rows="20" cols="40"><?php echo $row->contact_notes; ?></textarea>
             </p>
             <?php
@@ -291,57 +291,57 @@ $form = new w2p_Output_HTML_FormHelper($AppUI);
         </div>
         <div class="column right">
             <p>
-                <label><?php echo $AppUI->_('Address'); ?>1:</label>
+                <?php $form->showLabel('Address1'); ?>
                 <input type="text" class="text" name="contact_address1" value="<?php echo $row->contact_address1; ?>" maxlength="60" size="25" />
             </p>
             <p>
-                <label><?php echo $AppUI->_('Address'); ?>2:</label>
+                <?php $form->showLabel('Address2'); ?>
                 <input type="text" class="text" name="contact_address2" value="<?php echo $row->contact_address2; ?>" maxlength="60" size="25" />
             </p>
             <p>
-                <label><?php echo $AppUI->_('City'); ?>:</label>
+                <?php $form->showLabel('City'); ?>
                 <input type="text" class="text" name="contact_city" value="<?php echo $row->contact_city; ?>" maxlength="30" size="25" />
             </p>
             <p>
-                <label><?php echo $AppUI->_('State'); ?>:</label>
+                <?php $form->showLabel('State'); ?>
                 <input type="text" class="text" name="contact_state" value="<?php echo $row->contact_state; ?>" maxlength="30" size="25" />
             </p>
             <p>
-                <label><?php echo $AppUI->_('Zip'); ?>:</label>
+                <?php $form->showLabel('Zip'); ?>
                 <input type="text" class="text" name="contact_zip" value="<?php echo $row->contact_zip; ?>" maxlength="11" size="25" />
             </p>
             <p>
-                <label><?php echo $AppUI->_('Country'); ?>:</label>
+                <?php $form->showLabel('Country'); ?>
                 <?php
                 echo arraySelect($countries, 'contact_country', 'size="1" class="text"', $row->contact_country ? $row->contact_country : 0);
                 ?>
             </p>
             <p>
-                <label><?php echo $AppUI->_('Birthday'); ?>:</label>
+                <?php $form->showLabel('Birthday'); ?>
                 <input type="text" class="text" name="contact_birthday" value="<?php echo @substr($row->contact_birthday, 0, 10); ?>" maxlength="10" size="25" />(<?php echo $AppUI->_('yyyy-mm-dd'); ?>)
             </p>
             <p><strong><?php echo $AppUI->_('Contact Update Info'); ?></strong></p>
             <p>
-                <label><?php echo $AppUI->_('Waiting Update'); ?>?:</label>
+                <?php $form->showLabel('Awaiting Update'); ?>
                 <input type="checkbox" value="1" name="contact_updateask" <?php echo $row->contact_updatekey ? 'checked="checked"' : ''; ?> onclick="updateVerify()"/>
             </p>
             <p>
-                <label><?php echo $AppUI->_('Update Requested'); ?>:</label>
+                <?php $form->showLabel('Update Requested'); ?>
                 <?php $last_ask = new w2p_Utilities_Date($row->contact_updateasked); ?>
                 <?php echo $row->contact_updateasked ? $last_ask->format($df) : '&nbsp;'; ?>
             </p>
             <p>
-                <label><?php echo $AppUI->_('Last Updated'); ?>:</label>
+                <?php $form->showLabel('Last Updated'); ?>
                 <?php $lastupdated = new w2p_Utilities_Date($row->contact_lastupdate);
                 echo ($row->contact_lastupdate && !($row->contact_lastupdate == 0)) ? $AppUI->formatTZAwareTime($row->contact_lastupdate) : '&nbsp;';
                 ?>
             </p>
             <p>
-                <label><?php echo $AppUI->_('Private Entry'); ?>:</label>
+                <?php $form->showLabel('Private Entry'); ?>
                 <input type="checkbox" value="1" name="contact_private" id="contact_private" <?php echo ($row->contact_private ? 'checked="checked"' : ''); ?> />
             </p>
             <p>
-                <label><?php echo $AppUI->_('Contact Methods'); ?>:</label>
+                <?php $form->showLabel('Contact Methods'); ?>
                 <?php echo w2PtoolTip('Contact Method', 'add new', false, 'add_contact_method') ?><a href="javascript:addContactMethod();"><img src="<?php echo w2PfindImage('icons/edit_add.png'); ?>" style="border: 0;" alt="" /></a><?php echo w2PendTip() ?>
             </p>
             <p id="custom_fields"></p>

@@ -66,7 +66,7 @@ $cwd_hr = implode(', ', $cwd_conv);
         <div class="column left">
             <?php if ($can_edit_time_information) { ?>
             <p>
-                <label><?php echo $AppUI->_('Start Date'); ?>:</label>
+                <?php $form->showLabel('Start Date'); ?>
                 <input type='hidden' id='task_start_date' name='task_start_date' value='<?php echo $start_date ? $start_date->format(FMT_TIMESTAMP_DATE) : ''; ?>' />
                 <input type='text' onchange="setDate_new('datesFrm', 'start_date');" class='text' style='width:120px;' id='start_date' name='start_date' value='<?php echo $start_date ? $start_date->format($df) : ''; ?>' />
                 <a onclick="return showCalendar('start_date', '<?php echo $df ?>', 'datesFrm', null, true, true)" href="javascript: void(0);">
@@ -82,7 +82,7 @@ $cwd_hr = implode(', ', $cwd_conv);
                 ?>
             </p>
             <p>
-                <label><?php echo $AppUI->_('Finish Date'); ?>:</label>
+                <?php $form->showLabel('Finish Date'); ?>
                 <input type='hidden' id='task_end_date' name='task_end_date' value='<?php echo $end_date ? $end_date->format(FMT_TIMESTAMP_DATE) : ''; ?>' />
                 <input type='text' onchange="setDate_new('datesFrm', 'end_date');" class='text' style='width:120px;' id='end_date' name='end_date' value='<?php echo $end_date ? $end_date->format($df) : ''; ?>' />
                 <a onclick="return showCalendar('end_date', '<?php echo $df ?>', 'datesFrm', null, true, true)" href="javascript: void(0);">
@@ -97,7 +97,7 @@ $cwd_hr = implode(', ', $cwd_conv);
                 ?>
             </p>
             <p>
-                <label><?php echo $AppUI->_('Calculate'); ?>:</label>
+                <?php $form->showLabel('Calculate'); ?>
                 <input type="button" value="<?php echo $AppUI->_('Duration'); ?>" onclick="xajax_calcDuration(document.datesFrm.task_start_date.value,document.datesFrm.start_hour.value,document.datesFrm.start_minute.value,document.datesFrm.task_end_date.value,document.datesFrm.end_hour.value,document.datesFrm.end_minute.value,document.datesFrm.task_duration_type.value);" class="button btn btn-primary btn-mini" />
                 <input type="button" value="<?php echo $AppUI->_('Finish Date'); ?>" onclick="xajax_calcFinish(document.datesFrm.task_start_date.value,document.datesFrm.start_hour.value,document.datesFrm.start_minute.value,document.datesFrm.task_duration_type.value,document.datesFrm.task_duration.value)" class="button btn btn-primary btn-mini" />
             </p>
@@ -105,18 +105,18 @@ $cwd_hr = implode(', ', $cwd_conv);
         </div>
         <div class="column right">
             <p>
-                <label><?php echo $AppUI->_('Expected Duration'); ?>:</label>
+                <?php $form->showLabel('Expected Duration'); ?>
                 <input type="text" class="text" name="task_duration" id="task_duration" maxlength="8" size="6" value="<?php echo $task->task_duration; ?>" />
                 <?php
                 echo arraySelect($durnTypes, 'task_duration_type', 'class="text"', $task->task_duration_type, true);
                 ?>
             </p>
             <p>
-                <label><?php echo $AppUI->_('Daily Working Hours'); ?>:</label>
+                <?php $form->showLabel('Daily Working Hours'); ?>
                 <?php echo $w2Pconfig['daily_working_hours']; ?>
             </p>
             <p>
-                <label><?php echo $AppUI->_('Working Days'); ?>:</label>
+                <?php $form->showLabel('Working Days'); ?>
                 <?php echo $cwd_hr; ?>
             </p>
         </div>

@@ -87,24 +87,24 @@ $form = new w2p_Output_HTML_FormHelper($AppUI);
     <div class="std addedit departments">
         <div class="column left">
             <p>
-                <label><?php echo $AppUI->_('Forum Name'); ?>:</label>
+                <?php $form->showLabel('Name'); ?>
                 <input type="text" class="text" size="25" name="forum_name" value="<?php echo $forum->forum_name; ?>" maxlength="50" style="width:200px;" />
             </p>
             <p>
-                <label><?php echo $AppUI->_('Related Project'); ?>:</label>
+                <?php $form->showLabel('Related Project'); ?>
                 <?php echo arraySelect($projects, 'forum_project', 'size="1" class="text"', $forum->forum_project); ?>
             </p>
             <p>
-                <label><?php echo $AppUI->_('Owner'); ?>:</label>
+                <?php $form->showLabel('Owner'); ?>
                 <?php echo arraySelect($users, 'forum_owner', 'size="1" class="text"', $forum->forum_owner ? $forum->forum_owner : $AppUI->user_id); ?>
             </p>
             <p>
-                <label><?php echo $AppUI->_('Moderator'); ?>:</label>
+                <?php $form->showLabel('Moderator'); ?>
                 <?php echo arraySelect($users, 'forum_moderated', 'size="1" class="text"', $forum->forum_moderated); ?>
             </p>
             <?php if ($forum_id) { ?>
                 <p>
-                    <label><?php echo $AppUI->_('Message Count'); ?>:</label>
+                    <?php $form->showLabel('Message Count'); ?>
                     <?php echo $forum->forum_message_count; ?>
                 </p>
             <?php } ?>
@@ -114,16 +114,16 @@ $form = new w2p_Output_HTML_FormHelper($AppUI);
         </div>
         <div class="column right">
             <p>
-                <label><?php echo $AppUI->_('Description'); ?>:</label>
+                <?php $form->showLabel('Description'); ?>
                 <textarea class="textarea" cols="50" rows="7" name="forum_description"><?php echo $forum->forum_description; ?></textarea>
             </p>
             <?php if ($forum_id) { ?>
                 <p>
-                    <label><?php echo $AppUI->_('Created On'); ?>:</label>
+                    <?php $form->showLabel('Created On'); ?>
                     <?php echo $AppUI->formatTZAwareTime($forum->forum_create_date); ?>
                 </p>
                 <p>
-                    <label><?php echo $AppUI->_('Last Post'); ?>:</label>
+                    <?php $form->showLabel('Last Post'); ?>
                     <?php echo $AppUI->formatTZAwareTime($forum->forum_last_date); ?>
                 </p>
             <?php } ?>
