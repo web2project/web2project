@@ -43,6 +43,10 @@ class w2p_Output_HTML_FormHelper
                 $output .= 'name="' . $fieldName. '" value="' . w2PformSafe($fieldValue) . '" ' .$params .' />';
                 $output .= '<a href="javascript: void(0);" onclick="testURL()">[' . $this->AppUI->_('test') . ']</a>';
                 break;
+            /**
+             * This handles the default input text input box. It currently covers these fields:
+             *   name, email, phone1, phone2, url, address1, address2, city, state, zip, fax
+             */
             default:
                 $output  = '<input type="text" class="text '. $suffix . '" ';
                 $output .= 'name="' . $fieldName. '" value="' . w2PformSafe($fieldValue) . '" ' .$params .' />';
@@ -51,13 +55,9 @@ class w2p_Output_HTML_FormHelper
         return $output;
     }
 
-    public function addRow($fieldName, $fieldValue, $options = array(), $values = array())
+    public function showField($fieldName, $fieldValue, $options = array(), $values = array())
     {
-        $pieces = explode('_', $fieldName);
-        $suffix = end($pieces);
-
-        return '<p>' . $this->addLabel(ucwords($suffix)) .
-            $this->addField($fieldName, $fieldValue, $options, $values) . '</p>';
+        echo $this->addField($fieldName, $fieldValue, $options, $values);
     }
 
     public function addCancelButton()
@@ -66,11 +66,19 @@ class w2p_Output_HTML_FormHelper
 
         return $output;
     }
+    public function showCancelButton()
+    {
+        echo $this->addCancelButton();
+    }
     public function addSaveButton()
     {
         $output = '<input type="button" value="' . $this->AppUI->_('save') . '" class="save button btn btn-primary" onclick="submitIt()" />';
 
         return $output;
+    }
+    public function showSaveButton()
+    {
+        echo $this->addSaveButton();
     }
 
     public function addNonce()
