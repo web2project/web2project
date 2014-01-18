@@ -177,7 +177,7 @@ class CForum extends w2p_Core_BaseObject
         $q->exec();
     }
 
-    public function getAllowedRecords($uid, $fields = '*', $orderby = '', $index = null, $extra = null)
+    public function getAllowedRecords($uid, $fields = '*', $orderby = '', $index = null, $extra = null, $unused = '')
     {
         $oPrj = new CProject();
         $oPrj->overrideDatabase($this->_query);

@@ -187,7 +187,7 @@ class CUser extends w2p_Core_BaseObject
         return $search;
     }
 
-    public function getAllowedRecords($uid, $fields = '*', $orderby = '', $index = null, $extra = null)
+    public function getAllowedRecords($uid, $fields = '*', $orderby = '', $index = null, $extra = null, $unused = null)
     {
         return w2PgetUsers();
     }
