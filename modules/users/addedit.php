@@ -191,7 +191,7 @@ if (!$user && $user_id > 0) {
                     <input type="text" class="text" name="dept_name" value="<?php echo $user['dept_name']; ?>" size="40" disabled="disabled" />
                     <input type="button" class="button btn btn-primary btn-mini" value="<?php echo $AppUI->_('select dept'); ?>..." onclick="popDept()" />
                 </p>
-                <p><input type="button" value="<?php echo $AppUI->_('back'); ?>" onclick="javascript:history.back(-1);" class="button btn btn-danger cancel" /></p>
+                <?php $form->showCancelButton(); ?>
             </div>
             <div class="column right">
                 <?php if ($canEdit && !$user_id) { ?>
@@ -220,7 +220,7 @@ if (!$user && $user_id > 0) {
                     <?php $form->showLabel('Inform new user of account details?'); ?>
                     <input type="checkbox" value="1" name="send_user_mail" id="send_user_mail" />
                 </p>
-                <p><input type="button" value="<?php echo $AppUI->_('save'); ?>" onclick="submitIt()" class="button btn btn-primary save" /></p>
+                <?php $form->showSaveButton(); ?>
             </div>
         </div>
 

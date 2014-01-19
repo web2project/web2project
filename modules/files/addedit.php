@@ -220,10 +220,10 @@ $form = new w2p_Output_HTML_FormHelper($AppUI);
             </p>
             <?php } ?>
             <p>
-                <input class="button btn btn-danger" type="button" name="cancel" value="<?php echo $AppUI->_('cancel'); ?>" onclick="javascript:if(confirm('<?php echo $AppUI->_('Are you sure you want to cancel?', UI_OUTPUT_JS); ?>')){location.href = '?<?php echo $AppUI->getPlace(); ?>'; }" />
+                <?php $form->showCancelButton(); ?>
                 <?php
                 if (is_writable(W2P_BASE_DIR.'/files')) {
-                    ?><input type="button" class="button btn btn-primary right" value="<?php echo $AppUI->_('save'); ?>" onclick="submitIt()" /><?php
+                    $form->showSaveButton();
                 } else {
                     ?><span class="error">File uploads not allowed. Please check permissions on the /files directory.</span><?php
                 }

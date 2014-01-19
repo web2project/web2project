@@ -190,11 +190,11 @@ $form = new w2p_Output_HTML_FormHelper($AppUI);
         </tr>
         <tr>
             <td>
-                <input type="button" value="<?php echo $AppUI->_('back'); ?>" class="button" onclick="javascript:window.location='./index.php?<?php echo $back_url; ?>';" />
+                <?php $form->showCancelButton(); ?>
             </td>
-            <td align="right"><?php
-            echo '<input type="button" value="' . $AppUI->_('save') . '" class=button onclick="submitIt()">';
-        ?></td>
+            <td align="right">
+                <?php $form->showSaveButton(); ?>
+            </td>
         </tr>
     </table>
 </form>

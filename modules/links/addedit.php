@@ -157,12 +157,8 @@ $form = new w2p_Output_HTML_FormHelper($AppUI);
                 <?php $form->showLabel('URL'); ?>
                 <input type="text" class="text" name="link_url" style="width:270px" value="<?php echo $link->link_url ?>">
             </p>
-            <p>
-                <input type="button" class="button btn btn-primary" style="float: right;" value="<?php echo $AppUI->_('save'); ?>" onclick="submitIt()" />
-            </p>
-            <p>
-                <input class="button btn btn-danger" type="button" name="cancel" value="<?php echo $AppUI->_('cancel'); ?>" onclick="javascript:if(confirm('<?php echo $AppUI->_('Are you sure you want to cancel?', UI_OUTPUT_JS); ?>')){location.href = './index.php?m=links';}" />
-            </p>
+            <?php $form->showCancelButton(); ?>
+            <?php $form->showSaveButton(); ?>
         </div>
     </div>
 </form>

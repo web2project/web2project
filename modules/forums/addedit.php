@@ -109,7 +109,7 @@ $form = new w2p_Output_HTML_FormHelper($AppUI);
                 </p>
             <?php } ?>
             <p>
-                <input type="button" value="<?php echo $AppUI->_('back'); ?>" class="button" onclick="javascript:window.location='./index.php?m=forums';" />
+                <?php $form->showCancelButton(); ?>
             </p>
         </div>
         <div class="column right">
@@ -127,7 +127,7 @@ $form = new w2p_Output_HTML_FormHelper($AppUI);
                     <?php echo $AppUI->formatTZAwareTime($forum->forum_last_date); ?>
                 </p>
             <?php } ?>
-            <p><input type="button" value="save" class="save button btn btn-primary" onclick="submitIt()" /></p>
+            <?php $form->showSaveButton(); ?>
         </div>
     </div>
 </form>

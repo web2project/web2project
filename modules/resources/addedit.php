@@ -88,8 +88,8 @@ $form = new w2p_Output_HTML_FormHelper($AppUI);
                 <?php $form->showLabel('Notes'); ?>
                 <textarea name="resource_note" cols="60" rows="7"><?php echo w2PformSafe($resource->resource_note); ?></textarea>
             </p>
-            <input class="button btn btn-danger cancel" type="button" name="cancel" value="<?php echo $AppUI->_('cancel'); ?>" onclick="javascript:if(confirm('<?php echo $AppUI->_('Are you sure you want to cancel?', UI_OUTPUT_JS); ?>')){location.href = './index.php?m=resources';}" />
-            <input style="float: right;" type="button" class="button btn btn-primary save" value="<?php echo $AppUI->_('save'); ?>" onclick="submitIt()" />
+            <?php $form->showCancelButton(); ?>
+            <?php $form->showSaveButton(); ?>
         </div>
     </div>
 </form>

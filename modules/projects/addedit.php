@@ -303,7 +303,7 @@ $form = new w2p_Output_HTML_FormHelper($AppUI);
                 ?>
             </p>
             <?php } ?>
-            <p><input class="button btn btn-danger" type="button" name="cancel" value="<?php echo $AppUI->_('cancel'); ?>" onclick="javascript:if(confirm('Are you sure you want to cancel.')){location.href = './index.php?m=projects';}" /></p>
+            <?php $form->showCancelButton(); ?>
         </div>
         <div class="column right">
             <p>
@@ -379,7 +379,7 @@ $form = new w2p_Output_HTML_FormHelper($AppUI);
             $custom_fields = new w2p_Core_CustomFields($m, $a, $project->project_id, 'edit');
             echo '<p>' . $custom_fields->getHTML() . '</p>';
             ?>
-            <p><input class="button btn btn-primary" type="button" name="btnFuseAction" value="<?php echo $AppUI->_('save'); ?>" onclick="submitIt();" style="float: right;" /></p>
+            <?php $form->showSaveButton(); ?>
         </div>
     </div>
 </form>

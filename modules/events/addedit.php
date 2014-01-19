@@ -343,10 +343,10 @@ $form = new w2p_Output_HTML_FormHelper($AppUI);
                 </td>
             <tr>
                 <td colspan="2">
-                    <input type="button" value="<?php echo $AppUI->_('back'); ?>" class="button btn btn-danger" onclick="javascript:history.back();" />
+                    <?php $form->showCancelButton(); ?>
                 </td>
                 <td align="right" colspan="2">
-                    <input type="button" value="<?php echo $AppUI->_('save'); ?>" class="button btn btn-primary" onclick="submitIt()" />
+                    <?php $form->showSaveButton(); ?>
                 </td>
             </tr>
         </table>

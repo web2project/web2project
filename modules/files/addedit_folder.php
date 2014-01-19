@@ -111,8 +111,8 @@ $form = new w2p_Output_HTML_FormHelper($AppUI);
                 <?php $form->showLabel('Description'); ?>
                 <textarea name="file_folder_description" class="textarea" rows="4" style="width:270px"><?php echo $folder->file_folder_description; ?></textarea>
             </p>
-            <input class="button btn btn-danger" type="button" name="cancel" value="<?php echo $AppUI->_('cancel'); ?>" onclick="javascript:if(confirm('<?php echo $AppUI->_('Are you sure you want to cancel?'); ?>')){location.href = '?<?php echo $referrer; ?>';}" />
-            <input type="button" style="float: right;" class="button btn btn-primary" value="<?php echo $AppUI->_('submit'); ?>" onclick="submitIt()" />
+            <?php $form->showCancelButton(); ?>
+            <?php $form->showSaveButton(); ?>
         </div>
     </div>
 </form>

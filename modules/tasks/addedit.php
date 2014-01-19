@@ -212,7 +212,7 @@ $form = new w2p_Output_HTML_FormHelper($AppUI);
                 <?php $form->showLabel('Priority'); ?>
                 <?php echo arraySelect($priority, 'task_priority', 'size="1" class="text"', ($task->task_priority ? $task->task_priority : 0) , true); ?>
             </p>
-            <p><input class="button btn btn-danger cancel" type="button" name="cancel" value="<?php echo $AppUI->_('cancel'); ?>" onclick="if(confirm('<?php echo $AppUI->_('taskCancel', UI_OUTPUT_JS); ?>')){location.href = '?<?php echo $AppUI->getPlace(); ?>';}" /></p>
+            <?php $form->showCancelButton(); ?>
         </div>
         <div class="column right">
             <p>
