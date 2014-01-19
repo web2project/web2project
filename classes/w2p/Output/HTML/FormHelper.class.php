@@ -34,6 +34,10 @@ class w2p_Output_HTML_FormHelper
         }
 
         switch ($suffix) {
+            case 'parent':
+                $suffix = 'department';
+                $output  = arraySelect($values, $fieldName, 'size="1" class="text '.$suffix.'"', $fieldValue);
+                break;
             case 'company':
                 $class  = 'C'.ucfirst($suffix);
 
@@ -42,6 +46,7 @@ class w2p_Output_HTML_FormHelper
                 $link = '?m='. w2p_pluralize($suffix) .'&a=view&'.$suffix.'_id='.$fieldValue;
                 $output = '<a href="'.$link.'">'.$obj->{"$suffix".'_name'}.'</a>';
                 break;
+            case 'desc':            // @todo This is a special case because department->dept_notes should be renamed department->dept_description
             case 'notes':           // @todo This is a special case because contact->contact_notes should be renamed contact->contact_description
             case 'description':
                 $output  = '<textarea name="' . $fieldName . '" class="'.$suffix.'">' . w2PformSafe($fieldValue) . '</textarea>';
