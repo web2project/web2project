@@ -171,14 +171,4 @@ class CFileFolders_Test extends CommonSetup
                 'This test has not been implemented yet.'
         );
     }
-
-    /**
-     * @todo Implement testHook_search().
-     */
-    public function testHook_search() {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-                'This test has not been implemented yet.'
-        );
-    }
 }

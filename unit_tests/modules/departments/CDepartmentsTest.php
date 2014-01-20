@@ -293,9 +293,6 @@ class CDepartments_Test extends CommonSetup
         );
     }
 
-    /**
-     * @todo Implement testHook_search().
-     */
     public function testHook_search() {
         $search = $this->obj->hook_search();
 
