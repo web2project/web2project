@@ -908,24 +908,21 @@ class w2p_Core_CAppUITest extends CommonSetup
         );
     }
 
-    /**
-     * @todo Implement testAddFooterJavascriptFile().
-     */
     public function testAddFooterJavascriptFile() {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-                'This test has not been implemented yet.'
-        );
+        $this->_AppUI->addFooterJavascriptFile('monkey.js');
+        $this->_AppUI->addFooterJavascriptFile('test.js');
+        $this->_AppUI->addFooterJavascriptFile('web2project.js');
+        $result = $this->_AppUI->loadFooterJS();
+
+        $this->assertGreaterThan(0, strpos($result, 'monkey'));
+        $this->assertGreaterThan(0, strpos($result, 'test'));
+        $this->assertGreaterThan(0, strpos($result, 'web2project.js'));
     }
 
-    /**
-     * @todo Implement testLoadFooterJS().
-     */
     public function testLoadFooterJS() {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-                'This test has not been implemented yet.'
-        );
+        $result = $this->_AppUI->loadFooterJS();
+
+        $this->assertEquals(191, strlen($result));
     }
 
     /**

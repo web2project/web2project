@@ -1163,7 +1163,7 @@ class w2p_Core_CAppUI
             }
         }
 
-        echo $s;
+        return $s;
     }
 
     public function loadCalendarJS()
