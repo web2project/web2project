@@ -155,7 +155,7 @@ if (!$user && $user_id > 0) {
         <div class="std addedit users">
             <div class="column left">
                 <p>
-                    <label><?php echo $AppUI->_('Login Name'); ?>:</label>
+                    <?php $form->showLabel('Login Name'); ?>
                     <?php
                     if ($user["user_username"]) {
                         echo '<input type="hidden" class="text" name="user_username" value="' . $user['user_username'] . '" />';
@@ -167,64 +167,60 @@ if (!$user && $user_id > 0) {
                 </p>
                 <?php if (!$user["user_id"]) { ?>
                 <p>
-                    <label><?php echo $AppUI->_('Password'); ?>:</label>
+                    <?php $form->showLabel('Password'); ?>
                     <input type="password" class="text" name="user_password" value="<?php echo $user['user_password']; ?>" maxlength="32" size="32" onKeyUp="checkPassword(this.value);" />
                 </p>
                 <p>
-                    <label><?php echo $AppUI->_('Confirm Password'); ?>:</label>
+                    <?php $form->showLabel('Confirm Password'); ?>
                     <input type="password" class="text" name="password_check" value="<?php echo $user['user_password']; ?>" maxlength="32" size="32" />
                 </p>
                 <?php } ?>
                 <p>
-                    <label><?php echo $AppUI->_('Name'); ?>:</label>
+                    <?php $form->showLabel('Name'); ?>
                     <input type="text" class="text" name="contact_first_name" value="<?php echo $user['contact_first_name']; ?>" maxlength="50" /> <input type="text" class="text" name="contact_last_name" value="<?php echo $user['contact_last_name']; ?>" maxlength="50" />
                 </p>
                 <p>
-                    <label><?php echo $AppUI->_('Company'); ?>:</label>
+                    <?php $form->showLabel('Company'); ?>
                     <?php
                     echo arraySelect($companies, 'contact_company', 'class=text size=1', $user['contact_company']);
                     ?>
                 </p>
                 <p>
-                    <label><?php echo $AppUI->_('Department'); ?>:</label>
+                    <?php $form->showLabel('Department'); ?>
                     <input type="hidden" name="contact_department" value="<?php echo $user['contact_department']; ?>" />
                     <input type="text" class="text" name="dept_name" value="<?php echo $user['dept_name']; ?>" size="40" disabled="disabled" />
                     <input type="button" class="button btn btn-primary btn-mini" value="<?php echo $AppUI->_('select dept'); ?>..." onclick="popDept()" />
                 </p>
-                <p>
-                    <label>asdfasdfas</label>
-                    adsfasdfasd
-                </p>
-                <p><input type="button" value="<?php echo $AppUI->_('back'); ?>" onclick="javascript:history.back(-1);" class="button btn btn-danger" /></p>
+                <?php $form->showCancelButton(); ?>
             </div>
             <div class="column right">
                 <?php if ($canEdit && !$user_id) { ?>
                 <p>
-                    <label><?php echo $AppUI->_('User Role'); ?>:</label>
+                    <?php $form->showLabel('User Role'); ?>
                     <?php echo arraySelect($roles_arr, 'user_role', 'size="1" class="text"', '', true); ?>
                 </p>
                 <?php } ?>
                 <?php if (!$user["user_id"]) { ?>
                 <p>
-                    <label><?php echo $AppUI->_('Password Strength'); ?>:</label>
+                    <?php $form->showLabel('Password Strength'); ?>
                     <div class="text" style="width: 135px; margin-left: 18.5em">
                         <div id="progressBar"></div>
                     </div>
                 </p>
                 <?php } ?>
                 <p>
-                    <label><?php echo $AppUI->_('Email'); ?>:</label>
+                    <?php $form->showLabel('Email'); ?>
                     <input type="text" class="text" name="contact_email" value="<?php echo $user['contact_email']; ?>" maxlength="255" size="40" />
                 </p>
                 <p>
-                    <label><?php echo $AppUI->_('Email') . ' ' . $AppUI->_('Signature'); ?>:</label>
+                    <?php $form->showLabel('Email Signature'); ?>
                     <textarea class="text" name="user_signature"><?php echo $user["user_signature"]; ?></textarea>
                 </p>
                 <p>
-                    <label><?php echo $AppUI->_('Inform new user of their account details?'); ?>:</label>
+                    <?php $form->showLabel('Inform new user of account details?'); ?>
                     <input type="checkbox" value="1" name="send_user_mail" id="send_user_mail" />
                 </p>
-                <p><input type="button" value="<?php echo $AppUI->_('save'); ?>" onclick="submitIt()" class="button btn btn-primary" style="float: right" /></p>
+                <?php $form->showSaveButton(); ?>
             </div>
         </div>
 

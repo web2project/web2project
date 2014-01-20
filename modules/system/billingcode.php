@@ -57,7 +57,11 @@ function delIt2(id) {
 <form name="changeMe" action="./index.php?m=system&amp;a=billingcode" method="post" accept-charset="utf-8">
     <input type="hidden" name="company_id" id="company_filter" value="" />
 </form>
+<?php
 
+$form = new w2p_Output_HTML_FormHelper($AppUI);
+
+?>
 <form name="frmAddcode" action="./index.php?m=system" method="post" accept-charset="utf-8">
     <input type="hidden" name="dosql" value="do_billingcode_aed" />
     <input type="hidden" name="del" value="0" />
@@ -117,7 +121,7 @@ function delIt2(id) {
         </tr>
         <tr>
             <td align="left">
-                <input class="button"  type="button" value="<?php echo $AppUI->_('back'); ?>" onclick="javascript:history.back(-1);" />
+                <?php $form->showCancelButton(); ?>
             </td>
             <td colspan="3" align="right">
                 <input class="button" type="button" value="<?php echo $AppUI->_('submit'); ?>" onclick="submitIt()" />

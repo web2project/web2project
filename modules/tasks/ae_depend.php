@@ -8,6 +8,7 @@ if (!defined('W2P_BASE_DIR')) {
 global $AppUI, $w2Pconfig, $task_parent_options, $loadFromTab;
 global $can_edit_time_information, $task;
 global $durnTypes, $task_project, $task_id, $tab;
+global $form;
 
 //Time arrays for selects
 $start = (int) w2PgetConfig('cal_day_start');
@@ -68,16 +69,16 @@ $taskDep = __extract_from_ae_depend2($task_id);
     <div class="std addedit tasks-depends">
         <div class="column left">
             <p>
-                <label><?php echo $AppUI->_('Dependency Tracking'); ?></label>
+                <?php $form->showLabel('Dependency Tracking'); ?>
                 <?php echo $AppUI->_('On'); ?><input type="radio" name="task_dynamic" value="31" <?php if ($task_id == 0 || $task->task_dynamic > '20') { echo "checked"; } ?> />
                 <?php echo $AppUI->_('Off'); ?><input type="radio" name="task_dynamic" value="0" <?php if ($task_id && ($task->task_dynamic == '0' || $task->task_dynamic == '11')) { echo "checked"; } ?> />
             </p>
             <p>
-                <label><?php echo $AppUI->_('Set task start date based on dependency'); ?></label>
+                <?php $form->showLabel('Set task start date based on dependency'); ?>
                 <input type="checkbox" name="set_task_start_date" id="set_task_start_date" <?php if ($task_id == 0 || $task->task_dynamic > '20') { echo "checked"; } ?>  />
             </p>
             <p>
-                <label><?php echo $AppUI->_('All Tasks'); ?>:</label>
+                <?php $form->showLabel('All Tasks'); ?>
                 <select name="all_tasks" class="text" style="width:220px" size="10" class="text" multiple="multiple">
                     <?php echo str_replace('selected', '', $task_parent_options); // we need to remove selected added from task_parent options ?>
                 </select>
@@ -86,15 +87,15 @@ $taskDep = __extract_from_ae_depend2($task_id);
         </div>
         <div class="column right">
             <p>
-                <label><?php echo $AppUI->_('Dynamic Task'); ?></label>
+                <?php $form->showLabel('Dynamic Task'); ?>
                 <input type="checkbox" name="task_dynamic" id="task_dynamic" value="1" <?php if ($task->task_dynamic == "1") { echo 'checked="checked"'; } ?> />
             </p>
             <p>
-                <label><?php echo $AppUI->_('Do not track this task'); ?></label>
+                <?php $form->showLabel('Do not track this task'); ?>
                 <input type="checkbox" name="task_dynamic_nodelay" id="task_dynamic_nodelay" value="1" <?php if (($task->task_dynamic > '10') && ($task->task_dynamic < 30)) { echo 'checked="checked"'; } ?> />
             </p>
             <p>
-                <label><?php echo $AppUI->_('Task Dependencies'); ?>:</label>
+                <?php $form->showLabel('Dependencies'); ?>
                 <?php echo arraySelect($taskDep, 'task_dependencies', 'style="width:220px" size="10" class="text" multiple="multiple" ', null); ?>
             </p>
             <p><input type="button" class="button btn btn-primary btn-mini" value="&lt;" onclick="removeTaskDependency(document.dependFrm, document.datesFrm)" /></p>

@@ -121,7 +121,7 @@ $form = new w2p_Output_HTML_FormHelper($AppUI);
     <div class="std addedit links">
         <div class="column left">
             <p>
-                <label><?php echo $AppUI->_('Link Name'); ?>:</label>
+                <?php $form->showLabel('Link Name'); ?>
                 <input type="text" class="text" name="link_name" value="<?php echo $link->link_name; ?>">
                 <?php if ($link_id) { ?>
                     <a href="<?php echo $link->link_url; ?>" target="_blank"><?php echo $AppUI->_('go'); ?></a>
@@ -129,40 +129,36 @@ $form = new w2p_Output_HTML_FormHelper($AppUI);
             </p>
             <?php if ($link_id) { ?>
             <p>
-                <label><?php echo $AppUI->_('Created By'); ?>:</label>
+                <?php $form->showLabel('Created By'); ?>
                 <?php
                 echo arraySelect($users, 'link_owner', 'size="1" class="text"', ($link->link_owner ? $link->link_owner : $AppUI->user_id));
                 ?>
             </p>
             <?php } ?>
             <p>
-                <label><?php echo $AppUI->_('Category'); ?>:</label>
+                <?php $form->showLabel('Category'); ?>
                 <?php echo arraySelect($link_type, 'link_category', 'size="1" class="text"', $link->link_category, true); ?>
             </p>
             <p>
-                <label><?php echo $AppUI->_('Project'); ?>:</label>
+                <?php $form->showLabel('Project'); ?>
                 <?php echo arraySelect($projects, 'link_project', 'size="1" class="text" style="width:270px"', $link->link_project); ?>
             </p>
             <p>
-                <label><?php echo $AppUI->_('Task'); ?>:</label>
+                <?php $form->showLabel('Task'); ?>
                 <input type="hidden" name="link_task" value="<?php echo $link->link_task; ?>" />
                 <input type="text" class="text" name="task_name" value="<?php echo isset($link->task_name) ? $link->task_name : ''; ?>" size="40" disabled="disabled" />
                 <input type="button" class="button btn btn-primary btn-mini" value="<?php echo $AppUI->_('select task'); ?>..." onclick="popTask()" />
             </p>
             <p>
-                <label><?php echo $AppUI->_('Description'); ?>:</label>
+                <?php $form->showLabel('Description'); ?>
                 <textarea name="link_description" class="textarea" rows="4" style="width:270px"><?php echo $link->link_description; ?></textarea>
             </p>
             <p>
-                <label><?php echo $AppUI->_('Link URL'); ?>:</label>
+                <?php $form->showLabel('URL'); ?>
                 <input type="text" class="text" name="link_url" style="width:270px" value="<?php echo $link->link_url ?>">
             </p>
-            <p>
-                <input type="button" class="button btn btn-primary" style="float: right;" value="<?php echo $AppUI->_('save'); ?>" onclick="submitIt()" />
-            </p>
-            <p>
-                <input class="button btn btn-danger" type="button" name="cancel" value="<?php echo $AppUI->_('cancel'); ?>" onclick="javascript:if(confirm('<?php echo $AppUI->_('Are you sure you want to cancel?', UI_OUTPUT_JS); ?>')){location.href = './index.php?m=links';}" />
-            </p>
+            <?php $form->showCancelButton(); ?>
+            <?php $form->showSaveButton(); ?>
         </div>
     </div>
 </form>
