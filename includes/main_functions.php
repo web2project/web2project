@@ -190,23 +190,16 @@ function w2PgetConfig($key, $default = null)
  */
 function w2PgetParam(&$arr, $name, $def = null)
 {
-    global $AppUI;
+    $key = preg_replace("/[^A-Za-z0-9_]/", "", $name);
 
-    if (isset($arr[$name])) {
-        if ((is_array($arr[$name])) || (strpos($arr[$name], ' ') === false
-                && strpos($arr[$name], '<') === false && strpos($arr[$name], '"') === false
-                && strpos($arr[$name], '[') === false && strpos($arr[$name], ';') === false
-                && strpos($arr[$name], '{') === false) || ($arr == $_POST)) {
-            return isset($arr[$name]) ? $arr[$name] : $def;
-        } else {
-            //Hack attempt detected
-            //return isset($arr[$name]) ? str_replace(' ','',$arr[$name]) : $def;
-            $AppUI->setMsg('Poisoning attempt to the URL detected. Issue logged.', UI_MSG_ALERT);
-            $AppUI->redirect(ACCESS_DENIED);
-        }
+    if (isset($arr[$key])) {
+        $_result = strip_tags($arr[$key]);
+        $result  = preg_replace("/<>'\"\[\]{}:;/", "", $_result);
     } else {
-        return $def;
+        $result = $def;
     }
+
+    return $result;
 }
 
 /**
