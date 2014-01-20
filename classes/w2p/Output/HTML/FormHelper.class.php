@@ -62,8 +62,10 @@ class w2p_Output_HTML_FormHelper
                 $output  = '<input type="checkbox" value="1" class="text '. $suffix . '" ';
                 $output .= 'name="' . $fieldName. '" ' .$params .' />';
                 break;
+            case 'category':
             case 'country':
             case 'owner':
+            case 'project':
             case 'type':
                 $output  = arraySelect($values, $fieldName, 'size="1" class="text '.$suffix.'"', $fieldValue);
                 break;

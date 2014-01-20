@@ -65,7 +65,7 @@ foreach ($projects as $project_id => $project_info) {
 }
 $projects = arrayMerge(array('0' => $AppUI->_('All', UI_OUTPUT_JS)), $projects);
 
-$link_type = w2PgetSysVal('LinkType');
+$types = w2PgetSysVal('LinkType');
 
 // Load the users
 $perms = &$AppUI->acl();
@@ -122,7 +122,7 @@ $form = new w2p_Output_HTML_FormHelper($AppUI);
         <div class="column left">
             <p>
                 <?php $form->showLabel('Link Name'); ?>
-                <input type="text" class="text" name="link_name" value="<?php echo $link->link_name; ?>">
+                <?php $form->showField('link_name', $link->link_name, array('maxlength' => 255)); ?>
                 <?php if ($link_id) { ?>
                     <a href="<?php echo $link->link_url; ?>" target="_blank"><?php echo $AppUI->_('go'); ?></a>
                 <?php } ?>
@@ -130,18 +130,16 @@ $form = new w2p_Output_HTML_FormHelper($AppUI);
             <?php if ($link_id) { ?>
             <p>
                 <?php $form->showLabel('Created By'); ?>
-                <?php
-                echo arraySelect($users, 'link_owner', 'size="1" class="text"', ($link->link_owner ? $link->link_owner : $AppUI->user_id));
-                ?>
+                <?php $form->showField('link_owner', $link->link_owner, array(), $users); ?>
             </p>
             <?php } ?>
             <p>
                 <?php $form->showLabel('Category'); ?>
-                <?php echo arraySelect($link_type, 'link_category', 'size="1" class="text"', $link->link_category, true); ?>
+                <?php $form->showField('link_category', $link->link_category, array(), $types); ?>
             </p>
             <p>
                 <?php $form->showLabel('Project'); ?>
-                <?php echo arraySelect($projects, 'link_project', 'size="1" class="text" style="width:270px"', $link->link_project); ?>
+                <?php $form->showField('link_project', $link->link_project, array(), $projects); ?>
             </p>
             <p>
                 <?php $form->showLabel('Task'); ?>
@@ -151,11 +149,11 @@ $form = new w2p_Output_HTML_FormHelper($AppUI);
             </p>
             <p>
                 <?php $form->showLabel('Description'); ?>
-                <textarea name="link_description" class="textarea" rows="4" style="width:270px"><?php echo $link->link_description; ?></textarea>
+                <?php $form->showField('link_description', $link->link_description); ?>
             </p>
             <p>
                 <?php $form->showLabel('URL'); ?>
-                <input type="text" class="text" name="link_url" style="width:270px" value="<?php echo $link->link_url ?>">
+                <?php $form->showField('link_url', $link->link_url, array()); ?>
             </p>
             <?php $form->showCancelButton(); ?>
             <?php $form->showSaveButton(); ?>
