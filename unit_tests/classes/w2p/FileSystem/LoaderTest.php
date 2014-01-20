@@ -69,9 +69,9 @@ class w2p_FileSystem_LoaderTest extends CommonSetup
     }
 
     public function testMakeFileNameSafe() {
-        //$this->assertEquals('index.php', $this->obj->makeFileNameSafe('index.php'));
-        //$this->assertEquals('.', $this->obj->makeFileNameSafe('.'));
-        //$this->assertEquals('index.php', $this->obj->makeFileNameSafe('../index.php'));
-        //$this->assertEquals('index.php', $this->obj->makeFileNameSafe('..\index.php'));
+        $this->assertEquals('index.php', $this->obj->makeFileNameSafe('index.php'));
+        $this->assertEquals('.', $this->obj->makeFileNameSafe('.'));
+        $this->assertEquals('index.php', $this->obj->makeFileNameSafe('../index.php'));
+        $this->assertEquals('index.php', $this->obj->makeFileNameSafe('..\index.php'));
     }
 }
