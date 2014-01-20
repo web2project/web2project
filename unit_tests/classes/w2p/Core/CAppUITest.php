@@ -549,26 +549,6 @@ class w2p_Core_CAppUITest extends CommonSetup
     }
 
     /**
-     * @todo Implement testGetSystemClass().
-     */
-    public function testGetSystemClass() {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-                'This test has not been implemented yet.'
-        );
-    }
-
-    /**
-     * @todo Implement testGetLibraryClass().
-     */
-    public function testGetLibraryClass() {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-                'This test has not been implemented yet.'
-        );
-    }
-
-    /**
      * @todo Implement testGetModuleClass().
      */
     public function testGetModuleClass() {
