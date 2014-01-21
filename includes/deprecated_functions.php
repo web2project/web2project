@@ -367,3 +367,12 @@ if (!function_exists('styleRenderBoxBottom')) {
         echo $AppUI->getTheme()->styleRenderBoxBottom();
     }
 }
+
+
+/** @deprecated */
+function w2PgetCleanParam(&$arr, $name, $def = null)
+{
+    trigger_error("w2PgetCleanParam() has been deprecated in v3.1 and will be removed in v4.0. Use w2PgetParam() instead.", E_USER_NOTICE);
+
+    return w2PgetParam($arr, $name, $def);
+}

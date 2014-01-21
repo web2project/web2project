@@ -30,10 +30,6 @@ class w2p_FileSystem_LoaderTest extends CommonSetup
         $this->obj = new w2p_FileSystem_Loader();
     }
 
-    /**
-     * Test reading directories from an invalid path
-     *
-     */
     public function testReadDirsInvalidPath()
     {
         $dirs = $this->obj->readDirs('blah');
@@ -41,24 +37,25 @@ class w2p_FileSystem_LoaderTest extends CommonSetup
         $this->assertEquals(0,				count($dirs));
     }
 
-    /**
-     * @todo Implement testReadDirs().
-     */
     public function testReadDirs() {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-            'This test has not been implemented yet.'
-        );
+        $dirs = $this->obj->readDirs('.');
+
+        $this->assertTrue(array_key_exists('modules', $dirs));
+        $this->assertTrue(array_key_exists('includes', $dirs));
+        $this->assertGreaterThan(10, count($dirs));
     }
 
-    /**
-     * @todo Implement testReadFiles().
-     */
     public function testReadFiles() {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-            'This test has not been implemented yet.'
-        );
+        $files1 = $this->obj->readFiles('.');
+
+        $this->assertTrue(array_key_exists('COPYING', $files1));
+        $this->assertTrue(array_key_exists('index.php', $files1));
+
+        $files2 = $this->obj->readFiles('.', 'php');
+        $this->assertFalse(array_key_exists('COPYING', $files2));
+        $this->assertTrue(array_key_exists('index.php', $files2));
+
+        //$this->assertGreaterThan(count($files2), count($files1));
     }
 
     /**
@@ -71,13 +68,10 @@ class w2p_FileSystem_LoaderTest extends CommonSetup
         );
     }
 
-    /**
-     * @todo Implement testMakeFileNameSafe().
-     */
     public function testMakeFileNameSafe() {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-            'This test has not been implemented yet.'
-        );
+        $this->assertEquals('index.php', $this->obj->makeFileNameSafe('index.php'));
+        $this->assertEquals('.', $this->obj->makeFileNameSafe('.'));
+        $this->assertEquals('index.php', $this->obj->makeFileNameSafe('../index.php'));
+        $this->assertEquals('index.php', $this->obj->makeFileNameSafe('..\index.php'));
     }
 }

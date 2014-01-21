@@ -151,7 +151,7 @@ class w2p_Core_CAppUITest extends CommonSetup
 	{
         $AppUI = $this->_AppUI;
 
-		$this->assertEquals('en_US', $AppUI->getPref('LOCALE'));
+		$this->assertEquals('en', $AppUI->getPref('LOCALE'));
 		$this->assertEquals('',   $AppUI->getPref('NotGonnaBeThere'));
 	}
 
@@ -162,7 +162,7 @@ class w2p_Core_CAppUITest extends CommonSetup
 	{
         $AppUI = $this->_AppUI;
 
-		$this->assertEquals('en_US',     $AppUI->getPref('LOCALE'));
+		$this->assertEquals('en',     $AppUI->getPref('LOCALE'));
 		$AppUI->setPref('AddingThis', 'Monkey');
 		$this->assertEquals('Monkey', $AppUI->getPref('AddingThis'));
 	}
@@ -549,26 +549,6 @@ class w2p_Core_CAppUITest extends CommonSetup
     }
 
     /**
-     * @todo Implement testGetSystemClass().
-     */
-    public function testGetSystemClass() {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-                'This test has not been implemented yet.'
-        );
-    }
-
-    /**
-     * @todo Implement testGetLibraryClass().
-     */
-    public function testGetLibraryClass() {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-                'This test has not been implemented yet.'
-        );
-    }
-
-    /**
      * @todo Implement testGetModuleClass().
      */
     public function testGetModuleClass() {
@@ -908,24 +888,21 @@ class w2p_Core_CAppUITest extends CommonSetup
         );
     }
 
-    /**
-     * @todo Implement testAddFooterJavascriptFile().
-     */
     public function testAddFooterJavascriptFile() {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-                'This test has not been implemented yet.'
-        );
+        $this->_AppUI->addFooterJavascriptFile('monkey.js');
+        $this->_AppUI->addFooterJavascriptFile('test.js');
+        $this->_AppUI->addFooterJavascriptFile('web2project.js');
+        $result = $this->_AppUI->loadFooterJS();
+
+        $this->assertGreaterThan(0, strpos($result, 'monkey'));
+        $this->assertGreaterThan(0, strpos($result, 'test'));
+        $this->assertGreaterThan(0, strpos($result, 'web2project.js'));
     }
 
-    /**
-     * @todo Implement testLoadFooterJS().
-     */
     public function testLoadFooterJS() {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-                'This test has not been implemented yet.'
-        );
+        $result = $this->_AppUI->loadFooterJS();
+
+        $this->assertEquals(191, strlen($result));
     }
 
     /**

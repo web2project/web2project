@@ -163,6 +163,8 @@ class CDepartments_Test extends CommonSetup
 
     /**
      * Tests the update of a dept
+     *
+     * @expectedException PHPUnit_Framework_Error
      */
     public function testStoreUpdate()
     {
@@ -291,13 +293,10 @@ class CDepartments_Test extends CommonSetup
         );
     }
 
-    /**
-     * @todo Implement testHook_search().
-     */
     public function testHook_search() {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-                'This test has not been implemented yet.'
-        );
+        $search = $this->obj->hook_search();
+
+        $this->assertTrue(array_key_exists('search_fields', $search));
+        $this->assertEquals(count($search), 8);
     }
 }
