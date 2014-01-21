@@ -71,22 +71,22 @@ $form = new w2p_Output_HTML_FormHelper($AppUI);
         <div class="column left">
             <p>
                 <?php $form->showLabel('Resource Identifier'); ?>
-                <input type="text" class="text" size="15" maxlength="64" name="resource_key" value="<?php echo w2PformSafe($resource->resource_key); ?>" />
+                <?php $form->showField('resource_key', $resource->resource_key, array('maxlength' => 64)); ?>
             </p>
             <p>
                 <?php $form->showLabel('Resource Name'); ?>
-                <input type="text" class="text" size="30" maxlength="255" name="resource_name" value="<?php echo w2PformSafe($resource->resource_name); ?>" />
+                <?php $form->showField('resource_name', $resource->resource_name, array('maxlength' => 255)); ?>
             </p>
             <p><?php $form->showLabel('Type'); ?>
-                <?php echo arraySelect($typelist, 'resource_type', 'class="text"', $resource->resource_type, true); ?>
+                <?php $form->showField('resource_type', $resource->resource_type, array(), $typelist); ?>
             </p>
             <p>
                 <?php $form->showLabel('Max Allocation'); ?>
-                <?php echo arraySelect($percent, 'resource_max_allocation', 'size="1" class="text"', $resource->resource_max_allocation) . '%'; ?>
+                <?php $form->showField('resource_max_allocation', $resource->resource_max_allocation, array(), $percent); ?>
             </p>
             <p>
                 <?php $form->showLabel('Notes'); ?>
-                <textarea name="resource_note" cols="60" rows="7"><?php echo w2PformSafe($resource->resource_note); ?></textarea>
+                <?php $form->showField('resource_note', $resource->resource_note); ?>
             </p>
             <?php $form->showCancelButton(); ?>
             <?php $form->showSaveButton(); ?>

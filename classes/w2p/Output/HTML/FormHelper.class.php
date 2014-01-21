@@ -47,6 +47,7 @@ class w2p_Output_HTML_FormHelper
                 $output = '<a href="'.$link.'">'.$obj->{"$suffix".'_name'}.'</a>';
                 break;
             case 'desc':            // @todo This is a special case because department->dept_notes should be renamed department->dept_description
+            case 'note':            // @todo This is a special case because resource->resource_note should be renamed resource->resource_description
             case 'notes':           // @todo This is a special case because contact->contact_notes should be renamed contact->contact_description
             case 'description':
                 $output  = '<textarea name="' . $fieldName . '" class="'.$suffix.'">' . w2PformSafe($fieldValue) . '</textarea>';
@@ -62,6 +63,7 @@ class w2p_Output_HTML_FormHelper
                 $output  = '<input type="checkbox" value="1" class="text '. $suffix . '" ';
                 $output .= 'name="' . $fieldName. '" ' .$params .' />';
                 break;
+            case 'allocation':
             case 'category':
             case 'country':
             case 'owner':
