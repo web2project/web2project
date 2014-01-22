@@ -119,8 +119,8 @@ $form = new w2p_Output_HTML_FormHelper($AppUI);
 	<input type="hidden" name="message_id" value="<?php echo $message_id; ?>" />
     <?php echo $form->addNonce(); ?>
 
-    <table class="std addedit forums-message">
-        <tr><td>
+    <table class="std addedit forums-message" border="0">
+        <tr><td style="width: 25%">
             <table cellspacing="1" cellpadding="2" border="0" width="100%">
             <tr>
                 <td align="left" nowrap="nowrap"><?php echo breadCrumbs($crumbs); ?></td>
@@ -129,9 +129,9 @@ $form = new w2p_Output_HTML_FormHelper($AppUI);
             </table>
         </td></tr>
         <tr>
-            <th valign="top" colspan="2"><strong><?php
-        echo $AppUI->_($message_id ? 'Edit Message' : 'Add Message');
-        ?></strong></th>
+            <th valign="top" colspan="2">
+                <strong><?php echo $AppUI->_($message_id ? 'Edit Message' : 'Add Message'); ?></strong>
+            </th>
         </tr>
         <?php
         if ($message_parent >= 0) { //check if this is a reply-post; if so, printout the original message
@@ -139,11 +139,13 @@ $form = new w2p_Output_HTML_FormHelper($AppUI);
             $date = intval($message->message_date) ? new w2p_Utilities_Date($message->message_date) : new w2p_Utilities_Date();
             ?>
             <tr>
-                <td align="right"><?php echo $AppUI->_('Author') ?>:</td>
+                <td align="right"><?php $form->showLabel('Author'); ?></td>
                 <td align="left"><?php echo CContact::getContactByUserid($messageAuthor); ?> (<?php echo $AppUI->formatTZAwareTime($message->message_date, $df . ' ' . $tf); ?>)</td>
             </tr>
-            <tr><td align="right"><?php echo $AppUI->_('Subject') ?>:</td><td align="left"><?php echo $message->message_title ?></td></tr>
-            <tr><td align="right" valign="top"><?php echo $AppUI->_('Message') ?>:</td><td align="left">
+            <tr><td align="right"><?php $form->showLabel('Subject'); ?></td>
+                <td align="left"><?php echo $message->message_title ?></td></tr>
+            <tr><td align="right" valign="top"><?php $form->showLabel('Previous Message'); ?></td>
+                <td align="left">
             <?php
                 $messageBody = $bbparser->qparse($last_message->message_body);
                 $messageBody = nl2br($messageBody);
@@ -155,13 +157,13 @@ $form = new w2p_Output_HTML_FormHelper($AppUI);
 
         ?>
         <tr>
-            <td align="right"><?php echo $AppUI->_('Subject'); ?>:</td>
+            <td align="right"><?php $form->showLabel('Subject'); ?></td>
             <td>
                 <input type="text" class="text" name="message_title" value="<?php echo ($message_id || $message_parent < 0 ? '' : 'Re: ') . $message->message_title; ?>" size="50" maxlength="250" />
             </td>
         </tr>
         <tr>
-            <td align="right" valign="top"><?php echo $AppUI->_('Message'); ?>:</td>
+            <td align="right" valign="top"><?php $form->showLabel('Message'); ?></td>
             <td align="left" valign="top">
                <textarea cols="60" name="message_body" style="height:200px"><?php echo (($message_id == 0) and ($message_parent != -1)) ? "\n>" . $last_message->message_body . "\n\n" : $message->message_body; ?></textarea>
             </td>
