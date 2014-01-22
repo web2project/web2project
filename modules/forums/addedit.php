@@ -88,15 +88,15 @@ $form = new w2p_Output_HTML_FormHelper($AppUI);
         <div class="column left">
             <p>
                 <?php $form->showLabel('Name'); ?>
-                <input type="text" class="text" size="25" name="forum_name" value="<?php echo $forum->forum_name; ?>" maxlength="50" style="width:200px;" />
+                <?php $form->showField('forum_name', $forum->forum_name, array('maxlength' => 50)); ?>
             </p>
             <p>
                 <?php $form->showLabel('Related Project'); ?>
-                <?php echo arraySelect($projects, 'forum_project', 'size="1" class="text"', $forum->forum_project); ?>
+                <?php $form->showField('forum_project', $forum->forum_project, array(), $projects); ?>
             </p>
             <p>
                 <?php $form->showLabel('Owner'); ?>
-                <?php echo arraySelect($users, 'forum_owner', 'size="1" class="text"', $forum->forum_owner ? $forum->forum_owner : $AppUI->user_id); ?>
+                <?php $form->showField('forum_owner', $forum->forum_owner, array(), $users); ?>
             </p>
             <p>
                 <?php $form->showLabel('Moderator'); ?>
@@ -105,7 +105,7 @@ $form = new w2p_Output_HTML_FormHelper($AppUI);
             <?php if ($forum_id) { ?>
                 <p>
                     <?php $form->showLabel('Message Count'); ?>
-                    <?php echo $forum->forum_message_count; ?>
+                    <?php echo (int) $forum->forum_message_count; ?>
                 </p>
             <?php } ?>
             <p>
@@ -115,7 +115,7 @@ $form = new w2p_Output_HTML_FormHelper($AppUI);
         <div class="column right">
             <p>
                 <?php $form->showLabel('Description'); ?>
-                <textarea class="textarea" cols="50" rows="7" name="forum_description"><?php echo $forum->forum_description; ?></textarea>
+                <?php $form->showField('forum_description', $forum->forum_description); ?>
             </p>
             <?php if ($forum_id) { ?>
                 <p>
