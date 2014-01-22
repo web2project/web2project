@@ -697,6 +697,6 @@ input.state, input.zip {
 .files label {
     width: 28em;
 }
-.users label {
+.users label, .events label {
     width: 20em;
 }
