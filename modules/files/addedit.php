@@ -166,7 +166,7 @@ $form = new w2p_Output_HTML_FormHelper($AppUI);
     <?php echo $form->addNonce(); ?>
 
     <div class="std addedit files">
-        <div class="column left">
+        <div class="column left" style="width: 80%">
             <p>
                 <?php $form->showLabel('Folder'); ?>
                 <?php if ($file_id == 0 && !$ci) { ?>
@@ -197,7 +197,7 @@ $form = new w2p_Output_HTML_FormHelper($AppUI);
             <?php } ?>
             <p>
                 <?php $form->showLabel('Description'); ?>
-                <textarea name="file_description" class="textarea" rows="4" style="width:270px"><?php echo $file->file_description; ?></textarea>
+                <?php $form->showField('file_description', $file->file_description); ?>
             </p>
             <p>
                 <?php $form->showLabel('Upload File'); ?>

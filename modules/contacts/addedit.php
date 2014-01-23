@@ -287,7 +287,7 @@ $form = new w2p_Output_HTML_FormHelper($AppUI);
             </p>
             <p>
                 <?php $form->showLabel('Contact Notes'); ?>
-                <?php $form->showField('contact_notes', $row->contact_notes, array('maxlength' => 50)); ?>
+                <?php $form->showField('contact_notes', $row->contact_notes); ?>
             </p>
             <?php
             $custom_fields = new w2p_Core_CustomFields($m, $a, $row->contact_id, "edit");
