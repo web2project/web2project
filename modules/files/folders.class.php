@@ -49,15 +49,18 @@ class CFile_Folder extends w2p_Core_BaseObject
 	}
 
     /**
-     * This needs a separate canEdit instead of the BaseObject one because the
-     *   CFile_Folder object doesn't support separate permissions from the Files
-     *   module itself.
+     * This needs a separate canEdit and canView instead of the BaseObject one because the CFile_Folder object
+     *   doesn't support separate permissions from the Files module itself.
      *
      * @return boolean
      */
     public function canEdit()
     {
         return $this->_perms->checkModuleItem($this->_tbl_module, 'edit');
+    }
+    public function canView()
+    {
+        return $this->canAccess();
     }
 
     public function isValid()
