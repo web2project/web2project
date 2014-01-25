@@ -2425,34 +2425,6 @@ class CTasks_Test extends PHPUnit_Extensions_Database_TestCase
     }
 
     /**
-     * Test updating project of sub tasks with no task id passed
-     */
-    public function testUpdateSubTasksProjectNoTaskId()
-    {
-        $this->obj->load(11);
-
-        $this->obj->updateSubTasksProject(2);
-
-        $xml_file_dataset = $this->createXMLDataSet($this->getDataSetpath().'tasksTestUpdateSubTasksProjectNoTaskId.xml');
-        $xml_db_dataset = $this->getConnection()->createDataSet();
-        $this->assertTablesEqual($xml_file_dataset->getTable('tasks'), $xml_db_dataset->getTable('tasks'));
-    }
-
-    /**
-     * Tests updating project of sub tasks with task id passed
-     */
-    public function testUpdateSubTasksProjectTaskId()
-    {
-        $this->obj->load(1);
-
-        $this->obj->updateSubTasksProject(2, 11);
-
-        $xml_file_dataset = $this->createXMLDataset($this->getDataSetPath().'tasksTestUpdateSubTasksProjectTaskId.xml');
-        $xml_db_dataset = $this->getConnection()->createDataSet();
-        $this->assertTablesEqual($xml_file_dataset->getTable('tasks'), $xml_db_dataset->getTable('tasks'));
-    }
-
-    /**
      * Tests checking time information priviliges when user is a task owner
      */
     public function testCanUserEditTimeInformationTaskOwner()
