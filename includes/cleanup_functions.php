@@ -2036,17 +2036,14 @@ function getHelpdeskFolder() {
 }
 
 // From: modules/files/files.class.php
-function file_show_attr() {
-	global $AppUI, $obj, $ci, $canAdmin, $file_project, $file_task, $task_name, $preserve, $file_helpdesk_item;
+function file_show_attr($AppUI, $form) {
+	global $obj, $ci, $canAdmin, $file_project, $file_task, $task_name, $preserve;
 
 	if ($ci) {
-		$str_out = '<p><label>' . $AppUI->_('Minor Revision') . '</label><input type="Radio" name="revision_type" value="minor" checked />' . '</p><p><label>' . $AppUI->_('Major Revision') . '</label><input type="Radio" name="revision_type" value="major" />';
+		$str_out  = '<p>' . $form->addLabel('Minor Revision') . '<input type="Radio" name="revision_type" value="minor" checked /></p>';
+        $str_out .= '<p>' . $form->addLabel('Major Revision') . '<input type="Radio" name="revision_type" value="major" />';
 	} else {
-		$str_out = '<p><label>' . $AppUI->_('Version') . ':</label>';
-	}
-
-	if ($ci || ($canAdmin && $obj->file_checkout == 'final')) {
-		$str_out .= '<input type="hidden" name="file_checkout" value="" /><input type="hidden" name="file_co_reason" value="" />';
+		$str_out = '<p>' . $form->addLabel('Version');
 	}
 
 	if ($ci) {
@@ -2056,6 +2053,10 @@ function file_show_attr() {
 		$the_value = (strlen($obj->file_version) > 0 ? $obj->file_version : '1');
 		$str_out .= '<input type="text" name="file_version" maxlength="10" size="5" value="' . $the_value . '" class="text" />';
 	}
+
+    if ($ci || ($canAdmin && $obj->file_checkout == 'final')) {
+        $str_out .= '<input type="hidden" name="file_checkout" value="" /><input type="hidden" name="file_co_reason" value="" />';
+    }
 
 	$str_out .= '</p>';
 
@@ -2070,18 +2071,19 @@ function file_show_attr() {
 	}
 
 	// Category
-	$str_out .= '<p><label>' . $AppUI->_('Category') . ':</label>';
+	$str_out .= '<p>' . $form->addLabel('Category');
 	$str_out .= arraySelect(w2PgetSysVal('FileType'), 'file_category', 'class="text"' . $select_disabled, $obj->file_category, true) . '</p>';
 
 	// ---------------------------------------------------------------------------------
 
-    $str_out .= '<p><label>' . $AppUI->_('Project') . ':</label>';
+    $str_out .= '<p>' . $form->addLabel('Project');
     $str_out .= projectSelectWithOptGroup($AppUI->user_id, 'file_project', 'size="1" class="text"' . $select_disabled, $file_project) . '</p>';
 
     // ---------------------------------------------------------------------------------
 
     // Task
-    $str_out .= '<p><label>' . $AppUI->_('Task') . ':</label><input type="hidden" name="file_task" value="' . $file_task . '" /><input type="text" class="text" name="task_name" value="' . $task_name . '" size="40" disabled /><input type="button" class="button btn btn-primary btn-mini" value="' . $AppUI->_('select task') . '..."' . $onclick_task . '/></p>';
+    $str_out .= '<p>' . $form->addLabel('Task');
+    $str_out .= '<input type="hidden" name="file_task" value="' . $file_task . '" /><input type="text" class="text" name="task_name" value="' . $task_name . '" size="40" disabled /><input type="button" class="button btn btn-primary btn-mini" value="' . $AppUI->_('select task') . '..."' . $onclick_task . '/></p>';
 
 	return ($str_out);
 }

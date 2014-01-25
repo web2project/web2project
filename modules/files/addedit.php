@@ -193,7 +193,7 @@ $form = new w2p_Output_HTML_FormHelper($AppUI);
                 <?php echo $file->file_owner; ?>
                 <!-- @TODO lookup this value -->
             </p>
-            <?php echo file_show_attr(); ?>
+            <?php echo file_show_attr($AppUI, $form); ?>
             <?php } ?>
             <p>
                 <?php $form->showLabel('Description'); ?>
