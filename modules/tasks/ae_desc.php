@@ -26,7 +26,9 @@ $perms = &$AppUI->acl();
         <div class="column left">
             <p>
                 <?php $form->showLabel('Task Owner'); ?>
-                <?php echo arraySelect($users, 'task_owner', 'class="text"', !isset($task->task_owner) ? $AppUI->user_id : $task->task_owner); ?>
+                <?php
+                $owner = ($task->task_owner) ? $AppUI->user_id : $task->task_owner;
+                $form->showField('task_owner', $owner, array(), $users); ?>
             </p>
             <p>
                 <?php $form->showLabel('Access'); ?>
@@ -45,7 +47,7 @@ $perms = &$AppUI->acl();
             </p>
             <p>
                 <?php $form->showLabel('URL'); ?>
-                <input type="text" class="text" name="task_related_url" value="<?php echo $task->task_related_url; ?>" size="40" maxlength="255" />
+                <?php $form->showField('task_related_url', $project->task_related_url, array('maxlength' => 255)); ?>
             </p>
             <?php if (w2PgetConfig('budget_info_display', false)) { ?>
             <p>
@@ -61,7 +63,8 @@ $perms = &$AppUI->acl();
                 ?>
                 <p>
                     <?php $form->showLabel($AppUI->_($category)); ?>
-                    <?php echo $w2Pconfig['currency_symbol'] ?> <input name="budget_<?php echo $id; ?>" id="budget_<?php echo $id; ?>" type="text" value="<?php echo $amount; ?>" class="text" />
+                    <?php echo $w2Pconfig['currency_symbol'] ?>
+                    <?php echo $w2Pconfig['currency_symbol']; ?> <?php $form->showField("budget_<?php echo $id; ?>", $amount, array('maxlength' => 15)); ?>
                 </p>
             <?php } ?>
             <p>
@@ -75,8 +78,7 @@ $perms = &$AppUI->acl();
                 <?php $form->showLabel('Task Type'); ?>
                 <?php
                 $task_types = w2PgetSysVal('TaskType');
-                echo arraySelect($task_types, 'task_type', 'class="text"', $task->task_type, true);
-                ?>
+                $form->showField('task_type', $task->task_type, array(), $task_types); ?>
             </p>
             <?php if ($AppUI->isActiveModule('contacts') && canView('contacts')) { ?>
             <p>
@@ -92,7 +94,7 @@ $perms = &$AppUI->acl();
             <?php } ?>
             <p>
                 <?php $form->showLabel('Description'); ?>
-                <textarea name="task_description" class="textarea" cols="60" rows="10"><?php echo $task->task_description; ?></textarea>
+                <?php $form->showField('task_description', $task->task_description); ?>
             </p>
             <p>
                 <?php

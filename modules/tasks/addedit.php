@@ -206,18 +206,18 @@ $form = new w2p_Output_HTML_FormHelper($AppUI);
             </p>
             <p>
                 <?php $form->showLabel('Name'); ?>
-                <input type="text" class="text" name="task_name" value="<?php echo htmlspecialchars($task->task_name, ENT_QUOTES); ?>" size="40" maxlength="255" />
+                <?php $form->showField('task_name', $task->task_name, array('maxlength' => 255)); ?>
             </p>
             <p>
                 <?php $form->showLabel('Priority'); ?>
-                <?php echo arraySelect($priority, 'task_priority', 'size="1" class="text"', ($task->task_priority ? $task->task_priority : 0) , true); ?>
+                <?php $form->showField('task_priority', $task->task_priority, array(), $priority); ?>
             </p>
             <?php $form->showCancelButton(); ?>
         </div>
         <div class="column right">
             <p>
                 <?php $form->showLabel('Status'); ?>
-                <?php echo arraySelect($status, 'task_status', 'size="1" class="text"', ($task->task_status ? $task->task_status : 0) , true); ?>
+                <?php $form->showField('task_status', $task->task_status, array(), $status); ?>
             </p>
             <p>
                 <?php $form->showLabel('Progress'); ?>
