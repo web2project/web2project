@@ -49,21 +49,12 @@
                     <exclude name="**/CTasksTest.php"/>
                 </fileset>
 
-                <!--
-                The UpgradeManager_Test (manager.test.php) should be
-                executed separately and before any/all of the other
-                tests because it can build up a database for us.  Any
-                ideas on how to do this successfully would be greatly
-                appreciated.  - caseydk 02 July 2009
-                -->
                 <fileset dir="${dir.tests}/classes">
-                    <include name="**/*.test.php"/>
                     <include name="**/*Test.php"/>
                 </fileset>
 
                 <fileset dir="${dir.tests}/includes">
                     <include name="**/*.test.php"/>
-<!--                    <include name="**/*Test.php"/>-->
                 </fileset>
             </batchtest>
             <formatter  type="xml" todir="${dir.reports}" outfile="test-logs.xml"/>
