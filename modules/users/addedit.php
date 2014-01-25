@@ -165,7 +165,8 @@ $form = new w2p_Output_HTML_FormHelper($AppUI);
             <?php } ?>
             <p>
                 <?php $form->showLabel('Name'); ?>
-                <input type="text" class="text" name="contact_first_name" value="<?php echo $object->contact_first_name; ?>" maxlength="50" /> <input type="text" class="text" name="contact_last_name" value="<?php echo $object->contact_last_name; ?>" maxlength="50" />
+                <?php $form->showField('contact_first_name', $object->contact_first_name, array('maxlength' => 50)); ?>
+                <?php $form->showField('contact_last_name', $object->contact_last_name, array('maxlength' => 50)); ?>
             </p>
             <p>
                 <?php $form->showLabel('Company'); ?>
@@ -198,11 +199,11 @@ $form = new w2p_Output_HTML_FormHelper($AppUI);
             <?php } ?>
             <p>
                 <?php $form->showLabel('Email'); ?>
-                <input type="text" class="text" name="contact_email" value="<?php echo $object->contact_email; ?>" maxlength="255" size="40" />
+                <?php $form->showField('contact_email', $object->contact_email, array('maxlength' => 255)); ?>
             </p>
             <p>
                 <?php $form->showLabel('Email Signature'); ?>
-                <textarea class="text" name="user_signature"><?php echo $object->user_signature; ?></textarea>
+                <?php $form->showField('user_signature', $object->user_signature); ?>
             </p>
             <p>
                 <?php $form->showLabel('Inform new user of account details?'); ?>

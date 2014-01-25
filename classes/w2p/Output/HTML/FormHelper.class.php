@@ -49,6 +49,7 @@ class w2p_Output_HTML_FormHelper
             case 'desc':            // @todo This is a special case because department->dept_notes should be renamed department->dept_description
             case 'note':            // @todo This is a special case because resource->resource_note should be renamed resource->resource_description
             case 'notes':           // @todo This is a special case because contact->contact_notes should be renamed contact->contact_description
+            case 'signature':       // @todo This is a special case because user->user_signature should be renamed to something else..?
             case 'description':
                 $output  = '<textarea name="' . $fieldName . '" class="'.$suffix.'">' . w2PformSafe($fieldValue) . '</textarea>';
                 break;

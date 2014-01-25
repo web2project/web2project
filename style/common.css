@@ -700,3 +700,11 @@ input.state, input.zip {
 .users label, .events label {
     width: 20em;
 }
+
+.users .name {
+    width: 100px;
+}
+
+.users .signature {
+    width: 250px;
+}
