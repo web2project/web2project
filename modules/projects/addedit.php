@@ -189,7 +189,11 @@ $form = new w2p_Output_HTML_FormHelper($AppUI);
         <div class="column left">
             <p>
                 <?php $form->showLabel('Name'); ?>
-                <input type="text" name="project_name" id="project_name" value="<?php echo htmlspecialchars($project->project_name, ENT_QUOTES); ?>" size="25" maxlength="255" onblur="setShort();" class="text" /> *
+                <?php
+                $options = array();
+                $options['maxlength'] = 255;
+                $options['onBlur'] = 'setShort()';
+                $form->showField('project_name', $project->project_name, $options); ?>
             </p>
             <p>
                 <?php $form->showLabel('Parent Project'); ?>
@@ -227,8 +231,8 @@ $form = new w2p_Output_HTML_FormHelper($AppUI);
                 // pull users
                 $perms = &$AppUI->acl();
                 $users = $perms->getPermittedUsers('projects');
-                echo arraySelect($users, 'project_owner', 'size="1" style="width:200px;" class="text"', $project->project_owner ? $project->project_owner : $AppUI->user_id);
-                ?> *
+                ?>
+                <?php $form->showField('project_owner', $project->project_owner, array(), $users); ?>
             </p>
             <p>
                 <?php $form->showLabel('Contacts'); ?>
@@ -264,7 +268,7 @@ $form = new w2p_Output_HTML_FormHelper($AppUI);
             </p>
             <p>
                 <?php $form->showLabel('Project Location'); ?>
-                <input type="text" name="project_location" value="<?php echo w2PformSafe($project->project_location); ?>" size="25" maxlength="50" class="text" />
+                <?php $form->showField('project_location', $project->project_location, array('maxlength' => 50)); ?>
             </p>
             <?php if (w2PgetConfig('budget_info_display', false)) { ?>
             <p>
@@ -283,7 +287,7 @@ $form = new w2p_Output_HTML_FormHelper($AppUI);
                 ?>
                 <p>
                     <?php $form->showLabel($AppUI->_($category)); ?>
-                    <?php echo $w2Pconfig['currency_symbol']; ?> <input name="budget_<?php echo $id; ?>" id="budget_<?php echo $id; ?>" type="text" value="<?php echo $amount; ?>" class="text" />
+                    <?php echo $w2Pconfig['currency_symbol']; ?> <?php $form->showField("budget_<?php echo $id; ?>", $amount, array('maxlength' => 15)); ?>
                 </p>
                 <?php
             }
@@ -308,11 +312,11 @@ $form = new w2p_Output_HTML_FormHelper($AppUI);
         <div class="column right">
             <p>
                 <?php $form->showLabel('Priority'); ?>
-                <?php echo arraySelect($projectPriority, 'project_priority', 'size="1" class="text"', ($project->project_priority ? $project->project_priority : 0), true); ?> *
+                <?php $form->showField('project_priority', $project->project_priority, array(), $projectPriority); ?>
             </p>
             <p>
                 <?php $form->showLabel('Short Name'); ?>
-                <input type="text" name="project_short_name" value="<?php echo w2PformSafe($project->project_short_name); ?>" size="10" maxlength="10" class="text" /> *
+                <?php $form->showField('project_short_name', $project->project_short_name, array('maxlength' => 10)); ?>
             </p>
             <p>
                 <?php $form->showLabel('Color Identifier'); ?>
@@ -322,7 +326,7 @@ $form = new w2p_Output_HTML_FormHelper($AppUI);
             </p>
             <p>
                 <?php $form->showLabel('Project Type'); ?>
-                <?php echo arraySelect($ptype, 'project_type', 'size="1" class="text"', $project->project_type, true); ?> *
+                <?php $form->showField('project_type', $project->project_type, array(), $ptype); ?>
             </p>
             <p>
                 <table width="100%" bgcolor="#cccccc">
@@ -333,7 +337,7 @@ $form = new w2p_Output_HTML_FormHelper($AppUI);
                     </tr>
                     <tr>
                         <td>
-                            <?php echo arraySelect($pstatus, 'project_status', 'size="1" class="text"', $project->project_status, true); ?>
+                            <?php $form->showField('project_status', $project->project_status, array(), $pstatus); ?>
                         </td>
                         <td>
                             <strong><?php echo sprintf("%.1f%%", $project->project_percent_complete); ?></strong>
@@ -357,7 +361,7 @@ $form = new w2p_Output_HTML_FormHelper($AppUI);
             </p>
             <p>
                 <?php $form->showLabel('Description'); ?>
-                <textarea name="project_description" cols="50" rows="10" class="textarea"><?php echo w2PformSafe($project->project_description); ?></textarea>
+                <?php $form->showField('project_description', $project->project_description); ?>
             </p>
             <p>
                 <?php $form->showLabel('Notify by Email'); ?>
@@ -369,11 +373,11 @@ $form = new w2p_Output_HTML_FormHelper($AppUI);
             </p>
             <p>
                 <?php $form->showLabel('URL'); ?>
-                <input type="text" name="project_url" value='<?php echo $project->project_url; ?>' size="40" maxlength="255" class="text" />
+                <?php $form->showField('project_url', $project->project_url, array('maxlength' => 255)); ?>
             </p>
             <p>
                 <?php $form->showLabel('Staging URL'); ?>
-                <input type="Text" name="project_demo_url" value='<?php echo $project->project_demo_url; ?>' size="40" maxlength="255" class="text" />
+                <?php $form->showField('project_demo_url', $project->project_demo_url, array('maxlength' => 255)); ?>
             </p>
             <?php
             $custom_fields = new w2p_Core_CustomFields($m, $a, $project->project_id, 'edit');
