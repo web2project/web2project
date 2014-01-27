@@ -8,13 +8,13 @@ if (!defined('W2P_BASE_DIR')) {
  * The original work is copyright 2004 by Adam Donnison <adam@saki.com.au> on
  *   behalf of the dotproject project.
  *
- * Major updates occured in 2012 by Keith Casey <keith@caseysoftware.com> for
+ * Major updates occurred in 2012 by Keith Casey <keith@caseysoftware.com> for
  *   use with web2project, the dotproject fork.
  */
 
 $config = array();
 $config['mod_name']        = 'Resources';           // name the module
-$config['mod_version']     = '1.1.0';               // add a version number
+$config['mod_version']     = '3.1.1';               // add a version number
 $config['mod_directory']   = 'resources';           // tell web2project where to find this module
 $config['mod_setup_class'] = 'SResource';           // the name of the PHP setup class (used below)
 $config['mod_type']        = 'user';                // 'core' for modules distributed with w2p by standard, 'user' for additional modules
@@ -98,9 +98,10 @@ class SResource extends w2p_System_Setup
                 $result = $q->exec();
                 $q->clear();
             case '1.0.1':
-                $resource = new CResource();
-                $resource->convertTypes();
+                $this->convertTypes();
             case '1.1.0':
+
+            case '3.1.1':
                 //current version
             default:
                 break;
@@ -126,5 +127,32 @@ class SResource extends w2p_System_Setup
             $i++;
         }
         return true;
+    }
+
+    private function convertTypes()
+    {
+        $q = $this->_getQuery();
+        $q->addTable('resource_types');
+        $q->addQuery('*');
+        $types = $q->loadList();
+
+        $resourceTypes = array();
+        foreach($types as $type) {
+            $resourceTypes[$type['resource_type_id']] = $type['resource_type_name'];
+        }
+
+        foreach ($resourceTypes as $id => $type) {
+            $q->addTable('sysvals');
+            $q->addInsert('sysval_key_id', 1);
+            $q->addInsert('sysval_title', 'ResourceTypes');
+            $q->addInsert('sysval_value', $type);
+            $q->addInsert('sysval_value_id', $id);
+            $q->exec();
+            $q->clear();
+        }
+
+        // This removes the dead table.
+        $q->dropTable('resource_types');
+        $q->exec();
     }
 }

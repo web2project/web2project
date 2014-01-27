@@ -49,7 +49,9 @@ class CResource extends w2p_Core_BaseObject {
 
         $typelist = w2PgetSysVal('ResourceTypes');
         if (!count($typelist)) {
-            $this->convertTypes();
+            include W2P_BASE_DIR . '/modules/resources/setup.php';
+            $setup = new SResource();
+            $setup->upgrade('1.0.1');
             $typelist = w2PgetSysVal('ResourceTypes');
         }
 
@@ -92,37 +94,6 @@ class CResource extends w2p_Core_BaseObject {
         $q->addGroup('resource_id');
 
         return $q->loadHashList();
-    }
-
-    /*
-     * This method should only be run once to upgrade the module from v1.0.1 to
-     *   v1.1.0 which happened around the web2project v3.0 release.
-     */
-    public function convertTypes()
-    {
-        $q = $this->_getQuery();
-        $q->addTable('resource_types');
-        $q->addQuery('*');
-        $types = $q->loadList();
-
-        $resourceTypes = array();
-        foreach($types as $type) {
-            $resourceTypes[$type['resource_type_id']] = $type['resource_type_name'];
-        }
-
-        foreach ($resourceTypes as $id => $type) {
-            $q->addTable('sysvals');
-            $q->addInsert('sysval_key_id', 1);
-            $q->addInsert('sysval_title', 'ResourceTypes');
-            $q->addInsert('sysval_value', $type);
-            $q->addInsert('sysval_value_id', $id);
-            $q->exec();
-            $q->clear();
-        }
-
-        // This removes the dead table.
-        $q->dropTable('resource_types');
-        $q->exec();
     }
 
     public function hook_search() {
