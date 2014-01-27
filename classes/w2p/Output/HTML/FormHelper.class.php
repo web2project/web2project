@@ -59,8 +59,19 @@ class w2p_Output_HTML_FormHelper
                 $output  = '<input type="text" class="text '. $suffix . '" ';
                 $output .= 'name="' . $fieldName. '" value="' . w2PformSafe($date) . '" ' .$params .' />';
                 break;
+            case 'date':
+                $date = ($fieldValue) ? new w2p_Utilities_Date($fieldValue) : null;
+                unset($pieces[0]);
+                $datename = implode('_', $pieces);
+
+                $output = '<input type="hidden" name="'.$fieldName.'" id="'.$fieldName.'" value="' . ($date ? $date->format(FMT_TIMESTAMP_DATE) : '') .'" />';
+                $output .= '<input type="text" name="'.$datename.'" id="'.$datename.'" onchange="setDate_new(\'editFrm\', \''.$datename.'\');" value="' . ($date ? $date->format($this->df) : '') . '" class="text" />';
+                $output .= '<a href="javascript: void(0);" onclick="return showCalendar(\''.$datename.'\', \'' . $this->df . '\', \'editFrm\', null, true, true)">';
+                $output .= '<img src="' . w2PfindImage('calendar.gif') . '" width="24" height="12" alt="' . $this->AppUI->_('Calendar') . '" border="0" />';
+                $output .= '</a>';
+                break;
             case 'private':
-            case 'updateask':
+            case 'updateask':       // @todo This is unique to the contacts module
                 $output  = '<input type="checkbox" value="1" class="text '. $suffix . '" ';
                 $output .= 'name="' . $fieldName. '" ' .$params .' />';
                 break;

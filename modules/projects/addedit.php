@@ -70,8 +70,6 @@ $projectPriority = w2PgetSysVal('ProjectPriority');
 // format dates
 $df = $AppUI->getPref('SHDATEFORMAT');
 
-$start_date = new w2p_Utilities_Date($project->project_start_date);
-
 $end_date = intval($project->project_end_date) ? new w2p_Utilities_Date($project->project_end_date) : null;
 $actual_end_date = intval($criticalTasks[0]['task_end_date']) ? new w2p_Utilities_Date($criticalTasks[0]['task_end_date']) : null;
 $style = (($actual_end_date > $end_date) && !empty($end_date)) ? 'style="color:red; font-weight:bold"' : '';
@@ -240,19 +238,11 @@ $form = new w2p_Output_HTML_FormHelper($AppUI);
             </p>
             <p>
                 <?php $form->showLabel('Start Date'); ?>
-                <input type="hidden" name="project_start_date" id="project_start_date" value="<?php echo $start_date ? $start_date->format(FMT_TIMESTAMP_DATE) : ''; ?>" />
-                <input type="text" name="start_date" id="start_date" onchange="setDate_new('editFrm', 'start_date');" value="<?php echo $start_date ? $start_date->format($df) : ''; ?>" class="text" />
-                <a href="javascript: void(0);" onclick="return showCalendar('start_date', '<?php echo $df ?>', 'editFrm', null, true, true)">
-                    <img src="<?php echo w2PfindImage('calendar.gif'); ?>" width="24" height="12" alt="<?php echo $AppUI->_('Calendar'); ?>" border="0" />
-                </a>
+                <?php $form->showField('project_start_date', $project->project_start_date); ?>
             </p>
             <p>
                 <?php $form->showLabel('Target Finish Date'); ?>
-                <input type="hidden" name="project_end_date" id="project_end_date" value="<?php echo $end_date ? $end_date->format(FMT_TIMESTAMP_DATE) : ''; ?>" />
-                <input type="text" name="end_date" id="end_date" onchange="setDate_new('editFrm', 'end_date');" value="<?php echo $end_date ? $end_date->format($df) : ''; ?>" class="text" />
-                <a href="javascript: void(0);" onclick="return showCalendar('end_date', '<?php echo $df ?>', 'editFrm', null, true, true)">
-                    <img src="<?php echo w2PfindImage('calendar.gif'); ?>" width="24" height="12" alt="<?php echo $AppUI->_('Calendar'); ?>" border="0" />
-                </a>
+                <?php $form->showField('project_end_date', $project->project_end_date); ?>
             </p>
             <p>
                 <?php $form->showLabel('Actual Finish Date'); ?>
