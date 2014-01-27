@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Produces an INPUT Element of the TEXT type in edit mode
+ * Produces an INPUT Element of the TEXT type in edit mode. In view mode, it becomes a clickable email address.
  *
  * @package web2project\core
  */
