@@ -113,4 +113,4 @@ switch ($cmd) {
 		$AppUI->setMsg('Unknown Command', UI_MSG_ERROR);
 		break;
 }
-$AppUI->redirect();
+$AppUI->redirect('m=system&u=modules');
