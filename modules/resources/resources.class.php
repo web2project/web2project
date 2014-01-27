@@ -9,7 +9,7 @@ class CResource extends w2p_Core_BaseObject {
 	public $resource_name = null;
 	public $resource_type = null;
 	public $resource_max_allocation = null;
-	public $resource_note = null;
+	public $resource_description = null;
 
 	public function __construct() {
         parent::__construct('resources', 'resource_id');
@@ -103,7 +103,7 @@ class CResource extends w2p_Core_BaseObject {
         $search['table_link'] = 'index.php?m=resources&a=view&resource_id='; // first part of link
         $search['table_title'] = 'Resources';
         $search['table_orderby'] = 'resource_name';
-        $search['search_fields'] = array('resource_name', 'resource_key','resource_note');
+        $search['search_fields'] = array('resource_name', 'resource_key','resource_description');
         $search['display_fields'] = $search['search_fields'];
 
         return $search;

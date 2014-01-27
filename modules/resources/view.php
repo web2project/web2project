@@ -77,7 +77,7 @@ if ($canDelete) {
             <table cellspacing="1" cellpadding="2" border="0" width="100%" class="well">
                 <tr>
                     <td>
-                        <?php echo w2p_textarea($obj->resource_note); ?>&nbsp;
+                        <?php echo w2p_textarea($obj->resource_description); ?>&nbsp;
                     </td>
                 </tr>
             </table>

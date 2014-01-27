@@ -93,14 +93,29 @@ class SResource extends w2p_System_Setup
         // NOTE: All cases should fall through so all updates are executed.
         switch ($old_version) {
             case '1.0':
-                $q->addTable('resources');
+                $q->alterTable('resources');
                 $q->addField('resource_key', 'varchar(64) not null default ""');
                 $result = $q->exec();
                 $q->clear();
             case '1.0.1':
                 $this->convertTypes();
             case '1.1.0':
+                $q->alterTable('resources');
+                $q->addField('resource_description', 'text NOT NULL');
+                $result = $q->exec();
+                $q->clear();
 
+                $q->addTable('resources');
+                $q->addQuery('resource_id, resource_note');
+                $resources = $q->loadList();
+                $q->clear();
+                foreach($resources as $resource) {
+                    $q->addTable('resources');
+                    $q->addUpdate('resource_description', $resource['resource_note']);
+                    $q->addWhere('resource_id = ' . $resource['resource_id']);
+                    $q->exec();
+                    $q->clear();
+                }
             case '3.1.1':
                 //current version
             default:
