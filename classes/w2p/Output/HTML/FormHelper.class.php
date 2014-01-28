@@ -34,10 +34,6 @@ class w2p_Output_HTML_FormHelper
         }
 
         switch ($suffix) {
-            case 'parent':
-                $suffix = 'department';
-                $output  = arraySelect($values, $fieldName, 'size="1" class="text '.$suffix.'"', $fieldValue);
-                break;
             case 'company':
                 $class  = 'C'.ucfirst($suffix);
 
@@ -75,6 +71,8 @@ class w2p_Output_HTML_FormHelper
                 $output  = '<input type="checkbox" value="1" class="text '. $suffix . '" ';
                 $output .= 'name="' . $fieldName. '" ' .$params .' />';
                 break;
+            case 'parent':          // @note This drops through on purpose
+                $suffix = 'department';
             case 'allocation':
             case 'category':
             case 'country':
