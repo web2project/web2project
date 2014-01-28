@@ -428,3 +428,18 @@ function findchild_pd(&$tarr, $parent, $level = 0) {
 
     findchild_new($tarr, $parent, $level);
 }
+
+/**
+ * @deprecated
+ */
+function cleanText($text) {
+    trigger_error("cleanText() has been deprecated in v3.2 and will be removed by v5.0. There is no replacement.", E_USER_NOTICE);
+
+    //This text file is not utf, its iso so we have to decode/encode
+    $text = utf8_decode($text);
+    $trade = array('�' => 'a', '�' => 'a', '�' => 'a', '�' => 'a', '�' => 'a', '�' => 'A', '�' => 'A', '�' => 'A', '�' => 'A', '�' => 'A', '�' => 'e', '�' => 'e', '�' => 'e', '�' => 'e', '�' => 'E', '�' => 'E', '�' => 'E', '�' => 'E', '�' => 'i', '�' => 'i', '�' => 'i', '�' => 'i', '�' => 'I', '�' => 'I', '�' => 'I', '�' => 'I', '�' => 'o', '�' => 'o', '�' => 'o', '�' => 'o', '�' => 'o', '�' => 'O', '�' => 'O', '�' => 'O', '�' => 'O', '�' => 'O', '�' => 'u', '�' => 'u', '�' => 'u', '�' => 'u', '�' => 'U', '�' => 'U', '�' => 'U', '�' => 'U', '�' => 'N', '�' => 'n');
+    $text = strtr($text, $trade);
+    $text = utf8_encode($text);
+
+    return $text;
+}

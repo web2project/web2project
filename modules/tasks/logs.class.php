@@ -140,14 +140,7 @@ class CTask_Log extends w2p_Core_BaseObject
     // @todo this should be task_log_task_end_datetime to take advantage of our templating
     public $task_log_task_end_date;
 
-    /**
-     * Constructor for class
-     *
-     * @return void
-     *
-     * @access public
-     */
-	public function __construct()
+    public function __construct()
 	{
 		parent::__construct('task_log', 'task_log_id', 'tasks');
 
@@ -169,8 +162,6 @@ class CTask_Log extends w2p_Core_BaseObject
 			$log_duration_minutes = sprintf('%.3f', substr($this->task_log_hours, $dot + 1) / 60.0);
 			$this->task_log_hours = floor($this->task_log_hours) + $log_duration_minutes;
 		}
-		$this->task_log_hours = $this->task_log_hours;
-		$this->task_log_costcode = cleanText($this->task_log_costcode);
 
 		if (!((float)$this->task_log_hours)) {
 			// before evaluating a non-float work hour as 0 lets try to check if user is trying
@@ -401,5 +392,4 @@ class CTask_Log extends w2p_Core_BaseObject
 		}
 		return parent::getAllowedRecords($uid, $fields, $orderby, $index, $extra);
 	}
-
 }

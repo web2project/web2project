@@ -14,25 +14,6 @@ if (!defined('W2P_BASE_DIR')) {
 *   this shouldn't be a problem.
 */
 
-/**
- * There is an issue with international UTF characters, when stored in the
- *  database an accented letter actually takes up two letters per say in the
- *  field length, this is a problem with costcodes since they are limited in
- *  size so saving a costcode as REDACI�N would actually save REDACI� since the
- *  accent takes two characters, so lets unaccent them, other languages should
- *  add to the replacements array too...
- */
-//
-function cleanText($text) {
-	//This text file is not utf, its iso so we have to decode/encode
-	$text = utf8_decode($text);
-	$trade = array('�' => 'a', '�' => 'a', '�' => 'a', '�' => 'a', '�' => 'a', '�' => 'A', '�' => 'A', '�' => 'A', '�' => 'A', '�' => 'A', '�' => 'e', '�' => 'e', '�' => 'e', '�' => 'e', '�' => 'E', '�' => 'E', '�' => 'E', '�' => 'E', '�' => 'i', '�' => 'i', '�' => 'i', '�' => 'i', '�' => 'I', '�' => 'I', '�' => 'I', '�' => 'I', '�' => 'o', '�' => 'o', '�' => 'o', '�' => 'o', '�' => 'o', '�' => 'O', '�' => 'O', '�' => 'O', '�' => 'O', '�' => 'O', '�' => 'u', '�' => 'u', '�' => 'u', '�' => 'u', '�' => 'U', '�' => 'U', '�' => 'U', '�' => 'U', '�' => 'N', '�' => 'n');
-	$text = strtr($text, $trade);
-	$text = utf8_encode($text);
-
-	return $text;
-}
-
 function is_task_in_gantt_arr($task) {
     global $gantt_arr;
     $n = count($gantt_arr);
