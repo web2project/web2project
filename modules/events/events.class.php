@@ -386,7 +386,7 @@ class CEvent extends w2p_Core_BaseObject
             $mail->Subject($this->_AppUI->_('Requested Event') . ': ' . $this->event_name, $this->_locale_char_set);
         } else {
 			$type = $update ? $this->_AppUI->_('Event updated') : $this->_AppUI->_('New event');
-            $mail->Subject($type . ': ' . $this->event_name, $locale_char_set);
+            $mail->Subject($type . ': ' . $this->event_name);
         }
 
         $emailManager = new w2p_Output_EmailManager($this->_AppUI);
@@ -592,7 +592,7 @@ class CEvent extends w2p_Core_BaseObject
     }
 
     /** @deprecated */
-    public function checkClash($userlist = null)
+    public function checkClash()
     {
         return false;
     }
