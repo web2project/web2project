@@ -5,7 +5,7 @@
 abstract class w2p_Output_HTML_Base
 {
     protected $AppUI = null;
-    protected $df = null;
+    public $df = null;
     protected $dtf = null;
 
     public function __construct($AppUI)

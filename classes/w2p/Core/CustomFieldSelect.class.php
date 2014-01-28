@@ -7,15 +7,9 @@
  * @package     web2project\core
  */
 
-class w2p_Core_CustomFieldSelect extends w2p_Core_CustomField {
+class w2p_Core_CustomFieldSelect extends w2p_Core_CustomField
+{
     public $options;
-
-    public function __construct($field_id, $field_name, $field_order, $field_description, $field_extratags, $field_published) {
-        parent::__construct($field_id, $field_name, $field_order, $field_description, $field_extratags, $field_published);
-        $this->field_htmltype = 'select';
-        $this->options = new w2p_Core_CustomOptionList($field_id);
-        $this->options->load();
-    }
 
     public function getHTML($mode) {
         switch ($mode) {

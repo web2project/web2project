@@ -6,13 +6,8 @@
  * @package web2project\core
  */
 
-class w2p_Core_CustomFieldEmail extends w2p_Core_CustomFieldText {
-
-    public function __construct($field_id, $field_name, $field_order, $field_description, $field_extratags, $field_published) {
-        parent::__construct($field_id, $field_name, $field_order, $field_description, $field_extratags, $field_published);
-        $this->field_htmltype = 'email';
-    }
-
+class w2p_Core_CustomFieldEmail extends w2p_Core_CustomFieldText
+{
     public function getHTML($mode) {
         switch ($mode) {
             case 'edit':
