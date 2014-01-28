@@ -895,14 +895,12 @@ class w2p_Core_CAppUI
         }
     }
 
-    /*     * **********************************************************************************************************************
-      /**
+    /**
      * @deprecated
      */
-
     public function logout()
     {
-        
+        trigger_error("The AppUI->logout() method has been deprecated in 2.0 and will be removed in v4.0. Please use CCompany->projects() instead.", E_USER_NOTICE );
     }
 
     /**
