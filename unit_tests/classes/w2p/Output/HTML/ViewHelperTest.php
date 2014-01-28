@@ -47,10 +47,16 @@ class w2p_Output_HTML_ViewHelperTest extends CommonSetup
 
         $output = $this->obj->addField('owner', '2');
         $this->assertEquals('<a href="?m=users&a=view&user_id=2">Contact Number 1</a>', $output);
-/**
-        $output = $this->obj->addField('description', 'test');
-        $this->assertEquals('<textarea name="description" class="description">test</textarea>', $output);
 
+        $output = $this->obj->addField('description', 'test');
+        $this->assertEquals('test', $output);
+
+        $output = $this->obj->addField('description', 'test w/ a link: http://web2project.net');
+        $this->assertEquals('test w/ a link: <a href="http://web2project.net" target="_blank">http://web2project.net</a>', $output);
+
+        $output = $this->obj->addField('percent', '38.7');
+        $this->assertEquals('39%', $output);
+        /**
         $output = $this->obj->addField('birthday', '2014-02-01');
         // @todo $this->assertEquals('<input type="text" class="text birthday" name="birthday" value="2014-02-01" />', $output);
 

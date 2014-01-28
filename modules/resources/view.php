@@ -49,38 +49,29 @@ if ($canDelete) {
 	</form>
 <?php } ?>
 
-<table class="std view resources">
-    <tr>
-        <td width="50%" valign="top" class="view-column">
-            <strong><?php echo $AppUI->_('Details'); ?></strong>
-            <table cellspacing="1" cellpadding="2" border="0" width="100%" class="well">
-                <tr>
-                    <td align="right" nowrap="nowrap" width="5%"><?php echo $AppUI->_('Identifier'); ?>:</td>
-                    <?php echo $htmlHelper->createCell('resource_key', $obj->resource_key); ?>
-                </tr>
-                <tr>
-                    <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Name'); ?>:</td>
-                    <?php echo $htmlHelper->createCell('resource_name-nolink', $obj->resource_name); ?>
-                </tr>
-                <tr>
-                    <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Type'); ?>:</td>
-                    <?php echo $htmlHelper->createCell('resource_type', $obj->resource_type, $customLookups); ?>
-                </tr>
-                <tr>
-                    <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Max Allocation'); ?>:</td>
-                    <?php echo $htmlHelper->createCell('allocation_assignment', $obj->resource_max_allocation); ?>
-                </tr>
-            </table>
-        </td>
-        <td width="100%" valign="top">
-            <strong><?php echo $AppUI->_('Description'); ?></strong>
-            <table cellspacing="1" cellpadding="2" border="0" width="100%" class="well">
-                <tr>
-                    <td>
-                        <?php echo w2p_textarea($obj->resource_description); ?>&nbsp;
-                    </td>
-                </tr>
-            </table>
-        </td>
-    </tr>
-</table>
+<?php
+
+$view = new w2p_Output_HTML_ViewHelper($AppUI);
+
+?>
+<div class="std addedit companies">
+    <div class="column left">
+        <p><?php $view->showLabel('Identifier'); ?>
+            <?php $view->showField('resource_key', $obj->resource_key); ?>
+        </p>
+        <p><?php $view->showLabel('Name'); ?>
+            <?php $view->showField('resource_name', $obj->resource_name); ?>
+        </p>
+        <p><?php $view->showLabel('Type'); ?>
+            <?php $view->showField('resource_type', $AppUI->_($types[$obj->resource_type])); ?>
+        </p>
+        <p><?php $view->showLabel('Percent Allocation'); ?>
+            <?php $view->showField('percent', $obj->resource_max_allocation); ?>
+        </p>
+    </div>
+    <div class="column right">
+        <p><?php $view->showLabel('Description'); ?>
+            <?php $view->showField('resource_description', $obj->resource_description); ?>
+        </p>
+    </div>
+</div>

@@ -27,6 +27,12 @@ class w2p_Output_HTML_ViewHelper extends w2p_Output_HTML_Base
                 $link = '?m=users&a=view&user_id='.$fieldValue;
                 $output = '<a href="'.$link.'">'.$obj->contact_display_name.'</a>';
                 break;
+            case 'percent':
+                $output = round($fieldValue).'%';
+                break;
+            case 'description':
+                $output = w2p_textarea($fieldValue);
+                break;
             default:
                 $output = htmlspecialchars($fieldValue, ENT_QUOTES);
         }
