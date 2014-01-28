@@ -4,16 +4,16 @@
  */
 
 class CResource extends w2p_Core_BaseObject {
-	public $resource_id = null;
-	public $resource_key = null;
-	public $resource_name = null;
-	public $resource_type = null;
-	public $resource_max_allocation = null;
-	public $resource_description = null;
+    public $resource_id = null;
+    public $resource_key = null;
+    public $resource_name = null;
+    public $resource_type = null;
+    public $resource_max_allocation = null;
+    public $resource_description = null;
 
-	public function __construct() {
+    public function __construct() {
         parent::__construct('resources', 'resource_id');
-	}
+    }
 
     public function isValid()
     {
@@ -33,18 +33,18 @@ class CResource extends w2p_Core_BaseObject {
      *
      * @deprecated
      */
-	public function &loadTypes() {
-		trigger_error("CResource->loadTypes() has been deprecated in v3.0 and will be removed in v4.0. Please use w2PgetSysVal('ResourceTypes') instead.", E_USER_NOTICE);
+    public function &loadTypes() {
+        trigger_error("CResource->loadTypes() has been deprecated in v3.0 and will be removed in v4.0. Please use w2PgetSysVal('ResourceTypes') instead.", E_USER_NOTICE);
 
         return $this->typeSelect();
-	}
+    }
 
     /*
      * This is only here for backwards compatibility
      *
      * @deprecated
      */
-	public function typeSelect() {
+    public function typeSelect() {
         trigger_error("CResource->typeSelect() has been deprecated in v3.0 and will be removed in v4.0. Please use w2PgetSysVal('ResourceTypes') instead.", E_USER_NOTICE);
 
         $typelist = w2PgetSysVal('ResourceTypes');
@@ -55,20 +55,20 @@ class CResource extends w2p_Core_BaseObject {
             $typelist = w2PgetSysVal('ResourceTypes');
         }
 
-		return $typelist;
-	}
+        return $typelist;
+    }
 
     /*
      * This is only here for backwards compatibility
      *
      * @deprecated
      */
-	public function getTypeName() {
+    public function getTypeName() {
         trigger_error("CResource->getTypeName() has been deprecated in v3.0 and will be removed in v4.0. Please use w2PgetSysVal('ResourceTypes') instead.", E_USER_NOTICE);
 
         $typelist = $this->typeSelect();
         return $typelist[$this->resource_type];
-	}
+    }
 
     public function getResourcesByTask($task_id)
     {

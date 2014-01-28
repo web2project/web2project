@@ -67,7 +67,7 @@ class CLinks_Test extends CommonSetup
         /**
         * Verify we got the proper error message
         */
-		$this->assertFalse($this->obj->store());
+        $this->assertFalse($this->obj->store());
         $this->assertArrayHasKey('link_name', $this->obj->getError());
 
         /**
@@ -88,7 +88,7 @@ class CLinks_Test extends CommonSetup
         /**
         * Verify we got the proper error message
         */
-		$this->assertFalse($this->obj->store());
+        $this->assertFalse($this->obj->store());
         $this->assertArrayHasKey('link_url', $this->obj->getError());
 
         /**

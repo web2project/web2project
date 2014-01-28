@@ -29,8 +29,8 @@ include_once 'unit_tests/CommonSetup.php';
 class w2p_Output_HTMLHelperTest extends CommonSetup
 {
     protected function setUp ()
-	{
-		parent::setUp();
+    {
+        parent::setUp();
 
         $this->obj = new w2p_Output_HTMLHelper($this->_AppUI);
     }

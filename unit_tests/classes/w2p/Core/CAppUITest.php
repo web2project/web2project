@@ -116,56 +116,56 @@ class w2p_Core_CAppUITest extends CommonSetup
     /**
      * Test the translation function
      */
-	public function test__()
-	{
+    public function test__()
+    {
         $AppUI = $this->_AppUI;
-		global $w2Pconfig;
+        global $w2Pconfig;
 
-		$w2Pconfig['locale_warn'] = false;
-		$this->assertEquals('Company',        $AppUI->__('Company'));
-		$this->assertEquals('NoGonnaBeThere', $AppUI->__('NoGonnaBeThere'));
+        $w2Pconfig['locale_warn'] = false;
+        $this->assertEquals('Company',        $AppUI->__('Company'));
+        $this->assertEquals('NoGonnaBeThere', $AppUI->__('NoGonnaBeThere'));
 
-		/* Turn on 'untranslatable' warning */
-		$w2Pconfig['locale_warn'] = true;
-		$this->assertEquals('Projects^', $AppUI->__('Projects'));
-		$this->assertEquals('Add File^', $AppUI->__('Add File'));
+        /* Turn on 'untranslatable' warning */
+        $w2Pconfig['locale_warn'] = true;
+        $this->assertEquals('Projects^', $AppUI->__('Projects'));
+        $this->assertEquals('Add File^', $AppUI->__('Add File'));
 
-		/* Change to another language and reload tranlations */
-		$AppUI->user_locale = 'es';
-		require W2P_BASE_DIR . '/locales/core.php';
-		$this->assertEquals('Proyectos',      $AppUI->__('Projects'));
-		$this->assertEquals('Ciudad',         $AppUI->__('City'));
-		$this->assertEquals('StillNotThere^', $AppUI->__('StillNotThere'));
+        /* Change to another language and reload tranlations */
+        $AppUI->user_locale = 'es';
+        require W2P_BASE_DIR . '/locales/core.php';
+        $this->assertEquals('Proyectos',      $AppUI->__('Projects'));
+        $this->assertEquals('Ciudad',         $AppUI->__('City'));
+        $this->assertEquals('StillNotThere^', $AppUI->__('StillNotThere'));
 
-		/* Change back to English and reload tranlations */
-		$AppUI->user_locale = 'en';
-		require W2P_BASE_DIR . '/locales/core.php';
-		$this->assertEquals('Projects',        $AppUI->__('Projects'));
-		$this->assertEquals('NoGonnaBeThere^', $AppUI->__('NoGonnaBeThere'));
-	}
+        /* Change back to English and reload tranlations */
+        $AppUI->user_locale = 'en';
+        require W2P_BASE_DIR . '/locales/core.php';
+        $this->assertEquals('Projects',        $AppUI->__('Projects'));
+        $this->assertEquals('NoGonnaBeThere^', $AppUI->__('NoGonnaBeThere'));
+    }
 
     /**
      * Tests getting a preference
      */
-	public function testGetPref()
-	{
+    public function testGetPref()
+    {
         $AppUI = $this->_AppUI;
 
-		$this->assertEquals('en_US', $AppUI->getPref('LOCALE'));
-		$this->assertEquals('',   $AppUI->getPref('NotGonnaBeThere'));
-	}
+        $this->assertEquals('en_US', $AppUI->getPref('LOCALE'));
+        $this->assertEquals('',   $AppUI->getPref('NotGonnaBeThere'));
+    }
 
     /**
      * Tests setting a preference
      */
-	public function testSetPref()
-	{
+    public function testSetPref()
+    {
         $AppUI = $this->_AppUI;
 
-		$this->assertEquals('en_US',     $AppUI->getPref('LOCALE'));
-		$AppUI->setPref('AddingThis', 'Monkey');
-		$this->assertEquals('Monkey', $AppUI->getPref('AddingThis'));
-	}
+        $this->assertEquals('en_US',     $AppUI->getPref('LOCALE'));
+        $AppUI->setPref('AddingThis', 'Monkey');
+        $this->assertEquals('Monkey', $AppUI->getPref('AddingThis'));
+    }
 
     /**
      * Test setting the global state
@@ -207,76 +207,76 @@ class w2p_Core_CAppUITest extends CommonSetup
      *
      * @expectedException PHPUnit_Framework_Error
      */
-	public function testSavePlace()
-	{
+    public function testSavePlace()
+    {
         $AppUI = $this->_AppUI;
 
-		$_SERVER['QUERY_STRING'] = 'testUrl';
-		$AppUI->savePlace();
-		$this->assertEquals('testUrl', $AppUI->getPlace());
+        $_SERVER['QUERY_STRING'] = 'testUrl';
+        $AppUI->savePlace();
+        $this->assertEquals('testUrl', $AppUI->getPlace());
 
-		$AppUI->savePlace('?m=projects&amp;a=view&amp;project_id=1');
-		$this->assertEquals('?m=projects&amp;a=view&amp;project_id=1', $AppUI->getPlace());
-	}
+        $AppUI->savePlace('?m=projects&amp;a=view&amp;project_id=1');
+        $this->assertEquals('?m=projects&amp;a=view&amp;project_id=1', $AppUI->getPlace());
+    }
 
     /**
      * Tests reseting the place(url)
      *
      * @expectedException PHPUnit_Framework_Error
      */
-	public function testResetPlace()
-	{
+    public function testResetPlace()
+    {
         $AppUI = $this->_AppUI;
 
-		$_SERVER['QUERY_STRING'] = 'testUrl';
-		$AppUI->savePlace();
-		$this->assertEquals('testUrl', $AppUI->getPlace());
-		$AppUI->resetPlace();
-		$this->assertEquals('', $AppUI->getPlace());
-	}
+        $_SERVER['QUERY_STRING'] = 'testUrl';
+        $AppUI->savePlace();
+        $this->assertEquals('testUrl', $AppUI->getPlace());
+        $AppUI->resetPlace();
+        $this->assertEquals('', $AppUI->getPlace());
+    }
 
     /**
      * Tests restoring an object from the global scope
      */
-	public function testHoldRestoreObject()
-	{
+    public function testHoldRestoreObject()
+    {
         $AppUI = $this->_AppUI;
 
-	  $this->assertNull($AppUI->restoreObject());
-	  $myArray = array('one' => 'something', 2 => 'another');
-	  $AppUI->holdObject($myArray);
+      $this->assertNull($AppUI->restoreObject());
+      $myArray = array('one' => 'something', 2 => 'another');
+      $AppUI->holdObject($myArray);
 
-	  $result = $AppUI->restoreObject();
-	  $this->AssertEquals(2, count($result));
-	  $this->assertArrayHasKey('one', $result);
-	  $this->assertArrayHasKey(2, $result);
-	  $this->assertNull($AppUI->restoreObject());
-	}
+      $result = $AppUI->restoreObject();
+      $this->AssertEquals(2, count($result));
+      $this->assertArrayHasKey('one', $result);
+      $this->assertArrayHasKey(2, $result);
+      $this->assertNull($AppUI->restoreObject());
+    }
 
     /**
      * Tests setting a message
      */
-	public function testSetMsg()
-	{
+    public function testSetMsg()
+    {
         $AppUI = $this->_AppUI;
         global $w2Pconfig;
 
       $w2Pconfig['locale_warn'] = false;
 
-	  $msg = 'This is a test';
-	  $AppUI->setMsg($msg, 0, false);
-	  $this->AssertEquals($msg, $AppUI->msg);
-	  $AppUI->setMsg($msg, 0, true);
-	  $this->AssertEquals($msg.' '.$msg, $AppUI->msg);
-	  $AppUI->setMsg($msg, 0, false);
-	  $this->AssertEquals($msg, $AppUI->msg);
+      $msg = 'This is a test';
+      $AppUI->setMsg($msg, 0, false);
+      $this->AssertEquals($msg, $AppUI->msg);
+      $AppUI->setMsg($msg, 0, true);
+      $this->AssertEquals($msg.' '.$msg, $AppUI->msg);
+      $AppUI->setMsg($msg, 0, false);
+      $this->AssertEquals($msg, $AppUI->msg);
 
-	  $myArray = array('one' => 'First Message', 'two' => 'Second Message');
+      $myArray = array('one' => 'First Message', 'two' => 'Second Message');
       $AppUI->setMsg($myArray, 0, false);
-	  $this->AssertEquals('First Message<br />Second Message', $AppUI->msg);
+      $this->AssertEquals('First Message<br />Second Message', $AppUI->msg);
 
-	  $AppUI->setMsg($msg, 0, false);
-	  $this->AssertEquals($msg, $AppUI->msg);
+      $AppUI->setMsg($msg, 0, false);
+      $this->AssertEquals($msg, $AppUI->msg);
     }
 
     /**

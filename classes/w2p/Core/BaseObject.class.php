@@ -12,22 +12,22 @@ abstract class w2p_Core_BaseObject extends w2p_System_Event implements w2p_Syste
 {
 
     /**
-     * 	@var string Name of the table prefix in the db schema
+     *     @var string Name of the table prefix in the db schema
      */
     protected $_tbl_prefix = '';
 
     /**
-     * 	@var string Name of the table in the db schema relating to child class
+     *     @var string Name of the table in the db schema relating to child class
      */
     protected $_tbl = '';
 
     /**
-     * 	@var string Name of the primary key field in the table
+     *     @var string Name of the primary key field in the table
      */
     protected $_tbl_key = '';
 
     /**
-     * 	@var string Error message
+     *     @var string Error message
      */
     protected $_error = '';
 
@@ -51,7 +51,7 @@ abstract class w2p_Core_BaseObject extends w2p_System_Event implements w2p_Syste
     protected $_locale_char_set;
 
     /**
-     * 	Object constructor to set table and key field. This should be overridden by all submodules
+     *     Object constructor to set table and key field. This should be overridden by all submodules
      *
      * @param string $table     name of the table in the db schema relating to child class
      * @param string $key       name of the primary key field in the table
@@ -126,7 +126,7 @@ abstract class w2p_Core_BaseObject extends w2p_System_Event implements w2p_Syste
     }
 
     /**
-     * 	@return string or array Returns the error message
+     *     @return string or array Returns the error message
      */
     public function getError()
     {
@@ -139,7 +139,7 @@ abstract class w2p_Core_BaseObject extends w2p_System_Event implements w2p_Syste
     }
 
     /**
-     * 	Binds a named array/hash to this object
+     *     Binds a named array/hash to this object
      *
      * @param      $hash
      * @param null $prefix          Defaults to null, prefix to use with hash keys
@@ -175,7 +175,7 @@ abstract class w2p_Core_BaseObject extends w2p_System_Event implements w2p_Syste
     }
 
     /**
-     * 	Binds an array/hash to this object
+     *     Binds an array/hash to this object
      *
      * @param null $oid     optional argument, if not specifed then the value of current key is used
      * @param bool $strip
@@ -220,8 +220,8 @@ abstract class w2p_Core_BaseObject extends w2p_System_Event implements w2p_Syste
     public function loadFull($notUsed = null, $object_id) {     $this->load($object_id);        }
 
     /**
-     * 	Returns an array, keyed by the key field, of all elements that meet
-     * 	the where clause provided. Ordered by $order key.
+     *     Returns an array, keyed by the key field, of all elements that meet
+     *     the where clause provided. Ordered by $order key.
      *
      * @param null $order
      * @param null $where
@@ -244,9 +244,9 @@ abstract class w2p_Core_BaseObject extends w2p_System_Event implements w2p_Syste
     }
 
     /**
-     * 	Return a w2p_Database_Query object seeded with the table name.
-     * 	@param string $alias optional alias for table queries.
-     * 	@return w2p_Database_Query object
+     *     Return a w2p_Database_Query object seeded with the table name.
+     *     @param string $alias optional alias for table queries.
+     *     @return w2p_Database_Query object
      */
     public function &getQuery($alias = null)
     {
@@ -256,9 +256,9 @@ abstract class w2p_Core_BaseObject extends w2p_System_Event implements w2p_Syste
     }
 
     /**
-     * 	Generic check method, overload as needed
+     *     Generic check method, overload as needed
      *
-     * 	@return array() of size zero if the object is ok
+     *     @return array() of size zero if the object is ok
      */
     public function check()
     {
@@ -280,10 +280,10 @@ abstract class w2p_Core_BaseObject extends w2p_System_Event implements w2p_Syste
         return true;
     }
     /**
-     * 	Clone the current record
+     *     Clone the current record
      *
-     * 	@author	handco <handco@users.sourceforge.net>
-     * 	@return	object	The new record object or null if error
+     *     @author    handco <handco@users.sourceforge.net>
+     *     @return    object    The new record object or null if error
      * */
     public function duplicate()
     {
@@ -302,11 +302,11 @@ abstract class w2p_Core_BaseObject extends w2p_System_Event implements w2p_Syste
     }
 
     /**
-     * 	Default trimming method for class variables of type string
+     *     Default trimming method for class variables of type string
      *
-     * 	@param object Object to trim class variables for
+     *     @param object Object to trim class variables for
      *
-     * 	@return none
+     *     @return none
      */
     public function w2PTrimAll()
     {
@@ -319,7 +319,7 @@ abstract class w2p_Core_BaseObject extends w2p_System_Event implements w2p_Syste
     }
 
     /**
-     * 	Inserts a new row if id is zero or updates an existing row in the database table
+     *     Inserts a new row if id is zero or updates an existing row in the database table
      *
      * @param bool $updateNulls
      *
@@ -407,7 +407,7 @@ abstract class w2p_Core_BaseObject extends w2p_System_Event implements w2p_Syste
     }
 
     /**
-     * 	Generic check for whether dependencies exist for this object in the db schema, overload as needed
+     *     Generic check for whether dependencies exist for this object in the db schema, overload as needed
      *
      * @param string $notUsed
      * @param null   $oid
@@ -449,7 +449,7 @@ abstract class w2p_Core_BaseObject extends w2p_System_Event implements w2p_Syste
     }
 
     /**
-     * 	Default delete method
+     *     Default delete method
      *
      * @param null $oid
      *
@@ -489,9 +489,9 @@ abstract class w2p_Core_BaseObject extends w2p_System_Event implements w2p_Syste
     }
 
     /**
-     * 	Get specifically denied records from a table/module based on a user
-     * 	@param int User id number
-     * 	@return array
+     *     Get specifically denied records from a table/module based on a user
+     *     @param int User id number
+     *     @return array
      */
     public function getDeniedRecords($uid)
     {
@@ -502,7 +502,7 @@ abstract class w2p_Core_BaseObject extends w2p_System_Event implements w2p_Syste
     }
 
     /**
-     * 	Returns a list of records visible to the user
+     *     Returns a list of records visible to the user
      *
      * @param        $uid
      * @param string $fields        fields to be returned by the query, default is all

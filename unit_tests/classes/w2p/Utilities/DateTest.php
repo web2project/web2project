@@ -1333,20 +1333,20 @@ class w2p_Utilities_DateTest extends CommonSetup
     /**
      * Tests converting between timezones
      */
-	public function testConvertTZ()
-	{
-		$myDate1 = new w2p_Utilities_Date('', 'US/Eastern');
-		$myDate2 = new w2p_Utilities_Date('', 'CST');
-		$myDate2->convertTZ('EST');
+    public function testConvertTZ()
+    {
+        $myDate1 = new w2p_Utilities_Date('', 'US/Eastern');
+        $myDate2 = new w2p_Utilities_Date('', 'CST');
+        $myDate2->convertTZ('EST');
 
-		//This tweaks the test data in case the +1 is across the day change.
-		$tmpHour = ($myDate1->hour+1 >=24) ? $myDate1->hour+1-24 : $myDate1->hour+1;
-		$this->assertEquals($tmpHour, $myDate2->hour);
-		$this->assertEquals($myDate1->minute, $myDate2->minute);
+        //This tweaks the test data in case the +1 is across the day change.
+        $tmpHour = ($myDate1->hour+1 >=24) ? $myDate1->hour+1-24 : $myDate1->hour+1;
+        $this->assertEquals($tmpHour, $myDate2->hour);
+        $this->assertEquals($myDate1->minute, $myDate2->minute);
 
-		$myDate2->convertTZ('PST');
-		$tmpHour = ($myDate1->hour-2 < 0) ? $myDate1->hour-2+24 : $myDate1->hour-2;
-		$this->assertEquals($tmpHour, $myDate2->hour);
+        $myDate2->convertTZ('PST');
+        $tmpHour = ($myDate1->hour-2 < 0) ? $myDate1->hour-2+24 : $myDate1->hour-2;
+        $this->assertEquals($tmpHour, $myDate2->hour);
     }
 
     /**

@@ -10,35 +10,35 @@
  */
 
 class w2p_System_Event {
-	/**
-	 * The name of the resource publishing this event
-	 * @var string
-	 */
-	protected $resourceName;
+    /**
+     * The name of the resource publishing this event
+     * @var string
+     */
+    protected $resourceName;
  
-	/**
-	 * The name of this event
-	 * @var string
-	 */
-	protected $eventName;
+    /**
+     * The name of this event
+     * @var string
+     */
+    protected $eventName;
  
-	/**
-	 * Any data associated with this event
-	 * @var mixed
-	 */
-	protected $data;
+    /**
+     * Any data associated with this event
+     * @var mixed
+     */
+    protected $data;
  
-	/**
-	 * @param string $resourceName	name of the publisher
-	 * @param string $eventName		name of the event
-	 * @param mixed $data			[OPTIONAL] Additional event data
-	 */
-	public function __construct($resourceName, $eventName, $data=null)
-	{
-		$this->resourceName = $resourceName;
-		$this->eventName = $eventName;
-		$this->data = $data;
-	}
+    /**
+     * @param string $resourceName    name of the publisher
+     * @param string $eventName        name of the event
+     * @param mixed $data            [OPTIONAL] Additional event data
+     */
+    public function __construct($resourceName, $eventName, $data=null)
+    {
+        $this->resourceName = $resourceName;
+        $this->eventName = $eventName;
+        $this->data = $data;
+    }
 
     public function getResourceName() {
         return $this->resourceName;

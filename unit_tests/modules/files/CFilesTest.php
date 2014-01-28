@@ -47,7 +47,7 @@ class CFiles_Test extends CommonSetup
           'file_owner' =>         '1',
           'file_size' =>          '0',
           'file_version' =>       1,
-		  'file_version_id' =>    1,
+          'file_version_id' =>    1,
           'file_icon' =>          '',
           'file_category' =>      0,
           'file_checkout' =>      0,

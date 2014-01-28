@@ -71,7 +71,7 @@ class CDepartments_Test extends CommonSetup
         /**
         * Verify we got the proper error message
         */
-		$this->assertFalse($this->obj->store());
+        $this->assertFalse($this->obj->store());
         $this->assertArrayHasKey('dept_name', $this->obj->getError());
 
         /**
@@ -92,7 +92,7 @@ class CDepartments_Test extends CommonSetup
         /**
         * Verify we got the proper error message
         */
-		$this->assertFalse($this->obj->store());
+        $this->assertFalse($this->obj->store());
         $this->assertArrayHasKey('dept_company', $this->obj->getError());
 
         /**
@@ -113,7 +113,7 @@ class CDepartments_Test extends CommonSetup
         /**
         * Verify we got the proper error message
         */
-		$this->assertFalse($this->obj->store());
+        $this->assertFalse($this->obj->store());
         $this->assertArrayHasKey('dept_owner', $this->obj->getError());
 
         /**

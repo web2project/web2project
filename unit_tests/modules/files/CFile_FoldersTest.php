@@ -60,7 +60,7 @@ class CFileFolders_Test extends CommonSetup
         /**
         * Verify we got the proper error message
         */
-		$this->assertFalse($this->obj->store());
+        $this->assertFalse($this->obj->store());
         $this->assertArrayHasKey('file_folder_name', $this->obj->getError());
 
         /**

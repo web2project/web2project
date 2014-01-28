@@ -67,12 +67,12 @@
 
     <target name="metrics" depends="prepare">
         <echo message="Some of these targets are *very* memory intensive. You may have to increase your memory_limit in php.ini" />
-        <phingcall target="cpd" />
         <phingcall target="phploc" />
         <phingcall target="phpmd" />
         <phingcall target="depend" />
         <phingcall target="codesniffer" />
         <phingcall target="churn-grep" />
+        <phingcall target="cpd" />
     </target>
 
     <target name="standards" depends="lint, metrics" />

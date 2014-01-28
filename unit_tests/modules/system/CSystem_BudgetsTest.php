@@ -63,7 +63,7 @@ class CSystemBudgets_Test extends CommonSetup
         /**
         * Verify we got the proper error message
         */
-		$this->assertFalse($this->obj->store());
+        $this->assertFalse($this->obj->store());
         $this->assertArrayHasKey('budget_amount', $this->obj->getError());
 
         /**

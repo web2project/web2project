@@ -39,7 +39,7 @@ class w2p_FileSystem_LoaderTest extends CommonSetup
     {
         $dirs = $this->obj->readDirs('blah');
 
-        $this->assertEquals(0,				count($dirs));
+        $this->assertEquals(0,                count($dirs));
     }
 
     /**

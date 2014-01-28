@@ -26,13 +26,13 @@ class CTaskLogs_Test extends CommonSetup
 {
 
     protected function setUp ()
-	{
-		parent::setUp();
+    {
+        parent::setUp();
 
-		$this->obj = new CTask_Log();
+        $this->obj = new CTask_Log();
         $this->obj->overrideDatabase($this->mockDB);
 
-		$this->post_data = array(
+        $this->post_data = array(
             'task_log_id'                           => 0,
             'task_log_task'                         => 1,
             'task_log_name'                         => 'This is a task log name.',
@@ -49,8 +49,8 @@ class CTaskLogs_Test extends CommonSetup
             'task_log_record_creator'               => 1,
             'task_log_percent_complete'             => 20,
             'task_log_task_end_date'                => '20111007'
-		);
-	}
+        );
+    }
 
     public function testObjectProperties()
     {
@@ -281,7 +281,7 @@ class CTaskLogs_Test extends CommonSetup
         /**
         * Verify we got the proper error message
         */
-		$this->assertFalse($this->obj->store());
+        $this->assertFalse($this->obj->store());
         $this->assertArrayHasKey('task_log_task', $this->obj->getError());
 
         /**
@@ -302,7 +302,7 @@ class CTaskLogs_Test extends CommonSetup
         /**
         * Verify we got the proper error message
         */
-		$this->assertFalse($this->obj->store());
+        $this->assertFalse($this->obj->store());
         $this->assertArrayHasKey('task_log_name', $this->obj->getError());
 
         /**
@@ -323,7 +323,7 @@ class CTaskLogs_Test extends CommonSetup
         /**
         * Verify we got the proper error message
         */
-		$this->assertFalse($this->obj->store());
+        $this->assertFalse($this->obj->store());
         $this->assertArrayHasKey('task_log_creator', $this->obj->getError());
 
         /**

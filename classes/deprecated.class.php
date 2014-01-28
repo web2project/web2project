@@ -145,8 +145,8 @@ class CForumMessage extends CForum_Message
  */
 class CInfoTabBox extends w2p_Theme_InfoTabBox
 {
-	public function show($extra = '', $js_tabs = false, $alignment = 'left') {
-		parent::show($extra, $js_tabs, $alignment);
+    public function show($extra = '', $js_tabs = false, $alignment = 'left') {
+        parent::show($extra, $js_tabs, $alignment);
         trigger_error("CInfoTabBox has been deprecated in v3.0 and will be removed by v4.0. Please use w2p_Theme_InfoTabBox instead.", E_USER_NOTICE);
     }
 
@@ -174,10 +174,10 @@ class CMonthCalendar extends w2p_Output_MonthCalendar
  * @deprecated
  */
 class CPreferences extends w2p_System_Preferences {
-	public function __construct() {
-		parent::__construct();
+    public function __construct() {
+        parent::__construct();
         trigger_error("CPreferences has been deprecated in v3.0 and will be removed by v4.0. Please use w2p_System_Preferences instead.", E_USER_NOTICE );
-	}
+    }
 }
 
 /**
@@ -203,10 +203,10 @@ class CProjectDesignerOptions extends CProjectDesigner
  */
 class CRole extends CSystem_Role
 {
-	public function __construct($name = '', $description = '') {
+    public function __construct($name = '', $description = '') {
         parent::__construct($name, $description);
         trigger_error("CRole has been deprecated in v3.0 and will be removed by v4.0. Please use CSystem_Role instead.", E_USER_NOTICE );
-	}
+    }
 }
 
 /**
@@ -216,11 +216,11 @@ class CRole extends CSystem_Role
  */
 class CSysKey extends CSystem_SysKey
 {
-	public function __construct($name = null, $label = null, $type = '0',
+    public function __construct($name = null, $label = null, $type = '0',
                                     $sep1 = "\n", $sep2 = '|') {
         parent::__construct($name, $label, $type, $sep1, $sep2);
         trigger_error("CSysKey has been deprecated in v3.0 and will be removed by v4.0. Please use CSystem_SysKey instead.", E_USER_NOTICE );
-	}
+    }
 }
 
 /**
@@ -230,10 +230,10 @@ class CSysKey extends CSystem_SysKey
  */
 class CSysVal extends CSystem_SysVal
 {
-	public function __construct($key = null, $title = null, $value = null) {
+    public function __construct($key = null, $title = null, $value = null) {
         parent::__construct($key, $title, $value);
         trigger_error("CSysVal has been deprecated in v3.0 and will be removed by v4.0. Please use CSystem_SysVal instead.", E_USER_NOTICE );
-	}
+    }
 }
 
 /**
@@ -244,9 +244,9 @@ class CSysVal extends CSystem_SysVal
 class CTabBox_core extends w2p_Theme_TabBox
 {
     public function __construct($title, $icon = '', $module = '', $helpref = '') {
-		parent::__construct($title, $icon, $module, $helpref);
+        parent::__construct($title, $icon, $module, $helpref);
         trigger_error("CTabBox_core has been deprecated in v3.0 and will be removed by v4.0. Please use w2p_Theme_TabBox instead.", E_USER_NOTICE );
-	}
+    }
 }
 
 /**
@@ -283,11 +283,11 @@ class CTitleBlock extends w2p_Theme_TitleBlock
  */
 class CTitleBlock_core extends w2p_Theme_TitleBlock
 {
-	public function __construct($title, $icon = '', $module = '',
+    public function __construct($title, $icon = '', $module = '',
                                     $helpref = '') {
-		parent::__construct($title, $icon, $module, $helpref);
+        parent::__construct($title, $icon, $module, $helpref);
         trigger_error("CTitleBlock_core has been deprecated in v3.0 and will be removed by v4.0. Please use w2p_Theme_TitleBlock instead.", E_USER_NOTICE );
-	}
+    }
 }
 
 /**
@@ -297,11 +297,11 @@ class CTitleBlock_core extends w2p_Theme_TitleBlock
  */
 class CW2pObject extends w2p_Core_BaseObject
 {
-	public function __construct($table, $key, $module = '')
-	{
-		parent::__construct($table, $key, $module);
-		trigger_error("CW2pObject has been deprecated in v2.0 and will be removed by v4.0. Please use w2p_Core_BaseObject instead.", E_USER_NOTICE );
-	}
+    public function __construct($table, $key, $module = '')
+    {
+        parent::__construct($table, $key, $module);
+        trigger_error("CW2pObject has been deprecated in v2.0 and will be removed by v4.0. Please use w2p_Core_BaseObject instead.", E_USER_NOTICE );
+    }
 }
 
 /**
@@ -354,11 +354,11 @@ class Mail extends w2p_Utilities_Mail
  */
 class w2Pacl extends w2p_Extensions_Permissions
 {
-	public function __construct($opts = null)
-	{
-		parent::__construct($opts);
-		trigger_error("w2Pacl has been deprecated in v3.0 and will be removed by v4.0. Please use w2p_Extensions_Permissions instead.", E_USER_NOTICE );
-	}
+    public function __construct($opts = null)
+    {
+        parent::__construct($opts);
+        trigger_error("w2Pacl has been deprecated in v3.0 and will be removed by v4.0. Please use w2p_Extensions_Permissions instead.", E_USER_NOTICE );
+    }
 }
 
 /**

@@ -18,7 +18,7 @@ $config['mod_version']     = '3.1.1';               // add a version number
 $config['mod_directory']   = 'resources';           // tell web2project where to find this module
 $config['mod_setup_class'] = 'SResource';           // the name of the PHP setup class (used below)
 $config['mod_type']        = 'user';                // 'core' for modules distributed with w2p by standard, 'user' for additional modules
-$config['mod_ui_name']	   = $config['mod_name'];   // the name that is shown in the main menu of the User Interface
+$config['mod_ui_name']       = $config['mod_name'];   // the name that is shown in the main menu of the User Interface
 $config['mod_ui_icon']     = 'resources.png';       // name of a related icon
 $config['mod_description'] = 'Resources';           // some description of the module
 $config['mod_config']      = false;                 // show 'configure' link in viewmods
@@ -36,8 +36,8 @@ class SResource extends w2p_System_Setup
 {
     public function install() {
         $q = $this->_getQuery();
-		$q->createTable('resources');
-		$q->createDefinition('(
+        $q->createTable('resources');
+        $q->createDefinition('(
             resource_id integer not null auto_increment,
             resource_name varchar(255) not null default "",
             resource_key varchar(64) not null default "",
@@ -48,18 +48,18 @@ class SResource extends w2p_System_Setup
             key (resource_name),
             key (resource_type)
             ) ENGINE = MYISAM DEFAULT CHARSET=utf8 ');
-		if (!$q->exec()) { return false; }
+        if (!$q->exec()) { return false; }
 
         $q->clear();
         $q->createTable('resource_tasks');
-		$q->createDefinition('(
+        $q->createDefinition('(
             resource_id integer not null default 0,
             task_id integer not null default 0,
             percent_allocated integer not null default 100,
             key (resource_id),
             key (task_id, resource_id)
             ) ENGINE = MYISAM DEFAULT CHARSET=utf8 ');
-		if (!$q->exec()) {
+        if (!$q->exec()) {
             return false;
         }
 
@@ -70,16 +70,16 @@ class SResource extends w2p_System_Setup
 
     public function remove() {
         $q = $this->_getQuery();
-		$q->dropTable('resources');
-		$q->exec();
+        $q->dropTable('resources');
+        $q->exec();
 
         $q->clear();
         $q->dropTable('resource_tasks');
         $q->exec();
 
-		$q->clear();
-		$q->setDelete('sysvals');
-		$q->addWhere("sysval_title = 'ResourceTypes'");
+        $q->clear();
+        $q->setDelete('sysvals');
+        $q->addWhere("sysval_title = 'ResourceTypes'");
         $q->exec();
 
         return parent::remove();

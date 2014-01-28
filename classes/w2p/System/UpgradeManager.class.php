@@ -297,7 +297,7 @@ class w2p_System_UpgradeManager {
                     $errorMessage = $dbConn->ErrorMsg();
                     /*
                      * TODO: I'm not happy with this solution but have yet to come up
-                     * 	with another way of solving it...
+                     *     with another way of solving it...
                      */
                     if (strpos($errorMessage, 'Duplicate column name') === false &&
                       strpos($errorMessage, 'column/key exists') === false &&

@@ -1,6 +1,6 @@
 <?php
 if (!defined('W2P_BASE_DIR')) {
-	die('You should not access this file directly.');
+    die('You should not access this file directly.');
 }
 // @todo    convert to template
 $resource_id = (int) w2PgetParam($_GET, 'resource_id', 0);
@@ -17,7 +17,7 @@ $canDelete = $obj->canDelete();
 $titleBlock = new w2p_Theme_TitleBlock('View Resource', 'icon.png', $m, $m . '.' . $a);
 $titleBlock->addCrumb('?m=' . $m, 'resource list');
 if ($canEdit) {
-	$titleBlock->addCrumb('?m=resources&a=addedit&resource_id=' . $resource_id, 'edit this resource');
+    $titleBlock->addCrumb('?m=resources&a=addedit&resource_id=' . $resource_id, 'edit this resource');
 
     if ($canDelete) {
         $titleBlock->addCrumbDelete('delete resource', $canDelete, 'no delete permission');
@@ -36,17 +36,17 @@ if ($canDelete) {
 ?>
   <script language="javascript" type="text/javascript">
     function delIt() {
-    	if (confirm( '<?php echo $AppUI->_('doDelete') . ' ' . $AppUI->_('Resource') . '?'; ?>' )) {
-    		document.frmDelete.submit();
-    	}
+        if (confirm( '<?php echo $AppUI->_('doDelete') . ' ' . $AppUI->_('Resource') . '?'; ?>' )) {
+            document.frmDelete.submit();
+        }
     }
   </script>
 
-	<form name="frmDelete" action="./index.php?m=resources" method="post" accept-charset="utf-8">
-		<input type="hidden" name="dosql" value="do_resource_aed" />
-		<input type="hidden" name="del" value="1" />
-		<input type="hidden" name="resource_id" value="<?php echo $resource_id; ?>" />
-	</form>
+    <form name="frmDelete" action="./index.php?m=resources" method="post" accept-charset="utf-8">
+        <input type="hidden" name="dosql" value="do_resource_aed" />
+        <input type="hidden" name="del" value="1" />
+        <input type="hidden" name="resource_id" value="<?php echo $resource_id; ?>" />
+    </form>
 <?php } ?>
 
 <?php

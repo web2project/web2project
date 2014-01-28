@@ -1,6 +1,6 @@
 <?php
 if (!defined('W2P_BASE_DIR')) {
-	die('You should not access this file directly.');
+    die('You should not access this file directly.');
 }
 // @todo    convert to template
 $resource_id = (int) w2PgetParam($_GET, 'resource_id', 0);
@@ -15,7 +15,7 @@ $canAddEdit = $obj->canAddEdit();
 $canAuthor = $obj->canCreate();
 $canEdit = $obj->canEdit();
 if (!$canAddEdit) {
-	$AppUI->redirect(ACCESS_DENIED);
+    $AppUI->redirect(ACCESS_DENIED);
 }
 
 $obj = $AppUI->restoreObject();
@@ -37,7 +37,7 @@ $titleBlock = new w2p_Theme_TitleBlock($AppUI->_($ttl), 'icon.png', $m, $m . '.'
 $titleBlock->addCrumb('?m=' . $m, $m . ' list');
 
 if ($resource_id) {
-	$titleBlock->addCrumb('?m=resources&a=view&resource_id=' . $resource_id, 'view this resource');
+    $titleBlock->addCrumb('?m=resources&a=view&resource_id=' . $resource_id, 'view this resource');
 }
 $titleBlock->show();
 
@@ -47,13 +47,13 @@ $typelist = w2PgetSysVal('ResourceTypes');
 ?>
 <script language="javascript" type="text/javascript">
 function submitIt() {
-	var form = document.editfrm;
-	if (form.resource_name.value.length < 3) {
-		alert( "<?php echo $AppUI->_('You must enter a name for the resource', UI_OUTPUT_JS); ?>" );
-		form.resource_name.focus();
-	} else {
-		form.submit();
-	}
+    var form = document.editfrm;
+    if (form.resource_name.value.length < 3) {
+        alert( "<?php echo $AppUI->_('You must enter a name for the resource', UI_OUTPUT_JS); ?>" );
+        form.resource_name.focus();
+    } else {
+        form.submit();
+    }
 }
 </script>
 <?php
