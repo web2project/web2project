@@ -185,27 +185,17 @@ class CTask_Log extends w2p_Core_BaseObject
         parent::hook_preCreate();
     }
 
-	/**
-	 * Deletes the current task log from the database. Then updated total hours
-	 * worked cache on task.
-	 *
-	 * @return void
-	 *
-	 * @access public
-	 */
-    public function delete($unused = null)
-	{
-		$this->load($this->task_log_id);
-		$this->_task_id = $this->task_log_task;
-
-        return parent::delete();
-	}
-
     protected function hook_postStore()
     {
         $this->updateTaskSummary(null, $this->task_log_task);
 
         parent::hook_postStore();
+    }
+
+    protected function hook_preDelete()
+    {
+        $this->load($this->task_log_id);
+        $this->_task_id = $this->task_log_task;
     }
 
     protected function hook_postDelete()
