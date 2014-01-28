@@ -480,6 +480,17 @@ class w2p_Utilities_DateTest extends CommonSetup
     /**
      * Tests addMonths function with a positive full month
      */
+    public function testAddMonthsMoreThan12()
+    {
+        $date = new w2p_Utilities_Date('2010-08-08 00:00:00');
+        $date->addMonths(14);
+
+        $this->assertEquals('2011-10-08 00:00:00', $date->getDate(DATE_FORMAT_ISO));
+    }
+
+    /**
+     * Tests addMonths function with a positive full month
+     */
     public function testAddMonthsPositiveFullMonth()
     {
         $date = new w2p_Utilities_Date('2010-08-08 00:00:00');
@@ -497,6 +508,17 @@ class w2p_Utilities_DateTest extends CommonSetup
         $date->addMonths(-2);
 
         $this->assertEquals('2010-06-08 00:00:00', $date->getDate(DATE_FORMAT_ISO));
+    }
+
+    /**
+     * Tests addMonths function with a negative full month
+     */
+    public function testAddMonthsNegativeLessThan12()
+    {
+        $date = new w2p_Utilities_Date('2010-08-08 00:00:00');
+        $date->addMonths(-27);
+
+        $this->assertEquals('2008-05-08 00:00:00', $date->getDate(DATE_FORMAT_ISO));
     }
 
     /**
