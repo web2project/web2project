@@ -362,6 +362,10 @@ class CTask_Log extends w2p_Core_BaseObject
         return false;
     }
 
+    public function canView()
+    {
+        return $this->_perms->checkModuleItem($this->_tbl_module, 'view', $this->task_log_task);
+    }
 	/**
 	 * Get a list of task logs the current user is allowed to access
 	 *
