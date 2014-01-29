@@ -50,6 +50,13 @@ class CSetupEvents extends w2p_System_Setup
                 $this->_renameModule('gacl_permissions', 'module');
 
                 $this->_renameModule('module_config', 'module_name');
+
+                $q = $this->_getQuery();
+                $q->addTable('config');
+                $q->addUpdate('config_value', 'events');
+                $q->addWhere("config_name = 'default_view_m'");
+                $q->addWhere("config_value = 'calendar'");
+                $q->exec();
             default:
                 break;
         }
