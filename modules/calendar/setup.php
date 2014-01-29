@@ -5,7 +5,7 @@ if (!defined('W2P_BASE_DIR')) {
 
 $config = array();
 $config['mod_name'] = 'Calendar';
-$config['mod_version'] = '3.1.0';
+$config['mod_version'] = '3.1.1';
 $config['mod_directory'] = 'events';                     // tell web2Project where to find this module
 $config['mod_setup_class'] = 'CSetupEvents';             // the name of the PHP setup class (used below)
 $config['mod_type'] = 'user';                           // 'core' for modules distributed with w2P by standard, 'user' for additional modules from dotmods
@@ -50,7 +50,7 @@ class CSetupEvents extends w2p_System_Setup
                 $this->_renameModule('gacl_permissions', 'module');
 
                 $this->_renameModule('module_config', 'module_name');
-
+            case '3.1.0':
                 $q = $this->_getQuery();
                 $q->addTable('config');
                 $q->addUpdate('config_value', 'events');
