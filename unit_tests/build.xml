@@ -171,7 +171,7 @@
     <target name="cpd" depends="prepare">
         <phpcpd>
             <fileset refid="project.source" />
-            <formatter type="default" outfile="${dir.reports}/cpd.xml" />
+            <formatter type="pmd" outfile="${dir.reports}/cpd.xml" />
         </phpcpd>
     </target>
 
@@ -191,10 +191,11 @@
     </target>
 
     <target name="codesniffer" depends="prepare">
-        <phpcodesniffer standard="PEAR" verbosity="1">
+        <echo message="If you don't have the PSR standards installed, just follow the instructions here: https://github.com/klaussilveira/phpcs-psr" />
+        <phpcodesniffer standard="PSR" verbosity="1">
             <fileset refid="project.source" />
-            <formatter type="checkstyle" outfile="${dir.reports}/codesniffer.xml"/>
-            <formatter type="summary" outfile="${dir.reports}/codesniffer-summary.xml"/>
+            <formatter type="checkstyle" outfile="/Users/caseydk/workspace/web2project/${dir.reports}/codesniffer.xml"/>
+            <formatter type="summary" outfile="/Users/caseydk/workspace/web2project/${dir.reports}/codesniffer-summary.xml"/>
         </phpcodesniffer>
     </target>
 
