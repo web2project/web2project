@@ -63,6 +63,7 @@ class CFile extends w2p_Core_BaseObject {
             $this->addHelpDeskTaskLog();
         }
         $this->file_parent = (int) $this->file_parent;
+        $this->file_owner = (int) $this->file_owner ? $this->file_owner : $this->_AppUI->user_id;
 
         parent::hook_preStore();
     }

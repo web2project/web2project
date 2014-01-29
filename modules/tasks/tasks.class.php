@@ -185,9 +185,6 @@ class CTask extends w2p_Core_BaseObject
                 $this->task_start_date = $this->task_end_date;
             }
         }
-        if (!$this->task_creator) {
-            $this->task_creator = $this->_AppUI->user_id;
-        }
         if (!$this->task_duration_type) {
             $this->task_duration_type = 1;
         }
@@ -769,7 +766,8 @@ class CTask extends w2p_Core_BaseObject
         $q = $this->_getQuery();
         $this->task_updated = $q->dbfnNowWithTZ();
         $this->task_target_budget = filterCurrency($this->task_target_budget);
-        $this->task_owner = ($this->task_owner) ? $this->task_owner : $this->_AppUI->user_id;
+        $this->task_owner = (int) $this->task_owner ? $this->task_owner : $this->_AppUI->user_id;
+        $this->task_creator = (int) $this->task_creator ? $this->task_creator : $this->_AppUI->user_id;
         $this->task_contacts = is_array($this->task_contacts) ? $this->task_contacts : explode(',', $this->task_contacts);
 
         parent::hook_preStore();

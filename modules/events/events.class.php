@@ -483,6 +483,7 @@ class CEvent extends w2p_Core_BaseObject
         $this->event_start_date = $this->_AppUI->convertToSystemTZ($this->event_start_date);
         $this->event_end_date = $this->_AppUI->convertToSystemTZ($this->event_end_date);
         $this->event_creator = (int) $this->event_creator ? $this->event_creator : $this->_AppUI->user_id;
+        $this->event_owner = (int) $this->event_owner ? $this->event_owner : $this->_AppUI->user_id;
 
         $q = $this->_getQuery();
         $this->event_updated = $q->dbfnNowWithTZ();

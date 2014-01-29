@@ -51,9 +51,6 @@ class CCompany extends w2p_Core_BaseObject {
         if ('' == trim($this->company_name)) {
             $this->_error['company_name'] = $baseErrorMsg . 'company name is not set';
         }
-        if ((int) $this->company_owner == 0) {
-            $this->_error['company_owner'] = $baseErrorMsg . 'company owner is not set';
-        }
 
         return (count($this->_error)) ? false : true;
     }
@@ -70,6 +67,7 @@ class CCompany extends w2p_Core_BaseObject {
 
     protected function hook_preStore() {
         $this->company_id = (int) $this->company_id;
+        $this->company_owner = (int) $this->company_owner ? $this->company_owner : $this->_AppUI->user_id;
         $this->company_primary_url = str_replace(array('"', '"', '<', '>'), '', $this->company_primary_url);
 
         parent::hook_preStore();

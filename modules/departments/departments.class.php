@@ -123,9 +123,6 @@ class CDepartment extends w2p_Core_BaseObject
         if (0 != $this->dept_id && $this->dept_id == $this->dept_parent) {
             $this->_error['parentError'] = $baseErrorMsg . 'a department cannot be its own parent';
         }
-        if (0 == (int) $this->dept_owner) {
-            $this->_error['dept_owner'] = $baseErrorMsg . 'department owner is not set';
-        }
 
         return (count($this->_error)) ? false : true;
     }
@@ -332,6 +329,7 @@ class CDepartment extends w2p_Core_BaseObject
 
     protected function hook_preStore()
     {
+        $this->dept_owner = (int) $this->dept_owner ? $this->dept_owner : $this->_AppUI->user_id;
         $this->dept_url = str_replace(array('"', '"', '<', '>'), '', $this->dept_url);
     }
 
