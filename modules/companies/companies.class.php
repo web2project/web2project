@@ -250,15 +250,17 @@ class CCompany extends w2p_Core_BaseObject {
     /**
      * @deprecated
      */
-    public static function getContacts(w2p_Core_CAppUI $AppUI, $companyId)
+    public static function getContacts($notUsed, $companyId)
     {
+        trigger_error("The CCompany::getContacts static method has been deprecated in 3.1 and will be removed in v4.0. Please use CCompany->contacts() instead.", E_USER_NOTICE );
+
         $company = new CCompany();
         return $company->contacts($companyId);
     }
     /**
      * @deprecated
      */
-    public static function getUsers(w2p_Core_CAppUI $AppUI, $companyId) {
+    public static function getUsers($notUsed, $companyId) {
         trigger_error("The CCompany::getUsers static method has been deprecated in 3.1 and will be removed in v4.0. Please use CCompany->users() instead.", E_USER_NOTICE );
 
         $company = new CCompany();
@@ -267,7 +269,7 @@ class CCompany extends w2p_Core_BaseObject {
     /**
      * @deprecated
      */
-	public static function getDepartments(w2p_Core_CAppUI $AppUI, $companyId)
+	public static function getDepartments($notUsed, $companyId)
     {
         trigger_error("The CCompany::getDepartments static method has been deprecated in 3.1 and will be removed in v4.0. Please use CCompany->departments() instead.", E_USER_NOTICE );
 
