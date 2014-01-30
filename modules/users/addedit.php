@@ -191,10 +191,6 @@ if (!$user && $user_id > 0) {
                     <input type="text" class="text" name="dept_name" value="<?php echo $user['dept_name']; ?>" size="40" disabled="disabled" />
                     <input type="button" class="button btn btn-primary btn-mini" value="<?php echo $AppUI->_('select dept'); ?>..." onclick="popDept()" />
                 </p>
-                <p>
-                    <label>asdfasdfas</label>
-                    adsfasdfasd
-                </p>
                 <p><input type="button" value="<?php echo $AppUI->_('back'); ?>" onclick="javascript:history.back(-1);" class="cancel button btn btn-danger" /></p>
             </div>
             <div class="column right">
