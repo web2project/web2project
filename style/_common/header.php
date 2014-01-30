@@ -63,8 +63,8 @@ $theme = $AppUI->getTheme();
                         $newItem = array('' => '- New Item -');
 
                         $items = array('companies' => 'Company', 'projects' => 'Project',
-                            'contacts' => 'Contact', 'calendar' => 'Events', 'files' => 'File',
-                            'admin' => 'User');
+                            'contacts' => 'Contact', 'events' => 'Events', 'files' => 'File',
+                            'users' => 'User');
                         foreach ($items as $module => $name) {
                             if (canAdd($module)) {
                                 $newItem[$module] = $name;
