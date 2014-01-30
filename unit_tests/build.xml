@@ -178,7 +178,7 @@
     <target name="phpmd" depends="prepare">
         <phpmd>
             <fileset refid="project.source" />
-            <formatter type="html" outfile="${dir.reports}/pmd.html"/>
+            <formatter type="xml" outfile="${dir.reports}/pmd.xml"/>
         </phpmd>
     </target>
 
@@ -186,6 +186,9 @@
         <phpdepend>
             <fileset refid="project.source" />
             <logger type="jdepend-xml" outfile="${dir.reports}/jdepend.xml"/>
+            <logger type="summary-xml" outfile="${dir.reports}/jdepend-summary.xml"/>
+            <logger type="jdepend-chart" outfile="${dir.reports}/dependencies.svg"/>
+            <logger type="overview-pyramid" outfile="${dir.reports}/overview-pyramid.svg"/>
             <analyzer type="coderank-mode" value="method"/>
         </phpdepend>
     </target>
