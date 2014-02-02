@@ -216,6 +216,6 @@
     </target>
 
     <target name="phpdoc" depends="prepare">
-        <exec command="phpdoc -d classes,includes,modules,styles -t ${dir.reports}/docs" />
+        <exec command="phpdoc -d classes,includes,modules,styles -t ${dir.reports}/docs --template=responsive-twig" />
     </target>
 </project>
