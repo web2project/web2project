@@ -698,3 +698,7 @@ input.state, input.zip {
 .files label {
     width: 24em;
 }
+
+input.button {
+    text-transform: capitalize;
+}
