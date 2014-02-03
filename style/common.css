@@ -691,6 +691,10 @@ input.state, input.zip {
     width: 50px;
 }
 
+.projects label {
+    width: 12em;
+}
+
 .tasks-depends label, .tasks-resources label, .users label {
     width: 18em;
 }

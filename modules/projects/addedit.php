@@ -293,7 +293,8 @@ $form = new w2p_Output_HTML_FormHelper($AppUI);
                 <?php echo $w2Pconfig['currency_symbol'] ?> <?php echo formatCurrency($totalBudget, $AppUI->getPref('CURRENCYFORM')); ?>
             </p>
             <p>
-                <label><?php echo $AppUI->_('Actual Budget'); ?> <?php echo $w2Pconfig['currency_symbol'] ?></label>
+                <label><?php echo $AppUI->_('Actual Budget'); ?></label>
+                <?php echo $w2Pconfig['currency_symbol'] ?>
                 <?php
                 if ($project_id > 0) {
                     echo $w2Pconfig['currency_symbol'] . '&nbsp;' . formatCurrency($project->project_actual_budget, $AppUI->getPref('CURRENCYFORM'));
