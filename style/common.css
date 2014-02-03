@@ -703,6 +703,6 @@ input.state, input.zip {
     width: 24em;
 }
 
-input.button {
+input.button, a div {
     text-transform: capitalize;
 }
