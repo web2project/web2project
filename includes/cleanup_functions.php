@@ -3793,7 +3793,7 @@ function HM2seconds($HM)
  */
 function w2PgetTimezonesForInstall()
 {
-    $file = W2P_BASE_DIR . '/install/sql/mysql/018_add_timezones.sql';
+    $file = W2P_BASE_DIR . '/install/sql/018_add_timezones.sql';
 
     $timezones = array();
 
