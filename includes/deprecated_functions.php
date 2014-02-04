@@ -377,7 +377,7 @@ if (!function_exists('styleRenderBoxTop')) {
     /**
      * @deprecated
      */
-    public function styleRenderBoxTop()
+    function styleRenderBoxTop()
     {
         trigger_error("styleRenderBoxTop() has been deprecated in v3.1 and will be removed by v5.0. Use AppUI->getTheme()->styleRenderBoxTop instead.", E_USER_NOTICE);
 
@@ -390,7 +390,7 @@ if (!function_exists('styleRenderBoxBottom')) {
     /**
      * @deprecated
      */
-    public function styleRenderBoxBottom()
+    function styleRenderBoxBottom()
     {
         trigger_error("styleRenderBoxBottom() has been deprecated in v3.1 and will be removed by v5.0. Use AppUI->getTheme()->styleRenderBoxBottom instead.", E_USER_NOTICE);
 
