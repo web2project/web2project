@@ -35,6 +35,7 @@ class CTasks_Test extends PHPUnit_Extensions_Database_TestCase
                        w2PgetConfig('dbhost') . ';dbname=' .
                        w2PgetConfig('dbname'),
                        w2PgetConfig('dbuser'), w2PgetConfig('dbpass'));
+
         return $this->createDefaultDBConnection($pdo, w2PgetConfig('dbname'));
     }
 
@@ -105,12 +106,13 @@ class CTasks_Test extends PHPUnit_Extensions_Database_TestCase
      *   database directly. So we have to do it manually post-dataload but
      *   pre-testing.
      */
-    protected function _preCalcData() {
+    protected function _preCalcData()
+    {
         $taskList = $this->obj->getAllowedTaskList(null, 1);
         foreach ($taskList as $item) {
             $tmpTask = new CTask();
             $tmpTask->load($item['task_id']);
-            if($tmpTask->task_dynamic == 1) {
+            if ($tmpTask->task_dynamic == 1) {
                 $tmpTask->updateDynamics(true);
                 $tmpTask->store();
             }
@@ -1092,7 +1094,7 @@ class CTasks_Test extends PHPUnit_Extensions_Database_TestCase
         $results = $q->loadList();
 
         global $AppUI;
-        foreach($results as $dates) {
+        foreach ($results as $dates) {
             $task_created = $AppUI->formatTZAwareTime($dates['task_created'], '%Y-%m-%d %T');
             $task_created = strtotime($task_created);
             $this->assertGreaterThanOrEqual($min_time, $task_created);
@@ -1134,7 +1136,7 @@ class CTasks_Test extends PHPUnit_Extensions_Database_TestCase
         $results = $q->loadList();
 
         global $AppUI;
-        foreach($results as $dates) {
+        foreach ($results as $dates) {
             $task_created = $AppUI->formatTZAwareTime($dates['task_created'], '%Y-%m-%d %T');
             $task_created = strtotime($task_created);
             $this->assertGreaterThanOrEqual($min_time, $task_created);
@@ -1176,7 +1178,7 @@ class CTasks_Test extends PHPUnit_Extensions_Database_TestCase
         $results = $q->loadList();
 
         global $AppUI;
-        foreach($results as $dates) {
+        foreach ($results as $dates) {
             $task_created = $AppUI->formatTZAwareTime($dates['task_created'], '%Y-%m-%d %T');
             $task_created = strtotime($task_created);
             $this->assertGreaterThanOrEqual($min_time, $task_created);
@@ -1296,7 +1298,6 @@ class CTasks_Test extends PHPUnit_Extensions_Database_TestCase
 
         $this->obj->bind($this->post_data);
         $this->obj->store();
-
 
         $xml_file_dataset = $this->createXMLDataSet($this->getDataSetPath().'tasksTestStoreShiftDependentTasks.xml');
         $xml_file_filtered_dataset = new PHPUnit_Extensions_Database_DataSet_DataSetFilter($xml_file_dataset, array('tasks' => array('task_updated')));
@@ -1444,7 +1445,7 @@ class CTasks_Test extends PHPUnit_Extensions_Database_TestCase
         $children = $this->obj->getDeepChildren();
         $this->obj->delete();
 
-        foreach($children as $child) {
+        foreach ($children as $child) {
             $this->assertFalse($this->obj->load($child));
             $this->assertEquals(0, count($this->obj->getAssignedUsers($child)));
             $this->assertEquals(0, count($this->obj->getTaskLogs($child)));
@@ -1752,7 +1753,6 @@ class CTasks_Test extends PHPUnit_Extensions_Database_TestCase
         $_POST['login'] = 'login';
         $_REQUEST['login'] = 'sql';
 
-
         // public access
         $result = @$this->obj->canAccess(2);
         $this->assertTrue($result);
@@ -1850,9 +1850,8 @@ class CTasks_Test extends PHPUnit_Extensions_Database_TestCase
 
         $results = $q->loadList();
 
-
         global $AppUI;
-        foreach($results as $dates) {
+        foreach ($results as $dates) {
             $task_updated = $AppUI->formatTZAwareTime($dates['task_updated'], '%Y-%m-%d %T');
             $task_updated = strtotime($task_updated);
             $this->assertGreaterThanOrEqual($min_time, $task_updated);
@@ -1897,7 +1896,7 @@ class CTasks_Test extends PHPUnit_Extensions_Database_TestCase
         $results = $q->loadList();
 
         global $AppUI;
-        foreach($results as $dates) {
+        foreach ($results as $dates) {
             $task_updated = $AppUI->formatTZAwareTime($dates['task_updated'], '%Y-%m-%d %T');
             $task_updated = strtotime($task_updated);
             $this->assertGreaterThanOrEqual($min_time, $task_updated);
@@ -1979,7 +1978,6 @@ class CTasks_Test extends PHPUnit_Extensions_Database_TestCase
         $xml_file_dataset = $this->createXMLDataSet($this->getDataSetPath().'tasksTestUpdateAssigned.xml');
         $xml_db_dataset = $this->getConnection()->createDataSet();
         $this->assertTablesEqual($xml_file_dataset->getTable('user_tasks'), $xml_db_dataset->getTable('user_tasks'));
-
 
         $w2Pconfig['check_overallocation'] = $old_config;
      }
@@ -2621,7 +2619,7 @@ class CTasks_Test extends PHPUnit_Extensions_Database_TestCase
         $q->addWhere('queue_id = 2');
         $results = $q->loadColumn();
 
-        foreach($results as $queue_start) {
+        foreach ($results as $queue_start) {
             $this->assertGreaterThanOrEqual($min_time, $queue_start);
             $this->assertLessThanOrEqual($now_secs, $queue_start);
         }

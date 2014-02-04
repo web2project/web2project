@@ -378,7 +378,8 @@ class CCompanies_Test extends CommonSetup
     /**
      * @todo Implement testCanDelete().
      */
-    public function testCanDelete() {
+    public function testCanDelete()
+    {
         // Remove the following lines when you implement this test.
         $this->markTestIncomplete(
                 'This test has not been implemented yet.'
@@ -388,15 +389,16 @@ class CCompanies_Test extends CommonSetup
     /**
      * @todo Implement testGetCompanyList().
      */
-    public function testGetCompanyList() {
+    public function testGetCompanyList()
+    {
         // Remove the following lines when you implement this test.
         $this->markTestIncomplete(
                 'This test has not been implemented yet.'
         );
     }
 
-    public function testGetCompanies() {
-
+    public function testGetCompanies()
+    {
         $results = $this->obj->getCompanies();
         $this->assertEquals(0,                  count($results));
 
@@ -412,7 +414,8 @@ class CCompanies_Test extends CommonSetup
     /**
      * @todo Implement testGetProjects().
      */
-    public function testGetProjects() {
+    public function testGetProjects()
+    {
         // Remove the following lines when you implement this test.
         $this->markTestIncomplete(
                 'This test has not been implemented yet.'
@@ -422,7 +425,8 @@ class CCompanies_Test extends CommonSetup
     /**
      * @todo Implement testGetContacts().
      */
-    public function testGetContacts() {
+    public function testGetContacts()
+    {
         // Remove the following lines when you implement this test.
         $this->markTestIncomplete(
                 'This test has not been implemented yet.'
@@ -432,7 +436,8 @@ class CCompanies_Test extends CommonSetup
     /**
      * @todo Implement testGetUsers().
      */
-    public function testGetUsers() {
+    public function testGetUsers()
+    {
         // Remove the following lines when you implement this test.
         $this->markTestIncomplete(
                 'This test has not been implemented yet.'
@@ -442,7 +447,8 @@ class CCompanies_Test extends CommonSetup
     /**
      * @todo Implement testGetDepartments().
      */
-    public function testGetDepartments() {
+    public function testGetDepartments()
+    {
         // Remove the following lines when you implement this test.
         $this->markTestIncomplete(
                 'This test has not been implemented yet.'

@@ -25,7 +25,7 @@ include_once 'unit_tests/CommonSetup.php';
 class CTaskLogs_Test extends CommonSetup
 {
 
-    protected function setUp ()
+    protected function setUp()
     {
         parent::setUp();
 
@@ -77,7 +77,7 @@ class CTaskLogs_Test extends CommonSetup
         /*
          *  These fields are formatted by the CTask_Log->store method.
          */
-        
+
         $this->assertEquals('2010-05-30 09:15:30',        $this->obj->task_log_date);
         $this->assertEquals(2.75,                         $this->obj->task_log_hours);
         /*
@@ -167,7 +167,7 @@ class CTaskLogs_Test extends CommonSetup
          */
         $vars = get_object_vars($this->obj);
 
-        foreach( $vars as $var_name => $var_value) {
+        foreach ($vars as $var_name => $var_value) {
             if (!is_object($var_value)) {
                 $this->obj->$var_name = " \t\n" . $var_value . "\r\0\x0B";
             }

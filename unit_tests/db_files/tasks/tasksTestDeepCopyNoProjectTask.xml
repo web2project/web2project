@@ -2,7 +2,7 @@
 <!-- testDeepCopyNoProjectNoTask - Dataset to compare against after a deep copy. -->
 <dataset>
     <table name="tasks">
-        <column>task_id</column> 
+        <column>task_id</column>
         <column>task_name</column>
         <column>task_parent</column>
         <column>task_milestone</column>

@@ -25,7 +25,7 @@ include_once 'unit_tests/CommonSetup.php';
 
 class CProjects_Test extends CommonSetup
 {
-    protected function setUp ()
+    protected function setUp()
     {
         parent::setUp();
 
@@ -463,7 +463,7 @@ $this->obj->overrideDatabase($this->mockDB);
         $results = $q->loadColumn();
 
         global $AppUI;
-        foreach($results as $created) {
+        foreach ($results as $created) {
             $created = strtotime($AppUI->formatTZAwareTime($created, '%Y-%m-%d %T'));
             $this->assertGreaterThanOrEqual($created, $now_secs);
             $this->assertLessThanOrEqual($created, $min_time);
@@ -478,7 +478,7 @@ $this->obj->overrideDatabase($this->mockDB);
         $q->addWhere('task_project = 4');
         $results = $q->loadColumn();
 
-        foreach($results as $updated) {
+        foreach ($results as $updated) {
             $updated = strtotime($AppUI->formatTZAwareTime($updated, '%Y-%m-%d %T'));
             $this->assertGreaterThanOrEqual($min_time, $updated);
             $this->assertLessThanOrEqual($now_secs, $updated);
@@ -505,7 +505,7 @@ $this->obj->overrideDatabase($this->mockDB);
     public function testGetAllowedRecordsWithWhere()
     {
         $this->mockDB->stageHashList(1, 'Test Project');
-        
+
         $extra = array('where' => 'project_active = 1');
         $allowed_records = $this->obj->getAllowedRecords(1, 'projects.project_id,project_name', null, null, $extra);
 
@@ -596,7 +596,7 @@ $this->obj->overrideDatabase($this->mockDB);
                     'task_end_date' => '2009-07-15 00:00:00',
                     'task_created' => '2009-07-05 15:43:00', 'task_updated' => '2009-07-05 15:43:00')
         );
-        
+
         $this->obj->load(1);
 
         $critical_tasks = $this->obj->getCriticalTasks();

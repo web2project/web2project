@@ -131,12 +131,14 @@ function w2p_old_autoload($class_name)
             $path = implode('/', $plural_pieces);
             if (file_exists(W2P_BASE_DIR . '/modules/' . $path . '.class.php')) {
                 require_once W2P_BASE_DIR . '/modules/' . $path . '.class.php';
+
                 return;
             }
 
             $path = implode('/', $pieces);
             if (file_exists(W2P_BASE_DIR . '/modules/' . $path . '.class.php')) {
                 require_once W2P_BASE_DIR . '/modules/' . $path . '.class.php';
+
                 return;
             }
 
@@ -162,6 +164,7 @@ function arrayMerge($a1, $a2)
     foreach ($a2 as $k => $v) {
         $a1[$k] = $v;
     }
+
     return $a1;
 }
 
@@ -270,6 +273,7 @@ function w2PgetCleanParam(&$arr, $name, $def = null)
             }
         }
     }
+
     return $val;
 }
 
@@ -300,14 +304,15 @@ function filterCurrency($number)
     return $number;
 }
 
-function w2pFindTaskComplete($start_date, $end_date, $percent) {
+function w2pFindTaskComplete($start_date, $end_date, $percent)
+{
     $start = strtotime($start_date);
     $end   = strtotime($end_date);
     $now   = time();
 
     if ($percent >= 100) { return 'done'; }
-    if ($now < $start)   { return ''; }
-    if ($now > $end)     { return 'late'; }
+    if ($now < $start) { return ''; }
+    if ($now > $end) { return 'late'; }
     if ($now > $start && $percent > 0) { return 'active'; }
     if ($now > $start && $percent == 0) { return 'notstarted'; }
 }
@@ -331,6 +336,7 @@ function w2p_url($link, $text = '')
         $text = ('' != $text) ? $text : $link;
         $result = '<a href="' . $link . '" target="_new">' . $text . '</a>';
     }
+
     return $result;
 }
 
@@ -342,6 +348,7 @@ function w2p_email($email, $name = '')
         $name = ('' != $name) ? $name : $email;
         $result = '<a href="mailto:' . $email . '">' . $name . '</a>';
     }
+
     return $result;
 }
 
@@ -372,30 +379,31 @@ function w2p_textarea($content)
     return $result;
 }
 
-function notifyNewExternalUser($emailAddress, $username, $logname, 
+function notifyNewExternalUser($emailAddress, $username, $logname,
         $logpwd, $emailUtility = null) {
 
     global $AppUI;
-	$mail = (!is_null($emailUtility)) ? $emailUtility : new w2p_Utilities_Mail();
-	if ($mail->ValidEmail($emailAddress)) {
-		$mail->To($emailAddress);
+    $mail = (!is_null($emailUtility)) ? $emailUtility : new w2p_Utilities_Mail();
+    if ($mail->ValidEmail($emailAddress)) {
+        $mail->To($emailAddress);
         $emailManager = new w2p_Output_EmailManager($AppUI);
         $body = $emailManager->notifyNewExternalUser($logname, $logpwd);
-		$mail->Subject('New Account Created');
+        $mail->Subject('New Account Created');
         $mail->Body($body);
-		$mail->Send();
-	}
+        $mail->Send();
+    }
 }
 
-function notifyNewUser($emailAddress, $username, $emailUtility = null) {
-	global $AppUI;
-	$mail = (!is_null($emailUtility)) ? $emailUtility : new w2p_Utilities_Mail();
-	if ($mail->ValidEmail($emailAddress)) {
-		$mail->To($emailAddress);
+function notifyNewUser($emailAddress, $username, $emailUtility = null)
+{
+    global $AppUI;
+    $mail = (!is_null($emailUtility)) ? $emailUtility : new w2p_Utilities_Mail();
+    if ($mail->ValidEmail($emailAddress)) {
+        $mail->To($emailAddress);
         $emailManager = new w2p_Output_EmailManager($AppUI);
         $body = $emailManager->getNotifyNewUser($username);
         $mail->Subject('New Account Created');
-		$mail->Body($body);
-		$mail->Send();
-	}
+        $mail->Body($body);
+        $mail->Send();
+    }
 }

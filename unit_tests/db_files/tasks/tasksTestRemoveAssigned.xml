@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!-- tasksTestRemoveAssigned.xml - Data for testing against after removing assigned user. -->
-<dataset>    
+<dataset>
     <table name="user_tasks">
         <column>user_id</column>
         <column>user_type</column>
@@ -43,4 +43,4 @@
             <value>72</value>
         </row>
     </table>
-</dataset>    
+</dataset>

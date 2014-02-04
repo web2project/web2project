@@ -136,7 +136,7 @@
 <!-- git log -since=8/17/2011 > changelog -->
         <delete dir="${dir.package}/${phing.project.name}" />
         <delete dir="${dir.package}/${phing.project.name}-${releaseName}/unit_tests" />
-        
+
         <phplint haltonfailure="true">
             <fileset dir="${dir.package}/${phing.project.name}-${releaseName}">
                 <include name="**/*.php" />

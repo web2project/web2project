@@ -26,7 +26,7 @@ class Main_Functions_Test extends PHPUnit_Framework_TestCase
 {
     public function testW2PgetParam()
     {
-        $params = array('m' => 'projects', 'a' => 'view', 'v' => '<script>alert</script>', 
+        $params = array('m' => 'projects', 'a' => 'view', 'v' => '<script>alert</script>',
                 'html' => '<div onclick="doSomething()">asdf</div>', '<script>' => 'Something Nasty');
 
         $this->assertEquals('projects', w2PgetParam($params, 'm'));
@@ -36,13 +36,13 @@ class Main_Functions_Test extends PHPUnit_Framework_TestCase
         $this->assertEquals('Some Default', w2PgetParam($params, 'NotGonnaBeThere', 'Some Default'));
 
         //$this->markTestIncomplete("Currently w2PgetParam redirects for tainted names.. what do we do there?");
-        
+
         //$this->markTestIncomplete("Currently w2PgetParam redirects for tainted values.. what do we do there?");
     }
-    
+
     public function testW2PgetCleanParam()
     {
-        $params = array('m' => 'projects', 'a' => 'view', 'v' => '<script>alert</script>', 
+        $params = array('m' => 'projects', 'a' => 'view', 'v' => '<script>alert</script>',
                 'html' => '<div onclick="doSomething()">asdf</div>', '<script>' => 'Something Nasty');
 
         $this->assertEquals('projects', w2PgetCleanParam($params, 'm'));
@@ -91,8 +91,8 @@ class Main_Functions_Test extends PHPUnit_Framework_TestCase
     }
 
     public function testConvert2days()
-    {        
-        $hours = 1;        
+    {
+        $hours = 1;
         $this->assertEquals(0.125, convert2days($hours, 0));
 
         $hoursIndicator = 1;
@@ -103,7 +103,7 @@ class Main_Functions_Test extends PHPUnit_Framework_TestCase
         $days = 1;
         $this->assertEquals(1, convert2days($days, $dayIndicator));
     }
-  
+
     public function test__autoload()
     {
         $this->assertTrue(class_exists('CProject'));
@@ -185,7 +185,8 @@ class Main_Functions_Test extends PHPUnit_Framework_TestCase
         $this->assertEquals($target, $linkText);
     }
 
-    public function test_w2p_pluralize() {
+    public function test_w2p_pluralize()
+    {
         $this->assertEquals('projects',  w2p_pluralize('project'));
         $this->assertEquals('links',     w2p_pluralize('link'));
         $this->assertEquals('companies', w2p_pluralize('company'));
@@ -193,13 +194,15 @@ class Main_Functions_Test extends PHPUnit_Framework_TestCase
         $this->assertEquals('todos',     w2p_pluralize('todo'));
     }
 
-    public function test_w2Psgn() {
+    public function test_w2Psgn()
+    {
         $this->assertEquals(-1, w2Psgn(-56.2));
         $this->assertEquals( 0, w2Psgn(0));
         $this->assertEquals( 1, w2Psgn(0.01));
     }
 
-    public function test_w2pFindTaskComplete() {
+    public function test_w2pFindTaskComplete()
+    {
         $empty   = null;    //we don't care what this value is
         $past    = date('Y-m-d', strtotime('-1 week'));
         $future  = date('Y-m-d', strtotime('+1 week'));
@@ -210,8 +213,9 @@ class Main_Functions_Test extends PHPUnit_Framework_TestCase
         $this->assertEquals('notstarted', w2pFindTaskComplete($past,   $future, 0));
         $this->assertEquals('late',       w2pFindTaskComplete($past,   $empty,  0));
     }
-    
-    public function test_notifyNewExternalUser() {
+
+    public function test_notifyNewExternalUser()
+    {
         // This is for phpUnit 3.6+
         $emailUtility = $this->getMock('w2p_Utilities_Mail', array('Send', 'Body', 'Subject'));
         $emailUtility->expects($this->once())
@@ -226,7 +230,8 @@ class Main_Functions_Test extends PHPUnit_Framework_TestCase
         notifyNewExternalUser('test@test.com', 'username', 'logname', 'logpwd', $emailUtility);
     }
 
-    public function test_notifyNewUser() {
+    public function test_notifyNewUser()
+    {
         // This is for phpUnit 3.6+
         $emailUtility = $this->getMock('w2p_Utilities_Mail', array('Send', 'Body', 'Subject'));
         $emailUtility->expects($this->once())
@@ -237,7 +242,7 @@ class Main_Functions_Test extends PHPUnit_Framework_TestCase
                      ->with($this->stringContains('username'));
         $emailUtility->expects($this->once())
                      ->method('Send');
-        
+
         notifyNewUser('test@test.com', 'username', $emailUtility);
     }
 }

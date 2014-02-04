@@ -205,7 +205,8 @@ class CDepartments_Test extends CommonSetup
     /**
      * @todo Implement testLoadFull().
      */
-    public function testLoadFull() {
+    public function testLoadFull()
+    {
         // Remove the following lines when you implement this test.
         $this->markTestIncomplete(
                 'This test has not been implemented yet.'
@@ -215,7 +216,8 @@ class CDepartments_Test extends CommonSetup
     /**
      * @todo Implement testLoadOtherDepts().
      */
-    public function testLoadOtherDepts() {
+    public function testLoadOtherDepts()
+    {
         // Remove the following lines when you implement this test.
         $this->markTestIncomplete(
                 'This test has not been implemented yet.'
@@ -225,7 +227,8 @@ class CDepartments_Test extends CommonSetup
     /**
      * @todo Implement testGetFilteredDepartmentList().
      */
-    public function testGetFilteredDepartmentList() {
+    public function testGetFilteredDepartmentList()
+    {
         // Remove the following lines when you implement this test.
         $this->markTestIncomplete(
                 'This test has not been implemented yet.'
@@ -235,7 +238,8 @@ class CDepartments_Test extends CommonSetup
     /**
      * @todo Implement testCheck().
      */
-    public function testCheck() {
+    public function testCheck()
+    {
         // Remove the following lines when you implement this test.
         $this->markTestIncomplete(
                 'This test has not been implemented yet.'
@@ -245,7 +249,8 @@ class CDepartments_Test extends CommonSetup
     /**
      * @todo Implement testGetAllowedRecords().
      */
-    public function testGetAllowedRecords() {
+    public function testGetAllowedRecords()
+    {
         // Remove the following lines when you implement this test.
         $this->markTestIncomplete(
                 'This test has not been implemented yet.'
@@ -255,7 +260,8 @@ class CDepartments_Test extends CommonSetup
     /**
      * @todo Implement testGetAllowedSQL().
      */
-    public function testGetAllowedSQL() {
+    public function testGetAllowedSQL()
+    {
         // Remove the following lines when you implement this test.
         $this->markTestIncomplete(
                 'This test has not been implemented yet.'
@@ -265,7 +271,8 @@ class CDepartments_Test extends CommonSetup
     /**
      * @todo Implement testSetAllowedSQL().
      */
-    public function testSetAllowedSQL() {
+    public function testSetAllowedSQL()
+    {
         // Remove the following lines when you implement this test.
         $this->markTestIncomplete(
                 'This test has not been implemented yet.'
@@ -275,7 +282,8 @@ class CDepartments_Test extends CommonSetup
     /**
      * @todo Implement testGetDepartmentList().
      */
-    public function testGetDepartmentList() {
+    public function testGetDepartmentList()
+    {
         // Remove the following lines when you implement this test.
         $this->markTestIncomplete(
                 'This test has not been implemented yet.'
@@ -285,7 +293,8 @@ class CDepartments_Test extends CommonSetup
     /**
      * @todo Implement testGetContactList().
      */
-    public function testGetContactList() {
+    public function testGetContactList()
+    {
         // Remove the following lines when you implement this test.
         $this->markTestIncomplete(
                 'This test has not been implemented yet.'
@@ -295,7 +304,8 @@ class CDepartments_Test extends CommonSetup
     /**
      * @todo Implement testHook_search().
      */
-    public function testHook_search() {
+    public function testHook_search()
+    {
         // Remove the following lines when you implement this test.
         $this->markTestIncomplete(
                 'This test has not been implemented yet.'

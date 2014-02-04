@@ -33,7 +33,8 @@ class w2p_Mocks_QueryTest extends CommonSetup
         parent::setUp();
     }
 
-    public function testLoadHash() {
+    public function testLoadHash()
+    {
         $hash1 = array('key1' => 'value1', 'key2' => 'value2');
         $hash2 = array('key3' => 'value3', 'key4' => 'value4');
 
@@ -45,7 +46,8 @@ class w2p_Mocks_QueryTest extends CommonSetup
         $this->assertNull($this->mockDB->loadHash());
     }
 
-    public function testLoadResult() {
+    public function testLoadResult()
+    {
         $this->mockDB->stageResult('value1');
         $this->assertEquals('value1', $this->mockDB->loadResult());
 
@@ -56,7 +58,8 @@ class w2p_Mocks_QueryTest extends CommonSetup
         $this->assertNotEquals('value2', $this->mockDB->loadResult());
     }
 
-    public function testLoadList() {
+    public function testLoadList()
+    {
         $this->mockDB->stageList(array('key1' => 'value1', 'key2' => 'value2'));
         $this->mockDB->stageList(array('key3' => 'value3', 'key4' => 'value4'));
         $this->assertEquals(2, count($this->mockDB->loadList()));
@@ -68,7 +71,8 @@ class w2p_Mocks_QueryTest extends CommonSetup
         $this->assertEquals('value4', $list[1]['key4']);
     }
 
-    public function testLoadHashList() {
+    public function testLoadHashList()
+    {
         $this->mockDB->stageHashList(1, array('key1' => 'value1', 'key2' => 'value2'));
         $this->mockDB->stageHashList(5, array('key3' => 'value3', 'key4' => 'value4'));
         $this->assertEquals(2, count($this->mockDB->loadHashList()));

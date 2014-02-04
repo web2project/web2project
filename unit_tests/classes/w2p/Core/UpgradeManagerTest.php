@@ -104,7 +104,7 @@ class w2p_Core_UpgradeManagerTest extends CommonSetup
                 $this->assertEquals(0, count($errors));
 
                 $updates = $this->obj->getUpdatesApplied();
-                $this->assertGreaterThanOrEqual(0, count($updates));                
+                $this->assertGreaterThanOrEqual(0, count($updates));
                 break;
 
             default:
@@ -115,7 +115,8 @@ class w2p_Core_UpgradeManagerTest extends CommonSetup
     /**
      * @todo Implement testGetActionRequired().
      */
-    public function testGetActionRequired() {
+    public function testGetActionRequired()
+    {
         // Remove the following lines when you implement this test.
         $this->markTestIncomplete(
                 'This test has not been implemented yet.'
@@ -125,7 +126,8 @@ class w2p_Core_UpgradeManagerTest extends CommonSetup
     /**
      * @todo Implement testGetConfigDir().
      */
-    public function testGetConfigDir() {
+    public function testGetConfigDir()
+    {
         // Remove the following lines when you implement this test.
         $this->markTestIncomplete(
                 'This test has not been implemented yet.'
@@ -135,7 +137,8 @@ class w2p_Core_UpgradeManagerTest extends CommonSetup
     /**
      * @todo Implement testGetConfigFile().
      */
-    public function testGetConfigFile() {
+    public function testGetConfigFile()
+    {
         // Remove the following lines when you implement this test.
         $this->markTestIncomplete(
                 'This test has not been implemented yet.'
@@ -145,7 +148,8 @@ class w2p_Core_UpgradeManagerTest extends CommonSetup
     /**
      * @todo Implement testGetUploadDir().
      */
-    public function testGetUploadDir() {
+    public function testGetUploadDir()
+    {
         // Remove the following lines when you implement this test.
         $this->markTestIncomplete(
                 'This test has not been implemented yet.'
@@ -155,7 +159,8 @@ class w2p_Core_UpgradeManagerTest extends CommonSetup
     /**
      * @todo Implement testGetLanguageDir().
      */
-    public function testGetLanguageDir() {
+    public function testGetLanguageDir()
+    {
         // Remove the following lines when you implement this test.
         $this->markTestIncomplete(
                 'This test has not been implemented yet.'
@@ -165,7 +170,8 @@ class w2p_Core_UpgradeManagerTest extends CommonSetup
     /**
      * @todo Implement testGetTempDir().
      */
-    public function testGetTempDir() {
+    public function testGetTempDir()
+    {
         // Remove the following lines when you implement this test.
         $this->markTestIncomplete(
                 'This test has not been implemented yet.'
@@ -175,7 +181,8 @@ class w2p_Core_UpgradeManagerTest extends CommonSetup
     /**
      * @todo Implement testGetConfigOptions().
      */
-    public function testGetConfigOptions() {
+    public function testGetConfigOptions()
+    {
         // Remove the following lines when you implement this test.
         $this->markTestIncomplete(
                 'This test has not been implemented yet.'
@@ -185,7 +192,8 @@ class w2p_Core_UpgradeManagerTest extends CommonSetup
     /**
      * @todo Implement testUpgradeSystem().
      */
-    public function testUpgradeSystem() {
+    public function testUpgradeSystem()
+    {
         // Remove the following lines when you implement this test.
         $this->markTestIncomplete(
                 'This test has not been implemented yet.'
@@ -195,7 +203,8 @@ class w2p_Core_UpgradeManagerTest extends CommonSetup
     /**
      * @todo Implement testGetUpdatesApplied().
      */
-    public function testGetUpdatesApplied() {
+    public function testGetUpdatesApplied()
+    {
         // Remove the following lines when you implement this test.
         $this->markTestIncomplete(
                 'This test has not been implemented yet.'
@@ -205,7 +214,8 @@ class w2p_Core_UpgradeManagerTest extends CommonSetup
     /**
      * @todo Implement testConvertDotProject().
      */
-    public function testConvertDotProject() {
+    public function testConvertDotProject()
+    {
         // Remove the following lines when you implement this test.
         $this->markTestIncomplete(
                 'Not a clue how to test this one...'
@@ -215,7 +225,8 @@ class w2p_Core_UpgradeManagerTest extends CommonSetup
     /**
      * @todo Implement testTestDatabaseCredentials().
      */
-    public function testTestDatabaseCredentials() {
+    public function testTestDatabaseCredentials()
+    {
         // Remove the following lines when you implement this test.
         $this->markTestIncomplete(
                 'This test has not been implemented yet.'
@@ -225,7 +236,8 @@ class w2p_Core_UpgradeManagerTest extends CommonSetup
     /**
      * @todo Implement testUpgradeRequired().
      */
-    public function testUpgradeRequired() {
+    public function testUpgradeRequired()
+    {
         // Remove the following lines when you implement this test.
         $this->markTestIncomplete(
                 'This test has not been implemented yet.'
