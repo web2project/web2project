@@ -282,13 +282,7 @@ if (file_exists($module_file)) {
 	$titleBlock->show();
 
     echo $theme->styleRenderBoxTop();
-	echo '<table width="100%" cellspacing="0" cellpadding="3" border="0" class="std">';
-	echo '<tr>';
-	echo '	<td>';
-	echo $AppUI->_('Missing file. Possible Module "' . $m . '" missing!');
-	echo '	</td>';
-	echo '</tr>';
-	echo '</table>';
+    include $theme->resolveTemplate('missing_module');
 }
 if (!$suppressHeaders) {
 	echo '<iframe name="thread" src="' . W2P_BASE_URL . '/modules/index.html" width="0" height="0" frameborder="0"></iframe>';
