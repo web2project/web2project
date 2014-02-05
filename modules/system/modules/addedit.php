@@ -3,8 +3,8 @@ if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
 
-$mod_id = (int) w2PgetCleanParam($_GET, 'mod_id');
-$view   = w2PgetCleanParam($_GET, 'v');
+$mod_id = (int) w2PgetParam($_GET, 'mod_id');
+$view   = w2PgetParam($_GET, 'v');
 
 $module = new w2p_System_Module();
 $module->load($mod_id);

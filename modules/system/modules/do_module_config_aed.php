@@ -9,7 +9,7 @@ if (!$canEdit) {
 	$AppUI->redirect(ACCESS_DENIED);
 }
 
-$mod_id = (int) w2PgetCleanParam($_POST, 'mod_id');
+$mod_id = (int) w2PgetParam($_POST, 'mod_id');
 $module = new w2p_System_Module();
 $module->load($mod_id);
 
