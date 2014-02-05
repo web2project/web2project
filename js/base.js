@@ -861,3 +861,16 @@ AllByTag.show = function(tagName,dispType) {
 AllByTag.hide = function(tagName,dispType) {
   AllByTag.setStyleDisplay(tagName, 'none');
 };
+
+$(document).ready(function(){
+	$('input[type="checkbox"].check_all').change(function(){
+		var check_class=$(this).attr('check_class');
+		if (check_class){
+			if ($(this).prop("checked")){
+				$('.'+check_class).attr("checked","checked");
+			}else{
+				$('.'+check_class).removeAttr('checked');
+			}
+		}
+	})
+});
