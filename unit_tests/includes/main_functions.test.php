@@ -26,7 +26,8 @@ class Main_Functions_Test extends PHPUnit_Framework_TestCase
 	public function testW2PgetParam()
 	{
 		$params = array('m' => 'projects', 'a' => 'view', 'v' => '<script>alert</script>', 
-				'html' => '<div onclick="doSomething()">asdf</div>', '<script>' => 'Something Nasty');
+				'html' => '<div onclick="doSomething()">asdf</div>', '<script>' => 'Something Nasty',
+                'key' => array(1,2,3));
 
 		$this->assertEquals('projects', w2PgetParam($params, 'm'));
 
@@ -39,6 +40,10 @@ class Main_Functions_Test extends PHPUnit_Framework_TestCase
         $this->assertEquals('asdf', w2PgetParam($params, 'html'));
 
         $this->assertEquals('Some Default', w2PgetParam($params, '<script>', 'Some Default'));
+
+        $this->assertEquals(array(1,2,3), w2PgetParam($params, 'key', array()));
+
+        $this->assertEquals(array(), w2PgetParam($params, 'not-there', array()));
 	}
 
 	public function testArrayMerge()

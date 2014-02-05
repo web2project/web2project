@@ -4,11 +4,10 @@ if (!defined('W2P_BASE_DIR')) {
 }
 // @todo    refactor to use a core controller
 // @todo    remove database query
-
 global $AppUI;
 
 $project_id                          = w2PgetParam($_POST, 'project_id', 0);
-$selected                            = w2PgetParam($_POST, 'bulk_selected_task', 0);
+$selected                            = w2PgetParam($_POST, 'bulk_selected_task', array());
 $bulk_task_project                   = w2PgetParam($_POST, 'bulk_task_project', '');
 $bulk_task_parent                    = w2PgetParam($_POST, 'bulk_task_parent', '');
 $bulk_task_dependency                = w2PgetParam($_POST, 'bulk_task_dependency', '');
@@ -42,15 +41,9 @@ if ($bulk_task_end_date) {
 $bulk_move_date = (int) w2PgetParam($_POST, 'bulk_move_date', '0');
 $bulk_task_percent_complete = w2PgetParam($_POST, 'bulk_task_percent_complete', '');
 
-$perms = &$AppUI->acl();
 if (!canEdit('tasks')) {
     $AppUI->redirect(ACCESS_DENIED);
 }
-
-//Lets store the panels view options of the user:
-$pdo = new CProjectDesigner();
-$pdo->bind($_POST);
-$pdo->store();
 
 $updateFields = array('bulk_task_percent_complete' => $bulk_task_percent_complete,
         'bulk_task_owner' => $bulk_task_owner, 'bulk_task_priority' => $bulk_task_priority,
@@ -187,7 +180,6 @@ if (is_array($selected) && count($selected)) {
         if (isset($_POST['bulk_task_dependency']) && $bulk_task_dependency != '') {
             if ($upd_task->task_id) {
                 //If parent is self task
-                //print_r($bulk_task_dependency);die;
                 if ($bulk_task_dependency == '0') {
                     $upd_task->task_dynamic = 0;
                     $upd_task->store();
