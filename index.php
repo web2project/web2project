@@ -207,15 +207,6 @@ include_once W2P_BASE_DIR . '/locales/core.php';
 setlocale(LC_TIME, $AppUI->user_lang);
 $m_config = w2PgetConfig($m);
 
-// TODO: canRead/Edit assignements should be moved into each file
-// check overall module permissions
-// these can be further modified by the included action files
-$canAccess = canAccess($m);
-$canRead = canView($m);
-$canEdit = canEdit($m);
-$canAuthor = canAdd($m);
-$canDelete = canDelete($m);
-
 if (!$suppressHeaders) {
 	// output the character set header
 	if (isset($locale_char_set)) {
