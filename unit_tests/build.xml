@@ -65,13 +65,13 @@
             format="noframes" />
     </target>
 
-    <target name="metrics" depends="prepare">
+    <target name="metrics" depends="prepare, lint">
         <echo message="Some of these targets are *very* memory intensive. You may have to increase your memory_limit in php.ini" />
         <phingcall target="phploc" />
-        <phingcall target="phpmd" />
         <phingcall target="depend" />
-        <phingcall target="codesniffer" />
+        <phingcall target="cpd" />
         <phingcall target="churn-grep" />
+        <phingcall target="phpmd" />
     </target>
 
     <target name="standards" depends="lint, metrics" />
