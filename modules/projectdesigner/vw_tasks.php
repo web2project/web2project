@@ -224,7 +224,7 @@ if (count($fields) > 0) {
         'task_owner', 'task_start_date', 'task_duration', 'task_end_date', 'task_4');
     $fieldNames = array('Work', 'P', 'U', 'A', 'T', 'R', 'I', 'Log',
         'Task Name', 'Task Owner', 'Start', 'Duration', 'Finish',
-        'Assgined Users');
+        'Assigned Users');
 
     $module->storeSettings('tasks', 'projectdesigner-view', $fieldList, $fieldNames);
 }
