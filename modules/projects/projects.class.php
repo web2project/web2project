@@ -724,30 +724,18 @@ class CProject extends w2p_Core_BaseObject
 
     public static function getBillingCodes($companyId, $all = false)
     {
-
         $q = new w2p_Database_Query();
         $q->addTable('billingcode');
         $q->addQuery('billingcode_id, billingcode_name');
         $q->addOrder('billingcode_name');
-        $q->addWhere('billingcode_status = 0');
-        $q->addWhere('(billingcode_company = 0 OR billingcode_company = ' . (int) $companyId . ')');
-        $task_log_costcodes = $q->loadHashList();
-
         if ($all) {
-            $q->clear();
-            $q->addTable('billingcode');
-            $q->addQuery('billingcode_id, billingcode_name');
-            $q->addOrder('billingcode_name');
             $q->addWhere('billingcode_status = 1');
-            $q->addWhere('(billingcode_company = 0 OR billingcode_company = ' . (int) $companyId . ')');
-
-            $billingCodeList = $q->loadHashList();
-            foreach ($billingCodeList as $id => $code) {
-                $task_log_costcodes[$id] = $code;
-            }
+        } else {
+            $q->addWhere('billingcode_status = 0');
         }
+        $q->addWhere('(billingcode_company = 0 OR billingcode_company = ' . (int) $companyId . ')');
 
-        return $task_log_costcodes;
+        return $q->loadHashList();
     }
 
     public static function getOwners()
