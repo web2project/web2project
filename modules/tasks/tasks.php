@@ -84,23 +84,7 @@ $where_list = (count($allowedProjects)) ? implode(' AND ', $allowedProjects) : '
 
 $working_hours = ($w2Pconfig['daily_working_hours'] ? $w2Pconfig['daily_working_hours'] : 8);
 
-$q = new w2p_Database_Query;
-$q->addTable('projects', 'p');
-$q->addQuery('company_name, p.project_id, project_color_identifier, project_name, project_percent_complete, project_task_count');
-$q->addJoin('companies', 'com', 'company_id = project_company', 'inner');
-$q->addJoin('tasks', 't1', 'p.project_id = t1.task_project', 'inner');
-$q->leftJoin('project_departments', 'project_departments', 'p.project_id = project_departments.project_id OR project_departments.project_id IS NULL');
-$q->leftJoin('departments', 'departments', 'departments.dept_id = project_departments.department_id OR dept_id IS NULL');
-$q->addWhere($where_list . (($where_list) ? ' AND ' : '') . 't1.task_id = t1.task_parent');
-$q->addGroup('p.project_id');
-if (!$project_id && !$task_id) {
-	$q->addOrder('project_name');
-}
-if ($project_id > 0) {
-	$q->addWhere('p.project_id = '.$project_id);
-}
-
-$projects = $q->loadList(-1, 'project_id');
+$projects = __extract_from_tasks4($where_list, $project_id, $task_id);
 
 $subquery = __extract_from_tasks1();
 
