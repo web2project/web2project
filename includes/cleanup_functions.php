@@ -428,6 +428,57 @@ function __extract_from_showtask(&$arr, $level, $today_view)
     $s .= $htmlHelper->createCell('user_task_priority', $arr['user_task_priority']);
 
     // dots
+    $s = __extract_from_showtask2($arr, $level, $today_view, $s, $m, $jsTaskId, $expanded);
+
+    if ($today_view) { // Show the project name
+        $s .= ('<td class="_name" width="50%"><a href="./index.php?m=projects&amp;a=view&amp;project_id=' . $arr['task_project'] . '">' . '<div style="display:inline-block;padding: 2px 3px;background-color:#' . $arr['project_color_identifier'] . ';color:' . bestColor($arr['project_color_identifier']) . '">' . $arr['project_name'] . '</div>' . '</a></td>');
+    } else {
+        $s .= $htmlHelper->createCell('task_owner', $arr['task_owner']);
+    }
+    if (isset($arr['task_assigned_users']) && count($arr['task_assigned_users'])) {
+        $assigned_users = $arr['task_assigned_users'];
+        $a_u_tmp_array = array();
+        $s .= '<td class="data">';
+        foreach ($assigned_users as $val) {
+            $a_u_tmp_array[] = ('<a href="?m=users&amp;a=view&amp;user_id=' . $val['user_id'] . '"' . 'title="' . (w2PgetConfig('check_overallocation') ? $AppUI->_('Extent of Assignment') . ':' . $userAlloc[$val['user_id']]['charge'] . '%; ' . $AppUI->_('Free Capacity') . ':' . $userAlloc[$val['user_id']]['freeCapacity'] . '%' : '') . '">' . $val['assignee'] . ' (' . $val['perc_assignment'] . '%)</a>');
+        }
+        $s .= join(', <br />', $a_u_tmp_array) . '</td>';
+    } elseif (!$today_view) {
+        // No users assigned to task
+        $s .= $htmlHelper->createCell('other', '-');
+    }
+
+    // duration or milestone
+    $s .= $htmlHelper->createCell('task_start_datetime', $arr['task_start_date']);
+    $s .= $htmlHelper->createCell('task_duration', $arr['task_duration'] . ' ' . mb_substr($AppUI->_($durnTypes[$arr['task_duration_type']]), 0, 1));
+    $s .= $htmlHelper->createCell('task_end_datetime', $arr['task_end_date']);
+    if ($today_view) {
+        $s .= $htmlHelper->createCell('task_due_in', $arr['task_due_in']);
+    } elseif ($history_active) {
+        $s .= $htmlHelper->createCell('last_update', $arr['last_update']);
+    }
+
+    // Assignment checkbox
+    if ('projectdesigner' == $m) {
+        $s .= ('<td class="data">' . '<input type="checkbox" name="selected_task[' . $arr['task_id'] . ']" value="' . $arr['task_id'] . '"/></td>');
+    }
+    $s .= '</tr>'."\n";
+
+    return $s;
+}
+
+/**
+ * @param $arr
+ * @param $level
+ * @param $today_view
+ * @param $s
+ * @param $m
+ * @param $jsTaskId
+ * @param $expanded
+ * @return array
+ */
+function __extract_from_showtask2($arr, $level, $today_view, $s, $m, $jsTaskId, $expanded)
+{
     $s .= '<td style="width: ' . (($today_view) ? '50%' : '90%') . '" class="data _name">';
     //level
     if ($level == -1) {
@@ -469,53 +520,6 @@ function __extract_from_showtask(&$arr, $level, $today_view)
         $s .= w2PendTip();
     }
     $s .= '</td>';
-    if ($today_view) { // Show the project name
-        $s .= ('<td class="_name" width="50%"><a href="./index.php?m=projects&amp;a=view&amp;project_id=' . $arr['task_project'] . '">' . '<div style="display:inline-block;padding: 2px 3px;background-color:#' . $arr['project_color_identifier'] . ';color:' . bestColor($arr['project_color_identifier']) . '">' . $arr['project_name'] . '</div>' . '</a></td>');
-    } else {
-        $s .= $htmlHelper->createCell('task_owner', $arr['task_owner']);
-    }
-    if (isset($arr['task_assigned_users']) && count($arr['task_assigned_users'])) {
-        $assigned_users = $arr['task_assigned_users'];
-        $a_u_tmp_array = array();
-        if ($show_all_assignees) {
-            $s .= '<td class="data">';
-            foreach ($assigned_users as $val) {
-                $a_u_tmp_array[] = ('<a href="?m=users&amp;a=view&amp;user_id=' . $val['user_id'] . '"' . 'title="' . (w2PgetConfig('check_overallocation') ? $AppUI->_('Extent of Assignment') . ':' . $userAlloc[$val['user_id']]['charge'] . '%; ' . $AppUI->_('Free Capacity') . ':' . $userAlloc[$val['user_id']]['freeCapacity'] . '%' : '') . '">' . $val['assignee'] . ' (' . $val['perc_assignment'] . '%)</a>');
-            }
-            $s .= join(', <br />', $a_u_tmp_array) . '</td>';
-        } else {
-            $s .= ('<td class="data">' . '<a href="?m=users&amp;a=view&amp;user_id=' . $assigned_users[0]['user_id'] . '" title="' . (w2PgetConfig('check_overallocation') ? $AppUI->_('Extent of Assignment') . ':' . $userAlloc[$assigned_users[0]['user_id']]['charge'] . '%; ' . $AppUI->_('Free Capacity') . ':' . $userAlloc[$assigned_users[0]['user_id']]['freeCapacity'] . '%' : '') . '">' . $assigned_users[0]['contact_name'] . ' (' . $assigned_users[0]['perc_assignment'] . '%)</a>');
-            if ($arr['assignee_count'] > 1) {
-                $s .= (' <a href="javascript: void(0);" onclick="toggle_users(' . "'users_" . $arr['task_id'] . "'" . ');" title="' . join(', ', $a_u_tmp_array) . '">(+' . ($arr['assignee_count'] - 1) . ')</a>' . '<span style="display: none" id="users_' . $arr['task_id'] . '">');
-                $a_u_tmp_array[] = $assigned_users[0]['assignee'];
-                for ($i = 1, $i_cmp = count($assigned_users); $i < $i_cmp; $i++) {
-                    $a_u_tmp_array[] = $assigned_users[$i]['assignee'];
-                    $s .= ('<br /><a href="?m=users&amp;a=view&amp;user_id=' . $assigned_users[$i]['user_id'] . '" title="' . (w2PgetConfig('check_overallocation') ? $AppUI->_('Extent of Assignment') . ':' . $userAlloc[$assigned_users[$i]['user_id']]['charge'] . '%; ' . $AppUI->_('Free Capacity') . ':' . $userAlloc[$assigned_users[$i]['user_id']]['freeCapacity'] . '%' : '') . '">' . $assigned_users[$i]['contact_name'] . ' (' . $assigned_users[$i]['perc_assignment'] . '%)</a>');
-                }
-                $s .= '</span>';
-            }
-            $s .= '</td>';
-        }
-    } elseif (!$today_view) {
-        // No users assigned to task
-        $s .= $htmlHelper->createCell('other', '-');
-    }
-
-    // duration or milestone
-    $s .= $htmlHelper->createCell('task_start_datetime', $arr['task_start_date']);
-    $s .= $htmlHelper->createCell('task_duration', $arr['task_duration'] . ' ' . mb_substr($AppUI->_($durnTypes[$arr['task_duration_type']]), 0, 1));
-    $s .= $htmlHelper->createCell('task_end_datetime', $arr['task_end_date']);
-    if ($today_view) {
-        $s .= $htmlHelper->createCell('task_due_in', $arr['task_due_in']);
-    } elseif ($history_active) {
-        $s .= $htmlHelper->createCell('last_update', $arr['last_update']);
-    }
-
-    // Assignment checkbox
-    if ('projectdesigner' == $m) {
-        $s .= ('<td class="data">' . '<input type="checkbox" name="selected_task[' . $arr['task_id'] . ']" value="' . $arr['task_id'] . '"/></td>');
-    }
-    $s .= '</tr>'."\n";
 
     return $s;
 }
