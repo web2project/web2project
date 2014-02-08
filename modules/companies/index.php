@@ -28,8 +28,10 @@ $search_string = w2PgetParam($_POST, 'search_string', '');
 $AppUI->setState($m . '_search_string', $search_string);
 $search_string = w2PformSafe($search_string, true);
 
-$perms = &$AppUI->acl();
+$company = new CCompany();
+$canCreate = $company->canCreate();
 
+$perms = &$AppUI->acl();
 $baseArray = array(0 => $AppUI->_('All', UI_OUTPUT_RAW));
 $allowedArray = $perms->getPermittedUsers('companies');
 $owner_list = is_array($allowedArray) ? ($baseArray + $allowedArray) : $baseArray;
@@ -39,7 +41,7 @@ $titleBlock = new w2p_Theme_TitleBlock('Companies', 'icon.png', $m, $m . '.' . $
 $titleBlock->addSearchCell($search_string);
 $titleBlock->addFilterCell('Owner', 'owner_filter_id', $owner_list, $owner_filter_id);
 
-if ($canEdit) {
+if ($canCreate) {
     $titleBlock->addButton('new company', '?m=companies&a=addedit');
 }
 $titleBlock->show();
