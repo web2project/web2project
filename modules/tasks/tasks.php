@@ -100,6 +100,8 @@ if ($project_id > 0) {
 	$q->addWhere('p.project_id = '.$project_id);
 }
 
+$projects = $q->loadList(-1, 'project_id');
+
 $q2 = new w2p_Database_Query;
 $q2->addTable('projects');
 $q2->addQuery('project_id, COUNT(t1.task_id) AS total_tasks');
@@ -111,14 +113,6 @@ if ($project_id > 0) {
 	$q2->addWhere('project_id = '.$project_id);
 }
 $q2->addGroup('project_id');
-
-$projects = array();
-
-$prc = $q->exec();
-echo db_error();
-while ($row = $q->fetchRow()) {
-    $projects[$row['project_id']] = $row;
-}
 
 $prc2 = $q2->fetchRow();
 echo db_error();
