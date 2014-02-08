@@ -86,7 +86,7 @@ $working_hours = ($w2Pconfig['daily_working_hours'] ? $w2Pconfig['daily_working_
 
 $q = new w2p_Database_Query;
 $q->addTable('projects', 'p');
-$q->addQuery('company_name, p.project_id, project_color_identifier, project_name, project_percent_complete');
+$q->addQuery('company_name, p.project_id, project_color_identifier, project_name, project_percent_complete, project_task_count');
 $q->addJoin('companies', 'com', 'company_id = project_company', 'inner');
 $q->addJoin('tasks', 't1', 'p.project_id = t1.task_project', 'inner');
 $q->leftJoin('project_departments', 'project_departments', 'p.project_id = project_departments.project_id OR project_departments.project_id IS NULL');
@@ -101,28 +101,6 @@ if ($project_id > 0) {
 }
 
 $projects = $q->loadList(-1, 'project_id');
-
-$q2 = new w2p_Database_Query;
-$q2->addTable('projects');
-$q2->addQuery('project_id, COUNT(t1.task_id) AS total_tasks');
-$q2->addJoin('tasks', 't1', 'projects.project_id = t1.task_project', 'inner');
-if ($where_list) {
-	$q2->addWhere($where_list);
-}
-if ($project_id > 0) {
-	$q2->addWhere('project_id = '.$project_id);
-}
-$q2->addGroup('project_id');
-
-$prc2 = $q2->fetchRow();
-echo db_error();
-while ($row2 = $q2->fetchRow()) {
-    if ($projects[$row2['project_id']]) {
-        array_push($projects[$row2['project_id']], $row2);
-    }
-}
-
-$q2->clear();
 
 $subquery = __extract_from_tasks1();
 
