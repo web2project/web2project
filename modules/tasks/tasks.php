@@ -85,35 +85,12 @@ $where_list = (count($allowedProjects)) ? implode(' AND ', $allowedProjects) : '
 $working_hours = ($w2Pconfig['daily_working_hours'] ? $w2Pconfig['daily_working_hours'] : 8);
 
 $projects = __extract_from_tasks4($where_list, $project_id, $task_id);
-
 $subquery = __extract_from_tasks1();
+$task_status = __extract_from_tasks($min_view, $currentTabId, $project_id, $currentTabName, $AppUI);
 
 $q = new w2p_Database_Query;
-$q->addQuery('tasks.task_id, task_parent, task_name');
-$q->addQuery('task_start_date, task_end_date, task_dynamic');
-$q->addQuery('task_pinned, pin.user_id as pin_user');
-$q->addQuery('ut.user_task_priority');
-$q->addQuery('task_priority, task_percent_complete');
-$q->addQuery('task_duration, task_duration_type');
-$q->addQuery('task_project, task_represents_project');
-$q->addQuery('task_description, task_owner, task_status');
-$q->addQuery('usernames.user_username, usernames.user_id');
-$q->addQuery('assignees.user_username as assignee_username');
-$q->addQuery('count(distinct assignees.user_id) as assignee_count');
-$q->addQuery('co.contact_first_name, co.contact_last_name');
-$q->addQuery('contact_display_name AS contact_name');
-$q->addQuery('contact_display_name AS owner');
-$q->addQuery('task_milestone');
-$q->addQuery('count(distinct f.file_task) as file_count');
-$q->addQuery('tlog.task_log_problem');
-$q->addQuery('task_access');
-$q->addQuery('(' . $subquery . ') AS task_nr_of_children');
-$q->addTable('tasks');
-
-if ($history_active) {
-	$q->addQuery('MAX(history_date) as last_update');
-	$q->leftJoin('history', 'h', 'history_item = tasks.task_id AND history_table=\'tasks\'');
-}
+$q = __extract_from_tasks5($q, $subquery);
+$q = __extract_from_tasks6($q, $history_active);
 
 $q->addJoin('projects', 'p', 'p.project_id = task_project', 'inner');
 $q->leftJoin('users', 'usernames', 'task_owner = usernames.user_id');
@@ -146,9 +123,6 @@ $q = __extract_from_tasks3($f, $q, $user_id, $task_id, $AppUI);
 if ($showIncomplete) {
 	$q->addWhere('( task_percent_complete < 100 OR task_percent_complete IS NULL)');
 }
-
-$task_status = __extract_from_tasks($min_view, $currentTabId, $project_id, $currentTabName, $AppUI);
-
 
 //When in task view context show all the tasks, active and inactive. (by not limiting the query by task status)
 //When in a project view or in the tasks list, show the active or the inactive tasks depending on the selected tab or button.

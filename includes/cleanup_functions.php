@@ -5918,3 +5918,47 @@ function __extract_from_tasks4($where_list, $project_id, $task_id)
     $projects = $q->loadList(-1, 'project_id');
     return $projects;
 }
+
+/**
+ * @param $q
+ * @param $subquery
+ */
+function __extract_from_tasks5($q, $subquery)
+{
+    $q->addQuery('tasks.task_id, task_parent, task_name');
+    $q->addQuery('task_start_date, task_end_date, task_dynamic');
+    $q->addQuery('task_pinned, pin.user_id as pin_user');
+    $q->addQuery('ut.user_task_priority');
+    $q->addQuery('task_priority, task_percent_complete');
+    $q->addQuery('task_duration, task_duration_type');
+    $q->addQuery('task_project, task_represents_project');
+    $q->addQuery('task_description, task_owner, task_status');
+    $q->addQuery('usernames.user_username, usernames.user_id');
+    $q->addQuery('assignees.user_username as assignee_username');
+    $q->addQuery('count(distinct assignees.user_id) as assignee_count');
+    $q->addQuery('co.contact_first_name, co.contact_last_name');
+    $q->addQuery('contact_display_name AS contact_name');
+    $q->addQuery('contact_display_name AS owner');
+    $q->addQuery('task_milestone');
+    $q->addQuery('count(distinct f.file_task) as file_count');
+    $q->addQuery('tlog.task_log_problem');
+    $q->addQuery('task_access');
+    $q->addQuery('(' . $subquery . ') AS task_nr_of_children');
+    $q->addTable('tasks');
+
+    return $q;
+}
+
+/**
+ * @param $history_active
+ * @param $q
+ */
+function __extract_from_tasks6($q, $history_active)
+{
+    if ($history_active) {
+        $q->addQuery('MAX(history_date) as last_update');
+        $q->leftJoin('history', 'h', 'history_item = tasks.task_id AND history_table=\'tasks\'');
+    }
+
+    return $q;
+}
