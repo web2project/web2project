@@ -29,6 +29,12 @@ External used variables:
 if (empty($query_string)) {
 	$query_string = '?m=' . $m . '&amp;a=' . $a;
 }
+$canViewTask = canView('tasks');;
+if (!$canViewTask) {
+    $AppUI->setMsg("You are not allowed to view tasks", UI_MSG_ERROR);
+    $AppUI->redirect(ACCESS_DENIED);
+}
+
 $mods = $AppUI->getActiveModules();
 $history_active = !empty($mods['history']) && canView('history');
 
@@ -106,25 +112,22 @@ if ($project_id > 0) {
 }
 $q2->addGroup('project_id');
 
-$perms = &$AppUI->acl();
 $projects = array();
-$canViewTask = canView('tasks');;
-if ($canViewTask) {
 
-	$prc = $q->exec();
-	echo db_error();
-	while ($row = $q->fetchRow()) {
-		$projects[$row['project_id']] = $row;
-	}
-
-	$prc2 = $q2->fetchRow();
-	echo db_error();
-	while ($row2 = $q2->fetchRow()) {
-		if ($projects[$row2['project_id']]) {
-			array_push($projects[$row2['project_id']], $row2);
-		}
-	}
+$prc = $q->exec();
+echo db_error();
+while ($row = $q->fetchRow()) {
+    $projects[$row['project_id']] = $row;
 }
+
+$prc2 = $q2->fetchRow();
+echo db_error();
+while ($row2 = $q2->fetchRow()) {
+    if ($projects[$row2['project_id']]) {
+        array_push($projects[$row2['project_id']], $row2);
+    }
+}
+
 $q2->clear();
 
 $subquery = __extract_from_tasks1();
@@ -238,9 +241,7 @@ if (!$project_id && !$task_id) {
     $q->addOrder('task_start_date, task_end_date, task_name');
 }
 
-if ($canViewTask) {
-	$tasks = $q->loadList();
-}
+$tasks = $q->loadList();
 
 // POST PROCESSING TASKS
 if (count($tasks) > 0) {
