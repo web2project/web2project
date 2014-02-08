@@ -4192,7 +4192,7 @@ function getTaskTooltip($task_id)
     $task = new CTask();
 
     // load the record data
-    $task->loadFull(null, $task_id);
+    $task->load($task_id);
 
     // load the event types
     $types = w2PgetSysVal('TaskType');
@@ -4207,8 +4207,13 @@ function getTaskTooltip($task_id)
     $end_date = (int) $task->task_end_date ? new w2p_Utilities_Date($AppUI->formatTZAwareTime($task->task_end_date, '%Y-%m-%d %T')) : null;
 
     // load the record data
-    $task_project = $task->project_name;
-    $task_company = $task->company_name;
+    $project = new CProject();
+    $project->load($task->task_project);
+    $task_project = $project->project_name;
+
+    $company = new CCompany();
+    $company->load($project->project_company);
+    $task_company = $company->company_name;
 
     $tt = '<table class="tool-tip">';
     $tt .= '<tr>';
