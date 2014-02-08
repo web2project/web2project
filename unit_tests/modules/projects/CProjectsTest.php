@@ -199,26 +199,6 @@ $this->obj->overrideDatabase($this->mockDB);
     }
 
     /**
-     * Tests that the proper error message is returned when no owner is passed.
-     */
-    public function testCreateProjectNoOwner()
-    {
-        unset($this->post_data['project_owner']);
-        $this->obj->bind($this->post_data);
-
-        /**
-         * Verify we got the proper error message
-         */
-        $this->assertFalse($this->obj->store());
-        $this->assertArrayHasKey('project_owner', $this->obj->getError());
-
-        /**
-         * Verify that project id was not set
-         */
-        $this->AssertEquals(0, $this->obj->project_id);
-    }
-
-    /**
      * Tests that the proper error message is returned when no creator is passed.
      */
     public function testCreateProjectNoCreator()

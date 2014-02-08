@@ -63,27 +63,6 @@ class CCompanies_Test extends CommonSetup
 
     /**
      * Tests that the proper error message is returned when a company
-     * is attempted to be created without an owner.
-     */
-    public function testCreateCompanyNoOwner()
-    {
-        unset($this->post_data['company_owner']);
-        $this->obj->bind($this->post_data);
-
-        /**
-         * Verify we got the proper error message
-         */
-        $this->assertFalse($this->obj->store());
-        $this->assertArrayHasKey('company_owner', $this->obj->getError());
-
-        /**
-         * Verify that company id was not set
-         */
-        $this->assertEquals(0, $this->obj->company_id);
-    }
-
-    /**
-     * Tests that the proper error message is returned when a company
      * is attempted to be created without a name.
      */
     public function testCreateCompanyNoName()

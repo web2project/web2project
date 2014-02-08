@@ -102,27 +102,6 @@ class CDepartments_Test extends CommonSetup
     }
 
     /**
-    * Tests that the proper error message is returned when a dept is attempted
-    * to be created without an owner.
-    */
-    public function testCreateDepartmentNoOwner()
-    {
-        unset($this->post_data['dept_owner']);
-        $this->obj->bind($this->post_data);
-
-        /**
-        * Verify we got the proper error message
-        */
-        $this->assertFalse($this->obj->store());
-        $this->assertArrayHasKey('dept_owner', $this->obj->getError());
-
-        /**
-        * Verify that dept id was not set
-        */
-        $this->AssertEquals(0, $this->obj->dept_id);
-    }
-
-    /**
      * Tests loading the Department Object
      */
     public function testLoad()
