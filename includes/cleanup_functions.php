@@ -5861,3 +5861,32 @@ function __extract_from_tasks3($f, $q, $user_id, $task_id, $AppUI)
 
     return $q;
 }
+
+/**
+ * @param $min_view
+ * @param $currentTabId
+ * @param $project_id
+ * @param $currentTabName
+ * @param $AppUI
+ * @return int
+ */
+function __extract_from_tasks($min_view, $currentTabId, $project_id, $currentTabName, $AppUI)
+{
+//TODO: This whole structure is hard-coded based on the TaskStatus SelectList.
+    $task_status = 0;
+    if ($min_view && isset($_GET['task_status'])) {
+        $task_status = (int)w2PgetParam($_GET, 'task_status', null);
+        return $task_status;
+    } elseif ($currentTabId == 1 && $project_id) {
+        $task_status = -1;
+        return $task_status;
+    } elseif ($currentTabId > 1 && $project_id) {
+        $task_status = $currentTabId - 1;
+        return $task_status;
+    } elseif (!$currentTabName) {
+        // If we aren't tabbed we are in the tasks list.
+        $task_status = (int)$AppUI->getState('inactive');
+        return $task_status;
+    }
+    return $task_status;
+}

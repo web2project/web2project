@@ -188,18 +188,8 @@ if ($showIncomplete) {
 	$q->addWhere('( task_percent_complete < 100 OR task_percent_complete IS NULL)');
 }
 
-//TODO: This whole structure is hard-coded based on the TaskStatus SelectList.
-$task_status = 0;
-if ($min_view && isset($_GET['task_status'])) {
-	$task_status = (int) w2PgetParam($_GET, 'task_status', null);
-} elseif ($currentTabId == 1 && $project_id) {
-	$task_status = -1;
-} elseif ($currentTabId > 1 && $project_id) {
-	$task_status = $currentTabId-1;
-} elseif (!$currentTabName) {
-	// If we aren't tabbed we are in the tasks list.
-	$task_status = (int) $AppUI->getState('inactive');
-}
+$task_status = __extract_from_tasks($min_view, $currentTabId, $project_id, $currentTabName, $AppUI);
+
 
 //When in task view context show all the tasks, active and inactive. (by not limiting the query by task status)
 //When in a project view or in the tasks list, show the active or the inactive tasks depending on the selected tab or button.
