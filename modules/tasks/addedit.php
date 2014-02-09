@@ -135,7 +135,8 @@ if ($task_id == 0 && (isset($contact_id) && $contact_id > 0)) {
 }
 
 $department_selection_list = array();
-$deptList = CDepartment::getDepartmentList($AppUI, $project->project_company, null);
+$department = new CDepartment();
+$deptList = $department->departments($project->project_company);
 foreach($deptList as $dept) {
   $department_selection_list[$dept['dept_id']] = $dept['dept_name'];
 }

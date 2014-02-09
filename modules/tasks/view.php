@@ -29,7 +29,7 @@ if ($reminded) {
 //check permissions for the associated project
 $canReadProject = canView('projects', $obj->task_project);
 
-$users = $obj->getAssignedUsers($task_id);
+$users = $obj->assignees($task_id);
 
 $durnTypes = w2PgetSysVal('TaskDurationType');
 $task_types = w2PgetSysVal('TaskType');
