@@ -413,9 +413,7 @@ function __extract_from_showtask(&$arr, $level, $today_view)
 
     // New Log
     $s .= '<td class="data">';
-    if (isset($arr['task_log_problem']) && $arr['task_log_problem'] > 0) {
-        $s .= ('<a href="?m=tasks&amp;a=view&amp;task_id=' . $arr['task_id'] . '&amp;tab=0&amp;problem=1">' . w2PshowImage('icons/dialog-warning5.png', 16, 16, 'Problem', 'Problem!') . '</a>');
-    } elseif ($arr['task_dynamic'] != 1 && 0 == $arr['task_represents_project']) {
+    if ($arr['task_dynamic'] != 1 && 0 == $arr['task_represents_project']) {
         $s .= ('<a href="?m=tasks&amp;a=view&amp;task_id=' . $arr['task_id'] . '&amp;tab=1">' . w2PshowImage('edit_add.png') . '</a>');
     } else {
         $s .= $AppUI->_('-');
