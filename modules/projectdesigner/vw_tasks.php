@@ -170,7 +170,7 @@ foreach ($tasks as $row) {
 	$q->clear();
 	$q->addQuery('ut.user_id,	u.user_username');
 	$q->addQuery('ut.perc_assignment, SUM(ut.perc_assignment) AS assign_extent');
-	$q->addQuery('contact_first_name, contact_last_name, contact_display_name as contact_name');
+	$q->addQuery('contact_first_name, contact_last_name, contact_display_name as assignee');
 	$q->addTable('user_tasks', 'ut');
 	$q->leftJoin('users', 'u', 'u.user_id = ut.user_id');
 	$q->leftJoin('contacts', 'c', 'u.user_contact = c.contact_id');
@@ -178,7 +178,6 @@ foreach ($tasks as $row) {
 	$q->addGroup('ut.user_id');
 	$q->addOrder('perc_assignment desc, user_username');
 
-	$assigned_users = array();
 	$row['task_assigned_users'] = $q->loadList();
 	$q->addQuery('count(task_id) as children');
 	$q->addTable('tasks');
