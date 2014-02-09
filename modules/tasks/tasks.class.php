@@ -1800,7 +1800,6 @@ class CTask extends w2p_Core_BaseObject
 
     public function getAssignedUsers($taskId)
     {
-
         $q = $this->_getQuery();
         $q->addTable('users', 'u');
         $q->innerJoin('user_tasks', 'ut', 'ut.user_id = u.user_id');
@@ -1811,6 +1810,21 @@ class CTask extends w2p_Core_BaseObject
         $q->addWhere('ut.task_id = ' . (int) $taskId);
 
         return $q->loadHashList('user_id');
+    }
+
+    public function getAssigned($index = 'user_id')
+    {
+        $q = $this->_getQuery();
+        $q->addTable('users', 'u');
+        $q->addTable('user_tasks', 'ut');
+        $q->addTable('contacts', 'con');
+        $q->addQuery('u.user_id, perc_assignment');
+        $q->addQuery('contact_id, contact_display_name AS user_name, contact_display_name AS contact_name, contact_email');
+        $q->addWhere('ut.task_id = ' . (int) $this->task_id);
+        $q->addWhere('user_contact = contact_id');
+        $q->addWhere('ut.user_id = u.user_id');
+        $assigned = $q->loadHashList($index);
+        return $assigned;
     }
 
     /*
@@ -2424,21 +2438,6 @@ class CTask extends w2p_Core_BaseObject
             }
         }
         return parent::getAllowedRecords($uid, $fields, $orderby, $index, $extra);
-    }
-
-    public function getAssigned($index = 'user_id')
-    {
-        $q = $this->_getQuery();
-        $q->addTable('users', 'u');
-        $q->addTable('user_tasks', 'ut');
-        $q->addTable('contacts', 'con');
-        $q->addQuery('u.user_id, perc_assignment');
-        $q->addQuery('contact_id, contact_display_name AS user_name, contact_display_name AS contact_name, contact_email');
-        $q->addWhere('ut.task_id = ' . (int) $this->task_id);
-        $q->addWhere('user_contact = contact_id');
-        $q->addWhere('ut.user_id = u.user_id');
-        $assigned = $q->loadHashList($index);
-        return $assigned;
     }
 
 //TODO: this method should be moved to CTaskLog
