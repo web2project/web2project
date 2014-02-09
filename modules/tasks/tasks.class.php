@@ -1816,13 +1816,12 @@ class CTask extends w2p_Core_BaseObject
     {
         $q = $this->_getQuery();
         $q->addTable('users', 'u');
-        $q->addTable('user_tasks', 'ut');
-        $q->addTable('contacts', 'con');
-        $q->addQuery('u.user_id, perc_assignment');
+        $q->addTable('user_tasks', 'ut', 'ut.user_id = u.user_id');
+        $q->leftJoin('contacts', 'co', ' co.contact_id = u.user_contact');
+        $q->addQuery('u.*, perc_assignment');
         $q->addQuery('contact_id, contact_display_name AS user_name, contact_display_name AS contact_name, contact_email');
         $q->addWhere('ut.task_id = ' . (int) $this->task_id);
-        $q->addWhere('user_contact = contact_id');
-        $q->addWhere('ut.user_id = u.user_id');
+
         $assigned = $q->loadHashList($index);
         return $assigned;
     }
