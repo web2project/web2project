@@ -708,3 +708,7 @@ input.state, input.zip {
 .users .signature {
     width: 250px;
 }
+
+.projects label {
+    width: 11em;
+}
