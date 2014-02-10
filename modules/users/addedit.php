@@ -192,7 +192,7 @@ $form = new w2p_Output_HTML_FormHelper($AppUI);
             <?php if (!$object->user_id) { ?>
             <p>
                 <?php $form->showLabel('Password Strength'); ?>
-                <div class="text" style="width: 135px; margin-left: 18.5em">
+                <div class="text" style="width: 135px; margin-left: 20.5em">
                     <div id="progressBar"></div>
                 </div>
             </p>
