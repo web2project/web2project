@@ -323,13 +323,6 @@ $form = new w2p_Output_HTML_FormHelper($AppUI);
                 </td>
             </tr>
             <tr>
-                <td align="right" nowrap="nowrap"><label for="event_cwd"><?php echo $AppUI->_('Show only on Working Days'); ?>:</label></td>
-                <td>
-                    <input type="checkbox" value="1" name="event_cwd" id="event_cwd" <?php echo ($obj->event_cwd ? 'checked="checked"' : ''); ?> />
-                </td>
-                <td align="right"><label for="mail_invited"><?php echo $AppUI->_('Mail Attendees?'); ?></label> <input type="checkbox" name="mail_invited" id="mail_invited" checked="checked" /></td>
-            </tr>
-            <tr>
                 <td colspan="2" align="right">
                     <?php
                     // $m does not equal 'calendar' here???
