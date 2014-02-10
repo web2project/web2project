@@ -8,11 +8,6 @@ if (!defined('W2P_BASE_DIR')) {
 global $AppUI, $cal_sdf;
 $AppUI->loadCalendarJS();
 
-// check permissions
-if (!$canEdit) {
-	$AppUI->redirect(ACCESS_DENIED);
-}
-
 $do_report = w2PgetParam($_POST, 'do_report', true);
 $log_start_date = w2PgetParam($_POST, 'log_start_date', 0);
 $log_end_date = w2PgetParam($_POST, 'log_end_date', 0);
