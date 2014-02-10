@@ -2909,7 +2909,7 @@ function w2PgetUsers()
     return $q->loadHashList();
 }
 
-function w2PgetUsersList($stub = null, $where = null, $orderby = 'contact_first_name, contact_last_name')
+function getUsers($stub = null, $where = null, $orderby = 'contact_first_name, contact_last_name')
 {
     global $AppUI;
     $q = new w2p_Database_Query;
@@ -2942,41 +2942,18 @@ function w2PgetUsersList($stub = null, $where = null, $orderby = 'contact_first_
         $q->addWhere('(' . implode(' OR ', $depts) . ' OR contact_department=0)');
     }
 
+    return $q;
+}
+
+function w2PgetUsersList($stub = null, $where = null, $orderby = 'contact_first_name, contact_last_name')
+{
+    $q = getUsers($stub, $where, $orderby);
     return $q->loadList();
 }
 
 function w2PgetUsersHashList($stub = null, $where = null, $orderby = 'contact_first_name, contact_last_name')
 {
-    global $AppUI;
-    $q = new w2p_Database_Query;
-    $q->addTable('users');
-    $q->addQuery('DISTINCT(user_id), user_username, contact_last_name, contact_first_name,
-         company_name, contact_company, dept_id, dept_name, contact_display_name,
-         contact_display_name as contact_name, contact_email, user_type');
-    $q->addJoin('contacts', 'con', 'con.contact_id = user_contact', 'inner');
-    if ($stub) {
-        $q->addWhere('(UPPER(user_username) LIKE \'' . $stub . '%\' or UPPER(contact_first_name) LIKE \'' . $stub . '%\' OR UPPER(contact_last_name) LIKE \'' . $stub . '%\')');
-    } elseif ($where) {
-        $where = $q->quote('%' . $where . '%');
-        $q->addWhere('(UPPER(user_username) LIKE ' . $where . ' OR UPPER(contact_first_name) LIKE ' . $where . ' OR UPPER(contact_last_name) LIKE ' . $where . ')');
-    }
-    $q->addGroup('user_id');
-    $q->addOrder($orderby);
-
-    // get CCompany() to filter by company
-    $obj = new CCompany();
-    $companies = $obj->getAllowedSQL($AppUI->user_id, 'company_id');
-    $q->addJoin('companies', 'com', 'company_id = contact_company');
-    if ($companies) {
-        $q->addWhere('(' . implode(' OR ', $companies) . ' OR contact_company=\'\' OR contact_company IS NULL OR contact_company = 0)');
-    }
-    $dpt = new CDepartment();
-    $depts = $dpt->getAllowedSQL($AppUI->user_id, 'dept_id');
-    $q->addJoin('departments', 'dep', 'dept_id = contact_department');
-    if ($depts) {
-        $q->addWhere('(' . implode(' OR ', $depts) . ' OR contact_department=0)');
-    }
-
+    $q = getUsers($stub, $where, $orderby);
     return $q->loadHashList('user_id');
 }
 
