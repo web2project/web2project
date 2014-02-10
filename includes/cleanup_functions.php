@@ -1886,10 +1886,9 @@ function displayFiles($AppUI, $folder_id, $task_id, $project_id, $company_id)
         //   At some point at/after v4.0, this should be deprecated
         $fieldList = array('file_name', 'file_description',
             'file_version', 'file_category', 'file_folder', 'file_task',
-            'file_owner', 'file_size', 'file_type', 'file_datetime', 'file_co_reason');
+            'file_owner', 'file_datetime');
         $fieldNames = array('File Name', 'Description', 'Version', 'Category',
-            'Folder', 'Task Name', 'Owner', 'Size', 'Type', 'Date',
-            'Checkout Reason');
+            'Folder', 'Task Name', 'Owner', 'Date',);
 
         $module->storeSettings('files', 'index_list', $fieldList, $fieldNames);
     }
@@ -1900,7 +1899,7 @@ function displayFiles($AppUI, $folder_id, $task_id, $project_id, $company_id)
     foreach ($fieldNames as $index => $name) {
         $s .= '<th>' . $AppUI->_($fieldNames[$index]) . '</th>';
     }
-    $s .= '<th></th><th></th>';
+    $s .= '<th></th>';
     $s .= '</tr>';
 
     $fp = -1;
@@ -2009,12 +2008,6 @@ function displayFiles($AppUI, $folder_id, $task_id, $project_id, $company_id)
             <input type="hidden" name="redirect" value="' . $current_uri . '" />
             </form>';
         $s .= '<a href="javascript: void(0);" onclick="if (confirm(\'' . $AppUI->_('Are you sure you want to delete this file?') . '\')) {document.frm_remove_file_' . $latest_file['file_id'] . '.submit()}">' . w2PshowImage('remove.png', '16', '16', 'delete file', 'delete file', 'files') . '</a>';
-        $s .= '</td>';
-        $s .= '<td nowrap="nowrap" align="center" width="1">';
-        if ($canEdit && (empty($latest_file['file_checkout']) || ($latest_file['file_checkout'] == 'final' && ($canEdit || $latest_file['project_owner'] == $AppUI->user_id)))) {
-            $bulk_op = 'onchange="(this.checked) ? addBulkComponent(' . $latest_file['file_id'] . ') : removeBulkComponent(' . $latest_file['file_id'] . ')"';
-            $s .= '<input type="checkbox" ' . $bulk_op . ' name="chk_sel_file_' . $latest_file['file_id'] . '" />';
-        }
         $s .= '</td>';
         $s .= '</tr>';
         $s .= $hidden_table;
