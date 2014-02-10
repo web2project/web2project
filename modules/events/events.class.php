@@ -58,6 +58,19 @@ class CEvent extends w2p_Core_BaseObject
         return true;
     }
 
+    public function canEdit()
+    {
+        if (!parent::canEdit()) {
+            return false;
+        }
+
+        if ($this->event_private && ($this->event_owner != $this->_AppUI->user_id)) {
+            return false;
+        }
+
+        return true;
+    }
+
     public function isValid()
     {
         $baseErrorMsg = get_class($this) . '::store-check failed - ';
