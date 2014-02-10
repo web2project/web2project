@@ -271,7 +271,7 @@ $form = new w2p_Output_HTML_FormHelper($AppUI);
             </p>
             <p>
                 <?php $form->showLabel('Company'); ?>
-                <?php $form->showField('contact_company', $row->contact_company, array('onChange' => 'companyChange()'), $companies); ?>
+                <?php echo arraySelect($companies, 'contact_company', 'size="1" class="text company" onChange="companyChange()"', $row->contact_company); ?>
             </p>
             <?php if ($AppUI->isActiveModule('departments')) { ?>
             <p>
