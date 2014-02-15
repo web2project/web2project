@@ -122,10 +122,6 @@ function delIt(){
                     <?php echo $htmlHelper->createCell('contact_title', $contact->contact_title); ?>
 				</tr>
 				<tr>
-					<td align="right"><?php echo $AppUI->_('Type'); ?>:</td>
-                    <?php echo $htmlHelper->createCell('contact_type', $contact->contact_type); ?>
-				</tr>
-				<tr>
 					<td align="right" valign="top" width="100"><?php echo $AppUI->_('Address'); ?>:</td>
 					<td width="100%">
 						<?php echo $contact->contact_address1; ?><br />
