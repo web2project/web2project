@@ -1,28 +1,9 @@
 <?php
-
-class w2p_Output_HTML_FormHelper
+/**
+ * Class w2p_Output_HTML_FormHelper
+ */
+class w2p_Output_HTML_FormHelper extends w2p_Output_HTML_Base
 {
-    protected $AppUI = null;
-    protected $df = null;
-    protected $dtf = null;
-
-    public function __construct($AppUI)
-    {
-        $this->AppUI = $AppUI;
-        $this->df     = $AppUI->getPref('SHDATEFORMAT');
-        $this->dtf    = $this->df . ' ' . $AppUI->getPref('TIMEFORMAT');
-    }
-
-    public function addLabel($label)
-    {
-        return '<label>' . $this->AppUI->_($label) . ':</label>';
-    }
-
-    public function showLabel($label)
-    {
-        echo $this->addLabel($label);
-    }
-
     public function addField($fieldName, $fieldValue, $options = array(), $values = array())
     {
         $pieces = explode('_', $fieldName);
@@ -34,10 +15,6 @@ class w2p_Output_HTML_FormHelper
         }
 
         switch ($suffix) {
-            case 'parent':
-                $suffix = 'department';
-                $output  = arraySelect($values, $fieldName, 'size="1" class="text '.$suffix.'"', $fieldValue);
-                break;
             case 'company':
                 $class  = 'C'.ucfirst($suffix);
 
@@ -47,7 +24,9 @@ class w2p_Output_HTML_FormHelper
                 $output = '<a href="'.$link.'">'.$obj->{"$suffix".'_name'}.'</a>';
                 break;
             case 'desc':            // @todo This is a special case because department->dept_notes should be renamed department->dept_description
+            case 'note':            // @todo This is a special case because resource->resource_note should be renamed resource->resource_description
             case 'notes':           // @todo This is a special case because contact->contact_notes should be renamed contact->contact_description
+            case 'signature':       // @todo This is a special case because user->user_signature should be renamed to something else..?
             case 'description':
                 $output  = '<textarea name="' . $fieldName . '" class="'.$suffix.'">' . w2PformSafe($fieldValue) . '</textarea>';
                 break;
@@ -57,18 +36,36 @@ class w2p_Output_HTML_FormHelper
                 $output  = '<input type="text" class="text '. $suffix . '" ';
                 $output .= 'name="' . $fieldName. '" value="' . w2PformSafe($date) . '" ' .$params .' />';
                 break;
+            case 'date':
+                $date = ($fieldValue) ? new w2p_Utilities_Date($fieldValue) : null;
+                unset($pieces[0]);
+                $datename = implode('_', $pieces);
+
+                $output = '<input type="hidden" name="'.$fieldName.'" id="'.$fieldName.'" value="' . ($date ? $date->format(FMT_TIMESTAMP_DATE) : '') .'" />';
+                $output .= '<input type="text" name="'.$datename.'" id="'.$datename.'" onchange="setDate_new(\'editFrm\', \''.$datename.'\');" value="' . ($date ? $date->format($this->df) : '') . '" class="text" />';
+                $output .= '<a href="javascript: void(0);" onclick="return showCalendar(\''.$datename.'\', \'' . $this->df . '\', \'editFrm\', null, true, true)">';
+                $output .= '<img src="' . w2PfindImage('calendar.gif') . '" width="24" height="12" alt="' . $this->AppUI->_('Calendar') . '" border="0" />';
+                $output .= '</a>';
+                break;
             case 'private':
-            case 'updateask':
+            case 'updateask':       // @todo This is unique to the contacts module
                 $output  = '<input type="checkbox" value="1" class="text '. $suffix . '" ';
                 $output .= 'name="' . $fieldName. '" ' .$params .' />';
                 break;
+            case 'parent':          // @note This drops through on purpose
+                $suffix = 'department';
+            case 'allocation':
+            case 'category':
             case 'country':
             case 'owner':
+            case 'priority':
+            case 'project':
+            case 'status':
             case 'type':
                 $output  = arraySelect($values, $fieldName, 'size="1" class="text '.$suffix.'"', $fieldValue);
                 break;
             case 'url':
-                $output  = '<input type="text" class="text '. $suffix . '" ';
+                $output  = 'http://<input type="text" class="text '. $suffix . '" ';
                 $output .= 'name="' . $fieldName. '" value="' . w2PformSafe($fieldValue) . '" ' .$params .' />';
                 $output .= '<a href="javascript: void(0);" onclick="testURL()">[' . $this->AppUI->_('test') . ']</a>';
                 break;

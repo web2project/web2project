@@ -11,10 +11,10 @@
 
 interface w2p_System_ListenerInterface
 {
-	/**
-	 * Accepts an event and does something with it
-	 *
-	 * @param Event $event	The event to process
-	 */
-	public function publish(w2p_System_Event $event);
+    /**
+     * Accepts an event and does something with it
+     *
+     * @param Event $event    The event to process
+     */
+    public function publish(w2p_System_Event $event);
 }

@@ -6,7 +6,7 @@
 	require_once W2P_BASE_DIR . '/lib/adodb/adodb.inc.php';
 	require_once W2P_BASE_DIR . '/includes/version.php';
 
-	$dbtype = trim( w2PgetCleanParam( $_POST, 'dbtype', 'mysql' ) );
+	$dbtype = trim( w2PgetCleanParam( $_POST, 'dbtype', 'mysqli' ) );
 	$dbhost = trim( w2PgetCleanParam( $_POST, 'dbhost', '' ) );
 	$dbname = trim( w2PgetCleanParam( $_POST, 'dbname', '' ) );
 	$dbuser = trim( w2PgetCleanParam( $_POST, 'dbuser', '' ) );

@@ -24,7 +24,7 @@ $timezones = w2PgetTimezonesForInstall();
 			<td class="item" width="50%">Database Server Type</td>
 			<td align="left">
 				<select name="dbtype" size="1" style="width:200px;" class="text" disabled="true">
-					<option value="mysql" selected="selected">MySQL</option>
+					<option value="mysqli" selected="selected">MySQL</option>
 				</select>
 			</td>
 		</tr>

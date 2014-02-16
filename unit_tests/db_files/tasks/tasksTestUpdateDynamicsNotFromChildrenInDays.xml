@@ -2,7 +2,7 @@
 <!-- testUpdateDynamicsNotFromChildrenInDays.xml - Dataset to compare against after updating dynamic tasks not from children. -->
 <dataset>
     <table name="tasks">
-        <column>task_id</column> 
+        <column>task_id</column>
         <column>task_name</column>
         <column>task_parent</column>
         <column>task_milestone</column>
@@ -945,7 +945,7 @@
           <value>0</value>
           <value>0</value>
         </row>
-		<row>
+        <row>
           <value>27</value>
           <value>Task 27</value>
           <value>27</value>
@@ -980,7 +980,7 @@
           <value>0</value>
           <value>0</value>
         </row>
-		<row>
+        <row>
           <value>28</value>
           <value>Task 28</value>
           <value>28</value>

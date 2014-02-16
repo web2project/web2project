@@ -5,18 +5,9 @@
  * @author      D. Keith Casey, Jr. <caseydk@users.sourceforge.net>
  */
 
-class w2p_Output_HTMLHelper
+class w2p_Output_HTMLHelper extends w2p_Output_HTML_Base
 {
-
-    protected $_AppUI = null;
     protected $tableRowData = array();
-
-    public function __construct(w2p_Core_CAppUI $AppUI)
-    {
-        $this->_AppUI = $AppUI;
-        $this->df     = $AppUI->getPref('SHDATEFORMAT');
-        $this->dtf    = $this->df . ' ' . $AppUI->getPref('TIMEFORMAT');
-    }
 
     public static function renderContactList(w2p_Core_CAppUI $AppUI, array $contactList)
     {
@@ -53,7 +44,7 @@ class w2p_Output_HTMLHelper
             $fields = array_combine($fieldList, $fieldNames);
         }
 
-        $listTable = new w2p_Output_ListTable($this->_AppUI);
+        $listTable = new w2p_Output_ListTable($this->AppUI);
 
         $output  = $listTable->startTable();
         $output .= $listTable->buildHeader($fields);
@@ -203,7 +194,7 @@ class w2p_Output_HTMLHelper
                 break;
             case '_budget':
                 $cell = w2PgetConfig('currency_symbol');
-                $cell .= formatCurrency($value, $this->_AppUI->getPref('CURRENCYFORM'));
+                $cell .= formatCurrency($value, $this->AppUI->getPref('CURRENCYFORM'));
                 break;
             case '_url':
                 $value = str_replace(array('"', '"', '<', '>'), '', $value);
@@ -231,7 +222,7 @@ class w2p_Output_HTMLHelper
             case '_datetime':
             case '_update':
             case '_updated':
-                $myDate = intval($value) ? new w2p_Utilities_Date($this->_AppUI->formatTZAwareTime($value, '%Y-%m-%d %T')) : null;
+                $myDate = intval($value) ? new w2p_Utilities_Date($this->AppUI->formatTZAwareTime($value, '%Y-%m-%d %T')) : null;
                 $cell = $myDate ? $myDate->format($this->dtf) : '-';
                 break;
             case '_description':
@@ -249,7 +240,7 @@ class w2p_Output_HTMLHelper
                 $cell = round($value).'%';
                 break;
             case '_password':
-                $cell = '('.$this->_AppUI->_('hidden').')';
+                $cell = '('.$this->AppUI->_('hidden').')';
                 break;
             case '_version':
                 $value = (int) (100 * $value);

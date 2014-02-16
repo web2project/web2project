@@ -45,9 +45,6 @@ class CForum extends w2p_Core_BaseObject
         if ('' == trim($this->forum_name)) {
             $this->_error['forum_name'] = $baseErrorMsg . 'forum name is not set';
         }
-        if (0 == (int) $this->forum_owner) {
-            $this->_error['forum_owner'] = $baseErrorMsg . 'forum owner is not set';
-        }
 
         return (count($this->_error)) ? false : true;
     }
@@ -149,6 +146,11 @@ class CForum extends w2p_Core_BaseObject
         $this->forum_create_date = $this->_AppUI->convertToSystemTZ($this->forum_create_date);
 
         parent::hook_preCreate();
+    }
+
+    protected function hook_preStore()
+    {
+        $this->forum_owner = (int) $this->forum_owner ? $this->forum_owner : $this->_AppUI->user_id;
     }
 
     public function delete($unused = null)

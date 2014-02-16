@@ -49,21 +49,12 @@
                     <exclude name="**/CTasksTest.php"/>
                 </fileset>
 
-                <!--
-                The UpgradeManager_Test (manager.test.php) should be
-                executed separately and before any/all of the other
-                tests because it can build up a database for us.  Any
-                ideas on how to do this successfully would be greatly
-                appreciated.  - caseydk 02 July 2009
-                -->
                 <fileset dir="${dir.tests}/classes">
-                    <include name="**/*.test.php"/>
                     <include name="**/*Test.php"/>
                 </fileset>
 
                 <fileset dir="${dir.tests}/includes">
                     <include name="**/*.test.php"/>
-<!--                    <include name="**/*Test.php"/>-->
                 </fileset>
             </batchtest>
             <formatter  type="xml" todir="${dir.reports}" outfile="test-logs.xml"/>
@@ -76,12 +67,12 @@
 
     <target name="metrics" depends="prepare">
         <echo message="Some of these targets are *very* memory intensive. You may have to increase your memory_limit in php.ini" />
-        <phingcall target="cpd" />
         <phingcall target="phploc" />
-        <phingcall target="phpmd" />
         <phingcall target="depend" />
-        <phingcall target="codesniffer" />
+        <!--<phingcall target="codesniffer" />-->
         <phingcall target="churn-grep" />
+        <phingcall target="cpd" />
+        <phingcall target="phpmd" />
     </target>
 
     <target name="standards" depends="lint, metrics" />
@@ -145,7 +136,7 @@
 <!-- git log -since=8/17/2011 > changelog -->
         <delete dir="${dir.package}/${phing.project.name}" />
         <delete dir="${dir.package}/${phing.project.name}-${releaseName}/unit_tests" />
-        
+
         <phplint haltonfailure="true">
             <fileset dir="${dir.package}/${phing.project.name}-${releaseName}">
                 <include name="**/*.php" />
@@ -180,14 +171,14 @@
     <target name="cpd" depends="prepare">
         <phpcpd>
             <fileset refid="project.source" />
-            <formatter type="default" outfile="${dir.reports}/cpd.xml" />
+            <formatter type="pmd" outfile="${dir.reports}/cpd.xml" />
         </phpcpd>
     </target>
 
     <target name="phpmd" depends="prepare">
         <phpmd>
             <fileset refid="project.source" />
-            <formatter type="html" outfile="${dir.reports}/pmd.html"/>
+            <formatter type="xml" outfile="${dir.reports}/pmd.xml"/>
         </phpmd>
     </target>
 
@@ -195,15 +186,19 @@
         <phpdepend>
             <fileset refid="project.source" />
             <logger type="jdepend-xml" outfile="${dir.reports}/jdepend.xml"/>
+            <logger type="summary-xml" outfile="${dir.reports}/jdepend-summary.xml"/>
+            <logger type="jdepend-chart" outfile="${dir.reports}/dependencies.svg"/>
+            <logger type="overview-pyramid" outfile="${dir.reports}/overview-pyramid.svg"/>
             <analyzer type="coderank-mode" value="method"/>
         </phpdepend>
     </target>
 
     <target name="codesniffer" depends="prepare">
-        <phpcodesniffer standard="PEAR" verbosity="1">
+        <echo message="If you don't have the PSR standards installed, just follow the instructions here: https://github.com/klaussilveira/phpcs-psr" />
+        <phpcodesniffer standard="PSR" verbosity="1">
             <fileset refid="project.source" />
-            <formatter type="checkstyle" outfile="${dir.reports}/codesniffer.xml"/>
-            <formatter type="summary" outfile="${dir.reports}/codesniffer-summary.xml"/>
+            <formatter type="checkstyle" outfile="/Users/caseydk/workspace/web2project/${dir.reports}/codesniffer.xml"/>
+            <formatter type="summary" outfile="/Users/caseydk/workspace/web2project/${dir.reports}/codesniffer-summary.xml"/>
         </phpcodesniffer>
     </target>
 

@@ -28,9 +28,9 @@ include_once 'unit_tests/CommonSetup.php';
 
 class w2p_Output_HTMLHelperTest extends CommonSetup
 {
-    protected function setUp ()
-	{
-		parent::setUp();
+    protected function setUp()
+    {
+        parent::setUp();
 
         $this->obj = new w2p_Output_HTMLHelper($this->_AppUI);
     }
@@ -179,11 +179,11 @@ class w2p_Output_HTMLHelperTest extends CommonSetup
         $this->assertEquals('<td>-</td>', $cell);
         // The formatting for _created, _datetime, _update, _updated are the same
         $cell = $this->obj->createCell('x_created', '2012-04-01 12:00:00');
-        $this->assertEquals('<td class="_created">01/Apr/2012 06:00 am</td>', $cell);
+        $this->assertEquals('<td class="_created">01/Apr/2012 07:00 am</td>', $cell);
         $cell = $this->obj->createCell('x_update', '2012-04-01 15:00:00');
-        $this->assertEquals('<td class="_update">01/Apr/2012 09:00 am</td>', $cell);
+        $this->assertEquals('<td class="_update">01/Apr/2012 10:00 am</td>', $cell);
         $cell = $this->obj->createCell('x_updated', '2012-04-01 01:00:00');
-        $this->assertEquals('<td class="_updated">31/Mar/2012 07:00 pm</td>', $cell);
+        $this->assertEquals('<td class="_updated">31/Mar/2012 08:00 pm</td>', $cell);
     }
 
     /*

@@ -25,13 +25,6 @@ $recurs = array('Never', 'Hourly', 'Daily', 'Weekly', 'Bi-Weekly', 'Every Month'
 
 $assigned = $event->getAssigned();
 
-if (($event->event_owner != $AppUI->user_id) && !canView('admin')) {
-	$canEdit = false;
-}
-
-$df = $AppUI->getPref('SHDATEFORMAT');
-$tf = $AppUI->getPref('TIMEFORMAT');
-
 $start_date = $event->event_start_date ? new w2p_Utilities_Date($event->event_start_date) : new w2p_Utilities_Date();
 $end_date = $event->event_end_date ? new w2p_Utilities_Date($event->event_end_date) : new w2p_Utilities_Date();
 if ($event->event_project) {

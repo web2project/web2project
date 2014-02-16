@@ -1243,7 +1243,7 @@ class w2p_Extensions_Permissions extends gacl_api
 
         //If we don't know what is the module we are dealing with lets deny
         if (!$mod_class['mod_directory']) {
-            dprint(__file__, __line__, 2, 'user:' . $userid . 'module:' . $module . 'Item:' . $item . $AppUI->getModuleClass($mod_class['mod_directory']));
+            dprint(__file__, __line__, 2, 'user:' . $userid . 'module:' . $module . 'Item:' . $item . $mod_class['mod_main_class']);
             return array();
         }
         $obj = new $mod_class['mod_main_class'];

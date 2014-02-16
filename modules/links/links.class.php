@@ -90,9 +90,7 @@ class CLink extends w2p_Core_BaseObject
             $this->link_url = 'http://' . $this->link_url;
         }
         $this->link_url = str_replace(array('"', '"', '<', '>'), '', $this->link_url);
-        if (0 == (int) $this->link_owner) {
-            $this->link_owner = $this->_AppUI->user_id;
-        }
+        $this->link_owner = (int) $this->link_owner ? $this->link_owner : $this->_AppUI->user_id;
     }
 
     public function hook_search()

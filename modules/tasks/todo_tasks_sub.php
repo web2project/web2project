@@ -174,18 +174,5 @@ $canDelete = $perms->checkModuleItem($m, 'delete');
         </tr>
     </table>
 </form>
-<table>
-    <tr>
-        <td>&nbsp; &nbsp;</td>
-        <td class="future">&nbsp; &nbsp;</td>
-        <td>=<?php echo $AppUI->_('Future Task'); ?></td>
-        <td>&nbsp; &nbsp;</td>
-        <td class="active">&nbsp; &nbsp;</td>
-        <td>=<?php echo $AppUI->_('Started and on time'); ?></td>
-        <td class="notstarted">&nbsp; &nbsp;</td>
-        <td>=<?php echo $AppUI->_('Should have started'); ?></td>
-        <td>&nbsp; &nbsp;</td>
-        <td class="late">&nbsp; &nbsp;</td>
-        <td>=<?php echo $AppUI->_('Overdue'); ?></td>
-    </tr>
-</table>
+<?php
+include $AppUI->getTheme()->resolveTemplate('task_key');

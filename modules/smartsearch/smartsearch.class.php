@@ -22,8 +22,6 @@ class CSmartSearch {
 	public $table_joins = array();
 	public $keyword = null;
 	public $keywords = null;
-	public $tmppattern = '';
-	public $display_val = '';
 	public $search_options = null;
 
 	public function fetchResults(&$permissions, &$record_count) {
@@ -51,7 +49,7 @@ class CSmartSearch {
 						if (!($this->search_options['display_all_flds'] == 'on') && ($ii > 2)) {
 							break;
 						}
-						$display_val = $display_val . ' ' . $records[preg_replace('/^.*\.([^\.]+)$/', '$1', $fld)];
+						$display_val .= ' ' . $records[preg_replace('/^.*\.([^\.]+)$/', '$1', $fld)];
 					}
 					//--MSy-
 					$tmplink = '';

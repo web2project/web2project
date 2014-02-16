@@ -185,9 +185,6 @@ class CTask extends w2p_Core_BaseObject
                 $this->task_start_date = $this->task_end_date;
             }
         }
-        if (!$this->task_creator) {
-            $this->task_creator = $this->_AppUI->user_id;
-        }
         if (!$this->task_duration_type) {
             $this->task_duration_type = 1;
         }
@@ -769,7 +766,8 @@ class CTask extends w2p_Core_BaseObject
         $q = $this->_getQuery();
         $this->task_updated = $q->dbfnNowWithTZ();
         $this->task_target_budget = filterCurrency($this->task_target_budget);
-        $this->task_owner = ($this->task_owner) ? $this->task_owner : $this->_AppUI->user_id;
+        $this->task_owner = (int) $this->task_owner ? $this->task_owner : $this->_AppUI->user_id;
+        $this->task_creator = (int) $this->task_creator ? $this->task_creator : $this->_AppUI->user_id;
         $this->task_contacts = is_array($this->task_contacts) ? $this->task_contacts : explode(',', $this->task_contacts);
 
         parent::hook_preStore();
@@ -1800,19 +1798,32 @@ class CTask extends w2p_Core_BaseObject
         return $overAssignment;
     }
 
-    public function getAssignedUsers($taskId)
+    public function assignees($taskId)
     {
-
         $q = $this->_getQuery();
         $q->addTable('users', 'u');
+        $q->addQuery('u.*, perc_assignment');
+
         $q->innerJoin('user_tasks', 'ut', 'ut.user_id = u.user_id');
         $q->leftJoin('contacts', 'co', ' co.contact_id = u.user_contact');
         $q->addQuery('u.*, ut.perc_assignment, ut.user_task_priority, contact_display_name,
             co.contact_last_name, co.contact_first_name, contact_display_name as contact_name');
         $q->addQuery('co.contact_email AS user_email, co.contact_phone AS user_phone');
+
         $q->addWhere('ut.task_id = ' . (int) $taskId);
 
         return $q->loadHashList('user_id');
+    }
+    public function getAssignedUsers($taskId)
+    {
+        trigger_error("The CTask->getAssignedUsers method has been deprecated in v3.2 and will be removed in v5.0. Please use CTask->assignees instead.", E_USER_NOTICE );
+        return $this->assignees($taskId);
+    }
+
+    public function getAssigned()
+    {
+        trigger_error("The CTask->getAssigned method has been deprecated in v3.2 and will be removed in v5.0. Please use CTask->assignees instead.", E_USER_NOTICE );
+        return $this->assignees($this->task_id);
     }
 
     /*
@@ -2426,21 +2437,6 @@ class CTask extends w2p_Core_BaseObject
             }
         }
         return parent::getAllowedRecords($uid, $fields, $orderby, $index, $extra);
-    }
-
-    public function getAssigned($index = 'user_id')
-    {
-        $q = $this->_getQuery();
-        $q->addTable('users', 'u');
-        $q->addTable('user_tasks', 'ut');
-        $q->addTable('contacts', 'con');
-        $q->addQuery('u.user_id, perc_assignment');
-        $q->addQuery('contact_id, contact_display_name AS user_name, contact_display_name AS contact_name, contact_email');
-        $q->addWhere('ut.task_id = ' . (int) $this->task_id);
-        $q->addWhere('user_contact = contact_id');
-        $q->addWhere('ut.user_id = u.user_id');
-        $assigned = $q->loadHashList($index);
-        return $assigned;
     }
 
 //TODO: this method should be moved to CTaskLog

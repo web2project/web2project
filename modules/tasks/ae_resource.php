@@ -14,7 +14,7 @@ if ($task_id == 0) {
 	$assignedUsers = array($AppUI->user_id => array('contact_name' => $users[$AppUI->user_id], 'perc_assignment' => '100'));
 } else {
 	// Pull users on this task
-	$assignedUsers = $task->getAssignedUsers($task_id);
+	$assignedUsers = $task->assignees($task_id);
 }
 
 $initPercAsignment = '';

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!-- tasksTestClearReminderDontCheck.xml - Data to test against when 
+<!-- tasksTestClearReminderDontCheck.xml - Data to test against when
      clearing reminder and  not checking that task is complete. -->
 <dataset>
     <table name="event_queue">

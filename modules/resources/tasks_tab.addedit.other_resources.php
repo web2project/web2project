@@ -1,6 +1,6 @@
 <?php
 if (!defined('W2P_BASE_DIR')) {
-	die('You should not access this file directly.');
+    die('You should not access this file directly.');
 }
 // @todo    convert to template
 // @todo    remove database query
@@ -25,29 +25,29 @@ $initResAssignment = '';
 
 $resources = array();
 if ($loadFromTab && isset($_SESSION['tasks_subform']['hresource_assign'])) {
-	$initResAssignment = '';
-	foreach (explode(';', $_SESSION['tasks_subform']['hresource_assign']) as $perc) {
-		if ($perc) {
-			list($rid, $perc) = explode('=', $perc);
-			$assigned_resources[$rid] = $perc;
-			$initResAssignment .= $rid . '=' . $perc . ';';
-			$resources[$rid] = $all_resources[$rid] . ' [' . $perc . '%]';
-		}
-	}
+    $initResAssignment = '';
+    foreach (explode(';', $_SESSION['tasks_subform']['hresource_assign']) as $perc) {
+        if ($perc) {
+            list($rid, $perc) = explode('=', $perc);
+            $assigned_resources[$rid] = $perc;
+            $initResAssignment .= $rid . '=' . $perc . ';';
+            $resources[$rid] = $all_resources[$rid] . ' [' . $perc . '%]';
+        }
+    }
 } elseif ($task_id == 0) {
 } else {
-	$initResAssignment = '';
-	// Pull resources on this task
-	$q = new w2p_Database_Query();
-	$q->addTable('resource_tasks');
-	$q->addQuery('resource_id, percent_allocated');
-	$q->addWhere('task_id = ' . (int)$task_id);
-	$assigned_res = $q->exec();
-	while ($row = $q->fetchRow()) {
-		$initResAssignment .= $row['resource_id'] . '=' . $row['percent_allocated'] . ';';
-		$resources[$row['resource_id']] = $all_resources[$row['resource_id']] . ' [' . $row['percent_allocated'] . '%]';
-	}
-	$q->clear();
+    $initResAssignment = '';
+    // Pull resources on this task
+    $q = new w2p_Database_Query();
+    $q->addTable('resource_tasks');
+    $q->addQuery('resource_id, percent_allocated');
+    $q->addWhere('task_id = ' . (int)$task_id);
+    $assigned_res = $q->exec();
+    while ($row = $q->fetchRow()) {
+        $initResAssignment .= $row['resource_id'] . '=' . $row['percent_allocated'] . ';';
+        $resources[$row['resource_id']] = $all_resources[$row['resource_id']] . ' [' . $row['percent_allocated'] . '%]';
+    }
+    $q->clear();
 }
 
 $percent = array(0 => '0', 5 => '5', 10 => '10', 15 => '15', 20 => '20', 25 => '25', 30 => '30', 35 => '35', 40 => '40', 45 => '45', 50 => '50', 55 => '55', 60 => '60', 65 => '65', 70 => '70', 75 => '75', 80 => '80', 85 => '85', 90 => '90', 95 => '95', 100 => '100');
@@ -58,7 +58,7 @@ $AppUI->getModuleJS('resources', 'tabs');
 echo "var projTasksWithEndDates=new Array();\n";
 $keys = array_keys($projTasksWithEndDates);
 for ($i = 1, $i_cmp = sizeof($keys); $i < $i_cmp; $i++) {
-	echo 'projTasksWithEndDates[' . $keys[$i] . "]=new Array(\"" . $projTasksWithEndDates[$keys[$i]][1] . "\", \"" . $projTasksWithEndDates[$keys[$i]][2] . "\", \"" . $projTasksWithEndDates[$keys[$i]][3] . "\");\n";
+    echo 'projTasksWithEndDates[' . $keys[$i] . "]=new Array(\"" . $projTasksWithEndDates[$keys[$i]][1] . "\", \"" . $projTasksWithEndDates[$keys[$i]][2] . "\", \"" . $projTasksWithEndDates[$keys[$i]][3] . "\");\n";
 }
 ?>
 </script>

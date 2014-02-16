@@ -895,14 +895,12 @@ class w2p_Core_CAppUI
         }
     }
 
-    /*     * **********************************************************************************************************************
-      /**
+    /**
      * @deprecated
      */
-
     public function logout()
     {
-        
+        trigger_error("The AppUI->logout() method has been deprecated in 2.0 and will be removed in v4.0. Please use CCompany->projects() instead.", E_USER_NOTICE );
     }
 
     /**
@@ -1133,12 +1131,12 @@ class w2p_Core_CAppUI
         $s = '<script type="text/javascript">';
         $s .= '$(document).ready(function() {';
         // Attach tooltips to "span" elements
-        $s .= '	$("span").tipTip({maxWidth: "600px;", delay: 200, fadeIn: 150, fadeOut: 150});';
+        $s .= '    $("span").tipTip({maxWidth: "600px;", delay: 200, fadeIn: 150, fadeOut: 150});';
         // Move the focus to the first textbox available, while avoiding the "Global Search..." textbox
         if (canAccess('smartsearch')) {
-            $s .= '	$("input[type=\'text\']:eq(1)").focus();';
+            $s .= '    $("input[type=\'text\']:eq(1)").focus();';
         } else {
-            $s .= '	$("input[type=\'text\']:eq(0)").focus();';
+            $s .= '    $("input[type=\'text\']:eq(0)").focus();';
         }
         $s .= '});';
         $s .= '</script>';

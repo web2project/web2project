@@ -25,36 +25,36 @@ include_once 'unit_tests/CommonSetup.php';
 class CCompanies_Test extends CommonSetup
 {
 
-	public function setUp()
-	{
-		parent::setUp();
+    public function setUp()
+    {
+        parent::setUp();
 
-		$this->obj = new CCompany();
+        $this->obj = new CCompany();
         $this->obj->overrideDatabase($this->mockDB);
 
         $GLOBALS['acl'] = new w2p_Mocks_Permissions();
 
-		$this->post_data = array (
-			'dosql'                 => 'do_company_aed',
-			'company_id'            => 0,
-			'company_name'          => 'UnitTestCompany',
-			'company_email'         => 'web2project@example.org',
-			'company_phone1'        => '1.999.999.9999',
-			'company_phone2'        => '1.999.999.9998',
-			'company_fax'           => '1.999.999.9997',
-			'company_address1'      => 'Address 1',
-			'company_address2'      => 'Address 2',
-			'company_city'          => 'City',
-			'company_state'         => 'CA',
-			'company_zip'           => '90210',
-			'company_country'       => 'US',
-			'company_primary_url'   => 'web2project.net',
-			'company_owner'         => 1,
-			'company_type'          => 2,
-			'company_description'   => 'This is a company.'
+        $this->post_data = array (
+            'dosql'                 => 'do_company_aed',
+            'company_id'            => 0,
+            'company_name'          => 'UnitTestCompany',
+            'company_email'         => 'web2project@example.org',
+            'company_phone1'        => '1.999.999.9999',
+            'company_phone2'        => '1.999.999.9998',
+            'company_fax'           => '1.999.999.9997',
+            'company_address1'      => 'Address 1',
+            'company_address2'      => 'Address 2',
+            'company_city'          => 'City',
+            'company_state'         => 'CA',
+            'company_zip'           => '90210',
+            'company_country'       => 'US',
+            'company_primary_url'   => 'web2project.net',
+            'company_owner'         => 1,
+            'company_type'          => 2,
+            'company_description'   => 'This is a company.'
 
-		);
-	}
+        );
+    }
 
     public function testObjectProperties()
     {
@@ -63,44 +63,23 @@ class CCompanies_Test extends CommonSetup
 
     /**
      * Tests that the proper error message is returned when a company
-     * is attempted to be created without an owner.
-     */
-    public function testCreateCompanyNoOwner()
-    {
-		unset($this->post_data['company_owner']);
-		$this->obj->bind($this->post_data);
-
-		/**
-		 * Verify we got the proper error message
-		 */
-		$this->assertFalse($this->obj->store());
-        $this->assertArrayHasKey('company_owner', $this->obj->getError());
-
-		/**
-		 * Verify that company id was not set
-		 */
-		$this->assertEquals(0, $this->obj->company_id);
-    }
-
-	/**
-     * Tests that the proper error message is returned when a company
      * is attempted to be created without a name.
      */
     public function testCreateCompanyNoName()
     {
-		unset($this->post_data['company_name']);
-		$this->obj->bind($this->post_data);
+        unset($this->post_data['company_name']);
+        $this->obj->bind($this->post_data);
 
-		/**
-		 * Verify we got the proper error message
-		 */
+        /**
+         * Verify we got the proper error message
+         */
         $this->assertFalse($this->obj->store());
         $this->assertArrayHasKey('company_name', $this->obj->getError());
 
-		/**
-		 * Verify that company id was not set
-		 */
-		$this->assertEquals(0, $this->obj->company_id);
+        /**
+         * Verify that company id was not set
+         */
+        $this->assertEquals(0, $this->obj->company_id);
     }
 
     /**
@@ -378,7 +357,8 @@ class CCompanies_Test extends CommonSetup
     /**
      * @todo Implement testCanDelete().
      */
-    public function testCanDelete() {
+    public function testCanDelete()
+    {
         // Remove the following lines when you implement this test.
         $this->markTestIncomplete(
                 'This test has not been implemented yet.'
@@ -388,15 +368,16 @@ class CCompanies_Test extends CommonSetup
     /**
      * @todo Implement testGetCompanyList().
      */
-    public function testGetCompanyList() {
+    public function testGetCompanyList()
+    {
         // Remove the following lines when you implement this test.
         $this->markTestIncomplete(
                 'This test has not been implemented yet.'
         );
     }
 
-    public function testGetCompanies() {
-
+    public function testGetCompanies()
+    {
         $results = $this->obj->getCompanies();
         $this->assertEquals(0,                  count($results));
 
@@ -412,7 +393,8 @@ class CCompanies_Test extends CommonSetup
     /**
      * @todo Implement testGetProjects().
      */
-    public function testGetProjects() {
+    public function testGetProjects()
+    {
         // Remove the following lines when you implement this test.
         $this->markTestIncomplete(
                 'This test has not been implemented yet.'
@@ -422,7 +404,8 @@ class CCompanies_Test extends CommonSetup
     /**
      * @todo Implement testGetContacts().
      */
-    public function testGetContacts() {
+    public function testGetContacts()
+    {
         // Remove the following lines when you implement this test.
         $this->markTestIncomplete(
                 'This test has not been implemented yet.'
@@ -432,7 +415,8 @@ class CCompanies_Test extends CommonSetup
     /**
      * @todo Implement testGetUsers().
      */
-    public function testGetUsers() {
+    public function testGetUsers()
+    {
         // Remove the following lines when you implement this test.
         $this->markTestIncomplete(
                 'This test has not been implemented yet.'
@@ -442,7 +426,8 @@ class CCompanies_Test extends CommonSetup
     /**
      * @todo Implement testGetDepartments().
      */
-    public function testGetDepartments() {
+    public function testGetDepartments()
+    {
         // Remove the following lines when you implement this test.
         $this->markTestIncomplete(
                 'This test has not been implemented yet.'

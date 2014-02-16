@@ -24,60 +24,60 @@ include_once 'unit_tests/CommonSetup.php';
 
 class Main_Functions_Test extends PHPUnit_Framework_TestCase
 {
-	public function testW2PgetParam()
-	{
-		$params = array('m' => 'projects', 'a' => 'view', 'v' => '<script>alert</script>', 
-				'html' => '<div onclick="doSomething()">asdf</div>', '<script>' => 'Something Nasty');
+    public function testW2PgetParam()
+    {
+        $params = array('m' => 'projects', 'a' => 'view', 'v' => '<script>alert</script>',
+                'html' => '<div onclick="doSomething()">asdf</div>', '<script>' => 'Something Nasty');
 
-		$this->assertEquals('projects', w2PgetParam($params, 'm'));
+        $this->assertEquals('projects', w2PgetParam($params, 'm'));
 
-		$this->assertEquals('', w2PgetParam($params, 'NotGonnaBeThere'));
+        $this->assertEquals('', w2PgetParam($params, 'NotGonnaBeThere'));
 
-		$this->assertEquals('Some Default', w2PgetParam($params, 'NotGonnaBeThere', 'Some Default'));
+        $this->assertEquals('Some Default', w2PgetParam($params, 'NotGonnaBeThere', 'Some Default'));
 
-		//$this->markTestIncomplete("Currently w2PgetParam redirects for tainted names.. what do we do there?");
-		
-		//$this->markTestIncomplete("Currently w2PgetParam redirects for tainted values.. what do we do there?");
-	}
-	
-	public function testW2PgetCleanParam()
-	{
-		$params = array('m' => 'projects', 'a' => 'view', 'v' => '<script>alert</script>', 
-				'html' => '<div onclick="doSomething()">asdf</div>', '<script>' => 'Something Nasty');
+        //$this->markTestIncomplete("Currently w2PgetParam redirects for tainted names.. what do we do there?");
 
-		$this->assertEquals('projects', w2PgetCleanParam($params, 'm'));
+        //$this->markTestIncomplete("Currently w2PgetParam redirects for tainted values.. what do we do there?");
+    }
 
-		$this->assertEquals('', w2PgetCleanParam($params, 'NotGonnaBeThere'));
+    public function testW2PgetCleanParam()
+    {
+        $params = array('m' => 'projects', 'a' => 'view', 'v' => '<script>alert</script>',
+                'html' => '<div onclick="doSomething()">asdf</div>', '<script>' => 'Something Nasty');
 
-		$this->assertEquals('Some Default', w2PgetCleanParam($params, 'NotGonnaBeThere', 'Some Default'));
+        $this->assertEquals('projects', w2PgetCleanParam($params, 'm'));
 
-		$this->assertEquals($params['v'], w2PgetCleanParam($params, 'v', ''));
+        $this->assertEquals('', w2PgetCleanParam($params, 'NotGonnaBeThere'));
 
-		$this->assertEquals($params['html'], w2PgetCleanParam($params, 'html', ''));
+        $this->assertEquals('Some Default', w2PgetCleanParam($params, 'NotGonnaBeThere', 'Some Default'));
 
-		$this->assertEquals($params['<script>'], w2PgetCleanParam($params, '<script>', ''));
+        $this->assertEquals($params['v'], w2PgetCleanParam($params, 'v', ''));
 
-		//$this->markTestIncomplete("This function does *nothing* for tainted values and I suspect it should...");
-	}
+        $this->assertEquals($params['html'], w2PgetCleanParam($params, 'html', ''));
 
-	public function testArrayMerge()
-	{
-		$array1 = array('a', 'b', 'c', 4 => 'd', 5 => 'e');
-		$array2 = array('z', 6 => 'y', 7 => 'x', 4 => 'w', 5 => 'v');
-		$newArray = arrayMerge($array1, $array2);
+        $this->assertEquals($params['<script>'], w2PgetCleanParam($params, '<script>', ''));
 
-		$this->assertEquals('b', $newArray[1]);		//	Tests no overwrite
-		$this->assertEquals('w', $newArray[4]);		//	Tests explicit overwrite
-		$this->assertEquals('z', $newArray[0]);		//	Tests conincidental overwrite
-	}
-	public function testW2PgetConfig()
-	{
-		global $w2Pconfig;
+        //$this->markTestIncomplete("This function does *nothing* for tainted values and I suspect it should...");
+    }
 
-		$this->assertEquals('web2project.net', w2PgetConfig('site_domain'));
-		$this->assertEquals(null, w2PgetConfig('NotGonnaBeThere'));
-		$this->assertEquals('Some Default', w2PgetConfig('NotGonnaBeThere', 'Some Default'));
-	}
+    public function testArrayMerge()
+    {
+        $array1 = array('a', 'b', 'c', 4 => 'd', 5 => 'e');
+        $array2 = array('z', 6 => 'y', 7 => 'x', 4 => 'w', 5 => 'v');
+        $newArray = arrayMerge($array1, $array2);
+
+        $this->assertEquals('b', $newArray[1]);        //    Tests no overwrite
+        $this->assertEquals('w', $newArray[4]);        //    Tests explicit overwrite
+        $this->assertEquals('z', $newArray[0]);        //    Tests conincidental overwrite
+    }
+    public function testW2PgetConfig()
+    {
+        global $w2Pconfig;
+
+        $this->assertEquals('web2project.net', w2PgetConfig('site_domain'));
+        $this->assertEquals(null, w2PgetConfig('NotGonnaBeThere'));
+        $this->assertEquals('Some Default', w2PgetConfig('NotGonnaBeThere', 'Some Default'));
+    }
 
     public function testFilterCurrency()
     {
@@ -90,20 +90,20 @@ class Main_Functions_Test extends PHPUnit_Framework_TestCase
         $this->assertEquals('1234567.89', filterCurrency('1,234,567.89'));
     }
 
-	public function testConvert2days()
-	{		
-		$hours = 1;		
-		$this->assertEquals(0.125, convert2days($hours, 0));
+    public function testConvert2days()
+    {
+        $hours = 1;
+        $this->assertEquals(0.125, convert2days($hours, 0));
 
-		$hoursIndicator = 1;
-		$hours = 8;
-		$this->assertEquals(1, convert2days($hours, $hoursIndicator));
+        $hoursIndicator = 1;
+        $hours = 8;
+        $this->assertEquals(1, convert2days($hours, $hoursIndicator));
 
-		$dayIndicator = 24;
-		$days = 1;
-		$this->assertEquals(1, convert2days($days, $dayIndicator));
-	}
-  
+        $dayIndicator = 24;
+        $days = 1;
+        $this->assertEquals(1, convert2days($days, $dayIndicator));
+    }
+
     public function test__autoload()
     {
         $this->assertTrue(class_exists('CProject'));
@@ -185,7 +185,8 @@ class Main_Functions_Test extends PHPUnit_Framework_TestCase
         $this->assertEquals($target, $linkText);
     }
 
-    public function test_w2p_pluralize() {
+    public function test_w2p_pluralize()
+    {
         $this->assertEquals('projects',  w2p_pluralize('project'));
         $this->assertEquals('links',     w2p_pluralize('link'));
         $this->assertEquals('companies', w2p_pluralize('company'));
@@ -193,13 +194,15 @@ class Main_Functions_Test extends PHPUnit_Framework_TestCase
         $this->assertEquals('todos',     w2p_pluralize('todo'));
     }
 
-    public function test_w2Psgn() {
+    public function test_w2Psgn()
+    {
         $this->assertEquals(-1, w2Psgn(-56.2));
         $this->assertEquals( 0, w2Psgn(0));
         $this->assertEquals( 1, w2Psgn(0.01));
     }
 
-    public function test_w2pFindTaskComplete() {
+    public function test_w2pFindTaskComplete()
+    {
         $empty   = null;    //we don't care what this value is
         $past    = date('Y-m-d', strtotime('-1 week'));
         $future  = date('Y-m-d', strtotime('+1 week'));
@@ -210,8 +213,9 @@ class Main_Functions_Test extends PHPUnit_Framework_TestCase
         $this->assertEquals('notstarted', w2pFindTaskComplete($past,   $future, 0));
         $this->assertEquals('late',       w2pFindTaskComplete($past,   $empty,  0));
     }
-    
-    public function test_notifyNewExternalUser() {
+
+    public function test_notifyNewExternalUser()
+    {
         // This is for phpUnit 3.6+
         $emailUtility = $this->getMock('w2p_Utilities_Mail', array('Send', 'Body', 'Subject'));
         $emailUtility->expects($this->once())
@@ -226,7 +230,8 @@ class Main_Functions_Test extends PHPUnit_Framework_TestCase
         notifyNewExternalUser('test@test.com', 'username', 'logname', 'logpwd', $emailUtility);
     }
 
-    public function test_notifyNewUser() {
+    public function test_notifyNewUser()
+    {
         // This is for phpUnit 3.6+
         $emailUtility = $this->getMock('w2p_Utilities_Mail', array('Send', 'Body', 'Subject'));
         $emailUtility->expects($this->once())
@@ -237,7 +242,7 @@ class Main_Functions_Test extends PHPUnit_Framework_TestCase
                      ->with($this->stringContains('username'));
         $emailUtility->expects($this->once())
                      ->method('Send');
-        
+
         notifyNewUser('test@test.com', 'username', $emailUtility);
     }
 }

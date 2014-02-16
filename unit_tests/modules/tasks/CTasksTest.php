@@ -35,6 +35,7 @@ class CTasks_Test extends PHPUnit_Extensions_Database_TestCase
                        w2PgetConfig('dbhost') . ';dbname=' .
                        w2PgetConfig('dbname'),
                        w2PgetConfig('dbuser'), w2PgetConfig('dbpass'));
+
         return $this->createDefaultDBConnection($pdo, w2PgetConfig('dbname'));
     }
 
@@ -47,17 +48,17 @@ class CTasks_Test extends PHPUnit_Extensions_Database_TestCase
     }
     protected function getDataSetPath()
     {
-    	return dirname(dirname(__FILE__)).'/../db_files/tasks/';
+        return dirname(dirname(__FILE__)).'/../db_files/tasks/';
     }
 
-	public function setUp()
-	{
-		parent::setUp();
+    public function setUp()
+    {
+        parent::setUp();
 
-		$this->obj = new CTask();
+        $this->obj = new CTask();
 
-		$this->post_data = array (
-			'dosql'                 => 'do_task_aed',
+        $this->post_data = array (
+            'dosql'                 => 'do_task_aed',
             'task_id'               => 0,
             'task_project'          => 1,
             'task_contacts'         => null,
@@ -94,8 +95,8 @@ class CTasks_Test extends PHPUnit_Extensions_Database_TestCase
             'hassign'               => 1,
             'hresource_assign'      => '',
             'resource_assignment'   => 100
-		);
-	}
+        );
+    }
 
     /*
      * This was written because the old CTask->load() actually performed updates
@@ -105,12 +106,13 @@ class CTasks_Test extends PHPUnit_Extensions_Database_TestCase
      *   database directly. So we have to do it manually post-dataload but
      *   pre-testing.
      */
-    protected function _preCalcData() {
+    protected function _preCalcData()
+    {
         $taskList = $this->obj->getAllowedTaskList(null, 1);
         foreach ($taskList as $item) {
             $tmpTask = new CTask();
             $tmpTask->load($item['task_id']);
-            if($tmpTask->task_dynamic == 1) {
+            if ($tmpTask->task_dynamic == 1) {
                 $tmpTask->updateDynamics(true);
                 $tmpTask->store();
             }
@@ -218,7 +220,7 @@ class CTasks_Test extends PHPUnit_Extensions_Database_TestCase
      */
     public function testCheckTaskNoName()
     {
-		unset($this->post_data['task_name']);
+        unset($this->post_data['task_name']);
 
         $this->obj->bind($this->post_data);
         $errorArray = $this->obj->check();
@@ -231,7 +233,7 @@ class CTasks_Test extends PHPUnit_Extensions_Database_TestCase
      */
     public function testCheckTaskNoPriority()
     {
-		unset($this->post_data['task_priority']);
+        unset($this->post_data['task_priority']);
 
         $this->obj->bind($this->post_data);
         $errorArray = $this->obj->check();
@@ -239,13 +241,13 @@ class CTasks_Test extends PHPUnit_Extensions_Database_TestCase
         $this->assertArrayHasKey('task_priority', $errorArray);
     }
 
-	/**
+    /**
      * Tests the check function returns the proper error message when no start date is passed
      */
 //TODO: this is based on check_task_dates being set to true..
     public function testCheckTaskNoStartDate()
     {
-		unset($this->post_data['task_start_date']);
+        unset($this->post_data['task_start_date']);
 
         $this->obj->bind($this->post_data);
         $result = $this->obj->check();
@@ -253,12 +255,12 @@ class CTasks_Test extends PHPUnit_Extensions_Database_TestCase
         $this->assertArrayHasKey('task_start_date', $result);
     }
 
-	/**
+    /**
      * Tests the check function returns the proper error message when no end date is passed
      */
     public function testCheckTaskNoEndDate()
     {
-		unset($this->post_data['task_end_date']);
+        unset($this->post_data['task_end_date']);
 
         $this->obj->bind($this->post_data);
         $result = $this->obj->check();
@@ -272,7 +274,7 @@ class CTasks_Test extends PHPUnit_Extensions_Database_TestCase
      */
     public function testCheckTaskDynamicWithDep()
     {
-		$this->post_data['task_id'] = 3;
+        $this->post_data['task_id'] = 3;
 
         $this->obj->bind($this->post_data);
         $errorMsg = $this->obj->check();
@@ -286,9 +288,9 @@ class CTasks_Test extends PHPUnit_Extensions_Database_TestCase
      */
     public function testCheckTaskCircularDep()
     {
-		$this->post_data['task_id'] 		= 3;
-		$this->post_data['task_parent'] 	= 4;
-		$this->post_data['task_dynamic']	= 0;
+        $this->post_data['task_id']         = 3;
+        $this->post_data['task_parent']     = 4;
+        $this->post_data['task_dynamic']    = 0;
 
         $this->obj->bind($this->post_data);
         $errorMsg = $this->obj->check();
@@ -304,9 +306,9 @@ class CTasks_Test extends PHPUnit_Extensions_Database_TestCase
      */
     public function testCheckTaskCannotDepOnParent()
     {
-		$this->post_data['task_id'] 		= 5;
-		$this->post_data['task_parent'] 	= 6;
-		$this->post_data['task_dynamic']	= 0;
+        $this->post_data['task_id']         = 5;
+        $this->post_data['task_parent']     = 6;
+        $this->post_data['task_dynamic']    = 0;
 
         $this->obj->bind($this->post_data);
         $errorMsg = $this->obj->check();
@@ -321,9 +323,9 @@ class CTasks_Test extends PHPUnit_Extensions_Database_TestCase
      */
     public function testCheckTaskParentCannotBeChild()
     {
-		$this->post_data['task_id'] 		= 6;
-		$this->post_data['task_parent'] 	= 7;
-		$this->post_data['task_dynamic']	= 0;
+        $this->post_data['task_id']         = 6;
+        $this->post_data['task_parent']     = 7;
+        $this->post_data['task_dynamic']    = 0;
 
         $this->obj->bind($this->post_data);
         $errorMsg = $this->obj->check();
@@ -338,9 +340,9 @@ class CTasks_Test extends PHPUnit_Extensions_Database_TestCase
      */
     public function testCheckTaskGrandParentCannotBeChild()
     {
-		$this->post_data['task_id'] 		= 10;
-		$this->post_data['task_parent'] 	= 9;
-		$this->post_data['task_dynamic']	= 0;
+        $this->post_data['task_id']         = 10;
+        $this->post_data['task_parent']     = 9;
+        $this->post_data['task_dynamic']    = 0;
 
         $this->obj->bind($this->post_data);
         $errorMsg = $this->obj->check();
@@ -356,9 +358,9 @@ class CTasks_Test extends PHPUnit_Extensions_Database_TestCase
      */
     public function testCheckTaskCannotDepOnGrandParent()
     {
-		$this->post_data['task_id']			= 11;
-		$this->post_data['task_parent']		= 10;
-		$this->post_data['task_dynamic']	= 0;
+        $this->post_data['task_id']            = 11;
+        $this->post_data['task_parent']        = 10;
+        $this->post_data['task_dynamic']    = 0;
 
         $this->obj->bind($this->post_data);
         $errorMsg = $this->obj->check();
@@ -374,9 +376,9 @@ class CTasks_Test extends PHPUnit_Extensions_Database_TestCase
      */
     public function testCheckTaskCircularDepOnParentDep()
     {
-		$this->post_data['task_id']			= 12;
-		$this->post_data['task_parent']		= 11;
-		$this->post_data['task_dynamic']	= 0;
+        $this->post_data['task_id']            = 12;
+        $this->post_data['task_parent']        = 11;
+        $this->post_data['task_dynamic']    = 0;
 
         $this->obj->bind($this->post_data);
         $errorMsg = $this->obj->check();
@@ -392,8 +394,8 @@ class CTasks_Test extends PHPUnit_Extensions_Database_TestCase
      */
     public function testCheckTaskChildDepOnParent()
     {
-		$this->post_data['task_id']		= 16;
-		$this->post_data['task_parent']	= 15;
+        $this->post_data['task_id']        = 16;
+        $this->post_data['task_parent']    = 15;
 
         $this->obj->bind($this->post_data);
         $errorMsg = $this->obj->check();
@@ -407,8 +409,8 @@ class CTasks_Test extends PHPUnit_Extensions_Database_TestCase
      */
     public function testCheck()
     {
-		$this->post_data['task_id']		= 18;
-		$this->post_data['task_parent']	= 18;
+        $this->post_data['task_id']        = 18;
+        $this->post_data['task_parent']    = 18;
 
         $this->obj->bind($this->post_data);
         $errorMsg = $this->obj->check();
@@ -1092,7 +1094,7 @@ class CTasks_Test extends PHPUnit_Extensions_Database_TestCase
         $results = $q->loadList();
 
         global $AppUI;
-        foreach($results as $dates) {
+        foreach ($results as $dates) {
             $task_created = $AppUI->formatTZAwareTime($dates['task_created'], '%Y-%m-%d %T');
             $task_created = strtotime($task_created);
             $this->assertGreaterThanOrEqual($min_time, $task_created);
@@ -1134,7 +1136,7 @@ class CTasks_Test extends PHPUnit_Extensions_Database_TestCase
         $results = $q->loadList();
 
         global $AppUI;
-        foreach($results as $dates) {
+        foreach ($results as $dates) {
             $task_created = $AppUI->formatTZAwareTime($dates['task_created'], '%Y-%m-%d %T');
             $task_created = strtotime($task_created);
             $this->assertGreaterThanOrEqual($min_time, $task_created);
@@ -1176,7 +1178,7 @@ class CTasks_Test extends PHPUnit_Extensions_Database_TestCase
         $results = $q->loadList();
 
         global $AppUI;
-        foreach($results as $dates) {
+        foreach ($results as $dates) {
             $task_created = $AppUI->formatTZAwareTime($dates['task_created'], '%Y-%m-%d %T');
             $task_created = strtotime($task_created);
             $this->assertGreaterThanOrEqual($min_time, $task_created);
@@ -1189,15 +1191,15 @@ class CTasks_Test extends PHPUnit_Extensions_Database_TestCase
         }
     }
 
-	/**
-	 * Tests the store function with proper arguments passed.
-	 */
-	public function testStoreCreate()
-	{
+    /**
+     * Tests the store function with proper arguments passed.
+     */
+    public function testStoreCreate()
+    {
         $this->obj->bind($this->post_data);
         $errorMsg = $this->obj->store();
 
-		$now_secs = time();
+        $now_secs = time();
         $min_time = $now_secs - 10;
 
         global $AppUI;
@@ -1211,18 +1213,18 @@ class CTasks_Test extends PHPUnit_Extensions_Database_TestCase
         $xml_db_dataset = $this->getConnection()->createDataSet();
         $xml_db_filtered_dataset = new PHPUnit_Extensions_Database_DataSet_DataSetFilter($xml_db_dataset, array('tasks' => array('task_created', 'task_updated')));
         $this->assertTablesEqual($xml_file_filtered_dataset->getTable('tasks'), $xml_db_filtered_dataset->getTable('tasks'));
-	}
+    }
 
-	/**
-	 * Tests the store function when there are sub tasks to be update as well
-	 */
-	public function testStoreSubTasks()
-	{
-		$this->post_data['task_id']               = 24;
-		$this->post_data['task_project']          = 2;
-		$this->post_data['task_name']             = 'Test Task';
-		$this->post_data['task_status']           = 2;
-		$this->post_data['task_parent']           = 1;
+    /**
+     * Tests the store function when there are sub tasks to be update as well
+     */
+    public function testStoreSubTasks()
+    {
+        $this->post_data['task_id']               = 24;
+        $this->post_data['task_project']          = 2;
+        $this->post_data['task_name']             = 'Test Task';
+        $this->post_data['task_status']           = 2;
+        $this->post_data['task_parent']           = 1;
 
         $this->obj->bind($this->post_data);
         $errorMsg = $this->obj->store();
@@ -1241,15 +1243,15 @@ class CTasks_Test extends PHPUnit_Extensions_Database_TestCase
         $task_updated = strtotime($task_updated);
         $this->assertGreaterThanOrEqual($min_time, $task_updated);
         $this->assertLessThanOrEqual($now_secs, $task_updated);
-	}
+    }
 
-	/**
-	 * Tests the store function when updating dynamics is necessary
-	 */
-	public function testStoreUpdateDynamics()
-	{
-		$this->obj->load(24);
-		$this->obj->updateDynamics(true);
+    /**
+     * Tests the store function when updating dynamics is necessary
+     */
+    public function testStoreUpdateDynamics()
+    {
+        $this->obj->load(24);
+        $this->obj->updateDynamics(true);
 
         $this->assertEquals(24,                     $this->obj->task_id);
         $this->assertEquals('Task 24',              $this->obj->task_name);
@@ -1281,22 +1283,21 @@ class CTasks_Test extends PHPUnit_Extensions_Database_TestCase
         $this->assertEquals(1,                      $this->obj->task_updator);
         $this->assertEquals('2009-07-06 15:43:00',  $this->obj->task_created);
         $this->assertEquals('2009-07-06 15:43:00',  $this->obj->task_updated);
-	}
+    }
 
-	/**
-	 * Tests store whilst shifting dependant tasks.
-	 */
-	public function testStoreShiftDependentTasks()
-	{
+    /**
+     * Tests store whilst shifting dependant tasks.
+     */
+    public function testStoreShiftDependentTasks()
+    {
         $this->obj->load(27);
-		$this->post_data['task_id'] 		= 27;
-		$this->post_data['task_end_date']	= '200912011700';
-		$this->post_data['milestone'] 		= 1;
-		$this->post_data['task_parent'] 	= 27;
+        $this->post_data['task_id']         = 27;
+        $this->post_data['task_end_date']    = '200912011700';
+        $this->post_data['milestone']         = 1;
+        $this->post_data['task_parent']     = 27;
 
-		$this->obj->bind($this->post_data);
-		$this->obj->store();
-
+        $this->obj->bind($this->post_data);
+        $this->obj->store();
 
         $xml_file_dataset = $this->createXMLDataSet($this->getDataSetPath().'tasksTestStoreShiftDependentTasks.xml');
         $xml_file_filtered_dataset = new PHPUnit_Extensions_Database_DataSet_DataSetFilter($xml_file_dataset, array('tasks' => array('task_updated')));
@@ -1311,20 +1312,20 @@ class CTasks_Test extends PHPUnit_Extensions_Database_TestCase
         $task_updated = strtotime($task_updated);
         $this->assertGreaterThanOrEqual($min_time, $task_updated);
         $this->assertLessThanOrEqual($now_secs, $task_updated);
-	}
+    }
 
-	/**
-	 * Tests store when there is no task_parent set
-	 */
-	public function testStoreNoTaskParent()
-	{
+    /**
+     * Tests store when there is no task_parent set
+     */
+    public function testStoreNoTaskParent()
+    {
         $this->obj->load(27);
-		$this->post_data['task_id'] = 27;
+        $this->post_data['task_id'] = 27;
 
-		unset($this->post_data['task_parent']);
+        unset($this->post_data['task_parent']);
 
-		$this->obj->bind($this->post_data);
-		$this->obj->store();
+        $this->obj->bind($this->post_data);
+        $this->obj->store();
 
         $xml_file_dataset = $this->createXMLDataSet($this->getDataSetPath().'tasksTestStoreNoTaskParent.xml');
         $xml_file_filtered_dataset = new PHPUnit_Extensions_Database_DataSet_DataSetFilter($xml_file_dataset, array('tasks' => array('task_updated')));
@@ -1332,7 +1333,7 @@ class CTasks_Test extends PHPUnit_Extensions_Database_TestCase
         $xml_db_filtered_dataset = new PHPUnit_Extensions_Database_DataSet_DataSetFilter($xml_db_dataset, array('tasks' => array('task_updated')));
         $this->assertTablesEqual($xml_file_filtered_dataset->getTable('tasks'), $xml_db_filtered_dataset->getTable('tasks'));
 
-		$now_secs = time();
+        $now_secs = time();
         $min_time = $now_secs - 10;
 
         global $AppUI;
@@ -1340,19 +1341,19 @@ class CTasks_Test extends PHPUnit_Extensions_Database_TestCase
         $task_updated = strtotime($task_updated);
         $this->assertGreaterThanOrEqual($min_time, $task_updated);
         $this->assertLessThanOrEqual($now_secs, $task_updated);
-	}
+    }
 
-	/**
-	 * Tests store function when creating and task_parent
-	 */
-	public function testStoreCreateNoParent()
-	{
+    /**
+     * Tests store function when creating and task_parent
+     */
+    public function testStoreCreateNoParent()
+    {
         unset($this->post_data['task_parent'], $this->post_data['task_id']);
-		$this->post_data['task_departments'] = '1,2';
-		$this->post_data['task_contacts'] = '1,2';
+        $this->post_data['task_departments'] = '1,2';
+        $this->post_data['task_contacts'] = '1,2';
 
-		$this->obj->bind($this->post_data);
-		$results = $this->obj->store();
+        $this->obj->bind($this->post_data);
+        $results = $this->obj->store();
 
         $xml_file_dataset = $this->createXMLDataSet($this->getDataSetPath().'tasksTestStoreCreateNoParent.xml');
         $xml_file_filtered_dataset = new PHPUnit_Extensions_Database_DataSet_DataSetFilter($xml_file_dataset, array('tasks' => array('task_created','task_updated')));
@@ -1362,7 +1363,7 @@ class CTasks_Test extends PHPUnit_Extensions_Database_TestCase
         $this->assertTablesEqual($xml_file_filtered_dataset->getTable('task_departments'), $xml_db_filtered_dataset->getTable('task_departments'));
         $this->assertTablesEqual($xml_file_filtered_dataset->getTable('task_contacts'), $xml_db_filtered_dataset->getTable('task_contacts'));
 
-		$now_secs = time();
+        $now_secs = time();
         $min_time = $now_secs - 10;
 
         global $AppUI;
@@ -1383,7 +1384,7 @@ class CTasks_Test extends PHPUnit_Extensions_Database_TestCase
         $project->load(1);
 
         $this->assertEquals(31, $project->project_task_count);
-	}
+    }
 
     /**
      * Tests deleting a task with no dependencies
@@ -1444,7 +1445,7 @@ class CTasks_Test extends PHPUnit_Extensions_Database_TestCase
         $children = $this->obj->getDeepChildren();
         $this->obj->delete();
 
-        foreach($children as $child) {
+        foreach ($children as $child) {
             $this->assertFalse($this->obj->load($child));
             $this->assertEquals(0, count($this->obj->getAssignedUsers($child)));
             $this->assertEquals(0, count($this->obj->getTaskLogs($child)));
@@ -1752,7 +1753,6 @@ class CTasks_Test extends PHPUnit_Extensions_Database_TestCase
         $_POST['login'] = 'login';
         $_REQUEST['login'] = 'sql';
 
-
         // public access
         $result = @$this->obj->canAccess(2);
         $this->assertTrue($result);
@@ -1850,9 +1850,8 @@ class CTasks_Test extends PHPUnit_Extensions_Database_TestCase
 
         $results = $q->loadList();
 
-
         global $AppUI;
-        foreach($results as $dates) {
+        foreach ($results as $dates) {
             $task_updated = $AppUI->formatTZAwareTime($dates['task_updated'], '%Y-%m-%d %T');
             $task_updated = strtotime($task_updated);
             $this->assertGreaterThanOrEqual($min_time, $task_updated);
@@ -1897,7 +1896,7 @@ class CTasks_Test extends PHPUnit_Extensions_Database_TestCase
         $results = $q->loadList();
 
         global $AppUI;
-        foreach($results as $dates) {
+        foreach ($results as $dates) {
             $task_updated = $AppUI->formatTZAwareTime($dates['task_updated'], '%Y-%m-%d %T');
             $task_updated = strtotime($task_updated);
             $this->assertGreaterThanOrEqual($min_time, $task_updated);
@@ -1979,7 +1978,6 @@ class CTasks_Test extends PHPUnit_Extensions_Database_TestCase
         $xml_file_dataset = $this->createXMLDataSet($this->getDataSetPath().'tasksTestUpdateAssigned.xml');
         $xml_db_dataset = $this->getConnection()->createDataSet();
         $this->assertTablesEqual($xml_file_dataset->getTable('user_tasks'), $xml_db_dataset->getTable('user_tasks'));
-
 
         $w2Pconfig['check_overallocation'] = $old_config;
      }
@@ -2071,10 +2069,10 @@ class CTasks_Test extends PHPUnit_Extensions_Database_TestCase
         $this->assertEquals(50,                                 $assigned_users[1]['perc_assignment']);
         $this->assertEquals(42,                                 $assigned_users[1]['user_task_priority']);
         $this->assertEquals('Person',                           $assigned_users[1]['contact_last_name']);
-		$this->assertEquals('Admin',							$assigned_users[1]['contact_first_name']);
+        $this->assertEquals('Admin',                            $assigned_users[1]['contact_first_name']);
         $this->assertEquals('Admin Person',                     $assigned_users[1]['contact_display_name']);
-		$this->assertEquals('',									$assigned_users[1]['user_email']);
-        $this->assertEquals('',									$assigned_users[1]['user_phone']);
+        $this->assertEquals('',                                    $assigned_users[1]['user_email']);
+        $this->assertEquals('',                                    $assigned_users[1]['user_phone']);
     }
     /**
      * Test getting a list of dependencies
@@ -2425,34 +2423,6 @@ class CTasks_Test extends PHPUnit_Extensions_Database_TestCase
     }
 
     /**
-     * Test updating project of sub tasks with no task id passed
-     */
-    public function testUpdateSubTasksProjectNoTaskId()
-    {
-        $this->obj->load(11);
-
-        $this->obj->updateSubTasksProject(2);
-
-        $xml_file_dataset = $this->createXMLDataSet($this->getDataSetpath().'tasksTestUpdateSubTasksProjectNoTaskId.xml');
-        $xml_db_dataset = $this->getConnection()->createDataSet();
-        $this->assertTablesEqual($xml_file_dataset->getTable('tasks'), $xml_db_dataset->getTable('tasks'));
-    }
-
-    /**
-     * Tests updating project of sub tasks with task id passed
-     */
-    public function testUpdateSubTasksProjectTaskId()
-    {
-        $this->obj->load(1);
-
-        $this->obj->updateSubTasksProject(2, 11);
-
-        $xml_file_dataset = $this->createXMLDataset($this->getDataSetPath().'tasksTestUpdateSubTasksProjectTaskId.xml');
-        $xml_db_dataset = $this->getConnection()->createDataSet();
-        $this->assertTablesEqual($xml_file_dataset->getTable('tasks'), $xml_db_dataset->getTable('tasks'));
-    }
-
-    /**
      * Tests checking time information priviliges when user is a task owner
      */
     public function testCanUserEditTimeInformationTaskOwner()
@@ -2649,7 +2619,7 @@ class CTasks_Test extends PHPUnit_Extensions_Database_TestCase
         $q->addWhere('queue_id = 2');
         $results = $q->loadColumn();
 
-        foreach($results as $queue_start) {
+        foreach ($results as $queue_start) {
             $this->assertGreaterThanOrEqual($min_time, $queue_start);
             $this->assertLessThanOrEqual($now_secs, $queue_start);
         }

@@ -17,12 +17,12 @@ $log = new CTask_Log();
 $log->load($task_log_id);
 
 $canAuthor = $log->canCreate();
-if (!$canAuthor && !$task_id) {
+if (!$canAuthor && !$task_log_id) {
 	$AppUI->redirect(ACCESS_DENIED);
 }
 
 $canEdit = $log->canEdit();
-if (!$canEdit && $task_id) {
+if ($task_log_id && !$canEdit) {
 	$AppUI->redirect(ACCESS_DENIED);
 }
 
@@ -215,7 +215,7 @@ $q->clear();
             <?php } ?>
             <p>
                 <label><?php echo $AppUI->_('Billing Code'); ?>:</label>
-                <select name="task_log_costcodes" id="task_log_costcodes" size="1" class="text" onchange="javascript:task_log_costcode.value = this.options[this.selectedIndex].value;">
+                <select name="task_log_costcode" id="task_log_costcode" size="1" class="text">
                     <option value="0" />
                     <?php
                     if (count($companyBC)) {
@@ -298,5 +298,5 @@ $q->clear();
     </div>
 </form>
 <script language="javascript" type="text/javascript">
-    document.getElementById('task_log_costcodes').value = <?php echo $log->task_log_costcode; ?>;
+    document.getElementById('task_log_costcode').value = <?php echo $log->task_log_costcode; ?>;
 </script>

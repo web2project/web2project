@@ -29,7 +29,7 @@ if ($reminded) {
 //check permissions for the associated project
 $canReadProject = canView('projects', $obj->task_project);
 
-$users = $obj->getAssignedUsers($task_id);
+$users = $obj->assignees($task_id);
 
 $durnTypes = w2PgetSysVal('TaskDurationType');
 $task_types = w2PgetSysVal('TaskType');
@@ -139,9 +139,11 @@ function delIt() {
                     <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Time Worked'); ?>:</td>
                     <?php echo $htmlHelper->createCell('task_hours_worked', $obj->task_hours_worked . ' ' . $AppUI->_('hours')); ?>
                 </tr>
-            </table>
-            <strong><?php echo $AppUI->_('Dates and Targets'); ?></strong>
-            <table width="100%" cellspacing="1" cellpadding="2" class="well">
+                <tr>
+                    <td>
+                        <strong><?php echo $AppUI->_('Dates and Targets'); ?></strong>
+                    </td>
+                </tr>
                 <tr>
                     <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Start Date'); ?>:</td>
                     <?php echo $htmlHelper->createCell('task_start_datetime', $obj->task_start_date); ?>

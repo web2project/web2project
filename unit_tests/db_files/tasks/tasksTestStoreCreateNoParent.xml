@@ -156,28 +156,28 @@
         </row>
     </table>
     <table name="users">
-    	<column>user_id</column>
-    	<column>user_contact</column>
-    	<column>user_username</column>
-    	<column>user_password</column>
-    	<column>user_parent</column>
-    	<column>user_type</column>
-    	<column>user_signature</column>
-    	<column>user_empireint_special</column>
-		<column>user_department</column>
-		<column>user_company</column>
-		<row>
-			<value>1</value>
-			<value>1</value>
-			<value>admin</value>
-			<value>76a2173be6393254e72ffa4d6df1030a</value>
-			<value>0</value>
-			<value>1</value>
-			<value>Admin User</value>
-			<value>0</value>
-			<value>0</value>
-			<value>0</value>
-		</row>
+        <column>user_id</column>
+        <column>user_contact</column>
+        <column>user_username</column>
+        <column>user_password</column>
+        <column>user_parent</column>
+        <column>user_type</column>
+        <column>user_signature</column>
+        <column>user_empireint_special</column>
+        <column>user_department</column>
+        <column>user_company</column>
+        <row>
+            <value>1</value>
+            <value>1</value>
+            <value>admin</value>
+            <value>76a2173be6393254e72ffa4d6df1030a</value>
+            <value>0</value>
+            <value>1</value>
+            <value>Admin User</value>
+            <value>0</value>
+            <value>0</value>
+            <value>0</value>
+        </row>
     </table>
     <table name="tasks">
         <column>task_id</column>
@@ -1123,7 +1123,7 @@
           <value>0</value>
           <value>0</value>
         </row>
-		<row>
+        <row>
           <value>27</value>
           <value>Task 27</value>
           <value>27</value>
@@ -1158,7 +1158,7 @@
           <value>0</value>
           <value>0</value>
         </row>
-		<row>
+        <row>
           <value>28</value>
           <value>Task 28</value>
           <value>28</value>
@@ -1175,7 +1175,7 @@
           <value>67</value>
           <value>This is task 28</value>
           <value>0.00</value>
-		  <null />
+          <null />
           <value>1</value>
           <value>1</value>
           <value>1</value>
@@ -1263,7 +1263,7 @@
           <value>0</value>
           <value>0</value>
         </row>
-		<row>
+        <row>
           <value>31</value>
           <value>Test Task</value>
           <value>31</value>
@@ -1280,7 +1280,7 @@
           <value>0</value>
           <value>this is a description for test task.</value>
           <value>1.00</value>
-		  <value>http://www.example.org</value>
+          <value>http://www.example.org</value>
           <value>1</value>
           <value>0</value>
           <value>0</value>
@@ -1334,10 +1334,10 @@
             <value>17</value>
             <value>15</value>
         </row>
-		<row>
-			<value>28</value>
-			<value>27</value>
-		</row>
+        <row>
+            <value>28</value>
+            <value>27</value>
+        </row>
     </table>
     <table name="task_log">
         <column>task_log_id</column>

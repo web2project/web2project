@@ -239,25 +239,21 @@ $form = new w2p_Output_HTML_FormHelper($AppUI);
         <div class="column left">
             <p>
                 <?php $form->showLabel('Name'); ?>
-                <input type="text" class="text" size="25" name="event_name" value="<?php echo $obj->event_name; ?>" maxlength="255" />
+                <?php $form->showField('event_name', $obj->event_name, array('maxlength' => 255)); ?>
             </p>
             <p>
                 <?php $form->showLabel('Type'); ?>
-                <?php
-                echo arraySelect($types, 'event_type', 'size="1" class="text"', $obj->event_type, true);
-                ?>
+                <?php $form->showField('event_type', $obj->event_type, array(), $types); ?>
             </p>
             <p>
                 <?php $form->showLabel('Project'); ?>
-                <?php
-                echo arraySelect($projects, 'event_project', 'size="1" class="text"', $obj->event_project);
-                ?>
+                <?php $form->showField('event_project', $obj->event_project, array(), $projects); ?>
             </p>
             <p>
                 <?php $form->showLabel('Event Owner'); ?>
                 <?php
-                echo arraySelect($users, 'event_owner', 'size="1" class="text"', ($obj->event_owner ? $obj->event_owner : $AppUI->user_id));
-                ?>
+                $owner = ($obj->event_owner) ? $obj->event_owner : $AppUI->user_id;
+                $form->showField('event_owner', $owner, array(), $users); ?>
             </p>
             <p>
                 <?php $form->showLabel('Private Entry'); ?>
@@ -290,7 +286,7 @@ $form = new w2p_Output_HTML_FormHelper($AppUI);
         <div class="column right">
             <p>
                 <?php $form->showLabel('Description'); ?>
-                <textarea class="textarea" name="event_description" rows="5" cols="45"><?php echo $obj->event_description; ?></textarea>
+                <?php $form->showField('event_description', $obj->event_description); ?>
             </p>
             <p>
                 <?php $form->showLabel('Only on Working Days'); ?>
@@ -325,13 +321,6 @@ $form = new w2p_Output_HTML_FormHelper($AppUI);
                 <td width="50%" colspan="2" align="left">
                     <input type="button" class="button btn btn-primary" value="&lt;" onclick="removeUser()" />
                 </td>
-            </tr>
-            <tr>
-                <td align="right" nowrap="nowrap"><label for="event_cwd"><?php echo $AppUI->_('Show only on Working Days'); ?>:</label></td>
-                <td>
-                    <input type="checkbox" value="1" name="event_cwd" id="event_cwd" <?php echo ($obj->event_cwd ? 'checked="checked"' : ''); ?> />
-                </td>
-                <td align="right"><label for="mail_invited"><?php echo $AppUI->_('Mail Attendees?'); ?></label> <input type="checkbox" name="mail_invited" id="mail_invited" checked="checked" /></td>
             </tr>
             <tr>
                 <td colspan="2" align="right">

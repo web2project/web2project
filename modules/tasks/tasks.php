@@ -29,6 +29,12 @@ External used variables:
 if (empty($query_string)) {
 	$query_string = '?m=' . $m . '&amp;a=' . $a;
 }
+$canViewTask = canView('tasks');;
+if (!$canViewTask) {
+    $AppUI->setMsg("You are not allowed to view tasks", UI_MSG_ERROR);
+    $AppUI->redirect(ACCESS_DENIED);
+}
+
 $mods = $AppUI->getActiveModules();
 $history_active = !empty($mods['history']) && canView('history');
 
@@ -78,83 +84,13 @@ $where_list = (count($allowedProjects)) ? implode(' AND ', $allowedProjects) : '
 
 $working_hours = ($w2Pconfig['daily_working_hours'] ? $w2Pconfig['daily_working_hours'] : 8);
 
-$q = new w2p_Database_Query;
-$q->addTable('projects', 'p');
-$q->addQuery('company_name, p.project_id, project_color_identifier, project_name, project_percent_complete');
-$q->addJoin('companies', 'com', 'company_id = project_company', 'inner');
-$q->addJoin('tasks', 't1', 'p.project_id = t1.task_project', 'inner');
-$q->leftJoin('project_departments', 'project_departments', 'p.project_id = project_departments.project_id OR project_departments.project_id IS NULL');
-$q->leftJoin('departments', 'departments', 'departments.dept_id = project_departments.department_id OR dept_id IS NULL');
-$q->addWhere($where_list . (($where_list) ? ' AND ' : '') . 't1.task_id = t1.task_parent');
-$q->addGroup('p.project_id');
-if (!$project_id && !$task_id) {
-	$q->addOrder('project_name');
-}
-if ($project_id > 0) {
-	$q->addWhere('p.project_id = '.$project_id);
-}
-
-$q2 = new w2p_Database_Query;
-$q2->addTable('projects');
-$q2->addQuery('project_id, COUNT(t1.task_id) AS total_tasks');
-$q2->addJoin('tasks', 't1', 'projects.project_id = t1.task_project', 'inner');
-if ($where_list) {
-	$q2->addWhere($where_list);
-}
-if ($project_id > 0) {
-	$q2->addWhere('project_id = '.$project_id);
-}
-$q2->addGroup('project_id');
-
-$perms = &$AppUI->acl();
-$projects = array();
-$canViewTask = canView('tasks');;
-if ($canViewTask) {
-
-	$prc = $q->exec();
-	echo db_error();
-	while ($row = $q->fetchRow()) {
-		$projects[$row['project_id']] = $row;
-	}
-
-	$prc2 = $q2->fetchRow();
-	echo db_error();
-	while ($row2 = $q2->fetchRow()) {
-		if ($projects[$row2['project_id']]) {
-			array_push($projects[$row2['project_id']], $row2);
-		}
-	}
-}
-$q2->clear();
-
+$projects = __extract_from_tasks4($where_list, $project_id, $task_id);
 $subquery = __extract_from_tasks1();
+$task_status = __extract_from_tasks($min_view, $currentTabId, $project_id, $currentTabName, $AppUI);
 
 $q = new w2p_Database_Query;
-$q->addQuery('tasks.task_id, task_parent, task_name');
-$q->addQuery('task_start_date, task_end_date, task_dynamic');
-$q->addQuery('task_pinned, pin.user_id as pin_user');
-$q->addQuery('ut.user_task_priority');
-$q->addQuery('task_priority, task_percent_complete');
-$q->addQuery('task_duration, task_duration_type');
-$q->addQuery('task_project, task_represents_project');
-$q->addQuery('task_description, task_owner, task_status');
-$q->addQuery('usernames.user_username, usernames.user_id');
-$q->addQuery('assignees.user_username as assignee_username');
-$q->addQuery('count(distinct assignees.user_id) as assignee_count');
-$q->addQuery('co.contact_first_name, co.contact_last_name');
-$q->addQuery('contact_display_name AS contact_name');
-$q->addQuery('contact_display_name AS owner');
-$q->addQuery('task_milestone');
-$q->addQuery('count(distinct f.file_task) as file_count');
-$q->addQuery('tlog.task_log_problem');
-$q->addQuery('task_access');
-$q->addQuery('(' . $subquery . ') AS task_nr_of_children');
-$q->addTable('tasks');
-
-if ($history_active) {
-	$q->addQuery('MAX(history_date) as last_update');
-	$q->leftJoin('history', 'h', 'history_item = tasks.task_id AND history_table=\'tasks\'');
-}
+$q = __extract_from_tasks5($q, $subquery);
+$q = __extract_from_tasks6($q, $history_active);
 
 $q->addJoin('projects', 'p', 'p.project_id = task_project', 'inner');
 $q->leftJoin('users', 'usernames', 'task_owner = usernames.user_id');
@@ -186,19 +122,6 @@ $q = __extract_from_tasks3($f, $q, $user_id, $task_id, $AppUI);
 
 if ($showIncomplete) {
 	$q->addWhere('( task_percent_complete < 100 OR task_percent_complete IS NULL)');
-}
-
-//TODO: This whole structure is hard-coded based on the TaskStatus SelectList.
-$task_status = 0;
-if ($min_view && isset($_GET['task_status'])) {
-	$task_status = (int) w2PgetParam($_GET, 'task_status', null);
-} elseif ($currentTabId == 1 && $project_id) {
-	$task_status = -1;
-} elseif ($currentTabId > 1 && $project_id) {
-	$task_status = $currentTabId-1;
-} elseif (!$currentTabName) {
-	// If we aren't tabbed we are in the tasks list.
-	$task_status = (int) $AppUI->getState('inactive');
 }
 
 //When in task view context show all the tasks, active and inactive. (by not limiting the query by task status)
@@ -248,9 +171,7 @@ if (!$project_id && !$task_id) {
     $q->addOrder('task_start_date, task_end_date, task_name');
 }
 
-if ($canViewTask) {
-	$tasks = $q->loadList();
-}
+$tasks = $q->loadList();
 
 // POST PROCESSING TASKS
 if (count($tasks) > 0) {
@@ -593,24 +514,5 @@ if ($showEditCheckbox) {
 		}
 	?>
 </table>
-<table width="100%" class="std">
-	<tr>
-		<td nowrap="nowrap"><?php echo $AppUI->_('Key'); ?>:</td>
-		<td>&nbsp;</td>
-		<td class="future">&nbsp; &nbsp;</td>
-		<td nowrap="nowrap">=<?php echo $AppUI->_('Future Task'); ?></td>
-		<td>&nbsp;</td>
-		<td class="active">&nbsp; &nbsp;</td>
-		<td nowrap="nowrap">=<?php echo $AppUI->_('Started and on time'); ?></td>
-		<td>&nbsp;</td>
-		<td class="notstarted">&nbsp; &nbsp;</td>
-		<td nowrap="nowrap">=<?php echo $AppUI->_('Should have started'); ?></td>
-		<td>&nbsp;</td>
-		<td class="late">&nbsp; &nbsp;</td>
-		<td nowrap="nowrap">=<?php echo $AppUI->_('Overdue'); ?></td>
-		<td>&nbsp;</td>
-		<td class="done">&nbsp; &nbsp;</td>
-		<td nowrap="nowrap">=<?php echo $AppUI->_('Done'); ?></td>
-		<td width="40%">&nbsp;</td>
-	</tr>
-</table>
+<?php
+include $AppUI->getTheme()->resolveTemplate('task_key');

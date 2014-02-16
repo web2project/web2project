@@ -51,9 +51,6 @@ class CCompany extends w2p_Core_BaseObject {
         if ('' == trim($this->company_name)) {
             $this->_error['company_name'] = $baseErrorMsg . 'company name is not set';
         }
-        if ((int) $this->company_owner == 0) {
-            $this->_error['company_owner'] = $baseErrorMsg . 'company owner is not set';
-        }
 
         return (count($this->_error)) ? false : true;
     }
@@ -70,6 +67,7 @@ class CCompany extends w2p_Core_BaseObject {
 
     protected function hook_preStore() {
         $this->company_id = (int) $this->company_id;
+        $this->company_owner = (int) $this->company_owner ? $this->company_owner : $this->_AppUI->user_id;
         $this->company_primary_url = str_replace(array('"', '"', '<', '>'), '', $this->company_primary_url);
 
         parent::hook_preStore();
@@ -252,15 +250,17 @@ class CCompany extends w2p_Core_BaseObject {
     /**
      * @deprecated
      */
-    public static function getContacts(w2p_Core_CAppUI $AppUI, $companyId)
+    public static function getContacts($notUsed, $companyId)
     {
+        trigger_error("The CCompany::getContacts static method has been deprecated in 3.1 and will be removed in v4.0. Please use CCompany->contacts() instead.", E_USER_NOTICE );
+
         $company = new CCompany();
         return $company->contacts($companyId);
     }
     /**
      * @deprecated
      */
-    public static function getUsers(w2p_Core_CAppUI $AppUI, $companyId) {
+    public static function getUsers($notUsed, $companyId) {
         trigger_error("The CCompany::getUsers static method has been deprecated in 3.1 and will be removed in v4.0. Please use CCompany->users() instead.", E_USER_NOTICE );
 
         $company = new CCompany();
@@ -269,7 +269,7 @@ class CCompany extends w2p_Core_BaseObject {
     /**
      * @deprecated
      */
-	public static function getDepartments(w2p_Core_CAppUI $AppUI, $companyId)
+	public static function getDepartments($notUsed, $companyId)
     {
         trigger_error("The CCompany::getDepartments static method has been deprecated in 3.1 and will be removed in v4.0. Please use CCompany->departments() instead.", E_USER_NOTICE );
 

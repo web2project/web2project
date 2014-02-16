@@ -29,9 +29,6 @@ class CForum_Message extends w2p_Core_BaseObject
         if (0 == (int) $this->message_forum) {
             $this->_error['message_forum'] = $baseErrorMsg . 'forum is not set';
         }
-        if (0 == (int) $this->message_author) {
-            $this->_error['message_author'] = $baseErrorMsg . 'message author is not set';
-        }
         if ('' == trim($this->message_title)) {
             $this->_error['message_title'] = $baseErrorMsg . 'message title is not set';
         }
@@ -40,6 +37,11 @@ class CForum_Message extends w2p_Core_BaseObject
         }
 
         return (count($this->_error)) ? false : true;
+    }
+
+    public function hook_preStore()
+    {
+        $this->message_author = (int) $this->message_author ? $this->message_author : $this->_AppUI->user_id;
     }
 
     public function store($unused = null)

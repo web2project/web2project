@@ -116,56 +116,56 @@ class w2p_Core_CAppUITest extends CommonSetup
     /**
      * Test the translation function
      */
-	public function test__()
-	{
+    public function test__()
+    {
         $AppUI = $this->_AppUI;
-		global $w2Pconfig;
+        global $w2Pconfig;
 
-		$w2Pconfig['locale_warn'] = false;
-		$this->assertEquals('Company',        $AppUI->__('Company'));
-		$this->assertEquals('NoGonnaBeThere', $AppUI->__('NoGonnaBeThere'));
+        $w2Pconfig['locale_warn'] = false;
+        $this->assertEquals('Company',        $AppUI->__('Company'));
+        $this->assertEquals('NoGonnaBeThere', $AppUI->__('NoGonnaBeThere'));
 
-		/* Turn on 'untranslatable' warning */
-		$w2Pconfig['locale_warn'] = true;
-		$this->assertEquals('Projects^', $AppUI->__('Projects'));
-		$this->assertEquals('Add File^', $AppUI->__('Add File'));
+        /* Turn on 'untranslatable' warning */
+        $w2Pconfig['locale_warn'] = true;
+        $this->assertEquals('Projects^', $AppUI->__('Projects'));
+        $this->assertEquals('Add File^', $AppUI->__('Add File'));
 
-		/* Change to another language and reload tranlations */
-		$AppUI->user_locale = 'es';
-		require W2P_BASE_DIR . '/locales/core.php';
-		$this->assertEquals('Proyectos',      $AppUI->__('Projects'));
-		$this->assertEquals('Ciudad',         $AppUI->__('City'));
-		$this->assertEquals('StillNotThere^', $AppUI->__('StillNotThere'));
+        /* Change to another language and reload tranlations */
+        $AppUI->user_locale = 'es';
+        require W2P_BASE_DIR . '/locales/core.php';
+        $this->assertEquals('Proyectos',      $AppUI->__('Projects'));
+        $this->assertEquals('Ciudad',         $AppUI->__('City'));
+        $this->assertEquals('StillNotThere^', $AppUI->__('StillNotThere'));
 
-		/* Change back to English and reload tranlations */
-		$AppUI->user_locale = 'en';
-		require W2P_BASE_DIR . '/locales/core.php';
-		$this->assertEquals('Projects',        $AppUI->__('Projects'));
-		$this->assertEquals('NoGonnaBeThere^', $AppUI->__('NoGonnaBeThere'));
-	}
+        /* Change back to English and reload tranlations */
+        $AppUI->user_locale = 'en';
+        require W2P_BASE_DIR . '/locales/core.php';
+        $this->assertEquals('Projects',        $AppUI->__('Projects'));
+        $this->assertEquals('NoGonnaBeThere^', $AppUI->__('NoGonnaBeThere'));
+    }
 
     /**
      * Tests getting a preference
      */
-	public function testGetPref()
-	{
+    public function testGetPref()
+    {
         $AppUI = $this->_AppUI;
 
-		$this->assertEquals('en_US', $AppUI->getPref('LOCALE'));
-		$this->assertEquals('',   $AppUI->getPref('NotGonnaBeThere'));
-	}
+        $this->assertEquals('en_US', $AppUI->getPref('LOCALE'));
+        $this->assertEquals('',   $AppUI->getPref('NotGonnaBeThere'));
+    }
 
     /**
      * Tests setting a preference
      */
-	public function testSetPref()
-	{
+    public function testSetPref()
+    {
         $AppUI = $this->_AppUI;
 
-		$this->assertEquals('en_US',     $AppUI->getPref('LOCALE'));
-		$AppUI->setPref('AddingThis', 'Monkey');
-		$this->assertEquals('Monkey', $AppUI->getPref('AddingThis'));
-	}
+        $this->assertEquals('en_US',     $AppUI->getPref('LOCALE'));
+        $AppUI->setPref('AddingThis', 'Monkey');
+        $this->assertEquals('Monkey', $AppUI->getPref('AddingThis'));
+    }
 
     /**
      * Test setting the global state
@@ -207,76 +207,76 @@ class w2p_Core_CAppUITest extends CommonSetup
      *
      * @expectedException PHPUnit_Framework_Error
      */
-	public function testSavePlace()
-	{
+    public function testSavePlace()
+    {
         $AppUI = $this->_AppUI;
 
-		$_SERVER['QUERY_STRING'] = 'testUrl';
-		$AppUI->savePlace();
-		$this->assertEquals('testUrl', $AppUI->getPlace());
+        $_SERVER['QUERY_STRING'] = 'testUrl';
+        $AppUI->savePlace();
+        $this->assertEquals('testUrl', $AppUI->getPlace());
 
-		$AppUI->savePlace('?m=projects&amp;a=view&amp;project_id=1');
-		$this->assertEquals('?m=projects&amp;a=view&amp;project_id=1', $AppUI->getPlace());
-	}
+        $AppUI->savePlace('?m=projects&amp;a=view&amp;project_id=1');
+        $this->assertEquals('?m=projects&amp;a=view&amp;project_id=1', $AppUI->getPlace());
+    }
 
     /**
      * Tests reseting the place(url)
      *
      * @expectedException PHPUnit_Framework_Error
      */
-	public function testResetPlace()
-	{
+    public function testResetPlace()
+    {
         $AppUI = $this->_AppUI;
 
-		$_SERVER['QUERY_STRING'] = 'testUrl';
-		$AppUI->savePlace();
-		$this->assertEquals('testUrl', $AppUI->getPlace());
-		$AppUI->resetPlace();
-		$this->assertEquals('', $AppUI->getPlace());
-	}
+        $_SERVER['QUERY_STRING'] = 'testUrl';
+        $AppUI->savePlace();
+        $this->assertEquals('testUrl', $AppUI->getPlace());
+        $AppUI->resetPlace();
+        $this->assertEquals('', $AppUI->getPlace());
+    }
 
     /**
      * Tests restoring an object from the global scope
      */
-	public function testHoldRestoreObject()
-	{
+    public function testHoldRestoreObject()
+    {
         $AppUI = $this->_AppUI;
 
-	  $this->assertNull($AppUI->restoreObject());
-	  $myArray = array('one' => 'something', 2 => 'another');
-	  $AppUI->holdObject($myArray);
+      $this->assertNull($AppUI->restoreObject());
+      $myArray = array('one' => 'something', 2 => 'another');
+      $AppUI->holdObject($myArray);
 
-	  $result = $AppUI->restoreObject();
-	  $this->AssertEquals(2, count($result));
-	  $this->assertArrayHasKey('one', $result);
-	  $this->assertArrayHasKey(2, $result);
-	  $this->assertNull($AppUI->restoreObject());
-	}
+      $result = $AppUI->restoreObject();
+      $this->AssertEquals(2, count($result));
+      $this->assertArrayHasKey('one', $result);
+      $this->assertArrayHasKey(2, $result);
+      $this->assertNull($AppUI->restoreObject());
+    }
 
     /**
      * Tests setting a message
      */
-	public function testSetMsg()
-	{
+    public function testSetMsg()
+    {
         $AppUI = $this->_AppUI;
         global $w2Pconfig;
 
       $w2Pconfig['locale_warn'] = false;
 
-	  $msg = 'This is a test';
-	  $AppUI->setMsg($msg, 0, false);
-	  $this->AssertEquals($msg, $AppUI->msg);
-	  $AppUI->setMsg($msg, 0, true);
-	  $this->AssertEquals($msg.' '.$msg, $AppUI->msg);
-	  $AppUI->setMsg($msg, 0, false);
-	  $this->AssertEquals($msg, $AppUI->msg);
+      $msg = 'This is a test';
+      $AppUI->setMsg($msg, 0, false);
+      $this->AssertEquals($msg, $AppUI->msg);
+      $AppUI->setMsg($msg, 0, true);
+      $this->AssertEquals($msg.' '.$msg, $AppUI->msg);
+      $AppUI->setMsg($msg, 0, false);
+      $this->AssertEquals($msg, $AppUI->msg);
 
-	  $myArray = array('one' => 'First Message', 'two' => 'Second Message');
+      $myArray = array('one' => 'First Message', 'two' => 'Second Message');
       $AppUI->setMsg($myArray, 0, false);
-	  $this->AssertEquals('First Message<br />Second Message', $AppUI->msg);
+      $this->AssertEquals('First Message<br />Second Message', $AppUI->msg);
 
-	  $AppUI->setMsg($msg, 0, false);
-	  $this->AssertEquals($msg, $AppUI->msg);
+      $AppUI->setMsg($msg, 0, false);
+      $this->AssertEquals($msg, $AppUI->msg);
     }
 
     /**
@@ -555,7 +555,8 @@ class w2p_Core_CAppUITest extends CommonSetup
     /**
      * @todo Implement testGetSystemClass().
      */
-    public function testGetSystemClass() {
+    public function testGetSystemClass()
+    {
         // Remove the following lines when you implement this test.
         $this->markTestIncomplete(
                 'This test has not been implemented yet.'
@@ -565,7 +566,8 @@ class w2p_Core_CAppUITest extends CommonSetup
     /**
      * @todo Implement testGetLibraryClass().
      */
-    public function testGetLibraryClass() {
+    public function testGetLibraryClass()
+    {
         // Remove the following lines when you implement this test.
         $this->markTestIncomplete(
                 'This test has not been implemented yet.'
@@ -575,7 +577,8 @@ class w2p_Core_CAppUITest extends CommonSetup
     /**
      * @todo Implement testGetModuleClass().
      */
-    public function testGetModuleClass() {
+    public function testGetModuleClass()
+    {
         // Remove the following lines when you implement this test.
         $this->markTestIncomplete(
                 'This test has not been implemented yet.'
@@ -585,7 +588,8 @@ class w2p_Core_CAppUITest extends CommonSetup
     /**
      * @todo Implement testGetModuleAjax().
      */
-    public function testGetModuleAjax() {
+    public function testGetModuleAjax()
+    {
         // Remove the following lines when you implement this test.
         $this->markTestIncomplete(
                 'This test has not been implemented yet.'
@@ -595,7 +599,8 @@ class w2p_Core_CAppUITest extends CommonSetup
     /**
      * @todo Implement testConvertToSystemTZ().
      */
-    public function testConvertToSystemTZ() {
+    public function testConvertToSystemTZ()
+    {
         // Remove the following lines when you implement this test.
         $this->markTestIncomplete(
                 'This test has not been implemented yet.'
@@ -605,7 +610,8 @@ class w2p_Core_CAppUITest extends CommonSetup
     /**
      * @todo Implement testFormatTZAwareTime().
      */
-    public function testFormatTZAwareTime() {
+    public function testFormatTZAwareTime()
+    {
         // Remove the following lines when you implement this test.
         $this->markTestIncomplete(
                 'This test has not been implemented yet.'
@@ -615,7 +621,8 @@ class w2p_Core_CAppUITest extends CommonSetup
     /**
      * @todo Implement testCheckStyle().
      */
-    public function testCheckStyle() {
+    public function testCheckStyle()
+    {
         // Remove the following lines when you implement this test.
         $this->markTestIncomplete(
                 'This test has not been implemented yet.'
@@ -625,7 +632,8 @@ class w2p_Core_CAppUITest extends CommonSetup
     /**
      * @todo Implement testSetUserLocale().
      */
-    public function testSetUserLocale() {
+    public function testSetUserLocale()
+    {
         // Remove the following lines when you implement this test.
         $this->markTestIncomplete(
                 'This test has not been implemented yet.'
@@ -635,7 +643,8 @@ class w2p_Core_CAppUITest extends CommonSetup
     /**
      * @todo Implement testFindLanguage().
      */
-    public function testFindLanguage() {
+    public function testFindLanguage()
+    {
         // Remove the following lines when you implement this test.
         $this->markTestIncomplete(
                 'This test has not been implemented yet.'
@@ -645,7 +654,8 @@ class w2p_Core_CAppUITest extends CommonSetup
     /**
      * @todo Implement testLoadLanguages().
      */
-    public function testLoadLanguages() {
+    public function testLoadLanguages()
+    {
         // Remove the following lines when you implement this test.
         $this->markTestIncomplete(
                 'This test has not been implemented yet.'
@@ -655,7 +665,8 @@ class w2p_Core_CAppUITest extends CommonSetup
     /**
      * @todo Implement test_().
      */
-    public function test_() {
+    public function test_()
+    {
         // Remove the following lines when you implement this test.
         $this->markTestIncomplete(
                 'This test has not been implemented yet.'
@@ -665,7 +676,8 @@ class w2p_Core_CAppUITest extends CommonSetup
     /**
      * @todo Implement testSetWarning().
      */
-    public function testSetWarning() {
+    public function testSetWarning()
+    {
         // Remove the following lines when you implement this test.
         $this->markTestIncomplete(
                 'This test has not been implemented yet.'
@@ -675,7 +687,8 @@ class w2p_Core_CAppUITest extends CommonSetup
     /**
      * @todo Implement testGetPlace().
      */
-    public function testGetPlace() {
+    public function testGetPlace()
+    {
         // Remove the following lines when you implement this test.
         $this->markTestIncomplete(
                 'This test has not been implemented yet.'
@@ -685,7 +698,8 @@ class w2p_Core_CAppUITest extends CommonSetup
     /**
      * @todo Implement testHoldObject().
      */
-    public function testHoldObject() {
+    public function testHoldObject()
+    {
         // Remove the following lines when you implement this test.
         $this->markTestIncomplete(
                 'This test has not been implemented yet.'
@@ -695,7 +709,8 @@ class w2p_Core_CAppUITest extends CommonSetup
     /**
      * @todo Implement testRestoreObject().
      */
-    public function testRestoreObject() {
+    public function testRestoreObject()
+    {
         // Remove the following lines when you implement this test.
         $this->markTestIncomplete(
                 'This test has not been implemented yet.'
@@ -705,7 +720,8 @@ class w2p_Core_CAppUITest extends CommonSetup
     /**
      * @todo Implement testRedirect().
      */
-    public function testRedirect() {
+    public function testRedirect()
+    {
         // Remove the following lines when you implement this test.
         $this->markTestIncomplete(
                 'This test has not been implemented yet.'
@@ -715,7 +731,8 @@ class w2p_Core_CAppUITest extends CommonSetup
     /**
      * @todo Implement testGetMsg().
      */
-    public function testGetMsg() {
+    public function testGetMsg()
+    {
         // Remove the following lines when you implement this test.
         $this->markTestIncomplete(
                 'This test has not been implemented yet.'
@@ -725,7 +742,8 @@ class w2p_Core_CAppUITest extends CommonSetup
     /**
      * @todo Implement testGetState().
      */
-    public function testGetState() {
+    public function testGetState()
+    {
         // Remove the following lines when you implement this test.
         $this->markTestIncomplete(
                 'This test has not been implemented yet.'
@@ -735,7 +753,8 @@ class w2p_Core_CAppUITest extends CommonSetup
     /**
      * @todo Implement testProcessIntState().
      */
-    public function testProcessIntState() {
+    public function testProcessIntState()
+    {
         // Remove the following lines when you implement this test.
         $this->markTestIncomplete(
                 'This test has not been implemented yet.'
@@ -745,7 +764,8 @@ class w2p_Core_CAppUITest extends CommonSetup
     /**
      * @todo Implement testCheckPrefState().
      */
-    public function testCheckPrefState() {
+    public function testCheckPrefState()
+    {
         // Remove the following lines when you implement this test.
         $this->markTestIncomplete(
                 'This test has not been implemented yet.'
@@ -755,7 +775,8 @@ class w2p_Core_CAppUITest extends CommonSetup
     /**
      * @todo Implement testLogin().
      */
-    public function testLogin() {
+    public function testLogin()
+    {
         // Remove the following lines when you implement this test.
         $this->markTestIncomplete(
                 'This test has not been implemented yet.'
@@ -765,7 +786,8 @@ class w2p_Core_CAppUITest extends CommonSetup
     /**
      * @todo Implement testRegisterLogin().
      */
-    public function testRegisterLogin() {
+    public function testRegisterLogin()
+    {
         // Remove the following lines when you implement this test.
         $this->markTestIncomplete(
                 'This test has not been implemented yet.'
@@ -775,7 +797,8 @@ class w2p_Core_CAppUITest extends CommonSetup
     /**
      * @todo Implement testRegisterLogout().
      */
-    public function testRegisterLogout() {
+    public function testRegisterLogout()
+    {
         // Remove the following lines when you implement this test.
         $this->markTestIncomplete(
                 'This test has not been implemented yet.'
@@ -785,7 +808,8 @@ class w2p_Core_CAppUITest extends CommonSetup
     /**
      * @todo Implement testUpdateLastAction().
      */
-    public function testUpdateLastAction() {
+    public function testUpdateLastAction()
+    {
         // Remove the following lines when you implement this test.
         $this->markTestIncomplete(
                 'This test has not been implemented yet.'
@@ -795,7 +819,8 @@ class w2p_Core_CAppUITest extends CommonSetup
     /**
      * @todo Implement testLogout().
      */
-    public function testLogout() {
+    public function testLogout()
+    {
         // Remove the following lines when you implement this test.
         $this->markTestIncomplete(
                 'This test has not been implemented yet.'
@@ -805,7 +830,8 @@ class w2p_Core_CAppUITest extends CommonSetup
     /**
      * @todo Implement testDoLogin().
      */
-    public function testDoLogin() {
+    public function testDoLogin()
+    {
         // Remove the following lines when you implement this test.
         $this->markTestIncomplete(
                 'This test has not been implemented yet.'
@@ -815,7 +841,8 @@ class w2p_Core_CAppUITest extends CommonSetup
     /**
      * @todo Implement testLoadPrefs().
      */
-    public function testLoadPrefs() {
+    public function testLoadPrefs()
+    {
         // Remove the following lines when you implement this test.
         $this->markTestIncomplete(
                 'This test has not been implemented yet.'
@@ -825,7 +852,8 @@ class w2p_Core_CAppUITest extends CommonSetup
     /**
      * @todo Implement testGetInstalledModules().
      */
-    public function testGetInstalledModules() {
+    public function testGetInstalledModules()
+    {
         // Remove the following lines when you implement this test.
         $this->markTestIncomplete(
                 'This test has not been implemented yet.'
@@ -835,7 +863,8 @@ class w2p_Core_CAppUITest extends CommonSetup
     /**
      * @todo Implement testGetActiveModules().
      */
-    public function testGetActiveModules() {
+    public function testGetActiveModules()
+    {
         // Remove the following lines when you implement this test.
         $this->markTestIncomplete(
                 'This test has not been implemented yet.'
@@ -845,7 +874,8 @@ class w2p_Core_CAppUITest extends CommonSetup
     /**
      * @todo Implement testGetMenuModules().
      */
-    public function testGetMenuModules() {
+    public function testGetMenuModules()
+    {
         // Remove the following lines when you implement this test.
         $this->markTestIncomplete(
                 'This test has not been implemented yet.'
@@ -855,7 +885,8 @@ class w2p_Core_CAppUITest extends CommonSetup
     /**
      * @todo Implement testGetLoadableModuleList().
      */
-    public function testGetLoadableModuleList() {
+    public function testGetLoadableModuleList()
+    {
         // Remove the following lines when you implement this test.
         $this->markTestIncomplete(
                 'This test has not been implemented yet.'
@@ -865,7 +896,8 @@ class w2p_Core_CAppUITest extends CommonSetup
     /**
      * @todo Implement testGetPermissionableModuleList().
      */
-    public function testGetPermissionableModuleList() {
+    public function testGetPermissionableModuleList()
+    {
         // Remove the following lines when you implement this test.
         $this->markTestIncomplete(
                 'This test has not been implemented yet.'
@@ -875,7 +907,8 @@ class w2p_Core_CAppUITest extends CommonSetup
     /**
      * @todo Implement testIsActiveModule().
      */
-    public function testIsActiveModule() {
+    public function testIsActiveModule()
+    {
         // Remove the following lines when you implement this test.
         $this->markTestIncomplete(
                 'This test has not been implemented yet.'
@@ -885,7 +918,8 @@ class w2p_Core_CAppUITest extends CommonSetup
     /**
      * @todo Implement testAcl().
      */
-    public function testAcl() {
+    public function testAcl()
+    {
         // Remove the following lines when you implement this test.
         $this->markTestIncomplete(
                 'This test has not been implemented yet.'
@@ -895,7 +929,8 @@ class w2p_Core_CAppUITest extends CommonSetup
     /**
      * @todo Implement testLoadHeaderJS().
      */
-    public function testLoadHeaderJS() {
+    public function testLoadHeaderJS()
+    {
         // Remove the following lines when you implement this test.
         $this->markTestIncomplete(
                 'This test has not been implemented yet.'
@@ -905,7 +940,8 @@ class w2p_Core_CAppUITest extends CommonSetup
     /**
      * @todo Implement testGetModuleJS().
      */
-    public function testGetModuleJS() {
+    public function testGetModuleJS()
+    {
         // Remove the following lines when you implement this test.
         $this->markTestIncomplete(
                 'This test has not been implemented yet.'
@@ -915,7 +951,8 @@ class w2p_Core_CAppUITest extends CommonSetup
     /**
      * @todo Implement testAddFooterJavascriptFile().
      */
-    public function testAddFooterJavascriptFile() {
+    public function testAddFooterJavascriptFile()
+    {
         // Remove the following lines when you implement this test.
         $this->markTestIncomplete(
                 'This test has not been implemented yet.'
@@ -925,7 +962,8 @@ class w2p_Core_CAppUITest extends CommonSetup
     /**
      * @todo Implement testLoadFooterJS().
      */
-    public function testLoadFooterJS() {
+    public function testLoadFooterJS()
+    {
         // Remove the following lines when you implement this test.
         $this->markTestIncomplete(
                 'This test has not been implemented yet.'
@@ -935,7 +973,8 @@ class w2p_Core_CAppUITest extends CommonSetup
     /**
      * @todo Implement testLoadCalendarJS().
      */
-    public function testLoadCalendarJS() {
+    public function testLoadCalendarJS()
+    {
         // Remove the following lines when you implement this test.
         $this->markTestIncomplete(
                 'This test has not been implemented yet.'

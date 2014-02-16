@@ -31,10 +31,7 @@ if (0 == count($fields)) {
 }
 ?>
 <br />
-<?php
-echo $AppUI->getTheme()->styleRenderBoxTop();
-
-?>
+<?php echo $AppUI->getTheme()->styleRenderBoxTop(); ?>
 <form name="watcher" action="?m=forums&a=viewer&forum_id=<?php echo $forum_id; ?>&f=<?php echo $f; ?>" method="post" accept-charset="utf-8">
     <input type="hidden" name="dosql" value="do_watch_forum" />
     <input type="hidden" name="watch" value="topic" />
@@ -46,17 +43,16 @@ echo $AppUI->getTheme()->styleRenderBoxTop();
     echo $listHelper->startTable();
     echo $listHelper->buildHeader($fields);
     echo $listHelper->buildRows($items);
-    echo $listHelper->endTable();
 
     ?>
-    <table class="std forums-topic">
         <tr>
-            <td align="left">
-                <input type="submit" class="button" value="<?php echo $AppUI->_('update watches'); ?>" />
-            </td>
-            <td align="right">
+            <td colspan="12">
+                <div class="left">
+                    <input type="submit" class="button" value="<?php echo $AppUI->_('update watches'); ?>" />
+                </div>
+
                 <?php if ($canAuthor) { ?>
-                    <input type="button" class="button" value="<?php echo $AppUI->_('start a new topic'); ?>" onclick="javascript:window.location='./index.php?m=forums&a=viewer&forum_id=<?php echo $forum_id; ?>&post_message=1';" />
+                    <input type="button" class="button right" value="<?php echo $AppUI->_('start a new topic'); ?>" onclick="javascript:window.location='./index.php?m=forums&a=viewer&forum_id=<?php echo $forum_id; ?>&post_message=1';" />
                 <?php } ?>
             </td>
         </tr>

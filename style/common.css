@@ -17,31 +17,31 @@ em {
 }
 
 a:link {
-	color: #333333;
-	text-decoration: none;
+    color: #333333;
+    text-decoration: none;
 }
 
 a:visited {
-	color: #333333;
-	text-decoration: none;
+    color: #333333;
+    text-decoration: none;
 }
 
 a:active {
-	color: #333333;
-	text-decoration: none;
+    color: #333333;
+    text-decoration: none;
 }
 
 a:hover {
-	color: #666666;
-	text-decoration: none;
+    color: #666666;
+    text-decoration: none;
 }
 
 tr {
-	font-size: 8pt
+    font-size: 8pt
 }
 
 td {
-	font-size: 8pt
+    font-size: 8pt
 }
 
 h1, .title {
@@ -59,8 +59,8 @@ h2, .subtitle {
     font-family: 'Trebuchet MS',arial,Osaka,verdana,Sans-Serif;
     font-size: 12px;
     font-weight: bold;
-	margin-bottom: 0px;
-	margin-top: 15px;
+    margin-bottom: 0px;
+    margin-top: 15px;
     text-transform: uppercase;
 }
 
@@ -69,8 +69,8 @@ h3 {
     font-family: 'Trebuchet MS',arial,Osaka,verdana,Sans-Serif;
     font-size: 12px;
     font-weight: bold;
-	margin-bottom: 0px;
-	margin-top: 35px;
+    margin-bottom: 0px;
+    margin-top: 35px;
 }
 
 
@@ -104,7 +104,7 @@ div.clear {
 }
 
 div.std {
-	background: #fafafa;
+    background: #fafafa;
     height:     1%;
     overflow:   hidden;
     width:      100%;
@@ -114,25 +114,25 @@ div.std {
 /* Begin: Header Bar & Navigation for all pages */
 .nav ul {
     font:       bold 8pt helvetica,arial,sans-serif;
-	line-height:100%;
-	list-style-image:none;
-	list-style-position:outside;
-	list-style-type:none;
-	margin:     2px 0px 0px 0px;
-	padding:    0px;
+    line-height:100%;
+    list-style-image:none;
+    list-style-position:outside;
+    list-style-type:none;
+    margin:     2px 0px 0px 0px;
+    padding:    0px;
 }
 
 .nav ul li {
-	float:      left;
-	margin:     0px 1px 0px 0px;
-	padding:    0px;
+    float:      left;
+    margin:     0px 1px 0px 0px;
+    padding:    0px;
 }
 
 .nav ul li a {
-	color:      #000000;
-	display:    block;
-	padding:    5px 7px 6px;
-	text-decoration:none;
+    color:      #000000;
+    display:    block;
+    padding:    5px 7px 6px;
+    text-decoration:none;
 }
 
 .quicknav {
@@ -142,8 +142,8 @@ div.std {
     margin: 0px 8px 0 8px;
 }
 form {
-	display: inline;
-	margin: 0;
+    display: inline;
+    margin: 0;
 }
 /* End: Header Bar & Navigation for all pages */
 
@@ -189,10 +189,10 @@ form {
 }
 
 .system-info P {
-	color: #000000;
-	font-size: 7pt;
-	margin: 0px;
-	text-align: center;
+    color: #000000;
+    font-size: 7pt;
+    margin: 0px;
+    text-align: center;
 }
 .error,.warning {
     color:red
@@ -458,55 +458,55 @@ table.prjprint TR {
 /*  margin-left: -25px;*/
 }
 #folder-list ul {
-	padding: 0;
-	margin: 0;
+    padding: 0;
+    margin: 0;
 }
 #folder-list ul li {
-	list-style: none;
-	margin-top: -1px;
-	margin-bottom: 0px;
-	border: 0px solid #CCC;
+    list-style: none;
+    margin-top: -1px;
+    margin-bottom: 0px;
+    border: 0px solid #CCC;
 }
 #folder-list ul li ul li {
-	margin-left: 25px;
+    margin-left: 25px;
 }
 
 .folder-name {
-	display: block;
-	height: 16px;
-	padding-top: 0px;
-	background: white;
-	border-bottom: 1px solid #333;
-	border-right: 1px solid #333;
-	margin-bottom: 0px;
+    display: block;
+    height: 16px;
+    padding-top: 0px;
+    background: white;
+    border-bottom: 1px solid #333;
+    border-right: 1px solid #333;
+    margin-bottom: 0px;
 }
 
 .folder-name-current {
-	display: block;
-	margin-bottom: 5px;
-	font-weight: bold;
-	border-bottom: 1px solid #333;
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+    border-bottom: 1px solid #333;
 }
 
 .has-files {
-	font-weight: bold;
+    font-weight: bold;
 }
 
 #folder-list .tbl {
-	margin-top: 2px;
+    margin-top: 2px;
 }
 #folder-list .tbl th {
-	border: none;
+    border: none;
 }
 
 #folder-list p {
-	padding: 3px 5px;
-	margin-top: -5px;
-	margin-left: 25px;
-	margin-right: 25px;
-	border: 1px solid #CCC;
-	border-top: none;
-	background: #F9F9F9;
+    padding: 3px 5px;
+    margin-top: -5px;
+    margin-left: 25px;
+    margin-right: 25px;
+    border: 1px solid #CCC;
+    border-top: none;
+    background: #F9F9F9;
 }
 #tblFolders ul {
     display: inline;
@@ -697,6 +697,18 @@ input.state, input.zip {
 .files label {
     width: 28em;
 }
-.users label {
+.users label, .events label {
     width: 20em;
+}
+
+.users .name {
+    width: 100px;
+}
+
+.users .signature {
+    width: 250px;
+}
+
+.projects label {
+    width: 11em;
 }

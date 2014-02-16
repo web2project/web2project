@@ -58,6 +58,19 @@ class CEvent extends w2p_Core_BaseObject
         return true;
     }
 
+    public function canEdit()
+    {
+        if (!parent::canEdit()) {
+            return false;
+        }
+
+        if ($this->event_private && ($this->event_owner != $this->_AppUI->user_id)) {
+            return false;
+        }
+
+        return true;
+    }
+
     public function isValid()
     {
         $baseErrorMsg = get_class($this) . '::store-check failed - ';
@@ -386,7 +399,7 @@ class CEvent extends w2p_Core_BaseObject
             $mail->Subject($this->_AppUI->_('Requested Event') . ': ' . $this->event_name, $this->_locale_char_set);
         } else {
 			$type = $update ? $this->_AppUI->_('Event updated') : $this->_AppUI->_('New event');
-            $mail->Subject($type . ': ' . $this->event_name, $locale_char_set);
+            $mail->Subject($type . ': ' . $this->event_name);
         }
 
         $emailManager = new w2p_Output_EmailManager($this->_AppUI);
@@ -483,6 +496,7 @@ class CEvent extends w2p_Core_BaseObject
         $this->event_start_date = $this->_AppUI->convertToSystemTZ($this->event_start_date);
         $this->event_end_date = $this->_AppUI->convertToSystemTZ($this->event_end_date);
         $this->event_creator = (int) $this->event_creator ? $this->event_creator : $this->_AppUI->user_id;
+        $this->event_owner = (int) $this->event_owner ? $this->event_owner : $this->_AppUI->user_id;
 
         $q = $this->_getQuery();
         $this->event_updated = $q->dbfnNowWithTZ();
@@ -592,7 +606,7 @@ class CEvent extends w2p_Core_BaseObject
     }
 
     /** @deprecated */
-    public function checkClash($userlist = null)
+    public function checkClash()
     {
         return false;
     }

@@ -13,19 +13,19 @@ class w2p_System_Config extends w2p_Core_BaseObject
 
     protected $keepReminders = false;
     
-	public function __construct() {
+    public function __construct() {
         parent::__construct('config', 'config_id', 'system');
-	}
+    }
 
-	public function getChildren($id) {
-		$q = $this->_getQuery();
-		$q->addTable('config_list');
-		$q->addOrder('config_list_id');
-		$q->addWhere('config_id = ' . (int)$id);
-		$result = $q->loadHashList('config_list_id');
+    public function getChildren($id) {
+        $q = $this->_getQuery();
+        $q->addTable('config_list');
+        $q->addOrder('config_list_id');
+        $q->addWhere('config_id = ' . (int)$id);
+        $result = $q->loadHashList('config_list_id');
 
-		return $result;
-	}
+        return $result;
+    }
 
     public function canCreate() {
         return $this->_perms->checkModule($this->_tbl_module, 'add');

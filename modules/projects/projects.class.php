@@ -82,9 +82,6 @@ class CProject extends w2p_Core_BaseObject
         if (0 == (int) $this->project_company) {
             $this->_error['project_company'] = $baseErrorMsg . 'project company is not set';
         }
-        if (0 == (int) $this->project_owner) {
-            $this->_error['project_owner'] = $baseErrorMsg . 'project owner is not set';
-        }
         if (0 == (int) $this->project_creator) {
             $this->_error['project_creator'] = $baseErrorMsg . 'project creator is not set';
         }
@@ -433,6 +430,7 @@ class CProject extends w2p_Core_BaseObject
         $this->project_target_budget = filterCurrency($this->project_target_budget);
         $this->project_url = str_replace(array('"', '"', '<', '>'), '', $this->project_url);
         $this->project_demo_url = str_replace(array('"', '"', '<', '>'), '', $this->project_demo_url);
+        $this->project_owner = (int) $this->project_owner ? $this->project_owner : $this->_AppUI->user_id;
 
         // Make sure project_short_name is the right size (issue for languages with encoded characters)
         if ('' == $this->project_short_name) {
@@ -726,30 +724,18 @@ class CProject extends w2p_Core_BaseObject
 
     public static function getBillingCodes($companyId, $all = false)
     {
-
         $q = new w2p_Database_Query();
         $q->addTable('billingcode');
         $q->addQuery('billingcode_id, billingcode_name');
         $q->addOrder('billingcode_name');
-        $q->addWhere('billingcode_status = 0');
-        $q->addWhere('(billingcode_company = 0 OR billingcode_company = ' . (int) $companyId . ')');
-        $task_log_costcodes = $q->loadHashList();
-
         if ($all) {
-            $q->clear();
-            $q->addTable('billingcode');
-            $q->addQuery('billingcode_id, billingcode_name');
-            $q->addOrder('billingcode_name');
             $q->addWhere('billingcode_status = 1');
-            $q->addWhere('(billingcode_company = 0 OR billingcode_company = ' . (int) $companyId . ')');
-
-            $billingCodeList = $q->loadHashList();
-            foreach ($billingCodeList as $id => $code) {
-                $task_log_costcodes[$id] = $code;
-            }
+        } else {
+            $q->addWhere('billingcode_status = 0');
         }
+        $q->addWhere('(billingcode_company = 0 OR billingcode_company = ' . (int) $companyId . ')');
 
-        return $task_log_costcodes;
+        return $q->loadHashList();
     }
 
     public static function getOwners()

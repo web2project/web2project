@@ -25,14 +25,14 @@ include_once 'unit_tests/CommonSetup.php';
 class CTaskLogs_Test extends CommonSetup
 {
 
-    protected function setUp ()
-	{
-		parent::setUp();
+    protected function setUp()
+    {
+        parent::setUp();
 
-		$this->obj = new CTask_Log();
+        $this->obj = new CTask_Log();
         $this->obj->overrideDatabase($this->mockDB);
 
-		$this->post_data = array(
+        $this->post_data = array(
             'task_log_id'                           => 0,
             'task_log_task'                         => 1,
             'task_log_name'                         => 'This is a task log name.',
@@ -49,8 +49,8 @@ class CTaskLogs_Test extends CommonSetup
             'task_log_record_creator'               => 1,
             'task_log_percent_complete'             => 20,
             'task_log_task_end_date'                => '20111007'
-		);
-	}
+        );
+    }
 
     public function testObjectProperties()
     {
@@ -77,7 +77,7 @@ class CTaskLogs_Test extends CommonSetup
         /*
          *  These fields are formatted by the CTask_Log->store method.
          */
-        
+
         $this->assertEquals('2010-05-30 09:15:30',        $this->obj->task_log_date);
         $this->assertEquals(2.75,                         $this->obj->task_log_hours);
         /*
@@ -167,7 +167,7 @@ class CTaskLogs_Test extends CommonSetup
          */
         $vars = get_object_vars($this->obj);
 
-        foreach( $vars as $var_name => $var_value) {
+        foreach ($vars as $var_name => $var_value) {
             if (!is_object($var_value)) {
                 $this->obj->$var_name = " \t\n" . $var_value . "\r\0\x0B";
             }
@@ -281,7 +281,7 @@ class CTaskLogs_Test extends CommonSetup
         /**
         * Verify we got the proper error message
         */
-		$this->assertFalse($this->obj->store());
+        $this->assertFalse($this->obj->store());
         $this->assertArrayHasKey('task_log_task', $this->obj->getError());
 
         /**
@@ -302,7 +302,7 @@ class CTaskLogs_Test extends CommonSetup
         /**
         * Verify we got the proper error message
         */
-		$this->assertFalse($this->obj->store());
+        $this->assertFalse($this->obj->store());
         $this->assertArrayHasKey('task_log_name', $this->obj->getError());
 
         /**
@@ -323,7 +323,7 @@ class CTaskLogs_Test extends CommonSetup
         /**
         * Verify we got the proper error message
         */
-		$this->assertFalse($this->obj->store());
+        $this->assertFalse($this->obj->store());
         $this->assertArrayHasKey('task_log_creator', $this->obj->getError());
 
         /**

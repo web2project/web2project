@@ -23,7 +23,7 @@ abstract class w2p_System_Setup {
     }
 
     /**
-     * 	@return string or array Returns the error message
+     *     @return string or array Returns the error message
      */
     public function getErrors()
     {

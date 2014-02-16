@@ -105,11 +105,11 @@ $form = new w2p_Output_HTML_FormHelper($AppUI);
             </p>
             <p>
                 <?php $form->showLabel('Folder Name'); ?>
-                <input type="text" class="text" id="ffn" name="file_folder_name" value="<?php echo $folder->file_folder_name; ?>" maxlength="255" />
+                <?php $form->showField('file_folder_name', $folder->file_folder_name, array('maxlength' => 255)); ?>
             </p>
             <p>
                 <?php $form->showLabel('Description'); ?>
-                <textarea name="file_folder_description" class="textarea" rows="4" style="width:270px"><?php echo $folder->file_folder_description; ?></textarea>
+                <?php $form->showField('file_folder_description', $folder->file_folder_description); ?>
             </p>
             <?php $form->showCancelButton(); ?>
             <?php $form->showSaveButton(); ?>
