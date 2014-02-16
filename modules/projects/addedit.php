@@ -243,7 +243,7 @@ $form = new w2p_Output_HTML_FormHelper($AppUI);
                 </a>
             </p>
             <p>
-                <label><?php echo $AppUI->_('Target Finish Date'); ?></label>
+                <label><?php echo $AppUI->_('Target End Date'); ?></label>
                 <input type="hidden" name="project_end_date" id="project_end_date" value="<?php echo $end_date ? $end_date->format(FMT_TIMESTAMP_DATE) : ''; ?>" />
                 <input type="text" name="end_date" id="end_date" onchange="setDate_new('editFrm', 'end_date');" value="<?php echo $end_date ? $end_date->format($df) : ''; ?>" class="text" />
                 <a href="javascript: void(0);" onclick="return showCalendar('end_date', '<?php echo $df ?>', 'editFrm', null, true, true)">
@@ -251,7 +251,7 @@ $form = new w2p_Output_HTML_FormHelper($AppUI);
                 </a>
             </p>
             <p>
-                <label><?php echo $AppUI->_('Actual Finish Date'); ?></label>
+                <label><?php echo $AppUI->_('Actual End Date'); ?></label>
                 <?php
                 if ($project_id > 0) {
                     echo $actual_end_date ? '<a href="?m=tasks&a=view&task_id=' . $criticalTasks[0]['task_id'] . '">' : '';
@@ -293,7 +293,8 @@ $form = new w2p_Output_HTML_FormHelper($AppUI);
                 <?php echo $w2Pconfig['currency_symbol'] ?> <?php echo formatCurrency($totalBudget, $AppUI->getPref('CURRENCYFORM')); ?>
             </p>
             <p>
-                <label><?php echo $AppUI->_('Actual Budget'); ?> <?php echo $w2Pconfig['currency_symbol'] ?></label>
+                <label><?php echo $AppUI->_('Actual Budget'); ?></label>
+                <?php echo $w2Pconfig['currency_symbol'] ?>
                 <?php
                 if ($project_id > 0) {
                     echo $w2Pconfig['currency_symbol'] . '&nbsp;' . formatCurrency($project->project_actual_budget, $AppUI->getPref('CURRENCYFORM'));

@@ -6,7 +6,7 @@ if (version_compare(PHP_VERSION, MIN_PHP_VERSION, '<')) {
     die();
 }
 
-$step = trim( w2PgetCleanParam( $_POST, 'step', '' ) );
+$step = trim( w2PgetParam( $_POST, 'step', '' ) );
 $manager = new w2p_System_UpgradeManager();
 ?>
 <html>

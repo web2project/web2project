@@ -72,6 +72,9 @@ if (!$user && $user_id > 0) {
         if ($canEdit || $user_id == $AppUI->user_id) {
             $titleBlock->addCrumb('?m=system&a=addeditpref&user_id=' . $user_id, 'edit preferences');
         }
+        if ($canDelete) {
+            $titleBlock->addCrumbDelete('delete User', $canDelete, $msg);
+        }
     }
     $titleBlock->show();
 
@@ -130,6 +133,13 @@ if (!$user && $user_id > 0) {
                 f.dept_name.value = '';
             }
         }
+        <?php if ($canDelete && $user_id) { ?>
+        function delIt() {
+            if (confirm( '<?php echo $AppUI->_('doDelete') . ' ' . $AppUI->_('User') . '?'; ?>' )) {
+                document.frmDelete.submit();
+            }
+        }
+        <?php } ?>
     </script>
     <?php
     /**
@@ -139,6 +149,13 @@ if (!$user && $user_id > 0) {
     $spacing = ('wps-redmond' == $AppUI->getPref('UISTYLE')) ? 70 : 0;
     echo '<div style="padding-top: ' . $spacing . 'px;"> </div>';
     ?>
+    <?php if ($canDelete && $user_id) { ?>
+    <form name="frmDelete" action="./index.php?m=users" method="post" accept-charset="utf-8">
+        <input type="hidden" name="dosql" value="do_user_aed" />
+        <input type="hidden" name="del" value="1" />
+        <input type="hidden" name="company_id" value="<?php echo $user_id; ?>" />
+    </form>
+    <?php } ?>
     <?php
 
     $form = new w2p_Output_HTML_FormHelper($AppUI);

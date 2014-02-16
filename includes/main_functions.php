@@ -193,8 +193,16 @@ function w2PgetParam(&$arr, $name, $def = null)
     $key = preg_replace("/[^A-Za-z0-9_]/", "", $name);
 
     if (isset($arr[$key])) {
-        $_result = strip_tags($arr[$key]);
-        $result  = preg_replace("/<>'\"\[\]{}:;/", "", $_result);
+        if (is_array($arr[$key])) {
+            $_result = $arr[$key];
+            foreach($_result as $_key => $_value) {
+                $_result[$_key] = preg_replace("/<>'\"\[\]{}:;/", "", $_value);
+            }
+            $result  = $_result;
+        } else {
+            $_result = strip_tags($arr[$key]);
+            $result  = preg_replace("/<>'\"\[\]{}:;/", "", $_result);
+        }
     } else {
         $result = $def;
     }

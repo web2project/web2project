@@ -101,9 +101,9 @@ if (w2PgetParam($_POST, 'lostpass', 0)) {
 // support alternative authentication methods such as the PostNuke
 // and HTTP auth methods now supported.
 if (isset($_POST['login'])) {
-	$username = w2PgetCleanParam($_POST, 'username', '');
-	$password = w2PgetCleanParam($_POST, 'password', '');
-	$redirect = w2PgetCleanParam($_POST, 'redirect', '');
+	$username = w2PgetParam($_POST, 'username', '');
+	$password = w2PgetParam($_POST, 'password', '');
+	$redirect = w2PgetParam($_POST, 'redirect', '');
 	$AppUI->setUserLocale();
 	@include_once (W2P_BASE_DIR . '/locales/' . $AppUI->user_locale . '/locales.php');
 	include_once W2P_BASE_DIR . '/locales/core.php';
@@ -167,11 +167,11 @@ if (!isset($_GET['m']) && !empty($w2Pconfig['default_view_m'])) {
 	}
 } else {
 	// set the module from the url
-	$m = $loader->checkFileName(w2PgetCleanParam($_GET, 'm', getReadableModule()));
+	$m = $loader->checkFileName(w2PgetParam($_GET, 'm', getReadableModule()));
 }
 $m = preg_replace("/[^a-z0-9_]/", "", $m);
 // set the action from the url
-$a = $loader->checkFileName(w2PgetCleanParam($_GET, 'a', $def_a));
+$a = $loader->checkFileName(w2PgetParam($_GET, 'a', $def_a));
 $a = preg_replace("/[^a-z0-9_]/", "", $a);
 if ($m == 'projects' && $a == 'view' && $w2Pconfig['projectdesigner_view_project'] && !w2PgetParam($_GET, 'bypass') && !(isset($_GET['tab']))) {
 	if ($AppUI->isActiveModule('projectdesigner')) {
@@ -187,7 +187,7 @@ if ($m == 'projects' && $a == 'view' && $w2Pconfig['projectdesigner_view_project
 * not allowed in the request parameters.
 */
 
-$u = $loader->checkFileName(w2PgetCleanParam($_GET, 'u', ''));
+$u = $loader->checkFileName(w2PgetParam($_GET, 'u', ''));
 $u = preg_replace("/[^a-z0-9_]/", "", $u);
 
 // load module based locale settings

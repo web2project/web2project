@@ -6,18 +6,18 @@
 	require_once W2P_BASE_DIR . '/lib/adodb/adodb.inc.php';
 	require_once W2P_BASE_DIR . '/includes/version.php';
 
-	$dbtype = trim( w2PgetCleanParam( $_POST, 'dbtype', 'mysql' ) );
-	$dbhost = trim( w2PgetCleanParam( $_POST, 'dbhost', '' ) );
-	$dbname = trim( w2PgetCleanParam( $_POST, 'dbname', '' ) );
-	$dbuser = trim( w2PgetCleanParam( $_POST, 'dbuser', '' ) );
-	$dbpass = trim( w2PgetCleanParam( $_POST, 'dbpass', '' ) );
-	$dbprefix = trim( w2PgetCleanParam( $_POST, 'dbprefix', '' ) );
-	$adminpass = trim( w2PgetCleanParam( $_POST, 'adminpass', 'passwd' ) );
+	$dbtype = trim( w2PgetParam( $_POST, 'dbtype', 'mysql' ) );
+	$dbhost = trim( w2PgetParam( $_POST, 'dbhost', '' ) );
+	$dbname = trim( w2PgetParam( $_POST, 'dbname', '' ) );
+	$dbuser = trim( w2PgetParam( $_POST, 'dbuser', '' ) );
+	$dbpass = trim( w2PgetParam( $_POST, 'dbpass', '' ) );
+	$dbprefix = trim( w2PgetParam( $_POST, 'dbprefix', '' ) );
+	$adminpass = trim( w2PgetParam( $_POST, 'adminpass', 'passwd' ) );
 	$adminpass = ($adminpass == '') ? 'passwd' : $adminpass;
-	$dbpersist = w2PgetCleanParam( $_POST, 'dbpersist', false );
+	$dbpersist = w2PgetParam( $_POST, 'dbpersist', false );
         
-        $system_timezone = trim( w2PgetCleanParam( $_POST, 'system_timezone', '' ) );
-        $user_timezone = trim( w2PgetCleanParam( $_POST, 'user_timezone', '' ) );
+        $system_timezone = trim( w2PgetParam( $_POST, 'system_timezone', '' ) );
+        $user_timezone = trim( w2PgetParam( $_POST, 'user_timezone', '' ) );
 
 	$do_db = isset($_POST['do_db']);
 	$do_db_cfg = isset($_POST['do_db_cfg']);

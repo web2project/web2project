@@ -65,13 +65,13 @@
             format="noframes" />
     </target>
 
-    <target name="metrics" depends="prepare">
+    <target name="metrics" depends="prepare, lint">
         <echo message="Some of these targets are *very* memory intensive. You may have to increase your memory_limit in php.ini" />
         <phingcall target="phploc" />
-        <phingcall target="phpmd" />
         <phingcall target="depend" />
-        <phingcall target="codesniffer" />
+        <phingcall target="cpd" />
         <phingcall target="churn-grep" />
+        <phingcall target="phpmd" />
     </target>
 
     <target name="standards" depends="lint, metrics" />
@@ -216,6 +216,6 @@
     </target>
 
     <target name="phpdoc" depends="prepare">
-        <exec command="phpdoc -d classes,includes,modules,styles -t ${dir.reports}/docs" />
+        <exec command="phpdoc -d classes,includes,modules,styles -t ${dir.reports}/docs --template=responsive-twig" />
     </target>
 </project>
