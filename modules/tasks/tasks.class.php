@@ -254,6 +254,7 @@ class CTask extends w2p_Core_BaseObject
             }
         }
 
+
         // Has a parent
         if ($this->task_id && $this->task_parent && $this->task_id != $this->task_parent) {
             $this_children = $this->getChildren();
@@ -262,9 +263,11 @@ class CTask extends w2p_Core_BaseObject
             $this_parent->load($this->task_parent);
             $parents_dependents = explode(',', $this_parent->dependentTasks());
 
-            if (in_array($this_parent->task_id, $this_dependencies)) {
-                $this->_error['BadDep_CannotDependOnParent'] = 'BadDep_CannotDependOnParent';
-                return false;
+ //opto there is not really a reason why ths should be forbidden, see forum
+ //opto  child can be dependent on parent if parent is nott dynamic
+           if (in_array($this_parent->task_id, $this_dependencies)) {
+//opto                $this->_error['BadDep_CannotDependOnParent'] = 'BadDep_CannotDependOnParent';
+//opto                return false;
             }
             // Task parent cannot be child of this task
             if (in_array($this_parent->task_id, $this_children)) {
