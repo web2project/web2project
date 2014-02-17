@@ -712,3 +712,7 @@ input.state, input.zip {
 .projects label {
     width: 11em;
 }
+
+.bulk {
+    width: 20em;
+}

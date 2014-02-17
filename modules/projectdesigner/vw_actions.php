@@ -90,7 +90,7 @@ $spercent = arrayMerge(array('' => '('.$AppUI->_('Progress').')'), $percent);
             <th width="15%"><?php echo $AppUI->_('Start Date'); ?>&nbsp;</th>
             <td width="160" nowrap="nowrap">
                 <input type='hidden' id='add_task_bulk_start_date' name='add_task_bulk_start_date' value='' />
-                <input type='text' onchange="setDate('frm_bulk', 'bulk_start_date');" class='text' style='width:120px;' id='bulk_start_date' name='bulk_start_date' value='' />
+                <input type='text' onchange="setDate('frm_bulk', 'bulk_start_date');" class='text' id='bulk_start_date' name='bulk_start_date' value='' />
                 <a onclick="return showCalendar('bulk_start_date', '<?php echo $cf ?>', 'frm_bulk', '<?php echo (strpos($cf, '%p') !== false ? '12' : '24') ?>', true)" href="javascript: void(0);">
                     <img src='<?php echo w2PfindImage('calendar.gif'); ?>' width='24' height='12' alt='<?php echo $AppUI->_('Calendar'); ?>' border='0' />
                 </a>
@@ -98,28 +98,29 @@ $spercent = arrayMerge(array('' => '('.$AppUI->_('Progress').')'), $percent);
             <th width="15%" nowrap="nowrap"><?php echo $AppUI->_('End Date'); ?>&nbsp;</th>
             <td width="160" nowrap="nowrap">
                 <input type='hidden' id='add_task_bulk_end_date' name='add_task_bulk_end_date' value='' />
-                <input type='text' onchange="setDate('frm_bulk', 'bulk_end_date');" class='text' style='width:120px;' id='bulk_end_date' name='bulk_end_date' value='' />
+                <input type='text' onchange="setDate('frm_bulk', 'bulk_end_date');" class='text' id='bulk_end_date' name='bulk_end_date' value='' />
                 <a onclick="return showCalendar('bulk_end_date', '<?php echo $cf ?>', 'frm_bulk', '<?php echo (strpos($cf, '%p') !== false ? '12' : '24') ?>', true)" href="javascript: void(0);">
                     <img src='<?php echo w2PfindImage('calendar.gif'); ?>' width='24' height='12' alt='<?php echo $AppUI->_('Calendar'); ?>' border='0' />
                 </a>
             </td>
             <th width="15%" nowrap="nowrap"><?php echo $AppUI->_('Keep daytimes'); ?>&nbsp;</th>
-           <td width="160" nowrap="nowrap">
+            <td width="160" nowrap="nowrap">
                 <input type='checkbox' id='add_task_bulk_time_keep' name='add_task_bulk_time_keep' value='1' checked />
-             </td>
-       </tr>
-        <tr>            <th width="15%" nowrap="nowrap"><?php echo $AppUI->_('Duration'); ?>&nbsp;</th>
-            <td width="250" nowrap="nowrap">
-                <input type='text' class='text' style='width:120px;text-align:right;' id='bulk_task_duration' name='bulk_task_duration' value='' />&nbsp;
-                <?php echo arraySelect($sdurntype, 'bulk_task_durntype', 'style="width=120px" size="1" class="text"', '', true); ?>
             </td>
-            <td width="100%">&nbsp;</td>
+       </tr>
+        <tr>
+            <th nowrap="nowrap"><?php echo $AppUI->_('Duration'); ?>&nbsp;</th>
+            <td nowrap="nowrap">
+                <input type='text' class='text' id='bulk_task_duration' name='bulk_task_duration' value='' />&nbsp;
+                <?php echo arraySelect($sdurntype, 'bulk_task_durntype', 'size="1" class="text"', '', true); ?>
+            </td>
+            <td>&nbsp;</td>
         </tr>
         <tr>
-            <th width="15%"><?php echo $AppUI->_('Owner'); ?>&nbsp;</th>
-            <td width="130"><?php echo arraySelect($sowners, 'bulk_task_owner', 'style="width:130px" class="text"', ''); ?></td>
-            <th width="15%"><?php echo $AppUI->_('Assign') . '&nbsp;</th>'; ?>
-            <td width="198" nowrap="nowrap"><a href="javascript: void(0);" style="display: block;" onclick="expand_selector('assign', 'frm_bulk')"><img id="assign_expand" src="<?php echo w2PfindImage('icons/expand.gif'); ?>" width="12" height="12" border="0" alt="">&nbsp;<img id="assign_collapse" src="<?php echo w2PfindImage('icons/collapse.gif'); ?>" width="12" height="12" border="0" style="display:none">&nbsp;</a>
+            <th><?php echo $AppUI->_('Owner'); ?>&nbsp;</th>
+            <td><?php echo arraySelect($sowners, 'bulk_task_owner', 'class="text"', ''); ?></td>
+            <th><?php echo $AppUI->_('Assign') . '&nbsp;</th>'; ?>
+            <td nowrap="nowrap"><a href="javascript: void(0);" style="display: block;" onclick="expand_selector('assign', 'frm_bulk')"><img id="assign_expand" src="<?php echo w2PfindImage('icons/expand.gif'); ?>" width="12" height="12" border="0" alt="">&nbsp;<img id="assign_collapse" src="<?php echo w2PfindImage('icons/collapse.gif'); ?>" width="12" height="12" border="0" style="display:none">&nbsp;</a>
                 <div>
                     <table>
                         <tr id="assign" style="visibility:collapse;display:none">
@@ -127,7 +128,7 @@ $spercent = arrayMerge(array('' => '('.$AppUI->_('Progress').')'), $percent);
                                 <a href="javascript: void(0);" onclick="addUser(document.frm_bulk)">
                                     <img src="<?php echo w2PfindImage('add.png', $m); ?>" width="16" height="16" title="<?php echo $AppUI->_('Add Assignment'); ?>" alt="<?php echo $AppUI->_('Add Assignment'); ?>" border="0" />
                                 </a>
-                                <?php echo arraySelect($sassign, 'bulk_task_user', 'style="width:130px" class="text"', ''); ?>
+                                <?php echo arraySelect($sassign, 'bulk_task_user', 'class="text"', ''); ?>
                                 <select name="bulk_task_assign_perc" class="text">
                                     <?php
                                         for ($i = 5; $i <= 100; $i += 5) {
@@ -138,62 +139,62 @@ $spercent = arrayMerge(array('' => '('.$AppUI->_('Progress').')'), $percent);
                                 <a href="javascript: void(0);" onclick="removeUser(document.frm_bulk)">
                                     <img src="<?php echo w2PfindImage('remove.png', $m); ?>" width="16" height="16" title="<?php echo $AppUI->_('Remove Assignment'); ?>" alt="<?php echo $AppUI->_('Remove Assignment'); ?>" border="0" />
                                 </a>
-                                <select name="bulk_task_assign[]" id="bulk_task_assign" style="width:200px" size="6" class="text" multiple="multiple">
+                                <select name="bulk_task_assign[]" id="bulk_task_assign" size="6" class="text" multiple="multiple">
                                 </select>
                             </td>
                         </tr>
                     </table>
                 </div>
             </td>
-            <th width="15%"><?php echo $AppUI->_('Unassign'); ?>&nbsp;</th>
-            <td width="130"><?php echo arraySelect($sunassign, 'bulk_task_unassign', 'style="width:130px" class="text"', ''); ?></td>
-            <td width="100%">&nbsp;</td>
+            <th><?php echo $AppUI->_('Unassign'); ?>&nbsp;</th>
+            <td><?php echo arraySelect($sunassign, 'bulk_task_unassign', 'class="text"', ''); ?></td>
+            <td>&nbsp;</td>
         </tr>
         <tr>
-            <th width="15%"><?php echo $AppUI->_('Priority'); ?>&nbsp;</th>
-            <td width="130"><?php echo arraySelect($spriority, 'bulk_task_priority', 'style="width:80px" class="text"', ''); ?></td>
-            <th width="15%"><?php echo $AppUI->_('Type'); ?>&nbsp;</th>
-            <td width="130"><?php echo arraySelect($stype, 'bulk_task_type', 'style="width:100px" class="text"', ''); ?></td>
-            <th width="15%"><?php echo $AppUI->_('Parent'); ?>&nbsp;</th>
-            <td width="130">
-                <select name='bulk_task_parent' style='width:300px' class='text'>
+            <th><?php echo $AppUI->_('Priority'); ?>&nbsp;</th>
+            <td><?php echo arraySelect($spriority, 'bulk_task_priority', 'class="text"', ''); ?></td>
+            <th><?php echo $AppUI->_('Type'); ?>&nbsp;</th>
+            <td><?php echo arraySelect($stype, 'bulk_task_type', 'class="text"', ''); ?></td>
+            <th><?php echo $AppUI->_('Parent'); ?>&nbsp;</th>
+            <td>
+                <select name='bulk_task_parent' class='text'>
                     <option value=''>(<?php echo $AppUI->_('Task Parent'); ?>)</option>
                     <option value='0'>(<?php echo $AppUI->_('Reset to Self Task'); ?>)</option>
                     <?php echo $task_parent_options; ?>
                 </select>
             </td>
-            <td width="100%">&nbsp;</td>
+            <td>&nbsp;</td>
         </tr>
         <tr>
-            <th width="15%"><?php echo $AppUI->_('Access'); ?>&nbsp;</th>
-            <td width="130"><?php echo arraySelect($stask_access, 'bulk_task_access', 'style="width:80px" class="text"', ''); ?></td>
-            <th width="15%"><?php echo $AppUI->_('Progress'); ?>&nbsp;</th>
-            <td width="130"><?php echo arraySelect($spercent, 'bulk_task_percent_complete', 'class="text"', ''); ?> %</td>
-            <th width="15%"><?php echo $AppUI->_('Dependency'); ?>&nbsp;</th>
-            <td width="130">
-                <select name='bulk_task_dependency' style='width:300px' class='text'>
+            <th><?php echo $AppUI->_('Access'); ?>&nbsp;</th>
+            <td><?php echo arraySelect($stask_access, 'bulk_task_access', 'class="text"', ''); ?></td>
+            <th><?php echo $AppUI->_('Progress'); ?>&nbsp;</th>
+            <td><?php echo arraySelect($spercent, 'bulk_task_percent_complete', 'class="text"', ''); ?> %</td>
+            <th><?php echo $AppUI->_('Dependency'); ?>&nbsp;</th>
+            <td>
+                <select name='bulk_task_dependency' class='text'>
                     <option value=''>(<?php echo $AppUI->_('Task Depend on Completion of...'); ?>)</option>
                     <option value='0'>(<?php echo $AppUI->_('Remove Dependencies'); ?>)</option>
                     <?php echo $task_parent_options; ?>
                 </select>
             </td>
-            <td width="100%">&nbsp;</td>
+            <td>&nbsp;</td>
         </tr>
         <tr>
-            <th width="15%" nowrap="nowrap"><?php echo $AppUI->_('Date Move (Days)'); ?>&nbsp;</th>
-            <td width="130">
-                            <input type='text' class='text' style='width:120px;text-align:right;' id='bulk_move_date' name='bulk_move_date' value='' />
+            <th nowrap="nowrap"><?php echo $AppUI->_('Date Move (Days)'); ?>&nbsp;</th>
+            <td>
+                <input type='text' class='text' id='bulk_move_date' name='bulk_move_date' value='' />
             </td>
-            <th width="15%"><?php echo $AppUI->_('Other'); ?>&nbsp;</th>
-            <td width="130"><?php echo arraySelect($sother, 'bulk_task_other', 'style="width:180px" class="text"', ''); ?></td>
-            <th width="15%"><?php echo $AppUI->_('Project'); ?>&nbsp;</th>
-            <td width="130"><?php echo arraySelect($sprojects, 'bulk_task_project', 'style="width:300px" class="text"', ''); ?></td>
-            <td width="100%">&nbsp;</td>
+            <th><?php echo $AppUI->_('Other'); ?>&nbsp;</th>
+            <td><?php echo arraySelect($sother, 'bulk_task_other', 'class="text"', ''); ?></td>
+            <th><?php echo $AppUI->_('Project'); ?>&nbsp;</th>
+            <td><?php echo arraySelect($sprojects, 'bulk_task_project', 'class="text bulk"', ''); ?></td>
+            <td>&nbsp;</td>
         </tr>
         <tr>
-            <th width="15%"><?php echo $AppUI->_('Allow users to add task logs for others'); ?></th>
-            <td width="130">
-                <select name="bulk_task_allow_other_user_tasklogs" style="width: 80px" class="text">
+            <th><?php echo $AppUI->_('Allow users to add task logs for others'); ?></th>
+            <td>
+                <select name="bulk_task_allow_other_user_tasklogs"class="text">
                     <option value=""></option>
                     <option value="1"><?php echo $AppUI->_('Yes'); ?></option>
                     <option value="0"><?php echo $AppUI->_('No'); ?></option>
