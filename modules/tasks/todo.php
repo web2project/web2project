@@ -43,7 +43,7 @@ $showPinned = $AppUI->getState('TaskDayShowPin', 0);
 $showEmptyDate = $AppUI->getState('TaskDayShowEmptyDate', 0);
 $showInProgress = $AppUI->getState('TaskDayShowInProgress', 0);
 
-if (canView('admin')) { // let's see if the user has sysadmin access
+if (canView('users')) { // let's see if the user has sysadmin access
 	$other_users = true;
 	if (($show_uid = w2PgetParam($_REQUEST, 'show_user_todo', 0)) != 0) { // lets see if the user wants to see anothers user mytodo
 		$user_id = $show_uid;
