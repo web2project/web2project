@@ -557,7 +557,7 @@ class CTask extends w2p_Core_BaseObject
 //opto      using this code, a project will be copied identically if imported to the same start date as
 //opto      the original project  
   
-  '        $timeOffset = $oldproject_start_date->dateDiff($project_start_date) ;
+        $timeOffset = $oldproject_start_date->dateDiff($project_start_date) ;
 
         array_unshift($task_list, $first_task);
         foreach($task_list as $orig_task) {
