@@ -530,10 +530,16 @@ class CTask extends w2p_Core_BaseObject
 
         $project_start_date = new w2p_Utilities_Date(
             $this->_AppUI->convertToSystemTZ($project_start_date));
-        $project_start_date->next_working_day();
+//opto  $project_start_date->next_working_day();
         $timeOffset = 0;
-
-        $newTask = new CTask();
+//opto   this gets the stat date of the original project
+        $oldProject = new CProject();
+		$oldProject->project_id=$from_project_id;
+		$oldProject->load();
+        $oldproject_start_date = new w2p_Utilities_Date(
+            $this->_AppUI->convertToSystemTZ($oldProject->project_start_date));
+		
+		$newTask = new CTask();
         $task_list = $newTask->loadAll('task_start_date', "task_project = " . $from_project_id);
         $first_task = array_shift($task_list);
 
@@ -541,8 +547,17 @@ class CTask extends w2p_Core_BaseObject
          * This gets the first (earliest) task start date and figures out
          *   how much we have to shift all the tasks by.
          */
-        $original_start_date = new w2p_Utilities_Date($first_task['task_start_date']);
-        $timeOffset = $original_start_date->dateDiff($project_start_date) + 1;
+//opto        $original_start_date = new w2p_Utilities_Date($first_task['task_start_date']);
+//opto        $timeOffset = $original_start_date->dateDiff($project_start_date) + 1;
+
+
+
+
+//opto      this gets the difference in days between original project's and new project's start dates
+//opto      using this code, a project will be copied identically if imported to the same start date as
+//opto      the original project  
+  
+        $timeOffset = $oldproject_start_date->dateDiff($project_start_date) ;
 
         array_unshift($task_list, $first_task);
         foreach($task_list as $orig_task) {
