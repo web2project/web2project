@@ -684,11 +684,11 @@ div.addedit input.save {
 }
 
 input.name, input.url {
-    width: 250px;
+    width: 25em;
 }
 
 input.state, input.zip {
-    width: 50px;
+    width: 5em;
 }
 
 .tasks-depends label, .tasks-dates label, .tasks-resources label, .users label {
@@ -711,4 +711,8 @@ input.state, input.zip {
 
 .projects label {
     width: 11em;
+}
+
+.tasks-tasklog label, .preference label {
+    width: 12em;
 }
