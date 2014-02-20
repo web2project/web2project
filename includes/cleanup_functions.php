@@ -4808,8 +4808,6 @@ function __extract_from_todo($user_id, $showArcProjs, $showLowTasks, $showInProg
     $q->addTable('tasks', 'ta');
     $q->addTable('user_tasks', 'ut');
     $q->leftJoin('user_task_pin', 'tp', 'tp.task_id = ta.task_id and tp.user_id = ' . (int) $user_id);
-    $q->leftJoin('project_departments', 'project_departments', 'pr.project_id = project_departments.project_id OR project_departments.project_id IS NULL');
-    $q->leftJoin('departments', 'departments', 'departments.dept_id = project_departments.department_id OR dept_id IS NULL');
 
     $q->addWhere('ut.task_id = ta.task_id');
     $q->addWhere('ut.user_id = ' . (int) $user_id);

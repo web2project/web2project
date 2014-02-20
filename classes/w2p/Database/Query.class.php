@@ -1211,11 +1211,11 @@ class w2p_Database_Query {
 				$hashlist[$hash[$index]] = $hash;
 				//Lets add the hash fields in numerial keys:
 				//This is so that the arraySelectList works correctly with the results of DBQueries loadHashList method
-				$key = 0;
-				foreach ($hash as $field) {
-					$hashlist[$hash[$index]][$key] = $field;
-					$key++;
-				}
+//				$key = 0;
+//				foreach ($hash as $field) {
+//					$hashlist[$hash[$index]][$key] = $field;
+//					$key++;
+//				}
 			} else {
 				// If we are using fetch mode of ASSOC, then we don't
 				// have an array index we can use, so we need to get one

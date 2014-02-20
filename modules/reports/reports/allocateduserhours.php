@@ -24,65 +24,59 @@ $end_date->setTime(23, 59, 59);
 echo $AppUI->getTheme()->styleRenderBoxTop();
 ?>
 <form name="editFrm" action="index.php?m=reports" method="post" accept-charset="utf-8">
-<input type="hidden" name="project_id" value="<?php echo $project_id; ?>" />
-<input type="hidden" name="report_category" value="<?php echo $report_category; ?>" />
-<input type="hidden" name="report_type" value="<?php echo $report_type; ?>" />
-<input type="hidden" name="datePicker" value="log" />
+    <input type="hidden" name="project_id" value="<?php echo $project_id; ?>" />
+    <input type="hidden" name="report_category" value="<?php echo $report_category; ?>" />
+    <input type="hidden" name="report_type" value="<?php echo $report_type; ?>" />
+    <input type="hidden" name="datePicker" value="log" />
 
-<table cellspacing="0" cellpadding="4" border="0" width="100%" class="std">
-
-<tr>
-	<td nowrap="nowrap"><?php echo $AppUI->_('For period'); ?>:
-		<input type="hidden" name="log_start_date" id="log_start_date" value="<?php echo $start_date ? $start_date->format(FMT_TIMESTAMP_DATE) : ''; ?>" />
-		<input type="text" name="start_date" id="start_date" onchange="setDate_new('editFrm', 'start_date');" value="<?php echo $start_date ? $start_date->format($df) : ''; ?>" class="text" />
-		<a href="javascript: void(0);" onclick="return showCalendar('start_date', '<?php echo $df ?>', 'editFrm', null, true, true)">
-			<img src="<?php echo w2PfindImage('calendar.gif'); ?>" width="24" height="12" alt="<?php echo $AppUI->_('Calendar'); ?>" border="0" />
-		</a>
-	</td>
-	<td nowrap="nowrap"><?php echo $AppUI->_('to'); ?>
-		<input type="hidden" name="log_end_date" id="log_end_date" value="<?php echo $end_date ? $end_date->format(FMT_TIMESTAMP_DATE) : ''; ?>" />
-		<input type="text" name="end_date" id="end_date" onchange="setDate_new('editFrm', 'end_date');" value="<?php echo $end_date ? $end_date->format($df) : ''; ?>" class="text" />
-		<a href="javascript: void(0);" onclick="return showCalendar('end_date', '<?php echo $df ?>', 'editFrm', null, true, true)">
-			<img src="<?php echo w2PfindImage('calendar.gif'); ?>" width="24" height="12" alt="<?php echo $AppUI->_('Calendar'); ?>" border="0" />
-		</a>
-	</td>
-	<td nowrap='nowrap'>
-	   <input type="radio" name="coarseness" value="1" <?php if ($coarseness == 1)
-	echo "checked" ?> />
-	   <?php echo $AppUI->_('Days'); ?>
-	   <input type="radio" name="coarseness" value="7" <?php if ($coarseness == 7)
-	echo "checked" ?> />
-	   <?php echo $AppUI->_('Weeks'); ?>
-</td>
-	<td nowrap='nowrap'>
-	   <?php
-echo $AppUI->_('Tasks created by');
-echo ' ';
-echo getUsersCombo($user_id);
-?>
-	</td>
-</tr>
-<tr>
-	<td nowrap="nowrap">
-		<input type="checkbox" name="log_all_projects" id="log_all_projects" <?php if ($log_all_projects)
-	echo 'checked="checked"' ?> />
-		<label for="log_all_projects"><?php echo $AppUI->_('Log All Projects'); ?></label>
-	</td>	
-	<td nowrap="nowrap">
-	   <input type="checkbox" name="use_assigned_percentage" id="use_assigned_percentage" <?php if ($use_assigned_percentage)
-	echo 'checked="checked"' ?> />
-	   <label for="use_assigned_percentage"><?php echo $AppUI->_('Use assigned percentage'); ?></label>
-	</td>	
-	<td nowrap="nowrap">
-	   <input type="checkbox" name="hideNonWd" id="hideNonWd" <?php if ($hideNonWd)
-	echo 'checked="checked"' ?> />
-	   <label for="hideNonWd"><?php echo $AppUI->_('Hide non-working days'); ?></label>
-	</td>	
-	<td align="right" width="50%" nowrap="nowrap">
-		<input class="button" type="submit" name="do_report" value="<?php echo $AppUI->_('submit'); ?>" />
-	</td>
-</tr>
-</table>
+    <table cellspacing="0" cellpadding="4" border="0" width="100%" class="std">
+        <tr>
+            <td nowrap="nowrap"><?php echo $AppUI->_('For period'); ?>:
+                <input type="hidden" name="log_start_date" id="log_start_date" value="<?php echo $start_date ? $start_date->format(FMT_TIMESTAMP_DATE) : ''; ?>" />
+                <input type="text" name="start_date" id="start_date" onchange="setDate_new('editFrm', 'start_date');" value="<?php echo $start_date ? $start_date->format($df) : ''; ?>" class="text" />
+                <a href="javascript: void(0);" onclick="return showCalendar('start_date', '<?php echo $df ?>', 'editFrm', null, true, true)">
+                    <img src="<?php echo w2PfindImage('calendar.gif'); ?>" width="24" height="12" alt="<?php echo $AppUI->_('Calendar'); ?>" border="0" />
+                </a>
+            </td>
+            <td nowrap="nowrap"><?php echo $AppUI->_('to'); ?>
+                <input type="hidden" name="log_end_date" id="log_end_date" value="<?php echo $end_date ? $end_date->format(FMT_TIMESTAMP_DATE) : ''; ?>" />
+                <input type="text" name="end_date" id="end_date" onchange="setDate_new('editFrm', 'end_date');" value="<?php echo $end_date ? $end_date->format($df) : ''; ?>" class="text" />
+                <a href="javascript: void(0);" onclick="return showCalendar('end_date', '<?php echo $df ?>', 'editFrm', null, true, true)">
+                    <img src="<?php echo w2PfindImage('calendar.gif'); ?>" width="24" height="12" alt="<?php echo $AppUI->_('Calendar'); ?>" border="0" />
+                </a>
+            </td>
+            <td nowrap='nowrap'>
+               <input type="radio" name="coarseness" value="1" <?php if ($coarseness == 1) echo "checked" ?> />
+               <?php echo $AppUI->_('Days'); ?>
+               <input type="radio" name="coarseness" value="7" <?php if ($coarseness == 7) echo "checked" ?> />
+               <?php echo $AppUI->_('Weeks'); ?>
+            </td>
+            <td nowrap='nowrap'>
+                <?php
+                echo $AppUI->_('Tasks created by');
+                echo ' ';
+                echo getUsersCombo($user_id);
+                ?>
+            </td>
+        </tr>
+        <tr>
+            <td nowrap="nowrap">
+                <input type="checkbox" name="log_all_projects" id="log_all_projects" <?php if ($log_all_projects) echo 'checked="checked"' ?> />
+                <label for="log_all_projects"><?php echo $AppUI->_('Log All Projects'); ?></label>
+            </td>
+            <td nowrap="nowrap">
+               <input type="checkbox" name="use_assigned_percentage" id="use_assigned_percentage" <?php if ($use_assigned_percentage) echo 'checked="checked"' ?> />
+               <label for="use_assigned_percentage"><?php echo $AppUI->_('Use assigned percentage'); ?></label>
+            </td>
+            <td nowrap="nowrap">
+               <input type="checkbox" name="hideNonWd" id="hideNonWd" <?php if ($hideNonWd) echo 'checked="checked"' ?> />
+               <label for="hideNonWd"><?php echo $AppUI->_('Hide non-working days'); ?></label>
+            </td>
+            <td align="right" width="50%" nowrap="nowrap">
+                <input class="button" type="submit" name="do_report" value="<?php echo $AppUI->_('submit'); ?>" />
+            </td>
+        </tr>
+    </table>
 </form>
 <?php
 if ($do_report) {
@@ -181,27 +175,26 @@ if ($do_report) {
 			showWeeks();
 		}
 ?>
-			<center><table class="std">
+			<center>
+        <table class="std">
 			<?php echo $table_header . $table_rows; ?>
-			</table>
-			<table width="100%"><tr><td align="center">
-		<?php
-
-
-		echo '<h4>' . $AppUI->_('Total capacity for shown users') . '</h4>';
-		echo $AppUI->_('Allocated hours') . ': ' . number_format($allocated_hours_sum, 2) . '<br />';
-		echo $AppUI->_('Total capacity') . ': ' . number_format($total_hours_capacity, 2) . '<br />';
-		echo $AppUI->_('Percentage used') . ': ' . (($total_hours_capacity > 0) ? number_format($allocated_hours_sum / $total_hours_capacity, 2) * 100 : 0) . '%<br />';
-?>
-			</td>
+        </table>
+        <table width="100%">
+            <tr>
+                <td align="center">
+                    <?php
+                    echo '<h4>' . $AppUI->_('Total capacity for shown users') . '</h4>';
+                    echo $AppUI->_('Allocated hours') . ': ' . number_format($allocated_hours_sum, 2) . '<br />';
+                    echo $AppUI->_('Total capacity') . ': ' . number_format($total_hours_capacity, 2) . '<br />';
+                    echo $AppUI->_('Percentage used') . ': ' . (($total_hours_capacity > 0) ? number_format($allocated_hours_sum / $total_hours_capacity, 2) * 100 : 0) . '%<br />';
+                    ?>
+			    </td>
 			<td align="center">
-		<?php
-
-
-		echo '<h4>' . $AppUI->_('Total capacity for all users') . '</h4>';
-		echo $AppUI->_('Allocated hours') . ': ' . number_format($allocated_hours_sum, 2) . '<br />';
-		echo $AppUI->_('Total capacity') . ': ' . number_format($total_hours_capacity_all, 2) . '<br />';
-		echo $AppUI->_('Percentage used') . ': ' . (($total_hours_capacity_all > 0) ? number_format($allocated_hours_sum / $total_hours_capacity_all, 2) * 100 : 0) . '%<br />';
+                <?php
+                    echo '<h4>' . $AppUI->_('Total capacity for all users') . '</h4>';
+                    echo $AppUI->_('Allocated hours') . ': ' . number_format($allocated_hours_sum, 2) . '<br />';
+                    echo $AppUI->_('Total capacity') . ': ' . number_format($total_hours_capacity_all, 2) . '<br />';
+                    echo $AppUI->_('Percentage used') . ': ' . (($total_hours_capacity_all > 0) ? number_format($allocated_hours_sum / $total_hours_capacity_all, 2) * 100 : 0) . '%<br />';
 	}
 ?>
 	   </td></tr>
