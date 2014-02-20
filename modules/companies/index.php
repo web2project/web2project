@@ -13,19 +13,9 @@ if (isset($_GET['orderby'])) {
 $orderby = $AppUI->getState('CompIdxOrderBy') ? $AppUI->getState('CompIdxOrderBy') : 'company_name';
 $orderdir = $AppUI->getState('CompIdxOrderDir') ? $AppUI->getState('CompIdxOrderDir') : 'asc';
 
-if (isset($_REQUEST['owner_filter_id'])) {
-	$AppUI->setState('owner_filter_id', w2PgetParam($_REQUEST, 'owner_filter_id', null));
-	$owner_filter_id = w2PgetParam($_REQUEST, 'owner_filter_id', null);
-} else {
-	$owner_filter_id = $AppUI->getState('owner_filter_id');
-	if (!isset($owner_filter_id)) {
-		$owner_filter_id = 0; //By default show all companies instead of $AppUI->user_id current user.
-		$AppUI->setState('owner_filter_id', $owner_filter_id);
-	}
-}
+$owner_filter_id = $AppUI->processIntState('owner_filter_id', $_POST, 'owner_filter_id', 0);
 
 $search_string = w2PgetParam($_POST, 'search_string', '');
-$AppUI->setState($m . '_search_string', $search_string);
 $search_string = w2PformSafe($search_string, true);
 
 $company = new CCompany();

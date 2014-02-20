@@ -22,6 +22,9 @@ class w2p_Output_HTML_ViewHelper extends w2p_Output_HTML_Base
                 $output = w2p_url($value);
                 break;
             case 'owner':
+                if (!$fieldValue) {
+                    return '-';
+                }
                 $obj = new CContact();
                 $obj->findContactByUserid($fieldValue);
                 $link = '?m=users&a=view&user_id='.$fieldValue;
