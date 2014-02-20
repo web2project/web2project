@@ -716,3 +716,9 @@ input.state, input.zip {
 .bulk {
     width: 20em;
 }
+
+#password-strength {
+    margin-left: 20.5em;
+    width: 9em;
+    /*style="width: 135px; margin-left: 20.5em"*/
+}
