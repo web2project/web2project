@@ -42,11 +42,6 @@ if (!$forum) {
 	$AppUI->redirect();
 }
 
-$df = $AppUI->getPref('SHDATEFORMAT');
-$tf = $AppUI->getPref('TIMEFORMAT');
-
-$start_date = $AppUI->formatTZAwareTime($forum->forum_create_date, $df);
-
 // setup the title block
 $titleBlock = new w2p_Theme_TitleBlock('Forum', 'icon.png', $m, $m . '.' . $a);
 $titleBlock->addCrumb('?m=forums', 'forums list');
@@ -77,7 +72,7 @@ $htmlHelper = new w2p_Output_HTMLHelper($AppUI);
             <table cellspacing="1" cellpadding="2" border="0" width="100%" class="well">
                 <tr>
                     <td align="left" nowrap="nowrap"><?php echo $AppUI->_('Related Project'); ?>:</td>
-                    <td nowrap="nowrap"><strong><?php echo ($project->project_name) ? $project->project_name : 'No associated project'; ?></strong></td>
+                    <?php echo $htmlHelper->createCell('forum_project', $forum->forum_project); ?>
                 </tr>
                 <tr>
                     <td align="left"><?php echo $AppUI->_('Owner'); ?>:</td>
@@ -85,7 +80,7 @@ $htmlHelper = new w2p_Output_HTMLHelper($AppUI);
                 </tr>
                 <tr>
                     <td align="left"><?php echo $AppUI->_('Created On'); ?>:</td>
-                    <td nowrap="nowrap"><?php echo $start_date; ?></td>
+                    <?php echo $htmlHelper->createCell('forum_create_date', $forum->forum_create_date); ?>
                 </tr>
             </table>
         </td>
@@ -93,9 +88,7 @@ $htmlHelper = new w2p_Output_HTMLHelper($AppUI);
             <strong><?php echo $AppUI->_('Description'); ?></strong>
             <table cellspacing="1" cellpadding="2" border="0" width="100%" class="well">
                 <tr>
-                    <td>
-                        <?php echo $forum->forum_description; ?>
-                    </td>
+                    <?php echo $htmlHelper->createCell('forum_description', $forum->forum_description); ?>
                 </tr>
             </table>
         </td>
