@@ -684,11 +684,11 @@ div.addedit input.save {
 }
 
 input.name, input.url {
-    width: 250px;
+    width: 25em;
 }
 
 input.state, input.zip {
-    width: 50px;
+    width: 5em;
 }
 
 .tasks-depends label, .tasks-dates label, .tasks-resources label, .users label {
@@ -720,5 +720,8 @@ input.state, input.zip {
 #password-strength {
     margin-left: 20.5em;
     width: 9em;
-    /*style="width: 135px; margin-left: 20.5em"*/
+}
+
+.tasks-tasklog label, .preference label {
+    width: 12em;
 }
