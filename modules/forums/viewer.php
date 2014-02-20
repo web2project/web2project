@@ -24,7 +24,7 @@ if (!$canRead) {
 }
 
 $message = new CForum_Message();
-$message->loadFull(null, $message_id);
+$message->load($message_id);
 
 if (0 == $forum_id) {
     $forum_id = $message->message_forum;
