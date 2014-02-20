@@ -35,7 +35,7 @@ $roles_arr = arrayMerge(array(0 => ''), $roles_arr);
 
 if ($contact_id) {
     $object = new CContact();
-    $object->loadFull(null, $contact_id);
+    $object->load($contact_id);
 } else {
     $object = new CUser();
     $object->loadFull($user_id);

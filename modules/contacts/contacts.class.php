@@ -61,16 +61,6 @@ class CContact extends w2p_Core_BaseObject
         return ('contact_name' == $name) ? $this->contact_display_name : '';
     }
 
-    public function loadFull($notUsed = null, $contactId)
-    {
-        $q = $this->_getQuery();
-        $q->addTable('contacts');
-        $q->addJoin('companies', 'cp', 'cp.company_id = contact_company');
-        $q->addJoin('users', 'u', 'u.user_contact = contact_id', 'left');
-        $q->addWhere('contact_id = ' . (int) $contactId);
-        $q->loadObject($this, true, false);
-    }
-
     protected function hook_preStore() {
         $this->contact_company = (int) $this->contact_company;
         $this->contact_department = (int) $this->contact_department;
