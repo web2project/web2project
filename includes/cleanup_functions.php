@@ -1178,7 +1178,7 @@ function showRoleRow($role = null)
         $s .= '<tr><td>&nbsp;</td>';
         $s .= '<td valign="top"><input type="text" size="20" name="role_name" value="' . $name . '" class="text" /></td>';
         $s .= '<td valign="top"><input type="text" size="50" name="role_description" class="text" value="' . $description . '">' . ($id ? '' : '&nbsp;&nbsp;&nbsp;&nbsp;' . arraySelect($roles_arr, 'copy_role_id', 'class="text"', 0, true));
-        $s .= '<input type="submit" value="' . $AppUI->_($id ? 'edit' : 'add') . '" class="button btn btn-primary btn-mini right" /></td>';
+        $s .= '<input type="submit" value="' . $AppUI->_($id ? 'save' : 'add') . '" class="button btn btn-primary btn-mini right" /></td>';
     } else {
         $s .= '<tr><td width="50" valign="top">';
         if ($canEdit) {
