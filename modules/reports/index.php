@@ -35,7 +35,7 @@ $reports = $loader->readFiles(W2P_BASE_DIR . '/modules/reports/reports', '\.php$
 
 // setup the title block
 if (!$suppressHeaders) {
-	$titleBlock = new w2p_Theme_TitleBlock('Project Reports', 'icon.png', $m, $m . '.' . $a);
+	$titleBlock = new w2p_Theme_TitleBlock('Reports', 'icon.png', $m, $m . '.' . $a);
 	$titleBlock->addCrumb('?m=projects', 'projects list');
 	if ($project_id) {
 		$titleBlock->addCrumb('?m=projects&amp;a=view&amp;project_id=' . $project_id, 'view this project');

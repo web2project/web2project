@@ -44,7 +44,7 @@ $canDelete = $perms->checkModuleItem($m, 'delete');
 ?>
 <form name="form_buttons" method="post" action="index.php?<?php echo 'm=' . $m . '&amp;a=' . $a . '&amp;date=' . $date; ?>" accept-charset="utf-8">
     <input type="hidden" name="show_form" value="1" />
-    <table width="100%" border="0" cellpadding="1" cellspacing="0">
+    <table width="100%" border="0" cellpadding="1" cellspacing="0" class="my-tasks">
         <tr>
             <td width="50%">
                 <?php

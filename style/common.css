@@ -714,3 +714,7 @@ input.state, input.zip {
 input.button, a div {
     text-transform: capitalize;
 }
+
+.smartsearch label, .my-tasks label {
+    width: inherit;
+}
