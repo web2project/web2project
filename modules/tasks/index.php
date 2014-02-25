@@ -86,10 +86,7 @@ $titleBlock->addCrumb('?m=tasks&amp;a=tasksperuser', 'tasks per user');
 if (!$project_id) {
     $titleBlock->addCell('
         <form name="task_list_options" method="post" action="?m=tasks" accept-charset="utf-8">
-            <input type="hidden" name="show_task_options" value="1" />
-            <input type="checkbox" name="show_incomplete" id="show_incomplete" onclick="document.task_list_options.submit();"' .
-                ($showIncomplete ? 'checked="checked"' : '') . '/>
-            <label for="show_incomplete">' . $AppUI->_("Incomplete Tasks Only") . '</label>
+            <label for="show_incomplete" ><input type="hidden" name="show_task_options" value="1" /><input type="checkbox" name="show_incomplete" id="show_incomplete" onclick="document.task_list_options.submit();"' . ($showIncomplete ? 'checked="checked"' : '') . '/>' . $AppUI->_("Incomplete Tasks Only") . '</label>
         </form>');
 
 }

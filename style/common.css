@@ -186,7 +186,15 @@ form {
 
 .crumb-right li select, .crumb-right li input {
     margin-top: -2px;
+    width: 15em;
 }
+
+.crumb-right label {
+    width: 14em;
+}
+.crumb-right input[type="checkbox"] {
+     width: 1em;
+ }
 
 .system-info P {
 	color: #000000;
