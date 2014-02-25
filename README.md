@@ -9,9 +9,9 @@ The best part is that it's free software. That means you can use it, extend it, 
 
 ## Requirements
 
-*  PHP 5.2+
+*  PHP 5.3.8+
 *  Mysql 5.x+
-*  Apache 1.x or IIS 7+
+*  Apache 1.x+ or IIS 7+
 *  GD  (for Gantt Chart generation)
 
 ## Installing/Upgrading:

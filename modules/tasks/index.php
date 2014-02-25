@@ -7,7 +7,7 @@ $AppUI->savePlace();
 $perms = &$AppUI->acl();
 // retrieve any state parameters
 $user_id = $AppUI->user_id;
-if (canView('admin')) { // Only sysadmins are able to change users
+if (canView('users')) { // Only sysadmins are able to change users
 	if (w2PgetParam($_POST, 'user_id', 0) != 0) { // this means that
 		$user_id = w2PgetParam($_POST, 'user_id', 0);
 		$AppUI->setState('user_id', $_POST['user_id']);
@@ -55,7 +55,7 @@ $titleBlock = new w2p_Theme_TitleBlock('Tasks', 'icon.png', $m, $m . '.' . $a);
 $titleBlock->addSearchCell($search_string);
 
 // Let's see if this user has admin privileges
-if (canView('admin')) {
+if (canView('users')) {
 	$user_list = $perms->getPermittedUsers('tasks');
     $titleBlock->addFilterCell('User', 'user_id', $user_list, $user_id);
 }
