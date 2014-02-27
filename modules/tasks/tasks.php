@@ -445,7 +445,7 @@ $open_link = w2PtoolTip($m, 'click to expand/collapse all the tasks for this pro
                 <?php echo $open_link; ?>
           </td>
           <td align='right'>
-                <table>
+                <table style="width: 20em;">
                     <tr>
                       <td><?php echo $AppUI->_('Show'); ?>:</td>
                       <td>
