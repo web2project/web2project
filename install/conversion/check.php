@@ -119,7 +119,7 @@
 	</tr>
 	<tr>
 	  <td colspan="2" align="center">
-		  <form action="<?php echo $baseUrl; ?>/index.php" method="post" name="form" id="form" accept-charset="utf-8">
+		  <form action="<?php echo W2P_BASE_URL; ?>/index.php" method="post" name="form" id="form" accept-charset="utf-8">
 		  	<?php if ($continue) { ?>
 		  		<input type="hidden" name="step" value="perform" />
 		  		<input class="button" type="submit" name="next" value="Perform Conversion &raquo;" />

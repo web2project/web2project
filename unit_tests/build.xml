@@ -135,7 +135,7 @@
 <!-- git log -since=8/17/2011 > changelog -->
         <delete dir="${dir.package}/${phing.project.name}" />
         <delete dir="${dir.package}/${phing.project.name}-${releaseName}/unit_tests" />
-        
+
         <phplint haltonfailure="true">
             <fileset dir="${dir.package}/${phing.project.name}-${releaseName}">
                 <include name="**/*.php" />
@@ -185,6 +185,9 @@
         <phpdepend>
             <fileset refid="project.source" />
             <logger type="jdepend-xml" outfile="${dir.reports}/jdepend.xml"/>
+            <logger type="summary-xml" outfile="${dir.reports}/jdepend-summary.xml"/>
+            <logger type="jdepend-chart" outfile="${dir.reports}/dependencies.svg"/>
+            <logger type="overview-pyramid" outfile="${dir.reports}/overview-pyramid.svg"/>
             <analyzer type="coderank-mode" value="method"/>
         </phpdepend>
     </target>

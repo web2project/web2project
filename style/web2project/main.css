@@ -56,9 +56,9 @@ div.shadow {
 }
 
 .nav a:hover{
-	background: #2E91C6 url(images/nav_item_hover.gif) repeat-x scroll 0%;
-	color:      #FFFFFF;
-	text-decoration:none;
+    background: #2E91C6 url(images/nav_item_hover.gif) repeat-x scroll 0%;
+    color:      #FFFFFF;
+    text-decoration:none;
 }
 /* End: Header Bar & Navigation for all pages */
 
@@ -80,11 +80,11 @@ input.button {
 }
 
 input.button:hover {
-	color: #000000;
+    color: #000000;
 }
 
 input.button:active {
-	color: #FFFFFF;
+    color: #FFFFFF;
     outline: none; /* hide dotted outline in Firefox */
 }
 
@@ -158,15 +158,15 @@ TD.topBtnOff {
 }
 
 td.label {
-	background-color:#FFFFFF;
-	background-image:url(images/label.gif);
-	height:22px;
+    background-color:#FFFFFF;
+    background-image:url(images/label.gif);
+    height:22px;
 }
 
 td.item {
-	background-color:#FFFFFF;
-	background-image:url(images/label.gif);
-	height:22px;
+    background-color:#FFFFFF;
+    background-image:url(images/label.gif);
+    height:22px;
 }
 
 /* Standard table 'spreadsheet' style */
@@ -201,23 +201,23 @@ table {
 
 /* a 'standard' table */
 table.std { 
-	background: #fafafa; 
-	border-color: #acacac; 
-	border-style: solid; 
-	border-width: 1px 2px 2px 1px;
+    background: #fafafa; 
+    border-color: #acacac; 
+    border-style: solid; 
+    border-width: 1px 2px 2px 1px;
     border-radius:3px;
 }
 
-table.std TH {	
-	background-color:#FFFFFF;
-	background-image:url(images/label.gif);
-	font: bold 12px Arial, Helvetica, sans-serif;
-	text-align: center;
+table.std TH {    
+    background-color:#FFFFFF;
+    background-image:url(images/label.gif);
+    font: bold 12px Arial, Helvetica, sans-serif;
+    text-align: center;
     color: #000;
-	margin-bottom: 0;
-	padding: 1px;
-	list-style-type: disc;
-	list-style-position: inside;
+    margin-bottom: 0;
+    padding: 1px;
+    list-style-type: disc;
+    list-style-position: inside;
 }
 
 table.addedit.pref td {
@@ -339,12 +339,12 @@ table.minical {
 }
 
 table.minical th {
-	color:#000000;
-	font-family:Arial,Helvetica,sans-serif;
-	font-size:11px;
-	font-style:normal;
-	font-weight:normal;
-	line-height:normal;
+    color:#000000;
+    font-family:Arial,Helvetica,sans-serif;
+    font-size:11px;
+    font-style:normal;
+    font-weight:normal;
+    line-height:normal;
 }
 table.minical td {
     text-align: center;
@@ -415,12 +415,12 @@ a.button span, a.button div {
 } 
 
 a.button:hover {
-	color: #FFFFFF;
+    color: #FFFFFF;
 }
 
 a.button:active {
     background-position: bottom right;
-	color: #FFFFFF;
+    color: #FFFFFF;
     outline: none; /* hide dotted outline in Firefox */
 }
 
@@ -439,7 +439,7 @@ a.delete {
     margin-right:0px;
     padding-right: 10px; /* sliding doors padding */
     text-decoration: none;
-	border:0px;
+    border:0px;
 }
 
 a.delete span, a.delete div {
@@ -450,12 +450,12 @@ a.delete span, a.delete div {
 } 
 
 a.delete:hover {
-	color: #FFFFFF;
+    color: #FFFFFF;
 }
 
 a.delete:active {
     background-position: bottom right;
-	color: #FFFFFF;
+    color: #FFFFFF;
     outline: none; /* hide dotted outline in Firefox */
 }
 
@@ -469,16 +469,16 @@ a.delete:active span {
     padding: 0px;
 }
 .crumb ul li {
-	margin: 2px 2px 2px;
-	font-family:arial,sans-serif;
-	color: #000000;
-	text-decoration: none;
-	display: inline; /* Remove this line arrange the buttons vertically */
-	background: transparent url('images/crumb_right.gif') no-repeat scroll top right;
-	float: left;
-	height: 22px;
-	padding-right: 10px; /* sliding doors padding */
-	border:0px;
+    margin: 2px 2px 2px;
+    font-family:arial,sans-serif;
+    color: #000000;
+    text-decoration: none;
+    display: inline; /* Remove this line arrange the buttons vertically */
+    background: transparent url('images/crumb_right.gif') no-repeat scroll top right;
+    float: left;
+    height: 22px;
+    padding-right: 10px; /* sliding doors padding */
+    border:0px;
 }
 .crumb ul li span, .crumb ul li div {
     background: transparent url('images/crumb_left.gif') no-repeat;
@@ -487,14 +487,14 @@ a.delete:active span {
     padding: 2px 0 5px 10px;
 }
 .crumb ul li a {
-	display: inline;
-	color: #000000;
+    display: inline;
+    color: #000000;
 }
 .crumb ul li a:active {
-	color: #AD0000;
+    color: #AD0000;
 }
 .crumb ul li a:hover {
-	color: #FFFFFF;
+    color: #FFFFFF;
 }
 
 .crumb-right div.crumb ul {
@@ -515,130 +515,130 @@ span > img {
 /*tooltip*/
 
 h4 {
-	font-weight: bold;
-	font-size: 14px;
-	margin: 0;
-	color: #9FD4FF;
+    font-weight: bold;
+    font-size: 14px;
+    margin: 0;
+    color: #9FD4FF;
 }
  
 /* TipTip CSS - Version 1.2 */
 
 #tiptip_holder {
-	display: none;
-	position: absolute;
-	top: 0;
-	left: 0;
-	z-index: 99999;
+    display: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 99999;
 }
 
 #tiptip_holder.tip_top {
-	padding-bottom: 5px;
+    padding-bottom: 5px;
 }
 
 #tiptip_holder.tip_bottom {
-	padding-top: 5px;
+    padding-top: 5px;
 }
 
 #tiptip_holder.tip_right {
-	padding-left: 5px;
+    padding-left: 5px;
 }
 
 #tiptip_holder.tip_left {
-	padding-right: 5px;
+    padding-right: 5px;
 }
 
 #tiptip_content {
-	font-size: 11px;
-	color: #fff;
-	text-shadow: 0 0 2px #000;
-	padding: 4px 8px;
-	border: 1px solid rgba(255,255,255,0.25);
-	background: rgb(25,25,25);
-	background: rgba(25,25,25,0.92);
-	background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, from(transparent), to(#000));
-	border-radius: 5px;
-	box-shadow: 0 0 3px #555;
+    font-size: 11px;
+    color: #fff;
+    text-shadow: 0 0 2px #000;
+    padding: 4px 8px;
+    border: 1px solid rgba(255,255,255,0.25);
+    background: rgb(25,25,25);
+    background: rgba(25,25,25,0.92);
+    background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, from(transparent), to(#000));
+    border-radius: 5px;
+    box-shadow: 0 0 3px #555;
 }
 
 #tiptip_arrow, #tiptip_arrow_inner {
-	position: absolute;
-	border-color: transparent;
-	border-style: solid;
-	border-width: 6px;
-	height: 0;
-	width: 0;
+    position: absolute;
+    border-color: transparent;
+    border-style: solid;
+    border-width: 6px;
+    height: 0;
+    width: 0;
 }
 
 #tiptip_holder.tip_top #tiptip_arrow {
-	border-top-color: #fff;
-	border-top-color: rgba(255,255,255,0.35);
+    border-top-color: #fff;
+    border-top-color: rgba(255,255,255,0.35);
 }
 
 #tiptip_holder.tip_bottom #tiptip_arrow {
-	border-bottom-color: #fff;
-	border-bottom-color: rgba(255,255,255,0.35);
+    border-bottom-color: #fff;
+    border-bottom-color: rgba(255,255,255,0.35);
 }
 
 #tiptip_holder.tip_right #tiptip_arrow {
-	border-right-color: #fff;
-	border-right-color: rgba(255,255,255,0.35);
+    border-right-color: #fff;
+    border-right-color: rgba(255,255,255,0.35);
 }
 
 #tiptip_holder.tip_left #tiptip_arrow {
-	border-left-color: #fff;
-	border-left-color: rgba(255,255,255,0.35);
+    border-left-color: #fff;
+    border-left-color: rgba(255,255,255,0.35);
 }
 
 #tiptip_holder.tip_top #tiptip_arrow_inner {
-	margin-top: -7px;
-	margin-left: -6px;
-	border-top-color: rgb(25,25,25);
-	border-top-color: rgba(25,25,25,0.92);
+    margin-top: -7px;
+    margin-left: -6px;
+    border-top-color: rgb(25,25,25);
+    border-top-color: rgba(25,25,25,0.92);
 }
 
 #tiptip_holder.tip_bottom #tiptip_arrow_inner {
-	margin-top: -5px;
-	margin-left: -6px;
-	border-bottom-color: rgb(25,25,25);
-	border-bottom-color: rgba(25,25,25,0.92);
+    margin-top: -5px;
+    margin-left: -6px;
+    border-bottom-color: rgb(25,25,25);
+    border-bottom-color: rgba(25,25,25,0.92);
 }
 
 #tiptip_holder.tip_right #tiptip_arrow_inner {
-	margin-top: -6px;
-	margin-left: -5px;
-	border-right-color: rgb(25,25,25);
-	border-right-color: rgba(25,25,25,0.92);
+    margin-top: -6px;
+    margin-left: -5px;
+    border-right-color: rgb(25,25,25);
+    border-right-color: rgba(25,25,25,0.92);
 }
 
 #tiptip_holder.tip_left #tiptip_arrow_inner {
-	margin-top: -6px;
-	margin-left: -7px;
-	border-left-color: rgb(25,25,25);
-	border-left-color: rgba(25,25,25,0.92);
+    margin-top: -6px;
+    margin-left: -7px;
+    border-left-color: rgb(25,25,25);
+    border-left-color: rgba(25,25,25,0.92);
 }
 
 /* Webkit Hacks  */
-@media screen and (-webkit-min-device-pixel-ratio:0) {	
-	#tiptip_content {
-		padding: 4px 8px 5px 8px;
-		background-color: rgba(45,45,45,0.88);
-	}
-	#tiptip_holder.tip_bottom #tiptip_arrow_inner { 
-		border-bottom-color: rgba(45,45,45,0.88);
-	}
-	#tiptip_holder.tip_top #tiptip_arrow_inner { 
-		border-top-color: rgba(20,20,20,0.92);
-	}
+@media screen and (-webkit-min-device-pixel-ratio:0) {    
+    #tiptip_content {
+        padding: 4px 8px 5px 8px;
+        background-color: rgba(45,45,45,0.88);
+    }
+    #tiptip_holder.tip_bottom #tiptip_arrow_inner { 
+        border-bottom-color: rgba(45,45,45,0.88);
+    }
+    #tiptip_holder.tip_top #tiptip_arrow_inner { 
+        border-top-color: rgba(20,20,20,0.92);
+    }
 }
 
 /*end_tooltip*/
 
 img {
-	vertical-align: top;
+    vertical-align: top;
 }
 
 label {
-	vertical-align: 25%;
+    vertical-align: 25%;
 }
 
 .view th, .list th {

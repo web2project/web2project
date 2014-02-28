@@ -6,7 +6,7 @@
 	require_once W2P_BASE_DIR . '/lib/adodb/adodb.inc.php';
 	require_once W2P_BASE_DIR . '/includes/version.php';
 
-	$dbtype = trim( w2PgetParam( $_POST, 'dbtype', 'mysql' ) );
+	$dbtype = trim( w2PgetParam( $_POST, 'dbtype', 'mysqli' ) );
 	$dbhost = trim( w2PgetParam( $_POST, 'dbhost', '' ) );
 	$dbname = trim( w2PgetParam( $_POST, 'dbname', '' ) );
 	$dbuser = trim( w2PgetParam( $_POST, 'dbuser', '' ) );
@@ -16,8 +16,8 @@
 	$adminpass = ($adminpass == '') ? 'passwd' : $adminpass;
 	$dbpersist = w2PgetParam( $_POST, 'dbpersist', false );
         
-        $system_timezone = trim( w2PgetParam( $_POST, 'system_timezone', '' ) );
-        $user_timezone = trim( w2PgetParam( $_POST, 'user_timezone', '' ) );
+    $system_timezone = trim( w2PgetParam( $_POST, 'system_timezone', '' ) );
+    $user_timezone = trim( w2PgetParam( $_POST, 'user_timezone', '' ) );
 
 	$do_db = isset($_POST['do_db']);
 	$do_db_cfg = isset($_POST['do_db_cfg']);
@@ -32,7 +32,7 @@
 	 'dbuser' => $dbuser,
 	 'dbpersist' => $dbpersist,
 	 'root_dir' => $baseDir,
-	 'base_url' => $baseUrl,
+	 'base_url' => W2P_BASE_URL,
 	 'adminpass' => $adminpass,
          'system_timezone' => $system_timezone,
          'user_timezone' => $user_timezone
@@ -43,7 +43,7 @@
 			<tr>
 			  <td colspan="2" align="center">
 			  	<b class="error">Your database credentials failed.  System installation has stopped.  Please correct them and try again.</b><br /><br />
-				  <form action="<?php echo $baseUrl; ?>/index.php" method="post" name="form" id="form" accept-charset="utf-8">
+				  <form action="<?php echo W2P_BASE_URL; ?>/index.php" method="post" name="form" id="form" accept-charset="utf-8">
 			  		<input type="hidden" name="step" value="dbcreds" />
 			  		<input class="button" type="submit" name="next" value="&laquo; Reset System Credentials" />
 					</form>

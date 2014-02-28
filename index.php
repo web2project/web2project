@@ -197,15 +197,6 @@ include_once W2P_BASE_DIR . '/locales/core.php';
 setlocale(LC_TIME, $AppUI->user_lang);
 $m_config = w2PgetConfig($m);
 
-// TODO: canRead/Edit assignements should be moved into each file
-// check overall module permissions
-// these can be further modified by the included action files
-$canAccess = canAccess($m);
-$canRead = canView($m);
-$canEdit = canEdit($m);
-$canAuthor = canAdd($m);
-$canDelete = canDelete($m);
-
 if (!$suppressHeaders) {
 	// output the character set header
 	if (isset($locale_char_set)) {
@@ -272,13 +263,7 @@ if (file_exists($module_file)) {
 	$titleBlock->show();
 
     echo $theme->styleRenderBoxTop();
-	echo '<table width="100%" cellspacing="0" cellpadding="3" border="0" class="std">';
-	echo '<tr>';
-	echo '	<td>';
-	echo $AppUI->_('Missing file. Possible Module "' . $m . '" missing!');
-	echo '	</td>';
-	echo '</tr>';
-	echo '</table>';
+    include $theme->resolveTemplate('missing_module');
 }
 if (!$suppressHeaders) {
 	echo '<iframe name="thread" src="' . W2P_BASE_URL . '/modules/index.html" width="0" height="0" frameborder="0"></iframe>';

@@ -34,7 +34,7 @@ if (file_exists('PHPUnit/Framework.php')) {
     require_once 'PHPUnit/Extensions/Database/TestCase.php';
 } else {
     /*
-     * For PHPUnit 3.6+, we don't need to explicitly require anything, it's 
+     * For PHPUnit 3.6+, we don't need to explicitly require anything, it's
      *   all handled via an autoloader.
      */
 }
@@ -48,8 +48,8 @@ $_REQUEST['login'] = 'sql';
 $AppUI->login('admin', 'passwd');
 $AppUI->user_email = 'something@something.com';
 
-class CommonSetup extends PHPUnit_Framework_TestCase {
-
+class CommonSetup extends PHPUnit_Framework_TestCase
+{
     protected $backupGlobals = FALSE;
     protected $obj = null;
     protected $post_data = array();
@@ -82,14 +82,14 @@ class CommonSetup extends PHPUnit_Framework_TestCase {
     public function objectPropertiesTest($classname, $fieldCount, $removeFields = array())
     {
         $params = get_object_vars($this->obj);
-        foreach($removeFields as $key => $value) {
+        foreach ($removeFields as $key => $value) {
             unset($params[$value]);
         }
 
         $this->assertInstanceOf($classname,     $this->obj);
         $this->assertEquals($fieldCount,        count($params));
-        
-        foreach($params as $key => $value) {
+
+        foreach ($params as $key => $value) {
             $this->assertNull($this->obj->{$key}, "$classname::$key did not pass validation");
         }
     }

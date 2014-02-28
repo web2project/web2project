@@ -82,9 +82,6 @@ class CProject extends w2p_Core_BaseObject
         if (0 == (int) $this->project_company) {
             $this->_error['project_company'] = $baseErrorMsg . 'project company is not set';
         }
-        if (0 == (int) $this->project_owner) {
-            $this->_error['project_owner'] = $baseErrorMsg . 'project owner is not set';
-        }
         if (0 == (int) $this->project_creator) {
             $this->_error['project_creator'] = $baseErrorMsg . 'project creator is not set';
         }
@@ -104,26 +101,7 @@ class CProject extends w2p_Core_BaseObject
         return (count($this->_error)) ? false : true;
     }
 
-    public function loadFull($notUsed = null, $projectId)
-    {
-
-        $q = $this->_getQuery();
-        $q->addTable('projects');
-        $q->addQuery('company_name, projects.*');
-        $q->addQuery('contact_display_name as user_name');                      //TODO: deprecate?
-        $q->addQuery('contact_display_name as project_owner_name');
-        $q->addJoin('companies', 'com', 'company_id = project_company', 'inner');
-        $q->leftJoin('users', 'u', 'user_id = project_owner');
-        $q->leftJoin('contacts', 'con', 'contact_id = user_contact');
-        $q->addWhere('project_id = ' . (int) $projectId);
-        $q->addGroup('project_id');
-
-        $this->company_name = '';
-        $this->project_owner_name = '';
-        $this->project_last_task = 0;
-        $this->user_name = '';
-
-        $q->loadObject($this);
+    protected function hook_postLoad() {
         $this->budget = $this->getBudget();
     }
 
@@ -363,6 +341,9 @@ class CProject extends w2p_Core_BaseObject
         return array_merge($aBuf1, $aBuf2);
     }
 
+    /**
+     * @deprecated
+     */
     public function getAllowedProjectsInRows($userId)
     {
         trigger_error("CProject->getAllowedProjectsInRows() has been deprecated in v3.0 and will be removed in v4.0", E_USER_NOTICE);
@@ -424,7 +405,7 @@ class CProject extends w2p_Core_BaseObject
             $q->clear();
         }
 
-        $this->project_actual_budget = array_sum($budgets);
+        $this->project_target_budget = array_sum($budgets);
         $this->store();
 
         return true;
@@ -449,6 +430,7 @@ class CProject extends w2p_Core_BaseObject
         $this->project_target_budget = filterCurrency($this->project_target_budget);
         $this->project_url = str_replace(array('"', '"', '<', '>'), '', $this->project_url);
         $this->project_demo_url = str_replace(array('"', '"', '<', '>'), '', $this->project_demo_url);
+        $this->project_owner = (int) $this->project_owner ? $this->project_owner : $this->_AppUI->user_id;
 
         // Make sure project_short_name is the right size (issue for languages with encoded characters)
         if ('' == $this->project_short_name) {
@@ -645,6 +627,9 @@ class CProject extends w2p_Core_BaseObject
         }
     }
 
+    /**
+     * @deprecated
+     */
     public static function getContacts($notUsed = null, $projectId)
     {
         trigger_error("CProject::getContacts has been deprecated in v3.0 and will be removed by v4.0. Please use CProject->getContactList() instead.", E_USER_NOTICE);
@@ -673,6 +658,9 @@ class CProject extends w2p_Core_BaseObject
         }
     }
 
+    /**
+     * @deprecated
+     */
     public static function getDepartments($notUsed = null, $projectId)
     {
         trigger_error("CProject::getDepartments has been deprecated in v3.0 and will be removed by v4.0. Please use CProject->getDepartmentList() instead.", E_USER_NOTICE);
@@ -701,6 +689,9 @@ class CProject extends w2p_Core_BaseObject
         }
     }
 
+    /**
+     * @deprecated
+     */
     public static function getForums($notUsed = null, $projectId)
     {
         trigger_error("CProject::getForums has been deprecated in v3.0 and will be removed by v4.0. Please use CProject->getForumList() instead.", E_USER_NOTICE);
@@ -712,43 +703,39 @@ class CProject extends w2p_Core_BaseObject
         return $project->getForumList();
     }
 
+    public function company()
+    {
+        $this->load();
+        return $this->project_company;
+    }
+
+    /**
+     * @deprecated
+     */
     public static function getCompany($projectId)
     {
+        trigger_error("CProject::getCompany has been deprecated in v3.1 and will be removed by v4.0. Please use CProject->company() instead.", E_USER_NOTICE);
 
-        $q = new w2p_Database_Query();
-        $q->addQuery('project_company');
-        $q->addTable('projects');
-        $q->addWhere('project_id = ' . (int) $projectId);
+        $project = new CProject();
+        $project->project_id = $projectId;
 
-        return $q->loadResult();
+        return $project->company();
     }
 
     public static function getBillingCodes($companyId, $all = false)
     {
-
         $q = new w2p_Database_Query();
         $q->addTable('billingcode');
         $q->addQuery('billingcode_id, billingcode_name');
         $q->addOrder('billingcode_name');
-        $q->addWhere('billingcode_status = 0');
-        $q->addWhere('(billingcode_company = 0 OR billingcode_company = ' . (int) $companyId . ')');
-        $task_log_costcodes = $q->loadHashList();
-
         if ($all) {
-            $q->clear();
-            $q->addTable('billingcode');
-            $q->addQuery('billingcode_id, billingcode_name');
-            $q->addOrder('billingcode_name');
             $q->addWhere('billingcode_status = 1');
-            $q->addWhere('(billingcode_company = 0 OR billingcode_company = ' . (int) $companyId . ')');
-
-            $billingCodeList = $q->loadHashList();
-            foreach ($billingCodeList as $id => $code) {
-                $task_log_costcodes[$id] = $code;
-            }
+        } else {
+            $q->addWhere('billingcode_status = 0');
         }
+        $q->addWhere('(billingcode_company = 0 OR billingcode_company = ' . (int) $companyId . ')');
 
-        return $task_log_costcodes;
+        return $q->loadHashList();
     }
 
     public static function getOwners()
@@ -774,11 +761,10 @@ class CProject extends w2p_Core_BaseObject
 
         $perms = $AppUI->acl();
         if ($perms->checkModuleItem('projects', 'edit', $projectId) && $projectId > 0 && $statusId >= 0) {
-            $q = new w2p_Database_Query();
-            $q->addTable('projects');
-            $q->addUpdate('project_status', $statusId);
-            $q->addWhere('project_id   = ' . (int) $projectId);
-            $q->exec();
+            $project = new CProject();
+            $project->load($projectId);
+            $project->project_status = $statusId;
+            $project->store();
         }
     }
 
@@ -786,29 +772,31 @@ class CProject extends w2p_Core_BaseObject
     {
         $project_id = (int) $project_id;
         if ($project_id && $task_id) {
-            $q = new w2p_Database_Query();
-            $q->addTable('projects');
-            $q->addUpdate('project_last_task', $task_id);
-            $q->addUpdate('project_actual_end_date', $project_actual_end_date);
-            $q->addUpdate('project_task_count', $project_task_count);
-            $q->addWhere('project_id   = ' . $project_id);
-            $q->exec();
+            $project = new CProject();
+            $project->load($project_id);
+            $project->project_last_task = $task_id;
+            $project->project_actual_end_date = $project_actual_end_date;
+            $project->project_task_count = $project_task_count;
+            $project->store();
+
             self::updatePercentComplete($project_id);
         }
     }
 
-    public static function updateTaskCount($project_id, $taskCount)
+    /**
+     * @deprecated
+     */
+    public static function updateTaskCount($projectId, $taskCount)
     {
         trigger_error("CProject::updateTaskCount has been deprecated in v2.3 and will be removed by v4.0. Please use CProject::updateTaskCache instead.", E_USER_NOTICE);
 
-        $project_id = (int) $project_id;
-        if ($project_id) {
-            $q = new w2p_Database_Query();
-            $q->addTable('projects');
-            $q->addUpdate('project_task_count', intval($taskCount));
-            $q->addWhere('project_id   = ' . (int) $project_id);
-            $q->exec();
-            self::updatePercentComplete($project_id);
+        if ((int) $projectId) {
+            $project = new CProject();
+            $project->load($projectId);
+            $project->project_task_count = $taskCount;
+            $project->store();
+
+            self::updatePercentComplete($projectId);
         }
     }
 
@@ -832,6 +820,9 @@ class CProject extends w2p_Core_BaseObject
         return $q->loadResult();
     }
 
+    /**
+     * @deprecated
+     */
     public static function hasTasks($projectId, $override = null)
     {
         trigger_error("CProject::hasTasks() has been deprecated in v3.0 and will be removed in v4.0. Please use CTask->getTaskCount() instead.", E_USER_NOTICE);
@@ -854,15 +845,19 @@ class CProject extends w2p_Core_BaseObject
         $worked_hours = rtrim($worked_hours, '.');
         $q->clear();
 
-        $q->addTable('projects');
-        $q->addUpdate('project_worked_hours', $worked_hours);
-        $q->addWhere('project_id  = ' . $project_id);
-        $q->exec();
+        $project = new CProject();
+        $project->load($project_id);
+        $project->project_worked_hours = $worked_hours;
+        $project->store();
+
         self::updatePercentComplete($project_id);
     }
 
     public static function updatePercentComplete($project_id)
     {
+        if (!$project_id) {
+            return;
+        }
         $working_hours = (w2PgetConfig('daily_working_hours') ? w2PgetConfig('daily_working_hours') : 8);
 
         $q = new w2p_Database_Query();
@@ -877,17 +872,17 @@ class CProject extends w2p_Core_BaseObject
         $task = new CTask();
         $project_scheduled_hours = $task->getHoursScheduled($project_id);
 
-        $q->addTable('projects');
-        $q->addUpdate('project_percent_complete',   $project_percent_complete);
-        $q->addUpdate('project_scheduled_hours',    $project_scheduled_hours);
-        $q->addWhere('project_id  = ' . (int) $project_id);
-        $q->exec();
+        $project = new CProject();
+        $project->load($project_id);
+        $project->project_percent_complete = $project_percent_complete;
+        $project->project_scheduled_hours = $project_scheduled_hours;
+        $project->store();
 
         global $AppUI;
         CTask::storeTokenTask($AppUI, $project_id);
     }
 
-    /*
+    /**
      * This is an unnecessary function as of v2.x. Instead of calculating this on
      *   demand every single time, we calculate it when a Task is created or deleted
      *   and then store it on the projects table. Then we can just return that column.

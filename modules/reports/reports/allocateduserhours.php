@@ -88,14 +88,6 @@ if ($do_report) {
 <tr>
 	<td>';
 
-	// Let's figure out which users we have
-	$q = new w2p_Database_Query;
-	$q->addTable('users', 'u');
-	$q->addQuery('u.user_id, u.user_username, contact_first_name, contact_last_name');
-	$q->addJoin('contacts', 'c', 'u.user_contact = contact_id', 'inner');
-	$user_list = $q->loadHashList('user_id');
-	$q->clear();
-
 	$q = new w2p_Database_Query;
 	$q->addTable('tasks', 't');
 	$q->addTable('user_tasks', 'ut');

@@ -3,7 +3,6 @@ if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
 
-$AppUI->savePlace();
 $perms = &$AppUI->acl();
 $role_id = (int) w2PgetParam($_GET, 'role_id', 0);
 $role = $perms->getRole($role_id);

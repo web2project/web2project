@@ -46,7 +46,7 @@ class CFiles_Test extends CommonSetup
           'file_owner' =>         '1',
           'file_size' =>          '0',
           'file_version' =>       1,
-		  'file_version_id' =>    1,
+          'file_version_id' =>    1,
           'file_icon' =>          '',
           'file_category' =>      0,
           'file_checkout' =>      0,
@@ -249,7 +249,8 @@ class CFiles_Test extends CommonSetup
     /**
      * @todo Implement testHook_cron().
      */
-    public function testHook_cron() {
+    public function testHook_cron()
+    {
         // Remove the following lines when you implement this test.
         $this->markTestIncomplete(
                 'This test has not been implemented yet.'
@@ -266,7 +267,8 @@ class CFiles_Test extends CommonSetup
     /**
      * @todo Implement testGetFileList().
      */
-    public function testGetFileList() {
+    public function testGetFileList()
+    {
         // Remove the following lines when you implement this test.
         $this->markTestIncomplete(
                 'This test has not been implemented yet.'
@@ -276,7 +278,8 @@ class CFiles_Test extends CommonSetup
     /**
      * @todo Implement testAddHelpDeskTaskLog().
      */
-    public function testAddHelpDeskTaskLog() {
+    public function testAddHelpDeskTaskLog()
+    {
         // Remove the following lines when you implement this test.
         $this->markTestIncomplete(
                 'This test has not been implemented yet.'
@@ -286,7 +289,8 @@ class CFiles_Test extends CommonSetup
     /**
      * @todo Implement testCanAdmin().
      */
-    public function testCanAdmin() {
+    public function testCanAdmin()
+    {
         // Remove the following lines when you implement this test.
         $this->markTestIncomplete(
                 'This test has not been implemented yet.'
@@ -296,7 +300,8 @@ class CFiles_Test extends CommonSetup
     /**
      * @todo Implement testCheckout().
      */
-    public function testCheckout() {
+    public function testCheckout()
+    {
         // Remove the following lines when you implement this test.
         $this->markTestIncomplete(
                 'This test has not been implemented yet.'
@@ -306,7 +311,8 @@ class CFiles_Test extends CommonSetup
     /**
      * @todo Implement testCancelCheckout().
      */
-    public function testCancelCheckout() {
+    public function testCancelCheckout()
+    {
         // Remove the following lines when you implement this test.
         $this->markTestIncomplete(
                 'This test has not been implemented yet.'
@@ -316,7 +322,8 @@ class CFiles_Test extends CommonSetup
     /**
      * @todo Implement testDeleteFile().
      */
-    public function testDeleteFile() {
+    public function testDeleteFile()
+    {
         // Remove the following lines when you implement this test.
         $this->markTestIncomplete(
                 'This test has not been implemented yet.'
@@ -326,7 +333,8 @@ class CFiles_Test extends CommonSetup
     /**
      * @todo Implement testMoveFile().
      */
-    public function testMoveFile() {
+    public function testMoveFile()
+    {
         // Remove the following lines when you implement this test.
         $this->markTestIncomplete(
                 'This test has not been implemented yet.'
@@ -336,7 +344,8 @@ class CFiles_Test extends CommonSetup
     /**
      * @todo Implement testDuplicateFile().
      */
-    public function testDuplicateFile() {
+    public function testDuplicateFile()
+    {
         // Remove the following lines when you implement this test.
         $this->markTestIncomplete(
                 'This test has not been implemented yet.'
@@ -346,7 +355,8 @@ class CFiles_Test extends CommonSetup
     /**
      * @todo Implement testMoveTemp().
      */
-    public function testMoveTemp() {
+    public function testMoveTemp()
+    {
         // Remove the following lines when you implement this test.
         $this->markTestIncomplete(
                 'This test has not been implemented yet.'
@@ -356,7 +366,8 @@ class CFiles_Test extends CommonSetup
     /**
      * @todo Implement testIndexStrings().
      */
-    public function testIndexStrings() {
+    public function testIndexStrings()
+    {
         // Remove the following lines when you implement this test.
         $this->markTestIncomplete(
                 'This test has not been implemented yet.'
@@ -366,7 +377,8 @@ class CFiles_Test extends CommonSetup
     /**
      * @todo Implement testNotify().
      */
-    public function testNotify() {
+    public function testNotify()
+    {
         // Remove the following lines when you implement this test.
         $this->markTestIncomplete(
                 'This test has not been implemented yet.'
@@ -376,7 +388,8 @@ class CFiles_Test extends CommonSetup
     /**
      * @todo Implement testNotifyContacts().
      */
-    public function testNotifyContacts() {
+    public function testNotifyContacts()
+    {
         // Remove the following lines when you implement this test.
         $this->markTestIncomplete(
                 'This test has not been implemented yet.'
@@ -386,7 +399,8 @@ class CFiles_Test extends CommonSetup
     /**
      * @todo Implement testGetOwner().
      */
-    public function testGetOwner() {
+    public function testGetOwner()
+    {
         // Remove the following lines when you implement this test.
         $this->markTestIncomplete(
                 'This test has not been implemented yet.'
@@ -396,7 +410,8 @@ class CFiles_Test extends CommonSetup
     /**
      * @todo Implement testGetTaskName().
      */
-    public function testGetTaskName() {
+    public function testGetTaskName()
+    {
         // Remove the following lines when you implement this test.
         $this->markTestIncomplete(
                 'This test has not been implemented yet.'

@@ -113,6 +113,7 @@ function setPermItem( key, val ) {
 </tr>
 
 <?php
+
 foreach ($role_acls as $acl) {
 	$buf = '';
 	$permission = $perms->get_acl($acl);
@@ -136,12 +137,7 @@ foreach ($role_acls as $acl) {
 					$mod_data = $perms->get_object_full($id, $key, 1, 'axo');
 					if (is_numeric($mod_data['name'])) {
 						$module = $pgo_list[ucfirst($key)];
-						$q = new w2p_Database_Query();
-						$q->addTable($module['permissions_item_table']);
-						$q->addQuery($module['permissions_item_label']);
-						$q->addWhere($module['permissions_item_field'] . '=' . $mod_data['name']);
-						$data = $q->loadResult();
-						$q->clear();
+                        $data = __extract_from_role_perms($module, $mod_data);
 						$modlist[] = $AppUI->_(ucfirst($key)) . ': ' . w2PHTMLDecode($data);
 					} else {
 						$modlist[] = $AppUI->_(ucfirst($key)) . ': ' . w2PHTMLDecode($mod_data['name']);

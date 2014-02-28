@@ -53,8 +53,6 @@ if (isset($_GET['pin'])) {
 	$AppUI->redirect('', -1);
 }
 
-$AppUI->savePlace();
-
 $durnTypes = w2PgetSysVal('TaskDurationType');
 $taskPriority = w2PgetSysVal('TaskPriority');
 
@@ -172,7 +170,7 @@ foreach ($tasks as $row) {
 	$q->clear();
 	$q->addQuery('ut.user_id,	u.user_username');
 	$q->addQuery('ut.perc_assignment, SUM(ut.perc_assignment) AS assign_extent');
-	$q->addQuery('contact_first_name, contact_last_name, contact_display_name as contact_name');
+	$q->addQuery('contact_first_name, contact_last_name, contact_display_name as assignee');
 	$q->addTable('user_tasks', 'ut');
 	$q->leftJoin('users', 'u', 'u.user_id = ut.user_id');
 	$q->leftJoin('contacts', 'c', 'u.user_contact = c.contact_id');
@@ -180,7 +178,6 @@ foreach ($tasks as $row) {
 	$q->addGroup('ut.user_id');
 	$q->addOrder('perc_assignment desc, user_username');
 
-	$assigned_users = array();
 	$row['task_assigned_users'] = $q->loadList();
 	$q->addQuery('count(task_id) as children');
 	$q->addTable('tasks');
@@ -219,14 +216,13 @@ if (count($fields) > 0) {
     // TODO: This is only in place to provide an pre-upgrade-safe
     //   state for versions earlier than v3.0
     //   At some point at/after v4.0, this should be deprecated
-    $fieldList = array('task_percent_complete', 'task_priority', 'user_task_priority',
-        'task_access', 'task_type', 'task_1', 'task_2', 'task_3', 'task_name',
-        'task_owner', 'task_start_date', 'task_duration', 'task_end_date', 'task_4');
-    $fieldNames = array('Work', 'P', 'U', 'A', 'T', 'R', 'I', 'Log',
-        'Task Name', 'Task Owner', 'Start', 'Duration', 'Finish',
-        'Assigned Users');
+    $fieldList = array('task_percent_complete', 'task_pinned', 'task_percent_complete',
+        'task_priority', 'user_task_priority', 'task_name',
+        'task_owner', 'task_start_date', 'task_duration', 'task_end_date', 'task_1');
+    $fieldNames = array('Pin', 'Log', 'Progress', 'P', 'U', 'Task Name',
+        'Task Owner', 'Assigned Users', 'Start', 'Duration', 'Finish');
 
-    $module->storeSettings('tasks', 'projectdesigner-view', $fieldList, $fieldNames);
+    //$module->storeSettings('tasks', 'projectdesigner-view', $fieldList, $fieldNames);
 }
 ?>
 <form name="frm_tasks" accept-charset="utf-8"">
@@ -274,8 +270,8 @@ foreach ($projects as $k => $p) {
 		for ($i = 0; $i < $tnums; $i++) {
 			$t = $p['tasks'][$i];
 			if ($t['task_parent'] == $t['task_id']) {
-				echo showtask_pd($t, 0);
-				findchild_pd($p['tasks'], $t['task_id']);
+				echo showtask_new($t, 0);
+                findchild_new($p['tasks'], $t['task_id']);
 			}
 		}
 	}
@@ -283,36 +279,5 @@ foreach ($projects as $k => $p) {
 ?>
 </table>
 </form>
-<table>
-<tr>
-        <td><?php echo $AppUI->_('Key'); ?>:</td>
-        <th>&nbsp;P&nbsp;</th>
-        <td>=<?php echo $AppUI->_('Overall Priority'); ?></td>
-        <th>&nbsp;U&nbsp;</th>
-        <td>=<?php echo $AppUI->_('User Priority'); ?></td>
-        <th>&nbsp;A&nbsp;</th>
-        <td>=<?php echo $AppUI->_('Access'); ?></td>
-        <th>&nbsp;T&nbsp;</th>
-        <td>=<?php echo $AppUI->_('Type'); ?></td>
-        <th>&nbsp;R&nbsp;</th>
-        <td>=<?php echo $AppUI->_('Reminder'); ?></td>
-        <th>&nbsp;I&nbsp;</th>
-        <td>=<?php echo $AppUI->_('Inactive'); ?></td>
-        <td>&nbsp; &nbsp;</td>
-        <td>&nbsp; &nbsp;</td>
-        <td class="future">&nbsp; &nbsp;</td>
-        <td>=<?php echo $AppUI->_('Future Task'); ?></td>
-        <td>&nbsp; &nbsp;</td>
-        <td class="active">&nbsp; &nbsp;</td>
-        <td>=<?php echo $AppUI->_('Started and on time'); ?></td>
-        <td>&nbsp; &nbsp;</td>
-        <td class="notstarted">&nbsp; &nbsp;</td>
-        <td>=<?php echo $AppUI->_('Should have started'); ?></td>
-        <td>&nbsp; &nbsp;</td>
-        <td class="late">&nbsp; &nbsp;</td>
-        <td>=<?php echo $AppUI->_('Overdue'); ?></td>
-        <td>&nbsp; &nbsp;</td>
-        <td class="done">&nbsp; &nbsp;</td>
-        <td>=<?php echo $AppUI->_('Done'); ?></td>
-</tr>
-</table>
+<?php
+include $AppUI->getTheme()->resolveTemplate('task_key');

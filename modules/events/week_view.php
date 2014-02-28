@@ -12,7 +12,6 @@ if (!$canRead) {
 	$AppUI->redirect(ACCESS_DENIED);
 }
 
-$AppUI->savePlace();
 global $locale_char_set;
 
 // retrieve any state parameters

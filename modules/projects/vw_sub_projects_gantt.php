@@ -33,31 +33,7 @@ $original_project_id = w2PgetParam($_REQUEST, 'original_project_id', 1);
 $pjobj = new CProject();
 $working_hours = $w2Pconfig['daily_working_hours'];
 
-// pull valid projects and their percent complete information
-// GJB: Note that we have to special case duration type 24 and this refers to the hours in a day, NOT 24 hours
-
-$q = new w2p_Database_Query;
-$q->addTable('projects', 'pr');
-$q->addQuery('DISTINCT pr.project_id, project_color_identifier, project_name, project_start_date, project_end_date,
-                max(t1.task_end_date) AS project_actual_end_date, project_percent_complete, project_status, project_active');
-$q->addJoin('tasks', 't1', 'pr.project_id = t1.task_project');
-$q->addJoin('companies', 'c1', 'pr.project_company = c1.company_id');
-if ($department > 0) {
-	$q->addWhere('project_departments.department_id = ' . (int)$department);
-}
-
-if (!($department > 0) && $company_id != 0) {
-	$q->addWhere('project_company = ' . (int)$company_id);
-}
-
-$q->addWhere('project_original_parent = ' . (int)$original_project_id);
-
-$q = $pjobj->setAllowedSQL($AppUI->user_id, $q, null, 'pr');
-$q->addGroup('pr.project_id');
-$q->addOrder('project_start_date, project_end_date, project_name');
-
-$projects = $q->loadHashList('project_id');
-$q->clear();
+$projects = __extract_from_subprojects_gantt($department, $company_id, $original_project_id, $pjobj, $AppUI);
 
 $width = w2PgetParam($_GET, 'width', 600);
 $start_date = w2PgetParam($_GET, 'start_date', 0);
@@ -115,6 +91,7 @@ if (!$start_date || !$end_date) {
 $gantt->SetDateRange($start_date, $end_date);
 
 $row = 0;
+
 if (!is_array($projects) || sizeof($projects) == 0) {
     $d = new w2p_Utilities_Date();
     $columnValues = array('project_name' => $AppUI->_('No projects found'),
@@ -125,21 +102,10 @@ if (!is_array($projects) || sizeof($projects) == 0) {
     if (is_array($projects)) {
         //pull all tasks into an array keyed by the project id, and get the tasks in hierarchy
         if ($showAllGantt) {
-            // insert tasks into Gantt Chart
-            // select for tasks for each project
-            // pull tasks
-            $q = new w2p_Database_Query;
-            $q->addTable('tasks', 't');
-            $q->addQuery('t.task_id, task_parent, task_name, task_start_date, task_end_date, task_duration, task_duration_type, task_priority, task_percent_complete, task_order, task_project, task_milestone, project_id, project_name, task_dynamic');
-            $q->addJoin('projects', 'p', 'project_id = t.task_project');
-            $q->addOrder('project_id, task_start_date');
-            $q->addWhere('project_original_parent = ' . (int)$original_project_id);
-
-            //$tasks = $q->loadList();
             $task = new CTask();
-            $q = $task->setAllowedSQL($AppUI->user_id, $q);
+            $proTasks = __extract_from_subprojects_gantt2($original_project_id, $task, $AppUI);
 
-            $proTasks = $q->loadHashList('task_id');
+
             $orrarr[] = array('task_id' => 0, 'order_up' => 0, 'order' => '');
 
             $end_max = '0000-00-00 00:00:00';
@@ -167,7 +133,6 @@ if (!is_array($projects) || sizeof($projects) == 0) {
                 }
                 $projects[$rec['task_project']]['tasks'][] = $rec;
             }
-            $q->clear();
 
             reset($projects);
             foreach ($projects as $p) {

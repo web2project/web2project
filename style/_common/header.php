@@ -21,7 +21,7 @@ $theme = $AppUI->getTheme();
         <link rel="shortcut icon" href="./style/<?php echo $theme; ?>/favicon.ico" type="image/ico" />
         <?php
             if (isset($xajax) && is_object($xajax)) {
-                $xajax->printJavascript(w2PgetConfig('base_url') . '/lib/xajax');
+                $xajax->printJavascript(W2P_BASE_URL . '/lib/xajax');
             }
         ?>
         <?php $AppUI->loadHeaderJS(); ?>

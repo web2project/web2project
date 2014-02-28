@@ -41,6 +41,7 @@ $types = w2PgetSysVal('UserType');
 $customLookups = array('user_type' => $types);
 
 $perms = &$AppUI->acl();
+
 foreach ($users as $row) {
 	if ($perms->isUserPermitted($row['user_id']) != $canLogin) {
 		continue;
@@ -55,13 +56,7 @@ foreach ($users as $row) {
 	<?php if (w2PgetParam($_REQUEST, 'tab', 0) == 0) { ?>
 	<td nowrap="nowrap">
 	       <?php
-		$q = new w2p_Database_Query;
-		$q->addTable('user_access_log', 'ual');
-		$q->addQuery('user_access_log_id, ( unix_timestamp( \''.$q->dbfnNowWithTZ().'\' ) - unix_timestamp( date_time_in ) ) / 3600 as 		hours, ( unix_timestamp( \''.$q->dbfnNowWithTZ().'\' ) - unix_timestamp( date_time_last_action ) ) / 3600 as idle, if(isnull(date_time_out) or date_time_out =\'0000-00-00 00:00:00\',\'1\',\'0\') as online');
-		$q->addWhere('user_id = ' . (int)$row['user_id']);
-		$q->addOrder('user_access_log_id DESC');
-		$q->setLimit(1);
-		$user_logs = $q->loadList();
+           $user_logs = __extract_from_vw_usr($row);
 
 		if ($user_logs) {
 			foreach ($user_logs as $row_log) {

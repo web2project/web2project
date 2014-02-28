@@ -58,9 +58,11 @@ $baseUrl = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off') ? 'https://'
 $baseUrl .= safe_get_env('HTTP_HOST');
 $baseUrl .= dirname(safe_get_env('SCRIPT_NAME'));
 $baseUrl = preg_replace('#/$#D', '', $baseUrl);
-// Note: This resolves http://bugs.web2project.net/view.php?id=1081 on IIS,
-// but I'm not sure I like it..
+// Note: This resolves http://bugs.web2project.net/view.php?id=1081 on IIS, but I'm not sure I like it..
 $baseUrl = stripslashes($baseUrl);
+
+// Note: If your url resolution isn't working as expected, uncomment the next line and manually set the correct value.
+//$baseUrl = 'http://add-your-correct-url-here.wontwork';
 
 // Defines to deprecate the global baseUrl/baseDir
 define('W2P_BASE_DIR', $baseDir);

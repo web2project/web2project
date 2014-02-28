@@ -37,15 +37,38 @@ class CEvent extends w2p_Core_BaseObject
         parent::__construct('events', 'event_id', 'events');
     }
 
-    public function loadFull($event_id)
+    /** @deprecated - this has a different method signature than the others */
+    public function loadFull($event_id) {
+        parent::loadFull(null, $event_id);
+    }
+
+    public function canView()
     {
-        $q = $this->_getQuery();
-        $q->addTable('events', 'e');
-        $q->addQuery('e.*, project_name, project_color_identifier, company_name');
-        $q->leftJoin('projects', 'p', 'event_project = project_id');
-        $q->leftJoin('companies', 'c', 'project_company = company_id');
-        $q->addWhere('event_id = ' . (int) $event_id);
-        $q->loadObject($this, true, false);
+        if (!parent::canView()) {
+            return false;
+        }
+        // @todo This should eventually check to see if the user is *any* of the invitees instead of just the owner
+        if ($this->event_private && ($this->event_owner != $this->_AppUI->user_id)) {
+            return false;
+        }
+        $perms = $this->_AppUI->acl();
+        if ($this->event_project && !$perms->checkModuleItem('projects', 'view', $event->event_project)) {
+            return false;
+        }
+        return true;
+    }
+
+    public function canEdit()
+    {
+        if (!parent::canEdit()) {
+            return false;
+        }
+
+        if ($this->event_private && ($this->event_owner != $this->_AppUI->user_id)) {
+            return false;
+        }
+
+        return true;
     }
 
     public function isValid()
@@ -376,7 +399,7 @@ class CEvent extends w2p_Core_BaseObject
             $mail->Subject($this->_AppUI->_('Requested Event') . ': ' . $this->event_name, $this->_locale_char_set);
         } else {
 			$type = $update ? $this->_AppUI->_('Event updated') : $this->_AppUI->_('New event');
-            $mail->Subject($type . ': ' . $this->event_name, $locale_char_set);
+            $mail->Subject($type . ': ' . $this->event_name);
         }
 
         $emailManager = new w2p_Output_EmailManager($this->_AppUI);
@@ -389,63 +412,6 @@ class CEvent extends w2p_Core_BaseObject
             }
             $mail->To($user['contact_email'], true);
             $mail->Send();
-        }
-    }
-
-    public function checkClash($userlist = null)
-    {
-        if (!isset($userlist)) {
-            return false;
-        }
-        $users = explode(',', $userlist);
-
-        // Now, remove the owner from the list, as we will always clash on this.
-        $key = array_search($this->_AppUI->user_id, $users);
-        if (isset($key) && $key !== false) { // Need both for change in php 4.2.0
-            unset($users[$key]);
-        }
-
-        if (!count($users)) {
-            return false;
-        }
-
-        $start_date = new w2p_Utilities_Date($this->event_start_date);
-        $end_date = new w2p_Utilities_Date($this->event_end_date);
-
-        // Now build a query to find matching events.
-        $q = $this->_getQuery();
-        $q->addTable('events', 'e');
-        $q->addQuery('e.event_owner, ue.user_id, e.event_cwd, e.event_id, e.event_start_date, e.event_end_date');
-        $q->addJoin('user_events', 'ue', 'ue.event_id = e.event_id');
-        $q->addWhere('event_start_date <= \'' . $end_date->format(FMT_DATETIME_MYSQL) . '\'');
-        $q->addWhere('event_end_date >= \'' . $start_date->format(FMT_DATETIME_MYSQL) . '\'');
-        $q->addWhere('(e.event_owner IN (' . implode(',', $users) . ') OR ue.user_id IN (' . implode(',', $users) . ') )');
-        $q->addWhere('e.event_id <>' . $this->event_id);
-
-        $result = $q->exec();
-        if (!$result) {
-            return false;
-        }
-
-        $clashes = array();
-        while ($row = $q->fetchRow()) {
-            array_push($clashes, $row['event_owner']);
-            if ($row['user_id']) {
-                array_push($clashes, $row['user_id']);
-            }
-        }
-        $clash = array_unique($clashes);
-        $q->clear();
-        if (count($clash)) {
-            $q->addTable('users', 'u');
-            $q->addTable('contacts', 'con');
-            $q->addQuery('user_id');
-            $q->addQuery('contact_display_name');
-            $q->addWhere('user_id IN (' . implode(',', $clash) . ')');
-            $q->addWhere('user_contact = contact_id');
-            return $q->loadHashList();
-        } else {
-            return false;
         }
     }
 
@@ -530,6 +496,7 @@ class CEvent extends w2p_Core_BaseObject
         $this->event_start_date = $this->_AppUI->convertToSystemTZ($this->event_start_date);
         $this->event_end_date = $this->_AppUI->convertToSystemTZ($this->event_end_date);
         $this->event_creator = (int) $this->event_creator ? $this->event_creator : $this->_AppUI->user_id;
+        $this->event_owner = (int) $this->event_owner ? $this->event_owner : $this->_AppUI->user_id;
 
         $q = $this->_getQuery();
         $this->event_updated = $q->dbfnNowWithTZ();
@@ -636,5 +603,11 @@ class CEvent extends w2p_Core_BaseObject
         }
 
         return $count;
+    }
+
+    /** @deprecated */
+    public function checkClash()
+    {
+        return false;
     }
 }

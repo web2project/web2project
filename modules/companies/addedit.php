@@ -5,6 +5,8 @@ if (!defined('W2P_BASE_DIR')) {
 
 $company_id = (int) w2PgetParam($_GET, 'company_id', 0);
 
+
+
 $company = new CCompany();
 $company->company_id = $company_id;
 
@@ -22,7 +24,7 @@ if ($obj) {
     $company = $obj;
     $company_id = $company->company_id;
 } else {
-    $company->loadFull(null, $company_id);
+    $company->load($company_id);
 }
 if (!$company && $company_id > 0) {
 	$AppUI->setMsg('Company');
@@ -58,8 +60,7 @@ function submitIt() {
 }
 
 function testURL( x ) {
-	var test = 'document.changeclient.company_primary_url.value';
-	test = eval(test);
+	var test = document.changeclient.company_primary_url.value;
 	if (test.length > 6) {
 		newwin = window.open( 'http://' + test, 'newwin', '' );
 	}

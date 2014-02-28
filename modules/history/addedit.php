@@ -1,6 +1,6 @@
 <?php
-if (!defined('W2P_BASE_DIR')) {
-	die('You should not access this file directly.');
-}
 
-echo $AppUI->_("All history/auditing entries are created automatically by the core system. You can't create your own.");
+trigger_error("?m=history&a=addedit has been deprecated. Please remove all references to it.", E_USER_NOTICE );
+
+$AppUI->setMsg('You cannot add or edit entries in the History module.', UI_MSG_ERROR);
+$AppUI->redirect('m=history');

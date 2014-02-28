@@ -11,19 +11,8 @@ if (!canView('tasks')) {
 $proj = (int) w2PgetParam($_GET, 'project', 0);
 $userFilter = w2PgetParam($_GET, 'userFilter', false);
 
-$q = new w2p_Database_Query();
-$q->addQuery('t.task_id, t.task_name');
-$q->addTable('tasks', 't');
+$tasks = __extract_from_listtasks($userFilter, $AppUI, $proj);
 
-if ($userFilter) {
-	$q->addJoin('user_tasks', 'ut', 'ut.task_id = t.task_id');
-	$q->addWhere('ut.user_id = ' . (int)$AppUI->user_id);
-}
-if ($proj != 0) {
-	$q->addWhere('task_project = ' . (int)$proj);
-}
-$tasks = $q->loadList();
-$q->clear();
 ?>
 
 <script language="javascript" type="text/javascript">

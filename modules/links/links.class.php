@@ -24,24 +24,6 @@ class CLink extends w2p_Core_BaseObject
         parent::__construct('links', 'link_id');
     }
 
-    public function loadFull($notUsed = null, $link_id)
-    {
-
-        $q = $this->_getQuery();
-        $q->addQuery('links.*');
-        $q->addQuery('user_username');
-        $q->addQuery('contact_first_name, contact_last_name, contact_display_name as contact_name');
-        $q->addQuery('project_id');
-        $q->addQuery('task_id, task_name');
-        $q->addTable('links');
-        $q->leftJoin('users', 'u', 'link_owner = user_id');
-        $q->leftJoin('contacts', 'c', 'user_contact = contact_id');
-        $q->leftJoin('projects', 'p', 'project_id = link_project');
-        $q->leftJoin('tasks', 't', 'task_id = link_task');
-        $q->addWhere('link_id = ' . (int) $link_id);
-        $q->loadObject($this, true, false);
-    }
-
     public function getProjectTaskLinksByCategory($notUsed = null, $project_id = 0, $task_id = 0, $category_id = 0, $search = '')
     {
         // load the following classes to retrieved denied records
@@ -104,9 +86,7 @@ class CLink extends w2p_Core_BaseObject
             $this->link_url = 'http://' . $this->link_url;
         }
         $this->link_url = str_replace(array('"', '"', '<', '>'), '', $this->link_url);
-        if (0 == (int) $this->link_owner) {
-            $this->link_owner = $this->_AppUI->user_id;
-        }
+        $this->link_owner = (int) $this->link_owner ? $this->link_owner : $this->_AppUI->user_id;
     }
 
     public function hook_search()

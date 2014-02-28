@@ -41,36 +41,36 @@ div.header a {
 }
 
 .nav a:hover{
-	background: #2E91C6 url(images/nav_shadow.jpg) repeat-x scroll 0%;
-	color:      #FFFFFF;
-	text-decoration:none;
+    background: #2E91C6 url(images/nav_shadow.jpg) repeat-x scroll 0%;
+    color:      #FFFFFF;
+    text-decoration:none;
 }
 /* End: Header Bar & Navigation for all pages */
 
 .item {
-	color: #333;
+    color: #333;
 }
 
 .text{
-	border: 1px #999999 solid;
-	font-family: arial,Osaka,verdana,Sans-Serif;
-	font-size: 8pt;
+    border: 1px #999999 solid;
+    font-family: arial,Osaka,verdana,Sans-Serif;
+    font-size: 8pt;
     margin-top  : 2px;
 }
 
 .textarea {
-	border: 1px #999999 solid;
-	font-family: arial, verdana,helvetica,arial,sans-serif;
-	font-size: 8pt;
+    border: 1px #999999 solid;
+    font-family: arial, verdana,helvetica,arial,sans-serif;
+    font-size: 8pt;
     padding : 2px;
     margin-top  : 2px;
 }
 
 input, textarea {
-	font-family : tahoma,arial,verdana,Sans-Serif;
+    font-family : tahoma,arial,verdana,Sans-Serif;
     font-size   : 8pt;
     font-weight : normal;
-	border      : 1px #999999 solid;
+    border      : 1px #999999 solid;
     padding     : 2px;
     margin-top  : 2px;
     border-radius:4px;
@@ -127,18 +127,18 @@ input:focus, textarea:focus {
 
 /* web2Project Top Banner and Top Nav Customization */
 TABLE.banner {
-	background-color: #D4D0C8;
-	color: #fff
+    background-color: #D4D0C8;
+    color: #fff
 }
 
 TH.banner {
-	background-color: #D4D0C8;
-	color: #fff
+    background-color: #D4D0C8;
+    color: #fff
 }
 
 TD.nav {
-	border              : 1px solid #848284;
-	color               : #333;
+    border              : 1px solid #848284;
+    color               : #333;
     background-color    : #D4D0C8;
     background-image    : url("images/nav_bg.png");
     background-image    : repeat-x;
@@ -151,50 +151,50 @@ Begin IE TD buttonizing
 */
 
 TD.clsBtnUp {
-	color: #FFFFFF;
-	padding: 0px 3px;
-	border: inset 2px;
+    color: #FFFFFF;
+    padding: 0px 3px;
+    border: inset 2px;
 }
 
 TD.clsBtnDown {
-	color: #FFFFFF;
-	padding: 0px 3px;
-	border: inset 2px;
+    color: #FFFFFF;
+    padding: 0px 3px;
+    border: inset 2px;
 }
 
 TD.clsBtnOn {
-	color: #FFFFFF;
-	padding: 0px 3px;
-	border: outset #eeeeee 2px;
+    color: #FFFFFF;
+    padding: 0px 3px;
+    border: outset #eeeeee 2px;
 }
 
 TD.clsBtnOff {
-	color: #FFFFFF;
-	padding: 0px 3px;
-	border: solid #559999 2px;
+    color: #FFFFFF;
+    padding: 0px 3px;
+    border: solid #559999 2px;
 }
 
 TD.topBtnOff {
-	color: #FFFFFF;
-	padding: 0px 3px;
-	border: solid #cccccc 2px;
+    color: #FFFFFF;
+    padding: 0px 3px;
+    border: solid #cccccc 2px;
 }
 
 TD.nav {
-	color: #ccc;
+    color: #ccc;
 }
 
 /* Standard table 'spreadsheet' style */
 table.tbl {
-	background: #D4D0C8;
+    background: #D4D0C8;
 }
 
 table.tbl TH {
-	color               : #333;
-	list-style-type     : disc;
-	list-style-position : inside;
-	border: outset #D1D1CD 0px;
-	font-weight         : normal;
+    color               : #333;
+    list-style-type     : disc;
+    list-style-position : inside;
+    border: outset #D1D1CD 0px;
+    font-weight         : normal;
     background-color    : #D4D0C8;
     background-image    : url("images/header_bg.png");
     background-image    : repeat-x;
@@ -203,7 +203,7 @@ table.tbl TH {
 }
 
 table.tbl td {
-	background-color: #ffffff;
+    background-color: #ffffff;
 }
 
 table.tbl td.hilite {
@@ -212,14 +212,14 @@ table.tbl td.hilite {
 
 /* a 'standard' table */
 table.std {
-	background : #D4D0C8;
+    background : #D4D0C8;
     border-radius: 4px;
     margin-top: 15px;
 }
 table.std TH {
-	color            : #333;
-	list-style-type  : disc;
-	list-style-position: inside;
+    color            : #333;
+    list-style-type  : disc;
+    list-style-position: inside;
     background-color    : #D4D0C8;
     background-image    : url("images/header_bg.png");
     background-image    : repeat-x;
@@ -232,12 +232,12 @@ table.addedit.pref td {
 }
 
 table.std td.hilite {
-	background-color: #ffffff;
+    background-color: #ffffff;
 }
 
 /* contacts table */
 table.contacts {
-	background-color: #808080;
+    background-color: #808080;
 }
 
 table.contacts td {
@@ -245,36 +245,36 @@ table.contacts td {
 }
 
 table.contacts td.hilite {
-	background-color: #ffffff;
+    background-color: #ffffff;
 }
 
 /* links in header blocks */
 A.hdr:link, A.hdr:active, A.hdr:visited {
-	color: #333333;
+    color: #333333;
 }
 
 /* tabbed boxes */
 
 td.tabon {
-	background: #D4D0C8;
+    background: #D4D0C8;
     background-image: url('images/tabSelectedBg.png');
     font-weight: bold;
 }
 td.taboff {
-	background: #D4D0C8;
-	background-image: url('images/tabBg.png');
+    background: #D4D0C8;
+    background-image: url('images/tabBg.png');
     background-position : bottom;
     background-repeat   : repeat-x;
     font-weight: normal;
 }
 td.tabsp {
-	border-bottom: solid #808080 1px;
+    border-bottom: solid #808080 1px;
 }
 td.tabox {
-	background-color : #D4D0C8;
-	border-left      : solid #808080 1px;
-	border-right     : solid #808080 1px;
-	border-bottom    : solid #808080 1px;
+    background-color : #D4D0C8;
+    border-left      : solid #808080 1px;
+    border-right     : solid #808080 1px;
+    border-bottom    : solid #808080 1px;
 }
 
 /* Message styles */
@@ -282,10 +282,10 @@ td.tabox {
 
 /* month calendar - title area */
 table.motitle {
-	background-color: #666;
+    background-color: #666;
 }
 table.motitle td {
-	background-color: #D4D0C8;
+    background-color: #D4D0C8;
 }
 table.motitle th {
     font-family         : arial,Osaka,verdana,Sans-Serif;
@@ -298,15 +298,15 @@ table.motitle th {
 }
 
 table.mocal {
-	background-color: #777777;
+    background-color: #777777;
     cursor: pointer;
 }
 table.mocal th {
-	color               : #333;
-	list-style-type     : disc;
-	list-style-position : inside;
-	font-weight         : bold;
-	text-align          : center;
+    color               : #333;
+    list-style-type     : disc;
+    list-style-position : inside;
+    font-weight         : bold;
+    text-align          : center;
     background-color    : #bccfeb;
     background-image    : url("images/header_bg.png");
     background-image    : repeat-x;
@@ -315,31 +315,31 @@ table.mocal td {
     vertical-align: top;
 }
 table.mocal td.week {
-	background-color: #D4D0C8;
-	height: 80px;
+    background-color: #D4D0C8;
+    height: 80px;
 }
 table.mocal td.empty {
-	background-color: #e0e0e0;
-	color: #aaaaaa;
-	text-align: left;
-	height: 80px;
+    background-color: #e0e0e0;
+    color: #aaaaaa;
+    text-align: left;
+    height: 80px;
 }
 table.mocal td.day  {
-	background-color: #ffffff;
-	color: #333366;
-	text-align: left;
-	height: 80px;
+    background-color: #ffffff;
+    color: #333366;
+    text-align: left;
+    height: 80px;
 }
 table.mocal td.today {
-	background-color : white;
-	border           : 2px dotted red;
-	color            : #ffffff;
-	text-align       : left;
+    background-color : white;
+    border           : 2px dotted red;
+    color            : #ffffff;
+    text-align       : left;
 }
 
 table.mocal td.weekend {
-	background-color: #f0f0f0;
-	text-align: left;
+    background-color: #f0f0f0;
+    text-align: left;
 }
 
 table.mocal td img {
@@ -348,27 +348,27 @@ table.mocal td img {
 
 /* mini calendar - title area */
 table.minical {
-	background-color: #f2f2f2;
-	border : 1px solid #cccccc;
+    background-color: #f2f2f2;
+    border : 1px solid #cccccc;
 }
 table.minical th {
-	background-color: #EEE;
-	font-weight: normal;
+    background-color: #EEE;
+    font-weight: normal;
 
 }
 table.minical td {
-	background-color: white;
+    background-color: white;
     text-align : center;
 }
 table.minical td.week {
 }
 table.minical td.empty {
-	color: #aaaaaa;
+    color: #aaaaaa;
     background-color: #E0E0E0;
 }
 table.minical td.day  { }
 table.minical td.today {
-	border           : 2px dotted red;
+    border           : 2px dotted red;
 }
 table.minical td.weekend {
     background-color: #f0f0f0;
@@ -402,7 +402,7 @@ table.tbl td.event {
 }
 
 table.tbl td.event td {
-	background-color: #fff0b0;
+    background-color: #fff0b0;
 }
 
 .crumb-right div.crumb ul {
@@ -414,15 +414,15 @@ table.tbl td.event td {
     padding: 0;
 }
 .crumb ul li {
-	margin: 2px 2px 2px;
-	font-family:arial,sans-serif;
-	color: #000000;
-	text-decoration: none;
-	display: inline; /* Remove this line arrange the buttons vertically */
-	float: left;
-	height: 22px;
-	padding-right: 5px; /* sliding doors padding */
-	border:0px;
+    margin: 2px 2px 2px;
+    font-family:arial,sans-serif;
+    color: #000000;
+    text-decoration: none;
+    display: inline; /* Remove this line arrange the buttons vertically */
+    float: left;
+    height: 22px;
+    padding-right: 5px; /* sliding doors padding */
+    border:0px;
 }
 .crumb ul li a {
     color: #000000;

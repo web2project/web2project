@@ -4,7 +4,7 @@ if (!defined('W2P_BASE_DIR')) {
 }
 // @todo    convert to template
 
-global $priorities;
+global $AppUI, $priorities;
 global $m, $a, $date, $other_users, $user_id, $task_type;
 global $task_sort_item1, $task_sort_type1, $task_sort_order1;
 global $task_sort_item2, $task_sort_type2, $task_sort_order2;
@@ -147,7 +147,7 @@ $canDelete = $perms->checkModuleItem($m, 'delete');
         // showing tasks
         $tasks = is_array($tasks) ? $tasks : array();
         foreach ($tasks as $task) {
-            echo showtask($task, 0, false, true);
+            echo showtask_new($task, 0, true);
         }
         if ($showEditCheckbox) {
         ?>
@@ -174,18 +174,5 @@ $canDelete = $perms->checkModuleItem($m, 'delete');
         </tr>
     </table>
 </form>
-<table>
-    <tr>
-        <td>&nbsp; &nbsp;</td>
-        <td class="future">&nbsp; &nbsp;</td>
-        <td>=<?php echo $AppUI->_('Future Task'); ?></td>
-        <td>&nbsp; &nbsp;</td>
-        <td class="active">&nbsp; &nbsp;</td>
-        <td>=<?php echo $AppUI->_('Started and on time'); ?></td>
-        <td class="notstarted">&nbsp; &nbsp;</td>
-        <td>=<?php echo $AppUI->_('Should have started'); ?></td>
-        <td>&nbsp; &nbsp;</td>
-        <td class="late">&nbsp; &nbsp;</td>
-        <td>=<?php echo $AppUI->_('Overdue'); ?></td>
-    </tr>
-</table>
+<?php
+include $AppUI->getTheme()->resolveTemplate('task_key');

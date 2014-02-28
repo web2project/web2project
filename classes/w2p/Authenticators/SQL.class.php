@@ -14,7 +14,7 @@ class w2p_Authenticators_SQL extends w2p_Authenticators_Base
     {
         $this->username = $username;
 
-        $q = new w2p_Database_Query;
+        $q = $this->_query;
         $q->addTable('users');
         $q->addQuery('user_id');
         $q->addWhere("user_username = '$username'");

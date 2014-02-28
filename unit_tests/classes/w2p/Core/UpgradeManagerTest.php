@@ -23,98 +23,99 @@ include_once 'unit_tests/CommonSetup.php';
 
 class w2p_Core_UpgradeManagerTest extends CommonSetup
 {
-	public function setUp()
-	{
+    public function setUp()
+    {
         parent::setUp();
 
         $this->obj = new w2p_System_UpgradeManager();
     }
 
-	public function testManagerSetup()
-	{
-		$this->obj->getActionRequired();
+    public function testManagerSetup()
+    {
+        $this->obj->getActionRequired();
 
-		$this->assertEquals(W2P_BASE_DIR.'/includes', $this->obj->getConfigDir());
-		$this->assertEquals(W2P_BASE_DIR.'/includes/config.php', $this->obj->getConfigFile());
-		$this->assertEquals(W2P_BASE_DIR.'/files', $this->obj->getUploadDir());
-		$this->assertEquals(W2P_BASE_DIR.'/locales/en', $this->obj->getLanguageDir());
-		$this->assertEquals(W2P_BASE_DIR.'/files/temp', $this->obj->getTempDir());
-	}
+        $this->assertEquals(W2P_BASE_DIR.'/includes', $this->obj->getConfigDir());
+        $this->assertEquals(W2P_BASE_DIR.'/includes/config.php', $this->obj->getConfigFile());
+        $this->assertEquals(W2P_BASE_DIR.'/files', $this->obj->getUploadDir());
+        $this->assertEquals(W2P_BASE_DIR.'/locales/en', $this->obj->getLanguageDir());
+        $this->assertEquals(W2P_BASE_DIR.'/files/temp', $this->obj->getTempDir());
+    }
 
-	public function testDatabaseConfiguration()
-	{
-		global $w2Pconfig;
+    public function testDatabaseConfiguration()
+    {
+        global $w2Pconfig;
 
-		$this->obj->getActionRequired();
+        $this->obj->getActionRequired();
 
-		$this->assertTrue($this->obj->testDatabaseCredentials($w2Pconfig));
-		$this->assertEquals($w2Pconfig, $this->obj->getConfigOptions());
-	}
+        $this->assertTrue($this->obj->testDatabaseCredentials($w2Pconfig));
+        $this->assertEquals($w2Pconfig, $this->obj->getConfigOptions());
+    }
 
-	public function testCreateConfigString()
-	{
-		global $w2Pconfig;
+    public function testCreateConfigString()
+    {
+        global $w2Pconfig;
 
-		$configString = $this->obj->createConfigString($w2Pconfig);
-		$this->assertRegExp('/dbtype/', $configString);
-		$this->assertRegExp('/'.$w2Pconfig['dbtype'].'/', $configString);
-		$this->assertRegExp('/dbhost/', $configString);
-		$this->assertRegExp('/'.$w2Pconfig['dbhost'].'/', $configString);
-		$this->assertRegExp('/dbname/', $configString);
-		$this->assertRegExp('/'.$w2Pconfig['dbname'].'/', $configString);
-		$this->assertRegExp('/dbuser/', $configString);
-		$this->assertRegExp('/'.$w2Pconfig['dbuser'].'/', $configString);
-		$this->assertRegExp('/dbpass/', $configString);
-		$this->assertRegExp('/'.$w2Pconfig['dbpass'].'/', $configString);
-	}
+        $configString = $this->obj->createConfigString($w2Pconfig);
+        $this->assertRegExp('/dbtype/', $configString);
+        $this->assertRegExp('/'.$w2Pconfig['dbtype'].'/', $configString);
+        $this->assertRegExp('/dbhost/', $configString);
+        $this->assertRegExp('/'.$w2Pconfig['dbhost'].'/', $configString);
+        $this->assertRegExp('/dbname/', $configString);
+        $this->assertRegExp('/'.$w2Pconfig['dbname'].'/', $configString);
+        $this->assertRegExp('/dbuser/', $configString);
+        $this->assertRegExp('/'.$w2Pconfig['dbuser'].'/', $configString);
+        $this->assertRegExp('/dbpass/', $configString);
+        $this->assertRegExp('/'.$w2Pconfig['dbpass'].'/', $configString);
+    }
 
-	public function testGetMaxFileUpload()
-	{
+    public function testGetMaxFileUpload()
+    {
         $upload_max_filesize = str_replace('M', '', ini_get('upload_max_filesize'));
         $post_max_size = str_replace('M', '', ini_get('post_max_size'));
-		$maxUpload = min($upload_max_filesize, $post_max_size).'M';
-		$this->assertEquals($maxUpload, $this->obj->getMaxFileUpload());
-	}
+        $maxUpload = min($upload_max_filesize, $post_max_size).'M';
+        $this->assertEquals($maxUpload, $this->obj->getMaxFileUpload());
+    }
 
-	/*
-	 * Realistically, the install/upgrade paths are almost identical and
-	 * even a system identified for "upgrade" will start with the first database
-	 * update required even if it's the first (install) script.
-	 */
-	public function testInstallSystem()
-	{
-		global $w2Pconfig;
+    /*
+     * Realistically, the install/upgrade paths are almost identical and
+     * even a system identified for "upgrade" will start with the first database
+     * update required even if it's the first (install) script.
+     */
+    public function testInstallSystem()
+    {
+        global $w2Pconfig;
 
-		switch ($this->obj->getActionRequired()) {
-			case 'install':
-				$this->assertTrue($this->obj->testDatabaseCredentials($w2Pconfig));
+        switch ($this->obj->getActionRequired()) {
+            case 'install':
+                $this->assertTrue($this->obj->testDatabaseCredentials($w2Pconfig));
 
-				$errors = $this->obj->upgradeSystem();
-				$this->assertEquals(0, count($errors));
+                $errors = $this->obj->upgradeSystem();
+                $this->assertEquals(0, count($errors));
 
-				$updates = $this->obj->getUpdatesApplied();
-				$this->assertGreaterThanOrEqual(5, count($updates));
-				break;
+                $updates = $this->obj->getUpdatesApplied();
+                $this->assertGreaterThanOrEqual(5, count($updates));
+                break;
 
-			case 'upgrade':
-				$this->assertTrue($this->obj->testDatabaseCredentials($w2Pconfig));
+            case 'upgrade':
+                $this->assertTrue($this->obj->testDatabaseCredentials($w2Pconfig));
 
-				$errors = $this->obj->upgradeSystem();
-				$this->assertEquals(0, count($errors));
+                $errors = $this->obj->upgradeSystem();
+                $this->assertEquals(0, count($errors));
 
-				$updates = $this->obj->getUpdatesApplied();
-				$this->assertGreaterThanOrEqual(0, count($updates));				
-				break;
+                $updates = $this->obj->getUpdatesApplied();
+                $this->assertGreaterThanOrEqual(0, count($updates));
+                break;
 
-			default:
-				$this->fail('w2p_System_UpgradeManager action was not matched.');
-		}
-	}
+            default:
+                $this->fail('w2p_System_UpgradeManager action was not matched.');
+        }
+    }
 
     /**
      * @todo Implement testGetActionRequired().
      */
-    public function testGetActionRequired() {
+    public function testGetActionRequired()
+    {
         // Remove the following lines when you implement this test.
         $this->markTestIncomplete(
                 'This test has not been implemented yet.'
@@ -124,7 +125,8 @@ class w2p_Core_UpgradeManagerTest extends CommonSetup
     /**
      * @todo Implement testGetConfigDir().
      */
-    public function testGetConfigDir() {
+    public function testGetConfigDir()
+    {
         // Remove the following lines when you implement this test.
         $this->markTestIncomplete(
                 'This test has not been implemented yet.'
@@ -134,7 +136,8 @@ class w2p_Core_UpgradeManagerTest extends CommonSetup
     /**
      * @todo Implement testGetConfigFile().
      */
-    public function testGetConfigFile() {
+    public function testGetConfigFile()
+    {
         // Remove the following lines when you implement this test.
         $this->markTestIncomplete(
                 'This test has not been implemented yet.'
@@ -144,7 +147,8 @@ class w2p_Core_UpgradeManagerTest extends CommonSetup
     /**
      * @todo Implement testGetUploadDir().
      */
-    public function testGetUploadDir() {
+    public function testGetUploadDir()
+    {
         // Remove the following lines when you implement this test.
         $this->markTestIncomplete(
                 'This test has not been implemented yet.'
@@ -154,7 +158,8 @@ class w2p_Core_UpgradeManagerTest extends CommonSetup
     /**
      * @todo Implement testGetLanguageDir().
      */
-    public function testGetLanguageDir() {
+    public function testGetLanguageDir()
+    {
         // Remove the following lines when you implement this test.
         $this->markTestIncomplete(
                 'This test has not been implemented yet.'
@@ -164,7 +169,8 @@ class w2p_Core_UpgradeManagerTest extends CommonSetup
     /**
      * @todo Implement testGetTempDir().
      */
-    public function testGetTempDir() {
+    public function testGetTempDir()
+    {
         // Remove the following lines when you implement this test.
         $this->markTestIncomplete(
                 'This test has not been implemented yet.'
@@ -174,7 +180,8 @@ class w2p_Core_UpgradeManagerTest extends CommonSetup
     /**
      * @todo Implement testGetConfigOptions().
      */
-    public function testGetConfigOptions() {
+    public function testGetConfigOptions()
+    {
         // Remove the following lines when you implement this test.
         $this->markTestIncomplete(
                 'This test has not been implemented yet.'
@@ -184,7 +191,8 @@ class w2p_Core_UpgradeManagerTest extends CommonSetup
     /**
      * @todo Implement testUpgradeSystem().
      */
-    public function testUpgradeSystem() {
+    public function testUpgradeSystem()
+    {
         // Remove the following lines when you implement this test.
         $this->markTestIncomplete(
                 'This test has not been implemented yet.'
@@ -194,7 +202,8 @@ class w2p_Core_UpgradeManagerTest extends CommonSetup
     /**
      * @todo Implement testGetUpdatesApplied().
      */
-    public function testGetUpdatesApplied() {
+    public function testGetUpdatesApplied()
+    {
         // Remove the following lines when you implement this test.
         $this->markTestIncomplete(
                 'This test has not been implemented yet.'
@@ -204,7 +213,8 @@ class w2p_Core_UpgradeManagerTest extends CommonSetup
     /**
      * @todo Implement testConvertDotProject().
      */
-    public function testConvertDotProject() {
+    public function testConvertDotProject()
+    {
         // Remove the following lines when you implement this test.
         $this->markTestIncomplete(
                 'Not a clue how to test this one...'
@@ -214,7 +224,8 @@ class w2p_Core_UpgradeManagerTest extends CommonSetup
     /**
      * @todo Implement testTestDatabaseCredentials().
      */
-    public function testTestDatabaseCredentials() {
+    public function testTestDatabaseCredentials()
+    {
         // Remove the following lines when you implement this test.
         $this->markTestIncomplete(
                 'This test has not been implemented yet.'
@@ -224,7 +235,8 @@ class w2p_Core_UpgradeManagerTest extends CommonSetup
     /**
      * @todo Implement testUpgradeRequired().
      */
-    public function testUpgradeRequired() {
+    public function testUpgradeRequired()
+    {
         // Remove the following lines when you implement this test.
         $this->markTestIncomplete(
                 'This test has not been implemented yet.'

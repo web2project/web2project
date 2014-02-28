@@ -10,8 +10,6 @@ if (!canView('users')) {
 	$AppUI->redirect(ACCESS_DENIED);
 }
 
-$AppUI->savePlace();
-
 if (isset($_GET['stub'])) {
 	$AppUI->setState('UserIdxStub', w2PgetParam($_GET, 'stub', null));
 	$AppUI->setState('UserIdxWhere', '');

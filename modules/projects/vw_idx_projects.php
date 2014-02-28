@@ -39,10 +39,7 @@ $fieldNames = array();
 $module = new w2p_System_Module();
 $fields = $module->loadSettings('projects', 'index_list');
 
-if (count($fields) > 0) {
-    $fieldList = array_keys($fields);
-    $fieldNames = array_values($fields);
-} else {
+if (0 == count($fields)) {
     // TODO: This is only in place to provide an pre-upgrade-safe
     //   state for versions earlier than v2.3
     //   At some point at/after v4.0, this should be deprecated
@@ -52,14 +49,18 @@ if (count($fields) > 0) {
     $fieldNames = array('%', 'P', 'Project Name', 'Company',
         'Start', 'End', 'Actual', 'Owner', 'Tasks');
 
-    $module = new w2p_System_Module();
     $module->storeSettings('projects', 'index_list', $fieldList, $fieldNames);
+    $fields = array_combine($fieldList, $fieldNames);
 }
+$fieldList = array_keys($fields);
+$fieldNames = array_values($fields);
 
 $page = (int) w2PgetParam($_GET, 'page', 1);
 $xpg_pagesize = w2PgetConfig('page_size', 50);
 $xpg_min = $xpg_pagesize * ($page - 1); // This is where we start our record set from
 $xpg_totalrecs = count($projects);
+
+$projects = array_slice($projects, $xpg_min, $xpg_pagesize);
 ?>
 
 <form action="./index.php?m=projects" method="post" accept-charset="utf-8">
@@ -87,9 +88,7 @@ $xpg_totalrecs = count($projects);
         $project_status = w2PgetSysVal('ProjectStatus');
         $customLookups = array('project_status' => $project_status, 'project_type' => $project_types);
 
-		for ($i = ($page - 1) * $xpg_pagesize; $i < $page * $xpg_pagesize && $i < $xpg_totalrecs; $i++) {
-			$row = $projects[$i];
-
+		foreach ($projects as $row) {
             $tmpProject = new CProject();
             $st_projects_arr = array();
 
@@ -105,11 +104,10 @@ $xpg_totalrecs = count($projects);
             } else {
                 $st_projects_arr[0][1] = 0;
             }
-
-            $htmlHelper = new w2p_Output_HTMLHelper($AppUI);
             if (!is_array($st_projects_arr)) {
                 continue;
             }
+            $htmlHelper = new w2p_Output_HTMLHelper($AppUI);
 
             foreach ($st_projects_arr as $st_project) {
                 $multiproject_id = 0;
@@ -164,7 +162,6 @@ $xpg_totalrecs = count($projects);
                             }
                             $s .= '</td>';
                             break;
-                        case 'department_list':
                         case 'project_departments':
                             $tmpProject->project_id = $row['project_id'];
                             $dept_array = $tmpProject->getDepartmentList();

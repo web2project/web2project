@@ -43,7 +43,7 @@ $showPinned = $AppUI->getState('TaskDayShowPin', 0);
 $showEmptyDate = $AppUI->getState('TaskDayShowEmptyDate', 0);
 $showInProgress = $AppUI->getState('TaskDayShowInProgress', 0);
 
-if (canView('admin')) { // let's see if the user has sysadmin access
+if (canView('users')) { // let's see if the user has sysadmin access
 	$other_users = true;
 	if (($show_uid = w2PgetParam($_REQUEST, 'show_user_todo', 0)) != 0) { // lets see if the user wants to see anothers user mytodo
 		$user_id = $show_uid;
@@ -69,35 +69,8 @@ $task_priority = w2PgetParam($_POST, 'task_priority', 99);
 $selected = w2PgetParam($_POST, 'selected_task', 0);
 
 if (is_array($selected) && count($selected)) {
-	foreach ($selected as $key => $val) {
-		if ($task_priority == 'c') {
-			// mark task as completed
-			$q = new w2p_Database_Query;
-			$q->addTable('tasks');
-			$q->addUpdate('task_percent_complete', '100');
-			$q->addWhere('task_id=' . (int)$val);
-		} else {
-			if ($task_priority == 'd') {
-				// delete task
-				$q = new w2p_Database_Query;
-				$q->setDelete('tasks');
-				$q->addWhere('task_id=' . (int)$val);
-			} else
-				if ($task_priority > -2 && $task_priority < 2) {
-					// set priority
-					$q = new w2p_Database_Query;
-					$q->addTable('tasks');
-					$q->addUpdate('task_priority', $task_priority);
-					$q->addWhere('task_id=' . (int)$val);
-				}
-        }
-		$q->exec();
-		echo db_error();
-		$q->clear();
-	}
+    __extract_from_tasks_todo($selected, $task_priority);
 }
-
-$AppUI->savePlace();
 
 $proj = new CProject;
 $tobj = new CTask;
@@ -105,69 +78,7 @@ $tobj = new CTask;
 $allowedProjects = $proj->getAllowedSQL($AppUI->user_id,'pr.project_id');
 $allowedTasks = $tobj->getAllowedSQL($AppUI->user_id, 'ta.task_id');
 
-// query my sub-tasks (ignoring task parents)
-
-$q = new w2p_Database_Query;
-$q->addQuery('distinct(ta.task_id), ta.*');
-$q->addQuery('project_name, pr.project_id, project_color_identifier');
-$q->addQuery('tp.task_pinned');
-$q->addQuery('ut.user_task_priority');
-$dateDiffString = $q->dbfnDateDiff('ta.task_end_date', $q->dbfnNow()) . ' AS task_due_in';
-$q->addQuery($dateDiffString);
-
-$q->addTable('projects', 'pr');
-$q->addTable('tasks', 'ta');
-$q->addTable('user_tasks', 'ut');
-$q->leftJoin('user_task_pin', 'tp', 'tp.task_id = ta.task_id and tp.user_id = ' . (int)$user_id);
-$q->leftJoin('project_departments', 'project_departments', 'pr.project_id = project_departments.project_id OR project_departments.project_id IS NULL');
-$q->leftJoin('departments', 'departments', 'departments.dept_id = project_departments.department_id OR dept_id IS NULL');
-
-$q->addWhere('ut.task_id = ta.task_id');
-$q->addWhere('ut.user_id = ' . (int)$user_id);
-$q->addWhere('( ta.task_percent_complete < 100 or ta.task_percent_complete is null)');
-
-$q->addWhere('ta.task_status = 0');
-$q->addWhere('pr.project_id = ta.task_project');
-if (!$showArcProjs) {
-	$q->addWhere('project_active = 1');
-	if (($template_status = w2PgetConfig('template_projects_status_id')) != '') {
-		$q->addWhere('project_status <> ' . (int)$template_status);
-	}
-}
-if (!$showLowTasks) {
-	$q->addWhere('task_priority >= 0');
-}
-if ($showInProgress) {
-	$q->addWhere('project_status = 3');
-}
-if (!$showHoldProjs) {
-	if (($on_hold_status = w2PgetConfig('on_hold_projects_status_id')) != '') {
-		$q->addWhere('project_status <> ' . (int)$on_hold_status);
-	}
-}
-if (!$showDynTasks) {
-	$q->addWhere('task_dynamic <> 1');
-}
-if ($showPinned) {
-	$q->addWhere('task_pinned = 1');
-}
-if (!$showEmptyDate) {
-	$q->addWhere('ta.task_start_date <> \'\' AND ta.task_start_date <> \'0000-00-00 00:00:00\'');
-}
-if ($task_type != '') {
-	$q->addWhere('ta.task_type = ' . (int)$task_type);
-}
-
-if (count($allowedTasks)) {
-	$q->addWhere($allowedTasks);
-}
-
-if (count($allowedProjects)) {
-	$q->addWhere($allowedProjects);
-}
-
-$q->addOrder('task_end_date, task_start_date, task_priority');
-$tasks = $q->loadList();
+$tasks = __extract_from_todo($user_id, $showArcProjs, $showLowTasks, $showInProgress, $showHoldProjs, $showDynTasks, $showPinned, $showEmptyDate, $task_type, $allowedTasks, $allowedProjects);
 
 /* we have to calculate the end_date via start_date+duration for
 ** end='0000-00-00 00:00:00'

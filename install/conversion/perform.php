@@ -10,7 +10,7 @@
 			<tr>
 			  <td colspan="2" align="center">
 			  	<b class="error">Your database credentials in ./includes/config.php are incorrect.  System conversion has stopped.  Please correct them and try again.</b><br /><br />
-				  <form action="<?php echo $baseUrl; ?>/index.php" method="post" name="form" id="form" accept-charset="utf-8">
+				  <form action="<?php echo W2P_BASE_URL; ?>/index.php" method="post" name="form" id="form" accept-charset="utf-8">
 			  		<input type="hidden" name="step" value="check" />
 			  		<input class="button" type="submit" name="next" value="&laquo; Return to System Checks" />
 					</form>
@@ -31,7 +31,7 @@
                     You can manually rename your tables without the '<?php echo $dpOptions['dbprefix']; ?>' prefix and remove the 'dbprefix' setting from your ./includes/config.php file;
                     <br />OR<br />
                     You can wait until web2project supports table prefixes. We are working on that currently.<br /><br />
-                    <form action="<?php echo $baseUrl; ?>/index.php" method="post" name="form" id="form" accept-charset="utf-8">
+                    <form action="<?php echo W2P_BASE_URL; ?>/index.php" method="post" name="form" id="form" accept-charset="utf-8">
                         <input type="hidden" name="step" value="check" />
                         <input class="button" type="submit" name="next" value="&laquo; Return to System Checks" />
                     </form>

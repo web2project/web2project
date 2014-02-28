@@ -3,7 +3,6 @@ if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
 
-$AppUI->savePlace();
 $perms = &$AppUI->acl();
 // retrieve any state parameters
 $user_id = $AppUI->user_id;

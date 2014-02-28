@@ -945,7 +945,7 @@
           <value>0</value>
           <value>0</value>
         </row>
-		<row>
+        <row>
           <value>27</value>
           <value>Task 27</value>
           <value>27</value>
@@ -980,7 +980,7 @@
           <value>0</value>
           <value>0</value>
         </row>
-		<row>
+        <row>
           <value>28</value>
           <value>Task 28</value>
           <value>28</value>
@@ -1145,9 +1145,9 @@
             <value>This is a project</value>
             <value>15.00</value>
             <value>5.00</value>
-	        <value>0</value>
-	        <value>0</value>
-	        <value>0</value>
+            <value>0</value>
+            <value>0</value>
+            <value>0</value>
             <value>1</value>
             <value>0</value>
             <value></value>

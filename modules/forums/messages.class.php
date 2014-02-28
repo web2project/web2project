@@ -29,9 +29,6 @@ class CForum_Message extends w2p_Core_BaseObject
         if (0 == (int) $this->message_forum) {
             $this->_error['message_forum'] = $baseErrorMsg . 'forum is not set';
         }
-        if (0 == (int) $this->message_author) {
-            $this->_error['message_author'] = $baseErrorMsg . 'message author is not set';
-        }
         if ('' == trim($this->message_title)) {
             $this->_error['message_title'] = $baseErrorMsg . 'message title is not set';
         }
@@ -40,6 +37,11 @@ class CForum_Message extends w2p_Core_BaseObject
         }
 
         return (count($this->_error)) ? false : true;
+    }
+
+    public function hook_preStore()
+    {
+        $this->message_author = (int) $this->message_author ? $this->message_author : $this->_AppUI->user_id;
     }
 
     public function store($unused = null)
@@ -115,27 +117,6 @@ class CForum_Message extends w2p_Core_BaseObject
             $q->exec();
         }
         return $result;
-    }
-
-    public function loadFull($notUsed = null, $message_id)
-    {
-        $q = $this->_getQuery();
-        $q->addTable('forum_messages', 'fm');
-        $q->addTable('users', 'u');
-        $q->addQuery('fm.*, f.*, user_username, contact_first_name,
-            contact_last_name, contact_display_name, project_name, project_color_identifier');
-        $q->addJoin('forums', 'f', 'forum_id = message_forum', 'inner');
-        $q->addJoin('contacts', 'con', 'contact_id = user_contact', 'inner');
-        $q->addJoin('projects', 'p', 'p.project_id = forum_project', 'left');
-        $q->addWhere('user_id = forum_owner');
-        $q->addWhere('message_id = ' . (int) $message_id);
-
-        $this->project_name = '';
-        $this->project_color_identifier = '';
-        $this->contact_first_name = '';
-        $this->contact_last_name = '';
-        $this->contact_display_name = '';
-        $q->loadObject($this);
     }
 
     protected function hook_preDelete()

@@ -39,10 +39,6 @@ class CCompany extends w2p_Core_BaseObject {
 	/**
  	@var int */
 	public $company_type = null;
-    /*
-     * @deprecated
-     */
-	public $company_custom = null;
 
 	public function __construct() {
 	  parent::__construct('companies', 'company_id');
@@ -54,9 +50,6 @@ class CCompany extends w2p_Core_BaseObject {
 
         if ('' == trim($this->company_name)) {
             $this->_error['company_name'] = $baseErrorMsg . 'company name is not set';
-        }
-        if ((int) $this->company_owner == 0) {
-            $this->_error['company_owner'] = $baseErrorMsg . 'company owner is not set';
         }
 
         return (count($this->_error)) ? false : true;
@@ -72,8 +65,9 @@ class CCompany extends w2p_Core_BaseObject {
 		return parent::canDelete('', null, $tables);
 	}
 
-    protected function  hook_preStore() {
+    protected function hook_preStore() {
         $this->company_id = (int) $this->company_id;
+        $this->company_owner = (int) $this->company_owner ? $this->company_owner : $this->_AppUI->user_id;
         $this->company_primary_url = str_replace(array('"', '"', '<', '>'), '', $this->company_primary_url);
 
         parent::hook_preStore();
@@ -92,20 +86,6 @@ class CCompany extends w2p_Core_BaseObject {
         $search['display_fields'] = $search['search_fields'];
 
         return $search;
-    }
-
-    public function loadFull($notUsed = null, $companyId) {
-        $q = $this->_getQuery();
-        $q->addTable('companies');
-        $q->addQuery('companies.*');
-        $q->addQuery('con.contact_first_name');
-        $q->addQuery('con.contact_last_name');
-        $q->addQuery('con.contact_display_name as contact_name');
-        $q->leftJoin('users', 'u', 'u.user_id = companies.company_owner');
-        $q->leftJoin('contacts', 'con', 'u.user_contact = con.contact_id');
-        $q->addWhere('companies.company_id = ' . (int) $companyId);
-
-        $q->loadObject($this, true, false);
     }
 
     public function getCompanyList($notUsed = null, $companyType = -1, $searchString = '', $ownerId = 0, $orderby = 'company_name', $orderdir = 'ASC') {
@@ -140,104 +120,160 @@ class CCompany extends w2p_Core_BaseObject {
         return $q->loadList();
     }
 
-    public function getCompanies() {
-        $where = $this->getAllowedSQL($this->_AppUI->user_id, 'company_id');
+    public function loadAll($order = 'company_name', $where = null)
+    {
+        $filter = $this->getAllowedSQL($this->_AppUI->user_id, 'company_id');
+        $filter .= ($where) ? ' AND ' . $where : '';
 
-        return $this->loadAll('company_id', $where);
+        return parent::loadAll($order, $filter);
     }
 
-	public static function getProjects(w2p_Core_CAppUI $AppUI, $companyId, $active = 1, $sort = 'project_name') {
-		$fields = 'DISTINCT pr.project_id, pr.*, contact_first_name, ' .
-                'contact_last_name, contact_display_name as contact_name, ' .
-                'contact_display_name as project_owner, contact_display_name as user_username, user_id';
+    /**
+     * @param w2p_Core_CAppUI $AppUI
+     * @param                 $companyId
+     * @param int             $active
+     * @param string          $sort
+     *
+     * @return Array
+     */
+    public function projects(w2p_Core_CAppUI $AppUI, $companyId, $active = 1, $sort = 'project_name')
+    {
+        $fields = 'DISTINCT pr.project_id, pr.*, contact_first_name, ' .
+            'contact_last_name, contact_display_name as contact_name, ' .
+            'contact_display_name as project_owner, contact_display_name as user_username, user_id';
 
-		$q = new w2p_Database_Query();
-		$q->addTable('projects', 'pr');
-		$q->addQuery($fields);
-		$q->leftJoin('users', 'u', 'u.user_id = pr.project_owner');
-		$q->leftJoin('contacts', 'con', 'u.user_contact = con.contact_id');
-		if ((int) $companyId > 0) {
-			$q->addWhere('pr.project_company = ' . (int) $companyId);
-		}
+        $q = $this->_getQuery();
+        $q->addTable('projects', 'pr');
+        $q->addQuery($fields);
+        $q->leftJoin('users', 'u', 'u.user_id = pr.project_owner');
+        $q->leftJoin('contacts', 'con', 'u.user_contact = con.contact_id');
+        if ((int) $companyId > 0) {
+            $q->addWhere('pr.project_company = ' . (int) $companyId);
+        }
 
-		$projObj = new CProject();
+        $projObj = new CProject();
 //TODO: We need to convert this from static to use ->overrideDatabase() for testing.
-		$q = $projObj->setAllowedSQL($AppUI->user_id, $q, null, 'pr');
+        $q = $projObj->setAllowedSQL($AppUI->user_id, $q, null, 'pr');
 
-		$q->addWhere('pr.project_active = '. (int) $active);
+        $q->addWhere('pr.project_active = '. (int) $active);
 
         if(property_exists('CProject', $sort) || strpos($fields, $sort) !== false) {
-			$q->addOrder($sort);
-		} else {
+            $q->addOrder($sort);
+        } else {
             $q->addOrder('project_name');
         }
 
-		return $q->loadList();
-	}
+        return $q->loadList();
+    }
 
-	public static function getContacts(w2p_Core_CAppUI $AppUI, $companyId) {
-		$results = array();
+    public function contacts($companyId)
+    {
+        $results = array();
 
-        if ($AppUI->isActiveModule('contacts') && canView('contacts') && (int) $companyId > 0) {
-			$q = new w2p_Database_Query();
-			$q->addQuery('c.*');
+        if ($this->_AppUI->isActiveModule('contacts') && canView('contacts') && (int) $companyId > 0) {
+            $q = $this->_getQuery();
+            $q->addQuery('c.*');
             $q->addQuery('c.contact_display_name as contact_name');
-			$q->addQuery('dept_name, dept_id');
-			$q->addTable('contacts', 'c');
-			$q->leftJoin('companies', 'b', 'c.contact_company = b.company_id');
-			$q->leftJoin('departments', '', 'contact_department = dept_id');
-			$q->addWhere('contact_company = ' . (int) $companyId);
-			$q->addWhere('
+            $q->addQuery('dept_name, dept_id');
+            $q->addTable('contacts', 'c');
+            $q->leftJoin('companies', 'b', 'c.contact_company = b.company_id');
+            $q->leftJoin('departments', '', 'contact_department = dept_id');
+            $q->addWhere('contact_company = ' . (int) $companyId);
+            $q->addWhere('
 				(contact_private=0
-					OR (contact_private=1 AND contact_owner=' . $AppUI->user_id . ')
+					OR (contact_private=1 AND contact_owner=' . $this->_AppUI->user_id . ')
 					OR contact_owner IS NULL OR contact_owner = 0
 				)');
-			$department = new CDepartment;
+            $department = new CDepartment;
 //TODO: We need to convert this from static to use ->overrideDatabase() for testing.
-            $q = $department->setAllowedSQL($AppUI->user_id, $q);
+            $q = $department->setAllowedSQL($this->_AppUI->user_id, $q);
 
-			$q->addOrder('contact_first_name');
-			$q->addOrder('contact_last_name');
+            $q->addOrder('contact_first_name');
+            $q->addOrder('contact_last_name');
 
-			$results = $q->loadHashList('contact_id');
-		}
+            $results = $q->loadHashList('contact_id');
+        }
 
-		return $results;
-	}
+        return $results;
+    }
 
-	public static function getUsers(w2p_Core_CAppUI $AppUI, $companyId) {
-
-        $q = new w2p_Database_Query();
-		$q->addTable('users');
-		$q->addQuery('users.*, c.*');
+    public function users($companyId)
+    {
+        $q = $this->_getQuery();
+        $q->addTable('users');
+        $q->addQuery('users.*, c.*');
         $q->addQuery('contact_display_name as contact_name');
-		$q->addJoin('contacts', 'c', 'users.user_contact = contact_id', 'inner');
-		$q->addJoin('departments', 'd', 'd.dept_id = contact_department');
-		$q->addWhere('contact_company = ' . (int) $companyId);
-		$q->addOrder('contact_last_name, contact_first_name');
+        $q->addJoin('contacts', 'c', 'users.user_contact = contact_id', 'inner');
+        $q->addJoin('departments', 'd', 'd.dept_id = contact_department');
+        $q->addWhere('contact_company = ' . (int) $companyId);
+        $q->addOrder('contact_last_name, contact_first_name');
 
-		$department = new CDepartment;
+        $department = new CDepartment;
 //TODO: We need to convert this from static to use ->overrideDatabase() for testing.
-        $q = $department->setAllowedSQL($AppUI->user_id, $q);
+        $q = $department->setAllowedSQL($this->_AppUI->user_id, $q);
 
-		return $q->loadHashList('user_id');
-	}
+        return $q->loadHashList('user_id');
+    }
 
-	public static function getDepartments(w2p_Core_CAppUI $AppUI, $companyId) {
-		if ($AppUI->isActiveModule('departments') && canView('departments')) {
-			$q = new w2p_Database_Query();
-			$q->addTable('departments');
-			$q->addQuery('departments.*, COUNT(contact_department) dept_users');
-			$q->addJoin('contacts', 'c', 'c.contact_department = dept_id');
-			$q->addWhere('dept_company = ' . (int) $companyId);
-			$q->addGroup('dept_id');
-			$q->addOrder('dept_parent, dept_name');
+    public function departments($companyId)
+    {
+        if ($this->_AppUI->isActiveModule('departments') && canView('departments')) {
+            $q = $this->_getQuery();
+            $q->addTable('departments');
+            $q->addQuery('departments.*, COUNT(contact_department) dept_users');
+            $q->addJoin('contacts', 'c', 'c.contact_department = dept_id');
+            $q->addWhere('dept_company = ' . (int) $companyId);
+            $q->addGroup('dept_id');
+            $q->addOrder('dept_parent, dept_name');
 
-			$department = new CDepartment;
-//TODO: We need to convert this from static to use ->overrideDatabase() for testing.
-            $q = $department->setAllowedSQL($AppUI->user_id, $q);
+            $department = new CDepartment();
+            $q = $department->setAllowedSQL($this->_AppUI->user_id, $q);
 
-			return $q->loadList();
-		}
+            return $q->loadList();
+        }
+    }
+
+    /** @deprecated */
+    public function getCompanies() {
+        return $this->loadAll();
+    }
+    /**
+     * @deprecated
+     */
+    public static function getProjects(w2p_Core_CAppUI $AppUI, $companyId, $active = 1, $sort = 'project_name')
+    {
+        trigger_error("The CCompany::getProjects static method has been deprecated in 3.1 and will be removed in v4.0. Please use CCompany->projects() instead.", E_USER_NOTICE );
+
+        $company = new CCompany();
+        return $company->projects($AppUI, $companyId, $active, $sort);
+    }
+    /**
+     * @deprecated
+     */
+    public static function getContacts($notUsed, $companyId)
+    {
+        trigger_error("The CCompany::getContacts static method has been deprecated in 3.1 and will be removed in v4.0. Please use CCompany->contacts() instead.", E_USER_NOTICE );
+
+        $company = new CCompany();
+        return $company->contacts($companyId);
+    }
+    /**
+     * @deprecated
+     */
+    public static function getUsers($notUsed, $companyId) {
+        trigger_error("The CCompany::getUsers static method has been deprecated in 3.1 and will be removed in v4.0. Please use CCompany->users() instead.", E_USER_NOTICE );
+
+        $company = new CCompany();
+        return $company->users($companyId);
+    }
+    /**
+     * @deprecated
+     */
+	public static function getDepartments($notUsed, $companyId)
+    {
+        trigger_error("The CCompany::getDepartments static method has been deprecated in 3.1 and will be removed in v4.0. Please use CCompany->departments() instead.", E_USER_NOTICE );
+
+        $company = new CCompany();
+        return $company->departments($companyId);
 	}
 }

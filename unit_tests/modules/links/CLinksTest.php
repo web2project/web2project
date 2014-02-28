@@ -66,7 +66,7 @@ class CLinks_Test extends CommonSetup
         /**
         * Verify we got the proper error message
         */
-		$this->assertFalse($this->obj->store());
+        $this->assertFalse($this->obj->store());
         $this->assertArrayHasKey('link_name', $this->obj->getError());
 
         /**
@@ -87,7 +87,7 @@ class CLinks_Test extends CommonSetup
         /**
         * Verify we got the proper error message
         */
-		$this->assertFalse($this->obj->store());
+        $this->assertFalse($this->obj->store());
         $this->assertArrayHasKey('link_url', $this->obj->getError());
 
         /**
@@ -189,7 +189,8 @@ class CLinks_Test extends CommonSetup
     /**
      * @todo Implement testLoadFull().
      */
-    public function testLoadFull() {
+    public function testLoadFull()
+    {
         // Remove the following lines when you implement this test.
         $this->markTestIncomplete(
                 'This test has not been implemented yet.'
@@ -199,7 +200,8 @@ class CLinks_Test extends CommonSetup
     /**
      * @todo Implement testGetProjectTaskLinksByCategory().
      */
-    public function testGetProjectTaskLinksByCategory() {
+    public function testGetProjectTaskLinksByCategory()
+    {
         // Remove the following lines when you implement this test.
         $this->markTestIncomplete(
                 'This test has not been implemented yet.'
@@ -209,7 +211,8 @@ class CLinks_Test extends CommonSetup
     /**
      * @todo Implement testCheck().
      */
-    public function testCheck() {
+    public function testCheck()
+    {
         // Remove the following lines when you implement this test.
         $this->markTestIncomplete(
                 'This test has not been implemented yet.'

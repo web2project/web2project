@@ -3,30 +3,17 @@ if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
 // @todo    convert to template
-
 $contact_id = (int) w2PgetParam($_GET, 'contact_id', 0);
 
 $contact = new CContact();
-$contact->contact_id = $contact_id;
+
+if (!$contact->load($contact_id)) {
+    $AppUI->redirect(ACCESS_DENIED);
+}
 
 $canEdit   = $contact->canEdit();
-$canRead   = $contact->canView();
-$canCreate = $contact->canCreate();
-$canAccess = $contact->canAccess();
 $canDelete = $contact->canDelete();
 
-if (!$canAccess || !$canRead) {
-	$AppUI->redirect(ACCESS_DENIED);
-}
-
-$contact->loadFull(null, $contact_id);
-if (!$contact) {
-	$AppUI->setMsg('Contact');
-	$AppUI->setMsg('invalidID', UI_MSG_ERROR, true);
-	$AppUI->redirect();
-} else {
-	$AppUI->savePlace();
-}
 
 $tab = $AppUI->processIntState('ContactVwTab', $_GET, 'tab', 0);
 
@@ -50,13 +37,13 @@ $methodLabels = w2PgetSysVal('ContactMethods');
 $ttl = 'View Contact';
 $titleBlock = new w2p_Theme_TitleBlock($ttl, 'icon.png', $m, $m . '.' . $a);
 $titleBlock->addCrumb('?m=contacts', 'contacts list');
-if ($canEdit && $contact_id) {
+if ($canEdit) {
 	$titleBlock->addCrumb('?m=contacts&a=addedit&contact_id='.$contact_id, 'edit this contact');
 }
 if ($contact->user_id) {
     $titleBlock->addCrumb('?m=users&a=view&user_id='.$contact->user_id, 'view this user');
 }
-if ($canDelete && $contact_id) {
+if ($canDelete) {
 	$titleBlock->addCrumbDelete('delete contact', $canDelete, $msg);
 }
 $titleBlock->show();
@@ -133,10 +120,6 @@ function delIt(){
 				<tr>
 					<td align="right"><?php echo $AppUI->_('Title'); ?>:</td>
                     <?php echo $htmlHelper->createCell('contact_title', $contact->contact_title); ?>
-				</tr>
-				<tr>
-					<td align="right"><?php echo $AppUI->_('Type'); ?>:</td>
-                    <?php echo $htmlHelper->createCell('contact_type', $contact->contact_type); ?>
 				</tr>
 				<tr>
 					<td align="right" valign="top" width="100"><?php echo $AppUI->_('Address'); ?>:</td>

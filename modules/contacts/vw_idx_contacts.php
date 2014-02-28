@@ -19,7 +19,8 @@ $AppUI->setState('ContIdxWhere', $searchString);
 
 $where = $AppUI->getState('ContIdxWhere') ? $AppUI->getState('ContIdxWhere') : '%';
 
-$rows = CContact::searchContacts($AppUI, $where, '', $days);
+$contact = new CContact();
+$rows = $contact->search($where, $days);
 
 $countries = w2PgetSysVal('GlobalCountries');
 

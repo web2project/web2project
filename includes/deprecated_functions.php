@@ -1,6 +1,6 @@
 <?php
 if (!defined('W2P_BASE_DIR')) {
-	die('You should not access this file directly.');
+    die('You should not access this file directly.');
 }
 /**
 * This file exists in order to identify individual functions which will be
@@ -23,8 +23,10 @@ if (!defined('W2P_BASE_DIR')) {
  *
  * @deprecated
  */
-function w2PcheckCharset() {
-	trigger_error("The w2PcheckCharset function has been deprecated and will be removed in v4.0.", E_USER_NOTICE );
+function w2PcheckCharset()
+{
+    trigger_error("The w2PcheckCharset function has been deprecated and will be removed in v4.0.", E_USER_NOTICE );
+
     return 'utf-8';
 }
 
@@ -34,7 +36,8 @@ function w2PcheckCharset() {
  *
  * @deprecated
  */
-function strJpGraph($text) {
+function strJpGraph($text)
+{
     global $locale_char_set;
     trigger_error("The strJpGraph function has been deprecated and will be removed in v4.0.", E_USER_NOTICE );
     if ( $locale_char_set=='utf-8' && function_exists("utf8_decode") ) {
@@ -50,8 +53,10 @@ function strJpGraph($text) {
  *
  * @deprecated
  */
-function atoi($a) {
+function atoi($a)
+{
     trigger_error("The atoi function has been deprecated and will be removed in v4.0. Please use (int) instead.", E_USER_NOTICE );
+
     return $a + 0;
 }
 
@@ -65,6 +70,7 @@ function atoi($a) {
 function w2p_check_url()
 {
     trigger_error("The w2p_check_url function has been deprecated and will be removed in v4.0. There is no replacement.", E_USER_NOTICE );
+
     return true;
 }
 
@@ -76,8 +82,10 @@ function w2p_check_url()
  * @deprecated
  *
  */
-function remove_invalid($arr) {
+function remove_invalid($arr)
+{
     trigger_error("The remove_invalid function has been deprecated and will be removed in v4.0. Please use array_filter instead.", E_USER_NOTICE );
+
     return array_filter($arr);
 }
 
@@ -87,47 +95,52 @@ function remove_invalid($arr) {
  *   so this version has been deprecated.
  * Original location: modules/projectdesigner/projectdesigner.class.php
  * TODO:  Remove for v4.0 - caseydk 21 March 2012
- * 
+ *
  * @deprecated
- * 
+ *
  */
-function findchild_pr(&$tarr, $parent, $level = 0) {
-	trigger_error("The findchild_pr function has been deprecated and will be removed in v4.0. Please use findchild_pd instead.", E_USER_NOTICE );
-    findchild_pd($tarr, $parent, $level = 0);
+function findchild_pr(&$tarr, $parent, $level = 0)
+{
+    trigger_error("The findchild_pr function has been deprecated and will be removed in v4.0. Please use findchild_new instead.", E_USER_NOTICE );
+
+    findchild_new($tarr, $parent, $level = 0);
 }
 
 /**
  * This was a function that simply did a str_repeat.. no clue why it didn't
  *   just use the regular str_repeat.
  * TODO:  Remove for v4.0 - caseydk 22 March 2012
- * 
+ *
  * @deprecated
  */
 // from modules/tasks/addedit.php and modules/projectdesigners/vw_actions.php
-function getSpaces($amount) {
-	trigger_error("The getSpaces function has been deprecated and will be removed in v4.0. Please use str_repeat instead.", E_USER_NOTICE );
-	return str_repeat('&nbsp;', $amount);
+function getSpaces($amount)
+{
+    trigger_error("The getSpaces function has been deprecated and will be removed in v4.0. Please use str_repeat instead.", E_USER_NOTICE );
+
+    return str_repeat('&nbsp;', $amount);
 }
 /**
  * This was used to retrieve and display the child departments starting from
  *   any ancestor. More importantly, it displays the relationship visually
  *   with little icons. There are a couple other variations of this function.
  * TODO:  Remove for v4.0 - caseydk 13 Feb 2012
- * 
+ *
  * @deprecated
  */
 // From:  modules/companies/vw_depts.php
-function findchilddept_comp(&$tarr, $parent, $level = 0) {
-	trigger_error("The findchilddept_comp function has been deprecated and will be removed in v4.0. There is no replacement.", E_USER_NOTICE );
+function findchilddept_comp(&$tarr, $parent, $level = 0)
+{
+    trigger_error("The findchilddept_comp function has been deprecated and will be removed in v4.0. There is no replacement.", E_USER_NOTICE );
 
     $level = $level + 1;
-	$n = count($tarr);
-	for ($x = 0; $x < $n; $x++) {
-		if ($tarr[$x]['dept_parent'] == $parent && $tarr[$x]['dept_parent'] != $tarr[$x]['dept_id']) {
-			echo showchilddept_comp($tarr[$x], $level);
-			findchilddept_comp($tarr, $tarr[$x]['dept_id'], $level);
-		}
-	}
+    $n = count($tarr);
+    for ($x = 0; $x < $n; $x++) {
+        if ($tarr[$x]['dept_parent'] == $parent && $tarr[$x]['dept_parent'] != $tarr[$x]['dept_id']) {
+            echo showchilddept_comp($tarr[$x], $level);
+            findchilddept_comp($tarr, $tarr[$x]['dept_id'], $level);
+        }
+    }
 }
 
 /**
@@ -135,34 +148,35 @@ function findchilddept_comp(&$tarr, $parent, $level = 0) {
  *   importantly, it displays the relationship visually with little icons.
  *   There are a couple other variations of this function.
  * TODO:  Remove for v4.0 - caseydk 13 Feb 2012
- * 
+ *
  * @deprecated
  */
 // From:  modules/companies/vw_depts.php
-function showchilddept_comp(&$a, $level = 0) {
-	trigger_error("The showchilddept_comp function has been deprecated and will be removed in v4.0. There is no replacement.", E_USER_NOTICE );
+function showchilddept_comp(&$a, $level = 0)
+{
+    trigger_error("The showchilddept_comp function has been deprecated and will be removed in v4.0. There is no replacement.", E_USER_NOTICE );
 
     global $AppUI;
-	$s = '
-	<td>
-		<a href="./index.php?m=departments&amp;a=addedit&amp;dept_id=' . $a["dept_id"] . '" title="' . $AppUI->_('edit') . '">
-			' . w2PshowImage('icons/stock_edit-16.png', 16, 16, '') . '
-	</td>
-	<td>';
+    $s = '
+    <td>
+        <a href="./index.php?m=departments&amp;a=addedit&amp;dept_id=' . $a["dept_id"] . '" title="' . $AppUI->_('edit') . '">
+            ' . w2PshowImage('icons/stock_edit-16.png', 16, 16, '') . '
+    </td>
+    <td>';
 
-	for ($y = 0; $y < $level; $y++) {
-		if ($y + 1 == $level) {
-			$s .= '<img src="' . w2PfindImage('corner-dots.gif') . '" width="16" height="12" border="0" alt="">';
-		} else {
-			$s .= '<img src="' . w2PfindImage('shim.gif') . '" width="16" height="12" border="0" alt="">';
-		}
-	}
+    for ($y = 0; $y < $level; $y++) {
+        if ($y + 1 == $level) {
+            $s .= '<img src="' . w2PfindImage('corner-dots.gif') . '" width="16" height="12" border="0" alt="">';
+        } else {
+            $s .= '<img src="' . w2PfindImage('shim.gif') . '" width="16" height="12" border="0" alt="">';
+        }
+    }
 
-	$s .= '<a href="./index.php?m=departments&a=view&dept_id=' . $a['dept_id'] . '">' . $a['dept_name'] . '</a>';
-	$s .= '</td>';
-	$s .= '<td align="center">' . ($a['dept_users'] ? $a['dept_users'] : '') . '</td>';
+    $s .= '<a href="./index.php?m=departments&a=view&dept_id=' . $a['dept_id'] . '">' . $a['dept_name'] . '</a>';
+    $s .= '</td>';
+    $s .= '<td align="center">' . ($a['dept_users'] ? $a['dept_users'] : '') . '</td>';
 
-	return '<tr>' . $s . '</tr>';
+    return '<tr>' . $s . '</tr>';
 }
 
 /**
@@ -172,12 +186,13 @@ function showchilddept_comp(&$a, $level = 0) {
  *
  * @deprecated
  */
-function taskstyle_pd($task) {
-	trigger_error("The taskstyle_pd function has been deprecated and will be removed in v4.0. Use w2pFindTaskComplete() instead.", E_USER_NOTICE );
+function taskstyle_pd($task)
+{
+    trigger_error("The taskstyle_pd function has been deprecated and will be removed in v4.0. Use w2pFindTaskComplete() instead.", E_USER_NOTICE );
 
     $style = w2pFindTaskComplete($task['task_start_date'], $task['task_end_date'], $task['task_percent_complete']);
 
-    switch($style) {
+    switch ($style) {
         case 'done':
         case 'late':
         case 'notstarted':
@@ -194,15 +209,17 @@ function taskstyle_pd($task) {
 
 /**
  * TODO:  Remove for v4.0 - caseydk 20 September 2012
- * 
+ *
  * @deprecated
  */
-function getStructuredProjects($original_project_id = 0, $project_status = -1, $active_only = false) {
+function getStructuredProjects($original_project_id = 0, $project_status = -1, $active_only = false)
+{
     trigger_error("getStructuredProjects has been deprecated in v3.0 and will be removed in v4.0. Please use CProject->getStructuredProjects() instead.", E_USER_NOTICE);
 
     $project = new CProject();
     $project->project_original_parent = $original_project_id;
     $project->project_status = $project_status;
+
     return $project->getStructuredProjects($active_only);
 }
 
@@ -212,8 +229,9 @@ function getStructuredProjects($original_project_id = 0, $project_status = -1, $
  *
  * @deprecated
  */
-function constructTaskTree($task_data, $depth = 0) {
-	global $projTasks, $all_tasks, $parents, $task_parent, $task_id;
+function constructTaskTree($task_data, $depth = 0)
+{
+    global $projTasks, $all_tasks, $parents, $task_parent, $task_id;
     trigger_error("The constructTaskTree function has been deprecated and will be removed in v4.0. Use buildTaskTree() instead.", E_USER_NOTICE );
 
     return buildTaskTree($task_data, $depth, $projTasks, $all_tasks, $parents, $task_parent, $task_id);
@@ -224,8 +242,9 @@ function constructTaskTree($task_data, $depth = 0) {
  *
  * @deprecated
  */
-function constructTaskTree_pd($task_data, $parents, $all_tasks, $depth = 0) {
-	global $projTasks, $all_tasks, $task_parent, $task_id;
+function constructTaskTree_pd($task_data, $parents, $all_tasks, $depth = 0)
+{
+    global $projTasks, $all_tasks, $task_parent, $task_id;
     trigger_error("The constructTaskTree_pd function has been deprecated and will be removed in v4.0. Use buildTaskTree() instead.", E_USER_NOTICE );
 
     return buildTaskTree($task_data, $depth, $projTasks, $all_tasks, $parents, $task_parent, $task_id);
@@ -244,7 +263,8 @@ function constructTaskTree_pd($task_data, $parents, $all_tasks, $depth = 0) {
  *
  * @deprecated
  */
-function canTaskAccess($task_id) {
+function canTaskAccess($task_id)
+{
     trigger_error("canTaskAccess has been deprecated in v3.0 and will be removed by v4.0. Please use CTask->canAccess() instead.", E_USER_NOTICE);
 
     global $AppUI;
@@ -257,44 +277,48 @@ function canTaskAccess($task_id) {
 
 /**
  * TODO:  Remove for v4.0 - caseydk 20 September 2012
- * 
+ *
  * @deprecated
  */
-function getProjects() {
-	trigger_error("getProjects() has been deprecated in v3.0 and will be removed in v4.0. Please use CProject->getProjects() instead.", E_USER_NOTICE);
+function getProjects()
+{
+    trigger_error("getProjects() has been deprecated in v3.0 and will be removed in v4.0. Please use CProject->getProjects() instead.", E_USER_NOTICE);
 
     $project = new CProject();
+
     return $project->getProjects();
 }
 
 /**
  * TODO:  Remove for v4.0 - caseydk 20 September 2012
- * 
+ *
  * @deprecated
  */
-function show_st_project(&$a, $level = 0) {
-	trigger_error("show_st_project() has been deprecated in v3.0 and will be removed in v4.0. There is no replacement.", E_USER_NOTICE);
+function show_st_project(&$a, $level = 0)
+{
+    trigger_error("show_st_project() has been deprecated in v3.0 and will be removed in v4.0. There is no replacement.", E_USER_NOTICE);
 
     global $st_projects_arr;
-	$st_projects_arr[] = array($a, $level);
+    $st_projects_arr[] = array($a, $level);
 }
 
 /**
  * TODO:  Remove for v4.0 - caseydk 20 September 2012
- * 
+ *
  * @deprecated
  */
-function find_proj_child(&$tarr, $parent, $level = 0) {
-	trigger_error("find_proj_child() has been deprecated in v3.0 and will be removed in v4.0. There is no replacement.", E_USER_NOTICE);
+function find_proj_child(&$tarr, $parent, $level = 0)
+{
+    trigger_error("find_proj_child() has been deprecated in v3.0 and will be removed in v4.0. There is no replacement.", E_USER_NOTICE);
 
     $level = $level + 1;
-	$n = count($tarr);
-	for ($x = 0; $x < $n; $x++) {
-		if ($tarr[$x]['project_parent'] == $parent && $tarr[$x]['project_parent'] != $tarr[$x]['project_id']) {
-			show_st_project($tarr[$x], $level);
-			find_proj_child($tarr, $tarr[$x]['project_id'], $level);
-		}
-	}
+    $n = count($tarr);
+    for ($x = 0; $x < $n; $x++) {
+        if ($tarr[$x]['project_parent'] == $parent && $tarr[$x]['project_parent'] != $tarr[$x]['project_id']) {
+            show_st_project($tarr[$x], $level);
+            find_proj_child($tarr, $tarr[$x]['project_id'], $level);
+        }
+    }
 }
 
 /**
@@ -302,12 +326,13 @@ function find_proj_child(&$tarr, $parent, $level = 0) {
  *
  * @deprecated
  */
-function makePass() {
+function makePass()
+{
     trigger_error("makePass() has been deprecated in v3.0 and will be removed in v4.0. Use w2p_Authenticators_SQL->createNewPassword instead.", E_USER_NOTICE);
 
     $auth = new w2p_Authenticators_SQL();
-    
-	return $auth->createNewPassword();
+
+    return $auth->createNewPassword();
 }
 
 /**
@@ -316,11 +341,13 @@ function makePass() {
  * @todo Remove for v4.0 - caseydk 06 March 2013
  * @deprecated
  */
-function get_dependencies_pd($task_id) {
+function get_dependencies_pd($task_id)
+{
     trigger_error("get_dependencies_pd() has been deprecated in v3.0 and will be removed in v4.0. Use CTask->getDependencyList instead.", E_USER_NOTICE);
 
     $task = new CTask();
-	return $task->getDependencyList($task_id);
+
+    return $task->getDependencyList($task_id);
 }
 
 /**
@@ -333,14 +360,16 @@ function get_dependencies_pd($task_id) {
  * @param type $innerTag
  * @param type $dividingToken
  * @param type $m
- * @return type 
+ * @return type
  */
-function buildHeaderNavigation($AppUI, $rootTag = '', $innerTag = '', $dividingToken = '', $m = '') {
-    //trigger_error("The buildHeaderNavigation function has been deprecated and will be removed in v4.0. Please use w2p_Theme_Base->buildHeaderNavigation() instead.", E_USER_NOTICE );
+function buildHeaderNavigation($AppUI, $rootTag = '', $innerTag = '', $dividingToken = '', $m = '')
+{
+    trigger_error("The buildHeaderNavigation function has been deprecated in v3.1 and will be removed by v5.0. Please use w2p_Theme_Base->buildHeaderNavigation() instead.", E_USER_NOTICE );
 
     $uistyle = $AppUI->getPref('UISTYLE') ? $AppUI->getPref('UISTYLE') : w2PgetConfig('host_style');
     $style = 'style_' . str_replace('-', '', $uistyle);
     $theme = new $style($AppUI, $m);
+
     return $theme->buildHeaderNavigation($rootTag, $innerTag, $dividingToken);
 }
 
@@ -348,8 +377,9 @@ if (!function_exists('styleRenderBoxTop')) {
     /**
      * @deprecated
      */
-    function styleRenderBoxTop() {
-        trigger_error("styleRenderBoxTop() has been deprecated in v3.1 and will be removed in v4.0. Use AppUI->getTheme()->styleRenderBoxTop instead.", E_USER_NOTICE);
+    function styleRenderBoxTop()
+    {
+        trigger_error("styleRenderBoxTop() has been deprecated in v3.1 and will be removed by v5.0. Use AppUI->getTheme()->styleRenderBoxTop instead.", E_USER_NOTICE);
 
         global $AppUI;
         echo $AppUI->getTheme()->styleRenderBoxTop();
@@ -360,14 +390,14 @@ if (!function_exists('styleRenderBoxBottom')) {
     /**
      * @deprecated
      */
-    function styleRenderBoxBottom() {
-        trigger_error("styleRenderBoxBottom() has been deprecated in v3.1 and will be removed in v4.0. Use AppUI->getTheme()->styleRenderBoxBottom instead.", E_USER_NOTICE);
+    function styleRenderBoxBottom()
+    {
+        trigger_error("styleRenderBoxBottom() has been deprecated in v3.1 and will be removed by v5.0. Use AppUI->getTheme()->styleRenderBoxBottom instead.", E_USER_NOTICE);
 
         global $AppUI;
         echo $AppUI->getTheme()->styleRenderBoxBottom();
     }
 }
-
 
 /** @deprecated */
 function w2PgetCleanParam(&$arr, $name, $def = null)
@@ -375,4 +405,89 @@ function w2PgetCleanParam(&$arr, $name, $def = null)
     trigger_error("w2PgetCleanParam() has been deprecated in v3.1 and will be removed in v4.0. Use w2PgetParam() instead.", E_USER_NOTICE);
 
     return w2PgetParam($arr, $name, $def);
+}
+
+/** @deprecated */
+function contextHelp($title, $link = '')
+{
+    trigger_error("contextHelp() has been deprecated in v3.1 and will be removed by v5.0", E_USER_NOTICE);
+
+    return w2PcontextHelp($title, $link);
+}
+
+function w2PcontextHelp($title, $link = '')
+{
+    global $AppUI;
+    trigger_error("w2PcontextHelp() has been deprecated in v3.1 and will be removed by v5.0", E_USER_NOTICE);
+
+    return '<a href="#' . $link . '" onclick="javascript:window.open(\'?m=help&amp;dialog=1&amp;hid=' . $link . '\', \'contexthelp\', \'width=400, height=400, left=50, top=50, scrollbars=yes, resizable=yes\')">' . $AppUI->_($title) . '</a>';
+}
+
+
+function w2PgetUsername($username)
+{
+    trigger_error("w2PgetUsername() has been deprecated in v3.1 and will be removed by v5.0. Please use CContact::getContactByUsername() instead.", E_USER_NOTICE);
+
+    return CContact::getContactByUsername($username);
+}
+
+function w2PgetUsernameFromID($userId)
+{
+    trigger_error("w2PcontextHelp() has been deprecated in v3.1 and will be removed by v5.0. Please use CContact::getContactByUserid() instead.", E_USER_NOTICE);
+
+    return CContact::getContactByUserid($userId);
+}
+
+/** @deprecated */
+function showtask_pd(&$arr, $level = 0, $today_view = false)
+{
+    trigger_error("showtask_pd() has been deprecated in v3.1 and will be removed by v5.0. Please use showtask_new() instead.", E_USER_NOTICE);
+
+    return showtask_new($arr, $level, $today_view);
+}
+
+/** @deprecated */
+function showtask_pr(&$arr, $level = 0, $today_view = false)
+{
+    trigger_error("showtask_pr() has been deprecated in v3.1 and will be removed by v5.0. Please use showtask_new() instead.", E_USER_NOTICE);
+
+    return showtask_new($arr, $level, $today_view);
+}
+
+/** @deprecated */
+function showtask(&$arr, $level = 0, $notUsed = true, $today_view = false)
+{
+    trigger_error("showtask() has been deprecated in v3.1 and will be removed by v5.0. Please use showtask_new() instead.", E_USER_NOTICE);
+
+    return showtask_new($arr, $level, $today_view);
+}
+
+function findchild(&$tarr, $parent, $level = 0)
+{
+    trigger_error("findchild() has been deprecated in v3.1 and will be removed by v5.0. Please use findchild_new() instead.", E_USER_NOTICE);
+
+    findchild_new($tarr, $parent, $level);
+}
+
+function findchild_pd(&$tarr, $parent, $level = 0)
+{
+    trigger_error("findchild_pd() has been deprecated in v3.1 and will be removed by v5.0. Please use findchild_new() instead.", E_USER_NOTICE);
+
+    findchild_new($tarr, $parent, $level);
+}
+
+/**
+ * @deprecated
+ */
+function cleanText($text)
+{
+    trigger_error("cleanText() has been deprecated in v3.2 and will be removed by v5.0. There is no replacement.", E_USER_NOTICE);
+
+    //This text file is not utf, its iso so we have to decode/encode
+    $text = utf8_decode($text);
+    $trade = array('�' => 'a', '�' => 'a', '�' => 'a', '�' => 'a', '�' => 'a', '�' => 'A', '�' => 'A', '�' => 'A', '�' => 'A', '�' => 'A', '�' => 'e', '�' => 'e', '�' => 'e', '�' => 'e', '�' => 'E', '�' => 'E', '�' => 'E', '�' => 'E', '�' => 'i', '�' => 'i', '�' => 'i', '�' => 'i', '�' => 'I', '�' => 'I', '�' => 'I', '�' => 'I', '�' => 'o', '�' => 'o', '�' => 'o', '�' => 'o', '�' => 'o', '�' => 'O', '�' => 'O', '�' => 'O', '�' => 'O', '�' => 'O', '�' => 'u', '�' => 'u', '�' => 'u', '�' => 'u', '�' => 'U', '�' => 'U', '�' => 'U', '�' => 'U', '�' => 'N', '�' => 'n');
+    $text = strtr($text, $trade);
+    $text = utf8_encode($text);
+
+    return $text;
 }

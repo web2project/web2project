@@ -3,36 +3,25 @@ if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
 // @todo    convert to template
-
 $task_id = (int) w2PgetParam($_GET, 'task_id', 0);
 $task_log_id = (int) w2PgetParam($_GET, 'task_log_id', 0);
-$reminded = (int) w2PgetParam($_GET, 'reminded', 0);
-
 $obj = new CTask();
-$obj->task_id = $task_id;
+
+if (!$obj->load($task_id)) {
+    $AppUI->redirect(ACCESS_DENIED);
+}
 
 $canEdit   = $obj->canEdit();
-$canRead   = $obj->canView();
-$canCreate = $obj->canCreate();
-$canAccess = $obj->canAccess();
 $canDelete = $obj->canDelete();
 
-if (!$canAccess || !$canRead) {
-	$AppUI->redirect(ACCESS_DENIED);
-}
-
-$obj->loadFull(null, $task_id);
-if (!$obj) {
-	$AppUI->setMsg('Task');
-	$AppUI->setMsg('invalidID', UI_MSG_ERROR, true);
-	$AppUI->redirect();
-} else {
-	$AppUI->savePlace();
-}
 
 $tab = $AppUI->processIntState('TaskLogVwTab', $_GET, 'tab', 0);
 
-// Clear any reminders
+/**
+ * Clear any reminders
+ * @todo THIS SHOULD NOT HAPPEN HERE.. VIEWING SHOULD BE IDEMPOTENT
+ */
+$reminded = (int) w2PgetParam($_GET, 'reminded', 0);
 if ($reminded) {
 	$obj->clearReminder();
 }
@@ -40,7 +29,7 @@ if ($reminded) {
 //check permissions for the associated project
 $canReadProject = canView('projects', $obj->task_project);
 
-$users = $obj->getAssignedUsers($task_id);
+$users = $obj->assignees($task_id);
 
 $durnTypes = w2PgetSysVal('TaskDurationType');
 $task_types = w2PgetSysVal('TaskType');
@@ -49,18 +38,19 @@ $billingCategory = w2PgetSysVal('BudgetCategory');
 // setup the title block
 $titleBlock = new w2p_Theme_TitleBlock('View Task', 'icon.png', $m, $m . '.' . $a);
 $titleBlock->addCell();
+if ($canReadProject) {
+    $titleBlock->addCrumb('?m=projects&a=view&project_id=' . $obj->task_project, 'view this project');
+}
+
 if ($canEdit) {
     $titleBlock->addButton('new log',  '?m=tasks&a=view&task_id=' . $task_id . '&tab=1');
     $titleBlock->addButton('new link', '?m=links&a=addedit&task_id=' . $task_id . '&project_id=' . $obj->task_project);
     $titleBlock->addButton('new file', '?m=files&a=addedit&project_id=' . $obj->task_project . '&file_task=' . $obj->task_id);
     $titleBlock->addButton('new task', '?m=tasks&a=addedit&task_project=' . $obj->task_project . '&task_parent=' . $task_id);
-}
 
-if ($canReadProject) {
-	$titleBlock->addCrumb('?m=projects&a=view&project_id=' . $obj->task_project, 'view this project');
-}
-if ($canEdit && 0 == $obj->task_represents_project) {
-	$titleBlock->addCrumb('?m=tasks&a=addedit&task_id=' . $task_id, 'edit this task');
+    if (!$obj->task_represents_project) {
+	    $titleBlock->addCrumb('?m=tasks&a=addedit&task_id=' . $task_id, 'edit this task');
+    }
 }
 if ($obj->task_represents_project) {
     $titleBlock->addCrumb('?m=projects&a=view&project_id=' . $obj->task_represents_project, 'view subproject');
@@ -103,15 +93,7 @@ function delIt() {
             <table width="100%" cellspacing="1" cellpadding="2" class="well">
                 <tr>
                     <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Project'); ?>:</td>
-                    <td style="background-color:#<?php echo $obj->project_color_identifier; ?>">
-                        <?php
-                        $perms = &$AppUI->acl();
-                        if ($perms->checkModuleItem('projects', 'access', $obj->task_project)) { ?>
-                            <?php echo "<a href='?m=projects&a=view&project_id=" . $obj->task_project . "' style='color: " . bestColor($obj->project_color_identifier) ."'>" . htmlspecialchars($obj->project_name, ENT_QUOTES) . '</a>'; ?>
-                        <?php } else { ?>
-                            <?php echo htmlspecialchars($company_detail['company_name'], ENT_QUOTES); ?>
-                        <?php } ?>
-                    </td>
+                    <?php echo $htmlHelper->createCell('task_project', $obj->task_project); ?>
                 </tr>
                 <?php if ($obj->task_parent != $obj->task_id) {
                     $obj_parent = new CTask();
@@ -124,7 +106,7 @@ function delIt() {
                 <?php } ?>
                 <tr>
                     <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Owner'); ?>:</td>
-                    <?php echo $htmlHelper->createCell('task_owner', $obj->task_owner_name); ?>
+                    <?php echo $htmlHelper->createCell('task_owner', $obj->task_owner); ?>
                 </tr>
                 <tr>
                     <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Priority'); ?>:</td>
@@ -157,9 +139,11 @@ function delIt() {
                     <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Time Worked'); ?>:</td>
                     <?php echo $htmlHelper->createCell('task_hours_worked', $obj->task_hours_worked . ' ' . $AppUI->_('hours')); ?>
                 </tr>
-            </table>
-            <strong><?php echo $AppUI->_('Dates and Targets'); ?></strong>
-            <table width="100%" cellspacing="1" cellpadding="2" class="well">
+                <tr>
+                    <td>
+                        <strong><?php echo $AppUI->_('Dates and Targets'); ?></strong>
+                    </td>
+                </tr>
                 <tr>
                     <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Start Date'); ?>:</td>
                     <?php echo $htmlHelper->createCell('task_start_datetime', $obj->task_start_date); ?>

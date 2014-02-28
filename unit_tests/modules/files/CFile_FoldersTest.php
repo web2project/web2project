@@ -59,7 +59,7 @@ class CFileFolders_Test extends CommonSetup
         /**
         * Verify we got the proper error message
         */
-		$this->assertFalse($this->obj->store());
+        $this->assertFalse($this->obj->store());
         $this->assertArrayHasKey('file_folder_name', $this->obj->getError());
 
         /**
@@ -145,7 +145,8 @@ class CFileFolders_Test extends CommonSetup
     /**
      * @todo Implement testLoadFull().
      */
-    public function testLoadFull() {
+    public function testLoadFull()
+    {
         // Remove the following lines when you implement this test.
         $this->markTestIncomplete(
                 'This test has not been implemented yet.'
@@ -155,7 +156,8 @@ class CFileFolders_Test extends CommonSetup
     /**
      * @todo Implement testGetProjectTaskLinksByCategory().
      */
-    public function testGetProjectTaskLinksByCategory() {
+    public function testGetProjectTaskLinksByCategory()
+    {
         // Remove the following lines when you implement this test.
         $this->markTestIncomplete(
                 'This test has not been implemented yet.'
@@ -165,7 +167,19 @@ class CFileFolders_Test extends CommonSetup
     /**
      * @todo Implement testCheck().
      */
-    public function testCheck() {
+    public function testCheck()
+    {
+        // Remove the following lines when you implement this test.
+        $this->markTestIncomplete(
+                'This test has not been implemented yet.'
+        );
+    }
+
+    /**
+     * @todo Implement testHook_search().
+     */
+    public function testHook_search()
+    {
         // Remove the following lines when you implement this test.
         $this->markTestIncomplete(
                 'This test has not been implemented yet.'

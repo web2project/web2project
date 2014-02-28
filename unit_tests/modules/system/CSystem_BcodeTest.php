@@ -62,7 +62,7 @@ class CSystemBcode_Test extends CommonSetup
         /**
         * Verify we got the proper error message
         */
-		$this->assertFalse($this->obj->store());
+        $this->assertFalse($this->obj->store());
         $this->assertArrayHasKey('billingcode_name', $this->obj->getError());
 
         /**

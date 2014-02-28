@@ -48,99 +48,18 @@ $projects = $project->getAllowedProjects($AppUI->user_id, false);
 */
 $caller = w2PgetParam($_REQUEST, 'caller', null);
 
+$task = new CTask();
+
 if ($caller == 'todo') {
     $user_id = w2PgetParam($_REQUEST, 'user_id', $AppUI->user_id);
 
     $projects[$project_id]['project_name'] = $AppUI->_('Todo for') . ' ' . CContact::getContactByUserid($user_id);
     $projects[$project_id]['project_color_identifier'] = 'ff6000';
 
-    $q = new w2p_Database_Query;
-    $q->addQuery('t.*');
-    $q->addQuery('project_name, project_id, project_color_identifier');
-    $q->addQuery('tp.task_pinned');
-    $q->addTable('tasks', 't');
-    $q->innerJoin('projects', 'pr', 'pr.project_id = t.task_project');
-    $q->innerJoin('user_tasks', 'ut', 'ut.task_id = t.task_id AND ut.user_id = ' . (int) $user_id);
-    $q->leftJoin('user_task_pin', 'tp', 'tp.task_id = t.task_id and tp.user_id = ' . (int)$user_id);
-    $q->addWhere('(t.task_percent_complete < 100 OR t.task_percent_complete IS NULL)');
-    $q->addWhere('t.task_status = 0');
-    if (!$showArcProjs) {
-        $q->addWhere('pr.project_active = 1');
-        if (($template_status = w2PgetConfig('template_projects_status_id')) != '') {
-            $q->addWhere('pr.project_status <> ' . (int)$template_status);
-        }
-    }
-    if (!$showLowTasks) {
-        $q->addWhere('task_priority >= 0');
-    }
-    if (!$showHoldProjs) {
-        $q->addWhere('project_active = 1');
-    }
-    if (!$showDynTasks) {
-        $q->addWhere('task_dynamic <> 1');
-    }
-    if ($showPinned) {
-        $q->addWhere('task_pinned = 1');
-    }
-
-    $q->addGroup('t.task_id');
+    $proTasks = __extract_from_tasks_gantt1($user_id, $showArcProjs, $showLowTasks, $showHoldProjs, $showDynTasks, $showPinned, $task, $AppUI);
 } else {
-    // pull tasks
-    $q = new w2p_Database_Query;
-    $q->addTable('tasks', 't');
-    $q->addQuery('t.task_id, task_parent, task_name, task_start_date, task_end_date,'.
-        ' task_duration, task_duration_type, task_priority, task_percent_complete,'.
-        ' task_hours_worked, task_order, task_project, task_milestone, task_access,'.
-        ' task_owner, project_name, project_color_identifier, task_dynamic');
-    $q->addJoin('projects', 'p', 'project_id = t.task_project', 'inner');
-
-    // don't add milestones if box is checked//////////////////////////////////////////////////////////
-    if ($showNoMilestones) {
-        $q->addWhere('task_milestone != 1');
-    }
-    if ($showMilestonesOnly) {
-        $q->addWhere('task_milestone = 1');
-    }
-    if ($ganttTaskFilter) {
-        $q->addWhere($where);
-    }
-    if ($project_id) {
-        $q->addWhere('task_project = ' . (int)$project_id);
-    }
-
-    switch ($f) {
-        case 'all':
-            $q->addWhere('task_status > -1');
-            break;
-        case 'myproj':
-            $q->addWhere('task_status > -1');
-            $q->addWhere('project_owner = ' . (int)$AppUI->user_id);
-            break;
-        case 'mycomp':
-            $q->addWhere('task_status > -1');
-            $q->addWhere('project_company = ' . (int)$AppUI->user_company);
-            break;
-        case 'myinact':
-            $q->innerJoin('user_tasks', 'ut', 'ut.task_id = t.task_id');
-            $q->addWhere('task_project = p.project_id');
-            $q->addWhere('ut.user_id = ' . (int)$AppUI->user_id);
-            break;
-        default:
-            $q->innerJoin('user_tasks', 'ut', 'ut.task_id = t.task_id');
-            $q->addWhere('task_status > -1');
-            $q->addWhere('task_project = p.project_id');
-            $q->addWhere('ut.user_id = ' . (int)$AppUI->user_id);
-            break;
-    }
+    $proTasks = __extract_from_tasks_gantt2($showNoMilestones, $showMilestonesOnly, $ganttTaskFilter, $where, $project_id, $f, $AppUI, $task);
 }
-
-$q->addOrder('t.task_start_date, t.task_end_date, t.task_priority');
-
-// get any specifically denied tasks
-$task = new CTask();
-$q = $task->setAllowedSQL($AppUI->user_id, $q);
-$proTasks = $q->loadHashList('task_id');
-$q->clear();
 
 $orrarr[] = array('task_id' => 0, 'order_up' => 0, 'order' => '');
 
@@ -193,7 +112,6 @@ foreach ($proTasks as $row) {
 
     $projects[$row['task_project']]['tasks'][] = $row;
 }
-$q->clear();
 
 $width = min(w2PgetParam($_GET, 'width', 600), 1400);
 $start_date = w2PgetParam($_GET, 'start_date', $start_min);
@@ -382,7 +300,6 @@ for ($i = 0, $i_cmp = count($gantt_arr); $i < $i_cmp; $i++) {
                         break;
                 }
             }
-            $q->clear();
             $caption = mb_substr($caption, 0, mb_strlen($caption) - 1);
         }
 
@@ -478,7 +395,6 @@ for ($i = 0, $i_cmp = count($gantt_arr); $i < $i_cmp; $i++) {
             }
             $gantt->addBar($columnValues, $caption, $height, '8F8FBD', true, $progress, $a['task_id']);
         }
-        $q->clear();
     }
 }
 

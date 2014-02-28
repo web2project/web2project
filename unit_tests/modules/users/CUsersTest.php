@@ -67,9 +67,9 @@ class CUsers_Test extends CommonSetup
         unset($this->post_data['user_password']);
         $this->obj->bind($this->post_data);
 
-		/**
-		 * Verify we got the proper error message
-		 */
+        /**
+         * Verify we got the proper error message
+         */
         $this->assertFalse($this->obj->store());
         $this->assertArrayHasKey('user_password', $this->obj->getError());
 
@@ -113,7 +113,8 @@ class CUsers_Test extends CommonSetup
         $this->assertNotEquals(0,                   $this->obj->user_id);
     }
 
-    public function testExists() {
+    public function testExists()
+    {
         $result = $this->obj->user_exists('admin');
         $this->assertFalse($result);
 
@@ -122,7 +123,8 @@ class CUsers_Test extends CommonSetup
         $this->assertTrue($result);
     }
 
-    public function testGetIdByContactId() {
+    public function testGetIdByContactId()
+    {
         // Don't load a hashlist so the lookup fails
         $result = $this->obj->getIdByContactId(1);
         $this->assertEquals('',                     $result);
@@ -133,7 +135,8 @@ class CUsers_Test extends CommonSetup
         $this->assertEquals(1,                      $result);
     }
 
-    public function testValidatePassword() {
+    public function testValidatePassword()
+    {
         // Don't load a dataset so the validation fails.
         $result = $this->obj->validatePassword(1, 'password');
         $this->assertFalse($result);

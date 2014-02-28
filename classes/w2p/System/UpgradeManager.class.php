@@ -230,7 +230,7 @@ class w2p_System_UpgradeManager {
     protected function _getMigrations() {
         $migrations = array();
 
-        $path = W2P_BASE_DIR.'/install/sql/'.$this->configOptions['dbtype'];
+        $path = W2P_BASE_DIR.'/install/sql/';
         $dir_handle = @opendir($path) or die("Unable to open $path");
 
         while ($file = readdir($dir_handle)) {
@@ -266,7 +266,7 @@ class w2p_System_UpgradeManager {
     }
 
     protected function _applySQLUpdates($sqlfile, $dbConn) {
-        $sqlfile = W2P_BASE_DIR.'/install/sql/'.$this->configOptions['dbtype'].'/'.$sqlfile;
+        $sqlfile = W2P_BASE_DIR.'/install/sql/'.$sqlfile;
         if (!file_exists($sqlfile) || filesize($sqlfile) == 0) {
             return array();
         }
@@ -297,7 +297,7 @@ class w2p_System_UpgradeManager {
                     $errorMessage = $dbConn->ErrorMsg();
                     /*
                      * TODO: I'm not happy with this solution but have yet to come up
-                     * 	with another way of solving it...
+                     *     with another way of solving it...
                      */
                     if (strpos($errorMessage, 'Duplicate column name') === false &&
                       strpos($errorMessage, 'column/key exists') === false &&

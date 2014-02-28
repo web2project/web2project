@@ -45,9 +45,6 @@ class CForum extends w2p_Core_BaseObject
         if ('' == trim($this->forum_name)) {
             $this->_error['forum_name'] = $baseErrorMsg . 'forum name is not set';
         }
-        if (0 == (int) $this->forum_owner) {
-            $this->_error['forum_owner'] = $baseErrorMsg . 'forum owner is not set';
-        }
 
         return (count($this->_error)) ? false : true;
     }
@@ -66,28 +63,6 @@ class CForum extends w2p_Core_BaseObject
         $q->addOrder('message_date ' . $sortDir);
 
         return $q->loadList();
-    }
-
-    public function loadFull($notUsed = null, $forum_id)
-    {
-        $q = $this->_getQuery();
-        $q->addTable('forums');
-        $q->addTable('users', 'u');
-        $q->addQuery('forum_id, forum_project,	forum_description, forum_owner, forum_name,
-            forum_create_date, forum_last_date, forum_message_count, forum_moderated,
-            user_username, contact_first_name, contact_last_name, contact_display_name,
-            project_name, project_color_identifier');
-        $q->addJoin('contacts', 'con', 'contact_id = user_contact', 'inner');
-        $q->addJoin('projects', 'p', 'p.project_id = forum_project', 'left');
-        $q->addWhere('user_id = forum_owner');
-        $q->addWhere('forum_id = ' . (int) $forum_id);
-
-        $this->project_name = '';
-        $this->project_color_identifier = '';
-        $this->contact_first_name = '';
-        $this->contact_last_name = '';
-        $this->contact_display_name = '';
-        $q->loadObject($this);
     }
 
     public function getAllowedForums($user_id, $company_id, $filter = -1, $orderby = 'forum_name', $orderdir = 'asc', $max_msg_length = 30)
@@ -149,6 +124,11 @@ class CForum extends w2p_Core_BaseObject
         $this->forum_create_date = $this->_AppUI->convertToSystemTZ($this->forum_create_date);
 
         parent::hook_preCreate();
+    }
+
+    protected function hook_preStore()
+    {
+        $this->forum_owner = (int) $this->forum_owner ? $this->forum_owner : $this->_AppUI->user_id;
     }
 
     public function delete($unused = null)

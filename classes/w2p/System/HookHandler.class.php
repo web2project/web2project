@@ -35,7 +35,11 @@ class w2p_System_HookHandler
             if (class_exists($module['mod_main_class'])) {
                 $object = new $module['mod_main_class']();
                 if (is_callable(array($object, $hookname))) {
-                    $object->{$hookname}();
+                    try {
+                        $object->{$hookname}();
+                    } catch (Exception $exc) {
+                        error_log('Error in ' . __FUNCTION__ . ' -- ' . $exc->getMessage());
+                    }
                 }
             }
         }
@@ -57,11 +61,15 @@ class w2p_System_HookHandler
             if (class_exists($module['mod_main_class'])) {
                 $object = new $module['mod_main_class']();
                 if (is_callable(array($object, $hookname))) {
-                    $itemList = $object->{$hookname}($this->AppUI->user_id);
-                    if (count($itemList)) {
-                        foreach ($itemList as $calendarItem) {
-                            $buffer .= w2p_Output_iCalendar::formatCalendarItem($calendarItem, $module['mod_directory']);
+                    try {
+                        $itemList = $object->{$hookname}($this->AppUI->user_id);
+                        if (count($itemList)) {
+                            foreach ($itemList as $calendarItem) {
+                                $buffer .= w2p_Output_iCalendar::formatCalendarItem($calendarItem, $module['mod_directory']);
+                            }
                         }
+                    } catch (Exception $exc) {
+                        error_log('Error in ' . __FUNCTION__ . ' -- ' . $exc->getMessage());
                     }
                 }
             }
@@ -84,10 +92,14 @@ class w2p_System_HookHandler
             if (class_exists($module['mod_main_class'])) {
                 $object = new $module['mod_main_class']();
                 if (is_callable(array($object, $hookname)) && is_callable(array($object, 'getCalendarLink'))) {
-                    $itemList = $object->{$hookname}($this->AppUI->user_id);
-                    foreach ($itemList as $item) {
-                        $dateIndex = str_replace('/', '', $item['startDate']);
-                        $this->links[$dateIndex][] = $object->getCalendarLink(null, $item);
+                    try {
+                        $itemList = $object->{$hookname}($this->AppUI->user_id);
+                        foreach ($itemList as $item) {
+                            $dateIndex = str_replace('/', '', $item['startDate']);
+                            $this->links[$dateIndex][] = $object->getCalendarLink(null, $item);
+                        }
+                    } catch (Exception $exc) {
+                        error_log('Error in ' . __FUNCTION__ . ' -- ' . $exc->getMessage());
                     }
                 }
             }

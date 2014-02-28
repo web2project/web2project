@@ -25,7 +25,7 @@ if (isset($_GET['out_user_id']) && $_GET['out_user_id']
 		$boot_user_session = $_GET['out_session'];
 		$boot_user_log_id = w2PgetParam($_GET, 'out_user_log_id', null);
 		$boot_query_row = false;
-	} else
+	} else {
 		if ($canEdit && $canDelete && $logoutUserFlag) {
 			// query for all sessions open for a given user
 			$r = new w2p_Database_Query;
@@ -43,6 +43,7 @@ if (isset($_GET['out_user_id']) && $_GET['out_user_id']
 				$boot_user_log_id = $boot_query_row['user_access_log_id'];
 			}
 		}
+    }
 
 	do {
 		if ($boot_user_id == $AppUI->user_id && $boot_user_session == $_COOKIE['PHPSESSID']) {
@@ -70,19 +71,7 @@ if (isset($_GET['out_user_id']) && $_GET['out_user_id']
 	$AppUI->redirect('m=users&tab=3');
 }
 
-$q = new w2p_Database_Query;
-$q->addTable('sessions', 's');
-$q->addQuery('DISTINCT(session_id), user_access_log_id, u.user_id, u.user_id as u_user_id,
-    user_username, contact_last_name, contact_display_name, contact_first_name,
-    company_name, contact_company, date_time_in, user_ip');
-
-$q->addJoin('user_access_log', 'ual', 'session_user = user_access_log_id');
-$q->addJoin('users', 'u', 'ual.user_id = u.user_id');
-$q->addJoin('contacts', 'con', 'u.user_contact = contact_id');
-$q->addJoin('companies', 'com', 'contact_company = company_id');
-$q->addOrder($orderby);
-$rows = $q->loadList();
-$q->clear();
+$rows = __extract_from_vw_usr_sessions($orderby);
 
 $tab = w2PgetParam($_REQUEST, 'tab', 0);
 

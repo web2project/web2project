@@ -17,8 +17,6 @@ $utypes = w2PgetSysVal('UserType');
 
 $CONFIG_FILE = W2P_BASE_DIR . '/modules/projectdesigner/config.php';
 
-$AppUI->savePlace();
-
 //define user type list
 $user_types = arrayMerge($utypes, array('9' => $AppUI->_('None')));
 

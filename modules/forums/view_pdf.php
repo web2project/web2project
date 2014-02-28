@@ -13,7 +13,10 @@ if (!$perms->checkModuleItem('forums', 'view', $forum_id)) {
 }
 
 $forum = new CForum();
-$forum->loadFull(null, $forum_id);
+$forum->load($forum_id);
+
+$project = new CProject();
+$project->load($forum->forum_project);
 
 $messages = $forum->getMessages(null, $forum_id, $message_id, $sort);
 
@@ -41,7 +44,7 @@ $output = new w2p_Output_PDFRenderer();
 $pdf = $output->getPDF();
 
 $pdf->selectFont($font_dir . '/Helvetica.afm');
-$pdf->ezText('Project: ' . $forum->project_name);
+$pdf->ezText('Project: ' . $project->project_name);
 $pdf->ezText('Forum: ' . $forum->forum_name);
 $pdf->ezText('Topic: ' . $topic);
 $pdf->ezText('');

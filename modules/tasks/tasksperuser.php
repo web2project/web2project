@@ -3,15 +3,12 @@ if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
 
-$AppUI->savePlace();
-
 if (isset($_POST['company_id'])) {
 	$AppUI->setState('CompanyIdxFilter', $_POST['company_id']);
 }
 $company_id = $AppUI->getState('CompanyIdxFilter') ? $AppUI->getState('CompanyIdxFilter') : 'all';
 
 $log_all_projects = true; // show tasks for all projects
-$df = $AppUI->getPref('SHDATEFORMAT'); // get the prefered date format
 
 if (!isset($user_id)) {
     $user_id = $AppUI->user_id;

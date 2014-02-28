@@ -3,13 +3,10 @@ if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
 // @todo    convert to template
-
-global $AppUI, $cal_sdf;
-$AppUI->loadCalendarJS();
-
 $project_id = (int) w2PgetParam($_GET, 'project_id', 0);
 $company_id = (int) w2PgetParam($_GET, 'company_id', $AppUI->user_company);
 $contact_id = (int) w2PgetParam($_GET, 'contact_id', 0);
+
 $project = new CProject();
 $project->project_id = $project_id;
 
@@ -21,7 +18,6 @@ if (!$canAddEdit) {
 	$AppUI->redirect(ACCESS_DENIED);
 }
 
-// load the record data
 $obj = $AppUI->restoreObject();
 if ($obj) {
     $project = $obj;
@@ -34,6 +30,10 @@ if (!$project && $project_id > 0) {
 	$AppUI->setMsg('invalidID', UI_MSG_ERROR, true);
 	$AppUI->redirect();
 }
+
+global $AppUI, $cal_sdf;
+$AppUI->loadCalendarJS();
+
 
 $pstatus = w2PgetSysVal('ProjectStatus');
 $ptype = w2PgetSysVal('ProjectType');
@@ -69,8 +69,6 @@ $projectPriority = w2PgetSysVal('ProjectPriority');
 
 // format dates
 $df = $AppUI->getPref('SHDATEFORMAT');
-
-$start_date = new w2p_Utilities_Date($project->project_start_date);
 
 $end_date = intval($project->project_end_date) ? new w2p_Utilities_Date($project->project_end_date) : null;
 $actual_end_date = intval($criticalTasks[0]['task_end_date']) ? new w2p_Utilities_Date($criticalTasks[0]['task_end_date']) : null;
@@ -188,15 +186,19 @@ $form = new w2p_Output_HTML_FormHelper($AppUI);
     <div class="std addedit projects">
         <div class="column left">
             <p>
-                <label><?php echo $AppUI->_('Project Name'); ?></label>
-                <input type="text" name="project_name" id="project_name" value="<?php echo htmlspecialchars($project->project_name, ENT_QUOTES); ?>" size="25" maxlength="255" onblur="setShort();" class="text" /> *
+                <?php $form->showLabel('Name'); ?>
+                <?php
+                $options = array();
+                $options['maxlength'] = 255;
+                $options['onBlur'] = 'setShort()';
+                $form->showField('project_name', $project->project_name, $options); ?>
             </p>
             <p>
-                <label><?php echo $AppUI->_('Parent Project'); ?></label>
+                <?php $form->showLabel('Parent Project'); ?>
                 <?php echo arraySelectTree($structprojects, 'project_parent', 'size="1" style="width:250px;" class="text"', $project->project_parent ? $project->project_parent : 0) ?>
             </p>
             <p>
-                <label><?php echo $AppUI->_('Company'); ?></label>
+                <?php $form->showLabel('Company'); ?>
                 <?php echo arraySelect($companies, 'project_company', 'class="text" size="1"', $project->project_company); ?>
             </p>
             <?php
@@ -211,7 +213,7 @@ $form = new w2p_Output_HTML_FormHelper($AppUI);
                 $departments_count = 0;
                 $department_selection_list = getDepartmentSelectionList($company_id, $selected_departments);
                 if ($department_selection_list != '' || $project_id) {
-                    $department_selection_list = '<p><label>' . $AppUI->_('Departments') . '</label><select name="project_departments[]" multiple="multiple" class="text"><option value="0"></option>' . $department_selection_list . '</select></p>';
+                    $department_selection_list = '<p>' . $form->addLabel('Departments') . '<select name="project_departments[]" multiple="multiple" class="text"><option value="0"></option>' . $department_selection_list . '</select></p>';
                 } else {
                     $department_selection_list = '<input type="button" class="button" value="' . $AppUI->_('Select department...') . '" onclick="javascript:popDepartment();" /><input type="hidden" name="project_departments"';
                 }
@@ -222,36 +224,28 @@ $form = new w2p_Output_HTML_FormHelper($AppUI);
             }
             ?>
             <p>
-                <label><?php echo $AppUI->_('Project Owner'); ?></label>
+                <?php $form->showLabel('Project Owner'); ?>
                 <?php
                 // pull users
                 $perms = &$AppUI->acl();
                 $users = $perms->getPermittedUsers('projects');
-                echo arraySelect($users, 'project_owner', 'size="1" style="width:200px;" class="text"', $project->project_owner ? $project->project_owner : $AppUI->user_id);
-                ?> *
+                ?>
+                <?php $form->showField('project_owner', $project->project_owner, array(), $users); ?>
             </p>
             <p>
-                <label>Contacts</label>
+                <?php $form->showLabel('Contacts'); ?>
                 <input type="button" class="button btn btn-primary btn-mini" value="<?php echo $AppUI->_('Select contacts...'); ?>" onclick="javascript:popContacts();" />
             </p>
             <p>
-                <label><?php echo $AppUI->_('Start Date'); ?></label>
-                <input type="hidden" name="project_start_date" id="project_start_date" value="<?php echo $start_date ? $start_date->format(FMT_TIMESTAMP_DATE) : ''; ?>" />
-                <input type="text" name="start_date" id="start_date" onchange="setDate_new('editFrm', 'start_date');" value="<?php echo $start_date ? $start_date->format($df) : ''; ?>" class="text" />
-                <a href="javascript: void(0);" onclick="return showCalendar('start_date', '<?php echo $df ?>', 'editFrm', null, true, true)">
-                    <img src="<?php echo w2PfindImage('calendar.gif'); ?>" width="24" height="12" alt="<?php echo $AppUI->_('Calendar'); ?>" border="0" />
-                </a>
+                <?php $form->showLabel('Start Date'); ?>
+                <?php $form->showField('project_start_date', $project->project_start_date); ?>
             </p>
             <p>
-                <label><?php echo $AppUI->_('Target End Date'); ?></label>
-                <input type="hidden" name="project_end_date" id="project_end_date" value="<?php echo $end_date ? $end_date->format(FMT_TIMESTAMP_DATE) : ''; ?>" />
-                <input type="text" name="end_date" id="end_date" onchange="setDate_new('editFrm', 'end_date');" value="<?php echo $end_date ? $end_date->format($df) : ''; ?>" class="text" />
-                <a href="javascript: void(0);" onclick="return showCalendar('end_date', '<?php echo $df ?>', 'editFrm', null, true, true)">
-                    <img src="<?php echo w2PfindImage('calendar.gif'); ?>" width="24" height="12" alt="<?php echo $AppUI->_('Calendar'); ?>" border="0" />
-                </a>
+                <?php $form->showLabel('Target Finish Date'); ?>
+                <?php $form->showField('project_end_date', $project->project_end_date); ?>
             </p>
             <p>
-                <label><?php echo $AppUI->_('Actual End Date'); ?></label>
+                <?php $form->showLabel('Actual Finish Date'); ?>
                 <?php
                 if ($project_id > 0) {
                     echo $actual_end_date ? '<a href="?m=tasks&a=view&task_id=' . $criticalTasks[0]['task_id'] . '">' : '';
@@ -263,12 +257,12 @@ $form = new w2p_Output_HTML_FormHelper($AppUI);
                 ?>
             </p>
             <p>
-                <label><?php echo $AppUI->_('Project Location'); ?></label>
-                <input type="text" name="project_location" value="<?php echo w2PformSafe($project->project_location); ?>" size="25" maxlength="50" class="text" />
+                <?php $form->showLabel('Project Location'); ?>
+                <?php $form->showField('project_location', $project->project_location, array('maxlength' => 50)); ?>
             </p>
             <?php if (w2PgetConfig('budget_info_display', false)) { ?>
             <p>
-                <label><?php echo $AppUI->_('Target Budgets'); ?></label>
+                <?php $form->showLabel('Target Budgets'); ?>
                 &nbsp;
             </p>
             <?php
@@ -282,19 +276,18 @@ $form = new w2p_Output_HTML_FormHelper($AppUI);
                 $totalBudget += $amount;
                 ?>
                 <p>
-                    <label><?php echo $AppUI->_($category); ?></label>
-                    <?php echo $w2Pconfig['currency_symbol']; ?> <input name="budget_<?php echo $id; ?>" id="budget_<?php echo $id; ?>" type="text" value="<?php echo $amount; ?>" class="text" />
+                    <?php $form->showLabel($AppUI->_($category)); ?>
+                    <?php echo $w2Pconfig['currency_symbol']; ?> <?php $form->showField("budget_<?php echo $id; ?>", $amount, array('maxlength' => 15)); ?>
                 </p>
                 <?php
             }
             ?>
             <p>
-                <label><?php echo $AppUI->_('Total Target Budget'); ?></label>
+                <?php $form->showLabel('Total Target Budget'); ?>
                 <?php echo $w2Pconfig['currency_symbol'] ?> <?php echo formatCurrency($totalBudget, $AppUI->getPref('CURRENCYFORM')); ?>
             </p>
             <p>
-                <label><?php echo $AppUI->_('Actual Budget'); ?></label>
-                <?php echo $w2Pconfig['currency_symbol'] ?>
+                <?php $form->showLabel('Actual Budget'); ?>
                 <?php
                 if ($project_id > 0) {
                     echo $w2Pconfig['currency_symbol'] . '&nbsp;' . formatCurrency($project->project_actual_budget, $AppUI->getPref('CURRENCYFORM'));
@@ -304,29 +297,28 @@ $form = new w2p_Output_HTML_FormHelper($AppUI);
                 ?>
             </p>
             <?php } ?>
-            <p><input class="cancel button btn btn-danger" type="button" name="cancel" value="<?php echo $AppUI->_('cancel'); ?>" onclick="javascript:if(confirm('Are you sure you want to cancel.')){location.href = './index.php?m=projects';}" /></p>
+            <?php $form->showCancelButton(); ?>
         </div>
         <div class="column right">
             <p>
-                <label><?php echo $AppUI->_('Priority'); ?></label>
-                <?php echo arraySelect($projectPriority, 'project_priority', 'size="1" class="text"', ($project->project_priority ? $project->project_priority : 0), true); ?> *
+                <?php $form->showLabel('Priority'); ?>
+                <?php $form->showField('project_priority', $project->project_priority, array(), $projectPriority); ?>
             </p>
             <p>
-                <label><?php echo $AppUI->_('Short Name'); ?></label>
-                <input type="text" name="project_short_name" value="<?php echo w2PformSafe($project->project_short_name); ?>" size="10" maxlength="10" class="text" /> *
+                <?php $form->showLabel('Short Name'); ?>
+                <?php $form->showField('project_short_name', $project->project_short_name, array('maxlength' => 10)); ?>
             </p>
             <p>
-                <label><?php echo $AppUI->_('Color Identifier'); ?></label>
+                <?php $form->showLabel('Color Identifier'); ?>
                 <input type="text" name="project_color_identifier" value="<?php echo ($project->project_color_identifier) ? $project->project_color_identifier : 'FFFFFF'; ?>" size="10" maxlength="6" onblur="setColor();" class="text" /> *
                 <a href="javascript: void(0);" onclick="newwin=window.open('./index.php?m=public&a=color_selector&dialog=1&callback=setColor', 'calwin', 'width=320, height=300, scrollbars=no');"><?php echo $AppUI->_('change color'); ?></a>
                 <a href="javascript: void(0);" onclick="newwin=window.open('./index.php?m=public&a=color_selector&dialog=1&callback=setColor', 'calwin', 'width=320, height=300, scrollbars=no');"><span id="test" style="border:solid;border-width:1;border-right-width:0;background:#<?php echo ($project->project_color_identifier) ? $project->project_color_identifier : 'FFFFFF'; ?>;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="border:solid;border-width:1;border-left-width:0;background:#FFFFFF">&nbsp;&nbsp;</span></a>
             </p>
             <p>
-                <label><?php echo $AppUI->_('Project Type'); ?></label>
-                <?php echo arraySelect($ptype, 'project_type', 'size="1" class="text"', $project->project_type, true); ?> *
+                <?php $form->showLabel('Project Type'); ?>
+                <?php $form->showField('project_type', $project->project_type, array(), $ptype); ?>
             </p>
             <p>
-                <label>&nbsp;</label>
                 <table width="100%" bgcolor="#cccccc">
                     <tr>
                         <td><?php echo $AppUI->_('Status'); ?> *</td>
@@ -335,7 +327,7 @@ $form = new w2p_Output_HTML_FormHelper($AppUI);
                     </tr>
                     <tr>
                         <td>
-                            <?php echo arraySelect($pstatus, 'project_status', 'size="1" class="text"', $project->project_status, true); ?>
+                            <?php $form->showField('project_status', $project->project_status, array(), $pstatus); ?>
                         </td>
                         <td>
                             <strong><?php echo sprintf("%.1f%%", $project->project_percent_complete); ?></strong>
@@ -347,7 +339,7 @@ $form = new w2p_Output_HTML_FormHelper($AppUI);
                 </table>
             </p>
             <p>
-                <label><?php echo $AppUI->_('Import tasks from'); ?>:</label>
+                <?php $form->showLabel('Import tasks from'); ?>
                 <?php
                 $templates = $project->loadAll('project_name', 'project_status = ' . w2PgetConfig('template_projects_status_id'));
                 $options[] = '';
@@ -358,11 +350,11 @@ $form = new w2p_Output_HTML_FormHelper($AppUI);
                 ?>
             </p>
             <p>
-                <label><?php echo $AppUI->_('Description'); ?>:</label>
-                <textarea name="project_description" cols="50" rows="10" class="textarea"><?php echo w2PformSafe($project->project_description); ?></textarea>
+                <?php $form->showLabel('Description'); ?>
+                <?php $form->showField('project_description', $project->project_description); ?>
             </p>
             <p>
-                <label><?php echo $AppUI->_('Notify by Email'); ?>:</label>
+                <?php $form->showLabel('Notify by Email'); ?>
                 <input type="checkbox" name="email_project_owner_box" id="email_project_owner_box" <?php echo ($tt ? 'checked="checked"' : '');?> />
                 <?php echo $AppUI->_('Project Owner'); ?>
                 <input type="hidden" name="email_project_owner" id="email_project_owner" value="<?php echo ($project->project_owner ? $project->project_owner : '0');?>" />
@@ -370,18 +362,18 @@ $form = new w2p_Output_HTML_FormHelper($AppUI);
                 <?php echo $AppUI->_('Project Contacts'); ?>
             </p>
             <p>
-                <label><?php echo $AppUI->_('URL'); ?></label>
-                <input type="text" name="project_url" value='<?php echo $project->project_url; ?>' size="40" maxlength="255" class="text" />
+                <?php $form->showLabel('URL'); ?>
+                <?php $form->showField('project_url', $project->project_url, array('maxlength' => 255)); ?>
             </p>
             <p>
-                <label><?php echo $AppUI->_('Staging URL'); ?></label>
-                <input type="Text" name="project_demo_url" value='<?php echo $project->project_demo_url; ?>' size="40" maxlength="255" class="text" />
+                <?php $form->showLabel('Staging URL'); ?>
+                <?php $form->showField('project_demo_url', $project->project_demo_url, array('maxlength' => 255)); ?>
             </p>
             <?php
             $custom_fields = new w2p_Core_CustomFields($m, $a, $project->project_id, 'edit');
             echo '<p>' . $custom_fields->getHTML() . '</p>';
             ?>
-            <p><input class="save button btn btn-primary" type="button" name="btnFuseAction" value="<?php echo $AppUI->_('save'); ?>" onclick="submitIt();" style="float: right;" /></p>
+            <?php $form->showSaveButton(); ?>
         </div>
     </div>
 </form>

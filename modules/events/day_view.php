@@ -13,7 +13,6 @@ if (!$canRead) {
 }
 
 global $tab, $locale_char_set, $date;
-$AppUI->savePlace();
 
 $company_id = $AppUI->processIntState('CalIdxCompany', $_REQUEST, 'company_id', $AppUI->user_company);
 

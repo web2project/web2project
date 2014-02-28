@@ -1,6 +1,6 @@
 <?php
 if (!defined('W2P_BASE_DIR')) {
-	die('You should not access this file directly.');
+    die('You should not access this file directly.');
 }
 // @todo    convert to template
 
@@ -15,7 +15,7 @@ $fields = $module->loadSettings('resources', 'index_list');
 
 if (0 == count($fields)) {
     $fieldList = array('resource_key', 'resource_name', 'resource_max_allocation',
-        'resource_type', 'resource_note');
+        'resource_type', 'resource_description');
     $fieldNames = array('Identifier', 'Resource Name', 'Max Alloc %',
         'Type', 'Notes');
 

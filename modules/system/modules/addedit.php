@@ -61,7 +61,6 @@ foreach ($fields as $field => $text) {
     $fieldNames[] = $text;
 }
 $orderMax = count($properties) + count($fields);
-//?m=system&u=syskeys&a=do_syskey_aed
 ?>
 
 <form name="frmConfig" id="frmConfig" action="?m=<?php echo $m; ?>&u=modules" method="post" accept-charset="utf-8">
@@ -69,7 +68,7 @@ $orderMax = count($properties) + count($fields);
 	<input type="hidden" name="mod_id" value="<?php echo $mod_id; ?>" />
 	<input type="hidden" name="module_config_name" value="<?php echo $view ?>" />
 
-	<table id="tblConfig" border="0" cellpadding="4" cellspacing="0" width="100%" class="std well">
+	<table id="tblConfig" border="0" cellpadding="4" cellspacing="0" width="100%" class="std tbl list well">
 		<tr>
 			<th colspan="2"><?php echo $AppUI->_('Order'); ?></th>
 			<th><?php echo $AppUI->_('Object Property'); ?></th>
@@ -97,7 +96,9 @@ $orderMax = count($properties) + count($fields);
 			unset($properties[$field]);
 		}
 		foreach ($properties as $property => $value) {
-			$value = ucwords(str_replace('_', ' ', $property));
+			$fieldname_pieces = explode('_', $property);
+            unset($fieldname_pieces[0]);
+            $value = ucwords(implode(' ', $fieldname_pieces));
             ?><tr>
 				<td>
 					<input type="checkbox" name="display[<?php echo $property; ?>]" />

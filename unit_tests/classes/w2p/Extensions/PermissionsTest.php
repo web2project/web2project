@@ -23,13 +23,13 @@ include_once 'unit_tests/CommonSetup.php';
 
 class w2p_Extensions_PermissionsTest extends CommonSetup
 {
-	public function testDebugText()
-	{
-		$perms = new w2p_Extensions_Permissions();
+    public function testDebugText()
+    {
+        $perms = new w2p_Extensions_Permissions();
 
-		$this->assertInstanceOf('w2p_Extensions_Permissions', $perms);
-		$perms->debug_text('test message');
+        $this->assertInstanceOf('w2p_Extensions_Permissions', $perms);
+        $perms->debug_text('test message');
 
-		$this->assertEquals('test message', $perms->msg());
-	}
+        $this->assertEquals('test message', $perms->msg());
+    }
 }

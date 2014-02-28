@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!-- tasksSeed.xml - Seed data for tasks test. -->
-<dataset>  
+<dataset>
     <table name="user_tasks">
         <column>user_id</column>
         <column>user_type</column>

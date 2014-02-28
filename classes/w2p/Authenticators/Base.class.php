@@ -25,6 +25,7 @@ abstract class w2p_Authenticators_Base
 
         $this->_AppUI = $AppUI;
         $this->_w2Pconfig = $w2Pconfig;
+        $this->_query = new w2p_Database_Query;
     }
     
     /**
@@ -53,12 +54,12 @@ abstract class w2p_Authenticators_Base
     public function createNewPassword()
     {
         $newPassword = '';
-        $salt = 'abchefghjkmnpqrstuvwxyz0123456789';
+        $salt = 'abcdefghjkmnpqrstuvwxyzABCDEFGHJKMNPQRSTUVWXYZ0123456789';
         srand((double)microtime() * 1000000);
 
         $i = 0;
         while ($i <= 10) {
-            $num = rand() % 33;
+            $num = rand() % strlen($salt);
             $tmp = substr($salt, $num, 1);
             $newPassword = $newPassword . $tmp;
             $i++;

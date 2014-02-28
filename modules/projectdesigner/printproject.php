@@ -40,16 +40,8 @@ if (!$project) {
 	$AppUI->setMsg('Project');
 	$AppUI->setMsg('invalidID', UI_MSG_ERROR, true);
 	$AppUI->redirect();
-} else {
-	$AppUI->savePlace();
 }
 
-global $w2Pconfig;
-
-$task = new CTask();
-
-$q = new w2p_Database_Query;
-$q->clear();
 $hasTasks = $project->project_task_count;
 
 if ($hasTasks) {

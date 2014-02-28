@@ -3,8 +3,9 @@ if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
 // @todo    convert to template
-
 $task_id = (int) w2PgetParam($_GET, 'task_id', 0);
+
+
 
 $task = new CTask();
 $task->task_id = $task_id;
@@ -17,13 +18,12 @@ if (!$canAddEdit) {
 	$AppUI->redirect(ACCESS_DENIED);
 }
 
-// load the record data
 $obj = $AppUI->restoreObject();
 if ($obj) {
     $task = $obj;
     $task_id = $task->task_id;
 } else {
-    $task->loadFull(null, $task_id);
+    $task->load($task_id);
 }
 if (!$task && $task_id > 0) {
 	$AppUI->setMsg('Task');
@@ -135,7 +135,8 @@ if ($task_id == 0 && (isset($contact_id) && $contact_id > 0)) {
 }
 
 $department_selection_list = array();
-$deptList = CDepartment::getDepartmentList($AppUI, $project->project_company, null);
+$department = new CDepartment();
+$deptList = $department->departments($project->project_company);
 foreach($deptList as $dept) {
   $department_selection_list[$dept['dept_id']] = $dept['dept_name'];
 }
@@ -198,36 +199,36 @@ $form = new w2p_Output_HTML_FormHelper($AppUI);
 
     <div class="std addedit tasks">
         <div class="column left">
-            <p >
+            <p>
                 <label>&nbsp;</label>
                 <span style="padding: 5px; border: outset #eeeeee 1px;background-color:#<?php echo $project->project_color_identifier; ?>; color: <?php echo bestColor($project->project_color_identifier); ?>;">
                     <strong><?php echo $AppUI->_('Project'); ?>: <?php echo $project->project_name; ?></strong>
                 </span>
             </p>
             <p>
-                <label><?php echo $AppUI->_('Task Name'); ?> *</label>
-                <input type="text" class="text" name="task_name" value="<?php echo htmlspecialchars($task->task_name, ENT_QUOTES); ?>" size="40" maxlength="255" />
+                <?php $form->showLabel('Name'); ?>
+                <?php $form->showField('task_name', $task->task_name, array('maxlength' => 255)); ?>
             </p>
             <p>
-                <label><?php echo $AppUI->_('Priority'); ?></label>
-                <?php echo arraySelect($priority, 'task_priority', 'size="1" class="text"', ($task->task_priority ? $task->task_priority : 0) , true); ?>
+                <?php $form->showLabel('Priority'); ?>
+                <?php $form->showField('task_priority', $task->task_priority, array(), $priority); ?>
             </p>
-            <p><input class="cancel button btn btn-danger" type="button" name="cancel" value="<?php echo $AppUI->_('cancel'); ?>" onclick="if(confirm('<?php echo $AppUI->_('taskCancel', UI_OUTPUT_JS); ?>')){location.href = '?<?php echo $AppUI->getPlace(); ?>';}" /></p>
+            <?php $form->showCancelButton(); ?>
         </div>
         <div class="column right">
             <p>
-                <label><?php echo $AppUI->_('Status'); ?></label>
-                <?php echo arraySelect($status, 'task_status', 'size="1" class="text"', ($task->task_status ? $task->task_status : 0) , true); ?>
+                <?php $form->showLabel('Status'); ?>
+                <?php $form->showField('task_status', $task->task_status, array(), $status); ?>
             </p>
             <p>
-                <label><?php echo $AppUI->_('Progress'); ?></label>
+                <?php $form->showLabel('Progress'); ?>
                 <?php echo arraySelect($percent, 'task_percent_complete', 'size="1" class="text"', $task->task_percent_complete) . '%'; ?>
             </p>
             <p>
-                <label><?php echo $AppUI->_('Milestone'); ?>?</label>
+                <?php $form->showLabel('Milestone'); ?>
                 <input type="checkbox" value="1" name="task_milestone" id="task_milestone" <?php if ($task->task_milestone) { ?>checked="checked"<?php } ?> onClick="toggleMilestone()" />
             </p>
-            <p><input class="save button btn btn-primary" type="button" name="btnFuseAction" value="<?php echo $AppUI->_('save'); ?>" onclick="submitIt(document.editFrm);" /></p>
+            <p><input class="button btn btn-primary save" type="button" name="btnFuseAction" value="<?php echo $AppUI->_('save'); ?>" onclick="submitIt(document.editFrm);" /></p>
         </div>
     </div>
     <div name="hiddenSubforms" id="hiddenSubforms" style="display: none;"></div>

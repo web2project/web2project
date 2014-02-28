@@ -185,9 +185,6 @@ class CTask extends w2p_Core_BaseObject
                 $this->task_start_date = $this->task_end_date;
             }
         }
-        if (!$this->task_creator) {
-            $this->task_creator = $this->_AppUI->user_id;
-        }
         if (!$this->task_duration_type) {
             $this->task_duration_type = 1;
         }
@@ -320,34 +317,14 @@ class CTask extends w2p_Core_BaseObject
         return parent::load($oid, $strip);
     }
 
-    public function loadFull($notUsed = null, $taskId)
+    protected function hook_postLoad()
     {
-        $q = $this->_getQuery();
-        $q->addTable('tasks');
-        $q->leftJoin('users', 'u1', 'u1.user_id = task_owner', 'outer');
-        $q->leftJoin('contacts', 'ct', 'ct.contact_id = u1.user_contact', 'outer');
-        $q->innerJoin('projects', 'p', 'p.project_id = task_project');
-        $q->innerJoin('companies', 'co', 'co.company_id = project_company');
-        $q->addWhere('task_id = ' . (int) $taskId);
-        $q->addQuery('tasks.*');
-        $q->addQuery('company_name, project_name, project_color_identifier');
-        $q->addQuery('contact_display_name as username');                       //TODO: deprecate?
-        $q->addQuery('contact_display_name as task_owner_name');
-        $q->addGroup('task_id');
-
-        $this->task_owner_name = '';
-
-        $q->loadObject($this, true, false);
-        $this->task_hours_worked += 0;
         $this->budget = $this->getBudget();
     }
 
-    /*
-     * This used to feed different parameters into load() but now we just do it.
-     *
+    /**
      * @deprecated
      */
-
     public function peek($oid = null, $strip = false)
     {
         trigger_error("peek() has been deprecated in v3.0 and will be removed by v4.0. Please use load() instead.", E_USER_NOTICE);
@@ -789,7 +766,8 @@ class CTask extends w2p_Core_BaseObject
         $q = $this->_getQuery();
         $this->task_updated = $q->dbfnNowWithTZ();
         $this->task_target_budget = filterCurrency($this->task_target_budget);
-        $this->task_owner = ($this->task_owner) ? $this->task_owner : $this->_AppUI->user_id;
+        $this->task_owner = (int) $this->task_owner ? $this->task_owner : $this->_AppUI->user_id;
+        $this->task_creator = (int) $this->task_creator ? $this->task_creator : $this->_AppUI->user_id;
         $this->task_contacts = is_array($this->task_contacts) ? $this->task_contacts : explode(',', $this->task_contacts);
 
         parent::hook_preStore();
@@ -1820,19 +1798,32 @@ class CTask extends w2p_Core_BaseObject
         return $overAssignment;
     }
 
-    public function getAssignedUsers($taskId)
+    public function assignees($taskId)
     {
-
         $q = $this->_getQuery();
         $q->addTable('users', 'u');
+        $q->addQuery('u.*, perc_assignment');
+
         $q->innerJoin('user_tasks', 'ut', 'ut.user_id = u.user_id');
         $q->leftJoin('contacts', 'co', ' co.contact_id = u.user_contact');
         $q->addQuery('u.*, ut.perc_assignment, ut.user_task_priority, contact_display_name,
             co.contact_last_name, co.contact_first_name, contact_display_name as contact_name');
         $q->addQuery('co.contact_email AS user_email, co.contact_phone AS user_phone');
+
         $q->addWhere('ut.task_id = ' . (int) $taskId);
 
         return $q->loadHashList('user_id');
+    }
+    public function getAssignedUsers($taskId)
+    {
+        trigger_error("The CTask->getAssignedUsers method has been deprecated in v3.2 and will be removed in v5.0. Please use CTask->assignees instead.", E_USER_NOTICE );
+        return $this->assignees($taskId);
+    }
+
+    public function getAssigned()
+    {
+        trigger_error("The CTask->getAssigned method has been deprecated in v3.2 and will be removed in v5.0. Please use CTask->assignees instead.", E_USER_NOTICE );
+        return $this->assignees($this->task_id);
     }
 
     /*
@@ -2448,21 +2439,6 @@ class CTask extends w2p_Core_BaseObject
         return parent::getAllowedRecords($uid, $fields, $orderby, $index, $extra);
     }
 
-    public function getAssigned($index = 'user_id')
-    {
-        $q = $this->_getQuery();
-        $q->addTable('users', 'u');
-        $q->addTable('user_tasks', 'ut');
-        $q->addTable('contacts', 'con');
-        $q->addQuery('u.user_id, perc_assignment');
-        $q->addQuery('contact_id, contact_display_name AS user_name, contact_display_name AS contact_name, contact_email');
-        $q->addWhere('ut.task_id = ' . (int) $this->task_id);
-        $q->addWhere('user_contact = contact_id');
-        $q->addWhere('ut.user_id = u.user_id');
-        $assigned = $q->loadHashList($index);
-        return $assigned;
-    }
-
 //TODO: this method should be moved to CTaskLog
     public function getTaskLogs($taskId, $problem = false)
     {
@@ -2602,37 +2578,59 @@ class CTask extends w2p_Core_BaseObject
         return $q->loadResult();
     }
 
+    /**
+     * @deprecated
+     */
     public static function pinUserTask($userId, $taskId)
     {
-        $q = new w2p_Database_Query;
+        trigger_error("CTask::pinUserTask() has been deprecated in v3.1 and will be removed by v4.0. Please use CTask->pinTask() instead.", E_USER_NOTICE);
+
+        $task = new CTask();
+        return $task->pinTask($userId, $taskId);
+    }
+    public function pinTask($userId, $taskId)
+    {
+        $q = $this->_getQuery();
         $q->addTable('user_task_pin');
         $q->addInsert('user_id', (int) $userId);
         $q->addInsert('task_id', (int) $taskId);
 
-        if (!$q->exec()) {
-            return 'Error pinning task';
-        } else {
-            return true;
-        }
+        return (!$q->exec()) ? false : true;
     }
 
+    /**
+     * @deprecated
+     */
     public static function unpinUserTask($userId, $taskId)
     {
-        $q = new w2p_Database_Query;
+        trigger_error("CTask::unpinUserTask() has been deprecated in v3.1 and will be removed by v4.0. Please use CTask->unpinTask() instead.", E_USER_NOTICE);
+
+        $task = new CTask();
+        return $task->unpinTask($userId, $taskId);
+    }
+    public function unpinTask($userId, $taskId)
+    {
+        $q = $this->_getQuery();
         $q->setDelete('user_task_pin');
         $q->addWhere('user_id = ' . (int) $userId);
         $q->addWhere('task_id = ' . (int) $taskId);
 
-        if (!$q->exec()) {
-            return 'Error unpinning task';
-        } else {
-            return true;
-        }
+        return (!$q->exec()) ? false : true;
     }
 
+    /**
+     * @deprecated
+     */
     public static function updateHoursWorked($taskId, $totalHours)
     {
-        $q = new w2p_Database_Query;
+        trigger_error("CTask::updateHoursWorked() has been deprecated in v3.1 and will be removed by v4.0. Please use CTask->updateHoursWorked2() instead.", E_USER_NOTICE);
+
+        $task = new CTask();
+        $task->updateHoursWorked2($taskId, $totalHours);
+    }
+    public function updateHoursWorked2($taskId, $totalHours)
+    {
+        $q = $this->_getQuery();
         $q->addTable('tasks');
         $q->addUpdate('task_hours_worked', $totalHours + 0);
         $q->addWhere('task_id = ' . $taskId);
@@ -2646,7 +2644,6 @@ class CTask extends w2p_Core_BaseObject
 
         CProject::updateHoursWorked($project_id);
     }
-
 }
 
 // user based access

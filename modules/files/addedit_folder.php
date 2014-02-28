@@ -3,9 +3,9 @@ if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
 // @todo    convert to template
-
 $file_folder_parent = intval(w2PgetParam($_GET, 'file_folder_parent', 0));
 $folder_id = intval(w2PgetParam($_GET, 'folder', 0));
+
 
 $folder = new CFile_Folder();
 $folder->file_folder_id = $folder_id;
@@ -18,7 +18,6 @@ if (!$canAddEdit) {
 	$AppUI->redirect(ACCESS_DENIED);
 }
 
-// load the record data
 $obj = $AppUI->restoreObject();
 if ($obj) {
     $folder = $obj;
@@ -98,22 +97,22 @@ $form = new w2p_Output_HTML_FormHelper($AppUI);
     <div class="std addedit departments">
         <div class="column left">
             <p>
-                <label><?php echo $AppUI->_('Subfolder of'); ?>:</label>
+                <?php $form->showLabel('Subfolder of'); ?>
                 <?php
                 $parent_folder = ($folder_id > 0) ? $folder->file_folder_parent : $file_folder_parent;
                 echo arraySelectTree($folders, 'file_folder_parent', 'style="width:175px;" class="text"', $parent_folder);
                 ?>
             </p>
             <p>
-                <label><?php echo $AppUI->_('Folder Name'); ?>:</label>
-                <input type="text" class="text" id="ffn" name="file_folder_name" value="<?php echo $folder->file_folder_name; ?>" maxlength="255" />
+                <?php $form->showLabel('Folder Name'); ?>
+                <?php $form->showField('file_folder_name', $folder->file_folder_name, array('maxlength' => 255)); ?>
             </p>
             <p>
-                <label><?php echo $AppUI->_('Description'); ?>:</label>
-                <textarea name="file_folder_description" class="textarea" rows="4" style="width:270px"><?php echo $folder->file_folder_description; ?></textarea>
+                <?php $form->showLabel('Description'); ?>
+                <?php $form->showField('file_folder_description', $folder->file_folder_description); ?>
             </p>
-            <input class="button btn btn-danger" type="button" name="cancel" value="<?php echo $AppUI->_('cancel'); ?>" onclick="javascript:if(confirm('<?php echo $AppUI->_('Are you sure you want to cancel?'); ?>')){location.href = '?<?php echo $referrer; ?>';}" />
-            <input type="button" style="float: right;" class="button btn btn-primary" value="<?php echo $AppUI->_('submit'); ?>" onclick="submitIt()" />
+            <?php $form->showCancelButton(); ?>
+            <?php $form->showSaveButton(); ?>
         </div>
     </div>
 </form>

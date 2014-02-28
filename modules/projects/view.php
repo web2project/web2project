@@ -3,35 +3,22 @@ if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
 // @todo    convert to template
-
 $project_id = (int) w2PgetParam($_GET, 'project_id', 0);
 
 $project = new CProject();
-$project->project_id = $project_id;
+
+if (!$project->load($project_id)) {
+    $AppUI->redirect(ACCESS_DENIED);
+}
 
 $canEdit   = $project->canEdit();
-$canRead   = $project->canView();
-$canCreate = $project->canCreate();
-$canAccess = $project->canAccess();
 $canDelete = $project->canDelete();
 
-if (!$canAccess || !$canRead) {
-	$AppUI->redirect(ACCESS_DENIED);
-}
-
-$project->loadFull(null, $project_id);
-if (!$project) {
-	$AppUI->setMsg('Project');
-	$AppUI->setMsg('invalidID', UI_MSG_ERROR, true);
-	$AppUI->redirect();
-} else {
-	$AppUI->savePlace();
-}
 
 $tab = $AppUI->processIntState('ProjVwTab', $_GET, 'tab', 0);
 
 //TODO: is this different from the above checks for some reason?
-// Now check if the proect is editable/viewable.
+// Now check if the project is editable/viewable.
 $denied = $project->getDeniedRecords($AppUI->user_id);
 if (in_array($project_id, $denied)) {
 	$AppUI->redirect(ACCESS_DENIED);
@@ -60,21 +47,19 @@ $style = (($actual_end_date > $end_date) && !empty($end_date)) ? 'style="color:r
 // setup the title block
 $titleBlock = new w2p_Theme_TitleBlock('View Project', 'icon.png', $m, $m . '.' . $a);
 
+$titleBlock->addCrumb('?m=projects', 'projects list');
+
 if ($canEdit) {
     $titleBlock->addButton('new link', '?m=links&a=addedit&project_id=' . $project_id);
     $titleBlock->addButton('new event', '?m=events&a=addedit&project_id=' . $project_id);
     $titleBlock->addButton('new file', '?m=files&a=addedit&project_id=' . $project_id);
-}
-
-if (canAdd('tasks')) {
-    $titleBlock->addButton('new task', '?m=tasks&a=addedit&task_project=' . $project_id);
-}
-$titleBlock->addCrumb('?m=projects', 'projects list');
-if ($canEdit) {
 	$titleBlock->addCrumb('?m=projects&a=addedit&project_id=' . $project_id, 'edit this project');
 	if ($canDelete) {
 		$titleBlock->addCrumbDelete('delete project', $canDelete);
 	}
+}
+if (canAdd('tasks')) {
+    $titleBlock->addButton('new task', '?m=tasks&a=addedit&task_project=' . $project_id);
 }
 $titleBlock->show();
 
@@ -130,15 +115,7 @@ function delIt() {
             <table cellspacing="1" cellpadding="2" border="0" width="100%" class="well">
                 <tr>
                     <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Company'); ?>:</td>
-                    <?php
-                    $perms = &$AppUI->acl();
-                    if ($perms->checkModuleItem('companies', 'access', $project->project_company)) { ?>
-                        <td width="100%">
-                            <?php echo '<a href="?m=companies&a=view&company_id=' . $project->project_company . '">' . htmlspecialchars($project->company_name, ENT_QUOTES) . '</a>'; ?>
-                        </td>
-                    <?php } else { ?>
-                        <?php echo $htmlHelper->createCell('company_name', $project->company_name); ?>
-                    <?php } ?>
+                    <?php echo $htmlHelper->createCell('project_company', $project->project_company); ?>
                 </tr>
                 <tr>
                     <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Project Location'); ?>:</td>
@@ -176,15 +153,7 @@ function delIt() {
                 </tr>
                 <tr>
                     <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Project Owner'); ?>:</td>
-                    <td>
-                        <?php
-                        $pusername = $project->user_name;
-                        $puserid = $project->project_owner;
-
-                        //TODO HTML helper not working properly due to field having suffix _owner, avoiding helper until fix
-                        echo "<a href=\"?m=users&a=view&user_id=$puserid\" alt=\"$pusername\">$pusername</a>";
-                        ?>
-                    </td>
+                    <?php echo $htmlHelper->createCell('project_owner', $project->project_owner); ?>
                 </tr>
                 <tr>
                     <td align="right" nowrap="nowrap"><?php echo $AppUI->_('URL'); ?>:</td>

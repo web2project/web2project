@@ -3,8 +3,6 @@ if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
 // @todo    convert to template
-
-// Add / Edit Company
 $dept_id = (int) w2PgetParam($_GET, 'dept_id', 0);
 $dept_parent = (int) w2PgetParam($_GET, 'dept_parent', 0);
 $company_id = (int) w2PgetParam($_GET, 'company_id', 0);
@@ -20,13 +18,12 @@ if (!$canAddEdit) {
 	$AppUI->redirect(ACCESS_DENIED);
 }
 
-// load the record data
 $obj = $AppUI->restoreObject();
 if ($obj) {
     $department = $obj;
     $dept_id = $department->dept_id;
 } else {
-    $department->loadFull(null, $dept_id);
+    $department->load($dept_id);
 }
 if (!$department && $dept_id > 0) {
     $AppUI->setMsg('Department');
@@ -34,9 +31,7 @@ if (!$department && $dept_id > 0) {
     $AppUI->redirect();
 }
 
-$companyName = $department->company_name;
-
-$company_id = $dept_id ? $department->dept_company : $company_id;
+$company_id = $department->dept_id ? $department->dept_company : $company_id;
 
 if (!$dept_id && !$company_id) {
     $AppUI->setMsg('badCompany', UI_MSG_ERROR);
@@ -46,7 +41,7 @@ if (!$dept_id && !$company_id) {
 // collect all the departments in the company
 if ($company_id) {
     $company = new CCompany();
-    $company->loadFull(null, $company_id);
+    $company->load($company_id);
     $companyName = $company->company_name;
     $depts = $department->loadOtherDepts(null, $company_id, 0);
     $depts = arrayMerge(array('0' => '- ' . $AppUI->_('Select Department') . ' -'), $depts);
@@ -67,7 +62,7 @@ $titleBlock->show();
 $types = w2PgetSysVal('DepartmentType');
 $countries = array('' => $AppUI->_('(Select a Country)')) + w2PgetSysVal('GlobalCountriesPreferred') +
 		array('-' => '----') + w2PgetSysVal('GlobalCountries');
-
+$dept_parent = ($department->dept_parent) ? $department->dept_parent : $dept_parent;
 ?>
 <script language="javascript" type="text/javascript">
 function testURL( x ) {
@@ -101,20 +96,20 @@ $form = new w2p_Output_HTML_FormHelper($AppUI);
 
     <div class="std addedit departments">
         <div class="column left">
-            <p><label><?php echo $AppUI->_('Company Name'); ?>:</label><?php echo $companyName; ?></p>
             <p>
-                <label><?php echo $AppUI->_('Name'); ?>:</label>
-                <input type="text" class="text" name="dept_name" value="<?php echo $department->dept_name; ?>" size="50" maxlength="255" />
+                <?php $form->showLabel('Company Name'); ?>
+                <?php echo $companyName; ?>
+            </p>
+            <p>
+                <?php $form->showLabel('Name'); ?>
+                <?php $form->showField('dept_name', $department->dept_name, array('maxlength' => 255)); ?>
             </p>
             <?php
             if (count($depts) > 0) {
                 ?>
                 <p>
-                    <label><?php echo $AppUI->_('Parent'); ?>:</label>
-                    <?php
-                    $dept_parent = ($department->dept_parent) ? $department->dept_parent : $dept_parent;
-                    echo arraySelect($depts, 'dept_parent', 'class=text size=1', $dept_parent);
-                    ?>
+                    <?php $form->showLabel('Parent'); ?>
+                    <?php $form->showField('dept_parent', $department->dept_parent, array(), $depts); ?>
                 </p>
             <?php
             } else {
@@ -122,72 +117,65 @@ $form = new w2p_Output_HTML_FormHelper($AppUI);
             }
             ?>
             <p>
-                <label><?php echo $AppUI->_('Email'); ?>:</label>
-                <input type="text" class="text" name="dept_email" value="<?php echo $department->dept_email; ?>" size="50" maxlength="255" />
+                <?php $form->showLabel('Email'); ?>
+                <?php $form->showField('dept_email', $department->dept_email, array('maxlength' => 255)); ?>
             </p>
             <p>
-                <label><?php echo $AppUI->_('Phone'); ?>:</label>
-                <input type="text" class="text" name="dept_phone" value="<?php echo $department->dept_phone; ?>" maxlength="30" />
+                <?php $form->showLabel('Phone'); ?>
+                <?php $form->showField('dept_phone', $department->dept_phone, array('maxlength' => 30)); ?>
             </p>
             <p>
-                <label><?php echo $AppUI->_('URL'); ?>:</label>
-                <input type="text" class="text" value="<?php echo $department->dept_url; ?>" name="dept_url" size="50" maxlength="255" />
-                <a href="javascript: void(0);" onclick="testURL('dept_url')">[<?php echo $AppUI->_('test'); ?>]</a>
+                <?php $form->showLabel('URL'); ?>
+                <?php $form->showField('dept_url', $department->dept_url, array('maxlength' => 255)); ?>
             </p>
             <p>
-                <label><?php echo $AppUI->_('Description'); ?>:</label>
-                <textarea name="dept_desc"><?php echo $department->dept_desc; ?></textarea>
+                <?php $form->showLabel('Description'); ?>
+                <?php $form->showField('dept_desc', $department->dept_desc); ?>
             </p>
-            <p><input type="button" value="back" class="cancel button btn btn-danger" onclick="javascript:history.back(-1);" /></p>
+            <?php $form->showCancelButton(); ?>
         </div>
         <div class="column right">
             <p>
-                <label><?php echo $AppUI->_('Address'); ?>1:</label>
-                <input type="text" class="text" name="dept_address1" value="<?php echo $department->dept_address1; ?>" size="50" maxlength="255" />
+                <?php $form->showLabel('Address1'); ?>
+                <?php $form->showField('dept_address1', $department->dept_address1, array('maxlength' => 255)); ?>
             </p>
             <p>
-                <label><?php echo $AppUI->_('Address'); ?>2:</label>
-                <input type="text" class="text" name="dept_address2" value="<?php echo $department->dept_address2; ?>" size="50" maxlength="255" />
+                <?php $form->showLabel('Address2'); ?>
+                <?php $form->showField('dept_address2', $department->dept_address2, array('maxlength' => 255)); ?>
             </p>
             <p>
-                <label><?php echo $AppUI->_('City'); ?>:</label>
-                <input type="text" class="text" name="dept_city" value="<?php echo $department->dept_city; ?>" size="50" maxlength="50" />
+                <?php $form->showLabel('City'); ?>
+                <?php $form->showField('dept_city', $department->dept_city, array('maxlength' => 50)); ?>
             </p>
             <p>
-                <label><?php echo $AppUI->_('State'); ?>:</label>
-                <input type="text" class="text" name="dept_state" value="<?php echo $department->dept_state; ?>" maxlength="50" />
+                <?php $form->showLabel('State'); ?>
+                <?php $form->showField('dept_state', $department->dept_state, array('maxlength' => 50)); ?>
             </p>
             <p>
-                <label><?php echo $AppUI->_('Zip'); ?>:</label>
-                <input type="text" class="text" name="dept_zip" value="<?php echo $department->dept_zip; ?>" maxlength="15" />
+                <?php $form->showLabel('Zip'); ?>
+                <?php $form->showField('dept_zip', $department->dept_zip, array('maxlength' => 15)); ?>
             </p>
             <p>
-                <label><?php echo $AppUI->_('Country'); ?>:</label>
+                <?php $form->showLabel('Country'); ?>
+                <?php $form->showField('dept_country', $department->dept_country, array(), $countries); ?>
+            </p>
+            <p>
+                <?php $form->showLabel('Fax'); ?>
+                <?php $form->showField('dept_fax', $department->dept_fax, array('maxlength' => 30)); ?>
+            </p>
+            <p>
+                <?php $form->showLabel('Owner'); ?>
                 <?php
-                echo arraySelect($countries, 'dept_country', 'size="1" class="text"', $department->dept_country ? $department->dept_country : 0);
-                ?>
-            </p>
-            <p>
-                <label><?php echo $AppUI->_('Fax'); ?>:</label>
-                <input type="text" class="text" name="dept_fax" value="<?php echo $department->dept_fax; ?>" maxlength="30" />
-            </p>
-            <p>
-                <label><?php echo $AppUI->_('Owner'); ?>:</label>
-                <?php
-                // check permissions for this record
                 $perms = &$AppUI->acl();
-                // collect all active users for the department owner list
                 $users = $perms->getPermittedUsers('departments');
-                echo arraySelect($users, 'dept_owner', 'size="1" class="text"', $department->dept_owner);
                 ?>
+                <?php $form->showField('dept_owner', $department->dept_owner, array(), $users); ?>
             </p>
             <p>
-                <label><?php echo $AppUI->_('Type'); ?>:</label>
-                <?php
-                echo arraySelect($types, 'dept_type', 'size="1" class="text"', $department->dept_type, true);
-                ?>
+                <?php $form->showLabel('Type'); ?>
+                <?php $form->showField('dept_type', $department->dept_type, array(), $types); ?>
             </p>
-            <p><input type="button" value="save" class="save button btn btn-primary" onclick="submitIt()" /></p>
+            <?php $form->showSaveButton(); ?>
         </div>
     </div>
 </form>

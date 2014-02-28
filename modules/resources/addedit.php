@@ -1,10 +1,11 @@
 <?php
 if (!defined('W2P_BASE_DIR')) {
-	die('You should not access this file directly.');
+    die('You should not access this file directly.');
 }
 // @todo    convert to template
-
 $resource_id = (int) w2PgetParam($_GET, 'resource_id', 0);
+
+
 
 $resource = new CResource();
 $resource->resource_id = $resource_id;
@@ -14,10 +15,9 @@ $canAddEdit = $obj->canAddEdit();
 $canAuthor = $obj->canCreate();
 $canEdit = $obj->canEdit();
 if (!$canAddEdit) {
-	$AppUI->redirect(ACCESS_DENIED);
+    $AppUI->redirect(ACCESS_DENIED);
 }
 
-// load the record data
 $obj = $AppUI->restoreObject();
 if ($obj) {
     $resource = $obj;
@@ -25,7 +25,6 @@ if ($obj) {
 } else {
     $resource->load($resource_id);
 }
-
 if (!$resource_id && $resource_id > 0) {
     $AppUI->setMsg('Resource');
     $AppUI->setMsg('invalidID', UI_MSG_ERROR, true);
@@ -38,7 +37,7 @@ $titleBlock = new w2p_Theme_TitleBlock($AppUI->_($ttl), 'icon.png', $m, $m . '.'
 $titleBlock->addCrumb('?m=' . $m, $m . ' list');
 
 if ($resource_id) {
-	$titleBlock->addCrumb('?m=resources&a=view&resource_id=' . $resource_id, 'view this resource');
+    $titleBlock->addCrumb('?m=resources&a=view&resource_id=' . $resource_id, 'view this resource');
 }
 $titleBlock->show();
 
@@ -48,13 +47,13 @@ $typelist = w2PgetSysVal('ResourceTypes');
 ?>
 <script language="javascript" type="text/javascript">
 function submitIt() {
-	var form = document.editfrm;
-	if (form.resource_name.value.length < 3) {
-		alert( "<?php echo $AppUI->_('You must enter a name for the resource', UI_OUTPUT_JS); ?>" );
-		form.resource_name.focus();
-	} else {
-		form.submit();
-	}
+    var form = document.editfrm;
+    if (form.resource_name.value.length < 3) {
+        alert( "<?php echo $AppUI->_('You must enter a name for the resource', UI_OUTPUT_JS); ?>" );
+        form.resource_name.focus();
+    } else {
+        form.submit();
+    }
 }
 </script>
 <?php
@@ -71,27 +70,26 @@ $form = new w2p_Output_HTML_FormHelper($AppUI);
     <div class="std addedit resources">
         <div class="column left">
             <p>
-                <label><?php echo $AppUI->_('Resource Identifier'); ?></label>
-                <input type="text" class="text" size="15" maxlength="64" name="resource_key" value="<?php echo w2PformSafe($resource->resource_key); ?>" />
+                <?php $form->showLabel('Resource Identifier'); ?>
+                <?php $form->showField('resource_key', $resource->resource_key, array('maxlength' => 64)); ?>
             </p>
             <p>
-                <label><?php echo $AppUI->_('Resource Name'); ?></label>
-                <input type="text" class="text" size="30" maxlength="255" name="resource_name" value="<?php echo w2PformSafe($resource->resource_name); ?>" />
+                <?php $form->showLabel('Resource Name'); ?>
+                <?php $form->showField('resource_name', $resource->resource_name, array('maxlength' => 255)); ?>
+            </p>
+            <p><?php $form->showLabel('Type'); ?>
+                <?php $form->showField('resource_type', $resource->resource_type, array(), $typelist); ?>
             </p>
             <p>
-                <label><?php echo $AppUI->_('Type'); ?></label>
-                <?php echo arraySelect($typelist, 'resource_type', 'class="text"', $resource->resource_type, true); ?>
+                <?php $form->showLabel('Max Allocation'); ?>
+                <?php $form->showField('resource_max_allocation', $resource->resource_max_allocation, array(), $percent); ?>
             </p>
             <p>
-                <label><?php echo $AppUI->_('Maximum Allocation'); ?></label>
-                <?php echo arraySelect($percent, 'resource_max_allocation', 'size="1" class="text"', $resource->resource_max_allocation) . '%'; ?>
+                <?php $form->showLabel('Notes'); ?>
+                <?php $form->showField('resource_description', $resource->resource_description); ?>
             </p>
-            <p>
-                <label><?php echo $AppUI->_('Notes'); ?></label>
-                <textarea name="resource_note" cols="60" rows="7"><?php echo w2PformSafe($resource->resource_note); ?></textarea>
-            </p>
-            <input type="button" class="cancel button btn btn-danger" name="cancel" value="<?php echo $AppUI->_('cancel'); ?>" onclick="javascript:if(confirm('<?php echo $AppUI->_('Are you sure you want to cancel?', UI_OUTPUT_JS); ?>')){location.href = './index.php?m=resources';}" />
-            <input type="button" class="save button btn btn-primary" value="<?php echo $AppUI->_('save'); ?>" onclick="submitIt()" />
+            <?php $form->showCancelButton(); ?>
+            <?php $form->showSaveButton(); ?>
         </div>
     </div>
 </form>

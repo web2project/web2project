@@ -23,7 +23,7 @@ include_once 'unit_tests/CommonSetup.php';
 
 class w2p_FileSystem_LoaderTest extends CommonSetup
 {
-    protected function setUp ()
+    protected function setUp()
     {
         parent::setUp();
 
@@ -34,7 +34,7 @@ class w2p_FileSystem_LoaderTest extends CommonSetup
     {
         $dirs = $this->obj->readDirs('blah');
 
-        $this->assertEquals(0,				count($dirs));
+        $this->assertEquals(0,                count($dirs));
     }
 
     public function testReadDirs() {
@@ -61,7 +61,8 @@ class w2p_FileSystem_LoaderTest extends CommonSetup
     /**
      * @todo Implement testCheckFileName().
      */
-    public function testCheckFileName() {
+    public function testCheckFileName()
+    {
         // Remove the following lines when you implement this test.
         $this->markTestIncomplete(
             'This test has not been implemented yet.'

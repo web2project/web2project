@@ -150,7 +150,7 @@ class CContacts_Test extends CommonSetup
                         'email_alt' => 'alternate@example.org', 'im_skype' => 'example_s',
                         'im_google' => 'example_g');
 
-        foreach($methods as $key => $value) {
+        foreach ($methods as $key => $value) {
             $this->mockDB->stageList(array('method_name' => $key, 'method_value' => $value));
         }
 
@@ -234,14 +234,16 @@ class CContacts_Test extends CommonSetup
         $this->assertEquals('Department 1',         $results['dept_name']);
     }
 
-    public function testGetUpdateKey() {
+    public function testGetUpdateKey()
+    {
         $this->obj->contact_id = 1;
         $this->mockDB->stageHashList($this->obj->contact_id, 'ASDFASDFASDF');
 
         $this->assertEquals('ASDFASDFASDF',         $this->obj->getUpdateKey());
     }
 
-    public function testClearUpdateKey() {
+    public function testClearUpdateKey()
+    {
         $this->mockDB->stageHash(array('contact_updatekey' => 'ASDFASDFASDF'));
 
         $this->obj->load(1);
@@ -254,63 +256,78 @@ class CContacts_Test extends CommonSetup
         $this->assertEquals('',                     $this->obj->getUpdateKey());
     }
 
-    public function testUpdateNotify() {
+    public function testUpdateNotify()
+    {
         $this->markTestSkipped('This test has not been implemented yet.');
     }
 
-    public function testGetAllowedRecords() {
+    public function testGetAllowedRecords()
+    {
         $this->markTestSkipped('This test has not been implemented yet.');
     }
 
-    public function testSearchContacts() {
+    public function testSearchContacts()
+    {
         $this->markTestSkipped('This method is static.');
     }
 
-    public function testGetFirstLetters() {
+    public function testGetFirstLetters()
+    {
         $this->markTestSkipped('This method is static.');
     }
 
-    public function testGetContactByUsername() {
+    public function testGetContactByUsername()
+    {
         $this->markTestSkipped('This method is static.');
     }
 
-    public function testGetContactByUserid() {
+    public function testGetContactByUserid()
+    {
         $this->markTestSkipped('This method is static.');
     }
 
-    public function testGetContactByEmail() {
+    public function testGetContactByEmail()
+    {
         $this->markTestSkipped('This method is static.');
     }
 
-    public function testGetContactByUpdatekey() {
+    public function testGetContactByUpdatekey()
+    {
         $this->markTestSkipped('This method is static.');
     }
 
-    public function testGetProjects() {
+    public function testGetProjects()
+    {
         $this->markTestSkipped('This method is static.');
     }
 
-    public function testClearOldUpdatekeys() {
+    public function testClearOldUpdatekeys()
+    {
         $this->markTestSkipped('This test has not been implemented yet.');
     }
 
-    public function testLoadFull() {
+    public function testLoadFull()
+    {
         $this->markTestIncomplete('This test has not been implemented yet.');
     }
 
-    public function testCanDelete() {
+    public function testCanDelete()
+    {
         $this->markTestIncomplete('This test has not been implemented yet.');
     }
 
-    public function testGetCompanyID() {
+    public function testGetCompanyID()
+    {
         $this->markTestIncomplete('This test has not been implemented yet.');
     }
 
-    public function testNotify() {
+    public function testNotify()
+    {
         $this->markTestIncomplete('This test has not been implemented yet.');
     }
 
-    public function testHook_calendar() {
+    public function testHook_calendar()
+    {
         $this->markTestIncomplete('This test has not been implemented yet.');
     }
 }

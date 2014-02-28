@@ -33,26 +33,7 @@ class CDepartment extends w2p_Core_BaseObject
         parent::__construct('departments', 'dept_id');
 	}
 
-	public function loadFull($notUsed = null, $deptId) {
-		$q = $this->_getQuery();
-		$q->addQuery('dep.*, company_name, con.contact_id');
-		$q->addQuery('con.contact_first_name, con.contact_last_name, con.contact_display_name as contact_name');
-        $q->addTable('departments', 'dep');
-		$q->addJoin('users', '', 'user_id = dep.dept_owner');
-        $q->addJoin('contacts', 'con', 'con.contact_id = user_contact');
-        $q->addJoin('companies', 'com', 'company_id = dep.dept_company');
-		$q->addWhere('dep.dept_id = ' . (int) $deptId);
-
-		$this->company_name = '';
-		$this->contact_first_name = '';
-		$this->contact_last_name = '';
-        $this->contact_name = '';
-        $this->contact_id = '';
-
-		$q->loadObject($this);
-	}
-
-    /*
+    /**
      * I already don't like this one..
      *
      * @deprecated
@@ -142,9 +123,6 @@ class CDepartment extends w2p_Core_BaseObject
         if (0 != $this->dept_id && $this->dept_id == $this->dept_parent) {
             $this->_error['parentError'] = $baseErrorMsg . 'a department cannot be its own parent';
         }
-        if (0 == (int) $this->dept_owner) {
-            $this->_error['dept_owner'] = $baseErrorMsg . 'department owner is not set';
-        }
 
         return (count($this->_error)) ? false : true;
     }
@@ -180,7 +158,6 @@ class CDepartment extends w2p_Core_BaseObject
 	 *	@param array Optional array of additional sql parameters (from and where supported)
 	 *	@return array
 	 */
-	// returns a list of records exposed to the user
 //TODO: this modifies the core $_query property
 	public function getAllowedRecords($uid, $fields = '*', $orderby = '', $index = null, $extra = null, $unused = '') {
 		$uid = (int) $uid;
@@ -310,43 +287,49 @@ class CDepartment extends w2p_Core_BaseObject
         return $query;
 	}
 
-	public static function getDepartmentList($AppUI = null, $companyId, $departmentId = 0) {
-		global $AppUI;
+    /**
+     * @param     $companyId
+     * @param int $departmentId
+     *
+     * @return Associative
+     */
+    public function departments($companyId, $departmentId = 0)
+    {
+        $q = $this->_getQuery();
+        $q->addTable('departments');
+        $q->addQuery('dept_id, dept_name');
+        if (is_int($departmentId)) {
+            $q->addWhere('dept_parent = ' . (int) $departmentId);
+        }
+        $q->addWhere('dept_company = ' . (int) $companyId);
+        $q->addOrder('dept_name');
 
-        $q = new w2p_Database_Query();
-		$q->addTable('departments');
-		$q->addQuery('dept_id, dept_name');
-		if (is_int($departmentId)) {
-			$q->addWhere('dept_parent = ' . (int) $departmentId);
-		}
-		$q->addWhere('dept_company = ' . (int) $companyId);
-		$q->addOrder('dept_name');
-		$department = new CDepartment;
-//TODO: We need to convert this from static to use ->overrideDatabase() for testing.
-		$q = $department->setAllowedSQL($AppUI->user_id, $q);
+        $q = $this->setAllowedSQL($this->_AppUI->user_id, $q);
 
-		return $q->loadHashList('dept_id');
-	}
+        return $q->loadHashList('dept_id');
+    }
 
-	public static function getContactList($AppUI = null, $deptId) {
-		global $AppUI;
+    public function contacts($departmentId)
+    {
+        $results = array();
 
-        if ($AppUI->isActiveModule('contacts') && canView('contacts') && (int) $deptId > 0) {
-            $q = new w2p_Database_Query();
+        if ($this->_AppUI->isActiveModule('contacts') && canView('contacts') && (int) $departmentId > 0) {
+            $q = $this->_getQuery();
             $q->addTable('contacts', 'con');
             $q->addQuery('con.*, con.contact_display_name as contact_name');
-            $q->addWhere('contact_department = ' . (int) $deptId);
-            $q->addWhere('(contact_owner = ' . (int) $AppUI->user_id . ' OR contact_private = 0)');
+            $q->addWhere('contact_department = ' . (int) $departmentId);
+            $q->addWhere('(contact_owner = ' . (int) $this->_AppUI->user_id . ' OR contact_private = 0)');
             $q->addOrder('contact_first_name');
 
-			$results = $q->loadHashList('contact_id');
-		}
+            $results = $q->loadHashList('contact_id');
+        }
 
-		return $results;
-	}
+        return $results;
+    }
 
     protected function hook_preStore()
     {
+        $this->dept_owner = (int) $this->dept_owner ? $this->dept_owner : $this->_AppUI->user_id;
         $this->dept_url = str_replace(array('"', '"', '<', '>'), '', $this->dept_url);
     }
 
@@ -362,5 +345,27 @@ class CDepartment extends w2p_Core_BaseObject
         $search['display_fields'] = $search['search_fields'];
 
         return $search;
+    }
+
+    /**
+     * @deprecated
+     */
+    public static function getContactList($AppUI = null, $deptId)
+    {
+        trigger_error("The CDepartment::getContactList static method has been deprecated in 3.1 and will be removed in v4.0. Please use CDepartment->contacts() instead.", E_USER_NOTICE );
+
+        $department = new CDepartment();
+        return $department->contacts($deptId);
+    }
+
+    /**
+     * @deprecated
+     */
+    public static function getDepartmentList($AppUI = null, $companyId, $departmentId = 0)
+    {
+        trigger_error("The CDepartment::getDepartmentList static method has been deprecated in 3.1 and will be removed in v4.0. Please use CDepartment->departments() instead.", E_USER_NOTICE );
+
+        $department = new CDepartment();
+        return $department->departments($companyId, $departmentId);
     }
 }

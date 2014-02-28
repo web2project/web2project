@@ -3,18 +3,11 @@
  * @package     web2project\modules\core
  */
 
-class CFile_Folder extends w2p_Core_BaseObject {
-	/**
- 	@param int file_folder_id **/
+class CFile_Folder extends w2p_Core_BaseObject
+{
 	public $file_folder_id = null;
-	/**
- 	@param int file_folder_parent The id of the parent folder **/
 	public $file_folder_parent = null;
-	/**
- 	@param string file_folder_name The folder's name **/
 	public $file_folder_name = null;
-	/**
- 	@param string file_folder_description The folder's description **/
 	public $file_folder_description = null;
 
 	public function __construct() {
@@ -56,15 +49,18 @@ class CFile_Folder extends w2p_Core_BaseObject {
 	}
 
     /**
-     * This needs a separate canEdit instead of the BaseObject one because the
-     *   CFile_Folder object doesn't support separate permissions from the Files
-     *   module itself.
+     * This needs a separate canEdit and canView instead of the BaseObject one because the CFile_Folder object
+     *   doesn't support separate permissions from the Files module itself.
      *
      * @return boolean
      */
     public function canEdit()
     {
         return $this->_perms->checkModuleItem($this->_tbl_module, 'edit');
+    }
+    public function canView()
+    {
+        return $this->canAccess();
     }
 
     public function isValid()

@@ -63,6 +63,7 @@ class CFile extends w2p_Core_BaseObject {
             $this->addHelpDeskTaskLog();
         }
         $this->file_parent = (int) $this->file_parent;
+        $this->file_owner = (int) $this->file_owner ? $this->file_owner : $this->_AppUI->user_id;
 
         parent::hook_preStore();
     }
@@ -201,20 +202,11 @@ class CFile extends w2p_Core_BaseObject {
             return false;
         }
 
-        $result = false;
-        $q = $this->_getQuery();
-        $q->clear();
-        $q->addTable('projects');
-        $q->addQuery('project_owner');
-        $q->addWhere('project_id = ' . (int)$this->file_project);
-        $res = $q->exec(ADODB_FETCH_ASSOC);
-        if ($res && $row = $q->fetchRow()) {
-            if ($row['project_owner'] == $this->_AppUI->user_id) {
-                $result = true;
-            }
-        }
+        $project = new CProject();
+        $project->project_id = $this->file_project;
+        $project->load();
 
-        return $result;
+        return ($project->project_owner == $this->_AppUI->user_id);
     }
 
     public function isValid()

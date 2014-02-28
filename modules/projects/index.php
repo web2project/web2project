@@ -12,6 +12,8 @@ $search_string = w2PgetParam($_POST, 'search_string', '');
 $AppUI->setState($m . '_search_string', $search_string);
 $search_string = w2PformSafe($search_string, true);
 
+$canCreate = $project->canCreate();
+
 $company_id = $AppUI->processIntState('ProjIdxCompany', $_POST, 'project_company', $AppUI->user_company);
 $orderby = (isset($_GET['orderby']) && property_exists('CProject', $_GET['orderby'])) ? $_GET['orderby'] : 'project_name';
 $project_type = $AppUI->processIntState('ProjIdxType', $_POST, 'project_type', -1);
@@ -46,7 +48,7 @@ $titleBlock->addFilterCell('Type', 'project_type', $project_types, $project_type
 $titleBlock->addFilterCell('Company', 'project_company', $allowedCompanies, $company_id);
 $titleBlock->addFilterCell('Owner', 'project_owner', $user_list, $owner);
 
-if ($canAuthor) {
+if ($canCreate) {
     $titleBlock->addButton('new project', '?m=projects&a=addedit');
 }
 $titleBlock->addCell('<span title="' . $AppUI->_('Projects') . '::' . $AppUI->_('Print projects list') . '.">' .
@@ -64,7 +66,6 @@ $project_statuses[] = 'Archived';
 
 ksort($project_statuses);
 
-$project = new CProject();
 $counts = $project->getProjectsByStatus($company_id);
 $counts[-2] = count($project->loadAll(null, ($company_id > 0) ? 'project_company = ' . $company_id: ''));
 $counts[-1] = count($project->loadAll(null, 'project_active = 1' . (($company_id > 0) ? ' AND project_company = ' . $company_id : '')));

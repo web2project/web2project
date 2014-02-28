@@ -5,7 +5,6 @@ if (!defined('W2P_BASE_DIR')) {
 // @todo    convert to template
 // @todo    remove database query
 
-$AppUI->savePlace();
 $sort = w2PgetParam($_REQUEST, 'sort', 'asc');
 $viewtype = w2PgetParam($_REQUEST, 'viewtype', 'normal');
 $hideEmail = w2PgetConfig('hide_email_addresses', false);
@@ -109,13 +108,7 @@ foreach ($messages as $row) {
 		$topic = $row['message_title'];
     }
 
-	$q = new w2p_Database_Query;
-	$q->addTable('forum_messages');
-	$q->addTable('users');
-	$q->addQuery('DISTINCT contact_first_name, contact_last_name, contact_display_name as contact_name, user_username, contact_email');
-	$q->addJoin('contacts', 'con', 'contact_id = user_contact', 'inner');
-	$q->addWhere('users.user_id = ' . (int)$row['message_editor']);
-	$editor = $q->loadList();
+    $editor = __extract_from_forums_view_messages($row);
 
 	$date = intval($row['message_date']) ? new w2p_Utilities_Date($row['message_date']) : null;
 	if ($viewtype != 'single') {
@@ -278,14 +271,7 @@ if ($viewtype == 'single') {
 </tr>
 </table>
 <?php
-// Now we need to update the forum visits with the new messages so they don't show again.
+
 foreach ($new_messages as $msg_id) {
-	$q = new w2p_Database_Query;
-	$q->addTable('forum_visits');
-	$q->addInsert('visit_user', $AppUI->user_id);
-	$q->addInsert('visit_forum', $forum_id);
-	$q->addInsert('visit_message', $msg_id);
-	$q->addInsert('visit_date', $date->getDate());
-	$q->exec();
-	$q->clear();
+    __extract_from_forums_view_messages2($AppUI, $forum_id, $msg_id, $date);
 }

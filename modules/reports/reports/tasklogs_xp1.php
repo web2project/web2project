@@ -275,7 +275,6 @@ if ($do_report) {
 		}
 
 		$temp_dir = W2P_BASE_DIR . '/files/temp';
-		$base_url = w2PgetConfig('base_url');
 
         $output = new w2p_Output_PDFRenderer();
         $output->addTitle($AppUI->_('Task Log Report'));

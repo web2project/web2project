@@ -18,12 +18,7 @@ if (!$canEdit && $user_id != $AppUI->user_id) {
 }
 
 // load the preferences
-$q = new w2p_Database_Query;
-$q->addTable('user_preferences');
-$q->addQuery('pref_name, pref_value');
-$q->addWhere('pref_user = ' . (int)$user_id);
-$prefs = $q->loadHashList();
-$q->clear();
+$prefs = getPreferences($user_id);
 
 // get the user name
 if ($user_id) {
@@ -313,8 +308,12 @@ echo ' />';
 	</td>
 </tr>
 <tr>
-	<td align="left"><input class="cancel button btn btn-danger"  type="button" value="<?php echo $AppUI->_('back'); ?>" onclick="javascript:history.back(-1);" /></td>
-	<td align="right"><input class="save button btn btn-primary" type="button" value="<?php echo $AppUI->_('save'); ?>" onclick="submitIt()" /></td>
+	<td align="left">
+        <?php $form->showCancelButton(); ?>
+    </td>
+	<td align="right">
+        <input class="button btn btn-primary" type="button" value="<?php echo $AppUI->_('save'); ?>" onclick="submitIt()" />
+    </td>
 </tr>
 </table>
 </form>

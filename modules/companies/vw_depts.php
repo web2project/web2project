@@ -3,9 +3,9 @@ if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
 
-global $AppUI, $company_id, $canEdit;
+global $AppUI, $company;
 
-$items = CCompany::getDepartments($AppUI, $company_id);
+$items = $company->departments($company->company_id);
 
 $module = new w2p_System_Module();
 $fields = $module->loadSettings('departments', 'company_view');

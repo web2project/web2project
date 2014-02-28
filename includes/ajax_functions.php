@@ -1,8 +1,9 @@
 <?php
 $xajax = new xajax();
-$xajax->configure('javascript URI',w2PgetConfig('base_url').'/lib/xajax/');
+$xajax->configure('javascript URI', W2P_BASE_URL.'/lib/xajax/');
 
-function calcFinish($start_date, $start_hour, $start_minute, $duration_type, $task_duration) {
+function calcFinish($start_date, $start_hour, $start_minute, $duration_type, $task_duration)
+{
     global $AppUI;
 
     $df = $AppUI->getPref('SHDATEFORMAT');
@@ -21,7 +22,7 @@ function calcFinish($start_date, $start_hour, $start_minute, $duration_type, $ta
     $response->assign('end_hour','value',$finish->getHour());
     $response->assign('end_minute','value',$finish->getMinute());
 
-    if($finish->getHour()>11) {
+    if ($finish->getHour()>11) {
         $response->assign('end_hour_ampm','value','pm');
     } else {
         $response->assign('end_hour_ampm','value','am');
@@ -33,7 +34,7 @@ function calcFinish($start_date, $start_hour, $start_minute, $duration_type, $ta
 function calcDuration($start_date, $start_hour, $start_minute,
         $end_date, $end_hour, $end_minute, $duration_type,
         $duration_output_field = 'task_duration') {
-	
+
     $year = substr($start_date,0,4);
     $month = substr($start_date,4,2);
     $day = substr($start_date,6,2);
@@ -50,7 +51,7 @@ function calcDuration($start_date, $start_hour, $start_minute,
 
     $duration = $startDate->calcDuration($endDate);
 
-    if(intval($duration_type) == 24) {
+    if (intval($duration_type) == 24) {
         $workHours = intval(w2PgetConfig('daily_working_hours'));
         $duration = $duration / $workHours;
     }
@@ -60,7 +61,7 @@ function calcDuration($start_date, $start_hour, $start_minute,
 
     return $response;
 }
-        
+
 function getDepartment($department_id, $fieldname)
 {
     $department = new CDepartment();

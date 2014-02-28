@@ -32,8 +32,8 @@ class w2p_System_Dispatcher
      * @return Dispatcher
      */
     public function subscribe(w2p_System_ListenerInterface $listener, $resourceName='*', $event='*'){
-    	$this->_listeners[$resourceName][$event][spl_object_hash($listener)] = $listener;
-    	return $this;
+        $this->_listeners[$resourceName][$event][spl_object_hash($listener)] = $listener;
+        return $this;
     }
  
     /**
@@ -45,8 +45,8 @@ class w2p_System_Dispatcher
      * @return Dispatcher
      */
     public function unsubscribe(w2p_System_ListenerInterface $listener, $resourceName='*', $event='*'){
-    	unset($this->_listeners[$resourceName][$event][spl_object_hash($listener)]);
-    	return $this;
+        unset($this->_listeners[$resourceName][$event][spl_object_hash($listener)]);
+        return $this;
     }
  
     /**
@@ -56,43 +56,43 @@ class w2p_System_Dispatcher
      * @return Dispatcher
      */
     public function publish(w2p_System_Event $event ){
-    	$resourceName = $event->getResourceName();
-    	$eventName = $event->getEventName();
+        $resourceName = $event->getResourceName();
+        $eventName = $event->getEventName();
 
-    	//Loop through all the wildcard handlers
-    	if(isset($this->_listeners['*']['*'])){
-	    	foreach($this->_listeners['*']['*'] as $listener){
-	    		$listener->publish($event);
-	    	}
-    	}
+        //Loop through all the wildcard handlers
+        if(isset($this->_listeners['*']['*'])){
+            foreach($this->_listeners['*']['*'] as $listener){
+                $listener->publish($event);
+            }
+        }
  
-    	//Dispatch wildcard Resources
-    	//These are events that are published no matter what the resource
-    	if(isset($this->_listeners['*'])){
-	    	foreach($this->_listeners['*'] as $event => $listeners){
-	    		if($event == $eventName){
-	    			foreach($listeners as $listener){
-	    				$listener->publish($event);
-	    			}
-	    		}
-	    	}
-    	}
+        //Dispatch wildcard Resources
+        //These are events that are published no matter what the resource
+        if(isset($this->_listeners['*'])){
+            foreach($this->_listeners['*'] as $event => $listeners){
+                if($event == $eventName){
+                    foreach($listeners as $listener){
+                        $listener->publish($event);
+                    }
+                }
+            }
+        }
  
-    	//Dispatch wildcard Events
-    	//these are listeners that are dispatched for a certain resource, despite the event
-    	if(isset($this->_listeners[$resourceName]['*'])){
-    		foreach($this->_listeners[$resourceName]['*'] as $listener){
-   				$listener->publish($event);
-    		}
-    	}
+        //Dispatch wildcard Events
+        //these are listeners that are dispatched for a certain resource, despite the event
+        if(isset($this->_listeners[$resourceName]['*'])){
+            foreach($this->_listeners[$resourceName]['*'] as $listener){
+                   $listener->publish($event);
+            }
+        }
  
-    	//Dispatch to a certain resource event
-    	if(isset($this->_listeners[$resourceName][$eventName])){
-    		foreach($this->_listeners[$resourceName][$eventName] as $listener){
-    			$listener->publish($event);
-    		}
-    	}
+        //Dispatch to a certain resource event
+        if(isset($this->_listeners[$resourceName][$eventName])){
+            foreach($this->_listeners[$resourceName][$eventName] as $listener){
+                $listener->publish($event);
+            }
+        }
 
-    	return $this;
+        return $this;
     }
 }

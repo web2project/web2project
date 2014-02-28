@@ -195,7 +195,6 @@ class CUser extends w2p_Core_BaseObject
     /*
      * @deprecated
      */
-
     public function fullLoad($userId)
     {
         trigger_error("The fullLoad method has been deprecated and will be removed by v4.0.", E_USER_NOTICE);
@@ -254,7 +253,6 @@ class CUser extends w2p_Core_BaseObject
     /*
      * @deprecated
      */
-
     public static function getUserIdByToken($token)
     {
         trigger_error("CUser::getUserIdByToken has been deprecated in v3.0 and will be removed by v4.0. Please use CUser->getIdByToken() instead.", E_USER_NOTICE);
@@ -273,7 +271,6 @@ class CUser extends w2p_Core_BaseObject
     /*
      * @deprecated
      */
-
     public static function getUserIdByContactID($contactId)
     {
         trigger_error("CUser::getUserIdByContactID has been deprecated in v3.0 and will be removed by v4.0. Please use CUser->getIdByContactId() instead.", E_USER_NOTICE);
@@ -303,7 +300,6 @@ class CUser extends w2p_Core_BaseObject
     /*
      * @deprecated
      */
-
     public static function generateUserToken($userId, $token = '')
     {
         trigger_error("CUser::generateUserToken has been deprecated in v3.0 and will be removed by v4.0. Please use CUser->generateToken() instead.", E_USER_NOTICE);
@@ -312,19 +308,26 @@ class CUser extends w2p_Core_BaseObject
         return $user->generateToken($userId, $token);
     }
 
-    public static function getFirstLetters()
+    public function getLetters()
     {
-        $letters = '';
-
-        $q = new w2p_Database_Query();
+        $q = $this->_getQuery();
         $q->addTable('users', 'u');
         $q->addQuery('DISTINCT SUBSTRING(user_username, 1, 1) as L');
         $arr = $q->loadList();
 
-        foreach ($arr as $L) {
-            $letters .= $L['L'];
-        }
+        $letters = implode('', $arr);
+
         return strtoupper($letters);
+    }
+
+    /**
+     * @deprecated
+     */
+    public static function getFirstLetters()
+    {
+        trigger_error("CUser::getFirstLetters has been deprecated in v3.1 and will be removed by v4.0. Please use CUser->getLetters() instead.", E_USER_NOTICE);
+        $user = new CUser();
+        return $user->getLetters();
     }
 
     public function user_exists($username)
@@ -352,7 +355,6 @@ class CUser extends w2p_Core_BaseObject
     /*
      * @deprecated
      */
-
     public static function getUserDeptId($user_id)
     {
         trigger_error("CUser::getUserDeptId has been deprecated in v3.0 and will be removed by v4.0. Please use CUser->getDeptId() instead.", E_USER_NOTICE);
@@ -383,7 +385,6 @@ class CUser extends w2p_Core_BaseObject
     /*
      * @deprecated
      */
-
     public static function getLogs($userId, $startDate, $endDate)
     {
         trigger_error("CUser::getLogs has been deprecated in v3.0 and will be removed by v4.0. Please use CUser->getLogList() instead.", E_USER_NOTICE);
@@ -420,7 +421,6 @@ class CUser extends w2p_Core_BaseObject
     /*
      * @deprecated
      */
-
     public static function isUserActive($user_id)
     {
         trigger_error("CUser::isUserActive has been deprecated in v3.0 and will be removed by v4.0. Please use CUser->isActive() instead.", E_USER_NOTICE);
@@ -429,15 +429,13 @@ class CUser extends w2p_Core_BaseObject
         return $user->isActive($user_id);
     }
 
-    public static function getUserList()
+    public function getList()
     {
-        global $AppUI;
-
-        $q = new w2p_Database_Query();
+        $q = $this->_getQuery();
         $q->addQuery('users.user_contact,users.user_id,co.contact_first_name,co.contact_last_name,co.contact_id');
         $q->addTable('users');
         $q->addJoin('contacts', 'co', 'co.contact_id = users.user_contact', 'inner');
-        $q->addWhere('users.user_contact = ' . $AppUI->user_id);
+        $q->addWhere('users.user_contact = ' . $this->_AppUI->user_id);
         $q->addOrder('contact_first_name, contact_last_name');
         $result = $q->loadList();
         $retres = array();
@@ -447,6 +445,16 @@ class CUser extends w2p_Core_BaseObject
                 $retres[] = $user;
             }
         }
-		return $retres;
-  }
+        return $retres;
+    }
+
+    /**
+     * @deprecated
+     */
+    public static function getUserList()
+    {
+        trigger_error("The CUser::getUserList static method has been deprecated in 3.1 and will be removed in v4.0. Please use CUser->getList instead.", E_USER_NOTICE );
+        $user = new CUser();
+        return $user->getList();
+    }
 }

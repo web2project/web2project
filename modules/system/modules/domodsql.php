@@ -40,7 +40,7 @@ if (file_exists(W2P_BASE_DIR . '/modules/' . $obj->mod_directory . '/setup.php')
     if (!$setupclass) {
         if ($obj->mod_type != 'core') {
             $AppUI->setMsg('Module does not have a valid setup class defined', UI_MSG_ERROR);
-            $AppUI->redirect();
+            $AppUI->redirect('m=system&u=modules');
         }
     } else {
         $setup = new $setupclass($AppUI, $config, new w2p_Database_Query());

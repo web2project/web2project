@@ -42,12 +42,7 @@ $today->addDays(1);
 $today->setHour($w2Pconfig['cal_day_start']);
 $today->setMinute(0);
 
-//Lets load the users panel viewing options
-$q = new w2p_Database_Query;
-$q->addTable('project_designer_options', 'pdo');
-$q->addQuery('pdo.*');
-$q->addWhere('pdo.pd_option_user = ' . (int)$AppUI->user_id);
-$view_options = $q->loadList();
+$view_options = __extract_from_projectdesigner1($AppUI);
 
 $project_id = (int) w2PgetParam($_POST, 'project_id', 0);
 $project_id = (int) w2PgetParam($_GET, 'project_id', $project_id);
@@ -55,12 +50,9 @@ $project_id = (int) w2PgetParam($_GET, 'project_id', $project_id);
 $extra = array('where' => 'project_active = 1');
 $project = new CProject();
 $projects = $project->getAllowedRecords($AppUI->user_id, 'projects.project_id,project_name', 'project_name', null, $extra, 'projects');
-$q = new w2p_Database_Query;
-$q->addTable('projects');
-$q->addQuery('projects.project_id, company_name');
-$q->addJoin('companies', 'co', 'co.company_id = project_company');
-$idx_companies = $q->loadHashList();
-$q->clear();
+
+$idx_companies = __extract_from_projectdesigner2();
+
 foreach ($projects as $prj_id => $prj_name) {
 	$projects[$prj_id] = $idx_companies[$prj_id] . ': ' . $prj_name;
 }
@@ -143,8 +135,6 @@ if (!$project_id) {
 		$AppUI->setMsg('Project');
 		$AppUI->setMsg('invalidID', UI_MSG_ERROR, true);
 		$AppUI->redirect();
-	} else {
-		$AppUI->savePlace();
 	}
 
 	// setup the title block

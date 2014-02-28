@@ -107,9 +107,6 @@ class w2p_Core_CAppUI
       @var string */
     public $user_style = null;
 
-    /**
-      @var integer */
-    public $user_is_admin = null;
     public $long_date_format = null;
     protected $objStore = null;
 
@@ -135,7 +132,6 @@ class w2p_Core_CAppUI
         $this->user_company = 0;
         $this->user_department = 0;
         $this->user_type = 0;
-        $this->user_is_admin = 0;
 
         // cfg['locale_warn'] is the only cfgVariable stored in session data (for security reasons)
         // this guarants the functionality of this->setWarning
@@ -530,16 +526,10 @@ class w2p_Core_CAppUI
         return $temp;
     }
 
-    /**
-     * Save the url query string
-     *
-     * Also saves one level of history.  This is useful for returning from a delete
-     * operation where the record more not now exist.  Returning to a view page
-     * would be a nonsense in this case.
-     * @param string If not set then the current url query string is used
-     */
+    /** @deprecated */
     public function savePlace($query = '')
     {
+        trigger_error("AppUI->savePlace() has been deprecated in v3.2 and will be removed by v5.0. Please route the user explicitly.", E_USER_NOTICE);
         $query = ($query == '') ? $_SERVER['QUERY_STRING'] : $query;
         $saved = (isset($this->state['SAVEDPLACE'])) ? $this->state['SAVEDPLACE'] : '';
 
@@ -858,10 +848,6 @@ class w2p_Core_CAppUI
         $this->setUserLocale();
         $this->setStyle();
 
-        // Let's see if this user has admin privileges
-        if (canView('admin')) {
-            $this->user_is_admin = 1;
-        }
         return true;
     }
 
@@ -909,14 +895,12 @@ class w2p_Core_CAppUI
         }
     }
 
-    /*     * **********************************************************************************************************************
-      /**
+    /**
      * @deprecated
      */
-
     public function logout()
     {
-        
+        trigger_error("The AppUI->logout() method has been deprecated in 2.0 and will be removed in v4.0. Please use CCompany->projects() instead.", E_USER_NOTICE );
     }
 
     /**
@@ -1147,12 +1131,12 @@ class w2p_Core_CAppUI
         $s = '<script type="text/javascript">';
         $s .= '$(document).ready(function() {';
         // Attach tooltips to "span" elements
-        $s .= '	$("span").tipTip({maxWidth: "600px;", delay: 200, fadeIn: 150, fadeOut: 150});';
+        $s .= '    $("span").tipTip({maxWidth: "600px;", delay: 200, fadeIn: 150, fadeOut: 150});';
         // Move the focus to the first textbox available, while avoiding the "Global Search..." textbox
         if (canAccess('smartsearch')) {
-            $s .= '	$("input[type=\'text\']:eq(1)").focus();';
+            $s .= '    $("input[type=\'text\']:eq(1)").focus();';
         } else {
-            $s .= '	$("input[type=\'text\']:eq(0)").focus();';
+            $s .= '    $("input[type=\'text\']:eq(0)").focus();';
         }
         $s .= '});';
         $s .= '</script>';
@@ -1170,15 +1154,15 @@ class w2p_Core_CAppUI
     {
         global $AppUI;
 
-        $s = '<style type="text/css">@import url(' . w2PgetConfig('base_url') . '/lib/jscalendar/skins/aqua/theme.css);</style>';
-        $s .= '<script type="text/javascript" src="' . w2PgetConfig('base_url') . '/js/calendar.js"></script>';
-        $s .= '<script type="text/javascript" src="' . w2PgetConfig('base_url') . '/lib/jscalendar/calendar.js"></script>';
+        $s = '<style type="text/css">@import url(' . W2P_BASE_URL . '/lib/jscalendar/skins/aqua/theme.css);</style>';
+        $s .= '<script type="text/javascript" src="' . W2P_BASE_URL . '/js/calendar.js"></script>';
+        $s .= '<script type="text/javascript" src="' . W2P_BASE_URL . '/lib/jscalendar/calendar.js"></script>';
         if (file_exists(w2PgetConfig('root_dir') . '/lib/jscalendar/lang/calendar-' . $AppUI->user_locale . '.js')) {
-            $s .= '<script type="text/javascript" src="' . w2PgetConfig('base_url') . '/lib/jscalendar/lang/calendar-' . $AppUI->user_locale . '.js"></script>';
+            $s .= '<script type="text/javascript" src="' . W2P_BASE_URL . '/lib/jscalendar/lang/calendar-' . $AppUI->user_locale . '.js"></script>';
         } else {
-            $s .= '<script type="text/javascript" src="' . w2PgetConfig('base_url') . '/lib/jscalendar/lang/calendar-en.js"></script>';
+            $s .= '<script type="text/javascript" src="' . W2P_BASE_URL . '/lib/jscalendar/lang/calendar-en.js"></script>';
         }
-        $s .= '<script type="text/javascript" src="' . w2PgetConfig('base_url') . '/lib/jscalendar/calendar-setup.js"></script>';
+        $s .= '<script type="text/javascript" src="' . W2P_BASE_URL . '/lib/jscalendar/calendar-setup.js"></script>';
         echo $s;
         include w2PgetConfig('root_dir') . '/js/calendar.php';
     }
