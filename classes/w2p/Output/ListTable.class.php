@@ -113,6 +113,7 @@ class w2p_Output_ListTable extends w2p_Output_HTMLHelper
                     $contents  = '<td class="_'.$type.'">';
                     $contents .= '<input type="checkbox" value="' . $this->tableRowData[$value] . '" name="' . $value . '[]" />';
                     $contents .= '</td>';
+                    break;
                 case 'log':
                     $pieces = explode('_', $value);
                     $module    = w2p_pluralize($pieces[0]);
