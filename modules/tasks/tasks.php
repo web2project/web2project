@@ -48,11 +48,12 @@ if (isset($_GET['pin'])) {
 	$pin = (int) w2PgetParam($_GET, 'pin', 0);
 	$msg = '';
 
+    $task = new CTask();
 	// load the record data
 	if ($pin) {
-		$msg = CTask::pinUserTask($AppUI->user_id, $task_id);
+		$msg = $task->pinTask($AppUI->user_id, $task_id);
 	} else {
-		$msg = CTask::unpinUserTask($AppUI->user_id, $task_id);
+		$msg = $task->unpinTask($AppUI->user_id, $task_id);
 	}
 
 	if (!$msg) {

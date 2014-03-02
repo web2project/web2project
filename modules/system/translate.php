@@ -1,34 +1,35 @@
 <?php
 if (!defined('W2P_BASE_DIR')) {
-	die('You should not access this file directly.');
+    die('You should not access this file directly.');
 }
 
 // check permissions
 $perms = &$AppUI->acl();
 if (!canEdit('system')) {
-	$AppUI->redirect(ACCESS_DENIED);
+    $AppUI->redirect(ACCESS_DENIED);
 }
 
 $module = w2PgetParam($_REQUEST, 'module', 'admin');
 $lang = w2PgetParam($_REQUEST, 'lang', $AppUI->user_locale);
 
 // read the installed modules
-$modules = arrayMerge($AppUI->readDirs('modules'), array('common' => 'common', 'styles' => 'styles'));
+$loader = new w2p_FileSystem_Loader();
+$modules = arrayMerge($loader->readDirs('modules'), array('common' => 'common', 'styles' => 'styles'));
 asort($modules);
 
 // read the installed languages
-$locales = $AppUI->readDirs('locales');
+$locales = $loader->readDirs('locales');
 
 ob_start();
-// read language files from module's locale directory preferrably
+// read language files from module's locale directory preferably
 $localeFile = W2P_BASE_DIR . '/modules/' . $modules[$module] . '/locales/en/' . $modules[$module] . '.inc';
 if (file_exists($localeFile)) {
-	readfile($localeFile);
+    readfile($localeFile);
 } else {
     $localeFile = W2P_BASE_DIR . '/locales/en/' . $modules[$module] . '.inc';
-	if (file_exists($localeFile)) {
-		readfile($localeFile);
-	}
+    if (file_exists($localeFile)) {
+        readfile($localeFile);
+    }
 }
 eval("\$english=array(" . ob_get_contents() . "\n'0');");
 ob_end_clean();
@@ -42,7 +43,7 @@ foreach ($english as $k => $v) {
 
 if ($lang != 'en') {
     ob_start();
-    // read language files from module's locale directory preferrably
+    // read language files from module's locale directory preferably
     $localeFile = W2P_BASE_DIR . '/modules/' . $modules[$module] . '/locales/' . $lang . '/' . $modules[$module] . '.inc';
     if (file_exists($localeFile)) {
         readfile($localeFile);
@@ -70,9 +71,6 @@ ksort($trans);
 $localeFolder = pathinfo($localeFile, PATHINFO_DIRNAME);
 if(file_exists($localeFile) && !is_writable($localeFile)) {
     $AppUI->setMsg($AppUI->_("Locales file ($localeFile) is not writable."), UI_MSG_ERROR);
-}
-if(!is_writable($localeFolder)) {
-    $AppUI->setMsg($AppUI->_("Locales folder ($localeFolder) is not writable."), UI_MSG_ERROR);
 }
 echo ('' != $AppUI->msg) ? $AppUI->getMsg() : '';
 

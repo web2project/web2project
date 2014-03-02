@@ -185,9 +185,12 @@ class w2p_Output_HTMLHelper extends w2p_Output_HTML_Base
                 break;
                 // The above are all contact/user display names, the below are numbers.
             case '_count':
-            case '_duration':
             case '_hours':
                 $cell = $value;
+                break;
+            case '_duration':
+                $cell = $value;
+                $cell .= (1 == $this->tableRowData['task_duration_type']) ? ' hours' : ' days';
                 break;
             case '_size':
                 $cell = file_size($value);
@@ -257,9 +260,8 @@ class w2p_Output_HTMLHelper extends w2p_Output_HTML_Base
                 $obj = new $class();
                 $obj->load($value);
                 $color = $obj->project_color_identifier;
-                $additional = 'style="background-color:#'.$color.';" ';
                 $link = '?m='. w2p_pluralize($module) .'&a=view&'.$module.'_id='.$value;
-                $cell = '<a href="'.$link.'" style="color:'.bestColor($color) .'">'.$obj->{"$module".'_name'}.'</a>';
+                $cell = '<span style="background-color:#'.$color.'; padding: 3px"><a href="'.$link.'" style="color:'.bestColor($color) .'">'.$obj->{"$module".'_name'}.'</a></span>';
                 $suffix .= ' _name';
                 break;
             case '_problem':

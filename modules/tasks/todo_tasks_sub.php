@@ -100,79 +100,33 @@ $canDelete = $perms->checkModuleItem($m, 'delete');
         </tr>
     </table>
 </form>
-<!-- TODO: Add the Flexifield support here too -->
-<form name="form" method="post" action="index.php?<?php echo "m=$m&amp;a=$a&amp;date=$date"; ?>" accept-charset="utf-8">
-    <table class="tbl list">
-        <tr>
-            <th width="10">&nbsp;</th>
-            <th width="10"><?php echo $AppUI->_('Pin'); ?></th>
-            <th width="20" colspan="2"><?php echo $AppUI->_('Progress'); ?></th>
-            <th width="15" align="center"><?php echo sort_by_item_title('P', 'task_priority', SORT_NUMERIC, '&amp;a=todo'); ?></th>
-			<th width="15" align="center"><?php echo sort_by_item_title('U', 'user_task_priority', SORT_NUMERIC, '&amp;a=todo'); ?></th>
-            <th colspan="2"><?php echo sort_by_item_title('Task / Project', 'task_name', SORT_STRING, '&amp;a=todo'); ?></th>
-            <th nowrap="nowrap"><?php echo sort_by_item_title('Start Date', 'task_start_date', SORT_NUMERIC, '&amp;a=todo'); ?></th>
-            <th nowrap="nowrap"><?php echo sort_by_item_title('Duration', 'task_duration', SORT_NUMERIC, '&amp;a=todo'); ?></th>
-            <th nowrap="nowrap"><?php echo sort_by_item_title('Finish Date', 'task_end_date', SORT_NUMERIC, '&amp;a=todo'); ?></th>
-            <th nowrap="nowrap"><?php echo sort_by_item_title('Due In', 'task_due_in', SORT_NUMERIC, '&amp;a=todo'); ?></th>
-            <?php if ($showEditCheckbox) { ?><th width="0">&nbsp;</th><?php } ?>
-        </tr>
-        <?php
-
-        // sorting tasks
-        if ($task_sort_item1 != '') {
-            if ($task_sort_item2 != '' && $task_sort_item1 != $task_sort_item2) {
-                $tasks = array_csort($tasks, $task_sort_item1, $task_sort_order1, $task_sort_type1, $task_sort_item2, $task_sort_order2, $task_sort_type2);
-            } else {
-                $tasks = array_csort($tasks, $task_sort_item1, $task_sort_order1, $task_sort_type1);
-            }
-        } else { // All this appears to already be handled in todo.php ... should consider deleting this else block
-            /* we have to calculate the end_date via start_date+duration for
-            ** end='0000-00-00 00:00:00' if array_csort function is not used
-            ** as it is normally done in array_csort function in order to economise
-            ** cpu time as we have to go through the array there anyway
-            */
-            for ($j = 0, $j_cmp = count($tasks); $j < $j_cmp; $j++) {
-                if ($tasks[$j]['task_end_date'] == '0000-00-00 00:00:00' || $tasks[$j]['task_end_date'] == '') {
-                    if ($tasks[$j]['task_start_date'] == '0000-00-00 00:00:00' || $tasks[$j]['task_start_date'] == '') {
-                        $tasks[$j]['task_start_date'] = '0000-00-00 00:00:00'; //just to be sure start date is "zeroed"
-                        $tasks[$j]['task_end_date'] = '0000-00-00 00:00:00';
-                    } else {
-                        $tasks[$j]['task_end_date'] = calcEndByStartAndDuration($tasks[$j]);
-                    }
-                }
-            }
-        }
-
-        $history_active = false;
-        // showing tasks
-        $tasks = is_array($tasks) ? $tasks : array();
-        foreach ($tasks as $task) {
-            echo showtask_new($task, 0, true);
-        }
-        if ($showEditCheckbox) {
-        ?>
-        <tr>
-            <td colspan="9" align="right" height="30">
-                <input type="submit" class="button" value="<?php echo $AppUI->_('update task'); ?>" />
-            </td>
-            <td colspan="4" align="center">
-            <?php
-                if (is_array($priorities)) {
-                    foreach ($priorities as $k => $v) {
-                        $options[$k] = $AppUI->_('set priority to ' . $v, UI_OUTPUT_RAW);
-                    }
-                }
-                $options['c'] = $AppUI->_('mark as finished', UI_OUTPUT_RAW);
-                if ($canDelete) {
-                    $options['d'] = $AppUI->_('delete', UI_OUTPUT_RAW);
-                }
-                
-                echo arraySelect($options, 'task_priority', 'size="1" class="text"', '0');
-            }
-            ?>
-            </td>
-        </tr>
-    </table>
-</form>
 <?php
+$module = new w2p_System_Module();
+$fields = $module->loadSettings('tasks', 'todo');
+
+if (0 == count($fields)) {
+    // TODO: This is only in place to provide an pre-upgrade-safe
+    //   state for versions earlier than v3.0
+    //   At some point at/after v4.0, this should be deprecated
+    $fieldList = array('task_percent_complete', 'task_priority', 'user_task_priority', 'task_name', 'task_project',
+        'task_start_date', 'task_duration', 'task_end_date', 'task_due_in');
+    $fieldNames = array('', 'P', 'U', 'Task Name', 'Project Name', 'Start Date', 'Duration', 'Finish Date', 'Due In');
+
+    $module->storeSettings('tasks', 'todo', $fieldList, $fieldNames);
+    $fields = array_combine($fieldList, $fieldNames);
+}
+$fieldNames = array_values($fields);
+
+$listTable = new w2p_Output_HTML_TaskTable($AppUI);
+$listTable->df .= ' ' . $AppUI->getPref('TIMEFORMAT');
+
+$listTable->addBefore('edit', 'task_id');
+$listTable->addBefore('pin', 'task_id');
+$listTable->addBefore('log', 'task_id');
+
+echo $listTable->startTable();
+echo $listTable->buildHeader($fields);
+echo $listTable->buildRows($tasks, array());
+echo $listTable->endTable();
+
 include $AppUI->getTheme()->resolveTemplate('task_key');

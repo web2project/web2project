@@ -113,6 +113,22 @@ class w2p_Output_ListTable extends w2p_Output_HTMLHelper
                     $contents  = '<td class="_'.$type.'">';
                     $contents .= '<input type="checkbox" value="' . $this->tableRowData[$value] . '" name="' . $value . '[]" />';
                     $contents .= '</td>';
+                case 'log':
+                    $pieces = explode('_', $value);
+                    $module    = w2p_pluralize($pieces[0]);
+                    $contents  = '<td class="_'.$type.'">';
+                    $contents .= '<a href="./index.php?m='.$module.'&a=view&tab=1&' . $value . '=' . $this->tableRowData[$value] .'">' .
+                        w2PshowImage('icons/edit_add.png', '16', '16') . '</a>';
+                    $contents .= '</td>';
+                    break;
+                case 'pin':
+                    $image = ($this->tableRowData['task_pinned']) ? 'pin.gif' : 'unpin.gif';
+                    $pieces = explode('_', $value);
+                    $module    = w2p_pluralize($pieces[0]);
+                    $contents  = '<td class="_'.$type.'">';
+                    $contents .= '<a href="./index.php?m='.$module.'&pin=1&' . $value . '=' . $this->tableRowData[$value] .'">' .
+                        w2PshowImage('icons/' . $image, '16', '16') . '</a>';
+                    $contents .= '</td>';
                     break;
                 case 'url':
                     $contents  = '<td class="_'.$type.'">';
