@@ -382,18 +382,17 @@ function cal_work_day_conv($val)
     return htmlspecialchars($day_name, ENT_COMPAT, $locale_char_set);
 }
 
-function __extract_from_showtask(&$arr, $level, $today_view)
+function __extract_from_showtask(&$arr, $level, $today_view, $listTable)
 {
     global $AppUI, $m;
+
+    $listTable = (is_null($listTable)) ? new w2p_Output_HTML_TaskTable($AppUI) : $listTable;
 
     $tmpTask = new CTask();
     $tmpTask->load($arr['task_id']);
     if (!$tmpTask->canAccess()) {
         return false;
     }
-
-    $htmlHelper = new w2p_Output_HTMLHelper($AppUI);
-    $htmlHelper->df .= ' ' . $AppUI->getPref('TIMEFORMAT');
 
     $class = w2pFindTaskComplete($arr['task_start_date'], $arr['task_end_date'], $arr['task_percent_complete']);
     $jsTaskId = 'project_' . $arr['task_project'] . '_level-' . $level . '-task_' . $arr['task_id'] . '_';
@@ -421,9 +420,9 @@ function __extract_from_showtask(&$arr, $level, $today_view)
     $s .= '</td>';
 
     // percent complete and priority
-    $s .= $htmlHelper->createCell('task_percent_complete', $arr['task_percent_complete']);
-    $s .= $htmlHelper->createCell('task_priority', $arr['task_priority']);
-    $s .= $htmlHelper->createCell('user_task_priority', $arr['user_task_priority']);
+    $s .= $listTable->createCell('task_percent_complete', $arr['task_percent_complete']);
+    $s .= $listTable->createCell('task_priority', $arr['task_priority']);
+    $s .= $listTable->createCell('user_task_priority', $arr['user_task_priority']);
 
     // dots
     $s = __extract_from_showtask2($arr, $level, $today_view, $s, $m, $jsTaskId, $expanded);
@@ -431,7 +430,7 @@ function __extract_from_showtask(&$arr, $level, $today_view)
     if ($today_view) { // Show the project name
         $s .= ('<td class="_name" width="50%"><a href="./index.php?m=projects&amp;a=view&amp;project_id=' . $arr['task_project'] . '">' . '<div style="display:inline-block;padding: 2px 3px;background-color:#' . $arr['project_color_identifier'] . ';color:' . bestColor($arr['project_color_identifier']) . '">' . $arr['project_name'] . '</div>' . '</a></td>');
     } else {
-        $s .= $htmlHelper->createCell('task_owner', $arr['task_owner']);
+        $s .= $listTable->createCell('task_owner', $arr['task_owner']);
     }
     if (isset($arr['task_assigned_users']) && count($arr['task_assigned_users'])) {
         $assigned_users = $arr['task_assigned_users'];
@@ -443,18 +442,13 @@ function __extract_from_showtask(&$arr, $level, $today_view)
         $s .= join(', <br />', $a_u_tmp_array) . '</td>';
     } elseif (!$today_view) {
         // No users assigned to task
-        $s .= $htmlHelper->createCell('other', '-');
+        $s .= $listTable->createCell('other', '-');
     }
 
     // duration or milestone
-    $s .= $htmlHelper->createCell('task_start_datetime', $arr['task_start_date']);
-    $s .= $htmlHelper->createCell('task_duration', $arr['task_duration'] . ' ' . mb_substr($AppUI->_($durnTypes[$arr['task_duration_type']]), 0, 1));
-    $s .= $htmlHelper->createCell('task_end_datetime', $arr['task_end_date']);
-    if ($today_view) {
-        $s .= $htmlHelper->createCell('task_due_in', $arr['task_due_in']);
-    } elseif ($history_active) {
-        $s .= $htmlHelper->createCell('last_update', $arr['last_update']);
-    }
+    $s .= $listTable->createCell('task_start_datetime', $arr['task_start_date']);
+    $s .= $listTable->createCell('task_duration', $arr['task_duration'] . ' ' . mb_substr($AppUI->_($durnTypes[$arr['task_duration_type']]), 0, 1));
+    $s .= $listTable->createCell('task_end_datetime', $arr['task_end_date']);
 
     // Assignment checkbox
     if ('projectdesigner' == $m) {
@@ -522,9 +516,9 @@ function __extract_from_showtask2($arr, $level, $today_view, $s, $m, $jsTaskId, 
     return $s;
 }
 
-function showtask_new(&$arr, $level = 0, $today_view = false)
+function showtask_new(&$arr, $level = 0, $today_view = false, $listTable = null)
 {
-    return __extract_from_showtask($arr, $level, $today_view);
+    return __extract_from_showtask($arr, $level, $today_view, $listTable);
 }
 
 /*
@@ -5931,4 +5925,29 @@ function __extract_from_tasks6($q, $history_active)
     }
 
     return $q;
+}
+
+/**
+ * @param $AppUI
+ * @param $task_id
+ */
+function __extract_from_tasks_pinning($AppUI, $task_id)
+{
+    if (isset($_GET['pin'])) {
+        $pin = (int)w2PgetParam($_GET, 'pin', 0);
+        $msg = '';
+
+        $task = new CTask();
+        // load the record data
+        if ($pin) {
+            $result = $task->pinTask($AppUI->user_id, $task_id);
+        } else {
+            $result = $task->unpinTask($AppUI->user_id, $task_id);
+        }
+
+        if (!$result) {
+            $AppUI->setMsg('Pinning ', UI_MSG_ERROR, true);
+        }
+        $AppUI->redirect('', -1);
+    }
 }

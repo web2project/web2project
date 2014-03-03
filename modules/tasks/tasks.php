@@ -44,23 +44,7 @@ $history_active = !empty($mods['history']) && canView('history');
 $task_id = (int) w2PgetParam($_GET, 'task_id', 0);
 
 $pinned_only = (int) w2PgetParam($_GET, 'pinned', 0);
-if (isset($_GET['pin'])) {
-	$pin = (int) w2PgetParam($_GET, 'pin', 0);
-	$msg = '';
-
-    $task = new CTask();
-	// load the record data
-	if ($pin) {
-		$msg = $task->pinTask($AppUI->user_id, $task_id);
-	} else {
-		$msg = $task->unpinTask($AppUI->user_id, $task_id);
-	}
-
-	if (!$msg) {
-		$AppUI->setMsg($msg, UI_MSG_ERROR, true);
-	}
-	$AppUI->redirect('', -1);
-}
+__extract_from_tasks_pinning($AppUI, $task_id);
 
 $durnTypes = w2PgetSysVal('TaskDurationType');
 $taskPriority = w2PgetSysVal('TaskPriority');

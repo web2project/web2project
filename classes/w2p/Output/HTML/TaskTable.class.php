@@ -15,11 +15,10 @@ class w2p_Output_HTML_TaskTable extends w2p_Output_ListTable
         $class = w2pFindTaskComplete($rowData['task_start_date'], $rowData['task_end_date'], $rowData['task_percent_complete']);
 
         $row = '<tr class="'.$class.'">';
-        $row .= $this->_buildBeforeCells($this->_before);
+        $row .= $this->_buildBeforeCells();
         foreach ($this->_fieldKeys as $column) {
             $row .= $this->createCell($column, $rowData[$column], $customLookups);
         }
-        $row .= $this->_buildBeforeCells($this->_after);
         $row .= '</tr>';
 
         return $row;

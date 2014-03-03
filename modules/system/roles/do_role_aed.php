@@ -19,21 +19,16 @@ if (!$role->bind($_POST)) {
     $AppUI->redirect('m=system&u=roles');
 }
 
-if ($del) {
-	if ($role->delete()) {
-		$AppUI->setMsg('Role deleted', UI_MSG_ALERT);
-	} else {
-		$AppUI->setMsg('This Role could not be deleted', UI_MSG_ERROR);
-	}
+$action = ($del) ? 'deleted' : 'stored';
+$success = ($del) ? $role->delete() : $role->store();
+
+if ($success) {
+    $AppUI->setMsg('Role '.$action, UI_MSG_OK, true);
+    if ($copy_role_id) {
+        $role->copyPermissions($copy_role_id, $role->role_id);
+    }
 } else {
-	if (!$role->store()) {
-		$AppUI->setMsg('This Role could not be stored', UI_MSG_ERROR);
-	} else {
-		$isNotNew = $_POST['role_id'];
-		$AppUI->setMsg('Role ' . ($isNotNew ? 'updated' : 'inserted'), UI_MSG_OK);
-		if ($copy_role_id && $role_id) {
-			$role->copyPermissions($copy_role_id, $role_id);
-		}
-	}
+    $AppUI->setMsg($this->object->getError(), UI_MSG_ERROR);
 }
+
 $AppUI->redirect('m=system&u=roles');

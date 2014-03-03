@@ -126,7 +126,7 @@ $listTable->addBefore('log', 'task_id');
 
 echo $listTable->startTable();
 echo $listTable->buildHeader($fields);
-echo $listTable->buildRows($tasks, array());
+echo $listTable->buildRows($tasks);
 echo $listTable->endTable();
 
 include $AppUI->getTheme()->resolveTemplate('task_key');

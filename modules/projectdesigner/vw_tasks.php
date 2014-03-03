@@ -27,31 +27,8 @@ $history_active = !empty($mods['history']) && canView('history');
 */
 $task_id = (int) w2PgetParam($_GET, 'task_id', 0);
 
-$q = new w2p_Database_Query;
 $pinned_only = (int) w2PgetParam($_GET, 'pinned', 0);
-if (isset($_GET['pin'])) {
-	$pin = (int) w2PgetParam($_GET, 'pin', 0);
-	$msg = '';
-
-	// load the record data
-	if ($pin) {
-		$q->addTable('user_task_pin');
-		$q->addInsert('user_id', $AppUI->user_id);
-		$q->addInsert('task_id', $task_id);
-	} else {
-		$q->setDelete('user_task_pin');
-		$q->addWhere('user_id = ' . (int)$AppUI->user_id);
-		$q->addWhere('task_id = ' . (int)$task_id);
-	}
-
-	if (!$q->exec()) {
-		$AppUI->setMsg('ins/del err', UI_MSG_ERROR, true);
-	} else {
-		$q->clear();
-	}
-
-	$AppUI->redirect('', -1);
-}
+__extract_from_tasks_pinning($AppUI, $task_id);
 
 $durnTypes = w2PgetSysVal('TaskDurationType');
 $taskPriority = w2PgetSysVal('TaskPriority');
@@ -74,6 +51,7 @@ $project = new CProject;
 $allowedProjects = $project->getAllowedSQL($AppUI->user_id, 'projects.project_id');
 $working_hours = ($w2Pconfig['daily_working_hours'] ? $w2Pconfig['daily_working_hours'] : 8);
 
+$q = new w2p_Database_Query;
 $q->addQuery('projects.project_id, project_color_identifier, project_name');
 $q->addQuery('SUM(task_duration * task_percent_complete * IF(task_duration_type = 24, ' . $working_hours . ', task_duration_type)) / SUM(task_duration * IF(task_duration_type = 24, ' . $working_hours . ', task_duration_type)) AS project_percent_complete');
 $q->addQuery('company_name');
@@ -203,81 +181,51 @@ global $expanded;
 $expanded = $AppUI->getPref('TASKSEXPANDED');
 $open_link = w2PtoolTip($m, 'click to expand/collapse all the tasks for this project.') . '<a href="javascript: void(0);"><img onclick="expand_collapse(\'task_proj_' . $project_id . '_\', \'tblProjects\',\'collapse\',0,2);" id="task_proj_' . $project_id . '__collapse" src="' . w2PfindImage('up22.png', $m) . '" border="0" width="22" height="22" align="center" ' . (!$expanded ? 'style="display:none"' : '') . ' /><img onclick="expand_collapse(\'task_proj_' . $project_id . '_\', \'tblProjects\',\'expand\',0,2);" id="task_proj_' . $project_id . '__expand" src="' . w2PfindImage('down22.png', $m) . '" border="0" width="22" height="22" align="center" ' . ($expanded ? 'style="display:none"' : '') . ' alt="" /></a>' . w2PendTip();
 
-$fieldList = array();
-$fieldNames = array();
-
 $module = new w2p_System_Module();
-$fields = $module->loadSettings('tasks', 'projectdesigner-view');
+$fields = $module->loadSettings('projectdesigner', 'tasks');
 
-if (count($fields) > 0) {
-    $fieldList = array_keys($fields);
-    $fieldNames = array_values($fields);
-} else {
+if (0 == count($fields)) {
     // TODO: This is only in place to provide an pre-upgrade-safe
     //   state for versions earlier than v3.0
     //   At some point at/after v4.0, this should be deprecated
-    $fieldList = array('task_percent_complete', 'task_pinned', 'task_percent_complete',
-        'task_priority', 'user_task_priority', 'task_name',
-        'task_owner', 'task_start_date', 'task_duration', 'task_end_date', 'task_1');
-    $fieldNames = array('Pin', 'Log', 'Progress', 'P', 'U', 'Task Name',
-        'Task Owner', 'Assigned Users', 'Start', 'Duration', 'Finish');
+    $fieldList = array('task_percent_complete', 'task_priority', 'user_task_priority', 'task_name', 'task_owner',
+        'task_assignees', 'task_start_date', 'task_duration', 'task_end_date');
+    $fieldNames = array('Percent', 'P', 'U', 'Task Name', 'Owner', 'Assignees', 'Start Date', 'Duration', 'Finish Date');
 
-    //$module->storeSettings('tasks', 'projectdesigner-view', $fieldList, $fieldNames);
+    $module->storeSettings('projectdesigner', 'tasks', $fieldList, $fieldNames);
+    $fields = array_combine($fieldList, $fieldNames);
 }
+$fieldNames = array_values($fields);
+
+$listTable = new w2p_Output_HTML_TaskTable($AppUI);
+$listTable->df .= ' ' . $AppUI->getPref('TIMEFORMAT');
+
+$listTable->addBefore('edit', 'task_id');
+$listTable->addBefore('pin', 'task_id');
+$listTable->addBefore('log', 'task_id');
 ?>
 <form name="frm_tasks" accept-charset="utf-8"">
-<table id="tblTasks" class="tbl list">
-    <tr>
-        <td colspan="16" align='left'>
-            <?php echo $open_link; ?>
-        </td>
-    </tr>
+    <?php
+    echo $listTable->startTable();
 
-    <tr>
-        <?php
-//TODO: $PROJDESIGN_CONFIG['show_task_descriptions'] will be on the config screen going forward..
-        echo '<th></th>';
-        foreach ($fieldNames as $index => $name) {
-            ?><th nowrap="nowrap">
-                <?php echo $AppUI->_($fieldNames[$index]); ?>
-            </th><?php
-        }
-        if ($showEditCheckbox) {
-            $fieldList[] = '';
-            $fieldNames[] = '';
-            echo '<th width="1"><input type="checkbox" onclick="select_all_rows(this, \'selected_task\')" name="multi_check"/></th>';
-        }
+    $header = $listTable->buildHeader($fields);
+    $checkAll = '<th width="1"><input type="checkbox" onclick="select_all_rows(this, \'selected_task\')" name="multi_check"/></th></tr>';
+    echo str_replace('</tr>', $checkAll, $header);
 
-        // Number of columns (used to calculate how many columns to span things through)
-        $cols = count($fieldNames);
-
-        ?>
-    </tr>
-<?php
-reset($projects);
-
-foreach ($projects as $k => $p) {
-	$tnums = count($p['tasks']);
-	if ($tnums > 0 || $project_id == $p['project_id']) {
-		if ($task_sort_item1 != '') {
-			if ($task_sort_item2 != '' && $task_sort_item1 != $task_sort_item2) {
-				$p['tasks'] = array_csort($p['tasks'], $task_sort_item1, $task_sort_order1, $task_sort_type1, $task_sort_item2, $task_sort_order2, $task_sort_type2);
-			} else {
-				$p['tasks'] = array_csort($p['tasks'], $task_sort_item1, $task_sort_order1, $task_sort_type1);
-			}
-		}
-
-		for ($i = 0; $i < $tnums; $i++) {
-			$t = $p['tasks'][$i];
-			if ($t['task_parent'] == $t['task_id']) {
-				echo showtask_new($t, 0);
+    reset($projects);
+    foreach ($projects as $k => $p) {
+        $tnums = count($p['tasks']);
+        for ($i = 0; $i < $tnums; $i++) {
+            $t = $p['tasks'][$i];
+            if ($t['task_parent'] == $t['task_id']) {
+                echo showtask_new($t, 0, false, $listTable);
                 findchild_new($p['tasks'], $t['task_id']);
-			}
-		}
-	}
-}
-?>
-</table>
+            }
+        }
+    }
+
+    echo $listTable->endTable();
+    ?>
 </form>
 <?php
 include $AppUI->getTheme()->resolveTemplate('task_key');
