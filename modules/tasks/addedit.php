@@ -218,7 +218,7 @@ $form = new w2p_Output_HTML_FormHelper($AppUI);
         <div class="column right">
             <p>
                 <?php $form->showLabel('Status'); ?>
-                <?php $form->showField('task_status', $task->task_status, array(), $status); ?>
+                <?php $form->showField('task_status', (int) $task->task_status, array(), $status); ?>
             </p>
             <p>
                 <?php $form->showLabel('Progress'); ?>
