@@ -104,7 +104,8 @@ class w2p_FileSystem_Local implements w2p_FileSystem_Interface
 
     public function exists($project_id, $filename)
     {
-        $fname = W2P_BASE_DIR . '/files/' . $project_id . '/' . $filename;
+       if ($project_id>0) $fname = W2P_BASE_DIR . '/files/' . $project_id . '/' . $filename;
+	      else $fname = W2P_BASE_DIR . '/files/'  . $filename;
         return file_exists($fname);
     }
 }
