@@ -87,6 +87,7 @@ if ($file_id) {
 	$q->addTable('files');
 	if ($fileclass->file_project) {
 		$q = $project->setAllowedSQL($AppUI->user_id, $q, 'file_project');
+        $q->addTable('projects', 'pr');
 	}
 	$q->addWhere('file_id = ' . $file_id);
 
