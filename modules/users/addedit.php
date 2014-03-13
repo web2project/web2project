@@ -153,8 +153,6 @@ $AppUI->addFooterJavascriptFile('js/passwordstrength.js');
         <input type="hidden" name="company_id" value="<?php echo $user_id; ?>" />
     </form>
     <?php } ?>
-    <?php
-    }
 </script>
 <?php
 /**
@@ -211,12 +209,14 @@ $form = new w2p_Output_HTML_FormHelper($AppUI);
                 echo arraySelect($companies, 'contact_company', 'class=text size=1', $object->contact_company);
                 ?>
             </p>
-            <p>
-                <?php $form->showLabel('Department'); ?>
-                <input type="hidden" name="contact_department" value="<?php echo $object->contact_department; ?>" />
-                <input type="text" class="text" name="dept_name" value="<?php echo $object->dept_name; ?>" size="40" disabled="disabled" />
-                <input type="button" class="button btn btn-primary btn-mini" value="<?php echo $AppUI->_('select dept'); ?>..." onclick="popDept()" />
-            </p>
+            <p><label>&nbsp;</label>&nbsp;</p>
+            <p><label>&nbsp;</label>&nbsp;</p>
+<!--            <p>-->
+<!--                --><?php //$form->showLabel('Department'); ?>
+<!--                <input type="hidden" name="contact_department" value="--><?php //echo $object->contact_department; ?><!--" />-->
+<!--                <input type="text" class="text" name="dept_name" value="--><?php //echo $object->dept_name; ?><!--" size="40" disabled="disabled" />-->
+<!--                <input type="button" class="button btn btn-primary btn-mini" value="--><?php //echo $AppUI->_('select dept'); ?><!--..." onclick="popDept()" />-->
+<!--            </p>-->
             <?php $form->showCancelButton(); ?>
         </div>
         <div class="column right">
