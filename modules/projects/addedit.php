@@ -40,8 +40,10 @@ $ptype = w2PgetSysVal('ProjectType');
 
 $structprojs = $project->getAllowedProjects($AppUI->user_id, false);
 unset($structprojs[$project_id]);
-$structprojs = array_map('temp_filterArrayForSelectTree', $structprojs);
-$structprojects = arrayMerge(array('0' => array(0 => 0, 1 => '(' . $AppUI->_('No Parent') . ')', 2 => '')), $structprojs);
+foreach($structprojs as $key => $tmpInfo) {
+    $structprojs[$key] = $tmpInfo['project_name'];
+}
+$structprojects = arrayMerge(array('0' => '(' . $AppUI->_('No Parent') . ')'), $structprojs);
 
 // get a list of permitted companies
 $company = new CCompany();
@@ -195,7 +197,7 @@ $form = new w2p_Output_HTML_FormHelper($AppUI);
             </p>
             <p>
                 <?php $form->showLabel('Parent Project'); ?>
-                <?php echo arraySelectTree($structprojects, 'project_parent', 'size="1" style="width:250px;" class="text"', $project->project_parent ? $project->project_parent : 0) ?>
+                <?php echo arraySelect($structprojects, 'project_parent', 'size="1" style="width:250px;" class="text"', $project->project_parent ? $project->project_parent : 0) ?>
             </p>
             <p>
                 <?php $form->showLabel('Company'); ?>
@@ -342,11 +344,11 @@ $form = new w2p_Output_HTML_FormHelper($AppUI);
                 <?php $form->showLabel('Import tasks from'); ?>
                 <?php
                 $templates = $project->loadAll('project_name', 'project_status = ' . w2PgetConfig('template_projects_status_id'));
-                $options[] = '';
+                $templateProjects[] = '';
                 foreach($templates as $key => $data) {
-                    $options[$key] = $data['project_name'];
+                    $templateProjects[$key] = $data['project_name'];
                 }
-                echo arraySelect($options, 'import_tasks_from', 'size="1" class="text"', -1, false);
+                echo arraySelect($templateProjects, 'import_tasks_from', 'size="1" class="text"', -1, false);
                 ?>
             </p>
             <p>
