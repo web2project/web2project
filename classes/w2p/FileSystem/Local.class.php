@@ -15,6 +15,8 @@ class w2p_FileSystem_Local implements w2p_FileSystem_Interface
 
     public function move(CFile $file, $old_project_id, $actual_file_name)
     {
+        $file->file_project = (int) $file->file_project;
+
         if (!is_dir(W2P_BASE_DIR . '/files/' . $file->file_project)) {
             $res = mkdir(W2P_BASE_DIR . '/files/' . $file->file_project, 0744);
             if (!$res) {
@@ -52,6 +54,8 @@ class w2p_FileSystem_Local implements w2p_FileSystem_Interface
     // move a file from a temporary (uploaded) location to the file system
     public function moveTemp(CFile $file, $upload_info, $AppUI)
     {
+        $file->file_project = (int) $file->file_project;
+
         $file->file_real_filename = uniqid(rand());
         // check that directories are created
         if (!is_dir(W2P_BASE_DIR . '/files')) {
@@ -68,7 +72,7 @@ class w2p_FileSystem_Local implements w2p_FileSystem_Interface
             }
         }
 
-        $file->_filepath = W2P_BASE_DIR . '/files/' . $file->file_project . '/' . $file->file_real_filename;
+        $file->_filepath = W2P_BASE_DIR . '/files/' . (int) $file->file_project . '/' . $file->file_real_filename;
         // move it
         $res = move_uploaded_file($upload_info['tmp_name'], $file->_filepath);
         if (!$res) {
@@ -79,6 +83,8 @@ class w2p_FileSystem_Local implements w2p_FileSystem_Interface
 
     public function delete(CFile $file)
     {
+        $file->file_project = (int) $file->file_project;
+
         if ('' == $file->file_real_filename ||
             !file_exists(W2P_BASE_DIR . '/files/' . $file->file_project . '/' . $file->file_real_filename)) {
             return true;
@@ -92,7 +98,7 @@ class w2p_FileSystem_Local implements w2p_FileSystem_Interface
 
     public function read($project_id, $filename)
     {
-        $handle = fopen(W2P_BASE_DIR . '/files/' . $project_id . '/' . $filename, 'rb');
+        $handle = fopen(W2P_BASE_DIR . '/files/' . (int) $project_id . '/' . $filename, 'rb');
         if ($handle) {
             while (!feof($handle)) {
                 print fread($handle, 8192);
@@ -105,6 +111,7 @@ class w2p_FileSystem_Local implements w2p_FileSystem_Interface
     public function exists($project_id, $filename)
     {
         $fname = W2P_BASE_DIR . '/files/' . (int) $project_id . '/' . $filename;
+
         return file_exists($fname);
     }
 }
