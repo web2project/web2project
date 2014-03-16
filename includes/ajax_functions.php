@@ -20,7 +20,8 @@ function calcFinish($start_date, $start_hour, $start_minute, $duration_type, $ta
     $response->assign('end_date','value',$finish->format($df));
     $response->assign('task_end_date','value',$finish->format(FMT_TIMESTAMP_DATE));
     $response->assign('end_hour','value',$finish->getHour());
-    $response->assign('end_minute','value',$finish->getMinute());
+    $minute = ('0' == $finish->getMinute()) ? '00' : $finish->getMinute();
+    $response->assign('end_minute','value', $minute);
 
     if ($finish->getHour()>11) {
         $response->assign('end_hour_ampm','value','pm');
