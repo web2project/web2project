@@ -5109,6 +5109,11 @@ function __extract_from_ae_depend1($deps)
  */
 function __extract_from_ae_depend2($task_id)
 {
+    if (0 == (int) $task_id)
+    {
+        return array();
+    }
+
     $q = new w2p_Database_Query;
     $q->addTable('tasks', 't');
     $q->addTable('task_dependencies', 'td');

@@ -211,7 +211,7 @@ $form = new w2p_Output_HTML_FormHelper($AppUI);
             </p>
             <p>
                 <?php $form->showLabel('Priority'); ?>
-                <?php $form->showField('task_priority', $task->task_priority, array(), $priority); ?>
+                <?php $form->showField('task_priority', (int) $task->task_priority, array(), $priority); ?>
             </p>
             <?php $form->showCancelButton(); ?>
         </div>

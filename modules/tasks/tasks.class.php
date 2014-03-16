@@ -1107,7 +1107,7 @@ class CTask extends w2p_Core_BaseObject
             }
 
             $nsd = new w2p_Utilities_Date($lastEndDate);
-         
+
             $osd = new w2p_Utilities_Date($_task_data['task_start_date']);
 
             $ned = new w2p_Utilities_Date($_task_data['task_end_date']);
@@ -1116,9 +1116,7 @@ class CTask extends w2p_Core_BaseObject
             $ned->addDuration($dur,1);
 
             $new_start_date = $nsd->format(FMT_DATETIME_MYSQL);
-            $new_start_date = $this->_AppUI->convertToSystemTZ($new_start_date);
             $new_end_date = $ned->format(FMT_DATETIME_MYSQL);
-            $new_end_date = $this->_AppUI->convertToSystemTZ($new_end_date);
 
             $q = $this->_getQuery();
             $q->addTable('tasks');

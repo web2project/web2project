@@ -827,18 +827,6 @@ function addOption(selectId, val, txt) {
       document.getElementById(selectId).options.add(objOption);
 }
 
-if (typeof(xajax) != 'undefined') {
-	xajax.callback.global.onRequest = 
-	    function(){
-           xajax.$('loadingMessage').style.display='block';
-	    };
-	    
-	function hideLoadingMessage() {
-	    xajax.$('loadingMessage').style.display = 'none';
-	}
-	xajax.callback.global.onComplete = hideLoadingMessage;
-}
-
 function emptyCombo(combo) {
     combo.options.length = 0;
 }
