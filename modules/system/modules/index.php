@@ -143,6 +143,7 @@ $htmlHelper = new w2p_Output_HTMLHelper($AppUI);
         }
     }
     ?>
+<!-- TODO:
     <tr>
         <td colspan="10" style="text-align: center;">
             <?php echo $AppUI->_('Select a module to upload'); ?>:
@@ -159,4 +160,5 @@ $htmlHelper = new w2p_Output_HTMLHelper($AppUI);
             </form>
         </td>
     </tr>
+-->
 </table>
