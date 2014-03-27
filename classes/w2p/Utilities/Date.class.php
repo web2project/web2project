@@ -476,12 +476,10 @@ class w2p_Utilities_Date extends Date {
         }
 
         $first_day_minutes = min($day_end_hour*60 - $finishDate->getHour()*60 - $finishDate->getMinute(), $work_hours*60, $duration_in_minutes);
-
         $finishDate->addSeconds($first_day_minutes*60);
-
         $duration_in_minutes -= $first_day_minutes;
 
-        $minutes = $this->getMinute();
+        $minutes = $finishDate->getMinute();
         $mod = $minutes % $min_increment;
 
         if ($mod > $min_increment/2) {

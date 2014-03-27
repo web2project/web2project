@@ -189,10 +189,6 @@ class w2p_Output_HTMLHelper extends w2p_Output_HTML_Base
             case '_duration':
                 $cell = $value;
                 break;
-            case '_duration':
-                $cell = $value;
-                $cell .= (1 == $this->tableRowData['task_duration_type']) ? ' hours' : ' days';
-                break;
             case '_size':
                 $cell = file_size($value);
                 break;
