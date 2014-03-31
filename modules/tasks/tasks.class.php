@@ -2102,7 +2102,7 @@ class CTask extends w2p_Core_BaseObject
         } else {
             $q->addWhere('(task_id = task_parent OR task_parent = 0)');
         }
-        $q->addOrder('task_start_date, task_end_date');
+        $q->addOrder('task_start_date, task_end_date, task_name');
 
         $tasks = $q->loadHashList('task_id');
         foreach ($tasks as $task) {
