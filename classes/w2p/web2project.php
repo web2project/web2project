@@ -34,6 +34,9 @@ function web2project_autoload($className) {
 /** 
  * This is the base class of the core web2project classes. As we build things
  *  out in the "proper" 5.3/5.4 sense of the word, this class will grow.
+ *
+ * @package     web2project
+ * @author      D. Keith Casey, Jr. <contrib@caseysoftware.com>
  */
 class w2p_web2project
 {

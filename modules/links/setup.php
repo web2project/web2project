@@ -22,6 +22,11 @@ if ($a == 'setup') {
 	echo w2PshowModuleConfig($config);
 }
 
+/**
+ * Class CSetupLinks
+ *
+ * @package     web2project\modules\misc
+ */
 class CSetupLinks extends w2p_System_Setup
 {
 	public function remove()
