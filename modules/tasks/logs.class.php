@@ -234,8 +234,13 @@ class CTask_Log extends w2p_Core_BaseObject
             $task = new CTask();
             $task->overrideDatabase($this->_query);
             $task->load($task_id);
-            $diff = strtotime($this->task_log_task_end_date) - strtotime($task->task_end_date);
-            $task_end_date = (0 == $diff) ? $task->task_end_date : $this->task_log_task_end_date;
+
+            $old_end_date = new w2p_Utilities_Date($task->task_end_date);
+            $new_end_date = new w2p_Utilities_Date($this->task_log_task_end_date);
+
+            $new_end_date->setHour($old_end_date->getHour());
+            $new_end_date->setMinute($old_end_date->getMinute());
+            $task_end_date = $new_end_date->format(FMT_DATETIME_MYSQL) . '<br />';
 
             /*
              * We're using a database update here instead of store() because a
