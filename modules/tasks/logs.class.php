@@ -219,7 +219,7 @@ class CTask_Log extends w2p_Core_BaseObject
         $q = $this->_getQuery();
 
         if($this->_perms->checkModuleItem('tasks', 'edit', $task_id)) {
-            if ($this->task_log_percent_complete < 100) {
+            if ($this->task_log_percent_complete <= 100) {
                 $q->addQuery('task_log_percent_complete, task_log_date');
                 $q->addTable('task_log');
                 $q->addWhere('task_log_task = ' . (int)$task_id);
