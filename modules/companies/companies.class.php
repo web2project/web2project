@@ -123,6 +123,7 @@ class CCompany extends w2p_Core_BaseObject {
     public function loadAll($order = 'company_name', $where = null)
     {
         $filter = $this->getAllowedSQL($this->_AppUI->user_id, 'company_id');
+        $filter = implode(' AND ', $filter);
         $filter .= ($where) ? ' AND ' . $where : '';
 
         return parent::loadAll($order, $filter);
