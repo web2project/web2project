@@ -174,7 +174,9 @@ if ($do_report) {
 			$str .= '<td>' . $task['project_name'] . '</td>';
 		}
 		$str .= '<td>';
-        $str .= ($task['task_id'] == $task['task_parent']) ? '' : '<img src="' . w2PfindImage('corner-dots.gif') . '" width="16" height="12" border="0" alt="" />';
+
+        $indent_count = substr_count($task['task_path_enumeration'], '/') * 3;
+        $str .= ($task['task_id'] == $task['task_parent']) ? '' : str_repeat('&nbsp;', $indent_count) . '<img src="' . w2PfindImage('corner-dots.gif') . '" width="16" height="12" border="0" alt="" />';
         $str .= '&nbsp;<a href="?m=tasks&a=view&task_id=' . $task['task_id'] . '">' . $task['task_name'] . '</a></td>';
 		$str .= '<td>' . nl2br($task['task_description']) . '</td>';
 
