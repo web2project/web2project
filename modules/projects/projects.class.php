@@ -979,7 +979,7 @@ class CProject extends w2p_Core_BaseObject
         $q = $this->getQuery();
         $q->addTable('projects');
         $q->addJoin('companies', '', 'projects.project_company = company_id', 'inner');
-        $q->addQuery('DISTINCT(projects.project_id), project_name, project_parent');
+        $q->addQuery('DISTINCT(projects.project_id), project_name, project_parent, project_company');
         if ($this->project_original_parent) {
             $q->addWhere('project_original_parent = ' . (int) $this->project_original_parent);
         }
