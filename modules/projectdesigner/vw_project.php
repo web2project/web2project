@@ -129,7 +129,7 @@ $htmlHelper->stageRowData($params);
         if (count($contacts)) {
             echo '<tr><td><strong>' . $AppUI->_('Project Contacts') . '</strong></td></tr>';
             echo '<tr><td colspan="3">';
-            echo w2p_Output_HTMLHelper::renderContactList($AppUI, $contacts);
+            echo $htmlHelper->renderContactTable('projects', $contacts);
             echo '</td></tr>';
         }
     ?>
