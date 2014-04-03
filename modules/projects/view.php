@@ -118,10 +118,6 @@ function delIt() {
                     <?php echo $htmlHelper->createCell('project_company', $project->project_company); ?>
                 </tr>
                 <tr>
-                    <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Project Location'); ?>:</td>
-                    <?php echo $htmlHelper->createCell('project_location', $project->project_location); ?>
-                </tr>
-                <tr>
                     <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Short Name'); ?>:</td>
                     <?php
 
@@ -164,6 +160,10 @@ function delIt() {
                     <?php echo $htmlHelper->createCell('project_demo_url', $project->project_demo_url); ?>
                 </tr>
                 <tr>
+                    <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Project Location'); ?>:</td>
+                    <?php echo $htmlHelper->createCell('project_location', $project->project_location); ?>
+                </tr>
+                <tr>
                     <td colspan="2">
                         <?php
                             $custom_fields = new w2p_Core_CustomFields($m, $a, $project->project_id, 'view');
@@ -200,8 +200,7 @@ function delIt() {
                 </tr>
                 <tr>
                     <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Progress'); ?>:</td>
-    <!-- TODO: we can't use the createCell helper here because it centers things while we need it left-aligned -->
-                    <td width="100%"><?php printf('%.1f%%', $project->project_percent_complete); ?></td>
+                    <?php echo $htmlHelper->createCell('project_percent_complete', $project->project_percent_complete); ?>
                 </tr>
                 <tr>
                     <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Active'); ?>:</td>
@@ -219,7 +218,7 @@ function delIt() {
                 <tr>
                     <td align="center" nowrap="nowrap"><?php echo $AppUI->_('Finances'); ?>:</td>
                     <td align="center" nowrap="nowrap">
-                        <table cellspacing="1" cellpadding="2" border="0" width="100%">
+                        <!--<table cellspacing="1" cellpadding="2" border="0" width="100%">
                             <tr>
                                 <td align="center">
                                     <?php echo $AppUI->_('Target Budgets'); ?>:
@@ -332,7 +331,7 @@ function delIt() {
                                 </td>
                             </tr>
                             <?php } ?>
-                        </table>
+                        </table>-->
                     </td>
                 </tr>
                 <?php } ?>

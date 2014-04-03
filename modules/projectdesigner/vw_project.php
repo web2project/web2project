@@ -40,10 +40,6 @@ $htmlHelper->stageRowData($params);
             <?php echo $htmlHelper->createCell('project_end_date_actual', $obj->project_actual_end_date); ?>
         </tr>
         <tr>
-            <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Target Budget'); ?>:</td>
-            <?php echo $htmlHelper->createCell('project_target_budget', $obj->project_target_budget); ?>
-        </tr>
-        <tr>
             <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Project Owner'); ?>:</td>
             <?php echo $htmlHelper->createCell('project_owner', $obj->project_owner); ?>
         </tr>
@@ -54,6 +50,10 @@ $htmlHelper->stageRowData($params);
         <tr>
             <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Staging URL'); ?>:</td>
             <?php echo $htmlHelper->createCell('project_demo_url', $obj->project_demo_url); ?>
+        </tr>
+        <tr>
+            <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Project Location'); ?>:</td>
+            <?php echo $htmlHelper->createCell('project_location', $obj->project_location); ?>
         </tr>
         <tr>
             <td colspan="2">
@@ -83,24 +83,28 @@ $htmlHelper->stageRowData($params);
             <?php echo $htmlHelper->createCell('project_status', $obj->project_status, $customLookups); ?>
         </tr>
         <tr>
-            <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Priority'); ?>:</td>
-            <?php echo $htmlHelper->createCell('project_priority', $obj->project_priority); ?>
-        </tr>
-        <tr>
             <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Type'); ?>:</td>
             <?php echo $htmlHelper->createCell('project_type', $obj->project_type, $customLookups); ?>
+        </tr>
+        <tr>
+            <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Priority'); ?>:</td>
+            <?php echo $htmlHelper->createCell('project_priority', $obj->project_priority); ?>
         </tr>
         <tr>
             <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Progress'); ?>:</td>
             <?php echo $htmlHelper->createCell('project_percent_complete', $obj->project_percent_complete); ?>
         </tr>
         <tr>
-            <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Worked Hours'); ?>:</td>
-            <?php echo $htmlHelper->createCell('project_worked_hours', $obj->project_worked_hours); ?>
+            <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Active'); ?>:</td>
+            <td width="100%"><?php echo $obj->project_active ? $AppUI->_('Yes') : $AppUI->_('No'); ?></td>
         </tr>
         <tr>
             <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Scheduled Hours'); ?>:</td>
             <?php echo $htmlHelper->createCell('project_scheduled_hours', $obj->project_scheduled_hours); ?>
+        </tr>
+        <tr>
+            <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Worked Hours'); ?>:</td>
+            <?php echo $htmlHelper->createCell('project_worked_hours', $obj->project_worked_hours); ?>
         </tr>
         <?php
         $depts = $obj->getDepartmentList();
