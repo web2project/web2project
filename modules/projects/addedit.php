@@ -304,7 +304,7 @@ $form = new w2p_Output_HTML_FormHelper($AppUI);
         <div class="column right">
             <p>
                 <?php $form->showLabel('Priority'); ?>
-                <?php $form->showField('project_priority', $project->project_priority, array(), $projectPriority); ?>
+                <?php $form->showField('project_priority', (int) $project->project_priority, array(), $projectPriority); ?>
             </p>
             <p>
                 <?php $form->showLabel('Short Name'); ?>
@@ -318,7 +318,7 @@ $form = new w2p_Output_HTML_FormHelper($AppUI);
             </p>
             <p>
                 <?php $form->showLabel('Project Type'); ?>
-                <?php $form->showField('project_type', $project->project_type, array(), $ptype); ?>
+                <?php $form->showField('project_type', (int) $project->project_type, array(), $ptype); ?>
             </p>
             <p>
                 <table width="100%" bgcolor="#cccccc">
