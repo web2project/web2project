@@ -446,12 +446,8 @@ function calcDuration(f, start_date, end_date, duration_fld, durntype_fld) {
 </tr>
 <tr id="project" <?php echo (isset($view_options[0]['pd_option_view_project']) ? ($view_options[0]['pd_option_view_project'] ? 'style="visibility:visible;display:"' : 'style="visibility:collapse;display:none"') : 'style="visibility:visible;display:"'); ?>>
 	<?php
-	if ($canReadProject) {
-		require (w2PgetConfig('root_dir') . '/modules/projectdesigner/vw_project.php');
-	} else {
-		echo '<td colspan="2">'. $AppUI->_('You do not have permission to view this project') . '</td>';
-	}
-?>
+    require (w2PgetConfig('root_dir') . '/modules/projectdesigner/vw_project.php');
+    ?>
 </tr>
 </table>
 <?php
