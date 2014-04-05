@@ -37,7 +37,7 @@ $theme = $AppUI->getTheme();
             <div class="right">
                 <a href="http://www.web2project.net/" target="_new">
                     <?php echo w2PtoolTip('web2Project v. ' . $AppUI->getVersion(), 'click to visit web2Project site', true);?>
-                        <img src="style/<?php echo $theme; ?>/images/title.png" border="0" class="banner" align="left" alt="click to visit web2Project site" />
+                        <img src="style/<?php echo $theme; ?>/images/logo.png" border="0" class="banner" align="left" alt="click to visit web2Project site" />
                     <?php echo w2PendTip();?>
                 </a>
             </div>
