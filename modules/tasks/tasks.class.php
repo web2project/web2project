@@ -259,10 +259,6 @@ class CTask extends w2p_Core_BaseObject
             $this_parent->load($this->task_parent);
             $parents_dependents = explode(',', $this_parent->dependentTasks());
 
-            if (in_array($this_parent->task_id, $this_dependencies)) {
-                $this->_error['BadDep_CannotDependOnParent'] = 'BadDep_CannotDependOnParent';
-                return false;
-            }
             // Task parent cannot be child of this task
             if (in_array($this_parent->task_id, $this_children)) {
                 $this->_error['BadParent_CircularParent'] = 'BadParent_CircularParent';
