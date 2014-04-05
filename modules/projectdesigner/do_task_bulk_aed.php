@@ -9,7 +9,7 @@ global $AppUI;
 $project_id                          = w2PgetParam($_POST, 'project_id', 0);
 $selected                            = w2PgetParam($_POST, 'selected_task', array());
 $bulk_task_project                   = w2PgetParam($_POST, 'bulk_task_project', '');
-$bulk_task_parent                    = w2PgetParam($_POST, 'bulk_task_parent', '');
+$bulk_task_parent                    = (int) w2PgetParam($_POST, 'bulk_task_parent', '');
 $bulk_task_dependency                = w2PgetParam($_POST, 'bulk_task_dependency', '');
 $bulk_task_priority                  = w2PgetParam($_POST, 'bulk_task_priority', '');
 $bulk_task_access                    = w2PgetParam($_POST, 'bulk_task_access', '');
@@ -134,24 +134,9 @@ if (is_array($selected) && count($selected)) {
         }
 
         //Action: Change parent
-        if (isset($_POST['bulk_task_parent']) && $bulk_task_parent != '') {
-            if ($upd_task->task_id) {
-                //If parent is self task
-                if ($bulk_task_parent == '0') {
-                    $upd_task->task_parent = $key;
-                    $result = $upd_task->store();
-                    if (!$result) {
-                        break;
-                    }
-                    //if not, then the task will be child to the selected parent
-                } else {
-                    $upd_task->task_parent = $bulk_task_parent;
-                    $result = $upd_task->store();
-                    if (!$result) {
-                        break;
-                    }
-                }
-            }
+        if ($bulk_task_parent) {
+            $upd_task->task_parent = $bulk_task_parent;
+            $result = $upd_task->store();
         }
 
         //Action: Change dependency
