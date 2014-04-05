@@ -2308,6 +2308,7 @@ function projects_list_data($user_id = false)
         $q->addQuery($field);
     }
     $q->addQuery('ct.contact_display_name AS owner_name');
+    $q->addJoin('companies', 'c', 'c.company_id = pr.project_company');
     $q->addJoin('users', 'u', 'pr.project_owner = u.user_id');
     $q->addJoin('contacts', 'ct', 'ct.contact_id = u.user_contact');
     $q->addJoin('tasks_problems', 'tp', 'pr.project_id = tp.task_project');
