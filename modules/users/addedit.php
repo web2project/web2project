@@ -130,13 +130,14 @@ $AppUI->addFooterJavascriptFile('js/passwordstrength.js');
             f.contact_department.value = '0';
             f.dept_name.value = '';
         }
-        <?php if ($canDelete && $user_id) { ?>
-        function delIt() {
-            if (confirm( '<?php echo $AppUI->_('doDelete') . ' ' . $AppUI->_('User') . '?'; ?>' )) {
-                document.frmDelete.submit();
-            }
+    }
+    <?php if ($canDelete && $user_id) { ?>
+    function delIt() {
+        if (confirm( '<?php echo $AppUI->_('doDelete') . ' ' . $AppUI->_('User') . '?'; ?>' )) {
+            document.frmDelete.submit();
         }
-        <?php } ?>
+    }
+    <?php } ?>
     </script>
     <?php
     /**
@@ -209,14 +210,12 @@ $form = new w2p_Output_HTML_FormHelper($AppUI);
                 echo arraySelect($companies, 'contact_company', 'class=text size=1', $object->contact_company);
                 ?>
             </p>
-            <p><label>&nbsp;</label>&nbsp;</p>
-            <p><label>&nbsp;</label>&nbsp;</p>
-<!--            <p>-->
-<!--                --><?php //$form->showLabel('Department'); ?>
-<!--                <input type="hidden" name="contact_department" value="--><?php //echo $object->contact_department; ?><!--" />-->
-<!--                <input type="text" class="text" name="dept_name" value="--><?php //echo $object->dept_name; ?><!--" size="40" disabled="disabled" />-->
-<!--                <input type="button" class="button btn btn-primary btn-mini" value="--><?php //echo $AppUI->_('select dept'); ?><!--..." onclick="popDept()" />-->
-<!--            </p>-->
+            <p>
+                <?php $form->showLabel('Department'); ?>
+                <input type="hidden" name="contact_department" value="<?php echo $object->contact_department; ?>" />
+                <input type="text" class="text" name="dept_name" value="<?php echo $object->dept_name; ?>" size="40" disabled="disabled" />
+                <input type="button" class="button btn btn-primary btn-mini" value="<?php echo $AppUI->_('select dept'); ?>..." onclick="popDept()" />
+            </p>
             <?php $form->showCancelButton(); ?>
         </div>
         <div class="column right">
