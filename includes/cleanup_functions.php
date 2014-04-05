@@ -452,7 +452,7 @@ function __extract_from_showtask(&$arr, $level, $today_view, $listTable)
 
     // Assignment checkbox
     if ('projectdesigner' == $m) {
-        $s .= ('<td class="data">' . '<input type="checkbox" name="selected_task[' . $arr['task_id'] . ']" value="' . $arr['task_id'] . '"/></td>');
+        $s .= ('<td class="data">' . '<input type="checkbox" name="selected_task[]" value="' . $arr['task_id'] . '"/></td>');
     }
     $s .= '</tr>'."\n";
 

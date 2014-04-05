@@ -219,7 +219,7 @@ $listTable->addBefore('log', 'task_id');
     echo $listTable->startTable();
 
     $header = $listTable->buildHeader($fields);
-    $checkAll = '<th width="1"><input type="checkbox" onclick="select_all_rows(this, \'selected_task\')" name="multi_check"/></th></tr>';
+    $checkAll = '<th width="1"><input type="checkbox" onclick="select_all_rows(this, \'selected_task[]\')" name="multi_check"/></th></tr>';
     echo str_replace('</tr>', $checkAll, $header);
 
     reset($projects);

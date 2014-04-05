@@ -55,10 +55,8 @@ $updateFields = array('bulk_task_percent_complete' => $bulk_task_percent_complet
 
 if (is_array($selected) && count($selected)) {
     $upd_task = new CTask();
-    foreach ($selected as $key => $val) {
-        if ($key) {
-            $upd_task->load($key);
-        }
+    foreach ($selected as $val) {
+        $upd_task->load($val);
 
         foreach ($updateFields as $name => $value) {
             if ($value != '' && ((int) $_POST[$name] == (int) $value)) {
@@ -66,7 +64,6 @@ if (is_array($selected) && count($selected)) {
                     $upd_task->{str_replace('bulk_', '', $name)} = $value;
                     $result = $upd_task->store();
                     if (!$result) {
-                        echo __LINE__; print_r($upd_task->getError()); die();
                         break;
                     }
                 }
