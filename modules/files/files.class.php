@@ -170,8 +170,12 @@ class CFile extends w2p_Core_BaseObject {
         return $q->loadList();
     }
 
-    public function addHelpDeskTaskLog() {
+    public function addHelpDeskTaskLog()
+    {
+        trigger_error("The CFiles->addHelpDeskTaskLog method has been deprecated in 3.2 and will be removed in v5.0. There is no replacement in core.", E_USER_NOTICE );
+
         global $helpdesk_available;
+
         if ($helpdesk_available && $this->file_helpdesk_item != 0) {
 
             // create task log with information about the file that was uploaded
@@ -532,27 +536,18 @@ class CFile extends w2p_Core_BaseObject {
         }
     }
 
-    public function getOwner() {
-        $owner = '';
-        if (!$this->file_owner)
-            return $owner;
+    public function getOwner()
+    {
+        trigger_error("The CFile->getOwner method has been deprecated in v3.2 and will be removed in v5.0. Please use just load a CContact object instead", E_USER_NOTICE );
 
-        $q = $this->_getQuery();
-        $q->addTable('users', 'a');
-        $q->addJoin('contacts', 'b', 'b.contact_id = a.user_contact', 'inner');
-        $q->addQuery('contact_first_name, contact_last_name, contact_display_name as contact_name');
-        $q->addWhere('a.user_id = ' . (int)$this->file_owner);
-        if ($qid = &$q->exec()) {
-            $owner = $qid->fields['contact_name'];
-        }
+        $contact = new CContact();
+        $contact->findContactByUserid((int) $this->file_owner);
 
-        return $owner;
+        return $contact->contact_display_name;
     }
 
     public function getTaskName() {
-        trigger_error("The CTask->getTaskName method has been deprecated in v3.0
-            and will be removed in v4.0. Please use just load a CTask object
-            instead", E_USER_NOTICE );
+        trigger_error("The CFile->getTaskName method has been deprecated in v3.0 and will be removed in v4.0. Please use just load a CTask object instead", E_USER_NOTICE );
 
         $task = new CTask();
         $task->load((int)$this->file_task);
