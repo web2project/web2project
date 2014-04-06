@@ -103,6 +103,10 @@ div.clear {
     clear: both;
 }
 
+img {
+    border: 0px;
+}
+
 div.std {
     background: #fafafa;
     height:     1%;

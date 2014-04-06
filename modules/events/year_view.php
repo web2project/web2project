@@ -82,13 +82,13 @@ $next_year = (int)($next_year + 10000);
 				    	<table border="0" cellspacing="1" cellpadding="2" width="100%" class="motitle">
 				        	<tr>
 				            	<td>
-				                	<a href="<?php echo '?m=events&a=year_view&date=' . $prev_year; ?>"><img src="<?php echo w2PfindImage('prev.gif'); ?>" width="16" height="16" alt="pre" title="pre" border="0"></a>
+				                	<a href="<?php echo '?m=events&a=year_view&date=' . $prev_year; ?>"><img src="<?php echo w2PfindImage('prev.gif'); ?>" alt="pre" title="pre" /></a>
 				                </td>
 				                <th width="100%" align="center">
 				                	<?php echo htmlspecialchars($date->format('%Y')); ?>
 				                </th>
 				                <td>
-				                	<a href="<?php echo '?m=events&a=year_view&date=' . $next_year; ?>"><img src="<?php echo w2PfindImage('next.gif'); ?>" width="16" height="16" alt="next" title="next" border="0"></a>
+				                	<a href="<?php echo '?m=events&a=year_view&date=' . $next_year; ?>"><img src="<?php echo w2PfindImage('next.gif'); ?>" alt="next" title="next" /></a>
 				                </td>
 				            </tr>
 				        </table>

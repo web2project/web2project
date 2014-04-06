@@ -170,7 +170,7 @@ function deleteItem(id) {
                     foreach ($select_items as $id => $item) {
                         echo '<li id="listitem_'.$id.'">';
                         echo '<a href="javascript:deleteItem(' . $id . ')">';
-                        echo '<img src="' . w2PfindImage('remove.png') . '" border="0" /></a>&nbsp;';
+                        echo '<img src="' . w2PfindImage('remove.png') . '" /></a>&nbsp;';
                         echo $item.'</li>';
                     }
                     echo '<li><input type="text" name="select_newitem" id="select_newitem" class="text" />&nbsp;

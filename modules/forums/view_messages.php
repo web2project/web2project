@@ -129,7 +129,7 @@ foreach ($messages as $row) {
 		if (!$hideEmail) {
 			$s .= '&nbsp;';
             $s .= '<a href="mailto:' . $row['contact_email'] . '">';
-    		$s .= '<img src="' . w2PfindImage('email.gif') . '" width="16" height="16" border="0" alt="email" />';
+    		$s .= '<img src="' . w2PfindImage('email.gif') . '" alt="email" />';
 			$s .= '</a>';
 		}
 
@@ -159,7 +159,7 @@ foreach ($messages as $row) {
 		$s .= '</tr><tr>';
 
 		$s .= '<td valign="top" style="' . $style . '" nowrap="nowrap">';
-		$s .= '<img src="' . w2PfindImage('icons/posticon.gif', $m) . '" alt="date posted" border="0" width="14" height="11">' . $AppUI->formatTZAwareTime($row['message_date'], $df . ' ' . $tf) . '</td>';
+		$s .= '<img src="' . w2PfindImage('icons/posticon.gif', $m) . '" alt="date posted" />' . $AppUI->formatTZAwareTime($row['message_date'], $df . ' ' . $tf) . '</td>';
 		$s .= '<td valign="top" align="right" style="' . $style . '">';
 
                 // in some weird permission cases

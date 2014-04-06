@@ -78,13 +78,13 @@ $titleBlock->show();
 <table border="0" cellspacing="0" cellpadding="2" width="100%" class="motitle">
 <tr>
 	<td>
-		<a href="<?php echo '?m=events&a=week_view&date=' . $prev_week->format(FMT_TIMESTAMP_DATE); ?>"><img src="<?php echo w2PfindImage('prev.gif'); ?>" width="16" height="16" alt="pre" border="0"></a>
+		<a href="<?php echo '?m=events&a=week_view&date=' . $prev_week->format(FMT_TIMESTAMP_DATE); ?>"><img src="<?php echo w2PfindImage('prev.gif'); ?>" alt="pre" /></a>
 	</td>
 	<th width="100%">
 		<?php echo $AppUI->_('Week') . ' ' . $first_time->format('%U - %Y') . ' - ' . $AppUI->_($first_time->format('%B')); ?>
 	</th>
 	<td>
-		<a href="<?php echo '?m=events&a=week_view&date=' . $next_week->format(FMT_TIMESTAMP_DATE); ?>"><img src="<?php echo w2PfindImage('next.gif'); ?>" width="16" height="16" alt="next" border="0"></a>
+		<a href="<?php echo '?m=events&a=week_view&date=' . $next_week->format(FMT_TIMESTAMP_DATE); ?>"><img src="<?php echo w2PfindImage('next.gif'); ?>" alt="next" /></a>
 	</td>
 </tr>
 </table>

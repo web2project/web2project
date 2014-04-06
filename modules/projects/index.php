@@ -53,7 +53,7 @@ if ($canCreate) {
 }
 $titleBlock->addCell('<span title="' . $AppUI->_('Projects') . '::' . $AppUI->_('Print projects list') . '.">' .
         '<a href="javascript: void(0);" onclick ="window.open(\'index.php?m=projects&a=printprojects&dialog=1&suppressHeaders=1&company_id='.$company_id.'&project_type='.$project_type.'&project_owner='.$owner.'\', \'printprojects\',\'width=1200, height=600, menubar=1, scrollbars=1\')">
-		<img src="' . w2PfindImage('printer.png') . '" border="0" width="22" heigth"22" alt="" />
+		<img src="' . w2PfindImage('printer.png') . '" />
 		</a></span>');
 
 $titleBlock->show();

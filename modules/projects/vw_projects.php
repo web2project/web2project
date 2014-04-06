@@ -140,7 +140,7 @@ foreach ($projects as $row) {
 		$s .= '</tr>';
 		echo $s;
 
-		echo '<tr><td height="1" colspan="12" style="border-bottom: 1px solid;padding:0px;" bgcolor="#FFFFFF"><img src="' . w2PfindImage('shim.gif') . '" alt=""></td></tr>';
+		echo '<tr><td height="1" colspan="12" style="border-bottom: 1px solid;padding:0px;" bgcolor="#FFFFFF"><img src="' . w2PfindImage('shim.gif') . '" /></td></tr>';
 	}
 }
 if ($none) {

@@ -37,7 +37,7 @@ function delIt(field_id) {
             <h2>
                 <?php echo w2PtoolTip($AppUI->_($module['mod_name']), $AppUI->_('Click this icon to Add a new Custom Field to this Module.'), true); ?>
                     <a href="?m=system&u=customfields&a=addedit&module=<?php echo $module['mod_id']; ?>">
-                        <img src="<?php echo w2PfindImage('icons/edit_add.png'); ?>" border="0" alt=""><?php echo $AppUI->_($module['mod_name']); ?>
+                        <img src="<?php echo w2PfindImage('icons/edit_add.png'); ?>" alt=""><?php echo $AppUI->_($module['mod_name']); ?>
                     </a>
                 <?php echo w2PendTip(); ?>
             </h2>
@@ -64,7 +64,7 @@ function delIt(field_id) {
         foreach ($rows as $row) {
             $s .= '<tr><td class="hilite">';
             $s .= w2PtoolTip('', $AppUI->_('Click this icon to Edit this Custom Field.'), true);
-            $s .= '<a href="?m=system&u=customfields&a=addedit&module=' . $module['mod_id'] . '&field_id=' . $row['field_id'] . '"><img src="' . w2PfindImage('icons/stock_edit-16.png') . '" border="0" alt=""></a>';
+            $s .= '<a href="?m=system&u=customfields&a=addedit&module=' . $module['mod_id'] . '&field_id=' . $row['field_id'] . '"><img src="' . w2PfindImage('icons/stock_edit-16.png') . '" /></a>';
             $s .= w2PendTip();
             $s .= $htmlHelper->createCell('na', $row['field_name']);
             $s .= $htmlHelper->createCell('field_description', $row['field_description']);
@@ -75,7 +75,7 @@ function delIt(field_id) {
             $s .= $htmlHelper->createCell('field_order', $row['field_order']);
             $s .= '<td>';
             $s .= w2PtoolTip('', $AppUI->_('Click this icon to Delete this Custom Field.'), true);
-            $s .= '<a href="javascript:delIt(' . $row['field_id'] . ');"><img src="' . w2PfindImage('icons/stock_delete-16.png') . '" border="0" alt=""></a>';
+            $s .= '<a href="javascript:delIt(' . $row['field_id'] . ');"><img src="' . w2PfindImage('icons/stock_delete-16.png') . '" /></a>';
             $s .= w2PendTip();
             $s .= '</td></tr>';
         }

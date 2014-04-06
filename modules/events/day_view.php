@@ -75,13 +75,13 @@ function clickDay( idate, fdate ) {
             <table border="0" cellspacing="1" cellpadding="2" width="100%" class="motitle">
                 <tr>
                     <td>
-                        <a href="<?php echo '?m=events&a=day_view&date=' . $prev_day->format(FMT_TIMESTAMP_DATE); ?>"><img src="<?php echo w2PfindImage('prev.gif'); ?>" width="16" height="16" alt="pre" border="0"></a>
+                        <a href="<?php echo '?m=events&a=day_view&date=' . $prev_day->format(FMT_TIMESTAMP_DATE); ?>"><img src="<?php echo w2PfindImage('prev.gif'); ?>" alt="pre" /></a>
                     </td>
                     <th width="100%">
                         <?php echo $AppUI->_(htmlspecialchars($this_day->format('%A'), ENT_COMPAT, $locale_char_set)) . ', ' . $this_day->format($df); ?>
                     </th>
                     <td>
-                        <a href="<?php echo '?m=events&a=day_view&date=' . $next_day->format(FMT_TIMESTAMP_DATE); ?>"><img src="<?php echo w2PfindImage('next.gif'); ?>" width="16" height="16" alt="next" border="0"></a>
+                        <a href="<?php echo '?m=events&a=day_view&date=' . $next_day->format(FMT_TIMESTAMP_DATE); ?>"><img src="<?php echo w2PfindImage('next.gif'); ?>" alt="next" /></a>
                     </td>
                 </tr>
             </table>

@@ -67,7 +67,7 @@ class CTabBox extends w2p_Theme_TabBox {
             foreach ($this->tabs as $k => $v) {
                 $class = ($k == $this->active) ? 'tabon' : 'taboff';
                 $sel = ($k == $this->active) ? 'Selected' : '';
-                $s .= '<td height="28" valign="middle" width="3"><img src="./style/' . $this->_uistyle . '/images/tab' . $sel . 'Left.png" width="3" height="28" id="lefttab_' . $k . '"border="0" alt="" /></td>';
+                $s .= '<td height="28" valign="middle" width="3"><img src="./style/' . $this->_uistyle . '/images/tab' . $sel . 'Left.png" id="lefttab_' . $k . '" alt="" /></td>';
                 $s .= '<td id="toptab_' . $k . '" valign="middle" nowrap="nowrap"';
                 if ($js_tabs) {
                     $s .= ' class="' . $class . '"';
@@ -83,7 +83,7 @@ class CTabBox extends w2p_Theme_TabBox {
                     $s .= $this->baseHRef . 'tab=' . $k;
                 }
                 $s .= '">' . ($v[2] ? $v[1] : $this->_AppUI->_($v[1])) . '</a>&nbsp;</td>';
-                $s .= '<td valign="middle" width="3"><img id="righttab_' . $k . '" src="./style/' . $this->_uistyle . '/images/tab' . $sel . 'Right.png" width="3" height="28" border="0" alt="" /></td>';
+                $s .= '<td valign="middle" width="3"><img id="righttab_' . $k . '" src="./style/' . $this->_uistyle . '/images/tab' . $sel . 'Right.png" alt="" /></td>';
                 $s .= '<td width="3" class="tabsp"><img src="./style/'.$this->_uistyle.'/images/shim.gif" height="1" width="3" alt=""/></td>';
             }
             $s .= '</table></td></tr>';

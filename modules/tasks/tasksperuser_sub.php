@@ -175,7 +175,7 @@ function chPriority(user_id) {
 				<input type="hidden" name="log_start_date" id="log_start_date" value="<?php echo $start_date ? $start_date->format(FMT_TIMESTAMP_DATE) : ''; ?>" />
 				<input type="text" name="start_date" id="start_date" onchange="setDate_new('editFrm', 'start_date');" value="<?php echo $start_date ? $start_date->format($df) : ''; ?>" class="text" />
 				<a href="javascript: void(0);" onclick="return showCalendar('start_date', '<?php echo $df ?>', 'editFrm', null, true, true)">
-					<img src="<?php echo w2PfindImage('calendar.gif'); ?>" width="24" height="12" alt="<?php echo $AppUI->_('Calendar'); ?>" border="0" />
+					<img src="<?php echo w2PfindImage('calendar.gif'); ?>" alt="<?php echo $AppUI->_('Calendar'); ?>" />
 				</a>
 			</td>
 			<td nowrap="nowrap">
@@ -201,7 +201,7 @@ function chPriority(user_id) {
 				<input type="hidden" name="log_end_date" id="log_end_date" value="<?php echo $end_date ? $end_date->format(FMT_TIMESTAMP_DATE) : ''; ?>" />
 				<input type="text" name="end_date" id="end_date" onchange="setDate_new('editFrm', 'end_date');" value="<?php echo $end_date ? $end_date->format($df) : ''; ?>" class="text" />
 				<a href="javascript: void(0);" onclick="return showCalendar('end_date', '<?php echo $df ?>', 'editFrm', null, true, true)">
-					<img src="<?php echo w2PfindImage('calendar.gif'); ?>" width="24" height="12" alt="<?php echo $AppUI->_('Calendar'); ?>" border="0" />
+					<img src="<?php echo w2PfindImage('calendar.gif'); ?>" alt="<?php echo $AppUI->_('Calendar'); ?>" />
 				</a>
 			</td>
 			<td nowrap="nowrap" colspan="1" align="left"><?php echo $AppUI->_('Projects'); ?>:
@@ -363,9 +363,9 @@ if ($do_report) {
 
                 $tmpuser .= '<td bgcolor="#D0D0D0"><table width="100%"><tr>';
                 $tmpuser .= '<td align="left">
-					 <a href="javascript:chAssignment(' . $user_id . ', 0, 1);"><img src="' . w2PfindImage('remove.png', 'tasks')   . '" border="0" alt="' . $AppUI->_('Unassign User') . '" title="' . $AppUI->_('Unassign User from Task') . '" /></a>&nbsp;' .
-					'<a href="javascript:chAssignment(' . $user_id . ', 1, 0);"><img src="' . w2PfindImage('exchange.png', 'tasks') . '" border="0" alt="' . $AppUI->_('Hand Over') . '" title="' . $AppUI->_('Unassign User from Task and assign to selected Users') . '" /></a>&nbsp;' .
-					'<a href="javascript:chAssignment(' . $user_id . ', 0, 0);"><img src="' . w2PfindImage('add.png', 'tasks')      . '" border="0" alt="' . $AppUI->_('Assign Users') . '" title="' . $AppUI->_('Assign selected Users to selected Tasks') . '" /></a></td>';
+					 <a href="javascript:chAssignment(' . $user_id . ', 0, 1);"><img src="' . w2PfindImage('remove.png', 'tasks')   . '" alt="' . $AppUI->_('Unassign User') . '" title="' . $AppUI->_('Unassign User from Task') . '" /></a>&nbsp;' .
+					'<a href="javascript:chAssignment(' . $user_id . ', 1, 0);"><img src="' . w2PfindImage('exchange.png', 'tasks') . '" alt="' . $AppUI->_('Hand Over') . '" title="' . $AppUI->_('Unassign User from Task and assign to selected Users') . '" /></a>&nbsp;' .
+					'<a href="javascript:chAssignment(' . $user_id . ', 0, 0);"><img src="' . w2PfindImage('add.png', 'tasks')      . '" alt="' . $AppUI->_('Assign Users') . '" title="' . $AppUI->_('Assign selected Users to selected Tasks') . '" /></a></td>';
                 $tmpuser .= '<td align="center"><select class="text" name="percentage_assignment" title="' . $AppUI->_('Assign with Percentage') . '">';
                 for ($i = 0; $i <= 100; $i += 5) {
                     $tmpuser .= '<option ' . (($i == 30) ? 'selected="true"' : '') . ' value="' . $i . '">' . $i . '%</option>';
