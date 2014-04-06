@@ -248,7 +248,6 @@ if (!$min_view) {
 </script>
 
 <div id="displayOptions"> <!-- start of div used to show/hide formatting options -->
-<br />
 <form name="editFrm" method="post" action="?<?php echo "m=$m&a=$a&tab=$tab&project_id=$project_id"; ?>" accept-charset="utf-8">
     <input type="hidden" name="display_option" value="<?php echo $display_option; ?>" />
 	<input type="hidden" name="printpdf" value="<?php echo $printpdf; ?>" />
