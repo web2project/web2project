@@ -94,7 +94,7 @@ function submitIt() {
     } else if (form.contact_first_name.value.length < 1) {
         alert( '<?php echo $AppUI->_('contactsValidName', UI_OUTPUT_JS); ?>' );
         form.contact_first_name.focus();
-    } else if (form.contact_birthday.value.length > 0) {
+    } else if (form.contact_birthday.value.length > 1) {
         dar = form.contact_birthday.value.split("-");
         if (dar.length < 3) {
             alert("<?php echo $AppUI->_('adminInvalidBirthday', UI_OUTPUT_JS); ?>");
