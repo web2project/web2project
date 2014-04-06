@@ -24,7 +24,7 @@ $theme = $AppUI->getTheme();
         <table width="100%" cellspacing="0" cellpadding="0" border="0">
             <tbody>
                 <tr>
-                    <td width="508"><a href="http://www.web2project.net"><img border="0" alt="web2Project Home" src="./style/<?php echo $uistyle; ?>/images/w2p_logo.jpg"/></a></td>
+                    <td width="508"><a href="http://www.web2project.net"><img src="./style/<?php echo $uistyle; ?>/images/w2p_logo.jpg" alt="web2Project Home" /></a></td>
                     <td style="background:url(./style/<?php echo $uistyle; ?>/images/logo_bkgd.jpg)">&nbsp;</td>
                 </tr>
             </tbody>
@@ -33,7 +33,7 @@ $theme = $AppUI->getTheme();
             <tbody>
                 <tr>
                     <td width="100%" valign="top" align="left" style="background: transparent url(./style/<?php echo $uistyle; ?>/images/nav_shadow.jpg) repeat-x scroll 0%;">
-                        <img width="1" height="13" border="0" src="./style/<?php echo $uistyle; ?>/images/nav_shadow.jpg" alt=""/>
+                        <img src="./style/<?php echo $uistyle; ?>/images/nav_shadow.jpg" />
                     </td>
                 </tr>
             </tbody>
@@ -62,7 +62,7 @@ $theme = $AppUI->getTheme();
                     <td style="padding:6px" align="right"><input type="password" size="25" maxlength="32" name="password" class="text" /></td>
                 </tr>
                 <tr>
-                    <td style="padding:6px" align="left"><a href="http://www.web2project.net/"><img src="./style/web2project/w2p_icon.ico" width="32" height="24" border="0" alt="web2Project logo" /></a></td>
+                    <td style="padding:6px" align="left"><a href="http://www.web2project.net/"><img src="./style/web2project/w2p_icon.ico" alt="web2Project logo" /></a></td>
                     <td style="padding:6px" align="right" valign="bottom"><input type="submit" name="login" value="<?php echo $AppUI->_('login'); ?>" class="button" /></td>
                 </tr>
                 <tr>

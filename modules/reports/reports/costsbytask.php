@@ -41,7 +41,7 @@ $billingCategory = w2PgetSysVal('BudgetCategory');
                 <input type="hidden" name="log_start_date" id="log_start_date" value="<?php echo $start_date ? $start_date->format(FMT_TIMESTAMP_DATE) : ''; ?>" />
                 <input type="text" name="start_date" id="start_date" onchange="setDate_new('editFrm', 'start_date');" value="<?php echo $start_date ? $start_date->format($df) : ''; ?>" class="text" />
                 <a href="javascript: void(0);" onclick="return showCalendar('start_date', '<?php echo $df ?>', 'editFrm', null, true, true)">
-                    <img src="<?php echo w2PfindImage('calendar.gif'); ?>" width="24" height="12" alt="<?php echo $AppUI->_('Calendar'); ?>" border="0" />
+                    <img src="<?php echo w2PfindImage('calendar.gif'); ?>" alt="<?php echo $AppUI->_('Calendar'); ?>" />
                 </a>
             </td>
             <td align="right" nowrap="nowrap"><?php echo $AppUI->_('to'); ?></td>
@@ -49,7 +49,7 @@ $billingCategory = w2PgetSysVal('BudgetCategory');
                 <input type="hidden" name="log_end_date" id="log_end_date" value="<?php echo $end_date ? $end_date->format(FMT_TIMESTAMP_DATE) : ''; ?>" />
                 <input type="text" name="end_date" id="end_date" onchange="setDate_new('editFrm', 'end_date');" value="<?php echo $end_date ? $end_date->format($df) : ''; ?>" class="text" />
                 <a href="javascript: void(0);" onclick="return showCalendar('end_date', '<?php echo $df ?>', 'editFrm', null, true, true)">
-                    <img src="<?php echo w2PfindImage('calendar.gif'); ?>" width="24" height="12" alt="<?php echo $AppUI->_('Calendar'); ?>" border="0" />
+                    <img src="<?php echo w2PfindImage('calendar.gif'); ?>" alt="<?php echo $AppUI->_('Calendar'); ?>" />
                 </a>
             </td>
             <td nowrap="nowrap">
@@ -99,7 +99,7 @@ $billingCategory = w2PgetSysVal('BudgetCategory');
                 <td align="center"><?php echo sprintf('%.0f%%', $task->task_percent_complete); ?></td>
                 <td>
                     <?php if ($task->task_id != $task->task_parent) { ?>
-                        <img src="<?php echo w2PfindImage('corner-dots.gif'); ?>" width="16" height="12" border="0" alt="">
+                        <img src="<?php echo w2PfindImage('corner-dots.gif'); ?>" />
                     <?php } ?>
                     <a href="?m=tasks&amp;a=view&amp;task_id=<?php echo $task->task_id; ?>">
                         <?php

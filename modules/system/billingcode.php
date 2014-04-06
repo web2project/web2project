@@ -87,11 +87,11 @@ $form = new w2p_Output_HTML_FormHelper($AppUI);
             ?><tr>
                 <td>
                     <a href="?m=system&a=billingcode&billingcode_id=<?php echo $code['billingcode_id']; ?>" title="<?php echo $AppUI->_('edit'); ?>">
-                        <img src="<?php echo w2PfindImage('icons/stock_edit-16.png'); ?>" border="0" alt="<?php echo $AppUI->_('edit'); ?>" />
+                        <img src="<?php echo w2PfindImage('icons/stock_edit-16.png'); ?>" alt="<?php echo $AppUI->_('edit'); ?>" />
                     </a>
                     <?php if (!$code['billingcode_status']) { ?>
                         <a href="javascript:delIt2(<?php echo $code['billingcode_id']; ?>);" title="<?php echo $AppUI->_('delete'); ?>">
-                            <img src="<?php echo w2PfindImage('icons/stock_delete-16.png'); ?>" border="0" alt="<?php echo $AppUI->_('delete'); ?>" />
+                            <img src="<?php echo w2PfindImage('icons/stock_delete-16.png'); ?>" alt="<?php echo $AppUI->_('delete'); ?>" />
                         </a>
                     <?php } ?>
                 </td>

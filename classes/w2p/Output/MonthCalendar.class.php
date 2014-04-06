@@ -300,7 +300,7 @@ class w2p_Output_MonthCalendar {
             if ($this->showWeek) {
                 $html .= '<td class="week">';
                 $html .= $this->dayFunc ? "<a href=\"javascript:$this->weekFunc('$week[0]')\">" : '';
-                $html .= '<img src="' . w2PfindImage('view.week.gif') . '" width="16" height="15" border="0" alt="Week View" /></a>';
+                $html .= '<img src="' . w2PfindImage('view.week.gif') . '" alt="Week View" /></a>';
                 $html .= $this->dayFunc ? '</a>' : '';
                 $html .= '</td>';
             }

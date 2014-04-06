@@ -24,7 +24,7 @@ $theme = new style_wpsredmond($AppUI);
         <table width="100%" cellspacing="0" cellpadding="0" border="0">
             <tbody>
                 <tr>
-                    <td width="508"><a href="http://www.web2project.net"><img border="0" alt="web2Project Home" src="./style/<?php echo $uistyle; ?>/images/w2p_logo.jpg"/></a></td>
+                    <td width="508"><a href="http://www.web2project.net"><img alt="web2Project Home" src="./style/<?php echo $uistyle; ?>/images/w2p_logo.jpg"/></a></td>
                     <td style="background:url(./style/<?php echo $uistyle; ?>/images/logo_bkgd.jpg);">&nbsp;</td>
                 </tr>
             </tbody>
@@ -59,7 +59,7 @@ $theme = new style_wpsredmond($AppUI);
                     <td style="padding:6px" align="left"><input type="email" size="25" maxlength="255" name="checkemail" class="text" /></td>
                 </tr>
                 <tr>
-                    <td style="padding:6px" align="left"><a href="http://www.web2project.net/"><img src="./style/web2project/w2p_icon.ico" width="32" height="24" border="0" alt="web2Project logo" /></a></td>
+                    <td style="padding:6px" align="left"><a href="http://www.web2project.net/"><img src="./style/web2project/w2p_icon.ico" alt="web2Project logo" /></a></td>
                     <td style="padding:6px" align="right" valign="bottom"><input type="submit" name="sendpass" value="<?php echo $AppUI->_('send password'); ?>" class="button" /></td>
                 </tr>
                 <tr>

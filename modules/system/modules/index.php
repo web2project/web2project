@@ -51,10 +51,10 @@ $htmlHelper = new w2p_Output_HTMLHelper($AppUI);
         $s = '';
         $s .= '<td width="64" align="center">';
         if ($canEdit) {
-            $s .= '<a href="' . $query_string . '&cmd=movefirst"><img src="' . w2PfindImage('icons/2uparrow.png') . '" border="0" alt=""/></a>';
-            $s .= '<a href="' . $query_string . '&cmd=moveup"><img src="' . w2PfindImage('icons/1uparrow.png') . '" border="0" alt=""/></a>';
-            $s .= '<a href="' . $query_string . '&cmd=movedn"><img src="' . w2PfindImage('icons/1downarrow.png') . '" border="0" alt=""/></a>';
-            $s .= '<a href="' . $query_string . '&cmd=movelast"><img src="' . w2PfindImage('icons/2downarrow.png') . '" border="0" alt=""/></a>';
+            $s .= '<a href="' . $query_string . '&cmd=movefirst"><img src="' . w2PfindImage('icons/2uparrow.png') . '" /></a>';
+            $s .= '<a href="' . $query_string . '&cmd=moveup"><img src="' . w2PfindImage('icons/1uparrow.png') . '" /></a>';
+            $s .= '<a href="' . $query_string . '&cmd=movedn"><img src="' . w2PfindImage('icons/1downarrow.png') . '" /></a>';
+            $s .= '<a href="' . $query_string . '&cmd=movelast"><img src="' . w2PfindImage('icons/2downarrow.png') . '" /></a>';
         }
         $s .= '</td>';
 

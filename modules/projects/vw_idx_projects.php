@@ -143,7 +143,7 @@ $projects = array_slice($projects, $xpg_min, $xpg_pagesize);
                             $s .= '<td width="40%" class="data _name">';
                             if ($level) {
                                 $s .= str_repeat('&nbsp;&nbsp;&nbsp;&nbsp;', ($level - 1));
-                                $s .= '<img src="' . w2PfindImage('corner-dots.gif') . '" width="16" height="12" border="0">&nbsp;';
+                                $s .= '<img src="' . w2PfindImage('corner-dots.gif') . '" />&nbsp;';
                                 $s .= '<a href="./index.php?m=projects&a=view&project_id=' . $row["project_id"] . '">';
                                 $s .= (nl2br($row['project_description']) ? w2PtoolTip($row[$field], nl2br($row['project_description']), true) : w2PtoolTip($row[$field], $AppUI->_('No information available'), true));
                                 $s .= $row[$field] . (nl2br($row['project_description']) ? w2PendTip() : '') . '</a>';
@@ -152,8 +152,8 @@ $projects = array_slice($projects, $xpg_min, $xpg_pagesize);
                                         '<i>'.$AppUI->_('this project is a parent on a multi-project structure').'</i><br />'.
                                         '<i>'.$AppUI->_('click to show/hide its children').'</i>');
                                 $s .= '<a href="javascript: void(0);" onclick="expand_collapse(\'multiproject_tr_' . $row["project_id"] . '_\', \'tblProjects\')">';
-                                $s .= '<img id="multiproject_tr_' . $row["project_id"] . '__expand" src="' . w2PfindImage('icons/expand.gif') . '" width="12" height="12" border="0">';
-                                $s .= '<img id="multiproject_tr_' . $row["project_id"] . '__collapse" src="' . w2PfindImage('icons/collapse.gif') . '" width="12" height="12" border="0" style="display:none"></a>&nbsp;';
+                                $s .= '<img id="multiproject_tr_' . $row["project_id"] . '__expand" src="' . w2PfindImage('icons/expand.gif') . '" />';
+                                $s .= '<img id="multiproject_tr_' . $row["project_id"] . '__collapse" src="' . w2PfindImage('icons/collapse.gif') . '" style="display:none" /></a>&nbsp;';
                                 $s .= '<a href="./index.php?m=projects&a=view&project_id=' . $row["project_id"] . '">' . (nl2br($row['project_description']) ? w2PtoolTip($row[$field], nl2br($row['project_description']), true) : '') . $row[$field] . (nl2br($row['project_description']) ? w2PendTip() : '') . '</a>' . w2PendTip();
                             } else {
                                 $s .= '<a href="./index.php?m=projects&a=view&project_id=' . $row["project_id"] . '">';

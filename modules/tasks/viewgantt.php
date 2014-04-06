@@ -261,7 +261,7 @@ if (!$min_view) {
             <td align="left" valign="top" width="20">
                 <?php if ($display_option != "all") { ?>
                 <a href="javascript:scrollPrev()">
-                    <img src="<?php echo w2PfindImage('prev.gif'); ?>" width="16" height="16" alt="<?php echo $AppUI->_('previous'); ?>" border="0">
+                    <img src="<?php echo w2PfindImage('prev.gif'); ?>" alt="<?php echo $AppUI->_('previous'); ?>" />
                 </a>
                 <?php } ?>
             </td>
@@ -271,14 +271,14 @@ if (!$min_view) {
                 <input type="hidden" name="project_start_date" id="project_start_date" value="<?php echo $start_date ? $start_date->format(FMT_TIMESTAMP_DATE) : ''; ?>" />
                 <input type="text" name="start_date" id="start_date" onchange="setDate_new('editFrm', 'start_date');" value="<?php echo $start_date ? $start_date->format($df) : ''; ?>" class="text" />
                 <a href="javascript: void(0);" onclick="return showCalendar('start_date', '<?php echo $df ?>', 'editFrm', null, true, true)">
-                <img src="<?php echo w2PfindImage('calendar.gif'); ?>" width="24" height="12" alt="" border="0" /></a>
+                <img src="<?php echo w2PfindImage('calendar.gif'); ?>" /></a>
             </td>
             <td align="right" nowrap="nowrap"><?php echo $AppUI->_('To'); ?>:</td>
             <td align="left" nowrap="nowrap">
                 <input type="hidden" name="project_end_date" id="project_end_date" value="<?php echo $end_date ? $end_date->format(FMT_TIMESTAMP_DATE) : ''; ?>" />
                 <input type="text" name="end_date" id="end_date" onchange="setDate_new('editFrm', 'end_date');" value="<?php echo $end_date ? $end_date->format($df) : ''; ?>" class="text" />
                 <a href="javascript: void(0);" onclick="return showCalendar('end_date', '<?php echo $df ?>', 'editFrm', null, true, true)">
-                <img src="<?php echo w2PfindImage('calendar.gif'); ?>" width="24" height="12" alt="" border="0" /></a>
+                <img src="<?php echo w2PfindImage('calendar.gif'); ?>" /></a>
             </td>
 			<td>
 				<input type="checkbox" name="showLabels" id="showLabels" value="1" <?php echo (($showLabels == 1) ? 'checked="checked"' : ""); ?> /><td><label for="showLabels"><?php echo $AppUI->_('Show captions'); ?></label>
@@ -290,7 +290,7 @@ if (!$min_view) {
             <td align="right" valign="top" width="20">
                 <?php if ($display_option != 'all') { ?>
                 <a href="javascript:scrollNext()">
-                    <img src="<?php echo w2PfindImage('next.gif'); ?>" width="16" height="16" alt="<?php echo $AppUI->_('next'); ?>" border="0" />
+                    <img src="<?php echo w2PfindImage('next.gif'); ?>" alt="<?php echo $AppUI->_('next'); ?>" />
                 </a>
                 <?php } ?>
             </td>

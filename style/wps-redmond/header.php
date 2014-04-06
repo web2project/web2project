@@ -31,13 +31,13 @@ $theme = $AppUI->getTheme();
         <div class="std titlebar">
             <div class="left">
                 <a href="http://www.w8.se/" target="_new">
-                    <img src="style/<?php echo $theme; ?>/images/wp_icon.gif" border="0" />
+                    <img src="style/<?php echo $theme; ?>/images/wp_icon.gif" />
                 </a>
             </div>
             <div class="right">
                 <a href="http://www.web2project.net/" target="_new">
                     <?php echo w2PtoolTip('web2Project v. ' . $AppUI->getVersion(), 'click to visit web2Project site', true);?>
-                        <img src="style/<?php echo $theme; ?>/images/logo.png" border="0" class="banner" align="left" alt="click to visit web2Project site" />
+                        <img src="style/<?php echo $theme; ?>/images/logo.png" class="banner" align="left" alt="click to visit web2Project site" />
                     <?php echo w2PendTip();?>
                 </a>
             </div>
@@ -100,7 +100,7 @@ $theme = $AppUI->getTheme();
                         <div class="left" style="margin-top: -3px;">
                         <?php if (canAccess('smartsearch')) { ?>
                             <form name="frm_search" action="?m=smartsearch" method="post" accept-charset="utf-8">
-                                <img src="<?php echo w2PfindImage('search.png'); ?>" style="border: 0;" alt="" />&nbsp;<input class="text" size="20" type="text" id="keyword" name="keyword" value="<?php echo $AppUI->_('Global Search') . '...'; ?>" onclick="document.frm_search.keyword.value=''" onblur="document.frm_search.keyword.value='<?php echo $AppUI->_('Global Search') . '...'; ?>'" />
+                                <img src="<?php echo w2PfindImage('search.png'); ?>" />&nbsp;<input class="text" size="20" type="text" id="keyword" name="keyword" value="<?php echo $AppUI->_('Global Search') . '...'; ?>" onclick="document.frm_search.keyword.value=''" onblur="document.frm_search.keyword.value='<?php echo $AppUI->_('Global Search') . '...'; ?>'" />
                             </form>
                             <?php } ?>
                         </div>

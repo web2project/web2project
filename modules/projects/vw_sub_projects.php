@@ -41,7 +41,7 @@ if (is_array($st_projects_arr)) {
             $row['company_id'] = $row['project_company'];
             $htmlHelper->stageRowData($row);
 
-            $s .= '<tr><td><a href="./index.php?m=projects&a=addedit&project_id=' . $s_project->project_id . '"><img src="' . w2PfindImage('icons/' . ($project_id == $s_project->project_id ? 'pin' : 'pencil') . '.gif') . '" border="0" alt="" /></a></td>';
+            $s .= '<tr><td><a href="./index.php?m=projects&a=addedit&project_id=' . $s_project->project_id . '"><img src="' . w2PfindImage('icons/' . ($project_id == $s_project->project_id ? 'pin' : 'pencil') . '.gif') . '" /></a></td>';
             if ($level) {
                 $sd = str_repeat('&nbsp;&nbsp;&nbsp;&nbsp;', ($level - 1)) . w2PshowImage('corner-dots.gif', 16, 12) . '&nbsp;' . '<a href="./index.php?m=projects&a=view&project_id=' . $s_project->project_id . '">' . $s_project->project_name . '</a>';
             } else {

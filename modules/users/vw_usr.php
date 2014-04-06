@@ -50,8 +50,8 @@ foreach ($users as $row) {
 ?>
 <tr>
     <td>
-        <a href="./index.php?m=users&a=addedit&user_id=<?php echo $row['user_id']; ?>"><img src="<?php echo w2PfindImage('icons/stock_edit-16.png'); ?>" width="16" height="16" border="0" alt="email" /></a>
-        <a href="./index.php?m=users&a=view&tab=1&user_id=<?php echo $row['user_id']; ?>"><img src="<?php echo w2PfindImage('obj/lock.gif'); ?>" width="16" height="16" border="0" alt="email" /></a>
+        <a href="./index.php?m=users&a=addedit&user_id=<?php echo $row['user_id']; ?>"><img src="<?php echo w2PfindImage('icons/stock_edit-16.png'); ?>" alt="email" /></a>
+        <a href="./index.php?m=users&a=view&tab=1&user_id=<?php echo $row['user_id']; ?>"><img src="<?php echo w2PfindImage('obj/lock.gif'); ?>" alt="email" /></a>
     </td>
 	<?php if (w2PgetParam($_REQUEST, 'tab', 0) == 0) { ?>
 	<td nowrap="nowrap">
@@ -73,7 +73,7 @@ foreach ($users as $row) {
 	} ?>
 	</td>
 	<td width="20%">
-		<a href="mailto:<?php echo $row['contact_email']; ?>"><img src="<?php echo w2PfindImage('obj/email.gif'); ?>" width="16" height="16" border="0" alt="email" /></a>
+		<a href="mailto:<?php echo $row['contact_email']; ?>"><img src="<?php echo w2PfindImage('obj/email.gif'); ?>" alt="email" /></a>
         <?php echo $row['contact_display_name']; ?>
 	</td>
     <?php

@@ -82,7 +82,7 @@ $spercent = arrayMerge(array('' => '('.$AppUI->_('Progress').')'), $percent);
                 <input type='hidden' id='add_task_bulk_start_date' name='add_task_bulk_start_date' value='' />
                 <input type='text' onchange="setDate('frm_bulk', 'bulk_start_date');" class='text' id='bulk_start_date' name='bulk_start_date' value='' />
                 <a onclick="return showCalendar('bulk_start_date', '<?php echo $cf ?>', 'frm_bulk', '<?php echo (strpos($cf, '%p') !== false ? '12' : '24') ?>', true)" href="javascript: void(0);">
-                    <img src='<?php echo w2PfindImage('calendar.gif'); ?>' width='24' height='12' alt='<?php echo $AppUI->_('Calendar'); ?>' border='0' />
+                    <img src="<?php echo w2PfindImage('calendar.gif'); ?>" alt="<?php echo $AppUI->_('Calendar'); ?>" />
                 </a>
             </td>
             <th width="15%" nowrap="nowrap"><?php echo $AppUI->_('End Date'); ?>&nbsp;</th>
@@ -90,7 +90,7 @@ $spercent = arrayMerge(array('' => '('.$AppUI->_('Progress').')'), $percent);
                 <input type='hidden' id='add_task_bulk_end_date' name='add_task_bulk_end_date' value='' />
                 <input type='text' onchange="setDate('frm_bulk', 'bulk_end_date');" class='text' id='bulk_end_date' name='bulk_end_date' value='' />
                 <a onclick="return showCalendar('bulk_end_date', '<?php echo $cf ?>', 'frm_bulk', '<?php echo (strpos($cf, '%p') !== false ? '12' : '24') ?>', true)" href="javascript: void(0);">
-                    <img src='<?php echo w2PfindImage('calendar.gif'); ?>' width='24' height='12' alt='<?php echo $AppUI->_('Calendar'); ?>' border='0' />
+                    <img src="<?php echo w2PfindImage('calendar.gif'); ?>" alt="<?php echo $AppUI->_('Calendar'); ?>" />
                 </a>
             </td>
             <th width="15%" nowrap="nowrap"><?php echo $AppUI->_('Keep daytimes'); ?>&nbsp;</th>
@@ -110,13 +110,13 @@ $spercent = arrayMerge(array('' => '('.$AppUI->_('Progress').')'), $percent);
             <th><?php echo $AppUI->_('Owner'); ?>&nbsp;</th>
             <td><?php echo arraySelect($sowners, 'bulk_task_owner', 'class="text"', ''); ?></td>
             <th><?php echo $AppUI->_('Assign') . '&nbsp;</th>'; ?>
-            <td nowrap="nowrap"><a href="javascript: void(0);" style="display: block;" onclick="expand_selector('assign', 'frm_bulk')"><img id="assign_expand" src="<?php echo w2PfindImage('icons/expand.gif'); ?>" width="12" height="12" border="0" alt="">&nbsp;<img id="assign_collapse" src="<?php echo w2PfindImage('icons/collapse.gif'); ?>" width="12" height="12" border="0" style="display:none">&nbsp;</a>
+            <td nowrap="nowrap"><a href="javascript: void(0);" style="display: block;" onclick="expand_selector('assign', 'frm_bulk')"><img src="<?php echo w2PfindImage('icons/expand.gif'); ?>" id="assign_expand" />&nbsp;<img src="<?php echo w2PfindImage('icons/collapse.gif'); ?>" id="assign_collapse" style="display:none">&nbsp;</a>
                 <div>
                     <table>
                         <tr id="assign" style="visibility:collapse;display:none">
                             <td nowrap="nowrap">
                                 <a href="javascript: void(0);" onclick="addUser(document.frm_bulk)">
-                                    <img src="<?php echo w2PfindImage('add.png', $m); ?>" width="16" height="16" title="<?php echo $AppUI->_('Add Assignment'); ?>" alt="<?php echo $AppUI->_('Add Assignment'); ?>" border="0" />
+                                    <img src="<?php echo w2PfindImage('add.png', $m); ?>" title="<?php echo $AppUI->_('Add Assignment'); ?>" alt="<?php echo $AppUI->_('Add Assignment'); ?>" />
                                 </a>
                                 <?php echo arraySelect($sassign, 'bulk_task_user', 'class="text"', ''); ?>
                                 <select name="bulk_task_assign_perc" class="text">
@@ -127,7 +127,7 @@ $spercent = arrayMerge(array('' => '('.$AppUI->_('Progress').')'), $percent);
                                     ?>
                                 </select><br /><br />
                                 <a href="javascript: void(0);" onclick="removeUser(document.frm_bulk)">
-                                    <img src="<?php echo w2PfindImage('remove.png', $m); ?>" width="16" height="16" title="<?php echo $AppUI->_('Remove Assignment'); ?>" alt="<?php echo $AppUI->_('Remove Assignment'); ?>" border="0" />
+                                    <img src="<?php echo w2PfindImage('remove.png', $m); ?>" title="<?php echo $AppUI->_('Remove Assignment'); ?>" alt="<?php echo $AppUI->_('Remove Assignment'); ?>" />
                                 </a>
                                 <select name="bulk_task_assign[]" id="bulk_task_assign" size="6" class="text" multiple="multiple">
                                 </select>

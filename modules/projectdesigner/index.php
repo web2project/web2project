@@ -166,19 +166,19 @@ if (!$project_id) {
 	}
 	$titleBlock->addCell();
 	$titleBlock->addCell(w2PtoolTip($m, 'print project') . '<a href="javascript: void(0);" onclick ="window.open(\'index.php?m=projectdesigner&a=printproject&dialog=1&suppressHeaders=1&project_id=' . $project_id . '\', \'printproject\',\'width=1200, height=600, menubar=1, scrollbars=1\')">
-      		<img src="' . w2PfindImage('printer.png') . '" border="0" width="22" heigth"22" alt="" />
+      		<img src="' . w2PfindImage('printer.png') . '" />
       		</a>
       		' . w2PendTip());
 	$titleBlock->addCell(w2PtoolTip($m, 'expand all panels') . '<a href="javascript: void(0);" onclick ="expandAll()">
-      		<img src="' . w2PfindImage('down.png', $m) . '" border="0" width="22" heigth="22" alt="" />
+      		<img src="' . w2PfindImage('down.png', $m) . '" />
       		</a>
       		' . w2PendTip());
 	$titleBlock->addCell(w2PtoolTip($m, 'collapse all panels') . '<a href="javascript: void(0);" onclick ="collapseAll()">
-      		<img src="' . w2PfindImage('up.png', $m) . '" border="0" width="22" heigth="22" alt="" />
+      		<img src="' . w2PfindImage('up.png', $m) . '" />
       		</a>
       		' . w2PendTip());
 	$titleBlock->addCell(w2PtoolTip($m, 'save your workspace') . '<a href="javascript: void(0);" onclick ="document.frmWorkspace.submit()">
-      		<img src="' . w2PfindImage('filesave.png', $m) . '" border="0" width="22" heigth="22" alt="" />
+      		<img src="' . w2PfindImage('filesave.png', $m) . '" />
       		</a>
       		' . w2PendTip());
 	$titleBlock->addCell();
@@ -258,14 +258,14 @@ function addComponent() {
 	oCell.setAttribute ('align','left');
 	oCell.setAttribute ('width','5');
 	htmltxt = '';
-	htmltxt +='<a href="javascript: void(0);" onclick="removeComponent(\'component'+line_nr+'_\')"><img src="<?php echo w2PfindImage('remove.png', $m); ?>" width="16" height="16" border="0" alt="" /></a>';
+	htmltxt +='<a href="javascript: void(0);" onclick="removeComponent(\'component'+line_nr+'_\')"><img src="<?php echo w2PfindImage('remove.png', $m); ?>" /></a>';
 	oCell.innerHTML =htmltxt;
 	newtr.appendChild(oCell);
 	oCell = document.createElement('td');
 	htmltxt = '';
 	htmltxt +='<input type="hidden" id="add_task_line_'+line_nr+'" name="add_task_line_'+line_nr+'" value="'+line_nr+'" />';
 	htmltxt +='<input type="text" class="text" style="width:200px;" name="add_task_name_'+line_nr+'" value="" />';
-	htmltxt +='&nbsp;<?php echo w2PtoolTip('add tasks panel', 'click here to add a description to this task and/or edit other available options.<br />click again to collapse it.'); ?><a href="javascript: void(0);" onclick="expand_collapse(\'component'+li+'_desc\', \'tblProjects\')"><img id="component'+li+'_desc_expand" src="<?php echo w2PfindImage('icons/expand.gif', $m); ?>" width="12" height="12" border="0" alt=""><img id="component'+li+'_desc_collapse" src="<?php echo w2PfindImage('icons/collapse.gif', $m); ?>" width="12" height="12" border="0" style="display:none" alt=""></a><?php echo w2PendTip(); ?>';
+	htmltxt +='&nbsp;<?php echo w2PtoolTip('add tasks panel', 'click here to add a description to this task and/or edit other available options.<br />click again to collapse it.'); ?><a href="javascript: void(0);" onclick="expand_collapse(\'component'+li+'_desc\', \'tblProjects\')"><img id="component'+li+'_desc_expand" src="<?php echo w2PfindImage('icons/expand.gif', $m); ?>" /><img id="component'+li+'_desc_collapse" src="<?php echo w2PfindImage('icons/collapse.gif', $m); ?>" style="display:none" /></a><?php echo w2PendTip(); ?>';
 	oCell.innerHTML =htmltxt;
 	newtr.appendChild(oCell);
 	oCell = document.createElement('td');
@@ -273,7 +273,7 @@ function addComponent() {
 	htmltxt +='<input type="hidden" id="add_task_start_date_'+line_nr+'" name="add_task_start_date_'+line_nr+'" value="<?php echo $today->format(FMT_TIMESTAMP); ?>" />';
 	htmltxt +='<input type="text" onchange="setDate(\'editFrm\', \'start_date_'+line_nr+'\');" class="text" style="width:130px;" id="start_date_'+line_nr+'" name="start_date_'+line_nr+'" value="<?php echo $today->format($cf); ?>" />';
 	htmltxt +='<a href="javascript: void(0);" onclick="return showCalendar(\'start_date_'+line_nr+'\', \'<?php echo $cf ?>\', \'editFrm\', \'<?php echo (strpos($cf, '%p') !== false ? '12' : '24') ?>\', true)" >';
-	htmltxt +='&nbsp;<img src="<?php echo w2PfindImage('calendar.gif', $m); ?>" width="24" height="12" border="0" alt="" />';
+	htmltxt +='&nbsp;<img src="<?php echo w2PfindImage('calendar.gif', $m); ?>" />';
 	htmltxt +='</a>';
 	oCell.innerHTML =htmltxt;
 	newtr.appendChild(oCell);
@@ -283,7 +283,7 @@ function addComponent() {
 	echo $today->format(FMT_TIMESTAMP); ?>" />';
 	htmltxt +='<input type="text" onchange="setDate(\'editFrm\', \'end_date_'+line_nr+'\');" class="text" style="width:130px;" id="end_date_'+line_nr+'" name="end_date_'+line_nr+'" value="<?php echo $today->format($cf); ?>" />';
 	htmltxt +='<a href="javascript: void(0);" onclick="return showCalendar(\'end_date_'+line_nr+'\', \'<?php echo $cf ?>\', \'editFrm\', \'<?php echo (strpos($cf, '%p') !== false ? '12' : '24') ?>\', true)" >';
-	htmltxt +='&nbsp;<img src="<?php echo w2PfindImage('calendar.gif', $m); ?>" width="24" height="12" border="0" alt="" />';
+	htmltxt +='&nbsp;<img src="<?php echo w2PfindImage('calendar.gif', $m); ?>" />';
 	htmltxt +='</a>';
 	oCell.innerHTML =htmltxt;
 	newtr.appendChild(oCell);
@@ -436,9 +436,9 @@ function calcDuration(f, start_date, end_date, duration_fld, durntype_fld) {
         <a href="javascript: void(0);" name="fp" style="display:block" onclick="expand_collapse('project', 'tblProjects');update_workspace('project');">
             <div class="left" style="color: <?php echo bestColor($obj->project_color_identifier); ?>; font-weight: bold; padding-top: 2px;"><?php echo $AppUI->_('Project') . ': ' . $obj->project_name; ?></div>
             <div class="right">
-                <img id="project_expand" src="<?php echo w2PfindImage('icons/expand.gif', $m); ?>" width="12" height="12" border="0"
+                <img id="project_expand" src="<?php echo w2PfindImage('icons/expand.gif', $m); ?>"
                      alt="" <?php echo (isset($view_options[0]['pd_option_view_project']) ? ($view_options[0]['pd_option_view_project'] ? 'style="display:none"' : 'style="display:"') : 'style="display:none"') ?>>
-                <img id="project_collapse" src="<?php echo w2PfindImage('icons/collapse.gif', $m); ?>" width="12" height="12" border="0"
+                <img id="project_collapse" src="<?php echo w2PfindImage('icons/collapse.gif', $m); ?>"
                      alt="" <?php echo (isset($view_options[0]['pd_option_view_project']) ? ($view_options[0]['pd_option_view_project'] ? 'style="display:"' : 'style="display:none"') : 'style="display:"') ?>>
             </div>
         </a>
@@ -463,9 +463,9 @@ function calcDuration(f, start_date, end_date, duration_fld, durntype_fld) {
         <a href="javascript: void(0);" name="fg" style="display:block" onclick="expand_collapse('gantt', 'tblProjects');update_workspace('gantt');">
             <strong class="left"><?php echo $AppUI->_('Gantt Chart'); ?></strong>
             <div class="right">
-                <img id="gantt_expand" src="<?php echo w2PfindImage('icons/expand.gif', $m); ?>" width="12" height="12" border="0"
+                <img id="gantt_expand" src="<?php echo w2PfindImage('icons/expand.gif', $m); ?>"
                      alt="" <?php echo (isset($view_options[0]['pd_option_view_gantt']) ? ($view_options[0]['pd_option_view_gantt'] ? 'style="display:none"' : 'style="display:"') : 'style="display:none"') ?>>
-                <img id="gantt_collapse" src="<?php echo w2PfindImage('icons/collapse.gif', $m); ?>" width="12" height="12" border="0"
+                <img id="gantt_collapse" src="<?php echo w2PfindImage('icons/collapse.gif', $m); ?>"
                      <?php echo (isset($view_options[0]['pd_option_view_gantt']) ? ($view_options[0]['pd_option_view_gantt'] ? 'style="display:"' : 'style="display:none"') : 'style="display:"') ?>>
             </div>
         </a>
@@ -496,9 +496,9 @@ function calcDuration(f, start_date, end_date, duration_fld, durntype_fld) {
         <a href="javascript: void(0);" name="fg" style="display:block" onclick="expand_collapse('tasks', 'tblProjects');update_workspace('tasks');">
             <strong class="left"><?php echo $AppUI->_('Tasks'); ?></strong>
             <div class="right">
-                <img id="tasks_expand" src="<?php echo w2PfindImage('icons/expand.gif', $m); ?>" width="12" height="12" border="0"
+                <img id="tasks_expand" src="<?php echo w2PfindImage('icons/expand.gif', $m); ?>"
                      alt="" <?php echo (isset($view_options[0]['pd_option_view_tasks']) ? ($view_options[0]['pd_option_view_tasks'] ? 'style="display:none"' : 'style="display:"') : 'style="display:none"') ?>>
-                <img id="tasks_collapse" src="<?php echo w2PfindImage('icons/collapse.gif', $m); ?>" width="12" height="12" border="0"
+                <img id="tasks_collapse" src="<?php echo w2PfindImage('icons/collapse.gif', $m); ?>"
                      <?php echo (isset($view_options[0]['pd_option_view_tasks']) ? ($view_options[0]['pd_option_view_tasks'] ? 'style="display:"' : 'style="display:none"') : 'style="display:"') ?>>
             </div>
         </a>
@@ -529,9 +529,9 @@ function calcDuration(f, start_date, end_date, duration_fld, durntype_fld) {
         <a href="javascript: void(0);" name="fg" style="display:block" onclick="expand_collapse('actions', 'tblProjects');update_workspace('actions');">
             <strong class="left"><?php echo $AppUI->_('Actions'); ?></strong>
             <div class="right">
-                <img id="actions_expand" src="<?php echo w2PfindImage('icons/expand.gif', $m); ?>" width="12" height="12" border="0"
+                <img id="actions_expand" src="<?php echo w2PfindImage('icons/expand.gif', $m); ?>"
                      alt="" <?php echo (isset($view_options[0]['pd_option_view_actions']) ? ($view_options[0]['pd_option_view_actions'] ? 'style="display:none"' : 'style="display:"') : 'style="display:none"') ?>>
-                <img id="actions_collapse" src="<?php echo w2PfindImage('icons/collapse.gif', $m); ?>" width="12" height="12" border="0"
+                <img id="actions_collapse" src="<?php echo w2PfindImage('icons/collapse.gif', $m); ?>"
                      <?php echo (isset($view_options[0]['pd_option_view_actions']) ? ($view_options[0]['pd_option_view_actions'] ? 'style="display:"' : 'style="display:none"') : 'style="display:"') ?>>
             </div>
         </a>
@@ -562,9 +562,9 @@ function calcDuration(f, start_date, end_date, duration_fld, durntype_fld) {
         <a href="javascript: void(0);" name="fg" style="display:block" onclick="expand_collapse('addtasks', 'tblProjects');update_workspace('addtasks');">
             <strong class="left"><?php echo $AppUI->_('Add Tasks'); ?></strong>
             <div class="right">
-                <img id="addtasks_expand" src="<?php echo w2PfindImage('icons/expand.gif', $m); ?>" width="12" height="12" border="0"
+                <img id="addtasks_expand" src="<?php echo w2PfindImage('icons/expand.gif', $m); ?>"
                      alt="" <?php echo (isset($view_options[0]['pd_option_view_addtasks']) ? ($view_options[0]['pd_option_view_addtasks'] ? 'style="display:none"' : 'style="display:"') : 'style="display:none"') ?>>
-                <img id="addtasks_collapse" src="<?php echo w2PfindImage('icons/collapse.gif', $m); ?>" width="12" height="12" border="0"
+                <img id="addtasks_collapse" src="<?php echo w2PfindImage('icons/collapse.gif', $m); ?>"
                      <?php echo (isset($view_options[0]['pd_option_view_addtasks']) ? ($view_options[0]['pd_option_view_addtasks'] ? 'style="display:"' : 'style="display:none"') : 'style="display:"') ?>>
             </div>
         </a>
@@ -595,9 +595,9 @@ function calcDuration(f, start_date, end_date, duration_fld, durntype_fld) {
         <a href="javascript: void(0);" name="fg" style="display:block" onclick="expand_collapse('files', 'tblProjects');update_workspace('files');">
             <strong class="left"><?php echo $AppUI->_('Files'); ?></strong>
             <div class="right">
-                <img id="files_expand" src="<?php echo w2PfindImage('icons/expand.gif', $m); ?>" width="12" height="12" border="0"
+                <img id="files_expand" src="<?php echo w2PfindImage('icons/expand.gif', $m); ?>"
                      alt="" <?php echo (isset($view_options[0]['pd_option_view_files']) ? ($view_options[0]['pd_option_view_files'] ? 'style="display:none"' : 'style="display:"') : 'style="display:none"') ?>>
-                <img id="files_collapse" src="<?php echo w2PfindImage('icons/collapse.gif', $m); ?>" width="12" height="12" border="0"
+                <img id="files_collapse" src="<?php echo w2PfindImage('icons/collapse.gif', $m); ?>"
                      <?php echo (isset($view_options[0]['pd_option_view_files']) ? ($view_options[0]['pd_option_view_files'] ? 'style="display:"' : 'style="display:none"') : 'style="display:"') ?>>
             </div>
         </a>

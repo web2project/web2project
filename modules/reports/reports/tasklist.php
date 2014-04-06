@@ -91,13 +91,13 @@ $df = $AppUI->getPref('SHDATEFORMAT');
                 <input type="hidden" name="log_start_date" id="log_start_date" value="<?php echo $start_date ? $start_date->format(FMT_TIMESTAMP_DATE) : ''; ?>" />
                 <input type="text" name="start_date" id="start_date" onchange="setDate_new('editFrm', 'start_date');" value="<?php echo $start_date ? $start_date->format($df) : ''; ?>" class="text" />
                 <a href="javascript: void(0);" onclick="return showCalendar('start_date', '<?php echo $df ?>', 'editFrm', null, true, true)">
-                    <img src="<?php echo w2PfindImage('calendar.gif'); ?>" width="24" height="12" alt="<?php echo $AppUI->_('Calendar'); ?>" border="0" />
+                    <img src="<?php echo w2PfindImage('calendar.gif'); ?>" alt="<?php echo $AppUI->_('Calendar'); ?>" />
                 </a>
                 <?php echo $AppUI->_('to'); ?>
                 <input type="hidden" name="log_end_date" id="log_end_date" value="<?php echo $end_date ? $end_date->format(FMT_TIMESTAMP_DATE) : ''; ?>" />
                 <input type="text" name="end_date" id="end_date" onchange="setDate_new('editFrm', 'end_date');" value="<?php echo $end_date ? $end_date->format($df) : ''; ?>" class="text" />
                 <a href="javascript: void(0);" onclick="return showCalendar('end_date', '<?php echo $df ?>', 'editFrm', null, true, true)">
-                    <img src="<?php echo w2PfindImage('calendar.gif'); ?>" width="24" height="12" alt="<?php echo $AppUI->_('Calendar'); ?>" border="0" />
+                    <img src="<?php echo w2PfindImage('calendar.gif'); ?>" alt="<?php echo $AppUI->_('Calendar'); ?>" />
                 </a>
             </td>
             <td nowrap="nowrap">
@@ -176,7 +176,7 @@ if ($do_report) {
 		$str .= '<td>';
 
         $indent_count = substr_count($task['task_path_enumeration'], '/') * 3;
-        $str .= ($task['task_id'] == $task['task_parent']) ? '' : str_repeat('&nbsp;', $indent_count) . '<img src="' . w2PfindImage('corner-dots.gif') . '" width="16" height="12" border="0" alt="" />';
+        $str .= ($task['task_id'] == $task['task_parent']) ? '' : str_repeat('&nbsp;', $indent_count) . '<img src="' . w2PfindImage('corner-dots.gif') . '" />';
         $str .= '&nbsp;<a href="?m=tasks&a=view&task_id=' . $task['task_id'] . '">' . $task['task_name'] . '</a></td>';
 		$str .= '<td>' . nl2br($task['task_description']) . '</td>';
 
