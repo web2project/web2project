@@ -10,6 +10,12 @@ if (isset($_REQUEST['project_id'])) {
 }
 $project_id = $AppUI->getState('LinkIdxProject') !== null ? $AppUI->getState('LinkIdxProject') : 0;
 
+$link = new CLink();
+
+if (!$link->canAccess()) {
+    $AppUI->redirect(ACCESS_DENIED);
+}
+
 // get the list of visible companies
 $extra = array('from' => 'links', 'where' => 'projects.project_id = link_project');
 

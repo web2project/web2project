@@ -4,11 +4,7 @@ if (!defined('W2P_BASE_DIR')) {
 }
 // @todo    convert to template
 
-global $AppUI, $canRead, $canEdit, $project_id, $task_id, $showProject, $tab, $search_string;
-
-if (!$canRead) {
-    $AppUI->redirect(ACCESS_DENIED);
-}
+global $AppUI, $project_id, $task_id, $showProject, $tab, $search_string;
 
 $type_filter = ($m == 'links') ? $tab-1 : -1;
 
