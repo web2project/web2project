@@ -170,9 +170,9 @@ $form = new w2p_Output_HTML_FormHelper($AppUI);
             <p>
                 <?php $form->showLabel('Folder'); ?>
                 <?php if ($file_id == 0 && !$ci) { ?>
-                    <?php echo arraySelectTree($folders, 'file_folder', 'class="text"', ($file_helpdesk_item ? getHelpdeskFolder() : $folder)); ?>
+                    <?php echo arraySelect($folders, 'file_folder', 'class="text"', ($file_helpdesk_item ? getHelpdeskFolder() : $folder)); ?>
                 <?php } else { ?>
-                    <?php echo arraySelectTree($folders, 'file_folder', 'class="text"', ($file_helpdesk_item ? getHelpdeskFolder() : $file->file_folder)); ?>
+                    <?php echo arraySelect($folders, 'file_folder', 'class="text"', ($file_helpdesk_item ? getHelpdeskFolder() : $file->file_folder)); ?>
                 <?php } ?>
             </p>
             <?php if ($file->file_id) { ?>

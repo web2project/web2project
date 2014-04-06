@@ -1675,12 +1675,17 @@ function clash_cancel(w2p_Core_CAppUI $AppUI)
 function getFolderSelectList()
 {
     global $AppUI;
-    $folders = array(0 => '');
+
     $q = new w2p_Database_Query();
     $q->addTable('file_folders');
     $q->addQuery('file_folder_id, file_folder_name, file_folder_parent');
     $q->addOrder('file_folder_name');
-    $folders = arrayMerge(array('0' => array(0, $AppUI->_('Root'), -1)), $q->loadHashList('file_folder_id'));
+    $folderList = $q->loadHashList('file_folder_id');
+
+    $folders = array(0 => 'Root');
+    foreach($folderList as $folder => $data) {
+        $folders[$folder] = $data['file_folder_name'];
+    }
 
     return $folders;
 }

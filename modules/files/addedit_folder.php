@@ -100,7 +100,7 @@ $form = new w2p_Output_HTML_FormHelper($AppUI);
                 <?php $form->showLabel('Subfolder of'); ?>
                 <?php
                 $parent_folder = ($folder_id > 0) ? $folder->file_folder_parent : $file_folder_parent;
-                echo arraySelectTree($folders, 'file_folder_parent', 'style="width:175px;" class="text"', $parent_folder);
+                echo arraySelect($folders, 'file_folder_parent', 'style="width:175px;" class="text"', $parent_folder);
                 ?>
             </p>
             <p>
