@@ -384,7 +384,7 @@ function cal_work_day_conv($val)
 
 function __extract_from_showtask(&$arr, $level, $today_view, $listTable)
 {
-    global $AppUI, $m;
+    global $AppUI, $m, $a;
 
     $listTable = (is_null($listTable)) ? new w2p_Output_HTML_TaskTable($AppUI) : $listTable;
 
@@ -427,7 +427,7 @@ function __extract_from_showtask(&$arr, $level, $today_view, $listTable)
     // dots
     $s = __extract_from_showtask2($arr, $level, $today_view, $s, $m, $jsTaskId, $expanded);
 
-    if ($today_view) { // Show the project name
+    if ($a == 'todo') { // Show the project name
         $s .= ('<td class="_name" width="50%"><a href="./index.php?m=projects&amp;a=view&amp;project_id=' . $arr['task_project'] . '">' . '<div style="display:inline-block;padding: 2px 3px;background-color:#' . $arr['project_color_identifier'] . ';color:' . bestColor($arr['project_color_identifier']) . '">' . $arr['project_name'] . '</div>' . '</a></td>');
     } else {
         $s .= $listTable->createCell('task_owner', $arr['task_owner']);
