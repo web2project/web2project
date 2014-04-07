@@ -186,8 +186,11 @@ class w2p_Output_HTMLHelper extends w2p_Output_HTML_Base
                 // The above are all contact/user display names, the below are numbers.
             case '_count':
             case '_hours':
-            case '_duration':
                 $cell = $value;
+                break;
+            case '_duration':
+                $durnTypes = w2PgetSysVal('TaskDurationType');
+                $cell = $value . ' ' . $this->AppUI->_($durnTypes[$this->tableRowData['task_duration_type']]);
                 break;
             case '_size':
                 $cell = file_size($value);

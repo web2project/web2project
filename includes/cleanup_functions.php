@@ -387,6 +387,7 @@ function __extract_from_showtask(&$arr, $level, $today_view, $listTable)
     global $AppUI, $m, $a;
 
     $listTable = (is_null($listTable)) ? new w2p_Output_HTML_TaskTable($AppUI) : $listTable;
+    $listTable->stageRowData($arr);
 
     $tmpTask = new CTask();
     $tmpTask->load($arr['task_id']);
@@ -447,7 +448,7 @@ function __extract_from_showtask(&$arr, $level, $today_view, $listTable)
 
     // duration or milestone
     $s .= $listTable->createCell('task_start_datetime', $arr['task_start_date']);
-    $s .= $listTable->createCell('task_duration', $arr['task_duration'] . ' ' . mb_substr($AppUI->_($durnTypes[$arr['task_duration_type']]), 0, 1));
+    $s .= $listTable->createCell('task_duration', $arr['task_duration']);
     $s .= $listTable->createCell('task_end_datetime', $arr['task_end_date']);
 
     // Assignment checkbox
