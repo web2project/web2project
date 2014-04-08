@@ -16,10 +16,13 @@ class w2p_Authenticators_SQL extends w2p_Authenticators_Base
 
         $q = $this->_query;
         $q->addTable('users');
-        $q->addQuery('user_id');
+        $q->addQuery('user_id, user_password');
         $q->addWhere("user_username = '$username'");
-        $q->addWhere("user_password = '".$this->hashPassword($password)."'");
-        $this->user_id = (int) $q->loadResult();
+        $result = $q->loadHash();
+
+        if ($this->verify($username, $password, $result['user_password'])) {
+            $this->user_id = (int) $result['user_id'];
+        }
 
         return ($this->user_id) ? true : false;
     }

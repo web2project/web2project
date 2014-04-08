@@ -45,6 +45,23 @@ abstract class w2p_Authenticators_Base
         return $hash;
     }
 
+    public function verify($username, $password, $hash)
+    {
+        $length = strlen($hash);
+
+        switch ($length) {
+            case '32':
+                $q = $this->_query;
+                $q->addTable('users');
+                $q->addUpdate('user_password', password_hash($password, PASSWORD_BCRYPT));
+                $q->addWhere("user_username = '$username'");
+                $q->exec();
+                return ($hash == $this->hashPassword($password));
+            default:
+                return password_verify($password, $hash);
+        }
+    }
+
     /**
      * This generates a new temporary password in order to send it to the user.
      *   It should be considered temporary because we could be sent via email.
