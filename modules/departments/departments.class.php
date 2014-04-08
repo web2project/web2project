@@ -76,16 +76,12 @@ class CDepartment extends w2p_Core_BaseObject
 
         $q = $this->_getQuery();
         $q->addTable('departments');
-        $q->addQuery('departments.*, COUNT(ct.contact_department) dept_users, count(distinct p.project_id) as countp, count(distinct p2.project_id) as inactive, con.contact_first_name, con.contact_last_name');
-        $q->addJoin('companies', 'c', 'c.company_id = departments.dept_company');
+        $q->addQuery('departments.*, count(distinct p.project_id) as countp, count(distinct p2.project_id) as inactive');
         $q->addJoin('project_departments', 'pd', 'pd.department_id = dept_id');
         $q->addJoin('projects', 'p', 'pd.project_id = p.project_id AND p.project_active = 1');
-        $q->leftJoin('users', 'u', 'dept_owner = u.user_id');
-        $q->leftJoin('contacts', 'con', 'u.user_contact = con.contact_id');
         $q->addJoin('projects', 'p2', 'pd.project_id = p2.project_id AND p2.project_active = 0');
-        $q->addJoin('contacts', 'ct', 'ct.contact_department = dept_id');
         $q->addGroup('dept_id');
-        $q->addOrder('dept_parent, dept_name');
+        $q->addOrder('dept_name');
 
         $oCpy = new CCompany();
         $oCpy->overrideDatabase($this->_query);
