@@ -43,11 +43,13 @@ abstract class w2p_Authenticators_Base
 
         switch ($length) {
             case '32':
-                $q = $this->_query;
-                $q->addTable('users');
-                $q->addUpdate('user_password', password_hash($password, PASSWORD_BCRYPT));
-                $q->addWhere("user_username = '$username'");
-                $q->exec();
+                if ($hash == $this->hashPassword($password)) {
+                    $q = $this->_query;
+                    $q->addTable('users');
+                    $q->addUpdate('user_password', password_hash($password, PASSWORD_BCRYPT));
+                    $q->addWhere("user_username = '$username'");
+                    $q->exec();
+                }
                 return ($hash == $this->hashPassword($password));
             default:
                 return password_verify($password, $hash);
