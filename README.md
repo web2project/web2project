@@ -32,13 +32,6 @@ http://support.web2project.net/ are our support forums. Whenever you have a ques
 
 http://bugs.web2project.net/ is where we collect and track bug reports. No software is perfect and nothing always behaves exactly as you expect 100% of the time. If you find something that doesn't work as expected or is broken, file a report here. Remember, the more specific you are, the easier it is for others to reproduce and eventually fix it.
 
-## TODO
-
-*  Library Updates
- *  Replace ADODB with PDO
- *  Update jpgraph to the latest version
- *  Update PEAR/Date to the latest version or use core Date functionality
-
 ## License
 
 web2Project is released under Clear BSD
