@@ -92,25 +92,21 @@ class CCompany extends w2p_Core_BaseObject {
 
         $q = $this->_getQuery();
         $q->addTable('companies', 'c');
-        $q->addQuery('c.*, count(distinct p.project_id) as countp, ' .
-            'count(distinct p2.project_id) as inactive, con.contact_first_name, ' .
-            'con.contact_last_name, con.contact_display_name, user_id');
+        $q->addQuery('c.*, count(distinct p.project_id) as countp, count(distinct p2.project_id) as inactive');
         $q->addJoin('projects', 'p', 'c.company_id = p.project_company AND p.project_active = 1');
-        $q->addJoin('users', 'u', 'c.company_owner = u.user_id');
-        $q->addJoin('contacts', 'con', 'u.user_contact = con.contact_id');
         $q->addJoin('projects', 'p2', 'c.company_id = p2.project_company AND p2.project_active = 0');
 
         $where = $this->getAllowedSQL($this->_AppUI->user_id, 'c.company_id');
         $q->addWhere($where);
 
         if ($companyType > -1) {
-        $q->addWhere('c.company_type = ' . (int) $companyType);
+            $q->addWhere('c.company_type = ' . (int) $companyType);
         }
         if ($searchString != '') {
-        $q->addWhere('c.company_name LIKE "%'.$searchString.'%"');
+            $q->addWhere('c.company_name LIKE "%'.$searchString.'%"');
         }
         if ($ownerId > 0) {
-        $q->addWhere('c.company_owner = '.$ownerId);
+            $q->addWhere('c.company_owner = '.$ownerId);
         }
         $q->addGroup('c.company_id');
         $orderby = (property_exists($this, $orderby) || in_array($orderby, array('countp', 'inactive')))
