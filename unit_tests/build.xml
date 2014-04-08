@@ -178,6 +178,7 @@
         <phpmd>
             <fileset refid="project.source" />
             <formatter type="xml" outfile="${dir.reports}/pmd.xml"/>
+            <formatter type="html" outfile="${dir.reports}/pmd.html"/>
         </phpmd>
     </target>
 
