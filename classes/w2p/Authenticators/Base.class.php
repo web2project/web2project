@@ -27,24 +27,16 @@ abstract class w2p_Authenticators_Base
         $this->_w2Pconfig = $w2Pconfig;
         $this->_query = new w2p_Database_Query;
     }
-    
+
     /**
-     * This is a simple MD5 Hash but should be replaced with something better as
-     * soon as possible. I did it this way so that replacement is easier than
-     * just finding and updating all the instances.
+     * This wraps the password_verify functionality available in PHP 5.5 (or ircmaxwell's password_compat library) to
+     *   update a user's password upon successful login. The process is transparent to the user and only happens once.
      *
-     * @param string $password
-     * @param string $salt unused but available @since 3.0
-     *
-     * @return md5hash
+     * @param $username
+     * @param $password
+     * @param $hash
+     * @return bool
      */
-    public function hashPassword($password, $salt = '')
-    {
-        $hash = md5($password . $salt);
-
-        return $hash;
-    }
-
     public function verify($username, $password, $hash)
     {
         $length = strlen($hash);
@@ -60,6 +52,16 @@ abstract class w2p_Authenticators_Base
             default:
                 return password_verify($password, $hash);
         }
+    }
+
+    /**
+     * @deprecated @since 3.2
+     */
+    public function hashPassword($password, $salt = '')
+    {
+        $hash = md5($password . $salt);
+
+        return $hash;
     }
 
     /**
