@@ -210,6 +210,10 @@ if (!$project_id) {
 	$sel_durntype = arraySelect($durntype, 'add_task_durntype0', 'style="width:80px" class="text"', '', true);
 ?>
 <script language="javascript" type="text/javascript">
+
+$( document ).ready(function() {
+    expand_collapse('project', 'tblProjects', 'expand');
+});
 // security improvement:
 // some javascript functions may not appear on client side in case of user not having write permissions
 // else users would be able to arbitrarily run 'bad' functions

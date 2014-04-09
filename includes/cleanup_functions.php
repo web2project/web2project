@@ -441,7 +441,7 @@ function __extract_from_showtask(&$arr, $level, $today_view, $listTable)
             $a_u_tmp_array[] = ('<a href="?m=users&amp;a=view&amp;user_id=' . $val['user_id'] . '"' . 'title="' . (w2PgetConfig('check_overallocation') ? $AppUI->_('Extent of Assignment') . ':' . $userAlloc[$val['user_id']]['charge'] . '%; ' . $AppUI->_('Free Capacity') . ':' . $userAlloc[$val['user_id']]['freeCapacity'] . '%' : '') . '">' . $val['assignee'] . ' (' . $val['perc_assignment'] . '%)</a>');
         }
         $s .= join(', <br />', $a_u_tmp_array) . '</td>';
-    } elseif (!$today_view) {
+    } elseif ($a != 'todo') {
         // No users assigned to task
         $s .= $listTable->createCell('other', '-');
     }
