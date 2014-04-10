@@ -540,23 +540,19 @@ class CProject extends w2p_Core_BaseObject
     }
     public function notifyOwner($isNotNew)
     {
-        $mail = new w2p_Utilities_Mail;
-
-        $subject = (intval($isNotNew)) ? $this->_AppUI->_('Project updated') . ': ' . $this->project_name : $this->_AppUI->_('Project submitted') . ': ' . $this->project_name;
-
         $user = new CUser();
         $user->overrideDatabase($this->_query);
         $user->loadFull($this->project_owner);
 
-        if ($user && $mail->ValidEmail($user->user_email)) {
-            $emailManager = new w2p_Output_EmailManager($this->_AppUI);
-            $body = $emailManager->getProjectNotifyOwner($this, $isNotNew);
+        $subject = (intval($isNotNew)) ? $this->_AppUI->_('Project updated') . ': ' . $this->project_name : $this->_AppUI->_('Project submitted') . ': ' . $this->project_name;
+        $emailManager = new w2p_Output_EmailManager($this->_AppUI);
+        $body = $emailManager->getProjectNotifyOwner($this, $isNotNew);
 
-            $mail->Subject($subject, $this->_locale_char_set);
-            $mail->Body($body, isset($GLOBALS['locale_char_set']) ? $GLOBALS['locale_char_set'] : '');
-            $mail->To($user->user_email, true);
-            $mail->Send();
-        }
+        $mail = new w2p_Utilities_Mail;
+        $mail->To($user->user_email, true);
+        $mail->Subject($subject, $this->_locale_char_set);
+        $mail->Body($body, isset($GLOBALS['locale_char_set']) ? $GLOBALS['locale_char_set'] : '');
+        $mail->Send();
     }
 
     public function notifyContacts($isNotNew)
@@ -570,13 +566,10 @@ class CProject extends w2p_Core_BaseObject
 
             foreach ($users as $row) {
                 $mail = new w2p_Utilities_Mail;
-                $mail->Body($body, isset($GLOBALS['locale_char_set']) ? $GLOBALS['locale_char_set'] : '');
+                $mail->To($row['contact_email'], true);
                 $mail->Subject($subject, $this->_locale_char_set);
-
-                if ($mail->ValidEmail($row['contact_email'])) {
-                    $mail->To($row['contact_email'], true);
-                    $mail->Send();
-                }
+                $mail->Body($body, isset($GLOBALS['locale_char_set']) ? $GLOBALS['locale_char_set'] : '');
+                $mail->Send();
             }
         }
         return '';

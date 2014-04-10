@@ -315,31 +315,28 @@ function w2p_textarea($content)
     return $result;
 }
 
-function notifyNewExternalUser($emailAddress, $username, $logname,
-        $logpwd, $emailUtility = null) {
-
+function notifyNewExternalUser($emailAddress, $username, $logname, $logpwd, $emailUtility = null)
+{
     global $AppUI;
+    $emailManager = new w2p_Output_EmailManager($AppUI);
+    $body = $emailManager->notifyNewExternalUser($logname, $logpwd);
+
     $mail = (!is_null($emailUtility)) ? $emailUtility : new w2p_Utilities_Mail();
-    if ($mail->ValidEmail($emailAddress)) {
-        $mail->To($emailAddress);
-        $emailManager = new w2p_Output_EmailManager($AppUI);
-        $body = $emailManager->notifyNewExternalUser($logname, $logpwd);
-        $mail->Subject('New Account Created');
-        $mail->Body($body);
-        $mail->Send();
-    }
+    $mail->To($emailAddress);
+    $mail->Subject('New Account Created');
+    $mail->Body($body);
+    $mail->Send();
 }
 
 function notifyNewUser($emailAddress, $username, $emailUtility = null)
 {
     global $AppUI;
+    $emailManager = new w2p_Output_EmailManager($AppUI);
+    $body = $emailManager->getNotifyNewUser($username);
+
     $mail = (!is_null($emailUtility)) ? $emailUtility : new w2p_Utilities_Mail();
-    if ($mail->ValidEmail($emailAddress)) {
-        $mail->To($emailAddress);
-        $emailManager = new w2p_Output_EmailManager($AppUI);
-        $body = $emailManager->getNotifyNewUser($username);
-        $mail->Subject('New Account Created');
-        $mail->Body($body);
-        $mail->Send();
-    }
+    $mail->To($emailAddress);
+    $mail->Subject('New Account Created');
+    $mail->Body($body);
+    $mail->Send();
 }

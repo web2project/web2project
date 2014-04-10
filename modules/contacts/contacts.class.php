@@ -307,26 +307,14 @@ class CContact extends w2p_Core_BaseObject
 
     public function notify()
     {
-        $result = false;
+        $emailManager = new w2p_Output_EmailManager($this->_AppUI);
+        $body = $emailManager->getContactUpdateNotify(null, $this);
 
         $mail = new w2p_Utilities_Mail();
+        $mail->To($this->contact_email, true);
         $mail->Subject('Hello', $this->_locale_char_set);
-
-        if ($this->contact_email) {
-            $emailManager = new w2p_Output_EmailManager($this->_AppUI);
-            $body = $emailManager->getContactUpdateNotify(null, $this);
-
-            $mail->Body($body, isset($GLOBALS['locale_char_set']) ? $GLOBALS['locale_char_set'] : '');
-        }
-
-        if ($mail->ValidEmail($this->contact_email)) {
-            $mail->To($this->contact_email, true);
-            $result = $mail->Send();
-        } else {
-            $this->_error['email_address'] = 'This is not a validate email address';
-        }
-
-        return $result;
+        $mail->Body($body, isset($GLOBALS['locale_char_set']) ? $GLOBALS['locale_char_set'] : '');
+        return $mail->Send();
     }
 
     public function updateNotify()

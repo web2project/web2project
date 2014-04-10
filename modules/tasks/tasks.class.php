@@ -1172,9 +1172,6 @@ class CTask extends w2p_Core_BaseObject
     {
         $projname = $project->load($this->task_project)->project_name;
 
-        $mail = new w2p_Utilities_Mail();
-        $mail->Subject($projname . '::' . $this->task_name . ' ' . $this->_AppUI->_($this->_action, UI_OUTPUT_RAW), $this->_locale_char_set);
-
         // c = creator
         // a = assignee
         // o = owner
@@ -1202,11 +1199,11 @@ class CTask extends w2p_Core_BaseObject
         if (count($users)) {
             $emailManager = new w2p_Output_EmailManager($this->_AppUI);
             $body = $emailManager->getTaskNotifyOwner($this);
-            $mail->Body($body, isset($GLOBALS['locale_char_set']) ? $GLOBALS['locale_char_set'] : '');
-        }
 
-        if ($mail->ValidEmail($users[0]['owner_email'])) {
+            $mail = new w2p_Utilities_Mail();
             $mail->To($users[0]['owner_email'], true);
+            $mail->Subject($projname . '::' . $this->task_name . ' ' . $this->_AppUI->_($this->_action, UI_OUTPUT_RAW), $this->_locale_char_set);
+            $mail->Body($body, isset($GLOBALS['locale_char_set']) ? $GLOBALS['locale_char_set'] : '');
             $mail->Send();
         }
 
@@ -1216,12 +1213,8 @@ class CTask extends w2p_Core_BaseObject
 //TODO: additional comment will be included in email body
     public function notify($comment = '')
     {
-        $mail = new w2p_Utilities_Mail();
-
 		$project = new CProject();
 		$projname = $project->load($this->task_project)->project_name;
-
-        $mail->Subject($projname . '::' . $this->task_name . ' ' . $this->_AppUI->_($this->_action, UI_OUTPUT_RAW), $this->_locale_char_set);
 
         // c = creator
         // a = assignee
@@ -1255,16 +1248,14 @@ class CTask extends w2p_Core_BaseObject
 
         foreach ($users as $row) {
             if ($mail_owner || $row['assignee_id'] != $this->_AppUI->user_id) {
-                if ($mail->ValidEmail($row['assignee_email'])) {
+                $emailManager = new w2p_Output_EmailManager($this->_AppUI);
+                $body = $emailManager->getTaskNotify($this, $row, $projname);
 
-                    $emailManager = new w2p_Output_EmailManager($this->_AppUI);
-                    $body = $emailManager->getTaskNotify($this, $row, $projname);
-
-                    $mail->Body($body, (isset($GLOBALS['locale_char_set']) ? $GLOBALS['locale_char_set'] : ''));
-
-                    $mail->To($row['assignee_email'], true);
-                    $mail->Send();
-                }
+                $mail = new w2p_Utilities_Mail();
+                $mail->To($row['assignee_email'], true);
+                $mail->Subject($projname . '::' . $this->task_name . ' ' . $this->_AppUI->_($this->_action, UI_OUTPUT_RAW), $this->_locale_char_set);
+                $mail->Body($body, (isset($GLOBALS['locale_char_set']) ? $GLOBALS['locale_char_set'] : ''));
+                $mail->Send();
             }
         }
         return '';
@@ -1362,25 +1353,23 @@ class CTask extends w2p_Core_BaseObject
 
             // Build the email and send it out.
             $char_set = isset($this->_locale_char_set) ? $this->_locale_char_set : '';
-            $mail = new w2p_Utilities_Mail();
+
             // Grab the subject from user preferences
             $prefix = $this->_AppUI->getPref('TASKLOGSUBJ');
-            $mail->Subject($prefix . ' ' . $log->task_log_name, $char_set);
 
             $emailManager = new w2p_Output_EmailManager($this->_AppUI);
             $body = $emailManager->getTaskEmailLog($this, $log);
+
+            $mail = new w2p_Utilities_Mail();
+            $mail->Subject($prefix . ' ' . $log->task_log_name, $char_set);
             $mail->Body($body, $char_set);
 
             $recipient_list = '';
             $toList = array();
 
             foreach ($mail_recipients as $email => $name) {
-                if ($mail->ValidEmail($email)) {
-                    $toList[$email] = $email;
-                    $recipient_list .= $email . ' (' . $name . ")\n";
-                } else {
-                    $recipient_list .= "Invalid email address '$email' for '$name' not sent \n";
-                }
+                $toList[$email] = $email;
+                $recipient_list .= $email . ' (' . $name . ")\n";
             }
 
             $sendToList = array_keys($mail_recipients);
@@ -2384,10 +2373,8 @@ class CTask extends w2p_Core_BaseObject
             $body = str_replace('END-TIME', $expires->convertTZ($tz)->format($df), $body);
             $mail->Body($body, $this->_locale_char_set);
 
-            if ($mail->ValidEmail($contact['contact_email'])) {
-                $mail->To($contact['contact_email'], true);
-                $mail->Send();
-            }
+            $mail->To($contact['contact_email'], true);
+            $mail->Send();
         }
         return true;
     }

@@ -462,19 +462,15 @@ class CFile extends w2p_Core_BaseObject {
                 if (intval($this->_task->task_id) != 0) {
                     foreach ($this->_users as $row) {
                         if ($row['assignee_id'] != $this->_AppUI->user_id) {
-                            if ($mail->ValidEmail($row['assignee_email'])) {
-                                $mail->To($row['assignee_email'], true);
-                                $mail->Send();
-                            }
+                            $mail->To($row['assignee_email'], true);
+                            $mail->Send();
                         }
                     }
                 } else { //sending mail to project owner
                     foreach ($this->_users as $row) { //there should be only one row
                         if ($row['user_id'] != $this->_AppUI->user_id) {
-                            if ($mail->ValidEmail($row['owner_email'])) {
-                                $mail->To($row['owner_email'], true);
-                                $mail->Send();
-                            }
+                            $mail->To($row['owner_email'], true);
+                            $mail->Send();
                         }
                     }
                 }
@@ -526,12 +522,9 @@ class CFile extends w2p_Core_BaseObject {
                 $this->_users = $q->loadList();
 
                 foreach ($this->_users as $row) {
-                    if ($mail->ValidEmail($row['contact_email'])) {
-                        $mail->To($row['contact_email'], true);
-                        $mail->Send();
-                    }
+                    $mail->To($row['contact_email'], true);
+                    $mail->Send();
                 }
-                return '';
             }
         }
     }

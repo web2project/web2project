@@ -30,29 +30,27 @@ function is_task_in_gantt_arr($task)
 function notifyHR($address, $notUsed, $uaddress, $uusername, $logname, $notUsed2, $userid)
 {
     global $AppUI;
+    $emailManager = new w2p_Output_EmailManager($AppUI);
+    $body = $emailManager->notifyHR($uusername, $logname, $uaddress, $userid);
+
     $mail = new w2p_Utilities_Mail();
-    if ($mail->ValidEmail($address)) {
-        $mail->To($address);
-        $emailManager = new w2p_Output_EmailManager($AppUI);
-        $body = $emailManager->notifyHR($uusername, $logname, $uaddress, $userid);
-        $mail->Subject('New External User Created');
-        $mail->Body($body);
-        $mail->Send();
-    }
+    $mail->To($address);
+    $mail->Subject('New External User Created');
+    $mail->Body($body);
+    $mail->Send();
 }
 
 function notifyNewUserCredentials($address, $username, $logname, $logpwd)
 {
     global $AppUI;
+    $emailManager = new w2p_Output_EmailManager($AppUI);
+    $body = $emailManager->notifyNewUserCredentials($username, $logname, $logpwd);
+
     $mail = new w2p_Utilities_Mail();
-    if ($mail->ValidEmail($address)) {
-        $mail->To($address);
-        $emailManager = new w2p_Output_EmailManager($AppUI);
-        $body = $emailManager->notifyNewUserCredentials($username, $logname, $logpwd);
-        $mail->Subject('New Account Created - web2Project Project Management System');
-        $mail->Body($body);
-        $mail->Send();
-    }
+    $mail->To($address);
+    $mail->Subject('New Account Created - web2Project Project Management System');
+    $mail->Body($body);
+    $mail->Send();
 }
 
 function clean_value($str)

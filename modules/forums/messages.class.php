@@ -203,13 +203,9 @@ class CForum_Message extends w2p_Core_BaseObject
         $mail->Body($body, isset($GLOBALS['locale_char_set']) ? $GLOBALS['locale_char_set'] : '');
 
         while ($row = $q->fetchRow()) {
-            if ($mail->ValidEmail($row['contact_email'])) {
-                $mail->To($row['contact_email'], true);
-                $mail->Send();
-            }
+            $mail->To($row['contact_email'], true);
+            $mail->Send();
         }
         $q->clear();
-        return;
     }
-
 }
