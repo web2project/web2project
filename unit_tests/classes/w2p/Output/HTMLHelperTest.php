@@ -105,7 +105,7 @@ class w2p_Output_HTMLHelperTest extends CommonSetup
         $cell = $this->obj->createCell('x_count', 'default value');
         $this->assertEquals('<td class="_count">default value</td>', $cell);
         $cell = $this->obj->createCell('x_duration', 'default value');
-        $this->assertEquals('<td class="_duration">default value</td>', $cell);
+        $this->assertEquals('<td class="_duration">default value </td>', $cell);
         $cell = $this->obj->createCell('x_hours', 'default value');
         $this->assertEquals('<td class="_hours">default value</td>', $cell);
     }
@@ -125,7 +125,7 @@ class w2p_Output_HTMLHelperTest extends CommonSetup
     public function testCreateCell_common()
     {
         $cell = $this->obj->createCell('x_budget', 12345.67);
-        $this->assertEquals('<td class="_budget">$USD 12,345.67</td>', $cell);
+        $this->assertEquals('<td class="_budget">$USD12,345.67</td>', $cell);
 
         $cell = $this->obj->createCell('x_url', 'http://web2project.net');
         $this->assertEquals('<td class="_url"><a href="http://web2project.net" target="_new">http://web2project.net</a></td>', $cell);
