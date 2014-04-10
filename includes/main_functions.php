@@ -325,7 +325,7 @@ function notifyNewExternalUser($emailAddress, $username, $logname, $logpwd, $ema
     $mail->To($emailAddress);
     $mail->Subject('New Account Created');
     $mail->Body($body);
-    $mail->Send();
+    return $mail->Send();
 }
 
 function notifyNewUser($emailAddress, $username, $emailUtility = null)
@@ -338,5 +338,5 @@ function notifyNewUser($emailAddress, $username, $emailUtility = null)
     $mail->To($emailAddress);
     $mail->Subject('New Account Created');
     $mail->Body($body);
-    $mail->Send();
+    return $mail->Send();
 }

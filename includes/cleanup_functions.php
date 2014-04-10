@@ -37,7 +37,7 @@ function notifyHR($address, $notUsed, $uaddress, $uusername, $logname, $notUsed2
     $mail->To($address);
     $mail->Subject('New External User Created');
     $mail->Body($body);
-    $mail->Send();
+    return $mail->Send();
 }
 
 function notifyNewUserCredentials($address, $username, $logname, $logpwd)
@@ -50,7 +50,7 @@ function notifyNewUserCredentials($address, $username, $logname, $logpwd)
     $mail->To($address);
     $mail->Subject('New Account Created - web2Project Project Management System');
     $mail->Body($body);
-    $mail->Send();
+    return $mail->Send();
 }
 
 function clean_value($str)
