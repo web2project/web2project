@@ -53,6 +53,10 @@
                     <include name="**/*Test.php"/>
                 </fileset>
 
+                <fileset dir="${dir.tests}/src">
+                    <include name="**/*Test.php"/>
+                </fileset>
+
                 <fileset dir="${dir.tests}/includes">
                     <include name="**/*.test.php"/>
                 </fileset>

@@ -1,5 +1,8 @@
 {
     "require": {
         "ircmaxell/password-compat": "dev-master"
+    },
+    "autoload": {
+        "psr-0": { "Web2project": "src/"}
     }
 }

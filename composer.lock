@@ -3,7 +3,7 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "af2fce658e0c5cb6ffe17f596a9395aa",
+    "hash": "bb40bbc8e385f7f5e0bab720c446093e",
     "packages": [
         {
             "name": "ircmaxell/password-compat",
