@@ -33,24 +33,6 @@ class w2p_Output_EmailManager
         $this->_AppUI = $AppUI;
     }
 
-    /**
-     * @deprecated
-     */
-    public function getCalendarConflictEmail(w2p_Core_CAppUI $AppUI = null)
-    {
-        trigger_error("getCalendarConflictEmail has been deprecated in v3.0 and will be removed by v4.0. Please use getEventNotify() instead.", E_USER_NOTICE);
-
-        $this->_AppUI = (!is_null($AppUI)) ? $AppUI : $this->_AppUI;
-
-        $body = '';
-        $body .= "You have been invited to an event by ".$this->_AppUI->user_display_name;
-        $body .= "\nHowever, either you or another intended invitee has a competing event\n";
-        $body .= $this->_AppUI->user_display_name." has requested that you reply to this message\n";
-        $body .= "and confirm if you can or can not make the requested time.\n\n";
-
-        return $body;
-    }
-
     public function getEventNotify(CEvent $event, $clash, $users)
     {
 
@@ -94,6 +76,24 @@ class w2p_Output_EmailManager
         }
 
         $body .= $body_attend . "\n\n" . $event->event_description . "\n";
+
+        return $body;
+    }
+
+    /**
+     * @deprecated
+     */
+    public function getCalendarConflictEmail(w2p_Core_CAppUI $AppUI = null)
+    {
+        trigger_error("getCalendarConflictEmail has been deprecated in v3.0 and will be removed by v4.0. Please use getEventNotify() instead.", E_USER_NOTICE);
+
+        $this->_AppUI = (!is_null($AppUI)) ? $AppUI : $this->_AppUI;
+
+        $body = '';
+        $body .= "You have been invited to an event by ".$this->_AppUI->user_display_name;
+        $body .= "\nHowever, either you or another intended invitee has a competing event\n";
+        $body .= $this->_AppUI->user_display_name." has requested that you reply to this message\n";
+        $body .= "and confirm if you can or can not make the requested time.\n\n";
 
         return $body;
     }
@@ -174,10 +174,8 @@ class w2p_Output_EmailManager
     {
         $body = $this->_AppUI->_('Project', UI_OUTPUT_RAW) . ":\t" . $projname . "\n";
         $body .= $this->_AppUI->_('Task', UI_OUTPUT_RAW) . ":\t\t" . $task->task_name . "\n";
-//TODO: Priority not working for some reason, will wait till later
         $body .= $this->_AppUI->_('Priority', UI_OUTPUT_RAW) . ":\t\t" . $task->task_priority . "\n";
-//Priority does work now
-        $body .= $this->_AppUI->_('Progress', UI_OUTPUT_RAW) . ":\t\t" . $task->task_percent_complete . " % \n";
+        $body .= $this->_AppUI->_('Progress', UI_OUTPUT_RAW) . ":\t\t" . $task->task_percent_complete . "%\n";
         $tmp_tz = $this->_AppUI->getPref('TIMEZONE');
         $user_prefs = $this->_AppUI->loadPrefs($user['assignee_id'], true);
         $this->_AppUI->user_prefs['TIMEZONE'] = $user_prefs['TIMEZONE'];
@@ -319,7 +317,7 @@ class w2p_Output_EmailManager
     public function getNotifyNewUser($username)
     {
         $body = "Dear $username,\n\n" .
-                $body .= "Congratulations! Your account has been activated by the administrator.\n";
+        $body .= "Congratulations! Your account has been activated by the administrator.\n";
         $body .= "Please use the login information provided earlier.\n\n";
         $body .= "You may login at the following URL: " . W2P_BASE_URL . "\n\n";
         $body .= "If you have any difficulties or questions, please ask the administrator for help.\n";
