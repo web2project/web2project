@@ -32,13 +32,6 @@ function notifyHR($address, $notUsed, $uaddress, $uusername, $logname, $notUsed2
     global $AppUI;
     $mail = new w2p_Utilities_Mail();
     if ($mail->ValidEmail($address)) {
-//TODO: why aren't we actually using this $email variable?
-        if ($mail->ValidEmail($AppUI->user_email)) {
-            $email = $AppUI->user_email;
-        } else {
-            $email = w2PgetConfig('admin_email');
-        }
-
         $mail->To($address);
         $emailManager = new w2p_Output_EmailManager($AppUI);
         $body = $emailManager->notifyHR($uusername, $logname, $uaddress, $userid);
@@ -53,13 +46,6 @@ function notifyNewUserCredentials($address, $username, $logname, $logpwd)
     global $AppUI;
     $mail = new w2p_Utilities_Mail();
     if ($mail->ValidEmail($address)) {
-//TODO: why aren't we actually using this $email variable?
-        if ($mail->ValidEmail($AppUI->user_email)) {
-            $email = $AppUI->user_email;
-        } else {
-            $email = w2PgetConfig('admin_email');
-        }
-
         $mail->To($address);
         $emailManager = new w2p_Output_EmailManager($AppUI);
         $body = $emailManager->notifyNewUserCredentials($username, $logname, $logpwd);
