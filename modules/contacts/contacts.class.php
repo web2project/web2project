@@ -309,9 +309,6 @@ class CContact extends w2p_Core_BaseObject
     {
         $result = false;
 
-        $df = $this->_AppUI->getPref('SHDATEFORMAT');
-        $df .= ' ' . $this->_AppUI->getPref('TIMEFORMAT');
-
         $mail = new w2p_Utilities_Mail();
         $mail->Subject('Hello', $this->_locale_char_set);
 

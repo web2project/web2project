@@ -1170,6 +1170,8 @@ class CTask extends w2p_Core_BaseObject
 
     public function notifyOwner()
     {
+        $projname = $project->load($this->task_project)->project_name;
+
         $mail = new w2p_Utilities_Mail();
         $mail->Subject($projname . '::' . $this->task_name . ' ' . $this->_AppUI->_($this->_action, UI_OUTPUT_RAW), $this->_locale_char_set);
 
@@ -1212,7 +1214,6 @@ class CTask extends w2p_Core_BaseObject
     }
 
 //TODO: additional comment will be included in email body
-//TODO: should we resolve $projname ?
     public function notify($comment = '')
     {
         $mail = new w2p_Utilities_Mail();
