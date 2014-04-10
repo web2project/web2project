@@ -550,7 +550,7 @@ class CProject extends w2p_Core_BaseObject
 
         $mail = new w2p_Utilities_Mail;
         $mail->To($user->user_email, true);
-        $mail->Subject($subject, $this->_locale_char_set);
+        $mail->Subject($subject);
         $mail->Body($body, isset($GLOBALS['locale_char_set']) ? $GLOBALS['locale_char_set'] : '');
         $mail->Send();
     }
@@ -567,7 +567,7 @@ class CProject extends w2p_Core_BaseObject
             foreach ($users as $row) {
                 $mail = new w2p_Utilities_Mail;
                 $mail->To($row['contact_email'], true);
-                $mail->Subject($subject, $this->_locale_char_set);
+                $mail->Subject($subject);
                 $mail->Body($body, isset($GLOBALS['locale_char_set']) ? $GLOBALS['locale_char_set'] : '');
                 $mail->Send();
             }

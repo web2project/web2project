@@ -101,7 +101,7 @@ class w2p_Utilities_Mail extends PHPMailer
      *    Define the subject line of the email
      *    @param string $subject any monoline string
      */
-    public function Subject($subject, $notUsed = '')
+    public function Subject($subject)
     {
         $this->Subject = w2PgetConfig('email_prefix') . ' ' . $subject;
         return true;

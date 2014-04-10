@@ -1202,7 +1202,7 @@ class CTask extends w2p_Core_BaseObject
 
             $mail = new w2p_Utilities_Mail();
             $mail->To($users[0]['owner_email'], true);
-            $mail->Subject($projname . '::' . $this->task_name . ' ' . $this->_AppUI->_($this->_action, UI_OUTPUT_RAW), $this->_locale_char_set);
+            $mail->Subject($projname . '::' . $this->task_name . ' ' . $this->_AppUI->_($this->_action, UI_OUTPUT_RAW));
             $mail->Body($body, isset($GLOBALS['locale_char_set']) ? $GLOBALS['locale_char_set'] : '');
             $mail->Send();
         }
@@ -1253,7 +1253,7 @@ class CTask extends w2p_Core_BaseObject
 
                 $mail = new w2p_Utilities_Mail();
                 $mail->To($row['assignee_email'], true);
-                $mail->Subject($projname . '::' . $this->task_name . ' ' . $this->_AppUI->_($this->_action, UI_OUTPUT_RAW), $this->_locale_char_set);
+                $mail->Subject($projname . '::' . $this->task_name . ' ' . $this->_AppUI->_($this->_action, UI_OUTPUT_RAW));
                 $mail->Body($body, (isset($GLOBALS['locale_char_set']) ? $GLOBALS['locale_char_set'] : ''));
                 $mail->Send();
             }
@@ -1361,7 +1361,7 @@ class CTask extends w2p_Core_BaseObject
             $body = $emailManager->getTaskEmailLog($this, $log);
 
             $mail = new w2p_Utilities_Mail();
-            $mail->Subject($prefix . ' ' . $log->task_log_name, $char_set);
+            $mail->Subject($prefix . ' ' . $log->task_log_name);
             $mail->Body($body, $char_set);
 
             $recipient_list = '';
@@ -2360,7 +2360,7 @@ class CTask extends w2p_Core_BaseObject
         $body = $emailManager->getTaskRemind($this, $msg, $project_name, $contacts);
 
         $mail = new w2p_Utilities_Mail();
-        $mail->Subject($subject, $this->_locale_char_set);
+        $mail->Subject($subject);
 
         foreach ($contacts as $contact) {
             $user_id = $contact['user_id'];

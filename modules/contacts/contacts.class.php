@@ -312,7 +312,7 @@ class CContact extends w2p_Core_BaseObject
 
         $mail = new w2p_Utilities_Mail();
         $mail->To($this->contact_email, true);
-        $mail->Subject('Hello', $this->_locale_char_set);
+        $mail->Subject('Hello');
         $mail->Body($body, isset($GLOBALS['locale_char_set']) ? $GLOBALS['locale_char_set'] : '');
         return $mail->Send();
     }

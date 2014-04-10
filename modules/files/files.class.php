@@ -418,12 +418,12 @@ class CFile extends w2p_Core_BaseObject {
                 $mail = new w2p_Utilities_Mail();
 
                 if ($this->file_task == 0) { //notify all developers
-                    $mail->Subject($this->_project->project_name . '::' . $this->file_name, $this->_locale_char_set);
+                    $mail->Subject($this->_project->project_name . '::' . $this->file_name);
                 } else { //notify all assigned users
                     $this->_task = new CTask();
                     $this->_task->overrideDatabase($this->_query);
                     $this->_task->load($this->file_task);
-                    $mail->Subject($this->_project->project_name . '::' . $this->_task->task_name . '::' . $this->file_name, $this->_locale_char_set);
+                    $mail->Subject($this->_project->project_name . '::' . $this->_task->task_name . '::' . $this->file_name);
                 }
 
                 $emailManager = new w2p_Output_EmailManager($this->_AppUI);
@@ -488,12 +488,12 @@ class CFile extends w2p_Core_BaseObject {
                 $mail = new w2p_Utilities_Mail();
 
                 if ($this->file_task == 0) { //notify all developers
-                    $mail->Subject($this->_AppUI->_('Project') . ': ' . $this->_project->project_name . '::' . $this->file_name, $this->_locale_char_set);
+                    $mail->Subject($this->_AppUI->_('Project') . ': ' . $this->_project->project_name . '::' . $this->file_name);
                 } else { //notify all assigned users
                     $this->_task = new CTask();
                     $this->_task->overrideDatabase($this->_query);
                     $this->_task->load($this->file_task);
-                    $mail->Subject($this->_AppUI->_('Project') . ': ' . $this->_project->project_name . '::' . $this->_task->task_name . '::' . $this->file_name, $this->_locale_char_set);
+                    $mail->Subject($this->_AppUI->_('Project') . ': ' . $this->_project->project_name . '::' . $this->_task->task_name . '::' . $this->file_name);
                 }
 
                 $emailManager = new w2p_Output_EmailManager($this->_AppUI);
