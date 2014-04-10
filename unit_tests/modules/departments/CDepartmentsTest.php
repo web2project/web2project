@@ -142,8 +142,6 @@ class CDepartments_Test extends CommonSetup
 
     /**
      * Tests the update of a dept
-     *
-     * @expectedException PHPUnit_Framework_Error
      */
     public function testStoreUpdate()
     {

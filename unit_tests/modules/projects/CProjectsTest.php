@@ -304,25 +304,6 @@ $this->obj->overrideDatabase($this->mockDB);
     }
 
     /**
-     * Test loading the Project object.
-     */
-    public function testLoadFull()
-    {
-        $this->mockDB->stageHash(
-                array('project_id' => 1, 'project_url' => 'http://project1.example.org',
-                    'project_start_date' => '2009-07-05 00:00:00',
-                    'company_name' => 'UnitTestCompany', 'user_name' => 'Admin Person')
-        );
-        $this->obj->loadFull(null, 1);
-
-        $this->assertEquals(1,                                  $this->obj->project_id);
-          $this->assertEquals('http://project1.example.org',      $this->obj->project_url);
-          $this->assertEquals('2009-07-05 00:00:00',              $this->obj->project_start_date);
-          $this->assertEquals('UnitTestCompany',                  $this->obj->company_name);
-          $this->assertEquals('Admin Person',                     $this->obj->user_name);
-    }
-
-    /**
      * Tests the update of a project.
      */
     public function testStoreUpdate()

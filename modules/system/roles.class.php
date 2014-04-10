@@ -52,7 +52,7 @@ class CSystem_Role extends w2p_Core_BaseObject {
 			$result = $this->_perms->updateRole($this->role_id, $this->role_name, $this->role_description);
 		} else {
             $result = $this->_perms->insertRole($this->role_name, $this->role_description);
-            $this->role_id = db_insert_id();
+            $this->role_id = $result;
 		}
 
 		if ($result) {
