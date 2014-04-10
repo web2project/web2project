@@ -13,6 +13,8 @@
  * @author      D. Keith Casey, Jr. <caseydk@users.sourceforge.net>
  */
 
+use Web2project\Output\EmailTemplate;
+
 class w2p_Output_EmailManager
 {
 
@@ -100,24 +102,24 @@ class w2p_Output_EmailManager
     {
         $this->_AppUI = (!is_null($AppUI)) ? $AppUI : $this->_AppUI;
 
-        $q = new w2p_Database_Query;
-        $q->addTable('companies');
-        $q->addQuery('company_id, company_name');
-        $q->addWhere('company_id = ' . (int) $contact->contact_company);
-        $contact_company = $q->loadHashList();
-        $q->clear();
+        $company = new CCompany();
+        $company->load($contact->contact_company);
+        $contact->company_name = $company->company_name;
+        $contact->user_display_name = $this->_AppUI->user_display_name;
 
-        $body = "Dear $contact->contact_title $contact->contact_display_name,";
+        $body = "Dear contact_title contact_display_name,";
         $body .= "\n\nIt was very nice to visit you";
-        $body .= ($contact->contact_company) ? " and " . $contact_company[$contact->contact_company] . "." : ".";
+        $body .= ($contact->contact_company) ? " and " . company_name . "." : ".";
         $body .= " Thank you for all the time that you spent with me.";
-        $body .= "\n\nI have entered the data from your business card into my contact data base so that we may keep in touch.";
-        $body .= "\n\nWe have implemented a system which allows you to view the information that I've recorded and give you the opportunity to correct it or add information as you see fit. Please click on this link to view what I've recorded:";
-        $body .= "\n\n" . W2P_BASE_URL . "/updatecontact.php?updatekey=".$contact->contact_updatekey;
+        $body .= "\n\nI have entered the data from your business card into my contact database so that we may keep in touch.";
+        $body .= " We have implemented a system which allows you to view the information that I've recorded and give you the opportunity to correct it or add information as you see fit. Please click on this link to view what I've recorded:";
+        $body .= "\n\n" . W2P_BASE_URL . "/updatecontact.php?updatekey=".contact_updatekey;
         $body .= "\n\nI assure you that the information will be held in strict confidence and will not be available to anyone other than me. I realize that you may not feel comfortable filling out the entire form so please supply only what you're comfortable with.";
         $body .= "\n\nThank you. I look forward to seeing you again, soon.";
-        $body .= "\n\nBest Regards,\n\n";
-        $body .= $this->_AppUI->user_display_name;
+        $body .= "\n\nBest Regards,\nuser_display_name";
+
+        $templater = new EmailTemplate();
+        $body = $templater->render($body, $contact);
 
         return $body;
     }
@@ -134,9 +136,7 @@ class w2p_Output_EmailManager
 
     public function getForumWatchEmail(CForum_Message $message, $forum_name, $message_from)
     {
-
         $body = $this->_AppUI->_('forumEmailBody', UI_OUTPUT_RAW);
-        ;
         $body .= "\n\n" . $this->_AppUI->_('Forum', UI_OUTPUT_RAW) . ': ' . $forum_name;
         $body .= "\n" . $this->_AppUI->_('Subject', UI_OUTPUT_RAW) . ': ' . $message->message_title;
         $body .= "\n" . $this->_AppUI->_('Message From', UI_OUTPUT_RAW) . ': ' . $message_from;
@@ -148,7 +148,6 @@ class w2p_Output_EmailManager
 
     public function getFileNotify(CFile $file)
     {
-
         $body = $this->_AppUI->_('Project') . ': ' . $file->_project->project_name;
         $body .= "\n" . $this->_AppUI->_('URL') . ':     ' . W2P_BASE_URL . '/index.php?m=projects&a=view&project_id=' . $file->_project->project_id;
 
@@ -229,7 +228,6 @@ class w2p_Output_EmailManager
 
     public function getTaskRemind(CTask $task, $msg, $project_name, $contacts)
     {
-
         $body = $this->_AppUI->_('Task Due', UI_OUTPUT_RAW) . ': ' . $msg . "\n";
         $body .= $this->_AppUI->_('Project', UI_OUTPUT_RAW) . ': ' . $project_name . "\n";
         $body .= $this->_AppUI->_('Task', UI_OUTPUT_RAW) . ': ' . $task->task_name . "\n";
@@ -280,7 +278,6 @@ class w2p_Output_EmailManager
 
     public function getProjectNotifyOwner(CProject $project, $isNotNew)
     {
-
         $status = (intval($isNotNew)) ? 'Updated' : 'Created';
 
         $body = $this->_AppUI->_('Project') . ': ' . $project->project_name . ' ' . $this->_AppUI->_('has been') . ' ' . $this->_AppUI->_($status);
@@ -302,7 +299,6 @@ class w2p_Output_EmailManager
 
     public function getProjectNotifyContacts(CProject $project, $isNotNew)
     {
-
         $status = (intval($isNotNew)) ? 'Updated' : 'Created';
 
         $body = $this->_AppUI->_('Project') . ": $project->project_name Has Been $status Via Project Manager. You can view the Project by clicking: ";
@@ -382,5 +378,4 @@ class w2p_Output_EmailManager
 
         return $body;
     }
-
 }
