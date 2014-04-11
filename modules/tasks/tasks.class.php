@@ -1505,6 +1505,11 @@ class CTask extends w2p_Core_BaseObject
                 }
 
             case self::ACCESS_PARTICIPANT:
+            
+                if ($this->task_owner == $user_id)   { $retval=true; break; }     
+                //in this case we don't need the query
+                else
+                {
                 $company_match = ((isset($company_match)) ? $company_match : true);
                 $q = $this->_getQuery();
                 $q->addTable('user_tasks');
@@ -1512,8 +1517,9 @@ class CTask extends w2p_Core_BaseObject
                 $q->addWhere('user_id=' . (int) $user_id . ' AND task_id=' . (int) $this->task_id);
                 $count = $q->loadResult();
                 $q->clear();
-                $retval = (($company_match && $count > 0) || $this->task_owner == $user_id);
+                $retval = (($company_match && $count > 0) );     //previously: || $this->task_owner == $user_id
                 break;
+                }
             case self::ACCESS_PRIVATE:
                 $retval = ($this->task_owner == $user_id);
                 break;
