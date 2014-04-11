@@ -1468,7 +1468,7 @@ class CTask extends w2p_Core_BaseObject
         $result = array();
         foreach ($tasks as $key => $row) {
             $obj->load($row['task_id']);
-            $canAccess = $obj->canAccess();
+            $canAccess = $obj->canAccess(0,false);
             if (!$canAccess) {
                 continue;
             }
@@ -1478,9 +1478,9 @@ class CTask extends w2p_Core_BaseObject
         return $result;
     }
 
-    public function canAccess($user_id = 0)
+    public function canAccess($user_id = 0, $task_data_not_loaded=true)
     {
-        $this->load($this->task_id);
+        if ($task_data_not_loaded) $this->load($this->task_id);
         $user_id = ($user_id) ? $user_id : $this->_AppUI->user_id;
         // Let's see if this user has admin privileges
         if (canView('admin')) {
