@@ -5,7 +5,7 @@
  *   does not change the order of the elements, it just gets a subset.
  *
  * @package web2project
- * @subpackage utilites
+ * @subpackage utilities
  *
  */
 

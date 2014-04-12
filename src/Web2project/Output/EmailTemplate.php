@@ -1,9 +1,17 @@
 <?php
-
 namespace Web2project\Output;
 
+/**
+ * Class EmailTemplate
+ * @package Web2project\Output
+ */
 class EmailTemplate
 {
+    /**
+     * @param $message
+     * @param $object
+     * @return mixed
+     */
     public function render($message, $object)
     {
         $properties = get_object_vars($object);
