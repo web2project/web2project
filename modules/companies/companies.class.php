@@ -74,16 +74,15 @@ class CCompany extends w2p_Core_BaseObject {
     }
 
     public function hook_search() {
-        $search['table'] = 'companies';
-        $search['table_module'] = $search['table'];
-        $search['table_key'] = 'company_id';
-        $search['table_link'] = 'index.php?m=companies&a=view&company_id=';
-        $search['table_title'] = 'Companies';
-        $search['table_orderby'] = 'company_name';
-        $search['search_fields'] = array('company_name', 'company_address1',
-            'company_address2', 'company_city', 'company_state', 'company_zip',
-            'company_primary_url', 'company_description', 'company_email');
-        $search['display_fields'] = $search['search_fields'];
+        $search['table']            = $this->_tbl;
+        $search['table_module']     = $this->_tbl;
+        $search['table_key']        = $this->_tbl_key;
+        $search['table_link']       = 'index.php?m='.$search['table_module'].'&a=view&'.$search['table_key'].'=';
+        $search['table_title']      = ucwords($this->_tbl);
+        $search['table_orderby']    = 'company_name';
+        $search['search_fields']    = array('company_name', 'company_address1', 'company_address2', 'company_city',
+            'company_state', 'company_zip', 'company_primary_url', 'company_description', 'company_email');
+        $search['display_fields']   = $search['search_fields'];
 
         return $search;
     }
