@@ -1480,7 +1480,7 @@ class CTask extends w2p_Core_BaseObject
             $result[$key] = $row;
         }
         // execute and return
-        return $tasks;//$result;
+        return $result;
     }
 
     public function canAccess($user_id = 0, $task_data_not_loaded=true)
