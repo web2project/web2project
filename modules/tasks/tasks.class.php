@@ -1468,6 +1468,8 @@ class CTask extends w2p_Core_BaseObject
         $result = array();
         foreach ($tasks as $key => $row) {
 //            $obj->load($row['task_id']);
+//we have everything already loaded in $row.
+//we only need to populate those fields of $obj that are used in canAccess
 			$obj->task_id=$row['task_id'];
 			$obj->task_access=$row['task_access'];
 			$obj->task_owner=$row['task_owner'];
