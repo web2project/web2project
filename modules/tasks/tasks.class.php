@@ -1467,7 +1467,10 @@ class CTask extends w2p_Core_BaseObject
         // check tasks access
         $result = array();
         foreach ($tasks as $key => $row) {
-            $obj->load($row['task_id']);
+//            $obj->load($row['task_id']);
+			$obj->task_id=$row['task_id'];
+			$obj->task_access=$row['task_access'];
+			$obj->task_owner=$row['task_owner'];
             $canAccess = $obj->canAccess(0,false);
             if (!$canAccess) {
                 continue;
@@ -1475,7 +1478,7 @@ class CTask extends w2p_Core_BaseObject
             $result[$key] = $row;
         }
         // execute and return
-        return $result;
+        return $tasks;//$result;
     }
 
     public function canAccess($user_id = 0, $task_data_not_loaded=true)
