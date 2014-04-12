@@ -22,13 +22,16 @@ class w2p_Output_EmailManager
     public $subject = '';
     public $body = '';
 
-    protected $_AppUI;
+    protected $_AppUI = null;
+    protected $templater = null;
 
     public function __construct(w2p_Core_CAppUI $AppUI = null)
     {
         if (is_null($AppUI)) {
             trigger_error('The w2p_Output_EmailManager constructor should receive $AppUI (an w2p_Core_CAppUI object) for proper usage.', E_USER_NOTICE);
         }
+
+        $this->templater = new EmailTemplate();
 
         $this->_AppUI = $AppUI;
     }
@@ -90,10 +93,12 @@ class w2p_Output_EmailManager
         $this->_AppUI = (!is_null($AppUI)) ? $AppUI : $this->_AppUI;
 
         $body = '';
-        $body .= "You have been invited to an event by ".$this->_AppUI->user_display_name;
+        $body .= "You have been invited to an event by user_display_name";
         $body .= "\nHowever, either you or another intended invitee has a competing event\n";
-        $body .= $this->_AppUI->user_display_name." has requested that you reply to this message\n";
+        $body .= "user_display_name has requested that you reply to this message\n";
         $body .= "and confirm if you can or can not make the requested time.\n\n";
+
+        $body = $this->templater->render($body, $this->_AppUI);
 
         return $body;
     }
@@ -118,8 +123,7 @@ class w2p_Output_EmailManager
         $body .= "\n\nThank you. I look forward to seeing you again, soon.";
         $body .= "\n\nBest Regards,\nuser_display_name";
 
-        $templater = new EmailTemplate();
-        $body = $templater->render($body, $contact);
+        $body = $this->templater->render($body, $contact);
 
         return $body;
     }
@@ -128,20 +132,27 @@ class w2p_Output_EmailManager
     {
         $this->_AppUI = (!is_null($AppUI)) ? $AppUI : $this->_AppUI;
 
-        $body = "\n\nFile " . $file->file_name . ' was ' . $file->_message;
-        $body .= ' by ' . $this->_AppUI->user_display_name;
+        $file->user_display_name = $this->_AppUI->user_display_name;
+        $body = "\n\nFile file_name was _message by user_display_name";
+
+        $body = $this->templater->render($body, $file);
 
         return $body;
     }
 
     public function getForumWatchEmail(CForum_Message $message, $forum_name, $message_from)
     {
+        $message->forum_name = $forum_name;
+        $message->message_from = $message_from;
+
         $body = $this->_AppUI->_('forumEmailBody', UI_OUTPUT_RAW);
-        $body .= "\n\n" . $this->_AppUI->_('Forum', UI_OUTPUT_RAW) . ': ' . $forum_name;
-        $body .= "\n" . $this->_AppUI->_('Subject', UI_OUTPUT_RAW) . ': ' . $message->message_title;
-        $body .= "\n" . $this->_AppUI->_('Message From', UI_OUTPUT_RAW) . ': ' . $message_from;
-        $body .= "\n\n" . W2P_BASE_URL . '/index.php?m=forums&a=viewer&forum_id=' . $message->message_forum;
-        $body .= "\n\n" . $message->message_body;
+        $body .= "\n\n" . $this->_AppUI->_('Forum', UI_OUTPUT_RAW) . ': forum_name';
+        $body .= "\n" . $this->_AppUI->_('Subject', UI_OUTPUT_RAW) . ': message_title';
+        $body .= "\n" . $this->_AppUI->_('Message From', UI_OUTPUT_RAW) . ': message_from';
+        $body .= "\n\n" . W2P_BASE_URL . '/index.php?m=forums&a=viewer&forum_id=message_forum';
+        $body .= "\n\nmessage_body";
+
+        $body = $this->templater->render($body, $message);
 
         return $body;
     }
