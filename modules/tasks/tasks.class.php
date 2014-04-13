@@ -1457,20 +1457,23 @@ class CTask extends w2p_Core_BaseObject
         // check tasks access
         $result = array();
         foreach ($tasks as $key => $row) {
-            $obj->load($row['task_id']);
-            $canAccess = $obj->canAccess();
+//            $obj->load($row['task_id']);
+			$obj->task_id=$row['task_id'];
+			$obj->task_access=$row['task_access'];
+			$obj->task_owner=$row['task_owner'];
+            $canAccess = $obj->canAccess(0,false);
             if (!$canAccess) {
                 continue;
             }
             $result[$key] = $row;
         }
         // execute and return
-        return $result;
+        return $tasks;//$result;
     }
 
-    public function canAccess($user_id = 0)
+    public function canAccess($user_id = 0, $task_data_not_loaded=true)
     {
-        $this->load($this->task_id);
+        if ($task_data_not_loaded) $this->load($this->task_id);
         $user_id = ($user_id) ? $user_id : $this->_AppUI->user_id;
         // Let's see if this user has admin privileges
         if (canView('admin')) {
@@ -1495,6 +1498,11 @@ class CTask extends w2p_Core_BaseObject
                 }
 
             case self::ACCESS_PARTICIPANT:
+            
+                if ($this->task_owner == $user_id)   { $retval=true; break; }     
+                //in this case we don't need the query
+                else
+                {
                 $company_match = ((isset($company_match)) ? $company_match : true);
                 $q = $this->_getQuery();
                 $q->addTable('user_tasks');
@@ -1502,8 +1510,9 @@ class CTask extends w2p_Core_BaseObject
                 $q->addWhere('user_id=' . (int) $user_id . ' AND task_id=' . (int) $this->task_id);
                 $count = $q->loadResult();
                 $q->clear();
-                $retval = (($company_match && $count > 0) || $this->task_owner == $user_id);
+                $retval = (($company_match && $count > 0) );     //previously: || $this->task_owner == $user_id
                 break;
+                }
             case self::ACCESS_PRIVATE:
                 $retval = ($this->task_owner == $user_id);
                 break;
