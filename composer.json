@@ -18,7 +18,8 @@
     },
     "require": {
         "aws/aws-sdk-php": "dev-master",
-        "dropbox/dropbox-sdk": "1.1.*"
+        "dropbox/dropbox-sdk": "1.1.*",
+        "ircmaxell/password-compat": "dev-master"
     },
     "autoload": {
         "psr-0": { "Web2project": "src/"}
