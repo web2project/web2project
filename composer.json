@@ -1,11 +1,9 @@
 {
-<<<<<<< HEAD
     "require": {
 
     },
     "autoload": {
         "psr-0": { "Web2project": "src/"}
-=======
     "name": "web2project/core",
     "type": "application",
     "keywords": ["web2project", "project management", "gantt"],
@@ -23,12 +21,10 @@
     },
     "require": {
         "aws/aws-sdk-php": "dev-master",
-        "dropbox/dropbox-sdk": "1.1.*"
+        "dropbox/dropbox-sdk": "1.1.*",
+        "ircmaxell/password-compat": "dev-master"
     },
     "autoload": {
-        "psr-0": {
-            "w2p_": ""
-        }
->>>>>>> added the composer components
+        "psr-0": { "Web2project": "src/"}
     }
 }
