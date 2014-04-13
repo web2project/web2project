@@ -1481,10 +1481,14 @@ class CTask extends w2p_Core_BaseObject
         if (canView('admin')) {
             return true;
         }
+        // If the user is the task owner, they can always see it.
+        if ($this->task_owner == $user_id) { return true; }
+
+        $access = false;
 
         switch ($this->task_access) {
             case self::ACCESS_PUBLIC:
-                $retval = true;
+                $access = true;
                 break;
             case self::ACCESS_PROTECTED:
                 $q = $this->_getQuery();
@@ -1498,13 +1502,8 @@ class CTask extends w2p_Core_BaseObject
                     $company_match = $company_match && ((!(isset($last_company))) || $last_company == $current_company);
                     $last_company = $current_company;
                 }
-
+                // This drops through on purpose.
             case self::ACCESS_PARTICIPANT:
-            
-                if ($this->task_owner == $user_id)   { $retval=true; break; }     
-                //in this case we don't need the query
-                else
-                {
                 $company_match = ((isset($company_match)) ? $company_match : true);
                 $q = $this->_getQuery();
                 $q->addTable('user_tasks');
@@ -1512,18 +1511,14 @@ class CTask extends w2p_Core_BaseObject
                 $q->addWhere('user_id=' . (int) $user_id . ' AND task_id=' . (int) $this->task_id);
                 $count = $q->loadResult();
                 $q->clear();
-                $retval = (($company_match && $count > 0) );     //previously: || $this->task_owner == $user_id
-                break;
-                }
-            case self::ACCESS_PRIVATE:
-                $retval = ($this->task_owner == $user_id);
+                $access = (($company_match && $count > 0) );
                 break;
             default:
-                $retval = false;
+                $access = false;
                 break;
         }
 
-        return $retval;
+        return $access;
     }
 
     /**
