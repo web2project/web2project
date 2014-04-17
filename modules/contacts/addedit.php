@@ -14,6 +14,7 @@ $obj = $row;
 $canAddEdit = $obj->canAddEdit();
 $canAuthor = $obj->canCreate();
 $canEdit = $obj->canEdit();
+$canDelete = $obj->canDelete();
 if (!$canAddEdit) {
 	$AppUI->redirect(ACCESS_DENIED);
 }
@@ -57,9 +58,10 @@ $df .= ' ' . $AppUI->getPref('TIMEFORMAT');
 // setup the title block
 $ttl = $contact_id > 0 ? 'Edit Contact' : 'Add Contact';
 $titleBlock = new w2p_Theme_TitleBlock($ttl, 'icon.png', $m, $m . '.' . $a);
-$titleBlock->addCrumb('?m=contacts', 'contacts list');
-$titleBlock->addCrumb('?m=contacts&a=view&contact_id=' . $contact_id, 'view contact');
-$canDelete = $row->canDelete();
+$titleBlock->addCrumb('?m=' . $m, $m . ' list');
+if ($contact_id != 0) {
+    $titleBlock->addCrumb('?m=contacts&a=view&contact_id=' . $contact_id, 'view contact');
+}
 
 $titleBlock->show();
 $company_detail = $row->getCompanyDetails();
