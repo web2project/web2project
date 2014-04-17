@@ -73,7 +73,7 @@ if ($file->file_checkout == 'final' && !$canAdmin) {
 $ttl = $file_id ? 'Edit File' : 'Add File';
 $ttl = $ci ? 'Checking in' : $ttl;
 $titleBlock = new w2p_Theme_TitleBlock($ttl, 'icon.png', $m, $m . '.' . $a);
-$titleBlock->addCrumb('?m=files', 'files list');
+$titleBlock->addCrumb('?m=' . $m, $m . ' list');
 $canDelete = $file->canDelete();
 
 if ($canDelete && $file_id > 0 && !$ci) {

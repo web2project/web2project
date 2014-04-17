@@ -48,7 +48,7 @@ if (0 == $link_id && ($project_id || $task_id)) {
 // setup the title block
 $ttl = $link_id ? 'Edit Link' : 'Add Link';
 $titleBlock = new w2p_Theme_TitleBlock($AppUI->_($ttl), 'icon.png', $m, $m . '.' . $a);
-$titleBlock->addCrumb('?m=' . $m, 'links list');
+$titleBlock->addCrumb('?m=' . $m, $m . ' list');
 $canDelete = $link->canDelete();
 if ($canDelete && $link_id) {
     if (!isset($msg)) {

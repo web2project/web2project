@@ -46,8 +46,7 @@ $style = (($actual_end_date > $end_date) && !empty($end_date)) ? 'style="color:r
 
 // setup the title block
 $titleBlock = new w2p_Theme_TitleBlock('View Project', 'icon.png', $m, $m . '.' . $a);
-
-$titleBlock->addCrumb('?m=projects', 'projects list');
+$titleBlock->addCrumb('?m=' . $m, $m . ' list');
 
 if ($canEdit) {
     $titleBlock->addButton('new link', '?m=links&a=addedit&project_id=' . $project_id);

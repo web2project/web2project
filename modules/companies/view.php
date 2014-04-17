@@ -23,7 +23,7 @@ $canCreateContacts = $contact->canCreate();
 // setup the title block
 $titleBlock = new w2p_Theme_TitleBlock('View Company', 'icon.png', $m, "$m.$a");
 $titleBlock->addCell();
-$titleBlock->addCrumb('?m=companies', 'company list');
+$titleBlock->addCrumb('?m=' . $m, $m . ' list');
 
 if ($canCreateContacts) {
     $titleBlock->addButton('New contact', '?m=contacts&a=addedit&company_id=' . $company_id);

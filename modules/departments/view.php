@@ -23,7 +23,7 @@ $types = w2PgetSysVal('DepartmentType');
 $titleBlock = new w2p_Theme_TitleBlock('View Department', 'icon.png', $m, $m . '.' . $a);
 $titleBlock->addCrumb('?m=companies', 'company list');
 $titleBlock->addCrumb('?m=companies&a=view&company_id=' . $department->dept_company, 'view this company');
-$titleBlock->addCrumb('?m=departments', 'department list');
+$titleBlock->addCrumb('?m=' . $m, $m . ' list');
 
 if ($canEdit) {
     $titleBlock->addCell();

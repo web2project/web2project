@@ -49,9 +49,8 @@ $companies = arrayMerge(array('0' => ''), $companies);
 // setup the title block
 $ttl = $user_id ? 'Edit User' : 'Add User';
 $titleBlock = new w2p_Theme_TitleBlock($ttl, 'icon.png', $m, $m . '.' . $a);
-if (canView('users')) {
-    $titleBlock->addCrumb('?m=users', 'users list');
-}
+$titleBlock->addCrumb('?m=' . $m, $m . ' list');
+
 if ($user_id) {
     $titleBlock->addCrumb('?m=users&a=view&user_id=' . $user_id, 'view this user');
     if ($object->contact_id > 0) {
