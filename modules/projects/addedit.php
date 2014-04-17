@@ -80,12 +80,10 @@ $style = (($actual_end_date > $end_date) && !empty($end_date)) ? 'style="color:r
 $ttl = $project_id > 0 ? 'Edit Project' : 'New Project';
 $titleBlock = new w2p_Theme_TitleBlock($ttl, 'icon.png', $m, $m . '.' . $a);
 $titleBlock->addCrumb('?m=' . $m, $m . ' list');
-$canDelete = $project->canDelete();
-if ($project_id != 0) {
-	$titleBlock->addCrumb('?m=projects&a=view&project_id=' . $project_id, 'view this project');
-}
+$titleBlock->addViewLink('project', $project_id);
 $titleBlock->show();
 
+$canDelete = $project->canDelete();
 // Get contacts list
 $selected_contacts = array();
 

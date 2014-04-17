@@ -50,12 +50,10 @@ $companies = arrayMerge(array('0' => ''), $companies);
 $ttl = $user_id ? 'Edit User' : 'Add User';
 $titleBlock = new w2p_Theme_TitleBlock($ttl, 'icon.png', $m, $m . '.' . $a);
 $titleBlock->addCrumb('?m=' . $m, $m . ' list');
+$titleBlock->addViewLink('user', $user_id);
+$titleBlock->addViewLink('contact', $object->contact_id);
 
 if ($user_id) {
-    $titleBlock->addCrumb('?m=users&a=view&user_id=' . $user_id, 'view this user');
-    if ($object->contact_id > 0) {
-        $titleBlock->addCrumb('?m=contacts&a=view&contact_id='.$object->contact_id, 'view this contact');
-    }
     if ($canEdit || $user_id == $AppUI->user_id) {
         $titleBlock->addCrumb('?m=system&a=addeditpref&user_id=' . $user_id, 'edit preferences');
     }

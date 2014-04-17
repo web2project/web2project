@@ -116,11 +116,8 @@ foreach ($root_tasks as $root_task) {
 // setup the title block
 $ttl = $task_id > 0 ? 'Edit Task' : 'Add Task';
 $titleBlock = new w2p_Theme_TitleBlock($ttl, 'icon.png', $m, $m . '.' . $a);
-if ($canReadProject) {
-	$titleBlock->addCrumb('?m=projects&a=view&project_id=' . $task_project, 'view this project');
-}
-if ($task_id > 0)
-	$titleBlock->addCrumb('?m=tasks&a=view&task_id=' . $task->task_id, 'view this task');
+$titleBlock->addViewLink('project', $task_project);
+$titleBlock->addViewLink('task', $task_id);
 $titleBlock->show();
 
 // Get contacts list

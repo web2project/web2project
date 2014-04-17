@@ -53,9 +53,7 @@ $users = $perms->getPermittedUsers('forums');
 $ttl = $forum_id > 0 ? 'Edit Forum' : 'Add Forum';
 $titleBlock = new w2p_Theme_TitleBlock($ttl, 'icon.png', $m, $m . '.' . $a);
 $titleBlock->addCrumb('?m=' . $m, $m . ' list');
-if ($forum_id) {
-    $titleBlock->addCrumb('?m=forums&a=viewer&forum_id=' . $forum_id, 'view this forum');
-}
+$titleBlock->addViewLink('forum', $forum_id, 'viewer');
 $titleBlock->show();
 ?>
 <script language="javascript" type="text/javascript">

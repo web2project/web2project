@@ -90,6 +90,20 @@ class w2p_Theme_TitleBlock {
     public function addCrumb($link, $label, $icon = '') {
         $this->crumbs[$link] = array($label, $icon);
     }
+
+    /**
+     * @param $m
+     * @param $id
+     * @param string $a
+     */
+    public function addViewLink($module, $key, $a = 'view')
+    {
+        if ($key) {
+            $this->addCrumb('?m=' . w2p_pluralize($module) . '&a=' . $a .
+                    '&' . $module . '_id=' . $key, 'view this ' . $module);
+        }
+    }
+
     /**
      * Adds a table 'cell' to the right-aligned bread-crumbs
      *

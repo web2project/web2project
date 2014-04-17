@@ -36,9 +36,7 @@ if (!$company && $company_id > 0) {
 $ttl = $company_id > 0 ? 'Edit Company' : 'Add Company';
 $titleBlock = new w2p_Theme_TitleBlock($ttl, 'icon.png', $m, $m . '.' . $a);
 $titleBlock->addCrumb('?m=' . $m, $m . ' list');
-if ($company_id != 0) {
-	$titleBlock->addCrumb('?m=companies&a=view&company_id=' . $company_id, 'view this company');
-}
+$titleBlock->addViewLink('company', $company_id);
 $titleBlock->show();
 
 

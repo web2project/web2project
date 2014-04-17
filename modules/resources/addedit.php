@@ -35,10 +35,7 @@ if (!$resource_id && $resource_id > 0) {
 $ttl = $resource_id ? 'Edit Resource' : 'Add Resource';
 $titleBlock = new w2p_Theme_TitleBlock($ttl, 'icon.png', $m, $m . '.' . $a);
 $titleBlock->addCrumb('?m=' . $m, $m . ' list');
-
-if ($resource_id) {
-    $titleBlock->addCrumb('?m=resources&a=view&resource_id=' . $resource_id, 'view this resource');
-}
+$titleBlock->addViewLink('resource', $resource_id);
 $titleBlock->show();
 
 $percent = array(0 => '0', 5 => '5', 10 => '10', 15 => '15', 20 => '20', 25 => '25', 30 => '30', 35 => '35', 40 => '40', 45 => '45', 50 => '50', 55 => '55', 60 => '60', 65 => '65', 70 => '70', 75 => '75', 80 => '80', 85 => '85', 90 => '90', 95 => '95', 100 => '100');

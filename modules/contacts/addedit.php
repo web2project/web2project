@@ -59,9 +59,7 @@ $df .= ' ' . $AppUI->getPref('TIMEFORMAT');
 $ttl = $contact_id > 0 ? 'Edit Contact' : 'Add Contact';
 $titleBlock = new w2p_Theme_TitleBlock($ttl, 'icon.png', $m, $m . '.' . $a);
 $titleBlock->addCrumb('?m=' . $m, $m . ' list');
-if ($contact_id != 0) {
-    $titleBlock->addCrumb('?m=contacts&a=view&contact_id=' . $contact_id, 'view contact');
-}
+$titleBlock->addViewLink('contact', $contact_id);
 
 $titleBlock->show();
 $company_detail = $row->getCompanyDetails();

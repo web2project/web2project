@@ -83,9 +83,7 @@ $titleBlock->addCrumb('?m=events&a=year_view&date=' . $start_date->format(FMT_TI
 $titleBlock->addCrumb('?m=events&amp;date=' . $start_date->format(FMT_TIMESTAMP_DATE), 'month view');
 $titleBlock->addCrumb('?m=events&a=week_view&date=' . $start_date->format(FMT_TIMESTAMP_DATE), 'week view');
 $titleBlock->addCrumb('?m=events&amp;a=day_view&amp;date=' . $start_date->format(FMT_TIMESTAMP_DATE) . '&amp;tab=0', 'day view');
-if ($event_id) {
-	$titleBlock->addCrumb('?m=events&amp;a=view&event_id=' . $event_id, 'view this event');
-}
+$titleBlock->addViewLink('event', $event_id);
 $titleBlock->show();
 
 // format dates
