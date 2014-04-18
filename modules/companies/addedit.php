@@ -45,4 +45,18 @@ $types = w2PgetSysVal('CompanyType');
 $countries = array('' => $AppUI->_('(Select a Country)')) + w2PgetSysVal('GlobalCountriesPreferred') +
 		array('-' => '----') + w2PgetSysVal('GlobalCountries');
 
+?>
+<script language="javascript" type="text/javascript">
+    function submitIt() {
+        var form = document.changeclient;
+        if (form.company_name.value.length < 3) {
+            alert( "<?php echo $AppUI->_('companyValidName', UI_OUTPUT_JS); ?>" );
+            form.company_name.focus();
+        } else {
+            form.submit();
+        }
+    }
+</script>
+<?php
+
 include $AppUI->getTheme()->resolveTemplate('companies/addedit');
