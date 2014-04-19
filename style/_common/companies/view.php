@@ -24,7 +24,7 @@ $view = new w2p_Output_HTML_ViewHelper($AppUI);
             <?php $view->showField('company_fax', $company->company_fax); ?>
         </p>
         <p><?php $view->showLabel('Address'); ?>
-            <?php $view->showAddress($company, 'company'); ?>
+            <?php $view->showAddress('company', $company); ?>
         </p>
         </p>
         <p><?php $view->showLabel('URL'); ?>
