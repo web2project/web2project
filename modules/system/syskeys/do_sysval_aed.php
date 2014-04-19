@@ -18,31 +18,25 @@ $post = array('sysval_title' => w2PgetParam($_POST, 'sysval_title'),
 $svid = array('sysval_title' => w2PgetParam($_POST, 'sysval_id'));
 
 if ($del) {
-	if (!$obj->bind($svid)) {
-		$AppUI->setMsg($obj->getError(), UI_MSG_ERROR);
-		$AppUI->redirect();
-        $AppUI->redirect('m=system&u=syskeys');
-	}
+    $bind = $obj->bind($svid);
 } else {
-	$del = 0;
-	if (!$obj->bind($post)) {
-		$AppUI->setMsg($obj->getError(), UI_MSG_ERROR);
-        $AppUI->redirect('m=system&u=syskeys');
-	}
+	$bind = $obj->bind($post);
+}
+
+if (!$bind) {
+    $AppUI->setMsg($obj->getError(), UI_MSG_ERROR);
+    $AppUI->redirect('m=system&u=syskeys');
 }
 
 $AppUI->setMsg('System Lookup Values', UI_MSG_ALERT);
-if ($del) {
-	if (($msg = $obj->delete())) {
-		$AppUI->setMsg($msg, UI_MSG_ERROR);
-	} else {
-		$AppUI->setMsg('deleted', UI_MSG_ALERT, true);
-	}
+
+$prefix  = 'System Lookup Values';
+$action  = ($del) ? 'deleted' : 'stored';
+$success = ($del) ? $obj->delete() : $obj->store();
+
+if ($success) {
+    $AppUI->setMsg($prefix . ' ' . $action);
 } else {
-	if (($msg = $obj->store())) {
-		$AppUI->setMsg($msg, UI_MSG_ERROR);
-	} else {
-		$AppUI->setMsg($_POST['sysval_id'] ? 'updated' : 'inserted', UI_MSG_OK, true);
-	}
+    $AppUI->setMsg($obj->getError(), UI_MSG_ERROR);
 }
 $AppUI->redirect('m=system&u=syskeys');
