@@ -59,7 +59,7 @@ class w2p_Output_HTML_ViewHelper extends w2p_Output_HTML_Base
         $output .= '<a href="http://maps.google.com/maps?q=' . $object->{$name . '_address1'} . '+' . $object->{$name . '_address2'} . '+' . $object->{$name . '_city'} . '+' . $object->{$name . '_state'} . '+' . $object->{$name . '_zip'} . '+' . $object->{$name . '_country'} . '" target="_blank">';
         $output .= '<img src="' . w2PfindImage('googlemaps.gif') . '" class="right" alt="Find It on Google" />';
         $output .= '</a>';
-        $output .=  $object->{$name . '_address1'} . (($object->{$name . '_address2'}) ? '<br />' . $object->{$name . '_address2'} : '') . (($object->{$name . '_city'}) ? '<br />' . $object->{$name . '_city'} : '') . (($object->{$name . '_state'}) ? '<br />' . $object->{$name . '_state'} : '') . (($object->{$name . '_zip'}) ? '<br />' . $object->{$name . '_zip'} : '') . (($object->{$name . '_country'}) ? '<br />' . $countries[$object->{$name . '_country'}] : '');
+        $output .=  $object->{$name . '_address1'} . (($object->{$name . '_address2'}) ? '<br />' . $object->{$name . '_address2'} : '') . (($object->{$name . '_city'}) ? '<br />' . $object->{$name . '_city'} : '') . (($object->{$name . '_state'}) ? ' ' . $object->{$name . '_state'} : '') . (($object->{$name . '_zip'}) ? ', ' . $object->{$name . '_zip'} : '') . (($object->{$name . '_country'}) ? '<br />' . $countries[$object->{$name . '_country'}] : '');
         $output .= '</div>';
 
         echo $output;
