@@ -246,6 +246,9 @@ class CUser extends w2p_Core_BaseObject
 
     public function generateToken($userId, $token = '')
     {
+        if (!$userId) {
+            return false;
+        }
         $q = $this->_getQuery();
         $q->setDelete('user_feeds');
         $q->addWhere('feed_user = ' . $userId);

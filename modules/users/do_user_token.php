@@ -1,10 +1,12 @@
 <?php
 
 $token = w2PgetParam($_POST, 'token', '');
-$userId = w2PgetParam($_POST, 'user_id', '');
+$user_id = w2PgetParam($_POST, 'user_id', '');
 
-if ($userId > 0) {
-    CUser::generateUserToken($userId, $token);
+$user = new CUser();
+$user->generateToken($user_id, $token);
+
+if ($userId) {
     $redirect = 'm=users&a=view&user_id='.$userId;
 } else {
     $redirect = 'm=users';
