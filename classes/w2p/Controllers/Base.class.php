@@ -29,7 +29,7 @@ class w2p_Controllers_Base
     /** Either the $successPath or $errorPath depending on what happened */
     public $resultPath = '';
 
-    public function __construct(w2p_Core_BaseObject $object, $delete,
+    public function __construct($object, $delete,
         $prefix, $successPath, $errorPath)
     {
         $this->object = $object;
