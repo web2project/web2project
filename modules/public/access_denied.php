@@ -4,10 +4,5 @@ if (!defined('W2P_BASE_DIR')) {
 }
 $titleBlock = new w2p_Theme_TitleBlock('Access Denied', 'error.png', $m, "$m.$a");
 $titleBlock->show();
-?>
-<table class="std" width="100%" border="0" cellpadding="5" cellspacing="0">
-<tr valign="top">
-	<td width="50%"><?php echo $AppUI->_('accessDeniedMsg'); ?></td>
-	<td width="50%">&nbsp;</td>
-</tr>
-</table>
+
+include $AppUI->getTheme()->resolveTemplate('public/access_denied');
