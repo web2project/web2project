@@ -24,12 +24,8 @@ $view = new w2p_Output_HTML_ViewHelper($AppUI);
             <?php $view->showField('company_fax', $company->company_fax); ?>
         </p>
         <p><?php $view->showLabel('Address'); ?>
-            <div style="margin-left: 10em;">
-                <a href="http://maps.google.com/maps?q=<?php echo $company->company_address1; ?>+<?php echo $company->company_address2; ?>+<?php echo $company->company_city; ?>+<?php echo $company->company_state; ?>+<?php echo $company->company_zip; ?>+<?php echo $company->company_country; ?>" target="_blank">
-                    <img src="<?php echo w2PfindImage('googlemaps.gif'); ?>" class="right" alt="Find It on Google" />
-                </a>
-                <?php echo $company->company_address1 . (($company->company_address2) ? '<br />' . $company->company_address2 : '') . (($company->company_city) ? '<br />' . $company->company_city : '') . (($company->company_state) ? '<br />' . $company->company_state : '') . (($company->company_zip) ? '<br />' . $company->company_zip : '') . (($company->company_country) ? '<br />' . $countries[$company->company_country] : '');?>
-            </div>
+            <?php $view->showAddress($company, 'company'); ?>
+        </p>
         </p>
         <p><?php $view->showLabel('URL'); ?>
             <?php $view->showField('company_primary_url', $company->company_primary_url); ?>

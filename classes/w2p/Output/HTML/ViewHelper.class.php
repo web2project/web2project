@@ -48,6 +48,20 @@ class w2p_Output_HTML_ViewHelper extends w2p_Output_HTML_Base
 
     public function showField($fieldName, $fieldValue)
     {
-        echo $this->addField($fieldName, $fieldValue, $options, $values);
+        echo $this->addField($fieldName, $fieldValue);
+    }
+
+    public function showAddress($object, $name)
+    {
+        $countries = w2PgetSysVal('GlobalCountries');
+
+        $output  = '<div style="margin-left: 10em;">';
+        $output .= '<a href="http://maps.google.com/maps?q=' . $object->company_address1 . '+' . $object->company_address2 . '+' . $object->company_city . '+' . $object->company_state . '+' . $object->company_zip . '+' . $object->company_country . '" target="_blank">';
+        $output .= '<img src="' . w2PfindImage('googlemaps.gif') . '" class="right" alt="Find It on Google" />';
+        $output .= '</a>';
+        $output .=  $object->company_address1 . (($object->company_address2) ? '<br />' . $object->company_address2 : '') . (($object->company_city) ? '<br />' . $object->company_city : '') . (($object->company_state) ? '<br />' . $object->company_state : '') . (($object->company_zip) ? '<br />' . $object->company_zip : '') . (($object->company_country) ? '<br />' . $countries[$object->company_country] : '');
+        $output .= '</div>';
+
+        echo $output;
     }
 }
