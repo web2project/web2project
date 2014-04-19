@@ -29,8 +29,7 @@ class w2p_Controllers_Base
     /** Either the $successPath or $errorPath depending on what happened */
     public $resultPath = '';
 
-    public function __construct($object, $delete,
-        $prefix, $successPath, $errorPath)
+    public function __construct($object, $delete, $prefix, $successPath, $errorPath)
     {
         $this->object = $object;
         $this->delete = $delete;
@@ -39,7 +38,7 @@ class w2p_Controllers_Base
         $this->errorPath = $errorPath;
     }
 
-    public function process(w2p_Core_CAppUI $AppUI, array $myArray)
+    public function process(\w2p_Core_CAppUI $AppUI, array $myArray)
     {
         if (!$this->object->bind($myArray)) {
             $AppUI->setMsg($this->object->getError(), UI_MSG_ERROR);
