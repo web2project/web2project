@@ -4,6 +4,8 @@ if (!defined('W2P_BASE_DIR')) {
 }
 // @todo    convert to template
 $dept_id = (int) w2PgetParam($_GET, 'dept_id', 0);
+$department_id = (int) w2PgetParam($_GET, 'department_id', 0);
+$dept_id = max($dept_id, $department_id);
 
 $department = new CDepartment();
 
