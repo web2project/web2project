@@ -69,6 +69,12 @@ function delIt() {
 		f.del.value='1';
 		f.submit();
 	}
+    if (confirm( '<?php echo $AppUI->_('doDelete') . ' ' . $AppUI->_('Folder') . '?'; ?>' )) {
+        $.post("?m=companies",
+            {dosql: "do_folder_aed", del: 1, file_folder_id: <?php echo $folder_id; ?>},
+            window.location = "?m=companies"
+        );
+    }
 }
 </script>
 <?php

@@ -56,27 +56,26 @@ if ($canDelete) {
 }
 $titleBlock->show();
 
-?>
+if ($canDelete) { ?>
+    <script language="javascript" type="text/javascript">
+        function delIt() {
+            if (confirm( '<?php echo $AppUI->_('doDelete') . ' ' . $AppUI->_('Task') . '?'; ?>' )) {
+                $.post("?m=tasks",
+                    {dosql: "do_task_aed", del: 1, task_id: <?php echo $task_id; ?>},
+                    window.location = "?m=tasks"
+                );
+            }
+        }
+    </script>
+<?php } ?>
+
 <script language="javascript" type="text/javascript">
 function updateTask() {
 	var f = document.editFrm;
 
 	f.submit();
 }
-<?php if ($canDelete) { ?>
-function delIt() {
-	if (confirm( '<?php echo $AppUI->_('doDelete', UI_OUTPUT_JS) . ' ' . $AppUI->_('Task', UI_OUTPUT_JS) . '?'; ?>' )) {
-		document.frmDelete.submit();
-	}
-}
-<?php } ?>
 </script>
-
-<form name="frmDelete" action="./index.php?m=tasks" method="post" accept-charset="utf-8">
-	<input type="hidden" name="dosql" value="do_task_aed" />
-	<input type="hidden" name="del" value="1" />
-	<input type="hidden" name="task_id" value="<?php echo $task_id; ?>" />
-</form>
 <?php
 $durnTypes = w2PgetSysVal('TaskDurationType');
 $task_types = w2PgetSysVal('TaskType');

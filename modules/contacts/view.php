@@ -41,23 +41,17 @@ if ($canDelete) {
 }
 $titleBlock->show();
 
-?>
-<form name="changecontact" action="?m=contacts" method="post" accept-charset="utf-8">
-        <input type="hidden" name="dosql" value="do_contact_aed" />
-        <input type="hidden" name="del" value="0" />
-        <input type="hidden" name="contact_id" value="<?php echo $contact_id; ?>" />
-        <input type="hidden" name="contact_owner" value="<?php echo $contact->contact_owner ? $contact->contact_owner : $AppUI->user_id; ?>" />
-</form>
-<?php if ($canDelete) { ?>
-<script language="javascript" type="text/javascript">
-function delIt(){
-	var form = document.changecontact;
-	if(confirm('<?php echo $AppUI->_('contactsDelete', UI_OUTPUT_JS); ?>')) {
-		form.del.value = '<?php echo $contact_id; ?>';
-		form.submit();
-	}
-}
-</script>
+if ($canDelete) { ?>
+    <script language="javascript" type="text/javascript">
+        function delIt() {
+            if (confirm( '<?php echo $AppUI->_('doDelete') . ' ' . $AppUI->_('Contact') . '?'; ?>' )) {
+                $.post("?m=contacts",
+                    {dosql: "do_contact_aed", del: 1, contact_id: <?php echo $contact_id; ?>},
+                    window.location = "?m=contacts"
+                );
+            }
+        }
+    </script>
 <?php }
 
 include $AppUI->getTheme()->resolveTemplate('contacts/view');

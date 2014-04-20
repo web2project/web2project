@@ -58,25 +58,21 @@ if ($canEdit) {
 $titleBlock->addCell(arraySelect($filters, 'f', 'size="1" class="text" onchange="document.filterFrm.submit();"', $f, true), '', '<form action="?m=forums&a=viewer&forum_id=' . $forum_id . '" method="post" name="filterFrm" accept-charset="utf-8">', '</form>');
 $titleBlock->show();
 
+if ($canDelete) { ?>
+    <script language="javascript" type="text/javascript">
+        function delIt() {
+            if (confirm( '<?php echo $AppUI->_('doDelete') . ' ' . $AppUI->_('Forum') . '?'; ?>' )) {
+                $.post("?m=forums",
+                    {dosql: "do_forum_aed", del: 1, forum_id: <?php echo $forum_id; ?>},
+                    window.location = "?m=forums"
+                );
+            }
+        }
+    </script>
+<?php }
+
 include $AppUI->getTheme()->resolveTemplate('forums/view');
 
-if ($canDelete && ($forum_id > 0)) { ?>
-<script language="javascript" type="text/javascript">
-function delIt(){
-    var form = document.frmDelete;
-    if (confirm( "<?php echo $AppUI->_('forumDeleteForum', UI_OUTPUT_JS); ?>" )) {
-        form.del.value="<?php echo $forum_id; ?>";
-        form.submit();
-    }
-}
-</script>
-<form name="frmDelete" action="./index.php?m=forums" method="post" accept-charset="utf-8">
-    <input type="hidden" name="dosql" value="do_forum_aed" />
-    <input type="hidden" name="del" value="1" />
-    <input type="hidden" name="forum_id" value="<?php echo $forum_id; ?>" />
-</form>
-<?php } ?>
-<?php
 echo $AppUI->getTheme()->styleRenderBoxBottom();
 if ($post_message) {
 	include (W2P_BASE_DIR . '/modules/forums/post_message.php');

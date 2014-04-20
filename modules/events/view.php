@@ -46,29 +46,18 @@ if ($canEdit) {
 }
 $titleBlock->show();
 
-?>
-<script language="javascript" type="text/javascript">
-<?php
-// security improvement:
-// some javascript functions may not appear on client side in case of user not having write permissions
-// else users would be able to arbitrarily run 'bad' functions
-if ($canDelete) {
-?>
-function delIt() {
-	if (confirm( "<?php echo $AppUI->_('eventDelete', UI_OUTPUT_JS); ?>" )) {
-		document.frmDelete.submit();
-	}
-}
-<?php } ?>
-</script>
-
-<form name="frmDelete" action="./index.php?m=events" method="post" accept-charset="utf-8">
-	<input type="hidden" name="dosql" value="do_event_aed" />
-	<input type="hidden" name="del" value="1" />
-	<input type="hidden" name="event_id" value="<?php echo $event_id; ?>" />
-</form>
-
-<?php
+if ($canDelete) { ?>
+    <script language="javascript" type="text/javascript">
+        function delIt() {
+            if (confirm( '<?php echo $AppUI->_('doDelete') . ' ' . $AppUI->_('Event') . '?'; ?>' )) {
+                $.post("?m=events",
+                    {dosql: "do_event_aed", del: 1, event_id: <?php echo $event_id; ?>},
+                    window.location = "?m=events"
+                );
+            }
+        }
+    </script>
+<?php }
 
 $types = w2PgetSysVal('EventType');
 

@@ -33,28 +33,19 @@ if ($canEdit) {
     }
 }
 $titleBlock->show();
-?>
-<script language="javascript" type="text/javascript">
-<?php
-	// security improvement:
-	// some javascript functions may not appear on client side in case of user not having write permissions
-	// else users would be able to arbitrarily run 'bad' functions
-	if ($canDelete) {
-?>
-function delIt() {
-	if (confirm('<?php echo $AppUI->_('departmentDelete', UI_OUTPUT_JS); ?>')) {
-		document.frmDelete.submit();
-	}
-}
-<?php } ?>
-</script>
 
-<form name="frmDelete" action="./index.php?m=departments" method="post" accept-charset="utf-8">
-	<input type="hidden" name="dosql" value="do_dept_aed" />
-	<input type="hidden" name="del" value="1" />
-	<input type="hidden" name="dept_id" value="<?php echo $dept_id; ?>" />
-</form>
-<?php
+if ($canDelete) { ?>
+    <script language="javascript" type="text/javascript">
+        function delIt() {
+            if (confirm( '<?php echo $AppUI->_('doDelete') . ' ' . $AppUI->_('Department') . '?'; ?>' )) {
+                $.post("?m=departments",
+                    {dosql: "do_dept_aed", del: 1, dept_id: <?php echo $dept_id; ?>},
+                    window.location = "?m=departments"
+                );
+            }
+        }
+    </script>
+<?php }
 
 $types = w2PgetSysVal('DepartmentType');
 

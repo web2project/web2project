@@ -41,27 +41,19 @@ if ($canEdit) {
 }
 $titleBlock->show();
 
-// security improvement:
-// some javascript functions may not appear on client side in case of user not having write permissions
-// else users would be able to arbitrarily run 'bad' functions
-if ($canDelete) {
-?>
+if ($canDelete) { ?>
   <script language="javascript" type="text/javascript">
     function delIt() {
     	if (confirm( '<?php echo $AppUI->_('doDelete') . ' ' . $AppUI->_('Company') . '?'; ?>' )) {
-    		document.frmDelete.submit();
+            $.post("?m=companies",
+                {dosql: "do_company_aed", del: 1, company_id: <?php echo $company_id; ?>},
+                window.location = "?m=companies"
+            );
     	}
     }
   </script>
+<?php }
 
-	<form name="frmDelete" action="./index.php?m=companies" method="post" accept-charset="utf-8">
-		<input type="hidden" name="dosql" value="do_company_aed" />
-		<input type="hidden" name="del" value="1" />
-		<input type="hidden" name="company_id" value="<?php echo $company_id; ?>" />
-	</form>
-<?php } ?>
-
-<?php
 $types = w2PgetSysVal('CompanyType');
 
 include $AppUI->getTheme()->resolveTemplate('companies/view');
