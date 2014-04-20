@@ -708,7 +708,7 @@ input.state, input.zip {
 }
 
 .tasks-depends label, .tasks-dates label, .tasks-resources label, .users label {
-    width: 18em;
+    width: 24em;
 }
 .files label {
     width: 28em;
