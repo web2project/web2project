@@ -1,6 +1,6 @@
 <?php
 if (!defined('W2P_BASE_DIR')) {
-	die('You should not access this file directly.');
+    die('You should not access this file directly.');
 }
 
 global $AppUI, $company;
@@ -19,7 +19,7 @@ if (0 == count($fields)) {
     $fields = array_combine($fieldList, $fieldNames);
 }
 ?>
-<a name="departments-company_view"> </a>
+    <a name="departments-company_view"> </a>
 <?php
 
 $dept_types = w2PgetSysVal('DepartmentType');
