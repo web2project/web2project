@@ -1,5 +1,7 @@
 <?php
+
 $htmlHelper = new w2p_Output_HTMLHelper($AppUI);
+
 ?>
 <table class="std view tasks">
 <tr>

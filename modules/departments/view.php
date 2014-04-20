@@ -37,9 +37,6 @@ if ($canEdit) {
     }
 }
 $titleBlock->show();
-
-$htmlHelper = new w2p_Output_HTMLHelper($AppUI);
-$htmlHelper->stageRowData((array) $department);
 ?>
 <script language="javascript" type="text/javascript">
 <?php

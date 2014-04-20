@@ -13,8 +13,6 @@ if (!$user->load($user_id)) {
 
 $canEdit   = $user->canEdit();
 
-
-
 $tab = $AppUI->processIntState('UserVwTab', $_GET, 'tab', 0);
 
 $user->loadFull($user_id);

@@ -59,6 +59,7 @@ if ($canDelete) {
 	$titleBlock->addCrumbDelete('delete task', $canDelete, $msg);
 }
 $titleBlock->show();
+
 ?>
 <script language="javascript" type="text/javascript">
 function updateTask() {

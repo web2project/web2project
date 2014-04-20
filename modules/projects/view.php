@@ -31,9 +31,6 @@ $billingCategory = w2PgetSysVal('BudgetCategory');
 $pstatus = w2PgetSysVal('ProjectStatus');
 $ptype = w2PgetSysVal('ProjectType');
 
-// get the prefered date format
-$df = $AppUI->getPref('SHDATEFORMAT');
-
 $criticalTasks = ($project_id > 0) ? $project->getCriticalTasks($project_id) : null;
 
 // create Date objects from the datetime fields
@@ -61,6 +58,7 @@ if (canAdd('tasks')) {
     $titleBlock->addButton('new task', '?m=tasks&a=addedit&task_project=' . $project_id);
 }
 $titleBlock->show();
+
 ?>
 <script language="javascript" type="text/javascript">
 function expand_multiproject(id, table_name) {

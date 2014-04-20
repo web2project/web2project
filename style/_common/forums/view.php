@@ -1,5 +1,4 @@
 <?php
-$htmlHelper = new w2p_Output_HTMLHelper($AppUI);
 
 $view = new w2p_Output_HTML_ViewHelper($AppUI);
 

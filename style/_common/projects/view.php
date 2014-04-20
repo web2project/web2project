@@ -1,6 +1,7 @@
 <?php
 
 $htmlHelper = new w2p_Output_HTMLHelper($AppUI);
+$df = $AppUI->getPref('SHDATEFORMAT');
 
 ?>
 <table id="tblProjects" class="std view projects">

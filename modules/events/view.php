@@ -14,9 +14,6 @@ if (!$event->load($event_id)) {
 $canEdit   = $event->canEdit();
 $canDelete = $event->canDelete();
 
-
-
-
 // load the event types
 $types = w2PgetSysVal('EventType');
 
@@ -51,8 +48,7 @@ if ($canEdit) {
 	}
 }
 $titleBlock->show();
-$htmlHelper = new w2p_Output_HTMLHelper($AppUI);
-$htmlHelper->df .= ' ' . $tf;
+
 ?>
 <script language="javascript" type="text/javascript">
 <?php

@@ -25,7 +25,6 @@ if ($canEdit) {
 }
 $titleBlock->show();
 
-$htmlHelper = new w2p_Output_HTMLHelper($AppUI);
 $types = w2PgetSysVal('ResourceTypes');
 $types[0] = 'Not Specified';
 $customLookups = array('resource_type' => $types);

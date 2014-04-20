@@ -14,12 +14,7 @@ if (!$contact->load($contact_id)) {
 $canEdit   = $contact->canEdit();
 $canDelete = $contact->canDelete();
 
-
 $tab = $AppUI->processIntState('ContactVwTab', $_GET, 'tab', 0);
-
-$df = $AppUI->getPref('SHDATEFORMAT');
-$df .= ' ' . $AppUI->getPref('TIMEFORMAT');
-
 
 $is_user = $contact->isUser($contact_id);
 
@@ -47,11 +42,6 @@ if ($canDelete) {
 	$titleBlock->addCrumbDelete('delete contact', $canDelete, $msg);
 }
 $titleBlock->show();
-
-$htmlHelper = new w2p_Output_HTMLHelper($AppUI);
-
-$last_ask = new w2p_Utilities_Date($contact->contact_updateasked);
-$lastupdated = new w2p_Utilities_Date($contact->contact_lastupdate);
 
 ?>
 <form name="changecontact" action="?m=contacts" method="post" accept-charset="utf-8">

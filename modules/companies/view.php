@@ -40,8 +40,7 @@ if ($canEdit) {
 	}
 }
 $titleBlock->show();
-$htmlHelper = new w2p_Output_HTMLHelper($AppUI);
-$htmlHelper->stageRowData(get_object_vars($company));
+
 // security improvement:
 // some javascript functions may not appear on client side in case of user not having write permissions
 // else users would be able to arbitrarily run 'bad' functions
