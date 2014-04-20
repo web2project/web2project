@@ -5,6 +5,9 @@ if (!defined('W2P_BASE_DIR')) {
 // @todo    convert to template
 $user_id = (int) w2PgetParam($_GET, 'user_id', 0);
 
+$tab = $AppUI->processIntState('UserVwTab', $_GET, 'tab', 0);
+$addPwT = $AppUI->processIntState('addProjWithTasks', $_POST, 'add_pwt', 0);
+
 $user = new CUser();
 
 if (!$user->load($user_id)) {
@@ -13,19 +16,13 @@ if (!$user->load($user_id)) {
 
 $canEdit   = $user->canEdit();
 
-$tab = $AppUI->processIntState('UserVwTab', $_GET, 'tab', 0);
-
 $user->loadFull($user_id);
 
 global $addPwT, $company_id, $dept_ids, $department, $min_view, $m, $a;
 
-$utypes = w2PgetSysVal('UserType');
-
 if ($user_id != $AppUI->user_id && (!$perms->checkModuleItem('users', 'view', $user_id) || !$perms->checkModuleItem('users', 'view', $user_id))) {
     $AppUI->redirect(ACCESS_DENIED);
 }
-
-$addPwT = $AppUI->processIntState('addProjWithTasks', $_POST, 'add_pwt', 0);
 
 $company_id = $AppUI->getState('UsrProjIdxCompany') !== null ? $AppUI->getState('UsrProjIdxCompany') : $AppUI->user_company;
 
@@ -77,6 +74,7 @@ $titleBlock->show();
     <?php } ?>
 </script>
 <?php
+$utypes = w2PgetSysVal('UserType');
 
 include $AppUI->getTheme()->resolveTemplate('users/view');
 

@@ -14,9 +14,6 @@ if (!$event->load($event_id)) {
 $canEdit   = $event->canEdit();
 $canDelete = $event->canDelete();
 
-// load the event types
-$types = w2PgetSysVal('EventType');
-
 // load the event recurs types
 $recurs = array('Never', 'Hourly', 'Daily', 'Weekly', 'Bi-Weekly', 'Every Month', 'Quarterly', 'Every 6 months', 'Every Year');
 
@@ -72,4 +69,7 @@ function delIt() {
 </form>
 
 <?php
+
+$types = w2PgetSysVal('EventType');
+
 include $AppUI->getTheme()->resolveTemplate('events/view');

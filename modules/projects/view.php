@@ -24,13 +24,6 @@ if (in_array($project_id, $denied)) {
 	$AppUI->redirect(ACCESS_DENIED);
 }
 
-// get ProjectPriority from sysvals
-$projectPriority = w2PgetSysVal('ProjectPriority');
-$projectPriorityColor = w2PgetSysVal('ProjectPriorityColor');
-$billingCategory = w2PgetSysVal('BudgetCategory');
-$pstatus = w2PgetSysVal('ProjectStatus');
-$ptype = w2PgetSysVal('ProjectType');
-
 $criticalTasks = ($project_id > 0) ? $project->getCriticalTasks($project_id) : null;
 
 // create Date objects from the datetime fields
@@ -98,6 +91,11 @@ function delIt() {
 </form>
 
 <?php
+$projectPriority = w2PgetSysVal('ProjectPriority');
+$projectPriorityColor = w2PgetSysVal('ProjectPriorityColor');
+$billingCategory = w2PgetSysVal('BudgetCategory');
+$pstatus = w2PgetSysVal('ProjectStatus');
+$ptype = w2PgetSysVal('ProjectType');
 
 include $AppUI->getTheme()->resolveTemplate('projects/view');
 

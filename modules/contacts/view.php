@@ -2,8 +2,10 @@
 if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
-// @todo    convert to template
+
 $contact_id = (int) w2PgetParam($_GET, 'contact_id', 0);
+
+$tab = $AppUI->processIntState('ContactVwTab', $_GET, 'tab', 0);
 
 $contact = new CContact();
 
@@ -14,11 +16,7 @@ if (!$contact->load($contact_id)) {
 $canEdit   = $contact->canEdit();
 $canDelete = $contact->canDelete();
 
-$tab = $AppUI->processIntState('ContactVwTab', $_GET, 'tab', 0);
-
 $is_user = $contact->isUser($contact_id);
-
-$countries = w2PgetSysVal('GlobalCountries');
 
 // Get the contact details for company and department
 $company_detail = $contact->getCompanyDetails();

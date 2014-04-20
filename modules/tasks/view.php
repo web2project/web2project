@@ -5,6 +5,9 @@ if (!defined('W2P_BASE_DIR')) {
 // @todo    convert to template
 $task_id = (int) w2PgetParam($_GET, 'task_id', 0);
 $task_log_id = (int) w2PgetParam($_GET, 'task_log_id', 0);
+
+$tab = $AppUI->processIntState('TaskLogVwTab', $_GET, 'tab', 0);
+
 $obj = new CTask();
 
 if (!$obj->load($task_id)) {
@@ -13,9 +16,6 @@ if (!$obj->load($task_id)) {
 
 $canEdit   = $obj->canEdit();
 $canDelete = $obj->canDelete();
-
-
-$tab = $AppUI->processIntState('TaskLogVwTab', $_GET, 'tab', 0);
 
 /**
  * Clear any reminders
@@ -30,10 +30,6 @@ if ($reminded) {
 $canReadProject = canView('projects', $obj->task_project);
 
 $users = $obj->assignees($task_id);
-
-$durnTypes = w2PgetSysVal('TaskDurationType');
-$task_types = w2PgetSysVal('TaskType');
-$billingCategory = w2PgetSysVal('BudgetCategory');
 
 // setup the title block
 $titleBlock = new w2p_Theme_TitleBlock('View Task', 'icon.png', $m);
@@ -82,6 +78,9 @@ function delIt() {
 	<input type="hidden" name="task_id" value="<?php echo $task_id; ?>" />
 </form>
 <?php
+$durnTypes = w2PgetSysVal('TaskDurationType');
+$task_types = w2PgetSysVal('TaskType');
+$billingCategory = w2PgetSysVal('BudgetCategory');
 
 include $AppUI->getTheme()->resolveTemplate('tasks/view');
 

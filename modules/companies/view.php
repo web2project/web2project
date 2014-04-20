@@ -5,6 +5,8 @@ if (!defined('W2P_BASE_DIR')) {
 
 $company_id = (int) w2PgetParam($_GET, 'company_id', 0);
 
+$tab = $AppUI->processIntState('CompVwTab', $_GET, 'tab', 0);
+
 $company = new CCompany();
 
 if (!$company->load($company_id)) {
@@ -14,8 +16,6 @@ if (!$company->load($company_id)) {
 $canEdit   = $company->canEdit();
 $canDelete = $company->canDelete();
 $deletable = $canDelete;            //TODO: this should be removed once the $deletable variable is removed
-
-$tab = $AppUI->processIntState('CompVwTab', $_GET, 'tab', 0);
 
 $contact = new CContact();
 $canCreateContacts = $contact->canCreate();
@@ -62,10 +62,7 @@ if ($canDelete) {
 <?php } ?>
 
 <?php
-// load the list of project statii and company types
-$pstatus = w2PgetSysVal('ProjectStatus');
 $types = w2PgetSysVal('CompanyType');
-$countries = w2PgetSysVal('GlobalCountries');
 
 include $AppUI->getTheme()->resolveTemplate('companies/view');
 

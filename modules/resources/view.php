@@ -25,9 +25,6 @@ if ($canEdit) {
 }
 $titleBlock->show();
 
-$types = w2PgetSysVal('ResourceTypes');
-$types[0] = 'Not Specified';
-$customLookups = array('resource_type' => $types);
 // security improvement:
 // some javascript functions may not appear on client side in case of user not having write permissions
 // else users would be able to arbitrarily run 'bad' functions
@@ -49,4 +46,8 @@ if ($canDelete) {
 <?php } ?>
 
 <?php
+$types = w2PgetSysVal('ResourceTypes');
+$types[0] = 'Not Specified';
+$customLookups = array('resource_type' => $types);
+
 include $AppUI->getTheme()->resolveTemplate('resources/view');

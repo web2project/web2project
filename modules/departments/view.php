@@ -2,10 +2,12 @@
 if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
-// @todo    convert to template
+
 $dept_id = (int) w2PgetParam($_GET, 'dept_id', 0);
 $department_id = (int) w2PgetParam($_GET, 'department_id', 0);
 $dept_id = max($dept_id, $department_id);
+
+$tab = $AppUI->processIntState('DeptVwTab', $_GET, 'tab', 0);
 
 $department = new CDepartment();
 
@@ -15,12 +17,6 @@ if (!$department->load($dept_id)) {
 
 $canEdit   = $department->canEdit();
 $canDelete = $department->canDelete();
-
-
-$tab = $AppUI->processIntState('DeptVwTab', $_GET, 'tab', 0);
-
-$countries = w2PgetSysVal('GlobalCountries');
-$types = w2PgetSysVal('DepartmentType');
 
 $titleBlock = new w2p_Theme_TitleBlock('View Department', 'icon.png', $m);
 $titleBlock->addCrumb('?m=companies', 'company list');
@@ -59,6 +55,8 @@ function delIt() {
 	<input type="hidden" name="dept_id" value="<?php echo $dept_id; ?>" />
 </form>
 <?php
+
+$types = w2PgetSysVal('DepartmentType');
 
 include $AppUI->getTheme()->resolveTemplate('departments/view');
 
