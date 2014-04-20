@@ -34,6 +34,16 @@ class CDepartment extends w2p_Core_BaseObject
 	}
 
     /**
+     * This is a nasty hack because our property names don't follow our naming conventions. This is legacy
+     *   code that will be killed eventually.
+     */
+    public function __get($name)
+    {
+        $field = str_replace('department', 'dept', $name);
+        return $this->$field;
+    }
+
+    /**
      * I already don't like this one..
      *
      * @deprecated

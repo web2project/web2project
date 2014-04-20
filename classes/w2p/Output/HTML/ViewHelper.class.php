@@ -39,6 +39,14 @@ class w2p_Output_HTML_ViewHelper extends w2p_Output_HTML_Base
             case 'description':
                 $output = w2p_textarea($fieldValue);
                 break;
+            case 'company':
+            case 'department':
+                $class  = 'C'.ucfirst($suffix);
+                $obj = new $class();
+                $obj->load($fieldValue);
+                $link = '?m='. w2p_pluralize($suffix) .'&a=view&'.$suffix.'_id='.$fieldValue;
+                $output = '<a href="'.$link.'">'.$obj->{"$suffix".'_name'}.'</a>';
+                break;
             default:
                 $output = htmlspecialchars($fieldValue, ENT_QUOTES);
         }
