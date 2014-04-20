@@ -127,11 +127,7 @@ if ($canViewTask && $AppUI->isActiveModule('tasks')) {
 		$tabBox->add(W2P_BASE_DIR . '/modules/projects/vw_logs', 'Task Logs');
 	}
 }
-if ( $AppUI->isActiveModule('forums') ) {
-    if (canView('forums')) {
-        $tabBox->add(W2P_BASE_DIR . '/modules/projects/vw_forums', 'Forums');
-    }
-}
+
 $f = 'all';
 $min_view = true;
 
