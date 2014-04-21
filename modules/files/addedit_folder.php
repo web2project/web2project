@@ -35,24 +35,13 @@ if (!$folder && $folder_id > 0) {
 $referrerArray = parse_url($_SERVER['HTTP_REFERER']);
 $referrer = $referrerArray['query'] . $referrerArray['fragment'];
 
-// check permissions for this record
-if ($folder_id == 0) {
-	$canEdit = $canAuthor;
-}
-if (!$canEdit) {
-	$AppUI->redirect(ACCESS_DENIED);
-}
-
 $folders = getFolderSelectList();
-
-
-
-
 
 // setup the title block
 $ttl = $folder_id ? 'Edit File Folder' : 'Add File Folder';
 $titleBlock = new w2p_Theme_TitleBlock($ttl, 'icon.png', $m, $m . '.' . $a);
-$titleBlock->addCrumb('?m=files', 'files list');
+$titleBlock->addCrumb('?m=' . $m, $m . ' list');
+
 $canDelete = $folder->canDelete();
 if ($canDelete) {
 	$titleBlock->addCrumbDelete('delete file folder', $canDelete, $msg);
