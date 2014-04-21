@@ -10,7 +10,7 @@ $obj = new CResource();
 $perms = &$AppUI->acl();
 $canEdit = canEdit('resources');
 
-$titleBlock = new w2p_Theme_TitleBlock('Resources', 'icon.png', $m, $m . '.' . $a);
+$titleBlock = new w2p_Theme_TitleBlock('Resources', 'icon.png', $m);
 if ($canEdit) {
     $titleBlock->addButton('new resource', '?m=resources&a=addedit');
 }

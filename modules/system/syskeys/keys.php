@@ -13,7 +13,7 @@ $keys = __extract_from_syskeys_syskey();
 
 $syskey_id = (int) w2PgetParam($_GET, 'syskey_id', 0);
 
-$titleBlock = new w2p_Theme_TitleBlock('System Lookup Keys', 'myevo-weather.png', $m, $m . '.' . $a);
+$titleBlock = new w2p_Theme_TitleBlock('System Lookup Keys', 'myevo-weather.png', $m);
 $titleBlock->addCrumb('?m=system', 'System Admin');
 $titleBlock->show();
 ?>

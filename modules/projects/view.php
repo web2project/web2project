@@ -45,7 +45,7 @@ if (isset($criticalTasks)) {
 $style = (($actual_end_date > $end_date) && !empty($end_date)) ? 'style="color:red; font-weight:bold"' : '';
 
 // setup the title block
-$titleBlock = new w2p_Theme_TitleBlock('View Project', 'icon.png', $m, $m . '.' . $a);
+$titleBlock = new w2p_Theme_TitleBlock('View Project', 'icon.png', $m);
 $titleBlock->addCrumb('?m=' . $m, $m . ' list');
 
 if ($canEdit) {

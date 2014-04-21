@@ -56,7 +56,7 @@ $methodLabels = w2PgetSysVal('ContactMethods');
 
 $countries = w2PgetSysVal('GlobalCountries');
 // setup the title block
-$titleBlock = new w2p_Theme_TitleBlock('View User', 'icon.png', $m, "$m.$a");
+$titleBlock = new w2p_Theme_TitleBlock('View User', 'icon.png', $m);
 $titleBlock->addCrumb('?m=' . $m, $m . ' list');
 if ($canEdit || $user_id == $AppUI->user_id) {
     $titleBlock->addCell('<div class="crumb"><ul><li><a href="javascript: void(0);" onclick="popChgPwd();return false"><span>' . $AppUI->_('change password') . '</span></a></li></ul></div>');

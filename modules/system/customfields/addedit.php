@@ -26,7 +26,7 @@ $module->load($module_id);
 
 $ttl = $field_id ? 'Edit Custom Fields' : 'Add Custom Fields';
 $ttl = $AppUI->_($ttl).' - '.$AppUI->_($module->mod_name).' '.$AppUI->_('Module');
-$titleBlock = new w2p_Theme_TitleBlock($ttl, 'customfields.png', $m, "$m.$a");
+$titleBlock = new w2p_Theme_TitleBlock($ttl, 'customfields.png', $m);
 $titleBlock->addCrumb('?m=system', 'system admin');
 $titleBlock->addCrumb('?m=system&u=customfields', 'custom fields');
 $titleBlock->show();

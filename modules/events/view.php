@@ -33,7 +33,7 @@ if ($event->event_project) {
 }
 
 // setup the title block
-$titleBlock = new w2p_Theme_TitleBlock('View Event', 'icon.png', $m, $m . '.' . $a);
+$titleBlock = new w2p_Theme_TitleBlock('View Event', 'icon.png', $m);
 $titleBlock->addCrumb('?m=events&a=year_view&date=' . $start_date->format(FMT_TIMESTAMP_DATE), 'year view');
 $titleBlock->addCrumb('?m=events&amp;date=' . $start_date->format(FMT_TIMESTAMP_DATE), 'month view');
 $titleBlock->addCrumb('?m=events&a=week_view&date=' . $start_date->format(FMT_TIMESTAMP_DATE), 'week view');

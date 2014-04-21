@@ -103,7 +103,7 @@ foreach ($hook_modules as $tmp) {
 </script>
 
 <?php
-    $titleBlock = new w2p_Theme_TitleBlock('SmartSearch', 'icon.png', $m, $m . '.' . $a);
+    $titleBlock = new w2p_Theme_TitleBlock('SmartSearch', 'icon.png', $m);
     $titleBlock->show();
 ?>
 <?php

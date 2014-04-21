@@ -20,7 +20,7 @@ $companies = $comp->getAllowedRecords($AppUI->user_id, 'company_id,company_name'
 $compFilter = arrayMerge(array('all' => $AppUI->_('All Companies')), $companies);
 
 // setup the title block
-$titleBlock = new w2p_Theme_TitleBlock('Tasks per User', 'icon.png', $m, $m . '.' . $a);
+$titleBlock = new w2p_Theme_TitleBlock('Tasks per User', 'icon.png', $m);
 $titleBlock->addCell($AppUI->_('Company') . ':');
 $titleBlock->addCell(arraySelect($compFilter, 'company_id', 'size="1" class="text" onChange="document.companyFilter.submit();"', $company_id, false), '', '<form action="?m=tasks&amp;a=tasksperuser" method="post" name="companyFilter" accept-charset="utf-8">', '</form>');
 $titleBlock->addCrumb('?m=tasks', 'tasks list');

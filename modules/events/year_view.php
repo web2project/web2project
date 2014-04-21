@@ -36,7 +36,7 @@ $companies = arrayMerge(array('0' => $AppUI->_('All')), $companies);
 $event_filter_list = array('my' => 'My Events', 'own' => 'Events I Created', 'all' => 'All Events');
 
 // setup the title block
-$titleBlock = new w2p_Theme_TitleBlock('Yearly Calendar', 'icon.png', $m, "$m.$a");
+$titleBlock = new w2p_Theme_TitleBlock('Yearly Calendar', 'icon.png', $m);
 $titleBlock->addCrumb('?m=events&a=year_view&date=' . $date, 'year view');
 $titleBlock->addCrumb('?m=events&date=' . $date, 'month view');
 $titleBlock->addCrumb('?m=events&a=week_view&date=' . $date, 'week view');

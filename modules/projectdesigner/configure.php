@@ -91,7 +91,7 @@ foreach ($config_options as $key => $value) {
 }
 
 // setup the title block
-$titleBlock = new w2p_Theme_TitleBlock('Project Designer Module Configuration', 'icon.png', $m,  $m . '.' . $a);
+$titleBlock = new w2p_Theme_TitleBlock('Project Designer Module Configuration', 'icon.png', $m);
 $titleBlock->addCrumb('?m=system', 'System Admin');
 $titleBlock->addCrumb('?m=system&a=viewmods', 'Modules');
 $titleBlock->show();

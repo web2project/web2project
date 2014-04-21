@@ -51,13 +51,9 @@ $df = $AppUI->getPref('SHDATEFORMAT');
 $df .= ' ' . $AppUI->getPref('TIMEFORMAT');
 
 
-
-
-
-
 // setup the title block
 $ttl = $contact_id > 0 ? 'Edit Contact' : 'Add Contact';
-$titleBlock = new w2p_Theme_TitleBlock($ttl, 'icon.png', $m, $m . '.' . $a);
+$titleBlock = new w2p_Theme_TitleBlock($ttl, 'icon.png', $m);
 $titleBlock->addCrumb('?m=' . $m, $m . ' list');
 $titleBlock->addViewLink('contact', $contact_id);
 

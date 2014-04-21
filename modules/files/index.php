@@ -36,7 +36,7 @@ $task = new CTask();
 $allowedTasks = $task->getAllowedSQL($AppUI->user_id, 'file_task');
 
 // setup the title block
-$titleBlock = new w2p_Theme_TitleBlock('Files', 'icon.png', $m, "$m.$a");
+$titleBlock = new w2p_Theme_TitleBlock('Files', 'icon.png', $m);
 $titleBlock->addFilterCell('Filter', 'project_id', $projects, $project_id);
 
 // override the $canEdit variable passed from the main index.php in order to check folder permissions

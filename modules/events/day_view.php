@@ -53,7 +53,7 @@ $companies = $company->getAllowedRecords($AppUI->user_id, 'company_id,company_na
 $companies = arrayMerge(array('0' => $AppUI->_('All')), $companies);
 
 // setup the title block
-$titleBlock = new w2p_Theme_TitleBlock('Day View', 'icon.png', $m, $m.'.'.$a);
+$titleBlock = new w2p_Theme_TitleBlock('Day View', 'icon.png', $m);
 $titleBlock->addCrumb('?m=events&a=year_view&date=' . $this_day->format(FMT_TIMESTAMP_DATE), 'year view');
 $titleBlock->addCrumb('?m=events&date=' . $this_day->format(FMT_TIMESTAMP_DATE), 'month view');
 $titleBlock->addCrumb('?m=events&a=week_view&date=' . $this_week, 'week view');

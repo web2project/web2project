@@ -34,7 +34,7 @@ if (isset($a) && $a == 'viewer') {
 }
 
 // setup the title block
-$titleBlock = new w2p_Theme_TitleBlock('Forums', 'icon.png', $m, $m . '.' . $a);
+$titleBlock = new w2p_Theme_TitleBlock('Forums', 'icon.png', $m);
 $titleBlock->addFilterCell('Filter', 'f', $filters, $f);
 
 if ($canAdd) {

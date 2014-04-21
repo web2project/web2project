@@ -146,7 +146,7 @@ if ($display_option == 'custom') {
 
 // setup the title block
 if (!$min_view) {
-	$titleBlock = new w2p_Theme_TitleBlock('Gantt Chart', 'icon.png', $m, $m . '.' . $a);
+	$titleBlock = new w2p_Theme_TitleBlock('Gantt Chart', 'icon.png', $m);
 	$titleBlock->addCrumb('?m=tasks', 'tasks list');
 	$titleBlock->addCrumb('?m=projects&a=view&project_id=' . $project_id, 'view this project');
     $titleBlock->addCrumb('#" onclick="javascript:toggleLayer(\'displayOptions\');', 'show/hide display options');

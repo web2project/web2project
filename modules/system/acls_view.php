@@ -30,7 +30,7 @@ $users = array('' => '(' . $AppUI->_('Select User') . ')') + w2PgetUsers();
 
 $permissions = getPermissions($perms, $user_id, $module, $action);
 
-$titleBlock = new w2p_Theme_TitleBlock('Permission Result Table', 'icon.png', $m, $m . '.' . $a);
+$titleBlock = new w2p_Theme_TitleBlock('Permission Result Table', 'icon.png', $m);
 $titleBlock->addCell('
     <form action="?m=system&a=acls_view" method="post" name="pickUser" accept-charset="utf-8">' .
         $AppUI->_('View Users Permissions') . ': ' . arraySelect($users, 'user', 'class="text" onchange="javascript:document.pickUser.submit()"', $user_id) .

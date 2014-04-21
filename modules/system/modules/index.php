@@ -21,7 +21,7 @@ $modules = __extract_from_modules_index($hidden_modules);
 $loader = new w2p_FileSystem_Loader();
 $modFiles = $loader->readDirs('modules');
 
-$titleBlock = new w2p_Theme_TitleBlock('Modules', 'power-management.png', $m, "$m.$a");
+$titleBlock = new w2p_Theme_TitleBlock('Modules', 'power-management.png', $m);
 $titleBlock->addCrumb('?m=system', 'System Admin');
 $titleBlock->show();
 

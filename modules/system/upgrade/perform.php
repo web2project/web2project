@@ -9,7 +9,7 @@ if (!canEdit('system')) {
 	$AppUI->redirect(ACCESS_DENIED);
 }
 
-$titleBlock = new w2p_Theme_TitleBlock($AppUI->_('Upgrade System'), 'control-center.png', $m, $m . '.' . $a);
+$titleBlock = new w2p_Theme_TitleBlock($AppUI->_('Upgrade System'), 'control-center.png', $m);
 $titleBlock->addCrumb('?m=system', 'system admin');
 $titleBlock->show();
 ?>

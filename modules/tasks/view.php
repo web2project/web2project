@@ -36,7 +36,7 @@ $task_types = w2PgetSysVal('TaskType');
 $billingCategory = w2PgetSysVal('BudgetCategory');
 
 // setup the title block
-$titleBlock = new w2p_Theme_TitleBlock('View Task', 'icon.png', $m, $m . '.' . $a);
+$titleBlock = new w2p_Theme_TitleBlock('View Task', 'icon.png', $m);
 $titleBlock->addCell();
 if ($canReadProject) {
     $titleBlock->addCrumb('?m=projects&a=view&project_id=' . $obj->task_project, 'view this project');

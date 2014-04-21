@@ -10,11 +10,11 @@ $role = $perms->getRole($role_id);
 $tab = $AppUI->processIntState('RoleVwTab', $_GET, 'tab', 0);
 
 if (!is_array($role)) {
-	$titleBlock = new w2p_Theme_TitleBlock('Invalid Role', 'main-settings.png', $m, $m . '.' . $a);
+	$titleBlock = new w2p_Theme_TitleBlock('Invalid Role', 'main-settings.png', $m);
 	$titleBlock->addCrumb('?m=system&u=roles', 'role list');
 	$titleBlock->show();
 } else {
-	$titleBlock = new w2p_Theme_TitleBlock('View Role', 'main-settings.png', $m, $m . '.' . $a);
+	$titleBlock = new w2p_Theme_TitleBlock('View Role', 'main-settings.png', $m);
 	$titleBlock->addCrumb('?m=system&u=roles', 'role list');
 	$titleBlock->show();
 	// Now onto the display of the user.

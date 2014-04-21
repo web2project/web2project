@@ -18,7 +18,7 @@ if (!isset($options[$filter_param])) {
     $filter_param = 'projects';
 }
 
-$titleBlock = new w2p_Theme_TitleBlock('History', 'icon.png', 'history', 'history.' . $a);
+$titleBlock = new w2p_Theme_TitleBlock('History', 'icon.png', $m);
 $titleBlock->addFilterCell('Changes to', 'filter', $options, $filter_param);
 $titleBlock->show();
 

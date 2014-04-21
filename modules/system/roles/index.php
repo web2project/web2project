@@ -22,7 +22,7 @@ $roles = $crole->getRoles();
 $role_id = (int) w2PgetParam($_GET, 'role_id', 0);
 
 // setup the title block
-$titleBlock = new w2p_Theme_TitleBlock('Roles', 'main-settings.png', $m, $m . '.' . $a);
+$titleBlock = new w2p_Theme_TitleBlock('Roles', 'main-settings.png', $m);
 $titleBlock->addCrumb('?m=system', 'System Admin');
 $titleBlock->show();
 

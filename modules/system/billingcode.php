@@ -22,7 +22,7 @@ $companies = arrayMerge(array('-1' => $AppUI->_('All Codes')), $companies);
 $billingCategory = w2PgetSysVal('BudgetCategory');
 $billingCategory = arrayMerge(array('0' => $AppUI->_('None specified')), $billingCategory);
 
-$titleBlock = new w2p_Theme_TitleBlock('Edit Billing Codes', 'myevo-weather.png', $m, $m . '.' . $a);
+$titleBlock = new w2p_Theme_TitleBlock('Edit Billing Codes', 'myevo-weather.png', $m);
 $titleBlock->addCrumb('?m=system', 'system admin');
 $titleBlock->show();
 ?>

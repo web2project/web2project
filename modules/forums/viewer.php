@@ -43,7 +43,7 @@ if (!$forum) {
 }
 
 // setup the title block
-$titleBlock = new w2p_Theme_TitleBlock('Forum', 'icon.png', $m, $m . '.' . $a);
+$titleBlock = new w2p_Theme_TitleBlock('Forum', 'icon.png', $m);
 $titleBlock->addCrumb('?m=' . $m, $m . ' list');
 if ($message_id) {
     $titleBlock->addCrumb('?m=forums&a=viewer&forum_id=' . $forum_id, 'topics for this forum');

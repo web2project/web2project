@@ -63,7 +63,7 @@ $companies = arrayMerge(array('0' => $AppUI->_('All')), $companies);
 $event_filter_list = array('my' => 'My Events', 'own' => 'Events I Created', 'all' => 'All Events');
 
 // setup the title block
-$titleBlock = new w2p_Theme_TitleBlock('Week View', 'icon.png', $m, "$m.$a");
+$titleBlock = new w2p_Theme_TitleBlock('Week View', 'icon.png', $m);
 $titleBlock->addCrumb('?m=events&a=year_view&date=' . $this_week->format(FMT_TIMESTAMP_DATE), 'year view');
 $titleBlock->addCrumb('?m=events&date=' . $this_week->format(FMT_TIMESTAMP_DATE), 'month view');
 $titleBlock->addCrumb('?m=events&a=week_view&date=' . $this_week->format(FMT_TIMESTAMP_DATE), 'week view');

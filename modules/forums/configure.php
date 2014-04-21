@@ -52,7 +52,7 @@ if (db_num_rows($resAll) >= 1) { // message has to be sent to all users
 $q->clear();
 
 // setup the title block
-$titleBlock = new w2p_Theme_TitleBlock('Configure Forums Module', 'icon.png', $m, $m . '.' . $a);
+$titleBlock = new w2p_Theme_TitleBlock('Configure Forums Module', 'icon.png', $m);
 $titleBlock->addCrumb('?m=system', 'system admin');
 $titleBlock->addCrumb('?m=system&a=viewmods', 'modules list');
 $titleBlock->show();

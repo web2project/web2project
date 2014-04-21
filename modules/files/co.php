@@ -29,7 +29,7 @@ if ($file_id > 0 && !$obj->load($file_id)) {
 }
 
 // setup the title block
-$titleBlock = new w2p_Theme_TitleBlock('Checkout', 'folder5.png', $m, "$m.$a");
+$titleBlock = new w2p_Theme_TitleBlock('Checkout', 'folder5.png', $m);
 $titleBlock->addCrumb('?m=files', 'files list');
 $titleBlock->show();
 

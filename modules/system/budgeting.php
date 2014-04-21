@@ -23,7 +23,7 @@ $companies = arrayMerge(array('0' => $AppUI->_('None specified')), $companies);
 $budget = new CSystem_Budget();
 $budget->load($budget_id);
 
-$titleBlock = new w2p_Theme_TitleBlock('Setup Budgets', 'myevo-weather.png', $m, $m . '.' . $a);
+$titleBlock = new w2p_Theme_TitleBlock('Setup Budgets', 'myevo-weather.png', $m);
 $titleBlock->addCrumb('?m=system', 'system admin');
 $titleBlock->show();
 ?>

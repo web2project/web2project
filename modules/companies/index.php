@@ -27,7 +27,7 @@ $allowedArray = $perms->getPermittedUsers('companies');
 $owner_list = is_array($allowedArray) ? ($baseArray + $allowedArray) : $baseArray;
 
 // setup the title block
-$titleBlock = new w2p_Theme_TitleBlock('Companies', 'icon.png', $m, $m . '.' . $a);
+$titleBlock = new w2p_Theme_TitleBlock('Companies', 'icon.png', $m);
 $titleBlock->addSearchCell($search_string);
 $titleBlock->addFilterCell('Owner', 'owner_filter_id', $owner_list, $owner_filter_id);
 
