@@ -270,8 +270,8 @@ class CTaskLog extends CTask_Log
  */
 class CTitleBlock extends w2p_Theme_TitleBlock
 {
-    public function __construct() {
-        parent::__construct($title, $icon, $module, $helpref);
+    public function __construct($title, $icon, $module, $helpref) {
+        parent::__construct($title, $icon, $module);
         trigger_error("CTitleBlock has been deprecated in v3.0 and will be removed by v4.0. Please use w2p_Theme_TitleBlock instead.", E_USER_NOTICE );
     }
 }
