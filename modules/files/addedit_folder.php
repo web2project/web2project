@@ -31,10 +31,6 @@ if (!$folder && $folder_id > 0) {
 	$AppUI->redirect('m=' . $m);
 }
 
-// add to allow for returning to other modules besides Files
-$referrerArray = parse_url($_SERVER['HTTP_REFERER']);
-$referrer = $referrerArray['query'] . $referrerArray['fragment'];
-
 $folders = getFolderSelectList();
 
 // setup the title block

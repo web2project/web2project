@@ -5,7 +5,6 @@ $form = new w2p_Output_HTML_FormHelper($AppUI);
 ?>
 <form name="changecontact" action="?m=<?php echo $m; ?>" method="post" accept-charset="utf-8" class="contacts addedit">
     <input type="hidden" name="dosql" value="do_contact_aed" />
-    <input type="hidden" name="del" value="0" />
     <input type="hidden" name="contact_project" value="0" />
     <input type="hidden" name="contact_unique_update" value="<?php echo uniqid(''); ?>" />
     <input type="hidden" name="contact_id" value="<?php echo $contact_id; ?>" />

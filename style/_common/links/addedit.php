@@ -5,7 +5,6 @@ $form = new w2p_Output_HTML_FormHelper($AppUI);
 ?>
 <form name="editFrm" action="?m=<?php echo $m; ?>" method="post" accept-charset="utf-8" class="addedit links">
     <input type="hidden" name="dosql" value="do_link_aed" />
-    <input type="hidden" name="del" value="0" />
     <input type="hidden" name="link_id" value="<?php echo $link_id; ?>" />
     <!-- TODO: Right now, link owner is hard coded, we should make this a select box like elsewhere. -->
     <input type="hidden" name="link_owner" value="<?php echo $link->link_owner; ?>" />
