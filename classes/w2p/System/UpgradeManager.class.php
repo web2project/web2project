@@ -155,7 +155,7 @@ class w2p_System_UpgradeManager {
                 $errorMessages = $this->_applySQLUpdates('dp_to_w2p2.sql', $dbConn);
                 $allErrors = array_merge($allErrors, $errorMessages);
 
-                $errorMessages = $this->upgradeSystem($dbConn);
+                $errorMessages = $this->upgradeSystem();
                 $allErrors = array_merge($allErrors, $errorMessages);
         }
 
@@ -217,11 +217,9 @@ class w2p_System_UpgradeManager {
            case 'k':
            case 'K':
                return (int) $val * 1024;
-               break;
            case 'm':
            case 'M':
                return (int)   $val * 1048576;
-               break;
            default:
                return $val;
        }
@@ -335,8 +333,6 @@ class w2p_System_UpgradeManager {
                   $db->_errorMsg = 'This database user does not have rights to the database.';
                 }
               }
-            } else {
-                $dbConnection = false;
             }
         } catch (Exception $exc) {
             echo 'Your database credentials do not work.';

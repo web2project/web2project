@@ -116,16 +116,12 @@ class w2p_System_Module extends w2p_Core_BaseObject {
         $q->clear();
 
         if ($dirn == 'moveup') {
-            $other_new = $new_ui_order;
             $new_ui_order--;
         } elseif ($dirn == 'movedn') {
-            $other_new = $new_ui_order;
             $new_ui_order++;
         } elseif ($dirn == 'movefirst') {
-            $other_new = $new_ui_order;
             $new_ui_order = 1;
         } elseif ($dirn == 'movelast') {
-            $other_new = $new_ui_order;
             $new_ui_order = count($modules) + 1;
         }
 
@@ -233,7 +229,7 @@ class w2p_System_Module extends w2p_Core_BaseObject {
                     return $errorMsgArray;
                 }
             }
-            $zip->close($this->filename);
+            $zip->close();
             unlink($this->filename);
         }
         return true;
