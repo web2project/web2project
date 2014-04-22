@@ -1541,13 +1541,12 @@ function clash_process(w2p_Core_CAppUI $AppUI)
     // Now process the events list
     foreach ($event_list as $event) {
         $sdate = new w2p_Utilities_Date($event['event_start_date']);
-        $edate = new w2p_Utilities_Date($event['event_end_date']);
         $sday = $sdate->format('%E');
         $day_offset = $sday - $first_day;
 
         // Now find the slots on that day that match
-        list($syear, $smonth, $sday, $shour, $sminute, $ssecond) = sscanf($event['event_start_date'], "%4d-%2d-%2d %2d:%2d:%2d");
-        list($eyear, $emonth, $eday, $ehour, $eminute, $esecond) = sscanf($event['event_start_date'], "%4d-%2d-%2d %2d:%2d:%2d");
+        list(, , , $shour, $sminute, ) = sscanf($event['event_start_date'], "%4d-%2d-%2d %2d:%2d:%2d");
+        list(, , , $ehour, $eminute, ) = sscanf($event['event_start_date'], "%4d-%2d-%2d %2d:%2d:%2d");
         $start_mins = $shour * 60 + $sminute;
         $end_mins = $ehour * 60 + $eminute;
         if (isset($slots[$day_offset])) {
@@ -1738,7 +1737,7 @@ function countFiles($folder)
 
     $q = new w2p_Database_Query();
     $q->addTable('files');
-    $q->addQuery('count(files.file_id)', 'file_in_folder');
+    $q->addQuery('count(files.file_id)');
     $q->addJoin('projects', 'p', 'p.project_id = file_project');
     $q->addJoin('users', 'u', 'u.user_id = file_owner');
     $q->addJoin('tasks', 't', 't.task_id = file_task');
@@ -1995,7 +1994,6 @@ function displayFiles($AppUI, $folder_id, $task_id, $project_id, $company_id)
         $s .= '</td>';
         $s .= '</tr>';
         $s .= $hidden_table;
-        $hidden_table = '';
     }
     if (0 == count($files)) {
         $s .= '<tr><td colspan="' . (count($fieldNames) + 3 ) . '">' . $AppUI->_('No data available') . '</td></tr>';
@@ -2022,7 +2020,7 @@ function last_file($file_versions, $file_name, $file_project)
 function getIcon($file_type)
 {
     global $uistyle;
-    $result = 'icons/unknown.png';
+
     $mime = str_replace('/', '-', $file_type);
     $icon = 'gnome-mime-' . $mime;
     if (is_file(W2P_BASE_DIR . '/styles/' . $uistyle . '/images/modules/files/icons/' . $icon . '.png')) {
@@ -2503,7 +2501,6 @@ function showWeeks()
         $user_names[$user_id] = $user_data['contact_first_name'] . ' ' . $user_data['contact_last_name'];
         if (isset($user_usage[$user_id])) {
             $table_rows .= '<tr><td nowrap="nowrap">(' . $user_data['user_username'] . ') ' . $user_data['contact_first_name'] . ' ' . $user_data['contact_last_name'] . '</td>';
-            $actual_date = $sd;
             $array_sum = array_sum($user_usage[$user_id]);
 
             $average_user_usage = number_format(($array_sum / ($week_difference * count(explode(',', w2PgetConfig('cal_working_days'))) * w2PgetConfig('daily_working_hours'))) * 100, 2);
@@ -2596,7 +2593,6 @@ function showDays()
         $user_names[$user_id] = $user_data['contact_first_name'] . ' ' . $user_data['contact_last_name'];
         if (isset($user_usage[$user_id])) {
             $table_rows .= '<tr><td nowrap="nowrap">(' . $user_data['user_username'] . ') ' . $user_data['contact_first_name'] . ' ' . $user_data['contact_last_name'] . '</td>';
-            $actual_date = $start_date;
             $array_sum = array_sum($user_usage[$user_id]);
             $average_user_usage = number_format(($array_sum / ($working_days_count * w2PgetConfig('daily_working_hours'))) * 100, 2);
             $allocated_hours_sum += $array_sum;
@@ -2693,20 +2689,14 @@ function &getAuth($auth_mode) {
     switch ($auth_mode) {
         case 'ldap':
             $auth = new w2p_Authenticators_LDAP();
-
-            return $auth;
             break;
         case 'pn':
             $auth = new w2p_Authenticators_PostNuke();
-
-            return $auth;
             break;
         default:
             $auth = new w2p_Authenticators_SQL();
-
-            return $auth;
-            break;
     }
+    return $auth;
 }
 
 ##
@@ -2999,7 +2989,7 @@ function w2PfindImage($name, $module = null)
  *	@param string The image height
  *	@param string The alt text for the image
  */
-function w2PshowImage($src, $wid = '', $hgt = '', $alt = '', $title = '', $module = null)
+function w2PshowImage($src, $notUsed = '', $notUsed2 = '', $alt = '', $title = '', $module = null)
 {
     global $m;
 
@@ -3058,7 +3048,6 @@ function buildPaginationNav($AppUI, $m, $tab, $xpg_totalrecs, $xpg_pagesize, $pa
   $xpg_total_pages = ($xpg_totalrecs > $xpg_pagesize) ? ceil($xpg_totalrecs / $xpg_pagesize) : 0;
 
   $xpg_break = false;
-  $xpg_prev_page = $xpg_next_page = 0;
 
   $s = '<table width="100%" cellspacing="0" cellpadding="0" border="0"><tr>';
 
@@ -4092,7 +4081,7 @@ function getTaskLinks($startPeriod, $endPeriod, &$links, $strMaxLen, $company_id
             } else {
                 $temp = $link;
                 if ($a != 'day_view') {
-                    $temp['text'] = w2PtoolTip($row['task_name'], getTaskTooltip($row['task_id'], true, true, $tasks), true) . w2PshowImage('block-start-16.png') . $start->format($tf) . ' ' . $temp['text'] . ' ' . $end->format($tf) . w2PshowImage('block-end-16.png') . w2PendTip();
+                    $temp['text'] = w2PtoolTip($row['task_name'], getTaskTooltip($row['task_id']) . w2PshowImage('block-start-16.png') . $start->format($tf) . ' ' . $temp['text'] . ' ' . $end->format($tf) . w2PshowImage('block-end-16.png') . w2PendTip();
                     $temp['text'].= '<a href="?m=tasks&amp;a=view&amp;task_id=' . $row['task_id'] . '&amp;tab=1&amp;date=' . $AppUI->formatTZAwareTime($row['task_end_date'], '%Y%m%d'). '">' . w2PtoolTip('Add Log', 'create a new log record against this task') . w2PshowImage('edit_add.png') . w2PendTip() . '</a>';
                 }
             }
@@ -4105,7 +4094,7 @@ function getTaskLinks($startPeriod, $endPeriod, &$links, $strMaxLen, $company_id
                 } else {
                     $temp = $link;
                     if ($a != 'day_view') {
-                        $temp['text'] = w2PtoolTip($row['task_name'], getTaskTooltip($row['task_id'], true, false, $tasks), true) . w2PshowImage('block-start-16.png') . $start->format($tf) . ' ' . $temp['text'] . w2PendTip();
+                        $temp['text'] = w2PtoolTip($row['task_name'], getTaskTooltip($row['task_id']) . w2PshowImage('block-start-16.png') . $start->format($tf) . ' ' . $temp['text'] . w2PendTip();
                         $temp['text'].= '<a href="?m=tasks&amp;a=view&amp;task_id=' . $row['task_id'] . '&amp;tab=1&amp;date=' . $AppUI->formatTZAwareTime($row['task_start_date'], '%Y%m%d'). '">' . w2PtoolTip('Add Log', 'create a new log record against this task') . w2PshowImage('edit_add.png') . w2PendTip() . '</a>';
                     }
                 }
@@ -4118,7 +4107,7 @@ function getTaskLinks($startPeriod, $endPeriod, &$links, $strMaxLen, $company_id
                 } else {
                     $temp = $link;
                     if ($a != 'day_view') {
-                        $temp['text'] = w2PtoolTip($row['task_name'], getTaskTooltip($row['task_id'], false, true, $tasks), true) . ' ' . $temp['text'] . ' ' . $end->format($tf) . w2PshowImage('block-end-16.png') . w2PendTip();
+                        $temp['text'] = w2PtoolTip($row['task_name'], getTaskTooltip($row['task_id']) . ' ' . $temp['text'] . ' ' . $end->format($tf) . w2PshowImage('block-end-16.png') . w2PendTip();
                         $temp['text'].= '<a href="?m=tasks&amp;a=view&amp;task_id=' . $row['task_id'] . '&amp;tab=1&amp;date=' . $AppUI->formatTZAwareTime($row['task_end_date'], '%Y%m%d'). '">' . w2PtoolTip('Add Log', 'create a new log record against this task') . w2PshowImage('edit_add.png') . w2PendTip() . '</a>';
                     }
                 }
@@ -5030,7 +5019,7 @@ function __extract_from_systemconfig_aed()
     $q->addTable('config');
     $q->addUpdate('config_value', 'false');
     $q->addWhere("config_type = 'checkbox'");
-    $rs = $q->loadResult();
+    $q->loadResult();
 }
 
 /**
@@ -5924,7 +5913,6 @@ function __extract_from_tasks_pinning($AppUI, $task_id)
 {
     if (isset($_GET['pin'])) {
         $pin = (int)w2PgetParam($_GET, 'pin', 0);
-        $msg = '';
 
         $task = new CTask();
         // load the record data
