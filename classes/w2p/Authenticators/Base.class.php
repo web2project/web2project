@@ -29,34 +29,6 @@ abstract class w2p_Authenticators_Base
     }
 
     /**
-     * This wraps the password_verify functionality available in PHP 5.5 (or ircmaxwell's password_compat library) to
-     *   update a user's password upon successful login. The process is transparent to the user and only happens once.
-     *
-     * @param $username
-     * @param $password
-     * @param $hash
-     * @return bool
-     */
-    public function verify($username, $password, $hash)
-    {
-        $length = strlen($hash);
-
-        switch ($length) {
-            case '32':
-                if ($hash == $this->hashPassword($password)) {
-                    $q = $this->_query;
-                    $q->addTable('users');
-                    $q->addUpdate('user_password', password_hash($password, PASSWORD_BCRYPT));
-                    $q->addWhere("user_username = '$username'");
-                    $q->exec();
-                }
-                return ($hash == $this->hashPassword($password));
-            default:
-                return password_verify($password, $hash);
-        }
-    }
-
-    /**
      * @deprecated @since 3.2
      */
     public function hashPassword($password, $salt = '')
@@ -85,7 +57,7 @@ abstract class w2p_Authenticators_Base
             $newPassword = $newPassword . $tmp;
             $i++;
         }
-
+error_log($newPassword);
         return $newPassword;
     }
 
