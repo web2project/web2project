@@ -57,7 +57,7 @@ abstract class w2p_Authenticators_Base
             $newPassword = $newPassword . $tmp;
             $i++;
         }
-error_log($newPassword);
+
         return $newPassword;
     }
 
