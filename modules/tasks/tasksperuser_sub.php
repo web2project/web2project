@@ -357,7 +357,8 @@ if ($do_report) {
               <td colspan="2" align="left" nowrap="nowrap" bgcolor="#D0D0D0">
               <font color="black">
               <b><a href="index.php?m=events&a=day_view&user_id=' . $user_id . '&tab=1">' . $userAlloc[$user_id]['userFC'] . '</a></b></font></td>';
-                for ($w = 0; $w <= (4 + weekCells($display_week_hours, $sss, $sse)); $w++) {
+                $weekcells_count = weekCells($display_week_hours, $sss, $sse);
+                for ($w = 0; $w <= (4 + $weekcells_count); $w++) {
                     $tmpuser .= '<td bgcolor="#D0D0D0"></td>';
                 }
 
@@ -425,8 +426,8 @@ if ($show_orphaned == 'on') {
 				<td colspan="2" align="left" nowrap="nowrap" bgcolor="#D0D0D0">
 				<font color="black">
 				<b><a href="index.php?m=events&a=day_view&user_id=' . $user_id . '&tab=1">' . $AppUI->_('Orphaned Tasks') . '</a></b></font></td>';
-
-	for ($w = 0; $w <= (4 + weekCells($display_week_hours, $sss, $sse)); $w++) {
+    $weekcells_count = weekCells($display_week_hours, $sss, $sse);
+	for ($w = 0; $w <= (4 + $weekcells_count); $w++) {
 		$tmpuser .= '<td bgcolor="#D0D0D0"></td>';
 	}
 	$tmpuser .= '<td bgcolor="#D0D0D0"><table width="100%"><tr>';

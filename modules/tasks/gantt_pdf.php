@@ -149,7 +149,8 @@ $taskcount = 0 ;
 // Create task_index array
 $ctflag = false ;
 if ( count( $gtask_sliced ) > 1 ) {
-    for ( $i = 0; $i < count($gantt_arr); $i++ ) {
+    $gantt_arr_count = count($gantt_arr);
+    for ( $i = 0; $i < $gantt_arr_count; $i++ ) {
         $task_index[$gantt_arr[$i][0]['task_id']] = $i+1 ;
     }
     $ctflag = true;
@@ -228,7 +229,8 @@ foreach ($gtask_sliced as $gts) {
     $gantt->loadTaskArray($gantt_arr);
 
     $row = 0;
-    for($i = 0; $i < count($gts); $i ++) {
+    $gts_count = count($gts);
+    for($i = 0; $i < $gts_count; $i ++) {
         $a = $gts[$i][0];
         $level = $gts[$i][1];
         $name = $a['task_name'];
@@ -413,7 +415,8 @@ $gpdfkey = W2P_BASE_DIR. '/modules/tasks/images/ganttpdf_key.png';
 $gpdfkeyNM = W2P_BASE_DIR. '/modules/tasks/images/ganttpdf_keyNM.png';
 
 $pdf->ezStartPageNumbers( 802 , 30 , 10 ,'left','Page {PAGENUM} of {TOTALPAGENUM}') ;
-for ($i=0; $i < count($ganttfile); $i++) {
+$ganttfile_count = count($ganttfile);
+for ($i=0; $i < $ganttfile_count; $i++) {
     $gf = $ganttfile[$i];
     $pdf->ezColumnsStart(array('num' =>1, 'gap' =>0));
     $pdf->ezImage( $gf, 0, 765, 'width', 'left'); // No pad, width = 800px, resize = 'none' (will go to next page if image height > remaining page space)
