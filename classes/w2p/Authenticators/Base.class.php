@@ -19,6 +19,7 @@ abstract class w2p_Authenticators_Base
     protected $AppUI = null;
     protected $w2Pconfig = null;
     protected $query = null;
+    protected $user_id = null;
 
     public function __construct() {
         global $AppUI;
