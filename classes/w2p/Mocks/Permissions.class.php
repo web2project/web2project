@@ -9,25 +9,20 @@
  * @author      D. Keith Casey, Jr. <caseydk@users.sourceforge.net>
  */
 
-class w2p_Mocks_Permissions extends w2p_Extensions_Permissions {
-
-    public function __construct($opts = null) {
-        parent::__construct($opts);
-    }
-
-    public function w2Pacl_nuclear($userid, $module, $item, $mod_class = array()) {
-
+class w2p_Mocks_Permissions extends w2p_Extensions_Permissions
+{
+    public function w2Pacl_nuclear($userid, $module, $item, $mod_class = array())
+    {
         return array('access' => 1, 'acl_id' => 'checked');
     }
 
-    public function w2Pacl_check($application = 'application', $op,
-            $user = 'user', $userid, $app = 'app', $module) {
-
+    public function w2Pacl_check($application = 'application', $op, $user = 'user', $userid, $app = 'app', $module)
+    {
         return true;
     }
 
-    public function w2Pacl_query($application = 'application', $op, $user = 'user', $userid, $module, $item) {
-
+    public function w2Pacl_query($application = 'application', $op, $user = 'user', $userid, $module, $item)
+    {
         return array('access' => 1, 'acl_id' => 'checked');
     }
 }

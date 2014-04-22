@@ -23,15 +23,6 @@ include_once 'unit_tests/CommonSetup.php';
 
 class w2p_Mocks_QueryTest extends CommonSetup
 {
-
-    /**
-     * Create an AppUI before running tests
-     */
-    protected function setUp()
-    {
-        parent::setUp();
-    }
-
     public function testLoadHash()
     {
         $hash1 = array('key1' => 'value1', 'key2' => 'value2');
