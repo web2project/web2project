@@ -516,7 +516,9 @@ abstract class w2p_Core_BaseObject extends w2p_System_Event implements w2p_Syste
     public function getAllowedRecords($uid, $fields = '*', $orderby = '', $index = null, $extra = null, $table_alias = '')
     {
         $uid = (int) $uid;
-        $uid || exit('FATAL ERROR ' . get_class($this) . '::getAllowedRecords failed');
+        if (!$uid) {
+            return array();
+        }
         $deny = $this->_perms->getDeniedItems($this->_tbl_module, $uid);
         $allow = $this->_perms->getAllowedItems($this->_tbl_module, $uid);
 

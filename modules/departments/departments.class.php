@@ -165,9 +165,12 @@ class CDepartment extends w2p_Core_BaseObject
 	 *	@return array
 	 */
 //TODO: this modifies the core $_query property
-	public function getAllowedRecords($uid, $fields = '*', $orderby = '', $index = null, $extra = null, $unused = '') {
-		$uid = (int) $uid;
-		$uid || exit('FATAL ERROR<br />' . get_class($this) . '::getAllowedRecords failed');
+	public function getAllowedRecords($uid, $fields = '*', $orderby = '', $index = null, $extra = null, $unused = '')
+    {
+        $uid = (int) $uid;
+        if (!$uid) {
+            return array();
+        }
 		$deny = $this->_perms->getDeniedItems($this->_tbl, $uid);
 		$allow = $this->_perms->getAllowedItems($this->_tbl, $uid);
 
@@ -211,7 +214,7 @@ class CDepartment extends w2p_Core_BaseObject
 		if ($orderby) {
 			$q->addOrder($orderby);
 		}
-
+echo '<pre>'; print_r($q->loadHashList($index)); die();
 		return $q->loadHashList($index);
 	}
 
