@@ -82,22 +82,9 @@ class CProject extends w2p_Core_BaseObject
         if (0 == (int) $this->project_company) {
             $this->_error['project_company'] = $baseErrorMsg . 'project company is not set';
         }
-        if (0 == (int) $this->project_creator) {
-            $this->_error['project_creator'] = $baseErrorMsg . 'project creator is not set';
-        }
-        if (!is_int($this->project_priority) && '' == $this->project_priority) {
-            $this->_error['project_priority'] = $baseErrorMsg . 'project priority is not set';
-        }
         if ('' == $this->project_color_identifier) {
             $this->_error['project_color_identifier'] = $baseErrorMsg . 'project color identifier is not set';
         }
-        if (!is_int($this->project_type) && '' == $this->project_type) {
-            $this->_error['project_type'] = $baseErrorMsg . 'project type is not set';
-        }
-        if (!is_int($this->project_status) && '' == $this->project_status) {
-            $this->_error['project_status'] = $baseErrorMsg . 'project status is not set';
-        }
-
         return (count($this->_error)) ? false : true;
     }
 
@@ -431,6 +418,11 @@ class CProject extends w2p_Core_BaseObject
         $this->project_url = str_replace(array('"', '"', '<', '>'), '', $this->project_url);
         $this->project_demo_url = str_replace(array('"', '"', '<', '>'), '', $this->project_demo_url);
         $this->project_owner = (int) $this->project_owner ? $this->project_owner : $this->_AppUI->user_id;
+        $this->project_creator = (int) $this->project_creator ? $this->project_creator : $this->_AppUI->user_id;
+
+        $this->project_priority = (int) $this->project_priority;
+        $this->project_type = (int) $this->project_type;
+        $this->project_status = (int) $this->project_status;
 
         // Make sure project_short_name is the right size (issue for languages with encoded characters)
         if ('' == $this->project_short_name) {
