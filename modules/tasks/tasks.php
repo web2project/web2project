@@ -348,6 +348,7 @@ if ($showEditCheckbox) {
 				if (!$min_view) {
 					// not minimal view
 					$open_link = w2PtoolTip($m, 'Click to Expand/Collapse the Tasks for this Project.') . '<a href="javascript: void(0);"><img onclick="expand_collapse(\'project_' . $p['project_id'] . '_\', \'tblProjects\',\'collapse\',0,2);" id="project_' . $p['project_id'] . '__collapse" src="' . w2PfindImage('up22.png', $m) . '" class="center" ' . (!$expanded ? 'style="display:none"' : '') . ' alt="" /><img onclick="expand_collapse(\'project_' . $p['project_id'] . '_\', \'tblProjects\',\'expand\',0,2);" id="project_' . $p['project_id'] . '__expand" src="' . w2PfindImage('down22.png', $m) . '" class="center" ' . ($expanded ? 'style="display:none"' : '') . ' /></a>' . w2PendTip();
+
 					?>
 					<tr>
 					  <td colspan="<?php echo $cols; ?>">
