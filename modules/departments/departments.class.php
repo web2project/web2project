@@ -214,7 +214,6 @@ class CDepartment extends w2p_Core_BaseObject
 		if ($orderby) {
 			$q->addOrder($orderby);
 		}
-echo '<pre>'; print_r($q->loadHashList($index)); die();
 		return $q->loadHashList($index);
 	}
 
