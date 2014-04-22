@@ -190,8 +190,6 @@ class CDepartment extends w2p_Core_BaseObject
 			if ((array_search('0', $allow)) === false) {
 				//If 0 (All Items of a module) are not permited then just add the allowed items only
 				$q->addWhere('(' . $this->_tbl_key . ' IN (' . implode(',', $allow) . ') OR ' . $this->_tbl_key . ' IS NULL)');
-			} else {
-				//If 0 (All Items of a module) are permited then don't add a where clause so the user is permitted to see all
 			}
 			//Denials are only required if we were able to see anything in the first place so now we handle the denials
 			if (count($deny)) {
@@ -218,8 +216,10 @@ class CDepartment extends w2p_Core_BaseObject
 	}
 
 	public function getAllowedSQL($uid, $index = null) {
-		$uid = (int) $uid;
-		$uid || exit('FATAL ERROR ' . get_class($this) . '::getAllowedSQL failed');
+        $uid = (int) $uid;
+        if (!$uid) {
+            return array();
+        }
 		$deny = $this->_perms->getDeniedItems($this->_tbl, $uid);
 		$allow = $this->_perms->getAllowedItems($this->_tbl, $uid);
 
@@ -255,8 +255,10 @@ class CDepartment extends w2p_Core_BaseObject
 
 	public function setAllowedSQL($uid, $query, $index = null, $key = null)
     {
-		$uid = (int) $uid;
-		$uid || exit('FATAL ERROR ' . get_class($this) . '::getAllowedSQL failed');
+        $uid = (int) $uid;
+        if (!$uid) {
+            return $query;
+        }
 		$deny = $this->_perms->getDeniedItems($this->_tbl, $uid);
 		$allow = $this->_perms->getAllowedItems($this->_tbl, $uid);
 		// Make sure that we add the table otherwise dependencies break
