@@ -51,6 +51,8 @@ class CProject extends w2p_Core_BaseObject
     public $project_parent = null;
     public $project_location = null;
     public $project_original_parent = null;
+    public $project_created = null;
+    public $project_updated = null;
 
     protected $st_projects_arr = array();
     /*
@@ -441,7 +443,6 @@ class CProject extends w2p_Core_BaseObject
         }
         if ($this->project_end_date) {
             $date = new w2p_Utilities_Date($this->project_end_date);
-            $date->setTime(23, 59, 59);
             $this->project_end_date = $date->format(FMT_DATETIME_MYSQL);
         }
         if ($this->project_actual_end_date) {
