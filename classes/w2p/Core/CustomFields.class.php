@@ -35,34 +35,32 @@ class w2p_Core_CustomFields {
         }
         $q->addOrder('field_order ASC');
         $rows = $q->loadList();
-        if ($rows == null) {
-            // No Custom Fields Available
-        } else {
+        if (count($rows)) {
             foreach ($rows as $row) {
                 switch ($row['field_htmltype']) {
                     case 'checkbox':
-                        $this->fields[$row['field_name']] = new w2p_Core_CustomFieldCheckbox( $row['field_id'], $row['field_name'], $row['field_order'], stripslashes($row['field_description']), stripslashes($row['field_extratags']), $row['field_order'], $row['field_published']);
+                        $this->fields[$row['field_name']] = new w2p_Core_CustomFieldCheckbox( $row['field_id'], $row['field_name'], $row['field_order'], stripslashes($row['field_description']), stripslashes($row['field_extratags']), $row['field_published']);
                         break;
                     case 'href':
-                        $this->fields[$row['field_name']] = new w2p_Core_CustomFieldWeblink(  $row['field_id'], $row['field_name'], $row['field_order'], stripslashes($row['field_description']), stripslashes($row['field_extratags']), $row['field_order'], $row['field_published']);
+                        $this->fields[$row['field_name']] = new w2p_Core_CustomFieldWeblink(  $row['field_id'], $row['field_name'], $row['field_order'], stripslashes($row['field_description']), stripslashes($row['field_extratags']), $row['field_published']);
                         break;
                     case 'textarea':
-                        $this->fields[$row['field_name']] = new w2p_Core_CustomFieldTextArea( $row['field_id'], $row['field_name'], $row['field_order'], stripslashes($row['field_description']), stripslashes($row['field_extratags']), $row['field_order'], $row['field_published']);
+                        $this->fields[$row['field_name']] = new w2p_Core_CustomFieldTextArea( $row['field_id'], $row['field_name'], $row['field_order'], stripslashes($row['field_description']), stripslashes($row['field_extratags']), $row['field_published']);
                         break;
                     case 'select':
-                        $this->fields[$row['field_name']] = new w2p_Core_CustomFieldSelect(   $row['field_id'], $row['field_name'], $row['field_order'], stripslashes($row['field_description']), stripslashes($row['field_extratags']), $row['field_order'], $row['field_published']);
+                        $this->fields[$row['field_name']] = new w2p_Core_CustomFieldSelect(   $row['field_id'], $row['field_name'], $row['field_order'], stripslashes($row['field_description']), stripslashes($row['field_extratags']), $row['field_published']);
                         break;
                     case 'label':
-                        $this->fields[$row['field_name']] = new w2p_Core_CustomFieldLabel(    $row['field_id'], $row['field_name'], $row['field_order'], stripslashes($row['field_description']), stripslashes($row['field_extratags']), $row['field_order'], $row['field_published']);
+                        $this->fields[$row['field_name']] = new w2p_Core_CustomFieldLabel(    $row['field_id'], $row['field_name'], $row['field_order'], stripslashes($row['field_description']), stripslashes($row['field_extratags']), $row['field_published']);
                         break;
                     case 'separator':
-                        $this->fields[$row['field_name']] = new w2p_Core_CustomFieldSeparator($row['field_id'], $row['field_name'], $row['field_order'], stripslashes($row['field_description']), stripslashes($row['field_extratags']), $row['field_order'], $row['field_published']);
+                        $this->fields[$row['field_name']] = new w2p_Core_CustomFieldSeparator($row['field_id'], $row['field_name'], $row['field_order'], stripslashes($row['field_description']), stripslashes($row['field_extratags']), $row['field_published']);
                         break;
                     case 'email':
-                        $this->fields[$row['field_name']] = new w2p_Core_CustomFieldEmail(    $row['field_id'], $row['field_name'], $row['field_order'], stripslashes($row['field_description']), stripslashes($row['field_extratags']), $row['field_order'], $row['field_published']);
+                        $this->fields[$row['field_name']] = new w2p_Core_CustomFieldEmail(    $row['field_id'], $row['field_name'], $row['field_order'], stripslashes($row['field_description']), stripslashes($row['field_extratags']), $row['field_published']);
                         break;
                     default:
-                        $this->fields[$row['field_name']] = new w2p_Core_CustomFieldText(     $row['field_id'], $row['field_name'], $row['field_order'], stripslashes($row['field_description']), stripslashes($row['field_extratags']), $row['field_order'], $row['field_published']);
+                        $this->fields[$row['field_name']] = new w2p_Core_CustomFieldText(     $row['field_id'], $row['field_name'], $row['field_order'], stripslashes($row['field_description']), stripslashes($row['field_extratags']), $row['field_published']);
                         break;
                 }
             }
