@@ -16,16 +16,17 @@
  */
 abstract class w2p_Authenticators_Base
 {
-    protected $_AppUI = null;
-    protected $_w2Pconfig = null;
+    protected $AppUI = null;
+    protected $w2Pconfig = null;
+    protected $query = null;
 
     public function __construct() {
         global $AppUI;
         global $w2Pconfig;
 
-        $this->_AppUI = $AppUI;
-        $this->_w2Pconfig = $w2Pconfig;
-        $this->_query = new w2p_Database_Query;
+        $this->AppUI = $AppUI;
+        $this->w2Pconfig = $w2Pconfig;
+        $this->query = new w2p_Database_Query;
     }
 
     /**

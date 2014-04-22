@@ -28,19 +28,19 @@ class w2p_Authenticators_PostNuke extends w2p_Authenticators_Base
                 $sqlAuth = new w2p_Authenticators_SQL();
                 return $sqlAuth->authenticate($username, $password);
             } else {
-                die($this->_AppUI->_('You have not configured your PostNuke site
+                die($this->AppUI->_('You have not configured your PostNuke site
                               correctly'));
             }
         }
 
         if (!$compressed_data = base64_decode(urldecode($_REQUEST['userdata']))) {
-            die($this->_AppUI->_('The credentials supplied were missing or corrupted') . ' (1)');
+            die($this->AppUI->_('The credentials supplied were missing or corrupted') . ' (1)');
         }
         if (!$userdata = gzuncompress($compressed_data)) {
-            die($this->_AppUI->_('The credentials supplied were missing or corrupted') . ' (2)');
+            die($this->AppUI->_('The credentials supplied were missing or corrupted') . ' (2)');
         }
         if (!$_REQUEST['check'] = $this->hashPassword($userdata)) {
-            die($this->_AppUI->_('The credentials supplied were issing or corrupted') . ' (3)');
+            die($this->AppUI->_('The credentials supplied were issing or corrupted') . ' (3)');
         }
         $user_data = unserialize($userdata);
 
@@ -55,19 +55,19 @@ class w2p_Authenticators_PostNuke extends w2p_Authenticators_Base
         $passwd = trim($user_data['passwd']);
         $email = trim($user_data['email']);
 
-        $q = $this->_query;
+        $q = $this->query;
         $q->addTable('users');
         $q->addQuery('user_id, user_password, user_contact');
         $q->addWhere('user_username = \'' . $username . '\'');
         if (!$rs = $q->exec()) {
-            die($this->_AppUI->_('Failed to get user details') . ' - error was ' . $db->ErrorMsg());
+            die($this->AppUI->_('Failed to get user details') . ' - error was ' . $db->ErrorMsg());
         }
         if ($rs->RecordCount() < 1) {
             $q->clear();
             $this->createsqluser($username, $passwd, $email, $first_name, $last_name);
         } else {
             if (!$row = $rs->FetchRow()) {
-                    die($this->_AppUI->_('Failed to retrieve user detail'));
+                    die($this->AppUI->_('Failed to retrieve user detail'));
             }
             // User exists, update the user details.
             $this->user_id = $row['user_id'];
@@ -76,7 +76,7 @@ class w2p_Authenticators_PostNuke extends w2p_Authenticators_Base
             $q->addUpdate('user_password', $passwd);
             $q->addWhere('user_id = ' . $this->user_id);
             if (!$q->exec()) {
-                die($this->_AppUI->_('Could not update user credentials'));
+                die($this->AppUI->_('Could not update user credentials'));
             }
             $q->clear();
             $q->addTable('contacts');
@@ -85,7 +85,7 @@ class w2p_Authenticators_PostNuke extends w2p_Authenticators_Base
             $q->addUpdate('contact_email', $email);
             $q->addWhere('contact_id = ' . $row['user_contact']);
             if (!$q->exec()) {
-                die($this->_AppUI->_('Could not update user details'));
+                die($this->AppUI->_('Could not update user details'));
             }
         }
         return true;
@@ -111,7 +111,7 @@ class w2p_Authenticators_PostNuke extends w2p_Authenticators_Base
         $user_id = $u->user_id;
         $this->user_id = $user_id;
 
-        $acl = &$this->_AppUI->acl();
+        $acl = &$this->AppUI->acl();
         $acl->insertUserRole($acl->get_group_id('anon'), $this->user_id);
     }
 }
