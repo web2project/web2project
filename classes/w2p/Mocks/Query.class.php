@@ -5,21 +5,19 @@
  * @author      D. Keith Casey, Jr. <caseydk@users.sourceforge.net>
  */
 
-class w2p_Mocks_Query extends w2p_Database_Query {
-
+class w2p_Mocks_Query extends w2p_Database_Query
+{
     protected $hash = array();
     protected $result = '';
     protected $list = array();
     protected $hashlist = array();
 
-    public function __construct($prefix = null, $query_db = null) {
-        parent::__construct($prefix, $query_db);
-    }
-
-    public function stageHash(array $array) {
+    public function stageHash(array $array)
+    {
         $this->hash[] = $array;
     }
-    public function loadHash() {
+    public function loadHash()
+    {
         return array_shift($this->hash);
     }
     public function clearHash()
@@ -27,17 +25,21 @@ class w2p_Mocks_Query extends w2p_Database_Query {
         $this->hash = array();
     }
 
-    public function stageResult($value) {
+    public function stageResult($value)
+    {
         $this->result = $value;
     }
-    public function loadResult() {
+    public function loadResult()
+    {
         return $this->result;
     }
 
-    public function stageList(array $array) {
+    public function stageList(array $array)
+    {
         $this->list[] = $array;
     }
-    public function loadList($maxrows = -1, $index = -1) {
+    public function loadList($maxrows = -1, $index = -1)
+    {
         return $this->list;
     }
     public function clearList()
@@ -45,10 +47,12 @@ class w2p_Mocks_Query extends w2p_Database_Query {
         $this->list = array();
     }
 
-    public function stageHashList($index, $value) {
+    public function stageHashList($index, $value)
+    {
         $this->hashlist[$index] = $value;
     }
-    public function loadHashList($index = null) {
+    public function loadHashList($index = null)
+    {
         return $this->hashlist;
     }
     public function clearHashList()
@@ -56,13 +60,15 @@ class w2p_Mocks_Query extends w2p_Database_Query {
         $this->hashlist = array();
     }
 
-    public function loadObject(&$object, $bindAll = false, $strip = true) {
+    public function loadObject(&$object, $bindAll = false, $strip = true)
+    {
         $hash = $this->loadHash();
 
         $this->bindHashToObject($hash, $object, null, $strip, $bindAll);
     }
 
-    public function bindHashToObject($hash, &$obj, $prefix = null, $notUsed = true, $bindAll = false) {
+    public function bindHashToObject($hash, &$obj, $prefix = null, $notUsed = true, $bindAll = false)
+    {
         foreach (get_object_vars($obj) as $k => $notUsed2) {
             if (isset($hash[$k])) {
                 if (is_array(w2PHTMLDecode($hash[$k]))) {
@@ -75,20 +81,19 @@ class w2p_Mocks_Query extends w2p_Database_Query {
     }
 
 
-    public function exec() {
+    public function exec()
+    {
         return true;
     }
 
-    public function insertObject($table, &$object, $keyName = null, $verbose = false) {
-
-        parent::insertObject($table, $object, $keyName, $verbose);
+    public function insertObject($table, &$object, $keyName = null, $verbose = false)
+    {
         $object->{$keyName} = 1;
         return true;
     }
 
-    public function updateObject($table, &$object, $keyName, $updateNulls = true) {
-
-        parent::updateObject($table, $object, $keyName, $updateNulls);
+    public function updateObject($table, &$object, $keyName, $updateNulls = true)
+    {
         return true;
     }
 }
