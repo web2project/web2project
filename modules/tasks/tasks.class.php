@@ -135,11 +135,6 @@ class CTask extends w2p_Core_BaseObject
     {
         $baseErrorMsg = get_class($this) . '::store-check failed - ';
 
-        $this->task_id = (int) $this->task_id;
-
-        if (is_null($this->task_priority) || !is_numeric((int) $this->task_priority)) {
-            $this->_error['task_priority'] = $baseErrorMsg . 'task priority is NULL';
-        }
         if ($this->task_name == '') {
             $this->_error['task_name'] = $baseErrorMsg . 'task name is NULL';
         }
@@ -167,32 +162,12 @@ class CTask extends w2p_Core_BaseObject
             }
         }
 
-        // ensure changes to checkboxes are honoured
-        $this->task_milestone = (int) $this->task_milestone;
-        $this->task_dynamic = (int) $this->task_dynamic;
-
-        $this->task_percent_complete = (int) $this->task_percent_complete;
-
-        $this->task_target_budget = $this->task_target_budget ? $this->task_target_budget : 0.00;
-
-        if (!$this->task_duration || $this->task_milestone) {
-            $this->task_duration = '0';
-        }
         if ($this->task_milestone) {
             if ($this->task_start_date && $this->task_start_date != '0000-00-00 00:00:00') {
                 $this->task_end_date = $this->task_start_date;
             } else {
                 $this->task_start_date = $this->task_end_date;
             }
-        }
-        if (!$this->task_duration_type) {
-            $this->task_duration_type = 1;
-        }
-        if (!$this->task_related_url) {
-            $this->task_related_url = '';
-        }
-        if (!$this->task_notify) {
-            $this->task_notify = 0;
         }
 
         /*
@@ -761,10 +736,21 @@ class CTask extends w2p_Core_BaseObject
 
         $q = $this->_getQuery();
         $this->task_updated = $q->dbfnNowWithTZ();
-        $this->task_target_budget = filterCurrency($this->task_target_budget);
+        $this->task_percent_complete = (int) $this->task_percent_complete;
+
         $this->task_owner = (int) $this->task_owner ? $this->task_owner : $this->_AppUI->user_id;
         $this->task_creator = (int) $this->task_creator ? $this->task_creator : $this->_AppUI->user_id;
+
         $this->task_contacts = is_array($this->task_contacts) ? $this->task_contacts : explode(',', $this->task_contacts);
+
+        // ensure changes to checkboxes are honoured
+        $this->task_milestone = (int) $this->task_milestone;
+        $this->task_dynamic = (int) $this->task_dynamic;
+        $this->task_notify = (int) $this->task_notify;
+
+        $this->task_duration = (!$this->task_duration || $this->task_milestone) ? $this->task_duration : 0;
+        $this->task_duration_type = (int) $this->task_duration_type ? $this->task_duration_type : 1;
+        $this->task_priority = (int) $this->task_priority ? $this->task_priority : 0;
 
         parent::hook_preStore();
     }
