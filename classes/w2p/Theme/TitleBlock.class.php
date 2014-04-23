@@ -118,7 +118,8 @@ class w2p_Theme_TitleBlock {
      * The drawing function
      */
     public function show() {
-        global $a, $m;
+        global $a;
+        $m = $this->module;
         $this->loadExtraCrumbs($m, $a);
         $uistyle = $this->_AppUI->getPref('UISTYLE') ? $this->_AppUI->getPref('UISTYLE') : $this->_w2Pconfig['host_style'];
         if (!$uistyle) {
