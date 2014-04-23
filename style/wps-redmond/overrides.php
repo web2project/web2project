@@ -58,7 +58,8 @@ class CTabBox extends w2p_Theme_TabBox {
             echo '</table>';
         } else {
             // tabbed view
-            $s = '<table width="100%" border="0" cellpadding="0" cellspacing="0"><tr><td><table border="0" cellpadding="0" cellspacing="0">';
+            $s = '<table width="100%" border="0" cellpadding="0" cellspacing="0">';
+            $s .= '<tr><td><table border="0" cellpadding="0" cellspacing="0">';
 
             if (count($this->tabs) - 1 < $this->active) {
                 //Last selected tab is not available in this view. eg. Child tasks
