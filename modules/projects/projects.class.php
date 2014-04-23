@@ -235,11 +235,7 @@ class CProject extends w2p_Core_BaseObject
             }
         } else {
             // There are no allowed companies, so don't allow projects.
-            if ($extra['where'] != '') {
-                $extra['where'] = $extra['where'] . ' AND 1 = 0 ';
-            } else {
-                $extra['where'] = '1 = 0';
-            }
+            $extra['where'] = '1 = 0';
         }
         return parent::getAllowedRecords($uid, $fields, $orderby, $index, $extra, $table_alias);
     }
