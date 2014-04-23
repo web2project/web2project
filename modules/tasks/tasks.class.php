@@ -1254,7 +1254,7 @@ class CTask extends w2p_Core_BaseObject
         $mail_recipients = array();
         $q = $this->_getQuery();
         if ((int) $this->task_id > 0 && (int) $this->task_project > 0) {
-            if (isset($assignees) && $assignees == 'on') {
+            if ('on' == $assignees) {
                 $q->addTable('user_tasks', 'ut');
                 $q->leftJoin('users', 'ua', 'ua.user_id = ut.user_id');
                 $q->leftJoin('contacts', 'c', 'c.contact_id = ua.user_contact');
@@ -1270,7 +1270,7 @@ class CTask extends w2p_Core_BaseObject
                     $mail_recipients[$myContact['contact_email']] = $myContact['contact_name'];
                 }
             }
-            if (isset($task_contacts) && $task_contacts == 'on') {
+            if ('on' == $task_contacts) {
                 $q->addTable('task_contacts', 'tc');
                 $q->leftJoin('contacts', 'c', 'c.contact_id = tc.contact_id');
                 $q->addQuery('c.contact_email, c.contact_display_name as contact_name');
@@ -1282,7 +1282,7 @@ class CTask extends w2p_Core_BaseObject
                     $mail_recipients[$myContact['contact_email']] = $myContact['contact_name'];
                 }
             }
-            if (isset($project_contacts) && $project_contacts == 'on') {
+            if ('on' == $project_contacts) {
                 $q->addTable('project_contacts', 'pc');
                 $q->leftJoin('contacts', 'c', 'c.contact_id = pc.contact_id');
                 $q->addQuery('c.contact_email, c.contact_display_name as contact_name');
@@ -1319,7 +1319,7 @@ class CTask extends w2p_Core_BaseObject
             }
             $q->clear(); // Reset to the default state.
             // If this should be sent to a specific user, add their contact details here
-            if (isset($specific_user) && $specific_user) {
+            if ((int) $specific_user) {
                 $q->addTable('users', 'u');
                 $q->leftJoin('contacts', 'c', 'c.contact_id = u.user_contact');
                 $q->addQuery('c.contact_email, c.contact_display_name as contact_name');
