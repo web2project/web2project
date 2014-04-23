@@ -14,9 +14,4 @@ $controller = new w2p_Controllers_Base(
                   );
 
 $AppUI = $controller->process($AppUI, $_POST);
-
-if ($controller->success && !$delete) {
-    $controller = __extract_from_contact_controller($controller);
-}
-
 $AppUI->redirect($controller->resultPath);

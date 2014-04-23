@@ -61,7 +61,8 @@ class CContact extends w2p_Core_BaseObject
         return ('contact_name' == $name) ? $this->contact_display_name : '';
     }
 
-    protected function hook_preStore() {
+    protected function hook_preStore()
+    {
         $this->contact_company = (int) $this->contact_company;
         $this->contact_department = (int) $this->contact_department;
         $this->contact_owner = ((int) $this->contact_owner) ? (int) $this->contact_owner : (int) $this->_AppUI->user_id;
