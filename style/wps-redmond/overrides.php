@@ -21,7 +21,7 @@ class style_wpsredmond extends w2p_Theme_Base
 class CTabBox extends w2p_Theme_TabBox {
     public function show($extra = '', $js_tabs = false) {
         global $currentTabId, $currentTabName, $m, $a;
-        $this->loadExtras($m, $a);
+        $this->loadExtras($this->m, $this->a);
 
 
 
@@ -50,8 +50,8 @@ class CTabBox extends w2p_Theme_TabBox {
             foreach ($this->tabs as $k => $v) {
                 echo '<tr><td><strong>' . ($v[2] ? $v[1] : $this->_AppUI->_($v[1])) . '</strong></td></tr>';
                 echo '<tr><td>';
-                $currentTabId = $k;
-                $currentTabName = $v[1];
+                $this->currentTabId = $k;
+                $this->currentTabName = $v[1];
                 include $this->baseInc . $v[0] . '.php';
                 echo '</td></tr>';
             }
@@ -91,8 +91,8 @@ class CTabBox extends w2p_Theme_TabBox {
             echo $s;
             //Will be null if the previous selection tab is not available in the new window eg. Children tasks
             if (isset($this->tabs[$this->active][0]) && $this->tabs[$this->active][0] != '') {
-                $currentTabId = $this->active;
-                $currentTabName = $this->tabs[$this->active][1];
+                $this->currentTabId = $this->active;
+                $this->currentTabName = $this->tabs[$this->active][1];
                 if (!$js_tabs) {
                     require $this->baseInc . $this->tabs[$this->active][0] . '.php';
                 }
@@ -100,8 +100,8 @@ class CTabBox extends w2p_Theme_TabBox {
             if ($js_tabs) {
                 foreach ($this->tabs as $k => $v) {
                     echo '<div class="tab" id="tab_' . $k . '">';
-                    $currentTabId = $k;
-                    $currentTabName = $v[1];
+                    $this->currentTabId = $k;
+                    $this->currentTabName = $v[1];
                     require $this->baseInc . $v[0] . '.php';
                     echo '</div>';
                     echo '<script language="javascript" type="text/javascript">

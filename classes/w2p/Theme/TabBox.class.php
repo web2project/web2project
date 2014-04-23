@@ -23,6 +23,11 @@ class w2p_Theme_TabBox {
     protected $_AppUI = null;
     protected $_uistyle = 'web2project';
 
+    protected $currentTabId = null;
+    protected $currentTabName = null;
+    protected $m = null;
+    protected $a = null;
+
     /**
      * Constructor
      * @param string The base URL query string to prefix tab links
@@ -32,8 +37,13 @@ class w2p_Theme_TabBox {
      *    Must support 2 arguments, currently active tab, new tab to activate.
      */
     public function __construct($baseHRef = '', $baseInc = '', $active = 0, $javascript = null) {
-        global $AppUI;
+        global $AppUI, $currentTabId, $currentTabName, $m, $a;
+
         $this->_AppUI = $AppUI;
+        $this->currentTabId = $currentTabId;
+        $this->currentTabName = $currentTabName;
+        $this->m = $m;
+        $this->a = $a;
 
         $this->tabs = array();
         $this->active = $active;
@@ -41,9 +51,8 @@ class w2p_Theme_TabBox {
         $this->javascript = $javascript;
         $this->baseInc = $baseInc;
 
-        global $w2Pconfig;
         $this->_uistyle = $this->_AppUI->getPref('UISTYLE') ?
-                $this->_AppUI->getPref('UISTYLE') : $w2Pconfig['host_style'];
+                $this->_AppUI->getPref('UISTYLE') : w2PgetConfig('host_style');
         if (!$this->_uistyle) {
             $this->_uistyle = 'web2project';
         }
@@ -84,7 +93,6 @@ class w2p_Theme_TabBox {
      * @param string Can't remember whether this was useful
      */
     public function show($extra = '', $js_tabs = false) {
-        global $currentTabId, $currentTabName;
         $this->loadExtras($notUsed, $notUsed2);
 
         
@@ -114,8 +122,8 @@ class w2p_Theme_TabBox {
             foreach ($this->tabs as $k => $v) {
                 echo '<tr><td><strong>' . ($v[2] ? $v[1] : $this->_AppUI->_($v[1])) . '</strong></td></tr>';
                 echo '<tr><td>';
-                $currentTabId = $k;
-                $currentTabName = $v[1];
+                $this->currentTabId = $k;
+                $this->currentTabName = $v[1];
                 include $this->baseInc . $v[0] . '.php';
                 echo '</td></tr>';
             }
@@ -149,8 +157,8 @@ class w2p_Theme_TabBox {
             echo $s;
             //Will be null if the previous selection tab is not available in the new window eg. Children tasks
             if ($this->baseInc . $this->tabs[$this->active][0] != '') {
-                $currentTabId = $this->active;
-                $currentTabName = $this->tabs[$this->active][1];
+                $this->currentTabId = $this->active;
+                $this->currentTabName = $this->tabs[$this->active][1];
                 if (!$js_tabs) {
                     require $this->baseInc . $this->tabs[$this->active][0] . '.php';
                 }
