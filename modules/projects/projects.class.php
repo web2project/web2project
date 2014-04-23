@@ -201,7 +201,7 @@ class CProject extends w2p_Core_BaseObject
      * *	@author	handco <handco@sourceforge.net>
      * *	@see	w2PObject::getAllowedRecords
      * */
-    public function getAllowedRecords($uid, $fields = '*', $orderby = '', $index = null, $extra = null, $table_alias = '')
+    public function getAllowedRecords($uid, $fields = '*', $orderby = '', $index = null, $extra = array(), $table_alias = '')
     {
         $oCpy = new CCompany();
         $oCpy->overrideDatabase($this->_query);
