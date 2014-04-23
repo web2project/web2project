@@ -1405,6 +1405,7 @@ class CTask extends w2p_Core_BaseObject
         $q->addTable('tasks', 't');
         if ($user_id) {
             $q->innerJoin('user_tasks', 'ut', 't.task_id=ut.task_id');
+            $q->addWhere('ut.user_id = ' . (int) $user_id);
         }
         $q->innerJoin('projects', 'projects', 't.task_project = projects.project_id');
         $q->innerJoin('companies', 'companies', 'projects.project_company = companies.company_id');
@@ -1417,10 +1418,6 @@ class CTask extends w2p_Core_BaseObject
         if (($template_status = w2PgetConfig('template_projects_status_id')) != '') {
             $q->addWhere('project_status <> ' . $template_status);
         }
-        if ($user_id) {
-            $q->addWhere('ut.user_id = ' . (int) $user_id);
-        }
-
         if ($company_id) {
             $q->addWhere('projects.project_company = ' . (int) $company_id);
         }
@@ -1441,7 +1438,6 @@ class CTask extends w2p_Core_BaseObject
         // check tasks access
         $result = array();
         foreach ($tasks as $key => $row) {
-//            $obj->load($row['task_id']);
 //we have everything already loaded in $row.
 //we only need to populate those fields of $obj that are used in canAccess
 			$obj->task_id=$row['task_id'];
