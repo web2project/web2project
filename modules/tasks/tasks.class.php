@@ -194,8 +194,6 @@ class CTask extends w2p_Core_BaseObject
         } else {
             $this_dependencies = explode(',', $this->getDependencies());
         }
-        // Set to false for recursive updateDynamic calls etc.
-        $addedit = false;
 
         // Have deps
         if (array_sum($this_dependencies)) {
