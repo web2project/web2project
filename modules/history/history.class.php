@@ -27,26 +27,18 @@ class CHistory extends w2p_Core_BaseObject
      *
      * @return boolean
      */
-    public function delete($unused = null)   {   return false;   }
+    public function delete()    {   return false;   }
     public function canDelete($notUsed = null, $notUsed2 = null, $notUsed3 = null) {   return false;   }
     public function canCreate() {   return true;    }
     public function canEdit()   {   return false;   }
-
-    /**
-     * @todo TODO: This needs to be fleshed out.
-     *
-     * @return boolean
-     */
-    public function store($unused = null) {
-        return true;
-    }
+    public function store()     {   return true;    }
 
     /**
      * @todo TODO: This should validate that we can actually view this specific
      *    (module-aware) log entry instead of the log entry itself.
      */
-    public function canView() {
-
+    public function canView()
+    {
         return true;
     }
 
@@ -66,8 +58,6 @@ class CHistory extends w2p_Core_BaseObject
             $table_id = 'mod_id';
         } elseif ($module == 'departments') {
             $table_id = 'dept_id';
-        } elseif ($module == 'forums') {
-            $table_id = 'forum_id';
         } elseif ($module == 'forum_messages') {
             $table_id = 'message_id';
         } elseif ($module == 'task_log') {
