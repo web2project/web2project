@@ -121,10 +121,6 @@ class w2p_Theme_TitleBlock {
         global $a;
         $m = $this->module;
         $this->loadExtraCrumbs($m, $a);
-        $uistyle = $this->_AppUI->getPref('UISTYLE') ? $this->_AppUI->getPref('UISTYLE') : $this->_w2Pconfig['host_style'];
-        if (!$uistyle) {
-            $uistyle = 'web2project';
-        }
 
         $s = '';
 
