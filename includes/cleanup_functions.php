@@ -369,6 +369,7 @@ function cal_work_day_conv($val)
 function __extract_from_showtask(&$arr, $level, $today_view, $listTable)
 {
     global $AppUI, $m, $a;
+	global  $expanded;
 
     $listTable = (is_null($listTable)) ? new w2p_Output_HTML_TaskTable($AppUI) : $listTable;
     $listTable->stageRowData($arr);
@@ -381,7 +382,7 @@ function __extract_from_showtask(&$arr, $level, $today_view, $listTable)
 
     $class = w2pFindTaskComplete($arr['task_start_date'], $arr['task_end_date'], $arr['task_percent_complete']);
     $jsTaskId = 'project_' . $arr['task_project'] . '_level-' . $level . '-task_' . $arr['task_id'] . '_';
-    $s = '<tr id="' . $jsTaskId . '" class="'.$class.'" ' . (($level > 0 && !($m == 'tasks' && $a == 'view')) ? 'style="display:none"' : '') . '>';
+    $s = '<tr id="' . $jsTaskId . '" class="'.$class.'" ' . ( !$expanded && ($level > 0 && !($m == 'tasks' && $a == 'view')) ? 'style="display:none"' : '') . '>';
 
     // edit icon
     $s .= '<td class="data _edit">';
@@ -472,6 +473,7 @@ function __extract_from_showtask2($arr, $level, $today_view, $s, $m, $jsTaskId, 
     if ($arr['task_description']) {
         $s .= w2PtoolTip('Task Description', substr($arr['task_description'], 0, 1000), true);
     }
+
 
     $open_link = '<a href="javascript: void(0);"><img onclick="expand_collapse(\'' . $jsTaskId . '\', \'tblProjects\',\'\',' . ($level + 1) . ');" id="' . $jsTaskId . '_collapse" src="' . w2PfindImage('icons/collapse.gif') . '" class="center" ' . (!$expanded ? 'style="display:none"' : '') . ' /><img onclick="expand_collapse(\'' . $jsTaskId . '\', \'tblProjects\',\'\',' . ($level + 1) . ');" id="' . $jsTaskId . '_expand" src="' . w2PfindImage('icons/expand.gif') . '" class="center" ' . ($expanded ? 'style="display:none"' : '') . ' /></a>';
     if (isset($arr['children']) && $arr['children']) {
