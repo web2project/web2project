@@ -262,18 +262,17 @@ class w2p_Utilities_Mail extends PHPMailer
      *        $priority : integer taken between 1 (highest) and 5 ( lowest )
      *        ex: $mail->Priority(1) ; => Highest
      */
-    public function Priority($priority)
+    public function Priority($priority = 5)
     {
-        if ((!intval($priority)) || (intval($priority) < 1) || (intval($priority) > 5)) {
-            return false;
-        }
+        $priority = max(1, (int) $priority);
+        $priority = min(5, $priority);
 
         $this->Priority = $priority;
         return true;
     }
 
     /**
-     *    Overload the Send method from PHPMailer to provide defered mails
+     *    Overload the Send method from PHPMailer to provide deferred mails
      *    @access public
      */
     public function Send()
@@ -302,8 +301,6 @@ class w2p_Utilities_Mail extends PHPMailer
         if (is_array($to) && count($to)) {
             $newArray = array_flip($to) + array_flip($this->ato);
             $this->ato = array_keys($newArray);
-        } elseif (is_array($this->ato) && count($this->ato)) {
-            //Do nothing, ato is good to go
         } else {
             //There is no email addresses to process, so lets just leave.
             return false;
@@ -417,5 +414,4 @@ class w2p_Utilities_Mail extends PHPMailer
         }
         return true;
     }
-
 }
