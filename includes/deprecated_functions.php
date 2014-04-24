@@ -1,7 +1,4 @@
 <?php
-if (!defined('W2P_BASE_DIR')) {
-    die('You should not access this file directly.');
-}
 /**
 * This file exists in order to identify individual functions which will be
 *   deprecated in coming releases.  In the documentation for each function,

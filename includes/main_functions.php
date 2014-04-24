@@ -1,11 +1,4 @@
 <?php
-##
-## Global General Purpose Functions
-##
-if (!defined('W2P_BASE_DIR')) {
-    die('You should not access this file directly.');
-}
-
 
 require_once W2P_BASE_DIR . '/includes/backcompat_functions.php';
 require_once W2P_BASE_DIR . '/includes/deprecated_functions.php';

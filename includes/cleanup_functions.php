@@ -1,7 +1,4 @@
 <?php
-if (!defined('W2P_BASE_DIR')) {
-    die('You should not access this file directly.');
-}
 /**
 * This file exists in order to list individual functions which need to be
 *   cleaned up, reorganized or eliminated based on usage. Before you touch
@@ -182,15 +179,6 @@ function temp_filterArrayForSelectTree($projectData)
 
     return array_values($projectData);
 }
-
-/**
- * The includes/permissions.php file has been ported here because it held a
- *  group of public functions for permission checking. And that is so it stays
- *  on one place only. Permission flags used in the DB
- */
-
-
-// TODO: getDeny* should return true/false instead of 1/0
 
 function getReadableModule()
 {
@@ -3108,9 +3096,6 @@ function defVal($var, $def)
     return isset($var) ? $var : $def;
 }
 
-#
-# add history entries for tracking changes
-#
 function addHistory($table, $id, $action = 'modify', $description = '', $project_id = 0)
 {
     global $AppUI;
@@ -3149,9 +3134,6 @@ function addHistory($table, $id, $action = 'modify', $description = '', $project
     //echo db_error();
 }
 
-##
-## Looks up a value from the SYSVALS table
-##
 function w2PgetSysVal($title)
 {
     $q = new w2p_Database_Query;
