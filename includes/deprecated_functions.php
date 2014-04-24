@@ -500,3 +500,13 @@ function resource_postsave()
 {
     trigger_error(__FUNCTION__ . " has been deprecated in v3.2 and will be removed by v5.0. There is no replacement.", E_USER_NOTICE);
 }
+
+/** @deprecated since 3.2 */
+function showFVar(&$var, $title = '')
+{
+    trigger_error(__FUNCTION__ . " has been deprecated in v3.2 and will be removed by v5.0. There is no replacement.", E_USER_NOTICE);
+    echo '<h1>' . $title . '</h1>';
+    echo '<pre>';
+    print_r($var);
+    echo '</pre>';
+}
