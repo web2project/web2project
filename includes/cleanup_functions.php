@@ -189,11 +189,6 @@ function temp_filterArrayForSelectTree($projectData)
  *  on one place only. Permission flags used in the DB
  */
 
-define('PERM_DENY', '0');
-define('PERM_EDIT', '-1');
-define('PERM_READ', '1');
-
-define('PERM_ALL', '-1');
 
 // TODO: getDeny* should return true/false instead of 1/0
 
