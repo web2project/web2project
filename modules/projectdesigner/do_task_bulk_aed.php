@@ -185,7 +185,7 @@ if (is_array($selected) && count($selected)) {
                 }
             }
             $upd_task = new CTask();
-            $upd_task->load($key);
+            $upd_task->load($val);
             if ($upd_task->task_id) {
                 $upd_task->updateAssigned($bulk_task_assign, $hperc_assign_ar, false, false);
             }
@@ -198,7 +198,7 @@ if (is_array($selected) && count($selected)) {
         //Action: Unassign User
         if (isset($_POST['bulk_task_unassign']) && $bulk_task_unassign != '') {
             $upd_task = new CTask();
-            $upd_task->load($key);
+            $upd_task->load($val);
             if ($upd_task->task_id) {
                 $upd_task->removeAssigned($bulk_task_unassign);
             }
@@ -207,7 +207,7 @@ if (is_array($selected) && count($selected)) {
         // Action: Allow user to add task logs for others
         if (isset($_POST['bulk_task_allow_other_user_tasklogs']) && $bulk_task_allow_other_user_tasklogs != '') {
             $upd_task = new CTask();
-            $upd_task->load($key);
+            $upd_task->load($val);
             if ($upd_task->task_id) {
                 $upd_task->task_allow_other_user_tasklogs = $bulk_task_allow_other_user_tasklogs;
                 $result = $upd_task->store();
