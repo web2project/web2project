@@ -66,7 +66,7 @@ $this->obj->overrideDatabase($this->mockDB);
 
     public function testObjectProperties()
     {
-        parent::objectPropertiesTest('CProject', 29);
+        parent::objectPropertiesTest('CProject', 31);
     }
 
     /**
@@ -126,15 +126,15 @@ $this->obj->overrideDatabase($this->mockDB);
         $this->obj->bind($this->post_data);
 
         /**
-         * Verify we got the proper error message
+         * Verify we didn't get this error message.
          */
-        $this->assertFalse($this->obj->store());
-        $this->assertArrayHasKey('project_priority', $this->obj->getError());
+        $this->assertTrue($this->obj->store());
+        $this->assertArrayNotHasKey('project_priority', $this->obj->getError());
 
         /**
          * Verify that project id was not set
          */
-        $this->AssertEquals(0, $this->obj->project_id);
+        $this->assertGreaterThan(0, $this->obj->project_id);
     }
 
     /**
@@ -166,15 +166,15 @@ $this->obj->overrideDatabase($this->mockDB);
         $this->obj->bind($this->post_data);
 
         /**
-         * Verify we got the proper error message
+         * Verify we didn't get this error message.
          */
-        $this->assertFalse($this->obj->store());
-        $this->assertArrayHasKey('project_type', $this->obj->getError());
+        $this->assertTrue($this->obj->store());
+        $this->assertArrayNotHasKey('project_type', $this->obj->getError());
 
         /**
          * Verify that project id was not set
          */
-        $this->AssertEquals(0, $this->obj->project_id);
+        $this->assertGreaterThan(0, $this->obj->project_id);
     }
 
     /**
@@ -186,15 +186,15 @@ $this->obj->overrideDatabase($this->mockDB);
         $this->obj->bind($this->post_data);
 
         /**
-         * Verify we got the proper error message
+         * Verify we didn't get this error message.
          */
-        $this->assertFalse($this->obj->store());
-        $this->assertArrayHasKey('project_status', $this->obj->getError());
+        $this->assertTrue($this->obj->store());
+        $this->assertArrayNotHasKey('project_status', $this->obj->getError());
 
         /**
          * Verify that project id was not set
          */
-        $this->AssertEquals(0, $this->obj->project_id);
+        $this->assertGreaterThan(0, $this->obj->project_id);
     }
 
     /**
@@ -206,15 +206,15 @@ $this->obj->overrideDatabase($this->mockDB);
         $this->obj->bind($this->post_data);
 
         /**
-         * Verify we got the proper error message
+         * Verify we didn't get this error message.
          */
-        $this->assertFalse($this->obj->store());
-        $this->assertArrayHasKey('project_creator', $this->obj->getError());
+        $this->assertTrue($this->obj->store());
+        $this->assertArrayNotHasKey('project_creator', $this->obj->getError());
 
         /**
          * Verify that project id was not set
          */
-        $this->AssertEquals(0, $this->obj->project_id);
+        $this->assertGreaterThan(0, $this->obj->project_id);
     }
 
     /**
@@ -239,7 +239,7 @@ $this->obj->overrideDatabase($this->mockDB);
          *  These fields are from the $_POST but are modified in the store().
          */
         $this->assertEquals('2009-06-28 00:00:00',       $this->obj->project_start_date);
-        $this->assertEquals('2009-07-28 23:59:59',       $this->obj->project_end_date);
+        $this->assertEquals('2009-07-28 00:00:00',       $this->obj->project_end_date);
         /*
          *  These fields come from the $_POST data and should be pass throughs.
          */
