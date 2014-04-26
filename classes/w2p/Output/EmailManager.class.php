@@ -13,7 +13,7 @@
  * @author      D. Keith Casey, Jr. <caseydk@users.sourceforge.net>
  */
 
-use Web2project\Output\EmailTemplate;
+use Web2project\Output\Email\Template as EmailTemplate;
 
 class w2p_Output_EmailManager
 {
