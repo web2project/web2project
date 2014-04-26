@@ -450,7 +450,7 @@ function __extract_from_showtask2($arr, $level, $today_view, $s, $m, $jsTaskId, 
         } else {
             $image = w2PfindImage('shim.gif', $m);
         }
-        $s .= '<img src="' . $image . '" />';
+        $s .= '<img src="' . $image . '" width="16" height="12"  border="0" alt=""/>';
     }
     if ($arr['task_description']) {
         $s .= w2PtoolTip('Task Description', substr($arr['task_description'], 0, 1000), true);
