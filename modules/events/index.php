@@ -105,7 +105,7 @@ if($last_time->getDayOfWeek() != 6) {
 $links = array();
 
 // assemble the links for the tasks
-getTaskLinks($first_time, $last_time, $links, 20, $company_id);
+getTaskLinks($first_time, $last_time, $links, 20, $company_id, false, $AppUI->userid);
 
 // assemble the links for the events
 getEventLinks($first_time, $last_time, $links, 20);
