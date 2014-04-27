@@ -37,7 +37,7 @@ $allowedTasks = $task->getAllowedSQL($AppUI->user_id, 'file_task');
 
 // setup the title block
 $titleBlock = new w2p_Theme_TitleBlock('Files', 'icon.png', $m);
-$titleBlock->addFilterCell('Filter', 'project_id', $projects, $project_id);
+//$titleBlock->addFilterCell('Filter', 'project_id', $projects, $project_id);
 
 // override the $canEdit variable passed from the main index.php in order to check folder permissions
 /** get permitted folders **/
@@ -57,15 +57,16 @@ if (!$limited) {
 }
 
 //$canCreate = $fObj->canCreate();
-$canCreateFolder = $cfObj->canCreate();
+//$canCreateFolder = $cfObj->canCreate();
 
-if ($canCreateFolder) {};
-$titleBlock->addCell();
-    $titleBlock->addButton('new folder', '?m=files&a=addedit_folder');
+//if ($canCreateFolder) {    $titleBlock->addButton('new folder', '?m=files&a=addedit_folder');
+//};
+//if ( $canCreate&&$canEdit)  $titleBlock->addButton('new file', '?m=files&a=addedit&folder=' . $folder);
+	$titleBlock->addCell();
+    $titleBlock->addButton('new folder', '?m=files&a=addedit');
 	
 		
 	
-//if ( $canCreate)  $titleBlock->addButton('new file', '?m=files&a=addedit&folder=' . $folder);
 
 $titleBlock->show();
 
