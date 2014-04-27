@@ -3,7 +3,8 @@
  * @package     web2project\modules\misc
  */
 
-class CResource extends w2p_Core_BaseObject {
+class CResource extends w2p_Core_BaseObject
+{
     public $resource_id = null;
     public $resource_key = null;
     public $resource_name = null;
@@ -28,9 +29,8 @@ class CResource extends w2p_Core_BaseObject {
 
         return (count($this->_error)) ? false : true;
     }
-    /*
-     * This is only here for backwards compatibility
-     *
+
+    /**
      * @deprecated
      */
     public function &loadTypes() {
@@ -39,9 +39,7 @@ class CResource extends w2p_Core_BaseObject {
         return $this->typeSelect();
     }
 
-    /*
-     * This is only here for backwards compatibility
-     *
+    /**
      * @deprecated
      */
     public function typeSelect() {
@@ -58,9 +56,7 @@ class CResource extends w2p_Core_BaseObject {
         return $typelist;
     }
 
-    /*
-     * This is only here for backwards compatibility
-     *
+    /**
      * @deprecated
      */
     public function getTypeName() {

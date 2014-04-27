@@ -2,7 +2,6 @@
 /**
  * @package     web2project\modules\misc
  *
- * @todo    new query object
  * @todo    refactor static methods
  */
 

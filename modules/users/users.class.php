@@ -5,10 +5,7 @@
  * @todo    refactor modules/admin to modules/users
  * @todo    new query object
  * @todo    refactor static methods
- * @todo    remove declarations before the class
  */
-
-$utypes = w2PgetSysVal('UserType');
 
 class CUser extends w2p_Core_BaseObject
 {
@@ -250,7 +247,7 @@ class CUser extends w2p_Core_BaseObject
         return $userId;
     }
 
-    /*
+    /**
      * @deprecated
      */
     public static function getUserIdByToken($token)
@@ -268,7 +265,7 @@ class CUser extends w2p_Core_BaseObject
         return (string) $users[$contactId]['user_id'];
     }
 
-    /*
+    /**
      * @deprecated
      */
     public static function getUserIdByContactID($contactId)
@@ -297,7 +294,7 @@ class CUser extends w2p_Core_BaseObject
         return true;
     }
 
-    /*
+    /**
      * @deprecated
      */
     public static function generateUserToken($userId, $token = '')
@@ -352,7 +349,7 @@ class CUser extends w2p_Core_BaseObject
         return $this->contact_department;
     }
 
-    /*
+    /**
      * @deprecated
      */
     public static function getUserDeptId($user_id)
@@ -382,7 +379,7 @@ class CUser extends w2p_Core_BaseObject
         return $q->loadList();
     }
 
-    /*
+    /**
      * @deprecated
      */
     public static function getLogs($userId, $startDate, $endDate)
@@ -409,16 +406,16 @@ class CUser extends w2p_Core_BaseObject
     }
 
     /**
-     * Function that checks if a user is active or not (i.e. are they able to login to the system)
-     * @param int $user_id id of the use to check
-     * @return boolean	true if active, false o/w
+     * * Function that checks if a user is active or not (i.e. are they able to login to the system)
+     * @param $userId
+     * @return mixed
      */
     public function isActive($userId)
     {
         return $this->_perms->isUserPermitted($userId);
     }
 
-    /*
+    /**
      * @deprecated
      */
     public static function isUserActive($user_id)

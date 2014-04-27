@@ -2,10 +2,7 @@
 /**
  * @package     web2project\modules\core
  *
- * @todo    refactor to modules/events
- * @todo    new query object
  * @todo    refactor static methods
- * @todo    remove declarations before the class
  */
 
 class CEvent extends w2p_Core_BaseObject

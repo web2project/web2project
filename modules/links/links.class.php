@@ -103,5 +103,4 @@ class CLink extends w2p_Core_BaseObject
 
         return $search;
     }
-
 }

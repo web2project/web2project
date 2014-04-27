@@ -4,8 +4,8 @@
  * @package     web2project\modules\core
  */
 
-class CSmartSearch {
-
+class CSmartSearch
+{
 	public $table = null;
 	public $table_alias = null;
 	public $table_module = null;
@@ -24,7 +24,8 @@ class CSmartSearch {
 	public $keywords = null;
 	public $search_options = null;
 
-	public function fetchResults(&$permissions, &$record_count) {
+	public function fetchResults(&$permissions, &$record_count)
+    {
 		global $AppUI;
         $outstring = '';
 
@@ -72,15 +73,18 @@ class CSmartSearch {
 		return $outstring;
 	}
 
-	public function setKeyword($keyw) {
+	public function setKeyword($keyw)
+    {
 		$this->keyword = $keyw;
 	}
-	public function setAdvanced($search_opts) {
+	public function setAdvanced($search_opts)
+    {
 		$this->search_options = $search_opts;
 		$this->keywords = $search_opts['keywords'];
 	}
 
-	public function _buildQuery() {
+	public function _buildQuery()
+    {
 		$q = new w2p_Database_Query;
 
 		if ($this->table_alias) {

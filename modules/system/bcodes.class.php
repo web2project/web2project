@@ -167,5 +167,4 @@ class CSystem_Bcode extends w2p_Core_BaseObject
 
         return $results;
     }
-
 }

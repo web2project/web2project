@@ -1,10 +1,10 @@
 <?php
-
 /**
  * @package     web2project\modules\core
  */
 
-class CSystem_SysVal extends w2p_Core_BaseObject {
+class CSystem_SysVal extends w2p_Core_BaseObject
+{
 	public $sysval_id = null;
 	public $sysval_key_id = null;
 	public $sysval_title = null;
@@ -25,14 +25,15 @@ class CSystem_SysVal extends w2p_Core_BaseObject {
         return (count($this->_error)) ? false : true;
     }
 
-	public function __construct($key = null, $title = null, $value = null) {
+	public function __construct($key = null, $title = null, $value = null)
+    {
         parent::__construct('sysvals', 'sysval_id', 'system');
 		$this->sysval_key_id = $key;
 		$this->sysval_title = $title;
 		$this->sysval_value = $value;
 	}
 
-    /*
+    /**
      * NOTE: This function is a simplified version from the w2p_Core_BaseObject
      *   because that version of the function applies filtering that kills our
      *   required fields which legitimately have <'s and >'s.
@@ -49,7 +50,8 @@ class CSystem_SysVal extends w2p_Core_BaseObject {
 		}
 	}
 
-	public function store($unused = null) {
+	public function store($unused = null)
+    {
         $this->w2PTrimAll();
 
 		$values = parseFormatSysval($this->sysval_value, $this->sysval_key_id);

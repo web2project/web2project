@@ -1,20 +1,7 @@
 <?php
 /**
  * @package     web2project\modules\misc
- * @todo    remove declarations before the class
  */
-
-if (!isset($AppUI)) {
-    $AppUI = new w2p_Core_CAppUI();
-}
-
-$filters = array('- Filters -');
-
-if (isset($a) && $a == 'viewer') {
-    array_push($filters, 'My Watched', 'Last 30 days');
-} else {
-    array_push($filters, 'My Forums', 'My Watched', 'My Projects', 'My Company', 'Inactive Projects');
-}
 
 class CForum extends w2p_Core_BaseObject
 {
@@ -209,5 +196,4 @@ class CForum extends w2p_Core_BaseObject
 
         return $search;
     }
-
 }

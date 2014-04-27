@@ -2,24 +2,8 @@
 /**
  *
  * @package     web2project\modules\core
- * @todo    new query object
- * @todo    refactor static methods
- * @todo    remove declarations before the class
+ * @todo        refactor static methods
  */
-
-$pstatus = w2PgetSysVal('ProjectStatus');
-$ptype = w2PgetSysVal('ProjectType');
-
-$ppriority_name = w2PgetSysVal('ProjectPriority');
-$ppriority_color = w2PgetSysVal('ProjectPriorityColor');
-
-$priority = array();
-foreach ($ppriority_name as $key => $val) {
-    $priority[$key]['name'] = $val;
-}
-foreach ($ppriority_color as $key => $val) {
-    $priority[$key]['color'] = $val;
-}
 
 class CProject extends w2p_Core_BaseObject
 {

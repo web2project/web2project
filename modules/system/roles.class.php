@@ -21,8 +21,6 @@
  * deleted, unless the user is.
  *
  * @package     web2project\modules\core
- *
- * @todo    new query object
  */
 
 class CSystem_Role extends w2p_Core_BaseObject {
