@@ -5927,6 +5927,7 @@ function __extract_from_tasks_pinning($AppUI, $task_id)
         if (!$result) {
             $AppUI->setMsg('Pinning ', UI_MSG_ERROR, true);
         }
-        $AppUI->redirect('', -1);
+		$task->load($task_id);
+        $AppUI->redirect('m=projects&a=view&project_id='.$task->task_project, -1);
     }
 }
