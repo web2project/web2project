@@ -5478,13 +5478,13 @@ function __extract_from_projects_gantt4($row)
 {
     if ($row['task_end_date'] == '0000-00-00 00:00:00') {
         if ($row['task_duration']) {
-            $start_date = new w2p_Utilities_Date($row['task_start_date']);
-            $start_date->addDuration($row['task_duration'], $row['task_duration_type']);
-            $row['task_end_date'] = $start_date->format(FMT_DATETIME_MYSQL);
+            $date = new w2p_Utilities_Date($row['task_start_date']);
+            $date->addDuration($row['task_duration'], $row['task_duration_type']);
         } else {
-            $todaydate = new w2p_Utilities_Date();
-            $row['task_end_date'] = $todaydate->format(FMT_TIMESTAMP_DATE);
+            $date = new w2p_Utilities_Date();
         }
+
+        $row['task_end_date'] = $date->format(FMT_TIMESTAMP_DATE);
     }
 
     return $row['task_end_date'];
