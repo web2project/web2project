@@ -573,3 +573,154 @@ function w2PsessionStart()
     $session = new w2p_System_Session();
     return $session->start();
 }
+
+
+function db_connect($host = 'localhost', $dbname, $user = 'root', $passwd = '', $persist = false)
+{
+    trigger_error(__FUNCTION__ . " has been deprecated in v3.2 and will be removed in v5.0. Please use w2p_Database_Connection->db_connect instead.", E_USER_NOTICE );
+
+    global $db;
+
+    $connection = new w2p_Database_Connection($db);
+    $connection->db_connect($host, $dbname, $user, $passwd, $persist);
+}
+
+function db_error()
+{
+    trigger_error(__FUNCTION__ . " has been deprecated in v3.2 and will be removed in v5.0. Please use w2p_Database_Connection->db_error instead.", E_USER_NOTICE );
+
+    global $db;
+
+    $connection = new w2p_Database_Connection($db);
+    return $connection->db_error();
+}
+
+function db_errno()
+{
+    trigger_error(__FUNCTION__ . " has been deprecated in v3.2 and will be removed in v5.0. Please use w2p_Database_Connection->db_errno instead.", E_USER_NOTICE );
+
+    global $db;
+
+    $connection = new w2p_Database_Connection($db);
+    return $connection->db_errno();
+}
+
+function db_insert_id()
+{
+    trigger_error(__FUNCTION__ . " has been deprecated in v3.2 and will be removed in v5.0. Please use w2p_Database_Connection->db_insert_id instead.", E_USER_NOTICE );
+
+    global $db;
+
+    $connection = new w2p_Database_Connection($db);
+    return $connection->db_insert_id();
+}
+
+function db_exec($sql)
+{
+    trigger_error(__FUNCTION__ . " has been deprecated in v3.2 and will be removed in v5.0. Please use w2p_Database_Connection->db_exec instead.", E_USER_NOTICE );
+
+    global $db, $w2p_performance_dbtime, $w2p_performance_old_dbqueries;
+
+    $connection = new w2p_Database_Connection($db);
+    return $connection->db_exec($sql, $w2p_performance_dbtime, $w2p_performance_old_dbqueries);
+}
+
+function db_free_result($cur)
+{
+    trigger_error(__FUNCTION__ . " has been deprecated in v3.2 and will be removed in v5.0. Please use w2p_Database_Connection->db_free_result instead.", E_USER_NOTICE );
+
+    global $db;
+
+    $connection = new w2p_Database_Connection($db);
+    $connection->db_free_result($cur);
+}
+
+function db_num_rows($qid)
+{
+    trigger_error(__FUNCTION__ . " has been deprecated in v3.2 and will be removed in v5.0. Please use w2p_Database_Connection->db_num_rows instead.", E_USER_NOTICE );
+
+    global $db;
+
+    $connection = new w2p_Database_Connection($db);
+    return $connection->db_num_rows($qid);
+}
+
+function db_fetch_row(&$qid)
+{
+    trigger_error(__FUNCTION__ . " has been deprecated in v3.2 and will be removed in v5.0. Please use w2p_Database_Connection->db_fetch_row instead.", E_USER_NOTICE );
+
+    global $db;
+
+    $connection = new w2p_Database_Connection($db);
+    return $connection->db_fetch_row($qid);
+}
+
+function db_fetch_assoc(&$qid)
+{
+    trigger_error(__FUNCTION__ . " has been deprecated in v3.2 and will be removed in v5.0. Please use w2p_Database_Connection->db_fetch_assoc instead.", E_USER_NOTICE );
+
+    global $db;
+
+    $connection = new w2p_Database_Connection($db);
+    return $connection->db_fetch_assoc($qid);
+}
+
+function db_fetch_array(&$qid)
+{
+    trigger_error(__FUNCTION__ . " has been deprecated in v3.2 and will be removed in v5.0. Please use w2p_Database_Connection->db_fetch_array instead.", E_USER_NOTICE );
+
+    global $db;
+
+    $connection = new w2p_Database_Connection($db);
+    return $connection->db_fetch_array($qid);
+}
+
+function db_fetch_object($qid)
+{
+    trigger_error(__FUNCTION__ . " has been deprecated in v3.2 and will be removed in v5.0. Please use w2p_Database_Connection->db_fetch_object instead.", E_USER_NOTICE );
+
+    global $db;
+
+    $connection = new w2p_Database_Connection($db);
+    return $connection->db_fetch_object($qid);
+}
+
+function db_escape($str)
+{
+    trigger_error(__FUNCTION__ . " has been deprecated in v3.2 and will be removed in v5.0. Please use w2p_Database_Connection->db_escape instead.", E_USER_NOTICE );
+
+    global $db;
+
+    $connection = new w2p_Database_Connection($db);
+    return $connection->db_escape($str);
+}
+
+function db_version()
+{
+    trigger_error(__FUNCTION__ . " has been deprecated in v3.2 and will be removed in v5.0. Please use w2p_Database_Connection->db_version instead.", E_USER_NOTICE );
+
+    global $db;
+
+    $connection = new w2p_Database_Connection($db);
+    return $connection->db_version();
+}
+
+function db_unix2dateTime($time)
+{
+    trigger_error(__FUNCTION__ . " has been deprecated in v3.2 and will be removed in v5.0. Please use w2p_Database_Connection->db_unix2dateTime instead.", E_USER_NOTICE );
+
+    global $db;
+
+    $connection = new w2p_Database_Connection($db);
+    return $connection->db_unix2dateTime($time);
+}
+
+function db_dateTime2unix($time)
+{
+    trigger_error(__FUNCTION__ . " has been deprecated in v3.2 and will be removed in v5.0. Please use w2p_Database_Connection->db_dateTime2unix instead.", E_USER_NOTICE );
+
+    global $db;
+
+    $connection = new w2p_Database_Connection($db);
+    return $connection->db_dateTime2unix($time);
+}
