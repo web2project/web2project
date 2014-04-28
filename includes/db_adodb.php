@@ -17,8 +17,8 @@ require_once (W2P_BASE_DIR . '/lib/adodb/adodb.inc.php');
 
 $db = NewADOConnection(w2PgetConfig('dbtype'));
 
-// make the connection to the db
-db_connect(w2PgetConfig('dbhost'), w2PgetConfig('dbname'), w2PgetConfig('dbuser'), w2PgetConfig('dbpass'), w2PgetConfig('dbpersist'));
+$connection = new w2p_Database_Connection($db);
+$connection->connect(w2PgetConfig('dbhost'), w2PgetConfig('dbname'), w2PgetConfig('dbuser'), w2PgetConfig('dbpass'), w2PgetConfig('dbpersist'));
 
 $charset = w2PgetConfig('dbchar', 'utf8');
 /** This explicitly sets the character set of the connection. */
