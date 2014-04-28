@@ -104,7 +104,7 @@ if($last_time->getDayOfWeek() != 6) {
 
 $links = array();
 $user_filter=0;
-if ($event_filter=='my') $user_filter=$AppUI->userid;
+if ($event_filter=='my') $user_filter=$AppUI->user_id;
 // assemble the links for the tasks
 getTaskLinks($first_time, $last_time, $links, 20, $company_id, false, $user_filter);
 
