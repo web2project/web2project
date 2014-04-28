@@ -1628,7 +1628,7 @@ class w2p_Database_Query {
 				continue;
 			}
 			if ($k == $keyName) { // PK not to be updated
-				$this->addWhere($keyName . ' = \'' . db_escape($v) . '\'');
+				$this->addWhere($keyName . ' = \'' . (int) $v . '\'');
 				continue;
 			}
 			if ($v === null && !$updateNulls) {
