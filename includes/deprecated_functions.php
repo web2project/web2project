@@ -510,3 +510,66 @@ function showFVar(&$var, $title = '')
     print_r($var);
     echo '</pre>';
 }
+
+
+function w2PsessionOpen()
+{
+    trigger_error(__FUNCTION__ . " has been deprecated in v3.2 and will be removed in v5.0.", E_USER_NOTICE );
+
+    return true;
+}
+
+function w2PsessionClose()
+{
+    trigger_error(__FUNCTION__ . " has been deprecated in v3.2 and will be removed in v5.0.", E_USER_NOTICE );
+
+    return true;
+}
+
+function w2PsessionRead($id)
+{
+    trigger_error(__FUNCTION__ . " has been deprecated in v3.2 and will be removed in v5.0. Please use w2p_System_Session->" . __FUNCTION__ . " instead.", E_USER_NOTICE );
+
+    $session = new w2p_System_Session();
+    return $session->w2PsessionRead($id);
+}
+
+function w2PsessionWrite($id, $data)
+{
+    trigger_error(__FUNCTION__ . " has been deprecated in v3.2 and will be removed in v5.0. Please use w2p_System_Session->" . __FUNCTION__ . " instead.", E_USER_NOTICE );
+
+    $session = new w2p_System_Session();
+    return $session->w2PsessionWrite($id, $data);
+}
+
+function w2PsessionDestroy($id)
+{
+    trigger_error(__FUNCTION__ . " has been deprecated in v3.2 and will be removed in v5.0. Please use w2p_System_Session->" . __FUNCTION__ . " instead.", E_USER_NOTICE );
+
+    $session = new w2p_System_Session();
+    return $session->w2PsessionDestroy($id);
+}
+
+function w2PsessionGC()
+{
+    trigger_error(__FUNCTION__ . " has been deprecated in v3.2 and will be removed in v5.0. Please use w2p_System_Session->" . __FUNCTION__ . " instead.", E_USER_NOTICE );
+
+    $session = new w2p_System_Session();
+    return $session->w2PsessionGC();
+}
+
+function w2PsessionConvertTime($key)
+{
+    trigger_error(__FUNCTION__ . " has been deprecated in v3.2 and will be removed in v5.0. Please use w2p_System_Session->" . __FUNCTION__ . " instead.", E_USER_NOTICE );
+
+    $session = new w2p_System_Session();
+    return $session->w2PsessionConvertTime($key);
+}
+
+function w2PsessionStart()
+{
+    trigger_error(__FUNCTION__ . " has been deprecated in v3.2 and will be removed in v5.0. Please use w2p_System_Session->" . __FUNCTION__ . " instead.", E_USER_NOTICE );
+
+    $session = new w2p_System_Session();
+    return $session->w2PsessionStart();
+}
