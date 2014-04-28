@@ -86,19 +86,14 @@ foreach ($task_list as $tid) {
 
 if (count($tasks)) {
 	$q->clear();
-	$q->addQuery('a.task_id, a.perc_assignment, b.*, c.*');
+	$q->addQuery('a.*, contact_display_name');
 	$q->addTable('user_tasks', 'a');
 	$q->addJoin('users', 'b', 'a.user_id = b.user_id', 'inner');
 	$q->addJoin('contacts', 'c', 'b.user_contact = c.contact_id', 'inner');
 	$q->addWhere('a.task_id IN (' . implode(',', $task_list) . ')');
-	$res = $q->exec();
-	if (!$res) {
-		$AppUI->setMsg(db_error(), UI_MSG_ERROR);
-		$q->clear();
-		$AppUI->redirect();
-	}
-	while ($row = db_fetch_assoc($res)) {
-		$assigned_users[$row['task_id']][$row['user_id']] = $row[contact_first_name] . ' ' . $row[contact_last_name] . ' [' . $row[perc_assignment] . '%]';
+	$rows = $q->loadHashList('task_id');
+    foreach($rows as $row) {
+		$assigned_users[$row['task_id']][$row['user_id']] = $row['contact_display_name'] . ' [' . $row['perc_assignment'] . '%]';
 	}
 	$q->clear();
 }
