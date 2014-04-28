@@ -582,7 +582,7 @@ function db_connect($host = 'localhost', $dbname, $user = 'root', $passwd = '', 
     global $db;
 
     $connection = new w2p_Database_Connection($db);
-    $connection->db_connect($host, $dbname, $user, $passwd, $persist);
+    $connection->connect($host, $dbname, $user, $passwd, $persist);
 }
 
 function db_error()
@@ -592,7 +592,7 @@ function db_error()
     global $db;
 
     $connection = new w2p_Database_Connection($db);
-    return $connection->db_error();
+    return $connection->error();
 }
 
 function db_errno()
@@ -602,7 +602,7 @@ function db_errno()
     global $db;
 
     $connection = new w2p_Database_Connection($db);
-    return $connection->db_errno();
+    return $connection->errno();
 }
 
 function db_insert_id()
@@ -612,7 +612,7 @@ function db_insert_id()
     global $db;
 
     $connection = new w2p_Database_Connection($db);
-    return $connection->db_insert_id();
+    return $connection->insert_id();
 }
 
 function db_exec($sql)
@@ -622,7 +622,7 @@ function db_exec($sql)
     global $db, $w2p_performance_dbtime, $w2p_performance_old_dbqueries;
 
     $connection = new w2p_Database_Connection($db);
-    return $connection->db_exec($sql, $w2p_performance_dbtime, $w2p_performance_old_dbqueries);
+    return $connection->exec($sql, $w2p_performance_dbtime, $w2p_performance_old_dbqueries);
 }
 
 function db_free_result($cur)
@@ -632,7 +632,7 @@ function db_free_result($cur)
     global $db;
 
     $connection = new w2p_Database_Connection($db);
-    $connection->db_free_result($cur);
+    $connection->free_result($cur);
 }
 
 function db_num_rows($qid)
@@ -642,7 +642,7 @@ function db_num_rows($qid)
     global $db;
 
     $connection = new w2p_Database_Connection($db);
-    return $connection->db_num_rows($qid);
+    return $connection->num_rows($qid);
 }
 
 function db_fetch_row(&$qid)
@@ -652,7 +652,7 @@ function db_fetch_row(&$qid)
     global $db;
 
     $connection = new w2p_Database_Connection($db);
-    return $connection->db_fetch_row($qid);
+    return $connection->fetch_row($qid);
 }
 
 function db_fetch_assoc(&$qid)
@@ -662,7 +662,7 @@ function db_fetch_assoc(&$qid)
     global $db;
 
     $connection = new w2p_Database_Connection($db);
-    return $connection->db_fetch_assoc($qid);
+    return $connection->fetch_assoc($qid);
 }
 
 function db_fetch_array(&$qid)
@@ -672,7 +672,7 @@ function db_fetch_array(&$qid)
     global $db;
 
     $connection = new w2p_Database_Connection($db);
-    return $connection->db_fetch_array($qid);
+    return $connection->fetch_array($qid);
 }
 
 function db_fetch_object($qid)
@@ -682,7 +682,7 @@ function db_fetch_object($qid)
     global $db;
 
     $connection = new w2p_Database_Connection($db);
-    return $connection->db_fetch_object($qid);
+    return $connection->fetch_object($qid);
 }
 
 function db_escape($str)
@@ -692,7 +692,7 @@ function db_escape($str)
     global $db;
 
     $connection = new w2p_Database_Connection($db);
-    return $connection->db_escape($str);
+    return $connection->escape($str);
 }
 
 function db_version()
@@ -702,7 +702,7 @@ function db_version()
     global $db;
 
     $connection = new w2p_Database_Connection($db);
-    return $connection->db_version();
+    return $connection->version();
 }
 
 function db_unix2dateTime($time)
@@ -712,7 +712,7 @@ function db_unix2dateTime($time)
     global $db;
 
     $connection = new w2p_Database_Connection($db);
-    return $connection->db_unix2dateTime($time);
+    return $connection->unix2dateTime($time);
 }
 
 function db_dateTime2unix($time)
@@ -722,5 +722,5 @@ function db_dateTime2unix($time)
     global $db;
 
     $connection = new w2p_Database_Connection($db);
-    return $connection->db_dateTime2unix($time);
+    return $connection->dateTime2unix($time);
 }

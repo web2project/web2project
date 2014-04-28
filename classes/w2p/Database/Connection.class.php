@@ -9,7 +9,7 @@ class w2p_Database_Connection
         $this->db = $db;
     }
 
-    public function db_connect($host = 'localhost', $dbname, $user = 'root', $passwd = '', $persist = false)
+    public function connect($host = 'localhost', $dbname, $user = 'root', $passwd = '', $persist = false)
     {
         global $ADODB_FETCH_MODE;
 
@@ -35,7 +35,7 @@ class w2p_Database_Connection
         $ADODB_FETCH_MODE = ADODB_FETCH_BOTH;
     }
 
-    public function db_error()
+    public function error()
     {
         if (!is_object($this->db)) {
             dprint(__file__, __line__, 0, 'Database object does not exist.');
@@ -44,7 +44,7 @@ class w2p_Database_Connection
         return $this->db->ErrorMsg();
     }
 
-    public function db_errno()
+    public function errno()
     {
         if (!is_object($this->db)) {
             dprint(__file__, __line__, 0, 'Database object does not exist.');
@@ -53,7 +53,7 @@ class w2p_Database_Connection
         return $this->db->ErrorNo();
     }
 
-    public function db_insert_id()
+    public function insert_id()
     {
         if (!is_object($this->db)) {
             dprint(__file__, __line__, 0, 'Database object does not exist.');
@@ -62,7 +62,7 @@ class w2p_Database_Connection
         return $this->db->Insert_ID();
     }
 
-    public function db_exec($sql, $w2p_performance_dbtime, $w2p_performance_old_dbqueries)
+    public function exec($sql, $w2p_performance_dbtime, $w2p_performance_old_dbqueries)
     {
         if (W2P_PERFORMANCE_DEBUG) {
             $startTime = array_sum(explode(' ', microtime()));
@@ -94,7 +94,7 @@ class w2p_Database_Connection
         return $qid;
     }
 
-    public function db_free_result($cur)
+    public function free_result($cur)
     {
         if (!is_object($cur)) {
             dprint(__file__, __line__, 0, 'Invalid object passed to db_free_result.');
@@ -102,7 +102,7 @@ class w2p_Database_Connection
         $cur->Close();
     }
 
-    public function db_num_rows($qid)
+    public function num_rows($qid)
     {
         if (!is_object($qid)) {
             dprint(__file__, __line__, 0, 'Invalid object passed to db_num_rows.');
@@ -111,7 +111,7 @@ class w2p_Database_Connection
         return $qid->RecordCount();
     }
 
-    public function db_fetch_row(&$qid)
+    public function fetch_row(&$qid)
     {
         if (!is_object($qid)) {
             dprint(__file__, __line__, 0, 'Invalid object passed to db_fetch_row.');
@@ -120,7 +120,7 @@ class w2p_Database_Connection
         return $qid->FetchRow();
     }
 
-    public function db_fetch_assoc(&$qid)
+    public function fetch_assoc(&$qid)
     {
         if (!is_object($qid)) {
             dprint(__file__, __line__, 0, 'Invalid object passed to db_fetch_assoc.');
@@ -129,7 +129,7 @@ class w2p_Database_Connection
         return $qid->FetchRow();
     }
 
-    public function db_fetch_array(&$qid)
+    public function fetch_array(&$qid)
     {
         if (!is_object($qid)) {
             dprint(__file__, __line__, 0, 'Invalid object passed to db_fetch_array.');
@@ -146,7 +146,7 @@ class w2p_Database_Connection
         return $result;
     }
 
-    public function db_fetch_object($qid)
+    public function fetch_object($qid)
     {
         if (!is_object($qid)) {
             dprint(__file__, __line__, 0, 'Invalid object passed to db_fetch_object.');
@@ -155,22 +155,22 @@ class w2p_Database_Connection
         return $qid->FetchNextObject(false);
     }
 
-    public function db_escape($str)
+    public function escape($str)
     {
         return substr($this->db->qstr($str), 1, -1);
     }
 
-    public function db_version()
+    public function version()
     {
         return 'ADODB';
     }
 
-    public function db_unix2dateTime($time)
+    public function unix2dateTime($time)
     {
         return $this->db->DBDate($time);
     }
 
-    public function db_dateTime2unix($time)
+    public function dateTime2unix($time)
     {
         return $this->db->UnixDate($time);
     }
