@@ -62,10 +62,8 @@ class w2p_Database_Connection
         return $this->db->Insert_ID();
     }
 
-    public function db_exec($sql)
+    public function db_exec($sql, $w2p_performance_dbtime, $w2p_performance_old_dbqueries)
     {
-        global $w2p_performance_dbtime, $w2p_performance_old_dbqueries;
-
         if (W2P_PERFORMANCE_DEBUG) {
             $startTime = array_sum(explode(' ', microtime()));
         }

@@ -4124,185 +4124,117 @@ function db_connect($host = 'localhost', $dbname, $user = 'root', $passwd = '', 
 {
     global $db, $ADODB_FETCH_MODE;
 
-    switch (strtolower(trim(w2PgetConfig('dbtype')))) {
-        case 'oci8':
-        case 'oracle':
-            if ($persist) {
-                $db->PConnect($host, $user, $passwd, $dbname) or die('FATAL ERROR: Connection to database server failed');
-            } else {
-                $db->Connect($host, $user, $passwd, $dbname) or die('FATAL ERROR: Connection to database server failed');
-            }
-            if (!defined('ADODB_ASSOC_CASE')) define('ADODB_ASSOC_CASE', 0);
-            break;
-        default:
-        //mySQL
-            if ($persist) {
-                $db->PConnect($host, $user, $passwd, $dbname) or die('FATAL ERROR: Connection to database server failed');
-            } else {
-                $db->Connect($host, $user, $passwd, $dbname) or die('FATAL ERROR: Connection to database server failed');
-            }
-    }
-
-    $ADODB_FETCH_MODE = ADODB_FETCH_BOTH;
+    $connection = new w2p_Database_Connection($db);
+    $connection->db_connect($host, $dbname, $user, $passwd, $persist);
 }
 
 function db_error()
 {
     global $db;
-    if (!is_object($db)) {
-        dprint(__file__, __line__, 0, 'Database object does not exist.');
-    }
-
-    return $db->ErrorMsg();
+    $connection = new w2p_Database_Connection($db);
+    return $connection->db_error();
 }
 
 function db_errno()
 {
     global $db;
-    if (!is_object($db)) {
-        dprint(__file__, __line__, 0, 'Database object does not exist.');
-    }
-
-    return $db->ErrorNo();
+    $connection = new w2p_Database_Connection($db);
+    return $connection->db_errno();
 }
 
 function db_insert_id()
 {
     global $db;
-    if (!is_object($db)) {
-        dprint(__file__, __line__, 0, 'Database object does not exist.');
-    }
-
-    return $db->Insert_ID();
+    $connection = new w2p_Database_Connection($db);
+    return $connection->db_insert_id();
 }
 
 function db_exec($sql)
 {
     global $db, $w2p_performance_dbtime, $w2p_performance_old_dbqueries;
 
-    if (W2P_PERFORMANCE_DEBUG) {
-        $startTime = array_sum(explode(' ', microtime()));
-    }
-
-    if (!is_object($db)) {
-        dprint(__file__, __line__, 0, 'Database object does not exist.');
-    }
-    $qid = $db->Execute($sql);
-    dprint(__file__, __line__, 10, $sql);
-    if (db_error()) {
-        dprint(__file__, __line__, 0, "Error executing: <pre>$sql</pre>");
-        // Useless statement, but it is being executed only on error,
-        // and it stops infinite loop.
-        $db->Execute($sql);
-        if (!db_error()) {
-            echo '<script language="JavaScript"> location.reload(); </script>';
-        }
-    }
-    if (!$qid && preg_match('/^\<select\>/i', $sql)) {
-        dprint(__file__, __line__, 0, $sql);
-    }
-
-    if (W2P_PERFORMANCE_DEBUG) {
-        ++$w2p_performance_old_dbqueries;
-        $w2p_performance_dbtime += array_sum(explode(' ', microtime())) - $startTime;
-    }
-
-    return $qid;
+    $connection = new w2p_Database_Connection($db);
+    return $connection->db_exec($sql, $w2p_performance_dbtime, $w2p_performance_old_dbqueries);
 }
 
 function db_free_result($cur)
 {
-    // TODO
-    //	mysql_free_result( $cur );
-    // Maybe it's done my Adodb
-    if (!is_object($cur)) {
-        dprint(__file__, __line__, 0, 'Invalid object passed to db_free_result.');
-    }
-    $cur->Close();
+    global $db;
+
+    $connection = new w2p_Database_Connection($db);
+    $connection->db_free_result($cur);
 }
 
 function db_num_rows($qid)
 {
-    if (!is_object($qid)) {
-        dprint(__file__, __line__, 0, 'Invalid object passed to db_num_rows.');
-    }
+    global $db;
 
-    return $qid->RecordCount();
+    $connection = new w2p_Database_Connection($db);
+    return $connection->db_num_rows($qid);
 }
 
 function db_fetch_row(&$qid)
 {
-    if (!is_object($qid)) {
-        dprint(__file__, __line__, 0, 'Invalid object passed to db_fetch_row.');
-    }
+    global $db;
 
-    return $qid->FetchRow();
+    $connection = new w2p_Database_Connection($db);
+    return $connection->db_fetch_row($qid);
 }
 
 function db_fetch_assoc(&$qid)
 {
-    if (!is_object($qid)) {
-        dprint(__file__, __line__, 0, 'Invalid object passed to db_fetch_assoc.');
-    }
+    global $db;
 
-    return $qid->FetchRow();
+    $connection = new w2p_Database_Connection($db);
+    return $connection->db_fetch_assoc($qid);
 }
 
 function db_fetch_array(&$qid)
 {
-    if (!is_object($qid)) {
-        dprint(__file__, __line__, 0, 'Invalid object passed to db_fetch_array.');
-    }
-    $result = $qid->FetchRow();
-    // Ensure there are numerics in the result.
-    if ($result && !isset($result[0])) {
-        $ak = array_keys($result);
-        foreach ($ak as $k => $v) {
-            $result[$k] = $result[$v];
-        }
-    }
+    global $db;
 
-    return $result;
+    $connection = new w2p_Database_Connection($db);
+    return $connection->db_fetch_array($qid);
 }
 
 function db_fetch_object($qid)
 {
-    if (!is_object($qid)) {
-        dprint(__file__, __line__, 0, 'Invalid object passed to db_fetch_object.');
-    }
+    global $db;
 
-    return $qid->FetchNextObject(false);
+    $connection = new w2p_Database_Connection($db);
+    return $connection->db_fetch_object($qid);
 }
 
 function db_escape($str)
 {
     global $db;
 
-    return substr($db->qstr($str), 1, -1);
+    $connection = new w2p_Database_Connection($db);
+    return $connection->db_escape($str);
 }
 
 function db_version()
 {
-    return 'ADODB';
+    global $db;
+
+    $connection = new w2p_Database_Connection($db);
+    return $connection->db_version();
 }
 
 function db_unix2dateTime($time)
 {
     global $db;
 
-    return $db->DBDate($time);
+    $connection = new w2p_Database_Connection($db);
+    return $connection->db_unix2dateTime($time);
 }
 
 function db_dateTime2unix($time)
 {
     global $db;
 
-    return $db->UnixDate($time);
-
-    // TODO - check if it's used anywhere...
-    //	if ($time == '0000-00-00 00:00:00') {
-    //		return -1;
-    //	}
+    $connection = new w2p_Database_Connection($db);
+    return $connection->db_dateTime2unix($time);
 }
 
 /**
