@@ -112,21 +112,15 @@ if (!is_array($projects) || sizeof($projects) == 0) {
             $start_min = date('Y-m-d H:i:s');
             //pull the tasks into an array
             foreach ($proTasks as $rec) {
-                if ($rec['task_start_date'] == '0000-00-00 00:00:00') {
-                    $rec['task_start_date'] = date('Y-m-d H:i:s');
-                }
+                $rec['task_start_date'] = __extract_from_projects_gantt3($rec);
+
                 $tsd = new w2p_Utilities_Date($rec['task_start_date']);
                 if ($tsd->before(new w2p_Utilities_Date($start_min))) {
                     $start_min = $rec['task_start_date'];
                 }
-                // calculate or set blank task_end_date if unset
-                if ($rec['task_end_date'] == '0000-00-00 00:00:00') {
-                    if ($rec['task_duration']) {
-                        $rec['task_end_date'] = db_unix2dateTime(db_dateTime2unix($rec['task_start_date']) + SECONDS_PER_DAY * convert2days($rec['task_duration'], $rec['task_duration_type']));
-                    } else {
-                        $rec['task_end_date'] = '';
-                    }
-                }
+
+                $rec['task_end_date'] = __extract_from_projects_gantt4($rec);
+
                 $ted = new w2p_Utilities_Date($rec['task_end_date']);
                 if ($ted->after(new w2p_Utilities_Date($end_max))) {
                     $end_max = $rec['task_end_date'];

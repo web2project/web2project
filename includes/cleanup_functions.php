@@ -5631,3 +5631,45 @@ function __extract_from_tasks_pinning($AppUI, $task_id)
         $AppUI->redirect('', -1);
     }
 }
+
+/**
+ * Check if start date exists, if not try giving it the end date. If the end date does not exist then set it for
+ *   today. This avoids jpgraphs internal errors that render the gantt completely useless
+ *
+ * @param $row
+ * @return array
+ */
+function __extract_from_projects_gantt3($row)
+{
+    if ($row['task_start_date'] == '0000-00-00 00:00:00') {
+        if ($row['task_end_date'] == '0000-00-00 00:00:00') {
+            $todaydate = new w2p_Utilities_Date();
+            $row['task_start_date'] = $todaydate->format(FMT_TIMESTAMP_DATE);
+        } else {
+            $row['task_start_date'] = $row['task_end_date'];
+        }
+    }
+    return $row['task_start_date'];
+}
+
+/**
+ * Check if end date exists, if not try giving it the start date. If the start date does not exist then set it for
+ *   today. This avoids jpgraphs internal errors that render the gantt completely useless
+ *
+ * @param $row
+ * @return array
+ */
+function __extract_from_projects_gantt4($row)
+{
+    if ($row['task_end_date'] == '0000-00-00 00:00:00') {
+        if ($row['task_duration']) {
+            $row['task_end_date'] = db_unix2dateTime(db_dateTime2unix($row['task_start_date']) + SECONDS_PER_DAY * convert2days($row['task_duration'], $row['task_duration_type']));
+        } else {
+            $todaydate = new w2p_Utilities_Date();
+            $row['task_end_date'] = $todaydate->format(FMT_TIMESTAMP_DATE);
+        }
+    }
+
+    return $row['task_end_date'];
+}
+

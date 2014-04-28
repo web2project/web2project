@@ -104,6 +104,8 @@ if (!$start_date || !$end_date) {
 $gantt->setDateRange($start_date, $end_date);
 
 $row = 0;
+
+
 if (!is_array($projects) || 0 == count($projects)) {
     $d = new w2p_Utilities_Date();
     $columnValues = array('project_name' => $AppUI->_('No projects found'), 
@@ -163,29 +165,9 @@ if (!is_array($projects) || 0 == count($projects)) {
                 $name = $t['task_name'];
                 $name = ((mb_strlen($name) > 34) ? (mb_substr($name, 0, 30) . '...') : $name);
 
-                //Check if start date exists, if not try giving it the end date.
-                //If the end date does not exist then set it for today.
-                //This avoids jpgraphs internal errors that render the gantt completely useless
-                if ($t['task_start_date'] == '0000-00-00 00:00:00') {
-                    if ($t['task_end_date'] == '0000-00-00 00:00:00') {
-                        $todaydate = new w2p_Utilities_Date();
-                        $t['task_start_date'] = $todaydate->format(FMT_TIMESTAMP_DATE);
-                    } else {
-                        $t['task_start_date'] = $t['task_end_date'];
-                    }
-                }
+                $t['task_start_date'] = __extract_from_projects_gantt3($t);
 
-                //Check if end date exists, if not try giving it the start date.
-                //If the start date does not exist then set it for today.
-                //This avoids jpgraphs internal errors that render the gantt completely useless
-                if ($t['task_end_date'] == '0000-00-00 00:00:00') {
-                    if ($t['task_duration']) {
-                        $t['task_end_date'] = db_unix2dateTime(db_dateTime2unix($t['task_start_date']) + SECONDS_PER_DAY * convert2days($t['task_duration'], $t['task_duration_type']));
-                    } else {
-                        $todaydate = new w2p_Utilities_Date();
-                        $t['task_end_date'] = $todaydate->format(FMT_TIMESTAMP_DATE);
-                    }
-                }
+                $t['task_end_date'] = __extract_from_projects_gantt4($t);
 
                 $tStart = intval($t['task_start_date']) ? $t['task_start_date'] : $start;
                 $tEnd = intval($t['task_end_date']) ? $t['task_end_date'] : $end;
