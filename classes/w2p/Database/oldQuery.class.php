@@ -148,7 +148,7 @@ class w2p_Database_oldQuery {
             }
 
             if ($k == $keyName) { // PK not to be updated
-                $this->addWhere($keyName . ' = \'' . db_escape($v) . '\'');
+                $this->addWhere($keyName . ' = \'' . (int) $v . '\'');
                 continue;
             }
             $fields[] = $k;
