@@ -1,9 +1,4 @@
 {
-    "require": {
-
-    },
-    "autoload": {
-        "psr-0": { "Web2project": "src/"}
     "name": "web2project/core",
     "type": "application",
     "keywords": ["web2project", "project management", "gantt"],
