@@ -14,15 +14,6 @@ class w2p_Database_Connection
         global $ADODB_FETCH_MODE;
 
         switch (strtolower(trim(w2PgetConfig('dbtype')))) {
-            case 'oci8':
-            case 'oracle':
-                if ($persist) {
-                    $this->db->PConnect($host, $user, $passwd, $dbname) or die('FATAL ERROR: Connection to database server failed');
-                } else {
-                    $this->db->Connect($host, $user, $passwd, $dbname) or die('FATAL ERROR: Connection to database server failed');
-                }
-                if (!defined('ADODB_ASSOC_CASE')) define('ADODB_ASSOC_CASE', 0);
-                break;
             default:
                 //mySQL
                 if ($persist) {
