@@ -52,7 +52,7 @@ if (isset($_GET['out_user_id']) && $_GET['out_user_id']
 		} else {
 			addHistory('login', $boot_user_id, 'logout', $details);
             $session = new w2p_System_Session();
-            $session->w2PsessionDestroy($boot_user_session, $boot_user_log_id);
+            $session->destroy($boot_user_session, $boot_user_log_id);
 		}
 
 		if ($boot_query_row) {

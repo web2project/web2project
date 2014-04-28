@@ -11,17 +11,17 @@
 
 class w2p_System_Session
 {
-    public function w2PsessionOpen()
+    public function open()
     {
         return true;
     }
 
-    public function w2PsessionClose()
+    public function close()
     {
         return true;
     }
 
-    public function w2PsessionRead($id)
+    public function read($id)
     {
         $q = new w2p_Database_Query;
         $q->addTable('sessions');
@@ -34,13 +34,13 @@ class w2p_System_Session
             dprint(__file__, __line__, 11, 'Failed to retrieve session ' . $id);
             $data = '';
         } else {
-            $max = $this->w2PsessionConvertTime('max_lifetime');
-            $idle = $this->w2PsessionConvertTime('idle_time');
+            $max = $this->convertTime('max_lifetime');
+            $idle = $this->convertTime('idle_time');
             // If the idle time or the max lifetime is exceeded, trash the
             // session.
             if ($max < $qid->fields['session_lifespan'] || $idle < $qid->fields['session_idle']) {
                 dprint(__file__, __line__, 11, "session $id expired");
-                $this->w2PsessionDestroy($id);
+                $this->destroy($id);
                 $data = '';
             } else {
                 $data = $qid->fields['session_data'];
@@ -51,7 +51,7 @@ class w2p_System_Session
         return $data;
     }
 
-    public function w2PsessionWrite($id, $data)
+    public function write($id, $data)
     {
         global $AppUI;
 
@@ -81,7 +81,7 @@ class w2p_System_Session
         return true;
     }
 
-    public function w2PsessionDestroy($id)
+    public function destroy($id)
     {
         $q = new w2p_Database_Query;
         $q->addTable('user_access_log');
@@ -103,12 +103,12 @@ class w2p_System_Session
         return true;
     }
 
-    public function w2PsessionGC()
+    public function gc()
     {
         global $AppUI;
 
-        $max = $this->w2PsessionConvertTime('max_lifetime');
-        $idle = $this->w2PsessionConvertTime('idle_time');
+        $max = $this->convertTime('max_lifetime');
+        $idle = $this->convertTime('idle_time');
         // First pass is to kill any users that are logged in at the time of the session.
         $where = 'UNIX_TIMESTAMP() - UNIX_TIMESTAMP(session_updated) > ' . $idle . ' OR UNIX_TIMESTAMP() - UNIX_TIMESTAMP(session_created) > ' . $max;
         $q = new w2p_Database_Query;
@@ -142,7 +142,7 @@ class w2p_System_Session
         return true;
     }
 
-    public function w2PsessionConvertTime($key)
+    public function convertTime($key)
     {
         $key = 'session_' . $key;
 
@@ -173,7 +173,7 @@ class w2p_System_Session
         return $numpart;
     }
 
-    public function w2PsessionStart()
+    public function start()
     {
         session_name('web2project');
         if (ini_get('session.auto_start') > 0) {
@@ -183,10 +183,10 @@ class w2p_System_Session
             ini_set('session.save_handler', 'user');
             register_shutdown_function('session_write_close');
             session_set_save_handler(
-                array($this, 'w2PsessionOpen'),     array($this, 'w2PsessionClose'),
-                array($this, 'w2PsessionRead'),     array($this, 'w2PsessionWrite'),
-                array($this, 'w2PsessionDestroy'),  array($this, 'w2PsessionGC'));
-            $max_time = $this->w2PsessionConvertTime('max_lifetime');
+                array($this, 'open'),     array($this, 'close'),
+                array($this, 'read'),     array($this, 'write'),
+                array($this, 'destroy'),  array($this, 'gc'));
+            $max_time = $this->convertTime('max_lifetime');
         } else {
             $max_time = 0; // Browser session only.
         }

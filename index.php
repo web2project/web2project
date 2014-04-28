@@ -34,7 +34,7 @@ date_default_timezone_set($defaultTZ);
 $suppressHeaders = w2PgetParam($_GET, 'suppressHeaders', false);
 
 $session = new w2p_System_Session();
-$session->w2PsessionStart();
+$session->start();
 
 // write the HTML headers
 if (!$suppressHeaders) {

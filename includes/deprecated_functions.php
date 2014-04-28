@@ -528,48 +528,48 @@ function w2PsessionClose()
 
 function w2PsessionRead($id)
 {
-    trigger_error(__FUNCTION__ . " has been deprecated in v3.2 and will be removed in v5.0. Please use w2p_System_Session->" . __FUNCTION__ . " instead.", E_USER_NOTICE );
+    trigger_error(__FUNCTION__ . " has been deprecated in v3.2 and will be removed in v5.0. Please use w2p_System_Session->read instead.", E_USER_NOTICE );
 
     $session = new w2p_System_Session();
-    return $session->w2PsessionRead($id);
+    return $session->read($id);
 }
 
 function w2PsessionWrite($id, $data)
 {
-    trigger_error(__FUNCTION__ . " has been deprecated in v3.2 and will be removed in v5.0. Please use w2p_System_Session->" . __FUNCTION__ . " instead.", E_USER_NOTICE );
+    trigger_error(__FUNCTION__ . " has been deprecated in v3.2 and will be removed in v5.0. Please use w2p_System_Session->write instead.", E_USER_NOTICE );
 
     $session = new w2p_System_Session();
-    return $session->w2PsessionWrite($id, $data);
+    return $session->write($id, $data);
 }
 
 function w2PsessionDestroy($id)
 {
-    trigger_error(__FUNCTION__ . " has been deprecated in v3.2 and will be removed in v5.0. Please use w2p_System_Session->" . __FUNCTION__ . " instead.", E_USER_NOTICE );
+    trigger_error(__FUNCTION__ . " has been deprecated in v3.2 and will be removed in v5.0. Please use w2p_System_Session->destroy instead.", E_USER_NOTICE );
 
     $session = new w2p_System_Session();
-    return $session->w2PsessionDestroy($id);
+    return $session->destroy($id);
 }
 
 function w2PsessionGC()
 {
-    trigger_error(__FUNCTION__ . " has been deprecated in v3.2 and will be removed in v5.0. Please use w2p_System_Session->" . __FUNCTION__ . " instead.", E_USER_NOTICE );
+    trigger_error(__FUNCTION__ . " has been deprecated in v3.2 and will be removed in v5.0. Please use w2p_System_Session->gc instead.", E_USER_NOTICE );
 
     $session = new w2p_System_Session();
-    return $session->w2PsessionGC();
+    return $session->gc();
 }
 
 function w2PsessionConvertTime($key)
 {
-    trigger_error(__FUNCTION__ . " has been deprecated in v3.2 and will be removed in v5.0. Please use w2p_System_Session->" . __FUNCTION__ . " instead.", E_USER_NOTICE );
+    trigger_error(__FUNCTION__ . " has been deprecated in v3.2 and will be removed in v5.0. Please use w2p_System_Session->convertTime instead.", E_USER_NOTICE );
 
     $session = new w2p_System_Session();
-    return $session->w2PsessionConvertTime($key);
+    return $session->convertTime($key);
 }
 
 function w2PsessionStart()
 {
-    trigger_error(__FUNCTION__ . " has been deprecated in v3.2 and will be removed in v5.0. Please use w2p_System_Session->" . __FUNCTION__ . " instead.", E_USER_NOTICE );
+    trigger_error(__FUNCTION__ . " has been deprecated in v3.2 and will be removed in v5.0. Please use w2p_System_Session->start instead.", E_USER_NOTICE );
 
     $session = new w2p_System_Session();
-    return $session->w2PsessionStart();
+    return $session->start();
 }
