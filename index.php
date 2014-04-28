@@ -33,8 +33,8 @@ date_default_timezone_set($defaultTZ);
 // don't output anything. Usefull for fileviewer.php, gantt.php, etc.
 $suppressHeaders = w2PgetParam($_GET, 'suppressHeaders', false);
 
-// manage the session variable(s)
-w2PsessionStart(array('AppUI'));
+$session = new w2p_System_Session();
+$session->w2PsessionStart();
 
 // write the HTML headers
 if (!$suppressHeaders) {

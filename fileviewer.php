@@ -7,7 +7,9 @@ require_once W2P_BASE_DIR . '/includes/db_adodb.php';
 
 $loginFromPage = 'fileviewer.php';
 
-w2PsessionStart();
+$session = new w2p_System_Session();
+$session->w2PsessionStart();
+
 $AppUI = is_object($AppUI) ? $AppUI : new w2p_Core_CAppUI();
 // check if session has previously been initialised
 // if no ask for logging and do redirect

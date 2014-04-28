@@ -34,13 +34,13 @@ class w2p_System_Session
             dprint(__file__, __line__, 11, 'Failed to retrieve session ' . $id);
             $data = '';
         } else {
-            $max = w2PsessionConvertTime('max_lifetime');
-            $idle = w2PsessionConvertTime('idle_time');
+            $max = $this->w2PsessionConvertTime('max_lifetime');
+            $idle = $this->w2PsessionConvertTime('idle_time');
             // If the idle time or the max lifetime is exceeded, trash the
             // session.
             if ($max < $qid->fields['session_lifespan'] || $idle < $qid->fields['session_idle']) {
                 dprint(__file__, __line__, 11, "session $id expired");
-                w2PsessionDestroy($id);
+                $this->w2PsessionDestroy($id);
                 $data = '';
             } else {
                 $data = $qid->fields['session_data'];
@@ -107,8 +107,8 @@ class w2p_System_Session
     {
         global $AppUI;
 
-        $max = w2PsessionConvertTime('max_lifetime');
-        $idle = w2PsessionConvertTime('idle_time');
+        $max = $this->w2PsessionConvertTime('max_lifetime');
+        $idle = $this->w2PsessionConvertTime('idle_time');
         // First pass is to kill any users that are logged in at the time of the session.
         $where = 'UNIX_TIMESTAMP() - UNIX_TIMESTAMP(session_updated) > ' . $idle . ' OR UNIX_TIMESTAMP() - UNIX_TIMESTAMP(session_created) > ' . $max;
         $q = new w2p_Database_Query;
@@ -182,8 +182,11 @@ class w2p_System_Session
         if (w2PgetConfig('session_handling') == 'app') {
             ini_set('session.save_handler', 'user');
             register_shutdown_function('session_write_close');
-            session_set_save_handler('w2PsessionOpen', 'w2PsessionClose', 'w2PsessionRead', 'w2PsessionWrite', 'w2PsessionDestroy', 'w2PsessionGC');
-            $max_time = w2PsessionConvertTime('max_lifetime');
+            session_set_save_handler(
+                array($this, 'w2PsessionOpen'),     array($this, 'w2PsessionClose'),
+                array($this, 'w2PsessionRead'),     array($this, 'w2PsessionWrite'),
+                array($this, 'w2PsessionDestroy'),  array($this, 'w2PsessionGC'));
+            $max_time = $this->w2PsessionConvertTime('max_lifetime');
         } else {
             $max_time = 0; // Browser session only.
         }

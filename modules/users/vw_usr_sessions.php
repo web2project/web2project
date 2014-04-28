@@ -51,7 +51,8 @@ if (isset($_GET['out_user_id']) && $_GET['out_user_id']
 			$AppUI->redirect('logout=-1');
 		} else {
 			addHistory('login', $boot_user_id, 'logout', $details);
-			w2PsessionDestroy($boot_user_session, $boot_user_log_id);
+            $session = new w2p_System_Session();
+            $session->w2PsessionDestroy($boot_user_session, $boot_user_log_id);
 		}
 
 		if ($boot_query_row) {
