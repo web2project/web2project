@@ -17,12 +17,6 @@ if ($err = db_error()) {
 	$AppUI->redirect();
 }
 
-$output = new w2p_Output_PDFRenderer('A4', 'landscape');
-$output->addTitle($AppUI->_('Project Completed Task Report'));
-$output->addDate($df);
-$output->addSubtitle(w2PgetConfig('company_name'));
-$output->addSubtitle($pname);
-
 $date = new w2p_Utilities_Date();
 $last_week = new w2p_Utilities_Date($date);
 $last_week->subtractSpan(new Date_Span(array(7, 0, 0, 0)));
@@ -132,5 +126,11 @@ foreach ($tasks as $task_id => $detail) {
 	$row[] = $end_date->format($df);
 }
 
+
+$output = new w2p_Output_PDFRenderer('A4', 'landscape');
+$output->addTitle($AppUI->_('Project Completed Task Report'));
+$output->addDate($df);
+$output->addSubtitle(w2PgetConfig('company_name'));
+$output->addSubtitle($pname);
 $output->addTable($title, $columns, $pdfdata, $options);
 $output->getStream();
