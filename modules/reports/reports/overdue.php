@@ -87,7 +87,7 @@ foreach ($task_list as $tid) {
 
 if (count($tasks)) {
 	$q->clear();
-	$q->addQuery('a.task_id, a.perc_assignment, b.*, c.*');
+    $q->addQuery('a.*, contact_display_name');
 	$q->addTable('user_tasks', 'a');
 	$q->addJoin('users', 'b', 'a.user_id = b.user_id', 'inner');
 	$q->addJoin('contacts', 'c', 'b.user_contact = c.contact_id', 'inner');
@@ -99,7 +99,7 @@ if (count($tasks)) {
 		$AppUI->redirect();
 	}
 	while ($row = db_fetch_assoc($res)) {
-		$assigned_users[$row['task_id']][$row['user_id']] = $row[contact_first_name] . ' ' . $row[contact_last_name] . ' [' . $row[perc_assignment] . '%]';
+        $assigned_users[$row['task_id']][$row['user_id']] = $row['contact_display_name'] . ' [' . $row['perc_assignment'] . '%]';
 	}
 	$q->clear();
 }
