@@ -74,7 +74,6 @@ class w2p_Output_ListTable extends w2p_Output_HTMLHelper
         foreach ($this->_fieldKeys as $column) {
             $row .= $this->createCell($column, $rowData[$column], $customLookups);
         }
-        $row .= $this->_buildBeforeCells($this->_after);
         $row .= '</tr>';
 
         return $row;
