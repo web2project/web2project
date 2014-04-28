@@ -102,13 +102,8 @@ if ($hasResources && count($tasks)) {
 	$q->addTable('resource_tasks', 'a');
 	$q->addJoin('resources', 'b', 'a.resource_id = b.resource_id', 'inner');
 	$q->addWhere('a.task_id IN (' . implode(',', $task_list) . ')');
-	$res = $q->exec();
-	if (!$res) {
-		$AppUI->setMsg(db_error(), UI_MSG_ERROR);
-		$q->clear();
-		$AppUI->redirect();
-	}
-	while ($row = db_fetch_assoc($res)) {
+    $rows = $q->loadHashList('resource_id');
+    foreach($rows as $row) {
 		$resources[$row['task_id']][$row['resource_id']] = $row['resource_name'] . ' [' . $row['percent_allocated'] . '%]';
 	}
 	$q->clear();
