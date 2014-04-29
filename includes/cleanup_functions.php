@@ -2340,11 +2340,8 @@ function getDepartmentSelectionList($company_id, $checked_array = array(), $dept
     $parsed = '';
 
     if ($AppUI->isActiveModule('departments') && canView('departments')) {
-        if ($departments_count < 6) {
-            $departments_count++;
-        }
-
-        $depts_list = CDepartment::getDepartmentList($AppUI, $company_id, $dept_parent);
+        $department = new CDepartment();
+        $depts_list = $department->departments($company_id, $dept_parent);
 
         foreach ($depts_list as $dept_id => $dept_info) {
             $selected = in_array($dept_id, $checked_array) ? ' selected="selected"' : '';
