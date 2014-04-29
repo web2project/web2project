@@ -377,12 +377,12 @@ class CCompanies_Test extends CommonSetup
 
     public function testGetCompanies()
     {
-        $results = $this->obj->getCompanies();
+        $results = $this->obj->loadAll();
         $this->assertEquals(0,                  count($results));
 
         $this->mockDB->stageHashList(1, array('company_id' => 1, 'company_name' => 'First Company'));
         $this->mockDB->stageHashList(2, array('company_id' => 2, 'company_name' => 'Second Company'));
-        $results = $this->obj->getCompanies();
+        $results = $this->obj->loadAll();
 
         $this->assertEquals(2,                  count($results));
         $this->assertEquals('First Company',    $results[1]['company_name']);
