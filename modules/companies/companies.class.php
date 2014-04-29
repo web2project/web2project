@@ -230,6 +230,8 @@ class CCompany extends w2p_Core_BaseObject {
 
     /** @deprecated */
     public function getCompanies() {
+        trigger_error("The CCompany->getCompanies method has been deprecated in 3.2 and will be removed in v5.0. Please use CCompany->loadAll() instead.", E_USER_NOTICE );
+
         return $this->loadAll();
     }
     /**
