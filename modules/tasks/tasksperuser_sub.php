@@ -267,7 +267,7 @@ if ($do_report) {
 	foreach ($task_list_hash as $task_id => $task_data) {
 		$task = new CTask();
 		$task->load($task_id);
-		$task_users = $task->getAssignedUsers($task_id);
+		$task_users = $task->assignees($task_id);
 		foreach (array_keys($task_users) as $key => $uid) {
 			$user_assigned_tasks[$uid][] = $task_id;
 		}

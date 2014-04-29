@@ -98,7 +98,7 @@ $theme = $AppUI->getTheme();
                         <?php } ?>
                     </div>
                     <a class="button" href="javascript: void(0);" onclick="javascript:window.open('?m=help&amp;dialog=1&amp;hid=', 'contexthelp', 'width=800, height=300, left=50, top=50, scrollbars=yes, resizable=yes')"><span><?php echo $AppUI->_('Help'); ?></span></a>
-                    <a class="button" href="./index.php?m=admin&amp;a=view&amp;user_id=<?php echo $AppUI->user_id; ?>"><span><?php echo $AppUI->_('My Info'); ?></span></a>
+                    <a class="button" href="./index.php?m=users&amp;a=view&amp;user_id=<?php echo $AppUI->user_id; ?>"><span><?php echo $AppUI->_('My Info'); ?></span></a>
                     <?php if (canAccess('tasks')) { ?>
                         <a class="button" href="./index.php?m=tasks&amp;a=todo"><span><b><?php echo $AppUI->_('My Tasks'); ?></b></span></a>
                     <?php } ?>

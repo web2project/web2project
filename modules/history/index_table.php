@@ -15,6 +15,7 @@ $histories = $history->loadAll('history_date DESC', $where);
 
 $items = array_values($histories);
 
+$display = array();
 $perms = $AppUI->acl();
 foreach ($items as $item) {
     if (!$perms->checkModuleItem($item['history_table'], 'view', $item['history_item'])) {

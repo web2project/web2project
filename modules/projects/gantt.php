@@ -186,7 +186,7 @@ if (!is_array($projects) || 0 == count($projects)) {
                 }
 
                 $task->task_id = $t['task_id'];
-                $workers = $task->getAssigned();
+                $workers = $task->assignees($task->task_id);
                 foreach ($workers as $w) {
                     $columnValues = array('user_name' => '    * '.$w['user_name'],
                         'start_date' => $tStart, 'end_date' => $tEnd, 'actual_end' => '');

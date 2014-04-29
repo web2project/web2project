@@ -204,7 +204,7 @@ $q->clear();
                 <label><?php echo $AppUI->_('User'); ?>:</label>
                 <?php
                 //TODO: update for arraySelect()
-                foreach ($task->getAssignedUsers($task_id) as $task_user) {
+                foreach ($task->assignees($task_id) as $task_user) {
                     $task_user['user_id'] == $user_id ? $selected = 'selected="selected"' : $selected = '';
                     ?>
                     <option <?php echo $selected; ?> value="<?php echo $task_user['user_id']; ?>"><?php echo $task_user['contact_first_name'] . ' ' . $task_user['contact_last_name']; ?></option>

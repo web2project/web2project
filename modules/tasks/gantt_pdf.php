@@ -250,7 +250,7 @@ foreach ($gtask_sliced as $gts) {
         }
 
         if ($showLabels == '1') {
-            $res = $task->getAssignedUsers($a['task_id']);
+            $res = $task->assignees($a['task_id']);
             foreach ($res as $rw) {
                 switch ($rw['perc_assignment']) {
                     case 100:

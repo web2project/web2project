@@ -181,7 +181,7 @@ if ($do_report) {
 		$str .= '<td>' . nl2br($task['task_description']) . '</td>';
 
         $users = array();
-        $assignees = $obj->getAssignedUsers($task['task_id']);
+        $assignees = $obj->assignees($task['task_id']);
         foreach($assignees as $assignee) {
             $users[] = $assignee['contact_name'];
         }

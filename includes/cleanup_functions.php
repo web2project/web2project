@@ -4050,7 +4050,7 @@ function getTaskTooltip($task_id)
     // load the event types
     $types = w2PgetSysVal('TaskType');
 
-    $assignees = $task->getAssigned();
+    $assignees = $task->assignees($task_id);
     $assigned = array();
     foreach ($assignees as $user) {
         $assigned[] = $user['user_name'] . ' ' . $user['perc_assignment'] . '%';
