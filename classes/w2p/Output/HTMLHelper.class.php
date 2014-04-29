@@ -9,9 +9,9 @@ class w2p_Output_HTMLHelper extends w2p_Output_HTML_Base
 {
     protected $tableRowData = array();
 
+    /** @deprecated */
     public static function renderContactList(w2p_Core_CAppUI $AppUI, array $contactList)
     {
-
         $output = '<table cellspacing="1" cellpadding="2" border="0" width="100%" class="tbl">';
         $output .= '<tr><th>' . $AppUI->_('Name') . '</th><th>' . $AppUI->_('Email') . '</th>';
         $output .= '<th>' . $AppUI->_('Phone') . '</th><th>' . $AppUI->_('Department') . '</th></tr>';
