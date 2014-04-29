@@ -1296,7 +1296,7 @@ class w2p_Extensions_Permissions extends gacl_api
         } elseif ($module == 'users') {
             $mod_class = array('mod_main_class' => 'CUser', 'permissions_item_table' => 'users', 'permissions_item_field' => 'user_id', 'permissions_item_label' => 'user_username', 'mod_directory' => 'admin');
         } elseif ($module == 'events') {
-            $mod_class = array('mod_main_class' => 'CCalendar', 'permissions_item_table' => 'events', 'permissions_item_field' => 'event_id', 'permissions_item_label' => 'event_title', 'mod_directory' => 'calendar');
+            $mod_class = array('mod_main_class' => 'CEvent', 'permissions_item_table' => 'events', 'permissions_item_field' => 'event_id', 'permissions_item_label' => 'event_title', 'mod_directory' => 'calendar');
         }
         if ($op == 'view') {
             //Because view is nuclear we can't just check the permission against the results table, so we need to check the allowed records on each class, so it handles the
