@@ -166,17 +166,11 @@ if (!is_array($projects) || 0 == count($projects)) {
                 $name = ((mb_strlen($name) > 34) ? (mb_substr($name, 0, 30) . '...') : $name);
 
                 $t['task_start_date'] = __extract_from_projects_gantt3($t);
-
                 $t['task_end_date'] = __extract_from_projects_gantt4($t);
-
-                $tStart = intval($t['task_start_date']) ? $t['task_start_date'] : $start;
-                $tEnd = intval($t['task_end_date']) ? $t['task_end_date'] : $end;
-                $tStartObj = new w2p_Utilities_Date($t['task_start_date']);
-                $tEndObj = new w2p_Utilities_Date($t['task_end_date']);
 
                 if ($t['task_milestone'] != 1) {
                     $columnValues = array('task_name' => $name,
-                        'start_date' => $tStart, 'end_date' => $tEnd, 'actual_end' => '');
+                        'start_date' => $t['task_start_date'], 'end_date' => $t['task_end_date'], 'actual_end' => '');
                     $height = ($t['task_dynamic'] == 1) ? 0.1 : 0.6;
                     $gantt->addBar($columnValues, $t['task_percent_complete'].'% '.$AppUI->_('Complete'),
                         $height, $p['project_color_identifier'], $p['project_active'],
@@ -187,9 +181,10 @@ if (!is_array($projects) || 0 == count($projects)) {
 
                 $task->task_id = $t['task_id'];
                 $workers = $task->assignees($task->task_id);
+
                 foreach ($workers as $w) {
-                    $columnValues = array('user_name' => '    * '.$w['user_name'],
-                        'start_date' => $tStart, 'end_date' => $tEnd, 'actual_end' => '');
+                    $columnValues = array('user_name' => '    * '.$w['contact_display_name'],
+                        'start_date' => $t['task_start_date'], 'end_date' => $t['task_end_date'], 'actual_end' => '');
                     $height = ($t['task_dynamic'] == 1) ? 0.1 : 0.6;
                     $gantt->addBar($columnValues, $w['user_name'], 0.6, $p['project_color_identifier'],
                         true, $t['task_percent_complete'], $t['task_id']);
