@@ -15,6 +15,7 @@ $link = new CLink();
 if (!$link->canAccess()) {
     $AppUI->redirect(ACCESS_DENIED);
 }
+$canCreate = $link->canCreate();
 
 // get the list of visible companies
 $extra = array('from' => 'links', 'where' => 'projects.project_id = link_project');
@@ -32,7 +33,7 @@ $titleBlock = new w2p_Theme_TitleBlock('Links', 'icon.png', $m);
 $titleBlock->addSearchCell($search_string);
 $titleBlock->addFilterCell('Filter', 'project_id', $projects, $project_id);
 
-if ($canEdit) {
+if ($canCreate) {
     $titleBlock->addButton('New link', '?m=links&a=addedit');
 }
 $titleBlock->show();

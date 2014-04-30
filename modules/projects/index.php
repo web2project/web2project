@@ -3,7 +3,7 @@ if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
 
-$tab = $AppUI->processIntState('ProjIdxTab', $_GET, 'tab', 1);
+$tab = $AppUI->processIntState('ProjIdxTab', $_GET, 'tab', 5);
 
 $project = new CProject();
 $structprojs = $project->getProjects();
