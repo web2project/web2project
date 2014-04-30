@@ -32,7 +32,7 @@ $date = w2PgetParam($_GET, 'date', $today);
 $company = new CCompany();
 $companies = $company->getAllowedRecords($AppUI->user_id, 'company_id,company_name', 'company_name');
 $companies = arrayMerge(array('0' => $AppUI->_('All')), $companies);
-$event_filter_list = array('my' => 'My Events', 'own' => 'Events I Created', 'all' => 'All Events');
+$event_filter_list = array('my' => 'My Events for selected Company', 'own' => 'Events I Created', 'all' => 'All Events for selected Company');
 
 // setup the title block
 $titleBlock = new w2p_Theme_TitleBlock('Monthly Calendar', 'icon.png', $m);
@@ -103,9 +103,10 @@ if($last_time->getDayOfWeek() != 6) {
 }
 
 $links = array();
-
+$user_filter=0;
+if ($event_filter=='my') $user_filter=$AppUI->user_id;
 // assemble the links for the tasks
-getTaskLinks($first_time, $last_time, $links, 20, $company_id);
+getTaskLinks($first_time, $last_time, $links, 20, $company_id, false, $user_filter);
 
 // assemble the links for the events
 getEventLinks($first_time, $last_time, $links, 20);
