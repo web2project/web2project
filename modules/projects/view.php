@@ -61,8 +61,6 @@ if (canAdd('tasks')) {
     $titleBlock->addButton('new task', '?m=tasks&a=addedit&task_project=' . $project_id);
 }
 $titleBlock->show();
-
-$htmlHelper = new w2p_Output_HTMLHelper($AppUI);
 ?>
 <script language="javascript" type="text/javascript">
 function expand_multiproject(id, table_name) {

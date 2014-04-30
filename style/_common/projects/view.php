@@ -1,3 +1,8 @@
+<?php
+
+$htmlHelper = new w2p_Output_HTMLHelper($AppUI);
+
+?>
 <table id="tblProjects" class="std view projects">
 <tr>
     <td style="border: outset #d1d1cd 1px;background-color:#<?php echo $project->project_color_identifier; ?>" colspan="2" id="view-header">

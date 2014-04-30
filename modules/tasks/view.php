@@ -59,8 +59,6 @@ if ($canDelete) {
 	$titleBlock->addCrumbDelete('delete task', $canDelete, $msg);
 }
 $titleBlock->show();
-
-$htmlHelper = new w2p_Output_HTMLHelper($AppUI);
 ?>
 <script language="javascript" type="text/javascript">
 function updateTask() {
