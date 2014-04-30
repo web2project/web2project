@@ -55,15 +55,7 @@ $end_date = w2PgetParam($_GET, 'end_date', 0);
 
 $showAllGantt = w2PgetParam($_REQUEST, 'showAllGantt', '0');
 
-$gantt = new w2p_Output_GanttRenderer($AppUI, $width);
-$gantt->localize();
 
-$tableTitle = ($statusFilter == '-1') ? $AppUI->_('All Projects') : $projectStatus[$statusFilter];
-$gantt->setTitle($tableTitle);
-$columnNames = array('Project name', 'Start Date', 'Finish', 'Actual End');
-$columnSizes = array(160, 75, 75, 75);
-$gantt->setColumnHeaders($columnNames, $columnSizes);
-$gantt->setProperties(array('showhgrid' => true));
 
 if (!$start_date || !$end_date) {
     // find out DateRange from $projects array
@@ -101,6 +93,16 @@ if (!$start_date || !$end_date) {
         }
     }
 }
+
+$gantt = new w2p_Output_GanttRenderer($AppUI, $width);
+$gantt->localize();
+
+$tableTitle = ($statusFilter == '-1') ? $AppUI->_('All Projects') : $projectStatus[$statusFilter];
+$gantt->setTitle($tableTitle);
+$columnNames = array('Project name', 'Start Date', 'Finish', 'Actual End');
+$columnSizes = array(160, 75, 75, 75);
+$gantt->setColumnHeaders($columnNames, $columnSizes);
+$gantt->setProperties(array('showhgrid' => true));
 $gantt->setDateRange($start_date, $end_date);
 
 $row = 0;

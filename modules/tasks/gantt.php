@@ -122,27 +122,6 @@ if ($addLinksToGantt == '1') {
     $width = 1450 ;
 }
 
-$gantt = new w2p_Output_GanttRenderer($AppUI, $width);
-$gantt->localize();
-$pname = $projects[$project_id]['project_name'];
-$gantt->setTitle($pname, '#'.$projects[$project_id]['project_color_identifier']);
-$field = ($showWork == '1') ? 'Work' : 'Dur';
-
-if ($showTaskNameOnly == '1') {
-    $columnNames = array('Task name');
-    $columnSizes = array(300);
-} else {
-    if ($caller == 'todo') {
-        $columnNames = array('Task name', 'Project name', $field, 'Start', 'Finish');
-        $columnSizes = array(200, 160, 40, 75, 75);
-    } else {
-        $columnNames = array('Task name', $field, 'Start', 'Finish');
-        $columnSizes = array(200, 50, 80, 80);
-    }
-}
-$gantt->setColumnHeaders($columnNames, $columnSizes);
-$gantt->setProperties(array('showhgrid' => true));
-
 if (!$start_date || !$end_date) {
     // find out DateRange from gant_arr
     $d_start = new w2p_Utilities_Date();
@@ -179,6 +158,26 @@ if ('0000-00-00' == substr($start_date, 0, 10)) {
 if ('0000-00-00' == substr($end_date, 0, 10)) {
     $end_date = date('Y-m-d', time() + 60 * 60 * 24 * 7);
 }
+$gantt = new w2p_Output_GanttRenderer($AppUI, $width);
+$gantt->localize();
+$pname = $projects[$project_id]['project_name'];
+$gantt->setTitle($pname, '#'.$projects[$project_id]['project_color_identifier']);
+$field = ($showWork == '1') ? 'Work' : 'Dur';
+
+if ($showTaskNameOnly == '1') {
+    $columnNames = array('Task name');
+    $columnSizes = array(300);
+} else {
+    if ($caller == 'todo') {
+        $columnNames = array('Task name', 'Project name', $field, 'Start', 'Finish');
+        $columnSizes = array(200, 160, 40, 75, 75);
+    } else {
+        $columnNames = array('Task name', $field, 'Start', 'Finish');
+        $columnSizes = array(200, 50, 80, 80);
+    }
+}
+$gantt->setColumnHeaders($columnNames, $columnSizes);
+$gantt->setProperties(array('showhgrid' => true));
 $gantt->setDateRange($start_date, $end_date);
 
 $gantt_arr = array();
