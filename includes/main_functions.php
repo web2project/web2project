@@ -197,7 +197,7 @@ function w2PgetParam(&$arr, $name, $def = null)
             $result  = $_result;
         } else {
             $_result = strip_tags($arr[$key]);
-            $result  = preg_replace("/<>'\"\[\]{}:;/", "", $_result);
+            $result  = preg_replace("/<>\`'\"\[\]{}():;/", "", $_result);
         }
     } else {
         $result = $def;
