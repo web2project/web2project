@@ -8,6 +8,8 @@
 
 class w2p_Core_CustomFieldText extends w2p_Core_CustomField
 {
+    public $field_htmltype = 'textinput';
+
     public function getHTML($mode) {
         switch ($mode) {
             case 'edit':

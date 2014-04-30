@@ -11,7 +11,7 @@ class w2p_Core_CustomField {
     public $field_order;
     public $field_name;
     public $field_description;
-    public $field_htmltype;
+    public $field_htmltype = 'textinput';
     public $field_published;
     // TODO - data type, meant for validation if you just want numeric data in a text input
     // but not yet implemented
@@ -33,36 +33,6 @@ class w2p_Core_CustomField {
         $this->field_description = $field_description;
         $this->field_extratags = $field_extratags;
         $this->field_published = $field_published;
-
-        $class = get_class($this);
-        switch ($class) {
-            case 'w2p_Core_CustomFieldCheckBox':
-                $this->field_htmltype = 'checkbox';
-                break;
-            case 'w2p_Core_CustomFieldEmail':
-                $this->field_htmltype = 'email';
-                break;
-            case 'w2p_Core_CustomFieldLabel':
-                $this->field_htmltype = 'label';
-                break;
-            case 'w2p_Core_CustomFieldSelect':
-                $this->field_htmltype = 'select';
-                $this->options = new w2p_Core_CustomOptionList($field_id);
-                $this->options->load();
-                break;
-            case 'w2p_Core_CustomFieldSeparator':
-                $this->field_htmltype = 'separator';
-                break;
-            case 'w2p_Core_CustomFieldTextArea':
-                $this->field_htmltype = 'textarea';
-                break;
-            case 'w2p_Core_CustomFieldWeblink':
-                $this->field_htmltype = 'href';
-                break;
-            case 'w2p_Core_CustomFieldText':
-            default:
-                $this->field_htmltype = 'textinput';
-        }
     }
 
     public function load($object_id) {

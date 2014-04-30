@@ -8,6 +8,8 @@
 
 class w2p_Core_CustomFieldTextArea extends w2p_Core_CustomField
 {
+    public $field_htmltype = 'textarea';
+
     public function getHTML($mode) {
         switch ($mode) {
             case 'edit':

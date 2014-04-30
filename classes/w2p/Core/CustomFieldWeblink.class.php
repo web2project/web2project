@@ -9,6 +9,8 @@
 
 class w2p_Core_CustomFieldWeblink extends w2p_Core_CustomField
 {
+    public $field_htmltype = 'href';
+
     public function getHTML($mode) {
         switch ($mode) {
             case 'edit':

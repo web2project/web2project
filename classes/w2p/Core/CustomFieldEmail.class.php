@@ -8,6 +8,8 @@
 
 class w2p_Core_CustomFieldEmail extends w2p_Core_CustomFieldText
 {
+    public $field_htmltype = 'email';
+
     public function getHTML($mode) {
         switch ($mode) {
             case 'edit':
