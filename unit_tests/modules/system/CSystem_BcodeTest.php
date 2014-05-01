@@ -21,7 +21,7 @@
 // NOTE: This path is relative to Phing's build.xml, not this test.
 include_once 'unit_tests/CommonSetup.php';
 
-class CSystemBcode_Test extends CommonSetup
+class CSystem_BcodeTest extends CommonSetup
 {
 
     protected function setUp()
