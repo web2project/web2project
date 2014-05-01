@@ -28,7 +28,7 @@ if ($obj) {
 if (!$file && $file_id > 0) {
 	$AppUI->setMsg('File');
 	$AppUI->setMsg('invalidID', UI_MSG_ERROR, true);
-	$AppUI->redirect();
+    $AppUI->redirect('m=' . $m);
 }
 
 if (file_exists(W2P_BASE_DIR . '/modules/helpdesk/config.php')) {

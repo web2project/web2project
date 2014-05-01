@@ -39,7 +39,7 @@ $project->load($forum->forum_project);
 if (!$forum) {
 	$AppUI->setMsg('Forum');
 	$AppUI->setMsg('invalidID', UI_MSG_ERROR, true);
-	$AppUI->redirect();
+    $AppUI->redirect('m=' . $m);
 }
 
 // setup the title block

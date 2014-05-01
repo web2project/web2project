@@ -14,7 +14,7 @@ if ($project_id != 0) {
 }
 if ($err = db_error()) {
 	$AppUI->setMsg($err, UI_MSG_ERROR);
-	$AppUI->redirect();
+    $AppUI->redirect('m=' . $m);
 }
 
 $font_dir = W2P_BASE_DIR . '/lib/ezpdf/fonts';
@@ -75,7 +75,7 @@ $tasks = $q->loadHashList('task_id');
 
 if ($err = db_error()) {
 	$AppUI->setMsg($err, UI_MSG_ERROR);
-	$AppUI->redirect();
+    $AppUI->redirect('m=' . $m);
 }
 // Now grab the resources allocated to the tasks.
 $task_list = array_keys($tasks);
@@ -96,7 +96,7 @@ if (count($tasks)) {
 	if (!$res) {
 		$AppUI->setMsg(db_error(), UI_MSG_ERROR);
 		$q->clear();
-		$AppUI->redirect();
+        $AppUI->redirect('m=' . $m);
 	}
 	while ($row = db_fetch_assoc($res)) {
         $assigned_users[$row['task_id']][$row['user_id']] = $row['contact_display_name'] . ' [' . $row['perc_assignment'] . '%]';
@@ -118,7 +118,7 @@ if ($hasResources && count($tasks)) {
 	if (!$res) {
 		$AppUI->setMsg(db_error(), UI_MSG_ERROR);
 		$q->clear();
-		$AppUI->redirect();
+        $AppUI->redirect('m=' . $m);
 	}
 	while ($row = db_fetch_assoc($res)) {
 		$resources[$row['task_id']][$row['resource_id']] = $row['resource_name'] . ' [' . $row['percent_allocated'] . '%]';

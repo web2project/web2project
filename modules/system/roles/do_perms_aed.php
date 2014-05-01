@@ -30,4 +30,4 @@ if ($del) {
 		$AppUI->setMsg($obj->msg(), UI_MSG_ERROR);
 	}
 }
-$AppUI->redirect();
+$AppUI->redirect('m=system&u=roles');

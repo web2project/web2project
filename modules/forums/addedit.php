@@ -28,7 +28,7 @@ if ($obj) {
 if (!$forum && $forum_id > 0) {
     $AppUI->setMsg('Forum');
     $AppUI->setMsg('invalidID', UI_MSG_ERROR, true);
-    $AppUI->redirect();
+    $AppUI->redirect('m=' . $m);
 }
 
 $status = isset($forum->forum_status) ? $forum->forum_status : -1;

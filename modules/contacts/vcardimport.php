@@ -52,7 +52,7 @@ if (isset($_FILES['vcf']) && isset($_GET['suppressHeaders']) && (w2PgetParam($_G
 			// bind array to object
 			if (!$obj->bind($contactValues)) {
 				$AppUI->setMsg($obj->getError(), UI_MSG_ERROR);
-				$AppUI->redirect();
+                $AppUI->redirect('m=' . $m);
 			}
 
 			// store vCard data for this object
@@ -66,11 +66,11 @@ if (isset($_FILES['vcf']) && isset($_GET['suppressHeaders']) && (w2PgetParam($_G
 		}
 		// one or more vCard imports were successful
 		$AppUI->setMsg('vCard(s) imported', UI_MSG_OK, true);
-		$AppUI->redirect();
+        $AppUI->redirect('m=' . $m);
 
 	} else { // redirect in case of file upload trouble
 		$AppUI->setMsg('vCardFileUploadError', UI_MSG_ERROR);
-		$AppUI->redirect();
+        $AppUI->redirect('m=' . $m);
 	}
 } elseif (isset($_GET['dialog']) && (w2PgetParam($_GET, 'dialog', null) == '0')) { //file upload formular
 
@@ -79,7 +79,6 @@ if (isset($_FILES['vcf']) && isset($_GET['suppressHeaders']) && (w2PgetParam($_G
 	$titleBlock->show();
 
 ?>
-
 <table width="100%" border="0" cellpadding="3" cellspacing="3" class="std">
 
 	<form name="vcfFrm" action="?m=contacts&a=vcardimport&suppressHeaders=true" enctype="multipart/form-data" method="post">
@@ -93,8 +92,9 @@ if (isset($_FILES['vcf']) && isset($_GET['suppressHeaders']) && (w2PgetParam($_G
 	</tr>
 	</form>
 </table>
+<?php
 
-<?php } else { // trouble with get parameters
+} else { // trouble with get parameters
 	$AppUI->setMsg('vCardImportError', UI_MSG_ERROR);
-	$AppUI->redirect();
+    $AppUI->redirect('m=' . $m);
 }

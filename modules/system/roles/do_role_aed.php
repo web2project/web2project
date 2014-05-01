@@ -28,7 +28,6 @@ if ($success) {
         $role->copyPermissions($copy_role_id, $role->role_id);
     }
 } else {
-    $AppUI->setMsg($this->object->getError(), UI_MSG_ERROR);
+    $AppUI->setMsg($role->getError(), UI_MSG_ERROR);
 }
-
 $AppUI->redirect('m=system&u=roles');

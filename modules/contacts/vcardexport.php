@@ -101,5 +101,5 @@ if ($contact_id) {
 	print_r($text);
 } else {
 	$AppUI->setMsg('contactIdError', UI_MSG_ERROR);
-	$AppUI->redirect();
+    $AppUI->redirect('m=' . $m);
 }

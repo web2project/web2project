@@ -28,7 +28,7 @@ if ($obj) {
 if (!$project && $project_id > 0) {
 	$AppUI->setMsg('Project');
 	$AppUI->setMsg('invalidID', UI_MSG_ERROR, true);
-	$AppUI->redirect();
+    $AppUI->redirect('m=' . $m);
 }
 
 global $AppUI, $cal_sdf;
@@ -52,7 +52,7 @@ $companies = arrayMerge(array('0' => ''), $companies);
 
 if (count($companies) < 2 && $project_id == 0) {
 	$AppUI->setMsg('noCompanies', UI_MSG_ERROR, true);
-	$AppUI->redirect();
+    $AppUI->redirect('m=' . $m);
 }
 if ($project_id == 0 && $company_id > 0) {
 	$project->project_company = $company_id;

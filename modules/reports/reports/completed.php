@@ -14,7 +14,7 @@ if ($project_id != 0) {
 }
 if ($err = db_error()) {
 	$AppUI->setMsg($err, UI_MSG_ERROR);
-	$AppUI->redirect();
+    $AppUI->redirect('m=' . $m);
 }
 
 $date = new w2p_Utilities_Date();
@@ -68,7 +68,7 @@ $tasks = $q->loadHashList('task_id');
 
 if ($err = db_error()) {
 	$AppUI->setMsg($err, UI_MSG_ERROR);
-	$AppUI->redirect();
+    $AppUI->redirect('m=' . $m);
 }
 // Now grab the resources allocated to the tasks.
 $task_list = array_keys($tasks);

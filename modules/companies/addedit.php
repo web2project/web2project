@@ -29,7 +29,7 @@ if ($obj) {
 if (!$company && $company_id > 0) {
 	$AppUI->setMsg('Company');
     $AppUI->setMsg('invalidID', UI_MSG_ERROR, true);
-	$AppUI->redirect();
+    $AppUI->redirect('m=' . $m);
 }
 
 // setup the title block

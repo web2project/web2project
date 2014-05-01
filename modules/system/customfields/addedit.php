@@ -54,7 +54,7 @@ if ($field_id) {
 	} else {
 		//No such field exists with this ID
 		$AppUI->setMsg('Couldnt load the Custom Field, It might have been deleted somehow.', UI_MSG_ERROR);
-		$AppUI->redirect();
+        $AppUI->redirect('m=system&u=customfields');
 	}
 }
 

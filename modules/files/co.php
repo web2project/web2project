@@ -25,7 +25,7 @@ $obj = new CFile();
 if ($file_id > 0 && !$obj->load($file_id)) {
 	$AppUI->setMsg('File');
 	$AppUI->setMsg('invalidID', UI_MSG_ERROR, true);
-	$AppUI->redirect();
+    $AppUI->redirect('m=' . $m);
 }
 
 // setup the title block

@@ -28,7 +28,7 @@ if ($obj) {
 if (!$link && $link_id > 0) {
     $AppUI->setMsg('Link');
     $AppUI->setMsg('invalidID', UI_MSG_ERROR, true);
-    $AppUI->redirect();
+    $AppUI->redirect('m=' . $m);
 }
 
 if (0 == $link_id && ($project_id || $task_id)) {

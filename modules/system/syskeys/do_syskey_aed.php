@@ -16,6 +16,7 @@ $obj = new CSystem_SysKey();
 if (!$obj->bind($_POST)) {
 	$AppUI->setMsg($obj->getError(), UI_MSG_ERROR);
 	$AppUI->redirect();
+    $AppUI->redirect('m=system&u=syskeys&a=keys');
 }
 
 $AppUI->setMsg('System Lookup Keys', UI_MSG_ALERT);

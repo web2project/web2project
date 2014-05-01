@@ -31,14 +31,14 @@ if ($obj) {
 if (!$department && $dept_id > 0) {
     $AppUI->setMsg('Department');
     $AppUI->setMsg('invalidID', UI_MSG_ERROR, true);
-    $AppUI->redirect();
+    $AppUI->redirect('m=' . $m);
 }
 
 $company_id = $department->dept_id ? $department->dept_company : $company_id;
 
 if (!$dept_id && !$company_id) {
     $AppUI->setMsg('badCompany', UI_MSG_ERROR);
-    $AppUI->redirect();
+    $AppUI->redirect('m=companies');
 }
 
 // collect all the departments in the company

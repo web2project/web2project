@@ -134,7 +134,7 @@ if (!$project_id) {
 	if (!$obj) {
 		$AppUI->setMsg('Project');
 		$AppUI->setMsg('invalidID', UI_MSG_ERROR, true);
-		$AppUI->redirect();
+        $AppUI->redirect('m=' . $m);
 	}
 
 	// setup the title block

@@ -9,7 +9,7 @@ $del = (int) w2PgetParam($_POST, 'del', 0);
 $obj = new CFile();
 if (!$obj->bind($_POST)) {
 	$AppUI->setMsg($obj->getError(), UI_MSG_ERROR);
-	$AppUI->redirect();
+    $AppUI->redirect('m=files&a=addedit');
 }
 
 $action = ($del) ? 'deleted' : 'stored';

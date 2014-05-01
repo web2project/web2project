@@ -10,7 +10,7 @@ $notfiyTrigger = (int) w2PgetParam($_POST, 'project_id', 0);
 $obj = new CProject();
 if (!$obj->bind($_POST)) {
 	$AppUI->setMsg($obj->getError(), UI_MSG_ERROR);
-	$AppUI->redirect();
+    $AppUI->redirect('m=projects&a=addedit');
 }
 if (!w2PgetParam($_POST, 'project_departments', 0)) {
 	$obj->project_departments = implode(',', w2PgetParam($_POST, 'dept_ids', array()));

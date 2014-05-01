@@ -30,7 +30,7 @@ if ($obj) {
 if (!$row && $contact_id > 0) {
     $AppUI->setMsg('Contact');
     $AppUI->setMsg('invalidID', UI_MSG_ERROR, true);
-    $AppUI->redirect();
+    $AppUI->redirect('m=' . $m);
 }
 
 $company = new CCompany();

@@ -42,4 +42,4 @@ foreach ($_POST['w2Pcfg'] as $name => $value) {
     }
 }
 $obj->cleanUp();
-$AppUI->redirect();
+$AppUI->redirect('m=system&a=systemconfig');

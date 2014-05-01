@@ -34,7 +34,7 @@ if ($is_clash) {
 	if (!$obj->load($event_id) && $event_id) {
 		$AppUI->setMsg('Event');
 		$AppUI->setMsg('invalidID', UI_MSG_ERROR, true);
-		$AppUI->redirect();
+        $AppUI->redirect('m=' . $m);
 	}
 }
 $obj->event_project = ($event_project) ? $event_project : $obj->event_project;

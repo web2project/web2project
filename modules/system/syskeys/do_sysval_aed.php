@@ -21,12 +21,13 @@ if ($del) {
 	if (!$obj->bind($svid)) {
 		$AppUI->setMsg($obj->getError(), UI_MSG_ERROR);
 		$AppUI->redirect();
+        $AppUI->redirect('m=system&u=syskeys');
 	}
 } else {
 	$del = 0;
 	if (!$obj->bind($post)) {
 		$AppUI->setMsg($obj->getError(), UI_MSG_ERROR);
-		$AppUI->redirect();
+        $AppUI->redirect('m=system&u=syskeys');
 	}
 }
 

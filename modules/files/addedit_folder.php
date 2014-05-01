@@ -28,7 +28,7 @@ if ($obj) {
 if (!$folder && $folder_id > 0) {
 	$AppUI->setMsg('File Folder');
 	$AppUI->setMsg('invalidID', UI_MSG_ERROR, true);
-	$AppUI->redirect();
+	$AppUI->redirect('m=' . $m);
 }
 
 // add to allow for returning to other modules besides Files
