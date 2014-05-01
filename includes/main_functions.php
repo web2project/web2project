@@ -333,3 +333,23 @@ function notifyNewUser($emailAddress, $username, $emailUtility = null)
     $mail->Body($body);
     return $mail->Send();
 }
+
+/**
+ * Authenticator Factory
+ *
+ * @param $auth_mode
+ * @return w2p_Authenticators_Base
+ */
+function &getAuth($auth_mode) {
+    switch ($auth_mode) {
+        case 'ldap':
+            $auth = new w2p_Authenticators_LDAP();
+            break;
+        case 'pn':
+            $auth = new w2p_Authenticators_PostNuke();
+            break;
+        default:
+            $auth = new w2p_Authenticators_SQL();
+    }
+    return $auth;
+}
