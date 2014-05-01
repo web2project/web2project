@@ -833,10 +833,7 @@ class w2p_Core_CAppUI
         /* End Hack */
 
         $q->addWhere('user_id = ' . (int) $user_id . ' AND user_username = \'' . $username . '\'');
-        $sql = $q->prepare();
-
         $q->loadObject($this);
-        dprint(__file__, __line__, 7, 'Login SQL: ' . $sql);
 
         if (!$this) {
             dprint(__file__, __line__, 1, 'Failed to load user information');
