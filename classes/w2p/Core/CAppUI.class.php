@@ -649,29 +649,24 @@ class w2p_Core_CAppUI
      */
     public function getMsg($reset = true)
     {
-        $img = '';
-        $class = '';
         $msg = $this->msg;
+        $class = 'message';
 
         switch ($this->msgNo) {
-            case UI_MSG_OK:
-                $img = w2PshowImage('stock_ok-16.png', 16, 16, '');
-                $class = 'message';
-                break;
             case UI_MSG_ALERT:
-                $img = w2PshowImage('rc-gui-status-downgr.png', 16, 16, '');
-                $class = 'message';
+                $img = w2PshowImage('rc-gui-status-downgr.png');
                 break;
             case UI_MSG_WARNING:
-                $img = w2PshowImage('rc-gui-status-downgr.png', 16, 16, '');
+                $img = w2PshowImage('rc-gui-status-downgr.png');
                 $class = 'warning';
                 break;
             case UI_MSG_ERROR:
-                $img = w2PshowImage('stock_cancel-16.png', 16, 16, '');
+                $img = w2PshowImage('stock_cancel-16.png');
                 $class = 'error';
                 break;
+            case UI_MSG_OK:
             default:
-                $class = 'message';
+                $img = w2PshowImage('stock_ok-16.png');
                 break;
         }
         if ($reset) {
