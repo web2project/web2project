@@ -35,27 +35,15 @@ class w2p_Extensions_Permissions extends gacl_api
         $opts['db_name'] = w2PgetConfig('dbname');
         $opts['db_table_prefix'] = w2PgetConfig('dbprefix') . $this->_db_acl_prefix;
         $opts['db'] = $db;
-        // We can add an ADODB instance instead of the database
-        // connection details.  This might be worth looking at in
-        // the future.
+
         if (w2PgetConfig('debug', 0) > 10) {
             $this->_debug = true;
         }
         parent::gacl_api($opts);
-        $this->_query = new w2p_Database_Query();
     }
 
-    /**
-     * Since Dependency injection isn't feasible due to the sheer number of
-     *   calls to the above constructor, this is a way to hijack the current
-     *   $this->_query and manipulate it however we want.
-     *
-     *   @param Object A database connection (real or mocked)
-     */
-    protected function _overrideDatabase($override)
-    {
-        $this->_query = $override;
-    }
+    /** @deprecated since 3.2 */
+    protected function _overrideDatabase($override) { }
 
     public function checkLogin($login)
     {
