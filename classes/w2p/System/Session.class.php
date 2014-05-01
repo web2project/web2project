@@ -90,13 +90,16 @@ class w2p_System_Session
 
     public function destroy($id)
     {
-        $q = $this->q;
+        $q = new w2p_Database_Query;
+        $q2 = new w2p_Database_Query;
+
         $q->addTable('user_access_log');
         $q->addUpdate('date_time_out', $q->dbfnNowWithTZ());
-        $q2 = $this->q;
+
         $q2->addTable('sessions');
         $q2->addQuery('session_user');
-        $q2->addWhere('session_id = \'' . $id . '\'');
+        $q2->addWhere("session_id = '$id'");
+
         $q->addWhere('user_access_log_id = ( ' . $q2->prepare() . ' )');
         $q->exec();
         $q->clear();
@@ -118,10 +121,10 @@ class w2p_System_Session
         $idle = $this->convertTime('idle_time');
         // First pass is to kill any users that are logged in at the time of the session.
         $where = 'UNIX_TIMESTAMP() - UNIX_TIMESTAMP(session_updated) > ' . $idle . ' OR UNIX_TIMESTAMP() - UNIX_TIMESTAMP(session_created) > ' . $max;
-        $q = $this->q;
+        $q = $this->q->clear();
         $q->addTable('user_access_log');
         $q->addUpdate('date_time_out', $q->dbfnNowWithTZ());
-        $q2 = $this->q;
+        $q2 = $this->q->clear();
         $q2->addTable('sessions');
         $q2->addQuery('session_user');
         $q2->addWhere($where);
