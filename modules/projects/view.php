@@ -83,6 +83,7 @@ function expand_multiproject(id, table_name) {
           }
       }
 }
+</script>
 <?php
 
 $projectPriority = w2PgetSysVal('ProjectPriority');
