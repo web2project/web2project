@@ -13,11 +13,6 @@ class w2p_System_Session
 {
     protected $q = null;
 
-    public function __construct()
-    {
-        $this->q = new w2p_Database_Query;
-    }
-
     public function open()
     {
         return true;
@@ -30,7 +25,7 @@ class w2p_System_Session
 
     public function read($id)
     {
-        $q = $this->q;
+        $q = new w2p_Database_Query;
         $q->addTable('sessions');
         $q->addQuery('session_data');
         $q->addQuery('UNIX_TIMESTAMP() - UNIX_TIMESTAMP(session_created) as session_lifespan');
@@ -62,7 +57,7 @@ class w2p_System_Session
     {
         global $AppUI;
 
-        $q = $this->q;
+        $q = new w2p_Database_Query;
         $q->addQuery('count(session_id) as row_count');
         $q->addTable('sessions');
         $q->addWhere('session_id = \'' . $id . '\'');
@@ -121,10 +116,10 @@ class w2p_System_Session
         $idle = $this->convertTime('idle_time');
         // First pass is to kill any users that are logged in at the time of the session.
         $where = 'UNIX_TIMESTAMP() - UNIX_TIMESTAMP(session_updated) > ' . $idle . ' OR UNIX_TIMESTAMP() - UNIX_TIMESTAMP(session_created) > ' . $max;
-        $q = $this->q->clear();
+        $q = new w2p_Database_Query;
         $q->addTable('user_access_log');
         $q->addUpdate('date_time_out', $q->dbfnNowWithTZ());
-        $q2 = $this->q->clear();
+        $q2 = new w2p_Database_Query;
         $q2->addTable('sessions');
         $q2->addQuery('session_user');
         $q2->addWhere($where);
