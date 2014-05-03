@@ -689,23 +689,25 @@ abstract class w2p_Core_BaseObject extends w2p_System_Event implements w2p_Syste
      * @return \w2p_Core_BaseObject
      */
     protected function hook_preUpdate()     {   return $this;   }
+    /**
+     * This method is called within $this->delete() but before we attempt to
+     *   delete it. It is called regardless of whether or not the object can be
+     *   deleted.. which may be determined by dependencies or permissions.
+     *
+     * We're grabbing the id here before we delete the object because we might
+     *   need it later.
+     *
+     * @return \w2p_Core_BaseObject
+     */
+    protected function hook_preDelete()
+    {
+        $this->_old_key = $this->{$this->_tbl_key};
 
-    /**
-     * This method is called within $this->store() but only after the object
-     *   was created properly. You might use this to send notifications or
-     *   update other objects.
-     *
-     * @return \w2p_Core_BaseObject
-     */
-    protected function hook_postCreate()    {   return $this;   }
-    /**
-     * This method is called within $this->store() but only after the object
-     *   was updated properly. You might use this to send notifications or
-     *   update other objects.
-     *
-     * @return \w2p_Core_BaseObject
-     */
-    protected function hook_postUpdate()    {   return $this;   }
+        return $this;
+
+    }
+    protected function hook_preLoad()       {   return $this;   }
+
     /**
      * This method is called within $this->store() but only after the object
      *   was stored properly. You might use this to send notifications or
@@ -723,33 +725,27 @@ abstract class w2p_Core_BaseObject extends w2p_System_Event implements w2p_Syste
         $prefix = $this->_getColumnPrefixFromTableName($this->_tbl);
         $name = ('' != $this->{$prefix . '_name'}) ? $this->{$prefix . '_name'} : '';
         addHistory($this->_tbl, $this->{$this->_tbl_key}, $this->_event, $name . ' - ' .
-                $this->_AppUI->_('ACTION') . ': ' . $this->_event . ' ' . $this->_AppUI->_('TABLE') . ': ' .
-                $this->_tbl . ' ' . $this->_AppUI->_('ID') . ': ' . $this->{$this->_tbl_key});
+            $this->_AppUI->_('ACTION') . ': ' . $this->_event . ' ' . $this->_AppUI->_('TABLE') . ': ' .
+            $this->_tbl . ' ' . $this->_AppUI->_('ID') . ': ' . $this->{$this->_tbl_key});
 
         return $this;
     }
-
-    protected function hook_preLoad()       {   return $this;   }
-    //NOTE: This only happens if the load was successful.
-    protected function hook_postLoad()      {   return $this;   }
-
     /**
-     * This method is called within $this->delete() but before we attempt to
-     *   delete it. It is called regardless of whether or not the object can be
-     *   deleted.. which may be determined by dependencies or permissions.
-     *
-     * We're grabbing the id here before we delete the object because we might
-     *   need it later.
+     * This method is called within $this->store() but only after the object
+     *   was created properly. You might use this to send notifications or
+     *   update other objects.
      *
      * @return \w2p_Core_BaseObject
      */
-    protected function hook_preDelete()
-    {
-        $this->_old_key = $this->{$this->_tbl_key};
-
-        return $this;
-        
-    }
+    protected function hook_postCreate()    {   return $this;   }
+    /**
+     * This method is called within $this->store() but only after the object
+     *   was updated properly. You might use this to send notifications or
+     *   update other objects.
+     *
+     * @return \w2p_Core_BaseObject
+     */
+    protected function hook_postUpdate()    {   return $this;   }
     /**
      * This method is called only if $this->delete() was successful. It is
      *   often used for cleaning up other things like custom fields or related
@@ -765,12 +761,20 @@ abstract class w2p_Core_BaseObject extends w2p_System_Event implements w2p_Syste
          *   deleted.
          */
         $custom_field = new w2p_Core_CustomField('notUsed', 'notUsed2',
-                'notUsed3', 'notUsed4', 'notUsed5', 'notUsed6');
+            'notUsed3', 'notUsed4', 'notUsed5', 'notUsed6');
         $custom_field->deleteByObject($this->_old_key);
-        
+
         addHistory($this->_tbl, $this->{$this->_tbl_key}, 'delete');
         return $this;
     }
+    /**
+     * This method is called within $this->load() but only after the object
+     *   was loaded properly.
+     *
+     * @return \w2p_Core_BaseObject
+     */
+    protected function hook_postLoad()      {   return $this;   }
+
 
     public function publish(w2p_System_Event $event)
     {
