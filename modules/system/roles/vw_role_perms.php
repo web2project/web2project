@@ -187,7 +187,7 @@ foreach ($role_acls as $acl) {
                 <input type="hidden" name="permission_table" value="" />
                 <input type="hidden" name="permission_name" value="" />
 
-                <table cellspacing="1" cellpadding="2" class="std">
+                <table class="std">
                     <tr>
                         <th colspan="2"><?php echo $AppUI->_('Add Permissions'); ?></th>
                     </tr>

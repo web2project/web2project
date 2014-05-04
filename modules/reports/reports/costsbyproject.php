@@ -42,7 +42,7 @@ $companies = arrayMerge(array('0' => 'All Companies'), $companies);
     <?php
     echo $AppUI->getTheme()->styleRenderBoxTop();
     ?>
-    <table cellspacing="0" cellpadding="4" class="std">
+    <table class="std">
         <tr>
             <td align="right" nowrap="nowrap"><?php echo $AppUI->_('For Company'); ?>:</td>
             <td nowrap="nowrap">

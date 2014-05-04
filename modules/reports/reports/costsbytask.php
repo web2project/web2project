@@ -34,7 +34,7 @@ $billingCategory = w2PgetSysVal('BudgetCategory');
     <?php
     echo $AppUI->getTheme()->styleRenderBoxTop();
     ?>
-    <table cellspacing="0" cellpadding="4" class="std">
+    <table class="std">
         <tr>
             <td align="right" nowrap="nowrap"><?php echo $AppUI->_('For period'); ?>:</td>
             <td nowrap="nowrap">

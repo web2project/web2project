@@ -49,27 +49,28 @@ function delIt2(id) {
 }
 <?php } ?>
 </script>
-<table cellpadding="2" cellspacing="1" class="std">
 <form name="frmFilter" action="./index.php" method="get" accept-charset="utf-8">
-<tr>
-	<td width="98%">&nbsp;</td>
-	<td width="1%" nowrap="nowrap"><input type="checkbox" name="hide_inactive" id="hide_inactive" <?php echo $hide_inactive ? 'checked="checked"' : '' ?> onchange="document.frmFilter.submit()" /></td><td width="1%" nowrap="nowrap"><label for="hide_inactive"><?php echo $AppUI->_('Hide Inactive') ?></label></td>
-	<td width="1%" nowrap="nowrap"><input type="checkbox" name="hide_complete" id="hide_complete" <?php echo $hide_complete ? 'checked="checked"' : '' ?> onchange="document.frmFilter.submit()" /></td><td width="1%" nowrap="nowrap"><label for="hide_complete"><?php echo $AppUI->_('Hide 100% Complete') ?></label></td>
-	<!--
-TODO: disabled this filter for now... something is wrong with the userId portion...
-	<td width="1%" nowrap="nowrap"><?php echo $AppUI->_('User Filter') ?></td>
-	<td width="1%"><?php echo arraySelect($users, 'user_id', 'size="1" class="text" id="medium" onchange="document.frmFilter.submit()"', $user_id) ?></td>
-	-->
-	<td width="1%" nowrap="nowrap"><?php echo $AppUI->_('Cost Code Filter') ?></td>
-    <!-- TODO: add in optgroups to display company groupings for cost codes -->
-	<td width="1%"><?php echo arraySelect($task_log_costcodes, 'cost_code', 'size="1" class="text" onchange="document.frmFilter.submit()"', $cost_code) ?></td>
-</tr>
-<input type="hidden" name="m" value="projects"/>
-<input type="hidden" name="a" value="view"/>
-<input type="hidden" name="project_id" value="<?php echo $project_id ?>"/>
-<input type="hidden" name="tab" value="<?php echo $tab ?>"/>
+    <input type="hidden" name="m" value="projects"/>
+    <input type="hidden" name="a" value="view"/>
+    <input type="hidden" name="project_id" value="<?php echo $project_id ?>"/>
+    <input type="hidden" name="tab" value="<?php echo $tab ?>"/>
+
+    <table class="std">
+        <tr>
+            <td width="98%">&nbsp;</td>
+            <td width="1%" nowrap="nowrap"><input type="checkbox" name="hide_inactive" id="hide_inactive" <?php echo $hide_inactive ? 'checked="checked"' : '' ?> onchange="document.frmFilter.submit()" /></td><td width="1%" nowrap="nowrap"><label for="hide_inactive"><?php echo $AppUI->_('Hide Inactive') ?></label></td>
+            <td width="1%" nowrap="nowrap"><input type="checkbox" name="hide_complete" id="hide_complete" <?php echo $hide_complete ? 'checked="checked"' : '' ?> onchange="document.frmFilter.submit()" /></td><td width="1%" nowrap="nowrap"><label for="hide_complete"><?php echo $AppUI->_('Hide 100% Complete') ?></label></td>
+            <!--
+        TODO: disabled this filter for now... something is wrong with the userId portion...
+            <td width="1%" nowrap="nowrap"><?php echo $AppUI->_('User Filter') ?></td>
+            <td width="1%"><?php echo arraySelect($users, 'user_id', 'size="1" class="text" id="medium" onchange="document.frmFilter.submit()"', $user_id) ?></td>
+            -->
+            <td width="1%" nowrap="nowrap"><?php echo $AppUI->_('Cost Code Filter') ?></td>
+            <!-- TODO: add in optgroups to display company groupings for cost codes -->
+            <td width="1%"><?php echo arraySelect($task_log_costcodes, 'cost_code', 'size="1" class="text" onchange="document.frmFilter.submit()"', $cost_code) ?></td>
+        </tr>
+    </table>
 </form>
-</table>
 <form name="frmDelete2" action="./index.php?m=tasks" method="post" accept-charset="utf-8">
 	<input type="hidden" name="dosql" value="do_updatetask" />
 	<input type="hidden" name="del" value="1" />

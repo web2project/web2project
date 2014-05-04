@@ -79,7 +79,7 @@ if (isset($_FILES['vcf']) && isset($_GET['suppressHeaders']) && (w2PgetParam($_G
 	$titleBlock->show();
 
 ?>
-<table cellpadding="3" cellspacing="3" class="std">
+<table class="std">
 
 	<form name="vcfFrm" action="?m=contacts&a=vcardimport&suppressHeaders=true" enctype="multipart/form-data" method="post">
 		<input type="hidden" name="max_file_size" value="109605000" />

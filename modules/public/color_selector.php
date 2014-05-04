@@ -23,7 +23,7 @@ echo $AppUI->getTheme()->styleRenderBoxTop();
 $colors = w2PgetSysVal('ProjectColors');
 if ($w2Pconfig['restrict_color_selection']) {
     ?>
-    <table cellpadding="1" cellspacing="2" class="std">
+    <table class="std">
         <tr>
             <td valign="top" colspan="2">
                 <strong><?php echo $AppUI->_('Color Selector'); ?></strong>
@@ -43,7 +43,7 @@ if ($w2Pconfig['restrict_color_selection']) {
     <?php
 } else {
     ?>
-    <table cellpadding="1" cellspacing="2" class="std">
+    <table class="std">
         <tr>
             <td valign="top">
                 <strong><?php echo $AppUI->_('Color Selector'); ?></strong>

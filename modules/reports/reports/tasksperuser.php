@@ -37,7 +37,7 @@ echo $AppUI->getTheme()->styleRenderBoxTop();
     <input type="hidden" name="report_type" value="<?php echo $report_type; ?>" />
     <input type="hidden" name="datePicker" value="log" />
 
-    <table cellspacing="0" cellpadding="4" class="std">
+    <table class="std">
         <tr>
             <td align="right" nowrap="nowrap"><?php echo $AppUI->_('For period'); ?>:</td>
             <td nowrap="nowrap">
@@ -107,7 +107,7 @@ if ($do_report) {
     echo $AppUI->getTheme()->styleRenderBoxBottom();
 	echo '<br />';
     echo $AppUI->getTheme()->styleRenderBoxTop();
-	echo '<table cellspacing="0" cellpadding="4" class="std">
+	echo '<table class="std">
 	<tr>
 		<td align="center">';
 

@@ -109,7 +109,7 @@ if ('todo' == $a) {
 // are called from the day view of calendar, we need to prevent this
 if ($m == 'tasks' && $a == 'todo') {
     ?>
-    <table cellspacing="0" cellpadding="2" class="std">
+    <table class="std">
         <tr>
             <td width="80%" valign="top">
                 <?php

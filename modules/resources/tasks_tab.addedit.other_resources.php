@@ -67,7 +67,7 @@ for ($i = 1, $i_cmp = sizeof($keys); $i < $i_cmp; $i++) {
     <input type="hidden" name="task_id" value="<?php echo $task_id; ?>" />
     <input type="hidden" name="dosql" value="do_task_aed" />
     <input name="hresource_assign" type="hidden" value="<?php echo $initResAssignment; ?>"/>
-    <table cellpadding="4" cellspacing="0" class="std addedit">
+    <table class="std addedit">
         <tr>
             <td valign="top" align="center">
                 <table cellspacing="0" cellpadding="2" border="0" class="well">

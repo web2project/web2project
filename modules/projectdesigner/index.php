@@ -95,7 +95,7 @@ if (!$project_id) {
     echo $AppUI->getTheme()->styleRenderBoxTop();
 ?>
     <form name="prjFrm" action="?m=projectdesigner" method="post" accept-charset="utf-8">
-        <table border="1" cellpadding="4" cellspacing="0" class="std">
+        <table border="1" class="std">
             <tr>
                 <td class="projectdesigner">
                     <?php echo $AppUI->_('Project'); ?>: <?php echo arraySelect($projects, 'project_id', 'onchange="submitIt()" class="text"', 0); ?>
@@ -434,7 +434,7 @@ function calcDuration(f, start_date, end_date, duration_fld, durntype_fld) {
 	<input type="hidden" name="project_id" value="<?php echo $project_id; ?>" />
 </form>
 
-<table cellpadding="4" cellspacing="0" class="std view">
+<table class="std view">
 <tr>
 	<td style="border: outset #d1d1cd 1px; background-color:#<?php echo $obj->project_color_identifier; ?>" colspan="2" class="data _identifier">
         <a href="javascript: void(0);" name="fp" style="display:block" onclick="expand_collapse('project', 'tblProjects');update_workspace('project');">
@@ -461,7 +461,7 @@ function calcDuration(f, start_date, end_date, duration_fld, durntype_fld) {
 <?php
     echo $AppUI->getTheme()->styleRenderBoxTop();
 ?>
-<table cellpadding="4" cellspacing="0" class="std">
+<table class="std">
 <tr>
 	<td style="border: outset #d1d1cd 1px;" colspan="2">
         <a href="javascript: void(0);" name="fg" style="display:block" onclick="expand_collapse('gantt', 'tblProjects');update_workspace('gantt');">
@@ -494,7 +494,7 @@ function calcDuration(f, start_date, end_date, duration_fld, durntype_fld) {
 <?php
     echo $AppUI->getTheme()->styleRenderBoxTop();
 ?>
-<table cellpadding="4" cellspacing="0" class="std">
+<table class="std">
 <tr>
 	<td style="border: outset #d1d1cd 1px;" colspan="2">
         <a href="javascript: void(0);" name="fg" style="display:block" onclick="expand_collapse('tasks', 'tblProjects');update_workspace('tasks');">
@@ -527,7 +527,7 @@ function calcDuration(f, start_date, end_date, duration_fld, durntype_fld) {
 <?php
     echo $AppUI->getTheme()->styleRenderBoxTop();
 ?>
-<table cellpadding="4" cellspacing="0" class="std">
+<table class="std">
 <tr>
 	<td style="border: outset #d1d1cd 1px;" colspan="2">
         <a href="javascript: void(0);" name="fg" style="display:block" onclick="expand_collapse('actions', 'tblProjects');update_workspace('actions');">
@@ -560,7 +560,7 @@ function calcDuration(f, start_date, end_date, duration_fld, durntype_fld) {
 <?php
     echo $AppUI->getTheme()->styleRenderBoxTop();
 ?>
-<table cellpadding="4" cellspacing="0" class="std">
+<table class="std">
 <tr>
 	<td style="border: outset #d1d1cd 1px;" colspan="2">
         <a href="javascript: void(0);" name="fg" style="display:block" onclick="expand_collapse('addtasks', 'tblProjects');update_workspace('addtasks');">
@@ -593,7 +593,7 @@ function calcDuration(f, start_date, end_date, duration_fld, durntype_fld) {
 <?php
     echo $AppUI->getTheme()->styleRenderBoxTop();
 ?>
-<table cellpadding="4" cellspacing="0" class="std">
+<table class="std">
 <tr>
 	<td style="border: outset #d1d1cd 1px;" colspan="2">
         <a href="javascript: void(0);" name="fg" style="display:block" onclick="expand_collapse('files', 'tblProjects');update_workspace('files');">

@@ -66,7 +66,7 @@ $form = new w2p_Output_HTML_FormHelper($AppUI);
     <input type="hidden" name="dosql" value="do_billingcode_aed" />
     <input type="hidden" name="del" value="0" />
     <input type="hidden" name="billingcode_status" value="0" />
-    <table cellpadding="1" cellspacing="1" class="std list">
+    <table class="std list">
         <tr>
             <td>
                 <?php echo arraySelect($companies, 'billingcode_company', 'size="1" class="text" onchange="changeIt();"', $company_id, false); ?>

@@ -73,7 +73,7 @@ $next_year = $date->format(FMT_TIMESTAMP_DATE);
 $next_year = (int)($next_year + 10000);
 
 ?>
-<table class="std view" cellspacing="0" cellpadding="0">
+<table class="std view">
 	<tr>
 		<td align="center">
 			<table width="100%" cellspacing="0" cellpadding="4">

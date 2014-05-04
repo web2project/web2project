@@ -77,7 +77,7 @@ if ($myId) {
 			<?php
             echo $AppUI->getTheme()->styleRenderBoxTop();
 			?>
-			<table cellspacing="0" cellpadding="3" class="std">
+			<table class="std">
 			<tr>
 				<td colspan="2">
 					<?php
