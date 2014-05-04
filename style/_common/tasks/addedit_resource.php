@@ -6,8 +6,6 @@
 
     <div class="std addedit tasks-resources">
         <div class="column left">
-            <p>
-                <label>&nbsp;</label>
             <table cellspacing="0" cellpadding="2" border="0" class="well">
                 <tr>
                     <td><?php echo $AppUI->_('Human Resources'); ?>:</td>
@@ -41,9 +39,8 @@
                     </td>
                 </tr>
             </table>
-            </p>
         </div>
-        <div class="column right">
+        <div class="column right well" style="width: 45%">
             <p>
                 <?php $form->showLabel('Additional Email Comments'); ?>
                 <textarea name="email_comment" class="textarea" cols="60" rows="10"></textarea>
