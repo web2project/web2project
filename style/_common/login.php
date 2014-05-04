@@ -41,7 +41,7 @@ $theme = $AppUI->getTheme();
         <br /><br /><br /><br />
         <!--please leave action argument empty -->
         <form method="post" action="<?php echo $loginFromPage; ?>" name="loginform" accept-charset="utf-8">
-            <table style="border-style:none;" cellspacing="0" class="std login">
+            <table style="border-style:none; width: 20%" cellspacing="0" class="std login">
                 <input type="hidden" name="login" value="<?php echo time(); ?>" />
                 <input type="hidden" name="lostpass" value="0" />
                 <input type="hidden" name="redirect" value="<?php echo $redirect; ?>" />
