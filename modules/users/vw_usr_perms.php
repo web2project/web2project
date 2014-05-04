@@ -132,159 +132,158 @@ function setPermItem( key, val ) {
 </script>
 
 <table width="100%" border="0" cellpadding="2" cellspacing="0">
-<tr><td width="50%" valign="top">
-<table class="tbl list">
     <tr>
-        <th width="100%"><?php echo $AppUI->_('Item'); ?></th>
-        <th><?php echo $AppUI->_('Type'); ?></th>
-        <th><?php echo $AppUI->_('Status'); ?></th>
-        <th>&nbsp;</th>
-    </tr>
+        <td width="50%" valign="top">
+            <table class="tbl list">
+                <tr>
+                    <th width="100%"><?php echo $AppUI->_('Item'); ?></th>
+                    <th><?php echo $AppUI->_('Type'); ?></th>
+                    <th><?php echo $AppUI->_('Status'); ?></th>
+                    <th>&nbsp;</th>
+                </tr>
 
-<?php
-foreach ($user_acls as $acl) {
-	$buf = '';
-	$permission = $perms->get_acl($acl);
-
-	$style = '';
-	// TODO: Do we want to make the colour depend on the allow/deny/inherit flag?
-	// Module information.
-	if (is_array($permission)) {
-		$buf .= "<td $style>";
-		$modlist = array();
-		$itemlist = array();
-		if (is_array($permission['axo_groups'])) {
-			foreach ($permission['axo_groups'] as $group_id) {
-				$group_data = $perms->get_group_data($group_id, 'axo');
-				$modlist[] = $AppUI->_($group_data[3]);
-			}
-		}
-        $_canEdit = true;
-        $_canView = true;
-		if (is_array($permission['axo'])) {
-            foreach ($permission['axo'] as $key => $section) {
-                foreach ($section as $id) {
-					$mod_data = $perms->get_object_full($id, $key, 1, 'axo');
-					if (is_numeric($mod_data['value'])) {
-						$module = $pgo_list[ucfirst($key)];
-                        $data = __extract_from_vw_usr_perms($module, $mod_data);
-
-						$modlist[] = $AppUI->_(ucfirst($key)) . ': ' . w2PHTMLDecode($data);
-                        if (!canView($mod_data['section_value'], $mod_data['value'])) {
-                            $_canView = false;
-                        }
-                        if (!canEdit($mod_data['section_value'], $mod_data['value'])) {
-                            $_canEdit = false;
-                        }
-					} else {
-						$modlist[] = $AppUI->_(ucfirst($key)) . ': ' . w2PHTMLDecode($mod_data['name']);
-                        if (!canView($mod_data['value'])) {
-                            $_canView = false;
-                        }
-                        if (!canEdit($mod_data['value'])) {
-                            $_canEdit = false;
-                        }
-					}
-				}
-			}
-		}
-        if (!$_canView) {
-            continue;
-        }
-		$buf .= implode('<br />', $modlist);
-		$buf .= '</td>';
-		// Item information TODO:  need to figure this one out.
-		// 	$buf .= "<td></td>";
-		// Type information.
-		$buf .= '<td>';
-		$perm_type = array();
-		if (is_array($permission['aco'])) {
-			foreach ($permission['aco'] as $key => $section) {
-				foreach ($section as $value) {
-					$perm = $perms->get_object_full($value, $key, 1, 'aco');
-					$perm_type[] = $AppUI->_($perm['name']);
-				}
-			}
-		}
-		$buf .= implode('<br />', $perm_type);
-		$buf .= '</td>';
-
-		// Allow or deny
-		$buf .= '<td>' . $AppUI->_($permission['allow'] ? 'allow' : 'deny') . '</td>';
-		$buf .= '<td nowrap="nowrap">';
-        $canDelete = (canEdit('users') && $_canEdit);
-		if ($canDelete) {
-			$buf .= "<a href=\"javascript:delIt({$acl});\" title=\"" . $AppUI->_('delete') . "\">" . w2PshowImage('icons/stock_delete-16.png', 16, 16, '') . "</a>";
-		}
-		$buf .= '</td>';
-
-		echo "<tr>$buf</tr>";
-	}
-}
-?>
-</table>
-
-</td><td width="50%" valign="top">
-
-<?php if ($canEdit) { ?>
-<form name="frmPerms" method="post" action="?m=users" accept-charset="utf-8">
-	<input type="hidden" name="del" value="0" />
-	<input type="hidden" name="dosql" value="do_perms_aed" />
-	<input type="hidden" name="user_id" value="<?php echo $user_id; ?>" />
-	<input type="hidden" name="permission_user" value="<?php echo $perms->get_object_id('user', $user_id, 'aro'); ?>" />
-	<input type="hidden" name="permission_id" value="0" />
-	<input type="hidden" name="permission_item" value="0" />
-	<input type="hidden" name="permission_table" value="" />
-	<input type="hidden" name="permission_name" value="" />
-
-    <table cellspacing="1" cellpadding="2" border="0" class="std well" width="100%">
-        <tr>
-            <th colspan="2"><?php echo $AppUI->_('Add Permissions'); ?></th>
-        </tr>
-        <tr>
-            <td nowrap="nowrap" align="right"><?php echo $AppUI->_('Module'); ?>:</td>
-            <td width="100%"><?php echo arraySelect($modules, 'permission_module', 'size="1" class="text"', 'grp,all', true); ?></td>
-        </tr>
-        <tr>
-            <td nowrap="nowrap" align="right"><?php echo $AppUI->_('Item'); ?>:</td>
-            <td>
-                <input type="text" name="permission_item_name" class="text" size="30" value="all" disabled="disabled" />
-                <input type="button" name="" class="button btn btn-primary btn-mini" value="..." onclick="popPermItem();" />
-            </td>
-        </tr>
-        <tr>
-            <td nowrap="nowrap" align="right"><?php echo $AppUI->_('Access'); ?>:</td>
-            <td>
-                <select name="permission_access" class="text">
-                    <option value='1'><?php echo $AppUI->_('allow'); ?></option>
-                    <option value='0'><?php echo $AppUI->_('deny'); ?></option>
-                </select>
-            </td>
-        </tr>
-        <?php
-            foreach ($perm_list as $perm_id => $perm_name) {
-            ?>
-            <tr>
-                <td nowrap="nowrap" align='right'><?php echo $AppUI->_($perm_name); ?>:</td>
-                <td>
-                  <input type="checkbox" name="permission_type[]" value="<?php echo $perm_id; ?>" />
-                </td>
-            </tr>
             <?php
+            foreach ($user_acls as $acl) {
+                $buf = '';
+                $permission = $perms->get_acl($acl);
+
+                $style = '';
+                // TODO: Do we want to make the colour depend on the allow/deny/inherit flag?
+                // Module information.
+                if (is_array($permission)) {
+                    $buf .= "<td $style>";
+                    $modlist = array();
+                    $itemlist = array();
+                    if (is_array($permission['axo_groups'])) {
+                        foreach ($permission['axo_groups'] as $group_id) {
+                            $group_data = $perms->get_group_data($group_id, 'axo');
+                            $modlist[] = $AppUI->_($group_data[3]);
+                        }
+                    }
+                    $_canEdit = true;
+                    $_canView = true;
+                    if (is_array($permission['axo'])) {
+                        foreach ($permission['axo'] as $key => $section) {
+                            foreach ($section as $id) {
+                                $mod_data = $perms->get_object_full($id, $key, 1, 'axo');
+                                if (is_numeric($mod_data['value'])) {
+                                    $module = $pgo_list[ucfirst($key)];
+                                    $data = __extract_from_vw_usr_perms($module, $mod_data);
+
+                                    $modlist[] = $AppUI->_(ucfirst($key)) . ': ' . w2PHTMLDecode($data);
+                                    if (!canView($mod_data['section_value'], $mod_data['value'])) {
+                                        $_canView = false;
+                                    }
+                                    if (!canEdit($mod_data['section_value'], $mod_data['value'])) {
+                                        $_canEdit = false;
+                                    }
+                                } else {
+                                    $modlist[] = $AppUI->_(ucfirst($key)) . ': ' . w2PHTMLDecode($mod_data['name']);
+                                    if (!canView($mod_data['value'])) {
+                                        $_canView = false;
+                                    }
+                                    if (!canEdit($mod_data['value'])) {
+                                        $_canEdit = false;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    if (!$_canView) {
+                        continue;
+                    }
+                    $buf .= implode('<br />', $modlist);
+                    $buf .= '</td>';
+                    // Item information TODO:  need to figure this one out.
+                    // 	$buf .= "<td></td>";
+                    // Type information.
+                    $buf .= '<td>';
+                    $perm_type = array();
+                    if (is_array($permission['aco'])) {
+                        foreach ($permission['aco'] as $key => $section) {
+                            foreach ($section as $value) {
+                                $perm = $perms->get_object_full($value, $key, 1, 'aco');
+                                $perm_type[] = $AppUI->_($perm['name']);
+                            }
+                        }
+                    }
+                    $buf .= implode('<br />', $perm_type);
+                    $buf .= '</td>';
+
+                    // Allow or deny
+                    $buf .= '<td>' . $AppUI->_($permission['allow'] ? 'allow' : 'deny') . '</td>';
+                    $buf .= '<td nowrap="nowrap">';
+                    $canDelete = (canEdit('users') && $_canEdit);
+                    if ($canDelete) {
+                        $buf .= "<a href=\"javascript:delIt({$acl});\" title=\"" . $AppUI->_('delete') . "\">" . w2PshowImage('icons/stock_delete-16.png', 16, 16, '') . "</a>";
+                    }
+                    $buf .= '</td>';
+
+                    echo "<tr>$buf</tr>";
+                }
             }
-        ?>
-        <tr>
-            <td>
-                <input type="reset" value="<?php echo $AppUI->_('clear'); ?>" class="button btn btn-danger" name="sqlaction" onclick="clearIt();" />
-            </td>
-            <td align="right">
-                <input type="submit" value="<?php echo $AppUI->_('add'); ?>" class="button btn btn-primary" name="sqlaction2" />
-            </td>
-        </tr>
-    </table>
-</form>
-<?php } ?>
-</td>
-</tr>
-</tr>
+            ?>
+            </table>
+        </td>
+        <td width="50%" valign="top">
+            <?php if ($canEdit) { ?>
+                <form name="frmPerms" method="post" action="?m=users" accept-charset="utf-8">
+                    <input type="hidden" name="del" value="0" />
+                    <input type="hidden" name="dosql" value="do_perms_aed" />
+                    <input type="hidden" name="user_id" value="<?php echo $user_id; ?>" />
+                    <input type="hidden" name="permission_user" value="<?php echo $perms->get_object_id('user', $user_id, 'aro'); ?>" />
+                    <input type="hidden" name="permission_id" value="0" />
+                    <input type="hidden" name="permission_item" value="0" />
+                    <input type="hidden" name="permission_table" value="" />
+                    <input type="hidden" name="permission_name" value="" />
+
+                    <table cellspacing="1" cellpadding="2" border="0" class="std well" width="100%">
+                        <tr>
+                            <th colspan="2"><?php echo $AppUI->_('Add Permissions'); ?></th>
+                        </tr>
+                        <tr>
+                            <td nowrap="nowrap" align="right"><?php echo $AppUI->_('Module'); ?>:</td>
+                            <td width="100%"><?php echo arraySelect($modules, 'permission_module', 'size="1" class="text"', 'grp,all', true); ?></td>
+                        </tr>
+                        <tr>
+                            <td nowrap="nowrap" align="right"><?php echo $AppUI->_('Item'); ?>:</td>
+                            <td>
+                                <input type="text" name="permission_item_name" class="text" size="30" value="all" disabled="disabled" />
+                                <input type="button" name="" class="button btn btn-primary btn-mini" value="..." onclick="popPermItem();" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td nowrap="nowrap" align="right"><?php echo $AppUI->_('Access'); ?>:</td>
+                            <td>
+                                <select name="permission_access" class="text">
+                                    <option value='1'><?php echo $AppUI->_('allow'); ?></option>
+                                    <option value='0'><?php echo $AppUI->_('deny'); ?></option>
+                                </select>
+                            </td>
+                        </tr>
+                        <?php
+                            foreach ($perm_list as $perm_id => $perm_name) {
+                            ?>
+                            <tr>
+                                <td nowrap="nowrap" align='right'><?php echo $AppUI->_($perm_name); ?>:</td>
+                                <td>
+                                  <input type="checkbox" name="permission_type[]" value="<?php echo $perm_id; ?>" />
+                                </td>
+                            </tr>
+                            <?php
+                            }
+                        ?>
+                        <tr>
+                            <td>
+                                <input type="reset" value="<?php echo $AppUI->_('clear'); ?>" class="button btn btn-danger" name="sqlaction" onclick="clearIt();" />
+                            </td>
+                            <td align="right">
+                                <input type="submit" value="<?php echo $AppUI->_('add'); ?>" class="button btn btn-primary" name="sqlaction2" />
+                            </td>
+                        </tr>
+                    </table>
+                </form>
+            <?php } ?>
+        </td>
+    </tr>
 </table>
