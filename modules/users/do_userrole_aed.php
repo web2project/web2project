@@ -31,8 +31,6 @@ if ($del) {
 	} else {
 		$AppUI->setMsg('failed to delete role', UI_MSG_ERROR);
 	}
-    $AppUI->redirect();
-	return;
 }
 
 if (isset($_POST['user_role']) && $_POST['user_role']) {
@@ -44,5 +42,5 @@ if (isset($_POST['user_role']) && $_POST['user_role']) {
 	} else {
 		$AppUI->setMsg('failed to add role', UI_MSG_ERROR);
 	}
-    $AppUI->redirect();
 }
+$AppUI->redirect('m=users&a=view&user_id=' . $user_id);
