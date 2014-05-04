@@ -143,7 +143,7 @@ getTaskLinks($first_time, $last_time, $links, 20, $company_id, true);
 getEventLinks($first_time, $last_time, $links, 20);
 $minical->setEvents($links);
 
-echo '<table class="std" cellspacing="0" cellpadding="0" border="0" width="100%"><tr>';
+echo '<table class="std" cellspacing="0" cellpadding="0"><tr>';
 echo '<td valign="top" align="center" width="220">' . $minical->show() . '</td>';
 echo '<td valign="top" align="center" width="75%">&nbsp;</td>';
 

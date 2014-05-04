@@ -49,7 +49,7 @@ function delIt2(id) {
 }
 <?php } ?>
 </script>
-<table border="0" cellpadding="2" cellspacing="1" width="100%" class="std">
+<table cellpadding="2" cellspacing="1" class="std">
 <form name="frmFilter" action="./index.php" method="get" accept-charset="utf-8">
 <tr>
 	<td width="98%">&nbsp;</td>

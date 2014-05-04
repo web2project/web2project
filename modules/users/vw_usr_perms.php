@@ -237,7 +237,7 @@ function setPermItem( key, val ) {
                     <input type="hidden" name="permission_table" value="" />
                     <input type="hidden" name="permission_name" value="" />
 
-                    <table cellspacing="1" cellpadding="2" border="0" class="std well" width="100%">
+                    <table cellspacing="1" cellpadding="2" class="std well">
                         <tr>
                             <th colspan="2"><?php echo $AppUI->_('Add Permissions'); ?></th>
                         </tr>

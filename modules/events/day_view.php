@@ -69,7 +69,7 @@ function clickDay( idate, fdate ) {
 }
 </script>
 
-<table class="std" width="100%" cellspacing="0" cellpadding="4">
+<table class="std" cellspacing="0" cellpadding="4">
     <tr>
         <td valign="top">
             <table border="0" cellspacing="1" cellpadding="2" width="100%" class="motitle">

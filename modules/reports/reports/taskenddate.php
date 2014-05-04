@@ -28,7 +28,7 @@ echo $AppUI->getTheme()->styleRenderBoxTop();
     <input type="hidden" name="report_type" value="<?php echo $report_type; ?>" />
     <input type="hidden" name="datePicker" value="log" />
 
-    <table cellspacing="0" cellpadding="4" border="0" width="100%" class="std">
+    <table cellspacing="0" cellpadding="4" class="std">
         <tr>
             <td align="right" nowrap="nowrap"><?php echo $AppUI->_('For period'); ?>:</td>
             <td nowrap="nowrap">
@@ -104,11 +104,11 @@ if ($do_report) {
     echo $AppUI->getTheme()->styleRenderBoxBottom();
 	echo '<br />';
     echo $AppUI->getTheme()->styleRenderBoxTop();
-	echo '<table cellspacing="0" cellpadding="4" border="0" width="100%" class="std">
+	echo '<table cellspacing="0" cellpadding="4" class="std">
 <tr>
 	<td>';
 
-	echo '<table class="std" width="100%">';
+	echo '<table class="std">';
 	echo '<tr><th>' . $AppUI->_('Task name') . '</th><th>' . $AppUI->_('T.Owner') . '</th><th>' . $AppUI->_('H.Alloc.') . '</th><th>' . $AppUI->_('Task end date') . '</th><th>' . $AppUI->_('Last activity date') . '</th><th>' . $AppUI->_('Done') . '?</th></tr>';
 	$hrs = $AppUI->_('hrs'); // To avoid calling $AppUI each row
 	foreach ($tasks as $task) {

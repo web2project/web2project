@@ -255,7 +255,7 @@ if (!$min_view) {
 	<input type="hidden" name="caller" value="<?php echo $a; ?>" />
     <input type="hidden" name="datePicker" value="project" />
 
-    <table border="0" cellpadding="4" cellspacing="0" class="std well" width="100%">
+    <table cellpadding="4" cellspacing="0" class="std well">
         <tr>
             <td align="left" valign="top" width="20">
                 <?php if ($display_option != "all") { ?>
@@ -395,7 +395,7 @@ if (!$min_view) {
 	<?php } ?>
 </table>
 
-<table cellspacing="0" cellpadding="0" border="1" align="center" class="std" width="100%">
+<table cellspacing="0" cellpadding="0" class="std">
     <tr>
         <td valign="top" align="center">
             <?php

@@ -85,7 +85,7 @@ foreach ($user_roles as $row) {
 	<input type="hidden" name="user_id" value="<?php echo $user_id; ?>" />
 	<input type="hidden" name="user_name" value="<?php echo $user_name; ?>" />
 	<input type="hidden" name="role_id" value="" />
-	<table cellspacing="1" cellpadding="2" border="0" class="std" width="100%">
+	<table cellspacing="1" cellpadding="2" class="std">
 		<tr>
 			<th colspan='2'><?php echo $AppUI->_('Add Role'); ?></th>
 		</tr>

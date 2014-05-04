@@ -70,7 +70,7 @@ if ($report_type) {
 } else {
     echo $AppUI->getTheme()->styleRenderBoxTop();
 	$s = '';
-	$s .= '<table width="100%" class="std">';
+	$s .= '<table class="std">';
 	$s .= '<tr><td><h2>' . $AppUI->_('Reports Available') . '</h2></td></tr>';
 
 	foreach ($reports as $key => $v) {

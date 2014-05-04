@@ -21,7 +21,7 @@ $titleBlock->show();
     float: left;
 }
 </style>
-<table class="std list update" width="100%" border="0" cellpadding="0" cellspacing="5">
+<table class="std list update" cellpadding="0" cellspacing="5">
 	<tr>
 		<td class="title" colspan="2">Step 2: Update Database</td>
 	</tr>

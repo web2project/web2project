@@ -19,7 +19,7 @@ if (!is_array($role)) {
 	$titleBlock->show();
 	// Now onto the display of the user.
 ?>
-<table border="0" cellpadding="4" cellspacing="0" width="100%" class="std view">
+<table cellpadding="4" cellspacing="0" class="std view">
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Role ID'); ?>:</td>
 			<td class="hilite" width="100%"><?php echo $role["value"]; ?></td>

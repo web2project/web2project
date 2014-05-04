@@ -29,7 +29,7 @@ echo $AppUI->getTheme()->styleRenderBoxTop();
     <input type="hidden" name="report_type" value="<?php echo $report_type; ?>" />
     <input type="hidden" name="datePicker" value="log" />
 
-    <table cellspacing="0" cellpadding="4" border="0" width="100%" class="std">
+    <table cellspacing="0" cellpadding="4" class="std">
         <tr>
             <td nowrap="nowrap"><?php echo $AppUI->_('For period'); ?>:
                 <input type="hidden" name="log_start_date" id="log_start_date" value="<?php echo $start_date ? $start_date->format(FMT_TIMESTAMP_DATE) : ''; ?>" />
@@ -84,7 +84,7 @@ if ($do_report) {
     echo $AppUI->getTheme()->styleRenderBoxBottom();
 	echo '<br />';
     echo $AppUI->getTheme()->styleRenderBoxTop();
-	echo '<table cellspacing="0" cellpadding="4" border="0" width="100%" class="std">
+	echo '<table cellspacing="0" cellpadding="4" class="std">
 <tr>
 	<td>';
 

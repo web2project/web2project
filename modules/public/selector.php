@@ -161,7 +161,7 @@ if (!$ok) {
 <?php
 echo $AppUI->getTheme()->styleRenderBoxTop();
 ?>
-<table class="std" width="100%">
+<table class="std">
 <tr>
 	<td>
 		<div style="white-space:normal; overflow:auto; "  id="selector">

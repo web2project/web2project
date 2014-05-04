@@ -63,7 +63,7 @@ function delIt(input) {
     $customLookups = array('budget_category' => $budgetCategory);
 
     ?>
-    <table width="100%" border="0" cellpadding="1" cellspacing="1" class="std list">
+    <table cellpadding="1" cellspacing="1" class="std list">
         <tr>
             <th></th>
             <?php foreach ($fieldNames as $index => $name) { ?>

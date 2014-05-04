@@ -168,7 +168,7 @@ function chPriority(user_id) {
 	<input type="hidden" name="report_type" value="<?php echo $report_type; ?>" />
     <input type="hidden" name="datePicker" value="log" />
 	
-	<table cellspacing="0" cellpadding="4" border="0" width="100%" class="std">
+	<table cellspacing="0" cellpadding="4" class="std">
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('For period'); ?>:</td>
 			<td nowrap="nowrap">
@@ -297,7 +297,6 @@ if ($do_report) {
 	if ($max_levels < 0) {
 		$max_levels = -1;
 	}
-//<table width="100%" border="0" cellpadding="2" cellspacing="1" class="std">
     ?>
     <table class="tbl list">
         <tr>

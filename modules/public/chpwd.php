@@ -36,12 +36,12 @@ if ($user_id) {
 			} else {
                 echo '<h1>' . $AppUI->_('Change User Password') . '</h1>';
                 echo $AppUI->getTheme()->styleRenderBoxTop();
-				echo '<table width="100%" cellspacing="0" cellpadding="4" border="0" class="std"><tr><td>' . $AppUI->_('chgpwUpdated') . '</td></tr></table>';
+				echo '<table cellspacing="0" cellpadding="4" class="std"><tr><td>' . $AppUI->_('chgpwUpdated') . '</td></tr></table>';
 			}
 		} else {
 			echo '<h1>' . $AppUI->_('Change User Password') . '</h1>';
             echo $AppUI->getTheme()->styleRenderBoxTop();
-			echo '<table width="100%" cellspacing="0" cellpadding="4" border="0" class="std"><tr><td>' . $AppUI->_('chgpwWrongPW') . '</td></tr></table>';
+			echo '<table cellspacing="0" cellpadding="4" class="std"><tr><td>' . $AppUI->_('chgpwWrongPW') . '</td></tr></table>';
 		}
 	} else {
 
@@ -80,7 +80,7 @@ if ($user_id) {
 		?>
 		<form name="frmEdit" method="post" onsubmit="return false" accept-charset="utf-8">
 			<input type="hidden" name="user_id" value="<?php echo $user_id; ?>" />
-			<table width="100%" cellspacing="0" cellpadding="4" border="0" class="std">
+			<table cellspacing="0" cellpadding="4" class="std">
 				<?php if (!$canAdminEdit) { ?>
 					<tr>
 						<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Current Password'); ?></td>
@@ -114,5 +114,5 @@ if ($user_id) {
 } else {
 	echo '<h1>' . $AppUI->_('Change User Password') . '</h1>';
     echo $AppUI->getTheme()->styleRenderBoxTop();
-	echo '<table width="100%" cellspacing="0" cellpadding="4" border="0" class="std"><tr><td>' . $AppUI->_('chgpwLogin') . '</td></tr></table>';
+	echo '<table cellspacing="0" cellpadding="4" class="std"><tr><td>' . $AppUI->_('chgpwLogin') . '</td></tr></table>';
 }

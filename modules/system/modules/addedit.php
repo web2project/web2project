@@ -70,7 +70,7 @@ $orderMax = count($properties) + count($fields);
 	<input type="hidden" name="mod_id" value="<?php echo $mod_id; ?>" />
 	<input type="hidden" name="module_config_name" value="<?php echo $view ?>" />
 
-	<table id="tblConfig" border="0" cellpadding="4" cellspacing="0" width="100%" class="std tbl list well">
+	<table id="tblConfig" cellpadding="4" cellspacing="0" class="std tbl list well">
 		<tr>
 			<th colspan="2"><?php echo $AppUI->_('Order'); ?></th>
 			<th><?php echo $AppUI->_('Object Property'); ?></th>

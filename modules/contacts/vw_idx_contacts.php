@@ -83,7 +83,7 @@ $methodLabels = w2PgetSysVal('ContactMethods');
 					<?php for ($x = 0, $x_cmp = count($carr[$z]); $x < $x_cmp; $x++) { ?>
 						<tr>
 							<td>
-								<table width="100%" cellspacing="0" cellpadding="1" class="std contact-info">
+								<table cellspacing="0" cellpadding="1" class="std contact-info">
 									<tr>
 										<td width="100%" colspan="2">
 											<table width="100%" cellspacing="0" cellpadding="1">

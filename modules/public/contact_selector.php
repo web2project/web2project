@@ -130,7 +130,7 @@ $contacts = $q->loadHashList('contact_id');
 	<?php
     echo $AppUI->getTheme()->styleRenderBoxTop();
 	?>
-	<table width="100%" class="std">
+	<table class="std">
 		<tr>
 			<td>
 				<h4><a href="javascript: void(0);" onclick="window.location.href=setContactIDs('GET','dialog=1&<?php if (!is_null($call_back))
