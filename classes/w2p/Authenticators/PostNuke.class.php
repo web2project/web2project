@@ -5,6 +5,8 @@
  *
  * @package     web2project\authenticators
  * @todo    remove
+ *
+ * @deprecated
  */
 
 class w2p_Authenticators_PostNuke extends w2p_Authenticators_Base
