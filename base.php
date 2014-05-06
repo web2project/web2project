@@ -3,7 +3,6 @@
  * If you experience a 'white screen of death' or other problems,
  * change the following line of code to this:
  */
-ini_set('display_errors', 1);
 ini_set('display_errors', 0);
 
 /*
@@ -18,8 +17,7 @@ error_reporting(E_ALL & ~E_DEPRECATED & ~E_NOTICE & ~E_STRICT);
 
 define('W2P_PERFORMANCE_DEBUG', true);
 define('MIN_PHP_VERSION', '5.3.8');
-//date_default_timezone_set('America/New_York');
-//Performance Debug Initialization
+
 if (W2P_PERFORMANCE_DEBUG) {
     global $w2p_performance_time, $w2p_performance_dbtime,
         $w2p_performance_old_dbqueries, $w2p_performance_dbqueries,
