@@ -38,7 +38,7 @@ function checkDate(){
 <form action="index.php?m=users<?php echo $a; ?>" method="post" name="frmDate" accept-charset="utf-8">
     <input type="hidden" name="user_id" id="user_id" value="<?php echo $user_id; ?>" />
     <input type="hidden" name="datePicker" value="log" />
-    <table align="center" cellspacing="1" cellpadding="2" border="0" width="100%" class="well">
+    <table border="0" width="100%" class="well">
         <tr align="center">
             <td align="right" width="45%" ><?php echo $AppUI->_('Start Date'); ?></td>
             <td width="55%" align="left">

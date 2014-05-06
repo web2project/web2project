@@ -49,33 +49,33 @@ function clearIt(){
 
 </script>
 
-<table width="100%" border="0" cellpadding="2" cellspacing="0">
-<tr><td width="50%" valign="top">
-<table class="tbl list">
-<tr>
-	<th width="100%"><?php echo $AppUI->_('Role'); ?></th>
-	<th>&nbsp;</th>
-</tr>
+<table width="100%" border="0">
+    <tr>
+        <td width="50%" valign="top">
+            <table class="tbl list">
+                <tr>
+                    <th width="100%"><?php echo $AppUI->_('Role'); ?></th>
+                    <th>&nbsp;</th>
+                </tr>
+                <?php
+                foreach ($user_roles as $row) {
+                    $buf = '';
 
-<?php
-foreach ($user_roles as $row) {
-	$buf = '';
+                    $style = '';
+                    $buf .= "<td>" . $row['name'] . "</td>";
 
-	$style = '';
-	$buf .= "<td>" . $row['name'] . "</td>";
+                    $buf .= '<td nowrap>';
+                    if ($canEdit) {
+                        $buf .= "<a href=\"javascript:delIt({$row['id']});\" title=\"" . $AppUI->_('delete') . "\">" . w2PshowImage('icons/stock_delete-16.png', 16, 16, '') . '</a>';
+                    }
+                    $buf .= '</td>';
 
-	$buf .= '<td nowrap>';
-	if ($canEdit) {
-		$buf .= "<a href=\"javascript:delIt({$row['id']});\" title=\"" . $AppUI->_('delete') . "\">" . w2PshowImage('icons/stock_delete-16.png', 16, 16, '') . '</a>';
-	}
-	$buf .= '</td>';
-
-	echo "<tr>$buf</tr>";
-}
-?>
-</table>
-
-</td><td width="50%" valign="top">
+                    echo "<tr>$buf</tr>";
+                }
+                ?>
+            </table>
+        </td>
+        <td width="50%" valign="top">
 
 <?php if ($canEdit) { ?>
 

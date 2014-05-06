@@ -131,7 +131,7 @@ function setPermItem( key, val ) {
 <?php } ?>
 </script>
 
-<table width="100%" border="0" cellpadding="2" cellspacing="0">
+<table width="100%" border="0">
     <tr>
         <td width="50%" valign="top">
             <table class="tbl list">
