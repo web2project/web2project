@@ -39,9 +39,6 @@ class w2p_Output_HTML_ViewHelperTest extends CommonSetup
 
     public function testAddField()
     {
-        $output = $this->obj->addField('email', 'monkey@example.com');
-        $this->assertEquals('<a href="mailto:monkey@example.com">monkey@example.com</a>', $output);
-
         $output = $this->obj->addField('url', 'http://google.com');
         $this->assertEquals('<a href="http://google.com" target="_new">http://google.com</a>', $output);
 

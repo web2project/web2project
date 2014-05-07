@@ -22,7 +22,8 @@ class w2p_Output_HTML_ViewHelper extends w2p_Output_HTML_Base
                 $output = $myDate ? $myDate->format($this->dtf) : '-';
                 break;
             case 'email':
-                $output = w2p_email($fieldValue);
+                $field = new Web2project\Fields\Email();
+                $output = $field->view($fieldValue);
                 break;
             case 'url':
                 $value = str_replace(array('"', '"', '<', '>'), '', $fieldValue);
