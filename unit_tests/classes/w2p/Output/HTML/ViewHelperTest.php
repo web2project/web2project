@@ -36,10 +36,4 @@ class w2p_Output_HTML_ViewHelperTest extends CommonSetup
     {
         $this->assertEquals('<label>Project:</label>', $this->obj->addLabel('Project'));
     }
-
-    public function testAddField()
-    {
-        $output = $this->obj->addField('owner', '2');
-        $this->assertEquals('<a href="?m=users&a=view&user_id=2">Contact Number 1</a>', $output);
-    }
 }

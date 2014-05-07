@@ -30,13 +30,13 @@ class w2p_Output_HTML_ViewHelper extends w2p_Output_HTML_Base
                 $output = $field->view($fieldValue);
                 break;
             case 'owner':
-                if (!$fieldValue) {
-                    return '-';
-                }
                 $obj = new CContact();
                 $obj->findContactByUserid($fieldValue);
-                $link = '?m=users&a=view&user_id='.$fieldValue;
-                $output = '<a href="'.$link.'">'.$obj->contact_display_name.'</a>';
+
+                $field = new Web2project\Fields\Module();
+                $field->setObject($obj, 'user');
+
+                $output = $field->view($fieldValue);
                 break;
             case 'percent':
                 $field = new Web2project\Fields\Percent();
