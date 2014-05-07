@@ -152,10 +152,8 @@ class w2p_Utilities_Mail extends PHPMailer
         if (is_array($to)) {
             $this->ato = $to;
         } else {
-            if ($this->useRawAddress) {
-                if (preg_match("/^(.*)\<(.+)\>$/D", $to, $regs)) {
-                    $to = $regs[2];
-                }
+            if (preg_match("/^(.*)\<(.+)\>$/D", $to, $regs)) {
+                $to = $regs[2];
             }
             if ($reset) {
                 unset($this->ato);
