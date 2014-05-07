@@ -100,7 +100,6 @@ $form = new w2p_Output_HTML_FormHelper($AppUI);
             <tr>
                 <td colspan="2" align="right">
                     <?php
-                    // $m does not equal 'calendar' here???
                     $custom_fields = new w2p_Core_CustomFields('events', 'addedit', $obj->event_id, 'edit');
                     $custom_fields->printHTML();
                     ?>

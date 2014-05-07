@@ -36,7 +36,7 @@ $form = new w2p_Output_HTML_FormHelper($AppUI);
             </p>
             <?php
             $custom_fields = new w2p_Core_CustomFields($m, $a, $company->company_id, "edit");
-            echo '<p>' . $custom_fields->getHTML() . '</p>';
+            echo $custom_fields->getHTML();
             $form->showCancelButton();
             ?>
         </div>

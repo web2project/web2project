@@ -44,12 +44,10 @@ $view = new w2p_Output_HTML_ViewHelper($AppUI);
         <p><?php $view->showLabel('Description'); ?>
             <?php $view->showField('contact_notes', $contact->contact_notes); ?>
         </p>
-        <p>
-            <?php
-            $custom_fields = new w2p_Core_CustomFields($m, $a, $contact->contact_id, 'view');
-            $custom_fields->printHTML();
-            ?>
-        </p>
+        <?php
+        $custom_fields = new w2p_Core_CustomFields($m, $a, $contact->contact_id, 'view');
+        $custom_fields->printHTML();
+        ?>
         <?php
         $fields = $methods['fields'];
         foreach ($fields as $key => $field): ?>

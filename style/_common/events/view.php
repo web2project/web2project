@@ -41,11 +41,9 @@ $view = new w2p_Output_HTML_ViewHelper($AppUI);
         <p><?php $view->showLabel('Description'); ?>
             <?php $view->showField('event_description', $event->event_description); ?>
         </p>
-        <p>
-            <?php
-            $custom_fields = new w2p_Core_CustomFields($m, $a, $event->event_id, 'view');
-            $custom_fields->printHTML();
-            ?>
-        </p>
+        <?php
+        $custom_fields = new w2p_Core_CustomFields($m, $a, $event->event_id, 'view');
+        $custom_fields->printHTML();
+        ?>
     </div>
 </div>
