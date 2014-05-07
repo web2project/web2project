@@ -52,8 +52,11 @@ class w2p_Output_HTML_ViewHelper extends w2p_Output_HTML_Base
                 $class  = 'C'.ucfirst($suffix);
                 $obj = new $class();
                 $obj->load($fieldValue);
-                $link = '?m='. w2p_pluralize($suffix) .'&a=view&'.$suffix.'_id='.$fieldValue;
-                $output = '<a href="'.$link.'">'.$obj->{"$suffix".'_name'}.'</a>';
+
+                $field = new Web2project\Fields\Module();
+                $field->setObject($obj, $suffix);
+
+                $output = $field->view($fieldValue);
                 break;
             default:
                 $output = htmlspecialchars($fieldValue, ENT_QUOTES);
