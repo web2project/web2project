@@ -41,8 +41,5 @@ class w2p_Output_HTML_ViewHelperTest extends CommonSetup
     {
         $output = $this->obj->addField('owner', '2');
         $this->assertEquals('<a href="?m=users&a=view&user_id=2">Contact Number 1</a>', $output);
-
-        $output = $this->obj->addField('percent', '38.7');
-        $this->assertEquals('39%', $output);
     }
 }

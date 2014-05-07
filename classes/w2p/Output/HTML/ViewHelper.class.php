@@ -39,7 +39,8 @@ class w2p_Output_HTML_ViewHelper extends w2p_Output_HTML_Base
                 $output = '<a href="'.$link.'">'.$obj->contact_display_name.'</a>';
                 break;
             case 'percent':
-                $output = round($fieldValue).'%';
+                $field = new Web2project\Fields\Percent();
+                $output = $field->view($fieldValue);
                 break;
             case 'description':
                 $field = new Web2project\Fields\Text();
