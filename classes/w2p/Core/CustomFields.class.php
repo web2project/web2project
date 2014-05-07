@@ -208,26 +208,11 @@ class w2p_Core_CustomFields {
     }
 
     public function getHTML() {
-        if ($this->count() == 0) {
-            return '';
-        } else {
-            $html = '';
-            if (!$this->published) {
-                $html = '<table width="100%">';
-            }
-
-            foreach ($this->fields as $cfield) {
-                if (!$this->published) {
-                    $html .= "\t" . '<tr><td nowrap="nowrap">' . $cfield->getHTML($this->mode) . '</td></tr>';
-                } else {
-                    $html .= "\t" . '<tr><td align="right" nowrap="nowrap">' . $cfield->getHTML($this->mode) . '</td></tr>';
-                }
-            }
-            if (!$this->published) {
-                $html .= '</table>';
-            }
-            return $html;
+        $html = '';
+        foreach ($this->fields as $cfield) {
+            $html .= '<p>' . $cfield->getHTML($this->mode) . '</p>';
         }
+        return $html;
     }
 
     public function printHTML() {
