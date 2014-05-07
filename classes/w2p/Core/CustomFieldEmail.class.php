@@ -17,7 +17,7 @@ class w2p_Core_CustomFieldEmail extends w2p_Core_CustomFieldText
         $html = '<label>' . $this->field_description . ':</label>';
         switch ($mode) {
             case 'edit':
-                $html .= '<input type="text" class="text" name="' . $this->fieldName() . '" value="' . $this->charValue() . '" ' . $this->fieldExtraTags() . ' />';
+                $html .= $field->edit($this->fieldName(), $this->charValue(), $this->fieldExtraTags());
                 break;
             case 'view':
                 $html .= $field->view($this->charValue());
