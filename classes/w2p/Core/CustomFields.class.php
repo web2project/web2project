@@ -210,7 +210,9 @@ class w2p_Core_CustomFields {
     public function getHTML() {
         $html = '';
         foreach ($this->fields as $cfield) {
-            $html .= '<p>' . $cfield->getHTML($this->mode) . '</p>';
+            if ($cfield->field_published) {
+                $html .= '<p>' . $cfield->getHTML($this->mode) . '</p>';
+            }
         }
         return $html;
     }
