@@ -177,10 +177,10 @@ abstract class w2p_Core_BaseObject extends w2p_System_Event implements w2p_Syste
     /**
      *     Binds an array/hash to this object
      *
-     * @param null $oid     optional argument, if not specifed then the value of current key is used
+     * @param null $oid     optional argument, if not specified then the value of current key is used
      * @param bool $strip
      *
-     * @return $this|bool
+     * @return bool
      */
     public function load($oid = null, $strip = true)
     {
