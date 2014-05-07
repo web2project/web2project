@@ -97,12 +97,6 @@ class w2p_Core_CustomFieldsParser {
 
         $parsed .= $this->_getLabelHTML($field_config);
         switch ($field_config['type']) {
-            case 'text':
-                $parsed .= '<td align="left"><input type="text" name="custom_' . $key .'" class="text" ' . $field_config['options'] . ' value="' . (isset($this->previous_data[$key]) ? $this->previous_data[$key] : '') . '" /></td>';
-                break;
-            case 'href':
-                $parsed .= '<td align="left"><input type="text" name="custom_' . $key . '" class="text" ' . $field_config['options'] . ' value="' . (isset($this->previous_data[$key]) ? $this->previous_data[$key] : '') . '" /></td>';
-                break;
             case 'select':
                 $parsed .= '<td align="left">' . arraySelect(explode(',', $field_config['selects']), 'custom_' . $key, 'size="1" class="text" ' . $field_config['options'], (isset($this->previous_data[$key]) ? $this->previous_data[$key] : '')) . '</td>';
                 break;
@@ -122,6 +116,8 @@ class w2p_Core_CustomFieldsParser {
                 }
                 $parsed .= '</td>';
                 break;
+            default:
+                $parsed .= '<td align="left"><input type="text" name="custom_' . $key . '" class="text" ' . $field_config['options'] . ' value="' . (isset($this->previous_data[$key]) ? $this->previous_data[$key] : '') . '" /></td>';
         }
         $parsed .= '</tr>';
         return $parsed;
