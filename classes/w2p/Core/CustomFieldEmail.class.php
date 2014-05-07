@@ -10,13 +10,15 @@ class w2p_Core_CustomFieldEmail extends w2p_Core_CustomFieldText
 {
     public $field_htmltype = 'email';
 
-    public function getHTML($mode) {
+    public function getHTML($mode)
+    {
+        $html = '<label>' . $this->field_description . ':</label>';
         switch ($mode) {
             case 'edit':
-                $html = $this->field_description . ': </td><td><input type="text" class="text" name="' . $this->fieldName() . '" value="' . $this->charValue() . '" ' . $this->fieldExtraTags() . ' />';
+                $html .= '<input type="text" class="text" name="' . $this->fieldName() . '" value="' . $this->charValue() . '" ' . $this->fieldExtraTags() . ' />';
                 break;
             case 'view':
-                $html = $this->field_description . ': </td><td class="hilite" width="100%">' . w2p_email($this->charValue());
+                $html .= w2p_email($this->charValue());
                 break;
         }
         return $html;

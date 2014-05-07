@@ -10,13 +10,15 @@ class w2p_Core_CustomFieldText extends w2p_Core_CustomField
 {
     public $field_htmltype = 'textinput';
 
-    public function getHTML($mode) {
+    public function getHTML($mode)
+    {
+        $html = '<label>' . $this->field_description . ':</label>';
         switch ($mode) {
             case 'edit':
-                $html = $this->field_description . ': </td><td><input type="text" class="text" name="' . $this->fieldName() . '" value="' . $this->charValue() . '" ' . $this->fieldExtraTags() . ' />';
+                $html .= '<input type="text" class="text" name="' . $this->fieldName() . '" value="' . $this->charValue() . '" ' . $this->fieldExtraTags() . ' />';
                 break;
             case 'view':
-                $html = $this->field_description . ': </td><td class="hilite" width="100%">' . $this->charValue();
+                $html .= $this->charValue();
                 break;
         }
         return $html;

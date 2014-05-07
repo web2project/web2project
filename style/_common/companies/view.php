@@ -38,11 +38,9 @@ $view = new w2p_Output_HTML_ViewHelper($AppUI);
         <p><?php $view->showLabel('Description'); ?>
             <?php $view->showField('company_description', $company->company_description); ?>
         </p>
-        <p>
-            <?php
-            $custom_fields = new w2p_Core_CustomFields($m, $a, $company->company_id, 'view');
-            $custom_fields->printHTML();
-            ?>
-        </p>
+        <?php
+        $custom_fields = new w2p_Core_CustomFields($m, $a, $company->company_id, 'view');
+        $custom_fields->printHTML();
+        ?>
     </div>
 </div>

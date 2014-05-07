@@ -12,12 +12,13 @@ class w2p_Core_CustomFieldWeblink extends w2p_Core_CustomField
     public $field_htmltype = 'href';
 
     public function getHTML($mode) {
+        $html = '<label>' . $this->field_description . ':</label>';
         switch ($mode) {
             case 'edit':
-                $html = $this->field_description . ': </td><td><input type="text" class="text" name="' . $this->fieldName() . '" value="' . $this->charValue() . '" ' . $this->fieldExtraTags() . ' />';
+                $html .= '<input type="text" class="text" name="' . $this->fieldName() . '" value="' . $this->charValue() . '" ' . $this->fieldExtraTags() . ' />';
                 break;
             case 'view':
-                $html = $this->field_description . ': </td><td class="hilite" width="100%"><a href="' . $this->charValue() . '">' . $this->charValue() . '</a>';
+                $html .= '<a href="' . $this->charValue() . '">' . $this->charValue() . '</a>';
                 break;
         }
         return $html;

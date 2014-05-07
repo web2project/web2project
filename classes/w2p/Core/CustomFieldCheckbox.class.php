@@ -12,14 +12,15 @@ class  w2p_Core_CustomFieldCheckBox extends w2p_Core_CustomField
     public $field_htmltype = 'checkbox';
 
     public function getHTML($mode) {
+        $html = '<label>' . $this->field_description . ':</label>';
         switch ($mode) {
             case 'edit':
                 $bool_tag = ($this->intValue()) ? 'checked="checked"': '';
-                $html = $this->field_description . ': </td><td><input type="checkbox" name="' . $this->fieldName() . '" value="1" ' . $bool_tag . $this->fieldExtraTags() . '/>';
+                $html .= '<input type="checkbox" name="' . $this->fieldName() . '" value="1" ' . $bool_tag . $this->fieldExtraTags() . '/>';
                 break;
             case 'view':
                 $bool_text = ($this->intValue()) ? 'Yes': 'No';
-                $html = $this->field_description . ': </td><td class="hilite" width="100%">' . $bool_text;
+                $html .= $bool_text;
                 break;
         }
         return $html;

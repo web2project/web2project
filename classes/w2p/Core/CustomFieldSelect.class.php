@@ -21,13 +21,14 @@ class w2p_Core_CustomFieldSelect extends w2p_Core_CustomField
     }
 
     public function getHTML($mode) {
+        $html = '<label>' . $this->field_description . ':</label>';
+
         switch ($mode) {
             case 'edit':
-                $html = $this->field_description . ': </td><td>';
                 $html .= $this->options->getHTML($this->fieldName(), $this->intValue());
                 break;
             case 'view':
-                $html = $this->field_description . ': </td><td class="hilite" width="100%">' . $this->options->itemAtIndex($this->intValue());
+                $html .= $this->options->itemAtIndex($this->intValue());
                 break;
         }
         return $html;
