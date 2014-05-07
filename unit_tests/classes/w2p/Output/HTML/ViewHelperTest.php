@@ -56,26 +56,5 @@ class w2p_Output_HTML_ViewHelperTest extends CommonSetup
 
         $output = $this->obj->addField('percent', '38.7');
         $this->assertEquals('39%', $output);
-        /**
-        $output = $this->obj->addField('birthday', '2014-02-01');
-        // @todo $this->assertEquals('<input type="text" class="text birthday" name="birthday" value="2014-02-01" />', $output);
-
-        $output = $this->obj->addField('task_end_date', '2014-02-01');
-        $this->assertGreaterThan(0, strpos($output, 'value="20140201"'));
-        $this->assertGreaterThan(0, strpos($output, 'value="01/Feb/2014"'));
-        $this->assertGreaterThan(0, strpos($output, "return showCalendar('end_date'"));
-
-        $output = $this->obj->addField('private', 'fieldvalue');
-        // @todo $this->assertEquals('<input type="checkbox" value="1" class="text private" name="private" />', $output);
-
-        $output = $this->obj->addField('type', 0, array(), array(0 => 'monkey', 2 => 'dog'));
-        $this->assertGreaterThan(0, strpos($output, '<option value="0" selected="selected">monkey</option>'));
-
-        $output = $this->obj->addField('company', '1');
-        $this->assertEquals('<a href="?m=companies&a=view&company_id=1">UnitTestCompany</a>', $output);
-
-        $output = $this->obj->addField('other', 'fieldvalue', $options, $values);
-        // @todo $this->assertEquals('<input type="text" xx="text other" name="other" value="fieldvalue" />', $output);
- */
     }
 }
