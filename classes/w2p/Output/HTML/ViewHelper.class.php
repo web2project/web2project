@@ -23,11 +23,9 @@ class w2p_Output_HTML_ViewHelper extends w2p_Output_HTML_Base
                 break;
             case 'email':
                 $field = new Web2project\Fields\Email();
-                $output = $field->view($fieldValue);
                 break;
             case 'url':
                 $field = new Web2project\Fields\Url();
-                $output = $field->view($fieldValue);
                 break;
             case 'owner':
                 $obj = new CContact();
@@ -35,12 +33,9 @@ class w2p_Output_HTML_ViewHelper extends w2p_Output_HTML_Base
 
                 $field = new Web2project\Fields\Module();
                 $field->setObject($obj, 'user');
-
-                $output = $field->view($fieldValue);
                 break;
             case 'percent':
                 $field = new Web2project\Fields\Percent();
-                $output = $field->view($fieldValue);
                 break;
             case 'company':
             case 'department':
@@ -51,15 +46,12 @@ class w2p_Output_HTML_ViewHelper extends w2p_Output_HTML_Base
 
                 $field = new Web2project\Fields\Module();
                 $field->setObject($obj, $suffix);
-
-                $output = $field->view($fieldValue);
                 break;
             default:
                 $field = new Web2project\Fields\Text();
-                $output = $field->view($fieldValue);
         }
 
-        return $output;
+        return $field->view($fieldValue);
     }
 
     public function showField($fieldName, $fieldValue)
