@@ -9,7 +9,7 @@ class TextArea
         return w2p_textarea($value);
     }
 
-    public function edit($name, $value, $extraTags)
+    public function edit($name, $value, $extraTags = '')
     {
         return '<textarea name="' . $name . '" ' . $extraTags . ' class="customfield">' . $value . '</textarea>';
     }

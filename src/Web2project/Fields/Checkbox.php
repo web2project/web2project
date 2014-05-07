@@ -8,7 +8,7 @@ class Checkbox
         return $value;
     }
 
-    public function edit($name, $value, $extraTags)
+    public function edit($name, $value, $extraTags = '')
     {
         return '<input type="checkbox" name="' . $name . '" value="1" ' . $value . $extraTags . '/>';
     }

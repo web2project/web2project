@@ -9,7 +9,7 @@ class Text
         return w2p_textarea($value);
     }
 
-    public function edit($name, $value, $extraTags)
+    public function edit($name, $value, $extraTags = '')
     {
         return '<input type="text" class="text" name="' . $name . '" value="' . $value . '" ' . $extraTags . ' />';
     }
