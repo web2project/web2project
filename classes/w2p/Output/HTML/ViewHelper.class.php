@@ -26,8 +26,8 @@ class w2p_Output_HTML_ViewHelper extends w2p_Output_HTML_Base
                 $output = $field->view($fieldValue);
                 break;
             case 'url':
-                $value = str_replace(array('"', '"', '<', '>'), '', $fieldValue);
-                $output = w2p_url($value);
+                $field = new Web2project\Fields\Url();
+                $output = $field->view($fieldValue);
                 break;
             case 'owner':
                 if (!$fieldValue) {
