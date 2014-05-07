@@ -724,3 +724,43 @@ function db_dateTime2unix($time)
     $connection = new w2p_Database_Connection($db);
     return $connection->dateTime2unix($time);
 }
+
+/** @deprecated */
+function clash_process(w2p_Core_CAppUI $AppUI)
+{
+    trigger_error(__FUNCTION__ . " has been deprecated in v3.2 and will be removed in v5.0. There is no replacement.", E_USER_NOTICE );
+
+    $AppUI->redirect('m=events');
+}
+
+/** @deprecated */
+function clash_mail(w2p_Core_CAppUI $AppUI)
+{
+    trigger_error(__FUNCTION__ . " has been deprecated in v3.2 and will be removed in v5.0. There is no replacement.", E_USER_NOTICE );
+
+    $AppUI->redirect('m=events');
+}
+
+/** @deprecated */
+function clash_accept(w2p_Core_CAppUI $AppUI)
+{
+    trigger_error(__FUNCTION__ . " has been deprecated in v3.2 and will be removed in v5.0. There is no replacement.", E_USER_NOTICE );
+
+    $AppUI->redirect('m=events');
+}
+
+/** @deprecated */
+function clear_clash()
+{
+    trigger_error(__FUNCTION__ . " has been deprecated in v3.2 and will be removed in v5.0. There is no replacement.", E_USER_NOTICE );
+
+    return false;
+}
+
+/** @deprecated */
+function clash_cancel(w2p_Core_CAppUI $AppUI)
+{
+    trigger_error(__FUNCTION__ . " has been deprecated in v3.2 and will be removed in v5.0. There is no replacement.", E_USER_NOTICE );
+
+    $AppUI->redirect('m=events');
+}
