@@ -163,7 +163,7 @@ class w2p_Core_CustomField {
         if (false === strpos($this->field_extratags, 'id=')) {
             return ' id="'.$this->field_name.'_'.$this->field_id.'" ';
         } else {
-            return 'asdf';
+            return '';
         }
     }
 }
