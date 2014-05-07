@@ -58,7 +58,9 @@ class w2p_Output_HTML_FormHelper extends w2p_Output_HTML_Base
             case 'project':
             case 'status':
             case 'type':
-                $output  = arraySelect($values, $fieldName, 'size="1" class="text '.$suffix.'"', $fieldValue);
+                $field = new Web2project\Fields\Select();
+                $field->setOptions($values);
+                $output = $field->edit($fieldName, $fieldValue, "class=\"text $suffix\"");
                 break;
             case 'url':
                 $field = new Web2project\Fields\Url();
@@ -70,7 +72,7 @@ class w2p_Output_HTML_FormHelper extends w2p_Output_HTML_Base
              */
             default:
                 $field = new Web2project\Fields\Text();
-                $output .= $field->edit($fieldName, $fieldValue, "class=\"text $suffix\"");
+                $output = $field->edit($fieldName, $fieldValue, "class=\"text $suffix\"");
         }
 
         return $output;
