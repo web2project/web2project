@@ -12,16 +12,7 @@ class Select
 
     public function edit($name, $value, $extraTags = '')
     {
-        $html = '<select name="' . $name . '" class="text" ' . $extraTags . '>';
-        foreach ($this->options as $i => $opt) {
-            $html .= "\t" . '<option value="' . $i . '"';
-            if ($i == $value) {
-                $html .= ' selected="selected" ';
-            }
-            $html .= '>' . $opt . '</option>';
-        }
-        $html .= '</select>';
-        return $html;
+        return arraySelect($this->options, $name, 'size="1" '. $extraTags, $value);
     }
 
     public function setOptions($options)
