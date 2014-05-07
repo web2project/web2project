@@ -59,7 +59,8 @@ class w2p_Output_HTML_ViewHelper extends w2p_Output_HTML_Base
                 $output = $field->view($fieldValue);
                 break;
             default:
-                $output = htmlspecialchars($fieldValue, ENT_QUOTES);
+                $field = new Web2project\Fields\Text();
+                $output = $field->view($fieldValue);
         }
 
         return $output;
