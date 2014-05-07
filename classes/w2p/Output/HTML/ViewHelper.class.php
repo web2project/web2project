@@ -42,7 +42,8 @@ class w2p_Output_HTML_ViewHelper extends w2p_Output_HTML_Base
                 $output = round($fieldValue).'%';
                 break;
             case 'description':
-                $output = w2p_textarea($fieldValue);
+                $field = new Web2project\Fields\Text();
+                $output = $field->view($fieldValue);
                 break;
             case 'company':
             case 'department':
