@@ -124,8 +124,7 @@ class CUser extends w2p_Core_BaseObject
 
     public function canCreate()
     {
-        $recordCount = $this->loadAll(null, "user_username = '".$this->user_username."'");
-        if (count($recordCount)) {
+        if ($this->user_exists($this->user_username)) {
             $this->_error['canCreate'] = 'A user with this username already exists';
             return false;
          }
