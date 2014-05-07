@@ -6,7 +6,7 @@
  * @package web2project\core
  */
 
-class w2p_Core_CustomFieldEmail extends w2p_Core_CustomFieldText
+class w2p_Core_CustomFieldEmail extends w2p_Core_CustomField
 {
     public $field_htmltype = 'email';
 
