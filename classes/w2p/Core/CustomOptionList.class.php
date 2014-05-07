@@ -74,6 +74,7 @@ class w2p_Core_CustomOptionList {
         return $this->options[$i];
     }
 
+    /** @deprecated */
     public function getHTML($field_name, $selected) {
         $html = '<select name="' . $field_name . '" class="text">';
         foreach ($this->options as $i => $opt) {

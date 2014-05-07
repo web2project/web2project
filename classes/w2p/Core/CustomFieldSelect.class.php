@@ -20,15 +20,19 @@ class w2p_Core_CustomFieldSelect extends w2p_Core_CustomField
         $this->options->load();
     }
 
-    public function getHTML($mode) {
+    public function getHTML($mode)
+    {
+        $field = new Web2project\Fields\Select();
+
         $html = '<label>' . $this->field_description . ':</label>';
 
         switch ($mode) {
             case 'edit':
-                $html .= $this->options->getHTML($this->fieldName(), $this->intValue());
+                $field->setOptions($this->options->getOptions());
+                $html .= $field->edit($this->fieldName(), $this->intValue());
                 break;
             case 'view':
-                $html .= $this->options->itemAtIndex($this->intValue());
+                $html .= $field->view($this->options->itemAtIndex($this->intValue()));
                 break;
         }
         return $html;
