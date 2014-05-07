@@ -18,20 +18,13 @@ class w2p_Output_HTML_FormHelper extends w2p_Output_HTML_Base
         }
 
         switch ($suffix) {
-            case 'company':
-                $class  = 'C'.ucfirst($suffix);
-
-                $obj = new $class();
-                $obj->load($fieldValue);
-                $link = '?m='. w2p_pluralize($suffix) .'&a=view&'.$suffix.'_id='.$fieldValue;
-                $output = '<a href="'.$link.'">'.$obj->{"$suffix".'_name'}.'</a>';
-                break;
             case 'desc':            // @todo This is a special case because department->dept_notes should be renamed department->dept_description
             case 'note':            // @todo This is a special case because resource->resource_note should be renamed resource->resource_description
             case 'notes':           // @todo This is a special case because contact->contact_notes should be renamed contact->contact_description
             case 'signature':       // @todo This is a special case because user->user_signature should be renamed to something else..?
             case 'description':
-                $output  = '<textarea name="' . $fieldName . '" class="'.$suffix.'">' . w2PformSafe($fieldValue) . '</textarea>';
+                $field = new Web2project\Fields\TextArea();
+                $output = $field->edit($fieldName, $fieldValue, "class=\"text $suffix\"");
                 break;
             case 'birthday':        // @todo This is a special case because contact->contact_birthday should be renamed contact->contact_birth_date
                 $myDate = intval($fieldValue) ? new w2p_Utilities_Date($fieldValue) : null;
@@ -52,8 +45,8 @@ class w2p_Output_HTML_FormHelper extends w2p_Output_HTML_Base
                 break;
             case 'private':
             case 'updateask':       // @todo This is unique to the contacts module
-                $output  = '<input type="checkbox" value="1" class="text '. $suffix . '" ';
-                $output .= 'name="' . $fieldName. '" ' .$params .' />';
+                $field = new Web2project\Fields\Checkbox();
+                $output = $field->edit($fieldName, $fieldValue, "class=\"text $suffix\"");
                 break;
             case 'parent':          // @note This drops through on purpose
                 $suffix = 'department';
@@ -68,17 +61,16 @@ class w2p_Output_HTML_FormHelper extends w2p_Output_HTML_Base
                 $output  = arraySelect($values, $fieldName, 'size="1" class="text '.$suffix.'"', $fieldValue);
                 break;
             case 'url':
-                $output  = 'http://<input type="text" class="text '. $suffix . '" ';
-                $output .= 'name="' . $fieldName. '" value="' . w2PformSafe($fieldValue) . '" ' .$params .' />';
-                $output .= '<a href="javascript: void(0);" onclick="testURL()">[' . $this->AppUI->_('test') . ']</a>';
+                $field = new Web2project\Fields\Url();
+                $output = $field->edit($fieldName, $fieldValue, "class=\"text $suffix\"");
                 break;
             /**
              * This handles the default input text input box. It currently covers these fields:
              *   all names, email, phone1, phone2, url, address1, address2, city, state, zip, fax, title, job
              */
             default:
-                $output  = '<input type="text" class="text '. $suffix . '" ';
-                $output .= 'name="' . $fieldName. '" value="' . w2PformSafe($fieldValue) . '" ' .$params .' />';
+                $field = new Web2project\Fields\Text();
+                $output .= $field->edit($fieldName, $fieldValue, "class=\"text $suffix\"");
         }
 
         return $output;
