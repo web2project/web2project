@@ -109,9 +109,10 @@ class w2p_Output_HTMLHelper extends w2p_Output_HTML_Base
 
                 $obj = new $class();
                 $obj->load($value);
-                $link = '?m='. w2p_pluralize($module) .'&a=view&'.$module.'_id='.$value;
-                $cell = '<a href="'.$link.'">'.$obj->{"$module".'_name'}.'</a>';
-                $suffix .= ' _name';
+
+                $field = new Web2project\Fields\Module();
+                $field->setObject($obj, substr($suffix, 1));
+                $cell = $field->view($value);
                 break;
             case '_department':
                 $module = substr($suffix, 1);
@@ -176,17 +177,20 @@ class w2p_Output_HTMLHelper extends w2p_Output_HTML_Base
                 if ((int) $value) {
                     $obj = new CContact();
                     $obj->findContactByUserid($value);
-                    $suffix .= ' nowrap';
-                    $link = '?m=users&a=view&user_id='.$value;
-                    $cell = '<a href="'.$link.'">'.$obj->contact_display_name.'</a>';
+
+                    $field = new Web2project\Fields\Module();
+                    $field->setObject($obj, 'user');
+                    $cell = $field->view($value);
                 } else {
-                    $cell = $value;
+                    $field = new Web2project\Fields\Text();
+                    $cell = $field->view($value);
                 }
                 break;
                 // The above are all contact/user display names, the below are numbers.
             case '_count':
             case '_hours':
-                $cell = $value;
+                $field = new Web2project\Fields\Text();
+                $cell = $field->view($value);
                 break;
             case '_duration':
                 $durnTypes = w2PgetSysVal('TaskDurationType');
@@ -200,11 +204,12 @@ class w2p_Output_HTMLHelper extends w2p_Output_HTML_Base
                 $cell .= formatCurrency($value, $this->AppUI->getPref('CURRENCYFORM'));
                 break;
             case '_url':
-                $value = str_replace(array('"', '"', '<', '>'), '', $value);
-                $cell = w2p_url($value);
+                $field = new Web2project\Fields\Url();
+                $cell = $field->view($value);
                 break;
             case '_email':
-                $cell = w2p_email($value);
+                $field = new Web2project\Fields\Email();
+                $cell = $field->view($value);
                 break;
             case '_birthday':
             case '_date':
@@ -229,7 +234,8 @@ class w2p_Output_HTMLHelper extends w2p_Output_HTML_Base
                 $cell = $myDate ? $myDate->format($this->dtf) : '-';
                 break;
             case '_description':
-                $cell = w2p_textarea($value);
+                $field = new Web2project\Fields\TextArea();
+                $cell = $field->view($value);
                 break;
             case '_priority':
                 $mod = ($value > 0) ? '+' : '-';
@@ -240,7 +246,8 @@ class w2p_Output_HTMLHelper extends w2p_Output_HTML_Base
             case '_assignment':
             case '_allocated':
             case '_allocation':
-                $cell = round($value).'%';
+                $field = new Web2project\Fields\Percent();
+                $cell = $field->view($value);
                 break;
             case '_password':
                 $cell = '('.$this->AppUI->_('hidden').')';
@@ -251,7 +258,10 @@ class w2p_Output_HTMLHelper extends w2p_Output_HTML_Base
                 break;
             case '_identifier':
                 $additional = 'style="background-color:#'.$value.'; color:'.bestColor($value).'" ';
-                $cell = $this->tableRowData['project_percent_complete'].'%';
+                $value = $this->tableRowData['project_percent_complete'];
+
+                $field = new Web2project\Fields\Percent();
+                $cell = $field->view($value);
                 break;
             case '_project':
                 $module = substr($suffix, 1);
