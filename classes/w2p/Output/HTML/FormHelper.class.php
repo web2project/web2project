@@ -7,15 +7,10 @@
  */
 class w2p_Output_HTML_FormHelper extends w2p_Output_HTML_Base
 {
-    public function addField($fieldName, $fieldValue, $options = array(), $values = array())
+    public function addField($fieldName, $fieldValue, $unused = array(), $values = array())
     {
         $pieces = explode('_', $fieldName);
         $suffix = end($pieces);
-
-        $params = '';
-        foreach ($options as $key => $value) {
-            $params .= $key . '="' . $value .'" ';
-        }
 
         switch ($suffix) {
             case 'desc':            // @todo This is a special case because department->dept_notes should be renamed department->dept_description
