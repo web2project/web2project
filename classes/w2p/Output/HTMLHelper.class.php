@@ -242,6 +242,10 @@ class w2p_Output_HTMLHelper extends w2p_Output_HTML_Base
                 $image = '<img src="' . w2PfindImage('icons/priority' . $mod . abs($value) . '.gif') . '" width="13" height="16" alt="">';
                 $cell = ($value != 0) ? $image : '';
                 break;
+            case '_identifier':
+                $additional = 'style="background-color:#'.$value.'; color:'.bestColor($value).'" ';
+                $value = $this->tableRowData['project_percent_complete'];
+                // this drops through on purpose
             case '_complete':
             case '_assignment':
             case '_allocated':
@@ -255,13 +259,6 @@ class w2p_Output_HTMLHelper extends w2p_Output_HTML_Base
             case '_version':
                 $value = (int) (100 * $value);
                 $cell = number_format($value/100, 2);
-                break;
-            case '_identifier':
-                $additional = 'style="background-color:#'.$value.'; color:'.bestColor($value).'" ';
-                $value = $this->tableRowData['project_percent_complete'];
-
-                $field = new Web2project\Fields\Percent();
-                $cell = $field->view($value);
                 break;
             case '_project':
                 $module = substr($suffix, 1);
