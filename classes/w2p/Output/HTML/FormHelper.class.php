@@ -29,8 +29,9 @@ class w2p_Output_HTML_FormHelper extends w2p_Output_HTML_Base
             case 'birthday':        // @todo This is a special case because contact->contact_birthday should be renamed contact->contact_birth_date
                 $myDate = intval($fieldValue) ? new w2p_Utilities_Date($fieldValue) : null;
                 $date = $myDate ? $myDate->format('%Y-%m-%d') : '-';
-                $output  = '<input type="text" class="text '. $suffix . '" ';
-                $output .= 'name="' . $fieldName. '" value="' . w2PformSafe($date) . '" ' .$params .' />';
+
+                $field = new Web2project\Fields\Date();
+                $output = $field->edit($fieldName, $date, "class=\"text $suffix\"");
                 break;
             case 'date':
                 $date = ($fieldValue) ? new w2p_Utilities_Date($fieldValue) : null;
