@@ -58,7 +58,7 @@ class w2p_Output_HTML_FormHelperTest extends CommonSetup
         $values  = array();
 
         $output = $this->obj->addField('description', 'test');
-        $this->assertEquals('<textarea name="description" class="description">test</textarea>', $output);
+        $this->assertEquals('<textarea name="description" class="text description">test</textarea>', $output);
 
         $output = $this->obj->addField('birthday', '2014-02-01');
         // @todo $this->assertEquals('<input type="text" class="text birthday" name="birthday" value="2014-02-01" />', $output);
@@ -77,7 +77,6 @@ class w2p_Output_HTML_FormHelperTest extends CommonSetup
         $output = $this->obj->addField('url', 'http://google.com', $options, $values);
         $this->assertGreaterThan(0, strpos($output, 'class="text url"'));
         $this->assertGreaterThan(0, strpos($output, 'value="http://google.com"'));
-        $this->assertGreaterThan(0, strpos($output, 'onclick="testURL()"'));
 
         $output = $this->obj->addField('company', '1');
         $this->assertEquals('<a href="?m=companies&a=view&company_id=1">UnitTestCompany</a>', $output);
