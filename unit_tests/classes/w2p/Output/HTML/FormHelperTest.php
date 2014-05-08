@@ -78,9 +78,6 @@ class w2p_Output_HTML_FormHelperTest extends CommonSetup
         $this->assertGreaterThan(0, strpos($output, 'class="text url"'));
         $this->assertGreaterThan(0, strpos($output, 'value="http://google.com"'));
 
-        $output = $this->obj->addField('company', '1');
-        $this->assertEquals('<a href="?m=companies&a=view&company_id=1">UnitTestCompany</a>', $output);
-
         $output = $this->obj->addField('other', 'fieldvalue', $options, $values);
         // @todo $this->assertEquals('<input type="text" xx="text other" name="other" value="fieldvalue" />', $output);
     }
