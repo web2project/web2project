@@ -80,35 +80,12 @@ echo 'window.company_id=' . ((int) $company_detail['company_id']) . ";\n";
 
 function submitIt() {
 	var form = document.changecontact;
-    if (form.contact_birthday.value == '0000-00-00') {
-        form.contact_birthday.value = '';
-    }
     if (form.contact_last_name.value.length < 1) {
         alert( '<?php echo $AppUI->_('contactsValidName', UI_OUTPUT_JS); ?>' );
         form.contact_last_name.focus();
     } else if (form.contact_first_name.value.length < 1) {
         alert( '<?php echo $AppUI->_('contactsValidName', UI_OUTPUT_JS); ?>' );
         form.contact_first_name.focus();
-    } else if (form.contact_birthday.value.length > 1) {
-        dar = form.contact_birthday.value.split("-");
-        if (dar.length < 3) {
-            alert("<?php echo $AppUI->_('adminInvalidBirthday', UI_OUTPUT_JS); ?>");
-            form.contact_birthday.focus();
-        } else if (isNaN(parseInt(dar[0],10)) || isNaN(parseInt(dar[1],10)) || isNaN(parseInt(dar[2],10))) {
-            alert("<?php echo $AppUI->_('adminInvalidBirthday', UI_OUTPUT_JS); ?>");
-            form.contact_birthday.focus();
-        } else if (parseInt(dar[1],10) < 1 || parseInt(dar[1],10) > 12) {
-            alert("<?php echo $AppUI->_('adminInvalidMonth', UI_OUTPUT_JS) . ' ' . $AppUI->_('adminInvalidBirthday', UI_OUTPUT_JS); ?>");
-            form.contact_birthday.focus();
-        } else if (parseInt(dar[2],10) < 1 || parseInt(dar[2],10) > 31) {
-            alert("<?php echo $AppUI->_('adminInvalidDay', UI_OUTPUT_JS) . ' ' . $AppUI->_('adminInvalidBirthday', UI_OUTPUT_JS); ?>");
-            form.contact_birthday.focus();
-        } else if(parseInt(dar[0],10) < 1900 || parseInt(dar[0],10) > <?php echo date('Y'); ?>) {
-            alert("<?php echo $AppUI->_('adminInvalidYear', UI_OUTPUT_JS) . ' ' . $AppUI->_('adminInvalidBirthday', UI_OUTPUT_JS); ?>");
-            form.contact_birthday.focus();
-        } else {
-            form.submit();
-        }
 	} else if (form.contact_display_name.value.length < 1) {
 		orderByName('name');
 		form.submit();

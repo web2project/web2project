@@ -26,11 +26,6 @@ class w2p_Output_HTML_FormHelper extends w2p_Output_HTML_Base
                 $field = new Web2project\Fields\TextArea();
                 $output = $field->edit($fieldName, $fieldValue, "class=\"text $suffix\"");
                 break;
-            case 'birthday':        // @todo This is a special case because contact->contact_birthday should be renamed contact->contact_birth_date
-                $field = new Web2project\Fields\Date();
-                $field->setDateInformation($this->AppUI, $pieces, $this->df);
-                $output = $field->edit($fieldName, $fieldValue, "class=\"text $suffix\"");
-                break;
             case 'date':
                 $field = new Web2project\Fields\Date();
                 $field->setDateInformation($this->AppUI, $pieces, $this->df);

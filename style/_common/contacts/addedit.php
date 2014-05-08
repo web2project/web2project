@@ -95,10 +95,6 @@ $form = new w2p_Output_HTML_FormHelper($AppUI);
                 <?php $form->showLabel('Country'); ?>
                 <?php $form->showField('contact_country', $object->contact_country, array(), $countries); ?>
             </p>
-            <p>
-                <?php $form->showLabel('Birthday'); ?>
-                <?php $form->showField('contact_birthday', $object->contact_birthday, array('maxlength' => 10)); ?> (<?php echo $AppUI->_('yyyy-mm-dd'); ?>)
-            </p>
             <p><strong><?php echo $AppUI->_('Contact Update Info'); ?></strong></p>
             <p>
                 <?php $form->showLabel('Awaiting Update'); ?>
