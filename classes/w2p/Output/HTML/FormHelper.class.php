@@ -24,17 +24,14 @@ class w2p_Output_HTML_FormHelper extends w2p_Output_HTML_Base
             case 'signature':       // @todo This is a special case because user->user_signature should be renamed to something else..?
             case 'description':
                 $field = new Web2project\Fields\TextArea();
-                $output = $field->edit($fieldName, $fieldValue, "class=\"text $suffix\"");
                 break;
             case 'date':
                 $field = new Web2project\Fields\Date();
                 $field->setDateInformation($this->AppUI, $pieces, $this->df);
-                $output = $field->edit($fieldName, $fieldValue, "class=\"text $suffix\"");
                 break;
             case 'private':
             case 'updateask':       // @todo This is unique to the contacts module
                 $field = new Web2project\Fields\Checkbox();
-                $output = $field->edit($fieldName, $fieldValue, "class=\"text $suffix\"");
                 break;
             case 'parent':          // @note This drops through on purpose
                 $suffix = 'department';
@@ -48,11 +45,9 @@ class w2p_Output_HTML_FormHelper extends w2p_Output_HTML_Base
             case 'type':
                 $field = new Web2project\Fields\Select();
                 $field->setOptions($values);
-                $output = $field->edit($fieldName, $fieldValue, "class=\"text $suffix\"");
                 break;
             case 'url':
                 $field = new Web2project\Fields\Url();
-                $output = $field->edit($fieldName, $fieldValue, "class=\"text $suffix\"");
                 break;
             /**
              * This handles the default input text input box. It currently covers these fields:
@@ -60,10 +55,9 @@ class w2p_Output_HTML_FormHelper extends w2p_Output_HTML_Base
              */
             default:
                 $field = new Web2project\Fields\Text();
-                $output = $field->edit($fieldName, $fieldValue, "class=\"text $suffix\"");
         }
 
-        return $output;
+        return $field->edit($fieldName, $fieldValue, "class=\"text $suffix\"");
     }
 
     public function showField($fieldName, $fieldValue, $options = array(), $values = array())
