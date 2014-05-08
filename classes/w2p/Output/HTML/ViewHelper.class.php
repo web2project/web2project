@@ -21,6 +21,9 @@ class w2p_Output_HTML_ViewHelper extends w2p_Output_HTML_Base
                 $myDate = intval($fieldValue) ? new w2p_Utilities_Date($this->AppUI->formatTZAwareTime($fieldValue, '%Y-%m-%d %T')) : null;
                 $output = $myDate ? $myDate->format($this->dtf) : '-';
                 break;
+            case 'birthday':
+                $field = new Web2project\Fields\Date();
+                break;
             case 'email':
                 $field = new Web2project\Fields\Email();
                 break;

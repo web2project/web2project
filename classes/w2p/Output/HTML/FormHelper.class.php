@@ -27,22 +27,14 @@ class w2p_Output_HTML_FormHelper extends w2p_Output_HTML_Base
                 $output = $field->edit($fieldName, $fieldValue, "class=\"text $suffix\"");
                 break;
             case 'birthday':        // @todo This is a special case because contact->contact_birthday should be renamed contact->contact_birth_date
-                $myDate = intval($fieldValue) ? new w2p_Utilities_Date($fieldValue) : null;
-                $date = $myDate ? $myDate->format('%Y-%m-%d') : '-';
-
                 $field = new Web2project\Fields\Date();
-                $output = $field->edit($fieldName, $date, "class=\"text $suffix\"");
+                $field->setDateInformation($this->AppUI, $pieces, $this->df);
+                $output = $field->edit($fieldName, $fieldValue, "class=\"text $suffix\"");
                 break;
             case 'date':
-                $date = ($fieldValue) ? new w2p_Utilities_Date($fieldValue) : null;
-                unset($pieces[0]);
-                $datename = implode('_', $pieces);
-
-                $output = '<input type="hidden" name="'.$fieldName.'" id="'.$fieldName.'" value="' . ($date ? $date->format(FMT_TIMESTAMP_DATE) : '') .'" />';
-                $output .= '<input type="text" name="'.$datename.'" id="'.$datename.'" onchange="setDate_new(\'editFrm\', \''.$datename.'\');" value="' . ($date ? $date->format($this->df) : '') . '" class="text" />';
-                $output .= '<a href="javascript: void(0);" onclick="return showCalendar(\''.$datename.'\', \'' . $this->df . '\', \'editFrm\', null, true, true)">';
-                $output .= '<img src="' . w2PfindImage('calendar.gif') . '" alt="' . $this->AppUI->_('Calendar') . '" />';
-                $output .= '</a>';
+                $field = new Web2project\Fields\Date();
+                $field->setDateInformation($this->AppUI, $pieces, $this->df);
+                $output = $field->edit($fieldName, $fieldValue, "class=\"text $suffix\"");
                 break;
             case 'private':
             case 'updateask':       // @todo This is unique to the contacts module
