@@ -465,6 +465,14 @@ class CEvent extends w2p_Core_BaseObject
         return parent::getAllowedRecords($uid, $fields, $orderby, $index, $extra);
     }
 
+    public function bind($hash, $prefix = null, $checkSlashes = true, $bindAll = false)
+    {
+        parent::bind($hash, $prefix, $checkSlashes, $bindAll);
+
+        $this->event_start_date = $this->_AppUI->convertToSystemTZ($this->event_start_date);
+        $this->event_end_date = $this->_AppUI->convertToSystemTZ($this->event_end_date);
+    }
+
     protected function hook_preStore()
     {
         parent::hook_preStore();
@@ -490,8 +498,6 @@ class CEvent extends w2p_Core_BaseObject
         $this->event_private = (int) $this->event_private;
         $this->event_type = (int) $this->event_type;
         $this->event_cwd = (int) $this->event_cwd;
-        $this->event_start_date = $this->_AppUI->convertToSystemTZ($this->event_start_date);
-        $this->event_end_date = $this->_AppUI->convertToSystemTZ($this->event_end_date);
         $this->event_creator = (int) $this->event_creator ? $this->event_creator : $this->_AppUI->user_id;
         $this->event_owner = (int) $this->event_owner ? $this->event_owner : $this->_AppUI->user_id;
 
