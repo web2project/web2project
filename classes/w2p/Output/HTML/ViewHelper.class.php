@@ -41,6 +41,7 @@ class w2p_Output_HTML_ViewHelper extends w2p_Output_HTML_Base
                 break;
             case 'company':
             case 'department':
+            case 'project':
                 $class  = 'C'.ucfirst($suffix);
                 $obj = new $class();
                 $obj->load($fieldValue);
