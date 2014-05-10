@@ -8,7 +8,7 @@ global $AppUI, $company;
 $items = $company->users($company->company_id);
 
 $module = new w2p_System_Module();
-$fields = $module->loadSettings('admin', 'company_view');
+$fields = $module->loadSettings('users', 'company_view');
 
 if (0 == count($fields)) {
     // TODO: This is only in place to provide an pre-upgrade-safe
@@ -17,7 +17,7 @@ if (0 == count($fields)) {
     $fieldList = array('user_username', 'contact_name', 'user_type');
     $fieldNames = array('Username', 'Name', 'Type');
 
-    $module->storeSettings('admin', 'company_view', $fieldList, $fieldNames);
+    $module->storeSettings('users', 'company_view', $fieldList, $fieldNames);
 
     $fields = array_combine($fieldList, $fieldNames);
 }
