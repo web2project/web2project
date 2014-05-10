@@ -104,6 +104,7 @@ class w2p_Output_HTMLHelper extends w2p_Output_HTML_Base
             case '_company':
             case '_contact':
             case '_task':
+            case '_department':
                 $module = substr($suffix, 1);
                 $class  = 'C'.ucfirst($module);
 
@@ -113,21 +114,6 @@ class w2p_Output_HTMLHelper extends w2p_Output_HTML_Base
                 $field = new Web2project\Fields\Module();
                 $field->setObject($obj, substr($suffix, 1));
                 $cell = $field->view($value);
-                break;
-            case '_department':
-                $module = substr($suffix, 1);
-                $class  = 'C'.ucfirst($module);
-
-                $obj = new $class();
-                $obj->load($value);
-                /**
-                 * This is a branch separate from _company, _contact, etc above because although the module is called
-                 *   departments, the fields are dept_id and dept_name. :(
-                 *                                                              ~ caseydk, Dec 11 2013
-                 */
-                $link = '?m='. w2p_pluralize($module) .'&a=view&dept_id='.$value;
-                $cell = '<a href="'.$link.'">'.$obj->dept_name.'</a>';
-                $suffix .= ' _name';
                 break;
             case '_folder':
                 $obj = new CFile_Folder();
