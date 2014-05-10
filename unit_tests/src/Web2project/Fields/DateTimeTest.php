@@ -32,4 +32,14 @@ class DateTimeTest extends CommonSetup
         $output = $this->obj->view('2010-04-21 01:23:45');
         $this->assertEquals('20/Apr/2010 08:23 pm', $output);
     }
+
+    public function testEdit()
+    {
+        $this->obj->setDateInformation(array('project', 'monkey', 'date'));
+        $output = $this->obj->edit('date', '2010-04-21 01:23:45');
+
+        $this->assertGreaterThan(0, strpos($output, '20100421'));
+        $this->assertGreaterThan(0, strpos($output, 'monkey_date'));
+        $this->assertGreaterThan(0, strpos($output, '21/Apr/2010 01:23 am'));
+    }
 }

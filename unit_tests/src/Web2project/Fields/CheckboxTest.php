@@ -32,4 +32,10 @@ class CheckboxTest extends CommonSetup
         $output = $this->obj->view('Yes');
         $this->assertEquals('Yes', $output);
     }
+
+    public function testEdit()
+    {
+        $output = $this->obj->edit('theName', 'checked="checked"', ' id="theId"');
+        $this->assertEquals('<input type="checkbox" name="theName" value="1" checked="checked" id="theId"/>', $output);
+    }
 }

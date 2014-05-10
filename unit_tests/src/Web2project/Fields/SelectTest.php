@@ -32,4 +32,11 @@ class SelectTest extends CommonSetup
         $output = $this->obj->view('Yes');
         $this->assertEquals('Yes', $output);
     }
+
+    public function testEdit()
+    {
+        $this->obj->setOptions(array('one', 'two'));
+        $output = $this->obj->edit('myName', 'awesome value');
+        $this->assertEquals('<select id="myName" name="myName" size="1" ><option value="0">one</option><option value="1">two</option></select>', $output);
+    }
 }
