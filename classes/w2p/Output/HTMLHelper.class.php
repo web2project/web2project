@@ -254,7 +254,9 @@ class w2p_Output_HTMLHelper extends w2p_Output_HTML_Base
                 $cell = $field->view($value);
                 break;
             case '_password':
-                $cell = '('.$this->AppUI->_('hidden').')';
+                $value = '('.$this->AppUI->_('hidden').')';
+                $field = new Web2project\Fields\Text();
+                $cell = $field->view($value);
                 break;
             case '_version':
                 $value = (int) (100 * $value);
