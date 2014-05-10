@@ -21,8 +21,8 @@ class w2p_Output_HTML_FormHelper extends w2p_Output_HTML_Base
                 $field = new Web2project\Fields\TextArea();
                 break;
             case 'date':
-                $field = new Web2project\Fields\Date();
-                $field->setDateInformation($this->AppUI, $pieces, $this->df);
+                $field = new Web2project\Fields\Date($this->AppUI);
+                $field->setDateInformation($pieces);
                 break;
             case 'private':
             case 'updateask':       // @todo This is unique to the contacts module

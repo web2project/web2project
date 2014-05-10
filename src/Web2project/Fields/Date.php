@@ -7,6 +7,12 @@ class Date
     protected $datename;
     protected $format;
 
+    public function __construct($AppUI)
+    {
+        $this->AppUI = $AppUI;
+        $this->format = $this->AppUI->getPref('SHDATEFORMAT');
+    }
+
     public function edit($name, $value, $extraTags = '')
     {
         $date = ($value) ? new \w2p_Utilities_Date($value) : null;
@@ -20,14 +26,10 @@ class Date
         return $output;
     }
 
-    public function setDateInformation($AppUI, $pieces, $format)
+    public function setDateInformation($pieces)
     {
-        $this->AppUI = $AppUI;
-
         unset($pieces[0]);
         $this->datename = implode('_', $pieces);
-
-        $this->format = $format;
     }
 
     public function view($value)
@@ -38,6 +40,6 @@ class Date
     protected function format($value)
     {
         $myDate = intval($value) ? new \w2p_Utilities_Date($value) : null;
-        return $myDate ? $myDate->format('%Y-%m-%d') : '-';
+        return $myDate ? $myDate->format($this->format) : '-';
     }
 }

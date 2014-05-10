@@ -213,8 +213,8 @@ class w2p_Output_HTMLHelper extends w2p_Output_HTML_Base
                 break;
             case '_birthday':
             case '_date':
-                $myDate = intval($value) ? new w2p_Utilities_Date($value) : null;
-                $cell = $myDate ? $myDate->format($this->df) : '-';
+                $field = new Web2project\Fields\Date($this->AppUI);
+                $cell = $field->view($value);
                 break;
             case '_actual':
                 $end_date = intval($this->tableRowData['project_end_date']) ? new w2p_Utilities_Date($this->tableRowData['project_end_date']) : null;
@@ -230,8 +230,8 @@ class w2p_Output_HTMLHelper extends w2p_Output_HTML_Base
             case '_datetime':
             case '_update':
             case '_updated':
-                $myDate = intval($value) ? new w2p_Utilities_Date($this->AppUI->formatTZAwareTime($value, '%Y-%m-%d %T')) : null;
-                $cell = $myDate ? $myDate->format($this->dtf) : '-';
+                $field = new Web2project\Fields\DateTime($this->AppUI);
+                $cell = $field->view($value);
                 break;
             case '_description':
                 $field = new Web2project\Fields\TextArea();

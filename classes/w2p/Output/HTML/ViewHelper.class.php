@@ -22,7 +22,7 @@ class w2p_Output_HTML_ViewHelper extends w2p_Output_HTML_Base
                 $output = $myDate ? $myDate->format($this->dtf) : '-';
                 break;
             case 'birthday':
-                $field = new Web2project\Fields\Date();
+                $field = new Web2project\Fields\Date($this->AppUI);
                 break;
             case 'email':
                 $field = new Web2project\Fields\Email();
