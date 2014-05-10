@@ -124,13 +124,6 @@ class w2p_Output_HTMLHelper extends w2p_Output_HTML_Base
                 $cell = '<a href="'.$link.'">' . $image . ' ' . $foldername . '</a>';
                 $suffix .= ' _name';
                 break;
-            case '_user':
-            case '_username':
-                $obj = new CContact();
-                $obj->findContactByUserid($this->tableRowData['user_id']);
-                $link = '?m=users&a=view&user_id='.$this->tableRowData['user_id'];
-                $cell = '<a href="'.$link.'">'.$obj->user_username.'</a>';
-                break;
 //END: object-based linkings
 
 /*
@@ -156,6 +149,9 @@ class w2p_Output_HTMLHelper extends w2p_Output_HTML_Base
 //TODO: task_logs are another oddball..
                 $cell = ($prefix == 'task_log') ? str_replace('task_logs', 'tasks', $cell) : $cell;
                 break;
+            case '_user':
+            case '_username':
+                $value = $this->tableRowData['user_id'];
             case '_author':
             case '_creator':
             case '_owner':
