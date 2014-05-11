@@ -38,18 +38,8 @@ class w2p_Output_EmailManager
 
     public function getEventNotify(CEvent $event, $clash, $users)
     {
-
-        if ($clash) {
-            $body .= "You have been invited to an event by ".$this->_AppUI->user_display_name;
-            $body .= "However, either you or another intended invitee has a competing event\n";
-            $body .= $this->_AppUI->user_display_name." has requested that you reply to this message\n";
-            $body .= "and confirm if you can or can not make the requested time.\n\n";
-        }
-
-        $body .= $this->_AppUI->_('Event') . ":\t" . $event->event_name . "\n";
-        if (!$clash) {
-            $body .= $this->_AppUI->_('URL') . ":\t" . W2P_BASE_URL . "/index.php?m=events&a=view&event_id=" . $event->event_id . "\n";
-        }
+        $body = $this->_AppUI->_('Event') . ":\t" . $event->event_name . "\n";
+        $body .= $this->_AppUI->_('URL') . ":\t" . W2P_BASE_URL . "/index.php?m=events&a=view&event_id=" . $event->event_id . "\n";
 
         $date_format = $this->_AppUI->getPref('SHDATEFORMAT');
         $time_format = $this->_AppUI->getPref('TIMEFORMAT');
