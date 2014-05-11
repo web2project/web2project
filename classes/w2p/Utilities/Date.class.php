@@ -257,10 +257,11 @@ class w2p_Utilities_Date extends Date {
         // make duration positive
         $duration = abs($duration);
 
-        if ($durationType == '24') { // duration type is 24, full days, we're finished very quickly
-            $full_working_days = $duration;
-        } else
-            if ($durationType == '1') { // durationType is 1 hour
+        switch ($durationType) {
+            case '24':
+                $full_working_days = $duration;
+                break;
+            case '1':
                 // get w2P time constants
                 $cal_day_start = (int) w2PgetConfig('cal_day_start');
                 $cal_day_end = (int) w2PgetConfig('cal_day_end');
@@ -316,9 +317,12 @@ class w2p_Utilities_Date extends Date {
                     ($sgn > 0) ? $this->setHour($cal_day_start + $hoursRemaining) : $this->setHour($cal_day_end - $hoursRemaining);
                 }
                 //end of proceeding the last day
-            }
+                break;
+            default:
+                //do nothing
+        }
 
-        // proceeding the fulldays finally which is easy
+        // proceeding the full days finally which is easy
         // Full days
         for ($i = 0; $i < $full_working_days; $i++) {
             $this->addDays(1 * $sgn);
