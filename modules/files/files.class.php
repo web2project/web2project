@@ -34,10 +34,6 @@ class CFile extends w2p_Core_BaseObject {
     //public $file_helpdesk_item = NULL;
 
     public function __construct() {
-        global $helpdesk_available;
-        if ($helpdesk_available) {
-            $this->file_helpdesk_item = null;
-        }
         parent::__construct('files', 'file_id');
     }
 
@@ -56,11 +52,6 @@ class CFile extends w2p_Core_BaseObject {
     }
 
     protected function hook_preStore() {
-        global $helpdesk_available;
-
-        if ($helpdesk_available && $this->file_helpdesk_item != 0) {
-            $this->addHelpDeskTaskLog();
-        }
         $this->file_parent = (int) $this->file_parent;
         $this->file_owner = (int) $this->file_owner ? $this->file_owner : $this->_AppUI->user_id;
 
@@ -173,27 +164,6 @@ class CFile extends w2p_Core_BaseObject {
     {
         trigger_error("The CFiles->addHelpDeskTaskLog method has been deprecated in 3.2 and will be removed in v5.0. There is no replacement in core.", E_USER_NOTICE );
 
-        global $helpdesk_available;
-
-        if ($helpdesk_available && $this->file_helpdesk_item != 0) {
-
-            // create task log with information about the file that was uploaded
-            $task_log = new CHDTaskLog();
-            $task_log->overrideDatabase($this->_query);
-            $task_log->task_log_help_desk_id = $this->_hditem->item_id;
-            if ($this->_message != 'deleted') {
-                $task_log->task_log_name = 'File ' . $this->file_name . ' uploaded';
-            } else {
-                $task_log->task_log_name = 'File ' . $this->file_name . ' deleted';
-            }
-            $task_log->task_log_description = $this->file_description;
-            $task_log->task_log_creator = $this->_AppUI->user_id;
-            $date = new w2p_Utilities_Date();
-            $task_log->task_log_date = $date->format(FMT_DATETIME_MYSQL);
-            if ($msg = $task_log->store()) {
-                $this->_AppUI->setMsg($msg, UI_MSG_ERROR);
-            }
-        }
         return null;
     }
 
@@ -274,13 +244,7 @@ class CFile extends w2p_Core_BaseObject {
 
     protected function hook_preDelete()
     {
-        global $helpdesk_available;
-
         $this->_file_id = $this->file_id;
-
-        if ($helpdesk_available && $this->file_helpdesk_item != 0) {
-            $this->addHelpDeskTaskLog();
-        }
 
         parent::hook_preDelete();
     }
@@ -393,22 +357,7 @@ class CFile extends w2p_Core_BaseObject {
 
     //function notifies about file changing
     public function notify($notify) {
-        global $helpdesk_available;
-
         if ($notify == '1') {
-            // if helpdesk_item is available send notification to assigned users
-            if ($helpdesk_available && $this->file_helpdesk_item != 0) {
-                $this->_hditem = new CHelpDeskItem();
-                $this->_hditem->overrideDatabase($this->_query);
-                $this->_hditem->load($this->file_helpdesk_item);
-
-                $task_log = new CHDTaskLog();
-                $task_log->overrideDatabase($this->_query);
-                // send notifcation about new log entry
-                // 2 = TASK_LOG
-                $this->_hditem->notify(2, $task_log->task_log_id);
-
-            }
             //if no project specified than we will not do anything
             if ($this->file_project != 0) {
                 $this->_project = new CProject();
