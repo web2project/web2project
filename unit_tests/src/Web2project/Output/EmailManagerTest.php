@@ -274,7 +274,7 @@ class Web2project_Output_EmailManagerTest extends CommonSetup
     public function testNotifyHR()
     {
         $target_body  = "A new user has signed up on web2Project Development. Please go through the user details below:\n";
-        $target_body .= "Name:    Keith Casey\nUsername:    caseysoftware\nEmail:    test@test.com\n\n";
+        $target_body .= "Name: Keith Casey\nUsername: caseysoftware\nEmail: test@test.com\n\n";
         $target_body .= "You may check this account at the following URL: ";
         $target_body .= W2P_BASE_URL . "/index.php?m=users&a=view&user_id=-1\n\n";
         $target_body .= "Thank you very much.\n\nThe web2Project Development Taskforce.\n\n";
@@ -290,7 +290,7 @@ class Web2project_Output_EmailManagerTest extends CommonSetup
         $target_body  = "You have signed up for a new account on web2Project Development.\n\n";
         $target_body .= "Once the administrator approves your request, you will receive an email with confirmation.\n";
         $target_body .= "Your login information are below for your own record:\n\n";
-        $target_body .= "Username:    admin\nPassword:    password\n\n";
+        $target_body .= "Username: admin\nPassword: password\n\n";
         $target_body .= "You may login at the following URL: " . W2P_BASE_URL . "\n\nThank you very much.\n\n";
         $target_body .= "The web2Project Development Support Staff.\n\n";
         $target_body .= "****PLEASE KEEP THIS EMAIL FOR YOUR RECORDS****";
@@ -317,8 +317,6 @@ class Web2project_Output_EmailManagerTest extends CommonSetup
         $target_body  = "The user account admin has this email associated with it.\n";
         $target_body .= "A web user from " . W2P_BASE_URL ." has just requested that a new password be sent.\n\n";
         $target_body .= "Your New Password is: password If you didn't ask for this, don't worry. You are seeing this message, not them. If this was an error just login with your new password and then change your password to what you would like it to be.";
-        $target_body .= "";
-        $target_body .= "";
 
         $actual_body = $this->manager->notifyPasswordReset('admin', 'password');
 
