@@ -330,50 +330,74 @@ class w2p_Output_EmailManager
 
     public function notifyHR($username, $logname, $address, $userid)
     {
-        $body = 'A new user has signed up on ' . w2PgetConfig('company_name');
-        $body .= ". Please go through the user details below:\n";
-        $body .= 'Name:    ' . $username . "\n" . 'Username:    ' . $logname . "\n";
-        $body .= 'Email:    ' . $address . "\n\n";
-        $body .= 'You may check this account at the following URL: ' . W2P_BASE_URL;
-        $body .= '/index.php?m=users&a=view&user_id=' . $userid . "\n\n";
-        $body .= "Thank you very much.\n\n" . 'The ' . w2PgetConfig('company_name');
-        $body .= " Taskforce.\n\n" . '****PLEASE KEEP THIS EMAIL FOR YOUR RECORDS****';
+        $object = new stdClass();
+        $object->base_url = W2P_BASE_URL;
+        $object->company_name = w2PgetConfig('company_name');
+        $object->contact_name = $username;
+        $object->user_name = $logname;
+        $object->email_address = $address;
 
-        return $body;
+        $body = "A new user has signed up on company_name. Please go through the user details below:\n";
+        $body .= 'Name: contact_name' . "\n";
+        $body .= 'Username: user_name' . "\n";
+        $body .= 'Email: email_address' . "\n\n";
+        $body .= 'You may check this account at the following URL: base_url';
+        $body .= '/index.php?m=users&a=view&user_id=' . $userid . "\n\n";
+        $body .= "Thank you very much.\n\n";
+        $body .= "The company_name Taskforce.\n\n" . '****PLEASE KEEP THIS EMAIL FOR YOUR RECORDS****';
+
+        return $this->templater->render($body, $object);
     }
 
     public function notifyNewExternalUser($logname, $logpwd)
     {
-        $body = 'You have signed up for a new account on ' . w2PgetConfig('company_name');
-        $body .= ".\n\n" . "Once the administrator approves your request, you will receive an email with confirmation.\n";
+        $object = new stdClass();
+        $object->base_url = W2P_BASE_URL;
+        $object->company_name = w2PgetConfig('company_name');
+        $object->log_name = $logname;
+        $object->log_password = $logpwd;
+
+        $body = "You have signed up for a new account on company_name.\n\n";
+        $body .= "Once the administrator approves your request, you will receive an email with confirmation.\n";
         $body .= "Your login information are below for your own record:\n\n";
-        $body .= 'Username:    ' . $logname . "\n" . 'Password:    ' . $logpwd . "\n\n";
+        $body .= 'Username: log_name' . "\n" . 'Password: log_password' . "\n\n";
         $body .= "You may login at the following URL: " . W2P_BASE_URL;
-        $body .= "\n\n" . "Thank you very much.\n\n" . 'The ' . w2PgetConfig('company_name');
+        $body .= "\n\n" . "Thank you very much.\n\n" . 'The company_name';
         $body .= " Support Staff.\n\n" . '****PLEASE KEEP THIS EMAIL FOR YOUR RECORDS****';
 
-        return $body;
+        return $this->templater->render($body, $object);
     }
 
     public function notifyNewUserCredentials($username, $logname, $logpwd)
     {
-        $body = $username . ",\n\n";
+        $object = new stdClass();
+        $object->base_url = W2P_BASE_URL;
+        $object->user_name = $username;
+        $object->log_name = $logname;
+        $object->log_password = $logpwd;
+
+        $body = "user_name,\n\n";
         $body .= "An access account has been created for you in our web2Project project management system.\n\n";
-        $body .= "You can access it here at " . W2P_BASE_URL;
-        $body .= "\n\n" . "Your username is: " . $logname . "\n";
-        $body .= "Your password is: " . $logpwd . "\n\n";
+        $body .= "You can access it here at base_url\n\n";
+        $body .= "Your username is: log_name\n";
+        $body .= "Your password is: log_password\n\n";
         $body .= "This account will allow you to see and interact with projects. If you have any questions please contact us.";
 
-        return $body;
+        return $this->templater->render($body, $object);
     }
 
     public function notifyPasswordReset($username, $password)
     {
-        $body = $this->_AppUI->_('sendpass0', UI_OUTPUT_RAW) . ' ' .
-                $username . ' ' . $this->_AppUI->_('sendpass1', UI_OUTPUT_RAW) . ' ' .
-                W2P_BASE_URL . ' ' . $this->_AppUI->_('sendpass2', UI_OUTPUT_RAW) . ' ' .
-                $password . ' ' . $this->_AppUI->_('sendpass3', UI_OUTPUT_RAW);
+        $object = new stdClass();
+        $object->base_url = W2P_BASE_URL;
+        $object->user_name = $username;
+        $object->password = $password;
 
-        return $body;
+        $body = $this->_AppUI->_('sendpass0', UI_OUTPUT_RAW) . ' user_name ' .
+                $this->_AppUI->_('sendpass1', UI_OUTPUT_RAW) . ' base_url ' .
+                $this->_AppUI->_('sendpass2', UI_OUTPUT_RAW) . ' password ' .
+                $this->_AppUI->_('sendpass3', UI_OUTPUT_RAW);
+
+        return $this->templater->render($body, $object);
     }
 }
