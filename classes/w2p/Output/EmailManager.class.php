@@ -87,9 +87,7 @@ class w2p_Output_EmailManager
         $body .= "user_display_name has requested that you reply to this message\n";
         $body .= "and confirm if you can or can not make the requested time.\n\n";
 
-        $body = $this->templater->render($body, $this->_AppUI);
-
-        return $body;
+        return $this->templater->render($body, $this->_AppUI);
     }
 
     public function getContactUpdateNotify(w2p_Core_CAppUI $AppUI = null, CContact $contact)
@@ -112,9 +110,7 @@ class w2p_Output_EmailManager
         $body .= "\n\nThank you. I look forward to seeing you again, soon.";
         $body .= "\n\nBest Regards,\nuser_display_name";
 
-        $body = $this->templater->render($body, $contact);
-
-        return $body;
+        return $this->templater->render($body, $contact);
     }
 
     public function getFileUpdateNotify(w2p_Core_CAppUI $AppUI = null, CFile $file)
@@ -124,9 +120,7 @@ class w2p_Output_EmailManager
         $file->user_display_name = $this->_AppUI->user_display_name;
         $body = "\n\nFile file_name was _message by user_display_name";
 
-        $body = $this->templater->render($body, $file);
-
-        return $body;
+        return $this->templater->render($body, $file);
     }
 
     public function getForumWatchEmail(CForum_Message $message, $forum_name, $message_from)
@@ -141,9 +135,7 @@ class w2p_Output_EmailManager
         $body .= "\n\n" . W2P_BASE_URL . '/index.php?m=forums&a=viewer&forum_id=message_forum';
         $body .= "\n\nmessage_body";
 
-        $body = $this->templater->render($body, $message);
-
-        return $body;
+        return $this->templater->render($body, $message);
     }
 
     public function getFileNotify(CFile $file)
@@ -316,16 +308,20 @@ class w2p_Output_EmailManager
 
     public function getNotifyNewUser($username)
     {
-        $body = "Dear $username,\n\n" .
+        $object = new stdClass();
+        $object->base_url = W2P_BASE_URL;
+        $object->contact_name = $username;
+
+        $body = "Dear contact_name,\n\n" .
         $body .= "Congratulations! Your account has been activated by the administrator.\n";
         $body .= "Please use the login information provided earlier.\n\n";
-        $body .= "You may login at the following URL: " . W2P_BASE_URL . "\n\n";
+        $body .= "You may login at the following URL: base_url\n\n";
         $body .= "If you have any difficulties or questions, please ask the administrator for help.\n";
         $body .= "Assuring you the best of our attention at all time.\n\n";
         $body .= "Our Warmest Regards,\n\n" . "The Support Staff.\n\n";
         $body .= "****PLEASE KEEP THIS EMAIL FOR YOUR RECORDS****";
 
-        return $body;
+        return $this->templater->render($body, $object);
     }
 
     public function notifyHR($username, $logname, $address, $userid)
