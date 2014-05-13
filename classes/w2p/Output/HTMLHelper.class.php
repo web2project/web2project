@@ -182,8 +182,9 @@ class w2p_Output_HTMLHelper extends w2p_Output_HTML_Base
                 $cell = file_size($value);
                 break;
             case '_budget':
-                $cell = w2PgetConfig('currency_symbol');
-                $cell .= formatCurrency($value, $this->AppUI->getPref('CURRENCYFORM'));
+                $field = new Web2project\Fields\Currency();
+                $field->setOptions(w2PgetConfig('currency_symbol'), $this->AppUI->getPref('CURRENCYFORM'));
+                $cell = $field->view($value);
                 break;
             case '_url':
                 $field = new Web2project\Fields\Url();
