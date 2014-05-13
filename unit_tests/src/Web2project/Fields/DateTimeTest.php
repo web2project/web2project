@@ -12,7 +12,7 @@
 // NOTE: This path is relative to Phing's build.xml, not this test.
 include_once 'unit_tests/CommonSetup.php';
 
-class DateTimeTest extends CommonSetup
+class Web2project_Fields_DateTimeTest extends CommonSetup
 {
     protected function setUp()
     {

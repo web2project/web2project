@@ -12,7 +12,7 @@
 // NOTE: This path is relative to Phing's build.xml, not this test.
 include_once 'unit_tests/CommonSetup.php';
 
-class TextAreaTest extends CommonSetup
+class Web2project_Fields_TextAreaTest extends CommonSetup
 {
     protected function setUp()
     {
