@@ -1,15 +1,8 @@
 <?php
-
 /**
- * Class for testing Web2project\Field\Url functionality
- *
- * PHP version 5
- *
- * LICENSE: This source file is subject to Clear BSD License. Please see the
- *   LICENSE file in root of site for further details
+ * Class for testing Web2project\Field\Text functionality
  *
  * @author      Keith Casey <contrib@caseysoftware.com>
- * @category    EmailManager
  * @package     web2project
  * @subpackage  unit_tests
  * @license     Clear BSD

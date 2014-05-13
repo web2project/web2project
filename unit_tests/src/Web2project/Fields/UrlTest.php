@@ -1,12 +1,6 @@
 <?php
-
 /**
  * Class for testing Web2project\Field\Url functionality
- *
- * PHP version 5
- *
- * LICENSE: This source file is subject to Clear BSD License. Please see the
- *   LICENSE file in root of site for further details
  *
  * @author      Keith Casey <contrib@caseysoftware.com>
  * @package     web2project
