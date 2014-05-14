@@ -7,25 +7,26 @@ $link_id    = (int) w2PgetParam($_GET, 'link_id', 0);
 $task_id    = (int) w2PgetParam($_GET, 'task_id', 0);
 $project_id = (int) w2PgetParam($_GET, 'project_id', 0);
 
-$link = new CLink();
-$link->link_id = $link_id;
+$object = new CLink();
+$object->link_id = $link_id;
 
-$obj = $link;
+$obj = $object;
 $canAddEdit = $obj->canAddEdit();
 $canAuthor = $obj->canCreate();
 $canEdit = $obj->canEdit();
+$canDelete = $object->canDelete();
 if (!$canAddEdit) {
 	$AppUI->redirect(ACCESS_DENIED);
 }
 
 $obj = $AppUI->restoreObject();
 if ($obj) {
-    $link = $obj;
-    $link_id = $link->link_id;
+    $object = $obj;
+    $link_id = $object->link_id;
 } else {
-    $link->load($link_id);
+    $object->load($link_id);
 }
-if (!$link && $link_id > 0) {
+if (!$object && $link_id > 0) {
     $AppUI->setMsg('Link');
     $AppUI->setMsg('invalidID', UI_MSG_ERROR, true);
     $AppUI->redirect('m=' . $m);
@@ -35,8 +36,8 @@ if (0 == $link_id && ($project_id || $task_id)) {
 
     // We are creating a link, so if we have them lets figure out the project
     // and task id
-    $link->link_project = $project_id;
-    $link->link_task    = $task_id;
+    $object->link_project = $project_id;
+    $object->link_task    = $task_id;
 
     if ($task_id) {
         $link_task = new CTask;
@@ -49,7 +50,7 @@ if (0 == $link_id && ($project_id || $task_id)) {
 $ttl = $link_id ? 'Edit Link' : 'Add Link';
 $titleBlock = new w2p_Theme_TitleBlock($ttl, 'icon.png', $m);
 $titleBlock->addCrumb('?m=' . $m, $m . ' list');
-$canDelete = $link->canDelete();
+
 if ($canDelete && $link_id) {
     if (!isset($msg)) {
         $msg = '';
