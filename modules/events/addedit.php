@@ -10,10 +10,10 @@ $is_clash = isset($_SESSION['event_is_clash']) ? $_SESSION['event_is_clash'] : f
 $obj = new CEvent();
 $obj->event_id = $event_id;
 
-
 $canAddEdit = $obj->canAddEdit();
 $canAuthor = $obj->canCreate();
 $canEdit = $obj->canEdit();
+
 if (!$canAddEdit) {
 	$AppUI->redirect(ACCESS_DENIED);
 }
@@ -28,15 +28,12 @@ $date = w2PgetParam($_GET, 'date', null);
 $event_project = (int) w2PgetParam($_GET, 'project_id', 0);
 
 // load the record data
-if ($is_clash) {
-	$obj->bind($_SESSION['add_event_post']);
-} else {
-	if (!$obj->load($event_id) && $event_id) {
-		$AppUI->setMsg('Event');
-		$AppUI->setMsg('invalidID', UI_MSG_ERROR, true);
-        $AppUI->redirect('m=' . $m);
-	}
+if (!$obj->load($event_id) && $event_id) {
+    $AppUI->setMsg('Event');
+    $AppUI->setMsg('invalidID', UI_MSG_ERROR, true);
+    $AppUI->redirect('m=' . $m);
 }
+
 $obj->event_project = ($event_project) ? $event_project : $obj->event_project;
 $start_date = intval($obj->event_start_date) ? new w2p_Utilities_Date($AppUI->formatTZAwareTime($obj->event_start_date, '%Y-%m-%d %T')) : new w2p_Utilities_Date();
 $end_date = intval($obj->event_end_date) ? new w2p_Utilities_Date($AppUI->formatTZAwareTime($obj->event_end_date, '%Y-%m-%d %T')) : $start_date;
@@ -50,26 +47,10 @@ $users = $perms->getPermittedUsers('events');
 
 // Load the assignees
 $assigned = array();
-if ($is_clash) {
-	$assignee_list = $_SESSION['add_event_attendees'];
-	if (isset($assignee_list) && $assignee_list) {
-		$event = new CEvent();
-		$assigned = $event->getAssigneeList($assignee_list);
-	}
-	// Now that we have loaded the possible replacement event,  remove the stored
-	// details, NOTE: This could cause using a back button to make things break,
-	// but that is the least of our problems.
-    unset($_SESSION['add_event_post']);
-    unset($_SESSION['add_event_attendees']);
-    unset($_SESSION['add_event_mail']);
-    unset($_SESSION['add_event_clash']);
-    unset($_SESSION['event_is_clash']);
+if ($event_id == 0) {
+    $assigned[$AppUI->user_id] = $AppUI->user_display_name;
 } else {
-	if ($event_id == 0) {
-		$assigned[$AppUI->user_id] = $AppUI->user_display_name;
-	} else {
-		$assigned = $obj->getAssigned();
-	}
+    $assigned = $obj->getAssigned();
 }
 
 //check if the user has view permission over the project
