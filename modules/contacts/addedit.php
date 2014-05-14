@@ -7,14 +7,13 @@ $contact_id = (int) w2PgetParam($_GET, 'contact_id', 0);
 $company_id = (int) w2PgetParam($_GET, 'company_id', 0);
 $dept_id = (int) w2PgetParam($_GET, 'dept_id', 0);
 
-$row = new CContact();
-$row->contact_id = $contact_id;
+$object = new CContact();
+$object->contact_id = $contact_id;
 
-$obj = $row;
-$canAddEdit = $obj->canAddEdit();
-$canAuthor = $obj->canCreate();
-$canEdit = $obj->canEdit();
-$canDelete = $obj->canDelete();
+$canAddEdit = $object->canAddEdit();
+$canAuthor = $object->canCreate();
+$canEdit = $object->canEdit();
+$canDelete = $object->canDelete();
 if (!$canAddEdit) {
 	$AppUI->redirect(ACCESS_DENIED);
 }
@@ -22,12 +21,12 @@ if (!$canAddEdit) {
 // load the record data
 $obj = $AppUI->restoreObject();
 if ($obj) {
-    $row = $obj;
-    $contact_id = $row->contact_id;
+    $object = $obj;
+    $contact_id = $object->contact_id;
 } else {
-    $row->load($contact_id);
+    $object->load($contact_id);
 }
-if (!$row && $contact_id > 0) {
+if (!$object && $contact_id > 0) {
     $AppUI->setMsg('Contact');
     $AppUI->setMsg('invalidID', UI_MSG_ERROR, true);
     $AppUI->redirect('m=' . $m);
@@ -45,7 +44,7 @@ $dept = new CDepartment();
 $dept->load($dept_id);
 $dept_name = $dept->dept_name;
 
-$is_user = $row->isUser($contact_id);
+$is_user = $object->isUser($contact_id);
 
 $df = $AppUI->getPref('SHDATEFORMAT');
 $df .= ' ' . $AppUI->getPref('TIMEFORMAT');
@@ -58,8 +57,8 @@ $titleBlock->addCrumb('?m=' . $m, $m . ' list');
 $titleBlock->addViewLink('contact', $contact_id);
 
 $titleBlock->show();
-$company_detail = $row->getCompanyDetails();
-$dept_detail = $row->getDepartmentDetails();
+$company_detail = $object->getCompanyDetails();
+$dept_detail = $object->getDepartmentDetails();
 if ($contact_id == 0 && $company_id > 0) {
 	$company_detail['company_id'] = $company_id;
 	$company_detail['company_name'] = $company_name;
@@ -67,7 +66,7 @@ if ($contact_id == 0 && $company_id > 0) {
 	$dept_detail['dept_name'] = $dept_name;
 }
 
-$methods = $row->getContactMethods();
+$methods = $object->getContactMethods();
 $methodLabels = w2PgetSysVal('ContactMethods');
 $countries = array('' => $AppUI->_('(Select a Country)')) + w2PgetSysVal('GlobalCountriesPreferred') +
 		array('-' => '----') + w2PgetSysVal('GlobalCountries');

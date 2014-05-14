@@ -8,14 +8,14 @@ $form = new w2p_Output_HTML_FormHelper($AppUI);
     <input type="hidden" name="contact_project" value="0" />
     <input type="hidden" name="contact_unique_update" value="<?php echo uniqid(''); ?>" />
     <input type="hidden" name="contact_id" value="<?php echo $contact_id; ?>" />
-    <input type="hidden" name="contact_owner" value="<?php echo $row->contact_owner ? $row->contact_owner : $AppUI->user_id; ?>" />
+    <input type="hidden" name="contact_owner" value="<?php echo $object->contact_owner ? $object->contact_owner : $AppUI->user_id; ?>" />
     <?php echo $form->addNonce(); ?>
 
     <div class="std addedit contacts">
         <div class="column left">
             <p>
                 <?php $form->showLabel('First Name'); ?>
-                <?php $form->showField('contact_first_name', $row->contact_first_name, array('maxlength' => 50)); ?>
+                <?php $form->showField('contact_first_name', $object->contact_first_name, array('maxlength' => 50)); ?>
             </p>
             <p>
                 <?php $form->showLabel('Last Name'); ?>
@@ -25,28 +25,28 @@ $form = new w2p_Output_HTML_FormHelper($AppUI);
                     $options['onBlur'] = "orderByName('name')";
                 }
                 ?>
-                <?php $form->showField('contact_last_name', $row->contact_last_name, $options); ?>
+                <?php $form->showField('contact_last_name', $object->contact_last_name, $options); ?>
                 <a href="javascript: void(0);" onclick="orderByName('name')">[<?php echo $AppUI->_('use in display'); ?>]</a>
             </p>
             <p>
                 <?php $form->showLabel('Display Name'); ?>
-                <?php $form->showField('contact_display_name', $row->contact_display_name, array('maxlength' => 50)); ?>
+                <?php $form->showField('contact_display_name', $object->contact_display_name, array('maxlength' => 50)); ?>
             </p>
             <p>
                 <?php $form->showLabel('Title'); ?>
-                <?php $form->showField('contact_title', $row->contact_title, array('maxlength' => 50)); ?>
+                <?php $form->showField('contact_title', $object->contact_title, array('maxlength' => 50)); ?>
             </p>
             <p>
                 <?php $form->showLabel('Email'); ?>
-                <?php $form->showField('contact_email', $row->contact_email, array('maxlength' => 60)); ?>
+                <?php $form->showField('contact_email', $object->contact_email, array('maxlength' => 60)); ?>
             </p>
             <p>
                 <?php $form->showLabel('Phone'); ?>
-                <?php $form->showField('contact_phone', $row->contact_phone, array('maxlength' => 50)); ?>
+                <?php $form->showField('contact_phone', $object->contact_phone, array('maxlength' => 50)); ?>
             </p>
             <p>
                 <?php $form->showLabel('Company'); ?>
-                <?php echo arraySelect($companies, 'contact_company', 'size="1" class="text company" onChange="companyChange()"', $row->contact_company); ?>
+                <?php echo arraySelect($companies, 'contact_company', 'size="1" class="text company" onChange="companyChange()"', $object->contact_company); ?>
             </p>
             <?php if ($AppUI->isActiveModule('departments')) { ?>
                 <p>
@@ -58,14 +58,14 @@ $form = new w2p_Output_HTML_FormHelper($AppUI);
             <?php } ?>
             <p>
                 <?php $form->showLabel('Job Title'); ?>
-                <?php $form->showField('contact_job', $row->contact_job, array('maxlength' => 100)); ?>
+                <?php $form->showField('contact_job', $object->contact_job, array('maxlength' => 100)); ?>
             </p>
             <p>
                 <?php $form->showLabel('Contact Notes'); ?>
-                <?php $form->showField('contact_notes', $row->contact_notes); ?>
+                <?php $form->showField('contact_notes', $object->contact_notes); ?>
             </p>
             <?php
-            $custom_fields = new w2p_Core_CustomFields($m, $a, $row->contact_id, "edit");
+            $custom_fields = new w2p_Core_CustomFields($m, $a, $object->contact_id, "edit");
             echo $custom_fields->getHTML();
             $form->showCancelButton();
             ?>
@@ -73,38 +73,38 @@ $form = new w2p_Output_HTML_FormHelper($AppUI);
         <div class="column right">
             <p>
                 <?php $form->showLabel('Address1'); ?>
-                <?php $form->showField('contact_address1', $row->contact_address1, array('maxlength' => 60)); ?>
+                <?php $form->showField('contact_address1', $object->contact_address1, array('maxlength' => 60)); ?>
             </p>
             <p>
                 <?php $form->showLabel('Address2'); ?>
-                <?php $form->showField('contact_address2', $row->contact_address2, array('maxlength' => 60)); ?>
+                <?php $form->showField('contact_address2', $object->contact_address2, array('maxlength' => 60)); ?>
             </p>
             <p>
                 <?php $form->showLabel('City'); ?>
-                <?php $form->showField('contact_city', $row->contact_city, array('maxlength' => 30)); ?>
+                <?php $form->showField('contact_city', $object->contact_city, array('maxlength' => 30)); ?>
             </p>
             <p>
                 <?php $form->showLabel('State'); ?>
-                <?php $form->showField('contact_state', $row->contact_state, array('maxlength' => 30)); ?>
+                <?php $form->showField('contact_state', $object->contact_state, array('maxlength' => 30)); ?>
             </p>
             <p>
                 <?php $form->showLabel('Zip'); ?>
-                <?php $form->showField('contact_zip', $row->contact_zip, array('maxlength' => 11)); ?>
+                <?php $form->showField('contact_zip', $object->contact_zip, array('maxlength' => 11)); ?>
             </p>
             <p>
                 <?php $form->showLabel('Country'); ?>
-                <?php $form->showField('contact_country', $row->contact_country, array(), $countries); ?>
+                <?php $form->showField('contact_country', $object->contact_country, array(), $countries); ?>
             </p>
             <p>
                 <?php $form->showLabel('Birthday'); ?>
-                <?php $form->showField('contact_birthday', $row->contact_birthday, array('maxlength' => 10)); ?> (<?php echo $AppUI->_('yyyy-mm-dd'); ?>)
+                <?php $form->showField('contact_birthday', $object->contact_birthday, array('maxlength' => 10)); ?> (<?php echo $AppUI->_('yyyy-mm-dd'); ?>)
             </p>
             <p><strong><?php echo $AppUI->_('Contact Update Info'); ?></strong></p>
             <p>
                 <?php $form->showLabel('Awaiting Update'); ?>
                 <?php
                 $options = array('onclick' => 'updateVerify()');
-                if ($row->contact_updatekey) {
+                if ($object->contact_updatekey) {
                     $options['checked'] = 'checked';
                 }
                 ?>
@@ -112,26 +112,26 @@ $form = new w2p_Output_HTML_FormHelper($AppUI);
             </p>
             <p>
                 <?php $form->showLabel('Update Requested'); ?>
-                <?php $last_ask = new w2p_Utilities_Date($row->contact_updateasked); ?>
+                <?php $last_ask = new w2p_Utilities_Date($object->contact_updateasked); ?>
                 <?php
-                echo $row->contact_updateasked ? $AppUI->formatTZAwareTime($row->contact_updateasked) : '&nbsp;';
+                echo $object->contact_updateasked ? $AppUI->formatTZAwareTime($object->contact_updateasked) : '&nbsp;';
                 ?>
             </p>
             <p>
                 <?php $form->showLabel('Last Updated'); ?>
-                <?php $lastupdated = new w2p_Utilities_Date($row->contact_lastupdate);
-                echo ($row->contact_lastupdate && !($row->contact_lastupdate == 0)) ? $AppUI->formatTZAwareTime($row->contact_lastupdate) : '&nbsp;';
+                <?php $lastupdated = new w2p_Utilities_Date($object->contact_lastupdate);
+                echo ($object->contact_lastupdate && !($object->contact_lastupdate == 0)) ? $AppUI->formatTZAwareTime($object->contact_lastupdate) : '&nbsp;';
                 ?>
             </p>
             <p>
                 <?php $form->showLabel('Private Entry'); ?>
                 <?php
                 $options = array();
-                if ($row->contact_private) {
+                if ($object->contact_private) {
                     $options['checked'] = 'checked';
                 }
                 ?>
-                <?php $form->showField('contact_private', $row->contact_private, $options); ?>
+                <?php $form->showField('contact_private', $object->contact_private, $options); ?>
             </p>
             <p>
                 <?php $form->showLabel('Contact Methods'); ?>

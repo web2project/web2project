@@ -7,13 +7,12 @@ $company_id = (int) w2PgetParam($_GET, 'company_id', 0);
 
 
 
-$company = new CCompany();
-$company->company_id = $company_id;
+$object = new CCompany();
+$object->company_id = $company_id;
 
-$obj = $company;
-$canAddEdit = $obj->canAddEdit();
-$canAuthor = $obj->canCreate();
-$canEdit = $obj->canEdit();
+$canAddEdit = $object->canAddEdit();
+$canAuthor = $object->canCreate();
+$canEdit = $object->canEdit();
 if (!$canAddEdit) {
 	$AppUI->redirect(ACCESS_DENIED);
 }
@@ -21,12 +20,12 @@ if (!$canAddEdit) {
 // load the record data
 $obj = $AppUI->restoreObject();
 if ($obj) {
-    $company = $obj;
-    $company_id = $company->company_id;
+    $object = $obj;
+    $company_id = $object->company_id;
 } else {
-    $company->load($company_id);
+    $object->load($company_id);
 }
-if (!$company && $company_id > 0) {
+if (!$object && $company_id > 0) {
 	$AppUI->setMsg('Company');
     $AppUI->setMsg('invalidID', UI_MSG_ERROR, true);
     $AppUI->redirect('m=' . $m);

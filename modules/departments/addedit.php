@@ -10,31 +10,32 @@ $dept_id = max($dept_id, $department_id);
 $dept_parent = (int) w2PgetParam($_GET, 'dept_parent', 0);
 $company_id = (int) w2PgetParam($_GET, 'company_id', 0);
 
-$department = new CDepartment();
-$department->dept_id = $dept_id;
+$object = new CDepartment();
+$object->dept_id = $dept_id;
 
-$obj = $department;
-$canAddEdit = $obj->canAddEdit();
-$canAuthor = $obj->canCreate();
-$canEdit = $obj->canEdit();
+$canAddEdit = $object->canAddEdit();
+$canAuthor = $object->canCreate();
+$canEdit = $object->canEdit();
+
 if (!$canAddEdit) {
 	$AppUI->redirect(ACCESS_DENIED);
 }
 
+
 $obj = $AppUI->restoreObject();
 if ($obj) {
-    $department = $obj;
-    $dept_id = $department->dept_id;
+    $object = $obj;
+    $dept_id = $object->dept_id;
 } else {
-    $department->load($dept_id);
+    $object->load($dept_id);
 }
-if (!$department && $dept_id > 0) {
+if (!$object && $dept_id > 0) {
     $AppUI->setMsg('Department');
     $AppUI->setMsg('invalidID', UI_MSG_ERROR, true);
     $AppUI->redirect('m=' . $m);
 }
 
-$company_id = $department->dept_id ? $department->dept_company : $company_id;
+$company_id = $object->dept_id ? $object->dept_company : $company_id;
 
 if (!$dept_id && !$company_id) {
     $AppUI->setMsg('badCompany', UI_MSG_ERROR);
@@ -46,7 +47,7 @@ if ($company_id) {
     $company = new CCompany();
     $company->load($company_id);
     $companyName = $company->company_name;
-    $depts = $department->loadOtherDepts(null, $company_id, 0);
+    $depts = $object->loadOtherDepts(null, $company_id, 0);
     $depts = arrayMerge(array('0' => '- ' . $AppUI->_('Select Department') . ' -'), $depts);
 }
 
@@ -65,7 +66,7 @@ $titleBlock->show();
 $types = w2PgetSysVal('DepartmentType');
 $countries = array('' => $AppUI->_('(Select a Country)')) + w2PgetSysVal('GlobalCountriesPreferred') +
 		array('-' => '----') + w2PgetSysVal('GlobalCountries');
-$dept_parent = ($department->dept_parent) ? $department->dept_parent : $dept_parent;
+$dept_parent = ($object->dept_parent) ? $object->dept_parent : $dept_parent;
 ?>
 <script language="javascript" type="text/javascript">
 function testURL( x ) {
