@@ -5,7 +5,7 @@ $form = new w2p_Output_HTML_FormHelper($AppUI);
 ?>
 <form name="editFrm" action="?m=<?php echo $m; ?>" method="post" accept-charset="utf-8" class="addedit events">
     <input type="hidden" name="dosql" value="do_event_aed" />
-    <input type="hidden" name="event_id" value="<?php echo $event_id; ?>" />
+    <input type="hidden" name="event_id" value="<?php echo $object_id; ?>" />
     <input type="hidden" name="event_assigned" value="" />
     <input type="hidden" name="datePicker" value="event" />
     <?php echo $form->addNonce(); ?>

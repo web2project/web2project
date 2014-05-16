@@ -4,11 +4,11 @@ if (!defined('W2P_BASE_DIR')) {
 }
 // @todo    convert to template
 $file_folder_parent = intval(w2PgetParam($_GET, 'file_folder_parent', 0));
-$folder_id = intval(w2PgetParam($_GET, 'folder', 0));
+$object_id = intval(w2PgetParam($_GET, 'folder', 0));
 
 
 $object = new CFile_Folder();
-$object->setId($folder_id);
+$object->setId($object_id);
 
 $obj = $object;
 $canAddEdit = $obj->canAddEdit();
@@ -21,11 +21,11 @@ if (!$canAddEdit) {
 $obj = $AppUI->restoreObject();
 if ($obj) {
     $object = $obj;
-    $folder_id = $object->file_folder_id;
+    $object_id = $object->file_folder_id;
 } else {
-    $obj = $object->load($folder_id);
+    $obj = $object->load($object_id);
 }
-if (!$object && $folder_id > 0) {
+if (!$object && $object_id > 0) {
 	$AppUI->setMsg('File Folder');
 	$AppUI->setMsg('invalidID', UI_MSG_ERROR, true);
 	$AppUI->redirect('m=' . $m);
@@ -34,7 +34,7 @@ if (!$object && $folder_id > 0) {
 $folders = getFolderSelectList();
 
 // setup the title block
-$ttl = $folder_id ? 'Edit File Folder' : 'Add File Folder';
+$ttl = $object_id ? 'Edit File Folder' : 'Add File Folder';
 $titleBlock = new w2p_Theme_TitleBlock($ttl, 'icon.png', $m);
 $titleBlock->addCrumb('?m=' . $m, $m . ' list');
 
@@ -67,7 +67,7 @@ function delIt() {
 	}
     if (confirm( '<?php echo $AppUI->_('doDelete') . ' ' . $AppUI->_('Folder') . '?'; ?>' )) {
         $.post("?m=companies",
-            {dosql: "do_folder_aed", del: 1, file_folder_id: <?php echo $folder_id; ?>},
+            {dosql: "do_folder_aed", del: 1, file_folder_id: <?php echo $object_id; ?>},
             window.location = "?m=companies"
         );
     }

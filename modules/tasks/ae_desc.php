@@ -4,7 +4,7 @@ if (!defined('W2P_BASE_DIR')) {
 }
 // @todo    convert to template
 
-global $AppUI, $task_id, $object, $users, $task_access, $department_selection_list;
+global $AppUI, $object_id, $object, $users, $task_access, $department_selection_list;
 global $task_parent_options, $w2Pconfig, $projects, $task_project, $can_edit_time_information, $tab;
 global $form;
 

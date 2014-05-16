@@ -4,7 +4,7 @@ $form = new w2p_Output_HTML_FormHelper($AppUI);
 
 ?>
 <form name="editFrm" action="?m=<?php echo $m; ?>" method="post" accept-charset="utf-8" class="admin addedit">
-    <input type="hidden" name="user_id" value="<?php echo (int) $object->user_id; ?>" />
+    <input type="hidden" name="user_id" value="<?php echo $object_id; ?>" />
     <input type="hidden" name="contact_id" value="<?php echo (int) $object->contact_id; ?>" />
     <input type="hidden" name="dosql" value="do_user_aed" />
     <input type="hidden" name="username_min_len" value="<?php echo w2PgetConfig('username_min_len'); ?>)" />
@@ -24,7 +24,7 @@ $form = new w2p_Output_HTML_FormHelper($AppUI);
                 }
                 ?>
             </p>
-            <?php if (!$object->user_id) { ?>
+            <?php if (!$object_id) { ?>
                 <p>
                     <?php $form->showLabel('Password'); ?>
                     <input type="password" class="text" name="user_password" value="<?php echo $object->user_password; ?>" maxlength="32" size="32" onKeyUp="checkPassword(this.value);" />
@@ -54,13 +54,13 @@ $form = new w2p_Output_HTML_FormHelper($AppUI);
             <?php $form->showCancelButton(); ?>
         </div>
         <div class="column right">
-            <?php if ($canEdit && !$user_id) { ?>
+            <?php if ($canEdit && !$object_id) { ?>
                 <p>
                     <?php $form->showLabel('User Role'); ?>
                     <?php echo arraySelect($roles_arr, 'user_role', 'size="1" class="text"', '', true); ?>
                 </p>
             <?php } ?>
-            <?php if (!$object->user_id) { ?>
+            <?php if (!$object_id) { ?>
                 <p>
                     <?php $form->showLabel('Password Strength'); ?>
                 <div id="password-strength" class="text">

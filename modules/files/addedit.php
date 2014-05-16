@@ -4,12 +4,12 @@ if (!defined('W2P_BASE_DIR')) {
 }
 // @todo    convert to template
 $folder = (int) w2PgetParam($_GET, 'folder', 0);
-$file_id = (int) w2PgetParam($_GET, 'file_id', 0);
+$object_id = (int) w2PgetParam($_GET, 'file_id', 0);
 $ci = w2PgetParam($_GET, 'ci', 0) == 1 ? true : false;
 $preserve = $w2Pconfig['files_ci_preserve_attr'];
 
 $object = new CFile();
-$object->setId($file_id);
+$object->setId($object_id);
 
 $obj = $object;
 $canAddEdit = $obj->canAddEdit();
@@ -22,11 +22,11 @@ if (!$canAddEdit) {
 $obj = $AppUI->restoreObject();
 if ($obj) {
     $object = $obj;
-    $file_id = $file->getId();
+    $object_id = $file->getId();
 } else {
-    $obj = $object->load($file_id);
+    $obj = $object->load($object_id);
 }
-if (!$object && $file_id > 0) {
+if (!$object && $object_id > 0) {
 	$AppUI->setMsg('File');
 	$AppUI->setMsg('invalidID', UI_MSG_ERROR, true);
     $AppUI->redirect('m=' . $m);
@@ -44,7 +44,7 @@ $file_task = (int) w2PgetParam($_GET, 'file_task', $object->file_task);
 $file_parent = (int) w2PgetParam($_GET, 'file_parent', 0);
 $file_project = (int) w2PgetParam($_GET, 'project_id', 0);
 
-if ($file_id > 0) {
+if ($object_id > 0) {
 	// Check to see if the task or the project is also allowed.
     $perms = &$AppUI->acl();
 	if ($object->file_task) {
@@ -70,20 +70,20 @@ if ($object->file_checkout == 'final' && !$canAdmin) {
 	$AppUI->redirect(ACCESS_DENIED);
 }
 // setup the title block
-$ttl = $file_id ? 'Edit File' : 'Add File';
+$ttl = $object_id ? 'Edit File' : 'Add File';
 $ttl = $ci ? 'Checking in' : $ttl;
 $titleBlock = new w2p_Theme_TitleBlock($ttl, 'icon.png', $m);
 $titleBlock->addCrumb('?m=' . $m, $m . ' list');
 $canDelete = $object->canDelete();
 
-if ($canDelete && $file_id > 0 && !$ci) {
+if ($canDelete && $object_id > 0 && !$ci) {
 	$titleBlock->addCrumbDelete('delete file', $canDelete, $msg);
 }
 $titleBlock->show();
 
 //Clear the file id if checking out so a new version is created.
 if ($ci) {
-	$file_id = 0;
+	$object_id = 0;
 }
 
 if ($object->file_project) {

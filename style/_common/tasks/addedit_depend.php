@@ -1,18 +1,18 @@
 <form name="dependFrm" action="?m=tasks&a=addedit&task_project=<?php echo $task_project; ?>" method="post" accept-charset="utf-8">
     <input name="dosql" type="hidden" value="do_task_aed" />
-    <input name="task_id" type="hidden" value="<?php echo $task_id; ?>" />
+    <input name="task_id" type="hidden" value="<?php echo $object_id; ?>" />
     <input type="hidden" name="hdependencies" />
 
     <div class="std addedit tasks-depends">
         <div class="column left">
             <p>
                 <?php $form->showLabel('Dependency Tracking'); ?>
-                <?php echo $AppUI->_('On'); ?><input type="radio" name="task_dynamic" value="31" <?php if ($task_id == 0 || $object->task_dynamic > '20') { echo "checked"; } ?> />
-                <?php echo $AppUI->_('Off'); ?><input type="radio" name="task_dynamic" value="0" <?php if ($task_id && ($object->task_dynamic == '0' || $object->task_dynamic == '11')) { echo "checked"; } ?> />
+                <?php echo $AppUI->_('On'); ?><input type="radio" name="task_dynamic" value="31" <?php if ($object_id == 0 || $object->task_dynamic > '20') { echo "checked"; } ?> />
+                <?php echo $AppUI->_('Off'); ?><input type="radio" name="task_dynamic" value="0" <?php if ($object_id && ($object->task_dynamic == '0' || $object->task_dynamic == '11')) { echo "checked"; } ?> />
             </p>
             <p>
                 <?php $form->showLabel('Set task start date based on dependency'); ?>
-                <input type="checkbox" name="set_task_start_date" id="set_task_start_date" <?php if ($task_id == 0 || $object->task_dynamic > '20') { echo "checked"; } ?>  />
+                <input type="checkbox" name="set_task_start_date" id="set_task_start_date" <?php if ($object_id == 0 || $object->task_dynamic > '20') { echo "checked"; } ?>  />
             </p>
             <p>
                 <?php $form->showLabel('All Tasks'); ?>

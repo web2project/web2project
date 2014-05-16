@@ -3,12 +3,12 @@ if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
 // @todo    convert to template
-$link_id    = (int) w2PgetParam($_GET, 'link_id', 0);
+$object_id    = (int) w2PgetParam($_GET, 'link_id', 0);
 $task_id    = (int) w2PgetParam($_GET, 'task_id', 0);
 $project_id = (int) w2PgetParam($_GET, 'project_id', 0);
 
 $object = new CLink();
-$object->setId($link_id);
+$object->setId($object_id);
 
 $obj = $object;
 $canAddEdit = $obj->canAddEdit();
@@ -22,17 +22,17 @@ if (!$canAddEdit) {
 $obj = $AppUI->restoreObject();
 if ($obj) {
     $object = $obj;
-    $link_id = $object->getId();
+    $object_id = $object->getId();
 } else {
-    $object->load($link_id);
+    $object->load($object_id);
 }
-if (!$object && $link_id > 0) {
+if (!$object && $object_id > 0) {
     $AppUI->setMsg('Link');
     $AppUI->setMsg('invalidID', UI_MSG_ERROR, true);
     $AppUI->redirect('m=' . $m);
 }
 
-if (0 == $link_id && ($project_id || $task_id)) {
+if (0 == $object_id && ($project_id || $task_id)) {
 
     // We are creating a link, so if we have them lets figure out the project
     // and task id
@@ -47,11 +47,11 @@ if (0 == $link_id && ($project_id || $task_id)) {
 }
 
 // setup the title block
-$ttl = $link_id ? 'Edit Link' : 'Add Link';
+$ttl = $object_id ? 'Edit Link' : 'Add Link';
 $titleBlock = new w2p_Theme_TitleBlock($ttl, 'icon.png', $m);
 $titleBlock->addCrumb('?m=' . $m, $m . ' list');
 
-if ($canDelete && $link_id) {
+if ($canDelete && $object_id) {
     if (!isset($msg)) {
         $msg = '';
     }

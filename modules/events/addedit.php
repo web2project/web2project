@@ -3,12 +3,11 @@ if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
 // @todo    convert to template
-$event_id = intval(w2PgetParam($_GET, 'event_id', 0));
-$is_clash = isset($_SESSION['event_is_clash']) ? $_SESSION['event_is_clash'] : false;
+$object_id = intval(w2PgetParam($_GET, 'event_id', 0));
 
 
 $object = new CEvent();
-$object->setId($event_id);
+$object->setId($object_id);
 
 $canAddEdit = $object->canAddEdit();
 $canAuthor = $object->canCreate();
@@ -30,9 +29,9 @@ $event_project = (int) w2PgetParam($_GET, 'project_id', 0);
 $obj = $AppUI->restoreObject();
 if ($obj) {
     $object = $obj;
-    $event_id = $object->getId();
+    $object_id = $object->getId();
 } else {
-    $object->load($event_id);
+    $object->load($object_id);
 }
 // load the record data
 if (!$object && $dept_id > 0) {
@@ -54,7 +53,7 @@ $users = $perms->getPermittedUsers('events');
 
 // Load the assignees
 $assigned = array();
-if ($event_id == 0) {
+if ($object_id == 0) {
     $assigned[$AppUI->user_id] = $AppUI->user_display_name;
 } else {
     $assigned = $object->getAssigned();
@@ -66,12 +65,12 @@ if ($object->event_project && !$perms->checkModuleItem('projects', 'view', $obje
 }
 
 // setup the title block
-$titleBlock = new w2p_Theme_TitleBlock(($event_id ? 'Edit Event' : 'Add Event'), 'icon.png', $m);
+$titleBlock = new w2p_Theme_TitleBlock(($object_id ? 'Edit Event' : 'Add Event'), 'icon.png', $m);
 $titleBlock->addCrumb('?m=events&a=year_view&date=' . $start_date->format(FMT_TIMESTAMP_DATE), 'year view');
 $titleBlock->addCrumb('?m=events&amp;date=' . $start_date->format(FMT_TIMESTAMP_DATE), 'month view');
 $titleBlock->addCrumb('?m=events&a=week_view&date=' . $start_date->format(FMT_TIMESTAMP_DATE), 'week view');
 $titleBlock->addCrumb('?m=events&amp;a=day_view&amp;date=' . $start_date->format(FMT_TIMESTAMP_DATE) . '&amp;tab=0', 'day view');
-$titleBlock->addViewLink('event', $event_id);
+$titleBlock->addViewLink('event', $object_id);
 $titleBlock->show();
 
 // format dates
@@ -88,7 +87,7 @@ foreach ($projects as $project_id => $project_info) {
 $projects = arrayMerge(array(0 => $all_projects), $projects);
 
 $inc = intval(w2PgetConfig('cal_day_increment')) ? intval(w2PgetConfig('cal_day_increment')) : 30;
-if (!$event_id && !$is_clash) {
+if (!$object_id && !$is_clash) {
 
 	$seldate = new w2p_Utilities_Date($date, $AppUI->getPref('TIMEZONE'));
 	// If date is today, set start time to now + inc

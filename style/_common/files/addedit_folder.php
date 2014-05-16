@@ -6,7 +6,7 @@ $form = new w2p_Output_HTML_FormHelper($AppUI);
 <form name="folderFrm" action="?m=<?php echo $m; ?>" enctype="multipart/form-data" method="post" class="addedit files-folder">
     <input type="hidden" name="dosql" value="do_folder_aed" />
     <input type="hidden" name="del" value="0" />
-    <input type="hidden" name="file_folder_id" value="<?php echo $folder_id; ?>" />
+    <input type="hidden" name="file_folder_id" value="<?php echo $object_id; ?>" />
     <input type="hidden" name="redirect" value="<?php echo $referrer; ?>" />
     <?php echo $form->addNonce(); ?>
 
@@ -15,7 +15,7 @@ $form = new w2p_Output_HTML_FormHelper($AppUI);
             <p>
                 <?php $form->showLabel('Subfolder of'); ?>
                 <?php
-                $parent_folder = ($folder_id > 0) ? $object->file_folder_parent : $file_folder_parent;
+                $parent_folder = ($object_id > 0) ? $object->file_folder_parent : $file_folder_parent;
                 echo arraySelect($folders, 'file_folder_parent', 'style="width:175px;" class="text"', $parent_folder);
                 ?>
             </p>

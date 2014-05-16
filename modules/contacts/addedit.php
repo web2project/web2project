@@ -3,12 +3,12 @@ if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
 // @todo    convert to template
-$contact_id = (int) w2PgetParam($_GET, 'contact_id', 0);
+$object_id = (int) w2PgetParam($_GET, 'contact_id', 0);
 $company_id = (int) w2PgetParam($_GET, 'company_id', 0);
 $dept_id = (int) w2PgetParam($_GET, 'dept_id', 0);
 
 $object = new CContact();
-$object->setId($contact_id);
+$object->setId($object_id);
 
 $canAddEdit = $object->canAddEdit();
 $canAuthor = $object->canCreate();
@@ -22,11 +22,11 @@ if (!$canAddEdit) {
 $obj = $AppUI->restoreObject();
 if ($obj) {
     $object = $obj;
-    $contact_id = $object->getId();
+    $object_id = $object->getId();
 } else {
-    $object->load($contact_id);
+    $object->load($object_id);
 }
-if (!$object && $contact_id > 0) {
+if (!$object && $object_id > 0) {
     $AppUI->setMsg('Contact');
     $AppUI->setMsg('invalidID', UI_MSG_ERROR, true);
     $AppUI->redirect('m=' . $m);
@@ -44,22 +44,22 @@ $dept = new CDepartment();
 $dept->load($dept_id);
 $dept_name = $dept->dept_name;
 
-$is_user = $object->isUser($contact_id);
+$is_user = $object->isUser($object_id);
 
 $df = $AppUI->getPref('SHDATEFORMAT');
 $df .= ' ' . $AppUI->getPref('TIMEFORMAT');
 
 
 // setup the title block
-$ttl = $contact_id > 0 ? 'Edit Contact' : 'Add Contact';
+$ttl = $object_id > 0 ? 'Edit Contact' : 'Add Contact';
 $titleBlock = new w2p_Theme_TitleBlock($ttl, 'icon.png', $m);
 $titleBlock->addCrumb('?m=' . $m, $m . ' list');
-$titleBlock->addViewLink('contact', $contact_id);
+$titleBlock->addViewLink('contact', $object_id);
 
 $titleBlock->show();
 $company_detail = $object->getCompanyDetails();
 $dept_detail = $object->getDepartmentDetails();
-if ($contact_id == 0 && $company_id > 0) {
+if ($object_id == 0 && $company_id > 0) {
 	$company_detail['company_id'] = $company_id;
 	$company_detail['company_name'] = $company_name;
 	$dept_detail['dept_id'] = $dept_id;
@@ -133,7 +133,7 @@ function setDepartment( key ){
 function delIt(){
 	var form = document.changecontact;
 	if(confirm('<?php echo $AppUI->_('contactsDelete', UI_OUTPUT_JS); ?>')) {
-		form.del.value = '<?php echo $contact_id; ?>';
+		form.del.value = '<?php echo $object_id; ?>';
 		form.submit();
 	}
 }

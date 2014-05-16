@@ -5,7 +5,7 @@ $form = new w2p_Output_HTML_FormHelper($AppUI);
 ?>
 <form name="editFrm" action="?m=<?php echo $m; ?>" method="post" accept-charset="utf-8" class="addedit links">
     <input type="hidden" name="dosql" value="do_link_aed" />
-    <input type="hidden" name="link_id" value="<?php echo $link_id; ?>" />
+    <input type="hidden" name="link_id" value="<?php echo $object_id; ?>" />
     <!-- TODO: Right now, link owner is hard coded, we should make this a select box like elsewhere. -->
     <input type="hidden" name="link_owner" value="<?php echo $object->link_owner; ?>" />
     <?php echo $form->addNonce(); ?>
@@ -15,7 +15,7 @@ $form = new w2p_Output_HTML_FormHelper($AppUI);
             <p>
                 <?php $form->showLabel('Link Name'); ?>
                 <?php $form->showField('link_name', $object->link_name, array('maxlength' => 255)); ?>
-                <?php if ($link_id) { ?>
+                <?php if ($object_id) { ?>
                     <a href="<?php echo $object->link_url; ?>" target="_blank"><?php echo $AppUI->_('go'); ?></a>
                 <?php } ?>
             </p>

@@ -7,7 +7,7 @@ if (!defined('W2P_BASE_DIR')) {
 
 global $AppUI, $w2Pconfig, $task_parent_options, $loadFromTab;
 global $can_edit_time_information, $object;
-global $durnTypes, $task_project, $task_id, $tab;
+global $durnTypes, $task_project, $object_id, $tab;
 global $form;
 
 //Time arrays for selects
@@ -42,7 +42,7 @@ for ($current = $start; $current < $end + 1; $current++) {
 
 // Pull tasks dependencies
 $deps = false;
-$taskDep = __extract_from_ae_depend2($task_id);
+$taskDep = __extract_from_ae_depend2($object_id);
 
 ?>
 <script>

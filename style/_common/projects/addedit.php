@@ -5,7 +5,7 @@ $form = new w2p_Output_HTML_FormHelper($AppUI);
 ?>
 <form name="editFrm" action="?m=<?php echo $m; ?>" method="post" accept-charset="utf-8" class="addedit projects">
 <input type="hidden" name="dosql" value="do_project_aed" />
-<input type="hidden" name="project_id" value="<?php echo $project_id; ?>" />
+<input type="hidden" name="project_id" value="<?php echo $object_id; ?>" />
 <input type="hidden" name="project_creator" value="<?php echo is_null($object->project_creator) ? $AppUI->user_id : $object->project_creator; ?>" />
 <input type="hidden" name="project_contacts" id="project_contacts" value="<?php echo implode(',', $selected_contacts); ?>" />
 <input type="hidden" name="datePicker" value="project" />
@@ -34,13 +34,13 @@ $form = new w2p_Output_HTML_FormHelper($AppUI);
             //Build display list for departments
             $company_id = $object->project_company;
             $selected_departments = array();
-            if ($project_id) {
+            if ($object_id) {
                 $myDepartments = $object->getDepartmentList();
                 $selected_departments = (count($myDepartments) > 0) ? array_keys($myDepartments) : array();
             }
             $departments_count = 0;
             $department_selection_list = getDepartmentSelectionList($company_id, $selected_departments);
-            if ($department_selection_list != '' || $project_id) {
+            if ($department_selection_list != '' || $object_id) {
                 $department_selection_list = '<p>' . $form->addLabel('Departments') . '<select name="project_departments[]" multiple="multiple" class="text"><option value="0"></option>' . $department_selection_list . '</select></p>';
             } else {
                 $department_selection_list = '<input type="button" class="button" value="' . $AppUI->_('Select department...') . '" onclick="javascript:popDepartment();" /><input type="hidden" name="project_departments"';
@@ -75,7 +75,7 @@ $form = new w2p_Output_HTML_FormHelper($AppUI);
         <p>
             <?php $form->showLabel('Actual Finish Date'); ?>
             <?php
-            if ($project_id > 0) {
+            if ($object_id > 0) {
                 echo $actual_end_date ? '<a href="?m=tasks&a=view&task_id=' . $criticalTasks[0]['task_id'] . '">' : '';
                 echo $actual_end_date ? '<span ' . $style . '>' . $actual_end_date->format($df) . '</span>' : '-';
                 echo $actual_end_date ? '</a>' : '';
@@ -117,7 +117,7 @@ $form = new w2p_Output_HTML_FormHelper($AppUI);
             <p>
                 <?php $form->showLabel('Actual Budget'); ?>
                 <?php
-                if ($project_id > 0) {
+                if ($object_id > 0) {
                     echo $w2Pconfig['currency_symbol'] . '&nbsp;' . formatCurrency($object->project_actual_budget, $AppUI->getPref('CURRENCYFORM'));
                 } else {
                     echo $AppUI->_('Dynamically calculated');
@@ -161,7 +161,7 @@ $form = new w2p_Output_HTML_FormHelper($AppUI);
                     <strong><?php echo sprintf("%.1f%%", $object->project_percent_complete); ?></strong>
                 </td>
                 <td>
-                    <input type="checkbox" value="1" name="project_active" <?php echo $object->project_active || $project_id == 0 ? 'checked="checked"' : ''; ?> />
+                    <input type="checkbox" value="1" name="project_active" <?php echo $object->project_active || $object_id == 0 ? 'checked="checked"' : ''; ?> />
                 </td>
             </tr>
         </table>

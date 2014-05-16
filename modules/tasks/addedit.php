@@ -3,12 +3,12 @@ if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
 // @todo    convert to template
-$task_id = (int) w2PgetParam($_GET, 'task_id', 0);
+$object_id = (int) w2PgetParam($_GET, 'task_id', 0);
 
 
 
 $object = new CTask();
-$object->setId($task_id);
+$object->setId($object_id);
 
 $obj = $object;
 $canAddEdit = $obj->canAddEdit();
@@ -21,11 +21,11 @@ if (!$canAddEdit) {
 $obj = $AppUI->restoreObject();
 if ($obj) {
     $object = $obj;
-    $task_id = $object->getId();
+    $object_id = $object->getId();
 } else {
-    $object->load($task_id);
+    $object->load($object_id);
 }
-if (!$object && $task_id > 0) {
+if (!$object && $object_id > 0) {
 	$AppUI->setMsg('Task');
 	$AppUI->setMsg('invalidID', UI_MSG_ERROR, true);
     $AppUI->redirect('m=' . $m);
@@ -49,7 +49,7 @@ if (!$task_project) {
 
 // check permissions
 $perms = &$AppUI->acl();
-if (!$task_id) {
+if (!$object_id) {
 	// do we have access on this project?
 	$canEdit = $perms->checkModuleItem('projects', 'view', $task_project);
 	// And do we have add permission to tasks?
@@ -108,26 +108,26 @@ $task_parent_options = '';
 $root_tasks = $object->getRootTasks((int)$task_project);
 foreach ($root_tasks as $root_task) {
     build_date_list($projTasksWithEndDates, $root_task);
-	if ($root_task['task_id'] != $task_id) {
-        $task_parent_options .= buildTaskTree($root_task, 0, array(), $all_tasks, $parents, $task_parent, $task_id);
+	if ($root_task['task_id'] != $object_id) {
+        $task_parent_options .= buildTaskTree($root_task, 0, array(), $all_tasks, $parents, $task_parent, $object_id);
 	}
 }
 
 // setup the title block
-$ttl = $task_id > 0 ? 'Edit Task' : 'Add Task';
+$ttl = $object_id > 0 ? 'Edit Task' : 'Add Task';
 $titleBlock = new w2p_Theme_TitleBlock($ttl, 'icon.png', $m);
 $titleBlock->addViewLink('project', $task_project);
-$titleBlock->addViewLink('task', $task_id);
+$titleBlock->addViewLink('task', $object_id);
 $titleBlock->show();
 
 // Get contacts list
 $selected_contacts = array();
 
-if ($task_id) {
-	$myContacts = $object->getContacts(null, $task_id);
+if ($object_id) {
+	$myContacts = $object->getContacts(null, $object_id);
 	$selected_contacts = array_keys($myContacts);
 }
-if ($task_id == 0 && (isset($contact_id) && $contact_id > 0)) {
+if ($object_id == 0 && (isset($contact_id) && $contact_id > 0)) {
 	$selected_contacts[] = '' . $contact_id;
 }
 
@@ -187,7 +187,7 @@ include $AppUI->getTheme()->resolveTemplate('tasks/addedit');
 
 $tab = $AppUI->processIntState('TaskAeTabIdx', $_GET, 'tab', 0);
 
-$tabBox = new CTabBox('?m=tasks&a=addedit&task_id=' . $task_id, '', $tab, '');
+$tabBox = new CTabBox('?m=tasks&a=addedit&task_id=' . $object_id, '', $tab, '');
 $tabBox->add(W2P_BASE_DIR . '/modules/tasks/ae_desc', 'Details');
 $tabBox->add(W2P_BASE_DIR . '/modules/tasks/ae_dates', 'Dates');
 $tabBox->add(W2P_BASE_DIR . '/modules/tasks/ae_depend', 'Dependencies');

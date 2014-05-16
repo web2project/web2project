@@ -3,12 +3,12 @@ if (!defined('W2P_BASE_DIR')) {
     die('You should not access this file directly.');
 }
 // @todo    convert to template
-$user_id = (int) w2PgetParam($_GET, 'user_id', 0);
+$object_id = (int) w2PgetParam($_GET, 'user_id', 0);
 $contact_id = (int) w2PgetParam($_GET, 'contact_id', 0);
 
 
 $object = new CUser();
-$object->setId($user_id);
+$object->setId($object_id);
 
 
 $canAddEdit = $object->canAddEdit();
@@ -38,7 +38,7 @@ if ($contact_id) {
     $object->load($contact_id);
 } else {
     $object = new CUser();
-    $object->loadFull($user_id);
+    $object->loadFull($object_id);
 }
 
 // pull companies
@@ -47,15 +47,15 @@ $companies = $company->getAllowedRecords($AppUI->user_id, 'company_id,company_na
 $companies = arrayMerge(array('0' => ''), $companies);
 
 // setup the title block
-$ttl = $user_id ? 'Edit User' : 'Add User';
+$ttl = $object_id ? 'Edit User' : 'Add User';
 $titleBlock = new w2p_Theme_TitleBlock($ttl, 'icon.png', $m);
 $titleBlock->addCrumb('?m=' . $m, $m . ' list');
-$titleBlock->addViewLink('user', $user_id);
+$titleBlock->addViewLink('user', $object_id);
 $titleBlock->addViewLink('contact', $object->contact_id);
 
-if ($user_id) {
-    if ($canEdit || $user_id == $AppUI->user_id) {
-        $titleBlock->addCrumb('?m=system&a=addeditpref&user_id=' . $user_id, 'edit preferences');
+if ($object_id) {
+    if ($canEdit || $object_id == $AppUI->user_id) {
+        $titleBlock->addCrumb('?m=system&a=addeditpref&user_id=' . $object_id, 'edit preferences');
     }
     if ($canDelete) {
         $titleBlock->addCrumbDelete('delete User', $canDelete, $msg);
@@ -71,7 +71,7 @@ $AppUI->addFooterJavascriptFile('js/passwordstrength.js');
         if (form.user_username.value.length < <?php echo w2PgetConfig('username_min_len'); ?> && form.user_username.value != '<?php echo w2PgetConfig('admin_username'); ?>') {
             alert("<?php echo $AppUI->_('adminValidUserName', UI_OUTPUT_JS); ?>"  + <?php echo w2PgetConfig('username_min_len'); ?>);
             form.user_username.focus();
-            <?php if ($canEdit && !$user_id) { ?>
+            <?php if ($canEdit && !$object_id) { ?>
         } else if (form.user_role.value <=0 ) {
             alert("<?php echo $AppUI->_('adminValidRole', UI_OUTPUT_JS); ?>");
             form.user_role.focus();
@@ -118,7 +118,7 @@ $AppUI->addFooterJavascriptFile('js/passwordstrength.js');
             f.dept_name.value = '';
         }
     }
-    <?php if ($canDelete && $user_id) { ?>
+    <?php if ($canDelete && $object_id) { ?>
     function delIt() {
         if (confirm( '<?php echo $AppUI->_('doDelete') . ' ' . $AppUI->_('User') . '?'; ?>' )) {
             document.frmDelete.submit();
@@ -134,11 +134,11 @@ $AppUI->addFooterJavascriptFile('js/passwordstrength.js');
     $spacing = ('wps-redmond' == $AppUI->getPref('UISTYLE')) ? 70 : 0;
     echo '<div style="padding-top: ' . $spacing . 'px;"> </div>';
     ?>
-    <?php if ($canDelete && $user_id) { ?>
+    <?php if ($canDelete && $object_id) { ?>
     <form name="frmDelete" action="./index.php?m=users" method="post" accept-charset="utf-8">
         <input type="hidden" name="dosql" value="do_user_aed" />
         <input type="hidden" name="del" value="1" />
-        <input type="hidden" name="company_id" value="<?php echo $user_id; ?>" />
+        <input type="hidden" name="company_id" value="<?php echo $object_id; ?>" />
     </form>
     <?php } ?>
 </script>

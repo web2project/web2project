@@ -6,7 +6,7 @@ if (!defined('W2P_BASE_DIR')) {
 
 global $AppUI, $w2Pconfig, $task_parent_options, $loadFromTab;
 global $can_edit_time_information, $locale_char_set, $object;
-global $durnTypes, $task_project, $task_id, $tab;
+global $durnTypes, $task_project, $object_id, $tab;
 global $cal_sdf;
 $AppUI->loadCalendarJS();
 

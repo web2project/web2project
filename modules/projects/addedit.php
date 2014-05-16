@@ -3,12 +3,12 @@ if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
 // @todo    convert to template
-$project_id = (int) w2PgetParam($_GET, 'project_id', 0);
+$object_id = (int) w2PgetParam($_GET, 'project_id', 0);
 $company_id = (int) w2PgetParam($_GET, 'company_id', $AppUI->user_company);
 $contact_id = (int) w2PgetParam($_GET, 'contact_id', 0);
 
 $object = new CProject();
-$object->setId($project_id);
+$object->setId($object_id);
 
 $obj = $object;
 $canAddEdit = $obj->canAddEdit();
@@ -21,11 +21,11 @@ if (!$canAddEdit) {
 $obj = $AppUI->restoreObject();
 if ($obj) {
     $object = $obj;
-    $project_id = $object->getId();
+    $object_id = $object->getId();
 } else {
-    $object->loadFull(null, $project_id);
+    $object->loadFull(null, $object_id);
 }
-if (!$object && $project_id > 0) {
+if (!$object && $object_id > 0) {
 	$AppUI->setMsg('Project');
 	$AppUI->setMsg('invalidID', UI_MSG_ERROR, true);
     $AppUI->redirect('m=' . $m);
@@ -39,7 +39,7 @@ $pstatus = w2PgetSysVal('ProjectStatus');
 $ptype = w2PgetSysVal('ProjectType');
 
 $structprojs = $object->getAllowedProjects($AppUI->user_id, false);
-unset($structprojs[$project_id]);
+unset($structprojs[$object_id]);
 foreach($structprojs as $key => $tmpInfo) {
     $structprojs[$key] = $tmpInfo['project_name'];
 }
@@ -50,21 +50,21 @@ $company = new CCompany();
 $companies = $company->getAllowedRecords($AppUI->user_id, 'company_id,company_name', 'company_name');
 $companies = arrayMerge(array('0' => ''), $companies);
 
-if (count($companies) < 2 && $project_id == 0) {
+if (count($companies) < 2 && $object_id == 0) {
 	$AppUI->setMsg('noCompanies', UI_MSG_ERROR, true);
     $AppUI->redirect('m=' . $m);
 }
-if ($project_id == 0 && $company_id > 0) {
+if ($object_id == 0 && $company_id > 0) {
 	$object->project_company = $company_id;
 }
 
 // add in the existing company if for some reason it is dis-allowed
-if ($project_id && !array_key_exists($object->project_company, $companies)) {
+if ($object_id && !array_key_exists($object->project_company, $companies)) {
 	$companies[$object->project_company] = $company->load($object->project_company)->company_name;
 }
 
 // get critical tasks (criteria: task_end_date)
-$criticalTasks = ($project_id > 0) ? $object->getCriticalTasks() : null;
+$criticalTasks = ($object_id > 0) ? $object->getCriticalTasks() : null;
 
 // get ProjectPriority from sysvals
 $projectPriority = w2PgetSysVal('ProjectPriority');
@@ -77,21 +77,21 @@ $actual_end_date = intval($criticalTasks[0]['task_end_date']) ? new w2p_Utilitie
 $style = (($actual_end_date > $end_date) && !empty($end_date)) ? 'style="color:red; font-weight:bold"' : '';
 
 // setup the title block
-$ttl = $project_id > 0 ? 'Edit Project' : 'New Project';
+$ttl = $object_id > 0 ? 'Edit Project' : 'New Project';
 $titleBlock = new w2p_Theme_TitleBlock($ttl, 'icon.png', $m);
 $titleBlock->addCrumb('?m=' . $m, $m . ' list');
-$titleBlock->addViewLink('project', $project_id);
+$titleBlock->addViewLink('project', $object_id);
 $titleBlock->show();
 
 $canDelete = $object->canDelete();
 // Get contacts list
 $selected_contacts = array();
 
-if ($project_id) {
+if ($object_id) {
 	$myContacts = $object->getContactList();
 	$selected_contacts = array_keys($myContacts);
 }
-if ($project_id == 0 && $contact_id > 0) {
+if ($object_id == 0 && $contact_id > 0) {
 	$selected_contacts[] = '' . $contact_id;
 }
 

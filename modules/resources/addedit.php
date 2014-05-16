@@ -3,12 +3,12 @@ if (!defined('W2P_BASE_DIR')) {
     die('You should not access this file directly.');
 }
 // @todo    convert to template
-$resource_id = (int) w2PgetParam($_GET, 'resource_id', 0);
+$object_id = (int) w2PgetParam($_GET, 'resource_id', 0);
 
 
 
 $object = new CResource();
-$object->setId($resource_id);
+$object->setId($object_id);
 
 $obj = $object;
 $canAddEdit = $obj->canAddEdit();
@@ -21,21 +21,21 @@ if (!$canAddEdit) {
 $obj = $AppUI->restoreObject();
 if ($obj) {
     $object = $obj;
-    $resource_id = $object->getId();
+    $object_id = $object->getId();
 } else {
-    $object->load($resource_id);
+    $object->load($object_id);
 }
-if (!$object && $resource_id > 0) {
+if (!$object && $object_id > 0) {
     $AppUI->setMsg('Resource');
     $AppUI->setMsg('invalidID', UI_MSG_ERROR, true);
     $AppUI->redirect('m=' . $m);
 }
 
 // setup the title block
-$ttl = $resource_id ? 'Edit Resource' : 'Add Resource';
+$ttl = $object_id ? 'Edit Resource' : 'Add Resource';
 $titleBlock = new w2p_Theme_TitleBlock($ttl, 'icon.png', $m);
 $titleBlock->addCrumb('?m=' . $m, $m . ' list');
-$titleBlock->addViewLink('resource', $resource_id);
+$titleBlock->addViewLink('resource', $object_id);
 $titleBlock->show();
 
 $percent = array(0 => '0', 5 => '5', 10 => '10', 15 => '15', 20 => '20', 25 => '25', 30 => '30', 35 => '35', 40 => '40', 45 => '45', 50 => '50', 55 => '55', 60 => '60', 65 => '65', 70 => '70', 75 => '75', 80 => '80', 85 => '85', 90 => '90', 95 => '95', 100 => '100');

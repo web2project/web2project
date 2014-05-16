@@ -5,7 +5,7 @@ $form = new w2p_Output_HTML_FormHelper($AppUI);
 ?>
 <form name="editfrm" action="?m=<?php echo $m; ?>" method="post" accept-charset="utf-8" class="addedit resources">
     <input type="hidden" name="dosql" value="do_resource_aed" />
-    <input type="hidden" name="resource_id" value="<?php echo $resource_id; ?>" />
+    <input type="hidden" name="resource_id" value="<?php echo $object_id; ?>" />
     <?php echo $form->addNonce(); ?>
 
     <div class="std addedit resources">

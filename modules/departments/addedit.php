@@ -4,14 +4,14 @@ if (!defined('W2P_BASE_DIR')) {
 }
 // @todo    convert to template
 $dept_id = (int) w2PgetParam($_GET, 'dept_id', 0);
-$department_id = (int) w2PgetParam($_GET, 'department_id', 0);
-$dept_id = max($dept_id, $department_id);
+$object_id = (int) w2PgetParam($_GET, 'department_id', 0);
+$object_id = max($dept_id, $object_id);
 
 $dept_parent = (int) w2PgetParam($_GET, 'dept_parent', 0);
 $company_id = (int) w2PgetParam($_GET, 'company_id', 0);
 
 $object = new CDepartment();
-$object->setId($dept_id);
+$object->setId($object_id);
 
 $canAddEdit = $object->canAddEdit();
 $canAuthor = $object->canCreate();
@@ -25,11 +25,11 @@ if (!$canAddEdit) {
 $obj = $AppUI->restoreObject();
 if ($obj) {
     $object = $obj;
-    $dept_id = $object->getId();
+    $object_id = $object->getId();
 } else {
-    $object->load($dept_id);
+    $object->load($object_id);
 }
-if (!$object && $dept_id > 0) {
+if (!$object && $object_id > 0) {
     $AppUI->setMsg('Department');
     $AppUI->setMsg('invalidID', UI_MSG_ERROR, true);
     $AppUI->redirect('m=' . $m);
@@ -37,7 +37,7 @@ if (!$object && $dept_id > 0) {
 
 $company_id = $object->dept_id ? $object->dept_company : $company_id;
 
-if (!$dept_id && !$company_id) {
+if (!$object_id && !$company_id) {
     $AppUI->setMsg('badCompany', UI_MSG_ERROR);
     $AppUI->redirect('m=companies');
 }
@@ -52,7 +52,7 @@ if ($company_id) {
 }
 
 // setup the title block
-$ttl = $dept_id > 0 ? 'Edit Department' : 'Add Department';
+$ttl = $object_id > 0 ? 'Edit Department' : 'Add Department';
 $titleBlock = new w2p_Theme_TitleBlock($ttl, 'icon.png', $m);
 $titleBlock->addCrumb('?m=companies', 'companies list');
 $titleBlock->addCrumb('?m=' . $m, $m . ' list');

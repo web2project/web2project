@@ -7,7 +7,7 @@ $form = new w2p_Output_HTML_FormHelper($AppUI);
     <input type="hidden" name="dosql" value="do_contact_aed" />
     <input type="hidden" name="contact_project" value="0" />
     <input type="hidden" name="contact_unique_update" value="<?php echo uniqid(''); ?>" />
-    <input type="hidden" name="contact_id" value="<?php echo $contact_id; ?>" />
+    <input type="hidden" name="contact_id" value="<?php echo $object_id; ?>" />
     <input type="hidden" name="contact_owner" value="<?php echo $object->contact_owner ? $object->contact_owner : $AppUI->user_id; ?>" />
     <?php echo $form->addNonce(); ?>
 
@@ -21,7 +21,7 @@ $form = new w2p_Output_HTML_FormHelper($AppUI);
                 <?php $form->showLabel('Last Name'); ?>
                 <?php
                 $options = array('maxlength' => 50);
-                if ($contact_id == 0) {
+                if ($object_id == 0) {
                     $options['onBlur'] = "orderByName('name')";
                 }
                 ?>

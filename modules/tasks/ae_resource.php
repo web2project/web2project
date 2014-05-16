@@ -4,17 +4,17 @@ if (!defined('W2P_BASE_DIR')) {
 }
 // @todo    convert to template
 
-global $AppUI, $users, $task_id, $task_project, $object, $projTasksWithEndDates, $tab, $loadFromTab;
+global $AppUI, $users, $object_id, $task_project, $object, $projTasksWithEndDates, $tab, $loadFromTab;
 global $form;
 
 // Make sure that we can see users that are allocated to the task.
 
-if ($task_id == 0) {
+if ($object_id == 0) {
 	// Add task creator to assigned users by default
 	$assignedUsers = array($AppUI->user_id => array('contact_name' => $users[$AppUI->user_id], 'perc_assignment' => '100'));
 } else {
 	// Pull users on this task
-	$assignedUsers = $object->assignees($task_id);
+	$assignedUsers = $object->assignees($object_id);
 }
 
 $initPercAsignment = '';

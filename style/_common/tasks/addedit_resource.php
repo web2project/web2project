@@ -1,5 +1,5 @@
 <form action="?m=tasks&a=addedit&task_project=<?php echo $task_project; ?>" method="post" name="resourceFrm" accept-charset="utf-8">
-    <input type="hidden" name="task_id" value="<?php echo $task_id; ?>" />
+    <input type="hidden" name="task_id" value="<?php echo $object_id; ?>" />
     <input type="hidden" name="dosql" value="do_task_aed" />
     <input name="hperc_assign" type="hidden" value="<?php echo $initPercAsignment; ?>"/>
     <input type="hidden" name="hassign" />

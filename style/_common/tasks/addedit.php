@@ -5,7 +5,7 @@ $form = new w2p_Output_HTML_FormHelper($AppUI);
 ?>
 <form name="editFrm" action="?m=<?php echo $m; ?>&project_id=<?php echo $task_project; ?>" method="post" onSubmit="return submitIt(document.editFrm);" accept-charset="utf-8" class="addedit tasks">
     <input name="dosql" type="hidden" value="do_task_aed" />
-    <input name="task_id" type="hidden" value="<?php echo $task_id; ?>" />
+    <input name="task_id" type="hidden" value="<?php echo $object_id; ?>" />
     <input name="task_project" type="hidden" value="<?php echo $task_project; ?>" />
     <input name="old_task_parent" type="hidden" value="<?php echo $object->task_parent; ?>" />
     <input name='task_contacts' id='task_contacts' type='hidden' value="<?php echo implode(',', $selected_contacts); ?>" />
