@@ -14,25 +14,25 @@ $form = new w2p_Output_HTML_FormHelper($AppUI);
         <div class="column left">
             <p>
                 <?php $form->showLabel('Name'); ?>
-                <?php $form->showField('event_name', $obj->event_name, array('maxlength' => 255)); ?>
+                <?php $form->showField('event_name', $object->event_name, array('maxlength' => 255)); ?>
             </p>
             <p>
                 <?php $form->showLabel('Type'); ?>
-                <?php $form->showField('event_type', $obj->event_type, array(), $types); ?>
+                <?php $form->showField('event_type', $object->event_type, array(), $types); ?>
             </p>
             <p>
                 <?php $form->showLabel('Project'); ?>
-                <?php $form->showField('event_project', $obj->event_project, array(), $projects); ?>
+                <?php $form->showField('event_project', $object->event_project, array(), $projects); ?>
             </p>
             <p>
                 <?php $form->showLabel('Event Owner'); ?>
                 <?php
-                $owner = ($obj->event_owner) ? $obj->event_owner : $AppUI->user_id;
+                $owner = ($object->event_owner) ? $object->event_owner : $AppUI->user_id;
                 $form->showField('event_owner', $owner, array(), $users); ?>
             </p>
             <p>
                 <?php $form->showLabel('Private Entry'); ?>
-                <input type="checkbox" value="1" name="event_private" id="event_private" <?php echo ($obj->event_private ? 'checked="checked"' : ''); ?> />
+                <input type="checkbox" value="1" name="event_private" id="event_private" <?php echo ($object->event_private ? 'checked="checked"' : ''); ?> />
             </p>
             <p>
                 <?php $form->showLabel('Start Date'); ?>
@@ -41,7 +41,7 @@ $form = new w2p_Output_HTML_FormHelper($AppUI);
                 <a href="javascript: void(0);" onclick="return showCalendar('start_date', '<?php echo $df ?>', 'editFrm', null, true, true)">
                     <img src="<?php echo w2PfindImage('calendar.gif'); ?>" alt="<?php echo $AppUI->_('Calendar'); ?>" />
                 </a>
-                <?php echo arraySelect($times, 'start_time', 'size="1" class="text"', $AppUI->formatTZAwareTime($obj->event_start_date, '%H%M%S')); ?>
+                <?php echo arraySelect($times, 'start_time', 'size="1" class="text"', $AppUI->formatTZAwareTime($object->event_start_date, '%H%M%S')); ?>
             </p>
             <p>
                 <?php $form->showLabel('End Date'); ?>
@@ -50,22 +50,22 @@ $form = new w2p_Output_HTML_FormHelper($AppUI);
                 <a href="javascript: void(0);" onclick="return showCalendar('end_date', '<?php echo $df ?>', 'editFrm', null, true, true)">
                     <img src="<?php echo w2PfindImage('calendar.gif'); ?>" alt="<?php echo $AppUI->_('Calendar'); ?>" />
                 </a>
-                <?php echo arraySelect($times, 'end_time', 'size="1" class="text"', $AppUI->formatTZAwareTime($obj->event_end_date, '%H%M%S')); ?>
+                <?php echo arraySelect($times, 'end_time', 'size="1" class="text"', $AppUI->formatTZAwareTime($object->event_end_date, '%H%M%S')); ?>
             </p>
             <p>
                 <?php $form->showLabel('Recurs'); ?>
-                <?php echo arraySelect($recurs, 'event_recurs', 'size="1" class="text"', $obj->event_recurs, true); ?>
-                <input type="text" class="text" name="event_times_recuring" value="<?php echo ((isset($obj->event_times_recuring)) ? ($obj->event_times_recuring) : '1'); ?>" maxlength="2" size="3" /> <?php echo $AppUI->_('times'); ?>
+                <?php echo arraySelect($recurs, 'event_recurs', 'size="1" class="text"', $object->event_recurs, true); ?>
+                <input type="text" class="text" name="event_times_recuring" value="<?php echo ((isset($object->event_times_recuring)) ? ($object->event_times_recuring) : '1'); ?>" maxlength="2" size="3" /> <?php echo $AppUI->_('times'); ?>
             </p>
         </div>
         <div class="column right">
             <p>
                 <?php $form->showLabel('Description'); ?>
-                <?php $form->showField('event_description', $obj->event_description); ?>
+                <?php $form->showField('event_description', $object->event_description); ?>
             </p>
             <p>
                 <?php $form->showLabel('Only on Working Days'); ?>
-                <input type="checkbox" value="1" name="event_cwd" id="event_cwd" <?php echo ($obj->event_cwd ? 'checked="checked"' : ''); ?> />
+                <input type="checkbox" value="1" name="event_cwd" id="event_cwd" <?php echo ($object->event_cwd ? 'checked="checked"' : ''); ?> />
             </p>
             <p>
                 <?php $form->showLabel('Mail Attendees'); ?>
@@ -100,7 +100,7 @@ $form = new w2p_Output_HTML_FormHelper($AppUI);
             <tr>
                 <td colspan="2" align="right">
                     <?php
-                    $custom_fields = new w2p_Core_CustomFields('events', 'addedit', $obj->event_id, 'edit');
+                    $custom_fields = new w2p_Core_CustomFields('events', 'addedit', $object->event_id, 'edit');
                     $custom_fields->printHTML();
                     ?>
                 </td>

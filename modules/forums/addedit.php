@@ -7,10 +7,10 @@ $forum_id = (int) w2PgetParam($_GET, 'forum_id', 0);
 
 
 
-$forum = new CForum();
-$forum->forum_id = $forum_id;
+$object = new CForum();
+$object->forum_id = $forum_id;
 
-$obj = $forum;
+$obj = $object;
 $canAddEdit = $obj->canAddEdit();
 $canAuthor = $obj->canCreate();
 $canEdit = $obj->canEdit();
@@ -20,18 +20,18 @@ if (!$canAddEdit) {
 
 $obj = $AppUI->restoreObject();
 if ($obj) {
-    $forum = $obj;
-    $forum_id = $forum->forum_id;
+    $object = $obj;
+    $forum_id = $object->forum_id;
 } else {
-    $forum->load($forum_id);
+    $object->load($forum_id);
 }
-if (!$forum && $forum_id > 0) {
+if (!$object && $forum_id > 0) {
     $AppUI->setMsg('Forum');
     $AppUI->setMsg('invalidID', UI_MSG_ERROR, true);
     $AppUI->redirect('m=' . $m);
 }
 
-$status = isset($forum->forum_status) ? $forum->forum_status : -1;
+$status = isset($object->forum_status) ? $object->forum_status : -1;
 
 $prj = new CProject();
 if ($forum_id) {

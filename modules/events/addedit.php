@@ -7,12 +7,12 @@ $event_id = intval(w2PgetParam($_GET, 'event_id', 0));
 $is_clash = isset($_SESSION['event_is_clash']) ? $_SESSION['event_is_clash'] : false;
 
 
-$obj = new CEvent();
-$obj->event_id = $event_id;
+$object = new CEvent();
+$object->event_id = $event_id;
 
-$canAddEdit = $obj->canAddEdit();
-$canAuthor = $obj->canCreate();
-$canEdit = $obj->canEdit();
+$canAddEdit = $object->canAddEdit();
+$canAuthor = $object->canCreate();
+$canEdit = $object->canEdit();
 
 if (!$canAddEdit) {
 	$AppUI->redirect(ACCESS_DENIED);
@@ -27,16 +27,23 @@ $date = w2PgetParam($_GET, 'date', null);
 // get the passed timestamp (today if none)
 $event_project = (int) w2PgetParam($_GET, 'project_id', 0);
 
+$obj = $AppUI->restoreObject();
+if ($obj) {
+    $object = $obj;
+    $event_id = $object->event_id;
+} else {
+    $object->load($event_id);
+}
 // load the record data
-if (!$obj->load($event_id) && $event_id) {
+if (!$object && $dept_id > 0) {
     $AppUI->setMsg('Event');
     $AppUI->setMsg('invalidID', UI_MSG_ERROR, true);
     $AppUI->redirect('m=' . $m);
 }
 
-$obj->event_project = ($event_project) ? $event_project : $obj->event_project;
-$start_date = intval($obj->event_start_date) ? new w2p_Utilities_Date($AppUI->formatTZAwareTime($obj->event_start_date, '%Y-%m-%d %T')) : new w2p_Utilities_Date();
-$end_date = intval($obj->event_end_date) ? new w2p_Utilities_Date($AppUI->formatTZAwareTime($obj->event_end_date, '%Y-%m-%d %T')) : $start_date;
+$object->event_project = ($event_project) ? $event_project : $object->event_project;
+$start_date = intval($object->event_start_date) ? new w2p_Utilities_Date($AppUI->formatTZAwareTime($object->event_start_date, '%Y-%m-%d %T')) : new w2p_Utilities_Date();
+$end_date = intval($object->event_end_date) ? new w2p_Utilities_Date($AppUI->formatTZAwareTime($object->event_end_date, '%Y-%m-%d %T')) : $start_date;
 
 // load the event types
 $types = w2PgetSysVal('EventType');
@@ -50,11 +57,11 @@ $assigned = array();
 if ($event_id == 0) {
     $assigned[$AppUI->user_id] = $AppUI->user_display_name;
 } else {
-    $assigned = $obj->getAssigned();
+    $assigned = $object->getAssigned();
 }
 
 //check if the user has view permission over the project
-if ($obj->event_project && !$perms->checkModuleItem('projects', 'view', $obj->event_project)) {
+if ($object->event_project && !$perms->checkModuleItem('projects', 'view', $object->event_project)) {
 	$AppUI->redirect(ACCESS_DENIED);
 }
 
@@ -98,18 +105,18 @@ if (!$event_id && !$is_clash) {
 	if ($h && $h < w2PgetConfig('cal_day_end')) {
 		$seldate->setTime($h, $min, 0);
         $seldate->convertTZ('UTC');
-		$obj->event_start_date = $seldate->format(FMT_TIMESTAMP);
+		$object->event_start_date = $seldate->format(FMT_TIMESTAMP);
 		$seldate->addSeconds($inc * 60);
         $seldate->convertTZ('UTC');
-		$obj->event_end_date = $seldate->format(FMT_TIMESTAMP);
+		$object->event_end_date = $seldate->format(FMT_TIMESTAMP);
 	} else {
 		$seldate->setTime(w2PgetConfig('cal_day_start'), 0, 0);
         $seldate->convertTZ('UTC');
-		$obj->event_start_date = $seldate->format(FMT_TIMESTAMP);
+		$object->event_start_date = $seldate->format(FMT_TIMESTAMP);
         $seldate->convertTZ($AppUI->getPref('TIMEZONE'));
 		$seldate->setTime(w2PgetConfig('cal_day_end'), 0, 0);
         $seldate->convertTZ('UTC');
-		$obj->event_end_date = $seldate->format(FMT_TIMESTAMP);
+		$object->event_end_date = $seldate->format(FMT_TIMESTAMP);
 	}
 }
 

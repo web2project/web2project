@@ -15,17 +15,17 @@ $form = new w2p_Output_HTML_FormHelper($AppUI);
             <p>
                 <?php $form->showLabel('Subfolder of'); ?>
                 <?php
-                $parent_folder = ($folder_id > 0) ? $folder->file_folder_parent : $file_folder_parent;
+                $parent_folder = ($folder_id > 0) ? $object->file_folder_parent : $file_folder_parent;
                 echo arraySelect($folders, 'file_folder_parent', 'style="width:175px;" class="text"', $parent_folder);
                 ?>
             </p>
             <p>
                 <?php $form->showLabel('Folder Name'); ?>
-                <?php $form->showField('file_folder_name', $folder->file_folder_name, array('maxlength' => 255)); ?>
+                <?php $form->showField('file_folder_name', $object->file_folder_name, array('maxlength' => 255)); ?>
             </p>
             <p>
                 <?php $form->showLabel('Description'); ?>
-                <?php $form->showField('file_folder_description', $folder->file_folder_description); ?>
+                <?php $form->showField('file_folder_description', $object->file_folder_description); ?>
             </p>
             <?php $form->showCancelButton(); ?>
             <?php $form->showSaveButton(); ?>

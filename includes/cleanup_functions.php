@@ -1822,7 +1822,7 @@ function getHelpdeskFolder()
 // From: modules/files/files.class.php
 function file_show_attr($AppUI, $form)
 {
-    global $obj, $ci, $canAdmin, $file_project, $file_task, $task_name, $preserve;
+    global $object, $ci, $canAdmin, $file_project, $file_task, $task_name, $preserve;
 
     if ($ci) {
         $str_out  = '<p>' . $form->addLabel('Minor Revision') . '<input type="Radio" name="revision_type" value="minor" checked /></p>';
@@ -1832,14 +1832,14 @@ function file_show_attr($AppUI, $form)
     }
 
     if ($ci) {
-        $the_value = (strlen($obj->file_version) > 0 ? $obj->file_version + 0.01 : '1');
+        $the_value = (strlen($object->file_version) > 0 ? $object->file_version + 0.01 : '1');
         $str_out .= '<input type="hidden" name="file_version" value="' . $the_value . '" />';
     } else {
-        $the_value = (strlen($obj->file_version) > 0 ? $obj->file_version : '1');
+        $the_value = (strlen($object->file_version) > 0 ? $object->file_version : '1');
         $str_out .= '<input type="text" name="file_version" maxlength="10" size="5" value="' . $the_value . '" class="text" />';
     }
 
-    if ($ci || ($canAdmin && $obj->file_checkout == 'final')) {
+    if ($ci || ($canAdmin && $object->file_checkout == 'final')) {
         $str_out .= '<input type="hidden" name="file_checkout" value="" /><input type="hidden" name="file_co_reason" value="" />';
     }
 
@@ -1852,12 +1852,12 @@ function file_show_attr($AppUI, $form)
         $onclick_task = ' ';
         // need because when a html is disabled, it's value it's not sent in submit
         $str_out .= '<input type="hidden" name="file_project" value="' . $file_project . '" />';
-        $str_out .= '<input type="hidden" name="file_category" value="' . $obj->file_category . '" />';
+        $str_out .= '<input type="hidden" name="file_category" value="' . $object->file_category . '" />';
     }
 
     // Category
     $str_out .= '<p>' . $form->addLabel('Category');
-    $str_out .= arraySelect(w2PgetSysVal('FileType'), 'file_category', 'class="text"' . $select_disabled, $obj->file_category, true) . '</p>';
+    $str_out .= arraySelect(w2PgetSysVal('FileType'), 'file_category', 'class="text"' . $select_disabled, $object->file_category, true) . '</p>';
 
     // ---------------------------------------------------------------------------------
 

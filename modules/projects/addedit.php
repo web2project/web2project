@@ -7,10 +7,10 @@ $project_id = (int) w2PgetParam($_GET, 'project_id', 0);
 $company_id = (int) w2PgetParam($_GET, 'company_id', $AppUI->user_company);
 $contact_id = (int) w2PgetParam($_GET, 'contact_id', 0);
 
-$project = new CProject();
-$project->project_id = $project_id;
+$object = new CProject();
+$object->project_id = $project_id;
 
-$obj = $project;
+$obj = $object;
 $canAddEdit = $obj->canAddEdit();
 $canAuthor = $obj->canCreate();
 $canEdit = $obj->canEdit();
@@ -20,12 +20,12 @@ if (!$canAddEdit) {
 
 $obj = $AppUI->restoreObject();
 if ($obj) {
-    $project = $obj;
-    $project_id = $project->project_id;
+    $object = $obj;
+    $project_id = $object->project_id;
 } else {
-    $project->loadFull(null, $project_id);
+    $object->loadFull(null, $project_id);
 }
-if (!$project && $project_id > 0) {
+if (!$object && $project_id > 0) {
 	$AppUI->setMsg('Project');
 	$AppUI->setMsg('invalidID', UI_MSG_ERROR, true);
     $AppUI->redirect('m=' . $m);
@@ -38,7 +38,7 @@ $AppUI->loadCalendarJS();
 $pstatus = w2PgetSysVal('ProjectStatus');
 $ptype = w2PgetSysVal('ProjectType');
 
-$structprojs = $project->getAllowedProjects($AppUI->user_id, false);
+$structprojs = $object->getAllowedProjects($AppUI->user_id, false);
 unset($structprojs[$project_id]);
 foreach($structprojs as $key => $tmpInfo) {
     $structprojs[$key] = $tmpInfo['project_name'];
@@ -55,16 +55,16 @@ if (count($companies) < 2 && $project_id == 0) {
     $AppUI->redirect('m=' . $m);
 }
 if ($project_id == 0 && $company_id > 0) {
-	$project->project_company = $company_id;
+	$object->project_company = $company_id;
 }
 
 // add in the existing company if for some reason it is dis-allowed
-if ($project_id && !array_key_exists($project->project_company, $companies)) {
-	$companies[$project->project_company] = $company->load($project->project_company)->company_name;
+if ($project_id && !array_key_exists($object->project_company, $companies)) {
+	$companies[$object->project_company] = $company->load($object->project_company)->company_name;
 }
 
 // get critical tasks (criteria: task_end_date)
-$criticalTasks = ($project_id > 0) ? $project->getCriticalTasks() : null;
+$criticalTasks = ($project_id > 0) ? $object->getCriticalTasks() : null;
 
 // get ProjectPriority from sysvals
 $projectPriority = w2PgetSysVal('ProjectPriority');
@@ -72,7 +72,7 @@ $projectPriority = w2PgetSysVal('ProjectPriority');
 // format dates
 $df = $AppUI->getPref('SHDATEFORMAT');
 
-$end_date = intval($project->project_end_date) ? new w2p_Utilities_Date($project->project_end_date) : null;
+$end_date = intval($object->project_end_date) ? new w2p_Utilities_Date($object->project_end_date) : null;
 $actual_end_date = intval($criticalTasks[0]['task_end_date']) ? new w2p_Utilities_Date($criticalTasks[0]['task_end_date']) : null;
 $style = (($actual_end_date > $end_date) && !empty($end_date)) ? 'style="color:red; font-weight:bold"' : '';
 
@@ -83,12 +83,12 @@ $titleBlock->addCrumb('?m=' . $m, $m . ' list');
 $titleBlock->addViewLink('project', $project_id);
 $titleBlock->show();
 
-$canDelete = $project->canDelete();
+$canDelete = $object->canDelete();
 // Get contacts list
 $selected_contacts = array();
 
 if ($project_id) {
-	$myContacts = $project->getContactList();
+	$myContacts = $object->getContactList();
 	$selected_contacts = array_keys($myContacts);
 }
 if ($project_id == 0 && $contact_id > 0) {
