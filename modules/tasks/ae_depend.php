@@ -6,7 +6,7 @@ if (!defined('W2P_BASE_DIR')) {
 // @todo    remove database query
 
 global $AppUI, $w2Pconfig, $task_parent_options, $loadFromTab;
-global $can_edit_time_information, $task;
+global $can_edit_time_information, $object;
 global $durnTypes, $task_project, $task_id, $tab;
 global $form;
 

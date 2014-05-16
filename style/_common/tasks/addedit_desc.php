@@ -7,17 +7,17 @@
             <p>
                 <?php $form->showLabel('Task Owner'); ?>
                 <?php
-                $owner = ($task->task_owner) ? $AppUI->user_id : $task->task_owner;
+                $owner = ($object->task_owner) ? $AppUI->user_id : $object->task_owner;
                 $form->showField('task_owner', $owner, array(), $users); ?>
             </p>
             <p>
                 <?php $form->showLabel('Access'); ?>
-                <?php echo arraySelect($task_access, 'task_access', 'class="text"', (int) $task->task_access, true); ?>
+                <?php echo arraySelect($task_access, 'task_access', 'class="text"', (int) $object->task_access, true); ?>
             </p>
             <p>
                 <?php $form->showLabel('Task Parent'); ?>
                 <select name='task_parent' class='text'>
-                    <option value='<?php echo $task->task_id; ?>'><?php echo $AppUI->_('None'); ?></option>
+                    <option value='<?php echo $object->task_id; ?>'><?php echo $AppUI->_('None'); ?></option>
                     <?php echo $task_parent_options; ?>
                 </select>
             </p>
@@ -38,7 +38,7 @@
                 $billingCategory = w2PgetSysVal('BudgetCategory');
                 $totalBudget = 0;
                 foreach ($billingCategory as $id => $category) {
-                    $amount = $task->budget[$id]['budget_amount'];
+                    $amount = $object->budget[$id]['budget_amount'];
                     $totalBudget += $amount;
                     ?>
                     <p>
@@ -57,7 +57,7 @@
                 <?php $form->showLabel('Task Type'); ?>
                 <?php
                 $task_types = w2PgetSysVal('TaskType');
-                $form->showField('task_type', $task->task_type, array(), $task_types); ?>
+                $form->showField('task_type', $object->task_type, array(), $task_types); ?>
             </p>
             <?php if ($AppUI->isActiveModule('contacts') && canView('contacts')) { ?>
                 <p>
@@ -68,16 +68,16 @@
             <?php if (count($department_selection_list) > 1) { ?>
                 <p>
                     <?php $form->showLabel('Department'); ?>
-                    <?php echo arraySelect($department_selection_list, 'dept_ids[]', 'class="text" size="1"', $task->task_departments); ?>
+                    <?php echo arraySelect($department_selection_list, 'dept_ids[]', 'class="text" size="1"', $object->task_departments); ?>
                 </p>
             <?php } ?>
             <p>
                 <?php $form->showLabel('Description'); ?>
-                <?php $form->showField('task_description', $task->task_description); ?>
+                <?php $form->showField('task_description', $object->task_description); ?>
             </p>
             <p>
                 <?php
-                $custom_fields = new w2p_Core_CustomFields($m, $a, $task->task_id, 'edit');
+                $custom_fields = new w2p_Core_CustomFields($m, $a, $object->task_id, 'edit');
                 echo $custom_fields->getHTML();
                 ?>
             </p>

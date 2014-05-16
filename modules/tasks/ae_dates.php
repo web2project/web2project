@@ -5,7 +5,7 @@ if (!defined('W2P_BASE_DIR')) {
 // @todo    convert to template
 
 global $AppUI, $w2Pconfig, $task_parent_options, $loadFromTab;
-global $can_edit_time_information, $locale_char_set, $task;
+global $can_edit_time_information, $locale_char_set, $object;
 global $durnTypes, $task_project, $task_id, $tab;
 global $cal_sdf;
 $AppUI->loadCalendarJS();
@@ -39,15 +39,15 @@ for ($current = 0 + $inc; $current < 60; $current += $inc) {
 $df = $AppUI->getPref('SHDATEFORMAT');
 
 $defaultDate = new w2p_Utilities_Date();
-$start_date = intval($task->task_start_date) ?
-    new w2p_Utilities_Date($AppUI->formatTZAwareTime($task->task_start_date, '%Y-%m-%d %T')) :
-        $defaultDate->calcFinish(1, $task->task_duration_type);
+$start_date = intval($object->task_start_date) ?
+    new w2p_Utilities_Date($AppUI->formatTZAwareTime($object->task_start_date, '%Y-%m-%d %T')) :
+        $defaultDate->calcFinish(1, $object->task_duration_type);
 
-$task->task_duration = isset($task->task_duration) ? $task->task_duration : 1;
+$object->task_duration = isset($object->task_duration) ? $object->task_duration : 1;
 
-$end_date = intval($task->task_end_date) ?
-    new w2p_Utilities_Date($AppUI->formatTZAwareTime($task->task_end_date, '%Y-%m-%d %T')) :
-        $defaultDate->calcFinish($task->task_duration + 1, $task->task_duration_type);
+$end_date = intval($object->task_end_date) ?
+    new w2p_Utilities_Date($AppUI->formatTZAwareTime($object->task_end_date, '%Y-%m-%d %T')) :
+        $defaultDate->calcFinish($object->task_duration + 1, $object->task_duration_type);
 
 // convert the numeric calendar_working_days config array value to a human readable output format
 $cwd = explode(',', $w2Pconfig['cal_working_days']);

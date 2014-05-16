@@ -47,9 +47,9 @@
         <div class="column right">
             <p>
                 <?php $form->showLabel('Expected Duration'); ?>
-                <input type="text" class="text" name="task_duration" id="task_duration" maxlength="8" size="6" value="<?php echo $task->task_duration; ?>" />
+                <input type="text" class="text" name="task_duration" id="task_duration" maxlength="8" size="6" value="<?php echo $object->task_duration; ?>" />
                 <?php
-                echo arraySelect($durnTypes, 'task_duration_type', 'class="text"', $task->task_duration_type, true);
+                echo arraySelect($durnTypes, 'task_duration_type', 'class="text"', $object->task_duration_type, true);
                 ?>
             </p>
             <p>

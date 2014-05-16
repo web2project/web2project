@@ -47,11 +47,11 @@
             </p>
             <p>
                 <?php $form->showLabel('notifyChange'); ?>
-                <input type="checkbox" name="task_notify" id="task_notify" value="1" <?php if ($task->task_notify != '0') echo 'checked="checked"' ?> />
+                <input type="checkbox" name="task_notify" id="task_notify" value="1" <?php if ($object->task_notify != '0') echo 'checked="checked"' ?> />
             </p>
             <p>
                 <?php $form->showLabel('Allow users to add task logs for others'); ?>
-                <input type="checkbox" value="1" name="task_allow_other_user_tasklogs" <?php echo $task->task_allow_other_user_tasklogs ? 'checked="checked"' : ''; ?> />
+                <input type="checkbox" value="1" name="task_allow_other_user_tasklogs" <?php echo $object->task_allow_other_user_tasklogs ? 'checked="checked"' : ''; ?> />
             </p>
         </div>
     </div>

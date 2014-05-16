@@ -7,12 +7,12 @@
         <div class="column left">
             <p>
                 <?php $form->showLabel('Dependency Tracking'); ?>
-                <?php echo $AppUI->_('On'); ?><input type="radio" name="task_dynamic" value="31" <?php if ($task_id == 0 || $task->task_dynamic > '20') { echo "checked"; } ?> />
-                <?php echo $AppUI->_('Off'); ?><input type="radio" name="task_dynamic" value="0" <?php if ($task_id && ($task->task_dynamic == '0' || $task->task_dynamic == '11')) { echo "checked"; } ?> />
+                <?php echo $AppUI->_('On'); ?><input type="radio" name="task_dynamic" value="31" <?php if ($task_id == 0 || $object->task_dynamic > '20') { echo "checked"; } ?> />
+                <?php echo $AppUI->_('Off'); ?><input type="radio" name="task_dynamic" value="0" <?php if ($task_id && ($object->task_dynamic == '0' || $object->task_dynamic == '11')) { echo "checked"; } ?> />
             </p>
             <p>
                 <?php $form->showLabel('Set task start date based on dependency'); ?>
-                <input type="checkbox" name="set_task_start_date" id="set_task_start_date" <?php if ($task_id == 0 || $task->task_dynamic > '20') { echo "checked"; } ?>  />
+                <input type="checkbox" name="set_task_start_date" id="set_task_start_date" <?php if ($task_id == 0 || $object->task_dynamic > '20') { echo "checked"; } ?>  />
             </p>
             <p>
                 <?php $form->showLabel('All Tasks'); ?>
@@ -25,11 +25,11 @@
         <div class="column right">
             <p>
                 <?php $form->showLabel('Dynamic Task'); ?>
-                <input type="checkbox" name="task_dynamic" id="task_dynamic" value="1" <?php if ($task->task_dynamic == "1") { echo 'checked="checked"'; } ?> />
+                <input type="checkbox" name="task_dynamic" id="task_dynamic" value="1" <?php if ($object->task_dynamic == "1") { echo 'checked="checked"'; } ?> />
             </p>
             <p>
                 <?php $form->showLabel('Do not track this task'); ?>
-                <input type="checkbox" name="task_dynamic_nodelay" id="task_dynamic_nodelay" value="1" <?php if (($task->task_dynamic > '10') && ($task->task_dynamic < 30)) { echo 'checked="checked"'; } ?> />
+                <input type="checkbox" name="task_dynamic_nodelay" id="task_dynamic_nodelay" value="1" <?php if (($object->task_dynamic > '10') && ($object->task_dynamic < 30)) { echo 'checked="checked"'; } ?> />
             </p>
             <p>
                 <?php $form->showLabel('Dependencies'); ?>
