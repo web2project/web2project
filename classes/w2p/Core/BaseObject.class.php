@@ -828,4 +828,14 @@ abstract class w2p_Core_BaseObject extends w2p_System_Event implements w2p_Syste
         
         return $prefix;
     }
+
+    public function setId($key)
+    {
+        $this->{$this->_tbl_key} = $key;
+    }
+
+    public function getId()
+    {
+        return $this->{$this->_tbl_key};
+    }
 }
