@@ -8,7 +8,7 @@ $forum_id = (int) w2PgetParam($_GET, 'forum_id', 0);
 
 
 $object = new CForum();
-$object->forum_id = $forum_id;
+$object->setId($forum_id);
 
 $obj = $object;
 $canAddEdit = $obj->canAddEdit();
@@ -21,7 +21,7 @@ if (!$canAddEdit) {
 $obj = $AppUI->restoreObject();
 if ($obj) {
     $object = $obj;
-    $forum_id = $object->forum_id;
+    $forum_id = $object->getId();
 } else {
     $object->load($forum_id);
 }

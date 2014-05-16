@@ -8,7 +8,7 @@ $resource_id = (int) w2PgetParam($_GET, 'resource_id', 0);
 
 
 $object = new CResource();
-$object->resource_id = $resource_id;
+$object->setId($resource_id);
 
 $obj = $object;
 $canAddEdit = $obj->canAddEdit();
@@ -21,7 +21,7 @@ if (!$canAddEdit) {
 $obj = $AppUI->restoreObject();
 if ($obj) {
     $object = $obj;
-    $resource_id = $object->resource_id;
+    $resource_id = $object->getId();
 } else {
     $object->load($resource_id);
 }

@@ -8,7 +8,7 @@ $is_clash = isset($_SESSION['event_is_clash']) ? $_SESSION['event_is_clash'] : f
 
 
 $object = new CEvent();
-$object->event_id = $event_id;
+$object->setId($event_id);
 
 $canAddEdit = $object->canAddEdit();
 $canAuthor = $object->canCreate();
@@ -30,7 +30,7 @@ $event_project = (int) w2PgetParam($_GET, 'project_id', 0);
 $obj = $AppUI->restoreObject();
 if ($obj) {
     $object = $obj;
-    $event_id = $object->event_id;
+    $event_id = $object->getId();
 } else {
     $object->load($event_id);
 }

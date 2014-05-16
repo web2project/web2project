@@ -8,7 +8,7 @@ $task_id = (int) w2PgetParam($_GET, 'task_id', 0);
 
 
 $object = new CTask();
-$object->task_id = $task_id;
+$object->setId($task_id);
 
 $obj = $object;
 $canAddEdit = $obj->canAddEdit();
@@ -21,7 +21,7 @@ if (!$canAddEdit) {
 $obj = $AppUI->restoreObject();
 if ($obj) {
     $object = $obj;
-    $task_id = $object->task_id;
+    $task_id = $object->getId();
 } else {
     $object->load($task_id);
 }

@@ -8,7 +8,7 @@ $folder_id = intval(w2PgetParam($_GET, 'folder', 0));
 
 
 $object = new CFile_Folder();
-$object->file_folder_id = $folder_id;
+$object->setId($folder_id);
 
 $obj = $object;
 $canAddEdit = $obj->canAddEdit();

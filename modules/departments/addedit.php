@@ -11,7 +11,7 @@ $dept_parent = (int) w2PgetParam($_GET, 'dept_parent', 0);
 $company_id = (int) w2PgetParam($_GET, 'company_id', 0);
 
 $object = new CDepartment();
-$object->dept_id = $dept_id;
+$object->setId($dept_id);
 
 $canAddEdit = $object->canAddEdit();
 $canAuthor = $object->canCreate();
@@ -25,7 +25,7 @@ if (!$canAddEdit) {
 $obj = $AppUI->restoreObject();
 if ($obj) {
     $object = $obj;
-    $dept_id = $object->dept_id;
+    $dept_id = $object->getId();
 } else {
     $object->load($dept_id);
 }

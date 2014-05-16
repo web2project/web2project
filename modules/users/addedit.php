@@ -8,7 +8,7 @@ $contact_id = (int) w2PgetParam($_GET, 'contact_id', 0);
 
 
 $object = new CUser();
-$object->user_id = $user_id;
+$object->setId($user_id);
 
 
 $canAddEdit = $object->canAddEdit();

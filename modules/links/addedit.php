@@ -8,7 +8,7 @@ $task_id    = (int) w2PgetParam($_GET, 'task_id', 0);
 $project_id = (int) w2PgetParam($_GET, 'project_id', 0);
 
 $object = new CLink();
-$object->link_id = $link_id;
+$object->setId($link_id);
 
 $obj = $object;
 $canAddEdit = $obj->canAddEdit();
@@ -22,7 +22,7 @@ if (!$canAddEdit) {
 $obj = $AppUI->restoreObject();
 if ($obj) {
     $object = $obj;
-    $link_id = $object->link_id;
+    $link_id = $object->getId();
 } else {
     $object->load($link_id);
 }

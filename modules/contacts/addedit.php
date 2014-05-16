@@ -8,7 +8,7 @@ $company_id = (int) w2PgetParam($_GET, 'company_id', 0);
 $dept_id = (int) w2PgetParam($_GET, 'dept_id', 0);
 
 $object = new CContact();
-$object->contact_id = $contact_id;
+$object->setId($contact_id);
 
 $canAddEdit = $object->canAddEdit();
 $canAuthor = $object->canCreate();
@@ -22,7 +22,7 @@ if (!$canAddEdit) {
 $obj = $AppUI->restoreObject();
 if ($obj) {
     $object = $obj;
-    $contact_id = $object->contact_id;
+    $contact_id = $object->getId();
 } else {
     $object->load($contact_id);
 }

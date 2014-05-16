@@ -7,8 +7,9 @@ $folder = (int) w2PgetParam($_GET, 'folder', 0);
 $file_id = (int) w2PgetParam($_GET, 'file_id', 0);
 $ci = w2PgetParam($_GET, 'ci', 0) == 1 ? true : false;
 $preserve = $w2Pconfig['files_ci_preserve_attr'];
+
 $object = new CFile();
-$object->file_id = $file_id;
+$object->setId($file_id);
 
 $obj = $object;
 $canAddEdit = $obj->canAddEdit();
@@ -21,7 +22,7 @@ if (!$canAddEdit) {
 $obj = $AppUI->restoreObject();
 if ($obj) {
     $object = $obj;
-    $file_id = $file->file_id;
+    $file_id = $file->getId();
 } else {
     $obj = $object->load($file_id);
 }
