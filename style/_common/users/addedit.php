@@ -4,7 +4,7 @@ $form = new w2p_Output_HTML_FormHelper($AppUI);
 
 ?>
 <form name="editFrm" action="?m=<?php echo $m; ?>" method="post" accept-charset="utf-8" class="admin addedit">
-    <input type="hidden" name="user_id" value="<?php echo $object_id; ?>" />
+    <input type="hidden" name="user_id" value="<?php echo $object->getId(); ?>" />
     <input type="hidden" name="contact_id" value="<?php echo (int) $object->contact_id; ?>" />
     <input type="hidden" name="dosql" value="do_user_aed" />
     <input type="hidden" name="username_min_len" value="<?php echo w2PgetConfig('username_min_len'); ?>)" />

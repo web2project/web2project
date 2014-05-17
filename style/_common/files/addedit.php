@@ -6,7 +6,7 @@ $form = new w2p_Output_HTML_FormHelper($AppUI);
 <form name="uploadFrm" action="?m=<?php echo $m; ?>" enctype="multipart/form-data" method="post" class="addedit files">
     <input type="hidden" name="dosql" value="do_file_aed" />
     <input type="hidden" name="cancel" value="0" />
-    <input type="hidden" name="file_id" value="<?php echo $object_id; ?>" />
+    <input type="hidden" name="file_id" value="<?php echo $object->getId(); ?>" />
     <input type="hidden" name="file_parent" value="<?php echo ($object->file_parent) ? $object->file_parent : $file_parent; ?>" />
     <input type="hidden" name="file_version_id" value="<?php echo $object->file_version_id; ?>" />
     <input type="hidden" name="redirect" value="<?php echo $referrer; ?>" />

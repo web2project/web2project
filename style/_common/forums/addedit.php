@@ -6,7 +6,7 @@ $form = new w2p_Output_HTML_FormHelper($AppUI);
 <form name="changeforum" action="?m=<?php echo $m; ?>" method="post" accept-charset="utf-8" class="addedit forums">
     <input type="hidden" name="dosql" value="do_forum_aed" />
     <input type="hidden" name="forum_unique_update" value="<?php echo uniqid(''); ?>" />
-    <input type="hidden" name="forum_id" value="<?php echo $object_id; ?>" />
+    <input type="hidden" name="forum_id" value="<?php echo $object->getId(); ?>" />
     <?php echo $form->addNonce(); ?>
 
     <div class="std addedit departments">
