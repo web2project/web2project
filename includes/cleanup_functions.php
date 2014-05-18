@@ -408,7 +408,17 @@ function __extract_from_showtask(&$arr, $level, $today_view, $listTable)
     // percent complete and priority
     $s .= $listTable->createCell('task_percent_complete', $arr['task_percent_complete']);
     $s .= $listTable->createCell('task_priority', $arr['task_priority']);
-    $s .= $listTable->createCell('user_task_priority', $arr['user_task_priority']);
+	$assigned_users=$arr['task_assigned_users'];
+	$user_task_priority=0;
+    if (isset($arr['task_assigned_users']) && count($arr['task_assigned_users'])) {
+        $assigned_users = $arr['task_assigned_users'];
+        foreach ($assigned_users as $val) {
+			if ($val['user_id']===$AppUI->user_id) {
+				$user_task_priority=$val['user_task_priority'];
+				}
+        }		
+	}
+    $s .= $listTable->createCell('user_task_priority', $user_task_priority);//$arr['user_task_priority']);
 
     // dots
     $s = __extract_from_showtask2($arr, $level, $today_view, $s, $m, $jsTaskId, $expanded);
