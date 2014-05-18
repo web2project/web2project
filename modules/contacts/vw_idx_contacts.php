@@ -4,13 +4,13 @@ if (!defined('W2P_BASE_DIR')) {
 }
 // @todo    convert to template
 
-global $AppUI, $currentTabId;
+global $AppUI, $tab;
 
-$days = ($currentTabId == 0) ? 30 : 0;
+$days = ($tab == 0) ? 30 : 0;
 $searchString = w2PgetParam($_POST, 'search_string', '');
 if ('' == $searchString) {
-    $searchString = ((0 < $currentTabId) && ($currentTabId < 27)) ? chr(64 + $currentTabId) : '';
-    $searchString = (0 == $currentTabId) ? '' : $searchString;
+    $searchString = ((0 < $tab) && ($tab < 27)) ? chr(64 + $tab) : '';
+    $searchString = (0 == $tab) ? '' : $searchString;
 } else {
     $AppUI->setState('ContactsIdxTab', 27);
 }
