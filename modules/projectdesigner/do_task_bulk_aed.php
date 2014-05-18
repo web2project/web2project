@@ -217,7 +217,13 @@ if (is_array($selected) && count($selected)) {
                 }
             }
         }
-
+        //Action: Set user task priority for current user ($APPUI->userid)
+           if ($upd_task->task_id) {
+		   	$assigned_users=$upd_task->assignees($upd_task->task_id);
+			if (array_key_exists("$AppUI->user_id",$assigned_users )) $upd_task->updateUserSpecificTaskPriority($bulk_task_user_priority, $AppUI->user_id);
+ }		
+		
+		
 		//Action: Other Actions
         if (isset($_POST['bulk_task_other']) && $bulk_task_other != '') {
 
