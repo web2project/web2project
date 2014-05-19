@@ -146,7 +146,7 @@ if ($canViewTasks) {
 foreach ($tasks as $row) {
 	//add information about assigned users into the page output
 	$q->clear();
-	$q->addQuery('ut.user_id,	u.user_username');
+	$q->addQuery('ut.user_id,	u.user_username, ut.user_task_priority');
 	$q->addQuery('ut.perc_assignment, SUM(ut.perc_assignment) AS assign_extent');
 	$q->addQuery('contact_first_name, contact_last_name, contact_display_name as assignee');
 	$q->addTable('user_tasks', 'ut');
