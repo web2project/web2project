@@ -5712,7 +5712,7 @@ function __extract_from_forums_view_topics($AppUI, $forum_id, $f, $orderby, $ord
 function __extract_from_tasks2($row)
 {
     $q = new w2p_Database_Query;
-    $q->addQuery('ut.user_id,	u.user_username');
+    $q->addQuery('ut.user_id,	u.user_username, ut.user_task_priority');
     $q->addQuery('ut.perc_assignment');
     $q->addQuery('contact_display_name AS assignee, contact_email');
     $q->addTable('user_tasks', 'ut');
