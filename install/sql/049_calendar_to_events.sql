@@ -9,3 +9,5 @@ UPDATE `gacl_axo_map` SET `section_value` = 'events' WHERE `section_value` = 'ca
 
 UPDATE `gacl_permissions` SET `module` = 'events' WHERE `module` = 'calendar';
 UPDATE `module_config` SET `module_name` = 'events' WHERE `module_name` = 'calendar';
+
+UPDATE `config` SET `config_value` = 'events' WHERE `config_value` = 'calendar';
