@@ -204,20 +204,12 @@ if (!$suppressHeaders) {
 	}
 }
 
-// include the module class file - we use file_exists instead of @ so
-// that any parse errors in the file are reported, rather than errors
-// further down the track.
-//$modclass = $AppUI->getModuleClass($m);
-//if (file_exists($modclass)) {
-//	include_once ($modclass);
-//}
 if ($u && file_exists(W2P_BASE_DIR . '/modules/' . $m . '/' . $u . '/' . $u . '.class.php')) {
 	include_once W2P_BASE_DIR . '/modules/' . $m . '/' . $u . '/' . $u . '.class.php';
 }
 
-// include the module ajax file - we use file_exists instead of @ so
-// that any parse errors in the file are reported, rather than errors
-// further down the track.
+// include the module ajax file - we use file_exists instead of @ so  that any parse errors in the file are reported,
+//   rather than errors further down the track.
 $modajax = $AppUI->getModuleAjax($m);
 if (file_exists($modajax)) {
 	include_once ($modajax);
