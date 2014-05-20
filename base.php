@@ -96,17 +96,17 @@ define('FMT_TIMESTAMP', '%Y%m%d%H%M%S');
 define('FMT_TIMESTAMP_DATE', '%Y%m%d');
 define('FMT_TIMESTAMP_TIME', '%H%M%S');
 define('FMT_UNIX', '3');
-define('WDAY_SUNDAY', 0);
-define('WDAY_MONDAY', 1);
-define('WDAY_TUESDAY', 2);
-define('WDAY_WEDNESDAY', 3);
-define('WDAY_THURSDAY', 4);
-define('WDAY_FRIDAY', 5);
-define('WDAY_SATURDAY', 6);
-define('SEC_MINUTE', 60);
-define('SEC_HOUR', 3600);
-define('SEC_DAY', 86400);
-define('SECONDS_PER_DAY', 86400);
+define('WDAY_SUNDAY', 0);               // deprecated in v3.2, remove in v4.0
+define('WDAY_MONDAY', 1);               // deprecated in v3.2, remove in v4.0
+define('WDAY_TUESDAY', 2);              // deprecated in v3.2, remove in v4.0
+define('WDAY_WEDNESDAY', 3);            // deprecated in v3.2, remove in v4.0
+define('WDAY_THURSDAY', 4);             // deprecated in v3.2, remove in v4.0
+define('WDAY_FRIDAY', 5);               // deprecated in v3.2, remove in v4.0
+define('WDAY_SATURDAY', 6);             // deprecated in v3.2, remove in v4.0
+define('SEC_MINUTE', 60);               // deprecated in v3.2, remove in v4.0
+define('SEC_HOUR', 3600);               // deprecated in v3.2, remove in v4.0
+define('SEC_DAY', 86400);               // deprecated in v3.2, remove in v4.0
+define('SECONDS_PER_DAY', 86400);       // deprecated in v3.2, remove in v4.0
 
 define('UI_MSG_OK', 1);
 define('UI_MSG_ALERT', 2);

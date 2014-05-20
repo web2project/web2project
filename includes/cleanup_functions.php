@@ -613,7 +613,7 @@ function array_csort() { //coded by Ichier2003
 function calcEndByStartAndDuration($task)
 {
     $end_date = new w2p_Utilities_Date($task['task_start_date']);
-    $end_date->addSeconds($task['task_duration'] * $task['task_duration_type'] * SEC_HOUR);
+    $end_date->addSeconds($task['task_duration'] * $task['task_duration_type'] * 3600);
 
     return $end_date->format(FMT_DATETIME_MYSQL);
 }
