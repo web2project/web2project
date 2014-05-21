@@ -194,9 +194,11 @@ class CContact extends w2p_Core_BaseObject
         if(mb_strlen($this->contact_first_name) <= 1) {
             $this->_error['contact_first_name'] = $baseErrorMsg . 'contact first name is not set';
         }
-
         if(mb_strlen($this->contact_display_name) <= 1) {
             $this->_error['contact_display_name'] = $baseErrorMsg . 'contact display name is not set';
+        }
+        if (mb_strlen($this->contact_email) && !w2p_check_email($this->contact_email)) {
+            $this->_error['contact_email'] = $baseErrorMsg . 'contact email is not valid';
         }
 
         return (count($this->_error)) ? false : true;
