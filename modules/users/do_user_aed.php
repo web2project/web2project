@@ -81,7 +81,7 @@ if ($result) {
     }
 } else {
     $AppUI->setMsg($contact->getError(), UI_MSG_ERROR);
-    $redirect = 'm=users&a=addedituser&user_id='.$obj->user_id;
+    $redirect = 'm=users&a=addedit&user_id='.$obj->user_id;
 }
 
 $AppUI->redirect($redirect);
