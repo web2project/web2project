@@ -164,7 +164,7 @@ abstract class w2p_Core_BaseObject extends w2p_System_Event implements w2p_Syste
             
             foreach ($hash as $k => $v) {
                 if (!(is_object($hash[$k]))) {
-                    $filtered_hash[$k] = (is_string($v)) ? strip_tags($v) : $v;
+                    $filtered_hash[$k] = (is_string($v)) ? htmlentities($v) : $v;
                 }
             }
             $q = $this->_getQuery();
