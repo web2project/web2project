@@ -235,7 +235,7 @@ for ($i = 0, $i_cmp = count($gantt_arr); $i < $i_cmp; $i++) {
 
         $name = $a['task_name'];
         $name = ((mb_strlen($name) > 35) ? (mb_substr($name, 0, 30) . '...') : $name);
-        $name = str_repeat(' ', $level) . $name;
+        $name = str_repeat('   ', $level) . $name;
 
         $pname = $a['project_name'];
         $pname = (mb_strlen($pname) > 25) ? (mb_substr($pname, 0, 20) . '...') : $pname;
