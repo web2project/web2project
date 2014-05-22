@@ -74,6 +74,7 @@ class w2p_Output_ListTable extends w2p_Output_HTMLHelper
         foreach ($this->_fieldKeys as $column) {
             $row .= $this->createCell($column, $rowData[$column], $customLookups);
         }
+        $row .= $this->_buildBeforeCells($this->_after);
         $row .= '</tr>';
 
         return $row;
@@ -97,7 +98,7 @@ class w2p_Output_ListTable extends w2p_Output_HTMLHelper
          * Note: We can't refactor the actual td/class stuff out to the return statement because we may have multiple
          *   inserted cells processed together.. and we need them to remain separate cells.
          */
-        foreach ($this->_before as $type => $value) {
+        foreach ($array as $type => $value) {
             switch($type) {
                 case 'edit':
                     // @note This module determination *only* works if you've followed our naming conventions.
