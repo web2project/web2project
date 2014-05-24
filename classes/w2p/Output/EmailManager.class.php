@@ -266,14 +266,14 @@ class w2p_Output_EmailManager
         return $body;
     }
 
-    public function getProjectNotifyOwner(CProject $project, $isNotNew)
+    public function getProjectNotify(CProject $project, $isNotNew)
     {
         $status = (intval($isNotNew)) ? 'Updated' : 'Created';
 
         $body = $this->_AppUI->_('Project') . ': ' . $project->project_name . ' ' . $this->_AppUI->_('has been') . ' ' . $this->_AppUI->_($status);
         $body .= "\n" . $this->_AppUI->_('You can view the Project by clicking'). ':';
         $body .= "\n" . $this->_AppUI->_('URL') . ':     ' . W2P_BASE_URL . '/index.php?m=projects&a=view&project_id=' . $project->project_id;
-        $body .= "\n\n(" . $this->_AppUI->_('You are receiving this message because you are the owner of this Project') . ")";
+        $body .= "\n\n(" . $this->_AppUI->_('You are receiving this message because you are affiliated with this Project') . ")";
         $body .= "\n\n" . $this->_AppUI->_('Description') . ':' . "\n $project->project_description \n\n";
 
         $body .= (intval($isNotNew)) ? $this->_AppUI->_('Updater') : $this->_AppUI->_('Creator');
@@ -287,23 +287,18 @@ class w2p_Output_EmailManager
         return $body;
     }
 
+    public function getProjectNotifyOwner(CProject $project, $isNotNew)
+    {
+        trigger_error("EmailManager->getProjectNotifyOwner() has been deprecated in v3.2 and will be removed by v5.0. Please use EmailManager->getProjectNotify instead.", E_USER_NOTICE);
+
+        return $this->getProjectNotify($project, $isNotNew);
+    }
+
     public function getProjectNotifyContacts(CProject $project, $isNotNew)
     {
-        $status = (intval($isNotNew)) ? 'Updated' : 'Created';
+        trigger_error("EmailManager->getProjectNotifyContacts() has been deprecated in v3.2 and will be removed by v5.0. Please use EmailManager->getProjectNotify instead.", E_USER_NOTICE);
 
-        $body = $this->_AppUI->_('Project') . ": $project->project_name Has Been $status Via Project Manager. You can view the Project by clicking: ";
-        $body .= "\n" . $this->_AppUI->_('URL') . ':     ' . W2P_BASE_URL . '/index.php?m=projects&a=view&project_id=' . $project->project_id;
-        $body .= "\n\n(You are receiving this message because you are a contact or assignee for this Project)";
-        $body .= "\n\n" . $this->_AppUI->_('Description') . ':' . "\n $project->project_description \n\n";
-
-        $body .= (intval($isNotNew)) ? $this->_AppUI->_('Updater') : $this->_AppUI->_('Creator');
-        $body .= ': ' . $this->_AppUI->user_display_name;
-
-        if ($project->_message == 'deleted') {
-            $body .= "\n\nProject " . $project->project_name . ' was ' . $project->_message . ' by ' . $this->_AppUI->user_display_name;
-        }
-
-        return $body;
+        return $this->getProjectNotify($project, $isNotNew);
     }
 
     public function getNotifyNewUser($username)
