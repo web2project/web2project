@@ -218,7 +218,7 @@ class Web2project_Output_EmailManagerTest extends CommonSetup
     }
 
     /**
-     *
+     * @expectedException PHPUnit_Framework_Error
      */
     public function testGetProjectNotifyOwner()
     {
@@ -238,6 +238,9 @@ class Web2project_Output_EmailManagerTest extends CommonSetup
         $this->assertEquals($target_body, $actual_body);
     }
 
+    /**
+     * @expectedException PHPUnit_Framework_Error
+     */
     public function testGetProjectNotifyContacts()
     {
         $project = new CProject();
@@ -252,6 +255,25 @@ class Web2project_Output_EmailManagerTest extends CommonSetup
         $target_body .= "Creator: Admin Person";
 
         $actual_body = $this->manager->getProjectNotifyContacts($project, false);
+
+        $this->assertEquals($target_body, $actual_body);
+    }
+
+    public function testGetProjectNotify()
+    {
+        $project = new CProject();
+        $project->project_name = 'Project Name';
+        $project->project_description = 'something interesting';
+        $project->project_id = -1;
+
+        $target_body = "Project: Project Name has been Created\n";
+        $target_body .= "You can view the Project by clicking:\n";
+        $target_body .= "URL:     " . W2P_BASE_URL . "/index.php?m=projects&a=view&project_id=-1\n\n";
+        $target_body .= "(You are receiving this message because you are affiliated with this Project)\n\n";
+        $target_body .= "Description:\n something interesting \n\n";
+        $target_body .= "Creator: Admin Person";
+
+        $actual_body = $this->manager->getProjectNotify($project, false);
 
         $this->assertEquals($target_body, $actual_body);
     }
