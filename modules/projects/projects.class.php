@@ -514,12 +514,13 @@ class CProject extends w2p_Core_BaseObject
 
         $subject = (intval($isNotNew)) ? $this->_AppUI->_('Project updated') . ': ' . $this->project_name : $this->_AppUI->_('Project submitted') . ': ' . $this->project_name;
         $emailManager = new w2p_Output_EmailManager($this->_AppUI);
-        $body = $emailManager->getProjectNotifyOwner($this, $isNotNew);
+        $body = $emailManager->getProjectNotify($this, $isNotNew);
 
         $mail = new w2p_Utilities_Mail;
         $mail->To($user->user_email, true);
         $mail->Subject($subject);
         $mail->Body($body, isset($GLOBALS['locale_char_set']) ? $GLOBALS['locale_char_set'] : '');
+
         $mail->Send();
     }
 
@@ -530,7 +531,7 @@ class CProject extends w2p_Core_BaseObject
         $users = CProject::getContacts($this->_AppUI, $this->project_id);
         if (count($users)) {
             $emailManager = new w2p_Output_EmailManager($this->_AppUI);
-            $body = $emailManager->getProjectNotifyContacts($this, $isNotNew);
+            $body = $emailManager->getProjectNotify($this, $isNotNew);
 
             foreach ($users as $row) {
                 $mail = new w2p_Utilities_Mail;
