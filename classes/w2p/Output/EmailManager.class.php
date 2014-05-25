@@ -307,7 +307,7 @@ class w2p_Output_EmailManager
         $object->base_url = W2P_BASE_URL;
         $object->contact_name = $username;
 
-        $body = "Dear contact_name,\n\n" .
+        $body = "Dear contact_name,\n\n";
         $body .= "Congratulations! Your account has been activated by the administrator.\n";
         $body .= "Please use the login information provided earlier.\n\n";
         $body .= "You may login at the following URL: base_url\n\n";
