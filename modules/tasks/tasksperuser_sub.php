@@ -217,7 +217,7 @@ function chPriority(user_id) {
 			</td>
 		</tr>
 		<tr>
-			<td colspan="5" align="left" nowrap="nowrap"><?php echo $AppUI->_('P') . "&nbsp;=&nbsp;" . $AppUI->_('User specific Task Priority'); ?></td>
+			<td colspan="5" align="left" nowrap="nowrap"><?php echo $AppUI->_('UP') . "&nbsp;=&nbsp;" . $AppUI->_('User specific Task Priority'); ?></td>
 		</tr>
 	</table>
 	<?php
@@ -241,8 +241,8 @@ if (count($fields) > 0) {
     // TODO: This is only in place to provide an pre-upgrade-safe
     //   state for versions earlier than v3.0
     //   At some point at/after v4.0, this should be deprecated
-    $fieldList = array('task_priority', 'task_name', 'task_project', 'task_duration', 'task_start_date', 'task_end_date');
-    $fieldNames = array('P', 'Task', 'Project', 'Duration', 'Start Date', 'End Date');
+    $fieldList = array('user task_priority', 'task_name', 'task_project', 'task_duration', 'task_start_date', 'task_end_date');
+    $fieldNames = array('UP', 'Task', 'Project', 'Duration', 'Start Date', 'End Date');
 
     //$module->storeSettings('tasks', 'tasksperuser', $fieldList, $fieldNames);
 }
