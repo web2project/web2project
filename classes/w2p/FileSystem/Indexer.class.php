@@ -74,4 +74,14 @@ class w2p_FileSystem_Indexer
 
         return count($words);
     }
+
+    public function clear($file_id)
+    {
+        $q = $this->query;
+        $q->setDelete('files_index');
+        $q->addQuery('*');
+        $q->addWhere('file_id = ' . (int) $file_id);
+
+        return $q->exec();
+    }
 }
