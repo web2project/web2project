@@ -28,6 +28,7 @@ class CFile extends w2p_Core_BaseObject {
     public $file_co_reason = null;
     public $file_indexed = null;
 
+    protected $indexer = false;
     protected $_file_id = 0;
     protected $_file_system = null;
     // This "breaks" check-in/upload if helpdesk is not present class variable needs to be added "dymanically"
@@ -97,6 +98,7 @@ class CFile extends w2p_Core_BaseObject {
 
     public function hook_cron()
     {
+        $this->indexer = true;
         $q = $this->_getQuery();
         $q->addQuery('file_id, file_name');
         $q->addTable('files');
@@ -107,6 +109,7 @@ class CFile extends w2p_Core_BaseObject {
             $this->load($file_id);
             $this->indexStrings($this->_AppUI);
         }
+        $this->indexer = false;
     }
 
     public function hook_search()
@@ -165,6 +168,11 @@ class CFile extends w2p_Core_BaseObject {
         trigger_error("The CFiles->addHelpDeskTaskLog method has been deprecated in 3.2 and will be removed in v5.0. There is no replacement in core.", E_USER_NOTICE );
 
         return null;
+    }
+
+    public function canView()
+    {
+        return ($this->indexer || parent::canView());
     }
 
     public function canAdmin() {
