@@ -414,6 +414,7 @@ class CContact extends w2p_Core_BaseObject
         return $q->loadList();
     }
 
+    /** @deprecated */
     public static function searchContacts($unUsed = null, $where = '', $unUsed2 = '', $days = 0)
     {
         trigger_error("The CContact::searchContacts() method has been deprecated and will be removed in v4.0. Use CContact->search() instead.", E_USER_NOTICE );
