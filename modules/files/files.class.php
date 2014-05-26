@@ -395,6 +395,7 @@ class CFile extends w2p_Core_BaseObject {
         return $contact->contact_display_name;
     }
 
+    /** @deprecated */
     public function getTaskName() {
         trigger_error("The CFile->getTaskName method has been deprecated in v3.0 and will be removed in v4.0. Please use just load a CTask object instead", E_USER_NOTICE );
 
