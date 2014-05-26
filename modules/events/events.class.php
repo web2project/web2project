@@ -463,10 +463,12 @@ class CEvent extends w2p_Core_BaseObject
 
     public function bind($hash, $prefix = null, $checkSlashes = true, $bindAll = false)
     {
-        parent::bind($hash, $prefix, $checkSlashes, $bindAll);
+        $result = parent::bind($hash, $prefix, $checkSlashes, $bindAll);
 
         $this->event_start_date = $this->_AppUI->convertToSystemTZ($this->event_start_date);
         $this->event_end_date = $this->_AppUI->convertToSystemTZ($this->event_end_date);
+
+        return $result;
     }
 
     protected function hook_preStore()
