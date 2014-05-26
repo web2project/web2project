@@ -17,6 +17,10 @@ class w2p_Output_HTML_ViewHelper extends w2p_Output_HTML_Base
         $suffix = end($pieces);
 
         switch($suffix) {
+            case 'datetime':
+                $myDate = intval($fieldValue) ? new w2p_Utilities_Date($this->AppUI->formatTZAwareTime($fieldValue, '%Y-%m-%d %T')) : null;
+                $output = $myDate ? $myDate->format($this->dtf) : '-';
+                break;
             case 'email':
                 $output = w2p_email($fieldValue);
                 break;
