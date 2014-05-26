@@ -15,7 +15,7 @@ $_POST['task_log_percent_complete'] = $_POST['task_percent_complete'];
 $obj = new CTask_Log();
 if (!$obj->bind($_POST)) {
     $AppUI->setMsg($obj->getError(), UI_MSG_ERROR);
-    $AppUI->redirect();
+    $AppUI->redirect('m=tasks&a=view&task_id='.$obj->task_log_task);
 }
 
 $action = ($del) ? 'deleted' : 'stored';

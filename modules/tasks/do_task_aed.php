@@ -26,7 +26,6 @@ if ($task_id) {
 
 if (!$obj->bind($_POST)) {
     $AppUI->setMsg($obj->getError(), UI_MSG_ERROR);
-    $AppUI->redirect();
     $AppUI->redirect('m=task&a=addedit');
 }
 

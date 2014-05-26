@@ -53,7 +53,7 @@ for ($i = 0; $i <= $sizeof; $i++) {
 
 		if (!$obj->bind($_POST)) {
 			$AppUI->setMsg($obj->getError(), UI_MSG_ERROR);
-			$AppUI->redirect();
+			$AppUI->redirect('m=tasks&a=tasksperuser');
 		}
 
 		if ($rm && $del) {
@@ -96,4 +96,4 @@ for ($i = 0; $i <= $sizeof; $i++) {
 if ($rm && $del) {
 	$AppUI->setMsg('User(s) unassigned from Task', UI_MSG_OK);
 }
-$AppUI->redirect();
+$AppUI->redirect('m=tasks&a=tasksperuser');
