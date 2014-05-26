@@ -263,12 +263,6 @@ class CFile extends w2p_Core_BaseObject {
         parent::hook_postDelete();
     }
 
-    public function indexStrings()
-    {
-        $indexer = new w2p_FileSystem_Indexer($this->_getQuery());
-        $indexer->index($this);
-    }
-
     //function notifies about file changing
     public function notify($notify) {
         if ($notify == '1') {
@@ -408,6 +402,15 @@ class CFile extends w2p_Core_BaseObject {
         $task->load((int)$this->file_task);
 
         return $task->task_name;
+    }
+
+    /** @deprecated */
+    public function indexStrings()
+    {
+        trigger_error("CFile->indexStrings() has been deprecated in v3.2 and will be removed by v5.0. Please use w2p_FileSystem_Indexer->index() instead.", E_USER_NOTICE);
+
+        $indexer = new w2p_FileSystem_Indexer($this->_getQuery());
+        $indexer->index($this);
     }
 
     /** @deprecated */
