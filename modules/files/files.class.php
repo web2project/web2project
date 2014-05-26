@@ -107,7 +107,9 @@ class CFile extends w2p_Core_BaseObject {
 
         foreach($unindexedFiles as $file_id => $notUsed) {
             $this->load($file_id);
-            $this->indexStrings($this->_AppUI);
+
+            $indexer = new w2p_FileSystem_Indexer($this->_getQuery());
+            $indexer->index($this);
         }
         $this->indexer = false;
     }
@@ -118,7 +120,7 @@ class CFile extends w2p_Core_BaseObject {
         $search['table_alias'] = 'f';
         $search['table_module'] = 'files';
         $search['table_key'] = 'f.file_id'; // primary key in searched table
-        $search['table_link'] = 'index.php?m=files&a=addedit&file_id='; // first part of link
+        $search['table_link'] = 'index.php?m=files&a=view&file_id='; // first part of link
         $search['table_title'] = 'Files';
         $search['table_orderby'] = 'file_name, word_placement';
         $search['search_fields'] = array('file_name', 'file_description',
@@ -268,99 +270,10 @@ class CFile extends w2p_Core_BaseObject {
         parent::hook_postDelete();
     }
 
-    /**
-     * parse file for indexing
-     * @todo convert to using the FileSystem methods
-     */
-    public function indexStrings() {
-        $nwords_indexed = 0;
-
-        /* Workaround for indexing large files:
-        ** Based on the value defined in config data,
-        ** files with file_size greater than specified limit
-        ** are not indexed for searching.
-        ** Negative value :<=> no filesize limit
-        */
-        $index_max_file_size = w2PgetConfig('index_max_file_size', 0);
-        if ($this->file_size > 0 && ($index_max_file_size < 0 || (int) $this->file_size <= $index_max_file_size * 1024)) {
-            // get the parser application
-            $parser = $this->_w2Pconfig['parser_' . $this->file_type];
-            if (!$parser) {
-                $parser = $this->_w2Pconfig['parser_default'];
-            }
-            if (!$parser) {
-                return false;
-            }
-            // buffer the file
-            $this->_filepath = W2P_BASE_DIR . '/files/' . $this->file_project . '/' . $this->file_real_filename;
-            if (file_exists($this->_filepath)) {
-                $fp = fopen($this->_filepath, 'rb');
-                $x = fread($fp, $this->file_size);
-                fclose($fp);
-                // parse it
-                $parser = $parser . ' ' . $this->_filepath;
-                $pos = strpos($parser, '/pdf');
-
-                /*
-                 * TODO: I *really* hate using error surpression here and I would
-                 *   normally just detect if safe_mode is on and if it was, skip
-                 *   this call. Unfortunately, safe_mode has been deprecated in
-                 *   5.3 and will be removed in 5.4
-                 */
-                if (false !== $pos) {
-                    $x = @shell_exec(`$parser -`);
-                } else {
-                    $x = @shell_exec(`$parser`);
-                }
-                // if nothing, return
-                if (strlen($x) < 1) {
-                    return 0;
-                }
-                // remove punctuation and parse the strings
-                $x = str_replace(array('.', ',', '!', '@', '(', ')'), ' ', $x);
-                $warr = explode(' ', $x);
-
-                $wordarr = array();
-                $nwords = count($warr);
-                for ($x = 0; $x < $nwords; $x++) {
-                    $newword = $warr[$x];
-                    if (!preg_match('[!"#$%&\'()*+,\-./:;<=>?@[\\\]^_`{|}~]', $newword)
-                        && mb_strlen(mb_trim($newword)) > 2
-                        && !preg_match('[0-9]', $newword)) {
-                        $wordarr[$newword] = $x;
-                    }
-                }
-
-                // filter out common strings
-                $ignore = w2PgetSysVal('FileIndexIgnoreWords');
-                $ignore = str_replace(' ,', ',', $ignore);
-                $ignore = str_replace(', ', ',', $ignore);
-                $ignore = explode(',', $ignore);
-                foreach ($ignore as $w) {
-                    unset($wordarr[$w]);
-                }
-                $nwords_indexed = count($wordarr);
-                // insert the strings into the table
-                while (list($key, $val) = each($wordarr)) {
-                    $q = $this->_getQuery();
-                    $q->addTable('files_index');
-                    $q->addReplace('file_id', $this->file_id);
-                    $q->addReplace('word', $key);
-                    $q->addReplace('word_placement', $val);
-                    $q->exec();
-                    $q->clear();
-                }
-            } else {
-                //TODO: if the file doesn't exist.. should we delete the db record?
-            }
-        }
-        $q = $this->_getQuery();
-        $q->addTable('files');
-        $q->addUpdate('file_indexed', 1);
-        $q->addWhere('file_id = '. $this->file_id);
-        $q->exec();
-
-        return $nwords_indexed;
+    public function indexStrings()
+    {
+        $indexer = new w2p_FileSystem_Indexer($this->_getQuery());
+        $indexer->index($this);
     }
 
     //function notifies about file changing
