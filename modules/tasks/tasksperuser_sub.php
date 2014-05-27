@@ -181,8 +181,7 @@ function chPriority(user_id) {
 			<td nowrap="nowrap">
 				<?php
                     $active_users = $perms->getPermittedUsers('tasks');
-                    $system_users = arrayMerge(array('-1' => $AppUI->_('All Users')), $active_users);
-                    echo arraySelect($system_users, 'log_userfilter', 'class="text" style="width: 200px"', $log_userfilter);
+                    echo arraySelect($active_users, 'log_userfilter', 'class="text" style="width: 200px"', $log_userfilter);
                 ?>
 			</td>
 			<td nowrap="nowrap">
