@@ -735,7 +735,7 @@ class CTask extends w2p_Core_BaseObject
         $this->task_dynamic = (int) $this->task_dynamic;
         $this->task_notify = (int) $this->task_notify;
 
-        $this->task_duration = (!$this->task_duration || $this->task_milestone) ? $this->task_duration : 0;
+        $this->task_duration = ($this->task_milestone) ? 0 : $this->task_duration;
         $this->task_duration_type = (int) $this->task_duration_type ? $this->task_duration_type : 1;
         $this->task_priority = (int) $this->task_priority ? $this->task_priority : 0;
 
