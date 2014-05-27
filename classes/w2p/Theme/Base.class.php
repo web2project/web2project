@@ -103,4 +103,113 @@ abstract class w2p_Theme_Base
         $ret .= '</table>';
         return $ret;
     }
+
+    /**
+     * Find and add to output the file tags required to load module-specific
+     * javascript.
+     */
+    public function loadHeaderJS()
+    {
+        global $m, $a;
+
+        // load the js base.php
+        include w2PgetConfig('root_dir') . '/js/base.php';
+
+        // Search for the javascript files to load.
+        if (!isset($m)) {
+            return;
+        }
+        $root = W2P_BASE_DIR;
+        if (substr($root, -1) != '/') {
+            $root .= '/';
+        }
+
+        $base = W2P_BASE_URL;
+        if (substr($base, -1) != '/') {
+            $base .= '/';
+        }
+        // Load the basic javascript used by all modules.
+        echo '<script type="text/javascript" src="' . $base . 'js/base.js"></script>';
+
+        // additionally load jquery
+        echo '<script type="text/javascript" src="' . $base . 'lib/jquery/jquery.js"></script>';
+        echo '<script type="text/javascript" src="' . $base . 'lib/jquery/jquery.tipTip.js"></script>';
+
+        $this->getModuleJS($m, $a, true);
+    }
+
+    public function getModuleJS($module, $file = null, $load_all = false)
+    {
+        $root = W2P_BASE_DIR;
+        if (substr($root, -1) != '/') {
+            $root .= '/';
+        }
+        $base = W2P_BASE_URL;
+        if (substr($base, -1) != '/') {
+            $base .= '/';
+        }
+        if ($load_all || !$file) {
+            if (file_exists($root . 'modules/' . $module . '/' . $module . '.module.js')) {
+                echo '<script type="text/javascript" src="' . $base . 'modules/' . $module . '/' . $module . '.module.js"></script>';
+            }
+        }
+        if (isset($file) && file_exists($root . 'modules/' . $module . '/' . $file . '.js')) {
+            echo '<script type="text/javascript" src="' . $base . 'modules/' . $module . '/' . $file . '.js"></script>';
+        }
+    }
+
+    public function addFooterJavascriptFile($pathTo)
+    {
+        if (!in_array($pathTo, $this->footerJavascriptFiles)) {
+            $base = W2P_BASE_URL;
+            if (substr($base, -1) != '/') {
+                $base .= '/';
+            }
+            if (strpos($pathTo, $base) === false) {
+                $pathTo = $base . $pathTo;
+            }
+            $this->footerJavascriptFiles[] = $pathTo;
+        }
+    }
+
+    public function loadFooterJS()
+    {
+        $s = '<script type="text/javascript">';
+        $s .= '$(document).ready(function() {';
+        // Attach tooltips to "span" elements
+        $s .= '    $("span").tipTip({maxWidth: "600px;", delay: 200, fadeIn: 150, fadeOut: 150});';
+        // Move the focus to the first textbox available, while avoiding the "Global Search..." textbox
+        if (canAccess('smartsearch')) {
+            $s .= '    $("input[type=\'text\']:eq(1)").focus();';
+        } else {
+            $s .= '    $("input[type=\'text\']:eq(0)").focus();';
+        }
+        $s .= '});';
+        $s .= '</script>';
+
+        if (is_array($this->footerJavascriptFiles) and !empty($this->footerJavascriptFiles)) {
+            while ($jsFile = array_pop($this->footerJavascriptFiles)) {
+                $s .= "<script type='text/javascript' src='" . $jsFile . "'></script>";
+            }
+        }
+
+        return $s;
+    }
+
+    public function loadCalendarJS()
+    {
+        global $AppUI;
+
+        $s = '<style type="text/css">@import url(' . W2P_BASE_URL . '/lib/jscalendar/skins/aqua/theme.css);</style>';
+        $s .= '<script type="text/javascript" src="' . W2P_BASE_URL . '/js/calendar.js"></script>';
+        $s .= '<script type="text/javascript" src="' . W2P_BASE_URL . '/lib/jscalendar/calendar.js"></script>';
+        if (file_exists(w2PgetConfig('root_dir') . '/lib/jscalendar/lang/calendar-' . $AppUI->user_locale . '.js')) {
+            $s .= '<script type="text/javascript" src="' . W2P_BASE_URL . '/lib/jscalendar/lang/calendar-' . $AppUI->user_locale . '.js"></script>';
+        } else {
+            $s .= '<script type="text/javascript" src="' . W2P_BASE_URL . '/lib/jscalendar/lang/calendar-en.js"></script>';
+        }
+        $s .= '<script type="text/javascript" src="' . W2P_BASE_URL . '/lib/jscalendar/calendar-setup.js"></script>';
+        echo $s;
+        include w2PgetConfig('root_dir') . '/js/calendar.php';
+    }
 }
