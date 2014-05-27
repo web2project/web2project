@@ -1144,13 +1144,11 @@ class w2p_Core_CAppUI
 
     public function loadCalendarJS()
     {
-        global $AppUI;
-
         $s = '<style type="text/css">@import url(' . W2P_BASE_URL . '/lib/jscalendar/skins/aqua/theme.css);</style>';
         $s .= '<script type="text/javascript" src="' . W2P_BASE_URL . '/js/calendar.js"></script>';
         $s .= '<script type="text/javascript" src="' . W2P_BASE_URL . '/lib/jscalendar/calendar.js"></script>';
-        if (file_exists(w2PgetConfig('root_dir') . '/lib/jscalendar/lang/calendar-' . $AppUI->user_locale . '.js')) {
-            $s .= '<script type="text/javascript" src="' . W2P_BASE_URL . '/lib/jscalendar/lang/calendar-' . $AppUI->user_locale . '.js"></script>';
+        if (file_exists(w2PgetConfig('root_dir') . '/lib/jscalendar/lang/calendar-' . $this->user_locale . '.js')) {
+            $s .= '<script type="text/javascript" src="' . W2P_BASE_URL . '/lib/jscalendar/lang/calendar-' . $this->user_locale . '.js"></script>';
         } else {
             $s .= '<script type="text/javascript" src="' . W2P_BASE_URL . '/lib/jscalendar/lang/calendar-en.js"></script>';
         }
