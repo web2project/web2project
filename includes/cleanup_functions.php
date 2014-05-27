@@ -4850,16 +4850,22 @@ function __extract_from_todo($user_id, $showArcProjs, $showLowTasks, $showInProg
  *
  * @return mixed
  */
-function __extract_from_tasksperuser($use_period, $ss, $se, $log_userfilter, $project_id, $company_id, $proj, $AppUI)
+function __extract_from_tasksperuser($use_period, $ss, $se, $log_userfilter, $project_id, $company_id, $proj, $AppUI, $all_proj_status='on')
 {
     $q = new w2p_Database_Query;
     $q->addTable('tasks', 't');
     $q->addQuery('t.*');
     $q->addJoin('projects', 'pr', 'pr.project_id = t.task_project', 'inner');
     $q->addWhere('pr.project_active = 1');
-    if (($template_status = w2PgetConfig('template_projects_status_id')) != '') {
+    if ('off'==$all_proj_status) {
+		 $q->addWhere('pr.project_status = 3 ');
+		}
+		else {
+			
+		  if (($template_status = w2PgetConfig('template_projects_status_id')) != '') {
         $q->addWhere('pr.project_status <> ' . (int) $template_status);
     }
+	}
 
     if ('on' == $use_period) {
         $q->addWhere('(( task_start_date >= ' . $ss . ' AND task_start_date <= ' . $se . ' ) OR ' . '  ( task_end_date <= ' . $se . ' AND task_end_date >= ' . $ss . ' ))');
