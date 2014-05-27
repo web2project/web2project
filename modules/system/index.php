@@ -23,17 +23,17 @@ $titleBlock->show();
             <?php
             $system = new CSystem();
             if ('admin@web2project.net' == w2PgetConfig('admin_email', 'admin@web2project.net')) {
-                ?>
+                ?><br />
                 <a href="?m=system&a=systemconfig#admin_email"><?php echo $AppUI->_('Set the Admin Email Address'); ?></a> -
                 <span class="error"><?php echo $AppUI->_('Please set an email address for your Web2project Administrator.'); ?></span>
                 <?php
             }
             echo '<br />';
             if ($system->upgradeRequired()) {
-              ?>
-              <a href="?m=system&u=upgrade"><?php echo $AppUI->_('Apply System Updates'); ?></a> -<br />
-              <span class="error"><?php echo $AppUI->_('Your upgrade is not complete. Please apply the updates immediately.'); ?></span>
-              <?php
+                ?><br />
+                <a href="?m=system&u=upgrade"><?php echo $AppUI->_('Apply System Updates'); ?></a> -<br />
+                <span class="error"><?php echo $AppUI->_('Your upgrade is not complete. Please apply the updates immediately.'); ?></span>
+                <?php
             } else {
                 echo $AppUI->_('All installed update scripts have been executed.');
             }
