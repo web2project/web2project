@@ -1447,7 +1447,7 @@ class CTask extends w2p_Core_BaseObject
         if ($task_data_not_loaded) $this->load($this->task_id);
         $user_id = ($user_id) ? $user_id : $this->_AppUI->user_id;
         // Let's see if this user has admin privileges
-        if (canView('admin')) {
+        if (canView('system')) {
             return true;
         }
         // If the user is the task owner, they can always see it.
