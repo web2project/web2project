@@ -7,7 +7,7 @@
             <p>
                 <?php $form->showLabel('Task Owner'); ?>
                 <?php
-                $owner = ($object->task_owner) ? $AppUI->user_id : $object->task_owner;
+                $owner = ($object->task_owner) ? $object->task_owner : $AppUI->user_id;
                 $form->showField('task_owner', $owner, array(), $users); ?>
             </p>
             <p>
