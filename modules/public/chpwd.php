@@ -14,7 +14,7 @@ if ($user_id) {
 	$new_pwd2 = db_escape(trim(w2PgetParam($_POST, 'new_pwd2', null)));
 
 	$perms = &$AppUI->acl();
-	$canAdminEdit = canEdit('admin');
+	$canAdminEdit = canEdit('system');
 
 	// has the change form been posted
 	if ($new_pwd1 && $new_pwd2 && $new_pwd1 == $new_pwd2) {

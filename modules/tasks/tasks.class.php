@@ -2188,7 +2188,7 @@ class CTask extends w2p_Core_BaseObject
             }
 
             // Am I sys admin?
-            if (canEdit('admin')) {
+            if (canEdit('system')) {
                 $can_edit_time_information = true;
             }
         } else {
