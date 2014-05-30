@@ -104,11 +104,6 @@ $spercent = arrayMerge(array('' => '('.$AppUI->_('Progress').')'), $percent);
                 <input type='text' class='text' id='bulk_task_duration' name='bulk_task_duration' value='' />&nbsp;
                 <?php echo arraySelect($sdurntype, 'bulk_task_durntype', 'size="1" class="text"', '', true); ?>
             </td>
-            <td>&nbsp;</td>
-        </tr>
-        <tr>
-            <th><?php echo $AppUI->_('Owner'); ?>&nbsp;</th>
-            <td><?php echo arraySelect($sowners, 'bulk_task_owner', 'class="text"', ''); ?></td>
             <th><?php echo $AppUI->_('Assign') . '&nbsp;</th>'; ?>
             <td nowrap="nowrap"><a href="javascript: void(0);" style="display: block;" onclick="expand_selector('assign', 'frm_bulk')"><img src="<?php echo w2PfindImage('icons/expand.gif'); ?>" id="assign_expand" />&nbsp;<img src="<?php echo w2PfindImage('icons/collapse.gif'); ?>" id="assign_collapse" style="display:none">&nbsp;</a>
                 <div>
@@ -121,9 +116,9 @@ $spercent = arrayMerge(array('' => '('.$AppUI->_('Progress').')'), $percent);
                                 <?php echo arraySelect($sassign, 'bulk_task_user', 'class="text"', ''); ?>
                                 <select name="bulk_task_assign_perc" class="text">
                                     <?php
-                                        for ($i = 5; $i <= 100; $i += 5) {
-                                            echo '<option ' . (($i == 100) ? 'selected="true"' : '') . ' value="' . $i . '">' . $i . '%</option>';
-                                        }
+                                    for ($i = 5; $i <= 100; $i += 5) {
+                                        echo '<option ' . (($i == 100) ? 'selected="true"' : '') . ' value="' . $i . '">' . $i . '%</option>';
+                                    }
                                     ?>
                                 </select><br /><br />
                                 <a href="javascript: void(0);" onclick="removeUser(document.frm_bulk)">
@@ -138,25 +133,21 @@ $spercent = arrayMerge(array('' => '('.$AppUI->_('Progress').')'), $percent);
             </td>
             <th><?php echo $AppUI->_('Unassign'); ?>&nbsp;</th>
             <td><?php echo arraySelect($sunassign, 'bulk_task_unassign', 'class="text"', ''); ?></td>
-            <td>&nbsp;</td>
         </tr>
         <tr>
+            <th><?php echo $AppUI->_('Owner'); ?>&nbsp;</th>
+            <td><?php echo arraySelect($sowners, 'bulk_task_owner', 'class="text"', ''); ?></td>
             <th><?php echo $AppUI->_('Priority'); ?>&nbsp;</th>
             <td><?php echo arraySelect($spriority, 'bulk_task_priority', 'class="text"', ''); ?></td>
             <th><?php echo $AppUI->_('User Priority for')." '".$AppUI->user_display_name."' (".$AppUI->_('if assigned').")"; ?>&nbsp;</th>
             <td><?php echo arraySelect($spriority, 'bulk_task_user_priority', 'class="text"', ''); ?></td>
-            <th><?php echo $AppUI->_('Type'); ?>&nbsp;</th>
-            <td><?php echo arraySelect($stype, 'bulk_task_type', 'class="text"', ''); ?></td>
-            <th><?php echo $AppUI->_('Parent'); ?>&nbsp;</th>
-            <td>
-                <select name='bulk_task_parent' class='text'>
-                    <option value=''>(<?php echo $AppUI->_('Task Parent'); ?>)</option>
-                    <option value='0'>(<?php echo $AppUI->_('Reset to Self Task'); ?>)</option>
-                    <?php echo $task_parent_options; ?>
-                </select>
-            </td>
             <td>&nbsp;</td>
         </tr>
+<!--        <tr>-->
+<!--            <th>--><?php //echo $AppUI->_('Type'); ?><!--&nbsp;</th>-->
+<!--            <td>--><?php //echo arraySelect($stype, 'bulk_task_type', 'class="text"', ''); ?><!--</td>-->
+<!--            <td>&nbsp;</td>-->
+<!--        </tr>-->
         <tr>
             <th><?php echo $AppUI->_('Access'); ?>&nbsp;</th>
             <td><?php echo arraySelect($stask_access, 'bulk_task_access', 'class="text"', ''); ?></td>
@@ -190,6 +181,14 @@ $spercent = arrayMerge(array('' => '('.$AppUI->_('Progress').')'), $percent);
                     <option value=""></option>
                     <option value="1"><?php echo $AppUI->_('Yes'); ?></option>
                     <option value="0"><?php echo $AppUI->_('No'); ?></option>
+                </select>
+            </td>
+            <th><?php echo $AppUI->_('Parent'); ?>&nbsp;</th>
+            <td>
+                <select name='bulk_task_parent' class='text'>
+                    <option value=''>(<?php echo $AppUI->_('Task Parent'); ?>)</option>
+                    <option value='0'>(<?php echo $AppUI->_('Reset to Self Task'); ?>)</option>
+                    <?php echo $task_parent_options; ?>
                 </select>
             </td>
             <td colspan="18" align="right"><input type="button" class="button btn btn-primary btn-small" value="<?php echo $AppUI->_('update'); ?>" onclick="if (confirm('Are you sure you wish to apply the update(s) to the selected task(s)?')) document.frm_bulk.submit();" /></td>
