@@ -282,6 +282,7 @@ class w2p_Output_MonthCalendar {
      */
     private function _drawMain() {
         $today = new w2p_Utilities_Date();
+        $today->convertTZ($this->_AppUI->getPref('TIMEZONE'));
         $today = $today->format('%Y%m%d%w');
 
         $date = $this->this_month;

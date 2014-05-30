@@ -27,6 +27,7 @@ $event_filter = $AppUI->checkPrefState('CalIdxFilter', w2PgetParam($_REQUEST, 'e
 $date = w2PgetParam($_GET, 'date', null);
 
 $today = new w2p_Utilities_Date();
+$today->convertTZ($AppUI->getPref('TIMEZONE'));
 $today = $today->format(FMT_TIMESTAMP_DATE);
 
 // establish the focus 'date'
