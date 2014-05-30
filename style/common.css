@@ -364,7 +364,7 @@ td.future {
 }
 tr.future td._date, tr.future td._datetime, tr.future td._duration, tr.future td._in {
     background-color:#ffffff;
-    color:#00000;
+    color: #000;
 }
 
 td.done {
@@ -374,7 +374,7 @@ td.done {
 }
 tr.done td._date, tr.done td._datetime, tr.done td._duration, tr.done td._in {
     background-color:#aaddaa;
-    color:#00000;
+    color: #000;
 }
 
 td.late {
