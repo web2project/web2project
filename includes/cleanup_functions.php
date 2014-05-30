@@ -85,11 +85,9 @@ function strEzPdf($text)
 {
     if (function_exists('iconv') && function_exists('mb_detect_encoding')) {
         $text = iconv(mb_detect_encoding($text." "), 'UTF-8', $text);
-
-        return $text;
-    } else {
-        return $text;
     }
+
+    return $text;
 }
 
 /**
