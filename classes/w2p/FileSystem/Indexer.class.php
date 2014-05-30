@@ -66,11 +66,9 @@ class w2p_FileSystem_Indexer
                 //TODO: if the file doesn't exist.. should we delete the db record?
             }
         }
-        $q = new w2p_Database_Query();
-        $q->addTable('files');
-        $q->addUpdate('file_indexed', 1);
-        $q->addWhere('file_id = '. $file->file_id);
-        $q->exec();
+
+        $file->file_indexed = 1;
+        $file->store();
 
         return count($words);
     }
