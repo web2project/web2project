@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!-- tasksTestUnpinUserTask.xml - used to compare against in testUnpinUserTask -->
-<dataset>
-    <table name="user_task_pin">
-        <column>user_id</column>
-        <column>task_id</column>
-        <column>task_pinned</column>
-    </table>
-</dataset>
