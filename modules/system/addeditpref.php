@@ -102,7 +102,7 @@ $form = new w2p_Output_HTML_FormHelper($AppUI);
              *   language defaults to whatever is first in the dropdown.. which is Czech at the time of this writing.
              *   Since English is more widespread, I don't feel bad. ~ caseysoftware/caseydk 24 July 2013
              */
-            $prefs['LOCALE'] = ('' == $prefs['LOCALE']) ? 'en_US' : $prefs['LOCALE'];
+            $prefs['LOCALE'] = ('' == $prefs['LOCALE'] || 'en' == $prefs['LOCALE']) ? 'en_US' : $prefs['LOCALE'];
             echo arraySelect($langlist, 'pref_name[LOCALE]', 'class=text size=1', $prefs['LOCALE'], true);
             $AppUI->setWarning($temp);
         ?>
