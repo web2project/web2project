@@ -3618,7 +3618,7 @@ function showcompany($company, $restricted = false)
  * @param int the length to truncate entries by
  * @author Andrew Eddie <eddieajau@users.sourceforge.net>
  */
-function getEventLinks($startPeriod, $endPeriod, &$links, $notUsed = null, $minical = false)
+function getEventLinks($startPeriod, $endPeriod, $links, $notUsed = null, $minical = false)
 {
     global $event_filter;
     $events = CEvent::getEventsForPeriod($startPeriod, $endPeriod, $event_filter);
@@ -3647,6 +3647,8 @@ function getEventLinks($startPeriod, $endPeriod, &$links, $notUsed = null, $mini
             $date = $date->getNextDay();
         }
     }
+
+    return $links;
 }
 
 function getEventTooltip($event_id)
@@ -3744,7 +3746,7 @@ function getEventTooltip($event_id)
  * @param int the company id to filter by
  * @author Andrew Eddie <eddieajau@users.sourceforge.net>
  */
-function getTaskLinks($startPeriod, $endPeriod, &$links, $strMaxLen, $company_id = 0, $minical = false, $userid=0)
+function getTaskLinks($startPeriod, $endPeriod, $links, $strMaxLen, $company_id = 0, $minical = false, $userid=0)
 {
     global $a, $AppUI;
     $tasks = CTask::getTasksForPeriod($startPeriod, $endPeriod, $company_id, $userid);
@@ -3816,6 +3818,8 @@ function getTaskLinks($startPeriod, $endPeriod, &$links, $strMaxLen, $company_id
             }
         }
     }
+
+    return $links;
 }
 
 function getTaskTooltip($task_id)
