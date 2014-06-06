@@ -6,7 +6,6 @@ if (!defined('W2P_BASE_DIR')) {
 
 $del = (int) w2PgetParam($_POST, 'del', 0);
 $notify_owner = w2PgetParam($_POST, 'task_log_notify_owner', 'off');
-$isNotNew = (int) w2PgetParam($_POST, 'task_log_id', 0);
 
 // TODO: This is a dirty hack.
 $_POST['task_log_task_end_date'] = $_POST['task_end_date'];
