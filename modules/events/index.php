@@ -135,9 +135,9 @@ $first_time->setTime(0, 0, 0);
 $last_time = new w2p_Utilities_Date($cal->prev_month);
 $last_time->setDay($cal->prev_month->getDaysInMonth());
 $last_time->setTime(23, 59, 59);
-$links = array();
-getTaskLinks($first_time, $last_time, $links, 20, $company_id, true);
-getEventLinks($first_time, $last_time, $links, 20);
+
+$links = getTaskLinks($first_time, $last_time, array(), 20, $company_id, true);
+$links += ($first_time, $last_time, array(), 20);
 $minical->setEvents($links);
 
 echo '<table class="std"><tr>';
@@ -151,9 +151,9 @@ $first_time->setTime(0, 0, 0);
 $last_time = new w2p_Utilities_Date($cal->next_month);
 $last_time->setDay($cal->next_month->getDaysInMonth());
 $last_time->setTime(23, 59, 59);
-$links = array();
-getTaskLinks($first_time, $last_time, $links, 20, $company_id, true);
-getEventLinks($first_time, $last_time, $links, 20, true);
+
+$links = getTaskLinks($first_time, $last_time, array(), 20, $company_id, true);
+$links += getEventLinks($first_time, $last_time, array(), 20, true);
 $minical->setEvents($links);
 
 echo '<td valign="top" align="center" width="220">' . $minical->show() . '</td>';
