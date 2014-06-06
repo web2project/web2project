@@ -47,7 +47,7 @@ $gantt->localize();
 $original_project = new CProject();
 $original_project->load($original_project_id);
 $tableTitle = $original_project->project_name . ': ' . $AppUI->_('Multi-Project Gantt');
-$gantt->setTitle($tableTitle, '#eeeeee');
+$gantt->setTitle($tableTitle);
 
 $columnNames = array('Project name', 'Start Date', 'Finish', 'Actual End');
 $columnSizes = array(200, 75, 75, 75);
@@ -135,7 +135,7 @@ if (!is_array($projects) || sizeof($projects) == 0) {
                     $task = $p['tasks'][$i];
                     if ($task['task_parent'] == $task['task_id']) {
                         showgtask($task, 0, $p['project_id']);
-                        findchild_gantt($p['tasks'], $task['task_id'], 0, $p['project_id']);
+                        findchild_gantt($p['tasks'], $task['task_id'], 0);
                     }
                 }
             }
