@@ -34,7 +34,7 @@ if ($obj) {
     $object->load($object_id);
 }
 // load the record data
-if (!$object && $dept_id > 0) {
+if (!$object && $object_id > 0) {
     $AppUI->setMsg('Event');
     $AppUI->setMsg('invalidID', UI_MSG_ERROR, true);
     $AppUI->redirect('m=' . $m);
