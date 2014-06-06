@@ -2318,8 +2318,6 @@ function showDays()
 
     $table_header = '<tr><th>' . $AppUI->_('User') . '</th>';
     for ($i = 0; $i <= $days_difference; $i++) {
-        if (($actual_date->isWorkingDay()) || (!$actual_date->isWorkingDay() && !$hideNonWd)) {
-        }
         if ($actual_date->isWorkingDay()) {
             $working_days_count++;
         }
