@@ -543,7 +543,7 @@ function findchild_gantt(&$tarr, $parent, $level = 0)
     for ($x = 0; $x < $n; $x++) {
         if ($tarr[$x]['task_parent'] == $parent && $tarr[$x]['task_parent'] != $tarr[$x]['task_id']) {
             showgtask($tarr[$x], $level, $tarr[$x]['project_id']);
-            findchild_gantt($tarr, $tarr[$x]['task_id'], $tarr[$x]['project_id'], $level);
+            findchild_gantt($tarr, $tarr[$x]['task_id'], $level);
         }
     }
 }
