@@ -137,7 +137,7 @@ $last_time->setDay($cal->prev_month->getDaysInMonth());
 $last_time->setTime(23, 59, 59);
 
 $links = getTaskLinks($first_time, $last_time, array(), 20, $company_id, true);
-$links += ($first_time, $last_time, array(), 20);
+$links += getEventLinks($first_time, $last_time, array(), 20);
 $minical->setEvents($links);
 
 echo '<table class="std"><tr>';
