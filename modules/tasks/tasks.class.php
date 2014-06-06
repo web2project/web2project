@@ -1249,36 +1249,27 @@ class CTask extends w2p_Core_BaseObject
                 if (!$this->_AppUI->getPref('MAILALL')) {
                     $q->addWhere('ua.user_id <>' . (int) $this->_AppUI->user_id);
                 }
-                $assigneeList = $q->loadList();
+                $mail_recipients += $q->loadHashList();
                 $q->clear();
-
-                foreach ($assigneeList as $myContact) {
-                    $mail_recipients[$myContact['contact_email']] = $myContact['contact_name'];
-                }
             }
             if ('on' == $task_contacts) {
                 $q->addTable('task_contacts', 'tc');
                 $q->leftJoin('contacts', 'c', 'c.contact_id = tc.contact_id');
                 $q->addQuery('c.contact_email, c.contact_display_name as contact_name');
                 $q->addWhere('tc.task_id = ' . $this->task_id);
-                $contactList = $q->loadList();
+                $mail_recipients += $q->loadHashList();
                 $q->clear();
 
-                foreach ($contactList as $myContact) {
-                    $mail_recipients[$myContact['contact_email']] = $myContact['contact_name'];
-                }
+
             }
             if ('on' == $project_contacts) {
                 $q->addTable('project_contacts', 'pc');
                 $q->leftJoin('contacts', 'c', 'c.contact_id = pc.contact_id');
                 $q->addQuery('c.contact_email, c.contact_display_name as contact_name');
                 $q->addWhere('pc.project_id = ' . $this->task_project);
-                $projectContactList = $q->loadList();
-                $q->clear();
 
-                foreach ($projectContactList as $myContact) {
-                    $mail_recipients[$myContact['contact_email']] = $myContact['contact_name'];
-                }
+                $mail_recipients += $q->loadHashList();
+                $q->clear();
             }
             if (isset($others)) {
                 $others = trim($others, " \r\n\t,"); // get rid of empty elements.
@@ -1349,8 +1340,7 @@ class CTask extends w2p_Core_BaseObject
             $save_email = $this->_AppUI->getPref('TASKLOGNOTE');
             if ($save_email) {
 //TODO: This is where #38 - http://bugs.web2project.net/view.php?id=38 - should be applied if a change is necessary.
-//TODO: This datetime should be added/displayed in UTC/GMT.
-                $log->task_log_description .= "\n" . 'Emailed ' . date('l F j, Y H:i:s') . ' to:' . "\n" . $recipient_list;
+                $log->task_log_description .= "\n" . 'Emailed ' . date('l F j, Y H:i:s') . ' GMT to:' . "\n" . $recipient_list;
                 return true;
             }
         }
