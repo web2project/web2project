@@ -2730,13 +2730,7 @@ function w2PshowImage($src, $notUsed = '', $notUsed2 = '', $alt = '', $title = '
         $result = w2PtoolTip($m, $title);
     }
     $result .= '<img src="' . $src . '" alt="' . $alt . '" />';
-    if (!$alt && !$title) {
-        //do nothing
-    } elseif ($alt && $title) {
-        $result .= w2PendTip();
-    } elseif ($alt && !$title) {
-        $result .= w2PendTip();
-    } elseif (!$alt && $title) {
+    if ($alt || $title) {
         $result .= w2PendTip();
     }
 
