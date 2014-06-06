@@ -807,10 +807,10 @@ class CProject extends w2p_Core_BaseObject
         $worked_hours = rtrim($worked_hours, '.');
         $q->clear();
 
-        $project = new CProject();
-        $project->load($project_id);
-        $project->project_worked_hours = $worked_hours;
-        $project->store();
+        $q->addTable('projects');
+        $q->addUpdate('project_worked_hours', $worked_hours);
+        $q->addWhere('project_id = ' . $project_id);
+        $q->exec();
 
         self::updatePercentComplete($project_id);
     }
@@ -834,11 +834,11 @@ class CProject extends w2p_Core_BaseObject
         $task = new CTask();
         $project_scheduled_hours = $task->getHoursScheduled($project_id);
 
-        $project = new CProject();
-        $project->load($project_id);
-        $project->project_percent_complete = $project_percent_complete;
-        $project->project_scheduled_hours = $project_scheduled_hours;
-        $project->store();
+        $q->addTable('projects');
+        $q->addUpdate('project_percent_complete', $project_percent_complete);
+        $q->addUpdate('project_scheduled_hours', $project_scheduled_hours);
+        $q->addWhere('project_id = ' . $project_id);
+        $q->exec();
 
         global $AppUI;
         CTask::storeTokenTask($AppUI, $project_id);
