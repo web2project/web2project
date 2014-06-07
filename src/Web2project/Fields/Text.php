@@ -1,7 +1,7 @@
 <?php
 namespace Web2project\Fields;
 
-class Text
+class Text implements \Web2project\Interfaces\Field
 {
     public function view($value)
     {

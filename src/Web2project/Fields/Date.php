@@ -1,7 +1,7 @@
 <?php
 namespace Web2project\Fields;
 
-class Date
+class Date implements \Web2project\Interfaces\Field
 {
     protected $AppUI = null;
     protected $datename;

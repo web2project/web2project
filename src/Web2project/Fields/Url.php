@@ -1,7 +1,7 @@
 <?php
 namespace Web2project\Fields;
 
-class Url extends Text
+class Url extends Text implements \Web2project\Interfaces\Field
 {
     public function view($value)
     {

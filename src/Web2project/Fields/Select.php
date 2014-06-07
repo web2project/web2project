@@ -1,7 +1,7 @@
 <?php
 namespace Web2project\Fields;
 
-class Select
+class Select implements \Web2project\Interfaces\Field
 {
     protected $options;
 
