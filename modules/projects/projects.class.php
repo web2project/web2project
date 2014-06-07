@@ -170,7 +170,7 @@ class CProject extends w2p_Core_BaseObject
      * */
     public function importTasks($from_project_id, CTask $newTask = null)
     {
-        $newTask = is_object($newTask) ? $newTask : new CTask();
+        $newTask = new w2p_Actions_ImportTasks();
         $newTask->overrideDatabase($this->_query);
 
         return $newTask->importTasks($from_project_id, $this->project_id, $this->project_start_date);
