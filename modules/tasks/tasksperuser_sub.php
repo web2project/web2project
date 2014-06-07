@@ -39,14 +39,16 @@ $table_header = '';
 $table_rows = '';
 
 // create Date objects from the datetime fields
-$start_date = intval($log_start_date) ? new w2p_Utilities_Date($log_start_date) : new w2p_Utilities_Date();
-$end_date = intval($log_end_date) ? new w2p_Utilities_Date($log_end_date) : new w2p_Utilities_Date();
-$now = new w2p_Utilities_Date();
+$start_date = intval($log_start_date) ? new w2p_Utilities_Date($log_start_date, $AppUI->getPref('TIMEZONE')) : new w2p_Utilities_Date();
+$start_date->convertTZ('GMT');
+$end_date = intval($log_end_date) ? new w2p_Utilities_Date($log_end_date, $AppUI->getPref('TIMEZONE')) : new w2p_Utilities_Date();
+$end_date->convertTZ('GMT');
+$now = new w2p_Utilities_Date(null, $AppUI->getPref('TIMEZONE'));
+$now->convertTZ('GMT');
 
 if (!$log_start_date) {
 	$start_date->subtractSpan(new Date_Span('14,0,0,0'));
 }
-$end_date->setTime(23, 59, 59);
 
 // get Users with all Allocation info (e.g. their freeCapacity)
 $tempoTask = new CTask();
