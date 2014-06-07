@@ -24,7 +24,7 @@ $theme = $AppUI->getTheme();
                 $xajax->printJavascript(W2P_BASE_URL . '/lib/xajax');
             }
         ?>
-        <?php $AppUI->loadHeaderJS(); ?>
+        <?php $AppUI->getTheme()->loadHeaderJS(); ?>
     </head>
 
     <body onload="this.focus();">

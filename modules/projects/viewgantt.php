@@ -5,7 +5,7 @@ if (!defined('W2P_BASE_DIR')) {
 // @todo    convert to template
 
 global $AppUI, $company_id, $dept_ids, $department, $min_view, $m, $a, $user_id, $tab, $cal_sdf;
-$AppUI->loadCalendarJS();
+$AppUI->getTheme()->loadCalendarJS();
 
 $min_view = defVal($min_view, false);
 $project_id = w2PgetParam($_GET, 'project_id', 0);

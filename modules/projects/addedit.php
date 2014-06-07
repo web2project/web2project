@@ -32,7 +32,7 @@ if (!$object && $object_id > 0) {
 }
 
 global $AppUI, $cal_sdf;
-$AppUI->loadCalendarJS();
+$AppUI->getTheme()->loadCalendarJS();
 
 
 $pstatus = w2PgetSysVal('ProjectStatus');

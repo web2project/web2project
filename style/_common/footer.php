@@ -5,7 +5,7 @@
 
                     echo $AppUI->getTheme()->styleRenderBoxBottom($tab);
                     
-                    echo $AppUI->loadFooterJS();
+                    echo $AppUI->getTheme()->loadFooterJS();
                     echo $AppUI->getMsg();
                     ?>
                 </td>

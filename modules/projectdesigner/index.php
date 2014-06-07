@@ -35,7 +35,7 @@ if (!$canView) {
 	$AppUI->redirect(ACCESS_DENIED);
 }
 
-$AppUI->loadCalendarJS();
+$AppUI->getTheme()->loadCalendarJS();
 
 $today = new w2p_Utilities_Date();
 $today->addDays(1);

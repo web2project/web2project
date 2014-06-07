@@ -26,7 +26,7 @@ if ($task_log_id && !$canEdit) {
 	$AppUI->redirect(ACCESS_DENIED);
 }
 
-$AppUI->loadCalendarJS();
+$AppUI->getTheme()->loadCalendarJS();
 
 // check permissions
 $perms = &$AppUI->acl();

@@ -63,7 +63,7 @@ if ($object_id) {
 }
 $titleBlock->show();
 
-$AppUI->addFooterJavascriptFile('js/passwordstrength.js');
+$AppUI->getTheme()->addFooterJavascriptFile('js/passwordstrength.js');
 ?>
 <script language="javascript" type="text/javascript">
     function submitIt(){

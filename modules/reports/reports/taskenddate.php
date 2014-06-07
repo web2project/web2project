@@ -5,7 +5,7 @@ if (!defined('W2P_BASE_DIR')) {
 // @todo    convert to template
 
 global $AppUI, $cal_sdf;
-$AppUI->loadCalendarJS();
+$AppUI->getTheme()->loadCalendarJS();
 
 $do_report = w2PgetParam($_POST, 'do_report', 0);
 $log_start_date = w2PgetParam($_POST, 'log_start_date', 0);

@@ -18,7 +18,7 @@ if (!$canAddEdit) {
 }
 
 global $AppUI, $cal_sdf;
-$AppUI->loadCalendarJS();
+$AppUI->getTheme()->loadCalendarJS();
 
 
 // get the passed timestamp (today if none)

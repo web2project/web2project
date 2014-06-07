@@ -45,7 +45,7 @@ if ($user_id) {
 		}
 	} else {
 
-            $AppUI->addFooterJavascriptFile('js/passwordstrength.js');
+            $AppUI->getTheme()->addFooterJavascriptFile('js/passwordstrength.js');
             
 		?>
         <style>
