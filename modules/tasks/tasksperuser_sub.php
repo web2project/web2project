@@ -21,6 +21,7 @@ $log_userfilter = (int) w2PgetParam($_POST, 'log_userfilter', $AppUI->user_id);
 $company_id = (int) w2PgetParam($_POST, 'company_id', 'all');
 $project_id = (int) w2PgetParam($_POST, 'project_id', 'all');
 $report_type = (int) w2PgetParam($_POST, 'report_type', '');
+$all_proj_status = w2PgetParam($_POST, 'all_proj_status', 'off');
 
 // get CProject() to filter tasks by company
 $proj = new CProject();
@@ -184,13 +185,19 @@ function chPriority(user_id) {
                     echo arraySelect($active_users, 'log_userfilter', 'class="text" style="width: 200px"', $log_userfilter);
                 ?>
 			</td>
-			<td nowrap="nowrap">
+			<td width="50%" nowrap="nowrap">
 				<input type="checkbox" name="display_week_hours" id="display_week_hours" <?php if ('on' == $display_week_hours) { echo 'checked="checked"'; } ?> />
 				<label for="display_week_hours"><?php echo $AppUI->_('Display allocated hours/week'); ?></label><br />
+			</td>
+			<td nowrap="nowrap">
 				<input type="checkbox" name="use_period" id="use_period" <?php if ('on' == $use_period) { echo 'checked="checked"'; } ?> />
 				<label for="use_period"><?php echo $AppUI->_('Use the period'); ?></label>
 			</td>
-			<td align="left" width="50%" nowrap="nowrap">
+			<td width="50%" nowrap="nowrap">
+				<input type="checkbox" name="all_proj_status" id="all_proj_status" <?php if ('on' == $all_proj_status) { echo 'checked="checked"'; } ?> />
+				<label for="all_proj_status"><?php echo $AppUI->_('All project status except template'); ?></label>
+			</td>
+			<td align="right" width="50%" nowrap="nowrap">
 				<input class="button" type="submit" name="do_report" value="<?php echo $AppUI->_('submit'); ?>" />
 			</td>
 		</tr>
@@ -256,7 +263,7 @@ if ($do_report) {
 	$and = false;
 	$where = false;
 
-    $task_list_hash = __extract_from_tasksperuser($use_period, $ss, $se, $log_userfilter, $project_id, $company_id, $proj, $AppUI);
+    $task_list_hash = __extract_from_tasksperuser($use_period, $ss, $se, $log_userfilter, $project_id, $company_id, $proj, $AppUI, $all_proj_status);
 
 	$task_list = array();
 	$task_assigned_users = array();
