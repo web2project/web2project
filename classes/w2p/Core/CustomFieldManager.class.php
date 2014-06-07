@@ -8,9 +8,9 @@ class w2p_Core_CustomFieldManager extends w2p_Core_BaseObject {
 
     public $field_id = 0;
     public $field_module = '';
-    public $field_page = '';
+    public $field_page = 'addedit';
     public $field_htmltype = '';
-    public $field_datatype = '';
+    public $field_datatype = 'alpha';
     public $field_order = 0;
     public $field_name = '';
     public $field_extratags = '';

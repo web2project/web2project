@@ -3,12 +3,6 @@ if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
 
-/*
- * TODO: This is more than a little hacky.. trying to come up with a better
- *   approach but haven't found one yet.
- */
-$_POST['field_datatype'] = 'alpha';
-$_POST['field_page'] = 'addedit';
 $module_id = (int) w2PgetParam($_POST, 'module', 0);
 $module = new w2p_System_Module();
 $module->load($module_id);
