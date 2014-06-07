@@ -64,6 +64,7 @@ class w2p_Actions_ImportTasks extends CTask
             $orig_task['task_project'] = $to_project_id;
             $orig_task['task_sequence'] = 0;
             $orig_task['task_path_enumeration'] = '';
+            $orig_task['task_hours_worked'] = 0;
 
             // This is necessary because we're using bind() and it shifts by timezone
             $orig_task['task_start_date'] =
@@ -126,8 +127,26 @@ class w2p_Actions_ImportTasks extends CTask
         foreach($task_list as $key => $data) {
             $_task->load($key);
             $_task->_updatePathEnumeration();
-            $_task->updateDynamics();
+
+            if (!$_task->task_parent) {
+                $q->addTable('tasks');
+                $q->addUpdate('task_parent', $_task->task_id);
+                $q->addUpdate('task_updated', "'" . $q->dbfnNowWithTZ() . "'", false, true);
+                $q->addWhere('task_id = ' . (int) $_task->task_id);
+                $q->exec();
+                $q->clear();
+            }
         }
+
+        $_task->updateDynamics();
+
+        $last_task_data = $this->getLastTaskData($to_project_id);
+        CProject::updateTaskCache(
+            $to_project_id,
+            $last_task_data['task_id'],
+            $last_task_data['last_date'],
+            $this->getTaskCount($to_project_id)
+        );
 
         return $errors;
     }
