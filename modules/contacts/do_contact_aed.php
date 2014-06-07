@@ -10,7 +10,7 @@ $contact = new CContact();
 $contact->_contact_methods = empty($_POST['contact_methods']) ? array() : $_POST['contact_methods'];
 
 $controller = new w2p_Controllers_Base(
-                    $contact, $delete, 'Contact', 'm=contacts', 'm=companies&a=addedit'
+                    $contact, $delete, 'Contact', 'm=contacts', 'm=contacts&a=addedit'
                   );
 
 $AppUI = $controller->process($AppUI, $_POST);
