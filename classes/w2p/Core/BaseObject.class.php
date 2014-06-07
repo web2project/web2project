@@ -8,7 +8,7 @@
  * @abstract
  */
 
-abstract class w2p_Core_BaseObject extends w2p_System_Event implements w2p_System_ListenerInterface
+abstract class w2p_Core_BaseObject extends w2p_System_Event implements w2p_Interfaces_Listener
 {
 
     /**

@@ -9,7 +9,7 @@
  * @author      Keith Casey (maintainer) <caseydk@sourceforge.net>
  */
 
-interface w2p_System_ListenerInterface
+interface w2p_Interfaces_Listener
 {
     /**
      * Accepts an event and does something with it
