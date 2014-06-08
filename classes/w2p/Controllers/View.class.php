@@ -7,6 +7,7 @@ class w2p_Controllers_View
     protected $action = '';
     protected $dosql  = '';
     protected $key    = '';
+    protected $fields = '';
 
     public function __construct(w2p_Core_CAppUI $AppUI, $noun)
     {
@@ -30,10 +31,25 @@ class w2p_Controllers_View
             $output .= '<form name="frmDelete" action="' . $this->action . '" method="post" accept-charset="utf-8">';
             $output .= '<input type="hidden" name="dosql" value="' . $this->dosql . '" />';
             $output .= '<input type="hidden" name="del" value="1" />';
+            $output .= $this->fields;
             $output .= '<input type="hidden" name="' . $this->key . '" value="' . $object->getId() . '" />';
             $output .= '</form>';
         }
 
         return $output;
+    }
+
+    public function setDoSQL($dosql)
+    {
+        $this->dosql = $dosql;
+    }
+    public function setKey($key)
+    {
+        $this->key = $key;
+    }
+
+    public function addField($name, $value)
+    {
+        $this->fields .= '<input type="hidden" name="' . $name . '" value="' . $value . '" />';
     }
 }

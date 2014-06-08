@@ -34,18 +34,11 @@ if ($canEdit) {
 }
 $titleBlock->show();
 
-if ($canDelete) { ?>
-    <script language="javascript" type="text/javascript">
-        function delIt() {
-            if (confirm( '<?php echo $AppUI->_('doDelete') . ' ' . $AppUI->_('Department') . '?'; ?>' )) {
-                $.post("?m=departments",
-                    {dosql: "do_dept_aed", del: 1, dept_id: <?php echo $dept_id; ?>},
-                    window.location = "?m=departments"
-                );
-            }
-        }
-    </script>
-<?php }
+$view = new w2p_Controllers_View($AppUI, 'Department');
+$view->setDoSQL('do_dept_aed');
+$view->addField('dept_company', $department->dept_company);
+$view->setKey('dept_id');
+echo $view->renderDelete($department);
 
 $types = w2PgetSysVal('DepartmentType');
 
