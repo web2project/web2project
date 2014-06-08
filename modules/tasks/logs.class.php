@@ -216,6 +216,10 @@ class CTask_Log extends w2p_Core_BaseObject
 	 */
 	protected function updateTaskSummary($notUsed = null, $task_id)
 	{
+        $task = new CTask();
+        $task->overrideDatabase($this->_query);
+        $task->load($task_id);
+
         $q = $this->_getQuery();
 
         if($this->_perms->checkModuleItem('tasks', 'edit', $task_id)) {
@@ -230,10 +234,6 @@ class CTask_Log extends w2p_Core_BaseObject
             } else {
                 $percentComplete = 100;
             }
-
-            $task = new CTask();
-            $task->overrideDatabase($this->_query);
-            $task->load($task_id);
 
             $old_end_date = new w2p_Utilities_Date($task->task_end_date);
             $new_end_date = new w2p_Utilities_Date($this->task_log_task_end_date);
@@ -267,9 +267,6 @@ class CTask_Log extends w2p_Core_BaseObject
 		$totalHours = $q->loadResult();
 
         $task->updateHoursWorked2($task_id, $totalHours);
-
-        $task = new CTask();
-        $task->load($task_id);
         $task->updateDynamics();
 	}
 
