@@ -20,6 +20,7 @@ function web2project_autoload($className) {
         case 'w2p_Core_Preferences':
         case 'w2p_Core_Setup':
         case 'w2p_Core_UpgradeManager':
+        case 'w2p_Output_EmailManager':
             return include W2P_BASE_DIR . '/classes/deprecated.class.php';
         default:
             //fall through

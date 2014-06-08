@@ -282,7 +282,7 @@ class CFile extends w2p_Core_BaseObject {
                     $mail->Subject($this->_project->project_name . '::' . $this->_task->task_name . '::' . $this->file_name);
                 }
 
-                $emailManager = new w2p_Output_EmailManager($this->_AppUI);
+                $emailManager = new w2p_Output_Email_Manager($this->_AppUI);
                 $body = $emailManager->getFileNotify($this);
                 $mail->Body($body, isset($GLOBALS['locale_char_set']) ? $GLOBALS['locale_char_set'] : '');
 
@@ -352,7 +352,7 @@ class CFile extends w2p_Core_BaseObject {
                     $mail->Subject($this->_AppUI->_('Project') . ': ' . $this->_project->project_name . '::' . $this->_task->task_name . '::' . $this->file_name);
                 }
 
-                $emailManager = new w2p_Output_EmailManager($this->_AppUI);
+                $emailManager = new w2p_Output_Email_Manager($this->_AppUI);
                 $body = $emailManager->getFileNotifyContacts($this);
                 $mail->Body($body, isset($GLOBALS['locale_char_set']) ? $GLOBALS['locale_char_set'] : '');
 

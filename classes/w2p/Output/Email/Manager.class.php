@@ -13,7 +13,7 @@
  * @author      D. Keith Casey, Jr. <caseydk@users.sourceforge.net>
  */
 
-class w2p_Output_EmailManager
+class w2p_Output_Email_Manager
 {
 
     public $from = '';

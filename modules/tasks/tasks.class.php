@@ -1045,7 +1045,7 @@ class CTask extends w2p_Core_BaseObject
         $q->clear();
 
         if (count($users)) {
-            $emailManager = new w2p_Output_EmailManager($this->_AppUI);
+            $emailManager = new w2p_Output_Email_Manager($this->_AppUI);
             $body = $emailManager->getTaskNotifyOwner($this);
 
             $mail = new w2p_Utilities_Mail();
@@ -1096,7 +1096,7 @@ class CTask extends w2p_Core_BaseObject
 
         foreach ($users as $row) {
             if ($mail_owner || $row['assignee_id'] != $this->_AppUI->user_id) {
-                $emailManager = new w2p_Output_EmailManager($this->_AppUI);
+                $emailManager = new w2p_Output_Email_Manager($this->_AppUI);
                 $body = $emailManager->getTaskNotify($this, $row, $projname);
 
                 $mail = new w2p_Utilities_Mail();
@@ -1196,7 +1196,7 @@ class CTask extends w2p_Core_BaseObject
             // Grab the subject from user preferences
             $prefix = $this->_AppUI->getPref('TASKLOGSUBJ');
 
-            $emailManager = new w2p_Output_EmailManager($this->_AppUI);
+            $emailManager = new w2p_Output_Email_Manager($this->_AppUI);
             $body = $emailManager->getTaskEmailLog($this, $log);
 
             $mail = new w2p_Utilities_Mail();
@@ -2196,7 +2196,7 @@ class CTask extends w2p_Core_BaseObject
 
         $subject = $prefix . ' ' . $msg . ' ' . $this->task_name . '::' . $project_name;
 
-        $emailManager = new w2p_Output_EmailManager($this->_AppUI);
+        $emailManager = new w2p_Output_Email_Manager($this->_AppUI);
         $body = $emailManager->getTaskRemind($this, $msg, $project_name, $contacts);
 
         $mail = new w2p_Utilities_Mail();

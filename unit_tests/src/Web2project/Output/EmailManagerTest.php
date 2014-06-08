@@ -27,7 +27,7 @@ class Web2project_Output_EmailManagerTest extends CommonSetup
     {
         parent::setUp();
 
-        $this->manager = new w2p_Output_EmailManager($this->_AppUI);
+        $this->manager = new w2p_Output_Email_Manager($this->_AppUI);
     }
 
     public function testGetEventNotify()

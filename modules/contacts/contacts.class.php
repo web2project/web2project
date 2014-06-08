@@ -309,7 +309,7 @@ class CContact extends w2p_Core_BaseObject
 
     public function notify()
     {
-        $emailManager = new w2p_Output_EmailManager($this->_AppUI);
+        $emailManager = new w2p_Output_Email_Manager($this->_AppUI);
         $body = $emailManager->getContactUpdateNotify(null, $this);
 
         $mail = new w2p_Utilities_Mail();

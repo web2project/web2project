@@ -311,7 +311,7 @@ function w2p_textarea($content)
 function notifyNewExternalUser($emailAddress, $username, $logname, $logpwd, $emailUtility = null)
 {
     global $AppUI;
-    $emailManager = new w2p_Output_EmailManager($AppUI);
+    $emailManager = new w2p_Output_Email_Manager($AppUI);
     $body = $emailManager->notifyNewExternalUser($logname, $logpwd);
 
     $mail = (!is_null($emailUtility)) ? $emailUtility : new w2p_Utilities_Mail();
@@ -324,7 +324,7 @@ function notifyNewExternalUser($emailAddress, $username, $logname, $logpwd, $ema
 function notifyNewUser($emailAddress, $username, $emailUtility = null)
 {
     global $AppUI;
-    $emailManager = new w2p_Output_EmailManager($AppUI);
+    $emailManager = new w2p_Output_Email_Manager($AppUI);
     $body = $emailManager->getNotifyNewUser($username);
 
     $mail = (!is_null($emailUtility)) ? $emailUtility : new w2p_Utilities_Mail();

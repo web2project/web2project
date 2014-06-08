@@ -513,7 +513,7 @@ class CProject extends w2p_Core_BaseObject
         $user->loadFull($this->project_owner);
 
         $subject = (intval($isNotNew)) ? $this->_AppUI->_('Project updated') . ': ' . $this->project_name : $this->_AppUI->_('Project submitted') . ': ' . $this->project_name;
-        $emailManager = new w2p_Output_EmailManager($this->_AppUI);
+        $emailManager = new w2p_Output_Email_Manager($this->_AppUI);
         $body = $emailManager->getProjectNotify($this, $isNotNew);
 
         $mail = new w2p_Utilities_Mail;
@@ -530,7 +530,7 @@ class CProject extends w2p_Core_BaseObject
 
         $users = CProject::getContacts($this->_AppUI, $this->project_id);
         if (count($users)) {
-            $emailManager = new w2p_Output_EmailManager($this->_AppUI);
+            $emailManager = new w2p_Output_Email_Manager($this->_AppUI);
             $body = $emailManager->getProjectNotify($this, $isNotNew);
 
             foreach ($users as $row) {

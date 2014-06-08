@@ -27,7 +27,7 @@ function is_task_in_gantt_arr($task)
 function notifyHR($address, $notUsed, $uaddress, $uusername, $logname, $notUsed2, $userid)
 {
     global $AppUI;
-    $emailManager = new w2p_Output_EmailManager($AppUI);
+    $emailManager = new w2p_Output_Email_Manager($AppUI);
     $body = $emailManager->notifyHR($uusername, $logname, $uaddress, $userid);
 
     $mail = new w2p_Utilities_Mail();
@@ -40,7 +40,7 @@ function notifyHR($address, $notUsed, $uaddress, $uusername, $logname, $notUsed2
 function notifyNewUserCredentials($address, $username, $logname, $logpwd)
 {
     global $AppUI;
-    $emailManager = new w2p_Output_EmailManager($AppUI);
+    $emailManager = new w2p_Output_Email_Manager($AppUI);
     $body = $emailManager->notifyNewUserCredentials($username, $logname, $logpwd);
 
     $mail = new w2p_Utilities_Mail();
@@ -3499,7 +3499,7 @@ function sendNewPass()
     $cur = $q->exec();
 
     if ($cur) {
-        $emailManager = new w2p_Output_EmailManager($AppUI);
+        $emailManager = new w2p_Output_Email_Manager($AppUI);
         $body = $emailManager->notifyPasswordReset($checkusername, $newpass);
 
         $m = new w2p_Utilities_Mail; // create the mail

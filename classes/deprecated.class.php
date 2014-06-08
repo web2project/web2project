@@ -461,3 +461,17 @@ class w2p_Controller_Permissions extends \Web2project\Actions\AddEditPermissions
         parent::__construct($object, $delete, $prefix, $successPath, $errorPath);
     }
 }
+
+/**
+ * @package     web2project\deprecated
+ * @deprecated  since version 4.0
+ */
+class w2p_Output_EmailManager extends w2p_Output_Email_Manager
+{
+    public function __construct(w2p_Core_CAppUI $AppUI = null)
+    {
+        trigger_error("w2p_Output_EmailManager has been deprecated in v4.0 and will be removed by v5.0. Please use w2p_Output_Email_Manager instead.", E_USER_NOTICE );
+
+        parent::__construct($AppUI);
+    }
+}
