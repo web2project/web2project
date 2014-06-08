@@ -1,9 +1,11 @@
 <?php
+namespace Web2project\Actions;
+
 /**
  * Class Permissions
  * @package Web2project\Controllers
  */
-class w2p_Controllers_Permissions extends w2p_Controllers_Base
+class AddEditPermissions extends AddEdit
 {
     public function process(\w2p_Core_CAppUI $AppUI, array $myArray)
     {
