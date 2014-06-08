@@ -1,4 +1,6 @@
 <?php
+namespace Web2project\Interfaces;
+
 /**
  * This is the Dispatcher used for cross-module communications and heavily
  * based on http://dustint.com/post/38/building-a-php-publish-subscribe-system
@@ -9,7 +11,7 @@
  * @author      Keith Casey (maintainer) <caseydk@sourceforge.net>
  */
 
-interface w2p_Interfaces_Listener
+interface Listener
 {
     /**
      * Accepts an event and does something with it

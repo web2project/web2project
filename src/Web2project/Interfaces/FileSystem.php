@@ -1,4 +1,6 @@
 <?php
+namespace Web2project\Interfaces;
+
 /**
  * Class w2p_FileSystem_Interface
  *
@@ -6,7 +8,7 @@
  *
  * @package     web2project\filesystem
  */
-interface w2p_Interfaces_Filesystem
+interface Filesystem
 {
     public function isWritable();
     public function move(CFile $file, $old_project_id, $actual_file_name);
