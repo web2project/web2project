@@ -5,7 +5,7 @@
  * @package     web2project\authenticators
  */
 
-class w2p_Authenticators_SQL extends w2p_Authenticators_Base
+class w2p_Authenticators_SQL extends \Web2project\Authenticators\Base
 {
     public $user_id;
     public $username;

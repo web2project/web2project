@@ -1,4 +1,6 @@
 <?php
+namespace Web2project\Authenticators;
+
 /**
  * This is the core of the authentication system. All other Authenticators
  *  should extend it.
@@ -14,7 +16,7 @@
  * @package     web2project\authenticators
  * @abstract
  */
-abstract class w2p_Authenticators_Base
+abstract class Base
 {
     protected $AppUI = null;
     protected $w2Pconfig = null;
@@ -27,7 +29,7 @@ abstract class w2p_Authenticators_Base
 
         $this->AppUI = $AppUI;
         $this->w2Pconfig = $w2Pconfig;
-        $this->query = new w2p_Database_Query;
+        $this->query = new \w2p_Database_Query;
     }
 
     /**
