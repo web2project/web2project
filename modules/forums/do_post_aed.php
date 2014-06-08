@@ -12,7 +12,7 @@ $successPath = ($delete) ? 'm=forums' : 'm=forums&a=viewer&forum_id='.
 $errorPath = 'm=forums&a=viewer&forum_id='.$message_forum.'&message_parent='.
         $message_parent.'&post_message=1';
 
-$controller = new w2p_Controllers_Base(
+$controller = new \Web2project\Actions\AddEdit(
                     new CForum_Message(), $delete, 'Message', $successPath, $errorPath
                   );
 

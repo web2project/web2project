@@ -10,7 +10,7 @@ $_POST['field_module'] = $module->mod_name;
 
 $delete = (int) w2PgetParam($_POST, 'del', 0);
 
-$controller = new w2p_Controllers_Base(
+$controller = new \Web2project\Actions\AddEdit(
                     new w2p_Core_CustomFieldManager(), $delete, 'Custom Fields', 'm=system&u=customfields', 'm=system&u=customfields&a=addedit'
                   );
 

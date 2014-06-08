@@ -5,7 +5,7 @@ if (!defined('W2P_BASE_DIR')) {
 
 $delete = (int) w2PgetParam($_POST, 'del', 0);
 
-$controller = new w2p_Controllers_Base(
+$controller = new \Web2project\Actions\AddEdit(
                     new CCompany(), $delete, 'Company', 'm=companies', 'm=companies&a=addedit'
                   );
 

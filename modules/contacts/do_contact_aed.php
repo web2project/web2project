@@ -9,7 +9,7 @@ $contact = new CContact();
 // TODO: I don't like this particular hack but it's better than using the raw POST within the class
 $contact->_contact_methods = empty($_POST['contact_methods']) ? array() : $_POST['contact_methods'];
 
-$controller = new w2p_Controllers_Base(
+$controller = new \Web2project\Actions\AddEdit(
                     $contact, $delete, 'Contact', 'm=contacts', 'm=contacts&a=addedit'
                   );
 

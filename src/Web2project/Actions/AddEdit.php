@@ -1,17 +1,13 @@
 <?php
+namespace Web2project\Actions;
+
 /**
- * Parent class to all the controllers
+ * This is the most common AddEdit Action and used by nearly every module throughout the core system.
  *
- * @package     web2project\controllers
- */
-/**
- * This is the most common Controller and used by nearly every module
- *  throughout the core system.
- *
- * @package     web2project\controllers
+ * @package     web2project\actions
  * @author      Keith Casey <caseydk@sourceforge.net>
  */
-class w2p_Controllers_Base
+class AddEdit
 {
     /** A boolean on whether or not this should delete */
     protected $delete = false;

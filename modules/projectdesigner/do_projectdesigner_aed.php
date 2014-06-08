@@ -6,7 +6,7 @@ if (!defined('W2P_BASE_DIR')) {
 $project_id = (int) w2PgetParam($_POST, 'project_id', 0);
 $url = 'm=projectdesigner&project_id=' . $project_id;
 
-$controller = new w2p_Controllers_Base(
+$controller = new \Web2project\Actions\AddEdit(
                     new CProjectDesigner(), false, 'Your workspace has been ', $url, $url
                   );
 
