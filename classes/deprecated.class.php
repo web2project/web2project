@@ -517,3 +517,31 @@ class smartsearch extends CSmartSearch {
         trigger_error("smartsearch has been deprecated in v3.0 and will be removed by v4.0. Please use CSmartSearch instead.", E_USER_NOTICE );
     }
 }
+
+/**
+ * @package     web2project\deprecated
+ * @deprecated  since version 4.0
+ */
+class w2p_Controller_Base extends \Web2project\Actions\AddEdit
+{
+    public function __construct($object, $delete, $prefix, $successPath, $errorPath)
+    {
+        trigger_error("w2p_Controller_Base has been deprecated in v4.0 and will be removed by v5.0. Please use \\Web2project\\Actions\\AddEdit instead.", E_USER_NOTICE );
+
+        parent::__construct($object, $delete, $prefix, $successPath, $errorPath);
+    }
+}
+
+/**
+ * @package     web2project\deprecated
+ * @deprecated  since version 4.0
+ */
+class w2p_Controller_Permissions extends \Web2project\Actions\AddEditPermissions
+{
+    public function __construct($object, $delete, $prefix, $successPath, $errorPath)
+    {
+        trigger_error("w2p_Controller_Permissions has been deprecated in v4.0 and will be removed by v5.0. Please use \\Web2project\\Actions\\AddEditPermissions instead.", E_USER_NOTICE );
+
+        parent::__construct($object, $delete, $prefix, $successPath, $errorPath);
+    }
+}
