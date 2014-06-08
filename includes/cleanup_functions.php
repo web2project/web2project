@@ -356,7 +356,7 @@ function __extract_from_showtask(&$arr, $level, $today_view, $listTable)
     $listTable->stageRowData($arr);
 
     $tmpTask = new CTask();
-    $tmpTask->load($arr['task_id']);
+    //$tmpTask->load($arr['task_id']);
     if (!$tmpTask->canAccess()) {
         return false;
     }
