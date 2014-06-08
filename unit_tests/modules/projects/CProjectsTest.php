@@ -815,18 +815,6 @@ $this->obj->overrideDatabase($this->mockDB);
     }
 
     /**
-     * Tests updating a projects status
-     *
-     * @expectedException PHPUnit_Framework_Error
-     */
-    public function testUpdateStatus()
-    {
-        CProject::updateStatus(null, 1, 2);
-        $xml_dataset = $this->createXMLDataSet($this->getDataSetPath().'projectsTestUpdateStatus.xml');
-        $this->assertTablesEqual($xml_dataset->getTable('projects'), $this->getConnection()->createDataSet()->getTable('projects'));
-    }
-
-    /**
      * Tests finding if project id passed has children
      */
     public function testHasChildProjectsWithArg()

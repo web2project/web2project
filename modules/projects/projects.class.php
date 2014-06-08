@@ -715,21 +715,6 @@ class CProject extends w2p_Core_BaseObject
         return $q->loadHashList();
     }
 
-    public static function updateStatus($AppUI = null, $projectId, $statusId)
-    {
-        trigger_error("CProject::updateStatus has been deprecated in v2.3 and will be removed by v4.0.", E_USER_NOTICE);
-
-        global $AppUI;
-
-        $perms = $AppUI->acl();
-        if ($perms->checkModuleItem('projects', 'edit', $projectId) && $projectId > 0 && $statusId >= 0) {
-            $project = new CProject();
-            $project->load($projectId);
-            $project->project_status = $statusId;
-            $project->store();
-        }
-    }
-
     public static function updateTaskCache($project_id, $task_id, $project_actual_end_date, $project_task_count)
     {
         $project_id = (int) $project_id;
@@ -742,23 +727,6 @@ class CProject extends w2p_Core_BaseObject
             $project->store();
 
             self::updatePercentComplete($project_id);
-        }
-    }
-
-    /**
-     * @deprecated
-     */
-    public static function updateTaskCount($projectId, $taskCount)
-    {
-        trigger_error("CProject::updateTaskCount has been deprecated in v2.3 and will be removed by v4.0. Please use CProject::updateTaskCache instead.", E_USER_NOTICE);
-
-        if ((int) $projectId) {
-            $project = new CProject();
-            $project->load($projectId);
-            $project->project_task_count = $taskCount;
-            $project->store();
-
-            self::updatePercentComplete($projectId);
         }
     }
 

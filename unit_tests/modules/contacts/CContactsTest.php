@@ -176,30 +176,6 @@ class CContactsTest extends CommonSetup
         $this->assertFalse($this->obj->isUser());
     }
 
-    /**
-     * @expectedException PHPUnit_Framework_Error
-     */
-    public function testIs_Alpha()
-    {
-        $this->assertTrue($this->obj->is_alpha(123));
-        $this->assertTrue($this->obj->is_alpha('123'));
-        $this->assertFalse($this->obj->is_alpha('monkey'));
-        $this->assertFalse($this->obj->is_alpha('3.14159'));
-        $this->assertFalse($this->obj->is_alpha(3.14159));
-    }
-
-    /**
-     * @expectedException PHPUnit_Framework_Error
-     */
-    public function testGetCompanyName()
-    {
-        $this->obj->contact_company = 1;
-        $this->assertEquals('UnitTestCompany',  $this->obj->getCompanyName());
-
-        $this->obj->contact_company = 2;
-        $this->assertEquals('CreatedCompany',  $this->obj->getCompanyName());
-    }
-
     public function testGetCompanyDetails()
     {
         $this->mockDB->stageHash(array('company_id' => 0, 'company_name' => ''));

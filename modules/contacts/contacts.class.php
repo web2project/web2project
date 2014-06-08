@@ -589,15 +589,6 @@ class CContact extends w2p_Core_BaseObject
     /**
      * @deprecated
      */
-    public function is_alpha($val)
-    {
-        trigger_error("is_alpha() has been deprecated in v2.3 and will be removed by v4.0. Please cast values with (int) instead.", E_USER_NOTICE);
-        return (is_int($val) || ctype_digit($val));
-    }
-
-    /**
-     * @deprecated
-     */
     public function getCompanyID()
     {
         trigger_error("getCompanyID() has been deprecated in v3.0 and will be removed by v4.0. Please just use the object property itself.", E_USER_NOTICE);
