@@ -41,18 +41,8 @@ if ($canEdit) {
 }
 $titleBlock->show();
 
-if ($canDelete) { ?>
-  <script language="javascript" type="text/javascript">
-    function delIt() {
-    	if (confirm( '<?php echo $AppUI->_('doDelete') . ' ' . $AppUI->_('Company') . '?'; ?>' )) {
-            $.post("?m=companies",
-                {dosql: "do_company_aed", del: 1, company_id: <?php echo $company_id; ?>},
-                window.location = "?m=companies"
-            );
-    	}
-    }
-  </script>
-<?php }
+$view = new w2p_Controllers_View($AppUI, 'Company');
+echo $view->renderDelete($company);
 
 $types = w2PgetSysVal('CompanyType');
 
