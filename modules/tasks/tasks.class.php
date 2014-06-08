@@ -816,15 +816,18 @@ class CTask extends w2p_Core_BaseObject
         $result = false;
         $this->clearErrors();
 
+        $taskclass = get_class($this);
+
         if ($this->canDelete()) {
             //load it before deleting it because we need info on it to update the parents later on
             $this->load($this->task_id);
 
+            $task = new $taskclass();
+            $task->overrideDatabase($this->_query);
+
             // delete children
             $childrenlist = $this->getChildren();
             foreach ($childrenlist as $child) {
-                $task = new CTask();
-                $task->overrideDatabase($this->_query);
                 $task->task_id = $child;
                 $task->delete($this->_AppUI);
             }
