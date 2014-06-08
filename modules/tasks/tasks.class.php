@@ -703,11 +703,15 @@ class CTask extends w2p_Core_BaseObject
         parent::hook_postStore();
     }
 
-    public function hook_postDelete()
+    protected function hook_postDelete()
     {
         $this->task_id = $this->_old_key;
         $this->task_project = $this->_project_id;
         $this->updateDynamics();
+
+        $last_task_data = $this->getLastTaskData($this->_project_id);
+        CProject::updateTaskCache(
+            $this->_project_id, $last_task_data['task_id'], $last_task_data['last_date'], $this->getTaskCount($this->_project_id));
 
         parent::hook_postDelete();
     }
@@ -857,10 +861,6 @@ class CTask extends w2p_Core_BaseObject
             }
 
             $result = parent::delete();
-
-            $last_task_data = $this->getLastTaskData($this->task_project);
-            CProject::updateTaskCache(
-                    $this->task_project, $last_task_data['task_id'], $last_task_data['last_date'], $this->getTaskCount($this->task_project));
         }
 
         return $result;
