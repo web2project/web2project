@@ -18,5 +18,5 @@ interface Listener
      *
      * @param Event $event    The event to process
      */
-    public function publish(w2p_System_Event $event);
+    public function publish(\w2p_System_Event $event);
 }

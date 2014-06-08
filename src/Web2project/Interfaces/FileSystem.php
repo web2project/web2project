@@ -11,10 +11,10 @@ namespace Web2project\Interfaces;
 interface Filesystem
 {
     public function isWritable();
-    public function move(CFile $file, $old_project_id, $actual_file_name);
+    public function move(\CFile $file, $old_project_id, $actual_file_name);
     public function duplicate($old_project_id, $actual_file_name, $AppUI);
-    public function moveTemp(CFile $file, $upload_info, $AppUI);
-    public function delete(CFile $file);
+    public function moveTemp(\CFile $file, $upload_info, $AppUI);
+    public function delete(\CFile $file);
     public function exists($project_id, $filename);
     public function read($project_id, $filename);
 }

@@ -1,4 +1,6 @@
 <?php
+namespace Web2project\Exceptions;
+
 /**
  * Class w2p_Exception_FileSystem
  *
@@ -8,4 +10,4 @@
  * @package     web2project\exceptions
  */
 
-class w2p_Exception_FileSystem extends Exception { }
+class FileSystem extends Exception { }
