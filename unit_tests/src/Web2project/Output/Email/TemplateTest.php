@@ -1,7 +1,5 @@
 <?php
 
-use Web2project\Output\Email\Template as EmailTemplate;
-
 /**
  * Class for testing Web2project\Output\EmailTemplate functionality
  *
@@ -28,7 +26,7 @@ class Web2project_Output_EmailTemplateTest extends CommonSetup
     {
         parent::setUp();
 
-        $this->template = new EmailTemplate();
+        $this->template = new w2p_Output_Email_Template();
     }
 
     public function testRender()

@@ -13,8 +13,6 @@
  * @author      D. Keith Casey, Jr. <caseydk@users.sourceforge.net>
  */
 
-use Web2project\Output\Email\Template as EmailTemplate;
-
 class w2p_Output_EmailManager
 {
 
@@ -31,7 +29,7 @@ class w2p_Output_EmailManager
             trigger_error('The w2p_Output_EmailManager constructor should receive $AppUI (an w2p_Core_CAppUI object) for proper usage.', E_USER_NOTICE);
         }
 
-        $this->templater = new EmailTemplate();
+        $this->templater = new w2p_Output_Email_Template();
 
         $this->_AppUI = $AppUI;
     }
