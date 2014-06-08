@@ -13,6 +13,8 @@
  *   screens in certain modules instead of all of them at once.
  */
 
+global $m;
+
 $page = (int) w2PgetParam($_GET, 'page', 1);
 $paginator = new w2p_Utilities_Paginator($items);
 $items = $paginator->getItemsOnPage($page);
