@@ -703,7 +703,7 @@ abstract class w2p_Core_BaseObject extends w2p_System_Event implements w2p_Inter
      */
     protected function hook_preDelete()
     {
-        $this->_old_key = $this->{$this->_tbl_key};
+        $this->_old_key = (int) $this->{$this->_tbl_key};
 
         return $this;
 
