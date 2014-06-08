@@ -52,19 +52,8 @@ if (canAdd('tasks')) {
 }
 $titleBlock->show();
 
-if ($canDelete) { ?>
-    <script language="javascript" type="text/javascript">
-        function delIt() {
-            if (confirm( '<?php echo $AppUI->_('doDelete') . ' ' . $AppUI->_('Project') . '?'; ?>' )) {
-                $.post("?m=projects",
-                    {dosql: "do_project_aed", del: 1, project_id: <?php echo $project_id; ?>},
-                    window.location = "?m=projects"
-                );
-            }
-        }
-    </script>
-<?php }
-
+$view = new w2p_Controllers_View($AppUI, 'Project');
+echo $view->renderDelete($project);
 ?>
 <script language="javascript" type="text/javascript">
 function expand_multiproject(id, table_name) {

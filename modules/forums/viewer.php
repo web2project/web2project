@@ -58,18 +58,8 @@ if ($canEdit) {
 $titleBlock->addCell(arraySelect($filters, 'f', 'size="1" class="text" onchange="document.filterFrm.submit();"', $f, true), '', '<form action="?m=forums&a=viewer&forum_id=' . $forum_id . '" method="post" name="filterFrm" accept-charset="utf-8">', '</form>');
 $titleBlock->show();
 
-if ($canDelete) { ?>
-    <script language="javascript" type="text/javascript">
-        function delIt() {
-            if (confirm( '<?php echo $AppUI->_('doDelete') . ' ' . $AppUI->_('Forum') . '?'; ?>' )) {
-                $.post("?m=forums",
-                    {dosql: "do_forum_aed", del: 1, forum_id: <?php echo $forum_id; ?>},
-                    window.location = "?m=forums"
-                );
-            }
-        }
-    </script>
-<?php }
+$view = new w2p_Controllers_View($AppUI, 'Forum');
+echo $view->renderDelete($forum);
 
 include $AppUI->getTheme()->resolveTemplate('forums/view');
 

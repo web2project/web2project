@@ -56,19 +56,9 @@ if ($canDelete) {
 }
 $titleBlock->show();
 
-if ($canDelete) { ?>
-    <script language="javascript" type="text/javascript">
-        function delIt() {
-            if (confirm( '<?php echo $AppUI->_('doDelete') . ' ' . $AppUI->_('Task') . '?'; ?>' )) {
-                $.post("?m=tasks",
-                    {dosql: "do_task_aed", del: 1, task_id: <?php echo $task_id; ?>},
-                    window.location = "?m=tasks"
-                );
-            }
-        }
-    </script>
-<?php } ?>
-
+$view = new w2p_Controllers_View($AppUI, 'Task');
+echo $view->renderDelete($obj);
+?>
 <script language="javascript" type="text/javascript">
 function updateTask() {
 	var f = document.editFrm;

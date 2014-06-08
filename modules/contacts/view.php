@@ -41,17 +41,7 @@ if ($canDelete) {
 }
 $titleBlock->show();
 
-if ($canDelete) { ?>
-    <script language="javascript" type="text/javascript">
-        function delIt() {
-            if (confirm( '<?php echo $AppUI->_('doDelete') . ' ' . $AppUI->_('Contact') . '?'; ?>' )) {
-                $.post("?m=contacts",
-                    {dosql: "do_contact_aed", del: 1, contact_id: <?php echo $contact_id; ?>},
-                    window.location = "?m=contacts"
-                );
-            }
-        }
-    </script>
-<?php }
+$view = new w2p_Controllers_View($AppUI, 'Contact');
+echo $view->renderDelete($contact);
 
 include $AppUI->getTheme()->resolveTemplate('contacts/view');

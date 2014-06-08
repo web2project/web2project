@@ -46,18 +46,8 @@ if ($canEdit) {
 }
 $titleBlock->show();
 
-if ($canDelete) { ?>
-    <script language="javascript" type="text/javascript">
-        function delIt() {
-            if (confirm( '<?php echo $AppUI->_('doDelete') . ' ' . $AppUI->_('Event') . '?'; ?>' )) {
-                $.post("?m=events",
-                    {dosql: "do_event_aed", del: 1, event_id: <?php echo $event_id; ?>},
-                    window.location = "?m=events"
-                );
-            }
-        }
-    </script>
-<?php }
+$view = new w2p_Controllers_View($AppUI, 'Event');
+echo $view->renderDelete($event);
 
 $types = w2PgetSysVal('EventType');
 

@@ -25,18 +25,8 @@ if ($canEdit) {
 }
 $titleBlock->show();
 
-if ($canDelete) { ?>
-    <script language="javascript" type="text/javascript">
-        function delIt() {
-            if (confirm( '<?php echo $AppUI->_('doDelete') . ' ' . $AppUI->_('Resource') . '?'; ?>' )) {
-                $.post("?m=resources",
-                    {dosql: "do_resource_aed", del: 1, resource_id: <?php echo $resource_id; ?>},
-                    window.location = "?m=resources"
-                );
-            }
-        }
-    </script>
-<?php }
+$view = new w2p_Controllers_View($AppUI, 'Resource');
+echo $view->renderDelete($obj);
 
 $types = w2PgetSysVal('ResourceTypes');
 $types[0] = 'Not Specified';
