@@ -3,15 +3,17 @@
 class w2p_Controllers_View
 {
     protected $AppUI  = null;
+    protected $object = null;
     protected $noun   = '';
     protected $action = '';
     protected $dosql  = '';
     protected $key    = '';
     protected $fields = '';
 
-    public function __construct(w2p_Core_CAppUI $AppUI, $noun)
+    public function __construct(w2p_Core_CAppUI $AppUI, w2p_Core_BaseObject $object, $noun)
     {
         $this->AppUI = $AppUI;
+        $this->object = $object;
         $this->noun = $noun;
 
         $this->action = '?m=' . w2p_pluralize(strtolower($noun));
@@ -19,11 +21,11 @@ class w2p_Controllers_View
         $this->key    = strtolower($noun) . '_id';
     }
 
-    public function renderDelete(w2p_Core_BaseObject $object)
+    public function renderDelete()
     {
         $output = '';
 
-        if ($object->canDelete()) {
+        if ($this->object->canDelete()) {
             $output = "<script language=\"javascript\" type=\"text/javascript\">function delIt()";
             $output .= "{if (confirm('" . $this->AppUI->_('doDelete') . ' ' . $this->noun . "?')){";
             $output .= 'document.frmDelete.submit();';
@@ -32,7 +34,7 @@ class w2p_Controllers_View
             $output .= '<input type="hidden" name="dosql" value="' . $this->dosql . '" />';
             $output .= '<input type="hidden" name="del" value="1" />';
             $output .= $this->fields;
-            $output .= '<input type="hidden" name="' . $this->key . '" value="' . $object->getId() . '" />';
+            $output .= '<input type="hidden" name="' . $this->key . '" value="' . $this->object->getId() . '" />';
             $output .= '</form>';
         }
 
