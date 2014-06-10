@@ -25,8 +25,8 @@ if ($canEdit) {
 }
 $titleBlock->show();
 
-$view = new w2p_Controllers_View($AppUI, 'Resource');
-echo $view->renderDelete($obj);
+$view = new w2p_Controllers_View($AppUI, $obj, 'Resource');
+echo $view->renderDelete();
 
 $types = w2PgetSysVal('ResourceTypes');
 $types[0] = 'Not Specified';

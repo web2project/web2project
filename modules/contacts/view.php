@@ -41,7 +41,7 @@ if ($canDelete) {
 }
 $titleBlock->show();
 
-$view = new w2p_Controllers_View($AppUI, 'Contact');
-echo $view->renderDelete($contact);
+$view = new w2p_Controllers_View($AppUI, $contact, 'Contact');
+echo $view->renderDelete();
 
 include $AppUI->getTheme()->resolveTemplate('contacts/view');

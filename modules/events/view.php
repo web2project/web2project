@@ -46,8 +46,8 @@ if ($canEdit) {
 }
 $titleBlock->show();
 
-$view = new w2p_Controllers_View($AppUI, 'Event');
-echo $view->renderDelete($event);
+$view = new w2p_Controllers_View($AppUI, $event, 'Event');
+echo $view->renderDelete();
 
 $types = w2PgetSysVal('EventType');
 

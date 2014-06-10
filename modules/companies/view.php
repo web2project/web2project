@@ -41,8 +41,8 @@ if ($canEdit) {
 }
 $titleBlock->show();
 
-$view = new w2p_Controllers_View($AppUI, 'Company');
-echo $view->renderDelete($company);
+$view = new w2p_Controllers_View($AppUI, $company, 'Company');
+echo $view->renderDelete();
 
 $types = w2PgetSysVal('CompanyType');
 

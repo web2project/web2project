@@ -34,11 +34,11 @@ if ($canEdit) {
 }
 $titleBlock->show();
 
-$view = new w2p_Controllers_View($AppUI, 'Department');
+$view = new w2p_Controllers_View($AppUI, $department, 'Department');
 $view->setDoSQL('do_dept_aed');
 $view->addField('dept_company', $department->dept_company);
 $view->setKey('dept_id');
-echo $view->renderDelete($department);
+echo $view->renderDelete();
 
 $types = w2PgetSysVal('DepartmentType');
 

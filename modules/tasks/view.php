@@ -56,8 +56,8 @@ if ($canDelete) {
 }
 $titleBlock->show();
 
-$view = new w2p_Controllers_View($AppUI, 'Task');
-echo $view->renderDelete($obj);
+$view = new w2p_Controllers_View($AppUI, $obj, 'Task');
+echo $view->renderDelete();
 ?>
 <script language="javascript" type="text/javascript">
 function updateTask() {

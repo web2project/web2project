@@ -58,8 +58,8 @@ if ($canEdit) {
 $titleBlock->addCell(arraySelect($filters, 'f', 'size="1" class="text" onchange="document.filterFrm.submit();"', $f, true), '', '<form action="?m=forums&a=viewer&forum_id=' . $forum_id . '" method="post" name="filterFrm" accept-charset="utf-8">', '</form>');
 $titleBlock->show();
 
-$view = new w2p_Controllers_View($AppUI, 'Forum');
-echo $view->renderDelete($forum);
+$view = new w2p_Controllers_View($AppUI, $forum, 'Forum');
+echo $view->renderDelete();
 
 include $AppUI->getTheme()->resolveTemplate('forums/view');
 

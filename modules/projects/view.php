@@ -52,8 +52,8 @@ if (canAdd('tasks')) {
 }
 $titleBlock->show();
 
-$view = new w2p_Controllers_View($AppUI, 'Project');
-echo $view->renderDelete($project);
+$view = new w2p_Controllers_View($AppUI, $project, 'Project');
+echo $view->renderDelete();
 ?>
 <script language="javascript" type="text/javascript">
 function expand_multiproject(id, table_name) {
