@@ -41,11 +41,11 @@ $table_rows = '';
 $userTZ = $AppUI->getPref('TIMEZONE');
 // create Date objects from the datetime fields
 $start_date = intval($log_start_date) ? new w2p_Utilities_Date($log_start_date, $userTZ) : new w2p_Utilities_Date(null, $userTZ);
-$start_date->convertTZ('GMT');
+$start_date->convertTZ('UTC');
 $end_date = intval($log_end_date) ? new w2p_Utilities_Date($log_end_date, $userTZ) : new w2p_Utilities_Date(null, $userTZ);
-$end_date->convertTZ('GMT');
+$end_date->convertTZ('UTC');
 $now = new w2p_Utilities_Date(null, $userTZ);
-$now->convertTZ('GMT');
+$now->convertTZ('UTC');
 
 if (!$log_start_date) {
 	$start_date->subtractSpan(new Date_Span('14,0,0,0'));
