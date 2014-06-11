@@ -17,7 +17,7 @@ class w2p_Core_CustomFields {
     public $order;
     public $published;
 
-    public $fields;
+    public $fields = array();
 
     public function __construct($m, $notUsed, $obj_id = null, $mode = 'edit', $published = 0) {
         $this->m = $m;
