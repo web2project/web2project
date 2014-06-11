@@ -293,8 +293,9 @@ for ($i = 0, $i_cmp = count($gantt_arr); $i < $i_cmp; $i++) {
                 $mile_date = $start->format($df . ' ' . $AppUI->getPref('TIMEFORMAT'));
                 $mile_date_stamp = strtotime($start_mile);
 
-                $today = date('m/d/Y H:i:s');
-                $today = new w2p_Utilities_Date($AppUI->formatTZAwareTime($today, '%Y-%m-%d %T'));
+                $today = new w2p_Utilities_Date();
+                $today->convertTZ($AppUI->getPref('TIMEZONE'));
+
                 $today_mile = $today->getDate();
                 $today_date = $today->format($df . ' ' . $AppUI->getPref('TIMEFORMAT'));
                 $today_date_stamp = strtotime($today_mile);
