@@ -356,7 +356,7 @@ function __extract_from_showtask(&$arr, $level, $today_view, $listTable)
     $listTable->stageRowData($arr);
 
     $tmpTask = new CTask();
-    //$tmpTask->load($arr['task_id']);
+    $tmpTask->setId($arr['task_id']);
     if (!$tmpTask->canAccess()) {
         return false;
     }
@@ -461,7 +461,7 @@ function __extract_from_showtask2($arr, $level, $today_view, $s, $m, $jsTaskId, 
         }
         $s .= '<img src="' . $image . '" width="16" height="12"  border="0" alt=""/>';
     }
-    if ($arr['task_description']) {
+    if ($arr['task_description'] && !$arr['task_milestone']) {
         $s .= w2PtoolTip('Task Description', substr($arr['task_description'], 0, 1000), true);
     }
 
@@ -473,7 +473,7 @@ function __extract_from_showtask2($arr, $level, $today_view, $s, $m, $jsTaskId, 
         $is_parent = false;
     }
     if ($arr['task_milestone'] > 0) {
-        $s .= '&nbsp;<a href="./index.php?m=tasks&amp;a=view&amp;task_id=' . $arr['task_id'] . '" ><b>' . $arr['task_name'] . '</b></a> <img src="' . w2PfindImage('icons/milestone.gif') . '" /></td>';
+        $s .= '&nbsp;<a href="./index.php?m=tasks&amp;a=view&amp;task_id=' . $arr['task_id'] . '" ><b>' . $arr['task_name'] . '</b></a>&nbsp;<img src="' . w2PfindImage('icons/milestone.gif') . '" />';
     } elseif ($arr['task_dynamic'] == '1' || $is_parent) {
         if (!$today_view) {
             $s .= $open_link;
@@ -486,7 +486,7 @@ function __extract_from_showtask2($arr, $level, $today_view, $s, $m, $jsTaskId, 
     } else {
         $s .= '&nbsp;<a href="./index.php?m=tasks&amp;a=view&amp;task_id=' . $arr['task_id'] . '" >' . $arr['task_name'] . '</a>';
     }
-    if ($arr['task_description']) {
+    if ($arr['task_description'] && !$arr['task_milestone']) {
         $s .= w2PendTip();
     }
     $s .= '</td>';
