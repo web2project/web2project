@@ -283,7 +283,7 @@ if ($do_report) {
 		$task->task_assigned_users = $task_users;
 		$task_list[$i] = $task;
 
-		$i += 1;
+		$i++;
 	}
 	$Ntasks = $i;
 

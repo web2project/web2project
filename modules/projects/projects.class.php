@@ -978,7 +978,7 @@ class CProject extends w2p_Core_BaseObject
     }
 
     public function find_proj_child(&$tarr, $parent, $level = 0) {
-        $level = $level + 1;
+        $level++;
         $n = count($tarr);
         for ($x = 0; $x < $n; $x++) {
             if ($tarr[$x]['project_parent'] == $parent && $tarr[$x]['project_parent'] != $tarr[$x]['project_id']) {

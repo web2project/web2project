@@ -168,7 +168,7 @@ if ($do_report) {
 		$task->bind($task_data);
 		$task_list[$i] = $task;
 		$task_assigned_users[$i] = $task->assignees($task_id);
-		$i += 1;
+		$i++;
 	}
 	$Ntasks = $i;
 
