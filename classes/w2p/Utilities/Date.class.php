@@ -294,7 +294,7 @@ class w2p_Utilities_Date extends Date {
                 $duration -= $firstAdj;
 
                 // we've already processed the first day; move by one day!
-                $this->addDays(1 * $sgn);
+                $this->addDays($sgn);
 
                 // make sure that we didn't move to a non-working day
                 ($sgn > 0) ? $this->next_working_day() : $this->prev_working_day();
@@ -325,7 +325,7 @@ class w2p_Utilities_Date extends Date {
         // proceeding the full days finally which is easy
         // Full days
         for ($i = 0; $i < $full_working_days; $i++) {
-            $this->addDays(1 * $sgn);
+            $this->addDays($sgn);
             if (!$this->isWorkingDay()) {
                 // just 'ignore' this non-working day
                 $full_working_days++;
@@ -429,7 +429,7 @@ class w2p_Utilities_Date extends Date {
             if ($start->isWorkingDay()) {
                 $wd++;
             }
-            $start->addDays(1 * $sgn);
+            $start->addDays($sgn);
         }
 
         return $wd;
