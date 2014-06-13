@@ -82,14 +82,14 @@ foreach ($rs as $c) {
 	}
 	$output .= '<tr>
                     <td class="item" width="20%"><a name="'.$c['config_name'].'"> </a>' . $AppUI->_($c['config_name'] . '_title') . '</td>' .
-                    '<td align="left" width="5%">' .
+                    '<td align="left" width="45%">' .
                         $entry . 
                         '<input class="button" type="hidden"  name="w2PcfgId[' . $c['config_name'] . ']" value="' . $c['config_id'] . '" />' .
 			        '</td>' .
                     '<td align="left" width="16">' .
                          w2PtoolTip($AppUI->_($c['config_name'] . '_title'), $tooltip, true) . w2PshowImage('log-info.gif') . w2PendTip() .
  			        '</td>
-                    <td align="left" width="100%">&nbsp;</td>
+                    <td align="left" width="30%">&nbsp;</td>
                 </tr>';
 
 }
