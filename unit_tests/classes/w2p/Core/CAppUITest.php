@@ -279,30 +279,6 @@ class w2p_Core_CAppUITest extends CommonSetup
     }
 
     /**
-     * Tests getting a system class
-     *
-     * @expectedException PHPUnit_Framework_Error
-     */
-    public function testGetSystemClassValid()
-    {
-        $AppUI = $this->_AppUI;
-
-        $this->assertEquals(W2P_BASE_DIR . '/classes/cdate.class.php', $AppUI->getSystemClass('cdate'));
-    }
-
-    /**
-     * Tests getting a system class when no class name is passed
-     *
-     * @expectedException PHPUnit_Framework_Error
-     */
-    public function testGetSystemClassNoName()
-    {
-        $AppUI = $this->_AppUI;
-
-        $this->assertNull($AppUI->getSystemClass());
-    }
-
-    /**
      * Test getting a library class
      *
      * @expectedException PHPUnit_Framework_Error
