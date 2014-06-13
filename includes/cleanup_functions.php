@@ -768,7 +768,7 @@ function displayTask($list, $task, $level, $display_week_hours, $fromPeriod, $to
     $tmp .= '<input type="checkbox" name="selected_task[' . $task->task_id . ']" value="' . $task->task_id . '" />';
     $tmp .= '</td>';
     $tmp .= $htmlHelper->createCell('user_priority', $task->userPriority);
-    $tmp .= '<td>';
+    $tmp .= '<td class="_name">';
 
     for ($i = 0; $i < $level; $i++) {
         $tmp .= '&#160';
