@@ -41,8 +41,8 @@ foreach ($_POST['pref_name'] as $name => $value) {
 				// if user preferences, reload them now
 				$AppUI->loadPrefs($AppUI->user_id);
 				$AppUI->setUserLocale();
-				include_once W2P_BASE_DIR . ('/locales/' . $AppUI->user_locale . '/locales.php');
-				include W2P_BASE_DIR . ('/locales/core.php');
+				include W2P_BASE_DIR . '/locales/' . $AppUI->user_locale . '/locales.php';
+				include W2P_BASE_DIR . '/locales/core.php';
 				$AppUI->setMsg('Preferences');
 			}
 			$AppUI->setMsg('updated', UI_MSG_OK, true);

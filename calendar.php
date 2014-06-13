@@ -15,8 +15,8 @@ $userId = $user->getIdByToken($token);
 $AppUI->loadPrefs($userId);
 $AppUI->user_id = $userId;
 $AppUI->setUserLocale();
-@include_once W2P_BASE_DIR . '/locales/' . $AppUI->user_locale . '/locales.php';
-include_once W2P_BASE_DIR . '/locales/core.php';
+include W2P_BASE_DIR . '/locales/' . $AppUI->user_locale . '/locales.php';
+include W2P_BASE_DIR . '/locales/core.php';
 
 $defaultTZ = w2PgetConfig('system_timezone', 'UTC');
 $defaultTZ = ('' == $defaultTZ) ? 'UTC' : $defaultTZ;

@@ -197,7 +197,7 @@ class w2p_Theme_TitleBlock {
         foreach ($crumb_array as $crumb_elem) {
             if (isset($crumb_elem['module']) && $this->_AppUI->isActiveModule($crumb_elem['module'])) {
                 $crumb_count++;
-                include_once ($crumb_elem['file'] . '.php');
+                include $crumb_elem['file'] . '.php';
             }
         }
         return $crumb_count;

@@ -4,7 +4,7 @@
  * @todo    remove declarations before the class
  */
 
-include_once (W2P_BASE_DIR . '/modules/projectdesigner/config.php');
+include W2P_BASE_DIR . '/modules/projectdesigner/config.php';
 
 class CProjectDesigner extends w2p_Core_BaseObject
 {

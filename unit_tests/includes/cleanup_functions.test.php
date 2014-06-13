@@ -17,7 +17,7 @@
  */
 
 // NOTE: This path is relative to Phing's build.xml, not this test.
-include_once 'unit_tests/CommonSetup.php';
+include 'unit_tests/CommonSetup.php';
 
 class Cleanup_Functions_Test extends PHPUnit_Framework_TestCase
 {
