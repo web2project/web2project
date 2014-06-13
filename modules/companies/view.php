@@ -15,7 +15,6 @@ if (!$company->load($company_id)) {
 
 $canEdit   = $company->canEdit();
 $canDelete = $company->canDelete();
-$deletable = $canDelete;            //TODO: this should be removed once the $deletable variable is removed
 
 $contact = new CContact();
 $canCreateContacts = $contact->canCreate();
@@ -35,7 +34,7 @@ if ($canEdit) {
 
 	$titleBlock->addCrumb('?m=companies&a=addedit&company_id=' . $company_id, 'edit this company');
 
-	if ($canDelete && $deletable) {
+	if ($canDelete) {
 		$titleBlock->addCrumbDelete('delete company', $deletable, $msg);
 	}
 }
