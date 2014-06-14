@@ -5,7 +5,6 @@ if (!defined('W2P_BASE_DIR')) {
 // @todo    convert to template
 
 // check permissions for this record
-$perms = &$AppUI->acl();
 $canRead = canView($m);
 
 if (!$canRead) {
