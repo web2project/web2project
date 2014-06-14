@@ -408,7 +408,7 @@ class CProject extends w2p_Core_BaseObject
 
         // Make sure project_short_name is the right size (issue for languages with encoded characters)
         if ('' == $this->project_short_name) {
-            $this->project_short_name = mb_substr($this->project_name, 0, 10);
+            $this->project_short_name = $this->project_name;
         }
         $this->project_short_name = mb_substr($this->project_short_name, 0, 10);
         if (empty($this->project_end_date)) {
