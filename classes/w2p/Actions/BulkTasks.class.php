@@ -42,7 +42,7 @@ class w2p_Actions_BulkTasks extends CTask
         $project_start_date = new w2p_Utilities_Date($project_start_date);
 
         $newTask = new w2p_Actions_ImportTasks();
-        $task_list = $newTask->loadAll('task_start_date', "task_project = " . $from_project_id);
+        $task_list = $newTask->loadAll('task_start_date', "task_represents_project = 0 AND task_project = " . $from_project_id);
         $first_task = array_shift($task_list);
 
         /**
