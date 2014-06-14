@@ -86,9 +86,9 @@ class w2p_Output_Email_Manager
 
         $this->_AppUI = (!is_null($AppUI)) ? $AppUI : $this->_AppUI;
 
-        $body  = "You have been invited to an event by user_display_name\n";
+        $body  = "You have been invited to an event by {{user_display_name}}\n";
         $body .= "However, either you or another intended invitee has a competing event\n";
-        $body .= "user_display_name has requested that you reply to this message\n";
+        $body .= "{{user_display_name}} has requested that you reply to this message\n";
         $body .= "and confirm if you can or can not make the requested time.\n\n";
 
         return $this->templater->render($body, $this->_AppUI);
@@ -144,21 +144,31 @@ class w2p_Output_Email_Manager
 
     public function getFileNotify(CFile $file)
     {
-        $body = $this->_AppUI->_('Project') . ': ' . $file->_project->project_name;
-        $body .= "\n" . $this->_AppUI->_('URL') . ':     ' . W2P_BASE_URL . '/index.php?m=projects&a=view&project_id=' . $file->_project->project_id;
+        $file->project_name = $file->_project->project_name;
+        $file->project_id = $file->_project->project_id;
+        $file->task_name = $file->_task->task_name;
+        $file->task_id = $file->_task->task_id;
+        $file->task_description = $file->_task->task_description;
+        $file->user_display_name = $this->_AppUI->user_display_name;
 
-        if (intval($file->_task->task_id) != 0) {
-            $body .= "\n\n" . $this->_AppUI->_('Task') . ':    ' . $file->_task->task_name;
-            $body .= "\n" . $this->_AppUI->_('URL') . ':     ' . W2P_BASE_URL . '/index.php?m=tasks&a=view&task_id=' . $file->_task->task_id;
-            $body .= "\n" . $this->_AppUI->_('Description') . ':' . "\n" . $file->_task->task_description;
+        unset($file->_project);
+        unset($file->_task);
+
+        $body = $this->_AppUI->_('Project') . ': {{project_name}}';
+        $body .= "\n" . $this->_AppUI->_('URL') . ':     ' . W2P_BASE_URL . '/index.php?m=projects&a=view&project_id={{project_id}}';
+
+        if ((int) $file->_task->task_id) {
+            $body .= "\n\n" . $this->_AppUI->_('Task') . ':    {{task_name}}';
+            $body .= "\n" . $this->_AppUI->_('URL') . ':     ' . W2P_BASE_URL . '/index.php?m=tasks&a=view&task_id={{task_id}}';
+            $body .= "\n" . $this->_AppUI->_('Description') . ':' . "\n{{task_description}}";
         }
-        $body .= "\n\nFile " . $file->file_name . ' was ' . $file->_message . ' by ' . $this->_AppUI->user_display_name;
+        $body .= "\n\nFile {{file_name}}" . ' was {{_message}}' . ' by {{user_display_name}}';
         if ($this->_message != 'deleted') {
-            $body .= "\n" . $this->_AppUI->_('URL') . ':     ' . W2P_BASE_URL . '/fileviewer.php?file_id=' . $file->file_id;
-            $body .= "\n\n" . $this->_AppUI->_('Description') . ':' . "\n" . $file->file_description;
+            $body .= "\n" . $this->_AppUI->_('URL') . ':     ' . W2P_BASE_URL . '/fileviewer.php?file_id={{file_id}}';
+            $body .= "\n\n" . $this->_AppUI->_('Description') . ':' . "\n{{file_description}}";
         }
 
-        return $body;
+        return $this->templater->render($body, $file);
     }
 
     public function getFileNotifyContacts(CFile $file)
@@ -168,29 +178,29 @@ class w2p_Output_Email_Manager
 
     public function getTaskNotify(CTask $task, $user, $projname)
     {
-        $body = $this->_AppUI->_('Project', UI_OUTPUT_RAW) . ":\t" . $projname . "\n";
-        $body .= $this->_AppUI->_('Task', UI_OUTPUT_RAW) . ":\t\t" . $task->task_name . "\n";
-        $body .= $this->_AppUI->_('Priority', UI_OUTPUT_RAW) . ":\t\t" . $task->task_priority . "\n";
-        $body .= $this->_AppUI->_('Progress', UI_OUTPUT_RAW) . ":\t\t" . $task->task_percent_complete . "%\n";
-        $tmp_tz = $this->_AppUI->getPref('TIMEZONE');
+        $task->project_name = $projname;
+
+        $body = $this->_AppUI->_('Project', UI_OUTPUT_RAW) . ":\t{{project_name}}\n";
+        $body .= $this->_AppUI->_('Task', UI_OUTPUT_RAW) . ":\t\t{{task_name}}\n";
+        $body .= $this->_AppUI->_('Priority', UI_OUTPUT_RAW) . ":\t\t{{task_priority}}\n";
+        $body .= $this->_AppUI->_('Progress', UI_OUTPUT_RAW) . ":\t\t{{task_percent_complete}}%\n";
+
         $user_prefs = $this->_AppUI->loadPrefs($user['assignee_id'], true);
-        $this->_AppUI->user_prefs['TIMEZONE'] = $user_prefs['TIMEZONE'];
-
         $start_date = new w2p_Utilities_Date($this->_AppUI->formatTZAwareTime($task->task_start_date, '%Y-%m-%d %T'));
-        $fmt_start_date = $start_date->format($user_prefs['DISPLAYFORMAT']);
+        $task->task_start_date = $start_date->format($user_prefs['DISPLAYFORMAT']);
         $end_date = new w2p_Utilities_Date($this->_AppUI->formatTZAwareTime($task->task_end_date, '%Y-%m-%d %T'));
-        $fmt_end_date = $end_date->format($user_prefs['DISPLAYFORMAT']);
+        $task->task_end_date = $end_date->format($user_prefs['DISPLAYFORMAT']);
 
+        //$tmp_tz = $this->_AppUI->getPref('TIMEZONE');
         $timezoneObj = new Date_TimeZone($user_prefs['TIMEZONE']);
-        $tzString = $timezoneObj->getShortName();
-        $this->_AppUI->user_prefs['TIMEZONE'] = $tmp_tz;
+        $task->timezone = $timezoneObj->getShortName();
 
         // Format dates using preferences but add T as Timezone abbreviation
-        $body .= $this->_AppUI->_('Start Date') . ":\t" . $fmt_start_date . " $tzString\n";
-        $body .= $this->_AppUI->_('Finish Date') . ":\t" . $fmt_end_date . " $tzString\n";
+        $body .= $this->_AppUI->_('Start Date') . ":\t{{task_start_date}} {{timezone}}\n";
+        $body .= $this->_AppUI->_('Finish Date') . ":\t{{task_end_date}} {{timezone}}\n";
 
-        $body .= $this->_AppUI->_('URL', UI_OUTPUT_RAW) . ":\t\t" . W2P_BASE_URL . '/index.php?m=tasks&a=view&task_id=' . $task->task_id . "\n\n";
-        $body .= $this->_AppUI->_('Description', UI_OUTPUT_RAW) . ': ' . "\n" . $task->task_description;
+        $body .= $this->_AppUI->_('URL', UI_OUTPUT_RAW) . ":\t\t" . W2P_BASE_URL . '/index.php?m=tasks&a=view&task_id={{task_id}}' . "\n\n";
+        $body .= $this->_AppUI->_('Description', UI_OUTPUT_RAW) . ': ' . "\n{{task_description}}";
         if ($user['creator_email']) {
             $body .= ("\n\n" . $this->_AppUI->_('Creator', UI_OUTPUT_RAW) . ':' . "\n" . $user['creator_name'] . ', ' . $user['creator_email']);
         }
@@ -199,35 +209,39 @@ class w2p_Output_Email_Manager
             $body .= "\n\n" . $comment;
         }
 
-        return $body;
+        return $this->templater->render($body, $task);
     }
 
     public function getTaskNotifyOwner(CTask $task)
     {
         $project = new CProject();
-        $projname = $project->load($task->task_project)->project_name;
+        $task->project_name = $project->load($task->task_project)->project_name;
+        $task->user_display_name = $this->_AppUI->user_display_name;
 
-        $body = $this->_AppUI->_('Project', UI_OUTPUT_RAW) . ':     ' . $projname . "\n";
-        $body .= $this->_AppUI->_('Task', UI_OUTPUT_RAW) . ':         ' . $task->task_name . "\n";
-        $body .= $this->_AppUI->_('URL', UI_OUTPUT_RAW) . ':         ' . W2P_BASE_URL . '/index.php?m=tasks&a=view&task_id=' . $task->task_id . "\n\n";
-        $body .= $this->_AppUI->_('Task Description', UI_OUTPUT_RAW) . ":\n" . $task->task_description . "\n";
-        $body .= $this->_AppUI->_('Creator', UI_OUTPUT_RAW) . ': ' . $this->_AppUI->user_display_name . "\n\n";
-        $body .= $this->_AppUI->_('Progress', UI_OUTPUT_RAW) . ': ' . $task->task_percent_complete . '%' . "\n\n";
+        $body = $this->_AppUI->_('Project', UI_OUTPUT_RAW) . ':     {{project_name}}' . "\n";
+        $body .= $this->_AppUI->_('Task', UI_OUTPUT_RAW) . ':         {{task_name}}' . "\n";
+        $body .= $this->_AppUI->_('URL', UI_OUTPUT_RAW) . ':         ' . W2P_BASE_URL . '/index.php?m=tasks&a=view&task_id={{task_id}}' . "\n\n";
+        $body .= $this->_AppUI->_('Task Description', UI_OUTPUT_RAW) . ":\n{{task_description}}\n";
+        $body .= $this->_AppUI->_('Creator', UI_OUTPUT_RAW) . ': {{user_display_name}}' . "\n\n";
+        $body .= $this->_AppUI->_('Progress', UI_OUTPUT_RAW) . ': {{task_percent_complete}}%' . "\n\n";
 //TODO: why is POST used here? Poor form - dkc 13 Nov 2011
         $body .= $this->_AppUI->_('Summary', UI_OUTPUT_RAW) . ': ' . "\n\n";
         $body .= w2PgetParam($_POST, 'task_log_description');
 
-        return $body;
+        return $this->templater->render($body, $task);
     }
 
     public function getTaskRemind(CTask $task, $msg, $project_name, $contacts)
     {
-        $body = $this->_AppUI->_('Task Due', UI_OUTPUT_RAW) . ': ' . $msg . "\n";
-        $body .= $this->_AppUI->_('Project', UI_OUTPUT_RAW) . ': ' . $project_name . "\n";
-        $body .= $this->_AppUI->_('Task', UI_OUTPUT_RAW) . ': ' . $task->task_name . "\n";
+        $task->task_due = $msg;
+        $task->project_name = $project_name;
+
+        $body = $this->_AppUI->_('Task Due', UI_OUTPUT_RAW) . ': {{task_due}}' . "\n";
+        $body .= $this->_AppUI->_('Project', UI_OUTPUT_RAW) . ': {{project_name}}' . "\n";
+        $body .= $this->_AppUI->_('Task', UI_OUTPUT_RAW) . ': {{task_name}}' . "\n";
         $body .= $this->_AppUI->_('Start Date', UI_OUTPUT_RAW) . ': START-TIME' . "\n";
         $body .= $this->_AppUI->_('Finish Date', UI_OUTPUT_RAW) . ': END-TIME' . "\n";
-        $body .= $this->_AppUI->_('URL', UI_OUTPUT_RAW) . ': ' . W2P_BASE_URL . '/index.php?m=tasks&a=view&task_id=' . $task->task_id . '&reminded=1' . "\n\n";
+        $body .= $this->_AppUI->_('URL', UI_OUTPUT_RAW) . ': ' . W2P_BASE_URL . '/index.php?m=tasks&a=view&task_id={{task_id}}&reminded=1' . "\n\n";
         $body .= $this->_AppUI->_('Resources', UI_OUTPUT_RAW) . ":\n";
 
         foreach ($contacts as $contact) {
@@ -235,60 +249,67 @@ class w2p_Output_Email_Manager
                 $body .= ($contact['contact_name'] . ' <' . $contact['contact_email'] . ">\n");
             }
         }
-        $body .= $this->_AppUI->_('Description', UI_OUTPUT_RAW) . ":\n" . $task->task_description . "\n";
+        $body .= $this->_AppUI->_('Description', UI_OUTPUT_RAW) . ":\n{{task_description}}\n";
 
-        return $body;
+        return $this->templater->render($body, $task);
     }
 
     public function getTaskEmailLog(CTask $task, CTask_Log $log)
     {
         $project = new CProject();
-        $projname = $project->load($task->task_project)->project_name;
+        $task->project_name = $project->load($task->task_project)->project_name;
 
         $contact = new CContact();
-        $creatorname = $contact->findContactByUserid($log->task_log_creator)->contact_display_name;
+        $task->creator_name = $contact->findContactByUserid($log->task_log_creator)->contact_display_name;
 
-        $body = $this->_AppUI->_('Project', UI_OUTPUT_RAW) . ': ' . $projname . "\n";
-        if ($task->task_parent != $task->task_id) {
-            $tmpTask = new CTask();
-            $taskname = $tmpTask->load($task->task_parent)->task_name;
-            $body .= $this->_AppUI->_('Parent Task', UI_OUTPUT_RAW) . ': ' . $taskname . "\n";
-        }
-        $body .= $this->_AppUI->_('Task', UI_OUTPUT_RAW) . ': ' . $task->task_name . "\n";
         $task_types = w2PgetSysVal('TaskType');
-        $body .= $this->_AppUI->_('Task Type', UI_OUTPUT_RAW) . ':' . $task_types[$task->task_type] . "\n";
-        $body .= $this->_AppUI->_('URL', UI_OUTPUT_RAW) . ': ' . W2P_BASE_URL . '/index.php?m=tasks&a=view&task_id=' . $task->task_id . "\n\n";
-        $body .= "------------------------\n\n";
-        $body .= $this->_AppUI->_('User', UI_OUTPUT_RAW) . ': ' . $creatorname . "\n";
-        $body .= $this->_AppUI->_('Hours', UI_OUTPUT_RAW) . ': ' . $log->task_log_hours . "\n";
-        $body .= $this->_AppUI->_('Summary', UI_OUTPUT_RAW) . ': ' . $log->task_log_name . "\n\n";
-        $body .= $log->task_log_description;
+        $task->task_type = $task_types[$task->task_type];
+        $task->task_log_hours = $log->task_log_hours;
+        $task->task_log_name = $log->task_log_name;
+        $task->task_log_description = $log->task_log_description;
 
         $user = new CUser();
-        $body .= "\n--\n" . $user->load($this->_AppUI->user_id)->user_signature;
+        $task->user_signature = $user->load($this->_AppUI->user_id)->user_signature;
 
-        return $body;
+        $body = $this->_AppUI->_('Project', UI_OUTPUT_RAW) . ': {{project_name}}' . "\n";
+        if ($task->task_parent != $task->task_id) {
+            $tmpTask = new CTask();
+            $task->parent_task_name = $tmpTask->load($task->task_parent)->task_name;
+            $body .= $this->_AppUI->_('Parent Task', UI_OUTPUT_RAW) . ': {{parent_task_name}}' . "\n";
+        }
+        $body .= $this->_AppUI->_('Task', UI_OUTPUT_RAW) . ': {{task_name}}' . "\n";
+        $body .= $this->_AppUI->_('Task Type', UI_OUTPUT_RAW) . ': {{task_type}}' . "\n";
+        $body .= $this->_AppUI->_('URL', UI_OUTPUT_RAW) . ': ' . W2P_BASE_URL . '/index.php?m=tasks&a=view&task_id={{task_id}}' . "\n\n";
+        $body .= "------------------------\n\n";
+        $body .= $this->_AppUI->_('User', UI_OUTPUT_RAW) . ': {{creator_name}}' . "\n";
+        $body .= $this->_AppUI->_('Hours', UI_OUTPUT_RAW) . ': {{task_log_hours}}' . "\n";
+        $body .= $this->_AppUI->_('Summary', UI_OUTPUT_RAW) . ': {{task_log_name}}' . "\n\n{{task_log_description}}";
+        $body .= "\n--\n{{user_signature}}";
+
+        return $this->templater->render($body, $task);
     }
 
     public function getProjectNotify(CProject $project, $isNotNew)
     {
+        $project->user_display_name = $this->_AppUI->user_display_name;
+
         $status = (intval($isNotNew)) ? 'Updated' : 'Created';
 
-        $body = $this->_AppUI->_('Project') . ': ' . $project->project_name . ' ' . $this->_AppUI->_('has been') . ' ' . $this->_AppUI->_($status);
+        $body = $this->_AppUI->_('Project') . ': {{project_name}} ' . $this->_AppUI->_('has been') . ' ' . $this->_AppUI->_($status);
         $body .= "\n" . $this->_AppUI->_('You can view the Project by clicking'). ':';
-        $body .= "\n" . $this->_AppUI->_('URL') . ':     ' . W2P_BASE_URL . '/index.php?m=projects&a=view&project_id=' . $project->project_id;
+        $body .= "\n" . $this->_AppUI->_('URL') . ':     ' . W2P_BASE_URL . '/index.php?m=projects&a=view&project_id={{project_id}}';
         $body .= "\n\n(" . $this->_AppUI->_('You are receiving this message because you are affiliated with this Project') . ")";
-        $body .= "\n\n" . $this->_AppUI->_('Description') . ':' . "\n $project->project_description \n\n";
+        $body .= "\n\n" . $this->_AppUI->_('Description') . ':' . "\n {{project_description}} \n\n";
 
         $body .= (intval($isNotNew)) ? $this->_AppUI->_('Updater') : $this->_AppUI->_('Creator');
-        $body .= ': ' . $this->_AppUI->user_display_name;
+        $body .= ': {{user_display_name}}';
 
         if ($project->_message == 'deleted') {
-            $body .= "\n\n" . $this->_AppUI->_('Project') . $project->project_name . $this->_AppUI->_('was deleted') . '.';
-            $body .= "\n" . $this->_AppUI->_('deleted by') . ': ' . $this->_AppUI->user_display_name;
+            $body .= "\n\n" . $this->_AppUI->_('Project') . '{{project_name}}' . $this->_AppUI->_('was deleted') . '.';
+            $body .= "\n" . $this->_AppUI->_('deleted by') . ': {{user_display_name}}';
         }
 
-        return $body;
+        return $this->templater->render($body, $project);
     }
 
     public function getProjectNotifyOwner(CProject $project, $isNotNew)

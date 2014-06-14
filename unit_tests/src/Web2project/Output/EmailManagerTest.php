@@ -208,7 +208,7 @@ class Web2project_Output_EmailManagerTest extends CommonSetup
         $task_log->task_log_hours = 2.0;
         $task_log->task_log_name = 'Something cool';
 
-        $target_body  = "Project: \nTask: Task Name\nTask Type:Administrative\n";
+        $target_body  = "Project: \nTask: Task Name\nTask Type: Administrative\n";
         $target_body .= "URL: " . W2P_BASE_URL . "/index.php?m=tasks&a=view&task_id=-1\n\n";
         $target_body .= "------------------------\n\nUser: \nHours: 2\nSummary: Something cool\n\n\n--\n";
 
