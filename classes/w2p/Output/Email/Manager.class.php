@@ -97,16 +97,16 @@ class w2p_Output_Email_Manager
         $contact->company_name = $company->company_name;
         $contact->user_display_name = $this->_AppUI->user_display_name;
 
-        $body  = "Dear contact_title contact_display_name,";
+        $body  = "Dear {{contact_title}} {{contact_display_name}},";
         $body .= "\n\nIt was very nice to visit you";
-        $body .= ($contact->contact_company) ? " and company_name." : ".";
+        $body .= ($contact->contact_company) ? " and {{company_name}}." : ".";
         $body .= " Thank you for all the time that you spent with me.";
         $body .= "\n\nI have entered the data from your business card into my contact database so that we may keep in touch.";
         $body .= " We have implemented a system which allows you to view the information that I've recorded and give you the opportunity to correct it or add information as you see fit. Please click on this link to view what I've recorded:";
-        $body .= "\n\n" . W2P_BASE_URL . "/updatecontact.php?updatekey=contact_updatekey";
+        $body .= "\n\n" . W2P_BASE_URL . "/updatecontact.php?updatekey={{contact_updatekey}}";
         $body .= "\n\nI assure you that the information will be held in strict confidence and will not be available to anyone other than me. I realize that you may not feel comfortable filling out the entire form so please supply only what you're comfortable with.";
         $body .= "\n\nThank you. I look forward to seeing you again, soon.";
-        $body .= "\n\nBest Regards,\nuser_display_name";
+        $body .= "\n\nBest Regards,\n{{user_display_name}}";
 
         return $this->templater->render($body, $contact);
     }
@@ -116,7 +116,7 @@ class w2p_Output_Email_Manager
         $this->_AppUI = (!is_null($AppUI)) ? $AppUI : $this->_AppUI;
 
         $file->user_display_name = $this->_AppUI->user_display_name;
-        $body = "\n\nFile file_name was _message by user_display_name";
+        $body = "\n\nFile {{file_name}} was {{_message}} by {{user_display_name}}";
 
         return $this->templater->render($body, $file);
     }
@@ -127,11 +127,11 @@ class w2p_Output_Email_Manager
         $message->message_from = $message_from;
 
         $body = $this->_AppUI->_('forumEmailBody', UI_OUTPUT_RAW);
-        $body .= "\n\n" . $this->_AppUI->_('Forum', UI_OUTPUT_RAW) . ': forum_name';
-        $body .= "\n" . $this->_AppUI->_('Subject', UI_OUTPUT_RAW) . ': message_title';
-        $body .= "\n" . $this->_AppUI->_('Message From', UI_OUTPUT_RAW) . ': message_from';
-        $body .= "\n\n" . W2P_BASE_URL . '/index.php?m=forums&a=viewer&forum_id=message_forum';
-        $body .= "\n\nmessage_body";
+        $body .= "\n\n" . $this->_AppUI->_('Forum', UI_OUTPUT_RAW) . ': {{forum_name}}';
+        $body .= "\n" . $this->_AppUI->_('Subject', UI_OUTPUT_RAW) . ': {{message_title}}';
+        $body .= "\n" . $this->_AppUI->_('Message From', UI_OUTPUT_RAW) . ': {{message_from}}';
+        $body .= "\n\n" . W2P_BASE_URL . '/index.php?m=forums&a=viewer&forum_id={{message_forum}}';
+        $body .= "\n\n{{message_body}}";
 
         return $this->templater->render($body, $message);
     }
@@ -305,10 +305,10 @@ class w2p_Output_Email_Manager
         $object->base_url = W2P_BASE_URL;
         $object->contact_name = $username;
 
-        $body = "Dear contact_name,\n\n";
+        $body = "Dear {{contact_name}},\n\n";
         $body .= "Congratulations! Your account has been activated by the administrator.\n";
         $body .= "Please use the login information provided earlier.\n\n";
-        $body .= "You may login at the following URL: base_url\n\n";
+        $body .= "You may login at the following URL: {{base_url}}\n\n";
         $body .= "If you have any difficulties or questions, please ask the administrator for help.\n";
         $body .= "Assuring you the best of our attention at all time.\n\n";
         $body .= "Our Warmest Regards,\n\n" . "The Support Staff.\n\n";
@@ -325,15 +325,16 @@ class w2p_Output_Email_Manager
         $object->contact_name = $username;
         $object->user_name = $logname;
         $object->email_address = $address;
+        $object->user_id = $userid;
 
-        $body = "A new user has signed up on company_name. Please go through the user details below:\n";
-        $body .= 'Name: contact_name' . "\n";
-        $body .= 'Username: user_name' . "\n";
-        $body .= 'Email: email_address' . "\n\n";
-        $body .= 'You may check this account at the following URL: base_url';
-        $body .= '/index.php?m=users&a=view&user_id=' . $userid . "\n\n";
+        $body = "A new user has signed up on {{company_name}}. Please go through the user details below:\n";
+        $body .= 'Name: {{contact_name}}' . "\n";
+        $body .= 'Username: {{user_name}}' . "\n";
+        $body .= 'Email: {{email_address}}' . "\n\n";
+        $body .= 'You may check this account at the following URL: {{base_url}}';
+        $body .= "/index.php?m=users&a=view&user_id={{user_id}}\n\n";
         $body .= "Thank you very much.\n\n";
-        $body .= "The company_name Taskforce.\n\n" . '****PLEASE KEEP THIS EMAIL FOR YOUR RECORDS****';
+        $body .= "The {{company_name}} Taskforce.\n\n" . '****PLEASE KEEP THIS EMAIL FOR YOUR RECORDS****';
 
         return $this->templater->render($body, $object);
     }
@@ -346,12 +347,12 @@ class w2p_Output_Email_Manager
         $object->log_name = $logname;
         $object->log_password = $logpwd;
 
-        $body = "You have signed up for a new account on company_name.\n\n";
+        $body = "You have signed up for a new account on {{company_name}}.\n\n";
         $body .= "Once the administrator approves your request, you will receive an email with confirmation.\n";
         $body .= "Your login information are below for your own record:\n\n";
-        $body .= 'Username: log_name' . "\n" . 'Password: log_password' . "\n\n";
+        $body .= 'Username: {{log_name}}' . "\n" . 'Password: {{log_password}}' . "\n\n";
         $body .= "You may login at the following URL: " . W2P_BASE_URL;
-        $body .= "\n\n" . "Thank you very much.\n\n" . 'The company_name';
+        $body .= "\n\n" . "Thank you very much.\n\n" . 'The {{company_name}}';
         $body .= " Support Staff.\n\n" . '****PLEASE KEEP THIS EMAIL FOR YOUR RECORDS****';
 
         return $this->templater->render($body, $object);
@@ -365,11 +366,11 @@ class w2p_Output_Email_Manager
         $object->log_name = $logname;
         $object->log_password = $logpwd;
 
-        $body = "user_name,\n\n";
+        $body = "{{user_name}},\n\n";
         $body .= "An access account has been created for you in our web2Project project management system.\n\n";
-        $body .= "You can access it here at base_url\n\n";
-        $body .= "Your username is: log_name\n";
-        $body .= "Your password is: log_password\n\n";
+        $body .= "You can access it here at {{base_url}}\n\n";
+        $body .= "Your username is: {{log_name}}\n";
+        $body .= "Your password is: {{log_password}}\n\n";
         $body .= "This account will allow you to see and interact with projects. If you have any questions please contact us.";
 
         return $this->templater->render($body, $object);
@@ -382,9 +383,9 @@ class w2p_Output_Email_Manager
         $object->user_name = $username;
         $object->password = $password;
 
-        $body = $this->_AppUI->_('sendpass0', UI_OUTPUT_RAW) . ' user_name ' .
-                $this->_AppUI->_('sendpass1', UI_OUTPUT_RAW) . ' base_url ' .
-                $this->_AppUI->_('sendpass2', UI_OUTPUT_RAW) . ' password ' .
+        $body = $this->_AppUI->_('sendpass0', UI_OUTPUT_RAW) . ' {{user_name}} ' .
+                $this->_AppUI->_('sendpass1', UI_OUTPUT_RAW) . ' {{base_url}} ' .
+                $this->_AppUI->_('sendpass2', UI_OUTPUT_RAW) . ' {{password}} ' .
                 $this->_AppUI->_('sendpass3', UI_OUTPUT_RAW);
 
         return $this->templater->render($body, $object);

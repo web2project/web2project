@@ -15,7 +15,7 @@ class w2p_Output_Email_Template
         $properties = get_object_vars($object);
 
         foreach($properties as $key => $value) {
-            $message = str_replace($key, $value, $message);
+            $message = str_replace('{{' . $key . '}}', $value, $message);
         }
         return $message;
     }

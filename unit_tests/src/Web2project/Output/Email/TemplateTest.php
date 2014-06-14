@@ -36,7 +36,7 @@ class Web2project_Output_EmailTemplateTest extends CommonSetup
         $object->company_id = '12345';
         $object->project_name = 'My Project';
 
-        $raw_template = "My task is named task_name but my project is named project_name. By the way, they're owned by company_id.";
+        $raw_template = "My task is named {{task_name}} but my project is named {{project_name}}. By the way, they're owned by {{company_id}}.";
         $target_output = "My task is named A task name but my project is named My Project. By the way, they're owned by 12345.";
 
         $actual_output = $this->template->render($raw_template, $object);
