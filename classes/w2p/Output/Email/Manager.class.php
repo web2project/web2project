@@ -34,31 +34,37 @@ class w2p_Output_Email_Manager
         $this->_AppUI = $AppUI;
     }
 
-    public function getEventNotify(CEvent $event, $clash, $users)
+    public function getEventNotify(CEvent $event, $notUsed, $users)
     {
-        $body = $this->_AppUI->_('Event') . ":\t" . $event->event_name . "\n";
-        $body .= $this->_AppUI->_('URL') . ":\t" . W2P_BASE_URL . "/index.php?m=events&a=view&event_id=" . $event->event_id . "\n";
-
         $date_format = $this->_AppUI->getPref('SHDATEFORMAT');
         $time_format = $this->_AppUI->getPref('TIMEFORMAT');
         $fmt = $date_format . ' ' . $time_format;
 
 //TODO: customize these date formats based on the *receivers'* timezone setting
         $start_date = new w2p_Utilities_Date($event->event_start_date);
+        $event->event_start_date = $start_date->format($fmt);
         $end_date = new w2p_Utilities_Date($event->event_end_date);
-        $body .= $this->_AppUI->_('Starts') . ":\t" . $start_date->format($fmt) . " GMT/UTC\n";
-        $body .= $this->_AppUI->_('Ends') . ":\t" . $end_date->format($fmt) . " GMT/UTC\n";
+        $event->event_end_date = $end_date->format($fmt);
 
         // Find the project name.
         if ($event->event_project) {
             $project = new CProject();
-            $project->load($event->event_project);
-            $body .= $this->_AppUI->_('Project') . ":\t" . $project->project_name . "\n";
+            $event->project_name = $project->load($event->event_project)->project_name;
+        }
+        $types = w2PgetSysVal('EventType');
+        $event->event_type = $this->_AppUI->_($types[$event->event_type]);
+
+        $body = $this->_AppUI->_('Event') . ":\t{{event_name}}\n";
+        $body .= $this->_AppUI->_('URL') . ":\t" . W2P_BASE_URL . "/index.php?m=events&a=view&event_id={{event_id}}\n";
+        $body .= $this->_AppUI->_('Starts') . ":\t{{event_start_date}} GMT/UTC\n";
+        $body .= $this->_AppUI->_('Ends') . ":\t{{event_end_date}} GMT/UTC\n";
+
+        // Find the project name.
+        if ($event->event_project) {
+            $body .= $this->_AppUI->_('Project') . ":\t{{project_name}}\n";
         }
 
-        $types = w2PgetSysVal('EventType');
-
-        $body .= $this->_AppUI->_('Type') . ":\t" . $this->_AppUI->_($types[$event->event_type]) . "\n";
+        $body .= $this->_AppUI->_('Type') . ":\t{{event_type}}\n";
         $body .= $this->_AppUI->_('Attendees') . ":\t";
 
         $body_attend = '';
@@ -66,9 +72,9 @@ class w2p_Output_Email_Manager
             $body_attend .= ((($body_attend) ? ', ' : '') . $user['contact_name']);
         }
 
-        $body .= $body_attend . "\n\n" . $event->event_description . "\n";
+        $body .= $body_attend . "\n\n{{event_description}}\n";
 
-        return $body;
+        return $this->templater->render($body, $event);
     }
 
     /**
