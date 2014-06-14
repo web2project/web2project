@@ -17,7 +17,7 @@ $inc = (int) w2PgetConfig('cal_day_increment', 15);
 
 $ampm = stristr($AppUI->getPref('TIMEFORMAT'), '%p');
 $hours = array();
-for ($current = $start; $current < $end + 1; $current++) {
+for ($current = 0; $current < 23 + 1; $current++) {
     $current_key = ($current < 10) ? '0' . $current : $current;
 
     if ($ampm) {
@@ -59,4 +59,17 @@ include $AppUI->getTheme()->resolveTemplate('tasks/addedit_dates');
 ?>
 <script language="javascript">
 	subForm.push(new FormDefinition(<?php echo $tab; ?>, document.datesFrm, checkDates, saveDates));
+
+    function colorHours(field) {
+        field.style.fontWeight = '';
+        field.style.backgroundColor = '';
+        if (parseInt(field.value) < <?php echo $start; ?>) {
+            field.style.fontWeight = "bold"
+            field.style.backgroundColor = "red";
+        }
+        if (parseInt(field.value) > <?php echo $end; ?>) {
+            field.style.fontWeight = "bold"
+            field.style.backgroundColor = "red";
+        }
+    }
 </script>
