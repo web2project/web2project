@@ -749,3 +749,8 @@ input.button, a div {
 .tasks-tasklog label, .preference label {
     width: 12em;
 }
+
+.email-templating .description {
+    height: 25em;
+    width: 40em;
+}
