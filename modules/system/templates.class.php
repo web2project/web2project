@@ -17,4 +17,15 @@ class CSystem_Template extends w2p_Core_BaseObject
     {
         parent::__construct('email_templates', 'email_template_id', 'system');
     }
+
+    public function loadTemplate($identifer, $language = 'en-us')
+    {
+        $q = $this->_getQuery();
+        $q->addTable($this->_tbl);
+        $q->addWhere("email_template_identifier = '$identifer'");
+        $q->addWhere("email_template_language = '$language'");
+        $hash = $q->loadHash();
+
+        $q->bindHashToObject($hash, $this);
+    }
 }
