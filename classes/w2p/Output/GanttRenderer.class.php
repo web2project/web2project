@@ -182,7 +182,7 @@ class w2p_Output_GanttRenderer {
         $this->rowMap[$identifier] = $this->rowCount;
         $bar->progress->Set(min(($progress / 100), 1));
 
-        $bar->title->SetFont(FF_CUSTOM, FS_NORMAL, 9);
+        $bar->title->SetFont(FF_CUSTOM, FS_NORMAL, 10);
         $bar->title->SetColor(bestColor('#ffffff', '#' . $barcolor, '#000000'));
         $bar->SetFillColor('#' . $barcolor);
         $bar->SetPattern(BAND_SOLID, '#' . $barcolor);
@@ -230,7 +230,7 @@ class w2p_Output_GanttRenderer {
         $tStartObj = new w2p_Utilities_Date($start);
 
         $bar = new MileStone($this->rowCount++, $columnValues, $start, $tStartObj->format($this->df));
-        $bar->title->SetFont(FF_CUSTOM, FS_NORMAL, 9);
+        $bar->title->SetFont(FF_CUSTOM, FS_NORMAL, 10);
         $bar->title->SetColor($color);
         $bar->mark->SetType(MARK_DIAMOND);
         $bar->mark->SetWidth(10);
