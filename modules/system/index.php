@@ -97,7 +97,8 @@ $titleBlock->show();
         </div>
         <div class="left">
             <span class="subtitle"><?php echo $AppUI->_('Language Support'); ?></span><br />
-            <a href="?m=system&a=translate"><?php echo $AppUI->_('Translation Management'); ?></a>
+            <a href="?m=system&a=translate"><?php echo $AppUI->_('Translation Management'); ?></a><br />
+            <a href="?m=system&u=templating"><?php echo $AppUI->_('Email Templates'); ?></a>
         </div>
     </div>
 
