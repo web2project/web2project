@@ -398,7 +398,7 @@ $ganttfile_count = count($ganttfile);
 for ($i=0; $i < $ganttfile_count; $i++) {
     $gf = $ganttfile[$i];
     $pdf->ezColumnsStart(array('num' =>1, 'gap' =>0));
-    $pdf->ezImage( $gf, 0, 765, 'width', 'left'); // No pad, width = 800px, resize = 'none' (will go to next page if image height > remaining page space)
+    $pdf->ezImage( $gf, 20, 765, 'width', 'left'); // No pad, width = 800px, resize = 'none' (will go to next page if image height > remaining page space)
     if ($showNoMilestones == '1') {
         $pdf->ezImage( $gpdfkeyNM, 0, 765, 'width', 'left');
     } else {
