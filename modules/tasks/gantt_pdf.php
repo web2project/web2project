@@ -347,7 +347,7 @@ foreach ($gtask_sliced as $gts) {
     }
     unset($gts);
 
-    $filename = W2P_BASE_DIR."/files/temp/GanttPDF".md5(time()).".png";
+    $filename = W2P_BASE_DIR."/files/temp/GanttPNG_".md5(time()).".png";
     // Prepare Gantt image and store in $filename
     $gantt->render(true, $filename);
     $outpfiles[] = $filename;
@@ -409,7 +409,7 @@ for ($i=0; $i < $ganttfile_count; $i++) {
 // End of project display
 // Create document body and pdf temp file
 $pdf->stopObject($page_header);
-$gpdffile = $temp_dir . '/GanttChart_'.md5(time()).'.pdf';
+$gpdffile = $temp_dir . '/GanttPDF_'.md5(time()).'.pdf';
 if ($fp = fopen($gpdffile, 'wb')) {
     fwrite($fp, $pdf->ezOutput());
     fclose($fp);
