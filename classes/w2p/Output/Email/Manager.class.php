@@ -332,14 +332,9 @@ class w2p_Output_Email_Manager
         $object->base_url = W2P_BASE_URL;
         $object->contact_name = $username;
 
-        $body = "Dear {{contact_name}},\n\n";
-        $body .= "Congratulations! Your account has been activated by the administrator.\n";
-        $body .= "Please use the login information provided earlier.\n\n";
-        $body .= "You may login at the following URL: {{base_url}}\n\n";
-        $body .= "If you have any difficulties or questions, please ask the administrator for help.\n";
-        $body .= "Assuring you the best of our attention at all time.\n\n";
-        $body .= "Our Warmest Regards,\n\n" . "The Support Staff.\n\n";
-        $body .= "****PLEASE KEEP THIS EMAIL FOR YOUR RECORDS****";
+        $template = new CSystem_Template();
+        $template->loadTemplate('new-account-created');
+        $body = $template->email_template_body;
 
         return $this->templater->render($body, $object);
     }
@@ -354,14 +349,9 @@ class w2p_Output_Email_Manager
         $object->email_address = $address;
         $object->user_id = $userid;
 
-        $body = "A new user has signed up on {{company_name}}. Please go through the user details below:\n";
-        $body .= 'Name: {{contact_name}}' . "\n";
-        $body .= 'Username: {{user_name}}' . "\n";
-        $body .= 'Email: {{email_address}}' . "\n\n";
-        $body .= 'You may check this account at the following URL: {{base_url}}';
-        $body .= "/index.php?m=users&a=view&user_id={{user_id}}\n\n";
-        $body .= "Thank you very much.\n\n";
-        $body .= "The {{company_name}} Taskforce.\n\n" . '****PLEASE KEEP THIS EMAIL FOR YOUR RECORDS****';
+        $template = new CSystem_Template();
+        $template->loadTemplate('new-account-requested');
+        $body = $template->email_template_body;
 
         return $this->templater->render($body, $object);
     }
