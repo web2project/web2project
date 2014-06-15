@@ -75,7 +75,7 @@ $form = new w2p_Output_HTML_FormHelper($AppUI);
         <p>
             <?php $form->showLabel('Actual Finish Date'); ?>
             <?php
-            if ($object_id > 0) {
+            if ($object_id) {
                 echo $actual_end_date ? '<a href="?m=tasks&a=view&task_id=' . $criticalTasks[0]['task_id'] . '">' : '';
                 echo $actual_end_date ? '<span ' . $style . '>' . $actual_end_date->format($df) . '</span>' : '-';
                 echo $actual_end_date ? '</a>' : '';
