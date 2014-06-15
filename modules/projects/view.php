@@ -24,6 +24,7 @@ if (in_array($project_id, $denied)) {
 	$AppUI->redirect(ACCESS_DENIED);
 }
 
+// get critical tasks (criteria: task_end_date)
 $criticalTasks = ($project_id > 0) ? $project->getCriticalTasks($project_id) : null;
 
 // create Date objects from the datetime fields
