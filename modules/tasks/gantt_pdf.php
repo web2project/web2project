@@ -104,10 +104,11 @@ foreach ($projects as $p) {
 }
 
 $width = 1600;
-$start_date = w2PgetParam($_GET, 'start_date', $start_min);
-$end_date = w2PgetParam($_GET, 'end_date', $end_max);
-$s1 = ($start_date) ? new w2p_Utilities_Date($start_date) : new w2p_Utilities_Date();
-$e1 = ($end_date) ? new w2p_Utilities_Date($end_date) : new w2p_Utilities_Date();
+$gantt_start_date = w2PgetParam($_GET, 'start_date', $start_min);
+$gantt_end_date = w2PgetParam($_GET, 'end_date', $end_max);
+
+$s1 = ($gantt_start_date) ? new w2p_Utilities_Date($gantt_start_date) : new w2p_Utilities_Date();
+$e1 = ($gantt_end_date) ? new w2p_Utilities_Date($gantt_end_date) : new w2p_Utilities_Date();
 
 //consider critical (concerning end date) tasks as well
 if ($caller != 'todo') {
@@ -122,22 +123,12 @@ $count = 0;
 * 	Prepare Gantt_chart loop
 */
 $gtask_sliced = array() ;
-$gtask_sliced = smart_slice( $gantt_arr, $showNoMilestones, $printpdfhr, $e1->dateDiff($s1) );
+$gtask_sliced = dumb_slice($gantt_arr, 30);// smart_slice( $gantt_arr, $showNoMilestones, $printpdfhr, $e1->dateDiff($s1) );
 $page = 0 ;					// Numbering of output files
 $outpfiles = array();		// array of output files to be returned to caller
-$taskcount = 0 ;
-// Create task_index array
-$ctflag = false ;
-if ( count( $gtask_sliced ) > 1 ) {
-    $gantt_arr_count = count($gantt_arr);
-    for ( $i = 0; $i < $gantt_arr_count; $i++ ) {
-        $task_index[$gantt_arr[$i][0]['task_id']] = $i+1 ;
-    }
-    $ctflag = true;
-}
 
 foreach ($gtask_sliced as $gts) {
-    if (!$start_date || !$end_date) {
+    if (!$gantt_start_date || !$gantt_end_date) {
         // find out DateRange from gant_arr
         $d_start = new w2p_Utilities_Date();
         $d_end = new w2p_Utilities_Date();
@@ -181,12 +172,12 @@ foreach ($gtask_sliced as $gts) {
             $columnSizes = array(180, 135, 40, 75, 75);
         } else {
             $columnNames = array('Task name', $field, 'Start', 'Finish');
-            $columnSizes = array(250, 60, 80, 80);
+            $columnSizes = array(250, 60, 90, 90);
         }
     }
     $gantt->setColumnHeaders($columnNames, $columnSizes);
     $gantt->setProperties(array('showhgrid' => true));
-    $gantt->setDateRange($start_date, $end_date);
+    $gantt->setDateRange($gantt_start_date, $gantt_end_date);
 
     reset($projects);
     foreach ($projects as $p) {
@@ -347,7 +338,8 @@ foreach ($gtask_sliced as $gts) {
     }
     unset($gts);
 
-    $filename = W2P_BASE_DIR."/files/temp/GanttPDF".md5(time()).".png";
+    $filename = W2P_BASE_DIR."/files/temp/GanttPNG_".md5(time())."_$page.png";
+
     // Prepare Gantt image and store in $filename
     $gantt->render(true, $filename);
     $outpfiles[] = $filename;
@@ -400,9 +392,9 @@ for ($i=0; $i < $ganttfile_count; $i++) {
     $pdf->ezColumnsStart(array('num' =>1, 'gap' =>0));
     $pdf->ezImage( $gf, 0, 765, 'width', 'left'); // No pad, width = 800px, resize = 'none' (will go to next page if image height > remaining page space)
     if ($showNoMilestones == '1') {
-        $pdf->ezImage( $gpdfkeyNM, 0, 765, 'width', 'left');
+        $pdf->ezImage( $gpdfkeyNM, 0, 500, 'width', 'center');
     } else {
-        $pdf->ezImage( $gpdfkey, 0, 765, 'width', 'left');
+        $pdf->ezImage( $gpdfkey, 0, 500, 'width', 'center');
     }
     $pdf->ezColumnsStop();
 }
