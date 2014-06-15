@@ -4,10 +4,8 @@ $titleBlock = new w2p_Theme_TitleBlock('Email Templating', 'rdf2.png', $m);
 $titleBlock->addCrumb('?m=system', 'system admin');
 $titleBlock->show();
 
-
-$q = new w2p_Database_Query();
-$q->addTable('email_templates');
-$templates = $q->loadHashList('email_template_id');
+$templateLoader = new CSystem_Template();
+$templates = $templateLoader->loadAll('email_template_language');
 
 ?><table class="tbl list modules"><?php
 

@@ -7,14 +7,11 @@ $titleBlock->addCrumb('?m=system', 'system admin');
 $titleBlock->addCrumb('?m=system&u=templating', 'template admin');
 $titleBlock->show();
 
-$q = new w2p_Database_Query();
-$q->addTable('email_templates');
-$q->addWhere('email_template_id = ' . $object_id);
-$template = $q->loadHash('email_template_id');
+$template = new CSystem_Template();
+$template->load($object_id);
 
-$body = $template['email_template_body'];
+$body = $template->email_template_body;
 $body = str_replace('\n', "\n", $body);
-//$body = nl2br($body);
 
 $form = new w2p_Output_HTML_FormHelper($AppUI);
 
@@ -33,15 +30,15 @@ $form = new w2p_Output_HTML_FormHelper($AppUI);
         <div class="column left">
             <p>
                 <?php $form->showLabel('Template Name'); ?>
-                <?php $form->showField('email_template_name', $template['email_template_name'], array('maxlength' => 255)); ?>
+                <?php $form->showField('email_template_name', $template->email_template_name, array('maxlength' => 255)); ?>
             </p>
             <p>
                 <?php $form->showLabel('Identifier'); ?>
-                <?php $form->showField('email_template_identifier', $template['email_template_identifier'], array('maxlength' => 255)); ?>
+                <?php $form->showField('email_template_identifier', $template->email_template_identifier, array('maxlength' => 255)); ?>
             </p>
             <p>
                 <?php $form->showLabel('Language'); ?>
-                <?php $form->showField('email_template_language', $template['email_template_language'], array('maxlength' => 255)); ?>
+                <?php $form->showField('email_template_language', $template->email_template_language, array('maxlength' => 255)); ?>
             </p>
             <?php
             $form->showCancelButton();
@@ -50,7 +47,7 @@ $form = new w2p_Output_HTML_FormHelper($AppUI);
         <div class="column right">
             <p>
                 <?php $form->showLabel('Subject'); ?>
-                <?php $form->showField('email_template_subject', $template['email_template_subject'], array('maxlength' => 255)); ?>
+                <?php $form->showField('email_template_subject', $template->email_template_subject, array('maxlength' => 255)); ?>
             </p>
             <p>
                 <?php $form->showLabel('Body'); ?>
