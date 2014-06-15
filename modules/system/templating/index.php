@@ -1,6 +1,7 @@
 <?php
 
 $titleBlock = new w2p_Theme_TitleBlock('Email Templating', 'rdf2.png', $m);
+$titleBlock->addButton('new template', '?m=system&u=templating&a=addedit');
 $titleBlock->addCrumb('?m=system', 'system admin');
 $titleBlock->show();
 
