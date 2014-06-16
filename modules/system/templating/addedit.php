@@ -13,6 +13,21 @@ $template->load($object_id);
 $body = $template->email_template_body;
 $body = str_replace('\n', "\n", $body);
 
+// read the installed languages
+$LANGUAGES = $AppUI->loadLanguages();
+$langlist = array();
+foreach ($LANGUAGES as $lang => $langinfo) {
+    $langlist[$lang] = $langinfo[1];
+}
+/*
+ * NOTE: While it may seem egocentric to force US English as the default language, without this line, the
+ *   language defaults to whatever is first in the dropdown.. which is Czech at the time of this writing.
+ *   Since English is more widespread, I don't feel bad. ~ caseysoftware/caseydk 16 June 2014
+ */
+$template->email_template_language = ('' == $template->email_template_language || 'en' == $template->email_template_language) ?
+    'en_US' : $template->email_template_language;
+
+
 $form = new w2p_Output_HTML_FormHelper($AppUI);
 
 ?>
@@ -38,7 +53,7 @@ $form = new w2p_Output_HTML_FormHelper($AppUI);
             </p>
             <p>
                 <?php $form->showLabel('Language'); ?>
-                <?php $form->showField('email_template_language', $template->email_template_language, array('maxlength' => 255)); ?>
+                <?php echo arraySelect($langlist, 'email_template_language', 'class=text size=1', $template->email_template_language, true); ?>
             </p>
             <?php
             $form->showCancelButton();
