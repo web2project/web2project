@@ -161,7 +161,7 @@ class w2p_Core_CustomFields {
                 if (isset($hash[$k])) {
                     $this->fields[$k]->setValue($hash[$k]);
                 } else {
-                    unset($this->fields[$k]);
+                    $this->fields[$k]->setValue(0);
                 }
             }
         }
