@@ -1,12 +1,30 @@
 <?php
 
+// read the installed languages
+$LANGUAGES = $AppUI->loadLanguages();
+$langlist = array();
+foreach ($LANGUAGES as $lang => $langinfo) {
+    $langlist[$lang] = $langinfo[1];
+}
+/*
+ * NOTE: While it may seem egocentric to force US English as the default language, without this line, the
+ *   language defaults to whatever is first in the dropdown.. which is Czech at the time of this writing.
+ *   Since English is more widespread, I don't feel bad. ~ caseysoftware/caseydk 16 June 2014
+ */
+$locale = w2PgetParam($_POST, 'locale', 'en_US');
+
+echo 'x' . $locale . 'x';
+
 $titleBlock = new w2p_Theme_TitleBlock('Email Templating', 'rdf2.png', $m);
 $titleBlock->addButton('new template', '?m=system&u=templating&a=addedit');
+$titleBlock->module = 'system&u=templating';
+$titleBlock->addFilterCell('Language', 'locale', $langlist, $locale);
+$titleBlock->module = 'system';
 $titleBlock->addCrumb('?m=system', 'system admin');
 $titleBlock->show();
 
 $templateLoader = new CSystem_Template();
-$templates = $templateLoader->loadAll('email_template_language');
+$templates = $templateLoader->loadTemplates($locale);
 
 ?><table class="tbl list modules"><?php
 
