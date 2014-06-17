@@ -28,7 +28,6 @@ $templates = $templateLoader->loadTemplates($locale);
 
 ?><table class="tbl list modules"><?php
 
-// todo: apply translations to header
 // todo: use our proper table generation
 echo '<tr><th></th><th>Template Name</th><th>Identifier</th><th>Language</th><th>Email Subject</th><th>Email Body</th></tr>';
 
@@ -50,7 +49,4 @@ foreach ($templates as $template)
 }
 ?></table><?php
 
-//todo: get a dropdown of the languages available
-//todo: provide a way to view templates for a specific language
-//todo: filter the templates by the language selected
 //todo: add english as the default for each template
