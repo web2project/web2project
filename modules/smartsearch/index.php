@@ -226,7 +226,7 @@ if (isset($_POST['keyword'])) {
   	<?php
     	$perms = &$AppUI->acl();
     	$reccount = 0;
-
+        $module_count = 0;
 		reset($moduleList);
         foreach ($moduleList as $module) {
     		if ($ssearch['mod_selection'] == '' || $ssearch['mod_' . $module['mod_directory']] == 'on') {
@@ -243,7 +243,11 @@ if (isset($_POST['keyword'])) {
                         echo $search->fetchResults($perms, $reccount);
                     }
                 }
+                $module_count++;
 			}
+        }
+        if (!$module_count) {
+            echo '<tr><td colspan="25"><b>' . $AppUI->_('No modules selected') . '</b></td></tr>';
         }
     	echo '<tr><td colspan="25"><b>' . $AppUI->_('Total records found') . ': ' . $reccount . '</b></td></tr>';
     ?>
