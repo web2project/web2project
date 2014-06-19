@@ -41,7 +41,7 @@ class w2p_Actions_BulkTasks extends CTask
 
         $project_start_date = new w2p_Utilities_Date($project_start_date);
 
-        $newTask = new w2p_Actions_ImportTasks();
+        $newTask = new w2p_Actions_BulkTasks();
         $task_list = $newTask->loadAll('task_start_date', "task_represents_project = 0 AND task_project = " . $from_project_id);
         $first_task = array_shift($task_list);
 
@@ -77,7 +77,7 @@ class w2p_Actions_BulkTasks extends CTask
             $orig_task['task_end_date'] =
                 $this->_AppUI->formatTZAwareTime($new_end_date->format(FMT_DATETIME_MYSQL),   '%Y-%m-%d %T');
 
-            $_newTask = new w2p_Actions_ImportTasks();
+            $_newTask = new w2p_Actions_BulkTasks();
             $_newTask->bind($orig_task);
             $_newTask->store();
 
