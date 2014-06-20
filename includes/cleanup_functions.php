@@ -90,18 +90,6 @@ function strEzPdf($text)
     return $text;
 }
 
-/**
-* 	smart_slice : recursive function used to slice the task array whlie
-* 	minimizing the potential number of task dependencies between two sub_arrays
-* 	Each sub_array is LENGTH elements long maximum
-* 	It is shorter if
-* 		- either a dynamic task is between indices LENGTH-3 and LENGTH-1 : in this
-* 		  case, the milestone is EXCLUDED from the lower sub_array
-* 		- or a milestone a MILESTONE is between indices LENGTH-2 and LENGTH-1 : in
-* 		  this case the milestone is INCLUDED in the lower sub_array
-*/
-
-
 function dumb_slice( $gantt_arr, $length = 25 )
 {
     $sliced_array = array();
