@@ -764,3 +764,9 @@ function clash_cancel(w2p_Core_CAppUI $AppUI)
 
     $AppUI->redirect('m=events');
 }
+
+/** @deprecated */
+function smart_slice($arr, $notUsed1, $notUsed2, $notUsed3)
+{
+    return dumb_slice($arr);
+}

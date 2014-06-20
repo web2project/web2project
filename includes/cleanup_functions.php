@@ -100,51 +100,7 @@ function strEzPdf($text)
 * 		- or a milestone a MILESTONE is between indices LENGTH-2 and LENGTH-1 : in
 * 		  this case the milestone is INCLUDED in the lower sub_array
 */
-function smart_slice($arr, $showNoMilestones, $notUsed, $day_diff)
-{
-    global $gtask_sliced;
 
-    $length = ($showNoMilestones) ? 26 : 25;
-    if ($day_diff < 90) {
-        $length = $length - 2;
-    } elseif ($day_diff >=90 && $day_diff < 1096) {
-        $length = $length;
-    } else {
-        $length++;
-    }
-
-    if ( count($arr) > $length ) {
-        $found = 0 ;
-        for ($i = $length-3 ; $i<$length ; $i++) {
-            if ($arr[$i][0]['task_dynamic'] != 0) {
-                $found = $i ;
-            }
-        }
-        if (!$found) {
-            for ($i = $length-1 ; $i > $length-3 ; $i--) {
-                if ($arr[$i][0]['task_milestone'] != 0) {
-                    $found = $i ;
-                }
-            }
-            if (!$found) {
-                if ($arr[$length][0]['task_milestone'] == 0) {
-                    $cut = $length ;						// No specific task => standard cut
-                } else {
-                    $cut = $length--;					// No orphan milestone
-                }
-            } else {
-                $cut = $found++;						// include found milestone in lower level array
-            }
-        } else {
-            $cut = $found ;									//include found dynamic task in higher level array
-        }
-        $gtask_sliced[] = array_slice( $arr, 0, $cut );
-    } else {
-        $gtask_sliced[] = $arr ;
-    }
-
-    return $gtask_sliced ;
-}
 
 function dumb_slice( $gantt_arr, $length = 25 )
 {
