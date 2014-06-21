@@ -47,7 +47,7 @@ $countries = array('' => $AppUI->_('(Select a Country)')) + w2PgetSysVal('Global
 ?>
 <script language="javascript" type="text/javascript">
     function submitIt() {
-        var form = document.changeclient;
+        var form = document.editFrm;
         if (form.company_name.value.length < 3) {
             alert( "<?php echo $AppUI->_('companyValidName', UI_OUTPUT_JS); ?>" );
             form.company_name.focus();

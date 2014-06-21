@@ -102,23 +102,23 @@ $htmlHelper = new w2p_Output_HTMLHelper($AppUI);
 ?>
 <script language="javascript" type="text/javascript">
 function submitIt() {
-	var f = document.uploadFrm;
+	var f = document.editFrm;
 	f.submit();
 }
 function cancelIt() {
-	var f = document.uploadFrm;
+	var f = document.editFrm;
 	f.cancel.value='1';
 	f.submit();
 }
 function delIt() {
 	if (confirm( '<?php echo $AppUI->_('filesDelete', UI_OUTPUT_JS); ?>' )) {
-		var f = document.uploadFrm;
+		var f = document.editFrm;
 		f.del.value='1';
 		f.submit();
 	}
 }
 function popTask() {
-	var f = document.uploadFrm;
+	var f = document.editFrm;
 	if (f.file_project.selectedIndex == 0) {
 		alert( '<?php echo $AppUI->_('Please select a project first!', UI_OUTPUT_JS); ?>' );
 	} else {
@@ -127,7 +127,7 @@ function popTask() {
 }
 
 function finalCI() {
-	var f = document.uploadFrm;
+	var f = document.editFrm;
 	if (f.final_ci.value == '1') {
 		f.file_checkout.value = 'final';
 		f.file_co_reason.value = 'Final Version';
@@ -139,7 +139,7 @@ function finalCI() {
 
 // Callback function for the generic selector
 function setTask( key, val ) {
-	var f = document.uploadFrm;
+	var f = document.editFrm;
 	if (val != '') {
 		f.file_task.value = key;
 		f.task_name.value = val;

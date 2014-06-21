@@ -58,7 +58,7 @@ $titleBlock->show();
 ?>
 <script language="javascript" type="text/javascript">
 function submitIt(){
-	var form = document.changeforum;
+	var form = document.editFrm;
 	if(form.forum_name.value.search(/^\s*$/) >= 0 ) {
 		alert("<?php echo $AppUI->_('forumName', UI_OUTPUT_JS); ?>");
 		form.forum_name.focus();
