@@ -172,6 +172,7 @@ td.item {
 /* Standard table 'spreadsheet' style */
 table.tbl {
     background: #aeaeae;
+    width: 100%;
 }
 
 table.tbl TH {

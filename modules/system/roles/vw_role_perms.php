@@ -100,7 +100,7 @@ function setPermItem( key, val ) {
 -->
 </script>
 
-<table cellpadding="2" cellspacing="0">
+<table class="tbl">
     <tr>
         <td width="50%" valign="top">
             <table class="tbl list">
