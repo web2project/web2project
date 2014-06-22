@@ -23,7 +23,7 @@
             </p>
             <p>
                 <?php $form->showLabel('Move to project'); ?>
-                <?php echo arraySelect($projects, 'new_task_project', 'size="1" class="text" id="medium" onchange="submitIt(document.editFrm)"', $task_project); ?> (<?php echo $AppUI->_('and its children'); ?>)
+                <?php echo arraySelect($projects, 'new_task_project', 'size="1" class="text" id="medium" onchange="submitIt(document.editFrm)"', 0); ?> (<?php echo $AppUI->_('and its children'); ?>)
             </p>
             <p>
                 <?php $form->showLabel('URL'); ?>
