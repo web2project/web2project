@@ -54,24 +54,24 @@ foreach ($users as $row) {
         <a href="./index.php?m=users&a=view&tab=1&user_id=<?php echo $row['user_id']; ?>"><img src="<?php echo w2PfindImage('obj/lock.gif'); ?>" alt="email" /></a>
     </td>
 	<?php if (w2PgetParam($_REQUEST, 'tab', 0) == 0) { ?>
-	<td nowrap="nowrap">
-	       <?php
-           $user_logs = __extract_from_vw_usr($row);
+	    <td nowrap="nowrap">
+        <?php
+        $user_logs = __extract_from_vw_usr($row);
 
 		if ($user_logs) {
 			foreach ($user_logs as $row_log) {
 				if ($row_log['online'] == '1') {
-					echo '<span style="color: green">' . $row_log['hours'] . ' ' . $AppUI->_('hrs.') . '( ' . $row_log['idle'] . ' ' . $AppUI->_('hrs.') . ' ' . $AppUI->_('idle') . ') - ' . $AppUI->_('Online');
+					echo $row_log['hours'] . ' ' . $AppUI->_('hrs.') . '( ' . $row_log['idle'] . ' ' . $AppUI->_('hrs.') . ' ' . $AppUI->_('idle') . ') - ' . $AppUI->_('Online');
 				} else {
-					echo '<span style="color: red">' . $AppUI->_('Offline');
+					echo $AppUI->_('Offline');
 				}
 			}
 		} else {
-			echo '<span style="color: grey">' . $AppUI->_('Never Visited');
+			echo $AppUI->_('Never Visited');
 		}
-		echo '</span>';
-	} ?>
-	</td>
+	    ?>
+	    </td>
+       <?php } ?>
 	<td width="20%">
 		<a href="mailto:<?php echo $row['contact_email']; ?>"><img src="<?php echo w2PfindImage('obj/email.gif'); ?>" alt="email" /></a>
         <?php echo $row['contact_display_name']; ?>
