@@ -186,7 +186,7 @@ $spercent = arrayMerge(array('' => '('.$AppUI->_('Progress').')'), $percent);
             <th><?php echo $AppUI->_('Parent'); ?>&nbsp;</th>
             <td>
                 <select name='bulk_task_parent' class='text'>
-                    <option value=''>(<?php echo $AppUI->_('Task Parent'); ?>)</option>
+                    <option value='-1'>(<?php echo $AppUI->_('Task Parent'); ?>)</option>
                     <option value='0'>(<?php echo $AppUI->_('Reset to Self Task'); ?>)</option>
                     <?php echo $task_parent_options; ?>
                 </select>

@@ -135,7 +135,7 @@ if (is_array($selected) && count($selected)) {
         }
 
         //Action: Change parent
-        if ($bulk_task_parent) {
+        if ($bulk_task_parent > -1) {
             $upd_task->task_parent = $bulk_task_parent;
             $result = $upd_task->store();
         }
