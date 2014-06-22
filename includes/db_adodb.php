@@ -22,10 +22,10 @@ $connection->connect(w2PgetConfig('dbhost'), w2PgetConfig('dbname'), w2PgetConfi
 
 $charset = w2PgetConfig('dbchar', 'utf8');
 /** This explicitly sets the character set of the connection. */
-//if ('mysql' == w2PgetConfig('dbtype') && '' != $charset) {
-//    $sql = "SET NAMES $charset";
-//    $db->Execute($sql);
-//}
+if ('mysql' == w2PgetConfig('dbtype') && '' != $charset) {
+    $sql = "SET NAMES $charset";
+    $db->Execute($sql);
+}
 
 /*
 * Having successfully established the database connection now,
