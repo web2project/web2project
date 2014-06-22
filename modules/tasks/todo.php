@@ -95,7 +95,7 @@ for ($j = 0, $j_cmp = count($tasks); $j < $j_cmp; $j++) {
 	}
 }
 
-$priorities = array('1' => 'high', '0' => 'normal', '-1' => 'low');
+$priorities = w2PgetSysval('TaskPriority');
 $durnTypes = w2PgetSysVal('TaskDurationType');
 
 if ('todo' == $a) {

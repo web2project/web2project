@@ -4241,6 +4241,8 @@ function __extract_from_listtasks($userFilter, $AppUI, $proj)
  */
 function __extract_from_tasks_todo($selected, $task_priority)
 {
+    $priorities = w2PgetSysval('TaskPriority');
+
     $q = new w2p_Database_Query;
     foreach ($selected as $key => $val) {
         if ($task_priority == 'c') {
@@ -4253,17 +4255,16 @@ function __extract_from_tasks_todo($selected, $task_priority)
                 // delete task
                 $q->setDelete('tasks');
                 $q->addWhere('task_id=' . (int) $val);
-            } else
-                if ($task_priority > -2 && $task_priority < 2) {
-                    // set priority
-                    $q->addTable('tasks');
-                    $q->addUpdate('task_priority', $task_priority);
-                    $q->addWhere('task_id=' . (int) $val);
-                }
+            } else {
+                $task_priority = min($task_priority, max(array_keys($priorities)));
+                $task_priority = max($task_priority, min(array_keys($priorities)));
+
+                $q->addTable('tasks');
+                $q->addUpdate('task_priority', $task_priority);
+                $q->addWhere('task_id=' . (int) $val);
+            }
         }
         $q->exec();
-        echo db_error();
-        $q->clear();
     }
 }
 
