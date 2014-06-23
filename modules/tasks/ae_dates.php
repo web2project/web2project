@@ -31,7 +31,7 @@ for ($current = $start; $current < $end + 1; $current++) {
 
 $minutes = array();
 $minutes['00'] = '00';
-for ($current = 0 + $inc; $current < 60; $current += $inc) {
+for ($current = $inc; $current < 60; $current += $inc) {
 	$minutes[$current] = $current;
 }
 

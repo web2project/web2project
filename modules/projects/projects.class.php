@@ -803,7 +803,7 @@ class CProject extends w2p_Core_BaseObject
         $q->addTable('tasks');
         $q->addQuery('ROUND(SUM(task_log_hours),2)');
         $q->addWhere('task_log_task = task_id AND task_project = ' . $project_id);
-        $worked_hours = 0 + $q->loadResult();
+        $worked_hours =  floatval($q->loadResult());
         $worked_hours = rtrim($worked_hours, '.');
         $q->clear();
 
