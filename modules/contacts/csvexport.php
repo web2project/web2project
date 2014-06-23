@@ -49,7 +49,7 @@ $text .= sprintf("%s", "\"User 1\",\"User 2\",\"User 3\",\"User 4\",\"Web Page\"
 $custom_fields = w2p_Core_CustomFields::getCustomFieldList('contacts');
 
 foreach ($custom_fields as $f) {
-	$text .= sprintf("%s", "\"$f[field_description]\",");
+	$text .= sprintf("%s", "\"$f['field_description']\",");
 }
 $text .= sprintf("%s\r\n", "");
 
