@@ -2114,7 +2114,7 @@ class CTask extends w2p_Core_BaseObject
         // Find the end date of this task, then subtract the required number of days.
         $date = new w2p_Utilities_Date($this->task_end_date);
         $today = new w2p_Utilities_Date(date('Y-m-d'));
-        if (w2p_Utilities_Date::compare($date, $today) < 0) {
+        if ($date->compare($date, $today) < 0) {
             $start_day = time();
         } else {
             $start_day = $date->getDate(DATE_FORMAT_UNIXTIME);
@@ -2172,7 +2172,7 @@ class CTask extends w2p_Core_BaseObject
         $expires = new w2p_Utilities_Date($this->task_end_date);
         $now = new w2p_Utilities_Date();
         $diff = $expires->dateDiff($now);
-        $diff *= w2p_Utilities_Date::compare($expires, $now);
+        $diff *= $expires->compare($expires, $now);
         $prefix = $this->_AppUI->_('Task Due', UI_OUTPUT_RAW);
         if ($diff == 0) {
             $msg = $this->_AppUI->_('TODAY', UI_OUTPUT_RAW);
