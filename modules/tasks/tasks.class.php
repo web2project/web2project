@@ -2137,7 +2137,7 @@ class CTask extends w2p_Core_BaseObject
      * @return  mixed   true, dequeue event, false, event stays in queue.
      * -1, event is destroyed.
      */
-    public function remind($notUsed = null, $notUsed2 = null, $id, $owner, $notUsed = null)
+    public function remind($notUsed = null, $notUsed2 = null, $id, $owner, $notUsed3 = null)
     {
         // At this stage we won't have an object yet
         if (!$this->load($id)) {
