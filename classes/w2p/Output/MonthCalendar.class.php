@@ -33,10 +33,6 @@ class w2p_Output_MonthCalendar {
     public $callback;
 
     /**
-     @var boolean Show the heading */
-    public $showHeader;
-
-    /**
      @var boolean Show the previous/next month arrows */
     public $showArrows;
 
