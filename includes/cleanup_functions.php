@@ -422,7 +422,7 @@ function __extract_from_showtask2($arr, $level, $today_view, $s, $m, $jsTaskId, 
         $s .= w2PtoolTip('Task Description', substr($arr['task_description'], 0, 1000), true);
     }
 
-    if (isset($arr['children']) && $arr['children']) {
+    if (isset($arr['task_nr_of_children']) && $arr['task_nr_of_children']) {
         $is_parent = true;
     } else {
         $is_parent = false;
