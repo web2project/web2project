@@ -18,7 +18,7 @@ class w2p_Core_CustomFieldText extends w2p_Core_CustomField
                 $html .= '<input type="text" class="text" name="' . $this->fieldName() . '" value="' . $this->charValue() . '" ' . $this->fieldExtraTags() . ' />';
                 break;
             case 'view':
-                $html .= $this->charValue();
+                $html .= '&nbsp;' . $this->charValue();
                 break;
         }
         return $html;
