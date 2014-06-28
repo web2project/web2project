@@ -128,8 +128,7 @@ if (!$project_id) {
 
 	$canDeleteProject = $obj->canDelete($msg, $project_id);
 
-	// load the record data
-	$obj->loadFull(null, $project_id);
+	$obj->load($project_id);
 
 	if (!$obj) {
 		$AppUI->setMsg('Project');
@@ -144,15 +143,8 @@ if (!$project_id) {
 	$titleBlock->addCrumb('?m=' . $m, 'select another project');
 	$titleBlock->addCrumb('?m=projects&a=view&bypass=1&project_id=' . $project_id, 'normal view project');
 
-	if ($canAddProjects) {
-		$titleBlock->addCell();
-        $titleBlock->addButton('New project', '?m=projects&a=addedit');
-    }
+    $titleBlock->addButton('new link', '?m=links&a=addedit&project_id=' . $project_id);
 
-	if ($canAddTasks) {
-		$titleBlock->addCell();
-        $titleBlock->addButton('New task', '?m=tasks&a=addedit&task_project=' . $project_id);
-	}
 	if ($canEditProject) {
 		$titleBlock->addCell();
         $titleBlock->addButton('New event', '?m=events&a=addedit&event_project=' . $project_id);
@@ -164,6 +156,11 @@ if (!$project_id) {
 			$titleBlock->addCrumbDelete('delete project', $canDelete, $msg);
 		}
 	}
+    if ($canAddTasks) {
+        $titleBlock->addCell();
+        $titleBlock->addButton('New task', '?m=tasks&a=addedit&task_project=' . $project_id);
+    }
+
 	$titleBlock->addCell();
 	$titleBlock->addCell(w2PtoolTip($m, 'print project') . '<a href="javascript: void(0);" onclick ="window.open(\'index.php?m=projectdesigner&a=printproject&dialog=1&suppressHeaders=1&project_id=' . $project_id . '\', \'printproject\',\'width=1200, height=600, menubar=1, scrollbars=1\')">
       		<img src="' . w2PfindImage('printer.png') . '" />
