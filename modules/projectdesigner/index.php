@@ -431,27 +431,27 @@ function calcDuration(f, start_date, end_date, duration_fld, durntype_fld) {
 	<input type="hidden" name="project_id" value="<?php echo $project_id; ?>" />
 </form>
 
-<table class="std view">
-<tr>
-	<td style="border: outset #d1d1cd 1px; background-color:#<?php echo $obj->project_color_identifier; ?>" colspan="2" class="data _identifier">
-        <a href="javascript: void(0);" name="fp" style="display:block" onclick="expand_collapse('project', 'tblProjects');update_workspace('project');">
-            <div class="left" style="color: <?php echo bestColor($obj->project_color_identifier); ?>; font-weight: bold; padding-top: 2px;"><?php echo $AppUI->_('Project') . ': ' . $obj->project_name; ?></div>
-            <div class="right">
-                <img id="project_expand" src="<?php echo w2PfindImage('icons/expand.gif', $m); ?>"
-                     alt="" <?php echo (isset($view_options[0]['pd_option_view_project']) ? ($view_options[0]['pd_option_view_project'] ? 'style="display:none"' : 'style="display:"') : 'style="display:none"') ?>>
-                <img id="project_collapse" src="<?php echo w2PfindImage('icons/collapse.gif', $m); ?>"
-                     alt="" <?php echo (isset($view_options[0]['pd_option_view_project']) ? ($view_options[0]['pd_option_view_project'] ? 'style="display:"' : 'style="display:none"') : 'style="display:"') ?>>
-            </div>
-        </a>
-	</td>
-</tr>
-<tr id="project" <?php echo (isset($view_options[0]['pd_option_view_project']) ? ($view_options[0]['pd_option_view_project'] ? 'style="visibility:visible;display:"' : 'style="visibility:collapse;display:none"') : 'style="visibility:visible;display:"'); ?>>
-	<?php
-    require (w2PgetConfig('root_dir') . '/modules/projectdesigner/vw_project.php');
-    ?>
-</tr>
-</table>
 <?php
+    $project = $obj;
+
+    // get critical tasks (criteria: task_end_date)
+    $criticalTasks = ($project_id > 0) ? $project->getCriticalTasks($project_id) : null;
+    // create Date objects from the datetime fields
+    $end_date = intval($project->project_end_date) ? new w2p_Utilities_Date($project->project_end_date) : null;
+    $actual_end_date = null;
+    if (isset($criticalTasks)) {
+        $actual_end_date = intval($criticalTasks[0]['task_end_date']) ? new w2p_Utilities_Date($criticalTasks[0]['task_end_date']) : null;
+    }
+    $style = (($actual_end_date > $end_date) && !empty($end_date)) ? 'style="color:red; font-weight:bold"' : '';
+
+    $projectPriority = w2PgetSysVal('ProjectPriority');
+    $projectPriorityColor = w2PgetSysVal('ProjectPriorityColor');
+    $billingCategory = w2PgetSysVal('BudgetCategory');
+    $pstatus = w2PgetSysVal('ProjectStatus');
+    $ptype = w2PgetSysVal('ProjectType');
+
+    include $AppUI->getTheme()->resolveTemplate('projects/view');
+
     echo $AppUI->getTheme()->styleRenderBoxBottom();
 ?>
 <br />
