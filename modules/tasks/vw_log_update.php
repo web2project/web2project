@@ -216,7 +216,7 @@ $q->clear();
             <p>
                 <label><?php echo $AppUI->_('Billing Code'); ?>:</label>
                 <select name="task_log_costcode" id="task_log_costcode" size="1" class="text">
-                    <option value="0" />
+                    <option value="0"></option>
                     <?php
                     if (count($companyBC)) {
                         $myKeys = array_keys($companyBC);
@@ -237,7 +237,6 @@ $q->clear();
                     }
                     ?>
                 </select>
-                <input type="hidden" name="task_log_costcode" value="<?php echo $log->task_log_costcode; ?>" />
             </p>
             <?php
             if ($obj->canUserEditTimeInformation($project->project_owner, $AppUI->user_id) && $canEditTask) {
