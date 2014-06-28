@@ -453,9 +453,6 @@ function calcDuration(f, start_date, end_date, duration_fld, durntype_fld) {
     include $AppUI->getTheme()->resolveTemplate('projects/view');
 
     echo $AppUI->getTheme()->styleRenderBoxBottom();
-?>
-<br />
-<?php
     echo $AppUI->getTheme()->styleRenderBoxTop();
 ?>
 <table class="std">
@@ -486,9 +483,6 @@ function calcDuration(f, start_date, end_date, duration_fld, durntype_fld) {
 </table>
 <?php
     echo $AppUI->getTheme()->styleRenderBoxBottom();
-?>
-<br />
-<?php
     echo $AppUI->getTheme()->styleRenderBoxTop();
 ?>
 <table class="std">
@@ -519,9 +513,6 @@ function calcDuration(f, start_date, end_date, duration_fld, durntype_fld) {
 </table>
 <?php
     echo $AppUI->getTheme()->styleRenderBoxBottom();
-?>
-<br />
-<?php
     echo $AppUI->getTheme()->styleRenderBoxTop();
 ?>
 <table class="std">
@@ -552,9 +543,6 @@ function calcDuration(f, start_date, end_date, duration_fld, durntype_fld) {
 </table>
 <?php
     echo $AppUI->getTheme()->styleRenderBoxBottom();
-?>
-<br />
-<?php
     echo $AppUI->getTheme()->styleRenderBoxTop();
 ?>
 <table class="std">
@@ -585,9 +573,6 @@ function calcDuration(f, start_date, end_date, duration_fld, durntype_fld) {
 </table>
 <?php
     echo $AppUI->getTheme()->styleRenderBoxBottom();
-?>
-<br />
-<?php
     echo $AppUI->getTheme()->styleRenderBoxTop();
 ?>
 <table class="std">
@@ -618,13 +603,9 @@ function calcDuration(f, start_date, end_date, duration_fld, durntype_fld) {
 	</td>
 </tr>
 </table>
-<div style="display:none;">
-<table class="tbl">
-<tr><td id="td_sample">&nbsp;</td></tr>
-</table>
-</div>
+
 <script language="javascript" type="text/javascript">
-var original_bgc = getStyle('td_sample', 'background-color', 'backgroundColor');
+    var original_bgc = getStyle('td_sample', 'background-color', 'backgroundColor');
 </script>
 <?php
 }
