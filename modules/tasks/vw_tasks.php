@@ -1,6 +1,6 @@
 <?php
 if (!defined('W2P_BASE_DIR')) {
-	die('You should not access this file directly.');
+    die('You should not access this file directly.');
 }
 // @todo    convert to template
 // @todo    remove database query
@@ -17,14 +17,14 @@ global $history_active;
  */
 
 if (empty($query_string)) {
-	$query_string = '?m=' . $m . '&amp;a=' . $a;
+    $query_string = '?m=' . $m . '&amp;a=' . $a;
 }
 $mods = $AppUI->getActiveModules();
 $history_active = !empty($mods['history']) && canView('history');
 
 /****
 // Let's figure out which tasks are selected
-*/
+ */
 $task_id = (int) w2PgetParam($_GET, 'task_id', 0);
 
 $pinned_only = (int) w2PgetParam($_GET, 'pinned', 0);
@@ -42,7 +42,7 @@ $task_sort_type2 = w2PgetParam($_GET, 'task_sort_type2', '');
 $task_sort_order1 = (int) w2PgetParam($_GET, 'task_sort_order1', 0);
 $task_sort_order2 = (int) w2PgetParam($_GET, 'task_sort_order2', 0);
 if (isset($_POST['show_task_options'])) {
-	$AppUI->setState('TaskListShowIncomplete', w2PgetParam($_POST, 'show_incomplete', 0));
+    $AppUI->setState('TaskListShowIncomplete', w2PgetParam($_POST, 'show_incomplete', 0));
 }
 $showIncomplete = $AppUI->getState('TaskListShowIncomplete', 0);
 
@@ -63,7 +63,7 @@ $q->leftJoin('departments', 'departments', 'departments.dept_id = project_depart
 $q->addWhere('t1.task_id = t1.task_parent');
 $q->addWhere('projects.project_id=' . $project_id);
 if (count($allowedProjects)) {
-	$q->addWhere($allowedProjects);
+    $q->addWhere($allowedProjects);
 }
 $q->addGroup('projects.project_id');
 $q2 = new w2p_Database_Query;
@@ -73,18 +73,18 @@ $q2->addQuery('projects.project_id, COUNT(t1.task_id) as total_tasks');
 $perms = &$AppUI->acl();
 $projects = array();
 if ($canViewTasks) {
-	$prc = $q->exec();
-	echo db_error();
-	while ($row = $q->fetchRow()) {
-		$projects[$row['project_id']] = $row;
-	}
+    $prc = $q->exec();
+    echo db_error();
+    while ($row = $q->fetchRow()) {
+        $projects[$row['project_id']] = $row;
+    }
 
-	$prc2 = $q2->exec();
-	echo db_error();
-	while ($row2 = $q2->fetchRow()) {
-		$projects[$row2['project_id']] = ((!($projects[$row2['project_id']])) ? array() : $projects[$row2['project_id']]);
-		array_push($projects[$row2['project_id']], $row2);
-	}
+    $prc2 = $q2->exec();
+    echo db_error();
+    while ($row2 = $q2->fetchRow()) {
+        $projects[$row2['project_id']] = ((!($projects[$row2['project_id']])) ? array() : $projects[$row2['project_id']]);
+        array_push($projects[$row2['project_id']], $row2);
+    }
 }
 $q->clear();
 $q2->clear();
@@ -110,8 +110,8 @@ $q->addQuery('evtq.queue_id');
 
 $q->addTable('tasks');
 if ($history_active) {
-	$q->addQuery('MAX(history_date) as last_update');
-	$q->leftJoin('history', 'h', 'history_item = tasks.task_id AND history_table=\'tasks\'');
+    $q->addQuery('MAX(history_date) as last_update');
+    $q->leftJoin('history', 'h', 'history_item = tasks.task_id AND history_table=\'tasks\'');
 }
 $q->leftJoin('projects', 'projects', 'projects.project_id = task_project');
 $q->leftJoin('users', 'usernames', 'task_owner = usernames.user_id');
@@ -129,47 +129,47 @@ $q->addWhere('task_project = ' . (int)$project_id);
 
 $allowedProjects = $project->getAllowedSQL($AppUI->user_id, 'task_project');
 if (count($allowedProjects)) {
-	$q->addWhere($allowedProjects);
+    $q->addWhere($allowedProjects);
 }
 $obj = new CTask;
 $allowedTasks = $obj->getAllowedSQL($AppUI->user_id, 'tasks.task_id');
 if (count($allowedTasks)) {
-	$q->addWhere($allowedTasks);
+    $q->addWhere($allowedTasks);
 }
 $q->addGroup('tasks.task_id');
 
 $q->addOrder('task_start_date, task_end_date, task_name');
 if ($canViewTasks) {
-	$tasks = $q->loadList();
+    $tasks = $q->loadList();
 }
 // POST PROCESSING TASKS
 foreach ($tasks as $row) {
-	//add information about assigned users into the page output
-	$q->clear();
-	$q->addQuery('ut.user_id,	u.user_username, ut.user_task_priority');
-	$q->addQuery('ut.perc_assignment, SUM(ut.perc_assignment) AS assign_extent');
-	$q->addQuery('contact_first_name, contact_last_name, contact_display_name as assignee');
-	$q->addTable('user_tasks', 'ut');
-	$q->leftJoin('users', 'u', 'u.user_id = ut.user_id');
-	$q->leftJoin('contacts', 'c', 'u.user_contact = c.contact_id');
-	$q->addWhere('ut.task_id = ' . (int)$row['task_id']);
-	$q->addGroup('ut.user_id');
-	$q->addOrder('perc_assignment desc, user_username');
+    //add information about assigned users into the page output
+    $q->clear();
+    $q->addQuery('ut.user_id,	u.user_username, ut.user_task_priority');
+    $q->addQuery('ut.perc_assignment, SUM(ut.perc_assignment) AS assign_extent');
+    $q->addQuery('contact_first_name, contact_last_name, contact_display_name as assignee');
+    $q->addTable('user_tasks', 'ut');
+    $q->leftJoin('users', 'u', 'u.user_id = ut.user_id');
+    $q->leftJoin('contacts', 'c', 'u.user_contact = c.contact_id');
+    $q->addWhere('ut.task_id = ' . (int)$row['task_id']);
+    $q->addGroup('ut.user_id');
+    $q->addOrder('perc_assignment desc, user_username');
 
-	$row['task_assigned_users'] = $q->loadList();
-	$q->addQuery('count(task_id) as children');
-	$q->addTable('tasks');
-	$q->addWhere('task_parent = ' . (int)$row['task_id']);
-	$q->addWhere('task_id <> task_parent');
-	$row['children'] = $q->loadResult();
-	$i = count($projects[$row['task_project']]['tasks']) + 1;
-	$row['task_number'] = $i;
-	$row['node_id'] = 'node_' . $i . '-' . $row['task_id'];
-	if (strpos($row['task_duration'], '.') && $row['task_duration_type'] == 1) {
-		$row['task_duration'] = floor($row['task_duration']) . ':' . round(60 * ($row['task_duration'] - floor($row['task_duration'])));
-	}
-	//pull the final task row into array
-	$projects[$row['task_project']]['tasks'][] = $row;
+    $row['task_assigned_users'] = $q->loadList();
+    $q->addQuery('count(task_id) as children');
+    $q->addTable('tasks');
+    $q->addWhere('task_parent = ' . (int)$row['task_id']);
+    $q->addWhere('task_id <> task_parent');
+    $row['children'] = $q->loadResult();
+    $i = count($projects[$row['task_project']]['tasks']) + 1;
+    $row['task_number'] = $i;
+    $row['node_id'] = 'node_' . $i . '-' . $row['task_id'];
+    if (strpos($row['task_duration'], '.') && $row['task_duration_type'] == 1) {
+        $row['task_duration'] = floor($row['task_duration']) . ':' . round(60 * ($row['task_duration'] - floor($row['task_duration'])));
+    }
+    //pull the final task row into array
+    $projects[$row['task_project']]['tasks'][] = $row;
 }
 
 $showEditCheckbox = (isset($canEditTasks) && $canEditTasks) || canView('system');
@@ -215,26 +215,26 @@ $listTable->addBefore('log', 'task_id');
     <input type="hidden" name="pd_option_view_files" value="<?php echo (isset($view_options[0]['pd_option_view_files']) ? $view_options[0]['pd_option_view_files'] : 1); ?>" />
     <input type="hidden" name="bulk_task_hperc_assign" value="" />
 
-    <?php
-    echo $listTable->startTable();
+<?php
+echo $listTable->startTable();
 
-    $header = $listTable->buildHeader($fields);
-    $checkAll = '<th width="1"><input type="checkbox" onclick="select_all_rows(this, \'selected_task[]\')" name="multi_check"/></th></tr>';
-    echo str_replace('</tr>', $checkAll, $header);
+$header = $listTable->buildHeader($fields);
+$checkAll = '<th width="1"><input type="checkbox" onclick="select_all_rows(this, \'selected_task[]\')" name="multi_check"/></th></tr>';
+echo str_replace('</tr>', $checkAll, $header);
 
-    reset($projects);
-    foreach ($projects as $k => $p) {
-        $tnums = count($p['tasks']);
-        for ($i = 0; $i < $tnums; $i++) {
-            $t = $p['tasks'][$i];
-            if ($t['task_parent'] == $t['task_id']) {
-                echo showtask_new($t, 0, false, $listTable);
-                findchild_new($p['tasks'], $t['task_id']);
-            }
+reset($projects);
+foreach ($projects as $k => $p) {
+    $tnums = count($p['tasks']);
+    for ($i = 0; $i < $tnums; $i++) {
+        $t = $p['tasks'][$i];
+        if ($t['task_parent'] == $t['task_id']) {
+            echo showtask_new($t, 0, false, $listTable);
+            findchild_new($p['tasks'], $t['task_id']);
         }
     }
+}
 
-    echo $listTable->endTable();
-    ?>
+echo $listTable->endTable();
+?>
 <?php
 include $AppUI->getTheme()->resolveTemplate('task_key');

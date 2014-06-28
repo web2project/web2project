@@ -509,7 +509,7 @@ function calcDuration(f, start_date, end_date, duration_fld, durntype_fld) {
 	<td colspan="2" class="hilite">
 	<?php
 	if ($canViewTasks) {
-		require (w2PgetConfig('root_dir') . '/modules/projectdesigner/vw_tasks.php');
+		require (w2PgetConfig('root_dir') . '/modules/tasks/vw_tasks.php');
 	} else {
 		echo $AppUI->_('You do not have permission to view tasks');
 	}
