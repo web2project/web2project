@@ -122,12 +122,6 @@ if (count($allowedTasks)) {
     $q->addWhere($allowedTasks);
 }
 
-// Filter by company
-if (!$min_view && $f2 != 'allcompanies') {
-    $q->addJoin('companies', 'c', 'c.company_id = p.project_company', 'inner');
-    $q->addWhere('company_id = ' . (int) $f2);
-}
-
 $q->addGroup('tasks.task_id');
 if (!$project_id && !$task_id) {
     $q->addOrder('p.project_id, task_start_date, task_end_date');
