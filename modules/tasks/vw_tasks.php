@@ -11,11 +11,6 @@ global $task_sort_item2, $task_sort_type2, $task_sort_order2;
 global $user_id, $w2Pconfig, $currentTabId, $currentTabName, $canEdit, $showEditCheckbox;
 global $history_active;
 
-/*
- * TODO: This file looks a *lot* like the common task list rendering code in 
- *   tasks/tasks.php
- */
-
 if (empty($query_string)) {
     $query_string = '?m=' . $m . '&amp;a=' . $a;
 }
