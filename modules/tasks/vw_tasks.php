@@ -5,7 +5,7 @@ if (!defined('W2P_BASE_DIR')) {
 // @todo    convert to template
 // @todo    remove database query
 
-global $m, $a, $project_id, $f, $task_status, $min_view, $query_string, $durnTypes, $tpl;
+global $AppUI, $m, $a, $project_id, $f, $task_status, $min_view, $query_string, $durnTypes, $tpl;
 global $task_sort_item1, $task_sort_type1, $task_sort_order1;
 global $task_sort_item2, $task_sort_type2, $task_sort_order2;
 global $user_id, $w2Pconfig, $currentTabId, $currentTabName, $canEdit, $showEditCheckbox;
@@ -139,6 +139,8 @@ if (count($allowedTasks)) {
 $q->addGroup('tasks.task_id');
 
 $q->addOrder('task_start_date, task_end_date, task_name');
+
+$canViewTasks = canView('tasks');
 if ($canViewTasks) {
     $tasks = $q->loadList();
 }
@@ -219,8 +221,11 @@ $listTable->addBefore('log', 'task_id');
 echo $listTable->startTable();
 
 $header = $listTable->buildHeader($fields);
-$checkAll = '<th width="1"><input type="checkbox" onclick="select_all_rows(this, \'selected_task[]\')" name="multi_check"/></th></tr>';
-echo str_replace('</tr>', $checkAll, $header);
+if ('projectdesigner' == $m) {
+    $checkAll = '<th width="1"><input type="checkbox" onclick="select_all_rows(this, \'selected_task[]\')" name="multi_check"/></th></tr>';
+    $header = str_replace('</tr>', $checkAll, $header);
+}
+echo $header;
 
 reset($projects);
 foreach ($projects as $k => $p) {
