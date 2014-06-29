@@ -85,7 +85,7 @@ if ($pinned_only) {
 $q = __extract_from_tasks3($f, $q, $user_id, $task_id, $AppUI);
 
 if ($showIncomplete) {
-    $q->addWhere('( task_percent_complete < 100 OR task_percent_complete IS NULL)');
+    $q->addWhere('task_percent_complete <> 100');
 }
 
 //When in task view context show all the tasks, active and inactive. (by not limiting the query by task status)
