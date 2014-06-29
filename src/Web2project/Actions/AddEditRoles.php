@@ -15,7 +15,7 @@ class AddEditRoles extends \Web2project\Actions\AddEdit
 
         $action = ($this->delete) ? 'deleted' : 'stored';
         $this->success = ($this->delete) ?
-            $this->object->delete();
+            $this->object->delete() :
             $this->object->store();
 
         if ($this->success) {
