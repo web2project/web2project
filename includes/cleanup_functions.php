@@ -5003,9 +5003,8 @@ function __extract_from_tasks3($f, $q, $user_id, $task_id, $AppUI)
         //if we are on a task context make sure we show ALL the children tasks
         $f = 'deepchildren';
     }
+
     switch ($f) {
-        case 'all':
-            break;
         case 'myfinished7days':
             $q->addWhere('ut.user_id = ' . (int) $user_id);
         case 'allfinished7days':
@@ -5056,10 +5055,14 @@ function __extract_from_tasks3($f, $q, $user_id, $task_id, $AppUI)
         case 'taskowned':
             $q->addWhere('task_owner = ' . (int) $user_id);
             break;
+        case 'all':
+            //break;
         default:
-            $q->addTable('user_tasks');
-            $q->addWhere('user_tasks.user_id = ' . (int) $user_id);
-            $q->addWhere('user_tasks.task_id = tasks.task_id');
+            if ($user_id) {
+                $q->addTable('user_tasks');
+                $q->addWhere('user_tasks.user_id = ' . (int) $user_id);
+                $q->addWhere('user_tasks.task_id = tasks.task_id');
+            }
             break;
     }
 
