@@ -395,6 +395,7 @@ class CTask extends w2p_Core_BaseObject
             $q->addUpdate('task_duration_type',     $duration_type);
             $q->addUpdate('task_hours_worked',      $children_hours_worked);
             $q->addUpdate('task_percent_complete',  $percent_complete);
+            // TODO: the task_sequence should increment on this update
             $q->addWhere("task_id = $key");
             $q->exec();
         }
