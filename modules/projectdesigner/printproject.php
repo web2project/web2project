@@ -34,7 +34,7 @@ $types = w2Pgetsysval('TaskType');
 
 $project = new CProject();
 // load the record data
-$project->loadFull(null, $project_id);
+$project->load($project_id);
 $obj = $project;
 if (!$project) {
 	$AppUI->setMsg('Project');
@@ -85,7 +85,7 @@ $extra = array(0 => '(none)', 1 => 'Milestone', 2 => 'Dynamic Task', 3 => 'Inact
 </tr>
 	<?php
 	// Removed the additional permissions check here.. you can't get here without successfully passing the one above
-	require (w2PgetConfig('root_dir') . '/modules/projectdesigner/vw_projecttask.php');
+	require w2PgetConfig('root_dir') . '/modules/projectdesigner/vw_projecttask.php';
 	?>
 </table>
 </body>
