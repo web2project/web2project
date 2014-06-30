@@ -475,3 +475,17 @@ class w2p_Output_EmailManager extends w2p_Output_Email_Manager
         parent::__construct($AppUI);
     }
 }
+
+/**
+ * @package     web2project\deprecated
+ * @deprecated  since version 4.0
+ */
+class w2p_Output_Email_Template extends \Web2project\Output\Email\Template
+{
+    public function __construct()
+    {
+        trigger_error("w2p_Output_Email_Template has been deprecated in v4.0 and will be removed by v5.0. Please use \\Web2project\\Output\\Email\\Template instead.", E_USER_NOTICE );
+
+        parent::__construct();
+    }
+}
