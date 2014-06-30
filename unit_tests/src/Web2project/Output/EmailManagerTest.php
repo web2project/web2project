@@ -280,13 +280,13 @@ class Web2project_Output_EmailManagerTest extends CommonSetup
 
     public function testGetNotifyNewUser()
     {
-        $target_body  = "Dear Keith Casey,\n\n";
-        $target_body .= "Congratulations! Your account has been activated by the administrator.\n";
-        $target_body .= "Please use the login information provided earlier.\n\n";
-        $target_body .= "You may login at the following URL: " . W2P_BASE_URL . "\n\n";
-        $target_body .= "If you have any difficulties or questions, please ask the administrator for help.\n";
-        $target_body .= "Assuring you the best of our attention at all time.\n\n";
-        $target_body .= "Our Warmest Regards,\n\nThe Support Staff.\n\n****PLEASE KEEP THIS EMAIL FOR YOUR RECORDS****";
+        $target_body  = "Dear Keith Casey,\n\n\n";
+        $target_body .= "Congratulations! Your account has been activated by the administrator.\n\n";
+        $target_body .= "Please use the login information provided earlier.\n";
+        $target_body .= "You may login at the following URL: " . W2P_BASE_URL . "\n\n\n";
+        $target_body .= "If you have any difficulties or questions, please ask the administrator for help.\n\n";
+        //$target_body .= "Assuring you the best of our attention at all time.\n\n";
+        $target_body .= "Our Warmest Regards,\nThe Support Staff.\n\n****PLEASE KEEP THIS EMAIL FOR YOUR RECORDS****";
 
         $actual_body = $this->manager->getNotifyNewUser('Keith Casey');
 
@@ -295,11 +295,11 @@ class Web2project_Output_EmailManagerTest extends CommonSetup
 
     public function testNotifyHR()
     {
-        $target_body  = "A new user has signed up on web2Project Development. Please go through the user details below:\n";
+        $target_body  = "A new user has signed up on web2Project Development. Please go through the user details below:\n\n";
         $target_body .= "Name: Keith Casey\nUsername: caseysoftware\nEmail: test@test.com\n\n";
         $target_body .= "You may check this account at the following URL: ";
         $target_body .= W2P_BASE_URL . "/index.php?m=users&a=view&user_id=-1\n\n";
-        $target_body .= "Thank you very much.\n\nThe web2Project Development Taskforce.\n\n";
+        $target_body .= "Thank you very much.\n\nThe web2Project Development Taskforce\n\n";
         $target_body .= "****PLEASE KEEP THIS EMAIL FOR YOUR RECORDS****";
 
         $actual_body = $this->manager->notifyHR("Keith Casey", "caseysoftware", "test@test.com", -1);
@@ -336,7 +336,7 @@ class Web2project_Output_EmailManagerTest extends CommonSetup
 
     public function testNotifyPasswordReset()
     {
-        $target_body  = "The user account admin has this email associated with it.\n";
+        $target_body  = "The user account admin has this email associated with it. ";
         $target_body .= "A web user from " . W2P_BASE_URL ." has just requested that a new password be sent.\n\n";
         $target_body .= "Your New Password is: password If you didn't ask for this, don't worry. You are seeing this message, not them. If this was an error just login with your new password and then change your password to what you would like it to be.";
 
