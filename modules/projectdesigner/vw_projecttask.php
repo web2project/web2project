@@ -168,10 +168,6 @@ $q->addQuery('tlog.task_log_problem');
 $q->addQuery('evtq.queue_id');
 
 $q->addTable('tasks');
-if ($history_active) {
-	$q->addQuery('MAX(history_date) as last_update');
-	$q->leftJoin('history', 'h', 'history_item = tasks.task_id AND history_table=\'tasks\'');
-}
 $q->leftJoin('projects', 'projects', 'projects.project_id = task_project');
 $q->leftJoin('users', 'usernames', 'task_owner = usernames.user_id');
 $q->leftJoin('user_tasks', 'ut', 'ut.task_id = tasks.task_id');

@@ -5157,20 +5157,6 @@ function __extract_from_tasks5($q, $subquery)
 }
 
 /**
- * @param $history_active
- * @param $q
- */
-function __extract_from_tasks6($q, $history_active)
-{
-    if ($history_active) {
-        $q->addQuery('MAX(history_date) as last_update');
-        $q->leftJoin('history', 'h', 'history_item = tasks.task_id AND history_table=\'tasks\'');
-    }
-
-    return $q;
-}
-
-/**
  * @param $AppUI
  * @param $task_id
  */

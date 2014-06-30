@@ -54,7 +54,6 @@ $task_status = __extract_from_tasks($min_view, $currentTabId, $project_id, $curr
 
 $q = new w2p_Database_Query;
 $q = __extract_from_tasks5($q, $subquery);
-$q = __extract_from_tasks6($q, $history_active);
 
 $q->addJoin('projects', 'p', 'p.project_id = task_project', 'inner');
 $q->leftJoin('users', 'usernames', 'task_owner = usernames.user_id');

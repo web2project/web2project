@@ -764,3 +764,11 @@ function smart_slice($arr, $notUsed1, $notUsed2, $notUsed3)
 {
     return dumb_slice($arr);
 }
+
+/** @deprecated */
+function __extract_from_tasks6($q, $history_active)
+{
+    trigger_error(__FUNCTION__ . " has been deprecated in v3.2 and will be removed in v5.0. There is no replacement.", E_USER_NOTICE );
+
+    return $q;
+}
