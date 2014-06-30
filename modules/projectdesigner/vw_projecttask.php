@@ -257,7 +257,7 @@ if (count($fields) > 0) {
 $taskobj = new CTask();
 $taskTree = $taskobj->getTaskTree($project_id);
 
-$listTable = new w2p_Output_ListTable($AppUI);
+$listTable = new w2p_Output_HTML_TaskTable($AppUI);
 
 echo $listTable->startTable();
 echo $listTable->buildHeader($fields);
