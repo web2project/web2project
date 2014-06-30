@@ -254,29 +254,15 @@ if (count($fields) > 0) {
     $module->storeSettings('projectdesigner', 'task_list_print', $fieldList, $fieldNames);
 }
 
+$taskobj = new CTask();
+$taskTree = $taskobj->getTaskTree($project_id);
 
 $listTable = new w2p_Output_ListTable($AppUI);
 
 echo $listTable->startTable();
 echo $listTable->buildHeader($fields);
-
-$taskobj = new CTask();
-$taskTree = $taskobj->getTaskTree($project_id);
-
-foreach ($taskTree as $task) {
-    echo '<tr>';
-    foreach($fieldList as $field) {
-        echo $listTable->createCell($field, $task[$field]);
-    }
-    echo '</tr>';
-}
-
-echo '<pre>'; print_r($taskTree); die();
-
+echo $listTable->buildRows($taskTree);
 echo $listTable->endTable();
-
-global $project_id, $m;
-global $st_projects_arr;
 
 $df = $AppUI->getPref('SHDATEFORMAT');
 $projectPriority = w2PgetSysVal('ProjectPriority');
