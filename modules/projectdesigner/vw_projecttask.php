@@ -248,47 +248,33 @@ if (count($fields) > 0) {
     //   state for versions earlier than v3.0
     //   At some point at/after v4.0, this should be deprecated
     $fieldList = array('task_name', 'task_percent_complete',
-        'task_start_date', 'task_end_date', 'task_updated');
-    $fieldNames = array('Task Name', 'Work', 'Start', 'Finish', 'Last Update');
+        'task_start_date', 'task_end_date');
+    $fieldNames = array('Task Name', 'Work', 'Start', 'Finish');
 
     $module->storeSettings('projectdesigner', 'task_list_print', $fieldList, $fieldNames);
 }
 
-echo '<table class="tbl list prjprint"><tr class="prjprint">';
-foreach ($fieldNames as $index => $name) {
-    ?><th nowrap="nowrap">
-        <?php echo $AppUI->_($fieldNames[$index]); ?>
-    </th><?php
+
+$listTable = new w2p_Output_ListTable($AppUI);
+
+echo $listTable->startTable();
+echo $listTable->buildHeader($fields);
+
+$taskobj = new CTask();
+$taskTree = $taskobj->getTaskTree($project_id);
+
+foreach ($taskTree as $task) {
+    echo '<tr>';
+    foreach($fieldList as $field) {
+        echo $listTable->createCell($field, $task[$field]);
+    }
+    echo '</tr>';
 }
-echo '</tr>';
 
-reset($projects);
+echo '<pre>'; print_r($taskTree); die();
 
-foreach ($projects as $p) {
-	$tnums = count($p['tasks']);
+echo $listTable->endTable();
 
-	if ($tnums > 0 || $project_id == $p['project_id']) {
-		if ($task_sort_item1 != '') {
-			if ($task_sort_item2 != '' && $task_sort_item1 != $task_sort_item2) {
-				$p['tasks'] = array_csort($p['tasks'], $task_sort_item1, $task_sort_order1, $task_sort_type1, $task_sort_item2, $task_sort_order2, $task_sort_type2);
-			} else {
-				$p['tasks'] = array_csort($p['tasks'], $task_sort_item1, $task_sort_order1, $task_sort_type1);
-			}
-		}
-
-		for ($i = 0; $i < $tnums; $i++) {
-			$t = $p['tasks'][$i];
-
-			if ($t['task_parent'] == $t['task_id']) {
-				echo showtask_new($t, 0);
-                findchild_new($p['tasks'], $t['task_id']);
-			}
-		}
-	}
-}
-?>
-</table >
-<?php
 global $project_id, $m;
 global $st_projects_arr;
 
@@ -297,14 +283,17 @@ $projectPriority = w2PgetSysVal('ProjectPriority');
 $projectStatus = w2PgetSysVal('ProjectStatus');
 ?>
 <table class="tbl" cellspacing="1" cellpadding="2" border="0" width="100%">
-<td align="center">
-<?php echo '<strong>Gantt Chart</strong>' ?>
-</td>
-<tr>
-    <td align="center" colspan="20">
-<?php
-$src = "?m=tasks&a=gantt&suppressHeaders=1&showLabels=1&proFilter=&showInactive=1showAllGantt=1&project_id=$project_id&width=' + ((navigator.appName=='Netscape'?window.innerWidth:document.body.offsetWidth)*0.90) + '";
-echo "<script language=\"javascript\" type=\"text/javascript\">document.write('<img src=\"$src\">')</script>";
-?>
-</td>
+    <tr>
+        <td align="center">
+            <?php echo '<strong>Gantt Chart</strong>' ?>
+        </td>
+    </tr>
+    <tr>
+        <td align="center" colspan="20">
+            <?php
+            $src = "?m=tasks&a=gantt&suppressHeaders=1&showLabels=1&proFilter=&showInactive=1showAllGantt=1&project_id=$project_id&width=' + ((navigator.appName=='Netscape'?window.innerWidth:document.body.offsetWidth)*0.90) + '";
+            echo "<script language=\"javascript\" type=\"text/javascript\">document.write('<img src=\"$src\">')</script>";
+            ?>
+        </td>
+    </tr>
 </table>
