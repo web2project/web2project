@@ -82,12 +82,10 @@ echo $AppUI->getTheme()->styleRenderBoxTop();
 </tr>
 
 <tr>
-<?php
-if ($viewtype != 'short') {
-	echo '<th nowrap>' . $AppUI->_('Author') . ':</th>';
-}
-echo '<th width="' . (($viewtype == 'single') ? '60' : '100') . '%">' . $AppUI->_('Message') . ':</th>';
-?>
+    <?php
+    echo '<th nowrap>' . $AppUI->_('Author') . ':</th>';
+    echo '<th width="' . (($viewtype == 'single') ? '60' : '100') . '%">' . $AppUI->_('Message') . ':</th>';
+    ?>
 </tr>
 
 <?php
