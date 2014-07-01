@@ -139,7 +139,7 @@ foreach ($messages as $row) {
 			if (!$hideEmail) {
 				$s .= '<a href="mailto:' . $editor[0]['contact_email'] . '">';
 			}
-			$s .= '<font size="1">' . $editor[0]['contact_name'] . '</font>';
+			$s .= $editor[0]['contact_name'];
 			if (!$hideEmail) {
 				$s .= '</a>';
 			}
@@ -150,11 +150,11 @@ foreach ($messages as $row) {
 		}
 		$s .= '</td>';
 		$s .= '<td valign="top" style="' . $style . '">';
-		$s .= '<font size="2"><strong>' . $row['message_title'] . '</strong><hr size=1>';
+		$s .= '<strong>' . $row['message_title'] . '</strong><hr size=1>';
 		$row['message_body'] = $bbparser->qparse($row['message_body']);
         $row['message_body'] = nl2br($row['message_body']);
 		$s .= $row['message_body'];
-		$s .= '</font></td>';
+		$s .= '</td>';
 
 		$s .= '</tr><tr>';
 
@@ -196,14 +196,13 @@ foreach ($messages as $row) {
                 
 		$s .= '</td>';
 		$s .= '</tr>';
-	} else
+	} else {
 		if ($viewtype == 'short') {
 			$s .= "<tr>";
 
 			$s .= '<td valign="top" style="' . $style . '" >';
 			$s .= '<a href="mailto:' . $row['contact_email'] . '">';
-			$s .= '<font size="2">' . $row['contact_name'] . ' ' . $row['contact_name'] . '</font></a>';
-			$s .= ' (' . $AppUI->formatTZAwareTime($row['message_date'], $df . ' ' . $tf) . ') ';
+			$s .= $row['contact_name'] . '</a>';
 			if (sizeof($editor) > 0) {
 				$s .= '<br/>&nbsp;<br/>' . $AppUI->_('last edited by');
 				$s .= ':<br/><a href="mailto:' . $editor[0]['contact_email'] . '">';
@@ -217,7 +216,7 @@ foreach ($messages as $row) {
 			$s .= '</div></td>';
 
 			$s .= '</tr>';
-		} else
+		} else {
 			if ($viewtype == 'single') {
 				$s .= '<tr>';
 
@@ -246,8 +245,9 @@ foreach ($messages as $row) {
 				}
 				$s .= '</tr>';
 			}
-
-	if ($viewtype != 'single') {
+        }
+    }
+    if ($viewtype != 'single') {
 		echo $s;
 	}
 	$x = !$x;
