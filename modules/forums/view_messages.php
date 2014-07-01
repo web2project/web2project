@@ -117,7 +117,6 @@ foreach ($messages as $row) {
     $bbparser = new HTML_BBCodeParser();
 	//!!! Different table building for the three different views
 	// To be cleaned up, and reuse common code at later stage.
-
     switch ($viewtype) {
         case 'normal':
             list($s, $new_messages) = __extract_from_view_messages4($s, $style, $row, $hideEmail, $editor, $AppUI, $new_messages, $bbparser, $m, $df, $tf, $canEdit, $canAdminEdit, $canDelete);
@@ -129,6 +128,7 @@ foreach ($messages as $row) {
             list($s, $side) = __extract_from_view_messages3($s, $style, $AppUI, $row, $df, $tf, $editor, $side, $bbparser, $first, $messages);
             break;
     }
+    $first = false;
 
     if ($viewtype != 'single') {
 		echo $s;

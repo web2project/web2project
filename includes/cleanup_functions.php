@@ -5276,8 +5276,7 @@ function __extract_from_view_messages3($s, $style, $AppUI, $row, $df, $tf, $edit
 
     $s .= '<td valign="top" style="' . $style . '">';
     $s .= $AppUI->formatTZAwareTime($row['message_date'], $df . ' ' . $tf) . ' - ';
-    $s .= '<a href="mailto:' . $row['contact_email'] . '">';
-    $s .= '<font size="2">' . $row['contact_name'] . '</font></a>';
+    $s .= '<a href="mailto:' . $row['contact_email'] . '">' . $row['contact_name'] . '</a>';
     $s .= '<br />';
     if (sizeof($editor) > 0) {
         $s .= '<br/>&nbsp;<br/>' . $AppUI->_('last edited by');
@@ -5295,7 +5294,6 @@ function __extract_from_view_messages3($s, $style, $AppUI, $row, $df, $tf, $edit
         $s .= '<td rowspan="' . count($messages) . '" valign="top">';
         echo $s;
         $s = '';
-        $first = false;
     }
     $s .= '</tr>';
     return array($s, $side);
