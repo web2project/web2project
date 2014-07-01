@@ -32,9 +32,6 @@ echo $listTable->buildHeader($fields);
 echo $listTable->buildRows($taskTree);
 echo $listTable->endTable();
 
-$df = $AppUI->getPref('SHDATEFORMAT');
-$projectPriority = w2PgetSysVal('ProjectPriority');
-$projectStatus = w2PgetSysVal('ProjectStatus');
 ?>
 <table class="tbl" cellspacing="1" cellpadding="2" border="0" width="100%">
     <tr>
