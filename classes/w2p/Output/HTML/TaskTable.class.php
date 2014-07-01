@@ -18,11 +18,12 @@ class w2p_Output_HTML_TaskTable extends w2p_Output_ListTable
         $row .= $this->_buildBeforeCells();
         foreach ($this->_fieldKeys as $column) {
             if ('task_name' == $column ) {
+                $prefix = '';
                 if ($rowData['depth'] > 1) {
-                    $prefix = str_repeat('&nbsp;', $rowData['depth']) . '<img src="' . w2PfindImage('corner-dots.gif') . '" />';
+                    $prefix .= str_repeat('&nbsp;', ($rowData['depth'] - 1) * 4) . '<img src="' . w2PfindImage('corner-dots.gif') . '" />';
                 }
                 if ($rowData['children'] > 0) {
-                    $prefix = str_repeat('&nbsp;', $rowData['depth'] * 1.5 ) . '<img src="' . w2PfindImage('icons/collapse.gif') . '" />&nbsp;';
+                    $prefix .= '<img src="' . w2PfindImage('icons/collapse.gif') . '" />&nbsp;';
                 }
 
                 $rowData[$column] = $prefix . $rowData[$column];
