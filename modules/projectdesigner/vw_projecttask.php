@@ -247,9 +247,8 @@ if (count($fields) > 0) {
     // TODO: This is only in place to provide an pre-upgrade-safe 
     //   state for versions earlier than v3.0
     //   At some point at/after v4.0, this should be deprecated
-    $fieldList = array('task_name', 'task_percent_complete',
-        'task_start_date', 'task_end_date');
-    $fieldNames = array('Task Name', 'Work', 'Start', 'Finish');
+    $fieldList = array('task_name', 'task_percent_complete', 'task_owner', 'task_start_date', 'task_duration', 'task_end_date');
+    $fieldNames = array('Task Name', 'Work', 'Owner', 'Start', 'Duration', 'Finish');
 
     $module->storeSettings('projectdesigner', 'task_list_print', $fieldList, $fieldNames);
 }

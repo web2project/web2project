@@ -1922,6 +1922,7 @@ class CTask extends w2p_Core_BaseObject
         $q->addTable('tasks');
         $q->addQuery('task_id, task_name, task_description, task_end_date, task_start_date');
         $q->addQuery('task_milestone, task_parent, task_dynamic, task_percent_complete, task_path_enumeration');
+        $q->addQuery('task_duration, task_duration_type, task_owner');
         $q->addWhere('task_project = ' . (int) $project_id);
         
         if ($task_id) {
