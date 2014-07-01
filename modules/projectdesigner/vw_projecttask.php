@@ -5,49 +5,8 @@ if (!defined('W2P_BASE_DIR')) {
 
 global $project_id;
 
-$project_statuses = w2PgetSysVal('ProjectStatus');
-$project_types = w2PgetSysVal('ProjectType');
-$customLookups = array('project_status' => $pstatus, 'project_type' => $ptype);
-
-$params = get_object_vars($obj);
-
-$htmlHelper = new w2p_Output_HTMLHelper($AppUI);
-$htmlHelper->stageRowData($params);
-?>	
-<table width="100%" border="0" cellpadding="1" cellspacing="3" class="prjprint">
-<tr>
-	<td width="50%" valign="top">
-		<strong><?php echo $AppUI->_('Details'); ?></strong>
-		<table cellspacing="1" cellpadding="2" border="0" width="100%">
-		<tr>
-			<td align="right" nowrap="nowrap"><strong><?php echo $AppUI->_('Project Name'); ?>:&nbsp;</strong></td>
-            <?php echo $htmlHelper->createCell('project_name', $obj->project_name); ?>
-		</tr>
-		<tr>
-			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Company'); ?>:</td>
-            <?php echo $htmlHelper->createCell('company_name', $obj->company_name); ?>
-		</tr>
-		<tr>
-			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Short Name'); ?>:</td>
-            <?php echo $htmlHelper->createCell('project_short_name', $obj->project_short_name); ?>
-		</tr>
-		<tr>
-			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Start Date'); ?>:</td>
-            <?php echo $htmlHelper->createCell('project_start_date', $obj->project_start_date); ?>
-		</tr>
-		<tr>
-			<td align="right" nowrap="nowrap"><strong><?php echo $AppUI->_('Target End Date'); ?>:&nbsp;</strong></td>
-            <?php echo $htmlHelper->createCell('project_start_date', $obj->project_start_date); ?>
-		</tr>
-		<tr>
-			<td align="right" nowrap="nowrap"><strong><?php echo $AppUI->_('Status'); ?>:&nbsp;</strong></td>
-            <?php echo $htmlHelper->createCell('project_status', $obj->project_status, $customLookups); ?>
-		</tr>
-		<tr>
-			<td align="right" nowrap="nowrap"><strong><?php echo $AppUI->_('Progress'); ?>:&nbsp;</strong></td>
-            <?php echo $htmlHelper->createCell('project_percent_complete', $obj->project_percent_complete); ?>
-		</tr>
-<?php
+$project = $obj;
+include $AppUI->getTheme()->resolveTemplate('projects/view');
 
 $module = new w2p_System_Module();
 $fields = $module->loadSettings('projectdesigner', 'task_list_print');
