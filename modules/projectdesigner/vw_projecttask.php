@@ -233,17 +233,10 @@ $durnTypes = w2PgetSysVal('TaskDurationType');
 $tempoTask = new CTask();
 $userAlloc = $tempoTask->getAllocation('user_id');
 
-
-$fieldList = array();
-$fieldNames = array();
-
 $module = new w2p_System_Module();
 $fields = $module->loadSettings('projectdesigner', 'task_list_print');
 
-if (count($fields) > 0) {
-    $fieldList = array_keys($fields);
-    $fieldNames = array_values($fields);
-} else {
+if (0 == count($fields)) {
     // TODO: This is only in place to provide an pre-upgrade-safe 
     //   state for versions earlier than v3.0
     //   At some point at/after v4.0, this should be deprecated
@@ -251,6 +244,7 @@ if (count($fields) > 0) {
     $fieldNames = array('Task Name', 'Work', 'Owner', 'Start', 'Duration', 'Finish');
 
     $module->storeSettings('projectdesigner', 'task_list_print', $fieldList, $fieldNames);
+    $fields = array_combine($fieldList, $fieldNames);
 }
 
 $taskobj = new CTask();
