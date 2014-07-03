@@ -2,7 +2,6 @@
 if (!defined('W2P_BASE_DIR')) {
     die('You should not access this file directly.');
 }
-// @todo    convert to template
 $user_id = (int) w2PgetParam($_GET, 'user_id', 0);
 
 $tab = $AppUI->processIntState('UserVwTab', $_GET, 'tab', 0);
