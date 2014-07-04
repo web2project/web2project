@@ -59,11 +59,7 @@ function clearIt(){
                 </tr>
                 <?php
                 foreach ($user_roles as $row) {
-                    $buf = '';
-
-                    $style = '';
-                    $buf .= "<td>" . $row['name'] . "</td>";
-
+                    $buf = "<td>" . $row['name'] . "</td>";
                     $buf .= '<td nowrap>';
                     if ($canEdit) {
                         $buf .= "<a href=\"javascript:delIt({$row['id']});\" title=\"" . $AppUI->_('delete') . "\">" . w2PshowImage('icons/stock_delete-16.png', 16, 16, '') . '</a>';
