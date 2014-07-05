@@ -18,7 +18,6 @@ class Gateway
     public function search($value)
     {
         $query = $this->query;
-        $query->addTable($this->module, $this->module[0]);
 
         $object = new $this->class;
         $searchParams = $object->hook_search();
@@ -34,6 +33,14 @@ class Gateway
 
         $where = $object->getAllowedSQL($this->AppUI->user_id, $searchParams['table_key']);
         $query->addWhere($where);
+
+        $query->addTable($searchParams['table'], $searchParams['table_alias']);
+        $joins = $searchParams['table_joins'];
+        if (is_array($joins)) {
+            foreach($joins as $join) {
+                $query->addJoin($join['table'], $join['alias'], $join['join']);
+            }
+        }
 
         return $query->loadList();
     }
