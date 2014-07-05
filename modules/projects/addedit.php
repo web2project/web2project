@@ -48,7 +48,6 @@ $structprojects = arrayMerge(array('0' => '(' . $AppUI->_('No Parent') . ')'), $
 // get a list of permitted companies
 $company = new CCompany();
 $companies = $company->getAllowedRecords($AppUI->user_id, 'company_id,company_name', 'company_name');
-$companies = arrayMerge(array('0' => ''), $companies);
 
 if (count($companies) < 2 && $object_id == 0) {
 	$AppUI->setMsg('noCompanies', UI_MSG_ERROR, true);
@@ -168,6 +167,13 @@ function setDepartment(department_id_string){
 	document.editFrm.project_departments.value = department_id_string;
 	selected_departments_id = department_id_string;
 }
+
+$(function() {
+    var companies = <?php echo json_encode(array_values($companies)); ?>;
+    $( "#companies" ).autocomplete({
+        source: companies
+    });
+});
 
 </script>
 <?php
