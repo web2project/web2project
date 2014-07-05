@@ -3,11 +3,13 @@ namespace Web2project\Database;
 
 class Gateway
 {
+    protected $AppUI;
     protected $module;
     protected $query;
 
-    public function __construct($module, $query = null)
+    public function __construct($AppUI, $module, $query = null)
     {
+        $this->AppUI = $AppUI;
         $this->module = $module;
         $this->class = 'C' . w2p_unpluralize($module);
         $this->query = is_null($query) ? new \w2p_Database_Query() : $query;
@@ -29,6 +31,9 @@ class Gateway
         foreach ($displayFields as $field) {
             $query->addQuery($field);
         }
+
+        $where = $object->getAllowedSQL($this->AppUI->user_id, $searchParams['table_key']);
+        $query->addWhere($where);
 
         return $query->loadList();
     }

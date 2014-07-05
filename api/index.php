@@ -17,7 +17,7 @@ $app->get('/:module/search', function ($module) use ($app, $AppUI) {
     if ($AppUI->isActiveModule($module)) {
         $search = $app->request->get('query');
 
-        $gateway = new \Web2project\Database\Gateway($module);
+        $gateway = new \Web2project\Database\Gateway($AppUI, $module);
         $results = $gateway->search($search);
 
         echo json_encode($results);
