@@ -135,6 +135,8 @@ abstract class w2p_Theme_Base
         // additionally load jquery
         echo '<script type="text/javascript" src="' . $base . 'lib/jquery/jquery.js"></script>';
         echo '<script type="text/javascript" src="' . $base . 'lib/jquery/jquery.tipTip.js"></script>';
+        echo '<script src="//code.jquery.com/ui/1.11.0/jquery-ui.js"></script>';
+        echo '<link rel="stylesheet" href="//code.jquery.com/ui/1.11.0/themes/smoothness/jquery-ui.css">';
 
         $this->getModuleJS($m, $a, true);
     }
