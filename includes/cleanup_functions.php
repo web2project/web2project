@@ -5178,3 +5178,20 @@ function __extract_from_view_messages4($s, $style, $row, $hideEmail, $editor, $A
     $s .= '</tr>';
     return array($s, $new_messages);
 }
+
+function w2p_unpluralize($word)
+{
+    $suffix = substr($word, -3);
+    switch ($suffix) {
+        case 'ies':
+            $word = substr($word, 0, -3).'y';
+            break;
+        default:
+            $character = substr($word, -1);
+            if('s' == $character) {
+                $word = substr($word, 0, -1);
+            }
+    }
+
+    return $word;
+}
