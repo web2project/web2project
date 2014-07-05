@@ -169,9 +169,13 @@ function setDepartment(department_id_string){
 }
 
 $(function() {
-    var companies = <?php echo json_encode(array_values($companies)); ?>;
+    var companies = <?php echo json_encode(array_flip($companies)); ?>;
+    var companyNames = <?php echo json_encode(array_values($companies)); ?>;
     $( "#companies" ).autocomplete({
-        source: companies
+        source: companyNames
+    });
+    $("#companies").blur(function() {
+        $("#project_company").val(companies[$("#companies").val()]);
     });
 });
 
