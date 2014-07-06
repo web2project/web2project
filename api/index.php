@@ -42,4 +42,20 @@ $app->get('/:module/search', function ($module) use ($app, $AppUI) {
     }
 });
 
+$app->get('/:module/:id', function ($module, $id) use ($app, $AppUI) {
+    if ($AppUI->isActiveModule($module)) {
+        $class = 'C' . w2p_unpluralize($module);
+
+        $object = new $class();
+        $object->load($id);
+        if ($object->getId()) {
+            echo json_encode($object);
+        } else {
+            $app->response->setStatus(404);
+        }
+    } else {
+        $app->response->setStatus(404);
+    }
+});
+
 $app->run();
