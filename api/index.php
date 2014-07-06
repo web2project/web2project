@@ -18,6 +18,17 @@ $app->get('/' , function() use ($app) {
     $app->redirect('..');
 });
 
+$app->get('/:module' , function($module) use ($app, $AppUI) {
+    if ($AppUI->isActiveModule($module)) {
+        $gateway = new \Web2project\Database\Gateway($AppUI, $module);
+        $results = $gateway->search('');
+
+        echo json_encode($results);
+    } else {
+        $app->response->setStatus(404);
+    }
+});
+
 $app->get('/:module/search', function ($module) use ($app, $AppUI) {
     if ($AppUI->isActiveModule($module)) {
         $search = $app->request->get('query');
