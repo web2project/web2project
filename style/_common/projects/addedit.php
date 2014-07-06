@@ -11,6 +11,7 @@ $form = new w2p_Output_HTML_FormHelper($AppUI);
     <input type="hidden" name="datePicker" value="project" />
     <?php echo $form->addNonce(); ?>
 
+
     <div class="std addedit projects">
         <div class="column left">
             <p>
