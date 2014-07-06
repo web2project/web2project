@@ -13,6 +13,11 @@ $app = new \Slim\Slim(
     array('debug' => true)
 );
 
+$app->get('/' , function() use ($app) {
+    $app->response->setStatus(301);
+    $app->redirect('..');
+});
+
 $app->get('/:module/search', function ($module) use ($app, $AppUI) {
     if ($AppUI->isActiveModule($module)) {
         $search = $app->request->get('query');
