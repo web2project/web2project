@@ -177,8 +177,16 @@ $(function() {
     $("#companies").blur(function() {
         $("#project_company").val(companies[$("#companies").val()]);
     });
-});
 
+    var projects = <?php echo json_encode(array_flip($structprojects)); ?>;
+    var projectNames = <?php echo json_encode(array_values($structprojects)); ?>;
+    $( "#parents" ).autocomplete({
+        source: projectNames
+    });
+    $("#parents").blur(function() {
+        $("#project_parent").val(projects[$("#parents").val()]);
+    });
+});
 </script>
 <?php
 
