@@ -44,4 +44,22 @@ class Gateway
 
         return $query->loadList();
     }
+
+    public function index()
+    {
+        $query = $this->query;
+
+        $object = new $this->class;
+        $searchParams = $object->hook_search();
+        $query->addTable($searchParams['table'], $searchParams['table_alias']);
+        $query->addQuery('*');
+
+        $query->addQuery($searchParams['table_key']);
+
+        $where = $object->getAllowedSQL($this->AppUI->user_id, $searchParams['table_key']);
+        $query->addWhere($where);
+
+
+        return $query->loadList();
+    }
 }

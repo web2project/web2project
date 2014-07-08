@@ -21,7 +21,7 @@ $app->get('/' , function() use ($app) {
 $app->get('/:module' , function($module) use ($app, $AppUI) {
     if ($AppUI->isActiveModule($module)) {
         $gateway = new \Web2project\Database\Gateway($AppUI, $module);
-        $results = $gateway->search('');
+        $results = $gateway->index();
 
         echo json_encode($results);
     } else {
