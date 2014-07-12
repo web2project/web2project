@@ -8,7 +8,7 @@ if (!defined('W2P_BASE_DIR')) {
 global $AppUI, $m, $a, $project_id, $f, $task_status, $min_view, $query_string, $durnTypes, $tpl;
 global $task_sort_item1, $task_sort_type1, $task_sort_order1;
 global $task_sort_item2, $task_sort_type2, $task_sort_order2;
-global $user_id, $w2Pconfig, $currentTabId, $currentTabName, $canEdit, $showEditCheckbox;
+global $user_id, $w2Pconfig, $currentTabId, $currentTabName, $canEdit, $showEditCheckbox, $tab;
 global $history_active;
 
 if (empty($query_string)) {
@@ -90,6 +90,11 @@ if ($showIncomplete) {
 //When in task view context show all the tasks, active and inactive. (by not limiting the query by task status)
 //When in a project view or in the tasks list, show the active or the inactive tasks depending on the selected tab or button.
 if (!$task_id) {
+    if ($tab == 1) {
+        $task_status = -1;
+    } else {
+        $task_status = 0;
+    }
     $q->addWhere('task_status = ' . (int)$task_status);
 }
 if (isset($task_type) && (int) $task_type > 0) {
