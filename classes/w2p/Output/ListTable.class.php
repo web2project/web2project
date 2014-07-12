@@ -70,11 +70,11 @@ class w2p_Output_ListTable extends w2p_Output_HTMLHelper
         $this->stageRowData($rowData);
 
         $row = '<tr>';
-        $row .= $this->_buildBeforeCells($this->_before);
+        $row .= $this->_buildCells($this->_before);
         foreach ($this->_fieldKeys as $column) {
             $row .= $this->createCell($column, $rowData[$column], $customLookups);
         }
-        $row .= $this->_buildBeforeCells($this->_after);
+        $row .= $this->_buildCells($this->_after);
         $row .= '</tr>';
 
         return $row;
@@ -90,7 +90,7 @@ class w2p_Output_ListTable extends w2p_Output_HTMLHelper
         $this->_after[$type] = $value;
     }
 
-    protected function _buildBeforeCells($array = array())
+    protected function _buildCells($array = array())
     {
         $cells = '';
 
