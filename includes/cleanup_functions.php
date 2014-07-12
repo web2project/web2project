@@ -361,11 +361,8 @@ function __extract_from_showtask(&$arr, $level, $today_view, $listTable)
     // dots
     $s = __extract_from_showtask2($arr, $level, $today_view, $s, $m, $jsTaskId, $expanded);
 
-    if ($a == 'todo') { // Show the project name
-        $s .= ('<td class="_name" width="50%"><a href="./index.php?m=projects&amp;a=view&amp;project_id=' . $arr['task_project'] . '">' . '<div style="display:inline-block;padding: 2px 3px;background-color:#' . $arr['project_color_identifier'] . ';color:' . bestColor($arr['project_color_identifier']) . '">' . $arr['project_name'] . '</div>' . '</a></td>');
-    } else {
-        $s .= $listTable->createCell('task_owner', $arr['task_owner']);
-    }
+    $s .= $listTable->createCell('task_owner', $arr['task_owner']);
+
     if (isset($arr['task_assigned_users']) && count($arr['task_assigned_users'])) {
         $assigned_users = $arr['task_assigned_users'];
         $a_u_tmp_array = array();
@@ -374,9 +371,6 @@ function __extract_from_showtask(&$arr, $level, $today_view, $listTable)
             $a_u_tmp_array[] = ('<a href="?m=users&amp;a=view&amp;user_id=' . $val['user_id'] . '"' . 'title="' . (w2PgetConfig('check_overallocation') ? $AppUI->_('Extent of Assignment') . ':' . $userAlloc[$val['user_id']]['charge'] . '%; ' . $AppUI->_('Free Capacity') . ':' . $userAlloc[$val['user_id']]['freeCapacity'] . '%' : '') . '">' . $val['assignee'] . ' (' . $val['perc_assignment'] . '%)</a>');
         }
         $s .= join(', <br />', $a_u_tmp_array) . '</td>';
-    } elseif ($a != 'todo') {
-        // No users assigned to task
-        $s .= $listTable->createCell('other', '-');
     }
 
     // duration or milestone
