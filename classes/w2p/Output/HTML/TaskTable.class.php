@@ -15,7 +15,7 @@ class w2p_Output_HTML_TaskTable extends w2p_Output_ListTable
         $class = w2pFindTaskComplete($rowData['task_start_date'], $rowData['task_end_date'], $rowData['task_percent_complete']);
 
         $row = '<tr class="'.$class.'">';
-        $row .= $this->_buildBeforeCells();
+        $row .= $this->_buildCells(array('edit' => 'task_id', 'pin' => 'task_id', 'log' => 'task_id'));
         foreach ($this->_fieldKeys as $column) {
             if ('task_name' == $column ) {
                 $prefix = '';
