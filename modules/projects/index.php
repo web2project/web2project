@@ -14,7 +14,8 @@ $search_string = w2PformSafe($search_string, true);
 
 $canCreate = $project->canCreate();
 
-$company_id = $AppUI->processIntState('ProjIdxCompany', $_POST, 'project_company', $AppUI->user_company);
+$company_id = (w2PgetConfig('company_filter_default', 'user') == 'user') ? $AppUI->user_company : '-1';
+
 $orderby = (isset($_GET['orderby']) && property_exists('CProject', $_GET['orderby'])) ? $_GET['orderby'] : 'project_name';
 $project_type = $AppUI->processIntState('ProjIdxType', $_POST, 'project_type', -1);
 $owner = $AppUI->processIntState('ProjIdxowner', $_POST, 'project_owner', -1);
