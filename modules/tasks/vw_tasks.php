@@ -168,7 +168,7 @@ if (0 == count($fields)) {
         'task_assignees', 'task_start_date', 'task_duration', 'task_end_date');
     $fieldNames = array('Percent', 'P', 'U', 'Task Name', 'Owner', 'Assignees', 'Start Date', 'Duration', 'Finish Date');
 
-    $module->storeSettings($m, 'tasklist', $fieldList, $fieldNames);
+    //$module->storeSettings($m, 'tasklist', $fieldList, $fieldNames);
     $fields = array_combine($fieldList, $fieldNames);
 }
 $fieldNames = array_values($fields);
