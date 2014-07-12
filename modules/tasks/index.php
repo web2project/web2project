@@ -4,7 +4,7 @@ if (!defined('W2P_BASE_DIR')) {
 }
 
 $perms = &$AppUI->acl();
-$user_id = (int) w2PgetParam($_POST, 'user_id', 0);
+$user_id = (int) w2PgetParam($_POST, 'user_id', $AppUI->user_id);
 
 if (isset($_POST['f'])) {
 	$AppUI->setState('TaskIdxFilter', $_POST['f']);
