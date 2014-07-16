@@ -336,7 +336,7 @@ class Web2project_Output_EmailManagerTest extends CommonSetup
 
     public function testNotifyPasswordReset()
     {
-        $target_body  = "The user account admin has this email associated with it. ";
+        $target_body  = "The user account admin has this email associated with it.\n";
         $target_body .= "A web user from " . W2P_BASE_URL ." has just requested that a new password be sent.\n\n";
         $target_body .= "Your New Password is: password If you didn't ask for this, don't worry. You are seeing this message, not them. If this was an error just login with your new password and then change your password to what you would like it to be.";
 
