@@ -242,6 +242,7 @@ class w2p_Core_CAppUI
     public function formatTZAwareTime($datetime = '', $format = '')
     {
         $userTimezone = $this->getPref('TIMEZONE');
+        $userTimezone = ('' == $userTimezone) ? 'UTC' : $userTimezone;
         $userTZ = new DateTimeZone($userTimezone);
         $systemTZ = new DateTimeZone('UTC');
         $ts = new DateTime($datetime, $systemTZ);
