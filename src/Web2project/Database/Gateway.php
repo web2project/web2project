@@ -45,7 +45,7 @@ class Gateway
         return $query->loadList();
     }
 
-    public function index()
+    public function index($page, $page_size = 25)
     {
         $query = $this->query;
 
@@ -53,13 +53,15 @@ class Gateway
         $searchParams = $object->hook_search();
         $query->addTable($searchParams['table'], $searchParams['table_alias']);
         $query->addQuery('*');
-
         $query->addQuery($searchParams['table_key']);
 
         $where = $object->getAllowedSQL($this->AppUI->user_id, $searchParams['table_key']);
         $query->addWhere($where);
 
+        $results = $query->loadList();
 
-        return $query->loadList();
+        $results = array_slice($results, $page * $page_size, $page_size);
+
+        return $results;
     }
 }

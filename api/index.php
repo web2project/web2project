@@ -21,7 +21,9 @@ $app->get('/' , function() use ($app) {
 $app->get('/:module' , function($module) use ($app, $AppUI) {
     if ($AppUI->isActiveModule($module)) {
         $gateway = new \Web2project\Database\Gateway($AppUI, $module);
-        $results = $gateway->index();
+        $page = $app->request->get('page');
+        $page_size = $app->request->get('page_size');
+        $results = $gateway->index($page, $page_size);
 
         echo json_encode($results);
     } else {
