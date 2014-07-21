@@ -66,6 +66,9 @@ $q->leftJoin('project_departments', 'project_departments', 'p.project_id = proje
 $q->leftJoin('departments', 'departments', 'departments.dept_id = project_departments.department_id OR dept_id IS NULL');
 $q->leftJoin('user_task_pin', 'pin', 'tasks.task_id = pin.task_id AND pin.user_id = ' . (int)$AppUI->user_id);
 
+if ((int) $f2) {
+    $q->addWhere('project_company = ' . (int) $f2);
+}
 if ($project_id) {
     $q->addWhere('task_project = ' . (int)$project_id);
     //if we are on a project context make sure we show all tasks
