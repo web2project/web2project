@@ -9,6 +9,7 @@ abstract class w2p_Theme_Base
     protected $_AppUI = null;
     protected $_m     = null;
     protected $_uistyle = 'web2project';
+    protected $footerJavascriptFiles = array();
 
     public function __construct($AppUI, $m = '') {
         $this->_AppUI = $AppUI;
