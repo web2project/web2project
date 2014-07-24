@@ -70,7 +70,7 @@ $bbparser = new HTML_BBCodeParser();
 if ($canEdit || $canAdd) {
 ?>
 function submitIt(){
-	var form = document.changeforum;
+	var form = document.editFrm;
 	if (form.message_title.value.search(/^\s*$/) >= 0 ) {
 		alert("<?php echo $AppUI->_('forumSubject', UI_OUTPUT_JS); ?>");
 		form.message_title.focus();
@@ -83,7 +83,7 @@ function submitIt(){
 }
 
 function delIt(){
-	var form = document.changeforum;
+	var form = document.editFrm;
 	if (confirm( "<?php echo $AppUI->_('forumDeletePost', UI_OUTPUT_JS); ?>" )) {
 		form.del.value="<?php echo $message_id; ?>";
 		form.submit();
@@ -91,7 +91,7 @@ function delIt(){
 }
 <?php } ?>
 function orderByName(x){
-	var form = document.changeforum;
+	var form = document.editFrm;
 	if (x == 'name') {
 		form.forum_order_by.value = form.forum_last_name.value + ', ' + form.forum_name.value;
 	} else {
@@ -108,7 +108,7 @@ echo $AppUI->getTheme()->styleRenderBoxTop();
 $form = new w2p_Output_HTML_FormHelper($AppUI);
 
 ?>
-<form name="changeforum" action="?m=<?php echo $m; ?>&forum_id=<?php echo $forum_id; ?>" method="post" accept-charset="utf-8" class="addedit forums-message">
+<form name="editFrm" action="?m=<?php echo $m; ?>&forum_id=<?php echo $forum_id; ?>" method="post" accept-charset="utf-8" class="addedit forums-message">
 	<input type="hidden" name="dosql" value="do_post_aed" />
 	<input type="hidden" name="del" value="0" />
 	<input type="hidden" name="message_forum" value="<?php echo $forum_id; ?>" />

@@ -128,8 +128,7 @@ if (!$project_id) {
 
 	$canDeleteProject = $obj->canDelete($msg, $project_id);
 
-	// load the record data
-	$obj->loadFull(null, $project_id);
+	$obj->load($project_id);
 
 	if (!$obj) {
 		$AppUI->setMsg('Project');
@@ -144,15 +143,8 @@ if (!$project_id) {
 	$titleBlock->addCrumb('?m=' . $m, 'select another project');
 	$titleBlock->addCrumb('?m=projects&a=view&bypass=1&project_id=' . $project_id, 'normal view project');
 
-	if ($canAddProjects) {
-		$titleBlock->addCell();
-        $titleBlock->addButton('New project', '?m=projects&a=addedit');
-    }
+    $titleBlock->addButton('new link', '?m=links&a=addedit&project_id=' . $project_id);
 
-	if ($canAddTasks) {
-		$titleBlock->addCell();
-        $titleBlock->addButton('New task', '?m=tasks&a=addedit&task_project=' . $project_id);
-	}
 	if ($canEditProject) {
 		$titleBlock->addCell();
         $titleBlock->addButton('New event', '?m=events&a=addedit&event_project=' . $project_id);
@@ -164,6 +156,11 @@ if (!$project_id) {
 			$titleBlock->addCrumbDelete('delete project', $canDelete, $msg);
 		}
 	}
+    if ($canAddTasks) {
+        $titleBlock->addCell();
+        $titleBlock->addButton('New task', '?m=tasks&a=addedit&task_project=' . $project_id);
+    }
+
 	$titleBlock->addCell();
 	$titleBlock->addCell(w2PtoolTip($m, 'print project') . '<a href="javascript: void(0);" onclick ="window.open(\'index.php?m=projectdesigner&a=printproject&dialog=1&suppressHeaders=1&project_id=' . $project_id . '\', \'printproject\',\'width=1200, height=600, menubar=1, scrollbars=1\')">
       		<img src="' . w2PfindImage('printer.png') . '" />
@@ -434,31 +431,28 @@ function calcDuration(f, start_date, end_date, duration_fld, durntype_fld) {
 	<input type="hidden" name="project_id" value="<?php echo $project_id; ?>" />
 </form>
 
-<table class="std view">
-<tr>
-	<td style="border: outset #d1d1cd 1px; background-color:#<?php echo $obj->project_color_identifier; ?>" colspan="2" class="data _identifier">
-        <a href="javascript: void(0);" name="fp" style="display:block" onclick="expand_collapse('project', 'tblProjects');update_workspace('project');">
-            <div class="left" style="color: <?php echo bestColor($obj->project_color_identifier); ?>; font-weight: bold; padding-top: 2px;"><?php echo $AppUI->_('Project') . ': ' . $obj->project_name; ?></div>
-            <div class="right">
-                <img id="project_expand" src="<?php echo w2PfindImage('icons/expand.gif', $m); ?>"
-                     alt="" <?php echo (isset($view_options[0]['pd_option_view_project']) ? ($view_options[0]['pd_option_view_project'] ? 'style="display:none"' : 'style="display:"') : 'style="display:none"') ?>>
-                <img id="project_collapse" src="<?php echo w2PfindImage('icons/collapse.gif', $m); ?>"
-                     alt="" <?php echo (isset($view_options[0]['pd_option_view_project']) ? ($view_options[0]['pd_option_view_project'] ? 'style="display:"' : 'style="display:none"') : 'style="display:"') ?>>
-            </div>
-        </a>
-	</td>
-</tr>
-<tr id="project" <?php echo (isset($view_options[0]['pd_option_view_project']) ? ($view_options[0]['pd_option_view_project'] ? 'style="visibility:visible;display:"' : 'style="visibility:collapse;display:none"') : 'style="visibility:visible;display:"'); ?>>
-	<?php
-    require (w2PgetConfig('root_dir') . '/modules/projectdesigner/vw_project.php');
-    ?>
-</tr>
-</table>
 <?php
+    $project = $obj;
+
+    // get critical tasks (criteria: task_end_date)
+    $criticalTasks = ($project_id > 0) ? $project->getCriticalTasks($project_id) : null;
+    // create Date objects from the datetime fields
+    $end_date = intval($project->project_end_date) ? new w2p_Utilities_Date($project->project_end_date) : null;
+    $actual_end_date = null;
+    if (isset($criticalTasks)) {
+        $actual_end_date = intval($criticalTasks[0]['task_end_date']) ? new w2p_Utilities_Date($criticalTasks[0]['task_end_date']) : null;
+    }
+    $style = (($actual_end_date > $end_date) && !empty($end_date)) ? 'style="color:red; font-weight:bold"' : '';
+
+    $projectPriority = w2PgetSysVal('ProjectPriority');
+    $projectPriorityColor = w2PgetSysVal('ProjectPriorityColor');
+    $billingCategory = w2PgetSysVal('BudgetCategory');
+    $pstatus = w2PgetSysVal('ProjectStatus');
+    $ptype = w2PgetSysVal('ProjectType');
+
+    include $AppUI->getTheme()->resolveTemplate('projects/view');
+
     echo $AppUI->getTheme()->styleRenderBoxBottom();
-?>
-<br />
-<?php
     echo $AppUI->getTheme()->styleRenderBoxTop();
 ?>
 <table class="std">
@@ -489,9 +483,6 @@ function calcDuration(f, start_date, end_date, duration_fld, durntype_fld) {
 </table>
 <?php
     echo $AppUI->getTheme()->styleRenderBoxBottom();
-?>
-<br />
-<?php
     echo $AppUI->getTheme()->styleRenderBoxTop();
 ?>
 <table class="std">
@@ -512,7 +503,7 @@ function calcDuration(f, start_date, end_date, duration_fld, durntype_fld) {
 	<td colspan="2" class="hilite">
 	<?php
 	if ($canViewTasks) {
-		require (w2PgetConfig('root_dir') . '/modules/projectdesigner/vw_tasks.php');
+		require (w2PgetConfig('root_dir') . '/modules/tasks/vw_tasks.php');
 	} else {
 		echo $AppUI->_('You do not have permission to view tasks');
 	}
@@ -522,9 +513,6 @@ function calcDuration(f, start_date, end_date, duration_fld, durntype_fld) {
 </table>
 <?php
     echo $AppUI->getTheme()->styleRenderBoxBottom();
-?>
-<br />
-<?php
     echo $AppUI->getTheme()->styleRenderBoxTop();
 ?>
 <table class="std">
@@ -555,9 +543,6 @@ function calcDuration(f, start_date, end_date, duration_fld, durntype_fld) {
 </table>
 <?php
     echo $AppUI->getTheme()->styleRenderBoxBottom();
-?>
-<br />
-<?php
     echo $AppUI->getTheme()->styleRenderBoxTop();
 ?>
 <table class="std">
@@ -588,9 +573,6 @@ function calcDuration(f, start_date, end_date, duration_fld, durntype_fld) {
 </table>
 <?php
     echo $AppUI->getTheme()->styleRenderBoxBottom();
-?>
-<br />
-<?php
     echo $AppUI->getTheme()->styleRenderBoxTop();
 ?>
 <table class="std">
@@ -621,13 +603,9 @@ function calcDuration(f, start_date, end_date, duration_fld, durntype_fld) {
 	</td>
 </tr>
 </table>
-<div style="display:none;">
-<table class="tbl">
-<tr><td id="td_sample">&nbsp;</td></tr>
-</table>
-</div>
+
 <script language="javascript" type="text/javascript">
-var original_bgc = getStyle('td_sample', 'background-color', 'backgroundColor');
+    var original_bgc = getStyle('td_sample', 'background-color', 'backgroundColor');
 </script>
 <?php
 }

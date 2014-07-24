@@ -228,6 +228,7 @@ class w2p_Core_CAppUI
     public function formatTZAwareTime($datetime = '', $format = '')
     {
         $userTimezone = $this->getPref('TIMEZONE');
+        $userTimezone = ('' == $userTimezone) ? 'UTC' : $userTimezone;
         $userTZ = new DateTimeZone($userTimezone);
         $systemTZ = new DateTimeZone('UTC');
         $ts = new DateTime($datetime, $systemTZ);
@@ -407,7 +408,7 @@ class w2p_Core_CAppUI
             $langs = $loader->readDirs('locales');
             foreach ($langs as $lang) {
                 if (file_exists(W2P_BASE_DIR . '/locales/' . $lang . '/lang.php')) {
-                    include_once W2P_BASE_DIR . '/locales/' . $lang . '/lang.php';
+                    include W2P_BASE_DIR . '/locales/' . $lang . '/lang.php';
                 }
             }
             $_SESSION['LANGUAGES'] = &$LANGUAGES;

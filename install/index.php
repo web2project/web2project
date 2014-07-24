@@ -109,7 +109,7 @@ $manager = new w2p_System_UpgradeManager();
 					 * this case as we know *exactly* what both $action and $step will be
 					 * if we reach this include.
 					 */
-					include_once $action.'/'.$step.'.php';
+					include $action.'/'.$step.'.php';
 					break;
 				default:
 					//do nothing

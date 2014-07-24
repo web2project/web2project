@@ -4,7 +4,7 @@ if (!defined('W2P_BASE_DIR')) {
 }
 // @todo    convert to template
 
-global $AppUI, $project, $project_statuses, $tab, $company_id, $owner, $project_type, $orderby;
+global $AppUI, $project, $project_statuses, $tab, $company_id, $owner, $project_type, $orderby, $m;
 
 $currentTabId = $tab;
 $is_tabbed = false;
@@ -56,15 +56,18 @@ $fieldList = array_keys($fields);
 $fieldNames = array_values($fields);
 
 $page = (int) w2PgetParam($_GET, 'page', 1);
-$xpg_pagesize = w2PgetConfig('page_size', 50);
-$xpg_min = $xpg_pagesize * ($page - 1); // This is where we start our record set from
-$xpg_totalrecs = count($projects);
+$paginator = new w2p_Utilities_Paginator($projects);
+$items = $paginator->getItemsOnPage($page);
 
-$projects = array_slice($projects, $xpg_min, $xpg_pagesize);
 ?>
 
 <form action="./index.php?m=projects" method="post" accept-charset="utf-8">
     <table id="tblProjects-list" class="tbl list">
+        <tr>
+            <td colspan="<?php echo count($fieldNames) + 1; ?>">
+                <?php echo $paginator->buildNavigation($AppUI, $m, $tab); ?>
+            </td>
+        </tr>
 		<tr>
             <?php
             foreach ($fieldNames as $index => $name) {
@@ -88,7 +91,7 @@ $projects = array_slice($projects, $xpg_min, $xpg_pagesize);
         $project_status = w2PgetSysVal('ProjectStatus');
         $customLookups = array('project_status' => $project_status, 'project_type' => $project_types);
 
-		foreach ($projects as $row) {
+		foreach ($items as $row) {
             $tmpProject = new CProject();
             $st_projects_arr = array();
 
@@ -118,7 +121,7 @@ $projects = array_slice($projects, $xpg_min, $xpg_pagesize);
                     if ($is_tabbed) {
                         $row = $all_projects[getProjectIndex($all_projects, $project_id)];
                     } else {
-                        $row = $projects[getProjectIndex($projects, $project_id)];
+                        $row = $items[getProjectIndex($items, $project_id)];
                     }
                 }
                 $none = false;
@@ -210,6 +213,11 @@ $projects = array_slice($projects, $xpg_min, $xpg_pagesize);
 			<?php
 			}
 		?>
+        <tr>
+            <td colspan="<?php echo count($fieldNames) + 1; ?>">
+                <?php echo $paginator->buildNavigation($AppUI, $m, $tab); ?>
+            </td>
+        </tr>
 	</table>
 </form>
 <?php

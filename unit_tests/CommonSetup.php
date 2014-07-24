@@ -50,7 +50,7 @@ $AppUI->user_email = 'something@something.com';
 
 class CommonSetup extends PHPUnit_Framework_TestCase
 {
-    protected $backupGlobals = FALSE;
+    protected $backupGlobals = false;
     protected $obj = null;
     protected $post_data = array();
     protected $mockDB = null;

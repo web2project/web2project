@@ -134,7 +134,7 @@ $methodLabels = w2PgetSysVal('ContactMethods');
 										<?php
 											reset($showfields);
 											$s = '';
-											while (list($key, $val) = each($showfields)) {
+                                            foreach($showfields as $key => $val) {
 												if (isset($carr[$z][$x][$key]) && mb_strlen($carr[$z][$x][$key]) > 0) {
 													if ($val == 'contact_email') {
                                                         $s .= '<td class="hilite" colspan="2">' . w2p_email($carr[$z][$x][$key]) . '</td></tr>';

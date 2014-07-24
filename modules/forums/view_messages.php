@@ -82,12 +82,10 @@ echo $AppUI->getTheme()->styleRenderBoxTop();
 </tr>
 
 <tr>
-<?php
-if ($viewtype != 'short') {
-	echo '<th nowrap>' . $AppUI->_('Author') . ':</th>';
-}
-echo '<th width="' . (($viewtype == 'single') ? '60' : '100') . '%">' . $AppUI->_('Message') . ':</th>';
-?>
+    <?php
+    echo '<th nowrap>' . $AppUI->_('Author') . ':</th>';
+    echo '<th width="' . (($viewtype == 'single') ? '60' : '100') . '%">' . $AppUI->_('Message') . ':</th>';
+    ?>
 </tr>
 
 <?php
@@ -119,142 +117,27 @@ foreach ($messages as $row) {
     $bbparser = new HTML_BBCodeParser();
 	//!!! Different table building for the three different views
 	// To be cleaned up, and reuse common code at later stage.
-	if ($viewtype == 'normal') {
-		$s .= '<tr>';
+    switch ($viewtype) {
+        case 'normal':
+            list($s, $new_messages) = __extract_from_view_messages4($s, $style, $row, $hideEmail, $editor, $AppUI, $new_messages, $bbparser, $m, $df, $tf, $canEdit, $canAdminEdit, $canDelete);
+            break;
+        case 'short':
+            $s = __extract_from_view_messages1($s, $style, $row, $editor, $AppUI, $bbparser);
+            break;
+        case 'single':
+            list($s, $side) = __extract_from_view_messages3($s, $style, $AppUI, $row, $df, $tf, $editor, $side, $bbparser, $first, $messages);
+            break;
+    }
+    $first = false;
 
-		$s .= '<td valign="top" style="' . $style . '" nowrap="nowrap">';
-        $s .= '<a href="?m=users&a=view&user_id='.$row['message_author'].'">';
-        $s .= $row['contact_name'];
-        $s .= '</a>';
-		if (!$hideEmail) {
-			$s .= '&nbsp;';
-            $s .= '<a href="mailto:' . $row['contact_email'] . '">';
-    		$s .= '<img src="' . w2PfindImage('email.gif') . '" alt="email" />';
-			$s .= '</a>';
-		}
-
-		if (sizeof($editor) > 0) {
-			$s .= '<br/>&nbsp;<br/>' . $AppUI->_('last edited by');
-			$s .= ':<br/>';
-			if (!$hideEmail) {
-				$s .= '<a href="mailto:' . $editor[0]['contact_email'] . '">';
-			}
-			$s .= '<font size="1">' . $editor[0]['contact_name'] . '</font>';
-			if (!$hideEmail) {
-				$s .= '</a>';
-			}
-		}
-		if ($row['visit_user'] != $AppUI->user_id) {
-			$s .= '<br />&nbsp;' . w2PshowImage('icons/stock_new_small.png');
-			$new_messages[] = $row['message_id'];
-		}
-		$s .= '</td>';
-		$s .= '<td valign="top" style="' . $style . '">';
-		$s .= '<font size="2"><strong>' . $row['message_title'] . '</strong><hr size=1>';
-		$row['message_body'] = $bbparser->qparse($row['message_body']);
-        $row['message_body'] = nl2br($row['message_body']);
-		$s .= $row['message_body'];
-		$s .= '</font></td>';
-
-		$s .= '</tr><tr>';
-
-		$s .= '<td valign="top" style="' . $style . '" nowrap="nowrap">';
-		$s .= '<img src="' . w2PfindImage('icons/posticon.gif', $m) . '" alt="date posted" />' . $AppUI->formatTZAwareTime($row['message_date'], $df . ' ' . $tf) . '</td>';
-		$s .= '<td valign="top" align="right" style="' . $style . '">';
-
-                // in some weird permission cases
-                // it can happen that the table gets opened but never closed,
-                // or the other way around, thus breaking the layout
-                // introducing these variables to help us out with proper
-                // table tag opening and closing.
-                $tableOpened = false;
-                $tableClosed = false;
-		//the following users are allowed to edit/delete a forum message: 1. the forum creator  2. a superuser with read-write access to 'all' 3. the message author
-		if ($canEdit || $AppUI->user_id == $row['forum_moderated'] || $AppUI->user_id == $row['message_author'] || $canAdminEdit) {
-                    $tableOpened = true;
-                    $s .= '<table cellspacing="0" cellpadding="0" border="0"><tr>';
-                    // edit message
-                    $s .= '<td><a href="./index.php?m=forums&a=viewer&post_message=1&forum_id=' . $row['message_forum'] . '&message_parent=' . $row['message_parent'] . '&message_id=' . $row["message_id"] . '" title="' . $AppUI->_('Edit') . ' ' . $AppUI->_('Message') . '">';
-                    $s .= w2PshowImage('icons/stock_edit-16.png', '16', '16');
-                    $s .= '</td>';
-		}
-		if ($canDelete || $AppUI->user_id == $row['forum_moderated'] || $AppUI->user_id == $row['message_author'] || $canAdminEdit) {
-                    $tableClosed = true;
-                    if(!$tableOpened) {
-                        $s .= '<table cellspacing="0" cellpadding="0" border="0"><tr>';
-                    }
-                    // delete message
-                    $s .= '<td><a href="javascript:delIt(' . $row['message_id'] . ')" title="' . $AppUI->_('delete') . '">';
-                    $s .= w2PshowImage('icons/stock_delete-16.png', '16', '16');
-                    $s .= '</a>';
-                    $s .= '</td></tr></table>';
-		}
-                
-                if($tableOpened and !$tableClosed) {
-                    $s .= '</tr></table>';
-                }
-                
-		$s .= '</td>';
-		$s .= '</tr>';
-	} else
-		if ($viewtype == 'short') {
-			$s .= "<tr>";
-
-			$s .= '<td valign="top" style="' . $style . '" >';
-			$s .= '<a href="mailto:' . $row['contact_email'] . '">';
-			$s .= '<font size="2">' . $row['contact_name'] . ' ' . $row['contact_name'] . '</font></a>';
-			$s .= ' (' . $AppUI->formatTZAwareTime($row['message_date'], $df . ' ' . $tf) . ') ';
-			if (sizeof($editor) > 0) {
-				$s .= '<br/>&nbsp;<br/>' . $AppUI->_('last edited by');
-				$s .= ':<br/><a href="mailto:' . $editor[0]['contact_email'] . '">';
-				$s .= '<font size="1">' . $editor[0]['contact_name'] . '</font></a>';
-			}
-			$s .= '<a name="' . $row['message_id'] . '" href="javascript: void(0);" onclick="toggle(' . $row['message_id'] . ')">';
-			$s .= '<span size="2"><strong>' . $row['message_title'] . '</strong></span></a>';
-			$s .= '<div class="message" id="' . $row['message_id'] . '" style="display: none">';
-			$row['message_body'] = $bbparser->qparse($row['message_body']);
-			$s .= $row['message_body'];
-			$s .= '</div></td>';
-
-			$s .= '</tr>';
-		} else
-			if ($viewtype == 'single') {
-				$s .= '<tr>';
-
-				$s .= '<td valign="top" style="' . $style . '">';
-				$s .= $AppUI->formatTZAwareTime($row['message_date'], $df . ' ' . $tf) . ' - ';
-				$s .= '<a href="mailto:' . $row['contact_email'] . '">';
-				$s .= '<font size="2">' . $row['contact_name'] . '</font></a>';
-				$s .= '<br />';
-				if (sizeof($editor) > 0) {
-					$s .= '<br/>&nbsp;<br/>' . $AppUI->_('last edited by');
-					$s .= ':<br/><a href="mailto:' . $editor[0]['contact_email'] . '">';
-					$s .= '<font size="1">' . $editor[0]['contact_name'] . '</font></a>';
-				}
-				$s .= '<a href="javascript: void(0);" onclick="toggle(' . $row['message_id'] . ')">';
-				$s .= '<span size="2"><strong>' . $row['message_title'] . '</strong></span></a>';
-				$side .= '<div class="message" id="' . $row['message_id'] . '" style="display: none">';
-				$row['message_body'] = $bbparser->qparse($row['message_body']);
-				$side .= $row['message_body'];
-				$side .= '</div>';
-				$s .= '</td>';
-				if ($first) {
-					$s .= '<td rowspan="' . count($messages) . '" valign="top">';
-					echo $s;
-					$s = '';
-					$first = false;
-				}
-				$s .= '</tr>';
-			}
-
-	if ($viewtype != 'single') {
+    if ($viewtype != 'single') {
 		echo $s;
 	}
 	$x = !$x;
 
 }
 if ($viewtype == 'single') {
-	echo $side . '</td>' . $s;
+	echo $side . $s;
 }
 ?>
 

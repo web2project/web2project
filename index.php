@@ -85,8 +85,8 @@ $theme = new $uiClass($AppUI);
 // check is the user needs a new password
 if (w2PgetParam($_POST, 'lostpass', 0)) {
 	$AppUI->setUserLocale();
-	@include_once W2P_BASE_DIR . '/locales/' . $AppUI->user_locale . '/locales.php';
-	include_once W2P_BASE_DIR . '/locales/core.php';
+	include W2P_BASE_DIR . '/locales/' . $AppUI->user_locale . '/locales.php';
+	include W2P_BASE_DIR . '/locales/core.php';
 	setlocale(LC_TIME, $AppUI->user_lang);
 	if (w2PgetParam($_POST, 'sendpass', 0)) {
 		sendNewPass();
@@ -105,8 +105,8 @@ if (isset($_POST['login'])) {
 	$password = w2PgetParam($_POST, 'password', '');
 	$redirect = w2PgetParam($_POST, 'redirect', '');
 	$AppUI->setUserLocale();
-	@include_once (W2P_BASE_DIR . '/locales/' . $AppUI->user_locale . '/locales.php');
-	include_once W2P_BASE_DIR . '/locales/core.php';
+	include W2P_BASE_DIR . '/locales/' . $AppUI->user_locale . '/locales.php';
+	include W2P_BASE_DIR . '/locales/core.php';
 	$ok = $AppUI->login($username, $password);
 	if (!$ok) {
 		$AppUI->setMsg('Login Failed', UI_MSG_ERROR);
@@ -127,8 +127,8 @@ $u = '';
 if ($AppUI->doLogin()) {
 	// load basic locale settings
 	$AppUI->setUserLocale();
-	@include_once ('./locales/' . $AppUI->user_locale . '/locales.php');
-	include_once ('./locales/core.php');
+	include './locales/' . $AppUI->user_locale . '/locales.php';
+	include './locales/core.php';
 	setlocale(LC_TIME, $AppUI->user_lang);
 	$redirect = $_SERVER['QUERY_STRING'] ? strip_tags($_SERVER['QUERY_STRING']) : '';
 	if (strpos($redirect, 'logout') !== false) {
@@ -191,8 +191,8 @@ $u = $loader->checkFileName(w2PgetParam($_GET, 'u', ''));
 $u = preg_replace("/[^a-z0-9_]/", "", $u);
 
 // load module based locale settings
-@include_once W2P_BASE_DIR . '/locales/' . $AppUI->user_locale . '/locales.php';
-include_once W2P_BASE_DIR . '/locales/core.php';
+include W2P_BASE_DIR . '/locales/' . $AppUI->user_locale . '/locales.php';
+include W2P_BASE_DIR . '/locales/core.php';
 
 setlocale(LC_TIME, $AppUI->user_lang);
 $m_config = w2PgetConfig($m);
@@ -205,17 +205,17 @@ if (!$suppressHeaders) {
 }
 
 if ($u && file_exists(W2P_BASE_DIR . '/modules/' . $m . '/' . $u . '/' . $u . '.class.php')) {
-	include_once W2P_BASE_DIR . '/modules/' . $m . '/' . $u . '/' . $u . '.class.php';
+	includeW2P_BASE_DIR . '/modules/' . $m . '/' . $u . '/' . $u . '.class.php';
 }
 
 // include the module ajax file - we use file_exists instead of @ so  that any parse errors in the file are reported,
 //   rather than errors further down the track.
 $modajax = $AppUI->getModuleAjax($m);
 if (file_exists($modajax)) {
-	include_once ($modajax);
+	include $modajax;
 }
 if ($u && file_exists(W2P_BASE_DIR . '/modules/' . $m . '/' . $u . '/' . $u . '.ajax.php')) {
-	include_once W2P_BASE_DIR . '/modules/' . $m . '/' . $u . '/' . $u . '.ajax.php';
+	include W2P_BASE_DIR . '/modules/' . $m . '/' . $u . '/' . $u . '.ajax.php';
 }
 
 // do some db work if dosql is set

@@ -44,7 +44,7 @@ $typelist = w2PgetSysVal('ResourceTypes');
 ?>
 <script language="javascript" type="text/javascript">
 function submitIt() {
-    var form = document.editfrm;
+    var form = document.editFrm;
     if (form.resource_name.value.length < 3) {
         alert( "<?php echo $AppUI->_('You must enter a name for the resource', UI_OUTPUT_JS); ?>" );
         form.resource_name.focus();

@@ -94,9 +94,9 @@ $canViewTaskLog = canView('task_log');
 //TODO: This whole structure is hard-coded based on the TaskStatus SelectList.
 $status = w2PgetSysVal('TaskStatus');
 if ($canViewTask && $AppUI->isActiveModule('tasks')) {
-	$tabBox->add(W2P_BASE_DIR . '/modules/tasks/tasks', 'Tasks');
+	$tabBox->add(W2P_BASE_DIR . '/modules/tasks/vw_tasks', 'Tasks');
     unset($status[0]);
-    $tabBox->add(W2P_BASE_DIR . '/modules/tasks/tasks', 'Tasks (Inactive)');
+    $tabBox->add(W2P_BASE_DIR . '/modules/tasks/vw_tasks', 'Tasks (Inactive)');
     unset($status[-1]);
 
     foreach ($status as $id => $statusName) {

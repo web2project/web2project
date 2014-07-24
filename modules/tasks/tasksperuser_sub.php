@@ -283,7 +283,7 @@ if ($do_report) {
 		$task->task_assigned_users = $task_users;
 		$task_list[$i] = $task;
 
-		$i += 1;
+		$i++;
 	}
 	$Ntasks = $i;
 
@@ -363,8 +363,7 @@ if ($do_report) {
               <tr>
               <td align="center" bgcolor="#D0D0D0"><input onclick="javascript:checkAll(' . $user_id . ');" type="checkbox" name="master" value="true"/></td>
               <td colspan="2" align="left" nowrap="nowrap" bgcolor="#D0D0D0">
-              <font color="black">
-              <b><a href="index.php?m=events&a=day_view&user_id=' . $user_id . '&tab=1">' . $userAlloc[$user_id]['userFC'] . '</a></b></font></td>';
+              <b><a href="index.php?m=events&a=day_view&user_id=' . $user_id . '&tab=1">' . $userAlloc[$user_id]['userFC'] . '</a></b></td>';
                 $weekcells_count = weekCells($display_week_hours, $sss, $sse);
                 for ($w = 0; $w <= (4 + $weekcells_count); $w++) {
                     $tmpuser .= '<td bgcolor="#D0D0D0"></td>';
@@ -391,6 +390,9 @@ if ($do_report) {
                 $zi = 0;
                 foreach ($task_list as $task) {
                     if (isMemberOfTask($task_list, $Ntasks, $user_id, $task)) {
+                        if ($task->task_parent && $task->task_parent != $task->task_id) {
+                            continue;
+                        }
                         $tmptasks .= displayTask($task_list, $task, 0, $display_week_hours, $sss, $sse, $user_id);
                         // Get children
                         $tmptasks .= doChildren($task_list, $Ntasks, $task->task_id, $user_id, 1, $max_levels, $display_week_hours, $sss, $sse);
@@ -432,8 +434,7 @@ if ($show_orphaned == 'on') {
 				<tr>';
 	$tmpuser .= '<td bgcolor="#D0D0D0"><input onclick="javascript:checkAll(' . $user_id . ');" type="checkbox" name="master" value="true"/></td>
 				<td colspan="2" align="left" nowrap="nowrap" bgcolor="#D0D0D0">
-				<font color="black">
-				<b><a href="index.php?m=events&a=day_view&user_id=' . $user_id . '&tab=1">' . $AppUI->_('Orphaned Tasks') . '</a></b></font></td>';
+				<b><a href="index.php?m=events&a=day_view&user_id=' . $user_id . '&tab=1">' . $AppUI->_('Orphaned Tasks') . '</a></b></td>';
     $weekcells_count = weekCells($display_week_hours, $sss, $sse);
 	for ($w = 0; $w <= (4 + $weekcells_count); $w++) {
 		$tmpuser .= '<td bgcolor="#D0D0D0"></td>';

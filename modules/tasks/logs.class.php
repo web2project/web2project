@@ -153,6 +153,8 @@ class CTask_Log extends w2p_Core_BaseObject
 		$q = $this->_getQuery();
 		$this->task_log_updated = $q->dbfnNowWithTZ();
 
+        $this->task_log_creator = (int) $this->task_log_creator ? $this->task_log_creator : $this->_AppUI->user_id;
+
 		if ($this->task_log_date) {
 			$date = new w2p_Utilities_Date($this->task_log_date);
 			$this->task_log_date = $date->format(FMT_DATETIME_MYSQL);
@@ -293,9 +295,6 @@ class CTask_Log extends w2p_Core_BaseObject
         }
         if ('' == trim($this->task_log_name)) {
             $this->_error['task_log_name'] = $baseErrorMsg . 'task log name is not set';
-        }
-        if (0 == (int) $this->task_log_creator) {
-            $this->_error['task_log_creator'] = $baseErrorMsg . 'task log creator is NULL';
         }
 
         return (count($this->_error)) ? false : true;

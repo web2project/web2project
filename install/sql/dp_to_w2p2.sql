@@ -519,7 +519,7 @@ ALTER TABLE `companies` CHANGE `company_description` `company_description` TEXT 
 INSERT INTO `user_preferences` ( `pref_user` , `pref_name` , `pref_value` ) VALUES ('0', 'TASKSEXPANDED', '1');
 
 #Add config key to set the Template status id, so we can remove them from calculations
-INSERT INTO `config` VALUES (0, 'template_projects_status_id', '', 'projects', 'text');
+INSERT INTO `config` VALUES (0, 'template_projects_status_id', '6', 'projects', 'text');
 
 #Add the reset_memory_limit for converted systems
 INSERT INTO `config` (`config_name`, `config_value`, `config_group`, `config_type`) VALUES ('reset_memory_limit', '64M', 'admin_system', 'text');

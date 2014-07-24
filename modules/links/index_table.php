@@ -4,7 +4,7 @@ if (!defined('W2P_BASE_DIR')) {
 }
 // @todo    convert to template
 
-global $AppUI, $project_id, $task_id, $showProject, $tab, $search_string;
+global $AppUI, $project_id, $task_id, $showProject, $tab, $search_string, $m;
 
 $type_filter = ($m == 'links') ? $tab-1 : -1;
 

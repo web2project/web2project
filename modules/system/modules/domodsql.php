@@ -35,7 +35,7 @@ if (!$ok && $obj->mod_type != 'core') {
 }
 
 if (file_exists(W2P_BASE_DIR . '/modules/' . $obj->mod_directory . '/setup.php')) {
-    include_once (W2P_BASE_DIR . '/modules/' . $obj->mod_directory . '/setup.php');
+    include W2P_BASE_DIR . '/modules/' . $obj->mod_directory . '/setup.php';
     $setupclass = $config['mod_setup_class'];
     if (!$setupclass) {
         if ($obj->mod_type != 'core') {

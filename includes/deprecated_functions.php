@@ -130,7 +130,7 @@ function findchilddept_comp(&$tarr, $parent, $level = 0)
 {
     trigger_error("The findchilddept_comp function has been deprecated and will be removed in v4.0. There is no replacement.", E_USER_NOTICE );
 
-    $level = $level + 1;
+    $level++;
     $n = count($tarr);
     for ($x = 0; $x < $n; $x++) {
         if ($tarr[$x]['dept_parent'] == $parent && $tarr[$x]['dept_parent'] != $tarr[$x]['dept_id']) {
@@ -308,7 +308,7 @@ function find_proj_child(&$tarr, $parent, $level = 0)
 {
     trigger_error("find_proj_child() has been deprecated in v3.0 and will be removed in v4.0. There is no replacement.", E_USER_NOTICE);
 
-    $level = $level + 1;
+    $level++;
     $n = count($tarr);
     for ($x = 0; $x < $n; $x++) {
         if ($tarr[$x]['project_parent'] == $parent && $tarr[$x]['project_parent'] != $tarr[$x]['project_id']) {
@@ -479,12 +479,6 @@ function findchild_pd(&$tarr, $parent, $level = 0)
 function cleanText($text)
 {
     trigger_error("cleanText() has been deprecated in v3.2 and will be removed by v5.0. There is no replacement.", E_USER_NOTICE);
-
-    //This text file is not utf, its iso so we have to decode/encode
-    $text = utf8_decode($text);
-    $trade = array('�' => 'a', '�' => 'a', '�' => 'a', '�' => 'a', '�' => 'a', '�' => 'A', '�' => 'A', '�' => 'A', '�' => 'A', '�' => 'A', '�' => 'e', '�' => 'e', '�' => 'e', '�' => 'e', '�' => 'E', '�' => 'E', '�' => 'E', '�' => 'E', '�' => 'i', '�' => 'i', '�' => 'i', '�' => 'i', '�' => 'I', '�' => 'I', '�' => 'I', '�' => 'I', '�' => 'o', '�' => 'o', '�' => 'o', '�' => 'o', '�' => 'o', '�' => 'O', '�' => 'O', '�' => 'O', '�' => 'O', '�' => 'O', '�' => 'u', '�' => 'u', '�' => 'u', '�' => 'u', '�' => 'U', '�' => 'U', '�' => 'U', '�' => 'U', '�' => 'N', '�' => 'n');
-    $text = strtr($text, $trade);
-    $text = utf8_encode($text);
 
     return $text;
 }
@@ -763,4 +757,18 @@ function clash_cancel(w2p_Core_CAppUI $AppUI)
     trigger_error(__FUNCTION__ . " has been deprecated in v3.2 and will be removed in v5.0. There is no replacement.", E_USER_NOTICE );
 
     $AppUI->redirect('m=events');
+}
+
+/** @deprecated */
+function smart_slice($arr, $notUsed1, $notUsed2, $notUsed3)
+{
+    return dumb_slice($arr);
+}
+
+/** @deprecated */
+function __extract_from_tasks6($q, $history_active)
+{
+    trigger_error(__FUNCTION__ . " has been deprecated in v3.2 and will be removed in v5.0. There is no replacement.", E_USER_NOTICE );
+
+    return $q;
 }

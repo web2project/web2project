@@ -90,60 +90,17 @@ function strEzPdf($text)
     return $text;
 }
 
-/**
-* 	smart_slice : recursive function used to slice the task array whlie
-* 	minimizing the potential number of task dependencies between two sub_arrays
-* 	Each sub_array is LENGTH elements long maximum
-* 	It is shorter if
-* 		- either a dynamic task is between indices LENGTH-3 and LENGTH-1 : in this
-* 		  case, the milestone is EXCLUDED from the lower sub_array
-* 		- or a milestone a MILESTONE is between indices LENGTH-2 and LENGTH-1 : in
-* 		  this case the milestone is INCLUDED in the lower sub_array
-*/
-function smart_slice($arr, $showNoMilestones, $notUsed, $day_diff)
+function dumb_slice( $gantt_arr, $length = 25 )
 {
-    global $gtask_sliced;
+    $sliced_array = array();
 
-    $length = ($showNoMilestones) ? 26 : 25;
-    if ($day_diff < 90) {
-        $length = $length - 2;
-    } elseif ($day_diff >=90 && $day_diff < 1096) {
-        $length = $length;
-    } else {
-        $length++;
+    $pages = (int) count($gantt_arr) / $length;
+
+    for ( $i = 0; $i <= $pages; $i++ ) {
+        $sliced_array[] = array_slice($gantt_arr, $i * $length, $length);
     }
 
-    if ( count($arr) > $length ) {
-        $found = 0 ;
-        for ($i = $length-3 ; $i<$length ; $i++) {
-            if ($arr[$i][0]['task_dynamic'] != 0) {
-                $found = $i ;
-            }
-        }
-        if (!$found) {
-            for ($i = $length-1 ; $i > $length-3 ; $i--) {
-                if ($arr[$i][0]['task_milestone'] != 0) {
-                    $found = $i ;
-                }
-            }
-            if (!$found) {
-                if ($arr[$length][0]['task_milestone'] == 0) {
-                    $cut = $length ;						// No specific task => standard cut
-                } else {
-                    $cut = $length - 1 ;					// No orphan milestone
-                }
-            } else {
-                $cut = $found + 1 ;						// include found milestone in lower level array
-            }
-        } else {
-            $cut = $found ;									//include found dynamic task in higher level array
-        }
-        $gtask_sliced[] = array_slice( $arr, 0, $cut );
-    } else {
-        $gtask_sliced[] = $arr ;
-    }
-
-    return $gtask_sliced ;
+    return $sliced_array;
 }
 
 function dumb_slice( $gantt_arr, $length = 25 )
@@ -417,11 +374,8 @@ function __extract_from_showtask(&$arr, $level, $today_view, $listTable)
     // dots
     $s = __extract_from_showtask2($arr, $level, $today_view, $s, $m, $jsTaskId, $expanded);
 
-    if ($a == 'todo') { // Show the project name
-        $s .= ('<td class="_name" width="50%"><a href="./index.php?m=projects&amp;a=view&amp;project_id=' . $arr['task_project'] . '">' . '<div style="display:inline-block;padding: 2px 3px;background-color:#' . $arr['project_color_identifier'] . ';color:' . bestColor($arr['project_color_identifier']) . '">' . $arr['project_name'] . '</div>' . '</a></td>');
-    } else {
-        $s .= $listTable->createCell('task_owner', $arr['task_owner']);
-    }
+    $s .= $listTable->createCell('task_owner', $arr['task_owner']);
+
     if (isset($arr['task_assigned_users']) && count($arr['task_assigned_users'])) {
         $assigned_users = $arr['task_assigned_users'];
         $a_u_tmp_array = array();
@@ -430,9 +384,6 @@ function __extract_from_showtask(&$arr, $level, $today_view, $listTable)
             $a_u_tmp_array[] = ('<a href="?m=users&amp;a=view&amp;user_id=' . $val['user_id'] . '"' . 'title="' . (w2PgetConfig('check_overallocation') ? $AppUI->_('Extent of Assignment') . ':' . $userAlloc[$val['user_id']]['charge'] . '%; ' . $AppUI->_('Free Capacity') . ':' . $userAlloc[$val['user_id']]['freeCapacity'] . '%' : '') . '">' . $val['assignee'] . ' (' . $val['perc_assignment'] . '%)</a>');
         }
         $s .= join(', <br />', $a_u_tmp_array) . '</td>';
-    } elseif ($a != 'todo') {
-        // No users assigned to task
-        $s .= $listTable->createCell('other', '-');
     }
 
     // duration or milestone
@@ -478,7 +429,7 @@ function __extract_from_showtask2($arr, $level, $today_view, $s, $m, $jsTaskId, 
         $s .= w2PtoolTip('Task Description', substr($arr['task_description'], 0, 1000), true);
     }
 
-    if (isset($arr['children']) && $arr['children']) {
+    if (isset($arr['task_nr_of_children']) && $arr['task_nr_of_children']) {
         $is_parent = true;
     } else {
         $is_parent = false;
@@ -486,7 +437,7 @@ function __extract_from_showtask2($arr, $level, $today_view, $s, $m, $jsTaskId, 
     if ($arr['task_milestone'] > 0) {
         $s .= '&nbsp;<a href="./index.php?m=tasks&amp;a=view&amp;task_id=' . $arr['task_id'] . '" ><b>' . $arr['task_name'] . '</b></a>&nbsp;<img src="' . w2PfindImage('icons/milestone.gif') . '" />';
     } elseif ($arr['task_dynamic'] == '1' || $is_parent) {
-        $open_link = '<a href="javascript: void(0);"><img onclick="expand_collapse(\'' . $jsTaskId . '\', \'tblProjects\',\'\',' . ($level + 1) . ');" id="' . $jsTaskId . '_collapse" src="' . w2PfindImage('icons/collapse.gif') . '" class="center" ' . (!$expanded ? 'style="display:none"' : '') . ' /><img onclick="expand_collapse(\'' . $jsTaskId . '\', \'tblProjects\',\'\',' . ($level + 1) . ');" id="' . $jsTaskId . '_expand" src="' . w2PfindImage('icons/expand.gif') . '" class="center" ' . ($expanded ? 'style="display:none"' : '') . ' /></a>';
+        $open_link = '<a href="javascript: void(0);"><img onclick="expand_collapse(\'' . $jsTaskId . '\', \'tblProjects\',\'\',' . ($level++) . ');" id="' . $jsTaskId . '_collapse" src="' . w2PfindImage('icons/collapse.gif') . '" class="center" ' . (!$expanded ? 'style="display:none"' : '') . ' /><img onclick="expand_collapse(\'' . $jsTaskId . '\', \'tblProjects\',\'\',' . ($level++) . ');" id="' . $jsTaskId . '_expand" src="' . w2PfindImage('icons/expand.gif') . '" class="center" ' . ($expanded ? 'style="display:none"' : '') . ' /></a>';
         $s .= $open_link;
 
         if ($arr['task_dynamic'] == '1') {
@@ -534,7 +485,7 @@ function findchild_new(&$tarr, $parent, $level = 0)
 {
     global $shown_tasks;
 
-    $level = $level + 1;
+    $level++;
     $n = count($tarr);
 
     for ($x = 0; $x < $n; $x++) {
@@ -548,7 +499,7 @@ function findchild_new(&$tarr, $parent, $level = 0)
 
 function findchild_gantt(&$tarr, $parent, $level = 0)
 {
-    $level = $level + 1;
+    $level++;
     $n = count($tarr);
 
     for ($x = 0; $x < $n; $x++) {
@@ -690,7 +641,7 @@ function doChildren($list, $N, $id, $uid, $level, $maxlevels, $display_week_hour
                 // we have a child, do we have the user as a member?
                 if (isMemberOfTask($list, $N, $uid, $task)) {
                     $tmp .= displayTask($list, $task, $level, $display_week_hours, $ss, $se, $uid);
-                    $tmp .= doChildren($list, $N, $task->task_id, $uid, $level + 1, $maxlevels, $display_week_hours, $ss, $se);
+                    $tmp .= doChildren($list, $N, $task->task_id, $uid, $level++, $maxlevels, $display_week_hours, $ss, $se);
                 }
             }
         }
@@ -710,7 +661,7 @@ function doChildren_r($list, $Lusers, $N, $id, $uid, $level, $maxlevels, $displa
                 // we have a child, do we have the user as a member?
                 if (isMemberOfTask_r($list, $Lusers, $N, $uid, $task)) {
                     $tmp .= displayTask_r($list, $task, $level, $display_week_hours, $ss, $se, $log_all_projects, $uid);
-                    $tmp .= doChildren_r($list, $Lusers, $N, $task->task_id, $uid, $level + 1, $maxlevels, $display_week_hours, $ss, $se, $log_all_projects);
+                    $tmp .= doChildren_r($list, $Lusers, $N, $task->task_id, $uid, $level++, $maxlevels, $display_week_hours, $ss, $se, $log_all_projects);
                 }
             }
         }
@@ -781,7 +732,7 @@ function displayTask($list, $task, $level, $display_week_hours, $fromPeriod, $to
     $tmp .= '<input type="checkbox" name="selected_task[' . $task->task_id . ']" value="' . $task->task_id . '" />';
     $tmp .= '</td>';
     $tmp .= $htmlHelper->createCell('user_priority', $task->userPriority);
-    $tmp .= '<td>';
+    $tmp .= '<td class="_name">';
 
     for ($i = 0; $i < $level; $i++) {
         $tmp .= '&#160';
@@ -1125,7 +1076,7 @@ function showfiltertask(&$a, $level=0)
 // from modules/tasks/viewgantt.php
 function findfiltertaskchild(&$tarr, $parent, $level=0)
 {
-     $level = $level + 1;
+     $level++;
      $n = count($tarr);
      for ($x=0; $x < $n; $x++) {
           if ($tarr[$x]['task_parent'] == $parent && $tarr[$x]['task_parent'] != $tarr[$x]['task_id']) {
@@ -1388,7 +1339,7 @@ function showchilddept(&$a, $level = 1)
 //recursive function to display children departments.
 function findchilddept(&$tarr, $parent, $level = 1)
 {
-    $level = $level + 1;
+    $level++;
     $n = count($tarr);
     for ($x = 0; $x < $n; $x++) {
         if ($tarr[$x]['dept_parent'] == $parent && $tarr[$x]['dept_parent'] != $tarr[$x]['dept_id']) {
@@ -5060,9 +5011,8 @@ function __extract_from_tasks3($f, $q, $user_id, $task_id, $AppUI)
         //if we are on a task context make sure we show ALL the children tasks
         $f = 'deepchildren';
     }
+
     switch ($f) {
-        case 'all':
-            break;
         case 'myfinished7days':
             $q->addWhere('ut.user_id = ' . (int) $user_id);
         case 'allfinished7days':
@@ -5113,10 +5063,14 @@ function __extract_from_tasks3($f, $q, $user_id, $task_id, $AppUI)
         case 'taskowned':
             $q->addWhere('task_owner = ' . (int) $user_id);
             break;
+        case 'all':
+            //break;
         default:
-            $q->addTable('user_tasks');
-            $q->addWhere('user_tasks.user_id = ' . (int) $user_id);
-            $q->addWhere('user_tasks.task_id = tasks.task_id');
+            if ($user_id) {
+                $q->addTable('user_tasks');
+                $q->addWhere('user_tasks.user_id = ' . (int) $user_id);
+                $q->addWhere('user_tasks.task_id = tasks.task_id');
+            }
             break;
     }
 
@@ -5211,20 +5165,6 @@ function __extract_from_tasks5($q, $subquery)
 }
 
 /**
- * @param $history_active
- * @param $q
- */
-function __extract_from_tasks6($q, $history_active)
-{
-    if ($history_active) {
-        $q->addQuery('MAX(history_date) as last_update');
-        $q->leftJoin('history', 'h', 'history_item = tasks.task_id AND history_table=\'tasks\'');
-    }
-
-    return $q;
-}
-
-/**
  * @param $AppUI
  * @param $task_id
  */
@@ -5292,3 +5232,176 @@ function __extract_from_projects_gantt4($row)
     return $row['task_end_date'];
 }
 
+/**
+ * @param $s
+ * @param $style
+ * @param $row
+ * @param $editor
+ * @param $AppUI
+ * @param $bbparser
+ * @return array
+ */
+function __extract_from_view_messages1($s, $style, $row, $editor, $AppUI, $bbparser)
+{
+    $s .= "<tr>";
+
+    $s .= '<td valign="top" style="' . $style . '" >';
+    $s .= '<a href="mailto:' . $row['contact_email'] . '">';
+    $s .= $row['contact_name'] . '</a>';
+    if (sizeof($editor) > 0) {
+        $s .= '<br/>&nbsp;<br/>' . $AppUI->_('last edited by');
+        $s .= ':<br/><a href="mailto:' . $editor[0]['contact_email'] . '">';
+        $s .= '<font size="1">' . $editor[0]['contact_name'] . '</font></a>';
+    }
+    $s .= '<a name="' . $row['message_id'] . '" href="javascript: void(0);" onclick="toggle(' . $row['message_id'] . ')">';
+    $s .= '<span size="2"><strong>' . $row['message_title'] . '</strong></span></a>';
+    $s .= '<div class="message" id="' . $row['message_id'] . '" style="display: none">';
+    $row['message_body'] = $bbparser->qparse($row['message_body']);
+    $s .= $row['message_body'];
+    $s .= '</div></td>';
+
+    $s .= '</tr>';
+    return $s;
+}
+
+/**
+ * @param $s
+ * @param $style
+ * @param $AppUI
+ * @param $row
+ * @param $df
+ * @param $tf
+ * @param $editor
+ * @param $side
+ * @param $bbparser
+ * @param $first
+ * @param $messages
+ * @return array
+ */
+function __extract_from_view_messages3($s, $style, $AppUI, $row, $df, $tf, $editor, $side, $bbparser, $first, $messages)
+{
+    $s .= '<tr>';
+
+    $s .= '<td valign="top" style="' . $style . '">';
+    $s .= $AppUI->formatTZAwareTime($row['message_date'], $df . ' ' . $tf) . ' - ';
+    $s .= '<a href="mailto:' . $row['contact_email'] . '">' . $row['contact_name'] . '</a>';
+    $s .= '<br />';
+    if (sizeof($editor) > 0) {
+        $s .= '<br/>&nbsp;<br/>' . $AppUI->_('last edited by');
+        $s .= ':<br/><a href="mailto:' . $editor[0]['contact_email'] . '">';
+        $s .= '<font size="1">' . $editor[0]['contact_name'] . '</font></a>';
+    }
+    $s .= '<a href="javascript: void(0);" onclick="toggle(' . $row['message_id'] . ')">';
+    $s .= '<span size="2"><strong>' . $row['message_title'] . '</strong></span></a>';
+    $side .= '<div class="message" id="' . $row['message_id'] . '" style="display: none">';
+    $side .= $row['message_body'];
+    $side .= '</div>';
+    $row['message_body'] = $bbparser->qparse($row['message_body']);
+    $s .= '</td>';
+    if ($first) {
+        $s .= '<td rowspan="' . count($messages) . '" valign="top">';
+        echo $s;
+        $s = '';
+    }
+    $s .= '</tr>';
+    return array($s, $side);
+}
+
+
+/**
+ * @param $s
+ * @param $style
+ * @param $row
+ * @param $hideEmail
+ * @param $editor
+ * @param $AppUI
+ * @param $new_messages
+ * @param $bbparser
+ * @param $m
+ * @param $df
+ * @param $tf
+ * @param $canEdit
+ * @param $canAdminEdit
+ * @param $canDelete
+ * @return array
+ */
+function __extract_from_view_messages4($s, $style, $row, $hideEmail, $editor, $AppUI, $new_messages, $bbparser, $m, $df, $tf, $canEdit, $canAdminEdit, $canDelete)
+{
+    $s .= '<tr>';
+
+    $s .= '<td valign="top" style="' . $style . '" nowrap="nowrap">';
+    $s .= '<a href="?m=users&a=view&user_id=' . $row['message_author'] . '">';
+    $s .= $row['contact_name'];
+    $s .= '</a>';
+    if (!$hideEmail) {
+        $s .= '&nbsp;';
+        $s .= '<a href="mailto:' . $row['contact_email'] . '">';
+        $s .= '<img src="' . w2PfindImage('email.gif') . '" alt="email" />';
+        $s .= '</a>';
+    }
+
+    if (sizeof($editor) > 0) {
+        $s .= '<br/>&nbsp;<br/>' . $AppUI->_('last edited by');
+        $s .= ':<br/>';
+        if (!$hideEmail) {
+            $s .= '<a href="mailto:' . $editor[0]['contact_email'] . '">';
+        }
+        $s .= $editor[0]['contact_name'];
+        if (!$hideEmail) {
+            $s .= '</a>';
+        }
+    }
+    if ($row['visit_user'] != $AppUI->user_id) {
+        $s .= '<br />&nbsp;' . w2PshowImage('icons/stock_new_small.png');
+        $new_messages[] = $row['message_id'];
+    }
+    $s .= '</td>';
+    $s .= '<td valign="top" style="' . $style . '">';
+    $s .= '<strong>' . $row['message_title'] . '</strong><hr size=1>';
+    $row['message_body'] = $bbparser->qparse($row['message_body']);
+    $row['message_body'] = nl2br($row['message_body']);
+    $s .= $row['message_body'];
+    $s .= '</td>';
+
+    $s .= '</tr><tr>';
+
+    $s .= '<td valign="top" style="' . $style . '" nowrap="nowrap">';
+    $s .= '<img src="' . w2PfindImage('icons/posticon.gif', $m) . '" alt="date posted" />' . $AppUI->formatTZAwareTime($row['message_date'], $df . ' ' . $tf) . '</td>';
+    $s .= '<td valign="top" align="right" style="' . $style . '">';
+
+    // in some weird permission cases
+    // it can happen that the table gets opened but never closed,
+    // or the other way around, thus breaking the layout
+    // introducing these variables to help us out with proper
+    // table tag opening and closing.
+    $tableOpened = false;
+    $tableClosed = false;
+    //the following users are allowed to edit/delete a forum message: 1. the forum creator  2. a superuser with read-write access to 'all' 3. the message author
+    if ($canEdit || $AppUI->user_id == $row['forum_moderated'] || $AppUI->user_id == $row['message_author'] || $canAdminEdit) {
+        $tableOpened = true;
+        $s .= '<table cellspacing="0" cellpadding="0" border="0"><tr>';
+        // edit message
+        $s .= '<td><a href="./index.php?m=forums&a=viewer&post_message=1&forum_id=' . $row['message_forum'] . '&message_parent=' . $row['message_parent'] . '&message_id=' . $row["message_id"] . '" title="' . $AppUI->_('Edit') . ' ' . $AppUI->_('Message') . '">';
+        $s .= w2PshowImage('icons/stock_edit-16.png', '16', '16');
+        $s .= '</td>';
+    }
+    if ($canDelete || $AppUI->user_id == $row['forum_moderated'] || $AppUI->user_id == $row['message_author'] || $canAdminEdit) {
+        $tableClosed = true;
+        if (!$tableOpened) {
+            $s .= '<table cellspacing="0" cellpadding="0" border="0"><tr>';
+        }
+        // delete message
+        $s .= '<td><a href="javascript:delIt(' . $row['message_id'] . ')" title="' . $AppUI->_('delete') . '">';
+        $s .= w2PshowImage('icons/stock_delete-16.png', '16', '16');
+        $s .= '</a>';
+        $s .= '</td></tr></table>';
+    }
+
+    if ($tableOpened and !$tableClosed) {
+        $s .= '</tr></table>';
+    }
+
+    $s .= '</td>';
+    $s .= '</tr>';
+    return array($s, $new_messages);
+}

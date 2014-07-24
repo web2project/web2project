@@ -75,7 +75,7 @@ $htmlHelper = new w2p_Output_HTMLHelper($AppUI);
         //check for a setup file
         $ok = file_exists(W2P_BASE_DIR . '/modules/' . $row['mod_directory'] . '/setup.php');
         if ($ok) {
-            include_once (W2P_BASE_DIR . '/modules/' . $row['mod_directory'] . '/setup.php');
+            include W2P_BASE_DIR . '/modules/' . $row['mod_directory'] . '/setup.php';
 
             // check for upgrades
             if (version_compare($config['mod_version'], $row['mod_version']) == 1  && $canEdit) {
