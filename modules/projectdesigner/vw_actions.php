@@ -56,7 +56,7 @@ $root_tasks = $obj->getRootTasks((int) $task_project);
 foreach ($root_tasks as $root_task) {
     build_date_list($projTasksWithEndDates, $root_task);
 	if ($root_task['task_id'] != $task_id) {
-        $task_parent_options .= buildTaskTree($root_task, 0, array(), $all_tasks, $parents, $task_parent, $task_id);
+        $task_parent_options .= buildTaskTree($root_task, 0, array(), $all_tasks, $parents, 0, $task_id);
 	}
 }
 

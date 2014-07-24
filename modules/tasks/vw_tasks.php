@@ -66,6 +66,7 @@ $q->leftJoin('project_departments', 'project_departments', 'p.project_id = proje
 $q->leftJoin('departments', 'departments', 'departments.dept_id = project_departments.department_id OR dept_id IS NULL');
 $q->leftJoin('user_task_pin', 'pin', 'tasks.task_id = pin.task_id AND pin.user_id = ' . (int)$AppUI->user_id);
 
+$f2 = isset($f2) ? $f2 : 0;
 if ((int) $f2) {
     $q->addWhere('project_company = ' . (int) $f2);
 }
@@ -206,7 +207,7 @@ echo $header;
 
 reset($projects);
 foreach ($projects as $k => $p) {
-    $tnums = count($p['tasks']);
+    $tnums = (isset($p['tasks'])) ? count($p['tasks']) : 0;
     if ($tnums && $m == 'tasks') {
         ?>
         <tr><td colspan="20">
