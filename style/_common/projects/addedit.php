@@ -105,7 +105,7 @@ $form = new w2p_Output_HTML_FormHelper($AppUI);
                     ?>
                     <p>
                         <?php $form->showLabel($AppUI->_($category)); ?>
-                        <?php echo $w2Pconfig['currency_symbol']; ?> <?php $form->showField("budget_<?php echo $id; ?>", $amount, array('maxlength' => 15)); ?>
+                        <?php echo $w2Pconfig['currency_symbol']; ?> <?php $form->showField("budget_" . $id, $amount, array('maxlength' => 15)); ?>
                     </p>
                 <?php
                 }
