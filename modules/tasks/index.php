@@ -51,10 +51,6 @@ if (canView('users')) {
 
 $titleBlock->addFilterCell('Company', 'f2', $filters2, $f2);
 
-if ($canEdit && $project_id) {
-	$titleBlock->addCell('<form action="?m=tasks&amp;a=addedit&amp;task_project=' . $project_id . '" method="post" accept-charset="utf-8"><input type="submit" class="button" value="' . $AppUI->_('new task') . '"></form>');
-}
-
 if (w2PgetParam($_GET, 'inactive', '') == 'toggle') {
 	$AppUI->setState('inactive', $AppUI->getState('inactive') == -1 ? 0 : -1);
 }
