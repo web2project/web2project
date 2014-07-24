@@ -5,7 +5,7 @@ if (!defined('W2P_BASE_DIR')) {
 // @todo    convert to template
 // @todo    remove database query
 
-global $AppUI;
+global $AppUI, $m;
 
 $display_last_login = !((int) w2PgetParam($_REQUEST, 'tab', 0));
 

@@ -4,7 +4,7 @@ if (!defined('W2P_BASE_DIR')) {
 }
 // @todo    convert to template
 
-global $AppUI, $tab;
+global $AppUI, $tab, $m;
 
 $days = ($tab == 0) ? 30 : 0;
 $searchString = w2PgetParam($_POST, 'search_string', '');
