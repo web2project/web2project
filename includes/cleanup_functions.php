@@ -103,19 +103,6 @@ function dumb_slice( $gantt_arr, $length = 25 )
     return $sliced_array;
 }
 
-function dumb_slice( $gantt_arr, $length = 25 )
-{
-    $sliced_array = array();
-
-    $pages = (int) count($gantt_arr) / $length;
-
-    for ( $i = 0; $i <= $pages; $i++ ) {
-        $sliced_array[] = array_slice($gantt_arr, $i * $length, $length);
-    }
-
-    return $sliced_array;
-}
-
 /**
 *
 * 	END OF GANTT PDF UTILITY FUNCTIONS
