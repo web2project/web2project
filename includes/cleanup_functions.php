@@ -3785,7 +3785,7 @@ function getTaskTooltip($task_id)
     $assignees = $task->assignees($task_id);
     $assigned = array();
     foreach ($assignees as $user) {
-        $assigned[] = $user['user_name'] . ' ' . $user['perc_assignment'] . '%';
+        $assigned[] = $user['contact_name'] . ' ' . $user['perc_assignment'] . '%';
     }
 
     $start_date = (int) $task->task_start_date ? new w2p_Utilities_Date($AppUI->formatTZAwareTime($task->task_start_date, '%Y-%m-%d %T')) : null;
