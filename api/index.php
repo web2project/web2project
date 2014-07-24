@@ -13,9 +13,15 @@ $app = new \Slim\Slim(
     array('debug' => true)
 );
 
-$app->get('/' , function() use ($app) {
-    $app->response->setStatus(301);
-    $app->redirect('..');
+$app->get('/' , function() use ($app, $AppUI) {
+    $paths = array();
+
+    $baseURI = W2P_BASE_URL . '/';
+    $modules = $AppUI->getActiveModules();
+    foreach($modules as $key => $value) {
+        $paths[$key] = array('name' => $value, 'href' => $baseURI . $key);
+    }
+    echo json_encode($paths);
 });
 
 $app->get('/:module' , function($module) use ($app, $AppUI) {
