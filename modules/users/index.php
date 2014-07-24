@@ -67,9 +67,7 @@ $tabBox = new CTabBox('?m=users', W2P_BASE_DIR . '/modules/users/', $tab);
 $tabBox->add('vw_active_usr', 'Active Users');
 $tabBox->add('vw_inactive_usr', 'Inactive Users');
 $tabBox->add('vw_usr_log', 'User Log');
-if ($canEdit && $canDelete) {
-	$tabBox->add('vw_usr_sessions', 'Active Sessions');
-}
+$tabBox->add('vw_usr_sessions', 'Active Sessions');
 $tabBox->show();
 
 ?>
