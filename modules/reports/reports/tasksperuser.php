@@ -220,16 +220,15 @@ if ($do_report) {
 
 		$table_header = '
 			<tr>
-				<td nowrap="nowrap" bgcolor="#A0A0A0">
-				<font color="black"><b>' . $AppUI->_('Task') . '</b></font> </td>' . ($project_id == 0 ? '<td nowrap="nowrap" bgcolor="#A0A0A0"><font color="black"><b>' . $AppUI->_('Project') . '</b></font></td>' : '') . '
-				<td nowrap="nowrap" bgcolor="#A0A0A0"><font color="black"><b>' . $AppUI->_('Start Date') . '</b></font></td>
-				<td nowrap="nowrap" bgcolor="#A0A0A0"><font color="black"><b>' . $AppUI->_('End Date') . '</b></font></td>' . weekDates_r($display_week_hours, $sss, $sse) . '
+				<th>' . $AppUI->_('Task') . '</th>' . ($project_id == 0 ? '<th>' . $AppUI->_('Project') . '</th>' : '') . '
+				<th>' . $AppUI->_('Start Date') . '</th><th>' . $AppUI->_('End Date') . '</h>' .
+                weekDates_r($display_week_hours, $sss, $sse) . '
 			</tr>';
 		$table_rows = '';
 
 		foreach ($user_list as $user_id => $user_data) {
 
-			$tmpuser = "<tr><td align='left' nowrap='nowrap' bgcolor='#D0D0D0'><font color='black'><B>" . $user_data["contact_first_name"] . ' ' . $user_data['contact_last_name'] . '</b></font></td>';
+			$tmpuser = "<tr><td align='left' nowrap='nowrap' bgcolor='#D0D0D0'>" . $user_data["contact_display_name"] . '</td>';
 			for ($w = 0, $w_cmp = (1 + ($project_id == 0 ? 1 : 0) + weekCells_r($display_week_hours, $sss, $sse)); $w <= $w_cmp; $w++) {
 				$tmpuser .= '<td bgcolor="#D0D0D0">&nbsp;</td>';
 			}
