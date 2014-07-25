@@ -31,6 +31,7 @@ if ($del) {
 	} else {
 		$AppUI->setMsg('failed to delete role', UI_MSG_ERROR);
 	}
+    $AppUI->redirect('m=users&a=view&user_id=' . $user_id);
 }
 
 if (isset($_POST['user_role']) && $_POST['user_role']) {
