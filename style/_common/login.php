@@ -14,6 +14,7 @@ $theme = $AppUI->getTheme();
         <title><?php echo $w2Pconfig['company_name']; ?> :: web2Project Login</title>
         <meta http-equiv="Pragma" content="no-cache" />
         <meta name="Version" content="<?php echo $AppUI->getVersion(); ?>" />
+        <link rel="stylesheet" type="text/css" href="./style/login.css" media="all" charset="utf-8"/>
         <link rel="stylesheet" type="text/css" href="./style/common.css" media="all" charset="utf-8"/>
         <link rel="stylesheet" type="text/css" href="./style/<?php echo $uistyle; ?>/main.css" media="all" charset="utf-8"/>
         <style type="text/css" media="all">@import "./style/<?php echo $uistyle; ?>/main.css";</style>
@@ -38,52 +39,33 @@ $theme = $AppUI->getTheme();
                 </tr>
             </tbody>
         </table>
-        <!--please leave action argument empty -->
-        <form method="post" action="<?php echo $loginFromPage; ?>" name="loginform" accept-charset="utf-8">
-            <table style="border-style:none; width: 20%" cellspacing="0" class="std login">
-                <input type="hidden" name="login" value="<?php echo time(); ?>" />
-                <input type="hidden" name="lostpass" value="0" />
-                <input type="hidden" name="redirect" value="<?php echo $redirect; ?>" />
-                <tr>
-                    <td colspan="2">
-                        <?php echo $theme->styleRenderBoxTop(); ?>
-                    </td>
-                </tr>
-                <tr>
-                    <th colspan="2"><em><?php echo $w2Pconfig['company_name']; ?></em></th>
-                </tr>
-                <tr>
-                    <td style="padding:6px" align="right"><?php echo $AppUI->_('Username'); ?>:</td>
-                    <td style="padding:6px" align="right"><input type="text" size="25" maxlength="255" name="username" class="text" /></td>
-                </tr>
-                <tr>
-                    <td style="padding:6px" align="right"><?php echo $AppUI->_('Password'); ?>:</td>
-                    <td style="padding:6px" align="right"><input type="password" size="25" maxlength="32" name="password" class="text" /></td>
-                </tr>
-                <tr>
-                    <td style="padding:6px" align="left"><a href="http://www.web2project.net/"><img src="./style/web2project/w2p_icon.ico" alt="web2Project logo" /></a></td>
-                    <td style="padding:6px" align="right" valign="bottom"><input type="submit" name="login" value="<?php echo $AppUI->_('login'); ?>" class="button" /></td>
-                </tr>
-                <tr>
-                    <td style="padding:6px" colspan="2"><a href="javascript: void(0);" onclick="f=document.loginform;f.lostpass.value=1;f.submit();"><?php echo $AppUI->_('forgotPassword'); ?></a></td>
-                </tr>
-                <?php if (w2PgetConfig('activate_external_user_creation') == 'true') { ?>
-                    <tr>
-                         <td style="padding:6px" colspan="2"><a href="javascript: void(0);" onclick="javascript:window.location='./newuser.php'"><?php echo $AppUI->_('newAccountSignup'); ?></a></td>
-                    </tr>
-                <?php } ?>
-                <tr>
-                    <td colspan="2">
-                        <?php echo $theme->styleRenderBoxBottom(); ?>
-                    </td>
-                </tr>
-            </table>
-            <?php if ($AppUI->getVersion()) { ?>
-                <div align="center">
-                    <span style="font-size:7pt">Version <?php echo $AppUI->getVersion(); ?></span>
-                </div>
-            <?php } ?>
-        </form>
+
+        <div class="container">
+            <div class="login">
+                <h1><?php echo $w2Pconfig['company_name']; ?></h1>
+                <form method="post" action="<?php echo $loginFromPage; ?>" name="loginform" accept-charset="utf-8">
+                    <input type="hidden" name="login" value="<?php echo time(); ?>" />
+                    <input type="hidden" name="lostpass" value="0" />
+                    <input type="hidden" name="redirect" value="<?php echo $redirect; ?>" />
+
+                    <p><input type="text" name="username" value="" placeholder="Username"></p>
+                    <p><input type="password" name="password" value="" placeholder="Password"></p>
+                    <p class="remember_me">
+                        <label>
+                            <label>
+                                <a href="javascript: void(0);" onclick="f=document.loginform;f.lostpass.value=1;f.submit();"><?php echo $AppUI->_('forgotPassword'); ?></a>
+                            </label>
+                        </label>
+                    </p>
+                    <p class="submit"><input type="submit" name="login" value="login"></p>
+                </form>
+            </div>
+
+            <div class="login-help">
+                <p><a href="javascript: void(0);" onclick="javascript:window.location='./newuser.php'"><?php echo $AppUI->_('newAccountSignup'); ?></a></p>
+            </div>
+        </div>
+
         <div align="center">
             <?php
                 echo '<span class="error">' . $AppUI->getMsg() . '</span>';
@@ -94,6 +76,5 @@ $theme = $AppUI->getTheme();
                 echo $msg;
             ?>
         </div>
-        <center><span style="font-size:7pt"><strong><?php echo $AppUI->_('You must have cookies enabled in your browser'); ?></strong></span></center>
     </body>
 </html>
