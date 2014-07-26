@@ -50,30 +50,26 @@ function notifyNewUserCredentials($address, $username, $logname, $logpwd)
     $manager->send('new-user-activated', 'en_US', $object, $address);
 }
 
-function notifyNewExternalUser($emailAddress, $username, $logname, $logpwd, $emailUtility = null)
+function notifyNewExternalUser($emailAddress, $username, $logname, $logpwd)
 {
-    global $AppUI;
-    $emailManager = new w2p_Output_Email_Manager($AppUI);
-    $body = $emailManager->notifyNewExternalUser($logname, $logpwd);
+    $object = new stdClass();
+    $object->base_url = W2P_BASE_URL;
+    $object->user_name = $username;
+    $object->log_name = $logname;
+    $object->log_password = $logpwd;
 
-    $mail = (!is_null($emailUtility)) ? $emailUtility : new w2p_Utilities_Mail();
-    $mail->To($emailAddress);
-    $mail->Subject('New Account Created');
-    $mail->Body($body);
-    return $mail->Send();
+    $manager = new \Web2project\Output\Email\Manager();
+    $manager->send('new-external-user', 'en_US', $object, $emailAddress);
 }
 
-function notifyNewUser($emailAddress, $username, $emailUtility = null)
+function notifyNewUser($emailAddress, $username)
 {
-    global $AppUI;
-    $emailManager = new w2p_Output_Email_Manager($AppUI);
-    $body = $emailManager->getNotifyNewUser($username);
+    $object = new stdClass();
+    $object->base_url = W2P_BASE_URL;
+    $object->contact_name = $username;
 
-    $mail = (!is_null($emailUtility)) ? $emailUtility : new w2p_Utilities_Mail();
-    $mail->To($emailAddress);
-    $mail->Subject('New Account Created');
-    $mail->Body($body);
-    return $mail->Send();
+    $manager = new \Web2project\Output\Email\Manager();
+    $manager->send('new-account-created', 'en_US', $object, $emailAddress);
 }
 
 function clean_value($str)
@@ -82,7 +78,6 @@ function clean_value($str)
 
     return str_replace($bad_values, '', $str);
 }
-
 
 function strUTF8Decode($text)
 {
