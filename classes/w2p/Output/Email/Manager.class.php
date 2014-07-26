@@ -27,7 +27,7 @@ class w2p_Output_Email_Manager
     {
         $this->AppUI = (is_null($AppUI)) ? new w2p_Core_CAppUI() : $AppUI;
 
-        $this->templater = new \Web2project\Output\Email\Template();
+        $this->templater = new \Web2project\Output\Email\Manager();
     }
 
     public function getEventNotify(CEvent $event, $notUsed, $users)
