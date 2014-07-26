@@ -22,11 +22,13 @@ include_once 'unit_tests/CommonSetup.php';
 class Web2project_Output_Email_ManagerTest extends CommonSetup
 {
     protected $manager = null;
+    protected $sender  = null;
 
     protected function setUp()
     {
         parent::setUp();
 
+        $this->sender  = new w2p_Mocks_Email();
         $this->manager = new \Web2project\Output\Email\Manager();
     }
 
@@ -43,5 +45,16 @@ class Web2project_Output_Email_ManagerTest extends CommonSetup
         $actual_output = $this->manager->render($raw_template, $object);
 
         $this->assertEquals($target_output, $actual_output);
+    }
+
+    public function testSetTemplate()
+    {
+        $this->manager->setTemplate('sample-name', 'en-us', 'some subject line', 'my email body');
+
+        $this->assertArrayHasKey('sample-name', $this->manager->templates);
+        $info = $this->manager->templates['sample-name']['en-us'];
+
+        $this->assertArrayHasKey('subject', $info);
+        $this->assertArrayHasKey('body', $info);
     }
 }

@@ -8,16 +8,24 @@ namespace Web2project\Output\Email;
 class Manager
 {
     protected $sender = null;
-    protected $templates = array();
+    public $templates = array();
 
     public function __construct($sender = null)
     {
         $this->sender = is_null($sender) ? new \w2p_Utilities_Mail() : $sender;
     }
 
-    public function send($name, $language, $object)
+    public function send($name, $language, $object, $to, $from)
     {
+        list($subject, $body) = $this->templates[$name][$language];
+        $subject = $this->render($subject, $object);
+        $body = $this->render($body, $object);
 
+        $this->sender->To($to);
+        $this->sender->From($from);
+        $this->sender->Subject($subject);
+        $this->sender->Body($body);
+        $this->sender->Send();
     }
 
     public function render($string, $object)
@@ -38,7 +46,9 @@ class Manager
     public function loadTemplate($name, $language)
     {
         // todo: retrieve from database
-        // todo: load into array
-        $this->templates[$name][$language] = array('subject' => 'sample subject', 'body' => 'sample body');
+        $subject = 'sample subject';
+        $body = 'sample body';
+
+        $this->setTemplate($name, $language, $subject, $body);
     }
 }
