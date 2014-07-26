@@ -3372,15 +3372,13 @@ function sendNewPass()
     $cur = $q->exec();
 
     if ($cur) {
-        $emailManager = new w2p_Output_Email_Manager($AppUI);
-        $body = $emailManager->notifyPasswordReset($checkusername, $newpass);
+        $object = new stdClass();
+        $object->username = $checkusername;
+        $object->newpass  = $newpass;
+        $object->baseurl  = W2P_BASE_URL;
 
-        $m = new w2p_Utilities_Mail; // create the mail
-        $m->To($confirmEmail);
-        $subject = $_sitename . ' :: ' . $AppUI->_('sendpass4', UI_OUTPUT_RAW) . ' - ' . $checkusername;
-        $m->Subject($subject);
-        $m->Body($body, isset($GLOBALS['locale_char_set']) ? $GLOBALS['locale_char_set'] : ''); // set the body
-        $m->Send(); // send the mail
+        $manager = new \Web2project\Output\Email\Manager();
+        $manager->send('password-reset', 'en_US', $object, $confirmEmail);
 
         $AppUI->setMsg('New User Password created and emailed to you');
         $AppUI->redirect();
