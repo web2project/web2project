@@ -389,6 +389,7 @@ class w2p_Output_Email_Manager
         return $this->templater->render($body, $object);
     }
 
+    /** @deprecated */
     public function notifyPasswordReset($username, $password)
     {
         $object = new stdClass();
