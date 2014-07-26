@@ -308,6 +308,7 @@ class w2p_Output_Email_Manager
         return $this->templater->render($body, $project);
     }
 
+    /** @deprecated */
     public function getProjectNotifyOwner(CProject $project, $isNotNew)
     {
         trigger_error("EmailManager->getProjectNotifyOwner() has been deprecated in v3.2 and will be removed by v5.0. Please use EmailManager->getProjectNotify instead.", E_USER_NOTICE);
@@ -315,6 +316,7 @@ class w2p_Output_Email_Manager
         return $this->getProjectNotify($project, $isNotNew);
     }
 
+    /** @deprecated */
     public function getProjectNotifyContacts(CProject $project, $isNotNew)
     {
         trigger_error("EmailManager->getProjectNotifyContacts() has been deprecated in v3.2 and will be removed by v5.0. Please use EmailManager->getProjectNotify instead.", E_USER_NOTICE);
@@ -322,6 +324,7 @@ class w2p_Output_Email_Manager
         return $this->getProjectNotify($project, $isNotNew);
     }
 
+    /** @deprecated */
     public function getNotifyNewUser($username)
     {
         $object = new stdClass();
@@ -335,6 +338,7 @@ class w2p_Output_Email_Manager
         return $this->templater->render($body, $object);
     }
 
+    /** @deprecated */
     public function notifyHR($username, $logname, $address, $userid)
     {
         $object = new stdClass();
@@ -352,6 +356,7 @@ class w2p_Output_Email_Manager
         return $this->templater->render($body, $object);
     }
 
+    /** @deprecated */
     public function notifyNewExternalUser($logname, $logpwd)
     {
         $object = new stdClass();
@@ -371,6 +376,7 @@ class w2p_Output_Email_Manager
         return $this->templater->render($body, $object);
     }
 
+    /** @deprecated */
     public function notifyNewUserCredentials($username, $logname, $logpwd)
     {
         $object = new stdClass();
