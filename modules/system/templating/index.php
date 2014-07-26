@@ -13,8 +13,6 @@ foreach ($LANGUAGES as $lang => $langinfo) {
  */
 $locale = w2PgetParam($_POST, 'locale', 'en_US');
 
-echo 'x' . $locale . 'x';
-
 $titleBlock = new w2p_Theme_TitleBlock('Email Templating', 'rdf2.png', $m);
 $titleBlock->addButton('new template', '?m=system&u=templating&a=addedit');
 $titleBlock->module = 'system&u=templating';
