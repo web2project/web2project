@@ -73,6 +73,11 @@ if ($myId) {
 	<?php
 } else {
 	?>
+        <style>
+            div {
+                display: none;
+            }
+        </style>
 		<form name="frmSelector" action="./index.php?m=contacts&a=select_contact_company&dialog=1&table_name=<?php echo $table_name . '&' . $additional_get_information; ?>" method="post" accept-charset="utf-8">
 			<?php
             echo $AppUI->getTheme()->styleRenderBoxTop();
@@ -81,8 +86,8 @@ if ($myId) {
 			<tr>
 				<td colspan="2">
 					<?php
-						echo $AppUI->_('Select') . ' ' . $AppUI->_($selection_string) . ':<br />';
-						echo arraySelect($select_list, $id_field, 'class="text" style="width:300px" size="10"', $dataId);
+						echo $AppUI->_('Select') . ' ' . $AppUI->_($selection_string) . ': ';
+						echo arraySelect($select_list, $id_field, 'class="text"', $dataId);
 					?>
 				</td>
 			</tr>
