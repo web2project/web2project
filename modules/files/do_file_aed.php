@@ -4,7 +4,7 @@ if (!defined('W2P_BASE_DIR')) {
 }
 // @todo    refactor to use a core controller
 
-$del = (int) w2PgetParam($_POST, 'del', 0);
+$delete = (int) w2PgetParam($_POST, 'del', 0);
 
 $obj = new CFile();
 if (!$obj->bind($_POST)) {
@@ -12,7 +12,7 @@ if (!$obj->bind($_POST)) {
     $AppUI->redirect('m=files&a=addedit');
 }
 
-$action = ($del) ? 'deleted' : 'stored';
+$action = ($delete) ? 'deleted' : 'stored';
 $file_id = (int) w2PgetParam($_POST, 'file_id', 0);
 $isNotNew = (int) w2PgetParam($_POST, 'file_id', '0');
 $cancel = (int) w2PgetParam($_POST, 'cancel', 0);
@@ -25,8 +25,8 @@ $notifyContacts = w2PgetParam($_POST, 'notify_contacts', 'off');
 $notifyContacts = ($notifyContacts != '0') ? '1' : '0';
 
 $perms = &$AppUI->acl();
-if ($del) {
 	if (!$perms->checkModuleItem('files', 'delete', $file_id)) {
+if ($delete) {
 		$AppUI->redirect(ACCESS_DENIED);
 	}
 } elseif ($cancel) {
@@ -85,7 +85,7 @@ if ($duplicate) {
 }
 
 // delete the file
-if ($del) {
+if ($delete) {
 	$result = $obj->delete();
 
     if (count($obj->getError())) {
