@@ -15,16 +15,19 @@ class Manager
         $this->sender = is_null($sender) ? new \w2p_Utilities_Mail() : $sender;
     }
 
-    public function send($name, $language, $object, $to, $from)
+    public function send($name, $language, $object, $to)
     {
-        list($subject, $body) = $this->templates[$name][$language];
+        $this->loadTemplate($name, $language);
+        $subject = $this->templates[$name][$language]['subject'];
+        $body = $this->templates[$name][$language]['body'];
+
         $subject = $this->render($subject, $object);
         $body = $this->render($body, $object);
 
         $this->sender->To($to);
-        $this->sender->From($from);
         $this->sender->Subject($subject);
         $this->sender->Body($body);
+
         $this->sender->Send();
     }
 
