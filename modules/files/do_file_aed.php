@@ -16,7 +16,6 @@ $action = ($delete) ? 'deleted' : 'stored';
 $file_id = (int) w2PgetParam($_POST, 'file_id', 0);
 $isNotNew = (int) w2PgetParam($_POST, 'file_id', '0');
 $cancel = (int) w2PgetParam($_POST, 'cancel', 0);
-$duplicate = (int) w2PgetParam($_POST, 'duplicate', 0);
 $redirect = w2PgetParam($_POST, 'redirect', 'm=files');
 $notify = w2PgetParam($_POST, 'notify', '0');
 $notify = ($notify != '0') ? '1' : '0';
@@ -56,31 +55,6 @@ $revision_type = w2PgetParam($_POST, 'revision_type', 0);
 if (strcasecmp('major', $revision_type) == 0) {
 	$major_num = strtok($version, '.') + 1;
 	$_POST['file_version'] = $major_num;
-}
-
-// prepare (and translate) the module name ready for the suffix
-$AppUI->setMsg('File');
-// duplicate a file
-if ($duplicate) {
-	$obj->load($file_id);
-	$new_file = new CFile();
-	$new_file = $obj->duplicate();
-	$new_file->file_project = 0;
-	$new_file->file_folder = 0;
-	if (!($dup_realname = $obj->duplicateFile($obj->file_project, $obj->file_real_filename))) {
-		$AppUI->setMsg('Could not duplicate file, check file permissions', UI_MSG_ERROR);
-		$AppUI->redirect($redirect);
-	} else {
-		$new_file->file_real_filename = $dup_realname;
-        $result = $new_file->store();
-
-        if (count($new_file->getError())) {
-			$AppUI->setMsg($new_file->getError(), UI_MSG_ERROR);
-		} else {
-			$AppUI->setMsg('duplicated', UI_MSG_OK, true);
-		}
-        $AppUI->redirect($redirect);
-	}
 }
 
 // delete the file
