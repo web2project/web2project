@@ -92,7 +92,6 @@ $methodLabels = w2PgetSysVal('ContactMethods');
 													<a href="./index.php?m=contacts&a=view&contact_id=<?php echo $contactid; ?>"><strong><?php echo ($carr[$z][$x]['contact_title'] ? $carr[$z][$x]['contact_title'] . ' ' : '') . $carr[$z][$x]['contact_first_name'] . ' ' . $carr[$z][$x]['contact_last_name']; ?></strong></a>
 												</th>
 												<th style="text-align:right" nowrap="nowrap" width="30%">
-                                                    <span>
                                                     <?php
                                                     if ($carr[$z][$x]['user_id']) {
 														echo '<a href="./index.php?m=users&a=view&user_id=' . $carr[$z][$x]['user_id'] . '" style="float: right;">';
@@ -125,7 +124,6 @@ $methodLabels = w2PgetSysVal('ContactMethods');
                                                             echo w2PtoolTip('info', 'Update sucessfully done on: ' . $last_ask->format($df) . '') . '<img src="' . w2PfindImage('log-notice.gif') . '">' . w2PendTip();
 														}
 													?>
-                                                    </span>
 												</th>
 											</table>
 										</td>
