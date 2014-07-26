@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Class for testing Web2project\Output\EmailTemplate functionality
+ * Class for testing Web2project\Output\Email\Template functionality
  *
  * PHP version 5
  *
@@ -9,7 +9,7 @@
  *   LICENSE file in root of site for further details
  *
  * @author      Keith Casey <contrib@caseysoftware.com>
- * @category    EmailTemplate
+ * @category    Email
  * @package     web2project
  * @subpackage  unit_tests
  * @license     Clear BSD
@@ -19,14 +19,15 @@
 // NOTE: This path is relative to Phing's build.xml, not this test.
 include_once 'unit_tests/CommonSetup.php';
 
-class Web2project_Output_EmailTemplateTest extends CommonSetup
+class Web2project_Output_Email_ManagerTest extends CommonSetup
 {
-    protected $template = null;
+    protected $manager = null;
+
     protected function setUp()
     {
         parent::setUp();
 
-        $this->template = new \Web2project\Output\Email\Template();
+        $this->manager = new \Web2project\Output\Email\Manager();
     }
 
     public function testRender()
@@ -39,7 +40,7 @@ class Web2project_Output_EmailTemplateTest extends CommonSetup
         $raw_template = "My task is named {{task_name}} but my project is named {{project_name}}. By the way, they're owned by {{company_id}}.";
         $target_output = "My task is named A task name but my project is named My Project. By the way, they're owned by 12345.";
 
-        $actual_output = $this->template->render($raw_template, $object);
+        $actual_output = $this->manager->render($raw_template, $object);
 
         $this->assertEquals($target_output, $actual_output);
     }
