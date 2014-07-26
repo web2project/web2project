@@ -38,12 +38,11 @@ $theme = new style_web2project($AppUI);
                 </tr>
             </tbody>
         </table>
-        <br /><br /><br /><br />
         <!--please leave action argument empty -->
         <form method="post" name="lostpassform" accept-charset="utf-8">
             <input type="hidden" name="lostpass" value="1" />
             <input type="hidden" name="redirect" value="<?php echo isset($redirect) ? $redirect : ''; ?>" />
-            <table style="border-style:none;" cellspacing="0" class="std login" width="25%">
+            <table class="std login" width="25%">
                 <tr>
                     <td colspan="2"><?php echo $theme->styleRenderBoxTop(); ?></td>
                 </tr>

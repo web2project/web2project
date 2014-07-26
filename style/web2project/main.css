@@ -653,6 +653,8 @@ label {
 }
 
 table.login {
+    border-style: none;
+    margin-top: 10em;
     width: 10em;
 }
 

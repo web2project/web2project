@@ -38,7 +38,6 @@ $theme = $AppUI->getTheme();
                 </tr>
             </tbody>
         </table>
-        <br /><br /><br /><br />
         <!--please leave action argument empty -->
         <form method="post" action="<?php echo $loginFromPage; ?>" name="loginform" accept-charset="utf-8">
             <table style="border-style:none; width: 20%" cellspacing="0" class="std login">
