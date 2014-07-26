@@ -24,21 +24,20 @@ $notify = ($notify != '0') ? '1' : '0';
 $notifyContacts = w2PgetParam($_POST, 'notify_contacts', 'off');
 $notifyContacts = ($notifyContacts != '0') ? '1' : '0';
 
-$perms = &$AppUI->acl();
-	if (!$perms->checkModuleItem('files', 'delete', $file_id)) {
 if ($delete) {
+	if (!$obj->canDelete()) {
 		$AppUI->redirect(ACCESS_DENIED);
 	}
 } elseif ($cancel) {
-	if (!$perms->checkModuleItem('files', 'delete', $file_id)) {
+	if (!$obj->canDelete()) {
 		$AppUI->redirect(ACCESS_DENIED);
 	}
 } elseif ($isNotNew) {
-	if (!$perms->checkModuleItem('files', 'edit', $file_id)) {
+	if (!$obj->canEdit()) {
 		$AppUI->redirect(ACCESS_DENIED);
 	}
 } else {
-	if (!canAdd('files')) {
+	if (!$obj->canCreate()) {
 		$AppUI->redirect(ACCESS_DENIED);
 	}
 }
