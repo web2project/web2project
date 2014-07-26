@@ -19,7 +19,7 @@
  */
 
 // NOTE: This path is relative to Phing's build.xml, not this test.
-include 'unit_tests/CommonSetup.php';
+include_once 'unit_tests/CommonSetup.php';
 
 class Web2project_Actions_AddEditTest extends CommonSetup
 {
