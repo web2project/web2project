@@ -2,7 +2,8 @@
 
 /**
  * Class Roles
- * @package Web2project\Controllers
+ * @package     web2project\Actions
+ * @author      Keith Casey <caseydk@sourceforge.net>
  */
 class AddEditRoles extends \Web2project\Actions\AddEdit
 {
