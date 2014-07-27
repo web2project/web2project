@@ -556,22 +556,6 @@ table.prjprint TR {
     white-space: normal;
 }
 
-.login {
-    border: 0;
-    margin-left:auto;
-    margin-right:auto;
-    width: 250px;
-}
-
-table.login tr th {
-    padding: 6px;
-}
-
-table.login td {
-    padding: 0;
-    white-space:nowrap;
-}
-
 table.minititle th {
     font-weight: normal;
     text-align: center;

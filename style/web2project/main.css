@@ -651,3 +651,10 @@ label {
 .view td.data {
     background-color: #E8F3FE;
 }
+
+table.login {
+    border-style: none;
+    margin-top: 10em;
+    width: 10em;
+}
+

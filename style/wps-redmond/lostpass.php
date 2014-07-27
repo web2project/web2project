@@ -14,6 +14,7 @@ $theme = new style_wpsredmond($AppUI);
         <title><?php echo $w2Pconfig['company_name']; ?> :: web2Project Lost Password Recovery</title>
         <meta http-equiv="Pragma" content="no-cache" />
         <meta name="Version" content="<?php echo $AppUI->getVersion(); ?>" />
+        <link rel="stylesheet" type="text/css" href="./style/login.css" media="all" charset="utf-8"/>
         <link rel="stylesheet" type="text/css" href="./style/common.css" media="all" charset="utf-8"/>
         <link rel="stylesheet" type="text/css" href="./style/<?php echo $uistyle; ?>/main.css" media="all" charset="utf-8"/>
         <style type="text/css" media="all">@import "./style/<?php echo $uistyle; ?>/main.css";</style>
@@ -29,49 +30,34 @@ $theme = new style_wpsredmond($AppUI);
                 </tr>
             </tbody>
         </table>
+        <table width="100%" cellspacing="0" cellpadding="0" border="0">
+            <tbody>
+            <tr>
+                <td width="100%" valign="top" align="left" style="background: transparent url(./style/<?php echo $uistyle; ?>/images/nav_shadow.jpg) repeat-x scroll 0%;">
+                    <img src="./style/<?php echo $uistyle; ?>/images/nav_shadow.jpg" />
+                </td>
+            </tr>
+            </tbody>
+        </table>
 
+        <div class="container">
+            <div class="login">
+                <h1><?php echo $w2Pconfig['company_name']; ?></h1>
+                <form method="post" action="<?php echo $loginFromPage; ?>" name="loginform" accept-charset="utf-8">
+                    <input type="hidden" name="lostpass" value="1" />
+                    <input type="hidden" name="redirect" value="<?php echo isset($redirect) ? $redirect : ''; ?>" />
 
-
-
-
-
-
-
-
-        <br /><br /><br /><br />
-        <!--please leave action argument empty -->
-        <form method="post" name="lostpassform" accept-charset="utf-8">
-            <input type="hidden" name="lostpass" value="1" />
-            <input type="hidden" name="redirect" value="<?php echo isset($redirect) ? $redirect : ''; ?>" />
-            <table style="border-style:none;" cellspacing="0" class="std login">
-                <tr>
-                    <td colspan="2"><?php echo $theme->styleRenderBoxTop(); ?></td>
-                </tr>
-                <tr>
-                    <th colspan="2"><em><?php echo $w2Pconfig['company_name']; ?></em></th>
-                </tr>
-                <tr>
-                    <td style="padding:6px" align="right"><?php echo $AppUI->_('Username'); ?>:</td>
-                    <td style="padding:6px" align="left"><input type="text" size="25" maxlength="255" name="checkusername" class="text" /></td>
-                </tr>
-                <tr>
-                    <td style="padding:6px" align="right"><?php echo $AppUI->_('EMail'); ?>:</td>
-                    <td style="padding:6px" align="left"><input type="email" size="25" maxlength="255" name="checkemail" class="text" /></td>
-                </tr>
-                <tr>
-                    <td style="padding:6px" align="left"><a href="http://www.web2project.net/"><img src="./style/web2project/w2p_icon.ico" alt="web2Project logo" /></a></td>
-                    <td style="padding:6px" align="right" valign="bottom"><input type="submit" name="sendpass" value="<?php echo $AppUI->_('send password'); ?>" class="button" /></td>
-                </tr>
-                <tr>
-                    <td colspan="2"><?php echo $theme->styleRenderBoxBottom(); ?></td>
-                </tr>
-            </table>
-            <?php if ($AppUI->getVersion()) { ?>
-            <div align="center">
-                <span style="font-size:7pt">Version <?php echo $AppUI->getVersion(); ?></span>
+                    <p><input type="text" name="login" value="" placeholder="Username"></p>
+                    <p><input type="password" name="password" value="" placeholder="Email"></p>
+                    <p class="submit"><input type="submit" name="commit" value="Send Password"></p>
+                </form>
             </div>
-            <?php } ?>
-        </form>
+
+            <div class="login-help">
+                <p><a href="javascript: void(0);" onclick="javascript:window.location='./newuser.php'"><?php echo $AppUI->_('newAccountSignup'); ?></a></p>
+            </div>
+        </div>
+
         <div align="center">
             <?php
                 echo '<span class="error">' . $AppUI->getMsg() . '</span>';

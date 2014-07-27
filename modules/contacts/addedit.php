@@ -171,7 +171,7 @@ function addContactMethod(field, value) {
     /* Add contact method type menu to the table row */
     $('#contact_methods_' + index + '_').append('<label><select id="method_select_' + index + '" name="contact_methods[field][' + index + ']" size="1" class="text" /></label>');
     /* Add text field for the contact method value to the table row */
-    $('#contact_methods_' + index + '_').append('<input type="text" name="contact_methods[value][' + index + ']" size="25" maxlength="255" class="text" value="' + (value ? value : "") + '" /><?php echo w2PtoolTip('Contact Method', 'Remove') ?><a id="remove_contact_method" href="javascript:removeContactMethod(\'' + index + '\')"><img src="<?php echo w2PfindImage('icons/remove.png'); ?>" style="border: 0;" alt="" /></a><?php echo w2PendTip() ?>');
+    $('#contact_methods_' + index + '_').append('<input type="text" name="contact_methods[value][' + index + ']" size="25" maxlength="255" class="text" value="' + (value ? value : "") + '" /><?php echo w2PtoolTip('Contact Method', 'Remove') ?><a id="remove_contact_method" href="javascript:removeContactMethod(\'' + index + '\')"><img src="<?php echo w2PfindImage('icons/remove.png'); ?>" alt="" /></a><?php echo w2PendTip() ?>');
     addOption('#method_select_' + index, "", "");
     <?php foreach ($methodLabels as $value => $text): ?>
     addOption('#method_select_' + index, "<?php echo $value; ?>", "<?php echo $text; ?>", field);
