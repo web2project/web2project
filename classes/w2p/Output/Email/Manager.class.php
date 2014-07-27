@@ -90,6 +90,7 @@ class w2p_Output_Email_Manager
         return $this->templater->render($body, $this->AppUI);
     }
 
+    /** @deprecated */
     public function getContactUpdateNotify(w2p_Core_CAppUI $AppUI = null, CContact $contact)
     {
         $this->AppUI = (!is_null($AppUI)) ? $AppUI : $this->AppUI;

@@ -309,19 +309,16 @@ class CContact extends w2p_Core_BaseObject
 
     public function notify()
     {
-        $emailManager = new w2p_Output_Email_Manager($this->_AppUI);
-        $body = $emailManager->getContactUpdateNotify(null, $this);
+        $this->base_url = W2P_BASE_URL;
+        $this->user_display_name = $this->_AppUI->user_display_name;
 
-        $mail = new w2p_Utilities_Mail();
-        $mail->To($this->contact_email, true);
-        $mail->Subject('Hello');
-        $mail->Body($body, isset($GLOBALS['locale_char_set']) ? $GLOBALS['locale_char_set'] : '');
-        return $mail->Send();
+        $manager = new \Web2project\Output\Email\Manager();
+        $manager->send('new-contact-notify', 'en_US', $this, $this->contact_email);
     }
 
     public function updateNotify()
     {
-        //trigger_error("updateNotify has been deprecated and will be removed in v4.0. Please use notify() instead.", E_USER_NOTICE );
+        trigger_error("updateNotify has been deprecated in v4.0 and will be removed in v5.0. Please use notify() instead.", E_USER_NOTICE );
         return $this->notify();
     }
 
