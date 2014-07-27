@@ -164,6 +164,7 @@ if (!isset($_GET['m']) && !empty($w2Pconfig['default_view_m'])) {
 		$m = $w2Pconfig['default_view_m'];
 		$def_a = !empty($w2Pconfig['default_view_a']) ? $w2Pconfig['default_view_a'] : $def_a;
 		$tab = $w2Pconfig['default_view_tab'];
+        $_GET['tab'] = $tab;
 	}
 } else {
 	// set the module from the url
