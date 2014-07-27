@@ -1,13 +1,13 @@
 <?php
 if (!defined('W2P_BASE_DIR')) {
-	die('You should not access this file directly.');
+    die('You should not access this file directly.');
 }
 
 global $AppUI, $company, $tab;
 
 $sort = w2PgetParam($_GET, 'sort', 'project_name');
 if ($sort == 'project_priority') {
-	$sort .= ' DESC';
+    $sort .= ' DESC';
 }
 
 $items = $company->projects($AppUI, $company->company_id, !$tab, $sort);

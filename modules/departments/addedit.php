@@ -1,6 +1,6 @@
 <?php
 if (!defined('W2P_BASE_DIR')) {
-	die('You should not access this file directly.');
+    die('You should not access this file directly.');
 }
 // @todo    convert to template
 $dept_id = (int) w2PgetParam($_GET, 'dept_id', 0);
@@ -18,9 +18,8 @@ $canAuthor = $object->canCreate();
 $canEdit = $object->canEdit();
 
 if (!$canAddEdit) {
-	$AppUI->redirect(ACCESS_DENIED);
+    $AppUI->redirect(ACCESS_DENIED);
 }
-
 
 $obj = $AppUI->restoreObject();
 if ($obj) {
@@ -65,11 +64,12 @@ $titleBlock->show();
 // load the department types
 $types = w2PgetSysVal('DepartmentType');
 $countries = array('' => $AppUI->_('(Select a Country)')) + w2PgetSysVal('GlobalCountriesPreferred') +
-		array('-' => '----') + w2PgetSysVal('GlobalCountries');
+        array('-' => '----') + w2PgetSysVal('GlobalCountries');
 $dept_parent = ($object->dept_parent) ? $object->dept_parent : $dept_parent;
 ?>
 <script language="javascript" type="text/javascript">
-function testURL( x ) {
+function testURL(x)
+{
 	var test = 'document.editFrm.dept_url.value';
 	test = eval(test);
 	if (test.length > 6) {
@@ -77,7 +77,8 @@ function testURL( x ) {
 	}
 }
 
-function submitIt() {
+function submitIt()
+{
 	var form = document.editFrm;
 	if (form.dept_name.value.length < 2) {
 		alert( '<?php echo $AppUI->_('deptValidName', UI_OUTPUT_JS); ?>' );

@@ -1,6 +1,6 @@
 <?php
 if (!defined('W2P_BASE_DIR')) {
-	die('You should not access this file directly.');
+    die('You should not access this file directly.');
 }
 
 $company_id = (int) w2PgetParam($_GET, 'company_id', 0);
@@ -32,11 +32,11 @@ if ($canEdit) {
     }
     $titleBlock->addButton('New project', '?m=projects&a=addedit&company_id=' . $company_id);
 
-	$titleBlock->addCrumb('?m=companies&a=addedit&company_id=' . $company_id, 'edit this company');
+    $titleBlock->addCrumb('?m=companies&a=addedit&company_id=' . $company_id, 'edit this company');
 
-	if ($canDelete) {
-		$titleBlock->addCrumbDelete('delete company', $deletable, $msg);
-	}
+    if ($canDelete) {
+        $titleBlock->addCrumbDelete('delete company', $deletable, $msg);
+    }
 }
 $titleBlock->show();
 

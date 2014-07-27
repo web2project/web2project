@@ -1,6 +1,6 @@
 <?php
 if (!defined('W2P_BASE_DIR')) {
-	die('You should not access this file directly.');
+    die('You should not access this file directly.');
 }
 
 $dialog = (int) w2PgetParam($_GET, 'dialog', 0);
@@ -8,7 +8,7 @@ $dialog = (int) w2PgetParam($_GET, 'dialog', 0);
 $inc = W2P_BASE_DIR . '/locales/' . $AppUI->user_locale . '/help.php';
 
 if (!file_exists($inc)) {
-	$inc = W2P_BASE_DIR . '/locales/en/help.hlp';
+    $inc = W2P_BASE_DIR . '/locales/en/help.hlp';
 }
 ?>
     <style>
