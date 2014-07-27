@@ -1,6 +1,6 @@
 <?php
 if (!defined('W2P_BASE_DIR')) {
-	die('You should not access this file directly.');
+    die('You should not access this file directly.');
 }
 // @todo    convert to template
 
@@ -17,7 +17,7 @@ if ($task_id && !$project_id) {
 $page = (int) w2PgetParam($_GET, 'page', 1);
 
 if (!isset($project_id)) {
-	$project_id = (int) w2PgetParam($_POST, 'project_id', 0);
+    $project_id = (int) w2PgetParam($_POST, 'project_id', 0);
 }
 
 $link = new CLink();

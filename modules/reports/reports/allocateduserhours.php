@@ -1,6 +1,6 @@
 <?php
 if (!defined('W2P_BASE_DIR')) {
-	die('You should not access this file directly.');
+    die('You should not access this file directly.');
 }
 // @todo    convert to template
 
@@ -82,98 +82,98 @@ echo $AppUI->getTheme()->styleRenderBoxTop();
 if ($do_report) {
 
     echo $AppUI->getTheme()->styleRenderBoxBottom();
-	echo '<br />';
+    echo '<br />';
     echo $AppUI->getTheme()->styleRenderBoxTop();
-	echo '<table class="std">
+    echo '<table class="std">
 <tr>
 	<td>';
 
-	$q = new w2p_Database_Query;
-	$q->addTable('tasks', 't');
-	$q->addTable('user_tasks', 'ut');
-	$q->addTable('projects', 'pr');
-	$q->addQuery('t.*, ut.*, pr.project_name');
-	$q->addWhere('( task_start_date
-			   BETWEEN \'' . $start_date->format(FMT_DATETIME_MYSQL) . '\' 
-	                AND \'' . $end_date->format(FMT_DATETIME_MYSQL) . '\' 
-	           OR task_end_date	BETWEEN \'' . $start_date->format(FMT_DATETIME_MYSQL) . '\' 
-	                AND \'' . $end_date->format(FMT_DATETIME_MYSQL) . '\' 
+    $q = new w2p_Database_Query;
+    $q->addTable('tasks', 't');
+    $q->addTable('user_tasks', 'ut');
+    $q->addTable('projects', 'pr');
+    $q->addQuery('t.*, ut.*, pr.project_name');
+    $q->addWhere('( task_start_date
+			   BETWEEN \'' . $start_date->format(FMT_DATETIME_MYSQL) . '\'
+	                AND \'' . $end_date->format(FMT_DATETIME_MYSQL) . '\'
+	           OR task_end_date	BETWEEN \'' . $start_date->format(FMT_DATETIME_MYSQL) . '\'
+	                AND \'' . $end_date->format(FMT_DATETIME_MYSQL) . '\'
 		   OR ( task_start_date <= \'' . $start_date->format(FMT_DATETIME_MYSQL) . '\'
 	                AND task_end_date >= \'' . $end_date->format(FMT_DATETIME_MYSQL) . '\') )');
-	$q->addWhere('task_end_date IS NOT NULL');
-	$q->addWhere('task_end_date <> \'0000-00-00 00:00:00\'');
-	$q->addWhere('task_start_date IS NOT NULL');
-	$q->addWhere('task_start_date <> \'0000-00-00 00:00:00\'');
-	$q->addWhere('task_dynamic <> 1');
-	$q->addWhere('task_milestone = 0');
-	$q->addWhere('task_duration  > 0');
-	$q->addWhere('t.task_project = pr.project_id');
-	$q->addWhere('t.task_id = ut.task_id');
-	$q->addWhere('pr.project_active = 1');
-	if (($template_status = w2PgetConfig('template_projects_status_id')) != '') {
-		$q->addWhere('pr.project_status <> ' . (int)$template_status);
-	}
+    $q->addWhere('task_end_date IS NOT NULL');
+    $q->addWhere('task_end_date <> \'0000-00-00 00:00:00\'');
+    $q->addWhere('task_start_date IS NOT NULL');
+    $q->addWhere('task_start_date <> \'0000-00-00 00:00:00\'');
+    $q->addWhere('task_dynamic <> 1');
+    $q->addWhere('task_milestone = 0');
+    $q->addWhere('task_duration  > 0');
+    $q->addWhere('t.task_project = pr.project_id');
+    $q->addWhere('t.task_id = ut.task_id');
+    $q->addWhere('pr.project_active = 1');
+    if (($template_status = w2PgetConfig('template_projects_status_id')) != '') {
+        $q->addWhere('pr.project_status <> ' . (int) $template_status);
+    }
 
-	if ($user_id) {
-		$q->addWhere('t.task_owner = ' . (int)$user_id);
-	}
-	if ($project_id != 0) {
-		$q->addWhere('t.task_project = ' . (int)$project_id);
-	}
+    if ($user_id) {
+        $q->addWhere('t.task_owner = ' . (int) $user_id);
+    }
+    if ($project_id != 0) {
+        $q->addWhere('t.task_project = ' . (int) $project_id);
+    }
 
-	$proj = new CProject();
+    $proj = new CProject();
     $q = $proj->setAllowedSQL($AppUI->user_id, $q, null, 'pr');
 
-	$obj = new CTask();
+    $obj = new CTask();
     $q = $obj->setAllowedSQL($AppUI->user_id, $q);
 
-	$task_list_hash = $q->loadHashList('task_id');
+    $task_list_hash = $q->loadHashList('task_id');
 
-	$q->clear();
+    $q->clear();
 
-	$task_list = array();
-	$fetched_projects = array();
-	foreach ($task_list_hash as $task_id => $task_data) {
-		$task = new CTask();
-		$task->bind($task_data);
-		$task_list[] = $task;
-		$fetched_projects[$task->task_project] = $task_data['project_name'];
-	}
+    $task_list = array();
+    $fetched_projects = array();
+    foreach ($task_list_hash as $task_id => $task_data) {
+        $task = new CTask();
+        $task->bind($task_data);
+        $task_list[] = $task;
+        $fetched_projects[$task->task_project] = $task_data['project_name'];
+    }
 
-	$user_usage = array();
-	$task_dates = array();
+    $user_usage = array();
+    $task_dates = array();
 
-	$actual_date = $start_date;
-	$days_header = ''; // we will save days title here
+    $actual_date = $start_date;
+    $days_header = ''; // we will save days title here
 
-	$user_tasks_counted_in = array();
-	$user_names = array();
+    $user_tasks_counted_in = array();
+    $user_names = array();
 
-	if (count($task_list) == 0) {
-		echo '<p>' . $AppUI->_('No data available') . '</p>';
-	} else {
-		foreach ($task_list as $task) {
-			$task_start_date = new w2p_Utilities_Date($task->task_start_date);
-			$task_end_date = new w2p_Utilities_Date($task->task_end_date);
+    if (count($task_list) == 0) {
+        echo '<p>' . $AppUI->_('No data available') . '</p>';
+    } else {
+        foreach ($task_list as $task) {
+            $task_start_date = new w2p_Utilities_Date($task->task_start_date);
+            $task_end_date = new w2p_Utilities_Date($task->task_end_date);
 
-			$day_difference = $task_end_date->dateDiff($task_start_date);
-			$actual_date = $task_start_date;
+            $day_difference = $task_end_date->dateDiff($task_start_date);
+            $actual_date = $task_start_date;
 
-			$users = $task->getAssignedUsers($task->task_id);
+            $users = $task->getAssignedUsers($task->task_id);
 
-			if ($coarseness == 1) {
-				userUsageDays();
-			} elseif ($coarseness == 7) {
-				userUsageWeeks();
-			}
+            if ($coarseness == 1) {
+                userUsageDays();
+            } elseif ($coarseness == 7) {
+                userUsageWeeks();
+            }
 
-		}
+        }
 
-		if ($coarseness == 1) {
-			showDays();
-		} elseif ($coarseness == 7) {
-			showWeeks();
-		}
+        if ($coarseness == 1) {
+            showDays();
+        } elseif ($coarseness == 7) {
+            showWeeks();
+        }
 ?>
 			<center>
         <table class="std">
@@ -195,29 +195,29 @@ if ($do_report) {
                     echo $AppUI->_('Allocated hours') . ': ' . number_format($allocated_hours_sum, 2) . '<br />';
                     echo $AppUI->_('Total capacity') . ': ' . number_format($total_hours_capacity_all, 2) . '<br />';
                     echo $AppUI->_('Percentage used') . ': ' . (($total_hours_capacity_all > 0) ? number_format($allocated_hours_sum / $total_hours_capacity_all, 2) * 100 : 0) . '%<br />';
-	}
+    }
 ?>
 	   </td></tr>
 	   </table>
 	   </center>
 <?php
-	foreach ($user_tasks_counted_in as $user_id => $project_information) {
-		echo '<b>' . $user_names[$user_id] . '</b><br /><blockquote>';
-		echo '<table width="50%" border="1" class="std">';
-		foreach ($project_information as $project_id => $task_information) {
-			echo '<tr><th colspan="3"><span style="font-weight:bold; font-size:110%">' . $fetched_projects[$project_id] . '</span></th></tr>';
+    foreach ($user_tasks_counted_in as $user_id => $project_information) {
+        echo '<b>' . $user_names[$user_id] . '</b><br /><blockquote>';
+        echo '<table width="50%" border="1" class="std">';
+        foreach ($project_information as $project_id => $task_information) {
+            echo '<tr><th colspan="3"><span style="font-weight:bold; font-size:110%">' . $fetched_projects[$project_id] . '</span></th></tr>';
 
-			$project_total = 0;
-			foreach ($task_information as $task_id => $hours_assigned) {
-				echo '<tr><td>&nbsp;</td><td>' . $task_list_hash[$task_id]['task_name'] . '</td><td style="text-align:right;">' . number_format(round($hours_assigned, 2), 2) . ' hrs</td></tr>';
-				$project_total += round($hours_assigned, 2);
-			}
-			echo '<tr><td colspan="2" align="right"><b>' . $AppUI->_('Total assigned') . '</b></td><td style="text-align:right;"><b>' . number_format($project_total, 2) . ' hrs</b></td></tr>';
+            $project_total = 0;
+            foreach ($task_information as $task_id => $hours_assigned) {
+                echo '<tr><td>&nbsp;</td><td>' . $task_list_hash[$task_id]['task_name'] . '</td><td style="text-align:right;">' . number_format(round($hours_assigned, 2), 2) . ' hrs</td></tr>';
+                $project_total += round($hours_assigned, 2);
+            }
+            echo '<tr><td colspan="2" align="right"><b>' . $AppUI->_('Total assigned') . '</b></td><td style="text-align:right;"><b>' . number_format($project_total, 2) . ' hrs</b></td></tr>';
 
-		}
-		echo '</table></blockquote>';
-	}
-	echo '</td>
+        }
+        echo '</table></blockquote>';
+    }
+    echo '</td>
 </tr>
 </table>';
 }

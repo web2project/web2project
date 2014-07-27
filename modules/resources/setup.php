@@ -39,7 +39,8 @@ if ($a == 'setup') {
  */
 class CSetupResources extends w2p_System_Setup
 {
-    public function install() {
+    public function install()
+    {
         $q = $this->_getQuery();
         $q->createTable('resources');
         $q->createDefinition('(
@@ -73,7 +74,8 @@ class CSetupResources extends w2p_System_Setup
         return parent::install();
     }
 
-    public function remove() {
+    public function remove()
+    {
         $q = $this->_getQuery();
         $q->dropTable('resources');
         $q->exec();
@@ -90,7 +92,8 @@ class CSetupResources extends w2p_System_Setup
         return parent::remove();
     }
 
-    public function upgrade($old_version) {
+    public function upgrade($old_version)
+    {
         $result = false;
 
         $q = $this->_getQuery();
@@ -114,7 +117,7 @@ class CSetupResources extends w2p_System_Setup
                 $q->addQuery('resource_id, resource_note');
                 $resources = $q->loadList();
                 $q->clear();
-                foreach($resources as $resource) {
+                foreach ($resources as $resource) {
                     $q->addTable('resources');
                     $q->addUpdate('resource_description', $resource['resource_note']);
                     $q->addWhere('resource_id = ' . $resource['resource_id']);
@@ -126,6 +129,7 @@ class CSetupResources extends w2p_System_Setup
             default:
                 break;
         }
+
         return $result;
     }
 
@@ -146,6 +150,7 @@ class CSetupResources extends w2p_System_Setup
             $q->clear();
             $i++;
         }
+
         return true;
     }
 
@@ -157,7 +162,7 @@ class CSetupResources extends w2p_System_Setup
         $types = $q->loadList();
 
         $resourceTypes = array();
-        foreach($types as $type) {
+        foreach ($types as $type) {
             $resourceTypes[$type['resource_type_id']] = $type['resource_type_name'];
         }
 

@@ -1,6 +1,6 @@
 <?php
 if (!defined('W2P_BASE_DIR')) {
-	die('You should not access this file directly.');
+    die('You should not access this file directly.');
 }
 // @todo    convert to template
 
@@ -10,12 +10,12 @@ $q->addQuery('*');
 $q->addJoin('tasks', '', 'task_project = project_id');
 
 if (!empty($project_id)) {
-	$q->addWhere('project_id = ' . (int)$project_id);
+    $q->addWhere('project_id = ' . (int) $project_id);
 }
 $obj = new CTask();
 $allowedTasks = $obj->getAllowedSQL($AppUI->user_id);
 if (count($allowedTasks)) {
-	$obj->getAllowedSQL($AppUI->user_id, $q);
+    $obj->getAllowedSQL($AppUI->user_id, $q);
 }
 $all_tasks = $q->loadList();
 $q->clear();
@@ -30,30 +30,30 @@ $q->addJoin('contacts', '', 'users.user_contact = contact_id');
 $q->addJoin('task_log', '', 'task_log_task = tasks.task_id AND task_log_creator = users.user_id');
 $q->addWhere('project_active = 1');
 if (($template_status = w2PgetConfig('template_projects_status_id')) != '') {
-	$q->addWhere('project_status <> ' . (int)$template_status);
+    $q->addWhere('project_status <> ' . (int) $template_status);
 }
 if (!empty($project_id)) {
-	$q->addWhere('project_id = ' . (int)$project_id);
+    $q->addWhere('project_id = ' . (int) $project_id);
 }
 $q->addGroup('tasks.task_id');
 $q->addGroup('users.user_id');
 $obj = new CTask();
 $allowedTasks = $obj->getAllowedSQL($AppUI->user_id);
 if (count($allowedTasks)) {
-	$obj->getAllowedSQL($AppUI->user_id, $q);
+    $obj->getAllowedSQL($AppUI->user_id, $q);
 }
 $users_all = $q->loadList();
 $q->clear();
 
 foreach ($users_all as $user) {
-	$users_per_task[$user['task_id']][] = $user['user_id'];
-	$users[$user['user_id']]['all'][$user['task_id']] = $user;
-	$users[$user['user_id']]['name'] = (!empty($user['contact_first_name'])) ? $user['contact_first_name'] . ' ' . $user['contact_last_name'] : ((!empty($user['user_username'])) ? $user['user_username'] : $user['user_id']);
-	$users[$user['user_id']]['hours'] = 0;
-	$users[$user['user_id']]['completed'] = 0;
-	$users[$user['user_id']]['inprogress'] = 0;
-	$users[$user['user_id']]['pending'] = 0;
-	$users[$user['user_id']]['overdue'] = 0;
+    $users_per_task[$user['task_id']][] = $user['user_id'];
+    $users[$user['user_id']]['all'][$user['task_id']] = $user;
+    $users[$user['user_id']]['name'] = (!empty($user['contact_first_name'])) ? $user['contact_first_name'] . ' ' . $user['contact_last_name'] : ((!empty($user['user_username'])) ? $user['user_username'] : $user['user_id']);
+    $users[$user['user_id']]['hours'] = 0;
+    $users[$user['user_id']]['completed'] = 0;
+    $users[$user['user_id']]['inprogress'] = 0;
+    $users[$user['user_id']]['pending'] = 0;
+    $users[$user['user_id']]['overdue'] = 0;
 }
 
 $tasks['hours'] = 0;
@@ -62,38 +62,38 @@ $tasks['completed'] = 0;
 $tasks['pending'] = 0;
 $tasks['overdue'] = 0;
 foreach ($all_tasks as $task) {
-	if ($task['task_percent_complete'] == 100) {
-		$tasks['completed']++;
-	} else {
-		if ($task['task_end_date'] < date('Y-m-d')) {
-			$tasks['overdue']++;
-		}
-		if ($task['task_percent_complete'] == 0) {
-			$tasks['pending']++;
-		} else {
-			$tasks['inprogress']++;
-		}
-	}
+    if ($task['task_percent_complete'] == 100) {
+        $tasks['completed']++;
+    } else {
+        if ($task['task_end_date'] < date('Y-m-d')) {
+            $tasks['overdue']++;
+        }
+        if ($task['task_percent_complete'] == 0) {
+            $tasks['pending']++;
+        } else {
+            $tasks['inprogress']++;
+        }
+    }
 
-	if (isset($users_per_task[$task['task_id']])) {
-		foreach ($users_per_task[$task['task_id']] as $user) {
-			if ($task['task_percent_complete'] == 100) {
-				$users[$user]['completed']++;
-			} else {
-				if ($task['task_end_date'] < date('Y-m-d')) {
-					$users[$user]['overdue']++;
-				}
-				if ($task['task_percent_complete'] == 0) {
-					$users[$user]['pending']++;
-				} else {
-					$users[$user]['inprogress']++;
-				}
-			}
+    if (isset($users_per_task[$task['task_id']])) {
+        foreach ($users_per_task[$task['task_id']] as $user) {
+            if ($task['task_percent_complete'] == 100) {
+                $users[$user]['completed']++;
+            } else {
+                if ($task['task_end_date'] < date('Y-m-d')) {
+                    $users[$user]['overdue']++;
+                }
+                if ($task['task_percent_complete'] == 0) {
+                    $users[$user]['pending']++;
+                } else {
+                    $users[$user]['inprogress']++;
+                }
+            }
 
-			$users[$user]['hours'] += $users[$user]['all'][$task['task_id']]['work'];
-			$tasks['hours'] += $users[$user]['all'][$task['task_id']]['work'];
-		}
-	} else {
+            $users[$user]['hours'] += $users[$user]['all'][$task['task_id']]['work'];
+            $tasks['hours'] += $users[$user]['all'][$task['task_id']]['work'];
+        }
+    } else {
         $users[0]['completed'] = 0;
         $users[0]['overdue'] = 0;
         $users[0]['pending'] = 0;
@@ -120,9 +120,9 @@ $q = new w2p_Database_Query;
 $q->addTable('files');
 $q->addQuery('sum(file_size)');
 if ($project_id) {
-	$q->addWhere('file_project = ' . (int)$project_id);
+    $q->addWhere('file_project = ' . (int) $project_id);
 } else {
-	$q->addWhere('file_project = 0');
+    $q->addWhere('file_project = 0');
 }
 $q->addGroup('file_project');
 $files = $q->loadResult();

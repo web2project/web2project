@@ -5,8 +5,6 @@ if (!defined('W2P_BASE_DIR')) {
 // @todo    convert to template
 $object_id = (int) w2PgetParam($_GET, 'resource_id', 0);
 
-
-
 $object = new CResource();
 $object->setId($object_id);
 
@@ -43,7 +41,8 @@ $object->resource_max_allocation = ($object->resource_max_allocation) ? $object-
 $typelist = w2PgetSysVal('ResourceTypes');
 ?>
 <script language="javascript" type="text/javascript">
-function submitIt() {
+function submitIt()
+{
     var form = document.editFrm;
     if (form.resource_name.value.length < 3) {
         alert( "<?php echo $AppUI->_('You must enter a name for the resource', UI_OUTPUT_JS); ?>" );

@@ -1,6 +1,6 @@
 <?php
 if (!defined('W2P_BASE_DIR')) {
-	die('You should not call this file directly.');
+    die('You should not call this file directly.');
 }
 
 $callback = isset($_GET['callback']) ? w2PgetParam($_GET, 'callback', '') : 0;
@@ -23,9 +23,9 @@ $cal->callback = $callback;
 $cal->setLinkFunctions('clickDay');
 
 if (isset($prev_date)) {
-	$highlights = array($prev_date => '#FF8888');
-	$cal->setHighlightedDays($highlights);
-	$cal->showHighlightedDays = true;
+    $highlights = array($prev_date => '#FF8888');
+    $cal->setHighlightedDays($highlights);
+    $cal->showHighlightedDays = true;
 }
 
 echo $cal->show();
@@ -35,7 +35,8 @@ echo $cal->show();
  *	@param string Input date in the format YYYYMMDD
  *	@param string Formatted date
  */
-	function clickDay( idate, fdate ) {
+	function clickDay(idate, fdate)
+	{
 		window.opener.<?php echo $callback; ?>(idate,fdate);
 		window.close();
 	}
@@ -45,8 +46,8 @@ echo $cal->show();
 <?php
 $s = '';
 for ($i = 0; $i < 12; $i++) {
-	$this_month->setMonth($i + 1);
-	$s .= '<td width="8%"><a href="index.php?m=public&a=calendar&dialog=1&callback=' . $callback . '&date=' . $this_month->format(FMT_TIMESTAMP_DATE) . '&uts=' . $prev_date . '" class="">' . substr($this_month->format('%b'), 0, 1) . '</a></td>';
+    $this_month->setMonth($i + 1);
+    $s .= '<td width="8%"><a href="index.php?m=public&a=calendar&dialog=1&callback=' . $callback . '&date=' . $this_month->format(FMT_TIMESTAMP_DATE) . '&uts=' . $prev_date . '" class="">' . substr($this_month->format('%b'), 0, 1) . '</a></td>';
 }
 echo $s;
 ?>

@@ -1,11 +1,11 @@
 <?php
-	if (!defined('W2P_BASE_DIR')) {
-		die('You should not access this file directly.');
-	}
+    if (!defined('W2P_BASE_DIR')) {
+        die('You should not access this file directly.');
+    }
 
     $dpOptions = $manager->getConfigOptions();
-	if (!$manager->testDatabaseCredentials($dpOptions)) {
-		?>
+    if (!$manager->testDatabaseCredentials($dpOptions)) {
+        ?>
 		<table cellspacing="0" cellpadding="3" border="0" class="tbl update" align="center">
 			<tr>
 			  <td colspan="2" align="center">
@@ -18,11 +18,11 @@
 			</tr>
 		</table>
 		<?php
-		die();
-	}
+        die();
+    }
 
     if (isset($dpOptions['dbprefix']) && ('' != $dpOptions['dbprefix'])) {
-		?>
+        ?>
 		<table cellspacing="0" cellpadding="3" border="0" class="tbl update" align="center">
 			<tr>
                 <td colspan="2" align="center">
@@ -39,7 +39,7 @@
 			</tr>
 		</table>
 		<?php
-		die();
+        die();
     }
 ?>
 <table cellspacing="0" cellpadding="3" border="0" class="tbl update" align="center">
@@ -47,34 +47,34 @@
 		<td class="title" colspan="2">Step 2: Update Database &amp; Write Configuration</td>
 	</tr>
 	<?php
-		$errorMessages = $manager->convertDotProject();
+        $errorMessages = $manager->convertDotProject();
 
-		if (count($errorMessages) > 0) {
-			?>
+        if (count($errorMessages) > 0) {
+            ?>
 			<tr>
 				<td colspan="2"><b class="error">There were <?php echo count($errorMessages); ?> errors in the system update.</b></td>
 			</tr>
 			<?php
-			foreach ($errorMessages as $message) {
-				?>
+            foreach ($errorMessages as $message) {
+                ?>
 				<tr><td colspan="2"><?php echo $message; ?></td></tr>
 				<?php
-			}
-			?>
+            }
+            ?>
 			<tr>
 				<td colspan="2">Note: Errors noting 'Duplicate entry', 'Table already exists', or 'Unknown table' may not be problems.  It's possible that your dotProject database was not the version it claimed to be.</td>
 			</tr>
 			<?php
-		} else {
-			?>
+        } else {
+            ?>
 			<tr>
 				<td colspan="2">Your system update went smoothly without any errors.</td>
 			</tr>
 			<?php
-		}
+        }
 
-		$dpConfig = $manager->getConfigOptions();
-		$config = $manager->createConfigString($dpConfig);
+        $dpConfig = $manager->getConfigOptions();
+        $config = $manager->createConfigString($dpConfig);
 
         if (!isset($errorMessages['version_fail'])) {
             if ((is_writable(W2P_BASE_DIR.'/includes/config.php')  || !is_file(W2P_BASE_DIR.'/includes/config.php')) && ($fp = @fopen(W2P_BASE_DIR.'/includes/config.php', 'w'))) {
@@ -89,7 +89,7 @@
             $cFileErr = true;
             $cFileMsg = 'Config file could not be written'."\n";
         }
-	?>
+    ?>
 	<tr><td colspan="2">&nbsp;</td></tr>
 	<tr>
 		<td class="title">Config File Creation Feedback:</td>

@@ -1,12 +1,12 @@
 <?php
 if (!defined('W2P_BASE_DIR')) {
-	die('You should not access this file directly.');
+    die('You should not access this file directly.');
 }
 
 $tab = $AppUI->processIntState('LinkIdxTab', $_GET, 'tab', 0);
 
 if (isset($_REQUEST['project_id'])) {
-	$AppUI->setState('LinkIdxProject', w2PgetParam($_REQUEST, 'project_id', null));
+    $AppUI->setState('LinkIdxProject', w2PgetParam($_REQUEST, 'project_id', null));
 }
 $project_id = $AppUI->getState('LinkIdxProject') !== null ? $AppUI->getState('LinkIdxProject') : 0;
 
@@ -42,10 +42,10 @@ $linkTypes = w2PgetSysVal('LinkType');
 
 $tabBox = new CTabBox('?m=links', W2P_BASE_DIR . '/modules/links/', $tab);
 if ($tabBox->isTabbed()) {
-	array_unshift($linkTypes, $AppUI->_('All Links', UI_OUTPUT_RAW));
+    array_unshift($linkTypes, $AppUI->_('All Links', UI_OUTPUT_RAW));
 }
 foreach ($linkTypes as $link_type) {
-	$tabBox->add('index_table', $link_type);
+    $tabBox->add('index_table', $link_type);
 }
 $showProject = true;
 $tabBox->show();

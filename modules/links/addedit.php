@@ -1,6 +1,6 @@
 <?php
 if (!defined('W2P_BASE_DIR')) {
-	die('You should not access this file directly.');
+    die('You should not access this file directly.');
 }
 // @todo    convert to template
 $object_id    = (int) w2PgetParam($_GET, 'link_id', 0);
@@ -16,7 +16,7 @@ $canAuthor = $obj->canCreate();
 $canEdit = $obj->canEdit();
 $canDelete = $object->canDelete();
 if (!$canAddEdit) {
-	$AppUI->redirect(ACCESS_DENIED);
+    $AppUI->redirect(ACCESS_DENIED);
 }
 
 $obj = $AppUI->restoreObject();
@@ -55,14 +55,14 @@ if ($canDelete && $object_id) {
     if (!isset($msg)) {
         $msg = '';
     }
-	$titleBlock->addCrumbDelete('delete link', $canDelete, $msg);
+    $titleBlock->addCrumbDelete('delete link', $canDelete, $msg);
 }
 $titleBlock->show();
 
 $prj = new CProject();
 $projects = $prj->getAllowedProjects($AppUI->user_id, false);
 foreach ($projects as $project_id => $project_info) {
-	$projects[$project_id] = $project_info['project_name'];
+    $projects[$project_id] = $project_info['project_name'];
 }
 $projects = arrayMerge(array('0' => $AppUI->_('All', UI_OUTPUT_JS)), $projects);
 
@@ -73,18 +73,21 @@ $perms = &$AppUI->acl();
 $users = $perms->getPermittedUsers('links');
 ?>
 <script language="javascript" type="text/javascript">
-function submitIt() {
+function submitIt()
+{
 	var f = document.editFrm;
 	f.submit();
 }
-function delIt() {
+function delIt()
+{
 	if (confirm( "<?php echo $AppUI->_('linksDelete', UI_OUTPUT_JS); ?>" )) {
 		var f = document.editFrm;
 		f.del.value='1';
 		f.submit();
 	}
 }
-function popTask() {
+function popTask()
+{
     var f = document.editFrm;
     if (f.link_project.selectedIndex == 0) {
         alert( "<?php echo $AppUI->_('Please select a project first!', UI_OUTPUT_JS); ?>" );
@@ -95,7 +98,8 @@ function popTask() {
 }
 
 // Callback function for the generic selector
-function setTask( key, val ) {
+function setTask(key, val)
+{
     var f = document.editFrm;
     if (val != '') {
         f.link_task.value = key;

@@ -1,6 +1,6 @@
 <?php
 if (!defined('W2P_BASE_DIR')) {
-	die('You should not access this file directly.');
+    die('You should not access this file directly.');
 }
 // @todo    convert to template
 
@@ -20,7 +20,7 @@ $start_date = intval($log_start_date) ? new w2p_Utilities_Date($log_start_date) 
 $end_date = intval($log_end_date) ? new w2p_Utilities_Date($log_end_date) : new w2p_Utilities_Date();
 
 if (!$log_start_date) {
-	$start_date->subtractSpan(new Date_Span('14,0,0,0'));
+    $start_date->subtractSpan(new Date_Span('14,0,0,0'));
 }
 $end_date->setTime(23, 59, 59);
 $billingCategory = w2PgetSysVal('BudgetCategory');
