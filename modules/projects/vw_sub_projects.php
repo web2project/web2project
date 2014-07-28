@@ -12,21 +12,29 @@ $projectStatus = w2PgetSysVal('ProjectStatus');
 $original_project_id = $project->project_original_parent;
 $project->project_status = -1;
 $st_projects_arr = $project->getStructuredProjects();
-?>
-<table cellpadding="5" cellspacing="0" class="list subprojects">
-    <tr>
-        <th width="12">&nbsp;</th>
-        <th><?php echo $AppUI->_('Project'); ?></th>
-        <th><?php echo $AppUI->_('Company'); ?></th>
-        <th><?php echo $AppUI->_('Start'); ?></th>
-        <th><?php echo $AppUI->_('End'); ?></th>
-        <th><?php echo $AppUI->_('P'); ?></th>
-        <th><?php echo $AppUI->_('Status'); ?></th>
-    </tr>
-<?php
+
+
+$module = new w2p_System_Module();
+$fields = $module->loadSettings('projects', 'subproject_list');
+
+if (0 == count($fields)) {
+    $fieldList = array('project_name', 'project_company', 'project_start_date', 'project_end_date', 'project_priority', 'project_status');
+    $fieldNames = array('Project', 'Company', 'Start', 'End', 'P', 'Status');
+
+    //$module->storeSettings('projects', 'subproject_list', $fieldList, $fieldNames);
+    $fields = array_combine($fieldList, $fieldNames);
+}
+$fieldList = array_keys($fields);
+$fieldNames = array_values($fields);
+
+$listTable = new w2p_Output_ListTable($AppUI);
+$listTable->addBefore('edit', 'project_id');
+
+echo $listTable->startTable('list subprojects');
+echo $listTable->buildHeader($fields);
+
 $s = '';
 
-$htmlHelper = new w2p_Output_HTMLHelper($AppUI);
 $customLookups = array('project_status' => $projectStatus, 'project_priority' => $projectPriority);
 
 if (is_array($st_projects_arr)) {
@@ -39,7 +47,7 @@ if (is_array($st_projects_arr)) {
 
             $row = get_object_vars($s_project);
             $row['company_id'] = $row['project_company'];
-            $htmlHelper->stageRowData($row);
+            $listTable->stageRowData($row);
 
             $s .= '<tr><td><a href="./index.php?m=projects&a=addedit&project_id=' . $s_project->project_id . '"><img src="' . w2PfindImage('icons/' . ($project_id == $s_project->project_id ? 'pin' : 'pencil') . '.gif') . '" /></a></td>';
             if ($level) {
@@ -48,11 +56,11 @@ if (is_array($st_projects_arr)) {
                 $sd = '<a href="./index.php?m=projects&a=view&project_id=' . $s_project->project_id . '">' . $s_project->project_name . '</a>';
             }
             $s .= '<td class="_name">' . $sd . '</td>';
-            $s .= $htmlHelper->createCell('project_company', $s_project->project_company);
-            $s .= $htmlHelper->createCell('project_start_date', $s_project->project_start_date);
-            $s .= $htmlHelper->createCell('project_end_date', $s_project->project_end_date);
-            $s .= $htmlHelper->createCell('project_priority', $s_project->project_priority, $customLookups);
-            $s .= $htmlHelper->createCell('project_status', $s_project->project_status, $customLookups);
+            $s .= $listTable->createCell('project_company', $s_project->project_company);
+            $s .= $listTable->createCell('project_start_date', $s_project->project_start_date);
+            $s .= $listTable->createCell('project_end_date', $s_project->project_end_date);
+            $s .= $listTable->createCell('project_priority', $s_project->project_priority, $customLookups);
+            $s .= $listTable->createCell('project_status', $s_project->project_status, $customLookups);
             $s .= '</tr>';
         }
     }
