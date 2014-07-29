@@ -21,7 +21,7 @@ if (0 == count($fields)) {
     $fieldList = array('project_name', 'project_company', 'project_start_date', 'project_end_date', 'project_priority', 'project_status');
     $fieldNames = array('Project', 'Company', 'Start', 'End', 'P', 'Status');
 
-    //$module->storeSettings('projects', 'subproject_list', $fieldList, $fieldNames);
+    $module->storeSettings('projects', 'subproject_list', $fieldList, $fieldNames);
     $fields = array_combine($fieldList, $fieldNames);
 }
 $fieldList = array_keys($fields);
@@ -49,23 +49,28 @@ if (is_array($st_projects_arr)) {
             $row['company_id'] = $row['project_company'];
             $listTable->stageRowData($row);
 
-            $s .= '<tr><td><a href="./index.php?m=projects&a=addedit&project_id=' . $s_project->project_id . '"><img src="' . w2PfindImage('icons/' . ($project_id == $s_project->project_id ? 'pin' : 'pencil') . '.gif') . '" /></a></td>';
-            if ($level) {
-                $sd = str_repeat('&nbsp;&nbsp;&nbsp;&nbsp;', ($level - 1)) . w2PshowImage('corner-dots.gif', 16, 12) . '&nbsp;' . '<a href="./index.php?m=projects&a=view&project_id=' . $s_project->project_id . '">' . $s_project->project_name . '</a>';
-            } else {
-                $sd = '<a href="./index.php?m=projects&a=view&project_id=' . $s_project->project_id . '">' . $s_project->project_name . '</a>';
+            $s  = '<tr>';
+            $s .= '<td><a href="./index.php?m=projects&a=addedit&project_id=' . $s_project->project_id . '"><img src="' . w2PfindImage('icons/' . ($project_id == $s_project->project_id ? 'pin' : 'pencil') . '.gif') . '" /></a></td>';
+            foreach ($fieldList as $field) {
+                if ('project_name' == $field) {
+                    $s .= '<td class="_name">';
+                    if ($level) {
+                        $s .= str_repeat('&nbsp;&nbsp;&nbsp;&nbsp;', ($level - 1)) . w2PshowImage('corner-dots.gif', 16, 12) . '&nbsp;' . '<a href="./index.php?m=projects&a=view&project_id=' . $s_project->project_id . '">' . $s_project->project_name . '</a>';
+                    } else {
+                        $s .= '<a href="./index.php?m=projects&a=view&project_id=' . $s_project->project_id . '">' . $s_project->project_name . '</a>';
+                    }
+                    $s .= '</td>';
+                } else {
+                    $s .= $listTable->createCell($field, $s_project->{$field}, $customLookups);
+                }
             }
-            $s .= '<td class="_name">' . $sd . '</td>';
-            $s .= $listTable->createCell('project_company', $s_project->project_company);
-            $s .= $listTable->createCell('project_start_date', $s_project->project_start_date);
-            $s .= $listTable->createCell('project_end_date', $s_project->project_end_date);
-            $s .= $listTable->createCell('project_priority', $s_project->project_priority, $customLookups);
-            $s .= $listTable->createCell('project_status', $s_project->project_status, $customLookups);
             $s .= '</tr>';
+
+            echo $s;
         }
     }
 }
-echo $s;
+
 ?>
 </table>
 <table width="100%" border="0" cellpadding="5" cellspacing="1">
