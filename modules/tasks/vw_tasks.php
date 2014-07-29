@@ -175,6 +175,7 @@ if (0 == count($fields)) {
     //$module->storeSettings($m, 'tasklist', $fieldList, $fieldNames);
     $fields = array_combine($fieldList, $fieldNames);
 }
+$fieldList = array_keys($fields);
 $fieldNames = array_values($fields);
 
 $listTable = new w2p_Output_HTML_TaskTable($AppUI);
@@ -210,22 +211,24 @@ foreach ($projects as $k => $p) {
     $tnums = (isset($p['tasks'])) ? count($p['tasks']) : 0;
     if ($tnums && $m == 'tasks') {
         ?>
-        <tr><td colspan="20">
-                <table width="100%" border="0">
-                    <tr>
-                        <!-- patch 2.12.04 display company name next to project name -->
-                        <td nowrap="nowrap" style="border: outset #eeeeee 1px;background-color:#<?php echo $p['project_color_identifier']; ?>">
-                            <a href="./index.php?m=projects&amp;a=view&amp;project_id=<?php echo $k; ?>">
-                                        <span style="color:<?php echo bestColor($p['project_color_identifier']); ?>;text-decoration:none;">
-                                        <strong><?php echo $p['company_name'] . ' :: ' . $p['project_name']; ?></strong></span>
-                            </a>
-                        </td>
-                        <td width="<?php echo (101 - (int) $p['project_percent_complete']); ?>%">
+        <tr>
+            <td colspan="<?php echo count($fieldList) + 3; ?>">
+                <div style="border: outset #eeeeee 1px;background-color:#<?php echo $p['project_color_identifier']; ?>; width: <?php echo $p['project_percent_complete']; ?>%">
+                    <a href="./index.php?m=projects&amp;a=view&amp;project_id=<?php echo $k; ?>">
+                        <?php echo w2PshowImage('pencil.gif'); ?>
+                    </a>
+                    <span style="color:<?php echo bestColor($p['project_color_identifier']); ?>;text-decoration:none;">
+                        <strong>
+                            <?php echo $p['company_name'] . ' :: ' . $p['project_name']; ?>
+                        </strong>
+                        <span style="float: right;">
                             <?php echo (int) $p['project_percent_complete']; ?>%
-                        </td>
-                    </tr>
-                </table>
-            </td></tr>
+                        </span>
+                    </span>
+
+                </div>
+            </td>
+        </tr>
     <?php
     }
     for ($i = 0; $i < $tnums; $i++) {
