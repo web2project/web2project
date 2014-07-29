@@ -363,15 +363,16 @@ function __extract_from_showtask(&$arr, $level, $today_view, $listTable)
 
     $s .= $listTable->createCell('task_owner', $arr['task_owner']);
 
+    $s .= '<td class="data">';
     if (isset($arr['task_assigned_users']) && count($arr['task_assigned_users'])) {
         $assigned_users = $arr['task_assigned_users'];
         $a_u_tmp_array = array();
-        $s .= '<td class="data">';
         foreach ($assigned_users as $val) {
             $a_u_tmp_array[] = ('<a href="?m=users&amp;a=view&amp;user_id=' . $val['user_id'] . '"' . 'title="' . (w2PgetConfig('check_overallocation') ? $AppUI->_('Extent of Assignment') . ':' . $userAlloc[$val['user_id']]['charge'] . '%; ' . $AppUI->_('Free Capacity') . ':' . $userAlloc[$val['user_id']]['freeCapacity'] . '%' : '') . '">' . $val['assignee'] . ' (' . $val['perc_assignment'] . '%)</a>');
         }
-        $s .= join(', <br />', $a_u_tmp_array) . '</td>';
+        $s .= join(', <br />', $a_u_tmp_array);
     }
+    $s .= '</td>';
 
     // duration or milestone
     $s .= $listTable->createCell('task_start_datetime', $arr['task_start_date']);
