@@ -210,10 +210,11 @@ reset($projects);
 foreach ($projects as $k => $p) {
     $tnums = (isset($p['tasks'])) ? count($p['tasks']) : 0;
     if ($tnums && $m == 'tasks') {
+        $width = ($p['project_percent_complete'] < 30) ? 30 : $p['project_percent_complete'];
         ?>
         <tr>
             <td colspan="<?php echo count($fieldList) + 3; ?>">
-                <div style="border: outset #eeeeee 1px;background-color:#<?php echo $p['project_color_identifier']; ?>; width: <?php echo $p['project_percent_complete']; ?>%">
+                <div style="border: outset #eeeeee 1px;background-color:#<?php echo $p['project_color_identifier']; ?>; width: <?php echo $width; ?>%">
                     <a href="./index.php?m=projects&amp;a=view&amp;project_id=<?php echo $k; ?>">
                         <?php echo w2PshowImage('pencil.gif'); ?>
                     </a>
@@ -229,14 +230,11 @@ foreach ($projects as $k => $p) {
                 </div>
             </td>
         </tr>
-    <?php
-    }
-    for ($i = 0; $i < $tnums; $i++) {
-        $t = $p['tasks'][$i];
-        if ($t['task_parent'] == $t['task_id']) {
-            echo showtask_new($t, 0, false, $listTable);
-            findchild_new($p['tasks'], $t['task_id']);
-        }
+        <?php
+        $taskobj = new CTask();
+        $taskTree = $taskobj->getTaskTree($k);
+        $listTable->buildHeader($fields);
+        echo $listTable->buildRows($taskTree);
     }
 }
 
