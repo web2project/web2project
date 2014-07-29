@@ -43,7 +43,7 @@ if (is_array($st_projects_arr)) {
         $level = $project[1];
         if ($line['project_id']) {
             $s_project = new CProject();
-            $s_project->loadFull(null, $line['project_id']);
+            $s_project->load($line['project_id']);
 
             $row = get_object_vars($s_project);
             $row['company_id'] = $row['project_company'];
