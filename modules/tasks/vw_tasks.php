@@ -236,6 +236,12 @@ foreach ($projects as $k => $p) {
         $listTable->buildHeader($fields);
         echo $listTable->buildRows($taskTree);
     }
+    if ('projects' == $m) {
+        $taskobj = new CTask();
+        $taskTree = $taskobj->getTaskTree($k);
+        $listTable->buildHeader($fields);
+        echo $listTable->buildRows($taskTree);
+    }
 }
 
 echo $listTable->endTable();
