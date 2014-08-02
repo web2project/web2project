@@ -17,6 +17,19 @@ class w2p_Output_HTML_TaskTable extends w2p_Output_ListTable
 
         parent::__construct($AppUI);
     }
+
+    public function buildHeader($fields = array(), $sortable = false, $m = '')
+    {
+        $header = parent::buildHeader($fields, $sortable, $m);
+
+        if ('projectdesigner' == $m) {
+            $checkAll = '<th width="1"><input type="checkbox" onclick="select_all_rows(this, \'selected_task[]\')" name="multi_check"/></th></tr>';
+            $header = str_replace('</tr>', $checkAll, $header);
+        }
+
+        return $header;
+    }
+
     public function buildRow($rowData, $customLookups = array())
     {
         $this->stageRowData($rowData);

@@ -199,12 +199,7 @@ $listTable->addBefore('log', 'task_id');
 <?php
 echo $listTable->startTable();
 
-$header = $listTable->buildHeader($fields);
-if ('projectdesigner' == $m) {
-    $checkAll = '<th width="1"><input type="checkbox" onclick="select_all_rows(this, \'selected_task[]\')" name="multi_check"/></th></tr>';
-    $header = str_replace('</tr>', $checkAll, $header);
-}
-echo $header;
+echo $listTable->buildHeader($fields, false, $m);
 
 $status = w2PgetSysVal('TaskStatus');
 $priority = w2PgetSysVal('TaskPriority');
