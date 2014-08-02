@@ -59,6 +59,9 @@ class w2p_Output_HTML_TaskTable extends w2p_Output_ListTable
             }
             $row .= $this->createCell($column, $rowData[$column], $customLookups);
         }
+        if ('projectdesigner' == $this->module) {
+            $row .= '<td class="data"><input type="checkbox" name="selected_task[]" value="' . $rowData['task_id'] . '"/></td>';
+        }
         $row .= '</tr>';
 
         return $row;
