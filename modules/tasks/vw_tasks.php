@@ -239,7 +239,7 @@ foreach ($projects as $k => $p) {
         $listTable->buildHeader($fields);
         echo $listTable->buildRows($taskTree, $customLookups);
     }
-    if ('projects' == $m) {
+    if ('projects' == $m || 'projectdesigner' == $m) {
         $taskTree = $tempTask->getTaskTree($k);
         $listTable->buildHeader($fields);
         echo $listTable->buildRows($taskTree, $customLookups);
