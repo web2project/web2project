@@ -264,6 +264,9 @@ class w2p_Output_HTMLHelper extends w2p_Output_HTML_Base
                 $cell = '<span style="background-color:#'.$color.'; padding: 3px"><a href="'.$link.'" style="color:'.bestColor($color) .'">'.$obj->{"$module".'_name'}.'</a></span>';
                 $suffix .= ' _name';
                 break;
+            case '_assignees':
+                $cell = $value;
+                break;
             case '_problem':
                 if ($value) {
                     $cell  = '<a href="?m=tasks&a=index&f=all&project_id=' . $this->tableRowData['project_id'] . '">';

@@ -9,6 +9,14 @@
 
 class w2p_Output_HTML_TaskTable extends w2p_Output_ListTable
 {
+    protected $task = null;
+
+    public function __construct($AppUI, $task = null)
+    {
+        $this->task = (is_null($task)) ? new CTask() : $task;
+
+        parent::__construct($AppUI);
+    }
     public function buildRow($rowData, $customLookups = array())
     {
         $this->stageRowData($rowData);
@@ -27,6 +35,14 @@ class w2p_Output_HTML_TaskTable extends w2p_Output_ListTable
                 }
 
                 $rowData[$column] = $prefix . $rowData[$column];
+            }
+            if ('task_assignees' == $column) {
+                $parsed = array();
+                $assignees = $this->task->assignees($rowData['task_id']);
+                foreach ($assignees as $assignee) {
+                    $parsed[] = '<a href="?m=users&a=view&user_id=' . $assignee['user_id'] . '">' . $assignee['contact_name'] . '</a>';
+                }
+                $rowData[$column] = implode(', ', $parsed);
             }
             $row .= $this->createCell($column, $rowData[$column], $customLookups);
         }

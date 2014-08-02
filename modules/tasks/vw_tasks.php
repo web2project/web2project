@@ -172,13 +172,14 @@ if (0 == count($fields)) {
         'task_assignees', 'task_start_date', 'task_duration', 'task_end_date');
     $fieldNames = array('Percent', 'P', 'U', 'Task Name', 'Owner', 'Assignees', 'Start Date', 'Duration', 'Finish Date');
 
-    //$module->storeSettings($m, 'tasklist', $fieldList, $fieldNames);
+    $module->storeSettings($m, 'tasklist', $fieldList, $fieldNames);
     $fields = array_combine($fieldList, $fieldNames);
 }
 $fieldList = array_keys($fields);
 $fieldNames = array_values($fields);
 
-$listTable = new w2p_Output_HTML_TaskTable($AppUI);
+$taskobj = new CTask();
+$listTable = new w2p_Output_HTML_TaskTable($AppUI, $taskobj);
 $listTable->df .= ' ' . $AppUI->getPref('TIMEFORMAT');
 
 $listTable->addBefore('edit', 'task_id');
@@ -231,13 +232,11 @@ foreach ($projects as $k => $p) {
             </td>
         </tr>
         <?php
-        $taskobj = new CTask();
         $taskTree = $taskobj->getTaskTree($k);
         $listTable->buildHeader($fields);
         echo $listTable->buildRows($taskTree);
     }
     if ('projects' == $m) {
-        $taskobj = new CTask();
         $taskTree = $taskobj->getTaskTree($k);
         $listTable->buildHeader($fields);
         echo $listTable->buildRows($taskTree);
