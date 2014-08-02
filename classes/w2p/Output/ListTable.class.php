@@ -11,6 +11,7 @@
 class w2p_Output_ListTable extends w2p_Output_HTMLHelper
 {
     protected $_AppUI = null;
+    protected $module = '';
 
     protected $_fieldKeys = array();
     protected $_fieldNames = array();
@@ -35,10 +36,11 @@ class w2p_Output_ListTable extends w2p_Output_HTMLHelper
     {
         $this->_fieldKeys = array_keys($fields);
         $this->_fieldNames = array_values($fields);
+        $this->module = $m;
 
         $cells = '';
         foreach ($this->_fieldNames as $index => $name) {
-            $link = ($sortable) ? '<a href="?m=' . $m . '&orderby=' . $this->_fieldKeys[$index] . '" class="hdr">' : '';
+            $link = ($sortable) ? '<a href="?m=' . $this->module . '&orderby=' . $this->_fieldKeys[$index] . '" class="hdr">' : '';
             $link .= $this->_AppUI->_($name);
             $link .= ($sortable) ? '</a>' : '';
             $cells .= '<th>' . $link . '</th>';
