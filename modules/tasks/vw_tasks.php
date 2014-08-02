@@ -155,8 +155,8 @@ if (count($tasks) > 0) {
 $showEditCheckbox = ((isset($canEdit) && $canEdit && w2PgetConfig('direct_edit_assignment')) ? true : false);
 
 $durnTypes = w2PgetSysVal('TaskDurationType');
-$tempoTask = new CTask();
-$userAlloc = $tempoTask->getAllocation('user_id');
+$tempTask = new CTask();
+$userAlloc = $tempTask->getAllocation('user_id');
 global $expanded;
 $expanded = $AppUI->getPref('TASKSEXPANDED');
 $open_link = w2PtoolTip($m, 'click to expand/collapse all the tasks for this project.') . '<a href="javascript: void(0);"><img onclick="expand_collapse(\'task_proj_' . $project_id . '_\', \'tblProjects\',\'collapse\',0,2);" id="task_proj_' . $project_id . '__collapse" src="' . w2PfindImage('up22.png', $m) . '" class="center" ' . (!$expanded ? 'style="display:none"' : '') . ' /><img onclick="expand_collapse(\'task_proj_' . $project_id . '_\', \'tblProjects\',\'expand\',0,2);" id="task_proj_' . $project_id . '__expand" src="' . w2PfindImage('down22.png', $m) . '" class="center" ' . ($expanded ? 'style="display:none"' : '') . ' /></a>' . w2PendTip();
@@ -178,8 +178,7 @@ if (0 == count($fields)) {
 $fieldList = array_keys($fields);
 $fieldNames = array_values($fields);
 
-$taskobj = new CTask();
-$listTable = new w2p_Output_HTML_TaskTable($AppUI, $taskobj);
+$listTable = new w2p_Output_HTML_TaskTable($AppUI, $tempTask);
 $listTable->df .= ' ' . $AppUI->getPref('TIMEFORMAT');
 
 $listTable->addBefore('edit', 'task_id');
@@ -207,6 +206,10 @@ if ('projectdesigner' == $m) {
 }
 echo $header;
 
+$status = w2PgetSysVal('TaskStatus');
+$priority = w2PgetSysVal('TaskPriority');
+$customLookups = array('task_status' => $status, 'task_priority' => $priority);
+
 reset($projects);
 foreach ($projects as $k => $p) {
     $tnums = (isset($p['tasks'])) ? count($p['tasks']) : 0;
@@ -232,14 +235,14 @@ foreach ($projects as $k => $p) {
             </td>
         </tr>
         <?php
-        $taskTree = $taskobj->getTaskTree($k);
+        $taskTree = $tempTask->getTaskTree($k);
         $listTable->buildHeader($fields);
-        echo $listTable->buildRows($taskTree);
+        echo $listTable->buildRows($taskTree, $customLookups);
     }
     if ('projects' == $m) {
-        $taskTree = $taskobj->getTaskTree($k);
+        $taskTree = $tempTask->getTaskTree($k);
         $listTable->buildHeader($fields);
-        echo $listTable->buildRows($taskTree);
+        echo $listTable->buildRows($taskTree, $customLookups);
     }
 }
 
