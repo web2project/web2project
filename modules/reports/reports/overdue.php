@@ -49,25 +49,24 @@ $columns[] = '<b>' . $AppUI->_('Finish Date') . '</b>';
 
 // Grab the completed items in the last week
 $q = new w2p_Database_Query();
-$q->addQuery('a.*');
+$q->addQuery('t.*, p.project_name');
 $q->addQuery('contact_display_name AS user_username');
-$q->addTable('tasks', 'a');
-$q->addTable('projects', 'pr');
-$q->addWhere('a.task_project = pr.project_id');
-$q->addJoin('users', 'b', 'a.task_owner = b.user_id', 'inner');
+$q->addTable('tasks', 't');
+$q->addJoin('users', 'b', 't.task_owner = b.user_id', 'inner');
 $q->addJoin('contacts', 'ct', 'ct.contact_id = b.user_contact', 'inner');
+$q->addJoin('projects', 'p', 'p.project_id = t.task_project', 'inner');
 $q->addWhere('task_percent_complete < 100');
-$q->addWhere('pr.project_active = 1');
+$q->addWhere('p.project_active = 1');
 if (($template_status = w2PgetConfig('template_projects_status_id')) != '') {
-    $q->addWhere('pr.project_status <> ' . (int) $template_status);
+    $q->addWhere('p.project_status <> ' . (int) $template_status);
 }
-if ($project_id != 0) {
+if ($project_id) {
     $q->addWhere('task_project = ' . (int) $project_id);
 }
 $date = new w2p_Utilities_Date();
 $q->addWhere('task_end_date < \'' . $date->format(FMT_DATETIME_MYSQL) . '\'');
 $proj = new CProject();
-$q = $proj->setAllowedSQL($AppUI->user_id, $q, null, 'pr');
+$q = $proj->setAllowedSQL($AppUI->user_id, $q, null, 'p');
 
 $obj = new CTask();
 $q = $obj->setAllowedSQL($AppUI->user_id, $q);
