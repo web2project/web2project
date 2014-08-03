@@ -112,9 +112,6 @@ $df = $AppUI->getPref('SHDATEFORMAT');
 </form>
 <?php
 if ($do_report) {
-    $htmlHelper = new w2p_Output_HTMLHelper($AppUI);
-
-    $obj = new CTask();
 
     echo $AppUI->getTheme()->styleRenderBoxBottom();
 	echo '<br />';
@@ -141,6 +138,8 @@ if ($do_report) {
 		array_unshift($columns, '<b>' . $AppUI->_('Project Name') . '</b>');
 	}
 
+    $htmlHelper = new w2p_Output_HTMLHelper($AppUI);
+    $obj = new CTask();
     $taskTree = $obj->getTaskTree($project_id, 0);
     foreach($taskTree as $task) {
 		$str = '<tr>';
