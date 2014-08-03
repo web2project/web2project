@@ -114,33 +114,7 @@ $df = $AppUI->getPref('SHDATEFORMAT');
 if ($do_report) {
     $htmlHelper = new w2p_Output_HTMLHelper($AppUI);
 
-	if ($project_id == 0) {
-		$q = new w2p_Database_Query;
-		$q->addTable('tasks', 'a');
-		$q->addTable('projects', 'b');
-		$q->addQuery('a.*, b.project_name');
-		$q->addWhere('a.task_project = b.project_id');
-		$q->addWhere('b.project_active = 1');
-		if (($template_status = w2PgetConfig('template_projects_status_id')) != '') {
-			$q->addWhere('b.project_status <> ' . (int)$template_status);
-		}
-	} else {
-		$q = new w2p_Database_Query;
-		$q->addTable('tasks', 'a');
-		$q->addWhere('task_project =' . $project_id);
-	}
-	if (!$log_all) {
-		$q->addWhere('task_start_date >= \'' . $start_date->format(FMT_DATETIME_MYSQL) . '\'');
-		$q->addWhere('task_start_date <= \'' . $end_date->format(FMT_DATETIME_MYSQL) . '\'');
-	}
-
-	$obj = new CTask();
-	$allowedTasks = $obj->getAllowedSQL($AppUI->user_id);
-	if (count($allowedTasks)) {
-		$obj->getAllowedSQL($AppUI->user_id, $q);
-	}
-	$q->addOrder('task_project, task_start_date, task_end_date');
-	$Task_List = $q->exec();
+    $obj = new CTask();
 
     echo $AppUI->getTheme()->styleRenderBoxBottom();
 	echo '<br />';
