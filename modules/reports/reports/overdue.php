@@ -5,7 +5,7 @@ if (!defined('W2P_BASE_DIR')) {
 
 // Output the PDF
 // make the PDF file
-if ($project_id != 0) {
+if ($project_id) {
     $project = new CProject();
     $project->load($project_id);
     $pname = 'Project: ' . $project->project_name;
@@ -13,23 +13,17 @@ if ($project_id != 0) {
     $pname = $AppUI->_('All Projects');
 }
 
-$next_week = new w2p_Utilities_Date($date);
+$next_week = new w2p_Utilities_Date();
 $next_week->addSpan(new Date_Span(array(7, 0, 0, 0)));
 
-$hasResources = $AppUI->isActiveModule('resources');
-$perms = &$AppUI->acl();
-if ($hasResources) {
-    $hasResources = canView('resources');
-}
 // Build the data to go into the table.
-$pdfdata = array();
 $columns = array();
+if (0 == $project_id) {
+    $columns[] = '<b>' . $AppUI->_('Project Name') . '</b>';
+}
 $columns[] = '<b>' . $AppUI->_('Task Name') . '</b>';
 $columns[] = '<b>' . $AppUI->_('Owner') . '</b>';
 $columns[] = '<b>' . $AppUI->_('Assigned Users') . '</b>';
-if ($hasResources) {
-    $columns[] = '<b>' . $AppUI->_('Assigned Resources') . '</b>';
-}
 $columns[] = '<b>' . $AppUI->_('Finish Date') . '</b>';
 
 // Grab the completed items in the last week
@@ -57,10 +51,6 @@ $obj = new CTask();
 $q = $obj->setAllowedSQL($AppUI->user_id, $q);
 $tasks = $q->loadHashList('task_id');
 
-if ($err = db_error()) {
-    $AppUI->setMsg($err, UI_MSG_ERROR);
-    $AppUI->redirect('m=' . $m);
-}
 // Now grab the resources allocated to the tasks.
 $task_list = array_keys($tasks);
 $assigned_users = array();
@@ -88,39 +78,19 @@ if (count($tasks)) {
     $q->clear();
 }
 
-$resources = array();
-if ($hasResources && count($tasks)) {
-    foreach ($task_list as $tid) {
-        $resources[$tid] = array();
-    }
-    $q->clear();
-    $q->addQuery('a.*, b.resource_name');
-    $q->addTable('resource_tasks', 'a');
-    $q->addJoin('resources', 'b', 'a.resource_id = b.resource_id', 'inner');
-    $q->addWhere('a.task_id IN (' . implode(',', $task_list) . ')');
-    $res = $q->exec();
-    if (!$res) {
-        $AppUI->setMsg(db_error(), UI_MSG_ERROR);
-        $q->clear();
-        $AppUI->redirect('m=' . $m);
-    }
-    while ($row = db_fetch_assoc($res)) {
-        $resources[$row['task_id']][$row['resource_id']] = $row['resource_name'] . ' [' . $row['percent_allocated'] . '%]';
-    }
-    $q->clear();
-}
-
 // Build the data columns
+$pdfdata = array();
 foreach ($tasks as $task_id => $detail) {
-    $row = &$pdfdata[];
-    $row[] = utf8_decode($detail['task_name']);
-    $row[] = utf8_decode($detail['user_username']);
-    $row[] = utf8_decode(implode("\n", $assigned_users[$task_id]));
-    if ($hasResources) {
-        $row[] = utf8_decode(implode("\n", $resources[$task_id]));
+    $row = array();
+    if (0 == $project_id) {
+        $row[] = $detail['project_name'];
     }
+    $row[] = $detail['task_name'];
+    $row[] = $detail['user_username'];
+    $row[] = implode("\n", $assigned_users[$task_id]);
     $end_date = new w2p_Utilities_Date($detail['task_end_date']);
     $row[] = $end_date->format($df);
+    $pdfdata[] = $row;
 }
 
 $options = array('showLines' => 2, 'showHeadings' => 1, 'fontSize' => 9, 'rowGap' => 4, 'colGap' => 5, 'xPos' => 50, 'xOrientation' => 'right', 'width' => '750', 'shaded' => 0, 'cols' => array(0 => array('justification' => 'left', 'width' => 250), 1 => array('justification' => 'left', 'width' => 120), 2 => array('justification' => 'center', 'width' => 120), 3 => array('justification' => 'center', 'width' => 75), 4 => array('justification' => 'center', 'width' => 75)));
