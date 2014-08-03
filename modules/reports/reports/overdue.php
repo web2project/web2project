@@ -12,12 +12,6 @@ if ($project_id != 0) {
 } else {
     $pname = $AppUI->_('All Projects');
 }
-if ($err = db_error()) {
-    $AppUI->setMsg($err, UI_MSG_ERROR);
-    $AppUI->redirect('m=' . $m);
-}
-
-$font_dir = W2P_BASE_DIR . '/lib/ezpdf/fonts';
 
 $output = new w2p_Output_PDFRenderer('A4', 'landscape');
 $output->addTitle($AppUI->_('Project Overdue Task Report'));
