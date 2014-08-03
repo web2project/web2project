@@ -275,10 +275,14 @@ class w2p_Utilities_Mail extends PHPMailer
      */
     public function Send()
     {
-        if ($this->defer) {
-            return $this->QueueMail();
-        } else {
-            return PHPMailer::Send();
+        try {
+            if ($this->defer) {
+                return $this->QueueMail();
+            } else {
+                return PHPMailer::Send();
+            }
+        } catch (Exception $exc) {
+            error_log($exc->getMessage());
         }
     }
 
@@ -406,8 +410,7 @@ class w2p_Utilities_Mail extends PHPMailer
     {
         foreach ($aad as $ad) {
             if (!$this->ValidEmail($ad)) {
-                echo 'Class Mail, method Mail : invalid address ' . $ad;
-                exit;
+                return false;
             }
         }
         return true;
