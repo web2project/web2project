@@ -22,7 +22,6 @@ if (0 == $project_id) {
     $columns[] = '<b>' . $AppUI->_('Project Name') . '</b>';
 }
 $columns[] = '<b>' . $AppUI->_('Task Name') . '</b>';
-$columns[] = '<b>' . $AppUI->_('Owner') . '</b>';
 $columns[] = '<b>' . $AppUI->_('Assigned Users') . '</b>';
 $columns[] = '<b>' . $AppUI->_('Finish Date') . '</b>';
 
@@ -78,22 +77,29 @@ if (count($tasks)) {
     $q->clear();
 }
 
+$df = $AppUI->getPref('SHDATEFORMAT');
 // Build the data columns
 $pdfdata = array();
 foreach ($tasks as $task_id => $detail) {
-    $row = array();
+    $keys = array_keys($detail);
+    $taskDetail = array();
     if (0 == $project_id) {
-        $row[] = $detail['project_name'];
+        $taskDetail[] = $detail['project_name'];
     }
-    $row[] = $detail['task_name'];
-    $row[] = $detail['user_username'];
-    $row[] = implode("\n", $assigned_users[$task_id]);
+    $taskDetail[] = $detail['task_name'];
+    $taskDetail[] = implode("\n", $assigned_users[$task_id]);
     $end_date = new w2p_Utilities_Date($detail['task_end_date']);
-    $row[] = $end_date->format($df);
-    $pdfdata[] = $row;
+    $taskDetail[] = $end_date->format($df);
+    $pdfdata[] = $taskDetail;
 }
 
-$options = array('showLines' => 2, 'showHeadings' => 1, 'fontSize' => 9, 'rowGap' => 4, 'colGap' => 5, 'xPos' => 50, 'xOrientation' => 'right', 'width' => '750', 'shaded' => 0, 'cols' => array(0 => array('justification' => 'left', 'width' => 250), 1 => array('justification' => 'left', 'width' => 120), 2 => array('justification' => 'center', 'width' => 120), 3 => array('justification' => 'center', 'width' => 75), 4 => array('justification' => 'center', 'width' => 75)));
+$options = array('showLines' => 2, 'showHeadings' => 1, 'fontSize' => 9, 'rowGap' => 4, 'colGap' => 5, 'xPos' => 50,
+        'xOrientation' => 'right', 'width' => '750', 'shaded' => 0,
+        'cols' => array(0 => array('justification' => 'left', 'width' => 250),
+                        1 => array('justification' => 'left', 'width' => 120),
+                        2 => array('justification' => 'center', 'width' => 120),
+                        3 => array('justification' => 'center', 'width' => 75),
+                        4 => array('justification' => 'center', 'width' => 75)));
 
 $output = new w2p_Output_PDFRenderer('A4', 'landscape');
 $output->addTitle($AppUI->_('Project Overdue Task Report'));
