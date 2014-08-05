@@ -38,6 +38,9 @@ $filter = array($module->permissions_item_field, 'user_password', 'user_parent',
 if ('CProjectDesigner' == $module->mod_main_class) {
     $module->mod_main_class = 'CTask';
 }
+if ('CProject' == $module->mod_main_class && 'tasklist' == $view) {
+    $module->mod_main_class = 'CTask';
+}
 $properties = get_class_vars($module->mod_main_class);
 
 //TODO: Figure out a way to auto-load subclasses. Applicable for: Tasks, Files, Forum

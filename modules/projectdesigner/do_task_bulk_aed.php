@@ -166,6 +166,7 @@ if (is_array($selected) && count($selected)) {
                         $dep_task->shiftDependentTasks();
                     }
                 }
+                $upd_task->updateDynamics();
             }
         }
 

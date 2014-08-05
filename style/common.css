@@ -281,7 +281,7 @@ table.list tr:hover td._name {
 
 .list ._name {
     text-align: left;
-    width: 25%;
+    width: 75%;
 }
 
 .list ._description {   width: 30%; }

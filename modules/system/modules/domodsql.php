@@ -58,6 +58,7 @@ switch ($cmd) {
 	case 'toggle':
 		// just toggle the active state of the table entry
 		$obj->mod_active = 1 - $obj->mod_active;
+        $obj->mod_ui_active = $obj->mod_active;
 		$obj->store();
 		$AppUI->setMsg('Module state changed', UI_MSG_OK);
 		break;

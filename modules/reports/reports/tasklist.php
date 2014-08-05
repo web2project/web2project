@@ -112,36 +112,6 @@ $df = $AppUI->getPref('SHDATEFORMAT');
 </form>
 <?php
 if ($do_report) {
-    $htmlHelper = new w2p_Output_HTMLHelper($AppUI);
-
-    if ($project_id == 0) {
-        $q = new w2p_Database_Query;
-        $q->addTable('tasks', 'a');
-        $q->addTable('projects', 'b');
-        $q->addQuery('a.*, b.project_name');
-        $q->addWhere('a.task_project = b.project_id');
-        $q->addWhere('b.project_active = 1');
-        if (($template_status = w2PgetConfig('template_projects_status_id')) != '') {
-            $q->addWhere('b.project_status <> ' . (int) $template_status);
-        }
-    } else {
-        $q = new w2p_Database_Query;
-        $q->addTable('tasks', 'a');
-        $q->addWhere('task_project =' . $project_id);
-    }
-    if (!$log_all) {
-        $q->addWhere('task_start_date >= \'' . $start_date->format(FMT_DATETIME_MYSQL) . '\'');
-        $q->addWhere('task_start_date <= \'' . $end_date->format(FMT_DATETIME_MYSQL) . '\'');
-    }
-
-    $obj = new CTask();
-    $allowedTasks = $obj->getAllowedSQL($AppUI->user_id);
-    if (count($allowedTasks)) {
-        $obj->getAllowedSQL($AppUI->user_id, $q);
-    }
-    $q->addOrder('task_project, task_start_date, task_end_date');
-    $Task_List = $q->exec();
-
     echo $AppUI->getTheme()->styleRenderBoxBottom();
     echo '<br />';
     echo $AppUI->getTheme()->styleRenderBoxTop();
@@ -149,17 +119,16 @@ if ($do_report) {
 <tr>
 	<td>';
 
-    echo '<table cellspacing="1" cellpadding="4" border="0" class="tbl">';
-    if ($project_id == 0) {
-        echo '<tr><th>Project Name</th><th>Task Name</th>';
-    } else {
-        echo '<tr><th>Task Name</th>';
-    }
-    echo '<th width=400>Task Description</th>';
-    echo '<th>Assigned To</th>';
-    echo '<th>Task Start Date</th>';
-    echo '<th>Task End Date</th>';
-    echo '<th>Completion</th></tr>';
+	echo '<table cellspacing="1" cellpadding="4" border="0" class="tbl"><tr>';
+	if ($project_id == 0) {
+		echo '<th>Project Name</th>';
+	}
+    echo '<th>Task Name</th>';
+	echo '<th width=400>Task Description</th>';
+	echo '<th>Assigned To</th>';
+	echo '<th>Task Start Date</th>';
+	echo '<th>Task End Date</th>';
+	echo '<th>Completion</th></tr>';
 
     $pdfdata = array();
     $columns = array('<b>' . $AppUI->_('Task Name') . '</b>', '<b>' . $AppUI->_('Task Description') . '</b>', '<b>' . $AppUI->_('Assigned To') . '</b>', '<b>' . $AppUI->_('Task Start Date') . '</b>', '<b>' . $AppUI->_('Task End Date') . '</b>', '<b>' . $AppUI->_('Completion') . '</b>');
@@ -167,43 +136,57 @@ if ($do_report) {
         array_unshift($columns, '<b>' . $AppUI->_('Project Name') . '</b>');
     }
 
-    $taskTree = $obj->getTaskTree($project_id, 0);
-    foreach ($taskTree as $task) {
-        $str = '<tr>';
-        if ($project_id == 0) {
-            $str .= '<td>' . $task['project_name'] . '</td>';
-        }
-        $str .= '<td>';
+    $htmlHelper = new w2p_Output_HTMLHelper($AppUI);
 
-        $indent_count = substr_count($task['task_path_enumeration'], '/') * 3;
-        $str .= ($task['task_id'] == $task['task_parent']) ? '' : str_repeat('&nbsp;', $indent_count) . '<img src="' . w2PfindImage('corner-dots.gif') . '" />';
-        $str .= '&nbsp;<a href="?m=tasks&a=view&task_id=' . $task['task_id'] . '">' . $task['task_name'] . '</a></td>';
-        $str .= '<td>' . nl2br($task['task_description']) . '</td>';
+    if ($project_id == 0) {
+        $myProject = new CProject();
+        $projects = $myProject->getAllowedProjects($AppUI->user_id);
+        $project_ids = array_keys($projects);
+    } else {
+        $project_ids = array($project_id);
+    }
 
-        $users = array();
-        $assignees = $obj->assignees($task['task_id']);
-        foreach ($assignees as $assignee) {
-            $users[] = $assignee['contact_name'];
-        }
-        $str .= '<td>' . implode($users, ', ') . '</td>';
+    $obj = new CTask();
 
-        $str .= $htmlHelper->createCell('task_start_date', $task['task_start_date']);
-        $str .= $htmlHelper->createCell('task_end_date', $task['task_end_date']);
-        $str .= $htmlHelper->createCell('task_percent_complete', $task['task_percent_complete']);
-        $str .= '</tr>';
-        echo $str;
+    foreach ($project_ids as $project_id) {
+        $taskTree = $obj->getTaskTree($project_id, 0);
+        foreach($taskTree as $task) {
+            $str = '<tr>';
+            if (count($project_ids) > 1) {
+                $str .= '<td>' . $task['project_name'] . '</td>';
+            }
+            $str .= '<td>';
 
-        if ($project_id == 0) {
-            $pdfdata[] = array($task['project_name'], $task['task_name'], $task['task_description'], $users, (($start_date != ' ') ? $start_date->format($df) : ' '), (($end_date != ' ') ? $end_date->format($df) : ' '), $task['task_percent_complete'] . '%', );
-        } else {
-            $start_date = new w2p_Utilities_Date($task['task_start_date']);
-            $end_date = new w2p_Utilities_Date($task['task_end_date']);
-            $spacer = str_repeat('  ', $task['depth']);
-            $pdfdata[] = array($spacer . $task['task_name'], $task['task_description'],
-                implode($users, ', '),
-                (($start_date != ' ') ? $start_date->format($df) : ' '),
-                (($end_date != ' ') ? $end_date->format($df) : ' '),
-                $task['task_percent_complete'] . '%', );
+            $indent_count = substr_count($task['task_path_enumeration'], '/') * 3;
+            $str .= ($task['task_id'] == $task['task_parent']) ? '' : str_repeat('&nbsp;', $indent_count) . '<img src="' . w2PfindImage('corner-dots.gif') . '" />';
+            $str .= '&nbsp;<a href="?m=tasks&a=view&task_id=' . $task['task_id'] . '">' . $task['task_name'] . '</a></td>';
+            $str .= '<td>' . nl2br($task['task_description']) . '</td>';
+
+            $users = array();
+            $assignees = $obj->assignees($task['task_id']);
+            foreach($assignees as $assignee) {
+                $users[] = $assignee['contact_name'];
+            }
+            $str .= '<td>' . implode($users, ', ') . '</td>';
+
+            $str .= $htmlHelper->createCell('task_start_date', $task['task_start_date']);
+            $str .= $htmlHelper->createCell('task_end_date', $task['task_end_date']);
+            $str .= $htmlHelper->createCell('task_percent_complete', $task['task_percent_complete']);
+            $str .= '</tr>';
+            echo $str;
+
+            if ($project_id == 0) {
+                $pdfdata[] = array($task['project_name'], $task['task_name'], $task['task_description'], $users, (($start_date != ' ') ? $start_date->format($df) : ' '), (($end_date != ' ') ? $end_date->format($df) : ' '), $task['task_percent_complete'] . '%', );
+            } else {
+                $start_date = new w2p_Utilities_Date($task['task_start_date']);
+                $end_date = new w2p_Utilities_Date($task['task_end_date']);
+                $spacer = str_repeat('  ', $task['depth']);
+                $pdfdata[] = array($spacer . $task['task_name'], $task['task_description'],
+                    implode($users, ', '),
+                    (($start_date != ' ') ? $start_date->format($df) : ' '),
+                    (($end_date != ' ') ? $end_date->format($df) : ' '),
+                    $task['task_percent_complete'] . '%', );
+            }
         }
     }
 

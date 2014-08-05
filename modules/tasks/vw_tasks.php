@@ -155,8 +155,8 @@ if (count($tasks) > 0) {
 $showEditCheckbox = ((isset($canEdit) && $canEdit && w2PgetConfig('direct_edit_assignment')) ? true : false);
 
 $durnTypes = w2PgetSysVal('TaskDurationType');
-$tempoTask = new CTask();
-$userAlloc = $tempoTask->getAllocation('user_id');
+$tempTask = new CTask();
+$userAlloc = $tempTask->getAllocation('user_id');
 global $expanded;
 $expanded = $AppUI->getPref('TASKSEXPANDED');
 $open_link = w2PtoolTip($m, 'click to expand/collapse all the tasks for this project.') . '<a href="javascript: void(0);"><img onclick="expand_collapse(\'task_proj_' . $project_id . '_\', \'tblProjects\',\'collapse\',0,2);" id="task_proj_' . $project_id . '__collapse" src="' . w2PfindImage('up22.png', $m) . '" class="center" ' . (!$expanded ? 'style="display:none"' : '') . ' /><img onclick="expand_collapse(\'task_proj_' . $project_id . '_\', \'tblProjects\',\'expand\',0,2);" id="task_proj_' . $project_id . '__expand" src="' . w2PfindImage('down22.png', $m) . '" class="center" ' . ($expanded ? 'style="display:none"' : '') . ' /></a>' . w2PendTip();
@@ -172,12 +172,13 @@ if (0 == count($fields)) {
         'task_assignees', 'task_start_date', 'task_duration', 'task_end_date');
     $fieldNames = array('Percent', 'P', 'U', 'Task Name', 'Owner', 'Assignees', 'Start Date', 'Duration', 'Finish Date');
 
-    //$module->storeSettings($m, 'tasklist', $fieldList, $fieldNames);
+    $module->storeSettings($m, 'tasklist', $fieldList, $fieldNames);
     $fields = array_combine($fieldList, $fieldNames);
 }
+$fieldList = array_keys($fields);
 $fieldNames = array_values($fields);
 
-$listTable = new w2p_Output_HTML_TaskTable($AppUI);
+$listTable = new w2p_Output_HTML_TaskTable($AppUI, $tempTask);
 $listTable->df .= ' ' . $AppUI->getPref('TIMEFORMAT');
 
 $listTable->addBefore('edit', 'task_id');
@@ -198,42 +199,43 @@ $listTable->addBefore('log', 'task_id');
 <?php
 echo $listTable->startTable();
 
-$header = $listTable->buildHeader($fields);
-if ('projectdesigner' == $m) {
-    $checkAll = '<th width="1"><input type="checkbox" onclick="select_all_rows(this, \'selected_task[]\')" name="multi_check"/></th></tr>';
-    $header = str_replace('</tr>', $checkAll, $header);
-}
-echo $header;
+echo $listTable->buildHeader($fields, false, $m);
+
+$status = w2PgetSysVal('TaskStatus');
+$priority = w2PgetSysVal('TaskPriority');
+$customLookups = array('task_status' => $status, 'task_priority' => $priority);
 
 reset($projects);
 foreach ($projects as $k => $p) {
     $tnums = (isset($p['tasks'])) ? count($p['tasks']) : 0;
     if ($tnums && $m == 'tasks') {
+        $width = ($p['project_percent_complete'] < 30) ? 30 : $p['project_percent_complete'];
         ?>
-        <tr><td colspan="20">
-                <table width="100%" border="0">
-                    <tr>
-                        <!-- patch 2.12.04 display company name next to project name -->
-                        <td nowrap="nowrap" style="border: outset #eeeeee 1px;background-color:#<?php echo $p['project_color_identifier']; ?>">
-                            <a href="./index.php?m=projects&amp;a=view&amp;project_id=<?php echo $k; ?>">
-                                        <span style="color:<?php echo bestColor($p['project_color_identifier']); ?>;text-decoration:none;">
-                                        <strong><?php echo $p['company_name'] . ' :: ' . $p['project_name']; ?></strong></span>
-                            </a>
-                        </td>
-                        <td width="<?php echo (101 - (int) $p['project_percent_complete']); ?>%">
+        <tr>
+            <td colspan="<?php echo count($fieldList) + 3; ?>">
+                <div style="border: outset #eeeeee 1px;background-color:#<?php echo $p['project_color_identifier']; ?>; width: <?php echo $width; ?>%">
+                    <a href="./index.php?m=projects&amp;a=view&amp;project_id=<?php echo $k; ?>">
+                        <?php echo w2PshowImage('pencil.gif'); ?>
+                    </a>
+                    <span style="color:<?php echo bestColor($p['project_color_identifier']); ?>;text-decoration:none;">
+                        <strong>
+                            <?php echo $p['company_name'] . ' :: ' . $p['project_name']; ?>
+                        </strong>
+                        <span style="float: right;">
                             <?php echo (int) $p['project_percent_complete']; ?>%
-                        </td>
-                    </tr>
-                </table>
-            </td></tr>
-    <?php
+                        </span>
+                    </span>
+
+                </div>
+            </td>
+        </tr>
+        <?php
+        $taskTree = $tempTask->getTaskTree($k);
+        echo $listTable->buildRows($taskTree, $customLookups);
     }
-    for ($i = 0; $i < $tnums; $i++) {
-        $t = $p['tasks'][$i];
-        if ($t['task_parent'] == $t['task_id']) {
-            echo showtask_new($t, 0, false, $listTable);
-            findchild_new($p['tasks'], $t['task_id']);
-        }
+    if ('projects' == $m || 'projectdesigner' == $m) {
+        $taskTree = $tempTask->getTaskTree($k);
+        echo $listTable->buildRows($taskTree, $customLookups);
     }
 }
 

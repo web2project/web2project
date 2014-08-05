@@ -42,10 +42,7 @@ $fieldNames = array();
 $module = new w2p_System_Module();
 $fields = $module->loadSettings('tasks', 'task_logs_tasks_view');
 
-if (count($fields) > 0) {
-    $fieldList = array_keys($fields);
-    $fieldNames = array_values($fields);
-} else {
+if (0 == count($fields)) {
     // TODO: This is only in place to provide an pre-upgrade-safe
     //   state for versions earlier than v3.0
     //   At some point at/after v4.0, this should be deprecated
@@ -56,7 +53,11 @@ if (count($fields) > 0) {
         'Hours', 'Cost Code', 'Comments');
 
     $module->storeSettings('tasks', 'task_logs_tasks_view', $fieldList, $fieldNames);
+    $fields = array_combine($fieldList, $fieldNames);
 }
+$fieldList = array_keys($fields);
+$fieldNames = array_values($fields);
+
 ?>
 <a name="task_logs-tasks_view"> </a>
 <table class="tbl list">
