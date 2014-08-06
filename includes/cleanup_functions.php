@@ -1474,10 +1474,7 @@ function displayFiles($AppUI, $folder_id, $task_id, $project_id, $company_id)
     $module = new w2p_System_Module();
     $fields = $module->loadSettings('files', 'index_list');
 
-    if (count($fields) > 0) {
-        $fieldList = array_keys($fields);
-        $fieldNames = array_values($fields);
-    } else {
+    if (0 == count($fields)) {
         // TODO: This is only in place to provide an pre-upgrade-safe
         //   state for versions earlier than v3.0
         //   At some point at/after v4.0, this should be deprecated
@@ -1488,7 +1485,10 @@ function displayFiles($AppUI, $folder_id, $task_id, $project_id, $company_id)
             'Folder', 'Task Name', 'Owner', 'Date',);
 
         $module->storeSettings('files', 'index_list', $fieldList, $fieldNames);
+        $fields = array_combine($fieldList, $fieldNames);
     }
+    $fieldList = array_keys($fields);
+    $fieldNames = array_values($fields);
 
     $s  = '<tr>';
     $s .= '<th></th>';
