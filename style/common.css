@@ -170,6 +170,8 @@ form {
 .module-title .crumb-right {
     float: right;
     margin: 10px 0;
+    position: absolute;
+    right: 0;
 }
 
 .module-nav {
