@@ -772,3 +772,147 @@ function __extract_from_tasks6($q, $history_active)
 
     return $q;
 }
+
+/** @deprecated */
+function __extract_from_tasks($min_view, $currentTabId, $project_id, $currentTabName, $AppUI)
+{
+    trigger_error(__FUNCTION__ . " has been deprecated in v4.0 and will be removed in v5.0. There is no replacement.", E_USER_NOTICE );
+
+//TODO: This whole structure is hard-coded based on the TaskStatus SelectList.
+    $task_status = 0;
+    if ($min_view && isset($_GET['task_status'])) {
+        $task_status = (int)w2PgetParam($_GET, 'task_status', null);
+        return $task_status;
+    } elseif ($currentTabId == 1 && $project_id) {
+        $task_status = -1;
+        return $task_status;
+    } elseif ($currentTabId > 1 && $project_id) {
+        $task_status = $currentTabId - 1;
+        return $task_status;
+    } elseif (!$currentTabName) {
+        // If we aren't tabbed we are in the tasks list.
+        $task_status = (int)$AppUI->getState('inactive');
+        return $task_status;
+    }
+    return $task_status;
+}
+
+/** @deprecated */
+function __extract_from_tasks1()
+{
+    trigger_error(__FUNCTION__ . " has been deprecated in v4.0 and will be removed in v5.0. There is no replacement.", E_USER_NOTICE );
+
+//subquery the parent state
+    $sq = new w2p_Database_Query;
+    $sq->addTable('tasks', 'stasks');
+    $sq->addQuery('COUNT(stasks.task_id)');
+    $sq->addWhere('stasks.task_id <> tasks.task_id AND stasks.task_parent = tasks.task_id');
+    $subquery = $sq->prepare();
+
+    return $subquery;
+}
+
+/** @deprecated */
+function __extract_from_tasks5($q, $subquery)
+{
+    trigger_error(__FUNCTION__ . " has been deprecated in v4.0 and will be removed in v5.0. There is no replacement.", E_USER_NOTICE );
+
+    $q->addQuery('tasks.task_id, task_parent, task_name');
+    $q->addQuery('task_start_date, task_end_date, task_dynamic');
+    $q->addQuery('task_pinned, pin.user_id as pin_user');
+    $q->addQuery('ut.user_task_priority');
+    $q->addQuery('task_priority, task_percent_complete');
+    $q->addQuery('task_duration, task_duration_type');
+    $q->addQuery('task_project, task_represents_project');
+    $q->addQuery('task_description, task_owner, task_status');
+    $q->addQuery('usernames.user_username, usernames.user_id');
+    $q->addQuery('assignees.user_username as assignee_username');
+    $q->addQuery('count(distinct assignees.user_id) as assignee_count');
+    $q->addQuery('co.contact_first_name, co.contact_last_name');
+    $q->addQuery('contact_display_name AS contact_name');
+    $q->addQuery('contact_display_name AS owner');
+    $q->addQuery('task_milestone');
+    $q->addQuery('count(distinct f.file_task) as file_count');
+    $q->addQuery('tlog.task_log_problem');
+    $q->addQuery('task_access');
+    $q->addQuery('(' . $subquery . ') AS task_nr_of_children');
+    $q->addTable('tasks');
+
+    return $q;
+}
+
+/** @deprecated */
+function __extract_from_tasks3($f, $q, $user_id, $task_id, $AppUI)
+{
+    trigger_error(__FUNCTION__ . " has been deprecated in v4.0 and will be removed in v5.0. There is no replacement.", E_USER_NOTICE );
+
+    $f = (($f) ? $f : '');
+    if ($task_id) {
+        //if we are on a task context make sure we show ALL the children tasks
+        $f = 'deepchildren';
+    }
+
+    switch ($f) {
+        case 'myfinished7days':
+            $q->addWhere('ut.user_id = ' . (int) $user_id);
+        case 'allfinished7days':
+            $q->addTable('user_tasks');
+            $q->addWhere('user_tasks.user_id = ' . (int) $user_id);
+            $q->addWhere('user_tasks.task_id = tasks.task_id');
+
+            $q->addWhere('task_percent_complete = 100');
+            //TODO: use date class to construct date.
+            $q->addWhere('task_end_date >= \'' . date('Y-m-d 00:00:00', mktime(0, 0, 0, date('m'), date('d') - 7, date('Y'))) . '\'');
+            break;
+        case 'children':
+            $q->addWhere('task_parent = ' . (int) $task_id);
+            $q->addWhere('tasks.task_id <> ' . $task_id);
+            break;
+        case 'deepchildren':
+            $taskobj = new CTask;
+            $taskobj->load((int) $task_id);
+            $deepchildren = $taskobj->getDeepChildren();
+            $q->addWhere('tasks.task_id IN (' . implode(',', $deepchildren) . ')');
+            $q->addWhere('tasks.task_id <> ' . $task_id);
+            break;
+        case 'myproj':
+            $q->addWhere('project_owner = ' . (int) $user_id);
+            break;
+        case 'mycomp':
+            if (!$AppUI->user_company) {
+                $AppUI->user_company = 0;
+            }
+            $q->addWhere('project_company = ' . (int) $AppUI->user_company);
+            break;
+        case 'myunfinished':
+            $q->addTable('user_tasks');
+            $q->addWhere('user_tasks.user_id = ' . (int) $user_id);
+            $q->addWhere('user_tasks.task_id = tasks.task_id');
+            $q->addWhere('(task_percent_complete < 100 OR task_end_date = \'\')');
+            break;
+        case 'allunfinished':
+            $q->addWhere('(task_percent_complete < 100 OR task_end_date = \'\')');
+            break;
+        case 'unassigned':
+            $q->leftJoin('user_tasks', 'ut_empty', 'tasks.task_id = ut_empty.task_id');
+            $q->addWhere('ut_empty.task_id IS NULL');
+            break;
+        case 'taskcreated':
+            $q->addWhere('task_creator = ' . (int) $user_id);
+            break;
+        case 'taskowned':
+            $q->addWhere('task_owner = ' . (int) $user_id);
+            break;
+        case 'all':
+            //break;
+        default:
+            if ($user_id) {
+                $q->addTable('user_tasks');
+                $q->addWhere('user_tasks.user_id = ' . (int) $user_id);
+                $q->addWhere('user_tasks.task_id = tasks.task_id');
+            }
+            break;
+    }
+
+    return $q;
+}
