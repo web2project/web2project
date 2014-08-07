@@ -115,7 +115,12 @@ foreach ($projects as $k => $p) {
         echo $listTable->buildRows($taskTree, $customLookups);
     }
     if ('projects' == $m || 'projectdesigner' == $m) {
-        $taskTree = $tempTask->getTaskTree($k);
+        // TODO: fix this ugly bit of code :(
+        if ($tab == 1) {
+            $taskTree = $tempTask->loadAll('task_start_date, task_end_date', "task_project = $k AND task_status != 0");
+        } else {
+            $taskTree = $tempTask->getTaskTree($k);
+        }
         echo $listTable->buildRows($taskTree, $customLookups);
     }
 }
