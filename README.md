@@ -16,7 +16,7 @@ The best part is that it's free software. That means you can use it, extend it, 
 
 ## Installing/Upgrading:
 
-Read the INSTALLATION file
+Installing or upgrading your web2project is quite simple. The definitive copy of this guide is online at http://wiki.web2project.net/index.php?title=Installation
 
 ## For More Information
 

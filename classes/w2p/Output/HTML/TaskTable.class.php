@@ -46,6 +46,9 @@ class w2p_Output_HTML_TaskTable extends w2p_Output_ListTable
                 if ($rowData['children'] > 0) {
                     $prefix .= '<img src="' . w2PfindImage('icons/collapse.gif') . '" />&nbsp;';
                 }
+                if (1 == $rowData['task_dynamic']) {
+                    $rowData[$column] = '<b>' . $rowData[$column] . '</b>';
+                }
 
                 $rowData[$column] = $prefix . $rowData[$column];
             }
