@@ -58,7 +58,7 @@ if ($caller == 'todo') {
 
     $proTasks = __extract_from_tasks_gantt1($user_id, $showArcProjs, $showLowTasks, $showHoldProjs, $showDynTasks, $showPinned, $task, $AppUI);
 } else {
-    $proTasks = __extract_from_tasks_gantt2($showNoMilestones, $showMilestonesOnly, $ganttTaskFilter, $where, $project_id, $f, $AppUI, $task);
+    $proTasks = __extract_from_tasks_gantt2($showNoMilestones, $showMilestonesOnly, $ganttTaskFilter, '', $project_id, $f, $AppUI, $task);
 }
 
 $orrarr[] = array('task_id' => 0, 'order_up' => 0, 'order' => '');
