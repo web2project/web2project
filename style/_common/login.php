@@ -61,9 +61,11 @@ $theme = $AppUI->getTheme();
                 </form>
             </div>
 
+            <?php if (w2PgetConfig('activate_external_user_creation') == 'true') { ?>
             <div class="login-help">
                 <p><a href="javascript: void(0);" onclick="javascript:window.location='./newuser.php'"><?php echo $AppUI->_('newAccountSignup'); ?></a></p>
             </div>
+            <?php } ?>
         </div>
 
         <div align="center">
