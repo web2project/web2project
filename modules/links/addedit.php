@@ -112,4 +112,4 @@ function setTask(key, val)
 </script>
 <?php
 
-include $AppUI->getTheme()->resolveTemplate('links/addedit');
+include $AppUI->getTheme()->resolveTemplate( $m . '/' . $a);

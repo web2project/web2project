@@ -71,7 +71,7 @@ $durnTypes = w2PgetSysVal('TaskDurationType');
 $task_types = w2PgetSysVal('TaskType');
 $billingCategory = w2PgetSysVal('BudgetCategory');
 
-include $AppUI->getTheme()->resolveTemplate('tasks/view');
+include $AppUI->getTheme()->resolveTemplate( $m . '/' . $a);
 
 $query_string = '?m=tasks&a=view&task_id=' . $task_id;
 $tabBox = new CTabBox('?m=tasks&a=view&task_id=' . $task_id, '', $tab);

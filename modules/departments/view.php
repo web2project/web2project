@@ -42,7 +42,7 @@ echo $view->renderDelete();
 
 $types = w2PgetSysVal('DepartmentType');
 
-include $AppUI->getTheme()->resolveTemplate('departments/view');
+include $AppUI->getTheme()->resolveTemplate( $m . '/' . $a);
 
 // tabbed information boxes
 $tabBox = new CTabBox('?m=departments&a=' . $a . '&dept_id=' . $dept_id, '', $tab);

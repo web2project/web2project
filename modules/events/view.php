@@ -51,4 +51,4 @@ echo $view->renderDelete();
 
 $types = w2PgetSysVal('EventType');
 
-include $AppUI->getTheme()->resolveTemplate('events/view');
+include $AppUI->getTheme()->resolveTemplate( $m . '/' . $a);

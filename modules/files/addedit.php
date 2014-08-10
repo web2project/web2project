@@ -151,4 +151,4 @@ function setTask( key, val ) {
 </script>
 <?php
 
-include $AppUI->getTheme()->resolveTemplate('files/addedit');
+include $AppUI->getTheme()->resolveTemplate( $m . '/' . $a);

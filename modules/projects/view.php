@@ -82,7 +82,7 @@ $billingCategory = w2PgetSysVal('BudgetCategory');
 $pstatus = w2PgetSysVal('ProjectStatus');
 $ptype = w2PgetSysVal('ProjectType');
 
-include $AppUI->getTheme()->resolveTemplate('projects/view');
+include $AppUI->getTheme()->resolveTemplate( $m . '/' . $a);
 
 $tabBox = new CTabBox('?m=projects&a=view&project_id=' . $project_id, '', $tab);
 $query_string = '?m=projects&a=view&project_id=' . $project_id;

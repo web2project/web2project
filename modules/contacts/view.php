@@ -43,5 +43,5 @@ $titleBlock->show();
 
 $view = new w2p_Controllers_View($AppUI, $contact, 'Contact');
 echo $view->renderDelete();
-
-include $AppUI->getTheme()->resolveTemplate('contacts/view');
+;
+include $AppUI->getTheme()->resolveTemplate( $m . '/' . $a);

@@ -75,7 +75,7 @@ $titleBlock->show();
 <?php
 $utypes = w2PgetSysVal('UserType');
 
-include $AppUI->getTheme()->resolveTemplate('users/view');
+include $AppUI->getTheme()->resolveTemplate( $m . '/' . $a);
 
 // tabbed information boxes
 $min_view = true;

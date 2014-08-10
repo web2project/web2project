@@ -53,4 +53,4 @@ function submitIt()
 }
 </script>
 <?php
-include $AppUI->getTheme()->resolveTemplate('resources/addedit');
+include $AppUI->getTheme()->resolveTemplate( $m . '/' . $a);

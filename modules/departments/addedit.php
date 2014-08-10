@@ -90,4 +90,4 @@ function submitIt()
 </script>
 <?php
 
-include $AppUI->getTheme()->resolveTemplate('departments/addedit');
+include $AppUI->getTheme()->resolveTemplate( $m . '/' . $a);

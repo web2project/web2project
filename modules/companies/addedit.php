@@ -56,4 +56,4 @@ $countries = array('' => $AppUI->_('(Select a Country)')) + w2PgetSysVal('Global
 </script>
 <?php
 
-include $AppUI->getTheme()->resolveTemplate('companies/addedit');
+include $AppUI->getTheme()->resolveTemplate( $m . '/' . $a);

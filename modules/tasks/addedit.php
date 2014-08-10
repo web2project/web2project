@@ -183,7 +183,7 @@ function popContacts() {
 </script>
 <?php
 
-include $AppUI->getTheme()->resolveTemplate('tasks/addedit');
+include $AppUI->getTheme()->resolveTemplate( $m . '/' . $a);
 
 $tab = $AppUI->processIntState('TaskAeTabIdx', $_GET, 'tab', 0);
 

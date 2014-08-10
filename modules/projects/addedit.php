@@ -172,4 +172,4 @@ function setDepartment(department_id_string){
 </script>
 <?php
 
-include $AppUI->getTheme()->resolveTemplate('projects/addedit');
+include $AppUI->getTheme()->resolveTemplate( $m . '/' . $a);

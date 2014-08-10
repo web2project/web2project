@@ -45,7 +45,7 @@ echo $view->renderDelete();
 
 $types = w2PgetSysVal('CompanyType');
 
-include $AppUI->getTheme()->resolveTemplate('companies/view');
+include $AppUI->getTheme()->resolveTemplate( $m . '/' . $a);
 
 // tabbed information boxes
 $moddir = W2P_BASE_DIR . '/modules/companies/';

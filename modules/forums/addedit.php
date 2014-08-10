@@ -72,4 +72,4 @@ function submitIt(){
 </script>
 <?php
 
-include $AppUI->getTheme()->resolveTemplate('forums/addedit');
+include $AppUI->getTheme()->resolveTemplate( $m . '/' . $a);

@@ -150,4 +150,4 @@ $AppUI->getTheme()->addFooterJavascriptFile('js/passwordstrength.js');
 $spacing = ('wps-redmond' == $AppUI->getPref('UISTYLE')) ? 70 : 0;
 echo '<div style="padding-top: ' . $spacing . 'px;"> </div>';
 
-include $AppUI->getTheme()->resolveTemplate('users/addedit');
+include $AppUI->getTheme()->resolveTemplate( $m . '/' . $a);

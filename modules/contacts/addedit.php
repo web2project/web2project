@@ -196,4 +196,4 @@ foreach ($fields as $key => $field): ?>
 </script>
 <?php
 
-include $AppUI->getTheme()->resolveTemplate('contacts/addedit');
+include $AppUI->getTheme()->resolveTemplate( $m . '/' . $a);
