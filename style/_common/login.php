@@ -57,11 +57,12 @@ $theme = $AppUI->getTheme();
                 <p><a href="javascript: void(0);" onclick="f=document.loginform;f.lostpass.value=1;f.submit();"><?php echo $AppUI->_('forgotPassword'); ?></a></p>
             </div>
 
-            <?php if (w2PgetConfig('activate_external_user_creation') == 'true') { ?>
             <div class="login-help">
+                <?php if (w2PgetConfig('activate_external_user_creation') == 'true') { ?>
                 <p><a href="javascript: void(0);" onclick="javascript:window.location='./newuser.php'"><?php echo $AppUI->_('newAccountSignup'); ?></a></p>
+                <?php } ?>
+                <p><span style="font-size:7pt">Version <?php echo $AppUI->getVersion(); ?></span></p>
             </div>
-            <?php } ?>
         </div>
 
         <div align="center">
