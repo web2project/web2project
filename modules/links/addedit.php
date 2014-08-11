@@ -71,18 +71,14 @@ $types = w2PgetSysVal('LinkType');
 // Load the users
 $perms = &$AppUI->acl();
 $users = $perms->getPermittedUsers('links');
+
+$view = new w2p_Controllers_View($AppUI, $object, 'Link');
+echo $view->renderDelete();
 ?>
 <script language="javascript" type="text/javascript">
 function submitIt() {
 	var f = document.editFrm;
 	f.submit();
-}
-function delIt() {
-	if (confirm( "<?php echo $AppUI->_('linksDelete', UI_OUTPUT_JS); ?>" )) {
-		var f = document.editFrm;
-		f.del.value='1';
-		f.submit();
-	}
 }
 function popTask() {
     var f = document.editFrm;
