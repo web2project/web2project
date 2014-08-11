@@ -94,6 +94,7 @@ class CProject extends w2p_Core_BaseObject
         if ($order && property_exists($this, $order)) {
             $q->addOrder($order);
         }
+        $q->addOrder('project_name');
         if ($where) {
             $q->addWhere($where);
         }
