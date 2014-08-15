@@ -266,7 +266,7 @@ table.list tr:hover td {
     font-style: italic;
 }
 table.list tr:hover td._name {
-    font-weight: bold;
+    /*font-weight: bold;*/
 }
 
 .list ._description {
