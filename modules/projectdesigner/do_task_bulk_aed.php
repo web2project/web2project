@@ -133,10 +133,10 @@ if (is_array($selected) && count($selected)) {
 				$upd_task->moveTaskBetweenProjects($upd_task->task_id,$upd_task->task_project,$bulk_task_project);
             }
         }
-
         //Action: Change parent
         if ($bulk_task_parent) {
-            $upd_task->task_parent = $bulk_task_parent;
+            $new_parent = (-1 == $bulk_task_parent) ? $upd_task->task_id : $bulk_task_parent;
+            $upd_task->task_parent = $new_parent;
             $result = $upd_task->store();
         }
 
@@ -306,7 +306,7 @@ if (is_array($selected) && count($selected)) {
                 }
             }
         }
-        echo db_error();
+        $AppUI->setMsg($upd_task->getError(), UI_MSG_ERROR);
 	}
 }
 if (!$result) {
