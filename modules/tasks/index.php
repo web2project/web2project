@@ -80,4 +80,5 @@ $titleBlock->show();
 
 // include the re-usable sub view
 $min_view = false;
+echo $AppUI->getTheme()->styleRenderBoxTop();
 include (W2P_BASE_DIR . '/modules/tasks/vw_tasks.php');

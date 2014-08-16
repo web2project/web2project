@@ -71,6 +71,9 @@ $types = w2PgetSysVal('LinkType');
 // Load the users
 $perms = &$AppUI->acl();
 $users = $perms->getPermittedUsers('links');
+
+$view = new w2p_Controllers_View($AppUI, $object, 'Link');
+echo $view->renderDelete();
 ?>
 <script language="javascript" type="text/javascript">
 function submitIt()
