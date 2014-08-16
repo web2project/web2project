@@ -799,7 +799,7 @@ class w2p_Core_CAppUI
 
         $q = new w2p_Database_Query;
         $q->addTable('users');
-        $q->addQuery('user_id, contact_first_name as user_first_name, ' .
+        $q->addQuery('user_id, contact_first_name as user_first_name, user_email, ' .
             'contact_last_name as user_last_name, contact_display_name as user_display_name, ' .
             'contact_company as user_company, contact_department as user_department, user_type');
         $q->addJoin('contacts', 'con', 'con.contact_id = user_contact', 'inner');
@@ -823,8 +823,6 @@ class w2p_Core_CAppUI
             $q->leftJoin('contacts_methods', 'cm', 'cm.contact_id = con.contact_id');
             $q->addWhere("cm.method_name = 'email_primary'");
             $q->addQuery('cm.method_value AS user_email');
-        } else {
-            $q->addQuery('contact_email AS user_email');
         }
         /* End Hack */
 
