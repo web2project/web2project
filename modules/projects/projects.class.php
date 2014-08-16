@@ -91,7 +91,7 @@ class CProject extends w2p_Core_BaseObject
     {
         $q = $this->_getQuery();
         $q->addTable($this->_tbl);
-        if ($order && property_exists($this, $order)) {
+        if ($order) {
             $q->addOrder($order);
         }
         $q->addOrder('project_name');
@@ -100,6 +100,7 @@ class CProject extends w2p_Core_BaseObject
         }
         $where = $this->getAllowedSQL($this->_AppUI->user_id, 'projects.project_id');
         $q->addWhere($where);
+        $q->addJoin('companies', 'c', 'c.company_id = project_company');
 
         return $q->loadHashList($this->_tbl_key);
     }
