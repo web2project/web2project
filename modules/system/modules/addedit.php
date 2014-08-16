@@ -24,7 +24,7 @@ if (!$canRead) {
 }
 
 //TODO: generate per-module filter list
-$filter = array($module->permissions_item_field, 'user_password', 'user_parent',
+$filter = array('user_password', 'user_parent',
         'task_updator', 'task_order', 'task_client_publish', 'task_dynamic',
         'task_notify', 'task_departments', 'task_contacts', 'task_custom',
         'task_allow_other_user_tasklogs', 'tracked_dynamics', 'tracking_dynamics',
