@@ -293,20 +293,6 @@ class Web2project_Output_EmailManagerTest extends CommonSetup
         $this->assertEquals($target_body, $actual_body);
     }
 
-    public function testNotifyHR()
-    {
-        $target_body  = "A new user has signed up on web2Project Development. Please go through the user details below:\n\n";
-        $target_body .= "Name: Keith Casey\nUsername: caseysoftware\nEmail: test@test.com\n\n";
-        $target_body .= "You may check this account at the following URL: ";
-        $target_body .= W2P_BASE_URL . "/index.php?m=users&a=view&user_id=-1\n\n";
-        $target_body .= "Thank you very much.\n\nThe web2Project Development Taskforce\n\n";
-        $target_body .= "****PLEASE KEEP THIS EMAIL FOR YOUR RECORDS****";
-
-        $actual_body = $this->manager->notifyHR("Keith Casey", "caseysoftware", "test@test.com", -1);
-
-        $this->assertEquals($target_body, $actual_body);
-    }
-
     public function testNotifyNewExternalUser()
     {
         $target_body  = "You have signed up for a new account on web2Project Development.\n\n";
