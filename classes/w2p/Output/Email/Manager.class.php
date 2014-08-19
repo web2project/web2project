@@ -254,7 +254,8 @@ class w2p_Output_Email_Manager
     public function getTaskEmailLog(CTask $task, CTask_Log $log)
     {
         $project = new CProject();
-        $task->project_name = $project->load($task->task_project)->project_name;
+        $project->load($task->task_project);
+        $task->project_name = $project->project_name;
 
         $contact = new CContact();
         $task->creator_name = $contact->findContactByUserid($log->task_log_creator)->contact_display_name;
@@ -271,7 +272,8 @@ class w2p_Output_Email_Manager
         $body = $this->AppUI->_('Project', UI_OUTPUT_RAW) . ': {{project_name}}' . "\n";
         if ($task->task_parent != $task->task_id) {
             $tmpTask = new CTask();
-            $task->parent_task_name = $tmpTask->load($task->task_parent)->task_name;
+            $tmpTask->load($task->task_parent);
+            $task->parent_task_name = $tmpTask->task_name;
             $body .= $this->AppUI->_('Parent Task', UI_OUTPUT_RAW) . ': {{parent_task_name}}' . "\n";
         }
         $body .= $this->AppUI->_('Task', UI_OUTPUT_RAW) . ': {{task_name}}' . "\n";
