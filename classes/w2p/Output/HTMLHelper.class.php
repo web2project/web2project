@@ -176,7 +176,7 @@ class w2p_Output_HTMLHelper extends w2p_Output_HTML_Base
                 break;
             case '_duration':
                 $durnTypes = w2PgetSysVal('TaskDurationType');
-                $cell = $value . ' ' . $this->AppUI->_($durnTypes[$this->tableRowData['task_duration_type']]);
+                $cell = $value . '&nbsp;' . $this->AppUI->_($durnTypes[$this->tableRowData['task_duration_type']]);
                 break;
             case '_size':
                 $cell = file_size($value);
