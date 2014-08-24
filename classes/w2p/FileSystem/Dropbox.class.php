@@ -15,7 +15,7 @@ class w2p_FileSystem_Dropbox implements \Web2project\Interfaces\Filesystem
     protected function authenticate()
     {
         if ('' == w2PgetConfig('dropbox_key') || '' == w2PgetConfig('dropbox_secret')) {
-            throw new w2p_FileSystem_Exception("Your Dropbox credentials are not configured properly");
+            throw new \Web2project\Exceptions\FileSystem("Your Dropbox credentials are not configured properly");
         }
 
         $accessToken = w2PgetConfig('dropbox_access_token');
@@ -24,7 +24,7 @@ class w2p_FileSystem_Dropbox implements \Web2project\Interfaces\Filesystem
             $this->_client = new dbx\Client($accessToken, "PHP-Example/1.0");
             $accountInfo = $this->_client->getAccountInfo();
         } catch (Exception $exc) {
-            throw new w2p_FileSystem_Exception("Your Dropbox access token is invalid or not configured properly");
+            throw new \Web2project\Exceptions\FileSystem("Your Dropbox access token is invalid or not configured properly");
         }
 
         return is_array($accountInfo);

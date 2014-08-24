@@ -48,7 +48,7 @@ class w2p_FileSystem_Amazon implements \Web2project\Interfaces\Filesystem
     protected function authenticate()
     {
         if ('' == w2PgetConfig('aws_access_key') || '' == w2PgetConfig('aws_secret_key')) {
-            throw new w2p_FileSystem_Exception("Your Amazon credentials are not configured properly");
+            throw new \Web2project\Exceptions\FileSystem("Your Amazon credentials are not configured properly");
         }
 
         $this->_client = S3Client::factory(array(
