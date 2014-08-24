@@ -677,7 +677,7 @@ label {
 div.addedit textarea {
     width: 65%;
 }
-div.addedit input.save {
+input.save {
     float: right;
 }
 
