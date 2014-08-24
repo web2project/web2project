@@ -10,7 +10,7 @@ use Aws\S3\Model\MultipartUpload\UploadBuilder;
  *
  * Replace the helper library usage with the Streams implementation.
  */
-class w2p_FileSystem_Amazon implements w2p_FileSystem_Interface
+class w2p_FileSystem_Amazon implements \Web2project\Interfaces\Filesystem
 {
     protected $_client = null;
     protected $_bucket = null;
