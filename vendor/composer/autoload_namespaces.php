@@ -7,4 +7,9 @@ $baseDir = dirname($vendorDir);
 
 return array(
     'Web2project' => array($baseDir . '/src'),
+    'Symfony\\Component\\EventDispatcher\\' => array($vendorDir . '/symfony/event-dispatcher'),
+    'Guzzle\\Tests' => array($vendorDir . '/guzzle/guzzle/tests'),
+    'Guzzle' => array($vendorDir . '/guzzle/guzzle/src'),
+    'Dropbox' => array($vendorDir . '/dropbox/dropbox-sdk/lib'),
+    'Aws' => array($vendorDir . '/aws/aws-sdk-php/src'),
 );

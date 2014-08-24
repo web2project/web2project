@@ -1,11 +1,4 @@
 {
-<<<<<<< HEAD
-    "require": {
-
-    },
-    "autoload": {
-        "psr-0": { "Web2project": "src/"}
-=======
     "name": "web2project/core",
     "type": "application",
     "keywords": ["web2project", "project management", "gantt"],
@@ -26,9 +19,6 @@
         "dropbox/dropbox-sdk": "1.1.*"
     },
     "autoload": {
-        "psr-0": {
-            "w2p_": ""
-        }
->>>>>>> added the composer components
+        "psr-0": { "Web2project": "src/"}
     }
 }
