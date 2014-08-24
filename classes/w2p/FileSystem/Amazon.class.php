@@ -82,12 +82,12 @@ class w2p_FileSystem_Amazon implements \Web2project\Interfaces\Filesystem
 
     public function delete(CFile $file)
     {
-        return unlink('s3://' . $this->_bucket . '/' . $file->file_project . '/' . $file->file_real_filename);
+        return unlink('s3://' . $this->_bucket . '/' . (int) $file->file_project . '/' . $file->file_real_filename);
     }
 
     public function exists($project_id, $filename)
     {
-        $fullpath = 's3://' . $this->_bucket . '/' . $project_id . '/' .$filename;
+        $fullpath = 's3://' . $this->_bucket . '/' . (int) $project_id . '/' .$filename;
 
         return file_exists($fullpath);
     }
@@ -96,7 +96,7 @@ class w2p_FileSystem_Amazon implements \Web2project\Interfaces\Filesystem
     {
         $result = $this->_client->getObject(array(
             'Bucket' => $this->_bucket,
-            'Key'    => $project_id . '/' . $filename
+            'Key'    => (int) $project_id . '/' . $filename
         ));
 
         echo $result['Body'];

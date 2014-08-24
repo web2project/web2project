@@ -59,7 +59,7 @@ class w2p_FileSystem_Dropbox implements \Web2project\Interfaces\Filesystem
 
     public function delete(CFile $file)
     {
-        $path = '/' . $file->file_project . '/' . $file->file_real_filename;
+        $path = '/' . (int) $file->file_project . '/' . $file->file_real_filename;
         try {
             $fileMetadata = $this->_client->delete($path);
         } catch (Dropbox\Exception_BadResponse $exc) {
@@ -78,7 +78,7 @@ class w2p_FileSystem_Dropbox implements \Web2project\Interfaces\Filesystem
 
     public function exists($project_id, $filename)
     {
-        $path = '/' . $project_id . '/' . $filename;
+        $path = '/' . (int) $project_id . '/' . $filename;
         $fileMetadata = $this->_client->getMetadata($path);;
 
         return (isset($fileMetadata['size']));
@@ -86,7 +86,7 @@ class w2p_FileSystem_Dropbox implements \Web2project\Interfaces\Filesystem
 
     public function read($project_id, $filename)
     {
-        $path = '/' . $project_id . '/' . $filename;
+        $path = '/' . (int) $project_id . '/' . $filename;
 
         $f = fopen("php://memory", "w+b");
         $this->_client->getFile($path, $f);
