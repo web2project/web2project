@@ -89,6 +89,17 @@ ignore_user_abort(1);
 $upload = null;
 if (isset($_FILES['formfile'])) {
 	$upload = $_FILES['formfile'];
+    $mime_type = explode('/', $upload['type']);
+    $extension = $mime_type[1];
+    $allowed   = w2PgetConfig('file_types', '');
+    $allowed   = str_replace(' ', '', $allowed);
+    $extensions = explode(',', $allowed);
+
+    if (!in_array($extension, $extensions)) {
+        $AppUI->setMsg('This is not an allowed file type. Only these are allowed: ' . $allowed, UI_MSG_ERROR);
+        $AppUI->holdObject($obj);
+        $AppUI->redirect('m=files&a=addedit');
+    }
 
 	if ($upload['size'] < 1) {
 		if (!$file_id) {

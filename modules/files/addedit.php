@@ -22,7 +22,7 @@ if (!$canAddEdit) {
 $obj = $AppUI->restoreObject();
 if ($obj) {
     $object = $obj;
-    $object_id = $file->getId();
+    $object_id = $object->getId();
 } else {
     $obj = $object->load($object_id);
 }
