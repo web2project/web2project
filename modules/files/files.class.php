@@ -46,7 +46,18 @@ class CFile extends w2p_Core_BaseObject {
     public function getFileSystem()
     {
         if (is_null($this->_file_system)) {
-            $this->setFileSystem(new w2p_FileSystem_Local());
+            $file_system = w2PgetConfig('file_system');
+            switch($file_system) {
+                case 'amazon':
+                    $file_system = new w2p_FileSystem_Amazon();
+                    break;
+                case 'dropbox':
+                    $file_system = new w2p_FileSystem_Dropbox();
+                    break;
+                default:
+                    $file_system = new w2p_FileSystem_Local();
+            }
+            $this->setFileSystem($file_system);
         }
 
         return $this->_file_system;

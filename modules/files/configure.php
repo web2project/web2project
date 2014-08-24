@@ -19,6 +19,9 @@ foreach($values as $key => $array) {
     $values[$key] = $array['module_config_value'];
 }
 
+$filesystem  = w2PgetConfig('file_system', '');
+$filesystems = array('' => 'default', 'amazon' => 'Amazon S3', 'dropbox' => 'Dropbox');
+
 $form = new w2p_Output_HTML_FormHelper($AppUI);
 ?>
 <script language="javascript" type="text/javascript">
@@ -35,9 +38,13 @@ $form = new w2p_Output_HTML_FormHelper($AppUI);
             <p>
                 <?php $form->showLabel('Default Storage System'); ?>
                 <select name="file_system" id="file_system">
-                    <option value="">default (local)</option>
-                    <option value="amazon">Amazon S3</option>
-                    <option value="dropbox">Dropbox</option>
+                    <?php foreach($filesystems as $key => $value) { ?>
+                        <?php if ($key == $filesystem) { ?>
+                            <option value="<?php echo $key; ?>" selected="true"><?php echo $value; ?></option>
+                        <?php } else { ?>
+                            <option value="<?php echo $key; ?>"><?php echo $value; ?></option>
+                        <?php } ?>
+                    <?php } ?>
                 </select>
             </p>
             <p><label><?php echo $AppUI->_('Amazon S3 Settings'); ?>*</label><br /></p>
