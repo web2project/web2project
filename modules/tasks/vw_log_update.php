@@ -156,6 +156,9 @@ $q->clear();
 </script>
 <!-- END OF TIMER RELATED SCRIPTS -->
 
+<?php
+$form = new w2p_Output_HTML_FormHelper($AppUI);
+?>
 <a name="log"></a>
 <form name="editFrm" action="?m=<?php echo $m; ?>&amp;a=view&amp;task_id=<?php echo $obj->task_id; ?>" method="post"
     onsubmit="updateEmailContacts();" accept-charset="utf-8" class="addedit tasks-tasklog">
@@ -269,7 +272,7 @@ $q->clear();
         <div class="column right">
             <p>
                 <label><?php echo $AppUI->_('Summary'); ?>:</label>
-                <input type="text" class="text" name="task_log_name" value="<?php echo htmlentities($log->task_log_name, ENT_COMPAT, 'UTF-8'); ?>" maxlength="255" size="30" />
+                <?php $form->showField('task_log_name', $log->task_log_name, array('maxlength' => 255)); ?>
             </p>
             <p>
                 <label><?php echo $AppUI->_('Reference'); ?>:</label>
