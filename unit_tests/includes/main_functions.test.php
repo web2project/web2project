@@ -1,6 +1,4 @@
 <?php
-/* vim: set expandtab tabstop=4 shiftwidth=4 softtabstop=4: */
-
 /**
  * Class for testing main_functions functionality
  *
@@ -17,9 +15,6 @@
  * @license     Clear BSD
  * @link        http://www.web2project.net
  */
-
-// NOTE: This path is relative to Phing's build.xml, not this test.
-include 'unit_tests/CommonSetup.php';
 
 class Main_Functions_Test extends PHPUnit_Framework_TestCase
 {
