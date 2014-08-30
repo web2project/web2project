@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Class for testing Web2project\Output\EmailTemplate functionality
  *
@@ -15,9 +14,6 @@
  * @license     Clear BSD
  * @link        http://www.web2project.net
  */
-
-// NOTE: This path is relative to Phing's build.xml, not this test.
-include 'unit_tests/CommonSetup.php';
 
 class Web2project_Output_EmailTemplateTest extends CommonSetup
 {
