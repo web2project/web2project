@@ -145,8 +145,8 @@ class Web2project_Output_EmailManagerTest extends CommonSetup
 
         $target_body  = "Project:\tProject Name\n";
         $target_body .= "Task:\t\tMy Task\n";
-        $target_body .= "Priority:\t\t1\n";
-        $target_body .= "Progress:\t\t50%\n";
+        $target_body .= "Priority:\t1\n";
+        $target_body .= "Progress:\t50%\n";
         $target_body .= "Start Date:\t30/Jan/2010 06:30 am CST\n";
         $target_body .= "Finish Date:\t02/Feb/2011 06:45 am CST\n";
         $target_body .= "URL:\t\t" . W2P_BASE_URL . "/index.php?m=tasks&a=view&task_id=-1\n\n";
@@ -168,7 +168,7 @@ class Web2project_Output_EmailManagerTest extends CommonSetup
 
         $target_body  = "Project:     \n";
         $target_body .= "Task:         Task Name\n";
-        $target_body .= "URL:         http:///Users/caseydk/pear/share/pear/index.php?m=tasks&a=view&task_id=-1\n\n";
+        $target_body .= "URL:         " . W2P_BASE_URL . "/index.php?m=tasks&a=view&task_id=-1\n\n";
         $target_body .= "Task Description:\nsomething cool\n";
         $target_body .= "Creator: Admin Person\n\n";
         $target_body .= "Progress: 45%\n\n";
