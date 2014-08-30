@@ -1,6 +1,6 @@
 <?php
 if (!defined('W2P_BASE_DIR')) {
-	die('You should not access this file directly.');
+    die('You should not access this file directly.');
 }
 // @todo    convert to template
 $object_id = (int) w2PgetParam($_GET, 'contact_id', 0);
@@ -15,7 +15,7 @@ $canAuthor = $object->canCreate();
 $canEdit = $object->canEdit();
 $canDelete = $object->canDelete();
 if (!$canAddEdit) {
-	$AppUI->redirect(ACCESS_DENIED);
+    $AppUI->redirect(ACCESS_DENIED);
 }
 
 // load the record data
@@ -49,7 +49,6 @@ $is_user = $object->isUser($object_id);
 $df = $AppUI->getPref('SHDATEFORMAT');
 $df .= ' ' . $AppUI->getPref('TIMEFORMAT');
 
-
 // setup the title block
 $ttl = $object_id > 0 ? 'Edit Contact' : 'Add Contact';
 $titleBlock = new w2p_Theme_TitleBlock($ttl, 'icon.png', $m);
@@ -60,16 +59,16 @@ $titleBlock->show();
 $company_detail = $object->getCompanyDetails();
 $dept_detail = $object->getDepartmentDetails();
 if ($object_id == 0 && $company_id > 0) {
-	$company_detail['company_id'] = $company_id;
-	$company_detail['company_name'] = $company_name;
-	$dept_detail['dept_id'] = $dept_id;
-	$dept_detail['dept_name'] = $dept_name;
+    $company_detail['company_id'] = $company_id;
+    $company_detail['company_name'] = $company_name;
+    $dept_detail['dept_id'] = $dept_id;
+    $dept_detail['dept_name'] = $dept_name;
 }
 
 $methods = $object->getContactMethods();
 $methodLabels = w2PgetSysVal('ContactMethods');
 $countries = array('' => $AppUI->_('(Select a Country)')) + w2PgetSysVal('GlobalCountriesPreferred') +
-		array('-' => '----') + w2PgetSysVal('GlobalCountries');
+        array('-' => '----') + w2PgetSysVal('GlobalCountries');
 
 ?>
 
@@ -78,7 +77,8 @@ $countries = array('' => $AppUI->_('(Select a Country)')) + w2PgetSysVal('Global
 echo 'window.company_id=' . ((int) $company_detail['company_id']) . ";\n";
 ?>
 
-function submitIt() {
+function submitIt()
+{
 	var form = document.changecontact;
     if (form.contact_last_name.value.length < 1) {
         alert( '<?php echo $AppUI->_('contactsValidName', UI_OUTPUT_JS); ?>' );
@@ -94,12 +94,14 @@ function submitIt() {
 	}
 }
 
-function popDepartment() {
+function popDepartment()
+{
 	var f = document.changecontact;
 	window.open('./index.php?m=contacts&a=select_contact_company&dialog=1&table_name=departments&company_id='+f.contact_company.value+'&dept_id='+f.contact_department.value, 'company', 'left=50,top=50,height=320,width=400,resizable');
 }
 
-function setDepartment( key ){
+function setDepartment(key)
+{
 	var f = document.changecontact;
 
     f.contact_department.value = key;
@@ -107,16 +109,18 @@ function setDepartment( key ){
 }
 
 <?php if ($canDelete) { ?>
-function delIt(){
+function delIt()
+{
 	var form = document.changecontact;
-	if(confirm('<?php echo $AppUI->_('contactsDelete', UI_OUTPUT_JS); ?>')) {
+	if (confirm('<?php echo $AppUI->_('contactsDelete', UI_OUTPUT_JS); ?>')) {
 		form.del.value = '<?php echo $object_id; ?>';
 		form.submit();
 	}
 }
 <?php } ?>
 
-function orderByName( x ){
+function orderByName(x)
+{
 	var form = document.changecontact;
 	if (x == 'name') {
 		form.contact_display_name.value = form.contact_first_name.value + ' ' + form.contact_last_name.value;
@@ -125,16 +129,18 @@ function orderByName( x ){
 	}
 }
 
-function companyChange() {
+function companyChange()
+{
 	var f = document.changecontact;
 
-	if ( f.contact_company.value != window.company_id ){
+	if (f.contact_company.value != window.company_id) {
         f.contact_department_name.value = '';
 		f.contact_department.value = '0';
 	}
 }
 
-function updateVerify() {
+function updateVerify()
+{
 	var form = document.changecontact;
 	if (form.contact_email.value.length < 1 && form.contact_updateask.checked) {
 		alert('<?php echo $AppUI->_('You must enter a valid email before using this feature.', UI_OUTPUT_JS); ?>');
@@ -143,7 +149,8 @@ function updateVerify() {
 	}
 }
 
-function addContactMethod(field, value) {
+function addContactMethod(field, value)
+{
     var selects, index, select, tr, td;
 
     /* Determine how many contact method rows exist */
@@ -157,7 +164,8 @@ function addContactMethod(field, value) {
     }
 
     /* Create select menu for contact method type */
-    function addOption(select, value, text, selected) {
+    function addOption(select, value, text, selected)
+    {
         var option = document.createElement('option');
         option.setAttribute("value", value);
         option.innerHTML = text;
@@ -180,12 +188,13 @@ function addContactMethod(field, value) {
     $("span").tipTip({maxWidth: "auto", delay: 200, fadeIn: 150, fadeOut: 150});
 }
 
-function removeContactMethod(index) {
+function removeContactMethod(index)
+{
     tr = document.getElementById("contact_methods_" + index + "_");
     tr.parentNode.removeChild(tr);
 }
 
-$(document).ready(function() {
+$(document).ready(function () {
 <?php
 $fields = $methods['fields'];
 foreach ($fields as $key => $field): ?>
@@ -196,4 +205,4 @@ foreach ($fields as $key => $field): ?>
 </script>
 <?php
 
-include $AppUI->getTheme()->resolveTemplate( $m . '/' . $a);
+include $AppUI->getTheme()->resolveTemplate($m . '/' . $a);

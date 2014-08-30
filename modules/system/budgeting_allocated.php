@@ -1,6 +1,6 @@
 <?php
 if (!defined('W2P_BASE_DIR')) {
-	die('You should not access this file directly.');
+    die('You should not access this file directly.');
 }
 global $AppUI, $cal_sdf;
 $AppUI->getTheme()->loadCalendarJS();
@@ -8,7 +8,7 @@ $AppUI->getTheme()->loadCalendarJS();
 $budget_id = (int) w2PgetParam($_GET, 'budget_id', 0);
 
 if (!canEdit('system')) {
-	$AppUI->redirect(ACCESS_DENIED);
+    $AppUI->redirect(ACCESS_DENIED);
 }
 $df = $AppUI->getPref('SHDATEFORMAT');
 

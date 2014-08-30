@@ -40,7 +40,7 @@ if (0 == $object_id && ($project_id || $task_id)) {
     $object->link_task    = $task_id;
 
     if ($task_id) {
-        $link_task = new CTask;
+        $link_task = new CTask();
         $link_task->load($task_id);
         $link->task_name = $link_task->task_name;
     }
@@ -115,4 +115,4 @@ function setTask(key, val)
 </script>
 <?php
 
-include $AppUI->getTheme()->resolveTemplate( $m . '/' . $a);
+include $AppUI->getTheme()->resolveTemplate($m . '/' . $a);

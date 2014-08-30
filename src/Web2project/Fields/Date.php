@@ -40,6 +40,7 @@ class Date implements \Web2project\Interfaces\Field
     protected function format($value)
     {
         $myDate = intval($value) ? new \w2p_Utilities_Date($value) : null;
+
         return $myDate ? $myDate->format($this->format) : '-';
     }
 }

@@ -1,7 +1,6 @@
 <?php
 namespace Web2project\Fields;
 
-
 class Module implements \Web2project\Interfaces\Field
 {
     protected $object;
@@ -21,6 +20,7 @@ class Module implements \Web2project\Interfaces\Field
         $key = ($this->prefix == 'user' ? 'contact' : $this->prefix ) . '_name';
 
         $link = '?m=' . w2p_pluralize($this->prefix) . '&a=view&' . $this->prefix . '_id='.$value;
+
         return '<a href="'.$link.'">'.$this->object->$key.'</a>';
     }
 

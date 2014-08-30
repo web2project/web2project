@@ -1,12 +1,12 @@
 <?php
 if (!defined('W2P_BASE_DIR')) {
-	die('You should not access this file directly.');
+    die('You should not access this file directly.');
 }
 
 // check permissions
 $perms = $AppUI->acl();
 if (!canEdit('system')) {
-	$AppUI->redirect(ACCESS_DENIED);
+    $AppUI->redirect(ACCESS_DENIED);
 }
 
 $titleBlock = new w2p_Theme_TitleBlock('Custom field editor', 'customfields.png', $m);
@@ -18,7 +18,8 @@ $modules = $manager->getModuleList();
 
 ?>
 <script language="javascript" type="text/javascript">
-function delIt(field_id) {
+function delIt(field_id)
+{
 	if (confirm( '<?php echo $AppUI->_('doDelete', UI_OUTPUT_JS) . ' ' . $AppUI->_('Custom Field', UI_OUTPUT_JS) . '?'; ?>' )) {
         document.frmDelete.field_id.value = field_id;
 		document.frmDelete.submit();
@@ -44,7 +45,7 @@ function delIt(field_id) {
         </td>
     </tr>
     <?php
-    
+
     $fieldList = array('field_name', 'field_description', 'field_htmltype',
         'field_published', 'field_order');
     $fieldNames = array('Name', 'Description', 'Type', 'Published', 'Order');
@@ -54,8 +55,8 @@ function delIt(field_id) {
     $htmlHelper = new w2p_Output_HTMLHelper($AppUI);
 
     $s = '';
-	if (count($rows)) {
-		$s .= '<tr><th width="10"></th>';
+    if (count($rows)) {
+        $s .= '<tr><th width="10"></th>';
         foreach ($fieldNames as $index => $name) {
             $s .= '<th>' . $AppUI->_($fieldNames[$index]) . '</th>';
         }
@@ -80,7 +81,7 @@ function delIt(field_id) {
             $s .= '</td></tr>';
         }
         echo $s;
-	}
+    }
 
     }?>
 </table>

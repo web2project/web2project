@@ -1,6 +1,6 @@
 <?php
 if (!defined('W2P_BASE_DIR')) {
-	die('You should not access this file directly.');
+    die('You should not access this file directly.');
 }
 
 $tab = $AppUI->processIntState('ContactsIdxTab', $_GET, 'tab', 0);
@@ -11,7 +11,7 @@ $canCreate = $contact->canCreate();
 $canAccess = $contact->canAccess();
 
 if (!$canAccess) {
-	$AppUI->redirect(ACCESS_DENIED);
+    $AppUI->redirect(ACCESS_DENIED);
 }
 
 $titleBlock = new w2p_Theme_TitleBlock('Contacts', 'icon.png', $m);
@@ -21,8 +21,8 @@ $titleBlock->addCell('<form action="index.php?m=contacts&tab=27" method="post" a
 $titleBlock->addCell($AppUI->_('Search') . ':');
 if ($canCreate) {
     $titleBlock->addButton('New contact', '?m=contacts&a=addedit');
-	$titleBlock->addCrumb('?m=contacts&a=csvexport&suppressHeaders=1', 'CSV Download');
-	$titleBlock->addCrumb('?m=contacts&a=vcardimport&dialog=0', 'Import vCard');
+    $titleBlock->addCrumb('?m=contacts&a=csvexport&suppressHeaders=1', 'CSV Download');
+    $titleBlock->addCrumb('?m=contacts&a=vcardimport&dialog=0', 'Import vCard');
 }
 $titleBlock->show();
 
@@ -38,7 +38,8 @@ $tabBox->show();
 ?>
 <script language="javascript" type="text/javascript">
 	// Callback function for the generic selector
-	function goProject( key, val ) {
+	function goProject(key, val)
+	{
 		var f = document.modProjects;
 		if (val != '') {
 			f.project_id.value = key;

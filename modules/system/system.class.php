@@ -12,24 +12,30 @@ class CSystem
     private $upgrader = null;
     protected $_w2Pconfig;
 
-	public function __construct() {
+    public function __construct()
+    {
         $this->upgrader = new w2p_System_UpgradeManager();
 
         global $w2Pconfig;
         $this->_w2Pconfig = $w2Pconfig;
-	}
+    }
 
-    public function upgradeRequired() {
+    public function upgradeRequired()
+    {
         $this->upgrader->getActionRequired();
+
         return $this->upgrader->upgradeRequired();
     }
 
-    public function upgradeSystem() {
+    public function upgradeSystem()
+    {
         $this->upgrader->getActionRequired();
+
         return $this->upgrader->upgradeSystem();
     }
 
-    public function getUpdatesApplied() {
+    public function getUpdatesApplied()
+    {
         return $this->upgrader->getUpdatesApplied();
     }
 
@@ -52,7 +58,7 @@ class CSystem
                 $configList = array();
 
                 $moduleList = $AppUI->getLoadableModuleList();
-                foreach($moduleList as $module) {
+                foreach ($moduleList as $module) {
                     $configList[$module['mod_directory']] = $module['mod_version'];
                 }
 
@@ -63,7 +69,7 @@ class CSystem
                 $configList['connector'] = php_sapi_name();
                 $configList['database_ver'] = mysql_get_client_info();
                 $libraries = array('tidy', 'json', 'libxml', 'mysql');
-                foreach($libraries as $library) {
+                foreach ($libraries as $library) {
                     $configList[$library.'_extver'] = phpversion($library);
                 }
                 if (function_exists('gd_info')) {

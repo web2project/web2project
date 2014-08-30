@@ -86,7 +86,7 @@ class CSmartSearch
 
     public function _buildQuery()
     {
-        $q = new w2p_Database_Query;
+        $q = new w2p_Database_Query();
 
         if ($this->table_alias) {
             $q->addTable($this->table, $this->table_alias);
@@ -136,8 +136,7 @@ class CSmartSearch
                         } else {
                             $sql .= ' ' . $field . ' REGEXP BINARY \'' . $tmppattern . '\' or ';
                         }
-                    } else
-                        if ($this->search_options['ignore_case'] == 'on') {
+                    } elseif ($this->search_options['ignore_case'] == 'on') {
                             $sql .= ' ' . $field . ' LIKE "%' . $or_keyword . '%" or ';
                         } else {
                             $sql .= ' ' . $field . ' LIKE BINARY "%' . $or_keyword . '%" or ';

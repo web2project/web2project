@@ -8,7 +8,7 @@ namespace Web2project\Interfaces;
  *
  * @package     web2project\filesystem
  */
-interface Filesystem
+interface FileSystem
 {
     public function isWritable();
     public function move(\CFile $file, $old_project_id, $actual_file_name);

@@ -1,6 +1,6 @@
 <?php
 if (!defined('W2P_BASE_DIR')) {
-	die('You should not access this file directly.');
+    die('You should not access this file directly.');
 }
 // @todo    convert to template
 // @todo    remove database query
@@ -18,12 +18,12 @@ $log->load($task_log_id);
 
 $canAuthor = $log->canCreate();
 if (!$canAuthor && !$task_log_id) {
-	$AppUI->redirect(ACCESS_DENIED);
+    $AppUI->redirect(ACCESS_DENIED);
 }
 
 $canEdit = $log->canEdit();
 if ($task_log_id && !$canEdit) {
-	$AppUI->redirect(ACCESS_DENIED);
+    $AppUI->redirect(ACCESS_DENIED);
 }
 
 $AppUI->getTheme()->loadCalendarJS();
@@ -34,16 +34,16 @@ $canEditTask = $perms->checkModuleItem('tasks', 'edit', $obj->task_id);
 $canViewTask = $perms->checkModuleItem('tasks', 'view', $obj->task_id);
 
 if ($task_log_id) {
-	if (!$canEdit || !$canViewTask) {
-		$AppUI->redirect(ACCESS_DENIED);
-	}
-	$log->load($task_log_id);
+    if (!$canEdit || !$canViewTask) {
+        $AppUI->redirect(ACCESS_DENIED);
+    }
+    $log->load($task_log_id);
 } else {
-	if (!$canAuthor || !$canViewTask) {
-		$AppUI->redirect(ACCESS_DENIED);
-	}
-	$log->task_log_task = $obj->task_id;
-	$log->task_log_name = $obj->task_name;
+    if (!$canAuthor || !$canViewTask) {
+        $AppUI->redirect(ACCESS_DENIED);
+    }
+    $log->task_log_task = $obj->task_id;
+    $log->task_log_name = $obj->task_name;
 }
 
 $project = new CProject();
@@ -67,7 +67,7 @@ $task_email_title = array();
 $q = new w2p_Database_Query();
 $q->addTable('task_contacts', 'tc');
 $q->addJoin('contacts', 'c', 'c.contact_id = tc.contact_id', 'inner');
-$q->addWhere('tc.task_id = ' . (int)$obj->task_id);
+$q->addWhere('tc.task_id = ' . (int) $obj->task_id);
 $q->addQuery('tc.contact_id');
 $q->addQuery('c.contact_first_name, c.contact_last_name');
 $req = &$q->exec();
@@ -80,7 +80,7 @@ for ($req; !$req->EOF; $req->MoveNext()) {
 $q->clear();
 $q->addTable('project_contacts', 'pc');
 $q->addJoin('contacts', 'c', 'c.contact_id = pc.contact_id', 'inner');
-$q->addWhere('pc.project_id = ' . (int)$obj->task_project);
+$q->addWhere('pc.project_id = ' . (int) $obj->task_project);
 $q->addQuery('pc.contact_id');
 $q->addQuery('c.contact_first_name, c.contact_last_name');
 $req = &$q->exec();
@@ -105,8 +105,9 @@ $q->clear();
 	var tStart        = null;
     var total_minutes = -1;
 
-	function UpdateTimer() {
-	   if(timerID) {
+	function UpdateTimer()
+	{
+	   if (timerID) {
 	      clearTimeout(timerID);
 	      clockID  = 0;
 	   }
@@ -123,8 +124,9 @@ $q->clear();
 	   timerID = setTimeout('UpdateTimer()', 60000);
 	}
 
-	function timerStart() {
-		if(!timerID){ // this means that it needs to be started
+	function timerStart()
+	{
+		if (!timerID) { // this means that it needs to be started
 			timerSet();
 			button = document.getElementById('timerStartStopButton');
 			button.innerHTML = '<?php echo $AppUI->_('Stop'); ?>';
@@ -137,20 +139,23 @@ $q->clear();
 		}
 	}
 
-	function timerStop() {
-        if(timerID) {
+	function timerStop()
+	{
+        if (timerID) {
             clearTimeout(timerID);
             timerID  = 0;
             total_minutes--;
         }
 	}
 
-	function timerReset() {
+	function timerReset()
+	{
 		document.editFrm.task_log_hours.value = '0.00';
         total_minutes = -1;
 	}
 
-	function timerSet() {
+	function timerSet()
+	{
 		total_minutes = Math.round(document.editFrm.task_log_hours.value * 60) -1;
 	}
 </script>
@@ -224,7 +229,7 @@ $form = new w2p_Output_HTML_FormHelper($AppUI);
                     if (count($companyBC)) {
                         $myKeys = array_keys($companyBC);
                         echo '<optgroup label="'.$companyBC[$myKeys[0]]['company_name'].'" />';
-                        foreach($companyBC as $bcode) {
+                        foreach ($companyBC as $bcode) {
                             echo '<option value="'.$bcode['billingcode_id'].'">'.$bcode['billingcode_name'];
                             echo ('' != $bcode['billingcode_category']) ? ' ('.$billingCategory[$bcode['billingcode_category']].')' : '';
                             echo '</option>';
@@ -232,7 +237,7 @@ $form = new w2p_Output_HTML_FormHelper($AppUI);
                     }
                     if (count($neutralBC)) {
                         echo '<optgroup label="'.$AppUI->_('No company specified').'" />';
-                        foreach($neutralBC as $bcode) {
+                        foreach ($neutralBC as $bcode) {
                             echo '<option value="'.$bcode['billingcode_id'].'">'.$bcode['billingcode_name'];
                             echo ('' != $bcode['billingcode_category']) ? ' ('.$billingCategory[$bcode['billingcode_category']].')' : '';
                             echo '</option>';

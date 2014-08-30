@@ -12,6 +12,7 @@ class AddEditPermissions extends AddEdit
     {
         if (!canEdit('users')) {
             $this->resultPath = ACCESS_DENIED;
+
             return $AppUI;
         }
 

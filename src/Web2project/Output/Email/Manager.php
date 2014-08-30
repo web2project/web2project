@@ -38,9 +38,10 @@ class Manager
     {
         $properties = get_object_vars($object);
 
-        foreach($properties as $key => $value) {
+        foreach ($properties as $key => $value) {
             $string = str_replace('{{' . $key . '}}', $value, $string);
         }
+
         return $string;
     }
 

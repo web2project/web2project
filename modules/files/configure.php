@@ -15,7 +15,7 @@ $query->addTable('module_config');
 $query->addWhere("module_name = 'files'");
 $values = $query->loadList(-1, 'module_config_name');
 
-foreach($values as $key => $array) {
+foreach ($values as $key => $array) {
     $values[$key] = $array['module_config_value'];
 }
 
@@ -38,7 +38,7 @@ $form = new w2p_Output_HTML_FormHelper($AppUI);
             <p>
                 <?php $form->showLabel('Default Storage System'); ?>
                 <select name="file_system" id="file_system">
-                    <?php foreach($filesystems as $key => $value) { ?>
+                    <?php foreach ($filesystems as $key => $value) { ?>
                         <?php if ($key == $filesystem) { ?>
                             <option value="<?php echo $key; ?>" selected="true"><?php echo $value; ?></option>
                         <?php } else { ?>

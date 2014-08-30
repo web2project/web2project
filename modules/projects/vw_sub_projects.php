@@ -1,6 +1,6 @@
 <?php
 if (!defined('W2P_BASE_DIR')) {
-	die('You should not access this file directly.');
+    die('You should not access this file directly.');
 }
 // @todo    convert to template
 
@@ -12,7 +12,6 @@ $projectStatus = w2PgetSysVal('ProjectStatus');
 $original_project_id = $project->project_original_parent;
 $project->project_status = -1;
 $st_projects_arr = $project->getStructuredProjects();
-
 
 $module = new w2p_System_Module();
 $fields = $module->loadSettings('projects', 'subproject_list');

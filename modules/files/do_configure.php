@@ -4,7 +4,7 @@ if (!defined('W2P_BASE_DIR')) {
 }
 
 unset($_POST['dosql']);
-foreach($_POST as $key => $value) {
+foreach ($_POST as $key => $value) {
     $key = preg_replace("/[^A-Za-z0-9_]/", "", $key);
     $value = preg_replace("/[^A-Za-z0-9_\/]/", "", $value);
 

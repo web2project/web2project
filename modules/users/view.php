@@ -67,7 +67,8 @@ $titleBlock->show();
         // else users would be able to arbitrarily run 'bad' functions
         if ($canEdit || $user_id == $AppUI->user_id) {
     ?>
-    function popChgPwd() {
+    function popChgPwd()
+    {
         window.open( './index.php?m=public&a=chpwd&dialog=1&user_id=<?php echo $user->user_id; ?>', 'chpwd', 'top=250,left=250,width=350, height=220, scrollbars=no' );
     }
     <?php } ?>
@@ -75,7 +76,7 @@ $titleBlock->show();
 <?php
 $utypes = w2PgetSysVal('UserType');
 
-include $AppUI->getTheme()->resolveTemplate( $m . '/' . $a);
+include $AppUI->getTheme()->resolveTemplate($m . '/' . $a);
 
 // tabbed information boxes
 $min_view = true;

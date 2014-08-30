@@ -13,6 +13,7 @@ class DateTime extends Date implements \Web2project\Interfaces\Field
     protected function format($value)
     {
         $myDate = intval($value) ? new \w2p_Utilities_Date($this->AppUI->formatTZAwareTime($value, '%Y-%m-%d %T')) : null;
+
         return $myDate ? $myDate->format($this->format) : '-';
     }
 }

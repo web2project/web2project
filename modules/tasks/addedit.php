@@ -1,11 +1,9 @@
 <?php
 if (!defined('W2P_BASE_DIR')) {
-	die('You should not access this file directly.');
+    die('You should not access this file directly.');
 }
 // @todo    convert to template
 $object_id = (int) w2PgetParam($_GET, 'task_id', 0);
-
-
 
 $object = new CTask();
 $object->setId($object_id);
@@ -15,7 +13,7 @@ $canAddEdit = $obj->canAddEdit();
 $canAuthor = $obj->canCreate();
 $canEdit = $obj->canEdit();
 if (!$canAddEdit) {
-	$AppUI->redirect(ACCESS_DENIED);
+    $AppUI->redirect(ACCESS_DENIED);
 }
 
 $obj = $AppUI->restoreObject();
@@ -26,8 +24,8 @@ if ($obj) {
     $object->load($object_id);
 }
 if (!$object && $object_id > 0) {
-	$AppUI->setMsg('Task');
-	$AppUI->setMsg('invalidID', UI_MSG_ERROR, true);
+    $AppUI->setMsg('Task');
+    $AppUI->setMsg('invalidID', UI_MSG_ERROR, true);
     $AppUI->redirect('m=' . $m);
 }
 
@@ -40,26 +38,26 @@ $task_parent = (int) w2PgetParam($_GET, 'task_parent', $object->task_parent);
 // check for a valid project parent
 $task_project = (int) $object->task_project;
 if (!$task_project) {
-	$task_project = (int) w2PgetParam($_REQUEST, 'task_project', 0);
+    $task_project = (int) w2PgetParam($_REQUEST, 'task_project', 0);
     if (!$task_project) {
-		$AppUI->setMsg('badTaskProject', UI_MSG_ERROR);
+        $AppUI->setMsg('badTaskProject', UI_MSG_ERROR);
         $AppUI->redirect('m=' . $m);
-	}
+    }
 }
 
 // check permissions
 $perms = &$AppUI->acl();
 if (!$object_id) {
-	// do we have access on this project?
-	$canEdit = $perms->checkModuleItem('projects', 'view', $task_project);
-	// And do we have add permission to tasks?
-	if ($canEdit) {
-		$canEdit = $canAuthor;
-	}
+    // do we have access on this project?
+    $canEdit = $perms->checkModuleItem('projects', 'view', $task_project);
+    // And do we have add permission to tasks?
+    if ($canEdit) {
+        $canEdit = $canAuthor;
+    }
 }
 
 if (!$canEdit) {
-	$AppUI->redirect(ACCESS_DENIED);
+    $AppUI->redirect(ACCESS_DENIED);
 }
 if (isset($object->task_represents_project) && $object->task_represents_project) {
     $AppUI->setMsg('The selected task represents a subproject. Please view/edit this project instead.', UI_MSG_ERROR);
@@ -73,7 +71,7 @@ $durnTypes = w2PgetSysVal('TaskDurationType');
 
 // check the document access (public, participant, private)
 if (!$object->canAccess($AppUI->user_id)) {
-	$AppUI->redirect(ACCESS_DENIED);
+    $AppUI->redirect(ACCESS_DENIED);
 }
 
 // pull the related project
@@ -86,8 +84,6 @@ $project->load($task_project);
 //   projects but not create tasks since the task_owner dropdown does not get
 //   populated by the "getPermittedUsers" function.
 $users = $perms->getPermittedUsers('tasks');
-
-
 
 $projTasks = array();
 
@@ -105,12 +101,12 @@ foreach ($subtasks as $sub_task) {
 
 $task_parent_options = '';
 
-$root_tasks = $object->getRootTasks((int)$task_project);
+$root_tasks = $object->getRootTasks((int) $task_project);
 foreach ($root_tasks as $root_task) {
     build_date_list($projTasksWithEndDates, $root_task);
-	if ($root_task['task_id'] != $object_id) {
+    if ($root_task['task_id'] != $object_id) {
         $task_parent_options .= buildTaskTree($root_task, 0, array(), $all_tasks, $parents, $task_parent, $object_id);
-	}
+    }
 }
 
 // setup the title block
@@ -124,24 +120,24 @@ $titleBlock->show();
 $selected_contacts = array();
 
 if ($object_id) {
-	$myContacts = $object->getContacts(null, $object_id);
-	$selected_contacts = array_keys($myContacts);
+    $myContacts = $object->getContacts(null, $object_id);
+    $selected_contacts = array_keys($myContacts);
 }
 if ($object_id == 0 && (isset($contact_id) && $contact_id > 0)) {
-	$selected_contacts[] = '' . $contact_id;
+    $selected_contacts[] = '' . $contact_id;
 }
 
 $department_selection_list = array();
 $department = new CDepartment();
 $deptList = $department->departments($project->project_company);
-foreach($deptList as $dept) {
+foreach ($deptList as $dept) {
   $department_selection_list[$dept['dept_id']] = $dept['dept_name'];
 }
 $department_selection_list = arrayMerge(array('0' => ''), $department_selection_list);
 
 //Dynamic tasks are by default now off because of dangerous behavior if incorrectly used
 if (is_null($object->task_dynamic)) {
-	$object->task_dynamic = 0;
+    $object->task_dynamic = 0;
 }
 
 $can_edit_time_information = $object->canUserEditTimeInformation($project->project_owner, $AppUI->user_id);
@@ -149,7 +145,7 @@ $can_edit_time_information = $object->canUserEditTimeInformation($project->proje
 $tmpprojects = $project->getAllowedProjects($AppUI->user_id);
 $projects = array();
 $projects[0] = $AppUI->_('Do not move');
-foreach($tmpprojects as $proj) {
+foreach ($tmpprojects as $proj) {
     $projects[$proj['project_id']] = $proj['project_name'];
 }
 ?>
@@ -158,9 +154,9 @@ var task_id = '<?php echo $object->task_id; ?>';
 
 var check_task_dates = <?php
 if (isset($w2Pconfig['check_task_dates']) && $w2Pconfig['check_task_dates'])
-	echo 'true';
+    echo 'true';
 else
-	echo 'false';
+    echo 'false';
 ?>;
 var can_edit_time_information = <?php echo $can_edit_time_information ? 'true' : 'false'; ?>;
 
@@ -175,7 +171,8 @@ var cal_day_start = <?php echo (int) w2PgetConfig('cal_day_start'); ?>;
 var cal_day_end = <?php echo (int) w2PgetConfig('cal_day_end'); ?>;
 var daily_working_hours = <?php echo (int) w2PgetConfig('daily_working_hours'); ?>;
 
-function popContacts() {
+function popContacts()
+{
     var selected_contacts_id = document.getElementById('task_contacts').value;
     var project_company = <?php echo $project->project_company; ?>;
 	window.open('./index.php?m=public&a=contact_selector&dialog=1&call_back=setContacts&selected_contacts_id='+selected_contacts_id+'&company_id='+project_company, 'contacts','height=600,width=400,resizable,scrollbars=yes');
@@ -183,7 +180,7 @@ function popContacts() {
 </script>
 <?php
 
-include $AppUI->getTheme()->resolveTemplate( $m . '/' . $a);
+include $AppUI->getTheme()->resolveTemplate($m . '/' . $a);
 
 $tab = $AppUI->processIntState('TaskAeTabIdx', $_GET, 'tab', 0);
 

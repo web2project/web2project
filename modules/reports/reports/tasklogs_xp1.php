@@ -33,7 +33,7 @@ if (!$log_start_date) {
 $end_date->setTime(23, 59, 59);
 
 // Lets check cost codes
-$q = new w2p_Database_Query;
+$q = new w2p_Database_Query();
 $q->addTable('billingcode');
 $q->addQuery('billingcode_id, billingcode_name');
 
@@ -131,7 +131,7 @@ if ($do_report) {
 	<tr>
 		<td>';
 
-    $q = new w2p_Database_Query;
+    $q = new w2p_Database_Query();
     $q->addTable('task_log', 't');
     $q->addQuery('distinct(t.task_log_id), contact_display_name AS creator');
     $q->addQuery('billingcode_value, billingcode_name');
@@ -264,7 +264,7 @@ if ($do_report) {
         }
 
         if ($log_userfilter) {
-            $q = new w2p_Database_Query;
+            $q = new w2p_Database_Query();
             $q->addTable('contacts');
             $q->addQuery('contact_display_name');
             $q->addJoin('users', '', 'user_contact = contact_id', 'inner');

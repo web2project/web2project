@@ -1,6 +1,6 @@
 <?php
 if (!defined('W2P_BASE_DIR')) {
-	die('You should not access this file directly.');
+    die('You should not access this file directly.');
 }
 // @todo    convert to template
 
@@ -8,7 +8,7 @@ global $AppUI, $task_id, $sf, $df, $canEdit, $m;
 
 $perms = &$AppUI->acl();
 if (!canView('task_log')) {
-	$AppUI->redirect(ACCESS_DENIED);
+    $AppUI->redirect(ACCESS_DENIED);
 }
 
 $problem = (int) w2PgetParam($_GET, 'problem', null);
@@ -22,7 +22,8 @@ $problem = (int) w2PgetParam($_GET, 'problem', null);
 $canDelete = canDelete('task_log');
 if ($canDelete) {
 ?>
-function delIt2(id) {
+function delIt2(id)
+{
 	if (confirm( '<?php echo $AppUI->_('doDelete', UI_OUTPUT_JS) . ' ' . $AppUI->_('Task Log', UI_OUTPUT_JS) . '?'; ?>' )) {
 		document.frmDelete2.task_log_id.value = id;
 		document.frmDelete2.submit();
@@ -114,7 +115,7 @@ if (count($logs)) {
         $s .= '</td>';
 
         $s .= '</tr>';
-        $hrs += (float)$row['task_log_hours'];
+        $hrs += (float) $row['task_log_hours'];
     }
 }
 
@@ -123,7 +124,7 @@ $s .= '<td colspan="6" align="right">' . $AppUI->_('Total Hours') . ' =</td>';
 $s .= $htmlHelper->createCell('task_log_hours', sprintf('%.2f', $hrs));
 $s .= '<td align="right" colspan="3">';
 if ($perms->checkModuleItem('tasks', 'edit', $task_id)) {
-	$s .= '<form action="?m=tasks&a=view&tab=1&task_id=' . $task_id . '" method="post" accept-charset="utf-8">';
+    $s .= '<form action="?m=tasks&a=view&tab=1&task_id=' . $task_id . '" method="post" accept-charset="utf-8">';
     $s .= '<input type="submit" class="button btn btn-primary btn-mini" value="' . $AppUI->_('new log') . '"></form>';
 }
 $s .= '</td></tr>';

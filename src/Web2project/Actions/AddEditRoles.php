@@ -11,6 +11,7 @@ class AddEditRoles extends \Web2project\Actions\AddEdit
     {
         if (!canEdit('roles')) {
             $this->resultPath = ACCESS_DENIED;
+
             return $AppUI;
         }
 

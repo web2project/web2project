@@ -124,7 +124,7 @@ if ($do_report) {
     $and = false;
     $where = false;
 
-    $q = new w2p_Database_Query;
+    $q = new w2p_Database_Query();
     $q->addTable('tasks', 't');
     $q->addQuery('t.*');
     $q->addJoin('projects', '', 'projects.project_id = task_project', 'inner');

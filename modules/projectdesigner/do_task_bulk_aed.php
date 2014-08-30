@@ -1,6 +1,6 @@
 <?php
 if (!defined('W2P_BASE_DIR')) {
-	die('You should not access this file directly.');
+    die('You should not access this file directly.');
 }
 // @todo    refactor to use a core controller
 // @todo    remove database query
@@ -33,17 +33,16 @@ $bulk_task_percent_complete = w2PgetParam($_POST, 'bulk_task_percent_complete', 
 $userTZ = $AppUI->getPref('TIMEZONE');
 
 if ($bulk_task_start_date) {
-	$start_date_userTZ = $start_date = new w2p_Utilities_Date($bulk_task_start_date,$userTZ);
+    $start_date_userTZ = $start_date = new w2p_Utilities_Date($bulk_task_start_date,$userTZ);
         $start_date->convertTZ('UTC');
-	$bulk_start_date = $start_date->format(FMT_DATETIME_MYSQL);
+    $bulk_start_date = $start_date->format(FMT_DATETIME_MYSQL);
 }
 
 if ($bulk_task_end_date) {
-	$end_date_userTZ = $end_date = new w2p_Utilities_Date($bulk_task_end_date,$userTZ);
+    $end_date_userTZ = $end_date = new w2p_Utilities_Date($bulk_task_end_date,$userTZ);
         $end_date->convertTZ('UTC');
-	$bulk_end_date = $end_date->format(FMT_DATETIME_MYSQL);
+    $bulk_end_date = $end_date->format(FMT_DATETIME_MYSQL);
 }
-
 
 if (!canEdit('tasks')) {
     $AppUI->redirect(ACCESS_DENIED);
@@ -130,7 +129,7 @@ if (is_array($selected) && count($selected)) {
         //Action: Move to Project
         if (isset($_POST['bulk_task_project']) && $bulk_task_project != '' && $bulk_task_project) {
             if ($upd_task->task_id) {
-				$upd_task->moveTaskBetweenProjects($upd_task->task_id,$upd_task->task_project,$bulk_task_project);
+                $upd_task->moveTaskBetweenProjects($upd_task->task_id,$upd_task->task_project,$bulk_task_project);
             }
         }
         //Action: Change parent
@@ -147,14 +146,14 @@ if (is_array($selected) && count($selected)) {
                 if ($bulk_task_dependency == '0') {
                     $upd_task->task_dynamic = 0;
                     $upd_task->store();
-                    $q = new w2p_Database_Query;
+                    $q = new w2p_Database_Query();
                     $q->setDelete('task_dependencies');
                     $q->addWhere('dependencies_task_id=' . $upd_task->task_id);
                     $q->exec();
                 } elseif (!($bulk_task_dependency == $upd_task->task_id)) {
                     $upd_task->task_dynamic = 31;
                     $upd_task->store();
-                    $q = new w2p_Database_Query;
+                    $q = new w2p_Database_Query();
                     $q->addTable('task_dependencies');
                     $q->addReplace('dependencies_task_id', $upd_task->task_id);
                     $q->addReplace('dependencies_req_task_id', $bulk_task_dependency);
@@ -226,7 +225,7 @@ if (is_array($selected) && count($selected)) {
             }
         }
 
-		//Action: Other Actions
+        //Action: Other Actions
         if (isset($_POST['bulk_task_other']) && $bulk_task_other != '') {
 
             if ($upd_task->task_id) {
@@ -307,7 +306,7 @@ if (is_array($selected) && count($selected)) {
             }
         }
         $AppUI->setMsg($upd_task->getError(), UI_MSG_ERROR);
-	}
+    }
 }
 if (!$result) {
     $AppUI->setMsg($result, UI_MSG_ERROR);

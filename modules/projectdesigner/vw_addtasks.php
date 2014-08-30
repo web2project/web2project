@@ -1,6 +1,6 @@
 <?php
 if (!defined('W2P_BASE_DIR')) {
-	die('You should not access this file directly.');
+    die('You should not access this file directly.');
 }
 // @todo    convert to template
 
@@ -8,7 +8,8 @@ global $AppUI, $w2Pconfig, $projects, $project_id;
 ?>
 
 <script language="javascript" type="text/javascript">
-function buildTaskName(id) {
+function buildTaskName(id)
+{
 	var f = document.editFrm;
 	var taskNameObj = eval('f.add_task_name_'+id);
 	var taskName = eval('f.add_task_name_'+id+'.value');
@@ -22,23 +23,24 @@ function buildTaskName(id) {
 	eval("oldType_"+id+" = '-'+'"+taskType+"'");
 }
 
-function addTasks() {
+function addTasks()
+{
 	var f = document.editFrm;
 	var ok = true;
-	for (i=0,i_cmp=f.length;i<i_cmp;i++){
+	for (i=0,i_cmp=f.length;i<i_cmp;i++) {
 		var tempobj=f.elements[i]
-		if (tempobj.name.substring(0,14)=='add_task_name_'){
-			if (((tempobj.type=='text'||tempobj.type=='textarea')&&tempobj.value=='')||(tempobj.type.toString().charAt(0)=='s'&&tempobj.selectedIndex==-1)){
+		if (tempobj.name.substring(0,14)=='add_task_name_') {
+			if (((tempobj.type=='text'||tempobj.type=='textarea')&&tempobj.value=='')||(tempobj.type.toString().charAt(0)=='s'&&tempobj.selectedIndex==-1)) {
 				alert('<?php echo $AppUI->_('At least one task name is lacking.');?>');
 				f.elements[i].focus();
 				ok = false;
 				break;
 			}
 		}
-	}            	
-	for (i=0,i_cmp=f.length;i<i_cmp;i++){
+	}
+	for (i=0,i_cmp=f.length;i<i_cmp;i++) {
 		var tempobj=f.elements[i]
-		if (tempobj.name.substring(0,20)=='add_task_start_date_'){
+		if (tempobj.name.substring(0,20)=='add_task_start_date_') {
 			var int_st_date = new String(tempobj.name);
 			var int_en_date = new String(int_st_date.replace(/start_date_/,'end_date_'));
 			var st_date = new String(tempobj.name.replace(/add_task_/,''));
@@ -51,7 +53,7 @@ function addTasks() {
 			var eDate = new Date(int_en_date.substring(0,4),(int_en_date.substring(4,6)-1),int_en_date.substring(6,8), int_en_date.substring(8,10), int_en_date.substring(10,12));
 			var s = Date.UTC(int_st_date.substring(0,4),(int_st_date.substring(4,6)-1),int_st_date.substring(6,8), int_st_date.substring(8,10), int_st_date.substring(10,12));
 			var e = Date.UTC(int_en_date.substring(0,4),(int_en_date.substring(4,6)-1),int_en_date.substring(6,8), int_en_date.substring(8,10), int_en_date.substring(10,12));
-			if (s > e && int_st_date.length>0 && int_en_date.length>0){
+			if (s > e && int_st_date.length>0 && int_en_date.length>0) {
 				st_date.style.backgroundColor = 'red';
 				en_date.style.backgroundColor = 'red';
 				ok = false;
@@ -61,11 +63,11 @@ function addTasks() {
 				en_date.style.backgroundColor = '';
 			}
 		}
-	}            	
+	}
 	if (ok) {
 		f.submit();
 	}
-	
+
 }
 </script>
 

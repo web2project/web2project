@@ -1,6 +1,6 @@
 <?php
 if (!defined('W2P_BASE_DIR')) {
-	die('You should not access this file directly.');
+    die('You should not access this file directly.');
 }
 // @todo    convert to template
 // @todo    remove database query
@@ -30,7 +30,7 @@ $sowners = array('' => '('.$AppUI->_('Task Owner').')') + $perms->getPermittedUs
 $sassign = array('' => '('.$AppUI->_('Assign User').')') + $perms->getPermittedUsers('tasks');
 $sunassign = array('' => '('.$AppUI->_('Unassign User').')') + $users;
 
-$obj = new CTask;
+$obj = new CTask();
 $allowedTasks = $obj->getAllowedSQL($AppUI->user_id, 'tasks.task_id');
 
 $obj->load($task_id);
@@ -55,9 +55,9 @@ $task_parent_options = '';
 $root_tasks = $obj->getRootTasks((int) $task_project);
 foreach ($root_tasks as $root_task) {
     build_date_list($projTasksWithEndDates, $root_task);
-	if ($root_task['task_id'] != $task_id) {
+    if ($root_task['task_id'] != $task_id) {
         $task_parent_options .= buildTaskTree($root_task, 0, array(), $all_tasks, $parents, 0, $task_id);
-	}
+    }
 }
 
 $project = new CProject();
@@ -66,7 +66,7 @@ $sprojects = $project->getAllowedRecords($AppUI->user_id, 'projects.project_id,p
 $idx_companies = __extract_from_vw_actions();
 
 foreach ($sprojects as $prj_id => $prj_name) {
-	$sprojects[$prj_id] = $idx_companies[$prj_id] . ': ' . $prj_name;
+    $sprojects[$prj_id] = $idx_companies[$prj_id] . ': ' . $prj_name;
 }
 asort($sprojects);
 $sprojects = arrayMerge(array('' => '(' . $AppUI->_('Move to Project', UI_OUTPUT_RAW) . ')'), $sprojects);

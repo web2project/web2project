@@ -1,12 +1,12 @@
 <?php
 if (!defined('W2P_BASE_DIR')) {
-	die('You should not access this file directly.');
+    die('You should not access this file directly.');
 }
 // @todo    remove database query
 
 $perms = &$AppUI->acl();
 if (!canEdit('system')) {
-	$AppUI->redirect(ACCESS_DENIED);
+    $AppUI->redirect(ACCESS_DENIED);
 }
 
 ##
@@ -18,9 +18,9 @@ $mod_directory = w2PgetParam($_GET, 'mod_directory', '0');
 
 $obj = new w2p_System_Module();
 if ($mod_id) {
-	$obj->load($mod_id);
+    $obj->load($mod_id);
 } else {
-	$obj->mod_directory = $mod_directory;
+    $obj->mod_directory = $mod_directory;
 }
 
 //check for a setup file
@@ -48,27 +48,27 @@ if (file_exists(W2P_BASE_DIR . '/modules/' . $obj->mod_directory . '/setup.php')
 }
 
 switch ($cmd) {
-	case 'moveup':
-	case 'movedn':
-	case 'movefirst':
-	case 'movelast':
-		$obj->move($cmd);
-		$AppUI->setMsg('Module re-ordered', UI_MSG_OK);
-		break;
-	case 'toggle':
-		// just toggle the active state of the table entry
-		$obj->mod_active = 1 - $obj->mod_active;
+    case 'moveup':
+    case 'movedn':
+    case 'movefirst':
+    case 'movelast':
+        $obj->move($cmd);
+        $AppUI->setMsg('Module re-ordered', UI_MSG_OK);
+        break;
+    case 'toggle':
+        // just toggle the active state of the table entry
+        $obj->mod_active = 1 - $obj->mod_active;
         $obj->mod_ui_active = $obj->mod_active;
-		$obj->store();
-		$AppUI->setMsg('Module state changed', UI_MSG_OK);
-		break;
-	case 'toggleMenu':
-		// just toggle the active state of the table entry
-		$obj->mod_ui_active = 1 - $obj->mod_ui_active;
-		$obj->store();
-		$AppUI->setMsg('Module menu state changed', UI_MSG_OK);
-		break;
-	case 'install':
+        $obj->store();
+        $AppUI->setMsg('Module state changed', UI_MSG_OK);
+        break;
+    case 'toggleMenu':
+        // just toggle the active state of the table entry
+        $obj->mod_ui_active = 1 - $obj->mod_ui_active;
+        $obj->store();
+        $AppUI->setMsg('Module menu state changed', UI_MSG_OK);
+        break;
+    case 'install':
         $result = $setup->install($config);
 
         if (!$result) {
@@ -79,9 +79,9 @@ switch ($cmd) {
             $obj->install();
             $AppUI->setMsg('Module installed', UI_MSG_OK, true);
         }
-		break;
-	case 'remove':
-		$result = $setup->remove();
+        break;
+    case 'remove':
+        $result = $setup->remove();
 
         if (!$result) {
             $AppUI->setMsg($setup->getErrors(), UI_MSG_ERROR);
@@ -91,8 +91,8 @@ switch ($cmd) {
             $obj->remove();
             $AppUI->setMsg('Module removed', UI_MSG_OK, true);
         }
-		break;
-	case 'upgrade':
+        break;
+    case 'upgrade':
         $result = $setup->upgrade($obj->mod_version);
 
         if (!$result) {
@@ -102,16 +102,16 @@ switch ($cmd) {
             $obj->store();
             $AppUI->setMsg('Module upgraded', UI_MSG_OK, true);
         }
-		break;
-	case 'configure':
-		$result = $setup->configure();
+        break;
+    case 'configure':
+        $result = $setup->configure();
 
         if (!$result) { //returns true if configure succeeded
-			$AppUI->setMsg('Module configuration failed', UI_MSG_ERROR);
-		}
-		break;
-	default:
-		$AppUI->setMsg('Unknown Command', UI_MSG_ERROR);
-		break;
+            $AppUI->setMsg('Module configuration failed', UI_MSG_ERROR);
+        }
+        break;
+    default:
+        $AppUI->setMsg('Unknown Command', UI_MSG_ERROR);
+        break;
 }
 $AppUI->redirect('m=system&u=modules');

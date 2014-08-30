@@ -19,7 +19,7 @@ class Gateway
     {
         $query = $this->query;
 
-        $object = new $this->class;
+        $object = new $this->class();
         $searchParams = $object->hook_search();
         $searchFields = $searchParams['search_fields'];
         $filter = implode(" LIKE '%$value%' OR ", $searchFields) . " LIKE '%$value%'";
@@ -37,7 +37,7 @@ class Gateway
         $query->addTable($searchParams['table'], $searchParams['table_alias']);
         $joins = $searchParams['table_joins'];
         if (is_array($joins)) {
-            foreach($joins as $join) {
+            foreach ($joins as $join) {
                 $query->addJoin($join['table'], $join['alias'], $join['join']);
             }
         }
@@ -49,7 +49,7 @@ class Gateway
     {
         $query = $this->query;
 
-        $object = new $this->class;
+        $object = new $this->class();
         $searchParams = $object->hook_search();
         $query->addTable($searchParams['table'], $searchParams['table_alias']);
         $query->addQuery('*');

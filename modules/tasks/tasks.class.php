@@ -113,13 +113,12 @@ class CTask extends w2p_Core_BaseObject
         return $this->link . '/' . $this->type . '/' . $this->length;
     }
 
-    
 /*
  * TODO: The check() this is based on is a ridiculous hairy mess that has numerous
  *   levels of nesting, data modification, and various other things.
- * 
+ *
  * In short, Here Be Dragons.
- */ 
+ */
     public function isValid()
     {
         $baseErrorMsg = get_class($this) . '::store-check failed - ';
@@ -188,6 +187,7 @@ class CTask extends w2p_Core_BaseObject
         if (array_sum($this_dependencies)) {
             if ($this->task_dynamic == 1) {
                 $this->_error['BadDep_DynNoDep'] = 'BadDep_DynNoDep';
+
                 return false;
             }
 
@@ -209,6 +209,7 @@ class CTask extends w2p_Core_BaseObject
             if (array_sum($intersect)) {
                 $ids = '(' . implode(',', $intersect) . ')';
                 $this->_error['BadDep_CircularDep'] = 'BadDep_CircularDep';
+
                 return false;
             }
         }
@@ -224,6 +225,7 @@ class CTask extends w2p_Core_BaseObject
             // Task parent cannot be child of this task
             if (in_array($this_parent->task_id, $this_children)) {
                 $this->_error['BadParent_CircularParent'] = 'BadParent_CircularParent';
+
                 return false;
             }
 
@@ -231,11 +233,13 @@ class CTask extends w2p_Core_BaseObject
                 // ... or parent's parent, cannot be child of this task. Could go on ...
                 if (in_array($this_parent->task_parent, $this_children)) {
                     $this->_error['BadParent_CircularGrandParent'] = 'BadParent_CircularGrandParent';
+
                     return false;
                 }
                 // parent's parent cannot be one of this task's dependencies
                 if (in_array($this_parent->task_parent, $this_dependencies)) {
                     $this->_error['BadParent_CircularGrandParent'] = 'BadParent_CircularGrandParent';
+
                     return false;
                 }
             } // grand parent
@@ -245,6 +249,7 @@ class CTask extends w2p_Core_BaseObject
                 if (array_sum($intersect)) {
                     $ids = '(' . implode(',', $intersect) . ')';
                     $this->_error['BadDep_CircularDepOnParentDependent'] = 'BadDep_CircularDepOnParentDependent';
+
                     return false;
                 }
             }
@@ -253,6 +258,7 @@ class CTask extends w2p_Core_BaseObject
                 $intersect = array_intersect($this_children, $parents_dependents);
                 if (array_sum($intersect)) {
                     $this->_error['BadParent_ChildDepOnParent'] = 'BadParent_ChildDepOnParent';
+
                     return false;
                 }
             }
@@ -272,6 +278,7 @@ class CTask extends w2p_Core_BaseObject
         if ($skipUpdate) {
             trigger_error("The 'skipUpdate' parameter of load() has been deprecated in v3.0 and will be removed by v4.0. Please use load() without it instead.", E_USER_NOTICE);
         }
+
         return parent::load($oid, $strip);
     }
 
@@ -286,6 +293,7 @@ class CTask extends w2p_Core_BaseObject
     public function peek($oid = null, $strip = false)
     {
         trigger_error("peek() has been deprecated in v3.0 and will be removed by v4.0. Please use load() instead.", E_USER_NOTICE);
+
         return $this->load($oid, $strip);
     }
 
@@ -307,6 +315,7 @@ class CTask extends w2p_Core_BaseObject
          * Sum up the two distinct duration values for the children with
          *   duration type 'hrs' and for those with the duration type 'day'
          */
+
         return $children_allocated_hours + $children_allocated_days;
     }
     public function updateDynamics()
@@ -319,7 +328,7 @@ class CTask extends w2p_Core_BaseObject
         $q->addOrder('length(task_path_enumeration) DESC');
         $dynamics = $q->loadList(-1, 'task_id');
 
-        foreach($dynamics as $key => $data) {
+        foreach ($dynamics as $key => $data) {
             $path = $data['task_path_enumeration'];
 
             $q->clear();
@@ -421,8 +430,7 @@ class CTask extends w2p_Core_BaseObject
 
         if ($destTask_id == 0) {
             $newObj->task_parent = $newObj->task_id;
-        } else
-        if ($destTask_id > 0) {
+        } elseif ($destTask_id > 0) {
             $newObj->task_parent = $destTask_id;
         }
 
@@ -546,6 +554,7 @@ class CTask extends w2p_Core_BaseObject
 
             if (!parent::store()) {
                 $this->_error['store'] = "There was an error in storing this object.";
+
                 return false;
             }
 
@@ -585,7 +594,7 @@ class CTask extends w2p_Core_BaseObject
             // importing tasks do not update dynamics
             $this->importing_tasks = true;
         }
-        
+
         parent::hook_postCreate();
     }
     protected function hook_preStore()
@@ -759,7 +768,7 @@ class CTask extends w2p_Core_BaseObject
     /**
      *
      * @param w2p_Core_CAppUI $AppUI
-     * @param CProject $project_id
+     * @param CProject        $project_id
      *
      * The point of this function is to create/update a task to represent a
      *   subproject.
@@ -842,6 +851,7 @@ class CTask extends w2p_Core_BaseObject
             $q->addWhere('task_id IN (' . $implodedTaskList . ')');
             if (!($q->exec())) {
                 $this->_error['delete-user-assignments'] = db_error();
+
                 return false;
             }
             $q->clear();
@@ -852,6 +862,7 @@ class CTask extends w2p_Core_BaseObject
                 dependencies_req_task_id IN (' . $implodedTaskList . ')');
             if (!$q->exec()) {
                 $this->_error['delete-dependencies'] = db_error();
+
                 return false;
             }
             $q->clear();
@@ -861,6 +872,7 @@ class CTask extends w2p_Core_BaseObject
             $q->addWhere('task_id = ' . $this->task_id);
             if (!$q->exec()) {
                 $this->_error['delete-contacts'] = db_error();
+
                 return false;
             }
 
@@ -898,7 +910,7 @@ class CTask extends w2p_Core_BaseObject
         $q->addWhere('dependencies_task_id=' . (int) $this->task_id);
         $q->exec();
         $q->clear();
-	}
+    }
 
     public function updateDependencies($cslist, $parent_id = 0)
     {
@@ -938,7 +950,7 @@ class CTask extends w2p_Core_BaseObject
 
         $dependent_tasks = $this->getDependentTaskList($task_id);
 
-        foreach($dependent_tasks as $_task_id => $_task_data) {
+        foreach ($dependent_tasks as $_task_id => $_task_data) {
             $task_start_int = strtotime($_task_data['task_start_date']);
 
             if ($task_start_int >= $task_end_int) {
@@ -970,7 +982,7 @@ class CTask extends w2p_Core_BaseObject
             $q->addUpdate('task_updated', "'" . $q->dbfnNowWithTZ() . "'", false, true);
             $q->addWhere('task_dynamic > 1 AND task_id = ' . (int) $_task_id);
             $q->exec();
-            
+
             $this->pushDependencies($_task_id, $new_end_date);
         }
     }
@@ -985,6 +997,7 @@ class CTask extends w2p_Core_BaseObject
     {
         // Call the static method for this object
         $result = $this->staticGetDependencies($this->task_id);
+
         return $result;
     }
 
@@ -1062,8 +1075,8 @@ class CTask extends w2p_Core_BaseObject
 //TODO: additional comment will be included in email body
     public function notify($comment = '')
     {
-		$project = new CProject();
-		$projname = $project->load($this->task_project)->project_name;
+        $project = new CProject();
+        $projname = $project->load($this->task_project)->project_name;
 
         // c = creator
         // a = assignee
@@ -1107,6 +1120,7 @@ class CTask extends w2p_Core_BaseObject
                 $mail->Send();
             }
         }
+
         return '';
     }
 
@@ -1138,7 +1152,6 @@ class CTask extends w2p_Core_BaseObject
                 $q->addWhere('tc.task_id = ' . $this->task_id);
                 $mail_recipients += $q->loadHashList();
                 $q->clear();
-
 
             }
             if ('on' == $project_contacts) {
@@ -1220,6 +1233,7 @@ class CTask extends w2p_Core_BaseObject
             if ($save_email) {
 //TODO: This is where #38 - http://bugs.web2project.net/view.php?id=38 - should be applied if a change is necessary.
                 $log->task_log_description .= "\n" . 'Emailed ' . date('l F j, Y H:i:s') . ' GMT to:' . "\n" . $recipient_list;
+
                 return true;
             }
         }
@@ -1295,9 +1309,9 @@ class CTask extends w2p_Core_BaseObject
         foreach ($tasks as $key => $row) {
 //we have everything already loaded in $row.
 //we only need to populate those fields of $obj that are used in canAccess
-			$obj->task_id=$row['task_id'];
-			$obj->task_access=$row['task_access'];
-			$obj->task_owner=$row['task_owner'];
+            $obj->task_id=$row['task_id'];
+            $obj->task_access=$row['task_access'];
+            $obj->task_owner=$row['task_owner'];
             $canAccess = $obj->canAccess(0,false);
             if (!$canAccess) {
                 continue;
@@ -1528,6 +1542,7 @@ class CTask extends w2p_Core_BaseObject
         if ($number_assigned_users == 0) {
             $number_assigned_users = 1;
         }
+
         return ($duration / $number_assigned_users) / $number_of_days_worked;
     }
 
@@ -1561,6 +1576,7 @@ class CTask extends w2p_Core_BaseObject
         if ($number_assigned_users == 0) {
             $number_assigned_users = 1;
         }
+
         return ($duration / $number_assigned_users) / $number_of_weeks_worked;
     }
 
@@ -1594,6 +1610,7 @@ class CTask extends w2p_Core_BaseObject
                     $this->removeAssigned($user_id);
                 }
             }
+
             return false;
         } elseif ($del == true) { // delete all users assigned to this task (to properly update)
             $q->setDelete('user_tasks');
@@ -1621,6 +1638,7 @@ class CTask extends w2p_Core_BaseObject
                 }
             }
         }
+
         return $overAssignment;
     }
 
@@ -1643,12 +1661,14 @@ class CTask extends w2p_Core_BaseObject
     public function getAssignedUsers($taskId)
     {
         trigger_error("The CTask->getAssignedUsers method has been deprecated in v3.2 and will be removed in v5.0. Please use CTask->assignees instead.", E_USER_NOTICE );
+
         return $this->assignees($taskId);
     }
 
     public function getAssigned()
     {
         trigger_error("The CTask->getAssigned method has been deprecated in v3.2 and will be removed in v5.0. Please use CTask->assignees instead.", E_USER_NOTICE );
+
         return $this->assignees($this->task_id);
     }
 
@@ -1700,7 +1720,7 @@ class CTask extends w2p_Core_BaseObject
             $q->addWhere('t.task_id = ' . (int) $taskId);
             $q->addQuery('dept_id, dept_name, dept_phone');
 
-            $department = new CDepartment;
+            $department = new CDepartment();
             $department->overrideDatabase($this->_query);
             $q = $department->setAllowedSQL($this->_AppUI->user_id, $q);
 
@@ -1724,7 +1744,7 @@ class CTask extends w2p_Core_BaseObject
 
             $q->addWhere('(contact_owner = ' . (int) $this->_AppUI->user_id . ' OR contact_private = 0)');
 
-            $department = new CDepartment;
+            $department = new CDepartment();
             $department->overrideDatabase($this->_query);
             $q = $department->setAllowedSQL($this->_AppUI->user_id, $q);
 
@@ -1813,6 +1833,7 @@ class CTask extends w2p_Core_BaseObject
             $hash = $q->loadHashList($hash);
             $q->clear();
         }
+
         return $hash;
     }
 
@@ -1852,6 +1873,7 @@ class CTask extends w2p_Core_BaseObject
         $q->addWhere('project_id = ' . (int) $this->task_project);
         $projects = $q->loadHash();
         $q->clear();
+
         return $projects;
     }
 
@@ -1911,6 +1933,7 @@ class CTask extends w2p_Core_BaseObject
 
             return array_merge($children, $deep_children);
         }
+
         return array();
     }
 
@@ -1923,7 +1946,7 @@ class CTask extends w2p_Core_BaseObject
         $q->addQuery('*, p.project_name');
         $q->addWhere('task_project = ' . (int) $project_id);
         $q->addJoin('projects', 'p', 'p.project_id = task_project');
-        
+
         if ($task_id) {
             $q->addWhere('task_parent = ' . (int) $task_id);
             $q->addWhere('task_id != ' . (int) $task_id);
@@ -1997,10 +2020,10 @@ class CTask extends w2p_Core_BaseObject
     public function moveTaskBetweenProjects($task_id, $project_old, $project_new)
     {
         $this->updateSubTasksProject($project_new, $task_id);
-		$this->removeDependencies();
-		$this->task_project=$project_new;
-		$this->task_parent=$this->task_id;
-		$this->store();
+        $this->removeDependencies();
+        $this->task_project=$project_new;
+        $this->task_parent=$this->task_id;
+        $this->store();
 
         $taskCount_oldProject = $this->getTaskCount($project_old);
         CProject::updateTaskCount($project_old, $taskCount_oldProject);
@@ -2086,6 +2109,7 @@ class CTask extends w2p_Core_BaseObject
         }
 
         if (!$this->task_end_date) { // No end date, can't do anything.
+
             return $this->clearReminder(true); // Also no point if it is changed to null
         }
 
@@ -2132,14 +2156,14 @@ class CTask extends w2p_Core_BaseObject
      * Called by the Event Queue processor to process a reminder
      * on a task.
      * @access  public
-     * @param   string  $notUsed    Module name (not used)
-     * @param   string  $notUsed2   Type of event (not used)
-     * @param   integer $id         ID of task being reminded
-     * @param   integer $owner      Originator of event
-     * @param   mixed   $notUsed    event-specific arguments.
+     * @param string  $notUsed  Module name (not used)
+     * @param string  $notUsed2 Type of event (not used)
+     * @param integer $id       ID of task being reminded
+     * @param integer $owner    Originator of event
+     * @param mixed   $notUsed  event-specific arguments.
      *
-     * @return  mixed   true, dequeue event, false, event stays in queue.
-     * -1, event is destroyed.
+     * @return mixed true, dequeue event, false, event stays in queue.
+     *               -1, event is destroyed.
      */
     public function remind($notUsed = null, $notUsed2 = null, $id, $owner, $notUsed3 = null)
     {
@@ -2220,6 +2244,7 @@ class CTask extends w2p_Core_BaseObject
             $mail->To($contact['contact_email'], true);
             $mail->Send();
         }
+
         return true;
     }
 
@@ -2262,6 +2287,7 @@ class CTask extends w2p_Core_BaseObject
                 $extra['where'] = '1 = 0';
             }
         }
+
         return parent::getAllowedRecords($uid, $fields, $orderby, $index, $extra);
     }
 
@@ -2369,7 +2395,7 @@ class CTask extends w2p_Core_BaseObject
     public function getAllowedTaskList($notUsed = null, $task_project = 0, $orderby='')
     {
         $results = array();
-        
+
         $q = $this->_getQuery();
         $q->addQuery('task_id, task_name, task_parent, task_access, task_owner');
         $q->addQuery('task_start_date, task_end_date, task_percent_complete');
@@ -2402,6 +2428,7 @@ class CTask extends w2p_Core_BaseObject
         $q->addTable('tasks');
         $q->addQuery('COUNT(distinct tasks.task_id) AS total_tasks');
         $q->addWhere('task_project = ' . (int) $projectId);
+
         return $q->loadResult();
     }
 
@@ -2413,6 +2440,7 @@ class CTask extends w2p_Core_BaseObject
         trigger_error("CTask::pinUserTask() has been deprecated in v3.1 and will be removed by v4.0. Please use CTask->pinTask() instead.", E_USER_NOTICE);
 
         $task = new CTask();
+
         return $task->pinTask($userId, $taskId);
     }
     public function pinTask($userId, $taskId)
@@ -2433,6 +2461,7 @@ class CTask extends w2p_Core_BaseObject
         trigger_error("CTask::unpinUserTask() has been deprecated in v3.1 and will be removed by v4.0. Please use CTask->unpinTask() instead.", E_USER_NOTICE);
 
         $task = new CTask();
+
         return $task->unpinTask($userId, $taskId);
     }
     public function unpinTask($userId, $taskId)

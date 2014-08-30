@@ -30,6 +30,7 @@ class CSetupFiles extends w2p_System_Setup
     public function configure() { // configure this module
         global $AppUI;
         $AppUI->redirect('m=files&a=configure'); // load module specific configuration page
+
         return true;
     }
 }

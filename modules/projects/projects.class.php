@@ -71,10 +71,12 @@ class CProject extends w2p_Core_BaseObject
         if ('' == $this->project_color_identifier) {
             $this->_error['project_color_identifier'] = $baseErrorMsg . 'project color identifier is not set';
         }
+
         return (count($this->_error)) ? false : true;
     }
 
-    protected function hook_postLoad() {
+    protected function hook_postLoad()
+    {
         $this->budget = $this->getBudget();
     }
 
@@ -223,6 +225,7 @@ class CProject extends w2p_Core_BaseObject
             // There are no allowed companies, so don't allow projects.
             $extra['where'] = '1 = 0';
         }
+
         return parent::getAllowedRecords($uid, $fields, $orderby, $index, $extra, $table_alias);
     }
 
@@ -237,12 +240,13 @@ class CProject extends w2p_Core_BaseObject
         $where += $oDpt->getAllowedSQL($uid, 'dept_id');
 
         $project_where = parent::getAllowedSQL($uid, $index);
+
         return array_merge($where, $project_where);
     }
 
     public function setAllowedSQL($uid, $query, $index = null, $key = 'pr')
     {
-        $oCpy = new CCompany;
+        $oCpy = new CCompany();
         $oCpy->overrideDatabase($this->_query);
         $query = parent::setAllowedSQL($uid, $query, $index, $key);
         $query = $oCpy->setAllowedSQL($uid, $query, ($key ? $key . '.' : '') . 'project_company');
@@ -518,7 +522,7 @@ class CProject extends w2p_Core_BaseObject
         $emailManager = new w2p_Output_Email_Manager($this->_AppUI);
         $body = $emailManager->getProjectNotify($this, $isNotNew);
 
-        $mail = new w2p_Utilities_Mail;
+        $mail = new w2p_Utilities_Mail();
         $mail->To($user->user_email, true);
         $mail->Subject($subject);
         $mail->Body($body, isset($GLOBALS['locale_char_set']) ? $GLOBALS['locale_char_set'] : '');
@@ -536,13 +540,14 @@ class CProject extends w2p_Core_BaseObject
             $body = $emailManager->getProjectNotify($this, $isNotNew);
 
             foreach ($users as $row) {
-                $mail = new w2p_Utilities_Mail;
+                $mail = new w2p_Utilities_Mail();
                 $mail->To($row['contact_email'], true);
                 $mail->Subject($subject);
                 $mail->Body($body, isset($GLOBALS['locale_char_set']) ? $GLOBALS['locale_char_set'] : '');
                 $mail->Send();
             }
         }
+
         return '';
     }
 
@@ -582,7 +587,7 @@ class CProject extends w2p_Core_BaseObject
 					OR contact_owner IS NULL OR contact_owner = 0
 				)');
 
-            $department = new CDepartment;
+            $department = new CDepartment();
             $department->overrideDatabase($this->_query);
             //TODO: We need to convert this from static to use ->overrideDatabase() for testing.
             $q = $department->setAllowedSQL($this->_AppUI->user_id, $q);
@@ -638,10 +643,10 @@ class CProject extends w2p_Core_BaseObject
 
     public function getForumList()
     {
-		if ($this->_AppUI->isActiveModule('forums') && canView('forums')) {
-			$q = $this->_getQuery();
-			$q->addTable('forums');
-			$q->addQuery('forum_id, forum_project, forum_description, forum_owner,
+        if ($this->_AppUI->isActiveModule('forums') && canView('forums')) {
+            $q = $this->_getQuery();
+            $q->addTable('forums');
+            $q->addQuery('forum_id, forum_project, forum_description, forum_owner,
                 forum_name, forum_message_count, forum_create_date, forum_last_date,
 				project_name, project_color_identifier, project_id, user_id');
             $q->addJoin('projects', 'p', 'project_id = forum_project', 'inner');
@@ -670,6 +675,7 @@ class CProject extends w2p_Core_BaseObject
     public function company()
     {
         $this->load();
+
         return $this->project_company;
     }
 
@@ -736,7 +742,7 @@ class CProject extends w2p_Core_BaseObject
      * Note that this returns the *count* of projects.  If this is zero, it is
      *   evaluated as false, otherwise it is considered true.
      *
-     * @param type $projectId
+     * @param  type $projectId
      * @return type
      */
     public function hasChildProjects($projectId = 0)
@@ -761,6 +767,7 @@ class CProject extends w2p_Core_BaseObject
 
         $task = new CTask();
         $task->overrideDatabase($override);
+
         return $task->getTaskCount($projectId);
     }
 
@@ -828,8 +835,7 @@ class CProject extends w2p_Core_BaseObject
     {
         trigger_error("CProject->getTotalProjectHours() has been deprecated in v3.0 and will be removed in v4.0. Please use the project_scheduled_hours column instead.", E_USER_NOTICE);
 
-        if ('' == $this->project_name)
-        {
+        if ('' == $this->project_name) {
             $this->load($this->project_id);
         }
 
@@ -840,42 +846,43 @@ class CProject extends w2p_Core_BaseObject
     public function getTaskLogs($notUsed = null, $projectId, $user_id = 0, $hide_inactive = false, $hide_complete = false, $cost_code = 0)
     {
         $q = $this->_getQuery();
-		$q->addTable('task_log');
+        $q->addTable('task_log');
         $q->addTable('projects', 'pr');
-		$q->addQuery('DISTINCT task_log.*, user_username, t.*');
+        $q->addQuery('DISTINCT task_log.*, user_username, t.*');
 //BEGIN: We can probably drop these lines, the fields are unneeded
-		$q->addQuery("contact_display_name AS real_name");
+        $q->addQuery("contact_display_name AS real_name");
         $q->addJoin('users', 'u', 'user_id = task_log_creator');
         $q->addJoin('contacts', 'ct', 'contact_id = user_contact');
 //END: We can probably drop these lines, the fields are unneeded
         $q->addQuery('contact_display_name as contact_name');
         $q->addQuery('contact_display_name as task_log_creator');
-		$q->addQuery('billingcode_name as task_log_costcode, billingcode_category');
-		$q->addJoin('tasks', 't', 'task_log_task = t.task_id');
-		
-		$q->addJoin('billingcode', 'b', 'task_log.task_log_costcode = billingcode_id');
+        $q->addQuery('billingcode_name as task_log_costcode, billingcode_category');
+        $q->addJoin('tasks', 't', 'task_log_task = t.task_id');
 
-		$q->addWhere('task_project = ' . (int) $projectId);
-		if ($user_id > 0) {
-			$q->addWhere('task_log_creator=' . $user_id);
-		}
-		if ($hide_inactive) {
-			$q->addWhere('task_status>=0');
-		}
-		if ($hide_complete) {
-			$q->addWhere('task_percent_complete < 100');
-		}
-		if ($cost_code > 0) {
-			$q->addWhere("billingcode_id = $cost_code");
-		}
-		$q->addOrder('task_log_date');
-		$q->addOrder('task_log_created');
-		$q = $this->setAllowedSQL($this->_AppUI->user_id, $q, 'task_project');
+        $q->addJoin('billingcode', 'b', 'task_log.task_log_costcode = billingcode_id');
 
-		return $q->loadList();
-	}
+        $q->addWhere('task_project = ' . (int) $projectId);
+        if ($user_id > 0) {
+            $q->addWhere('task_log_creator=' . $user_id);
+        }
+        if ($hide_inactive) {
+            $q->addWhere('task_status>=0');
+        }
+        if ($hide_complete) {
+            $q->addWhere('task_percent_complete < 100');
+        }
+        if ($cost_code > 0) {
+            $q->addWhere("billingcode_id = $cost_code");
+        }
+        $q->addOrder('task_log_date');
+        $q->addOrder('task_log_created');
+        $q = $this->setAllowedSQL($this->_AppUI->user_id, $q, 'task_project');
 
-    public function hook_search() {
+        return $q->loadList();
+    }
+
+    public function hook_search()
+    {
         $search['table'] = 'projects';
         $search['table_alias'] = 'p';
         $search['table_module'] = 'projects';
@@ -947,7 +954,8 @@ class CProject extends w2p_Core_BaseObject
         return $this->st_projects_arr;
     }
 
-    public function find_proj_child(&$tarr, $parent, $level = 0) {
+    public function find_proj_child(&$tarr, $parent, $level = 0)
+    {
         $level++;
         $n = count($tarr);
         for ($x = 0; $x < $n; $x++) {
@@ -958,7 +966,8 @@ class CProject extends w2p_Core_BaseObject
         }
     }
 
-    protected function show_st_project(&$a, $level = 0) {
+    protected function show_st_project(&$a, $level = 0)
+    {
         $this->st_projects_arr[] = array($a, $level);
     }
 
@@ -973,6 +982,7 @@ class CProject extends w2p_Core_BaseObject
         $st_projects = $q->loadHashList('project_id');
 
         $this->reset_project_parents($st_projects);
+
         return $st_projects;
     }
 
@@ -986,7 +996,7 @@ class CProject extends w2p_Core_BaseObject
 
     /**
      * FILTER
-     * @param int $company_id
+     * @param  int   $company_id
      * @return Array
      */
     public function getProjectsByStatus($company_id = 0)

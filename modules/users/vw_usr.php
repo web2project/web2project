@@ -1,6 +1,6 @@
 <?php
 if (!defined('W2P_BASE_DIR')) {
-	die('You should not access this file directly.');
+    die('You should not access this file directly.');
 }
 // @todo    convert to template
 // @todo    remove database query
@@ -43,9 +43,9 @@ $customLookups = array('user_type' => $types);
 $perms = &$AppUI->acl();
 
 foreach ($users as $row) {
-	if ($perms->isUserPermitted($row['user_id']) != $canLogin) {
-		continue;
-	}
+    if ($perms->isUserPermitted($row['user_id']) != $canLogin) {
+        continue;
+    }
     $listTable->stageRowData($row);
 ?>
 <tr>
@@ -58,18 +58,18 @@ foreach ($users as $row) {
         <?php
         $user_logs = __extract_from_vw_usr($row);
 
-		if ($user_logs) {
-			foreach ($user_logs as $row_log) {
-				if ($row_log['online'] == '1') {
-					echo $row_log['hours'] . ' ' . $AppUI->_('hrs.') . '( ' . $row_log['idle'] . ' ' . $AppUI->_('hrs.') . ' ' . $AppUI->_('idle') . ') - ' . $AppUI->_('Online');
-				} else {
-					echo $AppUI->_('Offline');
-				}
-			}
-		} else {
-			echo $AppUI->_('Never Visited');
-		}
-	    ?>
+        if ($user_logs) {
+            foreach ($user_logs as $row_log) {
+                if ($row_log['online'] == '1') {
+                    echo $row_log['hours'] . ' ' . $AppUI->_('hrs.') . '( ' . $row_log['idle'] . ' ' . $AppUI->_('hrs.') . ' ' . $AppUI->_('idle') . ') - ' . $AppUI->_('Online');
+                } else {
+                    echo $AppUI->_('Offline');
+                }
+            }
+        } else {
+            echo $AppUI->_('Never Visited');
+        }
+        ?>
 	    </td>
        <?php } ?>
 	<td width="20%">

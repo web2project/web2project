@@ -88,7 +88,7 @@ if ($do_report) {
 <tr>
 	<td>';
 
-    $q = new w2p_Database_Query;
+    $q = new w2p_Database_Query();
     $q->addTable('tasks', 't');
     $q->addTable('user_tasks', 'ut');
     $q->addTable('projects', 'pr');

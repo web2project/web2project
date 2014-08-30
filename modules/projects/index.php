@@ -1,6 +1,6 @@
 <?php
 if (!defined('W2P_BASE_DIR')) {
-	die('You should not access this file directly.');
+    die('You should not access this file directly.');
 }
 
 $tab = $AppUI->processIntState('ProjIdxTab', $_GET, 'tab', 5);
@@ -22,11 +22,11 @@ $owner = $AppUI->processIntState('ProjIdxowner', $_POST, 'project_owner', -1);
 
 $orderdir = $AppUI->getState('ProjIdxOrderDir') ? $AppUI->getState('ProjIdxOrderDir') : 'asc';
 if (isset($_GET['orderby'])) {
-	if ($AppUI->getState('ProjIdxOrderDir') == 'asc') {
-		$orderdir = 'desc';
-	} else {
-		$orderdir = 'asc';
-	}
+    if ($AppUI->getState('ProjIdxOrderDir') == 'asc') {
+        $orderdir = 'desc';
+    } else {
+        $orderdir = 'asc';
+    }
 }
 $AppUI->setState('ProjIdxOrderDir', $orderdir);
 
@@ -34,7 +34,7 @@ $AppUI->setState('ProjIdxOrderDir', $orderdir);
 $search_text = $search_string;      // @note this is only because the projects_list_data function takes a bunch of globals
 //$projects = projects_list_data();
 
-$oCompany = new CCompany;
+$oCompany = new CCompany();
 $allowedCompanies[-1] = $AppUI->_('all');
 $allowedCompanies += $oCompany->getAllowedRecords($AppUI->user_id, 'company_id,company_name', 'company_name');
 
@@ -68,13 +68,13 @@ $project_statuses[] = 'Archived';
 ksort($project_statuses);
 
 $counts = $project->getProjectsByStatus($company_id);
-$counts[-2] = count($project->loadAll(null, ($company_id > 0) ? 'project_company = ' . $company_id: ''));
+$counts[-2] = count($project->loadAll(null, ($company_id > 0) ? 'project_company = ' . $company_id : ''));
 $counts[-1] = count($project->loadAll(null, 'project_active = 1' . (($company_id > 0) ? ' AND project_company = ' . $company_id : '')));
 $counts[count($project_statuses) - 3]   = $counts[-2] - $counts[-1];
 
 $tabBox = new CTabBox('?m=projects', W2P_BASE_DIR . '/modules/projects/', $tab);
 foreach ($project_statuses as $key => $project_status) {
-	$tabname = $project_status . '(' . (int) $counts[$key] . ')';
+    $tabname = $project_status . '(' . (int) $counts[$key] . ')';
     $tabBox->add('vw_idx_projects', mb_trim($tabname), true);
 }
 $min_view = true;

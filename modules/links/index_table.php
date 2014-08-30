@@ -9,7 +9,7 @@ global $AppUI, $project_id, $task_id, $showProject, $tab, $search_string, $m;
 $type_filter = ($m == 'links') ? $tab-1 : -1;
 
 if ($task_id && !$project_id) {
-    $task = new CTask;
+    $task = new CTask();
     $task->load($task_id);
     $project_id = $task->task_project;
 }

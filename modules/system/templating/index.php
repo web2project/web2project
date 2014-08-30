@@ -29,8 +29,7 @@ $templates = $templateLoader->loadTemplates($locale);
 // todo: use our proper table generation
 echo '<tr><th></th><th>Template Name</th><th>Identifier</th><th>Language</th><th>Email Subject</th><th>Email Body</th></tr>';
 
-foreach ($templates as $template)
-{
+foreach ($templates as $template) {
     //todo: generate the row
     echo '<tr>';
     echo '<td><a href="?m=system&u=templating&a=addedit&id=' . $template['email_template_id'] . '">' . w2PshowImage('icons/stock_edit-16.png', 16, 16, '') . '</a></td>';

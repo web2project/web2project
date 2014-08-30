@@ -32,4 +32,4 @@ $types = w2PgetSysVal('ResourceTypes');
 $types[0] = 'Not Specified';
 $customLookups = array('resource_type' => $types);
 
-include $AppUI->getTheme()->resolveTemplate( $m . '/' . $a);
+include $AppUI->getTheme()->resolveTemplate($m . '/' . $a);

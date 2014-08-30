@@ -1,6 +1,6 @@
 <?php
 if (!defined('W2P_BASE_DIR')) {
-	die('You should not access this file directly.');
+    die('You should not access this file directly.');
 }
 // @todo    convert to template
 
@@ -8,14 +8,14 @@ if (!defined('W2P_BASE_DIR')) {
 $canRead = canView($m);
 
 if (!$canRead) {
-	$AppUI->redirect(ACCESS_DENIED);
+    $AppUI->redirect(ACCESS_DENIED);
 }
 
 w2PsetMicroTime();
 
 // retrieve any state parameters
 if (isset($_REQUEST['company_id'])) {
-	$AppUI->setState('CalIdxCompany', intval(w2PgetParam($_REQUEST, 'company_id', 0)));
+    $AppUI->setState('CalIdxCompany', intval(w2PgetParam($_REQUEST, 'company_id', 0)));
 }
 $company_id = $AppUI->getState('CalIdxCompany', 0);
 
@@ -49,10 +49,12 @@ $titleBlock->show();
 ?>
 
 <script language="javascript" type="text/javascript">
-function clickDay( uts, fdate ) {
+function clickDay(uts, fdate)
+{
 	window.location = './index.php?m=events&a=day_view&date='+uts+'&tab=0';
 }
-function clickWeek( uts, fdate ) {
+function clickWeek(uts, fdate)
+{
 	window.location = './index.php?m=events&a=week_view&date='+uts;
 }
 </script>
@@ -71,13 +73,13 @@ $first_time->setTime(0, 0, 0);
 
 // if Sunday is the 1st, we don't need to go back
 // as that's the first day shown on the calendar
-if($first_time->getDayOfWeek() != 0) {
+if ($first_time->getDayOfWeek() != 0) {
     $last_day_of_previous_month = $first_time->getPrevDay();
     $day_of_previous_month = $last_day_of_previous_month->getDayOfWeek();
     $seconds_to_sub_in_previous_month = 86400 * $day_of_previous_month;
     // need to cast it to int because Pear::Date_Span::set down the line
     // fails to set the seconds correctly
-    $last_day_of_previous_month->subtractSeconds((int)$seconds_to_sub_in_previous_month);
+    $last_day_of_previous_month->subtractSeconds((int) $seconds_to_sub_in_previous_month);
 
     $first_time->setDay($last_day_of_previous_month->getDay());
     $first_time->setMonth($last_day_of_previous_month->getMonth());
@@ -90,13 +92,13 @@ $last_time->setTime(23, 59, 59);
 
 // if Saturday is the last day of month, we don't need to go forward
 // as that's the last day shown on the calendar
-if($last_time->getDayOfWeek() != 6) {
+if ($last_time->getDayOfWeek() != 6) {
     $first_day_of_next_month = $last_time->getNextDay();
     $day_of_next_month = $first_day_of_next_month->getDayOfWeek();
     $seconds_to_add_in_next_month = 86400 * $day_of_next_month;
     // need to cast it to int because Pear::Date_Span::set down the line
     // fails to set the seconds correctly
-    $first_day_of_next_month->addSeconds((int)$seconds_to_add_in_next_month);
+    $first_day_of_next_month->addSeconds((int) $seconds_to_add_in_next_month);
     $last_time->setDay($first_day_of_next_month->getDay());
     $last_time->setMonth($first_day_of_next_month->getMonth());
     $last_time->setYear($first_day_of_next_month->getYear());

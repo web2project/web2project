@@ -39,6 +39,7 @@ class AddEdit
         if (!$this->object->bind($myArray)) {
             $AppUI->setMsg($this->object->getError(), UI_MSG_ERROR);
             $this->resultPath = $this->errorPath;
+
             return $AppUI;
         }
 

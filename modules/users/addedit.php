@@ -6,10 +6,8 @@ if (!defined('W2P_BASE_DIR')) {
 $object_id = (int) w2PgetParam($_GET, 'user_id', 0);
 $contact_id = (int) w2PgetParam($_GET, 'contact_id', 0);
 
-
 $object = new CUser();
 $object->setId($object_id);
-
 
 $canAddEdit = $object->canAddEdit();
 $canAuthor = $object->canCreate();
@@ -18,7 +16,7 @@ if (!$canAddEdit) {
     $AppUI->redirect(ACCESS_DENIED);
 }
 
-$crole = new CSystem_Role;
+$crole = new CSystem_Role();
 $roles = $crole->getRoles();
 // Format the roles for use in arraySelect
 $roles_arr = array();
@@ -66,13 +64,14 @@ $titleBlock->show();
 $AppUI->getTheme()->addFooterJavascriptFile('js/passwordstrength.js');
 ?>
 <script language="javascript" type="text/javascript">
-    function submitIt(){
+    function submitIt()
+    {
         var form = document.editFrm;
         if (form.user_username.value.length < <?php echo w2PgetConfig('username_min_len'); ?> && form.user_username.value != '<?php echo w2PgetConfig('admin_username'); ?>') {
             alert("<?php echo $AppUI->_('adminValidUserName', UI_OUTPUT_JS); ?>"  + <?php echo w2PgetConfig('username_min_len'); ?>);
             form.user_username.focus();
             <?php if ($canEdit && !$object_id) { ?>
-        } else if (form.user_role.value <=0 ) {
+        } else if (form.user_role.value <=0) {
             alert("<?php echo $AppUI->_('adminValidRole', UI_OUTPUT_JS); ?>");
             form.user_role.focus();
         } else if (form.user_password.value.length < <?php echo w2PgetConfig('password_min_len'); ?>) {
@@ -96,7 +95,8 @@ $AppUI->getTheme()->addFooterJavascriptFile('js/passwordstrength.js');
         }
     }
 
-    function popDept() {
+    function popDept()
+    {
         var f = document.editFrm;
         if (f.selectedIndex == 0) {
             alert('<?php echo $AppUI->_('Please select a company first!', UI_OUTPUT_JS); ?>');
@@ -108,7 +108,8 @@ $AppUI->getTheme()->addFooterJavascriptFile('js/passwordstrength.js');
     }
 
     // Callback function for the generic selector
-    function setDept( key, val ) {
+    function setDept(key, val)
+    {
         var f = document.editFrm;
         if (val != '') {
             f.contact_department.value = key;
@@ -119,7 +120,8 @@ $AppUI->getTheme()->addFooterJavascriptFile('js/passwordstrength.js');
         }
     }
     <?php if ($canDelete && $object_id) { ?>
-    function delIt() {
+    function delIt()
+    {
         if (confirm( '<?php echo $AppUI->_('doDelete') . ' ' . $AppUI->_('User') . '?'; ?>' )) {
             document.frmDelete.submit();
         }
@@ -150,4 +152,4 @@ $AppUI->getTheme()->addFooterJavascriptFile('js/passwordstrength.js');
 $spacing = ('wps-redmond' == $AppUI->getPref('UISTYLE')) ? 70 : 0;
 echo '<div style="padding-top: ' . $spacing . 'px;"> </div>';
 
-include $AppUI->getTheme()->resolveTemplate( $m . '/' . $a);
+include $AppUI->getTheme()->resolveTemplate($m . '/' . $a);

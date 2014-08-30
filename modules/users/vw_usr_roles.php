@@ -8,12 +8,12 @@ global $AppUI, $user_id, $user_name, $canEdit, $canDelete, $tab;
 
 $perms = &$AppUI->acl();
 $user_roles = $perms->getUserRoles($user_id);
-$crole = new CSystem_Role;
+$crole = new CSystem_Role();
 $roles = $crole->getRoles();
 // Format the roles for use in arraySelect
 $roles_arr = array();
 foreach ($roles as $role) {
-	if ($role['name'] != 'Administrator') {
+    if ($role['name'] != 'Administrator') {
         $roles_arr[$role['id']] = $role['name'];
     } else {
         if ($perms->checkModuleItem('system', 'edit')) {
@@ -31,7 +31,8 @@ foreach ($roles as $role) {
 // else users would be able to arbitrarily run 'bad' functions
 if ($canEdit) {
 ?>
-function delIt(id) {
+function delIt(id)
+{
 	if (confirm( 'Are you sure you want to delete this role?' )) {
 		var f = document.frmRoles;
 		f.del.value = 1;
@@ -39,7 +40,8 @@ function delIt(id) {
 		f.submit();
 	}
 }
-function clearIt(){
+function clearIt()
+{
 	var f = document.frmRoles;
 	f.sqlaction2.value = "<?php echo $AppUI->_('add'); ?>";
 	f.user_role.selectedIndex = 0;
@@ -94,11 +96,11 @@ function clearIt(){
 			</td>
 			<td align="right">
 				<?php
-					if (!count($user_roles)) {
-						echo $AppUI->_('Notify New User Activation');
-						?> <input type='checkbox' name='notify_new_user' />&nbsp;&nbsp;&nbsp;&nbsp;<?php
-					}
-				?>
+                    if (!count($user_roles)) {
+                        echo $AppUI->_('Notify New User Activation');
+                        ?> <input type='checkbox' name='notify_new_user' />&nbsp;&nbsp;&nbsp;&nbsp;<?php
+                    }
+                ?>
 				<input type="submit" value="<?php echo $AppUI->_('add'); ?>" class="button btn btn-primary" name="sqlaction2" />
 			</td>
 		</tr>

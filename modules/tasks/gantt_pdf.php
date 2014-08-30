@@ -1,11 +1,10 @@
 <?php
 if (!defined('W2P_BASE_DIR')) {
-	die('You should not access this file directly.');
+    die('You should not access this file directly.');
 }
 // @todo    remove database query
 
 global $gantt_arr, $w2Pconfig, $gtask_sliced, $printpdfhr, $showNoMilestones;
-
 
 w2PsetExecutionConditions($w2Pconfig);
 
@@ -15,7 +14,6 @@ $f = w2PgetParam($_REQUEST, 'f', 0);
 $showLabels = (int) w2PgetParam($_REQUEST, 'showLabels', 0);
 $showWork = (int) w2PgetParam($_REQUEST, 'showWork', 0);
 
-
 $showPinned = (int) w2PgetParam( $_REQUEST, 'showPinned', false );
 $showArcProjs = (int) w2PgetParam( $_REQUEST, 'showArcProjs', false );
 $showHoldProjs = (int) w2PgetParam( $_REQUEST, 'showHoldProjs', false );
@@ -24,7 +22,6 @@ $showLowTasks = (int) w2PgetParam( $_REQUEST, 'showLowTasks', true);
 
 $project = new CProject();
 $criticalTasks = ($project_id > 0) ? $project->getCriticalTasks($project_id) : null;
-
 
 // pull valid projects and their percent complete information
 $projects = $project->getAllowedProjects($AppUI->user_id, false);
@@ -40,10 +37,10 @@ $caller = w2PgetParam($_REQUEST, 'caller', null);
 $task = new CTask();
 
 if ($caller == 'todo') {
-	$user_id = w2PgetParam($_REQUEST, 'user_id', $AppUI->user_id);
+    $user_id = w2PgetParam($_REQUEST, 'user_id', $AppUI->user_id);
 
-	$projects[$project_id]['project_name'] = $AppUI->_('Todo for') . ' ' . CContact::getContactByUserid($user_id);
-	$projects[$project_id]['project_color_identifier'] = 'ff6000';
+    $projects[$project_id]['project_name'] = $AppUI->_('Todo for') . ' ' . CContact::getContactByUserid($user_id);
+    $projects[$project_id]['project_color_identifier'] = 'ff6000';
 
     $proTasks = __extract_from_gantt_pdf3($user_id, $showArcProjs, $showLowTasks, $showHoldProjs, $showDynTasks, $showPinned, $task, $AppUI);
 } else {
@@ -60,29 +57,29 @@ $start_min = date('Y-m-d H:i:s');
 
 //pull the tasks into an array
 if ($caller != 'todo') {
-	$criticalTasks = $project->getCriticalTasks($project_id);
+    $criticalTasks = $project->getCriticalTasks($project_id);
 }
 
 foreach ($proTasks as $row) {
     $row['task_start_date'] = __extract_from_projects_gantt3($row);
 
-	$tsd = new w2p_Utilities_Date($row['task_start_date']);
-	if ($tsd->before(new w2p_Utilities_Date($start_min))) {
-		$start_min = $row['task_start_date'];
-	}
+    $tsd = new w2p_Utilities_Date($row['task_start_date']);
+    if ($tsd->before(new w2p_Utilities_Date($start_min))) {
+        $start_min = $row['task_start_date'];
+    }
 
     $row['task_end_date'] = __extract_from_projects_gantt4($row);
 
-	$ted = new w2p_Utilities_Date($row['task_end_date']);
-	if ($ted->after(new w2p_Utilities_Date($end_max))) {
-		$end_max = $row['task_end_date'];
-	}
-	if ($ted->after(new w2p_Utilities_Date($projects[$row['task_project']]['project_end_date']))
+    $ted = new w2p_Utilities_Date($row['task_end_date']);
+    if ($ted->after(new w2p_Utilities_Date($end_max))) {
+        $end_max = $row['task_end_date'];
+    }
+    if ($ted->after(new w2p_Utilities_Date($projects[$row['task_project']]['project_end_date']))
         || $projects[$row['task_project']]['project_end_date'] == '') {
-		$projects[$row['task_project']]['project_end_date'] = $row['task_end_date'];
-	}
+        $projects[$row['task_project']]['project_end_date'] = $row['task_end_date'];
+    }
 
-	$projects[$row['task_project']]['tasks'][] = $row;
+    $projects[$row['task_project']]['tasks'][] = $row;
 }
 
 unset($proTasks);
@@ -112,9 +109,9 @@ $e1 = ($gantt_end_date) ? new w2p_Utilities_Date($gantt_end_date) : new w2p_Util
 
 //consider critical (concerning end date) tasks as well
 if ($caller != 'todo') {
-	$start_min = $projects[$project_id]['project_start_date'];
-	$end_max = (($projects[$project_id]['project_end_date'] > $criticalTasks[0]['task_end_date']) 
-				? $projects[$project_id]['project_end_date'] : $criticalTasks[0]['task_end_date']);
+    $start_min = $projects[$project_id]['project_start_date'];
+    $end_max = (($projects[$project_id]['project_end_date'] > $criticalTasks[0]['task_end_date'])
+                ? $projects[$project_id]['project_end_date'] : $criticalTasks[0]['task_end_date']);
 }
 
 $count = 0;
@@ -124,8 +121,8 @@ $count = 0;
 */
 $gtask_sliced = array() ;
 $gtask_sliced = dumb_slice($gantt_arr, 30);// smart_slice( $gantt_arr, $showNoMilestones, $printpdfhr, $e1->dateDiff($s1) );
-$page = 0 ;					// Numbering of output files
-$outpfiles = array();		// array of output files to be returned to caller
+$page = 0 ;                    // Numbering of output files
+$outpfiles = array();        // array of output files to be returned to caller
 
 foreach ($gtask_sliced as $gts) {
     if (!$gantt_start_date || !$gantt_end_date) {
@@ -200,7 +197,7 @@ foreach ($gtask_sliced as $gts) {
 
     $row = 0;
     $gts_count = count($gts);
-    for($i = 0; $i < $gts_count; $i ++) {
+    for ($i = 0; $i < $gts_count; $i ++) {
         $a = $gts[$i][0];
         $level = $gts[$i][1];
         $name = $a['task_name'];
@@ -216,7 +213,7 @@ foreach ($gtask_sliced as $gts) {
         $start_date = new w2p_Utilities_Date($a['task_start_date']);
         $end_date = new w2p_Utilities_Date($a['task_end_date']);
         $start = $start_date->getDate();
-		$end = $end_date->getDate();
+        $end = $end_date->getDate();
 
         $progress = (int) $a['task_percent_complete'];
 
@@ -281,13 +278,13 @@ foreach ($gtask_sliced as $gts) {
                 //yellow for 'in progress' #FF9900
                 //green for 'achieved' #006600
                 // blue for 'planned' #0000FF
-                if ($a['task_percent_complete'] == 100)  {
+                if ($a['task_percent_complete'] == 100) {
                     $color = '#006600';
                 } else {
                     if (strtotime($mile_date) < strtotime($today_date)) {
                         $color = '#990000';
                     } else {
-                        if ($a['task_percent_complete'] == 0)  {
+                        if ($a['task_percent_complete'] == 0) {
                             $color = '#0000FF';
                         } else {
                             $color = '#FF9900';
@@ -326,11 +323,11 @@ foreach ($gtask_sliced as $gts) {
             } else {
                 if ($caller == 'todo') {
                     $columnValues = array('task_name' => $name, 'project_name' => $pname,
-						'duration' => $dur, 'start_date' => $start, 'end_date' => $end,
-						'actual_end' => '');
+                        'duration' => $dur, 'start_date' => $start, 'end_date' => $end,
+                        'actual_end' => '');
                 } else {
                     $columnValues = array('task_name' => $name, 'duration' => $dur,
-						'start_date' => $start, 'end_date' => $end, 'actual_end' => '');
+                        'start_date' => $start, 'end_date' => $end, 'actual_end' => '');
                 }
             }
             $gantt->addBar($columnValues, $caption, $height, '8F8FBD', true, $progress, $a['task_id']);
@@ -355,7 +352,7 @@ $show_gantt = 1;
 $show_gantt_taskdetails = ($showTaskNameOnly == '1') ? 0 : 1;
 $ganttfile = $outpfiles;
 
-// Initialize PDF document 
+// Initialize PDF document
 $font_dir = W2P_BASE_DIR . '/lib/ezpdf/fonts';
 $temp_dir = W2P_BASE_DIR . '/files/temp';
 

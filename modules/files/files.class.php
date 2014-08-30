@@ -5,8 +5,8 @@
  * @todo    refactor static methods
  */
 
-class CFile extends w2p_Core_BaseObject {
-
+class CFile extends w2p_Core_BaseObject
+{
     public $file_id = null;
     public $file_version_id = null;
     public $file_project = null;
@@ -34,7 +34,8 @@ class CFile extends w2p_Core_BaseObject {
     // This "breaks" check-in/upload if helpdesk is not present class variable needs to be added "dymanically"
     //public $file_helpdesk_item = NULL;
 
-    public function __construct() {
+    public function __construct()
+    {
         parent::__construct('files', 'file_id');
     }
 
@@ -47,7 +48,7 @@ class CFile extends w2p_Core_BaseObject {
     {
         if (is_null($this->_file_system)) {
             $file_system = w2PgetConfig('file_system');
-            switch($file_system) {
+            switch ($file_system) {
                 case 'amazon':
                     $file_system = new w2p_FileSystem_Amazon();
                     break;
@@ -63,14 +64,16 @@ class CFile extends w2p_Core_BaseObject {
         return $this->_file_system;
     }
 
-    protected function hook_preStore() {
+    protected function hook_preStore()
+    {
         $this->file_parent = (int) $this->file_parent;
         $this->file_owner = (int) $this->file_owner ? $this->file_owner : $this->_AppUI->user_id;
 
         parent::hook_preStore();
     }
 
-    protected function hook_preCreate() {
+    protected function hook_preCreate()
+    {
         $q = $this->_getQuery();
         $q->addTable('files');
 
@@ -83,7 +86,7 @@ class CFile extends w2p_Core_BaseObject {
             $this->file_version_id = $latest_file_version + 1;
         } else {
             $q->addUpdate('file_checkout', '');
-            $q->addWhere('file_version_id = ' . (int)$this->file_version_id);
+            $q->addWhere('file_version_id = ' . (int) $this->file_version_id);
             $q->exec();
         }
 
@@ -98,9 +101,10 @@ class CFile extends w2p_Core_BaseObject {
      * If not then we are just editing the file information alone. So we should
      *   leave the file_id as it is.
      */
-    protected function hook_preUpdate() {
+    protected function hook_preUpdate()
+    {
         $this->file_parent = $this->file_id;
-        if ((int)$this->file_size > 0) {
+        if ((int) $this->file_size > 0) {
             $this->file_id = 0;
             $this->file_owner = $this->_AppUI->user_id;
         }
@@ -116,7 +120,7 @@ class CFile extends w2p_Core_BaseObject {
         $q->addWhere('file_indexed = 0');
         $unindexedFiles = $q->loadList(5, 'file_id');
 
-        foreach($unindexedFiles as $file_id => $notUsed) {
+        foreach ($unindexedFiles as $file_id => $notUsed) {
             $this->load($file_id);
 
             $indexer = new w2p_FileSystem_Indexer($this->_getQuery());
@@ -143,7 +147,8 @@ class CFile extends w2p_Core_BaseObject {
         return $search;
     }
 
-    public static function getFileList($AppUI = null, $notUsed = 0, $project_id = 0, $task_id = 0, $category_id = 0) {
+    public static function getFileList($AppUI = null, $notUsed = 0, $project_id = 0, $task_id = 0, $category_id = 0)
+    {
         $q = new w2p_Database_Query();
         $q->addQuery('f.*');
         $q->addTable('files', 'f');
@@ -160,10 +165,10 @@ class CFile extends w2p_Core_BaseObject {
         }
 
         if (isset($project_id) && (int) $project_id > 0) {
-            $q->addWhere('file_project = ' . (int)$project_id);
+            $q->addWhere('file_project = ' . (int) $project_id);
         }
         if (isset($task_id) && (int) $task_id > 0) {
-            $q->addWhere('file_task = ' . (int)$task_id);
+            $q->addWhere('file_task = ' . (int) $task_id);
         }
         if ($category_id >= 0) {
             $q->addWhere('file_category = ' . (int) $category_id);
@@ -184,7 +189,8 @@ class CFile extends w2p_Core_BaseObject {
         return ($this->indexer || parent::canView());
     }
 
-    public function canAdmin() {
+    public function canAdmin()
+    {
         if (!$this->file_project) {
             return false;
         }
@@ -219,22 +225,24 @@ class CFile extends w2p_Core_BaseObject {
         return (count($this->_error)) ? false : true;
     }
 
-    public function checkout($userId, $fileId, $coReason) {
+    public function checkout($userId, $fileId, $coReason)
+    {
         $q = $this->_getQuery();
         $q->addTable('files');
         $q->addUpdate('file_checkout', $userId);
         $q->addUpdate('file_co_reason', $coReason);
-        $q->addWhere('file_id = ' . (int)$fileId);
+        $q->addWhere('file_id = ' . (int) $fileId);
         $q->exec();
 
         return true;
     }
 
-    public function cancelCheckout($fileId) {
+    public function cancelCheckout($fileId)
+    {
         $q = $this->_getQuery();
         $q->addTable('files');
         $q->addUpdate('file_checkout', '');
-        $q->addWhere('file_id = ' . (int)$fileId);
+        $q->addWhere('file_id = ' . (int) $fileId);
         $q->exec();
 
         return true;
@@ -251,11 +259,13 @@ class CFile extends w2p_Core_BaseObject {
             // remove the file from the file system
             if (!$this->deleteFile()) {
                 $this->_error['file-delete'] = 'file-delete';
+
                 return false;
             }
 
             $result = parent::delete();
         }
+
         return $result;
     }
 
@@ -275,7 +285,8 @@ class CFile extends w2p_Core_BaseObject {
     }
 
     //function notifies about file changing
-    public function notify($notify) {
+    public function notify($notify)
+    {
         if ($notify == '1') {
             //if no project specified than we will not do anything
             if ($this->file_project != 0) {
@@ -314,7 +325,7 @@ class CFile extends w2p_Core_BaseObject {
                     $q->addJoin('contacts', 'cc', 'c.user_contact = cc.contact_id');
                     $q->addJoin('users', 'a', 'a.user_id = u.user_id');
                     $q->addJoin('contacts', 'ac', 'a.user_contact = ac.contact_id');
-                    $q->addWhere('t.task_id = ' . (int)$this->_task->task_id);
+                    $q->addWhere('t.task_id = ' . (int) $this->_task->task_id);
 
                 } else {
                     //find project owner and notify him about new or modified file
@@ -322,7 +333,7 @@ class CFile extends w2p_Core_BaseObject {
                     $q->addTable('projects', 'p');
                     $q->addQuery('u.user_id, u.user_contact AS owner_contact_id');
                     $q->addWhere('p.project_owner = u.user_id');
-                    $q->addWhere('p.project_id = ' . (int)$this->file_project);
+                    $q->addWhere('p.project_id = ' . (int) $this->file_project);
                 }
                 $this->_users = $q->loadList();
 
@@ -345,7 +356,8 @@ class CFile extends w2p_Core_BaseObject {
         }
     } //notify
 
-    public function notifyContacts($notifyContacts) {
+    public function notifyContacts($notifyContacts)
+    {
         if ($notifyContacts) {
             //if no project specified than we will not do anything
             if ($this->file_project != 0) {
@@ -372,19 +384,19 @@ class CFile extends w2p_Core_BaseObject {
                 if (intval($this->_task->task_id) != 0) {
                     $q->addQuery('c.contact_email as contact_email, c.contact_first_name as contact_first_name, c.contact_last_name as contact_last_name');
                     $q->addJoin('contacts', 'c', 'c.contact_id = pc.contact_id');
-                    $q->addWhere('pc.project_id = ' . (int)$this->_project->project_id);
+                    $q->addWhere('pc.project_id = ' . (int) $this->_project->project_id);
                     $sql = '(' . $q->prepare() . ')';
                     $q->clear();
                     $sql .= ' UNION ';
                     $q->addTable('task_contacts', 'tc');
                     $q->addQuery('c.contact_email as contact_email, c.contact_first_name as contact_first_name, c.contact_last_name as contact_last_name');
                     $q->addJoin('contacts', 'c', 'c.contact_id = tc.contact_id');
-                    $q->addWhere('tc.task_id = ' . (int)$this->_task->task_id);
+                    $q->addWhere('tc.task_id = ' . (int) $this->_task->task_id);
                 } else {
                     $q->addQuery('pc.project_id, pc.contact_id');
                     $q->addQuery('c.contact_email as contact_email, c.contact_first_name as contact_first_name, c.contact_last_name as contact_last_name');
                     $q->addJoin('contacts', 'c', 'c.contact_id = pc.contact_id');
-                    $q->addWhere('pc.project_id = ' . (int)$this->file_project);
+                    $q->addWhere('pc.project_id = ' . (int) $this->file_project);
                 }
                 $this->_users = $q->loadList();
 
@@ -407,11 +419,12 @@ class CFile extends w2p_Core_BaseObject {
     }
 
     /** @deprecated */
-    public function getTaskName() {
+    public function getTaskName()
+    {
         trigger_error("The CFile->getTaskName method has been deprecated in v3.0 and will be removed in v4.0. Please use just load a CTask object instead", E_USER_NOTICE );
 
         $task = new CTask();
-        $task->load((int)$this->file_task);
+        $task->load((int) $this->file_task);
 
         return $task->task_name;
     }
@@ -435,6 +448,7 @@ class CFile extends w2p_Core_BaseObject {
     public function deleteFile()
     {
         $this->load();
+
         return $this->getFileSystem()->delete($this);
     }
 

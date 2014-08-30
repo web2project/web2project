@@ -4,7 +4,7 @@ if (!defined('W2P_BASE_DIR')) {
 }
 // @todo    convert to template
 
-$q = new w2p_Database_Query;
+$q = new w2p_Database_Query();
 $q->addTable('projects');
 $q->addQuery('*');
 $q->addJoin('tasks', '', 'task_project = project_id');
@@ -116,7 +116,7 @@ foreach ($all_tasks as $task) {
     }
 }
 
-$q = new w2p_Database_Query;
+$q = new w2p_Database_Query();
 $q->addTable('files');
 $q->addQuery('sum(file_size)');
 if ($project_id) {

@@ -119,16 +119,16 @@ if ($do_report) {
 <tr>
 	<td>';
 
-	echo '<table cellspacing="1" cellpadding="4" border="0" class="tbl"><tr>';
-	if ($project_id == 0) {
-		echo '<th>Project Name</th>';
-	}
+    echo '<table cellspacing="1" cellpadding="4" border="0" class="tbl"><tr>';
+    if ($project_id == 0) {
+        echo '<th>Project Name</th>';
+    }
     echo '<th>Task Name</th>';
-	echo '<th width=400>Task Description</th>';
-	echo '<th>Assigned To</th>';
-	echo '<th>Task Start Date</th>';
-	echo '<th>Task End Date</th>';
-	echo '<th>Completion</th></tr>';
+    echo '<th width=400>Task Description</th>';
+    echo '<th>Assigned To</th>';
+    echo '<th>Task Start Date</th>';
+    echo '<th>Task End Date</th>';
+    echo '<th>Completion</th></tr>';
 
     $pdfdata = array();
     $columns = array('<b>' . $AppUI->_('Task Name') . '</b>', '<b>' . $AppUI->_('Task Description') . '</b>', '<b>' . $AppUI->_('Assigned To') . '</b>', '<b>' . $AppUI->_('Task Start Date') . '</b>', '<b>' . $AppUI->_('Task End Date') . '</b>', '<b>' . $AppUI->_('Completion') . '</b>');
@@ -150,7 +150,7 @@ if ($do_report) {
 
     foreach ($project_ids as $project_id) {
         $taskTree = $obj->getTaskTree($project_id, 0);
-        foreach($taskTree as $task) {
+        foreach ($taskTree as $task) {
             $str = '<tr>';
             if (count($project_ids) > 1) {
                 $str .= '<td>' . $task['project_name'] . '</td>';
@@ -164,7 +164,7 @@ if ($do_report) {
 
             $users = array();
             $assignees = $obj->assignees($task['task_id']);
-            foreach($assignees as $assignee) {
+            foreach ($assignees as $assignee) {
                 $users[] = $assignee['contact_name'];
             }
             $str .= '<td>' . implode($users, ', ') . '</td>';

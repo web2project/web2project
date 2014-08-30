@@ -1,6 +1,6 @@
 <?php
 if (!defined('W2P_BASE_DIR')) {
-	die('You should not access this file directly.');
+    die('You should not access this file directly.');
 }
 
 global $AppUI, $company_id, $deny, $canRead, $canEdit;
@@ -13,11 +13,11 @@ $denied_folders_ary  = $cfObj->getDeniedRecords($AppUI->user_id);
 $limited = (count($allowed_folders_ary) < $cfObj->countFolders()) ? true : false;
 
 if (!$limited) {
-	$canEdit = true;
+    $canEdit = true;
 } elseif ($limited and array_key_exists($folder, $allowed_folders_ary)) {
-	$canEdit = true;
+    $canEdit = true;
 } else {
-	$canEdit = false;
+    $canEdit = false;
 }
 $showProject = false;
 
@@ -33,4 +33,4 @@ $showProject = false;
  */
 $currentTabId = 100;
 
-require (W2P_BASE_DIR . '/modules/files/index_table.php');
+require W2P_BASE_DIR . '/modules/files/index_table.php';

@@ -63,7 +63,7 @@ echo $AppUI->getTheme()->styleRenderBoxTop();
 <?php
 if ($do_report) {
 
-    $q = new w2p_Database_Query;
+    $q = new w2p_Database_Query();
     $q->addTable('tasks', 't');
     $q->addTable('users', 'u');
     $q->addTable('projects', 'p');

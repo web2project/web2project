@@ -27,12 +27,12 @@ foreach ($LANGUAGES as $lang => $langinfo) {
 $template->email_template_language = ('' == $template->email_template_language || 'en' == $template->email_template_language) ?
     'en_US' : $template->email_template_language;
 
-
 $form = new w2p_Output_HTML_FormHelper($AppUI);
 
 ?>
 <script language="javascript" type="text/javascript">
-    function submitIt() {
+    function submitIt()
+    {
         var form = document.addedit;
         form.submit();
     }

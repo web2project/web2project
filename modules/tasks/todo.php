@@ -1,16 +1,15 @@
 <?php
 if (!defined('W2P_BASE_DIR')) {
-	die('You should not access this file directly.');
+    die('You should not access this file directly.');
 }
 // @todo    remove database query
 
 global $AppUI, $task_type, $min_view;
 
-
 $tab = $AppUI->processIntState('ToDoTab', $_GET, 'tab', 0);
 
 if (isset($_POST['task_type'])) {
-	$AppUI->setState('ToDoTaskType', w2PgetParam($_POST, 'task_type', ''));
+    $AppUI->setState('ToDoTaskType', w2PgetParam($_POST, 'task_type', ''));
 }
 
 $task_type = $AppUI->getState('ToDoTaskType') !== null ? $AppUI->getState('ToDoTaskType') : '';
@@ -25,13 +24,13 @@ $other_users = false;
 
 // retrieve any state parameters
 if (isset($_POST['show_form'])) {
-	$AppUI->setState('TaskDayShowArc', w2PgetParam($_POST, 'show_arc_proj', 0));
-	$AppUI->setState('TaskDayShowLow', w2PgetParam($_POST, 'show_low_task', 0));
-	$AppUI->setState('TaskDayShowHold', w2PgetParam($_POST, 'show_hold_proj', 0));
-	$AppUI->setState('TaskDayShowDyn', w2PgetParam($_POST, 'show_dyn_task', 0));
-	$AppUI->setState('TaskDayShowPin', w2PgetParam($_POST, 'show_pinned', 0));
-	$AppUI->setState('TaskDayShowEmptyDate', w2PgetParam($_POST, 'show_empty_date', 0));
-	$AppUI->setState('TaskDayShowInProgress', w2PgetParam($_POST, 'show_inprogress', 0));
+    $AppUI->setState('TaskDayShowArc', w2PgetParam($_POST, 'show_arc_proj', 0));
+    $AppUI->setState('TaskDayShowLow', w2PgetParam($_POST, 'show_low_task', 0));
+    $AppUI->setState('TaskDayShowHold', w2PgetParam($_POST, 'show_hold_proj', 0));
+    $AppUI->setState('TaskDayShowDyn', w2PgetParam($_POST, 'show_dyn_task', 0));
+    $AppUI->setState('TaskDayShowPin', w2PgetParam($_POST, 'show_pinned', 0));
+    $AppUI->setState('TaskDayShowEmptyDate', w2PgetParam($_POST, 'show_empty_date', 0));
+    $AppUI->setState('TaskDayShowInProgress', w2PgetParam($_POST, 'show_inprogress', 0));
 }
 
 // Required for today view.
@@ -44,14 +43,14 @@ $showEmptyDate = $AppUI->getState('TaskDayShowEmptyDate', 0);
 $showInProgress = $AppUI->getState('TaskDayShowInProgress', 0);
 
 if (canView('users')) { // let's see if the user has sysadmin access
-	$other_users = true;
-	if (($show_uid = w2PgetParam($_REQUEST, 'show_user_todo', 0)) != 0) { // lets see if the user wants to see anothers user mytodo
-		$user_id = $show_uid;
-		$no_modify = true;
-		$AppUI->setState('tasks_todo_user_id', $user_id);
-	} elseif ($AppUI->getState('tasks_todo_user_id')) {
-		$user_id = $AppUI->getState('tasks_todo_user_id');
-	}
+    $other_users = true;
+    if (($show_uid = w2PgetParam($_REQUEST, 'show_user_todo', 0)) != 0) { // lets see if the user wants to see anothers user mytodo
+        $user_id = $show_uid;
+        $no_modify = true;
+        $AppUI->setState('tasks_todo_user_id', $user_id);
+    } elseif ($AppUI->getState('tasks_todo_user_id')) {
+        $user_id = $AppUI->getState('tasks_todo_user_id');
+    }
 }
 
 // check permissions
@@ -72,8 +71,8 @@ if (is_array($selected) && count($selected)) {
     __extract_from_tasks_todo($selected, $task_priority);
 }
 
-$proj = new CProject;
-$tobj = new CTask;
+$proj = new CProject();
+$tobj = new CTask();
 
 $allowedProjects = $proj->getAllowedSQL($AppUI->user_id,'pr.project_id');
 $allowedTasks = $tobj->getAllowedSQL($AppUI->user_id, 'ta.task_id');
@@ -85,23 +84,23 @@ $tasks = __extract_from_todo($user_id, $showArcProjs, $showLowTasks, $showInProg
 */
 for ($j = 0, $j_cmp = count($tasks); $j < $j_cmp; $j++) {
 
-	if ($tasks[$j]['task_end_date'] == '0000-00-00 00:00:00' || $tasks[$j]['task_end_date'] == '') {
-		if ($tasks[$j]['task_start_date'] == '0000-00-00 00:00:00' || $tasks[$j]['task_start_date'] == '') {
-			$tasks[$j]['task_start_date'] = '0000-00-00 00:00:00'; //just to be sure start date is "zeroed"
-			$tasks[$j]['task_end_date'] = '0000-00-00 00:00:00';
-		} else {
-			$tasks[$j]['task_end_date'] = calcEndByStartAndDuration($tasks[$j]);
-		}
-	}
+    if ($tasks[$j]['task_end_date'] == '0000-00-00 00:00:00' || $tasks[$j]['task_end_date'] == '') {
+        if ($tasks[$j]['task_start_date'] == '0000-00-00 00:00:00' || $tasks[$j]['task_start_date'] == '') {
+            $tasks[$j]['task_start_date'] = '0000-00-00 00:00:00'; //just to be sure start date is "zeroed"
+            $tasks[$j]['task_end_date'] = '0000-00-00 00:00:00';
+        } else {
+            $tasks[$j]['task_end_date'] = calcEndByStartAndDuration($tasks[$j]);
+        }
+    }
 }
 
 $priorities = w2PgetSysval('TaskPriority');
 $durnTypes = w2PgetSysVal('TaskDurationType');
 
 if ('todo' == $a) {
-	$titleBlock = new w2p_Theme_TitleBlock('My Tasks To Do', 'icon.png', $m);
-	$titleBlock->addCrumb('?m=tasks', 'tasks list');
-	$titleBlock->show();
+    $titleBlock = new w2p_Theme_TitleBlock('My Tasks To Do', 'icon.png', $m);
+    $titleBlock->addCrumb('?m=tasks', 'tasks list');
+    $titleBlock->show();
 }
 
 // If we are called from anywhere but directly, we would end up with
@@ -124,5 +123,5 @@ if ($m == 'tasks' && $a == 'todo') {
     </table>
     <?php
 } else {
-	include W2P_BASE_DIR . '/modules/tasks/todo_tasks_sub.php';
+    include W2P_BASE_DIR . '/modules/tasks/todo_tasks_sub.php';
 }

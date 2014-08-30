@@ -14,13 +14,13 @@ $ok = $callback & $table;
 
 $title = 'Generic Selector';
 
-$q = new w2p_Database_Query;
+$q = new w2p_Database_Query();
 $q->addTable($table);
 $query_result = false;
 
 switch ($table) {
     case 'companies':
-        $obj = new CCompany;
+        $obj = new CCompany();
         $title = 'Company';
         $q->addQuery('company_id, company_name');
         $q->addOrder('company_name');
@@ -31,7 +31,7 @@ switch ($table) {
         // known issue: does not filter out denied companies
         $title = 'Department';
         $company_id = w2PgetParam($_GET, 'company_id', 0);
-        $obj = new CDepartment;
+        $obj = new CDepartment();
         $q->addWhere(selPermWhere($obj, 'dept_id', 'dept_name'));
         $q->addWhere('dept_company = company_id ');
         $q->addTable('companies', 'b');

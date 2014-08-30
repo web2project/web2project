@@ -183,7 +183,7 @@ class CCompany extends w2p_Core_BaseObject
 					OR (contact_private=1 AND contact_owner=' . $this->_AppUI->user_id . ')
 					OR contact_owner IS NULL OR contact_owner = 0
 				)');
-            $department = new CDepartment;
+            $department = new CDepartment();
 //TODO: We need to convert this from static to use ->overrideDatabase() for testing.
             $q = $department->setAllowedSQL($this->_AppUI->user_id, $q);
 
@@ -207,7 +207,7 @@ class CCompany extends w2p_Core_BaseObject
         $q->addWhere('contact_company = ' . (int) $companyId);
         $q->addOrder('contact_last_name, contact_first_name');
 
-        $department = new CDepartment;
+        $department = new CDepartment();
 //TODO: We need to convert this from static to use ->overrideDatabase() for testing.
         $q = $department->setAllowedSQL($this->_AppUI->user_id, $q);
 

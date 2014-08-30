@@ -1,6 +1,6 @@
 <?php
 if (!defined('W2P_BASE_DIR')) {
-	die('You should not access this file directly.');
+    die('You should not access this file directly.');
 }
 // @todo    remove database query
 
@@ -18,9 +18,9 @@ $projectStatus = arrayMerge(array('-2' => $AppUI->_('All w/o in progress')), $pr
 $user_id = w2PgetParam($_REQUEST, 'user_id', $AppUI->user_id);
 
 if ($AppUI->user_id == $user_id) {
-	$projectStatus = arrayMerge(array('-3' => $AppUI->_('My projects')), $projectStatus);
+    $projectStatus = arrayMerge(array('-3' => $AppUI->_('My projects')), $projectStatus);
 } else {
-	$projectStatus = arrayMerge(array('-3' => $AppUI->_('User\'s projects')), $projectStatus);
+    $projectStatus = arrayMerge(array('-3' => $AppUI->_('User\'s projects')), $projectStatus);
 }
 
 $proFilter = w2PgetParam($_REQUEST, 'proFilter', '0');
@@ -57,25 +57,25 @@ $gantt->setColumnHeaders($columnNames, $columnSizes);
  *  TODO: Technically, doing the date math below using the strtotime is bad
  *     form because it is suseptible to the 2038 date bug. Hopefully, we'll
  *     either have this bug fixed and resolved by then and/or no one is
- *     scheduling projects 28 years into the future. Regardless, it's much 
+ *     scheduling projects 28 years into the future. Regardless, it's much
  *     easier than actual date math.
  *     ~ caseydk 22 Aug 2010
  */
 if (!$start_date || !$end_date) {
-	$i = 0;
-	foreach ($projects as $project) {
-		$start = substr($project["project_start_date"], 0, 10);
+    $i = 0;
+    foreach ($projects as $project) {
+        $start = substr($project["project_start_date"], 0, 10);
         $lastTask = $pjobj->getCriticalTasks($project['project_id']);
         $end = substr($lastTask[0]['task_end_date'], 0, 10);
 
         $d_start = strtotime($start);
         $d_end = strtotime($end);
-		if ($i == 0) {
-			$min_d_start = $d_start;
+        if ($i == 0) {
+            $min_d_start = $d_start;
             $start_date = $start;
-			$max_d_end = $d_end;
+            $max_d_end = $d_end;
             $end_date = $end;
-		} else {
+        } else {
             if ($d_start < $min_d_start) {
                 $min_d_start = $d_start;
                 $start_date = $start;
@@ -84,9 +84,9 @@ if (!$start_date || !$end_date) {
                 $max_d_end = $d_end;
                 $end_date = $end;
             }
-		}
-		$i++;
-	}
+        }
+        $i++;
+    }
 }
 $gantt->SetDateRange($start_date, $end_date);
 
@@ -104,7 +104,6 @@ if (!is_array($projects) || sizeof($projects) == 0) {
         if ($showAllGantt) {
             $task = new CTask();
             $proTasks = __extract_from_subprojects_gantt2($original_project_id, $task, $AppUI);
-
 
             $orrarr[] = array('task_id' => 0, 'order_up' => 0, 'order' => '');
 

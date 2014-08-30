@@ -82,7 +82,7 @@ if ($do_report) {
 
     $total = 0;
 
-    $q = new w2p_Database_Query;
+    $q = new w2p_Database_Query();
     if ($fullaccess) {
         $q->addTable('companies');
         $q->addQuery('company_id');

@@ -67,7 +67,7 @@ $company_name = '';
 $contacts_id = array_filter(explode(',', $selected_contacts_id));
 $selected_contacts_id = implode(',', $contacts_id);
 
-$q = new w2p_Database_Query;
+$q = new w2p_Database_Query();
 
 if (strlen($selected_contacts_id) > 0 && !$show_all && !$company_id) {
     $q->addTable('contacts');

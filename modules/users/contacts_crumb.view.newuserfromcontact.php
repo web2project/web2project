@@ -1,6 +1,6 @@
 <?php
 if (!defined('W2P_BASE_DIR')) {
-	die('You should not access this file directly.');
+    die('You should not access this file directly.');
 }
 global $AppUI, $titleBlock, $contact_id, $is_user;
 $perms = &$AppUI->acl();

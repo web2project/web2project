@@ -1,6 +1,6 @@
 <?php
 if (!defined('W2P_BASE_DIR')) {
-	die('You should not access this file directly');
+    die('You should not access this file directly');
 }
 // @todo    convert to template
 
@@ -9,14 +9,14 @@ $canRead = $forum->canView();
 $canAdd  = $forum->canCreate();
 
 if (!$canRead) {
-	$AppUI->redirect(ACCESS_DENIED);
+    $AppUI->redirect(ACCESS_DENIED);
 }
 
 // retrieve any state parameters
 if (isset($_GET['orderby'])) {
-	$orderdir = $AppUI->getState('ForumIdxOrderDir') ? ($AppUI->getState('ForumIdxOrderDir') == 'asc' ? 'desc' : 'asc') : 'desc';
-	$AppUI->setState('ForumIdxOrderBy', w2PgetParam($_GET, 'orderby', null));
-	$AppUI->setState('ForumIdxOrderDir', $orderdir);
+    $orderdir = $AppUI->getState('ForumIdxOrderDir') ? ($AppUI->getState('ForumIdxOrderDir') == 'asc' ? 'desc' : 'asc') : 'desc';
+    $AppUI->setState('ForumIdxOrderBy', w2PgetParam($_GET, 'orderby', null));
+    $AppUI->setState('ForumIdxOrderDir', $orderdir);
 }
 $orderby = $AppUI->getState('ForumIdxOrderBy') ? $AppUI->getState('ForumIdxOrderBy') : 'forum_name';
 $orderdir = $AppUI->getState('ForumIdxOrderDir') ? $AppUI->getState('ForumIdxOrderDir') : 'asc';

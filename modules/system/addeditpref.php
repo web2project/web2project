@@ -1,6 +1,6 @@
 <?php
 if (!defined('W2P_BASE_DIR')) {
-	die('You should not access this file directly.');
+    die('You should not access this file directly.');
 }
 // @todo    remove database query
 
@@ -14,7 +14,7 @@ $perms = &$AppUI->acl();
 $canEdit = canEdit('system');
 // Check permissions
 if (!$canEdit && $user_id != $AppUI->user_id) {
-	$AppUI->redirect(ACCESS_DENIED);
+    $AppUI->redirect(ACCESS_DENIED);
 }
 
 // load the preferences
@@ -22,21 +22,22 @@ $prefs = getPreferences($user_id);
 
 // get the user name
 if ($user_id) {
-	$user = CContact::getContactByUserid($user_id);
+    $user = CContact::getContactByUserid($user_id);
 } else {
-	$user = 'Default';
+    $user = 'Default';
 }
 
 $titleBlock = new w2p_Theme_TitleBlock('Edit User Preferences', 'myevo-weather.png', $m);
 $perms = &$AppUI->acl();
 if ($canEdit) {
-	$titleBlock->addCrumb('?m=system', 'system admin');
-	$titleBlock->addCrumb('?m=system&a=systemconfig', 'system configuration');
+    $titleBlock->addCrumb('?m=system', 'system admin');
+    $titleBlock->addCrumb('?m=system&a=systemconfig', 'system configuration');
 }
 $titleBlock->show();
 ?>
 <script language="javascript" type="text/javascript">
-function submitIt() {
+function submitIt()
+{
 	var form = document.changeuser;
 	// Collate the checked states of the task log stuff
 	var defs = document.getElementById('task_log_email_defaults');
@@ -194,7 +195,7 @@ $currencies = array();
 $currEx = 1234567.89;
 
 foreach (array_keys($LANGUAGES) as $lang) {
-	$currencies[$lang] = formatCurrency($currEx, $AppUI->setUserLocale($lang, false));
+    $currencies[$lang] = formatCurrency($currEx, $AppUI->setUserLocale($lang, false));
 }
 $prefs['CURRENCYFORM'] = ('' == $prefs['CURRENCYFORM']) ? 'en_US' : $prefs['CURRENCYFORM'];
 echo arraySelect($currencies, 'pref_name[CURRENCYFORM]', 'class=text size=1', $prefs['CURRENCYFORM'], false);
@@ -222,7 +223,7 @@ $AppUI->setWarning($temp);
 $tam = ($prefs['TASKASSIGNMAX'] > 0) ? $prefs['TASKASSIGNMAX'] : 100;
 $taskAssMax = array();
 for ($i = 5; $i <= 200; $i += 5) {
-	$taskAssMax[$i] = $i . '%';
+    $taskAssMax[$i] = $i . '%';
 }
 echo arraySelect($taskAssMax, 'pref_name[TASKASSIGNMAX]', 'class=text size=1', $tam, false);
 
@@ -255,24 +256,24 @@ echo arraySelect($notify_filter, 'pref_name[MAILALL]', 'class=text size=1', $pre
 		<input type="hidden" name="pref_name[TASKLOGEMAIL]" id="task_log_email_defaults" value="<?php echo $prefs['TASKLOGEMAIL']; ?>" />
 <?php
 if (!isset($prefs['TASKLOGEMAIL'])) {
-	$prefs['TASKLOGEMAIL'] = 0;
+    $prefs['TASKLOGEMAIL'] = 0;
 }
 $tl_assign = $prefs['TASKLOGEMAIL'] & 1;
 $tl_task = $prefs['TASKLOGEMAIL'] & 2;
 $tl_proj = $prefs['TASKLOGEMAIL'] & 4;
 echo '<p><label for="tl_assign">' . $AppUI->_('Email Assignees') . '</label>&nbsp;<input type="checkbox" name="tl_assign" id="tl_assign"';
 if ($tl_assign) {
-	echo ' checked="checked"';
+    echo ' checked="checked"';
 }
 echo ' /></p>';
 echo '<p><label for="tl_task">' . $AppUI->_('Email Task Contacts') . '</label>&nbsp;<input type="checkbox" name="tl_task" id="tl_task"';
 if ($tl_task) {
-	echo 'checked="checked"';
+    echo 'checked="checked"';
 }
 echo ' /></p>';
 echo '<p><label for="tl_proj">' . $AppUI->_('Email Project Contacts') . '</label>&nbsp;<input type="checkbox" name="tl_proj" id="tl_proj"';
 if ($tl_proj) {
-	echo ' checked="checked"';
+    echo ' checked="checked"';
 }
 echo ' /></p>';
 ?>
@@ -299,11 +300,11 @@ echo ' /></p>';
 	<td>
 		<input type="hidden" name="pref_name[TASKSEXPANDED]" id="tasks_expanded" value="<?php echo $prefs['TASKSEXPANDED']; ?>" />
         <?php
-		echo '<input type="checkbox" name="expanded"';
-		if ($prefs['TASKSEXPANDED']) {
-			echo ' checked="checked"';
-		}
-		echo ' />';
+        echo '<input type="checkbox" name="expanded"';
+        if ($prefs['TASKSEXPANDED']) {
+            echo ' checked="checked"';
+        }
+        echo ' />';
         ?>
 	</td>
 </tr>
