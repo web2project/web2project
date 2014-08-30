@@ -309,25 +309,4 @@ class CTask_LogsTest extends CommonSetup
         */
         $this->AssertEquals(0, $this->obj->task_log_id);
     }
-
-    /**
-     * Tests that the proper error message is returned when a task log is attempted
-     * to be created without a creator.
-     */
-    public function testCreateLinkNoOwner()
-    {
-        unset($this->post_data['task_log_creator']);
-        $this->obj->bind($this->post_data);
-
-        /**
-        * Verify we got the proper error message
-        */
-        $this->assertFalse($this->obj->store());
-        $this->assertArrayHasKey('task_log_creator', $this->obj->getError());
-
-        /**
-        * Verify that the id was not set
-        */
-        $this->AssertEquals(0, $this->obj->task_log_id);
-    }
 }
