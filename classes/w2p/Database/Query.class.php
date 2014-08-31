@@ -1135,7 +1135,9 @@ class w2p_Database_Query {
 			$this->_query_id = $this->_db->_Execute($q);
 			if (!$this->_query_id) {
 				$error = $this->_db->ErrorMsg();
-				dprint(__file__, __line__, 0, "query failed($q)" . ' - error was: <span style="color:red">' . $error . '</span>');
+                if ('' != $error) {
+                    dprint(__file__, __line__, 0, "query failed($q)" . ' - error was: <span style="color:red">' . $error . '</span>');
+                }
 				return $this->_query_id;
 			}
 			if (W2P_PERFORMANCE_DEBUG) {

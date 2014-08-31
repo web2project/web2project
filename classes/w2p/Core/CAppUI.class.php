@@ -764,7 +764,8 @@ class w2p_Core_CAppUI
         }
         $auth = &getauth($auth_method);
 
-        $username = trim(db_escape($username));
+        $username = preg_replace("/[^A-Za-z0-9_]/", "", $username);
+        $username = trim($username);
         $password = trim($password);
 
         if (!$auth->authenticate($username, $password)) {
@@ -785,7 +786,7 @@ class w2p_Core_CAppUI
 
         $q = new w2p_Database_Query;
         $q->addTable('users');
-        $q->addQuery('user_id, contact_first_name as user_first_name, user_email, ' .
+        $q->addQuery('user_id, contact_first_name as user_first_name, ' .
             'contact_last_name as user_last_name, contact_display_name as user_display_name, ' .
             'contact_company as user_company, contact_department as user_department, user_type');
         $q->addJoin('contacts', 'con', 'con.contact_id = user_contact', 'inner');

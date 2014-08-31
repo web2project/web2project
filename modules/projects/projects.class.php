@@ -428,8 +428,10 @@ class CProject extends w2p_Core_BaseObject
             $this->project_start_date = $date->format(FMT_DATETIME_MYSQL);
         }
 
-        $date = new w2p_Utilities_Date($this->project_end_date);
-        $this->project_end_date = $date->format(FMT_DATETIME_MYSQL);
+        if ($this->project_end_date) {
+            $date = new w2p_Utilities_Date($this->project_end_date);
+            $this->project_end_date = $date->format(FMT_DATETIME_MYSQL);
+        }
 
         // check project parents and reset them to self if they do not exist
         if (!$this->project_parent) {

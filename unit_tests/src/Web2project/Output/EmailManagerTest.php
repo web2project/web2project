@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Class for testing Web2project\Output\EmailManager functionality
  *
@@ -15,9 +14,6 @@
  * @license     Clear BSD
  * @link        http://www.web2project.net
  */
-
-// NOTE: This path is relative to Phing's build.xml, not this test.
-include_once 'unit_tests/CommonSetup.php';
 
 class Web2project_Output_EmailManagerTest extends CommonSetup
 {
@@ -72,7 +68,7 @@ class Web2project_Output_EmailManagerTest extends CommonSetup
 
         $target_body  = "Dear Mr. Monkey,\n\nIt was very nice to visit you. Thank you for all the time that you spent with me.\n\n";
         $target_body .= "I have entered the data from your business card into my contact database so that we may keep in touch. We have implemented a system which allows you to view the information that I've recorded and give you the opportunity to correct it or add information as you see fit. Please click on this link to view what I've recorded:\n\n";
-        $target_body .= "http:///Users/caseydk/pear/share/pear/updatecontact.php?updatekey=testkey\n\n";
+        $target_body .= W2P_BASE_URL . "/updatecontact.php?updatekey=testkey\n\n";
         $target_body .= "I assure you that the information will be held in strict confidence and will not be available to anyone other than me. I realize that you may not feel comfortable filling out the entire form so please supply only what you're comfortable with.\n\n";
         $target_body .= "Thank you. I look forward to seeing you again, soon.\n\nBest Regards,\nAdmin Person";
 
@@ -145,8 +141,8 @@ class Web2project_Output_EmailManagerTest extends CommonSetup
 
         $target_body  = "Project:\tProject Name\n";
         $target_body .= "Task:\t\tMy Task\n";
-        $target_body .= "Priority:\t\t1\n";
-        $target_body .= "Progress:\t\t50%\n";
+        $target_body .= "Priority:\t1\n";
+        $target_body .= "Progress:\t50%\n";
         $target_body .= "Start Date:\t30/Jan/2010 06:30 am CST\n";
         $target_body .= "Finish Date:\t02/Feb/2011 06:45 am CST\n";
         $target_body .= "URL:\t\t" . W2P_BASE_URL . "/index.php?m=tasks&a=view&task_id=-1\n\n";
@@ -168,7 +164,7 @@ class Web2project_Output_EmailManagerTest extends CommonSetup
 
         $target_body  = "Project:     \n";
         $target_body .= "Task:         Task Name\n";
-        $target_body .= "URL:         http:///Users/caseydk/pear/share/pear/index.php?m=tasks&a=view&task_id=-1\n\n";
+        $target_body .= "URL:         " . W2P_BASE_URL . "/index.php?m=tasks&a=view&task_id=-1\n\n";
         $target_body .= "Task Description:\nsomething cool\n";
         $target_body .= "Creator: Admin Person\n\n";
         $target_body .= "Progress: 45%\n\n";

@@ -1,6 +1,4 @@
 <?php
-/* vim: set expandtab tabstop=4 shiftwidth=4 softtabstop=4: */
-
 /**
  * Class for testing FileSystem Loader functionality
  *
@@ -17,9 +15,6 @@
  * @license     Clear BSD
  * @link        http://www.web2project.net
  */
-
-// NOTE: This path is relative to Phing's build.xml, not this test.
-include_once 'unit_tests/CommonSetup.php';
 
 class w2p_FileSystem_LoaderTest extends CommonSetup
 {
@@ -46,7 +41,7 @@ class w2p_FileSystem_LoaderTest extends CommonSetup
     }
 
     public function testReadFiles() {
-        $files1 = $this->obj->readFiles('.');
+        $files1 = $this->obj->readFiles('..');
 
         $this->assertTrue(array_key_exists('COPYING', $files1));
         $this->assertTrue(array_key_exists('index.php', $files1));
