@@ -67,7 +67,7 @@ class CForum_Message extends w2p_Core_BaseObject
                 $q->addTable('forum_messages');
                 $q->addQuery('count(message_id), MAX(message_date)');
                 $q->addWhere('message_forum = ' . (int) $this->message_forum);
-                $reply = $q->fetchRow();
+                $reply = $q->loadHash();
 
                 //update forum descriptor
                 $forum = new CForum();
@@ -151,7 +151,7 @@ class CForum_Message extends w2p_Core_BaseObject
         $q->addJoin('contacts', 'con', 'contact_id = user_contact', 'inner');
         $q->addWhere('user_id = ' . (int) $this->message_author);
         $q->exec();
-        if ($row = $q->fetchRow()) {
+        if ($row = $q->loadHash()) {
             $message_from = $row['contact_first_name'] . ' ' . $row['contact_last_name'] . '<' . $row['contact_email'] . '>';
         } else {
             $message_from = 'Unknown user';
@@ -162,7 +162,7 @@ class CForum_Message extends w2p_Core_BaseObject
         $q->addQuery('forum_name');
         $q->addWhere('forum_id = \'' . $this->message_forum . '\'');
         $res = $q->exec();
-        if ($row = $q->fetchRow()) {
+        if ($row = $q->loadHash()) {
             $forum_name = $row['forum_name'];
         } else {
             $forum_name = 'Unknown';

@@ -453,7 +453,7 @@ class w2p_Extensions_Permissions extends gacl_api
 
         $result = array();
         $q->exec();
-        while ($row = $q->fetchRow()) {
+        while ($row = $q->loadHash()) {
             $result[] = array('id' => $row[0], 'name' => $row[1], 'value' => $row[2], 'parent_id' => $row[3]);
         }
         $q->clear();
@@ -512,7 +512,7 @@ class w2p_Extensions_Permissions extends gacl_api
                 $q->clear();
                 return false;
             }
-            $row = $q->fetchRow();
+            $row = $q->loadHash();
             if ($row) {
                 $this->addLogin($user, $row['user_username']);
             }
@@ -678,7 +678,7 @@ class w2p_Extensions_Permissions extends gacl_api
 
         $result = array();
         $q->exec();
-        while ($row = $q->fetchRow()) {
+        while ($row = $q->loadHash()) {
             $result[] = array('id' => $row[0], 'name' => $row[1], 'value' => $row[2], 'parent_id' => $row[3]);
         }
         $q->clear();
@@ -733,7 +733,7 @@ class w2p_Extensions_Permissions extends gacl_api
         }
 
         $q->exec();
-        $row = $q->fetchRow();
+        $row = $q->loadHash();
         $q->clear();
 
         if (!is_array($row)) {
@@ -794,7 +794,7 @@ class w2p_Extensions_Permissions extends gacl_api
         $retarr = array();
 
         $q->exec();
-        while ($row = $q->fetchRow()) {
+        while ($row = $q->loadHash()) {
             $retarr[] = array('id' => $row[0], 'section_value' => $row[1], 'name' => $row[2], 'value' => $row[3], 'order_value' => $row[4], 'hidden' => $row[5]);
         }
         $q->clear();
@@ -848,7 +848,7 @@ class w2p_Extensions_Permissions extends gacl_api
 
         $retarr = array();
 
-        while ($row = $q->fetchRow()) {
+        while ($row = $q->loadHash()) {
             $retarr[] = array('id' => $row[0], 'value' => $row[1], 'name' => $row[2], 'order_value' => $row[3], 'hidden' => $row[4]);
         }
         $q->clear();

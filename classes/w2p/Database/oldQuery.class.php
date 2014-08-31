@@ -153,7 +153,7 @@ class w2p_Database_oldQuery {
 				$qid = $this->_db->Execute('EXPLAIN ' . $q);
 				if ($qid) {
 					$res = array();
-					while ($row = $this->fetchRow()) {
+					while ($row = $this->loadHash()) {
 						$res[] = $row;
 					}
 					dprint(__file__, __line__, 0, 'QUERY DEBUG: ' . var_export($res, true));
