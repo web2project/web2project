@@ -22,7 +22,7 @@ class Web2project_Utilities_PaginatorTest extends CommonSetup
             $items[] = chr($i);
         }
 
-        $this->paginator = new w2p_Utilities_Paginator($items, 10);
+        $this->paginator = new \Web2project\Utilities\Paginator($items, 10);
     }
 
     public function testGetItemsOnPage()

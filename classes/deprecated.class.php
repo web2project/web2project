@@ -489,3 +489,17 @@ class w2p_Output_Email_Template extends \Web2project\Output\Email\Manager
         parent::__construct();
     }
 }
+
+/**
+ * @package     web2project\deprecated
+ * @deprecated  since version 4.0
+ */
+class w2p_Utilities_Paginator extends \Web2project\Utilities\Paginator
+{
+    public function __construct(array $items, $pagesize = 0)
+    {
+        trigger_error("w2p_Utilities_Paginator has been deprecated in v4.0 and will be removed by v5.0. Please use \\Web2project\\Utilities\\Paginator instead.", E_USER_NOTICE );
+
+        parent::__construct($items, $pagesize);
+    }
+}

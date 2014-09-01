@@ -1,4 +1,5 @@
-<?php /* $Id$ $URL$ */
+<?php
+namespace Web2project\Utilities;
 
 /**
  * This class takes an array of items and allows us to paginate over them. This
@@ -9,7 +10,7 @@
  *
  */
 
-class w2p_Utilities_Paginator
+class Paginator
 {
     protected $_itemList    = array();
     protected $_itemCount   = 0;
