@@ -2090,7 +2090,9 @@ class CTask extends w2p_Core_BaseObject
 */
 
        if (!$this->task_reminder) {
-            return;
+         // Find if we have a reminder on this task already and clear it
+      	 $this->clearReminder(true);
+         return;
         }
 
 
