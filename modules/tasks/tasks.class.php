@@ -700,6 +700,7 @@ class CTask extends w2p_Core_BaseObject
             $last_task_data['last_date'],
             $this->getTaskCount($this->task_project)
         );
+		$this->addReminder();
 
         parent::hook_postStore();
     }
