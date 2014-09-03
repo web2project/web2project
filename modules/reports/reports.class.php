@@ -3,7 +3,8 @@
  * @package     web2project\modules\misc
  */
 
-class CReport {
+class CReport
+{
     protected $reportFilename = '';
     protected $tempDir = '';
     protected $expiresIn = 30;

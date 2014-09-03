@@ -1,4 +1,6 @@
 <?php
+namespace Web2project\Authenticators;
+
 /**
  * This is the core of the authentication system. All other Authenticators
  *  should extend it.
@@ -8,26 +10,27 @@
 /**
  * This class just collects the common functionality from across the
  *  Authenticators. It will tend to grow as we support more auth options.
- * 
+ *
  * @author      Keith Casey <caseydk@users.sourceforge.net>
  *
  * @package     web2project\authenticators
  * @abstract
  */
-abstract class w2p_Authenticators_Base
+abstract class Base
 {
     protected $AppUI = null;
     protected $w2Pconfig = null;
     protected $query = null;
     protected $user_id = null;
 
-    public function __construct() {
+    public function __construct()
+    {
         global $AppUI;
         global $w2Pconfig;
 
         $this->AppUI = $AppUI;
         $this->w2Pconfig = $w2Pconfig;
-        $this->query = new w2p_Database_Query;
+        $this->query = new \w2p_Database_Query();
     }
 
     /**
@@ -50,7 +53,7 @@ abstract class w2p_Authenticators_Base
     {
         $newPassword = '';
         $salt = 'abcdefghjkmnpqrstuvwxyzABCDEFGHJKMNPQRSTUVWXYZ0123456789';
-        srand((double)microtime() * 1000000);
+        srand((double) microtime() * 1000000);
 
         $i = 0;
         while ($i <= 10) {

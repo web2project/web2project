@@ -1,6 +1,6 @@
 <?php
 if (!defined('W2P_BASE_DIR')) {
-	die('You should not access this file directly.');
+    die('You should not access this file directly.');
 }
 // @todo    convert to template
 
@@ -20,7 +20,7 @@ $canEdit = $perms->checkModuleItem('forums', 'edit', $forum_id);
 $canAdminEdit = canEdit('system');
 
 if (!$canRead) {
-	$AppUI->redirect(ACCESS_DENIED);
+    $AppUI->redirect(ACCESS_DENIED);
 }
 
 $message = new CForum_Message();
@@ -37,8 +37,8 @@ $project = new CProject();
 $project->load($forum->forum_project);
 
 if (!$forum) {
-	$AppUI->setMsg('Forum');
-	$AppUI->setMsg('invalidID', UI_MSG_ERROR, true);
+    $AppUI->setMsg('Forum');
+    $AppUI->setMsg('invalidID', UI_MSG_ERROR, true);
     $AppUI->redirect('m=' . $m);
 }
 
@@ -65,11 +65,11 @@ include $AppUI->getTheme()->resolveTemplate('forums/view');
 
 echo $AppUI->getTheme()->styleRenderBoxBottom();
 if ($post_message) {
-	include (W2P_BASE_DIR . '/modules/forums/post_message.php');
+    include (W2P_BASE_DIR . '/modules/forums/post_message.php');
 } else {
-	if ($message_id) {
-		include (W2P_BASE_DIR . '/modules/forums/view_messages.php');
-	} else {
+    if ($message_id) {
+        include (W2P_BASE_DIR . '/modules/forums/view_messages.php');
+    } else {
         include (W2P_BASE_DIR . '/modules/forums/view_topics.php');
-	}
+    }
 }

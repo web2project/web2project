@@ -1,6 +1,6 @@
 <?php
 if (!defined('W2P_BASE_DIR')) {
-	die('You should not access this file directly.');
+    die('You should not access this file directly.');
 }
 // @todo    refactor to use a core controller
 
@@ -15,6 +15,7 @@ $allow_other = (int) w2PgetParam($_POST, 'task_allow_other_user_tasklogs', 0);
 $_POST['task_allow_other_user_tasklogs'] = $allow_other;
 $comment = w2PgetParam($_POST, 'email_comment', '');
 $new_task_project = (int) w2PgetParam($_POST, 'new_task_project', 0);
+$remind= (int) w2PgetParam($_POST, 'task_reminder', 0);
 
 // Find the task if we are set
 $task_end_date = null;
@@ -28,6 +29,7 @@ if (!$obj->bind($_POST)) {
     $AppUI->setMsg($obj->getError(), UI_MSG_ERROR);
     $AppUI->redirect('m=task&a=addedit');
 }
+$obj->task_reminder=$remind;
 
 // Check to see if the task_project has changed
 if ($new_task_project != 0 and $obj->task_project != $new_task_project) {
@@ -120,7 +122,7 @@ if ($result) {
         if (isset($start_date)) {
             $shift = $nsd->compare($start_date, $nsd);
             if ($shift < 1) {
-                
+
                 //$obj->task_start_date = $nsd->format(FMT_DATETIME_MYSQL);
                 $osd = new w2p_Utilities_Date($obj->task_start_date);
                 $ned = new w2p_Utilities_Date($obj->task_end_date);
@@ -142,11 +144,11 @@ if ($result) {
     $obj->updateDynamics();
 
     $billingCategory = w2PgetSysVal('BudgetCategory');
-	$budgets = array();
-	foreach ($billingCategory as $id => $category) {
-		$budgets[$id] = w2PgetParam($_POST, 'budget_'.$id, 0);
-	}
-	$obj->storeBudget($budgets);
+    $budgets = array();
+    foreach ($billingCategory as $id => $category) {
+        $budgets[$id] = w2PgetParam($_POST, 'budget_'.$id, 0);
+    }
+    $obj->storeBudget($budgets);
 
     // Now add any task reminders
     // If there wasn't a task, but there is one now, and

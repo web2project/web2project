@@ -1,6 +1,6 @@
 <?php
 if (!defined('W2P_BASE_DIR')) {
-	die('You should not access this file directly.');
+    die('You should not access this file directly.');
 }
 // @todo    convert to template
 
@@ -12,14 +12,14 @@ global $currentTabId, $m, $showProject, $xpg_min, $xpg_pagesize, $page;
 $tab = ($m == 'files') ? $currentTabId-1 : $currentTabId;
 $page = w2PgetParam($_GET, 'page', 1);
 if (!isset($project_id)) {
-	$project_id = w2PgetParam($_REQUEST, 'project_id', 0);
+    $project_id = w2PgetParam($_REQUEST, 'project_id', 0);
 }
 
 $category_id = 0;
 if (($company_id || $project_id || $task_id) && !($m == 'files')) {
-	$category_id = 0;
+    $category_id = 0;
 } else {
-	// TODO: the filtering is not working as expected in the flat view
+    // TODO: the filtering is not working as expected in the flat view
     $category_id = ($tab < 0) ? 0 : $tab + 1;
 }
 
@@ -33,7 +33,8 @@ $pageNav = buildPaginationNav($AppUI, $m, $tab+1, $xpg_totalrecs, $xpg_pagesize,
 echo $pageNav;
 ?>
 <script language="javascript" type="text/javascript">
-function expand(id){
+function expand(id)
+{
   var element = document.getElementById(id);
   element.style.display = (element.style.display == '' || element.style.display == 'none') ? 'block' : 'none';
 }

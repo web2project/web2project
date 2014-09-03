@@ -1,6 +1,6 @@
 <?php
 if (!defined('W2P_BASE_DIR')) {
-	die('You should not access this file directly.');
+    die('You should not access this file directly.');
 }
 // @todo    convert to template
 // @todo    remove database query
@@ -18,7 +18,7 @@ $pgo_list = $AppUI->getPermissionableModuleList();
 $modules = array();
 $offset = 0;
 foreach ($module_list as $module) {
-	$modName = $module['name'];
+    $modName = $module['name'];
     $addToList = false;
 
     if (strpos($modName, 'Admin') === false && strpos($modName, 'All Modules') === false) {
@@ -54,7 +54,8 @@ $perm_list = $perms->getPermissionList();
 // else users would be able to arbitrarily run 'bad' functions
 if ($canEdit) {
 ?>
-function editPerm( id, gon, it, vl, nm ) {
+function editPerm(id, gon, it, vl, nm)
+{
 /*
 	id = Permission_id
 	gon =permission_grant_on
@@ -65,11 +66,11 @@ function editPerm( id, gon, it, vl, nm ) {
 	var f = document.frmPerms;
 
 	f.sqlaction2.value = "<?php echo $AppUI->_('edit'); ?>";
-	
+
 	f.permission_id.value = id;
 	f.permission_item.value = it;
 	f.permission_item_name.value = nm;
-	for(var i=0, n=f.permission_grant_on.options.length; i < n; i++) {
+	for (var i=0, n=f.permission_grant_on.options.length; i < n; i++) {
 		if (f.permission_module.options[i].value == gon) {
 			f.permission_module.selectedIndex = i;
 			break;
@@ -79,14 +80,16 @@ function editPerm( id, gon, it, vl, nm ) {
 	f.permission_item_name.value = nm;
 }
 
-function clearIt(){
+function clearIt()
+{
 	var f = document.frmPerms;
 	f.sqlaction2.value = "<?php echo $AppUI->_('add'); ?>";
 	f.permission_id.value = 0;
 	f.permission_grant_on.selectedIndex = 0;
 }
 
-function delIt(id) {
+function delIt(id)
+{
 	if (confirm( 'Are you sure you want to delete this permission?' )) {
 		var f = document.frmPerms;
 		f.del.value = 1;
@@ -97,13 +100,14 @@ function delIt(id) {
 
 var tables = new Array;
 <?php
-	foreach ($pgos as $key => $value) {
-		// Find the module id in the modules array
-		echo "tables['$key'] = '$value';\n";
-	}
+    foreach ($pgos as $key => $value) {
+        // Find the module id in the modules array
+        echo "tables['$key'] = '$value';\n";
+    }
 ?>
 
-function popPermItem() {
+function popPermItem()
+{
 	var f = document.frmPerms;
 	var pgo = f.permission_module.selectedIndex;
 
@@ -116,7 +120,8 @@ function popPermItem() {
 }
 
 // Callback function for the generic selector
-function setPermItem( key, val ) {
+function setPermItem(key, val)
+{
 	var f = document.frmPerms;
 	if (val != '') {
 		f.permission_item.value = key;

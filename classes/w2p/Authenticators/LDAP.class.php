@@ -5,7 +5,7 @@
  * @package     web2project\authenticators
  */
 
-class w2p_Authenticators_LDAP extends w2p_Authenticators_Base
+class w2p_Authenticators_LDAP extends \Web2project\Authenticators\Base
 {
     public $ldap_host;
     public $ldap_port;

@@ -1,6 +1,6 @@
 <?php
 if (!defined('W2P_BASE_DIR')) {
-	die('You should not access this file directly.');
+    die('You should not access this file directly.');
 }
 // @todo    convert to template
 
@@ -26,14 +26,14 @@ $current_uri = $current_uriArray['query'];
 $page = (int) w2PgetParam($_GET, 'page', 1);
 
 if (!isset($project_id)) {
-	$project_id = (int) w2PgetParam($_REQUEST, 'project_id', 0);
+    $project_id = (int) w2PgetParam($_REQUEST, 'project_id', 0);
 }
 if (!$project_id) {
-	$showProject = true;
+    $showProject = true;
 }
 
 if (!isset($company_id)) {
-	$company_id = (int) w2PgetParam($_REQUEST, 'company_id', 0);
+    $company_id = (int) w2PgetParam($_REQUEST, 'company_id', 0);
 }
 
 $obj = new CCompany();
@@ -41,7 +41,7 @@ $allowed_companies_ary = $obj->getAllowedRecords($AppUI->user_id, 'company_id,co
 $allowed_companies = implode(',', array_keys($allowed_companies_ary));
 
 if (!isset($task_id)) {
-	$task_id = (int) w2PgetParam($_REQUEST, 'task_id', 0);
+    $task_id = (int) w2PgetParam($_REQUEST, 'task_id', 0);
 }
 
 $xpg_pagesize = w2PgetConfig('page_size', 50);
@@ -53,11 +53,13 @@ $myFolder = new CFile_Folder();
 $xpg_totalrecs = $myFolder->getFileCountByFolder(null, $folder_id, $task_id, $project_id, $company_id, $allowed_companies);
 ?>
 <script language="javascript" type="text/javascript">
-function expand(id){
+function expand(id)
+{
 	var element = document.getElementById(id);
 	element.style.display = (element.style.display == '' || element.style.display == 'none') ? 'block' : 'none';
 }
-function addBulkComponent(li) {
+function addBulkComponent(li)
+{
 //IE
 	if (document.all || navigator.appName == 'Microsoft Internet Explorer') {
 		var ni = document.getElementById('frm_bulk');
@@ -77,7 +79,8 @@ function addBulkComponent(li) {
 	}
 }
 
-function removeBulkComponent(li) {
+function removeBulkComponent(li)
+{
 	var t = document.getElementById('tbl_bulk');
 	var old = document.getElementById('bulk_selected_file['+li+']');
 	t.removeChild(old);

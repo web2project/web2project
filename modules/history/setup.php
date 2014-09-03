@@ -1,6 +1,6 @@
 <?php
 if (!defined('W2P_BASE_DIR')) {
-	die('You should not access this file directly.');
+    die('You should not access this file directly.');
 }
 
 // MODULE CONFIGURATION DEFINITION
@@ -15,7 +15,7 @@ $config['mod_ui_icon'] = '';
 $config['mod_description'] = 'A module for tracking changes';
 
 if ($a == 'setup') {
-	echo w2PshowModuleConfig($config);
+    echo w2PshowModuleConfig($config);
 }
 
 /**
@@ -25,12 +25,13 @@ if ($a == 'setup') {
  */
 class CSetupHistory extends w2p_System_Setup
 {
-	public function install() {
-		$q = $this->_getQuery();
-		$q->createTable('history');
-		$q->createDefinition('(
+    public function install()
+    {
+        $q = $this->_getQuery();
+        $q->createTable('history');
+        $q->createDefinition('(
 			history_id int(10) unsigned NOT NULL auto_increment,
-			history_date datetime NOT NULL default \'0000-00-00 00:00:00\',		  
+			history_date datetime NOT NULL default \'0000-00-00 00:00:00\',
 			history_user int(10) NOT NULL default \'0\',
 			history_action varchar(20) NOT NULL default \'modify\',
 			history_item int(10) NOT NULL,
@@ -41,20 +42,21 @@ class CSetupHistory extends w2p_System_Setup
 			history_description text,
 			PRIMARY KEY  (history_id),
 			INDEX index_history_module (history_table, history_item),
-		  	INDEX index_history_item (history_item) 
+		  	INDEX index_history_item (history_item)
             ) ENGINE = MYISAM DEFAULT CHARSET=utf8 ');
-		if (!$q->exec()) {
+        if (!$q->exec()) {
             return false;
         }
 
         return parent::install();
-	}
+    }
 
-	public function remove() {
+    public function remove()
+    {
         $q = $this->_getQuery();
-		$q->dropTable('history');
-		$q->exec();
+        $q->dropTable('history');
+        $q->exec();
 
         return parent::remove();
-	}
+    }
 }

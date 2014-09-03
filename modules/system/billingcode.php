@@ -1,13 +1,13 @@
 <?php
 if (!defined('W2P_BASE_DIR')) {
-	die('You should not access this file directly.');
+    die('You should not access this file directly.');
 }
 
 $company_id = (int) w2PgetParam($_POST, 'company_id', -1);
 $billingcode_id = (int) w2PgetParam($_GET, 'billingcode_id', 0);
 
 if (!canEdit('system')) {
-	$AppUI->redirect(ACCESS_DENIED);
+    $AppUI->redirect(ACCESS_DENIED);
 }
 
 $bcode = new CSystem_Bcode();
@@ -28,12 +28,14 @@ $titleBlock->show();
 ?>
 <script language="javascript" type="text/javascript">
 <!--
-function submitIt(){
+function submitIt()
+{
 	var form = document.frmAddcode;
 	form.submit();
 }
 
-function changeIt() {
+function changeIt()
+{
 	var f=document.changeMe;
     document.getElementById('company_filter').value = document.getElementById('company_id').value;
 	var msg = '';
@@ -41,7 +43,8 @@ function changeIt() {
 }
 
 
-function delIt2(id) {
+function delIt2(id)
+{
 	document.frmDel.billingcode_id.value = id;
 	document.frmDel.submit();
 }

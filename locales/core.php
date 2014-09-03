@@ -1,6 +1,6 @@
 <?php
 if (!defined('W2P_BASE_DIR')) {
-	die('You should not access this file directly');
+    die('You should not access this file directly');
 }
 
 ob_start();
@@ -27,7 +27,7 @@ if (isset($perms)) {
 }
 
 if (W2P_BASE_DIR . '/locales/' . $AppUI->user_locale . '/common.inc') {
-	readfile(W2P_BASE_DIR . '/locales/' . $AppUI->user_locale . '/common.inc');
+    readfile(W2P_BASE_DIR . '/locales/' . $AppUI->user_locale . '/common.inc');
 }
 
 /**
@@ -37,24 +37,24 @@ if (W2P_BASE_DIR . '/locales/' . $AppUI->user_locale . '/common.inc') {
  */
 
 if (file_exists(W2P_BASE_DIR . '/modules/' . $m . '/locales/' . $AppUI->user_locale . '/' . $m . '.inc')) {
-	readfile(W2P_BASE_DIR . '/modules/' . $m . '/locales/' . $AppUI->user_locale . '/' . $m . '.inc');
+    readfile(W2P_BASE_DIR . '/modules/' . $m . '/locales/' . $AppUI->user_locale . '/' . $m . '.inc');
 } elseif (file_exists(W2P_BASE_DIR . '/locales/' . $AppUI->user_locale . '/' . $m . '.inc')) {
-	readfile(W2P_BASE_DIR . '/locales/' . $AppUI->user_locale . '/' . $m . '.inc');
+    readfile(W2P_BASE_DIR . '/locales/' . $AppUI->user_locale . '/' . $m . '.inc');
 } elseif (file_exists(W2P_BASE_DIR . '/modules/' . $m . '/locales/' . $AppUI->user_locale . '.inc')) {
-	readfile(W2P_BASE_DIR . '/modules/' . $m . '/locales/' . $AppUI->user_locale . '.inc');
+    readfile(W2P_BASE_DIR . '/modules/' . $m . '/locales/' . $AppUI->user_locale . '.inc');
 }
 
 switch ($m) {
-	case 'departments':
-		if (file_exists(W2P_BASE_DIR . '/locales/' . $AppUI->user_locale . '/companies.inc')) {
-			readfile(W2P_BASE_DIR . '/locales/' . $AppUI->user_locale . '/companies.inc');
-		}
-		break;
-	case 'system':
-		if (file_exists(W2P_BASE_DIR . '/locales/' . $w2Pconfig['host_locale'] . '/styles.inc')) {
-			readfile(W2P_BASE_DIR . '/locales/' . $w2Pconfig['host_locale'] . '/styles.inc');
-		}
-		break;
+    case 'departments':
+        if (file_exists(W2P_BASE_DIR . '/locales/' . $AppUI->user_locale . '/companies.inc')) {
+            readfile(W2P_BASE_DIR . '/locales/' . $AppUI->user_locale . '/companies.inc');
+        }
+        break;
+    case 'system':
+        if (file_exists(W2P_BASE_DIR . '/locales/' . $w2Pconfig['host_locale'] . '/styles.inc')) {
+            readfile(W2P_BASE_DIR . '/locales/' . $w2Pconfig['host_locale'] . '/styles.inc');
+        }
+        break;
 }
 eval('$GLOBALS[\'translate\']=array(' . ob_get_contents() . "\n'0');");
 ob_end_clean();

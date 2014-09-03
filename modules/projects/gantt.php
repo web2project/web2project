@@ -1,6 +1,6 @@
 <?php
 if (!defined('W2P_BASE_DIR')) {
-	die('You should not access this file directly.');
+    die('You should not access this file directly.');
 }
 // @todo    remove database query
 
@@ -16,13 +16,13 @@ $user_id = w2PgetParam($_REQUEST, 'user_id', $AppUI->user_id);
 
 // prepare the type filter
 if (isset($_POST['project_type'])) {
-	$AppUI->setState('ProjIdxType', intval($_POST['project_type']));
+    $AppUI->setState('ProjIdxType', intval($_POST['project_type']));
 }
 $project_type = $AppUI->getState('ProjIdxType') !== null ? $AppUI->getState('ProjIdxType') : -1;
 
 // prepare the users filter
 if (isset($_POST['project_owner'])) {
-	$AppUI->setState('ProjIdxowner', intval($_POST['project_owner']));
+    $AppUI->setState('ProjIdxowner', intval($_POST['project_owner']));
 }
 $owner = $AppUI->getState('ProjIdxowner') !== null ? $AppUI->getState('ProjIdxowner') : 0;
 
@@ -54,8 +54,6 @@ $start_date = w2PgetParam($_GET, 'start_date', 0);
 $end_date = w2PgetParam($_GET, 'end_date', 0);
 
 $showAllGantt = w2PgetParam($_REQUEST, 'showAllGantt', '0');
-
-
 
 if (!$start_date || !$end_date) {
     // find out DateRange from $projects array
@@ -107,63 +105,62 @@ $gantt->setDateRange($start_date, $end_date);
 
 $row = 0;
 
-
 if (!is_array($projects) || 0 == count($projects)) {
     $d = new w2p_Utilities_Date();
-    $columnValues = array('project_name' => $AppUI->_('No projects found'), 
+    $columnValues = array('project_name' => $AppUI->_('No projects found'),
                         'start_date' => $d->getDate(), 'end_date' => $d->getDate(),
                         'actual_end' => '');
     $gantt->addBar($columnValues, ' ' , 0.6, 'red');
 } else {
-	foreach ($projects as $p) {
+    foreach ($projects as $p) {
 
         $pname = $p['project_name'];
         $pname = (mb_strlen($pname) > 30) ? (mb_substr($pname, 0, 25) . '...') : $pname;
 
-		//using new jpGraph determines using Date object instead of string
+        //using new jpGraph determines using Date object instead of string
         $start_date = (int) ($p['project_start_date']) ? new w2p_Utilities_Date($AppUI->formatTZAwareTime($p['project_start_date'], '%Y-%m-%d %T')) : new w2p_Utilities_Date();
         $start = $start_date->getDate();
 
         $end_date = (int) ($p['project_end_date']) ? new w2p_Utilities_Date($AppUI->formatTZAwareTime($p['project_end_date'], '%Y-%m-%d %T')) : new w2p_Utilities_Date();
-		$end = $end_date->getDate();
+        $end = $end_date->getDate();
 
         $actual_end = (int) ($p['project_actual_end_date']) ? new w2p_Utilities_Date($AppUI->formatTZAwareTime($p['project_actual_end_date'], '%Y-%m-%d %T')) : $end_date;
         $actual_end = $actual_end->getDate();
 
         $progress = (int) $p['project_percent_complete'];
 
-		$caption = '';
-		if (!$start || $start == '0000-00-00') {
-			$start = !$end ? date('Y-m-d') : $end;
-			$caption .= $AppUI->_('(no start date)');
-		}
+        $caption = '';
+        if (!$start || $start == '0000-00-00') {
+            $start = !$end ? date('Y-m-d') : $end;
+            $caption .= $AppUI->_('(no start date)');
+        }
 
-		if (!$end) {
-			$end = $start;
-			$caption .= ' ' . $AppUI->_('(no end date)');
-		}
+        if (!$end) {
+            $end = $start;
+            $caption .= ' ' . $AppUI->_('(no end date)');
+        }
 
-		if ($showLabels == '1') {
-			$caption .= $AppUI->_($projectStatus[$p['project_status']]) . ', ';
-			$caption .= ($p['project_active']) ? $AppUI->_('active') : $AppUI->_('archived');
-		}		
+        if ($showLabels == '1') {
+            $caption .= $AppUI->_($projectStatus[$p['project_status']]) . ', ';
+            $caption .= ($p['project_active']) ? $AppUI->_('active') : $AppUI->_('archived');
+        }
 
         $columnValues = array('project_name' => $pname, 'start_date' => $start,
                           'end_date' => $end, 'actual_end' => $actual_end);
-		$gantt->addBar($columnValues, $caption, 0.6, $p['project_color_identifier'],
+        $gantt->addBar($columnValues, $caption, 0.6, $p['project_color_identifier'],
             $p['project_active'], $progress, $p['project_id']);
 
-		// If showAllGant checkbox is checked
-		if ($showAllGantt) {
-			// insert tasks into Gantt Chart
-			// select for tasks for each project
+        // If showAllGant checkbox is checked
+        if ($showAllGantt) {
+            // insert tasks into Gantt Chart
+            // select for tasks for each project
 
             $task = new CTask();
             $orderBy = ($sortTasksByName) ? 'task_name' : 'task_end_date ASC';
             $tasks = $task->getAllowedTaskList(null, $p['project_id'], $orderBy);
             $bestColor = bestColor('#ffffff', '#' . $p['project_color_identifier'], '#000000');
 
-			foreach ($tasks as $t) {
+            foreach ($tasks as $t) {
                 $name = $t['task_name'];
                 $name = ((mb_strlen($name) > 34) ? (mb_substr($name, 0, 30) . '...') : $name);
 
@@ -192,12 +189,12 @@ if (!is_array($projects) || 0 == count($projects)) {
                         true, $t['task_percent_complete'], $t['task_id']);
                 }
                 // End of insert workers for each task into Gantt Chart
-			}
-			unset($tasks);
-			// End of insert tasks into Gantt Chart
-		}
-		// End of if showAllGant checkbox is checked
-	}
+            }
+            unset($tasks);
+            // End of insert tasks into Gantt Chart
+        }
+        // End of if showAllGant checkbox is checked
+    }
 } // End of check for valid projects array.
 
 unset($projects);

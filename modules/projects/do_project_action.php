@@ -15,10 +15,10 @@ foreach ($project_ids as $project_id) {
     $project = new CProject();
     $project->load($project_id);
     $project->project_status = $status_id;
-    foreach ($project->getContactList() as $contact_data){
+    foreach ($project->getContactList() as $contact_data) {
         $project->project_contacts[]=$contact_data['contact_id'];
     }
-    foreach ($project->getDepartmentList() as $department_data){
+    foreach ($project->getDepartmentList() as $department_data) {
         $project->project_departments[]=$department_data['dept_id'];
     }
     $project->store();

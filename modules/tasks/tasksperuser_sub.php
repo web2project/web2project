@@ -1,6 +1,6 @@
 <?php
 if (!defined('W2P_BASE_DIR')) {
-	die('You should not access this file directly.');
+    die('You should not access this file directly.');
 }
 // @todo    convert to template
 // @todo    remove database query
@@ -48,7 +48,7 @@ $now = new w2p_Utilities_Date(null, $userTZ);
 $now->convertTZ('UTC');
 
 if (!$log_start_date) {
-	$start_date->subtractSpan(new Date_Span('14,0,0,0'));
+    $start_date->subtractSpan(new Date_Span('14,0,0,0'));
 }
 
 // get Users with all Allocation info (e.g. their freeCapacity)
@@ -63,22 +63,23 @@ $userAlloc = $tempoTask->getAllocation('user_id', null, true);
 // else users would be able to arbitrarily run 'bad' functions
 if ($canEdit) {
 ?>
-function checkAll(user_id) {
+function checkAll(user_id)
+{
         var f = eval( 'document.assFrm' + user_id );
         var cFlag = f.master.checked ? false : true;
 
-        for (var i=0, i_cmp=f.elements.length; i<i_cmp;i++){
+        for (var i=0, i_cmp=f.elements.length; i<i_cmp;i++) {
                 var e = f.elements[i];
                 // only if it's a checkbox.
-                if(e.type == 'checkbox' && e.checked == cFlag && e.name != 'master')
-                {
+                if (e.type == 'checkbox' && e.checked == cFlag && e.name != 'master') {
                          e.checked = !e.checked;
                 }
         }
 }
 
 
-function chAssignment(user_id, rmUser, del) {
+function chAssignment(user_id, rmUser, del)
+{
         var f = eval( 'document.assFrm' + user_id );
         var fl = f.add_users.length-1;
         var c = 0;
@@ -88,18 +89,17 @@ function chAssignment(user_id, rmUser, del) {
         f.htasks.value = '';
 
         // harvest all checked checkboxes (tasks to process)
-        for (var i=0, i_cmp=f.elements.length; i<i_cmp; i++){
+        for (var i=0, i_cmp=f.elements.length; i<i_cmp; i++) {
                 var e = f.elements[i];
                 // only if it's a checkbox.
-                if(e.type == 'checkbox' && e.checked == true && e.name != 'master')
-                {
+                if (e.type == 'checkbox' && e.checked == true && e.name != 'master') {
                          c++;
                          f.htasks.value = f.htasks.value +','+ e.value;
                 }
         }
 
         // harvest all selected possible User Assignees
-        for (fl; fl > -1; fl--){
+        for (fl; fl > -1; fl--) {
                 if (f.add_users.options[fl].selected) {
                         a++;
                         f.hassign.value = ',' + f.hassign.value +','+ f.add_users.options[fl].value;
@@ -136,18 +136,18 @@ function chAssignment(user_id, rmUser, del) {
         }
 }
 
-function chPriority(user_id) {
+function chPriority(user_id)
+{
         var f = eval( 'document.assFrm' + user_id );
         var c = 0;
 
         f.htasks.value = '';
 
         // harvest all checked checkboxes (tasks to process)
-        for (var i=0, i_cmp=f.elements.length; i<i_cmp; i++){
+        for (var i=0, i_cmp=f.elements.length; i<i_cmp; i++) {
                 var e = f.elements[i];
                 // only if it's a checkbox.
-                if(e.type == 'checkbox' && e.checked == true && e.name != 'master')
-                {
+                if (e.type == 'checkbox' && e.checked == true && e.name != 'master') {
                          c++;
                          f.htasks.value = f.htasks.value +','+ e.value;
                 }
@@ -171,7 +171,7 @@ function chPriority(user_id) {
 	<input type="hidden" name="company_id" value="<?php echo $company_id; ?>" />
 	<input type="hidden" name="report_type" value="<?php echo $report_type; ?>" />
     <input type="hidden" name="datePicker" value="log" />
-	
+
 	<table class="std">
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('For period'); ?>:</td>
@@ -231,7 +231,7 @@ function chPriority(user_id) {
 	</table>
 	<?php
     echo $AppUI->getTheme()->styleRenderBoxBottom();
-	?>
+    ?>
 </form>
 <br />
 <?php
@@ -257,55 +257,55 @@ if (count($fields) > 0) {
 }
 
 if ($do_report) {
-	// Let's figure out which users we have
-	$user_list = $active_users;
+    // Let's figure out which users we have
+    $user_list = $active_users;
 
-	$ss = '\'' . $start_date->format(FMT_DATETIME_MYSQL) . '\'';
-	$se = '\'' . $end_date->format(FMT_DATETIME_MYSQL) . '\'';
+    $ss = '\'' . $start_date->format(FMT_DATETIME_MYSQL) . '\'';
+    $se = '\'' . $end_date->format(FMT_DATETIME_MYSQL) . '\'';
 
-	$and = false;
-	$where = false;
+    $and = false;
+    $where = false;
 
     $task_list_hash = __extract_from_tasksperuser($use_period, $ss, $se, $log_userfilter, $project_id, $company_id, $proj, $AppUI, $all_proj_status);
 
-	$task_list = array();
-	$task_assigned_users = array();
-	$user_assigned_tasks = array();
-	$i = 0;
+    $task_list = array();
+    $task_assigned_users = array();
+    $user_assigned_tasks = array();
+    $i = 0;
 
-	foreach ($task_list_hash as $task_id => $task_data) {
-		$task = new CTask();
-		$task->load($task_id);
-		$task_users = $task->assignees($task_id);
-		foreach (array_keys($task_users) as $key => $uid) {
-			$user_assigned_tasks[$uid][] = $task_id;
-		}
-		$task->task_assigned_users = $task_users;
-		$task_list[$i] = $task;
+    foreach ($task_list_hash as $task_id => $task_data) {
+        $task = new CTask();
+        $task->load($task_id);
+        $task_users = $task->assignees($task_id);
+        foreach (array_keys($task_users) as $key => $uid) {
+            $user_assigned_tasks[$uid][] = $task_id;
+        }
+        $task->task_assigned_users = $task_users;
+        $task_list[$i] = $task;
 
-		$i++;
-	}
-	$Ntasks = $i;
+        $i++;
+    }
+    $Ntasks = $i;
 
-	$user_usage = array();
-	$task_dates = array();
+    $user_usage = array();
+    $task_dates = array();
 
-	$actual_date = $start_date;
-	$days_header = ''; // we will save days title here
+    $actual_date = $start_date;
+    $days_header = ''; // we will save days title here
 
-	if (strtolower($max_levels) == 'max') {
-		$max_levels = -1;
-	} elseif ($max_levels == '') {
-		$max_levels = -1;
-	} else {
-		$max_levels = (int) $max_levels;
-	}
-	if ($max_levels == 0) {
-		$max_levels = 1;
-	}
-	if ($max_levels < 0) {
-		$max_levels = -1;
-	}
+    if (strtolower($max_levels) == 'max') {
+        $max_levels = -1;
+    } elseif ($max_levels == '') {
+        $max_levels = -1;
+    } else {
+        $max_levels = (int) $max_levels;
+    }
+    if ($max_levels == 0) {
+        $max_levels = 1;
+    }
+    if ($max_levels < 0) {
+        $max_levels = -1;
+    }
     ?>
     <table class="tbl list">
         <tr>
@@ -317,34 +317,34 @@ if ($do_report) {
             <th><?php echo $AppUI->_('Possible Assignees'); ?></th>
         </tr>
     <?php
-    
+
     if (count($task_list)) {
-		$sss = $ss;
-		$sse = $se;
-		if ('on' != $use_period) {
-			$sss = -1;
-			$sse = -1;
-		}
-		if ('on' == $display_week_hours && ('on' != $use_period)) {
-			foreach ($task_list as $t) {
-				if ($sss == -1) {
-					$sss = $t->task_start_date;
-					$sse = $t->task_end_date;
-				} else {
-					if ($t->task_start_date < $sss) {
-						$sss = $t->task_start_date;
-					}
-					if ($t->task_end_date > $sse) {
-						$sse = $t->task_end_date;
-					}
-				}
-			}
-		}
+        $sss = $ss;
+        $sse = $se;
+        if ('on' != $use_period) {
+            $sss = -1;
+            $sse = -1;
+        }
+        if ('on' == $display_week_hours && ('on' != $use_period)) {
+            foreach ($task_list as $t) {
+                if ($sss == -1) {
+                    $sss = $t->task_start_date;
+                    $sse = $t->task_end_date;
+                } else {
+                    if ($t->task_start_date < $sss) {
+                        $sss = $t->task_start_date;
+                    }
+                    if ($t->task_end_date > $sse) {
+                        $sse = $t->task_end_date;
+                    }
+                }
+            }
+        }
 
-		$table_rows = '';
+        $table_rows = '';
 
-		foreach ($user_list as $user_id => $user_data) {
-			if ($log_userfilter == -1 || ($user_id == $log_userfilter)) {
+        foreach ($user_list as $user_id => $user_data) {
+            if ($log_userfilter == -1 || ($user_id == $log_userfilter)) {
                 $z = 0;
                 foreach ($task_list as $task) {
                     if (isMemberOfTask($task_list, $Ntasks, $user_id, $task)) {
@@ -372,8 +372,8 @@ if ($do_report) {
                 $tmpuser .= '<td bgcolor="#D0D0D0"><table width="100%"><tr>';
                 $tmpuser .= '<td align="left">
 					 <a href="javascript:chAssignment(' . $user_id . ', 0, 1);"><img src="' . w2PfindImage('remove.png', 'tasks')   . '" alt="' . $AppUI->_('Unassign User') . '" title="' . $AppUI->_('Unassign User from Task') . '" /></a>&nbsp;' .
-					'<a href="javascript:chAssignment(' . $user_id . ', 1, 0);"><img src="' . w2PfindImage('exchange.png', 'tasks') . '" alt="' . $AppUI->_('Hand Over') . '" title="' . $AppUI->_('Unassign User from Task and assign to selected Users') . '" /></a>&nbsp;' .
-					'<a href="javascript:chAssignment(' . $user_id . ', 0, 0);"><img src="' . w2PfindImage('add.png', 'tasks')      . '" alt="' . $AppUI->_('Assign Users') . '" title="' . $AppUI->_('Assign selected Users to selected Tasks') . '" /></a></td>';
+                    '<a href="javascript:chAssignment(' . $user_id . ', 1, 0);"><img src="' . w2PfindImage('exchange.png', 'tasks') . '" alt="' . $AppUI->_('Hand Over') . '" title="' . $AppUI->_('Unassign User from Task and assign to selected Users') . '" /></a>&nbsp;' .
+                    '<a href="javascript:chAssignment(' . $user_id . ', 0, 0);"><img src="' . w2PfindImage('add.png', 'tasks')      . '" alt="' . $AppUI->_('Assign Users') . '" title="' . $AppUI->_('Assign selected Users to selected Tasks') . '" /></a></td>';
                 $tmpuser .= '<td align="center"><select class="text" name="percentage_assignment" title="' . $AppUI->_('Assign with Percentage') . '">';
                 for ($i = 0; $i <= 100; $i += 5) {
                     $tmpuser .= '<option ' . (($i == 30) ? 'selected="true"' : '') . ' value="' . $i . '">' . $i . '%</option>';
@@ -413,9 +413,9 @@ if ($do_report) {
                     $table_rows .= $tmptasks . '</form>';
                 }
             }
-		}
+        }
         echo $table_rows; //show tasks with existing assignees
-	} else {
+    } else {
         echo '<tr><td colspan="'.(count($fieldNames) + 3).'">' . $AppUI->_('No data available') . '</td></tr>';
     }
 }
@@ -423,7 +423,7 @@ if ($do_report) {
 // show orphaned tasks
 if ($show_orphaned == 'on') {
     $user_id = 0; //reset user id to zero (create new object - no user)
-	$tmpuser = '<form name="assFrm' . $user_id . '" action="index.php?m=tasks&a=tasksperuser" method="post" accept-charset="utf-8">
+    $tmpuser = '<form name="assFrm' . $user_id . '" action="index.php?m=tasks&a=tasksperuser" method="post" accept-charset="utf-8">
 				<input type="hidden" name="del" value="1" />
 				<input type="hidden" name="rm" value="0" />
 				<input type="hidden" name="store" value="0" />
@@ -432,38 +432,38 @@ if ($show_orphaned == 'on') {
 				<input type="hidden" name="hassign" />
 				<input type="hidden" name="htasks" />
 				<tr>';
-	$tmpuser .= '<td bgcolor="#D0D0D0"><input onclick="javascript:checkAll(' . $user_id . ');" type="checkbox" name="master" value="true"/></td>
+    $tmpuser .= '<td bgcolor="#D0D0D0"><input onclick="javascript:checkAll(' . $user_id . ');" type="checkbox" name="master" value="true"/></td>
 				<td colspan="2" align="left" nowrap="nowrap" bgcolor="#D0D0D0">
 				<b><a href="index.php?m=events&a=day_view&user_id=' . $user_id . '&tab=1">' . $AppUI->_('Orphaned Tasks') . '</a></b></td>';
     $weekcells_count = weekCells($display_week_hours, $sss, $sse);
-	for ($w = 0; $w <= (4 + $weekcells_count); $w++) {
-		$tmpuser .= '<td bgcolor="#D0D0D0"></td>';
-	}
-	$tmpuser .= '<td bgcolor="#D0D0D0"><table width="100%"><tr>';
-	$tmpuser .= '<td align="left">' . '<a href="javascript:chAssignment(' . $user_id . ', 0, 0);">' . w2PshowImage('add.png', 16, 16, 'Assign Users', 'Assign selected Users to selected Tasks', 'tasks') . '</a></td>';
-	$tmpuser .= '<td align="center"><select class="text" name="percentage_assignment" title="' . $AppUI->_('Assign with Percentage') . '">';
-	for ($i = 0; $i <= 100; $i += 5) {
-		$tmpuser .= '<option ' . (($i == 30) ? 'selected="true"' : '') . ' value="' . $i . '">' . $i . '%</option>';
-	}
-	$tmpuser .= '</select></td>';
-	$tmpuser .= '<td align="center">' . arraySelect($taskPriority, 'task_priority', 'onchange="javascript:chPriority(' . $user_id . ');" size="1" class="text" title="' . $AppUI->_('Change Priority of selected Tasks') . '"', 0, true);
-	$tmpuser .= '</td></tr></table></td>';
+    for ($w = 0; $w <= (4 + $weekcells_count); $w++) {
+        $tmpuser .= '<td bgcolor="#D0D0D0"></td>';
+    }
+    $tmpuser .= '<td bgcolor="#D0D0D0"><table width="100%"><tr>';
+    $tmpuser .= '<td align="left">' . '<a href="javascript:chAssignment(' . $user_id . ', 0, 0);">' . w2PshowImage('add.png', 16, 16, 'Assign Users', 'Assign selected Users to selected Tasks', 'tasks') . '</a></td>';
+    $tmpuser .= '<td align="center"><select class="text" name="percentage_assignment" title="' . $AppUI->_('Assign with Percentage') . '">';
+    for ($i = 0; $i <= 100; $i += 5) {
+        $tmpuser .= '<option ' . (($i == 30) ? 'selected="true"' : '') . ' value="' . $i . '">' . $i . '%</option>';
+    }
+    $tmpuser .= '</select></td>';
+    $tmpuser .= '<td align="center">' . arraySelect($taskPriority, 'task_priority', 'onchange="javascript:chPriority(' . $user_id . ');" size="1" class="text" title="' . $AppUI->_('Change Priority of selected Tasks') . '"', 0, true);
+    $tmpuser .= '</td></tr></table></td>';
 
-	$tmpuser .= '</tr>';
+    $tmpuser .= '</tr>';
 
-	$orphTasks = array_diff(array_map('getOrphanedTasks', $task_list), array(null));
+    $orphTasks = array_diff(array_map('getOrphanedTasks', $task_list), array(null));
 
-	$tmptasks = '';
-	$actual_date = $start_date;
+    $tmptasks = '';
+    $actual_date = $start_date;
 
-	$zi = 0;
-	foreach ($orphTasks as $task) {
-		$tmptasks .= displayTask($orphTasks, $task, 0, $display_week_hours, $sss, $sse, $user_id);
-	}
-	if ($tmptasks != '') {
-		echo $tmpuser;
-		echo $tmptasks . '</form>';
-	}
+    $zi = 0;
+    foreach ($orphTasks as $task) {
+        $tmptasks .= displayTask($orphTasks, $task, 0, $display_week_hours, $sss, $sse, $user_id);
+    }
+    if ($tmptasks != '') {
+        echo $tmpuser;
+        echo $tmptasks . '</form>';
+    }
 
 } // end of show orphaned tasks
 

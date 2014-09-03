@@ -1,6 +1,6 @@
 <?php
 if (!defined('W2P_BASE_DIR')) {
-	die('You should not access this file directly.');
+    die('You should not access this file directly.');
 }
 // @todo    convert to template
 // @todo    remove database query
@@ -15,29 +15,29 @@ $start = (int) w2PgetConfig('cal_day_start');
 $end = (int) w2PgetConfig('cal_day_end');
 $inc = (int) w2PgetConfig('cal_day_increment');
 if ($start === null) {
-	$start = 8;
+    $start = 8;
 }
 if ($end === null) {
-	$end = 17;
+    $end = 17;
 }
 if ($inc === null) {
-	$inc = 15;
+    $inc = 15;
 }
 $hours = array();
 for ($current = $start; $current < $end + 1; $current++) {
-	if ($current < 10) {
-		$current_key = '0' . $current;
-	} else {
-		$current_key = $current;
-	}
+    if ($current < 10) {
+        $current_key = '0' . $current;
+    } else {
+        $current_key = $current;
+    }
 
-	if (stristr($AppUI->getPref('TIMEFORMAT'), '%p')) {
-		//User time format in 12hr
-		$hours[$current_key] = ($current > 12 ? $current - 12 : $current);
-	} else {
-		//User time format in 24hr
-		$hours[$current_key] = $current;
-	}
+    if (stristr($AppUI->getPref('TIMEFORMAT'), '%p')) {
+        //User time format in 12hr
+        $hours[$current_key] = ($current > 12 ? $current - 12 : $current);
+    } else {
+        //User time format in 24hr
+        $hours[$current_key] = $current;
+    }
 }
 
 // Pull tasks dependencies
@@ -48,7 +48,7 @@ $taskDep = __extract_from_ae_depend2($object_id);
 <script>
     function toggleDependencies()
     {
-        if(document.getElementById('task_dynamic').checked) {
+        if (document.getElementById('task_dynamic').checked) {
             document.getElementById('dep-row-1').style.display = "none";
             document.getElementById('dep-row-2').style.display = "none";
             document.getElementById('dep-row-3').style.display = "none";

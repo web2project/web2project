@@ -107,7 +107,8 @@ class CForum extends w2p_Core_BaseObject
         return $q->loadList();
     }
 
-    protected function hook_preCreate() {
+    protected function hook_preCreate()
+    {
         $this->forum_create_date = $this->_AppUI->convertToSystemTZ($this->forum_create_date);
 
         parent::hook_preCreate();
@@ -128,11 +129,13 @@ class CForum extends w2p_Core_BaseObject
             $q->addWhere('message_forum = ' . (int) $this->forum_id);
             if (!$q->exec()) {
                 $this->_error['delete-messages'] = db_error();
+
                 return false;
             }
 
             $result = parent::delete();
         }
+
         return $result;
     }
 
@@ -166,6 +169,7 @@ class CForum extends w2p_Core_BaseObject
                 $extra['where'] = '(forum_project IS NULL OR forum_project = \'\' OR forum_project = 0)';
             }
         }
+
         return parent::getAllowedRecords($uid, $fields, $orderby, $index, $extra);
     }
 

@@ -20,7 +20,7 @@ along with web2Project; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 if (!defined('W2P_BASE_DIR')) {
-	die('You should not access this file directly');
+    die('You should not access this file directly');
 }
 // @todo    convert to template
 // @todo    remove database query
@@ -32,7 +32,7 @@ $canView = canView($m);
 $canAddProjects = $perms->checkModuleItem('projects', 'add');
 
 if (!$canView) {
-	$AppUI->redirect(ACCESS_DENIED);
+    $AppUI->redirect(ACCESS_DENIED);
 }
 
 $AppUI->getTheme()->loadCalendarJS();
@@ -54,7 +54,7 @@ $projects = $project->getAllowedRecords($AppUI->user_id, 'projects.project_id,pr
 $idx_companies = __extract_from_projectdesigner2();
 
 foreach ($projects as $prj_id => $prj_name) {
-	$projects[$prj_id] = $idx_companies[$prj_id] . ': ' . $prj_name;
+    $projects[$prj_id] = $idx_companies[$prj_id] . ': ' . $prj_name;
 }
 asort($projects);
 $projects = arrayMerge(array('0' => $AppUI->_('(None)', UI_OUTPUT_RAW)), $projects);
@@ -65,25 +65,26 @@ $tasks = $task->getAllowedRecords($AppUI->user_id, 'task_id,task_name', 'task_na
 $tasks = arrayMerge(array('0' => $AppUI->_('(None)', UI_OUTPUT_RAW)), $tasks);
 
 if (!$project_id) {
-	// setup the title block
-	$ttl = 'ProjectDesigner';
-	$titleBlock = new w2p_Theme_TitleBlock($ttl, 'icon.png', $m);
-	$titleBlock->addCrumb('?m=projects', 'projects list');
-	$titleBlock->addCell();
-	if ($canAddProjects) {
+    // setup the title block
+    $ttl = 'ProjectDesigner';
+    $titleBlock = new w2p_Theme_TitleBlock($ttl, 'icon.png', $m);
+    $titleBlock->addCrumb('?m=projects', 'projects list');
+    $titleBlock->addCell();
+    if ($canAddProjects) {
         $titleBlock->addButton('New project', '?m=projects&a=addedit');
     }
-	$titleBlock->show();
+    $titleBlock->show();
 ?>
 	<script language="javascript" type="text/javascript">
-	function submitIt() {
+	function submitIt()
+	{
 		var f = document.prjFrm;
 		var msg ='';
 		if (f.project_id.value == 0) {
 			msg += '<?php echo $AppUI->_('You must select a project first', UI_OUTPUT_JS); ?>';
 			f.project_id.focus();
 		}
-		
+
 		if (msg.length < 1) {
 			f.submit();
 		} else {
@@ -105,81 +106,81 @@ if (!$project_id) {
     </form>
 <?php
 } else {
-	// check permissions for this record
-	$canReadProject = $perms->checkModuleItem('projects', 'view', $project_id);
-	$canEditProject = $perms->checkModuleItem('projects', 'edit', $project_id);
-	$canViewTasks = canView('tasks');
-	$canAddTasks = canAdd('tasks');
-	$canEditTasks = canEdit('tasks');
-	$canDeleteTasks = canDelete('tasks');
+    // check permissions for this record
+    $canReadProject = $perms->checkModuleItem('projects', 'view', $project_id);
+    $canEditProject = $perms->checkModuleItem('projects', 'edit', $project_id);
+    $canViewTasks = canView('tasks');
+    $canAddTasks = canAdd('tasks');
+    $canEditTasks = canEdit('tasks');
+    $canDeleteTasks = canDelete('tasks');
 
-	if (!$canReadProject) {
-		$AppUI->redirect(ACCESS_DENIED);
-	}
+    if (!$canReadProject) {
+        $AppUI->redirect(ACCESS_DENIED);
+    }
 
-	// check if this record has dependencies to prevent deletion
-	$msg = '';
-	$obj = new CProject();
-	// Now check if the project is editable/viewable.
-	$denied = $obj->getDeniedRecords($AppUI->user_id);
-	if (in_array($project_id, $denied)) {
-		$AppUI->redirect(ACCESS_DENIED);
-	}
+    // check if this record has dependencies to prevent deletion
+    $msg = '';
+    $obj = new CProject();
+    // Now check if the project is editable/viewable.
+    $denied = $obj->getDeniedRecords($AppUI->user_id);
+    if (in_array($project_id, $denied)) {
+        $AppUI->redirect(ACCESS_DENIED);
+    }
 
-	$canDeleteProject = $obj->canDelete($msg, $project_id);
+    $canDeleteProject = $obj->canDelete($msg, $project_id);
 
-	$obj->load($project_id);
+    $obj->load($project_id);
 
-	if (!$obj) {
-		$AppUI->setMsg('Project');
-		$AppUI->setMsg('invalidID', UI_MSG_ERROR, true);
+    if (!$obj) {
+        $AppUI->setMsg('Project');
+        $AppUI->setMsg('invalidID', UI_MSG_ERROR, true);
         $AppUI->redirect('m=' . $m);
-	}
+    }
 
-	// setup the title block
-	$ttl = 'ProjectDesigner';
-	$titleBlock = new w2p_Theme_TitleBlock($ttl, 'icon.png', $m);
-	$titleBlock->addCrumb('?m=projects', 'projects list');
-	$titleBlock->addCrumb('?m=' . $m, 'select another project');
-	$titleBlock->addCrumb('?m=projects&a=view&bypass=1&project_id=' . $project_id, 'normal view project');
+    // setup the title block
+    $ttl = 'ProjectDesigner';
+    $titleBlock = new w2p_Theme_TitleBlock($ttl, 'icon.png', $m);
+    $titleBlock->addCrumb('?m=projects', 'projects list');
+    $titleBlock->addCrumb('?m=' . $m, 'select another project');
+    $titleBlock->addCrumb('?m=projects&a=view&bypass=1&project_id=' . $project_id, 'normal view project');
 
     $titleBlock->addButton('new link', '?m=links&a=addedit&project_id=' . $project_id);
 
-	if ($canEditProject) {
-		$titleBlock->addCell();
+    if ($canEditProject) {
+        $titleBlock->addCell();
         $titleBlock->addButton('New event', '?m=events&a=addedit&event_project=' . $project_id);
 
-		$titleBlock->addCell();
+        $titleBlock->addCell();
         $titleBlock->addButton('New file', '?m=files&a=addedit&project_id=' . $project_id);
-		$titleBlock->addCrumb('?m=projects&a=addedit&project_id=' . $project_id, 'edit this project');
-		if ($canDeleteProject) {
-			$titleBlock->addCrumbDelete('delete project', false, $msg);
-		}
-	}
+        $titleBlock->addCrumb('?m=projects&a=addedit&project_id=' . $project_id, 'edit this project');
+        if ($canDeleteProject) {
+            $titleBlock->addCrumbDelete('delete project', false, $msg);
+        }
+    }
     if ($canAddTasks) {
         $titleBlock->addCell();
         $titleBlock->addButton('New task', '?m=tasks&a=addedit&task_project=' . $project_id);
     }
 
-	$titleBlock->addCell();
-	$titleBlock->addCell(w2PtoolTip($m, 'print project') . '<a href="javascript: void(0);" onclick ="window.open(\'index.php?m=projectdesigner&a=printproject&dialog=1&suppressHeaders=1&project_id=' . $project_id . '\', \'printproject\',\'width=1200, height=600, menubar=1, scrollbars=1\')">
+    $titleBlock->addCell();
+    $titleBlock->addCell(w2PtoolTip($m, 'print project') . '<a href="javascript: void(0);" onclick ="window.open(\'index.php?m=projectdesigner&a=printproject&dialog=1&suppressHeaders=1&project_id=' . $project_id . '\', \'printproject\',\'width=1200, height=600, menubar=1, scrollbars=1\')">
       		<img src="' . w2PfindImage('printer.png') . '" />
       		</a>
       		' . w2PendTip());
-	$titleBlock->addCell(w2PtoolTip($m, 'expand all panels') . '<a href="javascript: void(0);" onclick ="expandAll()">
+    $titleBlock->addCell(w2PtoolTip($m, 'expand all panels') . '<a href="javascript: void(0);" onclick ="expandAll()">
       		<img src="' . w2PfindImage('down.png', $m) . '" />
       		</a>
       		' . w2PendTip());
-	$titleBlock->addCell(w2PtoolTip($m, 'collapse all panels') . '<a href="javascript: void(0);" onclick ="collapseAll()">
+    $titleBlock->addCell(w2PtoolTip($m, 'collapse all panels') . '<a href="javascript: void(0);" onclick ="collapseAll()">
       		<img src="' . w2PfindImage('up.png', $m) . '" />
       		</a>
       		' . w2PendTip());
-	$titleBlock->addCell(w2PtoolTip($m, 'save your workspace') . '<a href="javascript: void(0);" onclick ="document.frmWorkspace.submit()">
+    $titleBlock->addCell(w2PtoolTip($m, 'save your workspace') . '<a href="javascript: void(0);" onclick ="document.frmWorkspace.submit()">
       		<img src="' . w2PfindImage('filesave.png', $m) . '" />
       		</a>
       		' . w2PendTip());
-	$titleBlock->addCell();
-	$titleBlock->show();
+    $titleBlock->addCell();
+    $titleBlock->show();
 ?>
 <form name="frmWorkspace" action="?m=<?php echo $m; ?>" method="post" accept-charset="utf-8">
 	<input type="hidden" name="dosql" value="do_projectdesigner_aed" />
@@ -193,31 +194,32 @@ if (!$project_id) {
 </form>
 
 <?php
-	$priorities = w2Pgetsysval('TaskPriority');
-	$types = w2Pgetsysval('TaskType');
-	$durntype = w2PgetSysVal('TaskDurationType');
-    $task_access = array(CTask::ACCESS_PUBLIC => 'Public', 
+    $priorities = w2Pgetsysval('TaskPriority');
+    $types = w2Pgetsysval('TaskType');
+    $durntype = w2PgetSysVal('TaskDurationType');
+    $task_access = array(CTask::ACCESS_PUBLIC => 'Public',
         CTask::ACCESS_PROTECTED => 'Protected', CTask::ACCESS_PARTICIPANT => 'Participant',
         CTask::ACCESS_PRIVATE => 'Private');
-	$extra = array(0 => '(none)', 1 => 'Milestone', 2 => 'Dynamic Task', 3 => 'Inactive Task');
-	$sel_priorities = arraySelect($priorities, 'add_task_priority0', 'style="width:80px" class="text"', '0');
-	$sel_types = arraySelect($types, 'add_task_type0', 'style="width:80px" class="text"', '');
-	$sel_access = arraySelect($task_access, 'add_task_access0', 'style="width:80px" class="text"', '');
-	$sel_extra = arraySelect($extra, 'add_task_extra0', 'style="width:80px" class="text"', '');
-	$sel_durntype = arraySelect($durntype, 'add_task_durntype0', 'style="width:80px" class="text"', '', true);
+    $extra = array(0 => '(none)', 1 => 'Milestone', 2 => 'Dynamic Task', 3 => 'Inactive Task');
+    $sel_priorities = arraySelect($priorities, 'add_task_priority0', 'style="width:80px" class="text"', '0');
+    $sel_types = arraySelect($types, 'add_task_type0', 'style="width:80px" class="text"', '');
+    $sel_access = arraySelect($task_access, 'add_task_access0', 'style="width:80px" class="text"', '');
+    $sel_extra = arraySelect($extra, 'add_task_extra0', 'style="width:80px" class="text"', '');
+    $sel_durntype = arraySelect($durntype, 'add_task_durntype0', 'style="width:80px" class="text"', '', true);
 ?>
 <script language="javascript" type="text/javascript">
 
-$( document ).ready(function() {
+$( document ).ready(function () {
     expand_collapse('project', 'tblProjects', 'expand');
 });
 // security improvement:
 // some javascript functions may not appear on client side in case of user not having write permissions
 // else users would be able to arbitrarily run 'bad' functions
 <?php
-	if ($canEdit) {
+    if ($canEdit) {
 ?>
-function delIt() {
+function delIt()
+{
 	if (confirm( '<?php echo $AppUI->_('doDelete', UI_OUTPUT_JS) . ' ' . $AppUI->_('Project', UI_OUTPUT_JS) . '?'; ?>' )) {
 		document.frmDelete.submit();
 	}
@@ -230,14 +232,15 @@ var sel_access = '<?php echo mb_str_replace(chr(10), '', $sel_access); ?>';
 var sel_extra = '<?php echo mb_str_replace(chr(10), '', $sel_extra); ?>';
 var sel_durntype = '<?php echo mb_str_replace(chr(10), '', $sel_durntype); ?>';
 
-function addComponent() {
+function addComponent()
+{
 	var form = document.editFrm;
 	var li = parseInt(form.nrcomponents.value);
 	var line_nr = li+1;
-	
+
 	var ni = document.getElementById('tcomponents');
 	var li = li+1;
-	
+
 	priorities = sel_priorities.replace('priority0','priority_'+line_nr);
 	priorities = priorities.replace('priority0','priority_'+line_nr);
 	types = sel_types.replace('type0','type_'+line_nr);
@@ -248,9 +251,9 @@ function addComponent() {
 	extra = extra.replace('extra0','extra_'+line_nr);
 	durntype = sel_durntype.replace('durntype0', 'durntype_'+line_nr);
 	durntype = durntype.replace('durntype0', 'durntype_'+line_nr);
-	
+
 	eval('oldType_'+line_nr+'=""');
-	
+
 	var trIdName = 'component'+li+'_';
 	var newtr = document.createElement('tr');
 	var htmltxt = '';
@@ -281,7 +284,7 @@ function addComponent() {
 	oCell = document.createElement('td');
 	htmltxt = '';
 	htmltxt +='<input type="hidden" id="add_task_end_date_'+line_nr+'" name="add_task_end_date_'+line_nr+'" value="<?php $today->setDate($today->getTime() + 60 * 60, DATE_FORMAT_UNIXTIME);
-	echo $today->format(FMT_TIMESTAMP); ?>" />';
+    echo $today->format(FMT_TIMESTAMP); ?>" />';
 	htmltxt +='<input type="text" onchange="setDate(\'editFrm\', \'end_date_'+line_nr+'\');" class="text" style="width:130px;" id="end_date_'+line_nr+'" name="end_date_'+line_nr+'" value="<?php echo $today->format($cf); ?>" />';
 	htmltxt +='<a href="javascript: void(0);" onclick="return showCalendar(\'end_date_'+line_nr+'\', \'<?php echo $cf ?>\', \'editFrm\', \'<?php echo (strpos($cf, '%p') !== false ? '12' : '24') ?>\', true)" >';
 	htmltxt +='&nbsp;<img src="<?php echo w2PfindImage('calendar.gif', $m); ?>" />';
@@ -344,7 +347,8 @@ function addComponent() {
     $("span").tipTip({maxWidth: "auto", delay: 200, fadeIn: 150, fadeOut: 150});
 }
 
-function removeComponent(tr_id) {
+function removeComponent(tr_id)
+{
     var table_row = document.getElementById(tr_id);
     var table_row_description = document.getElementById(tr_id+'desc');
     table = table_row.parentNode;
@@ -352,17 +356,17 @@ function removeComponent(tr_id) {
     table.removeChild(table_row_description);
 //deactivate new tooltips on the fly
 	var as = [];
-	$$('span').each(function(span){
+	$$('span').each(function (span) {
 		if (span.getAttribute('title')) as.push(span);
 	});
 	new Tips(as), {}
 }
 
 var check_task_dates = <?php
-	if (isset($w2Pconfig['check_task_dates']) && $w2Pconfig['check_task_dates'])
-		echo 'true';
-	else
-		echo 'false';
+    if (isset($w2Pconfig['check_task_dates']) && $w2Pconfig['check_task_dates'])
+        echo 'true';
+    else
+        echo 'false';
 ?>;
 var can_edit_time_information = <?php echo $can_edit_time_information ? 'true' : 'false'; ?>;
 
@@ -379,7 +383,8 @@ var daily_working_hours = <?php echo (int) w2PgetConfig('daily_working_hours'); 
 var oldProj = '<?php echo htmlentities($obj->project_name, ENT_QUOTES) . ':'; ?>';
 
 /* TODO: This needs to be refactored to use the core setDate_new function. */
-function setDate( frm_name, f_date ) {
+function setDate(frm_name, f_date)
+{
 	fld_date = eval( 'document.' + frm_name + '.' + f_date );
 	fld_task_date = eval( 'document.' + frm_name + '.' + 'add_task_' + f_date );
 	if (fld_date.value.length>0) {
@@ -411,7 +416,8 @@ function setDate( frm_name, f_date ) {
 	}
 }
 
-function calcDuration(f, start_date, end_date, duration_fld, durntype_fld) {
+function calcDuration(f, start_date, end_date, duration_fld, durntype_fld)
+{
     var start_value = start_date.value;
     var end_value = end_date.value;
 
@@ -472,11 +478,11 @@ function calcDuration(f, start_date, end_date, duration_fld, durntype_fld) {
 <tr id="gantt" <?php echo (isset($view_options[0]['pd_option_view_gantt']) ? ($view_options[0]['pd_option_view_gantt'] ? 'style="visibility:visible;display:"' : 'style="visibility:collapse;display:none"') : 'style="visibility:visible;display:"'); ?>>
 	<td colspan="2" class="hilite">
 	<?php
-	if ($canViewTasks) {
-		require (w2PgetConfig('root_dir') . '/modules/projectdesigner/vw_gantt.php');
-	} else {
-		echo $AppUI->_('You do not have permission to view tasks');
-	}
+    if ($canViewTasks) {
+        require (w2PgetConfig('root_dir') . '/modules/projectdesigner/vw_gantt.php');
+    } else {
+        echo $AppUI->_('You do not have permission to view tasks');
+    }
 ?>
 	</td>
 </tr>
@@ -502,11 +508,11 @@ function calcDuration(f, start_date, end_date, duration_fld, durntype_fld) {
 <tr id="tasks" <?php echo (isset($view_options[0]['pd_option_view_tasks']) ? ($view_options[0]['pd_option_view_tasks'] ? 'style="visibility:visible;display:"' : 'style="visibility:collapse;display:none"') : 'style="visibility:visible;display:"'); ?>>
 	<td colspan="2" class="hilite">
 	<?php
-	if ($canViewTasks) {
-		require (w2PgetConfig('root_dir') . '/modules/tasks/vw_tasks.php');
-	} else {
-		echo $AppUI->_('You do not have permission to view tasks');
-	}
+    if ($canViewTasks) {
+        require (w2PgetConfig('root_dir') . '/modules/tasks/vw_tasks.php');
+    } else {
+        echo $AppUI->_('You do not have permission to view tasks');
+    }
 ?>
 	</td>
 </tr>
@@ -532,11 +538,11 @@ function calcDuration(f, start_date, end_date, duration_fld, durntype_fld) {
 <tr id="actions" <?php echo (isset($view_options[0]['pd_option_view_actions']) ? ($view_options[0]['pd_option_view_actions'] ? 'style="visibility:visible;display:"' : 'style="visibility:collapse;display:none"') : 'style="visibility:visible;display:"'); ?>>
 	<td colspan="2" class="hilite">
 	<?php
-	if ($canEditTasks) {
-		require w2PgetConfig('root_dir') . '/modules/projectdesigner/vw_actions.php';
-	} else {
-		echo $AppUI->_('You do not have permission to edit tasks');
-	}
+    if ($canEditTasks) {
+        require w2PgetConfig('root_dir') . '/modules/projectdesigner/vw_actions.php';
+    } else {
+        echo $AppUI->_('You do not have permission to edit tasks');
+    }
 ?>
 	</td>
 </tr>
@@ -562,11 +568,11 @@ function calcDuration(f, start_date, end_date, duration_fld, durntype_fld) {
 <tr id="addtasks" <?php echo (isset($view_options[0]['pd_option_view_addtasks']) ? ($view_options[0]['pd_option_view_addtasks'] ? 'style="visibility:visible;display:"' : 'style="visibility:collapse;display:none"') : 'style="visibility:visible;display:"'); ?>>
 	<td colspan="2" class="hilite">
 	<?php
-	if ($canAddTasks) {
-		require w2PgetConfig('root_dir') . '/modules/projectdesigner/vw_addtasks.php';
-	} else {
-		echo $AppUI->_('You do not have permission to add tasks');
-	}
+    if ($canAddTasks) {
+        require w2PgetConfig('root_dir') . '/modules/projectdesigner/vw_addtasks.php';
+    } else {
+        echo $AppUI->_('You do not have permission to add tasks');
+    }
 ?>
 	</td>
 </tr>
@@ -592,13 +598,13 @@ function calcDuration(f, start_date, end_date, duration_fld, durntype_fld) {
 <tr id="files" <?php echo (isset($view_options[0]['pd_option_view_files']) ? ($view_options[0]['pd_option_view_files'] ? 'style="visibility:visible;display:"' : 'style="visibility:collapse;display:none"') : 'style="visibility:visible;display:"'); ?>>
 	<td colspan="2" class="hilite">
 	<?php
-	//Permission check here
-	$canViewFiles = canView('files');
-	if ($canViewFiles) {
-		require w2PgetConfig('root_dir') . '/modules/projectdesigner/vw_files.php';
-	} else {
-		echo $AppUI->_('You do not have permission to view files');
-	}
+    //Permission check here
+    $canViewFiles = canView('files');
+    if ($canViewFiles) {
+        require w2PgetConfig('root_dir') . '/modules/projectdesigner/vw_files.php';
+    } else {
+        echo $AppUI->_('You do not have permission to view files');
+    }
 ?>
 	</td>
 </tr>

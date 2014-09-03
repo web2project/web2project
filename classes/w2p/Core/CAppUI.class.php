@@ -145,20 +145,6 @@ class w2p_Core_CAppUI
         $this->user_prefs = array();
     }
 
-    /**
-     * Used to load a php class file from the system classes directory
-     * @param string $name The class root file name (excluding .class.php)
-     * @return string The path to the include file
-     */
-    public function getSystemClass($name = null)
-    {
-        trigger_error("CAppUI->getSystemClass() has been deprecated in v2.0 and will be removed in v3.0", E_USER_NOTICE);
-
-        if ($name) {
-            return W2P_BASE_DIR . '/classes/' . $name . '.class.php';
-        }
-    }
-
     /** @deprecated */
     public function getLibraryClass($name = null)
     {
@@ -885,14 +871,6 @@ class w2p_Core_CAppUI
             $q->addWhere('user_access_log_id = ' . $last_insert_id);
             $q->exec();
         }
-    }
-
-    /**
-     * @deprecated
-     */
-    public function logout()
-    {
-        trigger_error("The AppUI->logout() method has been deprecated in 2.0 and will be removed in v4.0. Please use CCompany->projects() instead.", E_USER_NOTICE );
     }
 
     /**

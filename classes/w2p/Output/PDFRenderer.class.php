@@ -15,12 +15,12 @@ class w2p_Output_PDFRenderer
     protected $font_dir = '';
     protected $temp_dir = '';
 
-    public function __construct($papersize = 'A4', $orientation = 'portrait')
+    public function __construct($papersize = 'A4', $orientation = 'portrait', $pdf = null)
     {
         $this->font_dir = W2P_BASE_DIR . '/lib/ezpdf/fonts';
         $this->temp_dir = W2P_BASE_DIR . '/files/temp';
 
-        $this->pdf = new Cezpdf($papersize, $orientation);
+        $this->pdf = (is_null($pdf)) ? new Cezpdf($papersize, $orientation) : $pdf;
         $this->setMargins();
     }
 

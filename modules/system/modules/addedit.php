@@ -1,6 +1,6 @@
 <?php
 if (!defined('W2P_BASE_DIR')) {
-	die('You should not access this file directly.');
+    die('You should not access this file directly.');
 }
 
 $mod_id = (int) w2PgetParam($_GET, 'mod_id');
@@ -16,15 +16,15 @@ $canEdit = $obj->canEdit();
 $canRead = canView('system');
 
 if (!$canAddEdit) {
-	$AppUI->redirect(ACCESS_DENIED);
+    $AppUI->redirect(ACCESS_DENIED);
 }
 
 if (!$canRead) {
-	$AppUI->redirect(ACCESS_DENIED);
+    $AppUI->redirect(ACCESS_DENIED);
 }
 
 //TODO: generate per-module filter list
-$filter = array($module->permissions_item_field, 'user_password', 'user_parent',
+$filter = array('user_password', 'user_parent',
         'task_updator', 'task_order', 'task_client_publish', 'task_dynamic',
         'task_notify', 'task_departments', 'task_contacts', 'task_custom',
         'task_allow_other_user_tasklogs', 'tracked_dynamics', 'tracking_dynamics',
@@ -80,9 +80,9 @@ $orderMax = count($properties) + count($fields);
 			<th><?php echo $AppUI->_('Display Name'); ?></th>
 		</tr>
 		<?php
-		$order = 1;
-		foreach ($fields as $field => $text) {
-			?><tr>
+        $order = 1;
+        foreach ($fields as $field => $text) {
+            ?><tr>
 				<td>
 					<input type="checkbox" name="display[<?php echo $field; ?>]" checked="checked" />
 				</td>
@@ -97,11 +97,11 @@ $orderMax = count($properties) + count($fields);
 					<input type="text" name="displayNames[]" value="<?php echo htmlspecialchars($text, ENT_QUOTES); ?>" size="25" maxlength="50" class="text" />
 				</td>
 			</tr><?php
-			$order++;
-			unset($properties[$field]);
-		}
-		foreach ($properties as $property => $value) {
-			$fieldname_pieces = explode('_', $property);
+            $order++;
+            unset($properties[$field]);
+        }
+        foreach ($properties as $property => $value) {
+            $fieldname_pieces = explode('_', $property);
             unset($fieldname_pieces[0]);
             $value = ucwords(implode(' ', $fieldname_pieces));
             ?><tr>
@@ -119,9 +119,9 @@ $orderMax = count($properties) + count($fields);
 					<input type="text" name="displayNames[]" value="<?php echo $AppUI->_($value); ?>" size="25" maxlength="50" class="text" />
 				</td>
 			</tr><?php
-			$order++;
-		}
-		?>
+            $order++;
+        }
+        ?>
   		<tr>
           	<td colspan="2">
           		<input class="button btn btn-danger" type="button" name="cancel" value="<?php echo $AppUI->_('cancel'); ?>" />

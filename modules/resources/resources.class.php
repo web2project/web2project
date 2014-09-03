@@ -12,7 +12,8 @@ class CResource extends w2p_Core_BaseObject
     public $resource_max_allocation = null;
     public $resource_description = null;
 
-    public function __construct() {
+    public function __construct()
+    {
         parent::__construct('resources', 'resource_id');
     }
 
@@ -42,7 +43,8 @@ class CResource extends w2p_Core_BaseObject
     /**
      * @deprecated
      */
-    public function typeSelect() {
+    public function typeSelect()
+    {
         trigger_error("CResource->typeSelect() has been deprecated in v3.0 and will be removed in v4.0. Please use w2PgetSysVal('ResourceTypes') instead.", E_USER_NOTICE);
 
         $typelist = w2PgetSysVal('ResourceTypes');
@@ -59,10 +61,12 @@ class CResource extends w2p_Core_BaseObject
     /**
      * @deprecated
      */
-    public function getTypeName() {
+    public function getTypeName()
+    {
         trigger_error("CResource->getTypeName() has been deprecated in v3.0 and will be removed in v4.0. Please use w2PgetSysVal('ResourceTypes') instead.", E_USER_NOTICE);
 
         $typelist = $this->typeSelect();
+
         return $typelist[$this->resource_type];
     }
 
@@ -73,7 +77,7 @@ class CResource extends w2p_Core_BaseObject
         $q->addQuery('b.percent_allocated');
         $q->addTable('resources', 'a');
         $q->addJoin('resource_tasks', 'b', 'b.resource_id = a.resource_id', 'inner');
-        $q->addWhere('b.task_id = ' . (int)$task_id);
+        $q->addWhere('b.task_id = ' . (int) $task_id);
 
         return $q->loadHashList('resource_id');
     }
@@ -92,7 +96,8 @@ class CResource extends w2p_Core_BaseObject
         return $q->loadHashList();
     }
 
-    public function hook_search() {
+    public function hook_search()
+    {
         $search['table'] = 'resources';
         $search['table_module'] = 'resources';
         $search['table_key'] = 'resource_id';

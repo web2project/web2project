@@ -1,6 +1,6 @@
 <?php
 /**
- * Class for testing w2p_Controllers_Base_Test functionality
+ * Class for testing \Web2project\Actions\AddEdit functionality
  *
  *
  * PHP version 5
@@ -9,14 +9,14 @@
  *   LICENSE file in root of site for further details
  *
  * @author      Trevor Morse <trevor.morse@gmail.com>
- * @category    w2p_Controllers_Base
+ * @category    \Web2project\Actions\AddEdit
  * @package     web2project
  * @subpackage  unit_tests
  * @license     Clear BSD
  * @link        http://www.web2project.net
  */
 
-class w2p_Controllers_BaseTest extends CommonSetup
+class Web2project_Actions_AddEditTest extends CommonSetup
 {
     protected function setUp()
     {
@@ -25,7 +25,7 @@ class w2p_Controllers_BaseTest extends CommonSetup
       $this->link    = new CLink();
       $this->link->overrideDatabase($this->mockDB);
 
-      $this->obj = new w2p_Controllers_Base($this->link, false, 'prefix', '/success', '/failure');
+      $this->obj = new \Web2project\Actions\AddEdit($this->link, false, 'prefix', '/success', '/failure');
 
       $GLOBALS['acl'] = new w2p_Mocks_Permissions();
 
@@ -49,7 +49,7 @@ class w2p_Controllers_BaseTest extends CommonSetup
      */
     public function testNewBaseAttributes()
     {
-        $this->assertInstanceOf('w2p_Controllers_Base',     $this->obj);
+        $this->assertInstanceOf('\Web2project\Actions\AddEdit',     $this->obj);
         $this->assertObjectHasAttribute('delete',           $this->obj);
         $this->assertObjectHasAttribute('successPath',      $this->obj);
         $this->assertObjectHasAttribute('errorPath',        $this->obj);

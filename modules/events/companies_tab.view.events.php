@@ -1,6 +1,6 @@
 <?php
 if (!defined('W2P_BASE_DIR')) {
-	die('You should not access this file directly.');
+    die('You should not access this file directly.');
 }
 // @todo    convert to template
 
@@ -23,8 +23,6 @@ if (0 == count($fields)) {
 
     $fields = array_combine($fieldList, $fieldNames);
 }
-
-
 
 $event_types = w2PgetSysVal('EventType');
 $customLookups = array('event_type' => $event_types);

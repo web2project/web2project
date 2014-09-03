@@ -1,6 +1,6 @@
 <?php
 if (!defined('W2P_BASE_DIR')) {
-	die('You should not access this file directly.');
+    die('You should not access this file directly.');
 }
 
 global $project_id;
@@ -12,7 +12,7 @@ $module = new w2p_System_Module();
 $fields = $module->loadSettings('projectdesigner', 'task_list_print');
 
 if (0 == count($fields)) {
-    // TODO: This is only in place to provide an pre-upgrade-safe 
+    // TODO: This is only in place to provide an pre-upgrade-safe
     //   state for versions earlier than v3.0
     //   At some point at/after v4.0, this should be deprecated
     $fieldList = array('task_name', 'task_percent_complete', 'task_owner', 'task_start_date', 'task_duration', 'task_end_date');

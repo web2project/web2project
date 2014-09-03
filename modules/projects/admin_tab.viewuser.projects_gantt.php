@@ -1,6 +1,6 @@
 <?php
 if (!defined('W2P_BASE_DIR')) {
-	die('You should not access this file directly.');
+    die('You should not access this file directly.');
 }
 
 global $company_id, $dept_ids, $department, $min_view, $m, $a, $user_id, $tab;
@@ -9,4 +9,4 @@ global $company_id, $dept_ids, $department, $min_view, $m, $a, $user_id, $tab;
 // which is not used here
 $company_id = $department = 0;
 
-require (W2P_BASE_DIR . '/modules/projects/viewgantt.php');
+require W2P_BASE_DIR . '/modules/projects/viewgantt.php';

@@ -1,6 +1,6 @@
 <?php
 if (!defined('W2P_BASE_DIR')) {
-	die('You should not access this file directly.');
+    die('You should not access this file directly.');
 }
 // @todo    convert to template
 
@@ -15,21 +15,21 @@ $users = w2PgetUsers();
 $cost_code = w2PgetParam($_GET, 'cost_code', 0);
 
 if (isset($_GET['user_id'])) {
-	$AppUI->setState('ProjectsTaskLogsUserFilter', w2PgetParam($_GET, 'user_id', 0));
+    $AppUI->setState('ProjectsTaskLogsUserFilter', w2PgetParam($_GET, 'user_id', 0));
 }
 $user_id = $AppUI->getState('ProjectsTaskLogsUserFilter') ? $AppUI->getState('ProjectsTaskLogsUserFilter') : 0;
 
 if (isset($_GET['hide_inactive'])) {
-	$AppUI->setState('ProjectsTaskLogsHideArchived', true);
+    $AppUI->setState('ProjectsTaskLogsHideArchived', true);
 } else {
-	$AppUI->setState('ProjectsTaskLogsHideArchived', false);
+    $AppUI->setState('ProjectsTaskLogsHideArchived', false);
 }
 $hide_inactive = $AppUI->getState('ProjectsTaskLogsHideArchived');
 
 if (isset($_GET['hide_complete'])) {
-	$AppUI->setState('ProjectsTaskLogsHideComplete', true);
+    $AppUI->setState('ProjectsTaskLogsHideComplete', true);
 } else {
-	$AppUI->setState('ProjectsTaskLogsHideComplete', false);
+    $AppUI->setState('ProjectsTaskLogsHideComplete', false);
 }
 $hide_complete = $AppUI->getState('ProjectsTaskLogsHideComplete');
 
@@ -41,7 +41,8 @@ $hide_complete = $AppUI->getState('ProjectsTaskLogsHideComplete');
 // else users would be able to arbitrarily run 'bad' functions
 if ($canEdit) {
 ?>
-function delIt2(id) {
+function delIt2(id)
+{
 	if (confirm( '<?php echo $AppUI->_('doDelete', UI_OUTPUT_JS) . ' ' . $AppUI->_('Task Log', UI_OUTPUT_JS) . '?'; ?>' )) {
 		document.frmDelete2.task_log_id.value = id;
 		document.frmDelete2.submit();
@@ -122,7 +123,7 @@ $perms = &$AppUI->acl();
 $canDelete = canDelete('task_log');
 
 // Pull the task comments
-$project = new CProject;
+$project = new CProject();
 //TODO: this method should be moved to CTaskLog
 $logs = $project->getTaskLogs(null, $project_id, $user_id, $hide_inactive, $hide_complete, $cost_code);
 
@@ -149,7 +150,7 @@ if (count($logs)) {
             /** If the user isn't allowed to see the task, don't show the logs. */
             continue;
         }
-        
+
         $s .= '<tr bgcolor="white" valign="top"><td class="data _edit">';
         if ($canEdit) {
             $s .= '<a href="?m=tasks&a=view&task_id=' . $row['task_id'] . '&tab=1&task_log_id=' . $row['task_log_id'] . '">' . w2PshowImage('icons/stock_edit-16.png', 16, 16, '') . "\n\t\t</a>";
@@ -165,8 +166,8 @@ if (count($logs)) {
             $s .= '<a href="javascript:delIt2(' . $row['task_log_id'] . ');" title="' . $AppUI->_('delete log') . '">' . w2PshowImage('icons/stock_delete-16.png', 16, 16, '') . '</a>';
         }
         $s .= '</td></tr>';
-        
-        $hrs += (float)$row['task_log_hours'];
+
+        $hrs += (float) $row['task_log_hours'];
     }
 }
 $s .= '<tr bgcolor="white" valign="top">';

@@ -1,12 +1,12 @@
 <?php
 if (!defined('W2P_BASE_DIR')) {
-	die('You should not access this file directly.');
+    die('You should not access this file directly.');
 }
 
 // check permissions
 $perms = &$AppUI->acl();
 if (!canEdit('system')) {
-	$AppUI->redirect(ACCESS_DENIED);
+    $AppUI->redirect(ACCESS_DENIED);
 }
 
 $keys = __extract_from_syskeys_syskey();
@@ -24,7 +24,8 @@ $titleBlock->show();
 // else users would be able to arbitrarily run 'bad' functions
 if ($canEdit) {
 ?>
-function delIt(id) {
+function delIt(id)
+{
 	if (confirm( 'Are you sure you want to delete this?' )) {
 		f = document.sysKeyFrm;
 		f.del.value = 1;
@@ -47,11 +48,11 @@ function delIt(id) {
 // do the modules that are installed on the system
 $s = '';
 foreach ($keys as $row) {
-	echo showRow_keys($row['syskey_id'], $row['syskey_name'], $row['syskey_label']);
+    echo showRow_keys($row['syskey_id'], $row['syskey_name'], $row['syskey_label']);
 }
 // add in the new key row:
 if ($syskey_id == 0) {
-	echo showRow_keys();
+    echo showRow_keys();
 }
 ?>
 </table>

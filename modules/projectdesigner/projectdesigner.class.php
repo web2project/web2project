@@ -29,7 +29,7 @@ class CProjectDesigner extends w2p_Core_BaseObject
 
         $pd_options = $this->loadAll(null, 'pd_option_user = ' . $this->pd_option_user);
         if (count($pd_options)) {
-            foreach($pd_options as $options) {
+            foreach ($pd_options as $options) {
                 $pd_options_id = $options['pd_option_id'];
             }
         }
@@ -44,6 +44,6 @@ class CProjectDesigner extends w2p_Core_BaseObject
      *
      */
     public function canCreate() {   return true;    }
-    public function canEdit()   {   return true;    }
+    public function canEdit() {   return true;    }
     public function canDelete($notUsed = null, $notUsed2 = null, $notUsed3 = null) {   return true;    }
 }

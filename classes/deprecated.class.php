@@ -99,20 +99,6 @@ class CConfig extends w2p_System_Config
  *
  * @deprecated
  */
-class CDate extends w2p_Utilities_Date
-{
-    public function __construct($datetime = null, $tz = '')
-    {
-        parent::__construct($datetime, $tz);
-        trigger_error("CDate has been deprecated in v2.0 and will be removed by v4.0. Please use w2p_Utilities_Date instead.", E_USER_NOTICE );
-    }
-}
-
-/**
- * @package web2project\deprecated
- *
- * @deprecated
- */
 class CFileFolder extends CFile_Folder
 {
     public function __construct()
@@ -290,62 +276,6 @@ class CTitleBlock_core extends w2p_Theme_TitleBlock
     }
 }
 
-/**
- * @package web2project\deprecated
- *
- * @deprecated
- */
-class CW2pObject extends w2p_Core_BaseObject
-{
-    public function __construct($table, $key, $module = '')
-    {
-        parent::__construct($table, $key, $module);
-        trigger_error("CW2pObject has been deprecated in v2.0 and will be removed by v4.0. Please use w2p_Core_BaseObject instead.", E_USER_NOTICE );
-    }
-}
-
-/**
- * @package web2project\deprecated
- *
- * @deprecated
- */
-class CustomFields extends w2p_Core_CustomFields
-{
-    public function __construct($m, $a, $obj_id = null, $mode = 'edit',
-                                $published = 0)
-    {
-        parent::__construct($m, $a, $obj_id, $mode, $published);
-        trigger_error("CustomFields has been deprecated in v2.0 and will be removed by v4.0. Please use w2p_core_CustomFields instead.", E_USER_NOTICE );
-    }
-}
-
-/**
- * @package web2project\deprecated
- *
- * @deprecated
- */
-class DBQuery extends w2p_Database_Query
-{
-    public function __construct($prefix = null, $query_db = null)
-    {
-        parent::__construct($prefix, $query_db);
-        trigger_error("DBQuery has been deprecated in v2.0 and will be removed by v4.0. Please use w2p_Database_Query instead.", E_USER_NOTICE );
-    }
-}
-
-/**
- * @package web2project\deprecated
- *
- * @deprecated
- */
-class Mail extends w2p_Utilities_Mail
-{
-    public function __construct()
-    {
-        parent::__construct();
-        trigger_error("Mail has been deprecated in v2.0 and will be removed by v4.0. Please use w2p_Utilities_Mail instead.", E_USER_NOTICE );
-    }
-}
 
 /**
  * @package web2project\deprecated
@@ -358,20 +288,6 @@ class w2Pacl extends w2p_Extensions_Permissions
     {
         parent::__construct($opts);
         trigger_error("w2Pacl has been deprecated in v3.0 and will be removed by v4.0. Please use w2p_Extensions_Permissions instead.", E_USER_NOTICE );
-    }
-}
-
-/**
- * @package web2project\deprecated
- *
- * @deprecated
- */
-class w2PajaxResponse extends w2p_Extensions_AjaxResponse
-{
-    public function addCreateOptions($sSelectId, $options)
-    {
-        parent::addCreateOptions($sSelectId, $options);
-        trigger_error("w2PajaxResponse has been deprecated in v2.3 and will be removed by v4.0. Please use w2p_Extensions_AjaxResponse instead.", E_USER_NOTICE );
     }
 }
 
@@ -515,5 +431,75 @@ class smartsearch extends CSmartSearch {
 
     public function __construct() {
         trigger_error("smartsearch has been deprecated in v3.0 and will be removed by v4.0. Please use CSmartSearch instead.", E_USER_NOTICE );
+    }
+}
+
+/**
+ * @package     web2project\deprecated
+ * @deprecated  since version 4.0
+ */
+class w2p_Controller_Base extends \Web2project\Actions\AddEdit
+{
+    public function __construct($object, $delete, $prefix, $successPath, $errorPath)
+    {
+        trigger_error("w2p_Controller_Base has been deprecated in v4.0 and will be removed by v5.0. Please use \\Web2project\\Actions\\AddEdit instead.", E_USER_NOTICE );
+
+        parent::__construct($object, $delete, $prefix, $successPath, $errorPath);
+    }
+}
+
+/**
+ * @package     web2project\deprecated
+ * @deprecated  since version 4.0
+ */
+class w2p_Controller_Permissions extends \Web2project\Actions\AddEditPermissions
+{
+    public function __construct($object, $delete, $prefix, $successPath, $errorPath)
+    {
+        trigger_error("w2p_Controller_Permissions has been deprecated in v4.0 and will be removed by v5.0. Please use \\Web2project\\Actions\\AddEditPermissions instead.", E_USER_NOTICE );
+
+        parent::__construct($object, $delete, $prefix, $successPath, $errorPath);
+    }
+}
+
+/**
+ * @package     web2project\deprecated
+ * @deprecated  since version 4.0
+ */
+class w2p_Output_EmailManager extends w2p_Output_Email_Manager
+{
+    public function __construct(w2p_Core_CAppUI $AppUI = null)
+    {
+        trigger_error("w2p_Output_EmailManager has been deprecated in v4.0 and will be removed by v5.0. Please use w2p_Output_Email_Manager instead.", E_USER_NOTICE );
+
+        parent::__construct($AppUI);
+    }
+}
+
+/**
+ * @package     web2project\deprecated
+ * @deprecated  since version 4.0
+ */
+class w2p_Output_Email_Template extends \Web2project\Output\Email\Manager
+{
+    public function __construct()
+    {
+        trigger_error("w2p_Output_Email_Template has been deprecated in v4.0 and will be removed by v5.0. Please use \\Web2project\\Output\\Email\\Manager instead.", E_USER_NOTICE );
+
+        parent::__construct();
+    }
+}
+
+/**
+ * @package     web2project\deprecated
+ * @deprecated  since version 4.0
+ */
+class w2p_Utilities_Paginator extends \Web2project\Utilities\Paginator
+{
+    public function __construct(array $items, $pagesize = 0)
+    {
+        trigger_error("w2p_Utilities_Paginator has been deprecated in v4.0 and will be removed by v5.0. Please use \\Web2project\\Utilities\\Paginator instead.", E_USER_NOTICE );
+
+        parent::__construct($items, $pagesize);
     }
 }

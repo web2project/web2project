@@ -1,53 +1,53 @@
 <?php
 if (!defined('W2P_BASE_DIR')) {
-	die('You should not access this file directly.');
+    die('You should not access this file directly.');
 }
 
 if (!($user_id = w2PgetParam($_REQUEST, 'user_id', 0))) {
-	$user_id = $AppUI->user_id;
+    $user_id = $AppUI->user_id;
 }
 
 // check for a non-zero user id
 if ($user_id) {
-	$old_pwd = db_escape(trim(w2PgetParam($_POST, 'old_pwd', null)));
-	$new_pwd1 = db_escape(trim(w2PgetParam($_POST, 'new_pwd1', null)));
-	$new_pwd2 = db_escape(trim(w2PgetParam($_POST, 'new_pwd2', null)));
+    $old_pwd = db_escape(trim(w2PgetParam($_POST, 'old_pwd', null)));
+    $new_pwd1 = db_escape(trim(w2PgetParam($_POST, 'new_pwd1', null)));
+    $new_pwd2 = db_escape(trim(w2PgetParam($_POST, 'new_pwd2', null)));
 
-	$perms = &$AppUI->acl();
-	$canAdminEdit = canEdit('system');
+    $perms = &$AppUI->acl();
+    $canAdminEdit = canEdit('system');
 
-	// has the change form been posted
-	if ($new_pwd1 && $new_pwd2 && $new_pwd1 == $new_pwd2) {
-		$user = new CUser();
+    // has the change form been posted
+    if ($new_pwd1 && $new_pwd2 && $new_pwd1 == $new_pwd2) {
+        $user = new CUser();
 
-		if ($canAdminEdit || $user->validatePassword($user_id, $old_pwd)) {
+        if ($canAdminEdit || $user->validatePassword($user_id, $old_pwd)) {
             $user->load($user_id);
-			$user->user_password = $new_pwd1;
+            $user->user_password = $new_pwd1;
             $result = $user->store();
 
             if ($result) {
                 ?>
                 <script language="javascript" type="text/javascript">
-                    window.onload = function() {
+                    window.onload = function () {
                         window.close();
 		            }
                 </script>
                 <?php
-			} else {
+            } else {
                 echo '<h1>' . $AppUI->_('Change User Password') . '</h1>';
                 echo $AppUI->getTheme()->styleRenderBoxTop();
-				echo '<table class="std"><tr><td>' . $AppUI->_('chgpwUpdated') . '</td></tr></table>';
-			}
-		} else {
-			echo '<h1>' . $AppUI->_('Change User Password') . '</h1>';
+                echo '<table class="std"><tr><td>' . $AppUI->_('chgpwUpdated') . '</td></tr></table>';
+            }
+        } else {
+            echo '<h1>' . $AppUI->_('Change User Password') . '</h1>';
             echo $AppUI->getTheme()->styleRenderBoxTop();
-			echo '<table class="std"><tr><td>' . $AppUI->_('chgpwWrongPW') . '</td></tr></table>';
-		}
-	} else {
+            echo '<table class="std"><tr><td>' . $AppUI->_('chgpwWrongPW') . '</td></tr></table>';
+        }
+    } else {
 
             $AppUI->getTheme()->addFooterJavascriptFile('js/passwordstrength.js');
-            
-		?>
+
+        ?>
         <style>
             div[class="std titlebar"], form[name="frm_new"],
             body div:nth-child(2), div[class="left"] {
@@ -55,10 +55,11 @@ if ($user_id) {
             }
         </style>
 		<script language="javascript" type="text/javascript">
-		function submitIt() {
+		function submitIt()
+		{
 			var f = document.frmEdit;
 			var msg = '';
-		
+
 			if (f.new_pwd1.value.length < <?php echo w2PgetConfig('password_min_len'); ?>) {
 		        	msg += "<?php echo $AppUI->_('chgpwValidNew', UI_OUTPUT_JS); ?>" + <?php echo w2PgetConfig('password_min_len'); ?>;
 					f.new_pwd1.focus();
@@ -77,7 +78,7 @@ if ($user_id) {
 		<h1><?php echo $AppUI->_('Change User Password'); ?></h1>
 		<?php
         echo $AppUI->getTheme()->styleRenderBoxTop();
-		?>
+        ?>
 		<form name="frmEdit" method="post" onsubmit="return false" accept-charset="utf-8">
 			<input type="hidden" name="user_id" value="<?php echo $user_id; ?>" />
 			<table class="std">
@@ -110,9 +111,9 @@ if ($user_id) {
 			</table>
 		</form>
 		<?php
-	}
+    }
 } else {
-	echo '<h1>' . $AppUI->_('Change User Password') . '</h1>';
+    echo '<h1>' . $AppUI->_('Change User Password') . '</h1>';
     echo $AppUI->getTheme()->styleRenderBoxTop();
-	echo '<table class="std"><tr><td>' . $AppUI->_('chgpwLogin') . '</td></tr></table>';
+    echo '<table class="std"><tr><td>' . $AppUI->_('chgpwLogin') . '</td></tr></table>';
 }

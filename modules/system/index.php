@@ -1,10 +1,10 @@
 <?php
 if (!defined('W2P_BASE_DIR')) {
-	die('You should not access this file directly.');
+    die('You should not access this file directly.');
 }
 $perms = &$AppUI->acl();
 if (!canView('system')) { // let's see if the user has sys access
-	$AppUI->redirect(ACCESS_DENIED);
+    $AppUI->redirect(ACCESS_DENIED);
 }
 //TODO: fix the capitalization of 'system admin' vs 'System Admin' throughout this module
 
@@ -39,7 +39,7 @@ $titleBlock->show();
             }
             echo '<br />';
             $tzName = w2PgetConfig('system_timezone');
-            if(strlen($tzName) == 0) {
+            if (strlen($tzName) == 0) {
                 $tzName = ini_get('date.timezone');
             }
             if (strlen($tzName) > 0) {
@@ -97,7 +97,8 @@ $titleBlock->show();
         </div>
         <div class="left">
             <span class="subtitle"><?php echo $AppUI->_('Language Support'); ?></span><br />
-            <a href="?m=system&a=translate"><?php echo $AppUI->_('Translation Management'); ?></a>
+            <a href="?m=system&a=translate"><?php echo $AppUI->_('Translation Management'); ?></a><br />
+            <a href="?m=system&u=templating"><?php echo $AppUI->_('Email Templates'); ?></a>
         </div>
     </div>
 

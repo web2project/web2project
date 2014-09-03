@@ -32,7 +32,7 @@ $view = new w2p_Output_HTML_ViewHelper($AppUI);
         </p>
     </div>
     <div class="column right">
-        <p><?php $view->showLabel('Birthday'); ?>
+        <p><?php $view->showLabel('Birthdate'); ?>
             <?php $view->showField('contact_birthday', $contact->contact_birthday); ?>
         </p>
         <p><?php $view->showLabel('Phone'); ?>

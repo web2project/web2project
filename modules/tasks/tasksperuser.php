@@ -1,10 +1,10 @@
 <?php
 if (!defined('W2P_BASE_DIR')) {
-	die('You should not access this file directly.');
+    die('You should not access this file directly.');
 }
 
 if (isset($_POST['company_id'])) {
-	$AppUI->setState('CompanyIdxFilter', $_POST['company_id']);
+    $AppUI->setState('CompanyIdxFilter', $_POST['company_id']);
 }
 $company_id = $AppUI->getState('CompanyIdxFilter') ? $AppUI->getState('CompanyIdxFilter') : 'all';
 
@@ -20,7 +20,7 @@ $canAddEdit = $obj->canAddEdit();
 $canAuthor = $obj->canCreate();
 $canEdit = $obj->canEdit();
 if (!$canEdit) {
-	$AppUI->redirect(ACCESS_DENIED);
+    $AppUI->redirect(ACCESS_DENIED);
 }
 
 // get CCompany() to filter tasks by company

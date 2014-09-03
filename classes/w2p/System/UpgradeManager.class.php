@@ -91,8 +91,10 @@ class w2p_System_UpgradeManager {
         if ($dbConn) {
             $currentVersion = $this->_getDatabaseVersion($dbConn);
             $migrations = $this->_getMigrations();
+            $last_item = end($this->_getMigrations());
+            $migrationNumber = (int) substr($last_item, 0, 3);
 
-            if ($currentVersion < count($migrations)) {
+            if ($currentVersion < $migrationNumber) {
                 foreach ($migrations as $update) {
                     if ($update == end($migrations)) {
                         $version = $AppUI->getVersion();
@@ -206,7 +208,10 @@ class w2p_System_UpgradeManager {
 
     public function upgradeRequired() {
         $dbConn = $this->_openDBConnection();
-        return (count($this->_getMigrations()) > $this->_getDatabaseVersion($dbConn));
+        $last_item = end($this->_getMigrations());
+        $migrationNumber = (int) substr($last_item, 0, 3);
+
+        return ($migrationNumber > $this->_getDatabaseVersion($dbConn));
     }
 
     protected function _getIniSize($val) {
@@ -237,7 +242,7 @@ class w2p_System_UpgradeManager {
              $migrations[$migrationNumber] = $file;
            }
         }
-        sort($migrations);
+        asort($migrations);
         return $migrations;
     }
 

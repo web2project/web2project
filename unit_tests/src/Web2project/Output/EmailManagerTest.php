@@ -23,7 +23,7 @@ class Web2project_Output_EmailManagerTest extends CommonSetup
     {
         parent::setUp();
 
-        $this->manager = new w2p_Output_EmailManager($this->_AppUI);
+        $this->manager = new w2p_Output_Email_Manager($this->_AppUI);
     }
 
     public function testGetEventNotify()
@@ -204,7 +204,7 @@ class Web2project_Output_EmailManagerTest extends CommonSetup
         $task_log->task_log_hours = 2.0;
         $task_log->task_log_name = 'Something cool';
 
-        $target_body  = "Project: \nTask: Task Name\nTask Type:Administrative\n";
+        $target_body  = "Project: \nTask: Task Name\nTask Type: Administrative\n";
         $target_body .= "URL: " . W2P_BASE_URL . "/index.php?m=tasks&a=view&task_id=-1\n\n";
         $target_body .= "------------------------\n\nUser: \nHours: 2\nSummary: Something cool\n\n\n--\n";
 
@@ -276,29 +276,15 @@ class Web2project_Output_EmailManagerTest extends CommonSetup
 
     public function testGetNotifyNewUser()
     {
-        $target_body  = "Dear Keith Casey,\n\n";
-        $target_body .= "Congratulations! Your account has been activated by the administrator.\n";
-        $target_body .= "Please use the login information provided earlier.\n\n";
-        $target_body .= "You may login at the following URL: " . W2P_BASE_URL . "\n\n";
-        $target_body .= "If you have any difficulties or questions, please ask the administrator for help.\n";
-        $target_body .= "Assuring you the best of our attention at all time.\n\n";
-        $target_body .= "Our Warmest Regards,\n\nThe Support Staff.\n\n****PLEASE KEEP THIS EMAIL FOR YOUR RECORDS****";
+        $target_body  = "Dear Keith Casey,\n\n\n";
+        $target_body .= "Congratulations! Your account has been activated by the administrator.\n\n";
+        $target_body .= "Please use the login information provided earlier.\n";
+        $target_body .= "You may login at the following URL: " . W2P_BASE_URL . "\n\n\n";
+        $target_body .= "If you have any difficulties or questions, please ask the administrator for help.\n\n";
+        //$target_body .= "Assuring you the best of our attention at all time.\n\n";
+        $target_body .= "Our Warmest Regards,\nThe Support Staff.\n\n****PLEASE KEEP THIS EMAIL FOR YOUR RECORDS****";
 
         $actual_body = $this->manager->getNotifyNewUser('Keith Casey');
-
-        $this->assertEquals($target_body, $actual_body);
-    }
-
-    public function testNotifyHR()
-    {
-        $target_body  = "A new user has signed up on web2Project Development. Please go through the user details below:\n";
-        $target_body .= "Name: Keith Casey\nUsername: caseysoftware\nEmail: test@test.com\n\n";
-        $target_body .= "You may check this account at the following URL: ";
-        $target_body .= W2P_BASE_URL . "/index.php?m=users&a=view&user_id=-1\n\n";
-        $target_body .= "Thank you very much.\n\nThe web2Project Development Taskforce.\n\n";
-        $target_body .= "****PLEASE KEEP THIS EMAIL FOR YOUR RECORDS****";
-
-        $actual_body = $this->manager->notifyHR("Keith Casey", "caseysoftware", "test@test.com", -1);
 
         $this->assertEquals($target_body, $actual_body);
     }

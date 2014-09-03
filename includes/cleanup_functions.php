@@ -24,30 +24,52 @@ function is_task_in_gantt_arr($task)
     return false;
 }
 
-function notifyHR($address, $notUsed, $uaddress, $uusername, $logname, $notUsed2, $userid)
+function notifyHR($address, $notUsed, $address, $username, $logname, $notUsed2, $userid)
 {
-    global $AppUI;
-    $emailManager = new w2p_Output_EmailManager($AppUI);
-    $body = $emailManager->notifyHR($uusername, $logname, $uaddress, $userid);
+    $object = new stdClass();
+    $object->base_url = W2P_BASE_URL;
+    $object->company_name = w2PgetConfig('company_name');
+    $object->contact_name = $username;
+    $object->user_name = $logname;
+    $object->email_address = $address;
+    $object->user_id = $userid;
 
-    $mail = new w2p_Utilities_Mail();
-    $mail->To($address);
-    $mail->Subject('New External User Created');
-    $mail->Body($body);
-    return $mail->Send();
+    $manager = new \Web2project\Output\Email\Manager();
+    $manager->send('new-account-requested', 'en_US', $object, $address);
 }
 
 function notifyNewUserCredentials($address, $username, $logname, $logpwd)
 {
-    global $AppUI;
-    $emailManager = new w2p_Output_EmailManager($AppUI);
-    $body = $emailManager->notifyNewUserCredentials($username, $logname, $logpwd);
+    $object = new stdClass();
+    $object->base_url = W2P_BASE_URL;
+    $object->user_name = $username;
+    $object->log_name = $logname;
+    $object->log_password = $logpwd;
 
-    $mail = new w2p_Utilities_Mail();
-    $mail->To($address);
-    $mail->Subject('New Account Created - web2Project Project Management System');
-    $mail->Body($body);
-    return $mail->Send();
+    $manager = new \Web2project\Output\Email\Manager();
+    $manager->send('new-user-activated', 'en_US', $object, $address);
+}
+
+function notifyNewExternalUser($emailAddress, $username, $logname, $logpwd)
+{
+    $object = new stdClass();
+    $object->base_url = W2P_BASE_URL;
+    $object->user_name = $username;
+    $object->log_name = $logname;
+    $object->log_password = $logpwd;
+
+    $manager = new \Web2project\Output\Email\Manager();
+    $manager->send('new-external-user', 'en_US', $object, $emailAddress);
+}
+
+function notifyNewUser($emailAddress, $username)
+{
+    $object = new stdClass();
+    $object->base_url = W2P_BASE_URL;
+    $object->contact_name = $username;
+
+    $manager = new \Web2project\Output\Email\Manager();
+    $manager->send('new-account-created', 'en_US', $object, $emailAddress);
 }
 
 function clean_value($str)
@@ -56,7 +78,6 @@ function clean_value($str)
 
     return str_replace($bad_values, '', $str);
 }
-
 
 function strUTF8Decode($text)
 {
@@ -1474,10 +1495,7 @@ function displayFiles($AppUI, $folder_id, $task_id, $project_id, $company_id)
     $module = new w2p_System_Module();
     $fields = $module->loadSettings('files', 'index_list');
 
-    if (count($fields) > 0) {
-        $fieldList = array_keys($fields);
-        $fieldNames = array_values($fields);
-    } else {
+    if (0 == count($fields)) {
         // TODO: This is only in place to provide an pre-upgrade-safe
         //   state for versions earlier than v3.0
         //   At some point at/after v4.0, this should be deprecated
@@ -1488,7 +1506,10 @@ function displayFiles($AppUI, $folder_id, $task_id, $project_id, $company_id)
             'Folder', 'Task Name', 'Owner', 'Date',);
 
         $module->storeSettings('files', 'index_list', $fieldList, $fieldNames);
+        $fields = array_combine($fieldList, $fieldNames);
     }
+    $fieldList = array_keys($fields);
+    $fieldNames = array_values($fields);
 
     $s  = '<tr>';
     $s .= '<th></th>';
@@ -3372,15 +3393,13 @@ function sendNewPass()
     $cur = $q->exec();
 
     if ($cur) {
-        $emailManager = new w2p_Output_EmailManager($AppUI);
-        $body = $emailManager->notifyPasswordReset($checkusername, $newpass);
+        $object = new stdClass();
+        $object->username = $checkusername;
+        $object->newpass  = $newpass;
+        $object->baseurl  = W2P_BASE_URL;
 
-        $m = new w2p_Utilities_Mail; // create the mail
-        $m->To($confirmEmail);
-        $subject = $_sitename . ' :: ' . $AppUI->_('sendpass4', UI_OUTPUT_RAW) . ' - ' . $checkusername;
-        $m->Subject($subject);
-        $m->Body($body, isset($GLOBALS['locale_char_set']) ? $GLOBALS['locale_char_set'] : ''); // set the body
-        $m->Send(); // send the mail
+        $manager = new \Web2project\Output\Email\Manager();
+        $manager->send('password-reset', 'en_US', $object, $confirmEmail);
 
         $AppUI->setMsg('New User Password created and emailed to you');
         $AppUI->redirect();
@@ -4056,21 +4075,6 @@ function __extract_from_tasksperuser($use_period, $ss, $se, $log_userfilter, $pr
 }
 
 /**
- * @return String
- */
-function __extract_from_tasks1()
-{
-//subquery the parent state
-    $sq = new w2p_Database_Query;
-    $sq->addTable('tasks', 'stasks');
-    $sq->addQuery('COUNT(stasks.task_id)');
-    $sq->addWhere('stasks.task_id <> tasks.task_id AND stasks.task_parent = tasks.task_id');
-    $subquery = $sq->prepare();
-
-    return $subquery;
-}
-
-/**
  * @param $userFilter
  * @param $AppUI
  * @param $proj
@@ -4101,6 +4105,8 @@ function __extract_from_listtasks($userFilter, $AppUI, $proj)
  */
 function __extract_from_tasks_todo($selected, $task_priority)
 {
+    $priorities = w2PgetSysval('TaskPriority');
+
     $q = new w2p_Database_Query;
     foreach ($selected as $key => $val) {
         if ($task_priority == 'c') {
@@ -4113,17 +4119,16 @@ function __extract_from_tasks_todo($selected, $task_priority)
                 // delete task
                 $q->setDelete('tasks');
                 $q->addWhere('task_id=' . (int) $val);
-            } else
-                if ($task_priority > -2 && $task_priority < 2) {
-                    // set priority
-                    $q->addTable('tasks');
-                    $q->addUpdate('task_priority', $task_priority);
-                    $q->addWhere('task_id=' . (int) $val);
-                }
+            } else {
+                $task_priority = min($task_priority, max(array_keys($priorities)));
+                $task_priority = max($task_priority, min(array_keys($priorities)));
+
+                $q->addTable('tasks');
+                $q->addUpdate('task_priority', $task_priority);
+                $q->addWhere('task_id=' . (int) $val);
+            }
         }
         $q->exec();
-        echo db_error();
-        $q->clear();
     }
 }
 
@@ -4905,116 +4910,6 @@ function __extract_from_vw_actions()
 }
 
 /**
- * @param $f
- * @param $q
- * @param $user_id
- * @param $task_id
- * @param $AppUI
- * @return string
- */
-function __extract_from_tasks3($f, $q, $user_id, $task_id, $AppUI)
-{
-    $f = (($f) ? $f : '');
-    if ($task_id) {
-        //if we are on a task context make sure we show ALL the children tasks
-        $f = 'deepchildren';
-    }
-
-    switch ($f) {
-        case 'myfinished7days':
-            $q->addWhere('ut.user_id = ' . (int) $user_id);
-        case 'allfinished7days':
-            $q->addTable('user_tasks');
-            $q->addWhere('user_tasks.user_id = ' . (int) $user_id);
-            $q->addWhere('user_tasks.task_id = tasks.task_id');
-
-            $q->addWhere('task_percent_complete = 100');
-            //TODO: use date class to construct date.
-            $q->addWhere('task_end_date >= \'' . date('Y-m-d 00:00:00', mktime(0, 0, 0, date('m'), date('d') - 7, date('Y'))) . '\'');
-            break;
-        case 'children':
-            $q->addWhere('task_parent = ' . (int) $task_id);
-            $q->addWhere('tasks.task_id <> ' . $task_id);
-            break;
-        case 'deepchildren':
-            $taskobj = new CTask;
-            $taskobj->load((int) $task_id);
-            $deepchildren = $taskobj->getDeepChildren();
-            $q->addWhere('tasks.task_id IN (' . implode(',', $deepchildren) . ')');
-            $q->addWhere('tasks.task_id <> ' . $task_id);
-            break;
-        case 'myproj':
-            $q->addWhere('project_owner = ' . (int) $user_id);
-            break;
-        case 'mycomp':
-            if (!$AppUI->user_company) {
-                $AppUI->user_company = 0;
-            }
-            $q->addWhere('project_company = ' . (int) $AppUI->user_company);
-            break;
-        case 'myunfinished':
-            $q->addTable('user_tasks');
-            $q->addWhere('user_tasks.user_id = ' . (int) $user_id);
-            $q->addWhere('user_tasks.task_id = tasks.task_id');
-            $q->addWhere('(task_percent_complete < 100 OR task_end_date = \'\')');
-            break;
-        case 'allunfinished':
-            $q->addWhere('(task_percent_complete < 100 OR task_end_date = \'\')');
-            break;
-        case 'unassigned':
-            $q->leftJoin('user_tasks', 'ut_empty', 'tasks.task_id = ut_empty.task_id');
-            $q->addWhere('ut_empty.task_id IS NULL');
-            break;
-        case 'taskcreated':
-            $q->addWhere('task_creator = ' . (int) $user_id);
-            break;
-        case 'taskowned':
-            $q->addWhere('task_owner = ' . (int) $user_id);
-            break;
-        case 'all':
-            //break;
-        default:
-            if ($user_id) {
-                $q->addTable('user_tasks');
-                $q->addWhere('user_tasks.user_id = ' . (int) $user_id);
-                $q->addWhere('user_tasks.task_id = tasks.task_id');
-            }
-            break;
-    }
-
-    return $q;
-}
-
-/**
- * @param $min_view
- * @param $currentTabId
- * @param $project_id
- * @param $currentTabName
- * @param $AppUI
- * @return int
- */
-function __extract_from_tasks($min_view, $currentTabId, $project_id, $currentTabName, $AppUI)
-{
-//TODO: This whole structure is hard-coded based on the TaskStatus SelectList.
-    $task_status = 0;
-    if ($min_view && isset($_GET['task_status'])) {
-        $task_status = (int)w2PgetParam($_GET, 'task_status', null);
-        return $task_status;
-    } elseif ($currentTabId == 1 && $project_id) {
-        $task_status = -1;
-        return $task_status;
-    } elseif ($currentTabId > 1 && $project_id) {
-        $task_status = $currentTabId - 1;
-        return $task_status;
-    } elseif (!$currentTabName) {
-        // If we aren't tabbed we are in the tasks list.
-        $task_status = (int)$AppUI->getState('inactive');
-        return $task_status;
-    }
-    return $task_status;
-}
-
-/**
  * @param $where_list
  * @param $project_id
  * @param $task_id
@@ -5040,36 +4935,6 @@ function __extract_from_tasks4($where_list, $project_id, $task_id)
 
     $projects = $q->loadList(-1, 'project_id');
     return $projects;
-}
-
-/**
- * @param $q
- * @param $subquery
- */
-function __extract_from_tasks5($q, $subquery)
-{
-    $q->addQuery('tasks.task_id, task_parent, task_name');
-    $q->addQuery('task_start_date, task_end_date, task_dynamic');
-    $q->addQuery('task_pinned, pin.user_id as pin_user');
-    $q->addQuery('ut.user_task_priority');
-    $q->addQuery('task_priority, task_percent_complete');
-    $q->addQuery('task_duration, task_duration_type');
-    $q->addQuery('task_project, task_represents_project');
-    $q->addQuery('task_description, task_owner, task_status');
-    $q->addQuery('usernames.user_username, usernames.user_id');
-    $q->addQuery('assignees.user_username as assignee_username');
-    $q->addQuery('count(distinct assignees.user_id) as assignee_count');
-    $q->addQuery('co.contact_first_name, co.contact_last_name');
-    $q->addQuery('contact_display_name AS contact_name');
-    $q->addQuery('contact_display_name AS owner');
-    $q->addQuery('task_milestone');
-    $q->addQuery('count(distinct f.file_task) as file_count');
-    $q->addQuery('tlog.task_log_problem');
-    $q->addQuery('task_access');
-    $q->addQuery('(' . $subquery . ') AS task_nr_of_children');
-    $q->addTable('tasks');
-
-    return $q;
 }
 
 /**
@@ -5312,4 +5177,21 @@ function __extract_from_view_messages4($s, $style, $row, $hideEmail, $editor, $A
     $s .= '</td>';
     $s .= '</tr>';
     return array($s, $new_messages);
+}
+
+function w2p_unpluralize($word)
+{
+    $suffix = substr($word, -3);
+    switch ($suffix) {
+        case 'ies':
+            $word = substr($word, 0, -3).'y';
+            break;
+        default:
+            $character = substr($word, -1);
+            if('s' == $character) {
+                $word = substr($word, 0, -1);
+            }
+    }
+
+    return $word;
 }

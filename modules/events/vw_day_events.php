@@ -1,6 +1,6 @@
 <?php
 if (!defined('W2P_BASE_DIR')) {
-	die('You should not access this file directly.');
+    die('You should not access this file directly.');
 }
 // @todo    convert to template
 
@@ -16,12 +16,12 @@ $other_users = false;
 $no_modify = false;
 
 if (canView('system')) {
-	$other_users = true;
-	if (($show_uid = w2PgetParam($_REQUEST, 'show_user_events', 0)) != 0) {
-		$user_id = $show_uid;
-		$no_modify = true;
-		$AppUI->setState('event_user_id', $user_id);
-	}
+    $other_users = true;
+    if (($show_uid = w2PgetParam($_REQUEST, 'show_user_events', 0)) != 0) {
+        $user_id = $show_uid;
+        $no_modify = true;
+        $AppUI->setState('event_user_id', $user_id);
+    }
 }
 // assemble the links for the events
 $events = CEvent::getEventsForPeriod($first_time, $last_time, $event_filter, $user_id);
@@ -31,7 +31,7 @@ $start_hour = w2PgetConfig('cal_day_start');
 $end_hour = w2PgetConfig('cal_day_end');
 foreach ($events as $row) {
     $start = new w2p_Utilities_Date($row['event_start_date']);
-	$end = new w2p_Utilities_Date($row['event_end_date']);
+    $end = new w2p_Utilities_Date($row['event_end_date']);
 
     $key = $start->format('%H%M%S');
     if (-1 == $start->compare($start, $this_day)) {
@@ -40,12 +40,12 @@ foreach ($events as $row) {
     }
     $events2[$key][] = $row;
 
-	if ($start_hour > $start->format('%H')) {
-		$start_hour = $start->format('%H');
-	}
-	if ($end_hour < $end->format('%H')) {
-		$end_hour = $end->format('%H');
-	}
+    if ($start_hour > $start->format('%H')) {
+        $start_hour = $start->format('%H');
+    }
+    if ($end_hour < $end->format('%H')) {
+        $end_hour = $end->format('%H');
+    }
 }
 
 $tf = $AppUI->getPref('TIMEFORMAT');
@@ -57,11 +57,11 @@ $end = $end_hour;
 $inc = w2PgetConfig('cal_day_increment');
 
 if ($start === null)
-	$start = 8;
+    $start = 8;
 if ($end === null)
-	$end = 17;
+    $end = 17;
 if ($inc === null)
-	$inc = 15;
+    $inc = 15;
 
 $this_day->setTime($start, 0, 0);
 
@@ -71,17 +71,17 @@ $event_filter_list = array('my' => 'My Events', 'own' => 'Events I Created', 'al
 $html = '<form action="'.$_SERVER['REQUEST_URI'].'" method="post" name="pickFilter" accept-charset="utf-8">';
 $html .= $AppUI->_('Event Filter') . ':' . arraySelect($event_filter_list, 'event_filter', 'onChange="document.pickFilter.submit()" class="text"', $event_filter, true);
 if ($other_users) {
-	$html .= $AppUI->_('Show Events for') . ':' . '<select name="show_user_events" onchange="document.pickFilter.submit()" class="text">';
+    $html .= $AppUI->_('Show Events for') . ':' . '<select name="show_user_events" onchange="document.pickFilter.submit()" class="text">';
 
-	if (($rows = w2PgetUsersList())) {
-		foreach ($rows as $row) {
-			if ($user_id == $row['user_id'])
-				$html .= '<option value="' . $row['user_id'] . '" selected="selected">' . $row['contact_first_name'] . ' ' . $row['contact_last_name'];
-			else
-				$html .= '<option value="' . $row['user_id'] . '">' . $row['contact_first_name'] . ' ' . $row['contact_last_name'];
-		}
-	}
-	$html .= '</select>';
+    if (($rows = w2PgetUsersList())) {
+        foreach ($rows as $row) {
+            if ($user_id == $row['user_id'])
+                $html .= '<option value="' . $row['user_id'] . '" selected="selected">' . $row['contact_first_name'] . ' ' . $row['contact_last_name'];
+            else
+                $html .= '<option value="' . $row['user_id'] . '">' . $row['contact_first_name'] . ' ' . $row['contact_last_name'];
+        }
+    }
+    $html .= '</select>';
 
 }
 
@@ -89,44 +89,44 @@ $html .= '</form>';
 $html .= '<table cellspacing="1" cellpadding="2" border="0" width="100%" class="tbl">';
 $rows = 0;
 for ($i = 0, $n = ($end - $start) * 60 / $inc; $i < $n; $i++) {
-	$html .= '<tr>';
+    $html .= '<tr>';
 
-	$tm = $this_day->format($tf);
-	$html .= '<td width="1%" align="right" nowrap="nowrap">' . ($this_day->getMinute() ? $tm : '<b>' . $tm . '</b>') . '</td>';
+    $tm = $this_day->format($tf);
+    $html .= '<td width="1%" align="right" nowrap="nowrap">' . ($this_day->getMinute() ? $tm : '<b>' . $tm . '</b>') . '</td>';
 
-	$timeStamp = $this_day->format('%H%M%S');
-	if (isset($events2[$timeStamp])) {
-		$count = count($events2[$timeStamp]);
-		for ($j = 0; $j < $count; $j++) {
-			$row = $events2[$timeStamp][$j];
+    $timeStamp = $this_day->format('%H%M%S');
+    if (isset($events2[$timeStamp])) {
+        $count = count($events2[$timeStamp]);
+        for ($j = 0; $j < $count; $j++) {
+            $row = $events2[$timeStamp][$j];
 
-			$et = new w2p_Utilities_Date($row['event_end_date']);
+            $et = new w2p_Utilities_Date($row['event_end_date']);
 
-			$rows = $event->calculateRows($this_day, $et, $inc);
-			$href = '?m=events&a=view&event_id=' . $row['event_id'];
-			$alt = $row['event_description'];
+            $rows = $event->calculateRows($this_day, $et, $inc);
+            $href = '?m=events&a=view&event_id=' . $row['event_id'];
+            $alt = $row['event_description'];
 
-			$html .= '<td class="event" rowspan="' . $rows . '" valign="top">';
+            $html .= '<td class="event" rowspan="' . $rows . '" valign="top">';
 
-			$html .= '<table cellspacing="0" cellpadding="0" border="0"><tr>';
-			$html .= '<td>' . w2PshowImage('event' . $row['event_type'] . '.png', 16, 16, '', '', 'events');
-			$html .= '</td><td>&nbsp;<b>' . $AppUI->_($types[$row['event_type']]) . '</b></td></tr></table>';
-			$html .= w2PtoolTip($row['event_name'], getEventTooltip($row['event_id']), true);
-			$html .= $href ? '<a href="' . $href . '" class="event">' : '';
-			$html .= $row['event_name'];
-			$html .= $href ? '</a>' : '';
-			$html .= w2PendTip();
-			$html .= '</td>';
-		}
-	} else {
-		if (--$rows <= 0) {
-			$html .= '<td colspan="20"></td>';
-		}
-	}
+            $html .= '<table cellspacing="0" cellpadding="0" border="0"><tr>';
+            $html .= '<td>' . w2PshowImage('event' . $row['event_type'] . '.png', 16, 16, '', '', 'events');
+            $html .= '</td><td>&nbsp;<b>' . $AppUI->_($types[$row['event_type']]) . '</b></td></tr></table>';
+            $html .= w2PtoolTip($row['event_name'], getEventTooltip($row['event_id']), true);
+            $html .= $href ? '<a href="' . $href . '" class="event">' : '';
+            $html .= $row['event_name'];
+            $html .= $href ? '</a>' : '';
+            $html .= w2PendTip();
+            $html .= '</td>';
+        }
+    } else {
+        if (--$rows <= 0) {
+            $html .= '<td colspan="20"></td>';
+        }
+    }
 
-	$html .= '</tr>';
+    $html .= '</tr>';
 
-	$this_day->addSeconds(60 * $inc);
+    $this_day->addSeconds(60 * $inc);
 }
 
 $html .= '</table>';

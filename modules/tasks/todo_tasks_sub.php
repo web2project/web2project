@@ -1,6 +1,6 @@
 <?php
 if (!defined('W2P_BASE_DIR')) {
-	die('You should not access this file directly.');
+    die('You should not access this file directly.');
 }
 // @todo    convert to template
 
@@ -13,13 +13,13 @@ $showEditCheckbox = w2PgetConfig('direct_edit_assignment');
 
 // retrieve any state parameters
 if (isset($_POST['show_form'])) {
-	$AppUI->setState('TaskDayShowArc', w2PgetParam($_POST, 'show_arc_proj', 0));
-	$AppUI->setState('TaskDayShowLow', w2PgetParam($_POST, 'show_low_task', 0));
-	$AppUI->setState('TaskDayShowHold', w2PgetParam($_POST, 'show_hold_proj', 0));
-	$AppUI->setState('TaskDayShowDyn', w2PgetParam($_POST, 'show_dyn_task', 0));
-	$AppUI->setState('TaskDayShowPin', w2PgetParam($_POST, 'show_pinned', 0));
-	$AppUI->setState('TaskDayShowEmptyDate', w2PgetParam($_POST, 'show_empty_date', 0));
-	$AppUI->setState('TaskDayShowInProgress', w2PgetParam($_POST, 'show_inprogress', 0));
+    $AppUI->setState('TaskDayShowArc', w2PgetParam($_POST, 'show_arc_proj', 0));
+    $AppUI->setState('TaskDayShowLow', w2PgetParam($_POST, 'show_low_task', 0));
+    $AppUI->setState('TaskDayShowHold', w2PgetParam($_POST, 'show_hold_proj', 0));
+    $AppUI->setState('TaskDayShowDyn', w2PgetParam($_POST, 'show_dyn_task', 0));
+    $AppUI->setState('TaskDayShowPin', w2PgetParam($_POST, 'show_pinned', 0));
+    $AppUI->setState('TaskDayShowEmptyDate', w2PgetParam($_POST, 'show_empty_date', 0));
+    $AppUI->setState('TaskDayShowInProgress', w2PgetParam($_POST, 'show_inprogress', 0));
 }
 
 // Required for today view.
@@ -36,7 +36,7 @@ $showInProgress = $AppUI->getState('TaskDayShowInProgress', 0);
  * TODO: This is a nasty, dirty hack because globals have stacked on top of
  *   globals and have made a mess of things.. we need a better option.
  */
-if(!isset($tasks) || !count($tasks)) {
+if (!isset($tasks) || !count($tasks)) {
     global $tasks;
 }
 $perms = &$AppUI->acl();

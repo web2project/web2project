@@ -1,6 +1,6 @@
 <?php
 if (!defined('W2P_BASE_DIR')) {
-	die('You should not access this file directly.');
+    die('You should not access this file directly.');
 }
 // @todo    remove database query
 
@@ -10,9 +10,9 @@ global $AppUI, $role_id, $canEdit, $canDelete, $tab;
 $perms = &$AppUI->acl();
 $canEdit = canEdit('roles');
 if (!$canEdit) {
-	$AppUI->redirect(ACCESS_DENIED);
+    $AppUI->redirect(ACCESS_DENIED);
 }
-  
+
 $module_list = $perms->getModuleList();
 $pgo_list = $AppUI->getPermissionableModuleList();
 
@@ -22,17 +22,17 @@ $pgos = array();
 $modules = array();
 
 foreach ($module_list as $module) {
-	$modules[$module['type'] . ',' . $module['id']] = $module['name'];
-	if ($module['type'] = 'mod' && isset($pgo_list[$module['name']])) {
-		$pgos[$offset] = $pgo_list[$module['name']]['permissions_item_table'];
-	}
-	$offset++;
+    $modules[$module['type'] . ',' . $module['id']] = $module['name'];
+    if ($module['type'] = 'mod' && isset($pgo_list[$module['name']])) {
+        $pgos[$offset] = $pgo_list[$module['name']]['permissions_item_table'];
+    }
+    $offset++;
 }
 
 //Pull User perms
 $role_acls = $perms->getRoleACLs($role_id);
 if (!is_array($role_acls)) {
-	$role_acls = array(); // Stops foreach complaining.
+    $role_acls = array(); // Stops foreach complaining.
 }
 $perm_list = $perms->getPermissionList();
 
@@ -47,14 +47,16 @@ $perm_list = $perms->getPermissionList();
 if ($canEdit) {
 ?>
 
-function clearIt(){
+function clearIt()
+{
 	var f = document.frmPerms;
 	f.sqlaction2.value = "<?php echo $AppUI->_('add'); ?>";
 	f.permission_id.value = 0;
 	f.permission_grant_on.selectedIndex = 0;
 }
 
-function delIt(id) {
+function delIt(id)
+{
 	if (confirm( '<?php echo $AppUI->_('Are you sure you want to delete this permission?', UI_OUTPUT_JS); ?>' )) {
 		var f = document.frmPerms;
 		f.del.value = 1;
@@ -65,13 +67,14 @@ function delIt(id) {
 
 var tables = new Array;
 <?php
-	foreach ($pgos as $key => $value) {
-		// Find the module id in the modules array
-		echo "tables['$key'] = '$value';\n";
-	}
+    foreach ($pgos as $key => $value) {
+        // Find the module id in the modules array
+        echo "tables['$key'] = '$value';\n";
+    }
 ?>
 
-function popPermItem() {
+function popPermItem()
+{
 	var f = document.frmPerms;
 	var pgo = f.permission_module.selectedIndex;
 
@@ -84,7 +87,8 @@ function popPermItem() {
 }
 
 // Callback function for the generic selector
-function setPermItem( key, val ) {
+function setPermItem(key, val)
+{
 	var f = document.frmPerms;
 	if (val != '') {
 		f.permission_item.value = key;
@@ -114,64 +118,64 @@ function setPermItem( key, val ) {
 <?php
 
 foreach ($role_acls as $acl) {
-	$buf = '';
-	$permission = $perms->get_acl($acl);
+    $buf = '';
+    $permission = $perms->get_acl($acl);
 
-	$style = '';
-	// TODO: Do we want to make the colour depend on the allow/deny/inherit flag?
-	// Module information.
-	if (is_array($permission)) {
-		$buf .= '<td ' . $style . '>';
-		$modlist = array();
-		$itemlist = array();
-		if (is_array($permission['axo_groups'])) {
-			foreach ($permission['axo_groups'] as $group_id) {
-				$group_data = $perms->get_group_data($group_id, 'axo');
-				$modlist[] = $AppUI->_($group_data[3]);
-			}
-		}
-		if (is_array($permission['axo'])) {
-			foreach ($permission['axo'] as $key => $section) {
-				foreach ($section as $id) {
-					$mod_data = $perms->get_object_full($id, $key, 1, 'axo');
-					if (is_numeric($mod_data['name'])) {
-						$module = $pgo_list[ucfirst($key)];
+    $style = '';
+    // TODO: Do we want to make the colour depend on the allow/deny/inherit flag?
+    // Module information.
+    if (is_array($permission)) {
+        $buf .= '<td ' . $style . '>';
+        $modlist = array();
+        $itemlist = array();
+        if (is_array($permission['axo_groups'])) {
+            foreach ($permission['axo_groups'] as $group_id) {
+                $group_data = $perms->get_group_data($group_id, 'axo');
+                $modlist[] = $AppUI->_($group_data[3]);
+            }
+        }
+        if (is_array($permission['axo'])) {
+            foreach ($permission['axo'] as $key => $section) {
+                foreach ($section as $id) {
+                    $mod_data = $perms->get_object_full($id, $key, 1, 'axo');
+                    if (is_numeric($mod_data['name'])) {
+                        $module = $pgo_list[ucfirst($key)];
                         $data = __extract_from_role_perms($module, $mod_data);
-						$modlist[] = $AppUI->_(ucfirst($key)) . ': ' . w2PHTMLDecode($data);
-					} else {
-						$modlist[] = $AppUI->_(ucfirst($key)) . ': ' . w2PHTMLDecode($mod_data['name']);
-					}
-				}
-			}
-		}
-		$buf .= implode('<br />', $modlist);
-		$buf .= '</td>';
-		// Item information TODO:  need to figure this one out.
-		// 	$buf .= '<td></td>';
-		// Type information.
-		$buf .= '<td>';
-		$perm_type = array();
-		if (is_array($permission['aco'])) {
-			foreach ($permission['aco'] as $key => $section) {
-				foreach ($section as $value) {
-					$perm = $perms->get_object_full($value, $key, 1, 'aco');
-					$perm_type[] = $AppUI->_($perm['name']);
-				}
-			}
-		}
-		$buf .= implode('<br />', $perm_type);
-		$buf .= '</td>';
+                        $modlist[] = $AppUI->_(ucfirst($key)) . ': ' . w2PHTMLDecode($data);
+                    } else {
+                        $modlist[] = $AppUI->_(ucfirst($key)) . ': ' . w2PHTMLDecode($mod_data['name']);
+                    }
+                }
+            }
+        }
+        $buf .= implode('<br />', $modlist);
+        $buf .= '</td>';
+        // Item information TODO:  need to figure this one out.
+        // 	$buf .= '<td></td>';
+        // Type information.
+        $buf .= '<td>';
+        $perm_type = array();
+        if (is_array($permission['aco'])) {
+            foreach ($permission['aco'] as $key => $section) {
+                foreach ($section as $value) {
+                    $perm = $perms->get_object_full($value, $key, 1, 'aco');
+                    $perm_type[] = $AppUI->_($perm['name']);
+                }
+            }
+        }
+        $buf .= implode('<br />', $perm_type);
+        $buf .= '</td>';
 
-		// Allow or deny
-		$buf .= '<td>' . $AppUI->_($permission['allow'] ? 'allow' : 'deny') . '</td>';
-		$buf .= '<td nowrap="nowrap">';
-		if ($canDelete) {
-			$buf .= "<a href=\"javascript:delIt({$acl});\" title=\"" . $AppUI->_('delete') . "\">" . w2PshowImage('icons/stock_delete-16.png', 16, 16, '') . "</a>";
-		}
-		$buf .= '</td>';
+        // Allow or deny
+        $buf .= '<td>' . $AppUI->_($permission['allow'] ? 'allow' : 'deny') . '</td>';
+        $buf .= '<td nowrap="nowrap">';
+        if ($canDelete) {
+            $buf .= "<a href=\"javascript:delIt({$acl});\" title=\"" . $AppUI->_('delete') . "\">" . w2PshowImage('icons/stock_delete-16.png', 16, 16, '') . "</a>";
+        }
+        $buf .= '</td>';
 
-		echo '<tr>' . $buf . '</tr>';
-	}
+        echo '<tr>' . $buf . '</tr>';
+    }
 }
 ?>
             </table>

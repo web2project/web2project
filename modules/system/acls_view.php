@@ -1,6 +1,6 @@
 <?php
 if (!defined('W2P_BASE_DIR')) {
-	die('You should not access this file directly.');
+    die('You should not access this file directly.');
 }
 // @todo    remove database query
 
@@ -12,14 +12,14 @@ $action = w2PgetParam($_POST, 'action', 'all');
 
 $canView = canView('system');
 if (!$canView) { // let's see if the user has sys access
-	$AppUI->redirect(ACCESS_DENIED);
+    $AppUI->redirect(ACCESS_DENIED);
 }
 
 $perms = &$AppUI->acl();
 $avail_modules = $perms->getModuleList();
 $modules = array('all' => 'All Modules');
 foreach ($avail_modules as $avail_module) {
-	$modules[$avail_module['value']] = $avail_module['value'];
+    $modules[$avail_module['value']] = $avail_module['value'];
 }
 $module = isset($modules[$module]) ? $module : 'all';
 
@@ -56,14 +56,14 @@ $htmlHelper = new w2p_Output_HTMLHelper($AppUI);
 <?php
 
 foreach ($permissions as $row) {
-	$item = '';
-	if ($row['item_id']) {
+    $item = '';
+    if ($row['item_id']) {
         $field = getPermissionField($row);
 
         $item = getPermissionItem($row, $field);
-	}
-	if (!($row['item_id'] && !$row['acl_id'])) {
-		$table .= '<tr>' .
+    }
+    if (!($row['item_id'] && !$row['acl_id'])) {
+        $table .= '<tr>' .
                 $htmlHelper->createCell('user_id', $row['user_id']) .
                 $htmlHelper->createCell('na', $row['user_name']) .
                 '<td>' . $users[$row['user_id']] . '</td>' .
@@ -73,7 +73,7 @@ foreach ($permissions as $row) {
                 $htmlHelper->createCell('action', $row['action']) .
                 '<td ' . (!$row['access'] ? 'style="text-align:right;background-color:red"' : 'style="text-align:right;background-color:green"') . '>' . $row['access'] . '</td>' . '<td ' . ($row['acl_id'] ? '' : 'style="background-color:gray"') . '>' . ($row['acl_id'] ? $row['acl_id'] : 'soft-denial') . '</td>' .
                 '</tr>';
-	}
+    }
 }
 $table .= '</table>';
 echo $table;

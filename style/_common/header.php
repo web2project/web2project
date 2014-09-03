@@ -90,23 +90,25 @@ $theme = $AppUI->getTheme();
             </div>
             <?php if ($AppUI->user_id > 0) { ?>
                 <div class="right quicknav">
-                    <div class="left" style="margin-top: -3px;">
                     <?php if (canAccess('smartsearch')) { ?>
                         <form name="frm_search" action="?m=smartsearch" method="post" accept-charset="utf-8">
-                            <img src="<?php echo w2PfindImage('search.png'); ?>" />&nbsp;<input class="text" size="20" type="text" id="keyword" name="keyword" value="<?php echo $AppUI->_('Global Search') . '...'; ?>" onclick="document.frm_search.keyword.value=''" onblur="document.frm_search.keyword.value='<?php echo $AppUI->_('Global Search') . '...'; ?>'" />
+                            <input class="text" size="20" type="text" id="keyword" name="keyword" value="<?php echo $AppUI->_('Global Search') . '...'; ?>" onclick="document.frm_search.keyword.value=''" onblur="document.frm_search.keyword.value='<?php echo $AppUI->_('Global Search') . '...'; ?>'" />
                         </form>
-                        <?php } ?>
-                    </div>
-                    <a class="button" href="javascript: void(0);" onclick="javascript:window.open('?m=help&amp;dialog=1&amp;hid=', 'contexthelp', 'width=800, height=300, left=50, top=50, scrollbars=yes, resizable=yes')"><span><?php echo $AppUI->_('Help'); ?></span></a>
-                    <a class="button" href="./index.php?m=users&amp;a=view&amp;user_id=<?php echo $AppUI->user_id; ?>"><span><?php echo $AppUI->_('My Info'); ?></span></a>
+                    <?php } ?>
+                    <a href="javascript: void(0);" onclick="javascript:window.open('?m=help&amp;dialog=1&amp;hid=', 'contexthelp', 'width=800, height=300, left=50, top=50, scrollbars=yes, resizable=yes')">
+                        <button><?php echo $AppUI->_('Help'); ?></button>
+                    </a>
+                    <a href="./index.php?m=users&amp;a=view&amp;user_id=<?php echo $AppUI->user_id; ?>">
+                        <button><?php echo $AppUI->_('My Info'); ?></button>
+                    </a>
                     <?php if (canAccess('tasks')) { ?>
-                        <a class="button" href="./index.php?m=tasks&amp;a=todo"><span><b><?php echo $AppUI->_('My Tasks'); ?></b></span></a>
+                        <a href="./index.php?m=tasks&amp;a=todo"><button><?php echo $AppUI->_('My Tasks'); ?></button></a>
                     <?php } ?>
                     <?php if (canAccess('calendar')) {
                         $now = new w2p_Utilities_Date(); ?>
-                        <a class="button" href="./index.php?m=calendar&amp;a=day_view&amp;date=<?php echo $now->format(FMT_TIMESTAMP_DATE); ?>"><span><?php echo $AppUI->_('Today'); ?></span></a>
+                        <a href="./index.php?m=calendar&amp;a=day_view&amp;date=<?php echo $now->format(FMT_TIMESTAMP_DATE); ?>"><button><?php echo $AppUI->_('Today'); ?></button></a>
                     <?php } ?>
-                    <a class="button" href="./index.php?logout=-1"><span><?php echo $AppUI->_('Logout'); ?></span></a>
+                    <a href="./index.php?logout=-1"><button><?php echo $AppUI->_('Logout'); ?></button></a>
                 </div>
             <?php } ?>
         </div>

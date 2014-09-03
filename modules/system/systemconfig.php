@@ -1,18 +1,18 @@
 <?php
 
 if (!defined('W2P_BASE_DIR')) {
-	die('You should not access this file directly.');
+    die('You should not access this file directly.');
 }
 
 // check permissions
 if (!canEdit('system')) {
-	$AppUI->redirect(ACCESS_DENIED);
+    $AppUI->redirect(ACCESS_DENIED);
 }
 $reset = (int) w2PgetParam($_GET, 'reset', 0);
 if ($reset == 1) {
-	$obj = &$AppUI->acl();
-	$obj->recalcPermissions();
-} 
+    $obj = &$AppUI->acl();
+    $obj->recalcPermissions();
+}
 
 $w2Pcfg = new w2p_System_Config();
 
@@ -33,13 +33,13 @@ $output = null;
 $last_group = '';
 foreach ($rs as $c) {
 
-	$tooltip = $AppUI->_($c['config_name'] . '_tooltip');
-	// extraparse the checkboxes and the select lists
-	$extra = '';
-	$value = '';
-	switch ($c['config_type']) {
-		case 'select':
-			// Build the select list.
+    $tooltip = $AppUI->_($c['config_name'] . '_tooltip');
+    // extraparse the checkboxes and the select lists
+    $extra = '';
+    $value = '';
+    switch ($c['config_type']) {
+        case 'select':
+            // Build the select list.
             if ($c['config_name'] == 'system_timezone') {
                 $timezones = w2PgetSysVal('Timezones');
                 $entry = arraySelect($timezones, 'w2Pcfg[system_timezone]', 'class=text size=1', w2PgetConfig('system_timezone'), true);
@@ -56,15 +56,15 @@ foreach ($rs as $c) {
                 }
                 $entry .= '</select>';
             }
-			break;
-		case 'checkbox':
-			$extra = ($c['config_value'] == 'true') ? 'checked="checked"' : '';
-			$value = 'true';
-			// allow to fallthrough
-		default:
-			if (!$value) {
-				$value = $c['config_value'];
-			}
+            break;
+        case 'checkbox':
+            $extra = ($c['config_value'] == 'true') ? 'checked="checked"' : '';
+            $value = 'true';
+            // allow to fallthrough
+        default:
+            if (!$value) {
+                $value = $c['config_value'];
+            }
             if (strpos($c['config_name'], '_pass') !== false) {
                 $c['config_type'] = 'password';
                 $value = str_repeat('x', strlen($value));
@@ -73,23 +73,23 @@ foreach ($rs as $c) {
             } else {
                 $entry = '<input class="text" type="' . $c['config_type'] . '" name="w2Pcfg[' . $c['config_name'] . ']" id="w2Pcfg[' . $c['config_name'] . ']" value="' . $value . '" ' . $extra . '/>';
             }
-			break;
-	}
+            break;
+    }
 
-	if ($c['config_group'] != $last_group) {
-		$output .= '<tr><td colspan="2"><b>' . $AppUI->_($c['config_group'] . '_group_title') . '</b></td></tr>';
-		$last_group = $c['config_group'];
-	}
-	$output .= '<tr>
+    if ($c['config_group'] != $last_group) {
+        $output .= '<tr><td colspan="2"><b>' . $AppUI->_($c['config_group'] . '_group_title') . '</b></td></tr>';
+        $last_group = $c['config_group'];
+    }
+    $output .= '<tr>
                     <td class="item" width="20%"><a name="'.$c['config_name'].'"> </a>' . $AppUI->_($c['config_name'] . '_title') . '</td>' .
-                    '<td align="left" width="5%">' .
-                        $entry . 
+                    '<td align="left" width="45%">' .
+                        $entry .
                         '<input class="button" type="hidden"  name="w2PcfgId[' . $c['config_name'] . ']" value="' . $c['config_id'] . '" />' .
-			        '</td>' .
+                    '</td>' .
                     '<td align="left" width="16">' .
                          w2PtoolTip($AppUI->_($c['config_name'] . '_title'), $tooltip, true) . w2PshowImage('log-info.gif') . w2PendTip() .
- 			        '</td>
-                    <td align="left" width="100%">&nbsp;</td>
+                    '</td>
+                    <td align="left" width="30%">&nbsp;</td>
                 </tr>';
 
 }
@@ -105,7 +105,7 @@ foreach ($rs as $c) {
 	</table>
 </form>
 <script language="javascript" type="text/javascript">
-        $(document).ready(function(){
+        $(document).ready(function () {
             $("#w2Pcfg\\[system_timezone\\]").wrap("<div class='selectborder' />")
             $("#w2Pcfg\\[admin_email\\]").wrap("<div class='selectborder' />")
         });

@@ -1,6 +1,6 @@
 <?php
 if (!defined('W2P_BASE_DIR')) {
-	die('You should not access this file directly.');
+    die('You should not access this file directly.');
 }
 
 $contact_id = (int) w2PgetParam($_GET, 'contact_id', 0);
@@ -31,17 +31,17 @@ $ttl = 'View Contact';
 $titleBlock = new w2p_Theme_TitleBlock($ttl, 'icon.png', $m);
 $titleBlock->addCrumb('?m=contacts', 'contacts list');
 if ($canEdit) {
-	$titleBlock->addCrumb('?m=contacts&a=addedit&contact_id='.$contact_id, 'edit this contact');
+    $titleBlock->addCrumb('?m=contacts&a=addedit&contact_id='.$contact_id, 'edit this contact');
 }
 if ($contact->user_id) {
     $titleBlock->addCrumb('?m=users&a=view&user_id='.$contact->user_id, 'view this user');
 }
 if ($canDelete) {
-	$titleBlock->addCrumbDelete('delete contact', $canDelete, $msg);
+    $titleBlock->addCrumbDelete('delete contact', $canDelete, $msg);
 }
 $titleBlock->show();
 
 $view = new w2p_Controllers_View($AppUI, $contact, 'Contact');
 echo $view->renderDelete();
-
-include $AppUI->getTheme()->resolveTemplate('contacts/view');
+;
+include $AppUI->getTheme()->resolveTemplate($m . '/' . $a);

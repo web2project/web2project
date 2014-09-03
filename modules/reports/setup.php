@@ -1,6 +1,6 @@
 <?php
 if (!defined('W2P_BASE_DIR')) {
-	die('You should not access this file directly');
+    die('You should not access this file directly');
 }
 
 $config = array();
@@ -14,7 +14,7 @@ $config['mod_ui_icon'] = 'printer.png';
 $config['mod_description'] = 'A module for reports';
 
 if ($a == 'setup') {
-	echo w2PshowModuleConfig($config);
+    echo w2PshowModuleConfig($config);
 }
 
 /**

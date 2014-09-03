@@ -1,6 +1,6 @@
 <?php
 if (!defined('W2P_BASE_DIR')) {
-	die('You should not access this file directly.');
+    die('You should not access this file directly.');
 }
 
 $company_id = (int) w2PgetParam($_GET, 'company_id', 0);
@@ -15,7 +15,6 @@ if (!$company->load($company_id)) {
 
 $canEdit   = $company->canEdit();
 $canDelete = $company->canDelete();
-$deletable = $canDelete;            //TODO: this should be removed once the $deletable variable is removed
 
 $contact = new CContact();
 $canCreateContacts = $contact->canCreate();
@@ -33,11 +32,11 @@ if ($canEdit) {
     }
     $titleBlock->addButton('New project', '?m=projects&a=addedit&company_id=' . $company_id);
 
-	$titleBlock->addCrumb('?m=companies&a=addedit&company_id=' . $company_id, 'edit this company');
+    $titleBlock->addCrumb('?m=companies&a=addedit&company_id=' . $company_id, 'edit this company');
 
-	if ($canDelete && $deletable) {
-		$titleBlock->addCrumbDelete('delete company', $deletable, $msg);
-	}
+    if ($canDelete) {
+        $titleBlock->addCrumbDelete('delete company', $deletable, $msg);
+    }
 }
 $titleBlock->show();
 
@@ -46,7 +45,7 @@ echo $view->renderDelete();
 
 $types = w2PgetSysVal('CompanyType');
 
-include $AppUI->getTheme()->resolveTemplate('companies/view');
+include $AppUI->getTheme()->resolveTemplate($m . '/' . $a);
 
 // tabbed information boxes
 $moddir = W2P_BASE_DIR . '/modules/companies/';

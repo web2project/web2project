@@ -1,6 +1,6 @@
 <?php
 if (!defined('W2P_BASE_DIR')) {
-	die('You should not call this file directly.');
+    die('You should not call this file directly.');
 }
 
 $sort = w2PgetParam($_REQUEST, 'sort', 'asc');
@@ -9,7 +9,7 @@ $message_id = w2PgetParam($_REQUEST, 'message_id', 0);
 
 $perms = &$AppUI->acl();
 if (!$perms->checkModuleItem('forums', 'view', $forum_id)) {
-	$AppUI->redirect(ACCESS_DENIED);
+    $AppUI->redirect(ACCESS_DENIED);
 }
 
 $forum = new CForum();
@@ -28,13 +28,13 @@ $pdfdata = array();
 $pdfhead = array('Date', 'User', 'Message');
 
 foreach ($messages as $row) {
-	// Find the parent message - the topic.
-	if ($row['message_id'] == $message_id) {
-		$topic = $row['message_title'];
-	}
+    // Find the parent message - the topic.
+    if ($row['message_id'] == $message_id) {
+        $topic = $row['message_title'];
+    }
 
     $date = new w2p_Utilities_Date($AppUI->formatTZAwareTime($row['message_date'], '%Y-%m-%d %T'));
-	$pdfdata[] = array($date->format($df), $row['contact_display_name'], '<b>' . $row['message_title'] . '</b>' . "\n" . $row['message_body']);
+    $pdfdata[] = array($date->format($df), $row['contact_display_name'], '<b>' . $row['message_title'] . '</b>' . "\n" . $row['message_body']);
 }
 
 $font_dir = W2P_BASE_DIR . '/lib/ezpdf/fonts';

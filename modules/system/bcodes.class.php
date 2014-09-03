@@ -36,10 +36,11 @@ class CSystem_Bcode extends w2p_Core_BaseObject
             $q->addWhere('billingcode_id = ' . (int) $this->billingcode_id);
 
             $result = $q->exec();
-            if(!$result) {
+            if (!$result) {
                 $this->_errors['delete'] = db_error();
             }
         }
+
         return $result;
     }
 
@@ -66,6 +67,7 @@ class CSystem_Bcode extends w2p_Core_BaseObject
         if ($this->canEdit()) {
             $stored = parent::store();
         }
+
         return $stored;
     }
 

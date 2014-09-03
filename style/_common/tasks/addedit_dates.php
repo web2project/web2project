@@ -14,7 +14,7 @@
                         <img src="<?php echo w2PfindImage('calendar.gif'); ?>" alt="<?php echo $AppUI->_('Calendar'); ?>" />
                     </a>
                     <?php
-                    echo arraySelect($hours, 'start_hour', 'size="1" onchange="setAMPM(this)" class="text"', $start_date ? $start_date->getHour() : $start);
+                    echo arraySelect($hours, 'start_hour', 'size="1" id="start_hour" onchange="setAMPM(this);colorHours(this)" class="text"', $start_date ? $start_date->getHour() : $start);
                     echo arraySelect($minutes, 'start_minute', 'size="1" class="text"', $start_date ? $start_date->getMinute() : '00');
                     if (stristr($AppUI->getPref('TIMEFORMAT'), '%p')) {
                         echo '<input type="text" name="start_hour_ampm" id="start_hour_ampm" value="' . ($start_date ? $start_date->getAMPM() : ($start > 11 ? 'pm' : 'am')) . '" disabled="disabled" class="text" size="2" />';
@@ -30,7 +30,7 @@
                         <img src="<?php echo w2PfindImage('calendar.gif'); ?>" alt="<?php echo $AppUI->_('Calendar'); ?>" />
                     </a>
                     <?php
-                    echo arraySelect($hours, 'end_hour', 'size="1" onchange="setAMPM(this)" class="text"', $end_date ? $end_date->getHour() : $end);
+                    echo arraySelect($hours, 'end_hour', 'size="1" id="end_hour" onchange="setAMPM(this);colorHours(this)" class="text"', $end_date ? $end_date->getHour() : $end);
                     echo arraySelect($minutes, 'end_minute', 'size="1" class="text"', $end_date ? $end_date->getMinute() : '00');
                     if (stristr($AppUI->getPref('TIMEFORMAT'), '%p')) {
                         echo '<input type="text" name="end_hour_ampm" id="end_hour_ampm" value="' . ($end_date ? $end_date->getAMPM() : ($end > 11 ? 'pm' : 'am')) . '" disabled="disabled" class="text" size="2" />';

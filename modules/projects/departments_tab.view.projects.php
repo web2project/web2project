@@ -1,16 +1,16 @@
 <?php
 if (!defined('W2P_BASE_DIR')) {
-	die('You should not access this file directly.');
+    die('You should not access this file directly.');
 }
 // @todo    convert to template
 
 global $AppUI, $a, $addPwOiD, $buffer, $dept_id, $department, $min_view,
-	$m, $priority, $projects, $tab, $user_id, $orderdir, $orderby;
+    $m, $priority, $projects, $tab, $user_id, $orderdir, $orderby;
 
 if (isset($_GET['orderby'])) {
-	$orderdir = $AppUI->getState('DeptProjIdxOrderDir') ? ($AppUI->getState('DeptProjIdxOrderDir') == 'asc' ? 'desc' : 'asc') : 'desc';
-	$AppUI->setState('DeptProjIdxOrderBy', w2PgetParam($_GET, 'orderby', null));
-	$AppUI->setState('DeptProjIdxOrderDir', $orderdir);
+    $orderdir = $AppUI->getState('DeptProjIdxOrderDir') ? ($AppUI->getState('DeptProjIdxOrderDir') == 'asc' ? 'desc' : 'asc') : 'desc';
+    $AppUI->setState('DeptProjIdxOrderBy', w2PgetParam($_GET, 'orderby', null));
+    $AppUI->setState('DeptProjIdxOrderDir', $orderdir);
 }
 $orderby = $AppUI->getState('DeptProjIdxOrderBy') ? $AppUI->getState('DeptProjIdxOrderBy') : 'project_end_date';
 $orderdir = $AppUI->getState('DeptProjIdxOrderDir') ? $AppUI->getState('DeptProjIdxOrderDir') : 'asc';
@@ -19,9 +19,9 @@ $orderdir = $AppUI->getState('DeptProjIdxOrderDir') ? $AppUI->getState('DeptProj
  *  TODO:  This is a *nasty* *nasty* kludge that should be cleaned up.
  * Unfortunately due to the global variables from dotProject, we're stuck with
  * this mess for now.
- * 
+ *
  * May God have mercy on our souls for the atrocity we're about to commit.
- */ 
+ */
 $tmpDepartments = $department;
 $department = $dept_id;
 $project = new CProject();

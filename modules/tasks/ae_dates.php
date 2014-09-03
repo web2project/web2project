@@ -1,6 +1,6 @@
 <?php
 if (!defined('W2P_BASE_DIR')) {
-	die('You should not access this file directly.');
+    die('You should not access this file directly.');
 }
 // @todo    convert to template
 
@@ -17,22 +17,22 @@ $inc = (int) w2PgetConfig('cal_day_increment', 15);
 
 $ampm = stristr($AppUI->getPref('TIMEFORMAT'), '%p');
 $hours = array();
-for ($current = $start; $current < $end + 1; $current++) {
+for ($current = 0; $current < 23 + 1; $current++) {
     $current_key = ($current < 10) ? '0' . $current : $current;
 
     if ($ampm) {
-		//User time format in 12hr
-		$hours[$current_key] = ($current > 12 ? $current - 12 : $current);
-	} else {
-		//User time format in 24hr
-		$hours[$current_key] = $current;
-	}
+        //User time format in 12hr
+        $hours[$current_key] = ($current > 12 ? $current - 12 : $current);
+    } else {
+        //User time format in 24hr
+        $hours[$current_key] = $current;
+    }
 }
 
 $minutes = array();
 $minutes['00'] = '00';
 for ($current = $inc; $current < 60; $current += $inc) {
-	$minutes[$current] = $current;
+    $minutes[$current] = $current;
 }
 
 // format dates
@@ -59,4 +59,18 @@ include $AppUI->getTheme()->resolveTemplate('tasks/addedit_dates');
 ?>
 <script language="javascript">
 	subForm.push(new FormDefinition(<?php echo $tab; ?>, document.datesFrm, checkDates, saveDates));
+
+    function colorHours(field)
+    {
+        field.style.fontWeight = '';
+        field.style.backgroundColor = '';
+        if (parseInt(field.value) < <?php echo $start; ?>) {
+            field.style.fontWeight = "bold"
+            field.style.backgroundColor = "red";
+        }
+        if (parseInt(field.value) > <?php echo $end; ?>) {
+            field.style.fontWeight = "bold"
+            field.style.backgroundColor = "red";
+        }
+    }
 </script>

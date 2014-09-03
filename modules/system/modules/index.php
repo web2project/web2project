@@ -1,6 +1,6 @@
 <?php
 if (!defined('W2P_BASE_DIR')) {
-	die('You should not access this file directly.');
+    die('You should not access this file directly.');
 }
 // @todo    remove database query
 
@@ -9,7 +9,7 @@ $perms = &$AppUI->acl();
 $canEdit = canEdit('system');
 $canRead = canView('system');
 if (!$canRead) {
-	$AppUI->redirect(ACCESS_DENIED);
+    $AppUI->redirect(ACCESS_DENIED);
 }
 
 $module = new w2p_System_Module();
@@ -97,13 +97,13 @@ $htmlHelper = new w2p_Output_HTMLHelper($AppUI);
                 $s .= '</a><br />';
             }
         }
-        
+
         $s .= '</td>';
         $s .= $htmlHelper->createCell('na', $row['mod_type']);
         $s .= $htmlHelper->createCell('na', $row['mod_version']);
         $s .= $htmlHelper->createCell('na', $row['mod_ui_name']);
         $s .= $htmlHelper->createCell('mod_ui_icon', $row['mod_ui_icon']);
-        
+
         $s .= '<td class="data _status">';
         $s .= '<img src="' . w2PfindImage('/obj/' . ($row['mod_ui_active'] ? 'dotgreen.gif' : 'dotredanim.gif')) . '" alt="" />&nbsp;';
         if ($canEdit) {

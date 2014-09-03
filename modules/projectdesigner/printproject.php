@@ -1,6 +1,6 @@
 <?php
 if (!defined('W2P_BASE_DIR')) {
-	die('You should not access this file directly.');
+    die('You should not access this file directly.');
 }
 // @todo    convert to template
 // @todo    remove database query
@@ -13,7 +13,7 @@ $canRead = $perms->checkModuleItem('projects', 'view', $project_id);
 $canAddProject = $canRead;
 
 if (!$canRead) {
-	$AppUI->redirect(ACCESS_DENIED);
+    $AppUI->redirect(ACCESS_DENIED);
 }
 
 $task = new CTask();
@@ -37,18 +37,18 @@ $project = new CProject();
 $project->load($project_id);
 $obj = $project;
 if (!$project) {
-	$AppUI->setMsg('Project');
-	$AppUI->setMsg('invalidID', UI_MSG_ERROR, true);
+    $AppUI->setMsg('Project');
+    $AppUI->setMsg('invalidID', UI_MSG_ERROR, true);
     $AppUI->redirect('m=' . $m);
 }
 
 $hasTasks = $project->project_task_count;
 
 if ($hasTasks) {
-	$worked_hours = $project->project_worked_hours;
+    $worked_hours = $project->project_worked_hours;
     $total_project_hours = $project->project_scheduled_hours;
 } else { //no tasks in project so "fake" project data
-	$worked_hours = $total_hours = $total_project_hours = 0.00;
+    $worked_hours = $total_hours = $total_project_hours = 0.00;
 }
 
 global $task_access;
@@ -70,7 +70,7 @@ $extra = array(0 => '(none)', 1 => 'Milestone', 2 => 'Dynamic Task', 3 => 'Inact
 <body>
 <table width="100%" class="prjprint">
 <tr>
-	<td style="border: outset #d1d1cd 1px;" colspan="3">  
+	<td style="border: outset #d1d1cd 1px;" colspan="3">
 		<table border="0" cellpadding="0" cellspacing="0" width="100%" class="prjprint tbl">
             <tr>
             	<td width="22">
@@ -84,9 +84,9 @@ $extra = array(0 => '(none)', 1 => 'Milestone', 2 => 'Dynamic Task', 3 => 'Inact
 	</td>
 </tr>
 	<?php
-	// Removed the additional permissions check here.. you can't get here without successfully passing the one above
-	require w2PgetConfig('root_dir') . '/modules/projectdesigner/vw_projecttask.php';
-	?>
+    // Removed the additional permissions check here.. you can't get here without successfully passing the one above
+    require w2PgetConfig('root_dir') . '/modules/projectdesigner/vw_projecttask.php';
+    ?>
 </table>
 </body>
 </html>

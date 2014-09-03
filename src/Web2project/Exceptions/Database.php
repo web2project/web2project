@@ -1,4 +1,6 @@
 <?php
+namespace Web2project\Exceptions;
+
 /**
  * Class w2p_Exception_Database
  *
@@ -7,4 +9,5 @@
  *
  * @package     web2project\exceptions
  */
-class w2p_Exceptions_Database extends Exception { }
+
+class Database extends Exception { }

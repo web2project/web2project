@@ -6,19 +6,21 @@
  * @package web2project\core
  */
 
-class w2p_Core_CustomFieldEmail extends w2p_Core_CustomFieldText
+class w2p_Core_CustomFieldEmail extends w2p_Core_CustomField
 {
     public $field_htmltype = 'email';
 
     public function getHTML($mode)
     {
+        $field = new Web2project\Fields\Email();
+
         $html = '<label>' . $this->field_description . ':</label>';
         switch ($mode) {
             case 'edit':
-                $html .= '<input type="text" class="text" name="' . $this->fieldName() . '" value="' . $this->charValue() . '" ' . $this->fieldExtraTags() . ' />';
+                $html .= $field->edit($this->fieldName(), $this->charValue(), $this->fieldExtraTags());
                 break;
             case 'view':
-                $html .= w2p_email($this->charValue());
+                $html .= $field->view($this->charValue());
                 break;
         }
         return $html;

@@ -21,12 +21,12 @@ class CUser extends w2p_Core_BaseObject
     protected $externally_created_user = false;
     protected $authenticator = null;
 
-    private $perm_func = null;    
+    private $perm_func = null;
 
     public function __construct()
     {
         parent::__construct('users', 'user_id');
-        
+
         $this->authenticator = new w2p_Authenticators_SQL();
     }
 
@@ -47,14 +47,16 @@ class CUser extends w2p_Core_BaseObject
         return (count($this->_error)) ? false : true;
     }
 
-    protected function  hook_preCreate() {
+    protected function hook_preCreate()
+    {
         $this->perm_func = 'addLogin';
         $this->user_password = $this->authenticator->hashPassword($this->user_password);
 
         parent::hook_preCreate();
     }
 
-    protected function  hook_preUpdate() {
+    protected function hook_preUpdate()
+    {
         $this->perm_func = 'updateLogin';
         $tmpUser = new CUser();
         $tmpUser->overrideDatabase($this->_query);
@@ -119,6 +121,7 @@ class CUser extends w2p_Core_BaseObject
         if (parent::canEdit() || $this->user_id == $this->_AppUI->user_id) {
             $result = true;
         }
+
         return $result;
     }
 
@@ -126,6 +129,7 @@ class CUser extends w2p_Core_BaseObject
     {
         if ($this->user_exists($this->user_username)) {
             $this->_error['canCreate'] = 'A user with this username already exists';
+
             return false;
          }
 
@@ -218,7 +222,7 @@ class CUser extends w2p_Core_BaseObject
     public function validatePassword($userId, $password)
     {
         $hash = $this->authenticator->hashPassword($password);
-        
+
         $users = $this->loadAll('user_id', 'user_password = \'' . $hash . '\' AND user_id = ' . (int) $userId);
 
         return isset($users[$userId]);
@@ -349,6 +353,7 @@ class CUser extends w2p_Core_BaseObject
                 $retres[] = $user;
             }
         }
+
         return $retres;
     }
 
@@ -359,6 +364,7 @@ class CUser extends w2p_Core_BaseObject
     {
         trigger_error("The CUser::getUserList static method has been deprecated in 3.1 and will be removed in v4.0. Please use CUser->getList instead.", E_USER_NOTICE );
         $user = new CUser();
+
         return $user->getList();
     }
 
@@ -409,6 +415,7 @@ class CUser extends w2p_Core_BaseObject
         trigger_error("CUser::exists has been deprecated in v3.0 and will be removed by v4.0. Please use CUser->user_exists() instead.", E_USER_NOTICE);
 
         $user = new CUser();
+
         return $user->user_exists($username);
     }
     /**
@@ -418,6 +425,7 @@ class CUser extends w2p_Core_BaseObject
     {
         trigger_error("CUser::getFirstLetters has been deprecated in v3.1 and will be removed by v4.0. Please use CUser->getLetters() instead.", E_USER_NOTICE);
         $user = new CUser();
+
         return $user->getLetters();
     }
 

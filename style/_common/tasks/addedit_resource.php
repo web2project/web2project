@@ -53,6 +53,10 @@
                 <?php $form->showLabel('Allow users to add task logs for others'); ?>
                 <input type="checkbox" value="1" name="task_allow_other_user_tasklogs" <?php echo $object->task_allow_other_user_tasklogs ? 'checked="checked"' : ''; ?> />
             </p>
+            <p>
+                <?php $form->showLabel('Send reminders for this task'); ?>
+                <input type="checkbox" value="1" name="task_reminder" <?php echo $object->task_reminder ? 'checked="checked"' : ''; ?> />
+            </p>
         </div>
     </div>
 </form>

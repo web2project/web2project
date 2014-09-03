@@ -1,12 +1,12 @@
 <?php
 if (!defined('W2P_BASE_DIR')) {
-	die('You should not access this file directly.');
+    die('You should not access this file directly.');
 }
 // @todo    convert to template
 
 $canRead = canView('contacts');
 if (!$canRead) {
-	$AppUI->redirect(ACCESS_DENIED);
+    $AppUI->redirect(ACCESS_DENIED);
 }
 
 // Fields 1 - 5
@@ -49,55 +49,55 @@ $text .= sprintf("%s", "\"User 1\",\"User 2\",\"User 3\",\"User 4\",\"Web Page\"
 $custom_fields = w2p_Core_CustomFields::getCustomFieldList('contacts');
 
 foreach ($custom_fields as $f) {
-	$text .= sprintf("%s", "\"$f[field_description]\",");
+    $text .= sprintf("%s", "\"$f[field_description]\",");
 }
 $text .= sprintf("%s\r\n", "");
 
 $contactList = CContact::searchContacts();
-	
+
 foreach ($contactList as $contact) {
-	$myContact = new CContact();
+    $myContact = new CContact();
     $myContact->contact_id = $contact['contact_id'];
     $contactMethods = $myContact->getContactMethods();
-    
+
     // Fields 1- 10
-	$text .= sprintf("\"\",\"%s\",\"\",\"%s\",\"\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",", $contact['contact_first_name'], $contact['contact_last_name'], $contact['company_name'], $contact['dept_name'], $contact['contact_title'], $contact['contact_address1'], $contact['contact_address2']);
-	// Fields 11- 20
-	$text .= sprintf(",\"%s\",\"%s\",\"%s\",,,,,,,", $contact['contact_city'], $contact['contact_state'], $contact['contact_zip']);
-	// Fields 21- 30
-	$text .= sprintf(",,,,,,,,,,");
-	// Fields 31- 40
-	$text .= sprintf(",\"%s\",,,,,,,,,", $contact['contact_phone']);
-	// Fields 41- 50
-	settype($contactMethods['phone_mobile'], 'string');
-	$text .= sprintf("\"%s\",,,,,,,,\"\",\"0/0/00\",", '' . $contactMethods['phone_mobile']);
-	// Fields 51- 60
-	if ($contact['contact_type'] != '') {
-		$categories = "web2Project; " . $contact['contact_type'];
-	} else {
-		$categories = "web2Project;";
-	}
-	$text .= sprintf(",,\"%s\",\"%s\",,,\"%s\",\"%s\",\"%s\",,", $contact['contact_birthday'], $categories, $contact['contact_email'], "SMTP", $contact['contact_first_name'] . " " . $contact['contact_last_name']);
-	// Fields 61- 70
-	$text .= sprintf(",,,,,\"Unspecified\",,,,,");
-	// Fields 71- 80
-	$notes = mb_str_replace("\"", "\"\"", $contact['contact_notes']);
-	$text .= sprintf("\"\",\"\",\"\",,,\"%s\",,,,\"Normal\",", $notes);
-	// Fields 81- 90
-	$text .= sprintf("\"False\",,,\"Normal\",,,,,,,");
+    $text .= sprintf("\"\",\"%s\",\"\",\"%s\",\"\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",", $contact['contact_first_name'], $contact['contact_last_name'], $contact['company_name'], $contact['dept_name'], $contact['contact_title'], $contact['contact_address1'], $contact['contact_address2']);
+    // Fields 11- 20
+    $text .= sprintf(",\"%s\",\"%s\",\"%s\",,,,,,,", $contact['contact_city'], $contact['contact_state'], $contact['contact_zip']);
+    // Fields 21- 30
+    $text .= sprintf(",,,,,,,,,,");
+    // Fields 31- 40
+    $text .= sprintf(",\"%s\",,,,,,,,,", $contact['contact_phone']);
+    // Fields 41- 50
+    settype($contactMethods['phone_mobile'], 'string');
+    $text .= sprintf("\"%s\",,,,,,,,\"\",\"0/0/00\",", '' . $contactMethods['phone_mobile']);
+    // Fields 51- 60
+    if ($contact['contact_type'] != '') {
+        $categories = "web2Project; " . $contact['contact_type'];
+    } else {
+        $categories = "web2Project;";
+    }
+    $text .= sprintf(",,\"%s\",\"%s\",,,\"%s\",\"%s\",\"%s\",,", $contact['contact_birthday'], $categories, $contact['contact_email'], "SMTP", $contact['contact_first_name'] . " " . $contact['contact_last_name']);
+    // Fields 61- 70
+    $text .= sprintf(",,,,,\"Unspecified\",,,,,");
+    // Fields 71- 80
+    $notes = mb_str_replace("\"", "\"\"", $contact['contact_notes']);
+    $text .= sprintf("\"\",\"\",\"\",,,\"%s\",,,,\"Normal\",", $notes);
+    // Fields 81- 90
+    $text .= sprintf("\"False\",,,\"Normal\",,,,,,,");
 
-	$custom_fields = w2p_Core_CustomFields::getCustomFieldByModule($AppUI, 'contacts', $contact['contact_id']);
+    $custom_fields = w2p_Core_CustomFields::getCustomFieldByModule($AppUI, 'contacts', $contact['contact_id']);
 
-	if (count($custom_fields) > 0) {
-		foreach ($custom_fields as $f) {
-			if ($f['value_intvalue']) {
-				$text .= sprintf("%s", $f['list_value'].",");
-			} else {
-				$text .= sprintf("%s", "\"" . mb_str_replace("\r\n", " ", $f['value_charvalue']) . "\",");
-			}
-		}
-	}
-	$text .= sprintf("%s\r\n", '');
+    if (count($custom_fields) > 0) {
+        foreach ($custom_fields as $f) {
+            if ($f['value_intvalue']) {
+                $text .= sprintf("%s", $f['list_value'].",");
+            } else {
+                $text .= sprintf("%s", "\"" . mb_str_replace("\r\n", " ", $f['value_charvalue']) . "\",");
+            }
+        }
+    }
+    $text .= sprintf("%s\r\n", '');
 }
 
 //send http-output in csv format

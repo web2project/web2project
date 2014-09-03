@@ -12,13 +12,15 @@ class w2p_Core_CustomFieldTextArea extends w2p_Core_CustomField
 
     public function getHTML($mode)
     {
+        $field = new Web2project\Fields\TextArea();
+
         $html = '<label>' . $this->field_description . ':</label>';
         switch ($mode) {
             case 'edit':
-                $html .= '<textarea name="' . $this->fieldName() . '" ' . $this->fieldExtraTags() . ' class="customfield">' . $this->charValue() . '</textarea>';
+                $html .= $field->edit($this->fieldName(), $this->charValue(), $this->fieldExtraTags());
                 break;
             case 'view':
-                $html .= nl2br($this->charValue());
+                $html .= $field->view($this->charValue());
                 break;
         }
         return $html;

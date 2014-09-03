@@ -1,6 +1,6 @@
 <?php
 if (!defined('W2P_BASE_DIR')) {
-	die('You should not access this file directly.');
+    die('You should not access this file directly.');
 }
 
 ?>
@@ -11,7 +11,8 @@ if (!defined('W2P_BASE_DIR')) {
     }
 </style>
 <script language="javascript" type="text/javascript">
-	function setClose(color){
+	function setClose(color)
+	{
 		window.opener.setColor(color);
 		window.close();
 	}
@@ -96,7 +97,6 @@ if ($w2Pconfig['restrict_color_selection']) {
         <area coords="258,2,274,18" href="javascript:setClose('FFCC00')" />
         <area coords="274,2,290,18" href="javascript:setClose('FFFF00')" />
 
-
         <area coords="2,18,18,34"  href="javascript:setClose('330033')" />
         <area coords="18,18,34,34" href="javascript:setClose('333333')" />
         <area coords="34,18,50,34" href="javascript:setClose('336633')" />
@@ -117,7 +117,6 @@ if ($w2Pconfig['restrict_color_selection']) {
         <area coords="242,18,258,34" href="javascript:setClose('FF9933')" />
         <area coords="258,18,274,34" href="javascript:setClose('FFCC33')" />
         <area coords="274,18,290,34" href="javascript:setClose('FFFF33')" />
-
 
         <area coords="2,34,18,50"  href="javascript:setClose('330066')" />
         <area coords="18,34,34,50" href="javascript:setClose('333366')" />
@@ -140,7 +139,6 @@ if ($w2Pconfig['restrict_color_selection']) {
         <area coords="258,34,274,50" href="javascript:setClose('FFCC66')" />
         <area coords="274,34,290,50" href="javascript:setClose('FFFF66')" />
 
-
         <area coords="2,50,18,66"  href="javascript:setClose('330099')" />
         <area coords="18,50,34,66" href="javascript:setClose('333399')" />
         <area coords="34,50,50,66" href="javascript:setClose('336699')" />
@@ -161,7 +159,6 @@ if ($w2Pconfig['restrict_color_selection']) {
         <area coords="242,50,258,66" href="javascript:setClose('FF9999')" />
         <area coords="258,50,274,66" href="javascript:setClose('FFCC99')" />
         <area coords="274,50,290,66" href="javascript:setClose('FFFF99')" />
-
 
         <area coords="2,66,18,82"  href="javascript:setClose('3300CC')" />
         <area coords="18,66,34,82" href="javascript:setClose('3333CC')" />
@@ -184,7 +181,6 @@ if ($w2Pconfig['restrict_color_selection']) {
         <area coords="258,66,274,82" href="javascript:setClose('FFCCCC')" />
         <area coords="274,66,290,82" href="javascript:setClose('FFFFCC')" />
 
-
         <area coords="2,82,18,98"  href="javascript:setClose('3300FF')" />
         <area coords="18,82,34,98" href="javascript:setClose('3333FF')" />
         <area coords="34,82,50,98" href="javascript:setClose('3366FF')" />
@@ -205,7 +201,6 @@ if ($w2Pconfig['restrict_color_selection']) {
         <area coords="242,82,258,98" href="javascript:setClose('FF99FF')" />
         <area coords="258,82,274,98" href="javascript:setClose('FFCCFF')" />
         <area coords="274,82,290,98" href="javascript:setClose('FFFFFF')" />
-
 
         <area coords="2,98,18,114"  href="javascript:setClose('0000FF')" />
         <area coords="18,98,34,114" href="javascript:setClose('0033FF')" />
@@ -228,7 +223,6 @@ if ($w2Pconfig['restrict_color_selection']) {
         <area coords="258,98,274,114" href="javascript:setClose('CCCCFF')" />
         <area coords="274,98,290,114" href="javascript:setClose('CCFFFF')" />
 
-
         <area coords="2,114,18,130"  href="javascript:setClose('0000CC')" />
         <area coords="18,114,34,130" href="javascript:setClose('0033CC')" />
         <area coords="34,114,50,130" href="javascript:setClose('0066CC')" />
@@ -249,7 +243,6 @@ if ($w2Pconfig['restrict_color_selection']) {
         <area coords="242,114,258,130" href="javascript:setClose('CC99CC')" />
         <area coords="258,114,274,130" href="javascript:setClose('CCCCCC')" />
         <area coords="274,114,290,130" href="javascript:setClose('CCFFCC')" />
-
 
         <area coords="2,130,18,146"  href="javascript:setClose('000099')" />
         <area coords="18,130,34,146" href="javascript:setClose('003399')" />
@@ -272,7 +265,6 @@ if ($w2Pconfig['restrict_color_selection']) {
         <area coords="258,130,274,146" href="javascript:setClose('CCCC99')" />
         <area coords="274,130,290,146" href="javascript:setClose('CCFF99')" />
 
-
         <area coords="2,146,18,162"  href="javascript:setClose('000066')" />
         <area coords="18,146,34,162" href="javascript:setClose('003366')" />
         <area coords="34,146,50,162" href="javascript:setClose('006666')" />
@@ -294,7 +286,6 @@ if ($w2Pconfig['restrict_color_selection']) {
         <area coords="258,146,274,162" href="javascript:setClose('CCCC66')" />
         <area coords="274,146,290,162" href="javascript:setClose('CCFF66')" />
 
-
         <area coords="2,162,18,178"  href="javascript:setClose('000033')" />
         <area coords="18,162,34,178" href="javascript:setClose('003333')" />
         <area coords="34,162,50,178" href="javascript:setClose('006633')" />
@@ -315,7 +306,6 @@ if ($w2Pconfig['restrict_color_selection']) {
         <area coords="242,162,258,178" href="javascript:setClose('CC9933')" />
         <area coords="258,162,274,178" href="javascript:setClose('CCCC33')" />
         <area coords="274,162,290,178" href="javascript:setClose('CCFF33')" />
-
 
         <area coords="2,178,18,194"  href="javascript:setClose('000000')" />
         <area coords="18,178,34,194" href="javascript:setClose('003300')" />

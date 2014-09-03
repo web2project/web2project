@@ -1,6 +1,6 @@
 <?php
 if (!defined('W2P_BASE_DIR')) {
-	die('You should not access this file directly.');
+    die('You should not access this file directly.');
 }
 // @todo    convert to template
 // @todo    remove database query
@@ -15,7 +15,8 @@ $htmlHelper = new w2p_Output_HTMLHelper($AppUI);
 ?>
 <script language="javascript" type="text/javascript">
 <?php if ($viewtype != 'normal') { ?>
-	function toggle(id) {
+	function toggle(id)
+	{
         <?php if ($viewtype == 'single') { ?>
 		var elems = document.getElementsByTagName('div');
 		for (var i=0, i_cmp=elems.length; i<i_cmp; i++)
@@ -36,7 +37,8 @@ $htmlHelper = new w2p_Output_HTMLHelper($AppUI);
 // else users would be able to arbitrarily run 'bad' functions
 if ($canAuthor || $canEdit) {
 ?>
-function delIt(id) {
+function delIt(id)
+{
 	var form = document.messageForm;
 	if (confirm( '<?php echo $AppUI->_('forumsDelete'); ?>' )) {
 		form.del.value = 1;
@@ -94,29 +96,29 @@ $x = false;
 $date = new w2p_Utilities_Date();
 
 if ($viewtype == 'single') {
-	$s = '';
-	$first = true;
+    $s = '';
+    $first = true;
 }
 
 $new_messages = array();
 
 foreach ($messages as $row) {
-	// Find the parent message - the topic.
-	if ($row['message_id'] == $message_id) {
-		$topic = $row['message_title'];
+    // Find the parent message - the topic.
+    if ($row['message_id'] == $message_id) {
+        $topic = $row['message_title'];
     }
 
     $editor = __extract_from_forums_view_messages($row);
 
-	$date = intval($row['message_date']) ? new w2p_Utilities_Date($row['message_date']) : null;
-	if ($viewtype != 'single') {
-		$s = '';
-	}
-	$style = $x ? 'background-color:#eeeeee' : '';
+    $date = intval($row['message_date']) ? new w2p_Utilities_Date($row['message_date']) : null;
+    if ($viewtype != 'single') {
+        $s = '';
+    }
+    $style = $x ? 'background-color:#eeeeee' : '';
 
     $bbparser = new HTML_BBCodeParser();
-	//!!! Different table building for the three different views
-	// To be cleaned up, and reuse common code at later stage.
+    //!!! Different table building for the three different views
+    // To be cleaned up, and reuse common code at later stage.
     switch ($viewtype) {
         case 'normal':
             list($s, $new_messages) = __extract_from_view_messages4($s, $style, $row, $hideEmail, $editor, $AppUI, $new_messages, $bbparser, $m, $df, $tf, $canEdit, $canAdminEdit, $canDelete);
@@ -131,13 +133,13 @@ foreach ($messages as $row) {
     $first = false;
 
     if ($viewtype != 'single') {
-		echo $s;
-	}
-	$x = !$x;
+        echo $s;
+    }
+    $x = !$x;
 
 }
 if ($viewtype == 'single') {
-	echo $side . $s;
+    echo $side . $s;
 }
 ?>
 

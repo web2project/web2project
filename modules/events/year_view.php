@@ -1,6 +1,6 @@
 <?php
 if (!defined('W2P_BASE_DIR')) {
-	die('You should not access this file directly.');
+    die('You should not access this file directly.');
 }
 // @todo    convert to template
 
@@ -9,14 +9,14 @@ $perms = &$AppUI->acl();
 $canRead = canView($m);
 
 if (!$canRead) {
-	$AppUI->redirect(ACCESS_DENIED);
+    $AppUI->redirect(ACCESS_DENIED);
 }
 
 w2PsetMicroTime();
 
 // retrieve any state parameters
 if (isset($_REQUEST['company_id'])) {
-	$AppUI->setState('CalIdxCompany', intval(w2PgetParam($_REQUEST, 'company_id', 0)));
+    $AppUI->setState('CalIdxCompany', intval(w2PgetParam($_REQUEST, 'company_id', 0)));
 }
 $company_id = $AppUI->getState('CalIdxCompany', $AppUI->user_company);
 
@@ -50,10 +50,12 @@ $titleBlock->show();
 ?>
 
 <script language="javascript" type="text/javascript">
-function clickDay( uts, fdate ) {
+function clickDay(uts, fdate)
+{
 	window.location = './index.php?m=events&a=day_view&date='+uts;
 }
-function clickWeek( uts, fdate ) {
+function clickWeek(uts, fdate)
+{
 	window.location = './index.php?m=events&a=week_view&date='+uts;
 }
 </script>
@@ -61,16 +63,16 @@ function clickWeek( uts, fdate ) {
 <?php
 // establish the focus 'date'
 if (!$date) {
-	$date = new w2p_Utilities_Date();
+    $date = new w2p_Utilities_Date();
 } else {
-	$date = new w2p_Utilities_Date($date);
+    $date = new w2p_Utilities_Date($date);
 }
 $date->setDay(1);
 $date->setMonth(1);
 $prev_year = $date->format(FMT_TIMESTAMP_DATE);
-$prev_year = (int)($prev_year - 10000);
+$prev_year = (int) ($prev_year - 10000);
 $next_year = $date->format(FMT_TIMESTAMP_DATE);
-$next_year = (int)($next_year + 10000);
+$next_year = (int) ($next_year + 10000);
 
 ?>
 <table class="std view">
@@ -96,42 +98,42 @@ $next_year = (int)($next_year + 10000);
 				</tr>
 			</table>
 			<?php
-				$minical = new w2p_Output_MonthCalendar($date);
-				$minical->setStyles('minititle', 'minical');
-				$minical->showArrows = false;
-				$minical->showWeek = true;
-				$minical->clickMonth = true;
-				$minical->setLinkFunctions('clickDay', 'clickWeek');
-				$s = '';
-				
-				for ($j = 0; $j < 3; $j++) {
-					$s .= '<table cellspacing="0" cellpadding="0" border="0" width="100%"><tr>';
-					$s .= '<td valign="top" align="center" width="20%">&nbsp;</td>';
-					for ($i = 0; $i <= 3; $i++) {
-						// prepare time period for minical'events'
-						$first_time = new w2p_Utilities_Date($date);
-						$first_time->setDay(1);
-						$first_time->setTime(0, 0, 0);
-						$last_time = new w2p_Utilities_Date($date);
-						$last_time->setDay($date->getDaysInMonth());
-						$last_time->setTime(23, 59, 59);
-						$links = array();
-						// assemble the links for the tasks
-						// assemble the links for the events
-						//Pedro A.
-						getTaskLinks($first_time, $last_time, $links, 20, $company_id, true);
-						getEventLinks($first_time, $last_time, $links, 20, true);
-						$minical->setEvents($links);
-						$minical->setDate($date);
-						$s .= '<td valign="top" align="center">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>';
-						$s .= '<td valign="top" align="center" width="200">' . $minical->show() . '</td>';
-						$date->addMonths(1);
-					}
-					$s .= '<td valign="top" align="center" width="20%">&nbsp;</td>';
-					$s .= '</tr></table>';
-				}
-				echo $s;
-			?>
+                $minical = new w2p_Output_MonthCalendar($date);
+                $minical->setStyles('minititle', 'minical');
+                $minical->showArrows = false;
+                $minical->showWeek = true;
+                $minical->clickMonth = true;
+                $minical->setLinkFunctions('clickDay', 'clickWeek');
+                $s = '';
+
+                for ($j = 0; $j < 3; $j++) {
+                    $s .= '<table cellspacing="0" cellpadding="0" border="0" width="100%"><tr>';
+                    $s .= '<td valign="top" align="center" width="20%">&nbsp;</td>';
+                    for ($i = 0; $i <= 3; $i++) {
+                        // prepare time period for minical'events'
+                        $first_time = new w2p_Utilities_Date($date);
+                        $first_time->setDay(1);
+                        $first_time->setTime(0, 0, 0);
+                        $last_time = new w2p_Utilities_Date($date);
+                        $last_time->setDay($date->getDaysInMonth());
+                        $last_time->setTime(23, 59, 59);
+                        $links = array();
+                        // assemble the links for the tasks
+                        // assemble the links for the events
+                        //Pedro A.
+                        getTaskLinks($first_time, $last_time, $links, 20, $company_id, true);
+                        getEventLinks($first_time, $last_time, $links, 20, true);
+                        $minical->setEvents($links);
+                        $minical->setDate($date);
+                        $s .= '<td valign="top" align="center">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>';
+                        $s .= '<td valign="top" align="center" width="200">' . $minical->show() . '</td>';
+                        $date->addMonths(1);
+                    }
+                    $s .= '<td valign="top" align="center" width="20%">&nbsp;</td>';
+                    $s .= '</tr></table>';
+                }
+                echo $s;
+            ?>
 			<table width="100%" class="minical">
 				<tr>
 					<td valign="top" align="center" width="20%">&nbsp;</td>

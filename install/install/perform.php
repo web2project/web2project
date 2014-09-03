@@ -1,44 +1,44 @@
 <?php
-	if (!defined('W2P_BASE_DIR')) {
-		die('You should not access this file directly.');
-	}
+    if (!defined('W2P_BASE_DIR')) {
+        die('You should not access this file directly.');
+    }
 
-	require_once W2P_BASE_DIR . '/lib/adodb/adodb.inc.php';
-	require_once W2P_BASE_DIR . '/includes/version.php';
+    require_once W2P_BASE_DIR . '/lib/adodb/adodb.inc.php';
+    require_once W2P_BASE_DIR . '/includes/version.php';
 
-	$dbtype = trim( w2PgetParam( $_POST, 'dbtype', 'mysqli' ) );
-	$dbhost = trim( w2PgetParam( $_POST, 'dbhost', '' ) );
-	$dbname = trim( w2PgetParam( $_POST, 'dbname', '' ) );
-	$dbuser = trim( w2PgetParam( $_POST, 'dbuser', '' ) );
-	$dbpass = trim( w2PgetParam( $_POST, 'dbpass', '' ) );
-	$dbprefix = trim( w2PgetParam( $_POST, 'dbprefix', '' ) );
-	$adminpass = trim( w2PgetParam( $_POST, 'adminpass', 'passwd' ) );
-	$adminpass = ($adminpass == '') ? 'passwd' : $adminpass;
-	$dbpersist = w2PgetParam( $_POST, 'dbpersist', false );
-        
+    $dbtype = trim( w2PgetParam( $_POST, 'dbtype', 'mysqli' ) );
+    $dbhost = trim( w2PgetParam( $_POST, 'dbhost', '' ) );
+    $dbname = trim( w2PgetParam( $_POST, 'dbname', '' ) );
+    $dbuser = trim( w2PgetParam( $_POST, 'dbuser', '' ) );
+    $dbpass = trim( w2PgetParam( $_POST, 'dbpass', '' ) );
+    $dbprefix = trim( w2PgetParam( $_POST, 'dbprefix', '' ) );
+    $adminpass = trim( w2PgetParam( $_POST, 'adminpass', 'passwd' ) );
+    $adminpass = ($adminpass == '') ? 'passwd' : $adminpass;
+    $dbpersist = w2PgetParam( $_POST, 'dbpersist', false );
+
     $system_timezone = trim( w2PgetParam( $_POST, 'system_timezone', '' ) );
     $user_timezone = trim( w2PgetParam( $_POST, 'user_timezone', '' ) );
 
-	$do_db = isset($_POST['do_db']);
-	$do_db_cfg = isset($_POST['do_db_cfg']);
-	$do_cfg = isset($_POST['do_cfg']);
+    $do_db = isset($_POST['do_db']);
+    $do_db_cfg = isset($_POST['do_db_cfg']);
+    $do_cfg = isset($_POST['do_cfg']);
 
-	// Create a w2Pconfig array for dependent code
-	$w2Pconfig = array(
-	 'dbtype' => $dbtype,
-	 'dbhost' => $dbhost,
-	 'dbname' => $dbname,
-	 'dbpass' => $dbpass,
-	 'dbuser' => $dbuser,
-	 'dbpersist' => $dbpersist,
-	 'root_dir' => $baseDir,
-	 'base_url' => W2P_BASE_URL,
-	 'adminpass' => $adminpass,
+    // Create a w2Pconfig array for dependent code
+    $w2Pconfig = array(
+     'dbtype' => $dbtype,
+     'dbhost' => $dbhost,
+     'dbname' => $dbname,
+     'dbpass' => $dbpass,
+     'dbuser' => $dbuser,
+     'dbpersist' => $dbpersist,
+     'root_dir' => $baseDir,
+     'base_url' => W2P_BASE_URL,
+     'adminpass' => $adminpass,
          'system_timezone' => $system_timezone,
          'user_timezone' => $user_timezone
-	);
-	if (!$manager->testDatabaseCredentials($w2Pconfig)) {
-		?>
+    );
+    if (!$manager->testDatabaseCredentials($w2Pconfig)) {
+        ?>
         <table cellspacing="0" cellpadding="3" border="0" class="tbl update" align="center">
 			<tr>
 			  <td colspan="2" align="center">
@@ -50,37 +50,37 @@
 				</td>
 			</tr>
 		</table>
-		<?php		
-		die();
-	}
+		<?php
+        die();
+    }
 
-	$dbMsg = 'Not Created';
-	$cFileMsg = 'Not Created';
-	$dbErr = false;
-	$cFileErr = false;
-	$errorMessages = array();
+    $dbMsg = 'Not Created';
+    $cFileMsg = 'Not Created';
+    $dbErr = false;
+    $cFileErr = false;
+    $errorMessages = array();
 
-	if (($do_db || $do_db_cfg)) {
-		$errorMessages = $manager->upgradeSystem();
-		if (count($errorMessages) == 0) {
-			$dbMsg = 'Created';
-		} else {
-			$dbMsg = 'Created, some problems have occurred.';
-		}
-	}
-	
-	$config = $manager->createConfigString($w2Pconfig);
+    if (($do_db || $do_db_cfg)) {
+        $errorMessages = $manager->upgradeSystem();
+        if (count($errorMessages) == 0) {
+            $dbMsg = 'Created';
+        } else {
+            $dbMsg = 'Created, some problems have occurred.';
+        }
+    }
 
-	if ($do_cfg || $do_db_cfg){
-		if ((is_writable(W2P_BASE_DIR.'/includes/config.php')  || !is_file(W2P_BASE_DIR.'/includes/config.php')) && ($fp = @fopen(W2P_BASE_DIR.'/includes/config.php', 'w'))) {
-			fputs( $fp, $config, strlen( $config ) );
-			fclose( $fp );
-			$cFileMsg = 'Config file written successfully'."\n";
-		} else {
-			$cFileErr = true;
-			$cFileMsg = 'Config file could not be written'."\n";
-		}
-	}
+    $config = $manager->createConfigString($w2Pconfig);
+
+    if ($do_cfg || $do_db_cfg) {
+        if ((is_writable(W2P_BASE_DIR.'/includes/config.php')  || !is_file(W2P_BASE_DIR.'/includes/config.php')) && ($fp = @fopen(W2P_BASE_DIR.'/includes/config.php', 'w'))) {
+            fputs( $fp, $config, strlen( $config ) );
+            fclose( $fp );
+            $cFileMsg = 'Config file written successfully'."\n";
+        } else {
+            $cFileErr = true;
+            $cFileMsg = 'Config file could not be written'."\n";
+        }
+    }
 ?>
 
 <table cellspacing="0" cellpadding="3" border="0" class="tbl update" align="center">
@@ -89,28 +89,28 @@
 	</tr>
 	<tr>
 	  <td colspan="2">
-	  	Your database is now being installed and configured.  I would suggest 
-	  	going out to smoke a cigarette or get a cup of coffee except that 
+	  	Your database is now being installed and configured.  I would suggest
+	  	going out to smoke a cigarette or get a cup of coffee except that
 	  	cigarettes aren't very healthy and.. oh wait, we're done.
 	  </td>
 	</tr>
 	<tr><td colspan="2">&nbsp;</td></tr>
 	<?php
-		if (count($errorMessages) > 0) { ?>
+        if (count($errorMessages) > 0) { ?>
 			<tr>
 				<td colspan="2"><b class="error">There were <?php echo count($errorMessages); ?> errors in the installation.</b></td>
 			</tr>
 			<?php
-				foreach ($errorMessages as $message) { 
-					?><tr><td colspan="2"><?php echo $message; ?></td></tr><?php
-				}
-			?>
+                foreach ($errorMessages as $message) {
+                    ?><tr><td colspan="2"><?php echo $message; ?></td></tr><?php
+                }
+            ?>
 			<tr>
 				<td colspan="2">Note: Errors noting 'Duplicate entry', 'Table already exists', or 'Unknown table' are not likely to be problems.  Sit back and relax.</td>
 			</tr>
 			<?php
-		}
-	?>
+        }
+    ?>
 	<tr>
 		<td class="title" valign="top">Database Installation Feedback:</td>
 		<td class="item">
@@ -124,7 +124,7 @@
 		<td class="title">Config File Creation Feedback:</td>
 		<td class="item" align="left"><b style="color:<?php echo $cFileErr ? 'red' : 'green'; ?>"><?php echo $cFileMsg; ?></b></td>
 	</tr>
-	<?php if(($do_cfg || $do_db_cfg) && $cFileErr){ ?>
+	<?php if (($do_cfg || $do_db_cfg) && $cFileErr) { ?>
 		<tr>
 			<td class="item" align="left" colspan="2">The following Content should go to ./includes/config.php. Create that text file manually and copy the following lines in by hand and save.  This file must be readable by the webserver.</td>
 		</tr>

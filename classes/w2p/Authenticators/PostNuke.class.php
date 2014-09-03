@@ -9,7 +9,7 @@
  * @deprecated
  */
 
-class w2p_Authenticators_PostNuke extends w2p_Authenticators_Base
+class w2p_Authenticators_PostNuke extends \Web2project\Authenticators\Base
 {
     public function __construct()
     {

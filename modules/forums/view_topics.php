@@ -1,14 +1,14 @@
 <?php
 if (!defined('W2P_BASE_DIR')) {
-	die('You should not access this file directly.');
+    die('You should not access this file directly.');
 }
 // @todo    remove database query
 
 // retrieve any state parameters
 if (isset($_GET['orderby'])) {
-	$orderdir = $AppUI->getState('ForumVwOrderDir') ? ($AppUI->getState('ForumVwOrderDir') == 'asc' ? 'desc' : 'asc') : 'desc';
-	$AppUI->setState('ForumVwOrderBy', w2PgetParam($_GET, 'orderby', null));
-	$AppUI->setState('ForumVwOrderDir', $orderdir);
+    $orderdir = $AppUI->getState('ForumVwOrderDir') ? ($AppUI->getState('ForumVwOrderDir') == 'asc' ? 'desc' : 'asc') : 'desc';
+    $AppUI->setState('ForumVwOrderBy', w2PgetParam($_GET, 'orderby', null));
+    $AppUI->setState('ForumVwOrderDir', $orderdir);
 }
 $orderby = $AppUI->getState('ForumVwOrderBy') ? $AppUI->getState('ForumVwOrderBy') : 'latest_reply';
 $orderdir = $AppUI->getState('ForumVwOrderDir') ? $AppUI->getState('ForumVwOrderDir') : 'desc';

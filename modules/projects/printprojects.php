@@ -1,6 +1,6 @@
 <?php
 if (!defined('W2P_BASE_DIR')) {
-	die('You should not access this file directly.');
+    die('You should not access this file directly.');
 }
 // @todo    convert to template
 
@@ -10,7 +10,7 @@ $perms = &$AppUI->acl();
 $canView = canView('projects');
 
 if (!$canView) {
-	$AppUI->redirect(ACCESS_DENIED);
+    $AppUI->redirect(ACCESS_DENIED);
 }
 
 $search_text = $AppUI->getState('projsearchtext') ? $AppUI->getState('projsearchtext') : '';
@@ -22,11 +22,11 @@ $owner = $AppUI->processIntState('ProjIdxowner', $_GET, 'project_owner', -1);
 
 $orderdir = $AppUI->getState('ProjIdxOrderDir') ? $AppUI->getState('ProjIdxOrderDir') : 'asc';
 if (isset($_GET['orderby'])) {
-	if ($AppUI->getState('ProjIdxOrderDir') == 'asc') {
-		$orderdir = 'desc';
-	} else {
-		$orderdir = 'asc';
-	}
+    if ($AppUI->getState('ProjIdxOrderDir') == 'asc') {
+        $orderdir = 'desc';
+    } else {
+        $orderdir = 'asc';
+    }
 }
 $AppUI->setState('ProjIdxOrderDir', $orderdir);
 
@@ -97,7 +97,7 @@ $project_statuses = w2PgetSysVal('ProjectStatus');
             // already in the page
             $tabBox = new CTabBox('?m=projects', W2P_BASE_DIR . '/modules/projects/', $tab);
             // This will overwrited the initial tabs, so we need to add that separately.
-            $allactive = (int)count($projects) - (int)($archived);
+            $allactive = (int) count($projects) - (int) ($archived);
             array_unshift($project_statuses, $AppUI->_('All Projects', UI_OUTPUT_RAW) . ' (' . count($projects) . ')', $AppUI->_('All Active', UI_OUTPUT_RAW) . ' (' . $allactive . ')');
 
             //Tabbed view
@@ -132,4 +132,4 @@ $project_statuses = w2PgetSysVal('ProjectStatus');
 </table>
 <?php
 
-require (W2P_BASE_DIR . '/modules/projects/vw_projects.php');
+require W2P_BASE_DIR . '/modules/projects/vw_projects.php';
