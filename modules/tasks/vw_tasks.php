@@ -5,7 +5,7 @@ if (!defined('W2P_BASE_DIR')) {
 // @todo    convert to template
 // @todo    remove database query
 
-global $AppUI, $m, $a, $project_id, $f, $task_status, $min_view, $query_string, $durnTypes, $tpl;
+global $AppUI, $m, $a, $project_id, $task_id, $f, $task_status, $min_view, $query_string, $durnTypes, $tpl;
 global $task_sort_item1, $task_sort_type1, $task_sort_order1;
 global $task_sort_item2, $task_sort_type2, $task_sort_order2;
 global $user_id, $w2Pconfig, $currentTabId, $currentTabName, $canEdit, $showEditCheckbox, $tab;
@@ -205,18 +205,24 @@ $status = w2PgetSysVal('TaskStatus');
 $priority = w2PgetSysVal('TaskPriority');
 $customLookups = array('task_status' => $status, 'task_priority' => $priority);
 
-reset($projects);
-foreach ($projects as $k => $p) {
-    $tnums = (isset($p['tasks'])) ? count($p['tasks']) : 0;
-    if ($tnums && $m == 'tasks') {
-        $width = ($p['project_percent_complete'] < 30) ? 30 : $p['project_percent_complete'];
-        ?>
-        <tr>
-            <td colspan="<?php echo count($fieldList) + 3; ?>">
-                <div style="border: outset #eeeeee 1px;background-color:#<?php echo $p['project_color_identifier']; ?>; width: <?php echo $width; ?>%">
-                    <a href="./index.php?m=projects&amp;a=view&amp;project_id=<?php echo $k; ?>">
-                        <?php echo w2PshowImage('pencil.gif'); ?>
-                    </a>
+if ($task_id) {
+    $task = new CTask();
+    $task->load($task_id);
+    $taskTree = $tempTask->getTaskTree($task->task_project, $task_id);
+    echo $listTable->buildRows($taskTree, $customLookups);
+} else {
+    reset($projects);
+    foreach ($projects as $k => $p) {
+        $tnums = (isset($p['tasks'])) ? count($p['tasks']) : 0;
+        if ($tnums && $m == 'tasks') {
+            $width = ($p['project_percent_complete'] < 30) ? 30 : $p['project_percent_complete'];
+            ?>
+            <tr>
+                <td colspan="<?php echo count($fieldList) + 3; ?>">
+                    <div style="border: outset #eeeeee 1px;background-color:#<?php echo $p['project_color_identifier']; ?>; width: <?php echo $width; ?>%">
+                        <a href="./index.php?m=projects&amp;a=view&amp;project_id=<?php echo $k; ?>">
+                            <?php echo w2PshowImage('pencil.gif'); ?>
+                        </a>
                     <span style="color:<?php echo bestColor($p['project_color_identifier']); ?>;text-decoration:none;">
                         <strong>
                             <?php echo $p['company_name'] . ' :: ' . $p['project_name']; ?>
@@ -226,18 +232,20 @@ foreach ($projects as $k => $p) {
                         </span>
                     </span>
 
-                </div>
-            </td>
-        </tr>
-        <?php
-        $taskTree = $tempTask->getTaskTree($k);
-        echo $listTable->buildRows($taskTree, $customLookups);
-    }
-    if ('projects' == $m || 'projectdesigner' == $m) {
-        $taskTree = $tempTask->getTaskTree($k);
-        echo $listTable->buildRows($taskTree, $customLookups);
+                    </div>
+                </td>
+            </tr>
+            <?php
+            $taskTree = $tempTask->getTaskTree($k);
+            echo $listTable->buildRows($taskTree, $customLookups);
+        }
+        if ('projects' == $m || 'projectdesigner' == $m) {
+            $taskTree = $tempTask->getTaskTree($k);
+            echo $listTable->buildRows($taskTree, $customLookups);
+        }
     }
 }
+
 
 echo $listTable->endTable();
 ?>
