@@ -105,7 +105,7 @@ if (count($obj->getChildren()) > 0) {
 	// $_GET[task_status]; this patch is to be able to see
 	// child tasks withing an inactive task
 	$_GET['task_status'] = $obj->task_status;
-	$tabBox->add(W2P_BASE_DIR . '/modules/tasks/tasks', 'Child Tasks');
+	$tabBox->add(W2P_BASE_DIR . '/modules/tasks/vw_tasks', 'Child Tasks');
 }
 
 if (count($tabBox->tabs)) {
