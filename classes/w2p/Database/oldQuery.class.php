@@ -41,12 +41,7 @@ class w2p_Database_oldQuery {
 	/**< Use the old style of fetch mode with ADODB */
 	public $_old_style = null;
 
-	/** Insert a value into the database
-	 * @param $field The field to insert the value into
-	 * @param $value The specified value
-	 * @param $set Defaults to false. If true will check to see if the fields or values supplied are comma delimited strings instead of arrays
-	 * @param $func Defaults to false. If true will not use quotation marks around the value - to be used when the value being inserted includes a function
-	 */
+    /** @deprecated */
 	public function addInsert($field, $value = null, $set = false, $func = false) {
         error_log(__FUNCTION__ . ' has been deprecated', E_USER_WARNING);
         if (is_array($field) && $value == null) {
@@ -79,13 +74,7 @@ class w2p_Database_oldQuery {
         $this->type = 'insert';
 	}
 
-	// implemented addReplace() on top of addInsert()
-	/** Insert a value into the database, to replace an existing row.
-	 * @param $field The field to insert the value into
-	 * @param $value The specified value
-	 * @param $set Defaults to false. If true will check to see if the fields or values supplied are comma delimited strings instead of arrays
-	 * @param $func Defaults to false. If true will not use quotation marks around the value - to be used when the value being inserted includes a function
-	 */
+    /** @deprecated */
 	public function addReplace($field, $value, $set = false, $func = false) {
         error_log(__FUNCTION__ . ' has been deprecated', E_USER_WARNING);
         $this->addInsert($field, $value, $set, $func);
