@@ -22,6 +22,7 @@ function web2project_autoload($className) {
         case 'w2p_Core_UpgradeManager':
         case 'w2p_Output_EmailManager':
         case 'w2p_Output_Email_Template':
+        case 'w2p_Utilities_Paginator':
             return include W2P_BASE_DIR . '/classes/deprecated.class.php';
         default:
             //fall through
