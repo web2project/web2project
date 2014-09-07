@@ -223,7 +223,7 @@ input[type="checkbox"] {
  */
 .list td {
     text-align: center;
-    /*white-space:nowrap;*/
+    white-space:nowrap;
 }
 table.smartsearch td {
     text-align: left;
