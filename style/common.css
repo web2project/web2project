@@ -561,7 +561,7 @@ table.minititle th {
     text-align: center;
 }
 
-bordertable, .bordertable{
+.bordertable{
     border: 1px black solid;
 }
 
