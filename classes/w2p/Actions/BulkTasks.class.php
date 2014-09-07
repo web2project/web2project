@@ -15,9 +15,6 @@ class w2p_Actions_BulkTasks extends CTask
     /**
      * Import tasks from another project
      *
-     * 	@param	int Project ID of the tasks come from.
-     * 	@return	bool
-     *
      *  @todo - this entire thing has nothing to do with projects.. it should move to the CTask class - dkc 25 Nov 2012
      *  @todo - why are we returning either an array or a boolean? You make my head hurt. - dkc 25 Nov 2012
      *
@@ -30,7 +27,12 @@ class w2p_Actions_BulkTasks extends CTask
      *   be filled out (Files) but there's also documentation you need about it
      *   (Links) and once the task is underway, you need to let some people
      *   know (Contacts). - dkc 25 Nov 2012
-     * */
+     *
+     * @param $from_project_id
+     * @param $to_project_id
+     * @param $project_start_date
+     * @return array
+     */
     public function importTasks($from_project_id, $to_project_id, $project_start_date)
     {
         $errors = array();

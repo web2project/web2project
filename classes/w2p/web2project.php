@@ -8,6 +8,7 @@ function web2project_autoload($className) {
      */
     switch($className)
     {
+        case 'w2p_Actions_ImportTasks':
         case 'w2p_API_iCalendar':
         case 'w2p_Controller_Base':
         case 'w2p_Controller_Permissions':

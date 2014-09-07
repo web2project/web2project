@@ -503,3 +503,13 @@ class w2p_Utilities_Paginator extends \Web2project\Utilities\Paginator
         parent::__construct($items, $pagesize);
     }
 }
+
+class w2p_Actions_ImportTasks extends w2p_Actions_BulkTasks
+{
+    public function __construct()
+    {
+        trigger_error("w2p_Actions_ImportTasks has been deprecated in v4.0 and will be removed by v5.0. Please use w2p_Actions_BulkTasks instead.", E_USER_NOTICE );
+
+        parent::__construct();
+    }
+}
