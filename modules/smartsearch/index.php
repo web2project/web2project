@@ -15,7 +15,7 @@ $moduleList = $AppUI->getLoadableModuleList();
 asort($moduleList);
 foreach ($moduleList as $module) {
     if (class_exists($module['mod_main_class'])) {
-        $object = new $module['mod_main_class'()]();
+        $object = new $module['mod_main_class']();
         if (is_callable(array($object, 'hook_search'))) {
             $ssearch['mod_' . $module['mod_directory']] = w2PgetParam($_POST, 'mod_' . $module['mod_directory'], '');
             $hook_modules[] = $module['mod_directory'];
@@ -233,7 +233,7 @@ if (isset($_POST['keyword'])) {
         foreach ($moduleList as $module) {
             if ($ssearch['mod_selection'] == '' || $ssearch['mod_' . $module['mod_directory']] == 'on') {
                 if (class_exists($module['mod_main_class'])) {
-                    $object = new $module['mod_main_class'()]();
+                    $object = new $module['mod_main_class']();
                     if (is_callable(array($object, 'hook_search'))) {
                         $search = new CSmartSearch();
                         $searchArray = $object->hook_search();
