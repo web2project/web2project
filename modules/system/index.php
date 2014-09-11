@@ -97,8 +97,9 @@ $titleBlock->show();
         </div>
         <div class="left">
             <span class="subtitle"><?php echo $AppUI->_('Language Support'); ?></span><br />
+            Additional language packs can be found on <a href="https://github.com/web2project/locales">Github</a><br />
             <a href="?m=system&a=translate"><?php echo $AppUI->_('Translation Management'); ?></a><br />
-            <a href="?m=system&u=templating"><?php echo $AppUI->_('Email Templates'); ?></a>
+            <a href="?m=system&u=templating"><?php echo $AppUI->_('Manage Email Templates'); ?></a>
         </div>
     </div>
 
