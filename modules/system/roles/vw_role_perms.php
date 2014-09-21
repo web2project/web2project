@@ -113,6 +113,7 @@ function setPermItem( key, val ) {
 
 <?php
 
+$canDelete = canAccess('system');
 foreach ($role_acls as $acl) {
 	$buf = '';
 	$permission = $perms->get_acl($acl);
