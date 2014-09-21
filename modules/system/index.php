@@ -119,7 +119,7 @@ $titleBlock->show();
     <?php if (w2PgetConfig('budget_info_display', false)) { ?>
     <div class="right main">
         <div class="left icon">
-            <?php echo w2PshowImage('control-center.png', 42, 42, ''); ?>
+            <?php echo w2PshowImage('money.png', 42, 42, ''); ?>
         </div>
         <div class="left">
             <span class="subtitle"><?php echo $AppUI->_('Budgeting Setup'); ?></span><br />
