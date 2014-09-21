@@ -46,8 +46,12 @@ class w2p_Output_HTML_TaskTable extends w2p_Output_ListTable
                 if ($rowData['children'] > 0) {
                     $prefix .= '<img src="' . w2PfindImage('icons/collapse.gif') . '" />&nbsp;';
                 }
+                if ('' != $rowData['task_description'] ) {
+                    $prefix .= w2PtoolTip($this->_AppUI->_('Task Description'), $rowData['task_description']);
+                    $suffix .= w2PendTip();
+                }
                 if ($rowData['task_milestone']) {
-                    $suffix = '&nbsp;' . '<img src="' . w2PfindImage('icons/milestone.gif') . '" />';
+                    $suffix .= '&nbsp;' . '<img src="' . w2PfindImage('icons/milestone.gif') . '" />';
                 }
                 if (1 == $rowData['task_dynamic'] || $rowData['task_milestone']) {
                     $rowData[$column] = '<b>' . $rowData[$column] . '</b>';
