@@ -100,7 +100,7 @@ class w2p_Output_HTMLHelperTest extends CommonSetup
         $cell = $this->obj->createCell('x_count', 'default value');
         $this->assertEquals('<td class="_count">default value</td>', $cell);
         $cell = $this->obj->createCell('x_duration', 'default value');
-        $this->assertEquals('<td class="_duration">default value </td>', $cell);
+        $this->assertEquals('<td class="_duration">default value&nbsp;</td>', $cell);
         $cell = $this->obj->createCell('x_hours', 'default value');
         $this->assertEquals('<td class="_hours">default value</td>', $cell);
     }
