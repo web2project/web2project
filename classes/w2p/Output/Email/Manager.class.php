@@ -179,8 +179,8 @@ class w2p_Output_Email_Manager
 
         $body = $this->AppUI->_('Project', UI_OUTPUT_RAW) . ":\t{{project_name}}\n";
         $body .= $this->AppUI->_('Task', UI_OUTPUT_RAW) . ":\t\t{{task_name}}\n";
-        $body .= $this->AppUI->_('Priority', UI_OUTPUT_RAW) . ":\t\t{{task_priority}}\n";
-        $body .= $this->AppUI->_('Progress', UI_OUTPUT_RAW) . ":\t\t{{task_percent_complete}}%\n";
+        $body .= $this->AppUI->_('Priority', UI_OUTPUT_RAW) . ":\t{{task_priority}}\n";
+        $body .= $this->AppUI->_('Progress', UI_OUTPUT_RAW) . ":\t{{task_percent_complete}}%\n";
 
         $user_prefs = $this->AppUI->loadPrefs($user['assignee_id'], true);
         $start_date = new w2p_Utilities_Date($this->AppUI->formatTZAwareTime($task->task_start_date, '%Y-%m-%d %T'));
