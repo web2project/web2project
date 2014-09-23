@@ -123,19 +123,6 @@ class w2p_Core_CAppUITest extends CommonSetup
         $w2Pconfig['locale_warn'] = true;
         $this->assertEquals('Projects^', $AppUI->__('Projects'));
         $this->assertEquals('Add File^', $AppUI->__('Add File'));
-
-        /* Change to another language and reload tranlations */
-        $AppUI->user_locale = 'es';
-        require W2P_BASE_DIR . '/locales/core.php';
-        $this->assertEquals('Proyectos',      $AppUI->__('Projects'));
-        $this->assertEquals('Ciudad',         $AppUI->__('City'));
-        $this->assertEquals('StillNotThere^', $AppUI->__('StillNotThere'));
-
-        /* Change back to English and reload tranlations */
-        $AppUI->user_locale = 'en';
-        require W2P_BASE_DIR . '/locales/core.php';
-        $this->assertEquals('Projects',        $AppUI->__('Projects'));
-        $this->assertEquals('NoGonnaBeThere^', $AppUI->__('NoGonnaBeThere'));
     }
 
     /**
