@@ -1,4 +1,17 @@
 {
+    "name": "web2project/core",
+    "version": "3.2.80",
+    "type": "application",
+    "description": "web-based project management system",
+    "keywords": ["gantt", "task tracking", ""],
+    "homepage": "http://web2project.net",
+    "license": "Clear BSD",
+    "authors": [
+        {
+            "name": "Keith Casey",
+            "email": "contrib@caseysoftware.com"
+        }
+    ],
     "require": {
 
     },
