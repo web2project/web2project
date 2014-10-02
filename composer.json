@@ -3,7 +3,7 @@
     "version": "3.2.80",
     "type": "application",
     "description": "web-based project management system",
-    "keywords": ["gantt", "task tracking", ""],
+    "keywords": ["gantt charts", "task tracking", "time tracking", "project planning"],
     "homepage": "http://web2project.net",
     "license": "Clear BSD",
     "authors": [
