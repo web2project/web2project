@@ -24,15 +24,15 @@ class CTabBox extends w2p_Theme_TabBox {
         // tabbed / flat view options
         if ($this->_AppUI->getPref('TABVIEW') == 0) {
             if ($opt_flat) {
-                $s .= '<table border="0" cellpadding="2" cellspacing="0" width="100%">';
-                $s .= '<tr>';
-                $s .= '<td width="54" nowrap="nowrap">';
-                $s .= '<a class="button" href="' . $this->baseHRef . 'tab=0"><div>' . $this->_AppUI->_('tabbed') . '</div></a>';
-                $s .= '</td>';
-                $s .= '<td nowrap="nowrap">';
-                $s .= '<a class="button" href="' . $this->baseHRef . 'tab=-1"><div>' . $this->_AppUI->_('flat') . '</div></a>';
-                $s .= '</td>' . $extra . '</tr></table>';
-                echo $s;
+//                $s .= '<table border="0" cellpadding="2" cellspacing="0" width="100%">';
+//                $s .= '<tr>';
+//                $s .= '<td width="54" nowrap="nowrap">';
+//                $s .= '<a class="button" href="' . $this->baseHRef . 'tab=0"><div>' . $this->_AppUI->_('tabbed') . '</div></a>';
+//                $s .= '</td>';
+//                $s .= '<td nowrap="nowrap">';
+//                $s .= '<a class="button" href="' . $this->baseHRef . 'tab=-1"><div>' . $this->_AppUI->_('flat') . '</div></a>';
+//                $s .= '</td>' . $extra . '</tr></table>';
+//                echo $s;
             }
         } else {
             if ($extra) {
