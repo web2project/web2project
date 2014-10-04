@@ -103,11 +103,6 @@ class w2p_Theme_TabBox {
         $s = '';
         // tabbed / flat view options
         if ($this->_AppUI->getPref('TABVIEW') == 0) {
-            $s .= '<table border="0" cellpadding="2" cellspacing="0" width="100%"><tr><td nowrap="nowrap">';
-            $s .= '<a class="crumb" href="' . $this->baseHRef . 'tab=0"><span>' . $this->_AppUI->_('tabbed') . '</span></a> ';
-            $s .= '<a class="crumb" href="' . $this->baseHRef . 'tab=-1"><span>' . $this->_AppUI->_('flat') . '</span></a>';
-            $s .= '</td>' . $extra . '</tr></table>';
-            echo $s;
         } else {
             if ($extra) {
                 echo '<table border="0" cellpadding="2" cellspacing="0" width="100%"><tr>' . $extra . '</tr></table>';
