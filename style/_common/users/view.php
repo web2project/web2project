@@ -4,7 +4,7 @@ $view = new w2p_Output_HTML_ViewHelper($AppUI);
 
 ?>
 <div class="std addedit users">
-    <div class="column left">
+    <div class="column left well">
         <p><?php $view->showLabel('Username'); ?>
             <?php $view->showField('user_username', $user->user_username); ?>
         </p>
@@ -33,7 +33,7 @@ $view = new w2p_Output_HTML_ViewHelper($AppUI);
             <?php $view->showField('contact_birthday', $user->contact_birthday); ?>
         </p>
     </div>
-    <div class="column right">
+    <div class="column right well">
         <?php
         $fields = $methods['fields'];
         foreach ($fields as $key => $field): ?>

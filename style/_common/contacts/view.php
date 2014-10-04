@@ -4,8 +4,7 @@ $view = new w2p_Output_HTML_ViewHelper($AppUI);
 
 ?>
 <div class="std addedit contacts">
-    <div class="column left">
-
+    <div class="column left well">
         <p><?php $view->showLabel('First Name'); ?>
             <?php $view->showField('contact_firstname', $contact->contact_first_name); ?>
         </p>
@@ -31,8 +30,8 @@ $view = new w2p_Output_HTML_ViewHelper($AppUI);
             <?php $view->showAddress('contact', $contact); ?>
         </p>
     </div>
-    <div class="column right">
-        <p><?php $view->showLabel('Birthdate'); ?>
+    <div class="column right well">
+        <p><?php $view->showLabel('Birthday'); ?>
             <?php $view->showField('contact_birthday', $contact->contact_birthday); ?>
         </p>
         <p><?php $view->showLabel('Phone'); ?>

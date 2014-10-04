@@ -1,9 +1,11 @@
 {
     "name": "web2project/core",
+    "version": "3.2.80",
     "type": "application",
-    "keywords": ["web2project", "project management", "gantt"],
-    "homepage": "http://github.com/web2project/web2project",
-    "license": "BSD",
+    "description": "web-based project management system",
+    "keywords": ["web2project", "dotproject", "gantt charts", "task tracking", "time tracking", "project planning"],
+    "homepage": "http://web2project.net",
+    "license": "Clear BSD",
     "authors": [
         {
             "name": "Keith Casey",

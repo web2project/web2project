@@ -31,11 +31,11 @@ class CTabBox extends w2p_Theme_TabBox {
         $s = '';
         // tabbed / flat view options
         if ($this->_AppUI->getPref('TABVIEW') == 0) {
-            $s .= '<table border="0" cellpadding="2" cellspacing="0" width="100%"><tr><td nowrap="nowrap">';
-            $s .= '<a href="' . $this->baseHRef . 'tab=0">' . $this->_AppUI->_('tabbed') . '</a> : ';
-            $s .= '<a href="' . $this->baseHRef . 'tab=-1">' . $this->_AppUI->_('flat') . '</a>';
-            $s .= '</td>' . $extra . '</tr></table>';
-            echo $s;
+//            $s .= '<table border="0" cellpadding="2" cellspacing="0" width="100%"><tr><td nowrap="nowrap">';
+//            $s .= '<a href="' . $this->baseHRef . 'tab=0">' . $this->_AppUI->_('tabbed') . '</a> : ';
+//            $s .= '<a href="' . $this->baseHRef . 'tab=-1">' . $this->_AppUI->_('flat') . '</a>';
+//            $s .= '</td>' . $extra . '</tr></table>';
+//            echo $s;
         } else {
             if ($extra) {
                 echo '<table border="0" cellpadding="2" cellspacing="0" width="100%"><tr>' . $extra . '</tr></table>';

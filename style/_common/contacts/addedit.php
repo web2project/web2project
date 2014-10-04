@@ -12,7 +12,7 @@ $form = new w2p_Output_HTML_FormHelper($AppUI);
     <?php echo $form->addNonce(); ?>
 
     <div class="std addedit contacts">
-        <div class="column left">
+        <div class="column left well">
             <p>
                 <?php $form->showLabel('First Name'); ?>
                 <?php $form->showField('contact_first_name', $object->contact_first_name, array('maxlength' => 50)); ?>
@@ -70,7 +70,7 @@ $form = new w2p_Output_HTML_FormHelper($AppUI);
             $form->showCancelButton();
             ?>
         </div>
-        <div class="column right">
+        <div class="column right well">
             <p>
                 <?php $form->showLabel('Address1'); ?>
                 <?php $form->showField('contact_address1', $object->contact_address1, array('maxlength' => 60)); ?>
