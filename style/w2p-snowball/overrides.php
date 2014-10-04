@@ -1,7 +1,4 @@
 <?php
-if (!defined('W2P_BASE_DIR')) {
-    die('You should not access this file directly.');
-}
 
 class style_w2psnowball extends w2p_Theme_Base
 {
