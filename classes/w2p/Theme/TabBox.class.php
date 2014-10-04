@@ -102,8 +102,7 @@ class w2p_Theme_TabBox {
         reset($this->tabs);
         $s = '';
         // tabbed / flat view options
-        if ($this->_AppUI->getPref('TABVIEW') == 0) {
-        } else {
+        if ($this->_AppUI->getPref('TABVIEW') != 0) {
             if ($extra) {
                 echo '<table border="0" cellpadding="2" cellspacing="0" width="100%"><tr>' . $extra . '</tr></table>';
             } else {
