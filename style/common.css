@@ -656,7 +656,7 @@ table.mocal td a:first-child {
 }
 
 div.column {
-    width: 50%;
+    width: 45%;
 }
 div.column:nth-child(1) {
     float: left;
