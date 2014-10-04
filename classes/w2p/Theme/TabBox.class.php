@@ -4,7 +4,7 @@
  * @package     web2project\theme
  */
 
-class w2p_Theme_TabBox {
+abstract class w2p_Theme_TabBox {
     /**
     @var array */
     public $tabs = null;
