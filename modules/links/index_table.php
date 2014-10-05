@@ -50,6 +50,7 @@ $listTable = new w2p_Output_HTML_ProjectListTable($AppUI);
 $listTable->df .= ' ' . $AppUI->getPref('TIMEFORMAT');
 $listTable->addBefore('edit', 'link_id');
 $listTable->addBefore('url', 'link_url');
+$listTable->setProjectIdName('link_project');
 
 echo $listTable->startTable();
 echo $listTable->buildHeader($fields);
