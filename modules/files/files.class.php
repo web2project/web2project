@@ -173,6 +173,7 @@ class CFile extends w2p_Core_BaseObject
         if ($category_id >= 0) {
             $q->addWhere('file_category = ' . (int) $category_id);
         }
+        $q->addOrder('project_name, file_name');
 
         return $q->loadList();
     }
