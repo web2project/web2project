@@ -25,14 +25,6 @@ if (($company_id || $project_id || $task_id) && !($m == 'files')) {
 
 $items = CFile::getFileList($AppUI, $company_id, $project_id, $task_id, $tab);
 
-$xpg_pagesize = w2PgetConfig('page_size', 50);
-$xpg_min = $xpg_pagesize * ($page - 1); // This is where we start our record set from
-
-// counts total recs from selection
-$xpg_totalrecs = count($fileList);
-$pageNav = buildPaginationNav($AppUI, $m, $tab+1, $xpg_totalrecs, $xpg_pagesize, $page);
-echo $pageNav;
-
 $module = new w2p_System_Module();
 $fields = $module->loadSettings('files', 'index_list');
 
@@ -49,16 +41,19 @@ if (0 == count($fields)) {
     //$module->storeSettings('files', 'index_list', $fieldList, $fieldNames);
     $fields = array_combine($fieldList, $fieldNames);
 }
-$fieldList = array_keys($fields);
-$fieldNames = array_values($fields);
+
+$page = (int) w2PgetParam($_GET, 'page', 1);
+$paginator = new w2p_Utilities_Paginator($items);
+$items = $paginator->getItemsOnPage($page);
 
 $fileTypes = w2PgetSysVal('FileType');
 $customLookups = array('file_category' => $fileTypes);
 
 $listTable = new w2p_Output_HTML_ProjectListTable($AppUI);
 $listTable->setProjectIdName('file_project');
+echo $paginator->buildNavigation($AppUI, $m, $tab);
 echo $listTable->startTable();
 echo $listTable->buildHeader($fields);
 echo $listTable->buildRows($items, $customLookups);
 echo $listTable->endTable();
-echo $pageNav;
+echo $paginator->buildNavigation($AppUI, $m, $tab);
