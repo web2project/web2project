@@ -42,6 +42,7 @@ if (0 == count($fields)) {
     $fields = array_combine($fieldList, $fieldNames);
 }
 
+$tab++;         // ugly hack.. without this, tab is sometimes -1 which flips the display into flat mode
 $page = (int) w2PgetParam($_GET, 'page', 1);
 $paginator = new w2p_Utilities_Paginator($items);
 $items = $paginator->getItemsOnPage($page);
