@@ -66,34 +66,34 @@ include W2P_BASE_DIR . '/locales/core.php';
 
 $file_id = (int) w2PgetParam($_GET, 'file_id', 0);
 
-if ($file_id) {
-    $file = new CFile;
-    $file->load($file_id);
-
-    if (!$file->canView()) {
-        $AppUI->redirect(ACCESS_DENIED);
-    }
-
-    $exists = $fileclass->getFileSystem()->exists($file['file_project'], $file['file_real_filename']);
-
-    if (!$exists) {
-        $AppUI->setMsg('fileIdError', UI_MSG_ERROR);
-        $AppUI->redirect();
-    }
-
-    ob_end_clean();
-    header('MIME-Version: 1.0');
-    header('Pragma: ');
-    header('Cache-Control: public');
-    header('Content-length: ' . $file['file_size']);
-    header('Content-type: ' . $file['file_type']);
-    header('Content-transfer-encoding: 8bit');
-    header('Content-disposition: attachment; filename="' . $file['file_name'] . '"');
-
-    $fileclass->getFileSystem()->read($file['file_project'], $file['file_real_filename']);
-
-    flush();
-} else {
+if (!$file_id) {
     $AppUI->setMsg('fileIdError', UI_MSG_ERROR);
     $AppUI->redirect();
 }
+
+$file = new CFile;
+$file->load($file_id);
+
+if (!$file->canView()) {
+    $AppUI->redirect(ACCESS_DENIED);
+}
+
+$exists = $file->getFileSystem()->exists($file->file_project, $file->file_real_filename);
+
+if (!$exists) {
+    $AppUI->setMsg('fileIdError', UI_MSG_ERROR);
+    $AppUI->redirect();
+}
+
+ob_end_clean();
+header('MIME-Version: 1.0');
+header('Pragma: ');
+header('Cache-Control: public');
+header('Content-length: ' . $file->file_size);
+header('Content-type: ' . $file->file_type);
+header('Content-transfer-encoding: 8bit');
+header('Content-disposition: attachment; filename="' . $file->file_name . '"');
+
+$file->getFileSystem()->read($file->file_project, $file->file_real_filename);
+
+flush();
