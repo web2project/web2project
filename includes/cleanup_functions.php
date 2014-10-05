@@ -981,18 +981,13 @@ function addDeptId($dataset, $parent)
 // From: modules/files/filefolder.class.php
 function getFolderSelectList()
 {
-    global $AppUI;
+    $folders = array(0 => 'Root');
 
     $q = new w2p_Database_Query();
     $q->addTable('file_folders');
-    $q->addQuery('file_folder_id, file_folder_name, file_folder_parent');
+    $q->addQuery('file_folder_id, file_folder_name');
     $q->addOrder('file_folder_name');
-    $folderList = $q->loadHashList('file_folder_id');
-
-    $folders = array(0 => 'Root');
-    foreach($folderList as $folder => $data) {
-        $folders[$folder] = $data['file_folder_name'];
-    }
+    $folders += $q->loadHashList();
 
     return $folders;
 }
