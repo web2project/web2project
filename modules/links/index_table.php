@@ -27,8 +27,8 @@ $module = new w2p_System_Module();
 $fields = $module->loadSettings('links', 'index_list');
 
 if (0 == count($fields)) {
-    $fieldList = array('link_name', 'link_description', 'link_category', 'link_project', 'link_task', 'link_owner', 'link_date');
-    $fieldNames = array('Link Name', 'Description', 'Category', 'Project Task', 'Task Name', 'Owner', 'Date');
+    $fieldList = array('link_name', 'link_description', 'link_category', 'link_task', 'link_owner', 'link_date');
+    $fieldNames = array('Link Name', 'Description', 'Category', 'Task Name', 'Owner', 'Date');
 
     $module->storeSettings('links', 'index_list', $fieldList, $fieldNames);
     $fields = array_combine($fieldList, $fieldNames);
@@ -46,7 +46,7 @@ echo $pageNav;
 $link_types = w2PgetSysVal('LinkType');
 $customLookups = array('link_category' => $link_types);
 
-$listTable = new w2p_Output_ListTable($AppUI);
+$listTable = new w2p_Output_HTML_ProjectListTable($AppUI);
 $listTable->df .= ' ' . $AppUI->getPref('TIMEFORMAT');
 $listTable->addBefore('edit', 'link_id');
 $listTable->addBefore('url', 'link_url');
