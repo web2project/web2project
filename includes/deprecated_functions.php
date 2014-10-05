@@ -1504,3 +1504,10 @@ function __extract_from_contact_controller($controller)
     return $controller;
 }
 
+/** @deprecated */
+function getReadableModule()
+{
+    trigger_error(__FUNCTION__ . " has been deprecated in v4.0 and will be removed in v5.0. There is no replacement.", E_USER_NOTICE );
+
+    return 'public';
+}

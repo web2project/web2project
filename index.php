@@ -168,7 +168,7 @@ if (!isset($_GET['m']) && !empty($w2Pconfig['default_view_m'])) {
 	}
 } else {
 	// set the module from the url
-	$m = $loader->checkFileName(w2PgetParam($_GET, 'm', getReadableModule()));
+	$m = $loader->checkFileName(w2PgetParam($_GET, 'm', 'public'));
 }
 $m = preg_replace("/[^a-z0-9_]/", "", $m);
 // set the action from the url

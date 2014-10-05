@@ -156,23 +156,6 @@ function temp_filterArrayForSelectTree($projectData)
     return array_values($projectData);
 }
 
-function getReadableModule()
-{
-    $q = new w2p_Database_Query;
-    $q->addTable('modules');
-    $q->addQuery('mod_directory');
-    $q->addWhere('mod_active = 1');
-    $q->addOrder('mod_ui_order');
-    $modules = $q->loadColumn();
-    foreach ($modules as $mod) {
-        if (canAccess($mod)) {
-            return $mod;
-        }
-    }
-
-    return null;
-}
-
 function getPermission($mod, $perm, $item_id = 0)
 {
     // First check if the module is readable, i.e. has view permission.
