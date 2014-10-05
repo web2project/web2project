@@ -10,4 +10,4 @@ namespace Web2project\Exceptions;
  * @package     web2project\exceptions
  */
 
-class Database extends Exception { }
+class Database extends \Exception { }

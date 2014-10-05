@@ -124,7 +124,7 @@ class w2p_Database_Query extends w2p_Database_oldQuery
                 $q = $this->prepareDelete();
                 break;
             default:
-                throw new w2p_Database_Exception("The {$this->type} query type has not been implemented.");
+                throw new \Web2project\Exceptions\Database("The {$this->type} query type has not been implemented.");
         }
         if ($clear) {
             $this->clear();
@@ -232,7 +232,7 @@ class w2p_Database_Query extends w2p_Database_oldQuery
         if (!$this->_query_id) {
             $error = $this->_db->ErrorMsg();
 
-            throw new w2p_Database_Exception($error);
+            throw new \Web2project\Exceptions\Database($error);
         }
 
         return $this->_query_id;
@@ -802,12 +802,12 @@ class w2p_Database_Query extends w2p_Database_oldQuery
      *
      * @param $object
      * @return bool
-     * @throws w2p_Database_Exception
+     * @throws \Web2project\Exceptions\Database
      */
     public function loadObject(&$object)
     {
         if (!is_object($object)) {
-            throw new w2p_Database_Exception("The loadObject method expects an object to load.");
+            throw new \Web2project\Exceptions\Database("The loadObject method expects an object to load.");
         }
         $result = $this->exec(ADODB_FETCH_ASSOC);
         if ($result) {
