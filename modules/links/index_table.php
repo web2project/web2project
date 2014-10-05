@@ -34,14 +34,9 @@ if (0 == count($fields)) {
     $fields = array_combine($fieldList, $fieldNames);
 }
 
-$xpg_pagesize = w2PgetConfig('page_size', 50);
-$xpg_min = $xpg_pagesize * ($page - 1); // This is where we start our record set from
-// counts total recs from selection
-$xpg_totalrecs = count($items);
-$items = array_slice($items, $xpg_min, $xpg_pagesize);
-
-$pageNav = buildPaginationNav($AppUI, $m, $tab, $xpg_totalrecs, $xpg_pagesize, $page);
-echo $pageNav;
+$page = (int) w2PgetParam($_GET, 'page', 1);
+$paginator = new w2p_Utilities_Paginator($items);
+$items = $paginator->getItemsOnPage($page);
 
 $link_types = w2PgetSysVal('LinkType');
 $customLookups = array('link_category' => $link_types);
@@ -52,8 +47,9 @@ $listTable->addBefore('edit', 'link_id');
 $listTable->addBefore('url', 'link_url');
 $listTable->setProjectIdName('link_project');
 
+echo $paginator->buildNavigation($AppUI, $m, $tab);
 echo $listTable->startTable();
 echo $listTable->buildHeader($fields);
 echo $listTable->buildRows($items, $customLookups);
 echo $listTable->endTable();
-echo $pageNav;
+echo $paginator->buildNavigation($AppUI, $m, $tab);
