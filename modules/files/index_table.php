@@ -23,27 +23,42 @@ if (($company_id || $project_id || $task_id) && !($m == 'files')) {
     $category_id = ($tab < 0) ? 0 : $tab + 1;
 }
 
+$items = CFile::getFileList($AppUI, $company_id, $project_id, $task_id, $tab);
+
 $xpg_pagesize = w2PgetConfig('page_size', 50);
 $xpg_min = $xpg_pagesize * ($page - 1); // This is where we start our record set from
 
 // counts total recs from selection
-$fileList = CFile::getFileList($AppUI, $company_id, $project_id, $task_id, $tab);
 $xpg_totalrecs = count($fileList);
 $pageNav = buildPaginationNav($AppUI, $m, $tab+1, $xpg_totalrecs, $xpg_pagesize, $page);
 echo $pageNav;
-?>
-<script language="javascript" type="text/javascript">
-function expand(id)
-{
-  var element = document.getElementById(id);
-  element.style.display = (element.style.display == '' || element.style.display == 'none') ? 'block' : 'none';
+
+$module = new w2p_System_Module();
+$fields = $module->loadSettings('files', 'index_list');
+
+if (0 == count($fields)) {
+    // TODO: This is only in place to provide an pre-upgrade-safe
+    //   state for versions earlier than v3.0
+    //   At some point at/after v4.0, this should be deprecated
+    $fieldList = array('file_name', 'file_description',
+        'file_version', 'file_category', 'file_folder', 'file_project', 'file_task',
+        'file_owner', 'file_datetime');
+    $fieldNames = array('File Name', 'Description', 'Version', 'Category',
+        'Folder', 'Project Name', 'Task Name', 'Owner', 'Date',);
+
+    //$module->storeSettings('files', 'index_list', $fieldList, $fieldNames);
+    $fields = array_combine($fieldList, $fieldNames);
 }
-</script>
-<table class="tbl list">
-    <?php
-    $showProject = true;
-    echo displayFiles($AppUI, -1, $task_id, $project_id, $company_id);
-    ?>
-</table>
-<?php
+$fieldList = array_keys($fields);
+$fieldNames = array_values($fields);
+
+$fileTypes = w2PgetSysVal('FileType');
+$customLookups = array('file_category' => $fileTypes);
+
+$listTable = new w2p_Output_HTML_ProjectListTable($AppUI);
+$listTable->setProjectIdName('file_project');
+echo $listTable->startTable();
+echo $listTable->buildHeader($fields);
+echo $listTable->buildRows($items, $customLookups);
+echo $listTable->endTable();
 echo $pageNav;
