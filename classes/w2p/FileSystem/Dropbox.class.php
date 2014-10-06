@@ -2,7 +2,7 @@
 
 use \Dropbox as dbx;
 
-class w2p_FileSystem_Dropbox implements \Web2project\Interfaces\Filesystem
+class w2p_FileSystem_Dropbox implements \Web2project\Interfaces\FileSystem
 {
     protected $_client = null;
     protected $_folder = null;

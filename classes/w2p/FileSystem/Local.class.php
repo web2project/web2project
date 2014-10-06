@@ -6,7 +6,7 @@
  *
  * @package     web2project\filesystem
  */
-class w2p_FileSystem_Local implements \Web2project\Interfaces\Filesystem
+class w2p_FileSystem_Local implements \Web2project\Interfaces\FileSystem
 {
     public function isWritable()
     {
