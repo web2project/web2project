@@ -64,61 +64,36 @@ if (!isset($_SESSION['AppUI']) || isset($_GET['logout'])) {
 $AppUI = &$_SESSION['AppUI'];
 include W2P_BASE_DIR . '/locales/core.php';
 
-$perms = &$AppUI->acl();
-
-$canRead = canView('files');
-if (!$canRead) {
-	$AppUI->redirect(ACCESS_DENIED);
-}
-
 $file_id = (int) w2PgetParam($_GET, 'file_id', 0);
 
-if ($file_id) {
-	// projects tat are denied access
-	$project = new CProject;
-	$allowedProjects = $project->getAllowedRecords($AppUI->user_id, 'projects.project_id, project_name', '', null, null, 'projects');
-	$fileclass = new CFile;
-	$fileclass->load($file_id);
-	$allowedFiles = $fileclass->getAllowedRecords($AppUI->user_id, 'file_id, file_name');
-
-	if (count($allowedFiles) && !array_key_exists($file_id, $allowedFiles)) {
-		$AppUI->redirect(ACCESS_DENIED);
-	}
-
-	$q = new w2p_Database_Query;
-	$q->addTable('files');
-	if ($fileclass->file_project) {
-		$q = $project->setAllowedSQL($AppUI->user_id, $q, 'file_project');
-        $q->addTable('projects', 'pr');
-	}
-	$q->addWhere('file_id = ' . $file_id);
-
-	$file = $q->loadHash();
-
-	if (!$file) {
-		$AppUI->redirect(ACCESS_DENIED);
-	}
-
-    $exists = $fileclass->getFileSystem()->exists($file['file_project'], $file['file_real_filename']);
-
-    if (!$exists) {
-        $AppUI->setMsg('fileIdError', UI_MSG_ERROR);
-        $AppUI->redirect();
-    }
-
-    ob_end_clean();
-    header('MIME-Version: 1.0');
-    header('Pragma: ');
-    header('Cache-Control: public');
-    header('Content-length: ' . $file['file_size']);
-    header('Content-type: ' . $file['file_type']);
-    header('Content-transfer-encoding: 8bit');
-    header('Content-disposition: attachment; filename="' . $file['file_name'] . '"');
-
-    $fileclass->getFileSystem()->read($file['file_project'], $file['file_real_filename']);
-
-    flush();
-} else {
+if (!$file_id) {
     $AppUI->setMsg('fileIdError', UI_MSG_ERROR);
     $AppUI->redirect();
 }
+
+$file = new CFile;
+$file->load($file_id);
+
+if (!$file->canView()) {
+    $AppUI->redirect(ACCESS_DENIED);
+}
+
+$exists = $file->getFileSystem()->exists($file->file_project, $file->file_real_filename);
+
+if (!$exists) {
+    $AppUI->setMsg('fileIdError', UI_MSG_ERROR);
+    $AppUI->redirect();
+}
+
+ob_end_clean();
+header('MIME-Version: 1.0');
+header('Pragma: ');
+header('Cache-Control: public');
+header('Content-length: ' . $file->file_size);
+header('Content-type: ' . $file->file_type);
+header('Content-transfer-encoding: 8bit');
+header('Content-disposition: attachment; filename="' . $file->file_name . '"');
+
+$file->getFileSystem()->read($file->file_project, $file->file_real_filename);
+
+flush();
