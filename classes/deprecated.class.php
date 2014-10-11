@@ -513,3 +513,13 @@ class w2p_Actions_ImportTasks extends w2p_Actions_BulkTasks
         parent::__construct();
     }
 }
+
+class w2p_Theme_InfoTabBox extends w2p_Theme_TabBox
+{
+    public function __construct($baseHRef = '', $baseInc = '', $active = 0, $javascript = null)
+    {
+        trigger_error( __CLASS__ . " has been deprecated in v4.0 and will be removed by v5.0. Please use theme-specific tab boxes instead.", E_USER_NOTICE );
+
+        parent::__construct($baseHRef, $baseInc, $active, $javascript);
+    }
+}
