@@ -24,7 +24,7 @@ class w2p_Core_CustomFieldManager extends w2p_Core_BaseObject {
 
         $this->html_types = array('textinput' => 'Text Input', 'textarea' => 'Text Area',
                     'checkbox' => 'Checkbox', 'select' => 'Select List', 'label' => 'Label',
-                    'separator' => 'Separator', 'href' => 'Weblink', 'email' => 'Email', 'date' => 'Date');
+                    'separator' => 'Separator', 'href' => 'Weblink', 'email' => 'Email', 'dateinput' => 'Date');
     }
 
     public function getType($name) {
@@ -32,6 +32,7 @@ class w2p_Core_CustomFieldManager extends w2p_Core_BaseObject {
     }
 
     public function getTypes() {
+        asort($this->html_types);
         return $this->html_types;
     }
 
@@ -48,7 +49,7 @@ class w2p_Core_CustomFieldManager extends w2p_Core_BaseObject {
         $q = $this->_getQuery();
         $q->addTable('custom_fields_struct');
         $q->addWhere("field_module = '$moduleName'");
-        $q->addOrder('field_order ASC');
+        $q->addOrder('field_order, field_name');
 
         return $q->loadList();
     }
