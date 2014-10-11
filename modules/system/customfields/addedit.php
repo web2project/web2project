@@ -76,7 +76,7 @@ function submitIt()
 }
 function filterFieldName(field)
 {
-    field.value=field.value.replace(/[^a-z|^A-Z|^0-9]*/gi,"");
+    field.value=field.value.replace(/[^a-z_|^A-Z|^0-9]*/gi,"");
 }
 
 function showAttribs()
