@@ -57,7 +57,7 @@ $fieldList = array_keys($fields);
 $fieldNames = array_values($fields);
 
 $page = (int) w2PgetParam($_GET, 'page', 1);
-$paginator = new w2p_Utilities_Paginator($projects);
+$paginator = new \Web2project\Utilities\Paginator($projects);
 $items = $paginator->getItemsOnPage($page);
 
 ?>
