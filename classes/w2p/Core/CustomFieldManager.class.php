@@ -24,7 +24,7 @@ class w2p_Core_CustomFieldManager extends w2p_Core_BaseObject {
 
         $this->html_types = array('textinput' => 'Text Input', 'textarea' => 'Text Area',
                     'checkbox' => 'Checkbox', 'select' => 'Select List', 'label' => 'Label',
-                    'separator' => 'Separator', 'href' => 'Weblink', 'email' => 'Email');
+                    'separator' => 'Separator', 'href' => 'Weblink', 'email' => 'Email', 'date' => 'Date');
     }
 
     public function getType($name) {
