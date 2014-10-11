@@ -259,9 +259,10 @@ if (file_exists($module_file)) {
     include $theme->resolveTemplate('missing_module');
 }
 if (!$suppressHeaders) {
-	echo '<iframe name="thread" src="' . W2P_BASE_URL . '/modules/index.html" width="0" height="0" frameborder="0"></iframe>';
-	echo '<iframe name="thread2" src="' . W2P_BASE_URL . '/modules/index.html" width="0" height="0" frameborder="0"></iframe>';
+	//echo '<iframe name="thread" src="' . W2P_BASE_URL . '/modules/index.html" width="0" height="0" frameborder="0"></iframe>';
+	//echo '<iframe name="thread2" src="' . W2P_BASE_URL . '/modules/index.html" width="0" height="0" frameborder="0"></iframe>';
  	//Theme footer goes before the performance box
+    $AppUI->getTheme()->loadCalendarJS();
     include $theme->resolveTemplate('footer');
 	if (W2P_PERFORMANCE_DEBUG) {
 		include $theme->resolveTemplate('performance');
