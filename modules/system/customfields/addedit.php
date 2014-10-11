@@ -130,6 +130,7 @@ function deleteItem(id)
             <td><label><?php echo $AppUI->_('Field Name/Identifier') ?>:&nbsp;<?php echo $AppUI->_('(No Spaces)') ?></label></td>
             <td>
                 <input type="text" class="text" name="field_name" maxlength="100" value="<?php echo $field_name ?>" onblur="javascript:filterFieldName(this)" />
+                * Any date fields must be named 'modulename_field_name' where modulename is the module it is used within.
             </td>
         </tr>
         <tr>
