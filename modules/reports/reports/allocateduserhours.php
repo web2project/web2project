@@ -5,7 +5,6 @@ if (!defined('W2P_BASE_DIR')) {
 // @todo    convert to template
 
 global $AppUI, $cal_sdf;
-$AppUI->getTheme()->loadCalendarJS();
 
 $coarseness = w2PgetParam($_POST, 'coarseness', 1);
 $do_report = w2PgetParam($_POST, 'do_report', 0);

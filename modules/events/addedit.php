@@ -17,7 +17,6 @@ if (!$canAddEdit) {
 }
 
 global $AppUI, $cal_sdf;
-$AppUI->getTheme()->loadCalendarJS();
 
 // get the passed timestamp (today if none)
 $date = w2PgetParam($_GET, 'date', null);

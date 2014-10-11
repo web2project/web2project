@@ -8,7 +8,6 @@ if (!defined('W2P_BASE_DIR')) {
  * Generates a report of the task logs for given dates
  */
 global $AppUI, $cal_sdf;
-$AppUI->getTheme()->loadCalendarJS();
 
 $perms = &$AppUI->acl();
 if (!canView('task_log')) {

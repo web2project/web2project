@@ -15,7 +15,6 @@ $df = $AppUI->getPref('SHDATEFORMAT');
 $a = ($user_id) ? '&a=view&user_id=' . $user_id : '';
 $a .= '&tab=' . $currentTabId . '&showdetails=1';
 
-$AppUI->getTheme()->loadCalendarJS();
 ?>
 <script language="javascript" type="text/javascript">
 function checkDate()

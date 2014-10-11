@@ -5,7 +5,6 @@ if (!defined('W2P_BASE_DIR')) {
 // @todo    convert to template
 
 global $AppUI, $cal_sdf;
-$AppUI->getTheme()->loadCalendarJS();
 
 /**
  * Generates a report of the task logs for given dates

@@ -6,7 +6,6 @@ if (!defined('W2P_BASE_DIR')) {
 // @todo    remove database query
 
 global $AppUI, $cal_sdf;
-$AppUI->getTheme()->loadCalendarJS();
 
 $do_report = w2PgetParam($_POST, 'do_report', true);
 $log_start_date = w2PgetParam($_POST, 'log_start_date', 0);

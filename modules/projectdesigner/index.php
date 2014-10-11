@@ -35,8 +35,6 @@ if (!$canView) {
     $AppUI->redirect(ACCESS_DENIED);
 }
 
-$AppUI->getTheme()->loadCalendarJS();
-
 $today = new w2p_Utilities_Date();
 $today->addDays(1);
 $today->setHour($w2Pconfig['cal_day_start']);

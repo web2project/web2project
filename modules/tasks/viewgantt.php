@@ -6,7 +6,6 @@ if (!defined('W2P_BASE_DIR')) {
 
 global $AppUI, $min_view, $m, $a, $user_id, $tab, $tasks, $cal_sdf;
 global $gantt_map, $currentGanttImgSource, $filter_task_list, $caller;
-$AppUI->getTheme()->loadCalendarJS();
 
 $min_view = defVal($min_view, false);
 

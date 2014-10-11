@@ -26,8 +26,6 @@ if ($task_log_id && !$canEdit) {
     $AppUI->redirect(ACCESS_DENIED);
 }
 
-$AppUI->getTheme()->loadCalendarJS();
-
 // check permissions
 $perms = &$AppUI->acl();
 $canEditTask = $perms->checkModuleItem('tasks', 'edit', $obj->task_id);

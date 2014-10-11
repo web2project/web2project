@@ -8,7 +8,6 @@ global $AppUI, $w2Pconfig, $task_parent_options, $loadFromTab;
 global $can_edit_time_information, $locale_char_set, $object;
 global $durnTypes, $task_project, $object_id, $tab;
 global $cal_sdf;
-$AppUI->getTheme()->loadCalendarJS();
 
 //Time arrays for selects
 $start = (int) w2PgetConfig('cal_day_start', 8);
