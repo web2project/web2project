@@ -7,6 +7,7 @@ $form = new w2p_Output_HTML_FormHelper($AppUI);
 	<input type="hidden" name="dosql" value="do_company_aed" />
 	<input type="hidden" name="company_id" value="<?php echo $object->getId(); ?>" />
     <?php echo $form->addNonce(); ?>
+    <input type="hidden" name="datePicker" value="" />
 
     <div class="std addedit companies">
         <div class="column left">

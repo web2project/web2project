@@ -19,7 +19,9 @@ class w2p_Core_CustomFieldDate extends w2p_Core_CustomField
         $html = '<label>' . $this->field_description . ':</label>';
         switch ($mode) {
             case 'edit':
-                $html .= $field->edit($this->fieldName(), $this->charValue(), $this->fieldExtraTags());
+                $pieces = explode('_', '_'.$this->fieldName());
+                $field->setDateInformation($pieces);
+                $html .= $field->edit('_'.$this->fieldName(), $this->charValue(), $this->fieldExtraTags());
                 break;
             case 'view':
                 $html .= $field->view($this->charValue());
