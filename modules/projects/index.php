@@ -20,19 +20,8 @@ $orderby = (isset($_GET['orderby']) && property_exists('CProject', $_GET['orderb
 $project_type = $AppUI->processIntState('ProjIdxType', $_POST, 'project_type', -1);
 $owner = $AppUI->processIntState('ProjIdxowner', $_POST, 'project_owner', -1);
 
-$orderdir = $AppUI->getState('ProjIdxOrderDir') ? $AppUI->getState('ProjIdxOrderDir') : 'asc';
-if (isset($_GET['orderby'])) {
-	if ($AppUI->getState('ProjIdxOrderDir') == 'asc') {
-		$orderdir = 'desc';
-	} else {
-		$orderdir = 'asc';
-	}
-}
-$AppUI->setState('ProjIdxOrderDir', $orderdir);
-
 // collect the full projects list data via function in projects.class.php
 $search_text = $search_string;      // @note this is only because the projects_list_data function takes a bunch of globals
-//$projects = projects_list_data();
 
 $oCompany = new CCompany;
 $allowedCompanies[-1] = $AppUI->_('all');

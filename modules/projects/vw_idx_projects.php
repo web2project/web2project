@@ -66,7 +66,7 @@ $items = $paginator->getItemsOnPage($page);
     <table id="tblProjects-list" class="tbl list">
         <tr>
             <td colspan="<?php echo count($fieldNames) + 1; ?>">
-                <?php echo $paginator->buildNavigation($AppUI, $m, $tab); ?>
+                <?php echo $paginator->buildNavigation($AppUI, $m, $tab, array('orderby' => $orderby)); ?>
             </td>
         </tr>
 		<tr>
