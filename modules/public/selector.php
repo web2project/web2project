@@ -18,6 +18,7 @@ $q = new w2p_Database_Query();
 $q->addTable($table);
 $query_result = false;
 
+//TODO: This should be cleaned up to use the core methods instead of these raw queries
 switch ($table) {
     case 'companies':
         $obj = new CCompany();
@@ -83,40 +84,34 @@ switch ($table) {
         break;
 
     case 'tasks':
-      $title = 'Task';
-      $task_project = (int) w2PgetParam($_GET, 'task_project', 0);
+        $title = 'Task';
+        $task_project = (int) w2PgetParam($_GET, 'task_project', 0);
 
-      $myTask = new CTask();
-      $task_list = $myTask->getAllowedTaskList(null, $task_project);
+        $myTask = new CTask();
+        $task_list = $myTask->getAllowedTaskList(null, $task_project);
 
-      $level = 0;
-      $query_result = array();
-      $last_parent = 0;
-      foreach ($task_list as $task) {
-        if ($task['task_parent'] != $task['task_id']) {
-              if ($last_parent != $task['task_parent']) {
-                  $last_parent = $task['task_parent'];
-                  $level++;
-              }
-          } else {
-              $last_parent = 0;
-              $level = 0;
-          }
-          $query_result[$task['task_id']] = ($level ? str_repeat('&nbsp;&nbsp;', $level) : '') . $task['task_name'];
-      }
-      break;
+        $level = 0;
+        $query_result = array();
+        $last_parent = 0;
+        foreach ($task_list as $task) {
+            if ($task['task_parent'] != $task['task_id']) {
+                if ($last_parent != $task['task_parent']) {
+                    $last_parent = $task['task_parent'];
+                    $level++;
+                }
+            } else {
+                $last_parent = 0;
+                $level = 0;
+                $query_result[$task['task_id']] = ($level ? str_repeat('&nbsp;&nbsp;', $level) : '') . $task['task_name'];
+            }
+        }
+        break;
     case 'users':
         $title = 'User';
         $q->addQuery('user_id, contact_display_name');
         $q->addOrder('contact_first_name');
         $q->addTable('contacts', 'b');
         $q->addWhere('user_contact = contact_id');
-        $resultList = $q->loadHashList();
-        break;
-    case 'SGD':
-        $title = 'Document';
-        $q->addQuery('SGD_id, SGD_name');
-        $q->addOrder('SGD_name');
         $resultList = $q->loadHashList();
         break;
     default:
