@@ -160,9 +160,9 @@ else
 ?>;
 var can_edit_time_information = <?php echo $can_edit_time_information ? 'true' : 'false'; ?>;
 
-var task_name_msg = '<?php echo $AppUI->_('taskName'); ?>';
-var task_start_msg = '<?php echo $AppUI->_('taskValidStartDate'); ?>';
-var task_end_msg = '<?php echo $AppUI->_('taskValidEndDate'); ?>';
+var task_name_msg = "<?php echo $AppUI->_('taskName'); ?>";
+var task_start_msg = "<?php echo $AppUI->_('taskValidStartDate'); ?>";
+var task_end_msg = "<?php echo $AppUI->_('taskValidEndDate'); ?>";
 
 var workHours = <?php echo w2PgetConfig('daily_working_hours'); ?>;
 //working days array from config.php
