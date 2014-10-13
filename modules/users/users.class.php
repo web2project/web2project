@@ -192,7 +192,8 @@ class CUser extends w2p_Core_BaseObject
         return w2PgetUsers();
     }
 
-    public function load($userId = null, $unused = true)
+    /** @deprecated */
+    public function loadFull($userId)
     {
         $q = $this->_getQuery();
         $q->addTable('users', 'u');
