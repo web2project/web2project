@@ -82,7 +82,7 @@ $billingCategory = w2PgetSysVal('BudgetCategory');
 
     if (count($taskList)) {
         foreach ($taskList as $taskItem) {
-            $task->loadFull(null, $taskItem['task_id']);
+            $task->load($taskItem['task_id']);
             $costs = $bcode->calculateTaskCost($taskItem['task_id'],
                     $start_date->format(FMT_DATETIME_MYSQL),
                     $end_date->format(FMT_DATETIME_MYSQL));

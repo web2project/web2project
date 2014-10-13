@@ -3008,7 +3008,7 @@ function getEventTooltip($event_id)
     // load the record data
 
     $event = new CEvent();
-    $event->loadFull($event_id);
+    $event->load($event_id);
 
     // load the event types
     $types = w2PgetSysVal('EventType');

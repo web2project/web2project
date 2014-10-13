@@ -34,12 +34,6 @@ class CEvent extends w2p_Core_BaseObject
         parent::__construct('events', 'event_id', 'events');
     }
 
-    /** @deprecated - this has a different method signature than the others */
-    public function loadFull($event_id)
-    {
-        $this->load($event_id);
-    }
-
     public function canView()
     {
         if (!parent::canView()) {

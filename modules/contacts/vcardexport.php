@@ -16,7 +16,7 @@ if (!$canRead) {
 if ($contact_id) {
 
     $contact = new CContact();
-    $contact->loadFull(null, $contact_id);
+    $contact->load($contact_id);
     $contactMethods = $contact->getContactMethods();
 
     // instantiate a builder object

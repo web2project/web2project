@@ -23,7 +23,7 @@ if ($obj) {
     $object = $obj;
     $object_id = $object->getId();
 } else {
-    $object->loadFull(null, $object_id);
+    $object->load($object_id);
 }
 if (!$object && $object_id > 0) {
     $AppUI->setMsg('Project');
