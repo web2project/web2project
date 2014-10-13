@@ -67,6 +67,7 @@ class w2p_Output_HTML_TaskTable extends w2p_Output_ListTable
                 }
                 $rowData[$column] = implode(', ', $parsed);
             }
+            $rowData[$column] = isset($rowData[$column]) ? $rowData[$column] : 0;
             $row .= $this->createCell($column, $rowData[$column], $customLookups);
         }
         if ('projectdesigner' == $this->module) {

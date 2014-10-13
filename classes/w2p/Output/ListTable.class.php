@@ -125,6 +125,7 @@ class w2p_Output_ListTable extends w2p_Output_HTMLHelper
                     $contents .= '</td>';
                     break;
                 case 'pin':
+                    $this->tableRowData['task_pinned'] = (isset($this->tableRowData['task_pinned'])) ? $this->tableRowData['task_pinned'] : 0;
                     $image = ($this->tableRowData['task_pinned']) ? 'pin.gif' : 'unpin.gif';
                     $pieces = explode('_', $value);
                     $module    = w2p_pluralize($pieces[0]);
