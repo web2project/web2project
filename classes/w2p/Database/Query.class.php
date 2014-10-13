@@ -31,6 +31,13 @@ class w2p_Database_Query extends w2p_Database_oldQuery
     protected $_update_list = array();
     protected $_value_list = array();
 
+    /** Deprecated fields from the old database structure */
+    protected $table_list = array();
+    protected $where = array();
+    protected $having = array();
+    protected $group_by = array();
+    protected $order_by = array();
+
 	/**< Handle to the database connection */
 	protected $_db = null;
     protected $_query_id = null;

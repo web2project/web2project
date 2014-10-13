@@ -208,7 +208,8 @@ class w2p_System_UpgradeManager {
 
     public function upgradeRequired() {
         $dbConn = $this->_openDBConnection();
-        $last_item = end($this->_getMigrations());
+        $migrations = $this->_getMigrations();
+        $last_item = end($migrations);
         $migrationNumber = (int) substr($last_item, 0, 3);
 
         return ($migrationNumber > $this->_getDatabaseVersion($dbConn));
