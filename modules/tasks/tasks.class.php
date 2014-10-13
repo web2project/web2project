@@ -1939,6 +1939,7 @@ class CTask extends w2p_Core_BaseObject
 
     public function getTaskTree($project_id, $task_id = 0)
     {
+        $taskTree = array();
         $this->_depth++;
 
         $q = $this->_getQuery();
