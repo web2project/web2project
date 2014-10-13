@@ -205,8 +205,11 @@ class CUser extends w2p_Core_BaseObject
         $q->addJoin('departments', 'dep', 'dept_id = contact_department');
         $q->addJoin('user_feeds', 'uf', 'feed_user = u.user_id');
         $q->addWhere('u.user_id = ' . (int) $userId);
+        $hash = $q->loadHash();
 
-        $q->loadObject($this, true, false);
+        foreach($hash as $key => $value) {
+            $this->$key = $value;
+        }
     }
 
     public function hook_cron()
