@@ -272,8 +272,7 @@ class CUser extends w2p_Core_BaseObject
         $q = $this->_getQuery();
         $q->addTable('users', 'u');
         $q->addQuery('DISTINCT SUBSTRING(user_username, 1, 1) as L');
-        $arr = $q->loadList();
-
+        $arr = $q->loadHashList();
         $letters = implode('', $arr);
 
         return strtoupper($letters);
