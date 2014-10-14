@@ -79,15 +79,6 @@ $theme = $AppUI->getTheme();
             <div class="std shadow">&nbsp;</div>
         </form>
         <div style="padding-left: 5px;">
-            <div class="left">
-                <?php
-                    echo $AppUI->_('Welcome') . ' ' . ($AppUI->user_id > 0 ? $AppUI->user_display_name : $outsider);
-                    echo '<br />';
-                    if ($AppUI->user_id > 0) {
-                        echo $AppUI->_('Server time is') . ' ' . $AppUI->getTZAwareTime();
-                    }
-                ?>
-            </div>
             <?php if ($AppUI->user_id > 0) { ?>
                 <div class="right quicknav">
                     <?php if (canAccess('smartsearch')) { ?>
