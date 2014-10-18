@@ -199,7 +199,8 @@ class w2p_Output_EmailManager
     public function getTaskNotifyOwner(CTask $task)
     {
         $project = new CProject();
-        $projname = $project->load($task->task_project)->project_name;
+        $project->load($task->task_project);
+        $projname = $project->project_name;
 
         $body = $this->_AppUI->_('Project', UI_OUTPUT_RAW) . ':     ' . $projname . "\n";
         $body .= $this->_AppUI->_('Task', UI_OUTPUT_RAW) . ':         ' . $task->task_name . "\n";
