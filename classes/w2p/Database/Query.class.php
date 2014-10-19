@@ -620,7 +620,6 @@ class w2p_Database_Query extends w2p_Database_oldQuery
      * @return bool
      */
     public function insertObject($table, &$object, $keyName = null, $verbose = false) {
-        error_log(__FUNCTION__ . ' has been deprecated', E_USER_WARNING);
         $this->addTable($table);
         foreach (get_object_vars($object) as $k => $v) {
             if (is_array($v) or is_object($v) or $v == null) {
@@ -660,7 +659,6 @@ class w2p_Database_Query extends w2p_Database_oldQuery
      * @return bool
      */
     public function updateObject($table, &$object, $keyName, $updateNulls = true) {
-        error_log(__FUNCTION__ . ' has been deprecated', E_USER_WARNING);
         $this->addTable($table);
         foreach (get_object_vars($object) as $k => $v) {
             if (is_array($v) or is_object($v) or $k[0] == '_') { // internal or NA field
