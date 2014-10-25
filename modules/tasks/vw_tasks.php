@@ -208,7 +208,7 @@ $customLookups = array('task_status' => $status, 'task_priority' => $priority);
 if ($task_id) {
     $task = new CTask();
     $task->load($task_id);
-    $taskTree = $tempTask->getTaskTree($task->task_project, $task_id);
+    $taskTree = $tempTask->getTaskTree($task->task_project, $task_id, $showIncomplete);
     echo $listTable->buildRows($taskTree, $customLookups);
 } else {
     reset($projects);
@@ -236,11 +236,11 @@ if ($task_id) {
                 </td>
             </tr>
             <?php
-            $taskTree = $tempTask->getTaskTree($k);
+            $taskTree = $tempTask->getTaskTree($k, 0, $showIncomplete);
             echo $listTable->buildRows($taskTree, $customLookups);
         }
         if ('projects' == $m || 'projectdesigner' == $m) {
-            $taskTree = $tempTask->getTaskTree($k);
+            $taskTree = $tempTask->getTaskTree($k, 0, $showIncomplete);
             echo $listTable->buildRows($taskTree, $customLookups);
         }
     }

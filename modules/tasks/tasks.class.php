@@ -1914,7 +1914,15 @@ class CTask extends w2p_Core_BaseObject
         return array();
     }
 
-    public function getTaskTree($project_id, $task_id = 0)
+    /**
+     * @param $project_id
+     * @param int $task_id
+     * @param bool $showIncompleteOnly
+     * @return type
+     *
+     * TODO: I don't like the additional parameter $showIncompleteOnly, it just seems like a bad implementation.
+     */
+    public function getTaskTree($project_id, $task_id = 0, $showIncompleteOnly = false)
     {
         $this->_depth++;
 
@@ -1931,6 +1939,9 @@ class CTask extends w2p_Core_BaseObject
             $q->addWhere('tasks.task_id != ' . (int) $task_id);
         } else {
             $q->addWhere('(tasks.task_id = task_parent OR task_parent = 0)');
+        }
+        if ($showIncompleteOnly) {
+            $q->addWhere('task_percent_complete <> 100');
         }
         $q->addOrder('task_start_date, task_end_date, task_name');
 
