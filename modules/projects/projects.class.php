@@ -166,7 +166,7 @@ class CProject extends w2p_Core_BaseObject
         $q->setDelete('tasks');
         $q->addWhere('task_represents_project =' . $this->_old_key);
 
-        parent::hook_preDelete();
+        parent::hook_postDelete();
     }
 
     /**
