@@ -18,7 +18,12 @@
 
 class w2p_Core_CAppUITest extends CommonSetup
 {
+    public function setUp()
+    {
+        parent::setUp();
 
+        $this->_AppUI->user_prefs['TIMEZONE'] = 'CST';
+    }
     /**
      * Tests the attributes of a new AppUI object
      */
