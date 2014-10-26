@@ -841,4 +841,15 @@ class w2p_Database_Query extends w2p_Database_oldQuery
     {
         return $this->_db->qstr($string);
     }
+
+    public function addMap($varname, $name, $id) {
+        if (!isset($this->$varname)) {
+            $this->$varname = array();
+        }
+        if (isset($id)) {
+            $this->{$varname}[$id] = $name;
+        } else {
+            $this->{$varname}[] = $name;
+        }
+    }
 }
