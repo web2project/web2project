@@ -53,15 +53,19 @@ class w2p_FileSystem_LoaderTest extends CommonSetup
         //$this->assertGreaterThan(count($files2), count($files1));
     }
 
-    /**
-     * @todo Implement testCheckFileName().
-     */
-    public function testCheckFileName()
+    public function testMakeFileNamSafe()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-            'This test has not been implemented yet.'
-        );
+        $filename = '../../asdf.php';
+        $this->assertEquals('asdf.php', $this->obj->makeFileNameSafe($filename));
+
+        $filename = '../../asdf--!.php';
+        $this->assertEquals('asdf.php', $this->obj->makeFileNameSafe($filename));
+
+        $filename = '../..\asdf.php';
+        $this->assertEquals('asdf.php', $this->obj->makeFileNameSafe($filename));
+
+        $filename = '/@#$%^&*(/asdf.php';
+        $this->assertEquals('asdf.php', $this->obj->makeFileNameSafe($filename));
     }
 
     public function testMakeFileNameSafe() {

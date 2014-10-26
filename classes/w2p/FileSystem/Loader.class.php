@@ -53,39 +53,25 @@ class w2p_FileSystem_Loader
         return $files;
     }
 
-    /**
-     * Utility function to check whether a file name is 'safe'
-     *
-     * Prevents from access to relative directories (eg ../../dealyfile.php);
-     * @param string The file name.
-     * @return array A named array of the files (the key and value are identical).
-     */
+    /** @deprecated */
     public function checkFileName($file)
     {
-        global $AppUI;
+        error_log(__FUNCTION__ . ' has been deprecated in v4.0 and will be removed by v5.0. Please use makeFileNameSafe instead.', E_USER_WARNING);
 
-        // define bad characters and their replacement
-        $bad_chars = ";/\\";
-        $bad_replace = '....'; // Needs the same number of chars as $bad_chars
-        // check whether the filename contained bad characters
-        if (strpos(strtr($file, $bad_chars, $bad_replace), '.') !== false) {
-            $AppUI->redirect(ACCESS_DENIED);
-        } else {
-            return $file;
-        }
+        return $this->makeFileNameSafe($file);
     }
 
     /**
      * Utility function to make a file name 'safe'
      *
-     * Strips out mallicious insertion of relative directories (eg ../../dealyfile.php);
+     * Strips out any non-alphanumeric (or underscore) characters
+     *
      * @param string The file name.
-     * @return array A named array of the files (the key and value are identical).
+     * @return string The clean filename
      */
-    public function makeFileNameSafe($file)
+    public function makeFileNameSafe($filename)
     {
-        $file = str_replace('../', '', $file);
-        $file = str_replace('..\\', '', $file);
-        return $file;
+        $filename = str_replace('..', '', $filename);
+        return preg_replace("/[^a-z0-9_.]/", "", $filename);
     }
 }
