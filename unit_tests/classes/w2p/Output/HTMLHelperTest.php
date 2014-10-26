@@ -26,6 +26,7 @@ class w2p_Output_HTMLHelperTest extends CommonSetup
     {
         parent::setUp();
 
+        $this->_AppUI->user_prefs['TIMEZONE'] = 'CST';
         $this->obj = new w2p_Output_HTMLHelper($this->_AppUI);
     }
 
@@ -178,24 +179,6 @@ class w2p_Output_HTMLHelperTest extends CommonSetup
         $this->assertEquals('<td class="_update">01/Apr/2012 10:00 am</td>', $cell);
         $cell = $this->obj->createCell('x_updated', '2012-04-01 01:00:00');
         $this->assertEquals('<td class="_updated">31/Mar/2012 08:00 pm</td>', $cell);
-    }
-
-    /*
-     * I really have no clue on how to properly test these cases.. they're
-     *   dependent on doing a $object->load() but we don't have dependency
-     *   injection so we need to figure something else out.
-     */
-    public function testCreateCell_classes()
-    {
-        //case '_company':
-        //case '_contact':
-        //case '_project':
-        //case '_task':
-        //case '_department':
-        //case '_folder':
-        //case '_user':
-        //case '_username':
-$this->markTestIncomplete('These tests have yet to be written because we need to think about dependency injection for our database mock..');
     }
 
     public function testRenderContactTableEmpty()
