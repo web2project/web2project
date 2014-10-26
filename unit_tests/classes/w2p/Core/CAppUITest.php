@@ -278,42 +278,6 @@ class w2p_Core_CAppUITest extends CommonSetup
     }
 
     /**
-     * Tests getting a library class when no library name is passed
-     *
-     * @expectedException PHPUnit_Framework_Error
-     */
-    public function testGetLibraryClassNoName()
-    {
-        $AppUI = $this->_AppUI;
-
-        $this->assertNull($AppUI->getLibraryClass());
-    }
-
-    /**
-     * Tests getting a module class
-     *
-     * @expectedException PHPUnit_Framework_Error
-     */
-    public function testGetModuleClassValid()
-    {
-        $AppUI = $this->_AppUI;
-
-        $this->assertEquals(W2P_BASE_DIR . '/modules/tasks/tasks.class.php', $AppUI->getModuleClass('tasks'));
-    }
-
-    /**
-     * Tests getting a module class when no name is passed
-     *
-     * @expectedException PHPUnit_Framework_Error
-     */
-    public function testGetModuleClassNoName()
-    {
-        $AppUI = $this->_AppUI;
-
-        $this->assertNull($AppUI->getModuleClass());
-    }
-
-    /**
      * Tests getting an ajax module file for a module
      */
     public function testGetModuleAjaxValid()
@@ -514,26 +478,9 @@ class w2p_Core_CAppUITest extends CommonSetup
         $this->assertEquals('web2project', $AppUI->getPref('UISTYLE'));
     }
 
-    /**
-     * @todo Implement testGetModuleClass().
-     */
-    public function testGetModuleClass()
-    {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-                'This test has not been implemented yet.'
-        );
-    }
-
-    /**
-     * @todo Implement testGetModuleAjax().
-     */
     public function testGetModuleAjax()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-                'This test has not been implemented yet.'
-        );
+        $this->assertEquals(W2P_BASE_DIR . '/modules/monkey/monkey.ajax.php', $this->_AppUI->getModuleAjax('monkey'));
     }
 
     /**
