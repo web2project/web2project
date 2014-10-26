@@ -842,6 +842,11 @@ class w2p_Database_Query extends w2p_Database_oldQuery
         return $this->_db->qstr($string);
     }
 
+    /**
+     * @param $varname
+     * @param $name
+     * @param $id
+     */
     public function addMap($varname, $name, $id) {
         if (!isset($this->$varname)) {
             $this->$varname = array();
@@ -851,5 +856,42 @@ class w2p_Database_Query extends w2p_Database_oldQuery
         } else {
             $this->{$varname}[] = $name;
         }
+    }
+
+    /**
+     * @param $field
+     * @param null $value
+     * @param bool $set
+     * @param bool $func
+     */
+    public function addInsert($field, $value = null, $set = false, $func = false) {
+        if (is_array($field) && $value == null) {
+            foreach ($field as $f => $v) {
+                $this->addMap('value_list', $f, $v);
+            }
+        } elseif ($set) {
+            if (is_array($field)) {
+                $fields = $field;
+            } else {
+                $fields = explode(',', $field);
+            }
+
+            if (is_array($value)) {
+                $values = $value;
+            } else {
+                $values = explode(',', $value);
+            }
+
+            for ($i = 0, $i_cmp = count($fields); $i < $i_cmp; $i++) {
+                $this->addMap('value_list', $this->quote($values[$i]), $fields[$i]);
+            }
+        } else {
+            if (!$func) {
+                $this->addMap('value_list', $this->quote($value), $field);
+            } else {
+                $this->addMap('value_list', $value, $field);
+            }
+        }
+        $this->type = 'insert';
     }
 }
