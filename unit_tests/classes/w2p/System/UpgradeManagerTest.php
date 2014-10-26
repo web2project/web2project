@@ -106,70 +106,35 @@ class w2p_System_UpgradeManagerTest extends CommonSetup
         }
     }
 
-    /**
-     * @todo Implement testGetActionRequired().
-     */
-    public function testGetActionRequired()
-    {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-                'This test has not been implemented yet.'
-        );
-    }
-
-    /**
-     * @todo Implement testGetConfigDir().
-     */
     public function testGetConfigDir()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-                'This test has not been implemented yet.'
-        );
+        $this->obj->getActionRequired();
+        $this->assertEquals(W2P_BASE_DIR . '/includes', $this->obj->getConfigDir());
     }
 
-    /**
-     * @todo Implement testGetConfigFile().
-     */
     public function testGetConfigFile()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-                'This test has not been implemented yet.'
-        );
+        $this->obj->getActionRequired();
+        $this->assertEquals(W2P_BASE_DIR . '/includes/config.php', $this->obj->getConfigFile());
+
     }
 
-    /**
-     * @todo Implement testGetUploadDir().
-     */
     public function testGetUploadDir()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-                'This test has not been implemented yet.'
-        );
+        $this->obj->getActionRequired();
+        $this->assertEquals(W2P_BASE_DIR . '/files', $this->obj->getUploadDir());
     }
 
-    /**
-     * @todo Implement testGetLanguageDir().
-     */
     public function testGetLanguageDir()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-                'This test has not been implemented yet.'
-        );
+        $this->obj->getActionRequired();
+        $this->assertEquals(W2P_BASE_DIR . '/locales/en', $this->obj->getLanguageDir());
     }
 
-    /**
-     * @todo Implement testGetTempDir().
-     */
     public function testGetTempDir()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-                'This test has not been implemented yet.'
-        );
+        $this->obj->getActionRequired();
+        $this->assertEquals(W2P_BASE_DIR . '/files/temp', $this->obj->getTempDir());
     }
 
     /**
