@@ -64,7 +64,7 @@ if (!$suppressHeaders) {
 <?php
 }
 if ($report_type) {
-    $report_type = $loader->checkFileName($report_type);
+    $report_type = $loader->makeFileNameSafe($report_type);
     $report_type = str_replace(' ', '_', $report_type);
     require W2P_BASE_DIR . '/modules/reports/reports/' . $report_type . '.php';
 } else {

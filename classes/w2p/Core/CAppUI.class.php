@@ -305,10 +305,10 @@ class w2p_Core_CAppUI
     /** @deprecated */
     public function checkFileName($file)
     {
-        trigger_error("AppUI->checkFileName() has been deprecated in v3.0 and will be removed by v4.0. Please use w2p_FileSystem_Loader->checkFileName() instead.", E_USER_NOTICE);
+        trigger_error("AppUI->checkFileName() has been deprecated in v3.0 and will be removed by v4.0. Please use w2p_FileSystem_Loader->makeFileNameSafe() instead.", E_USER_NOTICE);
 
         $loader = new w2p_FileSystem_Loader();
-        return $loader->checkFileName($file);
+        return $loader->makeFileNameSafe($file);
     }
 
     /** @deprecated */
