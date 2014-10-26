@@ -526,20 +526,17 @@ class w2p_Core_CAppUI
         }
     }
 
-    /**
-     * Resets the internal variable
-     */
+    /** @deprecated */
     public function resetPlace()
     {
+        trigger_error("AppUI->resetPlace() has been deprecated in v4.0 and will be removed by v5.0. Please route the user explicitly.", E_USER_NOTICE);
         $this->state['SAVEDPLACE'] = '';
     }
 
-    /**
-     * Get the saved place (usually one that could contain an edit button)
-     * @return string
-     */
+    /** @deprecated */
     public function getPlace()
     {
+        trigger_error("AppUI->getPlace() has been deprecated in v4.0 and will be removed by v5.0. Please route the user explicitly.", E_USER_NOTICE);
         return $this->state['SAVEDPLACE'];
     }
 
@@ -829,11 +826,6 @@ class w2p_Core_CAppUI
         return true;
     }
 
-    /*     * **********************************************************************************************************************
-      /**
-     * @Function for regiser log in dotprojet table "user_access_log"
-     */
-
     public function registerLogin()
     {
         $q = new w2p_Database_Query;
@@ -873,10 +865,16 @@ class w2p_Core_CAppUI
         }
     }
 
+    /** @deprecated */
+    public function doLogin()
+    {
+        return $this->loginRequired();
+    }
+
     /**
      * Checks whether there is any user logged in.
      */
-    public function doLogin()
+    public function loginRequired()
     {
         return ($this->user_id < 0) ? true : false;
     }

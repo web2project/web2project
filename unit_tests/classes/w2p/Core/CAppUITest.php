@@ -446,9 +446,7 @@ class w2p_Core_CAppUITest extends CommonSetup
         $datetimezone = new DateTimeZone('UTC');
         $datetime     = new DateTime('2011-01-1 10:00:00', $datetimezone);
         $datetime->setTimeZone($timezone);
-        $this->markTestIncomplete(
-                'The timezone math acts odd depending on the underlying timezone set on the system.'
-        );
+
         $this->assertEquals($datetime->format('d/m/Y h:i:s a'), $AppUI->formatTZAwareTime('2011-01-01 10:00:00', '%d/%m/%Y %I:%M:%S %p'));
     }
 
@@ -483,311 +481,48 @@ class w2p_Core_CAppUITest extends CommonSetup
         $this->assertEquals(W2P_BASE_DIR . '/modules/monkey/monkey.ajax.php', $this->_AppUI->getModuleAjax('monkey'));
     }
 
-    /**
-     * @todo Implement testConvertToSystemTZ().
-     */
     public function testConvertToSystemTZ()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-                'This test has not been implemented yet.'
-        );
+        $this->_AppUI->user_prefs['TIMEZONE'] = 'CST';
+        $time = $this->_AppUI->convertToSystemTZ('2010-05-12 14:34:56');
+        $this->assertEquals('2010-05-12 19:34:56', $time);
+
+        $this->_AppUI->user_prefs['TIMEZONE'] = 'BST';
+        $time = $this->_AppUI->convertToSystemTZ('2010-05-12 09:34:56');
+        $this->assertEquals('2010-05-12 08:34:56', $time);
     }
 
-    /**
-     * @todo Implement testFormatTZAwareTime().
-     */
     public function testFormatTZAwareTime()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-                'This test has not been implemented yet.'
-        );
+        $this->_AppUI->user_prefs['TIMEZONE'] = 'CST';
+        $this->_AppUI->user_prefs['FULLDATEFORMAT'] = 'd/m/Y h:i a';
+        $time = $this->_AppUI->formatTZAwareTime('2010-05-12 14:34:56');
+        $this->assertEquals('12/05/2010 09:34 am', $time);
+
+        $this->_AppUI->user_prefs['TIMEZONE'] = 'BST';
+        $this->_AppUI->user_prefs['FULLDATEFORMAT'] = 'd/m/Y h:i a';
+        $time = $this->_AppUI->formatTZAwareTime('2010-05-12 09:34:56');
+        $this->assertEquals('12/05/2010 10:34 am', $time);
     }
 
-    /**
-     * @todo Implement testCheckStyle().
-     */
-    public function testCheckStyle()
-    {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-                'This test has not been implemented yet.'
-        );
-    }
-
-    /**
-     * @todo Implement testSetUserLocale().
-     */
-    public function testSetUserLocale()
-    {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-                'This test has not been implemented yet.'
-        );
-    }
-
-    /**
-     * @todo Implement testFindLanguage().
-     */
-    public function testFindLanguage()
-    {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-                'This test has not been implemented yet.'
-        );
-    }
-
-    /**
-     * @todo Implement testLoadLanguages().
-     */
-    public function testLoadLanguages()
-    {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-                'This test has not been implemented yet.'
-        );
-    }
-
-    /**
-     * @todo Implement test_().
-     */
-    public function test_()
-    {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-                'This test has not been implemented yet.'
-        );
-    }
-
-    /**
-     * @todo Implement testSetWarning().
-     */
-    public function testSetWarning()
-    {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-                'This test has not been implemented yet.'
-        );
-    }
-
-    /**
-     * @todo Implement testGetPlace().
-     */
-    public function testGetPlace()
-    {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-                'This test has not been implemented yet.'
-        );
-    }
-
-    /**
-     * @todo Implement testHoldObject().
-     */
-    public function testHoldObject()
-    {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-                'This test has not been implemented yet.'
-        );
-    }
-
-    /**
-     * @todo Implement testRestoreObject().
-     */
-    public function testRestoreObject()
-    {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-                'This test has not been implemented yet.'
-        );
-    }
-
-    /**
-     * @todo Implement testRedirect().
-     */
-    public function testRedirect()
-    {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-                'This test has not been implemented yet.'
-        );
-    }
-
-    /**
-     * @todo Implement testGetMsg().
-     */
-    public function testGetMsg()
-    {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-                'This test has not been implemented yet.'
-        );
-    }
-
-    /**
-     * @todo Implement testGetState().
-     */
     public function testGetState()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-                'This test has not been implemented yet.'
-        );
-    }
+        $this->_AppUI->setState('animal', 'monkey');
+        $this->assertEquals('monkey', $this->_AppUI->getState('animal'));
 
-    /**
-     * @todo Implement testProcessIntState().
-     */
-    public function testProcessIntState()
-    {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-                'This test has not been implemented yet.'
-        );
-    }
-
-    /**
-     * @todo Implement testCheckPrefState().
-     */
-    public function testCheckPrefState()
-    {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-                'This test has not been implemented yet.'
-        );
-    }
-
-    /**
-     * @todo Implement testLogin().
-     */
-    public function testLogin()
-    {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-                'This test has not been implemented yet.'
-        );
-    }
-
-    /**
-     * @todo Implement testRegisterLogin().
-     */
-    public function testRegisterLogin()
-    {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-                'This test has not been implemented yet.'
-        );
-    }
-
-    /**
-     * @todo Implement testRegisterLogout().
-     */
-    public function testRegisterLogout()
-    {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-                'This test has not been implemented yet.'
-        );
-    }
-
-    /**
-     * @todo Implement testUpdateLastAction().
-     */
-    public function testUpdateLastAction()
-    {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-                'This test has not been implemented yet.'
-        );
-    }
-
-    /**
-     * @todo Implement testLogout().
-     */
-    public function testLogout()
-    {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-                'This test has not been implemented yet.'
-        );
+        $this->assertEquals('', $this->_AppUI->getState('not-set', ''));
+        $this->assertEquals('texas', $this->_AppUI->getState('republic', 'texas'));
     }
 
     /**
      * @todo Implement testDoLogin().
      */
-    public function testDoLogin()
+    public function testLoginRequired()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-                'This test has not been implemented yet.'
-        );
-    }
+        $this->_AppUI->user_id = 1;
+        $this->assertFalse($this->_AppUI->doLogin());
 
-    /**
-     * @todo Implement testLoadPrefs().
-     */
-    public function testLoadPrefs()
-    {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-                'This test has not been implemented yet.'
-        );
-    }
-
-    /**
-     * @todo Implement testGetInstalledModules().
-     */
-    public function testGetInstalledModules()
-    {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-                'This test has not been implemented yet.'
-        );
-    }
-
-    /**
-     * @todo Implement testGetActiveModules().
-     */
-    public function testGetActiveModules()
-    {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-                'This test has not been implemented yet.'
-        );
-    }
-
-    /**
-     * @todo Implement testGetMenuModules().
-     */
-    public function testGetMenuModules()
-    {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-                'This test has not been implemented yet.'
-        );
-    }
-
-    /**
-     * @todo Implement testGetLoadableModuleList().
-     */
-    public function testGetLoadableModuleList()
-    {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-                'This test has not been implemented yet.'
-        );
-    }
-
-    /**
-     * @todo Implement testGetPermissionableModuleList().
-     */
-    public function testGetPermissionableModuleList()
-    {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-                'This test has not been implemented yet.'
-        );
+        $this->_AppUI->user_id = -1;
+        $this->assertTrue($this->_AppUI->doLogin());
     }
 }
