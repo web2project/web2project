@@ -16,7 +16,7 @@
  * @link        http://www.web2project.net
  */
 
-class w2p_Core_UpgradeManagerTest extends CommonSetup
+class w2p_System_UpgradeManagerTest extends CommonSetup
 {
     public function setUp()
     {
