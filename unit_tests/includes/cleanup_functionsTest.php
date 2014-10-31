@@ -16,7 +16,7 @@
  * @link        http://www.web2project.net
  */
 
-class Cleanup_Functions_Test extends PHPUnit_Framework_TestCase
+class Cleanup_Functions_Test extends CommonSetup
 {
     protected function setUp()
     {

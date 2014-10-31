@@ -16,7 +16,7 @@
  * @link        http://www.web2project.net
  */
 
-class Main_Functions_Test extends PHPUnit_Framework_TestCase
+class Main_Functions_Test extends CommonSetup
 {
 	public function testW2PgetParam()
 	{
