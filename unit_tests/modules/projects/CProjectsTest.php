@@ -327,14 +327,6 @@ $this->obj->overrideDatabase($this->mockDB);
     }
 
     /**
-     * Tests the canDelete function of a project
-     */
-    public function testCanDelete()
-    {
-        $this->markTestSkipped('This test has been skipped because it simply returns parent::canDelete, new functionality has been disabled.');
-    }
-
-    /**
      * Tests deletion of a project.
      */
     public function testDelete()

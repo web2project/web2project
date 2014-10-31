@@ -195,14 +195,6 @@ class CContactsTest extends CommonSetup
         $this->AssertEquals(2,                      count($results));
         $this->assertNull($results['dept_id']);
         $this->assertNull($results['dept_name']);
-        $this->mockDB->clearHash();
-
-        $this->mockDB->stageHash(array('dept_id' => 1, 'dept_name' => 'Department 1'));
-        $this->obj->contact_department = 1;
-        $results = $this->obj->getDepartmentDetails();
-        $this->AssertEquals(2,                      count($results));
-        $this->assertEquals(1,                      $results['dept_id']);
-        $this->assertEquals('Department 1',         $results['dept_name']);
     }
 
     public function testGetUpdateKey()
@@ -225,80 +217,5 @@ class CContactsTest extends CommonSetup
 
         $this->obj->contact_id = 1;
         $this->assertEquals('',                     $this->obj->getUpdateKey());
-    }
-
-    public function testUpdateNotify()
-    {
-        $this->markTestSkipped('This test has not been implemented yet.');
-    }
-
-    public function testGetAllowedRecords()
-    {
-        $this->markTestSkipped('This test has not been implemented yet.');
-    }
-
-    public function testSearchContacts()
-    {
-        $this->markTestSkipped('This method is static.');
-    }
-
-    public function testGetFirstLetters()
-    {
-        $this->markTestSkipped('This method is static.');
-    }
-
-    public function testGetContactByUsername()
-    {
-        $this->markTestSkipped('This method is static.');
-    }
-
-    public function testGetContactByUserid()
-    {
-        $this->markTestSkipped('This method is static.');
-    }
-
-    public function testGetContactByEmail()
-    {
-        $this->markTestSkipped('This method is static.');
-    }
-
-    public function testGetContactByUpdatekey()
-    {
-        $this->markTestSkipped('This method is static.');
-    }
-
-    public function testGetProjects()
-    {
-        $this->markTestSkipped('This method is static.');
-    }
-
-    public function testClearOldUpdatekeys()
-    {
-        $this->markTestSkipped('This test has not been implemented yet.');
-    }
-
-    public function testLoadFull()
-    {
-        $this->markTestIncomplete('This test has not been implemented yet.');
-    }
-
-    public function testCanDelete()
-    {
-        $this->markTestIncomplete('This test has not been implemented yet.');
-    }
-
-    public function testGetCompanyID()
-    {
-        $this->markTestIncomplete('This test has not been implemented yet.');
-    }
-
-    public function testNotify()
-    {
-        $this->markTestIncomplete('This test has not been implemented yet.');
-    }
-
-    public function testHook_calendar()
-    {
-        $this->markTestIncomplete('This test has not been implemented yet.');
     }
 }

@@ -181,39 +181,6 @@ class CLinksTest extends CommonSetup
         $this->assertEquals('',              $item->link_url);
     }
 
-    /**
-     * @todo Implement testLoadFull().
-     */
-    public function testLoadFull()
-    {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-                'This test has not been implemented yet.'
-        );
-    }
-
-    /**
-     * @todo Implement testGetProjectTaskLinksByCategory().
-     */
-    public function testGetProjectTaskLinksByCategory()
-    {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-                'This test has not been implemented yet.'
-        );
-    }
-
-    /**
-     * @todo Implement testCheck().
-     */
-    public function testCheck()
-    {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-                'This test has not been implemented yet.'
-        );
-    }
-
     public function testHook_search() {
         $search = $this->obj->hook_search();
 

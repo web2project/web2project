@@ -348,28 +348,6 @@ class CCompaniesTest extends CommonSetup
         $this->assertEquals('Admin Person',                $companies[3]['contact_display_name']);
     }
 
-    /**
-     * @todo Implement testCanDelete().
-     */
-    public function testCanDelete()
-    {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-                'This test has not been implemented yet.'
-        );
-    }
-
-    /**
-     * @todo Implement testGetCompanyList().
-     */
-    public function testGetCompanyList()
-    {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-                'This test has not been implemented yet.'
-        );
-    }
-
     public function testGetCompanies()
     {
         $results = $this->obj->loadAll();
@@ -382,49 +360,5 @@ class CCompaniesTest extends CommonSetup
         $this->assertEquals(2,                  count($results));
         $this->assertEquals('First Company',    $results[1]['company_name']);
         $this->assertEquals('Second Company',   $results[2]['company_name']);
-    }
-
-    /**
-     * @todo Implement testGetProjects().
-     */
-    public function testGetProjects()
-    {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-                'This test has not been implemented yet.'
-        );
-    }
-
-    /**
-     * @todo Implement testGetContacts().
-     */
-    public function testGetContacts()
-    {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-                'This test has not been implemented yet.'
-        );
-    }
-
-    /**
-     * @todo Implement testGetUsers().
-     */
-    public function testGetUsers()
-    {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-                'This test has not been implemented yet.'
-        );
-    }
-
-    /**
-     * @todo Implement testGetDepartments().
-     */
-    public function testGetDepartments()
-    {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-                'This test has not been implemented yet.'
-        );
     }
 }
