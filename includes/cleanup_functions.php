@@ -50,7 +50,7 @@ function notifyNewUserCredentials($address, $username, $logname, $logpwd)
     $manager->send('new-user-activated', 'en_US', $object, $address);
 }
 
-function notifyNewExternalUser($emailAddress, $username, $logname, $logpwd)
+function notifyNewExternalUser($emailAddress, $username, $logname, $logpwd, $sender = null)
 {
     $object = new stdClass();
     $object->base_url = W2P_BASE_URL;
@@ -58,17 +58,17 @@ function notifyNewExternalUser($emailAddress, $username, $logname, $logpwd)
     $object->log_name = $logname;
     $object->log_password = $logpwd;
 
-    $manager = new \Web2project\Output\Email\Manager();
+    $manager = new \Web2project\Output\Email\Manager($sender);
     $manager->send('new-external-user', 'en_US', $object, $emailAddress);
 }
 
-function notifyNewUser($emailAddress, $username)
+function notifyNewUser($emailAddress, $username, $sender = null)
 {
     $object = new stdClass();
     $object->base_url = W2P_BASE_URL;
     $object->contact_name = $username;
 
-    $manager = new \Web2project\Output\Email\Manager();
+    $manager = new \Web2project\Output\Email\Manager($sender);
     $manager->send('new-account-created', 'en_US', $object, $emailAddress);
 }
 
