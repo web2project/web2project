@@ -592,8 +592,12 @@ class w2p_Database_Query extends w2p_Database_oldQuery
     }
 
     public function bindHashToObject($hash, &$obj, $notUsed = null, $notUsed2 = true, $bindAll = false) {
-        is_array($hash) or die('bindHashToObject : hash expected');
-        is_object($obj) or die('bindHashToObject : object expected');
+        if (!is_object($obj)) {
+            return new stdClass();
+        }
+        if (!is_array($hash)) {
+            return $obj;
+        }
 
         if ($bindAll) {
             $properties = array_keys($hash);
