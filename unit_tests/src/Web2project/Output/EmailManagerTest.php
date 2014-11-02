@@ -65,6 +65,7 @@ class Web2project_Output_EmailManagerTest extends CommonSetup
         $contact->contact_title = 'Mr.';
         $contact->contact_display_name = 'Monkey';
         $contact->contact_updatekey = 'testkey';
+        $this->_AppUI->user_display_name = 'Admin Person';
 
         $target_body  = "Dear Mr. Monkey,\n\nIt was very nice to visit you. Thank you for all the time that you spent with me.\n\n";
         $target_body .= "I have entered the data from your business card into my contact database so that we may keep in touch. We have implemented a system which allows you to view the information that I've recorded and give you the opportunity to correct it or add information as you see fit. Please click on this link to view what I've recorded:\n\n";
@@ -130,6 +131,9 @@ class Web2project_Output_EmailManagerTest extends CommonSetup
 
     public function testGetTaskNotify()
     {
+        global $AppUI;
+        $AppUI->user_prefs['TIMEZONE'] = 'CST';
+
         $task = new CTask();
         $task->task_id = -1;
         $task->task_name = 'My Task';
@@ -143,8 +147,8 @@ class Web2project_Output_EmailManagerTest extends CommonSetup
         $target_body .= "Task:\t\tMy Task\n";
         $target_body .= "Priority:\t1\n";
         $target_body .= "Progress:\t50%\n";
-        $target_body .= "Start Date:\t30/Jan/2010 06:30 am CST\n";
-        $target_body .= "Finish Date:\t02/Feb/2011 06:45 am CST\n";
+        $target_body .= "Start Date:\t30/Jan/2010 06:30 am UTC\n";
+        $target_body .= "Finish Date:\t02/Feb/2011 06:45 am UTC\n";
         $target_body .= "URL:\t\t" . W2P_BASE_URL . "/index.php?m=tasks&a=view&task_id=-1\n\n";
         $target_body .= "Description: \none two three\n\n";
         $target_body .= "Owner:\n, ";
