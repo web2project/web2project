@@ -64,12 +64,22 @@ class Web2project_Actions_AddEditTest extends CommonSetup
      */
     public function testProcess()
     {
-        $AppUI = $this->obj->process($this->_AppUI, $this->post_data);
+        $this->obj->process($this->_AppUI, $this->post_data);
         $this->assertEquals('/success',   $this->obj->resultPath);
 
         unset($this->post_data['link_url']);
         $this->obj->object = new CLink();
-        $AppUI = $this->obj->process($this->_AppUI, $this->post_data);
+        $this->obj->process($this->_AppUI, $this->post_data);
         $this->assertEquals('/failure',   $this->obj->resultPath);
+    }
+
+    public function testProcessNoNonce()
+    {
+        $this->_AppUI->__nonce = 'asdf';
+        $this->_AppUI->getMsg(true);
+
+        $this->post_data['link_url'] = 'http://web2project.net';
+        $AppUI = $this->obj->process($this->_AppUI, $this->post_data);
+        $this->assertStringStartsWith('There was an error processing the form.', $AppUI->msg);
     }
 }
