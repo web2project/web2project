@@ -71,41 +71,6 @@ class w2p_System_UpgradeManagerTest extends CommonSetup
         $this->assertEquals($maxUpload, $this->obj->getMaxFileUpload());
     }
 
-    /*
-     * Realistically, the install/upgrade paths are almost identical and
-     * even a system identified for "upgrade" will start with the first database
-     * update required even if it's the first (install) script.
-     */
-    public function testInstallSystem()
-    {
-        global $w2Pconfig;
-
-        switch ($this->obj->getActionRequired()) {
-            case 'install':
-                $this->assertTrue($this->obj->testDatabaseCredentials($w2Pconfig));
-
-                $errors = $this->obj->upgradeSystem();
-                $this->assertEquals(0, count($errors));
-
-                $updates = $this->obj->getUpdatesApplied();
-                $this->assertGreaterThanOrEqual(5, count($updates));
-                break;
-
-            case 'upgrade':
-                $this->assertTrue($this->obj->testDatabaseCredentials($w2Pconfig));
-
-                $errors = $this->obj->upgradeSystem();
-                $this->assertEquals(0, count($errors));
-
-                $updates = $this->obj->getUpdatesApplied();
-                $this->assertGreaterThanOrEqual(0, count($updates));
-                break;
-
-            default:
-                $this->fail('w2p_System_UpgradeManager action was not matched.');
-        }
-    }
-
     public function testGetConfigDir()
     {
         $this->obj->getActionRequired();
