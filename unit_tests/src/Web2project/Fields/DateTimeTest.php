@@ -20,6 +20,9 @@ class Web2project_Fields_DateTimeTest extends CommonSetup
 
     public function testView()
     {
+        global $AppUI;
+        $AppUI->user_prefs['TIMEZONE'] = 'CST';
+
         $output = $this->obj->view('2010-04-21 01:23:45');
         $this->assertEquals('20/Apr/2010 08:23 pm', $output);
     }
