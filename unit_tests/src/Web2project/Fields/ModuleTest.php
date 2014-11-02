@@ -18,6 +18,12 @@ class Web2project_Fields_ModuleTest extends CommonSetup
         $this->obj = new \Web2project\Fields\Module();
     }
 
+    public function testViewWithEmpty()
+    {
+        $output = $this->obj->view(false);
+        $this->assertEquals('-', $output);
+    }
+
     public function testViewWithContact()
     {
         $contact = new CContact();
@@ -36,5 +42,10 @@ class Web2project_Fields_ModuleTest extends CommonSetup
 
         $output = $this->obj->view(5);
         $this->assertEquals('<a href="?m=companies&a=view&company_id=5">CaseySoftware</a>', $output);
+    }
+
+    public function testEdit()
+    {
+        $this->assertEquals('', $this->obj->edit('name', 'value', 'tags'));
     }
 }
