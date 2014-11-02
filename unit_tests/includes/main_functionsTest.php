@@ -195,22 +195,6 @@ class Main_Functions_Test extends CommonSetup
         $this->assertEquals('late',       w2pFindTaskComplete($past,   $empty,  0));
     }
 
-    public function test_notifyNewExternalUser()
-    {
-        // This is for phpUnit 3.6+
-        $emailUtility = $this->getMock('w2p_Utilities_Mail', array('Send', 'Body', 'Subject'));
-        $emailUtility->expects($this->once())
-                     ->method('Subject')
-                     ->with($this->stringContains('New Account Created'));
-        $emailUtility->expects($this->once())
-                     ->method('Body')
-                     ->with($this->stringContains('logname'));
-        $emailUtility->expects($this->once())
-                     ->method('Send');
-
-        notifyNewExternalUser('test@test.com', 'username', 'logname', 'logpwd', $emailUtility);
-    }
-
     public function test_notifyNewUser()
     {
         // This is for phpUnit 3.6+

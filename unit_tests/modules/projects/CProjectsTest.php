@@ -64,14 +64,6 @@ $this->obj->overrideDatabase($this->mockDB);
     }
 
     /**
-     * Tests that the proper error message is returned when no ID is passed.
-     */
-    public function testCreateProjectNoID()
-    {
-        $this->markTestSkipped('This test has been deprecated by casting the project_id via intval().');
-    }
-
-    /**
      * Tests that the proper error message is returned when no name is passed.
      */
     public function testCreateProjectNoName()
@@ -1175,30 +1167,6 @@ $this->obj->overrideDatabase($this->mockDB);
         $this->assertEquals('Test Project 4',   $st_projects_arr[3][0]['project_name']);
         $this->assertEquals(1,                  $st_projects_arr[3][0]['project_parent']);
         $this->assertEquals(1,                  $st_projects_arr[3][1]);
-    }
-
-    /**
-     * Tests getting structured projects when passing a project status
-     *
-     * TODO: If this test is run
-     */
-    public function testGetStructuredProjectsProjectStatus()
-    {
-        $this->markTestSkipped('This test is skipped.. if run first, it breaks $this->testGetStructedProjectsActiveOnly() I think because of the globals. :(');
-        $this->mockDB->stageList(
-                array('project_id' => 1, 'project_name' => 'Test Project',
-                    'project_parent' => 1));
-
-        $this->obj->project_original_parent = 0;
-        $this->obj->project_status = 0;
-        $st_projects_arr = $this->obj->getStructuredProjects();
-
-        $this->assertEquals(1,              count($st_projects_arr));
-        $this->assertEquals(3,              count($st_projects_arr[0][0]));
-        $this->assertEquals(1,              $st_projects_arr[0][0]['project_id']);
-        $this->assertEquals('Test Project', $st_projects_arr[0][0]['project_name']);
-        $this->assertEquals(1,              $st_projects_arr[0][0]['project_parent']);
-        $this->assertEquals(0,              $st_projects_arr[0][1]);
     }
 
     /**
