@@ -1,4 +1,5 @@
 <?php
+namespace Web2project\Actions;
 
 /**
  * Class Role Permissions
