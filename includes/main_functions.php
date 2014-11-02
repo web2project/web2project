@@ -323,7 +323,7 @@ function &getAuth($auth_mode) {
             $auth = new w2p_Authenticators_PostNuke();
             break;
         default:
-            $auth = new w2p_Authenticators_SQL();
+            $auth = new \Web2project\Authenticators\SQL();
     }
     return $auth;
 }

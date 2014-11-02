@@ -24,7 +24,7 @@ class Web2project_Authenticators_SQL extends CommonSetup
         $query = new w2p_Mocks_Query();
         $query->stageResult(123);
 
-        $this->obj = new w2p_Authenticators_SQL($query);
+        $this->obj = new \Web2project\Authenticators\SQL($query);
     }
 
     public function testAuthenticate()

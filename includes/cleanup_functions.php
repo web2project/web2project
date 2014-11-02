@@ -2844,7 +2844,7 @@ function sendNewPass()
         $AppUI->redirect();
     }
 
-    $auth = new w2p_Authenticators_SQL();
+    $auth = new \Web2project\Authenticators\SQL();
     $newpass = $auth->createNewPassword();
     $hashed  = $auth->hashPassword($newpass);
 

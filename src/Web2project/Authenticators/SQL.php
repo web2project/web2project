@@ -1,11 +1,13 @@
 <?php
+namespace Web2project\Authenticators;
+
 /**
  * Authentication against the database is the default
  *
  * @package     web2project\authenticators
  */
 
-class w2p_Authenticators_SQL extends \Web2project\Authenticators\Base
+class SQL extends \Web2project\Authenticators\Base
 {
     public $user_id;
     public $username;

@@ -27,7 +27,7 @@ class CUser extends w2p_Core_BaseObject
     {
         parent::__construct('users', 'user_id');
 
-        $this->authenticator = new w2p_Authenticators_SQL();
+        $this->authenticator = new \Web2project\Authenticators\SQL();
     }
 
     public function isValid()

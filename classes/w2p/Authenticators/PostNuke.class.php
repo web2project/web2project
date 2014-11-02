@@ -27,7 +27,7 @@ class w2p_Authenticators_PostNuke extends \Web2project\Authenticators\Base
         if (!isset($_REQUEST['userdata'])) {
             // fallback to SQL Authentication if PostNuke fails.
             if ($this->fallback) {
-                $sqlAuth = new w2p_Authenticators_SQL();
+                $sqlAuth = new \Web2project\Authenticators\SQL();
                 return $sqlAuth->authenticate($username, $password);
             } else {
                 die($this->AppUI->_('You have not configured your PostNuke site

@@ -327,7 +327,7 @@ function makePass()
 {
     trigger_error("makePass() has been deprecated in v3.0 and will be removed in v4.0. Use w2p_Authenticators_SQL->createNewPassword instead.", E_USER_NOTICE);
 
-    $auth = new w2p_Authenticators_SQL();
+    $auth = new \Web2project\Authenticators\SQL();
 
     return $auth->createNewPassword();
 }
