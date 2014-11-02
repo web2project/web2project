@@ -23,14 +23,14 @@ abstract class Base
     protected $query = null;
     protected $user_id = null;
 
-    public function __construct()
+    public function __construct($query = null)
     {
         global $AppUI;
         global $w2Pconfig;
 
         $this->AppUI = $AppUI;
         $this->w2Pconfig = $w2Pconfig;
-        $this->query = new \w2p_Database_Query();
+        $this->query = is_null($query) ? new \w2p_Database_Query() : $query;
     }
 
     /**
