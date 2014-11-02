@@ -23,4 +23,9 @@ class Web2project_Fields_PercentTest extends CommonSetup
         $output = $this->obj->view('38.7');
         $this->assertEquals('39%', $output);
     }
+
+    public function testEdit()
+    {
+        $this->assertEquals('', $this->obj->edit('name', 'value', 'tags'));
+    }
 }
