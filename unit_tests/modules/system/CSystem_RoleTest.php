@@ -82,22 +82,6 @@ class CSystem_RoleTest extends CommonSetup
         $this->obj->delete();
     }
 
-    /**
-     * @todo Implement testDelete().
-     */
-    public function testDelete()
-    {
-        $roles = $this->obj->getRoles();
-
-        $this->AssertEquals(5,                      count($roles));
-        $this->obj->bind($this->post_data);
-        $this->obj->store();
-        $this->obj->delete();
-
-        $roles = $this->obj->getRoles();
-        $this->AssertEquals(5,                      count($roles));
-    }
-
     public function testGetRoles()
     {
         $roles = $this->obj->getRoles();
