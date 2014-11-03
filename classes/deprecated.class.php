@@ -125,6 +125,20 @@ class CForumMessage extends CForum_Message
 }
 
 /**
+ * @package     web2project\deprecated
+ * @deprecated  since version 4.0
+ */
+class w2p_Theme_InfoTabBox extends w2p_Theme_TabBox
+{
+    public function __construct($baseHRef = '', $baseInc = '', $active = 0, $javascript = null)
+    {
+        trigger_error( __CLASS__ . " has been deprecated in v4.0 and will be removed by v5.0. Please use theme-specific tab boxes instead.", E_USER_NOTICE );
+
+        parent::__construct($baseHRef, $baseInc, $active, $javascript);
+    }
+}
+
+/**
  * @package web2project\deprecated
  *
  * @deprecated
@@ -504,6 +518,10 @@ class w2p_Utilities_Paginator extends \Web2project\Utilities\Paginator
     }
 }
 
+/**
+ * @package     web2project\deprecated
+ * @deprecated  since version 4.0
+ */
 class w2p_Actions_ImportTasks extends w2p_Actions_BulkTasks
 {
     public function __construct()
@@ -514,12 +532,20 @@ class w2p_Actions_ImportTasks extends w2p_Actions_BulkTasks
     }
 }
 
-class w2p_Theme_InfoTabBox extends w2p_Theme_TabBox
-{
-    public function __construct($baseHRef = '', $baseInc = '', $active = 0, $javascript = null)
-    {
-        trigger_error( __CLASS__ . " has been deprecated in v4.0 and will be removed by v5.0. Please use theme-specific tab boxes instead.", E_USER_NOTICE );
+/**
+ * @package     web2project\deprecated
+ * @deprecated  since version 4.0
+ */
+class w2p_Mocks_Email extends \Web2project\Mocks\Email { }
 
-        parent::__construct($baseHRef, $baseInc, $active, $javascript);
-    }
-}
+/**
+ * @package     web2project\deprecated
+ * @deprecated  since version 4.0
+ */
+class w2p_Mocks_Permissions extends \Web2project\Mocks\Permissions { }
+
+/**
+ * @package     web2project\deprecated
+ * @deprecated  since version 4.0
+ */
+class w2p_Mocks_Query extends \Web2project\Mocks\Query { }

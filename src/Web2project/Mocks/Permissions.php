@@ -1,4 +1,5 @@
 <?php
+namespace Web2project\Mocks;
 
 /**
  * Permissions system extends the phpgacl class.  Very few changes have
@@ -9,7 +10,7 @@
  * @author      D. Keith Casey, Jr. <caseydk@users.sourceforge.net>
  */
 
-class w2p_Mocks_Permissions extends w2p_Extensions_Permissions
+class Permissions extends \w2p_Extensions_Permissions
 {
     public function w2Pacl_nuclear($userid, $module, $item, $mod_class = array())
     {

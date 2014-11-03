@@ -1,11 +1,12 @@
 <?php
+namespace Web2project\Mocks;
 
 /**
  * @package     web2project\mocks
  * @author      D. Keith Casey, Jr. <caseydk@users.sourceforge.net>
  */
 
-class w2p_Mocks_Query extends w2p_Database_Query
+class Query extends \w2p_Database_Query
 {
     protected $hash = array();
     protected $result = '';
