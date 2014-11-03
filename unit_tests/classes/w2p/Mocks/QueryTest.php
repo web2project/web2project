@@ -56,6 +56,16 @@ class w2p_Mocks_QueryTest extends CommonSetup
         $this->assertEquals('value4', $list[1]['key4']);
     }
 
+    public function testClearList()
+    {
+        $this->mockDB->stageList(array('key1' => 'value1', 'key2' => 'value2'));
+        $this->mockDB->stageList(array('key3' => 'value3', 'key4' => 'value4'));
+        $this->assertEquals(2, count($this->mockDB->loadList()));
+
+        $this->mockDB->clearList();
+        $this->assertEquals(0, count($this->mockDB->loadList()));
+    }
+
     public function testLoadHashList()
     {
         $this->mockDB->stageHashList(1, array('key1' => 'value1', 'key2' => 'value2'));
@@ -67,5 +77,27 @@ class w2p_Mocks_QueryTest extends CommonSetup
 
         $hashlist = $this->mockDB->loadHashList();
         $this->assertEquals('value5', $hashlist[7]['key5']);
+    }
+
+    public function testClearHashList()
+    {
+        $this->mockDB->stageHashList(1, array('key1' => 'value1', 'key2' => 'value2'));
+        $this->mockDB->stageHashList(5, array('key3' => 'value3', 'key4' => 'value4'));
+        $this->assertEquals(2, count($this->mockDB->loadHashList()));
+
+        $this->mockDB->clearHashList();
+        $this->assertEquals(0, count($this->mockDB->loadHashList()));
+    }
+
+    public function testLoadObject()
+    {
+        $hash = array('link_name' => 'web2project homepage', 'link_url' => 'http://web2project.net', 'link_owner' => 1);
+        $this->mockDB->stageHash($hash);
+
+        $link = new CLink();
+        $this->mockDB->loadObject($link);
+
+        $this->assertEquals('web2project homepage', $link->link_name);
+        $this->assertEquals('http://web2project.net', $link->link_url);
     }
 }
