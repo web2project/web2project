@@ -64,6 +64,7 @@ class Web2project_Actions_AddEditTest extends CommonSetup
      */
     public function testProcess()
     {
+        $this->_AppUI->__nonce = '';
         $this->obj->process($this->_AppUI, $this->post_data);
         $this->assertEquals('/success',   $this->obj->resultPath);
 
