@@ -100,4 +100,14 @@ class w2p_Mocks_QueryTest extends CommonSetup
         $this->assertEquals('web2project homepage', $link->link_name);
         $this->assertEquals('http://web2project.net', $link->link_url);
     }
+
+    public function testBindHashToObject()
+    {
+        $subhash = array('link_name' => 'web2project homepage', 'link_url' => 'http://web2project.net', 'link_owner' => 1);
+        $hash = array('link_name' => 'Google', 'link_url' => 'http://google.com', 'link_owner' => 1, 'link_category' => $subhash);
+
+        $link = new CLink();
+
+        $this->mockDB->bindHashToObject($hash, $link);
+    }
 }
