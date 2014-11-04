@@ -34,7 +34,7 @@ class AddEdit
         $this->errorPath = $errorPath;
     }
 
-    public function process(\w2p_Core_CAppUI $AppUI, array $myArray)
+    public function process(\w2p_Core_CAppUI $AppUI, $myArray)
     {
         if (!$this->object->bind($myArray)) {
             $AppUI->setMsg($this->object->getError(), UI_MSG_ERROR);

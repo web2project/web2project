@@ -83,4 +83,11 @@ class Web2project_Actions_AddEditTest extends CommonSetup
         $AppUI = $this->obj->process($this->_AppUI, $this->post_data);
         $this->assertStringStartsWith('There was an error processing the form.', $AppUI->msg);
     }
+
+    public function testProcessNoArray()
+    {
+        $this->_AppUI->__nonce = '';
+        $this->obj->process($this->_AppUI, null);
+        $this->assertEquals('/failure',   $this->obj->resultPath);
+    }
 }
