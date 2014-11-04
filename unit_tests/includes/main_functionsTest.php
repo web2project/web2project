@@ -50,6 +50,9 @@ class Main_Functions_Test extends CommonSetup
         $this->assertEquals('b', $newArray[1]);        //    Tests no overwrite
         $this->assertEquals('w', $newArray[4]);        //    Tests explicit overwrite
         $this->assertEquals('z', $newArray[0]);        //    Tests conincidental overwrite
+
+        $this->assertEquals($array1, arrayMerge($array1, null));
+        $this->assertEquals($array1, arrayMerge(null, $array1));
     }
     public function testW2PgetConfig()
     {
@@ -101,13 +104,18 @@ class Main_Functions_Test extends CommonSetup
         $linkText = w2p_url('http://web2project.net');
         $this->assertEquals($target, $linkText);
 
+        $target = '<a href="http://web2project.net" target="_new">web2project</a>';
+        $linkText = w2p_url('http://web2project.net', 'web2project');
+        $this->assertEquals($target, $linkText);
+
         $target = '';
         $linkText = w2p_url('');
         $this->assertEquals($target, $linkText);
 
         $target = '<a href="http://web2project.net" target="_new">web2project</a>';
-        $linkText = w2p_url('http://web2project.net', 'web2project');
+        $linkText = w2p_url('web2project.net');
         $this->assertEquals($target, $linkText);
+
     }
 
     /**
