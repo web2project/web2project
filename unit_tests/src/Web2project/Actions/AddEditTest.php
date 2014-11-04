@@ -8,7 +8,7 @@
  * LICENSE: This source file is subject to Clear BSD License. Please see the
  *   LICENSE file in root of site for further details
  *
- * @author      Trevor Morse <trevor.morse@gmail.com>
+ * @author      D. Keith Casey, Jr. <caseydk@users.sourceforge.net>
  * @category    \Web2project\Actions\AddEdit
  * @package     web2project
  * @subpackage  unit_tests
