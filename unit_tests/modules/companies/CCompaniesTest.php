@@ -361,4 +361,24 @@ class CCompaniesTest extends CommonSetup
         $this->assertEquals('First Company',    $results[1]['company_name']);
         $this->assertEquals('Second Company',   $results[2]['company_name']);
     }
+
+    public function testHookSearch()
+    {
+        $search = $this->obj->hook_search();
+
+        $this->assertEquals(8, count($search));
+    }
+
+    public function testProjects()
+    {
+        $this->mockDB->stageList(
+            array('project_id' => 1, 'project_name' => 'Test Project', 'contact_first_name' => 'Admin',
+                'contact_last_name' => 'User', 'user_id' => 1));
+
+        $projects = $this->obj->projects($this->_AppUI, 1);
+        $this->assertEquals('Test Project', $projects[0]['project_name']);
+
+        $projects = $this->obj->projects($this->_AppUI, 1, 1, 'monkey');
+        $this->assertEquals('Test Project', $projects[0]['project_name']);
+    }
 }
