@@ -218,4 +218,14 @@ class CContactsTest extends CommonSetup
         $this->obj->contact_id = 1;
         $this->assertEquals('',                     $this->obj->getUpdateKey());
     }
+
+    public function testIsValid()
+    {
+        $this->post_data['contact_email'] = 'Not an email';
+        $this->obj->bind($this->post_data);
+
+        $valid = $this->obj->isValid();
+        $this->assertFalse($valid);
+        $this->assertEquals(1, count($this->obj->getError()));
+    }
 }

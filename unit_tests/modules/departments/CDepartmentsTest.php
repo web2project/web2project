@@ -96,6 +96,23 @@ class CDepartmentsTest extends CommonSetup
     }
 
     /**
+     * Tests that the proper error message is returned when a dept is attempted
+     * to be created without a url.
+     */
+    public function testCreateDepartmentParentError()
+    {
+        $this->post_data['dept_id'] = 1;
+        $this->post_data['dept_parent'] = 1;
+        $this->obj->bind($this->post_data);
+
+        /**
+         * Verify we got the proper error message
+         */
+        $this->assertFalse($this->obj->store());
+        $this->assertArrayHasKey('parentError', $this->obj->getError());
+    }
+
+    /**
      * Tests loading the Department Object
      */
     public function testLoad()
