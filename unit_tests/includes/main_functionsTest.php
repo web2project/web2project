@@ -112,7 +112,7 @@ class Main_Functions_Test extends CommonSetup
         $linkText = w2p_url('');
         $this->assertEquals($target, $linkText);
 
-        $target = '<a href="http://web2project.net" target="_new">web2project</a>';
+        $target = '<a href="http://web2project.net" target="_new">http://web2project.net</a>';
         $linkText = w2p_url('web2project.net');
         $this->assertEquals($target, $linkText);
 
