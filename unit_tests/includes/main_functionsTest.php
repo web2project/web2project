@@ -227,6 +227,9 @@ class Main_Functions_Test extends CommonSetup
         $object = getAuth('ldap');
         $this->assertInstanceOf('w2p_Authenticators_LDAP', $object);
 
+        $object = getAuth('pn');
+        $this->assertInstanceOf('w2p_Authenticators_PostNuke', $object);
+
         $object = getAuth('something else');
         $this->assertInstanceOf('\Web2project\Authenticators\SQL', $object);
     }

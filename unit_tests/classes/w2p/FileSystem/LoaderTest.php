@@ -68,9 +68,6 @@ class w2p_FileSystem_LoaderTest extends CommonSetup
         $this->assertEquals('asdf.php', $this->obj->makeFileNameSafe($filename));
     }
 
-    /**
-     * @expectedException PHPUnit_Framework_Error
-     */
     public function testCheckFileName()
     {
         $this->assertEquals('index.php', $this->obj->checkFileName('index.php'));

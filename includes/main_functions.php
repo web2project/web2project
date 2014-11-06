@@ -212,10 +212,11 @@ function convert2days($durn, $units)
         case 0:
         case 1:
             return $durn / w2PgetConfig('daily_working_hours');
-            break;
-        case 24:
-            return $durn;
+        default:
+            // do nothing
     }
+
+    return $durn;
 }
 
 function filterCurrency($number)
@@ -244,6 +245,8 @@ function w2pFindTaskComplete($start_date, $end_date, $percent)
     if ($now > $end) { return 'late'; }
     if ($now > $start && $percent > 0) { return 'active'; }
     if ($now > $start && $percent == 0) { return 'notstarted'; }
+
+    return '';
 }
 
 /**
