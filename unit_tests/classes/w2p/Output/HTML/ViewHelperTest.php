@@ -60,6 +60,12 @@ class w2p_Output_HTML_ViewHelperTest extends CommonSetup
         $this->assertEquals('value', $output);
     }
 
+    public function testShowField()
+    {
+        $this->expectOutputString('<a href="mailto:value">value</a>');
+        $this->obj->showField('field_email', 'value');
+    }
+
     public function testShowAddress()
     {
         $object = new stdClass();
@@ -69,8 +75,7 @@ class w2p_Output_HTML_ViewHelperTest extends CommonSetup
         $object->monkey_zip = '78704';
         $object->monkey_country = 'US';
 
-        $output = $this->obj->showAddress('monkey', $object);
-        $this->assertGreaterThan(0, strpos($output, 'q=123 Fake Street'));
-        $this->assertGreaterThan(0, strpos($output, 'Austin TX'));
+        $this->expectOutputString('<div style="margin-left: 11em;"><a href="http://maps.google.com/maps?q=123 Fake Street++Austin+TX+78704+US" target="_blank"><img src="./style/web2project/images/googlemaps.gif" class="right" alt="Find It on Google" /></a>123 Fake Street<br />Austin TX, 78704<br />United States</div>');
+        $this->obj->showAddress('monkey', $object);
     }
 }

@@ -73,6 +73,5 @@ class w2p_Output_HTML_ViewHelper extends w2p_Output_HTML_Base
         $output .= '</div>';
 
         echo $output;
-        return $output;
     }
 }

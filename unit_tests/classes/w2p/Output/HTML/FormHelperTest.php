@@ -29,19 +29,22 @@ class w2p_Output_HTML_FormHelperTest extends CommonSetup
         $this->obj = new w2p_Output_HTML_FormHelper($this->_AppUI);
     }
 
-    public function testAddLabel()
+    public function testShowLabel()
     {
-        $this->assertEquals('<label>Project:</label>', $this->obj->addLabel('Project'));
+        $this->expectOutputString('<label>Project:</label>');
+        $this->obj->showLabel('Project');
     }
 
-    public function testAddCancelButton()
+    public function testShowCancelButton()
     {
-        $this->assertEquals('<input type="button" value="back" class="cancel button btn btn-danger" onclick="javascript:history.back(-1);" />', $this->obj->addCancelButton());
+        $this->expectOutputString('<input type="button" value="back" class="cancel button btn btn-danger" onclick="javascript:history.back(-1);" />');
+        $this->obj->showCancelButton();
     }
 
-    public function testAddSaveButton()
+    public function testShowSaveButton()
     {
-        $this->assertEquals('<input type="button" value="save" class="save button btn btn-primary" onclick="submitIt()" />', $this->obj->addSaveButton());
+        $this->expectOutputString('<input type="button" value="save" class="save button btn btn-primary" onclick="submitIt()" />');
+        $this->obj->showSaveButton();
     }
 
     public function testAddNonce()
@@ -77,5 +80,11 @@ class w2p_Output_HTML_FormHelperTest extends CommonSetup
 
         $output = $this->obj->addField('other', 'fieldvalue', $options, $values);
         // @todo $this->assertEquals('<input type="text" xx="text other" name="other" value="fieldvalue" />', $output);
+    }
+
+    public function testShowField()
+    {
+        $this->expectOutputString('<textarea name="description" class="text description">test</textarea>');
+        $this->obj->showField('description', 'test');
     }
 }
