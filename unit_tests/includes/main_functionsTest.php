@@ -219,6 +219,9 @@ class Main_Functions_Test extends CommonSetup
         notifyNewUser('test@test.com', 'username', $emailUtility);
     }
 
+    /**
+     * @expectedException PHPUnit_Framework_Error
+     */
     public function test_getAuth()
     {
         $object = getAuth('sql');
