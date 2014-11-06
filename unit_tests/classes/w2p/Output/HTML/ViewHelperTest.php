@@ -33,4 +33,44 @@ class w2p_Output_HTML_ViewHelperTest extends CommonSetup
     {
         $this->assertEquals('<label>Project:</label>', $this->obj->addLabel('Project'));
     }
+
+    public function testAddField()
+    {
+        $output = $this->obj->addField('field', '');
+
+        $output = $this->obj->addField('field_datetime', '12/13/2014 23:45');
+        $this->assertEquals('13/Dec/2014 05:45 pm', $output);
+
+        $output = $this->obj->addField('field_birthday', '1979-09-14');
+        $this->assertEquals('14/Sep/1979', $output);
+
+        $output = $this->obj->addField('field_email', 'value');
+        $this->assertEquals('<a href="mailto:value">value</a>', $output);
+
+        $output = $this->obj->addField('field_url', 'value');
+        $this->assertEquals('<a href="http://value" target="_new">http://value</a>', $output);
+
+        $output = $this->obj->addField('field_owner', 'value');
+        $this->assertEquals('<a href="?m=users&a=view&user_id=value"></a>', $output);
+
+        $output = $this->obj->addField('field_percent', '34.1');
+        $this->assertEquals('34%', $output);
+
+        $output = $this->obj->addField('field_name', 'value');
+        $this->assertEquals('value', $output);
+    }
+
+    public function testShowAddress()
+    {
+        $object = new stdClass();
+        $object->monkey_address1 = '123 Fake Street';
+        $object->monkey_city = 'Austin';
+        $object->monkey_state = 'TX';
+        $object->monkey_zip = '78704';
+        $object->monkey_country = 'US';
+
+        $output = $this->obj->showAddress('monkey', $object);
+        $this->assertGreaterThan(0, strpos($output, 'q=123 Fake Street'));
+        $this->assertGreaterThan(0, strpos($output, 'Austin TX'));
+    }
 }
