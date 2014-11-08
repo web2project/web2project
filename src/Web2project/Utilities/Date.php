@@ -1,4 +1,6 @@
 <?php
+namespace Web2project\Utilities;
+
 /**
  * @package     web2project\utilities
  */
@@ -11,7 +13,7 @@
  *
  * @package     web2project\utilities
  */
-class w2p_Utilities_Date extends Date {
+class Date extends \Date {
 
     public function __construct($datetime = null, $tz = '') {
 
@@ -42,11 +44,11 @@ class w2p_Utilities_Date extends Date {
      */
     public function compare($d1, $d2, $convertTZ = false) {
         if ($convertTZ) {
-            $d1->convertTZ(new Date_TimeZone('UTC'));
-            $d2->convertTZ(new Date_TimeZone('UTC'));
+            $d1->convertTZ(new \Date_TimeZone('UTC'));
+            $d2->convertTZ(new \Date_TimeZone('UTC'));
         }
 
-        $date_calc = new Date_Calc();
+        $date_calc = new \Date_Calc();
         $days1 = $date_calc->dateToDays($d1->day, $d1->month, $d1->year);
         $days2 = $date_calc->dateToDays($d2->day, $d2->month, $d2->year);
 
@@ -117,7 +119,7 @@ class w2p_Utilities_Date extends Date {
             return false;
         }
 
-        $date_calc = new Date_Calc();
+        $date_calc = new \Date_Calc();
         return $date_calc->dateDiff($this->getDay(), $this->getMonth(), $this->getYear(), $when->getDay(), $when->getMonth(), $when->getYear());
     }
 
@@ -349,7 +351,7 @@ class w2p_Utilities_Date extends Date {
     public function calcDuration($endDate) {
 
         // since one will alter the date ($this) one better copies it to a new instance
-        $startDate = new w2p_Utilities_Date();
+        $startDate = new \Web2project\Utilities\Date();
         $startDate->copy($this);
 
         // get w2P time constants
@@ -463,7 +465,7 @@ class w2p_Utilities_Date extends Date {
     public function calcFinish($duration, $durationType) {
 
         // since one will alter the date ($this) one better copies it to a new instance
-        $finishDate = new w2p_Utilities_Date();
+        $finishDate = new \Web2project\Utilities\Date();
         $finishDate->copy($this);
 
         // get w2P time constants
@@ -528,11 +530,11 @@ class w2p_Utilities_Date extends Date {
         if(is_a($tz, 'Date_TimeZone')) {
             $tz = $tz->getID();
         }
-        $newTZ = new DateTimeZone($tz);
+        $newTZ = new \DateTimeZone($tz);
 
-        $dt = new DateTime(
+        $dt = new \DateTime(
                     $this->format('%D %H%M%S'), 
-                    new DateTimeZone($this->tz['id'])
+                    new \DateTimeZone($this->tz['id'])
                 );
         $dt->setTimezone($newTZ);
         $this->setDate($dt->format('Y-m-d H:i:s'));
