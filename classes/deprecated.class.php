@@ -553,14 +553,8 @@ class w2p_Mocks_Query extends \Web2project\Mocks\Query { }
 /**
  * @package     web2project\deprecated
  * @deprecated  since version 4.0
+ *
+ * @todo At some point, this should throw a deprecation notice
  */
-class w2p_Utilities_Date extends \Web2project\Utilities\Date
-{
-    public function __construct($datetime = null, $tz = '')
-    {
-        //trigger_error("w2p_Utilities_Date has been deprecated in v4.0 and will be removed by v5.0. Please use \\Web2project\\Utilities\\Date instead.", E_USER_NOTICE );
-
-        parent::__construct($datetime, $tz);
-    }
-}
+class w2p_Utilities_Date extends \Web2project\Utilities\Date { }
 
