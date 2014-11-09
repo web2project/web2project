@@ -18,7 +18,7 @@
 
 class w2p_FileSystem_LoaderTest extends CommonSetup
 {
-    protected function setUp()
+    public function setUp()
     {
         parent::setUp();
 
