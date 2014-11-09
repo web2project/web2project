@@ -1,6 +1,8 @@
 <?php
 
-class w2p_Controllers_View
+namespace Web2project\Controllers;
+
+class View
 {
     protected $AppUI  = null;
     protected $object = null;
@@ -10,7 +12,7 @@ class w2p_Controllers_View
     protected $key    = '';
     protected $fields = '';
 
-    public function __construct(w2p_Core_CAppUI $AppUI, w2p_Core_BaseObject $object, $noun)
+    public function __construct(\w2p_Core_CAppUI $AppUI, \w2p_Core_BaseObject $object, $noun)
     {
         $this->AppUI = $AppUI;
         $this->object = $object;

@@ -554,7 +554,8 @@ class w2p_Mocks_Query extends \Web2project\Mocks\Query { }
  * @package     web2project\deprecated
  * @deprecated  since version 4.0
  *
- * @todo At some point, this should throw a deprecation notice
+ * @todo At some point, these should throw a deprecation notice
  */
 class w2p_Utilities_Date extends \Web2project\Utilities\Date { }
+class w2p_Controllers_View extends \Web2project\Controllers\View { }
 

@@ -12,6 +12,7 @@ function web2project_autoload($className) {
         case 'w2p_API_iCalendar':
         case 'w2p_Controller_Base':
         case 'w2p_Controller_Permissions':
+        case 'w2p_Controllers_View':
         case 'w2p_Core_Config':
         case 'w2p_Core_Dispatcher':
         case 'w2p_Core_Event':
