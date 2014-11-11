@@ -69,9 +69,6 @@ class CSystem_RoleTest extends CommonSetup
         $this->assertContains('role_description',   $result);
     }
 
-    /**
-     * @todo Implement testStore().
-     */
     public function testStore()
     {
         $this->obj->bind($this->post_data);
@@ -80,33 +77,6 @@ class CSystem_RoleTest extends CommonSetup
         $this->obj->store();
         $this->assertNotEquals(0,                   (int) $this->obj->role_id);
         $this->obj->delete();
-    }
-
-    public function testGetRoles()
-    {
-        $roles = $this->obj->getRoles();
-
-        $this->AssertEquals(5,                      count($roles));
-        $this->AssertEquals('Administrator',        $roles[0]['name']);
-        $this->AssertEquals('normal',               $roles[4]['value']);
-    }
-
-    public function testRename_array_fail()
-    {
-        $roles = $this->obj->getRoles();
-
-        $result = $this->obj->rename_array($roles, array('one'), array());
-
-        $this->assertFalse($result);
-    }
-
-    public function testRename_array()
-    {
-        $roles = $this->obj->getRoles();
-
-        $result = $this->obj->rename_array($roles, array('one'), array('two'));
-
-        $this->assertTrue($result);
     }
 
     public function testCopyPermissions()
