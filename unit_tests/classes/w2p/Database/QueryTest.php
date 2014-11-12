@@ -42,4 +42,11 @@ class w2p_Database_QueryTest extends CommonSetup
         $this->assertEquals(2, count($this->obj->one));
         $this->assertEquals('five', $this->obj->one['three']);
     }
+
+    public function testAddInsertSelect()
+    {
+        $this->obj = $this->obj->addInsertSelect('test');
+
+        $this->assertEquals('insert_select', $this->obj->type);
+    }
 }

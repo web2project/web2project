@@ -47,4 +47,16 @@ class w2p_Theme_TitleBlockTest extends CommonSetup
         $this->obj->addFilterCell('label', 'field', array(1, 2, 3), 1);
         $this->assertEquals(2, count($this->obj->cells1));
     }
+
+    public function testAddButton()
+    {
+        $this->assertEquals(0, count($this->obj->cells1));
+
+        $this->obj->addButton('label', 'http://google.com');
+        $this->assertEquals(1, count($this->obj->cells1));
+
+        $button = $this->obj->cells1[0][1];
+        $this->assertGreaterThan(0, strpos($button, 'value="label"'));
+        $this->assertGreaterThan(0, strpos($button, 'action="http://google.com"'));
+    }
 }
