@@ -30,18 +30,18 @@ class CResource extends w2p_Core_BaseObject
 
         return (count($this->_error)) ? false : true;
     }
-
     /**
      * @deprecated
+     * @codeCoverageIgnore
      */
     public function &loadTypes() {
         trigger_error("CResource->loadTypes() has been deprecated in v3.0 and will be removed in v4.0. Please use w2PgetSysVal('ResourceTypes') instead.", E_USER_NOTICE);
 
         return $this->typeSelect();
     }
-
     /**
      * @deprecated
+     * @codeCoverageIgnore
      */
     public function typeSelect()
     {
@@ -57,9 +57,9 @@ class CResource extends w2p_Core_BaseObject
 
         return $typelist;
     }
-
     /**
      * @deprecated
+     * @codeCoverageIgnore
      */
     public function getTypeName()
     {

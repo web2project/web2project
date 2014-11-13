@@ -362,6 +362,7 @@ class CUser extends w2p_Core_BaseObject
 
     /**
      * @deprecated
+     * @codeCoverageIgnore
      */
     public static function getUserList()
     {
@@ -370,9 +371,9 @@ class CUser extends w2p_Core_BaseObject
 
         return $user->getList();
     }
-
     /**
      * @deprecated
+     * @codeCoverageIgnore
      */
     public function fullLoad($userId)
     {
@@ -380,9 +381,9 @@ class CUser extends w2p_Core_BaseObject
 
         $this->loadFull($userId);
     }
-
     /**
      * @deprecated
+     * @codeCoverageIgnore
      */
     public static function getUserIdByToken($token)
     {
@@ -391,9 +392,9 @@ class CUser extends w2p_Core_BaseObject
 
         return $user->getIdByToken($token);
     }
-
     /**
      * @deprecated
+     * @codeCoverageIgnore
      */
     public static function getUserIdByContactID($contactId)
     {
@@ -402,9 +403,9 @@ class CUser extends w2p_Core_BaseObject
 
         return $user->getIdByContactId($contactId);
     }
-
     /**
      * @deprecated
+     * @codeCoverageIgnore
      */
     public static function getUserDeptId($user_id)
     {
@@ -423,6 +424,7 @@ class CUser extends w2p_Core_BaseObject
     }
     /**
      * @deprecated
+     * @codeCoverageIgnore
      */
     public static function getFirstLetters()
     {
@@ -431,9 +433,9 @@ class CUser extends w2p_Core_BaseObject
 
         return $user->getLetters();
     }
-
     /**
      * @deprecated
+     * @codeCoverageIgnore
      */
     public static function generateUserToken($userId, $token = '')
     {
@@ -442,9 +444,9 @@ class CUser extends w2p_Core_BaseObject
 
         return $user->generateToken($userId, $token);
     }
-
     /**
      * @deprecated
+     * @codeCoverageIgnore
      */
     public static function getLogs($userId, $startDate, $endDate)
     {
@@ -453,9 +455,9 @@ class CUser extends w2p_Core_BaseObject
 
         return $user->getLogList($userId, $startDate, $endDate);
     }
-
     /**
      * @deprecated
+     * @codeCoverageIgnore
      */
     public static function isUserActive($user_id)
     {

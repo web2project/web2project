@@ -45,9 +45,8 @@ class CDepartment extends w2p_Core_BaseObject
     }
 
     /**
-     * I already don't like this one..
-     *
      * @deprecated
+     * @codeCoverageIgnore
      */
     public function getProjects($department_id)
     {
@@ -368,6 +367,7 @@ class CDepartment extends w2p_Core_BaseObject
 
     /**
      * @deprecated
+     * @codeCoverageIgnore
      */
     public static function getContactList($AppUI = null, $deptId)
     {
@@ -380,6 +380,7 @@ class CDepartment extends w2p_Core_BaseObject
 
     /**
      * @deprecated
+     * @codeCoverageIgnore
      */
     public static function getDepartmentList($AppUI = null, $companyId, $departmentId = 0)
     {

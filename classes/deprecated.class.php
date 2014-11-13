@@ -11,6 +11,7 @@
  * @package web2project\deprecated
  *
  * @deprecated
+ * @codeCoverageIgnore
  */
 class bcode extends CSystem_Bcode
 {
@@ -27,6 +28,7 @@ class bcode extends CSystem_Bcode
  * @package web2project\deprecated
  *
  * @deprecated
+ * @codeCoverageIgnore
  */
 class budgets extends CSystem_Budget
 {
@@ -43,6 +45,7 @@ class budgets extends CSystem_Budget
  * @package web2project\deprecated
  *
  * @deprecated
+ * @codeCoverageIgnore
  */
 class CAdmin_User extends CUser
 {
@@ -57,6 +60,7 @@ class CAdmin_User extends CUser
  * @package web2project\deprecated
  *
  * @deprecated
+ * @codeCoverageIgnore
  */
 class CAppUI extends w2p_Core_CAppUI
 {
@@ -71,6 +75,7 @@ class CAppUI extends w2p_Core_CAppUI
  * @package web2project\deprecated
  *
  * @deprecated
+ * @codeCoverageIgnore
  */
 class CCalendar extends CEvent
 {
@@ -85,6 +90,7 @@ class CCalendar extends CEvent
  * @package web2project\deprecated
  *
  * @deprecated
+ * @codeCoverageIgnore
  */
 class CConfig extends w2p_System_Config
 {
@@ -98,6 +104,7 @@ class CConfig extends w2p_System_Config
  * @package web2project\deprecated
  *
  * @deprecated
+ * @codeCoverageIgnore
  */
 class CFileFolder extends CFile_Folder
 {
@@ -112,6 +119,7 @@ class CFileFolder extends CFile_Folder
  * @package web2project\deprecated
  *
  * @deprecated
+ * @codeCoverageIgnore
  */
 class CForumMessage extends CForum_Message
 {
@@ -127,6 +135,7 @@ class CForumMessage extends CForum_Message
 /**
  * @package     web2project\deprecated
  * @deprecated  since version 4.0
+ * @codeCoverageIgnore
  */
 class w2p_Theme_InfoTabBox extends w2p_Theme_TabBox
 {
@@ -142,6 +151,7 @@ class w2p_Theme_InfoTabBox extends w2p_Theme_TabBox
  * @package web2project\deprecated
  *
  * @deprecated
+ * @codeCoverageIgnore
  */
 class CInfoTabBox extends w2p_Theme_InfoTabBox
 {
@@ -156,6 +166,7 @@ class CInfoTabBox extends w2p_Theme_InfoTabBox
  * @package web2project\deprecated
  *
  * @deprecated
+ * @codeCoverageIgnore
  */
 class CMonthCalendar extends w2p_Output_MonthCalendar
 {
@@ -172,6 +183,7 @@ class CMonthCalendar extends w2p_Output_MonthCalendar
  * @package web2project\deprecated
  *
  * @deprecated
+ * @codeCoverageIgnore
  */
 class CPreferences extends w2p_System_Preferences {
     public function __construct() {
@@ -184,6 +196,7 @@ class CPreferences extends w2p_System_Preferences {
  * @package web2project\deprecated
  *
  * @deprecated
+ * @codeCoverageIgnore
  */
 class CProjectDesignerOptions extends CProjectDesigner
 {
@@ -200,6 +213,7 @@ class CProjectDesignerOptions extends CProjectDesigner
  * @package web2project\deprecated
  *
  * @deprecated
+ * @codeCoverageIgnore
  */
 class CRole extends CSystem_Role
 {
@@ -213,6 +227,7 @@ class CRole extends CSystem_Role
  * @package web2project\deprecated
  *
  * @deprecated
+ * @codeCoverageIgnore
  */
 class CSysKey extends CSystem_SysKey
 {
@@ -227,6 +242,7 @@ class CSysKey extends CSystem_SysKey
  * @package web2project\deprecated
  *
  * @deprecated
+ * @codeCoverageIgnore
  */
 class CSysVal extends CSystem_SysVal
 {
@@ -240,6 +256,7 @@ class CSysVal extends CSystem_SysVal
  * @package web2project\deprecated
  *
  * @deprecated
+ * @codeCoverageIgnore
  */
 class CTabBox_core extends w2p_Theme_TabBox
 {
@@ -253,6 +270,7 @@ class CTabBox_core extends w2p_Theme_TabBox
  * @package web2project\deprecated
  *
  * @deprecated
+ * @codeCoverageIgnore
  */
 class CTaskLog extends CTask_Log
 {
@@ -267,6 +285,7 @@ class CTaskLog extends CTask_Log
  * @package web2project\deprecated
  *
  * @deprecated
+ * @codeCoverageIgnore
  */
 class CTitleBlock extends w2p_Theme_TitleBlock
 {
@@ -280,6 +299,7 @@ class CTitleBlock extends w2p_Theme_TitleBlock
  * @package web2project\deprecated
  *
  * @deprecated
+ * @codeCoverageIgnore
  */
 class CTitleBlock_core extends w2p_Theme_TitleBlock
 {
@@ -295,6 +315,7 @@ class CTitleBlock_core extends w2p_Theme_TitleBlock
  * @package web2project\deprecated
  *
  * @deprecated
+ * @codeCoverageIgnore
  */
 class w2Pacl extends w2p_Extensions_Permissions
 {
@@ -308,6 +329,7 @@ class w2Pacl extends w2p_Extensions_Permissions
 /**
  * @package web2project\deprecated
  * @deprecated
+ * @codeCoverageIgnore
  */
 class w2p_Core_Config extends w2p_System_Config
 {
@@ -321,6 +343,7 @@ class w2p_Core_Config extends w2p_System_Config
 /**
  * @package web2project\deprecated
  * @deprecated
+ * @codeCoverageIgnore
  */
 class w2p_Core_Dispatcher extends w2p_System_Dispatcher
 {
@@ -334,6 +357,7 @@ class w2p_Core_Dispatcher extends w2p_System_Dispatcher
 /**
  * @package web2project\deprecated
  * @deprecated
+ * @codeCoverageIgnore
  */
 class w2p_Core_Event extends w2p_System_Event
 {
@@ -347,6 +371,7 @@ class w2p_Core_Event extends w2p_System_Event
 /**
  * @package web2project\deprecated
  * @deprecated
+ * @codeCoverageIgnore
  */
 class w2p_Core_EventQueue extends w2p_System_EventQueue
 {
@@ -360,6 +385,7 @@ class w2p_Core_EventQueue extends w2p_System_EventQueue
 /**
  * @package web2project\deprecated
  * @deprecated
+ * @codeCoverageIgnore
  */
 class w2p_Core_HookHandler extends w2p_System_HookHandler
 {
@@ -373,6 +399,7 @@ class w2p_Core_HookHandler extends w2p_System_HookHandler
 /**
  * @package web2project\deprecated
  * @deprecated
+ * @codeCoverageIgnore
  */
 class w2p_Core_Module extends w2p_System_Module
 {
@@ -386,6 +413,7 @@ class w2p_Core_Module extends w2p_System_Module
 /**
  * @package web2project\deprecated
  * @deprecated
+ * @codeCoverageIgnore
  */
 class w2p_Core_Preferences extends w2p_System_Preferences
 {
@@ -399,6 +427,7 @@ class w2p_Core_Preferences extends w2p_System_Preferences
 /**
  * @package web2project\deprecated
  * @deprecated
+ * @codeCoverageIgnore
  */
 class w2p_Core_Setup extends w2p_System_Setup
 {
@@ -413,6 +442,7 @@ class w2p_Core_Setup extends w2p_System_Setup
 /**
  * @package web2project\deprecated
  * @deprecated
+ * @codeCoverageIgnore
  */
 class w2p_Core_UpgradeManager extends w2p_System_UpgradeManager
 {
@@ -426,6 +456,7 @@ class w2p_Core_UpgradeManager extends w2p_System_UpgradeManager
 /**
  * @package     web2project\deprecated
  * @deprecated  since version 3.0
+ * @codeCoverageIgnore
  */
 class w2p_API_iCalendar extends w2p_Output_iCalendar
 {
@@ -440,6 +471,7 @@ class w2p_API_iCalendar extends w2p_Output_iCalendar
 /**
  * @package     web2project\deprecated
  * @deprecated  since version 3.0
+ * @codeCoverageIgnore
  */
 class smartsearch extends CSmartSearch {
 
@@ -451,6 +483,7 @@ class smartsearch extends CSmartSearch {
 /**
  * @package     web2project\deprecated
  * @deprecated  since version 4.0
+ * @codeCoverageIgnore
  */
 class w2p_Controller_Base extends \Web2project\Actions\AddEdit
 {
@@ -465,6 +498,7 @@ class w2p_Controller_Base extends \Web2project\Actions\AddEdit
 /**
  * @package     web2project\deprecated
  * @deprecated  since version 4.0
+ * @codeCoverageIgnore
  */
 class w2p_Controller_Permissions extends \Web2project\Actions\AddEditPermissions
 {
@@ -479,6 +513,7 @@ class w2p_Controller_Permissions extends \Web2project\Actions\AddEditPermissions
 /**
  * @package     web2project\deprecated
  * @deprecated  since version 4.0
+ * @codeCoverageIgnore
  */
 class w2p_Output_EmailManager extends w2p_Output_Email_Manager
 {
@@ -493,6 +528,7 @@ class w2p_Output_EmailManager extends w2p_Output_Email_Manager
 /**
  * @package     web2project\deprecated
  * @deprecated  since version 4.0
+ * @codeCoverageIgnore
  */
 class w2p_Output_Email_Template extends \Web2project\Output\Email\Manager
 {
@@ -507,6 +543,7 @@ class w2p_Output_Email_Template extends \Web2project\Output\Email\Manager
 /**
  * @package     web2project\deprecated
  * @deprecated  since version 4.0
+ * @codeCoverageIgnore
  */
 class w2p_Utilities_Paginator extends \Web2project\Utilities\Paginator
 {
@@ -521,6 +558,7 @@ class w2p_Utilities_Paginator extends \Web2project\Utilities\Paginator
 /**
  * @package     web2project\deprecated
  * @deprecated  since version 4.0
+ * @codeCoverageIgnore
  */
 class w2p_Actions_ImportTasks extends w2p_Actions_BulkTasks
 {
@@ -535,27 +573,37 @@ class w2p_Actions_ImportTasks extends w2p_Actions_BulkTasks
 /**
  * @package     web2project\deprecated
  * @deprecated  since version 4.0
+ * @codeCoverageIgnore
  */
 class w2p_Mocks_Email extends \Web2project\Mocks\Email { }
 
 /**
  * @package     web2project\deprecated
  * @deprecated  since version 4.0
+ * @codeCoverageIgnore
  */
 class w2p_Mocks_Permissions extends \Web2project\Mocks\Permissions { }
 
 /**
  * @package     web2project\deprecated
  * @deprecated  since version 4.0
+ * @codeCoverageIgnore
  */
 class w2p_Mocks_Query extends \Web2project\Mocks\Query { }
 
 /**
  * @package     web2project\deprecated
  * @deprecated  since version 4.0
+ * @codeCoverageIgnore
  *
  * @todo At some point, these should throw a deprecation notice
  */
 class w2p_Utilities_Date extends \Web2project\Utilities\Date { }
+
+/**
+ * @package     web2project\deprecated
+ * @deprecated  since version 4.0
+ * @codeCoverageIgnore
+ */
 class w2p_Controllers_View extends \Web2project\Controllers\View { }
 

@@ -103,8 +103,10 @@ class CSystem_Role extends w2p_Core_BaseObject
 
         return $roles;
     }
-
-    /** @deprecated */
+    /**
+     * @deprecated
+     * @codeCoverageIgnore
+     */
     public function rename_array(&$roles, $from, $to)
     {
         if (count($from) != count($to)) {

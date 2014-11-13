@@ -588,6 +588,7 @@ class CContact extends w2p_Core_BaseObject
 
     /**
      * @deprecated
+     * @codeCoverageIgnore
      */
     public function getCompanyID()
     {
@@ -598,6 +599,7 @@ class CContact extends w2p_Core_BaseObject
 
     /**
      * @deprecated
+     * @codeCoverageIgnore
      */
     public function getCompanyName()
     {

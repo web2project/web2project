@@ -94,7 +94,7 @@ class CFile extends w2p_Core_BaseObject
         parent::hook_preCreate();
     }
 
-    /*
+    /**
      * If while editing a file we attach a new file, then we go ahead and set
      *   file_id to 0 so a new file object is created. We also set its owner to
      *   the current user.
@@ -409,6 +409,10 @@ class CFile extends w2p_Core_BaseObject
         }
     }
 
+    /**
+     * @deprecated
+     * @codeCoverageIgnore
+     */
     public function getOwner()
     {
         trigger_error("The CFile->getOwner method has been deprecated in v3.2 and will be removed in v5.0. Please use just load a CContact object instead", E_USER_NOTICE );
@@ -418,8 +422,10 @@ class CFile extends w2p_Core_BaseObject
 
         return $contact->contact_display_name;
     }
-
-    /** @deprecated */
+    /**
+     * @deprecated
+     * @codeCoverageIgnore
+     */
     public function getTaskName()
     {
         trigger_error("The CFile->getTaskName method has been deprecated in v3.0 and will be removed in v4.0. Please use just load a CTask object instead", E_USER_NOTICE );
@@ -429,8 +435,10 @@ class CFile extends w2p_Core_BaseObject
 
         return $task->task_name;
     }
-
-    /** @deprecated */
+    /**
+     * @deprecated
+     * @codeCoverageIgnore
+     */
     public function indexStrings()
     {
         trigger_error("CFile->indexStrings() has been deprecated in v3.2 and will be removed by v5.0. Please use w2p_FileSystem_Indexer->index() instead.", E_USER_NOTICE);
@@ -438,34 +446,44 @@ class CFile extends w2p_Core_BaseObject
         $indexer = new w2p_FileSystem_Indexer($this->_getQuery());
         $indexer->index($this);
     }
-
-    /** @deprecated */
+    /**
+     * @deprecated
+     * @codeCoverageIgnore
+     */
     public function isWritable()
     {
         return $this->getFileSystem()->isWritable();
     }
-
-    /** @deprecated */
+    /**
+     * @deprecated
+     * @codeCoverageIgnore
+     */
     public function deleteFile()
     {
         $this->load();
 
         return $this->getFileSystem()->delete($this);
     }
-
-    /** @deprecated */
+    /**
+     * @deprecated
+     * @codeCoverageIgnore
+     */
     public function moveFile($oldProj, $realname)
     {
         return $this->getFileSystem()->move($this, $oldProj, $realname);
     }
-
-    /** @deprecated */
+    /**
+     * @deprecated
+     * @codeCoverageIgnore
+     */
     public function duplicateFile($oldProj, $realname)
     {
         return $this->getFileSystem()->duplicate($oldProj, $realname, $this->_AppUI);
     }
-
-    /** @deprecated */
+    /**
+     * @deprecated
+     * @codeCoverageIgnore
+     */
     public function moveTemp($upload)
     {
         return $this->getFileSystem()->moveTemp($this, $upload, $this->_AppUI);

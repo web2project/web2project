@@ -315,9 +315,9 @@ class CProject extends w2p_Core_BaseObject
 
         return array_merge($aBuf1, $aBuf2);
     }
-
     /**
      * @deprecated
+     * @codeCoverageIgnore
      */
     public function getAllowedProjectsInRows($userId)
     {
@@ -597,9 +597,9 @@ class CProject extends w2p_Core_BaseObject
             return $q->loadHashList('contact_id');
         }
     }
-
     /**
      * @deprecated
+     * @codeCoverageIgnore
      */
     public static function getContacts($notUsed = null, $projectId)
     {
@@ -631,6 +631,7 @@ class CProject extends w2p_Core_BaseObject
 
     /**
      * @deprecated
+     * @codeCoverageIgnore
      */
     public static function getDepartments($notUsed = null, $projectId)
     {
@@ -659,9 +660,9 @@ class CProject extends w2p_Core_BaseObject
             return $q->loadHashList('forum_id');
         }
     }
-
     /**
      * @deprecated
+     * @codeCoverageIgnore
      */
     public static function getForums($notUsed = null, $projectId)
     {
@@ -683,6 +684,7 @@ class CProject extends w2p_Core_BaseObject
 
     /**
      * @deprecated
+     * @codeCoverageIgnore
      */
     public static function getCompany($projectId)
     {
@@ -759,9 +761,9 @@ class CProject extends w2p_Core_BaseObject
 
         return $q->loadResult();
     }
-
     /**
      * @deprecated
+     * @codeCoverageIgnore
      */
     public static function hasTasks($projectId, $override = null)
     {

@@ -607,7 +607,10 @@ class CEvent extends w2p_Core_BaseObject
         return $count;
     }
 
-    /** @deprecated */
+    /**
+     * @deprecated
+     * @codeCoverageIgnore
+     */
     public function checkClash()
     {
         return false;

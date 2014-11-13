@@ -289,6 +289,7 @@ class CTask extends w2p_Core_BaseObject
 
     /**
      * @deprecated
+     * @codeCoverageIgnore
      */
     public function peek($oid = null, $strip = false)
     {
@@ -1424,9 +1425,9 @@ class CTask extends w2p_Core_BaseObject
     }
 
 // end of dependentTasks()
-
     /**
-     * @deprecated since version 3.0
+     * @deprecated
+     * @codeCoverageIgnore
      */
     public function shiftDependentTasks()
     {
@@ -1434,9 +1435,9 @@ class CTask extends w2p_Core_BaseObject
 
         $this->pushDependencies($this->task_id, $this->task_end_date);
     }
-
     /**
-     * @deprecated since version 3.0
+     * @deprecated
+     * @codeCoverageIgnore
      */
     public function update_dep_dates($task_id)
     {
@@ -1589,7 +1590,7 @@ class CTask extends w2p_Core_BaseObject
         $q->exec();
     }
 
-    /*
+    /**
      * using user allocation percentage ($perc_assign)
      *
      * @return returns the Names of the over-assigned users (if any), otherwise false
@@ -1672,11 +1673,10 @@ class CTask extends w2p_Core_BaseObject
         return $this->assignees($this->task_id);
     }
 
-    /*
+    /**
      * This looks quite similar to getDependentTaskList below but this gets a
      *   list of the dependencies for $taskId (aka tasks leading into $taskId).
      */
-
     public function getDependencyList($taskId)
     {
         $q = $this->_getQuery();
@@ -1690,11 +1690,10 @@ class CTask extends w2p_Core_BaseObject
         return $q->loadHashList('dependencies_req_task_id');
     }
 
-    /*
+    /**
      * This looks quite similar to getDependencyList above but this gets a list
      *   of tasks that are dependent on $taskId (aka coming after $taskId).
      */
-
     public function getDependentTaskList($taskId)
     {
         $q = $this->_getQuery();
@@ -2435,6 +2434,7 @@ class CTask extends w2p_Core_BaseObject
 
     /**
      * @deprecated
+     * @codeCoverageIgnore
      */
     public static function pinUserTask($userId, $taskId)
     {
@@ -2453,9 +2453,9 @@ class CTask extends w2p_Core_BaseObject
 
         return (!$q->exec()) ? false : true;
     }
-
     /**
      * @deprecated
+     * @codeCoverageIgnore
      */
     public static function unpinUserTask($userId, $taskId)
     {
@@ -2477,6 +2477,7 @@ class CTask extends w2p_Core_BaseObject
 
     /**
      * @deprecated
+     * @codeCoverageIgnore
      */
     public static function updateHoursWorked($taskId, $totalHours)
     {
