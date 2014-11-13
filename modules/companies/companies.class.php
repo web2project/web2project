@@ -232,7 +232,10 @@ class CCompany extends w2p_Core_BaseObject
         }
     }
 
-    /** @deprecated */
+    /**
+     * @deprecated
+     * @codeCoverageIgnore
+     */
     public function getCompanies()
     {
         trigger_error("The CCompany->getCompanies method has been deprecated in 3.2 and will be removed in v5.0. Please use CCompany->loadAll() instead.", E_USER_NOTICE );
@@ -241,6 +244,7 @@ class CCompany extends w2p_Core_BaseObject
     }
     /**
      * @deprecated
+     * @codeCoverageIgnore
      */
     public static function getProjects(w2p_Core_CAppUI $AppUI, $companyId, $active = 1, $sort = 'project_name')
     {
@@ -252,6 +256,7 @@ class CCompany extends w2p_Core_BaseObject
     }
     /**
      * @deprecated
+     * @codeCoverageIgnore
      */
     public static function getContacts($notUsed, $companyId)
     {
@@ -263,6 +268,7 @@ class CCompany extends w2p_Core_BaseObject
     }
     /**
      * @deprecated
+     * @codeCoverageIgnore
      */
     public static function getUsers($notUsed, $companyId)
     {
@@ -274,6 +280,7 @@ class CCompany extends w2p_Core_BaseObject
     }
     /**
      * @deprecated
+     * @codeCoverageIgnore
      */
     public static function getDepartments($notUsed, $companyId)
     {

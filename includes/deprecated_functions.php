@@ -19,6 +19,7 @@
  * TODO:  Remove for v4.0 - dkc 08 May 2011
  *
  * @deprecated
+ * @codeCoverageIgnore
  */
 function w2PcheckCharset()
 {
@@ -32,6 +33,7 @@ function w2PcheckCharset()
  * TODO:  Remove for v4.0 - caseydk 20 September 2012
  *
  * @deprecated
+ * @codeCoverageIgnore
  */
 function strJpGraph($text)
 {
@@ -49,6 +51,7 @@ function strJpGraph($text)
  * TODO:  Remove for v4.0 - caseydk 26 August 2011
  *
  * @deprecated
+ * @codeCoverageIgnore
  */
 function atoi($a)
 {
@@ -63,6 +66,7 @@ function atoi($a)
  * TODO:  Remove for v4.0 - caseydk 01 September 2011
  *
  * @deprecated
+ * @codeCoverageIgnore
 */
 function w2p_check_url()
 {
@@ -77,7 +81,7 @@ function w2p_check_url()
  * TODO:  Remove for v4.0 - caseydk 28 December 2011
  *
  * @deprecated
- *
+ * @codeCoverageIgnore
  */
 function remove_invalid($arr)
 {
@@ -94,7 +98,7 @@ function remove_invalid($arr)
  * TODO:  Remove for v4.0 - caseydk 21 March 2012
  *
  * @deprecated
- *
+ * @codeCoverageIgnore
  */
 function findchild_pr(&$tarr, $parent, $level = 0)
 {
@@ -109,8 +113,8 @@ function findchild_pr(&$tarr, $parent, $level = 0)
  * TODO:  Remove for v4.0 - caseydk 22 March 2012
  *
  * @deprecated
+ * @codeCoverageIgnore
  */
-// from modules/tasks/addedit.php and modules/projectdesigners/vw_actions.php
 function getSpaces($amount)
 {
     trigger_error("The getSpaces function has been deprecated and will be removed in v4.0. Please use str_repeat instead.", E_USER_NOTICE );
@@ -124,8 +128,8 @@ function getSpaces($amount)
  * TODO:  Remove for v4.0 - caseydk 13 Feb 2012
  *
  * @deprecated
+ * @codeCoverageIgnore
  */
-// From:  modules/companies/vw_depts.php
 function findchilddept_comp(&$tarr, $parent, $level = 0)
 {
     trigger_error("The findchilddept_comp function has been deprecated and will be removed in v4.0. There is no replacement.", E_USER_NOTICE );
@@ -147,8 +151,8 @@ function findchilddept_comp(&$tarr, $parent, $level = 0)
  * TODO:  Remove for v4.0 - caseydk 13 Feb 2012
  *
  * @deprecated
+ * @codeCoverageIgnore
  */
-// From:  modules/companies/vw_depts.php
 function showchilddept_comp(&$a, $level = 0)
 {
     trigger_error("The showchilddept_comp function has been deprecated and will be removed in v4.0. There is no replacement.", E_USER_NOTICE );
@@ -182,6 +186,7 @@ function showchilddept_comp(&$a, $level = 0)
  * TODO:  Remove for v4.0 - caseydk 04 Mar 2012
  *
  * @deprecated
+ * @codeCoverageIgnore
  */
 function taskstyle_pd($task)
 {
@@ -208,6 +213,7 @@ function taskstyle_pd($task)
  * TODO:  Remove for v4.0 - caseydk 20 September 2012
  *
  * @deprecated
+ * @codeCoverageIgnore
  */
 function getStructuredProjects($original_project_id = 0, $project_status = -1, $active_only = false)
 {
@@ -225,6 +231,7 @@ function getStructuredProjects($original_project_id = 0, $project_status = -1, $
  * TODO:  Remove for v4.0 - caseydk 20 September 2012
  *
  * @deprecated
+ * @codeCoverageIgnore
  */
 function constructTaskTree($task_data, $depth = 0)
 {
@@ -238,6 +245,7 @@ function constructTaskTree($task_data, $depth = 0)
  * TODO:  Remove for v4.0 - caseydk 20 September 2012
  *
  * @deprecated
+ * @codeCoverageIgnore
  */
 function constructTaskTree_pd($task_data, $parents, $all_tasks, $depth = 0)
 {
@@ -259,6 +267,7 @@ function constructTaskTree_pd($task_data, $parents, $all_tasks, $depth = 0)
  * @return true if user has task access to it, or false if he doesn't
  *
  * @deprecated
+ * @codeCoverageIgnore
  */
 function canTaskAccess($task_id)
 {
@@ -276,6 +285,7 @@ function canTaskAccess($task_id)
  * TODO:  Remove for v4.0 - caseydk 20 September 2012
  *
  * @deprecated
+ * @codeCoverageIgnore
  */
 function getProjects()
 {
@@ -290,6 +300,7 @@ function getProjects()
  * TODO:  Remove for v4.0 - caseydk 20 September 2012
  *
  * @deprecated
+ * @codeCoverageIgnore
  */
 function show_st_project(&$a, $level = 0)
 {
@@ -303,6 +314,7 @@ function show_st_project(&$a, $level = 0)
  * TODO:  Remove for v4.0 - caseydk 20 September 2012
  *
  * @deprecated
+ * @codeCoverageIgnore
  */
 function find_proj_child(&$tarr, $parent, $level = 0)
 {
@@ -322,6 +334,7 @@ function find_proj_child(&$tarr, $parent, $level = 0)
  * TODO:  Remove for v4.0 - caseydk 22 February 2013
  *
  * @deprecated
+ * @codeCoverageIgnore
  */
 function makePass()
 {
@@ -337,6 +350,7 @@ function makePass()
  *
  * @todo Remove for v4.0 - caseydk 06 March 2013
  * @deprecated
+ * @codeCoverageIgnore
  */
 function get_dependencies_pd($task_id)
 {
@@ -358,6 +372,8 @@ function get_dependencies_pd($task_id)
  * @param type $dividingToken
  * @param type $m
  * @return type
+ *
+ * @codeCoverageIgnore
  */
 function buildHeaderNavigation($AppUI, $rootTag = '', $innerTag = '', $dividingToken = '', $m = '')
 {
@@ -373,6 +389,7 @@ function buildHeaderNavigation($AppUI, $rootTag = '', $innerTag = '', $dividingT
 if (!function_exists('styleRenderBoxTop')) {
     /**
      * @deprecated
+     * @codeCoverageIgnore
      */
     function styleRenderBoxTop()
     {
@@ -386,6 +403,7 @@ if (!function_exists('styleRenderBoxTop')) {
 if (!function_exists('styleRenderBoxBottom')) {
     /**
      * @deprecated
+     * @codeCoverageIgnore
      */
     function styleRenderBoxBottom()
     {
@@ -396,7 +414,10 @@ if (!function_exists('styleRenderBoxBottom')) {
     }
 }
 
-/** @deprecated */
+/**
+ * @deprecated
+ * @codeCoverageIgnore
+ */
 function w2PgetCleanParam(&$arr, $name, $def = null)
 {
     trigger_error("w2PgetCleanParam() has been deprecated in v3.1 and will be removed in v4.0. Use w2PgetParam() instead.", E_USER_NOTICE);
@@ -404,14 +425,20 @@ function w2PgetCleanParam(&$arr, $name, $def = null)
     return w2PgetParam($arr, $name, $def);
 }
 
-/** @deprecated */
+/**
+ * @deprecated
+ * @codeCoverageIgnore
+ */
 function contextHelp($title, $link = '')
 {
     trigger_error("contextHelp() has been deprecated in v3.1 and will be removed by v5.0", E_USER_NOTICE);
 
     return w2PcontextHelp($title, $link);
 }
-
+/**
+ * @deprecated
+ * @codeCoverageIgnore
+ */
 function w2PcontextHelp($title, $link = '')
 {
     global $AppUI;
@@ -419,53 +446,70 @@ function w2PcontextHelp($title, $link = '')
 
     return '<a href="#' . $link . '" onclick="javascript:window.open(\'?m=help&amp;dialog=1&amp;hid=' . $link . '\', \'contexthelp\', \'width=400, height=400, left=50, top=50, scrollbars=yes, resizable=yes\')">' . $AppUI->_($title) . '</a>';
 }
-
-
+/**
+ * @deprecated
+ * @codeCoverageIgnore
+ */
 function w2PgetUsername($username)
 {
     trigger_error("w2PgetUsername() has been deprecated in v3.1 and will be removed by v5.0. Please use CContact::getContactByUsername() instead.", E_USER_NOTICE);
 
     return CContact::getContactByUsername($username);
 }
-
+/**
+ * @deprecated
+ * @codeCoverageIgnore
+ */
 function w2PgetUsernameFromID($userId)
 {
     trigger_error("w2PcontextHelp() has been deprecated in v3.1 and will be removed by v5.0. Please use CContact::getContactByUserid() instead.", E_USER_NOTICE);
 
     return CContact::getContactByUserid($userId);
 }
-
-/** @deprecated */
+/**
+ * @deprecated
+ * @codeCoverageIgnore
+ */
 function showtask_pd(&$arr, $level = 0, $today_view = false)
 {
     trigger_error("showtask_pd() has been deprecated in v3.1 and will be removed by v5.0. Please use showtask_new() instead.", E_USER_NOTICE);
 
     return showtask_new($arr, $level, $today_view);
 }
-
-/** @deprecated */
+/**
+ * @deprecated
+ * @codeCoverageIgnore
+ */
 function showtask_pr(&$arr, $level = 0, $today_view = false)
 {
     trigger_error("showtask_pr() has been deprecated in v3.1 and will be removed by v5.0. Please use showtask_new() instead.", E_USER_NOTICE);
 
     return showtask_new($arr, $level, $today_view);
 }
-
-/** @deprecated */
+/**
+ * @deprecated
+ * @codeCoverageIgnore
+ */
 function showtask(&$arr, $level = 0, $notUsed = true, $today_view = false)
 {
     trigger_error("showtask() has been deprecated in v3.1 and will be removed by v5.0. Please use showtask_new() instead.", E_USER_NOTICE);
 
     return showtask_new($arr, $level, $today_view);
 }
-
+/**
+ * @deprecated
+ * @codeCoverageIgnore
+ */
 function findchild(&$tarr, $parent, $level = 0)
 {
     trigger_error("findchild() has been deprecated in v3.1 and will be removed by v5.0. Please use findchild_new() instead.", E_USER_NOTICE);
 
     findchild_new($tarr, $parent, $level);
 }
-
+/**
+ * @deprecated
+ * @codeCoverageIgnore
+ */
 function findchild_pd(&$tarr, $parent, $level = 0)
 {
     trigger_error("findchild_pd() has been deprecated in v3.1 and will be removed by v5.0. Please use findchild_new() instead.", E_USER_NOTICE);
@@ -475,6 +519,7 @@ function findchild_pd(&$tarr, $parent, $level = 0)
 
 /**
  * @deprecated
+ * @codeCoverageIgnore
  */
 function cleanText($text)
 {
@@ -483,19 +528,27 @@ function cleanText($text)
     return $text;
 }
 
-/** @deprecated since 3.2 */
+/**
+ * @deprecated @since 3.2
+ * @codeCoverageIgnore
+ */
 function resource_presave()
 {
     trigger_error(__FUNCTION__ . " has been deprecated in v3.2 and will be removed by v5.0. There is no replacement.", E_USER_NOTICE);
 }
-
-/** @deprecated since 3.2 */
+/**
+ * @deprecated @since 3.2
+ * @codeCoverageIgnore
+ */
 function resource_postsave()
 {
     trigger_error(__FUNCTION__ . " has been deprecated in v3.2 and will be removed by v5.0. There is no replacement.", E_USER_NOTICE);
 }
 
-/** @deprecated since 3.2 */
+/**
+ * @deprecated @since 3.2
+ * @codeCoverageIgnore
+ */
 function showFVar(&$var, $title = '')
 {
     trigger_error(__FUNCTION__ . " has been deprecated in v3.2 and will be removed by v5.0. There is no replacement.", E_USER_NOTICE);
@@ -505,7 +558,10 @@ function showFVar(&$var, $title = '')
     echo '</pre>';
 }
 
-
+/**
+ * @deprecated @since 3.2
+ * @codeCoverageIgnore
+ */
 function w2PsessionOpen()
 {
     trigger_error(__FUNCTION__ . " has been deprecated in v3.2 and will be removed in v5.0.", E_USER_NOTICE );
@@ -513,13 +569,20 @@ function w2PsessionOpen()
     return true;
 }
 
+/**
+ * @deprecated @since 3.2
+ * @codeCoverageIgnore
+ */
 function w2PsessionClose()
 {
     trigger_error(__FUNCTION__ . " has been deprecated in v3.2 and will be removed in v5.0.", E_USER_NOTICE );
 
     return true;
 }
-
+/**
+ * @deprecated @since 3.2
+ * @codeCoverageIgnore
+ */
 function w2PsessionRead($id)
 {
     trigger_error(__FUNCTION__ . " has been deprecated in v3.2 and will be removed in v5.0. Please use w2p_System_Session->read instead.", E_USER_NOTICE );
@@ -527,7 +590,10 @@ function w2PsessionRead($id)
     $session = new w2p_System_Session();
     return $session->read($id);
 }
-
+/**
+ * @deprecated @since 3.2
+ * @codeCoverageIgnore
+ */
 function w2PsessionWrite($id, $data)
 {
     trigger_error(__FUNCTION__ . " has been deprecated in v3.2 and will be removed in v5.0. Please use w2p_System_Session->write instead.", E_USER_NOTICE );
@@ -535,7 +601,10 @@ function w2PsessionWrite($id, $data)
     $session = new w2p_System_Session();
     return $session->write($id, $data);
 }
-
+/**
+ * @deprecated @since 3.2
+ * @codeCoverageIgnore
+ */
 function w2PsessionDestroy($id)
 {
     trigger_error(__FUNCTION__ . " has been deprecated in v3.2 and will be removed in v5.0. Please use w2p_System_Session->destroy instead.", E_USER_NOTICE );
@@ -543,7 +612,10 @@ function w2PsessionDestroy($id)
     $session = new w2p_System_Session();
     return $session->destroy($id);
 }
-
+/**
+ * @deprecated @since 3.2
+ * @codeCoverageIgnore
+ */
 function w2PsessionGC()
 {
     trigger_error(__FUNCTION__ . " has been deprecated in v3.2 and will be removed in v5.0. Please use w2p_System_Session->gc instead.", E_USER_NOTICE );
@@ -551,7 +623,10 @@ function w2PsessionGC()
     $session = new w2p_System_Session();
     return $session->gc();
 }
-
+/**
+ * @deprecated @since 3.2
+ * @codeCoverageIgnore
+ */
 function w2PsessionConvertTime($key)
 {
     trigger_error(__FUNCTION__ . " has been deprecated in v3.2 and will be removed in v5.0. Please use w2p_System_Session->convertTime instead.", E_USER_NOTICE );
@@ -559,7 +634,10 @@ function w2PsessionConvertTime($key)
     $session = new w2p_System_Session();
     return $session->convertTime($key);
 }
-
+/**
+ * @deprecated @since 3.2
+ * @codeCoverageIgnore
+ */
 function w2PsessionStart()
 {
     trigger_error(__FUNCTION__ . " has been deprecated in v3.2 and will be removed in v5.0. Please use w2p_System_Session->start instead.", E_USER_NOTICE );
@@ -567,8 +645,10 @@ function w2PsessionStart()
     $session = new w2p_System_Session();
     return $session->start();
 }
-
-
+/**
+ * @deprecated @since 3.2
+ * @codeCoverageIgnore
+ */
 function db_connect($host = 'localhost', $dbname, $user = 'root', $passwd = '', $persist = false)
 {
     trigger_error(__FUNCTION__ . " has been deprecated in v3.2 and will be removed in v5.0. Please use w2p_Database_Connection->db_connect instead.", E_USER_NOTICE );
@@ -578,7 +658,10 @@ function db_connect($host = 'localhost', $dbname, $user = 'root', $passwd = '', 
     $connection = new w2p_Database_Connection($db);
     $connection->connect($host, $dbname, $user, $passwd, $persist);
 }
-
+/**
+ * @deprecated @since 3.2
+ * @codeCoverageIgnore
+ */
 function db_error()
 {
     trigger_error(__FUNCTION__ . " has been deprecated in v3.2 and will be removed in v5.0. Please use w2p_Database_Connection->db_error instead.", E_USER_NOTICE );
@@ -588,7 +671,10 @@ function db_error()
     $connection = new w2p_Database_Connection($db);
     return $connection->error();
 }
-
+/**
+ * @deprecated @since 3.2
+ * @codeCoverageIgnore
+ */
 function db_errno()
 {
     trigger_error(__FUNCTION__ . " has been deprecated in v3.2 and will be removed in v5.0. Please use w2p_Database_Connection->db_errno instead.", E_USER_NOTICE );
@@ -598,7 +684,10 @@ function db_errno()
     $connection = new w2p_Database_Connection($db);
     return $connection->errno();
 }
-
+/**
+ * @deprecated @since 3.2
+ * @codeCoverageIgnore
+ */
 function db_insert_id()
 {
     trigger_error(__FUNCTION__ . " has been deprecated in v3.2 and will be removed in v5.0. Please use w2p_Database_Connection->db_insert_id instead.", E_USER_NOTICE );
@@ -608,7 +697,10 @@ function db_insert_id()
     $connection = new w2p_Database_Connection($db);
     return $connection->insert_id();
 }
-
+/**
+ * @deprecated @since 3.2
+ * @codeCoverageIgnore
+ */
 function db_exec($sql)
 {
     trigger_error(__FUNCTION__ . " has been deprecated in v3.2 and will be removed in v5.0. Please use w2p_Database_Connection->db_exec instead.", E_USER_NOTICE );
@@ -618,7 +710,10 @@ function db_exec($sql)
     $connection = new w2p_Database_Connection($db);
     return $connection->exec($sql, $w2p_performance_dbtime, $w2p_performance_old_dbqueries);
 }
-
+/**
+ * @deprecated @since 3.2
+ * @codeCoverageIgnore
+ */
 function db_free_result($cur)
 {
     trigger_error(__FUNCTION__ . " has been deprecated in v3.2 and will be removed in v5.0. Please use w2p_Database_Connection->db_free_result instead.", E_USER_NOTICE );
@@ -628,7 +723,10 @@ function db_free_result($cur)
     $connection = new w2p_Database_Connection($db);
     $connection->free_result($cur);
 }
-
+/**
+ * @deprecated @since 3.2
+ * @codeCoverageIgnore
+ */
 function db_num_rows($qid)
 {
     trigger_error(__FUNCTION__ . " has been deprecated in v3.2 and will be removed in v5.0. Please use w2p_Database_Connection->db_num_rows instead.", E_USER_NOTICE );
@@ -638,7 +736,10 @@ function db_num_rows($qid)
     $connection = new w2p_Database_Connection($db);
     return $connection->num_rows($qid);
 }
-
+/**
+ * @deprecated @since 3.2
+ * @codeCoverageIgnore
+ */
 function db_fetch_row(&$qid)
 {
     trigger_error(__FUNCTION__ . " has been deprecated in v3.2 and will be removed in v5.0. Please use w2p_Database_Connection->db_fetch_row instead.", E_USER_NOTICE );
@@ -648,7 +749,10 @@ function db_fetch_row(&$qid)
     $connection = new w2p_Database_Connection($db);
     return $connection->fetch_row($qid);
 }
-
+/**
+ * @deprecated @since 3.2
+ * @codeCoverageIgnore
+ */
 function db_fetch_assoc(&$qid)
 {
     trigger_error(__FUNCTION__ . " has been deprecated in v3.2 and will be removed in v5.0. Please use w2p_Database_Connection->db_fetch_assoc instead.", E_USER_NOTICE );
@@ -658,7 +762,10 @@ function db_fetch_assoc(&$qid)
     $connection = new w2p_Database_Connection($db);
     return $connection->fetch_assoc($qid);
 }
-
+/**
+ * @deprecated @since 3.2
+ * @codeCoverageIgnore
+ */
 function db_fetch_array(&$qid)
 {
     trigger_error(__FUNCTION__ . " has been deprecated in v3.2 and will be removed in v5.0. Please use w2p_Database_Connection->db_fetch_array instead.", E_USER_NOTICE );
@@ -668,7 +775,10 @@ function db_fetch_array(&$qid)
     $connection = new w2p_Database_Connection($db);
     return $connection->fetch_array($qid);
 }
-
+/**
+ * @deprecated @since 3.2
+ * @codeCoverageIgnore
+ */
 function db_fetch_object($qid)
 {
     trigger_error(__FUNCTION__ . " has been deprecated in v3.2 and will be removed in v5.0. Please use w2p_Database_Connection->db_fetch_object instead.", E_USER_NOTICE );
@@ -678,7 +788,10 @@ function db_fetch_object($qid)
     $connection = new w2p_Database_Connection($db);
     return $connection->fetch_object($qid);
 }
-
+/**
+ * @deprecated @since 3.2
+ * @codeCoverageIgnore
+ */
 function db_escape($str)
 {
     trigger_error(__FUNCTION__ . " has been deprecated in v3.2 and will be removed in v5.0. Please use w2p_Database_Connection->db_escape instead.", E_USER_NOTICE );
@@ -688,7 +801,10 @@ function db_escape($str)
     $connection = new w2p_Database_Connection($db);
     return $connection->escape($str);
 }
-
+/**
+ * @deprecated @since 3.2
+ * @codeCoverageIgnore
+ */
 function db_version()
 {
     trigger_error(__FUNCTION__ . " has been deprecated in v3.2 and will be removed in v5.0. Please use w2p_Database_Connection->db_version instead.", E_USER_NOTICE );
@@ -698,7 +814,10 @@ function db_version()
     $connection = new w2p_Database_Connection($db);
     return $connection->version();
 }
-
+/**
+ * @deprecated @since 3.2
+ * @codeCoverageIgnore
+ */
 function db_unix2dateTime($time)
 {
     trigger_error(__FUNCTION__ . " has been deprecated in v3.2 and will be removed in v5.0. Please use w2p_Database_Connection->db_unix2dateTime instead.", E_USER_NOTICE );
@@ -708,7 +827,10 @@ function db_unix2dateTime($time)
     $connection = new w2p_Database_Connection($db);
     return $connection->unix2dateTime($time);
 }
-
+/**
+ * @deprecated @since 3.2
+ * @codeCoverageIgnore
+ */
 function db_dateTime2unix($time)
 {
     trigger_error(__FUNCTION__ . " has been deprecated in v3.2 and will be removed in v5.0. Please use w2p_Database_Connection->db_dateTime2unix instead.", E_USER_NOTICE );
@@ -718,40 +840,50 @@ function db_dateTime2unix($time)
     $connection = new w2p_Database_Connection($db);
     return $connection->dateTime2unix($time);
 }
-
-/** @deprecated */
+/**
+ * @deprecated @since 3.2
+ * @codeCoverageIgnore
+ */
 function clash_process(w2p_Core_CAppUI $AppUI)
 {
     trigger_error(__FUNCTION__ . " has been deprecated in v3.2 and will be removed in v5.0. There is no replacement.", E_USER_NOTICE );
 
     $AppUI->redirect('m=events');
 }
-
-/** @deprecated */
+/**
+ * @deprecated @since 3.2
+ * @codeCoverageIgnore
+ */
 function clash_mail(w2p_Core_CAppUI $AppUI)
 {
     trigger_error(__FUNCTION__ . " has been deprecated in v3.2 and will be removed in v5.0. There is no replacement.", E_USER_NOTICE );
 
     $AppUI->redirect('m=events');
 }
-
-/** @deprecated */
+/**
+ * @deprecated @since 3.2
+ * @codeCoverageIgnore
+ */
 function clash_accept(w2p_Core_CAppUI $AppUI)
 {
     trigger_error(__FUNCTION__ . " has been deprecated in v3.2 and will be removed in v5.0. There is no replacement.", E_USER_NOTICE );
 
     $AppUI->redirect('m=events');
 }
-
-/** @deprecated */
+/**
+ * @deprecated @since 3.2
+ * @codeCoverageIgnore
+ */
 function clear_clash()
 {
     trigger_error(__FUNCTION__ . " has been deprecated in v3.2 and will be removed in v5.0. There is no replacement.", E_USER_NOTICE );
 
     return false;
 }
-
-/** @deprecated */
+/**
+ * @deprecated @since 3.2
+ * @codeCoverageIgnore
+ */
 function clash_cancel(w2p_Core_CAppUI $AppUI)
 {
     trigger_error(__FUNCTION__ . " has been deprecated in v3.2 and will be removed in v5.0. There is no replacement.", E_USER_NOTICE );
@@ -759,13 +891,19 @@ function clash_cancel(w2p_Core_CAppUI $AppUI)
     $AppUI->redirect('m=events');
 }
 
-/** @deprecated */
+/**
+ * @deprecated @since 3.2
+ * @codeCoverageIgnore
+ */
 function smart_slice($arr, $notUsed1, $notUsed2, $notUsed3)
 {
     return dumb_slice($arr);
 }
 
-/** @deprecated */
+/**
+ * @deprecated @since 3.2
+ * @codeCoverageIgnore
+ */
 function __extract_from_tasks6($q, $history_active)
 {
     trigger_error(__FUNCTION__ . " has been deprecated in v3.2 and will be removed in v5.0. There is no replacement.", E_USER_NOTICE );
@@ -773,7 +911,10 @@ function __extract_from_tasks6($q, $history_active)
     return $q;
 }
 
-/** @deprecated */
+/**
+ * @deprecated @since 4.0
+ * @codeCoverageIgnore
+ */
 function __extract_from_tasks($min_view, $currentTabId, $project_id, $currentTabName, $AppUI)
 {
     trigger_error(__FUNCTION__ . " has been deprecated in v4.0 and will be removed in v5.0. There is no replacement.", E_USER_NOTICE );
@@ -797,7 +938,10 @@ function __extract_from_tasks($min_view, $currentTabId, $project_id, $currentTab
     return $task_status;
 }
 
-/** @deprecated */
+/**
+ * @deprecated @since 4.0
+ * @codeCoverageIgnore
+ */
 function __extract_from_tasks1()
 {
     trigger_error(__FUNCTION__ . " has been deprecated in v4.0 and will be removed in v5.0. There is no replacement.", E_USER_NOTICE );
@@ -812,7 +956,10 @@ function __extract_from_tasks1()
     return $subquery;
 }
 
-/** @deprecated */
+/**
+ * @deprecated @since 4.0
+ * @codeCoverageIgnore
+ */
 function __extract_from_tasks5($q, $subquery)
 {
     trigger_error(__FUNCTION__ . " has been deprecated in v4.0 and will be removed in v5.0. There is no replacement.", E_USER_NOTICE );
@@ -841,7 +988,10 @@ function __extract_from_tasks5($q, $subquery)
     return $q;
 }
 
-/** @deprecated */
+/**
+ * @deprecated @since 4.0
+ * @codeCoverageIgnore
+ */
 function __extract_from_tasks3($f, $q, $user_id, $task_id, $AppUI)
 {
     trigger_error(__FUNCTION__ . " has been deprecated in v4.0 and will be removed in v5.0. There is no replacement.", E_USER_NOTICE );
@@ -917,7 +1067,10 @@ function __extract_from_tasks3($f, $q, $user_id, $task_id, $AppUI)
     return $q;
 }
 
-/** @deprecated */
+/**
+ * @deprecated @since 4.0
+ * @codeCoverageIgnore
+ */
 function checkFlag($flag, $perm_type, $old_flag)
 {
     trigger_error(__FUNCTION__ . " has been deprecated in v4.0 and will be removed in v5.0. There is no replacement.", E_USER_NOTICE );
@@ -936,7 +1089,10 @@ function checkFlag($flag, $perm_type, $old_flag)
     }
 }
 
-/** @deprecated */
+/**
+ * @deprecated @since 4.0
+ * @codeCoverageIgnore
+ */
 function isAllowed($perm_type, $mod, $item_id = 0)
 {
     trigger_error(__FUNCTION__ . " has been deprecated in v4.0 and will be removed in v5.0. There is no replacement.", E_USER_NOTICE );
@@ -965,7 +1121,10 @@ function isAllowed($perm_type, $mod, $item_id = 0)
     return $allowed;
 }
 
-/** @deprecated */
+/**
+ * @deprecated @since 4.0
+ * @codeCoverageIgnore
+ */
 function __extract_from_showtask(&$arr, $level, $today_view, $listTable, $fields = array())
 {
     trigger_error(__FUNCTION__ . " has been deprecated in v4.0 and will be removed in v5.0. There is no replacement.", E_USER_NOTICE );
@@ -973,7 +1132,10 @@ function __extract_from_showtask(&$arr, $level, $today_view, $listTable, $fields
     return '';
 }
 
-/** @deprecated */
+/**
+ * @deprecated @since 4.0
+ * @codeCoverageIgnore
+ */
 function __extract_from_showtask2($arr, $level, $today_view, $s, $m, $jsTaskId, $expanded)
 {
     trigger_error(__FUNCTION__ . " has been deprecated in v4.0 and will be removed in v5.0. There is no replacement.", E_USER_NOTICE );
@@ -1022,14 +1184,20 @@ function __extract_from_showtask2($arr, $level, $today_view, $s, $m, $jsTaskId, 
     return $s;
 }
 
+/**
+ * @deprecated @since 4.0
+ * @codeCoverageIgnore
+ */
 function showtask_new(&$arr, $level = 0, $today_view = false, $listTable = null, $fields = array())
 {
     trigger_error(__FUNCTION__ . " has been deprecated in v4.0 and will be removed in v5.0. There is no replacement.", E_USER_NOTICE );
 
     return '';
 }
-
-/** @deprecated */
+/**
+ * @deprecated @since 4.0
+ * @codeCoverageIgnore
+ */
 function array_csort()
 { //coded by Ichier2003
     trigger_error(__FUNCTION__ . " has been deprecated in v4.0 and will be removed in v5.0. There is no replacement.", E_USER_NOTICE );
@@ -1085,7 +1253,10 @@ function array_csort()
     return $marray;
 }
 
-/** @deprecated */
+/**
+ * @deprecated @since 4.0
+ * @codeCoverageIgnore
+ */
 function sort_by_item_title($title, $item_name, $item_type, $a = '')
 {
     trigger_error(__FUNCTION__ . " has been deprecated in v4.0 and will be removed in v5.0. There is no replacement.", E_USER_NOTICE );
@@ -1139,7 +1310,10 @@ function sort_by_item_title($title, $item_name, $item_type, $a = '')
     return $s.'</a>';
 }
 
-/** @deprecated */
+/**
+ * @deprecated @since 4.0
+ * @codeCoverageIgnore
+ */
 function weekDates($display_allocated_hours, $fromPeriod, $toPeriod)
 {
     trigger_error(__FUNCTION__ . " has been deprecated in v4.0 and will be removed in v5.0. There is no replacement.", E_USER_NOTICE );
@@ -1168,7 +1342,10 @@ function weekDates($display_allocated_hours, $fromPeriod, $toPeriod)
     return $row;
 }
 
-/** @deprecated */
+/**
+ * @deprecated @since 4.0
+ * @codeCoverageIgnore
+ */
 function showcodes(&$a)
 {
     trigger_error(__FUNCTION__ . " has been deprecated in v4.0 and will be removed in v5.0. There is no replacement.", E_USER_NOTICE );
@@ -1195,7 +1372,10 @@ function showcodes(&$a)
     return $s;
 }
 
-/** @deprecated */
+/**
+ * @deprecated @since 4.0
+ * @codeCoverageIgnore
+ */
 function showchilddept(&$a, $level = 1)
 {
     trigger_error(__FUNCTION__ . " has been deprecated in v4.0 and will be removed in v5.0. There is no replacement.", E_USER_NOTICE );
@@ -1216,7 +1396,10 @@ function showchilddept(&$a, $level = 1)
     return $s;
 }
 
-/** @deprecated */
+/**
+ * @deprecated @since 4.0
+ * @codeCoverageIgnore
+ */
 function last_file($file_versions, $file_name, $file_project)
 {
     trigger_error(__FUNCTION__ . " has been deprecated in v4.0 and will be removed in v5.0. There is no replacement.", E_USER_NOTICE );
@@ -1232,7 +1415,10 @@ function last_file($file_versions, $file_name, $file_project)
     return $latest;
 }
 
-/** @deprecated */
+/**
+ * @deprecated @since 4.0
+ * @codeCoverageIgnore
+ */
 function getHelpdeskFolder()
 {
     trigger_error(__FUNCTION__ . " has been deprecated in v4.0 and will be removed in v5.0. There is no replacement.", E_USER_NOTICE );
@@ -1246,7 +1432,10 @@ function getHelpdeskFolder()
     return (int) $ffid;
 }
 
-/** @deprecated */
+/**
+ * @deprecated @since 4.0
+ * @codeCoverageIgnore
+ */
 function get_actual_end_date_pd($task_id, $task)
 {
     trigger_error(__FUNCTION__ . " has been deprecated in v4.0 and will be removed in v5.0. There is no replacement.", E_USER_NOTICE );
@@ -1275,7 +1464,10 @@ function get_actual_end_date_pd($task_id, $task)
     return $edate;
 }
 
-/** @deprecated */
+/**
+ * @deprecated @since 4.0
+ * @codeCoverageIgnore
+ */
 function formatTime($uts)
 {
     trigger_error(__FUNCTION__ . " has been deprecated in v4.0 and will be removed in v5.0. There is no replacement.", E_USER_NOTICE );
@@ -1287,7 +1479,10 @@ function formatTime($uts)
     return $date->format($AppUI->getPref('SHDATEFORMAT'));
 }
 
-/** @deprecated */
+/**
+ * @deprecated @since 4.0
+ * @codeCoverageIgnore
+ */
 function findTabModules($module, $file = null)
 {
     trigger_error(__FUNCTION__ . " has been deprecated in v4.0 and will be removed in v5.0. There is no replacement.", E_USER_NOTICE );
@@ -1315,7 +1510,10 @@ function findTabModules($module, $file = null)
     return array_unique($modlist);
 }
 
-/** @deprecated */
+/**
+ * @deprecated @since 4.0
+ * @codeCoverageIgnore
+ */
 function findCrumbModules($module, $file = null)
 {
     trigger_error(__FUNCTION__ . " has been deprecated in v4.0 and will be removed in v5.0. There is no replacement.", E_USER_NOTICE );
@@ -1343,7 +1541,10 @@ function findCrumbModules($module, $file = null)
     return array_unique($modlist);
 }
 
-/** @deprecated */
+/**
+ * @deprecated @since 4.0
+ * @codeCoverageIgnore
+ */
 function formatHours($hours)
 {
     trigger_error(__FUNCTION__ . " has been deprecated in v4.0 and will be removed in v5.0. There is no replacement.", E_USER_NOTICE );
@@ -1378,7 +1579,10 @@ function formatHours($hours)
     }
 }
 
-/** @deprecated */
+/**
+ * @deprecated @since 4.0
+ * @codeCoverageIgnore
+ */
 function w2PwriteDebug($s, $t = '', $f = '?', $l = '?')
 {
     trigger_error(__FUNCTION__ . " has been deprecated in v4.0 and will be removed in v5.0. There is no replacement.", E_USER_NOTICE );
@@ -1396,7 +1600,10 @@ function w2PwriteDebug($s, $t = '', $f = '?', $l = '?')
     }
 }
 
-/** @deprecated */
+/**
+ * @deprecated @since 4.0
+ * @codeCoverageIgnore
+ */
 function seconds2HM($sec, $padHours = true)
 {
     trigger_error(__FUNCTION__ . " has been deprecated in v4.0 and will be removed in v5.0. There is no replacement.", E_USER_NOTICE );
@@ -1424,7 +1631,10 @@ function seconds2HM($sec, $padHours = true)
     return $HM;
 }
 
-/** @deprecated */
+/**
+ * @deprecated @since 4.0
+ * @codeCoverageIgnore
+ */
 function HM2seconds($HM)
 {
     trigger_error(__FUNCTION__ . " has been deprecated in v4.0 and will be removed in v5.0. There is no replacement.", E_USER_NOTICE );
@@ -1439,7 +1649,10 @@ function HM2seconds($HM)
     return $seconds;
 }
 
-/** @deprecated */
+/**
+ * @deprecated @since 4.0
+ * @codeCoverageIgnore
+ */
 function getTaskLogContacts($obj)
 {
     trigger_error(__FUNCTION__ . " has been deprecated in v4.0 and will be removed in v5.0. There is no replacement.", E_USER_NOTICE );
@@ -1455,7 +1668,10 @@ function getTaskLogContacts($obj)
     return $req;
 }
 
-/** @deprecated */
+/**
+ * @deprecated @since 4.0
+ * @codeCoverageIgnore
+ */
 function getContactsfromProjects($obj)
 {
     trigger_error(__FUNCTION__ . " has been deprecated in v4.0 and will be removed in v5.0. There is no replacement.", E_USER_NOTICE );
@@ -1471,7 +1687,10 @@ function getContactsfromProjects($obj)
     return $req;
 }
 
-/** @deprecated */
+/**
+ * @deprecated @since 4.0
+ * @codeCoverageIgnore
+ */
 function __extract_from_ae_depend1($deps)
 {
     trigger_error(__FUNCTION__ . " has been deprecated in v4.0 and will be removed in v5.0. There is no replacement.", E_USER_NOTICE );
@@ -1485,7 +1704,10 @@ function __extract_from_ae_depend1($deps)
     return $taskDep;
 }
 
-/** @deprecated */
+/**
+ * @deprecated @since 4.0
+ * @codeCoverageIgnore
+ */
 function __extract_from_contact_controller($controller)
 {
     trigger_error(__FUNCTION__ . " has been deprecated in v4.0 and will be removed in v5.0. There is no replacement.", E_USER_NOTICE );
@@ -1504,7 +1726,10 @@ function __extract_from_contact_controller($controller)
     return $controller;
 }
 
-/** @deprecated */
+/**
+ * @deprecated @since 4.0
+ * @codeCoverageIgnore
+ */
 function getReadableModule()
 {
     trigger_error(__FUNCTION__ . " has been deprecated in v4.0 and will be removed in v5.0. There is no replacement.", E_USER_NOTICE );
