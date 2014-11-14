@@ -53,7 +53,10 @@ class w2p_FileSystem_Loader
         return $files;
     }
 
-    /** @deprecated */
+    /**
+     * @deprecated
+     * @codeCoverageIgnore
+     */
     public function checkFileName($file)
     {
         trigger_error(__CLASS__ . " has been deprecated in v4.0 and will be removed by v5.0. Please use makeFileNameSafe instead.", E_USER_NOTICE);
