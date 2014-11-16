@@ -37,6 +37,7 @@ class w2p_Output_HTML_ViewHelperTest extends CommonSetup
     public function testAddField()
     {
         $output = $this->obj->addField('field', '');
+        $this->assertEquals('-', $output);
 
         $output = $this->obj->addField('field_datetime', '12/13/2014 23:45');
         $this->assertEquals('13/Dec/2014 05:45 pm', $output);
@@ -58,6 +59,9 @@ class w2p_Output_HTML_ViewHelperTest extends CommonSetup
 
         $output = $this->obj->addField('field_name', 'value');
         $this->assertEquals('value', $output);
+
+        $output = $this->obj->addField('field_project', 1);
+        $this->assertEquals('<a href="?m=projects&a=view&project_id=1"></a>', $output);
     }
 
     public function testShowField()
