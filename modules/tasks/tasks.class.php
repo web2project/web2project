@@ -108,6 +108,10 @@ class CTask extends w2p_Core_BaseObject
         parent::__construct('tasks', 'task_id');
     }
 
+    /**
+     * @deprecated since 4.0
+     * @codeCoverageIgnore*
+     */
     public function __toString()
     {
         return $this->link . '/' . $this->type . '/' . $this->length;
@@ -267,12 +271,13 @@ class CTask extends w2p_Core_BaseObject
         return (count($this->_error)) ? false : true;
     }
 
-    /*
+    /**
      * This should be deprecated in favor of load() on the parent
      *   w2p_Core_BaseObject once we're sure no one is using the $skipUpdate
      *   parameter any more.
+     * @deprecated
+     * @codeCoverageIgnore
      */
-
     public function load($oid = null, $strip = false, $skipUpdate = false)
     {
         if ($skipUpdate) {
