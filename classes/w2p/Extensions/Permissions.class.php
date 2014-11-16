@@ -993,14 +993,13 @@ class w2p_Extensions_Permissions extends gacl_api
     public function removeACLPermissions($acl_id = null)
     {
         if (!$acl_id) {
-            return 'Can not remove acl permissions: no acl id given.';
+            error_log('Can not remove acl permissions: no acl id given.');
+            return false;
         }
         $q = new w2p_Database_Query;
         $q->setDelete($this->_db_acl_prefix . 'permissions');
         $q->addWhere('acl_id = \'' . $acl_id . '\'');
-        $result = $q->exec();
-        $q->clear();
-        return $result;
+        return $q->exec();
     }
 
     /**
@@ -1012,14 +1011,13 @@ class w2p_Extensions_Permissions extends gacl_api
     public function removeModulePermissions($module = null)
     {
         if (!$module) {
-            return 'Can not remove modules permissions: no module name given.';
+            error_log('Can not remove modules permissions: no module name given.');
+            return false;
         }
         $q = new w2p_Database_Query;
         $q->setDelete($this->_db_acl_prefix . 'permissions');
         $q->addWhere('module = \'' . $module . '\'');
-        $result = $q->exec();
-        $q->clear();
-        return $result;
+        return $q->exec();
     }
 
     /**
@@ -1031,14 +1029,13 @@ class w2p_Extensions_Permissions extends gacl_api
     public function removePermissions($user_id = null)
     {
         if (!$user_id) {
-            return 'Can not remove users permissions: no user given.';
+            error_log('Can not remove users permissions: no user given.');
         }
         $q = new w2p_Database_Query;
         $q->setDelete($this->_db_acl_prefix . 'permissions');
         $q->addWhere('user_id = \'' . $user_id . '\'');
-        $result = $q->exec();
-        $q->clear();
-        return $result;
+
+        return $q->exec();
     }
 
     /**
