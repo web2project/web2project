@@ -80,6 +80,9 @@ class w2p_Output_HTML_FormHelperTest extends CommonSetup
 
         $output = $this->obj->addField('other', 'fieldvalue', $options, $values);
         // @todo $this->assertEquals('<input type="text" xx="text other" name="other" value="fieldvalue" />', $output);
+        $output = $this->obj->addField('task_parent', 0, array(), array(0 => 'department 1', 2 => 'dept 2'));
+        $this->assertEquals('<select id="task_parent" name="task_parent" size="1" class="text department"><option value="0" selected="selected">department 1</option><option value="2">dept 2</option></select>', $output);
+
     }
 
     public function testShowField()
