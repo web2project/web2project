@@ -1063,7 +1063,8 @@ class CTask extends w2p_Core_BaseObject
     public function notify($comment = '')
     {
 		$project = new CProject();
-		$projname = $project->load($this->task_project)->project_name;
+		$project->load($this->task_project);
+        $projname = $project->project_name;
 
         // c = creator
         // a = assignee
