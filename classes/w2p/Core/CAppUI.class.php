@@ -145,7 +145,9 @@ class w2p_Core_CAppUI
         $this->user_prefs = array();
     }
 
-    /** @deprecated */
+    /** @deprecated
+     * @codeCoverageIgnore
+     */
     public function getLibraryClass($name = null)
     {
         trigger_error("CAppUI->getLibraryClass() has been deprecated in v3.1 and will be removed in v4.0", E_USER_NOTICE);
@@ -155,7 +157,9 @@ class w2p_Core_CAppUI
         }
     }
 
-    /** @deprecated */
+    /** @deprecated
+     * @codeCoverageIgnore
+     */
     public function getModuleClass($name = null)
     {
         trigger_error("CAppUI->getModuleClass() has been deprecated in v3.1 and will be removed in v4.0", E_USER_NOTICE);
@@ -199,7 +203,9 @@ class w2p_Core_CAppUI
         return $this->version_string;
     }
 
-    /** @deprecated */
+    /** @deprecated
+     * @codeCoverageIgnore
+     */
     public function getTZAwareTime()
     {
         return $this->formatTZAwareTime();
@@ -284,7 +290,9 @@ class w2p_Core_CAppUI
         $this->setStyle();
     }
 
-    /** @deprecated */
+    /** @deprecated
+     * @codeCoverageIgnore
+     */
     public function readDirs($path)
     {
         trigger_error("AppUI->readDirs() has been deprecated in v3.0 and will be removed by v4.0. Please use w2p_FileSystem_Loader->readDirs() instead.", E_USER_NOTICE);
@@ -293,7 +301,9 @@ class w2p_Core_CAppUI
         return $loader->readDirs($path);
     }
 
-    /** @deprecated */
+    /** @deprecated
+     * @codeCoverageIgnore
+     */
     public function readFiles($path, $filter = '.')
     {
         trigger_error("AppUI->readFiles() has been deprecated in v3.0 and will be removed by v4.0. Please use w2p_FileSystem_Loader->readFiles() instead.", E_USER_NOTICE);
@@ -302,7 +312,9 @@ class w2p_Core_CAppUI
         return $loader->readFiles($path, $filter);
     }
 
-    /** @deprecated */
+    /** @deprecated
+     * @codeCoverageIgnore
+     */
     public function checkFileName($file)
     {
         trigger_error("AppUI->checkFileName() has been deprecated in v3.0 and will be removed by v4.0. Please use w2p_FileSystem_Loader->makeFileNameSafe() instead.", E_USER_NOTICE);
@@ -311,7 +323,9 @@ class w2p_Core_CAppUI
         return $loader->makeFileNameSafe($file);
     }
 
-    /** @deprecated */
+    /** @deprecated
+     * @codeCoverageIgnore
+     */
     public function makeFileNameSafe($file)
     {
         trigger_error("AppUI->makeFileNameSafe() has been deprecated in v3.0 and will be removed by v4.0. Please use w2p_FileSystem_Loader->makeFileNameSafe() instead.", E_USER_NOTICE);
@@ -513,7 +527,9 @@ class w2p_Core_CAppUI
         return $temp;
     }
 
-    /** @deprecated */
+    /** @deprecated
+     * @codeCoverageIgnore
+     */
     public function savePlace($query = '')
     {
         trigger_error("AppUI->savePlace() has been deprecated in v3.2 and will be removed by v5.0. Please route the user explicitly.", E_USER_NOTICE);
@@ -526,14 +542,18 @@ class w2p_Core_CAppUI
         }
     }
 
-    /** @deprecated */
+    /** @deprecated
+     * @codeCoverageIgnore
+     */
     public function resetPlace()
     {
         trigger_error("AppUI->resetPlace() has been deprecated in v4.0 and will be removed by v5.0. Please route the user explicitly.", E_USER_NOTICE);
         $this->state['SAVEDPLACE'] = '';
     }
 
-    /** @deprecated */
+    /** @deprecated
+     * @codeCoverageIgnore
+     */
     public function getPlace()
     {
         trigger_error("AppUI->getPlace() has been deprecated in v4.0 and will be removed by v5.0. Please route the user explicitly.", E_USER_NOTICE);
@@ -865,7 +885,9 @@ class w2p_Core_CAppUI
         }
     }
 
-    /** @deprecated */
+    /** @deprecated
+     * @codeCoverageIgnore
+     */
     public function doLogin()
     {
         return $this->loginRequired();
@@ -1026,7 +1048,9 @@ class w2p_Core_CAppUI
         return $GLOBALS['acl'];
     }
 
-    /** @deprecated */
+    /** @deprecated
+     * @codeCoverageIgnore
+     */
     public function loadHeaderJS()
     {
         trigger_error("CAppUI->loadHeaderJS() has been deprecated in v3.2 and will be removed in v5.0", E_USER_NOTICE);
@@ -1034,7 +1058,9 @@ class w2p_Core_CAppUI
         $this->getTheme()->loadHeaderJS();
     }
 
-    /** @deprecated */
+    /** @deprecated
+     * @codeCoverageIgnore
+     */
     public function getModuleJS($module, $file = null, $load_all = false)
     {
         trigger_error("CAppUI->getModuleJS() has been deprecated in v3.2 and will be removed in v5.0", E_USER_NOTICE);
@@ -1042,7 +1068,9 @@ class w2p_Core_CAppUI
         $this->getTheme()->getModuleJS($module, $file, $load_all);
     }
 
-    /** @deprecated */
+    /** @deprecated
+     * @codeCoverageIgnore
+     */
     public function addFooterJavascriptFile($pathTo)
     {
         trigger_error("CAppUI->addFooterJavascriptFile() has been deprecated in v3.2 and will be removed in v5.0", E_USER_NOTICE);
@@ -1050,7 +1078,9 @@ class w2p_Core_CAppUI
         $this->getTheme()->addFooterJavascriptFile($pathTo);
     }
 
-    /** @deprecated */
+    /** @deprecated
+     * @codeCoverageIgnore
+     */
     public function loadFooterJS()
     {
         trigger_error("CAppUI->loadFooterJS() has been deprecated in v3.2 and will be removed in v5.0", E_USER_NOTICE);
@@ -1058,7 +1088,9 @@ class w2p_Core_CAppUI
         return $this->getTheme()->loadFooterJS();
     }
 
-    /** @deprecated */
+    /** @deprecated
+     * @codeCoverageIgnore
+     */
     public function loadCalendarJS()
     {
         trigger_error("CAppUI->loadCalendarJS() has been deprecated in v3.2 and will be removed in v5.0", E_USER_NOTICE);

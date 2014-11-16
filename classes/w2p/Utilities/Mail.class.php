@@ -81,7 +81,9 @@ class w2p_Utilities_Mail extends PHPMailer
         $this->From(w2PgetConfig('admin_email', 'admin@web2project.net'), w2PgetConfig('company_name'));
     }
 
-    /** @deprecated since 3.2*/
+    /** @deprecated since 3.2
+     * @codeCoverageIgnore
+     */
     public function autoCheck() {   return true;    }
 
     /**
@@ -394,6 +396,7 @@ class w2p_Utilities_Mail extends PHPMailer
 
     /**
      *    @deprecated
+     * @codeCoverageIgnore
      */
     public function CheckAdresses($aad)
     {
