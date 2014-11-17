@@ -15,20 +15,18 @@
 * @link        http://www.web2project.net
 */
 
-class w2p_Mocks_EmailTest extends CommonSetup
+class w2p_Utilities_EmailTest extends CommonSetup
 {
     public function setUp()
     {
         parent::setUp();
 
-        $this->obj = new w2p_Utilities_Mail();
+        $this->obj = new \Web2project\Mocks\Email();
     }
 
     public function testW2Pacl_nuclear()
     {
-        $object = new \Web2project\Mocks\Email();
-
-        $this->assertTrue($object->Send());
+        $this->assertTrue($this->obj->Send());
     }
 
     public function testSubject()
@@ -45,10 +43,22 @@ class w2p_Mocks_EmailTest extends CommonSetup
         $this->assertFalse($result);
     }
 
+    public function testFromOK()
+    {
+        $result = $this->obj->From('test@test.com');
+        $this->assertTrue($result);
+    }
+
     public function testReplyTo()
     {
-        $result = $this->obj->From(null);
+        $result = $this->obj->ReplyTo(null);
         $this->assertFalse($result);
+    }
+
+    public function testReplyToOK()
+    {
+        $result = $this->obj->ReplyTo('test@test.com');
+        $this->assertTrue($result);
     }
 
     public function testReceipt()
@@ -82,5 +92,17 @@ class w2p_Mocks_EmailTest extends CommonSetup
 
         $this->obj->Priority(12);
         $this->assertEquals(5, $this->obj->Priority);
+    }
+
+    public function testCheckAddresses()
+    {
+        $okEmails = array('test@test.com', 'another@test.com');
+        $this->assertTrue($this->obj->CheckAddresses($okEmails));
+    }
+
+    public function testCheckAddressesFaile()
+    {
+        $badEmails = array('@test.com', 'another');
+        $this->assertFalse($this->obj->CheckAddresses($badEmails));
     }
 }

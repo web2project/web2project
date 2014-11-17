@@ -69,16 +69,6 @@ class CSystem_RoleTest extends CommonSetup
         $this->assertContains('role_description',   $result);
     }
 
-    public function testStore()
-    {
-        $this->obj->bind($this->post_data);
-
-        $this->AssertEquals(0,                      $this->obj->role_id);
-        $this->obj->store();
-        $this->assertNotEquals(0,                   (int) $this->obj->role_id);
-        $this->obj->delete();
-    }
-
     public function testCopyPermissions()
     {
         // Remove the following lines when you implement this test.

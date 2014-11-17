@@ -107,9 +107,7 @@ class w2p_Utilities_Mail extends PHPMailer
         }
         $this->From = $from;
         $this->FromName = $fromname;
-        if ($this->receipt) {
-            $this->ConfirmReadingTo($from);
-        }
+
         return true;
     }
 
@@ -123,9 +121,7 @@ class w2p_Utilities_Mail extends PHPMailer
             return false;
         }
         $this->AddReplyTo($address);
-        if ($this->receipt) {
-            $this->ConfirmReadingTo($address);
-        }
+
         return true;
     }
 
