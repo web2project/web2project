@@ -50,10 +50,10 @@ class AddEdit
          */
         if (('' != $AppUI->__nonce) && ($AppUI->__nonce != $myArray['__nonce'])) {
             error_log("Your submission is missing the CSRF nonce. Please see http://wiki.web2project.net/index.php?title=Security_Nonce for details.");
-//            $AppUI->setMsg("There was an error processing the form. Please submit again.", UI_MSG_ERROR);
-//            $AppUI->holdObject($this->object);
-//            $this->resultPath = $this->errorPath;
-//            return $AppUI;
+            $AppUI->setMsg("There was an error processing the form. Please submit again.", UI_MSG_ERROR);
+            $AppUI->holdObject($this->object);
+            $this->resultPath = $this->errorPath;
+            return $AppUI;
         }
 
         $action = ($this->delete) ? 'deleted' : 'stored';
