@@ -1948,7 +1948,7 @@ class CTask extends w2p_Core_BaseObject
 
         $tasks = $q->loadHashList('task_id');
         foreach ($tasks as $task) {
-            $children = $this->getTaskTree($project_id, $task['task_id']);
+            $children = $this->getTaskTree($project_id, $task['task_id'], $showIncompleteOnly);
 
             $task['depth'] = $this->_depth;
             $task['children'] = count($children);
