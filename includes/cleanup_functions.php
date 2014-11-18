@@ -3353,11 +3353,12 @@ function sendNewPass()
         $q->leftJoin('contacts_methods', 'cm', 'cm.contact_id = con.contact_id');
         $q->addWhere("cm.method_value = '$confirmEmail'");
     } else {
-        $q->addWhere("LOWER(contact_email) = '$confirmEmail'");
+        $q->addWhere("LOWER(user_email) = '$confirmEmail'");
     }
     /* End Hack */
 
-    if (!($user_id = $q->loadResult()) || !$checkusername || !$confirmEmail) {
+    $user_id = $q->loadResult();
+    if (!$user_id) {
         $AppUI->setMsg('Invalid username or email.', UI_MSG_ERROR);
         $AppUI->redirect();
     }
