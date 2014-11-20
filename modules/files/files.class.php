@@ -422,19 +422,7 @@ class CFile extends w2p_Core_BaseObject
 
         return $contact->contact_display_name;
     }
-    /**
-     * @deprecated
-     * @codeCoverageIgnore
-     */
-    public function getTaskName()
-    {
-        trigger_error("The CFile->getTaskName method has been deprecated in v3.0 and will be removed in v4.0. Please use just load a CTask object instead", E_USER_NOTICE );
 
-        $task = new CTask();
-        $task->load((int) $this->file_task);
-
-        return $task->task_name;
-    }
     /**
      * @deprecated
      * @codeCoverageIgnore
@@ -447,7 +435,7 @@ class CFile extends w2p_Core_BaseObject
         $indexer->index($this);
     }
     /**
-     * @deprecated
+     * @deprecated since 4.0
      * @codeCoverageIgnore
      */
     public function isWritable()
@@ -455,7 +443,7 @@ class CFile extends w2p_Core_BaseObject
         return $this->getFileSystem()->isWritable();
     }
     /**
-     * @deprecated
+     * @deprecated since 4.0
      * @codeCoverageIgnore
      */
     public function deleteFile()
@@ -465,7 +453,7 @@ class CFile extends w2p_Core_BaseObject
         return $this->getFileSystem()->delete($this);
     }
     /**
-     * @deprecated
+     * @deprecated since 4.0
      * @codeCoverageIgnore
      */
     public function moveFile($oldProj, $realname)
@@ -473,7 +461,7 @@ class CFile extends w2p_Core_BaseObject
         return $this->getFileSystem()->move($this, $oldProj, $realname);
     }
     /**
-     * @deprecated
+     * @deprecated since 4.0
      * @codeCoverageIgnore
      */
     public function duplicateFile($oldProj, $realname)
@@ -481,7 +469,7 @@ class CFile extends w2p_Core_BaseObject
         return $this->getFileSystem()->duplicate($oldProj, $realname, $this->_AppUI);
     }
     /**
-     * @deprecated
+     * @deprecated since 4.0
      * @codeCoverageIgnore
      */
     public function moveTemp($upload)

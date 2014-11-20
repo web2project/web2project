@@ -391,16 +391,6 @@ class w2p_Utilities_Mail extends PHPMailer
     }
 
     /**
-     *    @deprecated
-     * @codeCoverageIgnore
-     */
-    public function CheckAdresses($aad)
-    {
-        trigger_error("CheckAdresses() has been deprecated in v3.0 and will be removed by v4.0. Please use CheckAddresses() instead.", E_USER_NOTICE);
-        return $this->CheckAddresses($aad);
-    }
-
-    /**
      *    check validity of email addresses
      *    @param    array $aad -
      *    @return if unvalid, output an error message and exit, this may -should- be customized

@@ -145,30 +145,6 @@ class w2p_Core_CAppUI
         $this->user_prefs = array();
     }
 
-    /** @deprecated
-     * @codeCoverageIgnore
-     */
-    public function getLibraryClass($name = null)
-    {
-        trigger_error("CAppUI->getLibraryClass() has been deprecated in v3.1 and will be removed in v4.0", E_USER_NOTICE);
-
-        if ($name) {
-            return W2P_BASE_DIR . '/lib/' . $name . '.php';
-        }
-    }
-
-    /** @deprecated
-     * @codeCoverageIgnore
-     */
-    public function getModuleClass($name = null)
-    {
-        trigger_error("CAppUI->getModuleClass() has been deprecated in v3.1 and will be removed in v4.0", E_USER_NOTICE);
-
-        if ($name) {
-            return W2P_BASE_DIR . '/modules/' . $name . '/' . $name . '.class.php';
-        }
-    }
-
     /**
      * Used to load a php class file from the module directory
      * @param string $name The class root file name (excluding .ajax.php)
@@ -276,62 +252,6 @@ class w2p_Core_CAppUI
         $theme = new $uiClass($this);
 
         return $theme;
-    }
-
-    /**
-     * Checks that the current user preferred style is valid/exists.
-     *
-     * @deprecated
-     */
-    public function checkStyle()
-    {
-        trigger_error("AppUI->checkStyle() has been deprecated in v3.0 and will be removed by v4.0. Please use AppUI->setStyle() instead.", E_USER_NOTICE);
-
-        $this->setStyle();
-    }
-
-    /** @deprecated
-     * @codeCoverageIgnore
-     */
-    public function readDirs($path)
-    {
-        trigger_error("AppUI->readDirs() has been deprecated in v3.0 and will be removed by v4.0. Please use w2p_FileSystem_Loader->readDirs() instead.", E_USER_NOTICE);
-
-        $loader = new w2p_FileSystem_Loader();
-        return $loader->readDirs($path);
-    }
-
-    /** @deprecated
-     * @codeCoverageIgnore
-     */
-    public function readFiles($path, $filter = '.')
-    {
-        trigger_error("AppUI->readFiles() has been deprecated in v3.0 and will be removed by v4.0. Please use w2p_FileSystem_Loader->readFiles() instead.", E_USER_NOTICE);
-
-        $loader = new w2p_FileSystem_Loader();
-        return $loader->readFiles($path, $filter);
-    }
-
-    /** @deprecated
-     * @codeCoverageIgnore
-     */
-    public function checkFileName($file)
-    {
-        trigger_error("AppUI->checkFileName() has been deprecated in v3.0 and will be removed by v4.0. Please use w2p_FileSystem_Loader->makeFileNameSafe() instead.", E_USER_NOTICE);
-
-        $loader = new w2p_FileSystem_Loader();
-        return $loader->makeFileNameSafe($file);
-    }
-
-    /** @deprecated
-     * @codeCoverageIgnore
-     */
-    public function makeFileNameSafe($file)
-    {
-        trigger_error("AppUI->makeFileNameSafe() has been deprecated in v3.0 and will be removed by v4.0. Please use w2p_FileSystem_Loader->makeFileNameSafe() instead.", E_USER_NOTICE);
-
-        $loader = new w2p_FileSystem_Loader();
-        return $loader->makeFileNameSafe($file);
     }
 
     /**

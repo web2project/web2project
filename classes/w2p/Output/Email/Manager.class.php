@@ -73,24 +73,7 @@ class w2p_Output_Email_Manager
         return $this->templater->render($body, $event);
     }
 
-    /**
-     * @deprecated
-     */
-    public function getCalendarConflictEmail(w2p_Core_CAppUI $AppUI = null)
-    {
-        trigger_error("getCalendarConflictEmail has been deprecated in v3.0 and will be removed by v4.0. Please use getEventNotify() instead.", E_USER_NOTICE);
-
-        $this->AppUI = (!is_null($AppUI)) ? $AppUI : $this->AppUI;
-
-        $body  = "You have been invited to an event by {{user_display_name}}\n";
-        $body .= "However, either you or another intended invitee has a competing event\n";
-        $body .= "{{user_display_name}} has requested that you reply to this message\n";
-        $body .= "and confirm if you can or can not make the requested time.\n\n";
-
-        return $this->templater->render($body, $this->AppUI);
-    }
-
-    /** @deprecated */
+    /** @deprecated since 4.0 */
     public function getContactUpdateNotify(w2p_Core_CAppUI $AppUI = null, CContact $contact)
     {
         $this->AppUI = (!is_null($AppUI)) ? $AppUI : $this->AppUI;

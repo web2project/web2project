@@ -315,25 +315,6 @@ class CProject extends w2p_Core_BaseObject
 
         return array_merge($aBuf1, $aBuf2);
     }
-    /**
-     * @deprecated
-     * @codeCoverageIgnore
-     */
-    public function getAllowedProjectsInRows($userId)
-    {
-        trigger_error("CProject->getAllowedProjectsInRows() has been deprecated in v3.0 and will be removed in v4.0", E_USER_NOTICE);
-
-        $q = $this->_getQuery();
-        $q->clear();
-        $q->addQuery('pr.project_id, project_status, project_name, project_description, project_short_name');
-        $q->addTable('projects', 'pr');
-        $q->addOrder('project_short_name');
-        $q = $this->setAllowedSQL($userId, $q, null, 'pr');
-        $allowedProjectRows = $q->exec();
-        $q->clear();
-
-        return $allowedProjectRows;
-    }
 
     /** Retrieve tasks with latest task_end_dates within given project
      * @param int Project_id
@@ -597,21 +578,6 @@ class CProject extends w2p_Core_BaseObject
             return $q->loadHashList('contact_id');
         }
     }
-    /**
-     * @deprecated
-     * @codeCoverageIgnore
-     */
-    public static function getContacts($notUsed = null, $projectId)
-    {
-        trigger_error("CProject::getContacts has been deprecated in v3.0 and will be removed by v4.0. Please use CProject->getContactList() instead.", E_USER_NOTICE);
-
-        $project = new CProject();
-        //TODO: We need to convert this from static to use ->overrideDatabase() for testing.
-        $project->project_id = $projectId;
-
-        return $project->getContactList();
-    }
-
     public function getDepartmentList()
     {
         if ($this->_AppUI->isActiveModule('departments') && canView('departments')) {
@@ -627,21 +593,6 @@ class CProject extends w2p_Core_BaseObject
 
             return $q->loadHashList('dept_id');
         }
-    }
-
-    /**
-     * @deprecated
-     * @codeCoverageIgnore
-     */
-    public static function getDepartments($notUsed = null, $projectId)
-    {
-        trigger_error("CProject::getDepartments has been deprecated in v3.0 and will be removed by v4.0. Please use CProject->getDepartmentList() instead.", E_USER_NOTICE);
-
-        $project = new CProject();
-        //TODO: We need to convert this from static to use ->overrideDatabase() for testing.
-        $project->project_id = $projectId;
-
-        return $project->getDepartmentList();
     }
 
     public function getForumList()
@@ -660,40 +611,12 @@ class CProject extends w2p_Core_BaseObject
             return $q->loadHashList('forum_id');
         }
     }
-    /**
-     * @deprecated
-     * @codeCoverageIgnore
-     */
-    public static function getForums($notUsed = null, $projectId)
-    {
-        trigger_error("CProject::getForums has been deprecated in v3.0 and will be removed by v4.0. Please use CProject->getForumList() instead.", E_USER_NOTICE);
-
-        $project = new CProject();
-        //TODO: We need to convert this from static to use ->overrideDatabase() for testing.
-        $project->project_id = $projectId;
-
-        return $project->getForumList();
-    }
 
     public function company()
     {
         $this->load();
 
         return $this->project_company;
-    }
-
-    /**
-     * @deprecated
-     * @codeCoverageIgnore
-     */
-    public static function getCompany($projectId)
-    {
-        trigger_error("CProject::getCompany has been deprecated in v3.1 and will be removed by v4.0. Please use CProject->company() instead.", E_USER_NOTICE);
-
-        $project = new CProject();
-        $project->project_id = $projectId;
-
-        return $project->company();
     }
 
     public static function getBillingCodes($companyId, $all = false)
@@ -761,19 +684,6 @@ class CProject extends w2p_Core_BaseObject
 
         return $q->loadResult();
     }
-    /**
-     * @deprecated
-     * @codeCoverageIgnore
-     */
-    public static function hasTasks($projectId, $override = null)
-    {
-        trigger_error("CProject::hasTasks() has been deprecated in v3.0 and will be removed in v4.0. Please use CTask->getTaskCount() instead.", E_USER_NOTICE);
-
-        $task = new CTask();
-        $task->overrideDatabase($override);
-
-        return $task->getTaskCount($projectId);
-    }
 
     public static function updateHoursWorked($project_id)
     {
@@ -823,27 +733,6 @@ class CProject extends w2p_Core_BaseObject
 
         global $AppUI;
         CTask::storeTokenTask($AppUI, $project_id);
-    }
-
-    /**
-     * This is an unnecessary function as of v2.x. Instead of calculating this on
-     *   demand every single time, we calculate it when a Task is created or deleted
-     *   and then store it on the projects table. Then we can just return that column.
-     *
-     * Also, we have to do the check below just in case the object hasn't been
-     *   loaded.
-     *
-     * @deprecated
-     */
-    public function getTotalProjectHours()
-    {
-        trigger_error("CProject->getTotalProjectHours() has been deprecated in v3.0 and will be removed in v4.0. Please use the project_scheduled_hours column instead.", E_USER_NOTICE);
-
-        if ('' == $this->project_name) {
-            $this->load($this->project_id);
-        }
-
-        return $this->project_scheduled_hours;
     }
 
     //TODO: this method should be moved to CTaskLog

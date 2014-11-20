@@ -343,34 +343,6 @@ $this->obj->overrideDatabase($this->mockDB);
     }
 
     /**
-     * Tests getting a list of allowed project by user
-     *
-     * @expectedException PHPUnit_Framework_Error
-     */
-    public function testGetAllowedProjectsInRows()
-    {
-        $project_in_rows = $this->obj->getAllowedProjectsInRows(1);
-
-        $this->assertEquals(4, db_num_rows($project_in_rows));
-
-        $row = db_fetch_assoc($project_in_rows);
-        $this->assertEquals(1,                     $row[0]);
-        $this->assertEquals(1,                     $row['project_id']);
-        $this->assertEquals(0,                     $row[1]);
-        $this->assertEquals(0,                     $row['project_status']);
-        $this->assertEquals('Test Project',        $row[2]);
-        $this->assertEquals('Test Project',        $row['project_name']);
-        $this->assertEquals('This is a project',   $row[3]);
-        $this->assertEquals('This is a project',   $row['project_description']);
-        $this->assertEquals('TP',                  $row[4]);
-        $this->assertEquals('TP',                  $row['project_short_name']);
-
-        $project_in_rows = $this->obj->getAllowedProjectsInRows(2);
-
-        $this->assertEquals(0, db_num_rows($project_in_rows));
-    }
-
-    /**
      * Tests getting the most critical tasks with project loaded
      */
     public function testGetCriticalTasksNoArgs()
@@ -551,20 +523,6 @@ $this->obj->overrideDatabase($this->mockDB);
         $this->assertEquals('Person',               $contacts[1]['contact_last_name']);
         $this->assertEquals('',                     $contacts[1]['contact_order_by']);
         $this->assertEquals('',                     $contacts[1]['dept_name']);
-    }
-
-    /**
-     * Test finding of departments of project
-     *
-     * @expectedException PHPUnit_Framework_Error
-     */
-    public function testGetDepartments()
-    {
-        $departments = CProject::getDepartments(null, 1);
-        /*
-         * Beyond the deprecation notice, nothing else should be tested here. The
-         *   useful test is CProject->testGetDepartmentList().
-         */
     }
 
     /**

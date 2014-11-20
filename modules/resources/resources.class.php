@@ -30,45 +30,6 @@ class CResource extends w2p_Core_BaseObject
 
         return (count($this->_error)) ? false : true;
     }
-    /**
-     * @deprecated
-     * @codeCoverageIgnore
-     */
-    public function &loadTypes() {
-        trigger_error("CResource->loadTypes() has been deprecated in v3.0 and will be removed in v4.0. Please use w2PgetSysVal('ResourceTypes') instead.", E_USER_NOTICE);
-
-        return $this->typeSelect();
-    }
-    /**
-     * @deprecated
-     * @codeCoverageIgnore
-     */
-    public function typeSelect()
-    {
-        trigger_error("CResource->typeSelect() has been deprecated in v3.0 and will be removed in v4.0. Please use w2PgetSysVal('ResourceTypes') instead.", E_USER_NOTICE);
-
-        $typelist = w2PgetSysVal('ResourceTypes');
-        if (!count($typelist)) {
-            include W2P_BASE_DIR . '/modules/resources/setup.php';
-            $setup = new SResource();
-            $setup->upgrade('1.0.1');
-            $typelist = w2PgetSysVal('ResourceTypes');
-        }
-
-        return $typelist;
-    }
-    /**
-     * @deprecated
-     * @codeCoverageIgnore
-     */
-    public function getTypeName()
-    {
-        trigger_error("CResource->getTypeName() has been deprecated in v3.0 and will be removed in v4.0. Please use w2PgetSysVal('ResourceTypes') instead.", E_USER_NOTICE);
-
-        $typelist = $this->typeSelect();
-
-        return $typelist[$this->resource_type];
-    }
 
     public function getResourcesByTask($task_id)
     {

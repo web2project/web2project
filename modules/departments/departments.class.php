@@ -364,30 +364,4 @@ class CDepartment extends w2p_Core_BaseObject
 
         return $search;
     }
-
-    /**
-     * @deprecated
-     * @codeCoverageIgnore
-     */
-    public static function getContactList($AppUI = null, $deptId)
-    {
-        trigger_error("The CDepartment::getContactList static method has been deprecated in 3.1 and will be removed in v4.0. Please use CDepartment->contacts() instead.", E_USER_NOTICE );
-
-        $department = new CDepartment();
-
-        return $department->contacts($deptId);
-    }
-
-    /**
-     * @deprecated
-     * @codeCoverageIgnore
-     */
-    public static function getDepartmentList($AppUI = null, $companyId, $departmentId = 0)
-    {
-        trigger_error("The CDepartment::getDepartmentList static method has been deprecated in 3.1 and will be removed in v4.0. Please use CDepartment->departments() instead.", E_USER_NOTICE );
-
-        $department = new CDepartment();
-
-        return $department->departments($companyId, $departmentId);
-    }
 }

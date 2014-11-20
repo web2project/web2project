@@ -222,98 +222,6 @@ class w2p_Database_oldQuery {
     }
 
     /** @deprecated */
-	public function concat() {
-		trigger_error("concat() has been deprecated in v3.0 and will be removed by v4.0. Please concatenate in PHP instead.", E_USER_NOTICE );
-        $arr = func_get_args();
-		$conc_str = call_user_func_array(array(&$this->_db, 'Concat'), $arr);
-		return $conc_str;
-	}
-
-    /** @deprecated */
-	public function ifNull($field, $nullReplacementValue) {
-        trigger_error("ifNull() has been deprecated in v3.0 and will be removed by v4.0. There is no replacement.", E_USER_NOTICE );
-        return $this->_db->IfNull($field, $nullReplacementValue);
-	}
-
-    /** @deprecated */
-	public function addField($name, $type) {
-		if (!is_array($this->create_definition)) {
-			$this->create_definition = array();
-		}
-		$this->create_definition[] = array('action' => 'ADD', 'type' => '', 'spec' => $name . ' ' . $type);
-        trigger_error("w2p_Database_Query->addField() has been deprecated in v3.0 and will be removed by v4.0.", E_USER_NOTICE );
-	}
-
-    /** @deprecated */
-	public function alterField($name, $type) {
-		if (!is_array($this->create_definition)) {
-			$this->create_definition = array();
-		}
-		$this->create_definition[] = array('action' => 'CHANGE', 'type' => '', 'spec' => $name . ' ' . $name . ' ' . $type);
-        trigger_error("w2p_Database_Query->alterField() has been deprecated in v3.0 and will be removed by v4.0.", E_USER_NOTICE );
-	}
-
-    /** @deprecated */
-	public function dropField($name) {
-		if (!is_array($this->create_definition)) {
-			$this->create_definition = array();
-		}
-		$this->create_definition[] = array('action' => 'DROP', 'type' => '', 'spec' => $name);
-        trigger_error("w2p_Database_Query->dropField() has been deprecated in v3.0 and will be removed by v4.0.", E_USER_NOTICE );
-	}
-
-    /** @deprecated */
-	public function addIndex($name, $type) {
-		if (!is_array($this->create_definition)) {
-			$this->create_definition = array();
-		}
-		$this->create_definition[] = array('action' => 'ADD', 'type' => 'INDEX', 'spec' => '(' . $name . ') ' . $type);
-        trigger_error("w2p_Database_Query->addIndex() has been deprecated in v3.0 and will be removed by v4.0.", E_USER_NOTICE );
-	}
-
-    /** @deprecated */
-	public function addPrimary($name) {
-		if (!is_array($this->create_definition)) {
-			$this->create_definition = array();
-		}
-		$this->create_definition[] = array('action' => 'ADD', 'type' => 'PRIMARY KEY', 'spec' => '(' . $name . ')');
-        trigger_error("w2p_Database_Query->addPrimary() has been deprecated in v3.0 and will be removed by v4.0.", E_USER_NOTICE );
-	}
-
-    /** @deprecated */
-	public function dropIndex($name) {
-		if (!is_array($this->create_definition)) {
-			$this->create_definition = array();
-		}
-		$this->create_definition[] = array('action' => 'DROP', 'type' => 'INDEX', 'spec' => $name);
-        trigger_error("w2p_Database_Query->dropIndex() has been deprecated in v3.0 and will be removed by v4.0.", E_USER_NOTICE );
-	}
-
-    /** @deprecated */
-	public function dropPrimary() {
-		if (!is_array($this->create_definition)) {
-			$this->create_definition = array();
-		}
-		$this->create_definition[] = array('action' => 'DROP', 'type' => 'PRIMARY KEY', 'spec' => '');
-        trigger_error("w2p_Database_Query->dropPrimary() has been deprecated in v3.0 and will be removed by v4.0.", E_USER_NOTICE );
-	}
-
-    /** @deprecated */
-    public function addClause($clause, $value, $check_array = true) {
-        error_log(__FUNCTION__ . ' has been deprecated in v3.0. There is no replacement.', E_USER_WARNING);
-        if (!isset($this->$clause)) {
-            $this->$clause = array();
-        }
-        if ($check_array && is_array($value)) {
-            foreach ($value as $v) {
-                array_push($this->$clause, $v);
-            }
-        } else {
-            array_push($this->$clause, $value);
-        }
-    }
-
-    /** @deprecated */
     public function foundRows() {
         error_log(__FUNCTION__ . ' has been deprecated', E_USER_WARNING);
         global $db;
@@ -338,14 +246,6 @@ class w2p_Database_oldQuery {
         } else {
             $this->{$varname}[] = $name;
         }
-    }
-
-    /** @deprecated */
-    public function make_where_clause($where_clause) {
-        trigger_error("make_order_clause has been deprecated in v3.0.", E_USER_NOTICE );
-        $this->_convertFromOldStructure();
-
-        return $this->_buildWhere();
     }
 
     /** @deprecated */

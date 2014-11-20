@@ -266,18 +266,6 @@ class w2p_Core_CAppUITest extends CommonSetup
     }
 
     /**
-     * Test getting a library class
-     *
-     * @expectedException PHPUnit_Framework_Error
-     */
-    public function testGetLibraryClassValid()
-    {
-        $AppUI = $this->_AppUI;
-
-        $this->assertEquals(W2P_BASE_DIR . '/lib/PEAR/Date.php', $AppUI->getLibraryClass('PEAR/Date'));
-    }
-
-    /**
      * Tests getting an ajax module file for a module
      */
     public function testGetModuleAjaxValid()

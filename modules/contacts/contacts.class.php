@@ -585,30 +585,4 @@ class CContact extends w2p_Core_BaseObject
 
         return $search;
     }
-
-    /**
-     * @deprecated
-     * @codeCoverageIgnore
-     */
-    public function getCompanyID()
-    {
-        trigger_error("getCompanyID() has been deprecated in v3.0 and will be removed by v4.0. Please just use the object property itself.", E_USER_NOTICE);
-
-        return (int) $this->contact_company;
-    }
-
-    /**
-     * @deprecated
-     * @codeCoverageIgnore
-     */
-    public function getCompanyName()
-    {
-        trigger_error("getCompanyName has been deprecated and will be removed in v4.0. Please use getCompanyDetails() instead.", E_USER_NOTICE);
-
-        $company = new CCompany();
-        $company->overrideDatabase($this->_query);
-        $company->load((int) $this->contact_company);
-
-        return $company->company_name;
-    }
 }

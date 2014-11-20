@@ -271,36 +271,9 @@ class CTask extends w2p_Core_BaseObject
         return (count($this->_error)) ? false : true;
     }
 
-    /**
-     * This should be deprecated in favor of load() on the parent
-     *   w2p_Core_BaseObject once we're sure no one is using the $skipUpdate
-     *   parameter any more.
-     * @deprecated
-     * @codeCoverageIgnore
-     */
-    public function load($oid = null, $strip = false, $skipUpdate = false)
-    {
-        if ($skipUpdate) {
-            trigger_error("The 'skipUpdate' parameter of load() has been deprecated in v3.0 and will be removed by v4.0. Please use load() without it instead.", E_USER_NOTICE);
-        }
-
-        return parent::load($oid, $strip);
-    }
-
     protected function hook_postLoad()
     {
         $this->budget = $this->getBudget();
-    }
-
-    /**
-     * @deprecated
-     * @codeCoverageIgnore
-     */
-    public function peek($oid = null, $strip = false)
-    {
-        trigger_error("peek() has been deprecated in v3.0 and will be removed by v4.0. Please use load() instead.", E_USER_NOTICE);
-
-        return $this->load($oid, $strip);
     }
 
     public function getHoursScheduled($project_id)
@@ -1430,31 +1403,6 @@ class CTask extends w2p_Core_BaseObject
     }
 
 // end of dependentTasks()
-    /**
-     * @deprecated
-     * @codeCoverageIgnore
-     */
-    public function shiftDependentTasks()
-    {
-        trigger_error("The CTask->shiftDependentTasks method has been deprecated in v3.0 and will be removed in v4.0. Please use CTask->pushDependencies instead", E_USER_NOTICE );
-
-        $this->pushDependencies($this->task_id, $this->task_end_date);
-    }
-    /**
-     * @deprecated
-     * @codeCoverageIgnore
-     */
-    public function update_dep_dates($task_id)
-    {
-
-        $newTask = new CTask();
-        $newTask->overrideDatabase($this->_query);
-        $newTask->load($task_id);
-
-        trigger_error("The CTask->update_dep_dates method has been deprecated in v3.0 and will be removed in v4.0. Please use CTask->pushDependencies instead", E_USER_NOTICE );
-
-        $this->pushDependencies($task_id, $newTask->task_end_date);
-    }
 
     /*
      * * Time related calculations have been moved to /classes/date.class.php
@@ -2437,18 +2385,6 @@ class CTask extends w2p_Core_BaseObject
         return $q->loadResult();
     }
 
-    /**
-     * @deprecated
-     * @codeCoverageIgnore
-     */
-    public static function pinUserTask($userId, $taskId)
-    {
-        trigger_error("CTask::pinUserTask() has been deprecated in v3.1 and will be removed by v4.0. Please use CTask->pinTask() instead.", E_USER_NOTICE);
-
-        $task = new CTask();
-
-        return $task->pinTask($userId, $taskId);
-    }
     public function pinTask($userId, $taskId)
     {
         $q = $this->_getQuery();
@@ -2458,18 +2394,7 @@ class CTask extends w2p_Core_BaseObject
 
         return (!$q->exec()) ? false : true;
     }
-    /**
-     * @deprecated
-     * @codeCoverageIgnore
-     */
-    public static function unpinUserTask($userId, $taskId)
-    {
-        trigger_error("CTask::unpinUserTask() has been deprecated in v3.1 and will be removed by v4.0. Please use CTask->unpinTask() instead.", E_USER_NOTICE);
 
-        $task = new CTask();
-
-        return $task->unpinTask($userId, $taskId);
-    }
     public function unpinTask($userId, $taskId)
     {
         $q = $this->_getQuery();
@@ -2480,17 +2405,6 @@ class CTask extends w2p_Core_BaseObject
         return (!$q->exec()) ? false : true;
     }
 
-    /**
-     * @deprecated
-     * @codeCoverageIgnore
-     */
-    public static function updateHoursWorked($taskId, $totalHours)
-    {
-        trigger_error("CTask::updateHoursWorked() has been deprecated in v3.1 and will be removed by v4.0. Please use CTask->updateHoursWorked2() instead.", E_USER_NOTICE);
-
-        $task = new CTask();
-        $task->updateHoursWorked2($taskId, $totalHours);
-    }
     public function updateHoursWorked2($taskId, $totalHours)
     {
         $q = $this->_getQuery();
