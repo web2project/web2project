@@ -9,7 +9,10 @@ class w2p_Output_HTMLHelper extends w2p_Output_HTML_Base
 {
     protected $tableRowData = array();
 
-    /** @deprecated */
+    /**
+     * @deprecated
+     * @codeCoverageIgnore
+     */
     public static function renderContactList(w2p_Core_CAppUI $AppUI, array $contactList)
     {
         $output = '<table cellspacing="1" cellpadding="2" border="0" width="100%" class="tbl">';
@@ -281,6 +284,7 @@ class w2p_Output_HTMLHelper extends w2p_Output_HTML_Base
 
     /**
      * @deprecated
+     * @codeCoverageIgnore
      */
     public function createColumn($fieldName, $value) {
         trigger_error("The method createColumn has been deprecated in v3.0 and will be removed by v4.0. Please use createCell instead.", E_USER_NOTICE );
@@ -290,6 +294,7 @@ class w2p_Output_HTMLHelper extends w2p_Output_HTML_Base
 
     /**
      * @deprecated
+     * @codeCoverageIgnore
      */
     public static function renderColumn(w2p_Core_CAppUI $AppUI, $fieldName, $row)
     {
