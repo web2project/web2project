@@ -305,7 +305,6 @@ function w2p_textarea($content)
         $result = preg_replace("#(^|[\n ])([\w]+?://[\w]+[^ \"\n\r\t< ]*)#", "\\1<a href=\"\\2\" target=\"_blank\">\\2</a>", $result);
         $result = preg_replace("#(^|[\n ])((www|ftp)\.[^ \"\t\n\r< ]*)#", "\\1<a href=\"http://\\2\" target=\"_blank\">\\2</a>", $result);
         $result = nl2br($result);
-        //$result = html_entity_decode($result);
     }
 
     return $result;
@@ -320,13 +319,10 @@ function w2p_textarea($content)
 function &getAuth($auth_mode) {
     switch ($auth_mode) {
         case 'ldap':
-            $auth = new w2p_Authenticators_LDAP();
-            break;
+            return new w2p_Authenticators_LDAP();
         case 'pn':
-            $auth = new w2p_Authenticators_PostNuke();
-            break;
+            return new w2p_Authenticators_PostNuke();
         default:
-            $auth = new \Web2project\Authenticators\SQL();
+            return new \Web2project\Authenticators\SQL();
     }
-    return $auth;
 }
