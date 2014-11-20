@@ -1736,3 +1736,59 @@ function getReadableModule()
 
     return 'public';
 }
+
+/**
+ * @deprecated @since 4.0
+ * @codeCoverageIgnore
+ */
+function strUTF8Decode($text)
+{
+    if (extension_loaded('mbstring')) {
+        $encoding = mb_detect_encoding($text.' ');
+    }
+    if (function_exists('iconv')) {
+        $text = mb_convert_encoding($text, 'UTF-8', $encoding);
+        //iconv($encoding, 'UTF-8', $text);
+    } elseif (function_exists('utf8_decode')) {
+        $text = utf8_decode($text);
+    }
+    // mb functions don't seam to work well here for some reason as the output gets corrupted.
+    // iconv is doing the job just fine though
+    return $text;
+}
+
+/**
+ * @deprecated @since 4.0
+ * @codeCoverageIgnore
+ */
+function strEzPdf($text)
+{
+    if (function_exists('iconv') && function_exists('mb_detect_encoding')) {
+        $text = iconv(mb_detect_encoding($text." "), 'UTF-8', $text);
+    }
+
+    return $text;
+}
+
+/**
+ * @deprecated @since 4.0
+ * @codeCoverageIgnore
+ */
+function temp_filterArrayForSelectTree($projectData)
+{
+    unset($projectData['project_id']);
+    unset($projectData['project_color_identifier']);
+    unset($projectData['project_name']);
+    unset($projectData['project_start_date']);
+    unset($projectData['project_end_date']);
+    unset($projectData['project_company']);
+    unset($projectData['project_parent']);
+
+    unset($projectData[1]);
+    unset($projectData[3]);
+    unset($projectData[4]);
+    unset($projectData[5]);
+    $projectData[6] = ($projectData[0] == $projectData[6]) ? '' : $projectData[6];
+
+    return array_values($projectData);
+}

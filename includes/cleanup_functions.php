@@ -79,38 +79,6 @@ function clean_value($str)
     return str_replace($bad_values, '', $str);
 }
 
-function strUTF8Decode($text)
-{
-    if (extension_loaded('mbstring')) {
-        $encoding = mb_detect_encoding($text.' ');
-    }
-    if (function_exists('iconv')) {
-        $text = mb_convert_encoding($text, 'UTF-8', $encoding);
-        //iconv($encoding, 'UTF-8', $text);
-    } elseif (function_exists('utf8_decode')) {
-        $text = utf8_decode($text);
-    }
-    // mb functions don't seam to work well here for some reason as the output gets corrupted.
-    // iconv is doing the job just fine though
-    return $text;
-}
-
-/**
-* utility functions for the preparation of task data for GANTT PDF
-*
-* @todo some of these functions are not needed, need to trim this down
-*
-*/
-// PYS : utf_8 decoding as suggested in Vbulletin #3987
-function strEzPdf($text)
-{
-    if (function_exists('iconv') && function_exists('mb_detect_encoding')) {
-        $text = iconv(mb_detect_encoding($text." "), 'UTF-8', $text);
-    }
-
-    return $text;
-}
-
 function dumb_slice( $gantt_arr, $length = 25 )
 {
     $sliced_array = array();
@@ -122,38 +90,6 @@ function dumb_slice( $gantt_arr, $length = 25 )
     }
 
     return $sliced_array;
-}
-
-/**
-*
-* 	END OF GANTT PDF UTILITY FUNCTIONS
-*
-*/
-
-/**
-*  This is a kludgy mess because of how the arraySelectTree function is used..
-*    it expects - nay, demands! - that the first element of the subarray is the
-*    id and the third is the parent id. In most cases, that is fine.. in this
-*    one we're using the existing ACL-respecting functions and it has additional
-*    fields in "improper" places.
-*/
-function temp_filterArrayForSelectTree($projectData)
-{
-    unset($projectData['project_id']);
-    unset($projectData['project_color_identifier']);
-    unset($projectData['project_name']);
-    unset($projectData['project_start_date']);
-    unset($projectData['project_end_date']);
-    unset($projectData['project_company']);
-    unset($projectData['project_parent']);
-
-    unset($projectData[1]);
-    unset($projectData[3]);
-    unset($projectData[4]);
-    unset($projectData[5]);
-    $projectData[6] = ($projectData[0] == $projectData[6]) ? '' : $projectData[6];
-
-    return array_values($projectData);
 }
 
 function getPermission($mod, $perm, $item_id = 0)
