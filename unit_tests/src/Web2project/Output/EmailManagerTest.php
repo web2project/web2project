@@ -46,19 +46,6 @@ class Web2project_Output_EmailManagerTest extends CommonSetup
         $this->assertEquals($target_body, $actual_body);
     }
 
-    /**
-     * @expectedException PHPUnit_Framework_Error
-     */
-    public function testGetCalendarConflictEmail()
-    {
-        $target_body = "You have been invited to an event by Admin Person\nHowever, either you or another intended invitee has a competing event\n";
-        $target_body .= "Admin Person has requested that you reply to this message\nand confirm if you can or can not make the requested time.\n\n";
-
-        $actual_body = $this->manager->getCalendarConflictEmail($this->_AppUI);
-
-        $this->assertEquals($target_body, $actual_body);
-    }
-
     public function testGetContactUpdateNotify()
     {
         $contact = new CContact();
