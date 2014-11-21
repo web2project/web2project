@@ -328,9 +328,17 @@ class CDepartment extends w2p_Core_BaseObject
 
     public function contacts($departmentId)
     {
+        if (0 == $departmentId) {
+            return array();
+        }
+
+        if (!canView('contacts')) {
+            return array();
+        }
+
         $results = array();
 
-        if ($this->_AppUI->isActiveModule('contacts') && canView('contacts') && (int) $departmentId > 0) {
+        if ($this->_AppUI->isActiveModule('contacts')) {
             $q = $this->_getQuery();
             $q->addTable('contacts', 'con');
             $q->addQuery('con.*, con.contact_display_name as contact_name');

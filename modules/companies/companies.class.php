@@ -167,9 +167,17 @@ class CCompany extends w2p_Core_BaseObject
 
     public function contacts($companyId)
     {
+        if (0 == $companyId) {
+            return array();
+        }
+
+        if (!canView('contacts')) {
+            return array();
+        }
+
         $results = array();
 
-        if ($this->_AppUI->isActiveModule('contacts') && canView('contacts') && (int) $companyId > 0) {
+        if ($this->_AppUI->isActiveModule('contacts')) {
             $q = $this->_getQuery();
             $q->addQuery('c.*');
             $q->addQuery('c.contact_display_name as contact_name');
@@ -198,6 +206,14 @@ class CCompany extends w2p_Core_BaseObject
 
     public function users($companyId)
     {
+        if (0 == $companyId) {
+            return array();
+        }
+
+        if (!canView('users')) {
+            return array();
+        }
+
         $q = $this->_getQuery();
         $q->addTable('users');
         $q->addQuery('users.*, c.*');
@@ -216,7 +232,15 @@ class CCompany extends w2p_Core_BaseObject
 
     public function departments($companyId)
     {
-        if ($this->_AppUI->isActiveModule('departments') && canView('departments')) {
+        if (0 == $companyId) {
+            return array();
+        }
+
+        if (!canView('departments')) {
+            return array();
+        }
+
+        if ($this->_AppUI->isActiveModule('departments')) {
             $q = $this->_getQuery();
             $q->addTable('departments');
             $q->addQuery('departments.*, COUNT(contact_department) dept_users');

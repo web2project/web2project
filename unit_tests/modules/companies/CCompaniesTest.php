@@ -381,4 +381,22 @@ class CCompaniesTest extends CommonSetup
         $projects = $this->obj->projects($this->_AppUI, 1, 1, 'monkey');
         $this->assertEquals('Test Project', $projects[0]['project_name']);
     }
+
+    public function testDepartmentsNoCompany()
+    {
+        $results = $this->obj->departments(0);
+        $this->assertEquals(0, count($results));
+    }
+
+    public function testUsersNoCompany()
+    {
+        $results = $this->obj->users(0);
+        $this->assertEquals(0, count($results));
+    }
+
+    public function testContactsNoCompany()
+    {
+        $results = $this->obj->contacts(0);
+        $this->assertEquals(0, count($results));
+    }
 }

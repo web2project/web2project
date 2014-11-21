@@ -198,4 +198,10 @@ class CDepartmentsTest extends CommonSetup
         $this->assertTrue(array_key_exists('search_fields', $search));
         $this->assertEquals(count($search), 8);
     }
+
+    public function testContactsNoDepartment()
+    {
+        $results = $this->obj->contacts(0);
+        $this->assertEquals(0, count($results));
+    }
 }
