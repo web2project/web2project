@@ -41,7 +41,10 @@ class w2p_Database_oldQuery {
 	/**< Use the old style of fetch mode with ADODB */
 	public $_old_style = null;
 
-    /** @deprecated */
+    /**
+     * @deprecated
+     * @codeCoverageIgnore
+     */
 	public function addInsert($field, $value = null, $set = false, $func = false) {
         error_log(__FUNCTION__ . ' has been deprecated', E_USER_WARNING);
         if (is_array($field) && $value == null) {
@@ -74,14 +77,20 @@ class w2p_Database_oldQuery {
         $this->type = 'insert';
 	}
 
-    /** @deprecated */
+    /**
+     * @deprecated
+     * @codeCoverageIgnore
+     */
 	public function addReplace($field, $value, $set = false, $func = false) {
         error_log(__FUNCTION__ . ' has been deprecated', E_USER_WARNING);
         $this->addInsert($field, $value, $set, $func);
 		$this->type = 'replace';
 	}
 
-    /** @deprecated */
+    /**
+     * @deprecated
+     * @codeCoverageIgnore
+     */
 	public function createTable($table, $def = null) {
         $this->type = 'createPermanent';
 		$this->create_table = $table;
@@ -90,18 +99,27 @@ class w2p_Database_oldQuery {
 		}
 	}
 
-	/** @deprecated */
+    /**
+     * @deprecated
+     * @codeCoverageIgnore
+     */
 	public function dropTable($table) {
 		$this->type = 'drop';
 		$this->create_table = $table;
 	}
 
-    /** @deprecated */
+    /**
+     * @deprecated
+     * @codeCoverageIgnore
+     */
 	public function createDefinition($def) {
 		$this->create_definition = $def;
 	}
 
-    /** @deprecated */
+    /**
+     * @deprecated
+     * @codeCoverageIgnore
+     */
     public function insertArray($table, &$hash) {
         error_log(__FUNCTION__ . ' has been deprecated', E_USER_WARNING);
         $this->addTable($table);
@@ -127,7 +145,10 @@ class w2p_Database_oldQuery {
         return $id;
     }
 
-    /** @deprecated */
+    /**
+     * @deprecated
+     * @codeCoverageIgnore
+     */
     public function updateArray($table, &$hash, $keyName) {
         error_log(__FUNCTION__ . ' has been deprecated', E_USER_WARNING);
         $this->addTable($table);
@@ -160,19 +181,28 @@ class w2p_Database_oldQuery {
         return $ret;
     }
 
-    /** @deprecated */
+    /**
+     * @deprecated
+     * @codeCoverageIgnore
+     */
     public function createDatabase($database) {
         $dict = NewDataDictionary($this->_db, w2PgetConfig('dbtype'));
         $dict->CreateDatabase($database);
     }
 
-    /** @deprecated */
+    /**
+     * @deprecated
+     * @codeCoverageIgnore
+     */
     public function alterTable($table) {
         $this->create_table = $table;
         $this->type = 'alter';
     }
 
-    /** @deprecated */
+    /**
+     * @deprecated
+     * @codeCoverageIgnore
+     */
     public function prepareAlter() {
         $q = 'ALTER TABLE ' . $this->quote_db($this->_table_prefix . $this->create_table) . ' ';
         if (isset($this->create_definition)) {
@@ -193,7 +223,10 @@ class w2p_Database_oldQuery {
         return $q;
     }
 
-    /** @deprecated */
+    /**
+     * @deprecated
+     * @codeCoverageIgnore
+     */
     public function DDcreateTable($table, $def, $opts) {
         $dict = NewDataDictionary($this->_db, w2PgetConfig('dbtype'));
         $query_array = $dict->ChangeTableSQL(w2PgetConfig('dbprefix') . $table, $def, $opts);
@@ -201,7 +234,10 @@ class w2p_Database_oldQuery {
         return $dict->ExecuteSQLArray($query_array);
     }
 
-    /** @deprecated */
+    /**
+     * @deprecated
+     * @codeCoverageIgnore
+     */
     public function DDcreateIndex($name, $table, $cols, $opts) {
         $dict = NewDataDictionary($this->_db, w2PgetConfig('dbtype'));
         $query_array = $dict->CreateIndexSQL($name, $table, $cols, $opts);
@@ -209,19 +245,28 @@ class w2p_Database_oldQuery {
         return $dict->ExecuteSQLArray($query_array);
     }
 
-    /** @deprecated */
+    /**
+     * @deprecated
+     * @codeCoverageIgnore
+     */
     public function createTemp($table) {
         $this->type = 'createTemporary';
         $this->create_table = $table;
     }
 
-    /** @deprecated */
+    /**
+     * @deprecated
+     * @codeCoverageIgnore
+     */
     public function dropTemp($table) {
         $this->type = 'drop';
         $this->create_table = $table;
     }
 
-    /** @deprecated */
+    /**
+     * @deprecated
+     * @codeCoverageIgnore
+     */
     public function foundRows() {
         error_log(__FUNCTION__ . ' has been deprecated', E_USER_WARNING);
         global $db;
@@ -235,7 +280,10 @@ class w2p_Database_oldQuery {
         return $result;
     }
 
-    /** @deprecated */
+    /**
+     * @deprecated
+     * @codeCoverageIgnore
+     */
     public function addMap($varname, $name, $id) {
         error_log(__FUNCTION__ . ' has been deprecated', E_USER_WARNING);
         if (!isset($this->$varname)) {
@@ -248,7 +296,10 @@ class w2p_Database_oldQuery {
         }
     }
 
-    /** @deprecated */
+    /**
+     * @deprecated
+     * @codeCoverageIgnore
+     */
     public function make_order_clause($order_clause) {
         trigger_error("make_order_clause has been deprecated in v3.0.", E_USER_NOTICE );
         $this->_convertFromOldStructure();
@@ -256,7 +307,10 @@ class w2p_Database_oldQuery {
         return $this->_buildOrder();
     }
 
-    /** @deprecated */
+    /**
+     * @deprecated
+     * @codeCoverageIgnore
+     */
     public function make_group_clause($group_clause) {
         trigger_error("make_group_clause has been deprecated in v3.0.", E_USER_NOTICE );
         $this->_convertFromOldStructure();
@@ -264,7 +318,10 @@ class w2p_Database_oldQuery {
         return $this->_buildGroup();
     }
 
-    /** @deprecated */
+    /**
+     * @deprecated
+     * @codeCoverageIgnore
+     */
     public function setPageLimit($page = 0, $pagesize = 0) {
         trigger_error(__FUNCTION__ . " has been deprecated in v3.0.", E_USER_NOTICE );
         if ($page == 0) {
@@ -279,7 +336,10 @@ class w2p_Database_oldQuery {
         $this->setLimit($pagesize, ($page - 1) * $pagesize);
     }
 
-    /** @deprecated */
+    /**
+     * @deprecated
+     * @codeCoverageIgnore
+     */
     public function make_limit_clause($limit, $offset) {
         trigger_error(__FUNCTION__ . " has been deprecated in v3.0.", E_USER_NOTICE );
 
@@ -288,7 +348,10 @@ class w2p_Database_oldQuery {
         return $this->_buildLimit();
     }
 
-    /** @deprecated */
+    /**
+     * @deprecated
+     * @codeCoverageIgnore
+     */
     public function make_having_clause($having_clause) {
         trigger_error(__FUNCTION__ . " has been deprecated in v3.0.", E_USER_NOTICE );
 
@@ -304,7 +367,10 @@ class w2p_Database_oldQuery {
         return $this->_buildHaving();
     }
 
-    /** @deprecated */
+    /**
+     * @deprecated
+     * @codeCoverageIgnore
+     */
     public function make_join($join_clause) {
         trigger_error(__FUNCTION__ . " has been deprecated in v3.0.", E_USER_NOTICE );
 
@@ -320,6 +386,7 @@ class w2p_Database_oldQuery {
 
     /**
      * @deprecated
+     * @codeCoverageIgnore
      */
     public function quote_db($string) {
         trigger_error(__FUNCTION__ . " has been deprecated in v3.0.", E_USER_NOTICE );
