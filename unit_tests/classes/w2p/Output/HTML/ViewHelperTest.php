@@ -61,7 +61,7 @@ class w2p_Output_HTML_ViewHelperTest extends CommonSetup
         $this->assertEquals('value', $output);
 
         $output = $this->obj->addField('field_project', 1);
-        $this->assertEquals('<a href="?m=projects&a=view&project_id=1"></a>', $output);
+        $this->assertEquals('<a href="?m=projects&a=view&project_id=1">Test Project</a>', $output);
     }
 
     public function testShowField()
