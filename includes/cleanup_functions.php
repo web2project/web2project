@@ -118,27 +118,6 @@ function getPermission($mod, $perm, $item_id = 0)
     return $result;
 }
 
-function canView($mod, $item_id = 0)
-{
-    return getPermission($mod, 'view', $item_id);
-}
-function canEdit($mod, $item_id = 0)
-{
-    return getPermission($mod, 'edit', $item_id);
-}
-function canAdd($mod, $item_id = 0)
-{
-    return getPermission($mod, 'add', $item_id);
-}
-function canDelete($mod, $item_id = 0)
-{
-    return getPermission($mod, 'delete', $item_id);
-}
-function canAccess($mod)
-{
-    return getPermission($mod, 'access');
-}
-
 function buildTaskTree($task_data, $depth = 0, $projTasks, $all_tasks, $parents, $task_parent, $task_id)
 {
     $output = '';

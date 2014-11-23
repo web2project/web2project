@@ -1434,3 +1434,54 @@ function temp_filterArrayForSelectTree($projectData)
 
     return array_values($projectData);
 }
+
+/**
+ * @deprecated 4.0
+ * @codeCoverageIgnore
+ */
+function canView($mod, $item_id = 0)
+{
+    global $AppUI;
+
+    return $AppUI->acl()->canView($mod, $item_id);
+}
+/**
+ * @deprecated 4.0
+ * @codeCoverageIgnore
+ */
+function canEdit($mod, $item_id = 0)
+{
+    global $AppUI;
+
+    return $AppUI->acl()->canEdit($mod, $item_id);
+}
+/**
+ * @deprecated 4.0
+ * @codeCoverageIgnore
+ */
+function canAdd($mod, $item_id = 0)
+{
+    global $AppUI;
+
+    return $AppUI->acl()->canAdd($mod, $item_id);
+}
+/**
+ * @deprecated 4.0
+ * @codeCoverageIgnore
+ */
+function canDelete($mod, $item_id = 0)
+{
+    global $AppUI;
+
+    return $AppUI->acl()->canDelete($mod, $item_id);
+}
+/**
+ * @deprecated 4.0
+ * @codeCoverageIgnore
+ */
+function canAccess($mod)
+{
+    global $AppUI;
+
+    return $AppUI->acl()->canAccess($mod);
+}

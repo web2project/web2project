@@ -1395,4 +1395,25 @@ class w2p_Extensions_Permissions extends gacl_api
         $this->_query->direct_query = false;
         return $this->_query;
     }
+
+    public function canView($module, $item_id = 0)
+    {
+        return getPermission($module, 'view', $item_id);
+    }
+    public function canEdit($module, $item_id = 0)
+    {
+        return getPermission($module, 'edit', $item_id);
+    }
+    public function canAdd($module, $item_id = 0)
+    {
+        return getPermission($module, 'add', $item_id);
+    }
+    public function canDelete($module, $item_id = 0)
+    {
+        return getPermission($module, 'delete', $item_id);
+    }
+    public function canAccess($module)
+    {
+        return getPermission($module, 'access');
+    }
 }
