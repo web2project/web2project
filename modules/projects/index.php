@@ -32,7 +32,6 @@ $AppUI->setState('ProjIdxOrderDir', $orderdir);
 
 // collect the full projects list data via function in projects.class.php
 $search_text = $search_string;      // @note this is only because the projects_list_data function takes a bunch of globals
-//$projects = projects_list_data();
 
 $oCompany = new CCompany();
 $allowedCompanies[-1] = $AppUI->_('all');

@@ -1054,8 +1054,9 @@ class CTask extends w2p_Core_BaseObject
 //TODO: additional comment will be included in email body
     public function notify($comment = '')
     {
-        $project = new CProject();
-        $projname = $project->load($this->task_project)->project_name;
+		$project = new CProject();
+		$project->load($this->task_project);
+        $projname = $project->project_name;
 
         // c = creator
         // a = assignee
@@ -1889,28 +1890,42 @@ class CTask extends w2p_Core_BaseObject
         return array();
     }
 
-    public function getTaskTree($project_id, $task_id = 0)
+    /**
+     * @param $project_id
+     * @param int $task_id
+     * @param bool $showIncompleteOnly
+     * @return type
+     *
+     * TODO: I don't like the additional parameter $showIncompleteOnly, it just seems like a bad implementation.
+     */
+    public function getTaskTree($project_id, $task_id = 0, $showIncompleteOnly = false)
     {
         $taskTree = array();
         $this->_depth++;
 
         $q = $this->_getQuery();
         $q->addTable('tasks');
-        $q->addQuery('*, p.project_name');
+        $q->addQuery('tasks.*, p.project_name, task_pinned');
         $q->addWhere('task_project = ' . (int) $project_id);
         $q->addJoin('projects', 'p', 'p.project_id = task_project');
+        $q->addQuery('user_task_priority');
+        $q->addJoin('user_tasks', 'ut', 'ut.task_id = tasks.task_id');
+        $q->addJoin('user_task_pin', 'utp', 'tasks.task_id = utp.task_id');
 
         if ($task_id) {
             $q->addWhere('task_parent = ' . (int) $task_id);
-            $q->addWhere('task_id != ' . (int) $task_id);
+            $q->addWhere('tasks.task_id != ' . (int) $task_id);
         } else {
-            $q->addWhere('(task_id = task_parent OR task_parent = 0)');
+            $q->addWhere('(tasks.task_id = task_parent OR task_parent = 0)');
+        }
+        if ($showIncompleteOnly) {
+            $q->addWhere('task_percent_complete <> 100');
         }
         $q->addOrder('task_start_date, task_end_date, task_name');
 
         $tasks = $q->loadHashList('task_id');
         foreach ($tasks as $task) {
-            $children = $this->getTaskTree($project_id, $task['task_id']);
+            $children = $this->getTaskTree($project_id, $task['task_id'], $showIncompleteOnly);
 
             $task['depth'] = $this->_depth;
             $task['children'] = count($children);

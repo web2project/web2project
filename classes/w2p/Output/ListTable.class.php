@@ -127,10 +127,11 @@ class w2p_Output_ListTable extends w2p_Output_HTMLHelper
                 case 'pin':
                     $this->tableRowData['task_pinned'] = (isset($this->tableRowData['task_pinned'])) ? $this->tableRowData['task_pinned'] : 0;
                     $image = ($this->tableRowData['task_pinned']) ? 'pin.gif' : 'unpin.gif';
+                    $pin  = ($this->tableRowData['task_pinned']) ? -1 : 1;
                     $pieces = explode('_', $value);
                     $module    = w2p_pluralize($pieces[0]);
                     $contents  = '<td class="_'.$type.'">';
-                    $contents .= '<a href="./index.php?m='.$module.'&pin=1&' . $value . '=' . $this->tableRowData[$value] .'">' .
+                    $contents .= '<a href="./index.php?m='.$module.'&pin=' . $pin . '&' . $value . '=' . $this->tableRowData[$value] .'">' .
                         w2PshowImage('icons/' . $image, '16', '16') . '</a>';
                     $contents .= '</td>';
                     break;
