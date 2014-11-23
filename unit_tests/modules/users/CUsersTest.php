@@ -25,13 +25,10 @@ class CUsersTest extends CommonSetup
     {
       parent::setUp();
 
-      global $AppUI;
-      $AppUI->user_id = 1;
+      $this->_AppUI->user_id = 1;
 
       $this->obj    = new CUser();
       $this->obj->overrideDatabase($this->mockDB);
-
-      $GLOBALS['acl'] = new w2p_Mocks_Permissions();
 
       $this->post_data = array(
           'dosql'              => 'do_user_aed',

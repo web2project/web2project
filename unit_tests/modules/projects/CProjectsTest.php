@@ -23,10 +23,7 @@ class CProjectsTest extends CommonSetup
         parent::setUp();
 
         $this->obj = new CProject();
-        $this->mockDB = new w2p_Mocks_Query();
-$this->obj->overrideDatabase($this->mockDB);
-
-        $GLOBALS['acl'] = new w2p_Mocks_Permissions();
+        $this->obj->overrideDatabase($this->mockDB);
 
         $this->post_data = array(
             'dosql' =>                      'do_project_aed',

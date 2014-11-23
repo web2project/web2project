@@ -26,8 +26,6 @@ class CCompaniesTest extends CommonSetup
         $this->obj = new CCompany();
         $this->obj->overrideDatabase($this->mockDB);
 
-        $GLOBALS['acl'] = new \Web2project\Mocks\Permissions();
-
         $this->post_data = array (
             'dosql'                 => 'do_company_aed',
             'company_id'            => 0,
