@@ -24,52 +24,36 @@ function is_task_in_gantt_arr($task)
     return false;
 }
 
-function notifyHR($address, $notUsed, $address, $username, $logname, $notUsed2, $userid)
+function notifyHR($address, $notUsed, $address, $username, $logname, $notUsed2, $userid, $sender = null)
 {
-    $object = new stdClass();
-    $object->base_url = W2P_BASE_URL;
-    $object->company_name = w2PgetConfig('company_name');
-    $object->contact_name = $username;
-    $object->user_name = $logname;
-    $object->email_address = $address;
-    $object->user_id = $userid;
-
-    $manager = new \Web2project\Output\Email\Manager();
-    $manager->send('new-account-requested', 'en_US', $object, $address);
+    $manager = new \Web2project\Output\Email\Manager($sender);
+    $manager->loadTemplate('new-account-requested', 'en_US');
+    $manager->send($address, array('base_url' => W2P_BASE_URL, 'company_name' => w2PgetConfig('company_name'),
+                                   'contact_name' => $username, 'user_name' => $logname,
+                                   'email_address' => $address, 'user_id' => $userid));
 }
 
-function notifyNewUserCredentials($address, $username, $logname, $logpwd)
+function notifyNewUserCredentials($address, $username, $logname, $logpwd, $sender = null)
 {
-    $object = new stdClass();
-    $object->base_url = W2P_BASE_URL;
-    $object->user_name = $username;
-    $object->log_name = $logname;
-    $object->log_password = $logpwd;
-
-    $manager = new \Web2project\Output\Email\Manager();
-    $manager->send('new-user-activated', 'en_US', $object, $address);
+    $manager = new \Web2project\Output\Email\Manager($sender);
+    $manager->loadTemplate('new-user-activated', 'en_US');
+    $manager->send($address, array('base_url' => W2P_BASE_URL, 'user_name' => $username,
+                                   'log_name' => $logname, 'log_password' => $logpwd));
 }
 
 function notifyNewExternalUser($emailAddress, $username, $logname, $logpwd, $sender = null)
 {
-    $object = new stdClass();
-    $object->base_url = W2P_BASE_URL;
-    $object->user_name = $username;
-    $object->log_name = $logname;
-    $object->log_password = $logpwd;
-
     $manager = new \Web2project\Output\Email\Manager($sender);
-    $manager->send('new-external-user', 'en_US', $object, $emailAddress);
+    $manager->loadTemplate('new-external-user', 'en_US');
+    $manager->send($emailAddress, array('base_url' => W2P_BASE_URL, 'user_name' => $username,
+                                        'log_name' => $logname, 'log_password' => $logpwd));
 }
 
 function notifyNewUser($emailAddress, $username, $sender = null)
 {
-    $object = new stdClass();
-    $object->base_url = W2P_BASE_URL;
-    $object->contact_name = $username;
-
     $manager = new \Web2project\Output\Email\Manager($sender);
-    $manager->send('new-account-created', 'en_US', $object, $emailAddress);
+    $manager->loadTemplate('new-account-created', 'en_US');
+    $manager->send($emailAddress, array('base_url' => W2P_BASE_URL, 'contact_name' => $username));
 }
 
 function clean_value($str)
