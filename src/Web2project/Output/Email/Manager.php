@@ -10,7 +10,8 @@ class Manager
     protected $sender = null;
     protected $templater = null;
 
-    public $templates = array();
+    public $subject = '';
+    public $body    = '';
 
     public function __construct($sender = null, $templater = null)
     {
@@ -18,36 +19,36 @@ class Manager
         $this->templater = is_null($templater) ? new \CSystem_Template() : $templater;
     }
 
-    public function send($name, $language, $object, $to)
+    public function sendAll($to_array, $substitutions)
     {
-        $this->loadTemplate($name, $language);
-        $subject = $this->templates[$name][$language]['subject'];
-        $body = $this->templates[$name][$language]['body'];
+        $result = array();
 
-        $subject = $this->render($subject, $object);
-        $body = $this->render($body, $object);
+        foreach($to_array as $to) {
+            $result[$to] = $this->send($to, $substitutions);
+        }
+
+        return $result;
+    }
+
+    public function send($to, $substitutions)
+    {
+        $subject = $this->render($this->subject, $substitutions);
+        $body = $this->render($this->body, $substitutions);
 
         $this->sender->To($to);
         $this->sender->Subject($subject);
         $this->sender->Body($body);
 
-        $this->sender->Send();
+        return $this->sender->Send();
     }
 
-    public function render($string, $object)
+    public function render($string, $substitutions)
     {
-        $properties = get_object_vars($object);
-
-        foreach ($properties as $key => $value) {
+        foreach ($substitutions as $key => $value) {
             $string = str_replace('{{' . $key . '}}', $value, $string);
         }
 
         return $string;
-    }
-
-    public function setTemplate($name, $language, $subject, $body)
-    {
-        $this->templates[$name][$language] = array('subject' => $subject, 'body' => $body);
     }
 
     public function loadTemplate($name, $language)
@@ -56,9 +57,8 @@ class Manager
         if (!$this->templater->email_template_id) {
             $this->templater->loadTemplate($name, 'en_US');
         }
-        $subject  = $this->templater->email_template_subject;
-        $body  = $this->templater->email_template_body;
 
-        $this->setTemplate($name, $language, $subject, $body);
+        $this->subject  = $this->templater->email_template_subject;
+        $this->body     = $this->templater->email_template_body;
     }
 }
