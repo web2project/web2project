@@ -19,36 +19,6 @@ function w2p_old_autoload($class_name)
 {
     $name = strtolower($class_name);
     switch ($name) {
-        case 'bcode':                   // Deprecated as of v3.0, TODO: remove this in v4.0
-        case 'budgets':                 // Deprecated as of v3.0, TODO: remove this in v4.0
-        case 'cadmin_user':             // Deprecated as of v3.0, TODO: remove this in v4.0
-        case 'cappui':                  // Deprecated as of v3.0, TODO: remove this in v4.0
-        case 'ccalendar':               // Deprecated as of v3.0, TODO: remove this in v4.0
-        case 'cconfig':                 // Deprecated as of v3.0, TODO: remove this in v4.0
-        case 'cdate':                   // Deprecated as of v3.0, TODO: remove this in v4.0
-        case 'cfilefolder':             // Deprecated as of v3.0, TODO: remove this in v4.0
-        case 'cforummessage':           // Deprecated as of v3.0, TODO: remove this in v4.0
-        case 'cinfotabbox':             // Deprecated as of v3.0, TODO: remove this in v4.0
-        case 'cmonthcalendar':          // Deprecated as of v3.0, TODO: remove this in v4.0
-        case 'cpreferences':            // Deprecated as of v3.0, TODO: remove this in v4.0
-        case 'cprojectdesigneroptions': // Deprecated as of v3.0, TODO: remove this in v4.0
-        case 'crole':                   // Deprecated as of v3.0, TODO: remove this in v4.0
-        case 'csyskey':                 // Deprecated as of v3.0, TODO: remove this in v4.0
-        case 'csysval':                 // Deprecated as of v3.0, TODO: remove this in v4.0
-        case 'ctabbox_core':            // Deprecated as of v3.0, TODO: remove this in v4.0
-        case 'ctasklog':                // Deprecated as of v3.0, TODO: remove this in v4.0
-        case 'ctitleblock':             // Deprecated as of v3.0, TODO: remove this in v4.0
-        case 'ctitleblock_core':        // Deprecated as of v3.0, TODO: remove this in v4.0
-        case 'customfields':            // Deprecated as of v3.0, TODO: remove this in v4.0
-        case 'cw2pobject':              // Deprecated as of v3.0, TODO: remove this in v4.0
-        case 'dbquery':                 // Deprecated as of v3.0, TODO: remove this in v4.0
-        case 'libmail':                 // Deprecated as of v2.3, TODO: remove this in v4.0
-        case 'smartsearch':             // Deprecated as of v2.3, TODO: remove this in v4.0
-        case 'w2pacl':                  // Deprecated as of v3.0, TODO: remove this in v4.0
-        case 'w2pajaxresponse':         // Deprecated as of v3.0, TODO: remove this in v4.0
-            require_once W2P_BASE_DIR . '/classes/deprecated.class.php';
-            break;
-
         /*
          * These are our library helper libraries. They're included here to simplify usage.
          */
