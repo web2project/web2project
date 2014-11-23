@@ -5084,9 +5084,10 @@ function __extract_from_tasks_pinning($AppUI, $task_id)
 
         $task = new CTask();
         // load the record data
-        if ($pin) {
+        if (1 == $pin) {
             $result = $task->pinTask($AppUI->user_id, $task_id);
-        } else {
+        }
+        if (-1 == $pin) {
             $result = $task->unpinTask($AppUI->user_id, $task_id);
         }
 
