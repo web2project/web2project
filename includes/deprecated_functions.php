@@ -1485,3 +1485,24 @@ function canAccess($mod)
 
     return $AppUI->acl()->canAccess($mod);
 }
+
+/**
+ * @deprecated since v4.0
+ * @codeCoverageIgnore
+ */
+function __extract_from_tasks2($row)
+{
+    $q = new w2p_Database_Query;
+    $q->addQuery('ut.user_id,	u.user_username, ut.user_task_priority');
+    $q->addQuery('ut.perc_assignment');
+    $q->addQuery('contact_display_name AS assignee, contact_email');
+    $q->addTable('user_tasks', 'ut');
+    $q->addJoin('users', 'u', 'u.user_id = ut.user_id', 'inner');
+    $q->addJoin('contacts', 'c', 'u.user_contact = c.contact_id', 'inner');
+    $q->addWhere('ut.task_id = ' . (int) $row['task_id']);
+    $q->addOrder('perc_assignment desc, contact_first_name, contact_last_name');
+    $assigned_users = $q->loadList();
+
+    return $assigned_users;
+}
+
