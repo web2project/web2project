@@ -25,11 +25,6 @@ $task_id = (int) w2PgetParam($_GET, 'task_id', 0);
 $pinned_only = (int) w2PgetParam($_GET, 'pinned', 0);
 __extract_from_tasks_pinning($AppUI, $task_id);
 
-$durnTypes = w2PgetSysVal('TaskDurationType');
-$taskPriority = w2PgetSysVal('TaskPriority');
-
-$task_project = $project_id;
-
 $task_sort_item1 = w2PgetParam($_GET, 'task_sort_item1', 'task_start_date');
 $task_sort_type1 = w2PgetParam($_GET, 'task_sort_type1', '');
 $task_sort_item2 = w2PgetParam($_GET, 'task_sort_item2', 'task_end_date');
@@ -49,8 +44,6 @@ $where_list = (count($allowedProjects)) ? implode(' AND ', $allowedProjects) : '
 $working_hours = ($w2Pconfig['daily_working_hours'] ? $w2Pconfig['daily_working_hours'] : 8);
 
 $projects = __extract_from_tasks4($where_list, $project_id, $task_id);
-$subquery = __extract_from_tasks1();
-$task_status = __extract_from_tasks($min_view, $currentTabId, $project_id, $currentTabName, $AppUI);
 
 global $expanded;
 $expanded = $AppUI->getPref('TASKSEXPANDED');
