@@ -16,7 +16,7 @@
 global $m;
 
 $page = (int) w2PgetParam($_GET, 'page', 1);
-$paginator = new w2p_Utilities_Paginator($items);
+$paginator = new \Web2project\Utilities\Paginator($items);
 $items = $paginator->getItemsOnPage($page);
 
 echo $paginator->buildNavigation($AppUI, $m, $tab);

@@ -26,8 +26,6 @@ class CCompaniesTest extends CommonSetup
         $this->obj = new CCompany();
         $this->obj->overrideDatabase($this->mockDB);
 
-        $GLOBALS['acl'] = new w2p_Mocks_Permissions();
-
         $this->post_data = array (
             'dosql'                 => 'do_company_aed',
             'company_id'            => 0,
@@ -348,28 +346,6 @@ class CCompaniesTest extends CommonSetup
         $this->assertEquals('Admin Person',                $companies[3]['contact_display_name']);
     }
 
-    /**
-     * @todo Implement testCanDelete().
-     */
-    public function testCanDelete()
-    {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-                'This test has not been implemented yet.'
-        );
-    }
-
-    /**
-     * @todo Implement testGetCompanyList().
-     */
-    public function testGetCompanyList()
-    {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-                'This test has not been implemented yet.'
-        );
-    }
-
     public function testGetCompanies()
     {
         $results = $this->obj->loadAll();
@@ -384,47 +360,41 @@ class CCompaniesTest extends CommonSetup
         $this->assertEquals('Second Company',   $results[2]['company_name']);
     }
 
-    /**
-     * @todo Implement testGetProjects().
-     */
-    public function testGetProjects()
+    public function testHookSearch()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-                'This test has not been implemented yet.'
-        );
+        $search = $this->obj->hook_search();
+
+        $this->assertEquals(8, count($search));
     }
 
-    /**
-     * @todo Implement testGetContacts().
-     */
-    public function testGetContacts()
+    public function testProjects()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-                'This test has not been implemented yet.'
-        );
+        $this->mockDB->stageList(
+            array('project_id' => 1, 'project_name' => 'Test Project', 'contact_first_name' => 'Admin',
+                'contact_last_name' => 'User', 'user_id' => 1));
+
+        $projects = $this->obj->projects($this->_AppUI, 1);
+        $this->assertEquals('Test Project', $projects[0]['project_name']);
+
+        $projects = $this->obj->projects($this->_AppUI, 1, 1, 'monkey');
+        $this->assertEquals('Test Project', $projects[0]['project_name']);
     }
 
-    /**
-     * @todo Implement testGetUsers().
-     */
-    public function testGetUsers()
+    public function testDepartmentsNoCompany()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-                'This test has not been implemented yet.'
-        );
+        $results = $this->obj->departments(0);
+        $this->assertEquals(0, count($results));
     }
 
-    /**
-     * @todo Implement testGetDepartments().
-     */
-    public function testGetDepartments()
+    public function testUsersNoCompany()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-                'This test has not been implemented yet.'
-        );
+        $results = $this->obj->users(0);
+        $this->assertEquals(0, count($results));
+    }
+
+    public function testContactsNoCompany()
+    {
+        $results = $this->obj->contacts(0);
+        $this->assertEquals(0, count($results));
     }
 }

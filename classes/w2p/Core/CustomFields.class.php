@@ -59,6 +59,9 @@ class w2p_Core_CustomFields {
                     case 'email':
                         $this->fields[$row['field_name']] = new w2p_Core_CustomFieldEmail(    $row['field_id'], $row['field_name'], $row['field_order'], stripslashes($row['field_description']), stripslashes($row['field_extratags']), $row['field_published']);
                         break;
+                    case 'dateinput':
+                        $this->fields[$row['field_name']] = new w2p_Core_CustomFieldDate(    $row['field_id'], $row['field_name'], $row['field_order'], stripslashes($row['field_description']), stripslashes($row['field_extratags']), $row['field_published']);
+                        break;
                     default:
                         $this->fields[$row['field_name']] = new w2p_Core_CustomFieldText(     $row['field_id'], $row['field_name'], $row['field_order'], stripslashes($row['field_description']), stripslashes($row['field_extratags']), $row['field_published']);
                         break;

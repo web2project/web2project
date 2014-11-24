@@ -36,43 +36,50 @@ class w2p_Output_HTML_ViewHelperTest extends CommonSetup
 
     public function testAddField()
     {
-        $output = $this->obj->addField('email', 'monkey@example.com');
-        $this->assertEquals('<a href="mailto:monkey@example.com">monkey@example.com</a>', $output);
+        $output = $this->obj->addField('field', '');
+        $this->assertEquals('-', $output);
 
-        $output = $this->obj->addField('url', 'http://google.com');
-        $this->assertEquals('<a href="http://google.com" target="_new">http://google.com</a>', $output);
+        $output = $this->obj->addField('field_datetime', '12/13/2014 23:45');
+        $this->assertEquals('13/Dec/2014 05:45 pm', $output);
 
-        $output = $this->obj->addField('owner', '2');
-        $this->assertEquals('<a href="?m=users&a=view&user_id=2">Contact Number 1</a>', $output);
+        $output = $this->obj->addField('field_birthday', '1979-09-14');
+        $this->assertEquals('14/Sep/1979', $output);
 
-        $output = $this->obj->addField('description', 'test');
-        $this->assertEquals('test', $output);
+        $output = $this->obj->addField('field_email', 'value');
+        $this->assertEquals('<a href="mailto:value">value</a>', $output);
 
-        $output = $this->obj->addField('description', 'test w/ a link: http://web2project.net');
-        $this->assertEquals('test w/ a link: <a href="http://web2project.net" target="_blank">http://web2project.net</a>', $output);
+        $output = $this->obj->addField('field_url', 'value');
+        $this->assertEquals('<a href="http://value" target="_new">http://value</a>', $output);
 
-        $output = $this->obj->addField('percent', '38.7');
-        $this->assertEquals('39%', $output);
-        /**
-        $output = $this->obj->addField('birthday', '2014-02-01');
-        // @todo $this->assertEquals('<input type="text" class="text birthday" name="birthday" value="2014-02-01" />', $output);
+        $output = $this->obj->addField('field_owner', 'value');
+        $this->assertEquals('<a href="?m=users&a=view&user_id=value"></a>', $output);
 
-        $output = $this->obj->addField('task_end_date', '2014-02-01');
-        $this->assertGreaterThan(0, strpos($output, 'value="20140201"'));
-        $this->assertGreaterThan(0, strpos($output, 'value="01/Feb/2014"'));
-        $this->assertGreaterThan(0, strpos($output, "return showCalendar('end_date'"));
+        $output = $this->obj->addField('field_percent', '34.1');
+        $this->assertEquals('34%', $output);
 
-        $output = $this->obj->addField('private', 'fieldvalue');
-        // @todo $this->assertEquals('<input type="checkbox" value="1" class="text private" name="private" />', $output);
+        $output = $this->obj->addField('field_name', 'value');
+        $this->assertEquals('value', $output);
 
-        $output = $this->obj->addField('type', 0, array(), array(0 => 'monkey', 2 => 'dog'));
-        $this->assertGreaterThan(0, strpos($output, '<option value="0" selected="selected">monkey</option>'));
+        $output = $this->obj->addField('field_project', 1);
+        $this->assertEquals('<a href="?m=projects&a=view&project_id=1">Test Project</a>', $output);
+    }
 
-        $output = $this->obj->addField('company', '1');
-        $this->assertEquals('<a href="?m=companies&a=view&company_id=1">UnitTestCompany</a>', $output);
+    public function testShowField()
+    {
+        $this->expectOutputString('<a href="mailto:value">value</a>');
+        $this->obj->showField('field_email', 'value');
+    }
 
-        $output = $this->obj->addField('other', 'fieldvalue', $options, $values);
-        // @todo $this->assertEquals('<input type="text" xx="text other" name="other" value="fieldvalue" />', $output);
- */
+    public function testShowAddress()
+    {
+        $object = new stdClass();
+        $object->monkey_address1 = '123 Fake Street';
+        $object->monkey_city = 'Austin';
+        $object->monkey_state = 'TX';
+        $object->monkey_zip = '78704';
+        $object->monkey_country = 'US';
+
+        $this->expectOutputString('<div style="margin-left: 11em;"><a href="http://maps.google.com/maps?q=123 Fake Street++Austin+TX+78704+US" target="_blank"><img src="./style/web2project/images/googlemaps.gif" class="right" alt="Find It on Google" /></a>123 Fake Street<br />Austin TX, 78704<br />United States</div>');
+        $this->obj->showAddress('monkey', $object);
     }
 }

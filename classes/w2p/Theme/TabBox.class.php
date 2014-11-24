@@ -4,7 +4,7 @@
  * @package     web2project\theme
  */
 
-class w2p_Theme_TabBox {
+abstract class w2p_Theme_TabBox {
     /**
     @var array */
     public $tabs = null;
@@ -85,34 +85,19 @@ class w2p_Theme_TabBox {
         return true;
     }
 
-    /**
-     * Displays the tabbed box
-     *
-     * This function may be overridden
-     *
-     * @param string Can't remember whether this was useful
-     */
-    public function show($extra = '', $js_tabs = false) {
-        $this->loadExtras($notUsed, $notUsed2);
+    public function show($extra = '', $js_tabs = false, $alignment = 'left', $opt_flat = true) {
+        $this->loadExtras($this->m, $this->a);
 
-        
-        
-        
-        
+        if (($this->a == 'addedit' || $this->a == 'view' || $this->a == 'viewuser')) {
+            echo $this->_AppUI->getTheme()->styleRenderBoxBottom();
+        }
+
         reset($this->tabs);
         $s = '';
         // tabbed / flat view options
-        if ($this->_AppUI->getPref('TABVIEW') == 0) {
-            $s .= '<table border="0" cellpadding="2" cellspacing="0" width="100%"><tr><td nowrap="nowrap">';
-            $s .= '<a class="crumb" href="' . $this->baseHRef . 'tab=0"><span>' . $this->_AppUI->_('tabbed') . '</span></a> ';
-            $s .= '<a class="crumb" href="' . $this->baseHRef . 'tab=-1"><span>' . $this->_AppUI->_('flat') . '</span></a>';
-            $s .= '</td>' . $extra . '</tr></table>';
-            echo $s;
-        } else {
+        if ($this->_AppUI->getPref('TABVIEW') != 0) {
             if ($extra) {
-                echo '<table border="0" cellpadding="2" cellspacing="0" width="100%"><tr>' . $extra . '</tr></table>';
-            } else {
-                echo '<img src="' . w2PfindImage('shim.gif') . '" height="10" width="1" alt="" />';
+                echo '<table border="0" cellpadding="2" cellspacing="0" width="100%"><tr>' . $extra . '</tr>' . '</table>';
             }
         }
 
@@ -130,33 +115,48 @@ class w2p_Theme_TabBox {
             echo '</table>';
         } else {
             // tabbed view
-            $s = '<table width="100%" border="0" cellpadding="3" cellspacing="0"><tr>';
+            $s = '<table width="100%" border="0" cellpadding="0" cellspacing="0">';
+            $s .= '<tr><td><table align="' . $alignment . '" border="0" cellpadding="0" cellspacing="0"><tr>';
+
             if (count($this->tabs) - 1 < $this->active) {
                 //Last selected tab is not available in this view. eg. Child tasks
                 $this->active = 0;
             }
             foreach ($this->tabs as $k => $v) {
                 $class = ($k == $this->active) ? 'tabon' : 'taboff';
-                $s .= '<td width="1%" nowrap="nowrap" class="tabsp"><img src="' . w2PfindImage('shim.gif') . '" height="1" width="1" alt="" /></td>';
-                $s .= '<td id="toptab_' . $k . '" width="1%" nowrap="nowrap"';
-                if ($js_tabs) {
-                    $s .= ' class="' . $class . '"';
-                }
-                $s .= '><a href="';
+                $sel = ($k == $this->active) ? 'Selected' : '';
+                $s .= '<td valign="middle"><img src="./style/' . $this->_uistyle . '/images/bar_top_' . $sel . 'left.gif" id="lefttab_' . $k . '" /></td>';
+                $s .= '<td id="toptab_' . $k . '" valign="middle" nowrap="nowrap" class="' . $class . '">&nbsp;<a href="';
                 if ($this->javascript) {
                     $s .= 'javascript:' . $this->javascript . '(' . $this->active . ', ' . $k . ')';
                 } elseif ($js_tabs) {
                     $s .= 'javascript:show_tab(' . $k . ')';
                 } else {
-                    $s .= $this->baseHRef . "tab=$k";
+                    $s .= $this->baseHRef . 'tab=' . $k;
                 }
-                $s .= '">' . ($v[2] ? $v[1] : $this->_AppUI->_($v[1])) . '</a></td>';
+                $s .= '">' . ($v[2] ? $v[1] : $this->_AppUI->_($v[1])) . '</a>&nbsp;</td>';
+                $s .= '<td valign="middle" ><img id="righttab_' . $k . '" src="./style/' . $this->_uistyle . '/images/bar_top_' . $sel . 'right.gif" /></td>';
+                $s .= '<td class="tabsp"><img src="' . w2PfindImage('shim.gif') . '" alt=""/></td>';
             }
-            $s .= '<td nowrap="nowrap" class="tabsp">&nbsp;</td></tr>';
-            $s .= '<tr><td width="100%" colspan="' . (count($this->tabs) * 2 + 1) . '" class="tabox">';
+            $s .= '</tr></table></td></tr>';
+
+            //round the right top of the tab box
+            $s .= '<tr><td>';
+            $s .= '<table width="100%" cellspacing="0" cellpadding="0" border="0">';
+            $s .= '<tbody>';
+            $s .= '<tr>';
+            $s .= '    <td valign="bottom" width="100%" background="./style/' . $this->_uistyle . '/images/tabbox_top.jpg" align="left">';
+            $s .= '        <img src="./style/' . $this->_uistyle . '/images/tabbox_top.jpg" alt=""/>';
+            $s .= '    </td>';
+            $s .= '</tr>';
+            $s .= '</tbody>';
+            $s .= '</table>';
+            $s .= '</td></tr>';
+
+            $s .= '<tr><td width="100%" colspan="' . (count($this->tabs) * 4 + 1) . '" class="tabox">';
             echo $s;
             //Will be null if the previous selection tab is not available in the new window eg. Children tasks
-            if ($this->baseInc . $this->tabs[$this->active][0] != '') {
+            if (isset($this->tabs[$this->active][0]) && $this->tabs[$this->active][0] != '') {
                 $this->currentTabId = $this->active;
                 $this->currentTabName = $this->tabs[$this->active][1];
                 if (!$js_tabs) {
@@ -166,8 +166,15 @@ class w2p_Theme_TabBox {
             if ($js_tabs) {
                 foreach ($this->tabs as $k => $v) {
                     echo '<div class="tab" id="tab_' . $k . '">';
+                    $this->currentTabId = $k;
+                    $this->currentTabName = $v[1];
                     require $this->baseInc . $v[0] . '.php';
                     echo '</div>';
+                    echo '<script language="javascript" type="text/javascript">
+                        <!--
+                        show_tab(' . $this->active . ');
+                        //-->
+                        </script>';
                 }
             }
             echo '</td></tr></table>';

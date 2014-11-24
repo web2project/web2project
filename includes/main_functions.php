@@ -19,36 +19,6 @@ function w2p_old_autoload($class_name)
 {
     $name = strtolower($class_name);
     switch ($name) {
-        case 'bcode':                   // Deprecated as of v3.0, TODO: remove this in v4.0
-        case 'budgets':                 // Deprecated as of v3.0, TODO: remove this in v4.0
-        case 'cadmin_user':             // Deprecated as of v3.0, TODO: remove this in v4.0
-        case 'cappui':                  // Deprecated as of v3.0, TODO: remove this in v4.0
-        case 'ccalendar':               // Deprecated as of v3.0, TODO: remove this in v4.0
-        case 'cconfig':                 // Deprecated as of v3.0, TODO: remove this in v4.0
-        case 'cdate':                   // Deprecated as of v3.0, TODO: remove this in v4.0
-        case 'cfilefolder':             // Deprecated as of v3.0, TODO: remove this in v4.0
-        case 'cforummessage':           // Deprecated as of v3.0, TODO: remove this in v4.0
-        case 'cinfotabbox':             // Deprecated as of v3.0, TODO: remove this in v4.0
-        case 'cmonthcalendar':          // Deprecated as of v3.0, TODO: remove this in v4.0
-        case 'cpreferences':            // Deprecated as of v3.0, TODO: remove this in v4.0
-        case 'cprojectdesigneroptions': // Deprecated as of v3.0, TODO: remove this in v4.0
-        case 'crole':                   // Deprecated as of v3.0, TODO: remove this in v4.0
-        case 'csyskey':                 // Deprecated as of v3.0, TODO: remove this in v4.0
-        case 'csysval':                 // Deprecated as of v3.0, TODO: remove this in v4.0
-        case 'ctabbox_core':            // Deprecated as of v3.0, TODO: remove this in v4.0
-        case 'ctasklog':                // Deprecated as of v3.0, TODO: remove this in v4.0
-        case 'ctitleblock':             // Deprecated as of v3.0, TODO: remove this in v4.0
-        case 'ctitleblock_core':        // Deprecated as of v3.0, TODO: remove this in v4.0
-        case 'customfields':            // Deprecated as of v3.0, TODO: remove this in v4.0
-        case 'cw2pobject':              // Deprecated as of v3.0, TODO: remove this in v4.0
-        case 'dbquery':                 // Deprecated as of v3.0, TODO: remove this in v4.0
-        case 'libmail':                 // Deprecated as of v2.3, TODO: remove this in v4.0
-        case 'smartsearch':             // Deprecated as of v2.3, TODO: remove this in v4.0
-        case 'w2pacl':                  // Deprecated as of v3.0, TODO: remove this in v4.0
-        case 'w2pajaxresponse':         // Deprecated as of v3.0, TODO: remove this in v4.0
-            require_once W2P_BASE_DIR . '/classes/deprecated.class.php';
-            break;
-
         /*
          * These are our library helper libraries. They're included here to simplify usage.
          */
@@ -212,10 +182,11 @@ function convert2days($durn, $units)
         case 0:
         case 1:
             return $durn / w2PgetConfig('daily_working_hours');
-            break;
-        case 24:
-            return $durn;
+        default:
+            // do nothing
     }
+
+    return $durn;
 }
 
 function filterCurrency($number)
@@ -244,6 +215,8 @@ function w2pFindTaskComplete($start_date, $end_date, $percent)
     if ($now > $end) { return 'late'; }
     if ($now > $start && $percent > 0) { return 'active'; }
     if ($now > $start && $percent == 0) { return 'notstarted'; }
+
+    return '';
 }
 
 /**
@@ -302,36 +275,9 @@ function w2p_textarea($content)
         $result = preg_replace("#(^|[\n ])([\w]+?://[\w]+[^ \"\n\r\t< ]*)#", "\\1<a href=\"\\2\" target=\"_blank\">\\2</a>", $result);
         $result = preg_replace("#(^|[\n ])((www|ftp)\.[^ \"\t\n\r< ]*)#", "\\1<a href=\"http://\\2\" target=\"_blank\">\\2</a>", $result);
         $result = nl2br($result);
-        //$result = html_entity_decode($result);
     }
 
     return $result;
-}
-
-function notifyNewExternalUser($emailAddress, $username, $logname, $logpwd, $emailUtility = null)
-{
-    global $AppUI;
-    $emailManager = new w2p_Output_EmailManager($AppUI);
-    $body = $emailManager->notifyNewExternalUser($logname, $logpwd);
-
-    $mail = (!is_null($emailUtility)) ? $emailUtility : new w2p_Utilities_Mail();
-    $mail->To($emailAddress);
-    $mail->Subject('New Account Created');
-    $mail->Body($body);
-    return $mail->Send();
-}
-
-function notifyNewUser($emailAddress, $username, $emailUtility = null)
-{
-    global $AppUI;
-    $emailManager = new w2p_Output_EmailManager($AppUI);
-    $body = $emailManager->getNotifyNewUser($username);
-
-    $mail = (!is_null($emailUtility)) ? $emailUtility : new w2p_Utilities_Mail();
-    $mail->To($emailAddress);
-    $mail->Subject('New Account Created');
-    $mail->Body($body);
-    return $mail->Send();
 }
 
 /**
@@ -343,13 +289,10 @@ function notifyNewUser($emailAddress, $username, $emailUtility = null)
 function &getAuth($auth_mode) {
     switch ($auth_mode) {
         case 'ldap':
-            $auth = new w2p_Authenticators_LDAP();
-            break;
+            return new w2p_Authenticators_LDAP();
         case 'pn':
-            $auth = new w2p_Authenticators_PostNuke();
-            break;
+            return new w2p_Authenticators_PostNuke();
         default:
-            $auth = new w2p_Authenticators_SQL();
+            return new \Web2project\Authenticators\SQL();
     }
-    return $auth;
 }

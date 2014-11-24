@@ -36,13 +36,9 @@ if (isset($_POST['show_task_options'])) {
 }
 $showIncomplete = $AppUI->getState('TaskListShowIncomplete', 0);
 
-$project = new CProject;
+$project = new CProject();
 $allowedProjects = $project->getAllowedSQL($AppUI->user_id, 'p.project_id');
-
 $where_list = (count($allowedProjects)) ? implode(' AND ', $allowedProjects) : '';
-
-$working_hours = ($w2Pconfig['daily_working_hours'] ? $w2Pconfig['daily_working_hours'] : 8);
-
 $projects = __extract_from_tasks4($where_list, $project_id, $task_id);
 
 global $expanded;
@@ -112,15 +108,14 @@ if ($task_id) {
                         <a href="./index.php?m=projects&amp;a=view&amp;project_id=<?php echo $k; ?>">
                             <?php echo w2PshowImage('pencil.gif'); ?>
                         </a>
-                    <span style="color:<?php echo bestColor($p['project_color_identifier']); ?>;text-decoration:none;">
-                        <strong>
-                            <?php echo $p['company_name'] . ' :: ' . $p['project_name']; ?>
-                        </strong>
-                        <span style="float: right;">
-                            <?php echo (int) $p['project_percent_complete']; ?>%
+                        <span style="color:<?php echo bestColor($p['project_color_identifier']); ?>;text-decoration:none;">
+                            <strong>
+                                <?php echo $p['company_name'] . ' :: ' . $p['project_name']; ?>
+                            </strong>
+                            <span style="float: right;">
+                                <?php echo (int) $p['project_percent_complete']; ?>%
+                            </span>
                         </span>
-                    </span>
-
                     </div>
                 </td>
             </tr>
@@ -129,7 +124,12 @@ if ($task_id) {
             echo $listTable->buildRows($taskTree, $customLookups);
         }
         if ('projects' == $m || 'projectdesigner' == $m) {
-            $taskTree = $tempTask->getTaskTree($k, 0, $showIncomplete);
+            // TODO: fix this ugly bit of code :(
+            if ($tab == 1) {
+                $taskTree = $tempTask->loadAll('task_start_date, task_end_date', "task_project = $k AND task_status != 0");
+            } else {
+                $taskTree = $tempTask->getTaskTree($k);
+            }
             echo $listTable->buildRows($taskTree, $customLookups);
         }
     }

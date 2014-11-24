@@ -1,7 +1,4 @@
 <?php
-if (!defined('W2P_BASE_DIR')) {
-    die('You should not access this file directly.');
-}
 
 class style_wpsredmond extends w2p_Theme_Base
 {
@@ -30,13 +27,7 @@ class CTabBox extends w2p_Theme_TabBox {
         reset($this->tabs);
         $s = '';
         // tabbed / flat view options
-        if ($this->_AppUI->getPref('TABVIEW') == 0) {
-//            $s .= '<table border="0" cellpadding="2" cellspacing="0" width="100%"><tr><td nowrap="nowrap">';
-//            $s .= '<a href="' . $this->baseHRef . 'tab=0">' . $this->_AppUI->_('tabbed') . '</a> : ';
-//            $s .= '<a href="' . $this->baseHRef . 'tab=-1">' . $this->_AppUI->_('flat') . '</a>';
-//            $s .= '</td>' . $extra . '</tr></table>';
-//            echo $s;
-        } else {
+        if ($this->_AppUI->getPref('TABVIEW') != 0) {
             if ($extra) {
                 echo '<table border="0" cellpadding="2" cellspacing="0" width="100%"><tr>' . $extra . '</tr></table>';
             } else {

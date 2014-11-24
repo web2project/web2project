@@ -18,7 +18,7 @@
 
 class w2p_FileSystem_LoaderTest extends CommonSetup
 {
-    protected function setUp()
+    public function setUp()
     {
         parent::setUp();
 
@@ -53,18 +53,31 @@ class w2p_FileSystem_LoaderTest extends CommonSetup
         //$this->assertGreaterThan(count($files2), count($files1));
     }
 
+    public function testMakeFileNamSafe()
+    {
+        $filename = '../../asdf.php';
+        $this->assertEquals('asdf.php', $this->obj->makeFileNameSafe($filename));
+
+        $filename = '../../asdf--!.php';
+        $this->assertEquals('asdf.php', $this->obj->makeFileNameSafe($filename));
+
+        $filename = '../..\asdf.php';
+        $this->assertEquals('asdf.php', $this->obj->makeFileNameSafe($filename));
+
+        $filename = '/@#$%^&*(/asdf.php';
+        $this->assertEquals('asdf.php', $this->obj->makeFileNameSafe($filename));
+    }
+
     /**
-     * @todo Implement testCheckFileName().
+     * @expectedException PHPUnit_Framework_Error
      */
     public function testCheckFileName()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-            'This test has not been implemented yet.'
-        );
+        $this->assertEquals('index.php', $this->obj->checkFileName('index.php'));
     }
 
-    public function testMakeFileNameSafe() {
+    public function testMakeFileNameSafe()
+    {
         $this->assertEquals('index.php', $this->obj->makeFileNameSafe('index.php'));
         $this->assertEquals('.', $this->obj->makeFileNameSafe('.'));
         $this->assertEquals('index.php', $this->obj->makeFileNameSafe('../index.php'));

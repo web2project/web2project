@@ -1,6 +1,6 @@
 <?php
 if (!defined('W2P_BASE_DIR')) {
-	die('You should not call this file directly.');
+    die('You should not call this file directly.');
 }
 $df = $AppUI->getPref('SHDATEFORMAT');
 $date = w2PgetParam($_GET, 'date', '');

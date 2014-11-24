@@ -26,8 +26,6 @@ class CLinksTest extends CommonSetup
       $this->obj    = new CLink();
       $this->obj->overrideDatabase($this->mockDB);
 
-      $GLOBALS['acl'] = new w2p_Mocks_Permissions();
-
       $this->post_data = array(
           'dosql'             => 'do_link_aed',
           'link_id'           => 0,
@@ -179,39 +177,6 @@ class CLinksTest extends CommonSetup
         $this->assertTrue(is_a($item, 'CLink'));
         $this->assertEquals('',              $item->link_name);
         $this->assertEquals('',              $item->link_url);
-    }
-
-    /**
-     * @todo Implement testLoadFull().
-     */
-    public function testLoadFull()
-    {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-                'This test has not been implemented yet.'
-        );
-    }
-
-    /**
-     * @todo Implement testGetProjectTaskLinksByCategory().
-     */
-    public function testGetProjectTaskLinksByCategory()
-    {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-                'This test has not been implemented yet.'
-        );
-    }
-
-    /**
-     * @todo Implement testCheck().
-     */
-    public function testCheck()
-    {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-                'This test has not been implemented yet.'
-        );
     }
 
     public function testHook_search() {

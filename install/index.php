@@ -36,15 +36,15 @@ $manager = new w2p_System_UpgradeManager();
 			  <td class="item" colspan="2">Welcome to the web2Project Update Manager!</td>
 			</tr>
 			<?php
-			$action = $manager->getActionRequired();
-			switch ($action) {
-				case 'install':
-					?>
+            $action = $manager->getActionRequired();
+            switch ($action) {
+                case 'install':
+                    ?>
 					<tr>
-						<td colspan="2">This system will help you perform each of the 
-							required steps to prepare your web2project installation.  It's 
-							a three step process.  First we'll confirm that all the 
-							requirements are met, then we'll get the database credentials, 
+						<td colspan="2">This system will help you perform each of the
+							required steps to prepare your web2project installation.  It's
+							a three step process.  First we'll confirm that all the
+							requirements are met, then we'll get the database credentials,
 							then we'll load the system.</td>
 					</tr>
 					<?php if ($step == '') { ?>
@@ -58,13 +58,13 @@ $manager = new w2p_System_UpgradeManager();
 							</td>
 						</tr>
 					<?php
-					}
-					break;
-				case 'conversion':
-					?>
+                    }
+                    break;
+                case 'conversion':
+                    ?>
 					<tr>
-						<td colspan="2">This is where the conversion script kicks in.  
-							It's a two step process.  First we'll confirm that all the 
+						<td colspan="2">This is where the conversion script kicks in.
+							It's a two step process.  First we'll confirm that all the
 							requirements are met, then we'll convert your existing data.<br />
 							You shouldn't have to do anything manually except log in at the end.</td>
 					</tr>
@@ -79,9 +79,9 @@ $manager = new w2p_System_UpgradeManager();
 							</td>
 						</tr>
 					<?php
-					}
-					break;
-				case 'upgrade':
+                    }
+                    break;
+                case 'upgrade':
                     ?>
 					<tr>
 						<td colspan="2">The system upgrade is performed through the
@@ -89,32 +89,32 @@ $manager = new w2p_System_UpgradeManager();
                         to be logged in with Admin access. Please click <strong><a href="../index.php?m=system">System Admin</a></strong> to continue.</td>
 					</tr>
 					<?php
-					break;
-				default:
-					?>
+                    break;
+                default:
+                    ?>
 					<tr>
 						<td colspan="2">You've attempted to perform an invalid action. Stop that.</td>
 					</tr>
 					<?php
-			}
+            }
 
-			switch ($action.'/'.$step) {
-				case 'install/check':
-				case 'install/dbcreds':
-				case 'install/perform':
-				case 'conversion/check':
-				case 'conversion/perform':
-					/*
+            switch ($action.'/'.$step) {
+                case 'install/check':
+                case 'install/dbcreds':
+                case 'install/perform':
+                case 'conversion/check':
+                case 'conversion/perform':
+                    /*
 					 *  Doing  something like this is often a security risk.  It's not in
 					 * this case as we know *exactly* what both $action and $step will be
 					 * if we reach this include.
 					 */
-					include $action.'/'.$step.'.php';
-					break;
-				default:
-					//do nothing
-			}
-			?>
+                    include $action.'/'.$step.'.php';
+                    break;
+                default:
+                    //do nothing
+            }
+            ?>
 		</table>
 	</body>
 </html>

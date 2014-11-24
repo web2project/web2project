@@ -26,8 +26,6 @@ class CSystem_BcodeTest extends CommonSetup
       $this->obj    = new CSystem_Bcode();
       $this->obj->overrideDatabase($this->mockDB);
 
-      $GLOBALS['acl'] = new w2p_Mocks_Permissions();
-
       $this->post_data = array(
           'dosql'                => 'do_billingcode_aed',
           'billingcode_id'       => 0,

@@ -21,13 +21,13 @@ class CUser extends w2p_Core_BaseObject
     protected $externally_created_user = false;
     protected $authenticator = null;
 
-    private $perm_func = null;    
+    private $perm_func = null;
 
     public function __construct()
     {
         parent::__construct('users', 'user_id');
-        
-        $this->authenticator = new w2p_Authenticators_SQL();
+
+        $this->authenticator = new \Web2project\Authenticators\SQL();
     }
 
     public function isValid()
@@ -47,14 +47,16 @@ class CUser extends w2p_Core_BaseObject
         return (count($this->_error)) ? false : true;
     }
 
-    protected function  hook_preCreate() {
+    protected function hook_preCreate()
+    {
         $this->perm_func = 'addLogin';
         $this->user_password = $this->authenticator->hashPassword($this->user_password);
 
         parent::hook_preCreate();
     }
 
-    protected function  hook_preUpdate() {
+    protected function hook_preUpdate()
+    {
         $this->perm_func = 'updateLogin';
         $tmpUser = new CUser();
         $tmpUser->overrideDatabase($this->_query);
@@ -113,27 +115,13 @@ class CUser extends w2p_Core_BaseObject
         parent::hook_postStore();
     }
 
-    /**
-     * A user can always view their own information.
-     *
-     * @return bool
-     */
-    public function canView()
-    {
-        return (parent::canView() || $this->user_id == $this->_AppUI->user_id);
-    }
-
-    /**
-     * A user can always edit their own information.
-     *
-     * @return bool
-     */
     public function canEdit()
     {
         $result = false;
         if (parent::canEdit() || $this->user_id == $this->_AppUI->user_id) {
             $result = true;
         }
+
         return $result;
     }
 
@@ -141,6 +129,7 @@ class CUser extends w2p_Core_BaseObject
     {
         if ($this->user_exists($this->user_username)) {
             $this->_error['canCreate'] = 'A user with this username already exists';
+
             return false;
          }
 
@@ -203,6 +192,7 @@ class CUser extends w2p_Core_BaseObject
         return w2PgetUsers();
     }
 
+    /** @deprecated */
     public function loadFull($userId)
     {
         $q = $this->_getQuery();
@@ -215,8 +205,11 @@ class CUser extends w2p_Core_BaseObject
         $q->addJoin('departments', 'dep', 'dept_id = contact_department');
         $q->addJoin('user_feeds', 'uf', 'feed_user = u.user_id');
         $q->addWhere('u.user_id = ' . (int) $userId);
+        $hash = $q->loadHash();
 
-        $q->loadObject($this, true, false);
+        foreach($hash as $key => $value) {
+            $this->$key = $value;
+        }
     }
 
     public function hook_cron()
@@ -233,7 +226,7 @@ class CUser extends w2p_Core_BaseObject
     public function validatePassword($userId, $password)
     {
         $hash = $this->authenticator->hashPassword($password);
-        
+
         $users = $this->loadAll('user_id', 'user_password = \'' . $hash . '\' AND user_id = ' . (int) $userId);
 
         return isset($users[$userId]);
@@ -283,8 +276,7 @@ class CUser extends w2p_Core_BaseObject
         $q = $this->_getQuery();
         $q->addTable('users', 'u');
         $q->addQuery('DISTINCT SUBSTRING(user_username, 1, 1) as L');
-        $arr = $q->loadList();
-
+        $arr = $q->loadHashList();
         $letters = implode('', $arr);
 
         return strtoupper($letters);
@@ -364,108 +356,7 @@ class CUser extends w2p_Core_BaseObject
                 $retres[] = $user;
             }
         }
+
         return $retres;
-    }
-
-    /**
-     * @deprecated
-     */
-    public static function getUserList()
-    {
-        trigger_error("The CUser::getUserList static method has been deprecated in 3.1 and will be removed in v4.0. Please use CUser->getList instead.", E_USER_NOTICE );
-        $user = new CUser();
-        return $user->getList();
-    }
-
-    /**
-     * @deprecated
-     */
-    public function fullLoad($userId)
-    {
-        trigger_error("The fullLoad method has been deprecated and will be removed by v4.0.", E_USER_NOTICE);
-
-        $this->loadFull($userId);
-    }
-
-    /**
-     * @deprecated
-     */
-    public static function getUserIdByToken($token)
-    {
-        trigger_error("CUser::getUserIdByToken has been deprecated in v3.0 and will be removed by v4.0. Please use CUser->getIdByToken() instead.", E_USER_NOTICE);
-        $user = new CUser();
-
-        return $user->getIdByToken($token);
-    }
-
-    /**
-     * @deprecated
-     */
-    public static function getUserIdByContactID($contactId)
-    {
-        trigger_error("CUser::getUserIdByContactID has been deprecated in v3.0 and will be removed by v4.0. Please use CUser->getIdByContactId() instead.", E_USER_NOTICE);
-        $user = new CUser();
-
-        return $user->getIdByContactId($contactId);
-    }
-
-    /**
-     * @deprecated
-     */
-    public static function getUserDeptId($user_id)
-    {
-        trigger_error("CUser::getUserDeptId has been deprecated in v3.0 and will be removed by v4.0. Please use CUser->getDeptId() instead.", E_USER_NOTICE);
-        $user = new CUser();
-
-        return $user->getDeptId($user_id);
-    }
-    public static function exists($username)
-    {
-        trigger_error("CUser::exists has been deprecated in v3.0 and will be removed by v4.0. Please use CUser->user_exists() instead.", E_USER_NOTICE);
-
-        $user = new CUser();
-        return $user->user_exists($username);
-    }
-    /**
-     * @deprecated
-     */
-    public static function getFirstLetters()
-    {
-        trigger_error("CUser::getFirstLetters has been deprecated in v3.1 and will be removed by v4.0. Please use CUser->getLetters() instead.", E_USER_NOTICE);
-        $user = new CUser();
-        return $user->getLetters();
-    }
-
-    /**
-     * @deprecated
-     */
-    public static function generateUserToken($userId, $token = '')
-    {
-        trigger_error("CUser::generateUserToken has been deprecated in v3.0 and will be removed by v4.0. Please use CUser->generateToken() instead.", E_USER_NOTICE);
-        $user = new CUser();
-
-        return $user->generateToken($userId, $token);
-    }
-
-    /**
-     * @deprecated
-     */
-    public static function getLogs($userId, $startDate, $endDate)
-    {
-        trigger_error("CUser::getLogs has been deprecated in v3.0 and will be removed by v4.0. Please use CUser->getLogList() instead.", E_USER_NOTICE);
-        $user = new CUser();
-
-        return $user->getLogList($userId, $startDate, $endDate);
-    }
-
-    /**
-     * @deprecated
-     */
-    public static function isUserActive($user_id)
-    {
-        trigger_error("CUser::isUserActive has been deprecated in v3.0 and will be removed by v4.0. Please use CUser->isActive() instead.", E_USER_NOTICE);
-        $user = new CUser();
-
-        return $user->isActive($user_id);
     }
 }

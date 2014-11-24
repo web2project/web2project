@@ -1,11 +1,10 @@
 <?php
 if (!defined('W2P_BASE_DIR')) {
-	die('You should not access this file directly.');
+    die('You should not access this file directly.');
 }
 // @todo    convert to template
 
 global $AppUI, $cal_sdf;
-$AppUI->getTheme()->loadCalendarJS();
 
 /**
  * Generates a report of the task logs for given dates
@@ -22,42 +21,42 @@ $log_end_date = w2PgetParam($_POST, 'log_end_date', 0);
 $period = w2PgetParam($_POST, 'period', 0);
 $period_value = w2PgetParam($_POST, 'pvalue', 1);
 if ($period) {
-	$today = new w2p_Utilities_Date();
-	$ts = $today->format(FMT_TIMESTAMP_DATE);
-	if (strtok($period, ' ') == $AppUI->_('Next')) {
-		$sign = + 1;
-	} else {
-		$sign = -1;
-	}
+    $today = new w2p_Utilities_Date();
+    $ts = $today->format(FMT_TIMESTAMP_DATE);
+    if (strtok($period, ' ') == $AppUI->_('Next')) {
+        $sign = + 1;
+    } else {
+        $sign = -1;
+    }
 
-	$day_word = strtok(' ');
-	if ($day_word == $AppUI->_('Day')) {
-		$days = $period_value;
-	} elseif ($day_word == $AppUI->_('Week')) {
-		$days = 7 * $period_value;
-	} elseif ($day_word == $AppUI->_('Month')) {
-		$days = 30 * $period_value;
-	}
+    $day_word = strtok(' ');
+    if ($day_word == $AppUI->_('Day')) {
+        $days = $period_value;
+    } elseif ($day_word == $AppUI->_('Week')) {
+        $days = 7 * $period_value;
+    } elseif ($day_word == $AppUI->_('Month')) {
+        $days = 30 * $period_value;
+    }
 
-	$start_date = new w2p_Utilities_Date($ts);
-	$end_date = new w2p_Utilities_Date($ts);
+    $start_date = new w2p_Utilities_Date($ts);
+    $end_date = new w2p_Utilities_Date($ts);
 
-	if ($sign > 0) {
-		$end_date->addSpan(new Date_Span(array($days,0,0,0)));
-	} else {
-		$start_date->subtractSpan(new Date_Span(array($days,0,0,0)));
-	}
+    if ($sign > 0) {
+        $end_date->addSpan(new Date_Span(array($days,0,0,0)));
+    } else {
+        $start_date->subtractSpan(new Date_Span(array($days,0,0,0)));
+    }
 
-	$do_report = 1;
+    $do_report = 1;
 
 } else {
-	// create Date objects from the datetime fields
-	$start_date = intval($log_start_date) ? new w2p_Utilities_Date($log_start_date) : new w2p_Utilities_Date();
-	$end_date = intval($log_end_date) ? new w2p_Utilities_Date($log_end_date) : new w2p_Utilities_Date();
+    // create Date objects from the datetime fields
+    $start_date = intval($log_start_date) ? new w2p_Utilities_Date($log_start_date) : new w2p_Utilities_Date();
+    $end_date = intval($log_end_date) ? new w2p_Utilities_Date($log_end_date) : new w2p_Utilities_Date();
 }
 
 if (!$log_start_date) {
-	$start_date->subtractSpan(new Date_Span('14,0,0,0'));
+    $start_date->subtractSpan(new Date_Span('14,0,0,0'));
 }
 $end_date->setTime(23, 59, 59);
 
@@ -112,30 +111,29 @@ $df = $AppUI->getPref('SHDATEFORMAT');
 </form>
 <?php
 if ($do_report) {
-
     echo $AppUI->getTheme()->styleRenderBoxBottom();
-	echo '<br />';
+    echo '<br />';
     echo $AppUI->getTheme()->styleRenderBoxTop();
-	echo '<table class="std">
+    echo '<table class="std">
 <tr>
 	<td>';
 
-	echo '<table cellspacing="1" cellpadding="4" border="0" class="tbl"><tr>';
-	if ($project_id == 0) {
-		echo '<th>Project Name</th>';
-	}
+    echo '<table cellspacing="1" cellpadding="4" border="0" class="tbl"><tr>';
+    if ($project_id == 0) {
+        echo '<th>Project Name</th>';
+    }
     echo '<th>Task Name</th>';
-	echo '<th width=400>Task Description</th>';
-	echo '<th>Assigned To</th>';
-	echo '<th>Task Start Date</th>';
-	echo '<th>Task End Date</th>';
-	echo '<th>Completion</th></tr>';
+    echo '<th width=400>Task Description</th>';
+    echo '<th>Assigned To</th>';
+    echo '<th>Task Start Date</th>';
+    echo '<th>Task End Date</th>';
+    echo '<th>Completion</th></tr>';
 
-	$pdfdata = array();
-	$columns = array('<b>' . $AppUI->_('Task Name') . '</b>', '<b>' . $AppUI->_('Task Description') . '</b>', '<b>' . $AppUI->_('Assigned To') . '</b>', '<b>' . $AppUI->_('Task Start Date') . '</b>', '<b>' . $AppUI->_('Task End Date') . '</b>', '<b>' . $AppUI->_('Completion') . '</b>');
-	if ($project_id == 0) {
-		array_unshift($columns, '<b>' . $AppUI->_('Project Name') . '</b>');
-	}
+    $pdfdata = array();
+    $columns = array('<b>' . $AppUI->_('Task Name') . '</b>', '<b>' . $AppUI->_('Task Description') . '</b>', '<b>' . $AppUI->_('Assigned To') . '</b>', '<b>' . $AppUI->_('Task Start Date') . '</b>', '<b>' . $AppUI->_('Task End Date') . '</b>', '<b>' . $AppUI->_('Completion') . '</b>');
+    if ($project_id == 0) {
+        array_unshift($columns, '<b>' . $AppUI->_('Project Name') . '</b>');
+    }
 
     $htmlHelper = new w2p_Output_HTMLHelper($AppUI);
 
@@ -151,7 +149,7 @@ if ($do_report) {
 
     foreach ($project_ids as $project_id) {
         $taskTree = $obj->getTaskTree($project_id, 0);
-        foreach($taskTree as $task) {
+        foreach ($taskTree as $task) {
             $str = '<tr>';
             if (count($project_ids) > 1) {
                 $str .= '<td>' . $task['project_name'] . '</td>';
@@ -165,7 +163,7 @@ if ($do_report) {
 
             $users = array();
             $assignees = $obj->assignees($task['task_id']);
-            foreach($assignees as $assignee) {
+            foreach ($assignees as $assignee) {
                 $users[] = $assignee['contact_name'];
             }
             $str .= '<td>' . implode($users, ', ') . '</td>';
@@ -191,14 +189,14 @@ if ($do_report) {
         }
     }
 
-	echo '</table>';
-	if ($log_pdf) {
-		// make the PDF file
+    echo '</table>';
+    if ($log_pdf) {
+        // make the PDF file
         $project = new CProject();
-        $project->load((int)$project_id);
-		$pname = $project->project_name;
+        $project->load((int) $project_id);
+        $pname = $project->project_name;
 
-		$temp_dir = W2P_BASE_DIR . '/files/temp';
+        $temp_dir = W2P_BASE_DIR . '/files/temp';
 
         $output = new w2p_Output_PDFRenderer('A4', 'landscape');
         $output->addTitle($AppUI->_('Project Task Report'));
@@ -209,18 +207,18 @@ if ($do_report) {
         }
 
         $subhead = '';
-		if ($log_all) {
+        if ($log_all) {
             $title = $AppUI->_('All task entries');
-		} else {
-			if ($end_date != ' ') {
+        } else {
+            if ($end_date != ' ') {
                 $title = $AppUI->_('Task entries from') . ' ' . $start_date->format($df) .
                     $AppUI->_('to') . ' ' . $end_date->format($df);
-			} else {
+            } else {
                 $title = $AppUI->_('Task entries from') . ' ' . $start_date->format($df);
-			}
-		}
+            }
+        }
 
-		$options = array('showLines' => 2, 'showHeadings' => 1, 'fontSize' => 9,
+        $options = array('showLines' => 2, 'showHeadings' => 1, 'fontSize' => 9,
             'rowGap' => 4, 'colGap' => 5, 'xPos' => 50, 'xOrientation' => 'right',
             'width' => '750', 'shaded' => 0,
             'cols' => array(array('justification' => 'left', 'width' => 225),
@@ -243,8 +241,8 @@ if ($do_report) {
                 'The files/temp directory is not writable.  Check your file system permissions.';
             }
         }
-	}
-	echo '</td>
+    }
+    echo '</td>
 </tr>
 </table>';
 }

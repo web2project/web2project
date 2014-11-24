@@ -47,9 +47,9 @@ $theme = new style_web2project($AppUI);
                     <input type="hidden" name="lostpass" value="1" />
                     <input type="hidden" name="redirect" value="<?php echo isset($redirect) ? $redirect : ''; ?>" />
 
-                    <p><input type="text" name="checkusername" value="" placeholder="Username"></p>
-                    <p><input type="text" name="checkemail" maxlength="255" size="25" class="text" placeholder="Email" /></p>
-                    <p class="submit"><input type="submit" name="sendpass" value="Send Password"></p>
+                    <p><input type="text" name="login" value="" placeholder="Username"></p>
+                    <p><input type="password" name="password" value="" placeholder="Email"></p>
+                    <p class="submit"><input type="submit" name="commit" value="Send Password"></p>
                 </form>
             </div>
 

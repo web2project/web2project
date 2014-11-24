@@ -69,7 +69,7 @@ ksort($trans);
  *   it's better than echo'ing which is what we had before.
  */
 $localeFolder = pathinfo($localeFile, PATHINFO_DIRNAME);
-if(file_exists($localeFile) && !is_writable($localeFile)) {
+if (file_exists($localeFile) && !is_writable($localeFile)) {
     $AppUI->setMsg($AppUI->_("Locales file ($localeFile) is not writable."), UI_MSG_ERROR);
 }
 echo ('' != $AppUI->msg) ? $AppUI->getMsg() : '';

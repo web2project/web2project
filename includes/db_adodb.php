@@ -22,10 +22,10 @@ $connection->connect(w2PgetConfig('dbhost'), w2PgetConfig('dbname'), w2PgetConfi
 
 $charset = w2PgetConfig('dbchar', 'utf8');
 /** This explicitly sets the character set of the connection. */
-//if ('mysql' == w2PgetConfig('dbtype') && '' != $charset) {
-//    $sql = "SET NAMES $charset";
-//    $db->Execute($sql);
-//}
+if ('mysql' == w2PgetConfig('dbtype') && '' != $charset) {
+    $sql = "SET NAMES $charset";
+    $db->Execute($sql);
+}
 
 /*
 * Having successfully established the database connection now,
@@ -36,25 +36,16 @@ $sql = 'SELECT config_name, config_value, config_type FROM ' . w2PgetConfig('dbp
 $rs = $db->Execute($sql);
 
 if ($rs) { // Won't work in install mode.
-    $rsArr = $rs->GetArray();
+	$rsArr = $rs->GetArray();
 
-    switch (strtolower(trim(w2PgetConfig('dbtype')))) {
-        case 'oci8':
-        case 'oracle':
-            foreach ($rsArr as $c) {
-                if ($c['CONFIG_TYPE'] == 'checkbox') {
-                    $c['CONFIG_VALUE'] = ($c['CONFIG_VALUES'] == 'true') ? true : false;
-                }
-                $w2Pconfig[$c['CONFIG_NAME']] = $c['CONFIG_VALUE'];
-            }
-            break;
-        default:
-        //mySQL
-            foreach ($rsArr as $c) {
-                if ($c['config_type'] == 'checkbox') {
-                    $c['config_value'] = ($c['config_value'] == 'true') ? true : false;
-                }
-                $w2Pconfig[$c['config_name']] = $c['config_value'];
-            }
-    }
+	switch (strtolower(trim(w2PgetConfig('dbtype')))) {
+		default:
+		//mySQL
+			foreach ($rsArr as $c) {
+				if ($c['config_type'] == 'checkbox') {
+					$c['config_value'] = ($c['config_value'] == 'true') ? true : false;
+				}
+				$w2Pconfig[$c['config_name']] = $c['config_value'];
+			}
+	}
 }

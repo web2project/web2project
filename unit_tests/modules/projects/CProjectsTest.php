@@ -23,10 +23,7 @@ class CProjectsTest extends CommonSetup
         parent::setUp();
 
         $this->obj = new CProject();
-        $this->mockDB = new w2p_Mocks_Query();
-$this->obj->overrideDatabase($this->mockDB);
-
-        $GLOBALS['acl'] = new w2p_Mocks_Permissions();
+        $this->obj->overrideDatabase($this->mockDB);
 
         $this->post_data = array(
             'dosql' =>                      'do_project_aed',
@@ -61,14 +58,6 @@ $this->obj->overrideDatabase($this->mockDB);
     public function testObjectProperties()
     {
         parent::objectPropertiesTest('CProject', 31);
-    }
-
-    /**
-     * Tests that the proper error message is returned when no ID is passed.
-     */
-    public function testCreateProjectNoID()
-    {
-        $this->markTestSkipped('This test has been deprecated by casting the project_id via intval().');
     }
 
     /**
@@ -327,123 +316,6 @@ $this->obj->overrideDatabase($this->mockDB);
     }
 
     /**
-     * Tests the canDelete function of a project
-     */
-    public function testCanDelete()
-    {
-        $this->markTestSkipped('This test has been skipped because it simply returns parent::canDelete, new functionality has been disabled.');
-    }
-
-    /**
-     * Tests deletion of a project.
-     */
-    public function testDelete()
-    {
-        $this->obj->bind($this->post_data);
-        $result = $this->obj->store();
-        $this->assertTrue($result);
-        $original_id = $this->obj->project_id;
-        $result = $this->obj->delete();
-
-        $item = new CProject();
-        $item->overrideDatabase($this->mockDB);
-        $this->mockDB->stageHash(array('project_name' => '', 'project_url' => ''));
-        $item->load($original_id);
-
-        $this->assertTrue(is_a($item, 'CProject'));
-        $this->assertEquals('',              $item->project_name);
-        $this->assertEquals('',              $item->project_url);
-
-        /*
-         * TODO: Not sure on how to test the cascading deletes. They're handled
-         *   in PHP, not in the database, so we need some assurance that they
-         *   actually happen..
-         */
-    }
-
-    /**
-     * Tests importing tasks from one project to another, when tasks are
-     * invalid and causes failure. So the project should be removed and
-     * tasks cleaned up.
-     */
-    public function testImportTasksFail()
-    {
-        $this->markTestIncomplete("This test is failing miserably.. not sure of the best way to solve it yet.");
-        $this->obj->load(2);
-        $response = $this->obj->importTasks(1);
-
-        $this->assertEquals(2, count($response));
-        $this->assertEquals('Task: BadDep_CircularDep', $response[0]);
-        $this->assertEquals('Task: (5)', $response[1]);
-
-//        $xml_file_dataset = $this->createXMLDataSet($this->getDataSetPath().'projectsTestImportTaskFail.xml');
-//        $xml_file_filtered_dataset = new PHPUnit_Extensions_Database_DataSet_DataSetFilter($xml_file_dataset, array('tasks' => array('task_created', 'task_updated')));
-//        $xml_db_dataset = $this->getConnection()->createDataSet();
-//        $xml_db_filtered_dataset = new PHPUnit_Extensions_Database_DataSet_DataSetFilter($xml_db_dataset, array('tasks' => array('task_created', 'task_updated')));
-//        $this->assertTablesEqual($xml_file_filtered_dataset->getTable('tasks'), $xml_db_filtered_dataset->getTable('tasks'));
-
-//        $xml_dataset = $this->createXMLDataSet($this->getDataSetPath().'projectsTestImportTaskFail.xml');
-//        $this->assertTablesEqual($xml_dataset->getTable('user_tasks'), $this->getConnection()->createDataSet()->getTable('user_tasks'));
-//        $this->assertTablesEqual($xml_dataset->getTable('task_dependencies'), $this->getConnection()->createDataSet()->getTable('task_dependencies'));
-    }
-
-    /**
-     * Tests importing tasks from one project to another
-     */
-    public function testImportTasks()
-    {
-        $this->markTestIncomplete("This test is failing miserably.. not sure of the best way to solve it yet.");
-        $this->obj->load(4);
-        $response = $this->obj->importTasks(3);
-
-        $this->assertEquals(array(), $response);
-
-//        $xml_file_dataset = $this->createXMLDataSet($this->getDataSetPath().'projectsTestImportTasks.xml');
-//        $xml_file_filtered_dataset = new PHPUnit_Extensions_Database_DataSet_DataSetFilter($xml_file_dataset, array('tasks' => array('task_created', 'task_updated')));
-//        $xml_db_dataset = $this->getConnection()->createDataSet();
-//        $xml_db_filtered_dataset = new PHPUnit_Extensions_Database_DataSet_DataSetFilter($xml_db_dataset, array('tasks' => array('task_created', 'task_updated')));
-//        $this->assertTablesEqual($xml_file_filtered_dataset->getTable('tasks'), $xml_db_filtered_dataset->getTable('tasks'));
-
-        $now_secs = time();
-        $min_time = $now_secs - 10;
-
-        /**
-         * Get created dates to test against
-         */
-        $q = new w2p_Database_Query;
-        $q->addTable('tasks');
-        $q->addQuery('task_created');
-        $q->addWhere('task_project = 4');
-        $results = $q->loadColumn();
-
-        global $AppUI;
-        foreach ($results as $created) {
-            $created = strtotime($AppUI->formatTZAwareTime($created, '%Y-%m-%d %T'));
-            $this->assertGreaterThanOrEqual($created, $now_secs);
-            $this->assertLessThanOrEqual($created, $min_time);
-        }
-
-        /**
-         * Get updated dates to test against
-         */
-        $q = new w2p_Database_Query;
-        $q->addTable('tasks');
-        $q->addQuery('task_updated');
-        $q->addWhere('task_project = 4');
-        $results = $q->loadColumn();
-
-        foreach ($results as $updated) {
-            $updated = strtotime($AppUI->formatTZAwareTime($updated, '%Y-%m-%d %T'));
-            $this->assertGreaterThanOrEqual($min_time, $updated);
-            $this->assertLessThanOrEqual($now_secs, $updated);
-        }
-
-//        $xml_dataset = $this->createXMLDataSet($this->getDataSetPath().'projectsTestImportTasks.xml');
-//        $this->assertTablesEqual($xml_dataset->getTable('user_tasks'), $this->getConnection()->createDataSet()->getTable('user_tasks'));
-//        $this->assertTablesEqual($xml_dataset->getTable('task_dependencies'), $this->getConnection()->createDataSet()->getTable('task_dependencies'));
-
-    }
-    /**
      * Tests checking allowed records with no permissions
      */
     public function testGetAllowedRecordsNoPermissions()
@@ -465,78 +337,6 @@ $this->obj->overrideDatabase($this->mockDB);
 
         $this->assertEquals(1, count($allowed_records));
         $this->assertEquals('Test Project', $allowed_records[1]);
-    }
-
-    /**
-     * Tests the custom getAllowedSQL function
-     *
-     */
-    public function testGetAllowedSQL()
-    {
-        $this->markTestSkipped('Not sure how to test this, everything I have tried has not results.');
-    }
-
-    /**
-     * Tests the custom setAllowedSQL function
-     *
-     */
-    public function testSetAllowedSQL()
-    {
-        $this->markTestSkipped('Not sure hot to test this.');
-    }
-
-    /**
-     * Tests the custom getDeniedRecords function
-     */
-    public function testGetDeniedRecords()
-    {
-        $this->markTestSkipped('Not sure how to test this, everything I have tried has not results.');
-    }
-
-    /**
-     * Tests getting a list of allowed project by user
-     *
-     * @expectedException PHPUnit_Framework_Error
-     */
-    public function testGetAllowedProjectsInRows()
-    {
-        $project_in_rows = $this->obj->getAllowedProjectsInRows(1);
-
-        $this->assertEquals(4, db_num_rows($project_in_rows));
-
-        $row = db_fetch_assoc($project_in_rows);
-        $this->assertEquals(1,                     $row[0]);
-        $this->assertEquals(1,                     $row['project_id']);
-        $this->assertEquals(0,                     $row[1]);
-        $this->assertEquals(0,                     $row['project_status']);
-        $this->assertEquals('Test Project',        $row[2]);
-        $this->assertEquals('Test Project',        $row['project_name']);
-        $this->assertEquals('This is a project',   $row[3]);
-        $this->assertEquals('This is a project',   $row['project_description']);
-        $this->assertEquals('TP',                  $row[4]);
-        $this->assertEquals('TP',                  $row['project_short_name']);
-
-        /*
-         * TODO: Figure out why db_fetch_assoc is failing now. Cause db_num_rows
-         * says 4, and this is our second call to db_fetch_assoc.
-         */
-        /*
-         * $row = db_fetch_assoc($project_in_rows);
-         * $this->assertEquals(2,                     $row[0]);
-           * $this->assertEquals(2,                     $row['project_id']);
-           * $this->assertEquals(1,                     $row[1]);
-           * $this->assertEquals(1,                     $row['project_status']);
-           * $this->assertEquals('Test Project 2',      $row[2]);
-           * $this->assertEquals('Test Project 2',      $row['project_name']);
-           * $this->assertEquals('This is a project 2', $row[3]);
-           * $this->assertEquals('This is a project 2', $row['project_description']);
-           * $this->assertEquals('TP2',                 $row[4]);
-           * $this->assertEquals('TP2',                 $row['project_short_name']);
-         */
-
-          $project_in_rows = $this->obj->getAllowedProjectsInRows(2);
-
-          $this->assertEquals(0, db_num_rows($project_in_rows));
     }
 
     /**
@@ -648,22 +448,6 @@ $this->obj->overrideDatabase($this->mockDB);
     }
 
     /**
-     * Test that owner is notified on change of project.
-     */
-    public function testNotifyOwner()
-    {
-        $this->markTestSkipped('Not sure how to test emails being sent.');
-    }
-
-    /**
-     * Test that contacs are notified on change of project.
-     */
-    public function testNotifyContacts()
-    {
-        $this->markTestSkipped('Not sure how to test emails being sent.');
-    }
-
-    /**
      * Tests getting allowed projects that are active.
      */
     public function testGetAllowedProjectsActiveOnly()
@@ -741,20 +525,6 @@ $this->obj->overrideDatabase($this->mockDB);
     /**
      * Test finding of departments of project
      *
-     * @expectedException PHPUnit_Framework_Error
-     */
-    public function testGetDepartments()
-    {
-        $departments = CProject::getDepartments(null, 1);
-        /*
-         * Beyond the deprecation notice, nothing else should be tested here. The
-         *   useful test is CProject->testGetDepartmentList().
-         */
-    }
-
-    /**
-     * Test finding of departments of project
-     *
      */
     public function testGetDepartmentList()
     {
@@ -806,18 +576,6 @@ $this->obj->overrideDatabase($this->mockDB);
         } else {
             $this->assertEquals(0,                  count($forums));
         }
-    }
-
-    /**
-     * Tests updating a projects status
-     *
-     * @expectedException PHPUnit_Framework_Error
-     */
-    public function testUpdateStatus()
-    {
-        CProject::updateStatus(null, 1, 2);
-        $xml_dataset = $this->createXMLDataSet($this->getDataSetPath().'projectsTestUpdateStatus.xml');
-        $this->assertTablesEqual($xml_dataset->getTable('projects'), $this->getConnection()->createDataSet()->getTable('projects'));
     }
 
     /**
@@ -987,22 +745,6 @@ $this->obj->overrideDatabase($this->mockDB);
         $this->assertEquals('Task Log 4',       $task_logs[0]['task_log_description']);
         $this->assertEquals('another_admin',    $task_logs[0]['user_username']);
         $this->assertEquals('Contact Number 1', $task_logs[0]['real_name']);
-    }
-
-    /**
-     * Tests the projects_list_data function
-     */
-    public function testProjectsListData()
-    {
-        $this->markTestSkipped('Untestable? Fills a $buffer variable with html and does nothing with it!?');
-    }
-
-    /**
-     * Tests the shownavbar_links_prj function
-     */
-    public function testShownavbarLinksPrj()
-    {
-        $this->markTestSkipped('Untestable? Echos out some html.');
     }
 
     /**
@@ -1195,30 +937,6 @@ $this->obj->overrideDatabase($this->mockDB);
         $this->assertEquals('Test Project 4',   $st_projects_arr[3][0]['project_name']);
         $this->assertEquals(1,                  $st_projects_arr[3][0]['project_parent']);
         $this->assertEquals(1,                  $st_projects_arr[3][1]);
-    }
-
-    /**
-     * Tests getting structured projects when passing a project status
-     *
-     * TODO: If this test is run
-     */
-    public function testGetStructuredProjectsProjectStatus()
-    {
-        $this->markTestSkipped('This test is skipped.. if run first, it breaks $this->testGetStructedProjectsActiveOnly() I think because of the globals. :(');
-        $this->mockDB->stageList(
-                array('project_id' => 1, 'project_name' => 'Test Project',
-                    'project_parent' => 1));
-
-        $this->obj->project_original_parent = 0;
-        $this->obj->project_status = 0;
-        $st_projects_arr = $this->obj->getStructuredProjects();
-
-        $this->assertEquals(1,              count($st_projects_arr));
-        $this->assertEquals(3,              count($st_projects_arr[0][0]));
-        $this->assertEquals(1,              $st_projects_arr[0][0]['project_id']);
-        $this->assertEquals('Test Project', $st_projects_arr[0][0]['project_name']);
-        $this->assertEquals(1,              $st_projects_arr[0][0]['project_parent']);
-        $this->assertEquals(0,              $st_projects_arr[0][1]);
     }
 
     /**

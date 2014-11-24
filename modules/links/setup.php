@@ -1,6 +1,6 @@
 <?php
 if (!defined('W2P_BASE_DIR')) {
-	die('You should not access this file directly.');
+    die('You should not access this file directly.');
 }
 
 $config = array();
@@ -19,7 +19,7 @@ $config['permissions_item_field'] = 'link_id';
 $config['permissions_item_label'] = 'link_name';
 
 if ($a == 'setup') {
-	echo w2PshowModuleConfig($config);
+    echo w2PshowModuleConfig($config);
 }
 
 /**
@@ -29,21 +29,21 @@ if ($a == 'setup') {
  */
 class CSetupLinks extends w2p_System_Setup
 {
-	public function remove()
+    public function remove()
     {
-		$q = $this->_getQuery();
-		$q->dropTable('links');
-		$q->exec();
+        $q = $this->_getQuery();
+        $q->dropTable('links');
+        $q->exec();
 
-		$q = $this->_getQuery();
-		$q->setDelete('sysvals');
-		$q->addWhere('sysval_title = \'LinkType\'');
-		$q->exec();
+        $q = $this->_getQuery();
+        $q->setDelete('sysvals');
+        $q->addWhere('sysval_title = \'LinkType\'');
+        $q->exec();
 
         return parent::remove();
-	}
+    }
 
-	public function install()
+    public function install()
     {
         $result = $this->_checkRequirements();
 
@@ -52,8 +52,8 @@ class CSetupLinks extends w2p_System_Setup
         }
 
         $q = $this->_getQuery();
-		$q->createTable('links');
-		$q->createDefinition('(
+        $q->createTable('links');
+        $q->createDefinition('(
             link_id int( 11 ) NOT NULL AUTO_INCREMENT ,
             link_url varchar( 255 ) NOT NULL default "",
             link_project int( 11 ) NOT NULL default "0",
@@ -70,7 +70,7 @@ class CSetupLinks extends w2p_System_Setup
             KEY idx_link_project ( link_project ) ,
             KEY idx_link_parent ( link_parent )
             ) ENGINE = MYISAM DEFAULT CHARSET=utf8 ');
-		if (!$q->exec()) {
+        if (!$q->exec()) {
             return false;
         }
 
@@ -89,5 +89,5 @@ class CSetupLinks extends w2p_System_Setup
         }
 
         return parent::install();
-	}
+    }
 }

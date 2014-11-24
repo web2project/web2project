@@ -7,41 +7,43 @@
  * @todo    refactor static methods
  */
 
-class CCompany extends w2p_Core_BaseObject {
-	/**
+class CCompany extends w2p_Core_BaseObject
+{
+    /**
  	@var int Primary Key */
-	public $company_id = null;
-	/**
+    public $company_id = null;
+    /**
  	@var string */
-	public $company_name = null;
+    public $company_name = null;
 
-	// these next fields should be ported to a generic address book
-	public $company_phone1 = null;
-	public $company_phone2 = null;
-	public $company_fax = null;
-	public $company_address1 = null;
-	public $company_address2 = null;
-	public $company_city = null;
-	public $company_state = null;
-	public $company_zip = null;
-	public $company_country = null;
-	public $company_email = null;
-	/**
+    // these next fields should be ported to a generic address book
+    public $company_phone1 = null;
+    public $company_phone2 = null;
+    public $company_fax = null;
+    public $company_address1 = null;
+    public $company_address2 = null;
+    public $company_city = null;
+    public $company_state = null;
+    public $company_zip = null;
+    public $company_country = null;
+    public $company_email = null;
+    /**
  	@var string */
-	public $company_primary_url = null;
-	/**
+    public $company_primary_url = null;
+    /**
  	@var int */
-	public $company_owner = null;
-	/**
+    public $company_owner = null;
+    /**
  	@var string */
-	public $company_description = null;
-	/**
+    public $company_description = null;
+    /**
  	@var int */
-	public $company_type = null;
+    public $company_type = null;
 
-	public function __construct() {
-	  parent::__construct('companies', 'company_id');
-	}
+    public function __construct()
+    {
+      parent::__construct('companies', 'company_id');
+    }
 
     public function isValid()
     {
@@ -56,15 +58,16 @@ class CCompany extends w2p_Core_BaseObject {
 
     public function canDelete($notUsed = null, $notUsed2 = null, $notUsed3 = null)
     {
-		$tables[] = array('label' => 'Projects', 'name' => 'projects', 'idfield' => 'project_id', 'joinfield' => 'project_company');
-		$tables[] = array('label' => 'Departments', 'name' => 'departments', 'idfield' => 'dept_id', 'joinfield' => 'dept_company');
-		$tables[] = array('label' => 'Users', 'name' => 'users', 'idfield' => 'user_id', 'joinfield' => 'user_company');
+        $tables[] = array('label' => 'Projects', 'name' => 'projects', 'idfield' => 'project_id', 'joinfield' => 'project_company');
+        $tables[] = array('label' => 'Departments', 'name' => 'departments', 'idfield' => 'dept_id', 'joinfield' => 'dept_company');
+        $tables[] = array('label' => 'Users', 'name' => 'users', 'idfield' => 'user_id', 'joinfield' => 'user_company');
         $tables[] = array('label' => 'Contacts', 'name' => 'contacts', 'idfield' => 'contact_id', 'joinfield' => 'contact_company');
-		// call the parent class method to assign the oid
-		return parent::canDelete('', null, $tables);
-	}
+        // call the parent class method to assign the oid
+        return parent::canDelete('', null, $tables);
+    }
 
-    protected function hook_preStore() {
+    protected function hook_preStore()
+    {
         $this->company_id = (int) $this->company_id;
         $this->company_owner = (int) $this->company_owner ? $this->company_owner : $this->_AppUI->user_id;
         $this->company_primary_url = str_replace(array('"', '"', '<', '>'), '', $this->company_primary_url);
@@ -72,7 +75,8 @@ class CCompany extends w2p_Core_BaseObject {
         parent::hook_preStore();
     }
 
-    public function hook_search() {
+    public function hook_search()
+    {
         $search['table']            = $this->_tbl;
         $search['table_module']     = $this->_tbl;
         $search['table_key']        = $this->_tbl_key;
@@ -86,8 +90,8 @@ class CCompany extends w2p_Core_BaseObject {
         return $search;
     }
 
-    public function getCompanyList($notUsed = null, $companyType = -1, $searchString = '', $ownerId = 0, $orderby = 'company_name', $orderdir = 'ASC') {
-
+    public function getCompanyList($notUsed = null, $companyType = -1, $searchString = '', $ownerId = 0, $orderby = 'company_name', $orderdir = 'ASC')
+    {
         $q = $this->_getQuery();
         $q->addTable('companies', 'c');
         $q->addQuery('c.*, count(distinct p.project_id) as countp, count(distinct p2.project_id) as inactive');
@@ -152,7 +156,7 @@ class CCompany extends w2p_Core_BaseObject {
 
         $q->addWhere('pr.project_active = '. (int) $active);
 
-        if(property_exists('CProject', $sort) || strpos($fields, $sort) !== false) {
+        if (property_exists('CProject', $sort) || strpos($fields, $sort) !== false) {
             $q->addOrder($sort);
         } else {
             $q->addOrder('project_name');
@@ -163,9 +167,17 @@ class CCompany extends w2p_Core_BaseObject {
 
     public function contacts($companyId)
     {
+        if (0 == $companyId) {
+            return array();
+        }
+
+        if (!canView('contacts')) {
+            return array();
+        }
+
         $results = array();
 
-        if ($this->_AppUI->isActiveModule('contacts') && canView('contacts') && (int) $companyId > 0) {
+        if ($this->_AppUI->isActiveModule('contacts')) {
             $q = $this->_getQuery();
             $q->addQuery('c.*');
             $q->addQuery('c.contact_display_name as contact_name');
@@ -179,7 +191,7 @@ class CCompany extends w2p_Core_BaseObject {
 					OR (contact_private=1 AND contact_owner=' . $this->_AppUI->user_id . ')
 					OR contact_owner IS NULL OR contact_owner = 0
 				)');
-            $department = new CDepartment;
+            $department = new CDepartment();
 //TODO: We need to convert this from static to use ->overrideDatabase() for testing.
             $q = $department->setAllowedSQL($this->_AppUI->user_id, $q);
 
@@ -194,6 +206,14 @@ class CCompany extends w2p_Core_BaseObject {
 
     public function users($companyId)
     {
+        if (0 == $companyId) {
+            return array();
+        }
+
+        if (!canView('users')) {
+            return array();
+        }
+
         $q = $this->_getQuery();
         $q->addTable('users');
         $q->addQuery('users.*, c.*');
@@ -203,7 +223,7 @@ class CCompany extends w2p_Core_BaseObject {
         $q->addWhere('contact_company = ' . (int) $companyId);
         $q->addOrder('contact_last_name, contact_first_name');
 
-        $department = new CDepartment;
+        $department = new CDepartment();
 //TODO: We need to convert this from static to use ->overrideDatabase() for testing.
         $q = $department->setAllowedSQL($this->_AppUI->user_id, $q);
 
@@ -212,7 +232,15 @@ class CCompany extends w2p_Core_BaseObject {
 
     public function departments($companyId)
     {
-        if ($this->_AppUI->isActiveModule('departments') && canView('departments')) {
+        if (0 == $companyId) {
+            return array();
+        }
+
+        if (!canView('departments')) {
+            return array();
+        }
+
+        if ($this->_AppUI->isActiveModule('departments')) {
             $q = $this->_getQuery();
             $q->addTable('departments');
             $q->addQuery('departments.*, COUNT(contact_department) dept_users');
@@ -228,49 +256,14 @@ class CCompany extends w2p_Core_BaseObject {
         }
     }
 
-    /** @deprecated */
-    public function getCompanies() {
+    /**
+     * @deprecated
+     * @codeCoverageIgnore
+     */
+    public function getCompanies()
+    {
         trigger_error("The CCompany->getCompanies method has been deprecated in 3.2 and will be removed in v5.0. Please use CCompany->loadAll() instead.", E_USER_NOTICE );
 
         return $this->loadAll();
     }
-    /**
-     * @deprecated
-     */
-    public static function getProjects(w2p_Core_CAppUI $AppUI, $companyId, $active = 1, $sort = 'project_name')
-    {
-        trigger_error("The CCompany::getProjects static method has been deprecated in 3.1 and will be removed in v4.0. Please use CCompany->projects() instead.", E_USER_NOTICE );
-
-        $company = new CCompany();
-        return $company->projects($AppUI, $companyId, $active, $sort);
-    }
-    /**
-     * @deprecated
-     */
-    public static function getContacts($notUsed, $companyId)
-    {
-        trigger_error("The CCompany::getContacts static method has been deprecated in 3.1 and will be removed in v4.0. Please use CCompany->contacts() instead.", E_USER_NOTICE );
-
-        $company = new CCompany();
-        return $company->contacts($companyId);
-    }
-    /**
-     * @deprecated
-     */
-    public static function getUsers($notUsed, $companyId) {
-        trigger_error("The CCompany::getUsers static method has been deprecated in 3.1 and will be removed in v4.0. Please use CCompany->users() instead.", E_USER_NOTICE );
-
-        $company = new CCompany();
-        return $company->users($companyId);
-    }
-    /**
-     * @deprecated
-     */
-	public static function getDepartments($notUsed, $companyId)
-    {
-        trigger_error("The CCompany::getDepartments static method has been deprecated in 3.1 and will be removed in v4.0. Please use CCompany->departments() instead.", E_USER_NOTICE );
-
-        $company = new CCompany();
-        return $company->departments($companyId);
-	}
 }

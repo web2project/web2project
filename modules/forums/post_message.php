@@ -1,6 +1,6 @@
 <?php
 if (!defined('W2P_BASE_DIR')) {
-	die('You should not access this file directly.');
+    die('You should not access this file directly.');
 }
 // @todo    convert to template
 // @todo    I think this file should actually be named 'addedit_message.php'
@@ -17,23 +17,23 @@ $canAddEdit = $obj->canAddEdit();
 $canAdd = $obj->canCreate();
 $canEdit = $obj->canEdit();
 if (!$canAddEdit) {
-	$AppUI->redirect(ACCESS_DENIED);
+    $AppUI->redirect(ACCESS_DENIED);
 }
 
 //Pull forum information
 $myForum->load($forum_id);
 if (!$myForum) {
-	$AppUI->setMsg('Forum');
-	$AppUI->setMsg('invalidID', UI_MSG_ERROR, true);
-	$AppUI->redirect('m=forums');
+    $AppUI->setMsg('Forum');
+    $AppUI->setMsg('invalidID', UI_MSG_ERROR, true);
+    $AppUI->redirect('m=forums');
 }
 
 // Build a back-url for when the back button is pressed
 $back_url_params = array();
 foreach ($_GET as $k => $v) {
-	if ($k != 'post_message') {
-		$back_url_params[] = "$k=$v";
-	}
+    if ($k != 'post_message') {
+        $back_url_params[] = "$k=$v";
+    }
 }
 $back_url = implode('&', $back_url_params);
 
@@ -57,7 +57,7 @@ $crumbs = array();
 $crumbs['?m=forums'] = 'forums list';
 $crumbs['?m=forums&a=viewer&forum_id=' . $forum_id] = 'topics for this forum';
 if ($message_parent > -1) {
-	$crumbs['?m=forums&a=viewer&forum_id=' . $forum_id . '&message_id=' . $message_parent] = 'this topic';
+    $crumbs['?m=forums&a=viewer&forum_id=' . $forum_id . '&message_id=' . $message_parent] = 'this topic';
 }
 
 $bbparser = new HTML_BBCodeParser();
@@ -69,7 +69,8 @@ $bbparser = new HTML_BBCodeParser();
 // else users would be able to arbitrarily run 'bad' functions
 if ($canEdit || $canAdd) {
 ?>
-function submitIt(){
+function submitIt()
+{
 	var form = document.editFrm;
 	if (form.message_title.value.search(/^\s*$/) >= 0 ) {
 		alert("<?php echo $AppUI->_('forumSubject', UI_OUTPUT_JS); ?>");
@@ -82,7 +83,8 @@ function submitIt(){
 	}
 }
 
-function delIt(){
+function delIt()
+{
 	var form = document.editFrm;
 	if (confirm( "<?php echo $AppUI->_('forumDeletePost', UI_OUTPUT_JS); ?>" )) {
 		form.del.value="<?php echo $message_id; ?>";
@@ -90,7 +92,8 @@ function delIt(){
 	}
 }
 <?php } ?>
-function orderByName(x){
+function orderByName(x)
+{
 	var form = document.editFrm;
 	if (x == 'name') {
 		form.forum_order_by.value = form.forum_last_name.value + ', ' + form.forum_name.value;

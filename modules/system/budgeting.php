@@ -1,16 +1,15 @@
 <?php
 if (!defined('W2P_BASE_DIR')) {
-	die('You should not access this file directly.');
+    die('You should not access this file directly.');
 }
 global $AppUI, $cal_sdf;
-$AppUI->getTheme()->loadCalendarJS();
 
 $budget_id = (int) w2PgetParam($_GET, 'budget_id', 0);
 
 $canEdit   = canEdit('system');
 $canDelete = canView('system');
 if (!$canEdit) {
-	$AppUI->redirect(ACCESS_DENIED);
+    $AppUI->redirect(ACCESS_DENIED);
 }
 $df = $AppUI->getPref('SHDATEFORMAT');
 
@@ -28,7 +27,8 @@ $titleBlock->addCrumb('?m=system', 'system admin');
 $titleBlock->show();
 ?>
 <script language="javascript" type="text/javascript">
-	function submitIt(){
+	function submitIt()
+	{
 		document.frmAddcode.submit();
 	}
 <?php
@@ -37,7 +37,8 @@ $titleBlock->show();
 // else users would be able to arbitrarily run 'bad' functions
 if ($canDelete) {
 ?>
-function delIt(input) {
+function delIt(input)
+{
 	if (confirm( '<?php echo $AppUI->_('doDelete', UI_OUTPUT_JS) . ' ' . $AppUI->_('Budget', UI_OUTPUT_JS) . '?'; ?>' )) {
 		document.frmDelete.budget_id.value = input;
         document.frmDelete.submit();
@@ -57,7 +58,7 @@ function delIt(input) {
     <?php
     $fieldList = array('company_name', 'budget_start_date', 'budget_end_date', 'budget_amount', 'budget_category');
     $fieldNames = array('Company', 'Start Date', 'End Date', 'Amount', 'Billing Category');
-    
+
     $htmlHelper = new w2p_Output_HTMLHelper($AppUI);
     $budgetCategory = w2PgetSysVal('BudgetCategory');
     $customLookups = array('budget_category' => $budgetCategory);
@@ -73,7 +74,7 @@ function delIt(input) {
         </tr>
 
         <?php
-		$budgets = $budget->getBudgetAmounts();
+        $budgets = $budget->getBudgetAmounts();
         foreach ($budgets as $row) {
             echo '<tr>';
             echo '<td>';
@@ -86,7 +87,7 @@ function delIt(input) {
             foreach ($fieldList as $index => $column) {
                 echo $htmlHelper->createCell($fieldList[$index], $row[$fieldList[$index]], $customLookups);
             }
-            
+
             echo '<td>';
             if ($canDelete) {
                 echo '<a href="javascript:delIt(' . $row['budget_id'] . ')" title="' . $AppUI->_('delete') . '">' . w2PshowImage('icons/stock_delete-16.png', '16', '16') . '</a>';
@@ -94,7 +95,7 @@ function delIt(input) {
             echo '</td>';
             echo '</tr>';
         }
-		?>
+        ?>
         <tr><td colspan="<?php echo (count($fieldList) + 2); ?>">&nbsp;</td></tr>
 		<tr>
 			<td>Add budgeting amount:</td>

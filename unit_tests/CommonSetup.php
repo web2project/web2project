@@ -1,15 +1,10 @@
 <?php
-
-/*
- * All of the module tests go through a common process of setting up the globals,
- *   doing the includes, logging in and setting the base configuration.
- *   Unfortunately, not all of it can immediately go into a common setUp
- *   method but a bunch of it can.
- */
-
 /**
- * Necessary global variables
+ * All of the module tests go through a common process of setting up the globals, doing the includes, logging in and
+ *   setting the base configuration. Unfortunately, not all of it can immediately go into a common setUp method but a
+ *   bunch of it can.
  */
+
 global $db;
 global $ADODB_FETCH_MODE;
 global $w2p_performance_dbtime;
@@ -21,14 +16,14 @@ require_once W2P_BASE_DIR . '/includes/main_functions.php';
 require_once W2P_BASE_DIR . '/includes/config.php';
 require_once W2P_BASE_DIR . '/includes/db_adodb.php';
 
-/*
+/**
  * Need this to not get the annoying timezone warnings in tests.
  */
 $defaultTZ = w2PgetConfig('system_timezone', 'UTC');
 $defaultTZ = ('' == $defaultTZ) ? 'UTC' : $defaultTZ;
 date_default_timezone_set($defaultTZ);
 
-/*
+/**
  * Need this to test actions that require permissions.
  */
 $AppUI  = new w2p_Core_CAppUI();
@@ -52,8 +47,9 @@ class CommonSetup extends PHPUnit_Framework_TestCase
         global $AppUI;
         $this->_AppUI  = $AppUI;
         $this->_AppUI->restoreObject();
+        $GLOBALS['acl'] = new \Web2project\Mocks\Permissions();
 
-        $this->mockDB = new w2p_Mocks_Query();
+        $this->mockDB = new \Web2project\Mocks\Query();
     }
 
     protected function tearDown()

@@ -81,7 +81,9 @@ class w2p_Utilities_Mail extends PHPMailer
         $this->From(w2PgetConfig('admin_email', 'admin@web2project.net'), w2PgetConfig('company_name'));
     }
 
-    /** @deprecated since 3.2*/
+    /** @deprecated since 3.2
+     * @codeCoverageIgnore
+     */
     public function autoCheck() {   return true;    }
 
     /**
@@ -105,9 +107,7 @@ class w2p_Utilities_Mail extends PHPMailer
         }
         $this->From = $from;
         $this->FromName = $fromname;
-        if ($this->receipt) {
-            $this->ConfirmReadingTo($from);
-        }
+
         return true;
     }
 
@@ -121,9 +121,7 @@ class w2p_Utilities_Mail extends PHPMailer
             return false;
         }
         $this->AddReplyTo($address);
-        if ($this->receipt) {
-            $this->ConfirmReadingTo($address);
-        }
+
         return true;
     }
 
@@ -390,15 +388,6 @@ class w2p_Utilities_Mail extends PHPMailer
             $address = $regs[2];
         }
         return (bool) preg_match('/^[^@ ]+@([-a-zA-Z0-9..]+)$/D', $address);
-    }
-
-    /**
-     *    @deprecated
-     */
-    public function CheckAdresses($aad)
-    {
-        trigger_error("CheckAdresses() has been deprecated in v3.0 and will be removed by v4.0. Please use CheckAddresses() instead.", E_USER_NOTICE);
-        return $this->CheckAddresses($aad);
     }
 
     /**

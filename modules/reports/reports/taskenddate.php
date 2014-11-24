@@ -1,11 +1,10 @@
 <?php
 if (!defined('W2P_BASE_DIR')) {
-	die('You should not access this file directly.');
+    die('You should not access this file directly.');
 }
 // @todo    convert to template
 
 global $AppUI, $cal_sdf;
-$AppUI->getTheme()->loadCalendarJS();
 
 $do_report = w2PgetParam($_POST, 'do_report', 0);
 $log_start_date = w2PgetParam($_POST, 'log_start_date', 0);
@@ -17,7 +16,7 @@ $start_date = intval($log_start_date) ? new w2p_Utilities_Date($log_start_date) 
 $end_date = intval($log_end_date) ? new w2p_Utilities_Date($log_end_date) : new w2p_Utilities_Date();
 
 if (!$log_start_date) {
-	$start_date->subtractSpan(new Date_Span('14,0,0,0'));
+    $start_date->subtractSpan(new Date_Span('14,0,0,0'));
 }
 $end_date->setTime(23, 59, 59);
 
@@ -63,72 +62,72 @@ echo $AppUI->getTheme()->styleRenderBoxTop();
 <?php
 if ($do_report) {
 
-	$q = new w2p_Database_Query;
-	$q->addTable('tasks', 't');
-	$q->addTable('users', 'u');
-	$q->addTable('projects', 'p');
-	$q->addQuery('t.*, p.project_name, u.user_username');
-	$q->addQuery('contact_display_name AS user_username');
-	$q->leftJoin('contacts', 'ct', 'ct.contact_id = u.user_contact');
-	$q->addWhere('p.project_active = 1');
-	if (($template_status = w2PgetConfig('template_projects_status_id')) != '') {
-		$q->addWhere('p.project_status <> ' . (int)$template_status);
-	}
+    $q = new w2p_Database_Query();
+    $q->addTable('tasks', 't');
+    $q->addTable('users', 'u');
+    $q->addTable('projects', 'p');
+    $q->addQuery('t.*, p.project_name, u.user_username');
+    $q->addQuery('contact_display_name AS user_username');
+    $q->leftJoin('contacts', 'ct', 'ct.contact_id = u.user_contact');
+    $q->addWhere('p.project_active = 1');
+    if (($template_status = w2PgetConfig('template_projects_status_id')) != '') {
+        $q->addWhere('p.project_status <> ' . (int) $template_status);
+    }
 
-	if ($user_id > 0) {
-		$q->addTable('user_tasks', 'ut');
-		$q->addWhere('ut.user_id =' . $user_id);
-		$q->addWhere('ut.task_id = t.task_id');
-	}
+    if ($user_id > 0) {
+        $q->addTable('user_tasks', 'ut');
+        $q->addWhere('ut.user_id =' . $user_id);
+        $q->addWhere('ut.task_id = t.task_id');
+    }
 
-	if ($project_id != 0) {
-		$q->addWhere('task_project =' . $project_id);
-	}
+    if ($project_id != 0) {
+        $q->addWhere('task_project =' . $project_id);
+    }
 
-	$q->addWhere('p.project_id   = t.task_project');
-	$q->addWhere('t.task_dynamic = 0');
-	$q->addWhere('t.task_owner = u.user_id');
-	$q->addWhere('task_end_date >= \'' . $start_date->format(FMT_DATETIME_MYSQL) . '\'');
-	$q->addWhere('task_end_date <= \'' . $end_date->format(FMT_DATETIME_MYSQL) . '\'');
+    $q->addWhere('p.project_id   = t.task_project');
+    $q->addWhere('t.task_dynamic = 0');
+    $q->addWhere('t.task_owner = u.user_id');
+    $q->addWhere('task_end_date >= \'' . $start_date->format(FMT_DATETIME_MYSQL) . '\'');
+    $q->addWhere('task_end_date <= \'' . $end_date->format(FMT_DATETIME_MYSQL) . '\'');
 
-	$q->addOrder('project_name ASC');
-	$q->addOrder('task_end_date ASC');
+    $q->addOrder('project_name ASC');
+    $q->addOrder('task_end_date ASC');
 
-	$tasks = $q->loadHashList('task_id');
-	$q->clear();
-	$first_task = current($tasks);
-	$actual_project_id = 0;
-	$first_task = true;
-	$task_log = array();
+    $tasks = $q->loadHashList('task_id');
+    $q->clear();
+    $first_task = current($tasks);
+    $actual_project_id = 0;
+    $first_task = true;
+    $task_log = array();
 
     echo $AppUI->getTheme()->styleRenderBoxBottom();
-	echo '<br />';
+    echo '<br />';
     echo $AppUI->getTheme()->styleRenderBoxTop();
-	echo '<table class="std">
+    echo '<table class="std">
 <tr>
 	<td>';
 
-	echo '<table class="std">';
-	echo '<tr><th>' . $AppUI->_('Task name') . '</th><th>' . $AppUI->_('T.Owner') . '</th><th>' . $AppUI->_('H.Alloc.') . '</th><th>' . $AppUI->_('Task end date') . '</th><th>' . $AppUI->_('Last activity date') . '</th><th>' . $AppUI->_('Done') . '?</th></tr>';
-	$hrs = $AppUI->_('hrs'); // To avoid calling $AppUI each row
-	foreach ($tasks as $task) {
-		if ($actual_project_id != $task['task_project']) {
-			echo '<tr><td colspan="6"><b>' . $task['project_name'] . '</b></td>';
-			$actual_project_id = $task['task_project'];
-		}
-		$q->addTable('task_log');
-		$q->addQuery('*');
-		$q->addWhere('task_log_task = ' . (int)$task['task_id']);
-		$q->addOrder('task_log_date DESC');
-		$q->setLimit(1);
-		$task_log = $q->loadHash();
-		$q->clear();
+    echo '<table class="std">';
+    echo '<tr><th>' . $AppUI->_('Task name') . '</th><th>' . $AppUI->_('T.Owner') . '</th><th>' . $AppUI->_('H.Alloc.') . '</th><th>' . $AppUI->_('Task end date') . '</th><th>' . $AppUI->_('Last activity date') . '</th><th>' . $AppUI->_('Done') . '?</th></tr>';
+    $hrs = $AppUI->_('hrs'); // To avoid calling $AppUI each row
+    foreach ($tasks as $task) {
+        if ($actual_project_id != $task['task_project']) {
+            echo '<tr><td colspan="6"><b>' . $task['project_name'] . '</b></td>';
+            $actual_project_id = $task['task_project'];
+        }
+        $q->addTable('task_log');
+        $q->addQuery('*');
+        $q->addWhere('task_log_task = ' . (int) $task['task_id']);
+        $q->addOrder('task_log_date DESC');
+        $q->setLimit(1);
+        $task_log = $q->loadHash();
+        $q->clear();
 
-		$done_img = $task['task_percent_complete'] == 100 ? 'Yes' : 'No';
-		echo '<tr><td>&nbsp;&nbsp;&nbsp;' . $task['task_name'] . '</td><td>' . $task['user_username'] . '</td><td align="right">' . ($task['task_duration'] * $task['task_duration_type']) . ' ' . $hrs . '</td><td align="center">' . $task['task_end_date'] . '</td><td align="center">' . $task_log['task_log_date'] . '</td><td align="center">' . $done_img . '</td></tr>';
-	}
-	echo '</table>';
-	echo '</td>
+        $done_img = $task['task_percent_complete'] == 100 ? 'Yes' : 'No';
+        echo '<tr><td>&nbsp;&nbsp;&nbsp;' . $task['task_name'] . '</td><td>' . $task['user_username'] . '</td><td align="right">' . ($task['task_duration'] * $task['task_duration_type']) . ' ' . $hrs . '</td><td align="center">' . $task['task_end_date'] . '</td><td align="center">' . $task_log['task_log_date'] . '</td><td align="center">' . $done_img . '</td></tr>';
+    }
+    echo '</table>';
+    echo '</td>
 </tr>
 </table>';
 }

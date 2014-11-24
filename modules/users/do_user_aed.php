@@ -1,6 +1,6 @@
 <?php
 if (!defined('W2P_BASE_DIR')) {
-	die('You should not access this file directly.');
+    die('You should not access this file directly.');
 }
 // @todo    refactor to use a core controller
 
@@ -8,12 +8,12 @@ $del = (int) w2PgetParam($_POST, 'del', 0);
 
 $obj = new CUser();
 if (!$obj->bind($_POST)) {
-	$AppUI->setMsg($obj->getError(), UI_MSG_ERROR);
+    $AppUI->setMsg($obj->getError(), UI_MSG_ERROR);
     $AppUI->redirect('m=users');
 }
 $contact = new CContact();
 if (!$contact->bind($_POST)) {
-	$AppUI->setMsg($contact->getError(), UI_MSG_ERROR);
+    $AppUI->setMsg($contact->getError(), UI_MSG_ERROR);
     $AppUI->redirect('m=users');
 }
 
@@ -27,16 +27,16 @@ $perms = &$AppUI->acl();
 if ($del) {
 
 } elseif ($isNewUser) {
-	if (!canAdd('users')) {
-		$AppUI->redirect(ACCESS_DENIED);
-	}
+    if (!canAdd('users')) {
+        $AppUI->redirect(ACCESS_DENIED);
+    }
 } else {
-	if ($user_id != $AppUI->user_id) {
+    if ($user_id != $AppUI->user_id) {
         // @todo shouldn't this check for the specific user?
-		if (!canEdit('users')) {
-			$AppUI->redirect(ACCESS_DENIED);
-		}
-	}
+        if (!canEdit('users')) {
+            $AppUI->redirect(ACCESS_DENIED);
+        }
+    }
 }
 
 $obj->user_username = strtolower($obj->user_username);
@@ -58,22 +58,22 @@ $contactArray = $contact->getContactMethods();
 $result = $contact->store();
 
 if ($result) {
-	$contact->setContactMethods($contactArray);
-	$obj->user_contact = $contact->contact_id;
+    $contact->setContactMethods($contactArray);
+    $obj->user_contact = $contact->contact_id;
 
     if ($obj->store()) {
         if ($isNewUser && w2PgetParam($_POST, 'send_user_mail', 0)) {
             notifyNewUserCredentials($contact->contact_email, $contact->contact_first_name, $obj->user_username, $_POST['user_password']);
-		}
-		if (isset($_REQUEST['user_role']) && $_REQUEST['user_role']) {
-			$perms = &$AppUI->acl();
-			if ($perms->insertUserRole($_REQUEST['user_role'], $obj->user_id)) {
-				$AppUI->setMsg('', UI_MSG_ALERT, true);
-			} else {
-				$AppUI->setMsg('failed to add role', UI_MSG_ERROR);
-			}
-		}
-		$AppUI->setMsg($isNewUser ? 'User added' : 'User updated', UI_MSG_OK, true);
+        }
+        if (isset($_REQUEST['user_role']) && $_REQUEST['user_role']) {
+            $perms = &$AppUI->acl();
+            if ($perms->insertUserRole($_REQUEST['user_role'], $obj->user_id)) {
+                $AppUI->setMsg('', UI_MSG_ALERT, true);
+            } else {
+                $AppUI->setMsg('failed to add role', UI_MSG_ERROR);
+            }
+        }
+        $AppUI->setMsg($isNewUser ? 'User added' : 'User updated', UI_MSG_OK, true);
         $redirect = 'm=users&a=view&user_id='.$obj->user_id.'&tab=2';
     } else {
         $AppUI->setMsg($obj->getError(), UI_MSG_ERROR);

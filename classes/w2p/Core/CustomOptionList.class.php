@@ -20,12 +20,10 @@ class w2p_Core_CustomOptionList {
         $q->addTable('custom_fields_lists');
         $q->addWhere('field_id = ' . $this->field_id);
         $q->addOrder('list_value');
-        if (!$q->exec()) {
-            return $db->ErrorMsg();
-        }
+        $rows = $q->loadHashList('list_option_id');
 
-        while ($opt_row = $q->fetchRow()) {
-            $this->options[$opt_row['list_option_id']] = $opt_row['list_value'];
+        foreach($rows as $row) {
+            $this->options[$row['list_option_id']] = $row['list_value'];
         }
     }
 
@@ -74,6 +72,7 @@ class w2p_Core_CustomOptionList {
         return $this->options[$i];
     }
 
+    /** @deprecated */
     public function getHTML($field_name, $selected) {
         $html = '<select name="' . $field_name . '" class="text">';
         foreach ($this->options as $i => $opt) {

@@ -29,19 +29,22 @@ class w2p_Output_HTML_FormHelperTest extends CommonSetup
         $this->obj = new w2p_Output_HTML_FormHelper($this->_AppUI);
     }
 
-    public function testAddLabel()
+    public function testShowLabel()
     {
-        $this->assertEquals('<label>Project:</label>', $this->obj->addLabel('Project'));
+        $this->expectOutputString('<label>Project:</label>');
+        $this->obj->showLabel('Project');
     }
 
-    public function testAddCancelButton()
+    public function testShowCancelButton()
     {
-        $this->assertEquals('<input type="button" value="back" class="cancel button btn btn-danger" onclick="javascript:history.back(-1);" />', $this->obj->addCancelButton());
+        $this->expectOutputString('<input type="button" value="back" class="cancel button btn btn-danger" onclick="javascript:history.back(-1);" />');
+        $this->obj->showCancelButton();
     }
 
-    public function testAddSaveButton()
+    public function testShowSaveButton()
     {
-        $this->assertEquals('<input type="button" value="save" class="save button btn btn-primary" onclick="submitIt()" />', $this->obj->addSaveButton());
+        $this->expectOutputString('<input type="button" value="save" class="save button btn btn-primary" onclick="submitIt()" />');
+        $this->obj->showSaveButton();
     }
 
     public function testAddNonce()
@@ -55,7 +58,7 @@ class w2p_Output_HTML_FormHelperTest extends CommonSetup
         $values  = array();
 
         $output = $this->obj->addField('description', 'test');
-        $this->assertEquals('<textarea name="description" class="description">test</textarea>', $output);
+        $this->assertEquals('<textarea name="description" class="text description">test</textarea>', $output);
 
         $output = $this->obj->addField('birthday', '2014-02-01');
         // @todo $this->assertEquals('<input type="text" class="text birthday" name="birthday" value="2014-02-01" />', $output);
@@ -74,12 +77,17 @@ class w2p_Output_HTML_FormHelperTest extends CommonSetup
         $output = $this->obj->addField('url', 'http://google.com', $options, $values);
         $this->assertGreaterThan(0, strpos($output, 'class="text url"'));
         $this->assertGreaterThan(0, strpos($output, 'value="http://google.com"'));
-        $this->assertGreaterThan(0, strpos($output, 'onclick="testURL()"'));
-
-        $output = $this->obj->addField('company', '1');
-        $this->assertEquals('<a href="?m=companies&a=view&company_id=1">UnitTestCompany</a>', $output);
 
         $output = $this->obj->addField('other', 'fieldvalue', $options, $values);
         // @todo $this->assertEquals('<input type="text" xx="text other" name="other" value="fieldvalue" />', $output);
+        $output = $this->obj->addField('task_parent', 0, array(), array(0 => 'department 1', 2 => 'dept 2'));
+        $this->assertEquals('<select id="task_parent" name="task_parent" size="1" class="text department"><option value="0" selected="selected">department 1</option><option value="2">dept 2</option></select>', $output);
+
+    }
+
+    public function testShowField()
+    {
+        $this->expectOutputString('<textarea name="description" class="text description">test</textarea>');
+        $this->obj->showField('description', 'test');
     }
 }

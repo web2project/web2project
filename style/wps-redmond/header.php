@@ -86,15 +86,6 @@ $theme = $AppUI->getTheme();
                 <div>&nbsp;</div>
             </form>
             <div style="margin-top: -10px;">
-                <div class="left" style="margin: 5px;">
-                    <?php
-                        echo $AppUI->_('Welcome') . ' ' . ($AppUI->user_id > 0 ? $AppUI->user_display_name : $outsider);
-                        echo '<br />';
-                        if ($AppUI->user_id > 0) {
-                            echo $AppUI->_('Server time is') . ' ' . $AppUI->getTZAwareTime();
-                        }
-                    ?>
-                </div>
                 <?php if ($AppUI->user_id > 0) { ?>
                     <div class="right quicknav">
                         <div class="left" style="margin-top: -3px;">

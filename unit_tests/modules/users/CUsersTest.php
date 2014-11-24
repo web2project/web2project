@@ -25,13 +25,10 @@ class CUsersTest extends CommonSetup
     {
       parent::setUp();
 
-      global $AppUI;
-      $AppUI->user_id = 1;
+      $this->_AppUI->user_id = 1;
 
       $this->obj    = new CUser();
       $this->obj->overrideDatabase($this->mockDB);
-
-      $GLOBALS['acl'] = new w2p_Mocks_Permissions();
 
       $this->post_data = array(
           'dosql'              => 'do_user_aed',
@@ -74,17 +71,6 @@ class CUsersTest extends CommonSetup
         * Verify that user_id was not set
         */
         $this->assertEquals(0, $this->obj->user_id);
-    }
-
-    /**
-     * Tests that the proper error message is returned we try to create a user
-     *   with the same username as another.
-     */
-    public function testCreateUserExists()
-    {
-        $this->markTestIncomplete("Unfortunately, we can't test this one because
-            the CUser::exists() method is static and we don't have a way
-            to override its database call.");
     }
 
     /**
@@ -142,25 +128,4 @@ class CUsersTest extends CommonSetup
         $result = $this->obj->validatePassword(1, 'password');
         $this->assertTrue($result);
     }
-
-    /*
-     * These tests are all marked as Skipped because we don't have a way of
-     *   testing the static methods without hitting the database.
-     */
-    public function testGenerateUserToken() {       $this->markTestSkipped(); }
-    public function testGetFirstLetters() {         $this->markTestSkipped(); }
-    public function testGetLogs() {                 $this->markTestSkipped(); }
-    public function testGetUserDeptId() {           $this->markTestSkipped(); }
-    public function testGetUserIdByToken() {        $this->markTestSkipped(); }
-    public function testGetUserList() {             $this->markTestSkipped(); }
-    public function testIsUserActive() {            $this->markTestSkipped(); }
-
-    /**
-     * These tests are incomplete.
-     */
-    public function testCanDelete() {               $this->markTestIncomplete(); }
-    public function testDelete() {                  $this->markTestIncomplete(); }
-    public function testGetAllowedRecords() {       $this->markTestIncomplete(); }
-    public function testGetFullUserName() {         $this->markTestIncomplete(); }
-    public function testLoadFull() {                $this->markTestIncomplete(); }
 }

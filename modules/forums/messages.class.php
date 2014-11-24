@@ -60,14 +60,14 @@ class CForum_Message extends w2p_Core_BaseObject
 
         if (0 == $this->{$this->_tbl_key} && $this->canCreate()) {
             $this->message_date = $q->dbfnNowWithTZ();
-            
+
             $stored = parent::store();
 
             if ($stored) {
                 $q->addTable('forum_messages');
                 $q->addQuery('count(message_id), MAX(message_date)');
                 $q->addWhere('message_forum = ' . (int) $this->message_forum);
-                $reply = $q->fetchRow();
+                $reply = $q->loadHash();
 
                 //update forum descriptor
                 $forum = new CForum();
@@ -85,6 +85,7 @@ class CForum_Message extends w2p_Core_BaseObject
                 $this->sendWatchMail(false);
             }
         }
+
         return $stored;
     }
 
@@ -102,7 +103,7 @@ class CForum_Message extends w2p_Core_BaseObject
 
             $q->setDelete('forum_messages');
             $q->addWhere('message_id = ' . (int) $this->message_id);
-            
+
             $result = parent::delete();
 
             $q->addTable('forum_messages');
@@ -116,6 +117,7 @@ class CForum_Message extends w2p_Core_BaseObject
             $q->addWhere('forum_id = ' . (int) $forumId);
             $q->exec();
         }
+
         return $result;
     }
 
@@ -149,7 +151,7 @@ class CForum_Message extends w2p_Core_BaseObject
         $q->addJoin('contacts', 'con', 'contact_id = user_contact', 'inner');
         $q->addWhere('user_id = ' . (int) $this->message_author);
         $q->exec();
-        if ($row = $q->fetchRow()) {
+        if ($row = $q->loadHash()) {
             $message_from = $row['contact_first_name'] . ' ' . $row['contact_last_name'] . '<' . $row['contact_email'] . '>';
         } else {
             $message_from = 'Unknown user';
@@ -160,7 +162,7 @@ class CForum_Message extends w2p_Core_BaseObject
         $q->addQuery('forum_name');
         $q->addWhere('forum_id = \'' . $this->message_forum . '\'');
         $res = $q->exec();
-        if ($row = $q->fetchRow()) {
+        if ($row = $q->loadHash()) {
             $forum_name = $row['forum_name'];
         } else {
             $forum_name = 'Unknown';
@@ -188,6 +190,7 @@ class CForum_Message extends w2p_Core_BaseObject
 
         if (!($res = $q->exec(ADODB_FETCH_ASSOC))) {
             $q->clear();
+
             return;
         }
         if (db_num_rows($res) < 1) {
@@ -198,7 +201,7 @@ class CForum_Message extends w2p_Core_BaseObject
         $subj_prefix = $this->_AppUI->_('forumEmailSubj', UI_OUTPUT_RAW);
         $mail->Subject($subj_prefix . ' ' . $this->message_title);
 
-        $emailManager = new w2p_Output_EmailManager($this->_AppUI);
+        $emailManager = new w2p_Output_Email_Manager($this->_AppUI);
         $body = $emailManager->getForumWatchEmail($this, $forum_name, $message_from);
         $mail->Body($body, isset($GLOBALS['locale_char_set']) ? $GLOBALS['locale_char_set'] : '');
 

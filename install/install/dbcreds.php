@@ -1,10 +1,10 @@
 <?php
-	if (!defined('W2P_BASE_DIR')) {
-		die('You should not access this file directly.');
-	}
-	
+    if (!defined('W2P_BASE_DIR')) {
+        die('You should not access this file directly.');
+    }
+
 $timezones = w2PgetTimezonesForInstall();
-        
+
 ?>
 <form action="<?php echo W2P_BASE_URL; ?>/index.php" method="post" name="form" id="form" accept-charset="utf-8">
 	<input type="hidden" name="step" value="perform" />
@@ -14,10 +14,10 @@ $timezones = w2PgetTimezonesForInstall();
 		</tr>
 		<tr>
 			<td colspan="2">
-				This installer does not create your database, it only loads it. 
-				Therefore, you have to create your own database and database user 
-				before continuing.  The database user must have permission to create 
-				tables.  Once you have those user credentials, please use them here. 
+				This installer does not create your database, it only loads it.
+				Therefore, you have to create your own database and database user
+				before continuing.  The database user must have permission to create
+				tables.  Once you have those user credentials, please use them here.
 			</td>
 		</tr>
 		<tr>
@@ -76,9 +76,9 @@ $timezones = w2PgetTimezonesForInstall();
 		<tr>
 			<td class="item" align="left" colspan="2" style="text-align: center;">
 				<b class="error">
-					If you haven't created your database yet, your installation will 
-					fail and the next screen will have lots of errors.<br />Save yourself 
-					(and us!) some time and make sure your database exists.  Thanks! 
+					If you haven't created your database yet, your installation will
+					fail and the next screen will have lots of errors.<br />Save yourself
+					(and us!) some time and make sure your database exists.  Thanks!
 				</b>
 			</td>
 		</tr>
@@ -86,7 +86,7 @@ $timezones = w2PgetTimezonesForInstall();
 			<td colspan="2">&nbsp;</td>
 		</tr>
 		<tr>
-			<td align="center" colspan="2">						
+			<td align="center" colspan="2">
 				<input class="button" type="submit" name="do_db" value="install db only &raquo;" title="Try to set up the database with the given information." />
 				&nbsp;<input class="button" type="submit" name="do_cfg" value="write config file only &raquo;" title="Write a config file with the details only." /><br /><br />
 				Recommended: &nbsp;<input class="button" type="submit" name="do_db_cfg" value="install db &amp; write cfg &raquo;" title="Write config file and setup the database with the given information." />

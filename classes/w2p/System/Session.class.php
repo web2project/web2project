@@ -31,7 +31,7 @@ class w2p_System_Session
         $q->addQuery('UNIX_TIMESTAMP() - UNIX_TIMESTAMP(session_created) as session_lifespan');
         $q->addQuery('UNIX_TIMESTAMP() - UNIX_TIMESTAMP(session_updated) as session_idle');
         $q->addWhere('session_id = \'' . $id . '\'');
-        $qid = &$q->exec();
+        $qid = $q->exec();
         if (!$qid || $qid->EOF) {
             dprint(__file__, __line__, 11, 'Failed to retrieve session ' . $id);
             $data = '';

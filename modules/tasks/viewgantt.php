@@ -1,12 +1,11 @@
 <?php
 if (!defined('W2P_BASE_DIR')) {
-	die('You should not access this file directly.');
+    die('You should not access this file directly.');
 }
 // @todo    remove database query
 
 global $AppUI, $min_view, $m, $a, $user_id, $tab, $tasks, $cal_sdf;
-GLOBAL $gantt_map, $currentGanttImgSource, $filter_task_list, $caller;
-$AppUI->getTheme()->loadCalendarJS();
+global $gantt_map, $currentGanttImgSource, $filter_task_list, $caller;
 
 $min_view = defVal($min_view, false);
 
@@ -44,36 +43,35 @@ $showTaskNameOnly = '';
 $showhgrid = '';
 
 if ($a == 'todo') {
-	if (isset($_POST['show_form'])) {
-		$AppUI->setState('TaskDayShowArc', w2PgetParam($_POST, 'showArcProjs', 0));
-		$AppUI->setState('TaskDayShowLow', w2PgetParam($_POST, 'showLowTasks', 0));
-		$AppUI->setState('TaskDayShowHold', w2PgetParam($_POST, 'showHoldProjs', 0));
-		$AppUI->setState('TaskDayShowDyn', w2PgetParam($_POST, 'showDynTasks', 0));
-		$AppUI->setState('TaskDayShowPin', w2PgetParam($_POST, 'showPinned', 0));
-	}
+    if (isset($_POST['show_form'])) {
+        $AppUI->setState('TaskDayShowArc', w2PgetParam($_POST, 'showArcProjs', 0));
+        $AppUI->setState('TaskDayShowLow', w2PgetParam($_POST, 'showLowTasks', 0));
+        $AppUI->setState('TaskDayShowHold', w2PgetParam($_POST, 'showHoldProjs', 0));
+        $AppUI->setState('TaskDayShowDyn', w2PgetParam($_POST, 'showDynTasks', 0));
+        $AppUI->setState('TaskDayShowPin', w2PgetParam($_POST, 'showPinned', 0));
+    }
 
-	$showArcProjs = $AppUI->getState('TaskDayShowArc', 0);
-	$showLowTasks = $AppUI->getState('TaskDayShowLow', 1);
-	$showHoldProjs = $AppUI->getState('TaskDayShowHold', 0);
-	$showDynTasks = $AppUI->getState('TaskDayShowDyn', 0);
-	$showPinned = $AppUI->getState('TaskDayShowPin', 0);
+    $showArcProjs = $AppUI->getState('TaskDayShowArc', 0);
+    $showLowTasks = $AppUI->getState('TaskDayShowLow', 1);
+    $showHoldProjs = $AppUI->getState('TaskDayShowHold', 0);
+    $showDynTasks = $AppUI->getState('TaskDayShowDyn', 0);
+    $showPinned = $AppUI->getState('TaskDayShowPin', 0);
 } else {
-	$showPinned = w2PgetParam($_POST, 'showPinned', '0');
-	$showPinned = (($showPinned != '0') ? '1' : $showPinned);
+    $showPinned = w2PgetParam($_POST, 'showPinned', '0');
+    $showPinned = (($showPinned != '0') ? '1' : $showPinned);
 
-	$showArcProjs = w2PgetParam($_POST, 'showArcProjs', '0');
-	$showArcProjs = (($showArcProjs != '0') ? '1' : $showArcProjs);
+    $showArcProjs = w2PgetParam($_POST, 'showArcProjs', '0');
+    $showArcProjs = (($showArcProjs != '0') ? '1' : $showArcProjs);
 
-	$showHoldProjs = w2PgetParam($_POST, 'showHoldProjs', '0');
-	$showHoldProjs = (($showHoldProjs != '0') ? '1' : $showHoldProjs);
+    $showHoldProjs = w2PgetParam($_POST, 'showHoldProjs', '0');
+    $showHoldProjs = (($showHoldProjs != '0') ? '1' : $showHoldProjs);
 
-	$showDynTasks = w2PgetParam($_POST, 'showDynTasks', '0');
-	$showDynTasks = (($showDynTasks != '0') ? '1' : $showDynTasks);
+    $showDynTasks = w2PgetParam($_POST, 'showDynTasks', '0');
+    $showDynTasks = (($showDynTasks != '0') ? '1' : $showDynTasks);
 
-	$showLowTasks = w2PgetParam($_POST, 'showLowTasks', '0');
-	$showLowTasks = (($showLowTasks != '0') ? '1' : $showLowTasks);
+    $showLowTasks = w2PgetParam($_POST, 'showLowTasks', '0');
+    $showLowTasks = (($showLowTasks != '0') ? '1' : $showLowTasks);
 }
-
 
 /**
   * prepare the array with the tasks to display in the task filter
@@ -120,9 +118,8 @@ foreach ($projects as $p) {
 }
 /**
  * the results of the above bits are stored in $filter_task_list (array)
- * 
+ *
  */
-
 
 // months to scroll
 $scroll_date = 1;
@@ -133,30 +130,31 @@ $display_option = w2PgetParam($_POST, 'display_option', 'this_month');
 $df = $AppUI->getPref('SHDATEFORMAT');
 
 if ($display_option == 'custom') {
-	// custom dates
-	$start_date = intval($sdate) ? new w2p_Utilities_Date($sdate) : new w2p_Utilities_Date();
-	$end_date = intval($edate) ? new w2p_Utilities_Date($edate) : new w2p_Utilities_Date();
+    // custom dates
+    $start_date = intval($sdate) ? new w2p_Utilities_Date($sdate) : new w2p_Utilities_Date();
+    $end_date = intval($edate) ? new w2p_Utilities_Date($edate) : new w2p_Utilities_Date();
 } else {
-	// month
-	$start_date = new w2p_Utilities_Date();
-	$start_date->day = 1;
-	$end_date = new w2p_Utilities_Date($start_date);
-	$end_date->addMonths($scroll_date);
+    // month
+    $start_date = new w2p_Utilities_Date();
+    $start_date->day = 1;
+    $end_date = new w2p_Utilities_Date($start_date);
+    $end_date->addMonths($scroll_date);
 }
 
 // setup the title block
 if (!$min_view) {
-	$titleBlock = new w2p_Theme_TitleBlock('Gantt Chart', 'icon.png', $m);
-	$titleBlock->addCrumb('?m=tasks', 'tasks list');
-	$titleBlock->addCrumb('?m=projects&a=view&project_id=' . $project_id, 'view this project');
+    $titleBlock = new w2p_Theme_TitleBlock('Gantt Chart', 'icon.png', $m);
+    $titleBlock->addCrumb('?m=tasks', 'tasks list');
+    $titleBlock->addCrumb('?m=projects&a=view&project_id=' . $project_id, 'view this project');
     $titleBlock->addCrumb('#" onclick="javascript:toggleLayer(\'displayOptions\');', 'show/hide display options');
-	$titleBlock->show();
+    $titleBlock->show();
 }
 ?>
 <script language="javascript" type="text/javascript">
     var calendarField = "";
 
-    function popCalendar(field) {
+    function popCalendar(field)
+    {
          calendarField = field;
          idate = eval("document.editFrm." + field + ".value");
          window.open("index.php?m=public&a=calendar&dialog=1&callback=setCalendar&date=" + idate,
@@ -166,14 +164,16 @@ if (!$min_view) {
      *     @param string Input date in the format YYYYMMDD
      *     @param string Formatted date
      */
-    function setCalendar(idate, fdate) {
+    function setCalendar(idate, fdate)
+    {
          fld_date = eval("document.editFrm." + calendarField);
          fld_fdate = eval("document.editFrm.show_" + calendarField);
          fld_date.value = idate;
          fld_fdate.value = fdate;
     }
 
-    function scrollPrev() {
+    function scrollPrev()
+    {
         f = document.editFrm;
         <?php
         $new_start = new w2p_Utilities_Date($start_date);
@@ -188,7 +188,8 @@ if (!$min_view) {
         f.submit()
     }
 
-    function scrollNext() {
+    function scrollNext()
+    {
         f = document.editFrm;
         <?php
         $new_start = new w2p_Utilities_Date($start_date);
@@ -205,21 +206,24 @@ if (!$min_view) {
         f.submit();
     }
 
-    function showThisMonth() {
+    function showThisMonth()
+    {
         document.editFrm.display_option.value = "this_month";
         document.editFrm.printpdf.value = "0";
         document.editFrm.printpdfhr.value = "0";
         document.editFrm.submit();
     }
 
-    function showFullProject() {
+    function showFullProject()
+    {
          document.editFrm.display_option.value = "all";
          document.editFrm.printpdf.value = "0";
          document.editFrm.printpdfhr.value = "0";
          document.editFrm.submit();
     }
 
-    function toggleLayer( whichLayer ) {
+    function toggleLayer(whichLayer)
+    {
          var elem, vis;
          if( document.getElementById ) // this is the way the standards work
               elem = document.getElementById( whichLayer );
@@ -234,13 +238,15 @@ if (!$min_view) {
               vis.display = (vis.display==''||vis.display=='block')?'none':'block';
     }
 
-    function printPDFHR() {
+    function printPDFHR()
+    {
          document.editFrm.printpdf.value = "0";
          document.editFrm.printpdfhr.value = "1";
          document.editFrm.submit();
     }
 
-    function submitIt() {
+    function submitIt()
+    {
          document.editFrm.printpdf.value = "0";
          document.editFrm.printpdfhr.value = "0";
          document.editFrm.submit();
@@ -381,7 +387,7 @@ if (!$min_view) {
 		<td align="center"><img src="<?php echo W2P_BASE_URL;?>/modules/tasks/images/task_completed.png" alt=""/></td>
 	</tr>
 	<?php } ?>
-	<?php if ($showNoMilestones != 1) {	?>
+	<?php if ($showNoMilestones != 1) {    ?>
 	<tr>
 		<td align="right"><?php echo $AppUI->_('Milestone (planned)')?>&nbsp;</td>
 		<td align="center"><img src="<?php echo W2P_BASE_URL;?>/modules/tasks/images/milestone_planned.png" alt=""/></td>
@@ -405,33 +411,33 @@ if (!$min_view) {
                  $cnt[0]['N'] = ((empty($tasks)) ? 0 : 1);
             }
             if ($cnt[0]['N'] > 0) {
-				 $src = ('?m=tasks&a=gantt&suppressHeaders=1&project_id=' . $project_id 
-						 . (($display_option == 'all') ? ''
-						    : ('&start_date=' . $start_date->format('%Y-%m-%d')
-						       . '&end_date=' . $end_date->format('%Y-%m-%d')))
-						 . "&width=' + ((navigator.appName=='Netscape'"
-						 . "?window.innerWidth:document.body.offsetWidth)*0.95) + '"
-						 . '&showLabels=' . $showLabels . '&showWork=' . $showWork
-						 . '&showTaskNameOnly=' . $showTaskNameOnly
-						   . '&showhgrid=' . $showhgrid . '&showPinned=' . $showPinned
-						 . '&showArcProjs=' . $showArcProjs . '&showHoldProjs=' . $showHoldProjs
-						 . '&showDynTasks=' . $showDynTasks . '&showLowTasks=' . $showLowTasks
-						 . '&caller=' . $a . '&user_id=' . $user_id
-						   . '&printpdf=' . $printpdf . '&showNoMilestones=' . $showNoMilestones . '&showMilestonesOnly=' . $showMilestonesOnly
-						   . '&addLinksToGantt=' . $addLinksToGantt . '&ganttTaskFilter=' . $ganttTaskFilter
-						   . '&monospacefont=' . $monospacefont . '&showWork_days=' . $showWork_days);
+                 $src = ('?m=tasks&a=gantt&suppressHeaders=1&project_id=' . $project_id
+                         . (($display_option == 'all') ? ''
+                            : ('&start_date=' . $start_date->format('%Y-%m-%d')
+                               . '&end_date=' . $end_date->format('%Y-%m-%d')))
+                         . "&width=' + ((navigator.appName=='Netscape'"
+                         . "?window.innerWidth:document.body.offsetWidth)*0.95) + '"
+                         . '&showLabels=' . $showLabels . '&showWork=' . $showWork
+                         . '&showTaskNameOnly=' . $showTaskNameOnly
+                           . '&showhgrid=' . $showhgrid . '&showPinned=' . $showPinned
+                         . '&showArcProjs=' . $showArcProjs . '&showHoldProjs=' . $showHoldProjs
+                         . '&showDynTasks=' . $showDynTasks . '&showLowTasks=' . $showLowTasks
+                         . '&caller=' . $a . '&user_id=' . $user_id
+                           . '&printpdf=' . $printpdf . '&showNoMilestones=' . $showNoMilestones . '&showMilestonesOnly=' . $showMilestonesOnly
+                           . '&addLinksToGantt=' . $addLinksToGantt . '&ganttTaskFilter=' . $ganttTaskFilter
+                           . '&monospacefont=' . $monospacefont . '&showWork_days=' . $showWork_days);
 
                 ?>
                 <script language="javascript" type="text/javascript"> document.write('<img alt="Please wait while the Gantt chart is generated... (this might take a minute or two)" src="<?php echo htmlspecialchars($src); ?>" />') </script>
                 <?php
 
-				 //If we have a problem displaying this we need to display a warning.
-				 //Put it at the bottom just in case
-				 if (! w2PcheckMem(32*1024*1024)) {
-					  echo "</td>\n</tr>\n<tr>\n<td>";
-					  echo '<span style="color: red; font-weight: bold;">' . $AppUI->_('invalid memory config') . '</span>';
-					  echo "\n";
-				 }
+                 //If we have a problem displaying this we need to display a warning.
+                 //Put it at the bottom just in case
+                 if (! w2PcheckMem(32*1024*1024)) {
+                      echo "</td>\n</tr>\n<tr>\n<td>";
+                      echo '<span style="color: red; font-weight: bold;">' . $AppUI->_('invalid memory config') . '</span>';
+                      echo "\n";
+                 }
             } else {
                 echo $AppUI->_('No tasks to display');
             }
@@ -441,37 +447,37 @@ if (!$min_view) {
 	<tr>
 		<td>
 			<?php
-				//POST of all necesary variables to generate gantt in PDF
-				$_POST['m'] = 'tasks';
-				$_POST['a'] = 'gantt_pdf';
-				$_POST['suppressHeaders'] = '1';
-				$_POST['start_date'] = $start_date->format('%Y-%m-%d');
-				$_POST['end_date'] = $end_date->format('%Y-%m-%d');
-				$_POST['display_option'] = $display_option;
-				$_POST['showLabels']= $showLabels;
-				$_POST['showWork']= $showWork;
-				$_POST['showTaskNameOnly']= $showTaskNameOnly;
-				$_POST['showhgrid']= $showhgrid;
-				$_POST['showPinned']= $showPinned;
-				$_POST['showArcProjs']= $showArcProjs;
-				$_POST['showHoldProjs']= $showHoldProjs;
-				$_POST['showDynTasks']= $showDynTasks;
-				$_POST['showLowTasks']= $showLowTasks;
-				$_POST['caller']= $a;
-				$_POST['user_id']= $user_id;
-				$_POST['printpdfhr']= $printpdfhr;
-				$_POST['showPinned']= $showPinned;
-				$_POST['showArcProjs']= $showArcProjs;
-				$_POST['showHoldProjs']= $showHoldProjs;
-				$_POST['showDynTasks']= $showDynTasks;
-				$_POST['showLowTasks']= $showLowTasks;
+                //POST of all necesary variables to generate gantt in PDF
+                $_POST['m'] = 'tasks';
+                $_POST['a'] = 'gantt_pdf';
+                $_POST['suppressHeaders'] = '1';
+                $_POST['start_date'] = $start_date->format('%Y-%m-%d');
+                $_POST['end_date'] = $end_date->format('%Y-%m-%d');
+                $_POST['display_option'] = $display_option;
+                $_POST['showLabels']= $showLabels;
+                $_POST['showWork']= $showWork;
+                $_POST['showTaskNameOnly']= $showTaskNameOnly;
+                $_POST['showhgrid']= $showhgrid;
+                $_POST['showPinned']= $showPinned;
+                $_POST['showArcProjs']= $showArcProjs;
+                $_POST['showHoldProjs']= $showHoldProjs;
+                $_POST['showDynTasks']= $showDynTasks;
+                $_POST['showLowTasks']= $showLowTasks;
+                $_POST['caller']= $a;
+                $_POST['user_id']= $user_id;
+                $_POST['printpdfhr']= $printpdfhr;
+                $_POST['showPinned']= $showPinned;
+                $_POST['showArcProjs']= $showArcProjs;
+                $_POST['showHoldProjs']= $showHoldProjs;
+                $_POST['showDynTasks']= $showDynTasks;
+                $_POST['showLowTasks']= $showLowTasks;
 
-				if ( $printpdf == 1 || $printpdfhr == 1) {
-					include 'gantt_pdf.php';
-					$_POST['printpdf']= 0; $printpdf = 0;
-					$_POST['printpdfhr']= 0; $printpdfhr = 0;
-				}
-			?>
+                if ($printpdf == 1 || $printpdfhr == 1) {
+                    include 'gantt_pdf.php';
+                    $_POST['printpdf']= 0; $printpdf = 0;
+                    $_POST['printpdfhr']= 0; $printpdfhr = 0;
+                }
+            ?>
 		</td>
 	</tr>
 </table>

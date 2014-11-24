@@ -1,5 +1,7 @@
 <?php
 
+global $tab;
+
 $sortable = false;
 $module   = '';
 

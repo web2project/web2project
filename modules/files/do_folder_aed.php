@@ -1,11 +1,11 @@
 <?php
 if (!defined('W2P_BASE_DIR')) {
-	die('You should not access this file directly.');
+    die('You should not access this file directly.');
 }
 
 $delete = (int) w2PgetParam($_POST, 'del', 0);
 
-$controller = new w2p_Controllers_Base(
+$controller = new \Web2project\Actions\AddEdit(
                     new CFile_Folder(), $delete, 'File Folder', 'm=files', 'm=files&a=addedit_folder'
                   );
 

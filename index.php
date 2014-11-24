@@ -166,14 +166,16 @@ if (!isset($_GET['m']) && !empty($w2Pconfig['default_view_m'])) {
 		$tab = $w2Pconfig['default_view_tab'];
         $_GET['tab'] = $tab;
 	}
-} else {
-	// set the module from the url
-	$m = $loader->checkFileName(w2PgetParam($_GET, 'm', getReadableModule()));
 }
-$m = preg_replace("/[^a-z0-9_]/", "", $m);
-// set the action from the url
-$a = $loader->checkFileName(w2PgetParam($_GET, 'a', $def_a));
-$a = preg_replace("/[^a-z0-9_]/", "", $a);
+
+$m = $loader->makeFileNameSafe(w2PgetParam($_GET, 'm', 'public'));
+$a = $loader->makeFileNameSafe(w2PgetParam($_GET, 'a', $def_a));
+/**
+ * This check for $u implies that a file located in a subdirectory of higher depth than 1 in relation to the module base
+ *   can't be executed. So it wouldn't be possible to run for example the file module/directory1/directory2/file.php
+ */
+$u = $loader->makeFileNameSafe(w2PgetParam($_GET, 'u', ''));
+
 if ($m == 'projects' && $a == 'view' && $w2Pconfig['projectdesigner_view_project'] && !w2PgetParam($_GET, 'bypass') && !(isset($_GET['tab']))) {
 	if ($AppUI->isActiveModule('projectdesigner')) {
 		$m = 'projectdesigner';
@@ -181,15 +183,7 @@ if ($m == 'projects' && $a == 'view' && $w2Pconfig['projectdesigner_view_project
 	}
 }
 
-/* This check for $u implies that a file located in a subdirectory of higher depth than 1
-* in relation to the module base can't be executed. So it would'nt be possible to
-* run for example the file module/directory1/directory2/file.php
-* Also it won't be possible to run modules/module/abc.zyz.class.php for that dots are
-* not allowed in the request parameters.
-*/
 
-$u = $loader->checkFileName(w2PgetParam($_GET, 'u', ''));
-$u = preg_replace("/[^a-z0-9_]/", "", $u);
 
 // load module based locale settings
 include W2P_BASE_DIR . '/locales/' . $AppUI->user_locale . '/locales.php';
@@ -222,7 +216,7 @@ if ($u && file_exists(W2P_BASE_DIR . '/modules/' . $m . '/' . $u . '/' . $u . '.
 // do some db work if dosql is set
 // TODO - MUST MOVE THESE INTO THE MODULE DIRECTORY
 if (isset($_POST['dosql'])) {
-	require W2P_BASE_DIR . '/modules/' . $m . '/' . ($u ? ($u . '/') : '') . $loader->checkFileName($_POST['dosql']) . '.php';
+	require W2P_BASE_DIR . '/modules/' . $m . '/' . ($u ? ($u . '/') : '') . $loader->makeFileNameSafe($_POST['dosql']) . '.php';
 }
 
 // start output proper
@@ -259,9 +253,10 @@ if (file_exists($module_file)) {
     include $theme->resolveTemplate('missing_module');
 }
 if (!$suppressHeaders) {
-	echo '<iframe name="thread" src="' . W2P_BASE_URL . '/modules/index.html" width="0" height="0" frameborder="0"></iframe>';
-	echo '<iframe name="thread2" src="' . W2P_BASE_URL . '/modules/index.html" width="0" height="0" frameborder="0"></iframe>';
+	//echo '<iframe name="thread" src="' . W2P_BASE_URL . '/modules/index.html" width="0" height="0" frameborder="0"></iframe>';
+	//echo '<iframe name="thread2" src="' . W2P_BASE_URL . '/modules/index.html" width="0" height="0" frameborder="0"></iframe>';
  	//Theme footer goes before the performance box
+    $AppUI->getTheme()->loadCalendarJS();
     include $theme->resolveTemplate('footer');
 	if (W2P_PERFORMANCE_DEBUG) {
 		include $theme->resolveTemplate('performance');

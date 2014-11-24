@@ -1,11 +1,10 @@
 <?php
 if (!defined('W2P_BASE_DIR')) {
-	die('You should not access this file directly.');
+    die('You should not access this file directly.');
 }
 // @todo    convert to template
 
 global $AppUI, $cal_sdf;
-$AppUI->getTheme()->loadCalendarJS();
 
 $company_id = (int) w2PgetParam($_POST, 'company_id', 0);
 $active_projects = w2PgetParam($_POST, 'active_projects', 0);
@@ -24,7 +23,7 @@ $start_date = intval($log_start_date) ? new w2p_Utilities_Date($log_start_date) 
 $end_date = intval($log_end_date) ? new w2p_Utilities_Date($log_end_date) : new w2p_Utilities_Date();
 
 if (!$log_start_date) {
-	$start_date->subtractSpan(new Date_Span('14,0,0,0'));
+    $start_date->subtractSpan(new Date_Span('14,0,0,0'));
 }
 $end_date->setTime(23, 59, 59);
 $billingCategory = w2PgetSysVal('BudgetCategory');
@@ -112,7 +111,7 @@ $companies = arrayMerge(array('0' => 'All Companies'), $companies);
 
     if (count($projectList)) {
         foreach ($projectList as $projectItem) {
-            $project->loadFull(null, $projectItem['project_id']);
+            $project->load($projectItem['project_id']);
             $criticalTasks = $project->getCriticalTasks($projectItem['project_id']);
 
             $costs = $bcode->calculateProjectCost($projectItem['project_id'],

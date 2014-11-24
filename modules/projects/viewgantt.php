@@ -1,11 +1,10 @@
 <?php
 if (!defined('W2P_BASE_DIR')) {
-	die('You should not access this file directly.');
+    die('You should not access this file directly.');
 }
 // @todo    convert to template
 
 global $AppUI, $company_id, $dept_ids, $department, $min_view, $m, $a, $user_id, $tab, $cal_sdf;
-$AppUI->getTheme()->loadCalendarJS();
 
 $min_view = defVal($min_view, false);
 $project_id = w2PgetParam($_GET, 'project_id', 0);
@@ -22,20 +21,20 @@ $addPwOiD = w2PgetParam($_POST, 'add_pwoid', isset($addPwOiD) ? $addPwOiD : 0);
 
 //if set GantChart includes user labels as captions of every GantBar
 if ($showLabels != '0') {
-	$showLabels = '1';
+    $showLabels = '1';
 }
 if ($showInactive != '0') {
-	$showInactive = '1';
+    $showInactive = '1';
 }
 
 if ($showAllGantt != '0') {
-	$showAllGantt = '1';
+    $showAllGantt = '1';
 }
 
 $projectStatus = w2PgetSysVal('ProjectStatus');
 
 if (isset($_POST['proFilter'])) {
-	$AppUI->setState('ProjectIdxFilter', $_POST['proFilter']);
+    $AppUI->setState('ProjectIdxFilter', $_POST['proFilter']);
 }
 $proFilter = $AppUI->getState('ProjectIdxFilter') !== null ? $AppUI->getState('ProjectIdxFilter') : '-1';
 
@@ -49,29 +48,30 @@ $display_option = w2PgetParam($_POST, 'display_option', 'this_month');
 $df = $AppUI->getPref('SHDATEFORMAT');
 
 if ($display_option == 'custom') {
-	// custom dates
-	$start_date = intval($sdate) ? new w2p_Utilities_Date($sdate) : new w2p_Utilities_Date();
-	$end_date = intval($edate) ? new w2p_Utilities_Date($edate) : new w2p_Utilities_Date();
+    // custom dates
+    $start_date = intval($sdate) ? new w2p_Utilities_Date($sdate) : new w2p_Utilities_Date();
+    $end_date = intval($edate) ? new w2p_Utilities_Date($edate) : new w2p_Utilities_Date();
 } else {
-	// month
-	$start_date = new w2p_Utilities_Date();
-	$start_date->day = 1;
-	$end_date = new w2p_Utilities_Date($start_date);
-	$end_date->addMonths($scroll_date);
+    // month
+    $start_date = new w2p_Utilities_Date();
+    $start_date->day = 1;
+    $end_date = new w2p_Utilities_Date($start_date);
+    $end_date->addMonths($scroll_date);
 }
 
 // setup the title block
 if (!$min_view) {
-	$titleBlock = new w2p_Theme_TitleBlock('Gantt Chart', 'icon.png', $m);
-	$titleBlock->addCrumb('?m=' . $m, 'projects list');
-	$titleBlock->show();
+    $titleBlock = new w2p_Theme_TitleBlock('Gantt Chart', 'icon.png', $m);
+    $titleBlock->addCrumb('?m=' . $m, 'projects list');
+    $titleBlock->show();
 }
 
 ?>
 
 <script language="javascript" type="text/javascript">
 
-function scrollPrev() {
+function scrollPrev()
+{
 	f = document.editFrm;
 <?php
 $new_start = new w2p_Utilities_Date($start_date);
@@ -87,7 +87,8 @@ echo "f.project_end_date.value='" . $new_end->format(FMT_TIMESTAMP_DATE) . "';";
 	f.submit()
 }
 
-function scrollNext() {
+function scrollNext()
+{
 	f = document.editFrm;
 <?php
 $new_start = new w2p_Utilities_Date($start_date);
@@ -102,12 +103,14 @@ echo "f.project_end_date.value='" . $new_end->format(FMT_TIMESTAMP_DATE) . "';";
 	f.submit()
 }
 
-function showThisMonth() {
+function showThisMonth()
+{
 	document.editFrm.display_option.value = 'this_month';
 	document.editFrm.submit();
 }
 
-function showFullProject() {
+function showFullProject()
+{
 	document.editFrm.display_option.value = 'all';
 	document.editFrm.submit();
 }

@@ -52,7 +52,7 @@ class CContact extends w2p_Core_BaseObject
      * This exists *only* to make sure we can use $this->contact_name and keep
      *   our code simpler.
      *
-     * @param type $name
+     * @param  type $name
      * @return type
      */
     public function __get($name)
@@ -115,7 +115,7 @@ class CContact extends w2p_Core_BaseObject
         $q->setDelete('contacts_methods');
         $q->addWhere('contact_id=' . (int) $this->_old_key);
         $q->exec();
-        
+
         parent::hook_postDelete();
     }
 
@@ -191,10 +191,10 @@ class CContact extends w2p_Core_BaseObject
     {
         $baseErrorMsg = get_class($this) . '::store-check failed - ';
 
-        if(mb_strlen($this->contact_first_name) <= 1) {
+        if (mb_strlen($this->contact_first_name) <= 1) {
             $this->_error['contact_first_name'] = $baseErrorMsg . 'contact first name is not set';
         }
-        if(mb_strlen($this->contact_display_name) <= 1) {
+        if (mb_strlen($this->contact_display_name) <= 1) {
             $this->_error['contact_display_name'] = $baseErrorMsg . 'contact display name is not set';
         }
         if (mb_strlen($this->contact_email) && !w2p_check_email($this->contact_email)) {
@@ -209,6 +209,7 @@ class CContact extends w2p_Core_BaseObject
         $recordCount = $this->loadAll(null, "contact_email = '".$this->contact_email."'");
         if (count($recordCount) && $this->contact_email != null) {
             $this->_error['canCreate'] = 'A contact with this email address already exists';
+
             return false;
         }
         if ('true' == w2PgetConfig('activate_external_user_creation')) {
@@ -309,19 +310,17 @@ class CContact extends w2p_Core_BaseObject
 
     public function notify()
     {
-        $emailManager = new w2p_Output_EmailManager($this->_AppUI);
-        $body = $emailManager->getContactUpdateNotify(null, $this);
+        $this->base_url = W2P_BASE_URL;
+        $this->user_display_name = $this->_AppUI->user_display_name;
 
-        $mail = new w2p_Utilities_Mail();
-        $mail->To($this->contact_email, true);
-        $mail->Subject('Hello');
-        $mail->Body($body, isset($GLOBALS['locale_char_set']) ? $GLOBALS['locale_char_set'] : '');
-        return $mail->Send();
+        $manager = new \Web2project\Output\Email\Manager();
+        $manager->send('new-contact-notify', 'en_US', $this, $this->contact_email);
     }
 
     public function updateNotify()
     {
-        //trigger_error("updateNotify has been deprecated and will be removed in v4.0. Please use notify() instead.", E_USER_NOTICE );
+        trigger_error("updateNotify has been deprecated in v4.0 and will be removed in v5.0. Please use notify() instead.", E_USER_NOTICE );
+
         return $this->notify();
     }
 
@@ -365,7 +364,8 @@ class CContact extends w2p_Core_BaseObject
                 $extra['where'] = 'contact_company IS NULL OR contact_company = \'\' OR contact_company = 0';
             }
         }
-        return parent::getAllowedRecords($uid, $fields, $orderby, $index, $extra);
+
+        return parent::getAllowedRecords($uid, '*', $orderby, $index, $extra);
     }
 
     public function search($search, $days = 0)
@@ -373,7 +373,7 @@ class CContact extends w2p_Core_BaseObject
         $hook = $this->hook_search();
         $searchfields = $hook['search_fields'];
 
-        foreach($searchfields as $key => $field) {
+        foreach ($searchfields as $key => $field) {
             $searchfields[$key] = "$field like '%$search%'";
         }
         $where = implode(' OR ', $searchfields);
@@ -398,14 +398,14 @@ class CContact extends w2p_Core_BaseObject
 			)');
 
 //TODO: We need to convert this from static to use ->overrideDatabase() for testing.
-        $company = new CCompany;
+        $company = new CCompany();
         $allow_where = $company->getAllowedSQL($this->_AppUI->user_id,'contact_company');
         if (count($allow_where)) {
             $q->addWhere('(contact_company = 0 OR contact_company IS NULL OR (' . implode(' AND ', $allow_where). '))');
         }
 
 //TODO: We need to convert this from static to use ->overrideDatabase() for testing.
-        $department = new CDepartment;
+        $department = new CDepartment();
         $q = $department->setAllowedSQL($this->_AppUI->user_id, $q);
 
         $q->addOrder('contact_first_name');
@@ -445,6 +445,7 @@ class CContact extends w2p_Core_BaseObject
             }
             $q->clear();
         }
+
         return strtoupper($letters);
     }
 
@@ -486,9 +487,8 @@ class CContact extends w2p_Core_BaseObject
         $q->addQuery('contact_display_name as contact_name');
         $q->addJoin('contacts', 'con', 'contact_id = user_contact', 'inner');
         $q->addWhere('user_id = ' . (int) $userId);
-        $q->setLimit(1);
-        $r = $q->loadList();
-        $result = (is_array($r) && isset($r[0])) ? $r[0]['contact_name'] : 'User Not Found';
+        $r = $q->loadHash();
+        $result = is_array($r) ? $r['contact_name'] : 'User Not Found';
 
         return $result;
     }
@@ -584,37 +584,5 @@ class CContact extends w2p_Core_BaseObject
                 'alias' => 'cm', 'join' => 'c.contact_id = cm.contact_id'));
 
         return $search;
-    }
-
-    /**
-     * @deprecated
-     */
-    public function is_alpha($val)
-    {
-        trigger_error("is_alpha() has been deprecated in v2.3 and will be removed by v4.0. Please cast values with (int) instead.", E_USER_NOTICE);
-        return (is_int($val) || ctype_digit($val));
-    }
-
-    /**
-     * @deprecated
-     */
-    public function getCompanyID()
-    {
-        trigger_error("getCompanyID() has been deprecated in v3.0 and will be removed by v4.0. Please just use the object property itself.", E_USER_NOTICE);
-        return (int) $this->contact_company;
-    }
-
-    /**
-     * @deprecated
-     */
-    public function getCompanyName()
-    {
-        trigger_error("getCompanyName has been deprecated and will be removed in v4.0. Please use getCompanyDetails() instead.", E_USER_NOTICE);
-
-        $company = new CCompany();
-        $company->overrideDatabase($this->_query);
-        $company->load((int) $this->contact_company);
-
-        return $company->company_name;
     }
 }

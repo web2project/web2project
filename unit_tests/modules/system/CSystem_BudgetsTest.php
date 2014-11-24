@@ -26,8 +26,6 @@ class CSystem_BudgetsTest extends CommonSetup
       $this->obj    = new CSystem_Budget();
       $this->obj->overrideDatabase($this->mockDB);
 
-      $GLOBALS['acl'] = new w2p_Mocks_Permissions();
-
       $this->post_data = array(
           'dosql'             => 'do_budgeting_aed',
           'budget_id'         => 0,

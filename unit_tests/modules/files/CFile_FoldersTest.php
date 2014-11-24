@@ -26,8 +26,6 @@ class CFile_FoldersTest extends CommonSetup
       $this->obj    = new CFile_Folder();
       $this->obj->overrideDatabase($this->mockDB);
 
-      $GLOBALS['acl'] = new w2p_Mocks_Permissions();
-
       $this->post_data = array(
           'dosql'                   => 'do_folder_aed',
           'file_folder_id'          => 0,
@@ -135,49 +133,5 @@ class CFile_FoldersTest extends CommonSetup
 
         $this->assertTrue(is_a($item,   'CFile_Folder'));
         $this->assertEquals('',         $item->file_folder_name);
-    }
-
-    /**
-     * @todo Implement testLoadFull().
-     */
-    public function testLoadFull()
-    {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-                'This test has not been implemented yet.'
-        );
-    }
-
-    /**
-     * @todo Implement testGetProjectTaskLinksByCategory().
-     */
-    public function testGetProjectTaskLinksByCategory()
-    {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-                'This test has not been implemented yet.'
-        );
-    }
-
-    /**
-     * @todo Implement testCheck().
-     */
-    public function testCheck()
-    {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-                'This test has not been implemented yet.'
-        );
-    }
-
-    /**
-     * @todo Implement testHook_search().
-     */
-    public function testHook_search()
-    {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-                'This test has not been implemented yet.'
-        );
     }
 }

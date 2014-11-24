@@ -1,6 +1,6 @@
 <?php
 if (!defined('W2P_BASE_DIR')) {
-	die('You should not access this file directly.');
+    die('You should not access this file directly.');
 }
 // @todo    convert to template
 $object_id = (int) w2PgetParam($_GET, 'project_id', 0);
@@ -15,7 +15,7 @@ $canAddEdit = $obj->canAddEdit();
 $canAuthor = $obj->canCreate();
 $canEdit = $obj->canEdit();
 if (!$canAddEdit) {
-	$AppUI->redirect(ACCESS_DENIED);
+    $AppUI->redirect(ACCESS_DENIED);
 }
 
 $obj = $AppUI->restoreObject();
@@ -23,24 +23,22 @@ if ($obj) {
     $object = $obj;
     $object_id = $object->getId();
 } else {
-    $object->loadFull(null, $object_id);
+    $object->load($object_id);
 }
 if (!$object && $object_id > 0) {
-	$AppUI->setMsg('Project');
-	$AppUI->setMsg('invalidID', UI_MSG_ERROR, true);
+    $AppUI->setMsg('Project');
+    $AppUI->setMsg('invalidID', UI_MSG_ERROR, true);
     $AppUI->redirect('m=' . $m);
 }
 
 global $AppUI, $cal_sdf;
-$AppUI->getTheme()->loadCalendarJS();
-
 
 $pstatus = w2PgetSysVal('ProjectStatus');
 $ptype = w2PgetSysVal('ProjectType');
 
 $structprojs = $object->getAllowedProjects($AppUI->user_id, false);
 unset($structprojs[$object_id]);
-foreach($structprojs as $key => $tmpInfo) {
+foreach ($structprojs as $key => $tmpInfo) {
     $structprojs[$key] = $tmpInfo['project_name'];
 }
 $structprojects = arrayMerge(array('0' => '(' . $AppUI->_('No Parent') . ')'), $structprojs);
@@ -48,19 +46,18 @@ $structprojects = arrayMerge(array('0' => '(' . $AppUI->_('No Parent') . ')'), $
 // get a list of permitted companies
 $company = new CCompany();
 $companies = $company->getAllowedRecords($AppUI->user_id, 'company_id,company_name', 'company_name');
-$companies = arrayMerge(array('0' => ''), $companies);
 
 if (count($companies) < 2 && $object_id == 0) {
-	$AppUI->setMsg('noCompanies', UI_MSG_ERROR, true);
+    $AppUI->setMsg('noCompanies', UI_MSG_ERROR, true);
     $AppUI->redirect('m=' . $m);
 }
 if ($object_id == 0 && $company_id > 0) {
-	$object->project_company = $company_id;
+    $object->project_company = $company_id;
 }
 
 // add in the existing company if for some reason it is dis-allowed
 if ($object_id && !array_key_exists($object->project_company, $companies)) {
-	$companies[$object->project_company] = $company->load($object->project_company)->company_name;
+    $companies[$object->project_company] = $company->load($object->project_company)->company_name;
 }
 
 // get critical tasks (criteria: task_end_date)
@@ -88,11 +85,11 @@ $canDelete = $object->canDelete();
 $selected_contacts = array();
 
 if ($object_id) {
-	$myContacts = $object->getContactList();
-	$selected_contacts = array_keys($myContacts);
+    $myContacts = $object->getContactList();
+    $selected_contacts = array_keys($myContacts);
 }
 if ($object_id == 0 && $contact_id > 0) {
-	$selected_contacts[] = '' . $contact_id;
+    $selected_contacts[] = '' . $contact_id;
 }
 
 // Get the users notification options
@@ -103,7 +100,8 @@ $tp = $tl & 4;
 ?>
 <script language="javascript" type="text/javascript">
 
-function setColor(color) {
+function setColor(color)
+{
 	var f = document.editFrm;
 	if (color) {
 		f.project_color_identifier.value = color;
@@ -111,7 +109,8 @@ function setColor(color) {
 	document.getElementById('test').style.background = '#' + f.project_color_identifier.value; 		//fix for mozilla: does this work with ie? opera ok.
 }
 
-function setShort() {
+function setShort()
+{
 	var f = document.editFrm;
 	var x = 10;
 	if (f.project_name.value.length < 11) {
@@ -122,7 +121,8 @@ function setShort() {
 	}
 }
 
-function submitIt() {
+function submitIt()
+{
 	var f = document.editFrm;
 	var msg = '';
 
@@ -141,35 +141,58 @@ echo w2PrequiredFields($requiredFields);
 	}
 }
 
-function popContacts() {
+function popContacts()
+{
     var selected_contacts_id = document.getElementById('project_contacts').value;
     var project_company = document.getElementById('project_company').value;
 	window.open('./index.php?m=public&a=contact_selector&dialog=1&call_back=setContacts&selected_contacts_id='+selected_contacts_id+'&company_id='+project_company, 'contacts','height=600,width=400,resizable,scrollbars=yes');
 }
 
-function setContacts(contact_id_string){
-	if(!contact_id_string){
+function setContacts(contact_id_string)
+{
+	if (!contact_id_string) {
 		contact_id_string = '';
 	}
 	document.editFrm.project_contacts.value = contact_id_string;
 }
 
-function popDepartment() {
+function popDepartment()
+{
         var f = document.editFrm;
 	var url = './index.php?m=public&a=selector&dialog=1&callback=setDepartment&table=departments&company_id='
             + f.project_company.options[f.project_company.selectedIndex].value;
         window.open(url,'dept','left=50,top=50,height=250,width=400,resizable');
 }
 
-function setDepartment(department_id_string){
-	if(!department_id_string){
+function setDepartment(department_id_string)
+{
+	if (!department_id_string) {
 		department_id_string = '';
 	}
 	document.editFrm.project_departments.value = department_id_string;
 	selected_departments_id = department_id_string;
 }
 
+$(function () {
+    var companies = <?php echo json_encode(array_flip($companies)); ?>;
+    var companyNames = <?php echo json_encode(array_values($companies)); ?>;
+    $( "#companies" ).autocomplete({
+        source: companyNames
+    });
+    $("#companies").blur(function () {
+        $("#project_company").val(companies[$("#companies").val()]);
+    });
+
+    var projects = <?php echo json_encode(array_flip($structprojects)); ?>;
+    var projectNames = <?php echo json_encode(array_values($structprojects)); ?>;
+    $( "#parents" ).autocomplete({
+        source: projectNames
+    });
+    $("#parents").blur(function () {
+        $("#project_parent").val(projects[$("#parents").val()]);
+    });
+});
 </script>
 <?php
 
-include $AppUI->getTheme()->resolveTemplate('projects/addedit');
+include $AppUI->getTheme()->resolveTemplate($m . '/' . $a);

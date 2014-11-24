@@ -1,11 +1,10 @@
 <?php
 if (!defined('W2P_BASE_DIR')) {
-	die('You should not access this file directly.');
+    die('You should not access this file directly.');
 }
 // @todo    convert to template
 
 global $AppUI, $cal_sdf;
-$AppUI->getTheme()->loadCalendarJS();
 
 $do_report = w2PgetParam($_POST, 'do_report', 0);
 $log_start_date = w2PgetParam($_POST, 'log_start_date', 0);
@@ -26,7 +25,7 @@ $start_date = intval($log_start_date) ? new w2p_Utilities_Date($log_start_date) 
 $end_date = intval($log_end_date) ? new w2p_Utilities_Date($log_end_date) : new w2p_Utilities_Date();
 
 if (!$log_start_date) {
-	$start_date->subtractSpan(new Date_Span('14,0,0,0'));
+    $start_date->subtractSpan(new Date_Span('14,0,0,0'));
 }
 $end_date->setTime(23, 59, 59);
 
@@ -105,159 +104,158 @@ echo $AppUI->getTheme()->styleRenderBoxTop();
 if ($do_report) {
 
     echo $AppUI->getTheme()->styleRenderBoxBottom();
-	echo '<br />';
+    echo '<br />';
     echo $AppUI->getTheme()->styleRenderBoxTop();
-	echo '<table class="std">
+    echo '<table class="std">
 	<tr>
 		<td align="center">';
 
-	// Let's figure out which users we have
+    // Let's figure out which users we have
 
-	$user_list = w2PgetUsersHashList();
-	if ($log_userfilter != 0) {
-		$user_list = array($log_userfilter => $user_list[$log_userfilter]);
-	}
+    $user_list = w2PgetUsersHashList();
+    if ($log_userfilter != 0) {
+        $user_list = array($log_userfilter => $user_list[$log_userfilter]);
+    }
 
-	$ss = "'" . $start_date->format(FMT_DATETIME_MYSQL) . "'";
-	$se = "'" . $end_date->format(FMT_DATETIME_MYSQL) . "'";
+    $ss = "'" . $start_date->format(FMT_DATETIME_MYSQL) . "'";
+    $se = "'" . $end_date->format(FMT_DATETIME_MYSQL) . "'";
 
-	$and = false;
-	$where = false;
+    $and = false;
+    $where = false;
 
-	$q = new w2p_Database_Query;
-	$q->addTable('tasks', 't');
-	$q->addQuery('t.*');
-	$q->addJoin('projects', '', 'projects.project_id = task_project', 'inner');
-	$q->addJoin('project_departments', '', 'project_departments.project_id = projects.project_id');
-	$q->addJoin('departments', '', 'department_id = dept_id');
-	$q->addWhere('project_active = 1');
-	if (($template_status = w2PgetConfig('template_projects_status_id')) != '') {
-		$q->addWhere('project_status <> ' . (int)$template_status);
-	}
+    $q = new w2p_Database_Query();
+    $q->addTable('tasks', 't');
+    $q->addQuery('t.*');
+    $q->addJoin('projects', '', 'projects.project_id = task_project', 'inner');
+    $q->addJoin('project_departments', '', 'project_departments.project_id = projects.project_id');
+    $q->addJoin('departments', '', 'department_id = dept_id');
+    $q->addWhere('project_active = 1');
+    if (($template_status = w2PgetConfig('template_projects_status_id')) != '') {
+        $q->addWhere('project_status <> ' . (int) $template_status);
+    }
 
-	if ($use_period) {
-		$q->addWhere('( (task_start_date >= ' . $ss . ' AND task_start_date <= ' . $se . ') OR ' . '(task_end_date <= ' . $se . ' AND task_end_date >= ' . $ss . ') )');
-	}
+    if ($use_period) {
+        $q->addWhere('( (task_start_date >= ' . $ss . ' AND task_start_date <= ' . $se . ') OR ' . '(task_end_date <= ' . $se . ' AND task_end_date >= ' . $ss . ') )');
+    }
 
-	if ($project_id != 0) {
-		$q->addWhere('task_project=' . $project_id);
-	}
+    if ($project_id != 0) {
+        $q->addWhere('task_project=' . $project_id);
+    }
 
-	$proj = new CProject();
-	$obj = new CTask();
-	$allowedProjects = $proj->getAllowedSQL($AppUI->user_id, 'task_project');
-	$allowedTasks = $obj->getAllowedSQL($AppUI->user_id);
+    $proj = new CProject();
+    $obj = new CTask();
+    $allowedProjects = $proj->getAllowedSQL($AppUI->user_id, 'task_project');
+    $allowedTasks = $obj->getAllowedSQL($AppUI->user_id);
 
-	if (count($allowedProjects)) {
-		$q->addWhere(implode(' AND ', $allowedProjects));
-	}
+    if (count($allowedProjects)) {
+        $q->addWhere(implode(' AND ', $allowedProjects));
+    }
 
-	if (count($allowedTasks)) {
-		$q->addWhere(implode(' AND ', $allowedTasks));
-	}
+    if (count($allowedTasks)) {
+        $q->addWhere(implode(' AND ', $allowedTasks));
+    }
 
-	$q->addOrder('task_end_date');
+    $q->addOrder('task_end_date');
 
-	$task_list_hash = $q->loadHashList('task_id');
-	$q->clear();
-	$task_list = array();
-	$task_assigned_users = array();
-	$i = 0;
-	foreach ($task_list_hash as $task_id => $task_data) {
-		$task = new CTask();
-		$task->bind($task_data);
-		$task_list[$i] = $task;
-		$task_assigned_users[$i] = $task->assignees($task_id);
-		$i++;
-	}
-	$Ntasks = $i;
+    $task_list_hash = $q->loadHashList('task_id');
+    $q->clear();
+    $task_list = array();
+    $task_assigned_users = array();
+    $i = 0;
+    foreach ($task_list_hash as $task_id => $task_data) {
+        $task = new CTask();
+        $task->bind($task_data);
+        $task_list[$i] = $task;
+        $task_assigned_users[$i] = $task->assignees($task_id);
+        $i++;
+    }
+    $Ntasks = $i;
 
-	$user_usage = array();
-	$task_dates = array();
+    $user_usage = array();
+    $task_dates = array();
 
-	$actual_date = $start_date;
-	$days_header = ""; // we will save days title here
+    $actual_date = $start_date;
+    $days_header = ""; // we will save days title here
 
-	if (strtolower($max_levels) == 'max') {
-		$max_levels = -1;
-	} elseif ($max_levels == '') {
-		$max_levels = -1;
-	} else {
-		$max_levels = atoi($max_levels);
-	}
-	if ($max_levels == 0) {
-		$max_levels = 1;
-	}
-	if ($max_levels < 0) {
-		$max_levels = -1;
-	}
+    if (strtolower($max_levels) == 'max') {
+        $max_levels = -1;
+    } elseif ($max_levels == '') {
+        $max_levels = -1;
+    } else {
+        $max_levels = atoi($max_levels);
+    }
+    if ($max_levels == 0) {
+        $max_levels = 1;
+    }
+    if ($max_levels < 0) {
+        $max_levels = -1;
+    }
 
-	if (count($task_list) == 0) {
-		echo '<p>' . $AppUI->_('No data available') . '</p>';
-	} else {
+    if (count($task_list) == 0) {
+        echo '<p>' . $AppUI->_('No data available') . '</p>';
+    } else {
 
-		$sss = $ss;
-		$sse = $se;
-		if (!$use_period) {
-			$sss = -1;
-			$sse = -1;
-		}
-		if ($display_week_hours and !$use_period) {
-			foreach ($task_list as $t) {
-				if ($sss == -1) {
-					$sss = $t->task_start_date;
-					$sse = $t->task_end_date;
-				} else {
-					if ($t->task_start_date < $sss) {
-						$sss = $t->task_start_date;
-					}
-					if ($t->task_end_date > $sse) {
-						$sse = $t->task_end_date;
-					}
-				}
-			}
-		}
+        $sss = $ss;
+        $sse = $se;
+        if (!$use_period) {
+            $sss = -1;
+            $sse = -1;
+        }
+        if ($display_week_hours and !$use_period) {
+            foreach ($task_list as $t) {
+                if ($sss == -1) {
+                    $sss = $t->task_start_date;
+                    $sse = $t->task_end_date;
+                } else {
+                    if ($t->task_start_date < $sss) {
+                        $sss = $t->task_start_date;
+                    }
+                    if ($t->task_end_date > $sse) {
+                        $sse = $t->task_end_date;
+                    }
+                }
+            }
+        }
 
-		$table_header = '
+        $table_header = '
 			<tr>
-				<td nowrap="nowrap" bgcolor="#A0A0A0">
-				<font color="black"><b>' . $AppUI->_('Task') . '</b></font> </td>' . ($project_id == 0 ? '<td nowrap="nowrap" bgcolor="#A0A0A0"><font color="black"><b>' . $AppUI->_('Project') . '</b></font></td>' : '') . '
-				<td nowrap="nowrap" bgcolor="#A0A0A0"><font color="black"><b>' . $AppUI->_('Start Date') . '</b></font></td>
-				<td nowrap="nowrap" bgcolor="#A0A0A0"><font color="black"><b>' . $AppUI->_('End Date') . '</b></font></td>' . weekDates_r($display_week_hours, $sss, $sse) . '
+				<th>' . $AppUI->_('Task') . '</th>' . ($project_id == 0 ? '<th>' . $AppUI->_('Project') . '</th>' : '') . '
+				<th>' . $AppUI->_('Start Date') . '</th><th>' . $AppUI->_('End Date') . '</h>' .
+                weekDates_r($display_week_hours, $sss, $sse) . '
 			</tr>';
-		$table_rows = '';
+        $table_rows = '';
 
-		foreach ($user_list as $user_id => $user_data) {
+        foreach ($user_list as $user_id => $user_data) {
 
-			$tmpuser = "<tr><td align='left' nowrap='nowrap' bgcolor='#D0D0D0'><font color='black'><B>" . $user_data["contact_first_name"] . ' ' . $user_data['contact_last_name'] . '</b></font></td>';
-			for ($w = 0, $w_cmp = (1 + ($project_id == 0 ? 1 : 0) + weekCells_r($display_week_hours, $sss, $sse)); $w <= $w_cmp; $w++) {
-				$tmpuser .= '<td bgcolor="#D0D0D0">&nbsp;</td>';
-			}
-			$tmpuser .= '</tr>';
+            $tmpuser = "<tr><td align='left' nowrap='nowrap' bgcolor='#D0D0D0'>" . $user_data["contact_display_name"] . '</td>';
+            for ($w = 0, $w_cmp = (1 + ($project_id == 0 ? 1 : 0) + weekCells_r($display_week_hours, $sss, $sse)); $w <= $w_cmp; $w++) {
+                $tmpuser .= '<td bgcolor="#D0D0D0">&nbsp;</td>';
+            }
+            $tmpuser .= '</tr>';
 
-			$tmptasks = '';
-			$actual_date = $start_date;
-			foreach ($task_list as $task) {
-				if (!isChildTask($task)) {
-					if (isMemberOfTask_r($task_list, $task_assigned_users, $Ntasks, $user_id, $task)) {
-						$tmptasks .= displayTask_r($task_list, $task, 0, $display_week_hours, $sss, $sse, !$project_id, $user_id);
-						// Get children
-						$tmptasks .= doChildren_r($task_list, $task_assigned_users, $Ntasks, $task->task_id, $user_id, 1, $max_levels, $display_week_hours, $sss, $sse, !$project_id);
-					}
-				}
-			}
-			if ($tmptasks != '') {
-				$table_rows .= $tmpuser;
-				$table_rows .= $tmptasks;
-			}
-		}
-	}
-	echo '
+            $tmptasks = '';
+            $actual_date = $start_date;
+            foreach ($task_list as $task) {
+                if (!isChildTask($task)) {
+                    if (isMemberOfTask_r($task_list, $task_assigned_users, $Ntasks, $user_id, $task)) {
+                        $tmptasks .= displayTask_r($task_list, $task, 0, $display_week_hours, $sss, $sse, !$project_id, $user_id);
+                        // Get children
+                        $tmptasks .= doChildren_r($task_list, $task_assigned_users, $Ntasks, $task->task_id, $user_id, 1, $max_levels, $display_week_hours, $sss, $sse, !$project_id);
+                    }
+                }
+            }
+            if ($tmptasks != '') {
+                $table_rows .= $tmpuser;
+                $table_rows .= $tmptasks;
+            }
+        }
+    }
+    echo '
 	<table class="std">
 		' . $table_header . $table_rows . '
 	</table>
 ';
-	echo '</td>
+    echo '</td>
 </tr>
 </table>';
 }

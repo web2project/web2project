@@ -42,8 +42,7 @@ class w2p_Core_CustomField {
         $q->addTable('custom_fields_values');
         $q->addWhere('value_field_id = ' . $this->field_id);
         $q->addWhere('value_object_id = ' . (int) $object_id);
-        $q->exec();
-        $row = $q->fetchRow();
+        $row = $q->loadHash();
 
         $value_id = $row['value_id'];
         $value_charvalue = $row['value_charvalue'];

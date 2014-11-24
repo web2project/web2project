@@ -15,7 +15,7 @@ $resources = $resource->loadAll();
 $resource_types = w2PgetSysVal('ResourceTypes');
 
 $all_resources = array();
-foreach($resources as $row) {
+foreach ($resources as $row) {
     $all_resources[$row['resource_id']] = $resource_types[$row['resource_type']] . ': ' . $row['resource_name'];
 }
 
@@ -41,7 +41,7 @@ if ($loadFromTab && isset($_SESSION['tasks_subform']['hresource_assign'])) {
     $q = new w2p_Database_Query();
     $q->addTable('resource_tasks');
     $q->addQuery('resource_id, percent_allocated');
-    $q->addWhere('task_id = ' . (int)$task_id);
+    $q->addWhere('task_id = ' . (int) $task_id);
     $assigned_res = $q->exec();
     while ($row = $q->fetchRow()) {
         $initResAssignment .= $row['resource_id'] . '=' . $row['percent_allocated'] . ';';

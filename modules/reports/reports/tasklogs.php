@@ -1,6 +1,6 @@
 <?php
 if (!defined('W2P_BASE_DIR')) {
-	die('You should not access this file directly.');
+    die('You should not access this file directly.');
 }
 // @todo    convert to template
 
@@ -8,11 +8,10 @@ if (!defined('W2P_BASE_DIR')) {
  * Generates a report of the task logs for given dates
  */
 global $AppUI, $cal_sdf;
-$AppUI->getTheme()->loadCalendarJS();
 
 $perms = &$AppUI->acl();
 if (!canView('task_log')) {
-	$AppUI->redirect(ACCESS_DENIED);
+    $AppUI->redirect(ACCESS_DENIED);
 }
 $do_report = w2PgetParam($_GET, 'do_report', 0);
 $log_all = w2PgetParam($_GET, 'log_all', 0);
@@ -28,12 +27,12 @@ $start_date = intval($log_start_date) ? new w2p_Utilities_Date($log_start_date) 
 $end_date = intval($log_end_date) ? new w2p_Utilities_Date($log_end_date) : new w2p_Utilities_Date();
 
 if (!$log_start_date) {
-	$start_date->subtractSpan(new Date_Span('14,0,0,0'));
+    $start_date->subtractSpan(new Date_Span('14,0,0,0'));
 }
 $end_date->setTime(23, 59, 59);
 
 // Lets check cost codes
-$q = new w2p_Database_Query;
+$q = new w2p_Database_Query();
 $q->addTable('billingcode');
 $q->addQuery('billingcode_id, billingcode_name');
 
@@ -42,10 +41,10 @@ $rows = $q->loadList();
 echo db_error();
 $nums = 0;
 if ($rows) {
-	$nums = count($rows);
+    $nums = count($rows);
 }
 foreach ($rows as $row) {
-	$task_log_costcodes[$row['billingcode_id']] = $row['billingcode_name'];
+    $task_log_costcodes[$row['billingcode_id']] = $row['billingcode_name'];
 }
 
 echo $AppUI->getTheme()->styleRenderBoxTop();
@@ -125,61 +124,61 @@ echo $AppUI->getTheme()->styleRenderBoxTop();
 if ($do_report) {
 
     echo $AppUI->getTheme()->styleRenderBoxBottom();
-	echo '<br />';
+    echo '<br />';
     echo $AppUI->getTheme()->styleRenderBoxTop();
-	echo '<table class="std">
+    echo '<table class="std">
 	<tr>
 		<td>';
 
-	$q = new w2p_Database_Query;
-	$q->addTable('task_log', 't');
-	$q->addQuery('distinct(t.task_log_id), contact_display_name AS creator');
+    $q = new w2p_Database_Query();
+    $q->addTable('task_log', 't');
+    $q->addQuery('distinct(t.task_log_id), contact_display_name AS creator');
     $q->addQuery('billingcode_value, billingcode_name');
     $q->addQuery('ROUND((billingcode_value * t.task_log_hours), 2) AS amount');
     $q->addQuery('c.company_name, project_name');
     $q->addQuery('ts.task_name, task_log_task, task_log_hours, task_log_description, task_log_date');
 
-	$q->addJoin('tasks', 'ts', 'ts.task_id = t.task_log_task');
-	$q->addJoin('projects', '', 'projects.project_id = ts.task_project');
-	$q->addJoin('users', 'u', 'user_id = task_log_creator');
-	$q->addJoin('contacts', '', 'user_contact = contact_id');
-	$q->addJoin('companies', 'c', 'c.company_id = projects.project_company');
-	$q->leftJoin('billingcode', '', 'billingcode_id = task_log_costcode');
-	$q->addJoin('project_departments', '', 'project_departments.project_id = projects.project_id');
-	$q->addJoin('departments', '', 'department_id = dept_id');
-	$q->addWhere('task_log_task > 0');
+    $q->addJoin('tasks', 'ts', 'ts.task_id = t.task_log_task');
+    $q->addJoin('projects', '', 'projects.project_id = ts.task_project');
+    $q->addJoin('users', 'u', 'user_id = task_log_creator');
+    $q->addJoin('contacts', '', 'user_contact = contact_id');
+    $q->addJoin('companies', 'c', 'c.company_id = projects.project_company');
+    $q->leftJoin('billingcode', '', 'billingcode_id = task_log_costcode');
+    $q->addJoin('project_departments', '', 'project_departments.project_id = projects.project_id');
+    $q->addJoin('departments', '', 'department_id = dept_id');
+    $q->addWhere('task_log_task > 0');
 
-	if ($project_id) {
-		$q->addWhere('projects.project_id = ' . (int)$project_id);
-	}
-	if ($company_id) {
-		$q->addWhere('c.company_id = ' . (int)$company_id);
-	}
+    if ($project_id) {
+        $q->addWhere('projects.project_id = ' . (int) $project_id);
+    }
+    if ($company_id) {
+        $q->addWhere('c.company_id = ' . (int) $company_id);
+    }
 
-	if (!$log_all) {
-		$q->addWhere('task_log_date >= \'' . $start_date->format(FMT_DATETIME_MYSQL) . '\'');
-		$q->addWhere('task_log_date <= \'' . $end_date->format(FMT_DATETIME_MYSQL) . '\'');
-	}
-	if ($log_ignore) {
-		$q->addWhere('task_log_hours > 0');
-	}
-	if ($log_userfilter) {
-		$q->addWhere('task_log_creator = ' . (int)$log_userfilter);
-	}
+    if (!$log_all) {
+        $q->addWhere('task_log_date >= \'' . $start_date->format(FMT_DATETIME_MYSQL) . '\'');
+        $q->addWhere('task_log_date <= \'' . $end_date->format(FMT_DATETIME_MYSQL) . '\'');
+    }
+    if ($log_ignore) {
+        $q->addWhere('task_log_hours > 0');
+    }
+    if ($log_userfilter) {
+        $q->addWhere('task_log_creator = ' . (int) $log_userfilter);
+    }
 
-	$proj = new CProject();
-	$allowedProjects = $proj->getAllowedSQL($AppUI->user_id, 'task_project');
-	if (count($allowedProjects)) {
-		$q->addWhere(implode(' AND ', $allowedProjects));
-	}
+    $proj = new CProject();
+    $allowedProjects = $proj->getAllowedSQL($AppUI->user_id, 'task_project');
+    if (count($allowedProjects)) {
+        $q->addWhere(implode(' AND ', $allowedProjects));
+    }
 
-	$q->addOrder('creator');
-	$q->addOrder('company_name');
-	$q->addOrder('project_name');
-	$q->addOrder('task_log_date');
+    $q->addOrder('creator');
+    $q->addOrder('company_name');
+    $q->addOrder('project_name');
+    $q->addOrder('task_log_date');
 
-	$logs = $q->loadList();
-	echo db_error();
+    $logs = $q->loadList();
+    echo db_error();
 ?>
 	<table cellspacing="1" cellpadding="4" border="0" class="tbl">
 	<tr>
@@ -193,16 +192,16 @@ if ($do_report) {
 		<th><?php echo $AppUI->_('Hours'); ?></th>
 	</tr>
 <?php
-	$hours = 0.00;
-	$tamount = 0.00;
-	$pdfdata = array();
+    $hours = 0.00;
+    $tamount = 0.00;
+    $pdfdata = array();
 
-	foreach ($logs as $log) {
-		$date = new w2p_Utilities_Date($log['task_log_date']);
-		$hours += $log['task_log_hours'];
-		$tamount += $log['amount'];
+    foreach ($logs as $log) {
+        $date = new w2p_Utilities_Date($log['task_log_date']);
+        $hours += $log['task_log_hours'];
+        $tamount += $log['amount'];
 
-		$pdfdata[] = array($log['creator'], $log['company_name'], $log['project_name'], $log['task_name'], $date->format($df), $log['task_log_description'], $log['billingcode_name'], sprintf("%.2f", $log['task_log_hours']), );
+        $pdfdata[] = array($log['creator'], $log['company_name'], $log['project_name'], $log['task_name'], $date->format($df), $log['task_log_description'], $log['billingcode_name'], sprintf("%.2f", $log['task_log_hours']), );
 ?>
 	<tr>
 		<td><?php echo $log['creator']; ?></td>
@@ -211,27 +210,27 @@ if ($do_report) {
 		<td><a href="?m=tasks&amp;a=view&amp;task_id=<?php echo $log['task_log_task']; ?>"><?php echo $log['task_name']; ?></a></td>
 		<td><?php echo $date->format($df); ?></td>
 		<td><?php
-		// dylan_cuthbert: auto-transation system in-progress, leave these lines for time-being
-		$transbrk = "\n[translation]\n";
-		$descrip = mb_str_replace("\n", '<br />', $log['task_log_description']);
-		$tranpos = mb_strpos($descrip, mb_str_replace("\n", '<br />', $transbrk));
-		if ($tranpos === false)
-			echo '<a href="?m=tasks&amp;a=view&amp;task_id=' . $log['task_log_task'] . '&amp;tab=1&amp;task_log_id=' . $log['task_log_id'] . '#log">' . $descrip . '</a>';
-		else {
-			$descrip = mb_substr($descrip, 0, $tranpos);
-			$tranpos = mb_strpos($log['task_log_description'], $transbrk);
-			$transla = mb_substr($log['task_log_description'], $tranpos + mb_strlen($transbrk));
-			$transla = mb_trim(mb_str_replace("'", '"', $transla));
-			echo '<a href="?m=tasks&amp;a=view&amp;task_id=' . $log['task_log_task'] . '&amp;tab=1&amp;task_log_id=' . $log['task_log_id'] . '#log">' . $descrip . '</a><div style="font-weight: bold; text-align: right"><a title="' . $transla . '" class="hilite">[' . $AppUI->_('translation') . ']</a></div>';
-		}
-		// dylan_cuthbert; auto-translation end
+        // dylan_cuthbert: auto-transation system in-progress, leave these lines for time-being
+        $transbrk = "\n[translation]\n";
+        $descrip = mb_str_replace("\n", '<br />', $log['task_log_description']);
+        $tranpos = mb_strpos($descrip, mb_str_replace("\n", '<br />', $transbrk));
+        if ($tranpos === false)
+            echo '<a href="?m=tasks&amp;a=view&amp;task_id=' . $log['task_log_task'] . '&amp;tab=1&amp;task_log_id=' . $log['task_log_id'] . '#log">' . $descrip . '</a>';
+        else {
+            $descrip = mb_substr($descrip, 0, $tranpos);
+            $tranpos = mb_strpos($log['task_log_description'], $transbrk);
+            $transla = mb_substr($log['task_log_description'], $tranpos + mb_strlen($transbrk));
+            $transla = mb_trim(mb_str_replace("'", '"', $transla));
+            echo '<a href="?m=tasks&amp;a=view&amp;task_id=' . $log['task_log_task'] . '&amp;tab=1&amp;task_log_id=' . $log['task_log_id'] . '#log">' . $descrip . '</a><div style="font-weight: bold; text-align: right"><a title="' . $transla . '" class="hilite">[' . $AppUI->_('translation') . ']</a></div>';
+        }
+        // dylan_cuthbert; auto-translation end
 ?></td>
 		<td><?php echo $log['billingcode_name']; ?></td>
 		<td align="right"><?php printf('%.2f', $log['task_log_hours']); ?></td>
 	</tr>
 <?php
-	}
-	$pdfdata[] = array('', '', '', '', '', '', $AppUI->_('Totals') . ':', sprintf('%.2f', $hours), );
+    }
+    $pdfdata[] = array('', '', '', '', '', '', $AppUI->_('Totals') . ':', sprintf('%.2f', $hours), );
 ?>
 	<tr>
 		<td align="right" colspan="7"><?php echo $AppUI->_('Report Totals'); ?>:</td>
@@ -239,34 +238,34 @@ if ($do_report) {
 	</tr>
 	</table>
 <?php
-	if ($log_pdf) {
-		// make the PDF file
-		if ($project_id) {
-			$project = new CProject();
+    if ($log_pdf) {
+        // make the PDF file
+        if ($project_id) {
+            $project = new CProject();
             $project->load($project_id);
-			$pname = 'Project: ' . $project->project_name;
-		} else {
-			$pname = 'All Companies and All Projects';
-		}
+            $pname = 'Project: ' . $project->project_name;
+        } else {
+            $pname = 'All Companies and All Projects';
+        }
 
-		if ($company_id) {
-			$company = new CCompany();
+        if ($company_id) {
+            $company = new CCompany();
             $company->load($company_id);
-			$cname = 'Company: ' . $company->company_name;
-		} else {
-			$cname = 'All Companies and All Projects';
-		}
+            $cname = 'Company: ' . $company->company_name;
+        } else {
+            $cname = 'All Companies and All Projects';
+        }
 
-		if ($log_userfilter) {
-			$q = new w2p_Database_Query;
-			$q->addTable('contacts');
-			$q->addQuery('contact_display_name');
-			$q->addJoin('users', '', 'user_contact = contact_id', 'inner');
-			$q->addWhere('user_id =' . (int)$log_userfilter);
-			$uname = 'User: ' . $q->loadResult();
-		} else {
-			$uname = 'All Users';
-		}
+        if ($log_userfilter) {
+            $q = new w2p_Database_Query();
+            $q->addTable('contacts');
+            $q->addQuery('contact_display_name');
+            $q->addJoin('users', '', 'user_contact = contact_id', 'inner');
+            $q->addWhere('user_id =' . (int) $log_userfilter);
+            $uname = 'User: ' . $q->loadResult();
+        } else {
+            $uname = 'All Users';
+        }
 
         $output = new w2p_Output_PDFRenderer();
         $output->addTitle($AppUI->_('Task Log Report'));
@@ -276,28 +275,28 @@ if ($do_report) {
         $output->addSubtitle($subtitle);
         $output->addSubtitle($uname);
 
-		if ($log_all) {
-			$title = 'All Task Log entries';
-		} else {
-			$title = 'Task Log entries from ' . $start_date->format($df) . ' to ' . $end_date->format($df);
-		}
+        if ($log_all) {
+            $title = 'All Task Log entries';
+        } else {
+            $title = 'Task Log entries from ' . $start_date->format($df) . ' to ' . $end_date->format($df);
+        }
 
-		$pdfheaders = array($AppUI->_('Creator', UI_OUTPUT_JS), $AppUI->_('Company', UI_OUTPUT_JS), $AppUI->_('Project', UI_OUTPUT_JS), $AppUI->_('Task', UI_OUTPUT_JS), $AppUI->_('Date', UI_OUTPUT_JS), $AppUI->_('Description', UI_OUTPUT_JS), $AppUI->_('Billing Code', UI_OUTPUT_JS), $AppUI->_('Hours', UI_OUTPUT_JS), );
+        $pdfheaders = array($AppUI->_('Creator', UI_OUTPUT_JS), $AppUI->_('Company', UI_OUTPUT_JS), $AppUI->_('Project', UI_OUTPUT_JS), $AppUI->_('Task', UI_OUTPUT_JS), $AppUI->_('Date', UI_OUTPUT_JS), $AppUI->_('Description', UI_OUTPUT_JS), $AppUI->_('Billing Code', UI_OUTPUT_JS), $AppUI->_('Hours', UI_OUTPUT_JS), );
 
-		$options = array('showLines' => 1, 'fontSize' => 7, 'rowGap' => 1, 'colGap' => 1, 'xPos' => 50, 'xOrientation' => 'right', 'width' => '500', 'cols' => array(0 => array('justification' => 'left', 'width' => 50), 1 => array('justification' => 'left', 'width' => 60), 2 => array('justification' => 'left', 'width' => 60), 3 => array('justification' => 'left', 'width' => 60), 4 => array('justification' => 'center', 'width' => 40), 5 => array('justification' => 'left', 'width' => 170), 6 => array('justification' => 'left', 'width' => 30), 7 => array('justification' => 'right', 'width' => 30), ));
+        $options = array('showLines' => 1, 'fontSize' => 7, 'rowGap' => 1, 'colGap' => 1, 'xPos' => 50, 'xOrientation' => 'right', 'width' => '500', 'cols' => array(0 => array('justification' => 'left', 'width' => 50), 1 => array('justification' => 'left', 'width' => 60), 2 => array('justification' => 'left', 'width' => 60), 3 => array('justification' => 'left', 'width' => 60), 4 => array('justification' => 'center', 'width' => 40), 5 => array('justification' => 'left', 'width' => 170), 6 => array('justification' => 'left', 'width' => 30), 7 => array('justification' => 'right', 'width' => 30), ));
 
         $output->addTable($title, $pdfheaders, $pdfdata, $options);
 
         $w2pReport = new CReport();
         if ($output->writeFile($w2pReport->getFilename())) {
             echo '<a href="' . W2P_BASE_URL . '/files/temp/' . $w2pReport->getFilename() . '.pdf" target="pdf">';
-			echo $AppUI->_('View PDF File');
-			echo '</a>';
-		} else {
-			echo 'Could not open file to save PDF.  ';
-		}
-	}
-	echo '</td>
+            echo $AppUI->_('View PDF File');
+            echo '</a>';
+        } else {
+            echo 'Could not open file to save PDF.  ';
+        }
+    }
+    echo '</td>
 </tr>
 </table>';
 }

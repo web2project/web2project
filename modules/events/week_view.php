@@ -1,6 +1,6 @@
 <?php
 if (!defined('W2P_BASE_DIR')) {
-	die('You should not access this file directly.');
+    die('You should not access this file directly.');
 }
 // @todo    convert to template
 
@@ -9,14 +9,14 @@ $perms = &$AppUI->acl();
 $canRead = canView($m);
 
 if (!$canRead) {
-	$AppUI->redirect(ACCESS_DENIED);
+    $AppUI->redirect(ACCESS_DENIED);
 }
 
 global $locale_char_set;
 
 // retrieve any state parameters
 if (isset($_REQUEST['company_id'])) {
-	$AppUI->setState('CalIdxCompany', (int) w2PgetParam($_REQUEST, 'company_id', 0));
+    $AppUI->setState('CalIdxCompany', (int) w2PgetParam($_REQUEST, 'company_id', 0));
 }
 $company_id = $AppUI->getState('CalIdxCompany') !== null ? $AppUI->getState('CalIdxCompany') : $AppUI->user_company;
 
@@ -104,23 +104,23 @@ for ($i = 0; $i < 7; $i++) {
     $class = (in_array($i, $workingDays)) ? 'workingDay' : 'otherDay';
     $s .= '<td class="'.$class.'">';
 
-	$dayStamp = $show_day->format(FMT_TIMESTAMP_DATE);
-	$href = '?m=events&a=day_view&date='.$dayStamp.'&tab=0';
+    $dayStamp = $show_day->format(FMT_TIMESTAMP_DATE);
+    $href = '?m=events&a=day_view&date='.$dayStamp.'&tab=0';
 
-	$s .= '		<table>';
-	$s .= '		<tr><td align="left"><a href="' . $href . '">';
+    $s .= '		<table>';
+    $s .= '		<tr><td align="left"><a href="' . $href . '">';
 
-	$s .= $dayStamp == $today ? '<span style="color:red">' : '';
-	$day_string = "<strong>" . $show_day->format('%d') . '</strong>';
-	$day_name = $AppUI->_($show_day->format('%A'));
-	$s .= $day_string . ' ' . $day_name;
-	$s .= $dayStamp == $today ? '</span>' : '';
-	$s .= '</a></td></tr>';
+    $s .= $dayStamp == $today ? '<span style="color:red">' : '';
+    $day_string = "<strong>" . $show_day->format('%d') . '</strong>';
+    $day_name = $AppUI->_($show_day->format('%A'));
+    $s .= $day_string . ' ' . $day_name;
+    $s .= $dayStamp == $today ? '</span>' : '';
+    $s .= '</a></td></tr>';
 
-	$s .= '<tr><td>';
+    $s .= '<tr><td>';
 
-	if (isset($links[$dayStamp])) {
-		foreach ($links[$dayStamp] as $e) {
+    if (isset($links[$dayStamp])) {
+        foreach ($links[$dayStamp] as $e) {
             $href = isset($e['href']) ? $e['href'] : null;
             $alt = isset($e['alt']) ? $e['alt'] : null;
 
@@ -129,15 +129,15 @@ for ($i = 0; $i < 7; $i++) {
             $link .= $href ? '</a>' : '';
 
             $s .= '<br /><span class="cal-item">' . $link . '</span>';
-		}
-	}
+        }
+    }
 
-	$s .= '</td></tr></table>';
+    $s .= '</td></tr></table>';
 
-	$s .= '</td>';
+    $s .= '</td>';
 
-	// select next day
-	$show_day->addSeconds(24 * 3600);
+    // select next day
+    $show_day->addSeconds(24 * 3600);
 }
 $s .= '</tr>';
 echo $s;

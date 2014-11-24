@@ -31,7 +31,7 @@ class w2p_System_Dispatcher
      * @param Mixed $event
      * @return Dispatcher
      */
-    public function subscribe(w2p_Interfaces_Listener $listener, $resourceName='*', $event='*'){
+    public function subscribe(\Web2project\Interfaces\Listener $listener, $resourceName='*', $event='*'){
         $this->_listeners[$resourceName][$event][spl_object_hash($listener)] = $listener;
         return $this;
     }
@@ -44,7 +44,7 @@ class w2p_System_Dispatcher
      * @param Mixed $event
      * @return Dispatcher
      */
-    public function unsubscribe(w2p_Interfaces_Listener $listener, $resourceName='*', $event='*'){
+    public function unsubscribe(\Web2project\Interfaces\Listener $listener, $resourceName='*', $event='*'){
         unset($this->_listeners[$resourceName][$event][spl_object_hash($listener)]);
         return $this;
     }

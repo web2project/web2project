@@ -24,30 +24,36 @@ function is_task_in_gantt_arr($task)
     return false;
 }
 
-function notifyHR($address, $notUsed, $uaddress, $uusername, $logname, $notUsed2, $userid)
+function notifyHR($address, $notUsed, $address, $username, $logname, $notUsed2, $userid, $sender = null)
 {
-    global $AppUI;
-    $emailManager = new w2p_Output_EmailManager($AppUI);
-    $body = $emailManager->notifyHR($uusername, $logname, $uaddress, $userid);
-
-    $mail = new w2p_Utilities_Mail();
-    $mail->To($address);
-    $mail->Subject('New External User Created');
-    $mail->Body($body);
-    return $mail->Send();
+    $manager = new \Web2project\Output\Email\Manager($sender);
+    $manager->loadTemplate('new-account-requested', 'en_US');
+    $manager->send($address, array('base_url' => W2P_BASE_URL, 'company_name' => w2PgetConfig('company_name'),
+                                   'contact_name' => $username, 'user_name' => $logname,
+                                   'email_address' => $address, 'user_id' => $userid));
 }
 
-function notifyNewUserCredentials($address, $username, $logname, $logpwd)
+function notifyNewUserCredentials($address, $username, $logname, $logpwd, $sender = null)
 {
-    global $AppUI;
-    $emailManager = new w2p_Output_EmailManager($AppUI);
-    $body = $emailManager->notifyNewUserCredentials($username, $logname, $logpwd);
+    $manager = new \Web2project\Output\Email\Manager($sender);
+    $manager->loadTemplate('new-user-activated', 'en_US');
+    $manager->send($address, array('base_url' => W2P_BASE_URL, 'user_name' => $username,
+                                   'log_name' => $logname, 'log_password' => $logpwd));
+}
 
-    $mail = new w2p_Utilities_Mail();
-    $mail->To($address);
-    $mail->Subject('New Account Created - web2Project Project Management System');
-    $mail->Body($body);
-    return $mail->Send();
+function notifyNewExternalUser($emailAddress, $username, $logname, $logpwd, $sender = null)
+{
+    $manager = new \Web2project\Output\Email\Manager($sender);
+    $manager->loadTemplate('new-external-user', 'en_US');
+    $manager->send($emailAddress, array('base_url' => W2P_BASE_URL, 'user_name' => $username,
+                                        'log_name' => $logname, 'log_password' => $logpwd));
+}
+
+function notifyNewUser($emailAddress, $username, $sender = null)
+{
+    $manager = new \Web2project\Output\Email\Manager($sender);
+    $manager->loadTemplate('new-account-created', 'en_US');
+    $manager->send($emailAddress, array('base_url' => W2P_BASE_URL, 'contact_name' => $username));
 }
 
 function clean_value($str)
@@ -55,39 +61,6 @@ function clean_value($str)
     $bad_values = array("'");
 
     return str_replace($bad_values, '', $str);
-}
-
-
-function strUTF8Decode($text)
-{
-    if (extension_loaded('mbstring')) {
-        $encoding = mb_detect_encoding($text.' ');
-    }
-    if (function_exists('iconv')) {
-        $text = mb_convert_encoding($text, 'UTF-8', $encoding);
-        //iconv($encoding, 'UTF-8', $text);
-    } elseif (function_exists('utf8_decode')) {
-        $text = utf8_decode($text);
-    }
-    // mb functions don't seam to work well here for some reason as the output gets corrupted.
-    // iconv is doing the job just fine though
-    return $text;
-}
-
-/**
-* utility functions for the preparation of task data for GANTT PDF
-*
-* @todo some of these functions are not needed, need to trim this down
-*
-*/
-// PYS : utf_8 decoding as suggested in Vbulletin #3987
-function strEzPdf($text)
-{
-    if (function_exists('iconv') && function_exists('mb_detect_encoding')) {
-        $text = iconv(mb_detect_encoding($text." "), 'UTF-8', $text);
-    }
-
-    return $text;
 }
 
 function dumb_slice( $gantt_arr, $length = 25 )
@@ -101,106 +74,6 @@ function dumb_slice( $gantt_arr, $length = 25 )
     }
 
     return $sliced_array;
-}
-
-/**
-*
-* 	END OF GANTT PDF UTILITY FUNCTIONS
-*
-*/
-
-/**
-*  This is a kludgy mess because of how the arraySelectTree function is used..
-*    it expects - nay, demands! - that the first element of the subarray is the
-*    id and the third is the parent id. In most cases, that is fine.. in this
-*    one we're using the existing ACL-respecting functions and it has additional
-*    fields in "improper" places.
-*/
-function temp_filterArrayForSelectTree($projectData)
-{
-    unset($projectData['project_id']);
-    unset($projectData['project_color_identifier']);
-    unset($projectData['project_name']);
-    unset($projectData['project_start_date']);
-    unset($projectData['project_end_date']);
-    unset($projectData['project_company']);
-    unset($projectData['project_parent']);
-
-    unset($projectData[1]);
-    unset($projectData[3]);
-    unset($projectData[4]);
-    unset($projectData[5]);
-    $projectData[6] = ($projectData[0] == $projectData[6]) ? '' : $projectData[6];
-
-    return array_values($projectData);
-}
-
-function getReadableModule()
-{
-    $q = new w2p_Database_Query;
-    $q->addTable('modules');
-    $q->addQuery('mod_directory');
-    $q->addWhere('mod_active = 1');
-    $q->addOrder('mod_ui_order');
-    $modules = $q->loadColumn();
-    foreach ($modules as $mod) {
-        if (canAccess($mod)) {
-            return $mod;
-        }
-    }
-
-    return null;
-}
-
-/**
- * This function is used to check permissions.
- */
-function checkFlag($flag, $perm_type, $old_flag)
-{
-    if ($old_flag) {
-        return (($flag == PERM_DENY) || // permission denied
-            ($perm_type == PERM_EDIT && $flag == PERM_READ) // we ask for editing, but are only allowed to read
-            ) ? 0 : 1;
-    } else {
-        if ($perm_type == PERM_READ) {
-            return ($flag != PERM_DENY) ? 1 : 0;
-        } else {
-            // => $perm_type == PERM_EDIT
-            return ($flag == $perm_type) ? 1 : 0;
-        }
-    }
-}
-
-/**
- * This function checks certain permissions for
- * a given module and optionally an item_id.
- *
- * $perm_type can be PERM_READ or PERM_EDIT
- */
-function isAllowed($perm_type, $mod, $item_id = 0)
-{
-    $invert = false;
-    switch ($perm_type) {
-        case PERM_READ:
-            $perm_type = 'view';
-            break;
-        case PERM_EDIT:
-            $perm_type = 'edit';
-            break;
-        case PERM_ALL:
-            $perm_type = 'edit';
-            break;
-        case PERM_DENY:
-            $perm_type = 'view';
-            $invert = true;
-            break;
-    }
-    $allowed = getPermission($mod, $perm_type, $item_id);
-    if ($invert) {
-        return !$allowed;
-    }
-
-    return $allowed;
 }
 
 function getPermission($mod, $perm, $item_id = 0)
@@ -227,27 +100,6 @@ function getPermission($mod, $perm, $item_id = 0)
     }
 
     return $result;
-}
-
-function canView($mod, $item_id = 0)
-{
-    return getPermission($mod, 'view', $item_id);
-}
-function canEdit($mod, $item_id = 0)
-{
-    return getPermission($mod, 'edit', $item_id);
-}
-function canAdd($mod, $item_id = 0)
-{
-    return getPermission($mod, 'add', $item_id);
-}
-function canDelete($mod, $item_id = 0)
-{
-    return getPermission($mod, 'delete', $item_id);
-}
-function canAccess($mod)
-{
-    return getPermission($mod, 'access');
 }
 
 function buildTaskTree($task_data, $depth = 0, $projTasks, $all_tasks, $parents, $task_parent, $task_id)
@@ -304,72 +156,6 @@ function cal_work_day_conv($val)
     return htmlspecialchars($day_name, ENT_COMPAT, $locale_char_set);
 }
 
-function __extract_from_showtask(&$arr, $level, $today_view, $listTable, $fields = array())
-{
-    return '';
-}
-
-/**
- * @param $arr
- * @param $level
- * @param $today_view
- * @param $s
- * @param $m
- * @param $jsTaskId
- * @param $expanded
- * @return array
- */
-function __extract_from_showtask2($arr, $level, $today_view, $s, $m, $jsTaskId, $expanded)
-{
-    $s .= '<td style="width: ' . (($today_view) ? '50%' : '90%') . '" class="data _name">';
-    //level
-    if ($level == -1) {
-        $s .= '...';
-    }
-    for ($y = 0; $y < $level; $y++) {
-        if ($y + 1 == $level) {
-            $image = w2PfindImage('corner-dots.gif', $m);
-        } else {
-            $image = w2PfindImage('shim.gif', $m);
-        }
-        $s .= '<img src="' . $image . '" width="16" height="12"  border="0" alt=""/>';
-    }
-    if ($arr['task_description'] && !$arr['task_milestone']) {
-        $s .= w2PtoolTip('Task Description', substr($arr['task_description'], 0, 1000), true);
-    }
-
-    if (isset($arr['task_nr_of_children']) && $arr['task_nr_of_children']) {
-        $is_parent = true;
-    } else {
-        $is_parent = false;
-    }
-    if ($arr['task_milestone'] > 0) {
-        $s .= '&nbsp;<a href="./index.php?m=tasks&amp;a=view&amp;task_id=' . $arr['task_id'] . '" ><b>' . $arr['task_name'] . '</b></a>&nbsp;<img src="' . w2PfindImage('icons/milestone.gif') . '" />';
-    } elseif ($arr['task_dynamic'] == '1' || $is_parent) {
-        $open_link = '<a href="javascript: void(0);"><img onclick="expand_collapse(\'' . $jsTaskId . '\', \'tblProjects\',\'\',' . ($level++) . ');" id="' . $jsTaskId . '_collapse" src="' . w2PfindImage('icons/collapse.gif') . '" class="center" ' . (!$expanded ? 'style="display:none"' : '') . ' /><img onclick="expand_collapse(\'' . $jsTaskId . '\', \'tblProjects\',\'\',' . ($level++) . ');" id="' . $jsTaskId . '_expand" src="' . w2PfindImage('icons/expand.gif') . '" class="center" ' . ($expanded ? 'style="display:none"' : '') . ' /></a>';
-        $s .= $open_link;
-
-        if ($arr['task_dynamic'] == '1') {
-            $s .= '&nbsp;<a href="./index.php?m=tasks&amp;a=view&amp;task_id=' . $arr['task_id'] . '" ><b><i>' . $arr['task_name'] . '</i></b></a>';
-        } else {
-            $s .= '&nbsp;<a href="./index.php?m=tasks&amp;a=view&amp;task_id=' . $arr['task_id'] . '" >' . $arr['task_name'] . '</a>';
-        }
-    } else {
-        $s .= '&nbsp;<a href="./index.php?m=tasks&amp;a=view&amp;task_id=' . $arr['task_id'] . '" >' . $arr['task_name'] . '</a>';
-    }
-    if ($arr['task_description'] && !$arr['task_milestone']) {
-        $s .= w2PendTip();
-    }
-    $s .= '</td>';
-
-    return $s;
-}
-
-function showtask_new(&$arr, $level = 0, $today_view = false, $listTable = null, $fields = array())
-{
-    return __extract_from_showtask($arr, $level, $today_view, $listTable, $fields);
-}
-
 /*
  * 	gantt_arr [ project_id ] [ 0 ]  is a task "object" : 	task['task_id'], task['task_access'], task['task_owner'], task['task_name'], task['project_name']
  * 															task['task_start_date'], task['task_end_date'], task['task_percent_complete'], ['task_milestone']
@@ -419,61 +205,6 @@ function findchild_gantt(&$tarr, $parent, $level = 0)
     }
 }
 
-// from modules/tasks/tasks.class.php
-function array_csort() { //coded by Ichier2003
-
-    $args = func_get_args();
-    $marray = array_shift($args);
-
-    if (empty($marray)) {
-        return array();
-    }
-
-    $i = 0;
-    $msortline = 'return(array_multisort(';
-    $sortarr = array();
-    foreach ($args as $arg) {
-        $i++;
-        if (is_string($arg)) {
-            for ($j = 0, $j_cmp = count($marray); $j < $j_cmp; $j++) {
-
-                /* we have to calculate the end_date via start_date+duration for
-                ** end='0000-00-00 00:00:00' before sorting, see mantis #1509:
-
-                ** Task definition writes the following to the DB:
-                ** A without start date: start = end = NULL
-                ** B with start date and empty end date: start = startdate,
-                end = '0000-00-00 00:00:00'
-                ** C start + end date: start= startdate, end = end date
-
-                ** A the end_date for the middle task (B) is ('dynamically') calculated on display
-                ** via start_date+duration, it may be that the order gets wrong due to the fact
-                ** that sorting has taken place _before_.
-                */
-                if ($marray[$j]['task_end_date'] == '0000-00-00 00:00:00') {
-                    $marray[$j]['task_end_date'] = calcEndByStartAndDuration($marray[$j]);
-                }
-
-                if ('' == $arg) { continue; }
-
-                $sortarr[$i][] = $marray[$j][$arg];
-            }
-        } else {
-            $sortarr[$i] = $arg;
-        }
-        if (!is_array($sortarr[$i])) {
-            continue;
-        }
-        $msortline .= '$sortarr[' . $i . '],';
-    }
-    $msortline .= '$marray));';
-
-    eval($msortline);
-
-    return $marray;
-}
-
-// from modules/tasks/tasks.class.php
 /*
 ** Calc End Date via Startdate + Duration
 ** @param array task	A DB row from the earlier fetched tasklist
@@ -485,58 +216,6 @@ function calcEndByStartAndDuration($task)
     $end_date->addSeconds($task['task_duration'] * $task['task_duration_type'] * 3600);
 
     return $end_date->format(FMT_DATETIME_MYSQL);
-}
-
-// from modules/tasks/tasks.class.php
-function sort_by_item_title($title, $item_name, $item_type, $a = '')
-{
-    global $AppUI, $project_id, $task_id, $m;
-    global $task_sort_item1, $task_sort_type1, $task_sort_order1;
-    global $task_sort_item2, $task_sort_type2, $task_sort_order2;
-
-    if ($task_sort_item2 == $item_name) {
-        $item_order = $task_sort_order2;
-    }
-    if ($task_sort_item1 == $item_name) {
-        $item_order = $task_sort_order1;
-    }
-
-    $s = '';
-
-    if (isset($item_order)) {
-        $show_icon = true;
-    } else {
-        $show_icon = false;
-        $item_order = SORT_DESC;
-    }
-
-    /* flip the sort order for the link */
-    $item_order = ($item_order == SORT_ASC) ? SORT_DESC : SORT_ASC;
-    if ($m == 'tasks') {
-        $s .= '<a href="./index.php?m=tasks' . (($task_id > 0) ? ('&amp;a=view&amp;task_id=' . $task_id) : $a);
-    } elseif ($m == 'calendar') {
-        $s .= '<a href="./index.php?m=events&amp;a=day_view';
-    } else {
-        $s .= '<a href="./index.php?m=projects&amp;bypass=1' . (($project_id > 0) ? ('&amp;a=view&amp;project_id=' . $project_id) : '');
-    }
-    $s .= '&amp;task_sort_item1=' . $item_name;
-    $s .= '&amp;task_sort_type1=' . $item_type;
-    $s .= '&amp;task_sort_order1=' . $item_order;
-    if ($task_sort_item1 == $item_name) {
-        $s .= '&amp;task_sort_item2=' . $task_sort_item2;
-        $s .= '&amp;task_sort_type2=' . $task_sort_type2;
-        $s .= '&amp;task_sort_order2=' . $task_sort_order2;
-    } else {
-        $s .= '&amp;task_sort_item2=' . $task_sort_item1;
-        $s .= '&amp;task_sort_type2=' . $task_sort_type1;
-        $s .= '&amp;task_sort_order2=' . $task_sort_order1;
-    }
-    $s .= '" class="hdr">' . $AppUI->_($title);
-    if ($show_icon) {
-        $s .= '&nbsp;<img src="' . w2PfindImage('arrow-' . (($item_order == SORT_ASC) ? 'up' : 'down') . '.gif') . '" />';
-    }
-
-    return $s.'</a>';
 }
 
 // from modules/tasks/tasksperuser_sub.php
@@ -750,33 +429,6 @@ function isChildTask($task)
     return $task->task_id != $task->task_parent;
 }
 
-// from modules/tasks/tasksperuser_sub.php
-function weekDates($display_allocated_hours, $fromPeriod, $toPeriod)
-{
-    if ($fromPeriod == -1) {
-        return '';
-    }
-    if (!$display_allocated_hours) {
-        return '';
-    }
-
-    $s = new w2p_Utilities_Date($fromPeriod);
-    $e = new w2p_Utilities_Date($toPeriod);
-    $sw = getBeginWeek($s);
-    $dw = ceil($e->dateDiff($s) / 7);
-    $ew = $sw + $dw;
-    $row = '';
-    for ($i = $sw; $i <= $ew; $i++) {
-        $wn = $s->getWeekofYear() % 52;
-        $wn = ($wn != 0) ? $wn : 52;
-
-        $row .= '<th title="' . $s->getYear() . '" nowrap="nowrap">' . $wn . '</th>';
-        $s->addSeconds(168 * 3600); // + one week
-    }
-
-    return $row;
-}
-
 // from modules/reports/tasksperuser.php
 function weekDates_r($display_allocated_hours, $fromPeriod, $toPeriod)
 {
@@ -982,6 +634,7 @@ function showfiltertask(&$a, $level=0)
      $filter_task_list[] = array($a, $level);
      $parents[$a['task_parent']] = true;
 }
+
 // from modules/tasks/viewgantt.php
 function findfiltertaskchild(&$tarr, $parent, $level=0)
 {
@@ -1080,31 +733,6 @@ function parseFormatSysval($text, $syskey)
     }
 
     return $arr;
-}
-
-// from modules/system/billingcode.php
-function showcodes(&$a)
-{
-    global $AppUI, $company_id;
-
-    $s = '
-<tr>
-    <td width=40>
-        <a href="?m=system&amp;a=billingcode&amp;company_id=' . $company_id . '&amp;billingcode_id=' . $a['billingcode_id'] . '" title="' . $AppUI->_('edit') . '">
-            <img src="' . w2PfindImage('icons/stock_edit-16.png') . '" alt="Edit" /></a>';
-
-    if ($a['billingcode_status'] == 0)
-        $s .= '<a href="javascript:delIt2(' . $a['billingcode_id'] . ');" title="' . $AppUI->_('delete') . '">
-            <img src="' . w2PfindImage('icons/stock_delete-16.png') . '" alt="Delete" /></a>';
-
-    $s .= '
-    </td>
-    <td align="left">&nbsp;' . $a['billingcode_name'] . ($a['billingcode_status'] == 1 ? ' (deleted)' : '') . '</td>
-    <td nowrap="nowrap" align="center">' . $a['billingcode_value'] . '</td>
-    <td nowrap="nowrap">' . $a['billingcode_desc'] . '</td>
-</tr>';
-
-    return $s;
 }
 
 // from modules/smartsearch/smartsearch.class.php
@@ -1225,26 +853,6 @@ function selPermWhere($obj, $idfld, $namefield, $prefix = '')
 }
 
 //comes from modules/departments/departments.class.php
-//writes out a single <option> element for display of departments
-function showchilddept(&$a, $level = 1)
-{
-    global $department;
-    $s = '<option value="' . $a['dept_id'] . '"' . (isset($department) && $department == $a['dept_id'] ? 'selected="selected"' : '') . '>';
-
-    for ($y = 0; $y < $level; $y++) {
-        if ($y + 1 == $level) {
-            $s .= '';
-        } else {
-            $s .= '&nbsp;&nbsp;';
-        }
-    }
-
-    $s .= '&nbsp;&nbsp;' . $a['dept_name'] . '</option>';
-
-    return $s;
-}
-
-//comes from modules/departments/departments.class.php
 //recursive function to display children departments.
 function findchilddept(&$tarr, $parent, $level = 1)
 {
@@ -1272,18 +880,13 @@ function addDeptId($dataset, $parent)
 // From: modules/files/filefolder.class.php
 function getFolderSelectList()
 {
-    global $AppUI;
+    $folders = array(0 => 'Root');
 
     $q = new w2p_Database_Query();
     $q->addTable('file_folders');
-    $q->addQuery('file_folder_id, file_folder_name, file_folder_parent');
+    $q->addQuery('file_folder_id, file_folder_name');
     $q->addOrder('file_folder_name');
-    $folderList = $q->loadHashList('file_folder_id');
-
-    $folders = array(0 => 'Root');
-    foreach($folderList as $folder => $data) {
-        $folders[$folder] = $data['file_folder_name'];
-    }
+    $folders += $q->loadHashList();
 
     return $folders;
 }
@@ -1474,10 +1077,7 @@ function displayFiles($AppUI, $folder_id, $task_id, $project_id, $company_id)
     $module = new w2p_System_Module();
     $fields = $module->loadSettings('files', 'index_list');
 
-    if (count($fields) > 0) {
-        $fieldList = array_keys($fields);
-        $fieldNames = array_values($fields);
-    } else {
+    if (0 == count($fields)) {
         // TODO: This is only in place to provide an pre-upgrade-safe
         //   state for versions earlier than v3.0
         //   At some point at/after v4.0, this should be deprecated
@@ -1488,7 +1088,10 @@ function displayFiles($AppUI, $folder_id, $task_id, $project_id, $company_id)
             'Folder', 'Task Name', 'Owner', 'Date',);
 
         $module->storeSettings('files', 'index_list', $fieldList, $fieldNames);
+        $fields = array_combine($fieldList, $fieldNames);
     }
+    $fieldList = array_keys($fields);
+    $fieldNames = array_values($fields);
 
     $s  = '<tr>';
     $s .= '<th></th>';
@@ -1617,20 +1220,6 @@ function displayFiles($AppUI, $folder_id, $task_id, $project_id, $company_id)
 }
 
 // From: modules/files/files.class.php
-function last_file($file_versions, $file_name, $file_project)
-{
-    $latest = null;
-
-    if (isset($file_versions))
-        foreach ($file_versions as $file_version)
-            if ($file_version['file_name'] == $file_name && $file_version['file_project'] == $file_project)
-                if ($latest == null || $latest['file_version'] < $file_version['file_version'])
-                    $latest = $file_version;
-
-    return $latest;
-}
-
-// From: modules/files/files.class.php
 function getIcon($file_type)
 {
     global $uistyle;
@@ -1684,18 +1273,6 @@ function __extract_from_files_index_table($file_type)
     }
 
     return $result;
-}
-
-// From: modules/files/files.class.php
-function getHelpdeskFolder()
-{
-    $q = new w2p_Database_Query();
-    $q->addTable('file_folders', 'ff');
-    $q->addQuery('file_folder_id');
-    $q->addWhere('ff.file_folder_name = \'Helpdesk\'');
-    $ffid = $q->loadResult();
-
-    return (int) $ffid;
 }
 
 // From: modules/files/files.class.php
@@ -1774,33 +1351,6 @@ function getCriticalTasksInverted($project_id = null, $limit = 1)
 
         return $q->loadList();
     }
-}
-
-//TODO: modules/projectdesigner/projectdesigner.class.php
-function get_actual_end_date_pd($task_id, $task)
-{
-    global $AppUI;
-
-    $q = new w2p_Database_Query();
-    $mods = $AppUI->getActiveModules();
-
-    if (!empty($mods['history']) && canView('history')) {
-        $q->addQuery('MAX(history_date) as actual_end_date');
-        $q->addTable('history');
-        $q->addWhere('history_table=\'tasks\' AND history_item=' . $task_id);
-    } else {
-        $q->addQuery('MAX(task_log_date) AS actual_end_date');
-        $q->addTable('task_log');
-        $q->addWhere('task_log_task = ' . (int) $task_id);
-    }
-
-    $task_log_end_date = $q->loadResult();
-
-    $edate = $task_log_end_date;
-
-    $edate = ($edate > $task->task_end_date || $task->task_percent_complete == 100) ? $edate : $task->task_end_date;
-
-    return $edate;
 }
 
 /* The next lines of code have resided in projects/index.php before
@@ -2866,14 +2416,6 @@ function w2PformSafe($txt, $deslash = false)
     return $txt;
 }
 
-function formatTime($uts)
-{
-    global $AppUI;
-    $date = new w2p_Utilities_Date();
-    $date->setDate($uts, DATE_FORMAT_UNIXTIME);
-
-    return $date->format($AppUI->getPref('SHDATEFORMAT'));
-}
 
 function file_size($size)
 {
@@ -2935,64 +2477,6 @@ function dprint($file, $line, $level, $msg)
     }
 }
 
-/**
- * Return a list of modules that are associated with tabs for this
- * page.  This can be used to find post handlers, for instance.
- */
-function findTabModules($module, $file = null)
-{
-    $modlist = array();
-    if (!isset($_SESSION['all_tabs']) || !isset($_SESSION['all_tabs'][$module])) {
-        return $modlist;
-    }
-
-    if (isset($file)) {
-        if (isset($_SESSION['all_tabs'][$module][$file]) && is_array($_SESSION['all_tabs'][$module][$file])) {
-            $tabs_array = &$_SESSION['all_tabs'][$module][$file];
-        } else {
-            return $modlist;
-        }
-    } else {
-        $tabs_array = &$_SESSION['all_tabs'][$module];
-    }
-    foreach ($tabs_array as $tab) {
-        if (isset($tab['module'])) {
-            $modlist[] = $tab['module'];
-        }
-    }
-
-    return array_unique($modlist);
-}
-
-/**
- * Return a list of modules that are associated with crumbs for this
- * page.  This can be used to find post handlers, for instance.
- */
-function findCrumbModules($module, $file = null)
-{
-    $modlist = array();
-    if (!isset($_SESSION['all_crumbs']) || !isset($_SESSION['all_crumbs'][$module])) {
-        return $modlist;
-    }
-
-    if (isset($file)) {
-        if (isset($_SESSION['all_crumbs'][$module][$file]) && is_array($_SESSION['all_crumbs'][$module][$file])) {
-            $crumbs_array = &$_SESSION['all_crumbs'][$module][$file];
-        } else {
-            return $modlist;
-        }
-    } else {
-        $crumbs_array = &$_SESSION['all_crumbs'][$module];
-    }
-    foreach ($crumbs_array as $crumb) {
-        if (isset($crumb['module'])) {
-            $modlist[] = $crumb['module'];
-        }
-    }
-
-    return array_unique($modlist);
-}
-
 function getUsersArray()
 {
     return w2PgetUsersHashList();
@@ -3017,42 +2501,6 @@ function getUsersCombo($default_user_id = 0, $first_option = 'All users')
 }
 
 /**
- * Function to format hours into useful numbers.
- * Supplied by GrahamJB.
- */
-function formatHours($hours)
-{
-    global $AppUI;
-
-    $hours = (int) $hours;
-    $working_hours = w2PgetConfig('daily_working_hours');
-
-    if ($hours < $working_hours) {
-        if ($hours == 1) {
-            return '1 ' . $AppUI->_('hour');
-        } else {
-            return $hours . ' ' . $AppUI->_('hours');
-        }
-    }
-
-    $hoursPart = $hours % $working_hours;
-    $daysPart = (int) ($hours / $working_hours);
-    if ($hoursPart == 0) {
-        if ($daysPart == 1) {
-            return '1 ' . $AppUI->_('day');
-        } else {
-            return $daysPart . ' ' . $AppUI->_('days');
-        }
-    }
-
-    if ($daysPart == 1) {
-        return '1 ' . $AppUI->_('day') . ' ' . $hoursPart . ' ' . $AppUI->_('hr');
-    } else {
-        return $daysPart . ' ' . $AppUI->_('days') . ' ' . $hoursPart . ' ' . $AppUI->_('hr');
-    }
-}
-
-/*
 ** Create the Required Fields (From Sysvals) JavaScript Code
 ** For instance implemented in projects and tasks addedit.php
 ** @param array required field array from SysVals
@@ -3182,30 +2630,6 @@ function w2PendTip()
     return $endtip;
 }
 
-/**
- *    Write debugging to debug.log file
- *
- *    @param string $s the debug message
- *    @param string $t the header of the message
- *    @param string $f the script filename
- *    @param string $l the script line
- *    @access public
- */
-function w2PwriteDebug($s, $t = '', $f = '?', $l = '?')
-{
-    global $debug;
-
-    $debug_file = W2P_BASE_DIR . '/files/debug.log';
-    if ($debug && ($fp = fopen($debug_file, "at"))) {
-        fputs($fp, "Debug message from file [$f], line [$l], at: " . strftime('%H:%S'));
-        if ($t) {
-            fputs($fp, "\n * * $t * *\n");
-        }
-        fputs($fp, "\n$s\n\n");
-        fclose($fp);
-    }
-}
-
 function w2p_pluralize($word)
 {
     $rules= array(
@@ -3252,44 +2676,6 @@ function w2p_pluralize($word)
     return $word;
 }
 
-
-function seconds2HM($sec, $padHours = true)
-{
-    $HM = "";
-    // there are 3600 seconds in an hour, so if we
-    // divide total seconds by 3600 and throw away
-    // the remainder, we've got the number of hours
-    $hours = (int) ($sec / 3600);
-    // with the remaining seconds divide them by 60
-    // and then round the floating number to get the precise minute
-    $minutes = intval(round(($sec - ($hours * 3600)) / 60) ,0);
-
-    if (intval($hours) == 0 && intval($minutes) < 0) {
-        $HM .= '-0:';
-    } else {
-        // add to $hms, with a leading 0 if asked for
-        $HM .= ($padHours) ? str_pad($hours, 2, "0", STR_PAD_LEFT). ':' : $hours. ':';
-    }
-    if (intval($hours) < 0 || intval($minutes) < 0) {
-        $minutes = $minutes * (-1);
-    }
-    $HM .= str_pad($minutes, 2, "0", STR_PAD_LEFT);
-
-    return $HM;
-}
-
-function HM2seconds($HM)
-{
-    list($h, $m) = explode (":", $HM);
-    if (intval($h) > 23 && intval($h) < 0) $h = 0;
-    if (intval($m) > 59 && intval($m) < 0) $m = 0;
-    $seconds = 0;
-    $seconds += (intval($h) * 3600);
-    $seconds += (intval($m) * 60);
-
-    return $seconds;
-}
-
 /**
  * Parse the SQL file and get out the timezones from it to use it on the install
  * screen. The SQL file used is: install/sql/mysql/018_add_timezones.sql
@@ -3315,11 +2701,6 @@ function w2PgetTimezonesForInstall()
 
     return $timezones;
 }
-
-//
-// New password code based oncode from Mambo Open Source Core
-// www.mamboserver.com | mosforge.net
-//
 
 function sendNewPass()
 {
@@ -3353,17 +2734,16 @@ function sendNewPass()
         $q->leftJoin('contacts_methods', 'cm', 'cm.contact_id = con.contact_id');
         $q->addWhere("cm.method_value = '$confirmEmail'");
     } else {
-        $q->addWhere("LOWER(user_email) = '$confirmEmail'");
+        $q->addWhere("LOWER(contact_email) = '$confirmEmail'");
     }
     /* End Hack */
 
-    $user_id = $q->loadResult();
-    if (!$user_id) {
+    if (!($user_id = $q->loadResult()) || !$checkusername || !$confirmEmail) {
         $AppUI->setMsg('Invalid username or email.', UI_MSG_ERROR);
         $AppUI->redirect();
     }
 
-    $auth = new w2p_Authenticators_SQL();
+    $auth = new \Web2project\Authenticators\SQL();
     $newpass = $auth->createNewPassword();
     $hashed  = $auth->hashPassword($newpass);
 
@@ -3373,15 +2753,13 @@ function sendNewPass()
     $cur = $q->exec();
 
     if ($cur) {
-        $emailManager = new w2p_Output_EmailManager($AppUI);
-        $body = $emailManager->notifyPasswordReset($checkusername, $newpass);
+        $object = new stdClass();
+        $object->username = $checkusername;
+        $object->newpass  = $newpass;
+        $object->baseurl  = W2P_BASE_URL;
 
-        $m = new w2p_Utilities_Mail; // create the mail
-        $m->To($confirmEmail);
-        $subject = $_sitename . ' :: ' . $AppUI->_('sendpass4', UI_OUTPUT_RAW) . ' - ' . $checkusername;
-        $m->Subject($subject);
-        $m->Body($body, isset($GLOBALS['locale_char_set']) ? $GLOBALS['locale_char_set'] : ''); // set the body
-        $m->Send(); // send the mail
+        $manager = new \Web2project\Output\Email\Manager();
+        $manager->send('password-reset', 'en_US', $object, $confirmEmail);
 
         $AppUI->setMsg('New User Password created and emailed to you');
         $AppUI->redirect();
@@ -3529,7 +2907,7 @@ function getEventTooltip($event_id)
     // load the record data
 
     $event = new CEvent();
-    $event->loadFull($event_id);
+    $event->load($event_id);
 
     // load the event types
     $types = w2PgetSysVal('EventType');
@@ -3856,42 +3234,6 @@ function getPreferences($user_id)
 }
 
 /**
- * @param $obj
- *
- * @return array
- */
-function getTaskLogContacts($obj)
-{
-    $q = new w2p_Database_Query();
-    $q->addTable('task_contacts', 'tc');
-    $q->addJoin('contacts', 'c', 'c.contact_id = tc.contact_id', 'inner');
-    $q->addWhere('tc.task_id = ' . (int) $obj->task_id);
-    $q->addQuery('tc.contact_id');
-    $q->addQuery('c.contact_first_name, c.contact_last_name');
-    $req = & $q->exec();
-
-    return $req;
-}
-
-/**
- * @param $obj
- *
- * @return array
- */
-function getContactsfromProjects($obj)
-{
-    $q = new w2p_Database_Query();
-    $q->addTable('project_contacts', 'pc');
-    $q->addJoin('contacts', 'c', 'c.contact_id = pc.contact_id', 'inner');
-    $q->addWhere('pc.project_id = ' . (int) $obj->task_project);
-    $q->addQuery('pc.contact_id');
-    $q->addQuery('c.contact_first_name, c.contact_last_name');
-    $req = & $q->exec();
-
-    return $req;
-}
-
-/**
  * @param $project_id
  * @param $AppUI
  *
@@ -4057,21 +3399,6 @@ function __extract_from_tasksperuser($use_period, $ss, $se, $log_userfilter, $pr
 }
 
 /**
- * @return String
- */
-function __extract_from_tasks1()
-{
-//subquery the parent state
-    $sq = new w2p_Database_Query;
-    $sq->addTable('tasks', 'stasks');
-    $sq->addQuery('COUNT(stasks.task_id)');
-    $sq->addWhere('stasks.task_id <> tasks.task_id AND stasks.task_parent = tasks.task_id');
-    $subquery = $sq->prepare();
-
-    return $subquery;
-}
-
-/**
  * @param $userFilter
  * @param $AppUI
  * @param $proj
@@ -4102,6 +3429,8 @@ function __extract_from_listtasks($userFilter, $AppUI, $proj)
  */
 function __extract_from_tasks_todo($selected, $task_priority)
 {
+    $priorities = w2PgetSysval('TaskPriority');
+
     $q = new w2p_Database_Query;
     foreach ($selected as $key => $val) {
         if ($task_priority == 'c') {
@@ -4114,17 +3443,16 @@ function __extract_from_tasks_todo($selected, $task_priority)
                 // delete task
                 $q->setDelete('tasks');
                 $q->addWhere('task_id=' . (int) $val);
-            } else
-                if ($task_priority > -2 && $task_priority < 2) {
-                    // set priority
-                    $q->addTable('tasks');
-                    $q->addUpdate('task_priority', $task_priority);
-                    $q->addWhere('task_id=' . (int) $val);
-                }
+            } else {
+                $task_priority = min($task_priority, max(array_keys($priorities)));
+                $task_priority = max($task_priority, min(array_keys($priorities)));
+
+                $q->addTable('tasks');
+                $q->addUpdate('task_priority', $task_priority);
+                $q->addWhere('task_id=' . (int) $val);
+            }
         }
         $q->exec();
-        echo db_error();
-        $q->clear();
     }
 }
 
@@ -4236,22 +3564,6 @@ function __extract_from_role_perms($module, $mod_data)
     $q->clear();
 
     return $data;
-}
-
-/**
- * @param $deps
- *
- * @return Associative
- */
-function __extract_from_ae_depend1($deps)
-{
-    $q = new w2p_Database_Query;
-    $q->addTable('tasks');
-    $q->addQuery('task_id, task_name');
-    $q->addWhere('task_id IN (' . $deps . ')');
-    $taskDep = $q->loadHashList();
-
-    return $taskDep;
 }
 
 /**
@@ -4486,7 +3798,6 @@ function __extract_from_gantt_pdf3($user_id, $showArcProjs, $showLowTasks, $show
     return $proTasks;
 }
 
-
 /**
  * @param $project_id
  * @param $f
@@ -4716,25 +4027,6 @@ function __extract_from_projectdesigner2()
 }
 
 /**
- * @param $controller
- */
-function __extract_from_contact_controller($controller)
-{
-    $updatekey = $controller->object->getUpdateKey();
-    $notifyasked = w2PgetParam($_POST, 'contact_updateask', 0);
-    if ($notifyasked && !strlen($updatekey)) {
-        $rnow = new w2p_Utilities_Date();
-        $controller->object->contact_updatekey = MD5($rnow->format(FMT_DATEISO));
-        $controller->object->contact_updateasked = $rnow->format(FMT_DATETIME_MYSQL);
-        $controller->object->contact_lastupdate = '';
-        $controller->object->store();
-        $controller->object->notify();
-    }
-
-    return $controller;
-}
-
-/**
  * @param $row
  *
  * @return Array
@@ -4906,116 +4198,6 @@ function __extract_from_vw_actions()
 }
 
 /**
- * @param $f
- * @param $q
- * @param $user_id
- * @param $task_id
- * @param $AppUI
- * @return string
- */
-function __extract_from_tasks3($f, $q, $user_id, $task_id, $AppUI)
-{
-    $f = (($f) ? $f : '');
-    if ($task_id) {
-        //if we are on a task context make sure we show ALL the children tasks
-        $f = 'deepchildren';
-    }
-
-    switch ($f) {
-        case 'myfinished7days':
-            $q->addWhere('ut.user_id = ' . (int) $user_id);
-        case 'allfinished7days':
-            $q->addTable('user_tasks');
-            $q->addWhere('user_tasks.user_id = ' . (int) $user_id);
-            $q->addWhere('user_tasks.task_id = tasks.task_id');
-
-            $q->addWhere('task_percent_complete = 100');
-            //TODO: use date class to construct date.
-            $q->addWhere('task_end_date >= \'' . date('Y-m-d 00:00:00', mktime(0, 0, 0, date('m'), date('d') - 7, date('Y'))) . '\'');
-            break;
-        case 'children':
-            $q->addWhere('task_parent = ' . (int) $task_id);
-            $q->addWhere('tasks.task_id <> ' . $task_id);
-            break;
-        case 'deepchildren':
-            $taskobj = new CTask;
-            $taskobj->load((int) $task_id);
-            $deepchildren = $taskobj->getDeepChildren();
-            $q->addWhere('tasks.task_id IN (' . implode(',', $deepchildren) . ')');
-            $q->addWhere('tasks.task_id <> ' . $task_id);
-            break;
-        case 'myproj':
-            $q->addWhere('project_owner = ' . (int) $user_id);
-            break;
-        case 'mycomp':
-            if (!$AppUI->user_company) {
-                $AppUI->user_company = 0;
-            }
-            $q->addWhere('project_company = ' . (int) $AppUI->user_company);
-            break;
-        case 'myunfinished':
-            $q->addTable('user_tasks');
-            $q->addWhere('user_tasks.user_id = ' . (int) $user_id);
-            $q->addWhere('user_tasks.task_id = tasks.task_id');
-            $q->addWhere('(task_percent_complete < 100 OR task_end_date = \'\')');
-            break;
-        case 'allunfinished':
-            $q->addWhere('(task_percent_complete < 100 OR task_end_date = \'\')');
-            break;
-        case 'unassigned':
-            $q->leftJoin('user_tasks', 'ut_empty', 'tasks.task_id = ut_empty.task_id');
-            $q->addWhere('ut_empty.task_id IS NULL');
-            break;
-        case 'taskcreated':
-            $q->addWhere('task_creator = ' . (int) $user_id);
-            break;
-        case 'taskowned':
-            $q->addWhere('task_owner = ' . (int) $user_id);
-            break;
-        case 'all':
-            //break;
-        default:
-            if ($user_id) {
-                $q->addTable('user_tasks');
-                $q->addWhere('user_tasks.user_id = ' . (int) $user_id);
-                $q->addWhere('user_tasks.task_id = tasks.task_id');
-            }
-            break;
-    }
-
-    return $q;
-}
-
-/**
- * @param $min_view
- * @param $currentTabId
- * @param $project_id
- * @param $currentTabName
- * @param $AppUI
- * @return int
- */
-function __extract_from_tasks($min_view, $currentTabId, $project_id, $currentTabName, $AppUI)
-{
-//TODO: This whole structure is hard-coded based on the TaskStatus SelectList.
-    $task_status = 0;
-    if ($min_view && isset($_GET['task_status'])) {
-        $task_status = (int)w2PgetParam($_GET, 'task_status', null);
-        return $task_status;
-    } elseif ($currentTabId == 1 && $project_id) {
-        $task_status = -1;
-        return $task_status;
-    } elseif ($currentTabId > 1 && $project_id) {
-        $task_status = $currentTabId - 1;
-        return $task_status;
-    } elseif (!$currentTabName) {
-        // If we aren't tabbed we are in the tasks list.
-        $task_status = (int)$AppUI->getState('inactive');
-        return $task_status;
-    }
-    return $task_status;
-}
-
-/**
  * @param $where_list
  * @param $project_id
  * @param $task_id
@@ -5044,36 +4226,6 @@ function __extract_from_tasks4($where_list, $project_id, $task_id)
 }
 
 /**
- * @param $q
- * @param $subquery
- */
-function __extract_from_tasks5($q, $subquery)
-{
-    $q->addQuery('tasks.task_id, task_parent, task_name');
-    $q->addQuery('task_start_date, task_end_date, task_dynamic');
-    $q->addQuery('task_pinned, pin.user_id as pin_user');
-    $q->addQuery('ut.user_task_priority');
-    $q->addQuery('task_priority, task_percent_complete');
-    $q->addQuery('task_duration, task_duration_type');
-    $q->addQuery('task_project, task_represents_project');
-    $q->addQuery('task_description, task_owner, task_status');
-    $q->addQuery('usernames.user_username, usernames.user_id');
-    $q->addQuery('assignees.user_username as assignee_username');
-    $q->addQuery('count(distinct assignees.user_id) as assignee_count');
-    $q->addQuery('co.contact_first_name, co.contact_last_name');
-    $q->addQuery('contact_display_name AS contact_name');
-    $q->addQuery('contact_display_name AS owner');
-    $q->addQuery('task_milestone');
-    $q->addQuery('count(distinct f.file_task) as file_count');
-    $q->addQuery('tlog.task_log_problem');
-    $q->addQuery('task_access');
-    $q->addQuery('(' . $subquery . ') AS task_nr_of_children');
-    $q->addTable('tasks');
-
-    return $q;
-}
-
-/**
  * @param $AppUI
  * @param $task_id
  */
@@ -5084,10 +4236,9 @@ function __extract_from_tasks_pinning($AppUI, $task_id)
 
         $task = new CTask();
         // load the record data
-        if (1 == $pin) {
+        if ($pin) {
             $result = $task->pinTask($AppUI->user_id, $task_id);
-        }
-        if (-1 == $pin) {
+        } else {
             $result = $task->unpinTask($AppUI->user_id, $task_id);
         }
 
@@ -5217,7 +4368,6 @@ function __extract_from_view_messages3($s, $style, $AppUI, $row, $df, $tf, $edit
     return array($s, $side);
 }
 
-
 /**
  * @param $s
  * @param $style
@@ -5314,4 +4464,21 @@ function __extract_from_view_messages4($s, $style, $row, $hideEmail, $editor, $A
     $s .= '</td>';
     $s .= '</tr>';
     return array($s, $new_messages);
+}
+
+function w2p_unpluralize($word)
+{
+    $suffix = substr($word, -3);
+    switch ($suffix) {
+        case 'ies':
+            $word = substr($word, 0, -3).'y';
+            break;
+        default:
+            $character = substr($word, -1);
+            if('s' == $character) {
+                $word = substr($word, 0, -1);
+            }
+    }
+
+    return $word;
 }

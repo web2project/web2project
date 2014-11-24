@@ -35,7 +35,8 @@ class CSetupEvents extends w2p_System_Setup
         return false;
     }
 
-    public function upgrade($old_version) {
+    public function upgrade($old_version)
+    {
         $result = false;
 
         // NOTE: All cases should fall through so all updates are executed.
@@ -60,6 +61,7 @@ class CSetupEvents extends w2p_System_Setup
             default:
                 break;
         }
+
         return $result;
     }
 
@@ -72,6 +74,7 @@ class CSetupEvents extends w2p_System_Setup
         $q->addTable($table);
         $q->addUpdate($field, 'events');
         $q->addWhere("$field = 'calendar'");
+
         return $q->exec();
     }
 }

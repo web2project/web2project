@@ -171,30 +171,6 @@ class CContactsTest extends CommonSetup
         $this->assertFalse($this->obj->isUser());
     }
 
-    /**
-     * @expectedException PHPUnit_Framework_Error
-     */
-    public function testIs_Alpha()
-    {
-        $this->assertTrue($this->obj->is_alpha(123));
-        $this->assertTrue($this->obj->is_alpha('123'));
-        $this->assertFalse($this->obj->is_alpha('monkey'));
-        $this->assertFalse($this->obj->is_alpha('3.14159'));
-        $this->assertFalse($this->obj->is_alpha(3.14159));
-    }
-
-    /**
-     * @expectedException PHPUnit_Framework_Error
-     */
-    public function testGetCompanyName()
-    {
-        $this->obj->contact_company = 1;
-        $this->assertEquals('UnitTestCompany',  $this->obj->getCompanyName());
-
-        $this->obj->contact_company = 2;
-        $this->assertEquals('CreatedCompany',  $this->obj->getCompanyName());
-    }
-
     public function testGetCompanyDetails()
     {
         $this->mockDB->stageHash(array('company_id' => 0, 'company_name' => ''));
@@ -219,14 +195,6 @@ class CContactsTest extends CommonSetup
         $this->AssertEquals(2,                      count($results));
         $this->assertNull($results['dept_id']);
         $this->assertNull($results['dept_name']);
-        $this->mockDB->clearHash();
-
-        $this->mockDB->stageHash(array('dept_id' => 1, 'dept_name' => 'Department 1'));
-        $this->obj->contact_department = 1;
-        $results = $this->obj->getDepartmentDetails();
-        $this->AssertEquals(2,                      count($results));
-        $this->assertEquals(1,                      $results['dept_id']);
-        $this->assertEquals('Department 1',         $results['dept_name']);
     }
 
     public function testGetUpdateKey()
@@ -251,78 +219,13 @@ class CContactsTest extends CommonSetup
         $this->assertEquals('',                     $this->obj->getUpdateKey());
     }
 
-    public function testUpdateNotify()
+    public function testIsValid()
     {
-        $this->markTestSkipped('This test has not been implemented yet.');
-    }
+        $this->post_data['contact_email'] = 'Not an email';
+        $this->obj->bind($this->post_data);
 
-    public function testGetAllowedRecords()
-    {
-        $this->markTestSkipped('This test has not been implemented yet.');
-    }
-
-    public function testSearchContacts()
-    {
-        $this->markTestSkipped('This method is static.');
-    }
-
-    public function testGetFirstLetters()
-    {
-        $this->markTestSkipped('This method is static.');
-    }
-
-    public function testGetContactByUsername()
-    {
-        $this->markTestSkipped('This method is static.');
-    }
-
-    public function testGetContactByUserid()
-    {
-        $this->markTestSkipped('This method is static.');
-    }
-
-    public function testGetContactByEmail()
-    {
-        $this->markTestSkipped('This method is static.');
-    }
-
-    public function testGetContactByUpdatekey()
-    {
-        $this->markTestSkipped('This method is static.');
-    }
-
-    public function testGetProjects()
-    {
-        $this->markTestSkipped('This method is static.');
-    }
-
-    public function testClearOldUpdatekeys()
-    {
-        $this->markTestSkipped('This test has not been implemented yet.');
-    }
-
-    public function testLoadFull()
-    {
-        $this->markTestIncomplete('This test has not been implemented yet.');
-    }
-
-    public function testCanDelete()
-    {
-        $this->markTestIncomplete('This test has not been implemented yet.');
-    }
-
-    public function testGetCompanyID()
-    {
-        $this->markTestIncomplete('This test has not been implemented yet.');
-    }
-
-    public function testNotify()
-    {
-        $this->markTestIncomplete('This test has not been implemented yet.');
-    }
-
-    public function testHook_calendar()
-    {
-        $this->markTestIncomplete('This test has not been implemented yet.');
+        $valid = $this->obj->isValid();
+        $this->assertFalse($valid);
+        $this->assertEquals(1, count($this->obj->getError()));
     }
 }

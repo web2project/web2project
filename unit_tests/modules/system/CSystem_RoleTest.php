@@ -69,62 +69,6 @@ class CSystem_RoleTest extends CommonSetup
         $this->assertContains('role_description',   $result);
     }
 
-    /**
-     * @todo Implement testStore().
-     */
-    public function testStore()
-    {
-        $this->obj->bind($this->post_data);
-
-        $this->AssertEquals(0,                      $this->obj->role_id);
-        $this->obj->store();
-        $this->assertNotEquals(0,                   (int) $this->obj->role_id);
-        $this->obj->delete();
-    }
-
-    /**
-     * @todo Implement testDelete().
-     */
-    public function testDelete()
-    {
-        $roles = $this->obj->getRoles();
-
-        $this->AssertEquals(5,                      count($roles));
-        $this->obj->bind($this->post_data);
-        $this->obj->store();
-        $this->obj->delete();
-
-        $roles = $this->obj->getRoles();
-        $this->AssertEquals(5,                      count($roles));
-    }
-
-    public function testGetRoles()
-    {
-        $roles = $this->obj->getRoles();
-
-        $this->AssertEquals(5,                      count($roles));
-        $this->AssertEquals('Administrator',        $roles[0]['name']);
-        $this->AssertEquals('normal',               $roles[4]['value']);
-    }
-
-    public function testRename_array_fail()
-    {
-        $roles = $this->obj->getRoles();
-
-        $result = $this->obj->rename_array($roles, array('one'), array());
-
-        $this->assertFalse($result);
-    }
-
-    public function testRename_array()
-    {
-        $roles = $this->obj->getRoles();
-
-        $result = $this->obj->rename_array($roles, array('one'), array('two'));
-
-        $this->assertTrue($result);
-    }
-
     public function testCopyPermissions()
     {
         // Remove the following lines when you implement this test.

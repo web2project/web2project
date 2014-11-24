@@ -1,6 +1,6 @@
 <?php
 if (!defined('W2P_BASE_DIR')) {
-	die('You should not access this file directly.');
+    die('You should not access this file directly.');
 }
 // @todo    refactor to use a core controller
 
@@ -120,7 +120,7 @@ if ($result) {
         if (isset($start_date)) {
             $shift = $nsd->compare($start_date, $nsd);
             if ($shift < 1) {
-                
+
                 //$obj->task_start_date = $nsd->format(FMT_DATETIME_MYSQL);
                 $osd = new w2p_Utilities_Date($obj->task_start_date);
                 $ned = new w2p_Utilities_Date($obj->task_end_date);
@@ -142,11 +142,11 @@ if ($result) {
     $obj->updateDynamics();
 
     $billingCategory = w2PgetSysVal('BudgetCategory');
-	$budgets = array();
-	foreach ($billingCategory as $id => $category) {
-		$budgets[$id] = w2PgetParam($_POST, 'budget_'.$id, 0);
-	}
-	$obj->storeBudget($budgets);
+    $budgets = array();
+    foreach ($billingCategory as $id => $category) {
+        $budgets[$id] = w2PgetParam($_POST, 'budget_'.$id, 0);
+    }
+    $obj->storeBudget($budgets);
 
     // Now add any task reminders
     // If there wasn't a task, but there is one now, and

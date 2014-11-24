@@ -1,6 +1,6 @@
 <?php
 if (!defined('W2P_BASE_DIR')) {
-	die('You should not access this file directly.');
+    die('You should not access this file directly.');
 }
 
 $tab = $AppUI->processIntState('FileIdxTab', $_GET, 'tab', 0);
@@ -13,13 +13,13 @@ $active = intval(!$AppUI->getState('FileIdxTab'));
 
 $view_temp = w2PgetParam($_GET, 'view');
 if (isset($view_temp)) {
-	$view = w2PgetParam($_GET, 'view'); // folders or categories
-	$AppUI->setState('FileIdxView', $view);
+    $view = w2PgetParam($_GET, 'view'); // folders or categories
+    $AppUI->setState('FileIdxView', $view);
 } else {
-	$view = $AppUI->getState('FileIdxView');
-	if ($view == '') {
-		$view = 'folders';
-	}
+    $view = $AppUI->getState('FileIdxView');
+    if ($view == '') {
+        $view = 'folders';
+    }
 }
 $folder = (int) w2PgetParam($_GET, 'folder', 0); // to pass to "new file" button
 
@@ -48,11 +48,11 @@ $denied_folders_ary = $cfObj->getDeniedRecords($AppUI->user_id);
 $limited = (count($allowed_folders_ary) < $cfObj->countFolders()) ? true : false;
 
 if (!$limited) {
-	$canEdit = true;
+    $canEdit = true;
 } elseif ($limited and array_key_exists($folder, $allowed_folders_ary)) {
-	$canEdit = true;
+    $canEdit = true;
 } else {
-	$canEdit = false;
+    $canEdit = false;
 }
 
 if ($canEdit) {
@@ -64,15 +64,15 @@ $titleBlock->show();
 $file_types = w2PgetSysVal('FileType');
 
 if ($tab != -1) {
-	array_unshift($file_types, 'All Files');
+    array_unshift($file_types, 'All Files');
 }
 
 $tabBox = new CTabBox('?m=files', W2P_BASE_DIR . '/modules/files/', $tab);
 $i = -1;
 foreach ($file_types as $file_type) {
-	$fileList = CFile::getFileList($AppUI, $company_id, $project_id, $task_id, $i);
-	$tabBox->add('index_table', $file_type . ' (' . count($fileList) . ')');
-	++$i;
+    $fileList = CFile::getFileList($AppUI, $company_id, $project_id, $task_id, $i);
+    $tabBox->add('index_table', $file_type . ' (' . count($fileList) . ')');
+    ++$i;
 }
 $tabBox->add('folders_table', 'Folder Explorer');
 $tabBox->show();

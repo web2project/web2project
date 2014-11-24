@@ -143,7 +143,7 @@ div.std {
     margin-right: 10px;
 }
 .quicknav a, form{
-    margin: 0px 8px 0 8px;
+    margin: 0;
 }
 form {
     display: inline;
@@ -170,6 +170,8 @@ form {
 .module-title .crumb-right {
     float: right;
     margin: 10px 0;
+    position: absolute;
+    right: 0;
 }
 
 .module-nav {
@@ -675,7 +677,7 @@ label {
 div.addedit textarea {
     width: 65%;
 }
-div.addedit input.save {
+input.save {
     float: right;
 }
 
@@ -732,4 +734,9 @@ input.button, a div {
 
 .tasks-tasklog label, .preference label {
     width: 12em;
+}
+
+.email-templating .description {
+    height: 25em;
+    width: 40em;
 }

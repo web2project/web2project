@@ -1,6 +1,6 @@
 <?php
 if (!defined('W2P_BASE_DIR')) {
-	die('You should not access this file directly.');
+    die('You should not access this file directly.');
 }
 // @todo    convert to template
 
@@ -15,14 +15,16 @@ $df = $AppUI->getPref('SHDATEFORMAT');
 $a = ($user_id) ? '&a=view&user_id=' . $user_id : '';
 $a .= '&tab=' . $currentTabId . '&showdetails=1';
 
-$AppUI->getTheme()->loadCalendarJS();
 ?>
 <script language="javascript" type="text/javascript">
-function checkDate(){
-    if (document.frmDate.log_start_date.value == '' || document.frmDate.log_end_date.value== ''){
+function checkDate()
+{
+    if (document.frmDate.log_start_date.value == '' || document.frmDate.log_end_date.value== '') {
         alert('<?php echo $AppUI->_('You must fill fields', UI_OUTPUT_JS) ?>');
+
         return false;
     }
+
     return true;
 }
 </script>
@@ -65,10 +67,10 @@ function checkDate(){
 
 <?php
 if (w2PgetParam($_REQUEST, 'showdetails', 0) == 1) {
-    
+
     $fieldList = array('user_username', 'contact_last_name', 'company_name', 'date_time_in', 'user_ip');
     $fieldNames = array('First Name', 'Last Name', 'Internet Address', 'Date Time IN', 'Date Time OUT');
-    
+
     $start_date = date('Y-m-d', strtotime(w2PgetParam($_POST, 'log_start_date', date('Y-m-d'))));
     $start_date = $AppUI->convertToSystemTZ($start_date);
     $end_date = date('Y-m-d 23:59:59', strtotime(w2PgetParam($_POST, 'log_end_date', date('Y-m-d'))));

@@ -1,12 +1,11 @@
 <?php
 if (!defined('W2P_BASE_DIR')) {
-	die('You should not access this file directly.');
+    die('You should not access this file directly.');
 }
 // @todo    convert to template
 
 global $AppUI, $cal_sdf;
-$AppUI->getTheme()->loadCalendarJS();
-//TODO: block execution unless I tell it to
+
 /**
  * Generates a report of the task logs for given dates
  */
@@ -20,7 +19,7 @@ $start_date = intval($log_start_date) ? new w2p_Utilities_Date($log_start_date) 
 $end_date = intval($log_end_date) ? new w2p_Utilities_Date($log_end_date) : new w2p_Utilities_Date();
 
 if (!$log_start_date) {
-	$start_date->subtractSpan(new Date_Span('14,0,0,0'));
+    $start_date->subtractSpan(new Date_Span('14,0,0,0'));
 }
 $end_date->setTime(23, 59, 59);
 $billingCategory = w2PgetSysVal('BudgetCategory');
@@ -83,7 +82,7 @@ $billingCategory = w2PgetSysVal('BudgetCategory');
 
     if (count($taskList)) {
         foreach ($taskList as $taskItem) {
-            $task->loadFull(null, $taskItem['task_id']);
+            $task->load($taskItem['task_id']);
             $costs = $bcode->calculateTaskCost($taskItem['task_id'],
                     $start_date->format(FMT_DATETIME_MYSQL),
                     $end_date->format(FMT_DATETIME_MYSQL));

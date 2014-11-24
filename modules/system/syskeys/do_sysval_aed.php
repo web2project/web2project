@@ -1,12 +1,12 @@
 <?php
 if (!defined('W2P_BASE_DIR')) {
-	die('You should not access this file directly.');
+    die('You should not access this file directly.');
 }
 
 // check permissions
 $perms = &$AppUI->acl();
 if (!canEdit('system')) {
-	$AppUI->redirect(ACCESS_DENIED);
+    $AppUI->redirect(ACCESS_DENIED);
 }
 
 $del = (int) w2PgetParam($_POST, 'del', 0);
@@ -20,7 +20,7 @@ $svid = array('sysval_title' => w2PgetParam($_POST, 'sysval_id'));
 if ($del) {
     $bind = $obj->bind($svid);
 } else {
-	$bind = $obj->bind($post);
+    $bind = $obj->bind($post);
 }
 
 if (!$bind) {

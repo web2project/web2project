@@ -1,6 +1,6 @@
 <?php
 if (!defined('W2P_BASE_DIR')) {
-	die('You should not access this file directly.');
+    die('You should not access this file directly.');
 }
 
 // MODULE CONFIGURATION DEFINITION
@@ -16,7 +16,7 @@ $config['mod_description'] = 'A module to design projects';
 $config['mod_config'] = true;
 
 if ($a == 'setup') {
-	echo w2PshowModuleConfig($config);
+    echo w2PshowModuleConfig($config);
 }
 
 /**
@@ -26,16 +26,17 @@ if ($a == 'setup') {
  */
 class CSetupProjectDesigner extends w2p_System_Setup
 {
-	public function install() {
-		$result = $this->_checkRequirements();
+    public function install()
+    {
+        $result = $this->_checkRequirements();
 
         if (!$result) {
             //$AppUI->setMsg($this->getErrors(), UI_MSG_ERROR);
         }
 
         $q = $this->_getQuery();
-		$q->createTable('project_designer_options');
-		$q->createDefinition('(
+        $q->createTable('project_designer_options');
+        $q->createDefinition('(
                 pd_option_id INT(11) NOT NULL auto_increment,
                 pd_option_user INT(11) NOT NULL default 0 UNIQUE,
                 pd_option_view_project INT(1) NOT NULL default 1,
@@ -46,25 +47,27 @@ class CSetupProjectDesigner extends w2p_System_Setup
                 pd_option_view_files INT(1) NOT NULL default 1,
                 PRIMARY KEY (pd_option_id)
             ) ENGINE = MYISAM DEFAULT CHARSET=utf8 ');
-		if (!$q->exec()) {
+        if (!$q->exec()) {
             return false;
         }
 
         return parent::install();
-	}
+    }
 
-	public function remove() {
-		$q = $this->_getQuery();
-		$q->dropTable('project_designer_options');
-		$q->exec();
+    public function remove()
+    {
+        $q = $this->_getQuery();
+        $q->dropTable('project_designer_options');
+        $q->exec();
 
         return parent::remove();
-	}
+    }
 
-	public function configure() {
-		$this->_AppUI->redirect('m=projectdesigner&a=configure');
+    public function configure()
+    {
+        $this->_AppUI->redirect('m=projectdesigner&a=configure');
 
-		return parent::configure();
-	}
+        return parent::configure();
+    }
 
 }

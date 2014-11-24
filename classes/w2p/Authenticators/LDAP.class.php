@@ -5,7 +5,7 @@
  * @package     web2project\authenticators
  */
 
-class w2p_Authenticators_LDAP extends w2p_Authenticators_Base
+class w2p_Authenticators_LDAP extends \Web2project\Authenticators\Base
 {
     public $ldap_host;
     public $ldap_port;
@@ -92,7 +92,7 @@ class w2p_Authenticators_LDAP extends w2p_Authenticators_Base
         }
 
         if ($this->fallback == true) {
-            $sqlAuth = new w2p_Authenticators_SQL();
+            $sqlAuth = new \Web2project\Authenticators\SQL();
             return $sqlAuth->authenticate($username, $password);
         }
 

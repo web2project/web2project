@@ -1,10 +1,10 @@
 <?php
 if (!defined('W2P_BASE_DIR')) {
-	die('You should not access this file directly.');
+    die('You should not access this file directly.');
 }
 
-global $a, $addPwOiD, $AppUI, $buffer, $company_id, $department, $dept_id, 
-	$dept_ids, $min_view, $m, $priority, $projects, $tab, $user_id;
+global $a, $addPwOiD, $AppUI, $buffer, $company_id, $department, $dept_id,
+    $dept_ids, $min_view, $m, $priority, $projects, $tab, $user_id;
 
 $perms = &$AppUI->acl();
 $df = $AppUI->getPref('SHDATEFORMAT');
@@ -12,7 +12,7 @@ $df = $AppUI->getPref('SHDATEFORMAT');
 $pstatus = w2PgetSysVal('ProjectStatus');
 
 if (isset($_POST['proFilter'])) {
-	$AppUI->setState('DeptProjectIdxFilter', $_POST['proFilter']);
+    $AppUI->setState('DeptProjectIdxFilter', $_POST['proFilter']);
 }
 $proFilter = $AppUI->getState('DeptProjectIdxFilter') !== null ? $AppUI->getState('DeptProjectIdxFilter') : '-3';
 
@@ -23,11 +23,11 @@ natsort($projFilter);
 
 // retrieve any state parameters
 if (isset($_GET['tab'])) {
-	$AppUI->setState('DeptProjIdxTab', w2PgetParam($_GET, 'tab', null));
+    $AppUI->setState('DeptProjIdxTab', w2PgetParam($_GET, 'tab', null));
 }
 
 if (isset($_POST['show_form'])) {
-	$AppUI->setState('addProjWithOwnerInDep', w2PgetParam($_POST, 'add_pwoid', 0));
+    $AppUI->setState('addProjWithOwnerInDep', w2PgetParam($_POST, 'add_pwoid', 0));
 }
 $addPwOiD = $AppUI->getState('addProjWithOwnerInDep') ? $AppUI->getState('addProjWithOwnerInDep') : 0;
 
@@ -44,10 +44,10 @@ $min_view = true;
  *  TODO:  This is a *nasty* *nasty* kludge that should be cleaned up.
  * Unfortunately due to the global variables from dotProject, we're stuck with
  * this mess for now.
- * 
+ *
  * My God have mercy on our souls for the atrocity we're about to commit.
- */ 
+ */
 $tmpDepartments = $department;
-$department = $dept_id; 
-require (W2P_BASE_DIR . '/modules/projects/viewgantt.php');
+$department = $dept_id;
+require W2P_BASE_DIR . '/modules/projects/viewgantt.php';
 $department = $tmpDepartments;

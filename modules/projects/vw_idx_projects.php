@@ -1,6 +1,6 @@
 <?php
 if (!defined('W2P_BASE_DIR')) {
-	die('You should not access this file directly.');
+    die('You should not access this file directly.');
 }
 // @todo    convert to template
 
@@ -10,7 +10,7 @@ $currentTabId = $tab;
 $is_tabbed = false;
 $project_status_filter = $currentTabId - 1;
 
-switch($tab) {
+switch ($tab) {
     case 0:
         //do nothing
         $filter = '1 = 1';
@@ -57,7 +57,7 @@ $fieldList = array_keys($fields);
 $fieldNames = array_values($fields);
 
 $page = (int) w2PgetParam($_GET, 'page', 1);
-$paginator = new w2p_Utilities_Paginator($projects);
+$paginator = new \Web2project\Utilities\Paginator($projects);
 $items = $paginator->getItemsOnPage($page);
 
 ?>
@@ -66,7 +66,7 @@ $items = $paginator->getItemsOnPage($page);
     <table id="tblProjects-list" class="tbl list">
         <tr>
             <td colspan="<?php echo count($fieldNames) + 1; ?>">
-                <?php echo $paginator->buildNavigation($AppUI, $m, $tab, array('orderby' => $orderby)); ?>
+                <?php echo $paginator->buildNavigation($AppUI, $m, $tab); ?>
             </td>
         </tr>
 		<tr>
@@ -85,14 +85,14 @@ $items = $paginator->getItemsOnPage($page);
             </th>
 		</tr>
 		<?php
-		$none = true;
-		$projectArray = array();
+        $none = true;
+        $projectArray = array();
 
         $project_types = w2PgetSysVal('ProjectType');
         $project_status = w2PgetSysVal('ProjectStatus');
         $customLookups = array('project_status' => $project_status, 'project_type' => $project_types);
 
-		foreach ($items as $row) {
+        foreach ($items as $row) {
             $tmpProject = new CProject();
             $st_projects_arr = array();
 
@@ -197,12 +197,12 @@ $items = $paginator->getItemsOnPage($page);
                     echo $s;
                 }
             }
-		}
+        }
         $pstatus = w2PgetSysVal('ProjectStatus');
-		if ($none) {
-			echo '<tr><td colspan="25">' . $AppUI->_('No projects to display for this Company, Owner and Type, or your Search returned no results. Please check the filters above and try again.') . '</td></tr>';
-		} else {
-			?>
+        if ($none) {
+            echo '<tr><td colspan="25">' . $AppUI->_('No projects to display for this Company, Owner and Type, or your Search returned no results. Please check the filters above and try again.') . '</td></tr>';
+        } else {
+            ?>
 				<tr>
 					<td colspan="25" align="right">
                         <input type="submit" class="btn btn-primary btn-mini" value="<?php echo $AppUI->_('Update projects status'); ?>" />
@@ -212,8 +212,8 @@ $items = $paginator->getItemsOnPage($page);
 					</td>
 				</tr>
 			<?php
-			}
-		?>
+            }
+        ?>
         <tr>
             <td colspan="<?php echo count($fieldNames) + 1; ?>">
                 <?php echo $paginator->buildNavigation($AppUI, $m, $tab); ?>
@@ -223,5 +223,5 @@ $items = $paginator->getItemsOnPage($page);
 </form>
 <?php
 if ($is_tabbed) {
-	echo $pageNav;
+    echo $pageNav;
 }

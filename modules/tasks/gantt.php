@@ -81,7 +81,6 @@ foreach ($proTasks as $row) {
 
     $row['task_end_date'] = __extract_from_projects_gantt4($row);
 
-
     $ted = new w2p_Utilities_Date($row['task_end_date']);
     if ($ted->after(new w2p_Utilities_Date($end_max))) {
         $end_max = $row['task_end_date'];
@@ -101,7 +100,7 @@ $end_date = w2PgetParam($_GET, 'end_date', $end_max);
 //consider critical (concerning end date) tasks as well
 if ($caller != 'todo') {
     $start_min = $projects[$project_id]['project_start_date'];
-    $end_max = (($projects[$project_id]['project_end_date'] > $criticalTasks[0]['task_end_date']) 
+    $end_max = (($projects[$project_id]['project_end_date'] > $criticalTasks[0]['task_end_date'])
                 ? $projects[$project_id]['project_end_date'] : $criticalTasks[0]['task_end_date']);
 } else {
     $start_min = substr($criticalTasksInverted[0]['task_start_date'], 0, 10);
@@ -207,14 +206,14 @@ foreach ($projects as $p) {
 }
 $hide_task_groups = false;
 if ($hide_task_groups) {
-	for ($i = 0, $i_cmp = count($gantt_arr); $i < $i_cmp; $i++) {
-		// remove task groups
-		if ($i != count($gantt_arr) - 1 && $gantt_arr[$i + 1][1] > $gantt_arr[$i][1]) {
-			// it's not a leaf => remove
-			array_splice($gantt_arr, $i, 1);
-			continue;
-		}
-	}
+    for ($i = 0, $i_cmp = count($gantt_arr); $i < $i_cmp; $i++) {
+        // remove task groups
+        if ($i != count($gantt_arr) - 1 && $gantt_arr[$i + 1][1] > $gantt_arr[$i][1]) {
+            // it's not a leaf => remove
+            array_splice($gantt_arr, $i, 1);
+            continue;
+        }
+    }
 }
 
 $gantt->loadTaskArray($gantt_arr);
@@ -316,13 +315,13 @@ for ($i = 0, $i_cmp = count($gantt_arr); $i < $i_cmp; $i++) {
                 //yellow for 'in progress' #FF9900
                 //green for 'achieved' #006600
                 // blue for 'planned' #0000FF
-                if ($a['task_percent_complete'] == 100)  {
+                if ($a['task_percent_complete'] == 100) {
                     $color = '#006600';
                 } else {
                     if ($mile_date_stamp < $today_date_stamp) {
                         $color = '#990000';
                     } else {
-                        if ($a['task_percent_complete'] == 0)  {
+                        if ($a['task_percent_complete'] == 0) {
                             $color = '#0000FF';
                         } else {
                             $color = '#FF9900';

@@ -96,6 +96,23 @@ class CDepartmentsTest extends CommonSetup
     }
 
     /**
+     * Tests that the proper error message is returned when a dept is attempted
+     * to be created without a url.
+     */
+    public function testCreateDepartmentParentError()
+    {
+        $this->post_data['dept_id'] = 1;
+        $this->post_data['dept_parent'] = 1;
+        $this->obj->bind($this->post_data);
+
+        /**
+         * Verify we got the proper error message
+         */
+        $this->assertFalse($this->obj->store());
+        $this->assertArrayHasKey('parentError', $this->obj->getError());
+    }
+
+    /**
      * Tests loading the Department Object
      */
     public function testLoad()
@@ -175,109 +192,16 @@ class CDepartmentsTest extends CommonSetup
         $this->assertEquals('',              $item->dept_owner);
     }
 
-    /**
-     * @todo Implement testLoadFull().
-     */
-    public function testLoadFull()
-    {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-                'This test has not been implemented yet.'
-        );
-    }
-
-    /**
-     * @todo Implement testLoadOtherDepts().
-     */
-    public function testLoadOtherDepts()
-    {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-                'This test has not been implemented yet.'
-        );
-    }
-
-    /**
-     * @todo Implement testGetFilteredDepartmentList().
-     */
-    public function testGetFilteredDepartmentList()
-    {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-                'This test has not been implemented yet.'
-        );
-    }
-
-    /**
-     * @todo Implement testCheck().
-     */
-    public function testCheck()
-    {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-                'This test has not been implemented yet.'
-        );
-    }
-
-    /**
-     * @todo Implement testGetAllowedRecords().
-     */
-    public function testGetAllowedRecords()
-    {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-                'This test has not been implemented yet.'
-        );
-    }
-
-    /**
-     * @todo Implement testGetAllowedSQL().
-     */
-    public function testGetAllowedSQL()
-    {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-                'This test has not been implemented yet.'
-        );
-    }
-
-    /**
-     * @todo Implement testSetAllowedSQL().
-     */
-    public function testSetAllowedSQL()
-    {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-                'This test has not been implemented yet.'
-        );
-    }
-
-    /**
-     * @todo Implement testGetDepartmentList().
-     */
-    public function testGetDepartmentList()
-    {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-                'This test has not been implemented yet.'
-        );
-    }
-
-    /**
-     * @todo Implement testGetContactList().
-     */
-    public function testGetContactList()
-    {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-                'This test has not been implemented yet.'
-        );
-    }
-
     public function testHook_search() {
         $search = $this->obj->hook_search();
 
         $this->assertTrue(array_key_exists('search_fields', $search));
         $this->assertEquals(count($search), 8);
+    }
+
+    public function testContactsNoDepartment()
+    {
+        $results = $this->obj->contacts(0);
+        $this->assertEquals(0, count($results));
     }
 }

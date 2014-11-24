@@ -18,30 +18,26 @@ class w2p_Output_HTML_ViewHelper extends w2p_Output_HTML_Base
 
         switch($suffix) {
             case 'datetime':
-                $myDate = intval($fieldValue) ? new w2p_Utilities_Date($this->AppUI->formatTZAwareTime($fieldValue, '%Y-%m-%d %T')) : null;
-                $output = $myDate ? $myDate->format($this->dtf) : '-';
+                $field = new Web2project\Fields\DateTime($this->AppUI);
+                break;
+            case 'birthday':
+                $field = new Web2project\Fields\Date($this->AppUI);
                 break;
             case 'email':
-                $output = w2p_email($fieldValue);
+                $field = new Web2project\Fields\Email();
                 break;
             case 'url':
-                $value = str_replace(array('"', '"', '<', '>'), '', $fieldValue);
-                $output = w2p_url($value);
+                $field = new Web2project\Fields\Url();
                 break;
             case 'owner':
-                if (!$fieldValue) {
-                    return '-';
-                }
                 $obj = new CContact();
                 $obj->findContactByUserid($fieldValue);
-                $link = '?m=users&a=view&user_id='.$fieldValue;
-                $output = '<a href="'.$link.'">'.$obj->contact_display_name.'</a>';
+
+                $field = new Web2project\Fields\Module();
+                $field->setObject($obj, 'user');
                 break;
             case 'percent':
-                $output = round($fieldValue).'%';
-                break;
-            case 'description':
-                $output = w2p_textarea($fieldValue);
+                $field = new Web2project\Fields\Percent();
                 break;
             case 'company':
             case 'department':
@@ -49,14 +45,15 @@ class w2p_Output_HTML_ViewHelper extends w2p_Output_HTML_Base
                 $class  = 'C'.ucfirst($suffix);
                 $obj = new $class();
                 $obj->load($fieldValue);
-                $link = '?m='. w2p_pluralize($suffix) .'&a=view&'.$suffix.'_id='.$fieldValue;
-                $output = '<a href="'.$link.'">'.$obj->{"$suffix".'_name'}.'</a>';
+
+                $field = new Web2project\Fields\Module();
+                $field->setObject($obj, $suffix);
                 break;
             default:
-                $output = htmlspecialchars($fieldValue, ENT_QUOTES);
+                $field = new Web2project\Fields\Text();
         }
 
-        return $output;
+        return $field->view($fieldValue);
     }
 
     public function showField($fieldName, $fieldValue)

@@ -1,6 +1,6 @@
 <?php
 if (!defined('W2P_BASE_DIR')) {
-	die('You should not access this file directly.');
+    die('You should not access this file directly.');
 }
 
 $delete = (int) w2PgetParam($_POST, 'del', 0);
@@ -12,7 +12,7 @@ $successPath = ($delete) ? 'm=forums' : 'm=forums&a=viewer&forum_id='.
 $errorPath = 'm=forums&a=viewer&forum_id='.$message_forum.'&message_parent='.
         $message_parent.'&post_message=1';
 
-$controller = new w2p_Controllers_Base(
+$controller = new \Web2project\Actions\AddEdit(
                     new CForum_Message(), $delete, 'Message', $successPath, $errorPath
                   );
 

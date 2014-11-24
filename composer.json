@@ -3,7 +3,7 @@
     "version": "3.2.80",
     "type": "application",
     "description": "web-based project management system",
-    "keywords": ["gantt charts", "task tracking", "time tracking", "project planning"],
+    "keywords": ["web2project", "dotproject", "gantt charts", "task tracking", "time tracking", "project planning"],
     "homepage": "http://web2project.net",
     "license": "Clear BSD",
     "authors": [
@@ -12,8 +12,14 @@
             "email": "contrib@caseysoftware.com"
         }
     ],
+    "support": {
+        "issues": "http://bugs.web2project.net",
+        "source": "http://github.com/web2project/web2project"
+    },
     "require": {
-
+        "aws/aws-sdk-php": "dev-master",
+        "dropbox/dropbox-sdk": "1.1.*",
+        "ircmaxell/password-compat": "dev-master"
     },
     "autoload": {
         "psr-0": { "Web2project": "src/"}
