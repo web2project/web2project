@@ -62,7 +62,7 @@ class w2p_Utilities_Mail extends PHPMailer
     public function __construct()
     {
         $this->defer = w2PgetConfig('mail_defer');
-        $this->canEncode = function_exists('imap_8bit') && 'us-ascii' != $this->charset;
+        $this->canEncode = function_exists('imap_8bit') && 'us-ascii' != $this->CharSet;
         $this->hasMbStr = function_exists('mb_substr');
 
         $this->Mailer = (w2PgetConfig('mail_transport', 'php') == 'smtp' ? 'smtp' : 'mail');
@@ -75,8 +75,8 @@ class w2p_Utilities_Mail extends PHPMailer
         $this->Username = w2PgetConfig('mail_user');
         $this->Password = w2PgetConfig('mail_pass');
         $this->Timeout = w2PgetConfig('mail_timeout', 0);
-        $this->charset = 'utf-8';
-        $this->Encoding = $this->charset != 'us-ascii' ? '8bit' : '7bit';
+        $this->CharSet = 'utf-8';
+        $this->Encoding = $this->CharSet != 'us-ascii' ? '8bit' : '7bit';
         //The from clause is fixed for all emails so that the users do not reply to one another
         $this->From(w2PgetConfig('admin_email', 'admin@web2project.net'), w2PgetConfig('company_name'));
     }
@@ -233,14 +233,14 @@ class w2p_Utilities_Mail extends PHPMailer
      */
     public function Body($body, $charset = '')
     {
-        $this->Body = w2PHTMLDecode($body);
-
         if (!empty($charset)) {
-            @($this->charset = strtolower($charset));
-            if ($this->charset != 'us-ascii') {
+            @($this->CharSet = strtolower($charset));
+            if ($this->CharSet != 'us-ascii') {
                 $this->Encoding = '8bit';
             }
         }
+
+        $this->Body = w2PHTMLDecode($body);
     }
 
     /**
