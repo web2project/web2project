@@ -25,7 +25,7 @@ $f = w2PgetParam($_REQUEST, 'f', 0);
 
 $items = $forum->getAllowedForums($AppUI->user_id, $AppUI->user_company, $f, $orderby, $orderdir);
 
-$filters = array('- Filters -');
+$filters = array('All Forums');
 
 if (isset($a) && $a == 'viewer') {
     array_push($filters, 'My Watched', 'Last 30 days');

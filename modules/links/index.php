@@ -31,7 +31,7 @@ $search_string = w2PformSafe($search_string, true);
 // setup the title block
 $titleBlock = new w2p_Theme_TitleBlock('Links', 'icon.png', $m);
 $titleBlock->addSearchCell($search_string);
-$titleBlock->addFilterCell('Filter', 'project_id', $projects, $project_id);
+$titleBlock->addFilterCell('Projects', 'project_id', $projects, $project_id);
 
 if ($canCreate) {
     $titleBlock->addButton('New link', '?m=links&a=addedit');

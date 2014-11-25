@@ -34,7 +34,7 @@ $AppUI->setState('ProjIdxOrderDir', $orderdir);
 $search_text = $search_string;      // @note this is only because the projects_list_data function takes a bunch of globals
 
 $oCompany = new CCompany();
-$allowedCompanies[-1] = $AppUI->_('all');
+$allowedCompanies[-1] = '(' . $AppUI->_('all') . ')';
 $allowedCompanies += $oCompany->getAllowedRecords($AppUI->user_id, 'company_id,company_name', 'company_name');
 
 $project_types = array(-1 => '(' . $AppUI->_('all') . ')') + w2PgetSysVal('ProjectType');
