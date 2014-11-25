@@ -20,11 +20,6 @@ if (!$obj->bind($_POST)) {
 $action = ($del) ? 'deleted' : 'stored';
 $result = ($del) ? $obj->delete() : $obj->store();
 
-if (count($obj->getError())) {
-    $AppUI->setMsg($result, UI_MSG_ERROR, true);
-    $AppUI->holdObject($obj);
-    $AppUI->redirect('m=tasks&a=view&task_id='.$obj->task_log_task);
-}
 if ($result) {
     $AppUI->setMsg('Task Log '.$action, UI_MSG_OK, true);
 
@@ -57,8 +52,12 @@ if ($result) {
         $obj->store(); // Save the updated message. It is not an error if this fails.
     }
 
-    $AppUI->redirect('m=tasks&a=view&task_id=' . $obj->task_log_task . '&tab=0#tasklog' . $obj->task_log_id);
+    $redirect = 'm=tasks&a=view&task_id=' . $obj->task_log_task . '&tab=0#tasklog' . $obj->task_log_id;
 
 } else {
-    $AppUI->redirect(ACCESS_DENIED);
+    $AppUI->setMsg($obj->getError(), UI_MSG_ERROR, true);
+    $AppUI->holdObject($obj);
+    $redirect = 'm=tasks&a=view&task_id='.$obj->task_log_task;
 }
+
+$AppUI->redirect($redirect);
