@@ -22,7 +22,7 @@ if (!$contact->bind($_POST)) {
 
     $result = $contact->store();
 
-    if (is_array($result)) {
+    if (!$result) {
         $msg = $AppUI->_('There was an error recording your contact data, please contact the system administrator. Thank you very much.');
     } else {
         $contact->clearUpdateKey();
