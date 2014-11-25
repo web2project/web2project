@@ -93,7 +93,7 @@ $canDelete = $perms->checkModuleItem($m, 'delete');
             </td>
             <td>
             <?php
-                $types = array('' => '(Task Type Filter)') + w2PgetSysVal('TaskType');
+                $types = array('' => $AppUI->_('All types')) + w2PgetSysVal('TaskType');
                 echo arraySelect($types, 'task_type', 'class="text" onchange="document.form_buttons.submit()"', $task_type, true);
             ?>
             </td>
