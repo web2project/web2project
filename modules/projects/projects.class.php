@@ -654,12 +654,13 @@ class CProject extends w2p_Core_BaseObject
     {
         $project_id = (int) $project_id;
         if ($project_id && $task_id) {
-            $project = new CProject();
-            $project->load($project_id);
-            $project->project_last_task = $task_id;
-            $project->project_actual_end_date = $project_actual_end_date;
-            $project->project_task_count = $project_task_count;
-            $project->store();
+            $q = new w2p_Database_Query();
+            $q->addTable('projects');
+            $q->addUpdate('project_last_task', $task_id);
+            $q->addUpdate('project_actual_end_date', $project_actual_end_date);
+            $q->addUpdate('project_task_count', $project_task_count);
+            $q->addWhere('project_id = ' . (int) $project_id);
+            $q->exec();
 
             self::updatePercentComplete($project_id);
         }
