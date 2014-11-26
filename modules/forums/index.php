@@ -63,8 +63,8 @@ if (0 == count($fields)) {
 ?>
 
 <form name="watcher" action="./index.php?m=forums&f=<?php echo $f; ?>" method="post" accept-charset="utf-8">
-	<input type="hidden" name="dosql" value="do_watch_forum" />
-	<input type="hidden" name="watch" value="forum" />
+    <input type="hidden" name="dosql" value="do_watch_forum" />
+    <input type="hidden" name="watch" value="forum" />
 
     <?php
     $listTable = new w2p_Output_ListTable($AppUI);
