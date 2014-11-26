@@ -170,7 +170,7 @@ class CForum extends w2p_Core_BaseObject
             }
         }
 
-        return parent::getAllowedRecords($uid, $fields, $orderby, $index, $extra);
+        return parent::getAllowedRecords($uid, '*', $orderby, $index, $extra);
     }
 
     public function hook_search()
