@@ -4420,7 +4420,7 @@ function __extract_from_view_messages4($s, $style, $row, $hideEmail, $editor, $A
         $tableOpened = true;
         $s .= '<table cellspacing="0" cellpadding="0" border="0"><tr>';
         // edit message
-        $s .= '<td><a href="./index.php?m=forums&a=viewer&post_message=1&forum_id=' . $row['message_forum'] . '&message_parent=' . $row['message_parent'] . '&message_id=' . $row["message_id"] . '" title="' . $AppUI->_('Edit') . ' ' . $AppUI->_('Message') . '">';
+        $s .= '<td><a href="./index.php?m=forums&a=view&post_message=1&forum_id=' . $row['message_forum'] . '&message_parent=' . $row['message_parent'] . '&message_id=' . $row["message_id"] . '" title="' . $AppUI->_('Edit') . ' ' . $AppUI->_('Message') . '">';
         $s .= w2PshowImage('icons/stock_edit-16.png', '16', '16');
         $s .= '</td>';
     }

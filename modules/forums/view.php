@@ -46,7 +46,7 @@ if (!$forum) {
 $titleBlock = new w2p_Theme_TitleBlock('Forum', 'icon.png', $m);
 $titleBlock->addCrumb('?m=' . $m, $m . ' list');
 if ($message_id) {
-    $titleBlock->addCrumb('?m=forums&a=viewer&forum_id=' . $forum_id, 'topics for this forum');
+    $titleBlock->addCrumb('?m=forums&a=view&forum_id=' . $forum_id, 'topics for this forum');
 }
 if ($canEdit) {
     $titleBlock->addCrumb('?m=forums&a=addedit&forum_id=' . $forum_id, 'edit this forum');
@@ -55,7 +55,7 @@ if ($canEdit) {
         $titleBlock->addCrumbDelete('delete forum', true, $msg);
     }
 }
-$titleBlock->addCell(arraySelect($filters, 'f', 'size="1" class="text" onchange="document.filterFrm.submit();"', $f, true), '', '<form action="?m=forums&a=viewer&forum_id=' . $forum_id . '" method="post" name="filterFrm" accept-charset="utf-8">', '</form>');
+$titleBlock->addCell(arraySelect($filters, 'f', 'size="1" class="text" onchange="document.filterFrm.submit();"', $f, true), '', '<form action="?m=forums&a=view&forum_id=' . $forum_id . '" method="post" name="filterFrm" accept-charset="utf-8">', '</form>');
 $titleBlock->show();
 
 $view = new w2p_Controllers_View($AppUI, $forum, 'Forum');

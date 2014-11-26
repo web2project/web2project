@@ -55,9 +55,9 @@ if ($message_parent != -1) {
 
 $crumbs = array();
 $crumbs['?m=forums'] = 'forums list';
-$crumbs['?m=forums&a=viewer&forum_id=' . $forum_id] = 'topics for this forum';
+$crumbs['?m=forums&a=view&forum_id=' . $forum_id] = 'topics for this forum';
 if ($message_parent > -1) {
-    $crumbs['?m=forums&a=viewer&forum_id=' . $forum_id . '&message_id=' . $message_parent] = 'this topic';
+    $crumbs['?m=forums&a=view&forum_id=' . $forum_id . '&message_id=' . $message_parent] = 'this topic';
 }
 
 $bbparser = new HTML_BBCodeParser();

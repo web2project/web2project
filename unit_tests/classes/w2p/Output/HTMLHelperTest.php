@@ -50,11 +50,11 @@ class w2p_Output_HTMLHelperTest extends CommonSetup
 
         // This handles the forum module's different path special case
         $cell = $this->obj->createCell('message_name', 'message name');
-        $this->assertEquals('<td class="_name"><a href="?m=forums&a=viewer&message_id=3">message name</a></td>', $cell);
+        $this->assertEquals('<td class="_name"><a href="?m=forums&a=view&message_id=3">message name</a></td>', $cell);
 
         // This handles the file module's different path special case
         $cell = $this->obj->createCell('forum_name', 'forum name');
-        $this->assertEquals('<td class="_name"><a href="?m=forums&a=viewer&forum_id=4">forum name</a></td>', $cell);
+        $this->assertEquals('<td class="_name"><a href="?m=forums&a=view&forum_id=4">forum name</a></td>', $cell);
     }
 
     /*

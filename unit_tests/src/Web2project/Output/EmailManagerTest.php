@@ -82,7 +82,7 @@ class Web2project_Output_EmailManagerTest extends CommonSetup
     public function testGetForumWatchEmail()
     {
         $target_body  = "forumEmailBody\n\nForum: name1\nSubject: Title\nMessage From: name2\n\n";
-        $target_body .= W2P_BASE_URL . "/index.php?m=forums&a=viewer&forum_id=-1\n\nMy Body";
+        $target_body .= W2P_BASE_URL . "/index.php?m=forums&a=view&forum_id=-1\n\nMy Body";
 
         $message = new CForum_Message();
         $message->message_title = 'Title';

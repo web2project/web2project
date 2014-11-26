@@ -7,9 +7,9 @@ $delete = (int) w2PgetParam($_POST, 'del', 0);
 
 $message_forum = (int) w2PgetParam($_POST, 'message_forum', 0);
 $message_parent = (int) w2PgetParam($_POST, 'message_parent', 0);
-$successPath = ($delete) ? 'm=forums' : 'm=forums&a=viewer&forum_id='.
+$successPath = ($delete) ? 'm=forums' : 'm=forums&a=view&forum_id='.
         $message_forum.'&message_parent='.$message_parent;
-$errorPath = 'm=forums&a=viewer&forum_id='.$message_forum.'&message_parent='.
+$errorPath = 'm=forums&a=view&forum_id='.$message_forum.'&message_parent='.
         $message_parent.'&post_message=1';
 
 $controller = new \Web2project\Actions\AddEdit(

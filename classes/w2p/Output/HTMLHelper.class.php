@@ -140,7 +140,7 @@ class w2p_Output_HTMLHelper extends w2p_Output_HTML_Base
             case '_name':
                 $prefix = ($prefix == 'project_short')  ? 'project' : $prefix;
                 $prefix = ($prefix == 'dept')  ? 'department' : $prefix;
-                $page   = ($prefix == 'forum' || $prefix == 'message') ? 'viewer' : 'view';
+                $page   = 'view';
                 $link   = '?m='. w2p_pluralize($prefix) .'&a='.$page.'&';
                 $link   = ($prefix == 'message') ? '?m=forums&a='.$page . '&' : $link;
                 $prefix = ($prefix == 'department') ? 'dept' : $prefix;

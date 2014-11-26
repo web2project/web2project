@@ -116,7 +116,7 @@ class w2p_Output_Email_Manager
         $body .= "\n\n" . $this->AppUI->_('Forum', UI_OUTPUT_RAW) . ': {{forum_name}}';
         $body .= "\n" . $this->AppUI->_('Subject', UI_OUTPUT_RAW) . ': {{message_title}}';
         $body .= "\n" . $this->AppUI->_('Message From', UI_OUTPUT_RAW) . ': {{message_from}}';
-        $body .= "\n\n" . W2P_BASE_URL . '/index.php?m=forums&a=viewer&forum_id={{message_forum}}';
+        $body .= "\n\n" . W2P_BASE_URL . '/index.php?m=forums&a=view&forum_id={{message_forum}}';
         $body .= "\n\n{{message_body}}";
 
         return $this->templater->render($body, $message);
