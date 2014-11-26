@@ -29,7 +29,7 @@ $titleBlock->show();
 $tabBox = new CTabBox('?m=contacts', W2P_BASE_DIR . '/modules/contacts/', $tab);
 $tabBox->add('vw_idx_contacts', $AppUI->_('Recently Updated'));
 for ($c = 65; $c < 91; $c++) {
-    $tabBox->add('vw_idx_contacts', $AppUI->_(chr($c)));
+    $tabBox->add('vw_idx_contacts', chr($c), true);
 }
 $tabBox->add('vw_idx_contacts', $AppUI->_('All Contacts'));
 $tabBox->show();
