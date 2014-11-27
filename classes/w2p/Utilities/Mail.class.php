@@ -183,8 +183,7 @@ class w2p_Utilities_Mail extends PHPMailer
      */
     public function Cc($cc)
     {
-
-        $this->acc = (is_array($cc)) ? explode(',', $cc) : $cc;
+        $this->acc = (is_array($cc)) ? $cc : explode(',', $cc);
 
         $this->CheckAddresses($this->acc);
 
@@ -207,8 +206,7 @@ class w2p_Utilities_Mail extends PHPMailer
      */
     public function Bcc($bcc)
     {
-
-        $this->abcc = (is_array($bcc)) ? explode(',', $bcc) : $bcc;
+        $this->abcc = (is_array($bcc)) ? $bcc : explode(',', $bcc);
 
         $this->CheckAddresses($this->abcc);
 
