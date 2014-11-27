@@ -105,4 +105,40 @@ class w2p_Utilities_EmailTest extends CommonSetup
         $badEmails = array('@test.com', 'another');
         $this->assertFalse($this->obj->CheckAddresses($badEmails));
     }
+
+    public function testTo()
+    {
+        $okEmails = array('test@test.com', 'another@test.com');
+        $this->obj->To($okEmails, true);
+        $this->assertEquals(2, count($this->obj->ato));
+
+        $this->obj->To('Admin Person <admin@test.com>', true);
+        $this->assertEquals(1, count($this->obj->ato));
+
+        $okEmails = array('First Person <test@test.com>', 'Second Person <another@test.com>');
+        $this->obj->To($okEmails, true);
+        $this->assertEquals(2, count($this->obj->ato));
+    }
+
+    public function testCC()
+    {
+        $okEmails = 'test@test.com, another@test.com';
+        $this->obj->CC($okEmails);
+        $this->assertEquals(2, count($this->obj->acc));
+
+        $okEmails = array('First Person <test@test.com>, Second Person <another@test.com>');
+        $this->obj->CC($okEmails);
+        $this->assertEquals(2, count($this->obj->acc));
+    }
+
+    public function testBCC()
+    {
+        $okEmails = 'test@test.com, another@test.com';
+        $this->obj->Bcc($okEmails);
+        $this->assertEquals(2, count($this->obj->abcc));
+
+        $okEmails = array('First Person <test@test.com>, Second Person <another@test.com>');
+        $this->obj->Bcc($okEmails);
+        $this->assertEquals(2, count($this->obj->abcc));
+    }
 }
