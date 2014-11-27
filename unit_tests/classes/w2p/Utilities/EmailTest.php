@@ -141,4 +141,16 @@ class w2p_Utilities_EmailTest extends CommonSetup
         $this->obj->Bcc($okEmails);
         $this->assertEquals(2, count($this->obj->abcc));
     }
+
+    public function testBody()
+    {
+        $this->obj->Body('something in the body', 'us-ascii');
+        $this->assertEquals('utf-8', $this->obj->Encoding);
+    }
+
+    public function testOrganization()
+    {
+        $this->obj->Organization('Web2project');
+        $this->assertEquals('Web2project', $this->obj->xheaders['Organization']);
+    }
 }
