@@ -231,13 +231,7 @@ class w2p_Utilities_Mail extends PHPMailer
      */
     public function Body($body, $charset = '')
     {
-        if (!empty($charset)) {
-            @($this->CharSet = strtolower($charset));
-            if ($this->CharSet != 'us-ascii') {
-                $this->Encoding = '8bit';
-            }
-        }
-
+        $this->Encoding = 'utf-8';
         $this->Body = w2PHTMLDecode($body);
     }
 
@@ -247,7 +241,7 @@ class w2p_Utilities_Mail extends PHPMailer
     public function Organization($org)
     {
         if ('' != trim($org)) {
-            $this->xheaders['Organization'] = $this->_wordEncode($org, mb_strlen('Organization: '));
+            $this->xheaders['Organization'] = $org;
         }
     }
 
