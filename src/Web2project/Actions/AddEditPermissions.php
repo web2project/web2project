@@ -3,7 +3,7 @@ namespace Web2project\Actions;
 
 /**
  * Class Permissions
- * @package     web2project\Actions
+ * @package     Web2project\Actions
  * @author      Keith Casey <caseydk@sourceforge.net>
  */
 class AddEditPermissions extends AddEdit

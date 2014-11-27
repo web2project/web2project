@@ -4,7 +4,7 @@ namespace Web2project\Actions;
 /**
  * This is the most common AddEdit Action and used by nearly every module throughout the core system.
  *
- * @package     web2project\Actions
+ * @package     Web2project\Actions
  * @author      Keith Casey <caseydk@sourceforge.net>
  */
 class AddEdit

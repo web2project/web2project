@@ -6,7 +6,7 @@ namespace Web2project\Interfaces;
  * based on http://dustint.com/post/38/building-a-php-publish-subscribe-system
  * from Dustin Thomson. Used here with permission received on 21 Aug 2011.
  *
- * @package     web2project\system
+ * @package     Web2project\Interfaces
  * @author      Dustin Thomson <dustin@dustint.com>
  * @author      Keith Casey (maintainer) <caseydk@sourceforge.net>
  */

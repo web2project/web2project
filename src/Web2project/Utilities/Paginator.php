@@ -5,8 +5,7 @@ namespace Web2project\Utilities;
  * This class takes an array of items and allows us to paginate over them. This
  *   does not change the order of the elements, it just gets a subset.
  *
- * @package web2project
- * @subpackage utilities
+ * @package     Web2project\Utilities
  *
  */
 

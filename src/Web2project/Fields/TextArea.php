@@ -1,6 +1,9 @@
 <?php
 namespace Web2project\Fields;
 
+/**
+ * @package     Web2project\Fields
+ */
 class TextArea extends Text implements \Web2project\Interfaces\Field
 {
     public function edit($name, $value, $extraTags = '')

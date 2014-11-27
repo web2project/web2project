@@ -6,7 +6,7 @@ namespace Web2project\Interfaces;
  *
  * This is the standard interface for all of the filesystem operations.
  *
- * @package     web2project\filesystem
+ * @package     Web2project\Interfaces
  */
 interface FileSystem
 {

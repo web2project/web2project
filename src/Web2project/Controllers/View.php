@@ -2,6 +2,12 @@
 
 namespace Web2project\Controllers;
 
+/**
+ * Authentication against the database is the default
+ *
+ * @package     Web2project\Controllers
+ */
+
 class View
 {
     protected $AppUI  = null;

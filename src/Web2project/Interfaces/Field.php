@@ -6,7 +6,7 @@ namespace Web2project\Interfaces;
  *
  * This is the standard interface for all of the field view and edit templates.
  *
- * @package     web2project\filesystem
+ * @package     Web2project\Interfaces
  */
 interface Field
 {

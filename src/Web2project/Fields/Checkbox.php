@@ -1,6 +1,10 @@
 <?php
 namespace Web2project\Fields;
 
+/**
+ * @package     Web2project\Fields
+ */
+
 class Checkbox implements \Web2project\Interfaces\Field
 {
     public function view($value)

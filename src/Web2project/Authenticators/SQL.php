@@ -4,7 +4,7 @@ namespace Web2project\Authenticators;
 /**
  * Authentication against the database is the default
  *
- * @package     web2project\authenticators
+ * @package     Web2project\Authenticators
  */
 
 class SQL extends \Web2project\Authenticators\Base

@@ -2,16 +2,12 @@
 namespace Web2project\Utilities;
 
 /**
- * @package     web2project\utilities
- */
-
-/**
  * web2Project implementation of the Pear Date class
  *
  * This provides customised extensions to the Date class to leave the
  * Date package as 'pure' as possible
  *
- * @package     web2project\utilities
+ * @package     Web2project\Utilities
  */
 class Date extends \Date {
 

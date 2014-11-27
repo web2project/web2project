@@ -1,7 +1,7 @@
 <?php
 namespace Web2project\Mocks;
 /**
- * @package     web2project\mocks
+ * @package     Web2project\Mocks
  * @author      D. Keith Casey, Jr. <caseydk@users.sourceforge.net>
  */
 

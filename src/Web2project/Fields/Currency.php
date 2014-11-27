@@ -1,6 +1,9 @@
 <?php
 namespace Web2project\Fields;
 
+/**
+ * @package     Web2project\Fields
+ */
 class Currency extends Text implements \Web2project\Interfaces\Field
 {
     protected $currency_symbol;

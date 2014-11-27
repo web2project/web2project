@@ -5,7 +5,7 @@ namespace Web2project\Authenticators;
  * This is the core of the authentication system. All other Authenticators
  *  should extend it.
  *
- * @package     web2project\authenticators
+ * @package     Web2project\Authenticators
  */
 /**
  * This class just collects the common functionality from across the

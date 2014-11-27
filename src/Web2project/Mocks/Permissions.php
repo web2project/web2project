@@ -6,7 +6,7 @@ namespace Web2project\Mocks;
  * been made, however the main one is to provide the database details from
  * the main w2P environment.
  *
- * @package     web2project\mocks
+ * @package     Web2project\Mocks
  * @author      D. Keith Casey, Jr. <caseydk@users.sourceforge.net>
  */
 

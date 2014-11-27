@@ -1,6 +1,11 @@
 <?php
 namespace Web2project\Database;
 
+/**
+ *
+ * @package     Web2project\Database
+ */
+
 class Gateway
 {
     protected $AppUI;
