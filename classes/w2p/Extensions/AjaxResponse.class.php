@@ -1,6 +1,6 @@
 <?php
 /**
- * @package     web2project\extensions
+ * @package     w2p\Extensions
  */
 
 class w2p_Extensions_AjaxResponse extends xajaxResponse {

@@ -3,7 +3,7 @@
 /**
  * Produces a TEXTAREA Element in edit mode
  *
- * @package     web2project\core
+ * @package     w2p\Core
  */
 
 class w2p_Core_CustomFieldTextArea extends w2p_Core_CustomField

@@ -4,7 +4,7 @@
  * event notifications and other timed events, as well as
  * outgoing emails.
  *
- * @package     web2project\system
+ * @package     w2p\System
  *
  * @todo    This can probably be converted to extend the w2p_Core_BaseObject and just get rid of a bunch of this code. ~ dkc 28 Oct 2012
  */

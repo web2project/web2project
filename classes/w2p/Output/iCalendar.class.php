@@ -7,7 +7,7 @@
  * http://severinghaus.org/projects/icv/  It helped me discover and debug a
  * number of date issues and streamline the whole process.
  *
- * @package     web2project\output
+ * @package     w2p\Output
  */
 
 class w2p_Output_iCalendar

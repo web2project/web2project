@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * @package     w2p\Database
+ */
 class w2p_Database_Connection
 {
     protected $db = null;

@@ -3,7 +3,7 @@
 /**
  * Produces just a non editable label
  *
- * @package     web2project\core
+ * @package     w2p\Core
  */
 
 class w2p_Core_CustomFieldLabel extends w2p_Core_CustomField

@@ -4,7 +4,7 @@
  *
  * This is the base implementation of the storage backend for the Files module.
  *
- * @package     web2project\filesystem
+ * @package     w2p\FileSystem
  */
 class w2p_FileSystem_Local implements \Web2project\Interfaces\FileSystem
 {

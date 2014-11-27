@@ -7,6 +7,8 @@
  *   port to other databases.  You may need to use less efficient techniques to make it more generic.
  *
  * NOTE: index.php and fileviewer.php MUST call w2PsessionStart instead of trying to set their own sessions.
+ *
+ * @package     w2p\System
  */
 
 class w2p_System_Session

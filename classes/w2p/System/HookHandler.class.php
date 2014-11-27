@@ -5,7 +5,7 @@
  * methods for laying out and interacting with hooks.  It should not be
  * considered complete at this time.
  *
- * @package     web2project\system
+ * @package     w2p\System
  * @author      Keith Casey <caseydk@sourceforge.net>
  */
 

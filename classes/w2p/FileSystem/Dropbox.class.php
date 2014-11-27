@@ -2,6 +2,12 @@
 
 use \Dropbox as dbx;
 
+/**
+ * Class w2p_FileSystem_Dropbox
+ * Replace the helper library usage with the Streams implementation.
+ *
+ * @package w2p\FileSystem
+ */
 class w2p_FileSystem_Dropbox implements \Web2project\Interfaces\FileSystem
 {
     protected $_client = null;

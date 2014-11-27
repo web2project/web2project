@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @package     web2project\theme
+ * @package     w2p\Theme
  */
 
 abstract class w2p_Theme_Base

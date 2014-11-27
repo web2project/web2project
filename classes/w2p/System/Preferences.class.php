@@ -2,7 +2,7 @@
 /**
  * This is the core preferences object that runs both the default and User-based preferences.
  *
- * @package     web2project\system
+ * @package     w2p\System
  *
  * @todo    couldn't this just extend the BaseObject?
  */

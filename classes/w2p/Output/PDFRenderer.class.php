@@ -5,7 +5,7 @@
  *   in the modules created a huge amount of duplicated code. In addition, as we
  *   evaluate alternatives, this will let us switch them out more easily.
  *
- * @package     web2project\output
+ * @package     w2p\Output
  * @author      D. Keith Casey, Jr. <contrib@caseysoftware.com>
  */
 

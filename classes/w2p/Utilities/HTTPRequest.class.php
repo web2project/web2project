@@ -3,7 +3,7 @@
 /**
  * web2Project implementation of an HTTP handler
  *
- * @package     web2project\utilities
+ * @package     w2p\Utilities
  */
 
 class w2p_Utilities_HTTPRequest {

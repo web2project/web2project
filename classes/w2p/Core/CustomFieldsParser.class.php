@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @package     web2project\core
+ * @package     w2p\Core
  */
 class w2p_Core_CustomFieldsParser {
     public $fields_array = array();

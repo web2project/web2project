@@ -25,7 +25,7 @@
  *    Keith Casey (caseydk). Its original copyright statement by Adam Donnison
  *    is being restored until this can be clarified and/or corrected.
  *
- * @package     web2project\deprecated
+ * @package     w2p\Deprecated
  *
  */
 

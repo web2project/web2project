@@ -2,7 +2,7 @@
 /**
  * Parent class to all database table derived objects
  *
- * @package     web2project\core
+ * @package     w2p\Core
  * @author      Andrew Eddie <eddieajau@users.sourceforge.net>
  *
  * @abstract

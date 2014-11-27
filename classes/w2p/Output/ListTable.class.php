@@ -4,7 +4,7 @@
  *   this ensures we have similar layouts and styles across the board. You can
  *   always hardcode your own.
  *
- * @package     web2project\output
+ * @package     w2p\Output
  * @author      D. Keith Casey, Jr. <contrib@caseysoftware.com>
  */
 

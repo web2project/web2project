@@ -7,8 +7,9 @@ use Aws\S3\Model\MultipartUpload\UploadBuilder;
 
 /**
  * Class w2p_FileSystem_Amazon
- *
  * Replace the helper library usage with the Streams implementation.
+ *
+ * @package w2p\FileSystem
  */
 class w2p_FileSystem_Amazon implements \Web2project\Interfaces\FileSystem
 {

@@ -1,5 +1,11 @@
 <?php
 
+/**
+ * Class w2p_FileSystem_Indexer
+ * Replace the helper library usage with the Streams implementation.
+ *
+ * @package w2p\FileSystem
+ */
 class w2p_FileSystem_Indexer
 {
     protected $query = null;

@@ -2,7 +2,7 @@
 /**
  * Class w2p_Output_HTML_FormHelper
  *
- * @package     web2project\output\html
+ * @package     w2p\Output\HTML
  * @author      D. Keith Casey, Jr. <contrib@caseysoftware.com>
  */
 class w2p_Output_HTML_FormHelper extends w2p_Output_HTML_Base

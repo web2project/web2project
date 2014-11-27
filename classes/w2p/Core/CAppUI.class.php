@@ -2,7 +2,7 @@
 /**
  * The Application User Interface Class.
  *
- * @package     web2project\core
+ * @package     w2p\Core
  * @author      Andrew Eddie <eddieajau@users.sourceforge.net>
  *
  * @todo    refactor to w2p/System/AppUI

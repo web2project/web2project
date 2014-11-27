@@ -11,7 +11,7 @@
  * just forward ones (i.e. looking up who is allowed to do x, rather
  * than is x allowed to do y).
  *
- * @package     web2project\extensions
+ * @package     w2p\Extensions
  */
 
 class w2p_Extensions_Permissions extends gacl_api

@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @package     web2project\output
+ * @package     w2p\Output
  * @author      D. Keith Casey, Jr. <caseydk@users.sourceforge.net>
  */
 

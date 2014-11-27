@@ -1,6 +1,6 @@
 <?php
 /**
- * @package     web2project\system
+ * @package     w2p\System
  *
  * @abstract
  */

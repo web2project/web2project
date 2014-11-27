@@ -19,7 +19,7 @@
  * echo "the mail below has been sent:<br><pre>", $m->Get(), "</pre>";
  * </code>
  *
- * @package     web2project\utilities
+ * @package     w2p\Utilities
  * @author      Leo West - lwest@free.fr
  * @author      Emiliano Gabrielli - emiliano.gabrielli@dearchitettura.com
  * @author      Pedro Azevedo - pedroa@web2project.net

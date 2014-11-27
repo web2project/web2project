@@ -8,7 +8,7 @@
  */
 
 /**
- * @package     web2project\deprecated
+ * @package     w2p\Deprecated
  * @deprecated  since version 4.0
  * @codeCoverageIgnore
  */
@@ -23,7 +23,7 @@ class w2p_Theme_InfoTabBox extends w2p_Theme_TabBox
 }
 
 /**
- * @package     web2project\deprecated
+ * @package     w2p\Deprecated
  * @deprecated  since version 4.0
  * @codeCoverageIgnore
  */
@@ -38,7 +38,7 @@ class w2p_Controller_Base extends \Web2project\Actions\AddEdit
 }
 
 /**
- * @package     web2project\deprecated
+ * @package     w2p\Deprecated
  * @deprecated  since version 4.0
  * @codeCoverageIgnore
  */
@@ -53,7 +53,7 @@ class w2p_Controller_Permissions extends \Web2project\Actions\AddEditPermissions
 }
 
 /**
- * @package     web2project\deprecated
+ * @package     w2p\Deprecated
  * @deprecated  since version 4.0
  * @codeCoverageIgnore
  */
@@ -68,7 +68,7 @@ class w2p_Output_EmailManager extends w2p_Output_Email_Manager
 }
 
 /**
- * @package     web2project\deprecated
+ * @package     w2p\Deprecated
  * @deprecated  since version 4.0
  * @codeCoverageIgnore
  */
@@ -83,7 +83,7 @@ class w2p_Output_Email_Template extends \Web2project\Output\Email\Manager
 }
 
 /**
- * @package     web2project\deprecated
+ * @package     w2p\Deprecated
  * @deprecated  since version 4.0
  * @codeCoverageIgnore
  */
@@ -98,7 +98,7 @@ class w2p_Utilities_Paginator extends \Web2project\Utilities\Paginator
 }
 
 /**
- * @package     web2project\deprecated
+ * @package     w2p\Deprecated
  * @deprecated  since version 4.0
  * @codeCoverageIgnore
  */
@@ -113,28 +113,28 @@ class w2p_Actions_ImportTasks extends w2p_Actions_BulkTasks
 }
 
 /**
- * @package     web2project\deprecated
+ * @package     w2p\Deprecated
  * @deprecated  since version 4.0
  * @codeCoverageIgnore
  */
 class w2p_Mocks_Email extends \Web2project\Mocks\Email { }
 
 /**
- * @package     web2project\deprecated
+ * @package     w2p\Deprecated
  * @deprecated  since version 4.0
  * @codeCoverageIgnore
  */
 class w2p_Mocks_Permissions extends \Web2project\Mocks\Permissions { }
 
 /**
- * @package     web2project\deprecated
+ * @package     w2p\Deprecated
  * @deprecated  since version 4.0
  * @codeCoverageIgnore
  */
 class w2p_Mocks_Query extends \Web2project\Mocks\Query { }
 
 /**
- * @package     web2project\deprecated
+ * @package     w2p\Deprecated
  * @deprecated  since version 4.0
  * @codeCoverageIgnore
  *
@@ -143,7 +143,7 @@ class w2p_Mocks_Query extends \Web2project\Mocks\Query { }
 class w2p_Utilities_Date extends \Web2project\Utilities\Date { }
 
 /**
- * @package     web2project\deprecated
+ * @package     w2p\Deprecated
  * @deprecated  since version 4.0
  * @codeCoverageIgnore
  */

@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @package     web2project\theme
+ * @package     w2p\Theme
  */
 
 class w2p_Theme_TitleBlock {

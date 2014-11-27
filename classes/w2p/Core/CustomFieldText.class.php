@@ -3,7 +3,7 @@
 /**
  * Produces an INPUT Element of the TEXT type in edit mode
  *
- * @package web2project\core
+ * @package     w2p\Core
  */
 
 class w2p_Core_CustomFieldText extends w2p_Core_CustomField

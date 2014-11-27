@@ -4,7 +4,7 @@
  * Produces an INPUT Element of the CheckBox type in edit mode, view mode
  *   indicates 'Yes' or 'No'
  *
- * @package     web2project\core
+ * @package     w2p\Core
  */
 
 class  w2p_Core_CustomFieldCheckBox extends w2p_Core_CustomField

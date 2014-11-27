@@ -3,7 +3,7 @@
 /**
  * Produces a Date Element in edit mode
  *
- * @package     web2project\core
+ * @package     w2p\Core
  */
 
 class w2p_Core_CustomFieldDate extends w2p_Core_CustomField

@@ -2,7 +2,7 @@
 /**
  * In addition to regular LDAP, this handles Active Directory.
  *
- * @package     web2project\authenticators
+ * @package     w2p\Authenticators
  */
 
 class w2p_Authenticators_LDAP extends \Web2project\Authenticators\Base

@@ -4,7 +4,7 @@
  *
  * This class reads the local filesystem. It is used to determine configuration options, available modules, etc.
  *
- * @package     web2project\filesystem
+ * @package     w2p\FileSystem
  */
 class w2p_FileSystem_Loader
 {

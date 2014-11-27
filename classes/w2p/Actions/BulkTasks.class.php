@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * Class w2p_Actions_BulkTasks
+ *
+ * @package w2p\Actions
+ */
 class w2p_Actions_BulkTasks extends CTask
 {
     protected function hook_postStore()

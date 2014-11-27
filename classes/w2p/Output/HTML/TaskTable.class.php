@@ -3,7 +3,7 @@
  * This class helps us build simple task table for the various modules. Using this ensures we have similar layouts and
  *   styles across the board. You can always hardcode your own.
  *
- * @package     web2project\output\html
+ * @package     w2p\Output\HTML
  * @author      D. Keith Casey, Jr. <contrib@caseysoftware.com>
  */
 

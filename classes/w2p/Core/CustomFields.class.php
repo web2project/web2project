@@ -6,7 +6,7 @@
  * supplied. The obj_id parameter is the ID of the module object
  * eg. company_id for companies module
  *
- * @package     web2project\core
+ * @package     w2p\Core
  */
 
 class w2p_Core_CustomFields {

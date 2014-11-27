@@ -5,7 +5,7 @@
  *
  * @since 3.0, this class has moved from the Calendar module to its own structure.
  *
- * @package     web2project\output
+ * @package     w2p\Output
  * @author      D. Keith Casey, Jr. <caseydk@users.sourceforge.net>
  */
 
