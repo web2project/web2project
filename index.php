@@ -46,6 +46,12 @@ if ($AppUI->doLogin()) {
 	$AppUI->loadPrefs(0);
 }
 
+// load module based locale settings
+$AppUI->setUserLocale();
+include W2P_BASE_DIR . '/locales/' . $AppUI->user_locale . '/locales.php';
+include W2P_BASE_DIR . '/locales/core.php';
+setlocale(LC_TIME, $AppUI->user_lang);
+
 //Function register logout in user_acces_log
 if (isset($user_id) && isset($_GET['logout'])) {
 	$AppUI->registerLogout($user_id);
@@ -61,10 +67,6 @@ $theme = new $uiClass($AppUI);
 
 // check is the user needs a new password
 if (w2PgetParam($_POST, 'lostpass', 0)) {
-	$AppUI->setUserLocale();
-	include W2P_BASE_DIR . '/locales/' . $AppUI->user_locale . '/locales.php';
-	include W2P_BASE_DIR . '/locales/core.php';
-	setlocale(LC_TIME, $AppUI->user_lang);
 	if (w2PgetParam($_POST, 'sendpass', 0)) {
 		sendNewPass();
 	} else {
@@ -81,9 +83,6 @@ if (isset($_POST['login'])) {
 	$username = w2PgetParam($_POST, 'username', '');
 	$password = w2PgetParam($_POST, 'password', '');
 	$redirect = w2PgetParam($_POST, 'redirect', '');
-	$AppUI->setUserLocale();
-	include W2P_BASE_DIR . '/locales/' . $AppUI->user_locale . '/locales.php';
-	include W2P_BASE_DIR . '/locales/core.php';
 	$ok = $AppUI->login($username, $password);
 	if (!$ok) {
 		$AppUI->setMsg('Login Failed', UI_MSG_ERROR);
@@ -97,11 +96,6 @@ if (isset($_POST['login'])) {
 
 // check if we are logged in
 if ($AppUI->doLogin()) {
-	// load basic locale settings
-	$AppUI->setUserLocale();
-	include './locales/' . $AppUI->user_locale . '/locales.php';
-	include './locales/core.php';
-	setlocale(LC_TIME, $AppUI->user_lang);
 	$redirect = $_SERVER['QUERY_STRING'] ? strip_tags($_SERVER['QUERY_STRING']) : '';
 	if (strpos($redirect, 'logout') !== false) {
 		$redirect = '';
@@ -113,15 +107,16 @@ if ($AppUI->doLogin()) {
 	session_destroy();
 	exit;
 }
-$AppUI->setUserLocale();
 
-// bring in the rest of the support and localisation files
-$perms = &$AppUI->acl();
+if (W2P_PERFORMANCE_DEBUG) {
+    $w2p_performance_setuptime = (array_sum(explode(' ', microtime())) - $w2p_performance_time);
+}
 
 /**
  * TODO: We should validate that the module identified by $m is actually
  *   installed & active. If not, we should go back to the defaults.
  */
+$perms = &$AppUI->acl();
 $def_a = 'index';
 if (!isset($_GET['m']) && !empty($w2Pconfig['default_view_m'])) {
 	if (!$perms->checkModule($w2Pconfig['default_view_m'], 'view', $AppUI->user_id)) {
@@ -150,14 +145,6 @@ if ($m == 'projects' && $a == 'view' && $w2Pconfig['projectdesigner_view_project
 		$a = 'index';
 	}
 }
-
-
-
-// load module based locale settings
-include W2P_BASE_DIR . '/locales/' . $AppUI->user_locale . '/locales.php';
-include W2P_BASE_DIR . '/locales/core.php';
-
-setlocale(LC_TIME, $AppUI->user_lang);
 
 if ($u && file_exists(W2P_BASE_DIR . '/modules/' . $m . '/' . $u . '/' . $u . '.class.php')) {
 	include W2P_BASE_DIR . '/modules/' . $m . '/' . $u . '/' . $u . '.class.php';
@@ -191,11 +178,6 @@ if (isset($_POST['dosql']) && $_POST['dosql'] == 'do_file_co') {
 if (!$suppressHeaders) {
 	include $theme->resolveTemplate('header');
 }
-
-if (W2P_PERFORMANCE_DEBUG) {
-	$w2p_performance_setuptime = (array_sum(explode(' ', microtime())) - $w2p_performance_time);
-}
-
 
 $pageHandler = new w2p_Output_PageHandler();
 $all_tabs   = $pageHandler->loadExtras($_SESSION, $AppUI, $m, 'tabs');
