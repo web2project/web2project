@@ -206,7 +206,7 @@ if (!$suppressHeaders) {
 }
 
 if ($u && file_exists(W2P_BASE_DIR . '/modules/' . $m . '/' . $u . '/' . $u . '.class.php')) {
-	includeW2P_BASE_DIR . '/modules/' . $m . '/' . $u . '/' . $u . '.class.php';
+	include W2P_BASE_DIR . '/modules/' . $m . '/' . $u . '/' . $u . '.class.php';
 }
 
 // include the module ajax file - we use file_exists instead of @ so  that any parse errors in the file are reported,
