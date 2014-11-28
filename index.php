@@ -135,11 +135,7 @@ $all_crumbs = $pageHandler->loadExtras($_SESSION, $AppUI, $m, 'crumbs');
 
 $module_file = W2P_BASE_DIR . '/modules/' . $m . '/' . ($u ? ($u . '/') : '') . $a . '.php';
 if (!file_exists($module_file)) {
-    $module = $m;
-    $m = 'public';
-    $u = '';
-    $a = 'missing_module';
-    $module_file = W2P_BASE_DIR . '/modules/' . $m . '/' . ($u ? ($u . '/') : '') . $a . '.php';
+    $module_file = W2P_BASE_DIR . '/modules/public/missing_module.php';
 }
 
 require $module_file;
