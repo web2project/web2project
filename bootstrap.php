@@ -137,8 +137,9 @@ require_once W2P_BASE_DIR . '/includes/deprecated_functions.php';
 require_once W2P_BASE_DIR . '/includes/cleanup_functions.php';
 require_once W2P_BASE_DIR . '/lib/adodb/adodb.inc.php';
 
-if (is_file(W2P_BASE_DIR . '/includes/config.php') && filesize(W2P_BASE_DIR . '/includes/config.php') > 0) {
-    require_once W2P_BASE_DIR . '/includes/config.php';
+$configFile = W2P_BASE_DIR . '/includes/config.php';
+if (is_file($configFile) && filesize($configFile) > 0) {
+    require_once $configFile;
     if (isset($dPconfig)) {
         echo '<html><head><meta http-equiv="refresh" content="5; URL=' . W2P_BASE_URL . '/install/index.php"></head><body>';
         echo 'Fatal Error. It appears you\'re converting from dotProject.<br/><a href="./install/index.php">' . 'Click Here To Start the Conversion!</a> (forwarded in 5 sec.)</body></html>';
