@@ -122,7 +122,6 @@ $AppUI->setUserLocale();
 // bring in the rest of the support and localisation files
 $perms = &$AppUI->acl();
 
-$loader = new w2p_FileSystem_Loader();
 /**
  * TODO: We should validate that the module identified by $m is actually
  *   installed & active. If not, we should go back to the defaults.
@@ -140,6 +139,7 @@ if (!isset($_GET['m']) && !empty($w2Pconfig['default_view_m'])) {
 	}
 }
 
+$loader = new w2p_FileSystem_Loader();
 $m = $loader->makeFileNameSafe(w2PgetParam($_GET, 'm', 'public'));
 $a = $loader->makeFileNameSafe(w2PgetParam($_GET, 'a', $def_a));
 /**
