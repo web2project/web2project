@@ -49,22 +49,14 @@ if (w2PgetParam($_POST, 'lostpass', 0)) {
 	exit();
 }
 
-// check if the user is trying to log in
-if (isset($_POST['login'])) {
-	$username = w2PgetParam($_POST, 'username', '');
-	$password = w2PgetParam($_POST, 'password', '');
-	$redirect = w2PgetParam($_POST, 'redirect', '');
-	$ok = $AppUI->login($username, $password);
-	if (!$ok) {
-		$AppUI->setMsg('Login Failed', UI_MSG_ERROR);
-	} else {
-		$AppUI->registerLogin();
-	}
-	addHistory('login', $AppUI->user_id, 'login', $AppUI->user_first_name . ' ' . $AppUI->user_last_name);
-	$AppUI->redirect('' . $redirect);
-}
+switch($_REQUEST['action']) {
+    case 'login':
+        $username = w2PgetParam($_POST, 'username', '');
+        $password = w2PgetParam($_POST, 'password', '');
+        $redirect = w2PgetParam($_POST, 'redirect', '');
 
-switch($_GET['action']) {
+        $AppUI->login($username, $password);
+        $AppUI->redirect('' . $redirect);
     case 'logout':
         $AppUI->logout();
     default:

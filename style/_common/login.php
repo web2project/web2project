@@ -26,7 +26,7 @@ $theme = $AppUI->getTheme();
             <div class="login">
                 <h1><?php echo $w2Pconfig['company_name']; ?></h1>
                 <form method="post" action="<?php echo $loginFromPage; ?>" name="loginform" accept-charset="utf-8">
-                    <input type="hidden" name="login" value="<?php echo time(); ?>" />
+                    <input type="hidden" name="action" value="login" />
                     <input type="hidden" name="lostpass" value="0" />
                     <input type="hidden" name="redirect" value="<?php echo $redirect; ?>" />
 

@@ -762,6 +762,8 @@ class w2p_Core_CAppUI
         $this->loadPrefs($this->user_id);
         $this->setUserLocale();
         $this->setStyle();
+        $this->registerLogin();
+        addHistory('login', $this->user_id, 'login', $this->user_first_name . ' ' . $this->user_last_name);
 
         return true;
     }
