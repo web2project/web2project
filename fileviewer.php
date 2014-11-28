@@ -4,9 +4,6 @@ require_once 'bootstrap.php';
 
 $loginFromPage = 'fileviewer.php';
 
-$session = new w2p_System_Session();
-$session->start();
-
 $AppUI = is_object($AppUI) ? $AppUI : new w2p_Core_CAppUI();
 // check if session has previously been initialised
 // if no ask for logging and do redirect

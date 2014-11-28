@@ -13,9 +13,6 @@ $loginFromPage = 'index.php';
 // don't output anything. Usefull for fileviewer.php, gantt.php, etc.
 $suppressHeaders = w2PgetParam($_GET, 'suppressHeaders', false);
 
-$session = new w2p_System_Session();
-$session->start();
-
 // write the HTML headers
 if (!$suppressHeaders) {
     header('Expires: Mon, 26 Jul 1997 05:00:00 GMT'); // Date in the past
