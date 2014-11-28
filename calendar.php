@@ -16,10 +16,6 @@ $AppUI->setUserLocale();
 include W2P_BASE_DIR . '/locales/' . $AppUI->user_locale . '/locales.php';
 include W2P_BASE_DIR . '/locales/core.php';
 
-$defaultTZ = w2PgetConfig('system_timezone', 'UTC');
-$defaultTZ = ('' == $defaultTZ) ? 'UTC' : $defaultTZ;
-date_default_timezone_set($defaultTZ);
-
 switch ($format) {
     //TODO: We only output in vCal, are there others we need to consider?
     case 'vcal':
