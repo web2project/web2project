@@ -75,6 +75,7 @@ if (w2PgetParam($_POST, 'lostpass', 0)) {
 	exit();
 }
 
+
 // check if the user is trying to log in
 // Note the change to REQUEST instead of POST.  This is so that we can
 // support alternative authentication methods such as the PostNuke
@@ -112,59 +113,9 @@ if (W2P_PERFORMANCE_DEBUG) {
     $w2p_performance_setuptime = (array_sum(explode(' ', microtime())) - $w2p_performance_time);
 }
 
-/**
- * TODO: We should validate that the module identified by $m is actually
- *   installed & active. If not, we should go back to the defaults.
- */
-$perms = &$AppUI->acl();
-$def_a = 'index';
-if (!isset($_GET['m']) && !empty($w2Pconfig['default_view_m'])) {
-	if (!$perms->checkModule($w2Pconfig['default_view_m'], 'view', $AppUI->user_id)) {
-		$m = 'public';
-		$def_a = 'welcome';
-	} else {
-		$m = $w2Pconfig['default_view_m'];
-		$def_a = !empty($w2Pconfig['default_view_a']) ? $w2Pconfig['default_view_a'] : $def_a;
-		$tab = $w2Pconfig['default_view_tab'];
-        $_GET['tab'] = $tab;
-	}
-}
-
-$loader = new w2p_FileSystem_Loader();
-$m = $loader->makeFileNameSafe(w2PgetParam($_GET, 'm', 'public'));
-$a = $loader->makeFileNameSafe(w2PgetParam($_GET, 'a', $def_a));
-/**
- * This check for $u implies that a file located in a subdirectory of higher depth than 1 in relation to the module base
- *   can't be executed. So it wouldn't be possible to run for example the file module/directory1/directory2/file.php
- */
-$u = $loader->makeFileNameSafe(w2PgetParam($_GET, 'u', ''));
-
-if ($m == 'projects' && $a == 'view' && $w2Pconfig['projectdesigner_view_project'] && !w2PgetParam($_GET, 'bypass') && !(isset($_GET['tab']))) {
-	if ($AppUI->isActiveModule('projectdesigner')) {
-		$m = 'projectdesigner';
-		$a = 'index';
-	}
-}
-
-if ($u && file_exists(W2P_BASE_DIR . '/modules/' . $m . '/' . $u . '/' . $u . '.class.php')) {
-	include W2P_BASE_DIR . '/modules/' . $m . '/' . $u . '/' . $u . '.class.php';
-}
-
-// include the module ajax file - we use file_exists instead of @ so  that any parse errors in the file are reported,
-//   rather than errors further down the track.
-$modajax = $AppUI->getModuleAjax($m);
-if (file_exists($modajax)) {
-	include $modajax;
-}
-if ($u && file_exists(W2P_BASE_DIR . '/modules/' . $m . '/' . $u . '/' . $u . '.ajax.php')) {
-	include W2P_BASE_DIR . '/modules/' . $m . '/' . $u . '/' . $u . '.ajax.php';
-}
-
-// do some db work if dosql is set
-// TODO - MUST MOVE THESE INTO THE MODULE DIRECTORY
-if (isset($_POST['dosql'])) {
-	require W2P_BASE_DIR . '/modules/' . $m . '/' . ($u ? ($u . '/') : '') . $loader->makeFileNameSafe($_POST['dosql']) . '.php';
-}
+$frontpage = new w2p_Core_FrontPageController($AppUI, new w2p_FileSystem_Loader());
+list($m, $a, $u) = $frontpage->resolveParameters($w2Pconfig, $_REQUEST);
+$frontpage->loadIncludes();
 
 // start output proper
 if (isset($_POST['dosql']) && $_POST['dosql'] == 'do_file_co') {
