@@ -14,22 +14,12 @@ $loginFromPage = 'index.php';
 $suppressHeaders = w2PgetParam($_GET, 'suppressHeaders', false);
 
 // check if session has previously been initialised
-if (!isset($_SESSION['AppUI']) || isset($_GET['logout'])) {
-	if (isset($_GET['logout']) && isset($_SESSION['AppUI']->user_id)) {
-		$AppUI = &$_SESSION['AppUI'];
-		$user_id = $AppUI->user_id;
-		addHistory('login', $AppUI->user_id, 'logout', $AppUI->user_first_name . ' ' . $AppUI->user_last_name);
-	}
-
+if (!isset($_SESSION['AppUI'])) {
 	$_SESSION['AppUI'] = new w2p_Core_CAppUI();
 }
 $AppUI = &$_SESSION['AppUI'];
-$last_insert_id = $AppUI->last_insert_id;
 
 $AppUI->setStyle();
-
-//Function for update lost action in user_access_log
-$AppUI->updateLastAction($last_insert_id);
 // load default preferences if not logged in
 if ($AppUI->loginRequired()) {
 	$AppUI->loadPrefs(0);
@@ -68,7 +58,6 @@ if (isset($_POST['login'])) {
 	if (!$ok) {
 		$AppUI->setMsg('Login Failed', UI_MSG_ERROR);
 	} else {
-		//Register login in user_acces_log
 		$AppUI->registerLogin();
 	}
 	addHistory('login', $AppUI->user_id, 'login', $AppUI->user_first_name . ' ' . $AppUI->user_last_name);
