@@ -135,16 +135,16 @@ $all_tabs   = $pageHandler->loadExtras($_SESSION, $AppUI, $m, 'tabs');
 $all_crumbs = $pageHandler->loadExtras($_SESSION, $AppUI, $m, 'crumbs');
 
 $module_file = W2P_BASE_DIR . '/modules/' . $m . '/' . ($u ? ($u . '/') : '') . $a . '.php';
-if (file_exists($module_file)) {
-	require $module_file;
-} else {
-	// TODO: make this part of the public module?
-	$titleBlock = new w2p_Theme_TitleBlock($AppUI->_('Warning'), 'log-error.gif');
-	$titleBlock->show();
-
-    echo $theme->styleRenderBoxTop();
-    include $theme->resolveTemplate('missing_module');
+if (!file_exists($module_file)) {
+    $module = $m;
+    $m = 'public';
+    $u = '';
+    $a = 'missing_module';
+    $module_file = W2P_BASE_DIR . '/modules/' . $m . '/' . ($u ? ($u . '/') : '') . $a . '.php';
 }
+
+require $module_file;
+
 if (!$suppressHeaders) {
  	//Theme footer goes before the performance box
     $AppUI->getTheme()->loadCalendarJS();
