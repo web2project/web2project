@@ -47,7 +47,7 @@ class w2p_Core_FrontPageController
         $u = $loader->makeFileNameSafe(w2PgetParam($input, 'u', ''));
 
         if ($m == 'projects' && $a == 'view' && $config['projectdesigner_view_project'] && !w2PgetParam($input, 'bypass') && !(isset($input['tab']))) {
-            if ($AppUI->isActiveModule('projectdesigner')) {
+            if ($this->AppUI->isActiveModule('projectdesigner')) {
                 $m = 'projectdesigner';
                 $a = 'index';
             }
