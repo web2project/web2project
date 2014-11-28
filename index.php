@@ -24,7 +24,6 @@ if (is_file(W2P_BASE_DIR . '/includes/config.php') && filesize(W2P_BASE_DIR . '/
 	exit();
 }
 
-require_once W2P_BASE_DIR . '/includes/main_functions.php';
 require_once W2P_BASE_DIR . '/includes/db_adodb.php';
 
 $defaultTZ = w2PgetConfig('system_timezone', 'UTC');
