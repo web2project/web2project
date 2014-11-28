@@ -1,7 +1,7 @@
 <?php
+
 require_once 'bootstrap.php';
-require_once W2P_BASE_DIR . '/includes/config.php';
-require_once W2P_BASE_DIR . '/includes/db_adodb.php';
+
 $AppUI = new w2p_Core_CAppUI();
 
 $updatekey = w2PgetParam($_GET, 'updatekey', 0);

@@ -13,8 +13,6 @@ if (!defined('W2P_BASE_DIR')) {
     die('You should not access this file directly.');
 }
 
-require_once (W2P_BASE_DIR . '/lib/adodb/adodb.inc.php');
-
 $db = NewADOConnection(w2PgetConfig('dbtype'));
 
 $connection = new w2p_Database_Connection($db);

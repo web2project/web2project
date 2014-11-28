@@ -1,11 +1,9 @@
 <?php
-require_once 'bootstrap.php';
 if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly');
 }
 
-require_once W2P_BASE_DIR . '/includes/config.php';
-require_once W2P_BASE_DIR . '/includes/db_adodb.php';
+require_once 'bootstrap.php';
 require_once W2P_BASE_DIR . '/lib/captcha/Functions.php';
 
 $AppUI = new w2p_Core_CAppUI();
