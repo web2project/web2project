@@ -95,11 +95,6 @@ if (isset($_POST['login'])) {
 	$AppUI->redirect('' . $redirect);
 }
 
-// clear out main url parameters
-$m = '';
-$a = '';
-$u = '';
-
 // check if we are logged in
 if ($AppUI->doLogin()) {
 	// load basic locale settings
@@ -167,7 +162,6 @@ include W2P_BASE_DIR . '/locales/' . $AppUI->user_locale . '/locales.php';
 include W2P_BASE_DIR . '/locales/core.php';
 
 setlocale(LC_TIME, $AppUI->user_lang);
-$m_config = w2PgetConfig($m);
 
 if (!$suppressHeaders) {
 	// output the character set header
