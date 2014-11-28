@@ -107,10 +107,6 @@ if ($AppUI->doLogin()) {
 		$redirect = '';
 	}
 
-	if (isset($locale_char_set)) {
-		header('Content-type: text/html;charset=' . $locale_char_set);
-	}
-
     include $theme->resolveTemplate('login');
 	// destroy the current session and output login page
 	session_unset();
@@ -162,13 +158,6 @@ include W2P_BASE_DIR . '/locales/' . $AppUI->user_locale . '/locales.php';
 include W2P_BASE_DIR . '/locales/core.php';
 
 setlocale(LC_TIME, $AppUI->user_lang);
-
-if (!$suppressHeaders) {
-	// output the character set header
-	if (isset($locale_char_set)) {
-		header('Content-type: text/html;charset=' . $locale_char_set);
-	}
-}
 
 if ($u && file_exists(W2P_BASE_DIR . '/modules/' . $m . '/' . $u . '/' . $u . '.class.php')) {
 	include W2P_BASE_DIR . '/modules/' . $m . '/' . $u . '/' . $u . '.class.php';
