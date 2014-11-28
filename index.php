@@ -112,14 +112,7 @@ if (W2P_PERFORMANCE_DEBUG) {
     $w2p_performance_setuptime = (array_sum(explode(' ', microtime())) - $w2p_performance_time);
 }
 
-// start output proper
-if (isset($_POST['dosql']) && $_POST['dosql'] == 'do_file_co') {
-    ob_start();
-} else {
-    if(!ob_start('ob_gzhandler')) {
-        ob_start();
-    }
-}
+ob_start();
 
 if (!$suppressHeaders) {
     include $theme->resolveTemplate('header');
