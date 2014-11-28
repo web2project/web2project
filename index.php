@@ -113,22 +113,22 @@ if (W2P_PERFORMANCE_DEBUG) {
     $w2p_performance_setuptime = (array_sum(explode(' ', microtime())) - $w2p_performance_time);
 }
 
-$frontpage = new w2p_Core_FrontPageController($AppUI, new w2p_FileSystem_Loader());
-list($m, $a, $u) = $frontpage->resolveParameters($w2Pconfig, $_REQUEST);
-$frontpage->loadIncludes();
-
 // start output proper
 if (isset($_POST['dosql']) && $_POST['dosql'] == 'do_file_co') {
-	ob_start();
+    ob_start();
 } else {
-	if(!ob_start('ob_gzhandler')) {
-		ob_start();
-	}
+    if(!ob_start('ob_gzhandler')) {
+        ob_start();
+    }
 }
 
 if (!$suppressHeaders) {
-	include $theme->resolveTemplate('header');
+    include $theme->resolveTemplate('header');
 }
+
+$frontpage = new w2p_Core_FrontPageController($AppUI, new w2p_FileSystem_Loader());
+list($m, $a, $u) = $frontpage->resolveParameters($w2Pconfig, $_REQUEST);
+$frontpage->loadIncludes();
 
 $pageHandler = new w2p_Output_PageHandler();
 $all_tabs   = $pageHandler->loadExtras($_SESSION, $AppUI, $m, 'tabs');
@@ -146,15 +146,12 @@ if (file_exists($module_file)) {
     include $theme->resolveTemplate('missing_module');
 }
 if (!$suppressHeaders) {
-	//echo '<iframe name="thread" src="' . W2P_BASE_URL . '/modules/index.html" width="0" height="0" frameborder="0"></iframe>';
-	//echo '<iframe name="thread2" src="' . W2P_BASE_URL . '/modules/index.html" width="0" height="0" frameborder="0"></iframe>';
  	//Theme footer goes before the performance box
     $AppUI->getTheme()->loadCalendarJS();
     include $theme->resolveTemplate('footer');
 	if (W2P_PERFORMANCE_DEBUG) {
 		include $theme->resolveTemplate('performance');
 	}
-    include $theme->resolveTemplate('message_loading');
 
 	//close the body and html here, instead of on the theme footer.
 	echo '</body>
