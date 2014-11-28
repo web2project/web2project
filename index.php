@@ -41,11 +41,6 @@ include W2P_BASE_DIR . '/locales/' . $AppUI->user_locale . '/locales.php';
 include W2P_BASE_DIR . '/locales/core.php';
 setlocale(LC_TIME, $AppUI->user_lang);
 
-//Function register logout in user_acces_log
-if (isset($user_id) && isset($_GET['logout'])) {
-	$AppUI->registerLogout($user_id);
-}
-
 // set the default ui style
 $uistyle = $AppUI->getPref('UISTYLE') ? $AppUI->getPref('UISTYLE') : w2PgetConfig('host_style');
 include W2P_BASE_DIR . '/style/' . $uistyle . '/overrides.php';
@@ -80,18 +75,15 @@ if (isset($_POST['login'])) {
 	$AppUI->redirect('' . $redirect);
 }
 
-// check if we are logged in
-if ($AppUI->loginRequired()) {
-	$redirect = $_SERVER['QUERY_STRING'] ? strip_tags($_SERVER['QUERY_STRING']) : '';
-	if (strpos($redirect, 'logout') !== false) {
-		$redirect = '';
-	}
-
-    include $theme->resolveTemplate('login');
-	// destroy the current session and output login page
-	session_unset();
-	session_destroy();
-	exit;
+switch($_GET['action']) {
+    case 'logout':
+        $AppUI->logout();
+    default:
+        if ($AppUI->loginRequired()) {
+            include $theme->resolveTemplate('login');
+            exit;
+        }
+    // do nothing
 }
 
 if (W2P_PERFORMANCE_DEBUG) {

@@ -104,7 +104,7 @@ $theme = $AppUI->getTheme();
                             $now = new w2p_Utilities_Date(); ?>
                             <a class="button" href="./index.php?m=calendar&amp;a=day_view&amp;date=<?php echo $now->format(FMT_TIMESTAMP_DATE); ?>"><span><?php echo $AppUI->_('Today'); ?></span></a>
                         <?php } ?>
-                        <a class="button" href="./index.php?logout=-1"><span><?php echo $AppUI->_('Logout'); ?></span></a>
+                        <a class="button" href="./index.php?action=logout"><span><?php echo $AppUI->_('Logout'); ?></span></a>
                     </div>
                 <?php } ?>
             </div>

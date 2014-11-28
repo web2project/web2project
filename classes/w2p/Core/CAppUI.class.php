@@ -777,12 +777,21 @@ class w2p_Core_CAppUI
         $this->last_insert_id = db_insert_id();
     }
 
+    public function logout()
+    {
+        $this->registerLogout();
+        $this->user_id = -1;
+
+        // destroy the current session and output login page
+        session_unset();
+        session_destroy();
+    }
     /**
      * @Function for register log out in web2project table "user_acces_log"
      */
-    public function registerLogout($user_id)
+    public function registerLogout($user_id = -1)
     {
-        if ($user_id > 0) {
+        if ($this->user_id > 0) {
             $q = new w2p_Database_Query;
             $q->addTable('user_access_log');
             $q->addUpdate('date_time_out', "'" . $q->dbfnNowWithTZ() . "'", false, true);
