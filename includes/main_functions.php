@@ -1,12 +1,5 @@
 <?php
 
-require_once W2P_BASE_DIR . '/includes/backcompat_functions.php';
-require_once W2P_BASE_DIR . '/includes/deprecated_functions.php';
-require_once W2P_BASE_DIR . '/includes/cleanup_functions.php';
-require_once W2P_BASE_DIR . '/lib/adodb/adodb.inc.php';
-require_once W2P_BASE_DIR . '/classes/w2p/web2project.php';
-require_once W2P_BASE_DIR . '/vendor/autoload.php';
-
 spl_autoload_register('web2project_autoload');
 spl_autoload_register('w2p_old_autoload');
 

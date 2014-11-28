@@ -6,8 +6,9 @@
  *  published by MetaCarta. The full text of this license is included in LICENSE.
  */
 
+require_once 'bootstrap.php';
+
 $loginFromPage = 'index.php';
-require_once 'base.php';
 
 clearstatcache();
 if (is_file(W2P_BASE_DIR . '/includes/config.php') && filesize(W2P_BASE_DIR . '/includes/config.php') > 0) {

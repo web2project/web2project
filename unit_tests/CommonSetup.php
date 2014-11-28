@@ -11,7 +11,7 @@ global $w2p_performance_dbtime;
 global $w2p_performance_old_dbqueries;
 global $AppUI;
 
-require_once '../base.php';
+require_once '../bootstrap.php';
 require_once W2P_BASE_DIR . '/includes/main_functions.php';
 require_once W2P_BASE_DIR . '/includes/config.php';
 require_once W2P_BASE_DIR . '/includes/db_adodb.php';

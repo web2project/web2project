@@ -1,5 +1,5 @@
 <?php
-require_once '../base.php';
+require_once '../bootstrap.php';
 require_once W2P_BASE_DIR . '/includes/main_functions.php';
 if (version_compare(PHP_VERSION, MIN_PHP_VERSION, '<')) {
     echo 'web2Project requires PHP ' . MIN_PHP_VERSION . '+. Please upgrade!';

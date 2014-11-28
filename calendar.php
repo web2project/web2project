@@ -1,5 +1,5 @@
 <?php
-require_once 'base.php';
+require_once 'bootstrap.php';
 require_once W2P_BASE_DIR . '/includes/config.php';
 require_once W2P_BASE_DIR . '/includes/main_functions.php';
 require_once W2P_BASE_DIR . '/includes/db_adodb.php';

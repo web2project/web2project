@@ -128,3 +128,11 @@ define('ACCESS_DENIED', 'm=public&a=access_denied');
  *  but we're trying to clean up some of the complexity in the loaded libraries.
  */
 define('QUERY_STYLE_NUM', 1);
+
+require_once W2P_BASE_DIR . '/vendor/autoload.php';
+require_once W2P_BASE_DIR . '/classes/w2p/web2project.php';
+require_once W2P_BASE_DIR . '/includes/main_functions.php';
+require_once W2P_BASE_DIR . '/includes/backcompat_functions.php';
+require_once W2P_BASE_DIR . '/includes/deprecated_functions.php';
+require_once W2P_BASE_DIR . '/includes/cleanup_functions.php';
+require_once W2P_BASE_DIR . '/lib/adodb/adodb.inc.php';
