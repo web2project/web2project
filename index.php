@@ -10,18 +10,8 @@ require_once 'bootstrap.php';
 
 $loginFromPage = 'index.php';
 
-// don't output anything. Usefull for fileviewer.php, gantt.php, etc.
+// Required for the gantt charts
 $suppressHeaders = w2PgetParam($_GET, 'suppressHeaders', false);
-
-// write the HTML headers
-if (!$suppressHeaders) {
-    header('Expires: Mon, 26 Jul 1997 05:00:00 GMT'); // Date in the past
-    header('Last-Modified: ' . gmdate('D, d M Y H:i:s') . ' GMT'); // always modified
-    header('Cache-Control: no-cache, must-revalidate, no-store, post-check=0, pre-check=0'); // HTTP/1.1
-    header('Pragma: no-cache'); // HTTP/1.0
-    header("Content-type: text/html; charset=UTF-8");
-}
-// Force POSIX locale (to prevent functions such as strtolower() from messing up UTF-8 strings)
 
 // check if session has previously been initialised
 if (!isset($_SESSION['AppUI']) || isset($_GET['logout'])) {
@@ -74,11 +64,7 @@ if (w2PgetParam($_POST, 'lostpass', 0)) {
 	exit();
 }
 
-
 // check if the user is trying to log in
-// Note the change to REQUEST instead of POST.  This is so that we can
-// support alternative authentication methods such as the PostNuke
-// and HTTP auth methods now supported.
 if (isset($_POST['login'])) {
 	$username = w2PgetParam($_POST, 'username', '');
 	$password = w2PgetParam($_POST, 'password', '');
@@ -114,7 +100,14 @@ if (W2P_PERFORMANCE_DEBUG) {
 
 ob_start();
 
+// write the HTML headers
 if (!$suppressHeaders) {
+    header('Expires: Mon, 26 Jul 1997 05:00:00 GMT'); // Date in the past
+    header('Last-Modified: ' . gmdate('D, d M Y H:i:s') . ' GMT'); // always modified
+    header('Cache-Control: no-cache, must-revalidate, no-store, post-check=0, pre-check=0'); // HTTP/1.1
+    header('Pragma: no-cache'); // HTTP/1.0
+    header("Content-type: text/html; charset=UTF-8");
+
     include $theme->resolveTemplate('header');
 }
 
