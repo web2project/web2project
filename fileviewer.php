@@ -13,7 +13,7 @@ if (!isset($_SESSION['AppUI']) || isset($_GET['logout'])) {
 	$AppUI->setConfig($w2Pconfig);
 	$AppUI->setStyle();
 
-	if ($AppUI->doLogin()) {
+	if ($AppUI->loginRequired()) {
 		$AppUI->loadPrefs(0);
     }
 	// check if the user is trying to log in
@@ -36,7 +36,7 @@ if (!isset($_SESSION['AppUI']) || isset($_GET['logout'])) {
 
 	$uistyle = $AppUI->getPref('UISTYLE') ? $AppUI->getPref('UISTYLE') : $w2Pconfig['host_style'];
 	// check if we are logged in
-	if ($AppUI->doLogin()) {
+	if ($AppUI->loginRequired()) {
 		$AppUI->setUserLocale();
 		include W2P_BASE_DIR . '/locales/' . $AppUI->user_locale . '/locales.php';
 		include W2P_BASE_DIR . '/locales/core.php';

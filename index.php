@@ -42,7 +42,7 @@ $AppUI->setStyle();
 //Function for update lost action in user_access_log
 $AppUI->updateLastAction($last_insert_id);
 // load default preferences if not logged in
-if ($AppUI->doLogin()) {
+if ($AppUI->loginRequired()) {
 	$AppUI->loadPrefs(0);
 }
 
@@ -95,7 +95,7 @@ if (isset($_POST['login'])) {
 }
 
 // check if we are logged in
-if ($AppUI->doLogin()) {
+if ($AppUI->loginRequired()) {
 	$redirect = $_SERVER['QUERY_STRING'] ? strip_tags($_SERVER['QUERY_STRING']) : '';
 	if (strpos($redirect, 'logout') !== false) {
 		$redirect = '';
