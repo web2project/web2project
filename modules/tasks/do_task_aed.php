@@ -148,12 +148,6 @@ if ($result) {
     }
     $obj->storeBudget($budgets);
 
-    // Now add any task reminders
-    // If there wasn't a task, but there is one now, and
-    // that task date is set, we need to set a reminder.
-    if (empty($task_end_date) || (!empty($end_date) && $task_end_date->dateDiff($end_date))) {
-        $obj->addReminder();
-    }
     $AppUI->setMsg($task_id ? 'Task updated' : 'Task added', UI_MSG_OK);
 
     if ($notify) {
