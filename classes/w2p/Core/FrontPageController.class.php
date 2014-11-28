@@ -9,6 +9,7 @@ class w2p_Core_FrontPageController
 {
     protected $AppUI  = null;
     protected $loader = null;
+    protected $includes = array();
 
     public function __construct($AppUI, $loader)
     {
@@ -26,10 +27,10 @@ class w2p_Core_FrontPageController
         $def_a = 'index';
         if (!isset($input['m']) && !empty($config['default_view_m'])) {
             if (!$perms->checkModule($config['default_view_m'], 'view', $AppUI->user_id)) {
-                $m = 'public';
+                $def_m = 'public';
                 $def_a = 'welcome';
             } else {
-                $m = $config['default_view_m'];
+                $def_m = $config['default_view_m'];
                 $def_a = !empty($config['default_view_a']) ? $config['default_view_a'] : $def_a;
                 $tab = $config['default_view_tab'];
                 $input['tab'] = $tab;
@@ -37,7 +38,7 @@ class w2p_Core_FrontPageController
         }
 
         $loader = new w2p_FileSystem_Loader();
-        $m = $loader->makeFileNameSafe(w2PgetParam($input, 'm', 'public'));
+        $m = $loader->makeFileNameSafe(w2PgetParam($input, 'm', $def_m));
         $a = $loader->makeFileNameSafe(w2PgetParam($input, 'a', $def_a));
         /**
          * This check for $u implies that a file located in a subdirectory of higher depth than 1 in relation to the module base
@@ -52,24 +53,14 @@ class w2p_Core_FrontPageController
             }
         }
 
-        if ($u && file_exists(W2P_BASE_DIR . '/modules/' . $m . '/' . $u . '/' . $u . '.class.php')) {
-            include W2P_BASE_DIR . '/modules/' . $m . '/' . $u . '/' . $u . '.class.php';
+        $this->includes[] = $this->AppUI->getModuleAjax($m);
+        if ($u) {
+            $this->includes[] = W2P_BASE_DIR . '/modules/' . $m . '/' . $u . '/' . $u . '.ajax.php';
+            $this->includes[] = W2P_BASE_DIR . '/modules/' . $m . '/' . $u . '/' . $u . '.class.php';
         }
 
-// include the module ajax file - we use file_exists instead of @ so  that any parse errors in the file are reported,
-//   rather than errors further down the track.
-        $modajax = $this->AppUI->getModuleAjax($m);
-        if (file_exists($modajax)) {
-            include $modajax;
-        }
-        if ($u && file_exists(W2P_BASE_DIR . '/modules/' . $m . '/' . $u . '/' . $u . '.ajax.php')) {
-            include W2P_BASE_DIR . '/modules/' . $m . '/' . $u . '/' . $u . '.ajax.php';
-        }
-
-// do some db work if dosql is set
-// TODO - MUST MOVE THESE INTO THE MODULE DIRECTORY
         if (isset($input['dosql'])) {
-            require W2P_BASE_DIR . '/modules/' . $m . '/' . ($u ? ($u . '/') : '') . $loader->makeFileNameSafe($input['dosql']) . '.php';
+            $this->includes[] = W2P_BASE_DIR . '/modules/' . $m . '/' . ($u ? ($u . '/') : '') . $loader->makeFileNameSafe($input['dosql']) . '.php';
         }
 
         return array($m, $a, $u);
@@ -77,6 +68,10 @@ class w2p_Core_FrontPageController
 
     public function loadIncludes()
     {
-
+        foreach($this->includes as $include) {
+            if (file_exists($include)) {
+                include $include;
+            }
+        }
     }
 }
