@@ -10,10 +10,6 @@ require_once 'bootstrap.php';
 
 $loginFromPage = 'index.php';
 
-$defaultTZ = w2PgetConfig('system_timezone', 'UTC');
-$defaultTZ = ('' == $defaultTZ) ? 'UTC' : $defaultTZ;
-date_default_timezone_set($defaultTZ);
-
 // don't output anything. Usefull for fileviewer.php, gantt.php, etc.
 $suppressHeaders = w2PgetParam($_GET, 'suppressHeaders', false);
 

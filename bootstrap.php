@@ -150,3 +150,7 @@ if (is_file(W2P_BASE_DIR . '/includes/config.php') && filesize(W2P_BASE_DIR . '/
     echo 'Fatal Error. You haven\'t created a config file yet.<br/><a href="./install/index.php">' . 'Click Here To Start Installation and Create One!</a> (forwarded in 5 sec.)</body></html>';
     exit();
 }
+
+$defaultTZ = w2PgetConfig('system_timezone', 'UTC');
+$defaultTZ = ('' == $defaultTZ) ? 'UTC' : $defaultTZ;
+date_default_timezone_set($defaultTZ);

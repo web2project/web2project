@@ -2,9 +2,6 @@
 // Function to scan the event queue and execute any functions required.
 require_once 'bootstrap.php';
 
-$defaultTZ = w2PgetConfig('system_timezone', 'UTC');
-date_default_timezone_set($defaultTZ);
-
 $AppUI = new w2p_Core_CAppUI();
 $AppUI->setUserLocale();
 
