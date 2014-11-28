@@ -39,17 +39,13 @@ $uiName = str_replace('-', '', $uistyle);
 $uiClass = 'style_' . $uiName;
 $theme = new $uiClass($AppUI);
 
-// check is the user needs a new password
-if (w2PgetParam($_POST, 'lostpass', 0)) {
-	if (w2PgetParam($_POST, 'sendpass', 0)) {
-		sendNewPass();
-	} else {
-        include $theme->resolveTemplate('lostpass');
-	}
-	exit();
-}
-
 switch($_REQUEST['action']) {
+    case 'lostpass':
+        include $theme->resolveTemplate('lostpass');
+        exit();
+    case 'sendpass':
+        sendNewPass();
+        break;
     case 'login':
         $username = w2PgetParam($_POST, 'username', '');
         $password = w2PgetParam($_POST, 'password', '');
@@ -57,14 +53,17 @@ switch($_REQUEST['action']) {
 
         $AppUI->login($username, $password);
         $AppUI->redirect('' . $redirect);
+        break;
     case 'logout':
         $AppUI->logout();
+        break;
     default:
-        if ($AppUI->loginRequired()) {
-            include $theme->resolveTemplate('login');
-            exit;
-        }
     // do nothing
+}
+
+if ($AppUI->loginRequired()) {
+    include $theme->resolveTemplate('login');
+    exit;
 }
 
 if (W2P_PERFORMANCE_DEBUG) {

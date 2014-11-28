@@ -22,33 +22,15 @@ $theme = new style_web2project($AppUI);
     </head>
 
     <body bgcolor="#f0f0f0" onload="document.lostpassform.checkusername.focus();">
-        <table width="100%" cellspacing="0" cellpadding="0" border="0">
-            <tbody>
-                <tr>
-                    <td width="508"><a href="http://www.web2project.net"><img src="./style/<?php echo $uistyle; ?>/images/w2p_logo.jpg" alt="web2Project Home"/></a></td>
-                    <td style="background:url(./style/<?php echo $uistyle; ?>/images/logo_bkgd.jpg);">&nbsp;</td>
-                </tr>
-            </tbody>
-        </table>
-        <table width="100%" cellspacing="0" cellpadding="0" border="0">
-            <tbody>
-                <tr>
-                    <td width="100%" valign="top" align="left" style="background: transparent url(./style/<?php echo $uistyle; ?>/images/nav_shadow.jpg) repeat-x scroll 0%;">
-                        <img src="./style/<?php echo $uistyle; ?>/images/nav_shadow.jpg" />
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-
         <div class="container">
             <div class="login">
                 <h1><?php echo $w2Pconfig['company_name']; ?></h1>
                 <form method="post" action="<?php echo $loginFromPage; ?>" name="loginform" accept-charset="utf-8">
-                    <input type="hidden" name="lostpass" value="1" />
+                    <input type="hidden" name="action" value="sendpass" />
                     <input type="hidden" name="redirect" value="<?php echo isset($redirect) ? $redirect : ''; ?>" />
 
-                    <p><input type="text" name="login" value="" placeholder="Username"></p>
-                    <p><input type="password" name="password" value="" placeholder="Email"></p>
+                    <p><input type="text" name="checkusername" value="" placeholder="Username"></p>
+                    <p><input type="text" name="checkemail" value="" placeholder="Email"></p>
                     <p class="submit"><input type="submit" name="commit" value="Send Password"></p>
                 </form>
             </div>

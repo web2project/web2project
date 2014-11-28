@@ -44,7 +44,7 @@ $theme = new style_wpsredmond($AppUI);
             <div class="login">
                 <h1><?php echo $w2Pconfig['company_name']; ?></h1>
                 <form method="post" action="<?php echo $loginFromPage; ?>" name="loginform" accept-charset="utf-8">
-                    <input type="hidden" name="lostpass" value="1" />
+                    <input type="hidden" name="action" value="sendpass" />
                     <input type="hidden" name="redirect" value="<?php echo isset($redirect) ? $redirect : ''; ?>" />
 
                     <p><input type="text" name="login" value="" placeholder="Username"></p>

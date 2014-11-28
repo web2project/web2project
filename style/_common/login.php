@@ -36,7 +36,7 @@ $theme = $AppUI->getTheme();
                 </form>
             </div>
             <div class="login-help">
-                <p><a href="javascript: void(0);" onclick="f=document.loginform;f.lostpass.value=1;f.submit();"><?php echo $AppUI->_('forgotPassword'); ?></a></p>
+                <p><a href="?action=lostpass"><?php echo $AppUI->_('forgotPassword'); ?></a></p>
             </div>
 
             <div class="login-help">
