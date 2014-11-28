@@ -6,6 +6,8 @@ if (!defined('W2P_BASE_DIR')) {
 
 $delete = (int) w2PgetParam($_POST, 'del', 0);
 
+global $AppUI;
+
 $obj = new CFile();
 if (!$obj->bind($_POST)) {
     $AppUI->setMsg($obj->getError(), UI_MSG_ERROR);

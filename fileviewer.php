@@ -4,59 +4,47 @@ require_once 'bootstrap.php';
 
 $loginFromPage = 'fileviewer.php';
 
-$AppUI = is_object($AppUI) ? $AppUI : new w2p_Core_CAppUI();
+// Required for the gantt charts
+$suppressHeaders = w2PgetParam($_GET, 'suppressHeaders', false);
+
 // check if session has previously been initialised
-// if no ask for logging and do redirect
-if (!isset($_SESSION['AppUI']) || isset($_GET['logout'])) {
-	$_SESSION['AppUI'] = new w2p_Core_CAppUI();
-	$AppUI = &$_SESSION['AppUI'];
-	$AppUI->setConfig($w2Pconfig);
-	$AppUI->setStyle();
-
-	if ($AppUI->loginRequired()) {
-		$AppUI->loadPrefs(0);
-    }
-	// check if the user is trying to log in
-	if (isset($_POST['login'])) {
-		$username = w2PgetParam($_POST, 'username', '');
-		$password = w2PgetParam($_POST, 'password', '');
-		$redirect = w2PgetParam($_POST, 'redirect', '');
-		$ok = $AppUI->login($username, $password);
-		if (!$ok) {
-			//display login failed message
-			$uistyle = $AppUI->getPref('UISTYLE') ? $AppUI->getPref('UISTYLE') : $w2Pconfig['host_style'];
-			$AppUI->setMsg('Login Failed', UI_MSG_ERROR);
-			require W2P_BASE_DIR . '/style/' . $uistyle . '/login.php';
-			session_unset();
-			exit;
-		}
-		header('Location: fileviewer.php?' . $redirect);
-		exit;
-	}
-
-	$uistyle = $AppUI->getPref('UISTYLE') ? $AppUI->getPref('UISTYLE') : $w2Pconfig['host_style'];
-	// check if we are logged in
-	if ($AppUI->loginRequired()) {
-		$AppUI->setUserLocale();
-		include W2P_BASE_DIR . '/locales/' . $AppUI->user_locale . '/locales.php';
-		include W2P_BASE_DIR . '/locales/core.php';
-		setlocale(LC_TIME, $AppUI->user_locale);
-
-		$redirect = @$_SERVER['QUERY_STRING'];
-		if (strpos($redirect, 'logout') !== false) {
-			$redirect = '';
-		}
-		if (isset($locale_char_set)) {
-			header('Content-type: text/html;charset=' . $locale_char_set);
-		}
-		require W2P_BASE_DIR . '/style/' . $uistyle . '/login.php';
-		session_unset();
-		session_destroy();
-		exit;
-	}
+if (!isset($_SESSION['AppUI'])) {
+    $_SESSION['AppUI'] = new w2p_Core_CAppUI();
 }
 $AppUI = &$_SESSION['AppUI'];
+
+$AppUI->setStyle();
+// load default preferences if not logged in
+if ($AppUI->loginRequired()) {
+    $AppUI->loadPrefs(0);
+}
+
+// load module based locale settings
+$AppUI->setUserLocale();
+include W2P_BASE_DIR . '/locales/' . $AppUI->user_locale . '/locales.php';
 include W2P_BASE_DIR . '/locales/core.php';
+setlocale(LC_TIME, $AppUI->user_lang);
+
+switch($_REQUEST['action']) {
+    case 'login':
+        $username = w2PgetParam($_POST, 'username', '');
+        $password = w2PgetParam($_POST, 'password', '');
+        $redirect = w2PgetParam($_POST, 'redirect', '');
+
+        $AppUI->login($username, $password);
+        $AppUI->redirect('fileviewer.php?' . $redirect);
+        break;
+    case 'logout':
+        $AppUI->logout();
+        break;
+    default:
+        // do nothing
+}
+
+if ($AppUI->loginRequired()) {
+    include $theme->resolveTemplate('login');
+    exit;
+}
 
 $file_id = (int) w2PgetParam($_GET, 'file_id', 0);
 
@@ -66,9 +54,7 @@ if (!$file_id) {
 }
 
 $file = new CFile;
-$file->load($file_id);
-
-if (!$file->canView()) {
+if (!$file->load($file_id)) {
     $AppUI->redirect(ACCESS_DENIED);
 }
 
