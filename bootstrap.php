@@ -129,6 +129,8 @@ define('ACCESS_DENIED', 'm=public&a=access_denied');
  */
 define('QUERY_STYLE_NUM', 1);
 
+setlocale(LC_CTYPE, 'C');
+
 require_once W2P_BASE_DIR . '/vendor/autoload.php';
 require_once W2P_BASE_DIR . '/classes/w2p/web2project.php';
 require_once W2P_BASE_DIR . '/includes/main_functions.php';

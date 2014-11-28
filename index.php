@@ -22,7 +22,6 @@ if (!$suppressHeaders) {
     header("Content-type: text/html; charset=UTF-8");
 }
 // Force POSIX locale (to prevent functions such as strtolower() from messing up UTF-8 strings)
-setlocale(LC_CTYPE, 'C');
 
 // check if session has previously been initialised
 if (!isset($_SESSION['AppUI']) || isset($_GET['logout'])) {
