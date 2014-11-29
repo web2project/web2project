@@ -10,8 +10,6 @@ require_once 'bootstrap.php';
 
 $loginFromPage = 'index.php';
 
-// Required for the gantt charts
-$suppressHeaders = w2PgetParam($_GET, 'suppressHeaders', false);
 
 // check if session has previously been initialised
 if (!isset($_SESSION['AppUI'])) {
@@ -38,6 +36,8 @@ $uiName = str_replace('-', '', $uistyle);
 
 $uiClass = 'style_' . $uiName;
 $theme = new $uiClass($AppUI);
+$frontpage = new w2p_Core_FrontPageController($AppUI, new w2p_FileSystem_Loader());
+list($m, $a, $u) = $frontpage->resolveParameters($w2Pconfig, $_REQUEST);
 
 switch($_REQUEST['action']) {
     case 'lostpass':
@@ -52,7 +52,7 @@ switch($_REQUEST['action']) {
         $redirect = w2PgetParam($_POST, 'redirect', '');
 
         $AppUI->login($username, $password);
-        $AppUI->redirect('' . $redirect);
+        $AppUI->redirect('m=' . $m . '&a=' . $a);
         break;
     case 'logout':
         $AppUI->logout();
@@ -72,6 +72,8 @@ if (W2P_PERFORMANCE_DEBUG) {
 
 ob_start();
 
+// Required for the gantt charts
+$suppressHeaders = w2PgetParam($_GET, 'suppressHeaders', false);
 // write the HTML headers
 if (!$suppressHeaders) {
     header('Expires: Mon, 26 Jul 1997 05:00:00 GMT'); // Date in the past
@@ -83,13 +85,10 @@ if (!$suppressHeaders) {
     include $theme->resolveTemplate('header');
 }
 
-$frontpage = new w2p_Core_FrontPageController($AppUI, new w2p_FileSystem_Loader());
-list($m, $a, $u) = $frontpage->resolveParameters($w2Pconfig, $_REQUEST);
-$frontpage->loadIncludes();
-
 $pageHandler = new w2p_Output_PageHandler();
 $pageHandler->loadExtras($_SESSION, $AppUI, $m, 'tabs');
 $pageHandler->loadExtras($_SESSION, $AppUI, $m, 'crumbs');
+$frontpage->loadIncludes();
 
 $module_file = W2P_BASE_DIR . '/modules/' . $m . '/' . ($u ? ($u . '/') : '') . $a . '.php';
 if (!file_exists($module_file)) {
