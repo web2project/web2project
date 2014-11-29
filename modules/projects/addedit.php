@@ -10,10 +10,7 @@ $contact_id = (int) w2PgetParam($_GET, 'contact_id', 0);
 $object = new CProject();
 $object->setId($object_id);
 
-$obj = $object;
-$canAddEdit = $obj->canAddEdit();
-$canAuthor = $obj->canCreate();
-$canEdit = $obj->canEdit();
+$canAddEdit = $object->canAddEdit();
 if (!$canAddEdit) {
     $AppUI->redirect(ACCESS_DENIED);
 }

@@ -10,7 +10,6 @@ $object = new CUser();
 $object->setId($object_id);
 
 $canAddEdit = $object->canAddEdit();
-$canAuthor = $object->canCreate();
 $canEdit = $object->canEdit();
 if (!$canAddEdit) {
     $AppUI->redirect(ACCESS_DENIED);

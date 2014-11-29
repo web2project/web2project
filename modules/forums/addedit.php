@@ -8,10 +8,7 @@ $object_id = (int) w2PgetParam($_GET, 'forum_id', 0);
 $object = new CForum();
 $object->setId($object_id);
 
-$obj = $object;
-$canAddEdit = $obj->canAddEdit();
-$canAuthor = $obj->canCreate();
-$canEdit = $obj->canEdit();
+$canAddEdit = $object->canAddEdit();
 if (!$canAddEdit) {
     $AppUI->redirect(ACCESS_DENIED);
 }

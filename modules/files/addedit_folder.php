@@ -9,10 +9,7 @@ $object_id = intval(w2PgetParam($_GET, 'folder', 0));
 $object = new CFile_Folder();
 $object->setId($object_id);
 
-$obj = $object;
-$canAddEdit = $obj->canAddEdit();
-$canAuthor = $obj->canCreate();
-$canEdit = $obj->canEdit();
+$canAddEdit = $object->canAddEdit();
 if (!$canAddEdit) {
     $AppUI->redirect(ACCESS_DENIED);
 }

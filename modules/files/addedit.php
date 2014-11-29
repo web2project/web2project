@@ -11,10 +11,7 @@ $preserve = $w2Pconfig['files_ci_preserve_attr'];
 $object = new CFile();
 $object->setId($object_id);
 
-$obj = $object;
-$canAddEdit = $obj->canAddEdit();
-$canAuthor = $obj->canCreate();
-$canEdit = $obj->canEdit();
+$canAddEdit = $object->canAddEdit();;
 if (!$canAddEdit) {
     $AppUI->redirect(ACCESS_DENIED);
 }

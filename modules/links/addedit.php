@@ -10,10 +10,7 @@ $project_id = (int) w2PgetParam($_GET, 'project_id', 0);
 $object = new CLink();
 $object->setId($object_id);
 
-$obj = $object;
-$canAddEdit = $obj->canAddEdit();
-$canAuthor = $obj->canCreate();
-$canEdit = $obj->canEdit();
+$canAddEdit = $object->canAddEdit();
 $canDelete = $object->canDelete();
 if (!$canAddEdit) {
     $AppUI->redirect(ACCESS_DENIED);

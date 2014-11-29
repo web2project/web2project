@@ -9,19 +9,9 @@ $object = new CEvent();
 $object->setId($object_id);
 
 $canAddEdit = $object->canAddEdit();
-$canAuthor = $object->canCreate();
-$canEdit = $object->canEdit();
-
 if (!$canAddEdit) {
     $AppUI->redirect(ACCESS_DENIED);
 }
-
-global $AppUI, $cal_sdf;
-
-// get the passed timestamp (today if none)
-$date = w2PgetParam($_GET, 'date', null);
-// get the passed timestamp (today if none)
-$event_project = (int) w2PgetParam($_GET, 'project_id', 0);
 
 $obj = $AppUI->restoreObject();
 if ($obj) {
@@ -30,6 +20,13 @@ if ($obj) {
 } else {
     $object->load($object_id);
 }
+
+global $AppUI, $cal_sdf;
+
+// get the passed timestamp (today if none)
+$date = w2PgetParam($_GET, 'date', null);
+// get the passed timestamp (today if none)
+$event_project = (int) w2PgetParam($_GET, 'project_id', 0);
 
 $object->event_project = ($event_project) ? $event_project : $object->event_project;
 $start_date = intval($object->event_start_date) ? new w2p_Utilities_Date($AppUI->formatTZAwareTime($object->event_start_date, '%Y-%m-%d %T')) : new w2p_Utilities_Date();
