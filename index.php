@@ -8,34 +8,6 @@
 
 require_once 'bootstrap.php';
 
-$loginFromPage = 'index.php';
-
-
-// check if session has previously been initialised
-if (!isset($_SESSION['AppUI'])) {
-	$_SESSION['AppUI'] = new w2p_Core_CAppUI();
-}
-$AppUI = &$_SESSION['AppUI'];
-
-$AppUI->setStyle();
-// load default preferences if not logged in
-if ($AppUI->loginRequired()) {
-	$AppUI->loadPrefs(0);
-}
-
-// load module based locale settings
-$AppUI->setUserLocale();
-include W2P_BASE_DIR . '/locales/' . $AppUI->user_locale . '/locales.php';
-include W2P_BASE_DIR . '/locales/core.php';
-setlocale(LC_TIME, $AppUI->user_lang);
-
-// set the default ui style
-$uistyle = $AppUI->getPref('UISTYLE') ? $AppUI->getPref('UISTYLE') : w2PgetConfig('host_style');
-include W2P_BASE_DIR . '/style/' . $uistyle . '/overrides.php';
-$uiName = str_replace('-', '', $uistyle);
-
-$uiClass = 'style_' . $uiName;
-$theme = new $uiClass($AppUI);
 $frontpage = new w2p_Core_FrontPageController($AppUI, new w2p_FileSystem_Loader());
 list($m, $a, $u) = $frontpage->resolveParameters($w2Pconfig, $_REQUEST);
 

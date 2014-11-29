@@ -2,29 +2,6 @@
 
 require_once 'bootstrap.php';
 
-$loginFromPage = 'fileviewer.php';
-
-// Required for the gantt charts
-$suppressHeaders = w2PgetParam($_GET, 'suppressHeaders', false);
-
-// check if session has previously been initialised
-if (!isset($_SESSION['AppUI'])) {
-    $_SESSION['AppUI'] = new w2p_Core_CAppUI();
-}
-$AppUI = &$_SESSION['AppUI'];
-
-$AppUI->setStyle();
-// load default preferences if not logged in
-if ($AppUI->loginRequired()) {
-    $AppUI->loadPrefs(0);
-}
-
-// load module based locale settings
-$AppUI->setUserLocale();
-include W2P_BASE_DIR . '/locales/' . $AppUI->user_locale . '/locales.php';
-include W2P_BASE_DIR . '/locales/core.php';
-setlocale(LC_TIME, $AppUI->user_lang);
-
 switch($_REQUEST['action']) {
     case 'login':
         $username = w2PgetParam($_POST, 'username', '');
