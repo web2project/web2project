@@ -26,7 +26,7 @@ class w2p_Core_FrontPageController
         $perms = $this->AppUI->acl();
         $def_a = 'index';
         if (!isset($input['m']) && !empty($config['default_view_m'])) {
-            if (!$perms->checkModule($config['default_view_m'], 'view', $AppUI->user_id)) {
+            if (!$perms->checkModule($config['default_view_m'], 'view', $this->AppUI->user_id)) {
                 $def_m = 'public';
                 $def_a = 'welcome';
             } else {
@@ -37,16 +37,15 @@ class w2p_Core_FrontPageController
             }
         }
 
-        $loader = new w2p_FileSystem_Loader();
-        $m = $loader->makeFileNameSafe(w2PgetParam($input, 'm', $def_m));
-        $a = $loader->makeFileNameSafe(w2PgetParam($input, 'a', $def_a));
+        $m = $this->loader->makeFileNameSafe(w2PgetParam($input, 'm', $def_m));
+        $a = $this->loader->makeFileNameSafe(w2PgetParam($input, 'a', $def_a));
         /**
          * This check for $u implies that a file located in a subdirectory of higher depth than 1 in relation to the module base
          *   can't be executed. So it wouldn't be possible to run for example the file module/directory1/directory2/file.php
          */
-        $u = $loader->makeFileNameSafe(w2PgetParam($input, 'u', ''));
+        $u = $this->loader->makeFileNameSafe(w2PgetParam($input, 'u', ''));
 
-        if ($m == 'projects' && $a == 'view' && $config['projectdesigner_view_project'] && !w2PgetParam($input, 'bypass') && !(isset($input['tab']))) {
+        if ($m == 'projects' && $a == 'view' && $config['projectdesigner_view_project']) {
             if ($this->AppUI->isActiveModule('projectdesigner')) {
                 $m = 'projectdesigner';
                 $a = 'index';
