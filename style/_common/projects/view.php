@@ -6,9 +6,9 @@ $df = $AppUI->getPref('SHDATEFORMAT');
 ?>
 <table id="tblProjects" class="std view projects">
 <tr>
-    <td style="border: outset #d1d1cd 1px;background-color:#<?php echo $project->project_color_identifier; ?>" colspan="2" id="view-header">
+    <td style="border: outset #d1d1cd 1px;background-color:#<?php echo $object->project_color_identifier; ?>" colspan="2" id="view-header">
         <?php
-        echo '<font color="' . bestColor($project->project_color_identifier) . '"><strong>' . $project->project_name . '<strong></font>';
+        echo '<font color="' . bestColor($object->project_color_identifier) . '"><strong>' . $object->project_name . '<strong></font>';
         ?>
     </td>
 </tr>
@@ -18,29 +18,29 @@ $df = $AppUI->getPref('SHDATEFORMAT');
     <table cellspacing="1" cellpadding="2" border="0" width="100%" class="well">
         <tr>
             <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Company'); ?>:</td>
-            <?php echo $htmlHelper->createCell('project_company', $project->project_company); ?>
+            <?php echo $htmlHelper->createCell('project_company', $object->project_company); ?>
         </tr>
         <tr>
             <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Short Name'); ?>:</td>
             <?php
 
             // TODO Need to rename field to avoid confusing HTMLhelper
-            echo $htmlHelper->createCell('project_shortname', $project->project_short_name);
+            echo $htmlHelper->createCell('project_shortname', $object->project_short_name);
             ?>
         </tr>
         <tr>
             <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Start Date'); ?>:</td>
-            <?php echo $htmlHelper->createCell('project_start_date', $project->project_start_date); ?>
+            <?php echo $htmlHelper->createCell('project_start_date', $object->project_start_date); ?>
         </tr>
         <tr>
             <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Target End Date'); ?>:</td>
-            <?php echo $htmlHelper->createCell('project_end_date', $project->project_end_date); ?>
+            <?php echo $htmlHelper->createCell('project_end_date', $object->project_end_date); ?>
         </tr>
         <tr>
             <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Actual End Date'); ?>:</td>
             <td>
                 <?php
-                if ($project_id) {
+                if ($object_id) {
                     echo $actual_end_date ? '<a href="?m=tasks&a=view&task_id=' . $criticalTasks[0]['task_id'] . '">' : '';
                     echo $actual_end_date ? '<span ' . $style . '>' . $actual_end_date->format($df) . '</span>' : '-';
                     echo $actual_end_date ? '</a>' : '';
@@ -52,24 +52,24 @@ $df = $AppUI->getPref('SHDATEFORMAT');
         </tr>
         <tr>
             <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Project Owner'); ?>:</td>
-            <?php echo $htmlHelper->createCell('project_owner', $project->project_owner); ?>
+            <?php echo $htmlHelper->createCell('project_owner', $object->project_owner); ?>
         </tr>
         <tr>
             <td align="right" nowrap="nowrap"><?php echo $AppUI->_('URL'); ?>:</td>
-            <?php echo $htmlHelper->createCell('project_url', $project->project_url); ?>
+            <?php echo $htmlHelper->createCell('project_url', $object->project_url); ?>
         </tr>
         <tr>
             <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Staging URL'); ?>:</td>
-            <?php echo $htmlHelper->createCell('project_demo_url', $project->project_demo_url); ?>
+            <?php echo $htmlHelper->createCell('project_demo_url', $object->project_demo_url); ?>
         </tr>
         <tr>
             <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Project Location'); ?>:</td>
-            <?php echo $htmlHelper->createCell('project_location', $project->project_location); ?>
+            <?php echo $htmlHelper->createCell('project_location', $object->project_location); ?>
         </tr>
         <tr>
             <td colspan="2">
                 <?php
-                $custom_fields = new w2p_Core_CustomFields($m, $a, $project->project_id, 'view');
+                $custom_fields = new w2p_Core_CustomFields($m, $a, $object->project_id, 'view');
                 $custom_fields->printHTML();
                 ?>
             </td>
@@ -79,7 +79,7 @@ $df = $AppUI->getPref('SHDATEFORMAT');
                 <strong><?php echo $AppUI->_('Description'); ?></strong><br />
                 <table cellspacing="0" cellpadding="2" border="0" width="100%">
                     <tr>
-                        <?php echo $htmlHelper->createCell('project_description', $project->project_description); ?>
+                        <?php echo $htmlHelper->createCell('project_description', $object->project_description); ?>
                     </tr>
                 </table>
             </td>
@@ -91,31 +91,31 @@ $df = $AppUI->getPref('SHDATEFORMAT');
     <table cellspacing="1" cellpadding="2" border="0" width="100%" class="well">
         <tr>
             <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Status'); ?>:</td>
-            <?php echo $htmlHelper->createCell('project_status', $AppUI->_($pstatus[$project->project_status])); ?>
+            <?php echo $htmlHelper->createCell('project_status', $AppUI->_($pstatus[$object->project_status])); ?>
         </tr>
         <tr>
             <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Type'); ?>:</td>
-            <?php echo $htmlHelper->createCell('project_type', $AppUI->_($ptype[$project->project_type])); ?>
+            <?php echo $htmlHelper->createCell('project_type', $AppUI->_($ptype[$object->project_type])); ?>
         </tr>
         <tr>
             <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Priority'); ?>:</td>
-            <td width="100%" style="background-color:<?php echo $projectPriorityColor[$project->project_priority] ?>"><?php echo $AppUI->_($projectPriority[$project->project_priority]); ?></td>
+            <td width="100%" style="background-color:<?php echo $projectPriorityColor[$object->project_priority] ?>"><?php echo $AppUI->_($projectPriority[$object->project_priority]); ?></td>
         </tr>
         <tr>
             <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Progress'); ?>:</td>
-            <?php echo $htmlHelper->createCell('project_percent_complete', $project->project_percent_complete); ?>
+            <?php echo $htmlHelper->createCell('project_percent_complete', $object->project_percent_complete); ?>
         </tr>
         <tr>
             <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Active'); ?>:</td>
-            <td width="100%"><?php echo $project->project_active ? $AppUI->_('Yes') : $AppUI->_('No'); ?></td>
+            <td width="100%"><?php echo $object->project_active ? $AppUI->_('Yes') : $AppUI->_('No'); ?></td>
         </tr>
         <tr>
             <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Scheduled Hours'); ?>:</td>
-            <?php echo $htmlHelper->createCell('total_hours', $project->project_scheduled_hours); ?>
+            <?php echo $htmlHelper->createCell('total_hours', $object->project_scheduled_hours); ?>
         </tr>
         <tr>
             <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Worked Hours'); ?>:</td>
-            <?php echo $htmlHelper->createCell('project_worked_hours', $project->project_worked_hours); ?>
+            <?php echo $htmlHelper->createCell('project_worked_hours', $object->project_worked_hours); ?>
         </tr>
         <?php if (w2PgetConfig('budget_info_display', false)) { ?>
             <tr>
@@ -137,8 +137,8 @@ $df = $AppUI->getPref('SHDATEFORMAT');
                                     $totalBudget = 0;
                                     foreach ($billingCategory as $id => $category) {
                                         $amount = 0;
-                                        if (isset($project->budget[$id])) {
-                                            $amount = $project->budget[$id]['budget_amount'];
+                                        if (isset($object->budget[$id])) {
+                                            $amount = $object->budget[$id]['budget_amount'];
                                         }
                                         $totalBudget += $amount;
                                         ?>
@@ -173,7 +173,7 @@ $df = $AppUI->getPref('SHDATEFORMAT');
                                 <table cellspacing="1" cellpadding="2" border="0" width="100%">
                                     <?php
                                     $bcode = new CSystem_Bcode();
-                                    $results = $bcode->calculateProjectCost($project_id);
+                                    $results = $bcode->calculateProjectCost($object_id);
                                     foreach ($billingCategory as $id => $category) {
                                         ?>
                                         <tr>
@@ -239,7 +239,7 @@ $df = $AppUI->getPref('SHDATEFORMAT');
             </tr>
         <?php } ?>
         <?php
-        $depts = $project->getDepartmentList();
+        $depts = $object->getDepartmentList();
 
         if (count($depts) > 0) { ?>
             <tr>
@@ -262,7 +262,7 @@ $df = $AppUI->getPref('SHDATEFORMAT');
         <?php
         }
 
-        $contacts = $project->getContactList();
+        $contacts = $object->getContactList();
         if (count($contacts)) {
             echo '<tr><td colspan="3"><strong>' . $AppUI->_('Project Contacts') . '</strong></td></tr>';
             echo '<tr><td colspan="3">';
@@ -276,7 +276,7 @@ $df = $AppUI->getPref('SHDATEFORMAT');
 <?php
 //lets add the subprojects table
 $canReadMultiProjects = canView('projects');
-if ($project->hasChildProjects($project_id) && $canReadMultiProjects) { ?>
+if ($object->hasChildProjects($object_id) && $canReadMultiProjects) { ?>
     <tr>
         <td colspan="2">
             <?php

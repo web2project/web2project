@@ -4,12 +4,12 @@ if (!defined('W2P_BASE_DIR')) {
 }
 // @todo    convert to template
 
-global $AppUI, $project_id;
+global $AppUI, $object_id;
 
 $start_date = new w2p_Utilities_Date('2001-01-01 00:00:00');
 $end_date = new w2p_Utilities_Date('2100-12-31 23:59:59');
 
-$items = CEvent::getEventsForPeriod($start_date, $end_date, 'all', 0, $project_id);
+$items = CEvent::getEventsForPeriod($start_date, $end_date, 'all', 0, $object_id);
 
 $module = new w2p_System_Module();
 $fields = $module->loadSettings('events', 'project_view');

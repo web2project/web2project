@@ -4,9 +4,9 @@ if (!defined('W2P_BASE_DIR')) {
 }
 // @todo    convert to template
 
-global $AppUI, $project;
+global $AppUI, $object;
 
-$items = $project->getForumList();
+$items = $object->getForumList();
 
 $module = new w2p_System_Module();
 $fields = $module->loadSettings('forums', 'projects_view');

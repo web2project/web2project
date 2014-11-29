@@ -3,7 +3,7 @@ if (!defined('W2P_BASE_DIR')) {
     die('You should not access this file directly.');
 }
 
-global $AppUI, $project_id, $deny, $canRead, $canEdit, $w2Pconfig;
+global $AppUI, $object_id, $deny, $canRead, $canEdit, $w2Pconfig;
 
 $cfObj = new CFile_Folder();
 global $allowed_folders_ary;

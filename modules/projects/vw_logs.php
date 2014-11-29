@@ -4,9 +4,9 @@ if (!defined('W2P_BASE_DIR')) {
 }
 // @todo    convert to template
 
-global $AppUI, $project, $project_id, $canEdit, $m, $tab;
+global $AppUI, $object, $object_id, $canEdit, $m, $tab;
 
-$company_id = $project->company();
+$company_id = $object->company();
 
 $task_log_costcodes =  array(0 => '(all)') + CProject::getBillingCodes($company_id, true);
 
@@ -53,7 +53,7 @@ function delIt2(id)
 <form name="frmFilter" action="./index.php" method="get" accept-charset="utf-8">
     <input type="hidden" name="m" value="projects"/>
     <input type="hidden" name="a" value="view"/>
-    <input type="hidden" name="project_id" value="<?php echo $project_id ?>"/>
+    <input type="hidden" name="project_id" value="<?php echo $object_id ?>"/>
     <input type="hidden" name="tab" value="<?php echo $tab ?>"/>
 
     <table class="std">
@@ -125,7 +125,7 @@ $canDelete = canDelete('task_log');
 // Pull the task comments
 $project = new CProject();
 //TODO: this method should be moved to CTaskLog
-$logs = $project->getTaskLogs(null, $project_id, $user_id, $hide_inactive, $hide_complete, $cost_code);
+$logs = $project->getTaskLogs(null, $object_id, $user_id, $hide_inactive, $hide_complete, $cost_code);
 
 $s = '';
 $hrs = 0;

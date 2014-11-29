@@ -4,14 +4,14 @@ if (!defined('W2P_BASE_DIR')) {
 }
 // @todo    convert to template
 
-global $project;
+global $object;
 
 $projectPriority = w2PgetSysVal('ProjectPriority');
 $projectStatus = w2PgetSysVal('ProjectStatus');
 
-$original_project_id = $project->project_original_parent;
-$project->project_status = -1;
-$st_projects_arr = $project->getStructuredProjects();
+$original_project_id = $object->project_original_parent;
+$object->project_status = -1;
+$st_projects_arr = $object->getStructuredProjects();
 
 $module = new w2p_System_Module();
 $fields = $module->loadSettings('projects', 'subproject_list');
@@ -49,7 +49,7 @@ if (is_array($st_projects_arr)) {
             $listTable->stageRowData($row);
 
             $s  = '<tr>';
-            $s .= '<td><a href="./index.php?m=projects&a=addedit&project_id=' . $s_project->project_id . '"><img src="' . w2PfindImage('icons/' . ($project_id == $s_project->project_id ? 'pin' : 'pencil') . '.gif') . '" /></a></td>';
+            $s .= '<td><a href="./index.php?m=projects&a=addedit&project_id=' . $s_project->project_id . '"><img src="' . w2PfindImage('icons/' . ($object_id == $s_project->project_id ? 'pin' : 'pencil') . '.gif') . '" /></a></td>';
             foreach ($fieldList as $field) {
                 if ('project_name' == $field) {
                     $s .= '<td class="_name">';
