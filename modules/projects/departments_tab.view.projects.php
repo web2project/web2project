@@ -4,7 +4,7 @@ if (!defined('W2P_BASE_DIR')) {
 }
 // @todo    convert to template
 
-global $AppUI, $a, $addPwOiD, $buffer, $dept_id, $department, $min_view,
+global $AppUI, $a, $addPwOiD, $buffer, $dept_id, $object, $min_view,
     $m, $priority, $projects, $tab, $user_id, $orderdir, $orderby;
 
 if (isset($_GET['orderby'])) {
@@ -22,11 +22,11 @@ $orderdir = $AppUI->getState('DeptProjIdxOrderDir') ? $AppUI->getState('DeptProj
  *
  * May God have mercy on our souls for the atrocity we're about to commit.
  */
-$tmpDepartments = $department;
-$department = $dept_id;
+$tmpDepartments = $object;
+$object = $dept_id;
 $project = new CProject();
 $projects = projects_list_data($user_id);
-$department = $tmpDepartments;
+$object = $tmpDepartments;
 $items = $projects;
 
 $module = new w2p_System_Module();

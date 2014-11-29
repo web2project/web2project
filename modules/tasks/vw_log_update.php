@@ -5,12 +5,11 @@ if (!defined('W2P_BASE_DIR')) {
 // @todo    convert to template
 // @todo    remove database query
 
-global $AppUI, $obj, $can_edit_time_information, $cal_sdf, $m;
+global $AppUI, $object, $can_edit_time_information, $cal_sdf, $m;
 
 $percent = array(0 => '0', 5 => '5', 10 => '10', 15 => '15', 20 => '20', 25 => '25', 30 => '30', 35 => '35', 40 => '40', 45 => '45', 50 => '50', 55 => '55', 60 => '60', 65 => '65', 70 => '70', 75 => '75', 80 => '80', 85 => '85', 90 => '90', 95 => '95', 100 => '100');
 
-$task        = $obj;
-$task_id     = $task->task_id;
+$object_id     = $object->getId();
 $task_log_id = (int) w2PgetParam($_GET, 'task_log_id', 0);
 
 $log = new CTask_Log();
@@ -28,8 +27,8 @@ if ($task_log_id && !$canEdit) {
 
 // check permissions
 $perms = &$AppUI->acl();
-$canEditTask = $perms->checkModuleItem('tasks', 'edit', $obj->task_id);
-$canViewTask = $perms->checkModuleItem('tasks', 'view', $obj->task_id);
+$canEditTask = $perms->checkModuleItem('tasks', 'edit', $object->task_id);
+$canViewTask = $perms->checkModuleItem('tasks', 'view', $object->task_id);
 
 if ($task_log_id) {
     if (!$canEdit || !$canViewTask) {
@@ -40,12 +39,12 @@ if ($task_log_id) {
     if (!$canAuthor || !$canViewTask) {
         $AppUI->redirect(ACCESS_DENIED);
     }
-    $log->task_log_task = $obj->task_id;
-    $log->task_log_name = $obj->task_name;
+    $log->task_log_task = $object->task_id;
+    $log->task_log_name = $object->task_name;
 }
 
 $project = new CProject();
-$project->load($obj->task_project);
+$project->load($object->task_project);
 
 $bcode = new CSystem_Bcode();
 $companyBC = $bcode->getBillingCodes($project->project_company);
@@ -65,7 +64,7 @@ $task_email_title = array();
 $q = new w2p_Database_Query();
 $q->addTable('task_contacts', 'tc');
 $q->addJoin('contacts', 'c', 'c.contact_id = tc.contact_id', 'inner');
-$q->addWhere('tc.task_id = ' . (int) $obj->task_id);
+$q->addWhere('tc.task_id = ' . (int) $object->task_id);
 $q->addQuery('tc.contact_id');
 $q->addQuery('c.contact_first_name, c.contact_last_name');
 $req = &$q->exec();
@@ -78,7 +77,7 @@ for ($req; !$req->EOF; $req->MoveNext()) {
 $q->clear();
 $q->addTable('project_contacts', 'pc');
 $q->addJoin('contacts', 'c', 'c.contact_id = pc.contact_id', 'inner');
-$q->addWhere('pc.project_id = ' . (int) $obj->task_project);
+$q->addWhere('pc.project_id = ' . (int) $object->task_project);
 $q->addQuery('pc.contact_id');
 $q->addQuery('c.contact_first_name, c.contact_last_name');
 $req = &$q->exec();
@@ -163,7 +162,7 @@ $q->clear();
 $form = new w2p_Output_HTML_FormHelper($AppUI);
 ?>
 <a name="log"></a>
-<form name="editFrm" action="?m=<?php echo $m; ?>&amp;a=view&amp;task_id=<?php echo $obj->task_id; ?>" method="post"
+<form name="editFrm" action="?m=<?php echo $m; ?>&amp;a=view&amp;task_id=<?php echo $object->task_id; ?>" method="post"
     onsubmit="updateEmailContacts();" accept-charset="utf-8" class="addedit tasks-tasklog">
 	<input type="hidden" name="uniqueid" value="<?php echo uniqid(''); ?>" />
 	<input type="hidden" name="dosql" value="do_updatetask" />
@@ -186,7 +185,7 @@ $form = new w2p_Output_HTML_FormHelper($AppUI);
             <p>
                 <label><?php echo ($canEditTask ? $AppUI->_('Progress') : ''); ?>:</label>
                 <?php
-                echo ($canEditTask ? arraySelect($percent, 'task_percent_complete', 'size="1" class="text"', $obj->task_percent_complete) . '%' : '<input type="hidden" name="task_percent_complete" value="0" />');
+                echo ($canEditTask ? arraySelect($percent, 'task_percent_complete', 'size="1" class="text"', $object->task_percent_complete) . '%' : '<input type="hidden" name="task_percent_complete" value="0" />');
                 ?>
             </p>
             <p>
@@ -196,21 +195,21 @@ $form = new w2p_Output_HTML_FormHelper($AppUI);
                 <a class="button" href="#" onclick="javascript:timerReset()"><span id="timerResetButton"><?php echo $AppUI->_('Reset'); ?></span></a>
                 <span id='timerStatus'></span>
             </p>
-            <?php if ($obj->task_owner != $AppUI->user_id) { ?>
+            <?php if ($object->task_owner != $AppUI->user_id) { ?>
             <p>
                 <label><?php echo $AppUI->_('Notify creator'); ?>:</label>
                 <input type="checkbox" name="task_log_notify_owner" id="task_log_notify_owner" />
             </p>
             <?php } ?>
-            <?php if (!$task->task_allow_other_user_tasklogs) { ?>
+            <?php if (!$object->task_allow_other_user_tasklogs) { ?>
                 <input type="hidden" name="task_log_creator" value="<?php echo ($log->task_log_creator == 0 ? $AppUI->user_id : $log->task_log_creator); ?>" />
             <?php } else { ?>
-                <?php ($obj->task_log_creator == 0) ? $user_id = $AppUI->user_id : $user_id = $obj->task_log_creator; ?>
+                <?php ($object->task_log_creator == 0) ? $user_id = $AppUI->user_id : $user_id = $object->task_log_creator; ?>
             <p>
                 <label><?php echo $AppUI->_('User'); ?>:</label>
                 <?php
                 //TODO: update for arraySelect()
-                foreach ($task->assignees($task_id) as $task_user) {
+                foreach ($object->assignees($object_id) as $task_user) {
                     $task_user['user_id'] == $user_id ? $selected = 'selected="selected"' : $selected = '';
                     ?>
                     <option <?php echo $selected; ?> value="<?php echo $task_user['user_id']; ?>"><?php echo $task_user['contact_first_name'] . ' ' . $task_user['contact_last_name']; ?></option>
@@ -245,8 +244,8 @@ $form = new w2p_Output_HTML_FormHelper($AppUI);
                 </select>
             </p>
             <?php
-            if ($obj->canUserEditTimeInformation($project->project_owner, $AppUI->user_id) && $canEditTask) {
-                $end_date = intval($obj->task_end_date) ? new w2p_Utilities_Date($obj->task_end_date) : null;
+            if ($object->canUserEditTimeInformation($project->project_owner, $AppUI->user_id) && $canEditTask) {
+                $end_date = intval($object->task_end_date) ? new w2p_Utilities_Date($object->task_end_date) : null;
             ?>
             <p>
                 <label><?php echo $AppUI->_('Task end date'); ?>:</label>

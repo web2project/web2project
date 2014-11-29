@@ -3,27 +3,27 @@ if (!defined('W2P_BASE_DIR')) {
     die('You should not access this file directly.');
 }
 
-$contact_id = (int) w2PgetParam($_GET, 'contact_id', 0);
+$object_id = (int) w2PgetParam($_GET, 'contact_id', 0);
 
 $tab = $AppUI->processIntState('ContactVwTab', $_GET, 'tab', 0);
 
-$contact = new CContact();
+$object = new CContact();
 
-if (!$contact->load($contact_id)) {
+if (!$object->load($object_id)) {
     $AppUI->redirect(ACCESS_DENIED);
 }
 
-$canEdit   = $contact->canEdit();
-$canDelete = $contact->canDelete();
+$canEdit   = $object->canEdit();
+$canDelete = $object->canDelete();
 
-$is_user = $contact->isUser($contact_id);
+$is_user = $object->isUser($object_id);
 
 // Get the contact details for company and department
-$company_detail = $contact->getCompanyDetails();
-$dept_detail = $contact->getDepartmentDetails();
+$company_detail = $object->getCompanyDetails();
+$dept_detail = $object->getDepartmentDetails();
 
 // Get the Contact info (phone, emails, etc) for the contact
-$methods = $contact->getContactMethods();
+$methods = $object->getContactMethods();
 $methodLabels = w2PgetSysVal('ContactMethods');
 
 // setup the title block
@@ -31,17 +31,17 @@ $ttl = 'View Contact';
 $titleBlock = new w2p_Theme_TitleBlock($ttl, 'icon.png', $m);
 $titleBlock->addCrumb('?m=contacts', 'contacts list');
 if ($canEdit) {
-    $titleBlock->addCrumb('?m=contacts&a=addedit&contact_id='.$contact_id, 'edit this contact');
+    $titleBlock->addCrumb('?m=contacts&a=addedit&contact_id='.$object_id, 'edit this contact');
 }
-if ($contact->user_id) {
-    $titleBlock->addCrumb('?m=users&a=view&user_id='.$contact->user_id, 'view this user');
+if ($object->user_id) {
+    $titleBlock->addCrumb('?m=users&a=view&user_id='.$object->user_id, 'view this user');
 }
 if ($canDelete) {
     $titleBlock->addCrumbDelete('delete contact', $canDelete, $msg);
 }
 $titleBlock->show();
 
-$view = new w2p_Controllers_View($AppUI, $contact, 'Contact');
+$view = new w2p_Controllers_View($AppUI, $object, 'Contact');
 echo $view->renderDelete();
-;
+
 include $AppUI->getTheme()->resolveTemplate($m . '/' . $a);

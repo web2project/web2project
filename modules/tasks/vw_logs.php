@@ -4,7 +4,7 @@ if (!defined('W2P_BASE_DIR')) {
 }
 // @todo    convert to template
 
-global $AppUI, $task_id, $sf, $df, $canEdit, $m;
+global $AppUI, $object_id, $sf, $df, $canEdit, $m;
 
 $perms = &$AppUI->acl();
 if (!canView('task_log')) {
@@ -73,7 +73,7 @@ $fieldNames = array_values($fields);
 // Pull the task comments
 $task= new CTask();
 //TODO: this method should be moved to CTaskLog
-$logs = $task->getTaskLogs($task_id, $problem);
+$logs = $task->getTaskLogs($object_id, $problem);
 
 $s = '';
 $hrs = 0;
@@ -96,7 +96,7 @@ if (count($logs)) {
 
         $s .= '<td class="data _edit">';
         if ($canEdit) {
-            $s .= '<a href="?m=tasks&a=view&task_id=' . $task_id . '&tab=';
+            $s .= '<a href="?m=tasks&a=view&task_id=' . $object_id . '&tab=';
             $s .= ($tab == -1) ? $AppUI->getState('TaskLogVwTab') : '1';
             $s .= '&task_log_id=' . $row['task_log_id'] . '">' . w2PshowImage('icons/stock_edit-16.png', 16, 16, '') . '</a>';
         }
@@ -123,8 +123,8 @@ $s .= '<tr>';
 $s .= '<td colspan="6" align="right">' . $AppUI->_('Total Hours') . ' =</td>';
 $s .= $htmlHelper->createCell('task_log_hours', sprintf('%.2f', $hrs));
 $s .= '<td align="right" colspan="3">';
-if ($perms->checkModuleItem('tasks', 'edit', $task_id)) {
-    $s .= '<form action="?m=tasks&a=view&tab=1&task_id=' . $task_id . '" method="post" accept-charset="utf-8">';
+if ($perms->checkModuleItem('tasks', 'edit', $object_id)) {
+    $s .= '<form action="?m=tasks&a=view&tab=1&task_id=' . $object_id . '" method="post" accept-charset="utf-8">';
     $s .= '<input type="submit" class="button btn btn-primary btn-mini" value="' . $AppUI->_('new log') . '"></form>';
 }
 $s .= '</td></tr>';

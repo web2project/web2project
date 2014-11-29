@@ -3,7 +3,7 @@ if (!defined('W2P_BASE_DIR')) {
     die('You should not access this file directly.');
 }
 
-global $a, $addPwOiD, $AppUI, $buffer, $company_id, $department, $dept_id,
+global $a, $addPwOiD, $AppUI, $buffer, $company_id, $object, $dept_id,
     $dept_ids, $min_view, $m, $priority, $projects, $tab, $user_id;
 
 $perms = &$AppUI->acl();
@@ -47,7 +47,7 @@ $min_view = true;
  *
  * My God have mercy on our souls for the atrocity we're about to commit.
  */
-$tmpDepartments = $department;
-$department = $dept_id;
+$tmpDepartments = $object;
+$object = $dept_id;
 require W2P_BASE_DIR . '/modules/projects/viewgantt.php';
-$department = $tmpDepartments;
+$object = $tmpDepartments;

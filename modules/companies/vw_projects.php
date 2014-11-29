@@ -3,14 +3,14 @@ if (!defined('W2P_BASE_DIR')) {
     die('You should not access this file directly.');
 }
 
-global $AppUI, $company, $tab;
+global $AppUI, $object, $tab;
 
 $sort = w2PgetParam($_GET, 'sort', 'project_name');
 if ($sort == 'project_priority') {
     $sort .= ' DESC';
 }
 
-$items = $company->projects($AppUI, $company->company_id, !$tab, $sort);
+$items = $object->projects($AppUI, $object->company_id, !$tab, $sort);
 
 $module = new w2p_System_Module();
 $fields = $module->loadSettings('projects', 'company_view');

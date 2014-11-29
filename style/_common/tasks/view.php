@@ -5,7 +5,7 @@ $htmlHelper = new w2p_Output_HTMLHelper($AppUI);
 ?>
 <table class="std view tasks">
 <tr>
-    <th colspan="2"><?php echo $obj->task_name; ?></th>
+    <th colspan="2"><?php echo $object->task_name; ?></th>
 </tr>
 <tr>
 <td width="50%" valign="top" class="view-column">
@@ -13,11 +13,11 @@ $htmlHelper = new w2p_Output_HTMLHelper($AppUI);
     <table width="100%" cellspacing="1" cellpadding="2" class="well">
         <tr>
             <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Project'); ?>:</td>
-            <?php echo $htmlHelper->createCell('task_project', $obj->task_project); ?>
+            <?php echo $htmlHelper->createCell('task_project', $object->task_project); ?>
         </tr>
-        <?php if ($obj->task_parent != $obj->task_id) {
+        <?php if ($object->task_parent != $object->task_id) {
             $obj_parent = new CTask();
-            $obj_parent->load($obj->task_parent);
+            $obj_parent->load($object->task_parent);
             ?>
             <tr>
                 <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Task Parent'); ?>:</td>
@@ -26,25 +26,25 @@ $htmlHelper = new w2p_Output_HTMLHelper($AppUI);
         <?php } ?>
         <tr>
             <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Owner'); ?>:</td>
-            <?php echo $htmlHelper->createCell('task_owner', $obj->task_owner); ?>
+            <?php echo $htmlHelper->createCell('task_owner', $object->task_owner); ?>
         </tr>
         <tr>
             <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Priority'); ?>:</td>
             <td>
                 <?php
                 $task_priotities = w2PgetSysVal('TaskPriority');
-                echo $AppUI->_($task_priotities[$obj->task_priority]);
+                echo $AppUI->_($task_priotities[$object->task_priority]);
                 ?>
             </td>
         </tr>
         <tr>
             <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Web Address'); ?>:</td>
-            <?php echo $htmlHelper->createCell('task_related_url', $obj->task_related_url); ?>
+            <?php echo $htmlHelper->createCell('task_related_url', $object->task_related_url); ?>
         </tr>
         <tr>
             <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Milestone'); ?>:</td>
             <td width="300">
-                <?php if ($obj->task_milestone) {
+                <?php if ($object->task_milestone) {
                     echo $AppUI->_('Yes');
                 } else {
                     echo $AppUI->_('No');
@@ -53,11 +53,11 @@ $htmlHelper = new w2p_Output_HTMLHelper($AppUI);
         </tr>
         <tr>
             <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Progress'); ?>:</td>
-            <td width="300"><?php echo ($obj->task_percent_complete) ? $obj->task_percent_complete : 0; ?>%</td>
+            <td width="300"><?php echo ($object->task_percent_complete) ? $object->task_percent_complete : 0; ?>%</td>
         </tr>
         <tr>
             <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Time Worked'); ?>:</td>
-            <?php echo $htmlHelper->createCell('task_hours_worked', $obj->task_hours_worked . ' ' . $AppUI->_('hours')); ?>
+            <?php echo $htmlHelper->createCell('task_hours_worked', $object->task_hours_worked . ' ' . $AppUI->_('hours')); ?>
         </tr>
         <tr>
             <td>
@@ -66,19 +66,19 @@ $htmlHelper = new w2p_Output_HTMLHelper($AppUI);
         </tr>
         <tr>
             <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Start Date'); ?>:</td>
-            <?php echo $htmlHelper->createCell('task_start_datetime', $obj->task_start_date); ?>
+            <?php echo $htmlHelper->createCell('task_start_datetime', $object->task_start_date); ?>
         </tr>
         <tr>
             <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Finish Date'); ?>:</td>
-            <?php echo $htmlHelper->createCell('task_end_datetime', $obj->task_end_date); ?>
+            <?php echo $htmlHelper->createCell('task_end_datetime', $object->task_end_date); ?>
         </tr>
         <tr>
             <td align="right" nowrap="nowrap" valign="top"><?php echo $AppUI->_('Expected Duration'); ?>:</td>
-            <td width="300"><?php echo $obj->task_duration . ' ' . $AppUI->_($durnTypes[$obj->task_duration_type]); ?></td>
+            <td width="300"><?php echo $object->task_duration . ' ' . $AppUI->_($durnTypes[$object->task_duration_type]); ?></td>
         </tr>
         <tr>
             <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Task Type'); ?> :</td>
-            <?php echo $htmlHelper->createCell('task_type', $AppUI->_($task_types[$obj->task_type])); ?>
+            <?php echo $htmlHelper->createCell('task_type', $AppUI->_($task_types[$object->task_type])); ?>
         </tr>
         <?php if (w2PgetConfig('budget_info_display', false)) { ?>
             <tr>
@@ -99,7 +99,7 @@ $htmlHelper = new w2p_Output_HTMLHelper($AppUI);
                                     <?php
                                     $totalBudget = 0;
                                     foreach ($billingCategory as $id => $category) {
-                                        $amount = $obj->budget[$id]['budget_amount'];
+                                        $amount = $object->budget[$id]['budget_amount'];
                                         $totalBudget += $amount;
                                         ?>
                                         <tr>
@@ -220,7 +220,7 @@ $htmlHelper = new w2p_Output_HTMLHelper($AppUI);
     <strong><?php echo $AppUI->_('Dependencies'); ?></strong>
     <table width="100%" cellspacing="1" cellpadding="2" class="tbl list well">
         <?php
-        $taskDep = $obj->getDependencyList($task_id);
+        $taskDep = $object->getDependencyList($task_id);
         $s = count($taskDep) == 0 ? '<tr><td>' . $AppUI->_('none') . '</td></tr>' :
             '<tr><th>' . $AppUI->_('Task') . '</th>' .
             '<th>' . $AppUI->_('Work') . '</th>' .
@@ -242,7 +242,7 @@ $htmlHelper = new w2p_Output_HTMLHelper($AppUI);
     <strong><?php echo $AppUI->_('Tasks depending on this Task'); ?></strong>
     <table width="100%" cellspacing="1" cellpadding="2" class="tbl list well">
         <?php
-        $dependingTasks = $obj->getDependentTaskList($task_id);
+        $dependingTasks = $object->getDependentTaskList($object_id);
         $s = count($dependingTasks) == 0 ? '<tr><td>' . $AppUI->_('none') . '</td></tr>' :
             '<tr><th>' . $AppUI->_('Task') . '</th>' .
             '<th>' . $AppUI->_('Work') . '</th>' .
@@ -263,10 +263,10 @@ $htmlHelper = new w2p_Output_HTMLHelper($AppUI);
     <strong><?php echo $AppUI->_('Description'); ?></strong>
     <table width="100%" cellspacing="1" cellpadding="2" class="well">
         <tr>
-            <?php echo $htmlHelper->createCell('task_description', $obj->task_description); ?>
+            <?php echo $htmlHelper->createCell('task_description', $object->task_description); ?>
         </tr>
         <?php
-        $depts = $obj->getTaskDepartments(null, $task_id);
+        $depts = $object->getTaskDepartments(null, $task_id);
         if (count($depts)) { ?>
             <tr>
                 <td><strong><?php echo $AppUI->_('Departments'); ?></strong></td>
@@ -285,7 +285,7 @@ $htmlHelper = new w2p_Output_HTMLHelper($AppUI);
                 </td>
             </tr>
         <?php }
-        $contacts = $obj->getContacts(null, $task_id);
+        $contacts = $object->getContacts(null, $task_id);
         if (count($contacts)) {
             echo '<tr><td colspan="3"><strong>' . $AppUI->_('Task Contacts') . '</strong></td></tr>';
             echo '<tr><td colspan="3">';
@@ -294,7 +294,7 @@ $htmlHelper = new w2p_Output_HTMLHelper($AppUI);
         }
 
         $project = new CProject();
-        $project->project_id = $obj->task_project;
+        $project->project_id = $object->task_project;
         $contacts = $project->getContactList();
         if (count($contacts)) {
             echo '<tr><td colspan="3"><strong>' . $AppUI->_('Project Contacts') . '</strong></td></tr>';
@@ -306,7 +306,7 @@ $htmlHelper = new w2p_Output_HTMLHelper($AppUI);
         <tr>
             <td colspan="3">
                 <?php
-                $custom_fields = new w2p_Core_CustomFields($m, $a, $obj->task_id, 'view');
+                $custom_fields = new w2p_Core_CustomFields($m, $a, $object_id, 'view');
                 $custom_fields->printHTML();
                 ?>
             </td>

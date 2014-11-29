@@ -4,10 +4,10 @@ if (!defined('W2P_BASE_DIR')) {
 }
 // @todo    convert to template
 
-global $AppUI, $user_id, $user_name, $canEdit, $canDelete, $tab;
+global $AppUI, $object_id, $user_name, $canEdit, $canDelete, $tab;
 
 $perms = &$AppUI->acl();
-$user_roles = $perms->getUserRoles($user_id);
+$user_roles = $perms->getUserRoles($object_id);
 $crole = new CSystem_Role();
 $roles = $crole->getRoles();
 // Format the roles for use in arraySelect
@@ -80,7 +80,7 @@ function clearIt()
 <form name="frmRoles" method="post" action="?m=users" accept-charset="utf-8">
 	<input type="hidden" name="del" value="0" />
 	<input type="hidden" name="dosql" value="do_userrole_aed" />
-	<input type="hidden" name="user_id" value="<?php echo $user_id; ?>" />
+	<input type="hidden" name="user_id" value="<?php echo $object_id; ?>" />
 	<input type="hidden" name="user_name" value="<?php echo $user_name; ?>" />
 	<input type="hidden" name="role_id" value="" />
 	<table class="std">

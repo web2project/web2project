@@ -4,9 +4,9 @@ if (!defined('W2P_BASE_DIR')) {
 }
 // @todo    convert to template
 
-global $AppUI, $department;
+global $AppUI, $object;
 
-$items = $department->contacts($department->dept_id);
+$items = $object->contacts($object->dept_id);
 
 $module = new w2p_System_Module();
 $fields = $module->loadSettings('contacts', 'department_view');

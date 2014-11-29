@@ -6,9 +6,9 @@ if (!defined('W2P_BASE_DIR')) {
 
 global $AppUI, $tab;
 
-$obj = new CResource();
+$object = new CResource();
 $where = ($tab) ? 'resource_type = '. $tab : '';
-$items = $obj->loadAll('resource_name', $where);
+$items = $object->loadAll('resource_name', $where);
 
 $module = new w2p_System_Module();
 $fields = $module->loadSettings('resources', 'index_list');

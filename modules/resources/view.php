@@ -3,21 +3,21 @@ if (!defined('W2P_BASE_DIR')) {
     die('You should not access this file directly.');
 }
 // @todo    convert to template
-$resource_id = (int) w2PgetParam($_GET, 'resource_id', 0);
+$object_id = (int) w2PgetParam($_GET, 'resource_id', 0);
 
-$obj = new CResource();
+$object = new CResource();
 
-if (!$obj->load($resource_id)) {
+if (!$object->load($object_id)) {
     $AppUI->redirect(ACCESS_DENIED);
 }
 
-$canEdit   = $obj->canEdit();
-$canDelete = $obj->canDelete();
+$canEdit   = $object->canEdit();
+$canDelete = $object->canDelete();
 
 $titleBlock = new w2p_Theme_TitleBlock('View Resource', 'icon.png', $m);
 $titleBlock->addCrumb('?m=' . $m, $m . ' list');
 if ($canEdit) {
-    $titleBlock->addCrumb('?m=resources&a=addedit&resource_id=' . $resource_id, 'edit this resource');
+    $titleBlock->addCrumb('?m=resources&a=addedit&resource_id=' . $object_id, 'edit this resource');
 
     if ($canDelete) {
         $titleBlock->addCrumbDelete('delete resource', $canDelete, 'no delete permission');
@@ -25,7 +25,7 @@ if ($canEdit) {
 }
 $titleBlock->show();
 
-$view = new w2p_Controllers_View($AppUI, $obj, 'Resource');
+$view = new w2p_Controllers_View($AppUI, $object, 'Resource');
 echo $view->renderDelete();
 
 $types = w2PgetSysVal('ResourceTypes');

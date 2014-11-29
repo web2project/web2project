@@ -5,7 +5,7 @@ if (!defined('W2P_BASE_DIR')) {
 // @todo    convert to template
 // @todo    remove database query
 
-global $AppUI, $user_id;
+global $AppUI, $object_id;
 
 $canEdit = canEdit('users');
 $perms = &$AppUI->acl();
@@ -41,7 +41,7 @@ foreach ($module_list as $module) {
 $count = 0;
 
 //Pull User perms
-$user_acls = $perms->getUserACLs($user_id);
+$user_acls = $perms->getUserACLs($object_id);
 $user_acls = (is_array($user_acls)) ? $user_acls : array();
 $perm_list = $perms->getPermissionList();
 
@@ -234,8 +234,8 @@ function setPermItem(key, val)
                 <form name="frmPerms" method="post" action="?m=users" accept-charset="utf-8">
                     <input type="hidden" name="del" value="0" />
                     <input type="hidden" name="dosql" value="do_perms_aed" />
-                    <input type="hidden" name="user_id" value="<?php echo $user_id; ?>" />
-                    <input type="hidden" name="permission_user" value="<?php echo $perms->get_object_id('user', $user_id, 'aro'); ?>" />
+                    <input type="hidden" name="user_id" value="<?php echo $object_id; ?>" />
+                    <input type="hidden" name="permission_user" value="<?php echo $perms->get_object_id('user', $object_id, 'aro'); ?>" />
                     <input type="hidden" name="permission_id" value="0" />
                     <input type="hidden" name="permission_item" value="0" />
                     <input type="hidden" name="permission_table" value="" />
