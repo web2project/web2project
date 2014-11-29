@@ -26,11 +26,6 @@ if ($obj) {
 } else {
     $object->load($object_id);
 }
-if (!$object && $object_id > 0) {
-    $AppUI->setMsg('Contact');
-    $AppUI->setMsg('invalidID', UI_MSG_ERROR, true);
-    $AppUI->redirect('m=' . $m);
-}
 
 $company = new CCompany();
 $company->load($company_id);

@@ -23,11 +23,6 @@ if ($obj) {
 } else {
     $object->load($object_id);
 }
-if (!$object && $object_id > 0) {
-    $AppUI->setMsg('Forum');
-    $AppUI->setMsg('invalidID', UI_MSG_ERROR, true);
-    $AppUI->redirect('m=' . $m);
-}
 
 $status = isset($object->forum_status) ? $object->forum_status : -1;
 

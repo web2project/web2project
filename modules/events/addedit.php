@@ -30,12 +30,6 @@ if ($obj) {
 } else {
     $object->load($object_id);
 }
-// load the record data
-if (!$object && $object_id > 0) {
-    $AppUI->setMsg('Event');
-    $AppUI->setMsg('invalidID', UI_MSG_ERROR, true);
-    $AppUI->redirect('m=' . $m);
-}
 
 $object->event_project = ($event_project) ? $event_project : $object->event_project;
 $start_date = intval($object->event_start_date) ? new w2p_Utilities_Date($AppUI->formatTZAwareTime($object->event_start_date, '%Y-%m-%d %T')) : new w2p_Utilities_Date();

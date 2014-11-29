@@ -26,11 +26,6 @@ if ($obj) {
 } else {
     $object->load($object_id);
 }
-if (!$object && $object_id > 0) {
-    $AppUI->setMsg('Link');
-    $AppUI->setMsg('invalidID', UI_MSG_ERROR, true);
-    $AppUI->redirect('m=' . $m);
-}
 
 if (0 == $object_id && ($project_id || $task_id)) {
 

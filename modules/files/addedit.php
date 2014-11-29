@@ -26,11 +26,6 @@ if ($obj) {
 } else {
     $obj = $object->load($object_id);
 }
-if (!$object && $object_id > 0) {
-    $AppUI->setMsg('File');
-    $AppUI->setMsg('invalidID', UI_MSG_ERROR, true);
-    $AppUI->redirect('m=' . $m);
-}
 
 if (file_exists(W2P_BASE_DIR . '/modules/helpdesk/config.php')) {
     include W2P_BASE_DIR . '/modules/helpdesk/config.php';

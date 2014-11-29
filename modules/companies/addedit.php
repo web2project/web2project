@@ -23,11 +23,6 @@ if ($obj) {
 } else {
     $object->load($object_id);
 }
-if (!$object && $object_id > 0) {
-    $AppUI->setMsg('Company');
-    $AppUI->setMsg('invalidID', UI_MSG_ERROR, true);
-    $AppUI->redirect('m=' . $m);
-}
 
 // setup the title block
 $ttl = $object_id > 0 ? 'Edit Company' : 'Add Company';
