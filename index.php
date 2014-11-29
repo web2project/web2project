@@ -8,8 +8,8 @@
 
 require_once 'bootstrap.php';
 
-$frontpage = new w2p_Core_FrontPageController($AppUI, new w2p_FileSystem_Loader());
-list($m, $a, $u) = $frontpage->resolveParameters($w2Pconfig, $_REQUEST);
+$pageHandler = new w2p_Output_PageHandler($AppUI);
+list($m, $a, $u) = $pageHandler->resolveParameters($w2Pconfig, $_REQUEST);
 
 switch($_REQUEST['action']) {
     case 'lostpass':
@@ -57,10 +57,9 @@ if (!$suppressHeaders) {
     include $theme->resolveTemplate('header');
 }
 
-$pageHandler = new w2p_Output_PageHandler();
 $pageHandler->loadExtras($_SESSION, $AppUI, $m, 'tabs');
 $pageHandler->loadExtras($_SESSION, $AppUI, $m, 'crumbs');
-$frontpage->loadIncludes();
+$pageHandler->loadIncludes();
 
 $module_file = W2P_BASE_DIR . '/modules/' . $m . '/' . ($u ? ($u . '/') : '') . $a . '.php';
 if (!file_exists($module_file)) {
