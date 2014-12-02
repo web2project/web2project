@@ -88,14 +88,14 @@ if (function_exists('mb_internal_encoding')) {
     mb_internal_encoding('UTF-8');
 }
 
-define('FMT_DATEISO', '%Y%m%dT%H%M%S');
-define('FMT_DATELDAP', '%Y%m%d%H%M%SZ');
+define('FMT_DATEISO', '%Y%m%dT%H%M%S');     // @todo: Deprecated in v4.0, remove in v5.0
+define('FMT_DATELDAP', '%Y%m%d%H%M%SZ');    // @todo: Deprecated in v4.0, remove in v5.0
 define('FMT_DATETIME_MYSQL', '%Y-%m-%d %H:%M:%S');
 define('FMT_DATERFC822', '%a, %d %b %Y %H:%M:%S');
 define('FMT_TIMESTAMP', '%Y%m%d%H%M%S');
 define('FMT_TIMESTAMP_DATE', '%Y%m%d');
 define('FMT_TIMESTAMP_TIME', '%H%M%S');
-define('FMT_UNIX', '3');
+define('FMT_UNIX', '3');                    // @todo: Deprecated in v4.0, remove in v5.0
 
 define('UI_MSG_OK', 1);
 define('UI_MSG_ALERT', 2);
@@ -114,20 +114,13 @@ define('UI_OUTPUT_HTML', 0);
 define('UI_OUTPUT_JS', 0x10);
 define('UI_OUTPUT_RAW', 0x20);
 
-define('PERM_DENY', '0');
-define('PERM_EDIT', '-1');
-define('PERM_READ', '1');
+define('PERM_DENY', '0');       // @todo: Deprecated in v4.0, remove in v5.0
+define('PERM_EDIT', '-1');      // @todo: Deprecated in v4.0, remove in v5.0
+define('PERM_READ', '1');       // @todo: Deprecated in v4.0, remove in v5.0
 
-define('PERM_ALL', '-1');
+define('PERM_ALL', '-1');       // @todo: Deprecated in v4.0, remove in v5.0
 
 define('ACCESS_DENIED', 'm=public&a=access_denied');
-
-/**
- * This was previously set to ADODB_FETCH_NUM which was 1 in all cases.
- *  Realistically, we should use the constant to make sure they stay the same
- *  but we're trying to clean up some of the complexity in the loaded libraries.
- */
-define('QUERY_STYLE_NUM', 1);
 
 setlocale(LC_CTYPE, 'C');
 

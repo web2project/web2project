@@ -1358,7 +1358,7 @@ function __extract_from_contact_controller($controller)
     $notifyasked = w2PgetParam($_POST, 'contact_updateask', 0);
     if ($notifyasked && !strlen($updatekey)) {
         $rnow = new w2p_Utilities_Date();
-        $controller->object->contact_updatekey = MD5($rnow->format(FMT_DATEISO));
+        $controller->object->contact_updatekey = MD5($rnow->format(FMT_DATETIME_MYSQL));
         $controller->object->contact_updateasked = $rnow->format(FMT_DATETIME_MYSQL);
         $controller->object->contact_lastupdate = '';
         $controller->object->store();
