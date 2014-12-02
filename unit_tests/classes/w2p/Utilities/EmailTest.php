@@ -128,7 +128,7 @@ class w2p_Utilities_EmailTest extends CommonSetup
 
         $okEmails = array('First Person <test@test.com>, Second Person <another@test.com>');
         $this->obj->CC($okEmails);
-        $this->assertEquals(2, count($this->obj->acc));
+        $this->assertEquals(1, count($this->obj->acc));
     }
 
     public function testBCC()
@@ -139,7 +139,7 @@ class w2p_Utilities_EmailTest extends CommonSetup
 
         $okEmails = array('First Person <test@test.com>, Second Person <another@test.com>');
         $this->obj->Bcc($okEmails);
-        $this->assertEquals(2, count($this->obj->abcc));
+        $this->assertEquals(1, count($this->obj->abcc));
     }
 
     public function testBody()

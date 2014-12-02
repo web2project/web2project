@@ -332,7 +332,7 @@ function db_errno()
  */
 function db_insert_id()
 {
-    trigger_error(__FUNCTION__ . " has been deprecated in v3.2 and will be removed in v5.0. Please use w2p_Database_Connection->db_insert_id instead.", E_USER_NOTICE );
+    //trigger_error(__FUNCTION__ . " has been deprecated in v3.2 and will be removed in v5.0. Please use w2p_Database_Connection->db_insert_id instead.", E_USER_NOTICE );
 
     global $db;
 
