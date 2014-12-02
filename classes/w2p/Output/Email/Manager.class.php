@@ -391,7 +391,7 @@ class w2p_Output_Email_Manager
 
         $body = $this->AppUI->_('sendpass0', UI_OUTPUT_RAW) . ' {{user_name}} ' .
                 $this->AppUI->_('sendpass1', UI_OUTPUT_RAW) . ' {{base_url}} ' .
-                $this->AppUI->_('sendpass2', UI_OUTPUT_RAW) . ' {{password}} ' .
+                $this->AppUI->_('sendpass2', UI_OUTPUT_RAW) . ' {{password}} ' . "\n\n" .
                 $this->AppUI->_('sendpass3', UI_OUTPUT_RAW);
 
         return $this->templater->render($body, $object);

@@ -6,24 +6,12 @@
  */
 
 global $db;
-global $ADODB_FETCH_MODE;
-global $w2p_performance_dbtime;
-global $w2p_performance_old_dbqueries;
-global $AppUI;
 
 require_once '../bootstrap.php';
 
 /**
- * Need this to not get the annoying timezone warnings in tests.
- */
-$defaultTZ = w2PgetConfig('system_timezone', 'UTC');
-$defaultTZ = ('' == $defaultTZ) ? 'UTC' : $defaultTZ;
-date_default_timezone_set($defaultTZ);
-
-/**
  * Need this to test actions that require permissions.
  */
-$AppUI  = new w2p_Core_CAppUI();
 $_POST['login'] = 'login';
 $_REQUEST['login'] = 'sql';
 $AppUI->login('admin', 'passwd');
