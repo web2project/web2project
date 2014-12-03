@@ -2265,9 +2265,9 @@ function addHistory($table, $id, $action = 'modify', $description = '', $project
     * 2) project_id and module_id should be provided in order to filter history entries
     *
     */
-//    if (!$AppUI->isActiveModule('history')) {
-//        return;
-//    }
+    if (!$AppUI->isActiveModule('history')) {
+        return;
+    }
     if (is_null($action)) {
         $action = 'delete';
     }
