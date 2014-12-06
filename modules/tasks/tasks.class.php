@@ -1020,6 +1020,7 @@ class CTask extends w2p_Core_BaseObject
 
     public function notifyOwner()
     {
+        $project = new CProject();
         $projname = $project->load($this->task_project)->project_name;
 
         // c = creator
