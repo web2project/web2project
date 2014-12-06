@@ -10,10 +10,10 @@ $contact_id = (int) w2PgetParam($_GET, 'contact_id', 0);
 $object = new CUser();
 $object->setId($object_id);
 
-
 $canAddEdit = $object->canAddEdit();
 $canAuthor = $object->canCreate();
 $canEdit = $object->canEdit();
+$canDelete = $object->canAddEdit();
 if (!$canAddEdit) {
     $AppUI->redirect(ACCESS_DENIED);
 }
@@ -62,6 +62,9 @@ if ($object_id) {
     }
 }
 $titleBlock->show();
+
+$view = new w2p_Controllers_View($AppUI, $object, 'User');
+echo $view->renderDelete();
 
 $AppUI->getTheme()->addFooterJavascriptFile('js/passwordstrength.js');
 ?>
@@ -118,13 +121,6 @@ $AppUI->getTheme()->addFooterJavascriptFile('js/passwordstrength.js');
             f.dept_name.value = '';
         }
     }
-    <?php if ($canDelete && $object_id) { ?>
-    function delIt() {
-        if (confirm( '<?php echo $AppUI->_('doDelete') . ' ' . $AppUI->_('User') . '?'; ?>' )) {
-            document.frmDelete.submit();
-        }
-    }
-    <?php } ?>
     </script>
     <?php
     /**
@@ -134,13 +130,6 @@ $AppUI->getTheme()->addFooterJavascriptFile('js/passwordstrength.js');
     $spacing = ('wps-redmond' == $AppUI->getPref('UISTYLE')) ? 70 : 0;
     echo '<div style="padding-top: ' . $spacing . 'px;"> </div>';
     ?>
-    <?php if ($canDelete && $object_id) { ?>
-    <form name="frmDelete" action="./index.php?m=users" method="post" accept-charset="utf-8">
-        <input type="hidden" name="dosql" value="do_user_aed" />
-        <input type="hidden" name="del" value="1" />
-        <input type="hidden" name="company_id" value="<?php echo $object_id; ?>" />
-    </form>
-    <?php } ?>
 </script>
 <?php
 /**
