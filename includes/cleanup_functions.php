@@ -2250,6 +2250,7 @@ function defVal($var, $def)
 function addHistory($table, $id, $action = 'modify', $description = '', $project_id = 0)
 {
     global $AppUI;
+    $AppUI = is_null($AppUI) ? new w2p_Core_CAppUI() : $AppUI;
     /*
     * TODO:
     * 1) description should be something like:
