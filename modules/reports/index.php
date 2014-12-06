@@ -8,7 +8,7 @@ $report_type = w2PgetParam($_REQUEST, 'report_type', '');
 
 $canReport = canView('reports');
 $canRead = canView('projects', $project_id);
-if (!$canReport || !$canRead) {
+if (!$canReport && !$canRead) {
 	$AppUI->redirect(ACCESS_DENIED);
 }
 
