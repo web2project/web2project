@@ -137,7 +137,7 @@ class w2p_Core_CAppUITest extends CommonSetup
     {
         $AppUI = $this->_AppUI;
 
-        $this->assertEquals('en_US', $AppUI->getPref('LOCALE'));
+        $this->assertEquals('en', $AppUI->getPref('LOCALE'));
         $this->assertEquals('',   $AppUI->getPref('NotGonnaBeThere'));
     }
 
@@ -148,7 +148,7 @@ class w2p_Core_CAppUITest extends CommonSetup
     {
         $AppUI = $this->_AppUI;
 
-        $this->assertEquals('en_US',     $AppUI->getPref('LOCALE'));
+        $this->assertEquals('en',     $AppUI->getPref('LOCALE'));
         $AppUI->setPref('AddingThis', 'Monkey');
         $this->assertEquals('Monkey', $AppUI->getPref('AddingThis'));
     }

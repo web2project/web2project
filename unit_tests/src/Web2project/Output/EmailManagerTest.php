@@ -134,8 +134,8 @@ class Web2project_Output_EmailManagerTest extends CommonSetup
         $target_body .= "Task:\t\tMy Task\n";
         $target_body .= "Priority:\t1\n";
         $target_body .= "Progress:\t50%\n";
-        $target_body .= "Start Date:\t30/Jan/2010 06:30 am UTC\n";
-        $target_body .= "Finish Date:\t02/Feb/2011 06:45 am UTC\n";
+        $target_body .= "Start Date:\t30/Jan/2010 06:30 am CST\n";
+        $target_body .= "Finish Date:\t02/Feb/2011 06:45 am CST\n";
         $target_body .= "URL:\t\t" . W2P_BASE_URL . "/index.php?m=tasks&a=view&task_id=-1\n\n";
         $target_body .= "Description: \none two three\n\n";
         $target_body .= "Owner:\n, ";
@@ -261,21 +261,6 @@ class Web2project_Output_EmailManagerTest extends CommonSetup
         $target_body .= "Creator: Admin Person";
 
         $actual_body = $this->manager->getProjectNotify($project, false);
-
-        $this->assertEquals($target_body, $actual_body);
-    }
-
-    public function testGetNotifyNewUser()
-    {
-        $target_body  = "Dear Keith Casey,\n\n\n";
-        $target_body .= "Congratulations! Your account has been activated by the administrator.\n\n";
-        $target_body .= "Please use the login information provided earlier.\n";
-        $target_body .= "You may login at the following URL: " . W2P_BASE_URL . "\n\n\n";
-        $target_body .= "If you have any difficulties or questions, please ask the administrator for help.\n\n";
-        //$target_body .= "Assuring you the best of our attention at all time.\n\n";
-        $target_body .= "Our Warmest Regards,\nThe Support Staff.\n\n****PLEASE KEEP THIS EMAIL FOR YOUR RECORDS****";
-
-        $actual_body = $this->manager->getNotifyNewUser('Keith Casey');
 
         $this->assertEquals($target_body, $actual_body);
     }
