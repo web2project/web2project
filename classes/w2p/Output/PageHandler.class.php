@@ -104,6 +104,8 @@ class w2p_Output_PageHandler
 
     public function loadIncludes()
     {
+        $AppUI = $this->AppUI;
+
         foreach($this->includes as $include) {
             if (file_exists($include)) {
                 include $include;
