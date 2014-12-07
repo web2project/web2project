@@ -55,7 +55,7 @@ class w2p_Output_PageHandler
         }
 
         if (isset($input['dosql'])) {
-            $this->includes[] = W2P_BASE_DIR . '/modules/' . $m . '/' . ($u ? ($u . '/') : '') . $loader->makeFileNameSafe($input['dosql']) . '.php';
+            $this->includes[] = W2P_BASE_DIR . '/modules/' . $m . '/' . ($u ? ($u . '/') : '') . $this->loader->makeFileNameSafe($input['dosql']) . '.php';
         }
 
         return array($m, $a, $u);
