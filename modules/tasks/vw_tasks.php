@@ -177,6 +177,7 @@ $fieldNames = array_values($fields);
 
 $tempTask = new CTask();
 $listTable = new w2p_Output_HTML_TaskTable($AppUI, $tempTask);
+$listTable->setFilters($f, $user_id);
 $listTable->df .= ' ' . $AppUI->getPref('TIMEFORMAT');
 
 $listTable->addBefore('edit', 'task_id');
