@@ -1,6 +1,6 @@
 {
     "name": "web2project/core",
-    "version": "3.3.34",
+    "version": "3.3.35",
     "type": "application",
     "description": "web-based project management system",
     "keywords": ["gantt charts", "task tracking", "time tracking", "project planning"],

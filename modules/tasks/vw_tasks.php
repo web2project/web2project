@@ -31,10 +31,10 @@ $task_sort_item2 = w2PgetParam($_GET, 'task_sort_item2', 'task_end_date');
 $task_sort_type2 = w2PgetParam($_GET, 'task_sort_type2', '');
 $task_sort_order1 = (int) w2PgetParam($_GET, 'task_sort_order1', 0);
 $task_sort_order2 = (int) w2PgetParam($_GET, 'task_sort_order2', 0);
-if (isset($_POST['show_task_options'])) {
-    $AppUI->setState('TaskListShowIncomplete', w2PgetParam($_POST, 'show_incomplete', 0));
-}
-$showIncomplete = $AppUI->getState('TaskListShowIncomplete', 0);
+//if (isset($_POST['show_task_options'])) {
+//    $AppUI->setState('TaskListShowIncomplete', w2PgetParam($_POST, 'show_incomplete', 0));
+//}
+//$showIncomplete = $AppUI->getState('TaskListShowIncomplete', 0);
 
 $project = new CProject;
 $allowedProjects = $project->getAllowedSQL($AppUI->user_id, 'p.project_id');
@@ -207,7 +207,7 @@ $customLookups = array('task_status' => $status, 'task_priority' => $priority);
 if ($task_id) {
     $task = new CTask();
     $task->load($task_id);
-    $taskTree = $tempTask->getTaskTree($task->task_project, $task_id, $showIncomplete);
+    $taskTree = $tempTask->getTaskTree($task->task_project, $task_id);
     echo $listTable->buildRows($taskTree, $customLookups);
 } else {
     reset($projects);
@@ -235,11 +235,11 @@ if ($task_id) {
                 </td>
             </tr>
             <?php
-            $taskTree = $tempTask->getTaskTree($k, 0, $showIncomplete);
+            $taskTree = $tempTask->getTaskTree($k, 0);
             echo $listTable->buildRows($taskTree, $customLookups);
         }
         if ('projects' == $m || 'projectdesigner' == $m) {
-            $taskTree = $tempTask->getTaskTree($k, 0, $showIncomplete);
+            $taskTree = $tempTask->getTaskTree($k, 0);
             echo $listTable->buildRows($taskTree, $customLookups);
         }
     }
