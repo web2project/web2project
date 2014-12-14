@@ -1892,19 +1892,16 @@ class CTask extends w2p_Core_BaseObject
     /**
      * @param $project_id
      * @param int $task_id
-     * @param bool $showIncompleteOnly
      * @return type
-     *
-     * TODO: I don't like the additional parameter $showIncompleteOnly, it just seems like a bad implementation.
      */
-    public function getTaskTree($project_id, $task_id = 0, $showIncompleteOnly = false)
+    public function getTaskTree($project_id, $task_id = 0)
     {
         $taskTree = array();
         $this->_depth++;
 
         $q = $this->_getQuery();
         $q->addTable('tasks');
-        $q->addQuery('tasks.*, p.project_name, task_pinned');
+        $q->addQuery('tasks.*, p.project_name, p.project_owner, p.project_company, task_pinned');
         $q->addWhere('task_project = ' . (int) $project_id);
         $q->addJoin('projects', 'p', 'p.project_id = task_project');
         $q->addQuery('user_task_priority');
@@ -1917,14 +1914,11 @@ class CTask extends w2p_Core_BaseObject
         } else {
             $q->addWhere('(tasks.task_id = task_parent OR task_parent = 0)');
         }
-        if ($showIncompleteOnly) {
-            $q->addWhere('task_percent_complete <> 100');
-        }
         $q->addOrder('task_start_date, task_end_date, task_name');
 
         $tasks = $q->loadHashList('task_id');
         foreach ($tasks as $task) {
-            $children = $this->getTaskTree($project_id, $task['task_id'], $showIncompleteOnly);
+            $children = $this->getTaskTree($project_id, $task['task_id']);
 
             $task['depth'] = $this->_depth;
             $task['children'] = count($children);

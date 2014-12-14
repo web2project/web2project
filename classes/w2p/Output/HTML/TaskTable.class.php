@@ -10,12 +10,20 @@
 class w2p_Output_HTML_TaskTable extends w2p_Output_ListTable
 {
     protected $task = null;
+    protected $filter = null;
+    protected $user_id = null;
 
     public function __construct($AppUI, $task = null)
     {
         $this->task = (is_null($task)) ? new CTask() : $task;
 
         parent::__construct($AppUI);
+    }
+
+    public function setFilters($filters, $user_id)
+    {
+        $this->filter = ('' == $filters) ? 'deepchildren' : $filters;
+        $this->user_id = $user_id;
     }
 
     public function buildHeader($fields = array(), $sortable = false, $m = '')
@@ -30,8 +38,42 @@ class w2p_Output_HTML_TaskTable extends w2p_Output_ListTable
         return $header;
     }
 
+    protected function showRow($rowData)
+    {
+        switch($this->filter) {
+            case 'all':
+            case 'deepchildren':
+                return true;
+            case 'myproj':
+                return ($rowData['project_owner'] == $this->user_id);
+            case 'mycomp':
+                return ($rowData['project_company'] == $this->_AppUI->user_company);
+            case 'allunfinished':
+                return ($rowData['task_percent_complete'] < 100);
+            case 'taskcreated':
+                return ($rowData['task_creator'] == $this->user_id);
+            case 'taskowned':
+                return ($rowData['task_owner'] == $this->user_id);
+            case 'my':
+                $assignees = $this->task->assignees($rowData['task_id']);
+                return (array_key_exists($this->user_id, $assignees));
+            case 'myunfinished':
+                $assignees = $this->task->assignees($rowData['task_id']);
+                return (array_key_exists($this->user_id, $assignees) && $rowData['task_percent_complete'] < 100);
+            case 'unassigned':
+                $assignees = $this->task->assignees($rowData['task_id']);
+                return (count($assignees)) ? false : true;
+        }
+
+        return false;
+    }
+
     public function buildRow($rowData, $customLookups = array())
     {
+        if (!$this->showRow($rowData)) {
+            return '';
+        }
+
         $this->stageRowData($rowData);
         $class = w2pFindTaskComplete($rowData['task_start_date'], $rowData['task_end_date'], $rowData['task_percent_complete']);
 

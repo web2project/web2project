@@ -23,16 +23,12 @@ if (isset($_GET['project_id'])) {
     $AppUI->setState('TaskIdxProject', w2PgetParam($_GET, 'project_id', null));
 }
 $project_id = $AppUI->getState('TaskIdxProject') ? $AppUI->getState('TaskIdxProject') : 0;
-if (isset($_POST['show_task_options'])) {
-    $AppUI->setState('TaskListShowIncomplete', w2PgetParam($_POST, 'show_incomplete', 0));
-}
-$showIncomplete = $AppUI->getState('TaskListShowIncomplete', 0);
 
 // get CCompany() to filter tasks by company
 $obj = new CCompany();
 $companies = $obj->getAllowedRecords($AppUI->user_id, 'company_id,company_name', 'company_name');
 $filters2 = arrayMerge(array('allcompanies' => $AppUI->_('All Companies', UI_OUTPUT_RAW)), $companies);
-$filters = array('my' => 'My Tasks', 'myunfinished' => 'My Unfinished Tasks', 'allunfinished' => 'All Unfinished Tasks', 'myproj' => 'My Projects', 'mycomp' => 'All Tasks for my Company', 'unassigned' => 'All Tasks (unassigned)', 'taskowned' => 'All Tasks That I Am Owner', 'taskcreated' => 'All Tasks I Have Created', 'all' => 'All Tasks', 'allfinished7days' => 'All Tasks Finished Last 7 Days', 'myfinished7days' => 'My Tasks Finished Last 7 Days');
+$filters = array('my' => 'My Tasks', 'myunfinished' => 'My Unfinished Tasks', 'allunfinished' => 'All Unfinished Tasks', 'myproj' => 'My Projects', 'mycomp' => 'All Tasks for my Company', 'unassigned' => 'All Tasks (unassigned)', 'taskowned' => 'All Tasks That I Am Owner', 'taskcreated' => 'All Tasks I Have Created', 'all' => 'All Tasks');
 
 $search_string = w2PgetParam($_POST, 'search_string', '');
 $AppUI->setState($m . '_search_string', $search_string);
@@ -68,14 +64,6 @@ if (w2PgetParam($_GET, 'pinned') == 1) {
 }
 $titleBlock->addCrumb('?m=tasks&amp;inactive=toggle', 'show ' . $in . 'active tasks');
 $titleBlock->addCrumb('?m=tasks&amp;a=tasksperuser', 'tasks per user');
-if (!$project_id) {
-    $titleBlock->addCell('
-        <form name="task_list_options" method="post" action="?m=tasks" accept-charset="utf-8">
-            <label for="show_incomplete" ><input type="hidden" name="show_task_options" value="1" /><input type="checkbox" name="show_incomplete" id="show_incomplete" onclick="document.task_list_options.submit();"' . ($showIncomplete ? 'checked="checked"' : '') . '/>' . $AppUI->_("Incomplete Tasks Only") . '</label>
-        </form>');
-
-}
-
 $titleBlock->show();
 
 // include the re-usable sub view
