@@ -54,6 +54,9 @@ class w2p_Output_HTML_TaskTable extends w2p_Output_ListTable
                 return ($rowData['task_creator'] == $this->user_id);
             case 'taskowned':
                 return ($rowData['task_owner'] == $this->user_id);
+            case 'my':
+                $assignees = $this->task->assignees($rowData['task_id']);
+                return (array_key_exists($this->user_id, $assignees));
             case 'myunfinished':
                 $assignees = $this->task->assignees($rowData['task_id']);
                 return (array_key_exists($this->user_id, $assignees) && $rowData['task_percent_complete'] < 100);
