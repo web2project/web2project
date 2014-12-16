@@ -6,16 +6,16 @@ if (!defined('W2P_BASE_DIR')) {
 // @todo    remove database query
 
 global $AppUI, $m, $a, $project_id, $task_id, $f, $task_status, $min_view, $query_string, $durnTypes, $tpl;
-global $task_sort_item1, $task_sort_type1, $task_sort_order1;
-global $task_sort_item2, $task_sort_type2, $task_sort_order2;
+//global $task_sort_item1, $task_sort_type1, $task_sort_order1;
+//global $task_sort_item2, $task_sort_type2, $task_sort_order2;
 global $user_id, $w2Pconfig, $currentTabId, $currentTabName, $canEdit, $showEditCheckbox, $tab;
-global $history_active;
+//global $history_active;
 
 if (empty($query_string)) {
     $query_string = '?m=' . $m . '&amp;a=' . $a;
 }
 $mods = $AppUI->getActiveModules();
-$history_active = !empty($mods['history']) && canView('history');
+//$history_active = !empty($mods['history']) && canView('history');
 
 /****
 // Let's figure out which tasks are selected
@@ -25,12 +25,12 @@ $task_id = (int) w2PgetParam($_GET, 'task_id', 0);
 $pinned_only = (int) w2PgetParam($_GET, 'pinned', 0);
 __extract_from_tasks_pinning($AppUI, $task_id);
 
-$task_sort_item1 = w2PgetParam($_GET, 'task_sort_item1', 'task_start_date');
-$task_sort_type1 = w2PgetParam($_GET, 'task_sort_type1', '');
-$task_sort_item2 = w2PgetParam($_GET, 'task_sort_item2', 'task_end_date');
-$task_sort_type2 = w2PgetParam($_GET, 'task_sort_type2', '');
-$task_sort_order1 = (int) w2PgetParam($_GET, 'task_sort_order1', 0);
-$task_sort_order2 = (int) w2PgetParam($_GET, 'task_sort_order2', 0);
+//$task_sort_item1 = w2PgetParam($_GET, 'task_sort_item1', 'task_start_date');
+//$task_sort_type1 = w2PgetParam($_GET, 'task_sort_type1', '');
+//$task_sort_item2 = w2PgetParam($_GET, 'task_sort_item2', 'task_end_date');
+//$task_sort_type2 = w2PgetParam($_GET, 'task_sort_type2', '');
+//$task_sort_order1 = (int) w2PgetParam($_GET, 'task_sort_order1', 0);
+//$task_sort_order2 = (int) w2PgetParam($_GET, 'task_sort_order2', 0);
 //if (isset($_POST['show_task_options'])) {
 //    $AppUI->setState('TaskListShowIncomplete', w2PgetParam($_POST, 'show_incomplete', 0));
 //}
