@@ -786,7 +786,7 @@ class w2p_Core_CAppUI
             return false;
         }
 
-        $user_id = $auth->userId();
+        $user_id = $auth->userId($username);
         $username = $auth->username; // Some authentication schemes may collect username in various ways.
         // Now that the password has been checked, see if they are allowed to
         // access the system
