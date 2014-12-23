@@ -172,10 +172,4 @@ include W2P_BASE_DIR . '/locales/' . $AppUI->user_locale . '/locales.php';
 include W2P_BASE_DIR . '/locales/core.php';
 setlocale(LC_TIME, $AppUI->user_lang);
 
-// set the default ui style
-$uistyle = $AppUI->getPref('UISTYLE') ? $AppUI->getPref('UISTYLE') : w2PgetConfig('host_style');
-include W2P_BASE_DIR . '/style/' . $uistyle . '/overrides.php';
-$uiName = str_replace('-', '', $uistyle);
-
-$uiClass = 'style_' . $uiName;
-$theme = new $uiClass($AppUI);
+$theme = $AppUI->getTheme();

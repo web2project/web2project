@@ -247,6 +247,7 @@ class w2p_Core_CAppUI
     {
         $this->setStyle();
         $uistyle = ('' == $this->getPref('UISTYLE')) ? 'web2project' : $this->getPref('UISTYLE');
+        include_once W2P_BASE_DIR . '/style/' . $uistyle . '/overrides.php';
         $uiClass = 'style_' . str_replace('-', '', $uistyle);
 
         $theme = new $uiClass($this);
