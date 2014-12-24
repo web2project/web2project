@@ -173,3 +173,4 @@ include W2P_BASE_DIR . '/locales/core.php';
 setlocale(LC_TIME, $AppUI->user_lang);
 
 $theme = $AppUI->getTheme();
+$uistyle = $AppUI->getPref('UISTYLE');
