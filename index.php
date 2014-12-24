@@ -24,10 +24,11 @@ switch($_REQUEST['action']) {
         $redirect = w2PgetParam($_POST, 'redirect', '');
 
         $AppUI->login($username, $password);
-        $AppUI->redirect('m=' . $m . '&a=' . $a);
+        $AppUI->redirect($redirect);
         break;
     case 'logout':
         $AppUI->logout();
+        $AppUI->redirect();
         break;
     default:
     // do nothing
