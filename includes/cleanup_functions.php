@@ -3400,7 +3400,7 @@ function showcompany($company_id, $restricted = false)
     $q->clear();
 
     $company = new CCompany();
-    $company->load($company_id)
+    $company->load($company_id);
     $company_name = $company->company_name;
 
     $table = '<h2>Company: ' . $company_name . '</h2>
