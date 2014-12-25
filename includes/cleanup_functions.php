@@ -3389,21 +3389,19 @@ function sendNewPass()
 }
 
 // from modules/reports/overall.php
-function showcompany($company, $restricted = false)
+function showcompany($company_id, $restricted = false)
 {
     global $AppUI, $allpdfdata, $log_start_date, $log_end_date, $log_all;
     $q = new w2p_Database_Query;
     $q->addTable('projects');
     $q->addQuery('project_id, project_name');
-    $q->addWhere('project_company = ' . (int) $company);
+    $q->addWhere('project_company = ' . (int) $company_id);
     $projects = $q->loadHashList();
     $q->clear();
 
-    $q->addTable('companies');
-    $q->addQuery('company_name');
-    $q->addWhere('company_id = ' . (int) $company);
-    $company_name = $q->loadResult();
-    $q->clear();
+    $company = new CCompany();
+    $company->load($company_id)
+    $company_name = $company->company_name;
 
     $table = '<h2>Company: ' . $company_name . '</h2>
         <table cellspacing="1" cellpadding="4" border="0" class="tbl">';
