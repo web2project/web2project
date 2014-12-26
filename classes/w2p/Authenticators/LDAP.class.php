@@ -165,4 +165,5 @@ class w2p_Authenticators_LDAP extends w2p_Authenticators_Base
 
         $acl = &$this->AppUI->acl();
         $acl->insertUserRole($acl->get_group_id('normal'), $this->user_id);
+    }
 }
