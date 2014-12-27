@@ -52,7 +52,7 @@ if (canAdd('tasks')) {
 }
 $titleBlock->show();
 
-$view = new \Web2project\Controllers\View($AppUI, $object, 'Project');
+$view = new \Web2project\Output\HTML\View($AppUI, $object, 'Project');
 echo $view->renderDelete();
 ?>
 <script language="javascript" type="text/javascript">

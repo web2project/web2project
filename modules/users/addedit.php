@@ -61,7 +61,7 @@ if ($object_id) {
 }
 $titleBlock->show();
 
-$view = new w2p_Controllers_View($AppUI, $object, 'User');
+$view = new \Web2project\Output\HTML\View($AppUI, $object, 'User');
 echo $view->renderDelete();
 
 $AppUI->getTheme()->addFooterJavascriptFile('js/passwordstrength.js');

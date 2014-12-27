@@ -1,9 +1,9 @@
 <?php
 
-namespace Web2project\Controllers;
+namespace Web2project\Output\HTML;
 
 /**
- * @package     Web2project\Controllers
+ * @package     Web2project\Output\HTML
  */
 
 class View

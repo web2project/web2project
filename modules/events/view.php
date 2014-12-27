@@ -46,7 +46,7 @@ if ($canEdit) {
 }
 $titleBlock->show();
 
-$view = new \Web2project\Controllers\View($AppUI, $object, 'Event');
+$view = new \Web2project\Output\HTML\View($AppUI, $object, 'Event');
 echo $view->renderDelete();
 
 $types = w2PgetSysVal('EventType');

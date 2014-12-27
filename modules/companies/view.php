@@ -40,7 +40,7 @@ if ($canEdit) {
 }
 $titleBlock->show();
 
-$view = new \Web2project\Controllers\View($AppUI, $object, 'Company');
+$view = new \Web2project\Output\HTML\View($AppUI, $object, 'Company');
 echo $view->renderDelete();
 
 $types = w2PgetSysVal('CompanyType');

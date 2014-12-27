@@ -56,7 +56,7 @@ if ($canDelete) {
 }
 $titleBlock->show();
 
-$view = new \Web2project\Controllers\View($AppUI, $object, 'Task');
+$view = new \Web2project\Output\HTML\View($AppUI, $object, 'Task');
 echo $view->renderDelete();
 ?>
 <script language="javascript" type="text/javascript">

@@ -147,5 +147,5 @@ class w2p_Utilities_Date extends \Web2project\Utilities\Date { }
  * @deprecated  since version 4.0
  * @codeCoverageIgnore
  */
-class w2p_Controllers_View extends \Web2project\Controllers\View { }
+class w2p_Controllers_View extends \Web2project\Output\HTML\View { }
 

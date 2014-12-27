@@ -22,7 +22,7 @@ class w2p_Controllers_ViewTest extends CommonSetup
     {
         parent::setUp();
 
-        $this->obj = new \Web2project\Controllers\View($this->_AppUI, new \Web2project\Mocks\BaseObject(), 'baseobject');
+        $this->obj = new \Web2project\Output\HTML\View($this->_AppUI, new \Web2project\Mocks\BaseObject(), 'baseobject');
     }
 
     public function testRenderDelete()

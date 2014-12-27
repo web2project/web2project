@@ -25,7 +25,7 @@ if ($canEdit) {
 }
 $titleBlock->show();
 
-$view = new \Web2project\Controllers\View($AppUI, $object, 'Resource');
+$view = new \Web2project\Output\HTML\View($AppUI, $object, 'Resource');
 echo $view->renderDelete();
 
 $types = w2PgetSysVal('ResourceTypes');

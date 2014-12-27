@@ -64,7 +64,7 @@ $types = w2PgetSysVal('LinkType');
 $perms = &$AppUI->acl();
 $users = $perms->getPermittedUsers('links');
 
-$view = new \Web2project\Controllers\View($AppUI, $object, 'Link');
+$view = new \Web2project\Output\HTML\View($AppUI, $object, 'Link');
 echo $view->renderDelete();
 ?>
 <script language="javascript" type="text/javascript">

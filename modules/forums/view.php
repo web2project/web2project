@@ -58,7 +58,7 @@ if ($canEdit) {
 $titleBlock->addCell(arraySelect($filters, 'f', 'size="1" class="text" onchange="document.filterFrm.submit();"', $f, true), '', '<form action="?m=forums&a=view&forum_id=' . $object_id . '" method="post" name="filterFrm" accept-charset="utf-8">', '</form>');
 $titleBlock->show();
 
-$view = new \Web2project\Controllers\View($AppUI, $object, 'Forum');
+$view = new \Web2project\Output\HTML\View($AppUI, $object, 'Forum');
 echo $view->renderDelete();
 
 include $AppUI->getTheme()->resolveTemplate('forums/view');

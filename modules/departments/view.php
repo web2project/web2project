@@ -34,7 +34,7 @@ if ($canEdit) {
 }
 $titleBlock->show();
 
-$view = new \Web2project\Controllers\View($AppUI, $object, 'Department');
+$view = new \Web2project\Output\HTML\View($AppUI, $object, 'Department');
 $view->setDoSQL('do_dept_aed');
 $view->addField('dept_company', $object->dept_company);
 $view->setKey('dept_id');
