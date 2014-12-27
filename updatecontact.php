@@ -2,8 +2,6 @@
 
 require_once 'bootstrap.php';
 
-$AppUI = new w2p_Core_CAppUI();
-
 $updatekey = w2PgetParam($_GET, 'updatekey', 0);
 $updatekey = preg_replace("/[^A-Za-z0-9]/", "", $updatekey);
 $contact_id = CContact::getContactByUpdatekey($updatekey);

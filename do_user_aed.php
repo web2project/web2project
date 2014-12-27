@@ -6,8 +6,6 @@ if (!defined('W2P_BASE_DIR')) {
 require_once 'bootstrap.php';
 require_once W2P_BASE_DIR . '/lib/captcha/Functions.php';
 
-$AppUI = new w2p_Core_CAppUI();
-
 /*
 CAPTCHA control condition...
 */

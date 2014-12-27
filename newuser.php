@@ -2,8 +2,6 @@
 
 require_once 'bootstrap.php';
 
-$AppUI = new w2p_Core_CAppUI();
-
 if (w2PgetConfig('activate_external_user_creation') != 'true') {
     echo $AppUI->_('You should not access this file directly');
     die();
