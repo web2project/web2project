@@ -13,7 +13,7 @@
         }
     ],
     "require": {
-
+        "ircmaxell/password-compat": "1.0.4"
     },
     "autoload": {
         "psr-0": { "Web2project": "src/"}
