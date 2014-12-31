@@ -1903,6 +1903,7 @@ class CTask extends w2p_Core_BaseObject
         $q->addTable('tasks');
         $q->addQuery('tasks.*, p.project_name, p.project_owner, p.project_company, task_pinned');
         $q->addWhere('task_project = ' . (int) $project_id);
+        $q->addWhere('task_status = 0');
         $q->addJoin('projects', 'p', 'p.project_id = task_project');
         $q->addQuery('user_task_priority');
         $q->addJoin('user_tasks', 'ut', 'ut.task_id = tasks.task_id');

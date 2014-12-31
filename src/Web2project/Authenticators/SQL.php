@@ -18,10 +18,25 @@ class SQL extends \Web2project\Authenticators\Base
 
         $q = $this->query;
         $q->addTable('users');
-        $q->addQuery('user_id');
+        $q->addQuery('user_id, user_password');
         $q->addWhere("user_username = '$username'");
-        $q->addWhere("user_password = '".$this->hashPassword($password)."'");
-        $this->user_id = (int) $q->loadResult();
+        $result = $q->loadHash();
+
+        // This detects and updates legacy passwords automatically
+        if (32 == strlen($result['user_password'])) {
+            if (md5($password) == $result['user_password']) {
+                $q->clear();
+                $q->addTable('users');
+                $q->addUpdate('user_password', $this->hashPassword($password));
+                $q->addWhere("user_username = '$username'");
+                $q->exec();
+                $this->user_id = $result['user_id'];
+            }
+        } else {
+            if (password_verify($password, $result['user_password'])) {
+                $this->user_id = $result['user_id'];
+            }
+        }
 
         return ($this->user_id) ? true : false;
     }

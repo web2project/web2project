@@ -33,12 +33,9 @@ abstract class Base
         $this->query = is_null($query) ? new \w2p_Database_Query() : $query;
     }
 
-    /**
-     * @deprecated @since 3.2
-     */
     public function hashPassword($password, $salt = '')
     {
-        $hash = md5($password . $salt);
+        $hash = password_hash($password, PASSWORD_BCRYPT);
 
         return $hash;
     }
@@ -56,7 +53,7 @@ abstract class Base
         srand((double) microtime() * 1000000);
 
         $i = 0;
-        while ($i <= 10) {
+        while ($i <= 16) {
             $num = rand() % strlen($salt);
             $tmp = substr($salt, $num, 1);
             $newPassword = $newPassword . $tmp;

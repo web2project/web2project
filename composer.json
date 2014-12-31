@@ -1,6 +1,6 @@
 {
     "name": "web2project/core",
-    "version": "4.0.0",
+    "version": "3.3.50",
     "type": "application",
     "description": "web-based project management system",
     "keywords": ["web2project", "dotproject", "gantt charts", "task tracking", "time tracking", "project planning"],
@@ -19,7 +19,7 @@
     "require": {
         "aws/aws-sdk-php": "dev-master",
         "dropbox/dropbox-sdk": "1.1.*",
-        "ircmaxell/password-compat": "dev-master"
+        "ircmaxell/password-compat": "1.0.4"
     },
     "autoload": {
         "psr-0": { "Web2project": "src/"}

@@ -31,8 +31,6 @@ if (!$row->load($contact_id) && $contact_id > 0) {
         $AppUI->redirect(ACCESS_DENIED);
     }
 }
-$df = $AppUI->getPref('SHDATEFORMAT');
-$df .= ' ' . $AppUI->getPref('TIMEFORMAT');
 
 // setup the title block
 $ttl = $contact_id > 0 ? 'Edit Contact' : 'Add Contact';
@@ -44,7 +42,7 @@ if ($contact_id == 0 && $company_id > 0) {
     echo $company_name;
 }
 
-$uistyle = 'web2project';
+$uistyle = $AppUI->getPref('UISTYLE') ? $AppUI->getPref('UISTYLE') : w2PgetConfig('host_style');
 $outsider = $row->contact_display_name;
 require W2P_BASE_DIR . '/style/' . $uistyle . '/overrides.php';
 require W2P_BASE_DIR . '/style/' . $uistyle . '/header.php';

@@ -165,13 +165,20 @@ function chPriority(user_id)
 }
 <?php } ?>
 </script>
+<style>
+    .tasksperuser label {
+        display: inline;
+        float: none;
+        width: inherit;
+    }
+</style>
 <form name="editFrm" action="index.php?m=tasks&amp;a=tasksperuser" method="post" accept-charset="utf-8">
 	<input type="hidden" name="project_id" value="<?php echo $project_id; ?>" />
 	<input type="hidden" name="company_id" value="<?php echo $company_id; ?>" />
 	<input type="hidden" name="report_type" value="<?php echo $report_type; ?>" />
     <input type="hidden" name="datePicker" value="log" />
 
-	<table class="std">
+	<table class="std tasksperuser">
 		<tr>
 			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('For period'); ?>:</td>
 			<td nowrap="nowrap">
