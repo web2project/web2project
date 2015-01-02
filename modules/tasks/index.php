@@ -66,6 +66,9 @@ $titleBlock->addCrumb('?m=tasks&amp;inactive=toggle', 'show ' . $in . 'active ta
 $titleBlock->addCrumb('?m=tasks&amp;a=tasksperuser', 'tasks per user');
 $titleBlock->show();
 
+$tabBox = new CTabBox('?m=tasks', W2P_BASE_DIR . '/modules/tasks/', $tab);
+$tabBox->show();
+
 // include the re-usable sub view
 $min_view = false;
 echo $AppUI->getTheme()->styleRenderBoxTop();
