@@ -10,7 +10,7 @@
 class w2p_Output_HTML_TaskTable extends w2p_Output_ListTable
 {
     protected $task = null;
-    protected $filter = null;
+    protected $filter = 'all';
     protected $user_id = null;
 
     public function __construct($AppUI, $task = null)
