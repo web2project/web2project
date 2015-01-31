@@ -32,7 +32,7 @@ global $m;
             </p>
             <p>
                 <?php $form->showLabel('URL'); ?>
-                <?php $form->showField('task_related_url', $project->task_related_url, array('maxlength' => 255)); ?>
+                <?php $form->showField('task_related_url', $object->task_related_url, array('maxlength' => 255)); ?>
             </p>
             <?php if (w2PgetConfig('budget_info_display', false)) { ?>
                 <p>
