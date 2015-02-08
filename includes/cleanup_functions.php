@@ -4592,7 +4592,7 @@ function __extract_from_projects_gantt2($department, $addPwOiD, $project_type, $
     if ($statusFilter > -1) {
         $q->addWhere('pr.project_status = ' . (int) $statusFilter);
     }
-    if (!($department > 0) && $company_id != 0 && !$addPwOiD) {
+    if (!($department > 0) && $company_id > 0 && !$addPwOiD) {
         $q->addWhere('pr.project_company = ' . (int) $company_id);
     }
 // Show Projects where the Project Owner is in the given department
