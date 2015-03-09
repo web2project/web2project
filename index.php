@@ -272,4 +272,8 @@ if (!$suppressHeaders) {
 	echo '</body>
           </html>';
 }
+
+//Enable URL based autofill.
+echo '<script type="text/javascript" src="' . $base . 'js/urlautofill.js"></script>';
+
 ob_end_flush();
