@@ -46,14 +46,14 @@ $view = new w2p_Output_HTML_ViewHelper($AppUI);
             <?php if ($user->feed_token != '') {
                 $calendarFeed = W2P_BASE_URL.'/calendar.php?token='.$user->feed_token.'&amp;ext=.ics';
                 ?>
-                <form name="regenerateToken" action="./index.php?m=users" method="post" accept-charset="utf-8">
-                    <input type="hidden" name="user_id" value="<?php echo (int) $user->user_id; ?>" />
-                    <input type="hidden" name="dosql" value="do_user_token" />
-                    <input type="hidden" name="token" value="<?php echo $user->feed_token; ?>" />
-                    <input type="submit" name="regenerate token" value="<?php echo $AppUI->_('regenerate feed url'); ?>" class="button btn btn-primary btn-mini" />
-                </form>
                 <a href="<?php echo $calendarFeed; ?>">calendar feed</a>
             <?php } ?>
+            <form name="regenerateToken" action="./index.php?m=users" method="post" accept-charset="utf-8">
+                <input type="hidden" name="user_id" value="<?php echo (int) $user->user_id; ?>" />
+                <input type="hidden" name="dosql" value="do_user_token" />
+                <input type="hidden" name="token" value="<?php echo $user->feed_token; ?>" />
+                <input type="submit" name="regenerate token" value="<?php echo $AppUI->_('regenerate feed url'); ?>" class="button btn btn-primary btn-mini" />
+            </form>
         </p>
         <p><?php $view->showLabel('Signature'); ?>
             <?php $view->showField('user_signature', $user->user_signature); ?>
