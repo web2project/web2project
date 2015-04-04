@@ -778,7 +778,7 @@ class w2p_Core_CAppUI
         }
         $auth = &getauth($auth_method);
 
-        $username = preg_replace("/[^A-Za-z0-9_]/", "", $username);
+        $username = preg_replace("/[^A-Za-z0-9_-]/", "", $username);
         $username = trim($username);
         $password = trim($password);
 
