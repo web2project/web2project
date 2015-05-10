@@ -333,7 +333,8 @@ class w2p_Extensions_Permissions extends gacl_api
         $rows = w2PgetUsersList();
         foreach ($rows as $row) {
             if (($this->isUserPermitted($row['user_id'], $module)) || $row['user_id'] == $AppUI->user_id) {
-                $userlist[$row['user_id']] = $row['contact_name'];
+                $name = ('' == $row['contact_name']) ? $row['user_username'] : $row['contact_name'];
+                $userlist[$row['user_id']] = $name;
             }
         }
         //  Now format the userlist as an assoc array.
