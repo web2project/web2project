@@ -40,7 +40,7 @@ $titleBlock->addSearchCell($search_string);
 
 // Let's see if this user has admin privileges
 if (canView('users')) {
-    $user_list = array(0 => '');
+    $user_list = array(0 => 'all users');
     $user_list += $perms->getPermittedUsers('tasks');
     $titleBlock->addFilterCell('User', 'user_id', $user_list, $user_id);
 }
