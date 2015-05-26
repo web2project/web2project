@@ -12,7 +12,10 @@ The best part is that it's free software. That means you can use it, extend it, 
 *  PHP 5.3.8+
 *  Mysql 5.x+
 *  Apache 1.x+ or IIS 7+
-*  GD  (for Gantt Chart generation)
+*  PHP extensions:
+  *  GD  (for Gantt Chart generation)
+  *  mbstring (only if you're using multi-byte strings)
+  *  zlib (for output compression)
 
 ## Installing/Upgrading:
 
