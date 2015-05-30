@@ -72,7 +72,7 @@
 				name => 'json',
 			),
 			array(
-				name => 'mysql',
+				name => 'mysqli',
 			),
 			array(
 				name => 'session',
