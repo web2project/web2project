@@ -208,7 +208,9 @@ class w2p_Output_HTMLHelper extends w2p_Output_HTML_Base
                 break;
             case '_birthday':
             case '_date':
-                $myDate = intval($value) ? new w2p_Utilities_Date($value) : null;
+//TZ  awarness is missing                $myDate = intval($value) ? new w2p_Utilities_Date($value) : null;
+                $myDate = intval($value) ? new w2p_Utilities_Date($this->AppUI->formatTZAwareTime($value, '%Y-%m-%d %T')) : null;
+//end bugfix
                 $cell = $myDate ? $myDate->format($this->df) : '-';
                 break;
             case '_actual':
