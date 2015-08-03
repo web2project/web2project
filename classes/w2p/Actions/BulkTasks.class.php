@@ -125,26 +125,43 @@ class w2p_Actions_BulkTasks extends CTask
                 $newTask->task_id = $old_id;
                 $newTask->copyAssignedUsers($new_id);
             }
-        }
+        
 
-        $_task = new CTask();
-        $task_list = $_task->loadAll('task_parent, task_id', "task_project = " . $to_project_id);
-        foreach($task_list as $key => $data) {
-            $_task->load($key);
-            $_task->_updatePathEnumeration();
+// fix the task path enumeration because we fixed the parents, but not the task_path_enumerations yet.
+// // depending of the order foreach goes through the task list, the parent path may not yet have been set, so we would  mix
+// //the path of th old project with the new child task_id., so _updatePathEnumeration won't work
+// //at time of access not all parents/children path may have been created
+        $oldTask = new CTask();
+        $newPath="";
+//        $_task = new CTask();
 
-            if (!$_task->task_parent) {
+        foreach($old_new_task_mapping as $old_id => $new_id) {
+                $oldTask->load($old_id);
+                $oldPath=$oldTask->task_path_enumeration;
+                $path_task_ids= explode("/",$oldPath);
+                //$newTask->load($old_id);
+                $newPath="";
+                foreach ($path_task_ids as $pathIndex => $parent_task_id)  {
+                	if ($pathIndex != 0) $newPath.= "/";
+					    $newPath.= "$old_new_task_mapping[$parent_task_id]";	
+				};
                 $q->addTable('tasks');
-                $q->addUpdate('task_parent', $_task->task_id);
+                $q->addUpdate('task_path_enumeration', $newPath);
                 $q->addUpdate('task_updated', "'" . $q->dbfnNowWithTZ() . "'", false, true);
-                $q->addWhere('task_id = ' . (int) $_task->task_id);
+                $q->addWhere('task_id = ' . (int) $new_id);
                 $q->exec();
                 $q->clear();
-            }
-        }
+		
+        
 
-        $_task->updateDynamics();
 
+
+
+        };
+        
+        
+		$newTask->load($old_new_task_mapping[0]);
+		$newTask->updateDynamics();
         $last_task_data = $this->getLastTaskData($to_project_id);
         CProject::updateTaskCache(
             $to_project_id,
@@ -153,6 +170,7 @@ class w2p_Actions_BulkTasks extends CTask
             $this->getTaskCount($to_project_id)
         );
 
-        return $errors;
     }
-}
+   return $errors;
+    }
+}    
