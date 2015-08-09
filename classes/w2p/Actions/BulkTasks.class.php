@@ -111,7 +111,9 @@ class w2p_Actions_BulkTasks extends CTask
             foreach($old_parents as $old_child => $old_parent) {
                 if ($old_child == $old_parent) {
                     /** Remember, this means skip the rest of the loop. */
-                    continue;
+ //                   continue;
+ //task_parent is here still 0 for all tasks, even top level, so update all.
+ //this might als go into the bulktasks::postStore hook.
                 }
                 $q->addTable('tasks');
                 $q->addUpdate('task_parent', $old_new_task_mapping[$old_parent]);
