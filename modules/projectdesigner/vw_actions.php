@@ -177,7 +177,7 @@ $spercent = arrayMerge(array('' => '('.$AppUI->_('Progress').')'), $percent);
             <td>&nbsp;</td>
         </tr>
         <tr>
-            <th nowrap="nowrap"><?php echo $AppUI->_('Date Move (Days)'); ?>&nbsp;</th>
+            <th nowrap="nowrap"><?php echo $AppUI->_('Date Move (Working Days)'); ?>&nbsp;</th>
             <td>
                 <input type='text' class='text' id='bulk_move_date' name='bulk_move_date' value='' />
             </td>
