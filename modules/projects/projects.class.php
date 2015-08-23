@@ -523,7 +523,7 @@ class CProject extends w2p_Core_BaseObject
         $body = $emailManager->getProjectNotify($this, $isNotNew);
 
         $mail = new w2p_Utilities_Mail;
-        $mail->To($user->user_email, true);
+        $mail->To($user->contact_email, true);
         $mail->Subject($subject);
         $mail->Body($body, isset($GLOBALS['locale_char_set']) ? $GLOBALS['locale_char_set'] : '');
 
