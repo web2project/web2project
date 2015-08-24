@@ -9,6 +9,7 @@ $defaultTZ = w2PgetConfig('system_timezone', 'UTC');
 date_default_timezone_set($defaultTZ);
 
 $AppUI = new w2p_Core_CAppUI();
+$AppUI->user_id=1; //otherwise, CTask::remind has no permissions to see the task
 $AppUI->setUserLocale();
 
 $queue = new w2p_System_EventQueue();
