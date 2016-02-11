@@ -217,6 +217,11 @@ class w2p_Output_EmailManager
 
     public function getTaskRemind(CTask $task, $msg, $project_name, $contacts)
     {
+        if(isnull($project_name) || $project_name=="")
+        {
+            $project = new CProject();
+            $project_name = $project->load($task->task_project)->project_name;
+        }
         $body = $this->_AppUI->_('Task Due', UI_OUTPUT_RAW) . ': ' . $msg . "\n";
         $body .= $this->_AppUI->_('Project', UI_OUTPUT_RAW) . ': ' . $project_name . "\n";
         $body .= $this->_AppUI->_('Task', UI_OUTPUT_RAW) . ': ' . $task->task_name . "\n";
