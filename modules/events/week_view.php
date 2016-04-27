@@ -82,7 +82,7 @@ $titleBlock->show();
 		<a href="<?php echo '?m=events&a=week_view&date=' . $prev_week->format(FMT_TIMESTAMP_DATE); ?>"><img src="<?php echo w2PfindImage('prev.gif'); ?>" alt="pre" /></a>
 	</td>
 	<th width="100%">
-		<?php echo $AppUI->_('Week') . ' ' . $first_time->format('%U - %Y') . ' - ' . $AppUI->_($first_time->format('%B')); ?>
+		<?php echo $AppUI->_('Week') . ' ' . $last_time->format('%U - %Y') . ' - ' . $AppUI->_($last_time->format('%B')); ?>
 	</th>
 	<td>
 		<a href="<?php echo '?m=events&a=week_view&date=' . $next_week->format(FMT_TIMESTAMP_DATE); ?>"><img src="<?php echo w2PfindImage('next.gif'); ?>" alt="next" /></a>
