@@ -1,6 +1,6 @@
 <?php
 // Set the version components separately.
 $w2p_version_major = 3;
-$w2p_version_minor = 3;
-$w2p_version_patch = 66; // Can be set to null if not used
-$w2p_version_prepatch = null; // Set to null if a release version.
+$w2p_version_minor = 4;
+$w2p_version_patch = 00; // Can be set to null if not used
+$w2p_version_prepatch = 'pre1'; // Set to null if a release version.
