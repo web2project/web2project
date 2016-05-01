@@ -5,9 +5,16 @@ if (!defined('W2P_BASE_DIR')) {
 // @todo    convert to template
 // @todo    remove database query
 
-global $AppUI, $users, $task_id, $task_project, $obj;
-global $projTasksWithEndDates, $tab, $loadFromTab;
 
+function phpAlert($msg) {
+    echo '<script type="text/javascript">alert("' . $msg . '")</script>';
+}
+
+
+
+global $AppUI, $users, $task_project, $obj; //are these really assigned at this point? global $task_id was not
+global $projTasksWithEndDates, $tab, $loadFromTab;
+$task_id= (int) w2PgetParam($_GET, 'task_id', 0);
 // Need to get all of the resources that this user is allowed to view
 $resource = new CResource();
 $resources = $resource->loadAll();
@@ -28,6 +35,7 @@ if ($loadFromTab && isset($_SESSION['tasks_subform']['hresource_assign'])) {
     $initResAssignment = '';
     foreach (explode(';', $_SESSION['tasks_subform']['hresource_assign']) as $perc) {
         if ($perc) {
+        phpAlert( $perc);
             list($rid, $perc) = explode('=', $perc);
             $assigned_resources[$rid] = $perc;
             $initResAssignment .= $rid . '=' . $perc . ';';

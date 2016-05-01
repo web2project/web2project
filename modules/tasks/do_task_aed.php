@@ -15,7 +15,7 @@ $allow_other = (int) w2PgetParam($_POST, 'task_allow_other_user_tasklogs', 0);
 $_POST['task_allow_other_user_tasklogs'] = $allow_other;
 $comment = w2PgetParam($_POST, 'email_comment', '');
 $new_task_project = (int) w2PgetParam($_POST, 'new_task_project', 0);
-
+$hresource_assign = w2PgetParam($_POST, 'hresource_assign');
 // Find the task if we are set
 $task_end_date = null;
 $obj = new CTask();
@@ -73,6 +73,17 @@ for ($i = 0; $i < $i_cmp; $i++) {
         $hperc_assign_ar[$tmp[0]] = 100;
     }
 }
+
+
+
+//save resources, missing: permissions check on resources
+if($AppUI->isActiveModule('resources')) {
+    global $other_resources;
+    $other_resources = w2PgetParam($_POST, 'hresource_assign');
+    CResource::updateResources($task_id);
+    }
+
+
 
 // let's check if there are some assigned departments to task
 $obj->task_departments = implode(',', w2PgetParam($_POST, 'dept_ids', array()));

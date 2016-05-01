@@ -104,4 +104,42 @@ class CResource extends w2p_Core_BaseObject
 
         return $search;
     }
+
+
+
+ //save resources, missing: permissions check on resources
+ // whether module is active needs to checked at place of calling
+    public function updateResources($task_id) {
+    	global $other_resources;
+    	if (isset($other_resources)) {
+    		$value = array();
+    		$reslist = explode(';', $other_resources);
+    		foreach ($reslist as $res) {
+    			if ($res) {
+    				list($resource, $perc) = explode('=', $res);
+    				$value[] = array($task_id, $resource, $perc);
+    			}
+    		}
+    		// first delete any elements already there, then replace with this
+    		// list.
+    		$q = new w2p_Database_Query;
+    		$q->setDelete('resource_tasks');
+    		$q->addWhere('task_id = ' . (int)$task_id);
+    		$q->exec();
+    		$q->clear();
+    		if (count($value)) {
+    			foreach ($value as $v) {
+    				$q->addTable('resource_tasks');
+    				$q->addInsert('task_id,resource_id,percent_allocated', $v, true);
+    				$q->exec();
+    				$q->clear();
+    			}
+    		}
+    	}
+    
+            return ;
+    }
+
+
+
 }

@@ -19,7 +19,7 @@ function addResource(form) {
     
     var users = 'x';
     
-    //build array of assiged users
+    //build array of assinged users
     for (au; au > -1; au--) {
         users = users + ',' + form.assigned.options[au].value + ','
     }
@@ -33,13 +33,14 @@ function addResource(form) {
             form.assigned.options[t] = opt
         }
     }
+alert(form.hresource_assign.value);
 }
 
 function removeResource(form) {
     fl = form.assigned.length -1;
     for (fl; fl > -1; fl--) {
         if (form.assigned.options[fl].selected) {
-            //remove from hperc_assign
+            //remove from hresource_assign
             var selValue = form.assigned.options[fl].value;            
             var re = '.*('+selValue+'=[0-9]*;).*';
             var hiddenValue = form.hresource_assign.value;
@@ -51,7 +52,7 @@ function removeResource(form) {
                 form.hresource_assign.value = hiddenValue;
                 form.assigned.options[fl] = null;
             }
-//alert(form.hperc_assign.value);
+//alert(form.hresource_assign.value);
         }
     }
 }
