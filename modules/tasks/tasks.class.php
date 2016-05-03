@@ -738,7 +738,62 @@ class CTask extends w2p_Core_BaseObject
         $q->addUpdate('task_updated', "'" . $q->dbfnNowWithTZ() . "'", false, true);
         $q->addWhere('task_id = ' . (int) $this->task_id);
         $q->exec();
+
+
+        //update same for children (sub children done recursively)
+        $children_list= $this->getChildren($task_id);
+        foreach ($children_list as $child_id)  {
+			$this->_updatePathEnumeration_w_args($child_id,$task_id, $path);			
+			};
+
+
+
     }
+
+
+
+
+    protected function _updatePathEnumeration_w_args($task_id=0,$task_parent=0, $parent=NULL)
+    {
+    	//allow to update for any task id,and to accept parent path in call
+        $q = $this->_getQuery();
+        
+        if ($task_id==0) $task_id= $this->task_id;
+        if ($task_parent==0) $task_parent= $this->task_parent;
+
+        if (0 == (int) $task_parent || $task_id == $task_parent) {
+            $path = $task_id;
+        } else {
+            if ($parent==NULL) {
+            	$q->addQuery('task_path_enumeration');
+	            $q->addTable('tasks');
+	            $q->addWhere('task_id = ' . $task_parent);
+	            $parent = $q->loadResult();
+            }
+            $path = $parent . '/' . $task_id;
+        }
+        $q->clear();
+
+        $q->addTable('tasks');
+        $q->addUpdate('task_path_enumeration', $path);
+        $q->addUpdate('task_updated', "'" . $q->dbfnNowWithTZ() . "'", false, true);
+        $q->addWhere('task_id = ' . (int) $task_id);
+        $q->exec();
+        
+        //update same for children (sub children done recursively)
+        $newTask = new CTask();
+        $newTask->load($task_id);
+        $children_list= $newTask->getChildren($task_id);
+        foreach ($children_list as $child_id)  {
+			$this->_updatePathEnumeration_w_args($child_id,$task_id, $path);			
+			}
+        
+        
+    }
+
+
+
+
 
     protected function hook_postUpdate()
     {
