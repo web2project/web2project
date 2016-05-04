@@ -81,7 +81,7 @@ $idx_companies = __extract_from_vw_actions();
 foreach ($sprojects as $prj_id => $prj_name) {
 	$sprojects[$prj_id] = $idx_companies[$prj_id] . ': ' . $prj_name;
 }
-asort($sprojects);
+asort($sprojects,SORT_NATURAL | SORT_FLAG_CASE);
 $sprojects = arrayMerge(array('' => '(' . $AppUI->_('Move to Project', UI_OUTPUT_RAW) . ')'), $sprojects);
 
 //lets addthe reference to percent
