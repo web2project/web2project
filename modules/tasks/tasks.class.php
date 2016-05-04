@@ -2064,11 +2064,15 @@ class CTask extends w2p_Core_BaseObject
      */
     public function moveTaskBetweenProjects($task_id, $project_old, $project_new)
     {
+		$oldTask= new CTask();
+		$oldTask->load($task_id);
         $this->updateSubTasksProject($project_new, $task_id);
 		$this->removeDependencies();
 		$this->task_project=$project_new;
 		$this->task_parent=$this->task_id;
 		$this->store();
+		//update dynamics in old project (for new project is done in store)
+		$oldTask->updateDynamics();
 
         $taskCount_oldProject = $this->getTaskCount($project_old);
         CProject::updateTaskCount($project_old, $taskCount_oldProject);
