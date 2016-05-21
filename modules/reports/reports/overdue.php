@@ -28,8 +28,14 @@ $output->addSubtitle($pname);
 $next_week = new w2p_Utilities_Date($date);
 $next_week->addSpan(new Date_Span(array(7, 0, 0, 0)));
 
-$title = null;
-$options = array('showLines' => 2, 'showHeadings' => 1, 'fontSize' => 9, 'rowGap' => 4, 'colGap' => 5, 'xPos' => 50, 'xOrientation' => 'right', 'width' => '750', 'shaded' => 0, 'cols' => array(0 => array('justification' => 'left', 'width' => 250), 1 => array('justification' => 'left', 'width' => 120), 2 => array('justification' => 'center', 'width' => 120), 3 => array('justification' => 'center', 'width' => 75), 4 => array('justification' => 'center', 'width' => 75)));
+$title = "Overdue Tasks";
+$options = array('showLines' => 2, 'showHeadings' => 1, 'fontSize' => 9, 'rowGap' => 4, 'colGap' => 5, 'xPos' => 50, 'xOrientation' => 'right', 'width' => '760', 'shaded' => 3, 
+    'cols' => array(
+        0 => array('justification' => 'left', 'width' => 120), 
+        1 => array('justification' => 'left', 'width' => 250), 
+        2 => array('justification' => 'left', 'width' => 120), 
+        3 => array('justification' => 'left', 'width' => 150), 
+        4 => array('justification' => 'left', 'width' => 120)));
 
 $hasResources = $AppUI->isActiveModule('resources');
 $perms = &$AppUI->acl();
@@ -39,6 +45,7 @@ if ($hasResources) {
 // Build the data to go into the table.
 $pdfdata = array();
 $columns = array();
+$columns[] = '<b>' . $AppUI->_('Project Name') . '</b>';
 $columns[] = '<b>' . $AppUI->_('Task Name') . '</b>';
 $columns[] = '<b>' . $AppUI->_('Owner') . '</b>';
 $columns[] = '<b>' . $AppUI->_('Assigned Users') . '</b>';
@@ -51,6 +58,7 @@ $columns[] = '<b>' . $AppUI->_('Finish Date') . '</b>';
 $q = new w2p_Database_Query();
 $q->addQuery('a.*');
 $q->addQuery('contact_display_name AS user_username');
+$q->addQuery('pr.project_name AS project_name');
 $q->addTable('tasks', 'a');
 $q->addTable('projects', 'pr');
 $q->addWhere('a.task_project = pr.project_id');
@@ -66,6 +74,9 @@ if ($project_id != 0) {
 }
 $date = new w2p_Utilities_Date();
 $q->addWhere('task_end_date < \'' . $date->format(FMT_DATETIME_MYSQL) . '\'');
+$q->addOrder('project_name');
+$q->addOrder('task_end_date');
+
 $proj = new CProject();
 $q = $proj->setAllowedSQL($AppUI->user_id, $q, null, 'pr');
 
@@ -129,6 +140,7 @@ if ($hasResources && count($tasks)) {
 // Build the data columns
 foreach ($tasks as $task_id => $detail) {
 	$row = &$pdfdata[];
+	$row[] = utf8_decode($detail['project_name']);
 	$row[] = utf8_decode($detail['task_name']);
 	$row[] = utf8_decode($detail['user_username']);
 	$row[] = utf8_decode(implode("\n", $assigned_users[$task_id]));
