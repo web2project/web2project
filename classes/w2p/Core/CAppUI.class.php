@@ -778,7 +778,7 @@ class w2p_Core_CAppUI
         }
         $auth = &getauth($auth_method);
 
-        $username = preg_replace("/[^A-Za-z0-9_]/", "", $username);
+        $username = preg_replace("/[^A-Za-z0-9._@-]/", "", $username);
         $username = trim($username);
         $password = trim($password);
 
@@ -786,7 +786,7 @@ class w2p_Core_CAppUI
             return false;
         }
 
-        $user_id = $auth->userId();
+        $user_id = $auth->userId($username);
         $username = $auth->username; // Some authentication schemes may collect username in various ways.
         // Now that the password has been checked, see if they are allowed to
         // access the system

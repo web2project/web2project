@@ -1,6 +1,19 @@
 {
+    "name": "web2project/core",
+    "version": "3.3.66",
+    "type": "application",
+    "description": "web-based project management system",
+    "keywords": ["gantt charts", "task tracking", "time tracking", "project planning"],
+    "homepage": "http://web2project.net",
+    "license": "Clear BSD",
+    "authors": [
+        {
+            "name": "Keith Casey",
+            "email": "contrib@caseysoftware.com"
+        }
+    ],
     "require": {
-
+        "ircmaxell/password-compat": "1.0.4"
     },
     "autoload": {
         "psr-0": { "Web2project": "src/"}

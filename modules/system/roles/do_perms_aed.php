@@ -4,6 +4,7 @@ if (!defined('W2P_BASE_DIR')) {
 }
 
 $del = (int) w2PgetParam($_POST, 'del', 0);
+$role_id = (int) w2PgetParam($_POST, 'role_id', 0);
 
 $perms = &$AppUI->acl();
 if (!canEdit('system')) {
@@ -30,4 +31,4 @@ if ($del) {
 		$AppUI->setMsg($obj->msg(), UI_MSG_ERROR);
 	}
 }
-$AppUI->redirect('m=system&u=roles');
+$AppUI->redirect('m=system&u=roles&a=viewrole&role_id=' . $role_id);

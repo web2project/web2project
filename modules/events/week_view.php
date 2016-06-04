@@ -48,10 +48,10 @@ $next_week = new w2p_Utilities_Date(Date_Calc::beginOfNextWeek($dd, $mm, $yy, FM
 $links = array();
 
 // assemble the links for the tasks
-getTaskLinks($first_time, $last_time, $links, 50, $company_id);
+$links = getTaskLinks($first_time, $last_time, $links, 50, $company_id);
 
 // assemble the links for the events
-getEventLinks($first_time, $last_time, $links, 50);
+$links += getEventLinks($first_time, $last_time, $links, 50);
 
 $hooks = new w2p_System_HookHandler($AppUI);
 $hooks->links = $links;

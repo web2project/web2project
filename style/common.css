@@ -281,7 +281,7 @@ table.list tr:hover td._name {
 
 .list ._name {
     text-align: left;
-    width: 75%;
+    width: 25%;
 }
 
 .list ._description {   width: 30%; }
@@ -561,7 +561,7 @@ table.minititle th {
     text-align: center;
 }
 
-bordertable, .bordertable{
+.bordertable{
     border: 1px black solid;
 }
 
@@ -656,7 +656,7 @@ table.mocal td a:first-child {
 }
 
 div.column {
-    width: 50%;
+    width: 45%;
 }
 div.column:nth-child(1) {
     float: left;

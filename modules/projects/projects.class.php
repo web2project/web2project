@@ -399,6 +399,8 @@ class CProject extends w2p_Core_BaseObject
         $this->project_private = (int) $this->project_private;
 
         $this->project_target_budget = filterCurrency($this->project_target_budget);
+	if(!ctype_digit($this->project_target_budget) && !is_float($this->project_target_budget))
+		$this->project_target_budget = 0.0;
         $this->project_url = str_replace(array('"', '"', '<', '>'), '', $this->project_url);
         $this->project_demo_url = str_replace(array('"', '"', '<', '>'), '', $this->project_demo_url);
         $this->project_owner = (int) $this->project_owner ? $this->project_owner : $this->_AppUI->user_id;
@@ -738,12 +740,13 @@ class CProject extends w2p_Core_BaseObject
     {
         $project_id = (int) $project_id;
         if ($project_id && $task_id) {
-            $project = new CProject();
-            $project->load($project_id);
-            $project->project_last_task = $task_id;
-            $project->project_actual_end_date = $project_actual_end_date;
-            $project->project_task_count = $project_task_count;
-            $project->store();
+            $q = new w2p_Database_Query();
+            $q->addTable('projects');
+            $q->addUpdate('project_last_task', $task_id);
+            $q->addUpdate('project_actual_end_date', $project_actual_end_date);
+            $q->addUpdate('project_task_count', $project_task_count);
+            $q->addWhere('project_id = ' . (int) $project_id);
+            $q->exec();
 
             self::updatePercentComplete($project_id);
         }
@@ -1018,21 +1021,17 @@ class CProject extends w2p_Core_BaseObject
         }
     }
 
-    /**
-     * FILTER
-     * @param int $company_id
-     * @return Array
-     */
     public function getProjectsByStatus($company_id = 0)
     {
         $q = $this->_getQuery();
-        $q->addTable('projects');
+        $q->addTable('projects', 'pr');
         $q->addQuery('project_status, count(*) as count');
         $q->addWhere('project_active = 1');
         if ($company_id > 0) {
             $q->addWhere('project_company = ' . $company_id);
         }
         $q->addGroup('project_status');
+        $q = $this->setAllowedSQL($this->_AppUI->user_id, $q, 'project_company');
 
         $statuses = $q->loadList(-1, 'project_status');
         foreach ($statuses as $key => $array) {

@@ -207,9 +207,10 @@ $htmlHelper = new w2p_Output_HTMLHelper($AppUI);
         <?php
         $s = count($users) == 0 ? '<tr><td bgcolor="#ffffff">' . $AppUI->_('none') . '</td></tr>' : '';
         foreach ($users as $row) {
+            $display = ('' == $row['contact_display_name']) ? $row['user_email'] : $row['contact_display_name'];
             $s .= '<tr>';
             $s .= '<td width=80%>';
-            $s .= w2p_email($row['user_email'], $row['contact_display_name']);
+            $s .= w2p_email($row['user_email'], $display);
             $s .= '</td>';
             $s .= $htmlHelper->createCell('perc_assignment', $row['perc_assignment']);
             $s .= '</tr>';

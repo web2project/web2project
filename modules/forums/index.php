@@ -48,6 +48,9 @@ $a = 'list';
 
 $titleBlock->show();
 
+$tabBox = new CTabBox('?m=forums', W2P_BASE_DIR . '/modules/forums/', $tab);
+$tabBox->show();
+
 $module = new w2p_System_Module();
 $fields = $module->loadSettings('forums', 'index_list');
 

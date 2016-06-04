@@ -109,7 +109,7 @@ if (0 == count($fields)) {
     //   state for versions earlier than v3.0
     //   At some point at/after v4.0, this should be deprecated
     $fieldList = array('task_percent_complete', 'task_priority', 'user_task_priority', 'task_name', 'task_project',
-        'task_start_date', 'task_duration', 'task_end_date', 'task_due_in');
+        'task_start_datetime', 'task_duration', 'task_end_datetime', 'task_due_in');
     $fieldNames = array('', 'P', 'U', 'Task Name', 'Project Name', 'Start Date', 'Duration', 'Finish Date', 'Due In');
 
     $module->storeSettings('tasks', 'todo', $fieldList, $fieldNames);

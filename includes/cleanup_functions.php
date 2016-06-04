@@ -3353,11 +3353,12 @@ function sendNewPass()
         $q->leftJoin('contacts_methods', 'cm', 'cm.contact_id = con.contact_id');
         $q->addWhere("cm.method_value = '$confirmEmail'");
     } else {
-        $q->addWhere("LOWER(contact_email) = '$confirmEmail'");
+        $q->addWhere("LOWER(user_email) = '$confirmEmail'");
     }
     /* End Hack */
 
-    if (!($user_id = $q->loadResult()) || !$checkusername || !$confirmEmail) {
+    $user_id = $q->loadResult();
+    if (!$user_id) {
         $AppUI->setMsg('Invalid username or email.', UI_MSG_ERROR);
         $AppUI->redirect();
     }
@@ -3388,21 +3389,19 @@ function sendNewPass()
 }
 
 // from modules/reports/overall.php
-function showcompany($company, $restricted = false)
+function showcompany($company_id, $restricted = false)
 {
     global $AppUI, $allpdfdata, $log_start_date, $log_end_date, $log_all;
     $q = new w2p_Database_Query;
     $q->addTable('projects');
     $q->addQuery('project_id, project_name');
-    $q->addWhere('project_company = ' . (int) $company);
+    $q->addWhere('project_company = ' . (int) $company_id);
     $projects = $q->loadHashList();
     $q->clear();
 
-    $q->addTable('companies');
-    $q->addQuery('company_name');
-    $q->addWhere('company_id = ' . (int) $company);
-    $company_name = $q->loadResult();
-    $q->clear();
+    $company = new CCompany();
+    $company->load($company_id);
+    $company_name = $company->company_name;
 
     $table = '<h2>Company: ' . $company_name . '</h2>
         <table cellspacing="1" cellpadding="4" border="0" class="tbl">';
@@ -3936,7 +3935,7 @@ function __extract_from_todo($user_id, $showArcProjs, $showLowTasks, $showInProg
 // query my sub-tasks (ignoring task parents)
 
     $q = new w2p_Database_Query;
-    $q->addQuery('distinct(ta.task_id), ta.*');
+    $q->addQuery('distinct(ta.task_id), ta.*, ta.task_start_date as task_start_datetime, ta.task_end_date as task_end_datetime');
     $q->addQuery('project_name, pr.project_id, project_color_identifier');
     $q->addQuery('tp.task_pinned');
     $q->addQuery('ut.user_task_priority');
@@ -4593,7 +4592,7 @@ function __extract_from_projects_gantt2($department, $addPwOiD, $project_type, $
     if ($statusFilter > -1) {
         $q->addWhere('pr.project_status = ' . (int) $statusFilter);
     }
-    if (!($department > 0) && $company_id != 0 && !$addPwOiD) {
+    if (!($department > 0) && $company_id > 0 && !$addPwOiD) {
         $q->addWhere('pr.project_company = ' . (int) $company_id);
     }
 // Show Projects where the Project Owner is in the given department
@@ -5083,9 +5082,10 @@ function __extract_from_tasks_pinning($AppUI, $task_id)
 
         $task = new CTask();
         // load the record data
-        if ($pin) {
+        if (1 == $pin) {
             $result = $task->pinTask($AppUI->user_id, $task_id);
-        } else {
+        }
+        if (-1 == $pin) {
             $result = $task->unpinTask($AppUI->user_id, $task_id);
         }
 

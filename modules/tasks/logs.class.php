@@ -242,7 +242,7 @@ class CTask_Log extends w2p_Core_BaseObject
 
             $new_end_date->setHour($old_end_date->getHour());
             $new_end_date->setMinute($old_end_date->getMinute());
-            $task_end_date = $new_end_date->format(FMT_DATETIME_MYSQL) . '<br />';
+            $task_end_date = $new_end_date->format(FMT_DATETIME_MYSQL);
 
             /*
              * We're using a database update here instead of store() because a

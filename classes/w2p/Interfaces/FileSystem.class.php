@@ -6,7 +6,7 @@
  *
  * @package     web2project\filesystem
  */
-interface w2p_Interfaces_Filesystem
+interface w2p_Interfaces_FileSystem
 {
     public function isWritable();
     public function move(CFile $file, $old_project_id, $actual_file_name);

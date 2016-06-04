@@ -23,7 +23,7 @@ class w2p_Controllers_Permissions extends w2p_Controllers_Base
 
             $this->object->recalcPermissions(null, (int) $myArray['permission_user']);
         } else {
-            $AppUI->setMsg($this->object->getError(), UI_MSG_ERROR);
+            $AppUI->setMsg('Modifying the permissions was not successful', UI_MSG_ERROR);
             $this->resultPath = $this->errorPath;
 
             $AppUI->holdObject($this->object);

@@ -113,6 +113,21 @@ class CUser extends w2p_Core_BaseObject
         parent::hook_postStore();
     }
 
+    /**
+     * A user can always view their own information.
+     *
+     * @return bool
+     */
+    public function canView()
+    {
+        return (parent::canView() || $this->user_id == $this->_AppUI->user_id);
+    }
+
+    /**
+     * A user can always edit their own information.
+     *
+     * @return bool
+     */
     public function canEdit()
     {
         $result = false;

@@ -10,12 +10,6 @@ function setContacts(contact_id_string) {
 }
 
 function submitIt(form){
-	if (form.task_name.value.length < 3) {
-        alert( task_name_msg );
-        form.task_name.focus();
-        return false;
-	}
-        
 	// Check the sub forms
 	for (var i = 0, i_cmp = subForm.length; i < i_cmp; i++) {
 		if (!subForm[i].check())
