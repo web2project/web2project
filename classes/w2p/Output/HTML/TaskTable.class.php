@@ -75,7 +75,9 @@ class w2p_Output_HTML_TaskTable extends w2p_Output_ListTable
         }
 
         $this->stageRowData($rowData);
-        $class = w2pFindTaskComplete($rowData['task_start_date'], $rowData['task_end_date'], $rowData['task_percent_complete']);
+        //if status inactive, indicate
+        if ($rowData['task_status']!=-1)    $class = w2pFindTaskComplete($rowData['task_start_date'], $rowData['task_end_date'], $rowData['task_percent_complete']);
+            else $class='inactive';
 
         $row = '<tr class="'.$class.'">';
         $row .= $this->_buildCells(array('edit' => 'task_id', 'pin' => 'task_id', 'log' => 'task_id'));

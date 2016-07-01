@@ -1,18 +1,16 @@
 <?php
 
 
+if (!defined('W2P_BASE_DIR')) {
+	die('You should not access this file directly.');
+}
+// @todo    convert to template
 
 global $project_id;
 $project_id = (int) w2PgetParam($_GET, 'project_id', -1);
 //after installing netbeans-php on Win 10 and Bitbnami wampserver , $project_id is
 //NULL if not retrieved
 
-
-if (!defined('W2P_BASE_DIR')) {
-	die('You should not access this file directly.');
-}
-// @todo    convert to template
-$project_id = (int) w2PgetParam($_GET, 'project_id', 0);
 
 $project = new CProject();
 
@@ -101,9 +99,10 @@ $canViewTask = canView('tasks');
 $canViewTaskLog = canView('task_log');
 
 //TODO: This whole structure is hard-coded based on the TaskStatus SelectList.
+//that doesn't make sense: if the user adds a new task status, nobody adds the php view file
 $status = w2PgetSysVal('TaskStatus');
 if ($canViewTask && $AppUI->isActiveModule('tasks')) {
-	$tabBox->add(W2P_BASE_DIR . '/modules/tasks/vw_tasks', 'Tasks');
+	$tabBox->add(W2P_BASE_DIR . '/modules/tasks/vw_tasks', 'Tasks (Active)');
     unset($status[0]);
     $tabBox->add(W2P_BASE_DIR . '/modules/tasks/vw_tasks_inactive', 'Tasks (Inactive)');
     unset($status[-1]);
@@ -112,6 +111,7 @@ if ($canViewTask && $AppUI->isActiveModule('tasks')) {
         $tabBox->add(W2P_BASE_DIR . '/modules/tasks/tasks', $AppUI->_('Tasks') . ' (' . $AppUI->_($statusName) . ')');
     }
 
+	$tabBox->add(W2P_BASE_DIR . '/modules/tasks/vw_tasks_all', 'Tasks (All)');
 	$tabBox->add(W2P_BASE_DIR . '/modules/tasks/viewgantt', 'Gantt Chart');
 	if ($canViewTaskLog) {
 		$tabBox->add(W2P_BASE_DIR . '/modules/projects/vw_logs', 'Task Logs');

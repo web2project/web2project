@@ -16,6 +16,9 @@
         <td>&nbsp;</td>
         <td class="done">&nbsp; &nbsp;</td>
         <td nowrap="nowrap">=<?php echo $AppUI->_('Done'); ?></td>
+        <td>&nbsp;</td>
+        <td class="inactive">&nbsp; &nbsp;</td>
+        <td nowrap="nowrap">=<?php echo $AppUI->_('Status: Inactive'); ?></td>
         <td width="40%">&nbsp;</td>
     </tr>
 </table>
