@@ -50,7 +50,7 @@ $titleBlock->addFilterCell('Company', 'f2', $filters2, $f2);
 if (w2PgetParam($_GET, 'inactive', '') == 'toggle') {
 	$AppUI->setState('inactive', $AppUI->getState('inactive') == -1 ? 0 : -1);
 }
-$in = $AppUI->getState('inactive') == -1 ? 'active' : 'all';
+$in = $AppUI->getState('inactive') == -1 ? 'active' : 'active and inactive ';
 
 $titleBlock->showhelp = false;
 $titleBlock->addCell('<form action="?m=tasks" method="post" name="taskFilter" accept-charset="utf-8">' . arraySelect($filters, 'f', 'size="1" class="text" onChange="document.taskFilter.submit();"', $f, true) . '</form>');

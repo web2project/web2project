@@ -113,6 +113,13 @@ if (!$project_id) {
 	$canEditTasks = canEdit('tasks');
 	$canDeleteTasks = canDelete('tasks');
 
+ if (w2PgetParam($_GET, 'inactive', '') == 'toggle') {
+	$AppUI->setState('inactive', $AppUI->getState('inactive') == -1 ? 0 : -1);
+}
+
+$in = $AppUI->getState('inactive') == -1 ? 'active' : 'active and inactive ';
+$statuscode = ($AppUI->getState('inactive') == -1) ? 9999 : 0;
+
 	if (!$canReadProject) {
 		$AppUI->redirect(ACCESS_DENIED);
 	}
@@ -142,6 +149,7 @@ if (!$project_id) {
 	$titleBlock->addCrumb('?m=projects', 'projects list');
 	$titleBlock->addCrumb('?m=' . $m, 'select another project');
 	$titleBlock->addCrumb('?m=projects&a=view&bypass=1&project_id=' . $project_id, 'normal view project');
+        $titleBlock->addCrumb('?m=projectdesigner&project_id=' . $project_id. '&amp;inactive=toggle', 'show ' . $in . ' tasks');
 
     $titleBlock->addButton('new link', '?m=links&a=addedit&project_id=' . $project_id);
 

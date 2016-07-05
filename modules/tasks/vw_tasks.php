@@ -227,7 +227,7 @@ if ($task_id) {
             echo $listTable->buildRows($taskTree, $customLookups);
         }
         if ('projects' == $m || 'projectdesigner' == $m) {
-            $taskTree = $tempTask->getTaskTree($k, 0);
+            $taskTree = $tempTask->getTaskTree($k, 0, $statuscode);
             echo $listTable->buildRows($taskTree, $customLookups);
         }
     }
