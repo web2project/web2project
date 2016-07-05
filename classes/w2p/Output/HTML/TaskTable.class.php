@@ -70,11 +70,17 @@ class w2p_Output_HTML_TaskTable extends w2p_Output_ListTable
 
     public function buildRow($rowData, $customLookups = array())
     {
+ 
         if (!$this->showRow($rowData)) {
             return '';
         }
 
-        $this->stageRowData($rowData);
+
+       $obj = new CTask();
+        $obj->task_id = $rowData['task_id'];
+        $canView = $obj->canView();
+        if ($canView) {
+      $this->stageRowData($rowData);
         //if status inactive, indicate
         if ($rowData['task_status']!=-1)    $class = w2pFindTaskComplete($rowData['task_start_date'], $rowData['task_end_date'], $rowData['task_percent_complete']);
             else $class='inactive';
@@ -119,5 +125,8 @@ class w2p_Output_HTML_TaskTable extends w2p_Output_ListTable
         $row .= '</tr>';
 
         return $row;
-    }
+        }
+        else return "";
+  
+        }
 }
