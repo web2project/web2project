@@ -58,6 +58,11 @@ if ($object_id == 0 && $company_id > 0) {
 	$object->project_company = $company_id;
 }
 
+if ($object_id == 0 ) {
+    $idd=$AppUI->user_id;
+	$object->project_owner = $idd;
+}
+
 // add in the existing company if for some reason it is dis-allowed
 if ($object_id && !array_key_exists($object->project_company, $companies)) {
 	$companies[$object->project_company] = $company->load($object->project_company)->company_name;
