@@ -140,11 +140,12 @@ if ($result) {
                 $ned->copy($nsd);
                 $ned->addDuration($dur,1);
 
-                $new_start_date = $nsd->format(FMT_DATETIME_MYSQL);
-                $obj->task_start_date = $AppUI->formatTZAwareTime($new_start_date, '%Y-%m-%d %T');
+                 $obj->task_start_date = $nsd->format(FMT_DATETIME_MYSQL);
+//for store, needs to be Mysql time format
+//                $obj->task_start_date = $AppUI->formatTZAwareTime($new_start_date, '%Y-%m-%d %T');
 
-                $new_end_date = $ned->format(FMT_DATETIME_MYSQL);
-                $obj->task_end_date = $AppUI->formatTZAwareTime($new_end_date, '%Y-%m-%d %T');
+                 $obj->task_end_date = $ned->format(FMT_DATETIME_MYSQL);
+//                $obj->task_end_date = $AppUI->formatTZAwareTime($new_end_date, '%Y-%m-%d %T');
 
                 $obj->store();
             }
