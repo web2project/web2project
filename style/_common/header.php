@@ -93,9 +93,9 @@ $theme = $AppUI->getTheme();
                     <?php if (canAccess('tasks')) { ?>
                         <a class="button" href="./index.php?m=tasks&amp;a=todo"><span><b><?php echo $AppUI->_('My Tasks'); ?></b></span></a>
                     <?php } ?>
-                    <?php if (canAccess('calendar')) {
+                    <?php if (canAccess('events')) {
                         $now = new w2p_Utilities_Date(); ?>
-                        <a class="button" href="./index.php?m=calendar&amp;a=day_view&amp;date=<?php echo $now->format(FMT_TIMESTAMP_DATE); ?>"><span><?php echo $AppUI->_('Today'); ?></span></a>
+                        <a class="button" href="./index.php?m=events&amp;a=day_view&amp;date=<?php echo $now->format(FMT_TIMESTAMP_DATE); ?>"><span><?php echo $AppUI->_('Today'); ?></span></a>
                     <?php } ?>
                     <a class="button" href="./index.php?logout=-1"><span><?php echo $AppUI->_('Logout'); ?></span></a>
                 </div>
