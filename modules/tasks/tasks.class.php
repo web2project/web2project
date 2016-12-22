@@ -827,6 +827,13 @@ class CTask extends w2p_Core_BaseObject
 //TODO: We need to convert this from static to use ->overrideDatabase() for testing.
         $subProject->load($project_id);
 
+//we need to override the check dates setting - otherwise, there will be an error creating the token task
+        //if no tasks have been entered to the project yet
+        global $w2Pconfig;
+        $old_Checkdates= $w2Pconfig['check_task_dates'];
+        $w2Pconfig['check_task_dates']=false;
+        
+        
         if ($subProject->project_parent > 0 && ($subProject->project_id != $subProject->project_parent)) {
             $q = new w2p_Database_Query();
             $q->addTable('tasks');
@@ -862,7 +869,9 @@ class CTask extends w2p_Core_BaseObject
             $task->store();
             //TODO: we should do something with this store result?
         }
-    }
+  //reset task date checking
+        $w2Pconfig['check_task_dates']=$old_Checkdates;
+   }
 
     /**
      * @todo Parent store could be partially used
