@@ -78,7 +78,7 @@
 		<td class="item">MySQL Support</td>
 		<td align="left">
 		<?php
-			if (!function_exists('mysql_connect')) {
+			if (!function_exists('mysqli_connect')) {
 				echo '<b class="error"><span class="warning">'.$failedImg.' Not available</span>';
 				$continue = false;
 			} else {
