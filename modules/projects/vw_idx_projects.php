@@ -63,13 +63,17 @@ $items = $paginator->getItemsOnPage($page);
 ?>
 
 <form action="./index.php?m=projects" method="post" accept-charset="utf-8">
-    <table id="tblProjects-list" class="tbl list">
+         <link rel="stylesheet" type="text/css" href="../lib/jquery/datatables.css" media="all" charset="utf-8"/>
+   <table id="tblProjects-list" class="tbl list">
+
         <tr>
             <td colspan="<?php echo count($fieldNames) + 1; ?>">
                 <?php echo $paginator->buildNavigation($AppUI, $m, $tab, array('orderby' => $orderby)); ?>
             </td>
         </tr>
-		<tr>
+<table id="ppp"   class="tbl list  cell-border">
+        <thead>	
+        <tr>
             <?php
             foreach ($fieldNames as $index => $name) {
                 $column = ('project_color_identifier' == $fieldList[$index]) ? 'project_percent_complete' : $fieldList[$index];
@@ -84,6 +88,8 @@ $items = $paginator->getItemsOnPage($page);
                 <?php echo $AppUI->_('Selection'); ?>
             </th>
 		</tr>
+        </thead>
+    <tbody>
 		<?php
 		$none = true;
 		$projectArray = array();
@@ -198,6 +204,9 @@ $items = $paginator->getItemsOnPage($page);
                 }
             }
 		}
+                ?>
+    </tbody></table>
+        <?php  
         $pstatus = w2PgetSysVal('ProjectStatus');
 		if ($none) {
 			echo '<tr><td colspan="25">' . $AppUI->_('No projects to display for this Company, Owner and Type, or your Search returned no results. Please check the filters above and try again.') . '</td></tr>';
@@ -219,8 +228,22 @@ $items = $paginator->getItemsOnPage($page);
                 <?php echo $paginator->buildNavigation($AppUI, $m, $tab); ?>
             </td>
         </tr>
+  
 	</table>
+         
+  
 </form>
+<script type="text/javascript">
+    $(document).ready(function() {
+  
+  
+    $('#ppp').DataTable( {
+        "lengthMenu": [[ 25, 50, 100, -1], [ 25, 50, 100, "All"]]
+        
+    }
+       );
+} );
+</script>
 <?php
 if ($is_tabbed) {
 	echo $pageNav;

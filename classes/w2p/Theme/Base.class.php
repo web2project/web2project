@@ -135,6 +135,7 @@ abstract class w2p_Theme_Base
         // additionally load jquery
         echo '<script type="text/javascript" src="' . $base . 'lib/jquery/jquery.js"></script>';
         echo '<script type="text/javascript" src="' . $base . 'lib/jquery/jquery.tipTip.js"></script>';
+        echo '<script type="text/javascript" src="' . $base . 'lib/jquery/datatables.js"></script>';
 
         $this->getModuleJS($m, $a, true);
     }
