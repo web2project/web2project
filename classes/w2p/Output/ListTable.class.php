@@ -27,11 +27,24 @@ class w2p_Output_ListTable extends w2p_Output_HTMLHelper
         parent::__construct($AppUI);
     }
 
-    public function startTable($classes = 'tbl list')
+    public function startBody()
     {
-        return '<table class="' . $classes . '">';
+       return '<tbody>';
     }
 
+    public function endBody()
+    {
+       return '</tbody>';
+    }
+
+    
+       public function startTable($classes = 'tbl list', $tbl_id="")
+    {
+       if ($tbl_id=="")  return '<table class="' . $classes . '">';
+                else  return '<table id ="'.$tbl_id. '" class="' . $classes . '">';
+    }
+
+    
     public function buildHeader($fields = array(), $sortable = false, $m = '')
     {
         $this->_fieldKeys = array_keys($fields);
@@ -48,8 +61,8 @@ class w2p_Output_ListTable extends w2p_Output_HTMLHelper
 
         $this->cellCount = count($this->_before) + count($fields) + count($this->_after);
 
-        return '<tr>' . str_repeat('<th></th>', count($this->_before)) .
-                $cells . str_repeat('<th></th>', count($this->_after)) . '</tr>';
+        return '<thead><tr>' . str_repeat('<th></th>', count($this->_before)) .
+                $cells . str_repeat('<th></th>', count($this->_after)) . '</tr></thead>';
     }
 
     public function buildRows($allRows, $customLookups = array())
