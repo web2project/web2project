@@ -34,10 +34,25 @@ $listTable->addBefore('edit', 'task_id');
 $listTable->addBefore('pin', 'task_id');
 $listTable->addBefore('log', 'task_id');
 
-echo $listTable->startTable();
+echo $listTable->startTable($class="tbl list", $tbl_id="ttt");
 echo $listTable->buildHeader($fields, false, $m);
+echo $listTable->startBody();
 echo $listTable->buildRows($tasks, $customLookups);
+echo $listTable->endBody();
 echo $listTable->endTable();
 ?>
-<?php
+
+<script type="text/javascript">
+    $(document).ready(function() {
+  
+  
+    $('#ttt').DataTable( {
+        "lengthMenu": [[ 25, 50, 100, -1], [ 25, 50, 100, "All"]]
+        
+    }
+       );
+} );
+</script>           
+    
+    <?php
 include $AppUI->getTheme()->resolveTemplate('task_key');

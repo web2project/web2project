@@ -188,7 +188,8 @@ $listTable->addBefore('log', 'task_id');
     <input type="hidden" name="pd_option_view_addtasks" value="<?php echo (isset($view_options[0]['pd_option_view_addtasks']) ? $view_options[0]['pd_option_view_addtasks'] : 1); ?>" />
     <input type="hidden" name="pd_option_view_files" value="<?php echo (isset($view_options[0]['pd_option_view_files']) ? $view_options[0]['pd_option_view_files'] : 1); ?>" />
     <input type="hidden" name="bulk_task_hperc_assign" value="" />
-
+         <link rel="stylesheet" type="text/css" href="./lib/jquery/datatables.css" media="all" charset="utf-8"/>
+ 
 <?php
 echo $listTable->startTable($class="tbl list", $tbl_id="ttt");
 

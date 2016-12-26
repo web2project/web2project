@@ -63,7 +63,7 @@ $items = $paginator->getItemsOnPage($page);
 ?>
 
 <form action="./index.php?m=projects" method="post" accept-charset="utf-8">
-         <link rel="stylesheet" type="text/css" href="../lib/jquery/datatables.css" media="all" charset="utf-8"/>
+         <link rel="stylesheet" type="text/css" href="./lib/jquery/datatables.css" media="all" charset="utf-8"/>
    <table id="tblProjects-list" class="tbl list">
 
         <tr>
