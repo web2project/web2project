@@ -190,10 +190,10 @@ $listTable->addBefore('log', 'task_id');
     <input type="hidden" name="bulk_task_hperc_assign" value="" />
 
 <?php
-echo $listTable->startTable();
+echo $listTable->startTable($class="tbl list", $tbl_id="ttt");
 
 echo $listTable->buildHeader($fields, false, $m);
-
+echo $listTable->startBody();
 $status = w2PgetSysVal('TaskStatus');
 $priority = w2PgetSysVal('TaskPriority');
 $customLookups = array('task_status' => $status, 'task_priority' => $priority);
@@ -239,8 +239,22 @@ if ($task_id) {
     }
 }
 
+echo $listTable->endBody();
 
 echo $listTable->endTable();
 ?>
+            
+            
+<script type="text/javascript">
+    $(document).ready(function() {
+  
+  
+    $('#ttt').DataTable( {
+        "lengthMenu": [[ 25, 50, 100, -1], [ 25, 50, 100, "All"]]
+        
+    }
+       );
+} );
+</script>            
 <?php
 include $AppUI->getTheme()->resolveTemplate('task_key');
