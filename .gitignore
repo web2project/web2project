@@ -1,8 +1,9 @@
 /includes/*config.php
 /reporting.tmp
 /tmp.*
-/unit_tests/reports/
-/.idea/
-/files/*
+/unit_tests/reports/**
+/.idea/**
+/files/**
 /docs/*
 /nbproject/private/
+vendor/**
