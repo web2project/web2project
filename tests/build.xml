@@ -7,9 +7,10 @@
     </target>
 
     <!-- Change these for your specific project -->
-    <property name="dir.tests" value="tests" />
-    <property name="dir.build" value="${dir.tests}" />
-    <property name="dir.lib"   value="lib" />
+    <property name="dir.tests"  value="tests" />
+    <property name="dir.build"  value="${dir.tests}" />
+    <property name="dir.lib"    value="lib" />
+    <property name="dir.vendor" value="vendor" />
 
     <!-- You might not have to change these.. but maybe -->
     <property name="dir.reports" value="${dir.build}/reports" />
@@ -20,9 +21,10 @@
         <include name="**/*.php" />
         <exclude name="classes/deprecated.class.php" />
         <exclude name="includes/deprecated_functions.php" />
-        <exclude name="${dir.lib}/" />
         <exclude name="${dir.tests}/" />
         <exclude name="${dir.build}/" />
+        <exclude name="${dir.lib}/" />
+        <exclude name="${dir.vendor}/" />
     </fileset>
 
     <target name="prepare">
