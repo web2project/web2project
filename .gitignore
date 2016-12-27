@@ -1,7 +1,7 @@
 /includes/*config.php
 /reporting.tmp
 /tmp.*
-/unit_tests/reports/**
+/tests/reports/**
 /.idea/**
 /files/**
 /docs/*
