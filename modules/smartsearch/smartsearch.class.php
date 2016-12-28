@@ -38,7 +38,8 @@ class CSmartSearch
 			$outstring = '';
 			$subrecord_count = 0;
 			foreach ($results as $records) {
-                if ($permissions->checkModuleItem($this->table_module, 'view', $records[$this->table_key])) {
+                $key = (false !== strpos($this->table_key, '.')) ? substr($this->table_key, 2) : $this->table_key;
+                if ($permissions->checkModuleItem($this->table_module, 'view', $records[$key])) {
 					//Don't count records for which the user does not have permission
 					$record_count++;
 					$subrecord_count++;
