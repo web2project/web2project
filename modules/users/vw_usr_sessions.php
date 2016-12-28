@@ -12,6 +12,8 @@ global $AppUI, $w2Pconfig, $canEdit, $canDelete, $stub, $where, $orderby;
 * Could be determined by a configuration value in the future.
 */
 $logoutUserFlag = true;
+$canEdit = canEdit('users');
+$canDelete = canEdit('users');
 
 if (isset($_GET['out_user_id']) && $_GET['out_user_id']
         && isset($_GET['out_name']) && $_GET['out_name']
