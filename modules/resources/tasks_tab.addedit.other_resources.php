@@ -6,10 +6,7 @@ if (!defined('W2P_BASE_DIR')) {
 // @todo    remove database query
 
 
-function phpAlert($msg) {
-    echo '<script type="text/javascript">alert("' . $msg . '")</script>';
-}
-
+function phpAlert($msg) { }
 
 
 global $AppUI, $users, $task_project, $obj; //are these really assigned at this point? global $task_id was not
