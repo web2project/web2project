@@ -7,3 +7,17 @@
 /docs/*
 /nbproject/private/
 vendor/**
+
+vendor/composer/installed.json
+
+vendor/autoload.php
+
+vendor/composer/autoload_files.php
+
+vendor/composer/autoload_psr4.php
+
+vendor/composer/autoload_real.php
+
+vendor/composer/ClassLoader.php
+
+vendor/composer/installed.json
