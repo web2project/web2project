@@ -29,7 +29,7 @@ http://github.com/web2project/web2project is our Github page. The code is always
 
 http://www.web2project.net/ is our homepage. This is where the latest and greatest news will always be. This is also where we keep most of the links to everything else.
 
-https://github.com/web2project/web2project.github.io is our documentation wiki. We always try to keep the most up to date documentation here. Sometimes it's not always the best, but that's the joy of a wiki. You're welcome to help make things better.
+http://docs.web2project.net/ is our documentation wiki. We always try to keep the most up to date documentation here. Sometimes it's not always the best, but that's the joy of a wiki. You're welcome to help make things better.
 
 http://support.web2project.net/ are our support forums. Whenever you have a question not addressed by the documentation, this is the first place to go. It's not acceptable to private message someone without their permission. Although the core development team is smart, our community is even smarter and it's possible - if not likely - that someone has found and solved your problem before. Remember that polite requests always go farther than terse commands.
 

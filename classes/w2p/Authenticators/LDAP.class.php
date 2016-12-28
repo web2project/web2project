@@ -53,7 +53,7 @@ class w2p_Authenticators_LDAP extends w2p_Authenticators_Base
 
             $ldap_bind_pw = empty($this->ldap_search_pass) ? null :
                 $this->ldap_search_pass;
-            $ldap_bind_dn = $this->base_dn;
+            $ldap_bind_dn = $this->ldap_search_user;
 
             if (ldap_bind($rs, $ldap_bind_dn, $ldap_bind_pw)) {
                 $filter_r = html_entity_decode(str_replace('%USERNAME%', $username,
@@ -130,15 +130,6 @@ class w2p_Authenticators_LDAP extends w2p_Authenticators_Base
      public function createsqluser($username, $password, $ldap_attribs = array())
     {
         $hash_pass = $this->hashPassword($password);
-        $u = new CUser();
-        $u->user_username = $username;
-        $u->user_password = $hash_pass;
-        $u->user_type = 0;   // Changed from 1 (administrator) to 0 (Default user)
-        $u->user_contact = 0;
-        $result = $u->store(null, true);
-
-        $user_id = $u->user_id;
-        $this->user_id = $user_id;
 
         $c = new CContact();
             if (count($ldap_attribs)) {
@@ -152,18 +143,24 @@ class w2p_Authenticators_LDAP extends w2p_Authenticators_Base
                 $c->contact_job = $ldap_attribs['title'][0];
                 $c->contact_email = $ldap_attribs['mail'][0];
                 $c->contact_phone = $ldap_attribs['telephonenumber'][0];
-                $c->contact_owner = $this->user_id;
                 $result = $c->store();
                 $contactArray = array('phone_mobile' => $ldap_attribs['mobile'][0]);
                 $c->setContactMethods($contactArray);
             }
-                //we may be able to use the above user element for this but I didnt know how it would handle an update after the store command so I created a new object.
-            $tmpUser = new CUser();
-            $tmpUser->load($user_id);
-            $tmpUser->user_contact = $this->contactId($user_id);
-            $tmpUser->store();
 
-        $acl = &$this->AppUI->acl();
-        $acl->insertUserRole($acl->get_group_id('normal'), $this->user_id);
+        $u = new CUser();
+        $u->user_username = $username;
+        $u->user_password = $hash_pass;
+        $u->user_type = 0;   // Changed from 1 (administrator) to 0 (Default user)
+        $u->user_contact = (int) $c->contact_id;
+        $result = $u->store(null, true);
+
+        $user_id = $u->user_id;
+        $this->user_id = $user_id;
+
+        // No role, so user will be created as 'Inactive'
+        //$acl = &$this->AppUI->acl();
+        //$acl->insertUserRole($acl->get_group_id('empty'), $this->user_id);
+    
     }
 }
