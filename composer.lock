@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "24703b504b68554b73c6ed37f20f9a7d",
+    "content-hash": "28fd21b67b45907c9be933083a73a7b6",
     "packages": [
         {
             "name": "ircmaxell/password-compat",
@@ -47,7 +47,9 @@
                 "password"
             ],
             "time": "2014-11-20T16:49:30+00:00"
-        },
+        }
+    ],
+    "packages-dev": [
         {
             "name": "pdepend/pdepend",
             "version": "2.3.2",
@@ -257,7 +259,6 @@
             "time": "2016-11-24T00:46:43+00:00"
         }
     ],
-    "packages-dev": [],
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": [],
