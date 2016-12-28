@@ -9,11 +9,11 @@ $start_date = intval($date_reg) ? new w2p_Utilities_Date(w2PgetParam($_REQUEST, 
 $end_date = intval($date_reg) ? new w2p_Utilities_Date(w2PgetParam($_REQUEST, 'log_end_date', date('Y-m-d'))) : null;
 $user_id = (int) w2PgetParam($_REQUEST, 'user_id', 0);
 
-global $AppUI, $currentTabId, $cal_sdf;
+global $AppUI, $cal_sdf, $tab;
 $df = $AppUI->getPref('SHDATEFORMAT');
 
 $a = ($user_id) ? '&a=view&user_id=' . $user_id : '';
-$a .= '&tab=' . $currentTabId . '&showdetails=1';
+$a .= '&tab=' . $tab . '&showdetails=1';
 
 $AppUI->getTheme()->loadCalendarJS();
 ?>
