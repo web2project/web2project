@@ -93,15 +93,13 @@ $titleBlock->show();
 <table border="0" cellspacing="1" cellpadding="2" width="100%" class="view week">
 <?php
 
-$workingDays = explode(',', w2PgetConfig('cal_working_days'));
-
 $show_day = $this_week;
 
 $s = '';
 $s .= '<tr>';
 for ($i = 0; $i < 7; $i++) {
 
-    $class = (in_array($i, $workingDays)) ? 'workingDay' : 'otherDay';
+    $class = ($show_day->isWorkingDay()) ? 'workingDay' : 'otherDay';
     $s .= '<td class="'.$class.'">';
 
 	$dayStamp = $show_day->format(FMT_TIMESTAMP_DATE);
