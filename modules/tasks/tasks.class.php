@@ -1990,9 +1990,8 @@ class CTask extends w2p_Core_BaseObject
      */
     public function getTaskTree($project_id, $task_id = 0, $task_status = 0)
     {
-        $_task = new CTask();
-        $_task->task_id = $task_id;
-        if (!$_task->canView($this->_AppUI->user_id)) {
+        $this->task_id = $task_id;
+        if (!$this->canView($this->_AppUI->user_id)) {
             return;
         }
 
