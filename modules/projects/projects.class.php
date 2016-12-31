@@ -1018,6 +1018,13 @@ class CProject extends w2p_Core_BaseObject
     public function getProjectsByStatus($company_id = 0)
     {
         $q = $this->_getQuery();
+
+        $_denied = $this->getDeniedRecords($this->_AppUI->user_id);
+        if (count($_denied)) {
+            $denied = implode(',', $_denied);
+            $q->addWhere('pr.project_id NOT IN (' . $denied . ')');
+        }
+
         $q->addTable('projects', 'pr');
         $q->addQuery('project_status, count(*) as count');
         $q->addWhere('project_active = 1');
