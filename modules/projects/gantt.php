@@ -44,6 +44,8 @@ $pjobj = new CProject();
 
 if ($addPwOiD && $department > 0) {
     $owner_ids = __extract_from_projects_gantt($department);
+} else {
+    $owner_ids = [];
 }
 
 $projects = __extract_from_projects_gantt2($department, $addPwOiD, $project_type, $owner, $statusFilter, $company_id, $owner_ids, $showInactive, $AppUI, $pjobj);
