@@ -24,4 +24,6 @@ foreach ($project_ids as $project_id) {
     $project->store();
 }
 
-$AppUI->redirect('m=projects');
+$tab = $status_id + 2;
+
+$AppUI->redirect('m=projects&tab=' . $tab);
