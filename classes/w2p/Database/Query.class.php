@@ -479,19 +479,17 @@ class w2p_Database_Query {
 		}
 	}
 
-	/** Add a JOIN condition
-	 *
-	 * Add a join condition to the query.  This only implements
-	 * left join, however most other joins are either synonymns or
-	 * can be emulated with where clauses.
-	 *
-	 * @param	$table	Name of table (without prefix)
-	 * @param	$alias	Alias to use instead of table name (required).
-	 * @param	$join	Join condition (e.g. 'a.id = b.other_id')
-	 *				or array of join fieldnames, e.g. array('id', 'name);
-	 *				Both are correctly converted into a join clause.
-	 */
-	public function addJoin($table, $alias, $join, $type = 'left') {
+    /**
+     * Add a join condition to the query.  This only implements left join, however most other joins are either
+     *   synonyms or can be emulated with where clauses.
+     *
+     * @param   $table  string  Name of table (without prefix)
+     * @param   $alias  string  Alias to use instead of table name (required).
+     * @param   $join   string  Join condition (e.g. 'a.id = b.other_id') or array of join fieldnames, e.g. array('id', 'name);
+     *                              Both are correctly converted into a join clause.
+     * @param   string  $type
+     */
+    public function addJoin($table, $alias, $join, $type = 'left') {
 		$var = array('table' => $table, 'alias' => $alias, 'condition' => $join, 'type' => $type);
 
 		$this->addClause('join', $var, false);
