@@ -4,7 +4,7 @@ if (!defined('W2P_BASE_DIR')) {
 }
 // @todo    convert to template
 
-global $AppUI, $filter_param;
+global $AppUI, $filter_param, $m;
 
 $filter_param = ('projects' == $m) ? 'projects' : $filter_param;
 $page = (int) w2PgetParam($_GET, 'page', 1);
