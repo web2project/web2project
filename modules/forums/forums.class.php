@@ -118,29 +118,23 @@ class CForum extends w2p_Core_BaseObject
         $this->forum_owner = (int) $this->forum_owner ? $this->forum_owner : $this->_AppUI->user_id;
     }
 
-    public function delete($unused = null)
+    protected function hook_preDelete()
     {
-        $result = false;
+        $this->_forum_id = $this->forum_id;
 
-        if ($this->canDelete()) {
-            $q = $this->_getQuery();
-            $q->setDelete('forum_messages');
-            $q->addWhere('message_forum = ' . (int) $this->forum_id);
-            if (!$q->exec()) {
-                $this->_error['delete-messages'] = db_error();
-                return false;
-            }
-
-            $result = parent::delete();
-        }
-        return $result;
+        parent::hook_preDelete();
     }
 
-    protected function hook_preDelete()
+    protected function hook_postDelete()
     {
         $q = $this->_getQuery();
         $q->setDelete('forum_visits');
-        $q->addWhere('visit_forum = ' . (int) $this->forum_id);
+        $q->addWhere('visit_forum = ' . (int) $this->_forum_id);
+        $q->exec();
+
+        $q = $this->_getQuery();
+        $q->setDelete('forum_messages');
+        $q->addWhere('message_forum = ' . (int) $this->_forum_id);
         $q->exec();
     }
 
