@@ -248,13 +248,6 @@ class CFile extends w2p_Core_BaseObject {
         return $result;
     }
 
-    protected function hook_preDelete()
-    {
-        $this->_file_id = $this->file_id;
-
-        parent::hook_preDelete();
-    }
-
     protected function hook_postDelete()
     {
         $indexer = new w2p_FileSystem_Indexer($this->_getQuery());

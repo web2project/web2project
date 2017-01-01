@@ -97,7 +97,6 @@ class CForum_Message extends w2p_Core_BaseObject
         $forumId = $q->loadResult();
 
         $this->_forum_id   = $forumId;
-        $this->_message_id = $this->message_id;
 
         parent::hook_preDelete();
     }
@@ -106,7 +105,7 @@ class CForum_Message extends w2p_Core_BaseObject
     {
         $q = $this->_getQuery();
         $q->setDelete('forum_visits');
-        $q->addWhere('visit_message = ' . (int) $this->_message_id);
+        $q->addWhere('visit_message = ' . (int) $this->_old_key);
         $q->exec();
         $q->clear();
 
@@ -124,7 +123,6 @@ class CForum_Message extends w2p_Core_BaseObject
 
     public function loadByParent($parent_id = 0)
     {
-
         $q = $this->_getQuery();
         $q->addTable('forum_messages');
         $q->addWhere('message_parent = ' . $parent_id);
