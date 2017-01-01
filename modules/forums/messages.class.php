@@ -88,44 +88,38 @@ class CForum_Message extends w2p_Core_BaseObject
         return $stored;
     }
 
-    public function delete($unused = null)
-    {
-        $result = false;
-
-        if ($this->canDelete()) {
-            $q = $this->_getQuery();
-            $q->addTable('forum_messages');
-            $q->addQuery('message_forum');
-            $q->addWhere('message_id = ' . (int) $this->message_id);
-            $forumId = $q->loadResult();
-            $q->clear();
-
-            $q->setDelete('forum_messages');
-            $q->addWhere('message_id = ' . (int) $this->message_id);
-            
-            $result = parent::delete();
-
-            $q->addTable('forum_messages');
-            $q->addQuery('COUNT(message_id)');
-            $q->addWhere('message_forum = ' . (int) $forumId);
-            $messageCount = $q->loadResult();
-            $q->clear();
-
-            $q->addTable('forums');
-            $q->addUpdate('forum_message_count', $messageCount);
-            $q->addWhere('forum_id = ' . (int) $forumId);
-            $q->exec();
-        }
-        return $result;
-    }
-
     protected function hook_preDelete()
     {
         $q = $this->_getQuery();
+        $q->addTable('forum_messages');
+        $q->addQuery('message_forum');
+        $q->addWhere('message_id = ' . (int) $this->message_id);
+        $forumId = $q->loadResult();
+
+        $this->_forum_id   = $forumId;
+        $this->_message_id = $this->message_id;
+
+        parent::hook_preDelete();
+    }
+
+    protected function hook_postDelete()
+    {
+        $q = $this->_getQuery();
         $q->setDelete('forum_visits');
-        $q->addWhere('visit_message = ' . (int) $this->message_id);
-        $q->exec(); // No error if this fails, it is not important.
+        $q->addWhere('visit_message = ' . (int) $this->_message_id);
+        $q->exec();
         $q->clear();
+
+        $q->addTable('forum_messages');
+        $q->addQuery('COUNT(message_id)');
+        $q->addWhere('message_forum = ' . (int) $this->_forum_id);
+        $messageCount = $q->loadResult();
+        $q->clear();
+
+        $q->addTable('forums');
+        $q->addUpdate('forum_message_count', $messageCount);
+        $q->addWhere('forum_id = ' . (int) $this->_forum_id);
+        $q->exec();
     }
 
     public function loadByParent($parent_id = 0)
