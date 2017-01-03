@@ -836,7 +836,9 @@ abstract class w2p_Core_BaseObject extends w2p_System_Event implements w2p_Inter
     {
         $owner_key = substr($this->_tbl_key, 0, strpos($this->_tbl_key, '_')) . '_owner';
 
-        $this->{$owner_key} = $user_id;
+        if (in_array($owner_key, get_class_vars(get_class($this)))) {
+            $this->{$owner_key} = $user_id;
+        }
     }
     public function setId($key)
     {
