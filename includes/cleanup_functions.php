@@ -1490,14 +1490,14 @@ function displayFiles($AppUI, $folder_id, $task_id, $project_id, $company_id)
         $module->storeSettings('files', 'index_list', $fieldList, $fieldNames);
     }
 
-    $s  = '<tr>';
+    $s  = '<thead><tr>';
     $s .= '<th></th>';
     $s .= '<th>' . $AppUI->_('co') . '</th>';
     foreach ($fieldNames as $index => $name) {
         $s .= '<th>' . $AppUI->_($fieldNames[$index]) . '</th>';
     }
     $s .= '<th></th>';
-    $s .= '</tr>';
+    $s .= '</tr></thead><tbody>';
 
     $fp = -1;
     $htmlHelper = new w2p_Output_HTMLHelper($AppUI);
@@ -1609,8 +1609,9 @@ function displayFiles($AppUI, $folder_id, $task_id, $project_id, $company_id)
         $s .= '</tr>';
         $s .= $hidden_table;
     }
+    $s.='</tbody></table>';
     if (0 == count($files)) {
-        $s .= '<tr><td colspan="' . (count($fieldNames) + 3 ) . '">' . $AppUI->_('No data available') . '</td></tr>';
+        $s .= '<table   class="tbl list" ><tr><td colspan="' . (count($fieldNames) + 3 ) . '">' . $AppUI->_('No data available') . '</td></tr></table>';
     }
 
     return $s;

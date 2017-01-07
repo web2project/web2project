@@ -38,11 +38,22 @@ function expand(id){
   element.style.display = (element.style.display == '' || element.style.display == 'none') ? 'block' : 'none';
 }
 </script>
-<table class="tbl list">
+ <link rel="stylesheet" type="text/css" href="./lib/jquery/datatables.css" media="all" charset="utf-8"/>
+<table id="file_list"  class="tbl list">
     <?php
     $showProject = true;
     echo displayFiles($AppUI, -1, $task_id, $project_id, $company_id);
     ?>
 </table>
-<?php
+<script type="text/javascript">
+    $(document).ready(function() {
+  
+  
+    $('#file_list').DataTable( {
+        "lengthMenu": [[ 25, 50, 100, -1], [ 25, 50, 100, "All"]]
+        
+    }
+       );
+} );
+</script>     <?php
 echo $pageNav;
