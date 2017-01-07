@@ -34,6 +34,7 @@ function delIt2(id) {
 	<input type="hidden" name="dosql" value="do_updatetask" />
 	<input type="hidden" name="del" value="1" />
 	<input type="hidden" name="task_log_id" value="0" />
+         <link rel="stylesheet" type="text/css" href="./lib/jquery/datatables.css" media="all" charset="utf-8"/>
 </form>
 <?php
 $fieldList = array();
@@ -60,14 +61,17 @@ $fieldNames = array_values($fields);
 
 ?>
 <a name="task_logs-tasks_view"> </a>
-<table class="tbl list">
-    <tr>
+<table id="task_logs"  class="tbl list">
+    <thead>
+        <tr>
         <th></th>
         <?php foreach ($fieldNames as $index => $name) { ?>
             <th><?php echo $AppUI->_($fieldNames[$index]); ?></th>
         <?php } ?>
         <th></th>
     </tr>
+    </thead>
+    <tbody>
 <?php
 // Pull the task comments
 $task= new CTask();
@@ -118,8 +122,8 @@ if (count($logs)) {
     }
 }
 
-$s .= '<tr>';
-$s .= '<td colspan="6" align="right">' . $AppUI->_('Total Hours') . ' =</td>';
+$s .= '</tbody></table><table  class="tbl list">';
+$s .= '<tr><td colspan="6" align="right">' . $AppUI->_('Total Hours') . ' =</td>';
 $s .= $htmlHelper->createCell('task_log_hours', sprintf('%.2f', $hrs));
 $s .= '<td align="right" colspan="3">';
 if ($perms->checkModuleItem('tasks', 'edit', $task_id)) {
@@ -130,6 +134,7 @@ $s .= '</td></tr>';
 
 echo $s;
 ?>
+
 </table>
 <table>
 <tr>
@@ -141,3 +146,14 @@ echo $s;
 	<td>=<?php echo $AppUI->_('Problem Report'); ?></td>
 </tr>
 </table>
+<script type="text/javascript">
+    $(document).ready(function() {
+  
+  
+    $('#task_logs').DataTable( {
+        "lengthMenu": [[ 25, 50, 100, -1], [ 25, 50, 100, "All"]]
+        
+    }
+       );
+} );
+</script>  
