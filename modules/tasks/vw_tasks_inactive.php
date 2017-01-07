@@ -34,7 +34,7 @@ $listTable->addBefore('edit', 'task_id');
 $listTable->addBefore('pin', 'task_id');
 $listTable->addBefore('log', 'task_id');
 
-echo $listTable->startTable($class="tbl list", $tbl_id="ttt");
+echo $listTable->startTable($class="tbl list", $tbl_id="task_inact");
 echo $listTable->buildHeader($fields, false, $m);
 echo $listTable->startBody();
 echo $listTable->buildRows($tasks, $customLookups);
@@ -46,7 +46,7 @@ echo $listTable->endTable();
     $(document).ready(function() {
   
   
-    $('#ttt').DataTable( {
+    $('#task_inact').DataTable( {
         "lengthMenu": [[ 25, 50, 100, -1], [ 25, 50, 100, "All"]]
         
     }

@@ -191,7 +191,7 @@ $listTable->addBefore('log', 'task_id');
          <link rel="stylesheet" type="text/css" href="./lib/jquery/datatables.css" media="all" charset="utf-8"/>
  
 <?php
-echo $listTable->startTable($class="tbl list", $tbl_id="ttt");
+echo $listTable->startTable($class="tbl list", $tbl_id="task_all");
 
 echo $listTable->buildHeader($fields, false, $m);
 echo $listTable->startBody();
@@ -250,7 +250,7 @@ echo $listTable->endTable();
     $(document).ready(function() {
   
   
-    $('#ttt').DataTable( {
+    $('#task_all').DataTable( {
         "lengthMenu": [[ 25, 50, 100, -1], [ 25, 50, 100, "All"]]
         
     }
