@@ -170,7 +170,8 @@ echo $AppUI->getTheme()->styleRenderBoxTop();
 			if (count($list) > 1) {
 				foreach ($list as $key => $val) {
 					$name = htmlspecialchars($val, ENT_QUOTES);
-					echo '<li><a href="javascript:setClose(\'' . $key . '\',\'' . $name . '\');">' . $val . '</a></li>';
+                    $name = htmlspecialchars($name);
+					echo '<li><a href="javascript:setClose(' . $key . ',\'' . $name . '\');">' . $val . '</a></li>';
 				}
 			} else {
 				echo $AppUI->_('no' . $table);
