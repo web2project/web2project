@@ -38,9 +38,9 @@ $s = '';
 $customLookups = array('project_status' => $projectStatus, 'project_priority' => $projectPriority);
 
 if (is_array($st_projects_arr)) {
-    foreach ($st_projects_arr as $project) {
-        $line = $project[0];
-        $level = $project[1];
+    foreach ($st_projects_arr as $_project) {
+        $line = $_project[0];
+        $level = $_project[1];
         if ($line['project_id']) {
             $s_project = new CProject();
             $s_project->load($line['project_id']);
