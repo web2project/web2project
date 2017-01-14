@@ -98,7 +98,7 @@ if ($obj->task_dynamic != 1 && 0 == $obj->task_represents_project) {
 if (count($obj->getChildren()) > 0) {
 	// Has children
 	// settings for tasks
-	$f = 'children';
+	$f = 'deepchildren';
 	$min_view = true;
 	$tabBox_show = 1;
 	// in the tasks file there is an if that checks
