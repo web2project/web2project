@@ -3,4 +3,4 @@
 $sortable = false;
 $module   = '';
 
-include $AppUI->getTheme()->resolveTemplate('list');
+include $AppUI->getTheme()->resolveTemplate('companies/list');
