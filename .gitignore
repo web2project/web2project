@@ -5,3 +5,6 @@
 /.idea/
 /files/*
 /docs/*
+vendor/**
+
+tests/reports/**
