@@ -63,6 +63,7 @@ class CTask extends w2p_Core_BaseObject
     public $task_updator = null;
     public $task_allow_other_user_tasklogs;
     public $task_path_enumeration = null;
+	public $task_reminder= 0;
 
     /*
      * TASK DYNAMIC VALUE:
@@ -2094,9 +2095,18 @@ class CTask extends w2p_Core_BaseObject
     {
         $day = 86400;
 
+/*
         if (!w2PgetConfig('task_reminder_control')) {
             return;
         }
+*/
+
+       if (!$this->task_reminder) {
+         // Find if we have a reminder on this task already and clear it
+      	 $this->clearReminder(true);
+         return;
+        }
+
 
         if (!$this->task_end_date) { // No end date, can't do anything.
             return $this->clearReminder(true); // Also no point if it is changed to null

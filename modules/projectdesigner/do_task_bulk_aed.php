@@ -272,9 +272,11 @@ if (is_array($selected) && count($selected)) {
                     }
                     //Option 6 - Add Task Reminder
                 } elseif ($bulk_task_other == '6') {
+					$upd_task->task_reminder=1;
                     $upd_task->addReminder();
                     //Option 7 - Mark as non dynamic
                 } elseif ($bulk_task_other == '7') {
+					$upd_task->task_reminder=0;
                     $upd_task->clearReminder(true);
                     //Option 8 - Mark as active
                 } elseif ($bulk_task_other == '8') {

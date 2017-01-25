@@ -12,6 +12,7 @@ global $form;
 if ($object_id == 0) {
 	// Add task creator to assigned users by default
 	$assignedUsers = array($AppUI->user_id => array('contact_name' => $users[$AppUI->user_id], 'perc_assignment' => '100'));
+	$object->task_reminder=w2PgetConfig('task_reminder_control');
 } else {
 	// Pull users on this task
 	$assignedUsers = $object->assignees($object_id);

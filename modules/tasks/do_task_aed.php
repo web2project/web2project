@@ -15,6 +15,7 @@ $allow_other = (int) w2PgetParam($_POST, 'task_allow_other_user_tasklogs', 0);
 $_POST['task_allow_other_user_tasklogs'] = $allow_other;
 $comment = w2PgetParam($_POST, 'email_comment', '');
 $new_task_project = (int) w2PgetParam($_POST, 'new_task_project', 0);
+$remind= (int) w2PgetParam($_POST, 'task_reminder', 0);
 
 // Find the task if we are set
 $task_end_date = null;
@@ -28,6 +29,7 @@ if (!$obj->bind($_POST)) {
     $AppUI->setMsg($obj->getError(), UI_MSG_ERROR);
     $AppUI->redirect('m=task&a=addedit');
 }
+$obj->task_reminder=$remind;
 
 // Check to see if the task_project has changed
 if ($new_task_project != 0 and $obj->task_project != $new_task_project) {
