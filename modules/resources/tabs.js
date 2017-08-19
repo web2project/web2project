@@ -19,7 +19,7 @@ function addResource(form) {
     
     var users = 'x';
     
-    //build array of assinged users
+    //build array of assigned users
     for (au; au > -1; au--) {
         users = users + ',' + form.assigned.options[au].value + ','
     }
@@ -33,7 +33,6 @@ function addResource(form) {
             form.assigned.options[t] = opt
         }
     }
-alert(form.hresource_assign.value);
 }
 
 function removeResource(form) {
@@ -52,7 +51,6 @@ function removeResource(form) {
                 form.hresource_assign.value = hiddenValue;
                 form.assigned.options[fl] = null;
             }
-//alert(form.hresource_assign.value);
         }
     }
 }

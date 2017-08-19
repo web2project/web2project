@@ -198,6 +198,8 @@ class CTask_Log extends w2p_Core_BaseObject
     {
         $this->load($this->task_log_id);
         $this->_task_id = $this->task_log_task;
+
+        parent::hook_preDelete();
     }
 
     protected function hook_postDelete()

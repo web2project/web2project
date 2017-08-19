@@ -75,6 +75,7 @@ abstract class w2p_Core_BaseObject extends w2p_System_Event implements w2p_Inter
         global $AppUI;
         $this->_AppUI = is_null($AppUI) ? new w2p_Core_CAppUI() : $AppUI;
         $this->_perms = $this->_AppUI->acl();
+        $this->setOwner($AppUI->user_id);
         global $locale_char_set;
         $this->_locale_char_set = $locale_char_set;
 
@@ -829,6 +830,15 @@ abstract class w2p_Core_BaseObject extends w2p_System_Event implements w2p_Inter
         }
         
         return $prefix;
+    }
+
+    public function setOwner($user_id = 0)
+    {
+        $owner_key = substr($this->_tbl_key, 0, strpos($this->_tbl_key, '_')) . '_owner';
+
+        if (in_array($owner_key, get_class_vars(get_class($this)), true)) {
+            $this->{$owner_key} = $user_id;
+        }
     }
 
     public function setId($key)

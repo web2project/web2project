@@ -86,13 +86,20 @@ class CCompany extends w2p_Core_BaseObject {
         return $search;
     }
 
-    public function getCompanyList($notUsed = null, $companyType = -1, $searchString = '', $ownerId = 0, $orderby = 'company_name', $orderdir = 'ASC') {
+    public function getCompanyList($notUsed = null, $companyType = -1, $searchString = '', $ownerId = 0, $orderby = 'company_name', $orderdir = 'ASC')
+    {
+        $project = new CProject();
+        $_denied = $project->getDeniedRecords($this->_AppUI->user_id);
+        $_denied[-1] = 0;       // this is so we always have at least one item
+        $denied = implode(',', $_denied);
 
         $q = $this->_getQuery();
         $q->addTable('companies', 'c');
         $q->addQuery('c.*, count(distinct p.project_id) as countp, count(distinct p2.project_id) as inactive');
-        $q->addJoin('projects', 'p', 'c.company_id = p.project_company AND p.project_active = 1');
-        $q->addJoin('projects', 'p2', 'c.company_id = p2.project_company AND p2.project_active = 0');
+        $q->addJoin('projects', 'p', 'c.company_id = p.project_company ' .
+            'AND (p.project_active = 1 AND p.project_id NOT IN ('. $denied .'))');
+        $q->addJoin('projects', 'p2', 'c.company_id = p2.project_company ' .
+            'AND (p2.project_active = 0 AND p2.project_id NOT IN (' . $denied . '))');
 
         $where = $this->getAllowedSQL($this->_AppUI->user_id, 'c.company_id');
         $q->addWhere($where);

@@ -64,7 +64,7 @@ $counts[count($project_statuses) - 3]   = $counts[-2] - $counts[-1];
 
 $tabBox = new CTabBox('?m=projects', W2P_BASE_DIR . '/modules/projects/', $tab);
 foreach ($project_statuses as $key => $project_status) {
-	$tabname = $project_status . '(' . (int) $counts[$key] . ')';
+    $tabname = $AppUI->__($project_status) . ' (' . (int) $counts[$key] . ')';
     $tabBox->add('vw_idx_projects', mb_trim($tabname), true);
 }
 $min_view = true;

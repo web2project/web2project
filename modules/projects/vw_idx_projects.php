@@ -208,7 +208,7 @@ $items = $paginator->getItemsOnPage($page);
                         <input type="submit" class="btn btn-primary btn-mini" value="<?php echo $AppUI->_('Update projects status'); ?>" />
                         <input type="hidden" name="dosql" value="do_project_action" />
                         <input type="hidden" name="m" value="projects" />
-                        <?php echo arraySelect($pstatus, 'project_status', 'size="1" class="text"', $project_status_filter + 1, true); ?>
+                        <?php echo arraySelect($pstatus, 'project_status', 'size="1" class="text"', $project_status_filter -1 , true); ?>
 					</td>
 				</tr>
 			<?php
@@ -216,7 +216,7 @@ $items = $paginator->getItemsOnPage($page);
 		?>
         <tr>
             <td colspan="<?php echo count($fieldNames) + 1; ?>">
-                <?php echo $paginator->buildNavigation($AppUI, $m, $tab); ?>
+                <?php echo $paginator->buildNavigation($AppUI, $m, $tab, array('orderby' => $orderby)); ?>
             </td>
         </tr>
 	</table>

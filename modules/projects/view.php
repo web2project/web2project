@@ -1,16 +1,9 @@
 <?php
-
-
 if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
 // @todo    convert to template
-
-global $project_id;
 $project_id = (int) w2PgetParam($_GET, 'project_id', -1);
-//after installing netbeans-php on Win 10 and Bitbnami wampserver , $project_id is
-//NULL if not retrieved
-
 
 $project = new CProject();
 

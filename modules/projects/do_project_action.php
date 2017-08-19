@@ -12,16 +12,9 @@ foreach ($project_ids as $project_id) {
         continue;
     }
 
-    $project = new CProject();
-    $project->load($project_id);
-    $project->project_status = $status_id;
-    foreach ($project->getContactList() as $contact_data){
-        $project->project_contacts[]=$contact_data['contact_id'];
-    }
-    foreach ($project->getDepartmentList() as $department_data){
-        $project->project_departments[]=$department_data['dept_id'];
-    }
-    $project->store();
+    CProject::updateStatus(null, $project_id, $status_id);
 }
 
-$AppUI->redirect('m=projects');
+$tab = $status_id + 2;
+
+$AppUI->redirect('m=projects&tab=' . $tab);

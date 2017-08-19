@@ -153,7 +153,7 @@ $htmlHelper = new w2p_Output_HTMLHelper($AppUI);
                 <input type="submit" value="<?php echo $AppUI->_('Upload'); ?>" class="button btn btn-primary btn-mini" />
                 <?php } else { ?>
                     <span class="error">
-                        <?php echo $AppUI->_('Module uploads are not allowed. Please check permissions on the /modules directory.'); ?>
+                        <?php echo $AppUI->_('Module uploads are not allowed. Please check permissions on the /modules and /files directories.'); ?>
                     </span>
                 <?php } ?>
             </form>

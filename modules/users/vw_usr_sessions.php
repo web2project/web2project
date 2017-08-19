@@ -11,7 +11,8 @@ global $AppUI, $w2Pconfig, $canEdit, $canDelete, $stub, $where, $orderby;
 * Flag value to determine if "logout user" button should show. 
 * Could be determined by a configuration value in the future.
 */
-$logoutUserFlag = true;
+$canEdit = canEdit('users');
+$canDelete = canEdit('users');
 
 if (isset($_GET['out_user_id']) && $_GET['out_user_id']
         && isset($_GET['out_name']) && $_GET['out_name']
@@ -26,7 +27,7 @@ if (isset($_GET['out_user_id']) && $_GET['out_user_id']
 		$boot_user_log_id = w2PgetParam($_GET, 'out_user_log_id', null);
 		$boot_query_row = false;
 	} else {
-		if ($canEdit && $canDelete && $logoutUserFlag) {
+		if ($canEdit && $canDelete) {
 			// query for all sessions open for a given user
 			$r = new w2p_Database_Query;
 			$r->addTable('sessions', 's');
@@ -101,7 +102,7 @@ foreach ($rows as $row) {
 		$s .= '<input type="button" class="button" value="' . $AppUI->_('logout_session') . '" onclick="javascript:window.location=\'./index.php?m=users&tab=3&out_session=' . $row['session_id'] . '&out_user_log_id=' . $row['user_access_log_id'] . '&out_user_id=' . $row['u_user_id'] . '&out_name=' . addslashes($row['contact_display_name']). '\';"></input>';
 	}
 	$s .= '</td><td align="center" nowrap="nowrap">';
-	if ($canEdit && $canDelete && $logoutUserFlag) {
+	if ($canEdit && $canDelete) {
 		$s .= '<input type="button" class=button value="' . $AppUI->_('logout_user') . '" onclick="javascript:window.location=\'./index.php?m=users&tab=3&out_user_id=' . $row['u_user_id'] . '&out_name=' . addslashes($row['contact_display_name']) . '\';"></input>';
 	}
 	$s .= '</td>';

@@ -15,6 +15,9 @@
     "require": {
         "ircmaxell/password-compat": "1.0.4"
     },
+    "require-dev": {
+        "pdepend/pdepend": "2.3.2"
+    },
     "autoload": {
         "psr-0": { "Web2project": "src/"}
     }

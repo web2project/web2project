@@ -1701,7 +1701,7 @@ class CTask extends w2p_Core_BaseObject
         $q->leftJoin('contacts', 'co', ' co.contact_id = u.user_contact');
         $q->addQuery('u.*, ut.perc_assignment, ut.user_task_priority, contact_display_name,
             co.contact_last_name, co.contact_first_name, contact_display_name as contact_name,
-            co.contact_email as user_email');
+			co.contact_email as user_email');
         $q->addQuery('co.contact_phone AS user_phone');
 
         $q->addWhere('ut.task_id = ' . (int) $taskId);
@@ -1990,6 +1990,11 @@ class CTask extends w2p_Core_BaseObject
      */
     public function getTaskTree($project_id, $task_id = 0, $task_status = 0)
     {
+        $this->task_id = $task_id;
+        if (!$this->canView($this->_AppUI->user_id)) {
+            return;
+        }
+
         $this->_depth++;
 
         $q = $this->_getQuery();

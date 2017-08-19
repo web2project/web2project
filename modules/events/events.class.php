@@ -79,11 +79,11 @@ class CEvent extends w2p_Core_BaseObject
         return (count($this->_error)) ? false : true;
     }
 
-    protected function hook_preDelete()
+    protected function hook_postDelete()
     {
         $q = $this->_getQuery();
         $q->setDelete('user_events');
-        $q->addWhere('event_id = ' . (int) $this->event_id);
+        $q->addWhere('event_id = ' . (int) $this->_old_key);
         $q->exec();
     }
 

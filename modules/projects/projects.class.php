@@ -163,8 +163,9 @@ class CProject extends w2p_Core_BaseObject
         $q->clear();
         $q->setDelete('tasks');
         $q->addWhere('task_represents_project =' . $this->_old_key);
+        $q->exec();
 
-        parent::hook_preDelete();
+        parent::hook_postDelete();
     }
 
     /**
@@ -723,17 +724,11 @@ class CProject extends w2p_Core_BaseObject
 
     public static function updateStatus($AppUI = null, $projectId, $statusId)
     {
-        trigger_error("CProject::updateStatus has been deprecated in v2.3 and will be removed by v4.0.", E_USER_NOTICE);
-
-        global $AppUI;
-
-        $perms = $AppUI->acl();
-        if ($perms->checkModuleItem('projects', 'edit', $projectId) && $projectId > 0 && $statusId >= 0) {
-            $project = new CProject();
-            $project->load($projectId);
-            $project->project_status = $statusId;
-            $project->store();
-        }
+        $q = new w2p_Database_Query();
+        $q->addTable('projects', 'p');
+        $q->addUpdate('project_status', $statusId);
+        $q->addWhere('project_id = ' . (int) $projectId);
+        $q->exec();
     }
 
     public static function updateTaskCache($project_id, $task_id, $project_actual_end_date, $project_task_count)
@@ -1024,6 +1019,13 @@ class CProject extends w2p_Core_BaseObject
     public function getProjectsByStatus($company_id = 0)
     {
         $q = $this->_getQuery();
+
+        $_denied = $this->getDeniedRecords($this->_AppUI->user_id);
+        if (count($_denied)) {
+            $denied = implode(',', $_denied);
+            $q->addWhere('pr.project_id NOT IN (' . $denied . ')');
+        }
+
         $q->addTable('projects', 'pr');
         $q->addQuery('project_status, count(*) as count');
         $q->addWhere('project_active = 1');

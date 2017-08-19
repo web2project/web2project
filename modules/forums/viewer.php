@@ -55,7 +55,6 @@ if ($canEdit) {
         $titleBlock->addCrumbDelete('delete forum', true, $msg);
     }
 }
-$titleBlock->addCell(arraySelect($filters, 'f', 'size="1" class="text" onchange="document.filterFrm.submit();"', $f, true), '', '<form action="?m=forums&a=viewer&forum_id=' . $forum_id . '" method="post" name="filterFrm" accept-charset="utf-8">', '</form>');
 $titleBlock->show();
 
 $view = new w2p_Controllers_View($AppUI, $forum, 'Forum');

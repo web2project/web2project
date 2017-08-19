@@ -1,0 +1,202 @@
+<?xml version="1.0"?>
+<project name="web2project" basedir=".." default="warning">
+    <target name="warning">
+        <echo message="Running Unit Tests is a destructive process and will drop/restore your database multiple times." />
+        <echo message="Please only run Unit Tests against your development or test databases." />
+        <echo message="To run tests, use the command: phing run-tests" />
+    </target>
+
+    <!-- Change these for your specific project -->
+    <property name="dir.tests"  value="tests" />
+    <property name="dir.build"  value="${dir.tests}" />
+    <property name="dir.lib"    value="lib" />
+    <property name="dir.vendor" value="vendor" />
+
+    <!-- You might not have to change these.. but maybe -->
+    <property name="dir.reports" value="${dir.build}/reports" />
+    <property name="dir.package" value="${dir.build}/packaging" />
+    <property name="phing.config" value="/usr/local/data/phing/" />
+
+    <fileset dir="." id="project.source">
+        <include name="**/*.php" />
+        <exclude name="classes/deprecated.class.php" />
+        <exclude name="includes/deprecated_functions.php" />
+        <exclude name="${dir.tests}/" />
+        <exclude name="${dir.build}/" />
+        <exclude name="${dir.lib}/" />
+        <exclude name="${dir.vendor}/" />
+    </fileset>
+
+    <target name="prepare">
+        <mkdir dir="${dir.build}" />
+        <mkdir dir="${dir.reports}" />
+
+        <if>
+            <equals arg1="${phing.home}" arg2="false" />
+            <then>
+                <property name="phing.path" value="${phing.config}" override="true"/>
+            </then>
+            <else>
+                <property name="phing.path" value="${phing.home}" override="true"/>
+            </else>
+        </if>
+    </target>
+
+    <target name="metrics" depends="prepare, lint">
+        <echo message="Some of these targets are *very* memory intensive. You may have to increase your memory_limit in php.ini" />
+        <phingcall target="phploc" />
+        <phingcall target="depend" />
+        <phingcall target="cpd" />
+        <phingcall target="churn-grep" />
+        <phingcall target="phpmd" />
+    </target>
+
+    <target name="standards" depends="lint, metrics" />
+
+    <target name="package" depends="prepare">
+        <mkdir dir="${dir.package}" />
+
+        <property name="releaseName" value="master" override="true"/>
+        <input propertyname="releaseName">What version should be packaged?</input>
+
+        <if>
+            <equals arg1="${releaseName}" arg2="master" />
+            <then>
+                <echo message="master!" />
+                <property name="version" value="${releaseName}" override="true"/>
+            </then>
+            <else>
+                <echo message="version${releaseName}!" />
+                <property name="version" value="tags/version${releaseName}" override="true"/>
+            </else>
+        </if>
+<!-- TODO: package tags in addition to master -->
+        <property name="gitUrl" value="https://github.com/web2project/web2project.git" override="true"/>
+        <echo message="Working with ${gitUrl}..." />
+        <gitclone repository="${gitUrl}" targetPath="${dir.package}/${phing.project.name}" />
+<!--        <exec command="git clone ${gitUrl} -b ${releaseName} -v" dir="${dir.build}/packaging/web2project" />-->
+
+        <delete dir="${dir.package}/${phing.project.name}/.git" />
+
+        <echo message="Copying Javascript to package" />
+        <jsMin targetDir="${dir.package}/${phing.project.name}-${releaseName}" failOnError="false" suffix="">
+            <fileset dir="${dir.package}/${phing.project.name}">
+                <include name="**/*.js"/>
+            </fileset>
+        </jsMin>
+
+        <echo message="Copying CSS to package" />
+        <copy todir="${dir.package}/${phing.project.name}-${releaseName}" overwrite="true">
+            <fileset dir="${dir.package}/${phing.project.name}">
+                <include name="**/*.css" />
+                <exclude name=".git" />
+            </fileset>
+            <filterchain>
+                <tabtospaces tablength="2" />
+                <stripwhitespace />
+                <replaceregexp>
+                    <regexp pattern="  " replace="" />
+                </replaceregexp>
+            </filterchain>
+        </copy>
+
+        <echo message="Copying everything else to package" />
+        <copy todir="${dir.package}/${phing.project.name}-${releaseName}" overwrite="true">
+            <fileset dir="${dir.package}/${phing.project.name}">
+                <include name="**/**" />
+                <exclude name="**/*.css" />
+                <exclude name="**/*.js" />
+            </fileset>
+        </copy>
+<!-- TODO: generate change log! -->
+<!-- git log -since=8/17/2011 > changelog -->
+        <delete dir="${dir.package}/${phing.project.name}" />
+        <delete dir="${dir.package}/${phing.project.name}-${releaseName}/${dir.tests}" />
+
+        <phplint haltonfailure="true">
+            <fileset dir="${dir.package}/${phing.project.name}-${releaseName}">
+                <include name="**/*.php" />
+                <exclude name="lib/" />
+            </fileset>
+        </phplint>
+
+        <tar destfile="${dir.build}/${phing.project.name}-${releaseName}.tar.gz" compression="gzip">
+            <fileset dir="${dir.package}">
+                <include name="**/**" />
+            </fileset>
+        </tar>
+        <zip destfile="${dir.build}/${phing.project.name}-${releaseName}.zip">
+            <fileset dir="${dir.package}">
+                <include name="**/**" />
+            </fileset>
+        </zip>
+
+        <phingcall target="cleanup" />
+    </target>
+
+    <target name="cleanup">
+        <delete dir="${dir.package}" />
+    </target>
+
+    <target name="lint">
+        <phplint haltonfailure="true" level="verbose">
+            <fileset refid="project.source" />
+        </phplint>
+    </target>
+
+    <target name="cpd" depends="prepare">
+        <phpcpd>
+            <fileset refid="project.source" />
+            <formatter type="pmd" outfile="${dir.reports}/cpd.xml" />
+        </phpcpd>
+    </target>
+
+    <target name="phpmd" depends="prepare">
+        <phpmd>
+            <fileset refid="project.source" />
+            <formatter type="xml" outfile="${dir.reports}/pmd.xml"/>
+            <formatter type="html" outfile="${dir.reports}/pmd.html"/>
+        </phpmd>
+    </target>
+
+    <target name="depend" depends="prepare">
+        <phpdepend>
+            <fileset refid="project.source" />
+            <logger type="jdepend-xml" outfile="${dir.reports}/jdepend.xml"/>
+            <logger type="summary-xml" outfile="${dir.reports}/jdepend-summary.xml"/>
+            <logger type="jdepend-chart" outfile="${dir.reports}/dependencies.svg"/>
+            <logger type="overview-pyramid" outfile="${dir.reports}/overview-pyramid.svg"/>
+            <analyzer type="coderank-mode" value="method"/>
+        </phpdepend>
+    </target>
+
+    <target name="codesniffer" depends="prepare">
+        <echo message="If you don't have the PSR standards installed, just follow the instructions here: https://github.com/klaussilveira/phpcs-psr" />
+        <phpcodesniffer standard="PSR" verbosity="1">
+            <fileset refid="project.source" />
+            <formatter type="checkstyle" outfile="/Users/caseydk/workspace/web2project/${dir.reports}/codesniffer.xml"/>
+            <formatter type="summary" outfile="/Users/caseydk/workspace/web2project/${dir.reports}/codesniffer-summary.xml"/>
+        </phpcodesniffer>
+    </target>
+
+    <!-- This one looks like an odd ball but what it does is:
+            - looks at the git log file, retrieving just the filenames;
+            - greps to extract those filenames, excluding anything from the old SVN /trunk structure;
+            - sorts the list of files to get the duplicates together;
+            - eliminates the duplicates but keeps a count of them;
+            - resorts the file names by that count; and
+            - retrieves the top 25 entries.
+
+        It's a variant of Katrina Owen's one-liner here: https://twitter.com/kytrinyx/status/358065717179973634
+    -->
+    <target name="churn-grep" depends="prepare">
+        <exec command="git log --name-only | grep php --exclude=trunk | sort | uniq -c | sort -nr | head -n 25 > ${dir.reports}/churn.txt" />
+    </target>
+    <target name="phploc" depends="prepare">
+        <exec command="phploc --log-xml ${dir.reports}/phploc.xml --exclude xxx ${project.basedir}/" />
+    </target>
+
+    <target name="phpdoc" depends="prepare">
+        <exec command="phpdoc -d classes,includes,modules,styles -t ${dir.reports}/docs --template=responsive-twig" />
+    </target>
+</project>
