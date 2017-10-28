@@ -22,7 +22,8 @@ $sother = array('' => '('.$AppUI->_('Other Operations').')', '1' => $AppUI->_('M
         '2' => $AppUI->_('Mark Tasks as Milestones'), '3' => $AppUI->_('Mark Tasks as Non Milestone'),
         '4' => $AppUI->_('Mark Tasks as Dynamic'), '5' => $AppUI->_('Mark Tasks as Non Dynamic'),
         '6' => $AppUI->_('Add Task Reminder'), '7' => $AppUI->_('Remove Task Reminder'),
-        '10' => $AppUI->_('Remove Tasks Description'), '99' => $AppUI->_('Delete Tasks'));
+        '10' => $AppUI->_('Remove Tasks Description'),  '11' => $AppUI->_('Pin Tasks'),
+         '12' => $AppUI->_('Unpin Tasks'),'99' => $AppUI->_('Delete Tasks'));
 
 //Pull all users
 $users = $perms->getPermittedUsers();
