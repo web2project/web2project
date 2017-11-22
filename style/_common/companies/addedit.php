@@ -3,7 +3,7 @@
 $form = new w2p_Output_HTML_FormHelper($AppUI);
 
 ?>
-<form name="editFrm" action="?m=<?php echo $m; ?>" method="post" accept-charset="utf-8" class="form-horizontal addeidt companies">
+<form name="editFrm" action="?m=<?php echo $m; ?>" method="post" accept-charset="utf-8" class="form-horizontal addedit companies">
 	<input type="hidden" name="dosql" value="do_company_aed" />
 	<input type="hidden" name="company_id" value="<?php echo $object->getId(); ?>" />
     <?php echo $form->addNonce(); ?>
