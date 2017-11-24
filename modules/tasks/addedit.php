@@ -107,6 +107,9 @@ $task_parent_options = '';
 
 $root_tasks = $object->getRootTasks((int)$task_project);
 foreach ($root_tasks as $root_task) {
+    if ($root_task['task_status'] != $object->task_status) {
+        continue;
+    }
     build_date_list($projTasksWithEndDates, $root_task);
 	if ($root_task['task_id'] != $object_id) {
         $task_parent_options .= buildTaskTree($root_task, 0, array(), $all_tasks, $parents, $task_parent, $object_id);

@@ -42,7 +42,7 @@ class CTask extends w2p_Core_BaseObject
     public $task_hours_worked = null;
     // @todo this should be task_end_datetime to take advantage of our templating
     public $task_end_date = null;
-    public $task_status = null;
+    public $task_status = 0;
     public $task_priority = null;
     public $task_percent_complete = null;
     public $task_description = null;
@@ -1943,7 +1943,7 @@ class CTask extends w2p_Core_BaseObject
     {
         $q = $this->_getQuery();
         $q->addTable('tasks');
-        $q->addQuery('task_id, task_name, task_end_date, task_start_date, task_milestone, task_parent, task_dynamic');
+        $q->addQuery('task_id, task_name, task_end_date, task_start_date, task_milestone, task_parent, task_dynamic, task_status');
         $q->addWhere('task_project = ' . (int) $project_id);
         $q->addWhere('task_id = task_parent');
         $q->addOrder('task_start_date');
@@ -1954,7 +1954,7 @@ class CTask extends w2p_Core_BaseObject
     public function getNonRootTasks($project_id)
     {
         $q = $this->_getQuery();
-        $q->addQuery('task_id, task_name, task_end_date, task_start_date, task_milestone, task_parent, task_dynamic');
+        $q->addQuery('task_id, task_name, task_end_date, task_start_date, task_milestone, task_parent, task_dynamic, task_status');
         $q->addTable('tasks');
         $q->addWhere('task_project = ' . (int) $project_id);
         $q->addWhere('task_id <> task_parent');
