@@ -5,7 +5,7 @@ if (!defined('W2P_BASE_DIR')) {
 // @todo    convert to template
 // @todo    remove database query
 
-global $task_access, $task_priority, $project_id;
+global $task_access, $task_priority, $project_id, $statuscode;
 
 $type = w2Pgetsysval('TaskType');
 $stype = array('' => '('.$AppUI->_('Type').')') + $type;
@@ -52,9 +52,11 @@ foreach ($subtasks as $sub_task) {
 }
 
 $task_parent_options = '';
-
 $root_tasks = $obj->getRootTasks((int) $task_project);
 foreach ($root_tasks as $root_task) {
+    if ($statuscode != 9999 && $root_task['task_status'] != $statuscode) {
+        continue;
+    }
     build_date_list($projTasksWithEndDates, $root_task);
 	if ($root_task['task_id'] != $task_id) {
         $task_parent_options .= buildTaskTree($root_task, 0, array(), $all_tasks, $parents, 0, $task_id);
