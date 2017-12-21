@@ -47,6 +47,9 @@ class w2p_Output_HTML_ViewHelper extends w2p_Output_HTML_Base
             case 'department':
             case 'project':
             case 'task':
+                if (!$fieldValue) {
+                    return '-';
+                }
                 $class  = 'C'.ucfirst($suffix);
                 $obj = new $class();
                 $obj->load($fieldValue);
