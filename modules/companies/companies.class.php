@@ -157,7 +157,9 @@ class CCompany extends w2p_Core_BaseObject {
 //TODO: We need to convert this from static to use ->overrideDatabase() for testing.
         $q = $projObj->setAllowedSQL($AppUI->user_id, $q, null, 'pr');
 
-        $q->addWhere('pr.project_active = '. (int) $active);
+        if ($active > -1) {
+            $q->addWhere('pr.project_active = ' . (int)$active);
+        }
 
         if(property_exists('CProject', $sort) || strpos($fields, $sort) !== false) {
             $q->addOrder($sort);
