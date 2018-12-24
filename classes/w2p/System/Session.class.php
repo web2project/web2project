@@ -185,7 +185,6 @@ class w2p_System_Session
             session_write_close();
         }
         if (w2PgetConfig('session_handling') == 'app') {
-            ini_set('session.save_handler', 'user');
             register_shutdown_function('session_write_close');
             session_set_save_handler(
                 array($this, 'open'),     array($this, 'close'),
