@@ -854,9 +854,8 @@ class w2p_Database_Query {
 				$q = 'UPDATE ';
 				if (isset($this->table_list)) {
 					if (is_array($this->table_list)) {
-						reset($this->table_list);
-						// Grab the first record
-						list($key, $table) = each($this->table_list);
+                        // Grab the first record
+                        $table = reset($this->table_list);
 					} else {
 						$table = $this->table_list;
 					}
@@ -881,10 +880,9 @@ class w2p_Database_Query {
 				//mySQL
 				$q = 'UPDATE ';
 				if (isset($this->table_list)) {
-					if (is_array($this->table_list)) {
-						reset($this->table_list);
+				    if (is_array($this->table_list)) {
 						// Grab the first record
-						list($key, $table) = each($this->table_list);
+                        $table = reset($this->table_list);
 					} else {
 						$table = $this->table_list;
 					}
@@ -916,9 +914,8 @@ class w2p_Database_Query {
 				$q = 'INSERT INTO ';
 				if (isset($this->table_list)) {
 					if (is_array($this->table_list)) {
-						reset($this->table_list);
-						// Grab the first record
-						list($key, $table) = each($this->table_list);
+                        // Grab the first record
+                        $table = reset($this->table_list);
 					} else {
 						$table = $this->table_list;
 					}
@@ -939,9 +936,8 @@ class w2p_Database_Query {
 				$q = 'INSERT INTO ';
 				if (isset($this->table_list)) {
 					if (is_array($this->table_list)) {
-						reset($this->table_list);
-						// Grab the first record
-						list($key, $table) = each($this->table_list);
+                        // Grab the first record
+                        $table = reset($this->table_list);
 					} else {
 						$table = $this->table_list;
 					}
@@ -965,9 +961,8 @@ class w2p_Database_Query {
 		$q = 'INSERT INTO ';
 		if (isset($this->table_list)) {
 			if (is_array($this->table_list)) {
-				reset($this->table_list);
-				// Grab the first record
-				list($notUsed, $table) = each($this->table_list);
+                // Grab the first record
+                $table = reset($this->table_list);
 			} else {
 				$table = $this->table_list;
 			}
@@ -993,9 +988,8 @@ class w2p_Database_Query {
 				$q = 'REPLACE INTO ';
 				if (isset($this->table_list)) {
 					if (is_array($this->table_list)) {
-						reset($this->table_list);
-						// Grab the first record
-						list($key, $table) = each($this->table_list);
+                        // Grab the first record
+                        $table = reset($this->table_list);
 					} else {
 						$table = $this->table_list;
 					}
@@ -1016,9 +1010,8 @@ class w2p_Database_Query {
 				$q = 'REPLACE INTO ';
 				if (isset($this->table_list)) {
 					if (is_array($this->table_list)) {
-						reset($this->table_list);
-						// Grab the first record
-						list($key, $table) = each($this->table_list);
+                        // Grab the first record
+                        $table = reset($this->table_list);
 					} else {
 						$table = $this->table_list;
 					}
@@ -1046,8 +1039,8 @@ class w2p_Database_Query {
 				$q = 'DELETE FROM ';
 				if (isset($this->table_list)) {
 					if (is_array($this->table_list)) {
-						// Grab the first record
-						list($key, $table) = each($this->table_list);
+                        // Grab the first record
+                        $table = reset($this->table_list);
 					} else {
 						$table = $this->table_list;
 					}
@@ -1063,8 +1056,8 @@ class w2p_Database_Query {
 				$q = 'DELETE FROM ';
 				if (isset($this->table_list)) {
 					if (is_array($this->table_list)) {
-						// Grab the first record
-						list($key, $table) = each($this->table_list);
+                        // Grab the first record
+                        $table = reset($this->table_list);
 					} else {
 						$table = $this->table_list;
 					}
