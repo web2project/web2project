@@ -2065,9 +2065,9 @@ CREATE TABLE `tasks` (
 CREATE TABLE `tasks_critical` (
   `task_project` int(10) default NULL,
   `critical_task` int(10) default NULL,
-  `project_actual_end_date` datetime default NULL,
-  PRIMARY KEY (`task_project`)
+  `project_actual_end_date` datetime default NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+ALTER TABLE `tasks_critical` ADD INDEX (`task_project`);
 
 -- --------------------------------------------------------
 
@@ -2077,9 +2077,9 @@ CREATE TABLE `tasks_critical` (
 
 CREATE TABLE `tasks_problems` (
   `task_project` int(10) default NULL,
-  `task_log_problem` tinyint(1) default NULL,
-  PRIMARY KEY (`task_project`)
+  `task_log_problem` tinyint(1) default NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+ALTER TABLE `tasks_problems` ADD INDEX (`task_project`);
 
 -- --------------------------------------------------------
 
@@ -2091,9 +2091,9 @@ CREATE TABLE `tasks_sum` (
   `task_project` int(10) default NULL,
   `total_tasks` int(6) default NULL,
   `project_percent_complete` float default NULL,
-  `project_duration` float default NULL,
-  PRIMARY KEY (`task_project`)
+  `project_duration` float default NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+ALTER TABLE `tasks_sum` ADD INDEX (`task_project`);
 
 -- --------------------------------------------------------
 
@@ -2103,9 +2103,9 @@ CREATE TABLE `tasks_sum` (
 
 CREATE TABLE `tasks_summy` (
   `task_project` int(10) default NULL,
-  `my_tasks` varchar(10) default NULL,
-  PRIMARY KEY (`task_project`)
+  `my_tasks` varchar(10) default NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+ALTER TABLE `tasks_summy` ADD INDEX (`task_project`);
 
 -- --------------------------------------------------------
 
@@ -2115,9 +2115,9 @@ CREATE TABLE `tasks_summy` (
 
 CREATE TABLE `tasks_total` (
   `task_project` int(10) default NULL,
-  `total_tasks` int(10) default NULL,
-  PRIMARY KEY (`task_project`)
+  `total_tasks` int(10) default NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+ALTER TABLE `tasks_total` ADD INDEX (`task_project`);
 
 -- --------------------------------------------------------
 
@@ -2127,9 +2127,9 @@ CREATE TABLE `tasks_total` (
 
 CREATE TABLE `tasks_users` (
   `task_project` int(10) default NULL,
-  `user_id` int(10) default NULL,
-  PRIMARY KEY (`task_project`)
+  `user_id` int(10) default NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+ALTER TABLE `tasks_users` ADD INDEX (`task_project`);
 
 -- --------------------------------------------------------
 
