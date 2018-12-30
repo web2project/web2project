@@ -488,13 +488,13 @@ DELETE FROM project_departments USING project_departments LEFT JOIN departments 
 ALTER TABLE `departments` ADD `dept_email` VARCHAR(255) DEFAULT '' NOT NULL;
 ALTER TABLE `departments` ADD `dept_type` INT(3) UNSIGNED NOT NULL DEFAULT '0';
 ALTER TABLE `projects` ADD `project_updator` INT(10) DEFAULT 0 NOT NULL;
-ALTER TABLE `projects` ADD `project_updated` datetime NOT NULL default '0000-00-00 00:00:00';
+ALTER TABLE `projects` ADD `project_updated` datetime NOT NULL default '1000-01-01 00:00:00';
 ALTER TABLE `tasks` ADD `task_updator` INT(10) DEFAULT 0 NOT NULL;
-ALTER TABLE `tasks` ADD `task_created` datetime NOT NULL default '0000-00-00 00:00:00';
-ALTER TABLE `tasks` ADD `task_updated` datetime NOT NULL default '0000-00-00 00:00:00';
+ALTER TABLE `tasks` ADD `task_created` datetime NOT NULL default '1000-01-01 00:00:00';
+ALTER TABLE `tasks` ADD `task_updated` datetime NOT NULL default '1000-01-01 00:00:00';
 ALTER TABLE `task_log` ADD `task_log_updator` INT(10) DEFAULT 0 NOT NULL;
-ALTER TABLE `task_log` ADD `task_log_updated` datetime NOT NULL default '0000-00-00 00:00:00';
-ALTER TABLE `task_log` ADD `task_log_created` datetime NOT NULL default '0000-00-00 00:00:00';
+ALTER TABLE `task_log` ADD `task_log_updated` datetime NOT NULL default '1000-01-01 00:00:00';
+ALTER TABLE `task_log` ADD `task_log_created` datetime NOT NULL default '1000-01-01 00:00:00';
 
 #new PHPMailer SMTP options
 INSERT INTO `config` (`config_name`, `config_value`, `config_group`, `config_type`) VALUES ('mail_secure', '', 'mail', 'select');

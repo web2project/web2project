@@ -13,11 +13,11 @@ UPDATE modules SET mod_main_class = 'CUser' WHERE mod_directory = 'admin';
 -- This adds some columns that are now being used.  For new installations, 
 --   they were in place.  For conversions from dotProject, not necessarily.
 
-ALTER TABLE `projects` ADD `project_created` DATETIME NOT NULL default '0000-00-00 00:00:00';
-ALTER TABLE `projects` ADD `project_updated` DATETIME NOT NULL default '0000-00-00 00:00:00';
+ALTER TABLE `projects` ADD `project_created` DATETIME NOT NULL default '1000-01-01 00:00:00';
+ALTER TABLE `projects` ADD `project_updated` DATETIME NOT NULL default '1000-01-01 00:00:00';
 ALTER TABLE `projects` ADD `project_status_comment` VARCHAR(255) NOT NULL default '';
 ALTER TABLE `projects` ADD `project_subpriority` TINYINT(4) NOT NULL default 0;
-ALTER TABLE `projects` ADD `project_end_date_adjusted` DATETIME NOT NULL default '0000-00-00 00:00:00';
+ALTER TABLE `projects` ADD `project_end_date_adjusted` DATETIME NOT NULL default '1000-01-01 00:00:00';
 ALTER TABLE `projects` ADD `project_end_date_adjusted_user` INT(10) NOT NULL default 0;
 
 -- Remove all the old indexes
