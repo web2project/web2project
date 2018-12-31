@@ -568,6 +568,7 @@ class CTask extends w2p_Core_BaseObject
     {
         $q = $this->_getQuery();
         $this->task_created = $q->dbfnNowWithTZ();
+        $this->task_path_enumeration = -1;
 
         parent::hook_preCreate();
     }
