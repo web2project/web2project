@@ -472,8 +472,19 @@ DROP TABLE IF EXISTS `user_roles`;
 DROP TABLE IF EXISTS `webcal_projects`;
 DROP TABLE IF EXISTS `webcal_resources`;
 
-#Table renames
-RENAME TABLE dpversion TO w2pversion;
+#Convert the dpversion table to w2p version
+CREATE TABLE `w2pversion` (
+  `code_revision` int(10) UNSIGNED NOT NULL DEFAULT '0',
+  `code_version` varchar(10) NOT NULL default '',
+  `db_version` int(10) NOT NULL default '0',
+  `last_db_update` date NOT NULL default '1000-01-01',
+  `last_code_update` date NOT NULL default '1000-01-01',
+  PRIMARY KEY  (`code_revision`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+UPDATE `dpversion` SET `last_db_update` = '1000-01-01' where `last_db_update` < '1000-01-01';
+UPDATE `dpversion` SET `last_code_update` = '1000-01-01' where `last_code_update` < '1000-01-01';
+INSERT INTO `w2pversion` SELECT * from `dpversion`;
+RENAME TABLE `dpversion` TO `old_dpversion`;
 
 #Deprecated indexes
 ALTER TABLE `syskeys` DROP INDEX `idx_syskey_name`;
