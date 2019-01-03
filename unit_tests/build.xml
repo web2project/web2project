@@ -7,9 +7,10 @@
     </target>
 
     <!-- Change these for your specific project -->
-    <property name="dir.build" value="unit_tests" />
-    <property name="dir.tests" value="unit_tests" />
-    <property name="dir.lib"   value="lib" />
+    <property name="dir.build"  value="unit_tests" />
+    <property name="dir.tests"  value="unit_tests" />
+    <property name="dir.lib"    value="lib" />
+    <property name="dir.vendor" value="vendor" />
 
     <!-- You might not have to change these.. but maybe -->
     <property name="dir.reports" value="${dir.build}/reports" />
@@ -23,6 +24,7 @@
         <exclude name="${dir.lib}/" />
         <exclude name="${dir.tests}/" />
         <exclude name="${dir.build}/" />
+        <exclude name="${dir.vendor}/" />
     </fileset>
 
     <target name="prepare">
