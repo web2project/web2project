@@ -43,7 +43,7 @@ RENAME TABLE `forums2` TO `forums`;
 
 
 CREATE TABLE `projects2` (
-  `project_id` int(10) NOT NULL,
+  `project_id` int(10) NOT NULL auto_increment,
   `project_company` int(10) NOT NULL DEFAULT '0',
   `project_department` int(10) NOT NULL DEFAULT '0',
   `project_name` varchar(255) DEFAULT NULL,
