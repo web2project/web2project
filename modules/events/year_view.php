@@ -120,7 +120,7 @@ $next_year = (int)($next_year + 10000);
 						// assemble the links for the events
 						//Pedro A.
                         $links = getTaskLinks($first_time, $last_time, $links, 20, $company_id, true);
-                        $links += getEventLinks($first_time, $last_time, $links, 20, true);
+                        $links = getEventLinks($first_time, $last_time, $links, 20, true);
 						$minical->setEvents($links);
 						$minical->setDate($date);
 						$s .= '<td valign="top" align="center">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>';
