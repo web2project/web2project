@@ -212,7 +212,7 @@ class w2p_System_UpgradeManager {
     protected function _getIniSize($val) {
        $val = trim($val);
        if (strlen($val <= 1)) return $val;
-       $last = $val{strlen($val)-1};
+       $last = substr($val, -1);
        switch($last) {
            case 'k':
            case 'K':
