@@ -11,4 +11,4 @@
 
 $dir = basename(dirname(__file__));
 
-$LANGUAGES['nl'] = array($dir, 'Dutch', 'Nederlands', 'nl', 'ISO8859-15');
+$LANGUAGES['nl_NL'] = array($dir, 'Dutch', 'Nederlands', 'nl', 'ISO8859-15');
