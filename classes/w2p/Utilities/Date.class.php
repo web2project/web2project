@@ -15,7 +15,7 @@ class w2p_Utilities_Date extends Date {
 
     public function __construct($datetime = null, $tz = '') {
 
-        parent::__construct($datetime);
+        // parent::__construct($datetime);
         if ($tz == '')
         {
             $this->setTZ(w2PgetConfig('system_timezone', 'UTC'));
