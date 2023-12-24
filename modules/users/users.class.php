@@ -203,7 +203,7 @@ class CUser extends w2p_Core_BaseObject
         return w2PgetUsers();
     }
 
-    public function loadFull($userId)
+    public function loadFull($userId, $notUsed = null)
     {
         $q = $this->_getQuery();
         $q->addTable('users', 'u');
