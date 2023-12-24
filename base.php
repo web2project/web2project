@@ -66,11 +66,6 @@ $baseUrl = stripslashes($baseUrl);
 define('W2P_BASE_DIR', $baseDir);
 define('W2P_BASE_URL', $baseUrl);
 
-// Set the ADODB directory
-if (!defined('ADODB_DIR')) {
-    define('ADODB_DIR', W2P_BASE_DIR . '/lib/adodb');
-}
-
 /*
  *  This  is set to get past the dotProject security sentinel.  It is only
  * required during the conversion process to load config.php.  Hopefully we

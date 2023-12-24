@@ -3,7 +3,6 @@
 		die('You should not access this file directly.');
 	}
 
-	require_once W2P_BASE_DIR . '/lib/adodb/adodb.inc.php';
 	require_once W2P_BASE_DIR . '/includes/version.php';
 
 	$dbtype = trim( w2PgetParam( $_POST, 'dbtype', 'mysqli' ) );
