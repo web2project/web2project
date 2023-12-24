@@ -39,7 +39,8 @@ class w2p_Extensions_Permissions extends gacl_api
         if (w2PgetConfig('debug', 0) > 10) {
             $this->_debug = true;
         }
-        parent::gacl_api($opts);
+
+        $this->db = $db;
     }
 
     /** @deprecated since 3.2 */
@@ -1093,7 +1094,7 @@ class w2p_Extensions_Permissions extends gacl_api
 
         $acls = array();
 
-        while (list(, $row) = @each($rows)) {
+        foreach($rows as $row) {
             $aco_section_value = $row['a_value'];
             $aco_value = $row['b_value'];
 
