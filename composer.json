@@ -13,7 +13,8 @@
         }
     ],
     "require": {
-        "ircmaxell/password-compat": "1.0.4"
+        "ircmaxell/password-compat": "1.0.4",
+        "adodb/adodb-php": "^5.22"
     },
     "require-dev": {
         "pdepend/pdepend" : "2.5.0",
