@@ -1389,23 +1389,16 @@ function displayFiles($AppUI, $folder_id, $task_id, $project_id, $company_id)
 
     // SETUP FOR FILE LIST
     $q = new w2p_Database_Query();
-    $q->addQuery('f.*, max(f.file_id) as latest_id, count(f.file_version) as file_versions, round(max(file_version), 2) as file_lastversion, file_owner, user_id');
-    $q->addQuery('ff.*, max(file_version) as file_version, f.file_date as file_datetime');
     $q->addTable('files', 'f');
-    $q->addJoin('file_folders', 'ff', 'ff.file_folder_id = file_folder');
     $q->addJoin('projects', 'p', 'p.project_id = file_project');
-    $q->addJoin('tasks', 't', 't.task_id = file_task');
-    $q->addJoin('users', 'u', 'u.user_id = file_owner');
-    $q->leftJoin('project_departments', 'project_departments', 'p.project_id = project_departments.project_id OR project_departments.project_id IS NULL');
-    $q->leftJoin('departments', 'departments', 'departments.dept_id = project_departments.department_id OR dept_id IS NULL');
 
-    //TODO: apply permissions properly
+    // Remove disallowed projects
     $project = new CProject();
     $deny1 = $project->getDeniedRecords($AppUI->user_id);
     if (count($deny1) > 0) {
         $q->addWhere('file_project NOT IN (' . implode(',', $deny1) . ')');
     }
-    //TODO: apply permissions properly
+    // Remove disallowed tasks
     $task = new CTask();
     $deny2 = $task->getDeniedRecords($AppUI->user_id);
     if (count($deny2) > 0) {
@@ -1421,55 +1414,9 @@ function displayFiles($AppUI, $folder_id, $task_id, $project_id, $company_id)
     if ($company_id) {
         $q->addWhere('project_company = ' . (int) $company_id);
     }
-    //$tab = ($m == 'files') ? $tab-1 : -1;
-    $temp_tab = ($m == 'files') ? $tab - 1 : -1;
-    if (($temp_tab >= 0) and ((count($file_types) - 1) > $temp_tab)) {
-    //if ($tab >= 0) {
-        $q->addWhere('file_category = ' . (int) $temp_tab);
-    }
-    $q->setLimit($xpg_pagesize, $xpg_min);
-    if ($folder_id > -1) {
-        $q->addWhere('file_folder = ' . (int) $folder_id);
-    }
-    $q->addGroup('file_version_id DESC');
-    $q->addOrder('project_name ASC, file_parent ASC, file_id DESC');
-
-    $qv = new w2p_Database_Query();
-    $qv->addTable('files');
-    $qv->addQuery('file_id, file_version, file_project, file_name, file_task,
-        file_description, file_owner, file_size, file_category,
-        task_name, file_version_id, file_date as file_datetime, file_checkout, file_co_reason, file_type,
-        file_date, cu.user_username as co_user, project_name,
-        project_color_identifier, project_owner, u.user_id,
-        con.contact_first_name, con.contact_last_name, con.contact_display_name as contact_name,
-        co.contact_first_name as co_contact_first_name, co.contact_last_name as co_contact_last_name,
-        co.contact_display_name as co_contact_name ');
-    $qv->addJoin('projects', 'p', 'p.project_id = file_project');
-    $qv->addJoin('users', 'u', 'u.user_id = file_owner');
-    $qv->addJoin('contacts', 'con', 'con.contact_id = u.user_contact');
-    $qv->addJoin('tasks', 't', 't.task_id = file_task');
-    $qv->addJoin('file_folders', 'ff', 'ff.file_folder_id = file_folder');
-    if ($project_id) {
-        $qv->addWhere('file_project = ' . (int) $project_id);
-    }
-    if ($task_id) {
-        $qv->addWhere('file_task = ' . (int) $task_id);
-    }
-    if ($company_id) {
-        $qv->addWhere('project_company = ' . (int) $company_id);
-    }
-    if (($temp_tab >= 0) and ((count($file_types) - 1) > $temp_tab)) {
-    //if ($tab >= 0) {
-        $qv->addWhere('file_category = ' . (int) $temp_tab);
-    }
-    $qv->leftJoin('users', 'cu', 'cu.user_id = file_checkout');
-    $qv->leftJoin('contacts', 'co', 'co.contact_id = cu.user_contact');
-    if ($folder_id > -1) {
-        $qv->addWhere('file_folder = ' . (int) $folder_id);
-    }
 
     $files = $q->loadList();
-    $file_versions = $qv->loadHashList('file_id');
+    $file_versions = [];//$qv->loadHashList('file_id');
 
     $module = new w2p_System_Module();
     $fields = $module->loadSettings('files', 'index_list');
