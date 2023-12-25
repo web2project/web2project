@@ -11,6 +11,9 @@
 *   this shouldn't be a problem.
 */
 
+
+$fixedSysVals = array('CompanyType', 'EventType', 'FileType', 'GlobalCountries', 'GlobalYesNo', 'ProjectPriority', 'ProjectStatus', 'ProjectType', 'TaskDurationType', 'TaskLogReference', 'TaskPriority', 'TaskStatus', 'TaskType', 'UserType');
+
 function is_task_in_gantt_arr($task)
 {
     global $gantt_arr;

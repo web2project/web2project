@@ -5,8 +5,6 @@
  * @todo    remove declarations before the class
  */
 
-$fixedSysVals = array('CompanyType', 'EventType', 'FileType', 'GlobalCountries', 'GlobalYesNo', 'ProjectPriority', 'ProjectStatus', 'ProjectType', 'TaskDurationType', 'TaskLogReference', 'TaskPriority', 'TaskStatus', 'TaskType', 'UserType');
-
 class CSystem
 {
     private $upgrader = null;
