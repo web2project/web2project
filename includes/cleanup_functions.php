@@ -2202,7 +2202,7 @@ function showRow($id = '', $key = 0, $title = '', $value = '')
 }
 
 // From: modules/system/syskeys/keys.php
-function showRow_keys($id = 0, $name = '', $label = '')
+function showRow_keys($id = 0, $name = '', $label = '', $canEdit = false)
 {
     global $canEdit, $syskey_id, $CR, $AppUI;
     $s = '';

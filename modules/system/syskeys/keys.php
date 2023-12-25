@@ -5,7 +5,8 @@ if (!defined('W2P_BASE_DIR')) {
 
 // check permissions
 $perms = &$AppUI->acl();
-if (!canEdit('system')) {
+$canEdit = canEdit('system');
+if (!$canEdit) {
 	$AppUI->redirect(ACCESS_DENIED);
 }
 
@@ -47,7 +48,7 @@ function delIt(id) {
 // do the modules that are installed on the system
 $s = '';
 foreach ($keys as $row) {
-	echo showRow_keys($row['syskey_id'], $row['syskey_name'], $row['syskey_label']);
+	echo showRow_keys($row['syskey_id'], $row['syskey_name'], $row['syskey_label'], $canEdit);
 }
 // add in the new key row:
 if ($syskey_id == 0) {
