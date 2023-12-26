@@ -51,7 +51,7 @@ $links = array();
 $links = getTaskLinks($first_time, $last_time, $links, 50, $company_id);
 
 // assemble the links for the events
-$links += getEventLinks($first_time, $last_time, $links, 50);
+$links = getEventLinks($first_time, $last_time, $links, 50, $company_id);
 
 $hooks = new w2p_System_HookHandler($AppUI);
 $hooks->links = $links;
@@ -106,7 +106,7 @@ for ($i = 0; $i < 7; $i++) {
 
 	$dayStamp = $show_day->format(FMT_TIMESTAMP_DATE);
 	$href = '?m=events&a=day_view&date='.$dayStamp.'&tab=0';
-
+        
 	$s .= '		<table>';
 	$s .= '		<tr><td align="left"><a href="' . $href . '">';
 
@@ -117,25 +117,23 @@ for ($i = 0; $i < 7; $i++) {
 	$s .= $dayStamp == $today ? '</span>' : '';
 	$s .= '</a></td></tr>';
 
-	$s .= '<tr><td>';
+	$s .= '<tr><align="left" valign="top">';
 
 	if (isset($links[$dayStamp])) {
-		foreach ($links[$dayStamp] as $e) {
-            $href = isset($e['href']) ? $e['href'] : null;
-            $alt = isset($e['alt']) ? $e['alt'] : null;
-
-            $link  = $href ? '<a href="'.$href.'" title="'.$alt.'">' : '';
-            $link .= $e['text'];
-            $link .= $href ? '</a>' : '';
-
-            $s .= '<br /><span class="cal-item">' . $link . '</span>';
-		}
+            
+            foreach ($links[$dayStamp] as $e) {
+                $href = isset($e['href']) ? $e['href'] : null;
+                $alt = isset($e['alt']) ? $e['alt'] : null;
+                $link  = $href ? '<a href="'.$href.'" title="'.$alt.'">' : '';
+                $link .= $e['text'];
+                $link .= $href ? '</a>' : '';
+                $s .= $link;
+            }
 	}
 
 	$s .= '</td></tr></table>';
-
 	$s .= '</td>';
-
+        
 	// select next day
 	$show_day->addSeconds(24 * 3600);
 }
@@ -146,5 +144,28 @@ echo $s;
 	<td colspan="7" align="right" bgcolor="#efefe7">
 		<a href="./index.php?m=events&a=day_view"><?php echo $AppUI->_('today'); ?></a>
 	</td>
+        <td nowrap="nowrap">Key:</td>
+        <td>&nbsp;</td>
+        <td class="future">&nbsp; &nbsp;</td>
+        <td nowrap="nowrap">=Future Task</td>
+        <td>&nbsp;</td>
+        <td class="active">&nbsp; &nbsp;</td>
+        <td nowrap="nowrap">=Started and on time</td>
+        <td>&nbsp;</td>
+        <td class="notstarted">&nbsp; &nbsp;</td>
+        <td nowrap="nowrap">=Should have started</td>
+        <td>&nbsp;</td>
+        <td class="late">&nbsp; &nbsp;</td>
+        <td nowrap="nowrap">=Overdue</td>
+        <td>&nbsp;</td>
+        <td class="done">&nbsp; &nbsp;</td>
+        <td nowrap="nowrap">=Done</td>
+        <td width="40%">&nbsp;</td>
 </tr>
 </table>
+
+<table>
+    <tr>
+        
+    </tr>
+</table>    
