@@ -3,6 +3,9 @@
  * @package     web2project\utilities
  */
 
+use Carbon\Carbon;
+use Carbon\CarbonTimeZone;
+
 /**
  * web2Project implementation of the Pear Date class
  *
@@ -543,8 +546,28 @@ class w2p_Utilities_Date extends Date {
 
     public function setTZ($tz)
     {
-        $tz_array = $GLOBALS['_DATE_TIMEZONE_DATA'][$tz];
-        $tz_array['id'] = $tz;
+        $tz_array = [];
+        $timezone_info = CarbonTimeZone::create($tz);
+
+        $_offset = explode(':', $timezone_info->toOffsetName());
+        $offset = $_offset[0] + $_offset[1]/60;
+
+        $winter = Carbon::parse('2024-01-01');
+        $summer = Carbon::parse('2024-06-01');
+        if ($timezone_info->toOffsetName($winter) == $timezone_info->toOffsetName($summer)) {
+            $hasDST = false;
+        } else {
+            $hasDST = true;
+        }
+
+        $tz_array['id']             = $tz;
+        $tz_array['offset']         = $offset * 60 * 60 * 1000;
+        $tz_array['longname']       = $timezone_info->toRegionName();
+        $tz_array['shortname']      = strtoupper($timezone_info->getAbbreviatedName());
+        $tz_array['hasdst']         = $hasDST;
+        $tz_array['dstlongname']    = $timezone_info->toRegionName();
+        $tz_array['dstshortname']   = strtoupper($timezone_info->getAbbreviatedName(true));
+
         $this->tz = $tz_array;
     }
     public function addSeconds( $n )
