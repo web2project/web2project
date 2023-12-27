@@ -230,6 +230,7 @@ return array(
     'JsHintTask' => $vendorDir . '/phing/phing/classes/phing/tasks/ext/JsHintTask.php',
     'JsMinTask' => $vendorDir . '/phing/phing/classes/phing/tasks/ext/jsmin/JsMinTask.php',
     'JslLintTask' => $vendorDir . '/phing/phing/classes/phing/tasks/ext/JslLintTask.php',
+    'JsonException' => $vendorDir . '/symfony/polyfill-php73/Resources/stubs/JsonException.php',
     'JsonLogger' => $vendorDir . '/phing/phing/classes/phing/listener/JsonLogger.php',
     'LineContains' => $vendorDir . '/phing/phing/classes/phing/filters/LineContains.php',
     'LineContainsRegexp' => $vendorDir . '/phing/phing/classes/phing/filters/LineContainsRegexp.php',
