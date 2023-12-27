@@ -219,24 +219,21 @@ if (isset($_POST['keyword'])) {
     	$perms = &$AppUI->acl();
     	$reccount = 0;
         $module_count = 0;
-		reset($moduleList);
         foreach ($moduleList as $module) {
-    		if ($ssearch['mod_selection'] == '' || $ssearch['mod_' . $module['mod_directory']] == 'on') {
-				if (class_exists($module['mod_main_class'])) {
-                    $object = new $module['mod_main_class']();
-                    if (is_callable(array($object, 'hook_search'))) {
-                        $search = new CSmartSearch();
-                        $searchArray = $object->hook_search();
-                        foreach($searchArray as $key => $value) {
-                            $search->{$key} = $value;
-                        }
-                        $search->setKeyword($search->keyword);
-                        $search->setAdvanced($ssearch);
-                        echo $search->fetchResults($perms, $reccount);
+			if (class_exists($module['mod_main_class'])) {
+                $object = new $module['mod_main_class']();
+                if (is_callable(array($object, 'hook_search'))) {
+                    $search = new CSmartSearch();
+                    $searchArray = $object->hook_search();
+                    foreach($searchArray as $key => $value) {
+                        $search->{$key} = $value;
                     }
+                    $search->setKeyword($search->keyword);
+                    $search->setAdvanced($ssearch);
+                    echo $search->fetchResults($perms, $reccount);
+                    $module_count++;
                 }
-                $module_count++;
-			}
+            }
         }
         if (!$module_count) {
             echo '<tr><td colspan="25"><b>' . $AppUI->_('No modules selected') . '</b></td></tr>';
