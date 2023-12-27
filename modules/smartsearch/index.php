@@ -78,23 +78,15 @@ if ($ssearch['advanced_search'] == 'on') {
 	}
 	
 	function selModAll() {
-		<?php
-foreach ($hook_modules as $tmp) {
-	$temp = $temp;
-    ?>document.frmSearch.mod_<?php echo $tmp ?>.checked=true;<?php
-}
-?>
-	}		
+	<?php foreach ($hook_modules as $tmp) { ?>
+    	document.frmSearch.mod_<?php echo $tmp ?>.checked=true;
+    <?php } ?>
+	}
 
 	function deselModAll() {
-		<?php
-foreach ($hook_modules as $tmp) {
-	$temp = $tmp;
-?>
+	<?php foreach ($hook_modules as $tmp) { ?>
 		document.frmSearch.mod_<?php echo $tmp ?>.checked=false;
-			<?php
-}
-?>
+	<?php } ?>
 	}		
 
 	
