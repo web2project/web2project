@@ -19,7 +19,7 @@ $form = new w2p_Output_HTML_FormHelper($AppUI);
                     <a href="<?php echo $object->link_url; ?>" target="_blank"><?php echo $AppUI->_('go'); ?></a>
                 <?php } ?>
             </p>
-            <?php if ($link_id) { ?>
+            <?php if ($object->link_id) { ?>
                 <p>
                     <?php $form->showLabel('Created By'); ?>
                     <?php $form->showField('link_owner', $object->link_owner, array(), $users); ?>
