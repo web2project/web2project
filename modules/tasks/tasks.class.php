@@ -2325,9 +2325,9 @@ class CTask extends w2p_Core_BaseObject
     public function hook_search()
     {
         $search['table'] = 'tasks';
-        $search['table_alias'] = 't';
+        $search['table_alias'] = '';
         $search['table_module'] = 'tasks';
-        $search['table_key'] = 't.task_id'; // primary key in searched table
+        $search['table_key'] = 'task_id'; // primary key in searched table
         $search['table_link'] = 'index.php?m=tasks&a=view&task_id='; // first part of link
         $search['table_key2'] = 'tl.task_log_id';
         $search['table_link2'] = '&task_log_id='; // second part of link
@@ -2338,7 +2338,7 @@ class CTask extends w2p_Core_BaseObject
             'task_related_url', 'task_log_name', 'task_log_description');
         $search['display_fields'] = $search['search_fields'];
         $search['table_joins'] = array(array('table' => 'task_log',
-                'alias' => 'tl', 'join' => 't.task_id = tl.task_log_task'));
+                'alias' => 'tl', 'join' => 'task_id = tl.task_log_task'));
 
         return $search;
     }
