@@ -45,15 +45,18 @@ class w2p_Core_CustomField {
         $q->exec();
         $row = $q->fetchRow();
 
-        $value_id = $row['value_id'];
-        $value_charvalue = $row['value_charvalue'];
-        $value_intvalue = $row['value_intvalue'];
+        if ($row) {
+            $value_id = $row['value_id'];
+            $value_charvalue = $row['value_charvalue']; 
+            $value_intvalue = $row['value_intvalue'];
 
-        if ($value_id != null) {
-            $this->value_id = $value_id;
-            $this->value_charvalue = $value_charvalue;
-            $this->value_intvalue = $value_intvalue;
+            if ($value_id != null) {
+                $this->value_id = $value_id;
+                $this->value_charvalue = $value_charvalue;
+                $this->value_intvalue = $value_intvalue;
+            }        
         }
+
     }
 
     public function store($object_id) {
