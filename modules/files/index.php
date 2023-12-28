@@ -21,7 +21,7 @@ if (isset($view_temp)) {
 		$view = 'folders';
 	}
 }
-$folder = (int) w2PgetParam($_GET, 'folder', 0); // to pass to "new file" button
+$folder_id = (int) w2PgetParam($_GET, 'folder', 0); // to pass to "new file" button
 
 // get the list of visible companies
 $extra = array('from' => 'files', 'where' => 'projects.project_id = file_project', 'join' => 'project_departments', 'on' => 'projects.project_id = project_departments.project_id');
@@ -49,7 +49,7 @@ $limited = (count($allowed_folders_ary) < $cfObj->countFolders()) ? true : false
 
 if (!$limited) {
 	$canEdit = true;
-} elseif ($limited and array_key_exists($folder, $allowed_folders_ary)) {
+} elseif ($limited and array_key_exists($folder_id, $allowed_folders_ary)) {
 	$canEdit = true;
 } else {
 	$canEdit = false;
@@ -57,7 +57,7 @@ if (!$limited) {
 
 if ($canEdit) {
     $titleBlock->addButton('new folder', '?m=files&a=addedit_folder');
-    $titleBlock->addButton('new file', '?m=files&a=addedit&folder=' . $folder);
+    $titleBlock->addButton('new file', '?m=files&a=addedit&folder=' . $folder_id);
 }
 $titleBlock->show();
 
