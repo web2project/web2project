@@ -1390,8 +1390,33 @@ function displayFiles($AppUI, $folder_id, $task_id, $project_id, $company_id)
     global $m, $tab, $xpg_min, $xpg_pagesize, $showProject, $file_types,
             $company_id, $current_uri, $canEdit;
 
+    $module = new w2p_System_Module();
+    $fields = $module->loadSettings('files', 'index_list');
+
+    if (count($fields) > 0) {
+        $fieldList = array_keys($fields);
+        $fieldNames = array_values($fields);
+    } else {
+        // TODO: This is only in place to provide an pre-upgrade-safe
+        //   state for versions earlier than v3.0
+        //   At some point at/after v4.0, this should be deprecated
+        $fieldList = array('file_name', 'file_description',
+            'file_version', 'file_category', 'file_folder', 'file_task',
+            'file_owner', 'file_datetime');
+        $fieldNames = array('File Name', 'Description', 'Version', 'Category',
+            'Folder', 'Task Name', 'Owner', 'Date',);
+
+        $module->storeSettings('files', 'index_list', $fieldList, $fieldNames);
+    }
+
+    $_key = array_search('file_date', $fieldList);
+    if ($_key) {
+        $fieldList[$_key] = 'file_datetime';
+    }
+
     // SETUP FOR FILE LIST
     $q = new w2p_Database_Query();
+    $q->addQuery($fieldList);
     $q->addTable('files', 'f');
     $q->addJoin('projects', 'p', 'p.project_id = file_project');
 
@@ -1420,25 +1445,6 @@ function displayFiles($AppUI, $folder_id, $task_id, $project_id, $company_id)
 
     $files = $q->loadList();
     $file_versions = [];//$qv->loadHashList('file_id');
-
-    $module = new w2p_System_Module();
-    $fields = $module->loadSettings('files', 'index_list');
-
-    if (count($fields) > 0) {
-        $fieldList = array_keys($fields);
-        $fieldNames = array_values($fields);
-    } else {
-        // TODO: This is only in place to provide an pre-upgrade-safe
-        //   state for versions earlier than v3.0
-        //   At some point at/after v4.0, this should be deprecated
-        $fieldList = array('file_name', 'file_description',
-            'file_version', 'file_category', 'file_folder', 'file_task',
-            'file_owner', 'file_datetime');
-        $fieldNames = array('File Name', 'Description', 'Version', 'Category',
-            'Folder', 'Task Name', 'Owner', 'Date',);
-
-        $module->storeSettings('files', 'index_list', $fieldList, $fieldNames);
-    }
 
     $s  = '<tr>';
     $s .= '<th></th>';
