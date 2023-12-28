@@ -190,7 +190,7 @@
         It's a variant of Katrina Owen's one-liner here: https://twitter.com/kytrinyx/status/358065717179973634
     -->
     <target name="churn-grep" depends="prepare">
-        <exec command="git log --name-only | grep php --exclude=trunk | sort | uniq -c | sort -nr | head -n 25 > ${dir.reports}/churn.txt" />
+        <exec command="git log --name-only | grep php | grep -v 'lib' | grep -v 'vendor' | sort | uniq -c | sort -nr | head -n 25 > ${dir.reports}/churn.txt" />
     </target>
     <target name="phploc" depends="prepare">
         <exec command="./vendor/phploc/phploc/phploc --log-xml ${dir.reports}/phploc.xml --exclude xxx ${project.basedir}/" />
