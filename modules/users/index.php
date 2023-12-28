@@ -45,24 +45,8 @@ $titleBlock->addCell($a2z);
 $titleBlock->addButton('New user', '?m=users&a=addedit');
 $titleBlock->show();
 
-?>
-<script language="javascript" type="text/javascript">
-<?php
-// security improvement:
-// some javascript functions may not appear on client side in case of user not having write permissions
-// else users would be able to arbitrarily run 'bad' functions
-if ($canDelete) {
-?>
-function delMe( x, y ) {
-	if (confirm( "<?php echo $AppUI->_('doDelete', UI_OUTPUT_JS) . ' ' . $AppUI->_('User', UI_OUTPUT_JS); ?> " + y + "?" )) {
-		document.frmDelete.user_id.value = x;
-		document.frmDelete.submit();
-	}
-}
-<?php } ?>
-</script>
+//TODO: restore the user delete functionality
 
-<?php
 $tabBox = new CTabBox('?m=users', W2P_BASE_DIR . '/modules/users/', $tab);
 $tabBox->add('vw_active_usr', 'Active Users');
 $tabBox->add('vw_inactive_usr', 'Inactive Users');
