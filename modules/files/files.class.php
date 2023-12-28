@@ -18,7 +18,7 @@ class CFile extends w2p_Core_BaseObject {
     public $file_type = null;
     public $file_owner = null;
     // @todo this should be file_datetime to take advantage of our templating
-    public $file_date = null;
+    public $file_datetime = null;
     public $file_size = null;
     public $file_version = null;
     public $file_icon = null;
@@ -76,7 +76,7 @@ class CFile extends w2p_Core_BaseObject {
             $q->exec();
         }
 
-        $this->file_date = $q->dbfnNowWithTZ();
+        $this->file_datetime = $q->dbfnNowWithTZ();
         parent::hook_preCreate();
     }
 

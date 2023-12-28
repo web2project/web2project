@@ -1417,6 +1417,8 @@ function displayFiles($AppUI, $folder_id, $task_id, $project_id, $company_id)
     // SETUP FOR FILE LIST
     $q = new w2p_Database_Query();
     $q->addQuery($fieldList);
+    $q->addQuery('file_id, file_project');
+    $q->addQuery('project_name, project_color_identifier');
     $q->addTable('files', 'f');
     $q->addJoin('projects', 'p', 'p.project_id = file_project');
 
@@ -1463,36 +1465,37 @@ function displayFiles($AppUI, $folder_id, $task_id, $project_id, $company_id)
     $customLookups = array('file_category' => $file_types);
 
     foreach ($files as $row) {
-        $latest_file = $file_versions[$row['latest_id']];
+        // $latest_file = $file_versions[$row['latest_id']];
 
-        if ($fp != $latest_file['file_project']) {
-            if (!$latest_file['file_project']) {
-                $latest_file['project_name'] = $AppUI->_('Not attached to a project');
-                $latest_file['project_color_identifier'] = 'f4efe3';
+        if ($fp != $row['file_project']) {
+            if (!$row['file_project']) {
+                $row['project_name'] = $AppUI->_('Not attached to a project');
+                $row['project_color_identifier'] = 'f4efe3';
             }
             if ($showProject) {
-                $style = 'background-color:#' . $latest_file['project_color_identifier'] . ';color:' . bestColor($latest_file['project_color_identifier']);
+                $style = 'background-color:#' . $row['project_color_identifier'] . ';color:' . bestColor($row['project_color_identifier']);
                 $s .= '<tr>';
                 $s .= '<td colspan="20" style="text-align: left; border: outset 2px #eeeeee;' . $style . '">';
-                if ($latest_file['file_project'] > 0) {
-                    $href = './index.php?m=projects&a=view&project_id=' . $latest_file['file_project'];
+                if ($row['file_project'] > 0) {
+                    $href = './index.php?m=projects&a=view&project_id=' . $row['file_project'];
                 } else {
                     $href = './index.php?m=projects';
                 }
                 $s .= '<a href="' . $href . '">';
-                $s .= '<span style="' . $style . '">' . $latest_file['project_name'] . '</span></a>';
+                $s .= '<span style="' . $style . '">' . $row['project_name'] . '</span></a>';
                 $s .= '</td></tr>';
             }
         }
-        $fp = $latest_file['file_project'];
-        $row['file_datetime'] = $latest_file['file_datetime'];
-        $row['file_id'] = $latest_file['file_id'];
+        $fp = $row['file_project'];
+
+        // $row['file_datetime'] = $latest_file['file_datetime'];
+        // $row['file_id'] = $latest_file['file_id'];
         $htmlHelper->stageRowData($row);
 
         $s .= '<tr>';
         $s .= '<td class="data">';
-        if ($canEdit && (empty($latest_file['file_checkout']) || ($latest_file['file_checkout'] == 'final' && ($canEdit || $latest_file['project_owner'] == $AppUI->user_id)))) {
-            $s .= '<a href="./index.php?m=files&a=addedit&file_id=' . $latest_file['file_id'] . '">' . w2PshowImage('kedit.png', '16', '16', 'edit file', 'edit file', 'files') . '</a>';
+        if ($canEdit && (empty($row['file_checkout']) || ($row['file_checkout'] == 'final' && ($canEdit || $row['project_owner'] == $AppUI->user_id)))) {
+            $s .= '<a href="./index.php?m=files&a=addedit&file_id=' . $row['file_id'] . '">' . w2PshowImage('kedit.png', '16', '16', 'edit file', 'edit file', 'files') . '</a>';
         }
         $s .= '</td>';
         $s .= '<td class="data">';
