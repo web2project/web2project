@@ -113,7 +113,7 @@ function removeBulkComponent(li) {
     $project = new CProject();
     $sprojects = $project->getAllowedProjects($AppUI->user_id, false);
     foreach ($sprojects as $prj_id => $proj_info) {
-        $sprojects[$prj_id] = $idx_companies[$prj_id] . ': ' . $proj_info['project_name'];
+        $sprojects[$prj_id] = $proj_info['project_name'];
     }
     asort($sprojects);
     $sprojects = array('O' => '(' . $AppUI->_('Move to Project', UI_OUTPUT_RAW) . ')') + array('0' => '(' . $AppUI->_('All Projects', UI_OUTPUT_RAW) . ')') + $sprojects;
