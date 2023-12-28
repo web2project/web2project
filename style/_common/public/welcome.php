@@ -22,9 +22,8 @@
 
             <h1>web2Project Online Documentation/Wiki</h1>
             <ul>
-                <li>The <a href="http://wiki.web2project.net/index.php?title=Main_Page">Wiki contains information about how to use web2Project</a> (e.g. explanation of modules, features, training, etc). The wiki is also a community project and you are invited to contribute to it. Learn more about <a href="http://wiki.web2project.net/index.php?title=Join_the_Team">becoming a member of the team, just click here</a>.</li>
-                <li>Find some <a href="http://sourceforge.net/projects/web2project/files/">additional community created User Guides (pictures and everything!) right here</a>. Download them and open the files! They're a few years old at this point but you may still find the answer you're looking for in there.</li>
-                <li>For those of you new to web2Project, you'll find some pretty darn good <a href="http://wiki.web2project.net/index.php?title=Installation#Video_Training">web2project training videos here</a>.</li>
+                <li>The <a href="https://docs.web2project.net/">Wiki contains information about how to use web2Project</a> (e.g. explanation of modules, features, training, etc). The wiki is also a community project and you are invited to contribute to it. Learn more about <a href="https://docs.web2project.net/docs/join-the-team.html">becoming a member of the team, just click here</a>.</li>
+                <li>Find some <a href="https://github.com/web2project">additional community created User Guides (pictures and everything!) right here</a>. Download them and open the files! They're a few years old at this point but you may still find the answer you're looking for in there.</li>
             </ul>
             <h1>web2Project Support Forums</h1>
             <ul>
