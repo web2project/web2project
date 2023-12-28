@@ -46,7 +46,7 @@ $xpg_min = $xpg_pagesize * ($page - 1); // This is where we start our record set
 $file_types = w2PgetSysVal('FileType');
 
 $myFolder = new CFile_Folder();
-$xpg_totalrecs = $myFolder->getFileCountByFolder(null, $folder_id, $task_id, $project_id, $company_id, $allowed_companies);
+$xpg_totalrecs = 0;//$myFolder->getFileCountByFolder(null, $folder_id, $task_id, $project_id, $company_id, $allowed_companies);
 ?>
 <script language="javascript" type="text/javascript">
 function expand(id){
@@ -108,28 +108,5 @@ function removeBulkComponent(li) {
     }
 
     echo getFolders($folder_id);
-
-    //Lets add our bulk form
-    $folders_avail = getFolderSelectList();
-    //used O (uppercase 0)instead of 0 (zero) to keep things in place
-    $folders = array('-1' => array(0 => 'O', 1 => '(Move to Folder)', 2 => -1)) + array('0' => array(0 => 0, 1 => 'Root', 2 => -1)) + $folders_avail;
-
-    $project = new CProject();
-    $sprojects = $project->getAllowedProjects($AppUI->user_id, false);
-    foreach ($sprojects as $prj_id => $proj_info) {
-        $sprojects[$prj_id] = $proj_info['project_name'];
-    }
-    asort($sprojects);
-    $sprojects = array('O' => '(' . $AppUI->_('Move to Project', UI_OUTPUT_RAW) . ')') + array('0' => '(' . $AppUI->_('All Projects', UI_OUTPUT_RAW) . ')') + $sprojects;
-    ?>
-	<tr>
-	    <td colspan="50" align="right">
-            <form name="frm_bulk" id="frm_bulk" method="post" action="?m=files&a=do_files_bulk_aed" accept-charset="utf-8">
-                <input type="hidden" name="redirect" value="<?php echo $current_uri; ?>" />
-                <?php echo arraySelect($sprojects, 'bulk_file_project', 'style="width:180px" class="text"', 'O'); ?>
-                <?php echo arraySelectTree($folders, 'bulk_file_folder', 'style="width:180px;" class="text"', 'O'); ?>
-                <input type="button" class="button" value="<?php echo $AppUI->_('Go'); ?>" onclick="if (confirm('Are you sure you wish to apply the options on the selected files?')) document.frm_bulk.submit();" />
-            </form>
-	    </td>
-	</tr>
+?>
 </table>
