@@ -11,6 +11,10 @@ global $AppUI, $deny1, $canRead, $canEdit, $allowed_folders_ary,
 $canEdit = canEdit($m);
 $canRead = canView($m);
 
+if ($folder_id && !$folder->load($folder_id)) {
+    $AppUI->redirect(ACCESS_DENIED);
+}
+
 // add to allow for returning to other modules besides Files
 $current_uriArray = parse_url($_SERVER['REQUEST_URI']);
 $current_uri = $current_uriArray['query'];

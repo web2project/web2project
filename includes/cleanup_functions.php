@@ -1385,7 +1385,7 @@ function countFiles($folder)
 }
 
 // From: modules/files/filefolder.class.php
-function displayFiles($AppUI, $folder_id, $task_id, $project_id, $company_id)
+function displayFiles($AppUI, $folder_id = 0, $task_id = 0, $project_id = 0, $company_id = 0)
 {
     global $m, $tab, $xpg_min, $xpg_pagesize, $showProject, $file_types,
             $company_id, $current_uri, $canEdit;
@@ -1435,6 +1435,9 @@ function displayFiles($AppUI, $folder_id, $task_id, $project_id, $company_id)
         $q->addWhere('file_task NOT IN (' . implode(',', $deny2) . ')');
     }
 
+    if ($folder_id) {
+        $q->addWhere('file_folder = ' . (int) $folder_id);
+    }
     if ($project_id) {
         $q->addWhere('file_project = ' . (int) $project_id);
     }
