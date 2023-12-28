@@ -1496,23 +1496,22 @@ function displayFiles($AppUI, $folder_id, $task_id, $project_id, $company_id)
         }
         $s .= '</td>';
         $s .= '<td class="data">';
-        if ($canEdit && empty($latest_file['file_checkout'])) {
-            $s .= '<a href="?m=files&a=co&file_id=' . $latest_file['file_id'] . '">' . w2PshowImage('up.png', '16', '16', 'checkout', 'checkout file', 'files') . '</a>';
-        } else {
-            if ($latest_file['file_checkout'] == $AppUI->user_id) {
-                $s .= '<a href="?m=files&a=addedit&ci=1&file_id=' . $latest_file['file_id'] . '">' . w2PshowImage('down.png', '16', '16', 'checkin', 'checkin file', 'files') . '</a>';
-            } else {
-                if ($latest_file['file_checkout'] == 'final') {
-                    $s .= 'final';
-                } else {
-                    $s .= $latest_file['co_contact_name'] . '<br>(' . $latest_file['co_user'] . ')';
-                }
-            }
-        }
+        // if ($canEdit && empty($latest_file['file_checkout'])) {
+        //     $s .= '<a href="?m=files&a=co&file_id=' . $latest_file['file_id'] . '">' . w2PshowImage('up.png', '16', '16', 'checkout', 'checkout file', 'files') . '</a>';
+        // } else {
+        //     if ($latest_file['file_checkout'] == $AppUI->user_id) {
+        //         $s .= '<a href="?m=files&a=addedit&ci=1&file_id=' . $latest_file['file_id'] . '">' . w2PshowImage('down.png', '16', '16', 'checkin', 'checkin file', 'files') . '</a>';
+        //     } else {
+        //         if ($latest_file['file_checkout'] == 'final') {
+        //             $s .= 'final';
+        //         } else {
+        //             $s .= $latest_file['co_contact_name'] . '<br>(' . $latest_file['co_user'] . ')';
+        //         }
+        //     }
+        // }
 
         $version_link = '';
-        $hidden_table = '';
-// TODO:
+        // $hidden_table = '';
         // if ($row['file_versions'] > 1) {
         //     $version_link = '&nbsp<a href="javascript: void(0);" onClick="expand(\'versions_' . $latest_file['file_id'] . '\'); ">(' . $row['file_versions'] . ')</a>';
         //     $hidden_table = '<tr><td colspan="20">
@@ -1547,11 +1546,11 @@ function displayFiles($AppUI, $folder_id, $task_id, $project_id, $company_id)
         $s .= '</td>';
 
         foreach ($fieldList as $index => $column) {
-            $cell = $htmlHelper->createCell($fieldList[$index], $row[$fieldList[$index]], $customLookups);
-            if ('file_version' == $fieldList[$index]) {
-                $cell = str_replace('</td>', $version_link.'</td>', $cell);
-            }
-            $s .= $cell;
+            $s .= $htmlHelper->createCell($fieldList[$index], $row[$fieldList[$index]], $customLookups);
+            // if ('file_version' == $fieldList[$index]) {
+            //     $cell = str_replace('</td>', $version_link.'</td>', $cell);
+            // }
+            // $s .= $cell;
         }
 
         $s .= '<td>';
@@ -1564,7 +1563,7 @@ function displayFiles($AppUI, $folder_id, $task_id, $project_id, $company_id)
         // $s .= '<a href="javascript: void(0);" onclick="if (confirm(\'' . $AppUI->_('Are you sure you want to delete this file?') . '\')) {document.frm_remove_file_' . $latest_file['file_id'] . '.submit()}">' . w2PshowImage('remove.png', '16', '16', 'delete file', 'delete file', 'files') . '</a>';
         $s .= '</td>';
         $s .= '</tr>';
-        $s .= $hidden_table;
+        // $s .= $hidden_table;
     }
     if (0 == count($files)) {
         $s .= '<tr><td colspan="' . (count($fieldNames) + 3 ) . '">' . $AppUI->_('No data available') . '</td></tr>';
