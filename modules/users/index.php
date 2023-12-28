@@ -28,8 +28,8 @@ $orderby = $AppUI->getState('UserIdxOrderby') ? $AppUI->getState('UserIdxOrderby
 $orderby = ($tab == 3 || ($orderby != 'date_time_in' && $orderby != 'user_ip')) ? $orderby : 'user_username';
 
 // Pull First Letters
-$letters = CUser::getFirstLetters();
-$letters = $letters.CContact::getFirstLetters($AppUI->user_id, true);
+$user = new CUser();
+$letters = $user->getLetters();
 
 $a2z = '<a href="./index.php?m=users&stub=0">' . $AppUI->_('All') . '</a>&nbsp;&nbsp;&nbsp;&nbsp;';
 for ($c = 65; $c < 91; $c++) {
