@@ -241,7 +241,7 @@ $df = $AppUI->getPref('SHDATEFORMAT');
         <?php
         $depts = $project->getDepartmentList();
 
-        if (count($depts) > 0) { ?>
+        if (!is_null($depts) && count($depts) > 0) { ?>
             <tr>
                 <td><strong><?php echo $AppUI->_('Departments'); ?></strong></td>
             </tr>
