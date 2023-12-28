@@ -1308,7 +1308,7 @@ function getFolders($parent)
     // display each child
     foreach ($folders as $row) {
         if (array_key_exists($row['file_folder_id'], $allowed_folders_ary) or array_key_exists($parent, $allowed_folders_ary)) {
-            $file_count = countFiles($row['file_folder_id']);
+            $file_count = count($file_folder->getFoldersByParent($row['file_folder_id']));
 
             $s .= '<tr><td colspan="20">';
             $s .= '<ul>';
