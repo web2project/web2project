@@ -41,11 +41,12 @@ $titleBlock->addFilterCell('Filter', 'project_id', $projects, $project_id);
 
 // override the $canEdit variable passed from the main index.php in order to check folder permissions
 /** get permitted folders **/
-$cfObj = new CFile_Folder();
-$allowed_folders_ary = $cfObj->getAllowedRecords($AppUI->user_id);
-$denied_folders_ary = $cfObj->getDeniedRecords($AppUI->user_id);
+$folder = new CFile_Folder();
+$folder->setId($folder_id);
+$allowed_folders_ary = $folder->getAllowedRecords($AppUI->user_id);
+$denied_folders_ary = $folder->getDeniedRecords($AppUI->user_id);
 
-$limited = (count($allowed_folders_ary) < $cfObj->countFolders()) ? true : false;
+$limited = (count($allowed_folders_ary) < $folder->countFolders()) ? true : false;
 
 if (!$limited) {
 	$canEdit = true;

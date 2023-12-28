@@ -6,18 +6,10 @@ if (!defined('W2P_BASE_DIR')) {
 
 global $AppUI, $deny1, $canRead, $canEdit, $allowed_folders_ary,
     $denied_folders_ary, $tab, $folder, $cfObj, $m, $a, $company_id,
-    $allowed_companies, $showProject;
+    $allowed_companies, $showProject, $folder, $folder_id;
 
 $canEdit = canEdit($m);
 $canRead = canView($m);
-
-$folder_id = (int) $folder;
-if ($folder_id) {
-    $cfObj->load($folder);
-    $msg = '';
-    $canDelete = $cfObj->canDelete($msg, $folder);
-}
-// Files modules: index page re-usable sub-table
 
 // add to allow for returning to other modules besides Files
 $current_uriArray = parse_url($_SERVER['REQUEST_URI']);
@@ -90,14 +82,14 @@ function removeBulkComponent(li) {
             <ul>
                 <?php if ($folder_id) { ?>
                 <li><a href="./index.php?m=<?php echo $m; ?>&amp;&a=<?php echo $a; ?>&amp;tab=<?php echo $tab; ?>&folder=0"><?php echo w2PshowImage('home.png', '22', '22', 'back to root folder', '', 'files'); ?></a></li>
-                <?php if (array_key_exists($cfObj->file_folder_parent, $allowed_folders_ary)): ?>
-                    <li><a href="./index.php?m=<?php echo $m; ?>&amp;&a=<?php echo $a; ?>&amp;tab=<?php echo $tab; ?>&folder=<?php echo $cfObj->file_folder_parent; ?>"><?php echo w2PshowImage('back.png', '22', '22', 'folder icon', 'back to parent folder', 'files'); ?></a></li>
+                <?php if (array_key_exists($folder->file_folder_parent, $allowed_folders_ary)): ?>
+                    <li><a href="./index.php?m=<?php echo $m; ?>&amp;&a=<?php echo $a; ?>&amp;tab=<?php echo $tab; ?>&folder=<?php echo $folder->file_folder_parent; ?>"><?php echo w2PshowImage('back.png', '22', '22', 'folder icon', 'back to parent folder', 'files'); ?></a></li>
         		<?php endif; ?>
-                <li><a href="./index.php?m=<?php echo $m; ?>&amp;tab=<?php echo $tab; ?>&a=addedit_folder&folder=<?php echo $cfObj->file_folder_id; ?>" title="edit the <?php echo $cfObj->file_folder_name; ?> folder"><?php echo w2PshowImage('filesaveas.png', '22', '22', 'folder icon', 'edit folder', 'files'); ?></a></li>
+                <li><a href="./index.php?m=<?php echo $m; ?>&amp;tab=<?php echo $tab; ?>&a=addedit_folder&folder=<?php echo $folder->file_folder_id; ?>" title="edit the <?php echo $folder->file_folder_name; ?> folder"><?php echo w2PshowImage('filesaveas.png', '22', '22', 'folder icon', 'edit folder', 'files'); ?></a></li>
                 <?php } ?>
-                <li class="info-text"><?php echo w2PshowImage('folder5_small.png', '22', '22', '', '', 'files'); ?> <strong><?php echo (isset($cfObj) && $cfObj->file_folder_name) ? $cfObj->file_folder_name : "Root"; ?></strong></li>
-                <?php if (isset($cfObj) && $cfObj->file_folder_description != '') { ?>
-                    <li class="info-text"><?php echo w2p_textarea($cfObj->file_folder_description); ?></li>
+                <li class="info-text"><?php echo w2PshowImage('folder5_small.png', '22', '22', '', '', 'files'); ?> <strong><?php echo (isset($folder) && $folder->file_folder_name) ? $folder->file_folder_name : "Root"; ?></strong></li>
+                <?php if (isset($folder) && $folder->file_folder_description != '') { ?>
+                    <li class="info-text"><?php echo w2p_textarea($folder->file_folder_description); ?></li>
                 <?php } ?>
             </ul>
         </td>
