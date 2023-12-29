@@ -4,16 +4,16 @@ if (!defined('W2P_BASE_DIR')) {
 }
 // @todo    convert to template
 
-$date_reg = date('Y-m-d');
-$start_date = intval($date_reg) ? new w2p_Utilities_Date(w2PgetParam($_REQUEST, 'log_start_date', date('Y-m-d'))) : null;
-$end_date = intval($date_reg) ? new w2p_Utilities_Date(w2PgetParam($_REQUEST, 'log_end_date', date('Y-m-d'))) : null;
-$user_id = (int) w2PgetParam($_REQUEST, 'user_id', 0);
+$_lastweek = mktime(0, 0, 0, date("m"), date("d") - 7, date("Y"));
 
-global $AppUI, $currentTabId, $cal_sdf;
+$start_date = new w2p_Utilities_Date(w2PgetParam($_REQUEST, 'log_start_date', date('Y-m-d', $_lastweek)));
+$end_date = new w2p_Utilities_Date(w2PgetParam($_REQUEST, 'log_end_date', date('Y-m-d')));
+
+global $AppUI, $tab, $cal_sdf;
 $df = $AppUI->getPref('SHDATEFORMAT');
 
 $a = ($user_id) ? '&a=view&user_id=' . $user_id : '';
-$a .= '&tab=' . $currentTabId . '&showdetails=1';
+$a .= '&tab=' . $tab . '&showdetails=1';
 
 $AppUI->getTheme()->loadCalendarJS();
 ?>
