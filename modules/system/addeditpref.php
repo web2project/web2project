@@ -254,12 +254,12 @@ echo arraySelect($notify_filter, 'pref_name[MAILALL]', 'class=text size=1', $pre
 	<td>
 		<input type="hidden" name="pref_name[TASKLOGEMAIL]" id="task_log_email_defaults" value="<?php echo $prefs['TASKLOGEMAIL']; ?>" />
 <?php
-if (!isset($prefs['TASKLOGEMAIL'])) {
-	$prefs['TASKLOGEMAIL'] = 0;
-}
-$tl_assign = $prefs['TASKLOGEMAIL'] & 1;
-$tl_task = $prefs['TASKLOGEMAIL'] & 2;
-$tl_proj = $prefs['TASKLOGEMAIL'] & 4;
+
+$taskLogEmail = (isset($prefs['TASKLOGEMAIL'])) ? (int) $prefs['TASKLOGEMAIL'] : 0;
+
+$tl_assign = $taskLogEmail & 1;
+$tl_task = $taskLogEmail & 2;
+$tl_proj = $taskLogEmail & 4;
 echo '<p><label for="tl_assign">' . $AppUI->_('Email Assignees') . '</label>&nbsp;<input type="checkbox" name="tl_assign" id="tl_assign"';
 if ($tl_assign) {
 	echo ' checked="checked"';
