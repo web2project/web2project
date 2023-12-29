@@ -9,7 +9,7 @@ $_lastweek = mktime(0, 0, 0, date("m"), date("d") - 7, date("Y"));
 $start_date = new w2p_Utilities_Date(w2PgetParam($_REQUEST, 'log_start_date', date('Y-m-d', $_lastweek)));
 $end_date = new w2p_Utilities_Date(w2PgetParam($_REQUEST, 'log_end_date', date('Y-m-d')));
 
-global $AppUI, $tab, $cal_sdf;
+global $AppUI, $user_id, $tab, $cal_sdf;
 $df = $AppUI->getPref('SHDATEFORMAT');
 
 $a = ($user_id) ? '&a=view&user_id=' . $user_id : '';

@@ -225,8 +225,12 @@ class w2p_Output_HTMLHelper extends w2p_Output_HTML_Base
             case '_datetime':
             case '_update':
             case '_updated':
-                $myDate = intval($value) ? new w2p_Utilities_Date($this->AppUI->formatTZAwareTime($value, '%Y-%m-%d %T')) : null;
-                $cell = $myDate ? $myDate->format($this->dtf) : '-';
+                if ('1000-01-01 00:00:00' == $value) {
+                    $cell = '-';
+                } else {
+                    $myDate = new w2p_Utilities_Date($value);
+                    $cell = $myDate->format($this->dtf);
+                }
                 break;
             case '_description':
                 $cell = w2p_textarea($value);

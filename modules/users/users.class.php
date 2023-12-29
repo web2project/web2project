@@ -309,7 +309,8 @@ class CUser extends w2p_Core_BaseObject
         $q->addTable('user_access_log', 'ual');
         $q->addTable('users', 'u');
         $q->addTable('contacts', 'c');
-        $q->addQuery('ual.*, u.*, c.*');
+        $q->addQuery('contact_first_name, contact_last_name');
+        $q->addQuery('ual.user_ip, ual.date_time_in, ual.date_time_out');
         $q->addWhere('ual.user_id = u.user_id');
         $q->addWhere('user_contact = contact_id ');
         if ($userId > 0) {
@@ -317,7 +318,7 @@ class CUser extends w2p_Core_BaseObject
         }
         $q->addWhere("ual.date_time_in  >= '$startDate'");
         $q->addWhere("ual.date_time_out <= '$endDate'");
-        $q->addGroup('ual.date_time_last_action DESC');
+        $q->addOrder('ual.date_time_last_action DESC');
 
         return $q->loadList();
     }
