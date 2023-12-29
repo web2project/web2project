@@ -18,13 +18,28 @@ class w2p_Utilities_Date extends Date {
 
     public function __construct($datetime = null, $tz = '') {
 
-        // parent::__construct($datetime);
         if ($tz == '')
         {
             $this->setTZ(w2PgetConfig('system_timezone', 'UTC'));
         } else
         {
             $this->setTZ($tz);
+        }
+
+        if (is_null($datetime)) {
+            $this->setDate(date('Y-m-d H:i:s'));
+        } elseif (is_object($datetime) && (get_class($datetime) == get_class($this))) {
+            $this->copy($datetime);
+        } elseif (preg_match('/\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}/', $datetime)) {
+            $this->setDate($datetime);
+        } elseif (preg_match('/\d{14}/',$datetime)) {
+            $this->setDate($datetime,DATE_FORMAT_TIMESTAMP);
+        } elseif (preg_match('/\d{4}-\d{2}-\d{2}/', $datetime)) {
+            $this->setDate($datetime.' 00:00:00');
+        } elseif (preg_match('/\d{8}/',$datetime)) {
+            $this->setDate($datetime.'000000',DATE_FORMAT_TIMESTAMP);
+        } else {
+            $this->setDate($datetime,DATE_FORMAT_UNIXTIME);
         }
     }
 
@@ -574,4 +589,62 @@ class w2p_Utilities_Date extends Date {
     {
         $this->setDate( $this->getTime() + $n, DATE_FORMAT_UNIXTIME);
     }
+
+
+    public function format($format)
+    {
+        $myTime = mktime($this->hour, $this->minute, $this->second, $this->month, $this->day, $this->year);
+
+        $_config = str_split($format);
+
+        $output = '';
+        foreach($_config as $value)
+        {
+            switch ($value) {
+                case 'Y':   // year, four digit
+                case 'd':   // day of month, two digit
+                case 'm':   // month, two digit
+                case 'H':   // hours, 24h format 
+                    $newValue = date($value, $myTime);
+                    break;
+                case 'I':   // hours, 12h format
+                    $newValue = date('g', $myTime);
+                    break;
+                case 'S':   // seconds, two digit
+                    $newValue = date('s', $myTime);
+                    break;
+                case 'M':   // minutes, two digit
+                    $newValue = date('i', $myTime);
+                    break;
+                case 'p':   // am/pm, lowercase
+                    $newValue = date('a', $myTime);
+                    break;
+                case 'b':   // month, three letters
+                    $newValue = date('M', $myTime);
+                    break;
+                case 'B':   // month, full name
+                    $newValue = date('F', $myTime);
+                    break;
+                case 'A':   // day, full name
+                    $newValue = date('l', $myTime);
+                    break;
+                case 'T':   // hours, 24 hour format : minutes, two digit : seconds, two digit
+                    $newValue = date('H:i:s', $myTime);
+                    break;
+                case 'U':   // week, number
+                    $newValue = date('W', $myTime);
+                    break;
+                case '%':
+                    $newValue = '';
+                    break;
+                case '/':
+                default:
+                    $newValue = $value;
+            }
+            $output .= $newValue;
+        }
+
+        return $output;
+    }
+
 }
