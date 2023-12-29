@@ -183,10 +183,10 @@ $form = new w2p_Output_HTML_FormHelper($AppUI);
             </p>
             <p>
                 <?php $form->showLabel('Notify by Email'); ?>
-                <input type="checkbox" name="email_project_owner_box" id="email_project_owner_box" <?php echo ($tt ? 'checked="checked"' : '');?> />
+                <input type="checkbox" name="email_project_owner_box" id="email_project_owner_box" <?php echo ($tl_task ? 'checked="checked"' : '');?> />
                 <?php echo $AppUI->_('Project Owner'); ?>
                 <input type="hidden" name="email_project_owner" id="email_project_owner" value="<?php echo ($object->project_owner ? $object->project_owner : '0');?>" />
-                <input type='checkbox' name='email_project_contacts_box' id='email_project_contacts_box' <?php echo ($tp ? 'checked="checked"' : ''); ?> />
+                <input type='checkbox' name='email_project_contacts_box' id='email_project_contacts_box' <?php echo ($tl_proj ? 'checked="checked"' : ''); ?> />
                 <?php echo $AppUI->_('Project Contacts'); ?>
             </p>
             <p>

@@ -9,6 +9,7 @@ $contact_id = (int) w2PgetParam($_GET, 'contact_id', 0);
 
 $object = new CProject();
 $object->setId($object_id);
+$object->project_owner = $AppUI->user_id;
 
 $obj = $object;
 $canAddEdit = $obj->canAddEdit();
@@ -96,10 +97,10 @@ if ($object_id == 0 && $contact_id > 0) {
 }
 
 // Get the users notification options
-$tl = $AppUI->getPref('TASKLOGEMAIL');
-$ta = $tl & 1;
-$tt = $tl & 2;
-$tp = $tl & 4;
+$taskLogEmail = (isset($prefs['TASKLOGEMAIL'])) ? (int) $prefs['TASKLOGEMAIL'] : 0;
+// $tl_assign = $taskLogEmail & 1;
+$tl_task = $taskLogEmail & 2;
+$tl_proj = $taskLogEmail & 4;
 ?>
 <script language="javascript" type="text/javascript">
 
