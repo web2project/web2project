@@ -228,6 +228,7 @@ class w2p_Output_HTMLHelper extends w2p_Output_HTML_Base
                 if ('1000-01-01 00:00:00' == $value) {
                     $cell = '-';
                 } else {
+                    $value = $this->AppUI->formatTZAwareTime($value, '%Y-%m-%d %T');
                     $myDate = new w2p_Utilities_Date($value);
                     $cell = $myDate->format($this->dtf);
                 }
