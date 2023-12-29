@@ -36,7 +36,7 @@ class CSystem_Role extends w2p_Core_BaseObject {
         parent::__construct('not-a-table', 'role_id');
 	}
 
-	public function store()
+	public function store($updateNulls = false)
     {
         if (!$this->isValid()) {
             return false;
@@ -70,7 +70,7 @@ class CSystem_Role extends w2p_Core_BaseObject {
      *
      * @return bool|null|string
      */
-    public function delete()
+    public function delete($oid = null)
     {
 		if (canDelete('roles')) {
 			// Delete all the children from this group
