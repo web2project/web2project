@@ -27,11 +27,11 @@ class CHistory extends w2p_Core_BaseObject
      *
      * @return boolean
      */
-    public function delete()    {   return false;   }
+    public function delete($oid = null)    {   return false;   }
     public function canDelete($notUsed = null, $notUsed2 = null, $notUsed3 = null) {   return false;   }
     public function canCreate() {   return true;    }
     public function canEdit()   {   return false;   }
-    public function store()     {   return true;    }
+    public function store($updateNulls = false)     {   return true;    }
 
     /**
      * @todo TODO: This should validate that we can actually view this specific

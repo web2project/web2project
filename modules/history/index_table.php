@@ -4,14 +4,14 @@ if (!defined('W2P_BASE_DIR')) {
 }
 // @todo    convert to template
 
-global $AppUI, $filter_param;
+global $AppUI, $filter_param, $m;
 
 $filter_param = ('projects' == $m) ? 'projects' : $filter_param;
 $page = (int) w2PgetParam($_GET, 'page', 1);
 
 $history = new CHistory();
 $where = (-1 == $filter_param) ? '' : "history_table = '".$filter_param."'";
-$histories = $history->loadAll('history_date DESC', $where);
+$histories = $history->loadAll('history_date', $where);
 
 $items = array_values($histories);
 
