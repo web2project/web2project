@@ -86,43 +86,12 @@ foreach ($projects as $project_id => $project_info) {
 }
 $projects = arrayMerge(array(0 => $all_projects), $projects);
 
-$inc = intval(w2PgetConfig('cal_day_increment')) ? intval(w2PgetConfig('cal_day_increment')) : 30;
-if (!$object_id && !$is_clash) {
-
-	$seldate = new w2p_Utilities_Date($date, $AppUI->getPref('TIMEZONE'));
-	// If date is today, set start time to now + inc
-	if ($date == date('Ymd')) {
-		$h = date('H');
-		// an interval after now.
-		$min = intval(date('i') / $inc) + 1;
-		$min *= $inc;
-		if ($min > 60) {
-			$min = 0;
-			$h++;
-		}
-	}
-	if ($h && $h < w2PgetConfig('cal_day_end')) {
-		$seldate->setTime($h, $min, 0);
-        $seldate->convertTZ('UTC');
-		$object->event_start_date = $seldate->format(FMT_TIMESTAMP);
-		$seldate->addSeconds($inc * 60);
-        $seldate->convertTZ('UTC');
-		$object->event_end_date = $seldate->format(FMT_TIMESTAMP);
-	} else {
-		$seldate->setTime(w2PgetConfig('cal_day_start'), 0, 0);
-        $seldate->convertTZ('UTC');
-		$object->event_start_date = $seldate->format(FMT_TIMESTAMP);
-        $seldate->convertTZ($AppUI->getPref('TIMEZONE'));
-		$seldate->setTime(w2PgetConfig('cal_day_end'), 0, 0);
-        $seldate->convertTZ('UTC');
-		$object->event_end_date = $seldate->format(FMT_TIMESTAMP);
-	}
-}
 
 $recurs = array('Never', 'Hourly', 'Daily', 'Weekly', 'Bi-Weekly', 'Every Month', 'Quarterly', 'Every 6 months', 'Every Year');
 
 $remind = array('900' => '15 mins', '1800' => '30 mins', '3600' => '1 hour', '7200' => '2 hours', '14400' => '4 hours', '28800' => '8 hours', '56600' => '16 hours', '86400' => '1 day', '172800' => '2 days');
 
+$inc = intval(w2PgetConfig('cal_day_increment')) ? intval(w2PgetConfig('cal_day_increment')) : 30;
 // build array of times in 30 minute increments
 $times = array();
 $t = new w2p_Utilities_Date();
