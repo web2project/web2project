@@ -9,6 +9,7 @@ $project_id = (int) w2PgetParam($_GET, 'project_id', 0);
 
 $object = new CLink();
 $object->setId($object_id);
+$object->link_owner = $AppUI->user_id;
 
 $obj = $object;
 $canAddEdit = $obj->canAddEdit();
