@@ -26,13 +26,26 @@ $date = w2PgetParam($_GET, 'date', null);
 // get the passed timestamp (today if none)
 $event_project = (int) w2PgetParam($_GET, 'project_id', 0);
 
+$assigned = [];
 $obj = $AppUI->restoreObject();
 if ($obj) {
     $object = $obj;
     $object_id = $object->getId();
+    $_assignees = explode(',', $AppUI->_assigned);
+    $_user = new CUser();
+    foreach($_assignees as $key) {
+    	$_user->loadFull($key);
+    	$assigned[$key] = $_user->contact_display_name;
+    }
 } else {
     $object->load($object_id);
+    $assigned = $object->getAssigned();
 }
+
+if ($object_id == 0) {
+    $assigned[$AppUI->user_id] = $AppUI->user_display_name;
+} 
+
 // load the record data
 if (!$object && $object_id > 0) {
     $AppUI->setMsg('Event');
@@ -50,14 +63,6 @@ $types = w2PgetSysVal('EventType');
 // Load the users
 $perms = &$AppUI->acl();
 $users = $perms->getPermittedUsers('events');
-
-// Load the assignees
-$assigned = array();
-if ($object_id == 0) {
-    $assigned[$AppUI->user_id] = $AppUI->user_display_name;
-} else {
-    $assigned = $object->getAssigned();
-}
 
 //check if the user has view permission over the project
 if ($object->event_project && !$perms->checkModuleItem('projects', 'view', $object->event_project)) {
