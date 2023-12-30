@@ -3483,28 +3483,16 @@ function getEventTooltip($event_id)
         return '';
     }
 
-    $df = $AppUI->getPref('SHDATEFORMAT');
-    $tf = $AppUI->getPref('TIMEFORMAT');
-
-    // load the record data
-
     $event = new CEvent();
-    $event->loadFull($event_id);
+    $event->load($event_id);
+    $assigned = $event->getAssigned();
 
     // load the event types
     $types = w2PgetSysVal('EventType');
-
     // load the event recurs types
     $recurs = array('Never', 'Hourly', 'Daily', 'Weekly', 'Bi-Weekly', 'Every Month', 'Quarterly', 'Every 6 months', 'Every Year');
 
-    $obj = new CEvent();
-    $obj->event_id = $event_id;
-    $assigned = $obj->getAssigned();
-
-    if ($event->event_project) {
-        $event_project = $event->project_name;
-        $event_company = $event->company_name;
-    }
+    $view = new w2p_Output_HTML_ViewHelper($AppUI);
 
     $tt = '<table class="tool-tip">';
     $tt .= '<tr>';
@@ -3513,29 +3501,19 @@ function getEventTooltip($event_id)
     $tt .= '		<table cellspacing="3" cellpadding="2" width="100%">';
     $tt .= '		<tr>';
     $tt .= '			<td class="tip-label">' . $AppUI->_('Type') . '</td>';
-    $tt .= '			<td>' . $AppUI->_($types[$event->event_type]) . '</td>';
+    $tt .= '			<td>' . $view->addField('event_type', $types[$event->event_type]) . '</td>';
     $tt .= '		</tr>	';
-    if ($event->event_project) {
-        $tt .= '		<tr>';
-        $tt .= '			<td class="tip-label">' . $AppUI->_('Company') . '</td>';
-        $tt .= '			<td>' . $event_company . '</td>';
-        $tt .= '		</tr>';
-        $tt .= '		<tr>';
-        $tt .= '			<td class="tip-label">' . $AppUI->_('Project') . '</td>';
-        $tt .= '			<td>' . $event_project . '</td>';
-        $tt .= '		</tr>';
-    }
     $tt .= '		<tr>';
     $tt .= '			<td class="tip-label">' . $AppUI->_('Starts') . '</td>';
-    $tt .= '			<td>' . $AppUI->formatTZAwareTime($event->event_start_date, $df . ' ' . $tf) . '</td>';
+    $tt .= '			<td>' . $view->addField('event_datetime', $event->event_start_date) . '</td>';
     $tt .= '		</tr>';
     $tt .= '		<tr>';
     $tt .= '			<td class="tip-label">' . $AppUI->_('Ends') . '</td>';
-    $tt .= '			<td>' . $AppUI->formatTZAwareTime($event->event_end_date, $df . ' ' . $tf) . '</td>';
+    $tt .= '			<td>' . $view->addField('event_datetime', $event->event_end_date) . '</td>';
     $tt .= '		</tr>';
     $tt .= '		<tr>';
     $tt .= '			<td class="tip-label">' . $AppUI->_('Recurs') . '</td>';
-    $tt .= '			<td>' . $AppUI->_($recurs[$event->event_recurs]) . ($event->event_recurs ? ' (' . $event->event_times_recuring . '&nbsp;' . $AppUI->_('times') . ')' : '') . '</td>';
+    $tt .= '			<td>' . $view->addField('event_recurs', $recurs[$event->event_recurs]) . '</td>';
     $tt .= '		</tr>';
     $tt .= '		<tr>';
     $tt .= '			<td class="tip-label">' . $AppUI->_('Attendees') . '</td>';
@@ -3548,9 +3526,7 @@ function getEventTooltip($event_id)
     $tt .= '		<strong>' . $AppUI->_('Note') . '</strong>';
     $tt .= '		<table cellspacing="0" cellpadding="2" border="0" width="100%">';
     $tt .= '		<tr>';
-    $tt .= '			<td class="tip-label description">';
-    $tt .= '				' . mb_str_replace(chr(10), "<br />", $event->event_description) . '&nbsp;';
-    $tt .= '			</td>';
+    $tt .= '			<td class="tip-label description">' . $view->addField('event_description', $event->event_description) . '</td>';
     $tt .= '		</tr>';
     $tt .= '		</table>';
     $tt .= '	</td>';
