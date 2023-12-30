@@ -442,22 +442,25 @@ class CEvent extends w2p_Core_BaseObject
         $oPrj->overrideDatabase($this->_query);
 
         $aPrjs = $oPrj->getAllowedRecords($uid, 'projects.project_id, project_name', '', null, null, 'projects');
-        if (count($aPrjs)) {
-            $buffer = '(event_project IN (' . implode(',', array_keys($aPrjs)) . ') OR event_project IS NULL OR event_project = \'\' OR event_project = 0)';
 
-            if ($extra['where'] != '') {
-                $extra['where'] = $extra['where'] . ' AND ' . $buffer;
-            } else {
-                $extra['where'] = $buffer;
-            }
-        } else {
-            // There are no allowed projects, so only allow events with no project.
-            if ($extra['where'] != '') {
-                $extra['where'] = $extra['where'] . ' AND (event_project IS NULL OR event_project = \'\' OR event_project = 0) ';
-            } else {
-                $extra['where'] = '(event_project IS NULL OR event_project = \'\' OR event_project = 0)';
-            }
-        }
+        if(is_array($extra)) {
+	        if (count($aPrjs)) {
+	            $buffer = '(event_project IN (' . implode(',', array_keys($aPrjs)) . ') OR event_project IS NULL OR event_project = \'\' OR event_project = 0)';
+
+	            if ($extra['where'] != '') {
+	                $extra['where'] = $extra['where'] . ' AND ' . $buffer;
+	            } else {
+	                $extra['where'] = $buffer;
+	            }
+	        } else {
+	            // There are no allowed projects, so only allow events with no project.
+	            if ($extra['where'] != '') {
+	                $extra['where'] = $extra['where'] . ' AND (event_project IS NULL OR event_project = \'\' OR event_project = 0) ';
+	            } else {
+	                $extra['where'] = '(event_project IS NULL OR event_project = \'\' OR event_project = 0)';
+	            }
+	        }
+    	}
         return parent::getAllowedRecords($uid, $fields, $orderby, $index, $extra);
     }
 
