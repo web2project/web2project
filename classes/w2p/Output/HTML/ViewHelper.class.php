@@ -50,8 +50,10 @@ class w2p_Output_HTML_ViewHelper extends w2p_Output_HTML_Base
                 $class  = 'C'.ucfirst($suffix);
                 $obj = new $class();
                 $obj->load($fieldValue);
+                $field = $suffix.'_name';
+                $name = ($fieldValue) ? $obj->$field : '-';
                 $link = '?m='. w2p_pluralize($suffix) .'&a=view&'.$suffix.'_id='.$fieldValue;
-                $output = '<a href="'.$link.'">'.$obj->{"$suffix".'_name'}.'</a>';
+                $output = '<a href="'.$link.'">' . $name . '</a>';
                 break;
             default:
                 $output = htmlspecialchars($fieldValue, ENT_QUOTES);
