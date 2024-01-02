@@ -6,7 +6,7 @@ if (!defined('W2P_BASE_DIR')) {
 
 global $AppUI, $company_id, $dept_ids, $department, $locale_char_set,
     $proFilter, $projectStatus, $showInactive, $showLabels, $showAllGantt,
-    $user_id, $w2Pconfig, $project_id, $project_original_id;
+    $user_id, $w2Pconfig, $project_id, $project_original_id, $gantt_arr;
 
 w2PsetExecutionConditions($w2Pconfig);
 
@@ -127,15 +127,14 @@ if (!is_array($projects) || sizeof($projects) == 0) {
                 }
                 $projects[$rec['task_project']]['tasks'][] = $rec;
             }
-
             reset($projects);
             foreach ($projects as $p) {
                 $tnums = count($p['tasks']);
                 for ($i = 0; $i < $tnums; $i++) {
                     $task = $p['tasks'][$i];
                     if ($task['task_parent'] == $task['task_id']) {
-                        showgtask($task, 0, $p['project_id']);
-                        findchild_gantt($p['tasks'], $task['task_id'], 0);
+                        $gantt_arr = showgtask($task, 0, $gantt_arr);
+                        findchild_gantt($p['tasks'], $task['task_id'], 0, $gantt_arr);
                     }
                 }
             }
