@@ -22,7 +22,7 @@ class w2p_Output_GanttRenderer {
 
     public function __construct(w2p_Core_CAppUI $AppUI, $width)
     {
-        $this->graph = new GanttGraph($width);
+        $this->graph = new GanttGraph((int) $width);
         $this->graph->ShowHeaders(GANTT_HYEAR | GANTT_HMONTH | GANTT_HDAY | GANTT_HWEEK);
         $this->graph->SetFrame(false);
         $this->graph->SetBox(true, array(0, 0, 0), 2);
