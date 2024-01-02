@@ -17,6 +17,8 @@ $fixedSysVals = array('CompanyType', 'EventType', 'FileType', 'GlobalCountries',
 function is_task_in_gantt_arr($task)
 {
     global $gantt_arr;
+
+    $gantt_arr = isset($gantt_arr) ? $gantt_arr : [];
     $n = count($gantt_arr);
     for ($x = 0; $x < $n; $x++) {
         if ($gantt_arr[$x][0]['task_id'] == $task['task_id']) {
@@ -416,7 +418,7 @@ function findchild_gantt(&$tarr, $parent, $level = 0)
 
     for ($x = 0; $x < $n; $x++) {
         if ($tarr[$x]['task_parent'] == $parent && $tarr[$x]['task_parent'] != $tarr[$x]['task_id']) {
-            showgtask($tarr[$x], $level, $tarr[$x]['project_id']);
+            showgtask($tarr[$x], $level, 0);
             findchild_gantt($tarr, $tarr[$x]['task_id'], $level);
         }
     }
