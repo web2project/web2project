@@ -6,7 +6,7 @@ if (!defined('W2P_BASE_DIR')) {
 // @todo    remove database query
 
 global $AppUI, $m, $a, $project_id, $task_id, $f, $task_status, $min_view, $query_string, $durnTypes, $tpl;
-global $user_id, $w2Pconfig, $currentTabId, $currentTabName, $canEdit, $showEditCheckbox, $tab;
+global $user_id, $w2Pconfig, $currentTabId, $currentTabName, $canEdit, $showEditCheckbox, $tab, $showIncomplete;
 
 $tab = (int) w2PgetParam($_GET, 'tab', 0);
 
