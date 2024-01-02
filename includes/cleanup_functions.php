@@ -4552,7 +4552,7 @@ function __extract_from_projects_gantt2($department, $addPwOiD, $project_type, $
     }
     $q = $pjobj->setAllowedSQL($AppUI->user_id, $q, null, 'pr');
     $q->addGroup('pr.project_id');
-    $q->addOrder('pr.project_name, task_end_date DESC');
+    $q->addOrder('pr.project_name, project_actual_end_date DESC');
 
     $projects = $q->loadList();
 
