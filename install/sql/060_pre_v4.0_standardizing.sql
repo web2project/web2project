@@ -11,3 +11,6 @@ UPDATE `module_config` SET `module_config_value` = 'event_end_datetime' WHERE `m
 ALTER TABLE `files` CHANGE `file_datetime` `file_datetime` DATETIME NULL DEFAULT CURRENT_TIMESTAMP;
 UPDATE `module_config` SET `module_config_value` = 'file_datetime' WHERE `module_config_value` = 'file_date';
 
+-- history
+ALTER TABLE `history` CHANGE `history_date` `history_datetime` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP;
+
