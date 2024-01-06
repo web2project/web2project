@@ -1411,11 +1411,6 @@ function displayFiles($AppUI, $folder_id = 0, $task_id = 0, $project_id = 0, $co
         $module->storeSettings('files', 'index_list', $fieldList, $fieldNames);
     }
 
-    $_key = array_search('file_date', $fieldList);
-    if ($_key) {
-        $fieldList[$_key] = 'file_datetime';
-    }
-
     // SETUP FOR FILE LIST
     $q = new w2p_Database_Query();
     $q->addQuery($fieldList);
