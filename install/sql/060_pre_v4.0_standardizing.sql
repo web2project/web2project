@@ -14,3 +14,5 @@ UPDATE `module_config` SET `module_config_value` = 'file_datetime' WHERE `module
 -- history
 ALTER TABLE `history` CHANGE `history_date` `history_datetime` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP;
 
+UPDATE `module_config` SET `module_config_value` = 'history_datetime' WHERE `module_config_value` = 'history_date';
+

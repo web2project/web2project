@@ -1747,7 +1747,7 @@ function get_actual_end_date_pd($task_id, $task)
     $mods = $AppUI->getActiveModules();
 
     if (!empty($mods['history']) && canView('history')) {
-        $q->addQuery('MAX(history_date) as actual_end_date');
+        $q->addQuery('MAX(history_datetime) as actual_end_date');
         $q->addTable('history');
         $q->addWhere('history_table=\'tasks\' AND history_item=' . $task_id);
     } else {
@@ -2690,7 +2690,7 @@ function addHistory($table, $id, $action = 'modify', $description = '', $project
     $q->addInsert('history_item', (int) $id);
     $q->addInsert('history_description', $description);
     $q->addInsert('history_user', (int) $AppUI->user_id);
-    $q->addInsert('history_date', "'".$q->dbfnNowWithTZ()."'", false, true);
+    $q->addInsert('history_datetime', "'".$q->dbfnNowWithTZ()."'", false, true);
     $q->addInsert('history_project', (int) $project_id);
     $q->addInsert('history_table', $table);
     $q->exec();
