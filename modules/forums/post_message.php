@@ -136,11 +136,11 @@ $form = new w2p_Output_HTML_FormHelper($AppUI);
         <?php
         if ($message_parent >= 0) { //check if this is a reply-post; if so, printout the original message
             $messageAuthor = isset($message->message_author) ? $message->message_author : $AppUI->user_id;
-            $date = intval($message->message_date) ? new w2p_Utilities_Date($message->message_date) : new w2p_Utilities_Date();
+            $date = intval($message->message_datetime) ? new w2p_Utilities_Date($message->message_datetime) : new w2p_Utilities_Date();
             ?>
             <tr>
                 <td align="right"><?php $form->showLabel('Author'); ?></td>
-                <td align="left"><?php echo CContact::getContactByUserid($messageAuthor); ?> (<?php echo $AppUI->formatTZAwareTime($message->message_date, $df . ' ' . $tf); ?>)</td>
+                <td align="left"><?php echo CContact::getContactByUserid($messageAuthor); ?> (<?php echo $AppUI->formatTZAwareTime($message->message_datetime, $df . ' ' . $tf); ?>)</td>
             </tr>
             <tr><td align="right"><?php $form->showLabel('Subject'); ?></td>
                 <td align="left"><?php echo $message->message_title ?></td></tr>

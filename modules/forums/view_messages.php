@@ -108,7 +108,7 @@ foreach ($messages as $row) {
 
     $editor = __extract_from_forums_view_messages($row);
 
-	$date = intval($row['message_date']) ? new w2p_Utilities_Date($row['message_date']) : null;
+	$date = intval($row['message_datetime']) ? new w2p_Utilities_Date($row['message_datetime']) : null;
 	if ($viewtype != 'single') {
 		$s = '';
 	}

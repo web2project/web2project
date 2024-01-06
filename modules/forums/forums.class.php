@@ -45,7 +45,7 @@ class CForum extends w2p_Core_BaseObject
         $q->addJoin('users', 'u', 'message_author = u.user_id', 'inner');
         $q->addJoin('contacts', 'con', 'contact_id = user_contact', 'inner');
         $q->addWhere('forum_id = message_forum AND (message_id = ' . (int) $message_id . ' OR message_parent = ' . (int) $message_id . ')');
-        $q->addOrder('message_date ' . $sortDir);
+        $q->addOrder('message_datetime ' . $sortDir);
 
         return $q->loadList();
     }

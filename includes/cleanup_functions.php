@@ -4780,7 +4780,7 @@ function __extract_from_forums_view_topics($AppUI, $forum_id, $f, $orderby, $ord
     $q->addTable('forum_messages', 'fm1');
     $q->addQuery('fm1.*, u.*, fm1.message_title as message_name, fm1.message_forum as forum_id');
     $q->addQuery('COUNT(distinct fm2.message_id) AS replies');
-    $q->addQuery('MAX(fm2.message_date) AS latest_reply');
+    $q->addQuery('MAX(fm2.message_datetime) AS latest_reply');
     $q->addQuery('user_username, contact_first_name, contact_last_name, contact_display_name as contact_name, watch_user');
     $q->addQuery('count(distinct v1.visit_message) as reply_visits');
     $q->addQuery('v1.visit_user');
@@ -4797,7 +4797,7 @@ function __extract_from_forums_view_topics($AppUI, $forum_id, $f, $orderby, $ord
             $q->addWhere('watch_user IS NOT NULL');
             break;
         case 2:
-            $q->addWhere('(NOW() < DATE_ADD(fm2.message_date, INTERVAL 30 DAY) OR NOW() < DATE_ADD(fm1.message_date, INTERVAL 30 DAY))');
+            $q->addWhere('(NOW() < DATE_ADD(fm2.message_datetime, INTERVAL 30 DAY) OR NOW() < DATE_ADD(fm1.message_datetime, INTERVAL 30 DAY))');
             break;
     }
     $q->addGroup('fm1.message_id, fm1.message_parent');
@@ -5129,7 +5129,7 @@ function __extract_from_view_messages3($s, $style, $AppUI, $row, $df, $tf, $edit
     $s .= '<tr>';
 
     $s .= '<td valign="top" style="' . $style . '">';
-    $s .= $AppUI->formatTZAwareTime($row['message_date'], $df . ' ' . $tf) . ' - ';
+    $s .= $AppUI->formatTZAwareTime($row['message_datetime'], $df . ' ' . $tf) . ' - ';
     $s .= '<a href="mailto:' . $row['contact_email'] . '">' . $row['contact_name'] . '</a>';
     $s .= '<br />';
     if (sizeof($editor) > 0) {
@@ -5212,7 +5212,7 @@ function __extract_from_view_messages4($s, $style, $row, $hideEmail, $editor, $A
     $s .= '</tr><tr>';
 
     $s .= '<td valign="top" style="' . $style . '" nowrap="nowrap">';
-    $s .= '<img src="' . w2PfindImage('icons/posticon.gif', $m) . '" alt="date posted" />' . $AppUI->formatTZAwareTime($row['message_date'], $df . ' ' . $tf) . '</td>';
+    $s .= '<img src="' . w2PfindImage('icons/posticon.gif', $m) . '" alt="date posted" />' . $AppUI->formatTZAwareTime($row['message_datetime'], $df . ' ' . $tf) . '</td>';
     $s .= '<td valign="top" align="right" style="' . $style . '">';
 
     // in some weird permission cases

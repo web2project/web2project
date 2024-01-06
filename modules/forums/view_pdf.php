@@ -33,7 +33,7 @@ foreach ($messages as $row) {
 		$topic = $row['message_title'];
 	}
 
-    $date = new w2p_Utilities_Date($AppUI->formatTZAwareTime($row['message_date'], '%Y-%m-%d %T'));
+    $date = new w2p_Utilities_Date($AppUI->formatTZAwareTime($row['message_datetime'], '%Y-%m-%d %T'));
 	$pdfdata[] = array($date->format($df), $row['contact_display_name'], '<b>' . $row['message_title'] . '</b>' . "\n" . $row['message_body']);
 }
 
