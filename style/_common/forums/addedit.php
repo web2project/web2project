@@ -45,7 +45,7 @@ $form = new w2p_Output_HTML_FormHelper($AppUI);
             <?php if ($object_id) { ?>
                 <p>
                     <?php $form->showLabel('Created On'); ?>
-                    <?php echo $AppUI->formatTZAwareTime($object->forum_create_date); ?>
+                    <?php echo $AppUI->formatTZAwareTime($object->forum_created); ?>
                 </p>
                 <p>
                     <?php $form->showLabel('Last Post'); ?>
