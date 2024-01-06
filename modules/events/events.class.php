@@ -12,7 +12,7 @@ class CEvent extends w2p_Core_BaseObject
     // @todo this should be event_start_datetime to take advantage of our templating
     public $event_start_datetime = null;
     // @todo this should be event_end_datetime to take advantage of our templating
-    public $event_end_date = null;
+    public $event_end_datetime = null;
     public $event_parent = null;
     public $event_description = null;
     public $event_times_recuring = null;
@@ -72,7 +72,7 @@ class CEvent extends w2p_Core_BaseObject
     {
         $baseErrorMsg = get_class($this) . '::store-check failed - ';
 
-        if ($this->event_start_datetime > $this->event_end_date) {
+        if ($this->event_start_datetime > $this->event_end_datetime) {
             $this->_error['start_after_end'] = $baseErrorMsg . 'start date is after end date';
         }
 
@@ -98,7 +98,7 @@ class CEvent extends w2p_Core_BaseObject
         $search['table_orderby'] = 'event_start_datetime';
         $search['search_fields'] = array(
             'event_name', 'event_description',
-            'event_start_datetime', 'event_end_date'
+            'event_start_datetime', 'event_end_datetime'
         );
         $search['display_fields'] = $search['search_fields'];
 
@@ -116,7 +116,7 @@ class CEvent extends w2p_Core_BaseObject
      * @param integer Time of Recurrence
      * @return array Calculated Start and End Dates for the recurrent Event for the given Period
      */
-    public function getRecurrentEventforPeriod($start_date, $end_date, $event_start_datetime, $event_end_date, $event_recurs, $event_times_recuring, $j)
+    public function getRecurrentEventforPeriod($start_date, $end_date, $event_start_datetime, $event_end_datetime, $event_recurs, $event_times_recuring, $j)
     {
 
         //this array will be returned
@@ -124,7 +124,7 @@ class CEvent extends w2p_Core_BaseObject
 
         //create Date Objects for Event Start and Event End
         $eventStart = new w2p_Utilities_Date($event_start_datetime);
-        $eventEnd = new w2p_Utilities_Date($event_end_date);
+        $eventEnd = new w2p_Utilities_Date($event_end_datetime);
 
         //Time of Recurence = 0 (first occurence of event) has to be checked, too.
         if ($j > 0) {
@@ -216,7 +216,7 @@ class CEvent extends w2p_Core_BaseObject
 			$$query_set = new w2p_Database_Query();
 			$$query_set->addTable('events', 'e');
 			$$query_set->addQuery('distinct(e.event_id), e.*');
-			$$query_set->addOrder('e.event_start_datetime, e.event_end_date ASC');
+			$$query_set->addOrder('e.event_start_datetime, e.event_end_datetime ASC');
 
 			$$query_set->leftJoin('projects', 'p', 'p.project_id =  e.event_project');
 			$$query_set->leftJoin('project_departments', 'project_departments', 'p.project_id = project_departments.project_id OR project_departments.project_id IS NULL');
@@ -249,7 +249,7 @@ class CEvent extends w2p_Core_BaseObject
 			if ($query_set == 'q') { // assemble query for non-recurring events
 				$$query_set->addWhere('(event_recurs <= 0)');
 				// following line is only good for *non-recurring* events
-				$$query_set->addWhere("(event_start_datetime <= '$db_end' AND event_end_date >= '$db_start' OR event_start_datetime BETWEEN '$db_start' AND '$db_end')");
+				$$query_set->addWhere("(event_start_datetime <= '$db_end' AND event_end_datetime >= '$db_start' OR event_start_datetime BETWEEN '$db_start' AND '$db_end')");
 				$eventList = $$query_set->loadList();
 			} elseif ($query_set == 'r') { // assemble query for recurring events
 				$$query_set->addWhere('(event_recurs > 0)');
@@ -272,25 +272,25 @@ class CEvent extends w2p_Core_BaseObject
 				//Daily View
 				//show all
 				if ($periodLength <= 1) {
-					$recEventDate = self::getRecurrentEventforPeriod($start_date, $end_date, $eventListRec[$i]['event_start_datetime'], $eventListRec[$i]['event_end_date'], $eventListRec[$i]['event_recurs'], $eventListRec[$i]['event_times_recuring'], $j);
+					$recEventDate = self::getRecurrentEventforPeriod($start_date, $end_date, $eventListRec[$i]['event_start_datetime'], $eventListRec[$i]['event_end_datetime'], $eventListRec[$i]['event_recurs'], $eventListRec[$i]['event_times_recuring'], $j);
 				}
 				//Weekly or Monthly View and Hourly Recurrent Events
 				//only show hourly recurrent event one time and add string 'hourly'
 				elseif ($periodLength > 1 && $eventListRec[$i]['event_recurs'] == 1 && $j == 0) {
-					$recEventDate = self::getRecurrentEventforPeriod($start_date, $end_date, $eventListRec[$i]['event_start_datetime'], $eventListRec[$i]['event_end_date'], $eventListRec[$i]['event_recurs'], $eventListRec[$i]['event_times_recuring'], $j);
+					$recEventDate = self::getRecurrentEventforPeriod($start_date, $end_date, $eventListRec[$i]['event_start_datetime'], $eventListRec[$i]['event_end_datetime'], $eventListRec[$i]['event_recurs'], $eventListRec[$i]['event_times_recuring'], $j);
 					$eventListRec[$i]['event_name'] = $eventListRec[$i]['event_name'] . ' (' . $AppUI->_('Hourly') . ')';
 				}
 				//Weekly and Monthly View and higher recurrence mode
 				//show all events of recurrence > 1
 				elseif ($periodLength > 1 && $eventListRec[$i]['event_recurs'] > 1) {
-					$recEventDate = self::getRecurrentEventforPeriod($start_date, $end_date, $eventListRec[$i]['event_start_datetime'], $eventListRec[$i]['event_end_date'], $eventListRec[$i]['event_recurs'], $eventListRec[$i]['event_times_recuring'], $j);
+					$recEventDate = self::getRecurrentEventforPeriod($start_date, $end_date, $eventListRec[$i]['event_start_datetime'], $eventListRec[$i]['event_end_datetime'], $eventListRec[$i]['event_recurs'], $eventListRec[$i]['event_times_recuring'], $j);
 				}
 
 				//add values to the eventsArray if check for recurrent event was positive
 				if (sizeof($recEventDate) > 0) {
 					$eList[0] = $eventListRec[$i];
 					$eList[0]['event_start_datetime'] = $recEventDate[0]->format(FMT_DATETIME_MYSQL);
-					$eList[0]['event_end_date'] = $recEventDate[1]->format(FMT_DATETIME_MYSQL);
+					$eList[0]['event_end_datetime'] = $recEventDate[1]->format(FMT_DATETIME_MYSQL);
 					$eventList = array_merge($eventList, $eList);
 				}
 				// clear array of positive recurrent events for the case that next loop recEventDate is empty in order to avoid double display
@@ -302,7 +302,7 @@ class CEvent extends w2p_Core_BaseObject
 		$i = 0;
 		foreach($eventList as $event) {
 			$eventList[$i]['event_start_datetime'] = $AppUI->formatTZAwareTime($event['event_start_datetime'], '%Y-%m-%d %H:%M:%S');
-			$eventList[$i]['event_end_date'] = $AppUI->formatTZAwareTime($event['event_end_date'], '%Y-%m-%d %H:%M:%S');
+			$eventList[$i]['event_end_datetime'] = $AppUI->formatTZAwareTime($event['event_end_datetime'], '%Y-%m-%d %H:%M:%S');
 			$i++;
 		}
 //echo '<pre>'; print_r($eventList); echo '</pre>';
@@ -421,14 +421,14 @@ class CEvent extends w2p_Core_BaseObject
         $q = $this->_getQuery();
         $q->addTable('events', 'e');
         $q->addQuery("e.event_id, event_name, event_sequence, event_owner, event_description, " .
-            "ue.user_id, event_cwd, event_start_datetime, event_end_date, event_updated, event_recurs");
+            "ue.user_id, event_cwd, event_start_datetime, event_end_datetime, event_updated, event_recurs");
         $q->addQuery('projects.project_id, projects.project_name');
         $q->addTable('events', 'e');
         $q->leftJoin('projects', 'projects', 'e.event_project = projects.project_id');
         $q->addJoin('user_events', 'ue', 'ue.event_id = e.event_id');
         $q->addWhere("event_start_datetime >= '$start_date' " .
-     	  		"AND event_end_date <= '$end_date' " .
-     	  		"AND EXTRACT(HOUR_MINUTE FROM e.event_end_date) >= '$start_time' " .
+     	  		"AND event_end_datetime <= '$end_date' " .
+     	  		"AND EXTRACT(HOUR_MINUTE FROM e.event_end_datetime) >= '$start_time' " .
      	  		"AND EXTRACT(HOUR_MINUTE FROM e.event_start_datetime) <= '$end_time' " .
      	  		"AND ( e.event_owner in (" . implode(',', $users) . ") " .
      	 		"OR ue.user_id in (" . implode(',', $users) . "))");
@@ -469,7 +469,7 @@ class CEvent extends w2p_Core_BaseObject
         $result = parent::bind($hash, $prefix, $checkSlashes, $bindAll);
 
         $this->event_start_datetime = $this->_AppUI->convertToSystemTZ($this->event_start_datetime);
-        $this->event_end_date = $this->_AppUI->convertToSystemTZ($this->event_end_date);
+        $this->event_end_datetime = $this->_AppUI->convertToSystemTZ($this->event_end_datetime);
 
         return $result;
     }
@@ -492,7 +492,7 @@ class CEvent extends w2p_Core_BaseObject
             $end_date->setDate($start_date->getDate());
             $end_date->setHour($hour);
             $end_date->setMinute($minute);
-            $this->event_end_date = $end_date->format(FMT_DATETIME_MYSQL);
+            $this->event_end_datetime = $end_date->format(FMT_DATETIME_MYSQL);
         }
 
         // ensure changes to check boxes and select lists are honoured
@@ -563,7 +563,7 @@ class CEvent extends w2p_Core_BaseObject
 
         foreach($events as $event) {
             for ($j = 0 ; $j <= $event['event_recurs']; $j++) {
-                $myDates = $this->getRecurrentEventforPeriod($start, $end, $event['event_start_datetime'], $event['event_end_date'],
+                $myDates = $this->getRecurrentEventforPeriod($start, $end, $event['event_start_datetime'], $event['event_end_datetime'],
                                 $event['event_recurs'], $event['event_times_recuring'], $j);
                 /*
                  * This list of fields - id, name, description, startDate, endDate,

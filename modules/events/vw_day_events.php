@@ -31,7 +31,7 @@ $start_hour = w2PgetConfig('cal_day_start');
 $end_hour = w2PgetConfig('cal_day_end');
 foreach ($events as $row) {
     $start = new w2p_Utilities_Date($row['event_start_datetime']);
-	$end = new w2p_Utilities_Date($row['event_end_date']);
+	$end = new w2p_Utilities_Date($row['event_end_datetime']);
 
     $key = $start->format('%H%M%S');
     if (-1 == $start->compare($start, $this_day)) {
@@ -100,7 +100,7 @@ for ($i = 0, $n = ($end - $start) * 60 / $inc; $i < $n; $i++) {
 		for ($j = 0; $j < $count; $j++) {
 			$row = $events2[$timeStamp][$j];
 
-			$et = new w2p_Utilities_Date($row['event_end_date']);
+			$et = new w2p_Utilities_Date($row['event_end_datetime']);
 
 			$rows = $event->calculateRows($this_day, $et, $inc);
 			$href = '?m=events&a=view&event_id=' . $row['event_id'];

@@ -15,7 +15,7 @@ $module = new w2p_System_Module();
 $fields = $module->loadSettings('events', 'company_view');
 
 if (0 == count($fields)) {
-    $fieldList = array('event_start_datetime', 'event_end_date', 'event_type',
+    $fieldList = array('event_start_datetime', 'event_end_datetime', 'event_type',
         'event_name');
     $fieldNames = array('Starting Time', 'Ending Time', 'Type', 'Name');
 

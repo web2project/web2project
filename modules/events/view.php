@@ -20,7 +20,7 @@ $recurs = array('Never', 'Hourly', 'Daily', 'Weekly', 'Bi-Weekly', 'Every Month'
 $assigned = $event->getAssigned();
 
 $start_date = $event->event_start_datetime ? new w2p_Utilities_Date($event->event_start_datetime) : new w2p_Utilities_Date();
-$end_date = $event->event_end_date ? new w2p_Utilities_Date($event->event_end_date) : new w2p_Utilities_Date();
+$end_date = $event->event_end_datetime ? new w2p_Utilities_Date($event->event_end_datetime) : new w2p_Utilities_Date();
 if ($event->event_project) {
 	$project = new CProject();
 	$event_project = $project->load($event->event_project)->project_name;

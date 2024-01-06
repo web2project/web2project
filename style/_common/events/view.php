@@ -18,7 +18,7 @@ $view = new w2p_Output_HTML_ViewHelper($AppUI);
             <?php $view->showField('event_start_datetime', $event->event_start_datetime); ?>
         </p>
         <p><?php $view->showLabel('Ends'); ?>
-            <?php $view->showField('event_end_datetime', $event->event_end_date); ?>
+            <?php $view->showField('event_end_datetime', $event->event_end_datetime); ?>
         </p>
         <p><?php $view->showLabel('Recurs'); ?>
             <?php $view->showField('event_recurs', $recurs[$event->event_recurs]); ?>

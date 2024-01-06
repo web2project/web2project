@@ -3453,7 +3453,7 @@ function getEventLinks($startPeriod, $endPeriod, $links, $notUsed = null, $minic
     // assemble the links for the events
     foreach ($events as $row) {
         $start = new w2p_Utilities_Date($row['event_start_datetime']);
-        $end = new w2p_Utilities_Date($row['event_end_date']);
+        $end = new w2p_Utilities_Date($row['event_end_datetime']);
         $date = $start;
 
         for ($i = 0, $i_cmp = $start->dateDiff($end); $i <= $i_cmp; $i++) {
@@ -3511,7 +3511,7 @@ function getEventTooltip($event_id)
     $tt .= '		</tr>';
     $tt .= '		<tr>';
     $tt .= '			<td class="tip-label">' . $AppUI->_('Ends') . '</td>';
-    $tt .= '			<td>' . $view->addField('event_datetime', $event->event_end_date) . '</td>';
+    $tt .= '			<td>' . $view->addField('event_datetime', $event->event_end_datetime) . '</td>';
     $tt .= '		</tr>';
     $tt .= '		<tr>';
     $tt .= '			<td class="tip-label">' . $AppUI->_('Recurs') . '</td>';
