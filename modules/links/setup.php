@@ -62,7 +62,7 @@ class CSetupLinks extends w2p_System_Setup
             link_parent int( 11 ) default "0",
             link_description text,
             link_owner int( 11 ) default "0",
-            link_date datetime default NULL ,
+            link_datetime datetime NOT NULL default CURRENT_TIMESTAMP,   
             link_icon varchar( 20 ) default "obj/",
             link_category int( 11 ) NOT NULL default "0",
             PRIMARY KEY ( link_id ) ,

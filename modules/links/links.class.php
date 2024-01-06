@@ -14,8 +14,7 @@ class CLink extends w2p_Core_BaseObject
     public $link_parent = null;
     public $link_description = null;
     public $link_owner = null;
-    // @todo this should be link_datetime to take advantage of our templating
-    public $link_date = null;
+    public $link_datetime = null;
     public $link_icon = null;
     public $link_category = null;
 
@@ -80,7 +79,7 @@ class CLink extends w2p_Core_BaseObject
     protected function hook_preStore()
     {
         $q = $this->_getQuery();
-        $this->link_date = $q->dbfnNowWithTZ();
+        $this->link_datetime = $q->dbfnNowWithTZ();
 
         if (strpos($this->link_url, ':') === false && strpos($this->link_url, "//") === false) {
             $this->link_url = 'http://' . $this->link_url;
