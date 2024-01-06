@@ -12,7 +12,7 @@ $module = new w2p_System_Module();
 $fields = $module->loadSettings('forums', 'projects_view');
 
 if (0 == count($fields)) {
-    $fieldList = array('forum_name', 'forum_description', 'forum_owner', 'forum_last_date');
+    $fieldList = array('forum_name', 'forum_description', 'forum_owner', 'forum_updated');
     $fieldNames = array('Forum Name', 'Description', 'Owner', 'Last Post Info');
 
     $module->storeSettings('forums', 'projects_view', $fieldList, $fieldNames);

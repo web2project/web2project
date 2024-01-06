@@ -49,7 +49,7 @@ $form = new w2p_Output_HTML_FormHelper($AppUI);
                 </p>
                 <p>
                     <?php $form->showLabel('Last Post'); ?>
-                    <?php echo $AppUI->formatTZAwareTime($object->forum_last_date); ?>
+                    <?php echo $AppUI->formatTZAwareTime($object->forum_updated); ?>
                 </p>
             <?php } ?>
             <?php $form->showSaveButton(); ?>

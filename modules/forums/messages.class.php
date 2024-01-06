@@ -78,7 +78,7 @@ class CForum_Message extends w2p_Core_BaseObject
                  * Note: the message_date here has already been adjusted for the
                  *    timezone above, so don't do it again!
                  */
-                $forum->forum_last_date = $this->message_date;
+                $forum->forum_updated = $this->message_date;
                 $forum->forum_last_id = $this->message_id;
                 $forum->store();
 

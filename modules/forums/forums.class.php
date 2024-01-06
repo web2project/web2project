@@ -12,8 +12,7 @@ class CForum extends w2p_Core_BaseObject
     public $forum_owner = null;
     public $forum_name = null;
     public $forum_created = null;
-    // @todo this should be forum_last_datetime to take advantage of our templating
-    public $forum_last_date = null;
+    public $forum_updated = null;
     public $forum_last_id = null;
     public $forum_message_count = null;
     public $forum_description = null;
@@ -60,7 +59,7 @@ class CForum extends w2p_Core_BaseObject
         $q->addTable('forums');
 
         $q->addQuery('forum_id, forum_project, forum_description, forum_owner, forum_name');
-        $q->addQuery('forum_moderated, forum_created, forum_last_date');
+        $q->addQuery('forum_moderated, forum_created, forum_updated');
         $q->addQuery('sum(if(c.message_parent=-1,1,0)) as forum_topics, sum(if(c.message_parent>0,1,0)) as forum_replies');
         $q->addQuery('user_username, project_name, project_color_identifier, contact_display_name as owner_name, user_id');
         $q->addQuery('SUBSTRING(l.message_body,1,' . $max_msg_length . ') message_body');
