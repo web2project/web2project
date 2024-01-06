@@ -16,3 +16,8 @@ ALTER TABLE `history` CHANGE `history_date` `history_datetime` DATETIME NOT NULL
 
 UPDATE `module_config` SET `module_config_value` = 'history_datetime' WHERE `module_config_value` = 'history_date';
 
+-- links
+ALTER TABLE `links` CHANGE `link_date` `link_datetime` DATETIME NULL DEFAULT CURRENT_TIMESTAMP;
+
+UPDATE `module_config` SET `module_config_value` = 'link_datetime' WHERE `module_config_value` = 'link_date';
+
