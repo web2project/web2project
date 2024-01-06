@@ -21,3 +21,9 @@ ALTER TABLE `links` CHANGE `link_date` `link_datetime` DATETIME NULL DEFAULT CUR
 
 UPDATE `module_config` SET `module_config_value` = 'link_datetime' WHERE `module_config_value` = 'link_date';
 
+-- user_access_log
+ALTER TABLE `user_access_log` CHANGE `date_time_in` `date_time_in` DATETIME NULL DEFAULT CURRENT_TIMESTAMP;
+ALTER TABLE `user_access_log` CHANGE `date_time_out` `date_time_out` DATETIME NULL DEFAULT CURRENT_TIMESTAMP;
+ALTER TABLE `user_access_log` CHANGE `date_time_last_action` `date_time_last_action` DATETIME NULL DEFAULT CURRENT_TIMESTAMP;
+
+
