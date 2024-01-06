@@ -54,7 +54,7 @@ if (!$object && $object_id > 0) {
 }
 
 $object->event_project = ($event_project) ? $event_project : $object->event_project;
-$start_date = intval($object->event_start_date) ? new w2p_Utilities_Date($AppUI->formatTZAwareTime($object->event_start_date, '%Y-%m-%d %T')) : new w2p_Utilities_Date();
+$start_date = intval($object->event_start_datetime) ? new w2p_Utilities_Date($AppUI->formatTZAwareTime($object->event_start_datetime, '%Y-%m-%d %T')) : new w2p_Utilities_Date();
 $end_date = intval($object->event_end_date) ? new w2p_Utilities_Date($AppUI->formatTZAwareTime($object->event_end_date, '%Y-%m-%d %T')) : $start_date;
 
 // load the event types
@@ -115,9 +115,9 @@ function submitIt(){
 		form.event_name.focus();
 		return;
 	}
-	if (form.event_start_date.value.length < 1){
+	if (form.event_start_datetime.value.length < 1){
 		alert('<?php echo $AppUI->_('Please enter a start date', UI_OUTPUT_JS); ?>');
-		form.event_start_date.focus();
+		form.event_start_datetime.focus();
 		return;
 	}
 	if (form.event_end_date.value.length < 1){

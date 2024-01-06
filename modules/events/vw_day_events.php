@@ -30,7 +30,7 @@ $events2 = array();
 $start_hour = w2PgetConfig('cal_day_start');
 $end_hour = w2PgetConfig('cal_day_end');
 foreach ($events as $row) {
-    $start = new w2p_Utilities_Date($row['event_start_date']);
+    $start = new w2p_Utilities_Date($row['event_start_datetime']);
 	$end = new w2p_Utilities_Date($row['event_end_date']);
 
     $key = $start->format('%H%M%S');
