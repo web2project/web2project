@@ -9,6 +9,5 @@ UPDATE `module_config` SET `module_config_value` = 'event_end_datetime' WHERE `m
 
 -- files
 ALTER TABLE `files` CHANGE `file_datetime` `file_datetime` DATETIME NULL DEFAULT CURRENT_TIMESTAMP;
-
 UPDATE `module_config` SET `module_config_value` = 'file_datetime' WHERE `module_config_value` = 'file_date';
 
