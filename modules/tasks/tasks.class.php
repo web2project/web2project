@@ -528,10 +528,10 @@ class CTask extends w2p_Core_BaseObject
         $stored = false;
 
         if ($this->task_start_date == '') {
-            $this->task_start_date = '0000-00-00 00:00:00';
+            $this->task_start_date = date('Y-m-d H:i:s');
         }
         if ($this->task_end_date == '') {
-            $this->task_end_date = '0000-00-00 00:00:00';
+            $this->task_end_date = date('Y-m-d H:i:s');
         }
 
         if ($this->{$this->_tbl_key} && $this->canEdit()) {
