@@ -32,3 +32,7 @@ UPDATE `module_config` SET `module_config_value` = 'link_datetime' WHERE `module
 ALTER TABLE `user_access_log` CHANGE `date_time_in` `date_time_in` DATETIME NULL DEFAULT CURRENT_TIMESTAMP;
 ALTER TABLE `user_access_log` CHANGE `date_time_out` `date_time_out` DATETIME NULL DEFAULT CURRENT_TIMESTAMP;
 ALTER TABLE `user_access_log` CHANGE `date_time_last_action` `date_time_last_action` DATETIME NULL DEFAULT CURRENT_TIMESTAMP;
+
+-- tasks: This cleans up some broken data where mysql no longer allows '0000-00-00 00:00:00' as a pseudo-null
+UPDATE `tasks` SET `task_updated` = now() WHERE `task_updated` < '1900-01-01 00:00:00';
+UPDATE `tasks` SET `task_created` = `task_updated` WHERE `task_created` < '1900-01-01 00:00:00';
