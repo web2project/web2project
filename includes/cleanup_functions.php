@@ -4090,7 +4090,6 @@ function __extract_from_syskeys_index2()
     $q->addQuery('DISTINCT sysval_title, sysval_key_id, syskeys.*');
     $q->addWhere('sysval_key_id = syskey_id');
     $q->addOrder('sysval_title');
-    $q->addOrder('sysval_id');
 
     return $q->loadList();
 }
