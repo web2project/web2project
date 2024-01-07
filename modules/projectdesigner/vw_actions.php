@@ -17,12 +17,25 @@ $task_access = array(CTask::ACCESS_PUBLIC => $AppUI->_('Public'),
 $stask_access = array('' => '('.$AppUI->_('Access').')') + $task_access;
 $durntype = w2PgetSysval('TaskDurationType');
 $sdurntype = array('' => '('.$AppUI->_('Duration Type').')') + $durntype;
-$sother = array('' => '('.$AppUI->_('Other Operations').')', '1' => $AppUI->_('Mark Tasks as Finished'),
-        '8' => $AppUI->_('Mark Tasks as Active'), '9' => $AppUI->_('Mark Tasks as Inactive'),
-        '2' => $AppUI->_('Mark Tasks as Milestones'), '3' => $AppUI->_('Mark Tasks as Non Milestone'),
-        '4' => $AppUI->_('Mark Tasks as Dynamic'), '5' => $AppUI->_('Mark Tasks as Non Dynamic'),
-        '6' => $AppUI->_('Add Task Reminder'), '7' => $AppUI->_('Remove Task Reminder'),
-        '10' => $AppUI->_('Remove Tasks Description'), '99' => $AppUI->_('Delete Tasks'));
+
+$sother = [
+    0 => '(' . $AppUI->_('Other Operations') . ')',
+    1 => $AppUI->_('Mark Tasks as Finished'),
+    2 => $AppUI->_('Mark Tasks as Milestones'),
+    3 => $AppUI->_('Mark Tasks as Non Milestone'),
+    4 => $AppUI->_('Mark Tasks as Dynamic'),
+    5 => $AppUI->_('Mark Tasks as Non Dynamic'),
+    6 => $AppUI->_('Add Task Reminder'),
+    7 => $AppUI->_('Remove Task Reminder'),
+    8 => $AppUI->_('Mark Tasks as Active'),
+    9 => $AppUI->_('Mark Tasks as Inactive'),
+    10 => $AppUI->_('Remove Tasks Description'),
+    11 => $AppUI->_('Pin Tasks'),
+    12 => $AppUI->_('Unpin Tasks'),
+    99 => $AppUI->_('Delete Tasks')
+];
+
+// echo '<pre>'; print_r($sother); print_r($other); die();
 
 //Pull all users
 $users = $perms->getPermittedUsers();
