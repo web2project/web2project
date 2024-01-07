@@ -168,7 +168,7 @@ if ($do_report) {
             foreach($assignees as $assignee) {
                 $users[] = $assignee['contact_name'];
             }
-            $str .= '<td>' . implode($users, ', ') . '</td>';
+            $str .= '<td>' . implode(', ', $users) . '</td>';
 
             $str .= $htmlHelper->createCell('task_start_date', $task['task_start_date']);
             $str .= $htmlHelper->createCell('task_end_date', $task['task_end_date']);
@@ -183,7 +183,7 @@ if ($do_report) {
                 $end_date = new w2p_Utilities_Date($task['task_end_date']);
                 $spacer = str_repeat('  ', $task['depth']);
                 $pdfdata[] = array($spacer . $task['task_name'], $task['task_description'],
-                    implode($users, ', '),
+                    implode(', ', $users),
                     (($start_date != ' ') ? $start_date->format($df) : ' '),
                     (($end_date != ' ') ? $end_date->format($df) : ' '),
                     $task['task_percent_complete'] . '%', );
