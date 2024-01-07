@@ -228,7 +228,7 @@ if (is_array($selected) && count($selected)) {
 
 		//Action: Other Actions
         if (isset($_POST['bulk_task_other']) && $bulk_task_other != '') {
-
+// TODO: convert this over to a switch statement
             if ($upd_task->task_id) {
                 //Option 1 - Mark as finished
                 if ($bulk_task_other == '1') {
