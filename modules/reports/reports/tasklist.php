@@ -101,10 +101,16 @@ $df = $AppUI->getPref('SHDATEFORMAT');
                 </a>
             </td>
             <td nowrap="nowrap">
-                <input type="checkbox" name="log_all" id="log_all" <?php if ($log_all) echo 'checked="checked"' ?> />
-                <label for="log_all"><?php echo $AppUI->_('Log All'); ?></label>
-                <input type="checkbox" name="log_pdf" id="log_pdf" <?php if ($log_pdf) echo 'checked="checked"' ?> />
-                <label for="log_pdf"><?php echo $AppUI->_('Make PDF'); ?></label>
+                <div>
+                    <input type="checkbox" name="log_all" id="log_all" <?php if ($log_all) echo 'checked="checked"' ?> />
+                    <label for="log_all"><?php echo $AppUI->_('Log All'); ?></label>
+                </div>
+                <div>
+                    <input type="checkbox" name="log_pdf" id="log_pdf" <?php if ($log_pdf) echo 'checked="checked"' ?> />
+                    <label for="log_pdf"><?php echo $AppUI->_('Make PDF'); ?></label>
+                </div>
+            </td>
+            <td>
                 <input class="button" style="float: right;" type="submit" name="do_report" value="<?php echo $AppUI->_('submit'); ?>" />
             </td>
         </tr>
