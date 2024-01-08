@@ -499,6 +499,10 @@
                         ],
                         "description": "A tool for quickly measuring the size of a PHP project.",
                         "homepage": "https://github.com/sebastianbergmann/phploc",
+                        "support": {
+                                "issues": "https://github.com/sebastianbergmann/phploc/issues",
+                                "source": "https://github.com/sebastianbergmann/phploc/tree/master"
+                        },
                         "install-path": "../phploc/phploc"
                 },
                 {
@@ -844,6 +848,11 @@
                         ],
                         "description": "Copy/Paste Detector (CPD) for PHP code.",
                         "homepage": "https://github.com/sebastianbergmann/phpcpd",
+                        "support": {
+                                "issues": "https://github.com/sebastianbergmann/phpcpd/issues",
+                                "source": "https://github.com/sebastianbergmann/phpcpd/tree/4.1.0"
+                        },
+                        "abandoned": true,
                         "install-path": "../sebastian/phpcpd"
                 },
                 {
@@ -890,6 +899,10 @@
                         ],
                         "description": "Library that helps with managing the version number of Git-hosted PHP projects",
                         "homepage": "https://github.com/sebastianbergmann/version",
+                        "support": {
+                                "issues": "https://github.com/sebastianbergmann/version/issues",
+                                "source": "https://github.com/sebastianbergmann/version/tree/master"
+                        },
                         "install-path": "../sebastian/version"
                 },
                 {
