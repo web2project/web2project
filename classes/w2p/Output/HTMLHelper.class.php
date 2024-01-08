@@ -216,8 +216,18 @@ class w2p_Output_HTMLHelper extends w2p_Output_HTML_Base
             case '_actual':
                 $end_date = intval($this->tableRowData['project_end_date']) ? new w2p_Utilities_Date($this->tableRowData['project_end_date']) : null;
                 $actual_end_date = intval($this->tableRowData['project_actual_end_date']) ? new w2p_Utilities_Date($this->tableRowData['project_actual_end_date']) : null;
-                if (($actual_end_date > $end_date) && !empty($end_date))  $style  ='style="color:red; font-weight:bold"' ;
-                else if  (($actual_end_date < $end_date) && !empty($end_date))  $style  ='style="color:green; font-weight:bold"'; else  $style  =''; 
+
+                $style = '';
+                if (!empty($end_date)) {
+                    if (($actual_end_date > $end_date)) {
+                        // overdue
+                        $style  ='style="color:red; font-weight:bold"' ;
+                    } else {
+                        // on time
+                        $style  ='style="color:green; font-weight:bold"';
+                    }
+                }
+
                 if ($actual_end_date) {
                     $cell = '<a href="?m=tasks&a=view&task_id=' . $this->tableRowData['project_last_task'] . '" ' . $style . '>' . $actual_end_date->format($this->df) . '</a>';
                 } else {
