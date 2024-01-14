@@ -103,8 +103,8 @@ class w2p_System_UpgradeManager {
                         $errorMessages = $this->_applySQLUpdates($update, $dbConn);
                         $allErrors = array_merge($allErrors, $errorMessages);
                         $sql = "INSERT INTO w2pversion " .
-                            " (db_version, code_version, last_db_update) " .
-                            " VALUES ($myIndex, '$version', now())";
+                            " (db_version, code_version, last_db_update, last_code_update) " .
+                            " VALUES ($myIndex, '$version', now(), now())";
                         $dbConn->Execute($sql);
                     }
                 }

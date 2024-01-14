@@ -36,3 +36,5 @@ ALTER TABLE `user_access_log` CHANGE `date_time_last_action` `date_time_last_act
 -- tasks: This cleans up some broken data where mysql no longer allows '0000-00-00 00:00:00' as a pseudo-null
 UPDATE `tasks` SET `task_updated` = now() WHERE `task_updated` < '1900-01-01 00:00:00';
 UPDATE `tasks` SET `task_created` = `task_updated` WHERE `task_created` < '1900-01-01 00:00:00';
+
+UPDATE `w2pversion` SET `last_code_update` = `last_db_update`;
