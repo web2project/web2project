@@ -47,8 +47,8 @@
         <phingcall target="phploc" />
         <phingcall target="depend" />
         <phingcall target="cpd" />
+        <phingcall target="phpstan" />
         <phingcall target="churn-grep" />
-        <phingcall target="phpmd" />
     </target>
 
     <target name="standards" depends="lint, metrics" />
@@ -151,12 +151,10 @@
         </phpcpd>
     </target>
 
-    <target name="phpmd" depends="prepare">
-        <phpmd>
-            <fileset refid="project.source" />
-            <formatter type="xml" outfile="${dir.reports}/pmd.xml"/>
-            <formatter type="html" outfile="${dir.reports}/pmd.html"/>
-        </phpmd>
+    <target name="phpstan" depends="prepare">
+        <exec command="vendor/bin/phpstan analyse classes includes install modules style
+            --memory-limit=1024M --level 9 --error-format=raw --no-progress > 
+            ${dir.reports}/phpstan.txt" />
     </target>
 
     <target name="depend" depends="prepare">

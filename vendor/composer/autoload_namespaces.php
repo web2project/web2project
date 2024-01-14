@@ -7,5 +7,8 @@ $baseDir = dirname($vendorDir);
 
 return array(
     'Web2project' => array($baseDir . '/src'),
-    'PHPMD\\' => array($vendorDir . '/phpmd/phpmd/src/main/php'),
+    'VersionControl' => array($vendorDir . '/pear/versioncontrol_git'),
+    'JShrink' => array($vendorDir . '/tedivm/jshrink/src'),
+    'Console' => array($vendorDir . '/pear/console_getopt'),
+    '' => array($vendorDir . '/pear/pear-core-minimal/src'),
 );

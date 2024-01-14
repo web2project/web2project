@@ -293,34 +293,41 @@
                 },
                 {
                         "name": "pdepend/pdepend",
-                        "version": "2.5.0",
-                        "version_normalized": "2.5.0.0",
+                        "version": "2.16.2",
+                        "version_normalized": "2.16.2.0",
                         "source": {
                                 "type": "git",
                                 "url": "https://github.com/pdepend/pdepend.git",
-                                "reference": "0c50874333149c0dad5a2877801aed148f2767ff"
+                                "reference": "f942b208dc2a0868454d01b29f0c75bbcfc6ed58"
                         },
                         "dist": {
                                 "type": "zip",
-                                "url": "https://api.github.com/repos/pdepend/pdepend/zipball/0c50874333149c0dad5a2877801aed148f2767ff",
-                                "reference": "0c50874333149c0dad5a2877801aed148f2767ff",
+                                "url": "https://api.github.com/repos/pdepend/pdepend/zipball/f942b208dc2a0868454d01b29f0c75bbcfc6ed58",
+                                "reference": "f942b208dc2a0868454d01b29f0c75bbcfc6ed58",
                                 "shasum": ""
                         },
                         "require": {
                                 "php": ">=5.3.7",
-                                "symfony/config": "^2.3.0|^3",
-                                "symfony/dependency-injection": "^2.3.0|^3",
-                                "symfony/filesystem": "^2.3.0|^3"
+                                "symfony/config": "^2.3.0|^3|^4|^5|^6.0|^7.0",
+                                "symfony/dependency-injection": "^2.3.0|^3|^4|^5|^6.0|^7.0",
+                                "symfony/filesystem": "^2.3.0|^3|^4|^5|^6.0|^7.0",
+                                "symfony/polyfill-mbstring": "^1.19"
                         },
                         "require-dev": {
-                                "phpunit/phpunit": "^4.4.0,<4.8",
+                                "easy-doc/easy-doc": "0.0.0|^1.2.3",
+                                "gregwar/rst": "^1.0",
                                 "squizlabs/php_codesniffer": "^2.0.0"
                         },
-                        "time": "2017-01-19T14:23:36+00:00",
+                        "time": "2023-12-17T18:09:59+00:00",
                         "bin": [
                                 "src/bin/pdepend"
                         ],
                         "type": "library",
+                        "extra": {
+                                "branch-alias": {
+                                        "dev-master": "2.x-dev"
+                                }
+                        },
                         "installation-source": "dist",
                         "autoload": {
                                 "psr-4": {
@@ -332,7 +339,243 @@
                                 "BSD-3-Clause"
                         ],
                         "description": "Official version of pdepend to be handled with Composer",
+                        "keywords": [
+                                "PHP Depend",
+                                "PHP_Depend",
+                                "dev",
+                                "pdepend"
+                        ],
+                        "support": {
+                                "issues": "https://github.com/pdepend/pdepend/issues",
+                                "source": "https://github.com/pdepend/pdepend/tree/2.16.2"
+                        },
+                        "funding": [
+                                {
+                                        "url": "https://tidelift.com/funding/github/packagist/pdepend/pdepend",
+                                        "type": "tidelift"
+                                }
+                        ],
                         "install-path": "../pdepend/pdepend"
+                },
+                {
+                        "name": "pear/console_getopt",
+                        "version": "v1.4.3",
+                        "version_normalized": "1.4.3.0",
+                        "source": {
+                                "type": "git",
+                                "url": "https://github.com/pear/Console_Getopt.git",
+                                "reference": "a41f8d3e668987609178c7c4a9fe48fecac53fa0"
+                        },
+                        "dist": {
+                                "type": "zip",
+                                "url": "https://api.github.com/repos/pear/Console_Getopt/zipball/a41f8d3e668987609178c7c4a9fe48fecac53fa0",
+                                "reference": "a41f8d3e668987609178c7c4a9fe48fecac53fa0",
+                                "shasum": ""
+                        },
+                        "time": "2019-11-20T18:27:48+00:00",
+                        "type": "library",
+                        "installation-source": "dist",
+                        "autoload": {
+                                "psr-0": {
+                                        "Console": "./"
+                                }
+                        },
+                        "notification-url": "https://packagist.org/downloads/",
+                        "include-path": [
+                                "./"
+                        ],
+                        "license": [
+                                "BSD-2-Clause"
+                        ],
+                        "authors": [
+                                {
+                                        "name": "Andrei Zmievski",
+                                        "email": "andrei@php.net",
+                                        "role": "Lead"
+                                },
+                                {
+                                        "name": "Stig Bakken",
+                                        "email": "stig@php.net",
+                                        "role": "Developer"
+                                },
+                                {
+                                        "name": "Greg Beaver",
+                                        "email": "cellog@php.net",
+                                        "role": "Helper"
+                                }
+                        ],
+                        "description": "More info available on: http://pear.php.net/package/Console_Getopt",
+                        "support": {
+                                "issues": "http://pear.php.net/bugs/search.php?cmd=display&package_name[]=Console_Getopt",
+                                "source": "https://github.com/pear/Console_Getopt"
+                        },
+                        "install-path": "../pear/console_getopt"
+                },
+                {
+                        "name": "pear/pear-core-minimal",
+                        "version": "v1.10.14",
+                        "version_normalized": "1.10.14.0",
+                        "source": {
+                                "type": "git",
+                                "url": "https://github.com/pear/pear-core-minimal.git",
+                                "reference": "a86fc145edb5caedbf96527214ce3cadc9de4a32"
+                        },
+                        "dist": {
+                                "type": "zip",
+                                "url": "https://api.github.com/repos/pear/pear-core-minimal/zipball/a86fc145edb5caedbf96527214ce3cadc9de4a32",
+                                "reference": "a86fc145edb5caedbf96527214ce3cadc9de4a32",
+                                "shasum": ""
+                        },
+                        "require": {
+                                "pear/console_getopt": "~1.4",
+                                "pear/pear_exception": "~1.0",
+                                "php": ">=5.4"
+                        },
+                        "replace": {
+                                "rsky/pear-core-min": "self.version"
+                        },
+                        "time": "2023-11-26T16:15:38+00:00",
+                        "type": "library",
+                        "installation-source": "dist",
+                        "autoload": {
+                                "psr-0": {
+                                        "": "src/"
+                                }
+                        },
+                        "notification-url": "https://packagist.org/downloads/",
+                        "include-path": [
+                                "src/"
+                        ],
+                        "license": [
+                                "BSD-3-Clause"
+                        ],
+                        "authors": [
+                                {
+                                        "name": "Christian Weiske",
+                                        "email": "cweiske@php.net",
+                                        "role": "Lead"
+                                }
+                        ],
+                        "description": "Minimal set of PEAR core files to be used as composer dependency",
+                        "support": {
+                                "issues": "http://pear.php.net/bugs/search.php?cmd=display&package_name[]=PEAR",
+                                "source": "https://github.com/pear/pear-core-minimal"
+                        },
+                        "install-path": "../pear/pear-core-minimal"
+                },
+                {
+                        "name": "pear/pear_exception",
+                        "version": "v1.0.2",
+                        "version_normalized": "1.0.2.0",
+                        "source": {
+                                "type": "git",
+                                "url": "https://github.com/pear/PEAR_Exception.git",
+                                "reference": "b14fbe2ddb0b9f94f5b24cf08783d599f776fff0"
+                        },
+                        "dist": {
+                                "type": "zip",
+                                "url": "https://api.github.com/repos/pear/PEAR_Exception/zipball/b14fbe2ddb0b9f94f5b24cf08783d599f776fff0",
+                                "reference": "b14fbe2ddb0b9f94f5b24cf08783d599f776fff0",
+                                "shasum": ""
+                        },
+                        "require": {
+                                "php": ">=5.2.0"
+                        },
+                        "require-dev": {
+                                "phpunit/phpunit": "<9"
+                        },
+                        "time": "2021-03-21T15:43:46+00:00",
+                        "type": "class",
+                        "extra": {
+                                "branch-alias": {
+                                        "dev-master": "1.0.x-dev"
+                                }
+                        },
+                        "installation-source": "dist",
+                        "autoload": {
+                                "classmap": [
+                                        "PEAR/"
+                                ]
+                        },
+                        "notification-url": "https://packagist.org/downloads/",
+                        "include-path": [
+                                "."
+                        ],
+                        "license": [
+                                "BSD-2-Clause"
+                        ],
+                        "authors": [
+                                {
+                                        "name": "Helgi Thormar",
+                                        "email": "dufuz@php.net"
+                                },
+                                {
+                                        "name": "Greg Beaver",
+                                        "email": "cellog@php.net"
+                                }
+                        ],
+                        "description": "The PEAR Exception base class.",
+                        "homepage": "https://github.com/pear/PEAR_Exception",
+                        "keywords": [
+                                "exception"
+                        ],
+                        "support": {
+                                "issues": "http://pear.php.net/bugs/search.php?cmd=display&package_name[]=PEAR_Exception",
+                                "source": "https://github.com/pear/PEAR_Exception"
+                        },
+                        "install-path": "../pear/pear_exception"
+                },
+                {
+                        "name": "pear/versioncontrol_git",
+                        "version": "v0.7.0",
+                        "version_normalized": "0.7.0.0",
+                        "source": {
+                                "type": "git",
+                                "url": "https://github.com/pear/VersionControl_Git.git",
+                                "reference": "c32d75d237974297f052ceb781dfc2eb817f7b59"
+                        },
+                        "dist": {
+                                "type": "zip",
+                                "url": "https://api.github.com/repos/pear/VersionControl_Git/zipball/c32d75d237974297f052ceb781dfc2eb817f7b59",
+                                "reference": "c32d75d237974297f052ceb781dfc2eb817f7b59",
+                                "shasum": ""
+                        },
+                        "require": {
+                                "pear/pear-core-minimal": "^1.9",
+                                "pear/pear_exception": "~1.0.0",
+                                "php": "^7.3 || ^7.4 || ^8.0"
+                        },
+                        "require-dev": {
+                                "phpunit/phpunit": "^9.5"
+                        },
+                        "time": "2023-03-22T19:55:38+00:00",
+                        "type": "library",
+                        "installation-source": "dist",
+                        "autoload": {
+                                "psr-0": {
+                                        "VersionControl": "./"
+                                }
+                        },
+                        "notification-url": "https://packagist.org/downloads/",
+                        "include-path": [
+                                "./"
+                        ],
+                        "license": [
+                                "Apache-2.0"
+                        ],
+                        "authors": [
+                                {
+                                        "name": "Kousuke Ebihara",
+                                        "email": "ebihara@php.net",
+                                        "role": "Lead"
+                                }
+                        ],
+                        "description": "VersionControl_Git is a library that provides OO interface to handle Git repository.",
+                        "support": {
+                                "issues": "http://pear.php.net/bugs/search.php?cmd=display&package_name[]=VersionControl_Git",
+                                "source": "https://github.com/pear/VersionControl_Git"
+                        },
+                        "install-path": "../pear/versioncontrol_git"
                 },
                 {
                         "name": "phing/phing",
@@ -506,80 +749,69 @@
                         "install-path": "../phploc/phploc"
                 },
                 {
-                        "name": "phpmd/phpmd",
-                        "version": "2.7.0",
-                        "version_normalized": "2.7.0.0",
+                        "name": "phpstan/phpstan",
+                        "version": "1.10.55",
+                        "version_normalized": "1.10.55.0",
                         "source": {
                                 "type": "git",
-                                "url": "https://github.com/phpmd/phpmd.git",
-                                "reference": "a05a999c644f4bc9a204846017db7bb7809fbe4c"
+                                "url": "https://github.com/phpstan/phpstan.git",
+                                "reference": "9a88f9d18ddf4cf54c922fbeac16c4cb164c5949"
                         },
                         "dist": {
                                 "type": "zip",
-                                "url": "https://api.github.com/repos/phpmd/phpmd/zipball/a05a999c644f4bc9a204846017db7bb7809fbe4c",
-                                "reference": "a05a999c644f4bc9a204846017db7bb7809fbe4c",
+                                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/9a88f9d18ddf4cf54c922fbeac16c4cb164c5949",
+                                "reference": "9a88f9d18ddf4cf54c922fbeac16c4cb164c5949",
                                 "shasum": ""
                         },
                         "require": {
-                                "ext-xml": "*",
-                                "pdepend/pdepend": "^2.5",
-                                "php": ">=5.3.9"
+                                "php": "^7.2|^8.0"
                         },
-                        "require-dev": {
-                                "gregwar/rst": "^1.0",
-                                "mikey179/vfsstream": "^1.6.4",
-                                "phpunit/phpunit": "^4.8.36 || ^5.7.27",
-                                "squizlabs/php_codesniffer": "^2.0"
+                        "conflict": {
+                                "phpstan/phpstan-shim": "*"
                         },
-                        "time": "2019-07-30T21:13:32+00:00",
+                        "time": "2024-01-08T12:32:40+00:00",
                         "bin": [
-                                "src/bin/phpmd"
+                                "phpstan",
+                                "phpstan.phar"
                         ],
                         "type": "library",
                         "installation-source": "dist",
                         "autoload": {
-                                "psr-0": {
-                                        "PHPMD\\": "src/main/php"
-                                }
+                                "files": [
+                                        "bootstrap.php"
+                                ]
                         },
                         "notification-url": "https://packagist.org/downloads/",
                         "license": [
-                                "BSD-3-Clause"
+                                "MIT"
                         ],
-                        "authors": [
-                                {
-                                        "name": "Manuel Pichler",
-                                        "email": "github@manuel-pichler.de",
-                                        "homepage": "https://github.com/manuelpichler",
-                                        "role": "Project Founder"
-                                },
-                                {
-                                        "name": "Marc Würth",
-                                        "email": "ravage@bluewin.ch",
-                                        "homepage": "https://github.com/ravage84",
-                                        "role": "Project Maintainer"
-                                },
-                                {
-                                        "name": "Other contributors",
-                                        "homepage": "https://github.com/phpmd/phpmd/graphs/contributors",
-                                        "role": "Contributors"
-                                }
-                        ],
-                        "description": "PHPMD is a spin-off project of PHP Depend and aims to be a PHP equivalent of the well known Java tool PMD.",
-                        "homepage": "https://phpmd.org/",
+                        "description": "PHPStan - PHP Static Analysis Tool",
                         "keywords": [
-                                "mess detection",
-                                "mess detector",
-                                "pdepend",
-                                "phpmd",
-                                "pmd"
+                                "dev",
+                                "static analysis"
                         ],
                         "support": {
-                                "irc": "irc://irc.freenode.org/phpmd",
-                                "issues": "https://github.com/phpmd/phpmd/issues",
-                                "source": "https://github.com/phpmd/phpmd/tree/master"
+                                "docs": "https://phpstan.org/user-guide/getting-started",
+                                "forum": "https://github.com/phpstan/phpstan/discussions",
+                                "issues": "https://github.com/phpstan/phpstan/issues",
+                                "security": "https://github.com/phpstan/phpstan/security/policy",
+                                "source": "https://github.com/phpstan/phpstan-src"
                         },
-                        "install-path": "../phpmd/phpmd"
+                        "funding": [
+                                {
+                                        "url": "https://github.com/ondrejmirtes",
+                                        "type": "github"
+                                },
+                                {
+                                        "url": "https://github.com/phpstan",
+                                        "type": "github"
+                                },
+                                {
+                                        "url": "https://tidelift.com/funding/github/packagist/phpstan/phpstan",
+                                        "type": "tidelift"
+                                }
+                        ],
+                        "install-path": "../phpstan/phpstan"
                 },
                 {
                         "name": "phpunit/php-timer",
@@ -1963,6 +2195,69 @@
                         "install-path": "../symfony/translation-contracts"
                 },
                 {
+                        "name": "tedivm/jshrink",
+                        "version": "v1.7.0",
+                        "version_normalized": "1.7.0.0",
+                        "source": {
+                                "type": "git",
+                                "url": "https://github.com/tedious/JShrink.git",
+                                "reference": "7a35f5a4651ca2ce77295eb8a3b4e133ba47e19e"
+                        },
+                        "dist": {
+                                "type": "zip",
+                                "url": "https://api.github.com/repos/tedious/JShrink/zipball/7a35f5a4651ca2ce77295eb8a3b4e133ba47e19e",
+                                "reference": "7a35f5a4651ca2ce77295eb8a3b4e133ba47e19e",
+                                "shasum": ""
+                        },
+                        "require": {
+                                "php": "^7.0|^8.0"
+                        },
+                        "require-dev": {
+                                "friendsofphp/php-cs-fixer": "^3.14",
+                                "php-coveralls/php-coveralls": "^2.5.0",
+                                "phpunit/phpunit": "^9|^10"
+                        },
+                        "time": "2023-10-04T17:23:23+00:00",
+                        "type": "library",
+                        "installation-source": "dist",
+                        "autoload": {
+                                "psr-0": {
+                                        "JShrink": "src/"
+                                }
+                        },
+                        "notification-url": "https://packagist.org/downloads/",
+                        "license": [
+                                "BSD-3-Clause"
+                        ],
+                        "authors": [
+                                {
+                                        "name": "Robert Hafner",
+                                        "email": "tedivm@tedivm.com"
+                                }
+                        ],
+                        "description": "Javascript Minifier built in PHP",
+                        "homepage": "http://github.com/tedious/JShrink",
+                        "keywords": [
+                                "javascript",
+                                "minifier"
+                        ],
+                        "support": {
+                                "issues": "https://github.com/tedious/JShrink/issues",
+                                "source": "https://github.com/tedious/JShrink/tree/v1.7.0"
+                        },
+                        "funding": [
+                                {
+                                        "url": "https://github.com/tedivm",
+                                        "type": "github"
+                                },
+                                {
+                                        "url": "https://tidelift.com/funding/github/packagist/tedivm/jshrink",
+                                        "type": "tidelift"
+                                }
+                        ],
+                        "install-path": "../tedivm/jshrink"
+                },
+                {
                         "name": "theseer/fdomdocument",
                         "version": "1.6.7",
                         "version_normalized": "1.6.7.0",
@@ -2017,9 +2312,13 @@
         "dev": true,
         "dev-package-names": [
                 "pdepend/pdepend",
+                "pear/console_getopt",
+                "pear/pear-core-minimal",
+                "pear/pear_exception",
+                "pear/versioncontrol_git",
                 "phing/phing",
                 "phploc/phploc",
-                "phpmd/phpmd",
+                "phpstan/phpstan",
                 "phpunit/php-timer",
                 "psr/container",
                 "sebastian/finder-facade",
@@ -2034,6 +2333,7 @@
                 "symfony/polyfill-ctype",
                 "symfony/polyfill-php73",
                 "symfony/service-contracts",
+                "tedivm/jshrink",
                 "theseer/fdomdocument"
         ]
 }

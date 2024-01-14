@@ -277,6 +277,7 @@ return array(
     'PDOSQLExecTask' => $vendorDir . '/phing/phing/classes/phing/tasks/ext/pdo/PDOSQLExecTask.php',
     'PDOSQLExecTransaction' => $vendorDir . '/phing/phing/classes/phing/tasks/ext/pdo/PDOSQLExecTask.php',
     'PDOTask' => $vendorDir . '/phing/phing/classes/phing/tasks/ext/pdo/PDOTask.php',
+    'PEAR_Exception' => $vendorDir . '/pear/pear_exception/PEAR/Exception.php',
     'PEAR_PackageFileManager_Fileset' => $vendorDir . '/phing/phing/classes/phing/tasks/ext/pearpackage/Fileset.php',
     'PHPCPDFormatterElement' => $vendorDir . '/phing/phing/classes/phing/tasks/ext/phpcpd/PHPCPDFormatterElement.php',
     'PHPCPDResultFormatter' => $vendorDir . '/phing/phing/classes/phing/tasks/ext/phpcpd/formatter/PHPCPDResultFormatter.php',
