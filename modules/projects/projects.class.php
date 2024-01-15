@@ -399,8 +399,9 @@ class CProject extends w2p_Core_BaseObject
         $this->project_private = (int) $this->project_private;
 
         $this->project_target_budget = filterCurrency($this->project_target_budget);
-	if(!ctype_digit($this->project_target_budget) && !is_float($this->project_target_budget))
-		$this->project_target_budget = 0.0;
+	    if(!ctype_digit($this->project_target_budget) && !is_float($this->project_target_budget)) {
+            $this->project_target_budget = 0.0;
+        }
         $this->project_url = str_replace(array('"', '"', '<', '>'), '', $this->project_url);
         $this->project_demo_url = str_replace(array('"', '"', '<', '>'), '', $this->project_demo_url);
         $this->project_owner = (int) $this->project_owner ? $this->project_owner : $this->_AppUI->user_id;
@@ -421,11 +422,17 @@ class CProject extends w2p_Core_BaseObject
 
         $this->project_id = (int) $this->project_id;
         // convert dates to SQL format first
+        if ('' == $this->project_start_date) {
+            $this->project_start_date = $q->dbfnNowWithTZ();
+        }
         if ($this->project_start_date) {
             $date = new w2p_Utilities_Date($this->project_start_date);
             $this->project_start_date = $date->format(FMT_DATETIME_MYSQL);
         }
 
+        if ('' == $this->project_end_date) {
+            $this->project_end_date = $q->dbfnNowWithTZ();
+        }
         if ($this->project_end_date) {
             $date = new w2p_Utilities_Date($this->project_end_date);
             $this->project_end_date = $date->format(FMT_DATETIME_MYSQL);
