@@ -46,7 +46,7 @@ $canDelete = $perms->checkModuleItem($m, 'delete');
     <input type="hidden" name="show_form" value="1" />
     <table width="100%" border="0" cellpadding="1" cellspacing="0" class="my-tasks">
         <tr>
-            <td width="50%">
+            <td>
                 <?php
                     if ($other_users) {
                         $users = $perms->getPermittedUsers('tasks');
@@ -54,48 +54,32 @@ $canDelete = $perms->checkModuleItem($m, 'delete');
                     }
                 ?>
             </td>
-            <td align="right" width="50%">
-                <?php echo $AppUI->_('Show'); ?>:
-                <input type="checkbox" name="show_inprogress" id="show_inprogress" onclick="document.form_buttons.submit()" <?php echo $showInProgress ? 'checked="checked"' : ''; ?> />
+			<td align="right">
+				 <?php echo $AppUI->_('Show'); ?>:
+			</td>
+			<td>
+                <input type="checkbox" name="show_inprogress" id="show_inprogress" onclick="document.form_buttons.submit()" <?php echo $showInProgress ? 'checked="checked"' : ''; ?> /> <label for="show_inprogress"><?php echo $AppUI->_('In Progress Only'); ?></label>
+			</td>
+			<td>
+				<input type="checkbox" name="show_pinned" id="show_pinned" onclick="document.form_buttons.submit()" <?php echo $showPinned ? 'checked="checked"' : ''; ?> /> <label for="show_pinned"><?php echo $AppUI->_('Pinned Only'); ?></label>
             </td>
-             <td nowrap="nowrap">
-                <label for="show_inprogress"><?php echo $AppUI->_('In Progress Only'); ?></label>
+			<td>
+				<input type="checkbox" name="show_arc_proj" id="show_arc_proj" onclick="document.form_buttons.submit()" <?php echo $showArcProjs ? 'checked="checked"' : ''; ?> /> <label for="show_arc_proj"><?php echo $AppUI->_('Archived/Template Projects'); ?></label>
+			</td>
+			<td>
+				<input type="checkbox" name="show_dyn_task" id="show_dyn_task" onclick="document.form_buttons.submit()" <?php echo $showDynTasks ? 'checked="checked"' : ''; ?> /> <label for="show_dyn_task"><?php echo $AppUI->_('Dynamic Tasks'); ?></label>
+			</td>
+			<td>
+				<input type="checkbox" name="show_low_task" id="show_low_task" onclick="document.form_buttons.submit()" <?php echo $showLowTasks ? 'checked="checked"' : ''; ?> /> <label for="show_low_task"><?php echo $AppUI->_('Low Priority Tasks'); ?></label>
+			</td>
+			<td>
+				<input type="checkbox" name="show_empty_date" id="show_empty_date" onclick="document.form_buttons.submit()" <?php echo $showEmptyDate ? 'checked="checked"' : ''; ?> /> <label for="show_empty_date"><?php echo $AppUI->_('Empty Dates'); ?></label>
             </td>
-            <td>
-                <input type="checkbox" name="show_pinned" id="show_pinned" onclick="document.form_buttons.submit()" <?php echo $showPinned ? 'checked="checked"' : ''; ?> />
-            </td>
-            <td nowrap="nowrap">
-                <label for="show_pinned"><?php echo $AppUI->_('Pinned Only'); ?></label>
-            </td>
-            <td>
-                <input type="checkbox" name="show_arc_proj" id="show_arc_proj" onclick="document.form_buttons.submit()" <?php echo $showArcProjs ? 'checked="checked"' : ''; ?> />
-            </td>
-            <td nowrap="nowrap">
-                <label for="show_arc_proj"><?php echo $AppUI->_('Archived/Template Projects'); ?></label>
-            </td>
-            <td>
-                <input type="checkbox" name="show_dyn_task" id="show_dyn_task" onclick="document.form_buttons.submit()" <?php echo $showDynTasks ? 'checked="checked"' : ''; ?> />
-            </td>
-            <td nowrap="nowrap">
-                <label for="show_dyn_task"><?php echo $AppUI->_('Dynamic Tasks'); ?></label>
-            </td>
-            <td>
-                <input type="checkbox" name="show_low_task" id="show_low_task" onclick="document.form_buttons.submit()" <?php echo $showLowTasks ? 'checked="checked"' : ''; ?> />
-            </td>
-            <td nowrap="nowrap">
-                <label for="show_low_task"><?php echo $AppUI->_('Low Priority Tasks'); ?></label>
-            </td>
-            <td>
-                <input type="checkbox" name="show_empty_date" id="show_empty_date" onclick="document.form_buttons.submit()" <?php echo $showEmptyDate ? 'checked="checked"' : ''; ?> />
-            </td>
-            <td nowrap="nowrap">
-                <label for="show_empty_date"><?php echo $AppUI->_('Empty Dates'); ?></label>
-            </td>
-            <td>
-            <?php
-                $types = array('' => '(Task Type Filter)') + w2PgetSysVal('TaskType');
-                echo arraySelect($types, 'task_type', 'class="text" onchange="document.form_buttons.submit()"', $task_type, true);
-            ?>
+            <td align="right">
+				<?php
+					$types = array('' => '(Task Type Filter)') + w2PgetSysVal('TaskType');
+					echo arraySelect($types, 'task_type', 'class="text" onchange="document.form_buttons.submit()"', $task_type, true);
+				?>
             </td>
         </tr>
     </table>
