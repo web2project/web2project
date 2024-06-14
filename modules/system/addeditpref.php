@@ -260,21 +260,21 @@ if (!isset($prefs['TASKLOGEMAIL'])) {
 $tl_assign = $prefs['TASKLOGEMAIL'] & 1;
 $tl_task = $prefs['TASKLOGEMAIL'] & 2;
 $tl_proj = $prefs['TASKLOGEMAIL'] & 4;
-echo '<p><label for="tl_assign">' . $AppUI->_('Email Assignees') . '</label>&nbsp;<input type="checkbox" name="tl_assign" id="tl_assign"';
+echo '<p><input type="checkbox" name="tl_assign" id="tl_assign"';
 if ($tl_assign) {
 	echo ' checked="checked"';
 }
-echo ' /></p>';
-echo '<p><label for="tl_task">' . $AppUI->_('Email Task Contacts') . '</label>&nbsp;<input type="checkbox" name="tl_task" id="tl_task"';
+echo ' /> <label for="tl_assign">' . $AppUI->_('Email Assignees') . '</label></p>';
+echo '<p><input type="checkbox" name="tl_task" id="tl_task"';
 if ($tl_task) {
 	echo 'checked="checked"';
 }
-echo ' /></p>';
-echo '<p><label for="tl_proj">' . $AppUI->_('Email Project Contacts') . '</label>&nbsp;<input type="checkbox" name="tl_proj" id="tl_proj"';
+echo ' /> <label for="tl_task">' . $AppUI->_('Email Task Contacts') . '</label></p>';
+echo '<p><input type="checkbox" name="tl_proj" id="tl_proj"';
 if ($tl_proj) {
 	echo ' checked="checked"';
 }
-echo ' /></p>';
+echo ' /> <label for="tl_proj">' . $AppUI->_('Email Project Contacts') . '</label></p>';
 ?>
 	</td>
 </tr>
@@ -299,11 +299,11 @@ echo ' /></p>';
 	<td>
 		<input type="hidden" name="pref_name[TASKSEXPANDED]" id="tasks_expanded" value="<?php echo $prefs['TASKSEXPANDED']; ?>" />
         <?php
-		echo '<input type="checkbox" name="expanded"';
+		echo '<input type="checkbox" id="expanded" name="expanded"';
 		if ($prefs['TASKSEXPANDED']) {
 			echo ' checked="checked"';
 		}
-		echo ' />';
+		echo ' /> <label for="expanded">&nbsp;</label>';
         ?>
 	</td>
 </tr>
