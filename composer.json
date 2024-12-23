@@ -1,6 +1,6 @@
 {
     "name": "web2project/core",
-    "version": "3.4",
+    "version": "3.9",
     "type": "application",
     "description": "web-based project management system",
     "keywords": ["gantt charts", "task tracking", "time tracking", "project planning"],
@@ -16,15 +16,6 @@
         "ircmaxell/password-compat": "1.0.4",
         "adodb/adodb-php": "^5.22",
         "nesbot/carbon": "^2.72"
-    },
-    "require-dev": {
-        "pdepend/pdepend" : "^2.16",
-        "phing/phing": "^2.17",
-        "phploc/phploc": "4.*",
-        "sebastian/phpcpd": "4.*",
-        "phpstan/phpstan": "^1.10",
-        "pear/versioncontrol_git": "^0.7.0",
-        "tedivm/jshrink": "^1.7"
     },
     "autoload": {
         "psr-0": { "Web2project": "src/"}
