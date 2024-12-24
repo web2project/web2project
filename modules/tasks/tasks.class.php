@@ -327,8 +327,8 @@ class CTask extends w2p_Core_BaseObject
             $q->addQuery('MIN(task_start_date) as min_date');
             $q->addQuery('MAX(task_end_date) as max_date');
             $q->addWhere("task_path_enumeration LIKE '$path/%' ");
-            $q->addWhere("task_start_date <> '0000-00-00 00:00:00'");
-            $q->addWhere("task_end_date <> '0000-00-00 00:00:00'");
+            $q->addWhere("task_start_date IS NOT NULL");
+            $q->addWhere("task_end_date IS NOT NULL");
             $dates = $q->loadHash();
 
             $min_date = $dates['min_date'];
@@ -1272,7 +1272,7 @@ class CTask extends w2p_Core_BaseObject
         $q->leftJoin('departments', '', 'departments.dept_id = project_departments.department_id');
 
         $q->addQuery('DISTINCT t.task_id, t.task_name, t.task_start_date, t.task_end_date, t.task_duration' . ', t.task_duration_type, projects.project_color_identifier AS color, projects.project_name, t.task_milestone, task_description, task_type, company_name, task_access, task_owner');
-        $q->addWhere('task_status > -1' . ' AND (task_start_date <= \'' . $db_end . '\' AND (task_end_date >= \'' . $db_start . '\' OR task_end_date = \'0000-00-00 00:00:00\' OR task_end_date = NULL))');
+        $q->addWhere('task_status > -1' . ' AND (task_start_date <= \'' . $db_end . '\' AND (task_end_date >= \'' . $db_start . '\' OR task_end_date IS NULL))');
         $q->addWhere('project_active = 1');
         if (($template_status = w2PgetConfig('template_projects_status_id')) != '') {
             $q->addWhere('project_status <> ' . $template_status);

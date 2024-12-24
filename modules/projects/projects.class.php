@@ -342,7 +342,7 @@ class CProject extends w2p_Core_BaseObject
 
         $q = $this->_getQuery();
         $q->addTable('tasks');
-        $q->addWhere('task_project = ' . (int) $project_id . ' AND task_end_date IS NOT NULL AND task_end_date <>  \'0000-00-00 00:00:00\'');
+        $q->addWhere('task_project = ' . (int) $project_id . ' AND task_end_date IS NOT NULL');
         $q->addOrder('task_end_date DESC');
         $q->setLimit($limit);
 

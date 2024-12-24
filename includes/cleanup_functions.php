@@ -3915,7 +3915,7 @@ function __extract_from_todo($user_id, $showArcProjs, $showLowTasks, $showInProg
         $q->addWhere('task_pinned = 1');
     }
     if (!$showEmptyDate) {
-        $q->addWhere('ta.task_start_date <> \'\' AND ta.task_start_date <> \'0000-00-00 00:00:00\'');
+        $q->addWhere('ta.task_start_date IS NOT NULL');
     }
     if ($task_type != '') {
         $q->addWhere('ta.task_type = ' . (int) $task_type);
@@ -4678,10 +4678,13 @@ function __extract_from_vw_usr($row)
 {
     $q = new w2p_Database_Query;
     $q->addTable('user_access_log', 'ual');
-    $q->addQuery('user_access_log_id, ( unix_timestamp( \'' . $q->dbfnNowWithTZ() . '\' ) - unix_timestamp( date_time_in ) ) / 3600 as 		hours, ( unix_timestamp( \'' . $q->dbfnNowWithTZ() . '\' ) - unix_timestamp( date_time_last_action ) ) / 3600 as idle, if(isnull(date_time_out) or date_time_out =\'0000-00-00 00:00:00\',\'1\',\'0\') as online');
+    $q->addQuery('user_access_log_id, ( unix_timestamp( \'' . $q->dbfnNowWithTZ() . '\' ) - unix_timestamp( date_time_in ) ) / 3600 as 		hours');
+    $q->addQuery('( unix_timestamp( \'' . $q->dbfnNowWithTZ() . '\' ) - unix_timestamp( date_time_last_action ) ) / 3600 as idle');
+    $q->addQuery('date_time_out IS NOT NULL as online');
     $q->addWhere('user_id = ' . (int) $row['user_id']);
     $q->addOrder('user_access_log_id DESC');
     $q->setLimit(1);
+// echo $q->prepare();
     $user_logs = $q->loadList();
 
     return $user_logs;
