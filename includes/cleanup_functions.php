@@ -2856,18 +2856,18 @@ function file_size($size)
  */
 function formatCurrency($number, $format)
 {
-    global $AppUI, $locale_char_set;
+    // global $AppUI, $locale_char_set;
 
-    if (!$format) {
-        $format = $AppUI->getPref('CURRENCYFORM');
-    }
-    // If the requested locale doesn't work, don't fail,
-    // revert to the system default.
-    if ($locale_char_set != 'utf-8' || !setlocale(LC_MONETARY, $format . '.UTF8')) {
-        if (!setlocale(LC_MONETARY, $format)) {
-            setlocale(LC_MONETARY, '');
-        }
-    }
+    // if (!$format) {
+    //     $format = $AppUI->getPref('CURRENCYFORM');
+    // }
+    // // If the requested locale doesn't work, don't fail,
+    // // revert to the system default.
+    // if ($locale_char_set != 'utf-8' || !setlocale(LC_MONETARY, $format . '.UTF8')) {
+    //     if (!setlocale(LC_MONETARY, $format)) {
+    //         setlocale(LC_MONETARY, '');
+    //     }
+    // }
 
     // Even money_format can't be trusted in Windows. It simply does not work on systems that don't have strfmon capabilities. Use number_format as fallback.
     return function_exists('money_format') ? money_format('%i', $number) : number_format($number, 2);
