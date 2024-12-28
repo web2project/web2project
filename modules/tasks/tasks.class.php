@@ -1712,6 +1712,8 @@ class CTask extends w2p_Core_BaseObject
             $q = $department->setAllowedSQL($this->_AppUI->user_id, $q);
 
             return $q->loadHashList('dept_id');
+        } else {
+            return [];
         }
     }
 
@@ -1736,6 +1738,8 @@ class CTask extends w2p_Core_BaseObject
             $q = $department->setAllowedSQL($this->_AppUI->user_id, $q);
 
             return $q->loadHashList('contact_id');
+        } else {
+            return [];
         }
     }
 
