@@ -22,7 +22,7 @@ class CTask extends w2p_Core_BaseObject
     /**
      * @var int
      */
-    public $task_parent = null;
+    public $task_parent = 0;
     public $task_milestone = null;
     public $task_project = null;
     public $task_owner = null;
@@ -557,7 +557,7 @@ class CTask extends w2p_Core_BaseObject
             $stored = parent::store();
         }
 
-        if (0 == $this->{$this->_tbl_key} && $this->canCreate()) {
+        if (0 == (int) $this->{$this->_tbl_key} && $this->canCreate()) {
             $stored = parent::store();
         }
 
