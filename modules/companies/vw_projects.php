@@ -3,7 +3,7 @@ if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
 
-global $AppUI, $company, $tab;
+global $AppUI, $company, $tab, $customLookups;
 
 $sort = w2PgetParam($_GET, 'sort', 'project_name');
 if ($sort == 'project_priority') {
