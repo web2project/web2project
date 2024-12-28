@@ -683,11 +683,13 @@ class CTask extends w2p_Core_BaseObject
                 $this->updateDynamics();
             }
 
-            if ($oTsk->task_parent != $this->task_parent) {
-                $old_parent = new CTask();
-                $old_parent->overrideDatabase($this->_query);
-                $old_parent->load($oTsk->task_parent);
-                $old_parent->updateDynamics();
+            if (!is_null($oTsk)) {
+                if ($oTsk->task_parent != $this->task_parent) {
+                    $old_parent = new CTask();
+                    $old_parent->overrideDatabase($this->_query);
+                    $old_parent->load($oTsk->task_parent);
+                    $old_parent->updateDynamics();
+                }
             }
         }
 
