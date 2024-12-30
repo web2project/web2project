@@ -58,7 +58,8 @@ $billingCategory = w2PgetSysVal('BudgetCategory');
 $df = $AppUI->getPref('SHDATEFORMAT');
 $log_date = new w2p_Utilities_Date($log->task_log_date);
 
-$tl = $AppUI->getPref('TASKLOGEMAIL');
+$tl = (int) $AppUI->getPref('TASKLOGEMAIL');
+error_log($tl);
 $ta = $tl & 1;
 $tt = $tl & 2;
 $tp = $tl & 4;
