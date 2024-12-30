@@ -39,8 +39,8 @@
                 </p>
                 <p>
                     <?php $form->showLabel('Calculate'); ?>
-                    <input type="button" value="<?php echo $AppUI->_('Duration'); ?>" onclick="xajax_calcDuration(document.datesFrm.task_start_date.value,document.datesFrm.start_hour.value,document.datesFrm.start_minute.value,document.datesFrm.task_end_date.value,document.datesFrm.end_hour.value,document.datesFrm.end_minute.value,document.datesFrm.task_duration_type.value);" class="button btn btn-primary btn-mini" />
-                    <input type="button" value="<?php echo $AppUI->_('Finish Date'); ?>" onclick="xajax_calcFinish(document.datesFrm.task_start_date.value,document.datesFrm.start_hour.value,document.datesFrm.start_minute.value,document.datesFrm.task_duration_type.value,document.datesFrm.task_duration.value)" class="button btn btn-primary btn-mini" />
+                    <input type="button" value="<?php echo $AppUI->_('Duration'); ?>" onclick="calcDuration(document.datesFrm)" class="button btn btn-primary btn-mini" />
+                    <input type="button" value="<?php echo $AppUI->_('Finish Date'); ?>" onclick="calcFinish(document.datesFrm)" class="button btn btn-primary btn-mini" />
                 </p>
             <?php } ?>
         </div>
