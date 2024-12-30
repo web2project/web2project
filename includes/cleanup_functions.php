@@ -1403,10 +1403,10 @@ function displayFiles($AppUI, $folder_id = 0, $task_id = 0, $project_id = 0, $co
         //   state for versions earlier than v3.0
         //   At some point at/after v4.0, this should be deprecated
         $fieldList = array('file_name', 'file_description',
-            'file_version', 'file_category', 'file_folder', 'file_task',
+            'file_version', 'file_category', 'file_task',
             'file_owner', 'file_datetime');
         $fieldNames = array('File Name', 'Description', 'Version', 'Category',
-            'Folder', 'Task Name', 'Owner', 'Date',);
+            'Task Name', 'Owner', 'Date',);
 
         $module->storeSettings('files', 'index_list', $fieldList, $fieldNames);
     }

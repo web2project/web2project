@@ -15,14 +15,6 @@ $form = new w2p_Output_HTML_FormHelper($AppUI);
 
     <div class="std addedit files">
         <div class="column left" style="width: 80%">
-            <p>
-                <?php $form->showLabel('Folder'); ?>
-                <?php if ($object_id == 0 && !$ci) { ?>
-                    <?php echo arraySelect($folders, 'file_folder', 'class="text"', $folder); ?>
-                <?php } else { ?>
-                    <?php echo arraySelect($folders, 'file_folder', 'class="text"', $object->file_folder); ?>
-                <?php } ?>
-            </p>
             <?php if ($object->file_id) { ?>
                 <p>
                     <?php $form->showLabel('File Name'); ?>
