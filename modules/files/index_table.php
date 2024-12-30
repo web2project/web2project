@@ -15,6 +15,10 @@ if (!isset($project_id)) {
 	$project_id = w2PgetParam($_REQUEST, 'project_id', 0);
 }
 
+if ($project_id > 0 || $task_id > 0) {
+  $category_id = -1;
+}
+
 $xpg_pagesize = w2PgetConfig('page_size', 50);
 $xpg_min = $xpg_pagesize * ($page - 1); // This is where we start our record set from
 
