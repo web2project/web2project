@@ -4895,10 +4895,10 @@ function __extract_from_tasks3($f, $q, $user_id, $task_id, $AppUI)
             $q->addTable('user_tasks');
             $q->addWhere('user_tasks.user_id = ' . (int) $user_id);
             $q->addWhere('user_tasks.task_id = tasks.task_id');
-            $q->addWhere('(task_percent_complete < 100 OR task_end_date = \'\')');
+            $q->addWhere('(task_percent_complete < 100 OR task_end_date IS NULL)');
             break;
         case 'allunfinished':
-            $q->addWhere('(task_percent_complete < 100 OR task_end_date = \'\')');
+            $q->addWhere('(task_percent_complete < 100 OR task_end_date IS NULL)');
             break;
         case 'unassigned':
             $q->leftJoin('user_tasks', 'ut_empty', 'tasks.task_id = ut_empty.task_id');
