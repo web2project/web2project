@@ -46,7 +46,6 @@
         <echo message="Some of these targets are *very* memory intensive. You may have to increase your memory_limit in php.ini" />
         <phingcall target="phploc" />
         <phingcall target="depend" />
-        <phingcall target="cpd" />
         <phingcall target="phpstan" />
         <phingcall target="churn-grep" />
     </target>
@@ -141,13 +140,6 @@
         <phplint haltonfailure="true" level="verbose">
             <fileset refid="project.source" />
         </phplint>
-    </target>
-
-    <target name="cpd" depends="prepare">
-        <phpcpd>
-            <fileset refid="project.source" />
-            <formatter type="pmd" outfile="${dir.reports}/cpd.xml" />
-        </phpcpd>
     </target>
 
     <target name="phpstan" depends="prepare">
