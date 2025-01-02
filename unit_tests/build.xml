@@ -191,8 +191,14 @@
     <target name="churn-grep" depends="prepare">
         <exec command="git log --name-only | grep php | grep -v 'lib' | grep -v 'vendor' | sort | uniq -c | sort -nr | head -n 25 > ${dir.reports}/churn.txt" />
     </target>
+
     <target name="phploc" depends="prepare">
-        <exec command="./vendor/phploc/phploc/phploc --log-xml ${dir.reports}/phploc.xml --exclude xxx ${project.basedir}/" />
+        <exec executable="${project.basedir}/${dir.vendor}/cmgmyr/phploc/phploc" 
+            dir="${project.basedir}"
+            output="${dir.reports}/phploc.xml">
+            <arg line="${project.basedir} --exclude ${dir.vendor} --exclude ${dir.lib} --exclude ${dir.build} 
+                --exclude classes/deprecated.class.php --exclude includes/deprecated_functions.php" />
+        </exec>
     </target>
 
     <target name="phpdoc" depends="prepare">
