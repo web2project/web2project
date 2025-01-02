@@ -17,6 +17,12 @@
         "adodb/adodb-php": "^5.22",
         "nesbot/carbon": "^2.72"
     },
+    "require-dev": {
+        "phing/phing": "3.*",
+        "cmgmyr/phploc": "^8.0",
+        "pdepend/pdepend": "^2.16",
+        "phpstan/phpstan": "^2.1"
+    },
     "autoload": {
         "psr-0": { "Web2project": "src/"}
     }

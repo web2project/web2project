@@ -151,9 +151,11 @@
     </target>
 
     <target name="phpstan" depends="prepare">
-        <exec command="vendor/bin/phpstan analyse classes includes install modules style
-            --memory-limit=1024M --level 9 --error-format=raw --no-progress > 
-            ${dir.reports}/phpstan.txt" />
+        <!-- Opted to do this via exec instead of the phpstan task as I couldn't figure out how to write the output otherwise -->
+        <exec executable="${project.basedir}/${dir.vendor}/phpstan/phpstan/phpstan" 
+            output="${dir.reports}/phpstan.txt">
+            <arg line="analyse classes includes install modules style --memory-limit=1024M --level 9 --error-format=table --no-progress" />
+        </exec>
     </target>
 
     <target name="depend" depends="prepare">
