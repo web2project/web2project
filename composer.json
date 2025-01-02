@@ -21,7 +21,10 @@
         "phing/phing": "3.*",
         "cmgmyr/phploc": "^8.0",
         "pdepend/pdepend": "^2.16",
-        "phpstan/phpstan": "^2.1"
+        "phpstan/phpstan": "^2.1",
+        "pear/versioncontrol_git": "^0.7.0",
+        "tedivm/jshrink": "^1.7",
+        "pear/archive_tar": "^1.5"
     },
     "autoload": {
         "psr-0": { "Web2project": "src/"}
