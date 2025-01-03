@@ -1,8 +1,5 @@
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/web2project/web2project/badges/quality-score.png?s=851af835fd13ef11ff20b848ff4aba6fd5325d61)](https://scrutinizer-ci.com/g/web2project/web2project/)
 
-- zip: (https://api.scarf.sh/v2/packages/web2project/bbd4d6da-3cb3-44a3-98c9-ae79ef2e84c1/downloads-badge)[web2project.gateway.scarf.sh/web2project-version4.0.zip]
-- Tar.gz: (https://api.scarf.sh/v2/packages/web2project/bbd4d6da-3cb3-44a3-98c9-ae79ef2e84c1/downloads-badge)[web2project.gateway.scarf.sh/web2project-version4.0.tar.gz]
-
 web2Project
 ================
 
