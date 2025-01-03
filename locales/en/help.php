@@ -11,7 +11,7 @@ if (!defined('W2P_BASE_DIR')) {
 			<br />
 			<br />We have 3 main places for your assistance. Please remember that all of these places are not one-way: You can help others as well by contributing.
 			<br />
-			<br />The <a href="http://wiki.web2project.net/" target="_blank">web2Project Online Documentation</a>
+			<br />The <a href="https://docs.web2project.net/" target="_blank">web2Project Online Documentation</a>
 			is intended to provide you with informations about how to use web2Project (e.g. explanation of modules, features, training ...).
 			<br />
 			<br />Further Assistance can be found in the

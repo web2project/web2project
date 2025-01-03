@@ -122,7 +122,7 @@ RENAME TABLE `projects` TO `old_projects`;
 RENAME TABLE `projects2` TO `projects`;
 
 CREATE TABLE `user_access_log2` (
-  `user_access_log_id` int(10) UNSIGNED NOT NULL,
+  `user_access_log_id` int(10) auto_increment,
   `user_id` int(10) UNSIGNED NOT NULL DEFAULT '0',
   `user_ip` varchar(15) NOT NULL DEFAULT '',
   `date_time_in` datetime DEFAULT '1000-01-01 00:00:00',

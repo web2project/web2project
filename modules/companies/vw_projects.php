@@ -3,7 +3,7 @@ if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
 
-global $AppUI, $company, $tab;
+global $AppUI, $company, $tab, $customLookups;
 
 $sort = w2PgetParam($_GET, 'sort', 'project_name');
 if ($sort == 'project_priority') {
@@ -17,9 +17,8 @@ $fields = $module->loadSettings('projects', 'company_view');
 
 if (0 == count($fields)) {
     $fieldList = array('project_priority', 'project_name', 'user_username',
-        'project_start_date', 'project_status', 'project_target_budget');
-    $fieldNames = array('P', 'Name', 'Owner', 'Started', 'Status',
-        'Budget');
+        'project_start_date', 'project_end_date', 'project_status');
+    $fieldNames = array('P', 'Name', 'Owner', 'Started', 'End', 'Status',);
 
     $module->storeSettings('projects', 'company_view', $fieldList, $fieldNames);
 

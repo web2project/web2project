@@ -176,13 +176,14 @@ class CDepartment extends w2p_Core_BaseObject
 		$q = $this->_getQuery();
 		$q->addQuery($fields);
 		$q->addTable($this->_tbl);
+		if(is_array($extra)) {
+			if ($extra['from']) {
+				$q->addTable($extra['from']);
+			}
 
-		if ($extra['from']) {
-			$q->addTable($extra['from']);
-		}
-
-		if ($extra['join'] && $extra['on']) {
-			$q->addJoin($extra['join'], $extra['join'], $extra['on']);
+			if ($extra['join'] && $extra['on']) {
+				$q->addJoin($extra['join'], $extra['join'], $extra['on']);
+			}
 		}
 
 		if (count($allow)) {

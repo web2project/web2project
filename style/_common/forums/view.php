@@ -12,7 +12,7 @@ $view = new w2p_Output_HTML_ViewHelper($AppUI);
             <?php $view->showField('forum_owner', $forum->forum_owner); ?>
         </p>
         <p><?php $view->showLabel('Created On'); ?>
-            <?php $view->showField('forum_create_date', $forum->forum_create_date); ?>
+            <?php $view->showField('forum_created', $forum->forum_created); ?>
         </p>
     </div>
     <div class="column right">

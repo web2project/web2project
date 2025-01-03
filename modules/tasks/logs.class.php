@@ -359,7 +359,7 @@ class CTask_Log extends w2p_Core_BaseObject
 	 *
 	 * @return array
 	 */
-	public function getAllowedRecords($uid, $fields = '*', $orderby = '', $index = null, $extra = null)
+	public function getAllowedRecords($uid, $fields = '*', $orderby = '', $index = null, $extra = null, $unused = '')
 	{
 		$oTsk = new CTask();
         $oTsk->overrideDatabase($this->_query);

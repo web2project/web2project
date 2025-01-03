@@ -57,7 +57,12 @@ $project_statuses[] = 'Archived';
 
 ksort($project_statuses);
 
-$counts = $project->getProjectsByStatus($company_id);
+$counts = array_fill_keys(array_keys($project_statuses), 0);
+$byStatus = $project->getProjectsByStatus($company_id);
+foreach($byStatus as $key => $_count) {
+	$counts[$key] = $_count;
+}
+
 $counts[-2] = count($project->loadAll(null, ($company_id > 0) ? 'project_company = ' . $company_id: ''));
 $counts[-1] = count($project->loadAll(null, 'project_active = 1' . (($company_id > 0) ? ' AND project_company = ' . $company_id : '')));
 $counts[count($project_statuses) - 3]   = $counts[-2] - $counts[-1];

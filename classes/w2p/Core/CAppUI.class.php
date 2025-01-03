@@ -868,7 +868,7 @@ class w2p_Core_CAppUI
             $q = new w2p_Database_Query;
             $q->addTable('user_access_log');
             $q->addUpdate('date_time_out', "'" . $q->dbfnNowWithTZ() . "'", false, true);
-            $q->addWhere('user_id = ' . (int) $user_id . ' AND (date_time_out = \'0000-00-00 00:00:00\' OR ISNULL(date_time_out)) ');
+            $q->addWhere('user_id = ' . (int) $user_id . ' AND date_time_out IS NULL');
             $q->exec();
         }
     }

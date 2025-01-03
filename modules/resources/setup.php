@@ -47,7 +47,7 @@ class CSetupResources extends w2p_System_Setup
             resource_name varchar(255) not null default "",
             resource_key varchar(64) not null default "",
             resource_type integer not null default 0,
-            resource_note text not null default "",
+            resource_note text default null,
             resource_max_allocation integer not null default 100,
             primary key (resource_id),
             key (resource_name),

@@ -22,7 +22,7 @@ class w2p_Output_GanttRenderer {
 
     public function __construct(w2p_Core_CAppUI $AppUI, $width)
     {
-        $this->graph = new GanttGraph($width);
+        $this->graph = new GanttGraph((int) $width);
         $this->graph->ShowHeaders(GANTT_HYEAR | GANTT_HMONTH | GANTT_HDAY | GANTT_HWEEK);
         $this->graph->SetFrame(false);
         $this->graph->SetBox(true, array(0, 0, 0), 2);
@@ -65,7 +65,7 @@ class w2p_Output_GanttRenderer {
             $this->graph->scale->year->grid->Show ();
             $this->graph->scale->year->grid->SetStyle('longdashed');
             $this->graph->scale->year->grid->SetColor('lightgray');
-            $this->graph->scale->year->SetFont(FF_CUSTOM, FS_NORMAL,  12);
+            $this->graph->scale->year->SetFont(FF_FONT0, FS_NORMAL,  12);
         } else if ($day_diff > 480) {
             //more than 480 days show only the firstletter of the month
             $this->graph->ShowHeaders(GANTT_HYEAR | GANTT_HMONTH);
@@ -73,7 +73,7 @@ class w2p_Output_GanttRenderer {
             $this->graph->scale->month->grid->Show ();
             $this->graph->scale->month->grid->SetStyle('longdashed');
             $this->graph->scale->month->grid->SetColor('lightgray');
-            $this->graph->scale->month->SetFont(FF_CUSTOM, FS_NORMAL, 10);
+            $this->graph->scale->month->SetFont(FF_FONT0, FS_NORMAL, 10);
         } else if($day_diff > 240) {
             //more than 240 days and less than 481 show the month short name eg: Jan
             $this->graph->ShowHeaders(GANTT_HYEAR | GANTT_HMONTH);
@@ -81,17 +81,17 @@ class w2p_Output_GanttRenderer {
             $this->graph->scale->month->grid->Show ();
             $this->graph->scale->month->grid->SetStyle('longdashed');
             $this->graph->scale->month->grid->SetColor('lightgray');
-            $this->graph->scale->month->SetFont(FF_CUSTOM, FS_NORMAL, 10);
+            $this->graph->scale->month->SetFont(FF_FONT0, FS_NORMAL, 10);
         } else if ($day_diff > 90) {
             //more than 90 days and less of 241
             $this->graph->ShowHeaders(GANTT_HMONTH | GANTT_HWEEK);
             $this->graph->scale->week->SetStyle(WEEKSTYLE_WNBR);
-            $this->graph->scale->week->SetFont(FF_CUSTOM, FS_NORMAL,  7);
+            $this->graph->scale->week->SetFont(FF_FONT0, FS_NORMAL,  7);
         } else {
             //more than 90 days and less of 241
             $this->graph->ShowHeaders(GANTT_HMONTH | GANTT_HDAY);
             $this->graph->scale->day->SetStyle(DAYSTYLE_SHORTDATE4);
-            $this->graph->scale->day->SetFont(FF_CUSTOM, FS_NORMAL,  7);
+            $this->graph->scale->day->SetFont(FF_FONT0, FS_NORMAL,  7);
         }
 
         $start_date = is_object($start_date) ? $start_date->format(FMT_DATETIME_MYSQL) : $start_date;
@@ -106,7 +106,7 @@ class w2p_Output_GanttRenderer {
         // Use TTF font if it exists
         // try commenting out the following two lines if gantt charts do not display
         if (is_file(TTF_DIR . 'FreeSansBold.ttf')) {
-            $this->graph->title->SetFont(FF_CUSTOM, FS_BOLD, 14);
+            $this->graph->title->SetFont(FF_FONT0, FS_BOLD, 14);
         }
     }
 
@@ -145,7 +145,7 @@ class w2p_Output_GanttRenderer {
         $this->graph->scale->actinfo->SetColor('darkgray');
         $this->graph->scale->actinfo->SetColTitles($translatedColumns, $columnSizes);
         if (is_file(TTF_DIR . 'FreeSans.ttf')) {
-            $this->graph->scale->actinfo->SetFont(FF_CUSTOM);
+            $this->graph->scale->actinfo->SetFont(FF_FONT0);
         }
     }
 
@@ -182,7 +182,7 @@ class w2p_Output_GanttRenderer {
         $this->rowMap[$identifier] = $this->rowCount;
         $bar->progress->Set(min(($progress / 100), 1));
 
-        $bar->title->SetFont(FF_CUSTOM, FS_NORMAL, 10);
+        $bar->title->SetFont(FF_FONT0, FS_NORMAL, 10);
         $bar->title->SetColor(bestColor('#ffffff', '#' . $barcolor, '#000000'));
         $bar->SetFillColor('#' . $barcolor);
         $bar->SetPattern(BAND_SOLID, '#' . $barcolor);
@@ -202,14 +202,14 @@ class w2p_Output_GanttRenderer {
 
             $bar->SetPattern(BAND_SOLID, 'black');
 
-            $bar->title->SetFont(FF_CUSTOM, FS_BOLD, 9);
+            $bar->title->SetFont(FF_FONT0, FS_BOLD, 9);
         }
 
         //adding captions
         $bar->caption = new TextProperty($caption);
         $bar->caption->Align('left', 'center');
         if (is_file(TTF_DIR . 'FreeSans.ttf')) {
-            $bar->caption->SetFont(FF_CUSTOM, FS_NORMAL, 8);
+            $bar->caption->SetFont(FF_FONT0, FS_NORMAL, 8);
         }
 
         // gray out templates, completes, on ice, on hold
@@ -230,7 +230,7 @@ class w2p_Output_GanttRenderer {
         $tStartObj = new w2p_Utilities_Date($start);
 
         $bar = new MileStone($this->rowCount++, $columnValues, $start, $tStartObj->format($this->df));
-        $bar->title->SetFont(FF_CUSTOM, FS_NORMAL, 10);
+        $bar->title->SetFont(FF_FONT0, FS_NORMAL, 10);
         $bar->title->SetColor($color);
         $bar->mark->SetType(MARK_DIAMOND);
         $bar->mark->SetWidth(10);
@@ -279,7 +279,7 @@ class w2p_Output_GanttRenderer {
             $today->convertTZ($this->AppUI->getPref('TIMEZONE'));
             $today->addDays(-1);
             $vline = new GanttVLine($today->format(FMT_DATETIME_MYSQL), $this->todayText);
-            $vline->title->setFont(FF_CUSTOM, FS_NORMAL, 8);
+            $vline->title->setFont(FF_FONT0, FS_NORMAL, 8);
             $this->graph->Add($vline);
         }
         ($filename == '') ? $this->graph->Stroke() : $this->graph->Stroke($filename);

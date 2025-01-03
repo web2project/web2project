@@ -73,7 +73,6 @@ function delIt(id) {
             <th>&nbsp;</th>
         </tr>
         <?php
-        $canEdit = canEdit('system');
         foreach ($values as $row) {
             echo showRow($row['sysval_title'], $row['sysval_key_id'], $row['sysval_title'], $row['sysval_value']);
         }

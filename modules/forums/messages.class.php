@@ -12,8 +12,7 @@ class CForum_Message extends w2p_Core_BaseObject
     public $message_author = null;
     public $message_editor = null;
     public $message_title = null;
-    // @todo this should be message_datetime to take advantage of our templating
-    public $message_date = null;
+    public $message_datetime = null;
     public $message_body = null;
     public $message_published = null;
 
@@ -59,13 +58,13 @@ class CForum_Message extends w2p_Core_BaseObject
         }
 
         if (0 == $this->{$this->_tbl_key} && $this->canCreate()) {
-            $this->message_date = $q->dbfnNowWithTZ();
+            $this->message_datetime = $q->dbfnNowWithTZ();
             
             $stored = parent::store();
 
             if ($stored) {
                 $q->addTable('forum_messages');
-                $q->addQuery('count(message_id), MAX(message_date)');
+                $q->addQuery('count(message_id), MAX(message_datetime)');
                 $q->addWhere('message_forum = ' . (int) $this->message_forum);
                 $reply = $q->fetchRow();
 
@@ -78,7 +77,7 @@ class CForum_Message extends w2p_Core_BaseObject
                  * Note: the message_date here has already been adjusted for the
                  *    timezone above, so don't do it again!
                  */
-                $forum->forum_last_date = $this->message_date;
+                $forum->forum_updated = $this->message_datetime;
                 $forum->forum_last_id = $this->message_id;
                 $forum->store();
 

@@ -55,14 +55,14 @@ $end_date = w2PgetParam($_GET, 'end_date', 0);
 
 $showAllGantt = w2PgetParam($_REQUEST, 'showAllGantt', '0');
 
-
+$_date = new w2p_Utilities_Date();
 
 if (!$start_date || !$end_date) {
     // find out DateRange from $projects array
     $projectCount = count($projects);
     for ($i = 0, $i_cmp = $projectCount; $i < $i_cmp; $i++) {
         $start = substr($projects[$i]['project_start_date'], 0, 10);
-        if (0 == strlen($start)) {
+        if (0 == strlen($start) || '1000-01-01' == $start) {
             $start = date('Y-m-d');
         }
         $end = substr($projects[$i]['project_end_date'], 0, 10);
@@ -82,11 +82,11 @@ if (!$start_date || !$end_date) {
             $start_date = $start;
             $end_date = $end;
         } else {
-            if (Date::compare($min_d_start, $d_start) > 0) {
+            if ($_date->compare($min_d_start, $d_start) > 0) {
                 $min_d_start = $d_start;
                 $start_date = $start;
             }
-            if (Date::compare($max_d_end, $d_end) < 0) {
+            if ($_date->compare($max_d_end, $d_end) < 0) {
                 $max_d_end = $d_end;
                 $end_date = $end;
             }

@@ -22,7 +22,7 @@ class CTask extends w2p_Core_BaseObject
     /**
      * @var int
      */
-    public $task_parent = null;
+    public $task_parent = 0;
     public $task_milestone = null;
     public $task_project = null;
     public $task_owner = null;
@@ -327,8 +327,8 @@ class CTask extends w2p_Core_BaseObject
             $q->addQuery('MIN(task_start_date) as min_date');
             $q->addQuery('MAX(task_end_date) as max_date');
             $q->addWhere("task_path_enumeration LIKE '$path/%' ");
-            $q->addWhere("task_start_date <> '0000-00-00 00:00:00'");
-            $q->addWhere("task_end_date <> '0000-00-00 00:00:00'");
+            $q->addWhere("task_start_date IS NOT NULL");
+            $q->addWhere("task_end_date IS NOT NULL");
             $dates = $q->loadHash();
 
             $min_date = $dates['min_date'];
@@ -528,10 +528,10 @@ class CTask extends w2p_Core_BaseObject
         $stored = false;
 
         if ($this->task_start_date == '') {
-            $this->task_start_date = '0000-00-00 00:00:00';
+            $this->task_start_date = date('Y-m-d H:i:s');
         }
         if ($this->task_end_date == '') {
-            $this->task_end_date = '0000-00-00 00:00:00';
+            $this->task_end_date = date('Y-m-d H:i:s');
         }
 
         if ($this->{$this->_tbl_key} && $this->canEdit()) {
@@ -557,7 +557,7 @@ class CTask extends w2p_Core_BaseObject
             $stored = parent::store();
         }
 
-        if (0 == $this->{$this->_tbl_key} && $this->canCreate()) {
+        if (0 == (int) $this->{$this->_tbl_key} && $this->canCreate()) {
             $stored = parent::store();
         }
 
@@ -683,11 +683,13 @@ class CTask extends w2p_Core_BaseObject
                 $this->updateDynamics();
             }
 
-            if ($oTsk->task_parent != $this->task_parent) {
-                $old_parent = new CTask();
-                $old_parent->overrideDatabase($this->_query);
-                $old_parent->load($oTsk->task_parent);
-                $old_parent->updateDynamics();
+            if (!is_null($oTsk)) {
+                if ($oTsk->task_parent != $this->task_parent) {
+                    $old_parent = new CTask();
+                    $old_parent->overrideDatabase($this->_query);
+                    $old_parent->load($oTsk->task_parent);
+                    $old_parent->updateDynamics();
+                }
             }
         }
 
@@ -882,11 +884,11 @@ class CTask extends w2p_Core_BaseObject
 
         $q = $this->_getQuery();
         $q->clear();
-        $q->addQuery('task_id, MAX(task_end_date) as last_date');
+        $q->addQuery('task_id, task_end_date as last_date');
         $q->addTable('tasks');
         $q->addWhere('task_dynamic <> 1');
         $q->addWhere('task_project = ' . (int) $project_id);
-        $q->addGroup('task_project');
+        $q->setLimit(1);
 
         return $q->loadHash();
     }
@@ -1272,7 +1274,7 @@ class CTask extends w2p_Core_BaseObject
         $q->leftJoin('departments', '', 'departments.dept_id = project_departments.department_id');
 
         $q->addQuery('DISTINCT t.task_id, t.task_name, t.task_start_date, t.task_end_date, t.task_duration' . ', t.task_duration_type, projects.project_color_identifier AS color, projects.project_name, t.task_milestone, task_description, task_type, company_name, task_access, task_owner');
-        $q->addWhere('task_status > -1' . ' AND (task_start_date <= \'' . $db_end . '\' AND (task_end_date >= \'' . $db_start . '\' OR task_end_date = \'0000-00-00 00:00:00\' OR task_end_date = NULL))');
+        $q->addWhere('task_status > -1' . ' AND (task_start_date <= \'' . $db_end . '\' AND (task_end_date >= \'' . $db_start . '\' OR task_end_date IS NULL))');
         $q->addWhere('project_active = 1');
         if (($template_status = w2PgetConfig('template_projects_status_id')) != '') {
             $q->addWhere('project_status <> ' . $template_status);
@@ -1710,6 +1712,8 @@ class CTask extends w2p_Core_BaseObject
             $q = $department->setAllowedSQL($this->_AppUI->user_id, $q);
 
             return $q->loadHashList('dept_id');
+        } else {
+            return [];
         }
     }
 
@@ -1734,6 +1738,8 @@ class CTask extends w2p_Core_BaseObject
             $q = $department->setAllowedSQL($this->_AppUI->user_id, $q);
 
             return $q->loadHashList('contact_id');
+        } else {
+            return [];
         }
     }
 
@@ -1926,6 +1932,7 @@ class CTask extends w2p_Core_BaseObject
      */
     public function getTaskTree($project_id, $task_id = 0)
     {
+        $taskTree = [];
         $this->_depth++;
 
         $q = $this->_getQuery();

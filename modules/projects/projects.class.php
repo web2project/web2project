@@ -342,7 +342,7 @@ class CProject extends w2p_Core_BaseObject
 
         $q = $this->_getQuery();
         $q->addTable('tasks');
-        $q->addWhere('task_project = ' . (int) $project_id . ' AND task_end_date IS NOT NULL AND task_end_date <>  \'0000-00-00 00:00:00\'');
+        $q->addWhere('task_project = ' . (int) $project_id . ' AND task_end_date IS NOT NULL');
         $q->addOrder('task_end_date DESC');
         $q->setLimit($limit);
 
@@ -399,8 +399,9 @@ class CProject extends w2p_Core_BaseObject
         $this->project_private = (int) $this->project_private;
 
         $this->project_target_budget = filterCurrency($this->project_target_budget);
-	if(!ctype_digit($this->project_target_budget) && !is_float($this->project_target_budget))
-		$this->project_target_budget = 0.0;
+	    if(!ctype_digit($this->project_target_budget) && !is_float($this->project_target_budget)) {
+            $this->project_target_budget = 0.0;
+        }
         $this->project_url = str_replace(array('"', '"', '<', '>'), '', $this->project_url);
         $this->project_demo_url = str_replace(array('"', '"', '<', '>'), '', $this->project_demo_url);
         $this->project_owner = (int) $this->project_owner ? $this->project_owner : $this->_AppUI->user_id;
@@ -421,11 +422,17 @@ class CProject extends w2p_Core_BaseObject
 
         $this->project_id = (int) $this->project_id;
         // convert dates to SQL format first
+        if ('' == $this->project_start_date) {
+            $this->project_start_date = $q->dbfnNowWithTZ();
+        }
         if ($this->project_start_date) {
             $date = new w2p_Utilities_Date($this->project_start_date);
             $this->project_start_date = $date->format(FMT_DATETIME_MYSQL);
         }
 
+        if ('' == $this->project_end_date) {
+            $this->project_end_date = $q->dbfnNowWithTZ();
+        }
         if ($this->project_end_date) {
             $date = new w2p_Utilities_Date($this->project_end_date);
             $this->project_end_date = $date->format(FMT_DATETIME_MYSQL);
@@ -523,7 +530,7 @@ class CProject extends w2p_Core_BaseObject
         $body = $emailManager->getProjectNotify($this, $isNotNew);
 
         $mail = new w2p_Utilities_Mail;
-        $mail->To($user->user_email, true);
+        $mail->To($user->contact_email, true);
         $mail->Subject($subject);
         $mail->Body($body, isset($GLOBALS['locale_char_set']) ? $GLOBALS['locale_char_set'] : '');
 
@@ -646,7 +653,7 @@ class CProject extends w2p_Core_BaseObject
 			$q = $this->_getQuery();
 			$q->addTable('forums');
 			$q->addQuery('forum_id, forum_project, forum_description, forum_owner,
-                forum_name, forum_message_count, forum_create_date, forum_last_date,
+                forum_name, forum_message_count, forum_created, forum_updated,
 				project_name, project_color_identifier, project_id, user_id');
             $q->addJoin('projects', 'p', 'project_id = forum_project', 'inner');
             $q->addWhere('forum_project = ' . (int) $this->project_id);
@@ -948,7 +955,7 @@ class CProject extends w2p_Core_BaseObject
         $q = $this->getQuery();
         $q->addTable('projects');
         $q->addJoin('companies', '', 'projects.project_company = company_id', 'inner');
-        $q->addQuery('DISTINCT(projects.project_id), project_name, project_parent, project_company');
+        $q->addQuery('DISTINCT(projects.project_id), project_name, project_parent, project_company, project_start_date, project_end_date');
         if ($this->project_original_parent) {
             $q->addWhere('project_original_parent = ' . (int) $this->project_original_parent);
         }

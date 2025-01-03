@@ -11,10 +11,8 @@ class CForum extends w2p_Core_BaseObject
     public $forum_status = null;
     public $forum_owner = null;
     public $forum_name = null;
-    // @todo this should be forum_create_datetime to take advantage of our templating
-    public $forum_create_date = null;
-    // @todo this should be forum_last_datetime to take advantage of our templating
-    public $forum_last_date = null;
+    public $forum_created = null;
+    public $forum_updated = null;
     public $forum_last_id = null;
     public $forum_message_count = null;
     public $forum_description = null;
@@ -47,7 +45,7 @@ class CForum extends w2p_Core_BaseObject
         $q->addJoin('users', 'u', 'message_author = u.user_id', 'inner');
         $q->addJoin('contacts', 'con', 'contact_id = user_contact', 'inner');
         $q->addWhere('forum_id = message_forum AND (message_id = ' . (int) $message_id . ' OR message_parent = ' . (int) $message_id . ')');
-        $q->addOrder('message_date ' . $sortDir);
+        $q->addOrder('message_datetime ' . $sortDir);
 
         return $q->loadList();
     }
@@ -61,7 +59,7 @@ class CForum extends w2p_Core_BaseObject
         $q->addTable('forums');
 
         $q->addQuery('forum_id, forum_project, forum_description, forum_owner, forum_name');
-        $q->addQuery('forum_moderated, forum_create_date, forum_last_date');
+        $q->addQuery('forum_moderated, forum_created, forum_updated');
         $q->addQuery('sum(if(c.message_parent=-1,1,0)) as forum_topics, sum(if(c.message_parent>0,1,0)) as forum_replies');
         $q->addQuery('user_username, project_name, project_color_identifier, contact_display_name as owner_name, user_id');
         $q->addQuery('SUBSTRING(l.message_body,1,' . $max_msg_length . ') message_body');
@@ -108,7 +106,7 @@ class CForum extends w2p_Core_BaseObject
     }
 
     protected function hook_preCreate() {
-        $this->forum_create_date = $this->_AppUI->convertToSystemTZ($this->forum_create_date);
+        $this->forum_created = $this->_AppUI->convertToSystemTZ($this->forum_created);
 
         parent::hook_preCreate();
     }

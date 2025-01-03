@@ -101,10 +101,16 @@ $df = $AppUI->getPref('SHDATEFORMAT');
                 </a>
             </td>
             <td nowrap="nowrap">
-                <input type="checkbox" name="log_all" id="log_all" <?php if ($log_all) echo 'checked="checked"' ?> />
-                <label for="log_all"><?php echo $AppUI->_('Log All'); ?></label>
-                <input type="checkbox" name="log_pdf" id="log_pdf" <?php if ($log_pdf) echo 'checked="checked"' ?> />
-                <label for="log_pdf"><?php echo $AppUI->_('Make PDF'); ?></label>
+                <div>
+                    <input type="checkbox" name="log_all" id="log_all" <?php if ($log_all) echo 'checked="checked"' ?> />
+                    <label for="log_all"><?php echo $AppUI->_('Log All'); ?></label>
+                </div>
+                <div>
+                    <input type="checkbox" name="log_pdf" id="log_pdf" <?php if ($log_pdf) echo 'checked="checked"' ?> />
+                    <label for="log_pdf"><?php echo $AppUI->_('Make PDF'); ?></label>
+                </div>
+            </td>
+            <td>
                 <input class="button" style="float: right;" type="submit" name="do_report" value="<?php echo $AppUI->_('submit'); ?>" />
             </td>
         </tr>
@@ -168,7 +174,7 @@ if ($do_report) {
             foreach($assignees as $assignee) {
                 $users[] = $assignee['contact_name'];
             }
-            $str .= '<td>' . implode($users, ', ') . '</td>';
+            $str .= '<td>' . implode(', ', $users) . '</td>';
 
             $str .= $htmlHelper->createCell('task_start_date', $task['task_start_date']);
             $str .= $htmlHelper->createCell('task_end_date', $task['task_end_date']);
@@ -183,7 +189,7 @@ if ($do_report) {
                 $end_date = new w2p_Utilities_Date($task['task_end_date']);
                 $spacer = str_repeat('  ', $task['depth']);
                 $pdfdata[] = array($spacer . $task['task_name'], $task['task_description'],
-                    implode($users, ', '),
+                    implode(', ', $users),
                     (($start_date != ' ') ? $start_date->format($df) : ' '),
                     (($end_date != ' ') ? $end_date->format($df) : ' '),
                     $task['task_percent_complete'] . '%', );

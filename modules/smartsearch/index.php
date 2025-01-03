@@ -3,7 +3,9 @@ if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
 // @todo    convert to template
-
+// if (isset($_POST)) {
+// echo '<pre>'; print_r($_POST);	
+// }
 //--MSy--
 $ssearch = array();
 $ssearch['keywords'] = array();
@@ -25,7 +27,10 @@ foreach ($moduleList as $module) {
 
 $ssearch['all_words'] = w2PgetParam($_POST, 'allwords', '');
 
-$keyword = (isset($_POST['keyword'])) ? strip_tags($_POST['keyword']) : '';
+$keyword1 = (isset($_POST['keyword1'])) ? strip_tags($_POST['keyword1']) : '';
+$keyword2 = (isset($_POST['keyword2'])) ? strip_tags($_POST['keyword2']) : '';
+$keyword3 = (isset($_POST['keyword3'])) ? strip_tags($_POST['keyword3']) : '';
+$keyword4 = (isset($_POST['keyword4'])) ? strip_tags($_POST['keyword4']) : '';
 
 if ($ssearch['advanced_search'] == 'on') {
 	$ssearch['ignore_case'] = w2PgetParam($_POST, 'ignorecase', '');
@@ -78,23 +83,15 @@ if ($ssearch['advanced_search'] == 'on') {
 	}
 	
 	function selModAll() {
-		<?php
-foreach ($hook_modules as $tmp) {
-	$temp = $temp;
-    ?>document.frmSearch.mod_<?php echo $tmp ?>.checked=true;<?php
-}
-?>
-	}		
+	<?php foreach ($hook_modules as $tmp) { ?>
+    	document.frmSearch.mod_<?php echo $tmp ?>.checked=true;
+    <?php } ?>
+	}
 
 	function deselModAll() {
-		<?php
-foreach ($hook_modules as $tmp) {
-	$temp = $tmp;
-?>
+	<?php foreach ($hook_modules as $tmp) { ?>
 		document.frmSearch.mod_<?php echo $tmp ?>.checked=false;
-			<?php
-}
-?>
+	<?php } ?>
 	}		
 
 	
@@ -120,7 +117,7 @@ $form = new w2p_Output_HTML_FormHelper($AppUI);
 				<tr>
 					<td align="left" valign="middle">
 					<div id="div_advancedsearch1" id="div_advancedsearch1"  style="<?php echo ($ssearch['advanced_search'] == "on" ? 'visibility:visible' : 'visibility:hidden'); ?> "> 1. </div></td>
-					<td align="left"><input class="text" size="18" type="text" id="keyword" name="keyword" value="<?php echo $keyword; ?>" /></td>
+					<td align="left"><input class="text" size="18" type="text" id="keyword1" name="keyword1" value="<?php echo $keyword1; ?>" /></td>
 					<td align="left"><input class="button btn btn-small dropdown-toggle" type="submit" value="<?php echo $AppUI->_('Search'); ?>" /></td>
 					<td align="left"><input name="allwords" id="allwords" type="checkbox"  <?php echo ($ssearch['all_words'] == "on" ? 'checked="checked"' : ''); ?> /></td> <td align="left"><label for="allwords"><?php echo $AppUI->_('All words'); ?></label></td>
 					<td align="left"><input name="modselection" id="modselection" type="checkbox"  <?php echo ($ssearch['mod_selection'] == "on" ? 'checked="checked"' : ''); ?> onclick="toggleModules(this)" /></td> <td align="left"><label for="modselection"><?php echo $AppUI->_('Modules selection'); ?></label></td>
@@ -131,9 +128,9 @@ $form = new w2p_Output_HTML_FormHelper($AppUI);
 				<table cellspacing="5" cellpadding="0" border="0">
 					<tr>
 						<td align="left"> 2. </td>
-						<td align="left"><input class="text" size="18" type="text" id="keyword2" name="keyword2" value="<?php echo stripslashes($_POST['keyword2']); ?>" /></td>
-						<td align="left"> 3. <input class="text" size="18" type="text" id="keyword3" name="keyword3" value="<?php echo stripslashes($_POST['keyword3']); ?>" /></td>
-						<td align="left"> 4. <input class="text" size="18" type="text" id="keyword4" name="keyword4" value="<?php echo stripslashes($_POST['keyword4']); ?>" /></td>
+						<td align="left"><input class="text" size="18" type="text" id="keyword2" name="keyword2" value="<?php echo $keyword2; ?>" /></td>
+						<td align="left"> 3. <input class="text" size="18" type="text" id="keyword3" name="keyword3" value="<?php echo $keyword3; ?>" /></td>
+						<td align="left"> 4. <input class="text" size="18" type="text" id="keyword4" name="keyword4" value="<?php echo $keyword4; ?>" /></td>
 						<td align="left"><input name="ignorespecchar" id="ignorespecchar" type="checkbox"  <?php echo ($ssearch['ignore_specchar'] == "on" ? 'checked="checked"' : ''); ?> /></td> <td align="left"><label for="ignorespecchar"><?php echo $AppUI->_('Ignore special chars'); ?></label></td>
 						<td align="left"><input name="ignorecase" id="ignorecase" type="checkbox"  <?php echo ($ssearch['ignore_case'] == "on" ? 'checked="checked"' : ''); ?> /></td> <td align="left"><label for="ignorecase"><?php echo $AppUI->_('Ignore case'); ?></label></td>
 						<td align="left"><input name="displayallflds" id="displayallflds" type="checkbox"  <?php echo ($ssearch['display_all_flds'] == "on" ? 'checked="checked"' : ''); ?> /></td> <td align="left"><label for="displayallflds"><?php echo $AppUI->_('Display all fields'); ?></label></td>
@@ -164,60 +161,40 @@ $form = new w2p_Output_HTML_FormHelper($AppUI);
 	</table>
 </form>
 <?php
-if (isset($_POST['keyword'])) {
+if ('' !== $keyword1) {
 	$search = new CSmartSearch();
-    $search->keyword = addslashes($_POST['keyword']);
+    $search->keyword = $keyword1;
     $search->keyword = preg_replace("/[^A-Za-z0-9 ]/", "", $search->keyword);
 
-	if (isset($_POST['keyword']) && mb_strlen($_POST['keyword']) > 0) {
-		$or_keywords = preg_split('/[\s,;]+/', addslashes($_POST['keyword']));
+	if ('' != $keyword1) {
+		$or_keywords = preg_split('/[\s,;]+/', $keyword1);
 		foreach ($or_keywords as $or_keyword) {
 			$ssearch['keywords'][$or_keyword] = array($or_keyword);
 			$ssearch['keywords'][$or_keyword][1] = 0;
 		}
-	} else {
-		$or_keywords = preg_split('/[\s,;]+/', addslashes($_POST['keyword']));
-		foreach ($or_keywords as $or_keyword) {
-			unset($ssearch['keywords'][$or_keyword]);
-		}
 	}
 
-	if (isset($_POST['keyword2']) && mb_strlen($_POST['keyword2']) > 0) {
-		$or_keywords = preg_split('/[\s,;]+/', addslashes($_POST['keyword2']));
+	if ('' != $keyword2 > 0) {
+		$or_keywords = preg_split('/[\s,;]+/', $keyword2);
 		foreach ($or_keywords as $or_keyword) {
 			$ssearch['keywords'][$or_keyword] = array($or_keyword);
 			$ssearch['keywords'][$or_keyword][1] = 1;
 		}
-	} else {
-		$or_keywords = preg_split('/[\s,;]+/', addslashes($_POST['keyword2']));
-		foreach ($or_keywords as $or_keyword) {
-			unset($ssearch['keywords'][$or_keyword]);
-		}
 	}
 
-	if (isset($_POST['keyword3']) && mb_strlen($_POST['keyword3']) > 0) {
-		$or_keywords = preg_split('/[\s,;]+/', addslashes($_POST['keyword3']));
+	if ('' != $keyword3) {
+		$or_keywords = preg_split('/[\s,;]+/', $keyword3);
 		foreach ($or_keywords as $or_keyword) {
 			$ssearch['keywords'][$or_keyword] = array($or_keyword);
 			$ssearch['keywords'][$or_keyword][1] = 2;
 		}
-	} else {
-		$or_keywords = preg_split('/[\s,;]+/', addslashes($_POST['keyword3']));
-		foreach ($or_keywords as $or_keyword) {
-			unset($ssearch['keywords'][$or_keyword]);
-		}
 	}
 
-	if (isset($_POST['keyword4']) && mb_strlen($_POST['keyword4']) > 0) {
-		$or_keywords = preg_split('/[\s,;]+/', addslashes($_POST['keyword4']));
+	if ('' != $keyword4) {
+		$or_keywords = preg_split('/[\s,;]+/', $keyword4);
 		foreach ($or_keywords as $or_keyword) {
 			$ssearch['keywords'][$or_keyword] = array($or_keyword);
 			$ssearch['keywords'][$or_keyword][1] = 3;
-		}
-	} else {
-		$or_keywords = preg_split('/[\s,;]+/', addslashes($_POST['keyword4']));
-		foreach ($or_keywords as $or_keyword) {
-			unset($ssearch['keywords'][$or_keyword]);
 		}
 	}
 
@@ -227,24 +204,21 @@ if (isset($_POST['keyword'])) {
     	$perms = &$AppUI->acl();
     	$reccount = 0;
         $module_count = 0;
-		reset($moduleList);
         foreach ($moduleList as $module) {
-    		if ($ssearch['mod_selection'] == '' || $ssearch['mod_' . $module['mod_directory']] == 'on') {
-				if (class_exists($module['mod_main_class'])) {
-                    $object = new $module['mod_main_class']();
-                    if (is_callable(array($object, 'hook_search'))) {
-                        $search = new CSmartSearch();
-                        $searchArray = $object->hook_search();
-                        foreach($searchArray as $key => $value) {
-                            $search->{$key} = $value;
-                        }
-                        $search->setKeyword($search->keyword);
-                        $search->setAdvanced($ssearch);
-                        echo $search->fetchResults($perms, $reccount);
+			if (class_exists($module['mod_main_class'])) {
+                $object = new $module['mod_main_class']();
+                if (is_callable(array($object, 'hook_search'))) {
+                    $search = new CSmartSearch();
+                    $searchArray = $object->hook_search();
+                    foreach($searchArray as $key => $value) {
+                        $search->{$key} = $value;
                     }
+                    $search->setKeyword($search->keyword);
+                    $search->setAdvanced($ssearch);
+                    echo $search->fetchResults($perms, $reccount);
+                    $module_count++;
                 }
-                $module_count++;
-			}
+            }
         }
         if (!$module_count) {
             echo '<tr><td colspan="25"><b>' . $AppUI->_('No modules selected') . '</b></td></tr>';

@@ -228,7 +228,7 @@ if (is_array($selected) && count($selected)) {
 
 		//Action: Other Actions
         if (isset($_POST['bulk_task_other']) && $bulk_task_other != '') {
-
+// TODO: convert this over to a switch statement
             if ($upd_task->task_id) {
                 //Option 1 - Mark as finished
                 if ($bulk_task_other == '1') {
@@ -297,7 +297,17 @@ if (is_array($selected) && count($selected)) {
                     if (!$result) {
                         break;
                     }
-                    //Option 99 (always at the bottom) - Delete
+                } elseif ($bulk_task_other == '11') {
+                    $result = $upd_task->pinTask($AppUI->user_id,$upd_task->task_id);
+                    if (!$result) {
+                        break;
+                    }
+                } elseif ($bulk_task_other == '12') {
+                    $result = $upd_task->unpinTask($AppUI->user_id,$upd_task->task_id);
+                    if (!$result) {
+                        break;
+                    }
+                     //Option 99 (always at the bottom) - Delete
                 } elseif ($bulk_task_other == '99') {
                     $result = $upd_task->delete();
                     if (!$result) {

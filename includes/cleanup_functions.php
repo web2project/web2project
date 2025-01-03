@@ -11,9 +11,14 @@
 *   this shouldn't be a problem.
 */
 
+
+$fixedSysVals = array('CompanyType', 'EventType', 'FileType', 'GlobalCountries', 'GlobalYesNo', 'ProjectPriority', 'ProjectStatus', 'ProjectType', 'TaskDurationType', 'TaskLogReference', 'TaskPriority', 'TaskStatus', 'TaskType', 'UserType');
+
 function is_task_in_gantt_arr($task)
 {
     global $gantt_arr;
+
+    $gantt_arr = isset($gantt_arr) ? $gantt_arr : [];
     $n = count($gantt_arr);
     for ($x = 0; $x < $n; $x++) {
         if ($gantt_arr[$x][0]['task_id'] == $task['task_id']) {
@@ -413,7 +418,7 @@ function findchild_gantt(&$tarr, $parent, $level = 0)
 
     for ($x = 0; $x < $n; $x++) {
         if ($tarr[$x]['task_parent'] == $parent && $tarr[$x]['task_parent'] != $tarr[$x]['task_id']) {
-            showgtask($tarr[$x], $level, $tarr[$x]['project_id']);
+            showgtask($tarr[$x], $level, 0);
             findchild_gantt($tarr, $tarr[$x]['task_id'], $level);
         }
     }
@@ -1305,7 +1310,7 @@ function getFolders($parent)
     // display each child
     foreach ($folders as $row) {
         if (array_key_exists($row['file_folder_id'], $allowed_folders_ary) or array_key_exists($parent, $allowed_folders_ary)) {
-            $file_count = countFiles($row['file_folder_id']);
+            $file_count = count($file_folder->getFoldersByParent($row['file_folder_id']));
 
             $s .= '<tr><td colspan="20">';
             $s .= '<ul>';
@@ -1382,94 +1387,10 @@ function countFiles($folder)
 }
 
 // From: modules/files/filefolder.class.php
-function displayFiles($AppUI, $folder_id, $task_id, $project_id, $company_id)
+function displayFiles($AppUI, $folder_id = 0, $task_id = 0, $project_id = 0, $company_id = 0, $category_id = -1)
 {
     global $m, $tab, $xpg_min, $xpg_pagesize, $showProject, $file_types,
             $company_id, $current_uri, $canEdit;
-
-    // SETUP FOR FILE LIST
-    $q = new w2p_Database_Query();
-    $q->addQuery('f.*, max(f.file_id) as latest_id, count(f.file_version) as file_versions, round(max(file_version), 2) as file_lastversion, file_owner, user_id');
-    $q->addQuery('ff.*, max(file_version) as file_version, f.file_date as file_datetime');
-    $q->addTable('files', 'f');
-    $q->addJoin('file_folders', 'ff', 'ff.file_folder_id = file_folder');
-    $q->addJoin('projects', 'p', 'p.project_id = file_project');
-    $q->addJoin('tasks', 't', 't.task_id = file_task');
-    $q->addJoin('users', 'u', 'u.user_id = file_owner');
-    $q->leftJoin('project_departments', 'project_departments', 'p.project_id = project_departments.project_id OR project_departments.project_id IS NULL');
-    $q->leftJoin('departments', 'departments', 'departments.dept_id = project_departments.department_id OR dept_id IS NULL');
-
-    //TODO: apply permissions properly
-    $project = new CProject();
-    $deny1 = $project->getDeniedRecords($AppUI->user_id);
-    if (count($deny1) > 0) {
-        $q->addWhere('file_project NOT IN (' . implode(',', $deny1) . ')');
-    }
-    //TODO: apply permissions properly
-    $task = new CTask();
-    $deny2 = $task->getDeniedRecords($AppUI->user_id);
-    if (count($deny2) > 0) {
-        $q->addWhere('file_task NOT IN (' . implode(',', $deny2) . ')');
-    }
-
-    if ($project_id) {
-        $q->addWhere('file_project = ' . (int) $project_id);
-    }
-    if ($task_id) {
-        $q->addWhere('file_task = ' . (int) $task_id);
-    }
-    if ($company_id) {
-        $q->addWhere('project_company = ' . (int) $company_id);
-    }
-    //$tab = ($m == 'files') ? $tab-1 : -1;
-    $temp_tab = ($m == 'files') ? $tab - 1 : -1;
-    if (($temp_tab >= 0) and ((count($file_types) - 1) > $temp_tab)) {
-    //if ($tab >= 0) {
-        $q->addWhere('file_category = ' . (int) $temp_tab);
-    }
-    $q->setLimit($xpg_pagesize, $xpg_min);
-    if ($folder_id > -1) {
-        $q->addWhere('file_folder = ' . (int) $folder_id);
-    }
-    $q->addGroup('file_version_id DESC');
-    $q->addOrder('project_name ASC, file_parent ASC, file_id DESC');
-
-    $qv = new w2p_Database_Query();
-    $qv->addTable('files');
-    $qv->addQuery('file_id, file_version, file_project, file_name, file_task,
-        file_description, file_owner, file_size, file_category,
-        task_name, file_version_id, file_date as file_datetime, file_checkout, file_co_reason, file_type,
-        file_date, cu.user_username as co_user, project_name,
-        project_color_identifier, project_owner, u.user_id,
-        con.contact_first_name, con.contact_last_name, con.contact_display_name as contact_name,
-        co.contact_first_name as co_contact_first_name, co.contact_last_name as co_contact_last_name,
-        co.contact_display_name as co_contact_name ');
-    $qv->addJoin('projects', 'p', 'p.project_id = file_project');
-    $qv->addJoin('users', 'u', 'u.user_id = file_owner');
-    $qv->addJoin('contacts', 'con', 'con.contact_id = u.user_contact');
-    $qv->addJoin('tasks', 't', 't.task_id = file_task');
-    $qv->addJoin('file_folders', 'ff', 'ff.file_folder_id = file_folder');
-    if ($project_id) {
-        $qv->addWhere('file_project = ' . (int) $project_id);
-    }
-    if ($task_id) {
-        $qv->addWhere('file_task = ' . (int) $task_id);
-    }
-    if ($company_id) {
-        $qv->addWhere('project_company = ' . (int) $company_id);
-    }
-    if (($temp_tab >= 0) and ((count($file_types) - 1) > $temp_tab)) {
-    //if ($tab >= 0) {
-        $qv->addWhere('file_category = ' . (int) $temp_tab);
-    }
-    $qv->leftJoin('users', 'cu', 'cu.user_id = file_checkout');
-    $qv->leftJoin('contacts', 'co', 'co.contact_id = cu.user_contact');
-    if ($folder_id > -1) {
-        $qv->addWhere('file_folder = ' . (int) $folder_id);
-    }
-
-    $files = $q->loadList();
-    $file_versions = $qv->loadHashList('file_id');
 
     $module = new w2p_System_Module();
     $fields = $module->loadSettings('files', 'index_list');
@@ -1482,13 +1403,53 @@ function displayFiles($AppUI, $folder_id, $task_id, $project_id, $company_id)
         //   state for versions earlier than v3.0
         //   At some point at/after v4.0, this should be deprecated
         $fieldList = array('file_name', 'file_description',
-            'file_version', 'file_category', 'file_folder', 'file_task',
+            'file_version', 'file_category', 'file_task',
             'file_owner', 'file_datetime');
         $fieldNames = array('File Name', 'Description', 'Version', 'Category',
-            'Folder', 'Task Name', 'Owner', 'Date',);
+            'Task Name', 'Owner', 'Date',);
 
         $module->storeSettings('files', 'index_list', $fieldList, $fieldNames);
     }
+
+    // SETUP FOR FILE LIST
+    $q = new w2p_Database_Query();
+    $q->addQuery($fieldList);
+    $q->addQuery('file_id, file_project');
+    $q->addQuery('project_name, project_color_identifier');
+    $q->addTable('files', 'f');
+    $q->addJoin('projects', 'p', 'p.project_id = file_project');
+
+    // Remove disallowed projects
+    $project = new CProject();
+    $deny1 = $project->getDeniedRecords($AppUI->user_id);
+    if (count($deny1) > 0) {
+        $q->addWhere('file_project NOT IN (' . implode(',', $deny1) . ')');
+    }
+    // Remove disallowed tasks
+    $task = new CTask();
+    $deny2 = $task->getDeniedRecords($AppUI->user_id);
+    if (count($deny2) > 0) {
+        $q->addWhere('file_task NOT IN (' . implode(',', $deny2) . ')');
+    }
+
+    if ($folder_id > -1) {
+        $q->addWhere('file_folder = ' . (int) $folder_id);
+    }
+    if ($project_id) {
+        $q->addWhere('file_project = ' . (int) $project_id);
+    }
+    if ($task_id) {
+        $q->addWhere('file_task = ' . (int) $task_id);
+    }
+    if ($company_id) {
+        $q->addWhere('project_company = ' . (int) $company_id);
+    }
+    if ($category_id > -1) {
+        $q->addWhere('file_category = ' . (int) $category_id);
+    }
+
+    $files = $q->loadList();
+    $file_versions = [];//$qv->loadHashList('file_id');
 
     $s  = '<tr>';
     $s .= '<th></th>';
@@ -1507,107 +1468,108 @@ function displayFiles($AppUI, $folder_id, $task_id, $project_id, $company_id)
     $customLookups = array('file_category' => $file_types);
 
     foreach ($files as $row) {
-        $latest_file = $file_versions[$row['latest_id']];
+        // $latest_file = $file_versions[$row['latest_id']];
 
-        if ($fp != $latest_file['file_project']) {
-            if (!$latest_file['file_project']) {
-                $latest_file['project_name'] = $AppUI->_('Not attached to a project');
-                $latest_file['project_color_identifier'] = 'f4efe3';
+        if ($fp != $row['file_project']) {
+            if (!$row['file_project']) {
+                $row['project_name'] = $AppUI->_('Not attached to a project');
+                $row['project_color_identifier'] = 'f4efe3';
             }
             if ($showProject) {
-                $style = 'background-color:#' . $latest_file['project_color_identifier'] . ';color:' . bestColor($latest_file['project_color_identifier']);
+                $style = 'background-color:#' . $row['project_color_identifier'] . ';color:' . bestColor($row['project_color_identifier']);
                 $s .= '<tr>';
                 $s .= '<td colspan="20" style="text-align: left; border: outset 2px #eeeeee;' . $style . '">';
-                if ($latest_file['file_project'] > 0) {
-                    $href = './index.php?m=projects&a=view&project_id=' . $latest_file['file_project'];
+                if ($row['file_project'] > 0) {
+                    $href = './index.php?m=projects&a=view&project_id=' . $row['file_project'];
                 } else {
                     $href = './index.php?m=projects';
                 }
                 $s .= '<a href="' . $href . '">';
-                $s .= '<span style="' . $style . '">' . $latest_file['project_name'] . '</span></a>';
+                $s .= '<span style="' . $style . '">' . $row['project_name'] . '</span></a>';
                 $s .= '</td></tr>';
             }
         }
-        $fp = $latest_file['file_project'];
-        $row['file_datetime'] = $latest_file['file_datetime'];
-        $row['file_id'] = $latest_file['file_id'];
+        $fp = $row['file_project'];
+
+        // $row['file_datetime'] = $latest_file['file_datetime'];
+        // $row['file_id'] = $latest_file['file_id'];
         $htmlHelper->stageRowData($row);
 
         $s .= '<tr>';
         $s .= '<td class="data">';
-        if ($canEdit && (empty($latest_file['file_checkout']) || ($latest_file['file_checkout'] == 'final' && ($canEdit || $latest_file['project_owner'] == $AppUI->user_id)))) {
-            $s .= '<a href="./index.php?m=files&a=addedit&file_id=' . $latest_file['file_id'] . '">' . w2PshowImage('kedit.png', '16', '16', 'edit file', 'edit file', 'files') . '</a>';
+        if ($canEdit && (empty($row['file_checkout']) || ($row['file_checkout'] == 'final' && ($canEdit || $row['project_owner'] == $AppUI->user_id)))) {
+            $s .= '<a href="./index.php?m=files&a=addedit&file_id=' . $row['file_id'] . '">' . w2PshowImage('kedit.png', '16', '16', 'edit file', 'edit file', 'files') . '</a>';
         }
         $s .= '</td>';
         $s .= '<td class="data">';
-        if ($canEdit && empty($latest_file['file_checkout'])) {
-            $s .= '<a href="?m=files&a=co&file_id=' . $latest_file['file_id'] . '">' . w2PshowImage('up.png', '16', '16', 'checkout', 'checkout file', 'files') . '</a>';
-        } else {
-            if ($latest_file['file_checkout'] == $AppUI->user_id) {
-                $s .= '<a href="?m=files&a=addedit&ci=1&file_id=' . $latest_file['file_id'] . '">' . w2PshowImage('down.png', '16', '16', 'checkin', 'checkin file', 'files') . '</a>';
-            } else {
-                if ($latest_file['file_checkout'] == 'final') {
-                    $s .= 'final';
-                } else {
-                    $s .= $latest_file['co_contact_name'] . '<br>(' . $latest_file['co_user'] . ')';
-                }
-            }
-        }
+        // if ($canEdit && empty($latest_file['file_checkout'])) {
+        //     $s .= '<a href="?m=files&a=co&file_id=' . $latest_file['file_id'] . '">' . w2PshowImage('up.png', '16', '16', 'checkout', 'checkout file', 'files') . '</a>';
+        // } else {
+        //     if ($latest_file['file_checkout'] == $AppUI->user_id) {
+        //         $s .= '<a href="?m=files&a=addedit&ci=1&file_id=' . $latest_file['file_id'] . '">' . w2PshowImage('down.png', '16', '16', 'checkin', 'checkin file', 'files') . '</a>';
+        //     } else {
+        //         if ($latest_file['file_checkout'] == 'final') {
+        //             $s .= 'final';
+        //         } else {
+        //             $s .= $latest_file['co_contact_name'] . '<br>(' . $latest_file['co_user'] . ')';
+        //         }
+        //     }
+        // }
 
         $version_link = '';
-        $hidden_table = '';
-        if ($row['file_versions'] > 1) {
-            $version_link = '&nbsp<a href="javascript: void(0);" onClick="expand(\'versions_' . $latest_file['file_id'] . '\'); ">(' . $row['file_versions'] . ')</a>';
-            $hidden_table = '<tr><td colspan="20">
-                <table style="display: none" id="versions_' . $latest_file['file_id'] . '" class="tbl list">
-                <tr>';
-            foreach ($fieldNames as $index => $name) {
-                $hidden_table .= '<th nowrap="nowrap">';
-                $hidden_table .= $AppUI->_($fieldNames[$index]);
-                $hidden_table .= '</th>';
-            }
-            $hidden_table .= '</tr>';
+        // $hidden_table = '';
+        // if ($row['file_versions'] > 1) {
+        //     $version_link = '&nbsp<a href="javascript: void(0);" onClick="expand(\'versions_' . $latest_file['file_id'] . '\'); ">(' . $row['file_versions'] . ')</a>';
+        //     $hidden_table = '<tr><td colspan="20">
+        //         <table style="display: none" id="versions_' . $latest_file['file_id'] . '" class="tbl list">
+        //         <tr>';
+        //     foreach ($fieldNames as $index => $name) {
+        //         $hidden_table .= '<th nowrap="nowrap">';
+        //         $hidden_table .= $AppUI->_($fieldNames[$index]);
+        //         $hidden_table .= '</th>';
+        //     }
+        //     $hidden_table .= '</tr>';
 
-            $sub_htmlHelper = new w2p_Output_HTMLHelper($AppUI);
-            $sub_htmlHelper->df .= ' ' . $AppUI->getPref('TIMEFORMAT');
+        //     $sub_htmlHelper = new w2p_Output_HTMLHelper($AppUI);
+        //     $sub_htmlHelper->df .= ' ' . $AppUI->getPref('TIMEFORMAT');
 
-            foreach ($file_versions as $file) {
-                $sub_htmlHelper->stageRowData($file);
+        //     foreach ($file_versions as $file) {
+        //         $sub_htmlHelper->stageRowData($file);
 
-                if ($file['file_version_id'] == $latest_file['file_version_id']) {
-                    foreach ($fieldList as $index => $column) {
-                        $hidden_table .= $sub_htmlHelper->createCell($fieldList[$index], $file[$fieldList[$index]], $customLookups);
-                    }
+        //         if ($file['file_version_id'] == $latest_file['file_version_id']) {
+        //             foreach ($fieldList as $index => $column) {
+        //                 $hidden_table .= $sub_htmlHelper->createCell($fieldList[$index], $file[$fieldList[$index]], $customLookups);
+        //             }
 
-                    if ($canEdit && w2PgetConfig('files_show_versions_edit')) {
-                        $hidden_table .= '<a href="./index.php?m=files&a=addedit&file_id=' . $file['file_id'] . '">' . w2PshowImage('kedit.png', '16', '16', 'edit file', 'edit file', 'files') . "</a>";
-                    }
-                    $hidden_table .= '</td><tr>';
-                }
-            }
-            $hidden_table .= '</table>';
-        }
+        //             if ($canEdit && w2PgetConfig('files_show_versions_edit')) {
+        //                 $hidden_table .= '<a href="./index.php?m=files&a=addedit&file_id=' . $file['file_id'] . '">' . w2PshowImage('kedit.png', '16', '16', 'edit file', 'edit file', 'files') . "</a>";
+        //             }
+        //             $hidden_table .= '</td><tr>';
+        //         }
+        //     }
+        //     $hidden_table .= '</table>';
+        // }
         $s .= '</td>';
 
         foreach ($fieldList as $index => $column) {
-            $cell = $htmlHelper->createCell($fieldList[$index], $row[$fieldList[$index]], $customLookups);
-            if ('file_version' == $fieldList[$index]) {
-                $cell = str_replace('</td>', $version_link.'</td>', $cell);
-            }
-            $s .= $cell;
+            $s .= $htmlHelper->createCell($fieldList[$index], $row[$fieldList[$index]], $customLookups);
+            // if ('file_version' == $fieldList[$index]) {
+            //     $cell = str_replace('</td>', $version_link.'</td>', $cell);
+            // }
+            // $s .= $cell;
         }
 
         $s .= '<td>';
-        $s .= '<form name="frm_remove_file_' . $latest_file['file_id'] . '" action="?m=files" method="post" accept-charset="utf-8">
-            <input type="hidden" name="dosql" value="do_file_aed" />
-            <input type="hidden" name="del" value="1" />
-            <input type="hidden" name="file_id" value="' . $latest_file['file_id'] . '" />
-            <input type="hidden" name="redirect" value="' . $current_uri . '" />
-            </form>';
-        $s .= '<a href="javascript: void(0);" onclick="if (confirm(\'' . $AppUI->_('Are you sure you want to delete this file?') . '\')) {document.frm_remove_file_' . $latest_file['file_id'] . '.submit()}">' . w2PshowImage('remove.png', '16', '16', 'delete file', 'delete file', 'files') . '</a>';
+        // $s .= '<form name="frm_remove_file_' . $latest_file['file_id'] . '" action="?m=files" method="post" accept-charset="utf-8">
+        //     <input type="hidden" name="dosql" value="do_file_aed" />
+        //     <input type="hidden" name="del" value="1" />
+        //     <input type="hidden" name="file_id" value="' . $latest_file['file_id'] . '" />
+        //     <input type="hidden" name="redirect" value="' . $current_uri . '" />
+        //     </form>';
+        // $s .= '<a href="javascript: void(0);" onclick="if (confirm(\'' . $AppUI->_('Are you sure you want to delete this file?') . '\')) {document.frm_remove_file_' . $latest_file['file_id'] . '.submit()}">' . w2PshowImage('remove.png', '16', '16', 'delete file', 'delete file', 'files') . '</a>';
         $s .= '</td>';
         $s .= '</tr>';
-        $s .= $hidden_table;
+        // $s .= $hidden_table;
     }
     if (0 == count($files)) {
         $s .= '<tr><td colspan="' . (count($fieldNames) + 3 ) . '">' . $AppUI->_('No data available') . '</td></tr>';
@@ -1785,7 +1747,7 @@ function get_actual_end_date_pd($task_id, $task)
     $mods = $AppUI->getActiveModules();
 
     if (!empty($mods['history']) && canView('history')) {
-        $q->addQuery('MAX(history_date) as actual_end_date');
+        $q->addQuery('MAX(history_datetime) as actual_end_date');
         $q->addTable('history');
         $q->addWhere('history_table=\'tasks\' AND history_item=' . $task_id);
     } else {
@@ -2255,7 +2217,7 @@ function showRow($id = '', $key = 0, $title = '', $value = '')
 }
 
 // From: modules/system/syskeys/keys.php
-function showRow_keys($id = 0, $name = '', $label = '')
+function showRow_keys($id = 0, $name = '', $label = '', $canEdit = false)
 {
     global $canEdit, $syskey_id, $CR, $AppUI;
     $s = '';
@@ -2728,7 +2690,7 @@ function addHistory($table, $id, $action = 'modify', $description = '', $project
     $q->addInsert('history_item', (int) $id);
     $q->addInsert('history_description', $description);
     $q->addInsert('history_user', (int) $AppUI->user_id);
-    $q->addInsert('history_date', "'".$q->dbfnNowWithTZ()."'", false, true);
+    $q->addInsert('history_datetime', "'".$q->dbfnNowWithTZ()."'", false, true);
     $q->addInsert('history_project', (int) $project_id);
     $q->addInsert('history_table', $table);
     $q->exec();
@@ -2894,18 +2856,18 @@ function file_size($size)
  */
 function formatCurrency($number, $format)
 {
-    global $AppUI, $locale_char_set;
+    // global $AppUI, $locale_char_set;
 
-    if (!$format) {
-        $format = $AppUI->getPref('CURRENCYFORM');
-    }
-    // If the requested locale doesn't work, don't fail,
-    // revert to the system default.
-    if ($locale_char_set != 'utf-8' || !setlocale(LC_MONETARY, $format . '.UTF8')) {
-        if (!setlocale(LC_MONETARY, $format)) {
-            setlocale(LC_MONETARY, '');
-        }
-    }
+    // if (!$format) {
+    //     $format = $AppUI->getPref('CURRENCYFORM');
+    // }
+    // // If the requested locale doesn't work, don't fail,
+    // // revert to the system default.
+    // if ($locale_char_set != 'utf-8' || !setlocale(LC_MONETARY, $format . '.UTF8')) {
+    //     if (!setlocale(LC_MONETARY, $format)) {
+    //         setlocale(LC_MONETARY, '');
+    //     }
+    // }
 
     // Even money_format can't be trusted in Windows. It simply does not work on systems that don't have strfmon capabilities. Use number_format as fallback.
     return function_exists('money_format') ? money_format('%i', $number) : number_format($number, 2);
@@ -3488,8 +3450,8 @@ function getEventLinks($startPeriod, $endPeriod, $links, $notUsed = null, $minic
 
     // assemble the links for the events
     foreach ($events as $row) {
-        $start = new w2p_Utilities_Date($row['event_start_date']);
-        $end = new w2p_Utilities_Date($row['event_end_date']);
+        $start = new w2p_Utilities_Date($row['event_start_datetime']);
+        $end = new w2p_Utilities_Date($row['event_end_datetime']);
         $date = $start;
 
         for ($i = 0, $i_cmp = $start->dateDiff($end); $i <= $i_cmp; $i++) {
@@ -3521,28 +3483,16 @@ function getEventTooltip($event_id)
         return '';
     }
 
-    $df = $AppUI->getPref('SHDATEFORMAT');
-    $tf = $AppUI->getPref('TIMEFORMAT');
-
-    // load the record data
-
     $event = new CEvent();
-    $event->loadFull($event_id);
+    $event->load($event_id);
+    $assigned = $event->getAssigned();
 
     // load the event types
     $types = w2PgetSysVal('EventType');
-
     // load the event recurs types
     $recurs = array('Never', 'Hourly', 'Daily', 'Weekly', 'Bi-Weekly', 'Every Month', 'Quarterly', 'Every 6 months', 'Every Year');
 
-    $obj = new CEvent();
-    $obj->event_id = $event_id;
-    $assigned = $obj->getAssigned();
-
-    if ($event->event_project) {
-        $event_project = $event->project_name;
-        $event_company = $event->company_name;
-    }
+    $view = new w2p_Output_HTML_ViewHelper($AppUI);
 
     $tt = '<table class="tool-tip">';
     $tt .= '<tr>';
@@ -3551,29 +3501,19 @@ function getEventTooltip($event_id)
     $tt .= '		<table cellspacing="3" cellpadding="2" width="100%">';
     $tt .= '		<tr>';
     $tt .= '			<td class="tip-label">' . $AppUI->_('Type') . '</td>';
-    $tt .= '			<td>' . $AppUI->_($types[$event->event_type]) . '</td>';
+    $tt .= '			<td>' . $view->addField('event_type', $types[$event->event_type]) . '</td>';
     $tt .= '		</tr>	';
-    if ($event->event_project) {
-        $tt .= '		<tr>';
-        $tt .= '			<td class="tip-label">' . $AppUI->_('Company') . '</td>';
-        $tt .= '			<td>' . $event_company . '</td>';
-        $tt .= '		</tr>';
-        $tt .= '		<tr>';
-        $tt .= '			<td class="tip-label">' . $AppUI->_('Project') . '</td>';
-        $tt .= '			<td>' . $event_project . '</td>';
-        $tt .= '		</tr>';
-    }
     $tt .= '		<tr>';
     $tt .= '			<td class="tip-label">' . $AppUI->_('Starts') . '</td>';
-    $tt .= '			<td>' . $AppUI->formatTZAwareTime($event->event_start_date, $df . ' ' . $tf) . '</td>';
+    $tt .= '			<td>' . $view->addField('event_datetime', $event->event_start_datetime) . '</td>';
     $tt .= '		</tr>';
     $tt .= '		<tr>';
     $tt .= '			<td class="tip-label">' . $AppUI->_('Ends') . '</td>';
-    $tt .= '			<td>' . $AppUI->formatTZAwareTime($event->event_end_date, $df . ' ' . $tf) . '</td>';
+    $tt .= '			<td>' . $view->addField('event_datetime', $event->event_end_datetime) . '</td>';
     $tt .= '		</tr>';
     $tt .= '		<tr>';
     $tt .= '			<td class="tip-label">' . $AppUI->_('Recurs') . '</td>';
-    $tt .= '			<td>' . $AppUI->_($recurs[$event->event_recurs]) . ($event->event_recurs ? ' (' . $event->event_times_recuring . '&nbsp;' . $AppUI->_('times') . ')' : '') . '</td>';
+    $tt .= '			<td>' . $view->addField('event_recurs', $recurs[$event->event_recurs]) . '</td>';
     $tt .= '		</tr>';
     $tt .= '		<tr>';
     $tt .= '			<td class="tip-label">' . $AppUI->_('Attendees') . '</td>';
@@ -3586,9 +3526,7 @@ function getEventTooltip($event_id)
     $tt .= '		<strong>' . $AppUI->_('Note') . '</strong>';
     $tt .= '		<table cellspacing="0" cellpadding="2" border="0" width="100%">';
     $tt .= '		<tr>';
-    $tt .= '			<td class="tip-label description">';
-    $tt .= '				' . mb_str_replace(chr(10), "<br />", $event->event_description) . '&nbsp;';
-    $tt .= '			</td>';
+    $tt .= '			<td class="tip-label description">' . $view->addField('event_description', $event->event_description) . '</td>';
     $tt .= '		</tr>';
     $tt .= '		</table>';
     $tt .= '	</td>';
@@ -3977,7 +3915,7 @@ function __extract_from_todo($user_id, $showArcProjs, $showLowTasks, $showInProg
         $q->addWhere('task_pinned = 1');
     }
     if (!$showEmptyDate) {
-        $q->addWhere('ta.task_start_date <> \'\' AND ta.task_start_date <> \'0000-00-00 00:00:00\'');
+        $q->addWhere('ta.task_start_date IS NOT NULL');
     }
     if ($task_type != '') {
         $q->addWhere('ta.task_type = ' . (int) $task_type);
@@ -4152,7 +4090,6 @@ function __extract_from_syskeys_index2()
     $q->addQuery('DISTINCT sysval_title, sysval_key_id, syskeys.*');
     $q->addWhere('sysval_key_id = syskey_id');
     $q->addOrder('sysval_title');
-    $q->addOrder('sysval_id');
 
     return $q->loadList();
 }
@@ -4612,7 +4549,7 @@ function __extract_from_projects_gantt2($department, $addPwOiD, $project_type, $
     }
     $q = $pjobj->setAllowedSQL($AppUI->user_id, $q, null, 'pr');
     $q->addGroup('pr.project_id');
-    $q->addOrder('pr.project_name, task_end_date DESC');
+    $q->addOrder('pr.project_name, project_actual_end_date DESC');
 
     $projects = $q->loadList();
 
@@ -4741,10 +4678,13 @@ function __extract_from_vw_usr($row)
 {
     $q = new w2p_Database_Query;
     $q->addTable('user_access_log', 'ual');
-    $q->addQuery('user_access_log_id, ( unix_timestamp( \'' . $q->dbfnNowWithTZ() . '\' ) - unix_timestamp( date_time_in ) ) / 3600 as 		hours, ( unix_timestamp( \'' . $q->dbfnNowWithTZ() . '\' ) - unix_timestamp( date_time_last_action ) ) / 3600 as idle, if(isnull(date_time_out) or date_time_out =\'0000-00-00 00:00:00\',\'1\',\'0\') as online');
+    $q->addQuery('user_access_log_id, ( unix_timestamp( \'' . $q->dbfnNowWithTZ() . '\' ) - unix_timestamp( date_time_in ) ) / 3600 as 		hours');
+    $q->addQuery('( unix_timestamp( \'' . $q->dbfnNowWithTZ() . '\' ) - unix_timestamp( date_time_last_action ) ) / 3600 as idle');
+    $q->addQuery('date_time_out IS NOT NULL as online');
     $q->addWhere('user_id = ' . (int) $row['user_id']);
     $q->addOrder('user_access_log_id DESC');
     $q->setLimit(1);
+// echo $q->prepare();
     $user_logs = $q->loadList();
 
     return $user_logs;
@@ -4842,7 +4782,7 @@ function __extract_from_forums_view_topics($AppUI, $forum_id, $f, $orderby, $ord
     $q->addTable('forum_messages', 'fm1');
     $q->addQuery('fm1.*, u.*, fm1.message_title as message_name, fm1.message_forum as forum_id');
     $q->addQuery('COUNT(distinct fm2.message_id) AS replies');
-    $q->addQuery('MAX(fm2.message_date) AS latest_reply');
+    $q->addQuery('MAX(fm2.message_datetime) AS latest_reply');
     $q->addQuery('user_username, contact_first_name, contact_last_name, contact_display_name as contact_name, watch_user');
     $q->addQuery('count(distinct v1.visit_message) as reply_visits');
     $q->addQuery('v1.visit_user');
@@ -4859,7 +4799,7 @@ function __extract_from_forums_view_topics($AppUI, $forum_id, $f, $orderby, $ord
             $q->addWhere('watch_user IS NOT NULL');
             break;
         case 2:
-            $q->addWhere('(NOW() < DATE_ADD(fm2.message_date, INTERVAL 30 DAY) OR NOW() < DATE_ADD(fm1.message_date, INTERVAL 30 DAY))');
+            $q->addWhere('(NOW() < DATE_ADD(fm2.message_datetime, INTERVAL 30 DAY) OR NOW() < DATE_ADD(fm1.message_datetime, INTERVAL 30 DAY))');
             break;
     }
     $q->addGroup('fm1.message_id, fm1.message_parent');
@@ -4955,10 +4895,10 @@ function __extract_from_tasks3($f, $q, $user_id, $task_id, $AppUI)
             $q->addTable('user_tasks');
             $q->addWhere('user_tasks.user_id = ' . (int) $user_id);
             $q->addWhere('user_tasks.task_id = tasks.task_id');
-            $q->addWhere('(task_percent_complete < 100 OR task_end_date = \'\')');
+            $q->addWhere('(task_percent_complete < 100 OR task_end_date IS NULL)');
             break;
         case 'allunfinished':
-            $q->addWhere('(task_percent_complete < 100 OR task_end_date = \'\')');
+            $q->addWhere('(task_percent_complete < 100 OR task_end_date IS NULL)');
             break;
         case 'unassigned':
             $q->leftJoin('user_tasks', 'ut_empty', 'tasks.task_id = ut_empty.task_id');
@@ -5050,20 +4990,20 @@ function __extract_from_tasks5($q, $subquery)
     $q->addQuery('tasks.task_id, task_parent, task_name');
     $q->addQuery('task_start_date, task_end_date, task_dynamic');
     $q->addQuery('task_pinned, pin.user_id as pin_user');
-    $q->addQuery('ut.user_task_priority');
+    // $q->addQuery('ut.user_task_priority');
     $q->addQuery('task_priority, task_percent_complete');
     $q->addQuery('task_duration, task_duration_type');
     $q->addQuery('task_project, task_represents_project');
     $q->addQuery('task_description, task_owner, task_status');
     $q->addQuery('usernames.user_username, usernames.user_id');
-    $q->addQuery('assignees.user_username as assignee_username');
+    // $q->addQuery('assignees.user_username as assignee_username');
     $q->addQuery('count(distinct assignees.user_id) as assignee_count');
     $q->addQuery('co.contact_first_name, co.contact_last_name');
     $q->addQuery('contact_display_name AS contact_name');
     $q->addQuery('contact_display_name AS owner');
     $q->addQuery('task_milestone');
     $q->addQuery('count(distinct f.file_task) as file_count');
-    $q->addQuery('tlog.task_log_problem');
+    // $q->addQuery('tlog.task_log_problem');
     $q->addQuery('task_access');
     $q->addQuery('(' . $subquery . ') AS task_nr_of_children');
     $q->addTable('tasks');
@@ -5191,7 +5131,7 @@ function __extract_from_view_messages3($s, $style, $AppUI, $row, $df, $tf, $edit
     $s .= '<tr>';
 
     $s .= '<td valign="top" style="' . $style . '">';
-    $s .= $AppUI->formatTZAwareTime($row['message_date'], $df . ' ' . $tf) . ' - ';
+    $s .= $AppUI->formatTZAwareTime($row['message_datetime'], $df . ' ' . $tf) . ' - ';
     $s .= '<a href="mailto:' . $row['contact_email'] . '">' . $row['contact_name'] . '</a>';
     $s .= '<br />';
     if (sizeof($editor) > 0) {
@@ -5274,7 +5214,7 @@ function __extract_from_view_messages4($s, $style, $row, $hideEmail, $editor, $A
     $s .= '</tr><tr>';
 
     $s .= '<td valign="top" style="' . $style . '" nowrap="nowrap">';
-    $s .= '<img src="' . w2PfindImage('icons/posticon.gif', $m) . '" alt="date posted" />' . $AppUI->formatTZAwareTime($row['message_date'], $df . ' ' . $tf) . '</td>';
+    $s .= '<img src="' . w2PfindImage('icons/posticon.gif', $m) . '" alt="date posted" />' . $AppUI->formatTZAwareTime($row['message_datetime'], $df . ' ' . $tf) . '</td>';
     $s .= '<td valign="top" align="right" style="' . $style . '">';
 
     // in some weird permission cases

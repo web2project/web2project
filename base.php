@@ -16,7 +16,7 @@ error_reporting(E_ALL & ~E_DEPRECATED & ~E_NOTICE & ~E_STRICT);
 //error_reporting(-1);
 
 define('W2P_PERFORMANCE_DEBUG', false);
-define('MIN_PHP_VERSION', '5.3.8');
+define('MIN_PHP_VERSION', '8.0.0');
 
 if (W2P_PERFORMANCE_DEBUG) {
     global $w2p_performance_time, $w2p_performance_dbtime,
@@ -65,11 +65,6 @@ $baseUrl = stripslashes($baseUrl);
 // Defines to deprecate the global baseUrl/baseDir
 define('W2P_BASE_DIR', $baseDir);
 define('W2P_BASE_URL', $baseUrl);
-
-// Set the ADODB directory
-if (!defined('ADODB_DIR')) {
-    define('ADODB_DIR', W2P_BASE_DIR . '/lib/adodb');
-}
 
 /*
  *  This  is set to get past the dotProject security sentinel.  It is only

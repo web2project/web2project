@@ -80,7 +80,7 @@ class Date_Calc
      * @return boolean true/false
      */
 
-    function isLeapYear($year="")
+    public static function isLeapYear($year="")
     {
 
         if(empty($year))
@@ -947,7 +947,7 @@ class Date_Calc
      * @return string date in given format
      */
 
-    function endOfWeek($day="",$month="",$year="",$format="%Y%m%d",$fdow=null)
+    public static function endOfWeek($day="",$month="",$year="",$format="%Y%m%d",$fdow=null)
     {
         if(empty($year))
             $year = Date_Calc::dateNow("%Y");
@@ -981,7 +981,7 @@ class Date_Calc
      * @return string date in given format
      */
 
-    function beginOfNextWeek($day="",$month="",$year="",$format="%Y%m%d",$fdow=null)
+    public static function beginOfNextWeek($day="",$month="",$year="",$format="%Y%m%d",$fdow=null)
     {
         if(empty($year))
             $year = Date_Calc::dateNow("%Y");
@@ -1021,7 +1021,7 @@ class Date_Calc
      * @return string date in given format
      */
 
-    function beginOfPrevWeek($day="",$month="",$year="",$format="%Y%m%d",$fdow=null)
+    public static function beginOfPrevWeek($day="",$month="",$year="",$format="%Y%m%d",$fdow=null)
     {
         if(empty($year))
             $year = Date_Calc::dateNow("%Y");

@@ -38,7 +38,9 @@ class CSmartSearch
 			$outstring = '';
 			$subrecord_count = 0;
 			foreach ($results as $records) {
-                if ($permissions->checkModuleItem($this->table_module, 'view', $records[$this->table_key])) {
+				// Added this line to strip out the alias that doesn't get loaded into the recordset array
+				$_id = str_contains($this->table_key, '.') ? substr($this->table_key, 2) : $this->table_key;
+                if ($permissions->checkModuleItem($this->table_module, 'view', $records[$_id])) {
 					//Don't count records for which the user does not have permission
 					$record_count++;
 					$subrecord_count++;

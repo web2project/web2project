@@ -5,10 +5,10 @@ if (!defined('W2P_BASE_DIR')) {
 // @todo    convert to template
 $object_id = (int) w2PgetParam($_GET, 'forum_id', 0);
 
-
-
 $object = new CForum();
 $object->setId($object_id);
+$object->forum_owner = $AppUI->user_id;
+$object->forum_moderated = $AppUI->user_id;
 
 $obj = $object;
 $canAddEdit = $obj->canAddEdit();

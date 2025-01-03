@@ -18,7 +18,7 @@ class CFile extends w2p_Core_BaseObject {
     public $file_type = null;
     public $file_owner = null;
     // @todo this should be file_datetime to take advantage of our templating
-    public $file_date = null;
+    public $file_datetime = null;
     public $file_size = null;
     public $file_version = null;
     public $file_icon = null;
@@ -76,7 +76,7 @@ class CFile extends w2p_Core_BaseObject {
             $q->exec();
         }
 
-        $this->file_date = $q->dbfnNowWithTZ();
+        $this->file_datetime = $q->dbfnNowWithTZ();
         parent::hook_preCreate();
     }
 
@@ -122,7 +122,7 @@ class CFile extends w2p_Core_BaseObject {
         $search['table_key'] = 'f.file_id'; // primary key in searched table
         $search['table_link'] = 'index.php?m=files&a=view&file_id='; // first part of link
         $search['table_title'] = 'Files';
-        $search['table_orderby'] = 'file_name, word_placement';
+        $search['table_orderby'] = 'file_name';
         $search['search_fields'] = array('file_name', 'file_description',
             'file_type', 'file_version', 'file_co_reason', 'word');
         $search['display_fields'] = $search['search_fields'];

@@ -352,18 +352,23 @@ class CContact extends w2p_Core_BaseObject
                 $dpt_buffer = '(contact_department = 0)';
             }
 
-            if ($extra['where'] != '') {
-                $extra['where'] = $extra['where'] . ' AND ' . $buffer . ' AND ' . $dpt_buffer;
-            } else {
-                $extra['where'] = $buffer . ' AND ' . $dpt_buffer;
+            if(is_array($extra)) {
+                if ($extra['where'] != '') {
+                    $extra['where'] = $extra['where'] . ' AND ' . $buffer . ' AND ' . $dpt_buffer;
+                } else {
+                    $extra['where'] = $buffer . ' AND ' . $dpt_buffer;
+                }
             }
         } else {
             // There are no allowed companies, so don't allow projects.
-            if ($extra['where'] != '') {
-                $extra['where'] = $extra['where'] . ' AND (contact_company IS NULL OR contact_company = \'\' OR contact_company = 0) ';
-            } else {
-                $extra['where'] = 'contact_company IS NULL OR contact_company = \'\' OR contact_company = 0';
+            if(is_array($extra)) {
+                if ($extra['where'] != '') {
+                    $extra['where'] = $extra['where'] . ' AND (contact_company IS NULL OR contact_company = \'\' OR contact_company = 0) ';
+                } else {
+                    $extra['where'] = 'contact_company IS NULL OR contact_company = \'\' OR contact_company = 0';
+                }
             }
+
         }
         return parent::getAllowedRecords($uid, $fields, $orderby, $index, $extra);
     }
@@ -578,7 +583,7 @@ class CContact extends w2p_Core_BaseObject
         $search['search_fields'] = array('contact_first_name', 'contact_last_name',
             'contact_phone', 'contact_email', 'contact_title', 'contact_company',
             'contact_type', 'contact_address1', 'contact_address2', 'contact_city',
-            'contact_state', 'contact_zip', 'contact_country', 'contact_notes', 'cm.method_value');
+            'contact_state', 'contact_zip', 'contact_country', 'contact_notes');
         $search['display_fields'] = $search['search_fields'];
         $search['table_joins'] = array(array('table' => 'contacts_methods',
                 'alias' => 'cm', 'join' => 'c.contact_id = cm.contact_id'));

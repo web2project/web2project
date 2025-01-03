@@ -56,7 +56,7 @@ $idx_companies = __extract_from_projectdesigner2();
 foreach ($projects as $prj_id => $prj_name) {
 	$projects[$prj_id] = $idx_companies[$prj_id] . ': ' . $prj_name;
 }
-asort($projects);
+asort($projects,SORT_NATURAL | SORT_FLAG_CASE);
 $projects = arrayMerge(array('0' => $AppUI->_('(None)', UI_OUTPUT_RAW)), $projects);
 
 $extra = array();

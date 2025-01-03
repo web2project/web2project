@@ -4,14 +4,14 @@ if (!defined('W2P_BASE_DIR')) {
 }
 // @todo    convert to template
 
-global $AppUI, $filter_param;
+global $AppUI, $filter_param, $m;
 
 $filter_param = ('projects' == $m) ? 'projects' : $filter_param;
 $page = (int) w2PgetParam($_GET, 'page', 1);
 
 $history = new CHistory();
 $where = (-1 == $filter_param) ? '' : "history_table = '".$filter_param."'";
-$histories = $history->loadAll('history_date DESC', $where);
+$histories = $history->loadAll('history_datetime', $where);
 
 $items = array_values($histories);
 
@@ -31,7 +31,7 @@ $module = new w2p_System_Module();
 $fields = $module->loadSettings('history', 'index_list');
 
 if (0 == count($fields)) {
-    $fieldList = array('history_date', 'history_description', 'history_user');
+    $fieldList = array('history_datetime', 'history_description', 'history_user');
     $fieldNames = array('Date', 'Description', 'Owner');
 
     $module->storeSettings('history', 'index_list', $fieldList, $fieldNames);

@@ -87,3 +87,27 @@ if(!function_exists('mb_trim')) {
 		return preg_replace("/$pattern_middle/usSD", '', $string);
 	}
 }
+
+if(!function_exists('get_magic_quotes_runtime')) {
+	/**
+	 * get_magic_quotes_runtime()
+	 * 
+	 * Restored this function because while core w2p doesn't use it, some of our libraries do.
+	 */
+	function get_magic_quotes_runtime()
+	{
+		return false;
+	}	
+}
+
+if(!function_exists('get_magic_quotes_gpc')) {
+	/**
+	 * get_magic_quotes_gpc()
+	 * 
+	 * Restored this function because while core w2p doesn't use it, some of our libraries do.
+	 */
+	function get_magic_quotes_gpc()
+	{
+		return false;
+	}	
+}

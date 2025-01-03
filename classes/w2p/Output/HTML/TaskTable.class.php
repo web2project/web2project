@@ -74,6 +74,12 @@ class w2p_Output_HTML_TaskTable extends w2p_Output_ListTable
             return '';
         }
 
+        $_obj = new CTask();
+        $_obj->task_id = $rowData['task_id'];
+        if (!$_obj->canView()) {
+            return '';
+        }
+
         $this->stageRowData($rowData);
         $class = w2pFindTaskComplete($rowData['task_start_date'], $rowData['task_end_date'], $rowData['task_percent_complete']);
 
@@ -82,10 +88,14 @@ class w2p_Output_HTML_TaskTable extends w2p_Output_ListTable
         foreach ($this->_fieldKeys as $column) {
             if ('task_name' == $column ) {
                 $prefix = $suffix = '';
-                if ($rowData['depth'] > 1) {
-                    $prefix .= str_repeat('&nbsp;', ($rowData['depth'] - 1) * 4) . '<img src="' . w2PfindImage('corner-dots.gif') . '" />';
+
+                $_depth = isset($rowData['depth']) ? $rowData['depth'] : 0;
+                $_children = isset($rowData['children']) ? $rowData['children'] : 0;
+
+                if ($_depth > 1) {
+                    $prefix .= str_repeat('&nbsp;', ($_depth - 1) * 4) . '<img src="' . w2PfindImage('corner-dots.gif') . '" />';
                 }
-                if ($rowData['children'] > 0) {
+                if ($_children > 0) {
                     $prefix .= '<img src="' . w2PfindImage('icons/collapse.gif') . '" />&nbsp;';
                 }
                 if ('' != $rowData['task_description'] ) {

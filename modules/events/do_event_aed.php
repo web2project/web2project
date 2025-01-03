@@ -9,11 +9,12 @@ $controller = new w2p_Controllers_Base(
     new CEvent(), $delete, 'Event', 'm=events', 'm=events&a=addedit'
 );
 
-$start_date = new w2p_Utilities_Date($_POST['event_start_date'] . $_POST['start_time']);
-$_POST['event_start_date'] = $start_date->format(FMT_DATETIME_MYSQL);
-
-$end_date = new w2p_Utilities_Date($_POST['event_end_date'] . $_POST['end_time']);
-$_POST['event_end_date'] = $end_date->format(FMT_DATETIME_MYSQL);
+// These lines take care of some pre-processing we need to do before the save attempt.
+$start_date = new w2p_Utilities_Date($_POST['event_start_datetime'] . $_POST['start_time']);
+$_POST['event_start_datetime'] = $start_date->format(FMT_DATETIME_MYSQL);
+$end_date = new w2p_Utilities_Date($_POST['event_end_datetime'] . $_POST['end_time']);
+$_POST['event_end_datetime'] = $end_date->format(FMT_DATETIME_MYSQL);
+$AppUI->_assigned = $_POST['event_assigned'];
 
 $AppUI = $controller->process($AppUI, $_POST);
 $AppUI->redirect($controller->resultPath);

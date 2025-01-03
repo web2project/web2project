@@ -159,4 +159,14 @@ class CFile_Folder extends w2p_Core_BaseObject
 
         return $q->loadList();
     }
+
+    public function getFiles() {
+
+        $q = $this->_getQuery();
+        $q->addTable('files');
+        $q->addQuery('*');
+        $q->addWhere('file_folder = '. (int) $this->file_folder_id);
+
+        return $q->loadList();
+    }
 }

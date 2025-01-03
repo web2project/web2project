@@ -44,8 +44,8 @@ class w2p_Output_EmailManager
         $fmt = $date_format . ' ' . $time_format;
 
 //TODO: customize these date formats based on the *receivers'* timezone setting
-        $start_date = new w2p_Utilities_Date($event->event_start_date);
-        $end_date = new w2p_Utilities_Date($event->event_end_date);
+        $start_date = new w2p_Utilities_Date($event->event_start_datetime);
+        $end_date = new w2p_Utilities_Date($event->event_end_datetime);
         $body .= $this->_AppUI->_('Starts') . ":\t" . $start_date->format($fmt) . " GMT/UTC\n";
         $body .= $this->_AppUI->_('Ends') . ":\t" . $end_date->format($fmt) . " GMT/UTC\n";
 

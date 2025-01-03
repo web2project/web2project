@@ -56,7 +56,7 @@ $fields = $module->loadSettings('forums', 'index_list');
 
 if (0 == count($fields)) {
     $fieldList = array('forum_project', 'forum_name', 'forum_description', 'forum_owner',
-        'forum_topics', 'forum_replies', 'forum_last_date');
+        'forum_topics', 'forum_replies', 'forum_updated');
     $fieldNames = array('Project', 'Forum Name', 'Description', 'Owner', 'Topics',
         'Replies', 'Last Post Info');
 

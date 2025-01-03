@@ -46,9 +46,8 @@
         <echo message="Some of these targets are *very* memory intensive. You may have to increase your memory_limit in php.ini" />
         <phingcall target="phploc" />
         <phingcall target="depend" />
-        <phingcall target="cpd" />
+        <phingcall target="phpstan" />
         <phingcall target="churn-grep" />
-        <phingcall target="phpmd" />
     </target>
 
     <target name="standards" depends="lint, metrics" />
@@ -70,11 +69,10 @@
                 <property name="version" value="tags/version${releaseName}" override="true"/>
             </else>
         </if>
-<!-- TODO: package tags in addition to master -->
+
         <property name="gitUrl" value="https://github.com/web2project/web2project.git" override="true"/>
         <echo message="Working with ${gitUrl}..." />
-        <gitclone repository="${gitUrl}" targetPath="${dir.package}/${phing.project.name}" />
-<!--        <exec command="git clone ${gitUrl} -b ${releaseName} -v" dir="unit_tests/packaging/web2project" />-->
+        <gitclone repository="${gitUrl}" targetPath="${dir.package}/${phing.project.name}" branch="${releaseName}" />
 
         <delete dir="${dir.package}/${phing.project.name}/.git" />
 
@@ -144,19 +142,12 @@
         </phplint>
     </target>
 
-    <target name="cpd" depends="prepare">
-        <phpcpd>
-            <fileset refid="project.source" />
-            <formatter type="pmd" outfile="${dir.reports}/cpd.xml" />
-        </phpcpd>
-    </target>
-
-    <target name="phpmd" depends="prepare">
-        <phpmd>
-            <fileset refid="project.source" />
-            <formatter type="xml" outfile="${dir.reports}/pmd.xml"/>
-            <formatter type="html" outfile="${dir.reports}/pmd.html"/>
-        </phpmd>
+    <target name="phpstan" depends="prepare">
+        <!-- Opted to do this via exec instead of the phpstan task as I couldn't figure out how to write the output otherwise -->
+        <exec executable="${project.basedir}/${dir.vendor}/phpstan/phpstan/phpstan" 
+            output="${dir.reports}/phpstan.txt">
+            <arg line="analyse classes includes install modules style --memory-limit=1024M --level 9 --error-format=table --no-progress" />
+        </exec>
     </target>
 
     <target name="depend" depends="prepare">
@@ -190,10 +181,18 @@
         It's a variant of Katrina Owen's one-liner here: https://twitter.com/kytrinyx/status/358065717179973634
     -->
     <target name="churn-grep" depends="prepare">
-        <exec command="git log --name-only | grep php --exclude=trunk | sort | uniq -c | sort -nr | head -n 25 > ${dir.reports}/churn.txt" />
+        <exec executable="git">
+            <arg line="log --name-only | grep php | grep -v 'lib' | grep -v 'vendor' | sort | uniq -c | sort -nr | head -n 25 > ${dir.reports}/churn.txt" />
+        </exec>
     </target>
+
     <target name="phploc" depends="prepare">
-        <exec command="./vendor/phploc/phploc/phploc --log-xml ${dir.reports}/phploc.xml --exclude xxx ${project.basedir}/" />
+        <exec executable="${project.basedir}/${dir.vendor}/cmgmyr/phploc/phploc" 
+            dir="${project.basedir}"
+            output="${dir.reports}/phploc.xml">
+            <arg line="${project.basedir} --exclude ${dir.vendor} --exclude ${dir.lib} --exclude ${dir.build} 
+                --exclude classes/deprecated.class.php --exclude includes/deprecated_functions.php" />
+        </exec>
     </target>
 
     <target name="phpdoc" depends="prepare">

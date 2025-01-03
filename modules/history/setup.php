@@ -30,7 +30,7 @@ class CSetupHistory extends w2p_System_Setup
 		$q->createTable('history');
 		$q->createDefinition('(
 			history_id int(10) unsigned NOT NULL auto_increment,
-			history_date datetime NOT NULL default \'0000-00-00 00:00:00\',		  
+			history_datetime datetime NOT NULL default CURRENT_TIMESTAMP,		  
 			history_user int(10) NOT NULL default \'0\',
 			history_action varchar(20) NOT NULL default \'modify\',
 			history_item int(10) NOT NULL,

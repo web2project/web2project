@@ -21,7 +21,7 @@ if (isset($view_temp)) {
 		$view = 'folders';
 	}
 }
-$folder = (int) w2PgetParam($_GET, 'folder', 0); // to pass to "new file" button
+$folder_id = (int) w2PgetParam($_GET, 'folder', 0); // to pass to "new file" button
 
 // get the list of visible companies
 $extra = array('from' => 'files', 'where' => 'projects.project_id = file_project', 'join' => 'project_departments', 'on' => 'projects.project_id = project_departments.project_id');
@@ -41,23 +41,24 @@ $titleBlock->addFilterCell('Filter', 'project_id', $projects, $project_id);
 
 // override the $canEdit variable passed from the main index.php in order to check folder permissions
 /** get permitted folders **/
-$cfObj = new CFile_Folder();
-$allowed_folders_ary = $cfObj->getAllowedRecords($AppUI->user_id);
-$denied_folders_ary = $cfObj->getDeniedRecords($AppUI->user_id);
+$folder = new CFile_Folder();
+$folder->setId($folder_id);
+$allowed_folders_ary = $folder->getAllowedRecords($AppUI->user_id);
+$denied_folders_ary = $folder->getDeniedRecords($AppUI->user_id);
 
-$limited = (count($allowed_folders_ary) < $cfObj->countFolders()) ? true : false;
+$limited = (count($allowed_folders_ary) < $folder->countFolders()) ? true : false;
 
 if (!$limited) {
 	$canEdit = true;
-} elseif ($limited and array_key_exists($folder, $allowed_folders_ary)) {
+} elseif ($limited and array_key_exists($folder_id, $allowed_folders_ary)) {
 	$canEdit = true;
 } else {
 	$canEdit = false;
 }
 
 if ($canEdit) {
-    $titleBlock->addButton('new folder', '?m=files&a=addedit_folder');
-    $titleBlock->addButton('new file', '?m=files&a=addedit&folder=' . $folder);
+    // $titleBlock->addButton('new folder', '?m=files&a=addedit_folder');
+    $titleBlock->addButton('new file', '?m=files&a=addedit&folder=' . $folder_id);
 }
 $titleBlock->show();
 
@@ -74,5 +75,5 @@ foreach ($file_types as $file_type) {
 	$tabBox->add('index_table', $file_type . ' (' . count($fileList) . ')');
 	++$i;
 }
-$tabBox->add('folders_table', 'Folder Explorer');
+// $tabBox->add('folders_table', 'Folder Explorer');
 $tabBox->show();

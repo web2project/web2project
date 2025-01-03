@@ -12,6 +12,7 @@ $company_id = (int) w2PgetParam($_GET, 'company_id', 0);
 
 $object = new CDepartment();
 $object->setId($object_id);
+$object->dept_owner = $AppUI->user_id;
 
 $canAddEdit = $object->canAddEdit();
 $canAuthor = $object->canCreate();

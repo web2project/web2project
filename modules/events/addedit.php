@@ -26,13 +26,26 @@ $date = w2PgetParam($_GET, 'date', null);
 // get the passed timestamp (today if none)
 $event_project = (int) w2PgetParam($_GET, 'project_id', 0);
 
+$assigned = [];
 $obj = $AppUI->restoreObject();
 if ($obj) {
     $object = $obj;
     $object_id = $object->getId();
+    $_assignees = explode(',', $AppUI->_assigned);
+    $_user = new CUser();
+    foreach($_assignees as $key) {
+    	$_user->loadFull($key);
+    	$assigned[$key] = $_user->contact_display_name;
+    }
 } else {
     $object->load($object_id);
+    $assigned = $object->getAssigned();
 }
+
+if ($object_id == 0) {
+    $assigned[$AppUI->user_id] = $AppUI->user_display_name;
+} 
+
 // load the record data
 if (!$object && $object_id > 0) {
     $AppUI->setMsg('Event');
@@ -41,8 +54,8 @@ if (!$object && $object_id > 0) {
 }
 
 $object->event_project = ($event_project) ? $event_project : $object->event_project;
-$start_date = intval($object->event_start_date) ? new w2p_Utilities_Date($AppUI->formatTZAwareTime($object->event_start_date, '%Y-%m-%d %T')) : new w2p_Utilities_Date();
-$end_date = intval($object->event_end_date) ? new w2p_Utilities_Date($AppUI->formatTZAwareTime($object->event_end_date, '%Y-%m-%d %T')) : $start_date;
+$start_date = intval($object->event_start_datetime) ? new w2p_Utilities_Date($AppUI->formatTZAwareTime($object->event_start_datetime, '%Y-%m-%d %T')) : new w2p_Utilities_Date();
+$end_date = intval($object->event_end_datetime) ? new w2p_Utilities_Date($AppUI->formatTZAwareTime($object->event_end_datetime, '%Y-%m-%d %T')) : $start_date;
 
 // load the event types
 $types = w2PgetSysVal('EventType');
@@ -50,14 +63,6 @@ $types = w2PgetSysVal('EventType');
 // Load the users
 $perms = &$AppUI->acl();
 $users = $perms->getPermittedUsers('events');
-
-// Load the assignees
-$assigned = array();
-if ($object_id == 0) {
-    $assigned[$AppUI->user_id] = $AppUI->user_display_name;
-} else {
-    $assigned = $object->getAssigned();
-}
 
 //check if the user has view permission over the project
 if ($object->event_project && !$perms->checkModuleItem('projects', 'view', $object->event_project)) {
@@ -86,43 +91,12 @@ foreach ($projects as $project_id => $project_info) {
 }
 $projects = arrayMerge(array(0 => $all_projects), $projects);
 
-$inc = intval(w2PgetConfig('cal_day_increment')) ? intval(w2PgetConfig('cal_day_increment')) : 30;
-if (!$object_id && !$is_clash) {
-
-	$seldate = new w2p_Utilities_Date($date, $AppUI->getPref('TIMEZONE'));
-	// If date is today, set start time to now + inc
-	if ($date == date('Ymd')) {
-		$h = date('H');
-		// an interval after now.
-		$min = intval(date('i') / $inc) + 1;
-		$min *= $inc;
-		if ($min > 60) {
-			$min = 0;
-			$h++;
-		}
-	}
-	if ($h && $h < w2PgetConfig('cal_day_end')) {
-		$seldate->setTime($h, $min, 0);
-        $seldate->convertTZ('UTC');
-		$object->event_start_date = $seldate->format(FMT_TIMESTAMP);
-		$seldate->addSeconds($inc * 60);
-        $seldate->convertTZ('UTC');
-		$object->event_end_date = $seldate->format(FMT_TIMESTAMP);
-	} else {
-		$seldate->setTime(w2PgetConfig('cal_day_start'), 0, 0);
-        $seldate->convertTZ('UTC');
-		$object->event_start_date = $seldate->format(FMT_TIMESTAMP);
-        $seldate->convertTZ($AppUI->getPref('TIMEZONE'));
-		$seldate->setTime(w2PgetConfig('cal_day_end'), 0, 0);
-        $seldate->convertTZ('UTC');
-		$object->event_end_date = $seldate->format(FMT_TIMESTAMP);
-	}
-}
 
 $recurs = array('Never', 'Hourly', 'Daily', 'Weekly', 'Bi-Weekly', 'Every Month', 'Quarterly', 'Every 6 months', 'Every Year');
 
 $remind = array('900' => '15 mins', '1800' => '30 mins', '3600' => '1 hour', '7200' => '2 hours', '14400' => '4 hours', '28800' => '8 hours', '56600' => '16 hours', '86400' => '1 day', '172800' => '2 days');
 
+$inc = intval(w2PgetConfig('cal_day_increment')) ? intval(w2PgetConfig('cal_day_increment')) : 30;
 // build array of times in 30 minute increments
 $times = array();
 $t = new w2p_Utilities_Date();
@@ -141,14 +115,14 @@ function submitIt(){
 		form.event_name.focus();
 		return;
 	}
-	if (form.event_start_date.value.length < 1){
+	if (form.event_start_datetime.value.length < 1){
 		alert('<?php echo $AppUI->_('Please enter a start date', UI_OUTPUT_JS); ?>');
-		form.event_start_date.focus();
+		form.event_start_datetime.focus();
 		return;
 	}
-	if (form.event_end_date.value.length < 1){
+	if (form.event_end_datetime.value.length < 1){
 		alert('<?php echo $AppUI->_('Please enter an end date', UI_OUTPUT_JS); ?>');
-		form.event_end_date.focus();
+		form.event_end_datetime.focus();
 		return;
 	}
 	if ( (!(form.event_times_recuring.value>0)) 

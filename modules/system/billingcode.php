@@ -84,6 +84,7 @@ $form = new w2p_Output_HTML_FormHelper($AppUI);
 
         <?php
         foreach ($billingcodes as $code) {
+            $category = (int) $code['billingcode_category'];
             ?><tr>
                 <td>
                     <a href="?m=system&a=billingcode&billingcode_id=<?php echo $code['billingcode_id']; ?>" title="<?php echo $AppUI->_('edit'); ?>">
@@ -99,7 +100,7 @@ $form = new w2p_Output_HTML_FormHelper($AppUI);
                 <td align="left">&nbsp;<?php echo $code['billingcode_name'] . ($code['billingcode_status'] == 1 ? ' (deleted)' : ''); ?></td>
                 <td nowrap="nowrap" align="center"><?php echo $code['billingcode_value']; ?></td>
                 <td nowrap="nowrap"><?php echo $code['billingcode_desc']; ?></td>
-                <td nowrap="nowrap"><?php echo $billingCategory[$code['billingcode_category']]; ?></td>
+                <td nowrap="nowrap"><?php echo $billingCategory[$category]; ?></td>
             </tr><?php
         } ?>
         <tr>

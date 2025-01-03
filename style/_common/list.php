@@ -13,13 +13,14 @@
  *   screens in certain modules instead of all of them at once.
  */
 
-global $m;
+global $m, $customLookups, $tab;
 
 $page = (int) w2PgetParam($_GET, 'page', 1);
+
 $paginator = new w2p_Utilities_Paginator($items);
 $items = $paginator->getItemsOnPage($page);
-
 echo $paginator->buildNavigation($AppUI, $m, $tab);
+
 $listTable = new w2p_Output_ListTable($AppUI);
 echo $listTable->startTable();
 echo $listTable->buildHeader($fields, $sortable, $m);

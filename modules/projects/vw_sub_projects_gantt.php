@@ -6,7 +6,7 @@ if (!defined('W2P_BASE_DIR')) {
 
 global $AppUI, $company_id, $dept_ids, $department, $locale_char_set,
     $proFilter, $projectStatus, $showInactive, $showLabels, $showAllGantt,
-    $user_id, $w2Pconfig, $project_id, $project_original_id;
+    $user_id, $w2Pconfig, $project_id, $project_original_id, $gantt_arr;
 
 w2PsetExecutionConditions($w2Pconfig);
 
@@ -127,15 +127,14 @@ if (!is_array($projects) || sizeof($projects) == 0) {
                 }
                 $projects[$rec['task_project']]['tasks'][] = $rec;
             }
-
             reset($projects);
             foreach ($projects as $p) {
                 $tnums = count($p['tasks']);
                 for ($i = 0; $i < $tnums; $i++) {
                     $task = $p['tasks'][$i];
                     if ($task['task_parent'] == $task['task_id']) {
-                        showgtask($task, 0, $p['project_id']);
-                        findchild_gantt($p['tasks'], $task['task_id'], 0);
+                        $gantt_arr = showgtask($task, 0, $gantt_arr);
+                        findchild_gantt($p['tasks'], $task['task_id'], 0, $gantt_arr);
                     }
                 }
             }
@@ -182,39 +181,42 @@ if (!is_array($projects) || sizeof($projects) == 0) {
             if ($showAllGantt) {
                 // insert tasks into Gantt Chart
                 // cycle for tasks for each project
-                for ($i = 0, $i_cmp = count($gantt_arr[$p['project_id']]); $i < $i_cmp; $i++) {
-                    $t = $gantt_arr[$p['project_id']][$i][0];
-                    if (!is_array($t)) {
-                        continue;
-                    }
-                    $level = $gantt_arr[$p['project_id']][$i][1];
-                    if ($t['task_end_date'] == null) {
-                        $t['task_end_date'] = $t['task_start_date'];
-                    }
-                    $tStart = ($t['task_start_date'] > '0000-00-00 00:00:00') ? $t['task_start_date'] : date('Y-m-d H:i:s');
-                    $tEnd = ($t['task_end_date'] > '0000-00-00 00:00:00') ? $t['task_end_date'] : date('Y-m-d H:i:s');
-                    $tStartObj = new w2p_Utilities_Date($tStart);
-                    $tEndObj = new w2p_Utilities_Date($tEnd);
+                if (is_array($gantt_arr)) {
+                    for ($i = 0, $i_cmp = count($gantt_arr[$p['project_id']]); $i < $i_cmp; $i++) {
+                        $t = $gantt_arr[$p['project_id']][$i][0];
+                        if (!is_array($t)) {
+                            continue;
+                        }
+                        $level = $gantt_arr[$p['project_id']][$i][1];
+                        if ($t['task_end_date'] == null) {
+                            $t['task_end_date'] = $t['task_start_date'];
+                        }
+                        $tStart = ($t['task_start_date'] > '0000-00-00 00:00:00') ? $t['task_start_date'] : date('Y-m-d H:i:s');
+                        $tEnd = ($t['task_end_date'] > '0000-00-00 00:00:00') ? $t['task_end_date'] : date('Y-m-d H:i:s');
+                        $tStartObj = new w2p_Utilities_Date($tStart);
+                        $tEndObj = new w2p_Utilities_Date($tEnd);
 
-                    if ($t['task_milestone'] != 1) {
-                        $advance = str_repeat('  ', $level+2);
-                        $name = mb_strlen($advance . $t['task_name']) > 35 ? mb_substr($advance . $t['task_name'], 0, 33) . '...' : $advance . $t['task_name'];
-                        $height = ($t['task_dynamic'] == 1) ? 0.1 : 0.6;
+                        if ($t['task_milestone'] != 1) {
+                            $advance = str_repeat('  ', $level+2);
+                            $name = mb_strlen($advance . $t['task_name']) > 35 ? mb_substr($advance . $t['task_name'], 0, 33) . '...' : $advance . $t['task_name'];
+                            $height = ($t['task_dynamic'] == 1) ? 0.1 : 0.6;
 
-                        $columnValues = array('project_name' => $name, 'start_date' => $tStartObj->getDate(),
-                                          'end_date' => $tEndObj->getDate(), 'actual_end' => '');
-                        $gantt->addBar($columnValues, '', $height, $p['project_color_identifier'],
-                            $p['project_active'], $progress, $p['project_id']);
-                    } else {
-                        $name = $advance.'* ' . $t['task_name'];
-                        $milestone = substr($t['task_start_date'], 0, 10);
-                        $milestoneDate = new w2p_Utilities_Date($milestone);
-                        $gantt->addMilestone(array($name, '', $milestoneDate->format($df)), $t['task_start_date']);
+                            $columnValues = array('project_name' => $name, 'start_date' => $tStartObj->getDate(),
+                                              'end_date' => $tEndObj->getDate(), 'actual_end' => '');
+                            $gantt->addBar($columnValues, '', $height, $p['project_color_identifier'],
+                                $p['project_active'], $progress, $p['project_id']);
+                        } else {
+                            $name = $advance.'* ' . $t['task_name'];
+                            $milestone = substr($t['task_start_date'], 0, 10);
+                            $milestoneDate = new w2p_Utilities_Date($milestone);
+                            $gantt->addMilestone(array($name, '', $milestoneDate->format($df)), $t['task_start_date']);
+                        }
+
+                        // End of insert workers for each task into Gantt Chart
                     }
-
-                    // End of insert workers for each task into Gantt Chart
+                    // End of insert tasks into Gantt Chart
                 }
-                // End of insert tasks into Gantt Chart
+
             }
             // End of if showAllGant checkbox is checked
         }
