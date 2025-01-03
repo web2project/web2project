@@ -190,7 +190,7 @@
         <exec executable="${project.basedir}/${dir.vendor}/cmgmyr/phploc/phploc" 
             dir="${project.basedir}"
             output="${dir.reports}/phploc.xml">
-            <arg line="${project.basedir} --exclude ${dir.vendor} --exclude ${dir.lib} --exclude ${dir.build} 
+            <arg line="${project.basedir} --exclude ${dir.vendor} --exclude ${dir.lib} 
                 --exclude classes/deprecated.class.php --exclude includes/deprecated_functions.php" />
         </exec>
     </target>
