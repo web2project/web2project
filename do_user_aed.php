@@ -14,28 +14,13 @@ $defaultTZ = w2PgetConfig('system_timezone', 'UTC');
 $defaultTZ = ('' == $defaultTZ) ? 'UTC' : $defaultTZ;
 date_default_timezone_set($defaultTZ);
 
-/*
-CAPTCHA control condition...
-*/
-$passed = false;
-if (strlen($_POST['spam_check']) > 0) {
-	$cid = md5_decrypt($_POST['cid']);
-	if ($cid == strtoupper($_POST['spam_check'])) {
-		$passed = true;
-	} else {
-		header('Location: newuser.php?msg=data');
-	}
-} else {
-	header('Location: newuser.php?msg=spam');
-}
-
 if (w2PgetConfig('activate_external_user_creation') != 'true') {
 	die('You should not access this file directly');
 }
 
 $username = w2PgetParam($_POST, 'user_username', 0);
 $username = preg_replace("/[^A-Za-z0-9]/", "", $username);
-$user = new CAdmin_User();
+$user = new CUser();
 $result = $user->loadAll(null, "user_username = '$username'");
 if (count($result)) {
     header('Location: newuser.php?msg=existing-user');
