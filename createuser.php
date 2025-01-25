@@ -97,8 +97,8 @@ $form = new w2p_Output_HTML_FormHelper($AppUI);
 <form name="editFrm" action="./do_user_aed.php" method="post" accept-charset="utf-8">
 	<input type="hidden" name="user_id" value="0" />
 	<input type="hidden" name="contact_id" value="0" />
-	<input type="hidden" name="username_min_len" value="<?php echo w2PgetConfig('username_min_len'); ?>)" />
-	<input type="hidden" name="password_min_len" value="<?php echo w2PgetConfig('password_min_len'); ?>)" />
+	<input type="hidden" name="username_min_len" value="<?php echo w2PgetConfig('username_min_len'); ?>" />
+	<input type="hidden" name="password_min_len" value="<?php echo w2PgetConfig('password_min_len'); ?>" />
     <?php echo $form->addNonce(); ?>
 
     <table style="border-style:none;" align="center" border="0" width="700" cellpadding="0" cellspacing="0" class="std">
