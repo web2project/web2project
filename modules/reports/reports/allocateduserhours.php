@@ -101,9 +101,9 @@ if ($do_report) {
 		   OR ( task_start_date <= \'' . $start_date->format(FMT_DATETIME_MYSQL) . '\'
 	                AND task_end_date >= \'' . $end_date->format(FMT_DATETIME_MYSQL) . '\') )');
 	$q->addWhere('task_end_date IS NOT NULL');
-	$q->addWhere('task_end_date <> \'0000-00-00 00:00:00\'');
+	// $q->addWhere('task_end_date <> \'0000-00-00 00:00:00\'');
 	$q->addWhere('task_start_date IS NOT NULL');
-	$q->addWhere('task_start_date <> \'0000-00-00 00:00:00\'');
+	// $q->addWhere('task_start_date <> \'0000-00-00 00:00:00\'');
 	$q->addWhere('task_dynamic <> 1');
 	$q->addWhere('task_milestone = 0');
 	$q->addWhere('task_duration  > 0');
@@ -124,8 +124,8 @@ if ($do_report) {
 	$proj = new CProject();
     $q = $proj->setAllowedSQL($AppUI->user_id, $q, null, 'pr');
 
-	$obj = new CTask();
-    $q = $obj->setAllowedSQL($AppUI->user_id, $q);
+	// $obj = new CTask();
+    // $q = $obj->setAllowedSQL($AppUI->user_id, $q, null);
 
 	$task_list_hash = $q->loadHashList('task_id');
 

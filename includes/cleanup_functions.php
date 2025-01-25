@@ -2143,6 +2143,10 @@ function showDays()
 {
     global $allocated_hours_sum, $end_date, $start_date, $AppUI, $user_list, $user_names, $user_usage, $hideNonWd, $table_header, $table_rows, $working_days_count, $total_hours_capacity, $total_hours_capacity_all;
 
+    if (!is_array($user_list)) {
+        $user_list = [];
+    }
+
     $days_difference = $end_date->dateDiff($start_date);
 
     $actual_date = $start_date;
