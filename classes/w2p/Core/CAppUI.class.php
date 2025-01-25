@@ -591,7 +591,7 @@ class w2p_Core_CAppUI
      */
     public function redirect($params = '', $hist = '')
     {
-        $session_id = SID;
+        $session_id = session_id();
 
         session_write_close();
         // are the params empty
