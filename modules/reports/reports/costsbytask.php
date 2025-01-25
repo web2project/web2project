@@ -53,9 +53,6 @@ $billingCategory = w2PgetSysVal('BudgetCategory');
                 </a>
             </td>
             <td nowrap="nowrap">
-                <input type="checkbox" name="log_pdf" id="log_pdf" <?php if ($log_pdf)
-            echo 'checked="checked"' ?> />
-                <label for="log_pdf"><?php echo $AppUI->_('Make PDF'); ?></label>
             </td>
             <td align="right" width="50%" nowrap="nowrap">
                 <input class="button" type="submit" name="do_report" value="<?php echo $AppUI->_('submit'); ?>" />

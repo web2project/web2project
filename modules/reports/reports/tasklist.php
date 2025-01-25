@@ -106,8 +106,6 @@ $df = $AppUI->getPref('SHDATEFORMAT');
                     <label for="log_all"><?php echo $AppUI->_('Log All'); ?></label>
                 </div>
                 <div>
-                    <input type="checkbox" name="log_pdf" id="log_pdf" <?php if ($log_pdf) echo 'checked="checked"' ?> />
-                    <label for="log_pdf"><?php echo $AppUI->_('Make PDF'); ?></label>
                 </div>
             </td>
             <td>
