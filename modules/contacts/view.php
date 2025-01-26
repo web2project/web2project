@@ -37,7 +37,7 @@ if ($contact->user_id) {
     $titleBlock->addCrumb('?m=users&a=view&user_id='.$contact->user_id, 'view this user');
 }
 if ($canDelete) {
-	$titleBlock->addCrumbDelete('delete contact', $canDelete, $msg);
+	$titleBlock->addCrumbDelete('delete contact', $canDelete);
 }
 $titleBlock->show();
 

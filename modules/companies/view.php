@@ -36,7 +36,7 @@ if ($canEdit) {
 	$titleBlock->addCrumb('?m=companies&a=addedit&company_id=' . $company_id, 'edit this company');
 
 	if ($canDelete && $deletable) {
-		$titleBlock->addCrumbDelete('delete company', $deletable, $msg);
+		$titleBlock->addCrumbDelete('delete company', $deletable);
 	}
 }
 $titleBlock->show();

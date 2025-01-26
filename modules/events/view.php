@@ -41,7 +41,7 @@ if ($canEdit) {
 		</form>', '', '', '');
 	$titleBlock->addCrumb('?m=events&amp;a=addedit&amp;event_id=' . $event_id, 'edit this event');
 	if ($canDelete) {
-		$titleBlock->addCrumbDelete('delete event', $canDelete, $msg);
+		$titleBlock->addCrumbDelete('delete event', $canDelete);
 	}
 }
 $titleBlock->show();

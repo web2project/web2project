@@ -6,7 +6,6 @@ if (!defined('W2P_BASE_DIR')) {
 
 //view posts
 $forum_id = (int) w2PgetParam($_GET, 'forum_id', 0);
-
 $message_id = (int) w2PgetParam($_GET, 'message_id', 0);
 $post_message = (int) w2PgetParam($_GET, 'post_message', 0);
 $f = w2PgetParam($_POST, 'f', 0);
@@ -52,9 +51,10 @@ if ($canEdit) {
     $titleBlock->addCrumb('?m=forums&a=addedit&forum_id=' . $forum_id, 'edit this forum');
 
     if ($canDelete) {
-        $titleBlock->addCrumbDelete('delete forum', true, $msg);
+        $titleBlock->addCrumbDelete('delete forum', true);
     }
 }
+
 $titleBlock->addCell(arraySelect($filters, 'f', 'size="1" class="text" onchange="document.filterFrm.submit();"', $f, true), '', '<form action="?m=forums&a=viewer&forum_id=' . $forum_id . '" method="post" name="filterFrm" accept-charset="utf-8">', '</form>');
 $titleBlock->show();
 
