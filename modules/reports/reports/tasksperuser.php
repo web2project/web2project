@@ -72,11 +72,11 @@ echo $AppUI->getTheme()->styleRenderBoxTop();
                 <table>
                 <tr><td>
                     <input type="checkbox" name="use_period" id="use_period" <?php if ($use_period) echo 'checked="checked"' ?> />
-                    <label for="use_period"><?php echo $AppUI->_('Use the period'); ?></label>
+					<?php echo $AppUI->_('Use the period'); ?>
                 </td></tr>
                 <tr><td>
-                    <input type="checkbox" name="display_week_hours" id="display_week_hours" <?php if ($display_week_hours) echo 'checked="checked"' ?> />
-                    <label for="display_week_hours"><?php echo $AppUI->_('Display allocated hours/week'); ?></label>
+					<input type="checkbox" name="display_week_hours" id="display_week_hours" <?php if ($display_week_hours) echo 'checked="checked"' ?> />	
+					<?php echo $AppUI->_('Display allocated hours/week'); ?>
                 </td></tr>
                 </table>
             </td>

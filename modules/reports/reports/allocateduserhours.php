@@ -70,7 +70,7 @@ echo $AppUI->getTheme()->styleRenderBoxTop();
             </td>
             <td nowrap="nowrap">
                <input type="checkbox" name="hideNonWd" id="hideNonWd" <?php if ($hideNonWd) echo 'checked="checked"' ?> />
-               <label for="hideNonWd"><?php echo $AppUI->_('Hide non-working days'); ?></label>
+               <?php echo $AppUI->_('Hide non-working days'); ?>
             </td>
             <td align="right" width="50%" nowrap="nowrap">
                 <input class="button" type="submit" name="do_report" value="<?php echo $AppUI->_('submit'); ?>" />
