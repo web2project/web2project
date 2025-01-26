@@ -41,7 +41,7 @@ $pjobj = new CProject();
 ** wants to see the ProjectsWithOwnerInDeparment (PwOiD)
 ** instead of the projects related to the given department.
 */
-
+$owner_ids = [];
 if ($addPwOiD && $department > 0) {
     $owner_ids = __extract_from_projects_gantt($department);
 }
