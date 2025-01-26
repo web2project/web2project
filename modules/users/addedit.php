@@ -6,7 +6,6 @@ if (!defined('W2P_BASE_DIR')) {
 $object_id = (int) w2PgetParam($_GET, 'user_id', 0);
 $contact_id = (int) w2PgetParam($_GET, 'contact_id', 0);
 
-
 $object = new CUser();
 $object->setId($object_id);
 
@@ -39,6 +38,9 @@ if ($contact_id) {
 } else {
     $object = new CUser();
     $object->loadFull($object_id);
+}
+if (!$object_id) {
+    $object->_role = array_search('Project worker', $roles_arr);
 }
 
 // pull companies
