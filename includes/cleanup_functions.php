@@ -1414,7 +1414,7 @@ function displayFiles($AppUI, $folder_id = 0, $task_id = 0, $project_id = 0, $co
     // SETUP FOR FILE LIST
     $q = new w2p_Database_Query();
     $q->addQuery($fieldList);
-    $q->addQuery('file_id, file_project');
+    $q->addQuery('file_id, file_project, file_type');
     $q->addQuery('project_name, project_color_identifier');
     $q->addTable('files', 'f');
     $q->addJoin('projects', 'p', 'p.project_id = file_project');
