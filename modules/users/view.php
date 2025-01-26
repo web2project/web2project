@@ -12,10 +12,9 @@ $user = new CUser();
 if (!$user->load($user_id)) {
     $AppUI->redirect(ACCESS_DENIED);
 }
-
-$canEdit   = $user->canEdit();
-
 $user->loadFull($user_id);
+$canEdit   = $user->canEdit();
+$canDelete = $user->canDelete();
 
 global $addPwT, $company_id, $dept_ids, $department, $min_view, $m, $a;
 
@@ -57,6 +56,9 @@ if ($canEdit || $user_id == $AppUI->user_id) {
     $titleBlock->addCrumb('?m=users&a=addedit&user_id='.$user_id, 'edit this user');
     $titleBlock->addCrumb('?m=contacts&a=addedit&contact_id='.$user->contact_id, 'edit this contact');
     $titleBlock->addCrumb('?m=system&a=addeditpref&user_id='.$user_id, 'edit preferences');
+}
+if ($canDelete) {
+    $titleBlock->addCrumbDelete('delete User', $canDelete);
 }
 $titleBlock->show();
 ?>

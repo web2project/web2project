@@ -13,7 +13,7 @@ $object->setId($object_id);
 $canAddEdit = $object->canAddEdit();
 $canAuthor = $object->canCreate();
 $canEdit = $object->canEdit();
-$canDelete = $object->canAddEdit();
+$canDelete = $object->canDelete();
 if (!$canAddEdit) {
     $AppUI->redirect(ACCESS_DENIED);
 }
@@ -56,9 +56,6 @@ $titleBlock->addViewLink('contact', $object->contact_id);
 if ($object_id) {
     if ($canEdit || $object_id == $AppUI->user_id) {
         $titleBlock->addCrumb('?m=system&a=addeditpref&user_id=' . $object_id, 'edit preferences');
-    }
-    if ($canDelete) {
-        $titleBlock->addCrumbDelete('delete User', $canDelete, $msg);
     }
 }
 $titleBlock->show();
