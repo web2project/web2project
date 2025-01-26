@@ -3392,7 +3392,7 @@ function showcompany($company_id, $restricted = false)
         $q->addTable('projects');
         $q->addTable('tasks');
         $q->addTable('task_log');
-        $q->addQuery('task_log_costcode, SUM(task_log_hours) as hours');
+        $q->addQuery('task_log_costcode, task_log_hours as hours');
         $q->addWhere('project_id = ' . (int) $project);
         $q->addWhere('project_active = 1');
         if (($template_status = w2PgetConfig('template_projects_status_id')) != '') {
@@ -3411,7 +3411,6 @@ function showcompany($company_id, $restricted = false)
 
         $q->addWhere('project_id = task_project');
         $q->addWhere('task_id = task_log_task');
-        $q->addGroup('project_id');
 
         $task_logs = $q->loadHashList();
         $q->clear();
