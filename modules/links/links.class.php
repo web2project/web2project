@@ -56,7 +56,7 @@ class CLink extends w2p_Core_BaseObject
         }
         // Permissions
         $q = $project->setAllowedSQL($this->_AppUI->user_id, $q, 'link_project');
-        $q = $task->setAllowedSQL($this->_AppUI->user_id, $q, 'link_task and task_project = link_project');
+        $q = $task->setAllowedSQL($this->_AppUI->user_id, $q, 'link_task');
         $q->addOrder('project_name, link_name');
 
         return $q->loadList();
