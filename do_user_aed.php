@@ -7,7 +7,6 @@ if (!defined('W2P_BASE_DIR')) {
 require_once W2P_BASE_DIR . '/includes/config.php';
 require_once W2P_BASE_DIR . '/includes/main_functions.php';
 require_once W2P_BASE_DIR . '/includes/db_adodb.php';
-require_once W2P_BASE_DIR . '/lib/captcha/Functions.php';
 
 $AppUI = new w2p_Core_CAppUI();
 $defaultTZ = w2PgetConfig('system_timezone', 'UTC');
@@ -22,14 +21,14 @@ $username = w2PgetParam($_POST, 'user_username', 0);
 $username = preg_replace("/[^A-Za-z0-9]/", "", $username);
 $user = new CUser();
 $result = $user->loadAll(null, "user_username = '$username'");
-if (count($result)) {
+if (count($result) > 0) {
     header('Location: newuser.php?msg=existing-user');
 }
 
 $email = w2PgetParam($_POST, 'contact_email', 0);
 $contact = new CContact();
 $result = $contact->loadAll(null, "contact_email = '$email'");
-if (count($result)) {
+if (count($result) > 0) {
 	header('Location: newuser.php?msg=existing-email');
 }
 
@@ -43,7 +42,9 @@ if (!$contact->bind($_POST)) {
 	header('Location: newuser.php?msg=contact');
 }
 
+$contact->contact_owner = 1;
 $result = $contact->store();
+
 if (count($contact->getError())) {
     header('Location: newuser.php?msg=contact');
 } else {
