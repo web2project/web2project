@@ -502,12 +502,12 @@ class HTML_BBCodeParser
                 {
                     if (trim($tag['text']) == '') {
                         //just an empty indentation or newline without value?
-                        continue;
+                        break;
                     }
                     $newTagArray[] = $child;
                     $openTags[] = $child['tag'];
                 }
-                if ($prevTag['type'] === 0) {
+                if (is_array($prevTag) && $prevTag['type'] === 0) {
                     $tag['text'] = $prevTag['text'].$tag['text'];
                     array_pop($newTagArray);
                 }

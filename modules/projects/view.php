@@ -30,7 +30,7 @@ $criticalTasks = ($project_id > 0) ? $project->getCriticalTasks($project_id) : n
 // create Date objects from the datetime fields
 $end_date = intval($project->project_end_date) ? new w2p_Utilities_Date($project->project_end_date) : null;
 $actual_end_date = null;
-if (isset($criticalTasks)) {
+if (isset($criticalTasks) && isset($criticalTasks[0])) {
     $actual_end_date = intval($criticalTasks[0]['task_end_date']) ? new w2p_Utilities_Date($criticalTasks[0]['task_end_date']) : null;
 }
 $style = (($actual_end_date > $end_date) && !empty($end_date)) ? 'style="color:red; font-weight:bold"' : '';

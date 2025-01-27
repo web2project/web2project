@@ -183,6 +183,6 @@ $form = new w2p_Output_HTML_FormHelper($AppUI);
 				<input type="button" value="<?php echo $AppUI->_('sign me up!'); ?>" onclick="submitIt()" class="button" />&nbsp;
 		  </td>
 		</tr>
-		<tr><td colspan="5"><?php echo styleRenderBoxBottom(); ?></td></tr>
+		<tr><td colspan="5"><?php echo $AppUI->getTheme()->styleRenderBoxBottom(); ?></td></tr>
 	</table>
 </form>

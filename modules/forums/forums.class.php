@@ -151,14 +151,14 @@ class CForum extends w2p_Core_BaseObject
         if (count($aPrjs)) {
             $buffer = '(forum_project IN (' . implode(',', array_keys($aPrjs)) . ') OR forum_project IS NULL OR forum_project = \'\' OR forum_project = 0)';
 
-            if ($extra['where'] != '') {
+            if (!is_null($extra) && $extra['where'] != '') {
                 $extra['where'] = $extra['where'] . ' AND ' . $buffer;
             } else {
                 $extra['where'] = $buffer;
             }
         } else {
             // There are no allowed projects, so only allow forums with no project associated.
-            if ($extra['where'] != '') {
+            if (!is_null($extra) && $extra['where'] != '') {
                 $extra['where'] = $extra['where'] . ' AND (forum_project IS NULL OR forum_project = \'\' OR forum_project = 0) ';
             } else {
                 $extra['where'] = '(forum_project IS NULL OR forum_project = \'\' OR forum_project = 0)';
