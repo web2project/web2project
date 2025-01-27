@@ -52,7 +52,7 @@ if ($obj->task_represents_project) {
     $titleBlock->addCrumb('?m=projects&a=view&project_id=' . $obj->task_represents_project, 'view subproject');
 }
 if ($canDelete) {
-	$titleBlock->addCrumbDelete('delete task', $canDelete, $msg);
+	$titleBlock->addCrumbDelete('delete task', $canDelete);
 }
 $titleBlock->show();
 

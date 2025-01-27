@@ -74,7 +74,12 @@ $projectPriority = w2PgetSysVal('ProjectPriority');
 $df = $AppUI->getPref('SHDATEFORMAT');
 
 $end_date = intval($object->project_end_date) ? new w2p_Utilities_Date($object->project_end_date) : null;
-$actual_end_date = intval($criticalTasks[0]['task_end_date']) ? new w2p_Utilities_Date($criticalTasks[0]['task_end_date']) : null;
+if (isset($criticalTasks) && isset($criticalTasks[0])) {
+	$actual_end_date = intval($criticalTasks[0]['task_end_date']) ? new w2p_Utilities_Date($criticalTasks[0]['task_end_date']) : null;	
+} else {
+	$actual_end_date = new w2p_Utilities_Date();
+}
+
 $style = (($actual_end_date > $end_date) && !empty($end_date)) ? 'style="color:red; font-weight:bold"' : '';
 
 // setup the title block

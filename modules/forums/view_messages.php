@@ -92,6 +92,8 @@ echo $AppUI->getTheme()->styleRenderBoxTop();
 $x = false;
 
 $date = new w2p_Utilities_Date();
+$df = $AppUI->getPref('SHDATEFORMAT');
+$tf = $AppUI->getPref('TIMEFORMAT');
 
 if ($viewtype == 'single') {
 	$s = '';
@@ -99,6 +101,8 @@ if ($viewtype == 'single') {
 }
 
 $new_messages = array();
+
+$bbparser = new HTML_BBCodeParser();
 
 foreach ($messages as $row) {
 	// Find the parent message - the topic.
@@ -114,7 +118,7 @@ foreach ($messages as $row) {
 	}
 	$style = $x ? 'background-color:#eeeeee' : '';
 
-    $bbparser = new HTML_BBCodeParser();
+    
 	//!!! Different table building for the three different views
 	// To be cleaned up, and reuse common code at later stage.
     switch ($viewtype) {

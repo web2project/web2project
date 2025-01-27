@@ -67,7 +67,7 @@ class w2p_System_EventQueue {
             $q->addInsert('queue_module_type', 'module');
         }
         if ($q->exec()) {
-            $return = db_insert_id();
+            $return = true;
         } else {
             $return = false;
         }

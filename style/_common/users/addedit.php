@@ -57,7 +57,7 @@ $form = new w2p_Output_HTML_FormHelper($AppUI);
             <?php if ($canEdit && !$object_id) { ?>
                 <p>
                     <?php $form->showLabel('User Role'); ?>
-                    <?php echo arraySelect($roles_arr, 'user_role', 'size="1" class="text"', '', true); ?>
+                    <?php echo arraySelect($roles_arr, 'user_role', 'size="1" class="text"', $object->_role, true); ?>
                 </p>
             <?php } ?>
             <?php if (!$object_id) { ?>

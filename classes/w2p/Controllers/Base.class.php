@@ -52,7 +52,7 @@ class w2p_Controllers_Base
          *   the __nonce field. See https://docs.web2project.net/docs/security-nonce.html for more details.
          */
         if (('' != $AppUI->__nonce) && ($AppUI->__nonce != $myArray['__nonce'])) {
-            error_log("Your submission is missing the CSRF nonce. Please see https://docs.web2project.net/docs/security-nonce.html for details.");
+            //error_log("Your submission is missing the CSRF nonce. Please see https://docs.web2project.net/docs/security-nonce.html for details.");
 //            $AppUI->setMsg("There was an error processing the form. Please submit again.", UI_MSG_ERROR);
 //            $AppUI->holdObject($this->object);
 //            $this->resultPath = $this->errorPath;

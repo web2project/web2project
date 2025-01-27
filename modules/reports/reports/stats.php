@@ -15,7 +15,7 @@ if (!empty($project_id)) {
 $obj = new CTask();
 $allowedTasks = $obj->getAllowedSQL($AppUI->user_id);
 if (count($allowedTasks)) {
-	$obj->getAllowedSQL($AppUI->user_id, $q);
+	$obj->getAllowedSQL($AppUI->user_id);
 }
 $all_tasks = $q->loadList();
 $q->clear();
@@ -40,7 +40,7 @@ $q->addGroup('users.user_id');
 $obj = new CTask();
 $allowedTasks = $obj->getAllowedSQL($AppUI->user_id);
 if (count($allowedTasks)) {
-	$obj->getAllowedSQL($AppUI->user_id, $q);
+	$obj->getAllowedSQL($AppUI->user_id);
 }
 $users_all = $q->loadList();
 $q->clear();
@@ -224,7 +224,13 @@ $ontime = round(100 * (1 - ($tasks['overdue']/count($all_tasks)) - ($tasks['comp
                     <td align="right"><?php echo $stats['inprogress']; ?></td>
                     <td align="right"><?php echo $stats['pending']; ?></td>
                     <td align="right"><?php echo $stats['completed']; ?></td>
-                    <td align="right"><?php echo count($stats['all']); ?></td>
+                    <td align="right">
+                        <?php 
+                            if (!is_null($stats) && !is_null($stats['all'])) {
+                                echo count($stats['all']);
+                            }
+                        ?>
+                    </td>
                     <td align="right"><?php echo $stats['hours']; ?> <?php echo $AppUI->_('hours'); ?></td>
                 </tr>
                 <?php } ?>

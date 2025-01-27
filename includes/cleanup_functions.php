@@ -1414,7 +1414,7 @@ function displayFiles($AppUI, $folder_id = 0, $task_id = 0, $project_id = 0, $co
     // SETUP FOR FILE LIST
     $q = new w2p_Database_Query();
     $q->addQuery($fieldList);
-    $q->addQuery('file_id, file_project');
+    $q->addQuery('file_id, file_project, file_type');
     $q->addQuery('project_name, project_color_identifier');
     $q->addTable('files', 'f');
     $q->addJoin('projects', 'p', 'p.project_id = file_project');
@@ -2142,6 +2142,10 @@ function userUsageDays()
 function showDays()
 {
     global $allocated_hours_sum, $end_date, $start_date, $AppUI, $user_list, $user_names, $user_usage, $hideNonWd, $table_header, $table_rows, $working_days_count, $total_hours_capacity, $total_hours_capacity_all;
+
+    if (!is_array($user_list)) {
+        $user_list = [];
+    }
 
     $days_difference = $end_date->dateDiff($start_date);
 
@@ -3388,7 +3392,7 @@ function showcompany($company_id, $restricted = false)
         $q->addTable('projects');
         $q->addTable('tasks');
         $q->addTable('task_log');
-        $q->addQuery('task_log_costcode, SUM(task_log_hours) as hours');
+        $q->addQuery('task_log_costcode, task_log_hours as hours');
         $q->addWhere('project_id = ' . (int) $project);
         $q->addWhere('project_active = 1');
         if (($template_status = w2PgetConfig('template_projects_status_id')) != '') {
@@ -3407,7 +3411,6 @@ function showcompany($company_id, $restricted = false)
 
         $q->addWhere('project_id = task_project');
         $q->addWhere('task_id = task_log_task');
-        $q->addGroup('project_id');
 
         $task_logs = $q->loadHashList();
         $q->clear();

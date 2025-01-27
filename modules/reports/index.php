@@ -32,6 +32,7 @@ $df = $AppUI->getPref('SHDATEFORMAT');
 
 $loader = new w2p_FileSystem_Loader();
 $reports = $loader->readFiles(W2P_BASE_DIR . '/modules/reports/reports', '\.php$');
+asort($reports);
 
 // setup the title block
 if (!$suppressHeaders) {

@@ -153,7 +153,7 @@ if (!$project_id) {
         $titleBlock->addButton('New file', '?m=files&a=addedit&project_id=' . $project_id);
 		$titleBlock->addCrumb('?m=projects&a=addedit&project_id=' . $project_id, 'edit this project');
 		if ($canDeleteProject) {
-			$titleBlock->addCrumbDelete('delete project', false, $msg);
+			$titleBlock->addCrumbDelete('delete project', false);
 		}
 	}
     if ($canAddTasks) {

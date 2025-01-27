@@ -3,17 +3,9 @@ if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly');
 }
 
-require_once W2P_BASE_DIR . '/lib/captcha/Functions.php';
 require_once W2P_BASE_DIR . '/style/' . $uistyle . '/overrides.php';
 
 $AppUI = new w2p_Core_CAppUI();
-/*
-Re-Generating variables for html form...
-*/
-
-$rnd = strtoupper(rnd_string());
-$uid = urlencode(md5_encrypt($rnd));
-$cid = md5_encrypt($rnd);
 
 $msg = w2PgetParam($_GET, 'msg', '');
 
@@ -70,9 +62,7 @@ function submitIt(){
     } else if (form.contact_email.value.length < 4) {
         alert("<?php echo $AppUI->_('Email is invalid', UI_OUTPUT_JS); ?>");
         form.contact_email.focus();
-	} else if (form.spam_check.value.length < 1 ) {
-        alert("<?php echo $AppUI->_('Anti Spam Security is invalid', UI_OUTPUT_JS); ?>");
-    } else {
+	} else {
         form.submit();
     }
 }
@@ -107,9 +97,8 @@ $form = new w2p_Output_HTML_FormHelper($AppUI);
 <form name="editFrm" action="./do_user_aed.php" method="post" accept-charset="utf-8">
 	<input type="hidden" name="user_id" value="0" />
 	<input type="hidden" name="contact_id" value="0" />
-	<input type="hidden" name="username_min_len" value="<?php echo w2PgetConfig('username_min_len'); ?>)" />
-	<input type="hidden" name="password_min_len" value="<?php echo w2PgetConfig('password_min_len'); ?>)" />
-	<input type="hidden" name="cid" value="<?php echo $cid ?>" />
+	<input type="hidden" name="username_min_len" value="<?php echo w2PgetConfig('username_min_len'); ?>" />
+	<input type="hidden" name="password_min_len" value="<?php echo w2PgetConfig('password_min_len'); ?>" />
     <?php echo $form->addNonce(); ?>
 
     <table style="border-style:none;" align="center" border="0" width="700" cellpadding="0" cellspacing="0" class="std">
@@ -183,11 +172,6 @@ $form = new w2p_Output_HTML_FormHelper($AppUI);
 			</td>
 		</tr>
 		<tr>
-			<td valign="middle" align="right">* <?php echo $AppUI->_('Anti Spam Security'); ?>:</td>
-			<td valign="middle" width="50"><input type="text" class="text" id="spam" name="spam_check" value="" maxlength="5" size="5" /></td>
-			<td valign="middle" align="left"><img src="<?php echo W2P_BASE_URL; ?>/lib/captcha/CaptchaImage.php?uid=54;<?php echo $uid; ?>" alt="" /></td>
-		</tr>
-		<tr>
             <td align="right">* <?php echo $AppUI->_('Required Fields'); ?></td>
             <td colspan="2"></td>
 		</tr>
@@ -199,6 +183,6 @@ $form = new w2p_Output_HTML_FormHelper($AppUI);
 				<input type="button" value="<?php echo $AppUI->_('sign me up!'); ?>" onclick="submitIt()" class="button" />&nbsp;
 		  </td>
 		</tr>
-		<tr><td colspan="5"><?php echo styleRenderBoxBottom(); ?></td></tr>
+		<tr><td colspan="5"><?php echo $AppUI->getTheme()->styleRenderBoxBottom(); ?></td></tr>
 	</table>
 </form>

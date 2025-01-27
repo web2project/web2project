@@ -1533,7 +1533,7 @@ class w2p_Database_Query {
 		if (!$this->exec()) {
 			return false;
 		}
-		$id = db_insert_id();
+		$id = $this->_db->insert_id();
 		return $id;
 	}
 
@@ -1601,7 +1601,7 @@ class w2p_Database_Query {
 		if (!$this->exec()) {
 			return false;
 		}
-		$id = db_insert_id();
+		$id = $this->_db->insert_id();
 		($verbose) && print 'id=[' . $id . '] ';
 		if ($keyName && $id) {
 			$object->$keyName = $id;

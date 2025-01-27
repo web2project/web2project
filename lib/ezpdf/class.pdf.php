@@ -1231,10 +1231,12 @@ function output($debug=0){
   $this->checkAllHere();
 
   $xref=array();
-  $content="%PDF-1.3\n%âãÏÓ\n";
-//  $content="%PDF-1.3\n";
+  $content="%PDF-1.3\n%ï¿½ï¿½ï¿½ï¿½\n";
   $pos=strlen($content);
   foreach($this->objects as $k=>$v){
+    if (!isset($v['t'])) {
+      continue;
+    }
     $tmp='o_'.$v['t'];
     $cont=$this->$tmp($k,'out');
     $content.=$cont;

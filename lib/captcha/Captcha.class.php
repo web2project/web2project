@@ -172,7 +172,7 @@ Class GIFEncoder extends Captcha {
 		for ( $i = 0; $i < count ( $GIF_buf ); $i++ ) {
 			$tranid = false;
 			$length = strlen ( $GIF_buf [ $i ] );
-			$seek_p = 14 + ( 3 * ( 2 << ( ord ( $GIF_buf [ $i ] { 10 } ) & 0x07 ) ) );
+			$seek_p = 14 + ( 3 * ( 2 << ( ord ( $GIF_buf [ $i ] [ 10 ] ) & 0x07 ) ) );
 
 			if ( strlen ( $this->GIF ) == 6 ) {
                 $this->GIF .= substr ( $GIF_buf [ $i ], 6, $seek_p - 7 );
@@ -180,13 +180,13 @@ Class GIFEncoder extends Captcha {
 			}
 			if ( ord ( substr ( $GIF_buf [ $i ], $seek_p - 1, 1 ) ) != 0x21 ) {
             	if ( $transColor > -1 ) {
-            		$rgb =  substr ( $GIF_buf [ $i ], 14, 3 * ( 2 << ( ord ( $GIF_buf [ $i ] { 10 } ) & 0x07 ) ) );
+            		$rgb =  substr ( $GIF_buf [ $i ], 14, 3 * ( 2 << ( ord ( $GIF_buf [ $i ] [ 10 ] ) & 0x07 ) ) );
 
-                	for ( $j = 0; $j < ( 2 << ( ord ( $GIF_buf [ $i ] { 10 } ) & 0x07 ) ); $j++ ) {
+                	for ( $j = 0; $j < ( 2 << ( ord ( $GIF_buf [ $i ] [ 10 ] ) & 0x07 ) ); $j++ ) {
 						if	(
-								ord ( $rgb { 3 * $j     } ) == ( ( $transColor >> 16 ) & 0xFF ) &&
-								ord ( $rgb { 3 * $j + 1 } ) == ( ( $transColor >>  8 ) & 0xFF ) &&
-								ord ( $rgb { 3 * $j + 2 } ) == ( ( $transColor >>  0 ) & 0xFF )
+								ord ( $rgb [ 3 * $j     ] ) == ( ( $transColor >> 16 ) & 0xFF ) &&
+								ord ( $rgb [ 3 * $j + 1 ] ) == ( ( $transColor >>  8 ) & 0xFF ) &&
+								ord ( $rgb [ 3 * $j + 2 ] ) == ( ( $transColor >>  0 ) & 0xFF )
 							) {
 								$tranid = true;
 								break;
@@ -213,39 +213,39 @@ Class GIFEncoder extends Captcha {
 							$GIF_buf [ $i ] .= chr ( 0 );
 					}
             	}
-            	if ( ord ( $GIF_buf [ $i ] { $seek_p - 1 } ) != 0x2c ) {
+            	if ( ord ( $GIF_buf [ $i ] [ $seek_p - 1 ] ) != 0x2c ) {
 					printf	( "%s: %s ( 0x%x )", $this->VER, $this->ERR [ 'ERR03' ], ord ( substr ( $GIF_buf [ $i ], $seek_p - 1, 1 ) ) );
 					exit	( 0 );
             	}
 			}
 			else {
             	if ( $transColor > -1 ) {
-            		$rgb =  substr ( $GIF_buf [ $i ], 14, 3 * ( 2 << ( ord ( $GIF_buf [ $i ] { 10 } ) & 0x07 ) ) );
+            		$rgb =  substr ( $GIF_buf [ $i ], 14, 3 * ( 2 << ( ord ( $GIF_buf [ $i ] [ 10 ] ) & 0x07 ) ) );
 
-                	for ( $j = 0; $j < ( 2 << ( ord ( $GIF_buf [ $i ] { 10 } ) & 0x07 ) ); $j++ ) {
+                	for ( $j = 0; $j < ( 2 << ( ord ( $GIF_buf [ $i ] [ 10 ] ) & 0x07 ) ); $j++ ) {
 						if	(
-								ord ( $rgb { 3 * $j     } ) == ( ( $transColor >> 16 ) & 0xFF ) &&
-								ord ( $rgb { 3 * $j + 1 } ) == ( ( $transColor >>  8 ) & 0xFF ) &&
-								ord ( $rgb { 3 * $j + 2 } ) == ( ( $transColor >>  0 ) & 0xFF )
+								ord ( $rgb [ 3 * $j     ] ) == ( ( $transColor >> 16 ) & 0xFF ) &&
+								ord ( $rgb [ 3 * $j + 1 ] ) == ( ( $transColor >>  8 ) & 0xFF ) &&
+								ord ( $rgb [ 3 * $j + 2 ] ) == ( ( $transColor >>  0 ) & 0xFF )
 							) {
 								$tranid = true;
 								break;
 						}
             		}
 					if ( $tranid && $j < 256 ) {
-							$GIF_buf [ $i ] { ( $seek_p - 1 ) + 3 } = chr ( ( $GIF_dis << 2 ) + 1  );
-							$GIF_buf [ $i ] { ( $seek_p - 1 ) + 4 } = chr ( $GIF_tim [ $i ] & 0xFF );
-							$GIF_buf [ $i ] { ( $seek_p - 1 ) + 5 } = chr ( $GIF_tim [ $i ] >> 8   );
-							$GIF_buf [ $i ] { ( $seek_p - 1 ) + 6 } = chr ( $j );
+							$GIF_buf [ $i ] [ ( $seek_p - 1 ) + 3 ] = chr ( ( $GIF_dis << 2 ) + 1  );
+							$GIF_buf [ $i ] [ ( $seek_p - 1 ) + 4 ] = chr ( $GIF_tim [ $i ] & 0xFF );
+							$GIF_buf [ $i ] [ ( $seek_p - 1 ) + 5 ] = chr ( $GIF_tim [ $i ] >> 8   );
+							$GIF_buf [ $i ] [ ( $seek_p - 1 ) + 6 ] = chr ( $j );
 					}
 					else {
-							$GIF_buf [ $i ] { ( $seek_p - 1 ) + 3 } = chr ( ( $GIF_dis << 2 ) + 0  );
-							$GIF_buf [ $i ] { ( $seek_p - 1 ) + 4 } = chr ( $GIF_tim [ $i ] & 0xFF );
-							$GIF_buf [ $i ] { ( $seek_p - 1 ) + 5 } = chr ( $GIF_tim [ $i ] >> 8   );
-							$GIF_buf [ $i ] { ( $seek_p - 1 ) + 6 } = chr ( 0 );
+							$GIF_buf [ $i ] [ ( $seek_p - 1 ) + 3 ] = chr ( ( $GIF_dis << 2 ) + 0  );
+							$GIF_buf [ $i ] [ ( $seek_p - 1 ) + 4 ] = chr ( $GIF_tim [ $i ] & 0xFF );
+							$GIF_buf [ $i ] [ ( $seek_p - 1 ) + 5 ] = chr ( $GIF_tim [ $i ] >> 8   );
+							$GIF_buf [ $i ] [ ( $seek_p - 1 ) + 6 ] = chr ( 0 );
 					}
             	}
-            	if ( ord ( $GIF_buf [ $i ] { ( $seek_p - 1 ) + 8 } ) != 0x2c ) {
+            	if ( ord ( $GIF_buf [ $i ] [ ( $seek_p - 1 ) + 8 ] ) != 0x2c ) {
 					printf	( "%s: %s ( 0x%x )", $this->VER, $this->ERR [ 'ERR03' ], ord ( substr ( $GIF_buf [ $i ], $seek_p - 1, 1 ) ) );
 					exit	( 0 );
             	}

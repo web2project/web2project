@@ -3,6 +3,8 @@ if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
 
+$tab = $AppUI->processIntState('TasksIdxTab', $_GET, 'tab', 5);
+
 $perms = &$AppUI->acl();
 $user_id = (int) w2PgetParam($_POST, 'user_id', $AppUI->user_id);
 

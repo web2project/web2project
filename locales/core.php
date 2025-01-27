@@ -36,6 +36,8 @@ if (W2P_BASE_DIR . '/locales/' . $AppUI->user_locale . '/common.inc') {
  *   this allows for module specific translations to be distributed with the module
  */
 
+ $m = (isset($m) ? $m : '');
+
 if (file_exists(W2P_BASE_DIR . '/modules/' . $m . '/locales/' . $AppUI->user_locale . '/' . $m . '.inc')) {
 	readfile(W2P_BASE_DIR . '/modules/' . $m . '/locales/' . $AppUI->user_locale . '/' . $m . '.inc');
 } elseif (file_exists(W2P_BASE_DIR . '/locales/' . $AppUI->user_locale . '/' . $m . '.inc')) {

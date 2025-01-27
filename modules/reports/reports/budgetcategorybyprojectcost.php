@@ -63,9 +63,6 @@ $companies = arrayMerge(array('0' => 'All Companies'), $companies);
                 </a>
             </td>
             <td nowrap="nowrap">
-                <input type="checkbox" name="log_pdf" id="log_pdf" <?php if ($log_pdf)
-            echo 'checked="checked"' ?> />
-                <label for="log_pdf"><?php echo $AppUI->_('Make PDF'); ?></label>
             </td>
             <td nowrap="nowrap">
                 <input type="checkbox" name="active_projects" id="active_projects" <?php if ($active_projects)

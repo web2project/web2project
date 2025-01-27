@@ -88,9 +88,11 @@ function md5_decrypt ( $enc_text, $password = PASSWORD, $iv_len = 16 ) {
 function rnd_string ( $len = CHARSLEN ) {
 	$str = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
 	$val = '';
+    $strlen = strlen($str) - 1;
 
 	for ( $i = 0; $i < $len; $i++ ) {
-		$val .= $str { rand ( 0, strlen ( $str ) - 1 ) };
+		$pos = rand (0, $strlen);
+        $val .= $str[$pos];
 	}
     return $val;
 }

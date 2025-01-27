@@ -591,7 +591,7 @@ class w2p_Core_CAppUI
      */
     public function redirect($params = '', $hist = '')
     {
-        $session_id = SID;
+        $session_id = session_id();
 
         session_write_close();
         // are the params empty
@@ -856,7 +856,6 @@ class w2p_Core_CAppUI
         $q->addInsert('date_time_in', "'" . $q->dbfnNowWithTZ() . "'", false, true);
         $q->addInsert('user_ip', $_SERVER['REMOTE_ADDR']);
         $q->exec();
-        $this->last_insert_id = db_insert_id();
     }
 
     /**

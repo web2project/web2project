@@ -13,14 +13,14 @@ $fields = $module->loadSettings('contacts', 'department_view');
 
 if (0 == count($fields)) {
     $fieldList = array('contact_name', 'contact_job',
-        'contact_email', 'contact_phone', 'dept_name');
-    $fieldNames = array('Name', 'Job Title', 'Email', 'Phone',
-        'Department');
+        'contact_email', 'contact_phone');
+    $fieldNames = array('Name', 'Job Title', 'Email', 'Phone');
 
     $module->storeSettings('contacts', 'department_view', $fieldList, $fieldNames);
 
     $fields = array_combine($fieldList, $fieldNames);
 }
+$customLookups = [];
 
 ?><a name="contacts-department_view"> </a><?php
 

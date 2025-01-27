@@ -6,14 +6,13 @@ if (!defined('W2P_BASE_DIR')) {
 $object_id = (int) w2PgetParam($_GET, 'user_id', 0);
 $contact_id = (int) w2PgetParam($_GET, 'contact_id', 0);
 
-
 $object = new CUser();
 $object->setId($object_id);
 
 $canAddEdit = $object->canAddEdit();
 $canAuthor = $object->canCreate();
 $canEdit = $object->canEdit();
-$canDelete = $object->canAddEdit();
+$canDelete = $object->canDelete();
 if (!$canAddEdit) {
     $AppUI->redirect(ACCESS_DENIED);
 }
@@ -40,6 +39,9 @@ if ($contact_id) {
     $object = new CUser();
     $object->loadFull($object_id);
 }
+if (!$object_id) {
+    $object->_role = array_search('Project worker', $roles_arr);
+}
 
 // pull companies
 $company = new CCompany();
@@ -56,9 +58,6 @@ $titleBlock->addViewLink('contact', $object->contact_id);
 if ($object_id) {
     if ($canEdit || $object_id == $AppUI->user_id) {
         $titleBlock->addCrumb('?m=system&a=addeditpref&user_id=' . $object_id, 'edit preferences');
-    }
-    if ($canDelete) {
-        $titleBlock->addCrumbDelete('delete User', $canDelete, $msg);
     }
 }
 $titleBlock->show();

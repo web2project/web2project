@@ -494,6 +494,9 @@ class RGB {
             if(!preg_match($regex, $aColor, $matches)) {
                 JpGraphError::RaiseL(25078,$aColor);//(" Unknown color: $aColor");
             }
+            if (1 == count($matches)) {
+                $matches = ['000000', '000000', '00', '00', '00'];
+            }
             if(empty($matches[5])) {
                 $r = strlen($matches[2]) == 1 ? $matches[2].$matches[2] : $matches[2];
                 $g = strlen($matches[3]) == 1 ? $matches[3].$matches[3] : $matches[3];

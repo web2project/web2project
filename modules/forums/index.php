@@ -4,6 +4,8 @@ if (!defined('W2P_BASE_DIR')) {
 }
 // @todo    convert to template
 
+$tab = $AppUI->processIntState('ForumIdxTab', $_GET, 'tab', 5);
+
 $forum = new CForum();
 $canRead = $forum->canView();
 $canAdd  = $forum->canCreate();

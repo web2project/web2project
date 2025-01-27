@@ -106,8 +106,6 @@ echo $AppUI->getTheme()->styleRenderBoxTop();
             </td>
 
             <td nowrap="nowrap">
-                <input type="checkbox" name="log_pdf" <?php if ($log_pdf) echo "checked" ?> />
-                <?php echo $AppUI->_('Make PDF'); ?>
             </td>
 
             <td nowrap="nowrap">
