@@ -1,48 +1,27 @@
-[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/web2project/web2project/badges/quality-score.png?s=851af835fd13ef11ff20b848ff4aba6fd5325d61)](https://scrutinizer-ci.com/g/web2project/web2project/)
+# web2Project Containeraziation
 
-web2Project
-================
+This is a containeraziation for [web2Project](https://github.com/web2project/web2project). It builds upon the [php:8.4-apache](https://hub.docker.com/_/php/) docker image.
 
-web2Project is an Open Source system for online project management.  It is based on an AMP-stack which means it is designed to run on Apache, MySQL, and PHP.
+## How to use
 
-The best part is that it's free software. That means you can use it, extend it, customize it, delete it, change the colors of things, and even break it... all for free. We won't (and can't) demand payment, but that also means you can't demand help. Well, you can but then you look like a jerk and no one wants that.
+### Podman
 
-## Requirements
+In [Podman](https://podman.io/) you can create a pod for the by using `podman pod create --name w2p -p [port]:80 --security-opt apparmor=unconfined`. 
 
-*  PHP 8.3.0+
-*  Mysql 8.x+
-*  Apache 1.x+ or IIS 7+
-*  PHP extensions:
-  *  GD  (for Gantt Chart generation)
-  *  mbstring (only if you're using multi-byte strings)
-  *  zlib (for output compression)
+Then build the image using the available Containerfile in this repo. The image will contain all the requirements and permissions for web2Project to run `podman build -f w2p.Containerfile -t w2p .`. 
 
-## Installing
+To create a mysql database you can use the [official docker image](https://hub.docker.com/_/mysql/) and add it to the pod: `podman run --replace --name w2p-mysql --pod w2p -e MYSQL_ROOT_PASSWORD=[proot_assword] -e MYSQL_DATABASE=w2p -e MYSQL_USER=w2p -e MYSQL_PASSWORD=[db_password] -d docker.io/library/mysql:8`
 
-Installing web2project is straightforward. In general, you should upload and unzip the package, run `composer install` as appropriate and then load the main page in your browser. The detailed steps are here: https://docs.web2project.net/docs/installation.html
+Finally run the w2p container inside the pod `podman run --replace -d --pod w2p -v w2p:/var/www/html/  --name w2p w2p`
 
-## Upgrading
+In the initial system configuration page you should use 127.0.0.1:3306 as the host, localhost:3306 does not work for some reason.
 
-The 4.0 release has not been tested for upgrades, use at your own risk.
+Please be aware however that at the time of writing apparmor has an intermittent [issue on handling permissions](https://github.com/containers/podman/issues/24142) you may be able to start it with no problem but killing the container can have issues.
 
-## For More Information
+### Docker
 
-We're always looking for feedback. If you have suggestions on how to make the system better or questions on how it should work, we provide places for that.
+I have not created a compose file for this project but the image works fine with `docker build -f w2p.Containerfile -t w2p .`
 
-http://github.com/web2project/web2project is our Github page. The code is always available here.
-
-http://www.web2project.net/ is our homepage. This is where the latest and greatest news will always be. This is also where we keep most of the links to everything else.
-
-http://docs.web2project.net/ is our documentation wiki. We always try to keep the most up to date documentation here. Sometimes it's not always the best, but that's the joy of a wiki. You're welcome to help make things better.
-
-http://support.web2project.net/ are our support forums. Whenever you have a question not addressed by the documentation, this is the first place to go.
-
-http://bugs.web2project.net/ is where we collect and track bug reports. If you find something that doesn't work as expected or is broken, file a report here. Remember, the more specific you are, the easier it is for others to reproduce and eventually fix it.
-
-## License
-
-web2Project is released under Clear BSD
-
-The full text of the license is in the COPYING file.
-
-Parts of web2Project include libraries from other projects which are used and included under their original licence(s).
+TODO:
+- [ ] Docker compose file
+- [ ] Podman quadlet
