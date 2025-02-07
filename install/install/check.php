@@ -22,7 +22,7 @@
 		</td>
 	</tr>
 	<tr>
-		<td class="title" colspan="2">Confirm Requirements</td>
+		<td class="title" colspan="2"><br />PHP version and settings</td>
 	</tr>
 	<tr>
 		<td class="item">PHP Version &gt;= <?= MIN_PHP_VERSION; ?></td>
@@ -38,19 +38,6 @@
 		</td>
 	</tr>
 	<tr>
-		<td class="item">GD Support (for GANTT Charts)</td>
-		<td align="left">
-		<?php
-			if (!extension_loaded('gd')) {
-				echo '<b class="error">'.$failedImg.'</b> <span class="item">GANTT Chart functionality may not work correctly.</span>';
-				$continue = false;
-			} else {
-				echo '<b class="ok">'.$okImg.'</b>';
-			}
-		?>
-		</td>
-	</tr>
-	<tr>
 		<td class="item">File Uploads</td>
 		<td align="left">
 		<?php
@@ -63,6 +50,60 @@
 		?>
 		</td>
 	</tr>
+	<tr>
+		<td class="title" colspan="2"><br />PHP Extensions</td>
+	</tr>
+	<tr>
+		<td colspan="2">
+			The following extensions are required to run web2Project:
+		</td>
+	</tr>
+<?php
+	phpExtCheck(
+		array(
+			array(
+				name => 'filter',
+			),
+			array(
+				name    => 'gd',
+				comment => 'GANTT Chart functionality may not work correctly.',
+			),
+			array(
+				name => 'json',
+			),
+			array(
+				name => 'mysqli',
+			),
+			array(
+				name => 'session',
+			),
+			array(
+				name => 'xml',
+			),
+			array(
+				name => 'zlib',
+				comment => 'Some non-core modules may have restricted operation.',
+			),
+		),
+		false    // The extensions are required
+	);
+?>
+	<tr>
+		<td colspan="2">
+			<br />The next extensions are optional:
+		</td>
+	</tr>
+<?php
+	phpExtCheck(
+		array(
+			array(
+				name    => 'mbstring',
+				comment => 'Required if you are using multi-byte strings.',
+			),
+		),
+		true    // The extensions are optional
+	);
+?>
 	<tr>
 		<td class="title" colspan="2"><br />Database Connectors</td>
 	</tr>
@@ -165,14 +206,6 @@
 		<td align="left"><?php echo function_exists( 'ldap_connect' ) ? '<b class="ok">'.$okImg.'</b><span class="item"> </span>' : '<span class="warning">'.$failedImg.' Not available</span>';?></td>
 	</tr>
 	<tr>
-		<td class="item">Zlib compression Support</td>
-		<td align="left">
-		<?php
-			echo (!extension_loaded('zlib')) ? '<b class="error">'.$failedImg.'</b> <span class="item">Some non-core modules may have restricted operation.</span>' : '<b class="ok">'.$okImg.'</b>';
-		?>
-		</td>
-	</tr>
-	<tr>
 		<td class="item">Session Save Path writable?</td>
 		<td align="left">
 			<?php
@@ -259,3 +292,32 @@
 		</td>
 	</tr>
 </table>
+
+<?php
+function phpExtCheck($phpExts, $phpExtsOptional) {
+    global $okImg, $failedImg, $continue;
+    foreach ($phpExts as $phpExt) {
+?>
+        <tr>
+            <td class="item">
+<?php
+                echo $phpExt[name];
+?>
+            </td>
+            <td align="left">
+<?php
+                if (!extension_loaded($phpExt[name])) {
+                    echo '<b class="error">' . $failedImg . '</b> <span class="item">' . $phpExt[comment] . '</span>';
+                    if (!$phpExtsOptional) {
+                        $continue = false;
+                    }
+                } else {
+                    echo '<b class="ok">' . $okImg . '</b>';
+                }
+?>
+            </td>
+        </tr>
+<?php
+    }
+}
+?>
