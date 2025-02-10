@@ -3319,12 +3319,11 @@ function sendNewPass()
         $q->leftJoin('contacts_methods', 'cm', 'cm.contact_id = con.contact_id');
         $q->addWhere("cm.method_value = '$confirmEmail'");
     } else {
-        $q->addWhere("LOWER(user_email) = '$confirmEmail'");
+        $q->addWhere("LOWER(contact_email) = '$confirmEmail'");
     }
     /* End Hack */
 
-    $user_id = $q->loadResult();
-    if (!$user_id) {
+    if (!($user_id = $q->loadResult()) || !$checkusername || !$confirmEmail) {
         $AppUI->setMsg('Invalid username or email.', UI_MSG_ERROR);
         $AppUI->redirect();
     }
@@ -3355,19 +3354,21 @@ function sendNewPass()
 }
 
 // from modules/reports/overall.php
-function showcompany($company_id, $restricted = false)
+function showcompany($company, $restricted = false)
 {
     global $AppUI, $allpdfdata, $log_start_date, $log_end_date, $log_all;
     $q = new w2p_Database_Query;
     $q->addTable('projects');
     $q->addQuery('project_id, project_name');
-    $q->addWhere('project_company = ' . (int) $company_id);
+    $q->addWhere('project_company = ' . (int) $company);
     $projects = $q->loadHashList();
     $q->clear();
 
-    $company = new CCompany();
-    $company->load($company_id);
-    $company_name = $company->company_name;
+    $q->addTable('companies');
+    $q->addQuery('company_name');
+    $q->addWhere('company_id = ' . (int) $company);
+    $company_name = $q->loadResult();
+    $q->clear();
 
     $table = '<h2>Company: ' . $company_name . '</h2>
         <table cellspacing="1" cellpadding="4" border="0" class="tbl">';
@@ -3445,10 +3446,10 @@ function showcompany($company_id, $restricted = false)
  * @param int the length to truncate entries by
  * @author Andrew Eddie <eddieajau@users.sourceforge.net>
  */
-function getEventLinks($startPeriod, $endPeriod, $links, $notUsed = null, $minical = false)
+function getEventLinks($startPeriod, $endPeriod, $links, $strMaxLen, $company_id = 0, $minical = false, $userid=0)
 {
     global $event_filter;
-    $events = CEvent::getEventsForPeriod($startPeriod, $endPeriod, $event_filter);
+    $events = CEvent::getEventsForPeriod($startPeriod, $endPeriod, $event_filter, $userid,0, $companyid);
     $cwd = explode(',', w2PgetConfig('cal_working_days'));
 
     // assemble the links for the events
@@ -3467,7 +3468,8 @@ function getEventLinks($startPeriod, $endPeriod, $links, $notUsed = null, $minic
                     $url = '?m=events&a=view&event_id=' . $row['event_id'];
                     $link['href'] = '';
                     $link['alt'] = '';
-                    $link['text'] = w2PtoolTip($row['event_name'], getEventTooltip($row['event_id']), true) . w2PshowImage('modules/events/event' . $row['event_type'] . '.png', 16, 16, '', '', 'calendar') . '</a>&nbsp;' . '<a href="' . $url . '"><span class="event">' . $row['event_name'] . '</span></a>' . w2PendTip();
+                    $link['text'] = w2PtoolTip($row['event_name'], getEventTooltip($row['event_id']), true) . w2PshowImage('modules/events/event' . $row['event_type'] . '.png', 16, 16, '', '', 'calendar') . '</a>' . '<a href="' . $url . '"><span class="event">' . $row['event_name'] . '</span></a>' . w2PendTip();
+                    $link['tClass']='cal-item';
                 }
                 $links[$date->format(FMT_TIMESTAMP_DATE)][] = $link;
             }
@@ -3558,28 +3560,59 @@ function getTaskLinks($startPeriod, $endPeriod, $links, $strMaxLen, $company_id 
     $startPeriod->subtractSeconds(1);
 
     $link = array();
+    
+    $today = new w2p_Utilities_Date();
+    $today->convertTZ($AppUI->getPref('TIMEZONE'));
 
     // assemble the links for the tasks
     foreach ($tasks as $row) {
         // the link
         $link['task'] = true;
 
+    // determine which day(s) to display the task
+        $start = new w2p_Utilities_Date($AppUI->formatTZAwareTime($row['task_start_date'], '%Y-%m-%d %T'));
+        $end = $row['task_end_date'] ? new w2p_Utilities_Date($AppUI->formatTZAwareTime($row['task_end_date'], '%Y-%m-%d %T')) : null;
+
+        // change the class of the task accordingly
+        // tClass not working as expected, changing $row['color'] for the time beeing...
+        
+        if ($today->after($end)) { 
+            if ($row[task_percent_complete]<100) {
+                $row['color'] =  "F50000";//LATE!!!
+                $row['tClass'] = 'late';
+            }
+            else {
+                $row['color'] =  "554FF7";//DONE!!!
+                $row['tClass'] = 'done';
+            }
+        } elseif ($today->after($start) && $today->before($end)) { //OK!!!
+            if ($row[task_percent_complete]> 0) { //HAS STARTED
+                $row['color'] =  "00F521";
+                $row['tClass'] = 'active';
+            }
+            else {
+                $row['color'] =  "F5F500"; //SHOULD HAVE STARTED
+                $row['tClass'] = 'notstarted';
+            }
+        } elseif ($today->before($start)){ //FUTURE
+            $row['tClass'] = 'future';
+            $row['color'] =  "4FF5F7";
+        }
+        
+         
         if (!$minical) {
             $link['href'] = '?m=tasks&a=view&task_id=' . $row['task_id'];
             // the link text
             if (mb_strlen($row['task_name']) > $strMaxLen) {
-                $row['short_name'] = mb_substr($row['task_name'], 0, $strMaxLen) . '...';
+                $row['short_name'] = mb_substr($row['task_name'], 0, $strMaxLen-3) . '...';
             } else {
                 $row['short_name'] = $row['task_name'];
             }
-
-            $link['text'] = '<span style="color:' . bestColor($row['color']) . ';background-color:#' . $row['color'] . '">' . $row['short_name'] . ($row['task_milestone'] ? '&nbsp;' . w2PshowImage('icons/milestone.gif') : '') . '</span>';
         }
-
-        // determine which day(s) to display the task
-        $start = new w2p_Utilities_Date($AppUI->formatTZAwareTime($row['task_start_date'], '%Y-%m-%d %T'));
-        $end = $row['task_end_date'] ? new w2p_Utilities_Date($AppUI->formatTZAwareTime($row['task_end_date'], '%Y-%m-%d %T')) : null;
-
+        //$link['text'] = '<span>' . $row['short_name'] . ($row['task_milestone'] ? '&nbsp;' . w2PshowImage('icons/milestone.gif') : '') . '</span>';
+        $link['text'] = '<span style="color:' . bestColor($row['color']) . ';background-color:#' . $row['color'] ;
+        $link['text'] = '">' . $row['short_name'] . ($row['task_milestone'] ? '&nbsp;' . w2PshowImage('icons/milestone.gif') : '') . '</span>';
+        
         // First we test if the Tasks Starts and Ends are on the same day, if so we don't need to go any further.
         if (($start->after($startPeriod)) && ($end && $end->after($startPeriod) && $end->before($endPeriod) && !($start->dateDiff($end)))) {
             if ($minical) {
@@ -3876,7 +3909,7 @@ function __extract_from_todo($user_id, $showArcProjs, $showLowTasks, $showInProg
 // query my sub-tasks (ignoring task parents)
 
     $q = new w2p_Database_Query;
-    $q->addQuery('distinct(ta.task_id), ta.*, ta.task_start_date as task_start_datetime, ta.task_end_date as task_end_datetime');
+    $q->addQuery('distinct(ta.task_id), ta.*');
     $q->addQuery('project_name, pr.project_id, project_color_identifier');
     $q->addQuery('tp.task_pinned');
     $q->addQuery('ut.user_task_priority');
@@ -4532,7 +4565,7 @@ function __extract_from_projects_gantt2($department, $addPwOiD, $project_type, $
     if ($statusFilter > -1) {
         $q->addWhere('pr.project_status = ' . (int) $statusFilter);
     }
-    if (!($department > 0) && $company_id > 0 && !$addPwOiD) {
+    if (!($department > 0) && $company_id != 0 && !$addPwOiD) {
         $q->addWhere('pr.project_company = ' . (int) $company_id);
     }
 // Show Projects where the Project Owner is in the given department
@@ -5025,10 +5058,9 @@ function __extract_from_tasks_pinning($AppUI, $task_id)
 
         $task = new CTask();
         // load the record data
-        if (1 == $pin) {
+        if ($pin) {
             $result = $task->pinTask($AppUI->user_id, $task_id);
-        }
-        if (-1 == $pin) {
+        } else {
             $result = $task->unpinTask($AppUI->user_id, $task_id);
         }
 
