@@ -144,12 +144,12 @@ CREATE TABLE `w2pversion2` (
   `code_revision` int(10) UNSIGNED NOT NULL DEFAULT '0',
   `code_version` varchar(10) NOT NULL DEFAULT '',
   `db_version` int(10) NOT NULL DEFAULT '0',
-  `last_db_update` date NOT NULL DEFAULT '1000-01-01',
-  `last_code_update` date NOT NULL DEFAULT '1000-01-01',
+  `last_db_update` date NOT NULL DEFAULT '2001-01-01',
+  `last_code_update` date NOT NULL DEFAULT '2001-01-01',
   PRIMARY KEY  (`db_version`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-UPDATE `w2pversion` SET `last_db_update` = '1000-01-01' where `last_db_update` < '1000-01-01';
-UPDATE `w2pversion` SET `last_code_update` = '1000-01-01' where `last_code_update` < '1000-01-01';
+UPDATE `w2pversion` SET `last_db_update` = '2001-01-01' where `last_db_update` < '2001-01-01';
+UPDATE `w2pversion` SET `last_code_update` = `last_db_update` where `last_code_update` < '2001-01-01';
 INSERT INTO `w2pversion2` (`code_revision`, `code_version`, `db_version`, `last_db_update`, `last_code_update`)
   SELECT 0, `code_version`, `db_version`, `last_db_update`, `last_code_update` from `w2pversion`;
 RENAME TABLE `w2pversion` TO `old_w2pversion`;
