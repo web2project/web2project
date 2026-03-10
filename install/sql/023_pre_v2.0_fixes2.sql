@@ -17,5 +17,16 @@ ALTER TABLE `departments` CHANGE `dept_country` `dept_country` VARCHAR( 100 )
 --   This is a variation of the above issue.
 --   Resolves: http://bugs.web2project.net/view.php?id=486
 
+# 2026 Update - eliminating '0000-00-00 00:00:00' as defaults
+ALTER TABLE `tasks`
+    MODIFY task_created DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    MODIFY task_updated DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP;
+
+# 2026 Update - eliminating '0000-00-00 00:00:00' as values
+UPDATE `tasks` SET `task_created` = NOW() WHERE CAST(`task_created` AS CHAR(20)) = '0000-00-00 00:00:00';
+UPDATE `tasks` SET `task_updated` = NOW() WHERE CAST(`task_updated` AS CHAR(20)) = '0000-00-00 00:00:00';
+UPDATE `tasks` SET `task_start_date` = NOW() WHERE CAST(`task_start_date` AS CHAR(20)) = '0000-00-00 00:00:00';
+UPDATE `tasks` SET `task_end_date` = NOW() WHERE CAST(`task_end_date` AS CHAR(20)) = '0000-00-00 00:00:00';
+
 ALTER TABLE `tasks` CHANGE `task_represents_project` `task_represents_project`
     INT( 10 ) NOT NULL DEFAULT '0'
