@@ -43,10 +43,10 @@ UPDATE projects SET project_task_count = (
 	SELECT COUNT(*) FROM tasks WHERE task_project = project_id
 );
 
-UPDATE projects SET project_last_task = (
-	SELECT task_id FROM tasks WHERE task_project = project_id
+UPDATE projects SET project_last_task = IFNULL(
+	(SELECT task_id FROM tasks WHERE task_project = project_id
 		AND task_dynamic <> 1
-		ORDER BY task_end_date DESC LIMIT 1
+		ORDER BY task_end_date DESC LIMIT 1), 0
 );
 
 UPDATE projects SET project_actual_end_date = (
