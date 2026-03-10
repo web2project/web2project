@@ -22,6 +22,6 @@ ALTER TABLE `events` ADD `event_name` VARCHAR( 255 ) NOT NULL AFTER  `event_id`;
 
 UPDATE events SET event_name = event_title;
 
-ALTER TABLE `events` CHANGE `event_title` `event_title` 
-    VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT  '' COMMENT  'deprecated';
+ALTER TABLE `events` CHANGE `event_title` `event_title` VARCHAR( 255 ) 
+    CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT  '' COMMENT  'deprecated';
 UPDATE `modules` SET `permissions_item_label` =  'event_name' WHERE  `mod_directory` =  'calendar';
