@@ -98,7 +98,7 @@ CREATE TABLE IF NOT EXISTS `tasks_users` (
   `user_id` INT(10) default NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
-#Fix the permissions fields of the modules table to properly use the permissions system
+# Fix the permissions fields of the modules table to properly use the permissions system
 UPDATE `modules` SET `permissions_item_table` = 'companies', `permissions_item_field` = 'company_id', `permissions_item_label` = 'company_name', `mod_main_class` = 'CCompany' WHERE  `modules`.`mod_directory` = 'companies';
 UPDATE `modules` SET `permissions_item_table` = 'projects', `permissions_item_field` = 'project_id', `permissions_item_label` = 'project_name', `mod_main_class` = 'CProject' WHERE  `modules`.`mod_directory` = 'projects';
 UPDATE `modules` SET `permissions_item_table` = 'tasks', `permissions_item_field` = 'task_id', `permissions_item_label` = 'task_name', `mod_main_class` = 'CTask' WHERE  `modules`.`mod_directory` = 'tasks';
@@ -108,8 +108,8 @@ UPDATE `modules` SET `permissions_item_table` = 'contacts', `permissions_item_fi
 UPDATE `modules` SET `permissions_item_table` = 'forums', `permissions_item_field` = 'forum_id', `permissions_item_label` = 'forum_name', `mod_main_class` = 'CForum' WHERE `modules`.`mod_directory` = 'forums';
 UPDATE `modules` SET `permissions_item_table` = 'departments', `permissions_item_field` = 'dept_id', `permissions_item_label` = 'dept_name', `mod_main_class` = 'CDepartment' WHERE   `modules`.`mod_directory` = 'departments';
 
-#Fix the host theme or the images for other themes will go beserk:
-#Also shift dP name if necessary on the email prefix
+# Fix the host theme or the images for other themes will go beserk:
+# Also shift dP name if necessary on the email prefix
 UPDATE `config` SET `config_value` = "web2project" WHERE `config_name` = "host_style";
 UPDATE `config` SET `config_value` = "[web2Project]" WHERE `config_name` = "email_prefix" AND `config_value` = "[dotProject]";
 

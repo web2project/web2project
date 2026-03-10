@@ -61,11 +61,11 @@ CREATE TABLE IF NOT EXISTS `file_folders` (
     PRIMARY KEY  (`file_folder_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
-#20071113
+# 20071113
 # Remove the NOT NULL clause from company_description to avoid issues on win plaforms
 ALTER TABLE `companies` MODIFY `company_description` text;
 
-#20070728
+# 20070728
 #altered the data type to prevent the 99.99% misrounding issue
 ALTER TABLE `tasks` MODIFY `task_percent_complete` tinyint(4) DEFAULT '0';
 
