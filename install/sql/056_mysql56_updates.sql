@@ -8,22 +8,56 @@
 --     extracts it from the old table, inserts it into the new, renames the old table, and renames the new to replace it.
 -- Fun times.
 
-ALTER TABLE `forum_messages`  CHANGE `message_date` `message_date`                    DATETIME DEFAULT '1000-01-01 00:00:00';
-ALTER TABLE `history`         CHANGE `history_date` `history_date`                    DATETIME NOT NULL DEFAULT '1000-01-01 00:00:00';
-ALTER TABLE `sessions`        CHANGE `session_created` `session_created`              DATETIME NOT NULL DEFAULT '1000-01-01 00:00:00';
-ALTER TABLE `tasks`           CHANGE `task_created` `task_created`                    DATETIME NOT NULL DEFAULT '1000-01-01 00:00:00';
-ALTER TABLE `tasks`           CHANGE `task_updated` `task_updated`                    DATETIME NOT NULL DEFAULT '1000-01-01 00:00:00';
-ALTER TABLE `task_log`        CHANGE `task_log_created` `task_log_created`            DATETIME NOT NULL DEFAULT '1000-01-01 00:00:00';
-ALTER TABLE `task_log`        CHANGE `task_log_updated` `task_log_updated`            DATETIME NOT NULL DEFAULT '1000-01-01 00:00:00';
+# 2026 Update - eliminating '0000-00-00 00:00:00' as defaults and values
+ALTER TABLE `forum_messages`  CHANGE `message_date` `message_date` DATETIME DEFAULT CURRENT_TIMESTAMP;
 
+ALTER TABLE `sessions`
+    MODIFY `session_created` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    MODIFY `session_updated` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP;
+
+ALTER TABLE `tasks`
+    MODIFY `task_created` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    MODIFY `task_updated` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP;
+
+# Added a create statement for history because there are potentially some upgrade paths that could have left it out
+CREATE TABLE IF NOT EXISTS `history` (
+  `history_id` int(10) NOT NULL AUTO_INCREMENT,
+  `history_date` datetime NOT NULL default CURRENT_TIMESTAMP,
+  `history_user` int(10) NOT NULL default '0',
+  `history_action` varchar(20) NOT NULL default 'modify',
+  `history_item` int(10) NOT NULL,
+  `history_table` varchar(20) NOT NULL default '',
+  `history_project` int(10) NOT NULL default '0',
+  `history_name` varchar(255) default NULL,
+  `history_changes` text,
+  `history_description` text,
+  PRIMARY KEY  (`history_id`),
+  KEY `index_history_module` (`history_table`,`history_item`),
+  KEY `index_history_item` (`history_item`),
+  KEY `history_date` (`history_date`),
+  KEY `history_table` (`history_table`),
+  KEY `history_user` (`history_user`)
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+# Still need the alter statement in case the history table was there but incorrect from a previous install
+ALTER TABLE `history`         CHANGE `history_date` `history_date` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP;
+
+UPDATE `task_log` SET `task_log_created` = `task_log_date` WHERE `task_log_created` IS NULL;
+UPDATE `task_log` SET `task_log_updated` = `task_log_date` WHERE `task_log_updated` IS NULL;
+
+ALTER TABLE `task_log`
+    MODIFY `task_log_created` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    MODIFY `task_log_updated` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP;
+
+# Clean up the forums structure
 CREATE TABLE `forums2` (
   `forum_id` int(10) NOT NULL auto_increment,
   `forum_project` int(10) NOT NULL default '0',
   `forum_status` tinyint(4) NOT NULL default '-1',
   `forum_owner` int(10) NOT NULL default '0',
   `forum_name` varchar(50) NOT NULL default '',
-  `forum_create_date` datetime default '1000-01-01 00:00:00',
-  `forum_last_date` datetime default '1000-01-01 00:00:00',
+  `forum_create_date` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `forum_last_date` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `forum_last_id` int(10) unsigned NOT NULL default '0',
   `forum_message_count` int(10) NOT NULL default '0',
   `forum_description` varchar(255) default NULL,
@@ -35,13 +69,15 @@ CREATE TABLE `forums2` (
   KEY `forum_name` (`forum_name`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
 
-UPDATE `forums` SET `forum_create_date` = '1000-01-01 00:00:00' where `forum_create_date` < '1000-01-01 00:00:00';
-UPDATE `forums` SET `forum_last_date` = '1000-01-01 00:00:00' where `forum_last_date` < '1000-01-01 00:00:00';
+UPDATE `forums` SET `forum_create_date` = NOW() WHERE CAST(`forum_create_date` AS CHAR(20)) = '0000-00-00 00:00:00';
+UPDATE `forums` SET `forum_create_date` = NOW() WHERE `forum_create_date` IS NULL;
+UPDATE `forums` SET `forum_last_date` = `forum_create_date` WHERE CAST(`forum_last_date` AS CHAR(20)) = '0000-00-00 00:00:00';
+UPDATE `forums` SET `forum_last_date` = `forum_create_date` WHERE `forum_last_date` IS NULL;
 INSERT INTO `forums2` SELECT * from `forums`;
 RENAME TABLE `forums` TO `old_forums`;
 RENAME TABLE `forums2` TO `forums`;
 
-
+# Clean up the projects structure
 CREATE TABLE `projects2` (
   `project_id` int(10) NOT NULL auto_increment,
   `project_company` int(10) NOT NULL DEFAULT '0',
@@ -77,8 +113,8 @@ CREATE TABLE `projects2` (
   `project_parent` int(10) UNSIGNED NOT NULL DEFAULT '0',
   `project_empireint_special` int(1) NOT NULL DEFAULT '0',
   `project_updator` int(10) NOT NULL DEFAULT '0',
-  `project_created` datetime NOT NULL DEFAULT '1000-01-01 00:00:00',
-  `project_updated` datetime NOT NULL DEFAULT '1000-01-01 00:00:00',
+  `project_created` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `project_updated` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `project_status_comment` varchar(255) NOT NULL DEFAULT '',
   `project_subpriority` tinyint(4) DEFAULT '0',
   `project_end_date_adjusted_user` int(10) NOT NULL DEFAULT '0',
@@ -96,10 +132,14 @@ CREATE TABLE `projects2` (
   KEY `project_type` (`project_type`),
   KEY `project_original_parent` (`project_original_parent`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-UPDATE `projects` SET `project_start_date` = '1000-01-01 00:00:00' where `project_start_date` < '1000-01-01 00:00:00';
-UPDATE `projects` SET `project_end_date` = '1000-01-01 00:00:00' where `project_end_date` < '1000-01-01 00:00:00';
-UPDATE `projects` SET `project_created` = '1000-01-01 00:00:00' where `project_created` < '1000-01-01 00:00:00';
-UPDATE `projects` SET `project_updated` = '1000-01-01 00:00:00' where `project_updated` < '1000-01-01 00:00:00';
+
+UPDATE `projects` SET `project_start_date` = NULL WHERE CAST(`project_start_date` AS CHAR(20)) = '0000-00-00 00:00:00';
+UPDATE `projects` SET `project_end_date` = NULL WHERE CAST(`project_end_date` AS CHAR(20)) = '0000-00-00 00:00:00';
+UPDATE `projects` SET `project_created` = NOW() WHERE CAST(`project_created` AS CHAR(20)) = '0000-00-00 00:00:00';
+UPDATE `projects` SET `project_created` = NOW() WHERE `project_created` IS NULL;
+UPDATE `projects` SET `project_updated` = NOW() WHERE CAST(`project_updated` AS CHAR(20)) = '0000-00-00 00:00:00';
+UPDATE `projects` SET `project_updated` = NOW() WHERE `project_updated` IS NULL;
+
 INSERT INTO `projects2` (`project_id`, `project_company`, `project_department`, `project_name`, `project_short_name`,
       `project_owner`, `project_url`, `project_demo_url`, `project_start_date`, `project_end_date`, `project_actual_end_date`,
       `project_status`, `project_percent_complete`, `project_color_identifier`, `project_description`, `project_target_budget`,
@@ -125,17 +165,24 @@ CREATE TABLE `user_access_log2` (
   `user_access_log_id` int(10) auto_increment,
   `user_id` int(10) UNSIGNED NOT NULL DEFAULT '0',
   `user_ip` varchar(15) NOT NULL DEFAULT '',
-  `date_time_in` datetime DEFAULT '1000-01-01 00:00:00',
-  `date_time_out` datetime DEFAULT '1000-01-01 00:00:00',
-  `date_time_last_action` datetime DEFAULT '1000-01-01 00:00:00',
+  `date_time_in` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `date_time_out` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `date_time_last_action` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY  (`user_access_log_id`),
   KEY `date_time_last_action` (`date_time_last_action`),
   KEY `date_time_in` (`date_time_in`),
   KEY `date_time_out` (`date_time_out`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-UPDATE `user_access_log` SET `date_time_in` = '1000-01-01 00:00:00' where `date_time_in` < '1000-01-01 00:00:00';
-UPDATE `user_access_log` SET `date_time_out` = '1000-01-01 00:00:00' where `date_time_out` < '1000-01-01 00:00:00';
-UPDATE `user_access_log` SET `date_time_last_action` = '1000-01-01 00:00:00' where `date_time_last_action` < '1000-01-01 00:00:00';
+
+UPDATE `user_access_log` SET `date_time_out` = NOW() WHERE CAST(`date_time_out` AS CHAR(20)) = '0000-00-00 00:00:00';
+UPDATE `user_access_log` SET `date_time_out` = NOW() WHERE `date_time_out` IS NULL;
+
+UPDATE `user_access_log` SET `date_time_in` = `date_time_out` WHERE CAST(`date_time_in` AS CHAR(20)) = '0000-00-00 00:00:00';
+UPDATE `user_access_log` SET `date_time_in` = `date_time_out` WHERE `date_time_in` IS NULL;
+
+UPDATE `user_access_log` SET `date_time_last_action` = `date_time_out` WHERE CAST(`date_time_last_action` AS CHAR(20)) = '0000-00-00 00:00:00';
+UPDATE `user_access_log` SET `date_time_last_action` = `date_time_out` WHERE `date_time_last_action` IS NULL;
+
 INSERT INTO `user_access_log2` SELECT * from `user_access_log`;
 RENAME TABLE `user_access_log` TO `old_user_access_log`;
 RENAME TABLE `user_access_log2` TO `user_access_log`;
@@ -144,8 +191,8 @@ CREATE TABLE `w2pversion2` (
   `code_revision` int(10) UNSIGNED NOT NULL DEFAULT '0',
   `code_version` varchar(10) NOT NULL DEFAULT '',
   `db_version` int(10) NOT NULL DEFAULT '0',
-  `last_db_update` date NOT NULL DEFAULT '2001-01-01',
-  `last_code_update` date NOT NULL DEFAULT '2001-01-01',
+  `last_db_update` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `last_code_update` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY  (`db_version`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 UPDATE `w2pversion` SET `last_db_update` = '2001-01-01' where `last_db_update` < '2001-01-01';
