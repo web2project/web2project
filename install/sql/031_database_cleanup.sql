@@ -6,11 +6,21 @@ UPDATE `contacts` SET `contact_birthday` = NULL WHERE CAST(`contact_birthday` AS
 ALTER TABLE `contacts` CHANGE `contact_order_by` `contact_order_by` VARCHAR( 30 )
     CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT 'deprecated';
 
+# 2026 Update - eliminating '0000-00-00 00:00:00' as defaults
+ALTER TABLE `projects`
+    MODIFY `project_created` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    MODIFY `project_updated` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	MODIFY `project_end_date_adjusted` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP;
 ALTER TABLE `projects` CHANGE `project_contacts` `project_contacts` VARCHAR( 100 )
     CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT 'deprecated';
-
 ALTER TABLE `projects` CHANGE `project_departments` `project_departments` VARCHAR( 100 )
 	CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT 'deprecated';
+# 2026 Update - eliminating '0000-00-00 00:00:00' as values
+UPDATE `projects` SET `project_start_date` = NOW() WHERE CAST(`project_start_date` AS CHAR(20)) = '0000-00-00 00:00:00';
+UPDATE `projects` SET `project_end_date` = NOW() WHERE CAST(`project_end_date` AS CHAR(20)) = '0000-00-00 00:00:00';
+UPDATE `projects` SET `project_created` = NOW() WHERE CAST(`project_created` AS CHAR(20)) = '0000-00-00 00:00:00';
+UPDATE `projects` SET `project_updated` = NOW() WHERE CAST(`project_updated` AS CHAR(20)) = '0000-00-00 00:00:00';
+UPDATE `projects` SET `project_end_date_adjusted` = NOW() WHERE CAST(`project_end_date_adjusted` AS CHAR(20)) = '0000-00-00 00:00:00';
 
 # 2026 Update - eliminating '0000-00-00 00:00:00' as defaults
 ALTER TABLE `tasks`
