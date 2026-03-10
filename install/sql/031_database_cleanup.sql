@@ -1,5 +1,8 @@
 -- This is just flagging a bunch of fields for deprecation.
 
+# 2026 Update - eliminating '0000-00-00 00:00:00' as values
+UPDATE `contacts` SET `contact_birthday` = NULL WHERE CAST(`contact_birthday` AS CHAR(20)) = '0000-00-00 00:00:00';
+
 ALTER TABLE `contacts` CHANGE `contact_order_by` `contact_order_by` VARCHAR( 30 )
     CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT 'deprecated';
 

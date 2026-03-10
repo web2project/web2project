@@ -28,6 +28,9 @@ INSERT INTO `contacts_methods` (`contact_id`, `method_name`, `method_value`)
     SELECT `contact_id`, 'im_skype', `contact_skype` FROM `contacts` WHERE TRIM(`contact_skype`) IS NOT NULL UNION
     SELECT `contact_id`, 'im_google', `contact_google` FROM `contacts` WHERE TRIM(`contact_google`) IS NOT NULL;
 
+# 2026 Update - eliminating '0000-00-00 00:00:00' as values
+UPDATE `contacts` SET `contact_birthday` = NULL WHERE CAST(`contact_birthday` AS CHAR(20)) = '0000-00-00 00:00:00';
+
 ALTER TABLE `contacts`
     DROP `contact_email`,
     DROP `contact_email2`,
