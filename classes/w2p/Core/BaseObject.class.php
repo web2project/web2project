@@ -726,9 +726,7 @@ abstract class w2p_Core_BaseObject extends w2p_System_Event implements w2p_Inter
 
         $prefix = $this->_getColumnPrefixFromTableName($this->_tbl);
         $name = ('' != $this->{$prefix . '_name'}) ? $this->{$prefix . '_name'} : '';
-        addHistory($this->_tbl, $this->{$this->_tbl_key}, $this->_event, $name . ' - ' .
-            $this->_AppUI->_('ACTION') . ': ' . $this->_event . ' ' . $this->_AppUI->_('TABLE') . ': ' .
-            $this->_tbl . ' ' . $this->_AppUI->_('ID') . ': ' . $this->{$this->_tbl_key});
+        addHistory($this->_tbl, $this->{$this->_tbl_key}, $this->_event, $name );
 
         return $this;
     }
