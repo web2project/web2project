@@ -31,7 +31,7 @@ $customLookups = array('event_type' => $event_types);
 
 $listTable = new w2p_Output_ListTable($AppUI);
 $listTable->df .= ' ' . $AppUI->getPref('TIMEFORMAT');      // @todo cleanup this hack
-echo $listTable->startTable();
+echo $listTable->startTable('events-company_view');
 echo $listTable->buildHeader($fields);
 echo $listTable->buildRows($items, $customLookups);
 echo $listTable->endTable();

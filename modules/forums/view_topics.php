@@ -40,7 +40,7 @@ if (0 == count($fields)) {
     $listHelper = new w2p_Output_ListTable($AppUI);
     $listHelper->addBefore('watch', 'message_id');
 
-    echo $listHelper->startTable();
+    echo $listHelper->startTable('topics-forums_view');
     echo $listHelper->buildHeader($fields);
     echo $listHelper->buildRows($items);
 

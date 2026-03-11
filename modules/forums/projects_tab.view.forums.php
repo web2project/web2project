@@ -24,7 +24,7 @@ if (0 == count($fields)) {
 $listTable = new w2p_Output_ListTable($AppUI);
 $listTable->df .= ' ' . $AppUI->getPref('TIMEFORMAT');
 
-echo $listTable->startTable();
+echo $listTable->startTable('forums-projects_view');
 echo $listTable->buildHeader($fields);
 echo $listTable->buildRows($items);
 echo $listTable->endTable();

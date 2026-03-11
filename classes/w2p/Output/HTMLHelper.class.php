@@ -30,7 +30,7 @@ class w2p_Output_HTMLHelper extends w2p_Output_HTML_Base
 
         $listTable = new w2p_Output_ListTable($this->AppUI);
 
-        $output  = $listTable->startTable();
+        $output  = $listTable->startTable('contacts-' . $moduleName . '_view');
         $output .= $listTable->buildHeader($fields);
         $output .= $listTable->buildRows($contactList);
         $output .= $listTable->endTable();

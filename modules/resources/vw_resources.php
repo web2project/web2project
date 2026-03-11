@@ -28,7 +28,7 @@ $resource_types = w2PgetSysVal('ResourceTypes');
 $customLookups = array('resource_type' => $resource_types);
 
 $listTable = new w2p_Output_ListTable($AppUI);
-echo $listTable->startTable();
+echo $listTable->startTable('resources');
 echo $listTable->buildHeader($fields);
 echo $listTable->buildRows($items, $customLookups);
 echo $listTable->endTable();

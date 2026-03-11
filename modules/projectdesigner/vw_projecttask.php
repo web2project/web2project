@@ -27,7 +27,7 @@ $taskTree = $taskobj->getTaskTree($project_id);
 
 $listTable = new w2p_Output_HTML_TaskTable($AppUI);
 
-echo $listTable->startTable();
+echo $listTable->startTable('projectdesigner-task_view');
 echo $listTable->buildHeader($fields);
 echo $listTable->buildRows($taskTree);
 echo $listTable->endTable();

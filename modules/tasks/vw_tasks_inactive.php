@@ -34,7 +34,7 @@ $listTable->addBefore('edit', 'task_id');
 $listTable->addBefore('pin', 'task_id');
 $listTable->addBefore('log', 'task_id');
 
-echo $listTable->startTable();
+echo $listTable->startTable('tasks-tasklist');
 echo $listTable->buildHeader($fields, false, $m);
 echo $listTable->buildRows($tasks, $customLookups);
 echo $listTable->endTable();

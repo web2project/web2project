@@ -50,7 +50,7 @@ $listTable = new w2p_Output_ListTable($AppUI);
 $listTable->df .= ' ' . $AppUI->getPref('TIMEFORMAT');
 
 echo $pageNav;
-echo $listTable->startTable('tbl list history');
+echo $listTable->startTable('history-list');
 echo $listTable->buildHeader($fields);
 echo $listTable->buildRows($items);
 echo $listTable->endTable();

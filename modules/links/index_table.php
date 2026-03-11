@@ -51,7 +51,7 @@ $listTable->df .= ' ' . $AppUI->getPref('TIMEFORMAT');
 $listTable->addBefore('edit', 'link_id');
 $listTable->addBefore('url', 'link_url');
 
-echo $listTable->startTable();
+echo $listTable->startTable('links');
 echo $listTable->buildHeader($fields);
 echo $listTable->buildRows($items, $customLookups);
 echo $listTable->endTable();

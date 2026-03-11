@@ -183,8 +183,7 @@ $listTable->addBefore('log', 'task_id');
     <input type="hidden" name="bulk_task_hperc_assign" value="" />
 
 <?php
-echo $listTable->startTable();
-
+echo $listTable->startTable('tasks-tasklist');
 echo $listTable->buildHeader($fields, false, $m);
 
 $status = w2PgetSysVal('TaskStatus');

@@ -74,7 +74,7 @@ if (0 == count($fields)) {
     <?php
     $listTable = new w2p_Output_ListTable($AppUI);
     $listTable->addBefore('watch', 'forum_id');
-    echo $listTable->startTable();
+    echo $listTable->startTable('forums');
     echo $listTable->buildHeader($fields, true, 'forums&f=' . $f);
     echo $listTable->buildRows($items);
     ?>

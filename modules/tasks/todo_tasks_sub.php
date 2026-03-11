@@ -129,7 +129,7 @@ $listTable->addBefore('edit', 'task_id');
 $listTable->addBefore('pin', 'task_id');
 $listTable->addBefore('log', 'task_id');
 
-echo $listTable->startTable();
+echo $listTable->startTable('tasks-todo_view');
 echo $listTable->buildHeader($fields);
 echo $listTable->buildRows($tasks);
 echo $listTable->endTable();

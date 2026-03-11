@@ -22,7 +22,7 @@ $items = $paginator->getItemsOnPage($page);
 echo $paginator->buildNavigation($AppUI, $m, $tab);
 
 $listTable = new w2p_Output_ListTable($AppUI);
-echo $listTable->startTable();
+echo $listTable->startTable($m);
 echo $listTable->buildHeader($fields, $sortable, $m);
 echo $listTable->buildRows($items, $customLookups);
 echo $listTable->endTable();
