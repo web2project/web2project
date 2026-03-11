@@ -2532,7 +2532,7 @@ function buildPaginationNav($AppUI, $m, $tab, $xpg_totalrecs, $xpg_pagesize, $pa
 
   $xpg_break = false;
 
-  $s = '<table width="100%" cellspacing="0" cellpadding="0" border="0"><tr>';
+  $s = '<table width="100%" cellspacing="0" cellpadding="0" border="0" class="pagination"><tr>';
 
   if ($xpg_totalrecs > $xpg_pagesize) {
     $xpg_prev_page = $page - 1;
@@ -4698,7 +4698,7 @@ function __extract_from_forums_view_messages2($AppUI, $forum_id, $msg_id, $date)
     $q->addInsert('visit_user', $AppUI->user_id);
     $q->addInsert('visit_forum', $forum_id);
     $q->addInsert('visit_message', $msg_id);
-    $q->addInsert('visit_date', $date->getDate());
+    $q->addInsert('visit_datetime', $date->getDate());
     $q->exec();
 }
 
