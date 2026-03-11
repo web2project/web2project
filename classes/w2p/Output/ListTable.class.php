@@ -48,8 +48,8 @@ class w2p_Output_ListTable extends w2p_Output_HTMLHelper
 
         $this->cellCount = count($this->_before) + count($fields) + count($this->_after);
 
-        return '<tr>' . str_repeat('<th></th>', count($this->_before)) .
-                $cells . str_repeat('<th></th>', count($this->_after)) . '</tr>';
+        return '<thead><tr>' . str_repeat('<th></th>', count($this->_before)) .
+                $cells . str_repeat('<th></th>', count($this->_after)) . '</tr></thead>';
     }
 
     public function buildRows($allRows, $customLookups = array())
@@ -64,7 +64,7 @@ class w2p_Output_ListTable extends w2p_Output_HTMLHelper
             $body .= $this->buildEmptyRow();
         }
 
-        return $body;
+        return '<tbody>' . $body . '</tbody>';
     }
 
     public function buildRow($rowData, $customLookups = array())

@@ -1451,14 +1451,14 @@ function displayFiles($AppUI, $folder_id = 0, $task_id = 0, $project_id = 0, $co
     $files = $q->loadList();
     $file_versions = [];//$qv->loadHashList('file_id');
 
-    $s  = '<tr>';
+    $s  = '<thead><tr>';
     $s .= '<th></th>';
     $s .= '<th>' . $AppUI->_('co') . '</th>';
     foreach ($fieldNames as $index => $name) {
         $s .= '<th>' . $AppUI->_($fieldNames[$index]) . '</th>';
     }
     $s .= '<th></th>';
-    $s .= '</tr>';
+    $s .= '</tr></thead><tbody>';
 
     $fp = -1;
     $htmlHelper = new w2p_Output_HTMLHelper($AppUI);
@@ -1516,7 +1516,7 @@ function displayFiles($AppUI, $folder_id = 0, $task_id = 0, $project_id = 0, $co
         $s .= '<tr><td colspan="' . (count($fieldNames) + 3 ) . '">' . $AppUI->_('No data available') . '</td></tr>';
     }
 
-    return $s;
+    return $s . '</tbody>';
 }
 
 // From: modules/files/files.class.php
