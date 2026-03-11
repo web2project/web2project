@@ -1491,8 +1491,6 @@ function displayFiles($AppUI, $folder_id = 0, $task_id = 0, $project_id = 0, $co
         }
         $fp = $row['file_project'];
 
-        // $row['file_datetime'] = $latest_file['file_datetime'];
-        // $row['file_id'] = $latest_file['file_id'];
         $htmlHelper->stageRowData($row);
 
         $s .= '<tr>';
@@ -1502,74 +1500,17 @@ function displayFiles($AppUI, $folder_id = 0, $task_id = 0, $project_id = 0, $co
         }
         $s .= '</td>';
         $s .= '<td class="data">';
-        // if ($canEdit && empty($latest_file['file_checkout'])) {
-        //     $s .= '<a href="?m=files&a=co&file_id=' . $latest_file['file_id'] . '">' . w2PshowImage('up.png', '16', '16', 'checkout', 'checkout file', 'files') . '</a>';
-        // } else {
-        //     if ($latest_file['file_checkout'] == $AppUI->user_id) {
-        //         $s .= '<a href="?m=files&a=addedit&ci=1&file_id=' . $latest_file['file_id'] . '">' . w2PshowImage('down.png', '16', '16', 'checkin', 'checkin file', 'files') . '</a>';
-        //     } else {
-        //         if ($latest_file['file_checkout'] == 'final') {
-        //             $s .= 'final';
-        //         } else {
-        //             $s .= $latest_file['co_contact_name'] . '<br>(' . $latest_file['co_user'] . ')';
-        //         }
-        //     }
-        // }
 
         $version_link = '';
-        // $hidden_table = '';
-        // if ($row['file_versions'] > 1) {
-        //     $version_link = '&nbsp<a href="javascript: void(0);" onClick="expand(\'versions_' . $latest_file['file_id'] . '\'); ">(' . $row['file_versions'] . ')</a>';
-        //     $hidden_table = '<tr><td colspan="20">
-        //         <table style="display: none" id="versions_' . $latest_file['file_id'] . '" class="tbl list">
-        //         <tr>';
-        //     foreach ($fieldNames as $index => $name) {
-        //         $hidden_table .= '<th nowrap="nowrap">';
-        //         $hidden_table .= $AppUI->_($fieldNames[$index]);
-        //         $hidden_table .= '</th>';
-        //     }
-        //     $hidden_table .= '</tr>';
-
-        //     $sub_htmlHelper = new w2p_Output_HTMLHelper($AppUI);
-        //     $sub_htmlHelper->df .= ' ' . $AppUI->getPref('TIMEFORMAT');
-
-        //     foreach ($file_versions as $file) {
-        //         $sub_htmlHelper->stageRowData($file);
-
-        //         if ($file['file_version_id'] == $latest_file['file_version_id']) {
-        //             foreach ($fieldList as $index => $column) {
-        //                 $hidden_table .= $sub_htmlHelper->createCell($fieldList[$index], $file[$fieldList[$index]], $customLookups);
-        //             }
-
-        //             if ($canEdit && w2PgetConfig('files_show_versions_edit')) {
-        //                 $hidden_table .= '<a href="./index.php?m=files&a=addedit&file_id=' . $file['file_id'] . '">' . w2PshowImage('kedit.png', '16', '16', 'edit file', 'edit file', 'files') . "</a>";
-        //             }
-        //             $hidden_table .= '</td><tr>';
-        //         }
-        //     }
-        //     $hidden_table .= '</table>';
-        // }
         $s .= '</td>';
 
         foreach ($fieldList as $index => $column) {
             $s .= $htmlHelper->createCell($fieldList[$index], $row[$fieldList[$index]], $customLookups);
-            // if ('file_version' == $fieldList[$index]) {
-            //     $cell = str_replace('</td>', $version_link.'</td>', $cell);
-            // }
-            // $s .= $cell;
         }
 
         $s .= '<td>';
-        // $s .= '<form name="frm_remove_file_' . $latest_file['file_id'] . '" action="?m=files" method="post" accept-charset="utf-8">
-        //     <input type="hidden" name="dosql" value="do_file_aed" />
-        //     <input type="hidden" name="del" value="1" />
-        //     <input type="hidden" name="file_id" value="' . $latest_file['file_id'] . '" />
-        //     <input type="hidden" name="redirect" value="' . $current_uri . '" />
-        //     </form>';
-        // $s .= '<a href="javascript: void(0);" onclick="if (confirm(\'' . $AppUI->_('Are you sure you want to delete this file?') . '\')) {document.frm_remove_file_' . $latest_file['file_id'] . '.submit()}">' . w2PshowImage('remove.png', '16', '16', 'delete file', 'delete file', 'files') . '</a>';
         $s .= '</td>';
         $s .= '</tr>';
-        // $s .= $hidden_table;
     }
     if (0 == count($files)) {
         $s .= '<tr><td colspan="' . (count($fieldNames) + 3 ) . '">' . $AppUI->_('No data available') . '</td></tr>';
@@ -2489,19 +2430,11 @@ function w2PgetUsersHashList($stub = null, $where = null, $orderby = 'contact_fi
 }
 
 ##
-## displays the configuration array of a module for informational purposes
+## @deprecated This is no longer used anywhere for anything.
 ##
 function w2PshowModuleConfig($config)
 {
-    global $AppUI;
-    $s = '<table cellspacing="2" cellpadding="2" border="0" class="std" width="50%">';
-    $s .= '<tr><th colspan="2">' . $AppUI->_('Module Configuration') . '</th></tr>';
-    foreach ($config as $k => $v) {
-        $s .= '<tr><td width="50%">' . $AppUI->_($k) . '</td><td width="50%" class="hilite">' . $AppUI->_($v) . '</td></tr>';
-    }
-    $s .= '</table>';
-
-    return ($s);
+    return '';
 }
 
 /**

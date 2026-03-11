@@ -12,23 +12,7 @@ class w2p_Output_HTMLHelper extends w2p_Output_HTML_Base
     /** @deprecated */
     public static function renderContactList(w2p_Core_CAppUI $AppUI, array $contactList)
     {
-        $output = '<table cellspacing="1" cellpadding="2" border="0" width="100%" class="tbl">';
-        $output .= '<tr><th>' . $AppUI->_('Name') . '</th><th>' . $AppUI->_('Email') . '</th>';
-        $output .= '<th>' . $AppUI->_('Phone') . '</th><th>' . $AppUI->_('Department') . '</th></tr>';
-        foreach ($contactList as $contact_id => $contact_data) {
-            $contact = new CContact();
-            $contact->contact_id = $contact_id;
-
-            $output .= '<tr>';
-            $output .= '<td class="hilite"><a href="index.php?m=contacts&amp;a=addedit&amp;contact_id=' . $contact_id . '">' . $contact_data['contact_order_by'] . '</a></td>';
-            $output .= '<td class="hilite">' . w2p_email($contact_data['contact_email']) . '</td>';
-            $output .= '<td class="hilite">' . $contact_data['contact_phone'] . '</td>';
-            $output .= '<td class="hilite">' . $contact_data['dept_name'] . '</td>';
-            $output .= '</tr>';
-        }
-        $output .= '</table>';
-
-        return $output;
+        return '';
     }
 
     public function renderContactTable($moduleName, array $contactList)

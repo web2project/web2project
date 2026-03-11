@@ -13,10 +13,6 @@ $config['mod_ui_name']     = $config['mod_name'];
 $config['mod_ui_icon'] = 'kfind.png';
 $config['mod_description'] = 'A module to search keywords and find the needle in the haystack';
 
-if ($a == 'setup') {
-	echo w2PshowModuleConfig($config);
-}
-
 /**
  * Class CSetupSmartsearch
  *
