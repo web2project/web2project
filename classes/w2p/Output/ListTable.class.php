@@ -27,9 +27,12 @@ class w2p_Output_ListTable extends w2p_Output_HTMLHelper
         parent::__construct($AppUI);
     }
 
-    public function startTable($classes = 'tbl list')
+    public function startTable(string $id = '', string $classes = 'tbl list')
     {
-        return '<table class="' . $classes . '">';
+        $_id = ('' == $id) ? '' : 'id="' . $id . '"';
+        $_classes = 'class="' . $classes . '"';
+
+        return "<table {$_id} {$_classes}>";
     }
 
     public function buildHeader($fields = array(), $sortable = false, $m = '')
