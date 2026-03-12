@@ -2,7 +2,6 @@
 
 $htmlHelper = new w2p_Output_HTMLHelper($AppUI);
 $df = $AppUI->getPref('SHDATEFORMAT');
-
 ?>
 <table id="tblProjects" class="std view projects">
 <tr>
@@ -84,44 +83,11 @@ $df = $AppUI->getPref('SHDATEFORMAT');
                 </table>
             </td>
         </tr>
-    </table>
-</td>
-<td class="view-column">
-    <strong><?php echo $AppUI->_('Summary'); ?></strong><br />
-    <table cellspacing="1" cellpadding="2" border="0" width="100%" class="well">
-        <tr>
-            <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Status'); ?>:</td>
-            <?php echo $htmlHelper->createCell('project_status', $AppUI->_($pstatus[$project->project_status])); ?>
-        </tr>
-        <tr>
-            <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Type'); ?>:</td>
-            <?php echo $htmlHelper->createCell('project_type', $AppUI->_($ptype[$project->project_type])); ?>
-        </tr>
-        <tr>
-            <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Priority'); ?>:</td>
-            <td width="100%" style="background-color:<?php echo $projectPriorityColor[$project->project_priority] ?>"><?php echo $AppUI->_($projectPriority[$project->project_priority]); ?></td>
-        </tr>
-        <tr>
-            <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Progress'); ?>:</td>
-            <?php echo $htmlHelper->createCell('project_percent_complete', $project->project_percent_complete); ?>
-        </tr>
-        <tr>
-            <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Active'); ?>:</td>
-            <td width="100%"><?php echo $project->project_active ? $AppUI->_('Yes') : $AppUI->_('No'); ?></td>
-        </tr>
-        <tr>
-            <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Scheduled Hours'); ?>:</td>
-            <?php echo $htmlHelper->createCell('total_hours', $project->project_scheduled_hours); ?>
-        </tr>
-        <tr>
-            <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Worked Hours'); ?>:</td>
-            <?php echo $htmlHelper->createCell('project_worked_hours', $project->project_worked_hours); ?>
-        </tr>
-        <?php if (w2PgetConfig('budget_info_display', false)) { ?>
+<?php if (w2PgetConfig('budget_info_display', false)) { ?>
             <tr>
                 <td align="center" nowrap="nowrap"><?php echo $AppUI->_('Finances'); ?>:</td>
                 <td align="center" nowrap="nowrap">
-                    <!--<table cellspacing="1" cellpadding="2" border="0" width="100%">
+                    <table cellspacing="1" cellpadding="2" border="0" width="100%">
                             <tr>
                                 <td align="center">
                                     <?php echo $AppUI->_('Target Budgets'); ?>:
@@ -234,10 +200,43 @@ $df = $AppUI->getPref('SHDATEFORMAT');
                                 </td>
                             </tr>
                             <?php } ?>
-                        </table>-->
+                        </table>
                 </td>
             </tr>
         <?php } ?>
+    </table>
+</td>
+<td class="view-column">
+    <strong><?php echo $AppUI->_('Summary'); ?></strong><br />
+    <table cellspacing="1" cellpadding="2" border="0" width="100%" class="well">
+        <tr>
+            <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Status'); ?>:</td>
+            <?php echo $htmlHelper->createCell('project_status', $AppUI->_($pstatus[$project->project_status])); ?>
+        </tr>
+        <tr>
+            <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Type'); ?>:</td>
+            <?php echo $htmlHelper->createCell('project_type', $AppUI->_($ptype[$project->project_type])); ?>
+        </tr>
+        <tr>
+            <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Priority'); ?>:</td>
+            <td width="100%" style="background-color:<?php echo $projectPriorityColor[$project->project_priority] ?>"><?php echo $AppUI->_($projectPriority[$project->project_priority]); ?></td>
+        </tr>
+        <tr>
+            <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Progress'); ?>:</td>
+            <?php echo $htmlHelper->createCell('project_percent_complete', $project->project_percent_complete); ?>
+        </tr>
+        <tr>
+            <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Active'); ?>:</td>
+            <td width="100%"><?php echo $project->project_active ? $AppUI->_('Yes') : $AppUI->_('No'); ?></td>
+        </tr>
+        <tr>
+            <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Scheduled Hours'); ?>:</td>
+            <?php echo $htmlHelper->createCell('total_hours', $project->project_scheduled_hours); ?>
+        </tr>
+        <tr>
+            <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Worked Hours'); ?>:</td>
+            <?php echo $htmlHelper->createCell('project_worked_hours', $project->project_worked_hours); ?>
+        </tr>
         <?php
         $depts = $project->getDepartmentList();
 
