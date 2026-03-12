@@ -31,8 +31,8 @@ $module = new w2p_System_Module();
 $fields = $module->loadSettings('history', 'index_list');
 
 if (0 == count($fields)) {
-    $fieldList = array('history_datetime', 'history_description', 'history_user');
-    $fieldNames = array('Date', 'Description', 'Owner');
+    $fieldList = array('history_datetime', 'history_table', 'history_action', 'history_description', 'history_user');
+    $fieldNames = array('Date', 'Module', 'Action', 'Item', 'Actor');
 
     $module->storeSettings('history', 'index_list', $fieldList, $fieldNames);
     $fields = array_combine($fieldList, $fieldNames);

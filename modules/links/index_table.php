@@ -28,7 +28,7 @@ $fields = $module->loadSettings('links', 'index_list');
 
 if (0 == count($fields)) {
     $fieldList = array('link_name', 'link_description', 'link_category', 'link_project', 'link_task', 'link_owner', 'link_datetime');
-    $fieldNames = array('Link Name', 'Description', 'Category', 'Project Task', 'Task Name', 'Owner', 'Date');
+    $fieldNames = array('Link Name', 'Description', 'Category', 'Project Name', 'Task Name', 'Owner', 'Date');
 
     $module->storeSettings('links', 'index_list', $fieldList, $fieldNames);
     $fields = array_combine($fieldList, $fieldNames);
