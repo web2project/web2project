@@ -35,6 +35,7 @@ abstract class w2p_Core_BaseObject extends w2p_System_Event implements w2p_Inter
      * @var object Query Handler
      */
     protected $_query;
+    private $_event;
 
     /**
      * @var object permissions/preference/translation object
