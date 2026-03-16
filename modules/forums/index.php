@@ -29,7 +29,7 @@ $items = $forum->getAllowedForums($AppUI->user_id, $AppUI->user_company, $f, $or
 
 $filters = array('- Filters -');
 
-if (isset($a) && $a == 'viewer') {
+if (isset($a) && $a == 'view') {
     array_push($filters, 'My Watched', 'Last 30 days');
 } else {
     array_push($filters, 'My Forums', 'My Watched', 'My Projects', 'My Company', 'Inactive Projects');

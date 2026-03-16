@@ -134,14 +134,11 @@ class w2p_Output_HTMLHelper extends w2p_Output_HTML_Base
  * TODO: These two prefix adjustments are an ugly hack because our departments 
  *   table doesn't follow the same convention as every other table we have. 
  *   This needs to be fixed in v4.0 - caseydk 13 Feb 2012
- *
- * TODO: And unfortunately, the forums module is screwy using 'viewer' instead 
- *   of our standard 'view' for the page. ~ caseydk 16 Feb 2012
-*/
+ */
             case '_name':
                 $prefix = ($prefix == 'project_short')  ? 'project' : $prefix;
                 $prefix = ($prefix == 'dept')  ? 'department' : $prefix;
-                $page   = ($prefix == 'forum' || $prefix == 'message') ? 'viewer' : 'view';
+                $page   = 'view';
                 $link   = '?m='. w2p_pluralize($prefix) .'&a='.$page.'&';
                 $link   = ($prefix == 'message') ? '?m=forums&a='.$page . '&' : $link;
                 $prefix = ($prefix == 'department') ? 'dept' : $prefix;
