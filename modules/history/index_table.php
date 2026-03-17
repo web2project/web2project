@@ -12,13 +12,20 @@ $page = (int) w2PgetParam($_GET, 'page', 1);
 $history = new CHistory();
 $where = (-1 == $filter_param) ? '' : "history_table = '".$filter_param."'";
 $histories = $history->loadAll('history_datetime', $where);
-
 $items = array_values($histories);
 
 $display = array();
 $perms = $AppUI->acl();
+
+$module_translate = ['modules' => 'system', 'custom_fields_struct' => 'system',
+    'budgets' => 'system', 'billingcode' => 'system',
+    'forum_messages' => 'forums', 'login' => 'admin'];
+
 foreach ($items as $item) {
-    if (!$perms->checkModuleItem($item['history_table'], 'view', $item['history_item'])) {
+    $_module = $item['history_table'];
+    $_module = isset($module_translate[$_module]) ? $module_translate[$_module] : $_module;
+
+    if (!$perms->checkModuleItem($_module, 'view', $item['history_item'])) {
         continue;
     }
     // @note this next line is a little hack so our templating can resolve which history_user is which user
