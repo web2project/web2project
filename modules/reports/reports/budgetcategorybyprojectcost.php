@@ -15,7 +15,6 @@ $active_projects = (isset($_POST['company_id'])) ? $active_projects : 1;
  * Generates a report of the task logs for given dates
  */
 $do_report = w2PgetParam($_POST, 'do_report', 0);
-$log_pdf = w2PgetParam($_POST, 'log_pdf', 0);
 
 $log_start_date = w2PgetParam($_POST, 'log_start_date', '2008-01-01');
 $log_end_date   = w2PgetParam($_POST, 'log_end_date',   '2012-01-01');
@@ -123,8 +122,6 @@ $companies = arrayMerge(array('0' => 'All Companies'), $companies);
             $workingDaysForProj = $pstart->workingDaysInSpan($pend);
             $factor = $workingDaysInSpans/$workingDaysForProj;
             $factor = ($factor > 1) ? 1 : $factor;
-            $pdfRow = array();
-            $pdfRow[] = sprintf('%.1f%%', $project->project_percent_complete);
             ?><tr>
                 <td width="10" align="right" style="border: outset #eeeeee 1px;background-color:#<?php echo $project->project_color_identifier; ?>">
                     <font color="<?php echo bestColor($project->project_color_identifier); ?>"><?php echo sprintf('%.1f%%', $project->project_percent_complete); ?></font>
@@ -133,7 +130,6 @@ $companies = arrayMerge(array('0' => 'All Companies'), $companies);
                     <a href="?m=projects&amp;a=view&amp;project_id=<?php echo $project->project_id; ?>">
                         <?php
                         $projectName = htmlentities($project->project_name);
-                        $pdfRow[] = '  '.$projectName;
                         echo $projectName;
                         ?>
                     </a>
@@ -146,8 +142,6 @@ $companies = arrayMerge(array('0' => 'All Companies'), $companies);
 
                         echo '<td align="center">'.$symbol.round($budget * $factor, 2).'</td>';
                         echo '<td align="center">'.$symbol.$consumed.'</td>';
-                        $pdfRow[] = round($budget * $factor, 2);
-                        $pdfRow[] = $consumed;
 
                         $projectBudget += $budget;
                         $totalBudget[$id] += $budget * $factor;
@@ -155,13 +149,11 @@ $companies = arrayMerge(array('0' => 'All Companies'), $companies);
                     }
                     $consumed = (isset($costs['otherCosts'])) ? $costs['otherCosts'] : 0;
                     $totalConsumed['otherCosts'] += $consumed;
-                    $pdfRow[] = $consumed;
                     echo '<td align="center">'.$symbol.$consumed.'</td>';
                 ?>
                 <td align="center">
                     <?php
                     echo $symbol.round($projectBudget*$factor, 2);
-                    $pdfRow[] = round($projectBudget*$factor, 2);
                     ?>
                 </td>
                 <td align="center">
@@ -169,7 +161,6 @@ $companies = arrayMerge(array('0' => 'All Companies'), $companies);
                         $projectCost = $costs['totalCosts'];
                         $actualCost = $symbol.((int) $projectCost);
                         echo $actualCost;
-                        $pdfRow[] = (int) $projectCost;
                     ?>
                 </td>
                 <td align="center">
@@ -178,18 +169,13 @@ $companies = arrayMerge(array('0' => 'All Companies'), $companies);
                     echo ($projectDiff < 0) ? '<span style="color: red;">' : '';
                     echo $symbol.$projectDiff;
                     echo ($projectDiff < 0) ? '</span>' : '';
-                    $pdfRow[] = $projectDiff;
                     ?>
                 </td>
             </tr><?php
-            $pdfdata[] = $pdfRow;
         }
 
-        $pdfRow = array();
         echo '<tr>';
         echo '<td colspan="2" align="right">'.$AppUI->_('Totals').'</td>';
-        $pdfRow[] = '';
-        $pdfRow[] = $AppUI->_('Totals');
         foreach ($billingCategory as $id => $category) {
             $tmpBudget = (isset($totalBudget[$id]) ? $totalBudget[$id] : 0);
             $sumBudget += $tmpBudget;
@@ -197,75 +183,18 @@ $companies = arrayMerge(array('0' => 'All Companies'), $companies);
             $sumConsumed += $tmpConsumed;
             echo '<td align="center">'.$symbol.round($tmpBudget).'</td>';
             echo '<td align="center">'.$symbol.round($tmpConsumed).'</td>';
-            $pdfRow[] = round($tmpBudget);
-            $pdfRow[] = round($tmpConsumed);
         }
         $sumConsumed += $totalConsumed['otherCosts'];
         echo '<td align="center">'.$symbol.$totalConsumed['otherCosts'].'</td>';
         echo '<td align="center">'.$symbol.round($sumBudget).'</td>';
         echo '<td align="center">'.$symbol.round($sumConsumed).'</td>';
-        $pdfRow[] = round($totalConsumed['otherCosts']);
-        $pdfRow[] = round($sumBudget);
-        $pdfRow[] = round($sumConsumed);
         echo '<td align="center">';
         $sumDiff = (int) ($sumBudget - $sumConsumed);
         echo ($sumDiff < 0) ? '<span style="color: red;">' : '';
         echo $symbol.$sumDiff;
         echo ($sumDiff < 0) ? '</span>' : '';
-        $pdfRow[] = round($sumDiff);
         echo '</td>';
         echo '</tr>';
-        $pdfdata[] = $pdfRow;
-
-        if ($log_pdf) {
-            // make the PDF file
-            $temp_dir = W2P_BASE_DIR . '/files/temp';
-
-            $output = new w2p_Output_PDFRenderer('A4', 'landscape');
-            $output->addTitle($AppUI->_('Costs By Project and Billing Category'));
-            $output->addDate($df);
-            $output->addSubtitle($companies[$company_id]);
-
-            $columns = array();
-            $pdfheaders = array($AppUI->_('Work', UI_OUTPUT_JS),
-                '  '.$AppUI->_('Project Name', UI_OUTPUT_JS));
-            $columns[] = array('justification' => 'center', 'width' => 40);
-            $columns[] = array('justification' => 'left'  , 'width' => 130);
-            foreach ($billingCategory as $id => $category) {
-                $pdfheaders[] = $AppUI->_($category."\n".$AppUI->_('Budgetted', UI_OUTPUT_JS), UI_OUTPUT_JS);
-                $pdfheaders[] = "\n(".$AppUI->_('Used', UI_OUTPUT_JS).")";
-                $columns[] = array('justification' => 'center', 'width' => 45);
-                $columns[] = array('justification' => 'center', 'width' => 45);
-            }
-            $pdfheaders[] = $AppUI->_("Unidentified\n(Used)", UI_OUTPUT_JS);
-            $pdfheaders[] = $AppUI->_('Budgetted', UI_OUTPUT_JS);
-            $pdfheaders[] = $AppUI->_('Used', UI_OUTPUT_JS);
-            $pdfheaders[] = $AppUI->_('Remaining', UI_OUTPUT_JS);
-            $columns[] = array('justification' => 'center', 'width' => 50);
-            $columns[] = array('justification' => 'center', 'width' => 45);
-            $columns[] = array('justification' => 'center', 'width' => 45);
-            $columns[] = array('justification' => 'center', 'width' => 50);
-
-            $options = array('showLines' => 1, 'fontSize' => 9, 'rowGap' => 1,
-                'colGap' => 1, 'xPos' => 25, 'xOrientation' => 'right', 'width' => '500',
-                'cols' => $columns);
-
-            $output->addTable($title, $pdfheaders, $pdfdata, $options);
-
-            $w2pReport = new CReport();
-            echo '<tr><td colspan="20" align="center">';
-            if ($output->writeFile($w2pReport->getFilename())) {
-                echo '<a href="' . W2P_BASE_URL . '/files/temp/' . $w2pReport->getFilename() . '.pdf" target="pdf">';
-                echo $AppUI->_('View PDF File');
-                echo '</a>';
-            } else {
-                echo 'Could not open file to save PDF.  ';
-                if (!is_writable($temp_dir)) {
-                    echo 'The files/temp directory is not writable.  Check your file system permissions.';
-                }
-            }
-            echo '</td></tr>';
-        }
     } else {
         echo '<tr><td colspan="20">'.$AppUI->_('There are no projects in this company').'</td></tr>';
     }

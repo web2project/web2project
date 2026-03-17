@@ -16,7 +16,6 @@ if (!canView('task_log')) {
 }
 $do_report = w2PgetParam($_GET, 'do_report', 0);
 $log_all = w2PgetParam($_GET, 'log_all', 0);
-$log_pdf = w2PgetParam($_GET, 'log_pdf', 0);
 $log_ignore = w2PgetParam($_GET, 'log_ignore', 0);
 $log_userfilter = w2PgetParam($_GET, 'log_userfilter', '0');
 
@@ -195,15 +194,12 @@ if ($do_report) {
 <?php
 	$hours = 0.00;
 	$tamount = 0.00;
-	$pdfdata = array();
 
 	foreach ($logs as $log) {
 		$date = new w2p_Utilities_Date($log['task_log_date']);
 		$hours += $log['task_log_hours'];
 		$tamount += $log['amount'];
-
-		$pdfdata[] = array($log['creator'], $log['company_name'], $log['project_name'], $log['task_name'], $date->format($df), $log['task_log_description'], $log['billingcode_name'], sprintf("%.2f", $log['task_log_hours']), sprintf("%.2f", $log['billingcode_value']), sprintf("%.2f", $log['amount']), );
-?>
+		?>
 	<tr>
 		<td><?php echo $log['creator']; ?></td>
 		<td><?php echo $log['company_name']; ?></td>
@@ -233,7 +229,6 @@ if ($do_report) {
 	</tr>
 <?php
 	}
-	$pdfdata[] = array('', '', '', '', '', '', $AppUI->_('Totals') . ':', sprintf('%.2f', $hours), '', sprintf('%.2f', $tamount), );
 ?>
 	<tr>
 		<td align="right" colspan="7"><?php echo $AppUI->_('Report Totals'); ?>:</td>
@@ -243,69 +238,6 @@ if ($do_report) {
 	</tr>
 	</table>
 <?php
-	if ($log_pdf) {
-		// make the PDF file
-		if ($project_id) {
-			$project = new CProject();
-            $project->load($project_id);
-			$pname = 'Project: ' . $project->project_name;
-		} else {
-			$pname = 'All Companies and All Projects';
-		}
-
-		if ($company_id) {
-			$company = new CCompany();
-            $company->load($company_id);
-			$cname = 'Company: ' . $company->company_name;
-		} else {
-			$cname = 'All Companies and All Projects';
-		}
-
-		if ($log_userfilter) {
-			$q = new w2p_Database_Query;
-			$q->addTable('contacts');
-			$q->addQuery('contact_display_name');
-			$q->addJoin('users', '', 'user_contact = contact_id', 'inner');
-			$q->addWhere('user_id =' . (int)$log_userfilter);
-			$uname = 'User: ' . $q->loadResult();
-		} else {
-			$uname = 'All Users';
-		}
-
-		$temp_dir = W2P_BASE_DIR . '/files/temp';
-
-        $output = new w2p_Output_PDFRenderer();
-        $output->addTitle($AppUI->_('Task Log Report'));
-        $output->addDate($df);
-
-        $subtitle1 = ($company_id) ? $cname : $pname;
-        $output->addSubtitle($subtitle1);
-        $output->addSubtitle($uname);
-
-		if ($log_all) {
-            $title = 'All Task Log entries';
-		} else {
-            $title = 'Task Log entries from ' . $start_date->format($df) . ' to ' . $end_date->format($df);
-		}
-
-		$pdfheaders = array($AppUI->_('Creator', UI_OUTPUT_JS), $AppUI->_('Company', UI_OUTPUT_JS), $AppUI->_('Project', UI_OUTPUT_JS), $AppUI->_('Task', UI_OUTPUT_JS), $AppUI->_('Date', UI_OUTPUT_JS), $AppUI->_('Description', UI_OUTPUT_JS), $AppUI->_('Billing Code', UI_OUTPUT_JS), $AppUI->_('Hours', UI_OUTPUT_JS), $AppUI->_('Cost', UI_OUTPUT_JS), $AppUI->_('Amount', UI_OUTPUT_JS));
-
-		$options = array('showLines' => 1, 'fontSize' => 7, 'rowGap' => 1, 'colGap' => 1, 'xPos' => 50, 'xOrientation' => 'right', 'width' => '500', 'cols' => array(0 => array('justification' => 'left', 'width' => 50), 1 => array('justification' => 'left', 'width' => 60), 2 => array('justification' => 'left', 'width' => 60), 3 => array('justification' => 'left', 'width' => 60), 4 => array('justification' => 'center', 'width' => 40), 5 => array('justification' => 'left', 'width' => 110), 6 => array('justification' => 'left', 'width' => 30), 7 => array('justification' => 'right', 'width' => 30), 8 => array('justification' => 'right', 'width' => 30), 9 => array('justification' => 'right', 'width' => 40), ));
-
-        $output->addTable($title, $pdfheaders, $pdfdata, $options);
-
-        $w2pReport = new CReport();
-        if ($output->writeFile($w2pReport->getFilename())) {
-            echo '<a href="' . W2P_BASE_URL . '/files/temp/' . $w2pReport->getFilename() . '.pdf" target="pdf">';
-            echo $AppUI->_('View PDF File');
-            echo '</a>';
-        } else {
-            echo 'Could not open file to save PDF.  ';
-            if (!is_writable($temp_dir)) {
-                echo 'The files/temp directory is not writable.  Check your file system permissions.';
-            }
-        }
-    }
     echo '</td>
 </tr>
 </table>';

@@ -234,11 +234,11 @@ if (!$min_view) {
               vis.display = (vis.display==''||vis.display=='block')?'none':'block';
     }
 
-    function printPDFHR() {
-         document.editFrm.printpdf.value = "0";
-         document.editFrm.printpdfhr.value = "1";
-         document.editFrm.submit();
-    }
+    // function printPDFHR() {
+    //      document.editFrm.printpdf.value = "0";
+    //      document.editFrm.printpdfhr.value = "1";
+    //      document.editFrm.submit();
+    // }
 
     function submitIt() {
          document.editFrm.printpdf.value = "0";
@@ -284,7 +284,6 @@ if (!$min_view) {
 			</td>
             <td align="left">
                 <input type="button" class="button btn btn-primary btn-mini" value="<?php echo $AppUI->_('submit'); ?>" onclick='document.editFrm.display_option.value="custom";submitIt();' style="float: left;" />
-                <input type="button" class="button btn btn-primary btn-mini" value="<?php echo $AppUI->_('Print to PDF');?>" onclick='javascript:printPDFHR()' style="float: right;" />
             </td>
             <td align="right" valign="top" width="20">
                 <?php if ($display_option != 'all') { ?>

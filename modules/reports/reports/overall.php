@@ -11,7 +11,6 @@ $AppUI->getTheme()->loadCalendarJS();
  * Generates a report of the task logs for given dates
  */
 $do_report = w2PgetParam($_POST, 'do_report', 0);
-$log_pdf = w2PgetParam($_POST, 'log_pdf', 0);
 
 $log_start_date = w2PgetParam($_POST, 'log_start_date', 0);
 $log_end_date = w2PgetParam($_POST, 'log_end_date', 0);
@@ -68,7 +67,6 @@ echo $AppUI->getTheme()->styleRenderBoxTop();
     </table>
 </form>
 <?php
-$allpdfdata = array();
 
 if ($do_report) {
     echo $AppUI->getTheme()->styleRenderBoxBottom();
@@ -108,44 +106,6 @@ if ($do_report) {
 	echo '<h2>' . $AppUI->_('Total Hours') . ': ';
 	printf("%.2f", $total);
 	echo '</h2>';
-	$pdfdata[] = array($AppUI->_('Total Hours'), round($total, 2));
-
-	if ($log_pdf) {
-		// make the PDF file
-		$temp_dir = W2P_BASE_DIR . '/files/temp';
-
-        $output = new w2p_Output_PDFRenderer();
-        $output->addTitle($AppUI->_('Overall Report'));
-        $output->addDate($df);
-
-		if ($log_all) {
-			$date = new w2p_Utilities_Date();
-			$title = "All hours as of " . $date->format($df);
-		} else {
-			$sdate = new w2p_Utilities_Date($log_start_date);
-			$edate = new w2p_Utilities_Date($log_end_date);
-			$title = "Hours from " . $sdate->format($df) . ' to ' . $edate->format($df);
-		}
-
-		foreach ($allpdfdata as $company => $data) {
-			$title = $company;
-			$options = array('showLines' => 1, 'showHeadings' => 0, 'fontSize' => 8, 'rowGap' => 2, 'colGap' => 5, 'xPos' => 50, 'xOrientation' => 'right', 'width' => '500', 'cols' => array(0 => array('justification' => 'left', 'width' => 250), 1 => array('justification' => 'right', 'width' => 120)));
-
-            $output->addTable($title, null, $data, $options);
-		}
-
-		$w2pReport = new CReport();
-        if ($output->writeFile($w2pReport->getFilename())) {
-			echo '<a href="' . W2P_BASE_URL . '/files/temp/' . $w2pReport->getFilename() . '.pdf" target="pdf">';
-			echo $AppUI->_('View PDF File');
-			echo '</a>';
-		} else {
-			echo 'Could not open file to save PDF.  ';
-			if (!is_writable($temp_dir)) {
-				'The files/temp directory is not writable.  Check your file system permissions.';
-			}
-		}
-	}
 	echo '</td>
 </tr>
 </table>';

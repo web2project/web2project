@@ -15,7 +15,6 @@ $active_projects = (isset($_POST['company_id'])) ? $active_projects : 1;
  * Generates a report of the task logs for given dates
  */
 $do_report = w2PgetParam($_POST, 'do_report', 0);
-$log_pdf = w2PgetParam($_POST, 'log_pdf', 0);
 
 $log_start_date = w2PgetParam($_POST, 'log_start_date', '2008-01-01');
 $log_end_date   = w2PgetParam($_POST, 'log_end_date',   '2014-01-01');
@@ -159,59 +158,6 @@ $companies = arrayMerge(array('0' => 'All Companies'), $companies);
                     ?>
                 </td>
             </tr><?php
-            $pdfdata[] = array(sprintf('%.1f%%', $project->project_percent_complete), 
-                '  '.$projectName, $contactName,
-                $AppUI->formatTZAwareTime($project->project_start_date, $df),
-                $AppUI->formatTZAwareTime($criticalTasks[0]['task_end_date'], $df),
-                $targetBudget, $actualCost,
-                $w2Pconfig['currency_symbol'].$diff_total);
-        }
-
-        if ($log_pdf) {
-            // make the PDF file
-            $temp_dir = W2P_BASE_DIR . '/files/temp';
-
-            $output = new w2p_Output_PDFRenderer('A4', 'landscape');
-            $output->addTitle($AppUI->_('Costs By Project'));
-            $output->addDate($df);
-            $output->addSubtitle($companies[$company_id]);
-
-            $pdfheaders = array($AppUI->_('Work', UI_OUTPUT_JS),
-                '  '.$AppUI->_('Project Name', UI_OUTPUT_JS), $AppUI->_('Project Owner', UI_OUTPUT_JS),
-                $AppUI->_('Start Date', UI_OUTPUT_JS), $AppUI->_('Finish Date', UI_OUTPUT_JS),
-                $AppUI->_('Target Budget', UI_OUTPUT_JS), $AppUI->_('Actual Cost', UI_OUTPUT_JS),
-                $AppUI->_('Difference', UI_OUTPUT_JS));
-
-            $options = array('showLines' => 1, 'fontSize' => 9, 'rowGap' => 1,
-                'colGap' => 1, 'xPos' => 50, 'xOrientation' => 'right', 'width' => '500',
-                'cols' => array(
-                            0 => array('justification' => 'center', 'width' => 45),
-                            1 => array('justification' => 'left', 'width' => 175),
-                            2 => array('justification' => 'center', 'width' => 75),
-                            3 => array('justification' => 'center', 'width' => 65),
-                            4 => array('justification' => 'center', 'width' => 65),
-                            5 => array('justification' => 'center', 'width' => 65),
-                            6 => array('justification' => 'center', 'width' => 65),
-                            7 => array('justification' => 'center', 'width' => 65),
-                    ));
-
-            $output->addTable($title, $pdfheaders, $pdfdata, $options);
-
-            $w2pReport = new CReport();
-            if ($output->writeFile($w2pReport->getFilename())) {
-                echo '<tr><td colspan="13">';
-                echo '<a href="' . W2P_BASE_URL . '/files/temp/' . $w2pReport->getFilename() . '.pdf" target="pdf">';
-                echo $AppUI->_('View PDF File');
-                echo '</a>';
-                echo '</td></tr>';
-            } else {
-                echo '<tr><td colspan="13">';
-                echo 'Could not open file to save PDF.  ';
-                if (!is_writable($temp_dir)) {
-                    echo 'The files/temp directory is not writable.  Check your file system permissions.';
-                }
-                echo '</td></tr>';
-            }
         }
     } else {
         echo '<tr><td colspan="13">'.$AppUI->_('There are no projects in this company').'</td></tr>';
