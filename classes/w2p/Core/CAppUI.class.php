@@ -351,7 +351,7 @@ class w2p_Core_CAppUI
         $LANGUAGES = $this->loadLanguages();
 
         if (!$loc) {
-            $loc = in_array('LOCALE', $this->user_prefs) ? $this->user_prefs['LOCALE'] : w2PgetConfig('host_locale');
+            $loc = isset($this->user_prefs['LOCALE']) ? $this->user_prefs['LOCALE'] : w2PgetConfig('host_locale');
         }
 
         if (isset($LANGUAGES[$loc])) {

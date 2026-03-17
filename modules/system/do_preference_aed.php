@@ -38,16 +38,18 @@ foreach ($_POST['pref_name'] as $name => $value) {
 			$AppUI->setMsg($msg, UI_MSG_ERROR);
 		} else {
 			if ($obj->pref_user) {
-				// if user preferences, reload them now
-				$AppUI->loadPrefs($AppUI->user_id);
-				$AppUI->setUserLocale();
-				include W2P_BASE_DIR . '/locales/' . $AppUI->user_locale . '/locales.php';
-				include W2P_BASE_DIR . '/locales/core.php';
 				$AppUI->setMsg('Preferences');
 			}
 			$AppUI->setMsg('updated', UI_MSG_OK, true);
 		}
 	}
 }
+
+// reload user preferences now, even the language files
+$prefs = $AppUI->loadPrefs($AppUI->user_id);
+$AppUI->setUserLocale();
+include W2P_BASE_DIR . '/locales/' . $AppUI->user_locale . '/locales.php';
+include W2P_BASE_DIR . '/locales/core.php';
+
 $returnPath = ($pref_user) ? 'm=users&a=view&user_id='.$pref_user : 'm=system';
 $AppUI->redirect($returnPath);
