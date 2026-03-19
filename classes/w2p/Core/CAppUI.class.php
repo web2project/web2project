@@ -267,10 +267,18 @@ class w2p_Core_CAppUI
         // check if default user's uistyle is installed
         $uistyle = $this->getPref('UISTYLE');
 
-        if ($uistyle && !is_dir(W2P_BASE_DIR . '/style/' . $uistyle)) {
-            // fall back to host_style if user style is not installed
-            $this->setPref('UISTYLE', w2PgetConfig('host_style'));
+        // Defaults back to host_style if the user style is unavailable
+        if ('' == $uistyle || !is_dir(W2P_BASE_DIR . '/style/' . $uistyle)) {
+            $uistyle = w2PgetConfig('host_style');
         }
+
+        // Defaults to web2project default style if the host_style is unavailable
+        if ('' == $uistyle || !is_dir(W2P_BASE_DIR . '/style/' . $uistyle)) {
+            // fall back to host_style if user style is not installed
+            $uistyle = 'web2project';
+        }
+
+        $this->setPref('UISTYLE', $uistyle);
     }
 
     /**
@@ -279,15 +287,16 @@ class w2p_Core_CAppUI
      *
      * @return w2p_Theme_Base object
      */
-    public function getTheme()
+    public function getTheme() : w2p_Theme_Base
     {
         $this->setStyle();
-        $uistyle = ('' == $this->getPref('UISTYLE')) ? 'web2project' : $this->getPref('UISTYLE');
-        $uiClass = 'style_' . str_replace('-', '', $uistyle);
+        $uistyle = $this->getPref('UISTYLE');
 
-        $theme = new $uiClass($this);
+        include_once W2P_BASE_DIR . '/style/' . $uistyle . '/overrides.php';
+        $uiName = str_replace('-', '', $uistyle);
+        $uiClass = 'style_' . $uiName;
 
-        return $theme;
+        return new $uiClass($this);
     }
 
     /**

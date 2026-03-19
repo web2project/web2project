@@ -71,8 +71,6 @@ if (!isset($_SESSION['AppUI']) || isset($_GET['logout'])) {
 $AppUI = &$_SESSION['AppUI'];
 $last_insert_id = $AppUI->last_insert_id;
 
-$AppUI->setStyle();
-
 //Function for update lost action in user_access_log
 $AppUI->updateLastAction($last_insert_id);
 // load default preferences if not logged in
@@ -85,16 +83,7 @@ if (isset($user_id) && isset($_GET['logout'])) {
 	$AppUI->registerLogout($user_id);
 }
 
-// set the default ui style
-$uistyle = $AppUI->getPref('UISTYLE') ? $AppUI->getPref('UISTYLE') : w2PgetConfig('host_style');
-$uistyle = ($uistyle == 'default') ? 'web2project' : $uistyle;
-$AppUI->setPref('UISTYLE', $uistyle);
-
-include W2P_BASE_DIR . '/style/' . $uistyle . '/overrides.php';
-$uiName = str_replace('-', '', $uistyle);
-
-$uiClass = 'style_' . $uiName;
-$theme = new $uiClass($AppUI);
+$theme = $AppUI->getTheme();
 
 // check is the user needs a new password
 if (w2PgetParam($_POST, 'lostpass', 0)) {
