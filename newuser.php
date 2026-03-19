@@ -10,8 +10,8 @@ if (w2PgetConfig('activate_external_user_creation') != 'true') {
     echo $AppUI->_('You should not access this file directly');
     die();
 }
-
-$uistyle = $AppUI->getPref('UISTYLE') ? $AppUI->getPref('UISTYLE') : w2PgetConfig('host_style');
+$AppUI->setStyle();
+$uistyle = $AppUI->getPref('UISTYLE');
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">

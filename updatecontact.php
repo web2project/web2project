@@ -4,6 +4,8 @@ require_once W2P_BASE_DIR . '/includes/config.php';
 require_once W2P_BASE_DIR . '/includes/main_functions.php';
 require_once W2P_BASE_DIR . '/includes/db_adodb.php';
 $AppUI = new w2p_Core_CAppUI();
+$AppUI->setStyle();
+$uistyle = $AppUI->getPref('UISTYLE');
 
 $updatekey = w2PgetParam($_GET, 'updatekey', 0);
 $updatekey = preg_replace("/[^A-Za-z0-9]/", "", $updatekey);
@@ -45,9 +47,7 @@ if ($contact_id == 0 && $company_id > 0) {
     echo $company_name;
 }
 
-$uistyle = $AppUI->getPref('UISTYLE') ? $AppUI->getPref('UISTYLE') : w2PgetConfig('host_style');
 $outsider = $row->contact_display_name;
-require W2P_BASE_DIR . '/style/' . $uistyle . '/overrides.php';
 require W2P_BASE_DIR . '/style/' . $uistyle . '/header.php';
 
 echo $AppUI->getTheme()->styleRenderBoxTop();

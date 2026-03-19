@@ -3,9 +3,9 @@ if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly');
 }
 
-require_once W2P_BASE_DIR . '/style/' . $uistyle . '/overrides.php';
-
 $AppUI = new w2p_Core_CAppUI();
+$AppUI->setStyle();
+$uistyle = $AppUI->getPref('UISTYLE');
 
 $msg = w2PgetParam($_GET, 'msg', '');
 

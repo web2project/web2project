@@ -3,6 +3,7 @@ if (!defined('W2P_BASE_DIR')) {
     die('You should not access this file directly');
 }
 
+$uistyle = 'web2project';
 $theme = new style_web2project($AppUI);
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"

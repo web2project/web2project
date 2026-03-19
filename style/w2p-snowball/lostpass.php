@@ -3,6 +3,7 @@ if (!defined('W2P_BASE_DIR')) {
     die('You should not access this file directly');
 }
 
+$uistyle = 'w2p-snowball';
 $theme = new style_w2psnowball($AppUI, $m);
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
