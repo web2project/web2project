@@ -29,12 +29,6 @@ $showWork = (($showWork != '0') ? '1' : $showWork);
 $showWork_days = w2PgetParam($_POST, 'showWork_days', '0');
 $showWork_days = (($showWork_days != '0') ? '1' : $showWork_days);
 
-$printpdf = w2PgetParam($_POST, 'printpdf', '0');
-$printpdf = (($printpdf != '0') ? '1' : $printpdf);
-
-$printpdfhr = w2PgetParam($_POST, 'printpdfhr', '0');
-$printpdfhr = (($printpdfhr != '0') ? '1' : $printpdfhr);
-
 $showMilestonesOnly = '';
 $showNoMilestones = '';
 $addLinksToGantt = '';
@@ -148,7 +142,11 @@ if ($display_option == 'custom') {
 if (!$min_view) {
 	$titleBlock = new w2p_Theme_TitleBlock('Gantt Chart', 'icon.png', $m);
 	$titleBlock->addCrumb('?m=tasks', 'tasks list');
-	$titleBlock->addCrumb('?m=projects&a=view&project_id=' . $project_id, 'view this project');
+    if ($project_id) {
+        $titleBlock->addCrumb('?m=projects&a=view&project_id=' . $project_id, 'view this project');
+    } else {
+        $titleBlock->addCrumb('?m=projects', 'view all projects');
+    }
     $titleBlock->addCrumb('#" onclick="javascript:toggleLayer(\'displayOptions\');', 'show/hide display options');
 	$titleBlock->show();
 }
@@ -200,22 +198,16 @@ if (!$min_view) {
         echo "f.project_end_date.value='" . $new_end->format(FMT_TIMESTAMP_DATE) . "';";
         ?>
         document.editFrm.display_option.value = 'custom';
-         document.editFrm.printpdf.value = "0";
-         document.editFrm.printpdfhr.value = "0";
         f.submit();
     }
 
     function showThisMonth() {
         document.editFrm.display_option.value = "this_month";
-        document.editFrm.printpdf.value = "0";
-        document.editFrm.printpdfhr.value = "0";
         document.editFrm.submit();
     }
 
     function showFullProject() {
          document.editFrm.display_option.value = "all";
-         document.editFrm.printpdf.value = "0";
-         document.editFrm.printpdfhr.value = "0";
          document.editFrm.submit();
     }
 
@@ -234,15 +226,7 @@ if (!$min_view) {
               vis.display = (vis.display==''||vis.display=='block')?'none':'block';
     }
 
-    // function printPDFHR() {
-    //      document.editFrm.printpdf.value = "0";
-    //      document.editFrm.printpdfhr.value = "1";
-    //      document.editFrm.submit();
-    // }
-
     function submitIt() {
-         document.editFrm.printpdf.value = "0";
-         document.editFrm.printpdfhr.value = "0";
          document.editFrm.submit();
     }
 </script>
@@ -250,8 +234,6 @@ if (!$min_view) {
 <div id="displayOptions"> <!-- start of div used to show/hide formatting options -->
 <form name="editFrm" method="post" action="?<?php echo "m=$m&a=$a&tab=$tab&project_id=$project_id"; ?>" accept-charset="utf-8">
     <input type="hidden" name="display_option" value="<?php echo $display_option; ?>" />
-	<input type="hidden" name="printpdf" value="<?php echo $printpdf; ?>" />
-	<input type="hidden" name="printpdfhr" value="<?php echo $printpdfhr; ?>" />
 	<input type="hidden" name="caller" value="<?php echo $a; ?>" />
     <input type="hidden" name="datePicker" value="project" />
 
@@ -412,13 +394,13 @@ if (!$min_view) {
 						 . "?window.innerWidth:document.body.offsetWidth)*0.95) + '"
 						 . '&showLabels=' . $showLabels . '&showWork=' . $showWork
 						 . '&showTaskNameOnly=' . $showTaskNameOnly
-						   . '&showhgrid=' . $showhgrid . '&showPinned=' . $showPinned
+					     . '&showhgrid=' . $showhgrid . '&showPinned=' . $showPinned
 						 . '&showArcProjs=' . $showArcProjs . '&showHoldProjs=' . $showHoldProjs
 						 . '&showDynTasks=' . $showDynTasks . '&showLowTasks=' . $showLowTasks
 						 . '&caller=' . $a . '&user_id=' . $user_id
-						   . '&printpdf=' . $printpdf . '&showNoMilestones=' . $showNoMilestones . '&showMilestonesOnly=' . $showMilestonesOnly
-						   . '&addLinksToGantt=' . $addLinksToGantt . '&ganttTaskFilter=' . $ganttTaskFilter
-						   . '&monospacefont=' . $monospacefont . '&showWork_days=' . $showWork_days);
+						 . '&showNoMilestones=' . $showNoMilestones . '&showMilestonesOnly=' . $showMilestonesOnly
+						 . '&addLinksToGantt=' . $addLinksToGantt . '&ganttTaskFilter=' . $ganttTaskFilter
+						 . '&monospacefont=' . $monospacefont . '&showWork_days=' . $showWork_days);
 
                 ?>
                 <script language="javascript" type="text/javascript"> document.write('<img alt="Please wait while the Gantt chart is generated... (this might take a minute or two)" src="<?php echo htmlspecialchars($src); ?>" />') </script>
@@ -437,40 +419,4 @@ if (!$min_view) {
             ?>
         </td>
     </tr>
-	<tr>
-		<td>
-			<?php
-				//POST of all necesary variables to generate gantt in PDF
-				$_POST['m'] = 'tasks';
-				$_POST['a'] = 'gantt_pdf';
-				$_POST['suppressHeaders'] = '1';
-				$_POST['start_date'] = $start_date->format('%Y-%m-%d');
-				$_POST['end_date'] = $end_date->format('%Y-%m-%d');
-				$_POST['display_option'] = $display_option;
-				$_POST['showLabels']= $showLabels;
-				$_POST['showWork']= $showWork;
-				$_POST['showTaskNameOnly']= $showTaskNameOnly;
-				$_POST['showhgrid']= $showhgrid;
-				$_POST['showPinned']= $showPinned;
-				$_POST['showArcProjs']= $showArcProjs;
-				$_POST['showHoldProjs']= $showHoldProjs;
-				$_POST['showDynTasks']= $showDynTasks;
-				$_POST['showLowTasks']= $showLowTasks;
-				$_POST['caller']= $a;
-				$_POST['user_id']= $user_id;
-				$_POST['printpdfhr']= $printpdfhr;
-				$_POST['showPinned']= $showPinned;
-				$_POST['showArcProjs']= $showArcProjs;
-				$_POST['showHoldProjs']= $showHoldProjs;
-				$_POST['showDynTasks']= $showDynTasks;
-				$_POST['showLowTasks']= $showLowTasks;
-
-				if ( $printpdf == 1 || $printpdfhr == 1) {
-					include 'gantt_pdf.php';
-					$_POST['printpdf']= 0; $printpdf = 0;
-					$_POST['printpdfhr']= 0; $printpdfhr = 0;
-				}
-			?>
-		</td>
-	</tr>
 </table>

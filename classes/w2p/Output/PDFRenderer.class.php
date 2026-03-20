@@ -7,6 +7,8 @@
  *
  * @package     web2project\output
  * @author      D. Keith Casey, Jr. <contrib@caseysoftware.com>
+ * 
+ * @deprecated
  */
 
 class w2p_Output_PDFRenderer

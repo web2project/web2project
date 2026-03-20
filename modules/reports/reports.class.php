@@ -20,6 +20,9 @@ class CReport {
         return $this->reportFilename;
     }
 
+    /**
+     * This cleanup task can be deleted once PDF generation is fully removed.
+     */
     public function hook_cron()
     {
         // number of seconds in $this->expiresIn days

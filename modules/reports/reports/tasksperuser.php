@@ -16,7 +16,6 @@ $display_week_hours = w2PgetParam($_POST, 'display_week_hours', 0);
 $max_levels = w2PgetParam($_POST, 'max_levels', 'max');
 $log_userfilter = w2PgetParam($_POST, 'log_userfilter', '');
 $log_open = w2PgetParam($_POST, 'log_open', 0);
-$pdf_output = w2PgetParam($_POST, 'pdf_output', 0);
 
 $table_header = '';
 $table_rows = '';
