@@ -3,7 +3,7 @@
 $view = new w2p_Output_HTML_ViewHelper($AppUI);
 
 ?>
-<div class="std addedit users">
+<div class="std view users">
     <div class="column left well">
         <p><?php $view->showLabel('Username'); ?>
             <?php $view->showField('user_username', $user->user_username); ?>

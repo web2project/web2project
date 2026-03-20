@@ -3,7 +3,7 @@
 $view = new w2p_Output_HTML_ViewHelper($AppUI);
 
 ?>
-<div class="std addedit companies">
+<div class="std view resources">
     <div class="column left">
         <p><?php $view->showLabel('Identifier'); ?>
             <?php $view->showField('resource_key', $obj->resource_key); ?>

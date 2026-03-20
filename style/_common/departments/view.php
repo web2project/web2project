@@ -3,7 +3,7 @@
 $view = new w2p_Output_HTML_ViewHelper($AppUI);
 
 ?>
-<div class="std addedit departments">
+<div class="std view departments">
     <div class="column left">
         <p><?php $view->showLabel('Name'); ?>
             <?php $view->showField('dept_name', $department->dept_name); ?>

@@ -3,7 +3,7 @@
 $view = new w2p_Output_HTML_ViewHelper($AppUI);
 
 ?>
-<div class="std addedit forums">
+<div class="std view forums">
     <div class="column left">
         <p><?php $view->showLabel('Related Project'); ?>
             <?php $view->showField('forum_project', $forum->forum_project); ?>

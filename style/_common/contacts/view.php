@@ -3,7 +3,7 @@
 $view = new w2p_Output_HTML_ViewHelper($AppUI);
 
 ?>
-<div class="std addedit contacts">
+<div class="std view contacts">
     <div class="column left well">
         <p><?php $view->showLabel('First Name'); ?>
             <?php $view->showField('contact_firstname', $contact->contact_first_name); ?>
