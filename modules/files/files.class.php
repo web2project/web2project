@@ -208,26 +208,18 @@ class CFile extends w2p_Core_BaseObject {
         return (count($this->_error)) ? false : true;
     }
 
+    /**
+     * @deprecated
+     */
     public function checkout($userId, $fileId, $coReason) {
-        $q = $this->_getQuery();
-        $q->addTable('files');
-        $q->addUpdate('file_checkout', $userId);
-        $q->addUpdate('file_co_reason', $coReason);
-        $q->addWhere('file_id = ' . (int)$fileId);
-        $q->exec();
-
         return true;
     }
 
+    /**
+     * @deprecated
+     */
     public function cancelCheckout($fileId) {
-        $q = $this->_getQuery();
-        $q->addTable('files');
-        $q->addUpdate('file_checkout', '');
-        $q->addWhere('file_id = ' . (int)$fileId);
-        $q->exec();
-
         return true;
-
     }
 
     public function delete($unused = null)

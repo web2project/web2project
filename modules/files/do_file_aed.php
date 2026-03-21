@@ -101,12 +101,6 @@ if ($del) {
 		$AppUI->redirect($redirect);
 	}
 }
-// cancel the file checkout
-if ($cancel) {
-	$obj->cancelCheckout($file_id);
-	$AppUI->setMsg('checkout canceled', UI_MSG_OK, true);
-	$AppUI->redirect($redirect);
-}
 
 if (!ini_get('safe_mode')) {
 	set_time_limit(600);

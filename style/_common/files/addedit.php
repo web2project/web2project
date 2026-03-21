@@ -43,22 +43,10 @@ $view = new w2p_Output_HTML_ViewHelper($AppUI);
                 <?php $form->showLabel('Upload File'); ?>
                 <input type="File" name="formfile" style="width:270px" />
             </p>
-            <?php if ($ci || ($canAdmin && $object->file_checkout == 'final')) { ?>
-                <p>
-                    <?php $form->showLabel('Final Version'); ?>
-                    <input type="checkbox" name="final_ci" id="final_ci" onclick="finalCI()" />
-                </p>
-            <?php } ?>
             <p>
                 <?php $form->showLabel('Notify Assignees of Task or Project Owner by Email'); ?>
                 <input type="checkbox" name="notify" id="notify" checked="checked" />
             </p>
-            <?php if ($object->file_id && $object->file_checkout <> '' && ((int) $object->file_checkout == $AppUI->user_id || $canAdmin)) { ?>
-                <p>
-                    <?php $form->showLabel('&nbsp;'); ?>
-                    <input type="button" class="button btn btn-danger btn-mini" value="<?php echo $AppUI->_('cancel checkout'); ?>" onclick="cancelIt()" />
-                </p>
-            <?php } ?>
             <p>
                 <?php $form->showCancelButton(); ?>
                 <?php

@@ -1453,7 +1453,7 @@ function displayFiles($AppUI, $folder_id = 0, $task_id = 0, $project_id = 0, $co
 
     $s  = '<thead><tr>';
     $s .= '<th></th>';
-    $s .= '<th>' . $AppUI->_('co') . '</th>';
+    // $s .= '<th>' . $AppUI->_('co') . '</th>';
     foreach ($fieldNames as $index => $name) {
         $s .= '<th>' . $AppUI->_($fieldNames[$index]) . '</th>';
     }
@@ -1495,14 +1495,12 @@ function displayFiles($AppUI, $folder_id = 0, $task_id = 0, $project_id = 0, $co
 
         $s .= '<tr>';
         $s .= '<td class="data">';
-        if ($canEdit && (empty($row['file_checkout']) || ($row['file_checkout'] == 'final' && ($canEdit || $row['project_owner'] == $AppUI->user_id)))) {
+        if ($canEdit) {
             $s .= '<a href="./index.php?m=files&a=addedit&file_id=' . $row['file_id'] . '">' . w2PshowImage('kedit.png', '16', '16', 'edit file', 'edit file', 'files') . '</a>';
         }
         $s .= '</td>';
-        $s .= '<td class="data">';
-
-        $version_link = '';
-        $s .= '</td>';
+        // $s .= '<td class="data">';
+        // $s .= '</td>';
 
         foreach ($fieldList as $index => $column) {
             $s .= $htmlHelper->createCell($fieldList[$index], $row[$fieldList[$index]], $customLookups);
@@ -1619,10 +1617,6 @@ function file_show_attr($AppUI, $form)
     } else {
         $the_value = (strlen($object->file_version) > 0 ? $object->file_version : '1');
         $str_out .= '<input type="text" name="file_version" maxlength="10" size="5" value="' . $the_value . '" class="text" />';
-    }
-
-    if ($ci || ($canAdmin && $object->file_checkout == 'final')) {
-        $str_out .= '<input type="hidden" name="file_checkout" value="" /><input type="hidden" name="file_co_reason" value="" />';
     }
 
     $str_out .= '</p>';
