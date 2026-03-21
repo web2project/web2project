@@ -1,6 +1,7 @@
 <?php
 
 $form = new w2p_Output_HTML_FormHelper($AppUI);
+$view = new w2p_Output_HTML_ViewHelper($AppUI);
 
 ?>
 <form name="editFrm" action="?m=<?php echo $m; ?>" enctype="multipart/form-data" method="post" class="addedit files">
@@ -30,8 +31,7 @@ $form = new w2p_Output_HTML_FormHelper($AppUI);
                 </p>
                 <p>
                     <?php $form->showLabel('Uploaded By'); ?>
-                    <?php echo $object->file_owner; ?>
-                    <!-- @TODO lookup this value -->
+                    <?php $view->showField('file_owner', $object->file_owner); ?>
                 </p>
             <?php } ?>
             <?php echo file_show_attr($AppUI, $form); ?>
