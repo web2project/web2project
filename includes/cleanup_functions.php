@@ -1403,10 +1403,9 @@ function displayFiles($AppUI, $folder_id = 0, $task_id = 0, $project_id = 0, $co
         //   state for versions earlier than v3.0
         //   At some point at/after v4.0, this should be deprecated
         $fieldList = array('file_name', 'file_description',
-            'file_version', 'file_category', 'file_task',
-            'file_owner', 'file_datetime');
-        $fieldNames = array('File Name', 'Description', 'Version', 'Category',
-            'Task Name', 'Owner', 'Date',);
+            'file_category', 'file_task', 'file_owner', 'file_datetime');
+        $fieldNames = array('File Name', 'Description', 
+            'Category', 'Task Name', 'Owner', 'Date',);
 
         $module->storeSettings('files', 'index_list', $fieldList, $fieldNames);
     }
@@ -1602,24 +1601,7 @@ function getHelpdeskFolder()
 // From: modules/files/files.class.php
 function file_show_attr($AppUI, $form)
 {
-    global $object, $ci, $canAdmin, $file_project, $file_task, $task_name, $preserve;
-
-    if ($ci) {
-        $str_out  = '<p>' . $form->addLabel('Minor Revision') . '<input type="Radio" name="revision_type" value="minor" checked /></p>';
-        $str_out .= '<p>' . $form->addLabel('Major Revision') . '<input type="Radio" name="revision_type" value="major" />';
-    } else {
-        $str_out = '<p>' . $form->addLabel('Version');
-    }
-
-    if ($ci) {
-        $the_value = (strlen($object->file_version) > 0 ? $object->file_version + 0.01 : '1');
-        $str_out .= '<input type="hidden" name="file_version" value="' . $the_value . '" />';
-    } else {
-        $the_value = (strlen($object->file_version) > 0 ? $object->file_version : '1');
-        $str_out .= '<input type="text" name="file_version" maxlength="10" size="5" value="' . $the_value . '" class="text" />';
-    }
-
-    $str_out .= '</p>';
+    global $object, $canAdmin, $file_project, $file_task, $task_name, $preserve;
 
     $select_disabled = ' ';
     $onclick_task = ' onclick="popTask()" ';
