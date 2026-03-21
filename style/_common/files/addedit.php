@@ -44,10 +44,6 @@ $view = new w2p_Output_HTML_ViewHelper($AppUI);
                 <input type="File" name="formfile" style="width:270px" />
             </p>
             <p>
-                <?php $form->showLabel('Notify Assignees of Task or Project Owner by Email'); ?>
-                <input type="checkbox" name="notify" id="notify" checked="checked" />
-            </p>
-            <p>
                 <?php $form->showCancelButton(); ?>
                 <?php
                 if (is_writable(W2P_BASE_DIR.'/files')) {

@@ -255,126 +255,18 @@ class CFile extends w2p_Core_BaseObject {
         parent::hook_postDelete();
     }
 
-    //function notifies about file changing
+    /**
+     * @deprecated
+     */
     public function notify($notify) {
-        if ($notify == '1') {
-            //if no project specified than we will not do anything
-            if ($this->file_project != 0) {
-                $this->_project = new CProject();
-                $this->_project->overrideDatabase($this->_query);
-                $this->_project->load($this->file_project);
-                $mail = new w2p_Utilities_Mail();
+        return true;
+    }
 
-                if ($this->file_task == 0) { //notify all developers
-                    $mail->Subject($this->_project->project_name . '::' . $this->file_name);
-                } else { //notify all assigned users
-                    $this->_task = new CTask();
-                    $this->_task->overrideDatabase($this->_query);
-                    $this->_task->load($this->file_task);
-                    $mail->Subject($this->_project->project_name . '::' . $this->_task->task_name . '::' . $this->file_name);
-                }
-
-                $emailManager = new w2p_Output_EmailManager($this->_AppUI);
-                $body = $emailManager->getFileNotify($this);
-                $mail->Body($body, isset($GLOBALS['locale_char_set']) ? $GLOBALS['locale_char_set'] : '');
-
-                $q = $this->_getQuery();
-                if (intval($this->_task->task_id) != 0) {
-                    //preparing users array
-                    $q->addTable('tasks', 't');
-                    $q->addQuery('t.task_id, cc.contact_email as creator_email, cc.contact_first_name as
-                            creator_first_name, cc.contact_last_name as creator_last_name,
-                            oc.contact_email as owner_email, oc.contact_first_name as owner_first_name,
-                            oc.contact_last_name as owner_last_name, a.user_id as assignee_id,
-                            ac.contact_email as assignee_email, ac.contact_first_name as
-                            assignee_first_name, ac.contact_last_name as assignee_last_name');
-                    $q->addJoin('user_tasks', 'u', 'u.task_id = t.task_id');
-                    $q->addJoin('users', 'o', 'o.user_id = t.task_owner');
-                    $q->addJoin('contacts', 'oc', 'o.user_contact = oc.contact_id');
-                    $q->addJoin('users', 'c', 'c.user_id = t.task_creator');
-                    $q->addJoin('contacts', 'cc', 'c.user_contact = cc.contact_id');
-                    $q->addJoin('users', 'a', 'a.user_id = u.user_id');
-                    $q->addJoin('contacts', 'ac', 'a.user_contact = ac.contact_id');
-                    $q->addWhere('t.task_id = ' . (int)$this->_task->task_id);
-
-                } else {
-                    //find project owner and notify him about new or modified file
-                    $q->addTable('users', 'u');
-                    $q->addTable('projects', 'p');
-                    $q->addQuery('u.user_id, u.user_contact AS owner_contact_id');
-                    $q->addWhere('p.project_owner = u.user_id');
-                    $q->addWhere('p.project_id = ' . (int)$this->file_project);
-                }
-                $this->_users = $q->loadList();
-
-                if (intval($this->_task->task_id) != 0) {
-                    foreach ($this->_users as $row) {
-                        if ($row['assignee_id'] != $this->_AppUI->user_id) {
-                            $mail->To($row['assignee_email'], true);
-                            $mail->Send();
-                        }
-                    }
-                } else { //sending mail to project owner
-                    foreach ($this->_users as $row) { //there should be only one row
-                        if ($row['user_id'] != $this->_AppUI->user_id) {
-                            $mail->To($row['owner_email'], true);
-                            $mail->Send();
-                        }
-                    }
-                }
-            }
-        }
-    } //notify
-
+    /**
+     * @deprecated
+     */
     public function notifyContacts($notifyContacts) {
-        if ($notifyContacts) {
-            //if no project specified than we will not do anything
-            if ($this->file_project != 0) {
-                $this->_project = new CProject();
-                $this->_project->overrideDatabase($this->_query);
-                $this->_project->load($this->file_project);
-                $mail = new w2p_Utilities_Mail();
-
-                if ($this->file_task == 0) { //notify all developers
-                    $mail->Subject($this->_AppUI->_('Project') . ': ' . $this->_project->project_name . '::' . $this->file_name);
-                } else { //notify all assigned users
-                    $this->_task = new CTask();
-                    $this->_task->overrideDatabase($this->_query);
-                    $this->_task->load($this->file_task);
-                    $mail->Subject($this->_AppUI->_('Project') . ': ' . $this->_project->project_name . '::' . $this->_task->task_name . '::' . $this->file_name);
-                }
-
-                $emailManager = new w2p_Output_EmailManager($this->_AppUI);
-                $body = $emailManager->getFileNotifyContacts($this);
-                $mail->Body($body, isset($GLOBALS['locale_char_set']) ? $GLOBALS['locale_char_set'] : '');
-
-                $q = $this->_getQuery();
-                $q->addTable('project_contacts', 'pc');
-                if (intval($this->_task->task_id) != 0) {
-                    $q->addQuery('c.contact_email as contact_email, c.contact_first_name as contact_first_name, c.contact_last_name as contact_last_name');
-                    $q->addJoin('contacts', 'c', 'c.contact_id = pc.contact_id');
-                    $q->addWhere('pc.project_id = ' . (int)$this->_project->project_id);
-                    $sql = '(' . $q->prepare() . ')';
-                    $q->clear();
-                    $sql .= ' UNION ';
-                    $q->addTable('task_contacts', 'tc');
-                    $q->addQuery('c.contact_email as contact_email, c.contact_first_name as contact_first_name, c.contact_last_name as contact_last_name');
-                    $q->addJoin('contacts', 'c', 'c.contact_id = tc.contact_id');
-                    $q->addWhere('tc.task_id = ' . (int)$this->_task->task_id);
-                } else {
-                    $q->addQuery('pc.project_id, pc.contact_id');
-                    $q->addQuery('c.contact_email as contact_email, c.contact_first_name as contact_first_name, c.contact_last_name as contact_last_name');
-                    $q->addJoin('contacts', 'c', 'c.contact_id = pc.contact_id');
-                    $q->addWhere('pc.project_id = ' . (int)$this->file_project);
-                }
-                $this->_users = $q->loadList();
-
-                foreach ($this->_users as $row) {
-                    $mail->To($row['contact_email'], true);
-                    $mail->Send();
-                }
-            }
-        }
+        return true;
     }
 
     public function getOwner()
