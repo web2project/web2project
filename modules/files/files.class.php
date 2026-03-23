@@ -132,6 +132,33 @@ class CFile extends w2p_Core_BaseObject {
         return $search;
     }
 
+    public function list($filter = [])
+    {
+        $q = new w2p_Database_Query();
+        $q->addQuery('f.*');
+        $q->addTable('files', 'f');
+        $q->addQuery('project_name, project_color_identifier'); 
+        $q->addJoin('projects', 'p', 'p.project_id = file_project');
+
+        // todo: add permissions
+
+        foreach($filter as $key => $value) {
+            switch ($key) {
+                case 'category':
+                    if ($value > -1) {
+                        $q->addWhere('file_category = ' . (int) $value);
+                    }
+                    break;
+                // todo: add a case for folders
+                default:
+                    if ($value > 0) {
+                        $q->addWhere("file_$key = " . $value);
+                    }
+            }
+        }
+        return $q->loadList();
+    }
+
     public static function getFileList($AppUI = null, $notUsed = 0, $project_id = 0, $task_id = 0, $category_id = 0) {
         $q = new w2p_Database_Query();
         $q->addQuery('f.*');

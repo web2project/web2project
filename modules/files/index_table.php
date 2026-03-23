@@ -19,8 +19,25 @@ if ($project_id > 0 || $task_id > 0) {
   $category_id = -1;
 }
 
-$fileList = CFile::getFileList($AppUI, $company_id, $project_id, $task_id, $category_id);
-$items = $fileList;
+$file = new CFile();
+$items = $file->list(['project' => $project_id, 'task' => $task_id, 'category' => $category_id]);
+
+$module = new w2p_System_Module();
+$fields = $module->loadSettings('files', 'index_list');
+
+if (0 == count($fields)) {
+    $fieldList = array('file_name', 'file_description',
+        'file_category', 'file_task', 'file_owner', 'file_datetime');
+    $fieldNames = array('File Name', 'Description', 
+        'Category', 'Task Name', 'Owner', 'Date',);
+
+    $module->storeSettings('files', 'index_list', $fieldList, $fieldNames);
+
+    $fields = array_combine($fieldList, $fieldNames);
+}
+$file_categories = w2PgetSysVal('FileType');
+$customLookups = array('file_category' => $file_categories);
+
 ?>
 <script language="javascript" type="text/javascript">
 function expand(id){
@@ -35,8 +52,10 @@ echo $paginator->buildNavigation($AppUI, $m, $tab);
 
 $listTable = new w2p_Output_ListTable($AppUI);
 echo $listTable->startTable($m);
-
-$showProject = true;
+$listTable->addBefore(1);
+// echo $listTable->buildHeader($fields);
+//todo: add the link for addedit view
+// echo $listTable->buildRows($items, $customLookups);
 echo displayFiles($AppUI, -1, $task_id, $project_id, $company_id, $category_id);
 
 echo $listTable->endTable();
