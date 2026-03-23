@@ -19,14 +19,8 @@ if ($project_id > 0 || $task_id > 0) {
   $category_id = -1;
 }
 
-$xpg_pagesize = w2PgetConfig('page_size', 50);
-$xpg_min = $xpg_pagesize * ($page - 1); // This is where we start our record set from
-
-// counts total recs from selection
 $fileList = CFile::getFileList($AppUI, $company_id, $project_id, $task_id, $category_id);
-$xpg_totalrecs = count($fileList);
-$pageNav = buildPaginationNav($AppUI, $m, $category_id, $xpg_totalrecs, $xpg_pagesize, $page);
-echo $pageNav;
+$items = $fileList;
 ?>
 <script language="javascript" type="text/javascript">
 function expand(id){
@@ -34,12 +28,16 @@ function expand(id){
   element.style.display = (element.style.display == '' || element.style.display == 'none') ? 'block' : 'none';
 }
 </script>
-<table class="tbl list">
-    <?php
-    $showProject = true;
-
-    echo displayFiles($AppUI, -1, $task_id, $project_id, $company_id, $category_id);
-    ?>
-</table>
 <?php
-echo $pageNav;
+$paginator = new w2p_Utilities_Paginator($items);
+$items = $paginator->getItemsOnPage($page);
+echo $paginator->buildNavigation($AppUI, $m, $tab);
+
+$listTable = new w2p_Output_ListTable($AppUI);
+echo $listTable->startTable($m);
+
+$showProject = true;
+echo displayFiles($AppUI, -1, $task_id, $project_id, $company_id, $category_id);
+
+echo $listTable->endTable();
+echo $paginator->buildNavigation($AppUI, $m, $tab);
