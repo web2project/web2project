@@ -38,25 +38,16 @@ if (0 == count($fields)) {
 $file_categories = w2PgetSysVal('FileType');
 $customLookups = array('file_category' => $file_categories);
 
-?>
-<script language="javascript" type="text/javascript">
-function expand(id){
-  var element = document.getElementById(id);
-  element.style.display = (element.style.display == '' || element.style.display == 'none') ? 'block' : 'none';
-}
-</script>
-<?php
 $paginator = new w2p_Utilities_Paginator($items);
 $items = $paginator->getItemsOnPage($page);
 echo $paginator->buildNavigation($AppUI, $m, $tab);
 
 $listTable = new w2p_Output_ListTable($AppUI);
-echo $listTable->startTable($m);
-$listTable->addBefore(1);
-// echo $listTable->buildHeader($fields);
-//todo: add the link for addedit view
-// echo $listTable->buildRows($items, $customLookups);
-echo displayFiles($AppUI, -1, $task_id, $project_id, $company_id, $category_id);
+$listTable->addBefore('edit', 'file_id');
 
+echo $listTable->startTable($m);
+echo $listTable->buildHeader($fields);
+// todo: add project row
+echo $listTable->buildRows($items, $customLookups);
 echo $listTable->endTable();
 echo $paginator->buildNavigation($AppUI, $m, $tab);
