@@ -19,6 +19,7 @@ class w2p_Output_ListTable extends w2p_Output_HTMLHelper
     public $cellCount = 0;
     protected $_before = array();
     protected $_after  = array();
+    protected $_divider = '';
 
     public function __construct($AppUI)
     {
@@ -60,8 +61,13 @@ class w2p_Output_ListTable extends w2p_Output_HTMLHelper
         $body = '';
 
         if (count($allRows) > 0) {
+            $_init = '';
             foreach ($allRows as $row) {
+                if ($_init != $row[$this->_divider]) {
+                    $body .= $this->_addDivider($row);
+                }
                 $body .= $this->buildRow($row, $customLookups);
+                $_init = $row[$this->_divider];
             }
         } else {
             $body .= $this->buildEmptyRow();
@@ -81,6 +87,30 @@ class w2p_Output_ListTable extends w2p_Output_HTMLHelper
         }
         $row .= $this->_buildCells($this->_after);
         $row .= '</tr>';
+
+        return $row;
+    }
+
+    public function addDividers($key = '')
+    {
+        $this->_divider = $key;
+    }
+    protected function _addDivider($row)
+    {
+        $style = 'text-align: left; border: outset 2px #eeeeee;';
+        switch ($this->_divider) {
+            case 'file_project';
+                $style .= 'background-color:#' . $row['project_color_identifier'] . ';color:' . bestColor($row['project_color_identifier']);
+                $project_id = $row['file_project'];
+                $link = ($project_id) ? './index.php?m=projects&a=view&project_id=' . $project_id : './index.php?m=projects';
+                $name = ($project_id) ? $row['project_name'] : $this->_AppUI->_('Not attached to a project');
+                $content = '<a href="' . $link . '">' . $name . '</a>';
+                $row = '<tr><td colspan="' . $this->cellCount . '" style="' . $style . '">' . $content . '</td></tr>';
+                break;
+            default:
+                $row = '';
+                // do nothing
+        }
 
         return $row;
     }

@@ -44,10 +44,10 @@ echo $paginator->buildNavigation($AppUI, $m, $tab);
 
 $listTable = new w2p_Output_ListTable($AppUI);
 $listTable->addBefore('edit', 'file_id');
+$listTable->addDividers('file_project');
 
 echo $listTable->startTable($m);
 echo $listTable->buildHeader($fields);
-// todo: add project row
 echo $listTable->buildRows($items, $customLookups);
 echo $listTable->endTable();
 echo $paginator->buildNavigation($AppUI, $m, $tab);
