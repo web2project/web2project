@@ -137,10 +137,22 @@ class CFile extends w2p_Core_BaseObject {
         $q = new w2p_Database_Query();
         $q->addQuery('f.*');
         $q->addTable('files', 'f');
+        $q->addOrder('file_project, file_name');
         $q->addQuery('project_name, project_color_identifier'); 
         $q->addJoin('projects', 'p', 'p.project_id = file_project');
 
-        // todo: add permissions
+        // Remove disallowed projects
+        $project = new CProject();
+        $deny1 = $project->getDeniedRecords($this->_AppUI->user_id);
+        if (count($deny1) > 0) {
+            $q->addWhere('file_project NOT IN (' . implode(',', $deny1) . ')');
+        }
+        // Remove disallowed tasks
+        $task = new CTask();
+        $deny2 = $task->getDeniedRecords($this->_AppUI->user_id);
+        if (count($deny2) > 0) {
+            $q->addWhere('file_task NOT IN (' . implode(',', $deny2) . ')');
+        }
 
         foreach($filter as $key => $value) {
             switch ($key) {

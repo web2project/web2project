@@ -1386,7 +1386,11 @@ function countFiles($folder)
     return $files_in_folder;
 }
 
-// From: modules/files/filefolder.class.php
+/**
+ * From: modules/files/filefolder.class.php
+ * 
+ * @deprecated
+ */
 function displayFiles($AppUI, $folder_id = 0, $task_id = 0, $project_id = 0, $company_id = 0, $category_id = -1)
 {
     global $m, $tab, $xpg_min, $xpg_pagesize, $showProject, $file_types,
