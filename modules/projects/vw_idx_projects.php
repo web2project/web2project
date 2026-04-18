@@ -156,8 +156,8 @@ $items = $paginator->getItemsOnPage($page);
                                     $s .= $row[$field] . (nl2br($row['project_description']) ? w2PendTip() : '') . '</a>';
                                 } elseif ($count_projects > 0 && !$level) {
                                     $s .= w2PtoolTip($row[$field], nl2br($row['project_description']) .'<br />'.
-                                            '<i>'.$AppUI->_('this project is a parent on a multi-project structure').'</i><br />'.
-                                            '<i>'.$AppUI->_('click to show/hide its children').'</i>');
+                                            $AppUI->_('this project is a parent on a multi-project structure').'<br />'.
+                                            $AppUI->_('click to show/hide its children'));
                                     $s .= '<a href="javascript: void(0);" onclick="expand_collapse(\'multiproject_tr_' . $row["project_id"] . '_\', \'tblProjects\')">';
                                     $s .= '<img id="multiproject_tr_' . $row["project_id"] . '__expand" src="' . w2PfindImage('icons/expand.gif') . '" />';
                                     $s .= '<img id="multiproject_tr_' . $row["project_id"] . '__collapse" src="' . w2PfindImage('icons/collapse.gif') . '" style="display:none" /></a>&nbsp;';

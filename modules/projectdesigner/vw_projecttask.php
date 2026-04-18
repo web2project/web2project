@@ -36,7 +36,7 @@ echo $listTable->endTable();
 <table class="tbl" cellspacing="1" cellpadding="2" border="0" width="100%">
     <tr>
         <td align="center">
-            <?php echo '<strong>Gantt Chart</strong>' ?>
+            <h1><?php echo $AppUI->_('Gantt Chart'); ?></h1>
         </td>
     </tr>
     <tr>

@@ -173,9 +173,9 @@ $ontime = round(100 * (1 - ($tasks['overdue']/count($all_tasks)) - ($tasks['comp
                 <tr>
                     <td nowrap="nowrap" valign="top"><?php echo $AppUI->_('Past Due'); ?>:</td>
                     <td align="right" nowrap="nowrap">
-                        <?php echo $tasks['overdue']; ?><br />
-                        <i>(<?php echo $AppUI->_('In Progress'); ?>: <?php echo $tasks['inprogress']; ?>)<br />
-                        (<?php echo $AppUI->_('Not Started'); ?>: <?php echo $tasks['pending']; ?>)</i>
+                        <?php echo $tasks['overdue']; ?><br /><br />
+                        (<?php echo $AppUI->_('In Progress'); ?>: <?php echo $tasks['inprogress']; ?>)<br />
+                        (<?php echo $AppUI->_('Not Started'); ?>: <?php echo $tasks['pending']; ?>)
                     </td>
                     <td align="right"><?php echo round($tasks['overdue'] / count($all_tasks) * 100); ?>%</td>
                 </tr>
@@ -211,15 +211,15 @@ $ontime = round(100 * (1 - ($tasks['overdue']/count($all_tasks)) - ($tasks['comp
                 <tr>
                     <th><?php echo $AppUI->_('Task Assignee'); ?></th>
                     <th><?php echo $AppUI->_('Past Due'); ?></th>
-                    <th><i><?php echo $AppUI->_('In progress'); ?></i></th>
-                    <th><i><?php echo $AppUI->_('Not Started'); ?></i></th>
+                    <th><?php echo $AppUI->_('In progress'); ?></th>
+                    <th><?php echo $AppUI->_('Not Started'); ?></th>
                     <th><?php echo $AppUI->_('Complete'); ?></th>
                     <th><?php echo $AppUI->_('Total Tasks'); ?></th>
                     <th><?php echo $AppUI->_('Hours worked'); ?></th>
                 </tr>
                 <?php foreach ($users as $user => $stats) { ?>
                 <tr>
-                    <td><?php echo (strlen($stats['name']) > 0) ? $stats['name'] : '<i>'.$AppUI->_('No Assignee').'</i>'; ?></td>
+                    <td><?php echo (strlen($stats['name']) > 0) ? $stats['name'] : $AppUI->_('No Assignee'); ?></td>
                     <td align="right"><?php echo $stats['overdue']; ?></td>
                     <td align="right"><?php echo $stats['inprogress']; ?></td>
                     <td align="right"><?php echo $stats['pending']; ?></td>

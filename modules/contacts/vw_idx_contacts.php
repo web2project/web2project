@@ -139,17 +139,17 @@ $methodLabels = w2PgetSysVal('ContactMethods');
                                                     } elseif ($val == 'contact_company' && is_numeric($carr[$z][$x][$key])) {
 														//Don't do a thing
 													} elseif ($val == 'company_name') {
-														$s .= '<tr><td width="35%"><strong>' . $AppUI->_('Company') . ':</strong></td><td class="hilite" width="65%">' . $carr[$z][$x][$key] . '</td></tr>';
+														$s .= '<tr><td width="35%">' . $AppUI->_('Company') . ':</td><td class="hilite" width="65%">' . $carr[$z][$x][$key] . '</td></tr>';
 													} elseif ($val == 'contact_job') {
-														$s .= '<tr><td width="35%"><strong>' . $AppUI->_('Job Title') . ':</strong></td><td class="hilite" width="65%">' . $carr[$z][$x][$key] . '</td></tr>';
+														$s .= '<tr><td width="35%">' . $AppUI->_('Job Title') . ':</td><td class="hilite" width="65%">' . $carr[$z][$x][$key] . '</td></tr>';
 													} elseif ($val == 'dept_name') {
-														$s .= '<tr><td width="35%"><strong>' . $AppUI->_('Department') . ':</strong></td><td class="hilite" width="65%">' . $carr[$z][$x][$key] . '</td></tr>';
+														$s .= '<tr><td width="35%">' . $AppUI->_('Department') . ':</td><td class="hilite" width="65%">' . $carr[$z][$x][$key] . '</td></tr>';
 													} elseif ($val == 'contact_country' && $carr[$z][$x][$key]) {
 														$s .= '<tr><td class="hilite" colspan="2">' . ($countries[$carr[$z][$x][$key]] ? $countries[$carr[$z][$x][$key]] : $carr[$z][$x][$key]) . '<br /></td></tr>';
 													} elseif ($val != 'contact_country') {
 														$s .= '<tr><td class="hilite" colspan="2">' . $carr[$z][$x][$key] . '<br /></td></tr>';
                                                     } elseif ($val == 'contact_phone') {
-                                                        $s .= '<tr><td width="35%"><strong>' . $AppUI->_('Work Phone') . ':</strong></td><td class="hilite" width="65%">' . $carr[$z][$x][$key] . '</td></tr>';
+                                                        $s .= '<tr><td width="35%">' . $AppUI->_('Work Phone') . ':</td><td class="hilite" width="65%">' . $carr[$z][$x][$key] . '</td></tr>';
 													}
 												}
 											}

@@ -246,7 +246,7 @@ if (!$min_view) {
                 </a>
                 <?php } ?>
             </td>
-            <td align="right"><em>Date Filter:</em></td>
+            <td align="right">Date Filter:</td>
             <td align="right" nowrap="nowrap"><?php echo $AppUI->_('From'); ?>:</td>
             <td align="left" nowrap="nowrap">
                 <input type="hidden" name="project_start_date" id="project_start_date" value="<?php echo $start_date ? $start_date->format(FMT_TIMESTAMP_DATE) : ''; ?>" />

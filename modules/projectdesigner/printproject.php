@@ -77,7 +77,7 @@ $extra = array(0 => '(none)', 1 => 'Milestone', 2 => 'Dynamic Task', 3 => 'Inact
             	&nbsp;
             	</td>
             	<td align="center"  colspan="2">
-                    <strong><?php echo $AppUI->_('Project Report'); ?></strong>
+                    <h1><?php echo $AppUI->_('Project Report'); ?></h1>
             	</td>
             </tr>
       	</table>
