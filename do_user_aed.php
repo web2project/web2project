@@ -26,6 +26,7 @@ if (count($result) > 0) {
 }
 
 $email = w2PgetParam($_POST, 'contact_email', 0);
+$email = preg_replace("/[^A-Za-z0-9@.+]/", "", $email);
 $contact = new CContact();
 $result = $contact->loadAll(null, "contact_email = '$email'");
 if (count($result) > 0) {
