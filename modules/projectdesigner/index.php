@@ -338,7 +338,6 @@ function addComponent() {
 	start_date = eval( 'document.editFrm.add_task_start_date_'+line_nr );
 	duration_fld = eval( 'document.editFrm.add_task_duration_'+line_nr );
 	durntype_fld = eval( 'document.editFrm.add_task_durntype_'+line_nr );
-	//calcDuration(document.editFrm, start_date, end_date, duration_fld, durntype_fld);
 
 //activate new tooltips on the fly
     $("span").tipTip({maxWidth: "auto", delay: 200, fadeIn: 150, fadeOut: 150});
@@ -403,7 +402,6 @@ function setDate( frm_name, f_date ) {
 					duration_fld = eval( 'document.' + frm_name + '.' + 'add_task_' + f_date.replace('end_date','duration') );
 					durntype_fld = eval( 'document.' + frm_name + '.' + 'add_task_' + f_date.replace('end_date','durntype') );
 				}
-//				calcDuration(document.editFrm, start_date, end_date, duration_fld, durntype_fld);
 			}
 		}
 	} else {

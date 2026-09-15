@@ -70,7 +70,6 @@ function strUTF8Decode($text)
     }
     if (function_exists('iconv')) {
         $text = mb_convert_encoding($text, 'UTF-8', $encoding);
-        //iconv($encoding, 'UTF-8', $text);
     } elseif (function_exists('utf8_decode')) {
         $text = utf8_decode($text);
     }
@@ -1471,7 +1470,6 @@ function displayFiles($AppUI, $folder_id = 0, $task_id = 0, $project_id = 0, $co
     $customLookups = array('file_category' => $file_types);
 
     foreach ($files as $row) {
-        // $latest_file = $file_versions[$row['latest_id']];
 
         if ($fp != $row['file_project']) {
             if (!$row['file_project']) {
@@ -1502,8 +1500,6 @@ function displayFiles($AppUI, $folder_id = 0, $task_id = 0, $project_id = 0, $co
             $s .= '<a href="./index.php?m=files&a=addedit&file_id=' . $row['file_id'] . '">' . w2PshowImage('kedit.png', '16', '16', 'edit file', 'edit file', 'files') . '</a>';
         }
         $s .= '</td>';
-        // $s .= '<td class="data">';
-        // $s .= '</td>';
 
         foreach ($fieldList as $index => $column) {
             $s .= $htmlHelper->createCell($fieldList[$index], $row[$fieldList[$index]], $customLookups);
@@ -2611,7 +2607,6 @@ function addHistory($table, $id, $action = 'modify', $description = '', $project
     $q->addInsert('history_project', (int) $project_id);
     $q->addInsert('history_table', $table);
     $q->exec();
-    //echo db_error();
 }
 
 function w2PgetSysVal($title)
@@ -2773,18 +2768,6 @@ function file_size($size)
  */
 function formatCurrency($number, $format)
 {
-    // global $AppUI, $locale_char_set;
-
-    // if (!$format) {
-    //     $format = $AppUI->getPref('CURRENCYFORM');
-    // }
-    // // If the requested locale doesn't work, don't fail,
-    // // revert to the system default.
-    // if ($locale_char_set != 'utf-8' || !setlocale(LC_MONETARY, $format . '.UTF8')) {
-    //     if (!setlocale(LC_MONETARY, $format)) {
-    //         setlocale(LC_MONETARY, '');
-    //     }
-    // }
 
     // Even money_format can't be trusted in Windows. It simply does not work on systems that don't have strfmon capabilities. Use number_format as fallback.
     return function_exists('money_format') ? money_format('%i', $number) : number_format($number, 2);
@@ -4504,7 +4487,6 @@ function __extract_from_vw_usr($row)
     $q->addWhere('user_id = ' . (int) $row['user_id']);
     $q->addOrder('user_access_log_id DESC');
     $q->setLimit(1);
-// echo $q->prepare();
     $user_logs = $q->loadList();
 
     return $user_logs;
@@ -4810,20 +4792,17 @@ function __extract_from_tasks5($q, $subquery)
     $q->addQuery('tasks.task_id, task_parent, task_name');
     $q->addQuery('task_start_date, task_end_date, task_dynamic');
     $q->addQuery('task_pinned, pin.user_id as pin_user');
-    // $q->addQuery('ut.user_task_priority');
     $q->addQuery('task_priority, task_percent_complete');
     $q->addQuery('task_duration, task_duration_type');
     $q->addQuery('task_project, task_represents_project');
     $q->addQuery('task_description, task_owner, task_status');
     $q->addQuery('usernames.user_username, usernames.user_id');
-    // $q->addQuery('assignees.user_username as assignee_username');
     $q->addQuery('count(distinct assignees.user_id) as assignee_count');
     $q->addQuery('co.contact_first_name, co.contact_last_name');
     $q->addQuery('contact_display_name AS contact_name');
     $q->addQuery('contact_display_name AS owner');
     $q->addQuery('task_milestone');
     $q->addQuery('count(distinct f.file_task) as file_count');
-    // $q->addQuery('tlog.task_log_problem');
     $q->addQuery('task_access');
     $q->addQuery('(' . $subquery . ') AS task_nr_of_children');
     $q->addTable('tasks');

@@ -2318,7 +2318,6 @@ class CTask extends w2p_Core_BaseObject
 
         //TODO: A user should be able to select if they get distinct start/end dates or two tasks for each task.
         foreach ($taskList as $taskItem) {
-            //$taskArray[] = $taskItem;
             $taskArray[] = array_merge($taskItem, array('sequence' => $taskItem['sequence'],
                 'endDate' => $taskItem['startDate'], 'name' => 'Start: ' . $taskItem['name'],
                 'UID' => 'tasks_' . $taskItem['id'] . 'S'));

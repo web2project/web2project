@@ -68,20 +68,4 @@ class w2p_Mocks_QueryTest extends CommonSetup
         $hashlist = $this->mockDB->loadHashList();
         $this->assertEquals('value5', $hashlist[7]['key5']);
     }
-//    public function loadObject(&$object, $bindAll = false, $strip = true) {
-//        $hash = $this->loadHash();
-//
-//        $this->bindHashToObject($hash, $object, null, $strip, $bindAll);
-//    }
-//
-//    public function insertObject($table, &$object, $keyName = null, $verbose = false) {
-//
-//        parent::insertObject($table, $object, $keyName, $verbose);
-//        $object->{$keyName} = 1;
-//    }
-//
-//    public function updateObject($table, &$object, $keyName, $updateNulls = true) {
-//
-//        parent::updateObject($table, $object, $keyName, $updateNulls);
-//    }
 }

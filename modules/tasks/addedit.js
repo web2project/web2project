@@ -204,7 +204,6 @@ function next_working_day( dateObj ) {
 *   date on the backend and passes it back via the xajax library.
 */
 function calcFinish(f) {
-	//var int_st_date = new String(f.task_start_date.value);
 	var int_st_date_time = new String(f.task_start_date.value + f.start_hour.value + f.start_minute.value);	
 	var int_st_date = int_st_date_time;
 	var e = new Date(int_st_date_time.substring(0,4),(int_st_date_time.substring(4,6)-1),int_st_date_time.substring(6,8), int_st_date_time.substring(8,10), int_st_date_time.substring(10,12));

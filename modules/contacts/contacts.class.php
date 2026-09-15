@@ -321,7 +321,6 @@ class CContact extends w2p_Core_BaseObject
 
     public function updateNotify()
     {
-        //trigger_error("updateNotify has been deprecated and will be removed in v4.0. Please use notify() instead.", E_USER_NOTICE );
         return $this->notify();
     }
 

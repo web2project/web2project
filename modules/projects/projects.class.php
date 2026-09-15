@@ -949,7 +949,6 @@ class CProject extends w2p_Core_BaseObject
      */
     public function getStructuredProjects($active_only = false)
     {
-        //global $st_projects_arr;
         $st_projects = array(0 => '');
 
         $q = $this->getQuery();

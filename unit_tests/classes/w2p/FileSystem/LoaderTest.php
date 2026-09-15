@@ -50,7 +50,6 @@ class w2p_FileSystem_LoaderTest extends CommonSetup
         $this->assertFalse(array_key_exists('COPYING', $files2));
         $this->assertTrue(array_key_exists('index.php', $files2));
 
-        //$this->assertGreaterThan(count($files2), count($files1));
     }
 
     /**

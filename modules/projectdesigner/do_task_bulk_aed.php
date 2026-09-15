@@ -191,7 +191,6 @@ if (is_array($selected) && count($selected)) {
             if ($upd_task->task_id) {
                 $upd_task->updateAssigned($bulk_task_assign, $hperc_assign_ar, false, false);
             }
-            //$upd_task->updateAssigned($bulk_task_assign,array($bulk_task_assign=>$bulk_task_assign_perc),false,false);
             if ($upd_task->task_project && $upd_task->task_id && $upd_task->task_notify) {
                 $upd_task->notify();
             }

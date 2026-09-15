@@ -260,7 +260,6 @@ if (count($fields) > 0) {
     $fieldList = array('user task_priority', 'task_name', 'task_project', 'task_duration', 'task_start_date', 'task_end_date');
     $fieldNames = array('UP', 'Task', 'Project', 'Duration', 'Start Date', 'End Date');
 
-    //$module->storeSettings('tasks', 'tasksperuser', $fieldList, $fieldNames);
 }
 
 if ($do_report) {

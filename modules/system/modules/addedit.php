@@ -30,10 +30,6 @@ $filter = array($module->permissions_item_field, 'user_password', 'user_parent',
         'task_allow_other_user_tasklogs', 'tracked_dynamics', 'tracking_dynamics',
         'task_target_budget', 'task_project', 'task_parent', 'task_milestone',
         'task_access', 'project_contacts');
-//$filter = array('project_id', 'project_status', 'project_active',
-//	'project_parent', 'project_color_identifier',
-//	'project_original_parent', 'project_departments', 'project_contacts',
-//	'project_private', 'project_type', 'project_last_task', 'project_scheduled_hours');
 
 if ('CProjectDesigner' == $module->mod_main_class) {
     $module->mod_main_class = 'CTask';

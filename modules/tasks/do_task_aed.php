@@ -121,7 +121,6 @@ if ($result) {
             $shift = $nsd->compare($start_date, $nsd);
             if ($shift < 1) {
                 
-                //$obj->task_start_date = $nsd->format(FMT_DATETIME_MYSQL);
                 $osd = new w2p_Utilities_Date($obj->task_start_date);
                 $ned = new w2p_Utilities_Date($obj->task_end_date);
 

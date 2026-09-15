@@ -51,7 +51,6 @@ function removeResource(form) {
                 form.hresource_assign.value = hiddenValue;
                 form.assigned.options[fl] = null;
             }
-//alert(form.hperc_assign.value);
         }
     }
 }

@@ -35,7 +35,6 @@ $sother = [
     99 => $AppUI->_('Delete Tasks')
 ];
 
-// echo '<pre>'; print_r($sother); print_r($other); die();
 
 //Pull all users
 $users = $perms->getPermittedUsers();

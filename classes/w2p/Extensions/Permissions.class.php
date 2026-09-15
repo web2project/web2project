@@ -156,7 +156,6 @@ class w2p_Extensions_Permissions extends gacl_api
             $id = $this->del_object($id, 'aro', true);
         } else {
             //TODO: There was no permissions object to delete.. is this actuall an error?
-            //dprint(__file__, __line__, 0, 'Failed to remove user permission object');
         }
         $recalc = $this->removePermissions($login);
         if (!$recalc) {
@@ -318,7 +317,6 @@ class w2p_Extensions_Permissions extends gacl_api
             return $this->checkModule($module, 'view', $userid);
         } else {
             //this checks if the user is able to login
-            //return $this->checkLogin($userid);
             return $this->acl_check('system', 'login', 'user', $userid);
         }
     }
@@ -827,7 +825,6 @@ class w2p_Extensions_Permissions extends gacl_api
 
         $this->debug_text("get_objects(): Section Value: $section_value Object Type: $object_type");
 
-        // $query = 'SELECT id, value, name, order_value, hidden FROM '. $table;
         $q = new w2p_Database_Query;
         $q->addTable($table);
         $q->addQuery('id, value, name, order_value, hidden');

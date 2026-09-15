@@ -79,7 +79,6 @@ if (w2PgetParam($_POST, 'Save', '') != '') {
 	$AppUI->redirect('m=system&a=viewmods');
 }
 
-//$PROJDESIGN_CONFIG = array();
 include ($CONFIG_FILE);
 
 //Read the current config values from the config file and update the array.

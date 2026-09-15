@@ -118,7 +118,6 @@ $cal->setLinkFunctions('clickDay', 'clickWeek');
 $cal->setEvents($links);
 
 echo $cal->show();
-//echo '<pre>';print_r($cal);echo '</pre>';
 
 // create the mini previous and next month calendars under
 $minical = new w2p_Output_MonthCalendar($cal->prev_month);

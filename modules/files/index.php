@@ -57,7 +57,6 @@ if (!$limited) {
 }
 
 if ($canEdit) {
-    // $titleBlock->addButton('new folder', '?m=files&a=addedit_folder');
     $titleBlock->addButton('new file', '?m=files&a=addedit&folder=' . $folder_id);
 }
 $titleBlock->show();
@@ -75,5 +74,4 @@ foreach ($file_types as $file_type) {
 	$tabBox->add('index_table', $file_type . ' (' . count($fileList) . ')');
 	++$i;
 }
-// $tabBox->add('folders_table', 'Folder Explorer');
 $tabBox->show();

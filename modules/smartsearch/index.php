@@ -3,9 +3,6 @@ if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
 // @todo    convert to template
-// if (isset($_POST)) {
-// echo '<pre>'; print_r($_POST);	
-// }
 //--MSy--
 $ssearch = array();
 $ssearch['keywords'] = array();
@@ -87,8 +84,6 @@ if ($ssearch['advanced_search'] == 'on') {
 	
 	function selModAll() {
 		const select = document.getElementById('search_modules');
-		//const allValues = Array.from(selectElement.options).map(option => option.value);
-		//selectElement.value = allValues;   
 		Array.from(select.options).forEach(option => option.selected = true);
 	}
 

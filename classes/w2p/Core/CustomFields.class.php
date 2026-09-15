@@ -177,7 +177,6 @@ class w2p_Core_CustomFields {
                 }
             }
 
-            //if ($store_errors) return $store_errors;
             if ($store_errors) {
                 echo $store_errors;
             }

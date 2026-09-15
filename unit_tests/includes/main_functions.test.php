@@ -28,7 +28,6 @@ class Main_Functions_Test extends PHPUnit_Framework_TestCase
 
         $this->assertEquals('Some Default', w2PgetParam($params, 'NotGonnaBeThere', 'Some Default'));
 
-        //$this->markTestIncomplete("Currently w2PgetParam redirects for tainted names.. what do we do there?");
 
         $this->assertEquals('alert', w2PgetParam($params, 'v'));
 

@@ -291,8 +291,6 @@ $this->obj->overrideDatabase($this->mockDB);
         $item->load($this->obj->project_id);
 
         $this->assertEquals($this->obj->project_name,       $item->project_name);
-        //$this->assertEquals($this->obj->project_id,         $item->project_parent);
-        //$this->assertEquals($this->obj->project_id,         $item->project_original_parent);
         $this->assertNotEquals($this->obj->project_created, '');
         $this->assertNotEquals($this->obj->project_updated, '');
     }
@@ -376,15 +374,6 @@ $this->obj->overrideDatabase($this->mockDB);
         $this->assertEquals('Task: BadDep_CircularDep', $response[0]);
         $this->assertEquals('Task: (5)', $response[1]);
 
-//        $xml_file_dataset = $this->createXMLDataSet($this->getDataSetPath().'projectsTestImportTaskFail.xml');
-//        $xml_file_filtered_dataset = new PHPUnit_Extensions_Database_DataSet_DataSetFilter($xml_file_dataset, array('tasks' => array('task_created', 'task_updated')));
-//        $xml_db_dataset = $this->getConnection()->createDataSet();
-//        $xml_db_filtered_dataset = new PHPUnit_Extensions_Database_DataSet_DataSetFilter($xml_db_dataset, array('tasks' => array('task_created', 'task_updated')));
-//        $this->assertTablesEqual($xml_file_filtered_dataset->getTable('tasks'), $xml_db_filtered_dataset->getTable('tasks'));
-
-//        $xml_dataset = $this->createXMLDataSet($this->getDataSetPath().'projectsTestImportTaskFail.xml');
-//        $this->assertTablesEqual($xml_dataset->getTable('user_tasks'), $this->getConnection()->createDataSet()->getTable('user_tasks'));
-//        $this->assertTablesEqual($xml_dataset->getTable('task_dependencies'), $this->getConnection()->createDataSet()->getTable('task_dependencies'));
     }
 
     /**
@@ -398,11 +387,6 @@ $this->obj->overrideDatabase($this->mockDB);
 
         $this->assertEquals(array(), $response);
 
-//        $xml_file_dataset = $this->createXMLDataSet($this->getDataSetPath().'projectsTestImportTasks.xml');
-//        $xml_file_filtered_dataset = new PHPUnit_Extensions_Database_DataSet_DataSetFilter($xml_file_dataset, array('tasks' => array('task_created', 'task_updated')));
-//        $xml_db_dataset = $this->getConnection()->createDataSet();
-//        $xml_db_filtered_dataset = new PHPUnit_Extensions_Database_DataSet_DataSetFilter($xml_db_dataset, array('tasks' => array('task_created', 'task_updated')));
-//        $this->assertTablesEqual($xml_file_filtered_dataset->getTable('tasks'), $xml_db_filtered_dataset->getTable('tasks'));
 
         $now_secs = time();
         $min_time = $now_secs - 10;
@@ -438,9 +422,6 @@ $this->obj->overrideDatabase($this->mockDB);
             $this->assertLessThanOrEqual($now_secs, $updated);
         }
 
-//        $xml_dataset = $this->createXMLDataSet($this->getDataSetPath().'projectsTestImportTasks.xml');
-//        $this->assertTablesEqual($xml_dataset->getTable('user_tasks'), $this->getConnection()->createDataSet()->getTable('user_tasks'));
-//        $this->assertTablesEqual($xml_dataset->getTable('task_dependencies'), $this->getConnection()->createDataSet()->getTable('task_dependencies'));
 
     }
     /**
@@ -519,19 +500,6 @@ $this->obj->overrideDatabase($this->mockDB);
         /*
          * TODO: Figure out why db_fetch_assoc is failing now. Cause db_num_rows
          * says 4, and this is our second call to db_fetch_assoc.
-         */
-        /*
-         * $row = db_fetch_assoc($project_in_rows);
-         * $this->assertEquals(2,                     $row[0]);
-           * $this->assertEquals(2,                     $row['project_id']);
-           * $this->assertEquals(1,                     $row[1]);
-           * $this->assertEquals(1,                     $row['project_status']);
-           * $this->assertEquals('Test Project 2',      $row[2]);
-           * $this->assertEquals('Test Project 2',      $row['project_name']);
-           * $this->assertEquals('This is a project 2', $row[3]);
-           * $this->assertEquals('This is a project 2', $row['project_description']);
-           * $this->assertEquals('TP2',                 $row[4]);
-           * $this->assertEquals('TP2',                 $row['project_short_name']);
          */
 
           $project_in_rows = $this->obj->getAllowedProjectsInRows(2);

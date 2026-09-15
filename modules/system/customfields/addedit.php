@@ -58,15 +58,6 @@ if ($field_id) {
 	}
 }
 
-//$visible_state = array();
-
-//foreach ($html_types as $k => $ht) {
-//	if ($k == $field_htmltype) {
-//		$visible_state['div_' . $k] = 'display : block';
-//	} else {
-//		$visible_state['div_' . $k] = 'display : none';
-//	}
-//}
 ?>
 <script language="javascript" type="text/javascript">
 function submitIt() {

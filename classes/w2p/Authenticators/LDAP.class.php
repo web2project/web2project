@@ -159,8 +159,6 @@ class w2p_Authenticators_LDAP extends w2p_Authenticators_Base
         $this->user_id = $user_id;
 
         // No role, so user will be created as 'Inactive'
-        //$acl = &$this->AppUI->acl();
-        //$acl->insertUserRole($acl->get_group_id('empty'), $this->user_id);
     
     }
 }
