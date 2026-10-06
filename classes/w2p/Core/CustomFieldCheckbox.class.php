@@ -7,7 +7,7 @@
  * @package     web2project\core
  */
 
-class  w2p_Core_CustomFieldCheckBox extends w2p_Core_CustomField
+class w2p_Core_CustomFieldCheckbox extends w2p_Core_CustomField
 {
     public $field_htmltype = 'checkbox';
 
