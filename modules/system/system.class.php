@@ -59,7 +59,7 @@ class CSystem
                 $configList['database'] = $this->_w2Pconfig['dbtype'];
                 $configList['server'] = $_SERVER['SERVER_SOFTWARE'];
                 $configList['connector'] = php_sapi_name();
-                $configList['database_ver'] = mysql_get_client_info();
+                $configList['database_ver'] = function_exists('mysqli_get_client_info') ? mysqli_get_client_info() : '';
                 $libraries = array('tidy', 'json', 'libxml', 'mysql');
                 foreach($libraries as $library) {
                     $configList[$library.'_extver'] = phpversion($library);
