@@ -15,7 +15,7 @@ class w2p_Actions_BulkTasks extends CTask
     /**
      * Import tasks from another project
      *
-     * 	@param	int Project ID of the tasks come from.
+     * 	@param	int $from_project_id Project ID of the tasks come from.
      * 	@return	bool
      *
      *  @todo - this entire thing has nothing to do with projects.. it should move to the CTask class - dkc 25 Nov 2012

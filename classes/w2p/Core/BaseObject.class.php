@@ -104,7 +104,7 @@ abstract class w2p_Core_BaseObject extends w2p_System_Event implements w2p_Inter
      *   calls to the above constructor, this is a way to hijack the current
      *   $this->_query and manipulate it however we want.
      *
-     *   @param Object A database connection (real or mocked)
+     *   @param Object $override A database connection (real or mocked)
      */
     public function overrideDatabase($override)
     {
@@ -118,7 +118,7 @@ abstract class w2p_Core_BaseObject extends w2p_System_Event implements w2p_Inter
      *   calls to the above constructor, this is a way to hijack the current
      *   $this->_AppUI and manipulate it however we want.
      *
-     *   @param Object A permissions/preferences object (real or mocked)
+     *   @param Object $override A permissions/preferences object (real or mocked)
      */
     public function overrideAppUI($override)
     {
@@ -143,7 +143,7 @@ abstract class w2p_Core_BaseObject extends w2p_System_Event implements w2p_Inter
      *     Binds a named array/hash to this object
      *
      * @param      $hash
-     * @param null $prefix          Defaults to null, prefix to use with hash keys
+     * @param string|null $prefix          Defaults to null, prefix to use with hash keys
      * @param bool $checkSlashes    Defaults to true, strip any slashes from the hash values
      * @param bool $bindAll
      *
@@ -178,7 +178,7 @@ abstract class w2p_Core_BaseObject extends w2p_System_Event implements w2p_Inter
     /**
      *     Binds an array/hash to this object
      *
-     * @param null $oid     optional argument, if not specified then the value of current key is used
+     * @param int|null $oid     optional argument, if not specified then the value of current key is used
      * @param bool $strip
      *
      * @return bool
@@ -224,10 +224,10 @@ abstract class w2p_Core_BaseObject extends w2p_System_Event implements w2p_Inter
      *     Returns an array, keyed by the key field, of all elements that meet
      *     the where clause provided. Ordered by $order key.
      *
-     * @param null $order
-     * @param null $where
+     * @param string|null $order
+     * @param string|null $where
      *
-     * @return Associative
+     * @return array<mixed>
      */
     public function loadAll($order = null, $where = null)
     {
@@ -259,7 +259,7 @@ abstract class w2p_Core_BaseObject extends w2p_System_Event implements w2p_Inter
     /**
      *     Generic check method, overload as needed
      *
-     *     @return array() of size zero if the object is ok
+     *     @return array<int|string, string> Empty if the object is ok
      */
     public function check()
     {
@@ -305,9 +305,7 @@ abstract class w2p_Core_BaseObject extends w2p_System_Event implements w2p_Inter
     /**
      *     Default trimming method for class variables of type string
      *
-     *     @param object Object to trim class variables for
-     *
-     *     @return none
+     *     @return void
      */
     public function w2PTrimAll()
     {
@@ -413,8 +411,8 @@ abstract class w2p_Core_BaseObject extends w2p_System_Event implements w2p_Inter
      *     Generic check for whether dependencies exist for this object in the db schema, overload as needed
      *
      * @param string $notUsed
-     * @param null   $oid
-     * @param null   $joins
+     * @param int|null $oid
+     * @param array<mixed>|null $joins
      *
      * @return bool
      */
@@ -454,9 +452,9 @@ abstract class w2p_Core_BaseObject extends w2p_System_Event implements w2p_Inter
     /**
      *     Default delete method
      *
-     * @param null $oid
+     * @param int|null $oid
      *
-     * @return bool|Handle
+     * @return ADORecordSet|false
      */
     public function delete($oid = null)
     {
@@ -493,7 +491,7 @@ abstract class w2p_Core_BaseObject extends w2p_System_Event implements w2p_Inter
 
     /**
      *     Get specifically denied records from a table/module based on a user
-     *     @param int User id number
+     *     @param int $uid User id number
      *     @return array
      */
     public function getDeniedRecords($uid)
@@ -510,11 +508,11 @@ abstract class w2p_Core_BaseObject extends w2p_System_Event implements w2p_Inter
      * @param        $uid
      * @param string $fields        fields to be returned by the query, default is all
      * @param string $orderby       sort order for the query
-     * @param null   $index         name of field to index the returned array
-     * @param null   $extra         array of additional sql parameters (from and where supported)
+     * @param string|null $index         name of field to index the returned array
+     * @param array<mixed>|null $extra         array of additional sql parameters (from and where supported)
      * @param string $table_alias
      *
-     * @return Associative
+     * @return array<mixed>
      */
     public function getAllowedRecords($uid, $fields = '*', $orderby = '', $index = null, $extra = null, $table_alias = '')
     {

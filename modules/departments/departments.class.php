@@ -156,11 +156,11 @@ class CDepartment extends w2p_Core_BaseObject
 
 	/**
 	 *	Returns a list of records exposed to the user
-	 *	@param int User id number
-	 *	@param string Optional fields to be returned by the query, default is all
-	 *	@param string Optional sort order for the query
-	 *	@param string Optional name of field to index the returned array
-	 *	@param array Optional array of additional sql parameters (from and where supported)
+	 *	@param int $uid User id number
+	 *	@param string $fields Optional fields to be returned by the query, default is all
+	 *	@param string $orderby Optional sort order for the query
+	 *	@param string $index Optional name of field to index the returned array
+	 *	@param array $extra Optional array of additional sql parameters (from and where supported)
 	 *	@return array
 	 */
 //TODO: this modifies the core $_query property
@@ -301,7 +301,7 @@ class CDepartment extends w2p_Core_BaseObject
      * @param     $companyId
      * @param int $departmentId
      *
-     * @return Associative
+     * @return array<mixed>
      */
     public function departments($companyId, $departmentId = 0)
     {

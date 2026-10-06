@@ -140,9 +140,9 @@ function w2p_old_autoload($class_name)
 /**
  * Merges arrays maintaining/overwriting shared numeric indicees
  *
- * @param type $a1
- * @param type $a2
- * @return type
+ * @param array<mixed> $a1
+ * @param array<mixed> $a2
+ * @return array<mixed>
  */
 function arrayMerge($a1, $a2)
 {
@@ -163,8 +163,8 @@ function arrayMerge($a1, $a2)
  * Retrieves a configuration setting.
  *
  * @param $key          string The name of a configuration setting
- * @param null $default string The default value to return if the key not found.
- * @return null         The value of the setting, or the default value if not found.
+ * @param mixed $default The default value to return if the key not found.
+ * @return mixed The value of the setting, or the default value if not found.
  */
 function w2PgetConfig($key, $default = null)
 {

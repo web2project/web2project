@@ -99,7 +99,7 @@ class w2p_Output_MonthCalendar {
      *
      * { Description }
      *
-     * @param [type] $date
+     * @param mixed $date
      */
     public function setDate($date = null) {
         $this->this_month = new w2p_Utilities_Date($date);

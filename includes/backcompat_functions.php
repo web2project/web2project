@@ -58,10 +58,10 @@ if(!function_exists('mb_trim')) {
 	* Trim characters from either (or both) ends of a string in a way that is
 	* multibyte-friendly.
 	*
-	* @param string
-	* @param charlist list of characters to remove from the ends of this string.
-	* @param boolean trim the left?
-	* @param boolean trim the right?
+	* @param string $string
+	* @param string $charlist list of characters to remove from the ends of this string.
+	* @param boolean $ltrim trim the left?
+	* @param boolean $rtrim trim the right?
 	* @return String
 	*/
 	function mb_trim($string, $charlist='\\\\s', $ltrim=true, $rtrim=true) {

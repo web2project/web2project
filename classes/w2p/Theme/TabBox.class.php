@@ -30,10 +30,10 @@ class w2p_Theme_TabBox {
 
     /**
      * Constructor
-     * @param string The base URL query string to prefix tab links
-     * @param string The base path to prefix the include file
-     * @param int The active tab
-     * @param string Optional javascript method to be used to execute tabs.
+     * @param string $baseHRef The base URL query string to prefix tab links
+     * @param string $baseInc The base path to prefix the include file
+     * @param int $active The active tab
+     * @param string $javascript Optional javascript method to be used to execute tabs.
      *    Must support 2 arguments, currently active tab, new tab to activate.
      */
     public function __construct($baseHRef = '', $baseInc = '', $active = 0, $javascript = null) {
@@ -66,8 +66,8 @@ class w2p_Theme_TabBox {
     }
     /**
      * Adds a tab to the object
-     * @param string File to include
-     * @param The display title/name of the tab
+     * @param string $file File to include
+     * @param string $title The display title/name of the tab
      */
     public function add($file, $title, $translated = false, $key = null) {
         $t = array($file, $title, $translated);
@@ -90,7 +90,7 @@ class w2p_Theme_TabBox {
      *
      * This function may be overridden
      *
-     * @param string Can't remember whether this was useful
+     * @param string $extra Can't remember whether this was useful
      */
     public function show($extra = '', $js_tabs = false) {
         $this->loadExtras($notUsed, $notUsed2);

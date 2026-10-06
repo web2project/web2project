@@ -16,7 +16,7 @@ class w2p_Core_CustomFieldsParser {
 
     /**
      * @return w2p_Core_CustomFieldsParser
-     * @param char Field type: TaskCustomFields, CompanyCustomFields
+     * @param string $custom_record_type Field type: TaskCustomFields, CompanyCustomFields
      * @desc Constructor
      */
     public function __construct($custom_record_type, $row_id = 0) {

@@ -254,8 +254,6 @@ function constructTaskTree_pd($task_data, $parents, $all_tasks, $depth = 0)
  * TODO:  Remove for v4.0 - caseydk 20 September 2012
  *
  * @param mixed $task_id
- * @param mixed $task_access
- * @param mixed $task_owner
  * @return true if user has task access to it, or false if he doesn't
  *
  * @deprecated
@@ -352,12 +350,12 @@ function get_dependencies_pd($task_id)
  *   While this is overkill for the core system, it's absolutely necessary for
  *   good custom theming.
  *
- * @param type $AppUI
- * @param type $rootTag
- * @param type $innerTag
- * @param type $dividingToken
- * @param type $m
- * @return type
+ * @param w2p_Core_CAppUI $AppUI
+ * @param string $rootTag
+ * @param string $innerTag
+ * @param string $dividingToken
+ * @param string $m
+ * @return string
  */
 function buildHeaderNavigation($AppUI, $rootTag = '', $innerTag = '', $dividingToken = '', $m = '')
 {

@@ -113,7 +113,7 @@ class w2p_Utilities_Mail extends PHPMailer
 
     /**
      *    set the Reply-to header
-     *    @param string $email should be an email address
+     *    @param string $address should be an email address
      */
     public function ReplyTo($address)
     {
@@ -404,7 +404,7 @@ class w2p_Utilities_Mail extends PHPMailer
     /**
      *    check validity of email addresses
      *    @param    array $aad -
-     *    @return if unvalid, output an error message and exit, this may -should- be customized
+     *    @return bool False if any address is invalid
      */
     public function CheckAddresses($aad)
     {

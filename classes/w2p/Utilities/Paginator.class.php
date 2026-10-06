@@ -45,7 +45,7 @@ class w2p_Utilities_Paginator
      * The $params are to add extra query parameters. This is especially
      *   necessary when you have pagination within a subview.
      *
-     * @param   w2p_Coretype_CAppUI $AppUI
+     * @param   w2p_Core_CAppUI $AppUI
      * @param   string              $m
      * @param   int                 $tab
      * @param   array               $params

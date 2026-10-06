@@ -153,7 +153,7 @@ class w2p_Core_CustomFields {
      *   field in the $hash, it will always get updated, even if the value is
      *   null. If you don't want to update the field, don't include it.
      *
-     * @param type $hash
+     * @param array<mixed> $hash
      */
     public function bind($hash) {
         if (!count($this->fields) == 0) {
@@ -188,8 +188,8 @@ class w2p_Core_CustomFields {
      *  entry. Be *very* careful with it.
      *
      * @global type $db
-     * @param type $field_id
-     * @return type
+     * @param int $field_id
+     * @return mixed
      */
     public function deleteField($field_id) {
         global $db;

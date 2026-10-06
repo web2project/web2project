@@ -82,10 +82,10 @@ class CProject extends w2p_Core_BaseObject
      * 	Returns an array, keyed by the key field, of all elements that meet
      * 	the where clause provided. Ordered by $order key.
      *
-     * @param null $order
-     * @param null $where
+     * @param string|null $order
+     * @param string|null $where
      *
-     * @return Associative
+     * @return array<mixed>
      */
     public function loadAll($order = null, $where = null)
     {
@@ -332,8 +332,8 @@ class CProject extends w2p_Core_BaseObject
     }
 
     /** Retrieve tasks with latest task_end_dates within given project
-     * @param int Project_id
-     * @param int SQL-limit to limit the number of returned tasks
+     * @param int $project_id Project_id
+     * @param int $limit SQL-limit to limit the number of returned tasks
      * @return array List of criticalTasks
      */
     public function getCriticalTasks($project_id = 0, $limit = 1)
@@ -780,8 +780,8 @@ class CProject extends w2p_Core_BaseObject
      * Note that this returns the *count* of projects.  If this is zero, it is
      *   evaluated as false, otherwise it is considered true.
      *
-     * @param type $projectId
-     * @return type
+     * @param int $projectId
+     * @return mixed
      */
     public function hasChildProjects($projectId = 0)
     {

@@ -26,10 +26,10 @@ class w2p_System_Dispatcher
      * If $event is *, then the listener will be dispatched for any dispatched event of the specified resource
      * If $resourceName and $event is *, the listener will be dispatched for any dispatched event for any resource
      *
-     * @param Listener $listener
+     * @param w2p_Interfaces_Listener $listener
      * @param String $resourceName
      * @param Mixed $event
-     * @return Dispatcher
+     * @return $this
      */
     public function subscribe(w2p_Interfaces_Listener $listener, $resourceName='*', $event='*'){
         $this->_listeners[$resourceName][$event][spl_object_hash($listener)] = $listener;
@@ -39,10 +39,10 @@ class w2p_System_Dispatcher
     /**
      * Unsubscribes the listener from the resource's events
      *
-     * @param Listener $listener
+     * @param w2p_Interfaces_Listener $listener
      * @param String $resourceName
      * @param Mixed $event
-     * @return Dispatcher
+     * @return $this
      */
     public function unsubscribe(w2p_Interfaces_Listener $listener, $resourceName='*', $event='*'){
         unset($this->_listeners[$resourceName][$event][spl_object_hash($listener)]);
@@ -53,7 +53,7 @@ class w2p_System_Dispatcher
      * Publishes an event to all the listeners listening to the specified event for the specified resource
      *
      * @param w2p_System_Event $event
-     * @return Dispatcher
+     * @return $this
      */
     public function publish(w2p_System_Event $event ){
         $resourceName = $event->getResourceName();

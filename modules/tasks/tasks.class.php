@@ -934,8 +934,8 @@ class CTask extends w2p_Core_BaseObject
      *    and recurses.
      * If not, it returns.
      *
-     * @param type $task_id
-     * @param type $lastEndDate
+     * @param int $task_id
+     * @param mixed $lastEndDate
      */
     public function pushDependencies($task_id, $lastEndDate)
     {
@@ -999,7 +999,7 @@ class CTask extends w2p_Core_BaseObject
      * 		  Retrieve the tasks dependencies
      *
      * 		  @author		 handco		   <handco@users.sourceforge.net>
-     * 		  @param		integer		   ID of the task we want dependencies
+     * 		  @param		integer $taskId		   ID of the task we want dependencies
      * 		  @return		 string		   comma delimited list of tasks id's
      * */
     public function staticGetDependencies($taskId)
@@ -1235,9 +1235,9 @@ class CTask extends w2p_Core_BaseObject
     }
 
     /**
-     * @param Date Start date of the period
-     * @param Date End date of the period
-     * @param integer The target company
+     * @param Date $start_date Start date of the period
+     * @param Date $end_date End date of the period
+     * @param integer $company_id The target company
      *
      * WARNING: This is actually called staticly so $this is not available.
      */
@@ -1366,9 +1366,9 @@ class CTask extends w2p_Core_BaseObject
 
     /**
      * 		 retrieve tasks are dependent of another.
-     * 		 @param	 integer		 ID of the master task
-     * 		 @param	 boolean		 true if is a dep call (recurse call)
-     * 		 @param	 boolean		 false for no recursion (needed for calc_end_date)
+     * 		 @param	 integer $taskId		 ID of the master task
+     * 		 @param	 boolean $isDep		 true if is a dep call (recurse call)
+     * 		 @param	 boolean $recurse		 false for no recursion (needed for calc_end_date)
      * */
     public function dependentTasks($taskId = false, $isDep = false, $recurse = true)
     {
@@ -1751,8 +1751,8 @@ class CTask extends w2p_Core_BaseObject
 
     /**
      * 	Calculate the extent of utilization of user assignments
-     * 	@param string hash	 a hash for the returned hashList
-     * 	@param array users	 an array of user_ids calculating their assignment capacity
+     * 	@param string $hash	 a hash for the returned hashList
+     * 	@param array $users	 an array of user_ids calculating their assignment capacity
      * 	@return array		 returns hashList of extent of utilization for assignment of the users
      */
     public function getAllocation($hash = null, $users = null, $get_user_list = false)
@@ -1929,7 +1929,7 @@ class CTask extends w2p_Core_BaseObject
     /**
      * @param $project_id
      * @param int $task_id
-     * @return type
+     * @return mixed
      */
     public function getTaskTree($project_id, $task_id = 0)
     {
@@ -2012,9 +2012,9 @@ class CTask extends w2p_Core_BaseObject
      *
      * @todo Get the start/end dates for the cache.. - updateTaskCache
      *
-     * @param type $task_id
-     * @param type $project_old
-     * @param type $project_new
+     * @param int $task_id
+     * @param int $project_old
+     * @param int $project_new
      */
     public function moveTaskBetweenProjects($task_id, $project_old, $project_new)
     {

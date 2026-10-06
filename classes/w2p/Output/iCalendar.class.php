@@ -17,8 +17,8 @@ class w2p_Output_iCalendar
      *  iCalendar VEVENT string and returns it.
      *
      * @global type $AppUI
-     * @param type $calendarItem
-     * @param type $module_name
+     * @param mixed $calendarItem
+     * @param string $module_name
      * @return string
      */
     public static function formatCalendarItem($calendarItem, $module_name)

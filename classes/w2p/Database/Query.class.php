@@ -1092,7 +1092,7 @@ class w2p_Database_Query {
 	 * Execute the query and return a handle.  Supplants the db_exec query
 	 * @param $style ADODB fetch style. Can be ADODB_FETCH_BOTH, ADODB_FETCH_NUM or ADODB_FETCH_ASSOC
 	 * @param $debug Defaults to false. If true, debug output includes explanation of query
-	 * @return Handle to the query result
+	 * @return ADORecordSet|false Handle to the query result
 	 */
 	public function &exec($style = ADODB_FETCH_BOTH, $debug = false) {
 		global $ADODB_FETCH_MODE, $w2p_performance_dbtime, $w2p_performance_dbqueries;
@@ -1142,7 +1142,7 @@ class w2p_Database_Query {
 	}
 
 	/** Fetch the first row of the results
-	 * @return First row as array
+	 * @return array<mixed>|false First row as array
 	 */
 	public function fetchRow() {
 		if (!$this->_query_id) {
@@ -1186,7 +1186,7 @@ class w2p_Database_Query {
 	 *
 	 * Replaces the db_loadHashList() function
 	 * @param $index Defaults to null, the field to use for array keys
-	 * @return Associative array of rows, keyed with the field indicated by the $index parameter
+	 * @return array<mixed> Associative array of rows, keyed with the field indicated by the $index parameter
 	 */
 	public function loadHashList($index = null) {
 		if (!$this->exec(ADODB_FETCH_ASSOC)) {
@@ -1214,7 +1214,7 @@ class w2p_Database_Query {
 	}
 
 	/** Load a single result row as an associative array
-	 * @return Associative array of field names to values
+	 * @return array<mixed>|false Associative array of field names to values
 	 */
 	public function loadHash() {
 		if (!$this->exec(ADODB_FETCH_ASSOC)) {
@@ -1234,7 +1234,7 @@ class w2p_Database_Query {
 	}
 
 	/** Load an indexed array containing the first column of results only
-	 * @return Indexed array of first column values
+	 * @return array<mixed> Indexed array of first column values
 	 */
 	public function loadColumn() {
 		if (!$this->exec(ADODB_FETCH_NUM)) {
@@ -1320,7 +1320,7 @@ class w2p_Database_Query {
 	}
 
 	/** Load a single column result from a single row
-	 * @return Value of the row column
+	 * @return mixed Value of the row column
 	 */
 	public function loadResult() {
 		global $AppUI;
@@ -1339,7 +1339,7 @@ class w2p_Database_Query {
 	/** Create a where clause based upon supplied field.
 	 *
 	 * @param	$where_clause Either string or array of subclauses.
-	 * @return SQL WHERE clause as a string.
+	 * @return string SQL WHERE clause as a string.
 	 */
 	public function make_where_clause($where_clause) {
 		$result = '';
@@ -1359,7 +1359,7 @@ class w2p_Database_Query {
 	/** Create an order by clause based upon supplied field.
 	 *
 	 * @param	$order_clause	Either string or array of subclauses.
-	 * @return SQL ORDER BY clause as a string.
+	 * @return string SQL ORDER BY clause as a string.
 	 */
 	public function make_order_clause($order_clause) {
 		$result = '';
@@ -1378,7 +1378,7 @@ class w2p_Database_Query {
 	/** Create a group by clause based upon supplied field.
 	 *
 	 * @param	$group_clause	Either string or array of subclauses.
-	 * @return SQL GROUP BY clause as a string.
+	 * @return string SQL GROUP BY clause as a string.
 	 */
 	public function make_group_clause($group_clause) {
 		$result = '';
@@ -1397,7 +1397,7 @@ class w2p_Database_Query {
 	/** Create a join condition based upon supplied fields.
 	 *
 	 * @param	$join_clause	Either string or array of subclauses.
-	 * @return SQL JOIN condition as a string.
+	 * @return string SQL JOIN condition as a string.
 	 */
 	public function make_join($join_clause) {
 		$result = '';
@@ -1427,7 +1427,7 @@ class w2p_Database_Query {
 	/** Create a having clause based upon supplied field.
 	 *
 	 * @param	$having_clause Either string or array of subclauses.
-	 * @return SQL HAVING clause as a string.
+	 * @return string SQL HAVING clause as a string.
 	 */
 	public function make_having_clause($having_clause) {
 		$result = '';
@@ -1448,7 +1448,7 @@ class w2p_Database_Query {
 	 *
 	 * @param	$limit	Either integer with nr of records to retrieve or array with offset and nr of records to retrieve .
 	 * @param	$offset	integer of offset from where it should start retrieving.
-	 * @return	SQL LIMIT clause as a string.
+	 * @return	string SQL LIMIT clause as a string.
 	 */
 	public function make_limit_clause($limit, $offset) {
 		$result = '';
@@ -1481,7 +1481,7 @@ class w2p_Database_Query {
 	/** Add quotes to a string
 	 *
 	 * @param	$string	A string to add quotes to.
-	 * @return The quoted string
+	 * @return string The quoted string
 	 */
 	public function quote($string) {
 		if (is_int($string)) {
@@ -1493,7 +1493,7 @@ class w2p_Database_Query {
 
 	/** Add quotes to a database identifier
 	 * @param $string The identifier to quote
-	 * @return The quoted identifier
+	 * @return string The quoted identifier
 	 */
 	public function quote_db($string) {
 		return $this->_db->nameQuote . $string . $this->_db->nameQuote;
@@ -1565,8 +1565,8 @@ class w2p_Database_Query {
 	 *
 	 * { Description }
 	 *
-	 * @param [type] $keyName
-	 * @param [type] $verbose
+	 * @param string|null $keyName
+	 * @param bool $verbose
 	 */
 	public function insertObject($table, &$object, $keyName = null, $verbose = false) {
 		$this->addTable($table);
@@ -1603,7 +1603,7 @@ class w2p_Database_Query {
 	 *
 	 * { Description }
 	 *
-	 * @param [type] $updateNulls
+	 * @param bool $updateNulls
 	 */
 	public function updateObject($table, &$object, $keyName, $updateNulls = true) {
 		$this->addTable($table);

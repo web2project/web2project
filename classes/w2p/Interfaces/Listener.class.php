@@ -14,7 +14,7 @@ interface w2p_Interfaces_Listener
     /**
      * Accepts an event and does something with it
      *
-     * @param Event $event    The event to process
+     * @param w2p_System_Event $event    The event to process
      */
     public function publish(w2p_System_Event $event);
 }

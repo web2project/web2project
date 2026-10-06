@@ -89,7 +89,7 @@ class w2p_Utilities_Date extends Date {
 
     /**
      * Adds (+/-) a number of days to the current date.
-     * @param int Positive or negative number of days
+     * @param int $n Positive or negative number of days
      * @author J. Christopher Pereira <kripper@users.sf.net>
      */
     public function addDays($n) {
@@ -98,7 +98,7 @@ class w2p_Utilities_Date extends Date {
 
     /**
      * Adds (+/-) a number of months to the current date.
-     * @param int Positive or negative number of months
+     * @param int $n Positive or negative number of months
      * @author Andrew Eddie <eddieajau@users.sourceforge.net>
      */
     public function addMonths($n) {
@@ -141,9 +141,9 @@ class w2p_Utilities_Date extends Date {
 
     /**
      * New method that sets hour, minute and second in a single call
-     * @param int hour
-     * @param int minute
-     * @param int second
+     * @param int $h hour
+     * @param int $m minute
+     * @param int $s second
      * @author Andrew Eddie <eddieajau@users.sourceforge.net>
      */
     public function setTime($h = 0, $m = 0, $s = 0) {
@@ -361,7 +361,7 @@ class w2p_Utilities_Date extends Date {
      * Respects non-working days
      * SantosDiez - Credit for better variable names
      *
-     * @param    obj    DateObject    may be viewed as end date
+     * @param    w2p_Utilities_Date $endDate    may be viewed as end date
      * @return    float                working duration in hours
      */
     public function calcDuration($endDate) {

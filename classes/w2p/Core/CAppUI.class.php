@@ -351,7 +351,7 @@ class w2p_Core_CAppUI
      * Sets the user locale.
      *
      * Looks in the user preferences first.  If this value has not been set by the user it uses the system default set in config.php.
-     * @param string Locale abbreviation corresponding to the sub-directory name in the locales directory (usually the abbreviated language code).
+     * @param string $loc Locale abbreviation corresponding to the sub-directory name in the locales directory (usually the abbreviated language code).
      */
     public function setUserLocale($loc = '', $set = true)
     {
@@ -453,8 +453,8 @@ class w2p_Core_CAppUI
      * <li>If this is not the base lang, then return string with a red star appended to show
      * that a translation is required.
      * </ul>
-     * @param string The string to translate
-     * @param int Option flags, can be case handling or'd with output styles
+     * @param string $str The string to translate
+     * @param int $flags Option flags, can be case handling or'd with output styles
      * @return string
      */
     public function _($str, $flags = 0)
@@ -531,7 +531,7 @@ class w2p_Core_CAppUI
 
     /**
      * Set the display of warning for untranslated strings
-     * @param string
+     * @param string $state
      */
     public function setWarning($state = true)
     {
@@ -576,7 +576,7 @@ class w2p_Core_CAppUI
      * Primarily useful for holding an object after a failed validation check
      * without it actually being saved.
      *
-     * @param object The item to be temporarily stored
+     * @param object $obj The item to be temporarily stored
      *
      *
      */
@@ -599,8 +599,8 @@ class w2p_Core_CAppUI
      * to prevent nasties from doing a browser refresh after a db update.  The
      * method deliberately does not use javascript to effect the redirect.
      *
-     * @param string The URL query string to append to the URL
-     * @param string A marker for a historic 'place, only -1 or an empty string is valid.
+     * @param string $params The URL query string to append to the URL
+     * @param string $hist A marker for a historic 'place, only -1 or an empty string is valid.
      */
     public function redirect($params = '', $hist = '')
     {
@@ -635,9 +635,9 @@ class w2p_Core_CAppUI
      * languagues atomic-wise translation doesn't work. Append should be
      * deprecated.
      *
-     * @param mixed The (untranslated) message
-     * @param int The type of message
-     * @param boolean If true, $msg is appended to the current string otherwise
+     * @param mixed $msg The (untranslated) message
+     * @param int $msgNo The type of message
+     * @param boolean $append If true, $msg is appended to the current string otherwise
      * the existing message is overwritten with $msg.
      */
     public function setMsg($msg, $msgNo = 0, $append = false)
@@ -659,7 +659,7 @@ class w2p_Core_CAppUI
 
     /**
      * Display the formatted message and icon
-     * @param boolean If true the current message state is cleared.
+     * @param boolean $reset If true the current message state is cleared.
      */
     public function getMsg($reset = true)
     {
@@ -695,8 +695,8 @@ class w2p_Core_CAppUI
      *
      * The state is only held for the duration of a session.  It is not stored in the database.
      * Also do not set the value if it is unset.
-     * @param string The label or key of the state variable
-     * @param mixed Value to assign to the label/key
+     * @param string $label The label or key of the state variable
+     * @param mixed $value Value to assign to the label/key
      */
     public function setState($label, $value = null)
     {
@@ -779,8 +779,8 @@ class w2p_Core_CAppUI
      * table are loaded in this object for convenient reference.  The style, locales
      * and preferences are also loaded at this time.
      *
-     * @param string The user login name
-     * @param string The user password
+     * @param string $username The user login name
+     * @param string $password The user password
      * @return boolean True if successful, false if not
      */
     public function login($username, $password)
@@ -925,7 +925,7 @@ class w2p_Core_CAppUI
 
     /**
      * Gets the value of the specified user preference
-     * @param string Name of the preference
+     * @param string $name Name of the preference
      */
     public function getPref($name)
     {
@@ -934,8 +934,8 @@ class w2p_Core_CAppUI
 
     /**
      * Sets the value of a user preference specified by name
-     * @param string Name of the preference
-     * @param mixed The value of the preference
+     * @param string $name Name of the preference
+     * @param mixed $val The value of the preference
      */
     public function setPref($name, $val)
     {
@@ -945,8 +945,8 @@ class w2p_Core_CAppUI
     /**
      * Loads the stored user preferences from the database into the internal
      * preferences variable.
-     * @param int User id number
-     * @param bool If false (default) then sture internally, if true return pref array
+     * @param int $uid User id number
+     * @param bool $return If false (default) then sture internally, if true return pref array
      */
     public function loadPrefs($uid = 0, $return = false)
     {

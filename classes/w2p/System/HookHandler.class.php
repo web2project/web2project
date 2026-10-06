@@ -24,7 +24,7 @@ class w2p_System_HookHandler
      *   In general, this may be enough, but the additional methods may be
      *   useful too.
      *
-     * @param type $name 
+     * @param string $name 
      */
     public function process($name)
     {
@@ -50,7 +50,7 @@ class w2p_System_HookHandler
      *  combines them together to make a string that is used in the iCalendar
      *  functionality.
      *
-     * @return type 
+     * @return mixed 
      */
     public function calendar()
     {
@@ -81,7 +81,7 @@ class w2p_System_HookHandler
     /**
      * This gets a list of calendar items.
      *
-     * @return type 
+     * @return mixed 
      */
     public function calendar_links()
     {

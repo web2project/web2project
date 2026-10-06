@@ -52,8 +52,8 @@ class CContact extends w2p_Core_BaseObject
      * This exists *only* to make sure we can use $this->contact_name and keep
      *   our code simpler.
      *
-     * @param type $name
-     * @return type
+     * @param string $name
+     * @return mixed
      */
     public function __get($name)
     {

@@ -22,7 +22,7 @@ class w2p_Utilities_DateTest extends CommonSetup
     /**
      * Stores old working days value while tests being run
      *
-     * @param string
+     * @var string
      * @access private
      */
     private $old_working_days;
@@ -30,7 +30,7 @@ class w2p_Utilities_DateTest extends CommonSetup
     /**
      * Stores old day start value while tests being run
      *
-     * @param int
+     * @var int
      * @access private
      */
     private $old_cal_day_start;
@@ -38,7 +38,7 @@ class w2p_Utilities_DateTest extends CommonSetup
     /**
      * Stores old say end value while test being run
      *
-     * @param int
+     * @var int
      * @access private
      */
     private $old_cal_day_end;

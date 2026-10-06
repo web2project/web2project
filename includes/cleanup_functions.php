@@ -1632,8 +1632,8 @@ function file_show_attr($AppUI, $form)
 }
 
 /** Retrieve tasks with first task_end_dates within given project
- * @param int Project_id
- * @param int SQL-limit to limit the number of returned tasks
+ * @param int $project_id Project_id
+ * @param int $limit SQL-limit to limit the number of returned tasks
  * @return array List of criticalTasks
  */
 //TODO: modules/projectdesigner/projectdesigner.class.php
@@ -2274,11 +2274,11 @@ function tree_recurse($id, $indent, $list, $children)
 /**
  **	Provide Projects Selectbox sorted by Companies
  **	@author gregorerhardt with special thanks to original author aramis
- **	@param 	int 		userID
- **	@param 	string 	HTML select box name identifier
- **	@param	string	HTML attributes
- **	@param	int			Proejct ID for preselection
- **	@param 	int			Project ID which will be excluded from the list
+ **	@param 	int $user_id 		userID
+ **	@param 	string $select_name 	HTML select box name identifier
+ **	@param	string $select_attribs	HTML attributes
+ **	@param	int $selected			Proejct ID for preselection
+ **	@param 	int $excludeProjWithId			Project ID which will be excluded from the list
  **									(e.g. in the tasks import list exclude the project to import into)
  **	@return	string 	HTML selectbox
 
@@ -2415,8 +2415,8 @@ function w2PshowModuleConfig($config)
 
 /**
  *	Function to recussively find an image in a number of places
- *	@param string The name of the image
- *	@param string Optional name of the current module
+ *	@param string $name The name of the image
+ *	@param string $module Optional name of the current module
  */
 function w2PfindImage($name, $module = null)
 {
@@ -2449,10 +2449,10 @@ function w2PfindImage($name, $module = null)
  *	Workaround removed due to problems in Opera and other issues
  *	with IE6.
  *	Workaround to display png images with alpha-transparency in IE6.0
- *	@param string The name of the image
- *	@param string The image width
- *	@param string The image height
- *	@param string The alt text for the image
+ *	@param string $src The name of the image
+ *	@param string $notUsed The image width
+ *	@param string $notUsed2 The image height
+ *	@param string $alt The alt text for the image
  */
 function w2PshowImage($src, $notUsed = '', $notUsed2 = '', $alt = '', $title = '', $module = null)
 {
@@ -3326,10 +3326,10 @@ function showcompany($company_id, $restricted = false)
 
 /**
  * Sub-function to collect events within a period
- * @param Date the starting date of the period
- * @param Date the ending date of the period
- * @param array by-ref an array of links to append new items to
- * @param int the length to truncate entries by
+ * @param Date $startPeriod the starting date of the period
+ * @param Date $endPeriod the ending date of the period
+ * @param array $links by-ref an array of links to append new items to
+ * @param int $notUsed the length to truncate entries by
  * @author Andrew Eddie <eddieajau@users.sourceforge.net>
  */
 function getEventLinks($startPeriod, $endPeriod, $links, $notUsed = null, $minical = false)
@@ -3429,11 +3429,11 @@ function getEventTooltip($event_id)
 /**
  * Sub-function to collect tasks within a period
  *
- * @param Date the starting date of the period
- * @param Date the ending date of the period
- * @param array by-ref an array of links to append new items to
- * @param int the length to truncate entries by
- * @param int the company id to filter by
+ * @param Date $startPeriod the starting date of the period
+ * @param Date $endPeriod the ending date of the period
+ * @param array $links by-ref an array of links to append new items to
+ * @param int $strMaxLen the length to truncate entries by
+ * @param int $company_id the company id to filter by
  * @author Andrew Eddie <eddieajau@users.sourceforge.net>
  */
 function getTaskLinks($startPeriod, $endPeriod, $links, $strMaxLen, $company_id = 0, $minical = false, $userid=0)
@@ -3652,7 +3652,7 @@ function getPermissionField($row)
  * @param $row
  * @param $field
  *
- * @return Value
+ * @return mixed
  */
 function getPermissionItem($row, $field)
 {
@@ -3721,7 +3721,7 @@ function getContactsfromProjects($obj)
  * @param $project_id
  * @param $AppUI
  *
- * @return Associative
+ * @return array<mixed>
  */
 function __extract_from_tasks_viewgantt($project_id, $AppUI)
 {
@@ -4049,7 +4049,7 @@ function __extract_from_modules_index($hidden_modules)
  * @param $module
  * @param $mod_data
  *
- * @return Value
+ * @return mixed
  */
 function __extract_from_role_perms($module, $mod_data)
 {
@@ -4066,7 +4066,7 @@ function __extract_from_role_perms($module, $mod_data)
 /**
  * @param $deps
  *
- * @return Associative
+ * @return array<mixed>
  */
 function __extract_from_ae_depend1($deps)
 {
@@ -4082,7 +4082,7 @@ function __extract_from_ae_depend1($deps)
 /**
  * @param $task_id
  *
- * @return Associative
+ * @return array<mixed>
  */
 function __extract_from_ae_depend2($task_id)
 {
@@ -4496,7 +4496,7 @@ function __extract_from_vw_usr($row)
  * @param $module
  * @param $mod_data
  *
- * @return Value
+ * @return mixed
  */
 function __extract_from_vw_usr_perms($module, $mod_data)
 {

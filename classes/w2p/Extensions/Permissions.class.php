@@ -987,7 +987,7 @@ class w2p_Extensions_Permissions extends gacl_api
      * w2Pacl::removeACLPermissions() Removes the permissions for a given ACL ID
      *
      * @param mixed $acl_id
-     * @return
+     * @return mixed
      */
     public function removeACLPermissions($acl_id = null)
     {
@@ -1006,7 +1006,7 @@ class w2p_Extensions_Permissions extends gacl_api
      * w2Pacl::removeModulePermissions() Removes the permissions from the results table for a module
      *
      * @param mixed $module
-     * @return
+     * @return mixed
      */
     public function removeModulePermissions($module = null)
     {
@@ -1025,7 +1025,7 @@ class w2p_Extensions_Permissions extends gacl_api
      * w2Pacl::removePermissions() Removes the permissions from the results table for a given user (example: when you delete a user)
      *
      * @param mixed $user_id
-     * @return
+     * @return mixed
      */
     public function removePermissions($user_id = null)
     {
@@ -1047,7 +1047,7 @@ class w2p_Extensions_Permissions extends gacl_api
      * @param mixed $user_aro_id
      * @param mixed $role_id
      * @param mixed $module
-     * @return
+     * @return bool
      */
     public function recalcPermissions($user_id = null, $user_aro_id = null, $role_id = null, $module = '', $notUsed = null)
     {
@@ -1186,7 +1186,7 @@ class w2p_Extensions_Permissions extends gacl_api
      * @param mixed $userid it passes the user_id
      * @param mixed $notUsed3 it passes 'app' string by default and is not used
      * @param mixed $module it passes the modules name
-     * @return
+     * @return mixed
      */
     public function w2Pacl_check($notUsed = null, $op, $notUsed2 = null, $userid, $notUsed3 = null, $module)
     {
@@ -1262,7 +1262,7 @@ class w2p_Extensions_Permissions extends gacl_api
      * @param mixed $userid
      * @param mixed $module
      * @param mixed $item
-     * @return
+     * @return mixed
      */
     public function w2Pacl_query($notUsed = null, $op, $notUsed2 = null, $userid, $module, $item)
     {
