@@ -58,7 +58,7 @@ class w2p_FileSystem_Loader
      *
      * Prevents from access to relative directories (eg ../../dealyfile.php);
      * @param string $file The file name.
-     * @return array A named array of the files (the key and value are identical).
+     * @return string The file name (redirects to the access-denied page if it is unsafe).
      */
     public function checkFileName($file)
     {
@@ -81,7 +81,7 @@ class w2p_FileSystem_Loader
      *
      * Strips out mallicious insertion of relative directories (eg ../../dealyfile.php);
      * @param string $file The file name.
-     * @return array A named array of the files (the key and value are identical).
+     * @return string The file name with ../ and ..\ sequences removed.
      */
     public function makeFileNameSafe($file)
     {

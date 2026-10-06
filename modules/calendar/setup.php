@@ -64,7 +64,7 @@ class CSetupEvents extends w2p_System_Setup
     }
 
     /**
-     * @return boolean
+     * @return ADORecordSet|false
      */
     public function _renameModule($table, $field)
     {

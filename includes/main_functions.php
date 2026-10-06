@@ -140,9 +140,9 @@ function w2p_old_autoload($class_name)
 /**
  * Merges arrays maintaining/overwriting shared numeric indicees
  *
- * @param array<mixed> $a1
- * @param array<mixed> $a2
- * @return array<mixed>
+ * @param mixed $a1
+ * @param mixed $a2
+ * @return mixed
  */
 function arrayMerge($a1, $a2)
 {

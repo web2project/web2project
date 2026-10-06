@@ -324,7 +324,7 @@ function __extract_from_showtask(&$arr, $level, $today_view, $listTable, $fields
  * @param $m
  * @param $jsTaskId
  * @param $expanded
- * @return array
+ * @return string
  */
 function __extract_from_showtask2($arr, $level, $today_view, $s, $m, $jsTaskId, $expanded)
 {
@@ -1883,7 +1883,7 @@ function projects_list_data($user_id = false)
  *
  * @param mixed $arraylist array list of project elements to search
  * @param mixed $project_id project id to search for
- * @return int returns the array key of the project record in the array list or false if not found
+ * @return int|false returns the array key of the project record in the array list or false if not found
  */
 // From: modules/projects/project.class.php
 function getProjectIndex($arraylist, $project_id)
@@ -3673,7 +3673,7 @@ function getPermissions($perms, $user_id, $module, $action)
 /**
  * @param $row
  *
- * @return array
+ * @return array<mixed>|false
  */
 function getPermissionField($row)
 {
@@ -3722,7 +3722,7 @@ function getPreferences($user_id)
 /**
  * @param $obj
  *
- * @return array
+ * @return ADORecordSet|false
  */
 function getTaskLogContacts($obj)
 {
@@ -3740,7 +3740,7 @@ function getTaskLogContacts($obj)
 /**
  * @param $obj
  *
- * @return array
+ * @return ADORecordSet|false
  */
 function getContactsfromProjects($obj)
 {
@@ -3993,7 +3993,7 @@ function __extract_from_tasks_todo($selected, $task_priority)
 }
 
 /**
- * @return w2p_Database_Query
+ * @return array<mixed>
  */
 function __extract_from_syskeys_index1()
 {
@@ -4924,7 +4924,7 @@ function __extract_from_projects_gantt4($row)
  * @param $editor
  * @param $AppUI
  * @param $bbparser
- * @return array
+ * @return string
  */
 function __extract_from_view_messages1($s, $style, $row, $editor, $AppUI, $bbparser)
 {

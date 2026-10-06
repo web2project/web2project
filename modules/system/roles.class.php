@@ -125,7 +125,7 @@ class CSystem_Role extends w2p_Core_BaseObject {
 	 * 
 	 * @param integer $copy_role_id of the Role we are copying permissions from
 	 * @param integer $role_id of the Role we are copying permissions to
-	 * @return true if sucessful
+	 * @return bool True if successful
 	 */
 	public function copyPermissions($copy_role_id = null, $role_id = null)
     {

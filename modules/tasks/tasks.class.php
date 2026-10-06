@@ -878,7 +878,7 @@ class CTask extends w2p_Core_BaseObject
     /** Retrieve tasks with latest task_end_dates within given project
      * @param int $project_id
      *
-     * @return array List of criticalTasks
+     * @return array<mixed>|false List of criticalTasks
      */
     public function getLastTaskData($project_id)
     {
@@ -1367,7 +1367,7 @@ class CTask extends w2p_Core_BaseObject
 
     /**
      * 		 retrieve tasks are dependent of another.
-     * 		 @param	 integer $taskId		 ID of the master task
+     * 		 @param	 int|false $taskId		 ID of the master task
      * 		 @param	 boolean $isDep		 true if is a dep call (recurse call)
      * 		 @param	 boolean $recurse		 false for no recursion (needed for calc_end_date)
      * */

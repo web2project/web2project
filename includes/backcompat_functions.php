@@ -23,7 +23,7 @@ if(!function_exists('mb_str_replace')) {
      * @param mixed $search : string or array of strings to be searched.
      * @param mixed $replace : string or array of the strings that will replace the searched string(s)
      * @param mixed $subject : string to be modified.
-     * @return string with the replacements made
+     * @return mixed string, or array of strings when $subject is an array, with the replacements made
      */
     function mb_str_replace($search, $replace, $subject) {
         if(is_array($subject)) {
@@ -62,7 +62,7 @@ if(!function_exists('mb_trim')) {
 	* @param string $charlist list of characters to remove from the ends of this string.
 	* @param boolean $ltrim trim the left?
 	* @param boolean $rtrim trim the right?
-	* @return String
+	* @return string|null
 	*/
 	function mb_trim($string, $charlist='\\\\s', $ltrim=true, $rtrim=true) {
 		$both_ends = $ltrim && $rtrim;

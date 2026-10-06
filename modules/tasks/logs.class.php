@@ -80,7 +80,7 @@ class CTask_Log extends w2p_Core_BaseObject
 	/**
 	 * Indicates if there was a problem while working on the task
 	 *
-	 * @var bool
+	 * @var int|bool|null
 	 * @access public
 	 */
 	public $task_log_problem = null;
@@ -354,8 +354,8 @@ class CTask_Log extends w2p_Core_BaseObject
 	 * @param int $uid user id to test
 	 * @param string $fields optional fields to be returned by the query, default is all
 	 * @param string $orderby optional sort order for the query
-	 * @param int $index optional name of field to index the returned array
-	 * @param array $extra optional array of additional sql parameters (from and where supported)
+	 * @param string|null $index optional name of field to index the returned array
+	 * @param array<mixed>|null $extra optional array of additional sql parameters (from and where supported)
 	 *
 	 * @return array
 	 */

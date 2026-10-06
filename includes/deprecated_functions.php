@@ -255,7 +255,7 @@ function constructTaskTree_pd($task_data, $parents, $all_tasks, $depth = 0)
  * TODO:  Remove for v4.0 - caseydk 20 September 2012
  *
  * @param mixed $task_id
- * @return true if user has task access to it, or false if he doesn't
+ * @return bool True if user has task access to it, or false if he doesn't
  *
  * @deprecated
  */

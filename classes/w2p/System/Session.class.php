@@ -55,7 +55,7 @@ class w2p_System_Session
 
     public function write($id, $data)
     {
-        /** @var w2p_Core_CAppUI $AppUI */
+        /** @var w2p_Core_CAppUI|null $AppUI */
         global $AppUI;
 
         $q = new w2p_Database_Query;
@@ -111,7 +111,7 @@ class w2p_System_Session
 
     public function gc()
     {
-        /** @var w2p_Core_CAppUI $AppUI */
+        /** @var w2p_Core_CAppUI|null $AppUI */
         global $AppUI;
 
         $max = $this->convertTime('max_lifetime');

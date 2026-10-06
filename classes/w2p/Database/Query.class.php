@@ -1156,7 +1156,7 @@ class w2p_Database_Query {
 	 * Replaces the db_loadList() function
 	 * @param $maxrows Maximum number of rows to return
 	 * @param $index Can be used to set the keys of the resulting arrays, useful to find records by primary key.
-	 * @return Array of associative arrays containing row field values
+	 * @return array<mixed>|false Array of associative arrays containing row field values
 	 */
 	public function loadList($maxrows = -1, $index = -1) {
 		/** @var w2p_Core_CAppUI $AppUI */
@@ -1253,7 +1253,7 @@ class w2p_Database_Query {
 	 * @param &$object Reference to the object to propagate with database results
 	 * @param $bindAll Defaults to false, Bind every field returned to the referenced object
 	 * @param $strip Defaults to true
-	 * @return True on success.
+	 * @return bool True on success.
 	 */
 	public function loadObject(&$object, $bindAll = false, $strip = true) {
 		if (!$this->exec(ADODB_FETCH_NUM)) {
@@ -1483,7 +1483,7 @@ class w2p_Database_Query {
 	/** Add quotes to a string
 	 *
 	 * @param	$string	A string to add quotes to.
-	 * @return string The quoted string
+	 * @return string|int The quoted string (integers are returned unchanged)
 	 */
 	public function quote($string) {
 		if (is_int($string)) {

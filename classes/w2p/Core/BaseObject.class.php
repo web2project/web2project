@@ -73,7 +73,7 @@ abstract class w2p_Core_BaseObject extends w2p_System_Event implements w2p_Inter
          *   others, so I think it's the best approach for now.
          *                                           ~ caseydk 27 Dec 2011
          */
-        /** @var w2p_Core_CAppUI $AppUI */
+        /** @var w2p_Core_CAppUI|null $AppUI */
         global $AppUI;
         $this->_AppUI = is_null($AppUI) ? new w2p_Core_CAppUI() : $AppUI;
         $this->_perms = $this->_AppUI->acl();
@@ -105,7 +105,7 @@ abstract class w2p_Core_BaseObject extends w2p_System_Event implements w2p_Inter
      *   calls to the above constructor, this is a way to hijack the current
      *   $this->_query and manipulate it however we want.
      *
-     *   @param Object $override A database connection (real or mocked)
+     *   @param object|null $override A database connection (real or mocked)
      */
     public function overrideDatabase($override)
     {

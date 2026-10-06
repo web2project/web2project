@@ -32,7 +32,7 @@ class w2p_Core_CAppUI
     public $user_display_name = null;
 
     /**
-      @var string */
+      @var int|string|null */
     public $user_company = null;
 
     /**
@@ -60,7 +60,7 @@ class w2p_Core_CAppUI
     public $user_locale = null;
 
     /**
-      @var string */
+      @var array<int, mixed>|null */
     public $user_lang = null;
 
     /**
@@ -72,7 +72,7 @@ class w2p_Core_CAppUI
     public $msg = '';
 
     /**
-      @var string */
+      @var int|string */
     public $msgNo = '';
 
     /**
@@ -84,15 +84,15 @@ class w2p_Core_CAppUI
     public $cfg = null;
 
     /**
-      @var integer Version major */
+      @var int|null Version major */
     public $version_major = null;
 
     /**
-      @var integer Version minor */
+      @var int|null Version minor */
     public $version_minor = null;
 
     /**
-      @var integer Version patch level */
+      @var int|null Version patch level */
     public $version_patch = null;
 
     /**
@@ -148,7 +148,7 @@ class w2p_Core_CAppUI
     /**
      * Used to load a php class file from the system classes directory
      * @param string $name The class root file name (excluding .class.php)
-     * @return string The path to the include file
+     * @return string|null The path to the include file
      */
     public function getSystemClass($name = null)
     {
@@ -182,7 +182,7 @@ class w2p_Core_CAppUI
     /**
      * Used to load a php class file from the module directory
      * @param string $name The class root file name (excluding .ajax.php)
-     * @return string The path to the include file
+     * @return string|null The path to the include file
      */
     public function getModuleAjax($name = null)
     {
@@ -453,7 +453,7 @@ class w2p_Core_CAppUI
      * <li>If this is not the base lang, then return string with a red star appended to show
      * that a translation is required.
      * </ul>
-     * @param string $str The string to translate
+     * @param string|array<string> $str The string to translate
      * @param int $flags Option flags, can be case handling or'd with output styles
      * @return string
      */
@@ -531,7 +531,7 @@ class w2p_Core_CAppUI
 
     /**
      * Set the display of warning for untranslated strings
-     * @param string $state
+     * @param bool $state
      */
     public function setWarning($state = true)
     {

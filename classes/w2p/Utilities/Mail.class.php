@@ -49,8 +49,8 @@ class w2p_Utilities_Mail extends PHPMailer
      */
 
     /**
-     *    character set of message
-     *    @var string
+     *    request a read receipt
+     *    @var bool
      */
     public $receipt = false;
     public $useRawAddress = true;
@@ -144,7 +144,7 @@ class w2p_Utilities_Mail extends PHPMailer
      *    The optional reset parameter is useful when looping through records to send individual mails.
      *    This prevents the 'to' array being continually stacked with additional addresses.
      *
-     *    @param string $to email address, accept both a single address or an array of addresses
+     *    @param string|array<string> $to email address, accept both a single address or an array of addresses
      *    @param boolean $reset resets the current array
      */
     public function To($to, $reset = false)
@@ -382,7 +382,7 @@ class w2p_Utilities_Mail extends PHPMailer
      *    check an email address validity
      *    @access public
      *    @param string $address : email address to check
-     *    @return TRUE if email adress is ok
+     *    @return bool True if the email address is ok
      */
     public function ValidEmail($address)
     {

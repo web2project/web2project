@@ -29,10 +29,10 @@ class w2p_System_EventQueue {
      * @param integer $date Seconds since 1970 to trigger event.
      * @param integer $repeat_interval seconds to repeat
      * @param integer $repeat_count number of times to repeat
-     * @return integer queue id
+     * @return bool True if the event was queued
      */
     public function add($callback, &$args, $module, $sysmodule = false, $id = 0, $type = '', $date = 0, $repeat_interval = 0, $repeat_count = 1) {
-        /** @var w2p_Core_CAppUI $AppUI */
+        /** @var w2p_Core_CAppUI|null $AppUI */
         global $AppUI;
 
         if (!isset($AppUI)) {
