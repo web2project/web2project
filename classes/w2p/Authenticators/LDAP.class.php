@@ -105,7 +105,7 @@ class w2p_Authenticators_LDAP extends w2p_Authenticators_Base
         return $user->user_exists($username);
     }
 
-    public function userId($username)
+    public function userId($username = null)
     {
         $q = $this->query;
         $q->addTable('users');
