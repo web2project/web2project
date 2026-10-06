@@ -96,7 +96,7 @@ echo $AppUI->getTheme()->styleRenderBoxTop();
             </td>
             <td>
                 <?php echo $AppUI->_('Levels to display'); ?>
-                <input type="text" name="max_levels" size="10" maxlength="3" <?php $max_levels ?> />
+                <input type="text" name="max_levels" size="10" maxlength="3" value="<?php echo htmlspecialchars((string) $max_levels, ENT_QUOTES); ?>" />
             </td>
         </tr>
     </table>
