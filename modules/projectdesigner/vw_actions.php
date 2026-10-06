@@ -189,7 +189,7 @@ $spercent = arrayMerge(array('' => '('.$AppUI->_('Progress').')'), $percent);
         <tr>
             <th><?php echo $AppUI->_('Allow users to add task logs for others'); ?></th>
             <td>
-                <select name="bulk_task_allow_other_user_tasklogs"class="text">
+                <select name="bulk_task_allow_other_user_tasklogs" class="text">
                     <option value=""></option>
                     <option value="1"><?php echo $AppUI->_('Yes'); ?></option>
                     <option value="0"><?php echo $AppUI->_('No'); ?></option>

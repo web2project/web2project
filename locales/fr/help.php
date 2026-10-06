@@ -13,7 +13,7 @@
 			<a href="http://support.web2project.net/" target="_blank">Forums de support web2Project</a>.
 			<br />
 			<br />Des informations sur les problèmes connus et des améliorations suggérées peuvent être lues et soumises sur le site
-			<a href="http://bugs.web2project.net/" target="_blank"Bugs &amp; Suggestions >web2Project</a>.
+			<a href="http://bugs.web2project.net/" target="_blank">Bugs &amp; Suggestions web2Project</a>.
 			<br />
 			<br />Si vous êtes à la recherche d'un support professionnel concernant web2Project, contactez directement  les développeurs sur les forums.
 			<br />
