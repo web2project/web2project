@@ -1780,7 +1780,7 @@ class CTask extends w2p_Core_BaseObject
             // retrieve the systemwide default preference for the assignment maximum
             $q->addTable('user_preferences');
             $q->addQuery('pref_value');
-            $q->addWhere('pref_user = 0 AND pref_name = \'' . TASKASSIGNMAX . '\'');
+            $q->addWhere("pref_user = 0 AND pref_name = 'TASKASSIGNMAX'");
             $sysChargeMax = $q->loadHash();
             $q->clear();
             if (!$sysChargeMax) {
