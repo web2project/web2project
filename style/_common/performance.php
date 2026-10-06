@@ -33,7 +33,7 @@ print ('    <td width="100%">');
 print ('        <p>Memory Used: ' . sprintf('%01.2f Mb', memory_get_usage() / pow(1024, 2)) . '</p>');
 print ('        <p>Memory Unused: ' . sprintf('%01d Kb', (memory_get_usage() - $w2p_performance_memory_marker) / 1024) . '</p>');
 print ('        <p>Memory Peak: ' . sprintf('%01d Kb', (memory_get_peak_usage() - $w2p_performance_memory_marker) / 1024) . '</p>');
-print ('        <p>Page (Buffer) Size: ' . sprintf('%01.2f kb', ob_get_length() / 1024, 2) . '</p>');
+print ('        <p>Page (Buffer) Size: ' . sprintf('%01.2f kb', ob_get_length() / 1024) . '</p>');
 printf('        <p>Setup in %.3f seconds</p>', $w2p_performance_setuptime);
 printf('        <p>ACLs checked in %.3f seconds</p>', $w2p_performance_acltime);
 print ('        <p>ACLs nr of checks: ' . $w2p_performance_aclchecks . '</p>');
