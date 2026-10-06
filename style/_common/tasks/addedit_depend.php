@@ -16,7 +16,7 @@
             </p>
             <p>
                 <?php $form->showLabel('All Tasks'); ?>
-                <select name="all_tasks" class="text" style="width:220px" size="10" class="text" multiple="multiple">
+                <select name="all_tasks" class="text" style="width:220px" size="10" multiple="multiple">
                     <?php echo str_replace('selected', '', $task_parent_options); // we need to remove selected added from task_parent options ?>
                 </select>
             </p>

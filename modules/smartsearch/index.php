@@ -114,7 +114,7 @@ $form = new w2p_Output_HTML_FormHelper($AppUI);
 			<table cellspacing="5" cellpadding="0" border="0">
 				<tr>
 					<td align="left" valign="middle">
-					<div id="div_advancedsearch1" id="div_advancedsearch1"  style="<?php echo ($ssearch['advanced_search'] == "on" ? 'visibility:visible' : 'visibility:hidden'); ?> "> 1. </div></td>
+					<div id="div_advancedsearch1" style="<?php echo ($ssearch['advanced_search'] == "on" ? 'visibility:visible' : 'visibility:hidden'); ?> "> 1. </div></td>
 					<td align="left"><input class="text" size="18" type="text" id="keyword1" name="keyword1" value="<?php echo $keyword1; ?>" /></td>
 					<td align="left"><input class="button btn btn-small dropdown-toggle" type="submit" value="<?php echo $AppUI->_('Search'); ?>" /></td>
 					<td align="left"><input name="allwords" id="allwords" type="checkbox"  <?php echo ($ssearch['all_words'] == "on" ? 'checked="checked"' : ''); ?> /></td> <td align="left"><label for="allwords"><?php echo $AppUI->_('All words'); ?></label></td>
@@ -122,7 +122,7 @@ $form = new w2p_Output_HTML_FormHelper($AppUI);
 					<td align="left"><input name="advancedsearch" id="advancedsearch" type="checkbox" <?php echo ($ssearch['advanced_search'] == "on" ? 'checked="checked"' : ''); ?> onclick="toggleStatus(this)" /></td> <td align="left"><label for="advancedsearch"><?php echo $AppUI->_('Advanced search'); ?></label></td>
 				</tr>
 			</table>
-			<div id="div_advancedsearch" id="div_advancedsearch"  style="<?php echo ($ssearch['advanced_search'] == "on" ? 'display:block' : 'display:none'); ?> ">
+			<div id="div_advancedsearch" style="<?php echo ($ssearch['advanced_search'] == "on" ? 'display:block' : 'display:none'); ?> ">
 				<table cellspacing="5" cellpadding="0" border="0">
 					<tr>
 						<td align="left"> 2. </td>
