@@ -41,7 +41,7 @@ class CSystem_SysVal extends w2p_Core_BaseObject
 	public function bind($hash, $prefix = null, $checkSlashes = true, $bindAll = false)
 	{
 		if (!is_array($hash)) {
-			$this->_error = get_class($this) . '::bind failed.';
+			$this->_error[] = get_class($this) . '::bind failed.';
 			return false;
 		} else {
 			$q = $this->_getQuery();

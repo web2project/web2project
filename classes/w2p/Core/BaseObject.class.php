@@ -27,9 +27,9 @@ abstract class w2p_Core_BaseObject extends w2p_System_Event implements w2p_Inter
     protected $_tbl_key = '';
 
     /**
-     *     @var string Error message
+     *     @var array<int|string, string> Error messages keyed by field or check name
      */
-    protected $_error = '';
+    protected $_error = array();
 
     /**
      * @var object Query Handler
@@ -127,7 +127,7 @@ abstract class w2p_Core_BaseObject extends w2p_System_Event implements w2p_Inter
     }
 
     /**
-     *     @return string or array Returns the error message
+     *     @return array<int|string, string> Returns the error messages
      */
     public function getError()
     {
