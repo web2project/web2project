@@ -48,7 +48,6 @@ if ($w2Pconfig['restrict_color_selection']) {
             <td valign="top">
                 <strong><?php echo $AppUI->_('Color Selector'); ?></strong>
             </td>
-        <form>
             <td align="right" valign="bottom">
                 <select name="" class="text" onchange="javascript:setClose(this.options[this.selectedIndex].value)">
                     <option value="0">- - <?php echo $AppUI->_('Preset'); ?> - -</option>
@@ -59,7 +58,6 @@ if ($w2Pconfig['restrict_color_selection']) {
                     ?>
                 </select>
             </td>
-        </form>
         </tr>
         <tr>
             <td colspan="2">

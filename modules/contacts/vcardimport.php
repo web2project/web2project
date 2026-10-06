@@ -79,10 +79,9 @@ if (isset($_FILES['vcf']) && isset($_GET['suppressHeaders']) && (w2PgetParam($_G
 	$titleBlock->show();
 
 ?>
+<form name="vcfFrm" action="?m=contacts&a=vcardimport&suppressHeaders=true" enctype="multipart/form-data" method="post">
+	<input type="hidden" name="max_file_size" value="109605000" />
 <table class="std">
-
-	<form name="vcfFrm" action="?m=contacts&a=vcardimport&suppressHeaders=true" enctype="multipart/form-data" method="post">
-		<input type="hidden" name="max_file_size" value="109605000" />
 	<tr>
 		<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Fetch vCard(s) File'); ?>:</td>
 		<td align="left"><input type="file" class="button" name="vcf" accept="text/x-vcard"></td>
@@ -90,8 +89,8 @@ if (isset($_FILES['vcf']) && isset($_GET['suppressHeaders']) && (w2PgetParam($_G
 	<tr>
 		<td align="right" colspan="2" nowrap="nowrap"><input type="submit" class="button" value="<?php echo $AppUI->_('submit'); ?>"/></td>
 	</tr>
-	</form>
 </table>
+</form>
 <?php
 
 } else { // trouble with get parameters
