@@ -40,11 +40,13 @@ class w2p_Utilities_HTTPRequest {
             $ctx = stream_context_create($params);
             $fp = @fopen($this->url, 'rb', false, $ctx);
             if (!$fp) {
-                throw new Exception("Problem with $url, $php_errormsg");
+                $error = error_get_last();
+                throw new Exception("Problem with {$this->url}, " . ($error['message'] ?? 'unknown error'));
             }
             $response = @stream_get_contents($fp);
             if ($response === false) {
-                throw new Exception("Problem reading data from $url, $php_errormsg");
+                $error = error_get_last();
+                throw new Exception("Problem reading data from {$this->url}, " . ($error['message'] ?? 'unknown error'));
             }
         }
         return $response;
