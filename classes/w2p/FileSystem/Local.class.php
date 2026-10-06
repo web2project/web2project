@@ -37,7 +37,7 @@ class w2p_FileSystem_Local implements w2p_Interfaces_FileSystem
         if (!is_dir(W2P_BASE_DIR . '/files/0')) {
             $res = mkdir(W2P_BASE_DIR . '/files/0', 0744);
             if (!$res) {
-                $AppUI->setMsg('Upload folder not setup to accept uploads - change permission on files/ directory.', UI_MSG_ALLERT);
+                $AppUI->setMsg('Upload folder not setup to accept uploads - change permission on files/ directory.', UI_MSG_ALERT);
                 return false;
             }
         }
@@ -66,7 +66,7 @@ class w2p_FileSystem_Local implements w2p_Interfaces_FileSystem
         if (!is_dir(W2P_BASE_DIR . '/files/' . $file->file_project)) {
             $res = mkdir(W2P_BASE_DIR . '/files/' . $file->file_project, 0744);
             if (!$res) {
-                $AppUI->setMsg('Upload folder not setup to accept uploads - change permission on files/ directory.', UI_MSG_ALLERT);
+                $AppUI->setMsg('Upload folder not setup to accept uploads - change permission on files/ directory.', UI_MSG_ALERT);
                 return false;
             }
         }
