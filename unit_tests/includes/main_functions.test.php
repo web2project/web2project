@@ -16,7 +16,7 @@
  * @link        http://www.web2project.net
  */
 
-class Main_Functions_Test extends PHPUnit_Framework_TestCase
+class Main_Functions_Test extends \PHPUnit\Framework\TestCase
 {
 	public function testW2PgetParam()
 	{
@@ -196,8 +196,9 @@ class Main_Functions_Test extends PHPUnit_Framework_TestCase
 
     public function test_notifyNewExternalUser()
     {
-        // This is for phpUnit 3.6+
-        $emailUtility = $this->getMock('w2p_Utilities_Mail', array('Send', 'Body', 'Subject'));
+        $emailUtility = $this->getMockBuilder(w2p_Utilities_Mail::class)
+                             ->onlyMethods(array('Send', 'Body', 'Subject'))
+                             ->getMock();
         $emailUtility->expects($this->once())
                      ->method('Subject')
                      ->with($this->stringContains('New Account Created'));
@@ -212,8 +213,9 @@ class Main_Functions_Test extends PHPUnit_Framework_TestCase
 
     public function test_notifyNewUser()
     {
-        // This is for phpUnit 3.6+
-        $emailUtility = $this->getMock('w2p_Utilities_Mail', array('Send', 'Body', 'Subject'));
+        $emailUtility = $this->getMockBuilder(w2p_Utilities_Mail::class)
+                             ->onlyMethods(array('Send', 'Body', 'Subject'))
+                             ->getMock();
         $emailUtility->expects($this->once())
                      ->method('Subject')
                      ->with($this->stringContains('New Account Created'));
