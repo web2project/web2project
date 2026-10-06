@@ -84,7 +84,7 @@ $orderMax = count($properties) + count($fields);
 					<input type="checkbox" name="display[<?php echo $field; ?>]" checked="checked" />
 				</td>
 				<td>
-					<?php echo arraySelect(range(0, $orderMax), "order[$field]", 'class="text" size="1"', $order); ?>
+					<?php $orderOptions = range(0, $orderMax); echo arraySelect($orderOptions, "order[$field]", 'class="text" size="1"', $order); ?>
 				</td>
 				<td class="center">
 					<input type="hidden" name="displayFields[]" value="<?php echo $field; ?>" />

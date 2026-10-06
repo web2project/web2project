@@ -134,7 +134,7 @@ function deleteItem(id) {
         <tr>
             <td><label><?php echo $AppUI->_('Field Published') ?>:</label></td>
             <td>
-            <?php echo arraySelect(w2PgetSysVal('GlobalYesNo'), 'field_published', 'id="fieldpublished" class="text"', $field_published); ?>
+            <?php $publishedOptions = w2PgetSysVal('GlobalYesNo'); echo arraySelect($publishedOptions, 'field_published', 'id="fieldpublished" class="text"', $field_published); ?>
             </td>
         </tr>
         <tr>

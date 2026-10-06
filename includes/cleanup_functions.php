@@ -1627,7 +1627,8 @@ function file_show_attr($AppUI, $form)
 
     // Category
     $str_out .= '<p>' . $form->addLabel('Category');
-    $str_out .= arraySelect(w2PgetSysVal('FileType'), 'file_category', 'class="text"' . $select_disabled, $object->file_category, true) . '</p>';
+    $fileTypes = w2PgetSysVal('FileType');
+    $str_out .= arraySelect($fileTypes, 'file_category', 'class="text"' . $select_disabled, $object->file_category, true) . '</p>';
 
     // ---------------------------------------------------------------------------------
 

@@ -98,7 +98,8 @@ class w2p_Core_CustomFieldsParser {
         $parsed .= $this->_getLabelHTML($field_config);
         switch ($field_config['type']) {
             case 'select':
-                $parsed .= '<td align="left">' . arraySelect(explode(',', $field_config['selects']), 'custom_' . $key, 'size="1" class="text" ' . $field_config['options'], (isset($this->previous_data[$key]) ? $this->previous_data[$key] : '')) . '</td>';
+                $selectOptions = explode(',', $field_config['selects']);
+                $parsed .= '<td align="left">' . arraySelect($selectOptions, 'custom_' . $key, 'size="1" class="text" ' . $field_config['options'], (isset($this->previous_data[$key]) ? $this->previous_data[$key] : '')) . '</td>';
                 break;
             case 'textarea':
                 $parsed .= '<td align="left"><textarea name="custom_' . $key . '" class="textarea" ' . $field_config['options'] . '>' . (isset($this->previous_data[$key]) ? $this->previous_data[$key] : '') . '</textarea></td>';
