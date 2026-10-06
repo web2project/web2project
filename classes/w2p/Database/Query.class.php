@@ -739,7 +739,6 @@ class w2p_Database_Query {
 			$this->clear();
 		}
 		return $q;
-		dprint(__file__, __line__, 2, $q);
 	}
 
 	/** Prepare the SELECT component of the SQL query
@@ -787,7 +786,6 @@ class w2p_Database_Query {
 				$q .= $this->make_order_clause($this->order_by);
 				$q .= $this->make_limit_clause($this->limit, $this->offset);
 				return $q;
-				break;
 			default:
 				//mySQL
 				$q = 'SELECT ';
@@ -875,7 +873,6 @@ class w2p_Database_Query {
 				$q .= $sets;
 				$q .= $this->make_where_clause($this->where);
 				return $q;
-				break;
 			default:
 				//mySQL
 				$q = 'UPDATE ';
@@ -930,7 +927,6 @@ class w2p_Database_Query {
 
 				$q .= '(' . $fieldlist . ') VALUES (' . $valuelist . ')';
 				return $q;
-				break;
 			default:
 				//mySQL
 				$q = 'INSERT INTO ';
@@ -1004,7 +1000,6 @@ class w2p_Database_Query {
 
 				$q .= '(' . $fieldlist . ') VALUES (' . $valuelist . ')';
 				return $q;
-				break;
 			default:
 				//mySQL
 				$q = 'REPLACE INTO ';
@@ -1050,7 +1045,6 @@ class w2p_Database_Query {
 				$q .= $this->_table_prefix . $table;
 				$q .= $this->make_where_clause($this->where);
 				return $q;
-				break;
 			default:
 				//mySQL
 				$q = 'DELETE FROM ';

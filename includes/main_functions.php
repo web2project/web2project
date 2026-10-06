@@ -211,7 +211,6 @@ function convert2days($durn, $units)
         case 0:
         case 1:
             return $durn / w2PgetConfig('daily_working_hours');
-            break;
         case 24:
             return $durn;
     }

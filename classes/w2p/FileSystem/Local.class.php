@@ -21,7 +21,6 @@ class w2p_FileSystem_Local implements w2p_Interfaces_FileSystem
             $res = mkdir(W2P_BASE_DIR . '/files/' . $file->file_project, 0744);
             if (!$res) {
                 die('this directory could not be created');
-                return false;
             }
         }
 
