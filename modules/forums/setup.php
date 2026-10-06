@@ -24,6 +24,7 @@ $config['mod_config'] = true; // show 'configure' link in viewmods
 class CSetupForums extends w2p_System_Setup
 {
 	public function configure() { // configure this module
+		/** @var w2p_Core_CAppUI $AppUI */
 		global $AppUI;
 		$AppUI->redirect('m=forums&a=configure'); // load module specific configuration page
 		return true;

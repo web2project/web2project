@@ -1243,6 +1243,7 @@ class CTask extends w2p_Core_BaseObject
      */
     public static function getTasksForPeriod($start_date, $end_date, $company_id = 0, $user_id = null)
     {
+        /** @var w2p_Core_CAppUI $AppUI */
         global $AppUI;
         $q = new w2p_Database_Query();
 

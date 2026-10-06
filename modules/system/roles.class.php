@@ -87,6 +87,7 @@ class CSystem_Role extends w2p_Core_BaseObject {
 
     public function __wakeup()
     {
+        /** @var w2p_Core_CAppUI $AppUI */
         global $AppUI;
         $this->_AppUI = $AppUI;
         $this->_perms = $this->_AppUI->acl();

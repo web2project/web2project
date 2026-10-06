@@ -1,4 +1,5 @@
 <?php
+/** @var w2p_Core_CAppUI $AppUI */
 /*  Copyright (c) 2007 Pedro A. (web2Project Development Team Member)
 THIS MODULE WAS SPONSORED BY DUSTIN OF PURYEAR-IT.COM
 

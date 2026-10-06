@@ -70,6 +70,7 @@ class w2p_Output_MonthCalendar {
      * @param Date $date
      */
     public function __construct($date = null) {
+        /** @var w2p_Core_CAppUI $AppUI */
         global $AppUI;
         $this->_AppUI = $AppUI;
         

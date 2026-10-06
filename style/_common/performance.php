@@ -1,4 +1,5 @@
 <?php
+/** @var w2p_Core_CAppUI $AppUI */
 
 $db_info = $db->ServerInfo();
 print ('<table width="100%" cellspacing="0" cellpadding="4" border="0"  class="system-info">');

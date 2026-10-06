@@ -1,3 +1,4 @@
+<?php /** @var w2p_Core_CAppUI $AppUI */ ?>
 <table cellspacing="2" cellpadding="4" border="0" class="tbl info" width="80%" style="border-radius: 10px;">
     <tr><th><span><?php echo sprintf($AppUI->_('Welcome to %s'), 'web2Project'); ?></span></th></tr>
     <tr>

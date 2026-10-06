@@ -1159,6 +1159,7 @@ class w2p_Database_Query {
 	 * @return Array of associative arrays containing row field values
 	 */
 	public function loadList($maxrows = -1, $index = -1) {
+		/** @var w2p_Core_CAppUI $AppUI */
 		global $AppUI;
 
 		if (!$this->exec(ADODB_FETCH_ASSOC)) {
@@ -1323,6 +1324,7 @@ class w2p_Database_Query {
 	 * @return mixed Value of the row column
 	 */
 	public function loadResult() {
+		/** @var w2p_Core_CAppUI $AppUI */
 		global $AppUI;
 
 		$result = false;

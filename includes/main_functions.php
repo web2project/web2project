@@ -182,6 +182,11 @@ function w2PgetConfig($key, $default = null)
  *  default, and avoid poisoning the URL by denying:
  * 1) the use of spaces (for SQL and XSS injection)
  * 2) the use of <, ", [, ; and { (for XSS injection)
+ *
+ * @param array<mixed> $arr  Source array, usually $_GET or $_POST
+ * @param string       $name Key to read
+ * @param mixed        $def  Default when the key is missing
+ * @return mixed
  */
 function w2PgetParam(&$arr, $name, $def = null)
 {
@@ -307,6 +312,7 @@ function w2p_textarea($content)
 
 function notifyNewExternalUser($emailAddress, $username, $logname, $logpwd, $emailUtility = null)
 {
+    /** @var w2p_Core_CAppUI $AppUI */
     global $AppUI;
     $emailManager = new w2p_Output_EmailManager($AppUI);
     $body = $emailManager->notifyNewExternalUser($logname, $logpwd);
@@ -320,6 +326,7 @@ function notifyNewExternalUser($emailAddress, $username, $logname, $logpwd, $ema
 
 function notifyNewUser($emailAddress, $username, $emailUtility = null)
 {
+    /** @var w2p_Core_CAppUI $AppUI */
     global $AppUI;
     $emailManager = new w2p_Output_EmailManager($AppUI);
     $body = $emailManager->getNotifyNewUser($username);

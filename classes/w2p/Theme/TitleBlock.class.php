@@ -28,6 +28,7 @@ class w2p_Theme_TitleBlock {
      * not displayed.
      */
     public function __construct($title, $icon = '', $module = '') {
+        /** @var w2p_Core_CAppUI $AppUI */
         global $AppUI;
         $this->_AppUI = $AppUI;
         global $w2Pconfig;

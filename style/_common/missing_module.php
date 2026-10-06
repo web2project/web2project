@@ -1,3 +1,4 @@
+<?php /** @var w2p_Core_CAppUI $AppUI */ ?>
 <table width="100%" cellspacing="0" cellpadding="3" border="0" class="std">
     <tr>
         <td>

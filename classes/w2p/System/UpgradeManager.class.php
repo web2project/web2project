@@ -79,6 +79,7 @@ class w2p_System_UpgradeManager {
     }
 
     public function upgradeSystem() {
+        /** @var w2p_Core_CAppUI $AppUI */
         global $AppUI;
         $AppUI = is_object($AppUI) ? $AppUI : new w2p_Core_CAppUI();
 

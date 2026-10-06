@@ -1,3 +1,4 @@
+<?php /** @var w2p_Core_CAppUI $AppUI */ ?>
 <table width="100%" class="std">
     <tr>
         <td nowrap="nowrap"><?php echo $AppUI->_('Key'); ?>:</td>

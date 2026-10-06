@@ -1,4 +1,5 @@
 <?php
+/** @var w2p_Core_CAppUI $AppUI */
 
 $htmlHelper = new w2p_Output_HTMLHelper($AppUI);
 $df = $AppUI->getPref('SHDATEFORMAT');

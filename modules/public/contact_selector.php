@@ -1,4 +1,5 @@
 <?php
+/** @var w2p_Core_CAppUI $AppUI */
 // @todo    remove database query
 
 $show_all = w2PgetParam($_REQUEST, 'show_all', 0);

@@ -153,6 +153,7 @@ class w2p_Utilities_Date extends Date {
     }
 
     public function isWorkingDay() {
+        /** @var w2p_Core_CAppUI $AppUI */
         global $AppUI;
 
         if ($AppUI->isActiveModule('holiday')) {

@@ -732,6 +732,7 @@ class CProject extends w2p_Core_BaseObject
     {
         trigger_error("CProject::updateStatus has been deprecated in v2.3 and will be removed by v4.0.", E_USER_NOTICE);
 
+        /** @var w2p_Core_CAppUI $AppUI */
         global $AppUI;
 
         $perms = $AppUI->acl();
@@ -854,6 +855,7 @@ class CProject extends w2p_Core_BaseObject
         $q->addWhere('project_id = ' . $project_id);
         $q->exec();
 
+        /** @var w2p_Core_CAppUI $AppUI */
         global $AppUI;
         CTask::storeTokenTask($AppUI, $project_id);
     }

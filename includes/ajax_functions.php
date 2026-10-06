@@ -4,6 +4,7 @@ $xajax->configure('javascript URI', W2P_BASE_URL.'/lib/xajax/');
 
 function calcFinish($start_date, $start_hour, $start_minute, $duration_type, $task_duration)
 {
+    /** @var w2p_Core_CAppUI $AppUI */
     global $AppUI;
 
     $df = $AppUI->getPref('SHDATEFORMAT');

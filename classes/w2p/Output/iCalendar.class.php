@@ -23,6 +23,7 @@ class w2p_Output_iCalendar
      */
     public static function formatCalendarItem($calendarItem, $module_name)
     {
+        /** @var w2p_Core_CAppUI $AppUI */
         global $AppUI;
 
         $name = $calendarItem['name'];

@@ -199,6 +199,7 @@ abstract class w2p_Theme_Base
 
     public function loadCalendarJS()
     {
+        /** @var w2p_Core_CAppUI $AppUI */
         global $AppUI;
 
         $s = '<style type="text/css">@import url(' . W2P_BASE_URL . '/lib/jscalendar/skins/aqua/theme.css);</style>';

@@ -153,6 +153,7 @@ function showchilddept_comp(&$a, $level = 0)
 {
     trigger_error("The showchilddept_comp function has been deprecated and will be removed in v4.0. There is no replacement.", E_USER_NOTICE );
 
+    /** @var w2p_Core_CAppUI $AppUI */
     global $AppUI;
     $s = '
     <td>
@@ -262,6 +263,7 @@ function canTaskAccess($task_id)
 {
     trigger_error("canTaskAccess has been deprecated in v3.0 and will be removed by v4.0. Please use CTask->canAccess() instead.", E_USER_NOTICE);
 
+    /** @var w2p_Core_CAppUI $AppUI */
     global $AppUI;
 
     $task = new CTask();
@@ -376,6 +378,7 @@ if (!function_exists('styleRenderBoxTop')) {
     {
         trigger_error("styleRenderBoxTop() has been deprecated in v3.1 and will be removed by v5.0. Use AppUI->getTheme()->styleRenderBoxTop instead.", E_USER_NOTICE);
 
+        /** @var w2p_Core_CAppUI $AppUI */
         global $AppUI;
         echo $AppUI->getTheme()->styleRenderBoxTop();
     }
@@ -389,6 +392,7 @@ if (!function_exists('styleRenderBoxBottom')) {
     {
         trigger_error("styleRenderBoxBottom() has been deprecated in v3.1 and will be removed by v5.0. Use AppUI->getTheme()->styleRenderBoxBottom instead.", E_USER_NOTICE);
 
+        /** @var w2p_Core_CAppUI $AppUI */
         global $AppUI;
         echo $AppUI->getTheme()->styleRenderBoxBottom();
     }
@@ -412,6 +416,7 @@ function contextHelp($title, $link = '')
 
 function w2PcontextHelp($title, $link = '')
 {
+    /** @var w2p_Core_CAppUI $AppUI */
     global $AppUI;
     trigger_error("w2PcontextHelp() has been deprecated in v3.1 and will be removed by v5.0", E_USER_NOTICE);
 

@@ -1,4 +1,5 @@
 <?php
+/** @var w2p_Core_CAppUI $AppUI */
 /**
  * This file exists exclusively because it allows the Files module to use the
  *   same url generation that the other modules do. Aka.. it makes our lives

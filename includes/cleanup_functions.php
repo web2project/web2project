@@ -31,6 +31,7 @@ function is_task_in_gantt_arr($task)
 
 function notifyHR($address, $notUsed, $uaddress, $uusername, $logname, $notUsed2, $userid)
 {
+    /** @var w2p_Core_CAppUI $AppUI */
     global $AppUI;
     $emailManager = new w2p_Output_EmailManager($AppUI);
     $body = $emailManager->notifyHR($uusername, $logname, $uaddress, $userid);
@@ -44,6 +45,7 @@ function notifyHR($address, $notUsed, $uaddress, $uusername, $logname, $notUsed2
 
 function notifyNewUserCredentials($address, $username, $logname, $logpwd)
 {
+    /** @var w2p_Core_CAppUI $AppUI */
     global $AppUI;
     $emailManager = new w2p_Output_EmailManager($AppUI);
     $body = $emailManager->notifyNewUserCredentials($username, $logname, $logpwd);
@@ -297,6 +299,7 @@ function build_date_list(&$date_array, $row)
 // from modules/tasks/ae_dates.php
 function cal_work_day_conv($val)
 {
+    /** @var w2p_Core_CAppUI $AppUI */
     global $locale_char_set, $AppUI;
     setlocale(LC_TIME, 'en');
     $wk = Date_Calc::getCalendarWeek(null, null, null, '%a', LOCALE_FIRST_DAY);
@@ -494,6 +497,7 @@ function calcEndByStartAndDuration($task)
 // from modules/tasks/tasks.class.php
 function sort_by_item_title($title, $item_name, $item_type, $a = '')
 {
+    /** @var w2p_Core_CAppUI $AppUI */
     global $AppUI, $project_id, $task_id, $m;
     global $task_sort_item1, $task_sort_type1, $task_sort_order1;
     global $task_sort_item2, $task_sort_type2, $task_sort_order2;
@@ -628,6 +632,7 @@ function isMemberOfTask_r($list, $Lusers, $N, $user_id, $task)
 // from modules/tasks/tasksperuser_sub.php
 function displayTask($list, $task, $level, $display_week_hours, $fromPeriod, $toPeriod, $user_id)
 {
+    /** @var w2p_Core_CAppUI $AppUI */
     global $AppUI, $durnTypes, $active_users, $zi, $projects;
     //if the user has no permission to the project don't show the tasks
     if (!(key_exists($task->task_project, $projects))) {
@@ -705,6 +710,7 @@ function displayTask($list, $task, $level, $display_week_hours, $fromPeriod, $to
 // from modules/reports/tasksperuser.php
 function displayTask_r($list, $task, $level, $display_week_hours, $fromPeriod, $toPeriod, $log_all_projects = false, $user_id = 0)
 {
+    /** @var w2p_Core_CAppUI $AppUI */
     global $AppUI;
 
     $htmlHelper = new w2p_Output_HTMLHelper($AppUI);
@@ -784,6 +790,7 @@ function weekDates($display_allocated_hours, $fromPeriod, $toPeriod)
 // from modules/reports/tasksperuser.php
 function weekDates_r($display_allocated_hours, $fromPeriod, $toPeriod)
 {
+    /** @var w2p_Core_CAppUI $AppUI */
     global $AppUI;
 
     if ($fromPeriod == -1) {
@@ -1002,6 +1009,7 @@ function findfiltertaskchild(&$tarr, $parent, $level=0)
 // from modules/system/roles/roles.class.php
 function showRoleRow($role = null)
 {
+    /** @var w2p_Core_CAppUI $AppUI */
     global $canEdit, $canDelete, $role_id, $AppUI, $roles;
 
     $id = $role['id'];
@@ -1089,6 +1097,7 @@ function parseFormatSysval($text, $syskey)
 // from modules/system/billingcode.php
 function showcodes(&$a)
 {
+    /** @var w2p_Core_CAppUI $AppUI */
     global $AppUI, $company_id;
 
     $s = '
@@ -1218,6 +1227,7 @@ function recode2regexp_utf8($input)
 // from modules/public/selector.php
 function selPermWhere($obj, $idfld, $namefield, $prefix = '')
 {
+    /** @var w2p_Core_CAppUI $AppUI */
     global $AppUI;
 
     $allowed = $obj->getAllowedRecords($AppUI->user_id, $idfld . ', ' . $namefield, '', '', '', $prefix);
@@ -1276,6 +1286,7 @@ function addDeptId($dataset, $parent)
 // From: modules/files/filefolder.class.php
 function getFolderSelectList()
 {
+    /** @var w2p_Core_CAppUI $AppUI */
     global $AppUI;
 
     $q = new w2p_Database_Query();
@@ -1299,6 +1310,7 @@ function getFolderSelectList()
 // From: modules/files/filefolder.class.php
 function getFolders($parent)
 {
+    /** @var w2p_Core_CAppUI $AppUI */
     global $AppUI, $allowed_folders_ary, $tab, $m, $a, $company_id, $project_id, $task_id;
     // retrieve all children of $parent
 
@@ -1658,6 +1670,7 @@ function getCriticalTasksInverted($project_id = null, $limit = 1)
 //TODO: modules/projectdesigner/projectdesigner.class.php
 function get_actual_end_date_pd($task_id, $task)
 {
+    /** @var w2p_Core_CAppUI $AppUI */
     global $AppUI;
 
     $q = new w2p_Database_Query();
@@ -1697,6 +1710,7 @@ current viewing user $AppUI->user_id is used.
 // From: modules/projects/project.class.php
 function projects_list_data($user_id = false)
 {
+    /** @var w2p_Core_CAppUI $AppUI */
     global $AppUI, $addPwOiD, $buffer, $company, $company_id, $company_prefix,
         $deny, $department, $dept_ids, $orderby, $orderdir,
         $tasks_problems, $owner, $search_text, $project_type;
@@ -1895,6 +1909,7 @@ function getProjectIndex($arraylist, $project_id)
 // From: modules/projects/project.class.php
 function getDepartmentSelectionList($company_id, $checked_array = array(), $dept_parent = 0, $spaces = 0)
 {
+    /** @var w2p_Core_CAppUI $AppUI */
     global $departments_count, $AppUI;
     $parsed = '';
 
@@ -1966,6 +1981,7 @@ function userUsageWeeks()
 // From: modules/reports/reports/allocateduserhours.php
 function showWeeks()
 {
+    /** @var w2p_Core_CAppUI $AppUI */
     global $allocated_hours_sum, $end_date, $start_date, $AppUI, $user_list, $user_names, $user_usage, $table_header, $table_rows, $working_days_count, $total_hours_capacity, $total_hours_capacity_all;
 
     $working_days_count = 0;
@@ -2058,6 +2074,7 @@ function userUsageDays()
 // From: modules/reports/reports/allocateduserhours.php
 function showDays()
 {
+    /** @var w2p_Core_CAppUI $AppUI */
     global $allocated_hours_sum, $end_date, $start_date, $AppUI, $user_list, $user_names, $user_usage, $hideNonWd, $table_header, $table_rows, $working_days_count, $total_hours_capacity, $total_hours_capacity_all;
 
     if (!is_array($user_list)) {
@@ -2108,6 +2125,7 @@ function showDays()
 // From: modules/system/syskeys/index.php
 function showRow($id = '', $key = 0, $title = '', $value = '')
 {
+  /** @var w2p_Core_CAppUI $AppUI */
   global $canEdit, $sysval_id, $AppUI, $keys;
   global $fixedSysVals;
   $s = '';
@@ -2140,6 +2158,7 @@ function showRow($id = '', $key = 0, $title = '', $value = '')
 // From: modules/system/syskeys/keys.php
 function showRow_keys($id = 0, $name = '', $label = '', $canEdit = false)
 {
+    /** @var w2p_Core_CAppUI $AppUI */
     global $canEdit, $syskey_id, $CR, $AppUI;
     $s = '';
     if ($syskey_id == $id && $canEdit) {
@@ -2196,6 +2215,7 @@ function bestColor($bg, $lt = '#ffffff', $dk = '#000000')
 ##
 function arraySelect(&$arr, $select_name, $select_attribs, $selected, $translate = false)
 {
+    /** @var w2p_Core_CAppUI $AppUI */
     global $AppUI;
     if (!is_array($arr)) {
         dprint(__file__, __line__, 0, 'arraySelect called with no array');
@@ -2286,6 +2306,7 @@ function tree_recurse($id, $indent, $list, $children)
 
 function projectSelectWithOptGroup($user_id, $select_name, $select_attribs, $selected, $excludeProjWithId = null)
 {
+    /** @var w2p_Core_CAppUI $AppUI */
     global $AppUI;
     $q = new w2p_Database_Query();
     $q->addTable('projects', 'pr');
@@ -2319,6 +2340,7 @@ function projectSelectWithOptGroup($user_id, $select_name, $select_attribs, $sel
 ##
 function breadCrumbs(&$arr)
 {
+    /** @var w2p_Core_CAppUI $AppUI */
     global $AppUI;
     $crumbs = array();
     foreach ($arr as $k => $v) {
@@ -2330,6 +2352,7 @@ function breadCrumbs(&$arr)
 
 function w2PgetUsers()
 {
+    /** @var w2p_Core_CAppUI $AppUI */
     global $AppUI;
 
     $q = new w2p_Database_Query;
@@ -2359,6 +2382,7 @@ function w2PgetUsers()
 
 function getUsers($stub = null, $where = null, $orderby = 'contact_first_name, contact_last_name')
 {
+    /** @var w2p_Core_CAppUI $AppUI */
     global $AppUI;
     $q = new w2p_Database_Query;
     $q->addTable('users');
@@ -2574,6 +2598,7 @@ function defVal($var, $def)
 
 function addHistory($table, $id, $action = 'modify', $description = '', $project_id = 0)
 {
+    /** @var w2p_Core_CAppUI $AppUI */
     global $AppUI;
     /*
     * TODO:
@@ -2637,6 +2662,7 @@ function w2PgetSysVal($title)
 
 function w2PuserHasRole($name)
 {
+    /** @var w2p_Core_CAppUI $AppUI */
     global $AppUI;
     $uid = $AppUI->user_id;
     $q = new w2p_Database_Query;
@@ -2650,6 +2676,7 @@ function w2PuserHasRole($name)
 
 function w2PformatDuration($x)
 {
+    /** @var w2p_Core_CAppUI $AppUI */
     global $AppUI;
 
     $dur_day = floor($x / w2PgetConfig('daily_working_hours'));
@@ -2742,6 +2769,7 @@ function w2PformSafe($txt, $deslash = false)
 
 function formatTime($uts)
 {
+    /** @var w2p_Core_CAppUI $AppUI */
     global $AppUI;
     $date = new w2p_Utilities_Date();
     $date->setDate($uts, DATE_FORMAT_UNIXTIME);
@@ -2863,6 +2891,7 @@ function getUsersArray()
 
 function getUsersCombo($default_user_id = 0, $first_option = 'All users')
 {
+    /** @var w2p_Core_CAppUI $AppUI */
     global $AppUI;
 
     $parsed = '<select name="user_id" class="text">';
@@ -2884,6 +2913,7 @@ function getUsersCombo($default_user_id = 0, $first_option = 'All users')
  */
 function formatHours($hours)
 {
+    /** @var w2p_Core_CAppUI $AppUI */
     global $AppUI;
 
     $hours = (int) $hours;
@@ -2921,6 +2951,7 @@ function formatHours($hours)
 */
 function w2PrequiredFields($requiredFields)
 {
+    /** @var w2p_Core_CAppUI $AppUI */
     global $AppUI;
     $buffer = 'var foc=false;';
 
@@ -3025,6 +3056,7 @@ function w2PHTMLDecode($txt)
 
 function w2PtoolTip($header = '', $tip = '', $raw = false, $id = '')
 {
+    /** @var w2p_Core_CAppUI $AppUI */
     global $AppUI;
 
     $id = ('' == $id) ? '' : 'id="' . $id . '"';
@@ -3185,6 +3217,7 @@ function w2PgetTimezonesForInstall()
 
 function sendNewPass()
 {
+    /** @var w2p_Core_CAppUI $AppUI */
     global $AppUI;
 
     // ensure no malicous sql gets past
@@ -3253,6 +3286,7 @@ function sendNewPass()
 // from modules/reports/overall.php
 function showcompany($company_id, $restricted = false)
 {
+    /** @var w2p_Core_CAppUI $AppUI */
     global $AppUI, $log_start_date, $log_end_date, $log_all;
     $q = new w2p_Database_Query;
     $q->addTable('projects');
@@ -3367,6 +3401,7 @@ function getEventLinks($startPeriod, $endPeriod, $links, $notUsed = null, $minic
 
 function getEventTooltip($event_id)
 {
+    /** @var w2p_Core_CAppUI $AppUI */
     global $AppUI;
 
     if (!$event_id) {
@@ -3438,6 +3473,7 @@ function getEventTooltip($event_id)
  */
 function getTaskLinks($startPeriod, $endPeriod, $links, $strMaxLen, $company_id = 0, $minical = false, $userid=0)
 {
+    /** @var w2p_Core_CAppUI $AppUI */
     global $a, $AppUI;
     $tasks = CTask::getTasksForPeriod($startPeriod, $endPeriod, $company_id, $userid);
     $tf = $AppUI->getPref('TIMEFORMAT');
@@ -3514,6 +3550,7 @@ function getTaskLinks($startPeriod, $endPeriod, $links, $strMaxLen, $company_id 
 
 function getTaskTooltip($task_id)
 {
+    /** @var w2p_Core_CAppUI $AppUI */
     global $AppUI;
 
     if (!$task_id) {

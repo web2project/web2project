@@ -62,6 +62,7 @@ class w2p_FileSystem_Loader
      */
     public function checkFileName($file)
     {
+        /** @var w2p_Core_CAppUI $AppUI */
         global $AppUI;
 
         // define bad characters and their replacement

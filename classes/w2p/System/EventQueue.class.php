@@ -32,6 +32,7 @@ class w2p_System_EventQueue {
      * @return integer queue id
      */
     public function add($callback, &$args, $module, $sysmodule = false, $id = 0, $type = '', $date = 0, $repeat_interval = 0, $repeat_count = 1) {
+        /** @var w2p_Core_CAppUI $AppUI */
         global $AppUI;
 
         if (!isset($AppUI)) {

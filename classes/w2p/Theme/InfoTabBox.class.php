@@ -10,6 +10,7 @@
 class w2p_Theme_InfoTabBox extends w2p_Theme_TabBox {
 
     public function show($extra = '', $js_tabs = false, $alignment = 'left') {
+        /** @var w2p_Core_CAppUI $AppUI */
         global $AppUI, $w2Pconfig, $currentInfoTabId, $currentInfoTabName, $m;
         $uistyle = $AppUI->getPref('UISTYLE') ? $AppUI->getPref('UISTYLE') : $w2Pconfig['host_style'];
         if (!$uistyle) {

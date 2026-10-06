@@ -1,4 +1,5 @@
 <?php
+/** @var w2p_Core_CAppUI $AppUI */
                     global $a, $AppUI;
 
                     $tab = (int) w2PgetParam($_GET, 'tab', 0);

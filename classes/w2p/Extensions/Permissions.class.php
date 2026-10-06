@@ -326,6 +326,7 @@ class w2p_Extensions_Permissions extends gacl_api
         // Not as pretty as I'd like, but we can do it reasonably well.
         // Check to see if we are allowed to see other users.
         // If not we can only see ourselves.
+        /** @var w2p_Core_CAppUI $AppUI */
         global $AppUI;
         $userlist = array();
 
@@ -1213,6 +1214,7 @@ class w2p_Extensions_Permissions extends gacl_api
 
     public function w2Pacl_nuclear($userid, $module, $item, $mod_class = array())
     {
+        /** @var w2p_Core_CAppUI $AppUI */
         global $AppUI;
         //This is a sensitive function so if the minimum permission request arguments are not provided don't permit anything to this item
         if (!$userid || !$module || !$item) {

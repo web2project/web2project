@@ -1,4 +1,5 @@
 <?php
+/** @var w2p_Core_CAppUI $AppUI */
 /**
  * Processes the entries in the translation form.
  *

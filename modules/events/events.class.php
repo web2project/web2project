@@ -186,6 +186,7 @@ class CEvent extends w2p_Core_BaseObject
      */
     public static function getEventsForPeriod($start_date, $end_date, $filter = 'all', $user_id = null, $project_id = 0, $company_id = 0)
     {
+        /** @var w2p_Core_CAppUI $AppUI */
         global $AppUI;
 
         // convert to default db time stamp

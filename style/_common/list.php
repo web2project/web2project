@@ -19,6 +19,7 @@ $page = (int) w2PgetParam($_GET, 'page', 1);
 
 $paginator = new w2p_Utilities_Paginator($items);
 $items = $paginator->getItemsOnPage($page);
+/** @var w2p_Core_CAppUI $AppUI */
 echo $paginator->buildNavigation($AppUI, $m, $tab);
 
 $listTable = new w2p_Output_ListTable($AppUI);

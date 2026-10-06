@@ -26,6 +26,7 @@ class CSmartSearch
 
 	public function fetchResults(&$permissions, &$record_count)
     {
+		/** @var w2p_Core_CAppUI $AppUI */
 		global $AppUI;
         $outstring = '';
 

@@ -73,6 +73,7 @@ abstract class w2p_Core_BaseObject extends w2p_System_Event implements w2p_Inter
          *   others, so I think it's the best approach for now.
          *                                           ~ caseydk 27 Dec 2011
          */
+        /** @var w2p_Core_CAppUI $AppUI */
         global $AppUI;
         $this->_AppUI = is_null($AppUI) ? new w2p_Core_CAppUI() : $AppUI;
         $this->_perms = $this->_AppUI->acl();

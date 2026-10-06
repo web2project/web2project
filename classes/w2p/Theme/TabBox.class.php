@@ -37,6 +37,7 @@ class w2p_Theme_TabBox {
      *    Must support 2 arguments, currently active tab, new tab to activate.
      */
     public function __construct($baseHRef = '', $baseInc = '', $active = 0, $javascript = null) {
+        /** @var w2p_Core_CAppUI $AppUI */
         global $AppUI, $currentTabId, $currentTabName, $m, $a;
 
         $this->_AppUI = $AppUI;

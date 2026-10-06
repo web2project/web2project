@@ -1,3 +1,4 @@
+<?php /** @var w2p_Core_CAppUI $AppUI */ ?>
 <form action="?m=tasks&a=addedit&task_project=<?php echo $task_project; ?>" method="post" name="resourceFrm" accept-charset="utf-8">
     <input type="hidden" name="task_id" value="<?php echo $object->getId(); ?>" />
     <input type="hidden" name="dosql" value="do_task_aed" />
