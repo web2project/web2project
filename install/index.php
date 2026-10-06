@@ -52,7 +52,7 @@ $manager = new w2p_System_UpgradeManager();
             <tr>
                 <td colspan="2">
                     When you're ready to begin, simply
-                    <form action="<?php W2P_BASE_URL; ?>" method="post" name="form" id="form" accept-charset="utf-8">
+                    <form method="post" name="form" id="form" accept-charset="utf-8">
                         <input type="hidden" name="step" value="check" />
                         <input class="button" type="submit" name="next" value="Start <?php echo ucwords($action); ?> &raquo;" />
                     </form>
@@ -74,7 +74,7 @@ $manager = new w2p_System_UpgradeManager();
             <tr>
                 <td colspan="2">
                     When you're ready to begin, simply
-                    <form action="<?php W2P_BASE_URL; ?>" method="post" name="form" id="form" accept-charset="utf-8">
+                    <form method="post" name="form" id="form" accept-charset="utf-8">
                         <input type="hidden" name="step" value="check" />
                         <input class="button" type="submit" name="next" value="Start <?php echo ucwords($action); ?> &raquo;" />
                     </form>
