@@ -128,7 +128,7 @@
 			<td class="item" align="left" colspan="2">The following Content should go to ./includes/config.php. Create that text file manually and copy the following lines in by hand and save.  This file must be readable by the webserver.</td>
 		</tr>
 		<tr>
-			<td align="center" colspan="2"><textarea class="button" name="dbhost" cols="100" rows="20" title="Content of config.php for manual creation." /><?php echo $msg.$config; ?></textarea></td>
+			<td align="center" colspan="2"><textarea class="button" name="dbhost" cols="100" rows="20" title="Content of config.php for manual creation."><?php echo $msg.$config; ?></textarea></td>
 		</tr>
 	<?php } ?>
 	<tr>

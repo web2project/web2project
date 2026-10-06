@@ -103,7 +103,7 @@
 			<td class="item" align="left" colspan="2" style="text-align: center;"><b class="error">Failure to create this file as instructed will render your web2project installation non-operational.<br />Save yourself (and us!) some time and please follow directions. Thanks.</b></td>
 		</tr>
 		<tr>
-			<td align="center" colspan="2"><textarea class="button" name="dbhost" cols="100" rows="20" title="Content of config.php for manual creation." /><?php echo $msg.$config; ?></textarea></td>
+			<td align="center" colspan="2"><textarea class="button" name="dbhost" cols="100" rows="20" title="Content of config.php for manual creation."><?php echo $msg.$config; ?></textarea></td>
 		</tr>
 	<?php } ?>
 	<tr>

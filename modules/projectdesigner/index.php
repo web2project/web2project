@@ -329,7 +329,7 @@ function addComponent() {
 	oCell.setAttribute ('valign','top');
 	htmltxt = '';
 	htmltxt +='<b><?php echo $AppUI->_('Task Description'); ?></b>:<br />';
-	htmltxt +='<textarea cols="80" rows="8" id="add_task_description_'+line_nr+'" name="add_task_description_'+line_nr+'" /></textarea>';
+	htmltxt +='<textarea cols="80" rows="8" id="add_task_description_'+line_nr+'" name="add_task_description_'+line_nr+'"></textarea>';
 	oCell.innerHTML =htmltxt;
 	newtr.appendChild(oCell);
 	ni.appendChild(newtr);
