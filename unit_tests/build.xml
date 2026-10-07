@@ -20,7 +20,6 @@
     <fileset dir="." id="project.source">
         <include name="**/*.php" />
         <exclude name="classes/deprecated.class.php" />
-        <exclude name="includes/deprecated_functions.php" />
         <exclude name="${dir.lib}/" />
         <exclude name="${dir.tests}/" />
         <exclude name="${dir.build}/" />
@@ -191,7 +190,7 @@
             dir="${project.basedir}"
             output="${dir.reports}/phploc.txt">
             <arg line="${project.basedir} --exclude ${dir.vendor} --exclude ${dir.lib} 
-                --exclude classes/deprecated.class.php --exclude includes/deprecated_functions.php
+                --exclude classes/deprecated.class.php
                 --log-xml ${dir.reports}/phploc.xml" />
         </exec>
     </target>

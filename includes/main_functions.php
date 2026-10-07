@@ -1,7 +1,6 @@
 <?php
 
 require_once W2P_BASE_DIR . '/includes/backcompat_functions.php';
-require_once W2P_BASE_DIR . '/includes/deprecated_functions.php';
 require_once W2P_BASE_DIR . '/includes/cleanup_functions.php';
 require_once W2P_BASE_DIR . '/classes/w2p/web2project.php';
 require_once W2P_BASE_DIR . '/vendor/autoload.php';
