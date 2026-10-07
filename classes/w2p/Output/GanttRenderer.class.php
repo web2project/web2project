@@ -12,7 +12,6 @@
 class w2p_Output_GanttRenderer {
     private $graph = null;
     private $rowCount = null;
-    private $rowMap = array();
     private $todayText = null;
     private $AppUI = null;
     private $df = null;
@@ -179,7 +178,6 @@ class w2p_Output_GanttRenderer {
         }
 
         $bar = new GanttBar($this->rowCount++, $rowValues, $start, $actual_end, $caption, $height);
-        $this->rowMap[$identifier] = $this->rowCount;
         $bar->progress->Set(min(($progress / 100), 1));
 
         $bar->title->SetFont(FF_FONT0, FS_NORMAL, 10);
