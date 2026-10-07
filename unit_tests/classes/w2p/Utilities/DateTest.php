@@ -176,12 +176,12 @@ class w2p_Utilities_DateTest extends CommonSetup
         $this->assertEquals($datetime->format('i'),   $date->minute);
         $this->assertEquals($datetime->format('s'),   $date->second);
         $this->assertEquals('Halifax',                $date->tz['id']);
-        $this->assertFalse(isset($data->tz['offset']));
-        $this->assertFalse(isset($data->tz['longname']));
-        $this->assertFalse(isset($data->tz['shortname']));
-        $this->assertFalse(isset($data->tz['dstlongname']));
-        $this->assertFalse(isset($data->tz['dstshortname']));
-        $this->assertFalse(isset($data->tz['hasdst']));
+        $this->assertFalse(isset($date->tz['offset']));
+        $this->assertFalse(isset($date->tz['longname']));
+        $this->assertFalse(isset($date->tz['shortname']));
+        $this->assertFalse(isset($date->tz['dstlongname']));
+        $this->assertFalse(isset($date->tz['dstshortname']));
+        $this->assertFalse(isset($date->tz['hasdst']));
     }
 
     /**
@@ -1547,7 +1547,9 @@ class w2p_Utilities_DateTest extends CommonSetup
     {
         $date = new w2p_Utilities_Date('2010-11-05 11:00:00');
 
-        $this->assertNull($date->getDate(DATE_FORMAT_INVALID));
+        $invalidFormat = 9999;
+
+        $this->assertNull($date->getDate($invalidFormat));
     }
 
     /**
