@@ -6,6 +6,4 @@ if (!defined('W2P_BASE_DIR')) {
 // Set the pre and post save functions
 global $pre_save, $post_save, $other_resources;
 
-$pre_save[] = 'resource_presave';
-$post_save[] = 'resource_postsave';
 $other_resources = null;

@@ -256,6 +256,4 @@ $form = new w2p_Output_HTML_FormHelper($AppUI);
     </table>
 </form>
 <?php
-if (is_callable('styleRenderBoxBottom')) {
-    echo styleRenderBoxBottom();
-}
+echo $AppUI->getTheme()->styleRenderBoxBottom();

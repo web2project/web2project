@@ -307,7 +307,7 @@ class w2p_Output_HTMLHelper extends w2p_Output_HTML_Base
         switch ($suffix) {
             case '_creator':
             case '_owner':
-                $s .= w2PgetUsernameFromID($row[$fieldName]);
+                $s .= CContact::getContactByUserid($row[$fieldName]);
                 break;
             case '_budget':
                 $s = $w2Pconfig['currency_symbol'];
