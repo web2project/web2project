@@ -1539,7 +1539,7 @@ class w2p_Database_Query {
 			}
 
 			if ($k == $keyName) { // PK not to be updated
-				$this->addWhere($keyName . ' = \'' . db_escape($v) . '\'');
+				$this->addWhere($keyName . ' = \'' . (new w2p_Database_Connection($GLOBALS['db']))->escape($v) . '\'');
 				continue;
 			}
 			$fields[] = $k;

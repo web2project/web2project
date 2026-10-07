@@ -39,7 +39,7 @@ $q->addQuery('billingcode_id, billingcode_name');
 
 $task_log_costcodes[0] = $AppUI->_('None');
 $rows = $q->loadList();
-echo db_error();
+echo (new w2p_Database_Connection($GLOBALS['db']))->error();
 $nums = 0;
 if ($rows) {
 	$nums = count($rows);
@@ -177,7 +177,7 @@ if ($do_report) {
 	$q->addOrder('task_log_date');
 
 	$logs = $q->loadList();
-	echo db_error();
+	echo (new w2p_Database_Connection($GLOBALS['db']))->error();
 ?>
 	<table cellspacing="1" cellpadding="4" border="0" class="tbl">
 	<tr>

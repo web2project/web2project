@@ -19,7 +19,7 @@ if (isset($_POST['forcewatch']) && isset($_POST['forcesubmit'])) { // insert row
 	$q->addInsert('watch_forum', '0');
 	$q->addInsert('watch_topic', '0');
 	if (!$q->exec()) {
-		$AppUI->setMsg(db_error(), UI_MSG_ERROR);
+		$AppUI->setMsg((new w2p_Database_Connection($GLOBALS['db']))->error(), UI_MSG_ERROR);
 	} else {
 		$AppUI->setMsg('Watch Forced', UI_MSG_OK);
 	}
@@ -31,7 +31,7 @@ if (isset($_POST['forcewatch']) && isset($_POST['forcesubmit'])) { // insert row
 	$q->addWhere('watch_forum = 0');
 	$q->addWhere('watch_topic = 0');
 	if (!$q->exec()) {
-		$AppUI->setMsg(db_error(), UI_MSG_ERROR);
+		$AppUI->setMsg((new w2p_Database_Connection($GLOBALS['db']))->error(), UI_MSG_ERROR);
 	} else {
 		$AppUI->setMsg('Watch Unforced', UI_MSG_OK);
 	}
@@ -47,7 +47,7 @@ $q->addWhere('watch_forum = 0');
 $q->addWhere('watch_topic = 0');
 $resAll = $q->exec();
 
-if (db_num_rows($resAll) >= 1) { // message has to be sent to all users	
+if ((new w2p_Database_Connection($GLOBALS['db']))->num_rows($resAll) >= 1) { // message has to be sent to all users	
 	$watchAll = true;
 }
 $q->clear();

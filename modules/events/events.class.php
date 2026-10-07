@@ -360,7 +360,7 @@ class CEvent extends w2p_Core_BaseObject
 				}
 			}
 
-			if ($msg = db_error()) {
+			if ($msg = (new w2p_Database_Connection($GLOBALS['db']))->error()) {
 				$this->_AppUI->setMsg($msg, UI_MSG_ERROR);
 			}
 		}

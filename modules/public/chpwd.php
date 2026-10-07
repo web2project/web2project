@@ -10,9 +10,9 @@ if (!($user_id = w2PgetParam($_REQUEST, 'user_id', 0))) {
 
 // check for a non-zero user id
 if ($user_id) {
-	$old_pwd = db_escape(trim(w2PgetParam($_POST, 'old_pwd', null)));
-	$new_pwd1 = db_escape(trim(w2PgetParam($_POST, 'new_pwd1', null)));
-	$new_pwd2 = db_escape(trim(w2PgetParam($_POST, 'new_pwd2', null)));
+	$old_pwd = (new w2p_Database_Connection($GLOBALS['db']))->escape(trim(w2PgetParam($_POST, 'old_pwd', null)));
+	$new_pwd1 = (new w2p_Database_Connection($GLOBALS['db']))->escape(trim(w2PgetParam($_POST, 'new_pwd1', null)));
+	$new_pwd2 = (new w2p_Database_Connection($GLOBALS['db']))->escape(trim(w2PgetParam($_POST, 'new_pwd2', null)));
 
 	$perms = &$AppUI->acl();
 	$canAdminEdit = canEdit('system');

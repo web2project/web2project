@@ -134,7 +134,7 @@ if (!$ok) {
 	}
 } else {
 	$list = arrayMerge(array(0 => $AppUI->_('[none]')), $query_result ? $query_result : $resultList);
-	echo db_error();
+	echo (new w2p_Database_Connection($GLOBALS['db']))->error();
 ?>
 <script language="javascript" type="text/javascript">
 	function setClose(key, val){

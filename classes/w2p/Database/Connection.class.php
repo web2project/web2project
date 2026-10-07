@@ -64,12 +64,12 @@ class w2p_Database_Connection
         }
         $qid = $this->db->Execute($sql);
         dprint(__file__, __line__, 10, $sql);
-        if (db_error()) {
+        if ($this->error()) {
             dprint(__file__, __line__, 0, "Error executing: <pre>$sql</pre>");
             // Useless statement, but it is being executed only on error,
             // and it stops infinite loop.
             $this->db->Execute($sql);
-            if (!db_error()) {
+            if (!$this->error()) {
                 echo '<script language="JavaScript"> location.reload(); </script>';
             }
         }

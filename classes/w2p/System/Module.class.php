@@ -85,7 +85,7 @@ class w2p_System_Module extends w2p_Core_BaseObject {
         $q->addWhere('mod_id = ' . (int)$this->mod_id);
         if (!$q->exec()) {
             $q->clear();
-            return db_error();
+            return (new w2p_Database_Connection($GLOBALS['db']))->error();
         } else {
             if (!isset($this->mod_admin)) {
                 $this->mod_admin = 0;

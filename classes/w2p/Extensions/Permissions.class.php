@@ -274,7 +274,7 @@ class w2p_Extensions_Permissions extends gacl_api
             $q->setDelete('gacl_aco_map');
             $q->addWhere('acl_id = ' . $acl);
             if (!$q->exec()) {
-                $res .= is_null($res) ? db_error() : "\n\t" . db_error();
+                $res .= is_null($res) ? (new w2p_Database_Connection($GLOBALS['db']))->error() : "\n\t" . (new w2p_Database_Connection($GLOBALS['db']))->error();
             }
             $q->clear();
 
@@ -282,7 +282,7 @@ class w2p_Extensions_Permissions extends gacl_api
             $q->setDelete('gacl_aro_map');
             $q->addWhere('acl_id = ' . $acl);
             if (!$q->exec()) {
-                $res .= "\n\t" . db_error();
+                $res .= "\n\t" . (new w2p_Database_Connection($GLOBALS['db']))->error();
             }
             $q->clear();
 
@@ -290,7 +290,7 @@ class w2p_Extensions_Permissions extends gacl_api
             $q->setDelete('gacl_acl');
             $q->addWhere('id = ' . $acl);
             if (!$q->exec()) {
-                $res .= "\n\t" . db_error();
+                $res .= "\n\t" . (new w2p_Database_Connection($GLOBALS['db']))->error();
             }
             $q->clear();
         }
@@ -509,7 +509,7 @@ class w2p_Extensions_Permissions extends gacl_api
             $q->addWhere('user_id = ' . $user);
             $rq = $q->exec();
             if (!$rq) {
-                dprint(__file__, __line__, 0, "Cannot add role, user $user does not exist!<br>" . db_error());
+                dprint(__file__, __line__, 0, "Cannot add role, user $user does not exist!<br>" . (new w2p_Database_Connection($GLOBALS['db']))->error());
                 $q->clear();
                 return false;
             }

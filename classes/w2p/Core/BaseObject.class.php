@@ -365,7 +365,7 @@ abstract class w2p_Core_BaseObject extends w2p_System_Event implements w2p_Inter
             $this->_dispatcher->publish(new w2p_System_Event(get_class($this), 'post' . $this->_event . 'Event'));
             $this->_dispatcher->publish(new w2p_System_Event(get_class($this), 'postStoreEvent'));
         } else {
-            $this->_error['store'] = db_error();
+            $this->_error['store'] = (new w2p_Database_Connection($GLOBALS['db']))->error();
         }
 
         return $result;
@@ -484,7 +484,7 @@ abstract class w2p_Core_BaseObject extends w2p_System_Event implements w2p_Inter
         if ($result) {
             $this->_dispatcher->publish(new w2p_System_Event(get_class($this), 'postDeleteEvent'));
         } else {
-            $this->_error['delete'] = db_error();
+            $this->_error['delete'] = (new w2p_Database_Connection($GLOBALS['db']))->error();
         }
 
         return $result;

@@ -37,7 +37,7 @@ class CSystem_Bcode extends w2p_Core_BaseObject
 
             $result = $q->exec();
             if(!$result) {
-                $this->_errors['delete'] = db_error();
+                $this->_errors['delete'] = (new w2p_Database_Connection($GLOBALS['db']))->error();
             }
         }
         return $result;

@@ -67,7 +67,7 @@ class w2p_System_Preferences {
         }
         $q = new w2p_Database_Query;
         if (!$q->insertObject('user_preferences', $this)) {
-            return 'CPreference::store failed ' . db_error();
+            return 'CPreference::store failed ' . (new w2p_Database_Connection($GLOBALS['db']))->error();
         } else {
             return null;
         }
@@ -84,7 +84,7 @@ class w2p_System_Preferences {
         $q->addWhere('pref_user = ' . (int)$this->pref_user);
         $q->addWhere('pref_name = \'' . $this->pref_name . '\'');
         if (!$q->exec()) {
-            return db_error();
+            return (new w2p_Database_Connection($GLOBALS['db']))->error();
         } else {
             return null;
         }

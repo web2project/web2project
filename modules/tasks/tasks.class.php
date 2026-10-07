@@ -846,7 +846,7 @@ class CTask extends w2p_Core_BaseObject
             $q->setDelete('user_tasks');
             $q->addWhere('task_id IN (' . $implodedTaskList . ')');
             if (!($q->exec())) {
-                $this->_error['delete-user-assignments'] = db_error();
+                $this->_error['delete-user-assignments'] = (new w2p_Database_Connection($GLOBALS['db']))->error();
                 return false;
             }
             $q->clear();
@@ -856,7 +856,7 @@ class CTask extends w2p_Core_BaseObject
             $q->addWhere('dependencies_task_id IN (' . $implodedTaskList . ') OR
                 dependencies_req_task_id IN (' . $implodedTaskList . ')');
             if (!$q->exec()) {
-                $this->_error['delete-dependencies'] = db_error();
+                $this->_error['delete-dependencies'] = (new w2p_Database_Connection($GLOBALS['db']))->error();
                 return false;
             }
             $q->clear();
@@ -865,7 +865,7 @@ class CTask extends w2p_Core_BaseObject
             $q->setDelete('task_contacts');
             $q->addWhere('task_id = ' . $this->task_id);
             if (!$q->exec()) {
-                $this->_error['delete-contacts'] = db_error();
+                $this->_error['delete-contacts'] = (new w2p_Database_Connection($GLOBALS['db']))->error();
                 return false;
             }
 

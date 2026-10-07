@@ -125,7 +125,7 @@ class CForum extends w2p_Core_BaseObject
             $q->setDelete('forum_messages');
             $q->addWhere('message_forum = ' . (int) $this->forum_id);
             if (!$q->exec()) {
-                $this->_error['delete-messages'] = db_error();
+                $this->_error['delete-messages'] = (new w2p_Database_Connection($GLOBALS['db']))->error();
                 return false;
             }
 

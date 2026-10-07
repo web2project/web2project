@@ -3224,7 +3224,7 @@ function sendNewPass()
     // ensure no malicous sql gets past
     $checkusername = preg_replace("/[^A-Za-z0-9]/", "", w2PgetParam($_POST, 'checkusername', ''));
     $confirmEmail = trim(w2PgetParam($_POST, 'checkemail', ''));
-    $confirmEmail = strtolower(db_escape($confirmEmail));
+    $confirmEmail = strtolower((new w2p_Database_Connection($GLOBALS['db']))->escape($confirmEmail));
 
     $q = new w2p_Database_Query;
     $q->addTable('users');
@@ -3987,7 +3987,7 @@ function __extract_from_tasks_todo($selected, $task_priority)
                 }
         }
         $q->exec();
-        echo db_error();
+        echo (new w2p_Database_Connection($GLOBALS['db']))->error();
         $q->clear();
     }
 }

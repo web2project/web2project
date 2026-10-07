@@ -172,7 +172,7 @@ class CForum_Message extends w2p_Core_BaseObject
         $q->addQuery('*');
         $q->addWhere('watch_user = 0 AND watch_forum = 0 AND watch_topic = 0');
         $resAll = $q->exec();
-        $AllCount = db_num_rows($resAll);
+        $AllCount = (new w2p_Database_Connection($GLOBALS['db']))->num_rows($resAll);
 
         $q->clear();
         $q->addTable('users');
@@ -189,7 +189,7 @@ class CForum_Message extends w2p_Core_BaseObject
             $q->clear();
             return;
         }
-        if (db_num_rows($res) < 1) {
+        if ((new w2p_Database_Connection($GLOBALS['db']))->num_rows($res) < 1) {
             return;
         }
 
