@@ -160,8 +160,6 @@ class w2p_Utilities_DateTest extends CommonSetup
 
     /**
      * Tests constructor with an invalid timezone
-     *
-     * expectedException PHPUnit_Framework_Error
      */
     public function testConstructorInvalidTimezone()
     {

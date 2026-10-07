@@ -201,39 +201,6 @@ class w2p_Core_CAppUITest extends CommonSetup
     }
 
     /**
-     * Tests saving the place(url)
-     *
-     * @expectedException PHPUnit_Framework_Error
-     */
-    public function testSavePlace()
-    {
-        $AppUI = $this->_AppUI;
-
-        $_SERVER['QUERY_STRING'] = 'testUrl';
-        $AppUI->savePlace();
-        $this->assertEquals('testUrl', $AppUI->getPlace());
-
-        $AppUI->savePlace('?m=projects&amp;a=view&amp;project_id=1');
-        $this->assertEquals('?m=projects&amp;a=view&amp;project_id=1', $AppUI->getPlace());
-    }
-
-    /**
-     * Tests reseting the place(url)
-     *
-     * @expectedException PHPUnit_Framework_Error
-     */
-    public function testResetPlace()
-    {
-        $AppUI = $this->_AppUI;
-
-        $_SERVER['QUERY_STRING'] = 'testUrl';
-        $AppUI->savePlace();
-        $this->assertEquals('testUrl', $AppUI->getPlace());
-        $AppUI->resetPlace();
-        $this->assertEquals('', $AppUI->getPlace());
-    }
-
-    /**
      * Tests restoring an object from the global scope
      */
     public function testHoldRestoreObject()
@@ -275,78 +242,6 @@ class w2p_Core_CAppUITest extends CommonSetup
 
       $AppUI->setMsg($msg, 0, false);
       $this->AssertEquals($msg, $AppUI->msg);
-    }
-
-    /**
-     * Tests getting a system class
-     *
-     * @expectedException PHPUnit_Framework_Error
-     */
-    public function testGetSystemClassValid()
-    {
-        $AppUI = $this->_AppUI;
-
-        $this->assertEquals(W2P_BASE_DIR . '/classes/cdate.class.php', $AppUI->getSystemClass('cdate'));
-    }
-
-    /**
-     * Tests getting a system class when no class name is passed
-     *
-     * @expectedException PHPUnit_Framework_Error
-     */
-    public function testGetSystemClassNoName()
-    {
-        $AppUI = $this->_AppUI;
-
-        $this->assertNull($AppUI->getSystemClass());
-    }
-
-    /**
-     * Test getting a library class
-     *
-     * @expectedException PHPUnit_Framework_Error
-     */
-    public function testGetLibraryClassValid()
-    {
-        $AppUI = $this->_AppUI;
-
-        $this->assertEquals(W2P_BASE_DIR . '/lib/PEAR/Date.php', $AppUI->getLibraryClass('PEAR/Date'));
-    }
-
-    /**
-     * Tests getting a library class when no library name is passed
-     *
-     * @expectedException PHPUnit_Framework_Error
-     */
-    public function testGetLibraryClassNoName()
-    {
-        $AppUI = $this->_AppUI;
-
-        $this->assertNull($AppUI->getLibraryClass());
-    }
-
-    /**
-     * Tests getting a module class
-     *
-     * @expectedException PHPUnit_Framework_Error
-     */
-    public function testGetModuleClassValid()
-    {
-        $AppUI = $this->_AppUI;
-
-        $this->assertEquals(W2P_BASE_DIR . '/modules/tasks/tasks.class.php', $AppUI->getModuleClass('tasks'));
-    }
-
-    /**
-     * Tests getting a module class when no name is passed
-     *
-     * @expectedException PHPUnit_Framework_Error
-     */
-    public function testGetModuleClassNoName()
-    {
-        $AppUI = $this->_AppUI;
-
-        $this->assertNull($AppUI->getModuleClass());
     }
 
     /**

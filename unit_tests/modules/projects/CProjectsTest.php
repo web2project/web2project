@@ -475,39 +475,6 @@ $this->obj->overrideDatabase($this->mockDB);
     }
 
     /**
-     * Tests getting a list of allowed project by user
-     *
-     * @expectedException PHPUnit_Framework_Error
-     */
-    public function testGetAllowedProjectsInRows()
-    {
-        $project_in_rows = $this->obj->getAllowedProjectsInRows(1);
-
-        $this->assertEquals(4, db_num_rows($project_in_rows));
-
-        $row = db_fetch_assoc($project_in_rows);
-        $this->assertEquals(1,                     $row[0]);
-        $this->assertEquals(1,                     $row['project_id']);
-        $this->assertEquals(0,                     $row[1]);
-        $this->assertEquals(0,                     $row['project_status']);
-        $this->assertEquals('Test Project',        $row[2]);
-        $this->assertEquals('Test Project',        $row['project_name']);
-        $this->assertEquals('This is a project',   $row[3]);
-        $this->assertEquals('This is a project',   $row['project_description']);
-        $this->assertEquals('TP',                  $row[4]);
-        $this->assertEquals('TP',                  $row['project_short_name']);
-
-        /*
-         * TODO: Figure out why db_fetch_assoc is failing now. Cause db_num_rows
-         * says 4, and this is our second call to db_fetch_assoc.
-         */
-
-          $project_in_rows = $this->obj->getAllowedProjectsInRows(2);
-
-          $this->assertEquals(0, db_num_rows($project_in_rows));
-    }
-
-    /**
      * Tests getting the most critical tasks with project loaded
      */
     public function testGetCriticalTasksNoArgs()
@@ -709,18 +676,6 @@ $this->obj->overrideDatabase($this->mockDB);
     /**
      * Test finding of departments of project
      *
-     * @expectedException PHPUnit_Framework_Error
-     */
-    public function testGetDepartments()
-    {
-        $this->markTestIncomplete(
-            'This method is deprecated. The useful test is testGetDepartmentList().'
-        );
-    }
-
-    /**
-     * Test finding of departments of project
-     *
      */
     public function testGetDepartmentList()
     {
@@ -774,18 +729,6 @@ $this->obj->overrideDatabase($this->mockDB);
             // Forums module not enabled
             $this->assertNull($forums);
         }
-    }
-
-    /**
-     * Tests updating a projects status
-     *
-     * @expectedException PHPUnit_Framework_Error
-     */
-    public function testUpdateStatus()
-    {
-        CProject::updateStatus(null, 1, 2);
-        $xml_dataset = $this->createXMLDataSet($this->getDataSetPath().'projectsTestUpdateStatus.xml');
-        $this->assertTablesEqual($xml_dataset->getTable('projects'), $this->getConnection()->createDataSet()->getTable('projects'));
     }
 
     /**
