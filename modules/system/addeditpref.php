@@ -136,7 +136,9 @@ echo arraySelect($tabview, 'pref_name[TABVIEW]', 'class=text size=1', $prefs['TA
 	</td>
 </tr>
 <?php } else { ?>
-    <input type="hidden" name="pref_name[TABVIEW]" value="1" />
+<tr style="display: none;">
+    <td colspan="2"><input type="hidden" name="pref_name[TABVIEW]" value="1" /></td>
+</tr>
 <?php } ?>
 
 <tr>
