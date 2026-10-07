@@ -312,25 +312,6 @@ class CProject extends w2p_Core_BaseObject
         return array_merge($aBuf1, $aBuf2);
     }
 
-    /**
-     * @deprecated
-     */
-    public function getAllowedProjectsInRows($userId)
-    {
-        trigger_error("CProject->getAllowedProjectsInRows() has been deprecated in v3.0 and will be removed in v4.0", E_USER_NOTICE);
-
-        $q = $this->_getQuery();
-        $q->clear();
-        $q->addQuery('pr.project_id, project_status, project_name, project_description, project_short_name');
-        $q->addTable('projects', 'pr');
-        $q->addOrder('project_short_name');
-        $q = $this->setAllowedSQL($userId, $q, null, 'pr');
-        $allowedProjectRows = $q->exec();
-        $q->clear();
-
-        return $allowedProjectRows;
-    }
-
     /** Retrieve tasks with latest task_end_dates within given project
      * @param int $project_id Project_id
      * @param int $limit SQL-limit to limit the number of returned tasks
@@ -633,20 +614,6 @@ class CProject extends w2p_Core_BaseObject
         }
     }
 
-    /**
-     * @deprecated
-     */
-    public static function getDepartments($notUsed = null, $projectId)
-    {
-        trigger_error("CProject::getDepartments has been deprecated in v3.0 and will be removed by v4.0. Please use CProject->getDepartmentList() instead.", E_USER_NOTICE);
-
-        $project = new CProject();
-        //TODO: We need to convert this from static to use ->overrideDatabase() for testing.
-        $project->project_id = $projectId;
-
-        return $project->getDepartmentList();
-    }
-
     public function getForumList()
     {
 		if ($this->_AppUI->isActiveModule('forums') && canView('forums')) {
@@ -726,22 +693,6 @@ class CProject extends w2p_Core_BaseObject
         $q->addWhere('p.project_owner IS NOT NULL');
 
         return $q->loadHashList();
-    }
-
-    public static function updateStatus($AppUI = null, $projectId, $statusId)
-    {
-        trigger_error("CProject::updateStatus has been deprecated in v2.3 and will be removed by v4.0.", E_USER_NOTICE);
-
-        /** @var w2p_Core_CAppUI $AppUI */
-        global $AppUI;
-
-        $perms = $AppUI->acl();
-        if ($perms->checkModuleItem('projects', 'edit', $projectId) && $projectId > 0 && $statusId >= 0) {
-            $project = new CProject();
-            $project->load($projectId);
-            $project->project_status = $statusId;
-            $project->store();
-        }
     }
 
     public static function updateTaskCache($project_id, $task_id, $project_actual_end_date, $project_task_count)

@@ -146,40 +146,6 @@ class w2p_Core_CAppUI
     }
 
     /**
-     * Used to load a php class file from the system classes directory
-     * @param string $name The class root file name (excluding .class.php)
-     * @return string|null The path to the include file
-     */
-    public function getSystemClass($name = null)
-    {
-        trigger_error("CAppUI->getSystemClass() has been deprecated in v2.0 and will be removed in v3.0", E_USER_NOTICE);
-
-        if ($name) {
-            return W2P_BASE_DIR . '/classes/' . $name . '.class.php';
-        }
-    }
-
-    /** @deprecated */
-    public function getLibraryClass($name = null)
-    {
-        trigger_error("CAppUI->getLibraryClass() has been deprecated in v3.1 and will be removed in v4.0", E_USER_NOTICE);
-
-        if ($name) {
-            return W2P_BASE_DIR . '/lib/' . $name . '.php';
-        }
-    }
-
-    /** @deprecated */
-    public function getModuleClass($name = null)
-    {
-        trigger_error("CAppUI->getModuleClass() has been deprecated in v3.1 and will be removed in v4.0", E_USER_NOTICE);
-
-        if ($name) {
-            return W2P_BASE_DIR . '/modules/' . $name . '/' . $name . '.class.php';
-        }
-    }
-
-    /**
      * Used to load a php class file from the module directory
      * @param string $name The class root file name (excluding .ajax.php)
      * @return string|null The path to the include file
@@ -540,19 +506,6 @@ class w2p_Core_CAppUI
         return $temp;
     }
 
-    /** @deprecated */
-    public function savePlace($query = '')
-    {
-        trigger_error("AppUI->savePlace() has been deprecated in v3.2 and will be removed by v5.0. Please route the user explicitly.", E_USER_NOTICE);
-        $query = ($query == '') ? $_SERVER['QUERY_STRING'] : $query;
-        $saved = (isset($this->state['SAVEDPLACE'])) ? $this->state['SAVEDPLACE'] : '';
-
-        if ($query != $saved) {
-            $this->state['SAVEDPLACE-1'] = $saved;
-            $this->state['SAVEDPLACE'] = $query;
-        }
-    }
-
     /**
      * Resets the internal variable
      */
@@ -595,8 +548,7 @@ class w2p_Core_CAppUI
     /**
      * Redirects the browser to a new page.
      *
-     * Mostly used in conjunction with the savePlace method. It is generally used
-     * to prevent nasties from doing a browser refresh after a db update.  The
+     * It is generally used to prevent nasties from doing a browser refresh after a db update.  The
      * method deliberately does not use javascript to effect the redirect.
      *
      * @param string $params The URL query string to append to the URL
