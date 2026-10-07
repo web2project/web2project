@@ -19,7 +19,6 @@
 
     <fileset dir="." id="project.source">
         <include name="**/*.php" />
-        <exclude name="classes/deprecated.class.php" />
         <exclude name="${dir.lib}/" />
         <exclude name="${dir.tests}/" />
         <exclude name="${dir.build}/" />
@@ -189,8 +188,7 @@
         <exec executable="${project.basedir}/${dir.vendor}/cmgmyr/phploc/phploc" 
             dir="${project.basedir}"
             output="${dir.reports}/phploc.txt">
-            <arg line="${project.basedir} --exclude ${dir.vendor} --exclude ${dir.lib} 
-                --exclude classes/deprecated.class.php
+            <arg line="${project.basedir} --exclude ${dir.vendor} --exclude ${dir.lib}
                 --log-xml ${dir.reports}/phploc.xml" />
         </exec>
     </target>
