@@ -1460,9 +1460,9 @@ class w2p_Database_Query {
 
 		if (is_array($limit) && (count($limit) == 2)) {
 			$result = ' LIMIT ' . implode(',', $limit);
-		} elseif (isset($limit) && ($offset <= 0)) {
+		} elseif ($offset <= 0) {
 			$result = ' LIMIT ' . (int) $limit;
-		} elseif (isset($limit) && ($offset > 0)) {
+		} elseif ($offset > 0) {
 			$result = ' LIMIT ' . (int) $offset . ', ' . (int) $limit;
 		}
 		return $result;

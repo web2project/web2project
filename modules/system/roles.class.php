@@ -196,7 +196,7 @@ class CSystem_Role extends w2p_Core_BaseObject {
 				if ($mod_type == 'grp') {
 					$mod_group = array($mod_id);
 				} else {
-					if (isset($permission_item) && $permission_item) {
+					if ($permission_item) {
 						$mod_mod = array();
 						$mod_mod[$permission_table][] = $permission_item;
 						// check if the item already exists, if not create it.
