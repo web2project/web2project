@@ -16,7 +16,7 @@
  * @link        http://www.web2project.net
  */
 
-class Cleanup_Functions_Test extends \PHPUnit\Framework\TestCase
+class CleanupFunctionsTest extends \PHPUnit\Framework\TestCase
 {
     protected function setUp(): void
     {

@@ -16,7 +16,7 @@
  * @link        http://www.web2project.net
  */
 
-class Main_Functions_Test extends \PHPUnit\Framework\TestCase
+class MainFunctionsTest extends \PHPUnit\Framework\TestCase
 {
 	public function testW2PgetParam()
 	{
