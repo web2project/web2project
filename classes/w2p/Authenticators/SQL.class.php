@@ -2,7 +2,7 @@
 /**
  * Authentication against the database is the default
  *
- * @package     web2project\authenticators
+ * @package web2project\authenticators
  */
 
 class w2p_Authenticators_SQL extends w2p_Authenticators_Base
