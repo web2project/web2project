@@ -4,6 +4,7 @@
 *   cleaned up, reorganized or eliminated based on usage. Before you touch
 *   these, please ensure there are Unit Tests to validate that things work
 *   before and after.
+*
 * @todo/TODO: Every single function in this file.
 *
 * WARNING: The functions in this file are likely to move to other files as they
@@ -81,10 +82,9 @@ function strUTF8Decode($text)
 }
 
 /**
-* utility functions for the preparation of task data for GANTT PDF
+* Utility functions for the preparation of task data for GANTT PDF
 *
 * @todo some of these functions are not needed, need to trim this down
-*
 */
 // PYS : utf_8 decoding as suggested in Vbulletin #3987
 function strEzPdf($text)
@@ -110,9 +110,7 @@ function dumb_slice( $gantt_arr, $length = 25 )
 }
 
 /**
-*
 * 	END OF GANTT PDF UTILITY FUNCTIONS
-*
 */
 
 /**
@@ -317,13 +315,14 @@ function __extract_from_showtask(&$arr, $level, $today_view, $listTable, $fields
 }
 
 /**
- * @param $arr
- * @param $level
- * @param $today_view
- * @param $s
- * @param $m
- * @param $jsTaskId
- * @param $expanded
+ * @param mixed $arr
+ * @param mixed $level
+ * @param mixed $today_view
+ * @param mixed $s
+ * @param mixed $m
+ * @param mixed $jsTaskId
+ * @param mixed $expanded
+ *
  * @return string
  */
 function __extract_from_showtask2($arr, $level, $today_view, $s, $m, $jsTaskId, $expanded)
@@ -481,11 +480,13 @@ function array_csort() { //coded by Ichier2003
 }
 
 // from modules/tasks/tasks.class.php
-/*
-** Calc End Date via Startdate + Duration
-** @param array task	A DB row from the earlier fetched tasklist
-** @return string	Return calculated end date in MySQL-TIMESTAMP format
-*/
+/**
+ * Calc End Date via Startdate + Duration
+ *
+ * @param array  $task A DB row from the earlier fetched tasklist
+ *
+ * @return string Return calculated end date in MySQL-TIMESTAMP format
+ */
 function calcEndByStartAndDuration($task)
 {
     $end_date = new w2p_Utilities_Date($task['task_start_date']);
@@ -1559,7 +1560,8 @@ function getIcon($file_type)
 }
 
 /**
- * @param $file_type
+ * @param mixed $file_type
+ *
  * @return string
  */
 function __extract_from_files_index_table($file_type)
@@ -1644,9 +1646,12 @@ function file_show_attr($AppUI, $form)
     return ($str_out);
 }
 
-/** Retrieve tasks with first task_end_dates within given project
+/**
+ * Retrieve tasks with first task_end_dates within given project
+ *
  * @param int $project_id Project_id
  * @param int $limit SQL-limit to limit the number of returned tasks
+ *
  * @return array List of criticalTasks
  */
 //TODO: modules/projectdesigner/projectdesigner.class.php
@@ -1696,19 +1701,19 @@ function get_actual_end_date_pd($task_id, $task)
     return $edate;
 }
 
-/* The next lines of code have resided in projects/index.php before
-** and have been moved into this 'encapsulated' function
-** for reusability of that central code.
-**
-** @date 20060225
-** @responsible gregorerhardt
-**
-** E.g. this code is used as well in a tab for the admin/view site
-**
-** @mixed user_id 	userId as filter for tasks/projects that are shown, if nothing is specified,
-current viewing user $AppUI->user_id is used.
-*/
 // From: modules/projects/project.class.php
+/**
+ * The next lines of code have resided in projects/index.php before
+ * and have been moved into this 'encapsulated' function
+ * for reusability of that central code (2006-02-25).
+ *
+ * E.g. this code is used as well in a tab for the admin/view site
+ *
+ * @param mixed $user_id userId as filter for tasks/projects that are shown, if nothing is specified,
+ *                       current viewing user $AppUI->user_id is used.
+ *
+ * @author gregorerhardt
+ */
 function projects_list_data($user_id = false)
 {
     /** @var w2p_Core_CAppUI $AppUI */
@@ -1883,6 +1888,7 @@ function projects_list_data($user_id = false)
  *
  * @param mixed $arraylist array list of project elements to search
  * @param mixed $project_id project id to search for
+ *
  * @return int|false returns the array key of the project record in the array list or false if not found
  */
 // From: modules/projects/project.class.php
@@ -1903,8 +1909,9 @@ function getProjectIndex($arraylist, $project_id)
  *
  * @param mixed $company_id the id of the company we are searching departments
  * @param mixed $checked_array an array with the ids of the departments that should be selected on the list
- * @param integer $dept_parent used when to determine the starting level on the tree, or by recursion
- * @param integer $spaces used by recursion to add spaces to form the visual tree on the <select> element
+ * @param int $dept_parent used when to determine the starting level on the tree, or by recursion
+ * @param int $spaces used by recursion to add spaces to form the visual tree on the <select> element
+ *
  * @return string returns the html <option> elements
  */
 // From: modules/projects/project.class.php
@@ -2293,16 +2300,18 @@ function tree_recurse($id, $indent, $list, $children)
 }
 
 /**
- **	Provide Projects Selectbox sorted by Companies
- **	@author gregorerhardt with special thanks to original author aramis
- **	@param 	int $user_id 		userID
- **	@param 	string $select_name 	HTML select box name identifier
- **	@param	string $select_attribs	HTML attributes
- **	@param	int $selected			Proejct ID for preselection
- **	@param 	int $excludeProjWithId			Project ID which will be excluded from the list
- **									(e.g. in the tasks import list exclude the project to import into)
- **	@return	string 	HTML selectbox
-
+ *	Provide Projects Selectbox sorted by Companies
+ *
+ *	@param int $user_id 		userID
+ *	@param string $select_name 	HTML select box name identifier
+ *	@param string $select_attribs	HTML attributes
+ *	@param int $selected			Proejct ID for preselection
+ *	@param int $excludeProjWithId			Project ID which will be excluded from the list
+ *									(e.g. in the tasks import list exclude the project to import into)
+ *
+ *	@author gregorerhardt with special thanks to original author aramis
+ *
+ *	@return string 	HTML selectbox
  */
 
 function projectSelectWithOptGroup($user_id, $select_name, $select_attribs, $selected, $excludeProjWithId = null)
@@ -2440,6 +2449,7 @@ function w2PshowModuleConfig($config)
 
 /**
  *	Function to recussively find an image in a number of places
+ *
  *	@param string $name The name of the image
  *	@param string $module Optional name of the current module
  */
@@ -2474,6 +2484,7 @@ function w2PfindImage($name, $module = null)
  *	Workaround removed due to problems in Opera and other issues
  *	with IE6.
  *	Workaround to display png images with alpha-transparency in IE6.0
+ *
  *	@param string $src The name of the image
  *	@param string $notUsed The image width
  *	@param string $notUsed2 The image height
@@ -2590,7 +2601,7 @@ function buildPaginationNav($AppUI, $m, $tab, $xpg_totalrecs, $xpg_pagesize, $pa
 }
 
 /**
- * function to return a default value if a variable is not set
+ * Function to return a default value if a variable is not set
  */
 function defVal($var, $def)
 {
@@ -2703,8 +2714,6 @@ function w2PformatDuration($x)
 
 }
 
-/**
- */
 function w2PsetMicroTime()
 {
     global $microTimeSet;
@@ -2719,8 +2728,6 @@ function w2PsetExecutionConditions()
     ini_set('memory_limit', $memoryLimt);
 }
 
-/**
- */
 function w2PgetMicroDiff()
 {
     global $microTimeSet;
@@ -2945,11 +2952,12 @@ function formatHours($hours)
     }
 }
 
-/*
-** Create the Required Fields (From Sysvals) JavaScript Code
-** For instance implemented in projects and tasks addedit.php
-** @param array required field array from SysVals
-*/
+/**
+ * Create the Required Fields (From Sysvals) JavaScript Code
+ * For instance implemented in projects and tasks addedit.php
+ *
+ * @param array $requiredFields required field array from SysVals
+ */
 function w2PrequiredFields($requiredFields)
 {
     /** @var w2p_Core_CAppUI $AppUI */
@@ -3004,8 +3012,10 @@ function w2PgetBytes($str)
 
 /**
  * Check for a memory limit, if we can't generate it then we fail.
+ *
  * @param int $min minimum amount of memory needed
  * @param bool $revert revert back to original config after test.
+ *
  * @return bool true if we have the minimum amount of RAM and if we can modify RAM
  */
 function w2PcheckMem($min = 0, $revert = false)
@@ -3028,7 +3038,7 @@ function w2PcheckMem($min = 0, $revert = false)
 }
 
 /**
- * decode HTML entities
+ * Decode HTML entities
  */
 function w2PHTMLDecode($txt)
 {
@@ -3084,7 +3094,6 @@ function w2PendTip()
  *    @param string $t the header of the message
  *    @param string $f the script filename
  *    @param string $l the script line
- *    @access public
  */
 function w2PwriteDebug($s, $t = '', $f = '?', $l = '?')
 {
@@ -3361,10 +3370,12 @@ function showcompany($company_id, $restricted = false)
 
 /**
  * Sub-function to collect events within a period
+ *
  * @param Date $startPeriod the starting date of the period
  * @param Date $endPeriod the ending date of the period
  * @param array $links by-ref an array of links to append new items to
  * @param int $notUsed the length to truncate entries by
+ *
  * @author Andrew Eddie <eddieajau@users.sourceforge.net>
  */
 function getEventLinks($startPeriod, $endPeriod, $links, $notUsed = null, $minical = false)
@@ -3470,6 +3481,7 @@ function getEventTooltip($event_id)
  * @param array $links by-ref an array of links to append new items to
  * @param int $strMaxLen the length to truncate entries by
  * @param int $company_id the company id to filter by
+ *
  * @author Andrew Eddie <eddieajau@users.sourceforge.net>
  */
 function getTaskLinks($startPeriod, $endPeriod, $links, $strMaxLen, $company_id = 0, $minical = false, $userid=0)
@@ -3640,10 +3652,10 @@ function getTaskTooltip($task_id)
 }
 
 /**
- * @param $perms
- * @param $user_id
- * @param $module
- * @param $action
+ * @param mixed $perms
+ * @param mixed $user_id
+ * @param mixed $module
+ * @param mixed $action
  *
  * @return array
  */
@@ -3671,7 +3683,7 @@ function getPermissions($perms, $user_id, $module, $action)
 }
 
 /**
- * @param $row
+ * @param mixed $row
  *
  * @return array<mixed>|false
  */
@@ -3687,8 +3699,8 @@ function getPermissionField($row)
 }
 
 /**
- * @param $row
- * @param $field
+ * @param mixed $row
+ * @param mixed $field
  *
  * @return mixed
  */
@@ -3704,7 +3716,7 @@ function getPermissionItem($row, $field)
 }
 
 /**
- * @param $user_id
+ * @param mixed $user_id
  *
  * @return array
  */
@@ -3720,7 +3732,7 @@ function getPreferences($user_id)
 }
 
 /**
- * @param $obj
+ * @param mixed $obj
  *
  * @return ADORecordSet|false
  */
@@ -3738,7 +3750,7 @@ function getTaskLogContacts($obj)
 }
 
 /**
- * @param $obj
+ * @param mixed $obj
  *
  * @return ADORecordSet|false
  */
@@ -3756,8 +3768,8 @@ function getContactsfromProjects($obj)
 }
 
 /**
- * @param $project_id
- * @param $AppUI
+ * @param mixed $project_id
+ * @param mixed $AppUI
  *
  * @return array<mixed>
  */
@@ -3782,19 +3794,19 @@ function __extract_from_tasks_viewgantt($project_id, $AppUI)
 }
 
 /**
- * @param $user_id
- * @param $showArcProjs
- * @param $showLowTasks
- * @param $showInProgress
- * @param $showHoldProjs
- * @param $showDynTasks
- * @param $showPinned
- * @param $showEmptyDate
- * @param $task_type
- * @param $allowedTasks
- * @param $allowedProjects
+ * @param mixed $user_id
+ * @param mixed $showArcProjs
+ * @param mixed $showLowTasks
+ * @param mixed $showInProgress
+ * @param mixed $showHoldProjs
+ * @param mixed $showDynTasks
+ * @param mixed $showPinned
+ * @param mixed $showEmptyDate
+ * @param mixed $task_type
+ * @param mixed $allowedTasks
+ * @param mixed $allowedProjects
  *
- * @return Array
+ * @return array
  */
 function __extract_from_todo($user_id, $showArcProjs, $showLowTasks, $showInProgress, $showHoldProjs, $showDynTasks, $showPinned, $showEmptyDate, $task_type, $allowedTasks, $allowedProjects)
 {
@@ -3864,14 +3876,14 @@ function __extract_from_todo($user_id, $showArcProjs, $showLowTasks, $showInProg
 }
 
 /**
- * @param $use_period
- * @param $ss
- * @param $se
- * @param $log_userfilter
- * @param $project_id
- * @param $company_id
- * @param $proj
- * @param $AppUI
+ * @param mixed $use_period
+ * @param mixed $ss
+ * @param mixed $se
+ * @param mixed $log_userfilter
+ * @param mixed $project_id
+ * @param mixed $company_id
+ * @param mixed $proj
+ * @param mixed $AppUI
  *
  * @return mixed
  */
@@ -3921,7 +3933,7 @@ function __extract_from_tasksperuser($use_period, $ss, $se, $log_userfilter, $pr
 }
 
 /**
- * @return String
+ * @return string
  */
 function __extract_from_tasks1()
 {
@@ -3936,11 +3948,11 @@ function __extract_from_tasks1()
 }
 
 /**
- * @param $userFilter
- * @param $AppUI
- * @param $proj
+ * @param mixed $userFilter
+ * @param mixed $AppUI
+ * @param mixed $proj
  *
- * @return Array
+ * @return array
  */
 function __extract_from_listtasks($userFilter, $AppUI, $proj)
 {
@@ -3961,8 +3973,8 @@ function __extract_from_listtasks($userFilter, $AppUI, $proj)
 }
 
 /**
- * @param $selected
- * @param $task_priority
+ * @param mixed $selected
+ * @param mixed $task_priority
  */
 function __extract_from_tasks_todo($selected, $task_priority)
 {
@@ -4023,7 +4035,7 @@ function __extract_from_syskeys_index2()
 }
 
 /**
- * @return Array
+ * @return array
  */
 function __extract_from_syskeys_index3()
 {
@@ -4040,7 +4052,7 @@ function __extract_from_syskeys_index3()
 }
 
 /**
- * @return Array
+ * @return array
  */
 function __extract_from_syskeys_syskey()
 {
@@ -4065,9 +4077,9 @@ function __extract_from_systemconfig_aed()
 }
 
 /**
- * @param $hidden_modules
+ * @param mixed $hidden_modules
  *
- * @return Array
+ * @return array
  */
 function __extract_from_modules_index($hidden_modules)
 {
@@ -4084,8 +4096,8 @@ function __extract_from_modules_index($hidden_modules)
 }
 
 /**
- * @param $module
- * @param $mod_data
+ * @param mixed $module
+ * @param mixed $mod_data
  *
  * @return mixed
  */
@@ -4102,7 +4114,7 @@ function __extract_from_role_perms($module, $mod_data)
 }
 
 /**
- * @param $deps
+ * @param mixed $deps
  *
  * @return array<mixed>
  */
@@ -4118,7 +4130,7 @@ function __extract_from_ae_depend1($deps)
 }
 
 /**
- * @param $task_id
+ * @param mixed $task_id
  *
  * @return array<mixed>
  */
@@ -4141,14 +4153,14 @@ function __extract_from_ae_depend2($task_id)
 }
 
 /**
- * @param $user_id
- * @param $showArcProjs
- * @param $showLowTasks
- * @param $showHoldProjs
- * @param $showDynTasks
- * @param $showPinned
- * @param $task
- * @param $AppUI
+ * @param mixed $user_id
+ * @param mixed $showArcProjs
+ * @param mixed $showLowTasks
+ * @param mixed $showHoldProjs
+ * @param mixed $showDynTasks
+ * @param mixed $showPinned
+ * @param mixed $task
+ * @param mixed $AppUI
  *
  * @return array
  */
@@ -4193,14 +4205,14 @@ function __extract_from_tasks_gantt1($user_id, $showArcProjs, $showLowTasks, $sh
 }
 
 /**
- * @param $showNoMilestones
- * @param $showMilestonesOnly
- * @param $ganttTaskFilter
- * @param $where
- * @param $project_id
- * @param $f
- * @param $AppUI
- * @param $task
+ * @param mixed $showNoMilestones
+ * @param mixed $showMilestonesOnly
+ * @param mixed $ganttTaskFilter
+ * @param mixed $where
+ * @param mixed $project_id
+ * @param mixed $f
+ * @param mixed $AppUI
+ * @param mixed $task
  *
  * @return array
  */
@@ -4263,7 +4275,7 @@ function __extract_from_tasks_gantt2($showNoMilestones, $showMilestonesOnly, $ga
 }
 
 /**
- * @param $a
+ * @param mixed $a
  *
  * @deprecated
  * @return array
@@ -4274,7 +4286,7 @@ function __extract_from_gantt_pdf($a)
 }
 
 /**
- * @param $a
+ * @param mixed $a
  *
  * @deprecated
  * @return array
@@ -4285,14 +4297,14 @@ function __extract_from_gantt_pdf2($a)
 }
 
 /**
- * @param $user_id
- * @param $showArcProjs
- * @param $showLowTasks
- * @param $showHoldProjs
- * @param $showDynTasks
- * @param $showPinned
- * @param $task
- * @param $AppUI
+ * @param mixed $user_id
+ * @param mixed $showArcProjs
+ * @param mixed $showLowTasks
+ * @param mixed $showHoldProjs
+ * @param mixed $showDynTasks
+ * @param mixed $showPinned
+ * @param mixed $task
+ * @param mixed $AppUI
  *
  * @deprecated
  * @return array
@@ -4304,10 +4316,10 @@ function __extract_from_gantt_pdf3($user_id, $showArcProjs, $showLowTasks, $show
 
 
 /**
- * @param $project_id
- * @param $f
- * @param $AppUI
- * @param $task
+ * @param mixed $project_id
+ * @param mixed $f
+ * @param mixed $AppUI
+ * @param mixed $task
  *
  * @deprecated
  * @return array
@@ -4318,7 +4330,7 @@ function __extract_from_gantt_pdf4($project_id, $f, $AppUI, $task)
 }
 
 /**
- * @param $department
+ * @param mixed $department
  *
  * @return array
  */
@@ -4335,16 +4347,16 @@ function __extract_from_projects_gantt($department)
 }
 
 /**
- * @param $department
- * @param $addPwOiD
- * @param $project_type
- * @param $owner
- * @param $statusFilter
- * @param $company_id
- * @param $owner_ids
- * @param $showInactive
- * @param $AppUI
- * @param $pjobj
+ * @param mixed $department
+ * @param mixed $addPwOiD
+ * @param mixed $project_type
+ * @param mixed $owner
+ * @param mixed $statusFilter
+ * @param mixed $company_id
+ * @param mixed $owner_ids
+ * @param mixed $showInactive
+ * @param mixed $AppUI
+ * @param mixed $pjobj
  *
  * @return mixed
  */
@@ -4398,11 +4410,11 @@ function __extract_from_projects_gantt2($department, $addPwOiD, $project_type, $
 }
 
 /**
- * @param $department
- * @param $company_id
- * @param $original_project_id
- * @param $pjobj
- * @param $AppUI
+ * @param mixed $department
+ * @param mixed $company_id
+ * @param mixed $original_project_id
+ * @param mixed $pjobj
+ * @param mixed $AppUI
  *
  * @return array
  */
@@ -4437,9 +4449,9 @@ function __extract_from_subprojects_gantt($department, $company_id, $original_pr
 }
 
 /**
- * @param $original_project_id
- * @param $task
- * @param $AppUI
+ * @param mixed $original_project_id
+ * @param mixed $task
+ * @param mixed $AppUI
  *
  * @return array
  */
@@ -4461,7 +4473,7 @@ function __extract_from_subprojects_gantt2($original_project_id, $task, $AppUI)
 }
 
 /**
- * @param $AppUI
+ * @param mixed $AppUI
  *
  * @return array
  */
@@ -4492,7 +4504,7 @@ function __extract_from_projectdesigner2()
 }
 
 /**
- * @param $controller
+ * @param mixed $controller
  */
 function __extract_from_contact_controller($controller)
 {
@@ -4511,9 +4523,9 @@ function __extract_from_contact_controller($controller)
 }
 
 /**
- * @param $row
+ * @param mixed $row
  *
- * @return Array
+ * @return array
  */
 function __extract_from_vw_usr($row)
 {
@@ -4531,8 +4543,8 @@ function __extract_from_vw_usr($row)
 }
 
 /**
- * @param $module
- * @param $mod_data
+ * @param mixed $module
+ * @param mixed $mod_data
  *
  * @return mixed
  */
@@ -4548,9 +4560,9 @@ function __extract_from_vw_usr_perms($module, $mod_data)
 }
 
 /**
- * @param $orderby
+ * @param mixed $orderby
  *
- * @return Array
+ * @return array
  */
 function __extract_from_vw_usr_sessions($orderby)
 {
@@ -4571,7 +4583,7 @@ function __extract_from_vw_usr_sessions($orderby)
 }
 
 /**
- * @param $row
+ * @param mixed $row
  *
  * @return array
  */
@@ -4590,10 +4602,10 @@ function __extract_from_forums_view_messages($row)
 
 // Now we need to update the forum visits with the new messages so they don't show again.
 /**
- * @param $AppUI
- * @param $forum_id
- * @param $msg_id
- * @param $date
+ * @param mixed $AppUI
+ * @param mixed $forum_id
+ * @param mixed $msg_id
+ * @param mixed $date
  */
 function __extract_from_forums_view_messages2($AppUI, $forum_id, $msg_id, $date)
 {
@@ -4607,13 +4619,13 @@ function __extract_from_forums_view_messages2($AppUI, $forum_id, $msg_id, $date)
 }
 
 /**
- * @param $AppUI
- * @param $forum_id
- * @param $f
- * @param $orderby
- * @param $orderdir
+ * @param mixed $AppUI
+ * @param mixed $forum_id
+ * @param mixed $f
+ * @param mixed $orderby
+ * @param mixed $orderdir
  *
- * @return Array
+ * @return array
  */
 function __extract_from_forums_view_topics($AppUI, $forum_id, $f, $orderby, $orderdir)
 {
@@ -4650,9 +4662,9 @@ function __extract_from_forums_view_topics($AppUI, $forum_id, $f, $orderby, $ord
 }
 
 /**
- * @param $row
+ * @param mixed $row
  *
- * @return Array
+ * @return array
  */
 function __extract_from_tasks2($row)
 {
@@ -4684,11 +4696,12 @@ function __extract_from_vw_actions()
 }
 
 /**
- * @param $f
- * @param $q
- * @param $user_id
- * @param $task_id
- * @param $AppUI
+ * @param mixed $f
+ * @param mixed $q
+ * @param mixed $user_id
+ * @param mixed $task_id
+ * @param mixed $AppUI
+ *
  * @return string
  */
 function __extract_from_tasks3($f, $q, $user_id, $task_id, $AppUI)
@@ -4765,11 +4778,12 @@ function __extract_from_tasks3($f, $q, $user_id, $task_id, $AppUI)
 }
 
 /**
- * @param $min_view
- * @param $currentTabId
- * @param $project_id
- * @param $currentTabName
- * @param $AppUI
+ * @param mixed $min_view
+ * @param mixed $currentTabId
+ * @param mixed $project_id
+ * @param mixed $currentTabName
+ * @param mixed $AppUI
+ *
  * @return int
  */
 function __extract_from_tasks($min_view, $currentTabId, $project_id, $currentTabName, $AppUI)
@@ -4794,10 +4808,11 @@ function __extract_from_tasks($min_view, $currentTabId, $project_id, $currentTab
 }
 
 /**
- * @param $where_list
- * @param $project_id
- * @param $task_id
- * @return Array
+ * @param mixed $where_list
+ * @param mixed $project_id
+ * @param mixed $task_id
+ *
+ * @return array
  */
 function __extract_from_tasks4($where_list, $project_id, $task_id)
 {
@@ -4822,8 +4837,8 @@ function __extract_from_tasks4($where_list, $project_id, $task_id)
 }
 
 /**
- * @param $q
- * @param $subquery
+ * @param mixed $q
+ * @param mixed $subquery
  */
 function __extract_from_tasks5($q, $subquery)
 {
@@ -4849,8 +4864,8 @@ function __extract_from_tasks5($q, $subquery)
 }
 
 /**
- * @param $AppUI
- * @param $task_id
+ * @param mixed $AppUI
+ * @param mixed $task_id
  */
 function __extract_from_tasks_pinning($AppUI, $task_id)
 {
@@ -4878,7 +4893,8 @@ function __extract_from_tasks_pinning($AppUI, $task_id)
  * Check if start date exists, if not try giving it the end date. If the end date does not exist then set it for
  *   today. This avoids jpgraphs internal errors that render the gantt completely useless
  *
- * @param $row
+ * @param mixed $row
+ *
  * @return array
  */
 function __extract_from_projects_gantt3($row)
@@ -4898,7 +4914,8 @@ function __extract_from_projects_gantt3($row)
  * Check if end date exists, if not try giving it the start date. If the start date does not exist then set it for
  *   today. This avoids jpgraphs internal errors that render the gantt completely useless
  *
- * @param $row
+ * @param mixed $row
+ *
  * @return array
  */
 function __extract_from_projects_gantt4($row)
@@ -4918,12 +4935,13 @@ function __extract_from_projects_gantt4($row)
 }
 
 /**
- * @param $s
- * @param $style
- * @param $row
- * @param $editor
- * @param $AppUI
- * @param $bbparser
+ * @param mixed $s
+ * @param mixed $style
+ * @param mixed $row
+ * @param mixed $editor
+ * @param mixed $AppUI
+ * @param mixed $bbparser
+ *
  * @return string
  */
 function __extract_from_view_messages1($s, $style, $row, $editor, $AppUI, $bbparser)
@@ -4950,17 +4968,18 @@ function __extract_from_view_messages1($s, $style, $row, $editor, $AppUI, $bbpar
 }
 
 /**
- * @param $s
- * @param $style
- * @param $AppUI
- * @param $row
- * @param $df
- * @param $tf
- * @param $editor
- * @param $side
- * @param $bbparser
- * @param $first
- * @param $messages
+ * @param mixed $s
+ * @param mixed $style
+ * @param mixed $AppUI
+ * @param mixed $row
+ * @param mixed $df
+ * @param mixed $tf
+ * @param mixed $editor
+ * @param mixed $side
+ * @param mixed $bbparser
+ * @param mixed $first
+ * @param mixed $messages
+ *
  * @return array
  */
 function __extract_from_view_messages3($s, $style, $AppUI, $row, $df, $tf, $editor, $side, $bbparser, $first, $messages)
@@ -4994,20 +5013,21 @@ function __extract_from_view_messages3($s, $style, $AppUI, $row, $df, $tf, $edit
 
 
 /**
- * @param $s
- * @param $style
- * @param $row
- * @param $hideEmail
- * @param $editor
- * @param $AppUI
- * @param $new_messages
- * @param $bbparser
- * @param $m
- * @param $df
- * @param $tf
- * @param $canEdit
- * @param $canAdminEdit
- * @param $canDelete
+ * @param mixed $s
+ * @param mixed $style
+ * @param mixed $row
+ * @param mixed $hideEmail
+ * @param mixed $editor
+ * @param mixed $AppUI
+ * @param mixed $new_messages
+ * @param mixed $bbparser
+ * @param mixed $m
+ * @param mixed $df
+ * @param mixed $tf
+ * @param mixed $canEdit
+ * @param mixed $canAdminEdit
+ * @param mixed $canDelete
+ *
  * @return array
  */
 function __extract_from_view_messages4($s, $style, $row, $hideEmail, $editor, $AppUI, $new_messages, $bbparser, $m, $df, $tf, $canEdit, $canAdminEdit, $canDelete)
