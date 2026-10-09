@@ -20,12 +20,8 @@
     display: block;
 }
 
-.w2p-message table {
-    margin: 0;
-}
-.w2p-message td {
-    padding: 0 .25rem;
-    vertical-align: middle;
+.w2p-message {
+    margin-bottom: .75rem;
 }
 
 img {
@@ -426,26 +422,31 @@ table.smartsearch td,
 /* ---------------------------------------------------------------------
  * Task / project status colours
  * ------------------------------------------------------------------- */
-td.future {
+td.future,
+.w2p-swatch.future {
     background-color: var(--bs-body-bg);
 }
 tr.future td._date, tr.future td._datetime, tr.future td._duration, tr.future td._in {
     background-color: var(--bs-body-bg);
 }
 td.done,
+.w2p-swatch.done,
 tr.done td._date, tr.done td._datetime, tr.done td._duration, tr.done td._in {
     background-color: var(--bs-success-bg-subtle);
 }
 td.late,
+.w2p-swatch.late,
 tr.late td._date, tr.late td._datetime, tr.late td._duration, tr.late td._in {
     background-color: var(--bs-danger-bg-subtle);
     color: var(--bs-danger-text-emphasis);
 }
 td.notstarted,
+.w2p-swatch.notstarted,
 tr.notstarted td._date, tr.notstarted td._datetime, tr.notstarted td._duration, tr.notstarted td._in {
     background-color: var(--bs-warning-bg-subtle);
 }
 td.active,
+.w2p-swatch.active,
 tr.active td._date, tr.active td._datetime, tr.active td._duration, tr.active td._in {
     background-color: var(--bs-info-bg-subtle);
 }
@@ -545,16 +546,20 @@ table.minical td.tasktoday,
 table.minical td.eventtasktoday {
     outline: 1px dotted var(--bs-danger);
 }
-table.motitle {
-    width: 100%;
+.motitle {
+    margin-bottom: .5rem;
 }
-table.motitle th {
+.motitle .w2p-cal-month {
     font-size: 1.25rem;
-    text-align: center;
 }
-table.minititle th {
-    font-weight: normal;
-    text-align: center;
+.minititle .w2p-cal-month,
+.poptitle .w2p-cal-month {
+    font-weight: normal !important;
+}
+.w2p-swatch {
+    width: 1.5rem;
+    height: 1rem;
+    vertical-align: middle;
 }
 .view td.workingDay,
 .view td.otherDay {
@@ -647,17 +652,31 @@ span.cal-item a {
     float: right;
 }
 
-.tool-tip td {
+.tool-tip {
     color: #fff;
-    white-space: nowrap;
+    text-align: left;
 }
-.tool-tip td.tip-label {
-    border: 1px solid #fff;
+.tool-tip .tip-column {
+    min-width: 0;
+}
+.tool-tip dl.tip-details {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: .2rem .5rem;
+    margin: .25rem 0 0;
+}
+.tool-tip dt.tip-label {
+    padding: 0 .25rem;
+    font-weight: normal;
     text-align: right;
+    white-space: nowrap;
+    border: 1px solid #fff;
     border-radius: 3.5px;
 }
-.tool-tip td.description {
-    text-align: left;
+.tool-tip dd {
+    margin: 0;
+}
+.tool-tip .description {
     white-space: normal;
 }
 

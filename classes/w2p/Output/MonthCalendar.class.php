@@ -240,34 +240,28 @@ class w2p_Output_MonthCalendar {
         $url .= $a ? '&amp;a=' . $a : '';
         $url .= isset($_GET['dialog']) ? '&amp;dialog=1' : '';
 
-        $s = '<table border="0" cellspacing="0" cellpadding="3" width="100%" class="' . $this->styleTitle . '">';
-        $s .= '<tr>';
+        $s = '<div class="d-flex align-items-center gap-2 ' . $this->styleTitle . '">';
 
         if ($this->showArrows) {
             $href = $url . '&amp;date=' . $this->prev_month->format(FMT_TIMESTAMP_DATE) . ($this->callback ? '&amp;callback=' . $this->callback : '') . ((count($this->highlightedDays) > 0) ? '&uts=' . key($this->highlightedDays) : '');
-            $s .= '<td align="left">';
             $s .= '<a href="' . $href . '">' . w2PshowImage('prev.gif', 16, 16, $this->_AppUI->_('previous month')) . '</a>';
-            $s .= '</td>';
         }
 
-        $s .= '<th width="99%" align="center">';
+        $s .= '<div class="flex-grow-1 text-center fw-bold w2p-cal-month">';
         if ($this->clickMonth) {
             $s .= '<a href="index.php?m=' . $m . '&amp;date=' . $this->this_month->format(FMT_TIMESTAMP_DATE) . '">';
         }
         setlocale(LC_TIME, 'C');
         $s .= $this->_AppUI->_($this->this_month->format('%B')) . ' ' . $this->this_month->format('%Y') . (($this->clickMonth) ? '</a>' : '');
         setlocale(LC_ALL, $this->_AppUI->user_lang);
-        $s .= '</th>';
+        $s .= '</div>';
 
         if ($this->showArrows) {
             $href = ($url . '&amp;date=' . $this->next_month->format(FMT_TIMESTAMP_DATE) . (($this->callback) ? ('&amp;callback=' . $this->callback) : '') . ((count($this->highlightedDays) > 0) ? ('&amp;uts=' . key($this->highlightedDays)) : ''));
-            $s .= '<td align="right">';
             $s .= ('<a href="' . $href . '">' . w2PshowImage('next.gif', 16, 16, $this->_AppUI->_('next month')) . '</a>');
-            $s .= '</td>';
         }
 
-        $s .= '</tr>';
-        $s .= '</table>';
+        $s .= '</div>';
 
         return $s;
     }

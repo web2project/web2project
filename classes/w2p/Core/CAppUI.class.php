@@ -643,6 +643,7 @@ class w2p_Core_CAppUI
     {
         $msg = $this->msg;
         $class = 'message';
+        $alert = 'info';
 
         switch ($this->msgNo) {
             case UI_MSG_ALERT:
@@ -651,21 +652,25 @@ class w2p_Core_CAppUI
             case UI_MSG_WARNING:
                 $img = w2PshowImage('rc-gui-status-downgr.png');
                 $class = 'warning';
+                $alert = 'warning';
                 break;
             case UI_MSG_ERROR:
                 $img = w2PshowImage('stock_cancel-16.png');
                 $class = 'error';
+                $alert = 'danger';
                 break;
             case UI_MSG_OK:
             default:
                 $img = w2PshowImage('stock_ok-16.png');
+                $alert = 'success';
                 break;
         }
         if ($reset) {
             $this->msg = '';
             $this->msgNo = 0;
         }
-        return $msg ? '<table cellspacing="0" cellpadding="1" border="0"><tr>' . '<td>' . $img . '</td>' . '<td class="' . $class . '">' . $msg . '</td>' . '</tr></table>' : '';
+        return $msg ? '<div class="alert alert-' . $alert . ' d-flex align-items-center gap-2 py-2 w2p-message" role="alert">' .
+            $img . '<span class="' . $class . '">' . $msg . '</span></div>' : '';
     }
 
     /**

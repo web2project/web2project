@@ -2540,64 +2540,47 @@ function w2PshowImage($src, $notUsed = '', $notUsed2 = '', $alt = '', $title = '
 
 function buildPaginationNav($AppUI, $m, $tab, $xpg_totalrecs, $xpg_pagesize, $page)
 {
-  $xpg_total_pages = ($xpg_totalrecs > $xpg_pagesize) ? ceil($xpg_totalrecs / $xpg_pagesize) : 0;
+    if ($xpg_totalrecs <= $xpg_pagesize) {
+        return '';
+    }
 
-  $xpg_break = false;
-
-  $s = '<table width="100%" cellspacing="0" cellpadding="0" border="0" class="pagination"><tr>';
-
-  if ($xpg_totalrecs > $xpg_pagesize) {
+    $xpg_total_pages = ceil($xpg_totalrecs / $xpg_pagesize);
     $xpg_prev_page = $page - 1;
     $xpg_next_page = $page + 1;
-    // left buttoms
-    if ($xpg_prev_page > 0) {
-      $s .= '<td align="left" width="15%"><a href="./index.php?m=' . $m . '&amp;tab=' . $tab . '&amp;page=1"><img src="' . w2PfindImage('navfirst.gif') . '" alt="First Page"></a>&nbsp;&nbsp;';
-      $s .= '<a href="./index.php?m=' . $m . '&amp;tab=' . $tab . '&amp;page=' . $xpg_prev_page . '"><img src="' . w2PfindImage('navleft.gif') . '" alt="Previous page (' . $xpg_prev_page . ')"></a></td>';
-    } else {
-      $s .= '<td width="15%">&nbsp;</td>';
-    }
+    $url = './index.php?m=' . $m . '&amp;tab=' . $tab . '&amp;page=';
 
-    // central text (files, total pages, ...)
-    $s .= '<td align="center" width="70%">';
-    $s .= $xpg_totalrecs . ' ' . $AppUI->_('Record(s)') . ' ' . $xpg_total_pages . ' ' . $AppUI->_('Page(s)');
+    $item = function ($href, $label, $state = '') {
+        if ('' != $state) {
+            return '<li class="page-item ' . $state . '"><span class="page-link">' . $label . '</span></li>';
+        }
+        return '<li class="page-item"><a class="page-link" href="' . $href . '">' . $label . '</a></li>';
+    };
+
+    $s = '<nav class="d-flex flex-wrap align-items-center gap-2 my-2 w2p-pagination" aria-label="' . $AppUI->_('Page(s)') . '">';
+    $s .= '<ul class="pagination pagination-sm flex-wrap mb-0">';
+
+    // left buttons
+    $s .= $item($url . '1', '<img src="' . w2PfindImage('navfirst.gif') . '" alt="First Page" />', ($xpg_prev_page > 0) ? '' : 'disabled');
+    $s .= $item($url . $xpg_prev_page, '<img src="' . w2PfindImage('navleft.gif') . '" alt="Previous page (' . $xpg_prev_page . ')" />', ($xpg_prev_page > 0) ? '' : 'disabled');
 
     // Page numbered list, up to 30 pages
-    $s .= ' [ ';
-
     for ($n = $page > 16 ? $page - 16 : 1; $n <= $xpg_total_pages; $n++) {
-      if ($n == $page) {
-        $s .= '<b>' . $n . '</b></a>';
-      } else {
-        $s .= '<a href="./index.php?m=' . $m . '&amp;tab=' . $tab . '&amp;page=' . $n . '">' . $n . '</a>';
-      }
-      if ($n >= 30 + $page - 15) {
-        $xpg_break = true;
-        break;
-      } elseif ($n < $xpg_total_pages) {
-        $s .= ' | ';
-      }
+        $s .= $item($url . $n, $n, ($n == $page) ? 'active' : '');
+        if ($n >= 30 + $page - 15) {
+            break;
+        }
     }
 
-    if (!isset($xpg_break)) { // are we supposed to break ?
-      if ($n == $page) {
-        $s .= '<' . $n . '</a>';
-      } else {
-        $s .= '<a href="./index.php?m=' . $m . '&amp;tab=' . $tab . '&amp;page=' . $xpg_total_pages . '">' . $n . '</a>';
-      }
-    }
-    $s .= ' ] ';
-    $s .= '</td>';
-    // right buttoms
-    if ($xpg_next_page <= $xpg_total_pages) {
-      $s .= '<td align="right" width="15%"><a href="./index.php?m=' . $m . '&amp;tab=' . $tab . '&amp;page=' . $xpg_next_page . '"><img src="' . w2PfindImage('navright.gif') . '" alt="Next Page (' . $xpg_next_page . ')"></a>&nbsp;&nbsp;';
-      $s .= '<a href="./index.php?m=' . $m . '&amp;tab=' . $tab . '&amp;page=' . $xpg_total_pages . '"><img src="' . w2PfindImage('navlast.gif') . '" alt="Last Page"></a></td>';
-    } else {
-      $s .= '<td width="15%">&nbsp;</td></tr>';
-    }
-  }
-  $s .= '</table>';
+    // right buttons
+    $s .= $item($url . $xpg_next_page, '<img src="' . w2PfindImage('navright.gif') . '" alt="Next Page (' . $xpg_next_page . ')" />', ($xpg_next_page <= $xpg_total_pages) ? '' : 'disabled');
+    $s .= $item($url . $xpg_total_pages, '<img src="' . w2PfindImage('navlast.gif') . '" alt="Last Page" />', ($xpg_next_page <= $xpg_total_pages) ? '' : 'disabled');
+    $s .= '</ul>';
 
-  return $s;
+    // central text (files, total pages, ...)
+    $s .= '<span class="text-body-secondary small">' . $xpg_totalrecs . ' ' . $AppUI->_('Record(s)') . ' ' . $xpg_total_pages . ' ' . $AppUI->_('Page(s)') . '</span>';
+    $s .= '</nav>';
+
+    return $s;
 }
 
 /**
@@ -3431,44 +3414,27 @@ function getEventTooltip($event_id)
 
     $view = new w2p_Output_HTML_ViewHelper($AppUI);
 
-    $tt = '<table class="tool-tip">';
-    $tt .= '<tr>';
-    $tt .= '	<td valign="top" width="40%">';
+    $tt = '<div class="d-flex gap-3 tool-tip">';
+    $tt .= '	<div class="tip-column">';
     $tt .= '		<strong>' . $AppUI->_('Details') . '</strong>';
-    $tt .= '		<table cellspacing="3" cellpadding="2" width="100%">';
-    $tt .= '		<tr>';
-    $tt .= '			<td class="tip-label">' . $AppUI->_('Type') . '</td>';
-    $tt .= '			<td>' . $view->addField('event_type', $types[$event->event_type]) . '</td>';
-    $tt .= '		</tr>	';
-    $tt .= '		<tr>';
-    $tt .= '			<td class="tip-label">' . $AppUI->_('Starts') . '</td>';
-    $tt .= '			<td>' . $view->addField('event_datetime', $event->event_start_datetime) . '</td>';
-    $tt .= '		</tr>';
-    $tt .= '		<tr>';
-    $tt .= '			<td class="tip-label">' . $AppUI->_('Ends') . '</td>';
-    $tt .= '			<td>' . $view->addField('event_datetime', $event->event_end_datetime) . '</td>';
-    $tt .= '		</tr>';
-    $tt .= '		<tr>';
-    $tt .= '			<td class="tip-label">' . $AppUI->_('Recurs') . '</td>';
-    $tt .= '			<td>' . $view->addField('event_recurs', $recurs[$event->event_recurs]) . '</td>';
-    $tt .= '		</tr>';
-    $tt .= '		<tr>';
-    $tt .= '			<td class="tip-label">' . $AppUI->_('Attendees') . '</td>';
-    $tt .= '			<td>';
-    $tt .= implode('<br />', $assigned);
-    $tt .= '		</tr>';
-    $tt .= '		</table>';
-    $tt .= '	</td>';
-    $tt .= '	<td width="60%" valign="top">';
+    $tt .= '		<dl class="tip-details">';
+    $tt .= '			<dt class="tip-label">' . $AppUI->_('Type') . '</dt>';
+    $tt .= '			<dd>' . $view->addField('event_type', $types[$event->event_type]) . '</dd>';
+    $tt .= '			<dt class="tip-label">' . $AppUI->_('Starts') . '</dt>';
+    $tt .= '			<dd>' . $view->addField('event_datetime', $event->event_start_datetime) . '</dd>';
+    $tt .= '			<dt class="tip-label">' . $AppUI->_('Ends') . '</dt>';
+    $tt .= '			<dd>' . $view->addField('event_datetime', $event->event_end_datetime) . '</dd>';
+    $tt .= '			<dt class="tip-label">' . $AppUI->_('Recurs') . '</dt>';
+    $tt .= '			<dd>' . $view->addField('event_recurs', $recurs[$event->event_recurs]) . '</dd>';
+    $tt .= '			<dt class="tip-label">' . $AppUI->_('Attendees') . '</dt>';
+    $tt .= '			<dd>' . implode('<br />', $assigned) . '</dd>';
+    $tt .= '		</dl>';
+    $tt .= '	</div>';
+    $tt .= '	<div class="tip-column">';
     $tt .= '		<strong>' . $AppUI->_('Note') . '</strong>';
-    $tt .= '		<table cellspacing="0" cellpadding="2" border="0" width="100%">';
-    $tt .= '		<tr>';
-    $tt .= '			<td class="tip-label description">' . $view->addField('event_description', $event->event_description) . '</td>';
-    $tt .= '		</tr>';
-    $tt .= '		</table>';
-    $tt .= '	</td>';
-    $tt .= '</tr>';
-    $tt .= '</table>';
+    $tt .= '		<div class="description">' . $view->addField('event_description', $event->event_description) . '</div>';
+    $tt .= '	</div>';
+    $tt .= '</div>';
 
     return $tt;
 }
@@ -3599,54 +3565,31 @@ function getTaskTooltip($task_id)
     $company->load($project->project_company);
     $task_company = $company->company_name;
 
-    $tt = '<table class="tool-tip">';
-    $tt .= '<tr>';
-    $tt .= '	<td valign="top" width="40%">';
+    $tt = '<div class="d-flex gap-3 tool-tip">';
+    $tt .= '	<div class="tip-column">';
     $tt .= '		<strong>' . $AppUI->_('Details') . '</strong>';
-    $tt .= '		<table cellspacing="3" cellpadding="2" width="100%">';
-    $tt .= '		<tr>';
-    $tt .= '			<td class="tip-label">' . $AppUI->_('Company') . '</td>';
-    $tt .= '			<td>' . $task_company . '</td>';
-    $tt .= '		</tr>';
-    $tt .= '		<tr>';
-    $tt .= '			<td class="tip-label">' . $AppUI->_('Project') . '</td>';
-    $tt .= '			<td>' . $task_project . '</td>';
-    $tt .= '		</tr>';
-    $tt .= '		<tr>';
-    $tt .= '			<td class="tip-label">' . $AppUI->_('Type') . '</td>';
-    $tt .= '			<td>' . $AppUI->_($types[$task->task_type]) . '</td>';
-    $tt .= '		</tr>	';
-    $tt .= '		<tr>';
-    $tt .= '			<td class="tip-label">' . $AppUI->_('Progress') . '</td>';
-    $tt .= '			<td>' . sprintf("%.1f%%", $task->task_percent_complete) . '</td>';
-    $tt .= '		</tr>	';
-    $tt .= '		<tr>';
-    $tt .= '			<td class="tip-label">' . $AppUI->_('Starts') . '</td>';
-    $tt .= '			<td>' . ($start_date ? $start_date->format($df . ' ' . $tf) : '-') . '</td>';
-    $tt .= '		</tr>';
-    $tt .= '		<tr>';
-    $tt .= '			<td class="tip-label">' . $AppUI->_('Ends') . '</td>';
-    $tt .= '			<td>' . ($end_date ? $end_date->format($df . ' ' . $tf) : '-') . '</td>';
-    $tt .= '		</tr>';
-    $tt .= '		<tr>';
-    $tt .= '			<td class="tip-label">' . $AppUI->_('Assignees') . '</td>';
-    $tt .= '			<td>';
-    $tt .= implode('<br />', $assigned);
-    $tt .= '		</tr>';
-    $tt .= '		</table>';
-    $tt .= '	</td>';
-    $tt .= '	<td width="60%" valign="top">';
+    $tt .= '		<dl class="tip-details">';
+    $tt .= '			<dt class="tip-label">' . $AppUI->_('Company') . '</dt>';
+    $tt .= '			<dd>' . $task_company . '</dd>';
+    $tt .= '			<dt class="tip-label">' . $AppUI->_('Project') . '</dt>';
+    $tt .= '			<dd>' . $task_project . '</dd>';
+    $tt .= '			<dt class="tip-label">' . $AppUI->_('Type') . '</dt>';
+    $tt .= '			<dd>' . $AppUI->_($types[$task->task_type]) . '</dd>';
+    $tt .= '			<dt class="tip-label">' . $AppUI->_('Progress') . '</dt>';
+    $tt .= '			<dd>' . sprintf("%.1f%%", $task->task_percent_complete) . '</dd>';
+    $tt .= '			<dt class="tip-label">' . $AppUI->_('Starts') . '</dt>';
+    $tt .= '			<dd>' . ($start_date ? $start_date->format($df . ' ' . $tf) : '-') . '</dd>';
+    $tt .= '			<dt class="tip-label">' . $AppUI->_('Ends') . '</dt>';
+    $tt .= '			<dd>' . ($end_date ? $end_date->format($df . ' ' . $tf) : '-') . '</dd>';
+    $tt .= '			<dt class="tip-label">' . $AppUI->_('Assignees') . '</dt>';
+    $tt .= '			<dd>' . implode('<br />', $assigned) . '</dd>';
+    $tt .= '		</dl>';
+    $tt .= '	</div>';
+    $tt .= '	<div class="tip-column">';
     $tt .= '		<strong>' . $AppUI->_('Description') . '</strong>';
-    $tt .= '		<table cellspacing="0" cellpadding="2" border="0" width="100%">';
-    $tt .= '		<tr>';
-    $tt .= '			<td class="tip-label description">';
-    $tt .= '				' . $task->task_description;
-    $tt .= '			</td>';
-    $tt .= '		</tr>';
-    $tt .= '		</table>';
-    $tt .= '	</td>';
-    $tt .= '</tr>';
-    $tt .= '</table>';
+    $tt .= '		<div class="description">' . $task->task_description . '</div>';
+    $tt .= '	</div>';
+    $tt .= '</div>';
 
     return $tt;
 }
@@ -5062,7 +5005,7 @@ function __extract_from_view_messages4($s, $style, $row, $hideEmail, $editor, $A
     }
     $s .= '</td>';
     $s .= '<td valign="top" style="' . $style . '">';
-    $s .= '<strong>' . $row['message_title'] . '</strong><hr size=1>';
+    $s .= '<strong>' . $row['message_title'] . '</strong><hr />';
     $row['message_body'] = $bbparser->qparse($row['message_body']);
     $row['message_body'] = nl2br($row['message_body']);
     $s .= $row['message_body'];
@@ -5074,37 +5017,21 @@ function __extract_from_view_messages4($s, $style, $row, $hideEmail, $editor, $A
     $s .= '<img src="' . w2PfindImage('icons/posticon.gif', $m) . '" alt="date posted" />' . $AppUI->formatTZAwareTime($row['message_datetime'], $df . ' ' . $tf) . '</td>';
     $s .= '<td valign="top" align="right" style="' . $style . '">';
 
-    // in some weird permission cases
-    // it can happen that the table gets opened but never closed,
-    // or the other way around, thus breaking the layout
-    // introducing these variables to help us out with proper
-    // table tag opening and closing.
-    $tableOpened = false;
-    $tableClosed = false;
+    $s .= '<span class="d-inline-flex gap-2">';
     //the following users are allowed to edit/delete a forum message: 1. the forum creator  2. a superuser with read-write access to 'all' 3. the message author
     if ($canEdit || $AppUI->user_id == $row['forum_moderated'] || $AppUI->user_id == $row['message_author'] || $canAdminEdit) {
-        $tableOpened = true;
-        $s .= '<table cellspacing="0" cellpadding="0" border="0"><tr>';
         // edit message
-        $s .= '<td><a href="./index.php?m=forums&a=view&post_message=1&forum_id=' . $row['message_forum'] . '&message_parent=' . $row['message_parent'] . '&message_id=' . $row["message_id"] . '" title="' . $AppUI->_('Edit') . ' ' . $AppUI->_('Message') . '">';
+        $s .= '<a href="./index.php?m=forums&amp;a=view&amp;post_message=1&amp;forum_id=' . $row['message_forum'] . '&amp;message_parent=' . $row['message_parent'] . '&amp;message_id=' . $row["message_id"] . '" title="' . $AppUI->_('Edit') . ' ' . $AppUI->_('Message') . '">';
         $s .= w2PshowImage('icons/stock_edit-16.png', '16', '16');
-        $s .= '</td>';
+        $s .= '</a>';
     }
     if ($canDelete || $AppUI->user_id == $row['forum_moderated'] || $AppUI->user_id == $row['message_author'] || $canAdminEdit) {
-        $tableClosed = true;
-        if (!$tableOpened) {
-            $s .= '<table cellspacing="0" cellpadding="0" border="0"><tr>';
-        }
         // delete message
-        $s .= '<td><a href="javascript:delIt(' . $row['message_id'] . ')" title="' . $AppUI->_('delete') . '">';
+        $s .= '<a href="javascript:delIt(' . $row['message_id'] . ')" title="' . $AppUI->_('delete') . '">';
         $s .= w2PshowImage('icons/stock_delete-16.png', '16', '16');
         $s .= '</a>';
-        $s .= '</td></tr></table>';
     }
-
-    if ($tableOpened and !$tableClosed) {
-        $s .= '</tr></table>';
-    }
+    $s .= '</span>';
 
     $s .= '</td>';
     $s .= '</tr>';

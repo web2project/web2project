@@ -77,7 +77,7 @@ class w2p_Theme_TitleBlock {
 
     public function addButton($label, $url)
     {
-        $button = '<input type="submit" class="button btn btn-small dropdown-toggle" value="' . $this->_AppUI->_($label) . '">';
+        $button = '<input type="submit" class="button btn btn-primary btn-sm" value="' . $this->_AppUI->_($label) . '">';
         $form = '<form action="' . $url . '" method="post" accept-charset="utf-8">' . $button . '</form>';
 
         $this->addCell($form);

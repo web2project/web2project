@@ -82,33 +82,28 @@ class w2p_Core_CustomFieldsParser {
 
     public function _getLabelHTML($field_config) {
         if ($field_config['type'] == 'label') {
-            $separador = '';
-            $colspan = 'colspan="2"';
-            $field_config['name'] = '<b>' . $field_config['name'] . '</b>';
-        } else {
-            $separador = ':';
-            $colspan = '';
+            return '<strong>' . $field_config['name'] . '</strong>';
         }
 
-        return '<td ' . $colspan . '>' . $field_config['name'] . ' ' . $separador . '</td>';
+        return '<label>' . $field_config['name'] . ':</label>';
     }
 
     public function parseEditField($key) {
         $field_config = unserialize($this->fields_array[$key]);
-        $parsed = '<tr id="custom_tr_' . $key . '">';
+        $parsed = '<p id="custom_tr_' . $key . '">';
 
         $parsed .= $this->_getLabelHTML($field_config);
         switch ($field_config['type']) {
             case 'select':
                 $selectOptions = explode(',', $field_config['selects']);
-                $parsed .= '<td align="left">' . arraySelect($selectOptions, 'custom_' . $key, 'size="1" class="text" ' . $field_config['options'], (isset($this->previous_data[$key]) ? $this->previous_data[$key] : '')) . '</td>';
+                $parsed .= arraySelect($selectOptions, 'custom_' . $key, 'size="1" class="text" ' . $field_config['options'], (isset($this->previous_data[$key]) ? $this->previous_data[$key] : ''));
                 break;
             case 'textarea':
-                $parsed .= '<td align="left"><textarea name="custom_' . $key . '" class="textarea" ' . $field_config['options'] . '>' . (isset($this->previous_data[$key]) ? $this->previous_data[$key] : '') . '</textarea></td>';
+                $parsed .= '<textarea name="custom_' . $key . '" class="textarea" ' . $field_config['options'] . '>' . (isset($this->previous_data[$key]) ? $this->previous_data[$key] : '') . '</textarea>';
                 break;
             case 'checkbox':
                 $options_array = explode(',', $field_config['selects']);
-                $parsed .= '<td align="left">';
+                $parsed .= '<span>';
                 foreach ($options_array as $option) {
                     $checked = '';
                     if (isset($this->previous_data[$key]) && array_key_exists($option, array_flip($this->previous_data[$key]))) {
@@ -117,36 +112,36 @@ class w2p_Core_CustomFieldsParser {
                     $parsed .= '<input type="checkbox" value="' . $option . '" name="custom_' . $key . '[]" class="text" style="border:0" ' . $checked . ' ' . $field_config['options'] . ' />' . $option . '<br />';
                     $checked = '';
                 }
-                $parsed .= '</td>';
+                $parsed .= '</span>';
                 break;
             default:
-                $parsed .= '<td align="left"><input type="text" name="custom_' . $key . '" class="text" ' . $field_config['options'] . ' value="' . (isset($this->previous_data[$key]) ? $this->previous_data[$key] : '') . '" /></td>';
+                $parsed .= '<input type="text" name="custom_' . $key . '" class="text" ' . $field_config['options'] . ' value="' . (isset($this->previous_data[$key]) ? $this->previous_data[$key] : '') . '" />';
         }
-        $parsed .= '</tr>';
+        $parsed .= '</p>';
         return $parsed;
     }
 
     public function parseViewField($key) {
         $field_config = unserialize($this->fields_array[$key]);
-        $parsed = '<tr id="custom_tr_' . $key . '">';
+        $parsed = '<p id="custom_tr_' . $key . '">';
         $parsed .= $this->_getLabelHTML($field_config);
         switch ($field_config['type']) {
             case 'text':
-                $parsed .= '<td class="hilite">' . w2PformSafe((isset($this->previous_data[$key]) ? $this->previous_data[$key] : '')) . '</td>';
+                $parsed .= '<span class="hilite">' . w2PformSafe((isset($this->previous_data[$key]) ? $this->previous_data[$key] : '')) . '</span>';
                 break;
             case 'href':
-                $parsed .= '<td class="hilite"><a href="' . w2PformSafe((isset($this->previous_data[$key]) ? $this->previous_data[$key] : '')) . '">' . w2PformSafe((isset($this->previous_data[$key]) ? $this->previous_data[$key] : '')) . '</a></td>';
+                $parsed .= '<span class="hilite"><a href="' . w2PformSafe((isset($this->previous_data[$key]) ? $this->previous_data[$key] : '')) . '">' . w2PformSafe((isset($this->previous_data[$key]) ? $this->previous_data[$key] : '')) . '</a></span>';
                 break;
             case 'select':
                 $optionarray = explode(',', $field_config['selects']);
-                $parsed .= '<td class="hilite" width="300">' . w2PformSafe((isset($this->previous_data[$key]) ? $optionarray[$this->previous_data[$key]] : '')) . '</td>';
+                $parsed .= '<span class="hilite">' . w2PformSafe((isset($this->previous_data[$key]) ? $optionarray[$this->previous_data[$key]] : '')) . '</span>';
                 break;
             case 'textarea':
-                $parsed .= '<td valign="top" class="hilite">' . w2PformSafe((isset($this->previous_data[$key]) ? $this->previous_data[$key] : '')) . '</td>';
+                $parsed .= '<span class="hilite">' . w2PformSafe((isset($this->previous_data[$key]) ? $this->previous_data[$key] : '')) . '</span>';
                 break;
             case 'checkbox':
                 $optionarray = explode(',', $field_config['selects']);
-                $parsed .= '<td align="left">';
+                $parsed .= '<span>';
                 foreach ($optionarray as $option) {
                     $checked = '';
                     if (isset($this->previous_data[$key]) && array_key_exists($option, array_flip($this->previous_data[$key]))) {
@@ -154,15 +149,15 @@ class w2p_Core_CustomFieldsParser {
                     }
                     $parsed .= '<input type="checkbox" value="' . $option . '" name="custom_' . $key . '[]" class="text" locked style="border:0" ' . $checked . ' ' . $field_config['options'] . ' disabled />' . $option . '<br />';
                 }
-                $parsed .= '</td>';
+                $parsed .= '</span>';
                 break;
         }
-        $parsed .= '</tr>';
+        $parsed .= '</p>';
         return $parsed;
     }
 
     public function parseTableForm($edit = false, $record_type = null) {
-        $parsed = '<table>';
+        $parsed = '<div class="w2p-custom-fields">';
 
         $visible_keys = array();
         if (!is_null($record_type)) {
@@ -183,7 +178,7 @@ class w2p_Core_CustomFieldsParser {
                     $parsed .= $this->$fnc_name($key);
                 }
         }
-        $parsed .= '</table>';
+        $parsed .= '</div>';
         return $parsed;
     }
 
