@@ -17,7 +17,7 @@ $config['mod_description'] = 'A module for tracking changes';
 /**
  * Class CSetupHistory
  *
- * @package     web2project\modules\misc
+ * @package web2project\modules\misc
  */
 class CSetupHistory extends w2p_System_Setup
 {
