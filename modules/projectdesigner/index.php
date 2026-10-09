@@ -96,13 +96,9 @@ if (!$project_id) {
     echo $AppUI->getTheme()->styleRenderBoxTop();
 ?>
     <form name="prjFrm" action="?m=projectdesigner" method="post" accept-charset="utf-8">
-        <table border="1" class="std">
-            <tr>
-                <td class="projectdesigner">
-                    <?php echo $AppUI->_('Project'); ?>: <?php echo arraySelect($projects, 'project_id', 'onchange="submitIt()" class="text"', 0); ?>
-                </td>
-            </tr>
-        </table>
+        <div class="std border rounded p-2 projectdesigner">
+            <?php echo $AppUI->_('Project'); ?>: <?php echo arraySelect($projects, 'project_id', 'onchange="submitIt()" class="text"', 0); ?>
+        </div>
     </form>
 <?php
 } else {
@@ -210,7 +206,7 @@ if (!$project_id) {
 <script language="javascript" type="text/javascript">
 
 $( document ).ready(function() {
-    expand_collapse('project', 'tblProjects', 'expand');
+    toggle_panel('project', 'expand');
 });
 // security improvement:
 // some javascript functions may not appear on client side in case of user not having write permissions
@@ -454,22 +450,19 @@ function calcDuration(f, start_date, end_date, duration_fld, durntype_fld) {
     echo $AppUI->getTheme()->styleRenderBoxBottom();
     echo $AppUI->getTheme()->styleRenderBoxTop();
 ?>
-<table class="std">
-<tr>
-	<td style="border: outset #d1d1cd 1px;" colspan="2">
-        <a href="javascript: void(0);" name="fg" style="display:block" onclick="expand_collapse('gantt', 'tblProjects');update_workspace('gantt');">
-            <strong class="left"><?php echo $AppUI->_('Gantt Chart'); ?></strong>
-            <div class="right">
-                <img id="gantt_expand" src="<?php echo w2PfindImage('icons/expand.gif', $m); ?>"
-                     alt="" <?php echo (isset($view_options[0]['pd_option_view_gantt']) ? ($view_options[0]['pd_option_view_gantt'] ? 'style="display:none"' : 'style="display:"') : 'style="display:none"') ?>>
-                <img id="gantt_collapse" src="<?php echo w2PfindImage('icons/collapse.gif', $m); ?>"
-                     <?php echo (isset($view_options[0]['pd_option_view_gantt']) ? ($view_options[0]['pd_option_view_gantt'] ? 'style="display:"' : 'style="display:none"') : 'style="display:"') ?>>
-            </div>
+<div class="card mb-3 std">
+    <div class="card-header p-0">
+        <a href="javascript: void(0);" name="fg" class="d-flex justify-content-between align-items-center px-2 py-1 text-reset text-decoration-none" onclick="toggle_panel('gantt');update_workspace('gantt');">
+            <strong><?php echo $AppUI->_('Gantt Chart'); ?></strong>
+            <span>
+                <img id="gantt_expand" src="<?php echo w2PfindImage('icons/expand.gif', $m); ?>" alt=""
+                     <?php echo (isset($view_options[0]['pd_option_view_gantt']) ? ($view_options[0]['pd_option_view_gantt'] ? 'style="display:none"' : 'style="display:"') : 'style="display:none"') ?> />
+                <img id="gantt_collapse" src="<?php echo w2PfindImage('icons/collapse.gif', $m); ?>" alt=""
+                     <?php echo (isset($view_options[0]['pd_option_view_gantt']) ? ($view_options[0]['pd_option_view_gantt'] ? 'style="display:"' : 'style="display:none"') : 'style="display:"') ?> />
+            </span>
         </a>
-	</td>
-</tr>
-<tr id="gantt" <?php echo (isset($view_options[0]['pd_option_view_gantt']) ? ($view_options[0]['pd_option_view_gantt'] ? 'style="visibility:visible;display:"' : 'style="visibility:collapse;display:none"') : 'style="visibility:visible;display:"'); ?>>
-	<td colspan="2" class="hilite">
+    </div>
+    <div id="gantt" class="card-body p-2 hilite"<?php echo (isset($view_options[0]['pd_option_view_gantt']) && !$view_options[0]['pd_option_view_gantt']) ? ' style="display:none"' : ''; ?>>
 	<?php
 	if ($canViewTasks) {
 		require (w2PgetConfig('root_dir') . '/modules/projectdesigner/vw_gantt.php');
@@ -477,29 +470,36 @@ function calcDuration(f, start_date, end_date, duration_fld, durntype_fld) {
 		echo $AppUI->_('You do not have permission to view tasks');
 	}
 ?>
-	</td>
-</tr>
-</table>
+    </div>
+</div>
 <?php
     echo $AppUI->getTheme()->styleRenderBoxBottom();
     echo $AppUI->getTheme()->styleRenderBoxTop();
 ?>
-<table class="std">
-<tr>
-	<td style="border: outset #d1d1cd 1px;" colspan="2">
-        <a href="javascript: void(0);" name="fg" style="display:block" onclick="expand_collapse('tasks', 'tblProjects');update_workspace('tasks');">
-            <strong class="left"><?php echo $AppUI->_('Tasks'); ?></strong>
-            <div class="right">
-                <img id="tasks_expand" src="<?php echo w2PfindImage('icons/expand.gif', $m); ?>"
-                     alt="" <?php echo (isset($view_options[0]['pd_option_view_tasks']) ? ($view_options[0]['pd_option_view_tasks'] ? 'style="display:none"' : 'style="display:"') : 'style="display:none"') ?>>
-                <img id="tasks_collapse" src="<?php echo w2PfindImage('icons/collapse.gif', $m); ?>"
-                     <?php echo (isset($view_options[0]['pd_option_view_tasks']) ? ($view_options[0]['pd_option_view_tasks'] ? 'style="display:"' : 'style="display:none"') : 'style="display:"') ?>>
-            </div>
+<?php // the task list (tasks/vw_tasks.php) and the bulk actions panel share this form ?>
+<form name="frm_bulk" method="post" action="?m=projectdesigner" accept-charset="utf-8">
+    <input type="hidden" name="dosql" value="do_task_bulk_aed" />
+    <input type="hidden" name="project_id" value="<?php echo $project_id; ?>" />
+    <input type="hidden" name="pd_option_view_project" value="<?php echo (isset($view_options[0]['pd_option_view_project']) ? $view_options[0]['pd_option_view_project'] : 1); ?>" />
+    <input type="hidden" name="pd_option_view_gantt" value="<?php echo (isset($view_options[0]['pd_option_view_gantt']) ? $view_options[0]['pd_option_view_gantt'] : 1); ?>" />
+    <input type="hidden" name="pd_option_view_tasks" value="<?php echo (isset($view_options[0]['pd_option_view_tasks']) ? $view_options[0]['pd_option_view_tasks'] : 1); ?>" />
+    <input type="hidden" name="pd_option_view_actions" value="<?php echo (isset($view_options[0]['pd_option_view_actions']) ? $view_options[0]['pd_option_view_actions'] : 1); ?>" />
+    <input type="hidden" name="pd_option_view_addtasks" value="<?php echo (isset($view_options[0]['pd_option_view_addtasks']) ? $view_options[0]['pd_option_view_addtasks'] : 1); ?>" />
+    <input type="hidden" name="pd_option_view_files" value="<?php echo (isset($view_options[0]['pd_option_view_files']) ? $view_options[0]['pd_option_view_files'] : 1); ?>" />
+    <input type="hidden" name="bulk_task_hperc_assign" value="" />
+<div class="card mb-3 std">
+    <div class="card-header p-0">
+        <a href="javascript: void(0);" name="fg" class="d-flex justify-content-between align-items-center px-2 py-1 text-reset text-decoration-none" onclick="toggle_panel('tasks');update_workspace('tasks');">
+            <strong><?php echo $AppUI->_('Tasks'); ?></strong>
+            <span>
+                <img id="tasks_expand" src="<?php echo w2PfindImage('icons/expand.gif', $m); ?>" alt=""
+                     <?php echo (isset($view_options[0]['pd_option_view_tasks']) ? ($view_options[0]['pd_option_view_tasks'] ? 'style="display:none"' : 'style="display:"') : 'style="display:none"') ?> />
+                <img id="tasks_collapse" src="<?php echo w2PfindImage('icons/collapse.gif', $m); ?>" alt=""
+                     <?php echo (isset($view_options[0]['pd_option_view_tasks']) ? ($view_options[0]['pd_option_view_tasks'] ? 'style="display:"' : 'style="display:none"') : 'style="display:"') ?> />
+            </span>
         </a>
-	</td>
-</tr>
-<tr id="tasks" <?php echo (isset($view_options[0]['pd_option_view_tasks']) ? ($view_options[0]['pd_option_view_tasks'] ? 'style="visibility:visible;display:"' : 'style="visibility:collapse;display:none"') : 'style="visibility:visible;display:"'); ?>>
-	<td colspan="2" class="hilite">
+    </div>
+    <div id="tasks" class="card-body p-2 hilite"<?php echo (isset($view_options[0]['pd_option_view_tasks']) && !$view_options[0]['pd_option_view_tasks']) ? ' style="display:none"' : ''; ?>>
 	<?php
 	if ($canViewTasks) {
 		require (w2PgetConfig('root_dir') . '/modules/tasks/vw_tasks.php');
@@ -507,29 +507,25 @@ function calcDuration(f, start_date, end_date, duration_fld, durntype_fld) {
 		echo $AppUI->_('You do not have permission to view tasks');
 	}
 ?>
-	</td>
-</tr>
-</table>
+    </div>
+</div>
 <?php
     echo $AppUI->getTheme()->styleRenderBoxBottom();
     echo $AppUI->getTheme()->styleRenderBoxTop();
 ?>
-<table class="std">
-<tr>
-	<td style="border: outset #d1d1cd 1px;" colspan="2">
-        <a href="javascript: void(0);" name="fg" style="display:block" onclick="expand_collapse('actions', 'tblProjects');update_workspace('actions');">
-            <strong class="left"><?php echo $AppUI->_('Actions'); ?></strong>
-            <div class="right">
-                <img id="actions_expand" src="<?php echo w2PfindImage('icons/expand.gif', $m); ?>"
-                     alt="" <?php echo (isset($view_options[0]['pd_option_view_actions']) ? ($view_options[0]['pd_option_view_actions'] ? 'style="display:none"' : 'style="display:"') : 'style="display:none"') ?>>
-                <img id="actions_collapse" src="<?php echo w2PfindImage('icons/collapse.gif', $m); ?>"
-                     <?php echo (isset($view_options[0]['pd_option_view_actions']) ? ($view_options[0]['pd_option_view_actions'] ? 'style="display:"' : 'style="display:none"') : 'style="display:"') ?>>
-            </div>
+<div class="card mb-3 std">
+    <div class="card-header p-0">
+        <a href="javascript: void(0);" name="fg" class="d-flex justify-content-between align-items-center px-2 py-1 text-reset text-decoration-none" onclick="toggle_panel('actions');update_workspace('actions');">
+            <strong><?php echo $AppUI->_('Actions'); ?></strong>
+            <span>
+                <img id="actions_expand" src="<?php echo w2PfindImage('icons/expand.gif', $m); ?>" alt=""
+                     <?php echo (isset($view_options[0]['pd_option_view_actions']) ? ($view_options[0]['pd_option_view_actions'] ? 'style="display:none"' : 'style="display:"') : 'style="display:none"') ?> />
+                <img id="actions_collapse" src="<?php echo w2PfindImage('icons/collapse.gif', $m); ?>" alt=""
+                     <?php echo (isset($view_options[0]['pd_option_view_actions']) ? ($view_options[0]['pd_option_view_actions'] ? 'style="display:"' : 'style="display:none"') : 'style="display:"') ?> />
+            </span>
         </a>
-	</td>
-</tr>
-<tr id="actions" <?php echo (isset($view_options[0]['pd_option_view_actions']) ? ($view_options[0]['pd_option_view_actions'] ? 'style="visibility:visible;display:"' : 'style="visibility:collapse;display:none"') : 'style="visibility:visible;display:"'); ?>>
-	<td colspan="2" class="hilite">
+    </div>
+    <div id="actions" class="card-body p-2 hilite"<?php echo (isset($view_options[0]['pd_option_view_actions']) && !$view_options[0]['pd_option_view_actions']) ? ' style="display:none"' : ''; ?>>
 	<?php
 	if ($canEditTasks) {
 		require w2PgetConfig('root_dir') . '/modules/projectdesigner/vw_actions.php';
@@ -537,29 +533,26 @@ function calcDuration(f, start_date, end_date, duration_fld, durntype_fld) {
 		echo $AppUI->_('You do not have permission to edit tasks');
 	}
 ?>
-	</td>
-</tr>
-</table>
+    </div>
+</div>
+</form>
 <?php
     echo $AppUI->getTheme()->styleRenderBoxBottom();
     echo $AppUI->getTheme()->styleRenderBoxTop();
 ?>
-<table class="std">
-<tr>
-	<td style="border: outset #d1d1cd 1px;" colspan="2">
-        <a href="javascript: void(0);" name="fg" style="display:block" onclick="expand_collapse('addtasks', 'tblProjects');update_workspace('addtasks');">
-            <strong class="left"><?php echo $AppUI->_('Add Tasks'); ?></strong>
-            <div class="right">
-                <img id="addtasks_expand" src="<?php echo w2PfindImage('icons/expand.gif', $m); ?>"
-                     alt="" <?php echo (isset($view_options[0]['pd_option_view_addtasks']) ? ($view_options[0]['pd_option_view_addtasks'] ? 'style="display:none"' : 'style="display:"') : 'style="display:none"') ?>>
-                <img id="addtasks_collapse" src="<?php echo w2PfindImage('icons/collapse.gif', $m); ?>"
-                     <?php echo (isset($view_options[0]['pd_option_view_addtasks']) ? ($view_options[0]['pd_option_view_addtasks'] ? 'style="display:"' : 'style="display:none"') : 'style="display:"') ?>>
-            </div>
+<div class="card mb-3 std">
+    <div class="card-header p-0">
+        <a href="javascript: void(0);" name="fg" class="d-flex justify-content-between align-items-center px-2 py-1 text-reset text-decoration-none" onclick="toggle_panel('addtasks');update_workspace('addtasks');">
+            <strong><?php echo $AppUI->_('Add Tasks'); ?></strong>
+            <span>
+                <img id="addtasks_expand" src="<?php echo w2PfindImage('icons/expand.gif', $m); ?>" alt=""
+                     <?php echo (isset($view_options[0]['pd_option_view_addtasks']) ? ($view_options[0]['pd_option_view_addtasks'] ? 'style="display:none"' : 'style="display:"') : 'style="display:none"') ?> />
+                <img id="addtasks_collapse" src="<?php echo w2PfindImage('icons/collapse.gif', $m); ?>" alt=""
+                     <?php echo (isset($view_options[0]['pd_option_view_addtasks']) ? ($view_options[0]['pd_option_view_addtasks'] ? 'style="display:"' : 'style="display:none"') : 'style="display:"') ?> />
+            </span>
         </a>
-	</td>
-</tr>
-<tr id="addtasks" <?php echo (isset($view_options[0]['pd_option_view_addtasks']) ? ($view_options[0]['pd_option_view_addtasks'] ? 'style="visibility:visible;display:"' : 'style="visibility:collapse;display:none"') : 'style="visibility:visible;display:"'); ?>>
-	<td colspan="2" class="hilite">
+    </div>
+    <div id="addtasks" class="card-body p-2 hilite"<?php echo (isset($view_options[0]['pd_option_view_addtasks']) && !$view_options[0]['pd_option_view_addtasks']) ? ' style="display:none"' : ''; ?>>
 	<?php
 	if ($canAddTasks) {
 		require w2PgetConfig('root_dir') . '/modules/projectdesigner/vw_addtasks.php';
@@ -567,29 +560,25 @@ function calcDuration(f, start_date, end_date, duration_fld, durntype_fld) {
 		echo $AppUI->_('You do not have permission to add tasks');
 	}
 ?>
-	</td>
-</tr>
-</table>
+    </div>
+</div>
 <?php
     echo $AppUI->getTheme()->styleRenderBoxBottom();
     echo $AppUI->getTheme()->styleRenderBoxTop();
 ?>
-<table class="std">
-<tr>
-	<td style="border: outset #d1d1cd 1px;" colspan="2">
-        <a href="javascript: void(0);" name="fg" style="display:block" onclick="expand_collapse('files', 'tblProjects');update_workspace('files');">
-            <strong class="left"><?php echo $AppUI->_('Files'); ?></strong>
-            <div class="right">
-                <img id="files_expand" src="<?php echo w2PfindImage('icons/expand.gif', $m); ?>"
-                     alt="" <?php echo (isset($view_options[0]['pd_option_view_files']) ? ($view_options[0]['pd_option_view_files'] ? 'style="display:none"' : 'style="display:"') : 'style="display:none"') ?>>
-                <img id="files_collapse" src="<?php echo w2PfindImage('icons/collapse.gif', $m); ?>"
-                     <?php echo (isset($view_options[0]['pd_option_view_files']) ? ($view_options[0]['pd_option_view_files'] ? 'style="display:"' : 'style="display:none"') : 'style="display:"') ?>>
-            </div>
+<div class="card mb-3 std">
+    <div class="card-header p-0">
+        <a href="javascript: void(0);" name="fg" class="d-flex justify-content-between align-items-center px-2 py-1 text-reset text-decoration-none" onclick="toggle_panel('files');update_workspace('files');">
+            <strong><?php echo $AppUI->_('Files'); ?></strong>
+            <span>
+                <img id="files_expand" src="<?php echo w2PfindImage('icons/expand.gif', $m); ?>" alt=""
+                     <?php echo (isset($view_options[0]['pd_option_view_files']) ? ($view_options[0]['pd_option_view_files'] ? 'style="display:none"' : 'style="display:"') : 'style="display:none"') ?> />
+                <img id="files_collapse" src="<?php echo w2PfindImage('icons/collapse.gif', $m); ?>" alt=""
+                     <?php echo (isset($view_options[0]['pd_option_view_files']) ? ($view_options[0]['pd_option_view_files'] ? 'style="display:"' : 'style="display:none"') : 'style="display:"') ?> />
+            </span>
         </a>
-	</td>
-</tr>
-<tr id="files" <?php echo (isset($view_options[0]['pd_option_view_files']) ? ($view_options[0]['pd_option_view_files'] ? 'style="visibility:visible;display:"' : 'style="visibility:collapse;display:none"') : 'style="visibility:visible;display:"'); ?>>
-	<td colspan="2" class="hilite">
+    </div>
+    <div id="files" class="card-body p-2 hilite"<?php echo (isset($view_options[0]['pd_option_view_files']) && !$view_options[0]['pd_option_view_files']) ? ' style="display:none"' : ''; ?>>
 	<?php
 	//Permission check here
 	$canViewFiles = canView('files');
@@ -599,9 +588,8 @@ function calcDuration(f, start_date, end_date, duration_fld, durntype_fld) {
 		echo $AppUI->_('You do not have permission to view files');
 	}
 ?>
-	</td>
-</tr>
-</table>
+    </div>
+</div>
 
 <script language="javascript" type="text/javascript">
     var original_bgc = getStyle('td_sample', 'background-color', 'backgroundColor');

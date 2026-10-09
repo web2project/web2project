@@ -99,18 +99,17 @@ $titleBlock->show();
 ?>
 
 <form method="post" accept-charset="utf-8">
-    <table class="std">
+    <div class="std addedit projectdesigner-config">
+    <div class="column left w2p-wide">
     <?php
     foreach ($config_options as $key => $value) {
-    ?>
-        <tr>
-            <?php
         // the key starts with hr, then just display the value
         if (substr($key, 0, 7) == 'heading') { ?>
-              <th align="center" colspan="2"><?php echo $value?></th>
-            <?php } else { ?>
-            <td align="right"><?php echo $value['description']?></td>
-            <td><?php
+            <h3 class="h6 border-bottom pb-1 mt-2"><?php echo $value?></h3>
+        <?php } else { ?>
+        <p>
+            <label><?php echo $value['description']?></label>
+            <?php
             switch ($value['type']) {
                 case 'checkbox': ?>
               <input type="checkbox" name="<?=$key?>" <?php echo $value['value']?"checked=\"checked\"":""?> />
@@ -129,22 +128,21 @@ $titleBlock->show();
                     break;
                 case 'radio':
                     foreach ($value['buttons'] as $v => $n) { ?>
-                <label><input type="radio" name="<?php echo $key; ?>" id="<?php echo $key; ?>" value="<?php echo $v; ?>" <?php echo (($value['value'] == $v) ? 'checked="checked"' : ''); ?> <?php echo $value['events']; ?> /> <?php echo $n; ?></label>
+                <label class="form-check-label"><input type="radio" name="<?php echo $key; ?>" id="<?php echo $key; ?>" value="<?php echo $v; ?>" <?php echo (($value['value'] == $v) ? 'checked="checked"' : ''); ?> <?php echo $value['events']; ?> /> <?php echo $n; ?></label>
               <?php }
                     break;
                 default:
                     break;
             }
-    ?></td>
-            <?php
+            ?>
+        </p>
+        <?php
         }
-    ?>
-        </tr>
-    <?php
     }
     ?>
-        <tr>
-            <td colspan="2" align="right"><input type="Submit" name="Cancel" value="<?php echo $AppUI->_('back')?>" /><input type="Submit" name="Save" value="<?php echo $AppUI->_('save')?>" /></td>
-        </tr>
-    </table>
+    </div>
+        <div class="w2p-form-actions justify-content-end">
+            <input type="Submit" class="button" name="Cancel" value="<?php echo $AppUI->_('back')?>" /><input type="Submit" class="button" name="Save" value="<?php echo $AppUI->_('save')?>" />
+        </div>
+    </div>
 </form>

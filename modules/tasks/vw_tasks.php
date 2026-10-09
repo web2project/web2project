@@ -172,6 +172,11 @@ $listTable->addBefore('edit', 'task_id');
 $listTable->addBefore('pin', 'task_id');
 $listTable->addBefore('log', 'task_id');
 ?>
+<?php
+// the project designer wraps its task list and bulk action panels in this form itself
+$bulkForm = ('projectdesigner' != $m);
+if ($bulkForm) {
+?>
 <form name="frm_bulk" method="post" action="?m=projectdesigner" accept-charset="utf-8">
     <input type="hidden" name="dosql" value="do_task_bulk_aed" />
     <input type="hidden" name="project_id" value="<?php echo $project_id; ?>" />
@@ -182,9 +187,10 @@ $listTable->addBefore('log', 'task_id');
     <input type="hidden" name="pd_option_view_addtasks" value="<?php echo (isset($view_options[0]['pd_option_view_addtasks']) ? $view_options[0]['pd_option_view_addtasks'] : 1); ?>" />
     <input type="hidden" name="pd_option_view_files" value="<?php echo (isset($view_options[0]['pd_option_view_files']) ? $view_options[0]['pd_option_view_files'] : 1); ?>" />
     <input type="hidden" name="bulk_task_hperc_assign" value="" />
-
 <?php
+}
 echo $listTable->startTable('tasks-tasklist');
+
 echo $listTable->buildHeader($fields, false, $m);
 
 $status = w2PgetSysVal('TaskStatus');
@@ -234,6 +240,9 @@ if ($task_id) {
 
 
 echo $listTable->endTable();
+if ($bulkForm) {
+    echo '</form>';
+}
 ?>
 <?php
 include $AppUI->getTheme()->resolveTemplate('task_key');

@@ -34,18 +34,10 @@ echo $listTable->buildRows($taskTree);
 echo $listTable->endTable();
 
 ?>
-<table class="tbl" cellspacing="1" cellpadding="2" border="0" width="100%">
-    <tr>
-        <td align="center">
-            <h1><?php echo $AppUI->_('Gantt Chart'); ?></h1>
-        </td>
-    </tr>
-    <tr>
-        <td align="center" colspan="20">
-            <?php
-            $src = "?m=tasks&a=gantt&suppressHeaders=1&showLabels=1&proFilter=&showInactive=1showAllGantt=1&project_id=$project_id&width=' + ((navigator.appName=='Netscape'?window.innerWidth:document.body.offsetWidth)*0.90) + '";
-            echo "<script language=\"javascript\" type=\"text/javascript\">document.write('<img src=\"$src\">')</script>";
-            ?>
-        </td>
-    </tr>
-</table>
+<div class="text-center">
+    <h2 class="h6"><?php echo $AppUI->_('Gantt Chart'); ?></h2>
+    <?php
+    $src = "?m=tasks&a=gantt&suppressHeaders=1&showLabels=1&proFilter=&showInactive=1showAllGantt=1&project_id=$project_id&width=' + ((navigator.appName=='Netscape'?window.innerWidth:document.body.offsetWidth)*0.90) + '";
+    echo "<script language=\"javascript\" type=\"text/javascript\">document.write('<img src=\"$src\">')</script>";
+    ?>
+</div>

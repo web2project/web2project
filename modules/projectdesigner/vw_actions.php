@@ -88,118 +88,115 @@ $sprojects = arrayMerge(array('' => '(' . $AppUI->_('Move to Project', UI_OUTPUT
 $percent = array(0 => '0', 5 => '5', 10 => '10', 15 => '15', 20 => '20', 25 => '25', 30 => '30', 35 => '35', 40 => '40', 45 => '45', 50 => '50', 55 => '55', 60 => '60', 65 => '65', 70 => '70', 75 => '75', 80 => '80', 85 => '85', 90 => '90', 95 => '95', 100 => '100');
 $spercent = arrayMerge(array('' => '('.$AppUI->_('Progress').')'), $percent);
 ?>
-    <table id="tbl_bulk" width="100%" class="well">
-        <tr>
-            <th width="15%"><?php echo $AppUI->_('Start Date'); ?>&nbsp;</th>
-            <td width="160" nowrap="nowrap">
-                <input type='hidden' id='add_task_bulk_start_date' name='add_task_bulk_start_date' value='' />
-                <input type='text' onchange="setDate('frm_bulk', 'bulk_start_date');" class='text' id='bulk_start_date' name='bulk_start_date' value='' />
-                <a onclick="return showCalendar('bulk_start_date', '<?php echo $cf ?>', 'frm_bulk', '<?php echo (strpos($cf, '%p') !== false ? '12' : '24') ?>', true)" href="javascript: void(0);">
-                    <img src="<?php echo w2PfindImage('calendar.gif'); ?>" alt="<?php echo $AppUI->_('Calendar'); ?>" />
+    <div id="tbl_bulk" class="row g-2 align-items-center mb-2 well">
+        <div class="col-md-6 col-xl-4 d-flex flex-wrap align-items-center gap-1">
+            <span class="fw-semibold me-1"><?php echo $AppUI->_('Start Date'); ?></span>
+            <input type='hidden' id='add_task_bulk_start_date' name='add_task_bulk_start_date' value='' />
+            <input type='text' onchange="setDate('frm_bulk', 'bulk_start_date');" class='text' id='bulk_start_date' name='bulk_start_date' value='' />
+            <a onclick="return showCalendar('bulk_start_date', '<?php echo $cf ?>', 'frm_bulk', '<?php echo (strpos($cf, '%p') !== false ? '12' : '24') ?>', true)" href="javascript: void(0);">
+                <img src="<?php echo w2PfindImage('calendar.gif'); ?>" alt="<?php echo $AppUI->_('Calendar'); ?>" />
+            </a>
+        </div>
+        <div class="col-md-6 col-xl-4 d-flex flex-wrap align-items-center gap-1">
+            <span class="fw-semibold me-1"><?php echo $AppUI->_('End Date'); ?></span>
+            <input type='hidden' id='add_task_bulk_end_date' name='add_task_bulk_end_date' value='' />
+            <input type='text' onchange="setDate('frm_bulk', 'bulk_end_date');" class='text' id='bulk_end_date' name='bulk_end_date' value='' />
+            <a onclick="return showCalendar('bulk_end_date', '<?php echo $cf ?>', 'frm_bulk', '<?php echo (strpos($cf, '%p') !== false ? '12' : '24') ?>', true)" href="javascript: void(0);">
+                <img src="<?php echo w2PfindImage('calendar.gif'); ?>" alt="<?php echo $AppUI->_('Calendar'); ?>" />
+            </a>
+        </div>
+        <div class="col-md-6 col-xl-4 d-flex flex-wrap align-items-center gap-1">
+            <span class="fw-semibold me-1"><?php echo $AppUI->_('Keep daytimes'); ?></span>
+            <input type='checkbox' id='add_task_bulk_time_keep' name='add_task_bulk_time_keep' value='1' checked />
+        </div>
+        <div class="col-md-6 col-xl-4 d-flex flex-wrap align-items-center gap-1">
+            <span class="fw-semibold me-1"><?php echo $AppUI->_('Duration'); ?></span>
+            <input type='text' class='text' id='bulk_task_duration' name='bulk_task_duration' value='' />
+            <?php echo arraySelect($sdurntype, 'bulk_task_durntype', 'size="1" class="text"', '', true); ?>
+        </div>
+        <div class="col-md-6 col-xl-4 d-flex flex-wrap align-items-center gap-1">
+            <span class="fw-semibold me-1"><?php echo $AppUI->_('Assign'); ?></span>
+            <a href="javascript: void(0);" onclick="toggle_panel('assign')"><img src="<?php echo w2PfindImage('icons/expand.gif'); ?>" id="assign_expand" alt="" /><img src="<?php echo w2PfindImage('icons/collapse.gif'); ?>" id="assign_collapse" alt="" style="display:none" /></a>
+            <div id="assign" class="w-100" style="display:none">
+                <a href="javascript: void(0);" onclick="addUser(document.frm_bulk)">
+                    <img src="<?php echo w2PfindImage('add.png', $m); ?>" title="<?php echo $AppUI->_('Add Assignment'); ?>" alt="<?php echo $AppUI->_('Add Assignment'); ?>" />
                 </a>
-            </td>
-            <th width="15%" nowrap="nowrap"><?php echo $AppUI->_('End Date'); ?>&nbsp;</th>
-            <td width="160" nowrap="nowrap">
-                <input type='hidden' id='add_task_bulk_end_date' name='add_task_bulk_end_date' value='' />
-                <input type='text' onchange="setDate('frm_bulk', 'bulk_end_date');" class='text' id='bulk_end_date' name='bulk_end_date' value='' />
-                <a onclick="return showCalendar('bulk_end_date', '<?php echo $cf ?>', 'frm_bulk', '<?php echo (strpos($cf, '%p') !== false ? '12' : '24') ?>', true)" href="javascript: void(0);">
-                    <img src="<?php echo w2PfindImage('calendar.gif'); ?>" alt="<?php echo $AppUI->_('Calendar'); ?>" />
+                <?php echo arraySelect($sassign, 'bulk_task_user', 'class="text"', ''); ?>
+                <select name="bulk_task_assign_perc" class="text">
+                    <?php
+                    for ($i = 5; $i <= 100; $i += 5) {
+                        echo '<option ' . (($i == 100) ? 'selected="true"' : '') . ' value="' . $i . '">' . $i . '%</option>';
+                    }
+                    ?>
+                </select><br /><br />
+                <a href="javascript: void(0);" onclick="removeUser(document.frm_bulk)">
+                    <img src="<?php echo w2PfindImage('remove.png', $m); ?>" title="<?php echo $AppUI->_('Remove Assignment'); ?>" alt="<?php echo $AppUI->_('Remove Assignment'); ?>" />
                 </a>
-            </td>
-            <th width="15%" nowrap="nowrap"><?php echo $AppUI->_('Keep daytimes'); ?>&nbsp;</th>
-            <td width="160" nowrap="nowrap">
-                <input type='checkbox' id='add_task_bulk_time_keep' name='add_task_bulk_time_keep' value='1' checked />
-            </td>
-       </tr>
-        <tr>
-            <th nowrap="nowrap"><?php echo $AppUI->_('Duration'); ?>&nbsp;</th>
-            <td nowrap="nowrap">
-                <input type='text' class='text' id='bulk_task_duration' name='bulk_task_duration' value='' />&nbsp;
-                <?php echo arraySelect($sdurntype, 'bulk_task_durntype', 'size="1" class="text"', '', true); ?>
-            </td>
-            <th><?php echo $AppUI->_('Assign') . '&nbsp;</th>'; ?>
-            <td nowrap="nowrap"><a href="javascript: void(0);" style="display: block;" onclick="expand_selector('assign', 'frm_bulk')"><img src="<?php echo w2PfindImage('icons/expand.gif'); ?>" id="assign_expand" />&nbsp;<img src="<?php echo w2PfindImage('icons/collapse.gif'); ?>" id="assign_collapse" style="display:none">&nbsp;</a>
-                <div>
-                    <table>
-                        <tr id="assign" style="visibility:collapse;display:none">
-                            <td nowrap="nowrap">
-                                <a href="javascript: void(0);" onclick="addUser(document.frm_bulk)">
-                                    <img src="<?php echo w2PfindImage('add.png', $m); ?>" title="<?php echo $AppUI->_('Add Assignment'); ?>" alt="<?php echo $AppUI->_('Add Assignment'); ?>" />
-                                </a>
-                                <?php echo arraySelect($sassign, 'bulk_task_user', 'class="text"', ''); ?>
-                                <select name="bulk_task_assign_perc" class="text">
-                                    <?php
-                                    for ($i = 5; $i <= 100; $i += 5) {
-                                        echo '<option ' . (($i == 100) ? 'selected="true"' : '') . ' value="' . $i . '">' . $i . '%</option>';
-                                    }
-                                    ?>
-                                </select><br /><br />
-                                <a href="javascript: void(0);" onclick="removeUser(document.frm_bulk)">
-                                    <img src="<?php echo w2PfindImage('remove.png', $m); ?>" title="<?php echo $AppUI->_('Remove Assignment'); ?>" alt="<?php echo $AppUI->_('Remove Assignment'); ?>" />
-                                </a>
-                                <select name="bulk_task_assign[]" id="bulk_task_assign" size="6" class="text" multiple="multiple">
-                                </select>
-                            </td>
-                        </tr>
-                    </table>
-                </div>
-            </td>
-            <th><?php echo $AppUI->_('Unassign'); ?>&nbsp;</th>
-            <td><?php echo arraySelect($sunassign, 'bulk_task_unassign', 'class="text"', ''); ?></td>
-        </tr>
-        <tr>
-            <th><?php echo $AppUI->_('Owner'); ?>&nbsp;</th>
-            <td><?php echo arraySelect($sowners, 'bulk_task_owner', 'class="text"', ''); ?></td>
-            <th><?php echo $AppUI->_('Priority'); ?>&nbsp;</th>
-            <td><?php echo arraySelect($spriority, 'bulk_task_priority', 'class="text"', ''); ?></td>
-            <th><?php echo $AppUI->_('User Priority for')." '".$AppUI->user_display_name."' (".$AppUI->_('if assigned').")"; ?>&nbsp;</th>
-            <td><?php echo arraySelect($spriority, 'bulk_task_user_priority', 'class="text"', ''); ?></td>
-            <td>&nbsp;</td>
-        </tr>
-        <tr>
-            <th><?php echo $AppUI->_('Access'); ?>&nbsp;</th>
-            <td><?php echo arraySelect($stask_access, 'bulk_task_access', 'class="text"', ''); ?></td>
-            <th><?php echo $AppUI->_('Progress'); ?>&nbsp;</th>
-            <td><?php echo arraySelect($spercent, 'bulk_task_percent_complete', 'class="text"', ''); ?> %</td>
-            <th><?php echo $AppUI->_('Dependency'); ?>&nbsp;</th>
-            <td>
-                <select name='bulk_task_dependency' class='text'>
-                    <option value=''>(<?php echo $AppUI->_('Task Depend on Completion of...'); ?>)</option>
-                    <option value='0'>(<?php echo $AppUI->_('Remove Dependencies'); ?>)</option>
-                    <?php echo $task_parent_options; ?>
+                <select name="bulk_task_assign[]" id="bulk_task_assign" size="6" class="text" multiple="multiple">
                 </select>
-            </td>
-            <td>&nbsp;</td>
-        </tr>
-        <tr>
-            <th nowrap="nowrap"><?php echo $AppUI->_('Date Move (Working Days)'); ?>&nbsp;</th>
-            <td>
-                <input type='text' class='text' id='bulk_move_date' name='bulk_move_date' value='' />
-            </td>
-            <th><?php echo $AppUI->_('Other'); ?>&nbsp;</th>
-            <td><?php echo arraySelect($sother, 'bulk_task_other', 'class="text"', ''); ?></td>
-            <th><?php echo $AppUI->_('Project'); ?>&nbsp;</th>
-            <td><?php echo arraySelect($sprojects, 'bulk_task_project', 'class="text bulk"', ''); ?></td>
-            <td>&nbsp;</td>
-        </tr>
-        <tr>
-            <th><?php echo $AppUI->_('Allow users to add task logs for others'); ?></th>
-            <td>
-                <select name="bulk_task_allow_other_user_tasklogs" class="text">
-                    <option value=""></option>
-                    <option value="1"><?php echo $AppUI->_('Yes'); ?></option>
-                    <option value="0"><?php echo $AppUI->_('No'); ?></option>
-                </select>
-            </td>
-            <th><?php echo $AppUI->_('Parent'); ?>&nbsp;</th>
-            <td>
-                <select name='bulk_task_parent' class='text'>
-                    <option value=''>(<?php echo $AppUI->_('Task Parent'); ?>)</option>
-                    <option value='-1'>(<?php echo $AppUI->_('Reset to Self Task'); ?>)</option>
-                    <?php echo $task_parent_options; ?>
-                </select>
-            </td>
-            <td colspan="18" align="right"><input type="button" class="button btn btn-primary btn-small" value="<?php echo $AppUI->_('update'); ?>" onclick="if (confirm('Are you sure you wish to apply the update(s) to the selected task(s)?')) document.frm_bulk.submit();" /></td>
-        </tr>
-    </table>
-</form>
+            </div>
+        </div>
+        <div class="col-md-6 col-xl-4 d-flex flex-wrap align-items-center gap-1">
+            <span class="fw-semibold me-1"><?php echo $AppUI->_('Unassign'); ?></span>
+            <?php echo arraySelect($sunassign, 'bulk_task_unassign', 'class="text"', ''); ?>
+        </div>
+        <div class="col-md-6 col-xl-4 d-flex flex-wrap align-items-center gap-1">
+            <span class="fw-semibold me-1"><?php echo $AppUI->_('Owner'); ?></span>
+            <?php echo arraySelect($sowners, 'bulk_task_owner', 'class="text"', ''); ?>
+        </div>
+        <div class="col-md-6 col-xl-4 d-flex flex-wrap align-items-center gap-1">
+            <span class="fw-semibold me-1"><?php echo $AppUI->_('Priority'); ?></span>
+            <?php echo arraySelect($spriority, 'bulk_task_priority', 'class="text"', ''); ?>
+        </div>
+        <div class="col-md-6 col-xl-4 d-flex flex-wrap align-items-center gap-1">
+            <span class="fw-semibold me-1"><?php echo $AppUI->_('User Priority for')." '".$AppUI->user_display_name."' (".$AppUI->_('if assigned').")"; ?></span>
+            <?php echo arraySelect($spriority, 'bulk_task_user_priority', 'class="text"', ''); ?>
+        </div>
+        <div class="col-md-6 col-xl-4 d-flex flex-wrap align-items-center gap-1">
+            <span class="fw-semibold me-1"><?php echo $AppUI->_('Access'); ?></span>
+            <?php echo arraySelect($stask_access, 'bulk_task_access', 'class="text"', ''); ?>
+        </div>
+        <div class="col-md-6 col-xl-4 d-flex flex-wrap align-items-center gap-1">
+            <span class="fw-semibold me-1"><?php echo $AppUI->_('Progress'); ?></span>
+            <?php echo arraySelect($spercent, 'bulk_task_percent_complete', 'class="text"', ''); ?> %
+        </div>
+        <div class="col-md-6 col-xl-4 d-flex flex-wrap align-items-center gap-1">
+            <span class="fw-semibold me-1"><?php echo $AppUI->_('Dependency'); ?></span>
+            <select name='bulk_task_dependency' class='text'>
+                <option value=''>(<?php echo $AppUI->_('Task Depend on Completion of...'); ?>)</option>
+                <option value='0'>(<?php echo $AppUI->_('Remove Dependencies'); ?>)</option>
+                <?php echo $task_parent_options; ?>
+            </select>
+        </div>
+        <div class="col-md-6 col-xl-4 d-flex flex-wrap align-items-center gap-1">
+            <span class="fw-semibold me-1"><?php echo $AppUI->_('Date Move (Working Days)'); ?></span>
+            <input type='text' class='text' id='bulk_move_date' name='bulk_move_date' value='' />
+        </div>
+        <div class="col-md-6 col-xl-4 d-flex flex-wrap align-items-center gap-1">
+            <span class="fw-semibold me-1"><?php echo $AppUI->_('Other'); ?></span>
+            <?php echo arraySelect($sother, 'bulk_task_other', 'class="text"', ''); ?>
+        </div>
+        <div class="col-md-6 col-xl-4 d-flex flex-wrap align-items-center gap-1">
+            <span class="fw-semibold me-1"><?php echo $AppUI->_('Project'); ?></span>
+            <?php echo arraySelect($sprojects, 'bulk_task_project', 'class="text bulk"', ''); ?>
+        </div>
+        <div class="col-md-6 col-xl-4 d-flex flex-wrap align-items-center gap-1">
+            <span class="fw-semibold me-1"><?php echo $AppUI->_('Allow users to add task logs for others'); ?></span>
+            <select name="bulk_task_allow_other_user_tasklogs" class="text">
+                <option value=""></option>
+                <option value="1"><?php echo $AppUI->_('Yes'); ?></option>
+                <option value="0"><?php echo $AppUI->_('No'); ?></option>
+            </select>
+        </div>
+        <div class="col-md-6 col-xl-4 d-flex flex-wrap align-items-center gap-1">
+            <span class="fw-semibold me-1"><?php echo $AppUI->_('Parent'); ?></span>
+            <select name='bulk_task_parent' class='text'>
+                <option value=''>(<?php echo $AppUI->_('Task Parent'); ?>)</option>
+                <option value='-1'>(<?php echo $AppUI->_('Reset to Self Task'); ?>)</option>
+                <?php echo $task_parent_options; ?>
+            </select>
+        </div>
+        <div class="col-12 text-end">
+            <input type="button" class="button btn btn-primary btn-sm" value="<?php echo $AppUI->_('update'); ?>" onclick="if (confirm('Are you sure you wish to apply the update(s) to the selected task(s)?')) document.frm_bulk.submit();" />
+        </div>
+    </div>

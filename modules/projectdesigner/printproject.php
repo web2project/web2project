@@ -58,36 +58,23 @@ $extra = array(0 => '(none)', 1 => 'Milestone', 2 => 'Dynamic Task', 3 => 'Inact
 //Though we are in suppressHeaders mode, we should properly set the HTML Headers
 //For this report.
 ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-	   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<!DOCTYPE html>
+<html lang="en">
     <head>
+        <meta charset="<?php echo isset($locale_char_set) ? $locale_char_set : 'UTF-8'; ?>" />
         <meta name="Description" content="web2Project Default Style" />
         <meta name="Version" content="<?php echo $AppUI->getVersion(); ?>" />
-        <meta http-equiv="Content-Type" content="text/html;charset=<?php echo isset($locale_char_set) ? $locale_char_set : 'UTF-8'; ?>" />
         <title><?php echo @w2PgetConfig('page_title'); ?></title>
-        <link rel="stylesheet" type="text/css" href="./style/common.css" media="all" charset="utf-8"/>
+        <link rel="stylesheet" type="text/css" href="./style/bootstrap/css/bootstrap.min.css" media="all" />
+        <link rel="stylesheet" type="text/css" href="./style/bootstrap/main.css" media="all" />
     </head>
-<body>
-<table width="100%" class="prjprint">
-<tr>
-	<td style="border: outset #d1d1cd 1px;" colspan="3">  
-		<table border="0" cellpadding="0" cellspacing="0" width="100%" class="prjprint tbl">
-            <tr>
-            	<td width="22">
-            	&nbsp;
-            	</td>
-            	<td align="center"  colspan="2">
-                    <h1><?php echo $AppUI->_('Project Report'); ?></h1>
-            	</td>
-            </tr>
-      	</table>
-	</td>
-</tr>
+<body class="p-3">
+<div class="prjprint">
+    <h1 class="h4 text-center border-bottom pb-2"><?php echo $AppUI->_('Project Report'); ?></h1>
 	<?php
 	// Removed the additional permissions check here.. you can't get here without successfully passing the one above
 	require w2PgetConfig('root_dir') . '/modules/projectdesigner/vw_projecttask.php';
 	?>
-</table>
+</div>
 </body>
 </html>
