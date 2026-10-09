@@ -7,12 +7,12 @@
  * LICENSE: This source file is subject to Clear BSD License. Please see the
  *   LICENSE file in root of site for further details
  *
- * @author      D. Keith Casey, Jr.<caseydk@users.sourceforge.net>
- * @category    CSystem_Role
- * @package     web2project
- * @subpackage  unit_tests
- * @license     Clear BSD
- * @link        http://www.web2project.net
+ * @author     D. Keith Casey, Jr.<caseydk@users.sourceforge.net>
+ * @category   CSystem_Role
+ * @package    web2project
+ * @subpackage unit_tests
+ * @license    Clear BSD
+ * @link       http://www.web2project.net
  */
 
 class CSystem_RoleTest extends CommonSetup
