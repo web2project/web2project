@@ -74,33 +74,22 @@ if ($myId) {
 	<?php
 } else {
 	?>
-        <style>
-            div {
-                display: none;
-            }
-        </style>
 		<form name="frmSelector" action="./index.php?m=contacts&a=select_contact_company&dialog=1&table_name=<?php echo $table_name . '&' . $additional_get_information; ?>" method="post" accept-charset="utf-8">
 			<?php
             echo $AppUI->getTheme()->styleRenderBoxTop();
 			?>
-			<table class="std">
-			<tr>
-				<td colspan="2">
+			<div class="std p-2">
+				<p class="d-flex flex-wrap align-items-center gap-2">
 					<?php
 						echo $AppUI->_('Select') . ' ' . $AppUI->_($selection_string) . ': ';
 						echo arraySelect($select_list, $id_field, 'class="text"', $dataId);
 					?>
-				</td>
-			</tr>
-			<tr>
-				<td>
+				</p>
+				<div class="d-flex justify-content-between">
 					<input type="button" class="button" value="<?php echo $AppUI->_('cancel'); ?>" onclick="window.close()" />
-				</td>
-				<td align="right">
 					<input type="submit" class="button" value="<?php echo $AppUI->_('Select', UI_CASE_LOWER); ?>" />
-				</td>
-			</tr>
-			</table>
+				</div>
+			</div>
 		</form>
 	<?php
 }
