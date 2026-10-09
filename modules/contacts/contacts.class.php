@@ -1,16 +1,17 @@
 <?php
 
 /**
- * @package     web2project\modules\core
+ * @package web2project\modules\core
  *
- * @todo    refactor static methods
+ * @todo refactor static methods
  */
 
 class CContact extends w2p_Core_BaseObject
 {
 
     /**
-      @public int */
+     * @public int
+     */
     public $contact_id = null;
 
     // @todo this should be contact_firstname to take advantage of our templating
@@ -53,6 +54,7 @@ class CContact extends w2p_Core_BaseObject
      *   our code simpler.
      *
      * @param string $name
+     *
      * @return mixed
      */
     public function __get($name)
