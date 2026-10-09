@@ -1,6 +1,6 @@
 <?php
 /**
- * @package     web2project\modules\misc
+ * @package web2project\modules\misc
  */
 
 class CHistory extends w2p_Core_BaseObject
@@ -24,7 +24,7 @@ class CHistory extends w2p_Core_BaseObject
      * The history entries are creatable by everyone but not editable or
      *    deletable by anyone. This is to protect its integrity as an audit log.
      *
-     * @return boolean
+     * @return bool
      */
     public function delete($oid = null)    {   return false;   }
     public function canDelete($notUsed = null, $notUsed2 = null, $notUsed3 = null) {   return false;   }
