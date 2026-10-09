@@ -6,7 +6,7 @@
  * supplied. The obj_id parameter is the ID of the module object
  * eg. company_id for companies module
  *
- * @package     web2project\core
+ * @package web2project\core
  */
 
 class w2p_Core_CustomFields {
@@ -187,8 +187,10 @@ class w2p_Core_CustomFields {
      * This deletes the field itself, *not* just the data for a given object's
      *  entry. Be *very* careful with it.
      *
-     * @global type $db
      * @param int $field_id
+     *
+     * @global ADOConnection $db
+     *
      * @return mixed
      */
     public function deleteField($field_id) {
