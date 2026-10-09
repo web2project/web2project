@@ -2,18 +2,17 @@
 /**
  * Class for testing Date functionality
  *
- *
  * PHP version 5
  *
  * LICENSE: This source file is subject to Clear BSD License. Please see the
  *   LICENSE file in root of site for further details
  *
- * @author      D. Keith Casey, Jr.<caseydk@users.sourceforge.net>
- * @category    w2p_Utilities_Date_Test
- * @package     web2project
- * @subpackage  unit_tests
- * @license     Clear BSD
- * @link        http://www.web2project.net
+ * @author     D. Keith Casey, Jr.<caseydk@users.sourceforge.net>
+ * @category   w2p_Utilities_Date_Test
+ * @package    web2project
+ * @subpackage unit_tests
+ * @license    Clear BSD
+ * @link       http://www.web2project.net
  */
 
 class w2p_Utilities_DateTest extends CommonSetup
@@ -23,7 +22,6 @@ class w2p_Utilities_DateTest extends CommonSetup
      * Stores old working days value while tests being run
      *
      * @var string
-     * @access private
      */
     private $old_working_days;
 
@@ -31,7 +29,6 @@ class w2p_Utilities_DateTest extends CommonSetup
      * Stores old day start value while tests being run
      *
      * @var int
-     * @access private
      */
     private $old_cal_day_start;
 
@@ -39,7 +36,6 @@ class w2p_Utilities_DateTest extends CommonSetup
      * Stores old say end value while test being run
      *
      * @var int
-     * @access private
      */
     private $old_cal_day_end;
 
