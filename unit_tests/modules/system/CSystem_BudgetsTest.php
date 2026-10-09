@@ -2,18 +2,17 @@
 /**
  * Class for testing budget functionality
  *
- *
  * PHP version 5
  *
  * LICENSE: This source file is subject to Clear BSD License. Please see the
  *   LICENSE file in root of site for further details
  *
- * @author      D. Keith Casey, Jr.<caseydk@users.sourceforge.net>
- * @category    CSystem_Budget
- * @package     web2project
- * @subpackage  unit_tests
- * @license     Clear BSD
- * @link        http://www.web2project.net
+ * @author     D. Keith Casey, Jr.<caseydk@users.sourceforge.net>
+ * @category   CSystem_Budget
+ * @package    web2project
+ * @subpackage unit_tests
+ * @license    Clear BSD
+ * @link       http://www.web2project.net
  */
 
 class CSystem_BudgetsTest extends CommonSetup
