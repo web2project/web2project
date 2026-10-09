@@ -1,0 +1,791 @@
+/*
+ * web2Project Bootstrap theme
+ *
+ * Bootstrap 5.3 (css/bootstrap.min.css) provides the base styles. This file
+ * only maps the class names web2Project has always emitted (std, tbl, list,
+ * text, button, hilite, ...) onto the Bootstrap look and adds the handful of
+ * application specific styles (task status colours, calendars, tooltips).
+ * It deliberately uses the Bootstrap CSS variables so the default Bootstrap
+ * colours apply everywhere.
+ */
+
+/* ---------------------------------------------------------------------
+ * Page shell
+ * ------------------------------------------------------------------- */
+.w2p-main {
+    padding-bottom: 2rem;
+}
+
+.navbar-brand img {
+    display: block;
+}
+
+.w2p-message table {
+    margin: 0;
+}
+.w2p-message td {
+    padding: 0 .25rem;
+    vertical-align: middle;
+}
+
+img {
+    vertical-align: middle;
+}
+
+/* jQuery tipTip wraps images in spans; keep them inline */
+span > img {
+    display: inline;
+}
+
+.left {
+    float: left;
+}
+.right {
+    float: right;
+}
+.center {
+    text-align: center;
+}
+div.clear {
+    clear: both;
+}
+.nowrap {
+    white-space: nowrap;
+}
+.error, .warning {
+    color: var(--bs-danger);
+}
+.message {
+    color: var(--bs-body-color);
+}
+em {
+    font-style: normal;
+    font-weight: bold;
+}
+
+/* ---------------------------------------------------------------------
+ * Title block (w2p_Theme_TitleBlock)
+ * ------------------------------------------------------------------- */
+.module-title {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: .5rem 1rem;
+    margin-bottom: .5rem;
+}
+.module-title .icon {
+    margin: 0;
+}
+.module-title .icon img {
+    max-height: 42px;
+}
+.module-title h1 {
+    font-size: 1.5rem;
+    margin: 0;
+}
+.crumb-right {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row-reverse;
+    align-items: center;
+    gap: .25rem .5rem;
+    list-style: none;
+    margin: 0 0 0 auto;
+    padding: 0;
+}
+.crumb-right li {
+    list-style: none;
+}
+.crumb-right li form {
+    display: inline-flex;
+    align-items: center;
+    gap: .25rem;
+    margin: 0;
+}
+.module-nav {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: .5rem;
+    margin-bottom: 1rem;
+}
+.module-nav .crumb-right {
+    flex-direction: row;
+}
+.crumb ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .25rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+.crumb ul li a,
+.module-nav .crumb-right a.delete {
+    display: inline-block;
+    padding: .25rem .5rem;
+    font-size: .875rem;
+    border: var(--bs-border-width) solid var(--bs-border-color);
+    border-radius: var(--bs-border-radius-sm);
+    text-decoration: none;
+    color: var(--bs-secondary-color);
+    background-color: var(--bs-body-bg);
+}
+.crumb ul li a:hover {
+    color: var(--bs-body-color);
+    background-color: var(--bs-tertiary-bg);
+}
+.crumb ul li a div,
+a.delete div {
+    display: inline;
+}
+.crumb ul li a img {
+    vertical-align: text-bottom;
+}
+a.delete,
+.module-nav .crumb-right a.delete {
+    color: var(--bs-danger);
+    border-color: var(--bs-danger);
+}
+a.delete:hover,
+.module-nav .crumb-right a.delete:hover {
+    color: #fff;
+    background-color: var(--bs-danger);
+}
+
+/* ---------------------------------------------------------------------
+ * Tabs (CTabBox in overrides.php)
+ * ------------------------------------------------------------------- */
+.w2p-tab-content > table,
+.w2p-tab-content > form > table {
+    margin-bottom: 0;
+}
+
+/* ---------------------------------------------------------------------
+ * Form controls emitted by w2p_Output_HTML_FormHelper, arraySelect() and
+ * the hand written forms. These mirror .form-control-sm/.form-select-sm.
+ * ------------------------------------------------------------------- */
+input.text,
+input[type="text"]:not(.form-control),
+input[type="password"]:not(.form-control),
+input[type="email"]:not(.form-control),
+input[type="file"]:not(.form-control),
+select:not(.form-select),
+textarea:not(.form-control) {
+    display: inline-block;
+    max-width: 100%;
+    padding: .25rem .5rem;
+    font-size: .875rem;
+    line-height: 1.5;
+    color: var(--bs-body-color);
+    background-color: var(--bs-body-bg);
+    border: var(--bs-border-width) solid var(--bs-border-color);
+    border-radius: var(--bs-border-radius-sm);
+    vertical-align: middle;
+    transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;
+}
+input.text:focus,
+input[type="text"]:not(.form-control):focus,
+input[type="password"]:not(.form-control):focus,
+input[type="email"]:not(.form-control):focus,
+select:not(.form-select):focus,
+textarea:not(.form-control):focus {
+    border-color: #86b7fe;
+    outline: 0;
+    box-shadow: 0 0 0 .25rem rgba(var(--bs-primary-rgb), .25);
+}
+select[multiple]:not(.form-select) {
+    min-height: 6rem;
+}
+input[type="checkbox"],
+input[type="radio"] {
+    margin: 0 .25rem;
+    vertical-align: middle;
+}
+textarea:not(.form-control) {
+    width: 100%;
+    min-height: 5rem;
+}
+input.name, input.url {
+    width: 25em;
+}
+input.state, input.zip {
+    width: 6em;
+}
+
+/* Buttons: legacy .button links and inputs look like Bootstrap buttons */
+input.button:not(.btn),
+button.button:not(.btn),
+a.button {
+    display: inline-block;
+    padding: .25rem .5rem;
+    font-size: .875rem;
+    line-height: 1.5;
+    font-weight: 400;
+    text-align: center;
+    text-decoration: none;
+    vertical-align: middle;
+    color: var(--bs-secondary-color);
+    background-color: var(--bs-body-bg);
+    border: var(--bs-border-width) solid var(--bs-secondary-color);
+    border-radius: var(--bs-border-radius-sm);
+    cursor: pointer;
+}
+input.button:not(.btn):hover,
+button.button:not(.btn):hover,
+a.button:hover {
+    color: #fff;
+    background-color: var(--bs-secondary);
+    border-color: var(--bs-secondary);
+}
+a.button span, a.button div {
+    display: inline;
+}
+input.btn, button.btn {
+    font-size: .875rem;
+    padding: .25rem .75rem;
+}
+input.button, a div {
+    text-transform: capitalize;
+}
+
+/* ---------------------------------------------------------------------
+ * Add/edit forms and views built from <div class="std addedit">,
+ * <div class="column left|right"> and <p><label/>field</p>
+ * ------------------------------------------------------------------- */
+div.std {
+    background-color: var(--bs-body-bg);
+}
+div.std.addedit,
+div.std.view {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(22rem, 1fr));
+    gap: 0 2rem;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    border: var(--bs-border-width) solid var(--bs-border-color);
+    border-radius: var(--bs-border-radius);
+}
+div.std.addedit > .column,
+div.std.view > .column {
+    float: none;
+    width: auto;
+    min-width: 0;
+}
+div.std.addedit p,
+div.std.view p {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: .25rem .5rem;
+    margin: 0 0 .5rem;
+}
+div.std.addedit label,
+div.std.view label {
+    flex: 0 0 10rem;
+    margin: 0;
+    text-align: end;
+    font-weight: 500;
+    color: var(--bs-secondary-color);
+}
+div.std.addedit p > input.text,
+div.std.addedit p > select,
+div.std.addedit p > textarea {
+    flex: 1 1 14rem;
+}
+div.std.addedit input.save,
+div.std.addedit .save {
+    float: right;
+}
+.addedit .btn + .btn {
+    margin-left: .5rem;
+}
+@media (max-width: 575.98px) {
+    div.std.addedit label,
+    div.std.view label {
+        flex-basis: 100%;
+        text-align: start;
+    }
+}
+
+/* Simple key/value detail lists (<dl class="row w2p-details">) */
+dl.w2p-details {
+    margin-bottom: 0;
+}
+dl.w2p-details > dt {
+    font-weight: 500;
+    color: var(--bs-secondary-color);
+}
+dl.w2p-details > dd {
+    margin-bottom: .35rem;
+}
+.w2p-section-title,
+.w2p-panel > .card-header {
+    font-weight: 600;
+}
+
+/* ---------------------------------------------------------------------
+ * Data tables. Lists add the Bootstrap .table classes themselves, these
+ * rules keep the older class names looking the same.
+ * ------------------------------------------------------------------- */
+table.tbl,
+table.list,
+table.std {
+    width: 100%;
+    margin-bottom: 1rem;
+    border-collapse: collapse;
+    background-color: var(--bs-body-bg);
+    font-size: .875rem;
+}
+table.tbl > * > tr > th,
+table.tbl > * > tr > td,
+table.list > * > tr > th,
+table.list > * > tr > td,
+table.std > * > tr > th,
+table.std > * > tr > td {
+    padding: .3rem .5rem;
+    border-bottom: var(--bs-border-width) solid var(--bs-border-color);
+    vertical-align: top;
+}
+table.tbl > * > tr > th,
+table.list > * > tr > th,
+table.std > * > tr > th {
+    background-color: var(--bs-tertiary-bg);
+    font-weight: 600;
+    white-space: nowrap;
+    text-align: center;
+    vertical-align: bottom;
+}
+table.tbl th a,
+table.list th a {
+    color: var(--bs-body-color);
+    text-decoration: none;
+}
+table.list > tbody > tr:hover > td,
+table.tbl > tbody > tr:hover > td {
+    background-color: var(--bs-table-hover-bg, rgba(0, 0, 0, .075));
+}
+table.std td.hilite,
+td.hilite,
+.view td.data {
+    background-color: var(--bs-light-bg-subtle, var(--bs-tertiary-bg));
+}
+table.table {
+    font-size: .875rem;
+}
+
+.list td {
+    white-space: nowrap;
+}
+.list ._name,
+.list ._description,
+table.smartsearch td,
+._departments {
+    text-align: left;
+}
+.list ._description,
+._description {
+    white-space: normal;
+}
+._duration,
+._hours,
+._budget,
+.budgets,
+.budgets input {
+    text-align: right;
+}
+.budgets input {
+    width: 5rem;
+}
+.list ._identifier {
+    width: 2.5rem;
+}
+._identifier {
+    border: var(--bs-border-width) solid var(--bs-border-color);
+}
+.list.history td.data._description {
+    width: 60%;
+}
+.syskeys td:nth-child(3),
+.modules td:nth-child(3) {
+    text-align: left;
+}
+.sysvals td:nth-child(4) {
+    text-align: left;
+    white-space: normal;
+}
+.history tr td:nth-child(2) {
+    white-space: nowrap;
+}
+
+/* Paginator */
+.pagination .page-link img {
+    vertical-align: baseline;
+}
+
+/* ---------------------------------------------------------------------
+ * Task / project status colours
+ * ------------------------------------------------------------------- */
+td.future {
+    background-color: var(--bs-body-bg);
+}
+tr.future td._date, tr.future td._datetime, tr.future td._duration, tr.future td._in {
+    background-color: var(--bs-body-bg);
+}
+td.done,
+tr.done td._date, tr.done td._datetime, tr.done td._duration, tr.done td._in {
+    background-color: var(--bs-success-bg-subtle);
+}
+td.late,
+tr.late td._date, tr.late td._datetime, tr.late td._duration, tr.late td._in {
+    background-color: var(--bs-danger-bg-subtle);
+    color: var(--bs-danger-text-emphasis);
+}
+td.notstarted,
+tr.notstarted td._date, tr.notstarted td._datetime, tr.notstarted td._duration, tr.notstarted td._in {
+    background-color: var(--bs-warning-bg-subtle);
+}
+td.active,
+tr.active td._date, tr.active td._datetime, tr.active td._duration, tr.active td._in {
+    background-color: var(--bs-info-bg-subtle);
+}
+
+.highlight0 { background-color: #FFFF66; }
+.highlight1 { background-color: #ADD8E6; }
+.highlight2 { background-color: #90EE8A; }
+.highlight3 { background-color: #FF99FF; }
+.highlight4 { background-color: #FFA500; }
+.highlight5 { background-color: #ADFF2F; }
+.highlight6 { background-color: #00FFFF; }
+.highlight7 { background-color: #FF69B4; }
+
+/* ---------------------------------------------------------------------
+ * Calendars (w2p_Output_MonthCalendar and the events module)
+ * ------------------------------------------------------------------- */
+table.mocal,
+table.minical {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: var(--bs-body-bg);
+}
+table.mocal th,
+table.mocal td {
+    border: var(--bs-border-width) solid var(--bs-border-color);
+    padding: .25rem;
+    vertical-align: top;
+}
+table.mocal th {
+    background-color: var(--bs-tertiary-bg);
+    text-align: center;
+}
+table.mocal td.week {
+    width: 1.5rem;
+    background-color: var(--bs-tertiary-bg);
+}
+table.mocal td.day,
+table.mocal td.empty,
+table.mocal td.today,
+table.mocal td.weekend {
+    height: 6rem;
+    text-align: left;
+}
+table.mocal td.empty {
+    color: var(--bs-secondary-color);
+    background-color: var(--bs-secondary-bg);
+}
+table.mocal td.today {
+    background-color: var(--bs-primary-bg-subtle);
+}
+table.mocal td.weekend {
+    background-color: var(--bs-tertiary-bg);
+}
+table.mocal td.event,
+table.tbl td.event,
+table.tbl td.event td {
+    background-color: var(--bs-warning-bg-subtle);
+}
+table.mocal td a:first-child {
+    font-weight: bold;
+}
+table.minical {
+    font-size: .75rem;
+}
+table.minical th {
+    font-weight: normal;
+    text-align: center;
+}
+table.minical td {
+    text-align: center;
+    padding: .1rem;
+}
+table.minical td.empty {
+    color: var(--bs-secondary-color);
+    background-color: var(--bs-secondary-bg);
+}
+table.minical td.today {
+    outline: 1px dotted var(--bs-danger);
+}
+table.minical td.weekend {
+    background-color: var(--bs-tertiary-bg);
+}
+table.minical td.event,
+table.minical td.eventtoday {
+    background-color: var(--bs-warning-bg-subtle);
+}
+table.minical td.task,
+table.minical td.tasktoday {
+    background-color: var(--bs-primary-bg-subtle);
+}
+table.minical td.eventtask,
+table.minical td.eventtasktoday {
+    background-color: var(--bs-danger-bg-subtle);
+}
+table.minical td.eventtoday,
+table.minical td.tasktoday,
+table.minical td.eventtasktoday {
+    outline: 1px dotted var(--bs-danger);
+}
+table.motitle {
+    width: 100%;
+}
+table.motitle th {
+    font-size: 1.25rem;
+    text-align: center;
+}
+table.minititle th {
+    font-weight: normal;
+    text-align: center;
+}
+.view td.workingDay,
+.view td.otherDay {
+    height: 300px;
+    width: 14.29%;
+    vertical-align: top;
+    border: var(--bs-border-width) solid var(--bs-border-color);
+}
+.view td.otherDay {
+    background-color: var(--bs-secondary-bg);
+}
+span.cal-item * {
+    float: left;
+}
+span.cal-item a {
+    padding: 0 3px;
+}
+#month-view span > img {
+    display: inline;
+}
+
+/* ---------------------------------------------------------------------
+ * Module specific bits carried over from style/common.css
+ * ------------------------------------------------------------------- */
+.system-info p {
+    margin: 0;
+    font-size: .8rem;
+}
+.info span {
+    font-size: medium;
+    font-weight: bold;
+}
+.info p, .info li {
+    font-size: medium;
+}
+.main {
+    margin-top: 1rem;
+    min-width: 250px;
+}
+
+#folder-list ul {
+    padding: 0;
+    margin: 0;
+}
+#folder-list ul li {
+    list-style: none;
+}
+#folder-list ul li ul li {
+    margin-left: 1.5rem;
+}
+.folder-name {
+    display: block;
+    padding: .15rem 0;
+    border-bottom: var(--bs-border-width) solid var(--bs-border-color);
+}
+.folder-name-current {
+    display: block;
+    margin-bottom: .25rem;
+    font-weight: bold;
+    border-bottom: var(--bs-border-width) solid var(--bs-border-color);
+}
+.has-files {
+    font-weight: bold;
+}
+#folder-list p {
+    padding: .25rem .5rem;
+    margin: 0 1.5rem .5rem;
+    border: var(--bs-border-width) solid var(--bs-border-color);
+    border-top: none;
+    background-color: var(--bs-tertiary-bg);
+}
+#tblFolders ul {
+    display: inline;
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+#tblFolders ul li,
+#tblFolders ul li img {
+    display: inline;
+}
+#tblFolders ul li a {
+    text-decoration: none;
+}
+#tblFolders .info-text {
+    font-size: medium;
+    margin-left: 1.25rem;
+}
+.small-delete {
+    float: right;
+}
+
+.tool-tip td {
+    color: #fff;
+    white-space: nowrap;
+}
+.tool-tip td.tip-label {
+    border: 1px solid #fff;
+    text-align: right;
+    border-radius: 3.5px;
+}
+.tool-tip td.description {
+    text-align: left;
+    white-space: normal;
+}
+
+.bordertable {
+    border: var(--bs-border-width) solid var(--bs-border-color);
+}
+#progressBar {
+    font-size: 1px;
+    height: 15px;
+    width: 0;
+}
+.subprojects {
+    width: 100%;
+    text-align: center;
+    border: var(--bs-border-width) solid var(--bs-border-color);
+}
+.subprojects tr:nth-child(even) {
+    background-color: var(--bs-tertiary-bg);
+}
+.subprojects td._name {
+    text-align: left;
+}
+.projectdesigner {
+    font-weight: bold;
+    white-space: nowrap;
+}
+.projectdesigner select {
+    width: 100%;
+    max-width: 500px;
+}
+table.prjprint {
+    background-color: #fff;
+}
+table.prjprint th {
+    border: 1px solid;
+    font-weight: normal;
+    font-size: 15px;
+}
+table.prjprint td {
+    font-size: 14px;
+}
+.bulk {
+    width: 20em;
+}
+#password-strength {
+    width: 9em;
+}
+.users .name {
+    width: 100px;
+}
+.users .signature {
+    width: 250px;
+}
+
+/* ---------------------------------------------------------------------
+ * TipTip (lib/jquery/jquery.tipTip.js) tooltips
+ * ------------------------------------------------------------------- */
+h4 {
+    font-weight: bold;
+    font-size: 14px;
+    margin: 0;
+}
+#tiptip_holder h4 {
+    color: #9FD4FF;
+}
+#tiptip_holder {
+    display: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 99999;
+}
+#tiptip_holder.tip_top {
+    padding-bottom: 5px;
+}
+#tiptip_holder.tip_bottom {
+    padding-top: 5px;
+}
+#tiptip_holder.tip_right {
+    padding-left: 5px;
+}
+#tiptip_holder.tip_left {
+    padding-right: 5px;
+}
+#tiptip_content {
+    font-size: .8rem;
+    color: #fff;
+    padding: .25rem .5rem;
+    background-color: var(--bs-emphasis-color);
+    border-radius: var(--bs-border-radius);
+    box-shadow: var(--bs-box-shadow-sm);
+}
+#tiptip_arrow, #tiptip_arrow_inner {
+    position: absolute;
+    border-color: transparent;
+    border-style: solid;
+    border-width: 6px;
+    height: 0;
+    width: 0;
+}
+#tiptip_holder.tip_top #tiptip_arrow_inner {
+    margin-top: -7px;
+    margin-left: -6px;
+    border-top-color: var(--bs-emphasis-color);
+}
+#tiptip_holder.tip_bottom #tiptip_arrow_inner {
+    margin-top: -5px;
+    margin-left: -6px;
+    border-bottom-color: var(--bs-emphasis-color);
+}
+#tiptip_holder.tip_right #tiptip_arrow_inner {
+    margin-top: -6px;
+    margin-left: -5px;
+    border-right-color: var(--bs-emphasis-color);
+}
+#tiptip_holder.tip_left #tiptip_arrow_inner {
+    margin-top: -6px;
+    margin-left: -7px;
+    border-left-color: var(--bs-emphasis-color);
+}
+
+/* ---------------------------------------------------------------------
+ * Printing
+ * ------------------------------------------------------------------- */
+@media print {
+    .w2p-header,
+    .module-nav,
+    .crumb-right {
+        display: none !important;
+    }
+}
