@@ -35,37 +35,33 @@ echo $AppUI->getTheme()->styleRenderBoxTop();
     <input type="hidden" name="report_type" value="<?php echo $report_type; ?>" />
     <input type="hidden" name="datePicker" value="log" />
 
-    <table class="std">
-        <tr>
-            <td align="right" nowrap="nowrap"><?php echo $AppUI->_('For period'); ?>:</td>
-            <td nowrap="nowrap">
-                <input type="hidden" name="log_start_date" id="log_start_date" value="<?php echo $start_date ? $start_date->format(FMT_TIMESTAMP_DATE) : ''; ?>" />
-                <input type="text" name="start_date" id="start_date" onchange="setDate_new('editFrm', 'start_date');" value="<?php echo $start_date ? $start_date->format($df) : ''; ?>" class="text" />
-                <a href="javascript: void(0);" onclick="return showCalendar('start_date', '<?php echo $df ?>', 'editFrm', null, true, true)">
-                    <img src="<?php echo w2PfindImage('calendar.gif'); ?>" alt="<?php echo $AppUI->_('Calendar'); ?>" />
-                </a>
-            </td>
-            <td align="right" nowrap="nowrap"><?php echo $AppUI->_('to'); ?></td>
-            <td nowrap="nowrap">
-                <input type="hidden" name="log_end_date" id="log_end_date" value="<?php echo $end_date ? $end_date->format(FMT_TIMESTAMP_DATE) : ''; ?>" />
-                <input type="text" name="end_date" id="end_date" onchange="setDate_new('editFrm', 'end_date');" value="<?php echo $end_date ? $end_date->format($df) : ''; ?>" class="text" />
-                <a href="javascript: void(0);" onclick="return showCalendar('end_date', '<?php echo $df ?>', 'editFrm', null, true, true)">
-                    <img src="<?php echo w2PfindImage('calendar.gif'); ?>" alt="<?php echo $AppUI->_('Calendar'); ?>" />
-                </a>
-            </td>
+    <div class="d-flex flex-wrap align-items-center gap-2 mb-3 std w2p-report-filter">
+        <span class="text-nowrap"><?php echo $AppUI->_('For period'); ?>:</span>
+        <span class="text-nowrap">
+            <input type="hidden" name="log_start_date" id="log_start_date" value="<?php echo $start_date ? $start_date->format(FMT_TIMESTAMP_DATE) : ''; ?>" />
+            <input type="text" name="start_date" id="start_date" onchange="setDate_new('editFrm', 'start_date');" value="<?php echo $start_date ? $start_date->format($df) : ''; ?>" class="text" />
+            <a href="javascript: void(0);" onclick="return showCalendar('start_date', '<?php echo $df ?>', 'editFrm', null, true, true)">
+                <img src="<?php echo w2PfindImage('calendar.gif'); ?>" alt="<?php echo $AppUI->_('Calendar'); ?>" />
+            </a>
+        </span>
+        <span class="text-nowrap"><?php echo $AppUI->_('to'); ?></span>
+        <span class="text-nowrap">
+            <input type="hidden" name="log_end_date" id="log_end_date" value="<?php echo $end_date ? $end_date->format(FMT_TIMESTAMP_DATE) : ''; ?>" />
+            <input type="text" name="end_date" id="end_date" onchange="setDate_new('editFrm', 'end_date');" value="<?php echo $end_date ? $end_date->format($df) : ''; ?>" class="text" />
+            <a href="javascript: void(0);" onclick="return showCalendar('end_date', '<?php echo $df ?>', 'editFrm', null, true, true)">
+                <img src="<?php echo w2PfindImage('calendar.gif'); ?>" alt="<?php echo $AppUI->_('Calendar'); ?>" />
+            </a>
+        </span>
 
-            <td nowrap="nowrap">
-                <input type="checkbox" name="log_all" id="log_all" <?php if ($log_all) echo 'checked="checked"' ?> />
-                <label for="log_all"><?php echo $AppUI->_('Log All'); ?></label>
-            </td>
-            <td nowrap="nowrap">
-            </td>
+        <span class="text-nowrap">
+            <input type="checkbox" name="log_all" id="log_all" <?php if ($log_all) echo 'checked="checked"' ?> />
+            <label for="log_all"><?php echo $AppUI->_('Log All'); ?></label>
+        </span>
 
-            <td align="right" width="50%" nowrap="nowrap">
-                <input class="button" type="submit" name="do_report" value="<?php echo $AppUI->_('submit'); ?>" />
-            </td>
-        </tr>
-    </table>
+        <span class="text-nowrap">
+            <input class="button" type="submit" name="do_report" value="<?php echo $AppUI->_('submit'); ?>" />
+        </span>
+    </div>
 </form>
 <?php
 
@@ -73,9 +69,7 @@ if ($do_report) {
     echo $AppUI->getTheme()->styleRenderBoxBottom();
 	echo '<br />';
     echo $AppUI->getTheme()->styleRenderBoxTop();
-	echo '<table class="std">
-	<tr>
-		<td>';
+	echo '<div class="std w2p-report">';
 
 	$total = 0;
 
@@ -107,7 +101,5 @@ if ($do_report) {
 	echo '<h2>' . $AppUI->_('Total Hours') . ': ';
 	printf("%.2f", $total);
 	echo '</h2>';
-	echo '</td>
-</tr>
-</table>';
+	echo '</div>';
 }

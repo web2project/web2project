@@ -42,40 +42,36 @@ $companies = arrayMerge(array('0' => 'All Companies'), $companies);
     <?php
     echo $AppUI->getTheme()->styleRenderBoxTop();
     ?>
-    <table class="std">
-        <tr>
-            <td align="right" nowrap="nowrap"><?php echo $AppUI->_('For Company'); ?>:</td>
-            <td nowrap="nowrap">
-                <?php echo arraySelect($companies, 'company_id', 'class="text" size="1"', $company_id); ?> *
-            </td>
-            <td align="right" nowrap="nowrap"><?php echo $AppUI->_('For period'); ?>:</td>
-            <td nowrap="nowrap">
-                <input type="hidden" name="log_start_date" id="log_start_date" value="<?php echo $start_date ? $start_date->format(FMT_TIMESTAMP_DATE) : ''; ?>" />
-                <input type="text" name="start_date" id="start_date" onchange="setDate_new('editFrm', 'start_date');" value="<?php echo $start_date ? $start_date->format($df) : ''; ?>" class="text" />
-                <a href="javascript: void(0);" onclick="return showCalendar('start_date', '<?php echo $df ?>', 'editFrm', null, true, true)">
-                    <img src="<?php echo w2PfindImage('calendar.gif'); ?>" alt="<?php echo $AppUI->_('Calendar'); ?>" />
-                </a>
-            </td>
-            <td align="right" nowrap="nowrap"><?php echo $AppUI->_('to'); ?></td>
-            <td nowrap="nowrap">
-                <input type="hidden" name="log_end_date" id="log_end_date" value="<?php echo $end_date ? $end_date->format(FMT_TIMESTAMP_DATE) : ''; ?>" />
-                <input type="text" name="end_date" id="end_date" onchange="setDate_new('editFrm', 'end_date');" value="<?php echo $end_date ? $end_date->format($df) : ''; ?>" class="text" />
-                <a href="javascript: void(0);" onclick="return showCalendar('end_date', '<?php echo $df ?>', 'editFrm', null, true, true)">
-                    <img src="<?php echo w2PfindImage('calendar.gif'); ?>" alt="<?php echo $AppUI->_('Calendar'); ?>" />
-                </a>
-            </td>
-            <td nowrap="nowrap">
-            </td>
-            <td nowrap="nowrap">
-                <input type="checkbox" name="active_projects" id="active_projects" <?php if ($active_projects)
-            echo 'checked="checked"' ?> />
-                <label for="active_projects"><?php echo $AppUI->_('Active Projects Only'); ?></label>
-            </td>
-            <td align="right" width="50%" nowrap="nowrap">
-                <input class="button" type="submit" name="do_report" value="<?php echo $AppUI->_('submit'); ?>" />
-            </td>
-        </tr>
-    </table>
+    <div class="d-flex flex-wrap align-items-center gap-2 mb-3 std w2p-report-filter">
+        <span class="text-nowrap"><?php echo $AppUI->_('For Company'); ?>:</span>
+        <span class="text-nowrap">
+            <?php echo arraySelect($companies, 'company_id', 'class="text" size="1"', $company_id); ?> *
+        </span>
+        <span class="text-nowrap"><?php echo $AppUI->_('For period'); ?>:</span>
+        <span class="text-nowrap">
+            <input type="hidden" name="log_start_date" id="log_start_date" value="<?php echo $start_date ? $start_date->format(FMT_TIMESTAMP_DATE) : ''; ?>" />
+            <input type="text" name="start_date" id="start_date" onchange="setDate_new('editFrm', 'start_date');" value="<?php echo $start_date ? $start_date->format($df) : ''; ?>" class="text" />
+            <a href="javascript: void(0);" onclick="return showCalendar('start_date', '<?php echo $df ?>', 'editFrm', null, true, true)">
+                <img src="<?php echo w2PfindImage('calendar.gif'); ?>" alt="<?php echo $AppUI->_('Calendar'); ?>" />
+            </a>
+        </span>
+        <span class="text-nowrap"><?php echo $AppUI->_('to'); ?></span>
+        <span class="text-nowrap">
+            <input type="hidden" name="log_end_date" id="log_end_date" value="<?php echo $end_date ? $end_date->format(FMT_TIMESTAMP_DATE) : ''; ?>" />
+            <input type="text" name="end_date" id="end_date" onchange="setDate_new('editFrm', 'end_date');" value="<?php echo $end_date ? $end_date->format($df) : ''; ?>" class="text" />
+            <a href="javascript: void(0);" onclick="return showCalendar('end_date', '<?php echo $df ?>', 'editFrm', null, true, true)">
+                <img src="<?php echo w2PfindImage('calendar.gif'); ?>" alt="<?php echo $AppUI->_('Calendar'); ?>" />
+            </a>
+        </span>
+        <span class="text-nowrap">
+            <input type="checkbox" name="active_projects" id="active_projects" <?php if ($active_projects)
+        echo 'checked="checked"' ?> />
+            <label for="active_projects"><?php echo $AppUI->_('Active Projects Only'); ?></label>
+        </span>
+        <span class="text-nowrap">
+            <input class="button" type="submit" name="do_report" value="<?php echo $AppUI->_('submit'); ?>" />
+        </span>
+    </div>
 </form>
 
 <table width="100%" class="tbl" cellspacing="1" cellpadding="3" border="0">

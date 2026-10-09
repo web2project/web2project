@@ -70,49 +70,42 @@ $df = $AppUI->getPref('SHDATEFORMAT');
 	<input type="hidden" name="report_type" value="<?php echo $report_type; ?>" />
     <input type="hidden" name="datePicker" value="log" />
 
-    <table class="std">
-        <tr>
-            <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Default Actions'); ?>:</td>
-            <td nowrap="nowrap">
-                <input class="button" type="submit" name="period" value="<?php echo $AppUI->_('Previous Month'); ?>" />
-                <input class="button" type="submit" name="period" value="<?php echo $AppUI->_('Previous Week'); ?>" />
-                <input class="button" type="submit" name="period" value="<?php echo $AppUI->_('Previous Day'); ?>" />
-            </td>
-            <td nowrap="nowrap">
-                <input class="button" type="submit" name="period" value="<?php echo $AppUI->_('Next Day'); ?>" />
-                <input class="button" type="submit" name="period" value="<?php echo $AppUI->_('Next Week'); ?>" />
-                <input class="button" type="submit" name="period" value="<?php echo $AppUI->_('Next Month'); ?>" />
-            </td>
-            <td><input class="text" type="field" size="2" name="pvalue" value="1" /> - <?php echo $AppUI->_('value for the previous buttons'); ?></td>
-        </tr>
-        <tr>
-            <td align="right" nowrap="nowrap"><?php echo $AppUI->_('For period'); ?>:</td>
-            <td nowrap="nowrap">
-                <input type="hidden" name="log_start_date" id="log_start_date" value="<?php echo $start_date ? $start_date->format(FMT_TIMESTAMP_DATE) : ''; ?>" />
-                <input type="text" name="start_date" id="start_date" onchange="setDate_new('editFrm', 'start_date');" value="<?php echo $start_date ? $start_date->format($df) : ''; ?>" class="text" />
-                <a href="javascript: void(0);" onclick="return showCalendar('start_date', '<?php echo $df ?>', 'editFrm', null, true, true)">
-                    <img src="<?php echo w2PfindImage('calendar.gif'); ?>" alt="<?php echo $AppUI->_('Calendar'); ?>" />
-                </a>
-                <?php echo $AppUI->_('to'); ?>
-                <input type="hidden" name="log_end_date" id="log_end_date" value="<?php echo $end_date ? $end_date->format(FMT_TIMESTAMP_DATE) : ''; ?>" />
-                <input type="text" name="end_date" id="end_date" onchange="setDate_new('editFrm', 'end_date');" value="<?php echo $end_date ? $end_date->format($df) : ''; ?>" class="text" />
-                <a href="javascript: void(0);" onclick="return showCalendar('end_date', '<?php echo $df ?>', 'editFrm', null, true, true)">
-                    <img src="<?php echo w2PfindImage('calendar.gif'); ?>" alt="<?php echo $AppUI->_('Calendar'); ?>" />
-                </a>
-            </td>
-            <td nowrap="nowrap">
-                <div>
-                    <input type="checkbox" name="log_all" id="log_all" <?php if ($log_all) echo 'checked="checked"' ?> />
-                    <label for="log_all"><?php echo $AppUI->_('Log All'); ?></label>
-                </div>
-                <div>
-                </div>
-            </td>
-            <td>
-                <input class="button" style="float: right;" type="submit" name="do_report" value="<?php echo $AppUI->_('submit'); ?>" />
-            </td>
-        </tr>
-    </table>
+    <div class="d-flex flex-wrap align-items-center gap-2 mb-3 std w2p-report-filter">
+        <span class="text-nowrap"><?php echo $AppUI->_('Default Actions'); ?>:</span>
+        <span class="text-nowrap">
+            <input class="button" type="submit" name="period" value="<?php echo $AppUI->_('Previous Month'); ?>" />
+            <input class="button" type="submit" name="period" value="<?php echo $AppUI->_('Previous Week'); ?>" />
+            <input class="button" type="submit" name="period" value="<?php echo $AppUI->_('Previous Day'); ?>" />
+        </span>
+        <span class="text-nowrap">
+            <input class="button" type="submit" name="period" value="<?php echo $AppUI->_('Next Day'); ?>" />
+            <input class="button" type="submit" name="period" value="<?php echo $AppUI->_('Next Week'); ?>" />
+            <input class="button" type="submit" name="period" value="<?php echo $AppUI->_('Next Month'); ?>" />
+        </span>
+        <span class="text-nowrap"><input class="text" type="text" size="2" name="pvalue" value="1" /> - <?php echo $AppUI->_('value for the previous buttons'); ?></span>
+        <div class="w-100"></div>
+        <span class="text-nowrap"><?php echo $AppUI->_('For period'); ?>:</span>
+        <span class="text-nowrap">
+            <input type="hidden" name="log_start_date" id="log_start_date" value="<?php echo $start_date ? $start_date->format(FMT_TIMESTAMP_DATE) : ''; ?>" />
+            <input type="text" name="start_date" id="start_date" onchange="setDate_new('editFrm', 'start_date');" value="<?php echo $start_date ? $start_date->format($df) : ''; ?>" class="text" />
+            <a href="javascript: void(0);" onclick="return showCalendar('start_date', '<?php echo $df ?>', 'editFrm', null, true, true)">
+                <img src="<?php echo w2PfindImage('calendar.gif'); ?>" alt="<?php echo $AppUI->_('Calendar'); ?>" />
+            </a>
+            <?php echo $AppUI->_('to'); ?>
+            <input type="hidden" name="log_end_date" id="log_end_date" value="<?php echo $end_date ? $end_date->format(FMT_TIMESTAMP_DATE) : ''; ?>" />
+            <input type="text" name="end_date" id="end_date" onchange="setDate_new('editFrm', 'end_date');" value="<?php echo $end_date ? $end_date->format($df) : ''; ?>" class="text" />
+            <a href="javascript: void(0);" onclick="return showCalendar('end_date', '<?php echo $df ?>', 'editFrm', null, true, true)">
+                <img src="<?php echo w2PfindImage('calendar.gif'); ?>" alt="<?php echo $AppUI->_('Calendar'); ?>" />
+            </a>
+        </span>
+        <span class="text-nowrap">
+            <input type="checkbox" name="log_all" id="log_all" <?php if ($log_all) echo 'checked="checked"' ?> />
+            <label for="log_all"><?php echo $AppUI->_('Log All'); ?></label>
+        </span>
+        <span class="text-nowrap">
+            <input class="button" type="submit" name="do_report" value="<?php echo $AppUI->_('submit'); ?>" />
+        </span>
+    </div>
 </form>
 <?php
 if ($do_report) {
@@ -120,9 +113,7 @@ if ($do_report) {
     echo $AppUI->getTheme()->styleRenderBoxBottom();
 	echo '<br />';
     echo $AppUI->getTheme()->styleRenderBoxTop();
-	echo '<table class="std">
-<tr>
-	<td>';
+	echo '<div class="std w2p-report">';
 
 	echo '<table cellspacing="1" cellpadding="4" border="0" class="tbl"><tr>';
 	if ($project_id == 0) {
@@ -190,7 +181,5 @@ if ($do_report) {
     }
 
 	echo '</table>';
-	echo '</td>
-</tr>
-</table>';
+	echo '</div>';
 }

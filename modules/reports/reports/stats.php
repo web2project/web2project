@@ -132,31 +132,20 @@ $q->clear();
 $ontime = round(100 * (1 - ($tasks['overdue']/count($all_tasks)) - ($tasks['completed']/count($all_tasks))));
 ?>
 
-<table width="100%" border="1" cellpadding="0" cellspacing="0" class="tbl">
-    <tr>
-        <th colspan="3"><?php echo $AppUI->_('Progress Chart (completed/in progress/pending)'); ?></th>
-    </tr>
-    <tr>
-        <td width="<?php echo round($tasks['completed'] / count($all_tasks) * 100); ?>%" style="background: springgreen; text-align: center;"><?php echo $AppUI->_('completed'); ?></td>
-        <td width="<?php echo round($tasks['inprogress'] / count($all_tasks) * 100); ?>%" style="background: aquamarine; text-align: center;"><?php echo $AppUI->_('in progress'); ?></td>
-        <td width="<?php echo round($tasks['pending'] / count($all_tasks) * 100); ?>%" style="background: gold; text-align: center;"><?php echo $AppUI->_('pending'); ?></td>
-    </tr>
-</table>
-<br />
-<table width="100%" border="1" cellpadding="0" cellspacing="0" class="tbl">
-    <tr>
-        <th colspan="3"><?php echo $AppUI->_('Time Chart (completed/on time/overdue)'); ?></td>
-    </tr>
-    <tr>
-        <td width="<?php echo round($tasks['completed']/ count($all_tasks) * 100); ?>%" style="background: springgreen; text-align: center;"><?php echo $AppUI->_('completed'); ?></td>
-        <td width="<?php echo $ontime; ?>%" style="background: aquamarine; text-align: center;"><?php echo $AppUI->_('on time'); ?></td>
-        <td width="<?php echo round($tasks['overdue']/ count($all_tasks) * 100); ?>%" style="background: tomato; text-align: center;"><?php echo $AppUI->_('overdue'); ?></td>
-    </tr>
-</table>
-<br />
-<table class="tbl">
-    <tr>
-        <td>
+<h3 class="h6"><?php echo $AppUI->_('Progress Chart (completed/in progress/pending)'); ?></h3>
+<div class="progress-stacked mb-3" style="height: 1.5rem;">
+    <div class="progress" role="progressbar" style="width: <?php echo round($tasks['completed'] / count($all_tasks) * 100); ?>%; height: 1.5rem;"><div class="progress-bar bg-success"><?php echo $AppUI->_('completed'); ?></div></div>
+    <div class="progress" role="progressbar" style="width: <?php echo round($tasks['inprogress'] / count($all_tasks) * 100); ?>%; height: 1.5rem;"><div class="progress-bar bg-info"><?php echo $AppUI->_('in progress'); ?></div></div>
+    <div class="progress" role="progressbar" style="width: <?php echo round($tasks['pending'] / count($all_tasks) * 100); ?>%; height: 1.5rem;"><div class="progress-bar bg-warning text-dark"><?php echo $AppUI->_('pending'); ?></div></div>
+</div>
+<h3 class="h6"><?php echo $AppUI->_('Time Chart (completed/on time/overdue)'); ?></h3>
+<div class="progress-stacked mb-3" style="height: 1.5rem;">
+    <div class="progress" role="progressbar" style="width: <?php echo round($tasks['completed']/ count($all_tasks) * 100); ?>%; height: 1.5rem;"><div class="progress-bar bg-success"><?php echo $AppUI->_('completed'); ?></div></div>
+    <div class="progress" role="progressbar" style="width: <?php echo $ontime; ?>%; height: 1.5rem;"><div class="progress-bar bg-info"><?php echo $AppUI->_('on time'); ?></div></div>
+    <div class="progress" role="progressbar" style="width: <?php echo round($tasks['overdue']/ count($all_tasks) * 100); ?>%; height: 1.5rem;"><div class="progress-bar bg-danger"><?php echo $AppUI->_('overdue'); ?></div></div>
+</div>
+<div class="row g-3">
+        <div class="col-lg-4">
             <table width="100%" cellspacing="1" cellpadding="4" border="0" class="tbl">
                 <tr>
                     <th colspan="3"><?php echo $AppUI->_('Current Project Status'); ?></th>
@@ -186,7 +175,6 @@ $ontime = round(100 * (1 - ($tasks['overdue']/count($all_tasks)) - ($tasks['comp
                     <td align="right">100%</td>
                 </tr>
             </table>
-            <br />
             <table width="100%" cellspacing="1" cellpadding="4" border="0" class="tbl">
                 <tr>
                     <th colspan="2"><?php echo $AppUI->_('Project Assignee Details'); ?></th>
@@ -196,7 +184,6 @@ $ontime = round(100 * (1 - ($tasks['overdue']/count($all_tasks)) - ($tasks['comp
                     <td align="right"><?php echo count($users); ?> <?php echo $AppUI->_('users'); ?></td>
                 </tr>
             </table>
-            <br />
             <table width="100%" cellspacing="1" cellpadding="4" border="0" class="tbl">
                 <tr>
                     <th colspan="2"><?php echo $AppUI->_('Document Space Utilized'); ?></th>
@@ -206,8 +193,8 @@ $ontime = round(100 * (1 - ($tasks['overdue']/count($all_tasks)) - ($tasks['comp
                     <td align="right" nowrap="nowrap"><?php echo file_size($files); ?></td>
                 </tr>
             </table>
-        </td>
-        <td width="100%" valign="top">
+        </div>
+        <div class="col-lg-8">
             <table width="100%" cellspacing="1" cellpadding="4" border="0" class="tbl">
                 <tr>
                     <th><?php echo $AppUI->_('Task Assignee'); ?></th>
@@ -245,6 +232,5 @@ $ontime = round(100 * (1 - ($tasks['overdue']/count($all_tasks)) - ($tasks['comp
                     <td align="right" class="highlight"><?php echo $tasks['hours']; ?> <?php echo $AppUI->_('hours'); ?></td>
                 </tr>
             </table>
-        </td>
-    </tr>
-</table>
+        </div>
+</div>
