@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @package     web2project\core
+ * @package web2project\core
  *
  * @abstract
  */
