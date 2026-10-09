@@ -1,8 +1,8 @@
 <?php
 /**
- * @package     web2project\modules\core
+ * @package web2project\modules\core
  *
- * @todo    remove declarations before the class
+ * @todo remove declarations before the class
  */
 
 class CSystem
