@@ -2,8 +2,8 @@
 /**
  * Parent class to all database table derived objects
  *
- * @package     web2project\core
- * @author      Andrew Eddie <eddieajau@users.sourceforge.net>
+ * @package web2project\core
+ * @author  Andrew Eddie <eddieajau@users.sourceforge.net>
  *
  * @abstract
  */
@@ -119,7 +119,7 @@ abstract class w2p_Core_BaseObject extends w2p_System_Event implements w2p_Inter
      *   calls to the above constructor, this is a way to hijack the current
      *   $this->_AppUI and manipulate it however we want.
      *
-     *   @param Object $override A permissions/preferences object (real or mocked)
+     *   @param object $override A permissions/preferences object (real or mocked)
      */
     public function overrideAppUI($override)
     {
@@ -143,7 +143,7 @@ abstract class w2p_Core_BaseObject extends w2p_System_Event implements w2p_Inter
     /**
      *     Binds a named array/hash to this object
      *
-     * @param      $hash
+     * @param mixed $hash
      * @param string|null $prefix          Defaults to null, prefix to use with hash keys
      * @param bool $checkSlashes    Defaults to true, strip any slashes from the hash values
      * @param bool $bindAll
@@ -217,6 +217,7 @@ abstract class w2p_Core_BaseObject extends w2p_System_Event implements w2p_Inter
     /**
      * Although this is a new method in this class, it is deprecated because it is replacing all the subclass
      *   implementations.
+     *
      * @deprecated
      */
     public function loadFull($notUsed = null, $object_id) {     $this->load($object_id);        }
@@ -247,7 +248,9 @@ abstract class w2p_Core_BaseObject extends w2p_System_Event implements w2p_Inter
 
     /**
      *     Return a w2p_Database_Query object seeded with the table name.
+     *
      *     @param string $alias optional alias for table queries.
+     *
      *     @return w2p_Database_Query object
      */
     public function &getQuery($alias = null)
@@ -274,8 +277,8 @@ abstract class w2p_Core_BaseObject extends w2p_System_Event implements w2p_Inter
      *    since it always returns a boolean (storing the errors in the
      *    $this->_errors, we can make decisions based on it even if we don't
      *    care about the errors.
-     * 
-     * @return boolean
+     *
+     * @return bool
      */
     public function isValid()
     {
@@ -284,8 +287,8 @@ abstract class w2p_Core_BaseObject extends w2p_System_Event implements w2p_Inter
     /**
      *     Clone the current record
      *
-     *     @author    handco <handco@users.sourceforge.net>
-     *     @return    object    The new record object or null if error
+     *     @author handco <handco@users.sourceforge.net>
+     *     @return object    The new record object or null if error
      * */
     public function duplicate()
     {
@@ -372,7 +375,7 @@ abstract class w2p_Core_BaseObject extends w2p_System_Event implements w2p_Inter
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function canAddEdit()
     {
@@ -384,25 +387,25 @@ abstract class w2p_Core_BaseObject extends w2p_System_Event implements w2p_Inter
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function canAccess() {
         return $this->_perms->checkModuleItem($this->_tbl_module, 'access');
     }
     /**
-     * @return boolean
+     * @return bool
      */
     public function canCreate() {
         return $this->_perms->checkModuleItem($this->_tbl_module, 'add');
     }
     /**
-     * @return boolean
+     * @return bool
      */
     public function canEdit() {
         return $this->_perms->checkModuleItem($this->_tbl_module, 'edit', $this->{$this->_tbl_key});
     }
     /**
-     * @return boolean
+     * @return bool
      */
     public function canView() {
         return $this->_perms->checkModuleItem($this->_tbl_module, 'view', $this->{$this->_tbl_key});
@@ -492,7 +495,9 @@ abstract class w2p_Core_BaseObject extends w2p_System_Event implements w2p_Inter
 
     /**
      *     Get specifically denied records from a table/module based on a user
+     *
      *     @param int $uid User id number
+     *
      *     @return array
      */
     public function getDeniedRecords($uid)
@@ -506,7 +511,7 @@ abstract class w2p_Core_BaseObject extends w2p_System_Event implements w2p_Inter
     /**
      *     Returns a list of records visible to the user
      *
-     * @param        $uid
+     * @param mixed $uid
      * @param string $fields        fields to be returned by the query, default is all
      * @param string $orderby       sort order for the query
      * @param string|null $index         name of field to index the returned array
@@ -619,7 +624,7 @@ abstract class w2p_Core_BaseObject extends w2p_System_Event implements w2p_Inter
      * @param w2p_Database_Query    $query
      * @param string                $index
      *
-     * @return  w2p_Database_Query
+     * @return w2p_Database_Query
      */
     public function setAllowedSQL($uid, $query, $index = null)
     {
@@ -661,7 +666,6 @@ abstract class w2p_Core_BaseObject extends w2p_System_Event implements w2p_Inter
      *    -  if and only if the corresponding method executed successfully.
      *    -  For example, hook_postDelete() will execute only after the object is
      *       deleted as expected. In this case, don't count on using object properties.
-     *
      */
 
     /**
@@ -714,6 +718,7 @@ abstract class w2p_Core_BaseObject extends w2p_System_Event implements w2p_Inter
      * This method is called within $this->store() but only after the object
      *   was stored properly. You might use this to send notifications or
      *   update other objects.
+     *
      * @todo TODO: I REALLY hate this $_POST here.. it's just asking for trouble.
      *
      * @return \w2p_Core_BaseObject
@@ -804,8 +809,6 @@ abstract class w2p_Core_BaseObject extends w2p_System_Event implements w2p_Inter
      * Returns a clean query object
      *
      * Clears out the query and then returns it for use
-     *
-     * @access protected
      *
      * @return w2p_Database_Query Clean query object
      */
