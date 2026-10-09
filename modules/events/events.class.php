@@ -1,8 +1,8 @@
 <?php
 /**
- * @package     web2project\modules\core
+ * @package web2project\modules\core
  *
- * @todo    refactor static methods
+ * @todo refactor static methods
  */
 
 class CEvent extends w2p_Core_BaseObject
@@ -107,13 +107,15 @@ class CEvent extends w2p_Core_BaseObject
 
     /**
      * Calculating if an recurrent date is in the given period
+     *
      * @param Date $start_date Start date of the period
      * @param Date $end_date End date of the period
      * @param Date $event_start_datetime Start date of the Date Object
      * @param Date $event_end_datetime End date of the Date Object
-     * @param integer $event_recurs Type of Recurrence
-     * @param integer $event_times_recuring Times of Recurrence
-     * @param integer $j Time of Recurrence
+     * @param int $event_recurs Type of Recurrence
+     * @param int $event_times_recuring Times of Recurrence
+     * @param int $j Time of Recurrence
+     *
      * @return array Calculated Start and End Dates for the recurrent Event for the given Period
      */
     public function getRecurrentEventforPeriod($start_date, $end_date, $event_start_datetime, $event_end_datetime, $event_recurs, $event_times_recuring, $j)
@@ -178,8 +180,10 @@ class CEvent extends w2p_Core_BaseObject
 
     /**
      * Utility function to return an array of events with a period
+     *
      * @param Date $start_date Start date of the period
      * @param Date $end_date End date of the period
+     *
      * @return array A list of events
      *
      * WARNING: This is actually called staticly so $this is not available.
@@ -588,6 +592,7 @@ class CEvent extends w2p_Core_BaseObject
      * @param w2p_Utilities_Date $this_date
      * @param w2p_Utilities_Date $end_date
      * @param int $increment
+     *
      * @return int
      */
     public function calculateRows($this_date, $end_date, $increment)
