@@ -37,24 +37,18 @@ if ($user_id) {
 			} else {
                 echo '<h1>' . $AppUI->_('Change User Password') . '</h1>';
                 echo $AppUI->getTheme()->styleRenderBoxTop();
-				echo '<table class="std"><tr><td>' . $AppUI->_('chgpwUpdated') . '</td></tr></table>';
+				echo '<div class="std p-2">' . $AppUI->_('chgpwUpdated') . '</div>';
 			}
 		} else {
 			echo '<h1>' . $AppUI->_('Change User Password') . '</h1>';
             echo $AppUI->getTheme()->styleRenderBoxTop();
-			echo '<table class="std"><tr><td>' . $AppUI->_('chgpwWrongPW') . '</td></tr></table>';
+			echo '<div class="std p-2">' . $AppUI->_('chgpwWrongPW') . '</div>';
 		}
 	} else {
 
             $AppUI->getTheme()->addFooterJavascriptFile('js/passwordstrength.js');
             
 		?>
-        <style>
-            div[class="std titlebar"], form[name="frm_new"],
-            body div:nth-child(2), div[class="left"] {
-                display: none;
-            }
-        </style>
 		<script language="javascript" type="text/javascript">
 		function submitIt() {
 			var f = document.frmEdit;
@@ -81,39 +75,38 @@ if ($user_id) {
 		?>
 		<form name="frmEdit" method="post" onsubmit="return false" accept-charset="utf-8">
 			<input type="hidden" name="user_id" value="<?php echo $user_id; ?>" />
-			<table class="std">
+			<div class="std addedit">
+				<div class="column left">
 				<?php if (!$canAdminEdit) { ?>
-					<tr>
-						<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Current Password'); ?></td>
-						<td><input type="password" name="old_pwd" class="text" /></td>
-					</tr>
+					<p>
+						<label><?php echo $AppUI->_('Current Password'); ?></label>
+						<input type="password" name="old_pwd" class="text" />
+					</p>
 				<?php } ?>
-				<tr>
-					<td align="right" nowrap="nowrap"><?php echo $AppUI->_('New Password'); ?></td>
-					<td><input type="password" name="new_pwd1" class="text" onKeyUp="checkPassword(this.value);" /></td>
-				</tr>
-				<tr>
-					<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Repeat New Password'); ?></td>
-					<td><input type="password" name="new_pwd2" class="text" /></td>
-				</tr>
-                <tr>
-                    <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Password Strength'); ?></td>
-					<td>
-                        <div class="text" style="width: 135px;">
-                            <div id="progressBar"></div>
-                        </div>
-                    </td>
-                </tr>
-				<tr>
-					<td>&nbsp;</td>
-					<td align="right" nowrap="nowrap"><input type="button" value="<?php echo $AppUI->_('submit'); ?>" onclick="submitIt()" class="button" /></td>
-				</tr>
-			</table>
+				<p>
+					<label><?php echo $AppUI->_('New Password'); ?></label>
+					<input type="password" name="new_pwd1" class="text" onKeyUp="checkPassword(this.value);" />
+				</p>
+				<p>
+					<label><?php echo $AppUI->_('Repeat New Password'); ?></label>
+					<input type="password" name="new_pwd2" class="text" />
+				</p>
+				<p>
+					<label><?php echo $AppUI->_('Password Strength'); ?></label>
+					<span class="d-inline-block border rounded" style="width: 135px; height: 1rem;">
+						<span id="progressBar" class="d-block h-100"></span>
+					</span>
+				</p>
+				<p class="justify-content-end">
+					<input type="button" value="<?php echo $AppUI->_('submit'); ?>" onclick="submitIt()" class="button" />
+				</p>
+				</div>
+			</div>
 		</form>
 		<?php
 	}
 } else {
 	echo '<h1>' . $AppUI->_('Change User Password') . '</h1>';
     echo $AppUI->getTheme()->styleRenderBoxTop();
-	echo '<table class="std"><tr><td>' . $AppUI->_('chgpwLogin') . '</td></tr></table>';
+	echo '<div class="std p-2">' . $AppUI->_('chgpwLogin') . '</div>';
 }

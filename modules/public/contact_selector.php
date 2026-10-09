@@ -12,12 +12,6 @@ if (w2PgetParam($_POST, 'selected_contacts_id')) {
 	$selected_contacts_id = w2PgetParam($_POST, 'selected_contacts_id');
 }
 ?>
-<style>
-    div[class="std titlebar"], form[name="frm_new"],
-    body div:nth-child(2), div[class="left"] {
-        display: none;
-    }
-</style>
 <script language="javascript" type="text/javascript">
 // ECMA Script section Carsten Menke <menke@smp-synergie.de>
 function setContactIDs(method, querystring) {
@@ -128,13 +122,11 @@ $contacts = $q->loadHashList('contact_id');
 	<?php
     echo $AppUI->getTheme()->styleRenderBoxTop();
 	?>
-	<table class="std">
-		<tr>
-			<td>
-				<h4><a href="javascript: void(0);" onclick="window.location.href=setContactIDs('GET','dialog=1&<?php if (!is_null($call_back))
+	<div class="std p-2">
+				<h4 class="h6"><a href="javascript: void(0);" onclick="window.location.href=setContactIDs('GET','dialog=1&<?php if (!is_null($call_back))
 					echo 'call_back=' . $call_back . '&'; ?>show_all=1');"><?php echo $AppUI->_('View all allowed companies'); ?></a></h4>
 				<hr />
-				<h2><?php echo $AppUI->_('Contacts for'); ?> <?php echo $company_name ?></h2>
+				<h2 class="h5"><?php echo $AppUI->_('Contacts for'); ?> <?php echo $company_name ?></h2>
 					<?php
 						foreach ($contacts as $contact_id => $contact_data) {
 							if (!$contact_data['company_name']) {
@@ -143,12 +135,12 @@ $contacts = $q->loadHashList('contact_id');
 								$contact_company = $contact_data['company_name'];
 							}
 							if ($contact_company && $contact_company != $actual_company) {
-								echo '<h4>' . $contact_company . '</h4>';
+								echo '<h4 class="h6">' . $contact_company . '</h4>';
 								$actual_company = $contact_company;
 							}
 							$contact_department = $contact_data['dept_name'] ? $contact_data['dept_name'] : $contact_data['contact_department'];
 							if ($contact_department && $contact_department != $actual_department) {
-								echo '<h5>' . $contact_department . '</h5>';
+								echo '<h5 class="h6">' . $contact_department . '</h5>';
 								$actual_department = $contact_department;
 							}
 							$checked = in_array($contact_id, $contacts_id) ? 'checked="checked"' : '';
@@ -161,7 +153,5 @@ $contacts = $q->loadHashList('contact_id');
 				<input name="contacts_submited" type="hidden" value="1" />
 				<input name="selected_contacts_id" type="hidden" value="<?php echo $selected_contacts_id; ?>" />
 				<input type="submit" value="<?php echo $AppUI->_('Continue'); ?>" onclick="setContactIDs();" class="button" />
-			</td>
-		</tr>
-	</table>
+	</div>
 </form>

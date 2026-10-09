@@ -9,7 +9,6 @@ $debug = false;
 $callback = w2PgetParam($_GET, 'callback', 0);
 $table = w2PgetParam($_GET, 'table', 0);
 $user_id = w2PgetParam($_GET, 'user_id', 0);
-$dialog = (int) w2PgetParam($_GET, 'dialog', 0);
 
 $ok = $callback & $table;
 
@@ -162,11 +161,9 @@ if (!$ok) {
 <?php
 echo $AppUI->getTheme()->styleRenderBoxTop();
 ?>
-<table class="std">
-<tr>
-	<td>
-		<div style="white-space:normal; overflow:auto; "  id="selector">
-		<ul style="padding-left:0px">
+<div class="d-flex align-items-end gap-2 std">
+	<div class="flex-grow-1" style="white-space:normal; overflow:auto;" id="selector">
+		<ul class="list-unstyled mb-0">
 		<?php
 			if (count($list) > 1) {
 				foreach ($list as $key => $val) {
@@ -178,18 +175,8 @@ echo $AppUI->getTheme()->styleRenderBoxTop();
 			}
 		?>
 		</ul>
-		</div>
-	</td>
-	<td valign="bottom">
-				<input type="button" class="button" value="<?php echo $AppUI->_('cancel'); ?>" onclick="window.close()" />
-	</td>
-</tr>
-</table>
+	</div>
+	<input type="button" class="button" value="<?php echo $AppUI->_('cancel'); ?>" onclick="window.close()" />
+</div>
 </form>
 <?php } ?>
-<style>
-    div[class="std titlebar"], form[name="frm_new"],
-    body div:nth-child(2), div[class="left"] {
-        <?php if (1 == $dialog) { ?> display: none; <?php } ?>
-    }
-</style>

@@ -41,24 +41,19 @@ echo $cal->show();
 		window.close();
 	}
 </script>
-<table border="0" cellspacing="0" cellpadding="3" width="100%">
-	<tr>
+<div class="d-flex justify-content-between mt-2">
 <?php
 $s = '';
 for ($i = 0; $i < 12; $i++) {
 	$this_month->setMonth($i + 1);
-	$s .= '<td width="8%"><a href="index.php?m=public&a=calendar&dialog=1&callback=' . $callback . '&date=' . $this_month->format(FMT_TIMESTAMP_DATE) . '&uts=' . $prev_date . '" class="">' . substr($this_month->format('%b'), 0, 1) . '</a></td>';
+	$s .= '<a href="index.php?m=public&amp;a=calendar&amp;dialog=1&amp;callback=' . $callback . '&amp;date=' . $this_month->format(FMT_TIMESTAMP_DATE) . '&amp;uts=' . $prev_date . '">' . substr($this_month->format('%b'), 0, 1) . '</a>';
 }
 echo $s;
 ?>
-	</tr>
-	<tr>
+</div>
+<div class="d-flex justify-content-between">
 <?php
-echo '<td colspan="6" align="left">';
-echo "<a href=\"index.php?m=public&a=calendar&dialog=1&callback=$callback&date=" . $cal->prev_year->format(FMT_TIMESTAMP_DATE) . "&uts=$prev_date\" class=\"\">" . $cal->prev_year->getYear() . '</a>';
-echo '</td><td colspan="6" align="right">';
-echo "<a href=\"index.php?m=public&a=calendar&dialog=1&callback=$callback&date=" . $cal->next_year->format(FMT_TIMESTAMP_DATE) . "&uts=$prev_date\" class=\"\">" . $cal->next_year->getYear() . '</a>';
-echo '</td>';
+echo "<a href=\"index.php?m=public&amp;a=calendar&amp;dialog=1&amp;callback=$callback&amp;date=" . $cal->prev_year->format(FMT_TIMESTAMP_DATE) . "&amp;uts=$prev_date\">" . $cal->prev_year->getYear() . '</a>';
+echo "<a href=\"index.php?m=public&amp;a=calendar&amp;dialog=1&amp;callback=$callback&amp;date=" . $cal->next_year->format(FMT_TIMESTAMP_DATE) . "&amp;uts=$prev_date\">" . $cal->next_year->getYear() . '</a>';
 ?>
-	</tr>
-</table>
+</div>
