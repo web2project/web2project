@@ -2,14 +2,14 @@
 /**
  * Parent class to all the controllers
  *
- * @package     web2project\controllers
+ * @package web2project\controllers
  */
 /**
  * This is the most common Controller and used by nearly every module
  *  throughout the core system.
  *
- * @package     web2project\controllers
- * @author      Keith Casey <caseydk@sourceforge.net>
+ * @package web2project\controllers
+ * @author  Keith Casey <caseydk@sourceforge.net>
  */
 class w2p_Controllers_Base
 {
