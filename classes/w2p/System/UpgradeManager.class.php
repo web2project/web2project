@@ -1,6 +1,6 @@
 <?php
 /**
- * @package     web2project\system
+ * @package web2project\system
  */
 
 class w2p_System_UpgradeManager {
