@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @package     web2project\core
+ * @package web2project\core
  */
 
 class w2p_Core_CustomFieldManager extends w2p_Core_BaseObject {
