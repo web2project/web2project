@@ -16,6 +16,6 @@ $config['mod_description'] = 'A module to search keywords and find the needle in
 /**
  * Class CSetupSmartsearch
  *
- * @package     web2project\modules\core
+ * @package web2project\modules\core
  */
 class CSetupSmartsearch extends w2p_System_Setup { }
