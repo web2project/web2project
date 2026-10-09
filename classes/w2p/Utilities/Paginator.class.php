@@ -4,9 +4,8 @@
  * This class takes an array of items and allows us to paginate over them. This
  *   does not change the order of the elements, it just gets a subset.
  *
- * @package web2project
+ * @package    web2project
  * @subpackage utilities
- *
  */
 
 class w2p_Utilities_Paginator
@@ -28,8 +27,9 @@ class w2p_Utilities_Paginator
      *   items in an array. This keeps the original indexes intact so you can
      *   use the objects' ids safely.
      *
-     * @param   int $page
-     * @return  array
+     * @param int $page
+     *
+     * @return array
      */
     public function getItemsOnPage($page = 1)
     {
@@ -45,11 +45,12 @@ class w2p_Utilities_Paginator
      * The $params are to add extra query parameters. This is especially
      *   necessary when you have pagination within a subview.
      *
-     * @param   w2p_Core_CAppUI $AppUI
-     * @param   string              $m
-     * @param   int                 $tab
-     * @param   array               $params
-     * @return  string
+     * @param w2p_Core_CAppUI $AppUI
+     * @param string              $m
+     * @param int                 $tab
+     * @param array               $params
+     *
+     * @return string
      */
     public function buildNavigation($AppUI, $m, $tab, $params = array())
     {
