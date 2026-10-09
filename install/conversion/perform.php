@@ -6,26 +6,23 @@
     $dpOptions = $manager->getConfigOptions();
 	if (!$manager->testDatabaseCredentials($dpOptions)) {
 		?>
-		<table cellspacing="0" cellpadding="3" border="0" class="tbl update" align="center">
-			<tr>
-			  <td colspan="2" align="center">
+		<div class="std update">
+			<div class="my-2 text-center">
 			  	<b class="error">Your database credentials in ./includes/config.php are incorrect.  System conversion has stopped.  Please correct them and try again.</b><br /><br />
 				  <form action="<?php echo W2P_BASE_URL; ?>/index.php" method="post" name="form" id="form" accept-charset="utf-8">
 			  		<input type="hidden" name="step" value="check" />
 			  		<input class="button" type="submit" name="next" value="&laquo; Return to System Checks" />
 					</form>
-				</td>
-			</tr>
-		</table>
+				</div>
+		</div>
 		<?php
 		die();
 	}
 
     if (isset($dpOptions['dbprefix']) && ('' != $dpOptions['dbprefix'])) {
 		?>
-		<table cellspacing="0" cellpadding="3" border="0" class="tbl update" align="center">
-			<tr>
-                <td colspan="2" align="center">
+		<div class="std update">
+			<div class="my-2 text-center">
                     <b class="error">Unfortunately, your dotproject installation uses table prefixes and web2project does not support them. </b><br /><br />
                     There are two options at this stage:<br />
                     You can manually rename your tables without the '<?php echo $dpOptions['dbprefix']; ?>' prefix and remove the 'dbprefix' setting from your ./includes/config.php file;
@@ -35,41 +32,32 @@
                         <input type="hidden" name="step" value="check" />
                         <input class="button" type="submit" name="next" value="&laquo; Return to System Checks" />
                     </form>
-				</td>
-			</tr>
-		</table>
+				</div>
+		</div>
 		<?php
 		die();
     }
 ?>
-<table cellspacing="0" cellpadding="3" border="0" class="tbl update" align="center">
-	<tr>
-		<td class="title" colspan="2">Step 2: Update Database &amp; Write Configuration</td>
-	</tr>
+<div class="std update">
+	<h3 class="h6 mt-3 title">Step 2: Update Database &amp; Write Configuration</h3>
 	<?php
 		$errorMessages = $manager->convertDotProject();
 
 		if (count($errorMessages) > 0) {
 			?>
-			<tr>
-				<td colspan="2"><b class="error">There were <?php echo count($errorMessages); ?> errors in the system update.</b></td>
-			</tr>
+			<div class="my-2"><b class="error">There were <?php echo count($errorMessages); ?> errors in the system update.</b></div>
 			<?php
 			foreach ($errorMessages as $message) {
 				?>
-				<tr><td colspan="2"><?php echo $message; ?></td></tr>
+				<div class="my-2"><?php echo $message; ?></div>
 				<?php
 			}
 			?>
-			<tr>
-				<td colspan="2">Note: Errors noting 'Duplicate entry', 'Table already exists', or 'Unknown table' may not be problems.  It's possible that your dotProject database was not the version it claimed to be.</td>
-			</tr>
+			<div class="my-2">Note: Errors noting 'Duplicate entry', 'Table already exists', or 'Unknown table' may not be problems.  It's possible that your dotProject database was not the version it claimed to be.</div>
 			<?php
 		} else {
 			?>
-			<tr>
-				<td colspan="2">Your system update went smoothly without any errors.</td>
-			</tr>
+			<div class="my-2">Your system update went smoothly without any errors.</div>
 			<?php
 		}
 
@@ -90,23 +78,14 @@
             $cFileMsg = 'Config file could not be written'."\n";
         }
 	?>
-	<tr><td colspan="2">&nbsp;</td></tr>
-	<tr>
-		<td class="title">Config File Creation Feedback:</td>
-		<td class="item" align="left"><b style="color:<?php echo $cFileErr ? 'red' : 'green'; ?>"><?php echo $cFileMsg; ?></b></td>
-	</tr>
+	<div class="row py-1 border-bottom">
+		<div class="col-sm-5 title">Config File Creation Feedback:</div>
+		<div class="col-sm-7 item"><b style="color:<?php echo $cFileErr ? 'red' : 'green'; ?>"><?php echo $cFileMsg; ?></b></div>
+	</div>
 	<?php if ($cFileErr) { ?>
-		<tr>
-			<td class="item" align="left" colspan="2">The following content should go to ./includes/config.php. Create that text file manually and copy the following lines in by hand.  This file must be readable by the webserver.</td>
-		</tr>
-		<tr>
-			<td class="item" align="left" colspan="2" style="text-align: center;"><b class="error">Failure to create this file as instructed will render your web2project installation non-operational.<br />Save yourself (and us!) some time and please follow directions. Thanks.</b></td>
-		</tr>
-		<tr>
-			<td align="center" colspan="2"><textarea class="button" name="dbhost" cols="100" rows="20" title="Content of config.php for manual creation."><?php echo $msg.$config; ?></textarea></td>
-		</tr>
+		<div class="my-2 item">The following content should go to ./includes/config.php. Create that text file manually and copy the following lines in by hand.  This file must be readable by the webserver.</div>
+		<div class="my-2 text-center item"><b class="error">Failure to create this file as instructed will render your web2project installation non-operational.<br />Save yourself (and us!) some time and please follow directions. Thanks.</b></div>
+		<div class="my-2 text-center"><textarea class="button" name="dbhost" cols="100" rows="20" title="Content of config.php for manual creation."><?php echo $msg.$config; ?></textarea></div>
 	<?php } ?>
-	<tr>
-		<td class="item" align="center" colspan="2"><br/><b><a href="../index.php?m=system&amp;a=systemconfig&amp;reset=1">Login and Check the web2project System Environment</a></b></td>
-	</tr>
-</table>
+	<div class="my-2 text-center item"><br/><b><a href="../index.php?m=system&amp;a=systemconfig&amp;reset=1">Login and Check the web2project System Environment</a></b></div>
+</div>
