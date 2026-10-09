@@ -16,6 +16,6 @@ $config['mod_description'] = 'A module for reports';
 /**
  * Class CSetupReports
  *
- * @package     web2project\modules\misc
+ * @package web2project\modules\misc
  */
 class CSetupReports extends w2p_System_Setup { }
