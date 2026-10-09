@@ -425,10 +425,10 @@ class w2p_Core_CAppUITest extends CommonSetup
     {
         $AppUI = $this->_AppUI;
 
-        $AppUI->setPref('UISTYLE', 'wps-redmond');
+        $AppUI->setPref('UISTYLE', 'web2project');
         $AppUI->setStyle();
 
-        $this->assertEquals('wps-redmond', $AppUI->getPref('UISTYLE'));
+        $this->assertEquals('web2project', $AppUI->getPref('UISTYLE'));
     }
 
     /**

@@ -64,14 +64,6 @@ function submitIt() {
 }
 </script>
 <?php
-/**
- * Note: This is an ugly little hack which makes sure the form stays on the screen in firefox for the wps-redmond
- *   theme. There must be a better way. It also appears in system/addeditpref.php and nowhere else.
- */
-$spacing = ('wps-redmond' == $AppUI->getPref('UISTYLE')) ? 70 : 0;
-echo '<div style="padding-top: ' . $spacing . 'px;"> </div>';
-?>
-<?php
 
 $form = new w2p_Output_HTML_FormHelper($AppUI);
 
