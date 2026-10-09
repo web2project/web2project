@@ -18,7 +18,7 @@ $config['mod_config'] = true;
 /**
  * Class CSetupProjectDesigner
  *
- * @package     web2project\modules\misc
+ * @package web2project\modules\misc
  */
 class CSetupProjectDesigner extends w2p_System_Setup
 {
