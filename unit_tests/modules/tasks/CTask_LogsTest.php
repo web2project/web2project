@@ -4,18 +4,17 @@
 /**
  * Class for testing task log functionality
  *
- *
  * PHP version 5
  *
  * LICENSE: This source file is subject to Clear BSD License. Please see the
  *   LICENSE file in root of site for further details
  *
- * @author      Trevor Morse <trevor.morse@gmail.com>
- * @category    CTask_Logs
- * @package     web2project
- * @subpackage  unit_tests
- * @license     Clear BSD
- * @link        http://www.web2project.net
+ * @author     Trevor Morse <trevor.morse@gmail.com>
+ * @category   CTask_Logs
+ * @package    web2project
+ * @subpackage unit_tests
+ * @license    Clear BSD
+ * @link       http://www.web2project.net
  */
 
 class CTask_LogsTest extends CommonSetup
@@ -124,7 +123,6 @@ class CTask_LogsTest extends CommonSetup
 
     /**
      * Test deleting a tasklog
-     *
      */
     public function testDelete()
     {
