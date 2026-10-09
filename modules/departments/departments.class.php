@@ -1,14 +1,14 @@
 <?php
 /**
- * @package     web2project\modules\misc
+ * @package web2project\modules\misc
  *
- * @todo    refactor static methods
+ * @todo refactor static methods
  */
 
 class CDepartment extends w2p_Core_BaseObject
 {
     /**
-     * @todo    these parameters should use department_ not dept_ as the prefix
+     * @todo these parameters should use department_ not dept_ as the prefix
      */
     public $dept_id = null;
 	public $dept_parent = null;
@@ -156,11 +156,13 @@ class CDepartment extends w2p_Core_BaseObject
 
 	/**
 	 *	Returns a list of records exposed to the user
+	 *
 	 *	@param int $uid User id number
 	 *	@param string $fields Optional fields to be returned by the query, default is all
 	 *	@param string $orderby Optional sort order for the query
 	 *	@param string $index Optional name of field to index the returned array
 	 *	@param array $extra Optional array of additional sql parameters (from and where supported)
+	 *
 	 *	@return array
 	 */
 //TODO: this modifies the core $_query property
@@ -298,7 +300,7 @@ class CDepartment extends w2p_Core_BaseObject
 	}
 
     /**
-     * @param     $companyId
+     * @param mixed $companyId
      * @param int $departmentId
      *
      * @return array<mixed>
