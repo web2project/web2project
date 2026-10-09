@@ -1,8 +1,8 @@
 <?php
 /**
- * @package     web2project\modules\core
+ * @package web2project\modules\core
  *
- * @todo    refactor static methods
+ * @todo refactor static methods
  */
 
 class CFile extends w2p_Core_BaseObject {
