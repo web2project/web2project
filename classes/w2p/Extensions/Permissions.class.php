@@ -11,7 +11,7 @@
  * just forward ones (i.e. looking up who is allowed to do x, rather
  * than is x allowed to do y).
  *
- * @package     web2project\extensions
+ * @package web2project\extensions
  */
 
 class w2p_Extensions_Permissions extends gacl_api
@@ -243,19 +243,17 @@ class w2p_Extensions_Permissions extends gacl_api
         return $id;
     }
 
-    /*
-     * * Deleting all module-associated entries from the phpgacl tables
-     * * such as gacl_aco_maps, gacl_acl and gacl_aro_map
-     * *
-     * * @author     gregorerhardt
-     * * @date        20070927
-     * * @cause        #2140
-     * *
-     * * @access     public
-     * * @param    string    module (directory) name
-     * * @return
+    /**
+     * Deleting all module-associated entries from the phpgacl tables
+     * such as gacl_aco_maps, gacl_acl and gacl_aro_map
+     * (2007-09-27, bug #2140)
+     *
+     * @param string $mod Module (directory) name
+     *
+     * @author gregorerhardt
+     *
+     * @return string|null Error messages, or null on success
      */
-
     public function deleteModuleItems($mod)
     {
         // Declaring the return string
@@ -988,6 +986,7 @@ class w2p_Extensions_Permissions extends gacl_api
      * w2Pacl::removeACLPermissions() Removes the permissions for a given ACL ID
      *
      * @param mixed $acl_id
+     *
      * @return mixed
      */
     public function removeACLPermissions($acl_id = null)
@@ -1007,6 +1006,7 @@ class w2p_Extensions_Permissions extends gacl_api
      * w2Pacl::removeModulePermissions() Removes the permissions from the results table for a module
      *
      * @param mixed $module
+     *
      * @return mixed
      */
     public function removeModulePermissions($module = null)
@@ -1026,6 +1026,7 @@ class w2p_Extensions_Permissions extends gacl_api
      * w2Pacl::removePermissions() Removes the permissions from the results table for a given user (example: when you delete a user)
      *
      * @param mixed $user_id
+     *
      * @return mixed
      */
     public function removePermissions($user_id = null)
@@ -1048,6 +1049,7 @@ class w2p_Extensions_Permissions extends gacl_api
      * @param mixed $user_aro_id
      * @param mixed $role_id
      * @param mixed $module
+     *
      * @return bool
      */
     public function recalcPermissions($user_id = null, $user_aro_id = null, $role_id = null, $module = '', $notUsed = null)
@@ -1187,6 +1189,7 @@ class w2p_Extensions_Permissions extends gacl_api
      * @param mixed $userid it passes the user_id
      * @param mixed $notUsed3 it passes 'app' string by default and is not used
      * @param mixed $module it passes the modules name
+     *
      * @return mixed
      */
     public function w2Pacl_check($notUsed = null, $op, $notUsed2 = null, $userid, $notUsed3 = null, $module)
@@ -1264,6 +1267,7 @@ class w2p_Extensions_Permissions extends gacl_api
      * @param mixed $userid
      * @param mixed $module
      * @param mixed $item
+     *
      * @return mixed
      */
     public function w2Pacl_query($notUsed = null, $op, $notUsed2 = null, $userid, $module, $item)
