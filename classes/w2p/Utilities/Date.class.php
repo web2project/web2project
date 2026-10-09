@@ -1,6 +1,6 @@
 <?php
 /**
- * @package     web2project\utilities
+ * @package web2project\utilities
  */
 
 use Carbon\Carbon;
@@ -12,7 +12,7 @@ use Carbon\CarbonTimeZone;
  * This provides customised extensions to the Date class to leave the
  * Date package as 'pure' as possible
  *
- * @package     web2project\utilities
+ * @package web2project\utilities
  */
 class w2p_Utilities_Date extends Date {
 
@@ -53,9 +53,10 @@ class w2p_Utilities_Date extends Date {
      *  the third parameter to convert them both to UTC prior to performing the
      *  check.
      *
-     * @param $d1
-     * @param $d2
+     * @param mixed $d1
+     * @param mixed $d2
      * @param bool $convertTZ
+     *
      * @return int
      */
     public function compare($d1, $d2, $convertTZ = false) {
@@ -89,7 +90,9 @@ class w2p_Utilities_Date extends Date {
 
     /**
      * Adds (+/-) a number of days to the current date.
+     *
      * @param int $n Positive or negative number of days
+     *
      * @author J. Christopher Pereira <kripper@users.sf.net>
      */
     public function addDays($n) {
@@ -98,7 +101,9 @@ class w2p_Utilities_Date extends Date {
 
     /**
      * Adds (+/-) a number of months to the current date.
+     *
      * @param int $n Positive or negative number of months
+     *
      * @author Andrew Eddie <eddieajau@users.sourceforge.net>
      */
     public function addMonths($n) {
@@ -125,9 +130,11 @@ class w2p_Utilities_Date extends Date {
 
     /**
      * New method to get the difference in days the stored date
+     *
+     * @param mixed $when
+     *
      * @author Andrew Eddie <eddieajau@users.sourceforge.net>
      *
-     * @param $when
      * @return bool|int
      */
     public function dateDiff($when) {
@@ -141,9 +148,11 @@ class w2p_Utilities_Date extends Date {
 
     /**
      * New method that sets hour, minute and second in a single call
+     *
      * @param int $h hour
      * @param int $m minute
      * @param int $s second
+     *
      * @author Andrew Eddie <eddieajau@users.sourceforge.net>
      */
     public function setTime($h = 0, $m = 0, $s = 0) {
@@ -217,8 +226,9 @@ class w2p_Utilities_Date extends Date {
     /**
      * Return date obj for the end of the next working day
      *
-     * @param   bool    $preserveHours  Determine whether to set time to start of day or preserve the time of the given object
-     * @return  $this
+     * @param bool    $preserveHours  Determine whether to set time to start of day or preserve the time of the given object
+     *
+     * @return $this
     */
     public function next_working_day($preserveHours = false) {
         $do = clone $this;
@@ -238,7 +248,9 @@ class w2p_Utilities_Date extends Date {
 
     /**
      * Return date obj for the end of the previous working day
-     * @param   bool    $preserveHours  Determine whether to set time to end of day or preserve the time of the given object
+     *
+     * @param bool    $preserveHours  Determine whether to set time to end of day or preserve the time of the given object
+     *
      * @return $this
      */
     public function prev_working_day($preserveHours = false) {
@@ -262,9 +274,10 @@ class w2p_Utilities_Date extends Date {
      * Works in both directions: forwards/prospective and backwards/retrospective
      *   Respects non-working days
      *
-     * @param   string  $duration       (positive = forward, negative = backward)
-     * @param   string  $durationType   1 = hour; 24 = day;
-     * @return  $this                   Shifted DateObj
+     * @param string  $duration       (positive = forward, negative = backward)
+     * @param string  $durationType   1 = hour; 24 = day;
+     *
+     * @return $this                   Shifted DateObj
      */
     public function addDuration($duration = '8', $durationType = '1') {
         // using a sgn function lets us easily cover
@@ -362,8 +375,9 @@ class w2p_Utilities_Date extends Date {
      * Respects non-working days
      * SantosDiez - Credit for better variable names
      *
-     * @param    w2p_Utilities_Date $endDate    may be viewed as end date
-     * @return    float                working duration in hours
+     * @param w2p_Utilities_Date $endDate    may be viewed as end date
+     *
+     * @return float                working duration in hours
      */
     public function calcDuration($endDate) {
 
@@ -457,7 +471,7 @@ class w2p_Utilities_Date extends Date {
     /**
      *    Clone the current w2p_Utilities_Date object
      *
-     *    @return    object    The new record object or null if error
+     *    @return object    The new record object or null if error
      **/
     public function duplicate() {
 
@@ -475,9 +489,10 @@ class w2p_Utilities_Date extends Date {
      * Respects non-working days and the working hours and the begining and end of days
      * SantosDiez - Credit for better variable names
      *
-     * @param   $duration           Duration to be added to the date
-     * @param   $durationType       Duration Type: 1=hours, 24=days
-     * @return  w2p_Utilities_Date  The w2p_Utilities_Date object of the finish date
+     * @param mixed $duration           Duration to be added to the date
+     * @param mixed $durationType       Duration Type: 1=hours, 24=days
+     *
+     * @return w2p_Utilities_Date  The w2p_Utilities_Date object of the finish date
      */
     public function calcFinish($duration, $durationType) {
 
@@ -539,8 +554,9 @@ class w2p_Utilities_Date extends Date {
      * WARNING: This may not work correctly if your system does not allow
      * putenv() or if localtime() does not work in your environment.
      *
-     * @param   $tz
-     * @return  $this|void   the time zone ID - index in $GLOBALS['_DATE_TIMEZONE_DATA']
+     * @param mixed $tz
+     *
+     * @return $this|void   the time zone ID - index in $GLOBALS['_DATE_TIMEZONE_DATA']
      */
     public function convertTZ($tz)
     {
