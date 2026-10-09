@@ -110,34 +110,27 @@ $form = new w2p_Output_HTML_FormHelper($AppUI);
 <form name="frmSearch" action="?m=<?php echo $m; ?>"  method="post" accept-charset="utf-8">
     <?php echo $form->addNonce(); ?>
 
-    <table class="tbl view smartsearch">
-        <tr><td>
-			<table cellspacing="5" cellpadding="0" border="0">
-				<tr>
-					<td align="left" valign="middle">
-					<div id="div_advancedsearch1" style="<?php echo ($ssearch['advanced_search'] == "on" ? 'visibility:visible' : 'visibility:hidden'); ?> "> 1. </div></td>
-					<td align="left"><input class="text" size="18" type="text" id="keyword1" name="keyword1" value="<?php echo $keyword1; ?>" /></td>
-					<td align="left"><input class="button btn btn-small dropdown-toggle" type="submit" value="<?php echo $AppUI->_('Search'); ?>" /></td>
-					<td align="left"><input name="allwords" id="allwords" type="checkbox"  <?php echo ($ssearch['all_words'] == "on" ? 'checked="checked"' : ''); ?> /></td> <td align="left"><label for="allwords"><?php echo $AppUI->_('All words'); ?></label></td>
-					<td align="left"><input name="modselection" id="modselection" type="checkbox"  <?php echo ($ssearch['mod_selection'] == "on" ? 'checked="checked"' : ''); ?> onclick="toggleModules(this)" /></td> <td align="left"><label for="modselection"><?php echo $AppUI->_('Modules selection'); ?></label></td>
-					<td align="left"><input name="advancedsearch" id="advancedsearch" type="checkbox" <?php echo ($ssearch['advanced_search'] == "on" ? 'checked="checked"' : ''); ?> onclick="toggleStatus(this)" /></td> <td align="left"><label for="advancedsearch"><?php echo $AppUI->_('Advanced search'); ?></label></td>
-				</tr>
-			</table>
-			<div id="div_advancedsearch" style="<?php echo ($ssearch['advanced_search'] == "on" ? 'display:block' : 'display:none'); ?> ">
-				<table cellspacing="5" cellpadding="0" border="0">
-					<tr>
-						<td align="left"> 2. </td>
-						<td align="left"><input class="text" size="18" type="text" id="keyword2" name="keyword2" value="<?php echo $keyword2; ?>" /></td>
-						<td align="left"> 3. <input class="text" size="18" type="text" id="keyword3" name="keyword3" value="<?php echo $keyword3; ?>" /></td>
-						<td align="left"> 4. <input class="text" size="18" type="text" id="keyword4" name="keyword4" value="<?php echo $keyword4; ?>" /></td>
-						<td align="left"><input name="ignorespecchar" id="ignorespecchar" type="checkbox"  <?php echo ($ssearch['ignore_specchar'] == "on" ? 'checked="checked"' : ''); ?> /></td> <td align="left"><label for="ignorespecchar"><?php echo $AppUI->_('Ignore special chars'); ?></label></td>
-						<td align="left"><input name="ignorecase" id="ignorecase" type="checkbox"  <?php echo ($ssearch['ignore_case'] == "on" ? 'checked="checked"' : ''); ?> /></td> <td align="left"><label for="ignorecase"><?php echo $AppUI->_('Ignore case'); ?></label></td>
-						<td align="left"><input name="displayallflds" id="displayallflds" type="checkbox"  <?php echo ($ssearch['display_all_flds'] == "on" ? 'checked="checked"' : ''); ?> /></td> <td align="left"><label for="displayallflds"><?php echo $AppUI->_('Display all fields'); ?></label></td>
-						<td align="left"><input name="showempty" id="showempty" type="checkbox"  <?php echo ($ssearch['show_empty'] == "on" ? 'checked="checked"' : ''); ?> /></td> <td align="left"><label for="showempty"><?php echo $AppUI->_('Show empty'); ?></label></td>
-					</tr>
-				</table>
-			</div>
-			<div id="div_selmodules" style="<?php echo ($ssearch['mod_selection'] == "on" ? 'display:block' : 'display:none'); ?> ">
+    <div class="std mb-3 smartsearch">
+        <div class="d-flex flex-wrap align-items-center gap-2 mb-2">
+            <span id="div_advancedsearch1" style="<?php echo ($ssearch['advanced_search'] == "on" ? 'visibility:visible' : 'visibility:hidden'); ?> "> 1. </span>
+            <input class="text" size="18" type="text" id="keyword1" name="keyword1" value="<?php echo $keyword1; ?>" />
+            <input class="button btn btn-primary btn-sm" type="submit" value="<?php echo $AppUI->_('Search'); ?>" />
+            <span class="text-nowrap"><input name="allwords" id="allwords" type="checkbox"  <?php echo ($ssearch['all_words'] == "on" ? 'checked="checked"' : ''); ?> /><label for="allwords"><?php echo $AppUI->_('All words'); ?></label></span>
+            <span class="text-nowrap"><input name="modselection" id="modselection" type="checkbox"  <?php echo ($ssearch['mod_selection'] == "on" ? 'checked="checked"' : ''); ?> onclick="toggleModules(this)" /><label for="modselection"><?php echo $AppUI->_('Modules selection'); ?></label></span>
+            <span class="text-nowrap"><input name="advancedsearch" id="advancedsearch" type="checkbox" <?php echo ($ssearch['advanced_search'] == "on" ? 'checked="checked"' : ''); ?> onclick="toggleStatus(this)" /><label for="advancedsearch"><?php echo $AppUI->_('Advanced search'); ?></label></span>
+        </div>
+        <div id="div_advancedsearch" style="<?php echo ($ssearch['advanced_search'] == "on" ? 'display:block' : 'display:none'); ?> ">
+            <div class="d-flex flex-wrap align-items-center gap-2 mb-2">
+                <span class="text-nowrap"> 2. <input class="text" size="18" type="text" id="keyword2" name="keyword2" value="<?php echo $keyword2; ?>" /></span>
+                <span class="text-nowrap"> 3. <input class="text" size="18" type="text" id="keyword3" name="keyword3" value="<?php echo $keyword3; ?>" /></span>
+                <span class="text-nowrap"> 4. <input class="text" size="18" type="text" id="keyword4" name="keyword4" value="<?php echo $keyword4; ?>" /></span>
+                <span class="text-nowrap"><input name="ignorespecchar" id="ignorespecchar" type="checkbox"  <?php echo ($ssearch['ignore_specchar'] == "on" ? 'checked="checked"' : ''); ?> /><label for="ignorespecchar"><?php echo $AppUI->_('Ignore special chars'); ?></label></span>
+                <span class="text-nowrap"><input name="ignorecase" id="ignorecase" type="checkbox"  <?php echo ($ssearch['ignore_case'] == "on" ? 'checked="checked"' : ''); ?> /><label for="ignorecase"><?php echo $AppUI->_('Ignore case'); ?></label></span>
+                <span class="text-nowrap"><input name="displayallflds" id="displayallflds" type="checkbox"  <?php echo ($ssearch['display_all_flds'] == "on" ? 'checked="checked"' : ''); ?> /><label for="displayallflds"><?php echo $AppUI->_('Display all fields'); ?></label></span>
+                <span class="text-nowrap"><input name="showempty" id="showempty" type="checkbox"  <?php echo ($ssearch['show_empty'] == "on" ? 'checked="checked"' : ''); ?> /><label for="showempty"><?php echo $AppUI->_('Show empty'); ?></label></span>
+            </div>
+        </div>
+        <div id="div_selmodules" style="<?php echo ($ssearch['mod_selection'] == "on" ? 'display:block' : 'display:none'); ?> ">
 				<select name="modules[]" id="search_modules" multiple="true" size="<?php echo count($hook_modules); ?>">
 					<?php foreach ($hook_modules as $tmp) { ?>
 						<option value="<?php echo $tmp; ?>" <?php echo isset($ssearch['modules'][$tmp]) ? 'selected' : ''; ?> ><?php echo $AppUI->_(ucfirst($tmp)); ?></option>
@@ -146,8 +139,7 @@ $form = new w2p_Output_HTML_FormHelper($AppUI);
 				<a class="button" href="javascript: void(0);" onclick="selModAll(this)"><span><?php echo $AppUI->_('Select all'); ?></span></a>
 				<a class="button" href="javascript: void(0);" onclick="deselModAll(this)"><span><?php echo $AppUI->_('Deselect all'); ?></span></a>
 			</div>
-	</td></tr>
-	</table>
+    </div>
 </form>
 <?php
 if ('' !== $keyword1) {
