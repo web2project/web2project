@@ -1,21 +1,25 @@
 <?php
 
 /**
- * @package     web2project\theme
+ * @package web2project\theme
  */
 
 class w2p_Theme_TitleBlock {
     /**
-    @var string The main title of the page */
+     * @var string The main title of the page
+     */
     public $title = '';
     /**
-    @var string The name of the icon used to the left of the title */
+     * @var string The name of the icon used to the left of the title
+     */
     public $icon = '';
     /**
-    @var string The name of the module that this title block is displaying in */
+     * @var string The name of the module that this title block is displaying in
+     */
     public $module = '';
     /**
-    @var array An array of the table 'cells' to the right of the title block and for bread-crumbs */
+     * @var array An array of the table 'cells' to the right of the title block and for bread-crumbs
+     */
     public $cells = null;
 
     protected $_AppUI = null;
@@ -89,8 +93,8 @@ class w2p_Theme_TitleBlock {
     }
 
     /**
-     * @param $m
-     * @param $id
+     * @param mixed $module
+     * @param mixed $key
      * @param string $a
      */
     public function addViewLink($module, $key, $a = 'view')
