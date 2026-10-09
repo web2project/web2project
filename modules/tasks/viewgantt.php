@@ -71,9 +71,8 @@ if ($a == 'todo') {
 
 
 /**
-  * prepare the array with the tasks to display in the task filter
+  * Prepare the array with the tasks to display in the task filter
   * (for the most part this is code harvested from gantt.php)
-  *
   */
 $filter_task_list = array();
 $projectObject = new CProject();
@@ -114,8 +113,7 @@ foreach ($projects as $p) {
      }
 }
 /**
- * the results of the above bits are stored in $filter_task_list (array)
- * 
+ * The results of the above bits are stored in $filter_task_list (array)
  */
 
 
