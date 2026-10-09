@@ -1,8 +1,7 @@
 <?php
 /**
- *
- * @package     web2project\modules\core
- * @todo        refactor static methods
+ * @package web2project\modules\core
+ * @todo    refactor static methods
  */
 
 class CProject extends w2p_Core_BaseObject
@@ -259,8 +258,8 @@ class CProject extends w2p_Core_BaseObject
      * 	Overload of the w2PObject::getDeniedRecords
      * 	to ensure that the projects owned by denied companies are denied.
      *
-     * 	@author	handco <handco@sourceforge.net>
-     * 	@see	w2PObject::getAllowedRecords
+     * 	@author handco <handco@sourceforge.net>
+     * 	@see    w2PObject::getAllowedRecords
      */
     public function getDeniedRecords($uid)
     {
@@ -312,9 +311,12 @@ class CProject extends w2p_Core_BaseObject
         return array_merge($aBuf1, $aBuf2);
     }
 
-    /** Retrieve tasks with latest task_end_dates within given project
+    /**
+     * Retrieve tasks with latest task_end_dates within given project
+     *
      * @param int $project_id Project_id
      * @param int $limit SQL-limit to limit the number of returned tasks
+     *
      * @return array List of criticalTasks
      */
     public function getCriticalTasks($project_id = 0, $limit = 1)
@@ -733,6 +735,7 @@ class CProject extends w2p_Core_BaseObject
      *   evaluated as false, otherwise it is considered true.
      *
      * @param int $projectId
+     *
      * @return mixed
      */
     public function hasChildProjects($projectId = 0)
