@@ -253,8 +253,9 @@ div.std {
     background-color: var(--bs-body-bg);
 }
 div.std.addedit {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(22rem, 1fr));
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
     gap: 0 2rem;
     padding: 1rem;
     margin-bottom: 1rem;
@@ -262,6 +263,7 @@ div.std.addedit {
     border-radius: var(--bs-border-radius);
 }
 div.std.addedit > .column {
+    flex: 1 1 22rem;
     float: none;
     width: auto;
     min-width: 0;
@@ -299,10 +301,10 @@ div.std.addedit p > .save {
     margin-left: auto;
 }
 div.std.addedit > .column.w2p-wide {
-    grid-column: 1 / -1;
+    flex-basis: 100%;
 }
 div.std.addedit > .w2p-form-actions {
-    grid-column: 1 / -1;
+    flex: 1 1 100%;
     display: flex;
     justify-content: space-between;
     gap: .5rem;
