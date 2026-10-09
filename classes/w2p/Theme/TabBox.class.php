@@ -1,21 +1,25 @@
 <?php
 
 /**
- * @package     web2project\theme
+ * @package web2project\theme
  */
 
 class w2p_Theme_TabBox {
     /**
-    @var array */
+     * @var array
+     */
     public $tabs = null;
     /**
-    @var int The active tab */
+     * @var int The active tab
+     */
     public $active = null;
     /**
-    @var string The base URL query string to prefix tab links */
+     * @var string The base URL query string to prefix tab links
+     */
     public $baseHRef = null;
     /**
-    @var string The base path to prefix the include file */
+     * @var string The base path to prefix the include file
+     */
     public $baseInc;
     /** the active tab, and the selected tab **/
     public $javascript = null;
@@ -30,6 +34,7 @@ class w2p_Theme_TabBox {
 
     /**
      * Constructor
+     *
      * @param string $baseHRef The base URL query string to prefix tab links
      * @param string $baseInc The base path to prefix the include file
      * @param int $active The active tab
@@ -60,6 +65,7 @@ class w2p_Theme_TabBox {
     }
     /**
      * Gets the name of a tab
+     *
      * @return string
      */
     public function getTabName($idx) {
@@ -67,6 +73,7 @@ class w2p_Theme_TabBox {
     }
     /**
      * Adds a tab to the object
+     *
      * @param string $file File to include
      * @param string $title The display title/name of the tab
      */
