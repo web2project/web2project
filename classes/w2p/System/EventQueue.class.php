@@ -4,9 +4,9 @@
  * event notifications and other timed events, as well as
  * outgoing emails.
  *
- * @package     web2project\system
+ * @package web2project\system
  *
- * @todo    This can probably be converted to extend the w2p_Core_BaseObject and just get rid of a bunch of this code. ~ dkc 28 Oct 2012
+ * @todo This can probably be converted to extend the w2p_Core_BaseObject and just get rid of a bunch of this code. ~ dkc 28 Oct 2012
  */
 
 class w2p_System_EventQueue {
@@ -21,14 +21,16 @@ class w2p_System_EventQueue {
      *
      * The callback can either be the name of a global function or the
      * name of a class
+     *
      * @param mixed $callback function to call when this event is due.
      * @param mixed $args Arguments to pass to the callback
      * @param string $module module, or originator of the event
      * @param string $type type of event (to allow searching)
-     * @param integer $id id of originating event.
-     * @param integer $date Seconds since 1970 to trigger event.
-     * @param integer $repeat_interval seconds to repeat
-     * @param integer $repeat_count number of times to repeat
+     * @param int $id id of originating event.
+     * @param int $date Seconds since 1970 to trigger event.
+     * @param int $repeat_interval seconds to repeat
+     * @param int $repeat_count number of times to repeat
+     *
      * @return bool True if the event was queued
      */
     public function add($callback, &$args, $module, $sysmodule = false, $id = 0, $type = '', $date = 0, $repeat_interval = 0, $repeat_count = 1) {
@@ -78,7 +80,6 @@ class w2p_System_EventQueue {
 
     /**
      * Remove the event from the queue. 
-     * 
      */
     public function remove($id) {
         $q = new w2p_Database_Query;
@@ -90,7 +91,6 @@ class w2p_System_EventQueue {
 
     /**
      * Find a queue record (or records) based upon the
-     *
      */
     public function find($module, $type, $id = 0) {
         $q = new w2p_Database_Query;
