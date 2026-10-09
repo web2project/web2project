@@ -310,7 +310,6 @@ class CEvent extends w2p_Core_BaseObject
 			$eventList[$i]['event_end_datetime'] = $AppUI->formatTZAwareTime($event['event_end_datetime'], '%Y-%m-%d %H:%M:%S');
 			$i++;
 		}
-//echo '<pre>'; print_r($eventList); echo '</pre>';
 		//return a list of non-recurrent and recurrent events
 		return $eventList;
 	}

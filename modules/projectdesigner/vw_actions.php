@@ -156,11 +156,6 @@ $spercent = arrayMerge(array('' => '('.$AppUI->_('Progress').')'), $percent);
             <td><?php echo arraySelect($spriority, 'bulk_task_user_priority', 'class="text"', ''); ?></td>
             <td>&nbsp;</td>
         </tr>
-<!--        <tr>-->
-<!--            <th>--><?php //echo $AppUI->_('Type'); ?><!--&nbsp;</th>-->
-<!--            <td>--><?php //echo arraySelect($stype, 'bulk_task_type', 'class="text"', ''); ?><!--</td>-->
-<!--            <td>&nbsp;</td>-->
-<!--        </tr>-->
         <tr>
             <th><?php echo $AppUI->_('Access'); ?>&nbsp;</th>
             <td><?php echo arraySelect($stask_access, 'bulk_task_access', 'class="text"', ''); ?></td>

@@ -76,7 +76,7 @@ class CSystem_Role extends w2p_Core_BaseObject {
 			// Delete all the children from this group
 			return $this->_perms->deleteRole($this->role_id);
 		} else {
-			return false; //get_class($this) . '::delete failed - You do not have permission to delete this role';
+			return false;
 		}
 	}
 

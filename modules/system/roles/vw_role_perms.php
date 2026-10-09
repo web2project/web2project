@@ -149,7 +149,6 @@ foreach ($role_acls as $acl) {
 		$buf .= implode('<br />', $modlist);
 		$buf .= '</td>';
 		// Item information TODO:  need to figure this one out.
-		// 	$buf .= '<td></td>';
 		// Type information.
 		$buf .= '<td>';
 		$perm_type = array();
