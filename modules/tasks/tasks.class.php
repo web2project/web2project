@@ -1,9 +1,9 @@
 <?php
 /**
- * @package     web2project\modules\core
+ * @package web2project\modules\core
  *
- * @todo    new query object
- * @todo    refactor static methods
+ * @todo new query object
+ * @todo refactor static methods
  */
 
 class CTask extends w2p_Core_BaseObject
@@ -79,7 +79,6 @@ class CTask extends w2p_Core_BaseObject
      * When calculating a task's start date only consider
      * end dates of tasks with these dynamic values.
      *
-     * @access public
      * @static
      */
     public static $tracked_dynamics = array('0' => '0', '1' => '1', '2' => '31');
@@ -88,7 +87,6 @@ class CTask extends w2p_Core_BaseObject
      * Tasks with these dynamics have their dates updated when
      * one of their dependencies changes. (They track dependencies)
      *
-     * @access public
      * @static
      */
     public static $tracking_dynamics = array('0' => '21', '1' => '31');
@@ -403,14 +401,15 @@ class CTask extends w2p_Core_BaseObject
         CProject::updateHoursWorked((int) $this->task_project);
     }
 
-    /*
+    /**
      * Copy the current task
      *
+     * @param int $destProject_id ID of the destination project
+     *
      * @author handco <handco@users.sourceforge.net>
-     * @param int id of the destination project
+     *
      * @return object The new record object or null if error
      */
-
     public function copy($destProject_id = 0, $destTask_id = -1)
     {
         $newObj = $this->duplicate();
@@ -762,13 +761,11 @@ class CTask extends w2p_Core_BaseObject
     }
 
     /**
-     *
      * @param w2p_Core_CAppUI $AppUI
      * @param CProject $project_id
      *
      * The point of this function is to create/update a task to represent a
      *   subproject.
-     *
      */
     public static function storeTokenTask(w2p_Core_CAppUI $AppUI, $project_id)
     {
@@ -875,7 +872,9 @@ class CTask extends w2p_Core_BaseObject
         return $result;
     }
 
-    /** Retrieve tasks with latest task_end_dates within given project
+    /**
+     * Retrieve tasks with latest task_end_dates within given project
+     *
      * @param int $project_id
      *
      * @return array<mixed>|false List of criticalTasks
@@ -983,8 +982,8 @@ class CTask extends w2p_Core_BaseObject
     /**
      * 		  Retrieve the tasks dependencies
      *
-     * 		  @author		 handco		   <handco@users.sourceforge.net>
-     * 		  @return		 string		   comma delimited list of tasks id's
+     * 		  @author handco		   <handco@users.sourceforge.net>
+     * 		  @return string		   comma delimited list of tasks id's
      * */
     public function getDependencies()
     {
@@ -998,9 +997,11 @@ class CTask extends w2p_Core_BaseObject
     /**
      * 		  Retrieve the tasks dependencies
      *
-     * 		  @author		 handco		   <handco@users.sourceforge.net>
-     * 		  @param		integer $taskId		   ID of the task we want dependencies
-     * 		  @return		 string		   comma delimited list of tasks id's
+     * 		  @param int $taskId		   ID of the task we want dependencies
+     *
+     * 		  @author handco		   <handco@users.sourceforge.net>
+     *
+     * 		  @return string		   comma delimited list of tasks id's
      * */
     public function staticGetDependencies($taskId)
     {
@@ -1237,7 +1238,7 @@ class CTask extends w2p_Core_BaseObject
     /**
      * @param Date $start_date Start date of the period
      * @param Date $end_date End date of the period
-     * @param integer $company_id The target company
+     * @param int $company_id The target company
      *
      * WARNING: This is actually called staticly so $this is not available.
      */
@@ -1366,10 +1367,11 @@ class CTask extends w2p_Core_BaseObject
     }
 
     /**
-     * 		 retrieve tasks are dependent of another.
-     * 		 @param	 int|false $taskId		 ID of the master task
-     * 		 @param	 boolean $isDep		 true if is a dep call (recurse call)
-     * 		 @param	 boolean $recurse		 false for no recursion (needed for calc_end_date)
+     * 		 Retrieve tasks are dependent of another.
+     *
+     * 		 @param int|false $taskId		 ID of the master task
+     * 		 @param bool $isDep		 true if is a dep call (recurse call)
+     * 		 @param bool $recurse		 false for no recursion (needed for calc_end_date)
      * */
     public function dependentTasks($taskId = false, $isDep = false, $recurse = true)
     {
@@ -1459,15 +1461,13 @@ class CTask extends w2p_Core_BaseObject
      * * @purpose	reusability, consistence
      */
 
-    /*
-
-      Get the last end date of all of this task's dependencies
-
-      @param Task object
-      returns FMT_DATETIME_MYSQL date
-
+    /**
+     * Get the last end date of all of this task's dependencies
+     *
+     * @param CTask $taskObj
+     *
+     * @return string|false FMT_DATETIME_MYSQL date, or false if there are no dependencies
      */
-
     public function get_deps_max_end_date($taskObj)
     {
 
@@ -1581,10 +1581,10 @@ class CTask extends w2p_Core_BaseObject
         $q->exec();
     }
 
-    /*
-     * using user allocation percentage ($perc_assign)
+    /**
+     * Using user allocation percentage ($perc_assign)
      *
-     * @return returns the Names of the over-assigned users (if any), otherwise false
+     * @return string|false the Names of the over-assigned users (if any), otherwise false
      *
      * @todo - a given function/method should return one data type consistently - dkc 25 Nov 2012
      */
@@ -1752,8 +1752,10 @@ class CTask extends w2p_Core_BaseObject
 
     /**
      * 	Calculate the extent of utilization of user assignments
+     *
      * 	@param string $hash	 a hash for the returned hashList
      * 	@param array $users	 an array of user_ids calculating their assignment capacity
+     *
      * 	@return array		 returns hashList of extent of utilization for assignment of the users
      */
     public function getAllocation($hash = null, $users = null, $get_user_list = false)
@@ -1928,8 +1930,9 @@ class CTask extends w2p_Core_BaseObject
     }
 
     /**
-     * @param $project_id
+     * @param mixed $project_id
      * @param int $task_id
+     *
      * @return mixed
      */
     public function getTaskTree($project_id, $task_id = 0)
@@ -2011,11 +2014,11 @@ class CTask extends w2p_Core_BaseObject
      *   $project_new and then updates the corresponding task counts and task
      *   start/end dates for the projects.
      *
-     * @todo Get the start/end dates for the cache.. - updateTaskCache
-     *
      * @param int $task_id
      * @param int $project_old
      * @param int $project_new
+     *
+     * @todo Get the start/end dates for the cache.. - updateTaskCache
      */
     public function moveTaskBetweenProjects($task_id, $project_old, $project_new)
     {
@@ -2154,14 +2157,14 @@ class CTask extends w2p_Core_BaseObject
     /**
      * Called by the Event Queue processor to process a reminder
      * on a task.
-     * @access  public
-     * @param   string  $notUsed    Module name (not used)
-     * @param   string  $notUsed2   Type of event (not used)
-     * @param   integer $id         ID of task being reminded
-     * @param   integer $owner      Originator of event
-     * @param   mixed   $notUsed    event-specific arguments.
      *
-     * @return  mixed   true, dequeue event, false, event stays in queue.
+     * @param string  $notUsed    Module name (not used)
+     * @param string  $notUsed2   Type of event (not used)
+     * @param int $id         ID of task being reminded
+     * @param int $owner      Originator of event
+     * @param mixed   $notUsed    event-specific arguments.
+     *
+     * @return mixed   true, dequeue event, false, event stays in queue.
      * -1, event is destroyed.
      */
     public function remind($notUsed = null, $notUsed2 = null, $id, $owner, $notUsed3 = null)
@@ -2246,9 +2249,6 @@ class CTask extends w2p_Core_BaseObject
         return true;
     }
 
-    /**
-     *
-     */
     public function clearReminder($dont_check = false)
     {
         $ev = new w2p_System_EventQueue();
