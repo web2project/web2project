@@ -5,8 +5,8 @@
  * been made, however the main one is to provide the database details from
  * the main w2P environment.
  *
- * @package     web2project\mocks
- * @author      D. Keith Casey, Jr. <caseydk@users.sourceforge.net>
+ * @package web2project\mocks
+ * @author  D. Keith Casey, Jr. <caseydk@users.sourceforge.net>
  */
 
 class w2p_Mocks_Permissions extends w2p_Extensions_Permissions
