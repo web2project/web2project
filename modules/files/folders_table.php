@@ -81,33 +81,30 @@ function removeBulkComponent(li) {
 }
 </script>
 
-<table id="tblFolders" class="tbl list">
-    <tr>
-        <td nowrap="nowrap" colspan="20">
-            <ul>
-                <?php if ($folder_id) { ?>
-                <li><a href="./index.php?m=<?php echo $m; ?>&amp;&a=<?php echo $a; ?>&amp;tab=<?php echo $tab; ?>&folder=0"><?php echo w2PshowImage('home.png', '22', '22', 'back to root folder', '', 'files'); ?></a></li>
-                <?php if (array_key_exists($folder->file_folder_parent, $allowed_folders_ary)): ?>
-                    <li><a href="./index.php?m=<?php echo $m; ?>&amp;&a=<?php echo $a; ?>&amp;tab=<?php echo $tab; ?>&folder=<?php echo $folder->file_folder_parent; ?>"><?php echo w2PshowImage('back.png', '22', '22', 'folder icon', 'back to parent folder', 'files'); ?></a></li>
-        		<?php endif; ?>
-                <li><a href="./index.php?m=<?php echo $m; ?>&amp;tab=<?php echo $tab; ?>&a=addedit_folder&folder=<?php echo $folder->file_folder_id; ?>" title="edit the <?php echo $folder->file_folder_name; ?> folder"><?php echo w2PshowImage('filesaveas.png', '22', '22', 'folder icon', 'edit folder', 'files'); ?></a></li>
-                <?php } ?>
-                <li class="info-text"><?php echo w2PshowImage('folder5_small.png', '22', '22', '', '', 'files'); ?> <strong><?php echo (isset($folder) && $folder->file_folder_name) ? $folder->file_folder_name : "Root"; ?></strong></li>
-                <?php if (isset($folder) && $folder->file_folder_description != '') { ?>
-                    <li class="info-text"><?php echo w2p_textarea($folder->file_folder_description); ?></li>
-                <?php } ?>
-            </ul>
-        </td>
-    </tr>
-    </tr>
+<div id="tblFolders" class="w2p-folders">
+    <div class="d-flex flex-wrap align-items-center gap-2 border-bottom pb-1 mb-2">
+        <ul>
+            <?php if ($folder_id) { ?>
+            <li><a href="./index.php?m=<?php echo $m; ?>&amp;a=<?php echo $a; ?>&amp;tab=<?php echo $tab; ?>&amp;folder=0"><?php echo w2PshowImage('home.png', '22', '22', 'back to root folder', '', 'files'); ?></a></li>
+            <?php if (array_key_exists($folder->file_folder_parent, $allowed_folders_ary)): ?>
+                <li><a href="./index.php?m=<?php echo $m; ?>&amp;a=<?php echo $a; ?>&amp;tab=<?php echo $tab; ?>&amp;folder=<?php echo $folder->file_folder_parent; ?>"><?php echo w2PshowImage('back.png', '22', '22', 'folder icon', 'back to parent folder', 'files'); ?></a></li>
+            <?php endif; ?>
+            <li><a href="./index.php?m=<?php echo $m; ?>&amp;tab=<?php echo $tab; ?>&amp;a=addedit_folder&amp;folder=<?php echo $folder->file_folder_id; ?>" title="edit the <?php echo $folder->file_folder_name; ?> folder"><?php echo w2PshowImage('filesaveas.png', '22', '22', 'folder icon', 'edit folder', 'files'); ?></a></li>
+            <?php } ?>
+            <li class="info-text"><?php echo w2PshowImage('folder5_small.png', '22', '22', '', '', 'files'); ?> <strong><?php echo (isset($folder) && $folder->file_folder_name) ? $folder->file_folder_name : "Root"; ?></strong></li>
+            <?php if (isset($folder) && $folder->file_folder_description != '') { ?>
+                <li class="info-text"><?php echo w2p_textarea($folder->file_folder_description); ?></li>
+            <?php } ?>
+        </ul>
+    </div>
     <?php
     $fileCount = $folder->getFiles();
     if (count($fileCount) > 0) {
-        echo displayFiles($AppUI, $folder_id, $task_id, $project_id, $company_id);
+        echo '<table class="tbl list">' . displayFiles($AppUI, $folder_id, $task_id, $project_id, $company_id) . '</table>';
     } elseif ((!empty($limited) && !$limited) or $folder_id != 0) {
-        echo '<tr><td colspan="20">' . $AppUI->_('no files') . '</td></tr>';
+        echo '<p>' . $AppUI->_('no files') . '</p>';
     }
 
     echo getFolders($folder_id);
 ?>
-</table>
+</div>

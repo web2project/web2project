@@ -1324,8 +1324,8 @@ function getFolders($parent)
         if (array_key_exists($row['file_folder_id'], $allowed_folders_ary) or array_key_exists($parent, $allowed_folders_ary)) {
             $file_count = count($file_folder->getFoldersByParent($row['file_folder_id']));
 
-            $s .= '<tr><td colspan="20">';
-            $s .= '<ul>';
+            $s .= '<div class="d-flex align-items-center gap-2 border-bottom py-1 w2p-folder">';
+            $s .= '<ul class="me-auto">';
             $s .= '<li><a href="./index.php?m=files&amp;a=addedit_folder&amp;file_folder_parent=' . $row['file_folder_id'] . '&amp;file_folder_id=0">' . w2PshowImage('edit_add.png', '', '', 'new folder', 'add a new subfolder', 'files') . '</a></li>';
             $s .= '<li><a href="./index.php?m=files&amp;a=addedit&amp;folder=' . $row['file_folder_id'] . '&amp;project_id=' . $project_id . '&amp;file_id=0">' . w2PshowImage('folder_new.png', '', '', 'new file', 'add new file to this folder', 'files') . '</a></li>';
             $s .= '<li><a href="./index.php?m=files&amp;a=addedit_folder&amp;folder=' . $row['file_folder_id'] . '">' . w2PshowImage('filesaveas.png', '', '', 'edit icon', 'edit this folder', 'files') . '</a></li>';
@@ -1340,18 +1340,17 @@ function getFolders($parent)
             if ($file_count > 0) {
                 $s .= '<li class="info-text"><a href="javascript: void(0);" onClick="expand(\'files_' . $row['file_folder_id'] . '\')" class="has-files">(' . $file_count . ' files) +</a></li>';
             }
+            $s .= '</ul>';
             $s .= '<form name="frm_remove_folder_' . $row['file_folder_id'] . '" action="?m=files" method="post" accept-charset="utf-8">
                     <input type="hidden" name="dosql" value="do_folder_aed" />
                     <input type="hidden" name="del" value="1" />
                     <input type="hidden" name="file_folder_id" value="' . $row['file_folder_id'] . '" />
                     </form>';
-
-            $s .= '</ul>';
             $s .= '<a class="small-delete" href="javascript: void(0);" onclick="if (confirm(\'Are you sure you want to delete this folder?\')) {document.frm_remove_folder_' . $row['file_folder_id'] . '.submit()}">' . w2PshowImage('remove.png', '', '', 'delete icon', 'delete this folder', 'files') . '</a>';
-            $s .= '</td></tr>';
+            $s .= '</div>';
             if ($file_count > 0) {
                 $s .= '<div class="files-list" id="files_' . $row['file_folder_id'] . '" style="display: none;">';
-                $s .= displayFiles($AppUI, $row['file_folder_id'], $task_id, $project_id, $company_id);
+                $s .= '<table class="tbl list">' . displayFiles($AppUI, $row['file_folder_id'], $task_id, $project_id, $company_id) . '</table>';
                 $s .= "</div>";
             }
         }

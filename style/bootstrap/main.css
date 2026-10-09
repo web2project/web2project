@@ -280,6 +280,12 @@ div.std.addedit label {
     font-weight: 500;
     color: var(--bs-secondary-color);
 }
+div.std.addedit label.form-check-label {
+    flex: none;
+    font-weight: normal;
+    text-align: start;
+    color: inherit;
+}
 div.std.addedit p > input.text,
 div.std.addedit p > select,
 div.std.addedit p > textarea {
