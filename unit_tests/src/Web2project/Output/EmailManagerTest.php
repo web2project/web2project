@@ -7,12 +7,12 @@
  * LICENSE: This source file is subject to Clear BSD License. Please see the
  *   LICENSE file in root of site for further details
  *
- * @author      Keith Casey <contrib@caseysoftware.com>
- * @category    EmailManager
- * @package     web2project
- * @subpackage  unit_tests
- * @license     Clear BSD
- * @link        http://www.web2project.net
+ * @author     Keith Casey <contrib@caseysoftware.com>
+ * @category   EmailManager
+ * @package    web2project
+ * @subpackage unit_tests
+ * @license    Clear BSD
+ * @link       http://www.web2project.net
  */
 
 class Web2project_Output_EmailManagerTest extends CommonSetup
