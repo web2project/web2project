@@ -32,7 +32,7 @@ if (W2P_BASE_DIR . '/locales/' . $AppUI->user_locale . '/common.inc') {
 }
 
 /**
- * language files for specific locales and specific modules (for external modules) should be put in
+ * Language files for specific locales and specific modules (for external modules) should be put in
  *   modules/[the-module]/locales/[the-locale]/[the-module].inc or modules/[the-module]/locales/[the-locale].inc
  *   this allows for module specific translations to be distributed with the module
  */
