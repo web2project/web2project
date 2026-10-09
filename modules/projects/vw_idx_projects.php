@@ -64,12 +64,8 @@ $items = $paginator->getItemsOnPage($page);
 ?>
 
 <form action="./index.php?m=projects" method="post" accept-charset="utf-8">
+    <?php echo $paginator->buildNavigation($AppUI, $m, $tab, array('orderby' => $orderby)); ?>
     <table id="tblProjects-list" class="tbl list">
-        <tr>
-            <td colspan="<?php echo count($fieldNames) + 1; ?>">
-                <?php echo $paginator->buildNavigation($AppUI, $m, $tab, array('orderby' => $orderby)); ?>
-            </td>
-        </tr>
         <thead>
             <tr>
                 <?php
@@ -205,26 +201,19 @@ $items = $paginator->getItemsOnPage($page);
             $pstatus = w2PgetSysVal('ProjectStatus');
             if ($none) {
                 echo '<tr><td colspan="25">' . $AppUI->_('No projects to display for this Company, Owner and Type, or your Search returned no results. Please check the filters above and try again.') . '</td></tr>';
-            } else {
-                ?>
-                    <tr>
-                        <td colspan="25" align="right">
-                            <input type="submit" class="btn btn-primary btn-mini" value="<?php echo $AppUI->_('Update projects status'); ?>" />
-                            <input type="hidden" name="dosql" value="do_project_action" />
-                            <input type="hidden" name="m" value="projects" />
-                            <?php echo arraySelect($pstatus, 'project_status', 'size="1" class="text"', $project_status_filter + 1, true); ?>
-                        </td>
-                    </tr>
-                <?php
-                }
+            }
             ?>
-            <tr>
-                <td colspan="<?php echo count($fieldNames) + 1; ?>">
-                    <?php echo $paginator->buildNavigation($AppUI, $m, $tab); ?>
-                </td>
-            </tr>
         </tbody>
 	</table>
+	<?php if (!$none) { ?>
+        <div class="d-flex flex-wrap justify-content-end align-items-center gap-2">
+            <input type="submit" class="btn btn-primary btn-sm" value="<?php echo $AppUI->_('Update projects status'); ?>" />
+            <input type="hidden" name="dosql" value="do_project_action" />
+            <input type="hidden" name="m" value="projects" />
+            <?php echo arraySelect($pstatus, 'project_status', 'size="1" class="text"', $project_status_filter + 1, true); ?>
+        </div>
+	<?php } ?>
+    <?php echo $paginator->buildNavigation($AppUI, $m, $tab); ?>
 </form>
 <?php
 if ($is_tabbed) {

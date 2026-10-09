@@ -148,24 +148,16 @@ $form = new w2p_Output_HTML_FormHelper($AppUI);
                 <?php $form->showField('project_type', (int) $object->project_type, array(), $ptype); ?>
             </p>
             <p>
-            <table width="100%" bgcolor="#cccccc">
-                <tr>
-                    <td><?php echo $AppUI->_('Status'); ?> *</td>
-                    <td nowrap="nowrap"><?php echo $AppUI->_('Progress'); ?></td>
-                    <td><?php echo $AppUI->_('Active'); ?>?</td>
-                </tr>
-                <tr>
-                    <td>
-                        <?php $form->showField('project_status', $object->project_status, array(), $pstatus); ?>
-                    </td>
-                    <td>
-                        <strong><?php echo sprintf("%.1f%%", $object->project_percent_complete); ?></strong>
-                    </td>
-                    <td>
-                        <input type="checkbox" value="1" name="project_active" <?php echo $object->project_active || $object_id == 0 ? 'checked="checked"' : ''; ?> />
-                    </td>
-                </tr>
-            </table>
+                <label><?php echo $AppUI->_('Status'); ?> *:</label>
+                <?php $form->showField('project_status', $object->project_status, array(), $pstatus); ?>
+            </p>
+            <p>
+                <label><?php echo $AppUI->_('Progress'); ?>:</label>
+                <strong><?php echo sprintf("%.1f%%", $object->project_percent_complete); ?></strong>
+            </p>
+            <p>
+                <label><?php echo $AppUI->_('Active'); ?>?</label>
+                <input type="checkbox" value="1" name="project_active" <?php echo $object->project_active || $object_id == 0 ? 'checked="checked"' : ''; ?> />
             </p>
             <p>
                 <?php $form->showLabel('Import tasks from'); ?>
