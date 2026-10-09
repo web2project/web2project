@@ -111,6 +111,7 @@ function w2p_old_autoload($class_name)
  *
  * @param mixed $a1
  * @param mixed $a2
+ *
  * @return mixed
  */
 function arrayMerge($a1, $a2)
@@ -131,8 +132,9 @@ function arrayMerge($a1, $a2)
 /**
  * Retrieves a configuration setting.
  *
- * @param $key          string The name of a configuration setting
+ * @param string          $key The name of a configuration setting
  * @param mixed $default The default value to return if the key not found.
+ *
  * @return mixed The value of the setting, or the default value if not found.
  */
 function w2PgetConfig($key, $default = null)
@@ -155,6 +157,7 @@ function w2PgetConfig($key, $default = null)
  * @param array<mixed> $arr  Source array, usually $_GET or $_POST
  * @param string       $name Key to read
  * @param mixed        $def  Default when the key is missing
+ *
  * @return mixed
  */
 function w2PgetParam(&$arr, $name, $def = null)
@@ -310,7 +313,8 @@ function notifyNewUser($emailAddress, $username, $emailUtility = null)
 /**
  * Authenticator Factory
  *
- * @param $auth_mode
+ * @param mixed $auth_mode
+ *
  * @return w2p_Authenticators_Base
  */
 function &getAuth($auth_mode) {
