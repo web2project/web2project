@@ -180,63 +180,59 @@ function chPriority(user_id) {
 	<input type="hidden" name="report_type" value="<?php echo $report_type; ?>" />
     <input type="hidden" name="datePicker" value="log" />
 	
-	<table class="std tasksperuser">
-		<tr>
-			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('For period'); ?>:</td>
-			<td nowrap="nowrap">
+	<div class="d-flex flex-wrap align-items-center gap-2 mb-3 std tasksperuser">
+			<span class="text-nowrap"><?php echo $AppUI->_('For period'); ?>:</span>
+			<span class="text-nowrap">
 				<input type="hidden" name="log_start_date" id="log_start_date" value="<?php echo $start_date ? $start_date->format(FMT_TIMESTAMP_DATE) : ''; ?>" />
 				<input type="text" name="start_date" id="start_date" onchange="setDate_new('editFrm', 'start_date');" value="<?php echo $start_date ? $start_date->format($df) : ''; ?>" class="text" />
 				<a href="javascript: void(0);" onclick="return showCalendar('start_date', '<?php echo $df ?>', 'editFrm', null, true, true)">
 					<img src="<?php echo w2PfindImage('calendar.gif'); ?>" alt="<?php echo $AppUI->_('Calendar'); ?>" />
 				</a>
-			</td>
-			<td nowrap="nowrap">
+			</span>
+			<span class="text-nowrap">
 				<?php
                     $active_users = $perms->getPermittedUsers('tasks');
                     echo arraySelect($active_users, 'log_userfilter', 'class="text" style="width: 200px"', $log_userfilter);
                 ?>
-			</td>
-			<td width="50%" nowrap="nowrap">
+			</span>
+			<span class="text-nowrap">
 				<input type="checkbox" name="display_week_hours" id="display_week_hours" <?php if ('on' == $display_week_hours) { echo 'checked="checked"'; } ?> />
-				<label for="display_week_hours"><?php echo $AppUI->_('Display allocated hours/week'); ?></label><br />
-			</td>
-			<td nowrap="nowrap">
+				<label for="display_week_hours"><?php echo $AppUI->_('Display allocated hours/week'); ?></label>
+			</span>
+			<span class="text-nowrap">
 				<input type="checkbox" name="use_period" id="use_period" <?php if ('on' == $use_period) { echo 'checked="checked"'; } ?> />
 				<label for="use_period"><?php echo $AppUI->_('Use the period'); ?></label>
-			</td>
-			<td width="50%" nowrap="nowrap">
+			</span>
+			<span class="text-nowrap">
 				<input type="checkbox" name="all_proj_status" id="all_proj_status" <?php if ('on' == $all_proj_status) { echo 'checked="checked"'; } ?> />
 				<label for="all_proj_status"><?php echo $AppUI->_('All project status except template'); ?></label>
-			</td>
-			<td align="right" width="50%" nowrap="nowrap">
+			</span>
+			<span class="text-nowrap">
 				<input class="button" type="submit" name="do_report" value="<?php echo $AppUI->_('submit'); ?>" />
-			</td>
-		</tr>
-		<tr>
-			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('to'); ?>:</td>
-			<td>
+			</span>
+		<div class="w-100"></div>
+			<span class="text-nowrap"><?php echo $AppUI->_('to'); ?>:</span>
+			<span class="text-nowrap">
 				<input type="hidden" name="log_end_date" id="log_end_date" value="<?php echo $end_date ? $end_date->format(FMT_TIMESTAMP_DATE) : ''; ?>" />
 				<input type="text" name="end_date" id="end_date" onchange="setDate_new('editFrm', 'end_date');" value="<?php echo $end_date ? $end_date->format($df) : ''; ?>" class="text" />
 				<a href="javascript: void(0);" onclick="return showCalendar('end_date', '<?php echo $df ?>', 'editFrm', null, true, true)">
 					<img src="<?php echo w2PfindImage('calendar.gif'); ?>" alt="<?php echo $AppUI->_('Calendar'); ?>" />
 				</a>
-			</td>
-			<td nowrap="nowrap" colspan="1" align="left"><?php echo $AppUI->_('Projects'); ?>:
+			</span>
+			<span class="text-nowrap"><?php echo $AppUI->_('Projects'); ?>:
 				<?php echo arraySelect($projFilter, 'project_id', 'size=1 class=text', $project_id, false); ?>
-			</td>
-		    <td>
+			</span>
+		    <span class="text-nowrap">
 				<input type="checkbox" name="show_orphaned" id="show_orphaned" <?php if ($show_orphaned == 'on') { echo 'checked="checked"'; } ?> />
 				<label for="show_orphaned"><?php echo $AppUI->_('Show orphaned tasks'); ?></label>
-			</td>
-			<td>
+			</span>
+			<span class="text-nowrap">
 				<?php echo $AppUI->_('Levels to display'); ?>
 				<input type="text" name="max_levels" size="10" maxlength="3" value="<?php echo $max_levels; ?>" />
-			</td>
-		</tr>
-		<tr>
-			<td colspan="5" align="left" nowrap="nowrap"><?php echo $AppUI->_('UP') . "&nbsp;=&nbsp;" . $AppUI->_('User specific Task Priority'); ?></td>
-		</tr>
-	</table>
+			</span>
+		<div class="w-100"></div>
+			<span class="text-nowrap"><?php echo $AppUI->_('UP') . "&nbsp;=&nbsp;" . $AppUI->_('User specific Task Priority'); ?></span>
+	</div>
 	<?php
     echo $AppUI->getTheme()->styleRenderBoxBottom();
 	?>
@@ -376,18 +372,18 @@ if ($do_report) {
                     $tmpuser .= '<td bgcolor="#D0D0D0"></td>';
                 }
 
-                $tmpuser .= '<td bgcolor="#D0D0D0"><table width="100%"><tr>';
-                $tmpuser .= '<td align="left">
+                $tmpuser .= '<td bgcolor="#D0D0D0"><div class="d-flex align-items-center justify-content-between gap-2">';
+                $tmpuser .= '<span class="text-nowrap">
 					 <a href="javascript:chAssignment(' . $user_id . ', 0, 1);"><img src="' . w2PfindImage('remove.png', 'tasks')   . '" alt="' . $AppUI->_('Unassign User') . '" title="' . $AppUI->_('Unassign User from Task') . '" /></a>&nbsp;' .
 					'<a href="javascript:chAssignment(' . $user_id . ', 1, 0);"><img src="' . w2PfindImage('exchange.png', 'tasks') . '" alt="' . $AppUI->_('Hand Over') . '" title="' . $AppUI->_('Unassign User from Task and assign to selected Users') . '" /></a>&nbsp;' .
-					'<a href="javascript:chAssignment(' . $user_id . ', 0, 0);"><img src="' . w2PfindImage('add.png', 'tasks')      . '" alt="' . $AppUI->_('Assign Users') . '" title="' . $AppUI->_('Assign selected Users to selected Tasks') . '" /></a></td>';
-                $tmpuser .= '<td align="center"><select class="text" name="percentage_assignment" title="' . $AppUI->_('Assign with Percentage') . '">';
+					'<a href="javascript:chAssignment(' . $user_id . ', 0, 0);"><img src="' . w2PfindImage('add.png', 'tasks')      . '" alt="' . $AppUI->_('Assign Users') . '" title="' . $AppUI->_('Assign selected Users to selected Tasks') . '" /></a></span>';
+                $tmpuser .= '<select class="text" name="percentage_assignment" title="' . $AppUI->_('Assign with Percentage') . '">';
                 for ($i = 0; $i <= 100; $i += 5) {
                     $tmpuser .= '<option ' . (($i == 30) ? 'selected="true"' : '') . ' value="' . $i . '">' . $i . '%</option>';
                 }
-                $tmpuser .= '</select></td>';
-                $tmpuser .= '<td align="center">' . arraySelect($taskPriority, 'user_task_priority', 'onchange="javascript:chPriority(' . $user_id . ');" size="1" class="text" title="' . $AppUI->_('Change User specific Task Priority of selected Tasks') . '"', 999, true);
-                $tmpuser .= '</td></tr></table></td>';
+                $tmpuser .= '</select>';
+                $tmpuser .= arraySelect($taskPriority, 'user_task_priority', 'onchange="javascript:chPriority(' . $user_id . ');" size="1" class="text" title="' . $AppUI->_('Change User specific Task Priority of selected Tasks') . '"', 999, true);
+                $tmpuser .= '</div></td>';
 
                 $tmpuser .= '</tr>';
 
@@ -446,15 +442,15 @@ if ($show_orphaned == 'on') {
 	for ($w = 0; $w <= (4 + $weekcells_count); $w++) {
 		$tmpuser .= '<td bgcolor="#D0D0D0"></td>';
 	}
-	$tmpuser .= '<td bgcolor="#D0D0D0"><table width="100%"><tr>';
-	$tmpuser .= '<td align="left">' . '<a href="javascript:chAssignment(' . $user_id . ', 0, 0);">' . w2PshowImage('add.png', 16, 16, 'Assign Users', 'Assign selected Users to selected Tasks', 'tasks') . '</a></td>';
-	$tmpuser .= '<td align="center"><select class="text" name="percentage_assignment" title="' . $AppUI->_('Assign with Percentage') . '">';
+	$tmpuser .= '<td bgcolor="#D0D0D0"><div class="d-flex align-items-center justify-content-between gap-2">';
+	$tmpuser .= '<span class="text-nowrap">' . '<a href="javascript:chAssignment(' . $user_id . ', 0, 0);">' . w2PshowImage('add.png', 16, 16, 'Assign Users', 'Assign selected Users to selected Tasks', 'tasks') . '</a></span>';
+	$tmpuser .= '<select class="text" name="percentage_assignment" title="' . $AppUI->_('Assign with Percentage') . '">';
 	for ($i = 0; $i <= 100; $i += 5) {
 		$tmpuser .= '<option ' . (($i == 30) ? 'selected="true"' : '') . ' value="' . $i . '">' . $i . '%</option>';
 	}
-	$tmpuser .= '</select></td>';
-	$tmpuser .= '<td align="center">' . arraySelect($taskPriority, 'task_priority', 'onchange="javascript:chPriority(' . $user_id . ');" size="1" class="text" title="' . $AppUI->_('Change Priority of selected Tasks') . '"', 0, true);
-	$tmpuser .= '</td></tr></table></td>';
+	$tmpuser .= '</select>';
+	$tmpuser .= arraySelect($taskPriority, 'task_priority', 'onchange="javascript:chPriority(' . $user_id . ');" size="1" class="text" title="' . $AppUI->_('Change Priority of selected Tasks') . '"', 0, true);
+	$tmpuser .= '</div></td>';
 
 	$tmpuser .= '</tr>';
 

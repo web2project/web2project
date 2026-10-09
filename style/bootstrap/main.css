@@ -295,6 +295,9 @@ div.std.addedit input.save,
 div.std.addedit .save {
     float: right;
 }
+div.std.addedit p > .save {
+    margin-left: auto;
+}
 div.std.addedit > .column.w2p-wide {
     grid-column: 1 / -1;
 }
