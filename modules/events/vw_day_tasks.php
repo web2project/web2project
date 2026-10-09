@@ -15,16 +15,18 @@ $s = '';
 $dayStamp = $this_day->format(FMT_TIMESTAMP_DATE);
 
 if (isset($links[$dayStamp])) {
+	$s .= '<ul class="list-unstyled mb-2">';
 	foreach ($links[$dayStamp] as $e) {
 		$href = isset($e['href']) ? $e['href'] : null;
 		$alt = isset($e['alt']) ? $e['alt'] : null;
 
-		$s .= '<tr><td>';
+		$s .= '<li>';
 		$s .= $href ? '<a href="' . $href . '" class="event" title="' . $alt . '">' : '';
 		$s .= $e['text'];
 		$s .= $href ? '</a>' : '';
-		$s .= '</td></tr>';
+		$s .= '</li>';
 	}
+	$s .= '</ul>';
 }
 echo $s;
 

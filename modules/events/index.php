@@ -58,7 +58,7 @@ function clickWeek( uts, fdate ) {
 }
 </script>
 
-<table cellspacing="0" cellpadding="0" border="0" width="100%" id="month-view"><tr><td>
+<div id="month-view">
 <?php
 // establish the focus 'date'
 $date = new w2p_Utilities_Date($date);
@@ -139,9 +139,8 @@ $links = getTaskLinks($first_time, $last_time, array(), 20, $company_id, true);
 $links += getEventLinks($first_time, $last_time, array(), 20);
 $minical->setEvents($links);
 
-echo '<table class="std"><tr>';
-echo '<td valign="top" align="center" width="220">' . $minical->show() . '</td>';
-echo '<td valign="top" align="center" width="75%">&nbsp;</td>';
+echo '<div class="d-flex flex-wrap justify-content-between gap-3 std">';
+echo '<div class="w2p-minical">' . $minical->show() . '</div>';
 
 $minical->setDate($cal->next_month);
 $first_time = new w2p_Utilities_Date($cal->next_month);
@@ -155,7 +154,7 @@ $links = getTaskLinks($first_time, $last_time, array(), 20, $company_id, true);
 $links += getEventLinks($first_time, $last_time, array(), 20, true);
 $minical->setEvents($links);
 
-echo '<td valign="top" align="center" width="220">' . $minical->show() . '</td>';
-echo '</tr></table>';
+echo '<div class="w2p-minical">' . $minical->show() . '</div>';
+echo '</div>';
 ?>
-</td></tr></table>
+</div>

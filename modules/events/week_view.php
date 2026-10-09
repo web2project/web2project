@@ -77,19 +77,13 @@ $titleBlock->addCell($AppUI->_('Event Filter') . ':');
 $titleBlock->addButton('New event', '?m=events&a=addedit&date=' . $today);
 $titleBlock->show();
 ?>
-<table border="0" cellspacing="0" cellpadding="2" width="100%" class="motitle">
-<tr>
-	<td>
-		<a href="<?php echo '?m=events&a=week_view&date=' . $prev_week->format(FMT_TIMESTAMP_DATE); ?>"><img src="<?php echo w2PfindImage('prev.gif'); ?>" alt="pre" /></a>
-	</td>
-	<th width="100%">
+<div class="d-flex align-items-center gap-2 motitle">
+	<a href="<?php echo '?m=events&amp;a=week_view&amp;date=' . $prev_week->format(FMT_TIMESTAMP_DATE); ?>"><img src="<?php echo w2PfindImage('prev.gif'); ?>" alt="pre" /></a>
+	<div class="flex-grow-1 text-center fw-bold w2p-cal-month">
 		<?php echo $AppUI->_('Week') . ' ' . $last_time->format('%U - %Y') . ' - ' . $AppUI->_($last_time->format('%B')); ?>
-	</th>
-	<td>
-		<a href="<?php echo '?m=events&a=week_view&date=' . $next_week->format(FMT_TIMESTAMP_DATE); ?>"><img src="<?php echo w2PfindImage('next.gif'); ?>" alt="next" /></a>
-	</td>
-</tr>
-</table>
+	</div>
+	<a href="<?php echo '?m=events&amp;a=week_view&amp;date=' . $next_week->format(FMT_TIMESTAMP_DATE); ?>"><img src="<?php echo w2PfindImage('next.gif'); ?>" alt="next" /></a>
+</div>
 
 <table border="0" cellspacing="1" cellpadding="2" width="100%" class="view week">
 <?php
@@ -108,17 +102,16 @@ for ($i = 0; $i < 7; $i++) {
 	$dayStamp = $show_day->format(FMT_TIMESTAMP_DATE);
 	$href = '?m=events&a=day_view&date='.$dayStamp.'&tab=0';
 
-	$s .= '		<table>';
-	$s .= '		<tr><td align="left"><a href="' . $href . '">';
+	$s .= '		<div class="mb-1"><a href="' . $href . '">';
 
 	$s .= $dayStamp == $today ? '<span style="color:red">' : '';
 	$day_string = "<strong>" . $show_day->format('%d') . '</strong>';
 	$day_name = $AppUI->_($show_day->format('%A'));
 	$s .= $day_string . ' ' . $day_name;
 	$s .= $dayStamp == $today ? '</span>' : '';
-	$s .= '</a></td></tr>';
+	$s .= '</a></div>';
 
-	$s .= '<tr><td>';
+	$s .= '<div>';
 
 	if (isset($links[$dayStamp])) {
 		foreach ($links[$dayStamp] as $e) {
@@ -133,7 +126,7 @@ for ($i = 0; $i < 7; $i++) {
 		}
 	}
 
-	$s .= '</td></tr></table>';
+	$s .= '</div>';
 
 	$s .= '</td>';
 
@@ -143,9 +136,7 @@ for ($i = 0; $i < 7; $i++) {
 $s .= '</tr>';
 echo $s;
 ?>
-<tr>
-	<td colspan="7" align="right" bgcolor="#efefe7">
-		<a href="./index.php?m=events&a=day_view"><?php echo $AppUI->_('today'); ?></a>
-	</td>
-</tr>
 </table>
+<div class="text-end px-2 py-1 bg-body-tertiary">
+	<a href="./index.php?m=events&amp;a=day_view"><?php echo $AppUI->_('today'); ?></a>
+</div>
