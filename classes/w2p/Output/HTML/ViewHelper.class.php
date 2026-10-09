@@ -2,8 +2,8 @@
 /**
  * Class w2p_Output_HTML_FormHelper
  *
- * @package     web2project\output\html
- * @author      D. Keith Casey, Jr. <contrib@caseysoftware.com>
+ * @package web2project\output\html
+ * @author  D. Keith Casey, Jr. <contrib@caseysoftware.com>
  */
 class w2p_Output_HTML_ViewHelper extends w2p_Output_HTML_Base
 {
