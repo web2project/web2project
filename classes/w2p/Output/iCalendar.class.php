@@ -7,7 +7,7 @@
  * http://severinghaus.org/projects/icv/  It helped me discover and debug a
  * number of date issues and streamline the whole process.
  *
- * @package     web2project\output
+ * @package web2project\output
  */
 
 class w2p_Output_iCalendar
@@ -16,9 +16,11 @@ class w2p_Output_iCalendar
      * This takes a single array item at a time and transforms it into a proper
      *  iCalendar VEVENT string and returns it.
      *
-     * @global type $AppUI
      * @param mixed $calendarItem
      * @param string $module_name
+     *
+     * @global w2p_Core_CAppUI $AppUI
+     *
      * @return string
      */
     public static function formatCalendarItem($calendarItem, $module_name)
