@@ -9,8 +9,8 @@
  * admin interface that allows templates to be edited and potentially even
  * translated.
  *
- * @package     web2project\output
- * @author      D. Keith Casey, Jr. <caseydk@users.sourceforge.net>
+ * @package web2project\output
+ * @author  D. Keith Casey, Jr. <caseydk@users.sourceforge.net>
  */
 
 class w2p_Output_EmailManager
