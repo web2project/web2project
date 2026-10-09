@@ -15,8 +15,9 @@ class w2p_Actions_BulkTasks extends CTask
     /**
      * Import tasks from another project
      *
-     * 	@param	int $from_project_id Project ID of the tasks come from.
-     * 	@return	array<mixed> Errors raised while importing; empty on success
+     * 	@param int $from_project_id Project ID of the tasks come from.
+     *
+     * 	@return array<mixed> Errors raised while importing; empty on success
      *
      *  @todo - this entire thing has nothing to do with projects.. it should move to the CTask class - dkc 25 Nov 2012
      *  @todo - why are we returning either an array or a boolean? You make my head hurt. - dkc 25 Nov 2012
