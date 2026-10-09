@@ -2,18 +2,17 @@
 /**
  * Class for testing companies functionality
  *
- *
  * PHP version 5
  *
  * LICENSE: This source file is subject to Clear BSD License. Please see the
  *   LICENSE file in root of site for further details
  *
- * @author      Trevor Morse <trevor.morse@gmail.com>
- * @category    CCompanies
- * @package     web2project
- * @subpackage  unit_tests
- * @license     Clear BSD
- * @link        http://www.web2project.net
+ * @author     Trevor Morse <trevor.morse@gmail.com>
+ * @category   CCompanies
+ * @package    web2project
+ * @subpackage unit_tests
+ * @license    Clear BSD
+ * @link       http://www.web2project.net
  */
 
 class CCompaniesTest extends CommonSetup
