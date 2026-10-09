@@ -25,8 +25,7 @@
  *    Keith Casey (caseydk). Its original copyright statement by Adam Donnison
  *    is being restored until this can be clarified and/or corrected.
  *
- * @package     web2project\database
- *
+ * @package web2project\database
  */
 
 class w2p_Database_Query {
@@ -72,15 +71,16 @@ class w2p_Database_Query {
 
 	/**
 	 * Array of db function names
-	 * @access private
+	 *
 	 * @var array
 	 */
 	protected $_db_funcs;
 
-	/** w2p_Database_Query constructor
+	/**
+	 * w2p_Database_Query constructor
 	 *
-	 * @param $prefix Database table prefix - will be appended to all web2project table names
-	 * @param $query_db Database type
+	 * @param mixed $prefix Database table prefix - will be appended to all web2project table names
+	 * @param mixed $query_db Database type
 	 */
 	public function __construct($prefix = null, $query_db = null) {
 		global $db;
@@ -96,7 +96,8 @@ class w2p_Database_Query {
 		$this->clear();
 	}
 
-	/** Clear the current query and all set options
+	/**
+	 * Clear the current query and all set options
 	 */
 	public function clear() {
 		global $ADODB_FETCH_MODE;
@@ -134,6 +135,7 @@ class w2p_Database_Query {
      * Instead of concatenating here, retrieve the relevant fields and do
      *   it in PHP. It won't necessarily be faster but should be more
      *   supportable cross-databasewise.
+     *
 	 * @deprecated
 	 */
 	public function concat() {
@@ -143,23 +145,26 @@ class w2p_Database_Query {
 		return $conc_str;
 	}
 
-	/** Get database specific SQL used to check for null values.
+	/**
+	 * Get database specific SQL used to check for null values.
 	 *
 	 * Calls the ADODB IfNull method
-	 * @return String containing SQL to check for null field value
+	 *
+	 * @return string containing SQL to check for null field value
 	 */
 	public function ifNull($field, $nullReplacementValue) {
         trigger_error("ifNull() has been deprecated in v3.0 and will be removed by v4.0. There is no replacement.", E_USER_NOTICE );
         return $this->_db->IfNull($field, $nullReplacementValue);
 	}
 
-	/** Add item to an internal associative array
+	/**
+	 * Add item to an internal associative array
 	 *
 	 * Used internally with w2p_Database_Query
 	 *
-	 * @param	$varname	Name of variable to add/create
-	 * @param	$name	Data to add
-	 * @param	$id	Index to use in array.
+	 * @param mixed $varname	Name of variable to add/create
+	 * @param mixed $name	Data to add
+	 * @param mixed $id	Index to use in array.
 	 */
 	public function addMap($varname, $name, $id) {
 		if (!isset($this->$varname)) {
@@ -172,7 +177,8 @@ class w2p_Database_Query {
 		}
 	}
 
-	/** Add a table to the query
+	/**
+	 * Add a table to the query
 	 *
 	 * A table is normally addressed by an
 	 * alias.  If you don't supply the alias chances are your code will
@@ -181,20 +187,22 @@ class w2p_Database_Query {
 	 * of {PREFIX}table as a.
 	 * Where {PREFIX} is the system defined table prefix.
 	 *
-	 * @param	$name	Name of table, without prefix.
-	 * @param	$id	Alias for use in query/where/group clauses.
+	 * @param mixed $name	Name of table, without prefix.
+	 * @param mixed $id	Alias for use in query/where/group clauses.
 	 */
 	public function addTable($name, $id = null) {
 		$this->addMap('table_list', $name, ($id ? $id : $name));
 	}
 
-	/** Add a clause to an internal array
+	/**
+	 * Add a clause to an internal array
 	 *
 	 * Checks to see variable exists first.
 	 * then pushes the new data onto the end of the array.
-	 * @param $clause the type of clause to add
-	 * @param $value the clause value
-	 * @param $check_array defaults to true, iterates through each element in $value and adds them seperately to the clause
+	 *
+	 * @param mixed $clause the type of clause to add
+	 * @param mixed $value the clause value
+	 * @param mixed $check_array defaults to true, iterates through each element in $value and adds them seperately to the clause
 	 */
 	public function addClause($clause, $value, $check_array = true) {
 		if (!isset($this->$clause)) {
@@ -209,23 +217,26 @@ class w2p_Database_Query {
 		}
 	}
 
-	/** Add the select part (fields, functions) to the query
+	/**
+	 * Add the select part (fields, functions) to the query
 	 *
 	 * E.g. '*', or 'a.*'
 	 * or 'a.field, b.field', etc.  You can call this multiple times
 	 * and it will correctly format a combined query.
 	 *
-	 * @param	$query	Query string to use.
+	 * @param mixed $query	Query string to use.
 	 */
 	public function addQuery($query) {
 		$this->addClause('query', $query);
 	}
 
-	/** Insert a value into the database
-	 * @param $field The field to insert the value into
-	 * @param $value The specified value
-	 * @param $set Defaults to false. If true will check to see if the fields or values supplied are comma delimited strings instead of arrays
-	 * @param $func Defaults to false. If true will not use quotation marks around the value - to be used when the value being inserted includes a function
+	/**
+	 * Insert a value into the database
+	 *
+	 * @param mixed $field The field to insert the value into
+	 * @param mixed $value The specified value
+	 * @param mixed $set Defaults to false. If true will check to see if the fields or values supplied are comma delimited strings instead of arrays
+	 * @param mixed $func Defaults to false. If true will not use quotation marks around the value - to be used when the value being inserted includes a function
 	 */
 	public function addInsert($field, $value = null, $set = false, $func = false) {
 		if (is_array($field) && $value == null) {
@@ -263,22 +274,26 @@ class w2p_Database_Query {
 	}
 
 	// implemented addReplace() on top of addInsert()
-	/** Insert a value into the database, to replace an existing row.
-	 * @param $field The field to insert the value into
-	 * @param $value The specified value
-	 * @param $set Defaults to false. If true will check to see if the fields or values supplied are comma delimited strings instead of arrays
-	 * @param $func Defaults to false. If true will not use quotation marks around the value - to be used when the value being inserted includes a function
+	/**
+	 * Insert a value into the database, to replace an existing row.
+	 *
+	 * @param mixed $field The field to insert the value into
+	 * @param mixed $value The specified value
+	 * @param mixed $set Defaults to false. If true will check to see if the fields or values supplied are comma delimited strings instead of arrays
+	 * @param mixed $func Defaults to false. If true will not use quotation marks around the value - to be used when the value being inserted includes a function
 	 */
 	public function addReplace($field, $value, $set = false, $func = false) {
 		$this->addInsert($field, $value, $set, $func);
 		$this->type = 'replace';
 	}
 
-	/** Update a database value
-	 * @param $field The field to update
-	 * @param $value The value to set $field to
-	 * @param $set Defaults to false. If true will check to see if the fields or values supplied are comma delimited strings instead of arrays
-	 * @param $func Defaults to false. If true will not use quotation marks around the value - to be used when the value being updated includes a function
+	/**
+	 * Update a database value
+	 *
+	 * @param mixed $field The field to update
+	 * @param mixed $value The value to set $field to
+	 * @param mixed $set Defaults to false. If true will check to see if the fields or values supplied are comma delimited strings instead of arrays
+	 * @param mixed $func Defaults to false. If true will not use quotation marks around the value - to be used when the value being updated includes a function
 	 */
 	public function addUpdate($field, $value = null, $set = false, $func = false) {
 		if (is_array($field) && $value == null) {
@@ -311,8 +326,10 @@ class w2p_Database_Query {
 		$this->type = 'update';
 	}
 
-	/** Create a database table
-	 * @param $table the name of the table to create
+	/**
+	 * Create a database table
+	 *
+	 * @param mixed $table the name of the table to create
 	 */
 	public function createTable($table, $def = null) {
 		$this->type = 'createPermanent';
@@ -341,43 +358,53 @@ class w2p_Database_Query {
 		return $dict->ExecuteSQLArray($query_array);
 	}
 
-	/** Create a temporary database table
-	 * @param $table the name of the temporary table to create.
+	/**
+	 * Create a temporary database table
+	 *
+	 * @param mixed $table the name of the temporary table to create.
 	 */
 	public function createTemp($table) {
 		$this->type = 'createTemporary';
 		$this->create_table = $table;
 	}
 
-	/** Drop a table from the database
+	/**
+	 * Drop a table from the database
 	 *
 	 * Use dropTemp() to drop temporary tables
-	 * @param $table the name of the table to drop.
+	 *
+	 * @param mixed $table the name of the table to drop.
 	 */
 	public function dropTable($table) {
 		$this->type = 'drop';
 		$this->create_table = $table;
 	}
 
-	/** Drop a temporary table from the database
-	 * @param $table the name of the temporary table to drop
+	/**
+	 * Drop a temporary table from the database
+	 *
+	 * @param mixed $table the name of the temporary table to drop
 	 */
 	public function dropTemp($table) {
 		$this->type = 'drop';
 		$this->create_table = $table;
 	}
 
-	/** Alter a database table
-	 * @param $table the name of the table to alter
+	/**
+	 * Alter a database table
+	 *
+	 * @param mixed $table the name of the table to alter
 	 */
 	public function alterTable($table) {
 		$this->create_table = $table;
 		$this->type = 'alter';
 	}
 
-	/** Add a field definition for usage with table creation/alteration
-	 * @param $name The name of the field
-	 * @param $type The type of field to create
+	/**
+	 * Add a field definition for usage with table creation/alteration
+	 *
+	 * @param mixed $name The name of the field
+	 * @param mixed $type The type of field to create
 	 */
 	public function addField($name, $type) {
 		if (!is_array($this->create_definition)) {
@@ -389,8 +416,9 @@ class w2p_Database_Query {
 
 	/**
 	 * Alter a field definition for usage with table alteration
-	 * @param $name The name of the field
-	 * @param $type The type of the field
+	 *
+	 * @param mixed $name The name of the field
+	 * @param mixed $type The type of the field
 	 */
 	public function alterField($name, $type) {
 		if (!is_array($this->create_definition)) {
@@ -400,8 +428,10 @@ class w2p_Database_Query {
         trigger_error("w2p_Database_Query->alterField() has been deprecated in v3.0 and will be removed by v4.0.", E_USER_NOTICE );
 	}
 
-	/** Drop a field from table definition or from an existing table
-	 * @param $name The name of the field to drop
+	/**
+	 * Drop a field from table definition or from an existing table
+	 *
+	 * @param mixed $name The name of the field to drop
 	 */
 	public function dropField($name) {
 		if (!is_array($this->create_definition)) {
@@ -411,7 +441,8 @@ class w2p_Database_Query {
         trigger_error("w2p_Database_Query->dropField() has been deprecated in v3.0 and will be removed by v4.0.", E_USER_NOTICE );
 	}
 
-	/** Add an index. Fields should be separated by commas to create a multi-field index
+	/**
+	 * Add an index. Fields should be separated by commas to create a multi-field index
 	 */
 	public function addIndex($name, $type) {
 		if (!is_array($this->create_definition)) {
@@ -421,7 +452,8 @@ class w2p_Database_Query {
         trigger_error("w2p_Database_Query->addIndex() has been deprecated in v3.0 and will be removed by v4.0.", E_USER_NOTICE );
 	}
 
-	/** Add a primary key attribute. Fields should be separated by commas to create a multi-field primary key
+	/**
+	 * Add a primary key attribute. Fields should be separated by commas to create a multi-field primary key
 	 */
 	public function addPrimary($name) {
 		if (!is_array($this->create_definition)) {
@@ -431,7 +463,8 @@ class w2p_Database_Query {
         trigger_error("w2p_Database_Query->addPrimary() has been deprecated in v3.0 and will be removed by v4.0.", E_USER_NOTICE );
 	}
 
-	/** Drop an index
+	/**
+	 * Drop an index
 	 */
 	public function dropIndex($name) {
 		if (!is_array($this->create_definition)) {
@@ -441,7 +474,8 @@ class w2p_Database_Query {
         trigger_error("w2p_Database_Query->dropIndex() has been deprecated in v3.0 and will be removed by v4.0.", E_USER_NOTICE );
 	}
 
-	/** Remove a primary key attribute from a field
+	/**
+	 * Remove a primary key attribute from a field
 	 */
 	public function dropPrimary() {
 		if (!is_array($this->create_definition)) {
@@ -451,8 +485,10 @@ class w2p_Database_Query {
         trigger_error("w2p_Database_Query->dropPrimary() has been deprecated in v3.0 and will be removed by v4.0.", E_USER_NOTICE );
 	}
 
-	/** Set a table creation definition from supplied array
-	 * @param $def Array containing table definition
+	/**
+	 * Set a table creation definition from supplied array
+	 *
+	 * @param mixed $def Array containing table definition
 	 */
 	public function createDefinition($def) {
 		$this->create_definition = $def;
@@ -463,7 +499,8 @@ class w2p_Database_Query {
 		$this->addMap('table_list', $table, null);
 	}
 
-	/** Add a WHERE sub clause
+	/**
+	 * Add a WHERE sub clause
 	 *
 	 * The where clause can be built up one
 	 * part at a time and the resultant query will put in the 'and'
@@ -471,7 +508,7 @@ class w2p_Database_Query {
 	 *
 	 * Make sure you use table aliases.
 	 *
-	 * @param	$query	Where subclause to use, not including WHERE keyword
+	 * @param mixed $query	Where subclause to use, not including WHERE keyword
 	 */
 	public function addWhere($query) {
 		if (isset($query)) {
@@ -479,15 +516,16 @@ class w2p_Database_Query {
 		}
 	}
 
-	/** Add a JOIN condition
+	/**
+	 * Add a JOIN condition
 	 *
 	 * Add a join condition to the query.  This only implements
 	 * left join, however most other joins are either synonymns or
 	 * can be emulated with where clauses.
 	 *
-	 * @param	$table	Name of table (without prefix)
-	 * @param	$alias	Alias to use instead of table name (required).
-	 * @param	$join	Join condition (e.g. 'a.id = b.other_id')
+	 * @param mixed $table	Name of table (without prefix)
+	 * @param mixed $alias	Alias to use instead of table name (required).
+	 * @param mixed $join	Join condition (e.g. 'a.id = b.other_id')
 	 *				or array of join fieldnames, e.g. array('id', 'name);
 	 *				Both are correctly converted into a join clause.
 	 */
@@ -497,49 +535,59 @@ class w2p_Database_Query {
 		$this->addClause('join', $var, false);
 	}
 
-	/** Add a left join condition
+	/**
+	 * Add a left join condition
 	 *
 	 * Helper method to add a left join
+	 *
+	 * @param mixed $table Name of table (without prefix)
+	 * @param mixed $alias Alias to use instead of table name
+	 * @param mixed $join Join condition
+	 *
 	 * @see addJoin()
-	 * @param $table Name of table (without prefix)
-	 * @param $alias Alias to use instead of table name
-	 * @param $join Join condition
 	 */
 	public function leftJoin($table, $alias, $join) {
 		$this->addJoin($table, $alias, $join, 'left');
 	}
 
-	/** Add a right join condition
+	/**
+	 * Add a right join condition
 	 *
 	 * Helper method to add a right join
+	 *
+	 * @param mixed $table Name of table (without prefix)
+	 * @param mixed $alias Alias to use instead of table name
+	 * @param mixed $join Join condition
+	 *
 	 * @see addJoin()
-	 * @param $table Name of table (without prefix)
-	 * @param $alias Alias to use instead of table name
-	 * @param $join Join condition
 	 */
 	public function rightJoin($table, $alias, $join) {
 		$this->addJoin($table, $alias, $join, 'right');
 	}
 
-	/** Add an inner join condition
+	/**
+	 * Add an inner join condition
 	 *
 	 * Helper method to add an inner join
+	 *
+	 * @param mixed $table Name of table (without prefix)
+	 * @param mixed $alias Alias to use instead of table name
+	 * @param mixed $join Join condition
+	 *
 	 * @see addJoin()
-	 * @param $table Name of table (without prefix)
-	 * @param $alias Alias to use instead of table name
-	 * @param $join Join condition
 	 */
 	public function innerJoin($table, $alias, $join) {
 		$this->addJoin($table, $alias, $join, 'inner');
 	}
 
-	/** Add an ORDER BY clause
+	/**
+	 * Add an ORDER BY clause
 	 *
 	 * Again, only the fieldname is required, and
 	 * it should include an alias if a table has been added.
 	 * May be called multiple times.
 	 *
-	 * @param	$order	Order by field.
+	 * @param mixed $order	Order by field.
 	 */
 	public function addOrder($order) {
 		if (isset($order)) {
@@ -547,18 +595,20 @@ class w2p_Database_Query {
 		}
 	}
 
-	/** Add a GROUP BY clause
+	/**
+	 * Add a GROUP BY clause
 	 *
 	 * Only the fieldname is required.
 	 * May be called multiple times.  Use table aliases as required.
 	 *
-	 * @param	$group	Field name to group by.
+	 * @param mixed $group	Field name to group by.
 	 */
 	public function addGroup($group) {
 		$this->addClause('group_by', $group);
 	}
 
-	/** Add a HAVING sub clause
+	/**
+	 * Add a HAVING sub clause
 	 *
 	 * The having clause can be built up one
 	 * part at a time and the resultant query will put in the 'and'
@@ -568,7 +618,7 @@ class w2p_Database_Query {
 	 * "the SQL standard requires that HAVING must reference only columns in the
 	 * GROUP BY clause or columns used in aggregate functions"
 	 *
-	 * @param	$query	HAVING subclause to use, not including HAVING keyword
+	 * @param mixed $query	HAVING subclause to use, not including HAVING keyword
 	 */
 	public function addHaving($query) {
 		$this->addClause('having', $query);
@@ -584,7 +634,8 @@ class w2p_Database_Query {
         return $ts->format($df);
     }
 
-	/** Generates the token representing the 'now' datetime
+	/**
+	 * Generates the token representing the 'now' datetime
 	 *
 	 * The 'now' datetime is represented just a bit differently from database
 	 * engine to engine.  Therefore this method checks to see what database is
@@ -604,14 +655,15 @@ class w2p_Database_Query {
 		}
 	}
 
-	/** Add a date difference clause and name the result
+	/**
+	 * Add a date difference clause and name the result
 	 *
 	 * Each database engine represents date math just a little bit differently.
 	 * Therefore, this method checks to see what database is being used and adds a
 	 * date difference appropriately.
 	 *
-	 * @param	$date1			This is the starting date
-	 * @param	$date2			This is the ending date
+	 * @param mixed $date1			This is the starting date
+	 * @param mixed $date2			This is the ending date
 	 */
 	public function dbfnDateDiff($date1 = '', $date2 = '') {
 		$dbType = strtolower(trim(w2PgetConfig('dbtype')));
@@ -629,11 +681,12 @@ class w2p_Database_Query {
 		}
 	}
 
-	/** Adds a given unit interval to a date
+	/**
+	 * Adds a given unit interval to a date
 	 *
-	 * @param	$date			This is the date we want to add to
-	 * @param	$interval		This is how much units we will be adding to the date
-	 * @param	$unit			This is the type of unit we are adding to the date
+	 * @param mixed $date			This is the date we want to add to
+	 * @param mixed $interval		This is how much units we will be adding to the date
+	 * @param mixed $unit			This is the type of unit we are adding to the date
 	 */
 	public function dbfnDateAdd($date, $interval = 0, $unit = 'DAY') {
 		$dbType = strtolower(trim(w2PgetConfig('dbtype')));
@@ -650,13 +703,14 @@ class w2p_Database_Query {
 		}
 	}
 
-	/** Set a row limit on the query
+	/**
+	 * Set a row limit on the query
 	 *
 	 * Set a limit on the query.  This is done in a database-independent
 	 * fashion.
 	 *
-	 * @param	$limit	Number of rows to limit.
-	 * @param	$start	First row to start extraction(row offset).
+	 * @param mixed $limit	Number of rows to limit.
+	 * @param mixed $start	First row to start extraction(row offset).
 	 */
 	public function setLimit($limit, $start = -1) {
 		$this->limit = $limit;
@@ -670,10 +724,11 @@ class w2p_Database_Query {
 	public function includeCount() {
 		$this->include_count = true;
 	}
-	/** Set a limit on the query based on pagination.
+	/**
+	 * Set a limit on the query based on pagination.
 	 *
-	 * @param $page     the current page
-	 * @param $pagesize the size of pages
+	 * @param mixed $page     the current page
+	 * @param mixed $pagesize the size of pages
 	 */
 	public function setPageLimit($page = 0, $pagesize = 0) {
 		if ($page == 0) {
@@ -688,9 +743,12 @@ class w2p_Database_Query {
 		$this->setLimit($pagesize, ($page - 1) * $pagesize);
 	}
 
-	/** Prepare query for execution
-	 * @param $clear Boolean, Clear the query after it has been executed
-	 * @return String containing the SQL statement
+	/**
+	 * Prepare query for execution
+	 *
+	 * @param mixed $clear Boolean, Clear the query after it has been executed
+	 *
+	 * @return string containing the SQL statement
 	 */
 	public function prepare($clear = false) {
 		switch ($this->type) {
@@ -741,7 +799,8 @@ class w2p_Database_Query {
 		return $q;
 	}
 
-	/** Prepare the SELECT component of the SQL query
+	/**
+	 * Prepare the SELECT component of the SQL query
 	 */
 	public function prepareSelect() {
 		switch (strtolower(trim(w2PgetConfig('dbtype')))) {
@@ -842,7 +901,8 @@ class w2p_Database_Query {
 		}
 	}
 
-	/** Prepare the UPDATE component of the SQL query
+	/**
+	 * Prepare the UPDATE component of the SQL query
 	 */
 	public function prepareUpdate() {
 		// You can only update one table, so we get the table detail
@@ -902,7 +962,8 @@ class w2p_Database_Query {
 		}
 	}
 
-	/** Prepare the INSERT component of the SQL query
+	/**
+	 * Prepare the INSERT component of the SQL query
 	 */
 	public function prepareInsert() {
 		switch (strtolower(trim(w2PgetConfig('dbtype')))) {
@@ -951,7 +1012,8 @@ class w2p_Database_Query {
 		}
 	}
 
-	/** Prepare the INSERT component of the SQL query
+	/**
+	 * Prepare the INSERT component of the SQL query
 	 */
 	public function prepareInsertSelect() {
 		$q = 'INSERT INTO ';
@@ -975,7 +1037,8 @@ class w2p_Database_Query {
 		return $q;
 	}
 
-	/** Prepare the REPLACE component of the SQL query
+	/**
+	 * Prepare the REPLACE component of the SQL query
 	 */
 	public function prepareReplace() {
 		switch (strtolower(trim(w2PgetConfig('dbtype')))) {
@@ -1025,7 +1088,8 @@ class w2p_Database_Query {
 		}
 	}
 
-	/** Prepare the DELETE component of the SQL query
+	/**
+	 * Prepare the DELETE component of the SQL query
 	 */
 	public function prepareDelete() {
 		switch (strtolower(trim(w2PgetConfig('dbtype')))) {
@@ -1064,7 +1128,9 @@ class w2p_Database_Query {
 		}
 	}
 
-	/** Prepare the ALTER component of the SQL query
+	/**
+	 * Prepare the ALTER component of the SQL query
+	 *
 	 * @todo add ALTER DROP/CHANGE/MODIFY/IMPORT/DISCARD/.. definitions: http://dev.mysql.com/doc/mysql/en/alter-table.html
 	 */
 	public function prepareAlter() {
@@ -1087,11 +1153,14 @@ class w2p_Database_Query {
 		return $q;
 	}
 
-	/** Execute the query
+	/**
+	 * Execute the query
 	 *
 	 * Execute the query and return a handle.  Supplants the db_exec query
-	 * @param $style ADODB fetch style. Can be ADODB_FETCH_BOTH, ADODB_FETCH_NUM or ADODB_FETCH_ASSOC
-	 * @param $debug Defaults to false. If true, debug output includes explanation of query
+	 *
+	 * @param mixed $style ADODB fetch style. Can be ADODB_FETCH_BOTH, ADODB_FETCH_NUM or ADODB_FETCH_ASSOC
+	 * @param mixed $debug Defaults to false. If true, debug output includes explanation of query
+	 *
 	 * @return ADORecordSet|false Handle to the query result
 	 */
 	public function &exec($style = ADODB_FETCH_BOTH, $debug = false) {
@@ -1141,7 +1210,9 @@ class w2p_Database_Query {
 		}
 	}
 
-	/** Fetch the first row of the results
+	/**
+	 * Fetch the first row of the results
+	 *
 	 * @return array<mixed>|false First row as array
 	 */
 	public function fetchRow() {
@@ -1151,11 +1222,14 @@ class w2p_Database_Query {
 		return $this->_query_id->FetchRow();
 	}
 
-	/** Load database results as an array of associative arrays
+	/**
+	 * Load database results as an array of associative arrays
 	 *
 	 * Replaces the db_loadList() function
-	 * @param $maxrows Maximum number of rows to return
-	 * @param $index Can be used to set the keys of the resulting arrays, useful to find records by primary key.
+	 *
+	 * @param mixed $maxrows Maximum number of rows to return
+	 * @param mixed $index Can be used to set the keys of the resulting arrays, useful to find records by primary key.
+	 *
 	 * @return array<mixed>|false Array of associative arrays containing row field values
 	 */
 	public function loadList($maxrows = -1, $index = -1) {
@@ -1183,10 +1257,13 @@ class w2p_Database_Query {
 		return $list;
 	}
 
-	/** Load database results as an associative array, using the supplied field name as the array's keys
+	/**
+	 * Load database results as an associative array, using the supplied field name as the array's keys
 	 *
 	 * Replaces the db_loadHashList() function
-	 * @param $index Defaults to null, the field to use for array keys
+	 *
+	 * @param mixed $index Defaults to null, the field to use for array keys
+	 *
 	 * @return array<mixed> Associative array of rows, keyed with the field indicated by the $index parameter
 	 */
 	public function loadHashList($index = null) {
@@ -1214,7 +1291,9 @@ class w2p_Database_Query {
 		return $hashlist;
 	}
 
-	/** Load a single result row as an associative array
+	/**
+	 * Load a single result row as an associative array
+	 *
 	 * @return array<mixed>|false Associative array of field names to values
 	 */
 	public function loadHash() {
@@ -1227,14 +1306,15 @@ class w2p_Database_Query {
 	}
 
 	/**
-	 *
 	 * @deprecated
 	 */
 	public function loadArrayList() {
         trigger_error("loadArrayList has been deprecated in v3.0 to comply with the license change.", E_USER_NOTICE );
 	}
 
-	/** Load an indexed array containing the first column of results only
+	/**
+	 * Load an indexed array containing the first column of results only
+	 *
 	 * @return array<mixed> Indexed array of first column values
 	 */
 	public function loadColumn() {
@@ -1249,10 +1329,13 @@ class w2p_Database_Query {
 		return $result;
 	}
 
-	/** Load database results into a w2p_Core_BaseObject based object
-	 * @param &$object Reference to the object to propagate with database results
-	 * @param $bindAll Defaults to false, Bind every field returned to the referenced object
-	 * @param $strip Defaults to true
+	/**
+	 * Load database results into a w2p_Core_BaseObject based object
+	 *
+	 * @param mixed &$object Reference to the object to propagate with database results
+	 * @param mixed $bindAll Defaults to false, Bind every field returned to the referenced object
+	 * @param mixed $strip Defaults to true
+	 *
 	 * @return bool True on success.
 	 */
 	public function loadObject(&$object, $bindAll = false, $strip = true) {
@@ -1279,14 +1362,16 @@ class w2p_Database_Query {
 		}
 	}
 
-	/** Bind a hash to an object
+	/**
+	 * Bind a hash to an object
 	 *
 	 * Takes the hash/associative array specified by $hash and turns the fields into instance properties of $obj
-	 * @param $hash The hash to bind
-	 * @param &$obj A reference to the object to bind the hash to
-	 * @param $prefix Defaults to null, prefix to use with hash keys
-	 * @param $notUsed Defaults to true but isn't used anyway
-	 * @param $bindAll Bind all values regardless of their existance as defined instance variables
+	 *
+	 * @param mixed $hash The hash to bind
+	 * @param mixed &$obj A reference to the object to bind the hash to
+	 * @param mixed $prefix Defaults to null, prefix to use with hash keys
+	 * @param mixed $notUsed Defaults to true but isn't used anyway
+	 * @param mixed $bindAll Bind all values regardless of their existance as defined instance variables
 	 */
 	public function bindHashToObject($hash, &$obj, $prefix = null, $notUsed = true, $bindAll = false) {
 		is_array($hash) or die('bindHashToObject : hash expected');
@@ -1320,7 +1405,9 @@ class w2p_Database_Query {
 		trigger_error("execXML has been deprecated in v3.0 to comply with the license change.", E_USER_NOTICE );
 	}
 
-	/** Load a single column result from a single row
+	/**
+	 * Load a single column result from a single row
+	 *
 	 * @return mixed Value of the row column
 	 */
 	public function loadResult() {
@@ -1338,9 +1425,11 @@ class w2p_Database_Query {
 		return $result;
 	}
 
-	/** Create a where clause based upon supplied field.
+	/**
+	 * Create a where clause based upon supplied field.
 	 *
-	 * @param	$where_clause Either string or array of subclauses.
+	 * @param mixed $where_clause Either string or array of subclauses.
+	 *
 	 * @return string SQL WHERE clause as a string.
 	 */
 	public function make_where_clause($where_clause) {
@@ -1358,9 +1447,11 @@ class w2p_Database_Query {
 		return $result;
 	}
 
-	/** Create an order by clause based upon supplied field.
+	/**
+	 * Create an order by clause based upon supplied field.
 	 *
-	 * @param	$order_clause	Either string or array of subclauses.
+	 * @param mixed $order_clause	Either string or array of subclauses.
+	 *
 	 * @return string SQL ORDER BY clause as a string.
 	 */
 	public function make_order_clause($order_clause) {
@@ -1377,9 +1468,11 @@ class w2p_Database_Query {
 		return $result;
 	}
 
-	/** Create a group by clause based upon supplied field.
+	/**
+	 * Create a group by clause based upon supplied field.
 	 *
-	 * @param	$group_clause	Either string or array of subclauses.
+	 * @param mixed $group_clause	Either string or array of subclauses.
+	 *
 	 * @return string SQL GROUP BY clause as a string.
 	 */
 	public function make_group_clause($group_clause) {
@@ -1396,9 +1489,11 @@ class w2p_Database_Query {
 		return $result;
 	}
 
-	/** Create a join condition based upon supplied fields.
+	/**
+	 * Create a join condition based upon supplied fields.
 	 *
-	 * @param	$join_clause	Either string or array of subclauses.
+	 * @param mixed $join_clause	Either string or array of subclauses.
+	 *
 	 * @return string SQL JOIN condition as a string.
 	 */
 	public function make_join($join_clause) {
@@ -1426,9 +1521,11 @@ class w2p_Database_Query {
 		return $result;
 	}
 
-	/** Create a having clause based upon supplied field.
+	/**
+	 * Create a having clause based upon supplied field.
 	 *
-	 * @param	$having_clause Either string or array of subclauses.
+	 * @param mixed $having_clause Either string or array of subclauses.
+	 *
 	 * @return string SQL HAVING clause as a string.
 	 */
 	public function make_having_clause($having_clause) {
@@ -1446,11 +1543,13 @@ class w2p_Database_Query {
 		return $result;
 	}
 
-	/** Create a limit clause
+	/**
+	 * Create a limit clause
 	 *
-	 * @param	$limit	Either integer with nr of records to retrieve or array with offset and nr of records to retrieve .
-	 * @param	$offset	integer of offset from where it should start retrieving.
-	 * @return	string SQL LIMIT clause as a string.
+	 * @param mixed $limit	Either integer with nr of records to retrieve or array with offset and nr of records to retrieve .
+	 * @param int	$offset of offset from where it should start retrieving.
+	 *
+	 * @return string SQL LIMIT clause as a string.
 	 */
 	public function make_limit_clause($limit, $offset) {
 		$result = '';
@@ -1480,9 +1579,11 @@ class w2p_Database_Query {
 		return $result;
 	}
 
-	/** Add quotes to a string
+	/**
+	 * Add quotes to a string
 	 *
-	 * @param	$string	A string to add quotes to.
+	 * @param mixed $string	A string to add quotes to.
+	 *
 	 * @return string|int The quoted string (integers are returned unchanged)
 	 */
 	public function quote($string) {
@@ -1493,8 +1594,11 @@ class w2p_Database_Query {
 		}
 	}
 
-	/** Add quotes to a database identifier
-	 * @param $string The identifier to quote
+	/**
+	 * Add quotes to a database identifier
+	 *
+	 * @param mixed $string The identifier to quote
+	 *
 	 * @return string The quoted identifier
 	 */
 	public function quote_db($string) {
@@ -1642,7 +1746,7 @@ class w2p_Database_Query {
 	/**
 	 *	Clone the current query
 	 *
-	 *	@return	object	The new record object or null if error
+	 *	@return object	The new record object or null if error
 	 **/
 	public function duplicate() {
 
