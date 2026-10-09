@@ -4,8 +4,8 @@
  *   this ensures we have similar layouts and styles across the board. You can
  *   always hardcode your own.
  *
- * @package     web2project\output
- * @author      D. Keith Casey, Jr. <contrib@caseysoftware.com>
+ * @package web2project\output
+ * @author  D. Keith Casey, Jr. <contrib@caseysoftware.com>
  */
 
 class w2p_Output_ListTable extends w2p_Output_HTMLHelper
