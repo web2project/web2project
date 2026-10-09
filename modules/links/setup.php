@@ -21,7 +21,7 @@ $config['permissions_item_label'] = 'link_name';
 /**
  * Class CSetupLinks
  *
- * @package     web2project\modules\misc
+ * @package web2project\modules\misc
  */
 class CSetupLinks extends w2p_System_Setup
 {
