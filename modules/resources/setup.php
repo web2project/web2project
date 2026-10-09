@@ -31,7 +31,7 @@ $config['permissions_item_label'] = 'resource_name';
 /**
  * Class CSetupResources
  *
- * @package     web2project\modules\misc
+ * @package web2project\modules\misc
  */
 class CSetupResources extends w2p_System_Setup
 {
