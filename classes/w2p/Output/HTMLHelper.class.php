@@ -65,11 +65,47 @@ class w2p_Output_HTMLHelper extends w2p_Output_HTML_Base
      *   and views.
      */
     public function createCell($fieldName, $value, $custom = array()) {
-        $additional = '';
-
         if ('' == $value) {
             return '<td>-</td>';
         }
+
+        list($cell, $suffix, $additional) = $this->buildCellContent($fieldName, $value, $custom);
+
+        $begin = '<td '.$additional.'class="'.$suffix.'">';
+        $end = '</td>';
+
+        return $begin . $cell . $end;
+    }
+
+    /**
+     * Formats a value exactly like createCell() but wrapped in a <span> so it
+     * can be used outside of a table, for example in a definition list.
+     *
+     * @param string $fieldName
+     * @param mixed  $value
+     * @param array  $custom
+     *
+     * @return string
+     */
+    public function createValue($fieldName, $value, $custom = array()) {
+        if ('' == $value) {
+            return '<span>-</span>';
+        }
+
+        list($cell, $suffix, $additional) = $this->buildCellContent($fieldName, $value, $custom);
+
+        return '<span '.$additional.'class="'.$suffix.'">' . $cell . '</span>';
+    }
+
+    /**
+     * @param string $fieldName
+     * @param mixed  $value
+     * @param array  $custom
+     *
+     * @return array the formatted content, the class names and any additional attributes
+     */
+    protected function buildCellContent($fieldName, $value, $custom = array()) {
+        $additional = '';
 
         $pieces = explode('_', $fieldName);
         $prefix = $pieces[0];
@@ -278,10 +314,7 @@ class w2p_Output_HTMLHelper extends w2p_Output_HTML_Base
                 $cell = htmlspecialchars($value, ENT_QUOTES);
         }
 
-        $begin = '<td '.$additional.'class="'.$suffix.'">';
-        $end = '</td>';
-
-        return $begin . $cell . $end;
+        return array($cell, $suffix, $additional);
     }
 
     /**
