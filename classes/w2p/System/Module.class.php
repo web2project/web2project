@@ -1,6 +1,6 @@
 <?php
 /**
- * @package     web2project\system
+ * @package web2project\system
  */
 
 class w2p_System_Module extends w2p_Core_BaseObject {
