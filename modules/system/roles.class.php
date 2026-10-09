@@ -20,7 +20,7 @@
  * be deleted, and then the user id mappings.  Note that the user ARO is _never_
  * deleted, unless the user is.
  *
- * @package     web2project\modules\core
+ * @package web2project\modules\core
  */
 
 class CSystem_Role extends w2p_Core_BaseObject {
@@ -122,9 +122,10 @@ class CSystem_Role extends w2p_Core_BaseObject {
 	/**
 	 * CRole::copyPermissions()
 	 * Method to copy the Permissions of a Role into another Role object.
-	 * 
-	 * @param integer $copy_role_id of the Role we are copying permissions from
-	 * @param integer $role_id of the Role we are copying permissions to
+	 *
+	 * @param int $copy_role_id of the Role we are copying permissions from
+	 * @param int $role_id of the Role we are copying permissions to
+	 *
 	 * @return bool True if successful
 	 */
 	public function copyPermissions($copy_role_id = null, $role_id = null)
