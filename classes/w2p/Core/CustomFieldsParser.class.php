@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @package     web2project\core
+ * @package web2project\core
  */
 class w2p_Core_CustomFieldsParser {
     public $fields_array = array();
@@ -15,8 +15,10 @@ class w2p_Core_CustomFieldsParser {
     public $id_field_name = 'task_id';
 
     /**
-     * @return w2p_Core_CustomFieldsParser
      * @param string $custom_record_type Field type: TaskCustomFields, CompanyCustomFields
+     *
+     * @return w2p_Core_CustomFieldsParser
+     *
      * @desc Constructor
      */
     public function __construct($custom_record_type, $row_id = 0) {
