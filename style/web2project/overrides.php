@@ -101,9 +101,7 @@ class CTabBox extends w2p_Theme_TabBox {
                     require $this->baseInc . $v[0] . '.php';
                     echo '</div>';
                     echo '<script language="javascript" type="text/javascript">
-                        <!--
                         show_tab(' . $this->active . ');
-                        //-->
                         </script>';
                 }
             }

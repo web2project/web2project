@@ -28,7 +28,6 @@ $titleBlock->addCrumb('?m=system', 'system admin');
 $titleBlock->show();
 ?>
 <script language="javascript" type="text/javascript">
-<!--
 function submitIt(){
 	var form = document.frmAddcode;
 	form.submit();
@@ -46,7 +45,6 @@ function delIt2(id) {
 	document.frmDel.billingcode_id.value = id;
 	document.frmDel.submit();
 }
--->
 </script>
 
 <form name="frmDel" action="./index.php?m=system" method="post" accept-charset="utf-8">
