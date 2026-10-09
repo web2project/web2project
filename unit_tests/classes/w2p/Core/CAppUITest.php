@@ -419,29 +419,41 @@ class w2p_Core_CAppUITest extends CommonSetup
     }
 
     /**
-     * Tests checking a users style selection when it is valid
+     * The interface style is fixed, whatever the stored preference says
      */
-    public function testCheckStyleValidStyle()
+    public function testSetStyleAlwaysUsesBootstrap()
     {
         $AppUI = $this->_AppUI;
 
         $AppUI->setPref('UISTYLE', 'web2project');
         $AppUI->setStyle();
 
-        $this->assertEquals('web2project', $AppUI->getPref('UISTYLE'));
+        $this->assertEquals('bootstrap', $AppUI->getPref('UISTYLE'));
     }
 
     /**
-     * Tests checking a users style selection when it is invalid
+     * Tests that an unknown style preference is replaced too
      */
-    public function testCheckStyleInvalidStyle()
+    public function testSetStyleReplacesUnknownStyle()
     {
         $AppUI = $this->_AppUI;
 
         $AppUI->setPref('UISTYLE', 'trevors-style');
         $AppUI->setStyle();
 
-        $this->assertEquals('web2project', $AppUI->getPref('UISTYLE'));
+        $this->assertEquals('bootstrap', $AppUI->getPref('UISTYLE'));
+    }
+
+    /**
+     * Tests that the theme object is always the Bootstrap theme
+     */
+    public function testGetThemeReturnsBootstrapTheme()
+    {
+        $AppUI = $this->_AppUI;
+
+        $AppUI->setPref('UISTYLE', 'web2project');
+
+        $this->assertInstanceOf('style_bootstrap', $AppUI->getTheme());
     }
 
     /**

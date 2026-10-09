@@ -10,8 +10,8 @@ if (w2PgetConfig('activate_external_user_creation') != 'true') {
     echo $AppUI->_('You should not access this file directly');
     die();
 }
-$AppUI->setStyle();
-$uistyle = $AppUI->getPref('UISTYLE');
+
+$uistyle = W2P_UISTYLE;
 ?>
 <!DOCTYPE html>
 <html lang="en">

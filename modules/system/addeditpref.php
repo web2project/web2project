@@ -195,19 +195,6 @@ echo arraySelect($currencies, 'pref_name[CURRENCYFORM]', 'class=text size=1', $p
 </div>
 
 <div class="d-flex flex-wrap gap-2 mb-2">
-	<label><?php echo $AppUI->_('User Interface Style'); ?>:</label>
-	<div>
-<?php
-$uis = $prefs['UISTYLE'] ? $prefs['UISTYLE'] : 'web2project';
-$styles = $AppUI->readDirs('style');
-unset($styles['_common']);
-$temp = $AppUI->setWarning(false);
-echo arraySelect($styles, 'pref_name[UISTYLE]', 'class=text size=1', $uis, true, true);
-$AppUI->setWarning($temp);
-?>
-	</div>
-</div>
-<div class="d-flex flex-wrap gap-2 mb-2">
 	<label><?php echo $AppUI->_('User Task Assignment Maximum'); ?>:</label>
 	<div>
 <?php

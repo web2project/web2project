@@ -83,6 +83,8 @@ if (isset($user_id) && isset($_GET['logout'])) {
 	$AppUI->registerLogout($user_id);
 }
 
+// the ui style is fixed (see W2P_UISTYLE); $uistyle stays global for templates
+$uistyle = W2P_UISTYLE;
 $theme = $AppUI->getTheme();
 
 // check is the user needs a new password

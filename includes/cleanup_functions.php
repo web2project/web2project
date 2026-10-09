@@ -1545,11 +1545,9 @@ function last_file($file_versions, $file_name, $file_project)
 // From: modules/files/files.class.php
 function getIcon($file_type)
 {
-    global $uistyle;
-
     $mime = str_replace('/', '-', $file_type);
     $icon = 'gnome-mime-' . $mime;
-    if (is_file(W2P_BASE_DIR . '/styles/' . $uistyle . '/images/modules/files/icons/' . $icon . '.png')) {
+    if (is_file(W2P_BASE_DIR . '/styles/' . W2P_UISTYLE . '/images/modules/files/icons/' . $icon . '.png')) {
         $result = 'icons/' . $icon . '.png';
     } else {
         $result = __extract_from_files_index_table($file_type);
@@ -2454,29 +2452,23 @@ function w2PshowModuleConfig($config)
  */
 function w2PfindImage($name, $module = null)
 {
-    // uistyle must be declared globally
-    global $uistyle;
     if ($module && file_exists(W2P_BASE_DIR . '/modules/' . $module . '/images/' . $name)) {
         return './modules/' . $module . '/images/' . $name;
-    } elseif ($module && file_exists(W2P_BASE_DIR . '/style/' . $uistyle . '/images/modules/' . $module . '/' . $name)) {
-        return './style/' . $uistyle . '/images/modules/' . $module . '/' . $name;
-    } elseif (file_exists(W2P_BASE_DIR . '/style/' . $uistyle . '/images/icons/' . $name)) {
-        return './style/' . $uistyle . '/images/icons/' . $name;
-    } elseif (file_exists(W2P_BASE_DIR . '/style/' . $uistyle . '/images/obj/' . $name)) {
-        return './style/' . $uistyle . '/images/obj/' . $name;
-    } elseif (file_exists(W2P_BASE_DIR . '/style/' . $uistyle . '/images/' . $name)) {
-        return './style/' . $uistyle . '/images/' . $name;
-    } elseif ($module && file_exists(W2P_BASE_DIR . '/style/' . w2PgetConfig('host_style') . '/images/modules/' . $module . '/' . $name)) {
-        return './style/' . w2PgetConfig('host_style') . '/images/modules/' . $module . '/' . $name;
-    } elseif (file_exists(W2P_BASE_DIR . '/style/' . w2PgetConfig('host_style') . '/images/icons/' . $name)) {
-        return './style/' . w2PgetConfig('host_style') . '/images/icons/' . $name;
-    } elseif (file_exists(W2P_BASE_DIR . '/style/' . w2PgetConfig('host_style') . '/images/obj/' . $name)) {
-        return './style/' . w2PgetConfig('host_style') . '/images/obj/' . $name;
-    } elseif (file_exists(W2P_BASE_DIR . '/style/web2project/images/obj/' . $name)) {
-        return './style/web2project/images/obj/' . $name;
-    } else {
-        return './style/web2project/images/' . $name;
     }
+    // the active style first, then the images shipped with the web2project style
+    foreach (array_unique(array(W2P_UISTYLE, 'web2project')) as $style) {
+        $paths = array('icons/', 'obj/', '');
+        if ($module) {
+            array_unshift($paths, 'modules/' . $module . '/');
+        }
+        foreach ($paths as $path) {
+            if (file_exists(W2P_BASE_DIR . '/style/' . $style . '/images/' . $path . $name)) {
+                return './style/' . $style . '/images/' . $path . $name;
+            }
+        }
+    }
+
+    return './style/web2project/images/' . $name;
 }
 
 /**

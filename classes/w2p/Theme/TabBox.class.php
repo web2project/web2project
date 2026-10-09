@@ -25,7 +25,7 @@ class w2p_Theme_TabBox {
     public $javascript = null;
 
     protected $_AppUI = null;
-    protected $_uistyle = 'web2project';
+    protected $_uistyle = W2P_UISTYLE;
 
     protected $currentTabId = null;
     protected $currentTabName = null;
@@ -56,12 +56,6 @@ class w2p_Theme_TabBox {
         $this->baseHRef = ($baseHRef ? $baseHRef . '&amp;' : '?');
         $this->javascript = $javascript;
         $this->baseInc = $baseInc;
-
-        $this->_uistyle = $this->_AppUI->getPref('UISTYLE') ?
-                $this->_AppUI->getPref('UISTYLE') : w2PgetConfig('host_style');
-        if (!$this->_uistyle) {
-            $this->_uistyle = 'web2project';
-        }
     }
     /**
      * Gets the name of a tab

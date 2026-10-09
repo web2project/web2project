@@ -13,7 +13,6 @@ $date = $date !== '' ? $date : null;
 
 $this_month = new w2p_Utilities_Date($date);
 
-$uistyle = $AppUI->getPref('UISTYLE') ? $AppUI->getPref('UISTYLE') : w2PgetConfig('host_style');
 ?>
 <a href="javascript: void(0);" onclick="clickDay('', '');">clear date</a>
 <?php

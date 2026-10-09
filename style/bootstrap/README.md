@@ -17,5 +17,8 @@ web2Project logos.
 * Images which are not part of this theme are loaded from
   `style/web2project/images`.
 
+This is the only theme in use: the `W2P_UISTYLE` constant in `base.php` selects
+it, and there is no per-user or system-wide style setting.
+
 To upgrade Bootstrap, replace the files in `css/` and `js/` with the matching
 files from the `dist/` directory of a newer 5.3.x release.

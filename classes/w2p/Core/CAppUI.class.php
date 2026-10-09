@@ -253,21 +253,8 @@ class w2p_Core_CAppUI
 
     public function setStyle()
     {
-        // check if default user's uistyle is installed
-        $uistyle = $this->getPref('UISTYLE');
-
-        // Defaults back to host_style if the user style is unavailable
-        if ('' == $uistyle || !is_dir(W2P_BASE_DIR . '/style/' . $uistyle)) {
-            $uistyle = w2PgetConfig('host_style');
-        }
-
-        // Defaults to web2project default style if the host_style is unavailable
-        if ('' == $uistyle || !is_dir(W2P_BASE_DIR . '/style/' . $uistyle)) {
-            // fall back to host_style if user style is not installed
-            $uistyle = 'web2project';
-        }
-
-        $this->setPref('UISTYLE', $uistyle);
+        // the interface style is no longer selectable
+        $this->setPref('UISTYLE', W2P_UISTYLE);
     }
 
     /**
@@ -279,11 +266,8 @@ class w2p_Core_CAppUI
     public function getTheme() : w2p_Theme_Base
     {
         $this->setStyle();
-        $uistyle = $this->getPref('UISTYLE');
-
-        include_once W2P_BASE_DIR . '/style/' . $uistyle . '/overrides.php';
-        $uiName = str_replace('-', '', $uistyle);
-        $uiClass = 'style_' . $uiName;
+        require_once W2P_BASE_DIR . '/style/' . W2P_UISTYLE . '/overrides.php';
+        $uiClass = 'style_' . W2P_UISTYLE;
 
         return new $uiClass($this);
     }
