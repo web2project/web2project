@@ -1,8 +1,8 @@
 <?php
 
 /**
- * @package     web2project\output
- * @author      D. Keith Casey, Jr. <caseydk@users.sourceforge.net>
+ * @package web2project\output
+ * @author  D. Keith Casey, Jr. <caseydk@users.sourceforge.net>
  */
 
 class w2p_Output_HTMLHelper extends w2p_Output_HTML_Base
@@ -50,9 +50,9 @@ class w2p_Output_HTMLHelper extends w2p_Output_HTML_Base
      *   company_description, or even some_other_crazy_wacky_description in
      *   exactly the same way without additional lines of code or configuration.
      *   If you want to do your own, feel free... but this is probably easier.
-     * 
+     *
      * Examples: _budget, _date, _name, _owner
-     * 
+     *
      * This may not work for things like company_type or project_type which are
      *   actually just references to look up tables, ... but should work on
      *   fields like project_company, dept_company because we still have a 
