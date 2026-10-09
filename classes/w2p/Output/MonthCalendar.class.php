@@ -10,15 +10,30 @@
  */
 
 class w2p_Output_MonthCalendar {
-    /**#@+
-    * @var Date
-    */
+    /**
+     * @var w2p_Utilities_Date
+     */
     public $this_month;
+
+    /**
+     * @var w2p_Utilities_Date
+     */
     public $prev_month;
+
+    /**
+     * @var w2p_Utilities_Date
+     */
     public $next_month;
+
+    /**
+     * @var w2p_Utilities_Date
+     */
     public $prev_year;
+
+    /**
+     * @var w2p_Utilities_Date
+     */
     public $next_year;
-    /**#@-*/
 
     /**
      * @var string The css style name of the Title
