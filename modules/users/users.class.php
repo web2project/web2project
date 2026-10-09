@@ -1,10 +1,10 @@
 <?php
 /**
- * @package     web2project\modules\core
+ * @package web2project\modules\core
  *
- * @todo    refactor modules/admin to modules/users
- * @todo    new query object
- * @todo    refactor static methods
+ * @todo refactor modules/admin to modules/users
+ * @todo new query object
+ * @todo refactor static methods
  */
 
 class CUser extends w2p_Core_BaseObject
@@ -340,7 +340,9 @@ class CUser extends w2p_Core_BaseObject
 
     /**
      * * Function that checks if a user is active or not (i.e. are they able to login to the system)
-     * @param $userId
+     *
+     * @param mixed $userId
+     *
      * @return mixed
      */
     public function isActive($userId)
