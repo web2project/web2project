@@ -5,9 +5,9 @@
  *   in the modules created a huge amount of duplicated code. In addition, as we
  *   evaluate alternatives, this will let us switch them out more easily.
  *
- * @package     web2project\output
- * @author      D. Keith Casey, Jr. <contrib@caseysoftware.com>
- * 
+ * @package web2project\output
+ * @author  D. Keith Casey, Jr. <contrib@caseysoftware.com>
+ *
  * @deprecated
  */
 
@@ -70,7 +70,7 @@ class w2p_Output_PDFRenderer
     }
 
     /**
-     * @param $filename
+     * @param mixed $filename
      *
      * @return bool
      */
