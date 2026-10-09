@@ -20,6 +20,7 @@ $canDelete = $obj->canDelete();
 
 /**
  * Clear any reminders
+ *
  * @todo THIS SHOULD NOT HAPPEN HERE.. VIEWING SHOULD BE IDEMPOTENT
  */
 $reminded = (int) w2PgetParam($_GET, 'reminded', 0);
