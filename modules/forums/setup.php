@@ -19,7 +19,7 @@ $config['mod_config'] = true; // show 'configure' link in viewmods
 /**
  * Class CSetupForums
  *
- * @package     web2project\modules\misc
+ * @package web2project\modules\misc
  */
 class CSetupForums extends w2p_System_Setup
 {
