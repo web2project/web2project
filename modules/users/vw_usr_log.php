@@ -28,40 +28,28 @@ function checkDate(){
 }
 </script>
 
-<table align="center">
-	<tr>
-		<td>
-			<h1><?php echo $AppUI->_('User Log'); ?></h1>
-		</td>
-	</tr>
-</table>
+<h2 class="h5 text-center"><?php echo $AppUI->_('User Log'); ?></h2>
 
 <form action="index.php?m=users<?php echo $a; ?>" method="post" name="frmDate" accept-charset="utf-8">
     <input type="hidden" name="user_id" id="user_id" value="<?php echo $user_id; ?>" />
     <input type="hidden" name="datePicker" value="log" />
-    <table border="0" width="100%" class="well">
-        <tr align="center">
-            <td align="right" width="45%" ><?php echo $AppUI->_('Start Date'); ?></td>
-            <td width="55%" align="left">
-                <input type="hidden" name="log_start_date" id="log_start_date" value="<?php echo $start_date ? $start_date->format(FMT_TIMESTAMP_DATE) : ''; ?>" />
-                <input type="text" name="start_date" id="start_date" onchange="setDate_new('frmDate', 'start_date');" value="<?php echo $start_date ? $start_date->format($df) : ''; ?>" class="text" />
-                <a href="javascript: void(0);" onclick="return showCalendar('start_date', '<?php echo $df ?>', 'frmDate', null, true, true)">
-                <img src="<?php echo w2PfindImage('calendar.gif'); ?>" alt="<?php echo $AppUI->_('Calendar'); ?>" /></a>
-            </td>
-        </tr>
-        <tr align="center">
-            <td align="right" width="45%"><?php echo $AppUI->_('End Date'); ?></td>
-            <td width="55%" align="left">
-                <input type="hidden" name="log_end_date" id="log_end_date" value="<?php echo $end_date ? $end_date->format(FMT_TIMESTAMP_DATE) : ''; ?>" />
-                <input type="text" name="end_date" id="end_date" onchange="setDate_new('frmDate', 'end_date');" value="<?php echo $end_date ? $end_date->format($df) : ''; ?>" class="text" />
-                <a href="javascript: void(0);" onclick="return showCalendar('end_date', '<?php echo $df ?>', 'frmDate', null, true, true)">
-                <img src="<?php echo w2PfindImage('calendar.gif'); ?>" alt="<?php echo $AppUI->_('Calendar'); ?>" /></a>
-            </td>
-        </tr>
-        <tr align="center">
-            <td colspan="2"><input type="submit" class="button btn btn-primary btn-mini" value="<?php echo $AppUI->_('Submit'); ?>" onclick="return checkDate('start','end')" /></td>
-        </tr>
-    </table>
+    <div class="d-flex flex-wrap justify-content-center align-items-center gap-2 mb-3 well">
+        <label for="start_date"><?php echo $AppUI->_('Start Date'); ?></label>
+        <span class="text-nowrap">
+            <input type="hidden" name="log_start_date" id="log_start_date" value="<?php echo $start_date ? $start_date->format(FMT_TIMESTAMP_DATE) : ''; ?>" />
+            <input type="text" name="start_date" id="start_date" onchange="setDate_new('frmDate', 'start_date');" value="<?php echo $start_date ? $start_date->format($df) : ''; ?>" class="text" />
+            <a href="javascript: void(0);" onclick="return showCalendar('start_date', '<?php echo $df ?>', 'frmDate', null, true, true)">
+            <img src="<?php echo w2PfindImage('calendar.gif'); ?>" alt="<?php echo $AppUI->_('Calendar'); ?>" /></a>
+        </span>
+        <label for="end_date"><?php echo $AppUI->_('End Date'); ?></label>
+        <span class="text-nowrap">
+            <input type="hidden" name="log_end_date" id="log_end_date" value="<?php echo $end_date ? $end_date->format(FMT_TIMESTAMP_DATE) : ''; ?>" />
+            <input type="text" name="end_date" id="end_date" onchange="setDate_new('frmDate', 'end_date');" value="<?php echo $end_date ? $end_date->format($df) : ''; ?>" class="text" />
+            <a href="javascript: void(0);" onclick="return showCalendar('end_date', '<?php echo $df ?>', 'frmDate', null, true, true)">
+            <img src="<?php echo w2PfindImage('calendar.gif'); ?>" alt="<?php echo $AppUI->_('Calendar'); ?>" /></a>
+        </span>
+        <input type="submit" class="button btn btn-primary btn-sm" value="<?php echo $AppUI->_('Submit'); ?>" onclick="return checkDate('start','end')" />
+    </div>
 </form>
 
 <?php
