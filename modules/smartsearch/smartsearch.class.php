@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @package     web2project\modules\core
+ * @package web2project\modules\core
  */
 
 class CSmartSearch
