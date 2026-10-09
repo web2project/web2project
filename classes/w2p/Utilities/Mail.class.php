@@ -19,37 +19,40 @@
  * echo "the mail below has been sent:<br><pre>", $m->Get(), "</pre>";
  * </code>
  *
- * @package     web2project\utilities
- * @author      Leo West - lwest@free.fr
- * @author      Emiliano Gabrielli - emiliano.gabrielli@dearchitettura.com
- * @author      Pedro Azevedo - pedroa@web2project.net
+ * @package web2project\utilities
+ * @author  Leo West - lwest@free.fr
+ * @author  Emiliano Gabrielli - emiliano.gabrielli@dearchitettura.com
+ * @author  Pedro Azevedo - pedroa@web2project.net
  */
 
 class w2p_Utilities_Mail extends PHPMailer
 {
 
     /**
-     *    list of To addresses
-     *    @var    array
+     *    List of To addresses
+     *
+     *    @var array
      */
     public $ato = array();
 
     /**
-     *    @var    array
+     *    @var array
      */
     public $acc = array();
 
     /**
-     *    @var    array
+     *    @var array
      */
     public $abcc = array();
     /**
-     *    paths of attached files
+     *    Paths of attached files
+     *
      *    @var array
      */
 
     /**
-     *    request a read receipt
+     *    Request a read receipt
+     *
      *    @var bool
      */
     public $receipt = false;
@@ -86,6 +89,7 @@ class w2p_Utilities_Mail extends PHPMailer
 
     /**
      *    Define the subject line of the email
+     *
      *    @param string $subject any monoline string
      */
     public function Subject($subject)
@@ -95,7 +99,8 @@ class w2p_Utilities_Mail extends PHPMailer
     }
 
     /**
-     *    set the sender of the mail
+     *    Set the sender of the mail
+     *
      *    @param string $from should be an email address
      */
     public function From($from, $fromname = '')
@@ -112,7 +117,8 @@ class w2p_Utilities_Mail extends PHPMailer
     }
 
     /**
-     *    set the Reply-to header
+     *    Set the Reply-to header
+     *
      *    @param string $address should be an email address
      */
     public function ReplyTo($address)
@@ -128,8 +134,9 @@ class w2p_Utilities_Mail extends PHPMailer
     }
 
     /**
-     *    add a receipt to the mail ie.  a confirmation is returned to the "From" address (or "ReplyTo" if defined)
+     *    Add a receipt to the mail ie.  a confirmation is returned to the "From" address (or "ReplyTo" if defined)
      *    when the receiver opens the message.
+     *
      *    @warning this functionality is *not* a standard, thus only some mail clients are compliants.
      */
     public function Receipt()
@@ -139,13 +146,13 @@ class w2p_Utilities_Mail extends PHPMailer
     }
 
     /**
-     *    set the mail recipient
+     *    Set the mail recipient
      *
      *    The optional reset parameter is useful when looping through records to send individual mails.
      *    This prevents the 'to' array being continually stacked with additional addresses.
      *
      *    @param string|array<string> $to email address, accept both a single address or an array of addresses
-     *    @param boolean $reset resets the current array
+     *    @param bool $reset resets the current array
      */
     public function To($to, $reset = false)
     {
@@ -204,7 +211,7 @@ class w2p_Utilities_Mail extends PHPMailer
     }
 
     /**
-     *    set the Bcc headers ( blank carbon copy ).
+     *    Set the Bcc headers ( blank carbon copy ).
      *    $bcc : email address(es), accept both array and string
      */
     public function Bcc($bcc)
@@ -228,7 +235,7 @@ class w2p_Utilities_Mail extends PHPMailer
     }
 
     /**
-     *        set the body (message) of the mail
+     *        Set the body (message) of the mail
      *        define the charset if the message contains extended characters (accents)
      *        default to us-ascii
      *        $mail->Body( "m?l en fran?ais avec des accents", "iso-8859-1" );
@@ -246,7 +253,7 @@ class w2p_Utilities_Mail extends PHPMailer
     }
 
     /**
-     *  set the Organization header
+     *  Set the Organization header
      */
     public function Organization($org)
     {
@@ -256,7 +263,7 @@ class w2p_Utilities_Mail extends PHPMailer
     }
 
     /**
-     *        set the mail priority
+     *        Set the mail priority
      *        $priority : integer taken between 1 (highest) and 5 ( lowest )
      *        ex: $mail->Priority(1) ; => Highest
      */
@@ -271,7 +278,6 @@ class w2p_Utilities_Mail extends PHPMailer
 
     /**
      *    Overload the Send method from PHPMailer to provide deferred mails
-     *    @access public
      */
     public function Send()
     {
@@ -294,9 +300,8 @@ class w2p_Utilities_Mail extends PHPMailer
      *    If you don't want the emails to be sent to each recipient individually, you should use the To and then the Send method instead.
      *    The To method stacks recipients in the ato array property, and Send sends them all in one email only.
      *    The SendSeparatelyTo method sends one email per recipient, and only one recipient shows in the To field.
-     * 
-     *    @param  $to array with email addresses
-     *    @access public
+     *
+     *    @param array $to with email addresses
      */
     public function SendSeparatelyTo($to = array())
     {
@@ -337,8 +342,6 @@ class w2p_Utilities_Mail extends PHPMailer
     /**
      * Queue mail to allow the queue manager to trigger
      * the email transfer.
-     *
-     * @access private
      */
     private function QueueMail()
     {
@@ -349,8 +352,6 @@ class w2p_Utilities_Mail extends PHPMailer
 
     /**
      * Dequeue the email and transfer it.  Called from the queue manager.
-     *
-     * @access public
      */
     public function SendQueuedMail($notUsed, $notUsed2, $notUsed3, $notUsed4, &$args)
     {
@@ -367,7 +368,7 @@ class w2p_Utilities_Mail extends PHPMailer
     /**
      *    Returns the whole e-mail , headers + message
      *
-     *    can be used for displaying the message in plain text or logging it
+     *    Can be used for displaying the message in plain text or logging it
      *
      *    @return string
      */
@@ -379,9 +380,10 @@ class w2p_Utilities_Mail extends PHPMailer
     }
 
     /**
-     *    check an email address validity
-     *    @access public
+     *    Check an email address validity
+     *
      *    @param string $address : email address to check
+     *
      *    @return bool True if the email address is ok
      */
     public function ValidEmail($address)
@@ -402,8 +404,10 @@ class w2p_Utilities_Mail extends PHPMailer
     }
 
     /**
-     *    check validity of email addresses
-     *    @param    array $aad -
+     *    Check validity of email addresses
+     *
+     *    @param array $aad -
+     *
      *    @return bool False if any address is invalid
      */
     public function CheckAddresses($aad)
