@@ -5,8 +5,8 @@
  * methods for laying out and interacting with hooks.  It should not be
  * considered complete at this time.
  *
- * @package     web2project\system
- * @author      Keith Casey <caseydk@sourceforge.net>
+ * @package web2project\system
+ * @author  Keith Casey <caseydk@sourceforge.net>
  */
 
 class w2p_System_HookHandler
