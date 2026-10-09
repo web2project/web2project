@@ -631,6 +631,11 @@ span.cal-item a {
     margin-top: 1rem;
     min-width: 250px;
 }
+@media (min-width: 768px) {
+    .main {
+        width: 45%;
+    }
+}
 
 #folder-list ul {
     padding: 0;

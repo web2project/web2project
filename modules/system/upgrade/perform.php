@@ -15,17 +15,15 @@ $titleBlock->addCrumb('?m=system', 'system admin');
 $titleBlock->show();
 ?>
 <style>
-.update td {
+.update {
     font-size: medium;
 }
 .update img {
     float: left;
 }
 </style>
-<table class="std list update">
-	<tr>
-		<td class="title" colspan="2">Step 2: Update Database</td>
-	</tr>
+<div class="std update">
+	<h3 class="h6 mt-3 title">Step 2: Update Database</h3>
 	<?php
         $system = new CSystem();
         $errorMessages = $system->upgradeSystem();
@@ -34,38 +32,31 @@ $titleBlock->show();
 		if (count($updatesApplied) > 0) {
 			foreach ($updatesApplied as $update) {
 				?>
-				<tr><td colspan="2">Database update - <?php echo $update; ?> - applied</td></tr>
+				<div class="my-2">Database update - <?php echo $update; ?> - applied</div>
 				<?php
 			}
 		} else {
 			?>
-			<tr><td colspan="2">No database updates applied</td></tr>
+			<div class="my-2">No database updates applied</div>
 			<?php
 		}
 
 		if (count($errorMessages) > 0) {
 			?>
-			<tr>
-				<td colspan="2"><b class="error">There were <?php echo count($errorMessages); ?> errors in the system update.</b></td>
-			</tr>
+			<div class="my-2"><b class="error">There were <?php echo count($errorMessages); ?> errors in the system update.</b></div>
 			<?php
 			foreach ($errorMessages as $message) {
 				?>
-				<tr><td colspan="2"><?php echo $message; ?></td></tr>
+				<div class="my-2"><?php echo $message; ?></div>
 				<?php
 			}
 			?>
-			<tr>
-				<td colspan="2">Note: Errors noting 'Duplicate entry', 'Table already exists', or 'Unknown table' may not be problems.</td>
-			</tr>
+			<div class="my-2">Note: Errors noting 'Duplicate entry', 'Table already exists', or 'Unknown table' may not be problems.</div>
 			<?php
 		} else {
 			?>
-			<tr>
-				<td colspan="2">Your system update went smoothly without any errors.</td>
-			</tr>
+			<div class="my-2">Your system update went smoothly without any errors.</div>
 			<?php
 		}
 	?>
-	<tr><td colspan="2">&nbsp;</td></tr>
-</table>
+</div>

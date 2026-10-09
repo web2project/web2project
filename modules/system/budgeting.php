@@ -96,7 +96,6 @@ function delIt(input) {
             echo '</tr>';
         }
 		?>
-        <tr><td colspan="<?php echo (count($fieldList) + 2); ?>">&nbsp;</td></tr>
 		<tr>
 			<td>Add budgeting amount:</td>
 			<td align="center">

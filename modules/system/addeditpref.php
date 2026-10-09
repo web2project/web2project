@@ -68,20 +68,19 @@ function submitIt() {
 $form = new w2p_Output_HTML_FormHelper($AppUI);
 
 ?>
-<form name="changeuser" action="./index.php?m=<?php echo $m; ?>" method="post" accept-charset="utf-8" classes="addedit system-preference">
+<form name="changeuser" action="./index.php?m=<?php echo $m; ?>" method="post" accept-charset="utf-8" class="system-preference">
 	<input type="hidden" name="dosql" value="do_preference_aed" />
 	<input type="hidden" name="pref_user" value="<?php echo $user_id; ?>" />
 	<input type="hidden" name="del" value="0" />
     <?php echo $form->addNonce(); ?>
 
-<table class="std addedit pref well preference">
-    <tr>
-        <th colspan="2"><?php echo $AppUI->_('User Preferences'); ?>: <?php echo $user_id ? $user : $AppUI->_('Default'); ?></th>
-    </tr>
+<div class="std addedit preference">
+<div class="column left w2p-wide">
+    <h2 class="h6 border-bottom pb-1"><?php echo $AppUI->_('User Preferences'); ?>: <?php echo $user_id ? $user : $AppUI->_('Default'); ?></h2>
 
-<tr>
-	<td align="right"><?php echo $AppUI->_('Locale'); ?>:</td>
-	<td>
+<div class="d-flex flex-wrap gap-2 mb-2">
+	<label><?php echo $AppUI->_('Locale'); ?>:</label>
+	<div>
         <?php
             // read the installed languages
             $LANGUAGES = $AppUI->loadLanguages();
@@ -99,12 +98,12 @@ $form = new w2p_Output_HTML_FormHelper($AppUI);
             echo arraySelect($langlist, 'pref_name[LOCALE]', 'class=text size=1', $prefs['LOCALE'], true);
             $AppUI->setWarning($temp);
         ?>
-	</td>
-</tr>
+	</div>
+</div>
 
-<tr>
-	<td align="right"><?php echo $AppUI->_('Timezone'); ?>:</td>
-	<td>
+<div class="d-flex flex-wrap gap-2 mb-2">
+	<label><?php echo $AppUI->_('Timezone'); ?>:</label>
+	<div>
         <?php
             $timezones = w2PgetSysVal('Timezones');
             /*
@@ -114,28 +113,26 @@ $form = new w2p_Output_HTML_FormHelper($AppUI);
             $prefs['TIMEZONE'] = ('' == $prefs['TIMEZONE']) ? 'UTC' : $prefs['TIMEZONE'];
             echo arraySelect($timezones, 'pref_name[TIMEZONE]', 'class=text size=1', $prefs['TIMEZONE'], true);
         ?>
-	</td>
-</tr>
+	</div>
+</div>
 
 <?php if ($user_id && $prefs['TABVIEW'] != 1) { ?>
-<tr>
-	<td align="right"><?php echo $AppUI->_('Tabbed Box View'); ?>:</td>
-	<td>
+<div class="d-flex flex-wrap gap-2 mb-2">
+	<label><?php echo $AppUI->_('Tabbed Box View'); ?>:</label>
+	<div>
 <?php
 $tabview = array('either', 'tabbed', 'flat');
 echo arraySelect($tabview, 'pref_name[TABVIEW]', 'class=text size=1', $prefs['TABVIEW'], true);
 ?>
-	</td>
-</tr>
+	</div>
+</div>
 <?php } else { ?>
-<tr style="display: none;">
-    <td colspan="2"><input type="hidden" name="pref_name[TABVIEW]" value="1" /></td>
-</tr>
+<input type="hidden" name="pref_name[TABVIEW]" value="1" />
 <?php } ?>
 
-<tr>
-	<td align="right"><?php echo $AppUI->_('Short Date Format'); ?>:</td>
-	<td>
+<div class="d-flex flex-wrap gap-2 mb-2">
+	<label><?php echo $AppUI->_('Short Date Format'); ?>:</label>
+	<div>
 <?php
 // exmample date
 $ex = new w2p_Utilities_Date();
@@ -161,12 +158,12 @@ $f = '%Y-%m-%d';
 $dates[$f] = $ex->format($f);
 echo arraySelect($dates, 'pref_name[SHDATEFORMAT]', 'class=text size=1', $prefs['SHDATEFORMAT'], false);
 ?>
-	</td>
-</tr>
+	</div>
+</div>
 
-<tr>
-	<td align="right"><?php echo $AppUI->_('Time Format'); ?>:</td>
-	<td>
+<div class="d-flex flex-wrap gap-2 mb-2">
+	<label><?php echo $AppUI->_('Time Format'); ?>:</label>
+	<div>
 <?php
 // exmample date
 $times = array();
@@ -178,12 +175,12 @@ $f = '%H:%M:%S';
 $times[$f] = $ex->format($f) . ' (24)';
 echo arraySelect($times, 'pref_name[TIMEFORMAT]', 'class=text size=1', $prefs['TIMEFORMAT'], false);
 ?>
-	</td>
-</tr>
+	</div>
+</div>
 
-<tr>
-	<td align="right"><?php echo $AppUI->_('Currency Format'); ?>:</td>
-	<td>
+<div class="d-flex flex-wrap gap-2 mb-2">
+	<label><?php echo $AppUI->_('Currency Format'); ?>:</label>
+	<div>
 <?php
 $currencies = array();
 $currEx = 1234567.89;
@@ -194,12 +191,12 @@ foreach (array_keys($LANGUAGES) as $lang) {
 $prefs['CURRENCYFORM'] = ('' == $prefs['CURRENCYFORM']) ? 'en_US' : $prefs['CURRENCYFORM'];
 echo arraySelect($currencies, 'pref_name[CURRENCYFORM]', 'class=text size=1', $prefs['CURRENCYFORM'], false);
 ?>
-	</td>
-</tr>
+	</div>
+</div>
 
-<tr>
-	<td align="right"><?php echo $AppUI->_('User Interface Style'); ?>:</td>
-	<td>
+<div class="d-flex flex-wrap gap-2 mb-2">
+	<label><?php echo $AppUI->_('User Interface Style'); ?>:</label>
+	<div>
 <?php
 $uis = $prefs['UISTYLE'] ? $prefs['UISTYLE'] : 'web2project';
 $styles = $AppUI->readDirs('style');
@@ -208,11 +205,11 @@ $temp = $AppUI->setWarning(false);
 echo arraySelect($styles, 'pref_name[UISTYLE]', 'class=text size=1', $uis, true, true);
 $AppUI->setWarning($temp);
 ?>
-	</td>
-</tr>
-<tr>
-	<td align="right"><?php echo $AppUI->_('User Task Assignment Maximum'); ?>:</td>
-	<td>
+	</div>
+</div>
+<div class="d-flex flex-wrap gap-2 mb-2">
+	<label><?php echo $AppUI->_('User Task Assignment Maximum'); ?>:</label>
+	<div>
 <?php
 $tam = ($prefs['TASKASSIGNMAX'] > 0) ? $prefs['TASKASSIGNMAX'] : 100;
 $taskAssMax = array();
@@ -222,31 +219,31 @@ for ($i = 5; $i <= 200; $i += 5) {
 echo arraySelect($taskAssMax, 'pref_name[TASKASSIGNMAX]', 'class=text size=1', $tam, false);
 
 ?>
-	</td>
-</tr>
-<tr>
-	<td align="right"><?php echo $AppUI->_('Default Event Filter'); ?>:</td>
-	<td>
+	</div>
+</div>
+<div class="d-flex flex-wrap gap-2 mb-2">
+	<label><?php echo $AppUI->_('Default Event Filter'); ?>:</label>
+	<div>
 <?php
 $event_filter_list = array('my' => 'My Events', 'own' => 'Events I Created', 'all' => 'All Events');
 echo arraySelect($event_filter_list, 'pref_name[EVENTFILTER]', 'class=text size=1', $prefs['EVENTFILTER'], true);
 ?>
-	</td>
-</tr>
-<tr>
-	<td align="right"><?php echo $AppUI->_('Task Notification Method'); ?>:</td>
-	<td>
+	</div>
+</div>
+<div class="d-flex flex-wrap gap-2 mb-2">
+	<label><?php echo $AppUI->_('Task Notification Method'); ?>:</label>
+	<div>
 <?php
 $notify_filter = array(0 => 'Do not include task/event owner', 1 => 'Include task/event owner');
 
 echo arraySelect($notify_filter, 'pref_name[MAILALL]', 'class=text size=1', $prefs['MAILALL'], true);
 
 ?>
-	</td>
-</tr>
-<tr>
-	<td align="right"><?php echo $AppUI->_('Task Log Email Defaults'); ?>:</td>
-	<td>
+	</div>
+</div>
+<div class="d-flex flex-wrap gap-2 mb-2">
+	<label><?php echo $AppUI->_('Task Log Email Defaults'); ?>:</label>
+	<div>
 		<input type="hidden" name="pref_name[TASKLOGEMAIL]" id="task_log_email_defaults" value="<?php echo $prefs['TASKLOGEMAIL']; ?>" />
 <?php
 
@@ -255,43 +252,43 @@ $taskLogEmail = (isset($prefs['TASKLOGEMAIL'])) ? (int) $prefs['TASKLOGEMAIL'] :
 $tl_assign = $taskLogEmail & 1;
 $tl_task = $taskLogEmail & 2;
 $tl_proj = $taskLogEmail & 4;
-echo '<p><label for="tl_assign">' . $AppUI->_('Email Assignees') . '</label>&nbsp;<input type="checkbox" name="tl_assign" id="tl_assign"';
+echo '<p><label for="tl_assign" class="form-check-label">' . $AppUI->_('Email Assignees') . '</label>&nbsp;<input type="checkbox" name="tl_assign" id="tl_assign"';
 if ($tl_assign) {
 	echo ' checked="checked"';
 }
 echo ' /></p>';
-echo '<p><label for="tl_task">' . $AppUI->_('Email Task Contacts') . '</label>&nbsp;<input type="checkbox" name="tl_task" id="tl_task"';
+echo '<p><label for="tl_task" class="form-check-label">' . $AppUI->_('Email Task Contacts') . '</label>&nbsp;<input type="checkbox" name="tl_task" id="tl_task"';
 if ($tl_task) {
 	echo 'checked="checked"';
 }
 echo ' /></p>';
-echo '<p><label for="tl_proj">' . $AppUI->_('Email Project Contacts') . '</label>&nbsp;<input type="checkbox" name="tl_proj" id="tl_proj"';
+echo '<p><label for="tl_proj" class="form-check-label">' . $AppUI->_('Email Project Contacts') . '</label>&nbsp;<input type="checkbox" name="tl_proj" id="tl_proj"';
 if ($tl_proj) {
 	echo ' checked="checked"';
 }
 echo ' /></p>';
 ?>
-	</td>
-</tr>
-<tr>
-	<td align="right"><?php echo $AppUI->_('Task Log Email Subject'); ?>:</td>
-	<td>
+	</div>
+</div>
+<div class="d-flex flex-wrap gap-2 mb-2">
+	<label><?php echo $AppUI->_('Task Log Email Subject'); ?>:</label>
+	<div>
 		<input type="text" class="text" name="pref_name[TASKLOGSUBJ]" value="<?php echo $prefs['TASKLOGSUBJ']; ?>" />
-	</td>
-</tr>
-<tr>
-	<td align="right"><?php echo $AppUI->_('Task Log Email Recording Method'); ?>:</td>
-	<td>
+	</div>
+</div>
+<div class="d-flex flex-wrap gap-2 mb-2">
+	<label><?php echo $AppUI->_('Task Log Email Recording Method'); ?>:</label>
+	<div>
         <?php
             $record_method['0'] = $AppUI->_('None');
             $record_method['1'] = $AppUI->_('Append to Log');
             echo arraySelect($record_method, 'pref_name[TASKLOGNOTE]', 'class="text" size="1"', $prefs['TASKLOGNOTE'], false);
         ?>
-	</td>
-</tr>
-<tr>
-	<td align="right"><?php echo $AppUI->_('Show Parent Tasks Expanded by Default'); ?>:</td>
-	<td>
+	</div>
+</div>
+<div class="d-flex flex-wrap gap-2 mb-2">
+	<label><?php echo $AppUI->_('Show Parent Tasks Expanded by Default'); ?>:</label>
+	<div>
 		<input type="hidden" name="pref_name[TASKSEXPANDED]" id="tasks_expanded" value="<?php echo $prefs['TASKSEXPANDED']; ?>" />
         <?php
 		echo '<input type="checkbox" name="expanded"';
@@ -300,15 +297,12 @@ echo ' /></p>';
 		}
 		echo ' />';
         ?>
-	</td>
-</tr>
-<tr>
-	<td align="left">
-        <?php $form->showCancelButton(); ?>
-    </td>
-	<td align="right">
-        <input class="button btn btn-primary" type="button" value="<?php echo $AppUI->_('save'); ?>" onclick="submitIt()" />
-    </td>
-</tr>
-</table>
+	</div>
+</div>
+</div>
+<div class="w2p-form-actions">
+    <?php $form->showCancelButton(); ?>
+    <input class="button btn btn-primary" type="button" value="<?php echo $AppUI->_('save'); ?>" onclick="submitIt()" />
+</div>
+</div>
 </form>

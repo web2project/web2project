@@ -144,20 +144,18 @@ $htmlHelper = new w2p_Output_HTMLHelper($AppUI);
         }
     }
     ?>
-    <tr>
-        <td colspan="10" style="text-align: center;">
-            <?php echo $AppUI->_('Select a module to upload'); ?>:
-            <form action="./index.php?m=system&u=modules" method="post" enctype="multipart/form-data">
-                <input type="hidden" name="dosql" value="do_module_upload" />
-                <input type="file" name="module_upload" size="50" maxlength="1000000" class="text" />
-                <?php if (is_writable(W2P_BASE_DIR.'/files')) { ?>
-                <input type="submit" value="<?php echo $AppUI->_('Upload'); ?>" class="button btn btn-primary btn-mini" />
-                <?php } else { ?>
-                    <span class="error">
-                        <?php echo $AppUI->_('Module uploads are not allowed. Please check permissions on the /modules directory.'); ?>
-                    </span>
-                <?php } ?>
-            </form>
-        </td>
-    </tr>
 </table>
+<div class="d-flex flex-wrap justify-content-center align-items-center gap-2">
+    <?php echo $AppUI->_('Select a module to upload'); ?>:
+    <form action="./index.php?m=system&amp;u=modules" method="post" enctype="multipart/form-data" class="d-flex flex-wrap align-items-center gap-2">
+        <input type="hidden" name="dosql" value="do_module_upload" />
+        <input type="file" name="module_upload" size="50" maxlength="1000000" class="text" />
+        <?php if (is_writable(W2P_BASE_DIR.'/files')) { ?>
+        <input type="submit" value="<?php echo $AppUI->_('Upload'); ?>" class="button btn btn-primary btn-sm" />
+        <?php } else { ?>
+            <span class="error">
+                <?php echo $AppUI->_('Module uploads are not allowed. Please check permissions on the /modules directory.'); ?>
+            </span>
+        <?php } ?>
+    </form>
+</div>

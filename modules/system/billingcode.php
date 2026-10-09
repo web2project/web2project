@@ -65,12 +65,10 @@ $form = new w2p_Output_HTML_FormHelper($AppUI);
     <input type="hidden" name="dosql" value="do_billingcode_aed" />
     <input type="hidden" name="del" value="0" />
     <input type="hidden" name="billingcode_status" value="0" />
+    <div class="mb-2">
+        <?php echo arraySelect($companies, 'billingcode_company', 'size="1" class="text" onchange="changeIt();"', $company_id, false); ?>
+    </div>
     <table class="std list">
-        <tr>
-            <td>
-                <?php echo arraySelect($companies, 'billingcode_company', 'size="1" class="text" onchange="changeIt();"', $company_id, false); ?>
-            </td>
-        </tr>
         <tr>
             <th width="40">&nbsp;
             </th>
@@ -119,13 +117,9 @@ $form = new w2p_Output_HTML_FormHelper($AppUI);
                 ?>
             </td>
         </tr>
-        <tr>
-            <td align="left">
-                <?php $form->showCancelButton(); ?>
-            </td>
-            <td colspan="3" align="right">
-                <input type="button" class="save button" value="<?php echo $AppUI->_('save'); ?>" onclick="submitIt()" />
-            </td>
-        </tr>
     </table>
+    <div class="d-flex justify-content-between">
+        <?php $form->showCancelButton(); ?>
+        <input type="button" class="save button" value="<?php echo $AppUI->_('save'); ?>" onclick="submitIt()" />
+    </div>
 </form>
