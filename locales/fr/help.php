@@ -1,6 +1,4 @@
-<table cellspacing="2" cellpadding="4" border="0" class="tbl" width="100%">
-<tr>
-	<td width="100%" valign="top">
+<div class="std p-2">
 		<p>
 			<strong>Assistance en ligne web2Project</strong>
 			<br />
@@ -18,6 +16,4 @@
 			<br />Si vous êtes à la recherche d'un support professionnel concernant web2Project, contactez directement  les développeurs sur les forums.
 			<br />
 		</p>
-	</td>
-</tr>
-</table>
+</div>
