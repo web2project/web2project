@@ -78,13 +78,9 @@ if (0 == count($fields)) {
     echo $listTable->startTable('forums');
     echo $listTable->buildHeader($fields, true, 'forums&f=' . $f);
     echo $listTable->buildRows($items);
-    ?>
-    <tr>
-        <td colspan="<?php echo $listTable->cellCount; ?>">
-            <input type="submit" class="button" value="<?php echo $AppUI->_('update watches'); ?>" />
-        </td>
-    </tr>
-    <?php
     echo $listTable->endTable();
     ?>
+    <div class="d-flex gap-2">
+        <input type="submit" class="button" value="<?php echo $AppUI->_('update watches'); ?>" />
+    </div>
 </form>

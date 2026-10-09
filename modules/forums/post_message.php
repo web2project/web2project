@@ -120,59 +120,49 @@ $form = new w2p_Output_HTML_FormHelper($AppUI);
 	<input type="hidden" name="message_id" value="<?php echo $message_id; ?>" />
     <?php echo $form->addNonce(); ?>
 
-    <table class="std addedit forums-message" border="0">
-        <tr><td style="width: 25%">
-            <table cellspacing="1" cellpadding="2" border="0" width="100%">
-            <tr>
-                <td align="left" nowrap="nowrap"><?php echo breadCrumbs($crumbs); ?></td>
-                <td width="100%" align="right"></td>
-            </tr>
-            </table>
-        </td></tr>
-        <tr>
-            <th valign="top" colspan="2">
-                <strong><?php echo $AppUI->_($message_id ? 'Edit Message' : 'Add Message'); ?></strong>
-            </th>
-        </tr>
-        <?php
-        if ($message_parent >= 0) { //check if this is a reply-post; if so, printout the original message
-            $messageAuthor = isset($message->message_author) ? $message->message_author : $AppUI->user_id;
-            $date = intval($message->message_datetime) ? new w2p_Utilities_Date($message->message_datetime) : new w2p_Utilities_Date();
-            ?>
-            <tr>
-                <td align="right"><?php $form->showLabel('Author'); ?></td>
-                <td align="left"><?php echo CContact::getContactByUserid($messageAuthor); ?> (<?php echo $AppUI->formatTZAwareTime($message->message_datetime, $df . ' ' . $tf); ?>)</td>
-            </tr>
-            <tr><td align="right"><?php $form->showLabel('Subject'); ?></td>
-                <td align="left"><?php echo $message->message_title ?></td></tr>
-            <tr><td align="right" valign="top"><?php $form->showLabel('Previous Message'); ?></td>
-                <td align="left">
+    <div class="std addedit forums-message">
+        <div class="column left w2p-wide">
+            <p><?php echo breadCrumbs($crumbs); ?></p>
+            <h2 class="h6 border-bottom pb-1"><?php echo $AppUI->_($message_id ? 'Edit Message' : 'Add Message'); ?></h2>
             <?php
-                $messageBody = $bbparser->qparse($last_message->message_body);
-                $messageBody = nl2br($messageBody);
-                echo $messageBody;
-            ?></td></tr>
-            <tr><td colspan="2" align="left"><hr /></td></tr>
-            <?php
-        } //end of if-condition
+            if ($message_parent >= 0) { //check if this is a reply-post; if so, printout the original message
+                $messageAuthor = isset($message->message_author) ? $message->message_author : $AppUI->user_id;
+                $date = intval($message->message_datetime) ? new w2p_Utilities_Date($message->message_datetime) : new w2p_Utilities_Date();
+                ?>
+                <p>
+                    <?php $form->showLabel('Author'); ?>
+                    <span><?php echo CContact::getContactByUserid($messageAuthor); ?> (<?php echo $AppUI->formatTZAwareTime($message->message_datetime, $df . ' ' . $tf); ?>)</span>
+                </p>
+                <p>
+                    <?php $form->showLabel('Subject'); ?>
+                    <span><?php echo $message->message_title ?></span>
+                </p>
+                <div class="d-flex flex-wrap gap-2 mb-2">
+                    <?php $form->showLabel('Previous Message'); ?>
+                    <div>
+                    <?php
+                        $messageBody = $bbparser->qparse($last_message->message_body);
+                        $messageBody = nl2br($messageBody);
+                        echo $messageBody;
+                    ?>
+                    </div>
+                </div>
+                <hr />
+                <?php
+            } //end of if-condition
 
-        ?>
-        <tr>
-            <td align="right"><?php $form->showLabel('Subject'); ?></td>
-            <td>
+            ?>
+            <p>
+                <?php $form->showLabel('Subject'); ?>
                 <input type="text" class="text" name="message_title" value="<?php echo ($message_id || $message_parent < 0 ? '' : 'Re: ') . $message->message_title; ?>" size="50" maxlength="250" />
-            </td>
-        </tr>
-        <tr>
-            <td align="right" valign="top"><?php $form->showLabel('Message'); ?></td>
-            <td align="left" valign="top">
-               <textarea cols="60" name="message_body" style="height:200px"><?php echo (($message_id == 0) and ($message_parent != -1)) ? "\n>" . $last_message->message_body . "\n\n" : $message->message_body; ?></textarea>
-            </td>
-        </tr>
-        <tr>
-            <td>
-            </td>
-            <td align="left">
+            </p>
+            <p>
+                <?php $form->showLabel('Message'); ?>
+                <textarea cols="60" name="message_body" style="height:200px"><?php echo (($message_id == 0) and ($message_parent != -1)) ? "\n>" . $last_message->message_body . "\n\n" : $message->message_body; ?></textarea>
+            </p>
+            <p>
+                <label></label>
+                <span>
                 <small><b><?php echo $AppUI->_('BBCode Ready');?>!</b></small>
                 <?php echo w2PshowImage('log-info.gif','','','BBCode Tags Accepted','
                 [b][/b] Bold. Example: [b]<b>This text will be bold</b>[/b]<br />
@@ -189,15 +179,12 @@ $form = new w2p_Output_HTML_FormHelper($AppUI);
                 [quote][/quote] Quoted Text. Example: [quote]<q>This text will be superscript</q>[/quote]<br />
                 [code][/code] Text in code format. Example: [code]//This is a code comment;[/code]<br />
                 '); ?>
-            </td>
-        </tr>
-        <tr>
-            <td>
-                <?php $form->showCancelButton(); ?>
-            </td>
-            <td align="right">
-                <?php $form->showSaveButton(); ?>
-            </td>
-        </tr>
-    </table>
+                </span>
+            </p>
+        </div>
+        <div class="w2p-form-actions">
+            <?php $form->showCancelButton(); ?>
+            <?php $form->showSaveButton(); ?>
+        </div>
+    </div>
 </form>

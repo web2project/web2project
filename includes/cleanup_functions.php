@@ -2356,7 +2356,7 @@ function breadCrumbs(&$arr)
         $crumbs[] = '<a class="button" href="' . $k . '"><span>' . $AppUI->_($v) . '</span></a>';
     }
 
-    return implode('</td><td align="left" nowrap="nowrap">', $crumbs);
+    return '<span class="d-inline-flex flex-wrap gap-1 w2p-crumbs">' . implode('', $crumbs) . '</span>';
 }
 
 function w2PgetUsers()
@@ -4888,24 +4888,22 @@ function __extract_from_projects_gantt4($row)
  */
 function __extract_from_view_messages1($s, $style, $row, $editor, $AppUI, $bbparser)
 {
-    $s .= "<tr>";
-
-    $s .= '<td valign="top" style="' . $style . '" >';
+    $s .= '<div class="border-bottom px-2 py-1 w2p-forum-message" style="' . $style . '">';
     $s .= '<a href="mailto:' . $row['contact_email'] . '">';
-    $s .= $row['contact_name'] . '</a>';
+    $s .= $row['contact_name'] . '</a> ';
     if (sizeof($editor) > 0) {
-        $s .= '<br/>&nbsp;<br/>' . $AppUI->_('last edited by');
-        $s .= ':<br/><a href="mailto:' . $editor[0]['contact_email'] . '">';
-        $s .= '<font size="1">' . $editor[0]['contact_name'] . '</font></a>';
+        $s .= '<small>(' . $AppUI->_('last edited by');
+        $s .= ': <a href="mailto:' . $editor[0]['contact_email'] . '">';
+        $s .= $editor[0]['contact_name'] . '</a>)</small> ';
     }
     $s .= '<a name="' . $row['message_id'] . '" href="javascript: void(0);" onclick="toggle(' . $row['message_id'] . ')">';
-    $s .= '<span size="2"><strong>' . $row['message_title'] . '</strong></span></a>';
+    $s .= '<strong>' . $row['message_title'] . '</strong></a>';
     $s .= '<div class="message" id="' . $row['message_id'] . '" style="display: none">';
     $row['message_body'] = $bbparser->qparse($row['message_body']);
     $s .= $row['message_body'];
-    $s .= '</div></td>';
+    $s .= '</div>';
 
-    $s .= '</tr>';
+    $s .= '</div>';
     return $s;
 }
 
@@ -4926,30 +4924,21 @@ function __extract_from_view_messages1($s, $style, $row, $editor, $AppUI, $bbpar
  */
 function __extract_from_view_messages3($s, $style, $AppUI, $row, $df, $tf, $editor, $side, $bbparser, $first, $messages)
 {
-    $s .= '<tr>';
-
-    $s .= '<td valign="top" style="' . $style . '">';
+    $s .= '<div class="border-bottom px-2 py-1 w2p-forum-message" style="' . $style . '">';
     $s .= $AppUI->formatTZAwareTime($row['message_datetime'], $df . ' ' . $tf) . ' - ';
     $s .= '<a href="mailto:' . $row['contact_email'] . '">' . $row['contact_name'] . '</a>';
-    $s .= '<br />';
     if (sizeof($editor) > 0) {
-        $s .= '<br/>&nbsp;<br/>' . $AppUI->_('last edited by');
-        $s .= ':<br/><a href="mailto:' . $editor[0]['contact_email'] . '">';
-        $s .= '<font size="1">' . $editor[0]['contact_name'] . '</font></a>';
+        $s .= ' <small>(' . $AppUI->_('last edited by');
+        $s .= ': <a href="mailto:' . $editor[0]['contact_email'] . '">';
+        $s .= $editor[0]['contact_name'] . '</a>)</small>';
     }
+    $s .= '<br />';
     $s .= '<a href="javascript: void(0);" onclick="toggle(' . $row['message_id'] . ')">';
-    $s .= '<span size="2"><strong>' . $row['message_title'] . '</strong></span></a>';
+    $s .= '<strong>' . $row['message_title'] . '</strong></a>';
+    $s .= '</div>';
     $side .= '<div class="message" id="' . $row['message_id'] . '" style="display: none">';
     $side .= $row['message_body'];
     $side .= '</div>';
-    $row['message_body'] = $bbparser->qparse($row['message_body']);
-    $s .= '</td>';
-    if ($first) {
-        $s .= '<td rowspan="' . count($messages) . '" valign="top">';
-        echo $s;
-        $s = '';
-    }
-    $s .= '</tr>';
     return array($s, $side);
 }
 
@@ -4974,10 +4963,10 @@ function __extract_from_view_messages3($s, $style, $AppUI, $row, $df, $tf, $edit
  */
 function __extract_from_view_messages4($s, $style, $row, $hideEmail, $editor, $AppUI, $new_messages, $bbparser, $m, $df, $tf, $canEdit, $canAdminEdit, $canDelete)
 {
-    $s .= '<tr>';
+    $s .= '<div class="row g-2 border-bottom py-2 mx-0 w2p-forum-message" style="' . $style . '">';
 
-    $s .= '<td valign="top" style="' . $style . '" nowrap="nowrap">';
-    $s .= '<a href="?m=users&a=view&user_id=' . $row['message_author'] . '">';
+    $s .= '<div class="col-md-3 text-nowrap">';
+    $s .= '<a href="?m=users&amp;a=view&amp;user_id=' . $row['message_author'] . '">';
     $s .= $row['contact_name'];
     $s .= '</a>';
     if (!$hideEmail) {
@@ -5002,21 +4991,15 @@ function __extract_from_view_messages4($s, $style, $row, $hideEmail, $editor, $A
         $s .= '<br />&nbsp;' . w2PshowImage('icons/stock_new_small.png');
         $new_messages[] = $row['message_id'];
     }
-    $s .= '</td>';
-    $s .= '<td valign="top" style="' . $style . '">';
+    $s .= '<div class="mt-2"><img src="' . w2PfindImage('icons/posticon.gif', $m) . '" alt="date posted" />' . $AppUI->formatTZAwareTime($row['message_datetime'], $df . ' ' . $tf) . '</div>';
+    $s .= '</div>';
+    $s .= '<div class="col-md-9">';
     $s .= '<strong>' . $row['message_title'] . '</strong><hr />';
     $row['message_body'] = $bbparser->qparse($row['message_body']);
     $row['message_body'] = nl2br($row['message_body']);
     $s .= $row['message_body'];
-    $s .= '</td>';
 
-    $s .= '</tr><tr>';
-
-    $s .= '<td valign="top" style="' . $style . '" nowrap="nowrap">';
-    $s .= '<img src="' . w2PfindImage('icons/posticon.gif', $m) . '" alt="date posted" />' . $AppUI->formatTZAwareTime($row['message_datetime'], $df . ' ' . $tf) . '</td>';
-    $s .= '<td valign="top" align="right" style="' . $style . '">';
-
-    $s .= '<span class="d-inline-flex gap-2">';
+    $s .= '<div class="d-flex justify-content-end gap-2">';
     //the following users are allowed to edit/delete a forum message: 1. the forum creator  2. a superuser with read-write access to 'all' 3. the message author
     if ($canEdit || $AppUI->user_id == $row['forum_moderated'] || $AppUI->user_id == $row['message_author'] || $canAdminEdit) {
         // edit message
@@ -5030,9 +5013,9 @@ function __extract_from_view_messages4($s, $style, $row, $hideEmail, $editor, $A
         $s .= w2PshowImage('icons/stock_delete-16.png', '16', '16');
         $s .= '</a>';
     }
-    $s .= '</span>';
+    $s .= '</div>';
 
-    $s .= '</td>';
-    $s .= '</tr>';
+    $s .= '</div>';
+    $s .= '</div>';
     return array($s, $new_messages);
 }

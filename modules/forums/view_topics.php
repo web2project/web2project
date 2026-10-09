@@ -44,18 +44,14 @@ if (0 == count($fields)) {
     echo $listHelper->startTable('topics-forums_view');
     echo $listHelper->buildHeader($fields);
     echo $listHelper->buildRows($items);
+    echo $listHelper->endTable();
 
     ?>
-        <tr>
-            <td colspan="12">
-                <div class="left">
-                    <input type="submit" class="button" value="<?php echo $AppUI->_('update watches'); ?>" />
-                </div>
+    <div class="d-flex justify-content-between gap-2">
+        <input type="submit" class="button" value="<?php echo $AppUI->_('update watches'); ?>" />
 
-                <?php if ($canAuthor) { ?>
-                    <input type="button" class="button right" value="<?php echo $AppUI->_('start a new topic'); ?>" onclick="javascript:window.location='./index.php?m=forums&a=view&forum_id=<?php echo $forum_id; ?>&post_message=1';" />
-                <?php } ?>
-            </td>
-        </tr>
-    </table>
+        <?php if ($canAuthor) { ?>
+            <input type="button" class="button" value="<?php echo $AppUI->_('start a new topic'); ?>" onclick="javascript:window.location='./index.php?m=forums&a=view&forum_id=<?php echo $forum_id; ?>&post_message=1';" />
+        <?php } ?>
+    </div>
 </form>

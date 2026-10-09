@@ -61,33 +61,27 @@ echo $AppUI->getTheme()->styleRenderBoxTop();
 	<input type="hidden" name="message_id" value="0" />
 </form>
 
-<table class="std view forums-message">
-<tr>
-    <td colspan="2">
-        <div class="left" style="padding-left: 20px;">
-            <form action="<?php echo $thispage; ?>" method="post" accept-charset="utf-8">
-                <?php echo $AppUI->_('View') ?>:
-                <input type="radio" name="viewtype" value="normal" <?php echo ($viewtype == 'normal') ? 'checked' : ''; ?> onclick="this.form.submit();" /><?php echo $AppUI->_('Normal') ?>
-                <input type="radio" name="viewtype" value="short" <?php echo ($viewtype == 'short') ? 'checked' : ''; ?> onclick="this.form.submit();" /><?php echo $AppUI->_('Collapsed') ?>
-                <input type="radio" name="viewtype" value="single" <?php echo ($viewtype == 'single') ? 'checked' : ''; ?> onclick="this.form.submit();" /><?php echo $AppUI->_('Single Message at a time') ?>
-            </form>
-        </div>
-        <div class="right">
+<div class="std view forums-message">
+    <div class="d-flex flex-wrap align-items-center gap-2 mb-2">
+        <form action="<?php echo $thispage; ?>" method="post" accept-charset="utf-8" class="me-auto">
+            <?php echo $AppUI->_('View') ?>:
+            <input type="radio" name="viewtype" value="normal" <?php echo ($viewtype == 'normal') ? 'checked' : ''; ?> onclick="this.form.submit();" /><?php echo $AppUI->_('Normal') ?>
+            <input type="radio" name="viewtype" value="short" <?php echo ($viewtype == 'short') ? 'checked' : ''; ?> onclick="this.form.submit();" /><?php echo $AppUI->_('Collapsed') ?>
+            <input type="radio" name="viewtype" value="single" <?php echo ($viewtype == 'single') ? 'checked' : ''; ?> onclick="this.form.submit();" /><?php echo $AppUI->_('Single Message at a time') ?>
+        </form>
+        <div class="d-flex flex-wrap gap-1">
             <input type="button" class="button" value="<?php echo $AppUI->_('Sort By Date') . ' (' . $AppUI->_($sort) . ')'; ?>" onclick="javascript:window.location='./index.php?m=forums&a=view&forum_id=<?php echo $forum_id; ?>&message_id=<?php echo $message_id; ?>&sort=<?php echo $sort; ?>'" />
             <?php if ($canAuthor) { ?>
                 <input type="button" class="button" value="<?php echo $AppUI->_('Post Reply'); ?>" onclick="javascript:window.location='./index.php?m=forums&a=view&forum_id=<?php echo $forum_id; ?>&message_parent=<?php echo $message_id; ?>&post_message=1';" />
                 <input type="button" class="button" value="<?php echo $AppUI->_('New Topic'); ?>" onclick="javascript:window.location='./index.php?m=forums&a=view&forum_id=<?php echo $forum_id; ?>&message_id=0&post_message=1';" />
             <?php } ?>
         </div>
-    </td>
-</tr>
+    </div>
 
-<tr>
-    <?php
-    echo '<th nowrap>' . $AppUI->_('Author') . ':</th>';
-    echo '<th width="' . (($viewtype == 'single') ? '60' : '100') . '%">' . $AppUI->_('Message') . ':</th>';
-    ?>
-</tr>
+    <div class="row g-0 border-bottom bg-body-tertiary fw-semibold px-2 py-1 d-none d-md-flex">
+        <div class="col-md-3"><?php echo $AppUI->_('Author'); ?>:</div>
+        <div class="col-md-9"><?php echo $AppUI->_('Message'); ?>:</div>
+    </div>
 
 <?php
 $x = false;
@@ -98,6 +92,7 @@ $tf = $AppUI->getPref('TIMEFORMAT');
 
 if ($viewtype == 'single') {
 	$s = '';
+	$side = '';
 	$first = true;
 }
 
@@ -142,22 +137,18 @@ foreach ($messages as $row) {
 
 }
 if ($viewtype == 'single') {
-	echo $side . $s;
+	echo '<div class="row g-2"><div class="col-md-5">' . $s . '</div><div class="col-md-7">' . $side . '</div></div>';
 }
 ?>
 
-<tr>
-    <td colspan="2">
-        <div class="right">
+    <div class="d-flex flex-wrap justify-content-end gap-1 mt-2">
             <input type="button" class="button" value="<?php echo $AppUI->_('Sort By Date') . ' (' . $AppUI->_($sort) . ')'; ?>" onclick="javascript:window.location='./index.php?m=forums&a=view&forum_id=<?php echo $forum_id; ?>&message_id=<?php echo $message_id; ?>&sort=<?php echo $sort; ?>'" />
             <?php if ($canAuthor) { ?>
                 <input type="button" class="button" value="<?php echo $AppUI->_('Post Reply'); ?>" onclick="javascript:window.location='./index.php?m=forums&a=view&forum_id=<?php echo $forum_id; ?>&message_parent=<?php echo $message_id; ?>&post_message=1';" />
                 <input type="button" class="button" value="<?php echo $AppUI->_('New Topic'); ?>" onclick="javascript:window.location='./index.php?m=forums&a=view&forum_id=<?php echo $forum_id; ?>&message_id=0&post_message=1';" />
             <?php } ?>
-        </div>
-    </td>
-</tr>
-</table>
+    </div>
+</div>
 <?php
 
 foreach ($new_messages as $msg_id) {
