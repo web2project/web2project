@@ -1,6 +1,6 @@
 <?php
 /**
- * @package     web2project\modules\core
+ * @package web2project\modules\core
  */
 
 class CSystem_SysVal extends w2p_Core_BaseObject
