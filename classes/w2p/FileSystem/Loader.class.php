@@ -4,7 +4,7 @@
  *
  * This class reads the local filesystem. It is used to determine configuration options, available modules, etc.
  *
- * @package     web2project\filesystem
+ * @package web2project\filesystem
  */
 class w2p_FileSystem_Loader
 {
@@ -13,7 +13,9 @@ class w2p_FileSystem_Loader
      * Utility function to read the 'directories' under 'path'
      *
      * This function is used to read the modules or locales installed on the file system.
+     *
      * @param string $path The path to read.
+     *
      * @return array A named array of the directories (the key and value are identical).
      */
     public function readDirs($path)
@@ -34,8 +36,10 @@ class w2p_FileSystem_Loader
 
     /**
      * Utility function to read the 'files' under 'path'
+     *
      * @param string $path The path to read.
      * @param string $filter A regular expression to filter by.
+     *
      * @return array A named array of the files (the key and value are identical).
      */
     public function readFiles($path, $filter = '.')
@@ -57,7 +61,9 @@ class w2p_FileSystem_Loader
      * Utility function to check whether a file name is 'safe'
      *
      * Prevents from access to relative directories (eg ../../dealyfile.php);
+     *
      * @param string $file The file name.
+     *
      * @return string The file name (redirects to the access-denied page if it is unsafe).
      */
     public function checkFileName($file)
@@ -80,7 +86,9 @@ class w2p_FileSystem_Loader
      * Utility function to make a file name 'safe'
      *
      * Strips out mallicious insertion of relative directories (eg ../../dealyfile.php);
+     *
      * @param string $file The file name.
+     *
      * @return string The file name with ../ and ..\ sequences removed.
      */
     public function makeFileNameSafe($file)
