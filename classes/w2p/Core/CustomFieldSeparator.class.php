@@ -3,7 +3,7 @@
 /**
  * Produces just an horizontal line
  *
- * @package     web2project\core
+ * @package web2project\core
  */
 
 class w2p_Core_CustomFieldSeparator extends w2p_Core_CustomField
