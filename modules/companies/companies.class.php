@@ -1,18 +1,20 @@
 <?php
 
 /**
- * @package     web2project\modules\core
+ * @package web2project\modules\core
  *
- * @todo    Move the 'address' fields to a generic table
- * @todo    refactor static methods
+ * @todo Move the 'address' fields to a generic table
+ * @todo refactor static methods
  */
 
 class CCompany extends w2p_Core_BaseObject {
 	/**
- 	@var int Primary Key */
+	 * @var int Primary Key
+	 */
 	public $company_id = null;
 	/**
- 	@var string */
+	 * @var string
+	 */
 	public $company_name = null;
 
 	// these next fields should be ported to a generic address book
@@ -27,16 +29,20 @@ class CCompany extends w2p_Core_BaseObject {
 	public $company_country = null;
 	public $company_email = null;
 	/**
- 	@var string */
+	 * @var string
+	 */
 	public $company_primary_url = null;
 	/**
- 	@var int */
+	 * @var int
+	 */
 	public $company_owner = null;
 	/**
- 	@var string */
+	 * @var string
+	 */
 	public $company_description = null;
 	/**
- 	@var int */
+	 * @var int
+	 */
 	public $company_type = null;
 
 	public function __construct() {
@@ -125,11 +131,11 @@ class CCompany extends w2p_Core_BaseObject {
 
     /**
      * @param w2p_Core_CAppUI $AppUI
-     * @param                 $companyId
+     * @param mixed $companyId
      * @param int             $active
      * @param string          $sort
      *
-     * @return Array
+     * @return array
      */
     public function projects(w2p_Core_CAppUI $AppUI, $companyId, $active = 1, $sort = 'project_name')
     {
