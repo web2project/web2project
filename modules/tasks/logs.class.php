@@ -3,10 +3,10 @@
 /**
  * Class for handling task log functionality
  *
- * @category    CTask_Logs
- * @package     web2project\modules\core
- * @license     Clear BSD
- * @link        http://www.web2project.net
+ * @category CTask_Logs
+ * @package  web2project\modules\core
+ * @license  Clear BSD
+ * @link     http://www.web2project.net
  */
 
 class CTask_Log extends w2p_Core_BaseObject
@@ -16,7 +16,6 @@ class CTask_Log extends w2p_Core_BaseObject
 	 * The id of the task log
 	 *
 	 * @var int
-	 * @access public
 	 */
 	public $task_log_id = null;
 
@@ -24,7 +23,6 @@ class CTask_Log extends w2p_Core_BaseObject
 	 * The id of the task this task log belongs to
 	 *
 	 * @var int
-	 * @access public
 	 */
 	public $task_log_task = null;
 
@@ -32,7 +30,6 @@ class CTask_Log extends w2p_Core_BaseObject
 	 * The name of the task log
 	 *
 	 * @var string
-	 * @access public
 	 */
 	public $task_log_name = null;
 
@@ -40,7 +37,6 @@ class CTask_Log extends w2p_Core_BaseObject
 	 * Description of the task log
 	 *
 	 * @var string
-	 * @access public
 	 */
 	public $task_log_description = null;
 
@@ -48,7 +44,6 @@ class CTask_Log extends w2p_Core_BaseObject
 	 * The id of user that created the task log
 	 *
 	 * @var int
-	 * @access public
 	 */
 	public $task_log_creator = null;
 
@@ -56,7 +51,6 @@ class CTask_Log extends w2p_Core_BaseObject
 	 * The number of hours worked for the task log
 	 *
 	 * @var float
-	 * @access public
 	 */
 	public $task_log_hours = null;
 
@@ -64,7 +58,6 @@ class CTask_Log extends w2p_Core_BaseObject
 	 * Date of the task log, stored as a date in the db
 	 *
 	 * @var string
-	 * @access public
 	 */
 	public $task_log_date = null;
 
@@ -73,7 +66,6 @@ class CTask_Log extends w2p_Core_BaseObject
 	 * Integer value, can be defined by user
 	 *
 	 * @var int
-	 * @access public
 	 */
 	public $task_log_costcode = null;
 
@@ -81,7 +73,6 @@ class CTask_Log extends w2p_Core_BaseObject
 	 * Indicates if there was a problem while working on the task
 	 *
 	 * @var int|bool|null
-	 * @access public
 	 */
 	public $task_log_problem = null;
 
@@ -91,7 +82,6 @@ class CTask_Log extends w2p_Core_BaseObject
 	 * 4 - Fax however they can be altered by user
 	 *
 	 * @var int
-	 * @access public
 	 */
 	public $task_log_reference = null;
 
@@ -99,7 +89,6 @@ class CTask_Log extends w2p_Core_BaseObject
 	 * Url related to the work done in this task log
 	 *
 	 * @var string
-	 * @access public
 	 */
 	public $task_log_related_url = null;
 
@@ -108,7 +97,6 @@ class CTask_Log extends w2p_Core_BaseObject
 	 * Is handled by database layer
 	 *
 	 * @var string
-	 * @access public
 	 */
 	public $task_log_created = null;
 
@@ -117,7 +105,6 @@ class CTask_Log extends w2p_Core_BaseObject
 	 * Is handled by database layer
 	 *
 	 * @var string
-	 * @access public
 	 */
 	public $task_log_updated = null;
 
@@ -126,7 +113,6 @@ class CTask_Log extends w2p_Core_BaseObject
      * For task logs when user is creating it for another user
      *
      * @var int
-     * @access public
      */
     public $task_log_record_creator;
 
@@ -134,7 +120,6 @@ class CTask_Log extends w2p_Core_BaseObject
      * Percent complete of a given task at the time of the specific tasklog
      *
      * @var int
-     * @access public
      */
     public $task_log_percent_complete;
     // @todo this should be task_log_task_end_datetime to take advantage of our templating
@@ -213,8 +198,6 @@ class CTask_Log extends w2p_Core_BaseObject
      * @param int $task_id that task id of task this task log is for
 	 *
 	 * @return void
-	 *
-	 * @access protected
 	 */
 	protected function updateTaskSummary($notUsed = null, $task_id)
 	{
@@ -276,8 +259,6 @@ class CTask_Log extends w2p_Core_BaseObject
 	 * Trims all vars of this object of type string, except the task_log_description.
 	 *
 	 * @return void
-	 *
-	 * @access public
 	 */
 	public function w2PTrimAll()
 	{
@@ -305,7 +286,7 @@ class CTask_Log extends w2p_Core_BaseObject
      *   a) the creator of the log; OR
      *   b) the subject of the log; OR
      *   c) have edit permissions on the corresponding task.
-	 *
+     *
 	 * @return bool
 	 */
     public function canDelete($notUsed = null, $notUsed2 = null, $notUsed3 = null)
@@ -325,7 +306,7 @@ class CTask_Log extends w2p_Core_BaseObject
         return $this->_perms->checkModuleItem($this->_tbl_module, 'view', $this->task_log_task);
     }
 
-    /*
+    /**
      * You are allowed to edit a task log if you are:
      *   a) the creator of the log; OR
      *   b) the subject of the log; OR
