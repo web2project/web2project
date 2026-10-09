@@ -3,8 +3,8 @@
 /**
  * This class is used to do second level tabs or subtabs aligned to the right by default
  *
- * @package     web2project\theme
- * @author      Pedro Azevedo
+ * @package web2project\theme
+ * @author  Pedro Azevedo
  */
 
 class w2p_Theme_InfoTabBox extends w2p_Theme_TabBox {
