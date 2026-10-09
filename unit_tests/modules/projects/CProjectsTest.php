@@ -2,18 +2,17 @@
 /**
  * Class for testing projects functionality
  *
- *
  * PHP version 5
  *
  * LICENSE: This source file is subject to Clear BSD License. Please see the
  *   LICENSE file in root of site for further details
  *
- * @author      Trevor Morse <trevor.morse@gmail.com>
- * @category    CProjects
- * @package     web2project
- * @subpackage  unit_tests
- * @license     Clear BSD
- * @link        http://www.web2project.net
+ * @author     Trevor Morse <trevor.morse@gmail.com>
+ * @category   CProjects
+ * @package    web2project
+ * @subpackage unit_tests
+ * @license    Clear BSD
+ * @link       http://www.web2project.net
  */
 
 class CProjectsTest extends CommonSetup
@@ -450,7 +449,6 @@ $this->obj->overrideDatabase($this->mockDB);
 
     /**
      * Tests the custom getAllowedSQL function
-     *
      */
     public function testGetAllowedSQL()
     {
@@ -459,7 +457,6 @@ $this->obj->overrideDatabase($this->mockDB);
 
     /**
      * Tests the custom setAllowedSQL function
-     *
      */
     public function testSetAllowedSQL()
     {
@@ -675,7 +672,6 @@ $this->obj->overrideDatabase($this->mockDB);
 
     /**
      * Test finding of departments of project
-     *
      */
     public function testGetDepartmentList()
     {
