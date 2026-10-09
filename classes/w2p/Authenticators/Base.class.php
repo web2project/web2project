@@ -3,15 +3,15 @@
  * This is the core of the authentication system. All other Authenticators
  *  should extend it.
  *
- * @package     web2project\authenticators
+ * @package web2project\authenticators
  */
 /**
  * This class just collects the common functionality from across the
  *  Authenticators. It will tend to grow as we support more auth options.
- * 
- * @author      Keith Casey <caseydk@users.sourceforge.net>
  *
- * @package     web2project\authenticators
+ * @author Keith Casey <caseydk@users.sourceforge.net>
+ *
+ * @package  web2project\authenticators
  * @abstract
  */
 abstract class w2p_Authenticators_Base
