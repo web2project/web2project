@@ -1545,15 +1545,15 @@ function last_file($file_versions, $file_name, $file_project)
 // From: modules/files/files.class.php
 function getIcon($file_type)
 {
-    $mime = str_replace('/', '-', $file_type);
-    $icon = 'gnome-mime-' . $mime;
-    if (is_file(W2P_BASE_DIR . '/styles/' . W2P_UISTYLE . '/images/modules/files/icons/' . $icon . '.png')) {
-        $result = 'icons/' . $icon . '.png';
-    } else {
-        $result = __extract_from_files_index_table($file_type);
+    $icon = 'icons/gnome-mime-' . str_replace('/', '-', $file_type) . '.png';
+    // w2PfindImage() resolves the returned path against the same style folders
+    foreach (array_unique(array(W2P_UISTYLE, 'web2project')) as $style) {
+        if (is_file(W2P_BASE_DIR . '/style/' . $style . '/images/modules/files/' . $icon)) {
+            return $icon;
+        }
     }
 
-    return $result;
+    return __extract_from_files_index_table($file_type);
 }
 
 /**
