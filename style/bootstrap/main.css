@@ -1,13 +1,353 @@
+@import url("fonts/fonts.css");
+@import url("icons/bootstrap-icons.min.css");
+
 /*
  * web2Project Bootstrap theme
  *
  * Bootstrap 5.3 (css/bootstrap.min.css) provides the base styles. This file
- * only maps the class names web2Project has always emitted (std, tbl, list,
- * text, button, hilite, ...) onto the Bootstrap look and adds the handful of
- * application specific styles (task status colours, calendars, tooltips).
- * It deliberately uses the Bootstrap CSS variables so the default Bootstrap
- * colours apply everywhere.
+ * gives them the look of the NiceAdmin admin template (soft blue palette,
+ * Nunito Sans and Poppins, white cards with light borders and shadows, a
+ * fixed header and a left sidebar), maps the class names web2Project has
+ * always emitted (std, tbl, list, text, button, hilite, ...) onto that look
+ * and adds the application specific styles (task status colours, calendars,
+ * tooltips).
  */
+
+/* ---------------------------------------------------------------------
+ * Design tokens
+ * ------------------------------------------------------------------- */
+:root {
+    --w2p-font: "Nunito Sans", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+    --w2p-heading-font: "Poppins", var(--w2p-font);
+
+    --w2p-background: #f5f7ff;
+    --w2p-text: #2d3a4e;
+    --w2p-heading: #012970;
+    --w2p-accent: #4154f1;
+    --w2p-accent-rgb: 65, 84, 241;
+    --w2p-accent-hover: #3445d6;
+    --w2p-surface: #ffffff;
+    --w2p-muted: #667085;
+    --w2p-light: #98a2b3;
+    --w2p-border: #dbe3ff;
+    --w2p-border-light: #ebefff;
+    --w2p-border-dark: #c7d3ff;
+    --w2p-table-head: #eff3ff;
+    --w2p-table-hover: #e7eeff;
+    --w2p-table-stripe: #f8faff;
+    --w2p-success: #21a66c;
+    --w2p-success-light: #dcf8ea;
+    --w2p-warning: #ec9f05;
+    --w2p-warning-light: #fff3d8;
+    --w2p-danger: #e74c63;
+    --w2p-danger-light: #ffe3e8;
+    --w2p-info: #2f80ed;
+    --w2p-info-light: #e4efff;
+
+    --w2p-shadow-sm: 0 1px 4px -3px rgb(1 41 112 / .14), 0 1px 2px -1px rgb(65 84 241 / .1);
+    --w2p-shadow-md: 0 8px 20px -14px rgb(1 41 112 / .18), 0 4px 10px -8px rgb(65 84 241 / .12);
+    --w2p-shadow-lg: 0 20px 42px -24px rgb(1 41 112 / .26), 0 10px 20px -14px rgb(65 84 241 / .16);
+
+    --w2p-header-height: 64px;
+    --w2p-sidebar-width: 280px;
+
+    /* Bootstrap */
+    --bs-body-font-family: var(--w2p-font);
+    --bs-body-font-size: .9375rem;
+    --bs-body-color: var(--w2p-text);
+    --bs-body-color-rgb: 45, 58, 78;
+    --bs-body-bg: var(--w2p-surface);
+    --bs-emphasis-color: var(--w2p-heading);
+    --bs-heading-color: var(--w2p-heading);
+    --bs-secondary-color: var(--w2p-muted);
+    --bs-secondary-bg: #eef1fb;
+    --bs-tertiary-bg: var(--w2p-table-head);
+    --bs-border-color: var(--w2p-border);
+    --bs-border-color-translucent: var(--w2p-border);
+    --bs-border-radius: .25rem;
+    --bs-border-radius-sm: .25rem;
+    --bs-border-radius-lg: .25rem;
+    --bs-border-radius-xl: .25rem;
+    --bs-border-radius-xxl: .25rem;
+    --bs-box-shadow: var(--w2p-shadow-md);
+    --bs-box-shadow-sm: var(--w2p-shadow-sm);
+    --bs-box-shadow-lg: var(--w2p-shadow-lg);
+    --bs-link-color: var(--w2p-accent);
+    --bs-link-color-rgb: 65, 84, 241;
+    --bs-link-hover-color: var(--w2p-accent-hover);
+    --bs-link-hover-color-rgb: 52, 69, 214;
+    --bs-focus-ring-color: rgb(65 84 241 / .25);
+
+    --bs-primary: var(--w2p-accent);
+    --bs-primary-rgb: 65, 84, 241;
+    --bs-primary-text-emphasis: #3747cd;
+    --bs-primary-bg-subtle: #e8ebfe;
+    --bs-primary-border-subtle: var(--w2p-accent);
+    --bs-secondary: var(--w2p-muted);
+    --bs-secondary-rgb: 102, 112, 133;
+    --bs-success: var(--w2p-success);
+    --bs-success-rgb: 33, 166, 108;
+    --bs-success-text-emphasis: #17744c;
+    --bs-success-bg-subtle: var(--w2p-success-light);
+    --bs-success-border-subtle: var(--w2p-success);
+    --bs-warning: var(--w2p-warning);
+    --bs-warning-rgb: 236, 159, 5;
+    --bs-warning-text-emphasis: #a56f03;
+    --bs-warning-bg-subtle: var(--w2p-warning-light);
+    --bs-warning-border-subtle: var(--w2p-warning);
+    --bs-danger: var(--w2p-danger);
+    --bs-danger-rgb: 231, 76, 99;
+    --bs-danger-text-emphasis: #a23545;
+    --bs-danger-bg-subtle: var(--w2p-danger-light);
+    --bs-danger-border-subtle: var(--w2p-danger);
+    --bs-info: var(--w2p-info);
+    --bs-info-rgb: 47, 128, 237;
+    --bs-info-text-emphasis: #215aa6;
+    --bs-info-bg-subtle: var(--w2p-info-light);
+    --bs-info-border-subtle: var(--w2p-info);
+}
+
+body {
+    background-color: var(--w2p-background);
+    line-height: 1.6;
+}
+h1, h2, h3, h4, h5, h6,
+.h1, .h2, .h3, .h4, .h5, .h6 {
+    font-family: var(--w2p-heading-font);
+    font-weight: 600;
+    color: var(--w2p-heading);
+}
+a {
+    text-decoration: none;
+}
+a:hover {
+    text-decoration: underline;
+}
+::selection {
+    background-color: rgb(65 84 241 / .18);
+}
+
+/* ---------------------------------------------------------------------
+ * Bootstrap components with the NiceAdmin colours
+ * ------------------------------------------------------------------- */
+.btn {
+    --bs-btn-font-size: .875rem;
+    --bs-btn-font-weight: 500;
+    --bs-btn-padding-x: 1.25rem;
+    --bs-btn-padding-y: .5rem;
+    --bs-btn-border-radius: .25rem;
+}
+.btn-sm {
+    --bs-btn-font-size: .8125rem;
+    --bs-btn-padding-x: .875rem;
+    --bs-btn-padding-y: .375rem;
+}
+.btn-primary {
+    --bs-btn-bg: var(--w2p-accent);
+    --bs-btn-border-color: var(--w2p-accent);
+    --bs-btn-hover-bg: var(--w2p-accent-hover);
+    --bs-btn-hover-border-color: var(--w2p-accent-hover);
+    --bs-btn-active-bg: #2e3dbf;
+    --bs-btn-active-border-color: #2e3dbf;
+    --bs-btn-disabled-bg: var(--w2p-accent);
+    --bs-btn-disabled-border-color: var(--w2p-accent);
+    --bs-btn-focus-shadow-rgb: 65, 84, 241;
+}
+.btn-outline-primary {
+    --bs-btn-color: var(--w2p-accent);
+    --bs-btn-border-color: var(--w2p-accent);
+    --bs-btn-hover-bg: var(--w2p-accent);
+    --bs-btn-hover-border-color: var(--w2p-accent);
+    --bs-btn-active-bg: var(--w2p-accent);
+    --bs-btn-active-border-color: var(--w2p-accent);
+    --bs-btn-disabled-color: var(--w2p-accent);
+    --bs-btn-disabled-border-color: var(--w2p-accent);
+    --bs-btn-focus-shadow-rgb: 65, 84, 241;
+}
+.btn-secondary {
+    --bs-btn-bg: var(--w2p-muted);
+    --bs-btn-border-color: var(--w2p-muted);
+    --bs-btn-hover-bg: #525a6b;
+    --bs-btn-hover-border-color: #525a6b;
+}
+.btn-outline-secondary {
+    --bs-btn-color: var(--w2p-muted);
+    --bs-btn-border-color: var(--w2p-border-dark);
+    --bs-btn-bg: var(--w2p-surface);
+    --bs-btn-hover-color: var(--w2p-accent);
+    --bs-btn-hover-bg: rgb(65 84 241 / .08);
+    --bs-btn-hover-border-color: var(--w2p-accent);
+    --bs-btn-active-color: var(--w2p-accent);
+    --bs-btn-active-bg: rgb(65 84 241 / .12);
+    --bs-btn-active-border-color: var(--w2p-accent);
+}
+.btn-success {
+    --bs-btn-bg: var(--w2p-success);
+    --bs-btn-border-color: var(--w2p-success);
+    --bs-btn-hover-bg: #1b8a5a;
+    --bs-btn-hover-border-color: #1b8a5a;
+}
+.btn-danger {
+    --bs-btn-bg: var(--w2p-danger);
+    --bs-btn-border-color: var(--w2p-danger);
+    --bs-btn-hover-bg: #d33a51;
+    --bs-btn-hover-border-color: #d33a51;
+    --bs-btn-active-bg: #c2344a;
+    --bs-btn-active-border-color: #c2344a;
+}
+.btn-outline-danger {
+    --bs-btn-color: var(--w2p-danger);
+    --bs-btn-border-color: var(--w2p-danger);
+    --bs-btn-hover-bg: var(--w2p-danger);
+    --bs-btn-hover-border-color: var(--w2p-danger);
+    --bs-btn-active-bg: var(--w2p-danger);
+    --bs-btn-active-border-color: var(--w2p-danger);
+}
+
+.card {
+    --bs-card-border-color: var(--w2p-border);
+    --bs-card-border-radius: .25rem;
+    --bs-card-inner-border-radius: calc(.25rem - 1px);
+    --bs-card-cap-bg: var(--w2p-surface);
+    --bs-card-spacer-y: 1.25rem;
+    --bs-card-spacer-x: 1.25rem;
+    --bs-card-cap-padding-y: .85rem;
+    --bs-card-cap-padding-x: 1.25rem;
+    box-shadow: var(--w2p-shadow-md);
+}
+.card-header {
+    border-bottom-color: var(--w2p-border-light);
+    font-family: var(--w2p-heading-font);
+    font-size: .875rem;
+    font-weight: 600;
+    color: var(--w2p-heading);
+}
+.card-footer {
+    border-top-color: var(--w2p-border-light);
+    background-color: var(--w2p-surface);
+}
+
+.form-control,
+.form-select {
+    padding: .5rem .875rem;
+    font-size: .9375rem;
+    color: var(--w2p-text);
+    border-color: var(--w2p-border);
+}
+.form-select {
+    padding-right: 2.375rem;
+}
+.form-control-sm,
+.form-select-sm {
+    padding: .3125rem .75rem;
+    font-size: .8125rem;
+}
+.form-select-sm {
+    padding-right: 2.25rem;
+}
+.form-control:focus,
+.form-select:focus {
+    border-color: var(--w2p-accent);
+    box-shadow: 0 0 0 .25rem rgb(65 84 241 / .25);
+}
+.form-control::placeholder {
+    color: var(--w2p-light);
+}
+.form-label {
+    font-size: .875rem;
+    font-weight: 500;
+    color: var(--w2p-heading);
+}
+.form-text {
+    font-size: .8125rem;
+    color: var(--w2p-muted);
+}
+.form-check-input {
+    border-color: var(--w2p-border-dark);
+}
+.form-check-input:checked {
+    background-color: var(--w2p-accent);
+    border-color: var(--w2p-accent);
+}
+.form-check-input:focus {
+    border-color: var(--w2p-accent);
+    box-shadow: 0 0 0 .25rem rgb(65 84 241 / .25);
+}
+.input-group-text {
+    color: var(--w2p-muted);
+    background-color: var(--w2p-background);
+    border-color: var(--w2p-border);
+}
+
+.alert {
+    --bs-alert-padding-x: 1.25rem;
+    --bs-alert-padding-y: .875rem;
+    font-size: .875rem;
+}
+
+.nav-tabs {
+    --bs-nav-tabs-border-color: var(--w2p-border);
+    --bs-nav-tabs-link-hover-border-color: transparent transparent var(--w2p-border);
+    --bs-nav-tabs-link-active-color: var(--w2p-heading);
+    --bs-nav-tabs-link-active-bg: var(--w2p-surface);
+    --bs-nav-tabs-link-active-border-color: var(--w2p-border) var(--w2p-border) var(--w2p-surface);
+    --bs-nav-link-color: var(--w2p-muted);
+    --bs-nav-link-hover-color: var(--w2p-accent);
+    --bs-nav-link-padding-x: .875rem;
+    --bs-nav-link-padding-y: .5rem;
+    --bs-nav-link-font-size: .875rem;
+    --bs-nav-link-font-weight: 500;
+}
+.nav-tabs .nav-link.active {
+    box-shadow: inset 0 2px 0 var(--w2p-accent);
+}
+
+.pagination {
+    --bs-pagination-font-size: .875rem;
+    --bs-pagination-padding-x: .75rem;
+    --bs-pagination-padding-y: .375rem;
+    --bs-pagination-color: var(--w2p-text);
+    --bs-pagination-border-color: var(--w2p-border);
+    --bs-pagination-hover-color: var(--w2p-accent);
+    --bs-pagination-hover-bg: rgb(65 84 241 / .08);
+    --bs-pagination-hover-border-color: var(--w2p-border);
+    --bs-pagination-focus-box-shadow: 0 0 0 .25rem rgb(65 84 241 / .25);
+    --bs-pagination-active-bg: var(--w2p-accent);
+    --bs-pagination-active-border-color: var(--w2p-accent);
+    --bs-pagination-disabled-bg: var(--w2p-background);
+    gap: .25rem;
+    font-weight: 500;
+}
+.pagination .page-link {
+    border-radius: .25rem !important;
+    margin-left: 0 !important;
+}
+
+.dropdown-menu {
+    --bs-dropdown-border-color: var(--w2p-border);
+    --bs-dropdown-font-size: .875rem;
+    --bs-dropdown-link-hover-bg: rgb(65 84 241 / .08);
+    --bs-dropdown-link-hover-color: var(--w2p-accent);
+    --bs-dropdown-link-active-bg: var(--w2p-accent);
+    box-shadow: var(--w2p-shadow-lg);
+}
+.badge {
+    font-weight: 700;
+}
+.progress,
+.progress-stacked {
+    --bs-progress-bar-bg: var(--w2p-accent);
+    --bs-progress-bg: var(--w2p-border-light);
+}
+.list-group {
+    --bs-list-group-border-color: var(--w2p-border-light);
+}
+.table {
+    --bs-table-color: var(--w2p-text);
+    --bs-table-border-color: var(--w2p-border-light);
+    --bs-table-striped-bg: var(--w2p-table-stripe);
+    --bs-table-hover-bg: var(--w2p-table-hover);
+}
 
 /* ---------------------------------------------------------------------
  * Page shell
@@ -60,24 +400,25 @@ em {
 }
 
 /* ---------------------------------------------------------------------
- * Title block (w2p_Theme_TitleBlock)
+ * Title block (w2p_Theme_TitleBlock): a NiceAdmin page header, with the
+ * crumbs below the title rendered like a breadcrumb trail.
  * ------------------------------------------------------------------- */
 .module-title {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
     gap: .5rem 1rem;
-    margin-bottom: .5rem;
+    margin-bottom: .25rem;
 }
 .module-title .icon {
-    margin: 0;
-}
-.module-title .icon img {
-    max-height: 42px;
+    display: none;
 }
 .module-title h1 {
-    font-size: 1.5rem;
     margin: 0;
+    font-size: 1.5rem;
+    line-height: 1.3;
+    font-weight: 600;
+    color: var(--w2p-heading);
 }
 .crumb-right {
     display: flex;
@@ -88,6 +429,7 @@ em {
     list-style: none;
     margin: 0 0 0 auto;
     padding: 0;
+    font-size: .875rem;
 }
 .crumb-right li {
     list-style: none;
@@ -102,8 +444,11 @@ em {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    gap: .5rem;
-    margin-bottom: 1rem;
+    gap: .5rem 1rem;
+    margin-bottom: 1.25rem;
+}
+.module-title + :not(.module-nav) {
+    margin-top: 1rem;
 }
 .module-nav .crumb-right {
     flex-direction: row;
@@ -111,55 +456,74 @@ em {
 .crumb ul {
     display: flex;
     flex-wrap: wrap;
-    gap: .25rem;
+    align-items: center;
     list-style: none;
     margin: 0;
     padding: 0;
+    font-size: .8125rem;
 }
-.crumb ul li a,
-.module-nav .crumb-right a.delete {
-    display: inline-block;
-    padding: .25rem .5rem;
-    font-size: .875rem;
-    border: var(--bs-border-width) solid var(--bs-border-color);
-    border-radius: var(--bs-border-radius-sm);
+.crumb ul li + li::before {
+    content: "/";
+    padding: 0 .5rem;
+    color: var(--w2p-light);
+}
+.crumb ul li a {
+    color: var(--w2p-muted);
     text-decoration: none;
-    color: var(--bs-secondary-color);
-    background-color: var(--bs-body-bg);
 }
 .crumb ul li a:hover {
-    color: var(--bs-body-color);
-    background-color: var(--bs-tertiary-bg);
+    color: var(--w2p-accent);
 }
 .crumb ul li a div,
 a.delete div {
     display: inline;
 }
 .crumb ul li a img {
-    vertical-align: text-bottom;
+    display: none;
 }
 a.delete,
 .module-nav .crumb-right a.delete {
-    color: var(--bs-danger);
-    border-color: var(--bs-danger);
+    display: inline-block;
+    padding: .3125rem .75rem;
+    font-size: .8125rem;
+    font-weight: 500;
+    color: var(--w2p-danger);
+    border: 1px solid var(--w2p-danger);
+    border-radius: .25rem;
+    background-color: var(--w2p-surface);
+    text-decoration: none;
 }
 a.delete:hover,
 .module-nav .crumb-right a.delete:hover {
     color: #fff;
-    background-color: var(--bs-danger);
+    background-color: var(--w2p-danger);
 }
 
 /* ---------------------------------------------------------------------
  * Tabs (CTabBox in overrides.php)
  * ------------------------------------------------------------------- */
+.w2p-tabs {
+    margin-top: .5rem;
+}
+.w2p-tab-content {
+    background-color: var(--w2p-surface);
+    border-color: var(--w2p-border) !important;
+    box-shadow: var(--w2p-shadow-md);
+    padding: 1rem !important;
+}
 .w2p-tab-content > table,
 .w2p-tab-content > form > table {
     margin-bottom: 0;
 }
+.w2p-tabs-flat > section > h2 {
+    font-size: 1.05rem;
+    border-color: var(--w2p-border) !important;
+}
 
 /* ---------------------------------------------------------------------
  * Form controls emitted by w2p_Output_HTML_FormHelper, arraySelect() and
- * the hand written forms. These mirror .form-control-sm/.form-select-sm.
+ * the hand written forms. Outside add/edit forms they mirror
+ * .form-control-sm/.form-select-sm; add/edit forms use the full size.
  * ------------------------------------------------------------------- */
 input.text,
 input[type="text"]:not(.form-control),
@@ -170,13 +534,14 @@ select:not(.form-select),
 textarea:not(.form-control) {
     display: inline-block;
     max-width: 100%;
-    padding: .25rem .5rem;
-    font-size: .875rem;
+    padding: .3125rem .75rem;
+    font-family: inherit;
+    font-size: .8125rem;
     line-height: 1.5;
-    color: var(--bs-body-color);
-    background-color: var(--bs-body-bg);
-    border: var(--bs-border-width) solid var(--bs-border-color);
-    border-radius: var(--bs-border-radius-sm);
+    color: var(--w2p-text);
+    background-color: var(--w2p-surface);
+    border: 1px solid var(--w2p-border);
+    border-radius: .25rem;
     vertical-align: middle;
     transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;
 }
@@ -186,9 +551,9 @@ input[type="password"]:not(.form-control):focus,
 input[type="email"]:not(.form-control):focus,
 select:not(.form-select):focus,
 textarea:not(.form-control):focus {
-    border-color: #86b7fe;
+    border-color: var(--w2p-accent);
     outline: 0;
-    box-shadow: 0 0 0 .25rem rgba(var(--bs-primary-rgb), .25);
+    box-shadow: 0 0 0 .25rem rgb(65 84 241 / .25);
 }
 select[multiple]:not(.form-select) {
     min-height: 6rem;
@@ -197,6 +562,7 @@ input[type="checkbox"],
 input[type="radio"] {
     margin: 0 .25rem;
     vertical-align: middle;
+    accent-color: var(--w2p-accent);
 }
 textarea:not(.form-control) {
     width: 100%;
@@ -209,37 +575,56 @@ input.state, input.zip {
     width: 6em;
 }
 
-/* Buttons: legacy .button links and inputs look like Bootstrap buttons */
+/* Buttons: legacy .button links and inputs look like outline buttons */
 input.button:not(.btn),
 button.button:not(.btn),
 a.button {
     display: inline-block;
-    padding: .25rem .5rem;
-    font-size: .875rem;
+    padding: .3125rem .875rem;
+    font-family: inherit;
+    font-size: .8125rem;
     line-height: 1.5;
-    font-weight: 400;
+    font-weight: 500;
     text-align: center;
     text-decoration: none;
     vertical-align: middle;
-    color: var(--bs-secondary-color);
-    background-color: var(--bs-body-bg);
-    border: var(--bs-border-width) solid var(--bs-secondary-color);
-    border-radius: var(--bs-border-radius-sm);
+    color: var(--w2p-muted);
+    background-color: var(--w2p-surface);
+    border: 1px solid var(--w2p-border-dark);
+    border-radius: .25rem;
     cursor: pointer;
+    transition: color .15s ease-in-out, background-color .15s ease-in-out, border-color .15s ease-in-out;
 }
 input.button:not(.btn):hover,
 button.button:not(.btn):hover,
 a.button:hover {
+    color: var(--w2p-accent);
+    background-color: rgb(65 84 241 / .08);
+    border-color: var(--w2p-accent);
+    text-decoration: none;
+}
+input.button.save:not(.btn),
+button.button.save:not(.btn) {
     color: #fff;
-    background-color: var(--bs-secondary);
-    border-color: var(--bs-secondary);
+    background-color: var(--w2p-accent);
+    border-color: var(--w2p-accent);
+}
+input.button.save:not(.btn):hover,
+button.button.save:not(.btn):hover {
+    color: #fff;
+    background-color: var(--w2p-accent-hover);
+    border-color: var(--w2p-accent-hover);
 }
 a.button span, a.button div {
     display: inline;
 }
 input.btn, button.btn {
     font-size: .875rem;
-    padding: .25rem .75rem;
+    padding: .375rem 1rem;
+}
+input.btn-sm, button.btn-sm {
+    font-size: .8125rem;
+    padding: .3125rem .875rem;
 }
 input.button, a div {
     text-transform: capitalize;
@@ -250,17 +635,18 @@ input.button, a div {
  * <div class="column left|right"> and <p><label/>field</p>
  * ------------------------------------------------------------------- */
 div.std {
-    background-color: var(--bs-body-bg);
+    background-color: var(--w2p-surface);
 }
 div.std.addedit {
     display: flex;
     flex-wrap: wrap;
     align-items: flex-start;
-    gap: 0 2rem;
-    padding: 1rem;
-    margin-bottom: 1rem;
-    border: var(--bs-border-width) solid var(--bs-border-color);
-    border-radius: var(--bs-border-radius);
+    gap: 0 2.5rem;
+    padding: 1.25rem;
+    margin-bottom: 1.25rem;
+    border: 1px solid var(--w2p-border);
+    border-radius: .25rem;
+    box-shadow: var(--w2p-shadow-md);
 }
 div.std.addedit > .column {
     flex: 1 1 22rem;
@@ -272,15 +658,36 @@ div.std.addedit p {
     display: flex;
     flex-wrap: wrap;
     align-items: baseline;
-    gap: .25rem .5rem;
-    margin: 0 0 .5rem;
+    gap: .375rem .75rem;
+    margin: 0 0 1rem;
 }
 div.std.addedit label {
-    flex: 0 0 10rem;
+    flex: 0 0 10.5rem;
     margin: 0;
-    text-align: end;
+    text-align: start;
+    font-size: .875rem;
     font-weight: 500;
-    color: var(--bs-secondary-color);
+    line-height: 1.4;
+    color: var(--w2p-heading);
+}
+div.std.addedit p > input.text,
+div.std.addedit p > input[type="text"],
+div.std.addedit p > input[type="password"],
+div.std.addedit p > input[type="email"],
+div.std.addedit p > select,
+div.std.addedit p > textarea {
+    padding: .5rem .875rem;
+    font-size: .9375rem;
+}
+div.std.addedit > .column > strong:first-child,
+div.std.addedit > .column > h2:first-child,
+div.std.addedit > .column > h3:first-child {
+    display: block;
+    margin-bottom: 1rem;
+    font-family: var(--w2p-heading-font);
+    font-size: .9375rem;
+    font-weight: 600;
+    color: var(--w2p-heading);
 }
 div.std.addedit label.form-check-label {
     flex: none;
@@ -308,7 +715,9 @@ div.std.addedit > .w2p-form-actions {
     display: flex;
     justify-content: space-between;
     gap: .5rem;
-    margin-top: .5rem;
+    margin: .25rem -1.25rem -1.25rem;
+    padding: 1rem 1.25rem;
+    border-top: 1px solid var(--w2p-border-light);
 }
 div.std.addedit > .w2p-form-actions .save {
     float: none;
@@ -319,7 +728,6 @@ div.std.addedit > .w2p-form-actions .save {
 @media (max-width: 575.98px) {
     div.std.addedit label {
         flex-basis: 100%;
-        text-align: start;
     }
 }
 
@@ -328,15 +736,31 @@ dl.w2p-details {
     margin-bottom: 0;
 }
 dl.w2p-details > dt {
+    font-size: .875rem;
     font-weight: 500;
-    color: var(--bs-secondary-color);
+    color: var(--w2p-muted);
 }
 dl.w2p-details > dd {
     margin-bottom: .35rem;
 }
 .w2p-section-title,
 .w2p-panel > .card-header {
+    font-family: var(--w2p-heading-font);
     font-weight: 600;
+    color: var(--w2p-heading);
+}
+.view-column > strong {
+    display: block;
+    margin: 0 0 .5rem;
+    font-family: var(--w2p-heading-font);
+    font-size: .875rem;
+    font-weight: 600;
+    color: var(--w2p-heading);
+}
+.view-column > dl + strong,
+.view-column > table + strong,
+.view-column > div + strong {
+    margin-top: 1.25rem;
 }
 
 /* ---------------------------------------------------------------------
@@ -348,9 +772,12 @@ table.list,
 table.std {
     width: 100%;
     margin-bottom: 1rem;
-    border-collapse: collapse;
-    background-color: var(--bs-body-bg);
+    border-collapse: separate;
+    border-spacing: 0;
+    background-color: var(--w2p-surface);
     font-size: .875rem;
+    border: 1px solid var(--w2p-border);
+    border-radius: .25rem;
 }
 table.tbl > * > tr > th,
 table.tbl > * > tr > td,
@@ -358,35 +785,55 @@ table.list > * > tr > th,
 table.list > * > tr > td,
 table.std > * > tr > th,
 table.std > * > tr > td {
-    padding: .3rem .5rem;
-    border-bottom: var(--bs-border-width) solid var(--bs-border-color);
+    padding: .625rem .75rem;
+    border-bottom: 1px solid var(--w2p-border-light);
     vertical-align: top;
+}
+table.tbl > * > tr:last-child > td,
+table.list > * > tr:last-child > td,
+table.std > * > tr:last-child > td {
+    border-bottom: 0;
 }
 table.tbl > * > tr > th,
 table.list > * > tr > th,
 table.std > * > tr > th {
-    background-color: var(--bs-tertiary-bg);
+    background-color: var(--w2p-table-head);
+    border-bottom-color: var(--w2p-border);
+    font-size: .75rem;
     font-weight: 600;
+    letter-spacing: .04em;
+    text-transform: uppercase;
+    color: var(--w2p-muted);
     white-space: nowrap;
     text-align: center;
     vertical-align: bottom;
 }
 table.tbl th a,
 table.list th a {
-    color: var(--bs-body-color);
+    color: var(--w2p-muted);
     text-decoration: none;
+}
+table.tbl th a:hover,
+table.list th a:hover {
+    color: var(--w2p-accent);
 }
 table.list > tbody > tr:hover > td,
 table.tbl > tbody > tr:hover > td {
-    background-color: var(--bs-table-hover-bg, rgba(0, 0, 0, .075));
+    background-color: var(--w2p-table-hover);
 }
 table.std td.hilite,
 td.hilite,
 .view td.data {
-    background-color: var(--bs-light-bg-subtle, var(--bs-tertiary-bg));
+    background-color: var(--w2p-table-stripe);
 }
 table.table {
     font-size: .875rem;
+}
+.w2p-tab-content > table.tbl,
+.w2p-tab-content > table.list,
+.w2p-tab-content > form > table.tbl,
+.w2p-tab-content > form > table.list {
+    border: 0;
 }
 
 .list td {
