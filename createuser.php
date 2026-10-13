@@ -67,8 +67,8 @@ function submitIt(){
     }
 }
 </script>
-<div class="text-center my-3">
-	<a href="http://www.web2project.net"><img alt="web2Project Home" src="./style/<?php echo $uistyle; ?>/images/w2p_logo.jpg" class="img-fluid"/></a>
+<div class="d-flex justify-content-center">
+	<a href="http://www.web2project.net" class="w2p-auth-logo"><img alt="web2Project Home" src="./style/<?php echo $uistyle; ?>/images/logo.png" width="123" height="28" /></a>
 </div>
 <div class="mx-auto" style="max-width: 44rem;">
     <?php echo $AppUI->getMsg(); ?>
@@ -152,7 +152,7 @@ $form = new w2p_Output_HTML_FormHelper($AppUI);
         </div>
         <div class="w2p-form-actions">
             <input type="button" value="<?php echo $AppUI->_('cancel'); ?>" onclick="history.go(-1)" class="button" />
-            <input type="button" value="<?php echo $AppUI->_('sign me up!'); ?>" onclick="submitIt()" class="button" />
+            <input type="button" value="<?php echo $AppUI->_('sign me up!'); ?>" onclick="submitIt()" class="button save" />
         </div>
     </div>
     <?php echo $AppUI->getTheme()->styleRenderBoxBottom(); ?>

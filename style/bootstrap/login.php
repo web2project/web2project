@@ -19,37 +19,37 @@ $theme = $AppUI->getTheme();
         <link rel="icon" href="./style/<?php echo $theme; ?>/favicon.ico" type="image/x-icon" />
     </head>
 
-    <body class="bg-body-tertiary w2p-login">
-        <main class="container py-5">
-            <div class="card shadow-sm mx-auto" style="max-width: 26rem;">
-                <a href="http://www.web2project.net" class="card-img-top"><img src="./style/<?php echo $theme; ?>/images/w2p_logo.jpg" alt="web2Project Home" class="img-fluid rounded-top" /></a>
-                <div class="card-body">
-                    <h1 class="h5 card-title text-center mb-3"><?php echo $w2Pconfig['company_name']; ?></h1>
-                    <form method="post" action="<?php echo $loginFromPage; ?>" name="loginform" accept-charset="utf-8">
-                        <input type="hidden" name="lostpass" value="0" />
-                        <input type="hidden" name="redirect" value="<?php echo $redirect; ?>" />
+    <body class="w2p-auth">
+        <main class="w2p-auth-main">
+            <a href="http://www.web2project.net" class="w2p-auth-logo"><img src="./style/<?php echo $theme; ?>/images/logo.png" alt="web2Project Home" width="123" height="28" /></a>
+            <div class="w2p-auth-card">
+                <h1 class="w2p-auth-title"><?php echo $w2Pconfig['company_name']; ?></h1>
+                <form method="post" action="<?php echo $loginFromPage; ?>" name="loginform" accept-charset="utf-8">
+                    <input type="hidden" name="lostpass" value="0" />
+                    <input type="hidden" name="redirect" value="<?php echo $redirect; ?>" />
 
-                        <div class="form-floating mb-2">
-                            <input type="text" class="form-control" id="username" name="username" value="" placeholder="Username" autofocus />
-                            <label for="username"><?php echo $AppUI->_('Username'); ?></label>
+                    <div class="mb-3">
+                        <label for="username" class="form-label"><?php echo $AppUI->_('Username'); ?></label>
+                        <input type="text" class="form-control" id="username" name="username" value="" autofocus />
+                    </div>
+                    <div class="mb-4">
+                        <div class="d-flex justify-content-between align-items-baseline">
+                            <label for="password" class="form-label"><?php echo $AppUI->_('Password'); ?></label>
+                            <a class="w2p-auth-link" href="javascript: void(0);" onclick="f=document.loginform;f.lostpass.value=1;f.submit();"><?php echo $AppUI->_('forgotPassword'); ?></a>
                         </div>
-                        <div class="form-floating mb-3">
-                            <input type="password" class="form-control" id="password" name="password" value="" placeholder="Password" />
-                            <label for="password"><?php echo $AppUI->_('Password'); ?></label>
-                        </div>
-                        <button type="submit" class="btn btn-primary w-100" name="login" value="login"><?php echo $AppUI->_('login'); ?></button>
-                    </form>
-                </div>
-                <div class="card-footer text-center small">
-                    <a href="javascript: void(0);" onclick="f=document.loginform;f.lostpass.value=1;f.submit();"><?php echo $AppUI->_('forgotPassword'); ?></a>
-                    <?php if (w2PgetConfig('activate_external_user_creation') == 'true') { ?>
-                        &middot; <a href="./newuser.php"><?php echo $AppUI->_('newAccountSignup'); ?></a>
-                    <?php } ?>
-                    <div class="text-body-secondary">Version <?php echo $AppUI->getVersion(); ?></div>
-                </div>
+                        <input type="password" class="form-control" id="password" name="password" value="" />
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100" name="login" value="login"><?php echo $AppUI->_('login'); ?></button>
+                </form>
+                <?php if (w2PgetConfig('activate_external_user_creation') == 'true') { ?>
+                    <div class="w2p-auth-footer">
+                        <a class="w2p-auth-link" href="./newuser.php"><?php echo $AppUI->_('newAccountSignup'); ?></a>
+                    </div>
+                <?php } ?>
             </div>
+            <div class="w2p-auth-version">web2Project <?php echo $AppUI->getVersion(); ?></div>
 
-            <div class="mx-auto mt-3 text-center" style="max-width: 26rem;">
+            <div class="w2p-auth-messages">
                 <?php
                     echo $AppUI->getTheme()->messageHandler();
 

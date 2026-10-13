@@ -19,35 +19,34 @@ $theme = new style_bootstrap($AppUI);
         <link rel="icon" href="./style/<?php echo $theme; ?>/favicon.ico" type="image/x-icon" />
     </head>
 
-    <body class="bg-body-tertiary w2p-login">
-        <main class="container py-5">
-            <div class="card shadow-sm mx-auto" style="max-width: 26rem;">
-                <a href="http://www.web2project.net" class="card-img-top"><img src="./style/<?php echo $theme; ?>/images/w2p_logo.jpg" alt="web2Project Home" class="img-fluid rounded-top" /></a>
-                <div class="card-body">
-                    <h1 class="h5 card-title text-center mb-3"><?php echo $w2Pconfig['company_name']; ?></h1>
-                    <form method="post" action="<?php echo $loginFromPage; ?>" name="lostpassform" accept-charset="utf-8">
-                        <input type="hidden" name="lostpass" value="1" />
-                        <input type="hidden" name="redirect" value="<?php echo isset($redirect) ? $redirect : ''; ?>" />
+    <body class="w2p-auth">
+        <main class="w2p-auth-main">
+            <a href="http://www.web2project.net" class="w2p-auth-logo"><img src="./style/<?php echo $theme; ?>/images/logo.png" alt="web2Project Home" width="123" height="28" /></a>
+            <div class="w2p-auth-card">
+                <h1 class="w2p-auth-title"><?php echo $w2Pconfig['company_name']; ?></h1>
+                <form method="post" action="<?php echo $loginFromPage; ?>" name="lostpassform" accept-charset="utf-8">
+                    <input type="hidden" name="lostpass" value="1" />
+                    <input type="hidden" name="redirect" value="<?php echo isset($redirect) ? $redirect : ''; ?>" />
 
-                        <div class="form-floating mb-2">
-                            <input type="text" class="form-control" id="checkusername" name="checkusername" value="" placeholder="Username" autofocus />
-                            <label for="checkusername"><?php echo $AppUI->_('Username'); ?></label>
-                        </div>
-                        <div class="form-floating mb-3">
-                            <input type="email" class="form-control" id="checkemail" name="checkemail" maxlength="255" placeholder="Email" />
-                            <label for="checkemail"><?php echo $AppUI->_('Email'); ?></label>
-                        </div>
-                        <button type="submit" class="btn btn-primary w-100" name="sendpass" value="Send Password"><?php echo $AppUI->_('Send Password'); ?></button>
-                    </form>
-                </div>
-                <?php if (w2PgetConfig('activate_external_user_creation') == 'true') { ?>
-                    <div class="card-footer text-center small">
-                        <a href="./newuser.php"><?php echo $AppUI->_('newAccountSignup'); ?></a>
+                    <div class="mb-3">
+                        <label for="checkusername" class="form-label"><?php echo $AppUI->_('Username'); ?></label>
+                        <input type="text" class="form-control" id="checkusername" name="checkusername" value="" autofocus />
                     </div>
-                <?php } ?>
+                    <div class="mb-4">
+                        <label for="checkemail" class="form-label"><?php echo $AppUI->_('Email'); ?></label>
+                        <input type="email" class="form-control" id="checkemail" name="checkemail" maxlength="255" />
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100" name="sendpass" value="Send Password"><?php echo $AppUI->_('Send Password'); ?></button>
+                </form>
+                <div class="w2p-auth-footer">
+                    <a class="w2p-auth-link" href="./index.php"><?php echo $AppUI->_('login'); ?></a>
+                    <?php if (w2PgetConfig('activate_external_user_creation') == 'true') { ?>
+                        &middot; <a class="w2p-auth-link" href="./newuser.php"><?php echo $AppUI->_('newAccountSignup'); ?></a>
+                    <?php } ?>
+                </div>
             </div>
 
-            <div class="mx-auto mt-3 text-center" style="max-width: 26rem;">
+            <div class="w2p-auth-messages">
                 <?php
                     echo $theme->messageHandler();
 

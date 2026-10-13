@@ -1664,3 +1664,65 @@ h4 {
         min-height: 0;
     }
 }
+
+/* ---------------------------------------------------------------------
+ * Sign-in pages (login.php, lostpass.php)
+ * ------------------------------------------------------------------- */
+.w2p-auth {
+    background:
+        radial-gradient(60rem 30rem at 0% 0%, rgb(65 84 241 / .08), transparent 70%),
+        radial-gradient(50rem 30rem at 100% 100%, rgb(1 41 112 / .06), transparent 70%),
+        var(--w2p-background);
+}
+.w2p-auth-main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    padding: 2.5rem 1rem;
+}
+.w2p-auth-logo {
+    display: block;
+    margin-bottom: 1.5rem;
+}
+.w2p-auth-logo img {
+    display: block;
+}
+.w2p-auth-card {
+    width: 100%;
+    max-width: 26rem;
+    padding: 2rem;
+    background-color: var(--w2p-surface);
+    border: 1px solid var(--w2p-border);
+    border-radius: .25rem;
+    box-shadow: var(--w2p-shadow-lg);
+}
+.w2p-auth-title {
+    margin: 0 0 1.5rem;
+    font-size: 1.375rem;
+    text-align: center;
+}
+.w2p-auth-link {
+    font-size: .8125rem;
+    font-weight: 600;
+}
+.w2p-auth-footer {
+    margin: 1.5rem -2rem -2rem;
+    padding: 1rem 2rem;
+    font-size: .8125rem;
+    text-align: center;
+    color: var(--w2p-muted);
+    border-top: 1px solid var(--w2p-border-light);
+}
+.w2p-auth-version {
+    margin-top: 1rem;
+    font-size: .8125rem;
+    color: var(--w2p-muted);
+}
+.w2p-auth-messages {
+    width: 100%;
+    max-width: 26rem;
+    margin-top: 1rem;
+    text-align: center;
+}

@@ -25,8 +25,8 @@ $uistyle = W2P_UISTYLE;
         <link rel="icon" href="./style/<?php echo $uistyle; ?>/favicon.ico" type="image/x-icon" />
     </head>
 
-    <body class="bg-body-tertiary" onload="document.editFrm.user_username.focus();">
-        <main class="container py-3">
+    <body class="w2p-auth" onload="document.editFrm.user_username.focus();">
+        <main class="container py-5">
         <?php include 'createuser.php'; ?>
 
         <?php if ($AppUI->getVersion()) { ?>
