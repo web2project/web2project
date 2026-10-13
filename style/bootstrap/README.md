@@ -1,8 +1,9 @@
 # web2Project Bootstrap theme
 
-This theme renders web2Project with [Bootstrap](https://getbootstrap.com/) 5.3.8
-using Bootstrap's default colours and components together with the standard
-web2Project logos.
+This theme renders web2Project with [Bootstrap](https://getbootstrap.com/) 5.3.8,
+styled after the NiceAdmin admin template (BootstrapMade): its colours, fonts,
+card and form styles and its header-and-sidebar layout, together with the
+standard web2Project logos. No NiceAdmin code or assets are included.
 
 * `css/bootstrap.min.css` and `js/bootstrap.bundle.min.js` are the unmodified
   Bootstrap 5.3.8 distribution files (MIT licensed, see `BOOTSTRAP-LICENSE`),
@@ -18,8 +19,13 @@ web2Project logos.
   the application specific styles (task status colours, calendars, tooltips).
 * `overrides.php` defines the `style_bootstrap` theme class and a `CTabBox`
   which renders Bootstrap nav-tabs.
-* `header.php`, `footer.php`, `login.php` and `lostpass.php` are the page
-  shell templates. Every other template comes from `style/_common`.
+* `header.php` and `footer.php` are the page shell: a fixed header (sidebar
+  toggle, logo, global search, the New Item menu, quick links and the user
+  menu), the module sidebar built by `style_bootstrap::buildHeaderNavigation()`
+  and a footer with the version. `js/theme.js` collapses the sidebar to icons
+  on wide screens (remembered in localStorage) and slides it in on narrow ones.
+  `login.php` and `lostpass.php` are the sign-in pages. Every other template
+  comes from `style/_common`.
 * Images which are not part of this theme are loaded from
   `style/web2project/images`.
 
