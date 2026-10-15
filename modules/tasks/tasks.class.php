@@ -2169,10 +2169,19 @@ class CTask extends w2p_Core_BaseObject
      */
     public function remind($notUsed = null, $notUsed2 = null, $id, $owner, $notUsed3 = null)
     {
-        // At this stage we won't have an object yet
-        if (!$this->load($id)) {
+        // Reminders run from queuescanner.php, where nobody is logged in
+        // (user_id -1), so load() and its per-user permission check always
+        // failed and every reminder was dropped. The mail only goes to the
+        // task's owner and assignees, so read the task directly.
+        $q = $this->_getQuery();
+        $q->addTable('tasks');
+        $q->addWhere('task_id = ' . (int) $id);
+        $hash = $q->loadHash();
+        $q->clear();
+        if (!$hash) {
             return - 1; // No point it trying again later.
         }
+        $q->bindHashToObject($hash, $this, null, false);
         $this->htmlDecode();
 
         // Only remind on working days.
@@ -2186,11 +2195,19 @@ class CTask extends w2p_Core_BaseObject
             return - 1;
         }
 
-        $contacts = $this->assignees($this->task_id);
+        // Recipients keyed by user id: the assignees plus the task owner.
+        $contacts = array();
+        foreach ($this->assignees($this->task_id) as $assignee) {
+            $contacts[$assignee['user_id']] = array(
+                                    'user_id' => $assignee['user_id'],
+                                    'contact_id' => $assignee['user_contact'],
+                                    'contact_name' => $assignee['contact_name'],
+                                    'contact_email' => $assignee['user_email']);
+        }
 
         $contact = new CContact();
         $owner = $contact->findContactByUserId($this->task_owner);
-        $contacts[$owner->contact_id] = array(
+        $contacts[$this->task_owner] = array(
                                     'user_id' => $this->task_owner,
                                     'contact_id' => $owner->contact_id,
                                     'contact_name' => $owner->contact_display_name,
@@ -2215,14 +2232,19 @@ class CTask extends w2p_Core_BaseObject
             $msg = $this->_AppUI->_(array($diff, 'DAYS'));
         }
 
-        $project = new CProject();
-        $project->overrideDatabase($this->_query);
-        $project_name = $project->load($this->task_project)->project_name;
+        // Read the project directly for the same reason as the task (and
+        // load() returns a bool, so ->project_name on it was always null).
+        $q->addTable('projects');
+        $q->addQuery('project_name, project_active, project_status');
+        $q->addWhere('project_id = ' . (int) $this->task_project);
+        $project = $q->loadHash();
+        $q->clear();
 
         // Check to see that the project is both active and not a template
-        if (!$project->project_active || $project->project_status == w2PgetConfig('template_projects_status_id', 0)) {
+        if (!$project || !$project['project_active'] || $project['project_status'] == w2PgetConfig('template_projects_status_id', 0)) {
             return -1;
         }
+        $project_name = $project['project_name'];
 
         $subject = $prefix . ' ' . $msg . ' ' . $this->task_name . '::' . $project_name;
 

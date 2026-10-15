@@ -213,10 +213,10 @@ class w2p_Output_EmailManager
         $body .= $this->_AppUI->_('URL', UI_OUTPUT_RAW) . ': ' . W2P_BASE_URL . '/index.php?m=tasks&a=view&task_id=' . $task->task_id . '&reminded=1' . "\n\n";
         $body .= $this->_AppUI->_('Resources', UI_OUTPUT_RAW) . ":\n";
 
+        // $owner_is_not_assignee and $owner_contact were never defined here, so
+        // every recipient was always listed; keep that without the warnings.
         foreach ($contacts as $contact) {
-            if (!$owner_is_not_assignee || ($owner_is_not_assignee && $contact['contact_id'] != $owner_contact)) {
-                $body .= ($contact['contact_name'] . ' <' . $contact['contact_email'] . ">\n");
-            }
+            $body .= ($contact['contact_name'] . ' <' . $contact['contact_email'] . ">\n");
         }
         $body .= $this->_AppUI->_('Description', UI_OUTPUT_RAW) . ":\n" . $task->task_description . "\n";
 
