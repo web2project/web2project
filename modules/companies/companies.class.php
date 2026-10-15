@@ -94,11 +94,17 @@ class CCompany extends w2p_Core_BaseObject {
 
     public function getCompanyList($notUsed = null, $companyType = -1, $searchString = '', $ownerId = 0, $orderby = 'company_name', $orderdir = 'ASC') {
 
+        // Count only the projects this user can see; the counts used to
+        // include projects the user is denied.
+        $project = new CProject();
+        $visible = array_map('intval', array_keys($project->loadAll()));
+        $visible = count($visible) ? implode(',', $visible) : '0';
+
         $q = $this->_getQuery();
         $q->addTable('companies', 'c');
         $q->addQuery('c.*, count(distinct p.project_id) as countp, count(distinct p2.project_id) as inactive');
-        $q->addJoin('projects', 'p', 'c.company_id = p.project_company AND p.project_active = 1');
-        $q->addJoin('projects', 'p2', 'c.company_id = p2.project_company AND p2.project_active = 0');
+        $q->addJoin('projects', 'p', 'c.company_id = p.project_company AND p.project_active = 1 AND p.project_id IN (' . $visible . ')');
+        $q->addJoin('projects', 'p2', 'c.company_id = p2.project_company AND p2.project_active = 0 AND p2.project_id IN (' . $visible . ')');
 
         $where = $this->getAllowedSQL($this->_AppUI->user_id, 'c.company_id');
         $q->addWhere($where);

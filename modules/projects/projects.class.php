@@ -1011,13 +1011,18 @@ class CProject extends w2p_Core_BaseObject
     {
         $q = $this->_getQuery();
         $q->addTable('projects', 'pr');
-        $q->addQuery('project_status, count(*) as count');
+        // DISTINCT: setAllowedSQL() joins project_departments, which repeats a
+        // project that belongs to several departments.
+        $q->addQuery('project_status, count(DISTINCT pr.project_id) as count');
         $q->addWhere('project_active = 1');
         if ($company_id > 0) {
-            $q->addWhere('project_company = ' . $company_id);
+            $q->addWhere('project_company = ' . (int) $company_id);
         }
         $q->addGroup('project_status');
-        $q = $this->setAllowedSQL($this->_AppUI->user_id, $q, 'project_company');
+        // The index is the project id: passing 'project_company' applied the
+        // user's project allow/deny lists to company ids, so denied projects
+        // were still counted on the status tabs.
+        $q = $this->setAllowedSQL($this->_AppUI->user_id, $q, 'pr.project_id', 'pr');
 
         $statuses = $q->loadList(-1, 'project_status');
         foreach ($statuses as $key => $array) {
