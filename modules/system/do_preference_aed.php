@@ -13,7 +13,7 @@ if (!canEdit('system') && !$pref_user) {
 	$AppUI->redirect(ACCESS_DENIED);
 }
 
-if ((!($AppUI->user_id == $pref_user) && !canEdit('admin')) && $pref_user) {
+if ((!($AppUI->user_id == $pref_user) && !canEdit('users')) && $pref_user) {
 	$AppUI->redirect(ACCESS_DENIED);
 }
 $emails = (isset($_POST['tl_assign'])) ? 1 : 0;
