@@ -9,7 +9,14 @@ abstract class w2p_Theme_Base
     protected $_AppUI = null;
     protected $_m     = null;
     protected $_uistyle = 'web2project';
-    protected $footerJavascriptFiles = array();
+    /**
+     * Scripts queued for the page footer. CAppUI::getTheme() builds a new theme
+     * object on every call, so the queue is shared by all instances for the
+     * request; an instance property would be lost before footer.php runs.
+     *
+     * @var array<int, string>
+     */
+    protected static $footerJavascriptFiles = array();
 
     public function __construct($AppUI, $m = '') {
         $this->_AppUI = $AppUI;
@@ -133,15 +140,16 @@ abstract class w2p_Theme_Base
 
     public function addFooterJavascriptFile($pathTo)
     {
-        if (!in_array($pathTo, $this->footerJavascriptFiles)) {
-            $base = W2P_BASE_URL;
-            if (substr($base, -1) != '/') {
-                $base .= '/';
-            }
-            if (strpos($pathTo, $base) === false) {
-                $pathTo = $base . $pathTo;
-            }
-            $this->footerJavascriptFiles[] = $pathTo;
+        $base = W2P_BASE_URL;
+        if (substr($base, -1) != '/') {
+            $base .= '/';
+        }
+        if (strpos($pathTo, $base) === false) {
+            $pathTo = $base . $pathTo;
+        }
+        // Compare the full URL, which is what the queue holds.
+        if (!in_array($pathTo, static::$footerJavascriptFiles)) {
+            static::$footerJavascriptFiles[] = $pathTo;
         }
     }
 
@@ -160,8 +168,8 @@ abstract class w2p_Theme_Base
         $s .= '});';
         $s .= '</script>';
 
-        if (is_array($this->footerJavascriptFiles) and !empty($this->footerJavascriptFiles)) {
-            while ($jsFile = array_pop($this->footerJavascriptFiles)) {
+        if (!empty(static::$footerJavascriptFiles)) {
+            while ($jsFile = array_shift(static::$footerJavascriptFiles)) {
                 $s .= "<script type='text/javascript' src='" . $jsFile . "'></script>";
             }
         }
