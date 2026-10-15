@@ -71,14 +71,7 @@ class w2p_Authenticators_LDAP extends w2p_Authenticators_Base
                         // (only one user should match sAMAccountName or uid etc..)
                         if (ldap_bind($rs, $ldap_user_dn, $password)) {
                             if ($this->userExists($username)) {
-                                // Update password if different
-                                $tmpUser = new CUser();
-                                $tmpUser->load($this->userId($username));
-                                $hash_pass = $this->hashPassword($password);
-                                if ($hash_pass != $tmpUser->user_password) {
-                                    $tmpUser->user_password = $hash_pass;
-                                    $tmpUser->store();
-                                }
+                                $this->updateSqlPassword($username, $password);
                                 return true;
                             } else {
                                 $this->createsqluser($username, $password,
@@ -127,30 +120,70 @@ class w2p_Authenticators_LDAP extends w2p_Authenticators_Base
         return $row['contact_id'];
     }
 
+    /**
+     * Keeps the local copy of an LDAP user's password current, so the SQL
+     * fallback (ldap_allow_login) accepts the same password. Stored hashes are
+     * salted, so the password is checked with password_verify() and the row is
+     * only written when it no longer matches. The update goes straight to the
+     * table because nobody is logged in yet, so CUser::store() would be refused.
+     *
+     * @param string $username
+     * @param string $password
+     */
+    protected function updateSqlPassword($username, $password)
+    {
+        $q = new w2p_Database_Query();
+        $q->addTable('users');
+        $q->addQuery('user_password');
+        $q->addWhere('user_username = ' . $q->quote($username));
+        $hash = (string) $q->loadResult();
+
+        if (!password_verify($password, $hash)) {
+            $q->clear();
+            $q->addTable('users');
+            $q->addUpdate('user_password', $this->hashPassword($password));
+            $q->addWhere('user_username = ' . $q->quote($username));
+            $q->exec();
+        }
+    }
+
+    /**
+     * Returns the first value of an LDAP attribute, or '' when the directory
+     * does not provide it (not every schema has every inetOrgPerson field).
+     *
+     * @param array<string, mixed> $ldap_attribs
+     * @param string               $name
+     *
+     * @return string
+     */
+    protected function ldapAttribute(array $ldap_attribs, $name)
+    {
+        return isset($ldap_attribs[$name][0]) ? (string) $ldap_attribs[$name][0] : '';
+    }
+
      public function createsqluser($username, $password, $ldap_attribs = array())
     {
-        $hash_pass = $this->hashPassword($password);
-
         $c = new CContact();
             if (count($ldap_attribs)) {
                 // Contact information based on the inetOrgPerson class schema
-                $c->contact_first_name = $ldap_attribs['givenname'][0];
-                $c->contact_last_name = $ldap_attribs['sn'][0];
-                $c->contact_city = $ldap_attribs['l'][0];
-                $c->contact_country = $ldap_attribs['country'][0];
-                $c->contact_state = $ldap_attribs['st'][0];
-                $c->contact_zip = $ldap_attribs['postalcode'][0];
-                $c->contact_job = $ldap_attribs['title'][0];
-                $c->contact_email = $ldap_attribs['mail'][0];
-                $c->contact_phone = $ldap_attribs['telephonenumber'][0];
+                $c->contact_first_name = $this->ldapAttribute($ldap_attribs, 'givenname');
+                $c->contact_last_name = $this->ldapAttribute($ldap_attribs, 'sn');
+                $c->contact_city = $this->ldapAttribute($ldap_attribs, 'l');
+                $c->contact_country = $this->ldapAttribute($ldap_attribs, 'country');
+                $c->contact_state = $this->ldapAttribute($ldap_attribs, 'st');
+                $c->contact_zip = $this->ldapAttribute($ldap_attribs, 'postalcode');
+                $c->contact_job = $this->ldapAttribute($ldap_attribs, 'title');
+                $c->contact_email = $this->ldapAttribute($ldap_attribs, 'mail');
+                $c->contact_phone = $this->ldapAttribute($ldap_attribs, 'telephonenumber');
                 $result = $c->store();
-                $contactArray = array('phone_mobile' => $ldap_attribs['mobile'][0]);
+                $contactArray = array('phone_mobile' => $this->ldapAttribute($ldap_attribs, 'mobile'));
                 $c->setContactMethods($contactArray);
             }
 
         $u = new CUser();
         $u->user_username = $username;
-        $u->user_password = $hash_pass;
+        // Plain text: CUser hashes it when the user is created.
+        $u->user_password = $password;
         $u->user_type = 0;   // Changed from 1 (administrator) to 0 (Default user)
         $u->user_contact = (int) $c->contact_id;
         $result = $u->store(null, true);
