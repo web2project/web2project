@@ -84,7 +84,7 @@ if (0 == count($fields)) {
     $fieldList = array('task_log_date', 'task_log_name',
         'task_log_creator', 'task_log_hours', 'task_log_costcode', 'task_log_description');
     $fieldNames = array('Date', 'Summary', 'User', 'Hours',
-        'Cost Code', 'Comments', '');
+        'Cost Code', 'Comments');
 
     $module->storeSettings('tasks', 'task_logs_projects_view', $fieldList, $fieldNames);
     $fields = array_combine($fieldList, $fieldNames);
