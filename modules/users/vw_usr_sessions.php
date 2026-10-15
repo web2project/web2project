@@ -8,26 +8,31 @@ if (!defined('W2P_BASE_DIR')) {
 
 global $AppUI, $w2Pconfig, $canEdit, $canDelete, $stub, $where, $orderby;
 
-/*
-* Flag value to determine if "logout user" button should show. 
-* Could be determined by a configuration value in the future.
-*/
-$logoutUserFlag = true;
+// Nothing else sets these for this tab (users/index.php does not), so the
+// logout controls and the logout handler below never ran.
+$canEdit = canEdit('users');
+$canDelete = canDelete('users');
 
 if (isset($_GET['out_user_id']) && $_GET['out_user_id']
         && isset($_GET['out_name']) && $_GET['out_name']
         && $canEdit && $canDelete) {
-	$boot_user_id = w2PgetParam($_GET, 'out_user_id', null);
-	$boot_user_name = $_GET['out_name'];
+	$boot_user_id = (int) w2PgetParam($_GET, 'out_user_id', 0);
+	$boot_user_name = (string) w2PgetParam($_GET, 'out_name', '');
 	$details = $boot_user_name . ' by ' . $AppUI->user_first_name . ' ' . $AppUI->user_last_name;
 
 	// one session or many?
-	if ($_GET['out_session'] && $_GET['out_user_log_id']) {
-		$boot_user_session = $_GET['out_session'];
-		$boot_user_log_id = w2PgetParam($_GET, 'out_user_log_id', null);
+	// The session id goes into SQL in w2p_System_Session::destroy(), so only
+	// accept the characters PHP session ids use.
+	$out_session = (string) w2PgetParam($_GET, 'out_session', '');
+	if ($out_session && !preg_match('/^[A-Za-z0-9,-]+$/', $out_session)) {
+		$AppUI->redirect('m=users&tab=3');
+	}
+	if ($out_session && w2PgetParam($_GET, 'out_user_log_id', 0)) {
+		$boot_user_session = $out_session;
+		$boot_user_log_id = (int) w2PgetParam($_GET, 'out_user_log_id', 0);
 		$boot_query_row = false;
 	} else {
-		if ($canEdit && $canDelete && $logoutUserFlag) {
+		if ($canEdit && $canDelete) {
 			// query for all sessions open for a given user
 			$r = new w2p_Database_Query;
 			$r->addTable('sessions', 's');
@@ -98,12 +103,20 @@ foreach ($rows as $row) {
 
     $s = '<tr>';
 	$s .= '<td align="center" nowrap="nowrap">';
+	// Build the URLs with http_build_query() and escape them for the
+	// attribute: names were added with addslashes() only, so a quote in a
+	// display name broke out of the onclick attribute.
 	if ($canEdit && $canDelete) {
-		$s .= '<input type="button" class="button" value="' . $AppUI->_('logout_session') . '" onclick="javascript:window.location=\'./index.php?m=users&tab=3&out_session=' . $row['session_id'] . '&out_user_log_id=' . $row['user_access_log_id'] . '&out_user_id=' . $row['u_user_id'] . '&out_name=' . addslashes($row['contact_display_name']). '\';"></input>';
+		$url = './index.php?' . http_build_query(array('m' => 'users', 'tab' => 3,
+			'out_session' => $row['session_id'], 'out_user_log_id' => $row['user_access_log_id'],
+			'out_user_id' => $row['u_user_id'], 'out_name' => $row['contact_display_name']));
+		$s .= '<input type="button" class="button" value="' . $AppUI->_('logout_session') . '" onclick="window.location=' . htmlspecialchars(json_encode($url), ENT_QUOTES) . ';" />';
 	}
 	$s .= '</td><td align="center" nowrap="nowrap">';
-	if ($canEdit && $canDelete && $logoutUserFlag) {
-		$s .= '<input type="button" class=button value="' . $AppUI->_('logout_user') . '" onclick="javascript:window.location=\'./index.php?m=users&tab=3&out_user_id=' . $row['u_user_id'] . '&out_name=' . addslashes($row['contact_display_name']) . '\';"></input>';
+	if ($canEdit && $canDelete) {
+		$url = './index.php?' . http_build_query(array('m' => 'users', 'tab' => 3,
+			'out_user_id' => $row['u_user_id'], 'out_name' => $row['contact_display_name']));
+		$s .= '<input type="button" class="button" value="' . $AppUI->_('logout_user') . '" onclick="window.location=' . htmlspecialchars(json_encode($url), ENT_QUOTES) . ';" />';
 	}
 	$s .= '</td>';
     $s .= $htmlHelper->createCell('na', $row['user_username']);
