@@ -21,6 +21,15 @@ asort($modules);
 // read the installed languages
 $locales = $loader->readDirs('locales');
 
+// Both values are used to build file paths below, so fall back to the defaults
+// rather than reading from a path built out of an unknown value.
+if (!is_string($module) || !isset($modules[$module])) {
+    $module = 'admin';
+}
+if (!is_string($lang) || !isset($locales[$lang])) {
+    $lang = 'en';
+}
+
 ob_start();
 // read language files from module's locale directory preferably
 $localeFile = W2P_BASE_DIR . '/modules/' . $modules[$module] . '/locales/en/' . $modules[$module] . '.inc';
