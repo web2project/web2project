@@ -2052,6 +2052,14 @@ class CTask extends w2p_Core_BaseObject
 		$this->task_parent=$this->task_id;
 		$this->store();
 
+        // store() recalculates the dynamic tasks of the new project only; the
+        // old project's dynamic parents still included the moved task's dates.
+        // Fix from Klaus Buecher (opto), face287d.
+        $oldProject = new CTask();
+        $oldProject->overrideDatabase($this->_query);
+        $oldProject->task_project = (int) $project_old;
+        $oldProject->updateDynamics();
+
         $taskCount_oldProject = $this->getTaskCount($project_old);
         CProject::updateTaskCount($project_old, $taskCount_oldProject);
 
