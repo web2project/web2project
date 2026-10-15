@@ -725,6 +725,13 @@ class CTask extends w2p_Core_BaseObject
     {
         $q = $this->_getQuery();
 
+        // The current path, so the subtree can be moved along with this task.
+        $q->addQuery('task_path_enumeration');
+        $q->addTable('tasks');
+        $q->addWhere('task_id = ' . (int) $this->task_id);
+        $old_path = (string) $q->loadResult();
+        $q->clear();
+
         if (0 == (int) $this->task_parent || $this->task_id == $this->task_parent) {
             $path = $this->task_id;
         } else {
@@ -741,6 +748,23 @@ class CTask extends w2p_Core_BaseObject
         $q->addUpdate('task_updated', "'" . $q->dbfnNowWithTZ() . "'", false, true);
         $q->addWhere('task_id = ' . (int) $this->task_id);
         $q->exec();
+        $q->clear();
+
+        // When the task moved to another parent, its subtasks keep the old
+        // path prefix, so updateDynamics() (which finds subtasks by path)
+        // rolled them up into the old parent instead of the new one. Replace
+        // the prefix for the whole subtree. Paths contain only ids and slashes.
+        // Fix from Klaus Buecher (opto), 50794bd5, done here in one query.
+        $path = (string) $path;
+        if ('' != $old_path && $old_path !== $path
+                && preg_match('#^[0-9/]+$#', $old_path) && preg_match('#^[0-9/]+$#', $path)) {
+            $q->addTable('tasks');
+            $q->addUpdate('task_path_enumeration',
+                "CONCAT('" . $path . "', SUBSTRING(task_path_enumeration, " . (strlen($old_path) + 1) . "))", false, true);
+            $q->addWhere("task_path_enumeration LIKE '" . $old_path . "/%'");
+            $q->exec();
+            $q->clear();
+        }
     }
 
     protected function hook_postUpdate()
