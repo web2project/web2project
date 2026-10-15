@@ -2239,8 +2239,13 @@ function arraySelect(&$arr, $select_name, $select_attribs, $selected, $translate
         if ($translate) {
             $v = $AppUI->_($v);
         }
+        // Option labels are often user data (company, project, user names), so
+        // escape them. Existing entities are kept, because several callers
+        // indent with &nbsp; (double_encode = false).
+        $label = htmlspecialchars((string) $v, ENT_QUOTES, 'UTF-8', false);
+        $value = htmlspecialchars((string) $k, ENT_QUOTES);
         if (is_array($selected)) {
-            $s .= '<option value="' . $k . '"' . ((in_array($k, $selected) && !$did_selected) ? ' selected="selected"' : '') . '>' . $v . '</option>';
+            $s .= '<option value="' . $value . '"' . ((in_array($k, $selected) && !$did_selected) ? ' selected="selected"' : '') . '>' . $label . '</option>';
             if (in_array($k, $selected)) {
                 // We found a match. Lets decrease the $multiples yet to be found
                 $multiple--;
@@ -2250,7 +2255,7 @@ function arraySelect(&$arr, $select_name, $select_attribs, $selected, $translate
                 $did_selected = 1;
             }
         } else {
-            $s .= '<option value="' . $k . '"' . ((($k == $selected && strcmp($k, $selected) == 0) && !$did_selected) ? ' selected="selected"' : '') . '>' . $v . '</option>';
+            $s .= '<option value="' . $value . '"' . ((($k == $selected && strcmp($k, $selected) == 0) && !$did_selected) ? ' selected="selected"' : '') . '>' . $label . '</option>';
             if (($k == $selected && strcmp($k, $selected) == 0)) {
                 // As soon as we find a match we make sure no other gets selected by computer mistake by using the $did_selected lock
                 $did_selected = 1;
@@ -2332,9 +2337,10 @@ function projectSelectWithOptGroup($user_id, $select_name, $select_attribs, $sel
     foreach ($projects as $p) {
         if ($p['company_name'] != $current_company) {
             $current_company = $p['company_name'];
-            $s .= '<optgroup label="' . $current_company . '" >' . $current_company . '</optgroup>';
+            $company = htmlspecialchars((string) $current_company, ENT_QUOTES, 'UTF-8', false);
+            $s .= '<optgroup label="' . $company . '" >' . $company . '</optgroup>';
         }
-        $s .= '<option value="' . $p['project_id'] . '" ' . ($selected == $p['project_id'] ? 'selected="selected"' : '') . '>&nbsp;&nbsp;&nbsp;' . $p['project_name'] . '</option>';
+        $s .= '<option value="' . (int) $p['project_id'] . '" ' . ($selected == $p['project_id'] ? 'selected="selected"' : '') . '>&nbsp;&nbsp;&nbsp;' . htmlspecialchars((string) $p['project_name'], ENT_QUOTES, 'UTF-8', false) . '</option>';
     }
     $s .= '</select>';
 
