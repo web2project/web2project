@@ -729,8 +729,12 @@ abstract class w2p_Core_BaseObject extends w2p_System_Event implements w2p_Inter
         $custom_fields->bind($_POST);
         $custom_fields->store($this->{$this->_tbl_key});
 
+        // The history entry is labelled with the object's <prefix>_name. Not
+        // every class has one (CUser has no user_name), so only read it when
+        // the property exists or the class provides it through __get().
         $prefix = $this->_getColumnPrefixFromTableName($this->_tbl);
-        $name = ('' != $this->{$prefix . '_name'}) ? $this->{$prefix . '_name'} : '';
+        $nameProperty = $prefix . '_name';
+        $name = (property_exists($this, $nameProperty) || method_exists($this, '__get')) ? (string) $this->$nameProperty : '';
         addHistory($this->_tbl, $this->{$this->_tbl_key}, $this->_event, $name );
 
         return $this;
