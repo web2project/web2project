@@ -93,18 +93,36 @@ abstract class w2p_Core_BaseObject extends w2p_System_Event implements w2p_Inter
          *   logging, etc. We also need a way to enable Core Modules (CProject,
          *   CTask, etc) and Add On Modules to add their own hooks.
          */
-        $this->_dispatcher = new w2p_System_Dispatcher();
-        $this->_dispatcher->subscribe($this, get_class($this), 'preStoreEvent');
-        $this->_dispatcher->subscribe($this, get_class($this), 'postStoreEvent');
-        $this->_dispatcher->subscribe($this, get_class($this), 'preCreateEvent');
-        $this->_dispatcher->subscribe($this, get_class($this), 'postCreateEvent');
-        $this->_dispatcher->subscribe($this, get_class($this), 'preUpdateEvent');
-        $this->_dispatcher->subscribe($this, get_class($this), 'postUpdateEvent');
-        $this->_dispatcher->subscribe($this, get_class($this), 'preDeleteEvent');
-        $this->_dispatcher->subscribe($this, get_class($this), 'postDeleteEvent');
-        $this->_dispatcher->subscribe($this, get_class($this), 'preLoadEvent');
-        $this->_dispatcher->subscribe($this, get_class($this), 'postLoadEvent');
+        $this->_subscribeToEvents();
         parent::__construct($this->_tbl_module, get_class($this), array());
+    }
+
+    /**
+     * Creates this object's dispatcher and subscribes the object to its own
+     *   store/create/update/delete/load events, which run the hook_* methods.
+     */
+    private function _subscribeToEvents()
+    {
+        $this->_dispatcher = new w2p_System_Dispatcher();
+        $events = array('preStoreEvent', 'postStoreEvent', 'preCreateEvent', 'postCreateEvent',
+            'preUpdateEvent', 'postUpdateEvent', 'preDeleteEvent', 'postDeleteEvent',
+            'preLoadEvent', 'postLoadEvent');
+        foreach ($events as $event) {
+            $this->_dispatcher->subscribe($this, get_class($this), $event);
+        }
+    }
+
+    /**
+     * A clone (see duplicate()) gets its own query and dispatcher. With the
+     *   shallow copy, the clone's events went to the original object, so
+     *   storing a copied task ran the hooks on the source task: the target
+     *   project's task count, the copy's parent and its path were never set.
+     *   Reported by Klaus Buecher (opto), b32f3f28.
+     */
+    public function __clone()
+    {
+        $this->_query = new w2p_Database_Query;
+        $this->_subscribeToEvents();
     }
 
     /**
