@@ -60,12 +60,15 @@ class CUser extends w2p_Core_BaseObject
         $tmpUser->overrideDatabase($this->_query);
         $tmpUser->load($this->user_id);
 
-        if ('' == trim($this->user_password)) {
+        // An empty password, or the stored hash itself (the object was loaded
+        // and stored again), keeps the existing hash. Anything else is a new
+        // plain-text password. Comparing against a fresh hash would always
+        // differ because password_hash() salts randomly.
+        $password = (string) $this->user_password;
+        if ('' == trim($password) || $password === (string) $tmpUser->user_password) {
             $this->user_password = $tmpUser->user_password;
-        } elseif ($tmpUser->user_password != $this->authenticator->hashPassword($this->user_password)) {
-            $this->user_password = $this->authenticator->hashPassword($this->user_password);
         } else {
-            $this->user_password = $tmpUser->user_password;
+            $this->user_password = $this->authenticator->hashPassword($password);
         }
 
         parent::hook_preUpdate();
