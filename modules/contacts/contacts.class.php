@@ -66,7 +66,10 @@ class CContact extends w2p_Core_BaseObject
     {
         $this->contact_company = (int) $this->contact_company;
         $this->contact_department = (int) $this->contact_department;
-        $this->contact_owner = ((int) $this->contact_owner) ? (int) $this->contact_owner : (int) $this->_AppUI->user_id;
+        // Visitors who are not logged in have user_id -1 (for example LDAP's
+        // first login), which the unsigned column rejects; store them as 0
+        // (no owner) instead.
+        $this->contact_owner = ((int) $this->contact_owner) ? (int) $this->contact_owner : max(0, (int) $this->_AppUI->user_id);
         $this->contact_private = (int) $this->contact_private;
 
         $this->contact_first_name = ($this->contact_first_name == null) ? '' : $this->contact_first_name;
