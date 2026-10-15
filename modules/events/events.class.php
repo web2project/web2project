@@ -81,6 +81,9 @@ class CEvent extends w2p_Core_BaseObject
 
     protected function hook_preDelete()
     {
+        // Records the id that hook_postDelete() uses to remove custom field values.
+        parent::hook_preDelete();
+
         $q = $this->_getQuery();
         $q->setDelete('user_events');
         $q->addWhere('event_id = ' . (int) $this->event_id);

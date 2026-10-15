@@ -48,6 +48,13 @@ abstract class w2p_Core_BaseObject extends w2p_System_Event implements w2p_Inter
      * @var string Internal name of the module as stored in the 'mod_directory' of the 'modules' table, and the 'value' field of the 'gacl_axo' table
      */
     protected $_tbl_module;
+    /**
+     * The id of the object being deleted, set by hook_preDelete() for
+     * hook_postDelete().
+     *
+     * @var int|null
+     */
+    protected $_old_key = null;
     protected $_dispatcher;
     protected $_locale_char_set;
 

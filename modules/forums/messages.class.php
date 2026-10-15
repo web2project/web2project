@@ -120,6 +120,9 @@ class CForum_Message extends w2p_Core_BaseObject
 
     protected function hook_preDelete()
     {
+        // Records the id that hook_postDelete() uses to remove custom field values.
+        parent::hook_preDelete();
+
         $q = $this->_getQuery();
         $q->setDelete('forum_visits');
         $q->addWhere('visit_message = ' . (int) $this->message_id);

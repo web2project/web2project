@@ -136,6 +136,9 @@ class CForum extends w2p_Core_BaseObject
 
     protected function hook_preDelete()
     {
+        // Records the id that hook_postDelete() uses to remove custom field values.
+        parent::hook_preDelete();
+
         $q = $this->_getQuery();
         $q->setDelete('forum_visits');
         $q->addWhere('visit_forum = ' . (int) $this->forum_id);
