@@ -129,11 +129,12 @@ if ($result) {
                 $ned->copy($nsd);
                 $ned->addDuration($dur,1);
 
-                $new_start_date = $nsd->format(FMT_DATETIME_MYSQL);
-                $obj->task_start_date = $AppUI->formatTZAwareTime($new_start_date, '%Y-%m-%d %T');
-
-                $new_end_date = $ned->format(FMT_DATETIME_MYSQL);
-                $obj->task_end_date = $AppUI->formatTZAwareTime($new_end_date, '%Y-%m-%d %T');
+                // These dates are already UTC (from the database), and store()
+                // saves what it is given; only bind() converts user time to UTC.
+                // Converting them to the user's time zone here shifted the task
+                // by the user's UTC offset. Fix from Klaus Buecher (opto), d7213e00.
+                $obj->task_start_date = $nsd->format(FMT_DATETIME_MYSQL);
+                $obj->task_end_date = $ned->format(FMT_DATETIME_MYSQL);
 
                 $obj->store();
             }
