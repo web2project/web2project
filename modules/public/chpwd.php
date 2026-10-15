@@ -10,9 +10,12 @@ if (!($user_id = w2PgetParam($_REQUEST, 'user_id', 0))) {
 
 // check for a non-zero user id
 if ($user_id) {
-	$old_pwd = (new w2p_Database_Connection($GLOBALS['db']))->escape(trim(w2PgetParam($_POST, 'old_pwd', null)));
-	$new_pwd1 = (new w2p_Database_Connection($GLOBALS['db']))->escape(trim(w2PgetParam($_POST, 'new_pwd1', null)));
-	$new_pwd2 = (new w2p_Database_Connection($GLOBALS['db']))->escape(trim(w2PgetParam($_POST, 'new_pwd2', null)));
+	// Read the passwords exactly as the login form does (index.php). They are
+	// hashed, never put into SQL, so escaping them here would change the
+	// password that gets stored.
+	$old_pwd = (string) w2PgetParam($_POST, 'old_pwd', '');
+	$new_pwd1 = (string) w2PgetParam($_POST, 'new_pwd1', '');
+	$new_pwd2 = (string) w2PgetParam($_POST, 'new_pwd2', '');
 
 	$perms = &$AppUI->acl();
 	$canAdminEdit = canEdit('system');
@@ -26,7 +29,10 @@ if ($user_id) {
 			$user->user_password = $new_pwd1;
             $result = $user->store();
 
+            echo '<h1>' . $AppUI->_('Change User Password') . '</h1>';
+            echo $AppUI->getTheme()->styleRenderBoxTop();
             if ($result) {
+                echo '<div class="std p-2">' . $AppUI->_('chgpwUpdated') . '</div>';
                 ?>
                 <script language="javascript" type="text/javascript">
                     window.onload = function() {
@@ -35,9 +41,7 @@ if ($user_id) {
                 </script>
                 <?php
 			} else {
-                echo '<h1>' . $AppUI->_('Change User Password') . '</h1>';
-                echo $AppUI->getTheme()->styleRenderBoxTop();
-				echo '<div class="std p-2">' . $AppUI->_('chgpwUpdated') . '</div>';
+				echo '<div class="std p-2 text-danger">' . w2PformSafe(implode(' ', (array) $user->getError())) . '</div>';
 			}
 		} else {
 			echo '<h1>' . $AppUI->_('Change User Password') . '</h1>';
