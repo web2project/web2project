@@ -859,7 +859,9 @@ class CTask extends w2p_Core_BaseObject
                 $task->delete($this->_AppUI);
             }
 
-            $taskList = $childrenlist + array($this->task_id);
+            // array_merge, not +: with numeric keys + kept the first child in
+            // place of this task, so a parent's own rows were never deleted
+            $taskList = array_map('intval', array_merge($childrenlist, array($this->task_id)));
             $implodedTaskList = implode(',', $taskList);
 
             $q = $this->_getQuery();
@@ -888,6 +890,19 @@ class CTask extends w2p_Core_BaseObject
             if (!$q->exec()) {
                 $this->_error['delete-contacts'] = (new w2p_Database_Connection($GLOBALS['db']))->error();
                 return false;
+            }
+            $q->clear();
+
+            // delete the task's resource assignments (Other resources tab);
+            // the table only exists while the resources module is installed
+            if (array_key_exists('resources', $this->_AppUI->getInstalledModules())) {
+                $q->setDelete('resource_tasks');
+                $q->addWhere('task_id IN (' . $implodedTaskList . ')');
+                if (!$q->exec()) {
+                    $this->_error['delete-resources'] = (new w2p_Database_Connection($GLOBALS['db']))->error();
+                    return false;
+                }
+                $q->clear();
             }
 
             $result = parent::delete();
