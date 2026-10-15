@@ -214,7 +214,7 @@ $items = $paginator->getItemsOnPage($page);
             <?php echo arraySelect($pstatus, 'project_status', 'size="1" class="text"', $project_status_filter - 1, true); ?>
         </div>
 	<?php } ?>
-    <?php echo $paginator->buildNavigation($AppUI, $m, $tab); ?>
+    <?php echo $paginator->buildNavigation($AppUI, $m, $tab, array('orderby' => $orderby)); ?>
 </form>
 <?php
 if ($is_tabbed) {
