@@ -49,7 +49,7 @@ function delIt(field_id) {
         'field_published', 'field_order');
     $fieldNames = array('Name', 'Description', 'Type', 'Published', 'Order');
 
-    $rows = $manager->getStructure($module['mod_name']);
+    $rows = $manager->getStructure($module['mod_directory']);
 
     $htmlHelper = new w2p_Output_HTMLHelper($AppUI);
 

@@ -6,7 +6,9 @@ if (!defined('W2P_BASE_DIR')) {
 $module_id = (int) w2PgetParam($_POST, 'module', 0);
 $module = new w2p_System_Module();
 $module->load($module_id);
-$_POST['field_module'] = $module->mod_name;
+// Custom fields are looked up by module directory (events, companies...)
+// everywhere else, so store that rather than the display name.
+$_POST['field_module'] = $module->mod_directory;
 
 $delete = (int) w2PgetParam($_POST, 'del', 0);
 

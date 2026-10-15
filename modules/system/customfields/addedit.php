@@ -34,7 +34,7 @@ $titleBlock->show();
 
 $html_types = $field->getTypes();
 
-$custom_fields = new w2p_Core_CustomFields($module->mod_name, 'addedit', null, 'edit');
+$custom_fields = new w2p_Core_CustomFields($module->mod_directory, 'addedit', null, 'edit');
 
 if ($field_id) {
     $cf = $custom_fields->fieldWithId($field_id);
