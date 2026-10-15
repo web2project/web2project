@@ -87,7 +87,7 @@ function clearIt(){
 	f.permission_grant_on.selectedIndex = 0;
 }
 
-function delIt(id) {
+function delPerm(id) {
 	if (confirm( 'Are you sure you want to delete this permission?' )) {
 		var f = document.frmPerms;
 		f.del.value = 1;
@@ -213,7 +213,7 @@ function setPermItem( key, val ) {
                     $buf .= '<td nowrap="nowrap">';
                     $canDelete = (canEdit('users') && $_canEdit);
                     if ($canDelete) {
-                        $buf .= "<a href=\"javascript:delIt({$acl});\" title=\"" . $AppUI->_('delete') . "\">" . w2PshowImage('icons/stock_delete-16.png', 16, 16, '') . "</a>";
+                        $buf .= "<a href=\"javascript:delPerm({$acl});\" title=\"" . $AppUI->_('delete') . "\">" . w2PshowImage('icons/stock_delete-16.png', 16, 16, '') . "</a>";
                     }
                     $buf .= '</td>';
 

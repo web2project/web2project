@@ -32,7 +32,7 @@ foreach ($roles as $role) {
 // else users would be able to arbitrarily run 'bad' functions
 if ($canEdit) {
 ?>
-function delIt(id) {
+function delRole(id) {
 	if (confirm( 'Are you sure you want to delete this role?' )) {
 		var f = document.frmRoles;
 		f.del.value = 1;
@@ -62,7 +62,7 @@ function clearIt(){
                     $buf = "<td>" . $row['name'] . "</td>";
                     $buf .= '<td nowrap>';
                     if ($canEdit) {
-                        $buf .= "<a href=\"javascript:delIt({$row['id']});\" title=\"" . $AppUI->_('delete') . "\">" . w2PshowImage('icons/stock_delete-16.png', 16, 16, '') . '</a>';
+                        $buf .= "<a href=\"javascript:delRole({$row['id']});\" title=\"" . $AppUI->_('delete') . "\">" . w2PshowImage('icons/stock_delete-16.png', 16, 16, '') . '</a>';
                     }
                     $buf .= '</td>';
 

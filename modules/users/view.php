@@ -74,7 +74,22 @@ $titleBlock->show();
         window.open( './index.php?m=public&a=chpwd&dialog=1&user_id=<?php echo $user->user_id; ?>', 'chpwd', 'top=250,left=250,width=350, height=220, scrollbars=no' );
     }
     <?php } ?>
+    <?php if ($canDelete) { ?>
+    // Called by the "delete User" crumb (w2p_Theme_TitleBlock::addCrumbDelete).
+    function delIt() {
+        if (confirm(<?php echo json_encode($AppUI->_('doDelete', UI_OUTPUT_RAW) . ' ' . $AppUI->_('User', UI_OUTPUT_RAW) . ' ' . $user->user_username . '?', JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT); ?>)) {
+            document.frmDelete.submit();
+        }
+    }
+    <?php } ?>
 </script>
+<?php if ($canDelete) { ?>
+<form name="frmDelete" action="./index.php?m=users" method="post" accept-charset="utf-8">
+    <input type="hidden" name="dosql" value="do_user_aed" />
+    <input type="hidden" name="del" value="1" />
+    <input type="hidden" name="user_id" value="<?php echo (int) $user->user_id; ?>" />
+</form>
+<?php } ?>
 <?php
 $utypes = w2PgetSysVal('UserType');
 
