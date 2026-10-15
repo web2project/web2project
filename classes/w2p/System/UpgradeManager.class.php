@@ -299,13 +299,19 @@ class w2p_System_UpgradeManager {
                     /*
                      * TODO: I'm not happy with this solution but have yet to come up
                      *     with another way of solving it...
+                     *
+                     * Adding a column or key that is already there, or dropping
+                     * one that is already gone, fails with one of these messages.
+                     * The schema is already in the intended state, so they are
+                     * ignored. Everything else is reported.
                      */
                     if (strpos($errorMessage, 'Duplicate column name') === false &&
                       strpos($errorMessage, 'column/key exists') === false &&
-                      strpos($errorMessage, 'Multiple primary key defined') &&
-                      strpos($errorMessage, 'Duplicate key name') ) {
+                      strpos($errorMessage, 'Multiple primary key defined') === false &&
+                      strpos($errorMessage, 'Duplicate key name') === false &&
+                      strpos($errorMessage, 'check that it exists') === false) {
 
-                      $errorMessages[] = $errorMessage;
+                      $errorMessages[] = basename($sqlfile) . ': ' . $errorMessage;
                     }
                 }
             }
