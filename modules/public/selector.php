@@ -7,10 +7,15 @@ if (!defined('W2P_BASE_DIR')) {
 
 $debug = false;
 $callback = w2PgetParam($_GET, 'callback', 0);
+// The callback is written into this page's JavaScript, so it must be a plain
+// function name (setTask, setPermItem...), never code.
+if (!is_string($callback) || !preg_match('/^[A-Za-z_$][A-Za-z0-9_$]*$/', $callback)) {
+	$callback = '';
+}
 $table = w2PgetParam($_GET, 'table', 0);
 $user_id = w2PgetParam($_GET, 'user_id', 0);
 
-$ok = $callback & $table;
+$ok = ('' != $callback && '' != $table);
 
 $title = 'Generic Selector';
 
@@ -91,6 +96,7 @@ switch ($table) {
 
       $level = 0;
       $query_result = array();
+      $indent = array();
       $last_parent = 0;
       foreach ($task_list as $task) {
         if ($task['task_parent'] != $task['task_id']) {
@@ -102,7 +108,8 @@ switch ($table) {
       		$last_parent = 0;
       		$level = 0;
       	}
-      	$query_result[$task['task_id']] = ($level ? str_repeat('&nbsp;&nbsp;', $level) : '') . $task['task_name'];
+      	$query_result[$task['task_id']] = $task['task_name'];
+      	$indent[$task['task_id']] = $level;
       }
       break;
 	case 'users':
@@ -167,8 +174,14 @@ echo $AppUI->getTheme()->styleRenderBoxTop();
 		<?php
 			if (count($list) > 1) {
 				foreach ($list as $key => $val) {
-					$name = htmlspecialchars($val, ENT_QUOTES);
-					echo '<li><a href="javascript:setClose(\'' . $key . '\',\'' . $name . '\');">' . $val . '</a></li>';
+					// Names are user data: escape them for the link text, and pass the
+					// id and name through data attributes instead of building a
+					// javascript: URL (the browser decodes entities in href before
+					// running it, so quotes in a name broke out of the JS string).
+					$text = htmlspecialchars((string) $val, ENT_QUOTES);
+					$prefix = isset($indent[$key]) ? str_repeat('&nbsp;&nbsp;', (int) $indent[$key]) : '';
+					echo '<li>' . $prefix . '<a href="#" data-key="' . htmlspecialchars((string) $key, ENT_QUOTES) . '" data-name="' . $text . '"'
+						. ' onclick="setClose(this.getAttribute(\'data-key\'), this.getAttribute(\'data-name\')); return false;">' . $text . '</a></li>';
 				}
 			} else {
 				echo $AppUI->_('no' . $table);
