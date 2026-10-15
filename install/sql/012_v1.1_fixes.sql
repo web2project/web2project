@@ -341,7 +341,6 @@ ALTER TABLE `users` ADD INDEX (`user_parent`);
 ALTER TABLE `users` ADD INDEX (`user_type`);
 ALTER TABLE `users` ADD INDEX (`user_company`);
 ALTER TABLE `users` ADD INDEX (`user_department`);
-ALTER TABLE `users` ADD INDEX (`user_owner`);
 ALTER TABLE `users` ADD INDEX (`user_contact`);
 ALTER TABLE `user_access_log` ADD INDEX (`user_id`);
 ALTER TABLE `user_access_log` ADD INDEX (`date_time_in`);
