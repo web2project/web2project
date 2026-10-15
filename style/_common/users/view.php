@@ -33,6 +33,10 @@ $view = new w2p_Output_HTML_ViewHelper($AppUI);
         <p><?php $view->showLabel('Birthday'); ?>
             <?php $view->showField('contact_birthday', $user->contact_birthday); ?>
         </p>
+        <?php
+        $custom_fields = new w2p_Core_CustomFields('users', 'view', $user->user_id, 'view');
+        $custom_fields->printHTML();
+        ?>
     </div>
     <div class="column right well">
         <?php

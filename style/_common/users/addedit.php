@@ -52,7 +52,11 @@ $form = new w2p_Output_HTML_FormHelper($AppUI);
                 <input type="text" class="text" name="dept_name" value="<?php echo $object->dept_name; ?>" size="40" disabled="disabled" />
                 <input type="button" class="button btn btn-primary btn-mini" value="<?php echo $AppUI->_('select dept'); ?>..." onclick="popDept()" />
             </p>
-            <?php $form->showCancelButton(); ?>
+            <?php
+            $custom_fields = new w2p_Core_CustomFields('users', 'addedit', $object->user_id, 'edit');
+            echo $custom_fields->getHTML();
+            $form->showCancelButton();
+            ?>
         </div>
         <div class="column right">
             <?php if ($canEdit && !$object_id) { ?>

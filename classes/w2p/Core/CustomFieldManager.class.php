@@ -40,7 +40,7 @@ class w2p_Core_CustomFieldManager extends w2p_Core_BaseObject {
         $q->addTable('modules');
         $q->addOrder('mod_ui_order');
         // The Calendar module's directory has been 'events' since migration 049.
-        $q->addWhere("mod_directory IN ('companies', 'projects', 'tasks', 'events', 'contacts')");
+        $q->addWhere("mod_directory IN ('companies', 'projects', 'tasks', 'events', 'contacts', 'users')");
 
         return $q->loadList();
     }
