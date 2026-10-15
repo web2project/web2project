@@ -97,8 +97,12 @@ class CProject extends w2p_Core_BaseObject
         if ($where) {
             $q->addWhere($where);
         }
-        $where = $this->getAllowedSQL($this->_AppUI->user_id, 'projects.project_id');
-        $q->addWhere($where);
+        // setAllowedSQL() joins project_departments for the department rule.
+        // getAllowedSQL() only returned the conditions, including one on
+        // dept_id that this query never joined, so for any user without full
+        // department rights the query failed and the project list was empty.
+        $q->addQuery('projects.*, c.*');
+        $q = $this->setAllowedSQL($this->_AppUI->user_id, $q, 'projects.project_id', 'projects');
         $q->addJoin('companies', 'c', 'c.company_id = project_company');
 
         return $q->loadHashList($this->_tbl_key);
