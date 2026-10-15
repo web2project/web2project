@@ -230,13 +230,23 @@ class CUser extends w2p_Core_BaseObject
         return true;
     }
 
+    /**
+     * Checks a plain-text password against the user's stored hash.
+     *
+     * The stored value is a salted password_hash() result, so it has to be
+     * verified with password_verify(); hashing the input again never matches.
+     *
+     * @param int    $userId
+     * @param string $password
+     *
+     * @return bool
+     */
     public function validatePassword($userId, $password)
     {
-        $hash = $this->authenticator->hashPassword($password);
-        
-        $users = $this->loadAll('user_id', 'user_password = \'' . $hash . '\' AND user_id = ' . (int) $userId);
+        $users = $this->loadAll('user_id', 'user_id = ' . (int) $userId);
+        $hash = (string) ($users[$userId]['user_password'] ?? '');
 
-        return isset($users[$userId]);
+        return '' !== $hash && password_verify((string) $password, $hash);
     }
 
     public function getIdByToken($token)

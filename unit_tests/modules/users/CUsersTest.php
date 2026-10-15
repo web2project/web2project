@@ -137,9 +137,14 @@ class CUsersTest extends CommonSetup
         $result = $this->obj->validatePassword(1, 'password');
         $this->assertFalse($result);
 
+        $this->post_data['user_password'] = password_hash('password', PASSWORD_BCRYPT);
         $this->mockDB->stageHashList(1, $this->post_data);
         $result = $this->obj->validatePassword(1, 'password');
         $this->assertTrue($result);
+
+        // The wrong password must not validate against the stored hash.
+        $result = $this->obj->validatePassword(1, 'not-the-password');
+        $this->assertFalse($result);
     }
 
     /*
