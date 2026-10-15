@@ -54,9 +54,32 @@ class w2p_Utilities_Paginator
      */
     public function buildNavigation($AppUI, $m, $tab, $params = array())
     {
-        $m .= count($params) ? '&' . http_build_query($params) : '';
+        $m .= count($params) ? '&amp;' . http_build_query($params, '', '&amp;') : '';
 
         return buildPaginationNav($AppUI, $m, $tab,
                     $this->_itemCount, $this->_pagesize, $this->_currentPage);
+    }
+
+    /**
+     * The query parameters of the current page that page links must carry so
+     *   they stay on the same view (a=view, company_id, orderby and so on).
+     *   m, tab and page are left out because buildNavigation() sets them.
+     *
+     * @param array $query  defaults to $_GET
+     *
+     * @return array
+     */
+    public static function currentQueryParams($query = null)
+    {
+        $query = is_array($query) ? $query : $_GET;
+
+        $params = array();
+        foreach ($query as $key => $value) {
+            if (!in_array($key, array('m', 'tab', 'page'), true) && is_scalar($value) && '' !== (string) $value) {
+                $params[$key] = (string) $value;
+            }
+        }
+
+        return $params;
     }
 }

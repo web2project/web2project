@@ -41,7 +41,10 @@ $customLookups = array('file_category' => $file_categories);
 
 $paginator = new w2p_Utilities_Paginator($items);
 $items = $paginator->getItemsOnPage($page);
-echo $paginator->buildNavigation($AppUI, $m, $tab);
+// Keep the current view (e.g. a=view&project_id=1) in the page links so
+// paging the Files tab of a project, task or company stays on that tab.
+$pageParams = w2p_Utilities_Paginator::currentQueryParams();
+echo $paginator->buildNavigation($AppUI, $m, $tab, $pageParams);
 
 $listTable = new w2p_Output_ListTable($AppUI);
 $listTable->addBefore('edit', 'file_id');
@@ -51,4 +54,4 @@ echo $listTable->startTable($m);
 echo $listTable->buildHeader($fields);
 echo $listTable->buildRows($items, $customLookups);
 echo $listTable->endTable();
-echo $paginator->buildNavigation($AppUI, $m, $tab);
+echo $paginator->buildNavigation($AppUI, $m, $tab, $pageParams);

@@ -23,12 +23,7 @@ $items = $paginator->getItemsOnPage($page);
 // Keep the rest of the current query (a=view&company_id=..., orderby...) in the
 // page links; without it, paging a list inside a view tab (e.g. a company's
 // projects) jumped to the module's own list.
-$pageParams = array();
-foreach ($_GET as $key => $value) {
-    if (!in_array($key, array('m', 'tab', 'page'), true) && is_scalar($value) && '' !== (string) $value) {
-        $pageParams[$key] = (string) $value;
-    }
-}
+$pageParams = w2p_Utilities_Paginator::currentQueryParams();
 /** @var w2p_Core_CAppUI $AppUI */
 echo $paginator->buildNavigation($AppUI, $m, $tab, $pageParams);
 
