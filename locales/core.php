@@ -59,5 +59,6 @@ switch ($m) {
 		}
 		break;
 }
-eval('$GLOBALS[\'translate\']=array(' . ob_get_contents() . "\n'0');");
+// Parsed, not eval()'d: see w2p_Utilities_Translations.
+$GLOBALS['translate'] = w2p_Utilities_Translations::parse(ob_get_contents());
 ob_end_clean();

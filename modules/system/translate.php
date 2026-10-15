@@ -32,7 +32,7 @@ if (file_exists($localeFile)) {
         readfile($localeFile);
     }
 }
-eval("\$english=array(" . ob_get_contents() . "\n'0');");
+$english = w2p_Utilities_Translations::parse(ob_get_contents());
 ob_end_clean();
 
 $trans = array();
@@ -54,7 +54,7 @@ if ($lang != 'en') {
             readfile($localeFile);
         }
     }
-    eval("\$locale=array(" . ob_get_contents() . "\n'0');");
+    $locale = w2p_Utilities_Translations::parse(ob_get_contents());
     ob_end_clean();
 
     foreach ($locale as $k => $v) {
