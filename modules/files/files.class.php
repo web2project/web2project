@@ -160,10 +160,15 @@ class CFile extends w2p_Core_BaseObject {
                         $q->addWhere('file_category = ' . (int) $value);
                     }
                     break;
+                case 'company':
+                    if ($value > 0) {
+                        $q->addWhere('p.project_company = ' . (int) $value);
+                    }
+                    break;
                 // todo: add a case for folders
                 default:
                     if ($value > 0) {
-                        $q->addWhere("file_$key = " . $value);
+                        $q->addWhere("file_$key = " . (int) $value);
                     }
             }
         }

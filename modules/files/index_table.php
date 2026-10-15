@@ -10,7 +10,9 @@ if (!defined('W2P_BASE_DIR')) {
 global $AppUI, $company_id, $project_id, $task_id, $tab;
 global $currentTabId, $m, $showProject, $xpg_min, $xpg_pagesize, $page;
 
-$category_id = ($m == 'files') ? $tab-1 : $tab;
+// Only the Files module's own tabs are categories; elsewhere $tab is the
+// host view's tab (Files is tab 4 on a company), so show every category.
+$category_id = ($m == 'files') ? $tab-1 : -1;
 $page = w2PgetParam($_GET, 'page', 1);
 if (!isset($project_id)) {
 	$project_id = w2PgetParam($_REQUEST, 'project_id', 0);
@@ -21,7 +23,8 @@ if ($project_id > 0 || $task_id > 0) {
 }
 
 $file = new CFile();
-$items = $file->list(['project' => $project_id, 'task' => $task_id, 'category' => $category_id]);
+$items = $file->list(['company' => ($m == 'companies') ? (int) $company_id : 0,
+    'project' => $project_id, 'task' => $task_id, 'category' => $category_id]);
 
 $module = new w2p_System_Module();
 $fields = $module->loadSettings('files', 'index_list');
