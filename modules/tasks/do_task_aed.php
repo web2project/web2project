@@ -111,6 +111,13 @@ if ($result) {
         $obj->updateAssigned($hassign, $hperc_assign_ar);
     }
 
+    // The Other Resources tab (resources module) posts hresource_assign.
+    // Nothing saved it since v3.2; fix from Klaus Buecher (opto), 50db537d.
+    if (isset($_POST['hresource_assign']) && $AppUI->isActiveModule('resources')) {
+        $resource = new CResource();
+        $resource->updateTaskResources($obj->task_id, w2PgetParam($_POST, 'hresource_assign', ''));
+    }
+
     // This call has to be here to make sure that old dependencies are
     // cleared on save, even if there's no new dependencies
     $obj->updateDependencies($hdependencies,  $obj->task_id);
