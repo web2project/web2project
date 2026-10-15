@@ -46,6 +46,10 @@ if (count($allowedTasks)) {
 $users_all = $q->loadList();
 $q->clear();
 
+// Both stay empty when there are no projects (e.g. a fresh install), and
+// count($users) below needs an array.
+$users = array();
+$users_per_task = array();
 foreach ($users_all as $user) {
 	$users_per_task[$user['task_id']][] = $user['user_id'];
 	$users[$user['user_id']]['all'][$user['task_id']] = $user;
@@ -129,20 +133,26 @@ $q->addGroup('file_project');
 $files = $q->loadResult();
 $q->clear();
 
-$ontime = round(100 * (1 - ($tasks['overdue']/count($all_tasks)) - ($tasks['completed']/count($all_tasks))));
+// Percentages of all tasks. A project (or the "all projects" view) with no
+// tasks shows 0% instead of dividing by zero, which is a fatal error in PHP 8.
+$taskCount = count($all_tasks);
+$percentOfTasks = function ($value) use ($taskCount) {
+    return $taskCount ? round($value / $taskCount * 100) : 0;
+};
+$ontime = $taskCount ? round(100 * (1 - ($tasks['overdue'] / $taskCount) - ($tasks['completed'] / $taskCount))) : 0;
 ?>
 
 <h3 class="h6"><?php echo $AppUI->_('Progress Chart (completed/in progress/pending)'); ?></h3>
 <div class="progress-stacked mb-3" style="height: 1.5rem;">
-    <div class="progress" role="progressbar" style="width: <?php echo round($tasks['completed'] / count($all_tasks) * 100); ?>%; height: 1.5rem;"><div class="progress-bar bg-success"><?php echo $AppUI->_('completed'); ?></div></div>
-    <div class="progress" role="progressbar" style="width: <?php echo round($tasks['inprogress'] / count($all_tasks) * 100); ?>%; height: 1.5rem;"><div class="progress-bar bg-info"><?php echo $AppUI->_('in progress'); ?></div></div>
-    <div class="progress" role="progressbar" style="width: <?php echo round($tasks['pending'] / count($all_tasks) * 100); ?>%; height: 1.5rem;"><div class="progress-bar bg-warning text-dark"><?php echo $AppUI->_('pending'); ?></div></div>
+    <div class="progress" role="progressbar" style="width: <?php echo $percentOfTasks($tasks['completed']); ?>%; height: 1.5rem;"><div class="progress-bar bg-success"><?php echo $AppUI->_('completed'); ?></div></div>
+    <div class="progress" role="progressbar" style="width: <?php echo $percentOfTasks($tasks['inprogress']); ?>%; height: 1.5rem;"><div class="progress-bar bg-info"><?php echo $AppUI->_('in progress'); ?></div></div>
+    <div class="progress" role="progressbar" style="width: <?php echo $percentOfTasks($tasks['pending']); ?>%; height: 1.5rem;"><div class="progress-bar bg-warning text-dark"><?php echo $AppUI->_('pending'); ?></div></div>
 </div>
 <h3 class="h6"><?php echo $AppUI->_('Time Chart (completed/on time/overdue)'); ?></h3>
 <div class="progress-stacked mb-3" style="height: 1.5rem;">
-    <div class="progress" role="progressbar" style="width: <?php echo round($tasks['completed']/ count($all_tasks) * 100); ?>%; height: 1.5rem;"><div class="progress-bar bg-success"><?php echo $AppUI->_('completed'); ?></div></div>
+    <div class="progress" role="progressbar" style="width: <?php echo $percentOfTasks($tasks['completed']); ?>%; height: 1.5rem;"><div class="progress-bar bg-success"><?php echo $AppUI->_('completed'); ?></div></div>
     <div class="progress" role="progressbar" style="width: <?php echo $ontime; ?>%; height: 1.5rem;"><div class="progress-bar bg-info"><?php echo $AppUI->_('on time'); ?></div></div>
-    <div class="progress" role="progressbar" style="width: <?php echo round($tasks['overdue']/ count($all_tasks) * 100); ?>%; height: 1.5rem;"><div class="progress-bar bg-danger"><?php echo $AppUI->_('overdue'); ?></div></div>
+    <div class="progress" role="progressbar" style="width: <?php echo $percentOfTasks($tasks['overdue']); ?>%; height: 1.5rem;"><div class="progress-bar bg-danger"><?php echo $AppUI->_('overdue'); ?></div></div>
 </div>
 <div class="row g-3">
         <div class="col-lg-4">
@@ -158,7 +168,7 @@ $ontime = round(100 * (1 - ($tasks['overdue']/count($all_tasks)) - ($tasks['comp
                 <tr>
                     <td nowrap="nowrap"><?php echo $AppUI->_('Complete'); ?>:</td>
                     <td align="right"><?php echo $tasks['completed']; ?></td>
-                    <td align="right"><?php echo round($tasks['completed'] / count($all_tasks) * 100); ?>%</td>
+                    <td align="right"><?php echo $percentOfTasks($tasks['completed']); ?>%</td>
                 </tr>
                 <tr>
                     <td nowrap="nowrap" valign="top"><?php echo $AppUI->_('Past Due'); ?>:</td>
@@ -167,7 +177,7 @@ $ontime = round(100 * (1 - ($tasks['overdue']/count($all_tasks)) - ($tasks['comp
                         (<?php echo $AppUI->_('In Progress'); ?>: <?php echo $tasks['inprogress']; ?>)<br />
                         (<?php echo $AppUI->_('Not Started'); ?>: <?php echo $tasks['pending']; ?>)
                     </td>
-                    <td align="right"><?php echo round($tasks['overdue'] / count($all_tasks) * 100); ?>%</td>
+                    <td align="right"><?php echo $percentOfTasks($tasks['overdue']); ?>%</td>
                 </tr>
                 <tr>
                     <td><?php echo $AppUI->_('Total'); ?>:</td>
