@@ -197,7 +197,10 @@ CREATE TABLE `w2pversion2` (
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 UPDATE `w2pversion` SET `last_db_update` = '2001-01-01' where `last_db_update` < '2001-01-01';
 UPDATE `w2pversion` SET `last_code_update` = `last_db_update` where `last_code_update` < '2001-01-01';
-INSERT INTO `w2pversion2` (`code_revision`, `code_version`, `db_version`, `last_db_update`, `last_code_update`)
-  SELECT 0, `code_version`, `db_version`, `last_db_update`, `last_code_update` from `w2pversion`;
+# w2pversion can hold the same db_version twice (001 inserts version 1 and the
+# installer records it again), which the new primary key rejects. Keep the
+# first row for each version and the rest of the history.
+INSERT IGNORE INTO `w2pversion2` (`code_revision`, `code_version`, `db_version`, `last_db_update`, `last_code_update`)
+  SELECT 0, `code_version`, `db_version`, `last_db_update`, `last_code_update` from `w2pversion` ORDER BY `db_version`, `last_db_update`;
 RENAME TABLE `w2pversion` TO `old_w2pversion`;
 RENAME TABLE `w2pversion2` TO `w2pversion`;
