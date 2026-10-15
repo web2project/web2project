@@ -1959,7 +1959,16 @@ class CTask extends w2p_Core_BaseObject
      *
      * @return mixed
      */
-    public function getTaskTree($project_id, $task_id = 0)
+    /**
+     * The tasks of a project (or the subtasks of $task_id) in tree order.
+     *
+     * @param int      $project_id
+     * @param int      $task_id     0 for the whole project
+     * @param int|null $task_status only tasks with this status; null for all statuses
+     *
+     * The status argument is from Klaus Buecher (opto), 170b1d05.
+     */
+    public function getTaskTree($project_id, $task_id = 0, $task_status = 0)
     {
         $taskTree = [];
         $this->_depth++;
@@ -1968,7 +1977,9 @@ class CTask extends w2p_Core_BaseObject
         $q->addTable('tasks');
         $q->addQuery('tasks.*, p.project_name, p.project_owner, p.project_company, task_pinned');
         $q->addWhere('task_project = ' . (int) $project_id);
-        $q->addWhere('task_status = 0');
+        if (null !== $task_status) {
+            $q->addWhere('task_status = ' . (int) $task_status);
+        }
         $q->addJoin('projects', 'p', 'p.project_id = task_project');
         $q->addQuery('user_task_priority');
         $q->addJoin('user_tasks', 'ut', 'ut.task_id = tasks.task_id');
@@ -1984,7 +1995,7 @@ class CTask extends w2p_Core_BaseObject
 
         $tasks = $q->loadHashList('task_id');
         foreach ($tasks as $task) {
-            $children = $this->getTaskTree($project_id, $task['task_id']);
+            $children = $this->getTaskTree($project_id, $task['task_id'], $task_status);
 
             $task['depth'] = $this->_depth;
             $task['children'] = count($children);

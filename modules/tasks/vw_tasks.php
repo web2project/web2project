@@ -76,8 +76,10 @@ if ($showIncomplete) {
 }
 
 //When in task view context show all the tasks, active and inactive. (by not limiting the query by task status)
-//When in a project view or in the tasks list, show the active or the inactive tasks depending on the selected tab or button.
-if (!$task_id) {
+//When in a project view, show the active or the inactive tasks depending on the selected tab.
+//In the tasks list, the "show all tasks" crumb shows tasks of every status (from Klaus Buecher (opto), 525f759e).
+$showAllStatuses = ('tasks' == $m && !$task_id && -1 == $AppUI->getState('inactive'));
+if (!$task_id && !$showAllStatuses) {
     if ($tab == 1) {
         $task_status = -1;
     } else {
@@ -228,7 +230,7 @@ if ($task_id) {
                 </td>
             </tr>
             <?php
-            $taskTree = $tempTask->getTaskTree($k, 0);
+            $taskTree = $tempTask->getTaskTree($k, 0, $showAllStatuses ? null : 0);
             echo $listTable->buildRows($taskTree, $customLookups);
         }
         if ('projects' == $m || 'projectdesigner' == $m) {
