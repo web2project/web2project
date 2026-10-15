@@ -11,8 +11,13 @@ $projectPriority = w2PgetSysVal('ProjectPriority');
 $projectStatus = w2PgetSysVal('ProjectStatus');
 
 $original_project_id = $project->project_original_parent;
+// $project is the project being viewed and is shared with the other tabs.
+// A status of -1 asks getStructuredProjects() for every status, so restore
+// the real one afterwards.
+$saved_status = $project->project_status;
 $project->project_status = -1;
 $st_projects_arr = $project->getStructuredProjects();
+$project->project_status = $saved_status;
 
 
 $module = new w2p_System_Module();
@@ -39,9 +44,11 @@ $s = '';
 $customLookups = array('project_status' => $projectStatus, 'project_priority' => $projectPriority);
 
 if (is_array($st_projects_arr)) {
-    foreach ($st_projects_arr as $project) {
-        $line = $project[0];
-        $level = $project[1];
+    // Not $project: that is the global CProject the other tabs use (Task Logs
+    // calls $project->company() and failed with "company() on array").
+    foreach ($st_projects_arr as $st_project) {
+        $line = $st_project[0];
+        $level = $st_project[1];
         if ($line['project_id']) {
             $s_project = new CProject();
             $s_project->load($line['project_id']);
