@@ -771,7 +771,7 @@ abstract class w2p_Core_BaseObject extends w2p_System_Event implements w2p_Inter
          */
         $custom_field = new w2p_Core_CustomField('notUsed', 'notUsed2',
             'notUsed3', 'notUsed4', 'notUsed5', 'notUsed6');
-        $custom_field->deleteByObject($this->_old_key);
+        $custom_field->deleteByObject($this->_old_key, $this->_tbl_module);
 
         addHistory($this->_tbl, $this->{$this->_tbl_key}, 'delete');
         return $this;
