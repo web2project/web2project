@@ -294,6 +294,11 @@ class CTask_Log extends w2p_Core_BaseObject
 	 */
     public function canDelete($notUsed = null, $notUsed2 = null, $notUsed3 = null)
 	{
+        // Deletes post only the id. The creator check below needs the record,
+        // which hook_preDelete() used to load before this check ran.
+        if ($this->task_log_id && null === $this->task_log_creator) {
+            $this->load($this->task_log_id);
+        }
         if($this->_AppUI->user_id == $this->task_log_creator ||
                 $this->_AppUI->user_id == $this->task_log_record_creator ||
                 $this->_perms->checkModuleItem($this->_tbl_module, 'edit', $this->{$this->_tbl_key})) {

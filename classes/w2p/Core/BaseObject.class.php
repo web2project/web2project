@@ -477,14 +477,17 @@ abstract class w2p_Core_BaseObject extends w2p_System_Event implements w2p_Inter
             $this->$k = (int) $oid;
         }
 
-        $this->_dispatcher->publish(new w2p_System_Event(get_class($this), 'preDeleteEvent'));
-
+        // Check first: several hook_preDelete() implementations delete related
+        // rows (a user's login and preferences, event attendees, forum visits),
+        // which must not happen when the delete is refused.
         if (!$this->canDelete()) {
             //TODO: no clue why this is required..
             unset($this->_error['store']);
             $this->_error['delete-check'] = get_class($this) . '::delete-check failed';
             return false;
         }
+
+        $this->_dispatcher->publish(new w2p_System_Event(get_class($this), 'preDeleteEvent'));
 
         $q = $this->_getQuery();
         $q->setDelete($this->_tbl);
@@ -703,9 +706,9 @@ abstract class w2p_Core_BaseObject extends w2p_System_Event implements w2p_Inter
      */
     protected function hook_preUpdate()     {   return $this;   }
     /**
-     * This method is called within $this->delete() but before we attempt to
-     *   delete it. It is called regardless of whether or not the object can be
-     *   deleted.. which may be determined by dependencies or permissions.
+     * This method is called within $this->delete() after canDelete() has
+     *   allowed the delete and before the row is deleted, so it may clean up
+     *   related data.
      *
      * We're grabbing the id here before we delete the object because we might
      *   need it later.
