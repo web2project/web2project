@@ -847,6 +847,9 @@ class w2p_Core_CAppUI
         $q->addInsert('date_time_in', "'" . $q->dbfnNowWithTZ() . "'", false, true);
         $q->addInsert('user_ip', $_SERVER['REMOTE_ADDR']);
         $q->exec();
+        // The session and "last action" tracking use this id (it was lost
+        // when db_insert_id() was removed).
+        $this->last_insert_id = (int) $q->_db->insert_id();
     }
 
     /**
