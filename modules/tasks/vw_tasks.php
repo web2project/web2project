@@ -8,6 +8,7 @@ if (!defined('W2P_BASE_DIR')) {
 
 global $AppUI, $m, $a, $project_id, $task_id, $f, $task_status, $min_view, $query_string, $durnTypes, $tpl;
 global $user_id, $w2Pconfig, $currentTabId, $currentTabName, $canEdit, $showEditCheckbox, $tab, $showIncomplete;
+global $showAllTaskStatuses;
 
 $tab = (int) w2PgetParam($_GET, 'tab', 0);
 
@@ -77,8 +78,9 @@ if ($showIncomplete) {
 
 //When in task view context show all the tasks, active and inactive. (by not limiting the query by task status)
 //When in a project view, show the active or the inactive tasks depending on the selected tab.
-//In the tasks list, the "show all tasks" crumb shows tasks of every status (from Klaus Buecher (opto), 525f759e).
-$showAllStatuses = ('tasks' == $m && !$task_id && -1 == $AppUI->getState('inactive'));
+//In the tasks list, the "show all tasks" crumb shows tasks of every status (from Klaus Buecher (opto), 525f759e),
+//and so does the project view's "Tasks (All)" tab (vw_tasks_all.php, from opto's 8db88ce5).
+$showAllStatuses = !$task_id && (!empty($showAllTaskStatuses) || ('tasks' == $m && -1 == $AppUI->getState('inactive')));
 if (!$task_id && !$showAllStatuses) {
     if ($tab == 1) {
         $task_status = -1;
@@ -234,7 +236,7 @@ if ($task_id) {
             echo $listTable->buildRows($taskTree, $customLookups);
         }
         if ('projects' == $m || 'projectdesigner' == $m) {
-            $taskTree = $tempTask->getTaskTree($k, 0);
+            $taskTree = $tempTask->getTaskTree($k, 0, $showAllStatuses ? null : 0);
             echo $listTable->buildRows($taskTree, $customLookups);
         }
     }

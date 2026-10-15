@@ -103,6 +103,8 @@ if ($canViewTask && $AppUI->isActiveModule('tasks')) {
     foreach ($status as $id => $statusName) {
         $tabBox->add(W2P_BASE_DIR . '/modules/tasks/tasks', $AppUI->_('Tasks') . ' (' . $AppUI->_($statusName) . ')');
     }
+    // Tasks of every status, from Klaus Buecher (opto), 8db88ce5.
+    $tabBox->add(W2P_BASE_DIR . '/modules/tasks/vw_tasks_all', 'Tasks (All)');
 
 	$tabBox->add(W2P_BASE_DIR . '/modules/tasks/viewgantt', 'Gantt Chart');
 	if ($canViewTaskLog) {

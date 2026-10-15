@@ -81,7 +81,12 @@ class w2p_Output_HTML_TaskTable extends w2p_Output_ListTable
         }
 
         $this->stageRowData($rowData);
-        $class = w2pFindTaskComplete($rowData['task_start_date'], $rowData['task_end_date'], $rowData['task_percent_complete']);
+        // Inactive tasks get their own colour (from Klaus Buecher (opto), 8db88ce5).
+        if (isset($rowData['task_status']) && -1 == $rowData['task_status']) {
+            $class = 'inactive';
+        } else {
+            $class = w2pFindTaskComplete($rowData['task_start_date'], $rowData['task_end_date'], $rowData['task_percent_complete']);
+        }
 
         $row = '<tr class="'.$class.'">';
         $row .= $this->_buildCells(array('edit' => 'task_id', 'pin' => 'task_id', 'log' => 'task_id'));

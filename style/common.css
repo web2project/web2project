@@ -396,6 +396,15 @@ tr.notstarted td._date, tr.notstarted td._datetime, tr.notstarted td._duration, 
     background-color:#ffeebb;
 }
 
+td.inactive {
+    background-color: lightsteelblue;
+    border-style:solid;
+    border-width:1px;
+}
+tr.inactive td._date, tr.inactive td._datetime, tr.inactive td._duration, tr.inactive td._in {
+    background-color: lightsteelblue;
+}
+
 td.active {
     background-color: #e6eedd;
     border-style:solid;

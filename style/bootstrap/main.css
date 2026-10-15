@@ -1235,6 +1235,12 @@ td.notstarted,
 tr.notstarted td._date, tr.notstarted td._datetime, tr.notstarted td._duration, tr.notstarted td._in {
     background-color: var(--bs-warning-bg-subtle);
 }
+td.inactive,
+.w2p-swatch.inactive,
+tr.inactive td._date, tr.inactive td._datetime, tr.inactive td._duration, tr.inactive td._in {
+    background-color: var(--bs-gray-300);
+    color: var(--bs-gray-700);
+}
 td.active,
 .w2p-swatch.active,
 tr.active td._date, tr.active td._datetime, tr.active td._duration, tr.active td._in {

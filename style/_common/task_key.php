@@ -6,4 +6,5 @@
     <span class="text-nowrap"><span class="d-inline-block border notstarted w2p-swatch">&nbsp;</span> =<?php echo $AppUI->_('Should have started'); ?></span>
     <span class="text-nowrap"><span class="d-inline-block border late w2p-swatch">&nbsp;</span> =<?php echo $AppUI->_('Overdue'); ?></span>
     <span class="text-nowrap"><span class="d-inline-block border done w2p-swatch">&nbsp;</span> =<?php echo $AppUI->_('Done'); ?></span>
+    <span class="text-nowrap"><span class="d-inline-block border inactive w2p-swatch">&nbsp;</span> =<?php echo $AppUI->_('Inactive'); ?></span>
 </div>
