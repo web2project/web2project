@@ -39,19 +39,15 @@ $showTaskNameOnly = '';
 $showhgrid = '';
 
 if ($a == 'todo') {
-	if (isset($_POST['show_form'])) {
-		$AppUI->setState('TaskDayShowArc', w2PgetParam($_POST, 'showArcProjs', 0));
-		$AppUI->setState('TaskDayShowLow', w2PgetParam($_POST, 'showLowTasks', 0));
-		$AppUI->setState('TaskDayShowHold', w2PgetParam($_POST, 'showHoldProjs', 0));
-		$AppUI->setState('TaskDayShowDyn', w2PgetParam($_POST, 'showDynTasks', 0));
-		$AppUI->setState('TaskDayShowPin', w2PgetParam($_POST, 'showPinned', 0));
-	}
-
-	$showArcProjs = $AppUI->getState('TaskDayShowArc', 0);
-	$showLowTasks = $AppUI->getState('TaskDayShowLow', 1);
-	$showHoldProjs = $AppUI->getState('TaskDayShowHold', 0);
-	$showDynTasks = $AppUI->getState('TaskDayShowDyn', 0);
-	$showPinned = $AppUI->getState('TaskDayShowPin', 0);
+	// todo.php has already saved the posted filters (the form below uses the
+	// same field names as the My Tasks tab). The values go into the chart URL,
+	// where gantt.php casts them to int, so pass them as 1/0 rather than the
+	// checkbox value "on".
+	$showArcProjs = $AppUI->getState('TaskDayShowArc', 0) ? 1 : 0;
+	$showLowTasks = $AppUI->getState('TaskDayShowLow', 1) ? 1 : 0;
+	$showHoldProjs = $AppUI->getState('TaskDayShowHold', 0) ? 1 : 0;
+	$showDynTasks = $AppUI->getState('TaskDayShowDyn', 0) ? 1 : 0;
+	$showPinned = $AppUI->getState('TaskDayShowPin', 0) ? 1 : 0;
 } else {
 	$showPinned = w2PgetParam($_POST, 'showPinned', '0');
 	$showPinned = (($showPinned != '0') ? '1' : $showPinned);
@@ -270,49 +266,27 @@ if (!$min_view) {
         </div>
         <?php if ($a == 'todo') { ?>
         <input type="hidden" name="show_form" value="1" />
+        <?php // Not shown on this tab, but todo.php resets any filter that is not posted. ?>
+        <input type="hidden" name="show_empty_date" value="<?php echo $AppUI->getState('TaskDayShowEmptyDate', 0) ? 1 : 0; ?>" />
+        <input type="hidden" name="show_inprogress" value="<?php echo $AppUI->getState('TaskDayShowInProgress', 0) ? 1 : 0; ?>" />
         <div class="d-flex flex-wrap justify-content-center gap-3 mt-2">
-            <span class="text-nowrap">
-                <input type="checkbox" name="showPinned" id="showPinned" <?php echo $showPinned ? 'checked="checked"' : ''; ?> />
-                <label for="showPinned"><?php echo $AppUI->_('Pinned Only'); ?></label>
-            </span>
-            <span class="text-nowrap">
-                <input type="checkbox" name="showArcProjs" id="showArcProjs" <?php echo $showArcProjs ? 'checked="checked"' : ''; ?> />
-                <label for="showArcProjs"><?php echo $AppUI->_('Archived/Template Projects'); ?></label>
-            </span>
-            <span class="text-nowrap">
-                <input type="checkbox" name="showDynTasks" id="showDynTasks" <?php echo $showDynTasks ? 'checked="checked"' : ''; ?> />
-                <label for="showDynTasks"><?php echo $AppUI->_('Dynamic Tasks'); ?></label>
-            </span>
-            <span class="text-nowrap">
-                <input type="checkbox" name="showLowTasks" id="showLowTasks" <?php echo $showLowTasks ? 'checked="checked"' : ''; ?> />
-                <label for="showLowTasks"><?php echo $AppUI->_('Low Priority Tasks'); ?></label>
-            </span>
-        </div>
-        <div id="ganttoptions" style="display:none">
-            <input type="hidden" name="show_form" value="1" />
-            <div class="d-flex flex-wrap gap-3">
-                <span>&nbsp;To Do Options:&nbsp;</span>
+            <?php
+            $todoFilters = array(
+                'show_pinned'    => array($showPinned, 'Pinned Only'),
+                'show_arc_proj'  => array($showArcProjs, 'Archived/Template Projects'),
+                'show_hold_proj' => array($showHoldProjs, 'Projects on Hold'),
+                'show_dyn_task'  => array($showDynTasks, 'Dynamic Tasks'),
+                'show_low_task'  => array($showLowTasks, 'Low Priority Tasks'),
+            );
+            foreach ($todoFilters as $name => $filter) {
+                ?>
                 <span class="text-nowrap">
-                    <input type="checkbox" name="showPinned" id="showPinned" <?php echo $showPinned ? 'checked="checked"' : ''; ?> />
-                    <label for="showPinned"><?php echo $AppUI->_('Pinned Only'); ?></label>
+                    <input type="checkbox" name="<?php echo $name; ?>" id="gantt_<?php echo $name; ?>" value="1" <?php echo $filter[0] ? 'checked="checked"' : ''; ?> />
+                    <label for="gantt_<?php echo $name; ?>"><?php echo $AppUI->_($filter[1]); ?></label>
                 </span>
-                <span class="text-nowrap">
-                    <input type="checkbox" name="showArcProjs" id="showArcProjs" <?php echo $showArcProjs ? 'checked="checked"' : ''; ?> />
-                    <label for="showArcProjs"><?php echo $AppUI->_('Archived Projects'); ?></label>
-                </span>
-                <span class="text-nowrap">
-                    <input type="checkbox" name="showHoldProjs" id="showHoldProjs" <?php echo $showHoldProjs ? 'checked="checked"' : ''; ?> />
-                    <label for="showHoldProjs"><?php echo $AppUI->_('Projects on Hold'); ?></label>
-                </span>
-                <span class="text-nowrap">
-                    <input type="checkbox" name="showDynTasks" id="showDynTasks" <?php echo $showDynTasks ? 'checked="checked"' : ''; ?> />
-                    <label for="showDynTasks"><?php echo $AppUI->_('Dynamic Tasks'); ?></label>
-                </span>
-                <span class="text-nowrap">
-                    <input type="checkbox" name="showLowTasks" id="showLowTasks" <?php echo $showLowTasks ? 'checked="checked"' : ''; ?> />
-                    <label for="showLowTasks"><?php echo $AppUI->_('Low Priority Tasks'); ?></label>
-                </span>
-            </div>
+                <?php
+            }
+            ?>
         </div>
         <?php } ?>
         <div class="text-center mt-2">

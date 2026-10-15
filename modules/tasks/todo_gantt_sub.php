@@ -10,7 +10,7 @@ $perms = &$AppUI->acl();
 $canDelete = $perms->checkModuleItem($m, 'delete');
 ?>
 <form name="form_buttons" method="post" action="index.php?<?php echo 'm=' . $m . '&a=' . $a . '&date=' . $date; ?>" accept-charset="utf-8">
-    <input type="hidden" name="show_form" value="1" />
+    <?php // No show_form here: changing the user must not reset the filters (todo.php). ?>
     <div class="mb-2">
         <?php
         if ($other_users) {
