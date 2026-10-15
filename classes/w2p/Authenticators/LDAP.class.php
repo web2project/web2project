@@ -163,22 +163,37 @@ class w2p_Authenticators_LDAP extends w2p_Authenticators_Base
 
      public function createsqluser($username, $password, $ldap_attribs = array())
     {
+        // Every user needs a contact: the user lists and the per-user
+        // permission checks join on it, so a user without one cannot be
+        // found or given a role.
         $c = new CContact();
-            if (count($ldap_attribs)) {
-                // Contact information based on the inetOrgPerson class schema
-                $c->contact_first_name = $this->ldapAttribute($ldap_attribs, 'givenname');
-                $c->contact_last_name = $this->ldapAttribute($ldap_attribs, 'sn');
-                $c->contact_city = $this->ldapAttribute($ldap_attribs, 'l');
-                $c->contact_country = $this->ldapAttribute($ldap_attribs, 'country');
-                $c->contact_state = $this->ldapAttribute($ldap_attribs, 'st');
-                $c->contact_zip = $this->ldapAttribute($ldap_attribs, 'postalcode');
-                $c->contact_job = $this->ldapAttribute($ldap_attribs, 'title');
-                $c->contact_email = $this->ldapAttribute($ldap_attribs, 'mail');
-                $c->contact_phone = $this->ldapAttribute($ldap_attribs, 'telephonenumber');
-                $result = $c->store();
-                $contactArray = array('phone_mobile' => $this->ldapAttribute($ldap_attribs, 'mobile'));
-                $c->setContactMethods($contactArray);
-            }
+        if (count($ldap_attribs)) {
+            // Contact information based on the inetOrgPerson class schema
+            $c->contact_first_name = $this->ldapAttribute($ldap_attribs, 'givenname');
+            $c->contact_last_name = $this->ldapAttribute($ldap_attribs, 'sn');
+            $c->contact_city = $this->ldapAttribute($ldap_attribs, 'l');
+            $c->contact_country = $this->ldapAttribute($ldap_attribs, 'country');
+            $c->contact_state = $this->ldapAttribute($ldap_attribs, 'st');
+            $c->contact_zip = $this->ldapAttribute($ldap_attribs, 'postalcode');
+            $c->contact_job = $this->ldapAttribute($ldap_attribs, 'title');
+            $c->contact_email = $this->ldapAttribute($ldap_attribs, 'mail');
+            $c->contact_phone = $this->ldapAttribute($ldap_attribs, 'telephonenumber');
+        }
+        if (mb_strlen((string) $c->contact_first_name) <= 1) {
+            // CContact requires a first name; use the login name when the
+            // directory has none.
+            $c->contact_first_name = $username;
+        }
+        $c->store();
+        if (!$c->contact_id && '' != (string) $c->contact_email) {
+            // Most likely another contact already uses this e-mail address.
+            $c->contact_email = '';
+            $c->clearErrors();
+            $c->store();
+        }
+        if ($c->contact_id && count($ldap_attribs)) {
+            $c->setContactMethods(array('phone_mobile' => $this->ldapAttribute($ldap_attribs, 'mobile')));
+        }
 
         $u = new CUser();
         $u->user_username = $username;
