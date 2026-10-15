@@ -159,11 +159,31 @@ class CProject extends w2p_Core_BaseObject
         $q->addWhere('project_id =' . $this->_old_key);
         $q->exec();
 
+        // Remove the task that stood for this project inside its parent
+        // project (the statement used to be built but never executed), and
+        // refresh the parent project's cached task count and last date.
+        $q->clear();
+        $q->addTable('tasks');
+        $q->addQuery('DISTINCT task_project');
+        $q->addWhere('task_represents_project = ' . (int) $this->_old_key);
+        $parent_projects = $q->loadColumn();
+
         $q->clear();
         $q->setDelete('tasks');
-        $q->addWhere('task_represents_project =' . $this->_old_key);
+        $q->addWhere('task_represents_project = ' . (int) $this->_old_key);
+        $q->exec();
 
-        parent::hook_preDelete();
+        $task = new CTask();
+        $task->overrideDatabase($this->_query);
+        foreach ($parent_projects as $parent_project_id) {
+            $last_task_data = (array) $task->getLastTaskData($parent_project_id) + array('task_id' => 0, 'last_date' => null);
+            CProject::updateTaskCache($parent_project_id, $last_task_data['task_id'],
+                $last_task_data['last_date'], $task->getTaskCount($parent_project_id));
+        }
+
+        // hook_postDelete, not hook_preDelete: the base class removes the
+        // project's custom field values and records the delete in history.
+        parent::hook_postDelete();
     }
 
     /**
