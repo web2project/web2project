@@ -209,15 +209,15 @@ if ($do_report) {
 		$table_header = '
 			<tr>
 				<td nowrap="nowrap" bgcolor="#A0A0A0">
-				<font color="black"><b>' . $AppUI->_('Task') . '</b></font> </td>' . ($project_id == 0 ? '<td nowrap="nowrap" bgcolor="#A0A0A0"><font color="black"><b>' . $AppUI->_('Project') . '</b></font></td>' : '') . '
-				<td nowrap="nowrap" bgcolor="#A0A0A0"><font color="black"><b>' . $AppUI->_('Start Date') . '</b></font></td>
-				<td nowrap="nowrap" bgcolor="#A0A0A0"><font color="black"><b>' . $AppUI->_('End Date') . '</b></font></td>' . weekDates_r($display_week_hours, $sss, $sse) . '
+				<span style="color: black;"><b>' . $AppUI->_('Task') . '</b></span> </td>' . ($project_id == 0 ? '<td nowrap="nowrap" bgcolor="#A0A0A0"><span style="color: black;"><b>' . $AppUI->_('Project') . '</b></span></td>' : '') . '
+				<td nowrap="nowrap" bgcolor="#A0A0A0"><span style="color: black;"><b>' . $AppUI->_('Start Date') . '</b></span></td>
+				<td nowrap="nowrap" bgcolor="#A0A0A0"><span style="color: black;"><b>' . $AppUI->_('End Date') . '</b></span></td>' . weekDates_r($display_week_hours, $sss, $sse) . '
 			</tr>';
 		$table_rows = '';
 
 		foreach ($user_list as $user_id => $user_data) {
 
-			$tmpuser = "<tr><td align='left' nowrap='nowrap' bgcolor='#D0D0D0'><font color='black'><B>" . $user_data["contact_first_name"] . ' ' . $user_data['contact_last_name'] . '</b></font></td>';
+			$tmpuser = "<tr><td align='left' nowrap='nowrap' bgcolor='#D0D0D0'><span style='color: black;'><B>" . $user_data["contact_first_name"] . ' ' . $user_data['contact_last_name'] . '</b></span></td>';
 			for ($w = 0, $w_cmp = (1 + ($project_id == 0 ? 1 : 0) + weekCells_r($display_week_hours, $sss, $sse)); $w <= $w_cmp; $w++) {
 				$tmpuser .= '<td bgcolor="#D0D0D0">&nbsp;</td>';
 			}

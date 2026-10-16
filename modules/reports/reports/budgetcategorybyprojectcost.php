@@ -123,7 +123,7 @@ $companies = arrayMerge(array('0' => 'All Companies'), $companies);
             $factor = ($factor > 1) ? 1 : $factor;
             ?><tr>
                 <td width="10" align="right" style="border: outset #eeeeee 1px;background-color:#<?php echo $project->project_color_identifier; ?>">
-                    <font color="<?php echo bestColor($project->project_color_identifier); ?>"><?php echo sprintf('%.1f%%', $project->project_percent_complete); ?></font>
+                    <span style="color: <?php echo bestColor($project->project_color_identifier); ?>;"><?php echo sprintf('%.1f%%', $project->project_percent_complete); ?></span>
                 </td>
                 <td>
                     <a href="?m=projects&amp;a=view&amp;project_id=<?php echo $project->project_id; ?>">
