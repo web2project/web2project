@@ -2088,11 +2088,25 @@ class CTask extends w2p_Core_BaseObject
         $oldProject->task_project = (int) $project_old;
         $oldProject->updateDynamics();
 
-        $taskCount_oldProject = $this->getTaskCount($project_old);
-        CProject::updateTaskCount($project_old, $taskCount_oldProject);
-
-        $taskCount_newProject = $this->getTaskCount($project_new);
-        CProject::updateTaskCount($project_new, $taskCount_newProject);
+        // store() already refreshed the new project's task count and last
+        // task. Refresh the old project's here, directly: the deprecated
+        // CProject::updateTaskCount() logged a notice and re-stored the
+        // whole project, and updateTaskCache() skips projects left empty.
+        $project_old = (int) $project_old;
+        // both helpers reset the shared query object, so call them first
+        $last_task_data = $this->getLastTaskData($project_old);
+        $task_count = $this->getTaskCount($project_old);
+        $q = $this->_getQuery();
+        $q->addTable('projects');
+        $q->addUpdate('project_task_count', $task_count);
+        if (!empty($last_task_data['task_id'])) {
+            $q->addUpdate('project_last_task', $last_task_data['task_id']);
+            $q->addUpdate('project_actual_end_date', $last_task_data['last_date']);
+        }
+        $q->addWhere('project_id = ' . $project_old);
+        $q->exec();
+        $q->clear();
+        CProject::updatePercentComplete($project_old);
     }
 
     /**
