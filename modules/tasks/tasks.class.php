@@ -184,7 +184,9 @@ class CTask extends w2p_Core_BaseObject
         }
 
         // Have deps
-        if (array_sum($this_dependencies)) {
+        // the id lists come from explode() and may hold '' (array_sum() warns
+        // on strings in PHP 8); any non-zero id counts
+        if (count(array_filter(array_map('intval', $this_dependencies)))) {
             if ($this->task_dynamic == 1) {
                 $this->_error['BadDep_DynNoDep'] = 'BadDep_DynNoDep';
                 return false;
@@ -205,7 +207,7 @@ class CTask extends w2p_Core_BaseObject
 
             // Task dependencies can not be dependent on this task
             $intersect = array_intersect($this_dependencies, $this_dependents);
-            if (array_sum($intersect)) {
+            if (count(array_filter(array_map('intval', $intersect)))) {
                 $ids = '(' . implode(',', $intersect) . ')';
                 $this->_error['BadDep_CircularDep'] = 'BadDep_CircularDep';
                 return false;
@@ -241,7 +243,7 @@ class CTask extends w2p_Core_BaseObject
 
             if ($this_parent->task_dynamic == 1) {
                 $intersect = array_intersect($this_dependencies, $parents_dependents);
-                if (array_sum($intersect)) {
+                if (count(array_filter(array_map('intval', $intersect)))) {
                     $ids = '(' . implode(',', $intersect) . ')';
                     $this->_error['BadDep_CircularDepOnParentDependent'] = 'BadDep_CircularDepOnParentDependent';
                     return false;
@@ -250,7 +252,7 @@ class CTask extends w2p_Core_BaseObject
             if ($this->task_dynamic == 1) {
                 // then task's children can not be dependent on parent
                 $intersect = array_intersect($this_children, $parents_dependents);
-                if (array_sum($intersect)) {
+                if (count(array_filter(array_map('intval', $intersect)))) {
                     $this->_error['BadParent_ChildDepOnParent'] = 'BadParent_ChildDepOnParent';
                     return false;
                 }
