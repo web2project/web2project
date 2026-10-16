@@ -333,7 +333,8 @@ class CUser extends w2p_Core_BaseObject
             $q->addWhere('ual.user_id = ' . (int) $userId);
         }
         $q->addWhere("ual.date_time_in  >= '$startDate'");
-        $q->addWhere("ual.date_time_out <= '$endDate'");
+        // logins that are still open have no date_time_out
+        $q->addWhere("(ual.date_time_out IS NULL OR ual.date_time_out <= '$endDate')");
         $q->addOrder('ual.date_time_last_action DESC');
 
         return $q->loadList();

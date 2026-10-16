@@ -4473,7 +4473,8 @@ function __extract_from_vw_usr($row)
     $q->addTable('user_access_log', 'ual');
     $q->addQuery('user_access_log_id, ( unix_timestamp( \'' . $q->dbfnNowWithTZ() . '\' ) - unix_timestamp( date_time_in ) ) / 3600 as 		hours');
     $q->addQuery('( unix_timestamp( \'' . $q->dbfnNowWithTZ() . '\' ) - unix_timestamp( date_time_last_action ) ) / 3600 as idle');
-    $q->addQuery('date_time_out IS NOT NULL as online');
+    // an open login has no date_time_out (see migration 067)
+    $q->addQuery('date_time_out IS NULL as online');
     $q->addWhere('user_id = ' . (int) $row['user_id']);
     $q->addOrder('user_access_log_id DESC');
     $q->setLimit(1);

@@ -63,6 +63,8 @@ if (!isset($_SESSION['AppUI']) || isset($_GET['logout'])) {
 	if (isset($_GET['logout']) && isset($_SESSION['AppUI']->user_id)) {
 		$AppUI = &$_SESSION['AppUI'];
 		$user_id = $AppUI->user_id;
+		// the access log row of the login that is ending
+		$logout_log_id = (int) $AppUI->last_insert_id;
 		addHistory('login', $AppUI->user_id, 'logout', $AppUI->user_first_name . ' ' . $AppUI->user_last_name);
 	}
 
@@ -80,7 +82,7 @@ if ($AppUI->doLogin()) {
 
 //Function register logout in user_acces_log
 if (isset($user_id) && isset($_GET['logout'])) {
-	$AppUI->registerLogout($user_id);
+	$AppUI->registerLogout($user_id, isset($logout_log_id) ? $logout_log_id : 0);
 }
 
 // the ui style is fixed (see W2P_UISTYLE); $uistyle stays global for templates

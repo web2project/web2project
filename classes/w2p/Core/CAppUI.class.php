@@ -855,13 +855,17 @@ class w2p_Core_CAppUI
     /**
      * @Function for register log out in web2project table "user_acces_log"
      */
-    public function registerLogout($user_id)
+    public function registerLogout($user_id, $access_log_id = 0)
     {
         if ($user_id > 0) {
             $q = new w2p_Database_Query;
             $q->addTable('user_access_log');
             $q->addUpdate('date_time_out', "'" . $q->dbfnNowWithTZ() . "'", false, true);
             $q->addWhere('user_id = ' . (int) $user_id . ' AND date_time_out IS NULL');
+            // only the login that is ending; the user may be logged in elsewhere
+            if ((int) $access_log_id > 0) {
+                $q->addWhere('user_access_log_id = ' . (int) $access_log_id);
+            }
             $q->exec();
         }
     }
