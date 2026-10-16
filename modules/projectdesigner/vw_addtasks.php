@@ -73,8 +73,6 @@ function addTasks() {
 <form name="editFrm" action="?m=<?php echo $m; ?>" method="post" accept-charset="utf-8">
 	<input type="hidden" name="dosql" value="do_addtasks_aed" />
 	<input type="hidden" name="project" value="<?php echo $project_id; ?>" />
-	<input type="hidden" name="project_name" value="<?php echo $obj->project_name; ?>" />
-	<input type="hidden" name="redirect" value="<?php echo $redirect; ?>" />
 	<input type="hidden" name="nrcomponents" value="0" />
 	<input type="hidden" name="pd_option_view_project" value="<?php echo (isset($view_options[0]['pd_option_view_project']) ? $view_options[0]['pd_option_view_project'] : 1); ?>" />
 	<input type="hidden" name="pd_option_view_gantt" value="<?php echo (isset($view_options[0]['pd_option_view_gantt']) ? $view_options[0]['pd_option_view_gantt'] : 1); ?>" />

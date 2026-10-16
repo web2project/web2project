@@ -1013,9 +1013,10 @@ function showRoleRow($role = null)
     /** @var w2p_Core_CAppUI $AppUI */
     global $canEdit, $canDelete, $role_id, $AppUI, $roles;
 
-    $id = $role['id'];
-    $name = $role['value'];
-    $description = $role['name'];
+    // called without a role for the "add role" row
+    $id = $role['id'] ?? 0;
+    $name = $role['value'] ?? '';
+    $description = $role['name'] ?? '';
 
     if (!$id) {
         $roles_arr = array(0 => '(' . $AppUI->_('Copy Role') . '...)');

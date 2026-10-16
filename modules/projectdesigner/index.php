@@ -212,7 +212,7 @@ $( document ).ready(function() {
 // some javascript functions may not appear on client side in case of user not having write permissions
 // else users would be able to arbitrarily run 'bad' functions
 <?php
-	if ($canEdit) {
+	if ($canEditProject) {
 ?>
 function delIt() {
 	if (confirm( '<?php echo $AppUI->_('doDelete', UI_OUTPUT_JS) . ' ' . $AppUI->_('Project', UI_OUTPUT_JS) . '?'; ?>' )) {
@@ -360,7 +360,7 @@ var check_task_dates = <?php
 	else
 		echo 'false';
 ?>;
-var can_edit_time_information = <?php echo $can_edit_time_information ? 'true' : 'false'; ?>;
+var can_edit_time_information = <?php echo $task->canUserEditTimeInformation($obj->project_owner, $AppUI->user_id) ? 'true' : 'false'; ?>;
 
 var task_name_msg = '<?php echo $AppUI->_('taskName'); ?>';
 var task_start_msg = '<?php echo $AppUI->_('taskValidStartDate'); ?>';
