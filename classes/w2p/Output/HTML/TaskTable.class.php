@@ -124,7 +124,8 @@ class w2p_Output_HTML_TaskTable extends w2p_Output_ListTable
                 }
                 $rowData[$column] = implode(', ', $parsed);
             }
-            $row .= $this->createCell($column, $rowData[$column], $customLookups);
+            // the Tasks (Inactive) tab's rows (loadAll) have no user_task_priority
+            $row .= $this->createCell($column, $rowData[$column] ?? '', $customLookups);
         }
         if ('projectdesigner' == $this->module) {
             $row .= '<td class="data"><input type="checkbox" name="selected_task[]" value="' . $rowData['task_id'] . '"/></td>';

@@ -4,7 +4,7 @@ if (!defined('W2P_BASE_DIR')) {
     die('You should not access this file directly.');
 }
 
-global $AppUI, $m, $project_id;
+global $AppUI, $m, $project_id, $f, $user_id;
 
 $task = new CTask();
 
@@ -26,6 +26,9 @@ if (0 == count($fields)) {
 }
 $fieldList = array_keys($fields);
 $fieldNames = array_values($fields);
+
+// same lookups as vw_tasks.php
+$customLookups = array('task_status' => w2PgetSysVal('TaskStatus'), 'task_priority' => w2PgetSysVal('TaskPriority'));
 
 $listTable = new w2p_Output_HTML_TaskTable($AppUI, $task);
 $listTable->setFilters($f, $user_id);

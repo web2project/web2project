@@ -63,11 +63,14 @@ class w2p_Output_ListTable extends w2p_Output_HTMLHelper
         if (count($allRows) > 0) {
             $_init = '';
             foreach ($allRows as $row) {
-                if ($_init != $row[$this->_divider]) {
-                    $body .= $this->_addDivider($row);
+                // group rows under a heading only when addDividers() was called
+                if ('' != $this->_divider) {
+                    if ($_init != $row[$this->_divider]) {
+                        $body .= $this->_addDivider($row);
+                    }
+                    $_init = $row[$this->_divider];
                 }
                 $body .= $this->buildRow($row, $customLookups);
-                $_init = $row[$this->_divider];
             }
         } else {
             $body .= $this->buildEmptyRow();
@@ -83,7 +86,7 @@ class w2p_Output_ListTable extends w2p_Output_HTMLHelper
         $row = '<tr>';
         $row .= $this->_buildCells($this->_before);
         foreach ($this->_fieldKeys as $column) {
-            $row .= $this->createCell($column, $rowData[$column], $customLookups);
+            $row .= $this->createCell($column, $rowData[$column] ?? '', $customLookups);
         }
         $row .= $this->_buildCells($this->_after);
         $row .= '</tr>';
@@ -158,8 +161,9 @@ class w2p_Output_ListTable extends w2p_Output_HTMLHelper
                     $contents .= '</td>';
                     break;
                 case 'pin':
-                    $image = ($this->tableRowData['task_pinned']) ? 'pin.gif' : 'unpin.gif';
-                    $pin  = ($this->tableRowData['task_pinned']) ? -1 : 1;
+                    $pinned = !empty($this->tableRowData['task_pinned']);
+                    $image = $pinned ? 'pin.gif' : 'unpin.gif';
+                    $pin  = $pinned ? -1 : 1;
                     $pieces = explode('_', $value);
                     $module    = w2p_pluralize($pieces[0]);
                     $contents  = '<td class="_'.$type.'">';
