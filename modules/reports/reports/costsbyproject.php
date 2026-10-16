@@ -88,7 +88,7 @@ $companies = arrayMerge(array('0' => 'All Companies'), $companies);
     <?php
     //TODO: rotate the headers by 90 degrees?
     $activeOnly = ($active_projects) ? true : false;
-    $projectList = CCompany::getProjects($AppUI, $company_id, $activeOnly);
+    $projectList = $company->projects($AppUI, $company_id, $activeOnly);
     $bcode = new CSystem_Bcode();
     $project = new CProject();
 
@@ -132,7 +132,7 @@ $companies = arrayMerge(array('0' => 'All Companies'), $companies);
                     <?php
                         $totalBudget = 0;
                         foreach ($billingCategory as $id => $category) {
-                            $totalBudget += $project->budget[$id]['budget_amount'];
+                            $totalBudget += $project->budget[$id]['budget_amount'] ?? 0;
                         }
 
                         $targetBudget = $w2Pconfig['currency_symbol'].(int) ($totalBudget*$factor);

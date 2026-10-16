@@ -97,11 +97,13 @@ $companies = arrayMerge(array('0' => 'All Companies'), $companies);
     //TODO: rotate the headers by 90 degrees?
     $activeOnly = ($active_projects) ? true : false;
     $symbol = $w2Pconfig['currency_symbol'];
-    $projectList = CCompany::getProjects($AppUI, $company_id, $activeOnly);
+    $projectList = $company->projects($AppUI, $company_id, $activeOnly);
     $bcode = new CSystem_Bcode();
     $project = new CProject();
     $totalBudget = array();
-    $totalConsumed = array();
+    $totalConsumed = array('otherCosts' => 0);
+    $sumBudget = 0;
+    $sumConsumed = 0;
 
     if (count($projectList)) {
         foreach ($projectList as $projectItem) {
@@ -134,15 +136,15 @@ $companies = arrayMerge(array('0' => 'All Companies'), $companies);
                 <?php
                     $projectBudget = 0;
                     foreach ($billingCategory as $id => $category) {
-                        $budget = ($project->budget[$id]['budget_amount']) ? $project->budget[$id]['budget_amount'] : 0;
+                        $budget = $project->budget[$id]['budget_amount'] ?? 0;
                         $consumed = (isset($costs[$id])) ? $costs[$id] : 0;
 
                         echo '<td align="center">'.$symbol.round($budget * $factor, 2).'</td>';
                         echo '<td align="center">'.$symbol.$consumed.'</td>';
 
                         $projectBudget += $budget;
-                        $totalBudget[$id] += $budget * $factor;
-                        $totalConsumed[$id] += $consumed;
+                        $totalBudget[$id] = ($totalBudget[$id] ?? 0) + $budget * $factor;
+                        $totalConsumed[$id] = ($totalConsumed[$id] ?? 0) + $consumed;
                     }
                     $consumed = (isset($costs['otherCosts'])) ? $costs['otherCosts'] : 0;
                     $totalConsumed['otherCosts'] += $consumed;

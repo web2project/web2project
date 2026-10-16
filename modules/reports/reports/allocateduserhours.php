@@ -15,6 +15,9 @@ $log_start_date = w2PgetParam($_POST, 'log_start_date', 0);
 $log_end_date = w2PgetParam($_POST, 'log_end_date', 0);
 $use_assigned_percentage = w2PgetParam($_POST, 'use_assigned_percentage', 0);
 $user_id = w2PgetParam($_POST, 'user_id', $AppUI->user_id);
+// carried through the form; both were echoed without ever being set
+$report_category = w2PgetParam($_POST, 'report_category', '');
+$log_all_projects = (int) w2PgetParam($_POST, 'log_all_projects', 0);
 
 // create Date objects from the datetime fields
 $start_date = intval($log_start_date) ? new w2p_Utilities_Date($log_start_date) : new w2p_Utilities_Date(date('Y-m-01'));

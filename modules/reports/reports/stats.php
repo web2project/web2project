@@ -99,10 +99,14 @@ foreach ($all_tasks as $task) {
 			$tasks['hours'] += $users[$user]['all'][$task['task_id']]['work'];
 		}
 	} else {
-        $users[0]['completed'] = 0;
-        $users[0]['overdue'] = 0;
-        $users[0]['pending'] = 0;
-        $users[0]['inprogress'] = 0;
+        // Unassigned tasks are counted on one "No Assignee" row. Its counters
+        // were reset for every unassigned task (so they never went past 1)
+        // and it had no name, task list or hours.
+        if (!isset($users[0])) {
+            $users[0] = array('name' => '', 'all' => array(), 'hours' => 0,
+                'completed' => 0, 'overdue' => 0, 'pending' => 0, 'inprogress' => 0);
+        }
+        $users[0]['all'][$task['task_id']] = $task;
         if ($task['task_percent_complete'] == 100) {
             $users[0]['completed']++;
         } else {
@@ -116,8 +120,7 @@ foreach ($all_tasks as $task) {
             }
         }
 
-        $users[0]['hours'] += $users[0]['all'][$task['task_id']]['work'];
-        $tasks['hours'] += $users[0]['all'][$task['task_id']]['work'];
+        // no assignee, so no assigned hours
     }
 }
 

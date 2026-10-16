@@ -22,6 +22,8 @@ $log_userfilter = w2PgetParam($_GET, 'log_userfilter', '0');
 
 $log_start_date = w2PgetParam($_GET, 'log_start_date', 0);
 $log_end_date = w2PgetParam($_GET, 'log_end_date', 0);
+// the form carries it and the query filters on it, but it was never read
+$company_id = (int) w2PgetParam($_REQUEST, 'company_id', 0);
 
 // create Date objects from the datetime fields
 $start_date = intval($log_start_date) ? new w2p_Utilities_Date($log_start_date) : new w2p_Utilities_Date();
