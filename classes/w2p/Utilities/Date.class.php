@@ -570,7 +570,9 @@ class w2p_Utilities_Date extends Date {
         $newTZ = new DateTimeZone($tz);
 
         $tzId = $this->tz['id'] ?? date_default_timezone_get();
-        $dt = new DateTime( $this->format('%D %H%M%S'), new DateTimeZone($tzId) );
+        // '%D %H%M%S' (m/d/y and a bare HHMMSS) does not round-trip through
+        // DateTime: dates moved by hours or fell back to today
+        $dt = new DateTime($this->format('%Y-%m-%d %H:%M:%S'), new DateTimeZone($tzId));
         $dt->setTimezone($newTZ);
         $this->setDate($dt->format('Y-m-d H:i:s'));
         $this->setTZ($tz);
