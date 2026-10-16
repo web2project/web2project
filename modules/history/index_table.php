@@ -5,13 +5,18 @@ if (!defined('W2P_BASE_DIR')) {
 }
 // @todo    convert to template
 
-global $AppUI, $filter_param, $m;
+global $AppUI, $filter_param, $m, $project_id, $tab;
 
+// On a project's History tab, show only that project's own changes.
+$project_tab = ('projects' == $m && (int) $project_id > 0);
 $filter_param = ('projects' == $m) ? 'projects' : $filter_param;
 $page = (int) w2PgetParam($_GET, 'page', 1);
 
 $history = new CHistory();
 $where = (-1 == $filter_param) ? '' : "history_table = '".$filter_param."'";
+if ($project_tab) {
+    $where .= ' AND history_item = ' . (int) $project_id;
+}
 $histories = $history->loadAll('history_datetime', $where);
 $items = array_values($histories);
 
@@ -51,8 +56,13 @@ $xpg_min = $xpg_pagesize * ($page - 1); // This is where we start our record set
 $xpg_totalrecs = count($items);
 $items = array_slice($items, $xpg_min, $xpg_pagesize);
 
-$m .= '&filter='.$filter_param; // This is a hack to get the pagination to work as expected
-$pageNav = buildPaginationNav($AppUI, $m, 0, $xpg_totalrecs, $xpg_pagesize, $page);
+if ($project_tab) {
+    // keep the page links on this project's History tab
+    $pageNav = buildPaginationNav($AppUI, $m . '&amp;a=view&amp;project_id=' . (int) $project_id, (int) $tab, $xpg_totalrecs, $xpg_pagesize, $page);
+} else {
+    $m .= '&filter='.$filter_param; // This is a hack to get the pagination to work as expected
+    $pageNav = buildPaginationNav($AppUI, $m, 0, $xpg_totalrecs, $xpg_pagesize, $page);
+}
 
 $listTable = new w2p_Output_ListTable($AppUI);
 $listTable->df .= ' ' . $AppUI->getPref('TIMEFORMAT');
