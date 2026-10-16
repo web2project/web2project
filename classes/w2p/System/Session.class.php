@@ -69,6 +69,8 @@ class w2p_System_Session
             $q->addTable('sessions');
             $q->addWhere('session_id = \'' . $id . '\'');
             $q->addUpdate('session_data', $data);
+            // idle time and the idle expiry in read()/gc() are measured from here
+            $q->addUpdate('session_updated', $q->dbfnNowWithTZ());
             if (isset($AppUI)) {
                 $q->addUpdate('session_user', (int) $AppUI->last_insert_id);
             }
