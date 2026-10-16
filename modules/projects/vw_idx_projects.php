@@ -35,6 +35,19 @@ $orderby = ($orderby == 'project_company') ? 'company_name' : $orderby;
 $projects = $project->loadAll($orderby . ' ' . $orderdir, $filter);
 $projects = array_values($projects);
 
+// The "LP" column flags projects with a task log marked as a problem.
+// loadAll() only returns project columns, so without this the column was
+// always "-" (and logged an undefined key per row).
+$q = new w2p_Database_Query();
+$q->addTable('tasks', 't');
+$q->addQuery('DISTINCT t.task_project');
+$q->addJoin('task_log', 'tl', 'tl.task_log_task = t.task_id', 'inner');
+$q->addWhere('tl.task_log_problem = 1');
+$problem_projects = array_flip($q->loadColumn());
+foreach ($projects as $index => $project_row) {
+    $projects[$index]['task_log_problem'] = isset($problem_projects[$project_row['project_id']]) ? 1 : 0;
+}
+
 $fieldList = array();
 $fieldNames = array();
 
