@@ -5,7 +5,7 @@ if (!defined('W2P_BASE_DIR')) {
 }
 // @todo    convert to template
 
-global $AppUI, $task_id, $sf, $df, $canEdit, $m;
+global $AppUI, $task_id, $sf, $df, $canEdit, $m, $tab;
 
 $perms = &$AppUI->acl();
 if (!canView('task_log')) {
