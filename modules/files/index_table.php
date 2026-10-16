@@ -8,7 +8,7 @@ if (!defined('W2P_BASE_DIR')) {
 // modified later by Pablo Roca (proca) in 18 August 2003 - added page support
 // Files modules: index page re-usable sub-table
 global $AppUI, $company_id, $project_id, $task_id, $tab;
-global $currentTabId, $m, $showProject, $xpg_min, $xpg_pagesize, $page;
+global $currentTabId, $m, $showProject, $xpg_min, $xpg_pagesize, $page, $owner_id;
 
 // Only the Files module's own tabs are categories; elsewhere $tab is the
 // host view's tab (Files is tab 4 on a company), so show every category.
@@ -18,13 +18,15 @@ if (!isset($project_id)) {
 	$project_id = w2PgetParam($_REQUEST, 'project_id', 0);
 }
 
-if ($project_id > 0 || $task_id > 0) {
-  $category_id = -1;
-}
+// (Outside the Files module the category is already -1. Inside it, the
+// category tab now still applies when a project is selected; it used to
+// be switched off, so the project and category filters could not combine.)
 
 $file = new CFile();
+// the owner filter only exists on the Files module's own page
 $items = $file->list(['company' => ($m == 'companies') ? (int) $company_id : 0,
-    'project' => $project_id, 'task' => $task_id, 'category' => $category_id]);
+    'project' => $project_id, 'task' => $task_id, 'category' => $category_id,
+    'owner' => ($m == 'files') ? (int) $owner_id : 0]);
 
 $module = new w2p_System_Module();
 $fields = $module->loadSettings('files', 'index_list');

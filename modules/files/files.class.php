@@ -175,7 +175,7 @@ class CFile extends w2p_Core_BaseObject {
         return $q->loadList();
     }
 
-    public static function getFileList($AppUI = null, $notUsed = 0, $project_id = 0, $task_id = 0, $category_id = 0) {
+    public static function getFileList($AppUI = null, $notUsed = 0, $project_id = 0, $task_id = 0, $category_id = 0, $owner_id = 0) {
         $q = new w2p_Database_Query();
         $q->addQuery('f.*');
         $q->addTable('files', 'f');
@@ -199,6 +199,9 @@ class CFile extends w2p_Core_BaseObject {
         }
         if ($category_id >= 0) {
             $q->addWhere('file_category = ' . (int) $category_id);
+        }
+        if ((int) $owner_id > 0) {
+            $q->addWhere('file_owner = ' . (int) $owner_id);
         }
 
         return $q->loadList();
