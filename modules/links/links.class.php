@@ -1,6 +1,6 @@
 <?php
 /**
- * @package     web2project\modules\misc
+ * @package web2project\modules\misc
  */
 
 class CLink extends w2p_Core_BaseObject

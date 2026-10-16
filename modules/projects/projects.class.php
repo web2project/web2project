@@ -1,8 +1,7 @@
 <?php
 /**
- *
- * @package     web2project\modules\core
- * @todo        refactor static methods
+ * @package web2project\modules\core
+ * @todo    refactor static methods
  */
 
 class CProject extends w2p_Core_BaseObject
@@ -82,10 +81,10 @@ class CProject extends w2p_Core_BaseObject
      * 	Returns an array, keyed by the key field, of all elements that meet
      * 	the where clause provided. Ordered by $order key.
      *
-     * @param null $order
-     * @param null $where
+     * @param string|null $order
+     * @param string|null $where
      *
-     * @return Associative
+     * @return array<mixed>
      */
     public function loadAll($order = null, $where = null)
     {
@@ -98,8 +97,12 @@ class CProject extends w2p_Core_BaseObject
         if ($where) {
             $q->addWhere($where);
         }
-        $where = $this->getAllowedSQL($this->_AppUI->user_id, 'projects.project_id');
-        $q->addWhere($where);
+        // setAllowedSQL() joins project_departments for the department rule.
+        // getAllowedSQL() only returned the conditions, including one on
+        // dept_id that this query never joined, so for any user without full
+        // department rights the query failed and the project list was empty.
+        $q->addQuery('projects.*, c.*');
+        $q = $this->setAllowedSQL($this->_AppUI->user_id, $q, 'projects.project_id', 'projects');
         $q->addJoin('companies', 'c', 'c.company_id = project_company');
 
         return $q->loadHashList($this->_tbl_key);
@@ -160,11 +163,31 @@ class CProject extends w2p_Core_BaseObject
         $q->addWhere('project_id =' . $this->_old_key);
         $q->exec();
 
+        // Remove the task that stood for this project inside its parent
+        // project (the statement used to be built but never executed), and
+        // refresh the parent project's cached task count and last date.
+        $q->clear();
+        $q->addTable('tasks');
+        $q->addQuery('DISTINCT task_project');
+        $q->addWhere('task_represents_project = ' . (int) $this->_old_key);
+        $parent_projects = $q->loadColumn();
+
         $q->clear();
         $q->setDelete('tasks');
-        $q->addWhere('task_represents_project =' . $this->_old_key);
+        $q->addWhere('task_represents_project = ' . (int) $this->_old_key);
+        $q->exec();
 
-        parent::hook_preDelete();
+        $task = new CTask();
+        $task->overrideDatabase($this->_query);
+        foreach ($parent_projects as $parent_project_id) {
+            $last_task_data = (array) $task->getLastTaskData($parent_project_id) + array('task_id' => 0, 'last_date' => null);
+            CProject::updateTaskCache($parent_project_id, $last_task_data['task_id'],
+                $last_task_data['last_date'], $task->getTaskCount($parent_project_id));
+        }
+
+        // hook_postDelete, not hook_preDelete: the base class removes the
+        // project's custom field values and records the delete in history.
+        parent::hook_postDelete();
     }
 
     /**
@@ -259,8 +282,8 @@ class CProject extends w2p_Core_BaseObject
      * 	Overload of the w2PObject::getDeniedRecords
      * 	to ensure that the projects owned by denied companies are denied.
      *
-     * 	@author	handco <handco@sourceforge.net>
-     * 	@see	w2PObject::getAllowedRecords
+     * 	@author handco <handco@sourceforge.net>
+     * 	@see    w2PObject::getAllowedRecords
      */
     public function getDeniedRecords($uid)
     {
@@ -313,27 +336,11 @@ class CProject extends w2p_Core_BaseObject
     }
 
     /**
-     * @deprecated
-     */
-    public function getAllowedProjectsInRows($userId)
-    {
-        trigger_error("CProject->getAllowedProjectsInRows() has been deprecated in v3.0 and will be removed in v4.0", E_USER_NOTICE);
-
-        $q = $this->_getQuery();
-        $q->clear();
-        $q->addQuery('pr.project_id, project_status, project_name, project_description, project_short_name');
-        $q->addTable('projects', 'pr');
-        $q->addOrder('project_short_name');
-        $q = $this->setAllowedSQL($userId, $q, null, 'pr');
-        $allowedProjectRows = $q->exec();
-        $q->clear();
-
-        return $allowedProjectRows;
-    }
-
-    /** Retrieve tasks with latest task_end_dates within given project
-     * @param int Project_id
-     * @param int SQL-limit to limit the number of returned tasks
+     * Retrieve tasks with latest task_end_dates within given project
+     *
+     * @param int $project_id Project_id
+     * @param int $limit SQL-limit to limit the number of returned tasks
+     *
      * @return array List of criticalTasks
      */
     public function getCriticalTasks($project_id = 0, $limit = 1)
@@ -633,20 +640,6 @@ class CProject extends w2p_Core_BaseObject
         }
     }
 
-    /**
-     * @deprecated
-     */
-    public static function getDepartments($notUsed = null, $projectId)
-    {
-        trigger_error("CProject::getDepartments has been deprecated in v3.0 and will be removed by v4.0. Please use CProject->getDepartmentList() instead.", E_USER_NOTICE);
-
-        $project = new CProject();
-        //TODO: We need to convert this from static to use ->overrideDatabase() for testing.
-        $project->project_id = $projectId;
-
-        return $project->getDepartmentList();
-    }
-
     public function getForumList()
     {
 		if ($this->_AppUI->isActiveModule('forums') && canView('forums')) {
@@ -728,21 +721,6 @@ class CProject extends w2p_Core_BaseObject
         return $q->loadHashList();
     }
 
-    public static function updateStatus($AppUI = null, $projectId, $statusId)
-    {
-        trigger_error("CProject::updateStatus has been deprecated in v2.3 and will be removed by v4.0.", E_USER_NOTICE);
-
-        global $AppUI;
-
-        $perms = $AppUI->acl();
-        if ($perms->checkModuleItem('projects', 'edit', $projectId) && $projectId > 0 && $statusId >= 0) {
-            $project = new CProject();
-            $project->load($projectId);
-            $project->project_status = $statusId;
-            $project->store();
-        }
-    }
-
     public static function updateTaskCache($project_id, $task_id, $project_actual_end_date, $project_task_count)
     {
         $project_id = (int) $project_id;
@@ -780,8 +758,9 @@ class CProject extends w2p_Core_BaseObject
      * Note that this returns the *count* of projects.  If this is zero, it is
      *   evaluated as false, otherwise it is considered true.
      *
-     * @param type $projectId
-     * @return type
+     * @param int $projectId
+     *
+     * @return mixed
      */
     public function hasChildProjects($projectId = 0)
     {
@@ -854,6 +833,7 @@ class CProject extends w2p_Core_BaseObject
         $q->addWhere('project_id = ' . $project_id);
         $q->exec();
 
+        /** @var w2p_Core_CAppUI $AppUI */
         global $AppUI;
         CTask::storeTokenTask($AppUI, $project_id);
     }
@@ -949,7 +929,6 @@ class CProject extends w2p_Core_BaseObject
      */
     public function getStructuredProjects($active_only = false)
     {
-        //global $st_projects_arr;
         $st_projects = array(0 => '');
 
         $q = $this->getQuery();
@@ -1032,13 +1011,18 @@ class CProject extends w2p_Core_BaseObject
     {
         $q = $this->_getQuery();
         $q->addTable('projects', 'pr');
-        $q->addQuery('project_status, count(*) as count');
+        // DISTINCT: setAllowedSQL() joins project_departments, which repeats a
+        // project that belongs to several departments.
+        $q->addQuery('project_status, count(DISTINCT pr.project_id) as count');
         $q->addWhere('project_active = 1');
         if ($company_id > 0) {
-            $q->addWhere('project_company = ' . $company_id);
+            $q->addWhere('project_company = ' . (int) $company_id);
         }
         $q->addGroup('project_status');
-        $q = $this->setAllowedSQL($this->_AppUI->user_id, $q, 'project_company');
+        // The index is the project id: passing 'project_company' applied the
+        // user's project allow/deny lists to company ids, so denied projects
+        // were still counted on the status tabs.
+        $q = $this->setAllowedSQL($this->_AppUI->user_id, $q, 'pr.project_id', 'pr');
 
         $statuses = $q->loadList(-1, 'project_status');
         foreach ($statuses as $key => $array) {

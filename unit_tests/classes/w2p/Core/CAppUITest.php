@@ -2,18 +2,17 @@
 /**
  * Class for testing AppUI functionality
  *
- *
  * PHP version 5
  *
  * LICENSE: This source file is subject to Clear BSD License. Please see the
  *   LICENSE file in root of site for further details
  *
- * @author      D. Keith Casey, Jr.<caseydk@users.sourceforge.net>
- * @category    w2p_Core_CAppUI
- * @package     web2project
- * @subpackage  unit_tests
- * @license     Clear BSD
- * @link        http://www.web2project.net
+ * @author     D. Keith Casey, Jr.<caseydk@users.sourceforge.net>
+ * @category   w2p_Core_CAppUI
+ * @package    web2project
+ * @subpackage unit_tests
+ * @license    Clear BSD
+ * @link       http://www.web2project.net
  */
 
 class w2p_Core_CAppUITest extends CommonSetup
@@ -201,39 +200,6 @@ class w2p_Core_CAppUITest extends CommonSetup
     }
 
     /**
-     * Tests saving the place(url)
-     *
-     * @expectedException PHPUnit_Framework_Error
-     */
-    public function testSavePlace()
-    {
-        $AppUI = $this->_AppUI;
-
-        $_SERVER['QUERY_STRING'] = 'testUrl';
-        $AppUI->savePlace();
-        $this->assertEquals('testUrl', $AppUI->getPlace());
-
-        $AppUI->savePlace('?m=projects&amp;a=view&amp;project_id=1');
-        $this->assertEquals('?m=projects&amp;a=view&amp;project_id=1', $AppUI->getPlace());
-    }
-
-    /**
-     * Tests reseting the place(url)
-     *
-     * @expectedException PHPUnit_Framework_Error
-     */
-    public function testResetPlace()
-    {
-        $AppUI = $this->_AppUI;
-
-        $_SERVER['QUERY_STRING'] = 'testUrl';
-        $AppUI->savePlace();
-        $this->assertEquals('testUrl', $AppUI->getPlace());
-        $AppUI->resetPlace();
-        $this->assertEquals('', $AppUI->getPlace());
-    }
-
-    /**
      * Tests restoring an object from the global scope
      */
     public function testHoldRestoreObject()
@@ -275,78 +241,6 @@ class w2p_Core_CAppUITest extends CommonSetup
 
       $AppUI->setMsg($msg, 0, false);
       $this->AssertEquals($msg, $AppUI->msg);
-    }
-
-    /**
-     * Tests getting a system class
-     *
-     * @expectedException PHPUnit_Framework_Error
-     */
-    public function testGetSystemClassValid()
-    {
-        $AppUI = $this->_AppUI;
-
-        $this->assertEquals(W2P_BASE_DIR . '/classes/cdate.class.php', $AppUI->getSystemClass('cdate'));
-    }
-
-    /**
-     * Tests getting a system class when no class name is passed
-     *
-     * @expectedException PHPUnit_Framework_Error
-     */
-    public function testGetSystemClassNoName()
-    {
-        $AppUI = $this->_AppUI;
-
-        $this->assertNull($AppUI->getSystemClass());
-    }
-
-    /**
-     * Test getting a library class
-     *
-     * @expectedException PHPUnit_Framework_Error
-     */
-    public function testGetLibraryClassValid()
-    {
-        $AppUI = $this->_AppUI;
-
-        $this->assertEquals(W2P_BASE_DIR . '/lib/PEAR/Date.php', $AppUI->getLibraryClass('PEAR/Date'));
-    }
-
-    /**
-     * Tests getting a library class when no library name is passed
-     *
-     * @expectedException PHPUnit_Framework_Error
-     */
-    public function testGetLibraryClassNoName()
-    {
-        $AppUI = $this->_AppUI;
-
-        $this->assertNull($AppUI->getLibraryClass());
-    }
-
-    /**
-     * Tests getting a module class
-     *
-     * @expectedException PHPUnit_Framework_Error
-     */
-    public function testGetModuleClassValid()
-    {
-        $AppUI = $this->_AppUI;
-
-        $this->assertEquals(W2P_BASE_DIR . '/modules/tasks/tasks.class.php', $AppUI->getModuleClass('tasks'));
-    }
-
-    /**
-     * Tests getting a module class when no name is passed
-     *
-     * @expectedException PHPUnit_Framework_Error
-     */
-    public function testGetModuleClassNoName()
-    {
-        $AppUI = $this->_AppUI;
-
-        $this->assertNull($AppUI->getModuleClass());
     }
 
     /**
@@ -525,29 +419,41 @@ class w2p_Core_CAppUITest extends CommonSetup
     }
 
     /**
-     * Tests checking a users style selection when it is valid
+     * The interface style is fixed, whatever the stored preference says
      */
-    public function testCheckStyleValidStyle()
+    public function testSetStyleAlwaysUsesBootstrap()
     {
         $AppUI = $this->_AppUI;
 
-        $AppUI->setPref('UISTYLE', 'wps-redmond');
+        $AppUI->setPref('UISTYLE', 'web2project');
         $AppUI->setStyle();
 
-        $this->assertEquals('wps-redmond', $AppUI->getPref('UISTYLE'));
+        $this->assertEquals('bootstrap', $AppUI->getPref('UISTYLE'));
     }
 
     /**
-     * Tests checking a users style selection when it is invalid
+     * Tests that an unknown style preference is replaced too
      */
-    public function testCheckStyleInvalidStyle()
+    public function testSetStyleReplacesUnknownStyle()
     {
         $AppUI = $this->_AppUI;
 
         $AppUI->setPref('UISTYLE', 'trevors-style');
         $AppUI->setStyle();
 
-        $this->assertEquals('web2project', $AppUI->getPref('UISTYLE'));
+        $this->assertEquals('bootstrap', $AppUI->getPref('UISTYLE'));
+    }
+
+    /**
+     * Tests that the theme object is always the Bootstrap theme
+     */
+    public function testGetThemeReturnsBootstrapTheme()
+    {
+        $AppUI = $this->_AppUI;
+
+        $AppUI->setPref('UISTYLE', 'web2project');
+
+        $this->assertInstanceOf('style_bootstrap', $AppUI->getTheme());
     }
 
     /**

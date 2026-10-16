@@ -5,7 +5,54 @@ if (!defined('W2P_BASE_DIR')) {
 
 class style_web2project extends w2p_Theme_Base
 {
+    public function styleRenderBoxTop()
+    {
+        global $currentInfoTabId;
+        if ($currentInfoTabId) {
+            return '';
+        }
 
+        $ret = '<table width="100%" cellspacing="0" cellpadding="0" border="0">';
+        $ret .= '<tbody>';
+        $ret .= '<tr>';
+        $ret .= '    <td valign="bottom" height="17" style="background:url(./style/' . $this->_uistyle . '/images/box_left_corner.jpg);" align="left">';
+        $ret .= '        <img width="19" height="17" alt="" src="./style/' . $this->_uistyle . '/images/box_left_corner.jpg"/>';
+        $ret .= '    </td>';
+        $ret .= '    <td valign="bottom" width="100%" style="background:url(./style/' . $this->_uistyle . '/images/box_top.jpg);" align="left">';
+        $ret .= '        <img width="19" height="17" alt="" src="./style/' . $this->_uistyle . '/images/box_top.jpg"/>';
+        $ret .= '    </td>';
+        $ret .= '    <td valign="bottom" style="background:url(./style/' . $this->_uistyle . '/images/box_right_corner.jpg);" align="right">';
+        $ret .= '        <img width="19" height="17" alt="" src="./style/' . $this->_uistyle . '/images/box_right_corner.jpg"/>';
+        $ret .= '    </td>';
+        $ret .= '</tr>';
+        $ret .= '</tbody>';
+        $ret .= '</table>';
+        return $ret;
+    }
+
+    public function styleRenderBoxBottom($tab = 0)
+    {
+        if (-1 == $tab) {
+            return '';
+        }
+
+        $ret = '<table width="100%" cellspacing="0" cellpadding="0" border="0">';
+        $ret .= '<tbody>';
+        $ret .= '<tr>';
+        $ret .= '    <td valign="top" height="35" style="background:url(./style/' . $this->_uistyle . '/images/shadow_bttm_left_corner.jpg) no-repeat;" align="left">';
+        $ret .= '        <img width="19" height="35" alt="" src="./style/' . $this->_uistyle . '/images/shadow_bttm_left_corner.jpg"/>';
+        $ret .= '    </td>';
+        $ret .= '    <td valign="top" width="100%" style="background: repeat-x url(./style/' . $this->_uistyle . '/images/shadow_bottom.jpg);" align="left">';
+        $ret .= '        <img width="19" height="35" alt="" src="./style/' . $this->_uistyle . '/images/shadow_bottom.jpg"/>';
+        $ret .= '    </td>';
+        $ret .= '    <td valign="top" style="background:url(./style/' . $this->_uistyle . '/images/shadow_bttm_right_corner.jpg) no-repeat;" align="right">';
+        $ret .= '        <img width="19" height="35" alt="" src="./style/' . $this->_uistyle . '/images/shadow_bttm_right_corner.jpg"/>';
+        $ret .= '    </td>';
+        $ret .= '</tr>';
+        $ret .= '</tbody>';
+        $ret .= '</table>';
+        return $ret;
+    }
 }
 
 /**
@@ -24,15 +71,6 @@ class CTabBox extends w2p_Theme_TabBox {
         // tabbed / flat view options
         if ($this->_AppUI->getPref('TABVIEW') == 0) {
             if ($opt_flat) {
-//                $s .= '<table border="0" cellpadding="2" cellspacing="0" width="100%">';
-//                $s .= '<tr>';
-//                $s .= '<td width="54" nowrap="nowrap">';
-//                $s .= '<a class="button" href="' . $this->baseHRef . 'tab=0"><div>' . $this->_AppUI->_('tabbed') . '</div></a>';
-//                $s .= '</td>';
-//                $s .= '<td nowrap="nowrap">';
-//                $s .= '<a class="button" href="' . $this->baseHRef . 'tab=-1"><div>' . $this->_AppUI->_('flat') . '</div></a>';
-//                $s .= '</td>' . $extra . '</tr></table>';
-//                echo $s;
             }
         } else {
             if ($extra) {
@@ -110,9 +148,7 @@ class CTabBox extends w2p_Theme_TabBox {
                     require $this->baseInc . $v[0] . '.php';
                     echo '</div>';
                     echo '<script language="javascript" type="text/javascript">
-                        <!--
                         show_tab(' . $this->active . ');
-                        //-->
                         </script>';
                 }
             }

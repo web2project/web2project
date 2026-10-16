@@ -1,4 +1,5 @@
 <?php
+/** @var w2p_Core_CAppUI $AppUI */
 if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
@@ -34,7 +35,6 @@ $user_list = array(0 => '(' . $AppUI->_('all') . ')') + CProject::getOwners();
 
 // setup the title block
 $titleBlock = new w2p_Theme_TitleBlock('Projects', 'icon.png', $m);
-//$titleBlock->addSearchCell($search_string);
 $titleBlock->addFilterCell('Type', 'project_type', $project_types, $project_type);
 $titleBlock->addFilterCell('Company', 'project_company', $allowedCompanies, $company_id);
 $titleBlock->addFilterCell('Owner', 'project_owner', $user_list, $owner);

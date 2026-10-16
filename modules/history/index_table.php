@@ -1,4 +1,5 @@
 <?php
+/** @var w2p_Core_CAppUI $AppUI */
 if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
@@ -12,13 +13,20 @@ $page = (int) w2PgetParam($_GET, 'page', 1);
 $history = new CHistory();
 $where = (-1 == $filter_param) ? '' : "history_table = '".$filter_param."'";
 $histories = $history->loadAll('history_datetime', $where);
-
 $items = array_values($histories);
 
 $display = array();
 $perms = $AppUI->acl();
+
+$module_translate = ['modules' => 'system', 'custom_fields_struct' => 'system',
+    'budgets' => 'system', 'billingcode' => 'system',
+    'forum_messages' => 'forums', 'login' => 'admin'];
+
 foreach ($items as $item) {
-    if (!$perms->checkModuleItem($item['history_table'], 'view', $item['history_item'])) {
+    $_module = $item['history_table'];
+    $_module = isset($module_translate[$_module]) ? $module_translate[$_module] : $_module;
+
+    if (!$perms->checkModuleItem($_module, 'view', $item['history_item'])) {
         continue;
     }
     // @note this next line is a little hack so our templating can resolve which history_user is which user
@@ -31,8 +39,8 @@ $module = new w2p_System_Module();
 $fields = $module->loadSettings('history', 'index_list');
 
 if (0 == count($fields)) {
-    $fieldList = array('history_datetime', 'history_description', 'history_user');
-    $fieldNames = array('Date', 'Description', 'Owner');
+    $fieldList = array('history_datetime', 'history_table', 'history_action', 'history_description', 'history_user');
+    $fieldNames = array('Date', 'Module', 'Action', 'Item', 'Actor');
 
     $module->storeSettings('history', 'index_list', $fieldList, $fieldNames);
     $fields = array_combine($fieldList, $fieldNames);
@@ -50,7 +58,7 @@ $listTable = new w2p_Output_ListTable($AppUI);
 $listTable->df .= ' ' . $AppUI->getPref('TIMEFORMAT');
 
 echo $pageNav;
-echo $listTable->startTable('tbl list history');
+echo $listTable->startTable('history-list');
 echo $listTable->buildHeader($fields);
 echo $listTable->buildRows($items);
 echo $listTable->endTable();

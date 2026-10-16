@@ -1,4 +1,5 @@
 <?php
+/** @var w2p_Core_CAppUI $AppUI */
 if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
@@ -72,8 +73,6 @@ function addTasks() {
 <form name="editFrm" action="?m=<?php echo $m; ?>" method="post" accept-charset="utf-8">
 	<input type="hidden" name="dosql" value="do_addtasks_aed" />
 	<input type="hidden" name="project" value="<?php echo $project_id; ?>" />
-	<input type="hidden" name="project_name" value="<?php echo $obj->project_name; ?>" />
-	<input type="hidden" name="redirect" value="<?php echo $redirect; ?>" />
 	<input type="hidden" name="nrcomponents" value="0" />
 	<input type="hidden" name="pd_option_view_project" value="<?php echo (isset($view_options[0]['pd_option_view_project']) ? $view_options[0]['pd_option_view_project'] : 1); ?>" />
 	<input type="hidden" name="pd_option_view_gantt" value="<?php echo (isset($view_options[0]['pd_option_view_gantt']) ? $view_options[0]['pd_option_view_gantt'] : 1); ?>" />
@@ -81,11 +80,8 @@ function addTasks() {
 	<input type="hidden" name="pd_option_view_actions" value="<?php echo (isset($view_options[0]['pd_option_view_actions']) ? $view_options[0]['pd_option_view_actions'] : 1); ?>" />
 	<input type="hidden" name="pd_option_view_addtasks" value="<?php echo (isset($view_options[0]['pd_option_view_addtasks']) ? $view_options[0]['pd_option_view_addtasks'] : 1); ?>" />
 	<input type="hidden" name="pd_option_view_files" value="<?php echo (isset($view_options[0]['pd_option_view_files']) ? $view_options[0]['pd_option_view_files'] : 1); ?>" />
-    <table cellspacing="1" cellpadding="2" border="0" width="100%" class="tbl" >
-        <tr>
-            <td width="40%" valign="top" align="">
-                <table width="100%">
-                    <tbody valign="top" id="tcomponents">
+                <table class="tbl">
+                    <tbody id="tcomponents">
                         <tr>
                             <th width="5">
                                 <?php echo w2PtoolTip('add tasks', 'click here to add a new task to this project'); ?><a href="javascript: void(0);" onclick="addComponent()">
@@ -119,19 +115,7 @@ function addTasks() {
                         </tr>
                     </tbody>
                 </table>
-                <table width="100%">
-                    <tr>
-                        <td align="left" width="20">
-
-                        </td>
-                    </tr>
-                    <tr>
-                        <td colspan="5" valign="bottom" align="right">
-                            <input type="button" class="button btn btn-primary btn-small" value="<?php echo $AppUI->_('add'); ?>" onclick="addTasks()" />
-                        </td>
-                    </tr>
-                </table>
-            </td>
-        </tr>
-    </table>
+                <div class="text-end">
+                    <input type="button" class="button btn btn-primary btn-sm" value="<?php echo $AppUI->_('add'); ?>" onclick="addTasks()" />
+                </div>
 </form>

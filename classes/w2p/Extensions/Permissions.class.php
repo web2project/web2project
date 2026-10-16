@@ -11,7 +11,7 @@
  * just forward ones (i.e. looking up who is allowed to do x, rather
  * than is x allowed to do y).
  *
- * @package     web2project\extensions
+ * @package web2project\extensions
  */
 
 class w2p_Extensions_Permissions extends gacl_api
@@ -156,7 +156,6 @@ class w2p_Extensions_Permissions extends gacl_api
             $id = $this->del_object($id, 'aro', true);
         } else {
             //TODO: There was no permissions object to delete.. is this actuall an error?
-            //dprint(__file__, __line__, 0, 'Failed to remove user permission object');
         }
         $recalc = $this->removePermissions($login);
         if (!$recalc) {
@@ -244,19 +243,17 @@ class w2p_Extensions_Permissions extends gacl_api
         return $id;
     }
 
-    /*
-     * * Deleting all module-associated entries from the phpgacl tables
-     * * such as gacl_aco_maps, gacl_acl and gacl_aro_map
-     * *
-     * * @author     gregorerhardt
-     * * @date        20070927
-     * * @cause        #2140
-     * *
-     * * @access     public
-     * * @param    string    module (directory) name
-     * * @return
+    /**
+     * Deleting all module-associated entries from the phpgacl tables
+     * such as gacl_aco_maps, gacl_acl and gacl_aro_map
+     * (2007-09-27, bug #2140)
+     *
+     * @param string $mod Module (directory) name
+     *
+     * @author gregorerhardt
+     *
+     * @return string|null Error messages, or null on success
      */
-
     public function deleteModuleItems($mod)
     {
         // Declaring the return string
@@ -275,7 +272,7 @@ class w2p_Extensions_Permissions extends gacl_api
             $q->setDelete('gacl_aco_map');
             $q->addWhere('acl_id = ' . $acl);
             if (!$q->exec()) {
-                $res .= is_null($res) ? db_error() : "\n\t" . db_error();
+                $res .= is_null($res) ? (new w2p_Database_Connection($GLOBALS['db']))->error() : "\n\t" . (new w2p_Database_Connection($GLOBALS['db']))->error();
             }
             $q->clear();
 
@@ -283,7 +280,7 @@ class w2p_Extensions_Permissions extends gacl_api
             $q->setDelete('gacl_aro_map');
             $q->addWhere('acl_id = ' . $acl);
             if (!$q->exec()) {
-                $res .= "\n\t" . db_error();
+                $res .= "\n\t" . (new w2p_Database_Connection($GLOBALS['db']))->error();
             }
             $q->clear();
 
@@ -291,7 +288,7 @@ class w2p_Extensions_Permissions extends gacl_api
             $q->setDelete('gacl_acl');
             $q->addWhere('id = ' . $acl);
             if (!$q->exec()) {
-                $res .= "\n\t" . db_error();
+                $res .= "\n\t" . (new w2p_Database_Connection($GLOBALS['db']))->error();
             }
             $q->clear();
         }
@@ -318,7 +315,6 @@ class w2p_Extensions_Permissions extends gacl_api
             return $this->checkModule($module, 'view', $userid);
         } else {
             //this checks if the user is able to login
-            //return $this->checkLogin($userid);
             return $this->acl_check('system', 'login', 'user', $userid);
         }
     }
@@ -328,6 +324,7 @@ class w2p_Extensions_Permissions extends gacl_api
         // Not as pretty as I'd like, but we can do it reasonably well.
         // Check to see if we are allowed to see other users.
         // If not we can only see ourselves.
+        /** @var w2p_Core_CAppUI $AppUI */
         global $AppUI;
         $userlist = array();
 
@@ -510,7 +507,7 @@ class w2p_Extensions_Permissions extends gacl_api
             $q->addWhere('user_id = ' . $user);
             $rq = $q->exec();
             if (!$rq) {
-                dprint(__file__, __line__, 0, "Cannot add role, user $user does not exist!<br>" . db_error());
+                dprint(__file__, __line__, 0, "Cannot add role, user $user does not exist!<br>" . (new w2p_Database_Connection($GLOBALS['db']))->error());
                 $q->clear();
                 return false;
             }
@@ -827,7 +824,6 @@ class w2p_Extensions_Permissions extends gacl_api
 
         $this->debug_text("get_objects(): Section Value: $section_value Object Type: $object_type");
 
-        // $query = 'SELECT id, value, name, order_value, hidden FROM '. $table;
         $q = new w2p_Database_Query;
         $q->addTable($table);
         $q->addQuery('id, value, name, order_value, hidden');
@@ -990,7 +986,8 @@ class w2p_Extensions_Permissions extends gacl_api
      * w2Pacl::removeACLPermissions() Removes the permissions for a given ACL ID
      *
      * @param mixed $acl_id
-     * @return
+     *
+     * @return mixed
      */
     public function removeACLPermissions($acl_id = null)
     {
@@ -1009,7 +1006,8 @@ class w2p_Extensions_Permissions extends gacl_api
      * w2Pacl::removeModulePermissions() Removes the permissions from the results table for a module
      *
      * @param mixed $module
-     * @return
+     *
+     * @return mixed
      */
     public function removeModulePermissions($module = null)
     {
@@ -1028,7 +1026,8 @@ class w2p_Extensions_Permissions extends gacl_api
      * w2Pacl::removePermissions() Removes the permissions from the results table for a given user (example: when you delete a user)
      *
      * @param mixed $user_id
-     * @return
+     *
+     * @return mixed
      */
     public function removePermissions($user_id = null)
     {
@@ -1050,7 +1049,8 @@ class w2p_Extensions_Permissions extends gacl_api
      * @param mixed $user_aro_id
      * @param mixed $role_id
      * @param mixed $module
-     * @return
+     *
+     * @return bool
      */
     public function recalcPermissions($user_id = null, $user_aro_id = null, $role_id = null, $module = '', $notUsed = null)
     {
@@ -1189,7 +1189,8 @@ class w2p_Extensions_Permissions extends gacl_api
      * @param mixed $userid it passes the user_id
      * @param mixed $notUsed3 it passes 'app' string by default and is not used
      * @param mixed $module it passes the modules name
-     * @return
+     *
+     * @return mixed
      */
     public function w2Pacl_check($notUsed = null, $op, $notUsed2 = null, $userid, $notUsed3 = null, $module)
     {
@@ -1216,6 +1217,7 @@ class w2p_Extensions_Permissions extends gacl_api
 
     public function w2Pacl_nuclear($userid, $module, $item, $mod_class = array())
     {
+        /** @var w2p_Core_CAppUI $AppUI */
         global $AppUI;
         //This is a sensitive function so if the minimum permission request arguments are not provided don't permit anything to this item
         if (!$userid || !$module || !$item) {
@@ -1265,7 +1267,8 @@ class w2p_Extensions_Permissions extends gacl_api
      * @param mixed $userid
      * @param mixed $module
      * @param mixed $item
-     * @return
+     *
+     * @return mixed
      */
     public function w2Pacl_query($notUsed = null, $op, $notUsed2 = null, $userid, $module, $item)
     {

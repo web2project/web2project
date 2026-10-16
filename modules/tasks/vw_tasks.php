@@ -1,4 +1,5 @@
 <?php
+/** @var w2p_Core_CAppUI $AppUI */
 if (!defined('W2P_BASE_DIR')) {
     die('You should not access this file directly.');
 }
@@ -7,6 +8,7 @@ if (!defined('W2P_BASE_DIR')) {
 
 global $AppUI, $m, $a, $project_id, $task_id, $f, $task_status, $min_view, $query_string, $durnTypes, $tpl;
 global $user_id, $w2Pconfig, $currentTabId, $currentTabName, $canEdit, $showEditCheckbox, $tab, $showIncomplete;
+global $showAllTaskStatuses;
 
 $tab = (int) w2PgetParam($_GET, 'tab', 0);
 
@@ -75,8 +77,11 @@ if ($showIncomplete) {
 }
 
 //When in task view context show all the tasks, active and inactive. (by not limiting the query by task status)
-//When in a project view or in the tasks list, show the active or the inactive tasks depending on the selected tab or button.
-if (!$task_id) {
+//When in a project view, show the active or the inactive tasks depending on the selected tab.
+//In the tasks list, the "show all tasks" crumb shows tasks of every status (from Klaus Buecher (opto), 525f759e),
+//and so does the project view's "Tasks (All)" tab (vw_tasks_all.php, from opto's 8db88ce5).
+$showAllStatuses = !$task_id && (!empty($showAllTaskStatuses) || ('tasks' == $m && -1 == $AppUI->getState('inactive')));
+if (!$task_id && !$showAllStatuses) {
     if ($tab == 1) {
         $task_status = -1;
     } else {
@@ -171,6 +176,11 @@ $listTable->addBefore('edit', 'task_id');
 $listTable->addBefore('pin', 'task_id');
 $listTable->addBefore('log', 'task_id');
 ?>
+<?php
+// the project designer wraps its task list and bulk action panels in this form itself
+$bulkForm = ('projectdesigner' != $m);
+if ($bulkForm) {
+?>
 <form name="frm_bulk" method="post" action="?m=projectdesigner" accept-charset="utf-8">
     <input type="hidden" name="dosql" value="do_task_bulk_aed" />
     <input type="hidden" name="project_id" value="<?php echo $project_id; ?>" />
@@ -181,9 +191,9 @@ $listTable->addBefore('log', 'task_id');
     <input type="hidden" name="pd_option_view_addtasks" value="<?php echo (isset($view_options[0]['pd_option_view_addtasks']) ? $view_options[0]['pd_option_view_addtasks'] : 1); ?>" />
     <input type="hidden" name="pd_option_view_files" value="<?php echo (isset($view_options[0]['pd_option_view_files']) ? $view_options[0]['pd_option_view_files'] : 1); ?>" />
     <input type="hidden" name="bulk_task_hperc_assign" value="" />
-
 <?php
-echo $listTable->startTable();
+}
+echo $listTable->startTable('tasks-tasklist');
 
 echo $listTable->buildHeader($fields, false, $m);
 
@@ -222,11 +232,11 @@ if ($task_id) {
                 </td>
             </tr>
             <?php
-            $taskTree = $tempTask->getTaskTree($k, 0);
+            $taskTree = $tempTask->getTaskTree($k, 0, $showAllStatuses ? null : 0);
             echo $listTable->buildRows($taskTree, $customLookups);
         }
         if ('projects' == $m || 'projectdesigner' == $m) {
-            $taskTree = $tempTask->getTaskTree($k, 0);
+            $taskTree = $tempTask->getTaskTree($k, 0, $showAllStatuses ? null : 0);
             echo $listTable->buildRows($taskTree, $customLookups);
         }
     }
@@ -234,6 +244,9 @@ if ($task_id) {
 
 
 echo $listTable->endTable();
+if ($bulkForm) {
+    echo '</form>';
+}
 ?>
 <?php
 include $AppUI->getTheme()->resolveTemplate('task_key');

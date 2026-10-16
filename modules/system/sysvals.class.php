@@ -1,6 +1,6 @@
 <?php
 /**
- * @package     web2project\modules\core
+ * @package web2project\modules\core
  */
 
 class CSystem_SysVal extends w2p_Core_BaseObject
@@ -41,7 +41,7 @@ class CSystem_SysVal extends w2p_Core_BaseObject
 	public function bind($hash, $prefix = null, $checkSlashes = true, $bindAll = false)
 	{
 		if (!is_array($hash)) {
-			$this->_error = get_class($this) . '::bind failed.';
+			$this->_error[] = get_class($this) . '::bind failed.';
 			return false;
 		} else {
 			$q = $this->_getQuery();
@@ -62,7 +62,7 @@ class CSystem_SysVal extends w2p_Core_BaseObject
 			$q->addWhere('sysval_key_id = ' . (int)$this->sysval_key_id);
 			$q->addWhere('sysval_title = \'' . $this->sysval_title . '\'');
 			if (!$q->exec()) {
-                $this->_error['store'] = get_class($this) . '::store failed: ' . db_error();
+                $this->_error['store'] = get_class($this) . '::store failed: ' . (new w2p_Database_Connection($GLOBALS['db']))->error();
                 return false;
 			}
 		}
@@ -74,7 +74,7 @@ class CSystem_SysVal extends w2p_Core_BaseObject
 			$q->addInsert('sysval_value_id', $key);
 			$q->addInsert('sysval_value', $value);
 			if (!$q->exec()) {
-				$this->_error['store'] = get_class($this) . '::store failed: ' . db_error();
+				$this->_error['store'] = get_class($this) . '::store failed: ' . (new w2p_Database_Connection($GLOBALS['db']))->error();
                 return false;
 			}
 			$q->clear();
@@ -93,7 +93,7 @@ class CSystem_SysVal extends w2p_Core_BaseObject
 
             $result = $q->exec();
             if(!$result) {
-                $this->_errors[] = db_error();
+                $this->_errors[] = (new w2p_Database_Connection($GLOBALS['db']))->error();
             }
 		}
 		return $result;

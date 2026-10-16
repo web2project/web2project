@@ -1,4 +1,5 @@
 <?php
+/** @var w2p_Core_CAppUI $AppUI */
 if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
@@ -11,7 +12,6 @@ $AppUI->getTheme()->loadCalendarJS();
  * Generates a report of the task logs for given dates
  */
 $do_report = w2PgetParam($_POST, 'do_report', 0);
-$log_pdf = w2PgetParam($_POST, 'log_pdf', 0);
 
 $log_start_date = w2PgetParam($_POST, 'log_start_date', 0);
 $log_end_date = w2PgetParam($_POST, 'log_end_date', 0);
@@ -35,48 +35,41 @@ echo $AppUI->getTheme()->styleRenderBoxTop();
     <input type="hidden" name="report_type" value="<?php echo $report_type; ?>" />
     <input type="hidden" name="datePicker" value="log" />
 
-    <table class="std">
-        <tr>
-            <td align="right" nowrap="nowrap"><?php echo $AppUI->_('For period'); ?>:</td>
-            <td nowrap="nowrap">
-                <input type="hidden" name="log_start_date" id="log_start_date" value="<?php echo $start_date ? $start_date->format(FMT_TIMESTAMP_DATE) : ''; ?>" />
-                <input type="text" name="start_date" id="start_date" onchange="setDate_new('editFrm', 'start_date');" value="<?php echo $start_date ? $start_date->format($df) : ''; ?>" class="text" />
-                <a href="javascript: void(0);" onclick="return showCalendar('start_date', '<?php echo $df ?>', 'editFrm', null, true, true)">
-                    <img src="<?php echo w2PfindImage('calendar.gif'); ?>" alt="<?php echo $AppUI->_('Calendar'); ?>" />
-                </a>
-            </td>
-            <td align="right" nowrap="nowrap"><?php echo $AppUI->_('to'); ?></td>
-            <td nowrap="nowrap">
-                <input type="hidden" name="log_end_date" id="log_end_date" value="<?php echo $end_date ? $end_date->format(FMT_TIMESTAMP_DATE) : ''; ?>" />
-                <input type="text" name="end_date" id="end_date" onchange="setDate_new('editFrm', 'end_date');" value="<?php echo $end_date ? $end_date->format($df) : ''; ?>" class="text" />
-                <a href="javascript: void(0);" onclick="return showCalendar('end_date', '<?php echo $df ?>', 'editFrm', null, true, true)">
-                    <img src="<?php echo w2PfindImage('calendar.gif'); ?>" alt="<?php echo $AppUI->_('Calendar'); ?>" />
-                </a>
-            </td>
+    <div class="d-flex flex-wrap align-items-center gap-2 mb-3 std w2p-report-filter">
+        <span class="text-nowrap"><?php echo $AppUI->_('For period'); ?>:</span>
+        <span class="text-nowrap">
+            <input type="hidden" name="log_start_date" id="log_start_date" value="<?php echo $start_date ? $start_date->format(FMT_TIMESTAMP_DATE) : ''; ?>" />
+            <input type="text" name="start_date" id="start_date" onchange="setDate_new('editFrm', 'start_date');" value="<?php echo $start_date ? $start_date->format($df) : ''; ?>" class="text" />
+            <a href="javascript: void(0);" onclick="return showCalendar('start_date', '<?php echo $df ?>', 'editFrm', null, true, true)">
+                <img src="<?php echo w2PfindImage('calendar.gif'); ?>" alt="<?php echo $AppUI->_('Calendar'); ?>" />
+            </a>
+        </span>
+        <span class="text-nowrap"><?php echo $AppUI->_('to'); ?></span>
+        <span class="text-nowrap">
+            <input type="hidden" name="log_end_date" id="log_end_date" value="<?php echo $end_date ? $end_date->format(FMT_TIMESTAMP_DATE) : ''; ?>" />
+            <input type="text" name="end_date" id="end_date" onchange="setDate_new('editFrm', 'end_date');" value="<?php echo $end_date ? $end_date->format($df) : ''; ?>" class="text" />
+            <a href="javascript: void(0);" onclick="return showCalendar('end_date', '<?php echo $df ?>', 'editFrm', null, true, true)">
+                <img src="<?php echo w2PfindImage('calendar.gif'); ?>" alt="<?php echo $AppUI->_('Calendar'); ?>" />
+            </a>
+        </span>
 
-            <td nowrap="nowrap">
-                <input type="checkbox" name="log_all" id="log_all" <?php if ($log_all) echo 'checked="checked"' ?> />
-                <label for="log_all"><?php echo $AppUI->_('Log All'); ?></label>
-            </td>
-            <td nowrap="nowrap">
-            </td>
+        <span class="text-nowrap">
+            <input type="checkbox" name="log_all" id="log_all" <?php if ($log_all) echo 'checked="checked"' ?> />
+            <label for="log_all"><?php echo $AppUI->_('Log All'); ?></label>
+        </span>
 
-            <td align="right" width="50%" nowrap="nowrap">
-                <input class="button" type="submit" name="do_report" value="<?php echo $AppUI->_('submit'); ?>" />
-            </td>
-        </tr>
-    </table>
+        <span class="text-nowrap">
+            <input class="button" type="submit" name="do_report" value="<?php echo $AppUI->_('submit'); ?>" />
+        </span>
+    </div>
 </form>
 <?php
-$allpdfdata = array();
 
 if ($do_report) {
     echo $AppUI->getTheme()->styleRenderBoxBottom();
 	echo '<br />';
     echo $AppUI->getTheme()->styleRenderBoxTop();
-	echo '<table class="std">
-	<tr>
-		<td>';
+	echo '<div class="std w2p-report">';
 
 	$total = 0;
 
@@ -108,45 +101,5 @@ if ($do_report) {
 	echo '<h2>' . $AppUI->_('Total Hours') . ': ';
 	printf("%.2f", $total);
 	echo '</h2>';
-	$pdfdata[] = array($AppUI->_('Total Hours'), round($total, 2));
-
-	if ($log_pdf) {
-		// make the PDF file
-		$temp_dir = W2P_BASE_DIR . '/files/temp';
-
-        $output = new w2p_Output_PDFRenderer();
-        $output->addTitle($AppUI->_('Overall Report'));
-        $output->addDate($df);
-
-		if ($log_all) {
-			$date = new w2p_Utilities_Date();
-			$title = "All hours as of " . $date->format($df);
-		} else {
-			$sdate = new w2p_Utilities_Date($log_start_date);
-			$edate = new w2p_Utilities_Date($log_end_date);
-			$title = "Hours from " . $sdate->format($df) . ' to ' . $edate->format($df);
-		}
-
-		foreach ($allpdfdata as $company => $data) {
-			$title = $company;
-			$options = array('showLines' => 1, 'showHeadings' => 0, 'fontSize' => 8, 'rowGap' => 2, 'colGap' => 5, 'xPos' => 50, 'xOrientation' => 'right', 'width' => '500', 'cols' => array(0 => array('justification' => 'left', 'width' => 250), 1 => array('justification' => 'right', 'width' => 120)));
-
-            $output->addTable($title, null, $data, $options);
-		}
-
-		$w2pReport = new CReport();
-        if ($output->writeFile($w2pReport->getFilename())) {
-			echo '<a href="' . W2P_BASE_URL . '/files/temp/' . $w2pReport->getFilename() . '.pdf" target="pdf">';
-			echo $AppUI->_('View PDF File');
-			echo '</a>';
-		} else {
-			echo 'Could not open file to save PDF.  ';
-			if (!is_writable($temp_dir)) {
-				'The files/temp directory is not writable.  Check your file system permissions.';
-			}
-		}
-	}
-	echo '</td>
-</tr>
-</table>';
+	echo '</div>';
 }

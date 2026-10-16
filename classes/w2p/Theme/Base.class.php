@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @package     web2project\theme
+ * @package web2project\theme
  */
 
 abstract class w2p_Theme_Base
@@ -9,7 +9,14 @@ abstract class w2p_Theme_Base
     protected $_AppUI = null;
     protected $_m     = null;
     protected $_uistyle = 'web2project';
-    protected $footerJavascriptFiles = array();
+    /**
+     * Scripts queued for the page footer. CAppUI::getTheme() builds a new theme
+     * object on every call, so the queue is shared by all instances for the
+     * request; an instance property would be lost before footer.php runs.
+     *
+     * @var array<int, string>
+     */
+    protected static $footerJavascriptFiles = array();
 
     public function __construct($AppUI, $m = '') {
         $this->_AppUI = $AppUI;
@@ -58,51 +65,23 @@ abstract class w2p_Theme_Base
         return $this->_AppUI->getMsg($reset);
     }
 
+    /**
+     * Opens the decorated box around the page content.
+     *
+     * The content area is laid out with CSS so there is nothing to render by
+     * default. Themes which draw a frame around the content override this.
+     */
     public function styleRenderBoxTop() {
-        global $currentInfoTabId;
-        if ($currentInfoTabId) {
-            return '';
-        }
-
-        $ret = '<table width="100%" cellspacing="0" cellpadding="0" border="0">';
-        $ret .= '<tbody>';
-        $ret .= '<tr>';
-        $ret .= '    <td valign="bottom" height="17" style="background:url(./style/' . $this->_uistyle . '/images/box_left_corner.jpg);" align="left">';
-        $ret .= '        <img width="19" height="17" alt="" src="./style/' . $this->_uistyle . '/images/box_left_corner.jpg"/>';
-        $ret .= '    </td>';
-        $ret .= '    <td valign="bottom" width="100%" style="background:url(./style/' . $this->_uistyle . '/images/box_top.jpg);" align="left">';
-        $ret .= '        <img width="19" height="17" alt="" src="./style/' . $this->_uistyle . '/images/box_top.jpg"/>';
-        $ret .= '    </td>';
-        $ret .= '    <td valign="bottom" style="background:url(./style/' . $this->_uistyle . '/images/box_right_corner.jpg);" align="right">';
-        $ret .= '        <img width="19" height="17" alt="" src="./style/' . $this->_uistyle . '/images/box_right_corner.jpg"/>';
-        $ret .= '    </td>';
-        $ret .= '</tr>';
-        $ret .= '</tbody>';
-        $ret .= '</table>';
-        return $ret;
+        return '';
     }
 
+    /**
+     * Closes the decorated box around the page content.
+     *
+     * @param int $tab The current tab, -1 for the flat view
+     */
     public function styleRenderBoxBottom($tab = 0) {
-        if (-1 == $tab) {
-            return '';
-        }
-
-        $ret = '<table width="100%" cellspacing="0" cellpadding="0" border="0">';
-        $ret .= '<tbody>';
-        $ret .= '<tr>';
-        $ret .= '    <td valign="top" height="35" style="background:url(./style/' . $this->_uistyle . '/images/shadow_bttm_left_corner.jpg) no-repeat;" align="left">';
-        $ret .= '        <img width="19" height="35" alt="" src="./style/' . $this->_uistyle . '/images/shadow_bttm_left_corner.jpg"/>';
-        $ret .= '    </td>';
-        $ret .= '    <td valign="top" width="100%" style="background: repeat-x url(./style/' . $this->_uistyle . '/images/shadow_bottom.jpg);" align="left">';
-        $ret .= '        <img width="19" height="35" alt="" src="./style/' . $this->_uistyle . '/images/shadow_bottom.jpg"/>';
-        $ret .= '    </td>';
-        $ret .= '    <td valign="top" style="background:url(./style/' . $this->_uistyle . '/images/shadow_bttm_right_corner.jpg) no-repeat;" align="right">';
-        $ret .= '        <img width="19" height="35" alt="" src="./style/' . $this->_uistyle . '/images/shadow_bttm_right_corner.jpg"/>';
-        $ret .= '    </td>';
-        $ret .= '</tr>';
-        $ret .= '</tbody>';
-        $ret .= '</table>';
-        return $ret;
+        return '';
     }
 
     /**
@@ -161,15 +140,16 @@ abstract class w2p_Theme_Base
 
     public function addFooterJavascriptFile($pathTo)
     {
-        if (!in_array($pathTo, $this->footerJavascriptFiles)) {
-            $base = W2P_BASE_URL;
-            if (substr($base, -1) != '/') {
-                $base .= '/';
-            }
-            if (strpos($pathTo, $base) === false) {
-                $pathTo = $base . $pathTo;
-            }
-            $this->footerJavascriptFiles[] = $pathTo;
+        $base = W2P_BASE_URL;
+        if (substr($base, -1) != '/') {
+            $base .= '/';
+        }
+        if (strpos($pathTo, $base) === false) {
+            $pathTo = $base . $pathTo;
+        }
+        // Compare the full URL, which is what the queue holds.
+        if (!in_array($pathTo, static::$footerJavascriptFiles)) {
+            static::$footerJavascriptFiles[] = $pathTo;
         }
     }
 
@@ -188,8 +168,8 @@ abstract class w2p_Theme_Base
         $s .= '});';
         $s .= '</script>';
 
-        if (is_array($this->footerJavascriptFiles) and !empty($this->footerJavascriptFiles)) {
-            while ($jsFile = array_pop($this->footerJavascriptFiles)) {
+        if (!empty(static::$footerJavascriptFiles)) {
+            while ($jsFile = array_shift(static::$footerJavascriptFiles)) {
                 $s .= "<script type='text/javascript' src='" . $jsFile . "'></script>";
             }
         }
@@ -199,6 +179,7 @@ abstract class w2p_Theme_Base
 
     public function loadCalendarJS()
     {
+        /** @var w2p_Core_CAppUI $AppUI */
         global $AppUI;
 
         $s = '<style type="text/css">@import url(' . W2P_BASE_URL . '/lib/jscalendar/skins/aqua/theme.css);</style>';

@@ -2,9 +2,9 @@
 /**
  * This is the core preferences object that runs both the default and User-based preferences.
  *
- * @package     web2project\system
+ * @package web2project\system
  *
- * @todo    couldn't this just extend the BaseObject?
+ * @todo couldn't this just extend the BaseObject?
  */
 class w2p_System_Preferences {
     /** This is the user_id */
@@ -67,7 +67,7 @@ class w2p_System_Preferences {
         }
         $q = new w2p_Database_Query;
         if (!$q->insertObject('user_preferences', $this)) {
-            return 'CPreference::store failed ' . db_error();
+            return 'CPreference::store failed ' . (new w2p_Database_Connection($GLOBALS['db']))->error();
         } else {
             return null;
         }
@@ -84,7 +84,7 @@ class w2p_System_Preferences {
         $q->addWhere('pref_user = ' . (int)$this->pref_user);
         $q->addWhere('pref_name = \'' . $this->pref_name . '\'');
         if (!$q->exec()) {
-            return db_error();
+            return (new w2p_Database_Connection($GLOBALS['db']))->error();
         } else {
             return null;
         }
@@ -95,7 +95,6 @@ class w2p_System_Preferences {
      *
      * Clears out the query and then returns it for use
      *
-     * @access protected
      * @todo refactor
      *
      * @return w2p_Database_Query Clean query object

@@ -2,109 +2,133 @@
 /**
  * The Application User Interface Class.
  *
- * @package     web2project\core
- * @author      Andrew Eddie <eddieajau@users.sourceforge.net>
+ * @package web2project\core
+ * @author  Andrew Eddie <eddieajau@users.sourceforge.net>
  *
- * @todo    refactor to w2p/System/AppUI
+ * @todo refactor to w2p/System/AppUI
  */
 
 class w2p_Core_CAppUI
 {
 
     /**
-      @var array generic array for holding the state of anything */
+     * @var array generic array for holding the state of anything
+     */
     public $state = null;
 
     /**
-      @var int */
+     * @var int
+     */
     public $user_id = null;
 
     /**
-      @var string */
+     * @var string
+     */
     public $user_first_name = null;
 
     /**
-      @var string */
+     * @var string
+     */
     public $user_last_name = null;
 
     /**
-      @var string */
+     * @var string
+     */
     public $user_display_name = null;
 
     /**
-      @var string */
+     * @var int|string|null
+     */
     public $user_company = null;
 
     /**
-      @var int */
+     * @var int
+     */
     public $user_department = null;
 
     /**
-      @var string */
+     * @var string
+     */
     public $user_email = null;
 
     /**
-      @var int */
+     * @var int
+     */
     public $user_type = null;
 
     /**
-      @var array */
+     * @var array
+     */
     public $user_prefs = null;
 
     /**
-      @var int Unix time stamp */
+     * @var int Unix time stamp
+     */
     public $day_selected = null;
     // localisation
     /**
-      @var string */
+     * @var string
+     */
     public $user_locale = null;
 
     /**
-      @var string */
+     * @var array<int, mixed>|null
+     */
     public $user_lang = null;
 
     /**
-      @var string */
+     * @var string
+     */
     public $base_locale = 'en'; // do not change - the base 'keys' will always be in english
 
     /**
-      @var string Message string */
+     * @var string Message string
+     */
     public $msg = '';
 
     /**
-      @var string */
+     * @var int|string
+     */
     public $msgNo = '';
 
     /**
-      @var string Default page for a redirect call */
+     * @var string Default page for a redirect call
+     */
     public $defaultRedirect = '';
 
     /**
-      @var array Configuration variable array */
+     * @var array Configuration variable array
+     */
     public $cfg = null;
 
     /**
-      @var integer Version major */
+     * @var int|null Version major
+     */
     public $version_major = null;
 
     /**
-      @var integer Version minor */
+     * @var int|null Version minor
+     */
     public $version_minor = null;
 
     /**
-      @var integer Version patch level */
+     * @var int|null Version patch level
+     */
     public $version_patch = null;
 
     /**
-      @var string Version string */
+     * @var string Version string
+     */
     public $version_string = null;
 
     /**
-      @var integer for register log ID */
+     * @var int for register log ID
+     */
     public $last_insert_id = null;
 
     /**
-      @var string */
+     * @var string
+     */
     public $user_style = null;
 
     public $long_date_format = null;
@@ -119,7 +143,6 @@ class w2p_Core_CAppUI
     protected $footerJavascriptFiles = array();
 
     /**
-
      * CAppUI Constructor
      */
     public function __construct()
@@ -146,43 +169,11 @@ class w2p_Core_CAppUI
     }
 
     /**
-     * Used to load a php class file from the system classes directory
-     * @param string $name The class root file name (excluding .class.php)
-     * @return string The path to the include file
-     */
-    public function getSystemClass($name = null)
-    {
-        trigger_error("CAppUI->getSystemClass() has been deprecated in v2.0 and will be removed in v3.0", E_USER_NOTICE);
-
-        if ($name) {
-            return W2P_BASE_DIR . '/classes/' . $name . '.class.php';
-        }
-    }
-
-    /** @deprecated */
-    public function getLibraryClass($name = null)
-    {
-        trigger_error("CAppUI->getLibraryClass() has been deprecated in v3.1 and will be removed in v4.0", E_USER_NOTICE);
-
-        if ($name) {
-            return W2P_BASE_DIR . '/lib/' . $name . '.php';
-        }
-    }
-
-    /** @deprecated */
-    public function getModuleClass($name = null)
-    {
-        trigger_error("CAppUI->getModuleClass() has been deprecated in v3.1 and will be removed in v4.0", E_USER_NOTICE);
-
-        if ($name) {
-            return W2P_BASE_DIR . '/modules/' . $name . '/' . $name . '.class.php';
-        }
-    }
-
-    /**
      * Used to load a php class file from the module directory
+     *
      * @param string $name The class root file name (excluding .ajax.php)
-     * @return string The path to the include file
+     *
+     * @return string|null The path to the include file
      */
     public function getModuleAjax($name = null)
     {
@@ -193,7 +184,8 @@ class w2p_Core_CAppUI
 
     /**
      * Determines the version.
-     * @return String value indicating the current web2project version
+     *
+     * @return string value indicating the current web2project version
      */
     public function getVersion()
     {
@@ -219,9 +211,6 @@ class w2p_Core_CAppUI
         return $this->formatTZAwareTime();
     }
 
-    /**
-     *
-     */
     public function convertToSystemTZ($datetime = '', $format = 'Y-m-d H:i:s')
     {
         $userTZ = $this->getPref('TIMEZONE');
@@ -264,13 +253,8 @@ class w2p_Core_CAppUI
 
     public function setStyle()
     {
-        // check if default user's uistyle is installed
-        $uistyle = $this->getPref('UISTYLE');
-
-        if ($uistyle && !is_dir(W2P_BASE_DIR . '/style/' . $uistyle)) {
-            // fall back to host_style if user style is not installed
-            $this->setPref('UISTYLE', w2PgetConfig('host_style'));
-        }
+        // the interface style is no longer selectable
+        $this->setPref('UISTYLE', W2P_UISTYLE);
     }
 
     /**
@@ -279,15 +263,13 @@ class w2p_Core_CAppUI
      *
      * @return w2p_Theme_Base object
      */
-    public function getTheme()
+    public function getTheme() : w2p_Theme_Base
     {
         $this->setStyle();
-        $uistyle = ('' == $this->getPref('UISTYLE')) ? 'web2project' : $this->getPref('UISTYLE');
-        $uiClass = 'style_' . str_replace('-', '', $uistyle);
+        require_once W2P_BASE_DIR . '/style/' . W2P_UISTYLE . '/overrides.php';
+        $uiClass = 'style_' . W2P_UISTYLE;
 
-        $theme = new $uiClass($this);
-
-        return $theme;
+        return new $uiClass($this);
     }
 
     /**
@@ -342,7 +324,8 @@ class w2p_Core_CAppUI
      * Sets the user locale.
      *
      * Looks in the user preferences first.  If this value has not been set by the user it uses the system default set in config.php.
-     * @param string Locale abbreviation corresponding to the sub-directory name in the locales directory (usually the abbreviated language code).
+     *
+     * @param string $loc Locale abbreviation corresponding to the sub-directory name in the locales directory (usually the abbreviated language code).
      */
     public function setUserLocale($loc = '', $set = true)
     {
@@ -351,7 +334,7 @@ class w2p_Core_CAppUI
         $LANGUAGES = $this->loadLanguages();
 
         if (!$loc) {
-            $loc = in_array('LOCALE', $this->user_prefs) ? $this->user_prefs['LOCALE'] : w2PgetConfig('host_locale');
+            $loc = isset($this->user_prefs['LOCALE']) ? $this->user_prefs['LOCALE'] : w2PgetConfig('host_locale');
         }
 
         if (isset($LANGUAGES[$loc])) {
@@ -414,7 +397,6 @@ class w2p_Core_CAppUI
 
     /**
      * Load the known language codes for loaded locales
-     *
      */
     public function loadLanguages()
     {
@@ -444,8 +426,10 @@ class w2p_Core_CAppUI
      * <li>If this is not the base lang, then return string with a red star appended to show
      * that a translation is required.
      * </ul>
-     * @param string The string to translate
-     * @param int Option flags, can be case handling or'd with output styles
+     *
+     * @param string|array<string> $str The string to translate
+     * @param int $flags Option flags, can be case handling or'd with output styles
+     *
      * @return string
      */
     public function _($str, $flags = 0)
@@ -522,26 +506,14 @@ class w2p_Core_CAppUI
 
     /**
      * Set the display of warning for untranslated strings
-     * @param string
+     *
+     * @param bool $state
      */
     public function setWarning($state = true)
     {
         $temp = $this->cfg['locale_warn'];
         $this->cfg['locale_warn'] = $state;
         return $temp;
-    }
-
-    /** @deprecated */
-    public function savePlace($query = '')
-    {
-        trigger_error("AppUI->savePlace() has been deprecated in v3.2 and will be removed by v5.0. Please route the user explicitly.", E_USER_NOTICE);
-        $query = ($query == '') ? $_SERVER['QUERY_STRING'] : $query;
-        $saved = (isset($this->state['SAVEDPLACE'])) ? $this->state['SAVEDPLACE'] : '';
-
-        if ($query != $saved) {
-            $this->state['SAVEDPLACE-1'] = $saved;
-            $this->state['SAVEDPLACE'] = $query;
-        }
     }
 
     /**
@@ -554,6 +526,7 @@ class w2p_Core_CAppUI
 
     /**
      * Get the saved place (usually one that could contain an edit button)
+     *
      * @return string
      */
     public function getPlace()
@@ -567,9 +540,7 @@ class w2p_Core_CAppUI
      * Primarily useful for holding an object after a failed validation check
      * without it actually being saved.
      *
-     * @param object The item to be temporarily stored
-     *
-     *
+     * @param object $obj The item to be temporarily stored
      */
     public function holdObject($obj)
     {
@@ -586,12 +557,11 @@ class w2p_Core_CAppUI
     /**
      * Redirects the browser to a new page.
      *
-     * Mostly used in conjunction with the savePlace method. It is generally used
-     * to prevent nasties from doing a browser refresh after a db update.  The
+     * It is generally used to prevent nasties from doing a browser refresh after a db update.  The
      * method deliberately does not use javascript to effect the redirect.
      *
-     * @param string The URL query string to append to the URL
-     * @param string A marker for a historic 'place, only -1 or an empty string is valid.
+     * @param string $params The URL query string to append to the URL
+     * @param string $hist A marker for a historic 'place, only -1 or an empty string is valid.
      */
     public function redirect($params = '', $hist = '')
     {
@@ -626,9 +596,9 @@ class w2p_Core_CAppUI
      * languagues atomic-wise translation doesn't work. Append should be
      * deprecated.
      *
-     * @param mixed The (untranslated) message
-     * @param int The type of message
-     * @param boolean If true, $msg is appended to the current string otherwise
+     * @param mixed $msg The (untranslated) message
+     * @param int $msgNo The type of message
+     * @param bool $append If true, $msg is appended to the current string otherwise
      * the existing message is overwritten with $msg.
      */
     public function setMsg($msg, $msgNo = 0, $append = false)
@@ -650,12 +620,14 @@ class w2p_Core_CAppUI
 
     /**
      * Display the formatted message and icon
-     * @param boolean If true the current message state is cleared.
+     *
+     * @param bool $reset If true the current message state is cleared.
      */
     public function getMsg($reset = true)
     {
         $msg = $this->msg;
         $class = 'message';
+        $alert = 'info';
 
         switch ($this->msgNo) {
             case UI_MSG_ALERT:
@@ -664,21 +636,25 @@ class w2p_Core_CAppUI
             case UI_MSG_WARNING:
                 $img = w2PshowImage('rc-gui-status-downgr.png');
                 $class = 'warning';
+                $alert = 'warning';
                 break;
             case UI_MSG_ERROR:
                 $img = w2PshowImage('stock_cancel-16.png');
                 $class = 'error';
+                $alert = 'danger';
                 break;
             case UI_MSG_OK:
             default:
                 $img = w2PshowImage('stock_ok-16.png');
+                $alert = 'success';
                 break;
         }
         if ($reset) {
             $this->msg = '';
             $this->msgNo = 0;
         }
-        return $msg ? '<table cellspacing="0" cellpadding="1" border="0"><tr>' . '<td>' . $img . '</td>' . '<td class="' . $class . '">' . $msg . '</td>' . '</tr></table>' : '';
+        return $msg ? '<div class="alert alert-' . $alert . ' d-flex align-items-center gap-2 py-2 w2p-message" role="alert">' .
+            $img . '<span class="' . $class . '">' . $msg . '</span></div>' : '';
     }
 
     /**
@@ -686,8 +662,9 @@ class w2p_Core_CAppUI
      *
      * The state is only held for the duration of a session.  It is not stored in the database.
      * Also do not set the value if it is unset.
-     * @param string The label or key of the state variable
-     * @param mixed Value to assign to the label/key
+     *
+     * @param string $label The label or key of the state variable
+     * @param mixed $value Value to assign to the label/key
      */
     public function setState($label, $value = null)
     {
@@ -699,6 +676,7 @@ class w2p_Core_CAppUI
     /**
      * Get the value of a temporary state variable.
      * If a default value is supplied and no value is found, set the default.
+     *
      * @return mixed
      */
     public function getState($label, $default_value = null)
@@ -770,9 +748,10 @@ class w2p_Core_CAppUI
      * table are loaded in this object for convenient reference.  The style, locales
      * and preferences are also loaded at this time.
      *
-     * @param string The user login name
-     * @param string The user password
-     * @return boolean True if successful, false if not
+     * @param string $username The user login name
+     * @param string $password The user password
+     *
+     * @return bool True if successful, false if not
      */
     public function login($username, $password)
     {
@@ -868,18 +847,25 @@ class w2p_Core_CAppUI
         $q->addInsert('date_time_in', "'" . $q->dbfnNowWithTZ() . "'", false, true);
         $q->addInsert('user_ip', $_SERVER['REMOTE_ADDR']);
         $q->exec();
+        // The session and "last action" tracking use this id (it was lost
+        // when db_insert_id() was removed).
+        $this->last_insert_id = (int) $q->_db->insert_id();
     }
 
     /**
      * @Function for register log out in web2project table "user_acces_log"
      */
-    public function registerLogout($user_id)
+    public function registerLogout($user_id, $access_log_id = 0)
     {
         if ($user_id > 0) {
             $q = new w2p_Database_Query;
             $q->addTable('user_access_log');
             $q->addUpdate('date_time_out', "'" . $q->dbfnNowWithTZ() . "'", false, true);
             $q->addWhere('user_id = ' . (int) $user_id . ' AND date_time_out IS NULL');
+            // only the login that is ending; the user may be logged in elsewhere
+            if ((int) $access_log_id > 0) {
+                $q->addWhere('user_access_log_id = ' . (int) $access_log_id);
+            }
             $q->exec();
         }
     }
@@ -916,7 +902,8 @@ class w2p_Core_CAppUI
 
     /**
      * Gets the value of the specified user preference
-     * @param string Name of the preference
+     *
+     * @param string $name Name of the preference
      */
     public function getPref($name)
     {
@@ -925,8 +912,9 @@ class w2p_Core_CAppUI
 
     /**
      * Sets the value of a user preference specified by name
-     * @param string Name of the preference
-     * @param mixed The value of the preference
+     *
+     * @param string $name Name of the preference
+     * @param mixed $val The value of the preference
      */
     public function setPref($name, $val)
     {
@@ -936,8 +924,9 @@ class w2p_Core_CAppUI
     /**
      * Loads the stored user preferences from the database into the internal
      * preferences variable.
-     * @param int User id number
-     * @param bool If false (default) then sture internally, if true return pref array
+     *
+     * @param int $uid User id number
+     * @param bool $return If false (default) then sture internally, if true return pref array
      */
     public function loadPrefs($uid = 0, $return = false)
     {
@@ -974,6 +963,7 @@ class w2p_Core_CAppUI
     // --- Module connectors
     /**
      * Gets a list of the installed modules
+     *
      * @return array Named array list in the form 'module directory'=>'module name'
      */
     public function getInstalledModules()
@@ -987,6 +977,7 @@ class w2p_Core_CAppUI
 
     /**
      * Gets a list of the active modules
+     *
      * @return array Named array list in the form 'module directory'=>'module name'
      */
     public function getActiveModules()
@@ -1001,6 +992,7 @@ class w2p_Core_CAppUI
 
     /**
      * Gets a list of the modules that should appear in the menu
+     *
      * @return array Named array list in the form
      * ['module directory', 'module name', 'module_icon']
      */
@@ -1017,6 +1009,7 @@ class w2p_Core_CAppUI
 
     /**
      * Gets a list of the active modules
+     *
      * @return array Named array list in the form 'module directory'=>'module name'
      */
     public function getLoadableModuleList()
@@ -1051,6 +1044,7 @@ class w2p_Core_CAppUI
 
     /**
      * Returns the global dpACL class or creates it as neccessary.
+     *
      * @return object w2p_Extensions_Permissions
      */
     public function &acl()

@@ -18,14 +18,10 @@ $config['permissions_item_table'] = 'links';
 $config['permissions_item_field'] = 'link_id';
 $config['permissions_item_label'] = 'link_name';
 
-if ($a == 'setup') {
-	echo w2PshowModuleConfig($config);
-}
-
 /**
  * Class CSetupLinks
  *
- * @package     web2project\modules\misc
+ * @package web2project\modules\misc
  */
 class CSetupLinks extends w2p_System_Setup
 {

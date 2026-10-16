@@ -7,12 +7,12 @@
  * LICENSE: This source file is subject to Clear BSD License. Please see the
  *   LICENSE file in root of site for further details
  *
- * @author      Keith Casey <contrib@caseysoftware.com>
- * @category    EmailManager
- * @package     web2project
- * @subpackage  unit_tests
- * @license     Clear BSD
- * @link        http://www.web2project.net
+ * @author     Keith Casey <contrib@caseysoftware.com>
+ * @category   EmailManager
+ * @package    web2project
+ * @subpackage unit_tests
+ * @license    Clear BSD
+ * @link       http://www.web2project.net
  */
 
 class Web2project_Output_EmailManagerTest extends CommonSetup
@@ -42,19 +42,6 @@ class Web2project_Output_EmailManagerTest extends CommonSetup
 //todo: format dates
 
         $actual_body = $this->manager->getEventNotify($event, false, array());
-
-        $this->assertEquals($target_body, $actual_body);
-    }
-
-    /**
-     * @expectedException PHPUnit_Framework_Error
-     */
-    public function testGetCalendarConflictEmail()
-    {
-        $target_body = "You have been invited to an event by Admin Person\nHowever, either you or another intended invitee has a competing event\n";
-        $target_body .= "Admin Person has requested that you reply to this message\nand confirm if you can or can not make the requested time.\n\n";
-
-        $actual_body = $this->manager->getCalendarConflictEmail($this->_AppUI);
 
         $this->assertEquals($target_body, $actual_body);
     }
@@ -94,7 +81,7 @@ class Web2project_Output_EmailManagerTest extends CommonSetup
     public function testGetForumWatchEmail()
     {
         $target_body  = "forumEmailBody\n\nForum: name1\nSubject: Title\nMessage From: name2\n\n";
-        $target_body .= W2P_BASE_URL . "/index.php?m=forums&a=viewer&forum_id=-1\n\nMy Body";
+        $target_body .= W2P_BASE_URL . "/index.php?m=forums&a=view&forum_id=-1\n\nMy Body";
 
         $message = new CForum_Message();
         $message->message_title = 'Title';
@@ -209,48 +196,6 @@ class Web2project_Output_EmailManagerTest extends CommonSetup
         $target_body .= "------------------------\n\nUser: \nHours: 2\nSummary: Something cool\n\n\n--\n";
 
         $actual_body = $this->manager->getTaskEmailLog($task, $task_log);
-
-        $this->assertEquals($target_body, $actual_body);
-    }
-
-    /**
-     * @expectedException PHPUnit_Framework_Error
-     */
-    public function testGetProjectNotifyOwner()
-    {
-        $project = new CProject();
-        $project->project_id = -1;
-        $project->project_name = 'Project Name';
-        $project->project_description = 'description';
-
-        $target_body  = "Project: Project Name has been Created\nYou can view the Project by clicking:\n";
-        $target_body .= "URL:     " . W2P_BASE_URL . "/index.php?m=projects&a=view&project_id=-1\n\n";
-        $target_body .= "(You are receiving this message because you are the owner of this Project)\n\n";
-        $target_body .= "Description:\n description \n\n";
-        $target_body .= "Creator: Admin Person";
-
-        $actual_body = $this->manager->getProjectNotifyOwner($project, false);
-
-        $this->assertEquals($target_body, $actual_body);
-    }
-
-    /**
-     * @expectedException PHPUnit_Framework_Error
-     */
-    public function testGetProjectNotifyContacts()
-    {
-        $project = new CProject();
-        $project->project_name = 'Project Name';
-        $project->project_description = 'something interesting';
-        $project->project_id = -1;
-
-        $target_body  = "Project: Project Name Has Been Created Via Project Manager. You can view the Project by clicking: \n";
-        $target_body .= "URL:     " . W2P_BASE_URL . "/index.php?m=projects&a=view&project_id=-1\n\n";
-        $target_body .= "(You are receiving this message because you are a contact or assignee for this Project)\n\n";
-        $target_body .= "Description:\n something interesting \n\n";
-        $target_body .= "Creator: Admin Person";
-
-        $actual_body = $this->manager->getProjectNotifyContacts($project, false);
 
         $this->assertEquals($target_body, $actual_body);
     }

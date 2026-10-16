@@ -1,4 +1,5 @@
 <?php
+/** @var w2p_Core_CAppUI $AppUI */
 if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
@@ -11,7 +12,6 @@ $AppUI->getTheme()->loadCalendarJS();
  * Generates a report of the task logs for given dates
  */
 $do_report = w2PgetParam($_POST, 'do_report', 0);
-$log_pdf = w2PgetParam($_POST, 'log_pdf', 0);
 
 $log_start_date = w2PgetParam($_POST, 'log_start_date', '2008-01-01');
 $log_end_date   = w2PgetParam($_POST, 'log_end_date',   '2014-01-01');
@@ -34,31 +34,27 @@ $billingCategory = w2PgetSysVal('BudgetCategory');
     <?php
     echo $AppUI->getTheme()->styleRenderBoxTop();
     ?>
-    <table class="std">
-        <tr>
-            <td align="right" nowrap="nowrap"><?php echo $AppUI->_('For period'); ?>:</td>
-            <td nowrap="nowrap">
-                <input type="hidden" name="log_start_date" id="log_start_date" value="<?php echo $start_date ? $start_date->format(FMT_TIMESTAMP_DATE) : ''; ?>" />
-                <input type="text" name="start_date" id="start_date" onchange="setDate_new('editFrm', 'start_date');" value="<?php echo $start_date ? $start_date->format($df) : ''; ?>" class="text" />
-                <a href="javascript: void(0);" onclick="return showCalendar('start_date', '<?php echo $df ?>', 'editFrm', null, true, true)">
-                    <img src="<?php echo w2PfindImage('calendar.gif'); ?>" alt="<?php echo $AppUI->_('Calendar'); ?>" />
-                </a>
-            </td>
-            <td align="right" nowrap="nowrap"><?php echo $AppUI->_('to'); ?></td>
-            <td nowrap="nowrap">
-                <input type="hidden" name="log_end_date" id="log_end_date" value="<?php echo $end_date ? $end_date->format(FMT_TIMESTAMP_DATE) : ''; ?>" />
-                <input type="text" name="end_date" id="end_date" onchange="setDate_new('editFrm', 'end_date');" value="<?php echo $end_date ? $end_date->format($df) : ''; ?>" class="text" />
-                <a href="javascript: void(0);" onclick="return showCalendar('end_date', '<?php echo $df ?>', 'editFrm', null, true, true)">
-                    <img src="<?php echo w2PfindImage('calendar.gif'); ?>" alt="<?php echo $AppUI->_('Calendar'); ?>" />
-                </a>
-            </td>
-            <td nowrap="nowrap">
-            </td>
-            <td align="right" width="50%" nowrap="nowrap">
-                <input class="button" type="submit" name="do_report" value="<?php echo $AppUI->_('submit'); ?>" />
-            </td>
-        </tr>
-    </table>
+    <div class="d-flex flex-wrap align-items-center gap-2 mb-3 std w2p-report-filter">
+        <span class="text-nowrap"><?php echo $AppUI->_('For period'); ?>:</span>
+        <span class="text-nowrap">
+            <input type="hidden" name="log_start_date" id="log_start_date" value="<?php echo $start_date ? $start_date->format(FMT_TIMESTAMP_DATE) : ''; ?>" />
+            <input type="text" name="start_date" id="start_date" onchange="setDate_new('editFrm', 'start_date');" value="<?php echo $start_date ? $start_date->format($df) : ''; ?>" class="text" />
+            <a href="javascript: void(0);" onclick="return showCalendar('start_date', '<?php echo $df ?>', 'editFrm', null, true, true)">
+                <img src="<?php echo w2PfindImage('calendar.gif'); ?>" alt="<?php echo $AppUI->_('Calendar'); ?>" />
+            </a>
+        </span>
+        <span class="text-nowrap"><?php echo $AppUI->_('to'); ?></span>
+        <span class="text-nowrap">
+            <input type="hidden" name="log_end_date" id="log_end_date" value="<?php echo $end_date ? $end_date->format(FMT_TIMESTAMP_DATE) : ''; ?>" />
+            <input type="text" name="end_date" id="end_date" onchange="setDate_new('editFrm', 'end_date');" value="<?php echo $end_date ? $end_date->format($df) : ''; ?>" class="text" />
+            <a href="javascript: void(0);" onclick="return showCalendar('end_date', '<?php echo $df ?>', 'editFrm', null, true, true)">
+                <img src="<?php echo w2PfindImage('calendar.gif'); ?>" alt="<?php echo $AppUI->_('Calendar'); ?>" />
+            </a>
+        </span>
+        <span class="text-nowrap">
+            <input class="button" type="submit" name="do_report" value="<?php echo $AppUI->_('submit'); ?>" />
+        </span>
+    </div>
 </form>
 
 <table width="100%" class="tbl" cellspacing="1" cellpadding="3" border="0">
@@ -80,7 +76,7 @@ $billingCategory = w2PgetSysVal('BudgetCategory');
 
     if (count($taskList)) {
         foreach ($taskList as $taskItem) {
-            $task->loadFull(null, $taskItem['task_id']);
+            $task->load($taskItem['task_id']);
             $costs = $bcode->calculateTaskCost($taskItem['task_id'],
                     $start_date->format(FMT_DATETIME_MYSQL),
                     $end_date->format(FMT_DATETIME_MYSQL));
@@ -137,59 +133,8 @@ $billingCategory = w2PgetSysVal('BudgetCategory');
                     ?>
                 </td>
             </tr><?php
-            $pdfdata[] = array(sprintf('%.1f%%', $task->task_percent_complete),
-                '  '.$taskName, $contactName,
-                $AppUI->formatTZAwareTime($task->task_start_date, $df),
-                $AppUI->formatTZAwareTime($task->task_end_date, $df),
-                $targetBudget, $actualCost, $w2Pconfig['currency_symbol'].$diff_total);
         }
 
-        if ($log_pdf) {
-            // make the PDF file
-            $temp_dir = W2P_BASE_DIR . '/files/temp';
-
-            $output = new w2p_Output_PDFRenderer('A4', 'landscape');
-            $output->addTitle($AppUI->_('Costs By Task'));
-            $output->addDate($df);
-            $output->addSubtitle($projectList[$project_id]['project_name']);
-
-            $pdfheaders = array($AppUI->_('Work', UI_OUTPUT_JS),
-                '  '.$AppUI->_('Project Name', UI_OUTPUT_JS), $AppUI->_('Project Owner', UI_OUTPUT_JS),
-                $AppUI->_('Start Date', UI_OUTPUT_JS), $AppUI->_('Finish Date', UI_OUTPUT_JS),
-                $AppUI->_('Target Budget', UI_OUTPUT_JS), $AppUI->_('Actual Cost', UI_OUTPUT_JS),
-                $AppUI->_('Difference', UI_OUTPUT_JS));
-
-            $options = array('showLines' => 1, 'fontSize' => 9, 'rowGap' => 1,
-                'colGap' => 1, 'xPos' => 50, 'xOrientation' => 'right', 'width' => '500',
-                'cols' => array(
-                            0 => array('justification' => 'center', 'width' => 45),
-                            1 => array('justification' => 'left', 'width' => 175),
-                            2 => array('justification' => 'center', 'width' => 75),
-                            3 => array('justification' => 'center', 'width' => 65),
-                            4 => array('justification' => 'center', 'width' => 65),
-                            5 => array('justification' => 'center', 'width' => 65),
-                            6 => array('justification' => 'center', 'width' => 65),
-                            7 => array('justification' => 'center', 'width' => 65),
-                    ));
-
-            $output->addTable($title, $pdfheaders, $pdfdata, $options);
-
-            $w2pReport = new CReport();
-            if ($output->writeFile($w2pReport->getFilename())) {
-                echo '<tr><td colspan="13">';
-                echo '<a href="' . W2P_BASE_URL . '/files/temp/' . $w2pReport->getFilename() . '.pdf" target="pdf">';
-                echo $AppUI->_('View PDF File');
-                echo '</a>';
-                echo '</td></tr>';
-            } else {
-                echo '<tr><td colspan="13">';
-                echo 'Could not open file to save PDF.  ';
-                if (!is_writable($temp_dir)) {
-                    echo 'The files/temp directory is not writable.  Check your file system permissions.';
-                }
-                echo '</td></tr>';
-            }
-        }
     } else {
         echo '<tr><td colspan="13">'.$AppUI->_('There are no tasks on this project').'</td></tr>';
     }

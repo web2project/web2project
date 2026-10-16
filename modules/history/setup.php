@@ -14,14 +14,10 @@ $config['mod_ui_name'] = 'History';
 $config['mod_ui_icon'] = '';
 $config['mod_description'] = 'A module for tracking changes';
 
-if ($a == 'setup') {
-	echo w2PshowModuleConfig($config);
-}
-
 /**
  * Class CSetupHistory
  *
- * @package     web2project\modules\misc
+ * @package web2project\modules\misc
  */
 class CSetupHistory extends w2p_System_Setup
 {

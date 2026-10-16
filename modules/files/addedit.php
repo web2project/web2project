@@ -1,4 +1,5 @@
 <?php
+/** @var w2p_Core_CAppUI $AppUI */
 if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
@@ -59,19 +60,10 @@ if ($object_id > 0) {
 	}
 }
 
-if ($object->file_checkout != $AppUI->user_id) {
-	$ci = false;
-}
+$canAdmin = $object->canAdmin();
 
-if (!$canAdmin)
-	$canAdmin = $object->canAdmin();
-
-if ($object->file_checkout == 'final' && !$canAdmin) {
-	$AppUI->redirect(ACCESS_DENIED);
-}
 // setup the title block
 $ttl = $object_id ? 'Edit File' : 'Add File';
-$ttl = $ci ? 'Checking in' : $ttl;
 $titleBlock = new w2p_Theme_TitleBlock($ttl, 'icon.png', $m);
 $titleBlock->addCrumb('?m=' . $m, $m . ' list');
 $canDelete = $object->canDelete();
@@ -126,15 +118,8 @@ function popTask() {
 	}
 }
 
+// @deprecated
 function finalCI() {
-	var f = document.editFrm;
-	if (f.final_ci.value == '1') {
-		f.file_checkout.value = 'final';
-		f.file_co_reason.value = 'Final Version';
-	} else {
-		f.file_checkout.value = '';
-		f.file_co_reason.value = '';
-	}
 }
 
 // Callback function for the generic selector

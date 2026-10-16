@@ -1,4 +1,5 @@
 <?php
+/** @var w2p_Core_CAppUI $AppUI */
 if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
@@ -70,98 +71,84 @@ $contactMethods = array('phone_alt', 'phone_mobile', 'phone_fax');
 $methodLabels = w2PgetSysVal('ContactMethods');
 
 ?>
-<table width="100%" border="0" cellpadding="1" cellspacing="0" class="contacts">
-	<tr>
-		<?php for ($z = 0; $z < $carrWidth; $z++) { ?>
-			<td valign="top" align="left" width="<?php echo $tdw; ?>%">
+<div class="row g-2 contacts">
+    <?php for ($z = 0; $z < $carrWidth; $z++) {
+        if (!isset($carr[$z])) {
+            continue;
+        }
+        ?>
+        <div class="col-12 col-md-6 col-xl-3 contacts-column">
+            <?php for ($x = 0, $x_cmp = count($carr[$z]); $x < $x_cmp; $x++) { ?>
+                <div class="card mb-2 std contact-info">
+                    <?php $contactid = $carr[$z][$x]['contact_id']; ?>
+                    <div class="card-header d-flex align-items-start gap-2 py-1 px-2">
+                        <a class="me-auto" href="./index.php?m=contacts&amp;a=view&amp;contact_id=<?php echo $contactid; ?>"><strong><?php echo ($carr[$z][$x]['contact_title'] ? $carr[$z][$x]['contact_title'] . ' ' : '') . $carr[$z][$x]['contact_first_name'] . ' ' . $carr[$z][$x]['contact_last_name']; ?></strong></a>
+                        <span class="d-inline-flex gap-1 text-nowrap">
                             <?php
-                            if (!isset($carr[$z])){
-                                continue;
+                            $projectList = CContact::getProjects($contactid);
+
+                            $contact_updatekey   = $carr[$z][$x]['contact_updatekey'];
+                            $contact_lastupdate  = $carr[$z][$x]['contact_lastupdate'];
+                            $contact_updateasked = $carr[$z][$x]['contact_updateasked'];
+                            $last_ask = new w2p_Utilities_Date($contact_updateasked);
+                            $lastAskFormatted = $last_ask->format($df);
+                            if (count($projectList) > 0) {
+                                echo '<a href="" onclick="	window.open(\'./index.php?m=public&a=selector&dialog=1&callback=goProject&table=projects&user_id=' . $carr[$z][$x]['contact_id'] . '\', \'selector\', \'left=50,top=50,height=250,width=400,resizable\');return false;">' . w2PshowImage('projects.png', '', '', $m, 'click to view projects associated with this contact') . '</a>';
+                            }
+                            if ($contact_updateasked && (!$contact_lastupdate || $contact_lastupdate == 0) && $contact_updatekey) {
+                                echo w2PtoolTip('info', 'Waiting for Contact Update Information. (Asked on: ' . $lastAskFormatted . ')') . '<img src="' . w2PfindImage('log-info.gif') . '" alt="" />' . w2PendTip();
+                            } elseif ($contact_updateasked && (!$contact_lastupdate || $contact_lastupdate== 0) && !$contact_updatekey) {
+                                echo w2PtoolTip('info', 'Waiting for too long! (Asked on ' . $lastAskFormatted . ')') . '<img src="' . w2PfindImage('log-error.gif') . '" alt="" />' . w2PendTip();
+                            } elseif ($contact_updateasked && !$contact_updatekey) {
+                                $last_ask = new w2p_Utilities_Date($contact_lastupdate);
+                                echo w2PtoolTip('info', 'Update sucessfully done on: ' . $last_ask->format($df) . '') . '<img src="' . w2PfindImage('log-notice.gif') . '" alt="" />' . w2PendTip();
                             }
                             ?>
-				<table width="100%" cellspacing="2" cellpadding="1" class="contacts-column">
-					<?php for ($x = 0, $x_cmp = count($carr[$z]); $x < $x_cmp; $x++) { ?>
-						<tr>
-							<td>
-								<table class="std contact-info">
-									<tr>
-										<td width="100%" colspan="2">
-											<table width="100%" cellspacing="0" cellpadding="1">
-												<?php $contactid = $carr[$z][$x]['contact_id']; ?>
-												<th style="text-align:left" width="70%">
-													<a href="./index.php?m=contacts&a=view&contact_id=<?php echo $contactid; ?>"><strong><?php echo ($carr[$z][$x]['contact_title'] ? $carr[$z][$x]['contact_title'] . ' ' : '') . $carr[$z][$x]['contact_first_name'] . ' ' . $carr[$z][$x]['contact_last_name']; ?></strong></a>
-												</th>
-												<th style="text-align:right" nowrap="nowrap" width="30%">
-                                                    <?php
-                                                    if ($carr[$z][$x]['user_id']) {
-														echo '<a href="./index.php?m=users&a=view&user_id=' . $carr[$z][$x]['user_id'] . '" style="float: right;">';
-                                                        echo w2PtoolTip($m, 'This Contact is also a User, click to view its details.') . w2PshowImage('icons/users.gif') . w2PendTip();
-                                                        echo '</a>';
-													}
-                                                    ?><a href="?m=contacts&a=vcardexport&suppressHeaders=true&contact_id=<?php echo $contactid; ?>" style="float: right;"><?php
-                                                        echo w2PtoolTip($m, 'export vCard of this contact') . w2PshowImage('vcard.png') . w2PendTip();
-                                                    ?></a>
-                                                    <a href="?m=contacts&a=addedit&contact_id=<?php echo $contactid; ?>" style="float: right;"><?php
-                                                        echo w2PtoolTip($m, 'edit this contact') . w2PshowImage('icons/pencil.gif') . w2PendTip();
-                                                    ?></a>
-													<?php
-														$projectList = CContact::getProjects($contactid);
-
-                                                        $contact_updatekey   = $carr[$z][$x]['contact_updatekey'];
-                                                        $contact_lastupdate  = $carr[$z][$x]['contact_lastupdate'];
-                                                        $contact_updateasked = $carr[$z][$x]['contact_updateasked'];
-                                                        $last_ask = new w2p_Utilities_Date($contact_updateasked);
-                                                        $lastAskFormatted = $last_ask->format($df);
-														if (count($projectList) > 0) {
-															echo '<a href="" onclick="	window.open(\'./index.php?m=public&a=selector&dialog=1&callback=goProject&table=projects&user_id=' . $carr[$z][$x]['contact_id'] . '\', \'selector\', \'left=50,top=50,height=250,width=400,resizable\');return false;">' . w2PshowImage('projects.png', '', '', $m, 'click to view projects associated with this contact') . '</a>';
-														}
-														if ($contact_updateasked && (!$contact_lastupdate || $contact_lastupdate == 0) && $contact_updatekey) {
-                                                            echo w2PtoolTip('info', 'Waiting for Contact Update Information. (Asked on: ' . $lastAskFormatted . ')') . '<img src="' . w2PfindImage('log-info.gif') . '">' . w2PendTip();
-														} elseif ($contact_updateasked && (!$contact_lastupdate || $contact_lastupdate== 0) && !$contact_updatekey) {
-                                                            echo w2PtoolTip('info', 'Waiting for too long! (Asked on ' . $lastAskFormatted . ')') . '<img src="' . w2PfindImage('log-error.gif') . '">' . w2PendTip();
-														} elseif ($contact_updateasked && !$contact_updatekey) {
-															$last_ask = new w2p_Utilities_Date($contact_lastupdate);
-                                                            echo w2PtoolTip('info', 'Update sucessfully done on: ' . $last_ask->format($df) . '') . '<img src="' . w2PfindImage('log-notice.gif') . '">' . w2PendTip();
-														}
-													?>
-												</th>
-											</table>
-										</td>
-									</tr>
-									<tr>
-										<?php
-											reset($showfields);
-											$s = '';
-                                            foreach($showfields as $key => $val) {
-												if (isset($carr[$z][$x][$key]) && mb_strlen($carr[$z][$x][$key]) > 0) {
-													if ($val == 'contact_email') {
-                                                        $s .= '<td class="hilite" colspan="2">' . w2p_email($carr[$z][$x][$key]) . '</td></tr>';
-                                                    } elseif ($val == 'contact_company' && is_numeric($carr[$z][$x][$key])) {
-														//Don't do a thing
-													} elseif ($val == 'company_name') {
-														$s .= '<tr><td width="35%"><strong>' . $AppUI->_('Company') . ':</strong></td><td class="hilite" width="65%">' . $carr[$z][$x][$key] . '</td></tr>';
-													} elseif ($val == 'contact_job') {
-														$s .= '<tr><td width="35%"><strong>' . $AppUI->_('Job Title') . ':</strong></td><td class="hilite" width="65%">' . $carr[$z][$x][$key] . '</td></tr>';
-													} elseif ($val == 'dept_name') {
-														$s .= '<tr><td width="35%"><strong>' . $AppUI->_('Department') . ':</strong></td><td class="hilite" width="65%">' . $carr[$z][$x][$key] . '</td></tr>';
-													} elseif ($val == 'contact_country' && $carr[$z][$x][$key]) {
-														$s .= '<tr><td class="hilite" colspan="2">' . ($countries[$carr[$z][$x][$key]] ? $countries[$carr[$z][$x][$key]] : $carr[$z][$x][$key]) . '<br /></td></tr>';
-													} elseif ($val != 'contact_country') {
-														$s .= '<tr><td class="hilite" colspan="2">' . $carr[$z][$x][$key] . '<br /></td></tr>';
-                                                    } elseif ($val == 'contact_phone') {
-                                                        $s .= '<tr><td width="35%"><strong>' . $AppUI->_('Work Phone') . ':</strong></td><td class="hilite" width="65%">' . $carr[$z][$x][$key] . '</td></tr>';
-													}
-												}
-											}
-											echo $s;
-										?>
-									</tr>
-								</table>
-							</td>
-						</tr>
-					<?php } ?>
-				</table>
-			</td>
-		<?php } ?>
-	</tr>
-</table>
+                            <a href="?m=contacts&amp;a=addedit&amp;contact_id=<?php echo $contactid; ?>"><?php
+                                echo w2PtoolTip($m, 'edit this contact') . w2PshowImage('icons/pencil.gif') . w2PendTip();
+                            ?></a>
+                            <a href="?m=contacts&amp;a=vcardexport&amp;suppressHeaders=true&amp;contact_id=<?php echo $contactid; ?>"><?php
+                                echo w2PtoolTip($m, 'export vCard of this contact') . w2PshowImage('vcard.png') . w2PendTip();
+                            ?></a>
+                            <?php
+                            if ($carr[$z][$x]['user_id']) {
+                                echo '<a href="./index.php?m=users&amp;a=view&amp;user_id=' . $carr[$z][$x]['user_id'] . '">';
+                                echo w2PtoolTip($m, 'This Contact is also a User, click to view its details.') . w2PshowImage('icons/users.gif') . w2PendTip();
+                                echo '</a>';
+                            }
+                            ?>
+                        </span>
+                    </div>
+                    <div class="card-body py-1 px-2 small">
+                        <?php
+                            reset($showfields);
+                            $s = '';
+                            foreach($showfields as $key => $val) {
+                                if (isset($carr[$z][$x][$key]) && mb_strlen($carr[$z][$x][$key]) > 0) {
+                                    if ($val == 'contact_email') {
+                                        $s .= '<div class="hilite">' . w2p_email($carr[$z][$x][$key]) . '</div>';
+                                    } elseif ($val == 'contact_company' && is_numeric($carr[$z][$x][$key])) {
+                                        //Don't do a thing
+                                    } elseif ($val == 'company_name') {
+                                        $s .= '<div>' . $AppUI->_('Company') . ': <span class="hilite">' . $carr[$z][$x][$key] . '</span></div>';
+                                    } elseif ($val == 'contact_job') {
+                                        $s .= '<div>' . $AppUI->_('Job Title') . ': <span class="hilite">' . $carr[$z][$x][$key] . '</span></div>';
+                                    } elseif ($val == 'dept_name') {
+                                        $s .= '<div>' . $AppUI->_('Department') . ': <span class="hilite">' . $carr[$z][$x][$key] . '</span></div>';
+                                    } elseif ($val == 'contact_country' && $carr[$z][$x][$key]) {
+                                        $s .= '<div class="hilite">' . ($countries[$carr[$z][$x][$key]] ? $countries[$carr[$z][$x][$key]] : $carr[$z][$x][$key]) . '</div>';
+                                    } elseif ($val != 'contact_country') {
+                                        $s .= '<div class="hilite">' . $carr[$z][$x][$key] . '</div>';
+                                    } elseif ($val == 'contact_phone') {
+                                        $s .= '<div>' . $AppUI->_('Work Phone') . ': <span class="hilite">' . $carr[$z][$x][$key] . '</span></div>';
+                                    }
+                                }
+                            }
+                            echo $s;
+                        ?>
+                    </div>
+                </div>
+            <?php } ?>
+        </div>
+    <?php } ?>
+</div>

@@ -1,6 +1,6 @@
 <?php
 /**
- * @package     web2project\modules\misc
+ * @package web2project\modules\misc
  */
 
 class CForum extends w2p_Core_BaseObject
@@ -125,7 +125,7 @@ class CForum extends w2p_Core_BaseObject
             $q->setDelete('forum_messages');
             $q->addWhere('message_forum = ' . (int) $this->forum_id);
             if (!$q->exec()) {
-                $this->_error['delete-messages'] = db_error();
+                $this->_error['delete-messages'] = (new w2p_Database_Connection($GLOBALS['db']))->error();
                 return false;
             }
 
@@ -136,6 +136,9 @@ class CForum extends w2p_Core_BaseObject
 
     protected function hook_preDelete()
     {
+        // Records the id that hook_postDelete() uses to remove custom field values.
+        parent::hook_preDelete();
+
         $q = $this->_getQuery();
         $q->setDelete('forum_visits');
         $q->addWhere('visit_forum = ' . (int) $this->forum_id);
@@ -173,7 +176,7 @@ class CForum extends w2p_Core_BaseObject
         $search['table_alias'] = 'f';
         $search['table_module'] = 'forums';
         $search['table_key'] = 'f.forum_id';
-        $search['table_link'] = 'index.php?m=forums&a=viewer&forum_id='; // first part of link
+        $search['table_link'] = 'index.php?m=forums&a=view&forum_id='; // first part of link
         $search['table_key2'] = 'fm.message_id';
         $search['table_link2'] = '&message_id='; // second part of link
 

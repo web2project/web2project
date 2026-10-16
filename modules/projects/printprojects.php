@@ -1,4 +1,5 @@
 <?php
+/** @var w2p_Core_CAppUI $AppUI */
 if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
@@ -58,10 +59,9 @@ $project_statuses = w2PgetSysVal('ProjectStatus');
     text-align: center;
 }
 </style>
-<table class="prjprint">
-	<tr><th><?php echo $AppUI->_('Project List'); ?></th></tr>
-	<tr>
-		<th>
+<div class="text-center fw-bold mb-2 prjprint-header">
+	<h1 class="h5"><?php echo $AppUI->_('Project List'); ?></h1>
+	<div>
             <?php
             $active = 0;
             $archived = 0;
@@ -115,10 +115,8 @@ $project_statuses = w2PgetSysVal('ProjectStatus');
             $currentTabName = $project_statuses[$currentTabId];
             echo $AppUI->_('Status') . ' (' . $AppUI->_('Records') . '): ' . $currentTabName;
             ?>
-		</th>
-	</tr>
-	<tr>
-		<th>
+	</div>
+	<div>
             <?php
             $txt = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' . $AppUI->_('Search') . ':&nbsp;' . '<input type="text" disabled class="text" SIZE="20" name="projsearchtext" onChange="document.searchfilter.submit();" value=' . "'$search_text'" . 'title="' . $AppUI->_('Search in name and description fields') . '"/>&nbsp;';
             $txt .= $AppUI->_('Type') . ':&nbsp;' . arraySelect($project_types, 'project_type', 'size="1" disabled class="text"', $project_type, false);
@@ -127,9 +125,8 @@ $project_statuses = w2PgetSysVal('ProjectStatus');
             $txt .= $AppUI->_('Company') . ':&nbsp;' . str_replace('<select', '<select disabled="disabled"', $buffer);
             echo $txt;
             ?>
-		</th>
-	</tr>
-</table>
+	</div>
+</div>
 <?php
 
 require (W2P_BASE_DIR . '/modules/projects/vw_projects.php');

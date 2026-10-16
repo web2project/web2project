@@ -1,10 +1,10 @@
 <?php
 /**
- * @package     web2project\modules\core
+ * @package web2project\modules\core
  *
- * @todo    refactor modules/admin to modules/users
- * @todo    new query object
- * @todo    refactor static methods
+ * @todo refactor modules/admin to modules/users
+ * @todo new query object
+ * @todo refactor static methods
  */
 
 class CUser extends w2p_Core_BaseObject
@@ -60,12 +60,15 @@ class CUser extends w2p_Core_BaseObject
         $tmpUser->overrideDatabase($this->_query);
         $tmpUser->load($this->user_id);
 
-        if ('' == trim($this->user_password)) {
+        // An empty password, or the stored hash itself (the object was loaded
+        // and stored again), keeps the existing hash. Anything else is a new
+        // plain-text password. Comparing against a fresh hash would always
+        // differ because password_hash() salts randomly.
+        $password = (string) $this->user_password;
+        if ('' == trim($password) || $password === (string) $tmpUser->user_password) {
             $this->user_password = $tmpUser->user_password;
-        } elseif ($tmpUser->user_password != $this->authenticator->hashPassword($this->user_password)) {
-            $this->user_password = $this->authenticator->hashPassword($this->user_password);
         } else {
-            $this->user_password = $tmpUser->user_password;
+            $this->user_password = $this->authenticator->hashPassword($password);
         }
 
         parent::hook_preUpdate();
@@ -176,6 +179,9 @@ class CUser extends w2p_Core_BaseObject
 
     protected function hook_preDelete()
     {
+        // Records the id that hook_postDelete() uses to remove custom field values.
+        parent::hook_preDelete();
+
         $this->_perms->deleteLogin($this->user_id);
 
         $q = $this->_getQuery();
@@ -230,13 +236,23 @@ class CUser extends w2p_Core_BaseObject
         return true;
     }
 
+    /**
+     * Checks a plain-text password against the user's stored hash.
+     *
+     * The stored value is a salted password_hash() result, so it has to be
+     * verified with password_verify(); hashing the input again never matches.
+     *
+     * @param int    $userId
+     * @param string $password
+     *
+     * @return bool
+     */
     public function validatePassword($userId, $password)
     {
-        $hash = $this->authenticator->hashPassword($password);
-        
-        $users = $this->loadAll('user_id', 'user_password = \'' . $hash . '\' AND user_id = ' . (int) $userId);
+        $users = $this->loadAll('user_id', 'user_id = ' . (int) $userId);
+        $hash = (string) ($users[$userId]['user_password'] ?? '');
 
-        return isset($users[$userId]);
+        return '' !== $hash && password_verify((string) $password, $hash);
     }
 
     public function getIdByToken($token)
@@ -317,7 +333,8 @@ class CUser extends w2p_Core_BaseObject
             $q->addWhere('ual.user_id = ' . (int) $userId);
         }
         $q->addWhere("ual.date_time_in  >= '$startDate'");
-        $q->addWhere("ual.date_time_out <= '$endDate'");
+        // logins that are still open have no date_time_out
+        $q->addWhere("(ual.date_time_out IS NULL OR ual.date_time_out <= '$endDate')");
         $q->addOrder('ual.date_time_last_action DESC');
 
         return $q->loadList();
@@ -340,7 +357,9 @@ class CUser extends w2p_Core_BaseObject
 
     /**
      * * Function that checks if a user is active or not (i.e. are they able to login to the system)
-     * @param $userId
+     *
+     * @param mixed $userId
+     *
      * @return mixed
      */
     public function isActive($userId)

@@ -13,13 +13,9 @@ $config['mod_ui_name'] = 'Reports';
 $config['mod_ui_icon'] = 'printer.png';
 $config['mod_description'] = 'A module for reports';
 
-if ($a == 'setup') {
-	echo w2PshowModuleConfig($config);
-}
-
 /**
  * Class CSetupReports
  *
- * @package     web2project\modules\misc
+ * @package web2project\modules\misc
  */
 class CSetupReports extends w2p_System_Setup { }

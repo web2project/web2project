@@ -1,6 +1,6 @@
 <?php
 /**
- * @package     web2project\modules\misc
+ * @package web2project\modules\misc
  */
 
 class CForum_Message extends w2p_Core_BaseObject
@@ -120,6 +120,9 @@ class CForum_Message extends w2p_Core_BaseObject
 
     protected function hook_preDelete()
     {
+        // Records the id that hook_postDelete() uses to remove custom field values.
+        parent::hook_preDelete();
+
         $q = $this->_getQuery();
         $q->setDelete('forum_visits');
         $q->addWhere('visit_message = ' . (int) $this->message_id);
@@ -172,7 +175,7 @@ class CForum_Message extends w2p_Core_BaseObject
         $q->addQuery('*');
         $q->addWhere('watch_user = 0 AND watch_forum = 0 AND watch_topic = 0');
         $resAll = $q->exec();
-        $AllCount = db_num_rows($resAll);
+        $AllCount = (new w2p_Database_Connection($GLOBALS['db']))->num_rows($resAll);
 
         $q->clear();
         $q->addTable('users');
@@ -189,7 +192,7 @@ class CForum_Message extends w2p_Core_BaseObject
             $q->clear();
             return;
         }
-        if (db_num_rows($res) < 1) {
+        if ((new w2p_Database_Connection($GLOBALS['db']))->num_rows($res) < 1) {
             return;
         }
 

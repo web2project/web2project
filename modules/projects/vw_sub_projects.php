@@ -1,4 +1,5 @@
 <?php
+/** @var w2p_Core_CAppUI $AppUI */
 if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
@@ -10,8 +11,13 @@ $projectPriority = w2PgetSysVal('ProjectPriority');
 $projectStatus = w2PgetSysVal('ProjectStatus');
 
 $original_project_id = $project->project_original_parent;
+// $project is the project being viewed and is shared with the other tabs.
+// A status of -1 asks getStructuredProjects() for every status, so restore
+// the real one afterwards.
+$saved_status = $project->project_status;
 $project->project_status = -1;
 $st_projects_arr = $project->getStructuredProjects();
+$project->project_status = $saved_status;
 
 
 $module = new w2p_System_Module();
@@ -38,9 +44,11 @@ $s = '';
 $customLookups = array('project_status' => $projectStatus, 'project_priority' => $projectPriority);
 
 if (is_array($st_projects_arr)) {
-    foreach ($st_projects_arr as $project) {
-        $line = $project[0];
-        $level = $project[1];
+    // Not $project: that is the global CProject the other tabs use (Task Logs
+    // calls $project->company() and failed with "company() on array").
+    foreach ($st_projects_arr as $st_project) {
+        $line = $st_project[0];
+        $level = $st_project[1];
         if ($line['project_id']) {
             $s_project = new CProject();
             $s_project->load($line['project_id']);
@@ -73,13 +81,9 @@ if (is_array($st_projects_arr)) {
 
 ?>
 </table>
-<table width="100%" border="0" cellpadding="5" cellspacing="1">
-    <tr>
-        <td align="center" colspan="20">
+<div class="text-center p-1">
 <?php
 $src = "?m=projects&a=vw_sub_projects_gantt&suppressHeaders=1&showLabels=1&proFilter=&showInactive=1showAllGantt=1&original_project_id=$original_project_id&width=' + ((navigator.appName=='Netscape'?window.innerWidth:document.body.offsetWidth)*0.90) + '";
 echo "<script>document.write('<img src=\"$src\">')</script>";
 ?>
-        </td>
-    </tr>
-</table>
+</div>

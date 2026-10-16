@@ -1,4 +1,5 @@
 <?php
+/** @var w2p_Core_CAppUI $AppUI */
 if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
@@ -33,7 +34,7 @@ $titleBlock->show();
 
 $html_types = $field->getTypes();
 
-$custom_fields = new w2p_Core_CustomFields($module->mod_name, 'addedit', null, 'edit');
+$custom_fields = new w2p_Core_CustomFields($module->mod_directory, 'addedit', null, 'edit');
 
 if ($field_id) {
     $cf = $custom_fields->fieldWithId($field_id);
@@ -58,15 +59,6 @@ if ($field_id) {
 	}
 }
 
-//$visible_state = array();
-
-//foreach ($html_types as $k => $ht) {
-//	if ($k == $field_htmltype) {
-//		$visible_state['div_' . $k] = 'display : block';
-//	} else {
-//		$visible_state['div_' . $k] = 'display : none';
-//	}
-//}
 ?>
 <script language="javascript" type="text/javascript">
 function submitIt() {
@@ -117,49 +109,36 @@ function deleteItem(id) {
     <input type="hidden" name="field_id" value="<?php echo $field_id; ?>" />
     <input type="hidden" name="module" value="<?php echo $module_id ?>" />
     <input type="hidden" name="dosql" id="dosql" value="do_customfield_aed" />
-    <table class="std addedit well">
-        <tr>
-            <th colspan="2"><?php echo $ttl; ?></th>
-        </tr>
-        <tr>
-            <td><label><?php echo $AppUI->_('Field Name/Identifier') ?>:&nbsp;<?php echo $AppUI->_('(No Spaces)') ?></label></td>
-            <td>
+    <div class="std addedit well">
+        <div class="column left w2p-wide">
+            <h2 class="h6 border-bottom pb-1"><?php echo $ttl; ?></h2>
+            <p>
+                <label><?php echo $AppUI->_('Field Name/Identifier') ?>:&nbsp;<?php echo $AppUI->_('(No Spaces)') ?></label>
                 <input type="text" class="text" name="field_name" maxlength="100" value="<?php echo $field_name ?>" onblur="javascript:filterFieldName(this)" />
-            </td>
-        </tr>
-        <tr>
-            <td><label><?php echo $AppUI->_('Field Description') ?>:</label></td>
-            <td>
-            <input type="text" class="text" name="field_description" size="40" maxlength="250" value="<?php echo $field_description ?>" />
-            </td>
-        </tr>
-        <tr>
-            <td><label><?php echo $AppUI->_('Field Display Type') ?>:</label></td>
-            <td>
-            <?php echo arraySelect($html_types, 'field_htmltype', 'id="htmltype" class="text" onChange="javascript:showAttribs()"', $field_htmltype); ?>
-            </td>
-        </tr>
-        <tr>
-            <td><label><?php echo $AppUI->_('Field Published') ?>:</label></td>
-            <td>
-            <?php echo arraySelect(w2PgetSysVal('GlobalYesNo'), 'field_published', 'id="fieldpublished" class="text"', $field_published); ?>
-            </td>
-        </tr>
-        <tr>
-            <td><label><?php echo $AppUI->_('Field Display Order') ?>:</label></td>
-            <td>
-            <input type="text" class="text" name="field_order" size="4" maxlength="3" value="<?php echo (int) $field_order ?>" />
-            </td>
-        </tr>
-        <tr>
-            <td><label><?php echo $AppUI->_('HTML Tag Options') ?>:</label></td>
-            <td>
+            </p>
+            <p>
+                <label><?php echo $AppUI->_('Field Description') ?>:</label>
+                <input type="text" class="text" name="field_description" size="40" maxlength="250" value="<?php echo $field_description ?>" />
+            </p>
+            <p>
+                <label><?php echo $AppUI->_('Field Display Type') ?>:</label>
+                <?php echo arraySelect($html_types, 'field_htmltype', 'id="htmltype" class="text" onChange="javascript:showAttribs()"', $field_htmltype); ?>
+            </p>
+            <p>
+                <label><?php echo $AppUI->_('Field Published') ?>:</label>
+                <?php $publishedOptions = w2PgetSysVal('GlobalYesNo'); echo arraySelect($publishedOptions, 'field_published', 'id="fieldpublished" class="text"', $field_published); ?>
+            </p>
+            <p>
+                <label><?php echo $AppUI->_('Field Display Order') ?>:</label>
+                <input type="text" class="text" name="field_order" size="4" maxlength="3" value="<?php echo (int) $field_order ?>" />
+            </p>
+            <p>
+                <label><?php echo $AppUI->_('HTML Tag Options') ?>:</label>
                 <input type="text" class="text" name="field_extratags" size="80" value="<?php echo $field_extratags ?>" />
-            </td>
-        </tr>
-        <tr id="datarow">
-            <td><?php echo $AppUI->_('List of Options'); ?></td>
-            <td>
+            </p>
+            <div id="datarow" class="d-flex flex-wrap gap-2">
+                <label><?php echo $AppUI->_('List of Options'); ?></label>
+                <div>
             <?php
                 if ($field_htmltype == 'select') {
                     echo '<ul id="optionlist">';
@@ -178,15 +157,12 @@ function deleteItem(id) {
                     echo '</ul>';
                 }
             ?>
-            </td>
-        </tr>
-        <tr>
-            <td>
-                <input type="button" class="cancel button btn btn-danger" name="cancel" value="<?php echo $AppUI->_('cancel'); ?>" onclick="javascript:if(confirm('<?php echo $AppUI->_('Are you sure you want to cancel?', UI_OUTPUT_JS); ?>')){location.href = './index.php?m=system&u=customfields';}" />
-            </td>
-            <td align="right">
-                <input type="button" class="save button btn btn-primary" value="<?php echo $AppUI->_('save'); ?>" onclick="submitIt()" />
-            </td>
-        </tr>
-    </table>
+                </div>
+            </div>
+        </div>
+        <div class="w2p-form-actions">
+            <input type="button" class="cancel button btn btn-danger" name="cancel" value="<?php echo $AppUI->_('cancel'); ?>" onclick="javascript:if(confirm('<?php echo $AppUI->_('Are you sure you want to cancel?', UI_OUTPUT_JS); ?>')){location.href = './index.php?m=system&u=customfields';}" />
+            <input type="button" class="save button btn btn-primary" value="<?php echo $AppUI->_('save'); ?>" onclick="submitIt()" />
+        </div>
+    </div>
 </form>

@@ -1,4 +1,5 @@
 <?php
+/** @var w2p_Core_CAppUI $AppUI */
 if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
@@ -34,7 +35,7 @@ $letters = $user->getLetters();
 $a2z = '<a href="./index.php?m=users&stub=0">' . $AppUI->_('All') . '</a>&nbsp;&nbsp;&nbsp;&nbsp;';
 for ($c = 65; $c < 91; $c++) {
 	$cu = chr($c);
-	$cell = !(mb_strpos($letters, $cu) === false) ? '<a href="?m=users&stub=' . $cu . '">' . $cu . '</a>' : '<font color="#999999">' . $cu . '</font>';
+	$cell = !(mb_strpos($letters, $cu) === false) ? '<a href="?m=users&stub=' . $cu . '">' . $cu . '</a>' : '<span style="color: #999999;">' . $cu . '</span>';
 	$a2z .= $cell.'&nbsp;';
 }
 

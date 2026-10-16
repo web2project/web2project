@@ -3,8 +3,8 @@
  * This class helps us build simple task table for the various modules. Using this ensures we have similar layouts and
  *   styles across the board. You can always hardcode your own.
  *
- * @package     web2project\output\html
- * @author      D. Keith Casey, Jr. <contrib@caseysoftware.com>
+ * @package web2project\output\html
+ * @author  D. Keith Casey, Jr. <contrib@caseysoftware.com>
  */
 
 class w2p_Output_HTML_TaskTable extends w2p_Output_ListTable
@@ -81,7 +81,12 @@ class w2p_Output_HTML_TaskTable extends w2p_Output_ListTable
         }
 
         $this->stageRowData($rowData);
-        $class = w2pFindTaskComplete($rowData['task_start_date'], $rowData['task_end_date'], $rowData['task_percent_complete']);
+        // Inactive tasks get their own colour (from Klaus Buecher (opto), 8db88ce5).
+        if (isset($rowData['task_status']) && -1 == $rowData['task_status']) {
+            $class = 'inactive';
+        } else {
+            $class = w2pFindTaskComplete($rowData['task_start_date'], $rowData['task_end_date'], $rowData['task_percent_complete']);
+        }
 
         $row = '<tr class="'.$class.'">';
         $row .= $this->_buildCells(array('edit' => 'task_id', 'pin' => 'task_id', 'log' => 'task_id'));
@@ -119,7 +124,8 @@ class w2p_Output_HTML_TaskTable extends w2p_Output_ListTable
                 }
                 $rowData[$column] = implode(', ', $parsed);
             }
-            $row .= $this->createCell($column, $rowData[$column], $customLookups);
+            // the Tasks (Inactive) tab's rows (loadAll) have no user_task_priority
+            $row .= $this->createCell($column, $rowData[$column] ?? '', $customLookups);
         }
         if ('projectdesigner' == $this->module) {
             $row .= '<td class="data"><input type="checkbox" name="selected_task[]" value="' . $rowData['task_id'] . '"/></td>';

@@ -1,4 +1,5 @@
 <?php
+/** @var w2p_Core_CAppUI $AppUI */
 if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
@@ -27,7 +28,7 @@ $deptTypes = w2PgetSysVal('DepartmentType');
 $customLookups = array('dept_type' => $deptTypes);
 
 $listTable = new w2p_Output_ListTable($AppUI);
-echo $listTable->startTable();
+echo $listTable->startTable('departments-department_view');
 echo $listTable->buildHeader($fields);
 echo $listTable->buildRows($items, $customLookups);
 echo $listTable->endTable();

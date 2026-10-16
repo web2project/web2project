@@ -1,4 +1,5 @@
 <?php
+/** @var w2p_Core_CAppUI $AppUI */
 if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
@@ -33,7 +34,7 @@ if ($display_last_login) {
 $fields = array_combine($fieldList, $fieldNames);
 
 $listTable = new w2p_Output_ListTable($AppUI);
-echo $listTable->startTable();
+echo $listTable->startTable('users');
 $listTable->addBefore(1);
 echo $listTable->buildHeader($fields, false, $m);
 

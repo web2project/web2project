@@ -21,7 +21,7 @@ $config['permissions_item_label'] = 'event_name';
 /**
  * Class CSetupEvents
  *
- * @package     web2project\modules\deprecated
+ * @package web2project\modules\deprecated
  */
 class CSetupEvents extends w2p_System_Setup
 {
@@ -64,7 +64,7 @@ class CSetupEvents extends w2p_System_Setup
     }
 
     /**
-     * @return boolean
+     * @return ADORecordSet|false
      */
     public function _renameModule($table, $field)
     {

@@ -1,4 +1,5 @@
 <?php
+/** @var w2p_Core_CAppUI $AppUI */
 if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
@@ -55,21 +56,14 @@ function delIt2(id) {
     <input type="hidden" name="project_id" value="<?php echo $project_id ?>"/>
     <input type="hidden" name="tab" value="<?php echo $tab ?>"/>
 
-    <table class="std">
-        <tr>
-            <td width="98%">&nbsp;</td>
-            <td width="1%" nowrap="nowrap"><input type="checkbox" name="hide_inactive" id="hide_inactive" <?php echo $hide_inactive ? 'checked="checked"' : '' ?> onchange="document.frmFilter.submit()" /></td><td width="1%" nowrap="nowrap"><label for="hide_inactive"><?php echo $AppUI->_('Hide Inactive') ?></label></td>
-            <td width="1%" nowrap="nowrap"><input type="checkbox" name="hide_complete" id="hide_complete" <?php echo $hide_complete ? 'checked="checked"' : '' ?> onchange="document.frmFilter.submit()" /></td><td width="1%" nowrap="nowrap"><label for="hide_complete"><?php echo $AppUI->_('Hide 100% Complete') ?></label></td>
-            <!--
-        TODO: disabled this filter for now... something is wrong with the userId portion...
-            <td width="1%" nowrap="nowrap"><?php echo $AppUI->_('User Filter') ?></td>
-            <td width="1%"><?php echo arraySelect($users, 'user_id', 'size="1" class="text" id="medium" onchange="document.frmFilter.submit()"', $user_id) ?></td>
-            -->
-            <td width="1%" nowrap="nowrap"><?php echo $AppUI->_('Cost Code Filter') ?></td>
-            <!-- TODO: add in optgroups to display company groupings for cost codes -->
-            <td width="1%"><?php echo arraySelect($task_log_costcodes, 'cost_code', 'size="1" class="text" onchange="document.frmFilter.submit()"', $cost_code) ?></td>
-        </tr>
-    </table>
+    <div class="d-flex flex-wrap justify-content-end align-items-center gap-2 mb-2 std">
+        <span class="text-nowrap"><input type="checkbox" name="hide_inactive" id="hide_inactive" <?php echo $hide_inactive ? 'checked="checked"' : '' ?> onchange="document.frmFilter.submit()" /><label for="hide_inactive"><?php echo $AppUI->_('Hide Inactive') ?></label></span>
+        <span class="text-nowrap"><input type="checkbox" name="hide_complete" id="hide_complete" <?php echo $hide_complete ? 'checked="checked"' : '' ?> onchange="document.frmFilter.submit()" /><label for="hide_complete"><?php echo $AppUI->_('Hide 100% Complete') ?></label></span>
+        <?php /* TODO: a User Filter (arraySelect on $users / user_id) used to sit here; it was disabled because the userId part did not work. */ ?>
+        <span class="text-nowrap"><?php echo $AppUI->_('Cost Code Filter') ?></span>
+        <?php /* TODO: add in optgroups to display company groupings for cost codes */ ?>
+        <?php echo arraySelect($task_log_costcodes, 'cost_code', 'size="1" class="text" onchange="document.frmFilter.submit()"', $cost_code) ?>
+    </div>
 </form>
 <form name="frmDelete2" action="./index.php?m=tasks" method="post" accept-charset="utf-8">
 	<input type="hidden" name="dosql" value="do_updatetask" />
@@ -90,7 +84,7 @@ if (0 == count($fields)) {
     $fieldList = array('task_log_date', 'task_log_name',
         'task_log_creator', 'task_log_hours', 'task_log_costcode', 'task_log_description');
     $fieldNames = array('Date', 'Summary', 'User', 'Hours',
-        'Cost Code', 'Comments', '');
+        'Cost Code', 'Comments');
 
     $module->storeSettings('tasks', 'task_logs_projects_view', $fieldList, $fieldNames);
     $fields = array_combine($fieldList, $fieldNames);

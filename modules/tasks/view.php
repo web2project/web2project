@@ -1,4 +1,5 @@
 <?php
+/** @var w2p_Core_CAppUI $AppUI */
 if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
@@ -19,6 +20,7 @@ $canDelete = $obj->canDelete();
 
 /**
  * Clear any reminders
+ *
  * @todo THIS SHOULD NOT HAPPEN HERE.. VIEWING SHOULD BE IDEMPOTENT
  */
 $reminded = (int) w2PgetParam($_GET, 'reminded', 0);
@@ -98,7 +100,7 @@ if ($obj->task_dynamic != 1 && 0 == $obj->task_represents_project) {
 if (count($obj->getChildren()) > 0) {
 	// Has children
 	// settings for tasks
-	$f = 'children';
+	$f = 'deepchildren';
 	$min_view = true;
 	$tabBox_show = 1;
 	// in the tasks file there is an if that checks

@@ -1,4 +1,5 @@
 <?php
+/** @var w2p_Core_CAppUI $AppUI */
 if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
@@ -19,16 +20,12 @@ if (!is_array($role)) {
 	$titleBlock->show();
 	// Now onto the display of the user.
 ?>
-<table class="std view">
-		<tr>
-			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Role ID'); ?>:</td>
-			<td class="hilite" width="100%"><?php echo $role["value"]; ?></td>
-		</tr>
-		<tr>
-			<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Description'); ?>:</td>
-			<td class="hilite" width="100%"><?php echo $AppUI->_($role["name"]); ?></td>
-		</tr>
-</table>
+<dl class="row std view w2p-details">
+	<dt class="col-sm-3 col-lg-2 text-sm-end"><?php echo $AppUI->_('Role ID'); ?>:</dt>
+	<dd class="col-sm-9 col-lg-10 hilite"><?php echo $role["value"]; ?></dd>
+	<dt class="col-sm-3 col-lg-2 text-sm-end"><?php echo $AppUI->_('Description'); ?>:</dt>
+	<dd class="col-sm-9 col-lg-10 hilite"><?php echo $AppUI->_($role["name"]); ?></dd>
+</dl>
 <?php
     echo $AppUI->getTheme()->styleRenderBoxBottom();
 	$tabBox = new CTabBox('?m=system&u=roles&a=viewrole&role_id=' . $role_id, W2P_BASE_DIR . '/modules/system/roles/', $tab);

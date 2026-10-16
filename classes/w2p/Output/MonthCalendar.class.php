@@ -5,63 +5,89 @@
  *
  * @since 3.0, this class has moved from the Calendar module to its own structure.
  *
- * @package     web2project\output
- * @author      D. Keith Casey, Jr. <caseydk@users.sourceforge.net>
+ * @package web2project\output
+ * @author  D. Keith Casey, Jr. <caseydk@users.sourceforge.net>
  */
 
 class w2p_Output_MonthCalendar {
-    /**#@+
-    * @var Date
-    */
+    /**
+     * @var w2p_Utilities_Date
+     */
     public $this_month;
-    public $prev_month;
-    public $next_month;
-    public $prev_year;
-    public $next_year;
-    /**#@-*/
 
     /**
-     @var string The css style name of the Title */
+     * @var w2p_Utilities_Date
+     */
+    public $prev_month;
+
+    /**
+     * @var w2p_Utilities_Date
+     */
+    public $next_month;
+
+    /**
+     * @var w2p_Utilities_Date
+     */
+    public $prev_year;
+
+    /**
+     * @var w2p_Utilities_Date
+     */
+    public $next_year;
+
+    /**
+     * @var string The css style name of the Title
+     */
     public $styleTitle;
 
     /**
-     @var string The css style name of the main calendar */
+     * @var string The css style name of the main calendar
+     */
     public $styleMain;
 
     /**
-     @var string The name of the javascript function that a 'day' link should call when clicked */
+     * @var string The name of the javascript function that a 'day' link should call when clicked
+     */
     public $callback;
 
     /**
-     @var boolean Show the previous/next month arrows */
+     * @var bool Show the previous/next month arrows
+     */
     public $showArrows;
 
     /**
-     @var boolean Show the day name column headings */
+     * @var bool Show the day name column headings
+     */
     public $showDays;
 
     /**
-     @var boolean Show the week link (no pun intended) in the first column */
+     * @var bool Show the week link (no pun intended) in the first column
+     */
     public $showWeek;
 
     /**
-     @var boolean Show the month name as link */
+     * @var bool Show the month name as link
+     */
     public $clickMonth;
 
     /**
-     @var boolean Show events in the calendar boxes */
+     * @var bool Show events in the calendar boxes
+     */
     public $showEvents;
 
     /**
-     @var string */
+     * @var string
+     */
     public $dayFunc;
 
     /**
-     @var string */
+     * @var string
+     */
     public $weekFunc;
 
     /**
-     @var boolean Show highlighting in the calendar boxes */
+     * @var bool Show highlighting in the calendar boxes
+     */
     public $showHighlightedDays;
 
     protected $_AppUI = null;
@@ -70,6 +96,7 @@ class w2p_Output_MonthCalendar {
      * @param Date $date
      */
     public function __construct($date = null) {
+        /** @var w2p_Core_CAppUI $AppUI */
         global $AppUI;
         $this->_AppUI = $AppUI;
         
@@ -99,7 +126,7 @@ class w2p_Output_MonthCalendar {
      *
      * { Description }
      *
-     * @param [type] $date
+     * @param mixed $date
      */
     public function setDate($date = null) {
         $this->this_month = new w2p_Utilities_Date($date);
@@ -131,7 +158,6 @@ class w2p_Output_MonthCalendar {
      * w2p_Output_MonthCalendar::setStyles()
      *
      * { Description }
-     *
      */
     public function setStyles($title, $main) {
         $this->styleTitle = $title;
@@ -155,7 +181,6 @@ class w2p_Output_MonthCalendar {
      * w2p_Output_MonthCalendar::setCallback()
      *
      * { Description }
-     *
      */
     public function setCallback($function) {
         $this->callback = $function;
@@ -165,7 +190,6 @@ class w2p_Output_MonthCalendar {
      * w2p_Output_MonthCalendar::setEvents()
      *
      * { Description }
-     *
      */
     public function setEvents($e) {
         $this->events = $e;
@@ -176,7 +200,6 @@ class w2p_Output_MonthCalendar {
      * ie     ['20040517'] => '#ff0000',
      *
      * { Description }
-     *
      */
     public function setHighlightedDays($hd) {
         $this->highlightedDays = $hd;
@@ -187,7 +210,6 @@ class w2p_Output_MonthCalendar {
      * w2p_Output_MonthCalendar::show()
      *
      * { Description }
-     *
      */
     public function show() {
         $s = '';
@@ -211,7 +233,6 @@ class w2p_Output_MonthCalendar {
      * w2p_Output_MonthCalendar::_drawTitle()
      *
      * { Description }
-     *
      */
     private function _drawTitle() {
         global $m, $a;
@@ -219,34 +240,28 @@ class w2p_Output_MonthCalendar {
         $url .= $a ? '&amp;a=' . $a : '';
         $url .= isset($_GET['dialog']) ? '&amp;dialog=1' : '';
 
-        $s = '<table border="0" cellspacing="0" cellpadding="3" width="100%" class="' . $this->styleTitle . '">';
-        $s .= '<tr>';
+        $s = '<div class="d-flex align-items-center gap-2 ' . $this->styleTitle . '">';
 
         if ($this->showArrows) {
             $href = $url . '&amp;date=' . $this->prev_month->format(FMT_TIMESTAMP_DATE) . ($this->callback ? '&amp;callback=' . $this->callback : '') . ((count($this->highlightedDays) > 0) ? '&uts=' . key($this->highlightedDays) : '');
-            $s .= '<td align="left">';
             $s .= '<a href="' . $href . '">' . w2PshowImage('prev.gif', 16, 16, $this->_AppUI->_('previous month')) . '</a>';
-            $s .= '</td>';
         }
 
-        $s .= '<th width="99%" align="center">';
+        $s .= '<div class="flex-grow-1 text-center fw-bold w2p-cal-month">';
         if ($this->clickMonth) {
             $s .= '<a href="index.php?m=' . $m . '&amp;date=' . $this->this_month->format(FMT_TIMESTAMP_DATE) . '">';
         }
         setlocale(LC_TIME, 'C');
         $s .= $this->_AppUI->_($this->this_month->format('%B')) . ' ' . $this->this_month->format('%Y') . (($this->clickMonth) ? '</a>' : '');
         setlocale(LC_ALL, $this->_AppUI->user_lang);
-        $s .= '</th>';
+        $s .= '</div>';
 
         if ($this->showArrows) {
             $href = ($url . '&amp;date=' . $this->next_month->format(FMT_TIMESTAMP_DATE) . (($this->callback) ? ('&amp;callback=' . $this->callback) : '') . ((count($this->highlightedDays) > 0) ? ('&amp;uts=' . key($this->highlightedDays)) : ''));
-            $s .= '<td align="right">';
             $s .= ('<a href="' . $href . '">' . w2PshowImage('next.gif', 16, 16, $this->_AppUI->_('next month')) . '</a>');
-            $s .= '</td>';
         }
 
-        $s .= '</tr>';
-        $s .= '</table>';
+        $s .= '</div>';
 
         return $s;
     }
@@ -274,7 +289,6 @@ class w2p_Output_MonthCalendar {
      * w2p_Output_MonthCalendar::_drawMain()
      *
      * { Description }
-     *
      */
     private function _drawMain() {
         $today = new w2p_Utilities_Date();
@@ -372,7 +386,6 @@ class w2p_Output_MonthCalendar {
      * w2p_Output_MonthCalendar::_drawEvents()
      *
      * { Description }
-     *
      */
     private function _drawEvents($day) {
         $s = '';

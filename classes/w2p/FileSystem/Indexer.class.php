@@ -10,7 +10,8 @@ class w2p_FileSystem_Indexer
     }
 
     /**
-     * parse file for indexing
+     * Parse file for indexing
+     *
      * @todo convert to using the FileSystem methods
      */
     public function index(CFile $file) {

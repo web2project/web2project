@@ -12,10 +12,13 @@ INSERT INTO `config` (`config_name`, `config_value`, `config_group`, `config_typ
 DELETE FROM `config` WHERE `config_name` IN ('calendar', 'jpLocale',
     'projects', 'system', 'tasks');
 
+# 2026 Update - eliminating '0000-00-00 00:00:00' as values
+UPDATE `contacts` SET `contact_birthday` = NULL WHERE CAST(`contact_birthday` AS CHAR(20)) = '0000-00-00 00:00:00';
+
 ALTER TABLE `contacts` ADD `contact_display_name` VARCHAR( 100 )
     NOT NULL AFTER `contact_last_name`;
 
-UPDATE contacts SET contact_order_by = CONCAT(contact_first_name, ' ', contact_last_name)
-    WHERE contact_order_by = '';
+UPDATE `contacts` SET `contact_order_by` = CONCAT(`contact_first_name`, ' ', `contact_last_name`)
+    WHERE `contact_order_by` = '';
 
-UPDATE contacts SET contact_display_name = contact_order_by;
+UPDATE `contacts` SET `contact_display_name` = `contact_order_by`;

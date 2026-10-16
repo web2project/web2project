@@ -1,11 +1,17 @@
 <?php
+/** @var w2p_Core_CAppUI $AppUI */
 if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
 
+// The category filter picks the matching category tab (tab 0 is All Files).
+if (isset($_POST['category_id'])) {
+	$AppUI->setState('FileIdxTab', (int) $_POST['category_id'] + 1);
+}
 $tab = $AppUI->processIntState('FileIdxTab', $_GET, 'tab', 0);
 
 $project_id = $AppUI->processIntState('FileIdxProject', $_REQUEST, 'project_id', 0);
+$owner_id = $AppUI->processIntState('FileIdxOwner', $_REQUEST, 'owner_id', 0);
 $company_id = (isset($company_id)) ? $company_id : 0;
 $task_id = (isset($task_id)) ? $task_id : 0;
 
@@ -37,7 +43,21 @@ $allowedTasks = $task->getAllowedSQL($AppUI->user_id, 'file_task');
 
 // setup the title block
 $titleBlock = new w2p_Theme_TitleBlock('Files', 'icon.png', $m);
-$titleBlock->addFilterCell('Filter', 'project_id', $projects, $project_id);
+$titleBlock->addFilterCell('Project', 'project_id', $projects, $project_id);
+
+// owners of files, for the owner filter
+$q = new w2p_Database_Query();
+$q->addTable('files', 'f');
+$q->addQuery('DISTINCT f.file_owner, c.contact_display_name');
+$q->addJoin('users', 'u', 'u.user_id = f.file_owner', 'inner');
+$q->addJoin('contacts', 'c', 'c.contact_id = u.user_contact', 'inner');
+$q->addOrder('c.contact_display_name');
+$owners = arrayMerge(array('0' => $AppUI->_('All', UI_OUTPUT_RAW)), $q->loadHashList());
+$q->clear();
+$titleBlock->addFilterCell('Owner', 'owner_id', $owners, $owner_id);
+
+$categories = arrayMerge(array('-1' => $AppUI->_('All', UI_OUTPUT_RAW)), w2PgetSysVal('FileType'));
+$titleBlock->addFilterCell('Category', 'category_id', $categories, $tab - 1);
 
 // override the $canEdit variable passed from the main index.php in order to check folder permissions
 /** get permitted folders **/
@@ -57,7 +77,6 @@ if (!$limited) {
 }
 
 if ($canEdit) {
-    // $titleBlock->addButton('new folder', '?m=files&a=addedit_folder');
     $titleBlock->addButton('new file', '?m=files&a=addedit&folder=' . $folder_id);
 }
 $titleBlock->show();
@@ -71,9 +90,8 @@ if ($tab != -1) {
 $tabBox = new CTabBox('?m=files', W2P_BASE_DIR . '/modules/files/', $tab);
 $i = -1;
 foreach ($file_types as $file_type) {
-	$fileList = CFile::getFileList($AppUI, $company_id, $project_id, $task_id, $i);
+	$fileList = CFile::getFileList($AppUI, $company_id, $project_id, $task_id, $i, $owner_id);
 	$tabBox->add('index_table', $file_type . ' (' . count($fileList) . ')');
 	++$i;
 }
-// $tabBox->add('folders_table', 'Folder Explorer');
 $tabBox->show();

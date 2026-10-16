@@ -55,6 +55,7 @@ class w2p_System_Session
 
     public function write($id, $data)
     {
+        /** @var w2p_Core_CAppUI|null $AppUI */
         global $AppUI;
 
         $q = new w2p_Database_Query;
@@ -68,6 +69,8 @@ class w2p_System_Session
             $q->addTable('sessions');
             $q->addWhere('session_id = \'' . $id . '\'');
             $q->addUpdate('session_data', $data);
+            // idle time and the idle expiry in read()/gc() are measured from here
+            $q->addUpdate('session_updated', $q->dbfnNowWithTZ());
             if (isset($AppUI)) {
                 $q->addUpdate('session_user', (int) $AppUI->last_insert_id);
             }
@@ -110,6 +113,7 @@ class w2p_System_Session
 
     public function gc()
     {
+        /** @var w2p_Core_CAppUI|null $AppUI */
         global $AppUI;
 
         $max = $this->convertTime('max_lifetime');

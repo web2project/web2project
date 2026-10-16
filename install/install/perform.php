@@ -38,17 +38,15 @@
 	);
 	if (!$manager->testDatabaseCredentials($w2Pconfig)) {
 		?>
-        <table cellspacing="0" cellpadding="3" border="0" class="tbl update" align="center">
-			<tr>
-			  <td colspan="2" align="center">
+        <div class="std update">
+			<div class="my-2 text-center">
 			  	<b class="error">Your database credentials failed.  System installation has stopped.  Please correct them and try again.</b><br /><br />
 				  <form action="<?php echo W2P_BASE_URL; ?>/index.php" method="post" name="form" id="form" accept-charset="utf-8">
 			  		<input type="hidden" name="step" value="dbcreds" />
 			  		<input class="button" type="submit" name="next" value="&laquo; Reset System Credentials" />
 					</form>
-				</td>
-			</tr>
-		</table>
+				</div>
+		</div>
 		<?php		
 		die();
 	}
@@ -82,64 +80,47 @@
 	}
 ?>
 
-<table cellspacing="0" cellpadding="3" border="0" class="tbl update" align="center">
-	<tr>
-		<td class="title" colspan="2">Step 3: Create Database &amp; Write Configuration</td>
-	</tr>
-	<tr>
-	  <td colspan="2">
+<div class="std update">
+	<h3 class="h6 mt-3 title">Step 3: Create Database &amp; Write Configuration</h3>
+	<div class="my-2">
 	  	Your database is now being installed and configured.  I would suggest 
 	  	going out to smoke a cigarette or get a cup of coffee except that 
 	  	cigarettes aren't very healthy and.. oh wait, we're done.
-	  </td>
-	</tr>
-	<tr><td colspan="2">&nbsp;</td></tr>
+	  </div>
 	<?php
 		if (count($errorMessages) > 0) { ?>
-			<tr>
-				<td colspan="2"><b class="error">There were <?php echo count($errorMessages); ?> errors in the installation.</b></td>
-			</tr>
+			<div class="my-2"><b class="error">There were <?php echo count($errorMessages); ?> errors in the installation.</b></div>
 			<?php
 				foreach ($errorMessages as $message) { 
-					?><tr><td colspan="2"><?php echo $message; ?></td></tr><?php
+					?><div class="my-2"><?php echo $message; ?></div><?php
 				}
 			?>
-			<tr>
-				<td colspan="2">Note: Errors noting 'Duplicate entry', 'Table already exists', or 'Unknown table' are not likely to be problems.  Sit back and relax.</td>
-			</tr>
+			<div class="my-2">Note: Errors noting 'Duplicate entry', 'Table already exists', or 'Unknown table' are not likely to be problems.  Sit back and relax.</div>
 			<?php
 		}
 	?>
-	<tr>
-		<td class="title" valign="top">Database Installation Feedback:</td>
-		<td class="item">
+	<div class="row py-1 border-bottom">
+		<div class="col-sm-5 title">Database Installation Feedback:</div>
+		<div class="col-sm-7 item">
 			<b style="color:<?php echo $dbErr ? 'red' : 'green'; ?>"><?php echo $dbMsg; ?></b>
 			<?php if ($dbErr) { ?> <br />
 				Please note that errors relating to dropping indexes during upgrades are <b>NORMAL</b> and do not indicate a problem.
 			<?php } ?>
-		</td>
-	<tr>
-	<tr>
-		<td class="title">Config File Creation Feedback:</td>
-		<td class="item" align="left"><b style="color:<?php echo $cFileErr ? 'red' : 'green'; ?>"><?php echo $cFileMsg; ?></b></td>
-	</tr>
+		</div>
+	</div>
+	<div class="row py-1 border-bottom">
+		<div class="col-sm-5 title">Config File Creation Feedback:</div>
+		<div class="col-sm-7 item"><b style="color:<?php echo $cFileErr ? 'red' : 'green'; ?>"><?php echo $cFileMsg; ?></b></div>
+	</div>
 	<?php if(($do_cfg || $do_db_cfg) && $cFileErr){ ?>
-		<tr>
-			<td class="item" align="left" colspan="2">The following Content should go to ./includes/config.php. Create that text file manually and copy the following lines in by hand and save.  This file must be readable by the webserver.</td>
-		</tr>
-		<tr>
-			<td align="center" colspan="2"><textarea class="button" name="dbhost" cols="100" rows="20" title="Content of config.php for manual creation." /><?php echo $msg.$config; ?></textarea></td>
-		</tr>
+		<div class="my-2 item">The following Content should go to ./includes/config.php. Create that text file manually and copy the following lines in by hand and save.  This file must be readable by the webserver.</div>
+		<div class="my-2 text-center"><textarea class="button" name="dbhost" cols="100" rows="20" title="Content of config.php for manual creation."><?php echo $msg.$config; ?></textarea></div>
 	<?php } ?>
-	<tr>
-		<td class="item" align="center" colspan="2">
+	<div class="my-2 text-center item">
 			<?php if ($cFileErr) { ?><b style="color: red;">You MUST manually create ./includes/config.php before continuing.</b><br /><?php } ?>
 			<b><a href="../index.php?m=system&amp;a=systemconfig">Login and Check the web2project System Environment</a></b>
-		</td>
-	</tr>
-	<tr>
-		<td class="item" align="center" colspan="2">
+		</div>
+	<div class="my-2 text-center item">
 			<p>The Administrator login has been set to <b>admin</b> with the password <?php echo ($adminpass == 'passwd') ? 'of <b>passwd</b>' : 'you set' ?></b>. It is a good idea to change this password when you first log in</p>
-		</td>
-	</tr>
-</table>
+		</div>
+</div>

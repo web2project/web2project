@@ -1,4 +1,5 @@
 <?php
+/** @var w2p_Core_CAppUI $AppUI */
 if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly');
 }
@@ -31,7 +32,7 @@ if (W2P_BASE_DIR . '/locales/' . $AppUI->user_locale . '/common.inc') {
 }
 
 /**
- * language files for specific locales and specific modules (for external modules) should be put in
+ * Language files for specific locales and specific modules (for external modules) should be put in
  *   modules/[the-module]/locales/[the-locale]/[the-module].inc or modules/[the-module]/locales/[the-locale].inc
  *   this allows for module specific translations to be distributed with the module
  */
@@ -58,5 +59,6 @@ switch ($m) {
 		}
 		break;
 }
-eval('$GLOBALS[\'translate\']=array(' . ob_get_contents() . "\n'0');");
+// Parsed, not eval()'d: see w2p_Utilities_Translations.
+$GLOBALS['translate'] = w2p_Utilities_Translations::parse(ob_get_contents());
 ob_end_clean();

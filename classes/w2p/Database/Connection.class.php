@@ -21,6 +21,14 @@ class w2p_Database_Connection
                 } else {
                     $this->db->Connect($host, $user, $passwd, $dbname) or die('FATAL ERROR: Connection to database server failed');
                 }
+                /*
+                 * MySQL 5.7+ enables ONLY_FULL_GROUP_BY by default. Many queries
+                 * group by an id and also select other columns of the same row,
+                 * which that mode rejects (MySQL 8 returns errors and pages such as
+                 * the company list and project view fail). Turn off only that mode
+                 * for this connection and keep the server's other settings.
+                 */
+                $this->db->Execute("SET SESSION sql_mode = TRIM(BOTH ',' FROM REPLACE(CONCAT(',', @@SESSION.sql_mode, ','), ',ONLY_FULL_GROUP_BY,', ','))");
         }
 
         $ADODB_FETCH_MODE = ADODB_FETCH_BOTH;
@@ -64,12 +72,12 @@ class w2p_Database_Connection
         }
         $qid = $this->db->Execute($sql);
         dprint(__file__, __line__, 10, $sql);
-        if (db_error()) {
+        if ($this->error()) {
             dprint(__file__, __line__, 0, "Error executing: <pre>$sql</pre>");
             // Useless statement, but it is being executed only on error,
             // and it stops infinite loop.
             $this->db->Execute($sql);
-            if (!db_error()) {
+            if (!$this->error()) {
                 echo '<script language="JavaScript"> location.reload(); </script>';
             }
         }

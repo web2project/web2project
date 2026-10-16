@@ -1,8 +1,8 @@
 <?php
 /**
- * @package     web2project\modules\core
+ * @package web2project\modules\core
  *
- * @todo    refactor static methods
+ * @todo refactor static methods
  */
 
 class CEvent extends w2p_Core_BaseObject
@@ -81,6 +81,9 @@ class CEvent extends w2p_Core_BaseObject
 
     protected function hook_preDelete()
     {
+        // Records the id that hook_postDelete() uses to remove custom field values.
+        parent::hook_preDelete();
+
         $q = $this->_getQuery();
         $q->setDelete('user_events');
         $q->addWhere('event_id = ' . (int) $this->event_id);
@@ -107,13 +110,15 @@ class CEvent extends w2p_Core_BaseObject
 
     /**
      * Calculating if an recurrent date is in the given period
-     * @param Date Start date of the period
-     * @param Date End date of the period
-     * @param Date Start date of the Date Object
-     * @param Date End date of the Date Object
-     * @param integer Type of Recurrence
-     * @param integer Times of Recurrence
-     * @param integer Time of Recurrence
+     *
+     * @param Date $start_date Start date of the period
+     * @param Date $end_date End date of the period
+     * @param Date $event_start_datetime Start date of the Date Object
+     * @param Date $event_end_datetime End date of the Date Object
+     * @param int $event_recurs Type of Recurrence
+     * @param int $event_times_recuring Times of Recurrence
+     * @param int $j Time of Recurrence
+     *
      * @return array Calculated Start and End Dates for the recurrent Event for the given Period
      */
     public function getRecurrentEventforPeriod($start_date, $end_date, $event_start_datetime, $event_end_datetime, $event_recurs, $event_times_recuring, $j)
@@ -178,14 +183,17 @@ class CEvent extends w2p_Core_BaseObject
 
     /**
      * Utility function to return an array of events with a period
-     * @param Date Start date of the period
-     * @param Date End date of the period
+     *
+     * @param Date $start_date Start date of the period
+     * @param Date $end_date End date of the period
+     *
      * @return array A list of events
      *
      * WARNING: This is actually called staticly so $this is not available.
      */
     public static function getEventsForPeriod($start_date, $end_date, $filter = 'all', $user_id = null, $project_id = 0, $company_id = 0)
     {
+        /** @var w2p_Core_CAppUI $AppUI */
         global $AppUI;
 
         // convert to default db time stamp
@@ -305,7 +313,6 @@ class CEvent extends w2p_Core_BaseObject
 			$eventList[$i]['event_end_datetime'] = $AppUI->formatTZAwareTime($event['event_end_datetime'], '%Y-%m-%d %H:%M:%S');
 			$i++;
 		}
-//echo '<pre>'; print_r($eventList); echo '</pre>';
 		//return a list of non-recurrent and recurrent events
 		return $eventList;
 	}
@@ -359,7 +366,7 @@ class CEvent extends w2p_Core_BaseObject
 				}
 			}
 
-			if ($msg = db_error()) {
+			if ($msg = (new w2p_Database_Connection($GLOBALS['db']))->error()) {
 				$this->_AppUI->setMsg($msg, UI_MSG_ERROR);
 			}
 		}
@@ -584,10 +591,11 @@ class CEvent extends w2p_Core_BaseObject
     /**
      * This is used in the day event page to make sure we're marking the right hours.
      *
-     * @param type $this_date
-     * @param type $end_date
-     * @param type $increment
-     * @return type
+     * @param w2p_Utilities_Date $this_date
+     * @param w2p_Utilities_Date $end_date
+     * @param int $increment
+     *
+     * @return int
      */
     public function calculateRows($this_date, $end_date, $increment)
     {

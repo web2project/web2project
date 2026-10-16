@@ -1,4 +1,5 @@
 <?php
+/** @var w2p_Core_CAppUI $AppUI */
 if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
@@ -103,7 +104,6 @@ if ($object_id == 0 && $contact_id > 0) {
 
 // Get the users notification options
 $taskLogEmail = (isset($prefs['TASKLOGEMAIL'])) ? (int) $prefs['TASKLOGEMAIL'] : 0;
-// $tl_assign = $taskLogEmail & 1;
 $tl_task = $taskLogEmail & 2;
 $tl_proj = $taskLogEmail & 4;
 ?>

@@ -1,4 +1,5 @@
 <?php
+/** @var w2p_Core_CAppUI $AppUI */
 if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
@@ -28,7 +29,7 @@ $fields = $module->loadSettings('links', 'index_list');
 
 if (0 == count($fields)) {
     $fieldList = array('link_name', 'link_description', 'link_category', 'link_project', 'link_task', 'link_owner', 'link_datetime');
-    $fieldNames = array('Link Name', 'Description', 'Category', 'Project Task', 'Task Name', 'Owner', 'Date');
+    $fieldNames = array('Link Name', 'Description', 'Category', 'Project Name', 'Task Name', 'Owner', 'Date');
 
     $module->storeSettings('links', 'index_list', $fieldList, $fieldNames);
     $fields = array_combine($fieldList, $fieldNames);
@@ -51,7 +52,7 @@ $listTable->df .= ' ' . $AppUI->getPref('TIMEFORMAT');
 $listTable->addBefore('edit', 'link_id');
 $listTable->addBefore('url', 'link_url');
 
-echo $listTable->startTable();
+echo $listTable->startTable('links');
 echo $listTable->buildHeader($fields);
 echo $listTable->buildRows($items, $customLookups);
 echo $listTable->endTable();

@@ -1,4 +1,5 @@
 <?php
+/** @var w2p_Core_CAppUI $AppUI */
 if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
@@ -86,7 +87,7 @@ function clearIt(){
 	f.permission_grant_on.selectedIndex = 0;
 }
 
-function delIt(id) {
+function delPerm(id) {
 	if (confirm( 'Are you sure you want to delete this permission?' )) {
 		var f = document.frmPerms;
 		f.del.value = 1;
@@ -131,9 +132,8 @@ function setPermItem( key, val ) {
 <?php } ?>
 </script>
 
-<table width="100%" border="0">
-    <tr>
-        <td width="50%" valign="top">
+<div class="row g-3">
+        <div class="col-lg-6">
             <table class="tbl list">
                 <tr>
                     <th width="100%"><?php echo $AppUI->_('Item'); ?></th>
@@ -194,7 +194,6 @@ function setPermItem( key, val ) {
                     $buf .= implode('<br />', $modlist);
                     $buf .= '</td>';
                     // Item information TODO:  need to figure this one out.
-                    // 	$buf .= "<td></td>";
                     // Type information.
                     $buf .= '<td>';
                     $perm_type = array();
@@ -214,7 +213,7 @@ function setPermItem( key, val ) {
                     $buf .= '<td nowrap="nowrap">';
                     $canDelete = (canEdit('users') && $_canEdit);
                     if ($canDelete) {
-                        $buf .= "<a href=\"javascript:delIt({$acl});\" title=\"" . $AppUI->_('delete') . "\">" . w2PshowImage('icons/stock_delete-16.png', 16, 16, '') . "</a>";
+                        $buf .= "<a href=\"javascript:delPerm({$acl});\" title=\"" . $AppUI->_('delete') . "\">" . w2PshowImage('icons/stock_delete-16.png', 16, 16, '') . "</a>";
                     }
                     $buf .= '</td>';
 
@@ -223,8 +222,8 @@ function setPermItem( key, val ) {
             }
             ?>
             </table>
-        </td>
-        <td width="50%" valign="top">
+        </div>
+        <div class="col-lg-6">
             <?php if ($canEdit) { ?>
                 <form name="frmPerms" method="post" action="?m=users" accept-charset="utf-8">
                     <input type="hidden" name="del" value="0" />
@@ -236,53 +235,42 @@ function setPermItem( key, val ) {
                     <input type="hidden" name="permission_table" value="" />
                     <input type="hidden" name="permission_name" value="" />
 
-                    <table class="std well">
-                        <tr>
-                            <th colspan="2"><?php echo $AppUI->_('Add Permissions'); ?></th>
-                        </tr>
-                        <tr>
-                            <td nowrap="nowrap" align="right"><?php echo $AppUI->_('Module'); ?>:</td>
-                            <td width="100%"><?php echo arraySelect($modules, 'permission_module', 'size="1" class="text"', 'grp,all', true); ?></td>
-                        </tr>
-                        <tr>
-                            <td nowrap="nowrap" align="right"><?php echo $AppUI->_('Item'); ?>:</td>
-                            <td>
-                                <input type="text" name="permission_item_name" class="text" size="30" value="all" disabled="disabled" />
-                                <input type="button" name="" class="button btn btn-primary btn-mini" value="..." onclick="popPermItem();" />
-                            </td>
-                        </tr>
-                        <tr>
-                            <td nowrap="nowrap" align="right"><?php echo $AppUI->_('Access'); ?>:</td>
-                            <td>
-                                <select name="permission_access" class="text">
-                                    <option value='1'><?php echo $AppUI->_('allow'); ?></option>
-                                    <option value='0'><?php echo $AppUI->_('deny'); ?></option>
-                                </select>
-                            </td>
-                        </tr>
+                    <div class="std addedit well">
+                        <div class="column left w2p-wide">
+                        <h3 class="h6 border-bottom pb-1"><?php echo $AppUI->_('Add Permissions'); ?></h3>
+                        <p>
+                            <label><?php echo $AppUI->_('Module'); ?>:</label>
+                            <?php echo arraySelect($modules, 'permission_module', 'size="1" class="text"', 'grp,all', true); ?>
+                        </p>
+                        <p>
+                            <label><?php echo $AppUI->_('Item'); ?>:</label>
+                            <input type="text" name="permission_item_name" class="text" size="30" value="all" disabled="disabled" />
+                            <input type="button" name="" class="button btn btn-primary btn-sm" value="..." onclick="popPermItem();" />
+                        </p>
+                        <p>
+                            <label><?php echo $AppUI->_('Access'); ?>:</label>
+                            <select name="permission_access" class="text">
+                                <option value='1'><?php echo $AppUI->_('allow'); ?></option>
+                                <option value='0'><?php echo $AppUI->_('deny'); ?></option>
+                            </select>
+                        </p>
                         <?php
                             foreach ($perm_list as $perm_id => $perm_name) {
                             ?>
-                            <tr>
-                                <td nowrap="nowrap" align='right'><?php echo $AppUI->_($perm_name); ?>:</td>
-                                <td>
-                                  <input type="checkbox" name="permission_type[]" value="<?php echo $perm_id; ?>" />
-                                </td>
-                            </tr>
+                            <p>
+                                <label><?php echo $AppUI->_($perm_name); ?>:</label>
+                                <input type="checkbox" name="permission_type[]" value="<?php echo $perm_id; ?>" />
+                            </p>
                             <?php
                             }
                         ?>
-                        <tr>
-                            <td>
-                                <input type="reset" value="<?php echo $AppUI->_('clear'); ?>" class="button btn btn-danger" name="sqlaction" onclick="clearIt();" />
-                            </td>
-                            <td align="right">
-                                <input type="submit" value="<?php echo $AppUI->_('add'); ?>" class="button btn btn-primary" name="sqlaction2" />
-                            </td>
-                        </tr>
-                    </table>
+                        </div>
+                        <div class="w2p-form-actions">
+                            <input type="reset" value="<?php echo $AppUI->_('clear'); ?>" class="button btn btn-danger" name="sqlaction" onclick="clearIt();" />
+                            <input type="submit" value="<?php echo $AppUI->_('add'); ?>" class="button btn btn-primary" name="sqlaction2" />
+                        </div>
+                    </div>
                 </form>
             <?php } ?>
-        </td>
-    </tr>
-</table>
+        </div>
+</div>

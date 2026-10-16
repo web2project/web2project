@@ -1,6 +1,6 @@
 <?php
 /**
- * @package     web2project\modules\core
+ * @package web2project\modules\core
  */
 
 class CFile_Folder extends w2p_Core_BaseObject
@@ -52,7 +52,7 @@ class CFile_Folder extends w2p_Core_BaseObject
      * This needs a separate canEdit and canView instead of the BaseObject one because the CFile_Folder object
      *   doesn't support separate permissions from the Files module itself.
      *
-     * @return boolean
+     * @return bool
      */
     public function canEdit()
     {
@@ -82,7 +82,8 @@ class CFile_Folder extends w2p_Core_BaseObject
     }
 
 	/**
- 	@return string Returns the name of the parent folder or null if no parent was found **/
+	 * @return string Returns the name of the parent folder or null if no parent was found *
+	 */
 	public function getParentFolderName() {
 
         $q = $this->_getQuery();

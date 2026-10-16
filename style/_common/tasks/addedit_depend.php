@@ -1,3 +1,4 @@
+<?php /** @var w2p_Core_CAppUI $AppUI */ ?>
 <form name="dependFrm" action="?m=tasks&a=addedit&task_project=<?php echo $task_project; ?>" method="post" accept-charset="utf-8">
     <input name="dosql" type="hidden" value="do_task_aed" />
     <input name="task_id" type="hidden" value="<?php echo $object->getId(); ?>" />
@@ -16,7 +17,7 @@
             </p>
             <p>
                 <?php $form->showLabel('All Tasks'); ?>
-                <select name="all_tasks" class="text" style="width:220px" size="10" class="text" multiple="multiple">
+                <select name="all_tasks" class="text" style="width:220px" size="10" multiple="multiple">
                     <?php echo str_replace('selected', '', $task_parent_options); // we need to remove selected added from task_parent options ?>
                 </select>
             </p>

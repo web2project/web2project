@@ -4,9 +4,8 @@
  * This class takes an array of items and allows us to paginate over them. This
  *   does not change the order of the elements, it just gets a subset.
  *
- * @package web2project
+ * @package    web2project
  * @subpackage utilities
- *
  */
 
 class w2p_Utilities_Paginator
@@ -28,8 +27,9 @@ class w2p_Utilities_Paginator
      *   items in an array. This keeps the original indexes intact so you can
      *   use the objects' ids safely.
      *
-     * @param   int $page
-     * @return  array
+     * @param int $page
+     *
+     * @return array
      */
     public function getItemsOnPage($page = 1)
     {
@@ -45,17 +45,41 @@ class w2p_Utilities_Paginator
      * The $params are to add extra query parameters. This is especially
      *   necessary when you have pagination within a subview.
      *
-     * @param   w2p_Coretype_CAppUI $AppUI
-     * @param   string              $m
-     * @param   int                 $tab
-     * @param   array               $params
-     * @return  string
+     * @param w2p_Core_CAppUI $AppUI
+     * @param string              $m
+     * @param int                 $tab
+     * @param array               $params
+     *
+     * @return string
      */
     public function buildNavigation($AppUI, $m, $tab, $params = array())
     {
-        $m .= count($params) ? '&' . http_build_query($params) : '';
+        $m .= count($params) ? '&amp;' . http_build_query($params, '', '&amp;') : '';
 
         return buildPaginationNav($AppUI, $m, $tab,
                     $this->_itemCount, $this->_pagesize, $this->_currentPage);
+    }
+
+    /**
+     * The query parameters of the current page that page links must carry so
+     *   they stay on the same view (a=view, company_id, orderby and so on).
+     *   m, tab and page are left out because buildNavigation() sets them.
+     *
+     * @param array $query  defaults to $_GET
+     *
+     * @return array
+     */
+    public static function currentQueryParams($query = null)
+    {
+        $query = is_array($query) ? $query : $_GET;
+
+        $params = array();
+        foreach ($query as $key => $value) {
+            if (!in_array($key, array('m', 'tab', 'page'), true) && is_scalar($value) && '' !== (string) $value) {
+                $params[$key] = (string) $value;
+            }
+        }
+
+        return $params;
     }
 }

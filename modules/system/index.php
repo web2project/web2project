@@ -1,4 +1,5 @@
 <?php
+/** @var w2p_Core_CAppUI $AppUI */
 if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
@@ -80,7 +81,7 @@ $titleBlock->show();
         </div>
     </div>
 
-    <div class="clear"/>
+    <div class="clear"></div>
 
     <div class="left main">
         <div class="left icon">
@@ -101,7 +102,7 @@ $titleBlock->show();
         </div>
     </div>
 
-    <div class="clear"/>
+    <div class="clear"></div>
 
     <div class="left main">
         <div class="left icon">

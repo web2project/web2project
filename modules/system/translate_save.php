@@ -1,4 +1,5 @@
 <?php
+/** @var w2p_Core_CAppUI $AppUI */
 /**
  * Processes the entries in the translation form.
  *
@@ -16,6 +17,18 @@ $trans = w2PgetParam($_POST, 'trans', array());
 // check permissions
 if (!canEdit('system')) {
 	$AppUI->redirect(ACCESS_DENIED);
+}
+
+// Both values become part of the path of the file that is written below, so
+// only an installed module (or the shared common/styles files) and an
+// installed language are accepted. Anything else, such as "../", could
+// write a file outside the locales folders.
+$loader = new w2p_FileSystem_Loader();
+$modules = arrayMerge($loader->readDirs('modules'), array('common' => 'common', 'styles' => 'styles'));
+$locales = $loader->readDirs('locales');
+if (!is_string($module) || !isset($modules[$module]) || !is_string($lang) || !isset($locales[$lang])) {
+	$AppUI->setMsg('Unknown module or language; the locales file was not saved.', UI_MSG_ERROR);
+	$AppUI->redirect('m=system&a=translate');
 }
 
 // save to core locales if a translation exists there, otherwise save

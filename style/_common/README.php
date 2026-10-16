@@ -5,7 +5,7 @@
  *   these templates will be included within their modules similar to any other
  *   templating layer with a snippet like this:
  *
- *      include $AppUI->getTheme()->resolveTemplate('companies/list');
+ *      Include $AppUI->getTheme()->resolveTemplate('companies/list');
  *
  * which resolves to this file by default:
  *

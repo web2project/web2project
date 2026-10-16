@@ -1,8 +1,8 @@
 <?php
 
 /**
- * @package     web2project\output
- * @author      D. Keith Casey, Jr. <caseydk@users.sourceforge.net>
+ * @package web2project\output
+ * @author  D. Keith Casey, Jr. <caseydk@users.sourceforge.net>
  */
 
 class w2p_Output_HTMLHelper extends w2p_Output_HTML_Base
@@ -12,23 +12,7 @@ class w2p_Output_HTMLHelper extends w2p_Output_HTML_Base
     /** @deprecated */
     public static function renderContactList(w2p_Core_CAppUI $AppUI, array $contactList)
     {
-        $output = '<table cellspacing="1" cellpadding="2" border="0" width="100%" class="tbl">';
-        $output .= '<tr><th>' . $AppUI->_('Name') . '</th><th>' . $AppUI->_('Email') . '</th>';
-        $output .= '<th>' . $AppUI->_('Phone') . '</th><th>' . $AppUI->_('Department') . '</th></tr>';
-        foreach ($contactList as $contact_id => $contact_data) {
-            $contact = new CContact();
-            $contact->contact_id = $contact_id;
-
-            $output .= '<tr>';
-            $output .= '<td class="hilite"><a href="index.php?m=contacts&amp;a=addedit&amp;contact_id=' . $contact_id . '">' . $contact_data['contact_order_by'] . '</a></td>';
-            $output .= '<td class="hilite">' . w2p_email($contact_data['contact_email']) . '</td>';
-            $output .= '<td class="hilite">' . $contact_data['contact_phone'] . '</td>';
-            $output .= '<td class="hilite">' . $contact_data['dept_name'] . '</td>';
-            $output .= '</tr>';
-        }
-        $output .= '</table>';
-
-        return $output;
+        return '';
     }
 
     public function renderContactTable($moduleName, array $contactList)
@@ -46,7 +30,7 @@ class w2p_Output_HTMLHelper extends w2p_Output_HTML_Base
 
         $listTable = new w2p_Output_ListTable($this->AppUI);
 
-        $output  = $listTable->startTable();
+        $output  = $listTable->startTable('contacts-' . $moduleName . '_view');
         $output .= $listTable->buildHeader($fields);
         $output .= $listTable->buildRows($contactList);
         $output .= $listTable->endTable();
@@ -66,9 +50,9 @@ class w2p_Output_HTMLHelper extends w2p_Output_HTML_Base
      *   company_description, or even some_other_crazy_wacky_description in
      *   exactly the same way without additional lines of code or configuration.
      *   If you want to do your own, feel free... but this is probably easier.
-     * 
+     *
      * Examples: _budget, _date, _name, _owner
-     * 
+     *
      * This may not work for things like company_type or project_type which are
      *   actually just references to look up tables, ... but should work on
      *   fields like project_company, dept_company because we still have a 
@@ -81,11 +65,47 @@ class w2p_Output_HTMLHelper extends w2p_Output_HTML_Base
      *   and views.
      */
     public function createCell($fieldName, $value, $custom = array()) {
-        $additional = '';
-
         if ('' == $value) {
             return '<td>-</td>';
         }
+
+        list($cell, $suffix, $additional) = $this->buildCellContent($fieldName, $value, $custom);
+
+        $begin = '<td '.$additional.'class="'.$suffix.'">';
+        $end = '</td>';
+
+        return $begin . $cell . $end;
+    }
+
+    /**
+     * Formats a value exactly like createCell() but wrapped in a <span> so it
+     * can be used outside of a table, for example in a definition list.
+     *
+     * @param string $fieldName
+     * @param mixed  $value
+     * @param array  $custom
+     *
+     * @return string
+     */
+    public function createValue($fieldName, $value, $custom = array()) {
+        if ('' == $value) {
+            return '<span>-</span>';
+        }
+
+        list($cell, $suffix, $additional) = $this->buildCellContent($fieldName, $value, $custom);
+
+        return '<span '.$additional.'class="'.$suffix.'">' . $cell . '</span>';
+    }
+
+    /**
+     * @param string $fieldName
+     * @param mixed  $value
+     * @param array  $custom
+     *
+     * @return array the formatted content, the class names and any additional attributes
+     */
+    protected function buildCellContent($fieldName, $value, $custom = array()) {
+        $additional = '';
 
         $pieces = explode('_', $fieldName);
         $prefix = $pieces[0];
@@ -150,14 +170,11 @@ class w2p_Output_HTMLHelper extends w2p_Output_HTML_Base
  * TODO: These two prefix adjustments are an ugly hack because our departments 
  *   table doesn't follow the same convention as every other table we have. 
  *   This needs to be fixed in v4.0 - caseydk 13 Feb 2012
- *
- * TODO: And unfortunately, the forums module is screwy using 'viewer' instead 
- *   of our standard 'view' for the page. ~ caseydk 16 Feb 2012
-*/
+ */
             case '_name':
                 $prefix = ($prefix == 'project_short')  ? 'project' : $prefix;
                 $prefix = ($prefix == 'dept')  ? 'department' : $prefix;
-                $page   = ($prefix == 'forum' || $prefix == 'message') ? 'viewer' : 'view';
+                $page   = 'view';
                 $link   = '?m='. w2p_pluralize($prefix) .'&a='.$page.'&';
                 $link   = ($prefix == 'message') ? '?m=forums&a='.$page . '&' : $link;
                 $prefix = ($prefix == 'department') ? 'dept' : $prefix;
@@ -208,9 +225,7 @@ class w2p_Output_HTMLHelper extends w2p_Output_HTML_Base
                 break;
             case '_birthday':
             case '_date':
-//TZ  awarness is missing                $myDate = intval($value) ? new w2p_Utilities_Date($value) : null;
                 $myDate = intval($value) ? new w2p_Utilities_Date($this->AppUI->formatTZAwareTime($value, '%Y-%m-%d %T')) : null;
-//end bugfix
                 $cell = $myDate ? $myDate->format($this->df) : '-';
                 break;
             case '_actual':
@@ -299,10 +314,7 @@ class w2p_Output_HTMLHelper extends w2p_Output_HTML_Base
                 $cell = htmlspecialchars($value, ENT_QUOTES);
         }
 
-        $begin = '<td '.$additional.'class="'.$suffix.'">';
-        $end = '</td>';
-
-        return $begin . $cell . $end;
+        return array($cell, $suffix, $additional);
     }
 
     /**
@@ -328,7 +340,7 @@ class w2p_Output_HTMLHelper extends w2p_Output_HTML_Base
         switch ($suffix) {
             case '_creator':
             case '_owner':
-                $s .= w2PgetUsernameFromID($row[$fieldName]);
+                $s .= CContact::getContactByUserid($row[$fieldName]);
                 break;
             case '_budget':
                 $s = $w2Pconfig['currency_symbol'];

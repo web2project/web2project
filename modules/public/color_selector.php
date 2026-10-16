@@ -1,15 +1,10 @@
 <?php
+/** @var w2p_Core_CAppUI $AppUI */
 if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
 
 ?>
-<style>
-    div[class="std titlebar"], form[name="frm_new"],
-    body div:nth-child(2), div[class="left"] {
-        display: none;
-    }
-</style>
 <script language="javascript" type="text/javascript">
 	function setClose(color){
 		window.opener.setColor(color);
@@ -23,57 +18,41 @@ echo $AppUI->getTheme()->styleRenderBoxTop();
 $colors = w2PgetSysVal('ProjectColors');
 if ($w2Pconfig['restrict_color_selection']) {
     ?>
-    <table class="std">
-        <tr>
-            <td valign="top" colspan="2">
-                <strong><?php echo $AppUI->_('Color Selector'); ?></strong>
-            </td>
-        </tr>
+    <div class="std p-2">
+        <strong><?php echo $AppUI->_('Color Selector'); ?></strong>
+        <ul class="list-unstyled mb-0">
         <?php
         foreach ($colors as $key => $value) {
             ?>
-            <tr>
-                <td style="background-color:#<?php echo $value ?>; border: 1px solid black;cursor: pointer;" width="30" onclick="setClose('<?php echo $value ?>')">&nbsp;</td>
-                <td width="300"><a href="javascript:setClose('<?php echo $value ?>')"><?php echo $key ?></a></td>
-            </tr>
+            <li class="d-flex align-items-center gap-2 mb-1">
+                <span class="d-inline-block border border-dark" style="background-color:#<?php echo $value ?>; width: 30px; cursor: pointer;" onclick="setClose('<?php echo $value ?>')">&nbsp;</span>
+                <a href="javascript:setClose('<?php echo $value ?>')"><?php echo $key ?></a>
+            </li>
             <?php
         }
     ?>
-    </table>
+        </ul>
+    </div>
     <?php
 } else {
     ?>
-    <table class="std">
-        <tr>
-            <td valign="top">
-                <strong><?php echo $AppUI->_('Color Selector'); ?></strong>
-            </td>
-        <form>
-            <td align="right" valign="bottom">
-                <select name="" class="text" onchange="javascript:setClose(this.options[this.selectedIndex].value)">
-                    <option value="0">- - <?php echo $AppUI->_('Preset'); ?> - -</option>
-                    <?php
-                        foreach ($colors as $key => $value) {
-                            echo '<option value="'.$value.'">'.$key.'</option>';
-                        }
-                    ?>
-                </select>
-            </td>
-        </form>
-        </tr>
-        <tr>
-            <td colspan="2">
-                <a href="webpal.map">
-                    <img src="<?php echo w2PfindImage('colorchart.gif'); ?>" width="292" height="196" border="0" alt="color chart" usemap="#map_webpal" ismap />
-                </a>
-            </td>
-        </tr>
-        <tr>
-            <td colspan="2" align="left"><font size="1" face="trebuchetms,verdana,arial">
-                <?php echo $AppUI->_('colorLegend'); ?></p>
-            </td>
-        </tr>
-    </table>
+    <div class="std p-2">
+        <div class="d-flex justify-content-between align-items-end gap-2 mb-2">
+            <strong><?php echo $AppUI->_('Color Selector'); ?></strong>
+            <select name="" class="text" onchange="javascript:setClose(this.options[this.selectedIndex].value)">
+                <option value="0">- - <?php echo $AppUI->_('Preset'); ?> - -</option>
+                <?php
+                    foreach ($colors as $key => $value) {
+                        echo '<option value="'.$value.'">'.$key.'</option>';
+                    }
+                ?>
+            </select>
+        </div>
+        <a href="webpal.map">
+            <img src="<?php echo w2PfindImage('colorchart.gif'); ?>" width="292" height="196" alt="color chart" usemap="#map_webpal" ismap />
+        </a>
+        <p class="small mt-2 mb-0"><?php echo $AppUI->_('colorLegend'); ?></p>
+    </div>
     <map name="map_webpal">
         <area coords="2,2,18,18"  href="javascript:setClose('330000')" />
         <area coords="18,2,34,18" href="javascript:setClose('333300')" />

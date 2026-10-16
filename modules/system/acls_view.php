@@ -1,4 +1,5 @@
 <?php
+/** @var w2p_Core_CAppUI $AppUI */
 if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
@@ -46,6 +47,7 @@ $fieldNames = array('UserID', 'User', 'Display Name', 'Module', 'Item',
     'Item Name', 'Action', 'Allow', 'ACL_ID');
 
 $htmlHelper = new w2p_Output_HTMLHelper($AppUI);
+$table = '';
 ?>
 <table class="tbl list">
     <tr>

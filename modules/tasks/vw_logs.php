@@ -1,10 +1,11 @@
 <?php
+/** @var w2p_Core_CAppUI $AppUI */
 if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
 // @todo    convert to template
 
-global $AppUI, $task_id, $sf, $df, $canEdit, $m;
+global $AppUI, $task_id, $sf, $df, $canEdit, $m, $tab;
 
 $perms = &$AppUI->acl();
 if (!canView('task_log')) {
@@ -131,13 +132,8 @@ $s .= '</td></tr>';
 echo $s;
 ?>
 </table>
-<table>
-<tr>
-	<td><?php echo $AppUI->_('Key'); ?>:</td>
-	<td>&nbsp; &nbsp;</td>
-	<td bgcolor="#ffffff">&nbsp; &nbsp;</td>
-	<td>=<?php echo $AppUI->_('Normal Log'); ?></td>
-	<td bgcolor="#CC6666">&nbsp; &nbsp;</td>
-	<td>=<?php echo $AppUI->_('Problem Report'); ?></td>
-</tr>
-</table>
+<div class="d-flex flex-wrap align-items-center gap-3 my-2 small w2p-log-key">
+	<span><?php echo $AppUI->_('Key'); ?>:</span>
+	<span class="text-nowrap"><span class="d-inline-block border w2p-swatch" style="background-color: #ffffff;">&nbsp;</span> =<?php echo $AppUI->_('Normal Log'); ?></span>
+	<span class="text-nowrap"><span class="d-inline-block border w2p-swatch" style="background-color: #CC6666;">&nbsp;</span> =<?php echo $AppUI->_('Problem Report'); ?></span>
+</div>

@@ -1,4 +1,5 @@
 <?php
+/** @var w2p_Core_CAppUI $AppUI */
 if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
@@ -110,6 +111,13 @@ if ($result) {
         $obj->updateAssigned($hassign, $hperc_assign_ar);
     }
 
+    // The Other Resources tab (resources module) posts hresource_assign.
+    // Nothing saved it since v3.2; fix from Klaus Buecher (opto), 50db537d.
+    if (isset($_POST['hresource_assign']) && $AppUI->isActiveModule('resources')) {
+        $resource = new CResource();
+        $resource->updateTaskResources($obj->task_id, w2PgetParam($_POST, 'hresource_assign', ''));
+    }
+
     // This call has to be here to make sure that old dependencies are
     // cleared on save, even if there's no new dependencies
     $obj->updateDependencies($hdependencies,  $obj->task_id);
@@ -121,7 +129,6 @@ if ($result) {
             $shift = $nsd->compare($start_date, $nsd);
             if ($shift < 1) {
                 
-                //$obj->task_start_date = $nsd->format(FMT_DATETIME_MYSQL);
                 $osd = new w2p_Utilities_Date($obj->task_start_date);
                 $ned = new w2p_Utilities_Date($obj->task_end_date);
 
@@ -129,11 +136,12 @@ if ($result) {
                 $ned->copy($nsd);
                 $ned->addDuration($dur,1);
 
-                $new_start_date = $nsd->format(FMT_DATETIME_MYSQL);
-                $obj->task_start_date = $AppUI->formatTZAwareTime($new_start_date, '%Y-%m-%d %T');
-
-                $new_end_date = $ned->format(FMT_DATETIME_MYSQL);
-                $obj->task_end_date = $AppUI->formatTZAwareTime($new_end_date, '%Y-%m-%d %T');
+                // These dates are already UTC (from the database), and store()
+                // saves what it is given; only bind() converts user time to UTC.
+                // Converting them to the user's time zone here shifted the task
+                // by the user's UTC offset. Fix from Klaus Buecher (opto), d7213e00.
+                $obj->task_start_date = $nsd->format(FMT_DATETIME_MYSQL);
+                $obj->task_end_date = $ned->format(FMT_DATETIME_MYSQL);
 
                 $obj->store();
             }

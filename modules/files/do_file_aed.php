@@ -1,4 +1,5 @@
 <?php
+/** @var w2p_Core_CAppUI $AppUI */
 if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
@@ -18,11 +19,6 @@ $isNotNew = (int) w2PgetParam($_POST, 'file_id', '0');
 $cancel = (int) w2PgetParam($_POST, 'cancel', 0);
 $duplicate = (int) w2PgetParam($_POST, 'duplicate', 0);
 $redirect = w2PgetParam($_POST, 'redirect', 'm=files');
-$notify = w2PgetParam($_POST, 'notify', '0');
-$notify = ($notify != '0') ? '1' : '0';
-
-$notifyContacts = w2PgetParam($_POST, 'notify_contacts', 'off');
-$notifyContacts = ($notifyContacts != '0') ? '1' : '0';
 
 $perms = &$AppUI->acl();
 if ($del) {
@@ -92,20 +88,6 @@ if ($del) {
 		$AppUI->setMsg($obj->getError(), UI_MSG_ERROR);
 		$AppUI->redirect($redirect);
 	}
-
-    if ($result) {
-		$obj->notify($notify);
-        $obj->notifyContacts($notifyContacts);
-
-		$AppUI->setMsg($action, UI_MSG_OK, true);
-		$AppUI->redirect($redirect);
-	}
-}
-// cancel the file checkout
-if ($cancel) {
-	$obj->cancelCheckout($file_id);
-	$AppUI->setMsg('checkout canceled', UI_MSG_OK, true);
-	$AppUI->redirect($redirect);
 }
 
 if (!ini_get('safe_mode')) {
@@ -155,10 +137,6 @@ if (count($obj->getError())) {
     $AppUI->redirect('m=files&a=addedit');
 }
 if ($result) {
-	// Notification
-	$obj->notify($notify);
-    $obj->notifyContacts($notifyContacts);
-
     $AppUI->setMsg($file_id ? 'updated' : 'added', UI_MSG_OK, true);
 
 	if ($obj->file_task) {

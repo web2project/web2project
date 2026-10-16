@@ -6,7 +6,7 @@
  * supplied. The obj_id parameter is the ID of the module object
  * eg. company_id for companies module
  *
- * @package     web2project\core
+ * @package web2project\core
  */
 
 class w2p_Core_CustomFields {
@@ -153,7 +153,7 @@ class w2p_Core_CustomFields {
      *   field in the $hash, it will always get updated, even if the value is
      *   null. If you don't want to update the field, don't include it.
      *
-     * @param type $hash
+     * @param array<mixed> $hash
      */
     public function bind($hash) {
         if (!count($this->fields) == 0) {
@@ -177,7 +177,6 @@ class w2p_Core_CustomFields {
                 }
             }
 
-            //if ($store_errors) return $store_errors;
             if ($store_errors) {
                 echo $store_errors;
             }
@@ -188,9 +187,11 @@ class w2p_Core_CustomFields {
      * This deletes the field itself, *not* just the data for a given object's
      *  entry. Be *very* careful with it.
      *
-     * @global type $db
-     * @param type $field_id
-     * @return type
+     * @param int $field_id
+     *
+     * @global ADOConnection $db
+     *
+     * @return mixed
      */
     public function deleteField($field_id) {
         global $db;

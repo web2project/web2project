@@ -1,4 +1,5 @@
 <?php
+/** @var w2p_Core_CAppUI $AppUI */
 
 $form = new w2p_Output_HTML_FormHelper($AppUI);
 
@@ -74,44 +75,29 @@ $form = new w2p_Output_HTML_FormHelper($AppUI);
         </div>
     </div>
     <div class="std addedit events">
-        <table class="well">
-            <tr>
-                <td align="right"><?php echo $AppUI->_('People'); ?>:</td>
-                <td></td>
-                <td align="left"><?php echo $AppUI->_('Invited to Event'); ?>:</td>
-                <td></td>
-            </tr>
-            <tr>
-                <td width="50%" colspan="2" align="right">
-                    <?php echo arraySelect($users, 'resources', 'style="width:220px" size="10" class="text" multiple="multiple" ', null); ?>
-                </td>
-                <td width="50%" colspan="2" align="left">
-                    <?php echo arraySelect($assigned, 'assigned', 'style="width:220px" size="10" class="text" multiple="multiple" ', null); ?>
-                </td>
-            </tr>
-            <tr>
-                <td width="50%" colspan="2" align="right">
-                    <input type="button" class="button btn btn-primary" value="&gt;" onclick="addUser()" />
-                </td>
-                <td width="50%" colspan="2" align="left">
-                    <input type="button" class="button btn btn-primary" value="&lt;" onclick="removeUser()" />
-                </td>
-            </tr>
-            <tr>
-                <td colspan="2" align="right">
-                    <?php
-                    $custom_fields = new w2p_Core_CustomFields('events', 'addedit', $object->event_id, 'edit');
-                    $custom_fields->printHTML();
-                    ?>
-                </td>
-            <tr>
-                <td colspan="2">
-                    <?php $form->showCancelButton(); ?>
-                </td>
-                <td align="right" colspan="2">
-                    <?php $form->showSaveButton(); ?>
-                </td>
-            </tr>
-        </table>
+        <div class="column left text-md-end">
+            <div class="mb-1"><?php echo $AppUI->_('People'); ?>:</div>
+            <?php echo arraySelect($users, 'resources', 'style="width:220px" size="10" class="text" multiple="multiple" ', null); ?>
+            <div class="mt-2">
+                <input type="button" class="button btn btn-primary" value="&gt;" onclick="addUser()" />
+            </div>
+        </div>
+        <div class="column right">
+            <div class="mb-1"><?php echo $AppUI->_('Invited to Event'); ?>:</div>
+            <?php echo arraySelect($assigned, 'assigned', 'style="width:220px" size="10" class="text" multiple="multiple" ', null); ?>
+            <div class="mt-2">
+                <input type="button" class="button btn btn-primary" value="&lt;" onclick="removeUser()" />
+            </div>
+        </div>
+        <div class="column left">
+            <?php
+            $custom_fields = new w2p_Core_CustomFields('events', 'addedit', $object->event_id, 'edit');
+            $custom_fields->printHTML();
+            ?>
+        </div>
+        <div class="w2p-form-actions">
+            <?php $form->showCancelButton(); ?>
+            <?php $form->showSaveButton(); ?>
+        </div>
     </div>
 </form>

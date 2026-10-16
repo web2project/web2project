@@ -1,4 +1,5 @@
 <?php
+/** @var w2p_Core_CAppUI $AppUI */
 if (!defined('W2P_BASE_DIR')) {
     die('You should not access this file directly.');
 }
@@ -31,7 +32,7 @@ foreach ($roles as $role) {
 // else users would be able to arbitrarily run 'bad' functions
 if ($canEdit) {
 ?>
-function delIt(id) {
+function delRole(id) {
 	if (confirm( 'Are you sure you want to delete this role?' )) {
 		var f = document.frmRoles;
 		f.del.value = 1;
@@ -49,9 +50,8 @@ function clearIt(){
 
 </script>
 
-<table width="100%" border="0">
-    <tr>
-        <td width="50%" valign="top">
+<div class="row g-3">
+        <div class="col-lg-6">
             <table class="tbl list">
                 <tr>
                     <th width="100%"><?php echo $AppUI->_('Role'); ?></th>
@@ -62,7 +62,7 @@ function clearIt(){
                     $buf = "<td>" . $row['name'] . "</td>";
                     $buf .= '<td nowrap>';
                     if ($canEdit) {
-                        $buf .= "<a href=\"javascript:delIt({$row['id']});\" title=\"" . $AppUI->_('delete') . "\">" . w2PshowImage('icons/stock_delete-16.png', 16, 16, '') . '</a>';
+                        $buf .= "<a href=\"javascript:delRole({$row['id']});\" title=\"" . $AppUI->_('delete') . "\">" . w2PshowImage('icons/stock_delete-16.png', 16, 16, '') . '</a>';
                     }
                     $buf .= '</td>';
 
@@ -70,8 +70,8 @@ function clearIt(){
                 }
                 ?>
             </table>
-        </td>
-        <td width="50%" valign="top">
+        </div>
+        <div class="col-lg-6">
 
 <?php if ($canEdit) { ?>
 
@@ -81,32 +81,27 @@ function clearIt(){
 	<input type="hidden" name="user_id" value="<?php echo $user_id; ?>" />
 	<input type="hidden" name="user_name" value="<?php echo $user_name; ?>" />
 	<input type="hidden" name="role_id" value="" />
-	<table class="std">
-		<tr>
-			<th colspan='2'><?php echo $AppUI->_('Add Role'); ?></th>
-		</tr>
-		<tr>
-			<td colspan='2' width="100%"><?php echo arraySelect($roles_arr, 'user_role', 'size="1" class="text"', '', true); ?></td>
-		</tr>
-		<tr>
-			<td>
-				<input type="reset" value="<?php echo $AppUI->_('clear'); ?>" class="button btn btn-danger" name="sqlaction" onclick="clearIt();" />
-			</td>
-			<td align="right">
+	<div class="std addedit">
+		<div class="column left w2p-wide">
+			<h3 class="h6 border-bottom pb-1"><?php echo $AppUI->_('Add Role'); ?></h3>
+			<p><?php echo arraySelect($roles_arr, 'user_role', 'size="1" class="text"', '', true); ?></p>
+		</div>
+		<div class="w2p-form-actions align-items-center">
+			<input type="reset" value="<?php echo $AppUI->_('clear'); ?>" class="button btn btn-danger" name="sqlaction" onclick="clearIt();" />
+			<span class="d-inline-flex align-items-center gap-2">
 				<?php
 					if (!count($user_roles)) {
 						echo $AppUI->_('Notify New User Activation');
-						?> <input type='checkbox' name='notify_new_user' />&nbsp;&nbsp;&nbsp;&nbsp;<?php
+						?> <input type='checkbox' name='notify_new_user' /><?php
 					}
 				?>
 				<input type="submit" value="<?php echo $AppUI->_('add'); ?>" class="button btn btn-primary" name="sqlaction2" />
-			</td>
-		</tr>
-	</table>
+			</span>
+		</div>
+	</div>
 </form>
 
 <?php } ?>
 
-</td>
-</tr>
-</table>
+        </div>
+</div>

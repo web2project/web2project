@@ -1,4 +1,5 @@
 <?php
+/** @var w2p_Core_CAppUI $AppUI */
 if (!defined('W2P_BASE_DIR')) {
 	die('You should not call this file directly.');
 }
@@ -9,7 +10,5 @@ $this_day = new w2p_Utilities_Date($date);
 $formatted_date = $this_day->format($df);
 ?>
 <script language="javascript" type="text/javascript">
-<!--
 	window.parent.document.<?php echo $field; ?>.value = '<?php echo $formatted_date; ?>';
-//-->
 </script>

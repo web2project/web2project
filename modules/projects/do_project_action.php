@@ -1,4 +1,5 @@
 <?php
+/** @var w2p_Core_CAppUI $AppUI */
 if (!defined('W2P_BASE_DIR')) {
     die('You should not access this file directly.');
 }
@@ -24,4 +25,7 @@ foreach ($project_ids as $project_id) {
     $project->store();
 }
 
-$AppUI->redirect('m=projects');
+// Show the tab of the status the projects were moved to (tabs 0 and 1 are
+// All / All Active, so status N is tab N + 2); the remembered tab no longer
+// lists them.
+$AppUI->redirect('m=projects&tab=' . ($status_id + 2));

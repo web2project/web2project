@@ -1,4 +1,5 @@
 <?php
+/** @var w2p_Core_CAppUI $AppUI */
 if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
@@ -52,7 +53,8 @@ $titleBlock->addFilterCell('Company', 'f2', $filters2, $f2);
 if (w2PgetParam($_GET, 'inactive', '') == 'toggle') {
 	$AppUI->setState('inactive', $AppUI->getState('inactive') == -1 ? 0 : -1);
 }
-$in = $AppUI->getState('inactive') == -1 ? '' : 'in';
+// -1 shows tasks of every status. From Klaus Buecher (opto), 525f759e.
+$shown = $AppUI->getState('inactive') == -1 ? 'active' : 'all';
 
 $titleBlock->showhelp = false;
 $titleBlock->addCell('<form action="?m=tasks" method="post" name="taskFilter" accept-charset="utf-8">' . arraySelect($filters, 'f', 'size="1" class="text" onChange="document.taskFilter.submit();"', $f, true) . '</form>');
@@ -64,7 +66,7 @@ if (w2PgetParam($_GET, 'pinned') == 1) {
 } else {
 	$titleBlock->addCrumb('?m=tasks&amp;pinned=1', 'my pinned tasks');
 }
-$titleBlock->addCrumb('?m=tasks&amp;inactive=toggle', 'show ' . $in . 'active tasks');
+$titleBlock->addCrumb('?m=tasks&amp;inactive=toggle', 'show ' . $shown . ' tasks');
 $titleBlock->addCrumb('?m=tasks&amp;a=tasksperuser', 'tasks per user');
 $titleBlock->show();
 

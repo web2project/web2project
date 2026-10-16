@@ -1,4 +1,5 @@
 <?php
+/** @var w2p_Core_CAppUI $AppUI */
 
 if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
@@ -77,32 +78,29 @@ foreach ($rs as $c) {
 	}
 
 	if ($c['config_group'] != $last_group) {
-		$output .= '<tr><td colspan="2"><b>' . $AppUI->_($c['config_group'] . '_group_title') . '</b></td></tr>';
+		$output .= '<h3 class="h6 border-bottom pb-1 mt-3">' . $AppUI->_($c['config_group'] . '_group_title') . '</h3>';
 		$last_group = $c['config_group'];
 	}
-	$output .= '<tr>
-                    <td class="item" width="20%"><a name="'.$c['config_name'].'"> </a>' . $AppUI->_($c['config_name'] . '_title') . '</td>' .
-                    '<td align="left" width="5%">' .
-                        $entry . 
-                        '<input class="button" type="hidden"  name="w2PcfgId[' . $c['config_name'] . ']" value="' . $c['config_id'] . '" />' .
-			        '</td>' .
-                    '<td align="left" width="16">' .
-                         w2PtoolTip($AppUI->_($c['config_name'] . '_title'), $tooltip, true) . w2PshowImage('log-info.gif') . w2PendTip() .
- 			        '</td>
-                    <td align="left" width="100%">&nbsp;</td>
-                </tr>';
+	$output .= '<p>
+                    <label><a name="'.$c['config_name'].'"> </a>' . $AppUI->_($c['config_name'] . '_title') . '</label>' .
+                    $entry .
+                    '<input class="button" type="hidden"  name="w2PcfgId[' . $c['config_name'] . ']" value="' . $c['config_id'] . '" />' .
+                    w2PtoolTip($AppUI->_($c['config_name'] . '_title'), $tooltip, true) . w2PshowImage('log-info.gif') . w2PendTip() .
+                '</p>';
 
 }
 ?>
 <form name="cfgFrm" action="index.php?m=system&a=systemconfig" method="post" accept-charset="utf-8">
 	<input type="hidden" name="dosql" value="do_systemconfig_aed" />
-	<table class="std view well">
-		<tr><td colspan="4"><?php echo $AppUI->_('syscfg_intro'); ?></td></tr>
-		<?php echo $output; ?>
-		<tr>
-	 		<td align="right" colspan="4"><input class="save button btn btn-primary" type="submit" name="do_save_cfg" value="<?php echo $AppUI->_('save'); ?>" /></td>
-		</tr>
-	</table>
+	<div class="std addedit well">
+		<div class="column left w2p-wide">
+			<div><?php echo $AppUI->_('syscfg_intro'); ?></div>
+			<?php echo $output; ?>
+		</div>
+		<div class="w2p-form-actions justify-content-end">
+			<input class="save button btn btn-primary" type="submit" name="do_save_cfg" value="<?php echo $AppUI->_('save'); ?>" />
+		</div>
+	</div>
 </form>
 <script language="javascript" type="text/javascript">
         $(document).ready(function(){

@@ -1,6 +1,6 @@
 <?php
 /**
- * @package     web2project\modules\core
+ * @package web2project\modules\core
  */
 
 class CSystem_Bcode extends w2p_Core_BaseObject
@@ -37,7 +37,7 @@ class CSystem_Bcode extends w2p_Core_BaseObject
 
             $result = $q->exec();
             if(!$result) {
-                $this->_errors['delete'] = db_error();
+                $this->_errors['delete'] = (new w2p_Database_Connection($GLOBALS['db']))->error();
             }
         }
         return $result;
@@ -119,12 +119,16 @@ class CSystem_Bcode extends w2p_Core_BaseObject
         }
         $logs = $q->loadList();
 
-        $results = array();
+        // the reports read totalCosts and otherCosts even when nothing was logged
+        $results = array('uncountedHours' => 0, 'totalCosts' => 0, 'otherCosts' => 0);
         foreach ($logs as $tasklog) {
             if (is_null($tasklog['billingcode_value'])) {
                 $results['uncountedHours'] += $tasklog['task_log_hours'];
             } else {
                 $category = ('' == ($tasklog['billingcode_category'])) ? 'otherCosts' : $tasklog['billingcode_category'];
+                if (!isset($results[$category])) {
+                    $results[$category] = 0;
+                }
                 $results[$category] += $tasklog['task_log_hours'] * $tasklog['billingcode_value'];
                 $results['totalCosts'] += $tasklog['task_log_hours'] * $tasklog['billingcode_value'];
             }
@@ -147,8 +151,8 @@ class CSystem_Bcode extends w2p_Core_BaseObject
         }
         $logs = $q->loadList();
 
-        $results = array();
-        $results['uncountedHours'] = 0;
+        // the reports read totalCosts and otherCosts even when nothing was logged
+        $results = array('uncountedHours' => 0, 'totalCosts' => 0, 'otherCosts' => 0);
         foreach ($logs as $tasklog) {
             if (is_null($tasklog['billingcode_value'])) {
                 $results['uncountedHours'] += $tasklog['task_log_hours'];

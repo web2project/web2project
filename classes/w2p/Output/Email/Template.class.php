@@ -1,13 +1,15 @@
 <?php
 /**
  * Class Template
+ *
  * @package Web2project\Output\Email
  */
 class w2p_Output_Email_Template
 {
     /**
-     * @param $message
-     * @param $object
+     * @param mixed $message
+     * @param mixed $object
+     *
      * @return mixed
      */
     public function render($message, $object)

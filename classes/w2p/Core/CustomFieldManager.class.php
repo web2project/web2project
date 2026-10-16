@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @package     web2project\core
+ * @package web2project\core
  */
 
 class w2p_Core_CustomFieldManager extends w2p_Core_BaseObject {
@@ -39,7 +39,8 @@ class w2p_Core_CustomFieldManager extends w2p_Core_BaseObject {
         $q = $this->_getQuery();
         $q->addTable('modules');
         $q->addOrder('mod_ui_order');
-        $q->addWhere("mod_directory IN ('companies', 'projects', 'tasks', 'calendar', 'contacts')");
+        // The Calendar module's directory has been 'events' since migration 049.
+        $q->addWhere("mod_directory IN ('companies', 'projects', 'tasks', 'events', 'contacts', 'users')");
 
         return $q->loadList();
     }

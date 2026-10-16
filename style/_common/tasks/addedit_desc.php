@@ -2,6 +2,7 @@
 
 // @note Not sure why this is necessary as it's not in the other addedit.php templates.. maybe because this is a sub-template?
 global $m, $a;
+/** @var w2p_Core_CAppUI $AppUI */
 ?>
 <form action="?m=tasks&a=addedit&task_project=<?php echo $task_project; ?>" method="post" name="detailFrm" accept-charset="utf-8">
     <input type="hidden" name="dosql" value="do_task_aed" />

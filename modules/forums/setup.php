@@ -16,18 +16,15 @@ $config['mod_ui_icon'] = 'communicate.gif';
 $config['mod_description'] = '';
 $config['mod_config'] = true; // show 'configure' link in viewmods
 
-if ($a == 'setup') {
-	echo w2PshowModuleConfig($config);
-}
-
 /**
  * Class CSetupForums
  *
- * @package     web2project\modules\misc
+ * @package web2project\modules\misc
  */
 class CSetupForums extends w2p_System_Setup
 {
 	public function configure() { // configure this module
+		/** @var w2p_Core_CAppUI $AppUI */
 		global $AppUI;
 		$AppUI->redirect('m=forums&a=configure'); // load module specific configuration page
 		return true;

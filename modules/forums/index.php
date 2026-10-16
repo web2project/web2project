@@ -1,4 +1,5 @@
 <?php
+/** @var w2p_Core_CAppUI $AppUI */
 if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly');
 }
@@ -29,7 +30,7 @@ $items = $forum->getAllowedForums($AppUI->user_id, $AppUI->user_company, $f, $or
 
 $filters = array('- Filters -');
 
-if (isset($a) && $a == 'viewer') {
+if (isset($a) && $a == 'view') {
     array_push($filters, 'My Watched', 'Last 30 days');
 } else {
     array_push($filters, 'My Forums', 'My Watched', 'My Projects', 'My Company', 'Inactive Projects');
@@ -74,16 +75,12 @@ if (0 == count($fields)) {
     <?php
     $listTable = new w2p_Output_ListTable($AppUI);
     $listTable->addBefore('watch', 'forum_id');
-    echo $listTable->startTable();
+    echo $listTable->startTable('forums');
     echo $listTable->buildHeader($fields, true, 'forums&f=' . $f);
     echo $listTable->buildRows($items);
-    ?>
-    <tr>
-        <td colspan="<?php echo $listTable->cellCount; ?>">
-            <input type="submit" class="button" value="<?php echo $AppUI->_('update watches'); ?>" />
-        </td>
-    </tr>
-    <?php
     echo $listTable->endTable();
     ?>
+    <div class="d-flex gap-2">
+        <input type="submit" class="button" value="<?php echo $AppUI->_('update watches'); ?>" />
+    </div>
 </form>

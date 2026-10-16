@@ -1,9 +1,10 @@
 <?php
+/** @var w2p_Core_CAppUI $AppUI */
 
 $view = new w2p_Output_HTML_ViewHelper($AppUI);
 
 ?>
-<div class="std addedit companies">
+<div class="std view companies">
     <div class="column left">
         <p><?php $view->showLabel('Name'); ?>
             <?php $view->showField('company_name', $company->company_name); ?>

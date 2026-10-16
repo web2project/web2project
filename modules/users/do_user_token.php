@@ -1,4 +1,5 @@
 <?php
+/** @var w2p_Core_CAppUI $AppUI */
 
 $token = w2PgetParam($_POST, 'token', '');
 $user_id = w2PgetParam($_POST, 'user_id', '');

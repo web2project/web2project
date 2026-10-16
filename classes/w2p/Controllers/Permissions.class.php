@@ -1,6 +1,7 @@
 <?php
 /**
  * Class Permissions
+ *
  * @package Web2project\Controllers
  */
 class w2p_Controllers_Permissions extends w2p_Controllers_Base

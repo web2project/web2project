@@ -2,8 +2,8 @@
 /**
  * Parent class to all database table derived objects
  *
- * @package     web2project\core
- * @author      Andrew Eddie <eddieajau@users.sourceforge.net>
+ * @package web2project\core
+ * @author  Andrew Eddie <eddieajau@users.sourceforge.net>
  *
  * @abstract
  */
@@ -27,14 +27,15 @@ abstract class w2p_Core_BaseObject extends w2p_System_Event implements w2p_Inter
     protected $_tbl_key = '';
 
     /**
-     *     @var string Error message
+     *     @var array<int|string, string> Error messages keyed by field or check name
      */
-    protected $_error = '';
+    protected $_error = array();
 
     /**
      * @var object Query Handler
      */
     protected $_query;
+    private $_event;
 
     /**
      * @var object permissions/preference/translation object
@@ -47,6 +48,13 @@ abstract class w2p_Core_BaseObject extends w2p_System_Event implements w2p_Inter
      * @var string Internal name of the module as stored in the 'mod_directory' of the 'modules' table, and the 'value' field of the 'gacl_axo' table
      */
     protected $_tbl_module;
+    /**
+     * The id of the object being deleted, set by hook_preDelete() for
+     * hook_postDelete().
+     *
+     * @var int|null
+     */
+    protected $_old_key = null;
     protected $_dispatcher;
     protected $_locale_char_set;
 
@@ -72,6 +80,7 @@ abstract class w2p_Core_BaseObject extends w2p_System_Event implements w2p_Inter
          *   others, so I think it's the best approach for now.
          *                                           ~ caseydk 27 Dec 2011
          */
+        /** @var w2p_Core_CAppUI|null $AppUI */
         global $AppUI;
         $this->_AppUI = is_null($AppUI) ? new w2p_Core_CAppUI() : $AppUI;
         $this->_perms = $this->_AppUI->acl();
@@ -84,18 +93,36 @@ abstract class w2p_Core_BaseObject extends w2p_System_Event implements w2p_Inter
          *   logging, etc. We also need a way to enable Core Modules (CProject,
          *   CTask, etc) and Add On Modules to add their own hooks.
          */
-        $this->_dispatcher = new w2p_System_Dispatcher();
-        $this->_dispatcher->subscribe($this, get_class($this), 'preStoreEvent');
-        $this->_dispatcher->subscribe($this, get_class($this), 'postStoreEvent');
-        $this->_dispatcher->subscribe($this, get_class($this), 'preCreateEvent');
-        $this->_dispatcher->subscribe($this, get_class($this), 'postCreateEvent');
-        $this->_dispatcher->subscribe($this, get_class($this), 'preUpdateEvent');
-        $this->_dispatcher->subscribe($this, get_class($this), 'postUpdateEvent');
-        $this->_dispatcher->subscribe($this, get_class($this), 'preDeleteEvent');
-        $this->_dispatcher->subscribe($this, get_class($this), 'postDeleteEvent');
-        $this->_dispatcher->subscribe($this, get_class($this), 'preLoadEvent');
-        $this->_dispatcher->subscribe($this, get_class($this), 'postLoadEvent');
+        $this->_subscribeToEvents();
         parent::__construct($this->_tbl_module, get_class($this), array());
+    }
+
+    /**
+     * Creates this object's dispatcher and subscribes the object to its own
+     *   store/create/update/delete/load events, which run the hook_* methods.
+     */
+    private function _subscribeToEvents()
+    {
+        $this->_dispatcher = new w2p_System_Dispatcher();
+        $events = array('preStoreEvent', 'postStoreEvent', 'preCreateEvent', 'postCreateEvent',
+            'preUpdateEvent', 'postUpdateEvent', 'preDeleteEvent', 'postDeleteEvent',
+            'preLoadEvent', 'postLoadEvent');
+        foreach ($events as $event) {
+            $this->_dispatcher->subscribe($this, get_class($this), $event);
+        }
+    }
+
+    /**
+     * A clone (see duplicate()) gets its own query and dispatcher. With the
+     *   shallow copy, the clone's events went to the original object, so
+     *   storing a copied task ran the hooks on the source task: the target
+     *   project's task count, the copy's parent and its path were never set.
+     *   Reported by Klaus Buecher (opto), b32f3f28.
+     */
+    public function __clone()
+    {
+        $this->_query = new w2p_Database_Query;
+        $this->_subscribeToEvents();
     }
 
     /**
@@ -103,7 +130,7 @@ abstract class w2p_Core_BaseObject extends w2p_System_Event implements w2p_Inter
      *   calls to the above constructor, this is a way to hijack the current
      *   $this->_query and manipulate it however we want.
      *
-     *   @param Object A database connection (real or mocked)
+     *   @param object|null $override A database connection (real or mocked)
      */
     public function overrideDatabase($override)
     {
@@ -117,7 +144,7 @@ abstract class w2p_Core_BaseObject extends w2p_System_Event implements w2p_Inter
      *   calls to the above constructor, this is a way to hijack the current
      *   $this->_AppUI and manipulate it however we want.
      *
-     *   @param Object A permissions/preferences object (real or mocked)
+     *   @param object $override A permissions/preferences object (real or mocked)
      */
     public function overrideAppUI($override)
     {
@@ -126,7 +153,7 @@ abstract class w2p_Core_BaseObject extends w2p_System_Event implements w2p_Inter
     }
 
     /**
-     *     @return string or array Returns the error message
+     *     @return array<int|string, string> Returns the error messages
      */
     public function getError()
     {
@@ -141,8 +168,8 @@ abstract class w2p_Core_BaseObject extends w2p_System_Event implements w2p_Inter
     /**
      *     Binds a named array/hash to this object
      *
-     * @param      $hash
-     * @param null $prefix          Defaults to null, prefix to use with hash keys
+     * @param mixed $hash
+     * @param string|null $prefix          Defaults to null, prefix to use with hash keys
      * @param bool $checkSlashes    Defaults to true, strip any slashes from the hash values
      * @param bool $bindAll
      *
@@ -177,7 +204,7 @@ abstract class w2p_Core_BaseObject extends w2p_System_Event implements w2p_Inter
     /**
      *     Binds an array/hash to this object
      *
-     * @param null $oid     optional argument, if not specified then the value of current key is used
+     * @param int|null $oid     optional argument, if not specified then the value of current key is used
      * @param bool $strip
      *
      * @return bool
@@ -215,6 +242,7 @@ abstract class w2p_Core_BaseObject extends w2p_System_Event implements w2p_Inter
     /**
      * Although this is a new method in this class, it is deprecated because it is replacing all the subclass
      *   implementations.
+     *
      * @deprecated
      */
     public function loadFull($notUsed = null, $object_id) {     $this->load($object_id);        }
@@ -223,10 +251,10 @@ abstract class w2p_Core_BaseObject extends w2p_System_Event implements w2p_Inter
      *     Returns an array, keyed by the key field, of all elements that meet
      *     the where clause provided. Ordered by $order key.
      *
-     * @param null $order
-     * @param null $where
+     * @param string|null $order
+     * @param string|null $where
      *
-     * @return Associative
+     * @return array<mixed>
      */
     public function loadAll($order = null, $where = null)
     {
@@ -245,7 +273,9 @@ abstract class w2p_Core_BaseObject extends w2p_System_Event implements w2p_Inter
 
     /**
      *     Return a w2p_Database_Query object seeded with the table name.
+     *
      *     @param string $alias optional alias for table queries.
+     *
      *     @return w2p_Database_Query object
      */
     public function &getQuery($alias = null)
@@ -258,7 +288,7 @@ abstract class w2p_Core_BaseObject extends w2p_System_Event implements w2p_Inter
     /**
      *     Generic check method, overload as needed
      *
-     *     @return array() of size zero if the object is ok
+     *     @return array<int|string, string> Empty if the object is ok
      */
     public function check()
     {
@@ -272,8 +302,8 @@ abstract class w2p_Core_BaseObject extends w2p_System_Event implements w2p_Inter
      *    since it always returns a boolean (storing the errors in the
      *    $this->_errors, we can make decisions based on it even if we don't
      *    care about the errors.
-     * 
-     * @return boolean
+     *
+     * @return bool
      */
     public function isValid()
     {
@@ -282,8 +312,8 @@ abstract class w2p_Core_BaseObject extends w2p_System_Event implements w2p_Inter
     /**
      *     Clone the current record
      *
-     *     @author    handco <handco@users.sourceforge.net>
-     *     @return    object    The new record object or null if error
+     *     @author handco <handco@users.sourceforge.net>
+     *     @return object    The new record object or null if error
      * */
     public function duplicate()
     {
@@ -304,9 +334,7 @@ abstract class w2p_Core_BaseObject extends w2p_System_Event implements w2p_Inter
     /**
      *     Default trimming method for class variables of type string
      *
-     *     @param object Object to trim class variables for
-     *
-     *     @return none
+     *     @return void
      */
     public function w2PTrimAll()
     {
@@ -365,14 +393,14 @@ abstract class w2p_Core_BaseObject extends w2p_System_Event implements w2p_Inter
             $this->_dispatcher->publish(new w2p_System_Event(get_class($this), 'post' . $this->_event . 'Event'));
             $this->_dispatcher->publish(new w2p_System_Event(get_class($this), 'postStoreEvent'));
         } else {
-            $this->_error['store'] = db_error();
+            $this->_error['store'] = (new w2p_Database_Connection($GLOBALS['db']))->error();
         }
 
         return $result;
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function canAddEdit()
     {
@@ -384,25 +412,25 @@ abstract class w2p_Core_BaseObject extends w2p_System_Event implements w2p_Inter
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function canAccess() {
         return $this->_perms->checkModuleItem($this->_tbl_module, 'access');
     }
     /**
-     * @return boolean
+     * @return bool
      */
     public function canCreate() {
         return $this->_perms->checkModuleItem($this->_tbl_module, 'add');
     }
     /**
-     * @return boolean
+     * @return bool
      */
     public function canEdit() {
         return $this->_perms->checkModuleItem($this->_tbl_module, 'edit', $this->{$this->_tbl_key});
     }
     /**
-     * @return boolean
+     * @return bool
      */
     public function canView() {
         return $this->_perms->checkModuleItem($this->_tbl_module, 'view', $this->{$this->_tbl_key});
@@ -412,8 +440,8 @@ abstract class w2p_Core_BaseObject extends w2p_System_Event implements w2p_Inter
      *     Generic check for whether dependencies exist for this object in the db schema, overload as needed
      *
      * @param string $notUsed
-     * @param null   $oid
-     * @param null   $joins
+     * @param int|null $oid
+     * @param array<mixed>|null $joins
      *
      * @return bool
      */
@@ -453,9 +481,9 @@ abstract class w2p_Core_BaseObject extends w2p_System_Event implements w2p_Inter
     /**
      *     Default delete method
      *
-     * @param null $oid
+     * @param int|null $oid
      *
-     * @return bool|Handle
+     * @return ADORecordSet|false
      */
     public function delete($oid = null)
     {
@@ -467,14 +495,17 @@ abstract class w2p_Core_BaseObject extends w2p_System_Event implements w2p_Inter
             $this->$k = (int) $oid;
         }
 
-        $this->_dispatcher->publish(new w2p_System_Event(get_class($this), 'preDeleteEvent'));
-
+        // Check first: several hook_preDelete() implementations delete related
+        // rows (a user's login and preferences, event attendees, forum visits),
+        // which must not happen when the delete is refused.
         if (!$this->canDelete()) {
             //TODO: no clue why this is required..
             unset($this->_error['store']);
             $this->_error['delete-check'] = get_class($this) . '::delete-check failed';
             return false;
         }
+
+        $this->_dispatcher->publish(new w2p_System_Event(get_class($this), 'preDeleteEvent'));
 
         $q = $this->_getQuery();
         $q->setDelete($this->_tbl);
@@ -484,7 +515,7 @@ abstract class w2p_Core_BaseObject extends w2p_System_Event implements w2p_Inter
         if ($result) {
             $this->_dispatcher->publish(new w2p_System_Event(get_class($this), 'postDeleteEvent'));
         } else {
-            $this->_error['delete'] = db_error();
+            $this->_error['delete'] = (new w2p_Database_Connection($GLOBALS['db']))->error();
         }
 
         return $result;
@@ -492,7 +523,9 @@ abstract class w2p_Core_BaseObject extends w2p_System_Event implements w2p_Inter
 
     /**
      *     Get specifically denied records from a table/module based on a user
-     *     @param int User id number
+     *
+     *     @param int $uid User id number
+     *
      *     @return array
      */
     public function getDeniedRecords($uid)
@@ -506,14 +539,14 @@ abstract class w2p_Core_BaseObject extends w2p_System_Event implements w2p_Inter
     /**
      *     Returns a list of records visible to the user
      *
-     * @param        $uid
+     * @param mixed $uid
      * @param string $fields        fields to be returned by the query, default is all
      * @param string $orderby       sort order for the query
-     * @param null   $index         name of field to index the returned array
-     * @param null   $extra         array of additional sql parameters (from and where supported)
+     * @param string|null $index         name of field to index the returned array
+     * @param array<mixed>|null $extra         array of additional sql parameters (from and where supported)
      * @param string $table_alias
      *
-     * @return Associative
+     * @return array<mixed>
      */
     public function getAllowedRecords($uid, $fields = '*', $orderby = '', $index = null, $extra = null, $table_alias = '')
     {
@@ -619,7 +652,7 @@ abstract class w2p_Core_BaseObject extends w2p_System_Event implements w2p_Inter
      * @param w2p_Database_Query    $query
      * @param string                $index
      *
-     * @return  w2p_Database_Query
+     * @return w2p_Database_Query
      */
     public function setAllowedSQL($uid, $query, $index = null)
     {
@@ -661,7 +694,6 @@ abstract class w2p_Core_BaseObject extends w2p_System_Event implements w2p_Inter
      *    -  if and only if the corresponding method executed successfully.
      *    -  For example, hook_postDelete() will execute only after the object is
      *       deleted as expected. In this case, don't count on using object properties.
-     *
      */
 
     /**
@@ -692,9 +724,9 @@ abstract class w2p_Core_BaseObject extends w2p_System_Event implements w2p_Inter
      */
     protected function hook_preUpdate()     {   return $this;   }
     /**
-     * This method is called within $this->delete() but before we attempt to
-     *   delete it. It is called regardless of whether or not the object can be
-     *   deleted.. which may be determined by dependencies or permissions.
+     * This method is called within $this->delete() after canDelete() has
+     *   allowed the delete and before the row is deleted, so it may clean up
+     *   related data.
      *
      * We're grabbing the id here before we delete the object because we might
      *   need it later.
@@ -714,6 +746,7 @@ abstract class w2p_Core_BaseObject extends w2p_System_Event implements w2p_Inter
      * This method is called within $this->store() but only after the object
      *   was stored properly. You might use this to send notifications or
      *   update other objects.
+     *
      * @todo TODO: I REALLY hate this $_POST here.. it's just asking for trouble.
      *
      * @return \w2p_Core_BaseObject
@@ -724,11 +757,13 @@ abstract class w2p_Core_BaseObject extends w2p_System_Event implements w2p_Inter
         $custom_fields->bind($_POST);
         $custom_fields->store($this->{$this->_tbl_key});
 
+        // The history entry is labelled with the object's <prefix>_name. Not
+        // every class has one (CUser has no user_name), so only read it when
+        // the property exists or the class provides it through __get().
         $prefix = $this->_getColumnPrefixFromTableName($this->_tbl);
-        $name = ('' != $this->{$prefix . '_name'}) ? $this->{$prefix . '_name'} : '';
-        addHistory($this->_tbl, $this->{$this->_tbl_key}, $this->_event, $name . ' - ' .
-            $this->_AppUI->_('ACTION') . ': ' . $this->_event . ' ' . $this->_AppUI->_('TABLE') . ': ' .
-            $this->_tbl . ' ' . $this->_AppUI->_('ID') . ': ' . $this->{$this->_tbl_key});
+        $nameProperty = $prefix . '_name';
+        $name = (property_exists($this, $nameProperty) || method_exists($this, '__get')) ? (string) $this->$nameProperty : '';
+        addHistory($this->_tbl, $this->{$this->_tbl_key}, $this->_event, $name );
 
         return $this;
     }
@@ -764,7 +799,7 @@ abstract class w2p_Core_BaseObject extends w2p_System_Event implements w2p_Inter
          */
         $custom_field = new w2p_Core_CustomField('notUsed', 'notUsed2',
             'notUsed3', 'notUsed4', 'notUsed5', 'notUsed6');
-        $custom_field->deleteByObject($this->_old_key);
+        $custom_field->deleteByObject($this->_old_key, $this->_tbl_module);
 
         addHistory($this->_tbl, $this->{$this->_tbl_key}, 'delete');
         return $this;
@@ -800,15 +835,12 @@ abstract class w2p_Core_BaseObject extends w2p_System_Event implements w2p_Inter
             default:
             //do nothing
         }
-        //error_log("{$event->resourceName} published {$event->eventName} with id: " . $this->{$this->_tbl_key});
     }
 
     /**
      * Returns a clean query object
      *
      * Clears out the query and then returns it for use
-     *
-     * @access protected
      *
      * @return w2p_Database_Query Clean query object
      */

@@ -1,6 +1,4 @@
-<table cellspacing="2" cellpadding="4" border="0" class="tbl" width="100%">
-<tr>
-	<td width="100%" valign="top">
+<div class="std p-2">
 		<p>
 			<strong>Assistance en ligne web2Project</strong>
 			<br />
@@ -13,11 +11,9 @@
 			<a href="http://support.web2project.net/" target="_blank">Forums de support web2Project</a>.
 			<br />
 			<br />Des informations sur les problèmes connus et des améliorations suggérées peuvent être lues et soumises sur le site
-			<a href="http://bugs.web2project.net/" target="_blank"Bugs &amp; Suggestions >web2Project</a>.
+			<a href="http://bugs.web2project.net/" target="_blank">Bugs &amp; Suggestions web2Project</a>.
 			<br />
 			<br />Si vous êtes à la recherche d'un support professionnel concernant web2Project, contactez directement  les développeurs sur les forums.
 			<br />
 		</p>
-	</td>
-</tr>
-</table>
+</div>

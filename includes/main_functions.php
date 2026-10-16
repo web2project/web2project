@@ -1,7 +1,6 @@
 <?php
 
 require_once W2P_BASE_DIR . '/includes/backcompat_functions.php';
-require_once W2P_BASE_DIR . '/includes/deprecated_functions.php';
 require_once W2P_BASE_DIR . '/includes/cleanup_functions.php';
 require_once W2P_BASE_DIR . '/classes/w2p/web2project.php';
 require_once W2P_BASE_DIR . '/vendor/autoload.php';
@@ -18,36 +17,6 @@ function w2p_old_autoload($class_name)
 {
     $name = strtolower($class_name);
     switch ($name) {
-        case 'bcode':                   // Deprecated as of v3.0, TODO: remove this in v4.0
-        case 'budgets':                 // Deprecated as of v3.0, TODO: remove this in v4.0
-        case 'cadmin_user':             // Deprecated as of v3.0, TODO: remove this in v4.0
-        case 'cappui':                  // Deprecated as of v3.0, TODO: remove this in v4.0
-        case 'ccalendar':               // Deprecated as of v3.0, TODO: remove this in v4.0
-        case 'cconfig':                 // Deprecated as of v3.0, TODO: remove this in v4.0
-        case 'cdate':                   // Deprecated as of v3.0, TODO: remove this in v4.0
-        case 'cfilefolder':             // Deprecated as of v3.0, TODO: remove this in v4.0
-        case 'cforummessage':           // Deprecated as of v3.0, TODO: remove this in v4.0
-        case 'cinfotabbox':             // Deprecated as of v3.0, TODO: remove this in v4.0
-        case 'cmonthcalendar':          // Deprecated as of v3.0, TODO: remove this in v4.0
-        case 'cpreferences':            // Deprecated as of v3.0, TODO: remove this in v4.0
-        case 'cprojectdesigneroptions': // Deprecated as of v3.0, TODO: remove this in v4.0
-        case 'crole':                   // Deprecated as of v3.0, TODO: remove this in v4.0
-        case 'csyskey':                 // Deprecated as of v3.0, TODO: remove this in v4.0
-        case 'csysval':                 // Deprecated as of v3.0, TODO: remove this in v4.0
-        case 'ctabbox_core':            // Deprecated as of v3.0, TODO: remove this in v4.0
-        case 'ctasklog':                // Deprecated as of v3.0, TODO: remove this in v4.0
-        case 'ctitleblock':             // Deprecated as of v3.0, TODO: remove this in v4.0
-        case 'ctitleblock_core':        // Deprecated as of v3.0, TODO: remove this in v4.0
-        case 'customfields':            // Deprecated as of v3.0, TODO: remove this in v4.0
-        case 'cw2pobject':              // Deprecated as of v3.0, TODO: remove this in v4.0
-        case 'dbquery':                 // Deprecated as of v3.0, TODO: remove this in v4.0
-        case 'libmail':                 // Deprecated as of v2.3, TODO: remove this in v4.0
-        case 'smartsearch':             // Deprecated as of v2.3, TODO: remove this in v4.0
-        case 'w2pacl':                  // Deprecated as of v3.0, TODO: remove this in v4.0
-        case 'w2pajaxresponse':         // Deprecated as of v3.0, TODO: remove this in v4.0
-            require_once W2P_BASE_DIR . '/classes/deprecated.class.php';
-            break;
-
         /*
          * These are our library helper libraries. They're included here to simplify usage.
          */
@@ -140,9 +109,10 @@ function w2p_old_autoload($class_name)
 /**
  * Merges arrays maintaining/overwriting shared numeric indicees
  *
- * @param type $a1
- * @param type $a2
- * @return type
+ * @param mixed $a1
+ * @param mixed $a2
+ *
+ * @return mixed
  */
 function arrayMerge($a1, $a2)
 {
@@ -162,9 +132,10 @@ function arrayMerge($a1, $a2)
 /**
  * Retrieves a configuration setting.
  *
- * @param $key          string The name of a configuration setting
- * @param null $default string The default value to return if the key not found.
- * @return null         The value of the setting, or the default value if not found.
+ * @param string          $key The name of a configuration setting
+ * @param mixed $default The default value to return if the key not found.
+ *
+ * @return mixed The value of the setting, or the default value if not found.
  */
 function w2PgetConfig($key, $default = null)
 {
@@ -182,6 +153,12 @@ function w2PgetConfig($key, $default = null)
  *  default, and avoid poisoning the URL by denying:
  * 1) the use of spaces (for SQL and XSS injection)
  * 2) the use of <, ", [, ; and { (for XSS injection)
+ *
+ * @param array<mixed> $arr  Source array, usually $_GET or $_POST
+ * @param string       $name Key to read
+ * @param mixed        $def  Default when the key is missing
+ *
+ * @return mixed
  */
 function w2PgetParam(&$arr, $name, $def = null)
 {
@@ -211,7 +188,6 @@ function convert2days($durn, $units)
         case 0:
         case 1:
             return $durn / w2PgetConfig('daily_working_hours');
-            break;
         case 24:
             return $durn;
     }
@@ -301,7 +277,6 @@ function w2p_textarea($content)
         $result = preg_replace("#(^|[\n ])([\w]+?://[\w]+[^ \"\n\r\t< ]*)#", "\\1<a href=\"\\2\" target=\"_blank\">\\2</a>", $result);
         $result = preg_replace("#(^|[\n ])((www|ftp)\.[^ \"\t\n\r< ]*)#", "\\1<a href=\"http://\\2\" target=\"_blank\">\\2</a>", $result);
         $result = nl2br($result);
-        //$result = html_entity_decode($result);
     }
 
     return $result;
@@ -309,6 +284,7 @@ function w2p_textarea($content)
 
 function notifyNewExternalUser($emailAddress, $username, $logname, $logpwd, $emailUtility = null)
 {
+    /** @var w2p_Core_CAppUI $AppUI */
     global $AppUI;
     $emailManager = new w2p_Output_EmailManager($AppUI);
     $body = $emailManager->notifyNewExternalUser($logname, $logpwd);
@@ -322,6 +298,7 @@ function notifyNewExternalUser($emailAddress, $username, $logname, $logpwd, $ema
 
 function notifyNewUser($emailAddress, $username, $emailUtility = null)
 {
+    /** @var w2p_Core_CAppUI $AppUI */
     global $AppUI;
     $emailManager = new w2p_Output_EmailManager($AppUI);
     $body = $emailManager->getNotifyNewUser($username);
@@ -336,7 +313,8 @@ function notifyNewUser($emailAddress, $username, $emailUtility = null)
 /**
  * Authenticator Factory
  *
- * @param $auth_mode
+ * @param mixed $auth_mode
+ *
  * @return w2p_Authenticators_Base
  */
 function &getAuth($auth_mode) {

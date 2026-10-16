@@ -15,14 +15,10 @@ $config['mod_ui_icon'] = 'projectdesigner.jpg';
 $config['mod_description'] = 'A module to design projects';
 $config['mod_config'] = true;
 
-if ($a == 'setup') {
-	echo w2PshowModuleConfig($config);
-}
-
 /**
  * Class CSetupProjectDesigner
  *
- * @package     web2project\modules\misc
+ * @package web2project\modules\misc
  */
 class CSetupProjectDesigner extends w2p_System_Setup
 {
@@ -30,7 +26,6 @@ class CSetupProjectDesigner extends w2p_System_Setup
 		$result = $this->_checkRequirements();
 
         if (!$result) {
-            //$AppUI->setMsg($this->getErrors(), UI_MSG_ERROR);
         }
 
         $q = $this->_getQuery();

@@ -1,4 +1,5 @@
 <?php
+/** @var w2p_Core_CAppUI $AppUI */
 if (!defined('W2P_BASE_DIR')) {
     die('You should not access this file directly.');
 }
@@ -27,7 +28,6 @@ $showTaskNameOnly = (int) w2PgetParam($_REQUEST, 'showTaskNameOnly', 0);
 $showNoMilestones = (int) w2PgetParam($_REQUEST, 'showNoMilestones', 0);
 $showMilestonesOnly = (int) w2PgetParam($_REQUEST, 'showMilestonesOnly', 0);
 $showhgrid = (int) w2PgetParam($_REQUEST, 'showhgrid', 0);
-$printpdfhr = (int) w2PgetParam($_REQUEST, 'printpdfhr', 0);
 $addLinksToGantt = (int) w2PgetParam($_REQUEST, 'addLinksToGantt', 0);
 $monospacefont = (int) w2PgetParam($_REQUEST, 'monospacefont', 0);
 // Get the state of formatting variables here /////////////////////////////////////////////////////

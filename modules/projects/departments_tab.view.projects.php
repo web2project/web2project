@@ -1,4 +1,5 @@
 <?php
+/** @var w2p_Core_CAppUI $AppUI */
 if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
@@ -49,7 +50,7 @@ $customLookups = array('project_status' => $pstatus);
 
 $listHelper = new w2p_Output_ListTable($AppUI);
 
-echo $listHelper->startTable();
+echo $listHelper->startTable('projects-department_view');
 echo $listHelper->buildHeader($fields, true, 'departments&a=view&dept_id=' . $dept_id);
 echo $listHelper->buildRows($items, $customLookups);
 echo $listHelper->endTable();

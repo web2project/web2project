@@ -1,4 +1,5 @@
 <?php
+/** @var w2p_Core_CAppUI $AppUI */
 if (!defined('W2P_BASE_DIR')) {
     die('You should not access this file directly.');
 }
@@ -20,6 +21,15 @@ asort($modules);
 // read the installed languages
 $locales = $loader->readDirs('locales');
 
+// Both values are used to build file paths below, so fall back to the defaults
+// rather than reading from a path built out of an unknown value.
+if (!is_string($module) || !isset($modules[$module])) {
+    $module = 'admin';
+}
+if (!is_string($lang) || !isset($locales[$lang])) {
+    $lang = 'en';
+}
+
 ob_start();
 // read language files from module's locale directory preferably
 $localeFile = W2P_BASE_DIR . '/modules/' . $modules[$module] . '/locales/en/' . $modules[$module] . '.inc';
@@ -31,7 +41,7 @@ if (file_exists($localeFile)) {
         readfile($localeFile);
     }
 }
-eval("\$english=array(" . ob_get_contents() . "\n'0');");
+$english = w2p_Utilities_Translations::parse(ob_get_contents());
 ob_end_clean();
 
 $trans = array();
@@ -53,7 +63,7 @@ if ($lang != 'en') {
             readfile($localeFile);
         }
     }
-    eval("\$locale=array(" . ob_get_contents() . "\n'0');");
+    $locale = w2p_Utilities_Translations::parse(ob_get_contents());
     ob_end_clean();
 
     foreach ($locale as $k => $v) {
@@ -126,7 +136,7 @@ $titleBlock->show();
                 if (mb_strlen($langs['english']) < 40) {
                     $s .= '<input type="text" name="trans[' . $index . '][english]" value="' . $langs['english'] . '" size="40" class="text" />';
                 } else {
-                    $rows = round(mb_strlen($langs['english'] / 35)) + 1;
+                    $rows = round(mb_strlen($langs['english']) / 35) + 1;
                     $s .= '<textarea name="trans[' . $index . '][english]"  cols="40" class="small" rows="' . $rows . '">' . $langs['english'] . '</textarea>';
                 }
             } else {
@@ -139,7 +149,7 @@ $titleBlock->show();
                 if (mb_strlen($langs['lang']) < 40) {
                     $s .= '<input type="text" name="trans[' . $index . '][lang]" value="' . $langs['lang'] . '" size="40" class="text" />';
                 } else {
-                    $rows = round(mb_strlen($langs['lang'] / 35)) + 1;
+                    $rows = round(mb_strlen($langs['lang']) / 35) + 1;
                     $s .= '<textarea name="trans[' . $index . '][lang]" cols="40" class="small" rows="' . $rows . '">' . $langs['lang'] . '</textarea>';
                 }
             }
@@ -148,10 +158,8 @@ $titleBlock->show();
         }
         echo $s;
         ?>
-        <tr>
-            <td colspan="4" align="right">
-                <input type="submit" value="<?php echo $AppUI->_('save'); ?>" class="save button btn btn-primary" />
-            </td>
-        </tr>
     </table>
+    <div class="text-end">
+        <input type="submit" value="<?php echo $AppUI->_('save'); ?>" class="save button btn btn-primary" />
+    </div>
 </form>

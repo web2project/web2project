@@ -3,8 +3,8 @@
 --   text-based Custom Fields
 --   Resolves http://bugs.web2project.net/view.php?id=940
 
-ALTER TABLE  `custom_fields_values` CHANGE  `value_charvalue`  `value_charvalue`
-TEXT CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL;
+ALTER TABLE  `custom_fields_values` CHANGE  `value_charvalue`  `value_charvalue` VARCHAR( 255 )
+    CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL;
 
 ALTER TABLE  `custom_fields_values` DROP INDEX  `value_charvalue`;
 

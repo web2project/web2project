@@ -3,7 +3,7 @@
  * PostNuke authentication has encoded information passed in on the login
  * request. This needs to be extracted and verified.
  *
- * @package     web2project\authenticators
+ * @package web2project\authenticators
  * @todo    remove
  *
  * @deprecated

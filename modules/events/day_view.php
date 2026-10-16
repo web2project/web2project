@@ -1,4 +1,5 @@
 <?php
+/** @var w2p_Core_CAppUI $AppUI */
 if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
@@ -69,22 +70,15 @@ function clickDay( idate, fdate ) {
 }
 </script>
 
-<table class="std">
-    <tr>
-        <td valign="top">
-            <table border="0" cellspacing="1" cellpadding="2" width="100%" class="motitle">
-                <tr>
-                    <td>
-                        <a href="<?php echo '?m=events&a=day_view&date=' . $prev_day->format(FMT_TIMESTAMP_DATE); ?>"><img src="<?php echo w2PfindImage('prev.gif'); ?>" alt="pre" /></a>
-                    </td>
-                    <th width="100%">
-                        <?php echo $AppUI->_(htmlspecialchars($this_day->format('%A'), ENT_COMPAT, $locale_char_set)) . ', ' . $this_day->format($df); ?>
-                    </th>
-                    <td>
-                        <a href="<?php echo '?m=events&a=day_view&date=' . $next_day->format(FMT_TIMESTAMP_DATE); ?>"><img src="<?php echo w2PfindImage('next.gif'); ?>" alt="next" /></a>
-                    </td>
-                </tr>
-            </table>
+<div class="d-flex flex-wrap flex-lg-nowrap gap-3 std">
+        <div class="flex-grow-1" style="min-width: 0;">
+            <div class="d-flex align-items-center gap-2 motitle">
+                <a href="<?php echo '?m=events&amp;a=day_view&amp;date=' . $prev_day->format(FMT_TIMESTAMP_DATE); ?>"><img src="<?php echo w2PfindImage('prev.gif'); ?>" alt="pre" /></a>
+                <div class="flex-grow-1 text-center fw-bold w2p-cal-month">
+                    <?php echo $AppUI->_(htmlspecialchars($this_day->format('%A'), ENT_COMPAT, $locale_char_set)) . ', ' . $this_day->format($df); ?>
+                </div>
+                <a href="<?php echo '?m=events&amp;a=day_view&amp;date=' . $next_day->format(FMT_TIMESTAMP_DATE); ?>"><img src="<?php echo w2PfindImage('next.gif'); ?>" alt="next" /></a>
+            </div>
 
             <?php
                 // tabbed information boxes
@@ -93,9 +87,9 @@ function clickDay( idate, fdate ) {
                 $tabBox->add('vw_day_tasks', 'Tasks');
                 $tabBox->show();
             ?>
-        </td>
+        </div>
 <?php if ($w2Pconfig['cal_day_view_show_minical']) { ?>
-        <td valign="top" width="175">
+        <div class="flex-shrink-0 w2p-minicals" style="width: 175px;">
 <?php
 	$minical = new w2p_Output_MonthCalendar($this_day);
 	$minical->setStyles('minititle', 'minical');
@@ -119,9 +113,7 @@ function clickDay( idate, fdate ) {
 
 	$minical->setDate($minical->prev_month);
 
-	echo '<table cellspacing="0" cellpadding="0" border="0" width="100%"><tr>';
-	echo '<td align="center" >' . $minical->show() . '</td>';
-	echo '</tr></table><hr noshade size="1">';
+	echo '<div class="w2p-minical">' . $minical->show() . '</div><hr />';
 
 	$first_time = new w2p_Utilities_Date($minical->next_month);
 	$first_time->setDay(1);
@@ -136,9 +128,7 @@ function clickDay( idate, fdate ) {
 
 	$minical->setDate($minical->next_month);
 
-	echo '<table cellspacing="0" cellpadding="0" border="0" width="100%"><tr>';
-	echo '<td align="center" >' . $minical->show() . '</td>';
-	echo '</tr></table><hr noshade size="1">';
+	echo '<div class="w2p-minical">' . $minical->show() . '</div><hr />';
 
 	$first_time = new w2p_Utilities_Date($minical->next_month);
 	$first_time->setDay(1);
@@ -153,11 +143,8 @@ function clickDay( idate, fdate ) {
 
 	$minical->setDate($minical->next_month);
 
-	echo '<table cellspacing="0" cellpadding="0" border="0" width="100%"><tr>';
-	echo '<td align="center" >' . $minical->show() . '</td>';
-	echo '</tr></table>';
+	echo '<div class="w2p-minical">' . $minical->show() . '</div>';
 ?>
-        </td>
+        </div>
  <?php } ?>
-</tr>
-</table>
+</div>

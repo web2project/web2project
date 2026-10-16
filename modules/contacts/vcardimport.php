@@ -1,4 +1,5 @@
 <?php
+/** @var w2p_Core_CAppUI $AppUI */
 if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
@@ -79,19 +80,18 @@ if (isset($_FILES['vcf']) && isset($_GET['suppressHeaders']) && (w2PgetParam($_G
 	$titleBlock->show();
 
 ?>
-<table class="std">
-
-	<form name="vcfFrm" action="?m=contacts&a=vcardimport&suppressHeaders=true" enctype="multipart/form-data" method="post">
-		<input type="hidden" name="max_file_size" value="109605000" />
-	<tr>
-		<td align="right" nowrap="nowrap"><?php echo $AppUI->_('Fetch vCard(s) File'); ?>:</td>
-		<td align="left"><input type="file" class="button" name="vcf" accept="text/x-vcard"></td>
-	</tr>
-	<tr>
-		<td align="right" colspan="2" nowrap="nowrap"><input type="submit" class="button" value="<?php echo $AppUI->_('submit'); ?>"/></td>
-	</tr>
-	</form>
-</table>
+<form name="vcfFrm" action="?m=contacts&a=vcardimport&suppressHeaders=true" enctype="multipart/form-data" method="post">
+	<input type="hidden" name="max_file_size" value="109605000" />
+<div class="std addedit contacts-vcard">
+	<div class="column left">
+		<p>
+			<label><?php echo $AppUI->_('Fetch vCard(s) File'); ?>:</label>
+			<input type="file" class="form-control form-control-sm w-auto" name="vcf" accept="text/x-vcard" />
+		</p>
+		<p class="justify-content-end"><input type="submit" class="button" value="<?php echo $AppUI->_('submit'); ?>"/></p>
+	</div>
+</div>
+</form>
 <?php
 
 } else { // trouble with get parameters

@@ -9,8 +9,8 @@
  * admin interface that allows templates to be edited and potentially even
  * translated.
  *
- * @package     web2project\output
- * @author      D. Keith Casey, Jr. <caseydk@users.sourceforge.net>
+ * @package web2project\output
+ * @author  D. Keith Casey, Jr. <caseydk@users.sourceforge.net>
  */
 
 class w2p_Output_EmailManager
@@ -71,23 +71,6 @@ class w2p_Output_EmailManager
         return $body;
     }
 
-    /**
-     * @deprecated
-     */
-    public function getCalendarConflictEmail(w2p_Core_CAppUI $AppUI = null)
-    {
-        trigger_error("getCalendarConflictEmail has been deprecated in v3.0 and will be removed by v4.0. Please use getEventNotify() instead.", E_USER_NOTICE);
-
-        $this->_AppUI = (!is_null($AppUI)) ? $AppUI : $this->_AppUI;
-
-        $body  = "You have been invited to an event by user_display_name\n";
-        $body .= "However, either you or another intended invitee has a competing event\n";
-        $body .= "user_display_name has requested that you reply to this message\n";
-        $body .= "and confirm if you can or can not make the requested time.\n\n";
-
-        return $this->templater->render($body, $this->_AppUI);
-    }
-
     public function getContactUpdateNotify(w2p_Core_CAppUI $AppUI = null, CContact $contact)
     {
         $this->_AppUI = (!is_null($AppUI)) ? $AppUI : $this->_AppUI;
@@ -130,7 +113,7 @@ class w2p_Output_EmailManager
         $body .= "\n\n" . $this->_AppUI->_('Forum', UI_OUTPUT_RAW) . ': forum_name';
         $body .= "\n" . $this->_AppUI->_('Subject', UI_OUTPUT_RAW) . ': message_title';
         $body .= "\n" . $this->_AppUI->_('Message From', UI_OUTPUT_RAW) . ': message_from';
-        $body .= "\n\n" . W2P_BASE_URL . '/index.php?m=forums&a=viewer&forum_id=message_forum';
+        $body .= "\n\n" . W2P_BASE_URL . '/index.php?m=forums&a=view&forum_id=message_forum';
         $body .= "\n\nmessage_body";
 
         return $this->templater->render($body, $message);
@@ -230,10 +213,10 @@ class w2p_Output_EmailManager
         $body .= $this->_AppUI->_('URL', UI_OUTPUT_RAW) . ': ' . W2P_BASE_URL . '/index.php?m=tasks&a=view&task_id=' . $task->task_id . '&reminded=1' . "\n\n";
         $body .= $this->_AppUI->_('Resources', UI_OUTPUT_RAW) . ":\n";
 
+        // $owner_is_not_assignee and $owner_contact were never defined here, so
+        // every recipient was always listed; keep that without the warnings.
         foreach ($contacts as $contact) {
-            if (!$owner_is_not_assignee || ($owner_is_not_assignee && $contact['contact_id'] != $owner_contact)) {
-                $body .= ($contact['contact_name'] . ' <' . $contact['contact_email'] . ">\n");
-            }
+            $body .= ($contact['contact_name'] . ' <' . $contact['contact_email'] . ">\n");
         }
         $body .= $this->_AppUI->_('Description', UI_OUTPUT_RAW) . ":\n" . $task->task_description . "\n";
 
@@ -289,20 +272,6 @@ class w2p_Output_EmailManager
         }
 
         return $body;
-    }
-
-    public function getProjectNotifyOwner(CProject $project, $isNotNew)
-    {
-        trigger_error("EmailManager->getProjectNotifyOwner() has been deprecated in v3.2 and will be removed by v5.0. Please use EmailManager->getProjectNotify instead.", E_USER_NOTICE);
-
-        return $this->getProjectNotify($project, $isNotNew);
-    }
-
-    public function getProjectNotifyContacts(CProject $project, $isNotNew)
-    {
-        trigger_error("EmailManager->getProjectNotifyContacts() has been deprecated in v3.2 and will be removed by v5.0. Please use EmailManager->getProjectNotify instead.", E_USER_NOTICE);
-
-        return $this->getProjectNotify($project, $isNotNew);
     }
 
     public function getNotifyNewUser($username)

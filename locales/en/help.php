@@ -3,9 +3,7 @@ if (!defined('W2P_BASE_DIR')) {
     die('You should not access this file directly.');
 }
 ?>
-<table cellspacing="2" cellpadding="4" border="0" class="tbl" width="100%">
-<tr>
-	<td width="100%" valign="top">
+<div class="std p-2">
 		<p>
 			<strong>web2Project Online Assistance</strong>
 			<br />
@@ -23,6 +21,4 @@ if (!defined('W2P_BASE_DIR')) {
 			<br />If you're looking for Professional Support concerning web2Project consider getting in touch with the developers directly on the forums.
 			<br />
 		</p>
-	</td>
-</tr>
-</table>
+</div>

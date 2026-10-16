@@ -1,6 +1,6 @@
 <?php
 /**
- * @package     web2project\system
+ * @package web2project\system
  *
  * @abstract
  */
@@ -64,12 +64,12 @@ abstract class w2p_System_Setup {
         return $this->_perms->registerModule($this->_config['mod_name'], $name);
     }
 
-    /*
+    /**
      * This is a complex bit of code. There are two switch statements within the
      *   foreach. The first determines the version of the library we're actually
      *   looking for while the second determines the comparison we want.
      * The input to this is an array specifying the item, version, and comparison.
-     * 
+     *
      * Here's an example:
      * $config['requirements'] = array(
      *     array('require' => 'php',         'comparator' => '>=', 'version' => '5.2.8'),
@@ -79,7 +79,8 @@ abstract class w2p_System_Setup {
      *     array('require' => 'Phar',        'comparator' => 'exists'),
      *     array('require' => 'gd_info',     'comparator' => 'exists'),
      *     array('require' => 'curl',        'comparator' => 'exists'));
-     * @return boolean
+     *
+     * @return bool
      */
     protected function _meetsRequirements()
     {
@@ -165,8 +166,6 @@ abstract class w2p_System_Setup {
      * Returns a clean query object
      *
      * Clears out the query and then returns it for use
-     *
-     * @access protected
      *
      * @return w2p_Database_Query Clean query object
      */

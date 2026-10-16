@@ -1,4 +1,5 @@
 <?php
+/** @var w2p_Core_CAppUI $AppUI */
 if (!defined('W2P_BASE_DIR')) {
     die('You should not access this file directly.');
 }
@@ -67,39 +68,23 @@ for ($i = 1, $i_cmp = sizeof($keys); $i < $i_cmp; $i++) {
     <input type="hidden" name="task_id" value="<?php echo $task_id; ?>" />
     <input type="hidden" name="dosql" value="do_task_aed" />
     <input name="hresource_assign" type="hidden" value="<?php echo $initResAssignment; ?>"/>
-    <table class="std addedit">
-        <tr>
-            <td valign="top" align="center">
-                <table cellspacing="0" cellpadding="2" border="0" class="well">
-                    <tr>
-                        <td><?php echo $AppUI->_('Resources'); ?>:</td>
-                        <td><?php echo $AppUI->_('Assigned to Task'); ?>:</td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <?php echo arraySelect($all_resources, 'resources', 'style="width:220px" size="10" class="text" multiple="multiple" ', null); ?>
-                        </td>
-                        <td>
-                            <?php echo arraySelect($resources, 'assigned', 'style="width:220px" size="10" class="text" multiple="multiple" ', null); ?>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td colspan="2" align="center">
-                            <table>
-                            <tr>
-                                <td align="right"><input type="button" class="button btn btn-primary btn-mini" value="&gt;" onclick="addResource(document.otherFrm)" /></td>
-                                <td>
-                                    <?php echo arraySelect($percent, 'resource_assignment', 'size="1" class="text"', 100) . '%'; ?>
-                                </td>
-                                <td align="left"><input type="button" class="button btn btn-primary btn-mini" value="&lt;" onclick="removeResource(document.otherFrm)" /></td>
-                            </tr>
-                            </table>
-                        </td>
-                    </tr>
-                </table>
-            </td>
-        </tr>
-    </table>
+    <div class="std p-2 w2p-resource-picker">
+        <div class="d-flex flex-wrap justify-content-center gap-3">
+            <div>
+                <div class="mb-1"><?php echo $AppUI->_('Resources'); ?>:</div>
+                <?php echo arraySelect($all_resources, 'resources', 'style="width:220px" size="10" class="text" multiple="multiple" ', null); ?>
+            </div>
+            <div>
+                <div class="mb-1"><?php echo $AppUI->_('Assigned to Task'); ?>:</div>
+                <?php echo arraySelect($resources, 'assigned', 'style="width:220px" size="10" class="text" multiple="multiple" ', null); ?>
+            </div>
+        </div>
+        <div class="d-flex justify-content-center align-items-center gap-2 mt-2">
+            <input type="button" class="button btn btn-primary btn-sm" value="&gt;" onclick="addResource(document.otherFrm)" />
+            <span class="text-nowrap"><?php echo arraySelect($percent, 'resource_assignment', 'size="1" class="text"', 100) . '%'; ?></span>
+            <input type="button" class="button btn btn-primary btn-sm" value="&lt;" onclick="removeResource(document.otherFrm)" />
+        </div>
+    </div>
 </form>
 <script language="javascript" type="text/javascript">
   subForm.push(new FormDefinition(<?php echo $tab; ?>, document.otherFrm, checkOther, saveOther));

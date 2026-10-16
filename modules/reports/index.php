@@ -1,4 +1,5 @@
 <?php
+/** @var w2p_Core_CAppUI $AppUI */
 if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
@@ -51,16 +52,17 @@ $report_type_var = w2PgetParam($_GET, 'report_type', '');
 if (!empty($report_type_var)) {
 	$report_type_var = '&amp;report_type=' . $report_type;
 }
-echo '<br /><br /><br /><br /><br />';
 if (!$suppressHeaders) {
 	if (!isset($display_project_name)) {
 		$display_project_name = $AppUI->_('All');
 	}
-	echo $AppUI->_('Selected Project') . ': <b>' . $display_project_name . '</b>';
 ?>
-<form name="changeMe" action="./index.php?m=reports<?php echo $report_type_var; ?>" method="post" accept-charset="utf-8">
-<?php echo $AppUI->_('Projects') . ':' . arraySelect($project_list, 'project_id', 'size="1" class="text" onchange="changeIt();"', $project_id, false); ?>
-</form>
+<div class="d-flex flex-wrap align-items-center gap-3 mb-3 w2p-report-project">
+	<span><?php echo $AppUI->_('Selected Project') . ': <b>' . $display_project_name . '</b>'; ?></span>
+	<form name="changeMe" action="./index.php?m=reports<?php echo $report_type_var; ?>" method="post" accept-charset="utf-8">
+	<?php echo $AppUI->_('Projects') . ':' . arraySelect($project_list, 'project_id', 'size="1" class="text" onchange="changeIt();"', $project_id, false); ?>
+	</form>
+</div>
 
 <?php
 }
@@ -71,8 +73,9 @@ if ($report_type) {
 } else {
     echo $AppUI->getTheme()->styleRenderBoxTop();
 	$s = '';
-	$s .= '<table class="std">';
-	$s .= '<tr><td><h2>' . $AppUI->_('Reports Available') . '</h2></td></tr>';
+	$s .= '<div class="std">';
+	$s .= '<h2 class="h5">' . $AppUI->_('Reports Available') . '</h2>';
+	$s .= '<dl class="row w2p-details">';
 
 	foreach ($reports as $key => $v) {
 		$type = str_replace('.php', '', $v);
@@ -89,10 +92,10 @@ if ($report_type) {
             $link .= '&suppressHeaders=1';
         }
 
-		$s .= '<tr><td><a href="'.$link.'">'.$AppUI->_($type.'_name') . '</a></td>';
-		$s .= '<td>' . $AppUI->_($type.'_desc') . '</td></tr>';
+		$s .= '<dt class="col-sm-4 col-lg-3"><a href="'.$link.'">'.$AppUI->_($type.'_name') . '</a></dt>';
+		$s .= '<dd class="col-sm-8 col-lg-9">' . $AppUI->_($type.'_desc') . '</dd>';
 	}
-	$s .= '</table>';
+	$s .= '</dl></div>';
 	echo $s;
 }
 

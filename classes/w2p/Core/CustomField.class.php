@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @package     web2project\core
+ * @package web2project\core
  *
  * @abstract
  */
@@ -92,11 +92,25 @@ class w2p_Core_CustomField {
         }
     }
 
-    public function deleteByObject($object_id)
+    /**
+     * Deletes the custom field values of one object.
+     *
+     * Object ids are only unique within a module (task 1 and company 1 both
+     * exist) and value_module is not filled in, so the values are matched to
+     * the module through their field definition. Without a module, values of
+     * every module with that id are deleted (the old behaviour).
+     *
+     * @param int         $object_id
+     * @param string|null $module    the module the object belongs to, e.g. 'tasks'
+     */
+    public function deleteByObject($object_id, $module = null)
     {
         $q = new w2p_Database_Query;
         $q->setDelete('custom_fields_values');
         $q->addWhere('value_object_id=' . (int) $object_id);
+        if (null !== $module) {
+            $q->addWhere('value_field_id IN (SELECT field_id FROM ' . w2PgetConfig('dbprefix', '') . 'custom_fields_struct WHERE field_module = ' . $q->quote($module) . ')');
+        }
         $q->exec();
     }
     public function setIntValue($v) {

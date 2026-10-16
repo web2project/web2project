@@ -1,4 +1,5 @@
 <?php
+/** @var w2p_Core_CAppUI $AppUI */
 if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
@@ -53,7 +54,7 @@ $users = $perms->getPermittedUsers('forums');
 $ttl = $object_id > 0 ? 'Edit Forum' : 'Add Forum';
 $titleBlock = new w2p_Theme_TitleBlock($ttl, 'icon.png', $m);
 $titleBlock->addCrumb('?m=' . $m, $m . ' list');
-$titleBlock->addViewLink('forum', $object_id, 'viewer');
+$titleBlock->addViewLink('forum', $object_id, 'view');
 $titleBlock->show();
 ?>
 <script language="javascript" type="text/javascript">

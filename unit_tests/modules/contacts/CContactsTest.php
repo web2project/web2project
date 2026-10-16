@@ -2,18 +2,17 @@
 /**
  * Class for testing contacts functionality
  *
- *
  * PHP version 5
  *
  * LICENSE: This source file is subject to Clear BSD License. Please see the
  *   LICENSE file in root of site for further details
  *
- * @author      D. Keith Casey, Jr.<caseydk@users.sourceforge.net>
- * @category    CContacts
- * @package     web2project
- * @subpackage  unit_tests
- * @license     Clear BSD
- * @link        http://www.web2project.net
+ * @author     D. Keith Casey, Jr.<caseydk@users.sourceforge.net>
+ * @category   CContacts
+ * @package    web2project
+ * @subpackage unit_tests
+ * @license    Clear BSD
+ * @link       http://www.web2project.net
  */
 
 class CContactsTest extends CommonSetup
@@ -169,30 +168,6 @@ class CContactsTest extends CommonSetup
         $this->obj->contact_id = 'monkey!';
         $this->mockDB->stageResult(0);
         $this->assertFalse($this->obj->isUser());
-    }
-
-    /**
-     * @expectedException PHPUnit_Framework_Error
-     */
-    public function testIs_Alpha()
-    {
-        $this->assertTrue($this->obj->is_alpha(123));
-        $this->assertTrue($this->obj->is_alpha('123'));
-        $this->assertFalse($this->obj->is_alpha('monkey'));
-        $this->assertFalse($this->obj->is_alpha('3.14159'));
-        $this->assertFalse($this->obj->is_alpha(3.14159));
-    }
-
-    /**
-     * @expectedException PHPUnit_Framework_Error
-     */
-    public function testGetCompanyName()
-    {
-        $this->obj->contact_company = 1;
-        $this->assertEquals('UnitTestCompany',  $this->obj->getCompanyName());
-
-        $this->obj->contact_company = 2;
-        $this->assertEquals('CreatedCompany',  $this->obj->getCompanyName());
     }
 
     public function testGetCompanyDetails()

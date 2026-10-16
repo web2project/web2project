@@ -1,4 +1,5 @@
 <?php
+/** @var w2p_Core_CAppUI $AppUI */
 if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
@@ -29,12 +30,6 @@ $showWork = (($showWork != '0') ? '1' : $showWork);
 $showWork_days = w2PgetParam($_POST, 'showWork_days', '0');
 $showWork_days = (($showWork_days != '0') ? '1' : $showWork_days);
 
-$printpdf = w2PgetParam($_POST, 'printpdf', '0');
-$printpdf = (($printpdf != '0') ? '1' : $printpdf);
-
-$printpdfhr = w2PgetParam($_POST, 'printpdfhr', '0');
-$printpdfhr = (($printpdfhr != '0') ? '1' : $printpdfhr);
-
 $showMilestonesOnly = '';
 $showNoMilestones = '';
 $addLinksToGantt = '';
@@ -44,19 +39,15 @@ $showTaskNameOnly = '';
 $showhgrid = '';
 
 if ($a == 'todo') {
-	if (isset($_POST['show_form'])) {
-		$AppUI->setState('TaskDayShowArc', w2PgetParam($_POST, 'showArcProjs', 0));
-		$AppUI->setState('TaskDayShowLow', w2PgetParam($_POST, 'showLowTasks', 0));
-		$AppUI->setState('TaskDayShowHold', w2PgetParam($_POST, 'showHoldProjs', 0));
-		$AppUI->setState('TaskDayShowDyn', w2PgetParam($_POST, 'showDynTasks', 0));
-		$AppUI->setState('TaskDayShowPin', w2PgetParam($_POST, 'showPinned', 0));
-	}
-
-	$showArcProjs = $AppUI->getState('TaskDayShowArc', 0);
-	$showLowTasks = $AppUI->getState('TaskDayShowLow', 1);
-	$showHoldProjs = $AppUI->getState('TaskDayShowHold', 0);
-	$showDynTasks = $AppUI->getState('TaskDayShowDyn', 0);
-	$showPinned = $AppUI->getState('TaskDayShowPin', 0);
+	// todo.php has already saved the posted filters (the form below uses the
+	// same field names as the My Tasks tab). The values go into the chart URL,
+	// where gantt.php casts them to int, so pass them as 1/0 rather than the
+	// checkbox value "on".
+	$showArcProjs = $AppUI->getState('TaskDayShowArc', 0) ? 1 : 0;
+	$showLowTasks = $AppUI->getState('TaskDayShowLow', 1) ? 1 : 0;
+	$showHoldProjs = $AppUI->getState('TaskDayShowHold', 0) ? 1 : 0;
+	$showDynTasks = $AppUI->getState('TaskDayShowDyn', 0) ? 1 : 0;
+	$showPinned = $AppUI->getState('TaskDayShowPin', 0) ? 1 : 0;
 } else {
 	$showPinned = w2PgetParam($_POST, 'showPinned', '0');
 	$showPinned = (($showPinned != '0') ? '1' : $showPinned);
@@ -76,9 +67,8 @@ if ($a == 'todo') {
 
 
 /**
-  * prepare the array with the tasks to display in the task filter
+  * Prepare the array with the tasks to display in the task filter
   * (for the most part this is code harvested from gantt.php)
-  *
   */
 $filter_task_list = array();
 $projectObject = new CProject();
@@ -119,8 +109,7 @@ foreach ($projects as $p) {
      }
 }
 /**
- * the results of the above bits are stored in $filter_task_list (array)
- * 
+ * The results of the above bits are stored in $filter_task_list (array)
  */
 
 
@@ -148,7 +137,11 @@ if ($display_option == 'custom') {
 if (!$min_view) {
 	$titleBlock = new w2p_Theme_TitleBlock('Gantt Chart', 'icon.png', $m);
 	$titleBlock->addCrumb('?m=tasks', 'tasks list');
-	$titleBlock->addCrumb('?m=projects&a=view&project_id=' . $project_id, 'view this project');
+    if ($project_id) {
+        $titleBlock->addCrumb('?m=projects&a=view&project_id=' . $project_id, 'view this project');
+    } else {
+        $titleBlock->addCrumb('?m=projects', 'view all projects');
+    }
     $titleBlock->addCrumb('#" onclick="javascript:toggleLayer(\'displayOptions\');', 'show/hide display options');
 	$titleBlock->show();
 }
@@ -200,22 +193,16 @@ if (!$min_view) {
         echo "f.project_end_date.value='" . $new_end->format(FMT_TIMESTAMP_DATE) . "';";
         ?>
         document.editFrm.display_option.value = 'custom';
-         document.editFrm.printpdf.value = "0";
-         document.editFrm.printpdfhr.value = "0";
         f.submit();
     }
 
     function showThisMonth() {
         document.editFrm.display_option.value = "this_month";
-        document.editFrm.printpdf.value = "0";
-        document.editFrm.printpdfhr.value = "0";
         document.editFrm.submit();
     }
 
     function showFullProject() {
          document.editFrm.display_option.value = "all";
-         document.editFrm.printpdf.value = "0";
-         document.editFrm.printpdfhr.value = "0";
          document.editFrm.submit();
     }
 
@@ -234,15 +221,7 @@ if (!$min_view) {
               vis.display = (vis.display==''||vis.display=='block')?'none':'block';
     }
 
-    function printPDFHR() {
-         document.editFrm.printpdf.value = "0";
-         document.editFrm.printpdfhr.value = "1";
-         document.editFrm.submit();
-    }
-
     function submitIt() {
-         document.editFrm.printpdf.value = "0";
-         document.editFrm.printpdfhr.value = "0";
          document.editFrm.submit();
     }
 </script>
@@ -250,154 +229,90 @@ if (!$min_view) {
 <div id="displayOptions"> <!-- start of div used to show/hide formatting options -->
 <form name="editFrm" method="post" action="?<?php echo "m=$m&a=$a&tab=$tab&project_id=$project_id"; ?>" accept-charset="utf-8">
     <input type="hidden" name="display_option" value="<?php echo $display_option; ?>" />
-	<input type="hidden" name="printpdf" value="<?php echo $printpdf; ?>" />
-	<input type="hidden" name="printpdfhr" value="<?php echo $printpdfhr; ?>" />
 	<input type="hidden" name="caller" value="<?php echo $a; ?>" />
     <input type="hidden" name="datePicker" value="project" />
 
-    <table class="std well">
-        <tr>
-            <td align="left" valign="top" width="20">
-                <?php if ($display_option != "all") { ?>
-                <a href="javascript:scrollPrev()">
-                    <img src="<?php echo w2PfindImage('prev.gif'); ?>" alt="<?php echo $AppUI->_('previous'); ?>" />
-                </a>
-                <?php } ?>
-            </td>
-            <td align="right"><em>Date Filter:</em></td>
-            <td align="right" nowrap="nowrap"><?php echo $AppUI->_('From'); ?>:</td>
-            <td align="left" nowrap="nowrap">
+    <div class="std well p-2">
+        <div class="d-flex flex-wrap align-items-center justify-content-center gap-2">
+            <?php if ($display_option != "all") { ?>
+            <a href="javascript:scrollPrev()">
+                <img src="<?php echo w2PfindImage('prev.gif'); ?>" alt="<?php echo $AppUI->_('previous'); ?>" />
+            </a>
+            <?php } ?>
+            <em>Date Filter:</em>
+            <span class="text-nowrap"><?php echo $AppUI->_('From'); ?>:</span>
+            <span class="text-nowrap">
                 <input type="hidden" name="project_start_date" id="project_start_date" value="<?php echo $start_date ? $start_date->format(FMT_TIMESTAMP_DATE) : ''; ?>" />
                 <input type="text" name="start_date" id="start_date" onchange="setDate_new('editFrm', 'start_date');" value="<?php echo $start_date ? $start_date->format($df) : ''; ?>" class="text" />
                 <a href="javascript: void(0);" onclick="return showCalendar('start_date', '<?php echo $df ?>', 'editFrm', null, true, true)">
-                <img src="<?php echo w2PfindImage('calendar.gif'); ?>" /></a>
-            </td>
-            <td align="right" nowrap="nowrap"><?php echo $AppUI->_('To'); ?>:</td>
-            <td align="left" nowrap="nowrap">
+                <img src="<?php echo w2PfindImage('calendar.gif'); ?>" alt="" /></a>
+            </span>
+            <span class="text-nowrap"><?php echo $AppUI->_('To'); ?>:</span>
+            <span class="text-nowrap">
                 <input type="hidden" name="project_end_date" id="project_end_date" value="<?php echo $end_date ? $end_date->format(FMT_TIMESTAMP_DATE) : ''; ?>" />
                 <input type="text" name="end_date" id="end_date" onchange="setDate_new('editFrm', 'end_date');" value="<?php echo $end_date ? $end_date->format($df) : ''; ?>" class="text" />
                 <a href="javascript: void(0);" onclick="return showCalendar('end_date', '<?php echo $df ?>', 'editFrm', null, true, true)">
-                <img src="<?php echo w2PfindImage('calendar.gif'); ?>" /></a>
-            </td>
-			<td>
-				<input type="checkbox" name="showLabels" id="showLabels" value="1" <?php echo (($showLabels == 1) ? 'checked="checked"' : ""); ?> /><td><label for="showLabels"><?php echo $AppUI->_('Show captions'); ?></label>
-			</td>
-            <td align="left">
-                <input type="button" class="button btn btn-primary btn-mini" value="<?php echo $AppUI->_('submit'); ?>" onclick='document.editFrm.display_option.value="custom";submitIt();' style="float: left;" />
-                <input type="button" class="button btn btn-primary btn-mini" value="<?php echo $AppUI->_('Print to PDF');?>" onclick='javascript:printPDFHR()' style="float: right;" />
-            </td>
-            <td align="right" valign="top" width="20">
-                <?php if ($display_option != 'all') { ?>
-                <a href="javascript:scrollNext()">
-                    <img src="<?php echo w2PfindImage('next.gif'); ?>" alt="<?php echo $AppUI->_('next'); ?>" />
-                </a>
-                <?php } ?>
-            </td>
-        </tr>
+                <img src="<?php echo w2PfindImage('calendar.gif'); ?>" alt="" /></a>
+            </span>
+            <span class="text-nowrap">
+                <input type="checkbox" name="showLabels" id="showLabels" value="1" <?php echo (($showLabels == 1) ? 'checked="checked"' : ""); ?> /><label for="showLabels"><?php echo $AppUI->_('Show captions'); ?></label>
+            </span>
+            <input type="button" class="button btn btn-primary btn-sm" value="<?php echo $AppUI->_('submit'); ?>" onclick='document.editFrm.display_option.value="custom";submitIt();' />
+            <?php if ($display_option != 'all') { ?>
+            <a href="javascript:scrollNext()">
+                <img src="<?php echo w2PfindImage('next.gif'); ?>" alt="<?php echo $AppUI->_('next'); ?>" />
+            </a>
+            <?php } ?>
+        </div>
         <?php if ($a == 'todo') { ?>
-        <tr>
-            <td align="center" valign="bottom" nowrap="nowrap" colspan="7">
-                <input type="hidden" name="show_form" value="1" />
-                <table width="100%" border="0" cellpadding="1" cellspacing="0">
-                    <tr>
-                        <td align="center" valign="bottom" nowrap="nowrap">
-                            <input type="checkbox" name="showPinned" id="showPinned" <?php echo $showPinned ? 'checked="checked"' : ''; ?> />
-                            <label for="showPinned"><?php echo $AppUI->_('Pinned Only'); ?></label>
-                        </td>
-                        <td align="center" valign="bottom" nowrap="nowrap">
-                            <input type="checkbox" name="showArcProjs" id="showArcProjs" <?php echo $showArcProjs ? 'checked="checked"' : ''; ?> />
-                            <label for="showArcProjs"><?php echo $AppUI->_('Archived/Template Projects'); ?></label>
-                        </td>
-                        <td align="center" valign="bottom" nowrap="nowrap">
-                            <input type="checkbox" name="showDynTasks" id="showDynTasks" <?php echo $showDynTasks ? 'checked="checked"' : ''; ?> />
-                            <label for="showDynTasks"><?php echo $AppUI->_('Dynamic Tasks'); ?></label>
-                        </td>
-                        <td align="center" valign="bottom" nowrap="nowrap">
-                            <input type="checkbox" name="showLowTasks" id="showLowTasks" <?php echo $showLowTasks ? 'checked="checked"' : ''; ?> />
-                            <label for="showLowTasks"><?php echo $AppUI->_('Low Priority Tasks'); ?></label>
-                        </td>
-                    </tr>
-                </table>
-            </td>
-        </tr>
-        <tr align="left">
-            <td colspan="11">
-                <table border="0" id="ganttoptions" style="display:none" width="100%" ><tr><td width="100%">
-                    <tr>
-                        <td>
-
-                            <input type="hidden" name="show_form" value="1" />
-                            <table  border="0" cellpadding="2" cellspacing="0" width="100%" >
-                                <tr>
-                                    <td>&nbsp;To Do Options:&nbsp;</td>
-                                    <td  valign="bottom" nowrap="nowrap">
-                                        <input type="checkbox" name="showPinned" id="showPinned" <?php echo $showPinned ? 'checked="checked"' : ''; ?> />
-                                        <label for="showPinned"><?php echo $AppUI->_('Pinned Only'); ?></label>
-                                    </td>
-                                    <td valign="bottom" nowrap="nowrap">
-                                        <input type="checkbox" name="showArcProjs" id="showArcProjs" <?php echo $showArcProjs ? 'checked="checked"' : ''; ?> />
-                                        <label for="showArcProjs"><?php echo $AppUI->_('Archived Projects'); ?></label>
-                                    </td>
-                                    <td  valign="bottom" nowrap="nowrap">
-                                        <input type="checkbox" name="showHoldProjs" id="showHoldProjs" <?php echo $showHoldProjs ? 'checked="checked"' : ''; ?> />
-                                        <label for="showHoldProjs"><?php echo $AppUI->_('Projects on Hold'); ?></label>
-                                    </td>
-                                    <td valign="bottom" nowrap="nowrap">
-                                        <input type="checkbox" name="showDynTasks" id="showDynTasks" <?php echo $showDynTasks ? 'checked="checked"' : ''; ?> />
-                                        <label for="showDynTasks"><?php echo $AppUI->_('Dynamic Tasks'); ?></label>
-                                    </td>
-                                    <td valign="bottom" nowrap="nowrap">
-                                        <input type="checkbox" name="showLowTasks" id="showLowTasks" <?php echo $showLowTasks ? 'checked="checked"' : ''; ?> />
-                                        <label for="showLowTasks"><?php echo $AppUI->_('Low Priority Tasks'); ?></label>
-                                    </td>
-                                </tr>
-                            </table>
-                        </td>
-                    </tr>
-                </table>
-            </td>
-        </tr>
+        <input type="hidden" name="show_form" value="1" />
+        <?php // Not shown on this tab, but todo.php resets any filter that is not posted. ?>
+        <input type="hidden" name="show_empty_date" value="<?php echo $AppUI->getState('TaskDayShowEmptyDate', 0) ? 1 : 0; ?>" />
+        <input type="hidden" name="show_inprogress" value="<?php echo $AppUI->getState('TaskDayShowInProgress', 0) ? 1 : 0; ?>" />
+        <div class="d-flex flex-wrap justify-content-center gap-3 mt-2">
+            <?php
+            $todoFilters = array(
+                'show_pinned'    => array($showPinned, 'Pinned Only'),
+                'show_arc_proj'  => array($showArcProjs, 'Archived/Template Projects'),
+                'show_hold_proj' => array($showHoldProjs, 'Projects on Hold'),
+                'show_dyn_task'  => array($showDynTasks, 'Dynamic Tasks'),
+                'show_low_task'  => array($showLowTasks, 'Low Priority Tasks'),
+            );
+            foreach ($todoFilters as $name => $filter) {
+                ?>
+                <span class="text-nowrap">
+                    <input type="checkbox" name="<?php echo $name; ?>" id="gantt_<?php echo $name; ?>" value="1" <?php echo $filter[0] ? 'checked="checked"' : ''; ?> />
+                    <label for="gantt_<?php echo $name; ?>"><?php echo $AppUI->_($filter[1]); ?></label>
+                </span>
+                <?php
+            }
+            ?>
+        </div>
         <?php } ?>
-        <tr>
-            <td align="center" valign="bottom" colspan="11">
-                <?php echo "<a href='javascript:showThisMonth()'>" . $AppUI->_('show this month') . "</a> : <a href='javascript:showFullProject()'>" . ($a == 'todo' ? $AppUI->_('show all') : $AppUI->_('show full project')) . "</a><br>"; ?>
-            </td>
-        </tr>
-    </table>
+        <div class="text-center mt-2">
+            <?php echo "<a href='javascript:showThisMonth()'>" . $AppUI->_('show this month') . "</a> : <a href='javascript:showFullProject()'>" . ($a == 'todo' ? $AppUI->_('show all') : $AppUI->_('show full project')) . "</a>"; ?>
+        </div>
+    </div>
 </form>
 </div> <!-- end of div used to show/hide formatting options -->
 
-<table cellspacing="0" cellpadding="2" border="1"  bgcolor="white" width="100%">
-	<tr><th colspan="9" > Gantt chart key: </th></tr>
+<div class="d-flex flex-wrap align-items-center gap-3 border rounded p-2 my-2 small w2p-gantt-key">
+	<strong>Gantt chart key:</strong>
 	<?php if ($showMilestonesOnly != 1) { ?>
-	<tr>
-		<td align="right"><?php echo $AppUI->_('Dynamic Task')?>&nbsp;</td>
-		<td align="center"><img src="<?php echo W2P_BASE_URL;?>/modules/tasks/images/task_dynamic.png" alt=""/></td>
-		<td align="right">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php echo $AppUI->_('Task (planned)')?>&nbsp;</td>
-		<td align="center"><img src="<?php echo W2P_BASE_URL;?>/modules/tasks/images/task_planned.png" alt=""/></td>
-		<td align="right">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php echo $AppUI->_('Task (in progress)')?>&nbsp;</td>
-		<td align="center"><img src="<?php echo W2P_BASE_URL;?>/modules/tasks/images/task_in_progress.png" alt=""/></td>
-		<td align="right">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php echo $AppUI->_('Task (completed)')?>&nbsp;</td>
-		<td align="center"><img src="<?php echo W2P_BASE_URL;?>/modules/tasks/images/task_completed.png" alt=""/></td>
-	</tr>
+		<span class="text-nowrap"><?php echo $AppUI->_('Dynamic Task')?> <img src="<?php echo W2P_BASE_URL;?>/modules/tasks/images/task_dynamic.png" alt=""/></span>
+		<span class="text-nowrap"><?php echo $AppUI->_('Task (planned)')?> <img src="<?php echo W2P_BASE_URL;?>/modules/tasks/images/task_planned.png" alt=""/></span>
+		<span class="text-nowrap"><?php echo $AppUI->_('Task (in progress)')?> <img src="<?php echo W2P_BASE_URL;?>/modules/tasks/images/task_in_progress.png" alt=""/></span>
+		<span class="text-nowrap"><?php echo $AppUI->_('Task (completed)')?> <img src="<?php echo W2P_BASE_URL;?>/modules/tasks/images/task_completed.png" alt=""/></span>
 	<?php } ?>
 	<?php if ($showNoMilestones != 1) {	?>
-	<tr>
-		<td align="right"><?php echo $AppUI->_('Milestone (planned)')?>&nbsp;</td>
-		<td align="center"><img src="<?php echo W2P_BASE_URL;?>/modules/tasks/images/milestone_planned.png" alt=""/></td>
-		<td align="right">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php echo $AppUI->_('Milestone (completed)')?>&nbsp;</td>
-		<td align="center"><img src="<?php echo W2P_BASE_URL;?>/modules/tasks/images/milestone_completed.png" alt=""/></td>
-		<td align="right">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php echo $AppUI->_('Milestone (in progress)')?>&nbsp;</td>
-		<td align="center"><img src="<?php echo W2P_BASE_URL;?>/modules/tasks/images/milestone_in_progress.png" alt=""/></td>
-		<td align="right">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php echo $AppUI->_('Milestone (overdue)')?>&nbsp;</td>
-		<td align="center"><img src="<?php echo W2P_BASE_URL;?>/modules/tasks/images/milestone_overdue.png" alt=""/></td>
-	</tr>
+		<span class="text-nowrap"><?php echo $AppUI->_('Milestone (planned)')?> <img src="<?php echo W2P_BASE_URL;?>/modules/tasks/images/milestone_planned.png" alt=""/></span>
+		<span class="text-nowrap"><?php echo $AppUI->_('Milestone (completed)')?> <img src="<?php echo W2P_BASE_URL;?>/modules/tasks/images/milestone_completed.png" alt=""/></span>
+		<span class="text-nowrap"><?php echo $AppUI->_('Milestone (in progress)')?> <img src="<?php echo W2P_BASE_URL;?>/modules/tasks/images/milestone_in_progress.png" alt=""/></span>
+		<span class="text-nowrap"><?php echo $AppUI->_('Milestone (overdue)')?> <img src="<?php echo W2P_BASE_URL;?>/modules/tasks/images/milestone_overdue.png" alt=""/></span>
 	<?php } ?>
-</table>
+</div>
 
-<table class="std">
-    <tr>
-        <td valign="top" align="center">
+<div class="std text-center">
             <?php
             if ($a != 'todo') {
                 $cnt[0]['N'] = $project->project_task_count;
@@ -413,13 +328,13 @@ if (!$min_view) {
 						 . "?window.innerWidth:document.body.offsetWidth)*0.95) + '"
 						 . '&showLabels=' . $showLabels . '&showWork=' . $showWork
 						 . '&showTaskNameOnly=' . $showTaskNameOnly
-						   . '&showhgrid=' . $showhgrid . '&showPinned=' . $showPinned
+					     . '&showhgrid=' . $showhgrid . '&showPinned=' . $showPinned
 						 . '&showArcProjs=' . $showArcProjs . '&showHoldProjs=' . $showHoldProjs
 						 . '&showDynTasks=' . $showDynTasks . '&showLowTasks=' . $showLowTasks
 						 . '&caller=' . $a . '&user_id=' . $user_id
-						   . '&printpdf=' . $printpdf . '&showNoMilestones=' . $showNoMilestones . '&showMilestonesOnly=' . $showMilestonesOnly
-						   . '&addLinksToGantt=' . $addLinksToGantt . '&ganttTaskFilter=' . $ganttTaskFilter
-						   . '&monospacefont=' . $monospacefont . '&showWork_days=' . $showWork_days);
+						 . '&showNoMilestones=' . $showNoMilestones . '&showMilestonesOnly=' . $showMilestonesOnly
+						 . '&addLinksToGantt=' . $addLinksToGantt . '&ganttTaskFilter=' . $ganttTaskFilter
+						 . '&monospacefont=' . $monospacefont . '&showWork_days=' . $showWork_days);
 
                 ?>
                 <script language="javascript" type="text/javascript"> document.write('<img alt="Please wait while the Gantt chart is generated... (this might take a minute or two)" src="<?php echo htmlspecialchars($src); ?>" />') </script>
@@ -428,50 +343,10 @@ if (!$min_view) {
 				 //If we have a problem displaying this we need to display a warning.
 				 //Put it at the bottom just in case
 				 if (! w2PcheckMem(32*1024*1024)) {
-					  echo "</td>\n</tr>\n<tr>\n<td>";
-					  echo '<span style="color: red; font-weight: bold;">' . $AppUI->_('invalid memory config') . '</span>';
-					  echo "\n";
+					  echo '<div class="text-danger fw-bold">' . $AppUI->_('invalid memory config') . '</div>';
 				 }
             } else {
                 echo $AppUI->_('No tasks to display');
             }
             ?>
-        </td>
-    </tr>
-	<tr>
-		<td>
-			<?php
-				//POST of all necesary variables to generate gantt in PDF
-				$_POST['m'] = 'tasks';
-				$_POST['a'] = 'gantt_pdf';
-				$_POST['suppressHeaders'] = '1';
-				$_POST['start_date'] = $start_date->format('%Y-%m-%d');
-				$_POST['end_date'] = $end_date->format('%Y-%m-%d');
-				$_POST['display_option'] = $display_option;
-				$_POST['showLabels']= $showLabels;
-				$_POST['showWork']= $showWork;
-				$_POST['showTaskNameOnly']= $showTaskNameOnly;
-				$_POST['showhgrid']= $showhgrid;
-				$_POST['showPinned']= $showPinned;
-				$_POST['showArcProjs']= $showArcProjs;
-				$_POST['showHoldProjs']= $showHoldProjs;
-				$_POST['showDynTasks']= $showDynTasks;
-				$_POST['showLowTasks']= $showLowTasks;
-				$_POST['caller']= $a;
-				$_POST['user_id']= $user_id;
-				$_POST['printpdfhr']= $printpdfhr;
-				$_POST['showPinned']= $showPinned;
-				$_POST['showArcProjs']= $showArcProjs;
-				$_POST['showHoldProjs']= $showHoldProjs;
-				$_POST['showDynTasks']= $showDynTasks;
-				$_POST['showLowTasks']= $showLowTasks;
-
-				if ( $printpdf == 1 || $printpdfhr == 1) {
-					include 'gantt_pdf.php';
-					$_POST['printpdf']= 0; $printpdf = 0;
-					$_POST['printpdfhr']= 0; $printpdfhr = 0;
-				}
-			?>
-		</td>
-	</tr>
-</table>
+</div>

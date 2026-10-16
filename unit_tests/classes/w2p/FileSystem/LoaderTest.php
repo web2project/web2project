@@ -2,18 +2,17 @@
 /**
  * Class for testing FileSystem Loader functionality
  *
- *
  * PHP version 5
  *
  * LICENSE: This source file is subject to Clear BSD License. Please see the
  *   LICENSE file in root of site for further details
  *
- * @author      D. Keith Casey, Jr.<caseydk@users.sourceforge.net>
- * @category    w2p_FileSystem_Loader
- * @package     web2project
- * @subpackage  unit_tests
- * @license     Clear BSD
- * @link        http://www.web2project.net
+ * @author     D. Keith Casey, Jr.<caseydk@users.sourceforge.net>
+ * @category   w2p_FileSystem_Loader
+ * @package    web2project
+ * @subpackage unit_tests
+ * @license    Clear BSD
+ * @link       http://www.web2project.net
  */
 
 class w2p_FileSystem_LoaderTest extends CommonSetup
@@ -50,7 +49,6 @@ class w2p_FileSystem_LoaderTest extends CommonSetup
         $this->assertFalse(array_key_exists('COPYING', $files2));
         $this->assertTrue(array_key_exists('index.php', $files2));
 
-        //$this->assertGreaterThan(count($files2), count($files1));
     }
 
     /**

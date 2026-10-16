@@ -4,6 +4,7 @@
 *   cleaned up, reorganized or eliminated based on usage. Before you touch
 *   these, please ensure there are Unit Tests to validate that things work
 *   before and after.
+*
 * @todo/TODO: Every single function in this file.
 *
 * WARNING: The functions in this file are likely to move to other files as they
@@ -31,6 +32,7 @@ function is_task_in_gantt_arr($task)
 
 function notifyHR($address, $notUsed, $uaddress, $uusername, $logname, $notUsed2, $userid)
 {
+    /** @var w2p_Core_CAppUI $AppUI */
     global $AppUI;
     $emailManager = new w2p_Output_EmailManager($AppUI);
     $body = $emailManager->notifyHR($uusername, $logname, $uaddress, $userid);
@@ -44,6 +46,7 @@ function notifyHR($address, $notUsed, $uaddress, $uusername, $logname, $notUsed2
 
 function notifyNewUserCredentials($address, $username, $logname, $logpwd)
 {
+    /** @var w2p_Core_CAppUI $AppUI */
     global $AppUI;
     $emailManager = new w2p_Output_EmailManager($AppUI);
     $body = $emailManager->notifyNewUserCredentials($username, $logname, $logpwd);
@@ -70,7 +73,6 @@ function strUTF8Decode($text)
     }
     if (function_exists('iconv')) {
         $text = mb_convert_encoding($text, 'UTF-8', $encoding);
-        //iconv($encoding, 'UTF-8', $text);
     } elseif (function_exists('utf8_decode')) {
         $text = utf8_decode($text);
     }
@@ -80,10 +82,9 @@ function strUTF8Decode($text)
 }
 
 /**
-* utility functions for the preparation of task data for GANTT PDF
+* Utility functions for the preparation of task data for GANTT PDF
 *
 * @todo some of these functions are not needed, need to trim this down
-*
 */
 // PYS : utf_8 decoding as suggested in Vbulletin #3987
 function strEzPdf($text)
@@ -109,9 +110,7 @@ function dumb_slice( $gantt_arr, $length = 25 )
 }
 
 /**
-*
 * 	END OF GANTT PDF UTILITY FUNCTIONS
-*
 */
 
 /**
@@ -298,6 +297,7 @@ function build_date_list(&$date_array, $row)
 // from modules/tasks/ae_dates.php
 function cal_work_day_conv($val)
 {
+    /** @var w2p_Core_CAppUI $AppUI */
     global $locale_char_set, $AppUI;
     setlocale(LC_TIME, 'en');
     $wk = Date_Calc::getCalendarWeek(null, null, null, '%a', LOCALE_FIRST_DAY);
@@ -315,14 +315,15 @@ function __extract_from_showtask(&$arr, $level, $today_view, $listTable, $fields
 }
 
 /**
- * @param $arr
- * @param $level
- * @param $today_view
- * @param $s
- * @param $m
- * @param $jsTaskId
- * @param $expanded
- * @return array
+ * @param mixed $arr
+ * @param mixed $level
+ * @param mixed $today_view
+ * @param mixed $s
+ * @param mixed $m
+ * @param mixed $jsTaskId
+ * @param mixed $expanded
+ *
+ * @return string
  */
 function __extract_from_showtask2($arr, $level, $today_view, $s, $m, $jsTaskId, $expanded)
 {
@@ -479,11 +480,13 @@ function array_csort() { //coded by Ichier2003
 }
 
 // from modules/tasks/tasks.class.php
-/*
-** Calc End Date via Startdate + Duration
-** @param array task	A DB row from the earlier fetched tasklist
-** @return string	Return calculated end date in MySQL-TIMESTAMP format
-*/
+/**
+ * Calc End Date via Startdate + Duration
+ *
+ * @param array  $task A DB row from the earlier fetched tasklist
+ *
+ * @return string Return calculated end date in MySQL-TIMESTAMP format
+ */
 function calcEndByStartAndDuration($task)
 {
     $end_date = new w2p_Utilities_Date($task['task_start_date']);
@@ -495,6 +498,7 @@ function calcEndByStartAndDuration($task)
 // from modules/tasks/tasks.class.php
 function sort_by_item_title($title, $item_name, $item_type, $a = '')
 {
+    /** @var w2p_Core_CAppUI $AppUI */
     global $AppUI, $project_id, $task_id, $m;
     global $task_sort_item1, $task_sort_type1, $task_sort_order1;
     global $task_sort_item2, $task_sort_type2, $task_sort_order2;
@@ -629,6 +633,7 @@ function isMemberOfTask_r($list, $Lusers, $N, $user_id, $task)
 // from modules/tasks/tasksperuser_sub.php
 function displayTask($list, $task, $level, $display_week_hours, $fromPeriod, $toPeriod, $user_id)
 {
+    /** @var w2p_Core_CAppUI $AppUI */
     global $AppUI, $durnTypes, $active_users, $zi, $projects;
     //if the user has no permission to the project don't show the tasks
     if (!(key_exists($task->task_project, $projects))) {
@@ -706,6 +711,7 @@ function displayTask($list, $task, $level, $display_week_hours, $fromPeriod, $to
 // from modules/reports/tasksperuser.php
 function displayTask_r($list, $task, $level, $display_week_hours, $fromPeriod, $toPeriod, $log_all_projects = false, $user_id = 0)
 {
+    /** @var w2p_Core_CAppUI $AppUI */
     global $AppUI;
 
     $htmlHelper = new w2p_Output_HTMLHelper($AppUI);
@@ -785,6 +791,7 @@ function weekDates($display_allocated_hours, $fromPeriod, $toPeriod)
 // from modules/reports/tasksperuser.php
 function weekDates_r($display_allocated_hours, $fromPeriod, $toPeriod)
 {
+    /** @var w2p_Core_CAppUI $AppUI */
     global $AppUI;
 
     if ($fromPeriod == -1) {
@@ -1003,11 +1010,13 @@ function findfiltertaskchild(&$tarr, $parent, $level=0)
 // from modules/system/roles/roles.class.php
 function showRoleRow($role = null)
 {
+    /** @var w2p_Core_CAppUI $AppUI */
     global $canEdit, $canDelete, $role_id, $AppUI, $roles;
 
-    $id = $role['id'];
-    $name = $role['value'];
-    $description = $role['name'];
+    // called without a role for the "add role" row
+    $id = $role['id'] ?? 0;
+    $name = $role['value'] ?? '';
+    $description = $role['name'] ?? '';
 
     if (!$id) {
         $roles_arr = array(0 => '(' . $AppUI->_('Copy Role') . '...)');
@@ -1090,6 +1099,7 @@ function parseFormatSysval($text, $syskey)
 // from modules/system/billingcode.php
 function showcodes(&$a)
 {
+    /** @var w2p_Core_CAppUI $AppUI */
     global $AppUI, $company_id;
 
     $s = '
@@ -1219,6 +1229,7 @@ function recode2regexp_utf8($input)
 // from modules/public/selector.php
 function selPermWhere($obj, $idfld, $namefield, $prefix = '')
 {
+    /** @var w2p_Core_CAppUI $AppUI */
     global $AppUI;
 
     $allowed = $obj->getAllowedRecords($AppUI->user_id, $idfld . ', ' . $namefield, '', '', '', $prefix);
@@ -1277,6 +1288,7 @@ function addDeptId($dataset, $parent)
 // From: modules/files/filefolder.class.php
 function getFolderSelectList()
 {
+    /** @var w2p_Core_CAppUI $AppUI */
     global $AppUI;
 
     $q = new w2p_Database_Query();
@@ -1300,6 +1312,7 @@ function getFolderSelectList()
 // From: modules/files/filefolder.class.php
 function getFolders($parent)
 {
+    /** @var w2p_Core_CAppUI $AppUI */
     global $AppUI, $allowed_folders_ary, $tab, $m, $a, $company_id, $project_id, $task_id;
     // retrieve all children of $parent
 
@@ -1312,8 +1325,8 @@ function getFolders($parent)
         if (array_key_exists($row['file_folder_id'], $allowed_folders_ary) or array_key_exists($parent, $allowed_folders_ary)) {
             $file_count = count($file_folder->getFoldersByParent($row['file_folder_id']));
 
-            $s .= '<tr><td colspan="20">';
-            $s .= '<ul>';
+            $s .= '<div class="d-flex align-items-center gap-2 border-bottom py-1 w2p-folder">';
+            $s .= '<ul class="me-auto">';
             $s .= '<li><a href="./index.php?m=files&amp;a=addedit_folder&amp;file_folder_parent=' . $row['file_folder_id'] . '&amp;file_folder_id=0">' . w2PshowImage('edit_add.png', '', '', 'new folder', 'add a new subfolder', 'files') . '</a></li>';
             $s .= '<li><a href="./index.php?m=files&amp;a=addedit&amp;folder=' . $row['file_folder_id'] . '&amp;project_id=' . $project_id . '&amp;file_id=0">' . w2PshowImage('folder_new.png', '', '', 'new file', 'add new file to this folder', 'files') . '</a></li>';
             $s .= '<li><a href="./index.php?m=files&amp;a=addedit_folder&amp;folder=' . $row['file_folder_id'] . '">' . w2PshowImage('filesaveas.png', '', '', 'edit icon', 'edit this folder', 'files') . '</a></li>';
@@ -1328,18 +1341,17 @@ function getFolders($parent)
             if ($file_count > 0) {
                 $s .= '<li class="info-text"><a href="javascript: void(0);" onClick="expand(\'files_' . $row['file_folder_id'] . '\')" class="has-files">(' . $file_count . ' files) +</a></li>';
             }
+            $s .= '</ul>';
             $s .= '<form name="frm_remove_folder_' . $row['file_folder_id'] . '" action="?m=files" method="post" accept-charset="utf-8">
                     <input type="hidden" name="dosql" value="do_folder_aed" />
                     <input type="hidden" name="del" value="1" />
                     <input type="hidden" name="file_folder_id" value="' . $row['file_folder_id'] . '" />
                     </form>';
-
-            $s .= '</ul>';
             $s .= '<a class="small-delete" href="javascript: void(0);" onclick="if (confirm(\'Are you sure you want to delete this folder?\')) {document.frm_remove_folder_' . $row['file_folder_id'] . '.submit()}">' . w2PshowImage('remove.png', '', '', 'delete icon', 'delete this folder', 'files') . '</a>';
-            $s .= '</td></tr>';
+            $s .= '</div>';
             if ($file_count > 0) {
                 $s .= '<div class="files-list" id="files_' . $row['file_folder_id'] . '" style="display: none;">';
-                $s .= displayFiles($AppUI, $row['file_folder_id'], $task_id, $project_id, $company_id);
+                $s .= '<table class="tbl list">' . displayFiles($AppUI, $row['file_folder_id'], $task_id, $project_id, $company_id) . '</table>';
                 $s .= "</div>";
             }
         }
@@ -1386,7 +1398,11 @@ function countFiles($folder)
     return $files_in_folder;
 }
 
-// From: modules/files/filefolder.class.php
+/**
+ * From: modules/files/filefolder.class.php
+ * 
+ * @deprecated
+ */
 function displayFiles($AppUI, $folder_id = 0, $task_id = 0, $project_id = 0, $company_id = 0, $category_id = -1)
 {
     global $m, $tab, $xpg_min, $xpg_pagesize, $showProject, $file_types,
@@ -1403,10 +1419,9 @@ function displayFiles($AppUI, $folder_id = 0, $task_id = 0, $project_id = 0, $co
         //   state for versions earlier than v3.0
         //   At some point at/after v4.0, this should be deprecated
         $fieldList = array('file_name', 'file_description',
-            'file_version', 'file_category', 'file_task',
-            'file_owner', 'file_datetime');
-        $fieldNames = array('File Name', 'Description', 'Version', 'Category',
-            'Task Name', 'Owner', 'Date',);
+            'file_category', 'file_task', 'file_owner', 'file_datetime');
+        $fieldNames = array('File Name', 'Description', 
+            'Category', 'Task Name', 'Owner', 'Date',);
 
         $module->storeSettings('files', 'index_list', $fieldList, $fieldNames);
     }
@@ -1451,14 +1466,14 @@ function displayFiles($AppUI, $folder_id = 0, $task_id = 0, $project_id = 0, $co
     $files = $q->loadList();
     $file_versions = [];//$qv->loadHashList('file_id');
 
-    $s  = '<tr>';
+    $s  = '<thead><tr>';
     $s .= '<th></th>';
-    $s .= '<th>' . $AppUI->_('co') . '</th>';
+    // $s .= '<th>' . $AppUI->_('co') . '</th>';
     foreach ($fieldNames as $index => $name) {
         $s .= '<th>' . $AppUI->_($fieldNames[$index]) . '</th>';
     }
     $s .= '<th></th>';
-    $s .= '</tr>';
+    $s .= '</tr></thead><tbody>';
 
     $fp = -1;
     $htmlHelper = new w2p_Output_HTMLHelper($AppUI);
@@ -1468,7 +1483,6 @@ function displayFiles($AppUI, $folder_id = 0, $task_id = 0, $project_id = 0, $co
     $customLookups = array('file_category' => $file_types);
 
     foreach ($files as $row) {
-        // $latest_file = $file_versions[$row['latest_id']];
 
         if ($fp != $row['file_project']) {
             if (!$row['file_project']) {
@@ -1491,91 +1505,28 @@ function displayFiles($AppUI, $folder_id = 0, $task_id = 0, $project_id = 0, $co
         }
         $fp = $row['file_project'];
 
-        // $row['file_datetime'] = $latest_file['file_datetime'];
-        // $row['file_id'] = $latest_file['file_id'];
         $htmlHelper->stageRowData($row);
 
         $s .= '<tr>';
         $s .= '<td class="data">';
-        if ($canEdit && (empty($row['file_checkout']) || ($row['file_checkout'] == 'final' && ($canEdit || $row['project_owner'] == $AppUI->user_id)))) {
+        if ($canEdit) {
             $s .= '<a href="./index.php?m=files&a=addedit&file_id=' . $row['file_id'] . '">' . w2PshowImage('kedit.png', '16', '16', 'edit file', 'edit file', 'files') . '</a>';
         }
-        $s .= '</td>';
-        $s .= '<td class="data">';
-        // if ($canEdit && empty($latest_file['file_checkout'])) {
-        //     $s .= '<a href="?m=files&a=co&file_id=' . $latest_file['file_id'] . '">' . w2PshowImage('up.png', '16', '16', 'checkout', 'checkout file', 'files') . '</a>';
-        // } else {
-        //     if ($latest_file['file_checkout'] == $AppUI->user_id) {
-        //         $s .= '<a href="?m=files&a=addedit&ci=1&file_id=' . $latest_file['file_id'] . '">' . w2PshowImage('down.png', '16', '16', 'checkin', 'checkin file', 'files') . '</a>';
-        //     } else {
-        //         if ($latest_file['file_checkout'] == 'final') {
-        //             $s .= 'final';
-        //         } else {
-        //             $s .= $latest_file['co_contact_name'] . '<br>(' . $latest_file['co_user'] . ')';
-        //         }
-        //     }
-        // }
-
-        $version_link = '';
-        // $hidden_table = '';
-        // if ($row['file_versions'] > 1) {
-        //     $version_link = '&nbsp<a href="javascript: void(0);" onClick="expand(\'versions_' . $latest_file['file_id'] . '\'); ">(' . $row['file_versions'] . ')</a>';
-        //     $hidden_table = '<tr><td colspan="20">
-        //         <table style="display: none" id="versions_' . $latest_file['file_id'] . '" class="tbl list">
-        //         <tr>';
-        //     foreach ($fieldNames as $index => $name) {
-        //         $hidden_table .= '<th nowrap="nowrap">';
-        //         $hidden_table .= $AppUI->_($fieldNames[$index]);
-        //         $hidden_table .= '</th>';
-        //     }
-        //     $hidden_table .= '</tr>';
-
-        //     $sub_htmlHelper = new w2p_Output_HTMLHelper($AppUI);
-        //     $sub_htmlHelper->df .= ' ' . $AppUI->getPref('TIMEFORMAT');
-
-        //     foreach ($file_versions as $file) {
-        //         $sub_htmlHelper->stageRowData($file);
-
-        //         if ($file['file_version_id'] == $latest_file['file_version_id']) {
-        //             foreach ($fieldList as $index => $column) {
-        //                 $hidden_table .= $sub_htmlHelper->createCell($fieldList[$index], $file[$fieldList[$index]], $customLookups);
-        //             }
-
-        //             if ($canEdit && w2PgetConfig('files_show_versions_edit')) {
-        //                 $hidden_table .= '<a href="./index.php?m=files&a=addedit&file_id=' . $file['file_id'] . '">' . w2PshowImage('kedit.png', '16', '16', 'edit file', 'edit file', 'files') . "</a>";
-        //             }
-        //             $hidden_table .= '</td><tr>';
-        //         }
-        //     }
-        //     $hidden_table .= '</table>';
-        // }
         $s .= '</td>';
 
         foreach ($fieldList as $index => $column) {
             $s .= $htmlHelper->createCell($fieldList[$index], $row[$fieldList[$index]], $customLookups);
-            // if ('file_version' == $fieldList[$index]) {
-            //     $cell = str_replace('</td>', $version_link.'</td>', $cell);
-            // }
-            // $s .= $cell;
         }
 
         $s .= '<td>';
-        // $s .= '<form name="frm_remove_file_' . $latest_file['file_id'] . '" action="?m=files" method="post" accept-charset="utf-8">
-        //     <input type="hidden" name="dosql" value="do_file_aed" />
-        //     <input type="hidden" name="del" value="1" />
-        //     <input type="hidden" name="file_id" value="' . $latest_file['file_id'] . '" />
-        //     <input type="hidden" name="redirect" value="' . $current_uri . '" />
-        //     </form>';
-        // $s .= '<a href="javascript: void(0);" onclick="if (confirm(\'' . $AppUI->_('Are you sure you want to delete this file?') . '\')) {document.frm_remove_file_' . $latest_file['file_id'] . '.submit()}">' . w2PshowImage('remove.png', '16', '16', 'delete file', 'delete file', 'files') . '</a>';
         $s .= '</td>';
         $s .= '</tr>';
-        // $s .= $hidden_table;
     }
     if (0 == count($files)) {
         $s .= '<tr><td colspan="' . (count($fieldNames) + 3 ) . '">' . $AppUI->_('No data available') . '</td></tr>';
     }
 
-    return $s;
+    return $s . '</tbody>';
 }
 
 // From: modules/files/files.class.php
@@ -1595,21 +1546,20 @@ function last_file($file_versions, $file_name, $file_project)
 // From: modules/files/files.class.php
 function getIcon($file_type)
 {
-    global $uistyle;
-
-    $mime = str_replace('/', '-', $file_type);
-    $icon = 'gnome-mime-' . $mime;
-    if (is_file(W2P_BASE_DIR . '/styles/' . $uistyle . '/images/modules/files/icons/' . $icon . '.png')) {
-        $result = 'icons/' . $icon . '.png';
-    } else {
-        $result = __extract_from_files_index_table($file_type);
+    $icon = 'icons/gnome-mime-' . str_replace('/', '-', $file_type) . '.png';
+    // w2PfindImage() resolves the returned path against the same style folders
+    foreach (array_unique(array(W2P_UISTYLE, 'web2project')) as $style) {
+        if (is_file(W2P_BASE_DIR . '/style/' . $style . '/images/modules/files/' . $icon)) {
+            return $icon;
+        }
     }
 
-    return $result;
+    return __extract_from_files_index_table($file_type);
 }
 
 /**
- * @param $file_type
+ * @param mixed $file_type
+ *
  * @return string
  */
 function __extract_from_files_index_table($file_type)
@@ -1663,28 +1613,7 @@ function getHelpdeskFolder()
 // From: modules/files/files.class.php
 function file_show_attr($AppUI, $form)
 {
-    global $object, $ci, $canAdmin, $file_project, $file_task, $task_name, $preserve;
-
-    if ($ci) {
-        $str_out  = '<p>' . $form->addLabel('Minor Revision') . '<input type="Radio" name="revision_type" value="minor" checked /></p>';
-        $str_out .= '<p>' . $form->addLabel('Major Revision') . '<input type="Radio" name="revision_type" value="major" />';
-    } else {
-        $str_out = '<p>' . $form->addLabel('Version');
-    }
-
-    if ($ci) {
-        $the_value = (strlen($object->file_version) > 0 ? $object->file_version + 0.01 : '1');
-        $str_out .= '<input type="hidden" name="file_version" value="' . $the_value . '" />';
-    } else {
-        $the_value = (strlen($object->file_version) > 0 ? $object->file_version : '1');
-        $str_out .= '<input type="text" name="file_version" maxlength="10" size="5" value="' . $the_value . '" class="text" />';
-    }
-
-    if ($ci || ($canAdmin && $object->file_checkout == 'final')) {
-        $str_out .= '<input type="hidden" name="file_checkout" value="" /><input type="hidden" name="file_co_reason" value="" />';
-    }
-
-    $str_out .= '</p>';
+    global $object, $canAdmin, $file_project, $file_task, $task_name, $preserve;
 
     $select_disabled = ' ';
     $onclick_task = ' onclick="popTask()" ';
@@ -1698,7 +1627,8 @@ function file_show_attr($AppUI, $form)
 
     // Category
     $str_out .= '<p>' . $form->addLabel('Category');
-    $str_out .= arraySelect(w2PgetSysVal('FileType'), 'file_category', 'class="text"' . $select_disabled, $object->file_category, true) . '</p>';
+    $fileTypes = w2PgetSysVal('FileType');
+    $str_out .= arraySelect($fileTypes, 'file_category', 'class="text"' . $select_disabled, $object->file_category, true) . '</p>';
 
     // ---------------------------------------------------------------------------------
 
@@ -1714,9 +1644,12 @@ function file_show_attr($AppUI, $form)
     return ($str_out);
 }
 
-/** Retrieve tasks with first task_end_dates within given project
- * @param int Project_id
- * @param int SQL-limit to limit the number of returned tasks
+/**
+ * Retrieve tasks with first task_end_dates within given project
+ *
+ * @param int $project_id Project_id
+ * @param int $limit SQL-limit to limit the number of returned tasks
+ *
  * @return array List of criticalTasks
  */
 //TODO: modules/projectdesigner/projectdesigner.class.php
@@ -1741,6 +1674,7 @@ function getCriticalTasksInverted($project_id = null, $limit = 1)
 //TODO: modules/projectdesigner/projectdesigner.class.php
 function get_actual_end_date_pd($task_id, $task)
 {
+    /** @var w2p_Core_CAppUI $AppUI */
     global $AppUI;
 
     $q = new w2p_Database_Query();
@@ -1765,21 +1699,22 @@ function get_actual_end_date_pd($task_id, $task)
     return $edate;
 }
 
-/* The next lines of code have resided in projects/index.php before
-** and have been moved into this 'encapsulated' function
-** for reusability of that central code.
-**
-** @date 20060225
-** @responsible gregorerhardt
-**
-** E.g. this code is used as well in a tab for the admin/view site
-**
-** @mixed user_id 	userId as filter for tasks/projects that are shown, if nothing is specified,
-current viewing user $AppUI->user_id is used.
-*/
 // From: modules/projects/project.class.php
+/**
+ * The next lines of code have resided in projects/index.php before
+ * and have been moved into this 'encapsulated' function
+ * for reusability of that central code (2006-02-25).
+ *
+ * E.g. this code is used as well in a tab for the admin/view site
+ *
+ * @param mixed $user_id userId as filter for tasks/projects that are shown, if nothing is specified,
+ *                       current viewing user $AppUI->user_id is used.
+ *
+ * @author gregorerhardt
+ */
 function projects_list_data($user_id = false)
 {
+    /** @var w2p_Core_CAppUI $AppUI */
     global $AppUI, $addPwOiD, $buffer, $company, $company_id, $company_prefix,
         $deny, $department, $dept_ids, $orderby, $orderdir,
         $tasks_problems, $owner, $search_text, $project_type;
@@ -1951,7 +1886,8 @@ function projects_list_data($user_id = false)
  *
  * @param mixed $arraylist array list of project elements to search
  * @param mixed $project_id project id to search for
- * @return int returns the array key of the project record in the array list or false if not found
+ *
+ * @return int|false returns the array key of the project record in the array list or false if not found
  */
 // From: modules/projects/project.class.php
 function getProjectIndex($arraylist, $project_id)
@@ -1971,13 +1907,15 @@ function getProjectIndex($arraylist, $project_id)
  *
  * @param mixed $company_id the id of the company we are searching departments
  * @param mixed $checked_array an array with the ids of the departments that should be selected on the list
- * @param integer $dept_parent used when to determine the starting level on the tree, or by recursion
- * @param integer $spaces used by recursion to add spaces to form the visual tree on the <select> element
+ * @param int $dept_parent used when to determine the starting level on the tree, or by recursion
+ * @param int $spaces used by recursion to add spaces to form the visual tree on the <select> element
+ *
  * @return string returns the html <option> elements
  */
 // From: modules/projects/project.class.php
 function getDepartmentSelectionList($company_id, $checked_array = array(), $dept_parent = 0, $spaces = 0)
 {
+    /** @var w2p_Core_CAppUI $AppUI */
     global $departments_count, $AppUI;
     $parsed = '';
 
@@ -2049,6 +1987,7 @@ function userUsageWeeks()
 // From: modules/reports/reports/allocateduserhours.php
 function showWeeks()
 {
+    /** @var w2p_Core_CAppUI $AppUI */
     global $allocated_hours_sum, $end_date, $start_date, $AppUI, $user_list, $user_names, $user_usage, $table_header, $table_rows, $working_days_count, $total_hours_capacity, $total_hours_capacity_all;
 
     $working_days_count = 0;
@@ -2141,6 +2080,7 @@ function userUsageDays()
 // From: modules/reports/reports/allocateduserhours.php
 function showDays()
 {
+    /** @var w2p_Core_CAppUI $AppUI */
     global $allocated_hours_sum, $end_date, $start_date, $AppUI, $user_list, $user_names, $user_usage, $hideNonWd, $table_header, $table_rows, $working_days_count, $total_hours_capacity, $total_hours_capacity_all;
 
     if (!is_array($user_list)) {
@@ -2191,6 +2131,7 @@ function showDays()
 // From: modules/system/syskeys/index.php
 function showRow($id = '', $key = 0, $title = '', $value = '')
 {
+  /** @var w2p_Core_CAppUI $AppUI */
   global $canEdit, $sysval_id, $AppUI, $keys;
   global $fixedSysVals;
   $s = '';
@@ -2223,6 +2164,7 @@ function showRow($id = '', $key = 0, $title = '', $value = '')
 // From: modules/system/syskeys/keys.php
 function showRow_keys($id = 0, $name = '', $label = '', $canEdit = false)
 {
+    /** @var w2p_Core_CAppUI $AppUI */
     global $canEdit, $syskey_id, $CR, $AppUI;
     $s = '';
     if ($syskey_id == $id && $canEdit) {
@@ -2279,6 +2221,7 @@ function bestColor($bg, $lt = '#ffffff', $dk = '#000000')
 ##
 function arraySelect(&$arr, $select_name, $select_attribs, $selected, $translate = false)
 {
+    /** @var w2p_Core_CAppUI $AppUI */
     global $AppUI;
     if (!is_array($arr)) {
         dprint(__file__, __line__, 0, 'arraySelect called with no array');
@@ -2297,8 +2240,13 @@ function arraySelect(&$arr, $select_name, $select_attribs, $selected, $translate
         if ($translate) {
             $v = $AppUI->_($v);
         }
+        // Option labels are often user data (company, project, user names), so
+        // escape them. Existing entities are kept, because several callers
+        // indent with &nbsp; (double_encode = false).
+        $label = htmlspecialchars((string) $v, ENT_QUOTES, 'UTF-8', false);
+        $value = htmlspecialchars((string) $k, ENT_QUOTES);
         if (is_array($selected)) {
-            $s .= '<option value="' . $k . '"' . ((in_array($k, $selected) && !$did_selected) ? ' selected="selected"' : '') . '>' . $v . '</option>';
+            $s .= '<option value="' . $value . '"' . ((in_array($k, $selected) && !$did_selected) ? ' selected="selected"' : '') . '>' . $label . '</option>';
             if (in_array($k, $selected)) {
                 // We found a match. Lets decrease the $multiples yet to be found
                 $multiple--;
@@ -2308,7 +2256,7 @@ function arraySelect(&$arr, $select_name, $select_attribs, $selected, $translate
                 $did_selected = 1;
             }
         } else {
-            $s .= '<option value="' . $k . '"' . ((($k == $selected && strcmp($k, $selected) == 0) && !$did_selected) ? ' selected="selected"' : '') . '>' . $v . '</option>';
+            $s .= '<option value="' . $value . '"' . ((($k == $selected && strcmp($k, $selected) == 0) && !$did_selected) ? ' selected="selected"' : '') . '>' . $label . '</option>';
             if (($k == $selected && strcmp($k, $selected) == 0)) {
                 // As soon as we find a match we make sure no other gets selected by computer mistake by using the $did_selected lock
                 $did_selected = 1;
@@ -2355,20 +2303,23 @@ function tree_recurse($id, $indent, $list, $children)
 }
 
 /**
- **	Provide Projects Selectbox sorted by Companies
- **	@author gregorerhardt with special thanks to original author aramis
- **	@param 	int 		userID
- **	@param 	string 	HTML select box name identifier
- **	@param	string	HTML attributes
- **	@param	int			Proejct ID for preselection
- **	@param 	int			Project ID which will be excluded from the list
- **									(e.g. in the tasks import list exclude the project to import into)
- **	@return	string 	HTML selectbox
-
+ *	Provide Projects Selectbox sorted by Companies
+ *
+ *	@param int $user_id 		userID
+ *	@param string $select_name 	HTML select box name identifier
+ *	@param string $select_attribs	HTML attributes
+ *	@param int $selected			Proejct ID for preselection
+ *	@param int $excludeProjWithId			Project ID which will be excluded from the list
+ *									(e.g. in the tasks import list exclude the project to import into)
+ *
+ *	@author gregorerhardt with special thanks to original author aramis
+ *
+ *	@return string 	HTML selectbox
  */
 
 function projectSelectWithOptGroup($user_id, $select_name, $select_attribs, $selected, $excludeProjWithId = null)
 {
+    /** @var w2p_Core_CAppUI $AppUI */
     global $AppUI;
     $q = new w2p_Database_Query();
     $q->addTable('projects', 'pr');
@@ -2387,9 +2338,10 @@ function projectSelectWithOptGroup($user_id, $select_name, $select_attribs, $sel
     foreach ($projects as $p) {
         if ($p['company_name'] != $current_company) {
             $current_company = $p['company_name'];
-            $s .= '<optgroup label="' . $current_company . '" >' . $current_company . '</optgroup>';
+            $company = htmlspecialchars((string) $current_company, ENT_QUOTES, 'UTF-8', false);
+            $s .= '<optgroup label="' . $company . '" >' . $company . '</optgroup>';
         }
-        $s .= '<option value="' . $p['project_id'] . '" ' . ($selected == $p['project_id'] ? 'selected="selected"' : '') . '>&nbsp;&nbsp;&nbsp;' . $p['project_name'] . '</option>';
+        $s .= '<option value="' . (int) $p['project_id'] . '" ' . ($selected == $p['project_id'] ? 'selected="selected"' : '') . '>&nbsp;&nbsp;&nbsp;' . htmlspecialchars((string) $p['project_name'], ENT_QUOTES, 'UTF-8', false) . '</option>';
     }
     $s .= '</select>';
 
@@ -2402,17 +2354,19 @@ function projectSelectWithOptGroup($user_id, $select_name, $select_attribs, $sel
 ##
 function breadCrumbs(&$arr)
 {
+    /** @var w2p_Core_CAppUI $AppUI */
     global $AppUI;
     $crumbs = array();
     foreach ($arr as $k => $v) {
         $crumbs[] = '<a class="button" href="' . $k . '"><span>' . $AppUI->_($v) . '</span></a>';
     }
 
-    return implode('</td><td align="left" nowrap="nowrap">', $crumbs);
+    return '<span class="d-inline-flex flex-wrap gap-1 w2p-crumbs">' . implode('', $crumbs) . '</span>';
 }
 
 function w2PgetUsers()
 {
+    /** @var w2p_Core_CAppUI $AppUI */
     global $AppUI;
 
     $q = new w2p_Database_Query;
@@ -2442,6 +2396,7 @@ function w2PgetUsers()
 
 function getUsers($stub = null, $where = null, $orderby = 'contact_first_name, contact_last_name')
 {
+    /** @var w2p_Core_CAppUI $AppUI */
     global $AppUI;
     $q = new w2p_Database_Query;
     $q->addTable('users');
@@ -2489,61 +2444,49 @@ function w2PgetUsersHashList($stub = null, $where = null, $orderby = 'contact_fi
 }
 
 ##
-## displays the configuration array of a module for informational purposes
+## @deprecated This is no longer used anywhere for anything.
 ##
 function w2PshowModuleConfig($config)
 {
-    global $AppUI;
-    $s = '<table cellspacing="2" cellpadding="2" border="0" class="std" width="50%">';
-    $s .= '<tr><th colspan="2">' . $AppUI->_('Module Configuration') . '</th></tr>';
-    foreach ($config as $k => $v) {
-        $s .= '<tr><td width="50%">' . $AppUI->_($k) . '</td><td width="50%" class="hilite">' . $AppUI->_($v) . '</td></tr>';
-    }
-    $s .= '</table>';
-
-    return ($s);
+    return '';
 }
 
 /**
  *	Function to recussively find an image in a number of places
- *	@param string The name of the image
- *	@param string Optional name of the current module
+ *
+ *	@param string $name The name of the image
+ *	@param string $module Optional name of the current module
  */
 function w2PfindImage($name, $module = null)
 {
-    // uistyle must be declared globally
-    global $uistyle;
     if ($module && file_exists(W2P_BASE_DIR . '/modules/' . $module . '/images/' . $name)) {
         return './modules/' . $module . '/images/' . $name;
-    } elseif ($module && file_exists(W2P_BASE_DIR . '/style/' . $uistyle . '/images/modules/' . $module . '/' . $name)) {
-        return './style/' . $uistyle . '/images/modules/' . $module . '/' . $name;
-    } elseif (file_exists(W2P_BASE_DIR . '/style/' . $uistyle . '/images/icons/' . $name)) {
-        return './style/' . $uistyle . '/images/icons/' . $name;
-    } elseif (file_exists(W2P_BASE_DIR . '/style/' . $uistyle . '/images/obj/' . $name)) {
-        return './style/' . $uistyle . '/images/obj/' . $name;
-    } elseif (file_exists(W2P_BASE_DIR . '/style/' . $uistyle . '/images/' . $name)) {
-        return './style/' . $uistyle . '/images/' . $name;
-    } elseif ($module && file_exists(W2P_BASE_DIR . '/style/' . w2PgetConfig('host_style') . '/images/modules/' . $module . '/' . $name)) {
-        return './style/' . w2PgetConfig('host_style') . '/images/modules/' . $module . '/' . $name;
-    } elseif (file_exists(W2P_BASE_DIR . '/style/' . w2PgetConfig('host_style') . '/images/icons/' . $name)) {
-        return './style/' . w2PgetConfig('host_style') . '/images/icons/' . $name;
-    } elseif (file_exists(W2P_BASE_DIR . '/style/' . w2PgetConfig('host_style') . '/images/obj/' . $name)) {
-        return './style/' . w2PgetConfig('host_style') . '/images/obj/' . $name;
-    } elseif (file_exists(W2P_BASE_DIR . '/style/web2project/images/obj/' . $name)) {
-        return './style/web2project/images/obj/' . $name;
-    } else {
-        return './style/web2project/images/' . $name;
     }
+    // the active style first, then the images shipped with the web2project style
+    foreach (array_unique(array(W2P_UISTYLE, 'web2project')) as $style) {
+        $paths = array('icons/', 'obj/', '');
+        if ($module) {
+            array_unshift($paths, 'modules/' . $module . '/');
+        }
+        foreach ($paths as $path) {
+            if (file_exists(W2P_BASE_DIR . '/style/' . $style . '/images/' . $path . $name)) {
+                return './style/' . $style . '/images/' . $path . $name;
+            }
+        }
+    }
+
+    return './style/web2project/images/' . $name;
 }
 
 /**
  *	Workaround removed due to problems in Opera and other issues
  *	with IE6.
  *	Workaround to display png images with alpha-transparency in IE6.0
- *	@param string The name of the image
- *	@param string The image width
- *	@param string The image height
- *	@param string The alt text for the image
+ *
+ *	@param string $src The name of the image
+ *	@param string $notUsed The image width
+ *	@param string $notUsed2 The image height
+ *	@param string $alt The alt text for the image
  */
 function w2PshowImage($src, $notUsed = '', $notUsed2 = '', $alt = '', $title = '', $module = null)
 {
@@ -2595,68 +2538,51 @@ function w2PshowImage($src, $notUsed = '', $notUsed2 = '', $alt = '', $title = '
 
 function buildPaginationNav($AppUI, $m, $tab, $xpg_totalrecs, $xpg_pagesize, $page)
 {
-  $xpg_total_pages = ($xpg_totalrecs > $xpg_pagesize) ? ceil($xpg_totalrecs / $xpg_pagesize) : 0;
+    if ($xpg_totalrecs <= $xpg_pagesize) {
+        return '';
+    }
 
-  $xpg_break = false;
-
-  $s = '<table width="100%" cellspacing="0" cellpadding="0" border="0"><tr>';
-
-  if ($xpg_totalrecs > $xpg_pagesize) {
+    $xpg_total_pages = ceil($xpg_totalrecs / $xpg_pagesize);
     $xpg_prev_page = $page - 1;
     $xpg_next_page = $page + 1;
-    // left buttoms
-    if ($xpg_prev_page > 0) {
-      $s .= '<td align="left" width="15%"><a href="./index.php?m=' . $m . '&amp;tab=' . $tab . '&amp;page=1"><img src="' . w2PfindImage('navfirst.gif') . '" alt="First Page"></a>&nbsp;&nbsp;';
-      $s .= '<a href="./index.php?m=' . $m . '&amp;tab=' . $tab . '&amp;page=' . $xpg_prev_page . '"><img src="' . w2PfindImage('navleft.gif') . '" alt="Previous page (' . $xpg_prev_page . ')"></a></td>';
-    } else {
-      $s .= '<td width="15%">&nbsp;</td>';
-    }
+    $url = './index.php?m=' . $m . '&amp;tab=' . $tab . '&amp;page=';
 
-    // central text (files, total pages, ...)
-    $s .= '<td align="center" width="70%">';
-    $s .= $xpg_totalrecs . ' ' . $AppUI->_('Record(s)') . ' ' . $xpg_total_pages . ' ' . $AppUI->_('Page(s)');
+    $item = function ($href, $label, $state = '') {
+        if ('' != $state) {
+            return '<li class="page-item ' . $state . '"><span class="page-link">' . $label . '</span></li>';
+        }
+        return '<li class="page-item"><a class="page-link" href="' . $href . '">' . $label . '</a></li>';
+    };
+
+    $s = '<nav class="d-flex flex-wrap align-items-center gap-2 my-2 w2p-pagination" aria-label="' . $AppUI->_('Page(s)') . '">';
+    $s .= '<ul class="pagination pagination-sm flex-wrap mb-0">';
+
+    // left buttons
+    $s .= $item($url . '1', '<img src="' . w2PfindImage('navfirst.gif') . '" alt="First Page" />', ($xpg_prev_page > 0) ? '' : 'disabled');
+    $s .= $item($url . $xpg_prev_page, '<img src="' . w2PfindImage('navleft.gif') . '" alt="Previous page (' . $xpg_prev_page . ')" />', ($xpg_prev_page > 0) ? '' : 'disabled');
 
     // Page numbered list, up to 30 pages
-    $s .= ' [ ';
-
     for ($n = $page > 16 ? $page - 16 : 1; $n <= $xpg_total_pages; $n++) {
-      if ($n == $page) {
-        $s .= '<b>' . $n . '</b></a>';
-      } else {
-        $s .= '<a href="./index.php?m=' . $m . '&amp;tab=' . $tab . '&amp;page=' . $n . '">' . $n . '</a>';
-      }
-      if ($n >= 30 + $page - 15) {
-        $xpg_break = true;
-        break;
-      } elseif ($n < $xpg_total_pages) {
-        $s .= ' | ';
-      }
+        $s .= $item($url . $n, $n, ($n == $page) ? 'active' : '');
+        if ($n >= 30 + $page - 15) {
+            break;
+        }
     }
 
-    if (!isset($xpg_break)) { // are we supposed to break ?
-      if ($n == $page) {
-        $s .= '<' . $n . '</a>';
-      } else {
-        $s .= '<a href="./index.php?m=' . $m . '&amp;tab=' . $tab . '&amp;page=' . $xpg_total_pages . '">' . $n . '</a>';
-      }
-    }
-    $s .= ' ] ';
-    $s .= '</td>';
-    // right buttoms
-    if ($xpg_next_page <= $xpg_total_pages) {
-      $s .= '<td align="right" width="15%"><a href="./index.php?m=' . $m . '&amp;tab=' . $tab . '&amp;page=' . $xpg_next_page . '"><img src="' . w2PfindImage('navright.gif') . '" alt="Next Page (' . $xpg_next_page . ')"></a>&nbsp;&nbsp;';
-      $s .= '<a href="./index.php?m=' . $m . '&amp;tab=' . $tab . '&amp;page=' . $xpg_total_pages . '"><img src="' . w2PfindImage('navlast.gif') . '" alt="Last Page"></a></td>';
-    } else {
-      $s .= '<td width="15%">&nbsp;</td></tr>';
-    }
-  }
-  $s .= '</table>';
+    // right buttons
+    $s .= $item($url . $xpg_next_page, '<img src="' . w2PfindImage('navright.gif') . '" alt="Next Page (' . $xpg_next_page . ')" />', ($xpg_next_page <= $xpg_total_pages) ? '' : 'disabled');
+    $s .= $item($url . $xpg_total_pages, '<img src="' . w2PfindImage('navlast.gif') . '" alt="Last Page" />', ($xpg_next_page <= $xpg_total_pages) ? '' : 'disabled');
+    $s .= '</ul>';
 
-  return $s;
+    // central text (files, total pages, ...)
+    $s .= '<span class="text-body-secondary small">' . $xpg_totalrecs . ' ' . $AppUI->_('Record(s)') . ' ' . $xpg_total_pages . ' ' . $AppUI->_('Page(s)') . '</span>';
+    $s .= '</nav>';
+
+    return $s;
 }
 
 /**
- * function to return a default value if a variable is not set
+ * Function to return a default value if a variable is not set
  */
 function defVal($var, $def)
 {
@@ -2665,6 +2591,7 @@ function defVal($var, $def)
 
 function addHistory($table, $id, $action = 'modify', $description = '', $project_id = 0)
 {
+    /** @var w2p_Core_CAppUI $AppUI */
     global $AppUI;
     /*
     * TODO:
@@ -2698,7 +2625,6 @@ function addHistory($table, $id, $action = 'modify', $description = '', $project
     $q->addInsert('history_project', (int) $project_id);
     $q->addInsert('history_table', $table);
     $q->exec();
-    //echo db_error();
 }
 
 function w2PgetSysVal($title)
@@ -2729,6 +2655,7 @@ function w2PgetSysVal($title)
 
 function w2PuserHasRole($name)
 {
+    /** @var w2p_Core_CAppUI $AppUI */
     global $AppUI;
     $uid = $AppUI->user_id;
     $q = new w2p_Database_Query;
@@ -2742,6 +2669,7 @@ function w2PuserHasRole($name)
 
 function w2PformatDuration($x)
 {
+    /** @var w2p_Core_CAppUI $AppUI */
     global $AppUI;
 
     $dur_day = floor($x / w2PgetConfig('daily_working_hours'));
@@ -2767,8 +2695,6 @@ function w2PformatDuration($x)
 
 }
 
-/**
- */
 function w2PsetMicroTime()
 {
     global $microTimeSet;
@@ -2783,8 +2709,6 @@ function w2PsetExecutionConditions()
     ini_set('memory_limit', $memoryLimt);
 }
 
-/**
- */
 function w2PgetMicroDiff()
 {
     global $microTimeSet;
@@ -2834,6 +2758,7 @@ function w2PformSafe($txt, $deslash = false)
 
 function formatTime($uts)
 {
+    /** @var w2p_Core_CAppUI $AppUI */
     global $AppUI;
     $date = new w2p_Utilities_Date();
     $date->setDate($uts, DATE_FORMAT_UNIXTIME);
@@ -2860,18 +2785,6 @@ function file_size($size)
  */
 function formatCurrency($number, $format)
 {
-    // global $AppUI, $locale_char_set;
-
-    // if (!$format) {
-    //     $format = $AppUI->getPref('CURRENCYFORM');
-    // }
-    // // If the requested locale doesn't work, don't fail,
-    // // revert to the system default.
-    // if ($locale_char_set != 'utf-8' || !setlocale(LC_MONETARY, $format . '.UTF8')) {
-    //     if (!setlocale(LC_MONETARY, $format)) {
-    //         setlocale(LC_MONETARY, '');
-    //     }
-    // }
 
     // Even money_format can't be trusted in Windows. It simply does not work on systems that don't have strfmon capabilities. Use number_format as fallback.
     return function_exists('money_format') ? money_format('%i', $number) : number_format($number, 2);
@@ -2967,6 +2880,7 @@ function getUsersArray()
 
 function getUsersCombo($default_user_id = 0, $first_option = 'All users')
 {
+    /** @var w2p_Core_CAppUI $AppUI */
     global $AppUI;
 
     $parsed = '<select name="user_id" class="text">';
@@ -2988,6 +2902,7 @@ function getUsersCombo($default_user_id = 0, $first_option = 'All users')
  */
 function formatHours($hours)
 {
+    /** @var w2p_Core_CAppUI $AppUI */
     global $AppUI;
 
     $hours = (int) $hours;
@@ -3018,13 +2933,15 @@ function formatHours($hours)
     }
 }
 
-/*
-** Create the Required Fields (From Sysvals) JavaScript Code
-** For instance implemented in projects and tasks addedit.php
-** @param array required field array from SysVals
-*/
+/**
+ * Create the Required Fields (From Sysvals) JavaScript Code
+ * For instance implemented in projects and tasks addedit.php
+ *
+ * @param array $requiredFields required field array from SysVals
+ */
 function w2PrequiredFields($requiredFields)
 {
+    /** @var w2p_Core_CAppUI $AppUI */
     global $AppUI;
     $buffer = 'var foc=false;';
 
@@ -3076,8 +2993,10 @@ function w2PgetBytes($str)
 
 /**
  * Check for a memory limit, if we can't generate it then we fail.
+ *
  * @param int $min minimum amount of memory needed
  * @param bool $revert revert back to original config after test.
+ *
  * @return bool true if we have the minimum amount of RAM and if we can modify RAM
  */
 function w2PcheckMem($min = 0, $revert = false)
@@ -3100,7 +3019,7 @@ function w2PcheckMem($min = 0, $revert = false)
 }
 
 /**
- * decode HTML entities
+ * Decode HTML entities
  */
 function w2PHTMLDecode($txt)
 {
@@ -3129,6 +3048,7 @@ function w2PHTMLDecode($txt)
 
 function w2PtoolTip($header = '', $tip = '', $raw = false, $id = '')
 {
+    /** @var w2p_Core_CAppUI $AppUI */
     global $AppUI;
 
     $id = ('' == $id) ? '' : 'id="' . $id . '"';
@@ -3155,7 +3075,6 @@ function w2PendTip()
  *    @param string $t the header of the message
  *    @param string $f the script filename
  *    @param string $l the script line
- *    @access public
  */
 function w2PwriteDebug($s, $t = '', $f = '?', $l = '?')
 {
@@ -3289,12 +3208,13 @@ function w2PgetTimezonesForInstall()
 
 function sendNewPass()
 {
+    /** @var w2p_Core_CAppUI $AppUI */
     global $AppUI;
 
     // ensure no malicous sql gets past
     $checkusername = preg_replace("/[^A-Za-z0-9]/", "", w2PgetParam($_POST, 'checkusername', ''));
     $confirmEmail = trim(w2PgetParam($_POST, 'checkemail', ''));
-    $confirmEmail = strtolower(db_escape($confirmEmail));
+    $confirmEmail = strtolower((new w2p_Database_Connection($GLOBALS['db']))->escape($confirmEmail));
 
     $q = new w2p_Database_Query;
     $q->addTable('users');
@@ -3357,7 +3277,8 @@ function sendNewPass()
 // from modules/reports/overall.php
 function showcompany($company_id, $restricted = false)
 {
-    global $AppUI, $allpdfdata, $log_start_date, $log_end_date, $log_all;
+    /** @var w2p_Core_CAppUI $AppUI */
+    global $AppUI, $log_start_date, $log_end_date, $log_all;
     $q = new w2p_Database_Query;
     $q->addTable('projects');
     $q->addQuery('project_id, project_name');
@@ -3375,17 +3296,12 @@ function showcompany($company_id, $restricted = false)
         <tr>
                 <th>' . $AppUI->_('Project') . '</th>';
 
-    $pdfth[] = $AppUI->_('Project');
     $project_row .= '<th>' . $AppUI->_('Total') . '</th></tr>';
-    $pdfth[] = $AppUI->_('Total');
-    $pdfdata[] = $pdfth;
 
     $hours = 0.0;
     $table .= $project_row;
 
     foreach ($projects as $project => $name) {
-        $pdfproject = array();
-        $pdfproject[] = $name;
         $project_hours = 0;
         $project_row = '<tr><td>' . $name . '</td>';
 
@@ -3419,17 +3335,13 @@ function showcompany($company_id, $restricted = false)
             $project_hours += $task_log;
         }
         $project_row .= '<td style="text-align:right;">' . sprintf('%.2f', round($project_hours, 2)) . '</td></tr>';
-        $pdfproject[] = round($project_hours, 2);
         $hours += $project_hours;
         if ($project_hours > 0) {
             $table .= $project_row;
-            $pdfdata[] = $pdfproject;
         }
     }
 
     if ($hours > 0) {
-        $pdfdata[] = array($AppUI->_('Total'), round($hours, 2));
-        $allpdfdata[$company_name] = $pdfdata;
         echo $table;
         echo '<tr><td>' . $AppUI->_('Total') . '</td><td style="text-align:right;">' . sprintf('%.2f', round($hours, 2)) . '</td></tr></table>';
     }
@@ -3439,10 +3351,12 @@ function showcompany($company_id, $restricted = false)
 
 /**
  * Sub-function to collect events within a period
- * @param Date the starting date of the period
- * @param Date the ending date of the period
- * @param array by-ref an array of links to append new items to
- * @param int the length to truncate entries by
+ *
+ * @param Date $startPeriod the starting date of the period
+ * @param Date $endPeriod the ending date of the period
+ * @param array $links by-ref an array of links to append new items to
+ * @param int $notUsed the length to truncate entries by
+ *
  * @author Andrew Eddie <eddieajau@users.sourceforge.net>
  */
 function getEventLinks($startPeriod, $endPeriod, $links, $notUsed = null, $minical = false)
@@ -3480,6 +3394,7 @@ function getEventLinks($startPeriod, $endPeriod, $links, $notUsed = null, $minic
 
 function getEventTooltip($event_id)
 {
+    /** @var w2p_Core_CAppUI $AppUI */
     global $AppUI;
 
     if (!$event_id) {
@@ -3497,44 +3412,27 @@ function getEventTooltip($event_id)
 
     $view = new w2p_Output_HTML_ViewHelper($AppUI);
 
-    $tt = '<table class="tool-tip">';
-    $tt .= '<tr>';
-    $tt .= '	<td valign="top" width="40%">';
+    $tt = '<div class="d-flex gap-3 tool-tip">';
+    $tt .= '	<div class="tip-column">';
     $tt .= '		<strong>' . $AppUI->_('Details') . '</strong>';
-    $tt .= '		<table cellspacing="3" cellpadding="2" width="100%">';
-    $tt .= '		<tr>';
-    $tt .= '			<td class="tip-label">' . $AppUI->_('Type') . '</td>';
-    $tt .= '			<td>' . $view->addField('event_type', $types[$event->event_type]) . '</td>';
-    $tt .= '		</tr>	';
-    $tt .= '		<tr>';
-    $tt .= '			<td class="tip-label">' . $AppUI->_('Starts') . '</td>';
-    $tt .= '			<td>' . $view->addField('event_datetime', $event->event_start_datetime) . '</td>';
-    $tt .= '		</tr>';
-    $tt .= '		<tr>';
-    $tt .= '			<td class="tip-label">' . $AppUI->_('Ends') . '</td>';
-    $tt .= '			<td>' . $view->addField('event_datetime', $event->event_end_datetime) . '</td>';
-    $tt .= '		</tr>';
-    $tt .= '		<tr>';
-    $tt .= '			<td class="tip-label">' . $AppUI->_('Recurs') . '</td>';
-    $tt .= '			<td>' . $view->addField('event_recurs', $recurs[$event->event_recurs]) . '</td>';
-    $tt .= '		</tr>';
-    $tt .= '		<tr>';
-    $tt .= '			<td class="tip-label">' . $AppUI->_('Attendees') . '</td>';
-    $tt .= '			<td>';
-    $tt .= implode('<br />', $assigned);
-    $tt .= '		</tr>';
-    $tt .= '		</table>';
-    $tt .= '	</td>';
-    $tt .= '	<td width="60%" valign="top">';
+    $tt .= '		<dl class="tip-details">';
+    $tt .= '			<dt class="tip-label">' . $AppUI->_('Type') . '</dt>';
+    $tt .= '			<dd>' . $view->addField('event_type', $types[$event->event_type]) . '</dd>';
+    $tt .= '			<dt class="tip-label">' . $AppUI->_('Starts') . '</dt>';
+    $tt .= '			<dd>' . $view->addField('event_datetime', $event->event_start_datetime) . '</dd>';
+    $tt .= '			<dt class="tip-label">' . $AppUI->_('Ends') . '</dt>';
+    $tt .= '			<dd>' . $view->addField('event_datetime', $event->event_end_datetime) . '</dd>';
+    $tt .= '			<dt class="tip-label">' . $AppUI->_('Recurs') . '</dt>';
+    $tt .= '			<dd>' . $view->addField('event_recurs', $recurs[$event->event_recurs]) . '</dd>';
+    $tt .= '			<dt class="tip-label">' . $AppUI->_('Attendees') . '</dt>';
+    $tt .= '			<dd>' . implode('<br />', $assigned) . '</dd>';
+    $tt .= '		</dl>';
+    $tt .= '	</div>';
+    $tt .= '	<div class="tip-column">';
     $tt .= '		<strong>' . $AppUI->_('Note') . '</strong>';
-    $tt .= '		<table cellspacing="0" cellpadding="2" border="0" width="100%">';
-    $tt .= '		<tr>';
-    $tt .= '			<td class="tip-label description">' . $view->addField('event_description', $event->event_description) . '</td>';
-    $tt .= '		</tr>';
-    $tt .= '		</table>';
-    $tt .= '	</td>';
-    $tt .= '</tr>';
-    $tt .= '</table>';
+    $tt .= '		<div class="description">' . $view->addField('event_description', $event->event_description) . '</div>';
+    $tt .= '	</div>';
+    $tt .= '</div>';
 
     return $tt;
 }
@@ -3542,15 +3440,17 @@ function getEventTooltip($event_id)
 /**
  * Sub-function to collect tasks within a period
  *
- * @param Date the starting date of the period
- * @param Date the ending date of the period
- * @param array by-ref an array of links to append new items to
- * @param int the length to truncate entries by
- * @param int the company id to filter by
+ * @param Date $startPeriod the starting date of the period
+ * @param Date $endPeriod the ending date of the period
+ * @param array $links by-ref an array of links to append new items to
+ * @param int $strMaxLen the length to truncate entries by
+ * @param int $company_id the company id to filter by
+ *
  * @author Andrew Eddie <eddieajau@users.sourceforge.net>
  */
 function getTaskLinks($startPeriod, $endPeriod, $links, $strMaxLen, $company_id = 0, $minical = false, $userid=0)
 {
+    /** @var w2p_Core_CAppUI $AppUI */
     global $a, $AppUI;
     $tasks = CTask::getTasksForPeriod($startPeriod, $endPeriod, $company_id, $userid);
     $tf = $AppUI->getPref('TIMEFORMAT');
@@ -3627,6 +3527,7 @@ function getTaskLinks($startPeriod, $endPeriod, $links, $strMaxLen, $company_id 
 
 function getTaskTooltip($task_id)
 {
+    /** @var w2p_Core_CAppUI $AppUI */
     global $AppUI;
 
     if (!$task_id) {
@@ -3662,63 +3563,40 @@ function getTaskTooltip($task_id)
     $company->load($project->project_company);
     $task_company = $company->company_name;
 
-    $tt = '<table class="tool-tip">';
-    $tt .= '<tr>';
-    $tt .= '	<td valign="top" width="40%">';
+    $tt = '<div class="d-flex gap-3 tool-tip">';
+    $tt .= '	<div class="tip-column">';
     $tt .= '		<strong>' . $AppUI->_('Details') . '</strong>';
-    $tt .= '		<table cellspacing="3" cellpadding="2" width="100%">';
-    $tt .= '		<tr>';
-    $tt .= '			<td class="tip-label">' . $AppUI->_('Company') . '</td>';
-    $tt .= '			<td>' . $task_company . '</td>';
-    $tt .= '		</tr>';
-    $tt .= '		<tr>';
-    $tt .= '			<td class="tip-label">' . $AppUI->_('Project') . '</td>';
-    $tt .= '			<td>' . $task_project . '</td>';
-    $tt .= '		</tr>';
-    $tt .= '		<tr>';
-    $tt .= '			<td class="tip-label">' . $AppUI->_('Type') . '</td>';
-    $tt .= '			<td>' . $AppUI->_($types[$task->task_type]) . '</td>';
-    $tt .= '		</tr>	';
-    $tt .= '		<tr>';
-    $tt .= '			<td class="tip-label">' . $AppUI->_('Progress') . '</td>';
-    $tt .= '			<td>' . sprintf("%.1f%%", $task->task_percent_complete) . '</td>';
-    $tt .= '		</tr>	';
-    $tt .= '		<tr>';
-    $tt .= '			<td class="tip-label">' . $AppUI->_('Starts') . '</td>';
-    $tt .= '			<td>' . ($start_date ? $start_date->format($df . ' ' . $tf) : '-') . '</td>';
-    $tt .= '		</tr>';
-    $tt .= '		<tr>';
-    $tt .= '			<td class="tip-label">' . $AppUI->_('Ends') . '</td>';
-    $tt .= '			<td>' . ($end_date ? $end_date->format($df . ' ' . $tf) : '-') . '</td>';
-    $tt .= '		</tr>';
-    $tt .= '		<tr>';
-    $tt .= '			<td class="tip-label">' . $AppUI->_('Assignees') . '</td>';
-    $tt .= '			<td>';
-    $tt .= implode('<br />', $assigned);
-    $tt .= '		</tr>';
-    $tt .= '		</table>';
-    $tt .= '	</td>';
-    $tt .= '	<td width="60%" valign="top">';
+    $tt .= '		<dl class="tip-details">';
+    $tt .= '			<dt class="tip-label">' . $AppUI->_('Company') . '</dt>';
+    $tt .= '			<dd>' . $task_company . '</dd>';
+    $tt .= '			<dt class="tip-label">' . $AppUI->_('Project') . '</dt>';
+    $tt .= '			<dd>' . $task_project . '</dd>';
+    $tt .= '			<dt class="tip-label">' . $AppUI->_('Type') . '</dt>';
+    $tt .= '			<dd>' . $AppUI->_($types[$task->task_type]) . '</dd>';
+    $tt .= '			<dt class="tip-label">' . $AppUI->_('Progress') . '</dt>';
+    $tt .= '			<dd>' . sprintf("%.1f%%", $task->task_percent_complete) . '</dd>';
+    $tt .= '			<dt class="tip-label">' . $AppUI->_('Starts') . '</dt>';
+    $tt .= '			<dd>' . ($start_date ? $start_date->format($df . ' ' . $tf) : '-') . '</dd>';
+    $tt .= '			<dt class="tip-label">' . $AppUI->_('Ends') . '</dt>';
+    $tt .= '			<dd>' . ($end_date ? $end_date->format($df . ' ' . $tf) : '-') . '</dd>';
+    $tt .= '			<dt class="tip-label">' . $AppUI->_('Assignees') . '</dt>';
+    $tt .= '			<dd>' . implode('<br />', $assigned) . '</dd>';
+    $tt .= '		</dl>';
+    $tt .= '	</div>';
+    $tt .= '	<div class="tip-column">';
     $tt .= '		<strong>' . $AppUI->_('Description') . '</strong>';
-    $tt .= '		<table cellspacing="0" cellpadding="2" border="0" width="100%">';
-    $tt .= '		<tr>';
-    $tt .= '			<td class="tip-label description">';
-    $tt .= '				' . $task->task_description;
-    $tt .= '			</td>';
-    $tt .= '		</tr>';
-    $tt .= '		</table>';
-    $tt .= '	</td>';
-    $tt .= '</tr>';
-    $tt .= '</table>';
+    $tt .= '		<div class="description">' . $task->task_description . '</div>';
+    $tt .= '	</div>';
+    $tt .= '</div>';
 
     return $tt;
 }
 
 /**
- * @param $perms
- * @param $user_id
- * @param $module
- * @param $action
+ * @param mixed $perms
+ * @param mixed $user_id
+ * @param mixed $module
+ * @param mixed $action
  *
  * @return array
  */
@@ -3746,9 +3624,9 @@ function getPermissions($perms, $user_id, $module, $action)
 }
 
 /**
- * @param $row
+ * @param mixed $row
  *
- * @return array
+ * @return array<mixed>|false
  */
 function getPermissionField($row)
 {
@@ -3762,10 +3640,10 @@ function getPermissionField($row)
 }
 
 /**
- * @param $row
- * @param $field
+ * @param mixed $row
+ * @param mixed $field
  *
- * @return Value
+ * @return mixed
  */
 function getPermissionItem($row, $field)
 {
@@ -3779,7 +3657,7 @@ function getPermissionItem($row, $field)
 }
 
 /**
- * @param $user_id
+ * @param mixed $user_id
  *
  * @return array
  */
@@ -3795,9 +3673,9 @@ function getPreferences($user_id)
 }
 
 /**
- * @param $obj
+ * @param mixed $obj
  *
- * @return array
+ * @return ADORecordSet|false
  */
 function getTaskLogContacts($obj)
 {
@@ -3813,9 +3691,9 @@ function getTaskLogContacts($obj)
 }
 
 /**
- * @param $obj
+ * @param mixed $obj
  *
- * @return array
+ * @return ADORecordSet|false
  */
 function getContactsfromProjects($obj)
 {
@@ -3831,10 +3709,10 @@ function getContactsfromProjects($obj)
 }
 
 /**
- * @param $project_id
- * @param $AppUI
+ * @param mixed $project_id
+ * @param mixed $AppUI
  *
- * @return Associative
+ * @return array<mixed>
  */
 function __extract_from_tasks_viewgantt($project_id, $AppUI)
 {
@@ -3857,19 +3735,19 @@ function __extract_from_tasks_viewgantt($project_id, $AppUI)
 }
 
 /**
- * @param $user_id
- * @param $showArcProjs
- * @param $showLowTasks
- * @param $showInProgress
- * @param $showHoldProjs
- * @param $showDynTasks
- * @param $showPinned
- * @param $showEmptyDate
- * @param $task_type
- * @param $allowedTasks
- * @param $allowedProjects
+ * @param mixed $user_id
+ * @param mixed $showArcProjs
+ * @param mixed $showLowTasks
+ * @param mixed $showInProgress
+ * @param mixed $showHoldProjs
+ * @param mixed $showDynTasks
+ * @param mixed $showPinned
+ * @param mixed $showEmptyDate
+ * @param mixed $task_type
+ * @param mixed $allowedTasks
+ * @param mixed $allowedProjects
  *
- * @return Array
+ * @return array
  */
 function __extract_from_todo($user_id, $showArcProjs, $showLowTasks, $showInProgress, $showHoldProjs, $showDynTasks, $showPinned, $showEmptyDate, $task_type, $allowedTasks, $allowedProjects)
 {
@@ -3939,14 +3817,14 @@ function __extract_from_todo($user_id, $showArcProjs, $showLowTasks, $showInProg
 }
 
 /**
- * @param $use_period
- * @param $ss
- * @param $se
- * @param $log_userfilter
- * @param $project_id
- * @param $company_id
- * @param $proj
- * @param $AppUI
+ * @param mixed $use_period
+ * @param mixed $ss
+ * @param mixed $se
+ * @param mixed $log_userfilter
+ * @param mixed $project_id
+ * @param mixed $company_id
+ * @param mixed $proj
+ * @param mixed $AppUI
  *
  * @return mixed
  */
@@ -3996,7 +3874,7 @@ function __extract_from_tasksperuser($use_period, $ss, $se, $log_userfilter, $pr
 }
 
 /**
- * @return String
+ * @return string
  */
 function __extract_from_tasks1()
 {
@@ -4011,11 +3889,11 @@ function __extract_from_tasks1()
 }
 
 /**
- * @param $userFilter
- * @param $AppUI
- * @param $proj
+ * @param mixed $userFilter
+ * @param mixed $AppUI
+ * @param mixed $proj
  *
- * @return Array
+ * @return array
  */
 function __extract_from_listtasks($userFilter, $AppUI, $proj)
 {
@@ -4036,8 +3914,8 @@ function __extract_from_listtasks($userFilter, $AppUI, $proj)
 }
 
 /**
- * @param $selected
- * @param $task_priority
+ * @param mixed $selected
+ * @param mixed $task_priority
  */
 function __extract_from_tasks_todo($selected, $task_priority)
 {
@@ -4062,13 +3940,13 @@ function __extract_from_tasks_todo($selected, $task_priority)
                 }
         }
         $q->exec();
-        echo db_error();
+        echo (new w2p_Database_Connection($GLOBALS['db']))->error();
         $q->clear();
     }
 }
 
 /**
- * @return w2p_Database_Query
+ * @return array<mixed>
  */
 function __extract_from_syskeys_index1()
 {
@@ -4098,7 +3976,7 @@ function __extract_from_syskeys_index2()
 }
 
 /**
- * @return Array
+ * @return array
  */
 function __extract_from_syskeys_index3()
 {
@@ -4115,7 +3993,7 @@ function __extract_from_syskeys_index3()
 }
 
 /**
- * @return Array
+ * @return array
  */
 function __extract_from_syskeys_syskey()
 {
@@ -4140,9 +4018,9 @@ function __extract_from_systemconfig_aed()
 }
 
 /**
- * @param $hidden_modules
+ * @param mixed $hidden_modules
  *
- * @return Array
+ * @return array
  */
 function __extract_from_modules_index($hidden_modules)
 {
@@ -4159,10 +4037,10 @@ function __extract_from_modules_index($hidden_modules)
 }
 
 /**
- * @param $module
- * @param $mod_data
+ * @param mixed $module
+ * @param mixed $mod_data
  *
- * @return Value
+ * @return mixed
  */
 function __extract_from_role_perms($module, $mod_data)
 {
@@ -4177,9 +4055,9 @@ function __extract_from_role_perms($module, $mod_data)
 }
 
 /**
- * @param $deps
+ * @param mixed $deps
  *
- * @return Associative
+ * @return array<mixed>
  */
 function __extract_from_ae_depend1($deps)
 {
@@ -4193,9 +4071,9 @@ function __extract_from_ae_depend1($deps)
 }
 
 /**
- * @param $task_id
+ * @param mixed $task_id
  *
- * @return Associative
+ * @return array<mixed>
  */
 function __extract_from_ae_depend2($task_id)
 {
@@ -4216,14 +4094,14 @@ function __extract_from_ae_depend2($task_id)
 }
 
 /**
- * @param $user_id
- * @param $showArcProjs
- * @param $showLowTasks
- * @param $showHoldProjs
- * @param $showDynTasks
- * @param $showPinned
- * @param $task
- * @param $AppUI
+ * @param mixed $user_id
+ * @param mixed $showArcProjs
+ * @param mixed $showLowTasks
+ * @param mixed $showHoldProjs
+ * @param mixed $showDynTasks
+ * @param mixed $showPinned
+ * @param mixed $task
+ * @param mixed $AppUI
  *
  * @return array
  */
@@ -4268,14 +4146,14 @@ function __extract_from_tasks_gantt1($user_id, $showArcProjs, $showLowTasks, $sh
 }
 
 /**
- * @param $showNoMilestones
- * @param $showMilestonesOnly
- * @param $ganttTaskFilter
- * @param $where
- * @param $project_id
- * @param $f
- * @param $AppUI
- * @param $task
+ * @param mixed $showNoMilestones
+ * @param mixed $showMilestonesOnly
+ * @param mixed $ganttTaskFilter
+ * @param mixed $where
+ * @param mixed $project_id
+ * @param mixed $f
+ * @param mixed $AppUI
+ * @param mixed $task
  *
  * @return array
  */
@@ -4338,149 +4216,62 @@ function __extract_from_tasks_gantt2($showNoMilestones, $showMilestonesOnly, $ga
 }
 
 /**
- * @param $a
+ * @param mixed $a
  *
+ * @deprecated
  * @return array
  */
 function __extract_from_gantt_pdf($a)
 {
-    $q = new w2p_Database_Query;
-    $q->addTable('tasks', 't');
-    $q->addJoin('user_tasks', 'u', 't.task_id = u.task_id');
-    $q->addQuery('ROUND(SUM(t.task_duration*u.perc_assignment/100),2) AS wh');
-    $q->addWhere('t.task_duration_type = 24');
-    $q->addWhere('t.task_id = ' . (int) $a['task_id']);
-    $wh = $q->loadResult();
-
-    return $wh;
+    return [];
 }
 
 /**
- * @param $a
+ * @param mixed $a
  *
+ * @deprecated
  * @return array
  */
 function __extract_from_gantt_pdf2($a)
 {
-    $q = new w2p_Database_Query;
-    $q->addTable('tasks', 't');
-    $q->addJoin('user_tasks', 'u', 't.task_id = u.task_id');
-    $q->addQuery('ROUND(SUM(t.task_duration*u.perc_assignment/100),2) AS wh');
-    $q->addWhere('t.task_duration_type = 1');
-    $q->addWhere('t.task_id = ' . (int) $a['task_id']);
-    $wh2 = $q->loadResult();
-
-    return $wh2;
+    return 0.0;
 }
 
 /**
- * @param $user_id
- * @param $showArcProjs
- * @param $showLowTasks
- * @param $showHoldProjs
- * @param $showDynTasks
- * @param $showPinned
- * @param $task
- * @param $AppUI
+ * @param mixed $user_id
+ * @param mixed $showArcProjs
+ * @param mixed $showLowTasks
+ * @param mixed $showHoldProjs
+ * @param mixed $showDynTasks
+ * @param mixed $showPinned
+ * @param mixed $task
+ * @param mixed $AppUI
  *
+ * @deprecated
  * @return array
  */
 function __extract_from_gantt_pdf3($user_id, $showArcProjs, $showLowTasks, $showHoldProjs, $showDynTasks, $showPinned, $task, $AppUI)
 {
-    $q = new w2p_Database_Query;
-    $q->addQuery('t.*');
-    $q->addQuery('project_name, project_id, project_color_identifier');
-    $q->addQuery('tp.task_pinned');
-    $q->addTable('tasks', 't');
-    $q->innerJoin('projects', 'pr', 'pr.project_id = t.task_project');
-    $q->leftJoin('user_tasks', 'ut', 'ut.task_id = t.task_id AND ut.user_id = ' . (int) $user_id);
-    $q->leftJoin('user_task_pin', 'tp', 'tp.task_id = t.task_id and tp.user_id = ' . (int) $user_id);
-    $q->addWhere('(t.task_percent_complete < 100 OR t.task_percent_complete IS NULL)');
-    $q->addWhere('t.task_status = 0');
-    if (!$showArcProjs) {
-        $q->addWhere('pr.project_active = 1');
-        if (($template_status = w2PgetConfig('template_projects_status_id')) != '') {
-            $q->addWhere('pr.project_status <> ' . (int) $template_status);
-        }
-    }
-    if (!$showLowTasks) {
-        $q->addWhere('task_priority >= 0');
-    }
-    if (!$showHoldProjs) {
-        $q->addWhere('project_active = 1');
-    }
-    if (!$showDynTasks) {
-        $q->addWhere('task_dynamic <> 1');
-    }
-    if ($showPinned) {
-        $q->addWhere('task_pinned = 1');
-    }
-
-    $q->addGroup('t.task_id');
-    $q->addOrder('t.task_end_date, t.task_priority DESC');
-    $q = $task->setAllowedSQL($AppUI->user_id, $q);
-    $proTasks = $q->loadHashList('task_id');
-
-    return $proTasks;
+    return [];
 }
 
 
 /**
- * @param $project_id
- * @param $f
- * @param $AppUI
- * @param $task
+ * @param mixed $project_id
+ * @param mixed $f
+ * @param mixed $AppUI
+ * @param mixed $task
  *
+ * @deprecated
  * @return array
  */
 function __extract_from_gantt_pdf4($project_id, $f, $AppUI, $task)
 {
-// pull tasks
-    $q = new w2p_Database_Query();
-    $q->addTable('tasks', 't');
-    $q->addQuery('t.task_id, task_parent, task_name, task_start_date, task_end_date,' .
-    ' task_duration, task_duration_type, task_priority, task_percent_complete,' .
-    ' task_hours_worked, task_order, task_project, task_milestone, task_access,' .
-    ' task_owner, project_name, project_color_identifier, task_dynamic');
-    $q->addJoin('projects', 'p', 'project_id = t.task_project', 'inner');
-    $q->addOrder('p.project_id, t.task_end_date');
-
-    if ($project_id) {
-        $q->addWhere('task_project = ' . (int) $project_id);
-    }
-
-    switch ($f) {
-        case 'all':
-            $q->addWhere('task_status > -1');
-            break;
-        case 'myproj':
-            $q->addWhere('task_status > -1');
-            $q->addWhere('project_owner = ' . (int) $AppUI->user_id);
-            break;
-        case 'mycomp':
-            $q->addWhere('task_status > -1');
-            $q->addWhere('project_company = ' . (int) $AppUI->user_company);
-            break;
-        case 'myinact':
-            $q->innerJoin('user_tasks', 'ut', 'ut.task_id = t.task_id');
-
-            $q->addWhere('ut.user_id = ' . $AppUI->user_id);
-            break;
-        default:
-            $q->innerJoin('user_tasks', 'ut', 'ut.task_id = t.task_id');
-
-
-            $q->addWhere('ut.user_id = ' . (int) $AppUI->user_id);
-            break;
-    }
-    $q = $task->setAllowedSQL($AppUI->user_id, $q);
-    $proTasks = $q->loadHashList('task_id');
-
-    return $proTasks;
+    return [];
 }
 
 /**
- * @param $department
+ * @param mixed $department
  *
  * @return array
  */
@@ -4497,16 +4288,16 @@ function __extract_from_projects_gantt($department)
 }
 
 /**
- * @param $department
- * @param $addPwOiD
- * @param $project_type
- * @param $owner
- * @param $statusFilter
- * @param $company_id
- * @param $owner_ids
- * @param $showInactive
- * @param $AppUI
- * @param $pjobj
+ * @param mixed $department
+ * @param mixed $addPwOiD
+ * @param mixed $project_type
+ * @param mixed $owner
+ * @param mixed $statusFilter
+ * @param mixed $company_id
+ * @param mixed $owner_ids
+ * @param mixed $showInactive
+ * @param mixed $AppUI
+ * @param mixed $pjobj
  *
  * @return mixed
  */
@@ -4560,11 +4351,11 @@ function __extract_from_projects_gantt2($department, $addPwOiD, $project_type, $
 }
 
 /**
- * @param $department
- * @param $company_id
- * @param $original_project_id
- * @param $pjobj
- * @param $AppUI
+ * @param mixed $department
+ * @param mixed $company_id
+ * @param mixed $original_project_id
+ * @param mixed $pjobj
+ * @param mixed $AppUI
  *
  * @return array
  */
@@ -4599,9 +4390,9 @@ function __extract_from_subprojects_gantt($department, $company_id, $original_pr
 }
 
 /**
- * @param $original_project_id
- * @param $task
- * @param $AppUI
+ * @param mixed $original_project_id
+ * @param mixed $task
+ * @param mixed $AppUI
  *
  * @return array
  */
@@ -4623,7 +4414,7 @@ function __extract_from_subprojects_gantt2($original_project_id, $task, $AppUI)
 }
 
 /**
- * @param $AppUI
+ * @param mixed $AppUI
  *
  * @return array
  */
@@ -4654,7 +4445,7 @@ function __extract_from_projectdesigner2()
 }
 
 /**
- * @param $controller
+ * @param mixed $controller
  */
 function __extract_from_contact_controller($controller)
 {
@@ -4673,9 +4464,9 @@ function __extract_from_contact_controller($controller)
 }
 
 /**
- * @param $row
+ * @param mixed $row
  *
- * @return Array
+ * @return array
  */
 function __extract_from_vw_usr($row)
 {
@@ -4683,21 +4474,21 @@ function __extract_from_vw_usr($row)
     $q->addTable('user_access_log', 'ual');
     $q->addQuery('user_access_log_id, ( unix_timestamp( \'' . $q->dbfnNowWithTZ() . '\' ) - unix_timestamp( date_time_in ) ) / 3600 as 		hours');
     $q->addQuery('( unix_timestamp( \'' . $q->dbfnNowWithTZ() . '\' ) - unix_timestamp( date_time_last_action ) ) / 3600 as idle');
-    $q->addQuery('date_time_out IS NOT NULL as online');
+    // an open login has no date_time_out (see migration 067)
+    $q->addQuery('date_time_out IS NULL as online');
     $q->addWhere('user_id = ' . (int) $row['user_id']);
     $q->addOrder('user_access_log_id DESC');
     $q->setLimit(1);
-// echo $q->prepare();
     $user_logs = $q->loadList();
 
     return $user_logs;
 }
 
 /**
- * @param $module
- * @param $mod_data
+ * @param mixed $module
+ * @param mixed $mod_data
  *
- * @return Value
+ * @return mixed
  */
 function __extract_from_vw_usr_perms($module, $mod_data)
 {
@@ -4711,9 +4502,9 @@ function __extract_from_vw_usr_perms($module, $mod_data)
 }
 
 /**
- * @param $orderby
+ * @param mixed $orderby
  *
- * @return Array
+ * @return array
  */
 function __extract_from_vw_usr_sessions($orderby)
 {
@@ -4734,7 +4525,7 @@ function __extract_from_vw_usr_sessions($orderby)
 }
 
 /**
- * @param $row
+ * @param mixed $row
  *
  * @return array
  */
@@ -4753,10 +4544,10 @@ function __extract_from_forums_view_messages($row)
 
 // Now we need to update the forum visits with the new messages so they don't show again.
 /**
- * @param $AppUI
- * @param $forum_id
- * @param $msg_id
- * @param $date
+ * @param mixed $AppUI
+ * @param mixed $forum_id
+ * @param mixed $msg_id
+ * @param mixed $date
  */
 function __extract_from_forums_view_messages2($AppUI, $forum_id, $msg_id, $date)
 {
@@ -4765,18 +4556,18 @@ function __extract_from_forums_view_messages2($AppUI, $forum_id, $msg_id, $date)
     $q->addInsert('visit_user', $AppUI->user_id);
     $q->addInsert('visit_forum', $forum_id);
     $q->addInsert('visit_message', $msg_id);
-    $q->addInsert('visit_date', $date->getDate());
+    $q->addInsert('visit_datetime', $date->getDate());
     $q->exec();
 }
 
 /**
- * @param $AppUI
- * @param $forum_id
- * @param $f
- * @param $orderby
- * @param $orderdir
+ * @param mixed $AppUI
+ * @param mixed $forum_id
+ * @param mixed $f
+ * @param mixed $orderby
+ * @param mixed $orderdir
  *
- * @return Array
+ * @return array
  */
 function __extract_from_forums_view_topics($AppUI, $forum_id, $f, $orderby, $orderdir)
 {
@@ -4813,9 +4604,9 @@ function __extract_from_forums_view_topics($AppUI, $forum_id, $f, $orderby, $ord
 }
 
 /**
- * @param $row
+ * @param mixed $row
  *
- * @return Array
+ * @return array
  */
 function __extract_from_tasks2($row)
 {
@@ -4847,11 +4638,12 @@ function __extract_from_vw_actions()
 }
 
 /**
- * @param $f
- * @param $q
- * @param $user_id
- * @param $task_id
- * @param $AppUI
+ * @param mixed $f
+ * @param mixed $q
+ * @param mixed $user_id
+ * @param mixed $task_id
+ * @param mixed $AppUI
+ *
  * @return string
  */
 function __extract_from_tasks3($f, $q, $user_id, $task_id, $AppUI)
@@ -4928,11 +4720,12 @@ function __extract_from_tasks3($f, $q, $user_id, $task_id, $AppUI)
 }
 
 /**
- * @param $min_view
- * @param $currentTabId
- * @param $project_id
- * @param $currentTabName
- * @param $AppUI
+ * @param mixed $min_view
+ * @param mixed $currentTabId
+ * @param mixed $project_id
+ * @param mixed $currentTabName
+ * @param mixed $AppUI
+ *
  * @return int
  */
 function __extract_from_tasks($min_view, $currentTabId, $project_id, $currentTabName, $AppUI)
@@ -4957,10 +4750,11 @@ function __extract_from_tasks($min_view, $currentTabId, $project_id, $currentTab
 }
 
 /**
- * @param $where_list
- * @param $project_id
- * @param $task_id
- * @return Array
+ * @param mixed $where_list
+ * @param mixed $project_id
+ * @param mixed $task_id
+ *
+ * @return array
  */
 function __extract_from_tasks4($where_list, $project_id, $task_id)
 {
@@ -4985,28 +4779,25 @@ function __extract_from_tasks4($where_list, $project_id, $task_id)
 }
 
 /**
- * @param $q
- * @param $subquery
+ * @param mixed $q
+ * @param mixed $subquery
  */
 function __extract_from_tasks5($q, $subquery)
 {
     $q->addQuery('tasks.task_id, task_parent, task_name');
     $q->addQuery('task_start_date, task_end_date, task_dynamic');
     $q->addQuery('task_pinned, pin.user_id as pin_user');
-    // $q->addQuery('ut.user_task_priority');
     $q->addQuery('task_priority, task_percent_complete');
     $q->addQuery('task_duration, task_duration_type');
     $q->addQuery('task_project, task_represents_project');
     $q->addQuery('task_description, task_owner, task_status');
     $q->addQuery('usernames.user_username, usernames.user_id');
-    // $q->addQuery('assignees.user_username as assignee_username');
     $q->addQuery('count(distinct assignees.user_id) as assignee_count');
     $q->addQuery('co.contact_first_name, co.contact_last_name');
     $q->addQuery('contact_display_name AS contact_name');
     $q->addQuery('contact_display_name AS owner');
     $q->addQuery('task_milestone');
     $q->addQuery('count(distinct f.file_task) as file_count');
-    // $q->addQuery('tlog.task_log_problem');
     $q->addQuery('task_access');
     $q->addQuery('(' . $subquery . ') AS task_nr_of_children');
     $q->addTable('tasks');
@@ -5015,8 +4806,8 @@ function __extract_from_tasks5($q, $subquery)
 }
 
 /**
- * @param $AppUI
- * @param $task_id
+ * @param mixed $AppUI
+ * @param mixed $task_id
  */
 function __extract_from_tasks_pinning($AppUI, $task_id)
 {
@@ -5044,7 +4835,8 @@ function __extract_from_tasks_pinning($AppUI, $task_id)
  * Check if start date exists, if not try giving it the end date. If the end date does not exist then set it for
  *   today. This avoids jpgraphs internal errors that render the gantt completely useless
  *
- * @param $row
+ * @param mixed $row
+ *
  * @return array
  */
 function __extract_from_projects_gantt3($row)
@@ -5064,7 +4856,8 @@ function __extract_from_projects_gantt3($row)
  * Check if end date exists, if not try giving it the start date. If the start date does not exist then set it for
  *   today. This avoids jpgraphs internal errors that render the gantt completely useless
  *
- * @param $row
+ * @param mixed $row
+ *
  * @return array
  */
 function __extract_from_projects_gantt4($row)
@@ -5084,104 +4877,96 @@ function __extract_from_projects_gantt4($row)
 }
 
 /**
- * @param $s
- * @param $style
- * @param $row
- * @param $editor
- * @param $AppUI
- * @param $bbparser
- * @return array
+ * @param mixed $s
+ * @param mixed $style
+ * @param mixed $row
+ * @param mixed $editor
+ * @param mixed $AppUI
+ * @param mixed $bbparser
+ *
+ * @return string
  */
 function __extract_from_view_messages1($s, $style, $row, $editor, $AppUI, $bbparser)
 {
-    $s .= "<tr>";
-
-    $s .= '<td valign="top" style="' . $style . '" >';
+    $s .= '<div class="border-bottom px-2 py-1 w2p-forum-message" style="' . $style . '">';
     $s .= '<a href="mailto:' . $row['contact_email'] . '">';
-    $s .= $row['contact_name'] . '</a>';
+    $s .= $row['contact_name'] . '</a> ';
     if (sizeof($editor) > 0) {
-        $s .= '<br/>&nbsp;<br/>' . $AppUI->_('last edited by');
-        $s .= ':<br/><a href="mailto:' . $editor[0]['contact_email'] . '">';
-        $s .= '<font size="1">' . $editor[0]['contact_name'] . '</font></a>';
+        $s .= '<small>(' . $AppUI->_('last edited by');
+        $s .= ': <a href="mailto:' . $editor[0]['contact_email'] . '">';
+        $s .= $editor[0]['contact_name'] . '</a>)</small> ';
     }
     $s .= '<a name="' . $row['message_id'] . '" href="javascript: void(0);" onclick="toggle(' . $row['message_id'] . ')">';
-    $s .= '<span size="2"><strong>' . $row['message_title'] . '</strong></span></a>';
+    $s .= '<strong>' . $row['message_title'] . '</strong></a>';
     $s .= '<div class="message" id="' . $row['message_id'] . '" style="display: none">';
     $row['message_body'] = $bbparser->qparse($row['message_body']);
     $s .= $row['message_body'];
-    $s .= '</div></td>';
+    $s .= '</div>';
 
-    $s .= '</tr>';
+    $s .= '</div>';
     return $s;
 }
 
 /**
- * @param $s
- * @param $style
- * @param $AppUI
- * @param $row
- * @param $df
- * @param $tf
- * @param $editor
- * @param $side
- * @param $bbparser
- * @param $first
- * @param $messages
+ * @param mixed $s
+ * @param mixed $style
+ * @param mixed $AppUI
+ * @param mixed $row
+ * @param mixed $df
+ * @param mixed $tf
+ * @param mixed $editor
+ * @param mixed $side
+ * @param mixed $bbparser
+ * @param mixed $first
+ * @param mixed $messages
+ *
  * @return array
  */
 function __extract_from_view_messages3($s, $style, $AppUI, $row, $df, $tf, $editor, $side, $bbparser, $first, $messages)
 {
-    $s .= '<tr>';
-
-    $s .= '<td valign="top" style="' . $style . '">';
+    $s .= '<div class="border-bottom px-2 py-1 w2p-forum-message" style="' . $style . '">';
     $s .= $AppUI->formatTZAwareTime($row['message_datetime'], $df . ' ' . $tf) . ' - ';
     $s .= '<a href="mailto:' . $row['contact_email'] . '">' . $row['contact_name'] . '</a>';
-    $s .= '<br />';
     if (sizeof($editor) > 0) {
-        $s .= '<br/>&nbsp;<br/>' . $AppUI->_('last edited by');
-        $s .= ':<br/><a href="mailto:' . $editor[0]['contact_email'] . '">';
-        $s .= '<font size="1">' . $editor[0]['contact_name'] . '</font></a>';
+        $s .= ' <small>(' . $AppUI->_('last edited by');
+        $s .= ': <a href="mailto:' . $editor[0]['contact_email'] . '">';
+        $s .= $editor[0]['contact_name'] . '</a>)</small>';
     }
+    $s .= '<br />';
     $s .= '<a href="javascript: void(0);" onclick="toggle(' . $row['message_id'] . ')">';
-    $s .= '<span size="2"><strong>' . $row['message_title'] . '</strong></span></a>';
+    $s .= '<strong>' . $row['message_title'] . '</strong></a>';
+    $s .= '</div>';
     $side .= '<div class="message" id="' . $row['message_id'] . '" style="display: none">';
     $side .= $row['message_body'];
     $side .= '</div>';
-    $row['message_body'] = $bbparser->qparse($row['message_body']);
-    $s .= '</td>';
-    if ($first) {
-        $s .= '<td rowspan="' . count($messages) . '" valign="top">';
-        echo $s;
-        $s = '';
-    }
-    $s .= '</tr>';
     return array($s, $side);
 }
 
 
 /**
- * @param $s
- * @param $style
- * @param $row
- * @param $hideEmail
- * @param $editor
- * @param $AppUI
- * @param $new_messages
- * @param $bbparser
- * @param $m
- * @param $df
- * @param $tf
- * @param $canEdit
- * @param $canAdminEdit
- * @param $canDelete
+ * @param mixed $s
+ * @param mixed $style
+ * @param mixed $row
+ * @param mixed $hideEmail
+ * @param mixed $editor
+ * @param mixed $AppUI
+ * @param mixed $new_messages
+ * @param mixed $bbparser
+ * @param mixed $m
+ * @param mixed $df
+ * @param mixed $tf
+ * @param mixed $canEdit
+ * @param mixed $canAdminEdit
+ * @param mixed $canDelete
+ *
  * @return array
  */
 function __extract_from_view_messages4($s, $style, $row, $hideEmail, $editor, $AppUI, $new_messages, $bbparser, $m, $df, $tf, $canEdit, $canAdminEdit, $canDelete)
 {
-    $s .= '<tr>';
+    $s .= '<div class="row g-2 border-bottom py-2 mx-0 w2p-forum-message" style="' . $style . '">';
 
-    $s .= '<td valign="top" style="' . $style . '" nowrap="nowrap">';
-    $s .= '<a href="?m=users&a=view&user_id=' . $row['message_author'] . '">';
+    $s .= '<div class="col-md-3 text-nowrap">';
+    $s .= '<a href="?m=users&amp;a=view&amp;user_id=' . $row['message_author'] . '">';
     $s .= $row['contact_name'];
     $s .= '</a>';
     if (!$hideEmail) {
@@ -5206,53 +4991,31 @@ function __extract_from_view_messages4($s, $style, $row, $hideEmail, $editor, $A
         $s .= '<br />&nbsp;' . w2PshowImage('icons/stock_new_small.png');
         $new_messages[] = $row['message_id'];
     }
-    $s .= '</td>';
-    $s .= '<td valign="top" style="' . $style . '">';
-    $s .= '<strong>' . $row['message_title'] . '</strong><hr size=1>';
+    $s .= '<div class="mt-2"><img src="' . w2PfindImage('icons/posticon.gif', $m) . '" alt="date posted" />' . $AppUI->formatTZAwareTime($row['message_datetime'], $df . ' ' . $tf) . '</div>';
+    $s .= '</div>';
+    $s .= '<div class="col-md-9">';
+    $s .= '<strong>' . $row['message_title'] . '</strong><hr />';
     $row['message_body'] = $bbparser->qparse($row['message_body']);
     $row['message_body'] = nl2br($row['message_body']);
     $s .= $row['message_body'];
-    $s .= '</td>';
 
-    $s .= '</tr><tr>';
-
-    $s .= '<td valign="top" style="' . $style . '" nowrap="nowrap">';
-    $s .= '<img src="' . w2PfindImage('icons/posticon.gif', $m) . '" alt="date posted" />' . $AppUI->formatTZAwareTime($row['message_datetime'], $df . ' ' . $tf) . '</td>';
-    $s .= '<td valign="top" align="right" style="' . $style . '">';
-
-    // in some weird permission cases
-    // it can happen that the table gets opened but never closed,
-    // or the other way around, thus breaking the layout
-    // introducing these variables to help us out with proper
-    // table tag opening and closing.
-    $tableOpened = false;
-    $tableClosed = false;
+    $s .= '<div class="d-flex justify-content-end gap-2">';
     //the following users are allowed to edit/delete a forum message: 1. the forum creator  2. a superuser with read-write access to 'all' 3. the message author
     if ($canEdit || $AppUI->user_id == $row['forum_moderated'] || $AppUI->user_id == $row['message_author'] || $canAdminEdit) {
-        $tableOpened = true;
-        $s .= '<table cellspacing="0" cellpadding="0" border="0"><tr>';
         // edit message
-        $s .= '<td><a href="./index.php?m=forums&a=viewer&post_message=1&forum_id=' . $row['message_forum'] . '&message_parent=' . $row['message_parent'] . '&message_id=' . $row["message_id"] . '" title="' . $AppUI->_('Edit') . ' ' . $AppUI->_('Message') . '">';
+        $s .= '<a href="./index.php?m=forums&amp;a=view&amp;post_message=1&amp;forum_id=' . $row['message_forum'] . '&amp;message_parent=' . $row['message_parent'] . '&amp;message_id=' . $row["message_id"] . '" title="' . $AppUI->_('Edit') . ' ' . $AppUI->_('Message') . '">';
         $s .= w2PshowImage('icons/stock_edit-16.png', '16', '16');
-        $s .= '</td>';
+        $s .= '</a>';
     }
     if ($canDelete || $AppUI->user_id == $row['forum_moderated'] || $AppUI->user_id == $row['message_author'] || $canAdminEdit) {
-        $tableClosed = true;
-        if (!$tableOpened) {
-            $s .= '<table cellspacing="0" cellpadding="0" border="0"><tr>';
-        }
         // delete message
-        $s .= '<td><a href="javascript:delIt(' . $row['message_id'] . ')" title="' . $AppUI->_('delete') . '">';
+        $s .= '<a href="javascript:delIt(' . $row['message_id'] . ')" title="' . $AppUI->_('delete') . '">';
         $s .= w2PshowImage('icons/stock_delete-16.png', '16', '16');
         $s .= '</a>';
-        $s .= '</td></tr></table>';
     }
+    $s .= '</div>';
 
-    if ($tableOpened and !$tableClosed) {
-        $s .= '</tr></table>';
-    }
-
-    $s .= '</td>';
-    $s .= '</tr>';
+    $s .= '</div>';
+    $s .= '</div>';
     return array($s, $new_messages);
 }

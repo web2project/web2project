@@ -1,4 +1,5 @@
 <?php
+/** @var w2p_Core_CAppUI $AppUI */
 if (!defined('W2P_BASE_DIR')) {
     die('You should not access this file directly.');
 }
@@ -121,7 +122,7 @@ foreach ($projects as $row) {
 		$actual_end_date = intval($row['project_actual_end_date']) ? new w2p_Utilities_Date($row['project_actual_end_date']) : null;
 		$style = (($actual_end_date > $end_date) && !empty($end_date)) ? 'style="color:red; font-weight:bold"' : '';
 
-		$s = '<tr><td width="65" align="center" style="border: outset #eeeeee 2px;background-color:#' . $row['project_color_identifier'] . '"><font color="' . bestColor($row['project_color_identifier']) . '">' . sprintf("%.1f%%", $row['project_percent_complete']) . '</font></td>';
+		$s = '<tr><td width="65" align="center" style="border: outset #eeeeee 2px;background-color:#' . $row['project_color_identifier'] . '"><span style="color: ' . bestColor($row['project_color_identifier']) . ';">' . sprintf("%.1f%%", $row['project_percent_complete']) . '</span></td>';
 
         $s .= $htmlHelper->createCell('project_priority',        $row['project_priority']);
         $s .= $htmlHelper->createCell('project_id',              $row['project_id']);

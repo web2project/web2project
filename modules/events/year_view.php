@@ -1,4 +1,5 @@
 <?php
+/** @var w2p_Core_CAppUI $AppUI */
 if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
@@ -73,91 +74,54 @@ $next_year = $date->format(FMT_TIMESTAMP_DATE);
 $next_year = (int)($next_year + 10000);
 
 ?>
-<table class="std view">
-	<tr>
-		<td align="center">
-			<table width="100%" cellspacing="0" cellpadding="4">
-				<tr>
-					<td colspan="20" valign="top">
-				    	<table border="0" cellspacing="1" cellpadding="2" width="100%" class="motitle">
-				        	<tr>
-				            	<td>
-				                	<a href="<?php echo '?m=events&a=year_view&date=' . $prev_year; ?>"><img src="<?php echo w2PfindImage('prev.gif'); ?>" alt="pre" title="pre" /></a>
-				                </td>
-				                <th width="100%" align="center">
-				                	<?php echo htmlspecialchars($date->format('%Y')); ?>
-				                </th>
-				                <td>
-				                	<a href="<?php echo '?m=events&a=year_view&date=' . $next_year; ?>"><img src="<?php echo w2PfindImage('next.gif'); ?>" alt="next" title="next" /></a>
-				                </td>
-				            </tr>
-				        </table>
-				    </td>
-				</tr>
-			</table>
-			<?php
-				$minical = new w2p_Output_MonthCalendar($date);
-				$minical->setStyles('minititle', 'minical');
-				$minical->showArrows = false;
-				$minical->showWeek = true;
-				$minical->clickMonth = true;
-				$minical->setLinkFunctions('clickDay', 'clickWeek');
-				$s = '';
-				
-				for ($j = 0; $j < 3; $j++) {
-					$s .= '<table cellspacing="0" cellpadding="0" border="0" width="100%"><tr>';
-					$s .= '<td valign="top" align="center" width="20%">&nbsp;</td>';
-					for ($i = 0; $i <= 3; $i++) {
-						// prepare time period for minical'events'
-						$first_time = new w2p_Utilities_Date($date);
-						$first_time->setDay(1);
-						$first_time->setTime(0, 0, 0);
-						$last_time = new w2p_Utilities_Date($date);
-						$last_time->setDay($date->getDaysInMonth());
-						$last_time->setTime(23, 59, 59);
-						$links = array();
-						// assemble the links for the tasks
-						// assemble the links for the events
-						//Pedro A.
-                        $links = getTaskLinks($first_time, $last_time, $links, 20, $company_id, true);
-                        $links += getEventLinks($first_time, $last_time, $links, 20, true);
-						$minical->setEvents($links);
-						$minical->setDate($date);
-						$s .= '<td valign="top" align="center">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>';
-						$s .= '<td valign="top" align="center" width="200">' . $minical->show() . '</td>';
-						$date->addMonths(1);
-					}
-					$s .= '<td valign="top" align="center" width="20%">&nbsp;</td>';
-					$s .= '</tr></table>';
-				}
-				echo $s;
-			?>
-			<table width="100%" class="minical">
-				<tr>
-					<td valign="top" align="center" width="20%">&nbsp;</td>
-					<td nowrap="nowrap"><?php echo $AppUI->_('Key'); ?>:</td>
-					<td>&nbsp;</td>
-					<td style="border-style:solid;border-width:1px" class="day">&nbsp;&nbsp;</td>
-					<td nowrap="nowrap"><?php echo $AppUI->_('Day'); ?></td>
-					<td>&nbsp;</td>
-					<td style="border-style:solid;border-width:1px" class="event">&nbsp;&nbsp;</td>
-					<td nowrap="nowrap"><?php echo $AppUI->_('Event'); ?></td>
-					<td>&nbsp;</td>
-					<td style="border-style:solid;border-width:1px" class="task">&nbsp;&nbsp;</td>
-					<td nowrap="nowrap"><?php echo $AppUI->_('Task'); ?></td>
-					<td>&nbsp;</td>
-					<td style="border-style:solid;border-width:1px" class="eventtask">&nbsp;&nbsp;</td>
-					<td nowrap="nowrap"><?php echo $AppUI->_('Event'); ?>+<?php echo $AppUI->_('Task'); ?></td>
-					<td>&nbsp;</td>
-					<td style="border-style:solid;border-width:1px" class="weekend">&nbsp;&nbsp;</td>
-					<td nowrap="nowrap"><?php echo $AppUI->_('Weekend'); ?></td>
-					<td>&nbsp;</td>
-					<td class="today">&nbsp;&nbsp;</td>
-					<td nowrap="nowrap"><?php echo $AppUI->_('Today'); ?></td>
-					<td>&nbsp;</td>
-					<td width="20%">&nbsp;</td>
-				</tr>
-			</table>
-		</td>
-	</tr>
-</table>
+<div class="std w2p-year-view">
+	<div class="d-flex align-items-center gap-2 motitle">
+		<a href="<?php echo '?m=events&amp;a=year_view&amp;date=' . $prev_year; ?>"><img src="<?php echo w2PfindImage('prev.gif'); ?>" alt="pre" title="pre" /></a>
+		<div class="flex-grow-1 text-center fw-bold w2p-cal-month">
+			<?php echo htmlspecialchars($date->format('%Y')); ?>
+		</div>
+		<a href="<?php echo '?m=events&amp;a=year_view&amp;date=' . $next_year; ?>"><img src="<?php echo w2PfindImage('next.gif'); ?>" alt="next" title="next" /></a>
+	</div>
+	<?php
+		$minical = new w2p_Output_MonthCalendar($date);
+		$minical->setStyles('minititle', 'minical');
+		$minical->showArrows = false;
+		$minical->showWeek = true;
+		$minical->clickMonth = true;
+		$minical->setLinkFunctions('clickDay', 'clickWeek');
+		$s = '<div class="row row-cols-1 row-cols-sm-2 row-cols-lg-4 g-3 mx-auto" style="max-width: 60rem;">';
+
+		for ($j = 0; $j < 3; $j++) {
+			for ($i = 0; $i <= 3; $i++) {
+				// prepare time period for minical'events'
+				$first_time = new w2p_Utilities_Date($date);
+				$first_time->setDay(1);
+				$first_time->setTime(0, 0, 0);
+				$last_time = new w2p_Utilities_Date($date);
+				$last_time->setDay($date->getDaysInMonth());
+				$last_time->setTime(23, 59, 59);
+				$links = array();
+				// assemble the links for the tasks
+				// assemble the links for the events
+				//Pedro A.
+                $links = getTaskLinks($first_time, $last_time, $links, 20, $company_id, true);
+                $links += getEventLinks($first_time, $last_time, $links, 20, true);
+				$minical->setEvents($links);
+				$minical->setDate($date);
+				$s .= '<div class="col w2p-minical">' . $minical->show() . '</div>';
+				$date->addMonths(1);
+			}
+		}
+		$s .= '</div>';
+		echo $s;
+	?>
+	<div class="d-flex flex-wrap justify-content-center align-items-center gap-3 my-3 small w2p-cal-key">
+		<span><?php echo $AppUI->_('Key'); ?>:</span>
+		<span class="text-nowrap"><span class="d-inline-block border w2p-swatch day">&nbsp;</span> <?php echo $AppUI->_('Day'); ?></span>
+		<span class="text-nowrap"><span class="d-inline-block border w2p-swatch event">&nbsp;</span> <?php echo $AppUI->_('Event'); ?></span>
+		<span class="text-nowrap"><span class="d-inline-block border w2p-swatch task">&nbsp;</span> <?php echo $AppUI->_('Task'); ?></span>
+		<span class="text-nowrap"><span class="d-inline-block border w2p-swatch eventtask">&nbsp;</span> <?php echo $AppUI->_('Event'); ?>+<?php echo $AppUI->_('Task'); ?></span>
+		<span class="text-nowrap"><span class="d-inline-block border w2p-swatch weekend">&nbsp;</span> <?php echo $AppUI->_('Weekend'); ?></span>
+		<span class="text-nowrap"><span class="d-inline-block w2p-swatch today">&nbsp;</span> <?php echo $AppUI->_('Today'); ?></span>
+	</div>
+</div>

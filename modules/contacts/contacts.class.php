@@ -1,16 +1,17 @@
 <?php
 
 /**
- * @package     web2project\modules\core
+ * @package web2project\modules\core
  *
- * @todo    refactor static methods
+ * @todo refactor static methods
  */
 
 class CContact extends w2p_Core_BaseObject
 {
 
     /**
-      @public int */
+     * @public int
+     */
     public $contact_id = null;
 
     // @todo this should be contact_firstname to take advantage of our templating
@@ -52,8 +53,9 @@ class CContact extends w2p_Core_BaseObject
      * This exists *only* to make sure we can use $this->contact_name and keep
      *   our code simpler.
      *
-     * @param type $name
-     * @return type
+     * @param string $name
+     *
+     * @return mixed
      */
     public function __get($name)
     {
@@ -64,7 +66,10 @@ class CContact extends w2p_Core_BaseObject
     {
         $this->contact_company = (int) $this->contact_company;
         $this->contact_department = (int) $this->contact_department;
-        $this->contact_owner = ((int) $this->contact_owner) ? (int) $this->contact_owner : (int) $this->_AppUI->user_id;
+        // Visitors who are not logged in have user_id -1 (for example LDAP's
+        // first login), which the unsigned column rejects; store them as 0
+        // (no owner) instead.
+        $this->contact_owner = ((int) $this->contact_owner) ? (int) $this->contact_owner : max(0, (int) $this->_AppUI->user_id);
         $this->contact_private = (int) $this->contact_private;
 
         $this->contact_first_name = ($this->contact_first_name == null) ? '' : $this->contact_first_name;
@@ -321,7 +326,6 @@ class CContact extends w2p_Core_BaseObject
 
     public function updateNotify()
     {
-        //trigger_error("updateNotify has been deprecated and will be removed in v4.0. Please use notify() instead.", E_USER_NOTICE );
         return $this->notify();
     }
 
@@ -594,32 +598,10 @@ class CContact extends w2p_Core_BaseObject
     /**
      * @deprecated
      */
-    public function is_alpha($val)
-    {
-        trigger_error("is_alpha() has been deprecated in v2.3 and will be removed by v4.0. Please cast values with (int) instead.", E_USER_NOTICE);
-        return (is_int($val) || ctype_digit($val));
-    }
-
-    /**
-     * @deprecated
-     */
     public function getCompanyID()
     {
         trigger_error("getCompanyID() has been deprecated in v3.0 and will be removed by v4.0. Please just use the object property itself.", E_USER_NOTICE);
         return (int) $this->contact_company;
     }
 
-    /**
-     * @deprecated
-     */
-    public function getCompanyName()
-    {
-        trigger_error("getCompanyName has been deprecated and will be removed in v4.0. Please use getCompanyDetails() instead.", E_USER_NOTICE);
-
-        $company = new CCompany();
-        $company->overrideDatabase($this->_query);
-        $company->load((int) $this->contact_company);
-
-        return $company->company_name;
-    }
 }

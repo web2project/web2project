@@ -1,27 +1,31 @@
 <?php
 
 /**
- * @package     web2project\theme
+ * @package web2project\theme
  */
 
 class w2p_Theme_TabBox {
     /**
-    @var array */
+     * @var array
+     */
     public $tabs = null;
     /**
-    @var int The active tab */
+     * @var int The active tab
+     */
     public $active = null;
     /**
-    @var string The base URL query string to prefix tab links */
+     * @var string The base URL query string to prefix tab links
+     */
     public $baseHRef = null;
     /**
-    @var string The base path to prefix the include file */
+     * @var string The base path to prefix the include file
+     */
     public $baseInc;
     /** the active tab, and the selected tab **/
     public $javascript = null;
 
     protected $_AppUI = null;
-    protected $_uistyle = 'web2project';
+    protected $_uistyle = W2P_UISTYLE;
 
     protected $currentTabId = null;
     protected $currentTabName = null;
@@ -30,13 +34,15 @@ class w2p_Theme_TabBox {
 
     /**
      * Constructor
-     * @param string The base URL query string to prefix tab links
-     * @param string The base path to prefix the include file
-     * @param int The active tab
-     * @param string Optional javascript method to be used to execute tabs.
+     *
+     * @param string $baseHRef The base URL query string to prefix tab links
+     * @param string $baseInc The base path to prefix the include file
+     * @param int $active The active tab
+     * @param string $javascript Optional javascript method to be used to execute tabs.
      *    Must support 2 arguments, currently active tab, new tab to activate.
      */
     public function __construct($baseHRef = '', $baseInc = '', $active = 0, $javascript = null) {
+        /** @var w2p_Core_CAppUI $AppUI */
         global $AppUI, $currentTabId, $currentTabName, $m, $a;
 
         $this->_AppUI = $AppUI;
@@ -50,15 +56,10 @@ class w2p_Theme_TabBox {
         $this->baseHRef = ($baseHRef ? $baseHRef . '&amp;' : '?');
         $this->javascript = $javascript;
         $this->baseInc = $baseInc;
-
-        $this->_uistyle = $this->_AppUI->getPref('UISTYLE') ?
-                $this->_AppUI->getPref('UISTYLE') : w2PgetConfig('host_style');
-        if (!$this->_uistyle) {
-            $this->_uistyle = 'web2project';
-        }
     }
     /**
      * Gets the name of a tab
+     *
      * @return string
      */
     public function getTabName($idx) {
@@ -66,8 +67,9 @@ class w2p_Theme_TabBox {
     }
     /**
      * Adds a tab to the object
-     * @param string File to include
-     * @param The display title/name of the tab
+     *
+     * @param string $file File to include
+     * @param string $title The display title/name of the tab
      */
     public function add($file, $title, $translated = false, $key = null) {
         $t = array($file, $title, $translated);
@@ -86,92 +88,84 @@ class w2p_Theme_TabBox {
     }
 
     /**
-     * Displays the tabbed box
+     * Displays the tabbed box as a list of tabs (nav-tabs) followed by the
+     * content of the active tab, or every tab one after the other in the
+     * flat view.
      *
-     * This function may be overridden
+     * This function may be overridden by a theme.
      *
-     * @param string Can't remember whether this was useful
+     * @param string $extra     Markup displayed above the tabs
+     * @param bool   $js_tabs   Render every tab and switch between them client side
+     * @param string $alignment 'left' or 'right' alignment of the tabs
      */
-    public function show($extra = '', $js_tabs = false) {
-        $this->loadExtras($notUsed, $notUsed2);
+    public function show($extra = '', $js_tabs = false, $alignment = 'left') {
+        $this->loadExtras($this->m, $this->a);
 
-        
-        
-        
-        
         reset($this->tabs);
-        $s = '';
-        // tabbed / flat view options
-        if ($this->_AppUI->getPref('TABVIEW') == 0) {
-            $s .= '<table border="0" cellpadding="2" cellspacing="0" width="100%"><tr><td nowrap="nowrap">';
-            $s .= '<a class="crumb" href="' . $this->baseHRef . 'tab=0"><span>' . $this->_AppUI->_('tabbed') . '</span></a> ';
-            $s .= '<a class="crumb" href="' . $this->baseHRef . 'tab=-1"><span>' . $this->_AppUI->_('flat') . '</span></a>';
-            $s .= '</td>' . $extra . '</tr></table>';
-            echo $s;
-        } else {
-            if ($extra) {
-                echo '<table border="0" cellpadding="2" cellspacing="0" width="100%"><tr>' . $extra . '</tr></table>';
-            } else {
-                echo '<img src="' . w2PfindImage('shim.gif') . '" height="10" width="1" alt="" />';
-            }
+        if ($extra) {
+            echo '<div class="d-flex flex-wrap gap-2 align-items-center mb-2 w2p-tab-extra">' . $extra . '</div>';
         }
 
-        if ($this->active < 0 || $this->_AppUI->getPref('TABVIEW') == 2) {
+        if (!$this->isTabbed()) {
             // flat view, active = -1
-            echo '<table border="0" cellpadding="2" cellspacing="0" width="100%">';
+            echo '<div class="w2p-tabs-flat">';
             foreach ($this->tabs as $k => $v) {
-                echo '<tr><td><strong>' . ($v[2] ? $v[1] : $this->_AppUI->_($v[1])) . '</strong></td></tr>';
-                echo '<tr><td>';
+                echo '<section class="mb-4">';
+                echo '<h2 class="h5 border-bottom pb-1">' . ($v[2] ? $v[1] : $this->_AppUI->_($v[1])) . '</h2>';
                 $this->currentTabId = $k;
                 $this->currentTabName = $v[1];
                 include $this->baseInc . $v[0] . '.php';
-                echo '</td></tr>';
+                echo '</section>';
             }
-            echo '</table>';
-        } else {
-            // tabbed view
-            $s = '<table width="100%" border="0" cellpadding="3" cellspacing="0"><tr>';
-            if (count($this->tabs) - 1 < $this->active) {
-                //Last selected tab is not available in this view. eg. Child tasks
-                $this->active = 0;
-            }
-            foreach ($this->tabs as $k => $v) {
-                $class = ($k == $this->active) ? 'tabon' : 'taboff';
-                $s .= '<td width="1%" nowrap="nowrap" class="tabsp"><img src="' . w2PfindImage('shim.gif') . '" height="1" width="1" alt="" /></td>';
-                $s .= '<td id="toptab_' . $k . '" width="1%" nowrap="nowrap"';
-                if ($js_tabs) {
-                    $s .= ' class="' . $class . '"';
-                }
-                $s .= '><a href="';
-                if ($this->javascript) {
-                    $s .= 'javascript:' . $this->javascript . '(' . $this->active . ', ' . $k . ')';
-                } elseif ($js_tabs) {
-                    $s .= 'javascript:show_tab(' . $k . ')';
-                } else {
-                    $s .= $this->baseHRef . "tab=$k";
-                }
-                $s .= '">' . ($v[2] ? $v[1] : $this->_AppUI->_($v[1])) . '</a></td>';
-            }
-            $s .= '<td nowrap="nowrap" class="tabsp">&nbsp;</td></tr>';
-            $s .= '<tr><td width="100%" colspan="' . (count($this->tabs) * 2 + 1) . '" class="tabox">';
-            echo $s;
-            //Will be null if the previous selection tab is not available in the new window eg. Children tasks
-            if ($this->baseInc . $this->tabs[$this->active][0] != '') {
-                $this->currentTabId = $this->active;
-                $this->currentTabName = $this->tabs[$this->active][1];
-                if (!$js_tabs) {
-                    require $this->baseInc . $this->tabs[$this->active][0] . '.php';
-                }
-            }
-            if ($js_tabs) {
-                foreach ($this->tabs as $k => $v) {
-                    echo '<div class="tab" id="tab_' . $k . '">';
-                    require $this->baseInc . $v[0] . '.php';
-                    echo '</div>';
-                }
-            }
-            echo '</td></tr></table>';
+            echo '</div>';
+            return;
         }
+
+        if (count($this->tabs) - 1 < $this->active) {
+            //Last selected tab is not available in this view. eg. Child tasks
+            $this->active = 0;
+        }
+
+        $s = '<ul class="nav nav-tabs w2p-tabs' . ('right' == $alignment ? ' justify-content-end' : '') . '"' .
+            ($js_tabs ? ' role="tablist"' : '') . '>';
+        foreach ($this->tabs as $k => $v) {
+            $active = ($k == $this->active);
+            $title = ($v[2] ? $v[1] : $this->_AppUI->_($v[1]));
+            $s .= '<li class="nav-item"' . ($js_tabs ? ' role="presentation"' : '') . '>';
+            if ($js_tabs) {
+                $s .= '<button type="button" id="toptab_' . $k . '" class="nav-link' . ($active ? ' active' : '') .
+                    '" data-bs-toggle="tab" data-bs-target="#tab_' . $k . '" role="tab" aria-controls="tab_' . $k .
+                    '" aria-selected="' . ($active ? 'true' : 'false') . '">' . $title . '</button>';
+            } else {
+                $href = $this->javascript ?
+                    'javascript:' . $this->javascript . '(' . $this->active . ', ' . $k . ')' :
+                    $this->baseHRef . 'tab=' . $k;
+                $s .= '<a id="toptab_' . $k . '" class="nav-link' . ($active ? ' active" aria-current="page' : '') .
+                    '" href="' . $href . '">' . $title . '</a>';
+            }
+            $s .= '</li>';
+        }
+        $s .= '</ul>';
+        $s .= '<div class="tab-content border border-top-0 rounded-bottom p-2 mb-3 w2p-tab-content">';
+        echo $s;
+
+        if ($js_tabs) {
+            foreach ($this->tabs as $k => $v) {
+                $active = ($k == $this->active);
+                echo '<div class="tab-pane fade' . ($active ? ' show active' : '') . '" id="tab_' . $k .
+                    '" role="tabpanel" aria-labelledby="toptab_' . $k . '">';
+                $this->currentTabId = $k;
+                $this->currentTabName = $v[1];
+                require $this->baseInc . $v[0] . '.php';
+                echo '</div>';
+            }
+        } elseif (isset($this->tabs[$this->active][0]) && $this->tabs[$this->active][0] != '') {
+            //Will be null if the previous selection tab is not available in the new window eg. Children tasks
+            $this->currentTabId = $this->active;
+            $this->currentTabName = $this->tabs[$this->active][1];
+            require $this->baseInc . $this->tabs[$this->active][0] . '.php';
+        }
+        echo '</div>';
     }
 
     public function loadExtras($module, $file = null) {

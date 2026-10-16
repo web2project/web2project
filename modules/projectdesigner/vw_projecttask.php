@@ -1,4 +1,5 @@
 <?php
+/** @var w2p_Core_CAppUI $AppUI */
 if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
@@ -27,24 +28,16 @@ $taskTree = $taskobj->getTaskTree($project_id);
 
 $listTable = new w2p_Output_HTML_TaskTable($AppUI);
 
-echo $listTable->startTable();
+echo $listTable->startTable('projectdesigner-task_view');
 echo $listTable->buildHeader($fields);
 echo $listTable->buildRows($taskTree);
 echo $listTable->endTable();
 
 ?>
-<table class="tbl" cellspacing="1" cellpadding="2" border="0" width="100%">
-    <tr>
-        <td align="center">
-            <?php echo '<strong>Gantt Chart</strong>' ?>
-        </td>
-    </tr>
-    <tr>
-        <td align="center" colspan="20">
-            <?php
-            $src = "?m=tasks&a=gantt&suppressHeaders=1&showLabels=1&proFilter=&showInactive=1showAllGantt=1&project_id=$project_id&width=' + ((navigator.appName=='Netscape'?window.innerWidth:document.body.offsetWidth)*0.90) + '";
-            echo "<script language=\"javascript\" type=\"text/javascript\">document.write('<img src=\"$src\">')</script>";
-            ?>
-        </td>
-    </tr>
-</table>
+<div class="text-center">
+    <h2 class="h6"><?php echo $AppUI->_('Gantt Chart'); ?></h2>
+    <?php
+    $src = "?m=tasks&a=gantt&suppressHeaders=1&showLabels=1&proFilter=&showInactive=1showAllGantt=1&project_id=$project_id&width=' + ((navigator.appName=='Netscape'?window.innerWidth:document.body.offsetWidth)*0.90) + '";
+    echo "<script language=\"javascript\" type=\"text/javascript\">document.write('<img src=\"$src\">')</script>";
+    ?>
+</div>

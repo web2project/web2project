@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @package     web2project\modules\core
+ * @package web2project\modules\core
  */
 
 class CSmartSearch
@@ -26,6 +26,7 @@ class CSmartSearch
 
 	public function fetchResults(&$permissions, &$record_count)
     {
+		/** @var w2p_Core_CAppUI $AppUI */
 		global $AppUI;
         $outstring = '';
 

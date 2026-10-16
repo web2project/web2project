@@ -1,18 +1,44 @@
 
 function update_workspace(id) {
 	var tr = document.getElementById(id);
+	if (tr == null) {
+		return;
+	}
 	(tr.style.display == "none") ? eval('document.frmWorkspace.pd_option_view_'+id+'.value=0') : eval('document.frmWorkspace.pd_option_view_'+id+'.value=1');
 	(tr.style.display == "none") ? eval('document.editFrm.pd_option_view_'+id+'.value=0') : eval('document.editFrm.pd_option_view_'+id+'.value=1');
 	(tr.style.display == "none") ? eval('document.frm_bulk.pd_option_view_'+id+'.value=0') : eval('document.frm_bulk.pd_option_view_'+id+'.value=1');
 }
 
+/**
+ * Shows or hides one of the workspace panels (and swaps its +/- icons).
+ *
+ * @param id     the id of the panel
+ * @param option 'expand', 'collapse' or nothing to toggle
+ */
+function toggle_panel(id, option) {
+	var panel = document.getElementById(id);
+	if (panel == null) {
+		return;
+	}
+	var show = (option == 'expand') ? true : ((option == 'collapse') ? false : (panel.style.display == 'none'));
+	panel.style.display = show ? '' : 'none';
+	var img = document.getElementById(id + '_expand');
+	if (img != null) {
+		img.style.display = show ? 'none' : 'inline';
+	}
+	img = document.getElementById(id + '_collapse');
+	if (img != null) {
+		img.style.display = show ? 'inline' : 'none';
+	}
+}
+
 function expandAll() {
-      expand_collapse('project', 'tblProjects', 'expand');
-      expand_collapse('gantt', 'tblProjects', 'expand');
-      expand_collapse('tasks', 'tblProjects', 'expand');
-      expand_collapse('actions', 'tblProjects', 'expand');
-      expand_collapse('addtasks', 'tblProjects', 'expand');
-      expand_collapse('files', 'tblProjects', 'expand');
+      toggle_panel('project', 'expand');
+      toggle_panel('gantt', 'expand');
+      toggle_panel('tasks', 'expand');
+      toggle_panel('actions', 'expand');
+      toggle_panel('addtasks', 'expand');
+      toggle_panel('files', 'expand');
       update_workspace('project');
       update_workspace('gantt');
       update_workspace('tasks');
@@ -22,12 +48,12 @@ function expandAll() {
 }
 
 function collapseAll() {
-      expand_collapse('project', 'tblProjects', 'collapse');
-      expand_collapse('gantt', 'tblProjects', 'collapse');
-      expand_collapse('tasks', 'tblProjects', 'collapse');
-      expand_collapse('actions', 'tblProjects', 'collapse');
-      expand_collapse('addtasks', 'tblProjects', 'collapse');
-      expand_collapse('files', 'tblProjects', 'collapse');
+      toggle_panel('project', 'collapse');
+      toggle_panel('gantt', 'collapse');
+      toggle_panel('tasks', 'collapse');
+      toggle_panel('actions', 'collapse');
+      toggle_panel('addtasks', 'collapse');
+      toggle_panel('files', 'collapse');
       update_workspace('project');
       update_workspace('gantt');
       update_workspace('tasks');

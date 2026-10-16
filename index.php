@@ -63,6 +63,8 @@ if (!isset($_SESSION['AppUI']) || isset($_GET['logout'])) {
 	if (isset($_GET['logout']) && isset($_SESSION['AppUI']->user_id)) {
 		$AppUI = &$_SESSION['AppUI'];
 		$user_id = $AppUI->user_id;
+		// the access log row of the login that is ending
+		$logout_log_id = (int) $AppUI->last_insert_id;
 		addHistory('login', $AppUI->user_id, 'logout', $AppUI->user_first_name . ' ' . $AppUI->user_last_name);
 	}
 
@@ -70,8 +72,6 @@ if (!isset($_SESSION['AppUI']) || isset($_GET['logout'])) {
 }
 $AppUI = &$_SESSION['AppUI'];
 $last_insert_id = $AppUI->last_insert_id;
-
-$AppUI->setStyle();
 
 //Function for update lost action in user_access_log
 $AppUI->updateLastAction($last_insert_id);
@@ -82,19 +82,12 @@ if ($AppUI->doLogin()) {
 
 //Function register logout in user_acces_log
 if (isset($user_id) && isset($_GET['logout'])) {
-	$AppUI->registerLogout($user_id);
+	$AppUI->registerLogout($user_id, isset($logout_log_id) ? $logout_log_id : 0);
 }
 
-// set the default ui style
-$uistyle = $AppUI->getPref('UISTYLE') ? $AppUI->getPref('UISTYLE') : w2PgetConfig('host_style');
-$uistyle = ($uistyle == 'default') ? 'web2project' : $uistyle;
-$AppUI->setPref('UISTYLE', $uistyle);
-
-include W2P_BASE_DIR . '/style/' . $uistyle . '/overrides.php';
-$uiName = str_replace('-', '', $uistyle);
-
-$uiClass = 'style_' . $uiName;
-$theme = new $uiClass($AppUI);
+// the ui style is fixed (see W2P_UISTYLE); $uistyle stays global for templates
+$uistyle = W2P_UISTYLE;
+$theme = $AppUI->getTheme();
 
 // check is the user needs a new password
 if (w2PgetParam($_POST, 'lostpass', 0)) {
@@ -144,7 +137,7 @@ if ($AppUI->doLogin()) {
 	include './locales/' . $AppUI->user_locale . '/locales.php';
 	include './locales/core.php';
 	setlocale(LC_TIME, $AppUI->user_lang);
-	$redirect = $_SERVER['QUERY_STRING'] ? strip_tags($_SERVER['QUERY_STRING']) : '';
+	$redirect = !empty($_SERVER['QUERY_STRING']) ? strip_tags($_SERVER['QUERY_STRING']) : '';
 	if (strpos($redirect, 'logout') !== false) {
 		$redirect = '';
 	}

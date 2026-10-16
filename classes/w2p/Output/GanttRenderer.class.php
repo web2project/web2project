@@ -5,14 +5,13 @@
  * a huge amount of duplicated code. In addition, as we evaluate alternatives,
  * this will let us switch them out more easily.
  *
- * @package     web2project\output
- * @author      D. Keith Casey, Jr. <caseydk@users.sourceforge.net>
+ * @package web2project\output
+ * @author  D. Keith Casey, Jr. <caseydk@users.sourceforge.net>
  */
 
 class w2p_Output_GanttRenderer {
     private $graph = null;
     private $rowCount = null;
-    private $rowMap = array();
     private $todayText = null;
     private $AppUI = null;
     private $df = null;
@@ -129,10 +128,10 @@ class w2p_Output_GanttRenderer {
      * For the second parameter you have the TTF font style that can be:
      *  FS_NORMAL, FS_BOLD, FS_ITALIC, FS_BOLDIT, FS_BOLDITALIC
      *
-     * @author Pedro A.
-     *
      * @param array $columnNames
      * @param array $columnSizes
+     *
+     * @author Pedro A.
      */
     public function setColumnHeaders(array $columnNames, array $columnSizes)
     {
@@ -179,7 +178,6 @@ class w2p_Output_GanttRenderer {
         }
 
         $bar = new GanttBar($this->rowCount++, $rowValues, $start, $actual_end, $caption, $height);
-        $this->rowMap[$identifier] = $this->rowCount;
         $bar->progress->Set(min(($progress / 100), 1));
 
         $bar->title->SetFont(FF_FONT0, FS_NORMAL, 10);

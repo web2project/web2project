@@ -30,7 +30,7 @@ if (!isset($_SESSION['AppUI']) || isset($_GET['logout'])) {
 		$ok = $AppUI->login($username, $password);
 		if (!$ok) {
 			//display login failed message
-			$uistyle = $AppUI->getPref('UISTYLE') ? $AppUI->getPref('UISTYLE') : $w2Pconfig['host_style'];
+			$uistyle = W2P_UISTYLE;
 			$AppUI->setMsg('Login Failed', UI_MSG_ERROR);
 			require W2P_BASE_DIR . '/style/' . $uistyle . '/login.php';
 			session_unset();
@@ -40,7 +40,7 @@ if (!isset($_SESSION['AppUI']) || isset($_GET['logout'])) {
 		exit;
 	}
 
-	$uistyle = $AppUI->getPref('UISTYLE') ? $AppUI->getPref('UISTYLE') : $w2Pconfig['host_style'];
+	$uistyle = W2P_UISTYLE;
 	// check if we are logged in
 	if ($AppUI->doLogin()) {
 		$AppUI->setUserLocale();

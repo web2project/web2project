@@ -1,4 +1,5 @@
 <?php
+/** @var w2p_Core_CAppUI $AppUI */
 if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
@@ -68,7 +69,7 @@ $this_day->setTime($start, 0, 0);
 $event = new CEvent();
 $event_filter_list = array('my' => 'My Events', 'own' => 'Events I Created', 'all' => 'All Events');
 
-$html = '<form action="'.$_SERVER['REQUEST_URI'].'" method="post" name="pickFilter" accept-charset="utf-8">';
+$html = '<form action="'.$_SERVER['REQUEST_URI'].'" method="post" name="pickFilter" accept-charset="utf-8" class="d-flex flex-wrap align-items-center gap-2 mb-2">';
 $html .= $AppUI->_('Event Filter') . ':' . arraySelect($event_filter_list, 'event_filter', 'onChange="document.pickFilter.submit()" class="text"', $event_filter, true);
 if ($other_users) {
 	$html .= $AppUI->_('Show Events for') . ':' . '<select name="show_user_events" onchange="document.pickFilter.submit()" class="text">';
@@ -108,9 +109,8 @@ for ($i = 0, $n = ($end - $start) * 60 / $inc; $i < $n; $i++) {
 
 			$html .= '<td class="event" rowspan="' . $rows . '" valign="top">';
 
-			$html .= '<table cellspacing="0" cellpadding="0" border="0"><tr>';
-			$html .= '<td>' . w2PshowImage('event' . $row['event_type'] . '.png', 16, 16, '', '', 'events');
-			$html .= '</td><td>&nbsp;<b>' . $AppUI->_($types[$row['event_type']]) . '</b></td></tr></table>';
+			$html .= '<div class="d-flex align-items-center gap-1">' . w2PshowImage('event' . $row['event_type'] . '.png', 16, 16, '', '', 'events');
+			$html .= '<b>' . $AppUI->_($types[$row['event_type']]) . '</b></div>';
 			$html .= w2PtoolTip($row['event_name'], getEventTooltip($row['event_id']), true);
 			$html .= $href ? '<a href="' . $href . '" class="event">' : '';
 			$html .= $row['event_name'];

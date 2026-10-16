@@ -2,8 +2,8 @@
 /**
  * Class w2p_Output_HTML_Base
  *
- * @package     web2project\output\html
- * @author      D. Keith Casey, Jr. <contrib@caseysoftware.com>
+ * @package web2project\output\html
+ * @author  D. Keith Casey, Jr. <contrib@caseysoftware.com>
  */
 abstract class w2p_Output_HTML_Base
 {

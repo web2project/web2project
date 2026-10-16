@@ -1,9 +1,9 @@
 <?php
 /**
- * @package     web2project\modules\core
+ * @package web2project\modules\core
  *
- * @todo    new query object
- * @todo    refactor static methods
+ * @todo new query object
+ * @todo refactor static methods
  */
 
 class CTask extends w2p_Core_BaseObject
@@ -79,7 +79,6 @@ class CTask extends w2p_Core_BaseObject
      * When calculating a task's start date only consider
      * end dates of tasks with these dynamic values.
      *
-     * @access public
      * @static
      */
     public static $tracked_dynamics = array('0' => '0', '1' => '1', '2' => '31');
@@ -88,7 +87,6 @@ class CTask extends w2p_Core_BaseObject
      * Tasks with these dynamics have their dates updated when
      * one of their dependencies changes. (They track dependencies)
      *
-     * @access public
      * @static
      */
     public static $tracking_dynamics = array('0' => '21', '1' => '31');
@@ -186,7 +184,9 @@ class CTask extends w2p_Core_BaseObject
         }
 
         // Have deps
-        if (array_sum($this_dependencies)) {
+        // the id lists come from explode() and may hold '' (array_sum() warns
+        // on strings in PHP 8); any non-zero id counts
+        if (count(array_filter(array_map('intval', $this_dependencies)))) {
             if ($this->task_dynamic == 1) {
                 $this->_error['BadDep_DynNoDep'] = 'BadDep_DynNoDep';
                 return false;
@@ -207,7 +207,7 @@ class CTask extends w2p_Core_BaseObject
 
             // Task dependencies can not be dependent on this task
             $intersect = array_intersect($this_dependencies, $this_dependents);
-            if (array_sum($intersect)) {
+            if (count(array_filter(array_map('intval', $intersect)))) {
                 $ids = '(' . implode(',', $intersect) . ')';
                 $this->_error['BadDep_CircularDep'] = 'BadDep_CircularDep';
                 return false;
@@ -243,7 +243,7 @@ class CTask extends w2p_Core_BaseObject
 
             if ($this_parent->task_dynamic == 1) {
                 $intersect = array_intersect($this_dependencies, $parents_dependents);
-                if (array_sum($intersect)) {
+                if (count(array_filter(array_map('intval', $intersect)))) {
                     $ids = '(' . implode(',', $intersect) . ')';
                     $this->_error['BadDep_CircularDepOnParentDependent'] = 'BadDep_CircularDepOnParentDependent';
                     return false;
@@ -252,7 +252,7 @@ class CTask extends w2p_Core_BaseObject
             if ($this->task_dynamic == 1) {
                 // then task's children can not be dependent on parent
                 $intersect = array_intersect($this_children, $parents_dependents);
-                if (array_sum($intersect)) {
+                if (count(array_filter(array_map('intval', $intersect)))) {
                     $this->_error['BadParent_ChildDepOnParent'] = 'BadParent_ChildDepOnParent';
                     return false;
                 }
@@ -403,14 +403,15 @@ class CTask extends w2p_Core_BaseObject
         CProject::updateHoursWorked((int) $this->task_project);
     }
 
-    /*
+    /**
      * Copy the current task
      *
+     * @param int $destProject_id ID of the destination project
+     *
      * @author handco <handco@users.sourceforge.net>
-     * @param int id of the destination project
+     *
      * @return object The new record object or null if error
      */
-
     public function copy($destProject_id = 0, $destTask_id = -1)
     {
         $newObj = $this->duplicate();
@@ -726,6 +727,13 @@ class CTask extends w2p_Core_BaseObject
     {
         $q = $this->_getQuery();
 
+        // The current path, so the subtree can be moved along with this task.
+        $q->addQuery('task_path_enumeration');
+        $q->addTable('tasks');
+        $q->addWhere('task_id = ' . (int) $this->task_id);
+        $old_path = (string) $q->loadResult();
+        $q->clear();
+
         if (0 == (int) $this->task_parent || $this->task_id == $this->task_parent) {
             $path = $this->task_id;
         } else {
@@ -742,6 +750,23 @@ class CTask extends w2p_Core_BaseObject
         $q->addUpdate('task_updated', "'" . $q->dbfnNowWithTZ() . "'", false, true);
         $q->addWhere('task_id = ' . (int) $this->task_id);
         $q->exec();
+        $q->clear();
+
+        // When the task moved to another parent, its subtasks keep the old
+        // path prefix, so updateDynamics() (which finds subtasks by path)
+        // rolled them up into the old parent instead of the new one. Replace
+        // the prefix for the whole subtree. Paths contain only ids and slashes.
+        // Fix from Klaus Buecher (opto), 50794bd5, done here in one query.
+        $path = (string) $path;
+        if ('' != $old_path && $old_path !== $path
+                && preg_match('#^[0-9/]+$#', $old_path) && preg_match('#^[0-9/]+$#', $path)) {
+            $q->addTable('tasks');
+            $q->addUpdate('task_path_enumeration',
+                "CONCAT('" . $path . "', SUBSTRING(task_path_enumeration, " . (strlen($old_path) + 1) . "))", false, true);
+            $q->addWhere("task_path_enumeration LIKE '" . $old_path . "/%'");
+            $q->exec();
+            $q->clear();
+        }
     }
 
     protected function hook_postUpdate()
@@ -762,13 +787,11 @@ class CTask extends w2p_Core_BaseObject
     }
 
     /**
-     *
      * @param w2p_Core_CAppUI $AppUI
      * @param CProject $project_id
      *
      * The point of this function is to create/update a task to represent a
      *   subproject.
-     *
      */
     public static function storeTokenTask(w2p_Core_CAppUI $AppUI, $project_id)
     {
@@ -838,7 +861,9 @@ class CTask extends w2p_Core_BaseObject
                 $task->delete($this->_AppUI);
             }
 
-            $taskList = $childrenlist + array($this->task_id);
+            // array_merge, not +: with numeric keys + kept the first child in
+            // place of this task, so a parent's own rows were never deleted
+            $taskList = array_map('intval', array_merge($childrenlist, array($this->task_id)));
             $implodedTaskList = implode(',', $taskList);
 
             $q = $this->_getQuery();
@@ -846,7 +871,7 @@ class CTask extends w2p_Core_BaseObject
             $q->setDelete('user_tasks');
             $q->addWhere('task_id IN (' . $implodedTaskList . ')');
             if (!($q->exec())) {
-                $this->_error['delete-user-assignments'] = db_error();
+                $this->_error['delete-user-assignments'] = (new w2p_Database_Connection($GLOBALS['db']))->error();
                 return false;
             }
             $q->clear();
@@ -856,7 +881,7 @@ class CTask extends w2p_Core_BaseObject
             $q->addWhere('dependencies_task_id IN (' . $implodedTaskList . ') OR
                 dependencies_req_task_id IN (' . $implodedTaskList . ')');
             if (!$q->exec()) {
-                $this->_error['delete-dependencies'] = db_error();
+                $this->_error['delete-dependencies'] = (new w2p_Database_Connection($GLOBALS['db']))->error();
                 return false;
             }
             $q->clear();
@@ -865,8 +890,21 @@ class CTask extends w2p_Core_BaseObject
             $q->setDelete('task_contacts');
             $q->addWhere('task_id = ' . $this->task_id);
             if (!$q->exec()) {
-                $this->_error['delete-contacts'] = db_error();
+                $this->_error['delete-contacts'] = (new w2p_Database_Connection($GLOBALS['db']))->error();
                 return false;
+            }
+            $q->clear();
+
+            // delete the task's resource assignments (Other resources tab);
+            // the table only exists while the resources module is installed
+            if (array_key_exists('resources', $this->_AppUI->getInstalledModules())) {
+                $q->setDelete('resource_tasks');
+                $q->addWhere('task_id IN (' . $implodedTaskList . ')');
+                if (!$q->exec()) {
+                    $this->_error['delete-resources'] = (new w2p_Database_Connection($GLOBALS['db']))->error();
+                    return false;
+                }
+                $q->clear();
             }
 
             $result = parent::delete();
@@ -875,10 +913,12 @@ class CTask extends w2p_Core_BaseObject
         return $result;
     }
 
-    /** Retrieve tasks with latest task_end_dates within given project
+    /**
+     * Retrieve tasks with latest task_end_dates within given project
+     *
      * @param int $project_id
      *
-     * @return array List of criticalTasks
+     * @return array<mixed>|false List of criticalTasks
      */
     public function getLastTaskData($project_id)
     {
@@ -934,8 +974,8 @@ class CTask extends w2p_Core_BaseObject
      *    and recurses.
      * If not, it returns.
      *
-     * @param type $task_id
-     * @param type $lastEndDate
+     * @param int $task_id
+     * @param mixed $lastEndDate
      */
     public function pushDependencies($task_id, $lastEndDate)
     {
@@ -983,8 +1023,8 @@ class CTask extends w2p_Core_BaseObject
     /**
      * 		  Retrieve the tasks dependencies
      *
-     * 		  @author		 handco		   <handco@users.sourceforge.net>
-     * 		  @return		 string		   comma delimited list of tasks id's
+     * 		  @author handco		   <handco@users.sourceforge.net>
+     * 		  @return string		   comma delimited list of tasks id's
      * */
     public function getDependencies()
     {
@@ -998,9 +1038,11 @@ class CTask extends w2p_Core_BaseObject
     /**
      * 		  Retrieve the tasks dependencies
      *
-     * 		  @author		 handco		   <handco@users.sourceforge.net>
-     * 		  @param		integer		   ID of the task we want dependencies
-     * 		  @return		 string		   comma delimited list of tasks id's
+     * 		  @param int $taskId		   ID of the task we want dependencies
+     *
+     * 		  @author handco		   <handco@users.sourceforge.net>
+     *
+     * 		  @return string		   comma delimited list of tasks id's
      * */
     public function staticGetDependencies($taskId)
     {
@@ -1235,14 +1277,15 @@ class CTask extends w2p_Core_BaseObject
     }
 
     /**
-     * @param Date Start date of the period
-     * @param Date End date of the period
-     * @param integer The target company
+     * @param Date $start_date Start date of the period
+     * @param Date $end_date End date of the period
+     * @param int $company_id The target company
      *
      * WARNING: This is actually called staticly so $this is not available.
      */
     public static function getTasksForPeriod($start_date, $end_date, $company_id = 0, $user_id = null)
     {
+        /** @var w2p_Core_CAppUI $AppUI */
         global $AppUI;
         $q = new w2p_Database_Query();
 
@@ -1365,10 +1408,11 @@ class CTask extends w2p_Core_BaseObject
     }
 
     /**
-     * 		 retrieve tasks are dependent of another.
-     * 		 @param	 integer		 ID of the master task
-     * 		 @param	 boolean		 true if is a dep call (recurse call)
-     * 		 @param	 boolean		 false for no recursion (needed for calc_end_date)
+     * 		 Retrieve tasks are dependent of another.
+     *
+     * 		 @param int|false $taskId		 ID of the master task
+     * 		 @param bool $isDep		 true if is a dep call (recurse call)
+     * 		 @param bool $recurse		 false for no recursion (needed for calc_end_date)
      * */
     public function dependentTasks($taskId = false, $isDep = false, $recurse = true)
     {
@@ -1458,15 +1502,13 @@ class CTask extends w2p_Core_BaseObject
      * * @purpose	reusability, consistence
      */
 
-    /*
-
-      Get the last end date of all of this task's dependencies
-
-      @param Task object
-      returns FMT_DATETIME_MYSQL date
-
+    /**
+     * Get the last end date of all of this task's dependencies
+     *
+     * @param CTask $taskObj
+     *
+     * @return string|false FMT_DATETIME_MYSQL date, or false if there are no dependencies
      */
-
     public function get_deps_max_end_date($taskObj)
     {
 
@@ -1580,10 +1622,10 @@ class CTask extends w2p_Core_BaseObject
         $q->exec();
     }
 
-    /*
-     * using user allocation percentage ($perc_assign)
+    /**
+     * Using user allocation percentage ($perc_assign)
      *
-     * @return returns the Names of the over-assigned users (if any), otherwise false
+     * @return string|false the Names of the over-assigned users (if any), otherwise false
      *
      * @todo - a given function/method should return one data type consistently - dkc 25 Nov 2012
      */
@@ -1751,8 +1793,10 @@ class CTask extends w2p_Core_BaseObject
 
     /**
      * 	Calculate the extent of utilization of user assignments
-     * 	@param string hash	 a hash for the returned hashList
-     * 	@param array users	 an array of user_ids calculating their assignment capacity
+     *
+     * 	@param string $hash	 a hash for the returned hashList
+     * 	@param array $users	 an array of user_ids calculating their assignment capacity
+     *
      * 	@return array		 returns hashList of extent of utilization for assignment of the users
      */
     public function getAllocation($hash = null, $users = null, $get_user_list = false)
@@ -1779,7 +1823,7 @@ class CTask extends w2p_Core_BaseObject
             // retrieve the systemwide default preference for the assignment maximum
             $q->addTable('user_preferences');
             $q->addQuery('pref_value');
-            $q->addWhere('pref_user = 0 AND pref_name = \'' . TASKASSIGNMAX . '\'');
+            $q->addWhere("pref_user = 0 AND pref_name = 'TASKASSIGNMAX'");
             $sysChargeMax = $q->loadHash();
             $q->clear();
             if (!$sysChargeMax) {
@@ -1927,11 +1971,21 @@ class CTask extends w2p_Core_BaseObject
     }
 
     /**
-     * @param $project_id
+     * @param mixed $project_id
      * @param int $task_id
-     * @return type
+     *
+     * @return mixed
      */
-    public function getTaskTree($project_id, $task_id = 0)
+    /**
+     * The tasks of a project (or the subtasks of $task_id) in tree order.
+     *
+     * @param int      $project_id
+     * @param int      $task_id     0 for the whole project
+     * @param int|null $task_status only tasks with this status; null for all statuses
+     *
+     * The status argument is from Klaus Buecher (opto), 170b1d05.
+     */
+    public function getTaskTree($project_id, $task_id = 0, $task_status = 0)
     {
         $taskTree = [];
         $this->_depth++;
@@ -1940,7 +1994,9 @@ class CTask extends w2p_Core_BaseObject
         $q->addTable('tasks');
         $q->addQuery('tasks.*, p.project_name, p.project_owner, p.project_company, task_pinned');
         $q->addWhere('task_project = ' . (int) $project_id);
-        $q->addWhere('task_status = 0');
+        if (null !== $task_status) {
+            $q->addWhere('task_status = ' . (int) $task_status);
+        }
         $q->addJoin('projects', 'p', 'p.project_id = task_project');
         $q->addQuery('user_task_priority');
         $q->addJoin('user_tasks', 'ut', 'ut.task_id = tasks.task_id');
@@ -1956,7 +2012,7 @@ class CTask extends w2p_Core_BaseObject
 
         $tasks = $q->loadHashList('task_id');
         foreach ($tasks as $task) {
-            $children = $this->getTaskTree($project_id, $task['task_id']);
+            $children = $this->getTaskTree($project_id, $task['task_id'], $task_status);
 
             $task['depth'] = $this->_depth;
             $task['children'] = count($children);
@@ -2010,11 +2066,11 @@ class CTask extends w2p_Core_BaseObject
      *   $project_new and then updates the corresponding task counts and task
      *   start/end dates for the projects.
      *
-     * @todo Get the start/end dates for the cache.. - updateTaskCache
+     * @param int $task_id
+     * @param int $project_old
+     * @param int $project_new
      *
-     * @param type $task_id
-     * @param type $project_old
-     * @param type $project_new
+     * @todo Get the start/end dates for the cache.. - updateTaskCache
      */
     public function moveTaskBetweenProjects($task_id, $project_old, $project_new)
     {
@@ -2024,11 +2080,33 @@ class CTask extends w2p_Core_BaseObject
 		$this->task_parent=$this->task_id;
 		$this->store();
 
-        $taskCount_oldProject = $this->getTaskCount($project_old);
-        CProject::updateTaskCount($project_old, $taskCount_oldProject);
+        // store() recalculates the dynamic tasks of the new project only; the
+        // old project's dynamic parents still included the moved task's dates.
+        // Fix from Klaus Buecher (opto), face287d.
+        $oldProject = new CTask();
+        $oldProject->overrideDatabase($this->_query);
+        $oldProject->task_project = (int) $project_old;
+        $oldProject->updateDynamics();
 
-        $taskCount_newProject = $this->getTaskCount($project_new);
-        CProject::updateTaskCount($project_new, $taskCount_newProject);
+        // store() already refreshed the new project's task count and last
+        // task. Refresh the old project's here, directly: the deprecated
+        // CProject::updateTaskCount() logged a notice and re-stored the
+        // whole project, and updateTaskCache() skips projects left empty.
+        $project_old = (int) $project_old;
+        // both helpers reset the shared query object, so call them first
+        $last_task_data = $this->getLastTaskData($project_old);
+        $task_count = $this->getTaskCount($project_old);
+        $q = $this->_getQuery();
+        $q->addTable('projects');
+        $q->addUpdate('project_task_count', $task_count);
+        if (!empty($last_task_data['task_id'])) {
+            $q->addUpdate('project_last_task', $last_task_data['task_id']);
+            $q->addUpdate('project_actual_end_date', $last_task_data['last_date']);
+        }
+        $q->addWhere('project_id = ' . $project_old);
+        $q->exec();
+        $q->clear();
+        CProject::updatePercentComplete($project_old);
     }
 
     /**
@@ -2153,22 +2231,31 @@ class CTask extends w2p_Core_BaseObject
     /**
      * Called by the Event Queue processor to process a reminder
      * on a task.
-     * @access  public
-     * @param   string  $notUsed    Module name (not used)
-     * @param   string  $notUsed2   Type of event (not used)
-     * @param   integer $id         ID of task being reminded
-     * @param   integer $owner      Originator of event
-     * @param   mixed   $notUsed    event-specific arguments.
      *
-     * @return  mixed   true, dequeue event, false, event stays in queue.
+     * @param string  $notUsed    Module name (not used)
+     * @param string  $notUsed2   Type of event (not used)
+     * @param int $id         ID of task being reminded
+     * @param int $owner      Originator of event
+     * @param mixed   $notUsed    event-specific arguments.
+     *
+     * @return mixed   true, dequeue event, false, event stays in queue.
      * -1, event is destroyed.
      */
     public function remind($notUsed = null, $notUsed2 = null, $id, $owner, $notUsed3 = null)
     {
-        // At this stage we won't have an object yet
-        if (!$this->load($id)) {
+        // Reminders run from queuescanner.php, where nobody is logged in
+        // (user_id -1), so load() and its per-user permission check always
+        // failed and every reminder was dropped. The mail only goes to the
+        // task's owner and assignees, so read the task directly.
+        $q = $this->_getQuery();
+        $q->addTable('tasks');
+        $q->addWhere('task_id = ' . (int) $id);
+        $hash = $q->loadHash();
+        $q->clear();
+        if (!$hash) {
             return - 1; // No point it trying again later.
         }
+        $q->bindHashToObject($hash, $this, null, false);
         $this->htmlDecode();
 
         // Only remind on working days.
@@ -2182,11 +2269,19 @@ class CTask extends w2p_Core_BaseObject
             return - 1;
         }
 
-        $contacts = $this->assignees($this->task_id);
+        // Recipients keyed by user id: the assignees plus the task owner.
+        $contacts = array();
+        foreach ($this->assignees($this->task_id) as $assignee) {
+            $contacts[$assignee['user_id']] = array(
+                                    'user_id' => $assignee['user_id'],
+                                    'contact_id' => $assignee['user_contact'],
+                                    'contact_name' => $assignee['contact_name'],
+                                    'contact_email' => $assignee['user_email']);
+        }
 
         $contact = new CContact();
         $owner = $contact->findContactByUserId($this->task_owner);
-        $contacts[$owner->contact_id] = array(
+        $contacts[$this->task_owner] = array(
                                     'user_id' => $this->task_owner,
                                     'contact_id' => $owner->contact_id,
                                     'contact_name' => $owner->contact_display_name,
@@ -2211,14 +2306,19 @@ class CTask extends w2p_Core_BaseObject
             $msg = $this->_AppUI->_(array($diff, 'DAYS'));
         }
 
-        $project = new CProject();
-        $project->overrideDatabase($this->_query);
-        $project_name = $project->load($this->task_project)->project_name;
+        // Read the project directly for the same reason as the task (and
+        // load() returns a bool, so ->project_name on it was always null).
+        $q->addTable('projects');
+        $q->addQuery('project_name, project_active, project_status');
+        $q->addWhere('project_id = ' . (int) $this->task_project);
+        $project = $q->loadHash();
+        $q->clear();
 
         // Check to see that the project is both active and not a template
-        if (!$project->project_active || $project->project_status == w2PgetConfig('template_projects_status_id', 0)) {
+        if (!$project || !$project['project_active'] || $project['project_status'] == w2PgetConfig('template_projects_status_id', 0)) {
             return -1;
         }
+        $project_name = $project['project_name'];
 
         $subject = $prefix . ' ' . $msg . ' ' . $this->task_name . '::' . $project_name;
 
@@ -2245,9 +2345,6 @@ class CTask extends w2p_Core_BaseObject
         return true;
     }
 
-    /**
-     *
-     */
     public function clearReminder($dont_check = false)
     {
         $ev = new w2p_System_EventQueue();
@@ -2318,7 +2415,6 @@ class CTask extends w2p_Core_BaseObject
 
         //TODO: A user should be able to select if they get distinct start/end dates or two tasks for each task.
         foreach ($taskList as $taskItem) {
-            //$taskArray[] = $taskItem;
             $taskArray[] = array_merge($taskItem, array('sequence' => $taskItem['sequence'],
                 'endDate' => $taskItem['startDate'], 'name' => 'Start: ' . $taskItem['name'],
                 'UID' => 'tasks_' . $taskItem['id'] . 'S'));

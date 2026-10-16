@@ -28,14 +28,10 @@ $config['permissions_item_table'] = 'resources';
 $config['permissions_item_field'] = 'resource_id';
 $config['permissions_item_label'] = 'resource_name';
 
-if ($a == 'setup') {
-    echo w2PshowModuleConfig($config);
-}
-
 /**
  * Class CSetupResources
  *
- * @package     web2project\modules\misc
+ * @package web2project\modules\misc
  */
 class CSetupResources extends w2p_System_Setup
 {

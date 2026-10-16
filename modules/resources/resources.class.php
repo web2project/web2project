@@ -1,6 +1,6 @@
 <?php
 /**
- * @package     web2project\modules\misc
+ * @package web2project\modules\misc
  */
 
 class CResource extends w2p_Core_BaseObject
@@ -91,6 +91,60 @@ class CResource extends w2p_Core_BaseObject
         $q->addGroup('resource_id');
 
         return $q->loadHashList();
+    }
+
+    /**
+     * Replace the resources assigned to a task with those posted by the task
+     * form's Other Resources tab ("resource_id=percent;resource_id=percent;").
+     * Only resources the current user may view are touched; percentages are
+     * kept within 0-100 like the form's choices.
+     *
+     * Restores saving of task resources, which stopped in v3.2. Based on the
+     * fix from Klaus Buecher (opto), 50db537d and a6952959.
+     *
+     * @param int    $task_id
+     * @param string $allocations
+     *
+     * @return bool
+     */
+    public function updateTaskResources($task_id, $allocations)
+    {
+        $task_id = (int) $task_id;
+        if (!$task_id || !$this->_perms->checkModuleItem('tasks', 'edit', $task_id)) {
+            return false;
+        }
+
+        $allowed = $this->getAllowedRecords($this->_AppUI->user_id, 'resource_id, resource_name');
+        if (!count($allowed)) {
+            return false;
+        }
+
+        $values = array();
+        foreach (explode(';', (string) $allocations) as $allocation) {
+            $parts = explode('=', $allocation);
+            $resource_id = (int) $parts[0];
+            if (!isset($allowed[$resource_id])) {
+                continue;
+            }
+            $percent = isset($parts[1]) ? (int) $parts[1] : 100;
+            $values[$resource_id] = max(0, min(100, $percent));
+        }
+
+        $q = $this->_getQuery();
+        $q->setDelete('resource_tasks');
+        $q->addWhere('task_id = ' . $task_id);
+        $q->addWhere('resource_id IN (' . implode(',', array_map('intval', array_keys($allowed))) . ')');
+        $q->exec();
+        $q->clear();
+
+        foreach ($values as $resource_id => $percent) {
+            $q->addTable('resource_tasks');
+            $q->addInsert(array('task_id', 'resource_id', 'percent_allocated'), array($task_id, $resource_id, $percent), true);
+            $q->exec();
+            $q->clear();
+        }
+
+        return true;
     }
 
     public function hook_search() {

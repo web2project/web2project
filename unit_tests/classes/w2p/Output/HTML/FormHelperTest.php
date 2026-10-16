@@ -12,12 +12,12 @@
  * LICENSE: This source file is subject to Clear BSD License. Please see the
  *   LICENSE file in root of site for further details
  *
- * @author      D. Keith Casey, Jr.<contrib@caseysoftware.com>
- * @category    w2p_Output_HTMLHelper
- * @package     web2project
- * @subpackage  unit_tests
- * @license     Clear BSD
- * @link        http://www.web2project.net
+ * @author     D. Keith Casey, Jr.<contrib@caseysoftware.com>
+ * @category   w2p_Output_HTMLHelper
+ * @package    web2project
+ * @subpackage unit_tests
+ * @license    Clear BSD
+ * @link       http://www.web2project.net
  */
 
 class w2p_Output_HTML_FormHelperTest extends CommonSetup

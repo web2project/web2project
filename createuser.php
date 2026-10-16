@@ -3,9 +3,9 @@ if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly');
 }
 
-require_once W2P_BASE_DIR . '/style/' . $uistyle . '/overrides.php';
-
 $AppUI = new w2p_Core_CAppUI();
+$AppUI->setStyle();
+$uistyle = $AppUI->getPref('UISTYLE');
 
 $msg = w2PgetParam($_GET, 'msg', '');
 
@@ -67,28 +67,16 @@ function submitIt(){
     }
 }
 </script>
-<table width="100%" cellspacing="0" cellpadding="0" border="0">
-	<tr>
-		<td width="508"><a href="http://www.web2project.net"><img border="0" alt="web2Project Home" src="./style/<?php echo $uistyle; ?>/images/w2p_logo.jpg"/></a></td>
-		<td style="background: url(./style/<?php echo $uistyle; ?>/images/logo_bkgd.jpg)">&nbsp;</td>
-	</tr>
-</table>
-<table width="100%" cellspacing="0" cellpadding="0" border="0">
-	<tr>
-		<td valign="top" style="background: url(./style/<?php echo $uistyle; ?>/images/nav_shadow.jpg)" align="left">
-			<img width="1" height="13" border="0" src="./style/<?php echo $uistyle; ?>/images/nav_shadow.jpg" alt=""/>
-		</td>
-	</tr>
-</table>
-<div align="center" width="700">
+<div class="d-flex justify-content-center">
+	<a href="http://www.web2project.net" class="w2p-auth-logo"><img alt="web2Project Home" src="./style/<?php echo $uistyle; ?>/images/logo.png" width="123" height="28" /></a>
+</div>
+<div class="mx-auto" style="max-width: 44rem;">
     <?php echo $AppUI->getMsg(); ?>
 </div>
-<table align="center" border="0" width="700" cellpadding="0" cellspacing="0" class="">
-	<tr>
-		<td style="padding-top:10px;padding-bottom:10px;" align="left" valign="top" class="txt"><h1>New Signup to web2Project!</h1>
-		Please enter the info below to create a new signup.</td>
-	</tr>
-</table>
+<div class="mx-auto my-3" style="max-width: 44rem;">
+	<h1 class="h4">New Signup to web2Project!</h1>
+	Please enter the info below to create a new signup.
+</div>
 <?php
 
 $form = new w2p_Output_HTML_FormHelper($AppUI);
@@ -101,88 +89,71 @@ $form = new w2p_Output_HTML_FormHelper($AppUI);
 	<input type="hidden" name="password_min_len" value="<?php echo w2PgetConfig('password_min_len'); ?>" />
     <?php echo $form->addNonce(); ?>
 
-    <table style="border-style:none;" align="center" border="0" width="700" cellpadding="0" cellspacing="0" class="std">
-		<tr><td colspan="5"><?php echo $AppUI->getTheme()->styleRenderBoxTop(); ?></td></tr>
-		<tr>
-            <td align="right" width="230">* <?php echo $AppUI->_('Login Name'); ?>:</td>
-            <td colspan="2">
+    <?php echo $AppUI->getTheme()->styleRenderBoxTop(); ?>
+    <div class="std addedit mx-auto" style="max-width: 44rem;">
+        <div class="column left w2p-wide">
+            <p>
+                <label>* <?php echo $AppUI->_('Login Name'); ?>:</label>
                 <input type="text" class="text" name="user_username" value="" maxlength="255" size="40" />
-            </td>
-            <td class="right-brdr"><img src="./style/<?php echo $uistyle; ?>/images/shim.gif" width="1" height="1" /></td>
-		</tr>
-		<tr>
-            <td align="right">* <?php echo $AppUI->_('Password'); ?>:</td>
-            <td colspan="2"><input type="password" class="text" name="user_password" value="" maxlength="32" size="32" onKeyUp="checkPassword(this.value);" /> </td>
-		</tr>
-		<tr>
-            <td align="right">* <?php echo $AppUI->_('Confirm Password'); ?>:</td>
-            <td colspan="2"><input type="password" class="text" name="password_check" value="" maxlength="32" size="32" /> </td>
-		</tr>
-                <tr>
-                    <td align="right" nowrap="nowrap"><?php echo $AppUI->_('Password Strength'); ?></td>
-                    <td>
-                        <div class="text" style="width: 135px;">
-                            <div id="progressBar" style="font-size: 1px; height: 15px; width: 0px;">
-                            </div>
-                        </div>
-                    </td>
-                </tr>
-        <tr>
-            <td align="right">* <?php echo $AppUI->_('Name'); ?>:</td>
-            <td colspan="2">
+            </p>
+            <p>
+                <label>* <?php echo $AppUI->_('Password'); ?>:</label>
+                <input type="password" class="text" name="user_password" value="" maxlength="32" size="32" onKeyUp="checkPassword(this.value);" />
+            </p>
+            <p>
+                <label>* <?php echo $AppUI->_('Confirm Password'); ?>:</label>
+                <input type="password" class="text" name="password_check" value="" maxlength="32" size="32" />
+            </p>
+            <p>
+                <label><?php echo $AppUI->_('Password Strength'); ?></label>
+                <span class="d-inline-block border rounded" style="width: 135px; height: 1rem;"><span id="progressBar" class="d-block h-100" style="font-size: 1px; width: 0px;"></span></span>
+            </p>
+            <p>
+                <label>* <?php echo $AppUI->_('Name'); ?>:</label>
                 <input type="text" class="text" name="contact_first_name" value="" maxlength="25" />
                 <input type="text" class="text" name="contact_last_name" value="" maxlength="25" />
-            </td>
-        </tr>
-        <tr>
-            <td align="right">* <?php echo $AppUI->_('Email'); ?>:</td>
-            <td colspan="2"><input type="text" class="text" name="contact_email" value="" maxlength="255" size="40" /> </td>
-        </tr>
-        <tr>
-            <td align="right"><?php echo $AppUI->_('Phone'); ?>:</td>
-            <td colspan="2"><input type="text" class="text" name="contact_phone" value="" maxlength="50" size="40" /> </td>
-        </tr>
-        <tr>
-            <td align="right"><?php echo $AppUI->_('Address'); ?>1:</td>
-            <td colspan="2"><input type="text" class="text" name="contact_address1" value="" maxlength="50" size="40" /> </td>
-        </tr>
-        <tr>
-            <td align="right"><?php echo $AppUI->_('Address'); ?>2:</td>
-            <td colspan="2"><input type="text" class="text" name="contact_address2" value="" maxlength="50" size="40" /> </td>
-        </tr>
-        <tr>
-            <td align="right"><?php echo $AppUI->_('City'); ?>:</td>
-            <td colspan="2"><input type="text" class="text" name="contact_city" value="" maxlength="50" size="40" /> </td>
-        </tr>
-        <tr>
-            <td align="right"><?php echo $AppUI->_('State'); ?>:</td>
-            <td colspan="2"><input type="text" class="text" name="contact_state" value="" maxlength="50" size="40" /> </td>
-        </tr>
-        <tr>
-            <td align="right"><?php echo $AppUI->_('Postcode') . ' / ' . $AppUI->_('Zip Code'); ?>:</td>
-            <td colspan="2"><input type="text" class="text" name="contact_zip" value="" maxlength="50" size="40" /> </td>
-        </tr>
-		<tr>
-			<td align="right"><?php echo $AppUI->_('Country'); ?>:</td>
-			<td colspan="2">
+            </p>
+            <p>
+                <label>* <?php echo $AppUI->_('Email'); ?>:</label>
+                <input type="text" class="text" name="contact_email" value="" maxlength="255" size="40" />
+            </p>
+            <p>
+                <label><?php echo $AppUI->_('Phone'); ?>:</label>
+                <input type="text" class="text" name="contact_phone" value="" maxlength="50" size="40" />
+            </p>
+            <p>
+                <label><?php echo $AppUI->_('Address'); ?>1:</label>
+                <input type="text" class="text" name="contact_address1" value="" maxlength="50" size="40" />
+            </p>
+            <p>
+                <label><?php echo $AppUI->_('Address'); ?>2:</label>
+                <input type="text" class="text" name="contact_address2" value="" maxlength="50" size="40" />
+            </p>
+            <p>
+                <label><?php echo $AppUI->_('City'); ?>:</label>
+                <input type="text" class="text" name="contact_city" value="" maxlength="50" size="40" />
+            </p>
+            <p>
+                <label><?php echo $AppUI->_('State'); ?>:</label>
+                <input type="text" class="text" name="contact_state" value="" maxlength="50" size="40" />
+            </p>
+            <p>
+                <label><?php echo $AppUI->_('Postcode') . ' / ' . $AppUI->_('Zip Code'); ?>:</label>
+                <input type="text" class="text" name="contact_zip" value="" maxlength="50" size="40" />
+            </p>
+            <p>
+                <label><?php echo $AppUI->_('Country'); ?>:</label>
                 <?php
                     $countries = array('' => $AppUI->_('(Select a Country)')) + w2PgetSysVal('GlobalCountries');
                     echo arraySelect($countries, 'contact_country', 'size="1" class="text"', 0);
                 ?>
-			</td>
-		</tr>
-		<tr>
-            <td align="right">* <?php echo $AppUI->_('Required Fields'); ?></td>
-            <td colspan="2"></td>
-		</tr>
-		<tr>
-		  <td align="left">
-				&nbsp;<input type="button" value="<?php echo $AppUI->_('cancel'); ?>" onclick="history.go(-1)" class="button" />
-		  </td>
-		  <td colspan="2" align="right">
-				<input type="button" value="<?php echo $AppUI->_('sign me up!'); ?>" onclick="submitIt()" class="button" />&nbsp;
-		  </td>
-		</tr>
-		<tr><td colspan="5"><?php echo $AppUI->getTheme()->styleRenderBoxBottom(); ?></td></tr>
-	</table>
+            </p>
+            <p>* <?php echo $AppUI->_('Required Fields'); ?></p>
+        </div>
+        <div class="w2p-form-actions">
+            <input type="button" value="<?php echo $AppUI->_('cancel'); ?>" onclick="history.go(-1)" class="button" />
+            <input type="button" value="<?php echo $AppUI->_('sign me up!'); ?>" onclick="submitIt()" class="button save" />
+        </div>
+    </div>
+    <?php echo $AppUI->getTheme()->styleRenderBoxBottom(); ?>
 </form>

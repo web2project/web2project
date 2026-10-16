@@ -2,18 +2,17 @@
 /**
  * Class for testing Date functionality
  *
- *
  * PHP version 5
  *
  * LICENSE: This source file is subject to Clear BSD License. Please see the
  *   LICENSE file in root of site for further details
  *
- * @author      D. Keith Casey, Jr.<caseydk@users.sourceforge.net>
- * @category    w2p_Utilities_Date_Test
- * @package     web2project
- * @subpackage  unit_tests
- * @license     Clear BSD
- * @link        http://www.web2project.net
+ * @author     D. Keith Casey, Jr.<caseydk@users.sourceforge.net>
+ * @category   w2p_Utilities_Date_Test
+ * @package    web2project
+ * @subpackage unit_tests
+ * @license    Clear BSD
+ * @link       http://www.web2project.net
  */
 
 class w2p_Utilities_DateTest extends CommonSetup
@@ -22,24 +21,21 @@ class w2p_Utilities_DateTest extends CommonSetup
     /**
      * Stores old working days value while tests being run
      *
-     * @param string
-     * @access private
+     * @var string
      */
     private $old_working_days;
 
     /**
      * Stores old day start value while tests being run
      *
-     * @param int
-     * @access private
+     * @var int
      */
     private $old_cal_day_start;
 
     /**
      * Stores old say end value while test being run
      *
-     * @param int
-     * @access private
+     * @var int
      */
     private $old_cal_day_end;
 
@@ -160,8 +156,6 @@ class w2p_Utilities_DateTest extends CommonSetup
 
     /**
      * Tests constructor with an invalid timezone
-     *
-     * expectedException PHPUnit_Framework_Error
      */
     public function testConstructorInvalidTimezone()
     {
@@ -176,12 +170,12 @@ class w2p_Utilities_DateTest extends CommonSetup
         $this->assertEquals($datetime->format('i'),   $date->minute);
         $this->assertEquals($datetime->format('s'),   $date->second);
         $this->assertEquals('Halifax',                $date->tz['id']);
-        $this->assertFalse(isset($data->tz['offset']));
-        $this->assertFalse(isset($data->tz['longname']));
-        $this->assertFalse(isset($data->tz['shortname']));
-        $this->assertFalse(isset($data->tz['dstlongname']));
-        $this->assertFalse(isset($data->tz['dstshortname']));
-        $this->assertFalse(isset($data->tz['hasdst']));
+        $this->assertFalse(isset($date->tz['offset']));
+        $this->assertFalse(isset($date->tz['longname']));
+        $this->assertFalse(isset($date->tz['shortname']));
+        $this->assertFalse(isset($date->tz['dstlongname']));
+        $this->assertFalse(isset($date->tz['dstshortname']));
+        $this->assertFalse(isset($date->tz['hasdst']));
     }
 
     /**
@@ -1547,7 +1541,9 @@ class w2p_Utilities_DateTest extends CommonSetup
     {
         $date = new w2p_Utilities_Date('2010-11-05 11:00:00');
 
-        $this->assertNull($date->getDate(DATE_FORMAT_INVALID));
+        $invalidFormat = 9999;
+
+        $this->assertNull($date->getDate($invalidFormat));
     }
 
     /**

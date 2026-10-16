@@ -1,6 +1,6 @@
 <?php
 /**
- * @package     web2project\modules\misc
+ * @package web2project\modules\misc
  * @todo    remove declarations before the class
  */
 

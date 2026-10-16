@@ -4,18 +4,17 @@
 /**
  * Class for testing admin/users functionality
  *
- *
  * PHP version 5
  *
  * LICENSE: This source file is subject to Clear BSD License. Please see the
  *   LICENSE file in root of site for further details
  *
- * @author      D. Keith Casey, Jr.<caseydk@users.sourceforge.net>
- * @category    CUsers
- * @package     web2project
- * @subpackage  unit_tests
- * @license     Clear BSD
- * @link        http://www.web2project.net
+ * @author     D. Keith Casey, Jr.<caseydk@users.sourceforge.net>
+ * @category   CUsers
+ * @package    web2project
+ * @subpackage unit_tests
+ * @license    Clear BSD
+ * @link       http://www.web2project.net
  */
 
 class CUsersTest extends CommonSetup
@@ -138,9 +137,14 @@ class CUsersTest extends CommonSetup
         $result = $this->obj->validatePassword(1, 'password');
         $this->assertFalse($result);
 
+        $this->post_data['user_password'] = password_hash('password', PASSWORD_BCRYPT);
         $this->mockDB->stageHashList(1, $this->post_data);
         $result = $this->obj->validatePassword(1, 'password');
         $this->assertTrue($result);
+
+        // The wrong password must not validate against the stored hash.
+        $result = $this->obj->validatePassword(1, 'not-the-password');
+        $this->assertFalse($result);
     }
 
     /*

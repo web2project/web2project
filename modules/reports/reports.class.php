@@ -1,6 +1,6 @@
 <?php
 /**
- * @package     web2project\modules\misc
+ * @package web2project\modules\misc
  */
 
 class CReport {
@@ -20,6 +20,9 @@ class CReport {
         return $this->reportFilename;
     }
 
+    /**
+     * This cleanup task can be deleted once PDF generation is fully removed.
+     */
     public function hook_cron()
     {
         // number of seconds in $this->expiresIn days

@@ -1,4 +1,5 @@
 <?php
+/** @var w2p_Core_CAppUI $AppUI */
 if (!defined('W2P_BASE_DIR')) {
 	die('You should not access this file directly.');
 }
@@ -30,10 +31,6 @@ $filter = array($module->permissions_item_field, 'user_password', 'user_parent',
         'task_allow_other_user_tasklogs', 'tracked_dynamics', 'tracking_dynamics',
         'task_target_budget', 'task_project', 'task_parent', 'task_milestone',
         'task_access', 'project_contacts');
-//$filter = array('project_id', 'project_status', 'project_active',
-//	'project_parent', 'project_color_identifier',
-//	'project_original_parent', 'project_departments', 'project_contacts',
-//	'project_private', 'project_type', 'project_last_task', 'project_scheduled_hours');
 
 if ('CProjectDesigner' == $module->mod_main_class) {
     $module->mod_main_class = 'CTask';
@@ -87,7 +84,7 @@ $orderMax = count($properties) + count($fields);
 					<input type="checkbox" name="display[<?php echo $field; ?>]" checked="checked" />
 				</td>
 				<td>
-					<?php echo arraySelect(range(0, $orderMax), "order[$field]", 'class="text" size="1"', $order); ?>
+					<?php $orderOptions = range(0, $orderMax); echo arraySelect($orderOptions, "order[$field]", 'class="text" size="1"', $order); ?>
 				</td>
 				<td class="center">
 					<input type="hidden" name="displayFields[]" value="<?php echo $field; ?>" />
@@ -122,13 +119,9 @@ $orderMax = count($properties) + count($fields);
 			$order++;
 		}
 		?>
-  		<tr>
-          	<td colspan="2">
-          		<input class="button btn btn-danger" type="button" name="cancel" value="<?php echo $AppUI->_('cancel'); ?>" />
-            </td>
-          	<td colspan="2" class="center">
-          		<input class="button btn btn-primary" type="submit" name="submit" value="<?php echo $AppUI->_('save'); ?>" />
-          	</td>
-    	</tr>
 	</table>
+	<div class="d-flex justify-content-between">
+		<input class="button btn btn-danger" type="button" name="cancel" value="<?php echo $AppUI->_('cancel'); ?>" />
+		<input class="button btn btn-primary" type="submit" name="submit" value="<?php echo $AppUI->_('save'); ?>" />
+	</div>
 </form>

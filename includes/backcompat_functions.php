@@ -23,7 +23,8 @@ if(!function_exists('mb_str_replace')) {
      * @param mixed $search : string or array of strings to be searched.
      * @param mixed $replace : string or array of the strings that will replace the searched string(s)
      * @param mixed $subject : string to be modified.
-     * @return string with the replacements made
+     *
+     * @return mixed string, or array of strings when $subject is an array, with the replacements made
      */
     function mb_str_replace($search, $replace, $subject) {
         if(is_array($subject)) {
@@ -58,11 +59,12 @@ if(!function_exists('mb_trim')) {
 	* Trim characters from either (or both) ends of a string in a way that is
 	* multibyte-friendly.
 	*
-	* @param string
-	* @param charlist list of characters to remove from the ends of this string.
-	* @param boolean trim the left?
-	* @param boolean trim the right?
-	* @return String
+	* @param string $string
+	* @param string $charlist list of characters to remove from the ends of this string.
+	* @param bool $ltrim trim the left?
+	* @param bool $rtrim trim the right?
+	*
+	* @return string|null
 	*/
 	function mb_trim($string, $charlist='\\\\s', $ltrim=true, $rtrim=true) {
 		$both_ends = $ltrim && $rtrim;
@@ -91,7 +93,7 @@ if(!function_exists('mb_trim')) {
 if(!function_exists('get_magic_quotes_runtime')) {
 	/**
 	 * get_magic_quotes_runtime()
-	 * 
+	 *
 	 * Restored this function because while core w2p doesn't use it, some of our libraries do.
 	 */
 	function get_magic_quotes_runtime()
@@ -103,7 +105,7 @@ if(!function_exists('get_magic_quotes_runtime')) {
 if(!function_exists('get_magic_quotes_gpc')) {
 	/**
 	 * get_magic_quotes_gpc()
-	 * 
+	 *
 	 * Restored this function because while core w2p doesn't use it, some of our libraries do.
 	 */
 	function get_magic_quotes_gpc()
