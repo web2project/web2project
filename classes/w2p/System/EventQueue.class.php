@@ -157,9 +157,29 @@ class w2p_System_EventQueue {
         $this->commit_updates();
     }
 
-    public function update_event(&$fields) {
+    /**
+     * Reschedules a repeating event after it has run, or marks a one-off
+     * event for deletion.
+     *
+     * A repeating event moves to its next start time that is still in the
+     * future. If the scanner fell behind (cron stopped, server down), the
+     * missed runs are skipped rather than replayed: otherwise every scan would
+     * run the event again, one interval at a time, until it caught up with
+     * the clock, and each of those runs would use up one of its repeats. The
+     * event keeps its original time of day.
+     *
+     * @param array    $fields the queue row; updated in place
+     * @param int|null $now    the current time, defaults to time()
+     */
+    public function update_event(&$fields, $now = null) {
         if ($fields['queue_repeat_interval'] && $fields['queue_repeat_count']) {
-            $fields['queue_start'] += $fields['queue_repeat_interval'];
+            $now = (null === $now) ? time() : (int) $now;
+            $interval = (int) $fields['queue_repeat_interval'];
+            $next = (int) $fields['queue_start'] + $interval;
+            if ($interval > 0 && $next <= $now) {
+                $next += (intdiv($now - $next, $interval) + 1) * $interval;
+            }
+            $fields['queue_start'] = $next;
             $fields['queue_repeat_count']--;
             $this->update_list[] = $fields;
         } else {
