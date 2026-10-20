@@ -106,7 +106,7 @@ if($last_time->getDayOfWeek() != 6) {
 $user_filter = ($event_filter == 'my') ? $AppUI->user_id : 0;
 
 $links = getTaskLinks($first_time, $last_time, array(), 20, $company_id, false, $user_filter);
-$links += getEventLinks($first_time, $last_time, array(), 20);
+$links = getEventLinks($first_time, $last_time, $links, 20);
 
 $hooks = new w2p_System_HookHandler($AppUI);
 $hooks->links = $links;
@@ -136,7 +136,7 @@ $last_time->setDay($cal->prev_month->getDaysInMonth());
 $last_time->setTime(23, 59, 59);
 
 $links = getTaskLinks($first_time, $last_time, array(), 20, $company_id, true);
-$links += getEventLinks($first_time, $last_time, array(), 20);
+$links = getEventLinks($first_time, $last_time, $links, 20, true);
 $minical->setEvents($links);
 
 echo '<div class="d-flex flex-wrap justify-content-between gap-3 std">';
@@ -151,7 +151,7 @@ $last_time->setDay($cal->next_month->getDaysInMonth());
 $last_time->setTime(23, 59, 59);
 
 $links = getTaskLinks($first_time, $last_time, array(), 20, $company_id, true);
-$links += getEventLinks($first_time, $last_time, array(), 20, true);
+$links = getEventLinks($first_time, $last_time, $links, 20, true);
 $minical->setEvents($links);
 
 echo '<div class="w2p-minical">' . $minical->show() . '</div>';
