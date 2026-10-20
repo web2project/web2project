@@ -13,12 +13,12 @@ if (!defined('W2P_BASE_DIR')) {
 			is intended to provide you with informations about how to use web2Project (e.g. explanation of modules, features, training ...).
 			<br />
 			<br />Further Assistance can be found in the
-			<a href="http://support.web2project.net/" target="_blank">web2Project Support Forums</a>.
+			<a href="https://github.com/orgs/web2project/discussions" target="_blank">web2Project Discussions</a>.
 			<br />
 			<br />Information about known problems and suggested enhancements can be read and submitted at the
-			<a href="http://bugs.web2project.net/" target="_blank">web2Project Bugs &amp; Suggestions</a> site.
+			<a href="https://github.com/web2project/web2project/issues" target="_blank">web2Project issue tracker</a> on GitHub.
 			<br />
-			<br />If you're looking for Professional Support concerning web2Project consider getting in touch with the developers directly on the forums.
+			<br />If you're looking for Professional Support concerning web2Project consider getting in touch with the developers directly in the Discussions.
 			<br />
 		</p>
 </div>

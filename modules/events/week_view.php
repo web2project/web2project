@@ -52,7 +52,7 @@ $links = array();
 $links = getTaskLinks($first_time, $last_time, $links, 50, $company_id);
 
 // assemble the links for the events
-$links += getEventLinks($first_time, $last_time, $links, 50);
+$links = getEventLinks($first_time, $last_time, $links, 50);
 
 $hooks = new w2p_System_HookHandler($AppUI);
 $hooks->links = $links;

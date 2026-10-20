@@ -9,7 +9,7 @@ global $this_day, $first_time, $last_time, $company_id, $m, $a;
 $links = array();
 
 // assemble the links for the tasks
-getTaskLinks($first_time, $last_time, $links, 100, $company_id);
+$links = getTaskLinks($first_time, $last_time, $links, 100, $company_id);
 
 $s = '';
 $dayStamp = $this_day->format(FMT_TIMESTAMP_DATE);
