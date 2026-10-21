@@ -30,6 +30,22 @@ class w2p_Output_GanttRenderer {
         $this->AppUI = $AppUI;
     }
 
+    /**
+     * The font family for all text on the chart.
+     *
+     * JpGraph ships DejaVu Sans in its own fonts folder and checks there
+     * first, so nothing needs to be installed. It takes UTF-8 text and covers
+     * Latin, Greek, Cyrillic and more. The built-in bitmap fonts (FF_FONT0-2)
+     * only cover Latin-1 and turned other names into garbage. Without
+     * FreeType in GD, fall back to the bitmap font.
+     *
+     * @return int A JpGraph FF_* constant
+     */
+    private function font()
+    {
+        return function_exists('imagettftext') ? FF_DV_SANSSERIF : FF_FONT0;
+    }
+
     public function localize()
     {
         $AppUI = $this->AppUI;
@@ -58,13 +74,18 @@ class w2p_Output_GanttRenderer {
         // if diff(end_date,start_date) > 240 days it shows only
         //month number
         //-----------------------------------------
+        // Set every header row's font; the branches below adjust the size.
+        foreach (array('year', 'month', 'week', 'day') as $header) {
+            $this->graph->scale->$header->SetFont($this->font(), FS_NORMAL, 8);
+        }
+
         if ($day_diff > 1096) {
             //more than 3 years, show only the year scale
             $this->graph->ShowHeaders(GANTT_HYEAR);
             $this->graph->scale->year->grid->Show ();
             $this->graph->scale->year->grid->SetStyle('longdashed');
             $this->graph->scale->year->grid->SetColor('lightgray');
-            $this->graph->scale->year->SetFont(FF_FONT0, FS_NORMAL,  12);
+            $this->graph->scale->year->SetFont($this->font(), FS_NORMAL, 9);
         } else if ($day_diff > 480) {
             //more than 480 days show only the firstletter of the month
             $this->graph->ShowHeaders(GANTT_HYEAR | GANTT_HMONTH);
@@ -72,7 +93,7 @@ class w2p_Output_GanttRenderer {
             $this->graph->scale->month->grid->Show ();
             $this->graph->scale->month->grid->SetStyle('longdashed');
             $this->graph->scale->month->grid->SetColor('lightgray');
-            $this->graph->scale->month->SetFont(FF_FONT0, FS_NORMAL, 10);
+            $this->graph->scale->month->SetFont($this->font(), FS_NORMAL, 8);
         } else if($day_diff > 240) {
             //more than 240 days and less than 481 show the month short name eg: Jan
             $this->graph->ShowHeaders(GANTT_HYEAR | GANTT_HMONTH);
@@ -80,17 +101,17 @@ class w2p_Output_GanttRenderer {
             $this->graph->scale->month->grid->Show ();
             $this->graph->scale->month->grid->SetStyle('longdashed');
             $this->graph->scale->month->grid->SetColor('lightgray');
-            $this->graph->scale->month->SetFont(FF_FONT0, FS_NORMAL, 10);
+            $this->graph->scale->month->SetFont($this->font(), FS_NORMAL, 8);
         } else if ($day_diff > 90) {
             //more than 90 days and less of 241
             $this->graph->ShowHeaders(GANTT_HMONTH | GANTT_HWEEK);
             $this->graph->scale->week->SetStyle(WEEKSTYLE_WNBR);
-            $this->graph->scale->week->SetFont(FF_FONT0, FS_NORMAL,  7);
+            $this->graph->scale->week->SetFont($this->font(), FS_NORMAL, 7);
         } else {
             //more than 90 days and less of 241
             $this->graph->ShowHeaders(GANTT_HMONTH | GANTT_HDAY);
             $this->graph->scale->day->SetStyle(DAYSTYLE_SHORTDATE4);
-            $this->graph->scale->day->SetFont(FF_FONT0, FS_NORMAL,  7);
+            $this->graph->scale->day->SetFont($this->font(), FS_NORMAL, 7);
         }
 
         $start_date = is_object($start_date) ? $start_date->format(FMT_DATETIME_MYSQL) : $start_date;
@@ -102,11 +123,7 @@ class w2p_Output_GanttRenderer {
     public function setTitle($tableTitle = '')
     {
         $this->graph->title->Set($tableTitle);
-        // Use TTF font if it exists
-        // try commenting out the following two lines if gantt charts do not display
-        if (is_file(TTF_DIR . 'FreeSansBold.ttf')) {
-            $this->graph->title->SetFont(FF_FONT0, FS_BOLD, 14);
-        }
+        $this->graph->title->SetFont($this->font(), FS_BOLD, 11);
     }
 
     /**
@@ -115,18 +132,10 @@ class w2p_Output_GanttRenderer {
      *  SetFont call is executed again on the same object e subobjects.
      *
      * LOGIC: $graph->scale->actinfo->SetFont(font name, font style, font size);
-     * EXAMPLE: $graph->scale->actinfo->SetFont(FF_CUSTOM, FS_BOLD, 10);
+     * EXAMPLE: $graph->scale->actinfo->SetFont($this->font(), FS_BOLD, 10);
      *
-     * Here is a list of possibilities you can use for the first parameter of
-     *  the SetFont method:
-     *
-     *  TTF Font families (you must have them installed to use them):
-     *    FF_COURIER, FF_VERDANA, FF_TIMES, FF_COMIC, FF_CUSTOM, FF_GEORGIA, FF_TREBUCHE
-     *  Internal fonts:
-     *    FF_FONT0, FF_FONT1, FF_FONT2
-     *
-     * For the second parameter you have the TTF font style that can be:
-     *  FS_NORMAL, FS_BOLD, FS_ITALIC, FS_BOLDIT, FS_BOLDITALIC
+     * Use $this->font() for the family so every part of the chart uses the
+     *  same font. Styles: FS_NORMAL, FS_BOLD, FS_ITALIC, FS_BOLDITALIC.
      *
      * @param array $columnNames
      * @param array $columnSizes
@@ -143,9 +152,7 @@ class w2p_Output_GanttRenderer {
         $this->graph->scale->actinfo->vgrid->SetColor('gray');
         $this->graph->scale->actinfo->SetColor('darkgray');
         $this->graph->scale->actinfo->SetColTitles($translatedColumns, $columnSizes);
-        if (is_file(TTF_DIR . 'FreeSans.ttf')) {
-            $this->graph->scale->actinfo->SetFont(FF_FONT0);
-        }
+        $this->graph->scale->actinfo->SetFont($this->font(), FS_NORMAL, 8);
     }
 
     public function addBar(array $columnValues, $caption = '', $height = '0.6',
@@ -180,7 +187,7 @@ class w2p_Output_GanttRenderer {
         $bar = new GanttBar($this->rowCount++, $rowValues, $start, $actual_end, $caption, $height);
         $bar->progress->Set(min(($progress / 100), 1));
 
-        $bar->title->SetFont(FF_FONT0, FS_NORMAL, 10);
+        $bar->title->SetFont($this->font(), FS_NORMAL, 8);
         $bar->title->SetColor(bestColor('#ffffff', '#' . $barcolor, '#000000'));
         $bar->SetFillColor('#' . $barcolor);
         $bar->SetPattern(BAND_SOLID, '#' . $barcolor);
@@ -200,15 +207,13 @@ class w2p_Output_GanttRenderer {
 
             $bar->SetPattern(BAND_SOLID, 'black');
 
-            $bar->title->SetFont(FF_FONT0, FS_BOLD, 9);
+            $bar->title->SetFont($this->font(), FS_BOLD, 8);
         }
 
         //adding captions
         $bar->caption = new TextProperty($caption);
         $bar->caption->Align('left', 'center');
-        if (is_file(TTF_DIR . 'FreeSans.ttf')) {
-            $bar->caption->SetFont(FF_FONT0, FS_NORMAL, 8);
-        }
+        $bar->caption->SetFont($this->font(), FS_NORMAL, 7);
 
         // gray out templates, completes, on ice, on hold
         if (!$active) {
@@ -228,8 +233,9 @@ class w2p_Output_GanttRenderer {
         $tStartObj = new w2p_Utilities_Date($start);
 
         $bar = new MileStone($this->rowCount++, $columnValues, $start, $tStartObj->format($this->df));
-        $bar->title->SetFont(FF_FONT0, FS_NORMAL, 10);
+        $bar->title->SetFont($this->font(), FS_NORMAL, 8);
         $bar->title->SetColor($color);
+        $bar->caption->SetFont($this->font(), FS_NORMAL, 7);
         $bar->mark->SetType(MARK_DIAMOND);
         $bar->mark->SetWidth(10);
         $bar->mark->SetColor($color);
@@ -277,7 +283,7 @@ class w2p_Output_GanttRenderer {
             $today->convertTZ($this->AppUI->getPref('TIMEZONE'));
             $today->addDays(-1);
             $vline = new GanttVLine($today->format(FMT_DATETIME_MYSQL), $this->todayText);
-            $vline->title->setFont(FF_FONT0, FS_NORMAL, 8);
+            $vline->title->setFont($this->font(), FS_NORMAL, 7);
             $this->graph->Add($vline);
         }
         ($filename == '') ? $this->graph->Stroke() : $this->graph->Stroke($filename);
