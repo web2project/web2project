@@ -16,8 +16,13 @@ class w2p_Output_GanttRenderer {
     private $AppUI = null;
     private $df = null;
 
-    private $taskArray = array();
-    private $taskCount = 0;
+    /** @var array Rows by task id: task_id => array(bar or milestone, row) */
+    private $taskRows = array();
+    /** @var array Every row's labels, for fitTable(): array(object, raw strings, style) */
+    private $rows = array();
+    /** @var array Translated column titles and minimum widths from setColumnHeaders() */
+    private $columnTitles = array();
+    private $columnSizes = array();
 
     /** @var int|null Days in the range from setDateRange(), null if not set */
     private $dayCount = null;
@@ -301,6 +306,8 @@ class w2p_Output_GanttRenderer {
         $this->graph->scale->actinfo->SetColor('darkgray');
         $this->graph->scale->actinfo->SetColTitles($translatedColumns, $columnSizes);
         $this->graph->scale->actinfo->SetFont($this->font(), FS_NORMAL, 8);
+        $this->columnTitles = $translatedColumns;
+        $this->columnSizes = $columnSizes;
     }
 
     public function addBar(array $columnValues, $caption = '', $height = '0.6',
@@ -335,11 +342,13 @@ class w2p_Output_GanttRenderer {
         // Dynamic (parent) tasks are drawn as a thin bracket with a bold title.
         $dynamic = (0.1 == $height);
         $titleStyle = $dynamic ? FS_BOLD : FS_NORMAL;
+        $rawValues = $rowValues;
         foreach ($rowValues as $i => $value) {
             $rowValues[$i] = $this->text($value, $titleStyle, 8);
         }
 
-        $bar = new GanttBar($this->rowCount++, $rowValues, $start, $actual_end, $caption, $height);
+        $row = $this->rowCount++;
+        $bar = new GanttBar($row, $rowValues, $start, $actual_end, $caption, $height);
         $bar->progress->Set(min(($progress / 100), 1));
 
         $bar->title->SetFont($this->font(), $titleStyle, 8);
@@ -381,7 +390,7 @@ class w2p_Output_GanttRenderer {
             $bar->progress->SetFillColor('darkgray');
             $bar->progress->SetPattern(BAND_SOLID, 'darkgray', 98);
         }
-        $this->graph->Add($this->addDependencies($bar, $identifier));
+        $this->addRow($bar, $row, $rawValues, $titleStyle, $identifier);
     }
 
     public function addMilestone(array $columnValues, $start,
@@ -389,10 +398,12 @@ class w2p_Output_GanttRenderer {
     {
         $tStartObj = new w2p_Utilities_Date($start);
 
+        $rawValues = $columnValues;
         foreach ($columnValues as $i => $value) {
             $columnValues[$i] = $this->text($value, FS_NORMAL, 8);
         }
-        $bar = new MileStone($this->rowCount++, $columnValues, $start, $tStartObj->format($this->df));
+        $row = $this->rowCount++;
+        $bar = new MileStone($row, $columnValues, $start, $tStartObj->format($this->df));
         $bar->title->SetFont($this->font(), FS_NORMAL, 8);
         $bar->title->SetColor($color);
         $bar->caption->SetFont($this->font(), FS_NORMAL, 7);
@@ -409,33 +420,64 @@ class w2p_Output_GanttRenderer {
             $this->captioned[] = array($bar, $bar->mark->width / 2 + $bar->iCaptionMargin);
         }
 
-        $this->graph->Add($this->addDependencies($bar, $identifier));
+        $this->addRow($bar, $row, $rawValues, FS_NORMAL, $identifier);
     }
 
+    /**
+     * Adds a bar or milestone to the chart and remembers its row.
+     *
+     * @param GanttPlotObject $obj
+     * @param int    $row
+     * @param array  $rawValues The row's labels before text() wrapped them
+     * @param int    $style     FS_* style of the labels
+     * @param int    $taskId    The task this row draws, or 0 for a project,
+     *                          assignee or other row. Dependency arrows are
+     *                          drawn between task rows; the first row added
+     *                          for a task is the one arrows attach to.
+     */
+    private function addRow($obj, $row, array $rawValues, $style, $taskId)
+    {
+        $this->rows[] = array($obj, array_values($rawValues), $style);
+        $taskId = (int) $taskId;
+        if ($taskId > 0 && !isset($this->taskRows[$taskId])) {
+            $this->taskRows[$taskId] = array($obj, $row);
+        }
+        $this->graph->Add($obj);
+    }
+
+    /**
+     * @deprecated Rows are now matched to tasks by the task id passed to
+     *             addBar()/addMilestone(), on every chart. Kept so callers
+     *             don't break; it does nothing.
+     *
+     * @param array $gantt_array
+     */
     public function loadTaskArray($gantt_array)
     {
-        $this->taskArray = $gantt_array;
-        $this->taskCount = count($gantt_array);
     }
 
-    private function addDependencies($ganttBar, $task_id)
+    /**
+     * Draws an end-to-start arrow from each task to the tasks that depend on
+     *  it, when both are on the chart. One query covers every task row.
+     */
+    private function addDependencyArrows()
     {
-        $gantt_arr = $this->taskArray;
+        if (count($this->taskRows) < 2) {
+            return;
+        }
+        $ids = implode(',', array_map('intval', array_keys($this->taskRows)));
 
         $q = new w2p_Database_Query;
         $q->addTable('task_dependencies');
-        $q->addQuery('dependencies_task_id');
-        $q->addWhere('dependencies_req_task_id=' . (int) $task_id);
-        $query = $q->loadList();
+        $q->addQuery('dependencies_task_id, dependencies_req_task_id');
+        $q->addWhere('dependencies_req_task_id IN (' . $ids . ')');
+        $q->addWhere('dependencies_task_id IN (' . $ids . ')');
 
-        foreach ($query as $dep) {
-            for ($d = 0; $d < $this->taskCount; $d++) {
-                if ($gantt_arr[$d][0]['task_id'] == $dep['dependencies_task_id']) {
-                    $ganttBar->SetConstrain($d, CONSTRAIN_ENDSTART);
-                }
-            }
+        foreach ($q->loadList() as $dep) {
+            list($required) = $this->taskRows[(int) $dep['dependencies_req_task_id']];
+            list(, $dependentRow) = $this->taskRows[(int) $dep['dependencies_task_id']];
+            $required->SetConstrain($dependentRow, CONSTRAIN_ENDSTART);
         }
-        return $ganttBar;
     }
 
     public function render($markToday = true, $filename = '')
@@ -450,6 +492,7 @@ class w2p_Output_GanttRenderer {
             $vline->title->setFont($this->font(), FS_NORMAL, 7);
             $this->graph->Add($vline);
         }
+        $this->addDependencyArrows();
         if ($this->rowCount > 0) {
             $this->layout();
         }
@@ -471,6 +514,7 @@ class w2p_Output_GanttRenderer {
             list($min, $max) = $this->graph->GetBarMinMax();
             $scale->SetRange($min, $max);
         }
+        $this->fitTable();
         // The thresholds in setHeaders() are for the range that was asked for.
         $days = (null !== $this->dayCount) ? $this->dayCount : $scale->GetNumberOfDays();
 
@@ -479,6 +523,80 @@ class w2p_Output_GanttRenderer {
         $this->fitCaptions($scale->GetNumberOfDays(), $scale->iEndDate);
         // A wider margin narrows the days, so check the header rows again.
         $this->setHeaders($days, $this->pixelsPerDay($scale->GetNumberOfDays()));
+    }
+
+    /**
+     * The task table's width in pixels, as GanttGraph::Stroke() measures it.
+     *
+     * @return float
+     */
+    private function tableWidth()
+    {
+        $img = $this->graph->img;
+
+        return max($this->graph->scale->actinfo->GetWidth($img),
+            $this->graph->GetMaxLabelWidth(),
+            $this->graph->scale->tableTitle->GetWidth($img));
+    }
+
+    /**
+     * Keeps the task table to at most half the image, so a narrow chart
+     *  still has room for the bars. The table is as wide as its column
+     *  minimums and its widest labels. First drop columns from the right
+     *  (the bars show the dates), keeping the first, then shorten the
+     *  first column's labels with an ellipsis.
+     */
+    private function fitTable()
+    {
+        $count = count($this->columnTitles);
+        if (!$count) {
+            return;
+        }
+        $budget = $this->graph->img->width / 2;
+        while ($count > 1 && $this->tableWidth() > $budget) {
+            $this->showColumns(--$count);
+        }
+        if ($this->tableWidth() <= $budget) {
+            return;
+        }
+        $longest = 0;
+        foreach ($this->rows as $row) {
+            $longest = max($longest, mb_strlen((string) reset($row[1])));
+        }
+        for ($chars = $longest - 2; $chars >= 8; $chars = (int) floor($chars * 0.85)) {
+            $this->showColumns($count, $chars);
+            if ($this->tableWidth() <= $budget) {
+                return;
+            }
+        }
+    }
+
+    /**
+     * Shows the first $count columns, and if $maxChars is set, shortens
+     *  the first column's labels to that many characters plus an ellipsis.
+     *
+     * @param int      $count
+     * @param int|null $maxChars
+     */
+    private function showColumns($count, $maxChars = null)
+    {
+        $sizes = array_slice($this->columnSizes, 0, $count);
+        if (null !== $maxChars && $sizes) {
+            $sizes[0] = 0;  // let the shortened labels decide the width
+        }
+        $this->graph->scale->actinfo->SetColTitles(array_slice($this->columnTitles, 0, $count), $sizes);
+        foreach ($this->rows as $row) {
+            list($obj, $raw, $style) = $row;
+            $values = array_slice($raw, 0, $count);
+            if (null !== $maxChars && isset($values[0]) && is_string($values[0])
+                && mb_strlen($values[0]) > $maxChars + 1) {
+                $values[0] = rtrim(mb_substr($values[0], 0, $maxChars)) . '…';
+            }
+            foreach ($values as $i => $value) {
+                $values[$i] = $this->text($value, $style, 8);
+            }
+            $obj->title->Set($values);
+        }
     }
 
     /**

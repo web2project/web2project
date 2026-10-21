@@ -177,7 +177,7 @@ if (!is_array($projects) || sizeof($projects) == 0) {
             $columnValues = array('project_name' => $name, 'start_date' => $start,
                               'end_date' => $end, 'actual_end' => $actual_enddate->getDate());
             $gantt->addBar($columnValues, $caption, 0.6, $p['project_color_identifier'],
-                $p['project_active'], $progress, $p['project_id']);
+                $p['project_active'], $progress);
 
             // If showAllGant checkbox is checked
             if ($showAllGantt) {
@@ -211,7 +211,7 @@ if (!is_array($projects) || sizeof($projects) == 0) {
                             $name = $advance.'* ' . $t['task_name'];
                             $milestone = substr($t['task_start_date'], 0, 10);
                             $milestoneDate = new w2p_Utilities_Date($milestone);
-                            $gantt->addMilestone(array($name, '', $milestoneDate->format($df)), $t['task_start_date']);
+                            $gantt->addMilestone(array($name, '', $milestoneDate->format($df)), $t['task_start_date'], '#CC0000', $t['task_id']);
                         }
 
                         // End of insert workers for each task into Gantt Chart

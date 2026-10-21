@@ -171,8 +171,6 @@ if ($hide_task_groups) {
 	}
 }
 
-$gantt->loadTaskArray($gantt_arr);
-
 $row = 0;
 for ($i = 0, $i_cmp = count($gantt_arr); $i < $i_cmp; $i++) {
     $a = $gantt_arr[$i][0];
@@ -300,7 +298,7 @@ for ($i = 0, $i_cmp = count($gantt_arr); $i < $i_cmp; $i++) {
             if ($mile_date_stamp + 72*60*60 >= strtotime($end_date)) {
                 $captionToTheLeft = true;
             }
-            $gantt->addMilestone($fieldArray, $a['task_start_date'], $color, 0, $captionToTheLeft);
+            $gantt->addMilestone($fieldArray, $a['task_start_date'], $color, $a['task_id'], $captionToTheLeft);
             }
         } else {
             $type = $a['task_duration_type'];
