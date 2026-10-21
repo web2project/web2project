@@ -66,19 +66,22 @@ function clean_value($str)
 }
 
 
+/**
+ * Converts $text to UTF-8 from its detected encoding. Despite the name, this
+ * encodes to UTF-8; it never decoded. Without mbstring, $text is returned as is.
+ *
+ * @param string $text
+ *
+ * @return string
+ */
 function strUTF8Decode($text)
 {
-    if (extension_loaded('mbstring')) {
-        $encoding = mb_detect_encoding($text.' ');
+    if (!function_exists('mb_convert_encoding')) {
+        return $text;
     }
-    if (function_exists('iconv')) {
-        $text = mb_convert_encoding($text, 'UTF-8', $encoding);
-    } elseif (function_exists('utf8_decode')) {
-        $text = utf8_decode($text);
-    }
-    // mb functions don't seam to work well here for some reason as the output gets corrupted.
-    // iconv is doing the job just fine though
-    return $text;
+    $encoding = mb_detect_encoding($text . ' ');
+
+    return $encoding ? mb_convert_encoding($text, 'UTF-8', $encoding) : $text;
 }
 
 /**
