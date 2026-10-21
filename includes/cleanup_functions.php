@@ -1663,7 +1663,8 @@ function getCriticalTasksInverted($project_id = null, $limit = 1)
     } else {
         $q = new w2p_Database_Query();
         $q->addTable('tasks');
-        $q->addWhere('task_project = ' . (int) $project_id  . ' AND NOT ISNULL( task_end_date ) AND task_end_date <>  \'0000-00-00 00:00:00\'');
+        $q->addWhere('task_project = ' . (int) $project_id);
+        $q->addWhere('task_end_date IS NOT NULL');
         $q->addOrder('task_start_date ASC');
         $q->setLimit($limit);
 
