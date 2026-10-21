@@ -442,10 +442,11 @@ class w2p_Output_GanttRenderer {
     {
         if ($markToday)
         {
+            // Today's date (in the user's time zone) at 00:00. GanttVLine adds
+            // half a day, so the line sits in the middle of today's column.
             $today = new w2p_Utilities_Date();
             $today->convertTZ($this->AppUI->getPref('TIMEZONE'));
-            $today->addDays(-1);
-            $vline = new GanttVLine($today->format(FMT_DATETIME_MYSQL), $this->todayText);
+            $vline = new GanttVLine($today->format('%Y-%m-%d'), $this->todayText);
             $vline->title->setFont($this->font(), FS_NORMAL, 7);
             $this->graph->Add($vline);
         }
