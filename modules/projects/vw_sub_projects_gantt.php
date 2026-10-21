@@ -143,7 +143,9 @@ if (!is_array($projects) || sizeof($projects) == 0) {
         }
 
         foreach ($projects as $p) {
-            $name = strlen(utf8_decode($p['project_name'])) > 25 ? substr(utf8_decode($p['project_name']), 0, 22) . '...' : utf8_decode($p['project_name']);
+            $name = mb_strlen($p['project_name'], 'UTF-8') > 25 ? mb_substr($p['project_name'], 0, 22, 'UTF-8') . '...' : $p['project_name'];
+            // The chart uses JpGraph's built-in fonts, which only cover Latin-1.
+            $name = mb_convert_encoding($name, 'ISO-8859-1', 'UTF-8');
 
             //using new jpGraph determines using Date object instead of string
             $start = ($p['project_start_date'] > '0000-00-00 00:00:00') ? $p['project_start_date'] : date('Y-m-d H:i:s');
