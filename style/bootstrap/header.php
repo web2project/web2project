@@ -126,7 +126,7 @@ $w2pDialog = (1 == (int) w2PgetParam($_GET, 'dialog', 0));
                             <?php } ?>
                             <li class="w2p-narrow-only"><a class="dropdown-item" href="javascript: void(0);" onclick="javascript:window.open('?m=help&amp;dialog=1&amp;hid=', 'contexthelp', 'width=800, height=300, left=50, top=50, scrollbars=yes, resizable=yes')"><i class="bi bi-question-circle" aria-hidden="true"></i> <?php echo $AppUI->_('Help'); ?></a></li>
                             <li><hr class="dropdown-divider" /></li>
-                            <li><a class="dropdown-item text-danger" href="./index.php?logout=-1"><i class="bi bi-box-arrow-right" aria-hidden="true"></i> <?php echo $AppUI->_('Logout'); ?></a></li>
+                            <li><form method="post" action="./index.php" class="m-0" accept-charset="utf-8"><input type="hidden" name="logout" value="-1" /><button type="submit" class="dropdown-item text-danger"><i class="bi bi-box-arrow-right" aria-hidden="true"></i> <?php echo $AppUI->_('Logout'); ?></button></form></li>
                         </ul>
                     </div>
                 </div>

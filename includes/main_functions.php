@@ -185,6 +185,27 @@ function w2PgetParam(&$arr, $name, $def = null)
 }
 
 /**
+ * Whether this request asks to log the user out. A logged-in user is only
+ *  logged out when the request carries the session's form token (POSTed by
+ *  the Logout button, or in the URL for internal redirects), so another site
+ *  can't log users out (CSRF).
+ *
+ * @return bool
+ */
+function w2p_logout_requested()
+{
+    if (!isset($_GET['logout']) && !isset($_POST['logout'])) {
+        return false;
+    }
+    if (!isset($_SESSION['AppUI']) || !is_object($_SESSION['AppUI']) || empty($_SESSION['AppUI']->user_id)) {
+        return true;    // nobody is logged in, nothing to protect
+    }
+    $token = isset($_POST['__nonce']) ? $_POST['__nonce'] : (isset($_GET['__nonce']) ? $_GET['__nonce'] : null);
+
+    return $_SESSION['AppUI']->checkFormToken($token);
+}
+
+/**
  * Output filter: adds the session's form token (__nonce) to every POST form
  *  in an HTML page that doesn't already have one, so forms that never called
  *  w2p_Output_HTML_FormHelper::addNonce() still pass the token check.
