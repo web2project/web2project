@@ -303,8 +303,8 @@ function cal_work_day_conv($val)
     $wk = Date_Calc::getCalendarWeek(null, null, null, '%a', LOCALE_FIRST_DAY);
     setlocale(LC_ALL, $AppUI->user_lang);
 
+    // Translations are already UTF-8.
     $day_name = $AppUI->_($wk[($val - LOCALE_FIRST_DAY) % 7]);
-    $day_name = utf8_encode($day_name);
 
     return htmlspecialchars($day_name, ENT_COMPAT, $locale_char_set);
 }
