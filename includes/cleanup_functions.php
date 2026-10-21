@@ -1296,7 +1296,16 @@ function addDeptId($dataset, $parent)
 }
 
 // From: modules/files/filefolder.class.php
-function getFolderSelectList()
+/**
+ * The folders for a folder select list, Root first.
+ *
+ * @param int $exclude_id leave out this folder and everything below it (for
+ *                        the "Subfolder of" list, so a folder can't be moved
+ *                        into itself)
+ *
+ * @return array
+ */
+function getFolderSelectList($exclude_id = 0)
 {
     /** @var w2p_Core_CAppUI $AppUI */
     global $AppUI;
@@ -1307,9 +1316,18 @@ function getFolderSelectList()
     $q->addOrder('file_folder_name');
     $folderList = $q->loadHashList('file_folder_id');
 
+    $excluded = array();
+    if ($exclude_id) {
+        $folder = new CFile_Folder();
+        $excluded = $folder->getDescendantIds($exclude_id);
+        $excluded[] = (int) $exclude_id;
+    }
+
     $folders = array(0 => 'Root');
-    foreach($folderList as $folder => $data) {
-        $folders[$folder] = $data['file_folder_name'];
+    foreach((array) $folderList as $folder => $data) {
+        if (!in_array((int) $folder, $excluded)) {
+            $folders[$folder] = $data['file_folder_name'];
+        }
     }
 
     return $folders;
