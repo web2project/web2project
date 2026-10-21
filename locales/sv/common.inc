@@ -175,7 +175,6 @@
 'Vendor'=>'Återförsäljare',
 'Version'=>'Version',
 'Versions'=>'Versioner',
-'View PDF File'=>'Granska PDF-fil',
 'Wed'=>'Ons',
 'Wednesday'=>'Onsdag',
 'Welcome'=>'Välkommen',

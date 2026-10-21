@@ -172,7 +172,6 @@
 'Vendor'=>'Vendedor',
 'Version'=>'Versión',
 'Versions'=>'Versiones',
-'View PDF File'=>'Ver Archivo PDF',
 'Wed'=>'Mie',
 'Wednesday'=>'Miércoles',
 'Welcome'=>'Bienvenido',

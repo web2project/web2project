@@ -81,4 +81,3 @@
 'this topic'=>'este tópico',
 'topics for this forum'=>'tópicos para este forum',
 'update watches'=>'actualiza acompanhamentos',
-'view PDF file'=>'ver PDF',

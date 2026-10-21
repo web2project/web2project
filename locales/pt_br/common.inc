@@ -224,7 +224,6 @@
 'Vendor'=>'Vendedor',
 'Version'=>'Versão',
 'Versions'=>'Versões',
-'View PDF File'=>'Visualizar PDF',
 'Wed'=>'Qua',
 'Wednesday'=>'Quarta-Feira',
 'Welcome'=>'Bem-vindo',

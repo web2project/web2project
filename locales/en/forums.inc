@@ -78,7 +78,6 @@
 'update watches',
 'View',
 'View','Author',
-'view PDF file',
 'Watch',
 'Watch Forced',
 'Watch Unforced',

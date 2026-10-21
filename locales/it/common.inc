@@ -175,7 +175,6 @@
 'Vendor'=>'Venditore',
 'Version'=>'Venditori',
 'Versions'=>'Versioni',
-'View PDF File'=>'Vedi File PDF',
 'Wed'=>'Mer',
 'Wednesday'=>'Mercoledi',
 'Welcome'=>'Benvenuto',

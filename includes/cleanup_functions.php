@@ -90,38 +90,6 @@ function strUTF8Decode($text)
 }
 
 /**
-* Utility functions for the preparation of task data for GANTT PDF
-*
-* @todo some of these functions are not needed, need to trim this down
-*/
-// PYS : utf_8 decoding as suggested in Vbulletin #3987
-function strEzPdf($text)
-{
-    if (function_exists('iconv') && function_exists('mb_detect_encoding')) {
-        $text = iconv(mb_detect_encoding($text." "), 'UTF-8', $text);
-    }
-
-    return $text;
-}
-
-function dumb_slice( $gantt_arr, $length = 25 )
-{
-    $sliced_array = array();
-
-    $pages = (int) count($gantt_arr) / $length;
-
-    for ( $i = 0; $i <= $pages; $i++ ) {
-        $sliced_array[] = array_slice($gantt_arr, $i * $length, $length);
-    }
-
-    return $sliced_array;
-}
-
-/**
-* 	END OF GANTT PDF UTILITY FUNCTIONS
-*/
-
-/**
 *  This is a kludgy mess because of how the arraySelectTree function is used..
 *    it expects - nay, demands! - that the first element of the subarray is the
 *    id and the third is the parent id. In most cases, that is fine.. in this
@@ -4253,61 +4221,6 @@ function __extract_from_tasks_gantt2($showNoMilestones, $showMilestonesOnly, $ga
     $proTasks = $q->loadHashList('task_id');
 
     return $proTasks;
-}
-
-/**
- * @param mixed $a
- *
- * @deprecated
- * @return array
- */
-function __extract_from_gantt_pdf($a)
-{
-    return [];
-}
-
-/**
- * @param mixed $a
- *
- * @deprecated
- * @return array
- */
-function __extract_from_gantt_pdf2($a)
-{
-    return 0.0;
-}
-
-/**
- * @param mixed $user_id
- * @param mixed $showArcProjs
- * @param mixed $showLowTasks
- * @param mixed $showHoldProjs
- * @param mixed $showDynTasks
- * @param mixed $showPinned
- * @param mixed $task
- * @param mixed $AppUI
- *
- * @deprecated
- * @return array
- */
-function __extract_from_gantt_pdf3($user_id, $showArcProjs, $showLowTasks, $showHoldProjs, $showDynTasks, $showPinned, $task, $AppUI)
-{
-    return [];
-}
-
-
-/**
- * @param mixed $project_id
- * @param mixed $f
- * @param mixed $AppUI
- * @param mixed $task
- *
- * @deprecated
- * @return array
- */
-function __extract_from_gantt_pdf4($project_id, $f, $AppUI, $task)
-{
-    return [];
 }
 
 /**

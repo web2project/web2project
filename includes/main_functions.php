@@ -46,12 +46,6 @@ function w2p_old_autoload($class_name)
         case 'html_bbcodeparser':
             require_once W2P_BASE_DIR . '/lib/PEAR/BBCodeParser.php';
             break;
-        case 'cezpdf':
-            require_once W2P_BASE_DIR . '/lib/ezpdf/class.ezpdf.php';
-            break;
-        case 'cpdf':
-            require_once W2P_BASE_DIR . '/lib/ezpdf/class.pdf.php';
-            break;
         case 'gacl':
             require_once W2P_BASE_DIR . '/lib/phpgacl/gacl.class.php';
             break;

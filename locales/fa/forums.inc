@@ -81,4 +81,3 @@
 'this topic'=>'اين عنوان',
 'topics for this forum'=>'عناوين اين تالار',
 'update watches'=>'تماشاي روزآوري‌ها',
-'view PDF file'=>'نمايش فايل پي‌دي‌اف',

@@ -90,4 +90,3 @@
 'this topic'=>'questo argomento',
 'topics for this forum'=>'argomenti in questo forum',
 'update watches'=>'aggiorna osservazioni',
-'view PDF file'=>'vedi file PDF',

@@ -223,7 +223,6 @@
 'Vendor',
 'Version',
 'Versions',
-'View PDF File',
 'Wed',
 'Wednesday',
 'Welcome',

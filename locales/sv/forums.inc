@@ -81,4 +81,3 @@
 'this topic'=>'detta ämne',
 'topics for this forum'=>'ämnen i detta forum',
 'update watches'=>'uppdatera forumbevakningen',
-'view PDF file'=>'visa PDF-fil',
