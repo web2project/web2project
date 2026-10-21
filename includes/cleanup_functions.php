@@ -1351,7 +1351,7 @@ function getFolders($parent)
     // display each child
     foreach ($folders as $row) {
         if (array_key_exists($row['file_folder_id'], $allowed_folders_ary) or array_key_exists($parent, $allowed_folders_ary)) {
-            $file_count = count($file_folder->getFoldersByParent($row['file_folder_id']));
+            $file_count = $file_folder->countFiles($row['file_folder_id'], $task_id, $project_id, $company_id);
 
             $s .= '<div class="d-flex align-items-center gap-2 border-bottom py-1 w2p-folder">';
             $s .= '<ul class="me-auto">';
@@ -1367,7 +1367,7 @@ function getFolders($parent)
                 $s .= '</a></li>';
             }
             if ($file_count > 0) {
-                $s .= '<li class="info-text"><a href="javascript: void(0);" onClick="expand(\'files_' . $row['file_folder_id'] . '\')" class="has-files">(' . $file_count . ' files) +</a></li>';
+                $s .= '<li class="info-text"><a href="javascript: void(0);" onClick="expand(\'files_' . $row['file_folder_id'] . '\')" class="has-files">(' . $file_count . ' ' . $AppUI->_($file_count == 1 ? 'file' : 'files') . ') +</a></li>';
             }
             $s .= '</ul>';
             $s .= '<form name="frm_remove_folder_' . $row['file_folder_id'] . '" action="?m=files" method="post" accept-charset="utf-8">

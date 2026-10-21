@@ -206,6 +206,52 @@ class CFile_Folder extends w2p_Core_BaseObject
         return $q->loadList();
     }
 
+    /**
+     * Counts the files in a folder that the current user may see, with the
+     * same project/task/company filters displayFiles() applies.
+     *
+     * @param int $folder_id
+     * @param int $task_id
+     * @param int $project_id
+     * @param int $company_id
+     *
+     * @return int
+     */
+    public function countFiles($folder_id, $task_id = 0, $project_id = 0, $company_id = 0)
+    {
+        // The permission lookups share this object's query, so run them
+        // before building the count.
+        $project = new CProject();
+        $project->overrideDatabase($this->_query);
+        $deny1 = $project->getDeniedRecords($this->_AppUI->user_id);
+        $task = new CTask();
+        $task->overrideDatabase($this->_query);
+        $deny2 = $task->getDeniedRecords($this->_AppUI->user_id);
+
+        $q = $this->_getQuery();
+        $q->addTable('files', 'f');
+        $q->addQuery('COUNT(f.file_id)');
+        $q->addJoin('projects', 'p', 'p.project_id = f.file_project');
+        $q->addWhere('f.file_folder = ' . (int) $folder_id);
+        if (count($deny1) > 0) {
+            $q->addWhere('f.file_project NOT IN (' . implode(',', $deny1) . ')');
+        }
+        if (count($deny2) > 0) {
+            $q->addWhere('f.file_task NOT IN (' . implode(',', $deny2) . ')');
+        }
+        if ($project_id) {
+            $q->addWhere('f.file_project = ' . (int) $project_id);
+        }
+        if ($task_id) {
+            $q->addWhere('f.file_task = ' . (int) $task_id);
+        }
+        if ($company_id) {
+            $q->addWhere('p.project_company = ' . (int) $company_id);
+        }
+
+        return (int) $q->loadResult();
+    }
+
     public function getFiles() {
 
         $q = $this->_getQuery();

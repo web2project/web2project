@@ -17,16 +17,6 @@ $task_id = (isset($task_id)) ? $task_id : 0;
 
 $active = intval(!$AppUI->getState('FileIdxTab'));
 
-$view_temp = w2PgetParam($_GET, 'view');
-if (isset($view_temp)) {
-	$view = w2PgetParam($_GET, 'view'); // folders or categories
-	$AppUI->setState('FileIdxView', $view);
-} else {
-	$view = $AppUI->getState('FileIdxView');
-	if ($view == '') {
-		$view = 'folders';
-	}
-}
 $folder_id = (int) w2PgetParam($_GET, 'folder', 0); // to pass to "new file" button
 
 // get the list of visible companies
@@ -59,25 +49,17 @@ $titleBlock->addFilterCell('Owner', 'owner_id', $owners, $owner_id);
 $categories = arrayMerge(array('-1' => $AppUI->_('All', UI_OUTPUT_RAW)), w2PgetSysVal('FileType'));
 $titleBlock->addFilterCell('Category', 'category_id', $categories, $tab - 1);
 
-// override the $canEdit variable passed from the main index.php in order to check folder permissions
-/** get permitted folders **/
+// Folders have no permissions of their own (CFile_Folder::getAllowedRecords()
+// returns every folder), so the Files module permissions apply.
 $folder = new CFile_Folder();
 $folder->setId($folder_id);
 $allowed_folders_ary = $folder->getAllowedRecords($AppUI->user_id);
-$denied_folders_ary = $folder->getDeniedRecords($AppUI->user_id);
+$denied_folders_ary = array();
 
-$limited = (count($allowed_folders_ary) < $folder->countFolders()) ? true : false;
-
-if (!$limited) {
-	$canEdit = true;
-} elseif ($limited and array_key_exists($folder_id, $allowed_folders_ary)) {
-	$canEdit = true;
-} else {
-	$canEdit = false;
-}
-
-if ($canEdit) {
+$canEdit = canEdit('files');
+if (canAdd('files')) {
     $titleBlock->addButton('new file', '?m=files&a=addedit&folder=' . $folder_id);
+    $titleBlock->addButton('new folder', '?m=files&a=addedit_folder&file_folder_parent=' . $folder_id);
 }
 $titleBlock->show();
 
@@ -94,4 +76,6 @@ foreach ($file_types as $file_type) {
 	$tabBox->add('index_table', $file_type . ' (' . count($fileList) . ')');
 	++$i;
 }
+// The folder tree, after the category tabs so their numbers stay the same.
+$tabBox->add('folders_table', 'Folders');
 $tabBox->show();
