@@ -173,8 +173,11 @@ class w2p_Output_ListTable extends w2p_Output_HTMLHelper
                     break;
                 case 'url':
                     $contents  = '<td class="_'.$type.'">';
-                    $contents .= '<a href="' . $this->tableRowData[$value] . '" target="_blank">' .
-                        w2PshowImage('forward.png', '16', '16') . '</a>';
+                    $url = w2p_safe_url($this->tableRowData[$value]);
+                    if ('' != $url) {
+                        $contents .= '<a href="' . htmlspecialchars($url, ENT_QUOTES, 'UTF-8', false) . '" target="_blank">' .
+                            w2PshowImage('forward.png', '16', '16') . '</a>';
+                    }
                     $contents .= '</td>';
                     break;
                 case 'watch':

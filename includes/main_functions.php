@@ -231,16 +231,57 @@ function w2Psgn($x)
     return $x ? ($x > 0 ? 1 : -1) : 0;
 }
 
+/**
+ * Makes a user-entered URL safe to use as a link target.
+ *
+ * Only http, https, ftp and mailto links are allowed. Text without a scheme
+ *  (example.com/page) gets http://. Anything else, such as javascript: or
+ *  data: URLs, returns ''.
+ *
+ * The result is not HTML-escaped; escape it when printing it.
+ *
+ * @param string $url
+ *
+ * @return string
+ */
+function w2p_safe_url($url)
+{
+    // Browsers ignore control characters and whitespace inside a scheme
+    // ("java\tscript:"), so drop them before looking at it.
+    // Stored values are often HTML-encoded (bind() runs htmlentities()), and
+    // the browser decodes entities in an href, so check the decoded text.
+    $url = trim(preg_replace('/[\x00-\x20\x7f]+/', ' ', (string) $url));
+    if ('' == $url) {
+        return '';
+    }
+    $squashed = preg_replace('/[\x00-\x20\x7f]+/', '', html_entity_decode($url, ENT_QUOTES | ENT_HTML5, 'UTF-8'));
+
+    if (preg_match('/^([a-z][a-z0-9+.\-]*):/i', $squashed, $matches)) {
+        if (!in_array(strtolower($matches[1]), array('http', 'https', 'ftp', 'mailto'))) {
+            // Could still be host:port without a scheme (example.com:8080).
+            if (!preg_match('/^[a-z0-9.\-]+:\d+(\/|$)/i', $squashed)) {
+                return '';
+            }
+            return 'http://' . $squashed;
+        }
+        return $url;
+    }
+    if (0 === strpos($squashed, '//')) {
+        return 'http:' . $squashed;
+    }
+
+    return 'http://' . ltrim($url, '/');
+}
+
 function w2p_url($link, $text = '')
 {
     $result = '';
 
+    $link = w2p_safe_url($link);
     if ($link != '') {
-        if (strpos($link, 'http') === false) {
-            $link = 'http://' . $link;
-        }
         $text = ('' != $text) ? $text : $link;
-        $result = '<a href="' . $link . '" target="_new">' . $text . '</a>';
+        // Don't double-encode values that were stored HTML-encoded.
+        $result = '<a href="' . htmlspecialchars($link, ENT_QUOTES, 'UTF-8', false) . '" target="_new">' . htmlspecialchars($text, ENT_QUOTES, 'UTF-8', false) . '</a>';
     }
 
     return $result;
