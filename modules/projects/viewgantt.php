@@ -165,7 +165,7 @@ function showFullProject() {
                 </a>
             <?php } ?>
         </div>
-        <div class="text-center mb-2">
+        <div class="text-center mb-2 d-print-none">
             <?php echo "<a href='javascript:showThisMonth()'>" . $AppUI->_('show this month') . "</a> : <a href='javascript:showFullProject()'>" . $AppUI->_('show all') . "</a>"; ?>
         </div>
         <div class="text-center">

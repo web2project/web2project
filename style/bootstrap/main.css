@@ -1650,24 +1650,173 @@ h4 {
 /* ---------------------------------------------------------------------
  * Printing
  * ------------------------------------------------------------------- */
+/* ---------------------------------------------------------------------
+ * Printing (replaces the old PDF exports: use the browser's Print or
+ * "Save as PDF"). Only the page title and the content print: navigation,
+ * tabs other than the current one, filters, buttons and row actions are
+ * hidden, tables wrap to the page width and Gantt charts are scaled down.
+ * Add .d-print-none (Bootstrap) to anything else that shouldn't print.
+ * ------------------------------------------------------------------- */
 @media print {
+    @page {
+        margin: 12mm 10mm;
+    }
+
+    /* page chrome */
     .w2p-header,
     .w2p-sidebar,
     .w2p-sidebar-backdrop,
     .w2p-footer,
     .module-nav,
-    .crumb-right {
+    .crumb,
+    .crumb-right,
+    .module-title .icon,
+    #displayOptions,
+    .w2p-gantt-filter {
         display: none !important;
     }
     body,
     .w2p-main {
-        background-color: #fff;
+        background-color: #fff !important;
+        color: #000;
+    }
+    body {
+        font-size: 10pt;
     }
     .w2p-has-sidebar .w2p-main,
     .w2p-main {
         margin: 0 !important;
         padding: 0 !important;
         min-height: 0;
+    }
+    .module-title h1 {
+        font-size: 16pt;
+    }
+
+    /* controls: filters, buttons, date pickers, icon-only script links
+       (scroll arrows, calendar pickers, delete icons) */
+    .w2p-main input:not([type="hidden"]),
+    .w2p-main select,
+    .w2p-main textarea,
+    .w2p-main button,
+    .w2p-main .btn,
+    .w2p-main a[href^="javascript"] > img {
+        display: none !important;
+    }
+
+    /* tabs: only the current tab's label prints, as a heading */
+    .w2p-tabs {
+        border: 0 !important;
+        margin: .5rem 0 .25rem !important;
+    }
+    .w2p-tabs .nav-item:not(:has(.active)) {
+        display: none !important;
+    }
+    .w2p-tabs .nav-link.active {
+        border: 0 !important;
+        padding: 0 !important;
+        background: none !important;
+        box-shadow: none !important;
+        color: #000 !important;
+        font-weight: 600;
+        font-size: 12pt;
+    }
+    .tab-content,
+    .w2p-tab-content {
+        border: 0 !important;
+        padding: 0 !important;
+    }
+
+    /* links print as text */
+    .w2p-main a {
+        color: inherit !important;
+        text-decoration: none !important;
+    }
+
+    /* cards and panels: no shadows */
+    .w2p-main .card,
+    .w2p-main .std,
+    .w2p-main .well,
+    .w2p-main .shadow,
+    .w2p-main .shadow-sm {
+        box-shadow: none !important;
+    }
+
+    /* lists: fit the page, wrap long text, keep rows and headings together */
+    .w2p-main table,
+    .w2p-main .tbl {
+        width: 100% !important;
+        max-width: 100% !important;
+    }
+    .w2p-main .table-responsive {
+        overflow: visible !important;
+    }
+    .w2p-main .tbl th,
+    .w2p-main .tbl td,
+    .w2p-main .nowrap,
+    .w2p-main .text-nowrap {
+        white-space: normal !important;
+    }
+    .w2p-main .tbl th,
+    .w2p-main .tbl td {
+        padding: .15rem .3rem !important;
+        font-size: 9pt;
+    }
+    .w2p-main .tbl td {
+        overflow-wrap: break-word;
+    }
+    .w2p-main thead {
+        display: table-header-group;
+    }
+    .w2p-main tr,
+    .w2p-main img,
+    .w2p-main .contact-info {
+        break-inside: avoid;
+    }
+    .w2p-main h1,
+    .w2p-main h2,
+    .w2p-main h3,
+    .w2p-main h4,
+    .w2p-main .w2p-tabs {
+        break-after: avoid;
+    }
+
+    /* row actions (edit, pin, add log, watch, delete): keep the columns so
+       the headers stay aligned, but print them empty and narrow */
+    .w2p-main td._edit,
+    .w2p-main td._pin,
+    .w2p-main td._log,
+    .w2p-main td._watch,
+    .w2p-main td._delete {
+        width: 0 !important;
+        padding: 0 !important;
+    }
+    .w2p-main td._edit > *,
+    .w2p-main td._pin > *,
+    .w2p-main td._log > *,
+    .w2p-main td._watch > *,
+    .w2p-main td._delete > * {
+        display: none !important;
+    }
+    .w2p-main .contact-info .card-header > span {
+        display: none !important;
+    }
+
+    /* charts and images never run off the page */
+    .w2p-main img {
+        max-width: 100% !important;
+        height: auto !important;
+    }
+
+    /* status colours carry meaning (task rows, keys, swatches) */
+    .w2p-main .tbl tr,
+    .w2p-main .tbl td,
+    .w2p-main .w2p-swatch,
+    .w2p-main .w2p-task-key span,
+    .w2p-main .w2p-gantt-key,
+    .w2p-main [style*="background"] {
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
     }
 }
 
