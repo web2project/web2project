@@ -36,6 +36,14 @@ $html_types = $field->getTypes();
 
 $custom_fields = new w2p_Core_CustomFields($module->mod_directory, 'addedit', null, 'edit');
 
+// Defaults for a new field; overwritten below when editing one.
+$field_name = '';
+$field_description = '';
+$field_htmltype = 'textinput';
+$field_extratags = '';
+$field_order = 0;
+$field_published = 0;
+
 if ($field_id) {
     $cf = $custom_fields->fieldWithId($field_id);
 
@@ -114,11 +122,11 @@ function deleteItem(id) {
             <h2 class="h6 border-bottom pb-1"><?php echo $ttl; ?></h2>
             <p>
                 <label><?php echo $AppUI->_('Field Name/Identifier') ?>:&nbsp;<?php echo $AppUI->_('(No Spaces)') ?></label>
-                <input type="text" class="text" name="field_name" maxlength="100" value="<?php echo $field_name ?>" onblur="javascript:filterFieldName(this)" />
+                <input type="text" class="text" name="field_name" maxlength="100" value="<?php echo w2PformSafe($field_name); ?>" onblur="javascript:filterFieldName(this)" />
             </p>
             <p>
                 <label><?php echo $AppUI->_('Field Description') ?>:</label>
-                <input type="text" class="text" name="field_description" size="40" maxlength="250" value="<?php echo $field_description ?>" />
+                <input type="text" class="text" name="field_description" size="40" maxlength="250" value="<?php echo w2PformSafe($field_description); ?>" />
             </p>
             <p>
                 <label><?php echo $AppUI->_('Field Display Type') ?>:</label>
@@ -134,7 +142,7 @@ function deleteItem(id) {
             </p>
             <p>
                 <label><?php echo $AppUI->_('HTML Tag Options') ?>:</label>
-                <input type="text" class="text" name="field_extratags" size="80" value="<?php echo $field_extratags ?>" />
+                <input type="text" class="text" name="field_extratags" size="80" value="<?php echo w2PformSafe($field_extratags); ?>" />
             </p>
             <div id="datarow" class="d-flex flex-wrap gap-2">
                 <label><?php echo $AppUI->_('List of Options'); ?></label>
