@@ -1623,8 +1623,9 @@ function getHelpdeskFolder()
 // From: modules/files/files.class.php
 function file_show_attr($AppUI, $form)
 {
-    global $object, $canAdmin, $file_project, $file_task, $task_name, $preserve;
+    global $object, $canAdmin, $file_project, $file_task, $task_name, $preserve, $ci, $folders, $file_folder;
 
+    $str_out = '';
     $select_disabled = ' ';
     $onclick_task = ' onclick="popTask()" ';
     if ($ci && $preserve) {
@@ -1644,6 +1645,12 @@ function file_show_attr($AppUI, $form)
 
     $str_out .= '<p>' . $form->addLabel('Project');
     $str_out .= projectSelectWithOptGroup($AppUI->user_id, 'file_project', 'size="1" class="text"' . $select_disabled, $file_project) . '</p>';
+
+    // Folder
+    if (is_array($folders)) {
+        $str_out .= '<p>' . $form->addLabel('Folder');
+        $str_out .= arraySelect($folders, 'file_folder', 'size="1" class="text"', (int) $file_folder) . '</p>';
+    }
 
     // ---------------------------------------------------------------------------------
 
