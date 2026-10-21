@@ -18,6 +18,17 @@ $db = NewADOConnection(w2PgetConfig('dbtype'));
 $connection = new w2p_Database_Connection($db);
 $connection->connect(w2PgetConfig('dbhost'), w2PgetConfig('dbname'), w2PgetConfig('dbuser'), w2PgetConfig('dbpass'), w2PgetConfig('dbpersist'));
 
+/*
+* Table prefixes are not supported: the installer and the migrations only
+* create unprefixed tables, so with a prefix every query would fail.
+*/
+if ('' !== (string) w2PgetConfig('dbprefix', '')) {
+    header('HTTP/1.1 500 Internal Server Error');
+    die('web2project does not support table prefixes. Rename the tables without the \''
+        . htmlspecialchars(w2PgetConfig('dbprefix'), ENT_QUOTES) . '\' prefix and set '
+        . '$w2Pconfig[\'dbprefix\'] to \'\' in includes/config.php.');
+}
+
 $charset = w2PgetConfig('dbchar', 'utf8');
 /** This explicitly sets the character set of the connection. */
 

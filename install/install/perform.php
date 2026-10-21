@@ -10,7 +10,6 @@
 	$dbname = trim( w2PgetParam( $_POST, 'dbname', '' ) );
 	$dbuser = trim( w2PgetParam( $_POST, 'dbuser', '' ) );
 	$dbpass = trim( w2PgetParam( $_POST, 'dbpass', '' ) );
-	$dbprefix = trim( w2PgetParam( $_POST, 'dbprefix', '' ) );
 	$adminpass = trim( w2PgetParam( $_POST, 'adminpass', 'passwd' ) );
 	$adminpass = ($adminpass == '') ? 'passwd' : $adminpass;
 	$dbpersist = w2PgetParam( $_POST, 'dbpersist', false );

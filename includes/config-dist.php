@@ -22,7 +22,7 @@ $w2Pconfig['dbhost'] = '[DBHOST]';
 $w2Pconfig['dbname'] = '[DBNAME]'; // Your web2Project Database Name
 $w2Pconfig['dbuser'] = '[DBUSER]'; // Your MySQL Username
 $w2Pconfig['dbpass'] = '[DBPASS]'; // Your MySQL Password
-$w2Pconfig['dbprefix'] = '[DBPREFIX]'; // The prefix used for db table names
+$w2Pconfig['dbprefix'] = ''; // Table prefixes are not supported: leave this empty
 
 // set this value to true to use persistent database connections
 $w2Pconfig['dbpersist'] = false;
