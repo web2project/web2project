@@ -4140,7 +4140,7 @@ function __extract_from_tasks_gantt1($user_id, $showArcProjs, $showLowTasks, $sh
     $q->addGroup('t.task_id');
     $q->addOrder('t.task_start_date, t.task_end_date, t.task_priority');
     // get any specifically denied tasks
-    $q = $task->setAllowedSQL($AppUI->user_id, $q);
+    $q = $task->setAllowedSQL($AppUI->user_id, $q, 't.task_id');
     $proTasks = $q->loadHashList('task_id');
 
     return $proTasks;
@@ -4210,7 +4210,7 @@ function __extract_from_tasks_gantt2($showNoMilestones, $showMilestonesOnly, $ga
     $q->addOrder('t.task_start_date, t.task_end_date, t.task_priority');
     // get any specifically denied tasks
 
-    $q = $task->setAllowedSQL($AppUI->user_id, $q);
+    $q = $task->setAllowedSQL($AppUI->user_id, $q, 't.task_id');
     $proTasks = $q->loadHashList('task_id');
 
     return $proTasks;
