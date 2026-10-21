@@ -633,8 +633,8 @@ class w2p_Utilities_Date extends Date {
                 case 'H':   // hours, 24h format 
                     $newValue = date($value, $myTime);
                     break;
-                case 'I':   // hours, 12h format
-                    $newValue = date('g', $myTime);
+                case 'I':   // hours, 12h format, two digit
+                    $newValue = date('h', $myTime);
                     break;
                 case 'S':   // seconds, two digit
                     $newValue = date('s', $myTime);
