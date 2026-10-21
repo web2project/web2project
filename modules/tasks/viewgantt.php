@@ -35,7 +35,6 @@ $showNoMilestones = '';
 $addLinksToGantt = '';
 $ganttTaskFilter = '';
 $monospacefont = '';
-$showTaskNameOnly = '';
 $showhgrid = '';
 
 if ($a == 'todo') {
@@ -329,7 +328,6 @@ if (!$min_view) {
 						 . "&width=' + ((navigator.appName=='Netscape'"
 						 . "?window.innerWidth:document.body.offsetWidth)*0.95) + '"
 						 . '&showLabels=' . $showLabels . '&showWork=' . $showWork
-						 . '&showTaskNameOnly=' . $showTaskNameOnly
 					     . '&showhgrid=' . $showhgrid . '&showPinned=' . $showPinned
 						 . '&showArcProjs=' . $showArcProjs . '&showHoldProjs=' . $showHoldProjs
 						 . '&showDynTasks=' . $showDynTasks . '&showLowTasks=' . $showLowTasks
