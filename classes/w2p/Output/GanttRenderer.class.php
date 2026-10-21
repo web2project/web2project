@@ -23,6 +23,11 @@ class w2p_Output_GanttRenderer {
     private $dayCount = null;
     /** @var string|null Font file used for Chinese, Japanese and Korean text */
     private $cjkFont = null;
+    /** @var array Bars and milestones with a caption to the right: array(object, gap in px) */
+    private $captioned = array();
+
+    /** Han, kana, Hangul, Bopomofo, CJK punctuation and fullwidth forms */
+    const CJK_CHARS = '\p{Han}\p{Hiragana}\p{Katakana}\p{Hangul}\p{Bopomofo}\x{3000}-\x{303F}\x{FF00}-\x{FFEF}';
 
     public function __construct(w2p_Core_CAppUI $AppUI, $width)
     {
@@ -48,7 +53,7 @@ class w2p_Output_GanttRenderer {
     }
 
     /**
-     * The font family for a piece of chart text.
+     * The font family for chart text.
      *
      * JpGraph ships DejaVu Sans in its own fonts folder and checks there
      * first, so nothing needs to be installed. It takes UTF-8 text and covers
@@ -56,24 +61,57 @@ class w2p_Output_GanttRenderer {
      * only cover Latin-1 and turned other names into garbage. Without
      * FreeType in GD, fall back to the bitmap font.
      *
-     * DejaVu has no Chinese, Japanese or Korean glyphs. Text that contains
-     * them uses the CJK font from findCjkFont(), if one was found.
-     *
-     * @param string|array $text The text (or row of texts) to be drawn
+     * DejaVu has no Chinese, Japanese or Korean glyphs; text() handles labels
+     * that contain them.
      *
      * @return int A JpGraph FF_* constant
      */
-    private function font($text = '')
+    private function font()
     {
-        if (!function_exists('imagettftext')) {
-            return FF_FONT0;
+        return function_exists('imagettftext') ? FF_DV_SANSSERIF : FF_FONT0;
+    }
+
+    /**
+     * @param mixed $text
+     *
+     * @return bool True if $text is a string with CJK characters and a CJK
+     *              font was found to draw them
+     */
+    private function hasCjk($text)
+    {
+        return $this->cjkFont && is_string($text)
+            && preg_match('/[' . self::CJK_CHARS . ']/u', $text);
+    }
+
+    /**
+     * Returns $text unchanged, or for text with CJK characters, a
+     *  w2p_Output_GanttText that draws the CJK runs in the CJK font and the
+     *  rest in DejaVu Sans. CJK runs are one point larger: at the same point
+     *  size, CJK glyphs look smaller than DejaVu's.
+     *
+     * @param mixed  $text
+     * @param int    $style  FS_* style
+     * @param int    $size   Point size for the DejaVu runs
+     * @param string $halign Alignment JpGraph uses for this label
+     * @param string $valign
+     *
+     * @return mixed
+     */
+    private function text($text, $style, $size, $halign = 'left', $valign = 'center')
+    {
+        if (!$this->hasCjk($text)) {
+            return $text;
         }
-        if ($this->cjkFont
-            && preg_match('/[\p{Han}\p{Hiragana}\p{Katakana}\p{Hangul}]/u', implode(' ', (array) $text))) {
-            return FF_USERFONT;
+        $runs = array();
+        $parts = preg_split('/([' . self::CJK_CHARS . ']+)/u', $text, -1,
+            PREG_SPLIT_DELIM_CAPTURE | PREG_SPLIT_NO_EMPTY);
+        foreach ($parts as $part) {
+            $runs[] = preg_match('/^[' . self::CJK_CHARS . ']/u', $part)
+                ? array($part, FF_USERFONT, $size + 1)
+                : array($part, FF_DV_SANSSERIF, $size);
         }
 
-        return FF_DV_SANSSERIF;
+        return new w2p_Output_GanttText($this->graph->img, $runs, $style, $halign, $valign);
     }
 
     /**
@@ -193,6 +231,9 @@ class w2p_Output_GanttRenderer {
     private function setHeaders($days, $pxPerDay)
     {
         $scale = $this->graph->scale;
+        // layout() can call this twice; start from JpGraph's defaults.
+        $scale->year->grid->Show(false);
+        $scale->month->grid->Show(false);
         if ($days > 1096 || $pxPerDay < 0.8) {
             // more than 3 years: years only
             $this->graph->ShowHeaders(GANTT_HYEAR);
@@ -224,7 +265,13 @@ class w2p_Output_GanttRenderer {
     public function setTitle($tableTitle = '')
     {
         $this->graph->title->Set($tableTitle);
-        $this->graph->title->SetFont($this->font($tableTitle), FS_BOLD, 11);
+        // The title is a JpGraph Text, which can't hold a w2p_Output_GanttText,
+        // so a title with CJK characters is drawn entirely in the CJK font.
+        if ($this->hasCjk($tableTitle)) {
+            $this->graph->title->SetFont(FF_USERFONT, FS_BOLD, 12);
+        } else {
+            $this->graph->title->SetFont($this->font(), FS_BOLD, 11);
+        }
     }
 
     /**
@@ -253,7 +300,7 @@ class w2p_Output_GanttRenderer {
         $this->graph->scale->actinfo->vgrid->SetColor('gray');
         $this->graph->scale->actinfo->SetColor('darkgray');
         $this->graph->scale->actinfo->SetColTitles($translatedColumns, $columnSizes);
-        $this->graph->scale->actinfo->SetFont($this->font($translatedColumns), FS_NORMAL, 8);
+        $this->graph->scale->actinfo->SetFont($this->font(), FS_NORMAL, 8);
     }
 
     public function addBar(array $columnValues, $caption = '', $height = '0.6',
@@ -285,15 +332,22 @@ class w2p_Output_GanttRenderer {
             }
         }
 
+        // Dynamic (parent) tasks are drawn as a thin bracket with a bold title.
+        $dynamic = (0.1 == $height);
+        $titleStyle = $dynamic ? FS_BOLD : FS_NORMAL;
+        foreach ($rowValues as $i => $value) {
+            $rowValues[$i] = $this->text($value, $titleStyle, 8);
+        }
+
         $bar = new GanttBar($this->rowCount++, $rowValues, $start, $actual_end, $caption, $height);
         $bar->progress->Set(min(($progress / 100), 1));
 
-        $bar->title->SetFont($this->font($rowValues), FS_NORMAL, 8);
+        $bar->title->SetFont($this->font(), $titleStyle, 8);
         $bar->title->SetColor(bestColor('#ffffff', '#' . $barcolor, '#000000'));
         $bar->SetFillColor('#' . $barcolor);
         $bar->SetPattern(BAND_SOLID, '#' . $barcolor);
 
-        if (0.1 == $height) {
+        if ($dynamic) {
             $bar->rightMark->Show();
             $bar->rightMark->SetType(MARK_RIGHTTRIANGLE);
             $bar->rightMark->SetWidth(3);
@@ -307,14 +361,16 @@ class w2p_Output_GanttRenderer {
             $bar->leftMark->SetFillColor('black');
 
             $bar->SetPattern(BAND_SOLID, 'black');
-
-            $bar->title->SetFont($this->font($rowValues), FS_BOLD, 8);
         }
 
         //adding captions
-        $bar->caption = new TextProperty($caption);
+        $captionText = $this->text($caption, FS_NORMAL, 7);
+        $bar->caption = new TextProperty(is_object($captionText) ? array($captionText) : $caption);
         $bar->caption->Align('left', 'center');
-        $bar->caption->SetFont($this->font($caption), FS_NORMAL, 7);
+        $bar->caption->SetFont($this->font(), FS_NORMAL, 7);
+        // GanttBar draws the caption iCaptionMargin past the bar end, and past
+        // the end mark of a dynamic task.
+        $this->captioned[] = array($bar, $bar->iCaptionMargin + ($dynamic ? $bar->rightMark->GetWidth() : 0));
 
         // gray out templates, completes, on ice, on hold
         if (!$active) {
@@ -333,8 +389,11 @@ class w2p_Output_GanttRenderer {
     {
         $tStartObj = new w2p_Utilities_Date($start);
 
+        foreach ($columnValues as $i => $value) {
+            $columnValues[$i] = $this->text($value, FS_NORMAL, 8);
+        }
         $bar = new MileStone($this->rowCount++, $columnValues, $start, $tStartObj->format($this->df));
-        $bar->title->SetFont($this->font($columnValues), FS_NORMAL, 8);
+        $bar->title->SetFont($this->font(), FS_NORMAL, 8);
         $bar->title->SetColor($color);
         $bar->caption->SetFont($this->font(), FS_NORMAL, 7);
         $bar->mark->SetType(MARK_DIAMOND);
@@ -345,6 +404,9 @@ class w2p_Output_GanttRenderer {
         if ($captionToTheLeft) {
             $bar->caption->Align("right", "center");
             $bar->SetCaptionMargin(-15);
+        } else {
+            // MileStone draws the caption iCaptionMargin past the diamond.
+            $this->captioned[] = array($bar, $bar->mark->width / 2 + $bar->iCaptionMargin);
         }
 
         $this->graph->Add($this->addDependencies($bar, $identifier));
@@ -384,20 +446,83 @@ class w2p_Output_GanttRenderer {
             $today->convertTZ($this->AppUI->getPref('TIMEZONE'));
             $today->addDays(-1);
             $vline = new GanttVLine($today->format(FMT_DATETIME_MYSQL), $this->todayText);
-            $vline->title->setFont($this->font($this->todayText), FS_NORMAL, 7);
+            $vline->title->setFont($this->font(), FS_NORMAL, 7);
             $this->graph->Add($vline);
         }
-        $days = $this->dayCount;
-        if (null === $days && $this->rowCount > 0) {
-            // No setDateRange() (the sub-projects gantt): JpGraph fits the
-            // range to the bars, so measure it the same way.
-            list($min, $max) = $this->graph->GetBarMinMax();
-            $days = (int) round(($max - $min) / SECPERDAY);
-        }
-        if (null !== $days) {
-            $this->setHeaders($days, $this->pixelsPerDay($days));
+        if ($this->rowCount > 0) {
+            $this->layout();
         }
         ($filename == '') ? $this->graph->Stroke() : $this->graph->Stroke($filename);
+    }
+
+    /**
+     * Picks the header rows and the right margin. This does the date-range
+     *  steps GanttGraph::Stroke() would do first, so the measurements match
+     *  the chart that gets drawn: with no setDateRange() (the sub-projects
+     *  gantt) the range is fitted to the bars, and the range is extended to
+     *  whole weeks, which Stroke() does whenever month or year headers are
+     *  shown (always, here). Both steps are safe to repeat.
+     */
+    private function layout()
+    {
+        $scale = $this->graph->scale;
+        if (!$scale->IsRangeSet()) {
+            list($min, $max) = $this->graph->GetBarMinMax();
+            $scale->SetRange($min, $max);
+        }
+        // The thresholds in setHeaders() are for the range that was asked for.
+        $days = (null !== $this->dayCount) ? $this->dayCount : $scale->GetNumberOfDays();
+
+        $this->setHeaders($days, $this->pixelsPerDay($scale->GetNumberOfDays()));
+        $scale->AdjustStartEndDay();
+        $this->fitCaptions($scale->GetNumberOfDays(), $scale->iEndDate);
+        // A wider margin narrows the days, so check the header rows again.
+        $this->setHeaders($days, $this->pixelsPerDay($scale->GetNumberOfDays()));
+    }
+
+    /**
+     * Widens the right margin so captions to the right of bars and milestones
+     *  near the end of the range aren't cut off at the image edge. A wider
+     *  margin narrows the days, which moves the bar ends, so repeat a few
+     *  times until the margin settles. The margin takes at most a third of the
+     *  plot area, so on a narrow chart a long caption can still be cut off.
+     *
+     * @param int $days     Days in the range
+     * @param int $rangeEnd Timestamp of the end of the range
+     */
+    private function fitCaptions($days, $rangeEnd)
+    {
+        if (!$this->captioned) {
+            return;
+        }
+        $img = $this->graph->img;
+        $scale = $this->graph->scale;
+        $baseMargin = $img->right_margin;
+        $maxExtra = max(0, (int) floor($this->pixelsPerDay($days) * $days / 3));
+        for ($pass = 0; $pass < 3; $pass++) {
+            $pxPerDay = $this->pixelsPerDay($days);
+            $overflow = 0;
+            foreach ($this->captioned as $item) {
+                list($obj, $gap) = $item;
+                $end = $scale->NormalizeDate($obj->GetMaxDate());
+                if (false === $end) {
+                    continue;
+                }
+                if ($end > $rangeEnd) {
+                    // JpGraph draws no caption for a bar cut at the range end
+                    // (its end, 23:59:59, is past the range end, 23:59) or for
+                    // a milestone past it.
+                    continue;
+                }
+                $room = ($rangeEnd - $end) / SECPERDAY * $pxPerDay;
+                $overflow = max($overflow, $gap + $obj->caption->GetWidth($img) - $room);
+            }
+            $margin = $baseMargin + min((int) ceil($overflow), $maxExtra);
+            if ($margin == $img->right_margin) {
+                break;
+            }
+            $img->SetMargin($img->left_margin, $margin, $img->top_margin, $img->bottom_margin);
+        }
     }
 
     public function getGraph()
