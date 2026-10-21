@@ -1656,10 +1656,14 @@ function file_show_attr($AppUI, $form)
  * @param int $limit SQL-limit to limit the number of returned tasks
  *
  * @return array List of criticalTasks
+ *
+ * @deprecated No core code calls this since the task gantt stopped using it.
+ *             Kept for add-on modules. Query the tasks table directly instead.
  */
-//TODO: modules/projectdesigner/projectdesigner.class.php
 function getCriticalTasksInverted($project_id = null, $limit = 1)
 {
+    trigger_error('getCriticalTasksInverted() has been deprecated in v5.0 and will be removed in a later version. Query the tasks table directly instead.', E_USER_NOTICE);
+
     if (!$project_id) {
         $result = array();
         $result[0]['task_end_date'] = '0000-00-00 00:00:00';
