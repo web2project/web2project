@@ -63,10 +63,14 @@ class CForum_Message extends w2p_Core_BaseObject
             $stored = parent::store();
 
             if ($stored) {
+                // fetchRow() only reads a query that has already run, so it
+                // returned false here and the forum's count was set to null.
+                $q = $this->_getQuery();
                 $q->addTable('forum_messages');
-                $q->addQuery('count(message_id), MAX(message_datetime)');
+                $q->addQuery('count(message_id)');
                 $q->addWhere('message_forum = ' . (int) $this->message_forum);
-                $reply = $q->fetchRow();
+                $reply = array((int) $q->loadResult());
+                $q->clear();
 
                 //update forum descriptor
                 $forum = new CForum();
