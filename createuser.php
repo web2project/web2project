@@ -14,10 +14,13 @@ switch($msg) {
         //No message, do nothing
         break;
     case 'data':
-        $msg = "You didn't provide the correct Anti Spam Security ID or all required data. Please try again.";
+        $msg = "You didn't provide all required data. Please try again.";
         break;
     case 'spam':
-        $msg = "You didn't provide the Anti Spam Security ID. Please try again.";
+        $msg = "The signup could not be verified as coming from a person. Please try again.";
+        break;
+    case 'expired':
+        $msg = 'The signup form expired. Please fill it in again.';
         break;
     case 'existing-user':
         $msg = 'The username you selected already exists, please select another or if that user name is yours request the password recovery through the dedicated link.';
@@ -41,6 +44,7 @@ $AppUI->setMsg($msg, UI_MSG_ERROR);
 // because AppUI->loadFooterJS() is never called...
 ?>
 <script type="text/javascript" src="<?php echo W2P_BASE_URL; ?>/js/passwordstrength.js"></script>
+<script type="text/javascript" src="<?php echo W2P_BASE_URL; ?>/js/signupcheck.js"></script>
 <script language="javascript">
 function submitIt(){
     var form = document.editFrm;
@@ -63,7 +67,13 @@ function submitIt(){
         alert("<?php echo $AppUI->_('Email is invalid', UI_OUTPUT_JS); ?>");
         form.contact_email.focus();
 	} else {
-        form.submit();
+        // bot protection: solve the form's proof-of-work challenge first
+        var button = form.elements.signup_submit;
+        button.disabled = true;
+        button.value = "<?php echo $AppUI->_('please wait', UI_OUTPUT_JS); ?>...";
+        w2pSignupCheck.solve(form, function () {
+            form.submit();
+        });
     }
 }
 </script>
@@ -77,17 +87,15 @@ function submitIt(){
 	<h1 class="h4">New Signup to web2Project!</h1>
 	Please enter the info below to create a new signup.
 </div>
-<?php
-
-$form = new w2p_Output_HTML_FormHelper($AppUI);
-
-?>
 <form name="editFrm" action="./do_user_aed.php" method="post" accept-charset="utf-8">
 	<input type="hidden" name="user_id" value="0" />
 	<input type="hidden" name="contact_id" value="0" />
 	<input type="hidden" name="username_min_len" value="<?php echo w2PgetConfig('username_min_len'); ?>" />
 	<input type="hidden" name="password_min_len" value="<?php echo w2PgetConfig('password_min_len'); ?>" />
-    <?php echo $form->addNonce(); ?>
+    <?php
+        $signupCheck = new w2p_Utilities_SignupCheck();
+        echo $signupCheck->renderFields();
+    ?>
 
     <?php echo $AppUI->getTheme()->styleRenderBoxTop(); ?>
     <div class="std addedit mx-auto" style="max-width: 44rem;">
@@ -152,7 +160,7 @@ $form = new w2p_Output_HTML_FormHelper($AppUI);
         </div>
         <div class="w2p-form-actions">
             <input type="button" value="<?php echo $AppUI->_('cancel'); ?>" onclick="history.go(-1)" class="button" />
-            <input type="button" value="<?php echo $AppUI->_('sign me up!'); ?>" onclick="submitIt()" class="button save" />
+            <input type="button" name="signup_submit" value="<?php echo $AppUI->_('sign me up!'); ?>" onclick="submitIt()" class="button save" />
         </div>
     </div>
     <?php echo $AppUI->getTheme()->styleRenderBoxBottom(); ?>

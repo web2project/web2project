@@ -17,12 +17,36 @@ if (w2PgetConfig('activate_external_user_creation') != 'true') {
 	die('You should not access this file directly');
 }
 
+/**
+ * Back to the signup form with one of the messages in createuser.php.
+ * (A redirect must end the request: without exit, a duplicate user name or
+ * e-mail address still went on to create the account.)
+ */
+function w2p_signup_redirect($msg)
+{
+	header('Location: newuser.php?msg=' . urlencode($msg));
+	exit();
+}
+
+if ('POST' != $_SERVER['REQUEST_METHOD']) {
+	w2p_signup_redirect('data');
+}
+
+// Bot protection: proof-of-work, honeypot and fill time (#363).
+$session = new w2p_System_Session();
+$session->start();
+$signupCheck = new w2p_Utilities_SignupCheck();
+$failure = $signupCheck->verify($_POST);
+if ('' != $failure) {
+	w2p_signup_redirect($failure);
+}
+
 $username = w2PgetParam($_POST, 'user_username', 0);
 $username = preg_replace("/[^A-Za-z0-9]/", "", $username);
 $user = new CUser();
 $result = $user->loadAll(null, "user_username = '$username'");
 if (count($result) > 0) {
-    header('Location: newuser.php?msg=existing-user');
+	w2p_signup_redirect('existing-user');
 }
 
 $email = w2PgetParam($_POST, 'contact_email', 0);
@@ -30,36 +54,35 @@ $email = preg_replace("/[^A-Za-z0-9@.+]/", "", $email);
 $contact = new CContact();
 $result = $contact->loadAll(null, "contact_email = '$email'");
 if (count($result) > 0) {
-	header('Location: newuser.php?msg=existing-email');
+	w2p_signup_redirect('existing-email');
 }
 
 if (!$user->bind($_POST)) {
-	$AppUI->setMsg($user->getError(), UI_MSG_ERROR);
-    header('Location: newuser.php?msg=user');
+	w2p_signup_redirect('user');
 }
 
 if (!$contact->bind($_POST)) {
-	$AppUI->setMsg($contact->getError(), UI_MSG_ERROR);
-	header('Location: newuser.php?msg=contact');
+	w2p_signup_redirect('contact');
 }
 
 $contact->contact_owner = 1;
 $result = $contact->store();
 
 if (count($contact->getError())) {
-    header('Location: newuser.php?msg=contact');
-} else {
-    $user->user_contact = $contact->contact_id;
-    $result = $user->store(null, true);
-    if (count($user->getError())) {
-        header('Location: newuser.php?msg=user');
-    } else {
-        notifyNewExternalUser($contact->contact_email, $contact->contact_first_name, $user->user_username, $_POST['user_password']);
-        notifyHR(w2PgetConfig('admin_email', 'admin@web2project.net'), 'w2P System Human Resources',
-            $contact->contact_email, $contact->contact_first_name, $user->user_username,
-            $_POST['user_password'], $user->user_id);
-        $AppUI->setMsg('The User Administrator has been notified to grant you access to the system and an email message was sent to you with your login info. Thank you.', UI_MSG_OK);
-    }
+	w2p_signup_redirect('contact');
 }
 
-$AppUI->redirect();
+$user->user_contact = $contact->contact_id;
+$result = $user->store(null, true);
+if (count($user->getError())) {
+	w2p_signup_redirect('user');
+}
+
+// The password is not sent: the user chose it, and e-mail is not a safe
+// place to keep it.
+notifyNewExternalUser($contact->contact_email, $contact->contact_first_name, $user->user_username, '');
+notifyHR(w2PgetConfig('admin_email', 'admin@web2project.net'), 'w2P System Human Resources',
+	$contact->contact_email, $contact->contact_first_name, $user->user_username,
+	'', $user->user_id);
+
+w2p_signup_redirect('ok');

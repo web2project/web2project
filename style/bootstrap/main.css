@@ -1881,3 +1881,13 @@ h4 {
     margin-top: 1rem;
     text-align: center;
 }
+
+/* Signup form honeypot (w2p_Utilities_SignupCheck): off-screen for people,
+   still in the form for bots. */
+.w2p-hp {
+    position: absolute !important;
+    left: -10000px !important;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+}

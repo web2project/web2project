@@ -252,8 +252,8 @@ class Web2project_Output_EmailManagerTest extends CommonSetup
     {
         $target_body  = "You have signed up for a new account on web2Project Development.\n\n";
         $target_body .= "Once the administrator approves your request, you will receive an email with confirmation.\n";
-        $target_body .= "Your login information are below for your own record:\n\n";
-        $target_body .= "Username: admin\nPassword: password\n\n";
+        $target_body .= "Your login information is below for your own record:\n\n";
+        $target_body .= "Username: admin\nPassword: the one you chose when you signed up\n\n";
         $target_body .= "You may login at the following URL: " . W2P_BASE_URL . "\n\nThank you very much.\n\n";
         $target_body .= "The web2Project Development Support Staff.\n\n";
         $target_body .= "****PLEASE KEEP THIS EMAIL FOR YOUR RECORDS****";

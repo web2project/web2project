@@ -313,18 +313,21 @@ class w2p_Output_EmailManager
         return $this->templater->render($body, $object);
     }
 
-    public function notifyNewExternalUser($logname, $logpwd)
+    /**
+     * @param string $logname
+     * @param string $logpwd  not used any more: the password is not e-mailed
+     */
+    public function notifyNewExternalUser($logname, $logpwd = '')
     {
         $object = new stdClass();
         $object->base_url = W2P_BASE_URL;
         $object->company_name = w2PgetConfig('company_name');
         $object->log_name = $logname;
-        $object->log_password = $logpwd;
 
         $body = "You have signed up for a new account on company_name.\n\n";
         $body .= "Once the administrator approves your request, you will receive an email with confirmation.\n";
-        $body .= "Your login information are below for your own record:\n\n";
-        $body .= 'Username: log_name' . "\n" . 'Password: log_password' . "\n\n";
+        $body .= "Your login information is below for your own record:\n\n";
+        $body .= 'Username: log_name' . "\n" . 'Password: the one you chose when you signed up' . "\n\n";
         $body .= "You may login at the following URL: " . W2P_BASE_URL;
         $body .= "\n\n" . "Thank you very much.\n\n" . 'The company_name';
         $body .= " Support Staff.\n\n" . '****PLEASE KEEP THIS EMAIL FOR YOUR RECORDS****';
