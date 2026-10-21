@@ -32,17 +32,22 @@ class w2p_FileSystem_Local implements w2p_Interfaces_FileSystem
         return true;
     }
 
+    /**
+     * Copies a stored file. The copy stays in the same project's directory,
+     * because the duplicate keeps the original's project.
+     */
     public function duplicate($old_project_id, $actual_file_name, $AppUI)
     {
-        if (!is_dir(W2P_BASE_DIR . '/files/0')) {
-            $res = mkdir(W2P_BASE_DIR . '/files/0', 0744);
+        $dir = W2P_BASE_DIR . '/files/' . (int) $old_project_id;
+        if (!is_dir($dir)) {
+            $res = mkdir($dir, 0744);
             if (!$res) {
                 $AppUI->setMsg('Upload folder not setup to accept uploads - change permission on files/ directory.', UI_MSG_ALERT);
                 return false;
             }
         }
         $dest_realname = uniqid(rand());
-        $res = copy(W2P_BASE_DIR . '/files/' . $old_project_id . '/' . $actual_file_name, W2P_BASE_DIR . '/files/0/' . $dest_realname);
+        $res = copy($dir . '/' . $actual_file_name, $dir . '/' . $dest_realname);
 
         if (!$res) {
             return false;

@@ -61,9 +61,8 @@ $AppUI->setMsg('File');
 if ($duplicate) {
 	$obj->load($file_id);
 	$new_file = new CFile();
+	// The copy keeps the original's project, task and folder.
 	$new_file = $obj->duplicate();
-	$new_file->file_project = 0;
-	$new_file->file_folder = 0;
 	if (!($dup_realname = $obj->duplicateFile($obj->file_project, $obj->file_real_filename))) {
 		$AppUI->setMsg('Could not duplicate file, check file permissions', UI_MSG_ERROR);
 		$AppUI->redirect($redirect);
