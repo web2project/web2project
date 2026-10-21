@@ -36,7 +36,7 @@ $fieldNames = array_values($fields);
 $listTable = new w2p_Output_ListTable($AppUI);
 $listTable->addBefore('edit', 'project_id');
 
-echo $listTable->startTable('list subprojects');
+echo $listTable->startTable('projects-subprojects_view', 'list subprojects');
 echo $listTable->buildHeader($fields);
 
 $s = '';
