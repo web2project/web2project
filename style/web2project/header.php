@@ -98,7 +98,7 @@ $theme = $AppUI->getTheme();
                         $now = new w2p_Utilities_Date(); ?>
                         <a class="button" href="./index.php?m=events&amp;a=day_view&amp;date=<?php echo $now->format(FMT_TIMESTAMP_DATE); ?>"><span><?php echo $AppUI->_('Today'); ?></span></a>
                     <?php } ?>
-                    <form method="post" action="./index.php" style="display: inline;" accept-charset="utf-8"><input type="hidden" name="logout" value="-1" /><button type="submit" class="button"><span><?php echo $AppUI->_('Logout'); ?></span></button></form>
+                    <form method="post" action="./index.php" style="display: inline;" accept-charset="utf-8"><button type="submit" name="logout" value="-1" class="button"><span><?php echo $AppUI->_('Logout'); ?></span></button></form>
                 </div>
             <?php } ?>
         </div>
