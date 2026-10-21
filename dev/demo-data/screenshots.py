@@ -100,13 +100,14 @@ def report(start=None, end=None, checks=(), values=None):
 
 
 def gantt_all_tasks(pg):
-    """Work around a 5.0 bug: the Gantt image URL omits f=, so tasks/gantt.php only
-    draws tasks assigned to the viewer. Ask it for every task of the project."""
+    """Work around a 5.0 bug: the tasks/viewgantt.php image URL omits f=, so
+    tasks/gantt.php only draws tasks assigned to the viewer. Ask it for every task
+    of the project."""
     pg.evaluate("""() => new Promise(done => {
         const imgs = [...document.querySelectorAll('img[src*="a=gantt"]')];
         let left = imgs.length; if (!left) return done();
         imgs.forEach(i => { i.onload = i.onerror = () => { if (--left === 0) done(); };
-                            i.src = i.src.replace('showInactive=1showAllGantt', 'showInactive=1&showAllGantt') + '&f=all'; });
+                            if (!/[?&]f=/.test(i.src)) i.src += '&f=all'; });
     })""")
     pg.wait_for_timeout(300)
 
