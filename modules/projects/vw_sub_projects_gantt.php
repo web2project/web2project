@@ -128,14 +128,15 @@ if (!is_array($projects) || sizeof($projects) == 0) {
                 }
                 $projects[$rec['task_project']]['tasks'][] = $rec;
             }
-            reset($projects);
+            // showgtask() appends to the global $gantt_arr: a flat list of
+            // array(task, level) for every project.
+            $gantt_arr = array();
             foreach ($projects as $p) {
-                $tnums = count($p['tasks']);
-                for ($i = 0; $i < $tnums; $i++) {
-                    $task = $p['tasks'][$i];
+                $tasks = isset($p['tasks']) ? $p['tasks'] : array();
+                foreach ($tasks as $task) {
                     if ($task['task_parent'] == $task['task_id']) {
-                        $gantt_arr = showgtask($task, 0, $gantt_arr);
-                        findchild_gantt($p['tasks'], $task['task_id'], 0, $gantt_arr);
+                        showgtask($task, 0);
+                        findchild_gantt($tasks, $task['task_id'], 0);
                     }
                 }
             }
@@ -183,12 +184,12 @@ if (!is_array($projects) || sizeof($projects) == 0) {
                 // insert tasks into Gantt Chart
                 // cycle for tasks for each project
                 if (is_array($gantt_arr)) {
-                    for ($i = 0, $i_cmp = count($gantt_arr[$p['project_id']]); $i < $i_cmp; $i++) {
-                        $t = $gantt_arr[$p['project_id']][$i][0];
-                        if (!is_array($t)) {
+                    foreach ($gantt_arr as $entry) {
+                        $t = $entry[0];
+                        if (!is_array($t) || $t['task_project'] != $p['project_id']) {
                             continue;
                         }
-                        $level = $gantt_arr[$p['project_id']][$i][1];
+                        $level = $entry[1];
                         if ($t['task_end_date'] == null) {
                             $t['task_end_date'] = $t['task_start_date'];
                         }
