@@ -206,7 +206,7 @@ if (!is_array($projects) || sizeof($projects) == 0) {
                             $columnValues = array('project_name' => $name, 'start_date' => $tStartObj->getDate(),
                                               'end_date' => $tEndObj->getDate(), 'actual_end' => '');
                             $gantt->addBar($columnValues, '', $height, $p['project_color_identifier'],
-                                $p['project_active'], $progress, $p['project_id']);
+                                $p['project_active'], (int) $t['task_percent_complete'], $t['task_id']);
                         } else {
                             $name = $advance.'* ' . $t['task_name'];
                             $milestone = substr($t['task_start_date'], 0, 10);
