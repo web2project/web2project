@@ -376,16 +376,18 @@ function showtask_new(&$arr, $level = 0, $today_view = false, $listTable = null,
     return __extract_from_showtask($arr, $level, $today_view, $listTable, $fields);
 }
 
-/*
- * 	gantt_arr [ project_id ] [ 0 ]  is a task "object" : 	task['task_id'], task['task_access'], task['task_owner'], task['task_name'], task['project_name']
- * 															task['task_start_date'], task['task_end_date'], task['task_percent_complete'], ['task_milestone']
- * 	gantt_arr [ project_id ] [ 1 ] 	is the level
+/**
+ * Adds a task to the global $gantt_arr, unless it is already there.
  *
- * 	project_id is "optional": a 0 value means we re not handling projects
+ * $gantt_arr is a flat list in drawing order. Each entry is
+ * array(task, level): the task row (task_id, task_project, task_name,
+ * task_start_date, task_end_date, task_percent_complete, task_milestone, ...)
+ * and its depth in the task tree, 0 for a top-level task. To draw one
+ * project's tasks, filter on task_project.
  *
- *	 adds a bidimensional array:
- * 		-1st level: composed of integer project_id
- * 		-2nd level: composed of an array of two items: task "object", integer level
+ * @param array $a        The task row
+ * @param int   $level    Depth in the task tree
+ * @param mixed $notUsed  Unused, kept for old callers
  */
 function showgtask(&$a, $level = 0, $notUsed = 0)
 {
