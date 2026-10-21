@@ -13,7 +13,7 @@ class CSystem_SysKey extends w2p_Core_BaseObject {
 	public $syskey_sep2 = null;
 
 	public function __construct($name = null, $label = null, $type = '0', $sep1 = "\n", $sep2 = '|') {
-        parent::__construct('syskeys', 'syskey_id');
+        parent::__construct('syskeys', 'syskey_id', 'system');
 		$this->syskey_name = $name;
 		$this->syskey_label = $label;
 		$this->syskey_type = $type;
