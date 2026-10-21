@@ -99,17 +99,10 @@ def report(start=None, end=None, checks=(), values=None):
     return act
 
 
-def gantt_all_tasks(pg):
-    """Work around a 5.0 bug: the tasks/viewgantt.php image URL omits f=, so
-    tasks/gantt.php only draws tasks assigned to the viewer. Ask it for every task
-    of the project."""
-    pg.evaluate("""() => new Promise(done => {
-        const imgs = [...document.querySelectorAll('img[src*="a=gantt"]')];
-        let left = imgs.length; if (!left) return done();
-        imgs.forEach(i => { i.onload = i.onerror = () => { if (--left === 0) done(); };
-                            if (!/[?&]f=/.test(i.src)) i.src += '&f=all'; });
-    })""")
-    pg.wait_for_timeout(300)
+def gantt_loaded(pg):
+    """Wait until the Gantt chart images have finished loading."""
+    pg.wait_for_function("""() => [...document.querySelectorAll('img[src*="a=gantt"]')]
+                                  .every(i => i.complete)""")
 
 
 def steps(*actions):
@@ -193,9 +186,9 @@ SHOTS = [
     ('misc/login.png', None, '/index.php', None),
     ('misc/forgotten_password.png', None, '/index.php', lost_password),
     ('misc/new_account.png', None, '/newuser.php', None),
-    ('projectdesigner/index.png', 'admin', 'm=projectdesigner&project_id=1', gantt_all_tasks),
+    ('projectdesigner/index.png', 'admin', 'm=projectdesigner&project_id=1', gantt_loaded),
     ('projectdesigner/project.png', 'admin', 'm=projectdesigner&project_id=1', None, {'element': '#project'}),
-    ('projectdesigner/gantt.png', 'admin', 'm=projectdesigner&project_id=1', gantt_all_tasks, {'element': '#gantt'}),
+    ('projectdesigner/gantt.png', 'admin', 'm=projectdesigner&project_id=1', gantt_loaded, {'element': '#gantt'}),
     ('projectdesigner/tasks.png', 'admin', 'm=projectdesigner&project_id=1', None, {'element': '#tasks'}),
     ('projectdesigner/actions.png', 'admin', 'm=projectdesigner&project_id=1', None, {'element': '#actions'}),
     ('projectdesigner/addtasks.png', 'admin', 'm=projectdesigner&project_id=1',
@@ -250,7 +243,7 @@ SHOTS = [
     ('tasks/addedit_4.png', 'admin', 'm=tasks&a=addedit&task_id=12', click_text('Human Resources')),
     ('tasks/addedit_5.png', 'admin', 'm=tasks&a=addedit&task_id=4', click_text('Other resources')),
     ('tasks/gantt.png', 'admin', 'm=projects&a=view&project_id=1&tab=3',
-     steps(submit_form('a:has-text("show full project")'), gantt_all_tasks), {'viewport': WIDE, 'crop': 1.0}),
+     steps(submit_form('a:has-text("show full project")'), gantt_loaded), {'viewport': WIDE, 'crop': 1.0}),
     ('tasks/index.png', 'admin', 'm=tasks', select('select[name=f]', 'all'), {'viewport': WIDE}),
     ('tasks/log.png', 'dwhitfield', 'm=tasks&a=view&task_id=4&tab=1', None, {'crop': 1.0}),
     ('tasks/view.png', 'admin', 'm=tasks&a=view&task_id=4&tab=0', None),
