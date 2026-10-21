@@ -15,7 +15,7 @@ $search_string = w2PformSafe($search_string, true);
 
 $canCreate = $project->canCreate();
 
-$company_id = w2PgetParam($_POST, 'project_company', -1);
+$company_id = (int) w2PgetParam($_POST, 'project_company', -1);
 $company_id = ($company_id) ? $company_id : $AppUI->user_company;
 
 $orderby = (isset($_GET['orderby']) && property_exists('CProject', $_GET['orderby'])) ? $_GET['orderby'] : 'project_name';

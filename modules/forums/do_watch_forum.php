@@ -15,6 +15,10 @@ if (!canView('forums')) {
 ## Change forum watches
 ##
 $watch = w2PgetParam($_POST, 'watch', '');
+// $watch becomes part of a column name (watch_forum / watch_topic).
+if (!in_array($watch, array('forum', 'topic'), true)) {
+	$watch = '';
+}
 
 if ($watch) {
 	// clear existing watches
@@ -31,7 +35,7 @@ if ($watch) {
 			if (strpos($k, 'forum_') !== false) {
 				$q->addTable('forum_watch');
 				$q->addInsert('watch_user', $AppUI->user_id);
-				$q->addInsert('watch_' . $watch, substr($k, 6));
+				$q->addInsert('watch_' . $watch, (int) substr($k, 6));
 				if (!$q->exec()) {
 					$AppUI->setMsg((new w2p_Database_Connection($GLOBALS['db']))->error(), UI_MSG_ERROR);
 				} else {

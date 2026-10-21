@@ -11,7 +11,7 @@ $AppUI->getTheme()->loadCalendarJS();
 $do_report = w2PgetParam($_POST, 'do_report', 0);
 $log_start_date = w2PgetParam($_POST, 'log_start_date', 0);
 $log_end_date = w2PgetParam($_POST, 'log_end_date', 0);
-$user_id = w2PgetParam($_POST, 'user_id', $AppUI->user_id);
+$user_id = (int) w2PgetParam($_POST, 'user_id', $AppUI->user_id);
 
 // create Date objects from the datetime fields
 $start_date = intval($log_start_date) ? new w2p_Utilities_Date($log_start_date) : new w2p_Utilities_Date();

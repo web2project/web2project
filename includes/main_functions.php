@@ -150,9 +150,16 @@ function w2PgetConfig($key, $default = null)
 
 /**
  * Utility function to return a value from a named array or a specified
- *  default, and avoid poisoning the URL by denying:
- * 1) the use of spaces (for SQL and XSS injection)
- * 2) the use of <, ", [, ; and { (for XSS injection)
+ *  default.
+ *
+ * A string value has its HTML tags removed (strip_tags()); nothing else is
+ *  filtered, and array values are returned as they are. The result is NOT
+ *  safe for SQL or HTML: cast it ((int)), quote it (w2p_Database_Query::quote())
+ *  or escape it (w2PformSafe()/htmlspecialchars()) where it is used.
+ *
+ *  Earlier versions also ran preg_replace() with a pattern meant to remove
+ *  quotes, brackets and semicolons. It wasn't a character class, so it only
+ *  matched that exact sequence and never removed anything.
  *
  * @param array<mixed> $arr  Source array, usually $_GET or $_POST
  * @param string       $name Key to read
@@ -166,14 +173,9 @@ function w2PgetParam(&$arr, $name, $def = null)
 
     if (isset($arr[$key])) {
         if (is_array($arr[$key])) {
-            $_result = $arr[$key];
-            foreach($_result as $_key => $_value) {
-                $_result[$_key] = preg_replace("/<>'\"\[\]{}:;/", "", $_value);
-            }
-            $result  = $_result;
+            $result = $arr[$key];
         } else {
-            $_result = strip_tags($arr[$key]);
-            $result  = preg_replace("/<>\`'\"\[\]{}():;/", "", $_result);
+            $result = strip_tags($arr[$key]);
         }
     } else {
         $result = $def;
