@@ -136,7 +136,7 @@ $methodLabels = w2PgetSysVal('ContactMethods');
                                     } elseif ($val == 'dept_name') {
                                         $s .= '<div>' . $AppUI->_('Department') . ': <span class="hilite">' . $carr[$z][$x][$key] . '</span></div>';
                                     } elseif ($val == 'contact_country' && $carr[$z][$x][$key]) {
-                                        $s .= '<div class="hilite">' . ($countries[$carr[$z][$x][$key]] ? $countries[$carr[$z][$x][$key]] : $carr[$z][$x][$key]) . '</div>';
+                                        $s .= '<div class="hilite">' . ($countries[$carr[$z][$x][$key]] ?? $carr[$z][$x][$key]) . '</div>';
                                     } elseif ($val != 'contact_country') {
                                         $s .= '<div class="hilite">' . $carr[$z][$x][$key] . '</div>';
                                     } elseif ($val == 'contact_phone') {
