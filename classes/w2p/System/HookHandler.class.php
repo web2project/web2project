@@ -37,7 +37,7 @@ class w2p_System_HookHandler
                 if (is_callable(array($object, $hookname))) {
                     try {
                         $object->{$hookname}();
-                    } catch (Exception $exc) {
+                    } catch (Throwable $exc) {
                         error_log('Error in ' . __FUNCTION__ . ' -- ' . $exc->getMessage());
                     }
                 }
@@ -68,7 +68,7 @@ class w2p_System_HookHandler
                                 $buffer .= w2p_Output_iCalendar::formatCalendarItem($calendarItem, $module['mod_directory']);
                             }
                         }
-                    } catch (Exception $exc) {
+                    } catch (Throwable $exc) {
                         error_log('Error in ' . __FUNCTION__ . ' -- ' . $exc->getMessage());
                     }
                 }
@@ -98,7 +98,7 @@ class w2p_System_HookHandler
                             $dateIndex = str_replace('/', '', $item['startDate']);
                             $this->links[$dateIndex][] = $object->getCalendarLink(null, $item);
                         }
-                    } catch (Exception $exc) {
+                    } catch (Throwable $exc) {
                         error_log('Error in ' . __FUNCTION__ . ' -- ' . $exc->getMessage());
                     }
                 }

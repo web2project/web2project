@@ -555,17 +555,31 @@ class CContact extends w2p_Core_BaseObject
 
     public function hook_cron()
     {
+        /*
+         * Fill in missing display names the same way hook_preStore() does.
+         * The cron runs as no user, so load() and store() would fail their
+         * permission checks; update the column directly instead.
+         */
         $q = $this->_getQuery();
         $q->addTable('contacts');
-        $q->addQuery('contact_id');
+        $q->addQuery('contact_id, contact_first_name, contact_last_name, contact_email');
         $q->addWhere('contact_display_name IS NULL OR contact_display_name = ""');
-        $contactIdList = $q->loadList();
+        $contactList = $q->loadList();
+        $q->clear();
 
-        foreach ($contactIdList as $contactId) {
-            $myContact = new CContact();
-            $myContact->overrideDatabase($this->_query);
-            $myContact = $myContact->load($contactId['contact_id']);
-            $myContact->store();
+        foreach ((array) $contactList as $contact) {
+            $displayName = mb_trim($contact['contact_first_name'] . ' ' . $contact['contact_last_name']);
+            if ('' == $displayName) {
+                $displayName = (string) $contact['contact_email'];
+            }
+            if ('' == $displayName) {
+                continue;
+            }
+            $q->addTable('contacts');
+            $q->addUpdate('contact_display_name', $displayName);
+            $q->addWhere('contact_id = ' . (int) $contact['contact_id']);
+            $q->exec();
+            $q->clear();
         }
 
         //To Bruce: Clean updatekeys based on datediff to warn about long waiting.
