@@ -34,8 +34,6 @@ $monospacefont = (int) w2PgetParam($_REQUEST, 'monospacefont', 0);
 
 $df = $AppUI->getPref('SHDATEFORMAT');
 $project = new CProject();
-$criticalTasks = ($project_id > 0) ? $project->getCriticalTasks($project_id) : null;
-$criticalTasksInverted = ($project_id > 0) ? getCriticalTasksInverted($project_id) : null;
 
 // pull valid projects and their percent complete information
 $projects = $project->getAllowedProjects($AppUI->user_id, false);
@@ -67,10 +65,6 @@ $end_max = '0000-00-00 00:00:00';
 $start_min = $AppUI->convertToSystemTZ(date('Y-m-d H:i:s'));
 
 //pull the tasks into an array
-if ($caller != 'todo') {
-    $criticalTasks = $project->getCriticalTasks($project_id);
-}
-
 foreach ($proTasks as $row) {
     $row['task_start_date'] = __extract_from_projects_gantt3($row);
 
@@ -98,24 +92,6 @@ $width = min(w2PgetParam($_GET, 'width', 600), 1400);
 $start_date = w2PgetParam($_GET, 'start_date', $start_min);
 $end_date = w2PgetParam($_GET, 'end_date', $end_max);
 
-//consider critical (concerning end date) tasks as well
-if (!is_null($criticalTasks)) {
-    if ($caller != 'todo') {
-        $start_min = $projects[$project_id]['project_start_date'];
-        $end_max = (($projects[$project_id]['project_end_date'] > $criticalTasks[0]['task_end_date']) 
-                    ? $projects[$project_id]['project_end_date'] : $criticalTasks[0]['task_end_date']);
-    } else {
-        $start_min = substr($criticalTasksInverted[0]['task_start_date'], 0, 10);
-        if ($start_min == '0000-00-00' || !$start_min) {
-            $start_min = $projects[$project_id]['project_start_date'];
-        }
-        $end_max = substr($criticalTasks[0]['task_end_date'], 0, 10);
-        if ($end_max == '0000-00-00' || !$end_max) {
-            $end_max = $projects[$project_id]['project_end_date'];
-        }
-    }
-}
-
 $count = 0;
 
 // If hyperlinks are to be added then the graph is of a set width///////
@@ -123,35 +99,12 @@ if ($addLinksToGantt == '1') {
     $width = 1450 ;
 }
 
-if (!$start_date || !$end_date) {
-    // find out DateRange from gant_arr
-    $d_start = new w2p_Utilities_Date();
-    $d_end = new w2p_Utilities_Date();
-    $taskArray = count($gantt_arr);
-    for ($i = 0, $i_cmp = $taskArray; $i < $i_cmp; $i++) {
-        $a = $gantt_arr[$i][0];
-        $start = substr($a['task_start_date'], 0, 10);
-        $end = substr($a['task_end_date'], 0, 10);
-
-        $d_start->Date($start);
-        $d_end->Date($end);
-
-        if ($i == 0) {
-            $min_d_start = $d_start;
-            $max_d_end = $d_end;
-            $start_date = $start;
-            $end_date = $end;
-        } else {
-            if (Date::compare($min_d_start, $d_start) > 0) {
-                $min_d_start = $d_start;
-                $start_date = $start;
-            }
-            if (Date::compare($max_d_end, $d_end) < 0) {
-                $max_d_end = $d_end;
-                $end_date = $end;
-            }
-        }
-    }
+// An empty start_date or end_date parameter falls back to the task range.
+if (!$start_date) {
+    $start_date = $start_min;
+}
+if (!$end_date) {
+    $end_date = $end_max;
 }
 if ('0000-00-00' == substr($start_date, 0, 10)) {
     $start_date = date('Y-m-d', time() - 60 * 60 * 24 * 7);
