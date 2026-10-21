@@ -198,8 +198,8 @@ if (!is_array($projects) || sizeof($projects) == 0) {
                         $tStartObj = new w2p_Utilities_Date($tStart);
                         $tEndObj = new w2p_Utilities_Date($tEnd);
 
+                        $advance = str_repeat('  ', $level+2);
                         if ($t['task_milestone'] != 1) {
-                            $advance = str_repeat('  ', $level+2);
                             $name = mb_strlen($advance . $t['task_name']) > 35 ? mb_substr($advance . $t['task_name'], 0, 33) . '...' : $advance . $t['task_name'];
                             $height = ($t['task_dynamic'] == 1) ? 0.1 : 0.6;
 
