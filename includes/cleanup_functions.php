@@ -73,9 +73,14 @@ function clean_value($str)
  * @param string $text
  *
  * @return string
+ *
+ * @deprecated No core code calls this. Kept for add-on modules. Use
+ *             mb_convert_encoding() directly instead.
  */
 function strUTF8Decode($text)
 {
+    trigger_error('strUTF8Decode() has been deprecated in v5.0 and will be removed in a later version. Use mb_convert_encoding() instead.', E_USER_NOTICE);
+
     if (!function_exists('mb_convert_encoding')) {
         return $text;
     }
