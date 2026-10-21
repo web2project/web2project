@@ -122,6 +122,9 @@ function removeBulkComponent(li) {
 
 function getStyle(nodeName, sStyle, iStyle) {
     var element = document.getElementById(nodeName);
+    if (!element) {
+        return '';
+    }
     if (window.getComputedStyle) {
         var style=document.defaultView.getComputedStyle(element,null);
         var value = style.getPropertyValue(sStyle);
