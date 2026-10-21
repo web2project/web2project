@@ -135,6 +135,13 @@ class w2p_Core_CAppUI
     protected $objStore = null;
 
     /**
+     * The session's form token (CSRF protection), see getFormToken().
+     *
+     * @var string
+     */
+    public $__nonce = '';
+
+    /**
      * Holds an array of additional javascript files to be loaded
      * in the footer of the page
      *
@@ -542,6 +549,33 @@ class w2p_Core_CAppUI
      *
      * @param object $obj The item to be temporarily stored
      */
+    /**
+     * The token every form that changes data must post as __nonce. It is
+     *   random, made once per session (a new CAppUI is made at login and
+     *   logout), and checked for every dosql request in index.php.
+     *
+     * @return string
+     */
+    public function getFormToken()
+    {
+        if (!is_string($this->__nonce) || 64 != strlen($this->__nonce)) {
+            $this->__nonce = bin2hex(random_bytes(32));
+        }
+
+        return $this->__nonce;
+    }
+
+    /**
+     * @param mixed $token the posted __nonce
+     *
+     * @return bool
+     */
+    public function checkFormToken($token)
+    {
+        return is_string($token) && is_string($this->__nonce) && 64 == strlen($this->__nonce)
+            && hash_equals($this->__nonce, $token);
+    }
+
     public function holdObject($obj)
     {
         $this->objStore = $obj;

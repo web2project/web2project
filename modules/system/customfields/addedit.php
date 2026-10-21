@@ -94,7 +94,7 @@ function addItem() {
 
     document.getElementById('select_newitem').value = '';
     $.post('?m=system&u=customfields',
-        {field_id: "<?php echo $field_id; ?>", field_value: value, dosql: "do_customselect_aed"},
+        {field_id: "<?php echo $field_id; ?>", field_value: value, dosql: "do_customselect_aed", __nonce: "<?php echo $AppUI->getFormToken(); ?>"},
         function(data) {
             itemList.append('<li>' + value + '</li>');
         }
@@ -104,7 +104,7 @@ function addItem() {
 function deleteItem(id) {
     $.post('?m=system&u=customfields',
         {field_id: "<?php echo $field_id; ?>", list_option_id: id, 
-            dosql: "do_customselect_aed", del: 1
+            dosql: "do_customselect_aed", del: 1, __nonce: "<?php echo $AppUI->getFormToken(); ?>"
         },
         function() {
             $('#listitem_' + id).remove();

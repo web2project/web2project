@@ -184,6 +184,52 @@ function w2PgetParam(&$arr, $name, $def = null)
     return $result;
 }
 
+/**
+ * Output filter: adds the session's form token (__nonce) to every POST form
+ *  in an HTML page that doesn't already have one, so forms that never called
+ *  w2p_Output_HTML_FormHelper::addNonce() still pass the token check.
+ *
+ * @param string $buffer
+ *
+ * @return string
+ */
+function w2p_add_form_tokens($buffer)
+{
+    /** @var w2p_Core_CAppUI|null $AppUI */
+    global $AppUI;
+
+    if (!is_object($AppUI) || !$AppUI->user_id || false === stripos($buffer, '<form')) {
+        return $buffer;
+    }
+    foreach (headers_list() as $header) {
+        if (0 === stripos($header, 'Content-Type:') && false === stripos($header, 'text/html')) {
+            return $buffer;
+        }
+    }
+
+    $input = '<input type="hidden" name="__nonce" value="' . $AppUI->getFormToken() . '" />';
+    $parts = preg_split('/(<form\b[^>]*>)/i', $buffer, -1, PREG_SPLIT_DELIM_CAPTURE);
+    if (!is_array($parts)) {
+        return $buffer;
+    }
+    $result = '';
+    $count = count($parts);
+    for ($i = 0; $i < $count; $i++) {
+        $result .= $parts[$i];
+        if (1 == $i % 2 && preg_match('/\bmethod\s*=\s*["\']?post\b/i', $parts[$i])) {
+            // Skip forms that already carry the token.
+            $body = isset($parts[$i + 1]) ? $parts[$i + 1] : '';
+            $end = stripos($body, '</form');
+            $body = (false === $end) ? $body : substr($body, 0, $end);
+            if (false === strpos($body, 'name="__nonce"')) {
+                $result .= $input;
+            }
+        }
+    }
+
+    return $result;
+}
+
 function convert2days($durn, $units)
 {
     switch ($units) {

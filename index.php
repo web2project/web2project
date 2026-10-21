@@ -229,6 +229,12 @@ if ($u && file_exists(W2P_BASE_DIR . '/modules/' . $m . '/' . $u . '/' . $u . '.
 // do some db work if dosql is set
 // TODO - MUST MOVE THESE INTO THE MODULE DIRECTORY
 if (isset($_POST['dosql'])) {
+	// Every request that changes data must carry the session's form token
+	// (CSRF protection). Forms get it from w2p_add_form_tokens() below.
+	if (!$AppUI->checkFormToken(isset($_POST['__nonce']) ? $_POST['__nonce'] : null)) {
+		$AppUI->setMsg('Your form has expired or did not come from this site. Please try again.', UI_MSG_ERROR);
+		$AppUI->redirect();
+	}
 	require W2P_BASE_DIR . '/modules/' . $m . '/' . ($u ? ($u . '/') : '') . $loader->checkFileName($_POST['dosql']) . '.php';
 }
 
@@ -240,6 +246,8 @@ if (isset($_POST['dosql']) && $_POST['dosql'] == 'do_file_co') {
 		ob_start();
 	}
 }
+// adds the form token to every POST form on the page
+ob_start('w2p_add_form_tokens');
 
 if (!$suppressHeaders) {
 	include $theme->resolveTemplate('header');
@@ -279,4 +287,5 @@ if (!$suppressHeaders) {
 	echo '</body>
           </html>';
 }
+ob_end_flush();
 ob_end_flush();
