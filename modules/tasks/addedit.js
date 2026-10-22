@@ -125,15 +125,38 @@ function removeTaskDependency(form, datesForm) {
 	}
 }
 
-function setAMPM( field) {
-	ampm_field = document.getElementById(field.name + '_ampm');
-	if (ampm_field) {
-		if ( field.value > 11 ){
-			ampm_field.value = 'pm';
-		} else {
-			ampm_field.value = 'am';
+/**
+* The start and finish times are one select each (start_time, end_time) whose
+* values are HHMM. getTaskTime() returns that value, setTaskTime() selects a
+* time, adding it to the list when it isn't one of the offered times.
+*/
+function getTaskTime(f, which) {
+	var field = f.elements[which + '_time'];
+	return (field && field.value) ? String(field.value) : '0000';
+}
+
+function setTaskTime(f, which, hour, minute) {
+	var field = f.elements[which + '_time'];
+	if (!field) {
+		return;
+	}
+	hour = parseInt(hour, 10);
+	minute = parseInt(minute, 10);
+	var value = ('0' + hour).slice(-2) + ('0' + minute).slice(-2);
+	for (var i = 0, i_cmp = field.options.length; i < i_cmp; i++) {
+		if (field.options[i].value == value) {
+			field.selectedIndex = i;
+			return;
 		}
 	}
+	var label = ('0' + minute).slice(-2);
+	if (task_time_12h) {
+		label = ('0' + (hour % 12 == 0 ? 12 : hour % 12)).slice(-2) + ':' + label + (hour > 11 ? ' pm' : ' am');
+	} else {
+		label = ('0' + hour).slice(-2) + ':' + label;
+	}
+	field.options[field.options.length] = new Option(label, value, true, true);
+	field.value = value;
 }
 
 var hourMSecs = 3600*1000;
@@ -204,7 +227,7 @@ function next_working_day( dateObj ) {
 *   date on the backend and passes it back via the xajax library.
 */
 function calcFinish(f) {
-	var int_st_date_time = new String(f.task_start_date.value + f.start_hour.value + f.start_minute.value);	
+	var int_st_date_time = new String(f.task_start_date.value + getTaskTime(f, 'start'));	
 	var int_st_date = int_st_date_time;
 	var e = new Date(int_st_date_time.substring(0,4),(int_st_date_time.substring(4,6)-1),int_st_date_time.substring(6,8), int_st_date_time.substring(8,10), int_st_date_time.substring(10,12));
 
@@ -275,8 +298,6 @@ function calcFinish(f) {
                 e.setHours(cal_day_start);
             }
 
-            f.end_minute.value = (e.getMinutes() < 10 ? '0'+e.getMinutes() : e.getMinutes());
-
             // boolean for setting later if we just found a non-working day
             // and therefore do not have to add a day in the next loop
             // (which would have caused to not respecting multiple non-working days after each other)
@@ -293,7 +314,7 @@ function calcFinish(f) {
                     g = true;
                 }
             }
-            f.end_hour.value = (e.getHours() < 10 ? '0'+e.getHours() : e.getHours());
+            setTaskTime(f, 'end', e.getHours(), e.getMinutes());
             break;
         case 168:
             inc = inc * working_days.length;
@@ -319,11 +340,9 @@ function calcFinish(f) {
 
             if (e.getHours() == cal_day_start && e.getMinutes() == 0) {
                 e.setHours(cal_day_end);
-                f.end_hour.value = cal_day_end;
-                f.end_minute.value = '00';
+                setTaskTime(f, 'end', cal_day_end, 0);
             } else {
-                f.end_hour.value = f.start_hour.value;
-                f.end_minute.value = f.start_minute.value;
+                setTaskTime(f, 'end', getTaskTime(f, 'start').substring(0, 2), getTaskTime(f, 'start').substring(2, 4));
             }
             break;
         case 730:
@@ -333,11 +352,9 @@ function calcFinish(f) {
 
             if (e.getHours() == cal_day_start && e.getMinutes() == 0) {
                 e.setHours(cal_day_end);
-                f.end_hour.value = cal_day_end;
-                f.end_minute.value = '00';
+                setTaskTime(f, 'end', cal_day_end, 0);
             } else {
-                f.end_hour.value = f.start_hour.value;
-                f.end_minute.value = f.start_minute.value;
+                setTaskTime(f, 'end', getTaskTime(f, 'start').substring(0, 2), getTaskTime(f, 'start').substring(2, 4));
             }
             break;
         default:
@@ -363,7 +380,6 @@ function calcFinish(f) {
 	var url = 'index.php?m=public&a=date_format&dialog=1&field='+f.name+'.end_date&date=' + f.task_end_date.value;
 	thread = window.frames['thread']; //document.getElementById('thread');
 	thread.location = url;
-	setAMPM(f.end_hour);
 }
 
 /**
@@ -373,8 +389,8 @@ function calcFinish(f) {
 *   on the backend and passes it back via the xajax library.
 */
 function calcDuration(f) {
-	var int_st_date = new String(f.task_start_date.value + f.start_hour.value + f.start_minute.value);
-	var int_en_date = new String(f.task_end_date.value + f.end_hour.value + f.end_minute.value);
+	var int_st_date = new String(f.task_start_date.value + getTaskTime(f, 'start'));
+	var int_en_date = new String(f.task_end_date.value + getTaskTime(f, 'end'));
 
 	var sDate = new Date(int_st_date.substring(0,4),(int_st_date.substring(4,6)-1),int_st_date.substring(6,8), int_st_date.substring(8,10), int_st_date.substring(10,12));
 	var eDate = new Date(int_en_date.substring(0,4),(int_en_date.substring(4,6)-1),int_en_date.substring(6,8), int_en_date.substring(8,10), int_en_date.substring(10,12));
@@ -532,8 +548,8 @@ function checkDates(form) {
 			}
 		}
 		//check if the start date is > then end date
-		var int_st_date = new String(form.task_start_date.value + form.start_hour.value + form.start_minute.value);
-		var int_en_date = new String(form.task_end_date.value + form.end_hour.value + form.end_minute.value);
+		var int_st_date = new String(form.task_start_date.value + getTaskTime(form, 'start'));
+		var int_en_date = new String(form.task_end_date.value + getTaskTime(form, 'end'));
 
 		var s = Date.UTC(int_st_date.substring(0,4),(int_st_date.substring(4,6)-1),int_st_date.substring(6,8), int_st_date.substring(8,10), int_st_date.substring(10,12));
 		var e = Date.UTC(int_en_date.substring(0,4),(int_en_date.substring(4,6)-1),int_en_date.substring(6,8), int_en_date.substring(8,10), int_en_date.substring(10,12));
@@ -608,10 +624,10 @@ function copyForm(form, to, extras) {
 function saveDates(form) {
 	if (can_edit_time_information) {
 		if ( form.task_start_date.value.length > 0 ) {
-			form.task_start_date.value += form.start_hour.value + form.start_minute.value;
+			form.task_start_date.value += getTaskTime(form, 'start');
 		}
 		if ( form.task_end_date.value.length > 0 ) {
-			form.task_end_date.value += form.end_hour.value + form.end_minute.value;
+			form.task_end_date.value += getTaskTime(form, 'end');
 		}
 	}
 	

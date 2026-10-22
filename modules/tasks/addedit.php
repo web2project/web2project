@@ -174,6 +174,7 @@ var workHours = <?php echo w2PgetConfig('daily_working_hours'); ?>;
 var working_days = new Array(<?php echo w2PgetConfig('cal_working_days'); ?>);
 var cal_day_start = <?php echo (int) w2PgetConfig('cal_day_start'); ?>;
 var cal_day_end = <?php echo (int) w2PgetConfig('cal_day_end'); ?>;
+var task_time_12h = <?php echo stristr($AppUI->getPref('TIMEFORMAT'), '%p') ? 'true' : 'false'; ?>;
 var daily_working_hours = <?php echo (int) w2PgetConfig('daily_working_hours'); ?>;
 
 function popContacts() {
