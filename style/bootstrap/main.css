@@ -1047,6 +1047,30 @@ div.std.addedit .w2p-datetime > select {
 div.std.addedit .w2p-datetime > a {
     flex: none;
 }
+/* A select with a short number field (and its unit) on one line, e.g. the
+   event form's "Recurs: Weekly 4 times" */
+div.std.addedit p > .w2p-inline-fields {
+    flex: 1 1 14rem;
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+    min-width: 0;
+}
+div.std.addedit .w2p-inline-fields > input.text,
+div.std.addedit .w2p-inline-fields > select {
+    min-width: 0;
+    padding: .5rem .875rem;
+    font-size: .9375rem;
+}
+div.std.addedit .w2p-inline-fields > select {
+    flex: 1 1 8rem;
+}
+div.std.addedit .w2p-inline-fields > input.text {
+    flex: 0 0 4.5rem;
+}
+div.std.addedit .w2p-inline-fields > span {
+    flex: none;
+}
 div.std.addedit input.save,
 div.std.addedit .save {
     float: right;

@@ -59,8 +59,11 @@ $form = new w2p_Output_HTML_FormHelper($AppUI);
             </p>
             <p>
                 <?php $form->showLabel('Recurs'); ?>
-                <?php echo arraySelect($recurs, 'event_recurs', 'size="1" class="text"', $object->event_recurs, true); ?>
-                <input type="text" class="text" name="event_times_recuring" value="<?php echo ((isset($object->event_times_recuring)) ? ($object->event_times_recuring) : '1'); ?>" maxlength="2" size="3" /> <?php echo $AppUI->_('times'); ?>
+                <span class="w2p-inline-fields">
+                    <?php echo arraySelect($recurs, 'event_recurs', 'size="1" class="text"', $object->event_recurs, true); ?>
+                    <input type="text" class="text" name="event_times_recuring" value="<?php echo ((isset($object->event_times_recuring)) ? ($object->event_times_recuring) : '1'); ?>" maxlength="2" size="3" />
+                    <span><?php echo $AppUI->_('times'); ?></span>
+                </span>
             </p>
         </div>
         <div class="column right">
