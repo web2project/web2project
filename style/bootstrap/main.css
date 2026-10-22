@@ -1024,6 +1024,29 @@ div.std.addedit p > select,
 div.std.addedit p > textarea {
     flex: 1 1 14rem;
 }
+/* A date field with its calendar button and time select, kept on one line */
+div.std.addedit p > .w2p-datetime {
+    flex: 1 1 14rem;
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+    min-width: 0;
+}
+div.std.addedit .w2p-datetime > input.text,
+div.std.addedit .w2p-datetime > select {
+    min-width: 0;
+    padding: .5rem .875rem;
+    font-size: .9375rem;
+}
+div.std.addedit .w2p-datetime > input.text {
+    flex: 1 1 8rem;
+}
+div.std.addedit .w2p-datetime > select {
+    flex: 0 1 auto;
+}
+div.std.addedit .w2p-datetime > a {
+    flex: none;
+}
 div.std.addedit input.save,
 div.std.addedit .save {
     float: right;
