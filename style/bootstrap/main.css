@@ -1217,7 +1217,8 @@ table.smartsearch td,
     text-align: left;
 }
 .list ._description,
-._description {
+._description,
+table.smartsearch td {
     white-space: normal;
 }
 ._duration,

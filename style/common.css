@@ -225,6 +225,7 @@ input[type="checkbox"] {
 }
 table.smartsearch td {
     text-align: left;
+    white-space: normal;
 }
 
 ._departments {
