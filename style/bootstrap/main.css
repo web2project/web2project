@@ -33,6 +33,8 @@
     --w2p-border-light: #ebefff;
     --w2p-border-dark: #c7d3ff;
     --w2p-table-head: #eff3ff;
+    /* non-working days on the calendars: neutral grey, so it doesn't read as the blue task tint */
+    --w2p-nonworking: #e9ebef;
     --w2p-table-hover: #e7eeff;
     --w2p-table-stripe: #f8faff;
     --w2p-success: #21a66c;
@@ -1350,7 +1352,7 @@ table.mocal td.today {
     background-color: var(--bs-primary-bg-subtle);
 }
 table.mocal td.weekend {
-    background-color: var(--bs-tertiary-bg);
+    background-color: var(--w2p-nonworking);
 }
 table.mocal td.event,
 table.tbl td.event,
@@ -1379,7 +1381,11 @@ table.minical td.today {
     outline: 1px dotted var(--bs-danger);
 }
 table.minical td.weekend {
-    background-color: var(--bs-tertiary-bg);
+    background-color: var(--w2p-nonworking);
+}
+table.mocal td.weekend > a:first-child,
+table.minical td.weekend a {
+    color: var(--w2p-muted);
 }
 table.minical td.event,
 table.minical td.eventtoday {
@@ -1435,7 +1441,7 @@ table.minical td.weekend.eventtasktoday {
     background-color: var(--bs-danger-bg-subtle);
 }
 .w2p-cal-key .w2p-swatch.weekend {
-    background-color: var(--bs-tertiary-bg);
+    background-color: var(--w2p-nonworking);
 }
 .w2p-cal-key .w2p-swatch.today {
     outline: 1px dotted var(--bs-danger);
@@ -1448,7 +1454,7 @@ table.minical td.weekend.eventtasktoday {
     border: var(--bs-border-width) solid var(--bs-border-color);
 }
 .view td.otherDay {
-    background-color: var(--bs-secondary-bg);
+    background-color: var(--w2p-nonworking);
 }
 span.cal-item * {
     float: left;
