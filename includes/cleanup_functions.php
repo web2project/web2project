@@ -1129,7 +1129,8 @@ function highlight($text, $keyval)
         if (mb_strlen($key) > 0) {
             // escape every regex metacharacter, including the '/' delimiter
             $pattern = preg_quote($key, '/');
-            $groups[] = '(' . ($ignoreSpecChar ? recode2regexp_utf8($pattern) : $pattern) . ')';
+            // named, because a recoded pattern has (unnamed) groups of its own
+            $groups[] = '(?<k' . count($groups) . '>' . ($ignoreSpecChar ? recode2regexp_utf8($pattern) : $pattern) . ')';
             $keyIndexes[] = $key_idx;
         }
     }
@@ -1154,13 +1155,16 @@ function highlight($text, $keyval)
         if ('' === $found) {
             continue;
         }
-        // the first group that took part in the match tells us which keyword it was
-        $group = 1;
-        while (!isset($match[$group]) || -1 === $match[$group][1] || '' === $match[$group][0]) {
-            $group++;
+        // the keyword group that took part in the match tells us which keyword it was
+        $keyIdx = $keyIndexes[0];
+        foreach ($keyIndexes as $i => $idx) {
+            if (isset($match['k' . $i]) && -1 !== $match['k' . $i][1] && '' !== $match['k' . $i][0]) {
+                $keyIdx = $idx;
+                break;
+            }
         }
         $html .= $escape(substr($text, $pos, $offset - $pos));
-        $html .= '<span class="highlight' . $keyIndexes[$group - 1] . '" >' . $escape($found) . '</span>';
+        $html .= '<span class="highlight' . $keyIdx . '" >' . $escape($found) . '</span>';
         $pos = $offset + strlen($found);
     }
 
@@ -1168,70 +1172,52 @@ function highlight($text, $keyval)
 }
 
 // from modules/smartsearch/smartsearch.class.php
+/**
+ * Turns a (preg_quote()d) keyword into a regular expression that also matches
+ * accented forms of its letters, e.g. "cafe" also matches "café". Each letter
+ * with accented forms becomes a group of alternatives in the letter's own case:
+ * "e" becomes (e|é|è|ê|ë|ě|ę|ė|ē). Plain groups are used, rather than character
+ * classes or (?:), so the pattern works with MySQL's REGEXP as well as PCRE.
+ *
+ * @param string $input the keyword, with regex metacharacters already escaped
+ *
+ * @return string
+ */
 function recode2regexp_utf8($input)
 {
-    $result = '';
-    for ($i = 0, $i_cmp = mb_strlen($input); $i < $i_cmp; ++$i)
-        switch ($input[$i]) {
-            case 'A':
-            case 'a':
-                $result .= '(a|A!|A�|A?|A�)';
-                break;
-            case 'C':
-            case 'c':
-                $result .= '(c|�?|�O)';
-                break;
-            case 'D':
-            case 'd':
-                $result .= '(d|�?|Ď)';
-                break;
-            case 'E':
-            case 'e':
-                $result .= '(e|A�|ě|A�|Ě)';
-                break;
-            case 'I':
-            case 'i':
-                $result .= '(i|A�|A?)';
-                break;
-            case 'L':
-            case 'l':
-                $result .= '(l|�o|�3|�1|�1)';
-                break;
-            case 'N':
-            case 'n':
-                $result .= '(n|A^|A�)';
-                break;
-            case 'O':
-            case 'o':
-                $result .= '(o|A3|A�|A�|A�)';
-                break;
-            case 'R':
-            case 'r':
-                $result .= '(r|A�|A�|A�|A~)';
-                break;
-            case 'S':
-            case 's':
-                $result .= '(s|A!|A�)';
-                break;
-            case 'T':
-            case 't':
-                $result .= '(t|AY|A�)';
-                break;
-            case 'U':
-            case 'u':
-                $result .= '(u|Ao|A�|A�|A�)';
-                break;
-            case 'Y':
-            case 'y':
-                $result .= '(y|A1|A?)';
-                break;
-            case 'Z':
-            case 'z':
-                $result .= '(z|A3|A1)';
-                break;
-            default:
-                $result .= $input[$i];
+    static $variants = null;
+    static $baseOf = null;
+
+    if (is_null($variants)) {
+        $variants = array(
+            'a' => 'aáàâäãåąăā', 'c' => 'cçćčĉċ', 'd' => 'dďđ',
+            'e' => 'eéèêëěęėē', 'i' => 'iíìîïīį', 'l' => 'lĺľłļ',
+            'n' => 'nñńňņ', 'o' => 'oóòôöõøőō', 'r' => 'rŕřŗ',
+            's' => 'sśšşș', 't' => 'tťţț', 'u' => 'uúùûüůűūų',
+            'y' => 'yýÿ', 'z' => 'zźžż',
+        );
+        $baseOf = array();
+        foreach ($variants as $base => $chars) {
+            $variants[$base] = mb_str_split($chars);
+            foreach ($variants[$base] as $char) {
+                $baseOf[$char] = $base;
+            }
         }
+    }
+
+    $result = '';
+    foreach (mb_str_split((string) $input) as $char) {
+        $lower = mb_strtolower($char);
+        if (!isset($baseOf[$lower])) {
+            $result .= $char;
+            continue;
+        }
+        $alternatives = $variants[$baseOf[$lower]];
+        if ($char !== $lower) {
+            $alternatives = array_map('mb_strtoupper', $alternatives);
+        }
+        $result .= '(' . implode('|', array_unique($alternatives)) . ')';
+    }
 
     return $result;
 }
