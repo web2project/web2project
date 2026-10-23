@@ -10,8 +10,9 @@ $ssearch['keywords'] = array();
 $ssearch['advanced_search'] = w2PgetParam($_POST, 'advancedsearch', '');
 $ssearch['mod_selection'] = w2PgetParam($_POST, 'modselection', '');
 
+// a single module or a nested array would make array_flip() fail, so keep only the names
 $modules = w2PgetParam($_POST, 'modules', []);
-$ssearch['modules'] = array_flip($modules);
+$ssearch['modules'] = array_flip(array_filter((array) $modules, 'is_string'));
 
 $hook_modules = array();
 $moduleList = $AppUI->getLoadableModuleList();
@@ -28,12 +29,15 @@ foreach ($moduleList as $module) {
 
 $ssearch['all_words'] = w2PgetParam($_POST, 'allwords', '');
 
+// a posted keyword, or '' when it's missing or isn't a plain value (e.g. keyword1[]=x)
+$postedKeyword = function ($name) {
+    return (isset($_POST[$name]) && is_scalar($_POST[$name])) ? trim(strip_tags((string) $_POST[$name])) : '';
+};
 // the header's Global Search box posts 'keyword'; this page's own form posts 'keyword1'
-$keyword1 = isset($_POST['keyword1']) ? $_POST['keyword1'] : (isset($_POST['keyword']) ? $_POST['keyword'] : '');
-$keyword1 = trim(strip_tags($keyword1));
-$keyword2 = (isset($_POST['keyword2'])) ? strip_tags($_POST['keyword2']) : '';
-$keyword3 = (isset($_POST['keyword3'])) ? strip_tags($_POST['keyword3']) : '';
-$keyword4 = (isset($_POST['keyword4'])) ? strip_tags($_POST['keyword4']) : '';
+$keyword1 = isset($_POST['keyword1']) ? $postedKeyword('keyword1') : $postedKeyword('keyword');
+$keyword2 = $postedKeyword('keyword2');
+$keyword3 = $postedKeyword('keyword3');
+$keyword4 = $postedKeyword('keyword4');
 
 if ($ssearch['advanced_search'] == 'on') {
 	$ssearch['ignore_case'] = w2PgetParam($_POST, 'ignorecase', '');
