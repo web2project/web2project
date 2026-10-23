@@ -1110,10 +1110,8 @@ function highlight($text, $keyval)
 
     foreach ($keys as $key_idx => $key) {
         if (mb_strlen($key) > 0) {
-            $key = stripslashes($key);
-            $metacharacters = array('\\', '(', ')', '$', '[', '*', '+', '|', '.', '^', '?');
-            $metareplacement = array('\\\\', '\(', '\)', '\$', '\[', '\*', '\+', '\|', '\.', '\^', '\?');
-            $key = mb_str_replace($metacharacters, $metareplacement, $key);
+            // escape every regex metacharacter, including the '/' delimiter
+            $key = preg_quote($key, '/');
             if (isset($ssearch['ignore_specchar']) && ($ssearch['ignore_specchar'] == 'on')) {
                 if ($ssearch['ignore_case'] == 'on') {
                     $txt = preg_replace('/'.recode2regexp_utf8($key).'/i', '<span class="highlight' . $key_idx . '" >\\0</span>', $txt);
