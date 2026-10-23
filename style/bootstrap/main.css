@@ -1374,8 +1374,11 @@ table.minical td {
     padding: .1rem;
 }
 table.minical td.empty {
-    color: var(--bs-secondary-color);
-    background-color: var(--bs-secondary-bg);
+    /* days of the previous/next month: no fill, so they can't be mistaken for task days */
+    background-color: transparent;
+}
+table.minical td.empty a {
+    color: var(--w2p-light);
 }
 table.minical td.today {
     outline: 1px dotted var(--bs-danger);

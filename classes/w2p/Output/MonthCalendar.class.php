@@ -325,8 +325,11 @@ class w2p_Output_MonthCalendar {
                 $cday = (int) $ymd;
                 $isWorkingDay = $this_day->isWorkingDay();
 
-                //If we are on minical mode and we find tasks or events for this day then lets color code the cell depending on that
-                if (array_key_exists($cday, $this->events) && $this->styleMain == 'minical') {
+                if ($m != $this_month) {
+                    // days from the previous/next month are always drawn as empty
+                    $class = 'empty';
+                } elseif (array_key_exists($cday, $this->events) && $this->styleMain == 'minical') {
+                    //If we are on minical mode and we find tasks or events for this day then lets color code the cell depending on that
                     $nr_tasks = 0;
                     $nr_events = 0;
                     //lets count tasks and events
@@ -354,8 +357,6 @@ class w2p_Output_MonthCalendar {
                         // keep the non-working day marker alongside the task/event colour
                         $class .= ' weekend';
                     }
-                } elseif ($m != $this_month) {
-                    $class = 'empty';
                 } elseif ($ymd == $today) {
                     $class = 'today';
                 } elseif (!$isWorkingDay) {
