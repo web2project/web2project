@@ -145,7 +145,7 @@ $form = new w2p_Output_HTML_FormHelper($AppUI);
 </form>
 <?php
 if ('' !== $keyword1) {
-	if ('' != $keyword1) {
+	if ('' !== $keyword1) {
 		$or_keywords = preg_split('/[\s,;]+/', $keyword1);
 		foreach ($or_keywords as $or_keyword) {
 			$ssearch['keywords'][$or_keyword] = array($or_keyword);
@@ -153,7 +153,7 @@ if ('' !== $keyword1) {
 		}
 	}
 
-	if ('' != $keyword2 > 0) {
+	if ('' !== $keyword2) {
 		$or_keywords = preg_split('/[\s,;]+/', $keyword2);
 		foreach ($or_keywords as $or_keyword) {
 			$ssearch['keywords'][$or_keyword] = array($or_keyword);
@@ -161,7 +161,7 @@ if ('' !== $keyword1) {
 		}
 	}
 
-	if ('' != $keyword3) {
+	if ('' !== $keyword3) {
 		$or_keywords = preg_split('/[\s,;]+/', $keyword3);
 		foreach ($or_keywords as $or_keyword) {
 			$ssearch['keywords'][$or_keyword] = array($or_keyword);
@@ -169,7 +169,7 @@ if ('' !== $keyword1) {
 		}
 	}
 
-	if ('' != $keyword4) {
+	if ('' !== $keyword4) {
 		$or_keywords = preg_split('/[\s,;]+/', $keyword4);
 		foreach ($or_keywords as $or_keyword) {
 			$ssearch['keywords'][$or_keyword] = array($or_keyword);
