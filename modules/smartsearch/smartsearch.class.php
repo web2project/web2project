@@ -133,7 +133,7 @@ class CSmartSearch
 			foreach ($this->search_fields as $field) {
 				//OR treatment to each keyword
 				// Search for semi-colons, commas or spaces and allow any to be separators
-				$or_keywords = preg_split('/[\s,;]+/', $keyword);
+				$or_keywords = preg_split('/[\s,;]+/', $keyword, -1, PREG_SPLIT_NO_EMPTY);
 				foreach ($or_keywords as $or_keyword) {
 					if ($this->search_options['ignore_specchar'] == 'on') {
 						$pattern = $q->quote(recode2regexp_utf8(preg_quote($or_keyword)));
