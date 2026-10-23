@@ -28,7 +28,9 @@ foreach ($moduleList as $module) {
 
 $ssearch['all_words'] = w2PgetParam($_POST, 'allwords', '');
 
-$keyword1 = (isset($_POST['keyword1'])) ? strip_tags($_POST['keyword1']) : '';
+// the header's Global Search box posts 'keyword'; this page's own form posts 'keyword1'
+$keyword1 = isset($_POST['keyword1']) ? $_POST['keyword1'] : (isset($_POST['keyword']) ? $_POST['keyword'] : '');
+$keyword1 = trim(strip_tags($keyword1));
 $keyword2 = (isset($_POST['keyword2'])) ? strip_tags($_POST['keyword2']) : '';
 $keyword3 = (isset($_POST['keyword3'])) ? strip_tags($_POST['keyword3']) : '';
 $keyword4 = (isset($_POST['keyword4'])) ? strip_tags($_POST['keyword4']) : '';
@@ -49,7 +51,7 @@ if ($ssearch['advanced_search'] == 'on') {
 <script language="javascript" type="text/javascript">
 
 	function focusOnSearchBox() {
-		document.forms.frmSearch.keyword.focus();
+		document.forms.frmSearch.keyword1.focus();
 	}
 	function toggleStatus(obj) {
 		if (obj.checked) {
