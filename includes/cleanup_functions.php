@@ -1101,36 +1101,70 @@ function showcodes(&$a)
 }
 
 // from modules/smartsearch/smartsearch.class.php
+/**
+ * Returns $text HTML-escaped, with every match of the search keywords wrapped
+ * in <span class="highlightN">. The text is escaped piece by piece around the
+ * matches, so values from the database can't inject markup and a keyword can
+ * never match inside the markup this adds.
+ *
+ * @param string       $text   plain text, e.g. a record's fields
+ * @param string|array $keyval the keyword(s) to highlight
+ *
+ * @return string HTML
+ */
 function highlight($text, $keyval)
 {
     global $ssearch;
 
-    $txt = $text;
-    $keys = (!is_array($keyval)) ? array($keyval) : $keyval;
+    $text = (string) $text;
+    $ignoreCase = !isset($ssearch['ignore_case']) || 'on' == $ssearch['ignore_case'];
+    $ignoreSpecChar = isset($ssearch['ignore_specchar']) && 'on' == $ssearch['ignore_specchar'];
 
+    // one capture group per keyword, remembering which keyword each group is
+    $groups = array();
+    $keyIndexes = array();
+    $keys = (!is_array($keyval)) ? array($keyval) : $keyval;
     foreach ($keys as $key_idx => $key) {
+        $key = (string) $key;
         if (mb_strlen($key) > 0) {
             // escape every regex metacharacter, including the '/' delimiter
-            $key = preg_quote($key, '/');
-            if (isset($ssearch['ignore_specchar']) && ($ssearch['ignore_specchar'] == 'on')) {
-                if ($ssearch['ignore_case'] == 'on') {
-                    $txt = preg_replace('/'.recode2regexp_utf8($key).'/i', '<span class="highlight' . $key_idx . '" >\\0</span>', $txt);
-                } else {
-                    $txt = preg_replace('/'.(recode2regexp_utf8($key)).'/', '<span class="highlight' . $key_idx . '" >\\0</span>', $txt);
-                }
-            } elseif (!isset($ssearch['ignore_specchar']) || ($ssearch['ignore_specchar'] == '')) {
-                if ($ssearch['ignore_case'] == 'on') {
-                    $txt = preg_replace('/'.$key.'/i', '<span class="highlight' . $key_idx . '" >\\0</span>', $txt);
-                } else {
-                    $txt = preg_replace('/'.$key.'/', '<span class="highlight' . $key_idx . '" >\\0</span>', $txt);
-                }
-            } else {
-                $txt = preg_replace('/'.$key.'/i', '<span class="highlight:' . $key_idx . '" >\\0</span>', $txt);
-            }
+            $pattern = preg_quote($key, '/');
+            $groups[] = '(' . ($ignoreSpecChar ? recode2regexp_utf8($pattern) : $pattern) . ')';
+            $keyIndexes[] = $key_idx;
         }
     }
 
-    return $txt;
+    $escape = function ($s) {
+        return htmlspecialchars($s, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+    };
+    if (!count($groups)) {
+        return $escape($text);
+    }
+
+    $regex = '/' . implode('|', $groups) . '/u' . ($ignoreCase ? 'i' : '');
+    if (!preg_match_all($regex, $text, $matches, PREG_SET_ORDER | PREG_OFFSET_CAPTURE)) {
+        // no matches, or the text isn't valid UTF-8
+        return $escape($text);
+    }
+
+    $html = '';
+    $pos = 0;
+    foreach ($matches as $match) {
+        list($found, $offset) = $match[0];
+        if ('' === $found) {
+            continue;
+        }
+        // the first group that took part in the match tells us which keyword it was
+        $group = 1;
+        while (!isset($match[$group]) || -1 === $match[$group][1] || '' === $match[$group][0]) {
+            $group++;
+        }
+        $html .= $escape(substr($text, $pos, $offset - $pos));
+        $html .= '<span class="highlight' . $keyIndexes[$group - 1] . '" >' . $escape($found) . '</span>';
+        $pos = $offset + strlen($found);
+    }
+
+    return $html . $escape(substr($text, $pos));
 }
 
 // from modules/smartsearch/smartsearch.class.php

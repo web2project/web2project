@@ -64,7 +64,8 @@ class CSmartSearch
 						$tmplink = $this->table_link . $records[preg_replace('/^.*\.([^\.]+)$/', '$1', $this->table_key)] . $this->table_link2 . $records[preg_replace('/^.*\.([^\.]+)$/', '$1', $this->table_key2)];
 					}
 					//--MSy--
-					$outstring .= '<tr><td><a href = "' . $tmplink . '">' . highlight($display_val, $this->keywords) . '</a></td></tr>';
+					// highlight() escapes the record's values
+					$outstring .= '<tr><td><a href="' . htmlspecialchars($tmplink, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') . '">' . highlight($display_val, $this->keywords) . '</a></td></tr>';
 				}
 			}
 			$outstring = '<tr><th><b>' . $AppUI->_($this->table_title) . ' (' . $subrecord_count . ')' . '</b></th></tr> ' . "\n" . $outstring;
