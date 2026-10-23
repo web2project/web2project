@@ -850,6 +850,12 @@ class w2p_Core_CAppUI
             return false;
         }
 
+        // Signed in: switch to a new session id and drop the old one, so an
+        // id that was set or seen before login (session fixation) is useless.
+        if (PHP_SESSION_ACTIVE == session_status()) {
+            session_regenerate_id(true);
+        }
+
         // load the user preferences
         $this->loadPrefs($this->user_id);
         $this->setUserLocale();
