@@ -599,22 +599,14 @@ class w2p_Core_CAppUI
      */
     public function redirect($params = '', $hist = '')
     {
-        $session_id = session_id();
-
         session_write_close();
         // are the params empty
         if (!$params) {
             // has a place been saved
             $params = !empty($this->state['SAVEDPLACE' . $hist]) ? $this->state['SAVEDPLACE' . $hist] : $this->defaultRedirect;
         }
-        // Fix to handle cookieless sessions
-        if ($session_id != '') {
-            if (!$params) {
-                $params = $session_id;
-            } else {
-                $params .= '&' . $session_id;
-            }
-        }
+        // The session id is never put in the URL: it travels in the session
+        // cookie only, so it can't leak through logs, history or Referer.
         ob_implicit_flush(); // Ensure any buffering is disabled.
         header('Location: index.php?' . $params);
         exit(); // stop the PHP execution
