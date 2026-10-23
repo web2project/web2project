@@ -227,6 +227,14 @@ table.smartsearch td {
     text-align: left;
     white-space: normal;
 }
+/* the optional parts of the SmartSearch form follow their checkboxes */
+.smartsearch:has(#advancedsearch:not(:checked)) .smartsearch-number {
+    visibility: hidden;
+}
+.smartsearch:has(#advancedsearch:not(:checked)) .smartsearch-advanced,
+.smartsearch:has(#modselection:not(:checked)) .smartsearch-modules {
+    display: none !important;
+}
 
 ._departments {
     text-align: left;

@@ -1221,6 +1221,14 @@ table.smartsearch td,
 table.smartsearch td {
     white-space: normal;
 }
+/* the optional parts of the SmartSearch form follow their checkboxes */
+.smartsearch:has(#advancedsearch:not(:checked)) .smartsearch-number {
+    visibility: hidden;
+}
+.smartsearch:has(#advancedsearch:not(:checked)) .smartsearch-advanced,
+.smartsearch:has(#modselection:not(:checked)) .smartsearch-modules {
+    display: none !important;
+}
 ._duration,
 ._hours,
 ._budget,
