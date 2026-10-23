@@ -99,6 +99,7 @@
 'view this event',
 'Week',
 'Weekend',
+'Non-working day',
 'Weekly',
 'week view',
 'Week View',

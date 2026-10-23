@@ -386,6 +386,15 @@ table.minical td.eventtasktoday {
     background-color: #ffccff;
     border     : 1px dotted red;
 }
+table.minical td.weekend.event,
+table.minical td.weekend.task,
+table.minical td.weekend.eventtask,
+table.minical td.weekend.eventtoday,
+table.minical td.weekend.tasktoday,
+table.minical td.weekend.eventtasktoday {
+    /* non-working day that also has tasks/events: hatch over the task/event colour */
+    background-image: repeating-linear-gradient(45deg, rgba(128, 128, 128, .25) 0 2px, transparent 2px 5px);
+}
 
 /* daily calendar */
 table.tbl td.event {

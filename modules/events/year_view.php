@@ -121,7 +121,7 @@ $next_year = (int)($next_year + 10000);
 		<span class="text-nowrap"><span class="d-inline-block border w2p-swatch event">&nbsp;</span> <?php echo $AppUI->_('Event'); ?></span>
 		<span class="text-nowrap"><span class="d-inline-block border w2p-swatch task">&nbsp;</span> <?php echo $AppUI->_('Task'); ?></span>
 		<span class="text-nowrap"><span class="d-inline-block border w2p-swatch eventtask">&nbsp;</span> <?php echo $AppUI->_('Event'); ?>+<?php echo $AppUI->_('Task'); ?></span>
-		<span class="text-nowrap"><span class="d-inline-block border w2p-swatch weekend">&nbsp;</span> <?php echo $AppUI->_('Weekend'); ?></span>
+		<span class="text-nowrap"><span class="d-inline-block border w2p-swatch weekend">&nbsp;</span> <?php echo $AppUI->_('Non-working day'); ?></span>
 		<span class="text-nowrap"><span class="d-inline-block w2p-swatch today">&nbsp;</span> <?php echo $AppUI->_('Today'); ?></span>
 	</div>
 </div>

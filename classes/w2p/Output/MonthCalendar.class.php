@@ -310,9 +310,9 @@ class w2p_Output_MonthCalendar {
             $html .= '<tr>';
             if ($this->showWeek) {
                 $html .= '<td class="week">';
-                $html .= $this->dayFunc ? "<a href=\"javascript:$this->weekFunc('$week[0]')\">" : '';
-                $html .= '<img src="' . w2PfindImage('view.week.gif') . '" alt="Week View" /></a>';
-                $html .= $this->dayFunc ? '</a>' : '';
+                $html .= $this->weekFunc ? "<a href=\"javascript:$this->weekFunc('$week[0]')\">" : '';
+                $html .= '<img src="' . w2PfindImage('view.week.gif') . '" alt="Week View" />';
+                $html .= $this->weekFunc ? '</a>' : '';
                 $html .= '</td>';
             }
 
@@ -320,8 +320,8 @@ class w2p_Output_MonthCalendar {
                 $this_day = new w2p_Utilities_Date($day);
                 $m = (int) substr($day, 4, 2);
                 $d = (int) substr($day, 6, 2);
-                $dow = (int) substr($day, 8, 1);
                 $cday = (int) substr($day, 0, 8);
+                $isWorkingDay = $this_day->isWorkingDay();
 
                 //If we are on minical mode and we find tasks or events for this day then lets color code the cell depending on that
                 if (array_key_exists($cday, $this->events) && $this->styleMain == 'minical') {
@@ -348,11 +348,15 @@ class w2p_Output_MonthCalendar {
                     if ($day == $today) {
                         $class .= 'today';
                     }
+                    if (!$isWorkingDay) {
+                        // keep the non-working day marker alongside the task/event colour
+                        $class .= ' weekend';
+                    }
                 } elseif ($m != $this_month) {
                     $class = 'empty';
                 } elseif ($day == $today) {
                     $class = 'today';
-                } elseif ($dow == 0 || $dow == 6) {
+                } elseif (!$isWorkingDay) {
                     $class = 'weekend';
                 } else {
                     $class = 'day';

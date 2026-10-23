@@ -165,7 +165,13 @@ class w2p_Utilities_Date extends Date {
         /** @var w2p_Core_CAppUI $AppUI */
         global $AppUI;
 
-        if ($AppUI->isActiveModule('holiday')) {
+        // isActiveModule() runs a query; calendars call this once per cell, so look it up once per request
+        static $holidayModuleActive = null;
+        if (is_null($holidayModuleActive)) {
+            $holidayModuleActive = (bool) $AppUI->isActiveModule('holiday');
+        }
+
+        if ($holidayModuleActive) {
             // Holiday module, check the holiday database
             require_once W2P_BASE_DIR."/modules/holiday/holiday_functions.class.php";
             if(HolidayFunctions::isHoliday($this)) {
@@ -174,7 +180,7 @@ class w2p_Utilities_Date extends Date {
         }
 
         $working_days = w2PgetConfig('cal_working_days');
-        $working_days = ((is_null($working_days)) ? array('1', '2', '3', '4', '5') : explode(',', $working_days));
+        $working_days = ('' === trim((string) $working_days)) ? array('1', '2', '3', '4', '5') : explode(',', $working_days);
         return in_array($this->getDayOfWeek(), $working_days);
     }
 
