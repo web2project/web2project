@@ -3219,16 +3219,20 @@ function sendNewPass()
     /** @var w2p_Core_CAppUI $AppUI */
     global $AppUI;
 
-    // ensure no malicous sql gets past
-    $checkusername = preg_replace("/[^A-Za-z0-9]/", "", w2PgetParam($_POST, 'checkusername', ''));
-    $confirmEmail = trim(w2PgetParam($_POST, 'checkemail', ''));
-    $confirmEmail = strtolower((new w2p_Database_Connection($GLOBALS['db']))->escape($confirmEmail));
+    // The same characters CAppUI::login() accepts in a username, so users
+    // whose login contains . _ @ or - can reset their password too.
+    $checkusername = trim(preg_replace("/[^A-Za-z0-9._@-]/", "", (string) w2PgetParam($_POST, 'checkusername', '')));
+    $confirmEmail = strtolower(trim((string) w2PgetParam($_POST, 'checkemail', '')));
+    if ('' == $checkusername || !w2p_check_email($confirmEmail)) {
+        $AppUI->setMsg('Invalid username or email.', UI_MSG_ERROR);
+        $AppUI->redirect();
+    }
 
     $q = new w2p_Database_Query;
     $q->addTable('users');
     $q->addJoin('contacts', 'con', 'user_contact = contact_id', 'inner');
     $q->addQuery('user_id');
-    $q->addWhere("user_username = '$checkusername'");
+    $q->addWhere('user_username = ' . $q->quote($checkusername));
 
     /* Begin Hack */
     /*
@@ -3245,9 +3249,10 @@ function sendNewPass()
     $dbVersion = $qTest->loadResult();
     if ($dbVersion >= 21 && $dbVersion < 26) {
         $q->leftJoin('contacts_methods', 'cm', 'cm.contact_id = con.contact_id');
-        $q->addWhere("cm.method_value = '$confirmEmail'");
+        $q->addWhere('LOWER(cm.method_value) = ' . $q->quote($confirmEmail));
     } else {
-        $q->addWhere("LOWER(user_email) = '$confirmEmail'");
+        // the address lives on the user's contact; users has no email column
+        $q->addWhere('LOWER(con.contact_email) = ' . $q->quote($confirmEmail));
     }
     /* End Hack */
 
@@ -3272,7 +3277,7 @@ function sendNewPass()
 
         $m = new w2p_Utilities_Mail; // create the mail
         $m->To($confirmEmail);
-        $subject = $_sitename . ' :: ' . $AppUI->_('sendpass4', UI_OUTPUT_RAW) . ' - ' . $checkusername;
+        $subject = w2PgetConfig('page_title') . ' :: ' . $AppUI->_('sendpass4', UI_OUTPUT_RAW) . ' - ' . $checkusername;
         $m->Subject($subject);
         $m->Body($body, isset($GLOBALS['locale_char_set']) ? $GLOBALS['locale_char_set'] : ''); // set the body
         $m->Send(); // send the mail

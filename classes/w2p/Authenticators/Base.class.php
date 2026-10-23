@@ -46,16 +46,15 @@ abstract class w2p_Authenticators_Base
      */
     public function createNewPassword()
     {
-        $newPassword = '';
-        $salt = 'abcdefghjkmnpqrstuvwxyzABCDEFGHJKMNPQRSTUVWXYZ0123456789';
-        srand((double)microtime() * 1000000);
+        // 17 characters from an alphabet without look-alikes (no i, l, o, I,
+        // L, O), picked with a cryptographically secure generator. rand()
+        // seeded from the clock made these passwords guessable.
+        $alphabet = 'abcdefghjkmnpqrstuvwxyzABCDEFGHJKMNPQRSTUVWXYZ0123456789';
+        $max = strlen($alphabet) - 1;
 
-        $i = 0;
-        while ($i <= 16) {
-            $num = rand() % strlen($salt);
-            $tmp = substr($salt, $num, 1);
-            $newPassword = $newPassword . $tmp;
-            $i++;
+        $newPassword = '';
+        for ($i = 0; $i < 17; $i++) {
+            $newPassword .= $alphabet[random_int(0, $max)];
         }
 
         return $newPassword;
