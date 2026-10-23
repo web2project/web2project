@@ -216,7 +216,18 @@ class w2p_System_Session
             $cookie_dir .= '/';
         }
 
-        session_set_cookie_params($max_time, $cookie_dir);
+        // HttpOnly keeps the cookie away from scripts, SameSite=Lax keeps it
+        // off cross-site POSTs and embeds, and Secure keeps it off plain HTTP
+        // whenever web2project is served over HTTPS.
+        $https = (isset($_SERVER['HTTPS']) && 'off' != strtolower((string) $_SERVER['HTTPS']))
+            || 0 === stripos(W2P_BASE_URL, 'https://');
+        session_set_cookie_params(array(
+            'lifetime' => $max_time,
+            'path'     => $cookie_dir,
+            'secure'   => $https,
+            'httponly' => true,
+            'samesite' => 'Lax',
+        ));
         session_start();
     }
 }
