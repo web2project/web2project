@@ -145,10 +145,6 @@ $form = new w2p_Output_HTML_FormHelper($AppUI);
 </form>
 <?php
 if ('' !== $keyword1) {
-	$search = new CSmartSearch();
-    $search->keyword = $keyword1;
-    $search->keyword = preg_replace("/[^A-Za-z0-9 ]/", "", $search->keyword);
-
 	if ('' != $keyword1) {
 		$or_keywords = preg_split('/[\s,;]+/', $keyword1);
 		foreach ($or_keywords as $or_keyword) {
