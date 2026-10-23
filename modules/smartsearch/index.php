@@ -115,7 +115,7 @@ $form = new w2p_Output_HTML_FormHelper($AppUI);
     <div class="std mb-3 smartsearch">
         <div class="d-flex flex-wrap align-items-center gap-2 mb-2">
             <span id="div_advancedsearch1" style="<?php echo ($ssearch['advanced_search'] == "on" ? 'visibility:visible' : 'visibility:hidden'); ?> "> 1. </span>
-            <input class="text" size="18" type="text" id="keyword1" name="keyword1" value="<?php echo $keyword1; ?>" />
+            <input class="text" size="18" type="text" id="keyword1" name="keyword1" value="<?php echo w2PformSafe($keyword1); ?>" />
             <input class="button btn btn-primary btn-sm" type="submit" value="<?php echo $AppUI->_('Search'); ?>" />
             <span class="text-nowrap"><input name="allwords" id="allwords" type="checkbox"  <?php echo ($ssearch['all_words'] == "on" ? 'checked="checked"' : ''); ?> /><label for="allwords"><?php echo $AppUI->_('All words'); ?></label></span>
             <span class="text-nowrap"><input name="modselection" id="modselection" type="checkbox"  <?php echo ($ssearch['mod_selection'] == "on" ? 'checked="checked"' : ''); ?> onclick="toggleModules(this)" /><label for="modselection"><?php echo $AppUI->_('Modules selection'); ?></label></span>
@@ -123,9 +123,9 @@ $form = new w2p_Output_HTML_FormHelper($AppUI);
         </div>
         <div id="div_advancedsearch" style="<?php echo ($ssearch['advanced_search'] == "on" ? 'display:block' : 'display:none'); ?> ">
             <div class="d-flex flex-wrap align-items-center gap-2 mb-2">
-                <span class="text-nowrap"> 2. <input class="text" size="18" type="text" id="keyword2" name="keyword2" value="<?php echo $keyword2; ?>" /></span>
-                <span class="text-nowrap"> 3. <input class="text" size="18" type="text" id="keyword3" name="keyword3" value="<?php echo $keyword3; ?>" /></span>
-                <span class="text-nowrap"> 4. <input class="text" size="18" type="text" id="keyword4" name="keyword4" value="<?php echo $keyword4; ?>" /></span>
+                <span class="text-nowrap"> 2. <input class="text" size="18" type="text" id="keyword2" name="keyword2" value="<?php echo w2PformSafe($keyword2); ?>" /></span>
+                <span class="text-nowrap"> 3. <input class="text" size="18" type="text" id="keyword3" name="keyword3" value="<?php echo w2PformSafe($keyword3); ?>" /></span>
+                <span class="text-nowrap"> 4. <input class="text" size="18" type="text" id="keyword4" name="keyword4" value="<?php echo w2PformSafe($keyword4); ?>" /></span>
                 <span class="text-nowrap"><input name="ignorespecchar" id="ignorespecchar" type="checkbox"  <?php echo ($ssearch['ignore_specchar'] == "on" ? 'checked="checked"' : ''); ?> /><label for="ignorespecchar"><?php echo $AppUI->_('Ignore special chars'); ?></label></span>
                 <span class="text-nowrap"><input name="ignorecase" id="ignorecase" type="checkbox"  <?php echo ($ssearch['ignore_case'] == "on" ? 'checked="checked"' : ''); ?> /><label for="ignorecase"><?php echo $AppUI->_('Ignore case'); ?></label></span>
                 <span class="text-nowrap"><input name="displayallflds" id="displayallflds" type="checkbox"  <?php echo ($ssearch['display_all_flds'] == "on" ? 'checked="checked"' : ''); ?> /><label for="displayallflds"><?php echo $AppUI->_('Display all fields'); ?></label></span>
