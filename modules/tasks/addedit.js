@@ -650,7 +650,9 @@ function checkDetail(form) {
 }
 
 function saveDetail(form) {
-	return null;
+	// copyForm() skips hidden fields; keep the list of custom fields the
+	// form showed, so unticked custom checkboxes are saved as unticked.
+	return ['w2p_custom_fields[]'];
 }
 
 function checkResource(form) {

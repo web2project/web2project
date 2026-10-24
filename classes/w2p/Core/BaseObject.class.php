@@ -59,6 +59,14 @@ abstract class w2p_Core_BaseObject extends w2p_System_Event implements w2p_Inter
     protected $_locale_char_set;
 
     /**
+     * Custom field values for the next store(), from setCustomFields().
+     * When null, store() takes them from $_POST.
+     *
+     * @var array<string, mixed>|null
+     */
+    protected $_customFieldValues = null;
+
+    /**
      *     Object constructor to set table and key field. This should be overridden by all submodules
      *
      * @param string $table     name of the table in the db schema relating to child class
@@ -169,6 +177,22 @@ abstract class w2p_Core_BaseObject extends w2p_System_Event implements w2p_Inter
     public function getError()
     {
         return $this->_error;
+    }
+
+    /**
+     * Sets the custom field values the next store() saves, by field name,
+     * instead of taking them from $_POST (for imports, cron jobs, the API).
+     * Fields not given keep their values.
+     *
+     * @param array<string, mixed> $values
+     *
+     * @return $this
+     */
+    public function setCustomFields(array $values)
+    {
+        $this->_customFieldValues = $values;
+
+        return $this;
     }
 
     public function clearErrors()
@@ -764,9 +788,15 @@ abstract class w2p_Core_BaseObject extends w2p_System_Event implements w2p_Inter
      */
     protected function hook_postStore()
     {
+        // Only the custom fields given a value (by the add/edit form, or by
+        // setCustomFields()) are written; a store() from anywhere else
+        // leaves them as they are.
+        $values = (null !== $this->_customFieldValues) ? $this->_customFieldValues : $_POST;
         $custom_fields = new w2p_Core_CustomFields($this->_tbl_module, 'addedit', $this->{$this->_tbl_key}, 'edit');
-        $custom_fields->bind($_POST);
-        $custom_fields->store($this->{$this->_tbl_key});
+        $custom_fields->bind($values);
+        if ($custom_fields->hasBoundValues()) {
+            $custom_fields->store($this->{$this->_tbl_key}, true);
+        }
 
         // The history entry is labelled with the object's <prefix>_name. Not
         // every class has one (CUser has no user_name), so only read it when
