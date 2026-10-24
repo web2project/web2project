@@ -53,6 +53,15 @@ foreach ($tables as $table) {
         }
         continue;
     }
+    if ('login' == $table) {
+        // Logins and logouts (history_item is the user). Every user may see
+        // their own; other users' need the Users module. checkModuleItem()
+        // would allow them all, because CUser::getAllowedRecords() lists
+        // every user for the user pickers.
+        $allowed[] = canView('users') ? $inTable
+            : '(' . $inTable . ' AND history_item = ' . (int) $AppUI->user_id . ')';
+        continue;
+    }
     $items = array();
     if ($perms->checkModule($_module, 'view')) {
         $items[] = 0;
