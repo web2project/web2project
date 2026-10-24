@@ -93,8 +93,7 @@ $theme = $AppUI->getTheme();
 // check is the user needs a new password
 if (w2PgetParam($_POST, 'lostpass', 0)) {
 	$AppUI->setUserLocale();
-	include W2P_BASE_DIR . '/locales/' . $AppUI->user_locale . '/locales.php';
-	include W2P_BASE_DIR . '/locales/core.php';
+	$AppUI->loadLocale();
 	setlocale(LC_TIME, $AppUI->user_lang);
 	if (w2PgetParam($_POST, 'sendpass', 0)) {
 		sendNewPass();
@@ -113,8 +112,7 @@ if (isset($_POST['login'])) {
 	$password = w2PgetParam($_POST, 'password', '');
 	$redirect = w2PgetParam($_POST, 'redirect', '');
 	$AppUI->setUserLocale();
-	include W2P_BASE_DIR . '/locales/' . $AppUI->user_locale . '/locales.php';
-	include W2P_BASE_DIR . '/locales/core.php';
+	$AppUI->loadLocale();
 	$ok = $AppUI->login($username, $password);
 	if (!$ok) {
 		$AppUI->setMsg('Login Failed', UI_MSG_ERROR);
@@ -135,8 +133,7 @@ $u = '';
 if ($AppUI->doLogin()) {
 	// load basic locale settings
 	$AppUI->setUserLocale();
-	include './locales/' . $AppUI->user_locale . '/locales.php';
-	include './locales/core.php';
+	$AppUI->loadLocale();
 	setlocale(LC_TIME, $AppUI->user_lang);
 	$redirect = !empty($_SERVER['QUERY_STRING']) ? strip_tags($_SERVER['QUERY_STRING']) : '';
 	if (strpos($redirect, 'logout') !== false) {
@@ -200,8 +197,7 @@ $u = $loader->checkFileName(w2PgetParam($_GET, 'u', ''));
 $u = preg_replace("/[^a-z0-9_]/", "", $u);
 
 // load module based locale settings
-include W2P_BASE_DIR . '/locales/' . $AppUI->user_locale . '/locales.php';
-include W2P_BASE_DIR . '/locales/core.php';
+$AppUI->loadLocale();
 
 setlocale(LC_TIME, $AppUI->user_lang);
 $m_config = w2PgetConfig($m);

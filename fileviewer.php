@@ -44,8 +44,7 @@ if (!isset($_SESSION['AppUI']) || w2p_logout_requested()) {
 	// check if we are logged in
 	if ($AppUI->doLogin()) {
 		$AppUI->setUserLocale();
-		include W2P_BASE_DIR . '/locales/' . $AppUI->user_locale . '/locales.php';
-		include W2P_BASE_DIR . '/locales/core.php';
+		$AppUI->loadLocale();
 		setlocale(LC_TIME, $AppUI->user_locale);
 
 		$redirect = @$_SERVER['QUERY_STRING'];
@@ -62,7 +61,7 @@ if (!isset($_SESSION['AppUI']) || w2p_logout_requested()) {
 	}
 }
 $AppUI = &$_SESSION['AppUI'];
-include W2P_BASE_DIR . '/locales/core.php';
+$AppUI->loadLocale();
 
 $file_id = (int) w2PgetParam($_GET, 'file_id', 0);
 

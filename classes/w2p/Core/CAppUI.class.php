@@ -349,13 +349,13 @@ class w2p_Core_CAppUI
         } else {
             // Need to try and find the language the user is using, find the first one
             // that has this as the language part
-            if (strlen($loc) > 2) {
-                list($l, $c) = explode('_', $loc);
-                $loc = $this->findLanguage($l, $c);
-            } else {
-                $loc = $this->findLanguage($loc);
+            $parts = explode('_', (string) $loc, 2);
+            $loc = $this->findLanguage($parts[0], isset($parts[1]) ? $parts[1] : false);
+            if (null === $loc) {
+                // The user's (or the host's) language isn't installed: use English.
+                $loc = 'en_US';
             }
-            $lang = $LANGUAGES[$loc];
+            $lang = isset($LANGUAGES[$loc]) ? $LANGUAGES[$loc] : array('en', 'English', 'English', 'en_US', 'utf-8');
         }
         list($base_locale, $notUsed, $notUsed2, $default_language, $lcs) = $lang;
         if (!isset($lcs)) {
@@ -370,6 +370,33 @@ class w2p_Core_CAppUI
         } else {
             return $user_lang;
         }
+    }
+
+    /**
+     * Loads the user's language: its locales.php (LOCALE_FIRST_DAY and the
+     * other locale settings) and its translations (locales/core.php).
+     *
+     * Falls back to English when the language isn't installed, so a
+     * preference naming a removed language can't break the calendars.
+     * Call setUserLocale() first.
+     */
+    public function loadLocale()
+    {
+        // locales.php and core.php run in this scope; give them the globals
+        // they read or set.
+        global $locale_char_set, $m, $perms, $w2Pconfig;
+        $AppUI = $this;
+
+        if ('' == (string) $this->user_locale
+            || !file_exists(W2P_BASE_DIR . '/locales/' . $this->user_locale . '/locales.php')) {
+            $this->user_locale = 'en';
+        }
+        // locales.php defines constants, which can't change later in the
+        // request (saving preferences loads the language a second time).
+        if (!defined('LOCALE_FIRST_DAY')) {
+            include W2P_BASE_DIR . '/locales/' . $this->user_locale . '/locales.php';
+        }
+        include W2P_BASE_DIR . '/locales/core.php';
     }
 
     public function findLanguage($language, $country = false)
