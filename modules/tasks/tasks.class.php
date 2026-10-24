@@ -2486,7 +2486,7 @@ class CTask extends w2p_Core_BaseObject
 
         $q = $this->_getQuery();
         $q->addQuery('t.task_id as id');
-        $q->addQuery('task_name as name, task_sequence');
+        $q->addQuery('task_name as name, task_sequence as sequence');
         $q->addQuery('task_description as description');
         $q->addQuery('task_start_date as startDate');
         $q->addQuery('task_end_date as endDate');

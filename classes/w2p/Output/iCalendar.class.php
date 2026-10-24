@@ -34,7 +34,7 @@ class w2p_Output_iCalendar
         $description = '';
         $attachments = '';
 
-        if ($calendarItem['project_id']) {
+        if (!empty($calendarItem['project_id'])) {
             $description .= $AppUI->_('Project') . ': ' .
                 $calendarItem['project_name'];
             $attachments .= 'ATTACH;VALUE=URL:' . W2P_BASE_URL .
@@ -44,7 +44,7 @@ class w2p_Output_iCalendar
         $description .= '\r\n----------------------------------------\r\n';
         $description .= $AppUI->_('Description');
         $description .= '\r\n----------------------------------------\r\n';
-        $description .= strtr($calendarItem['description'], array("\n" => '\n',
+        $description .= strtr((string) ($calendarItem['description'] ?? ''), array("\n" => '\n',
                                                                   "\r\n" =>'\r\n'));
         $description .= '\r\n----------------------------------------\r\n';
         $description .= $AppUI->_('URL');
@@ -53,8 +53,8 @@ class w2p_Output_iCalendar
         $attachments .= 'ATTACH;VALUE=URL:' . $calendarItem['url'];
         $startDate = self::formatDate($calendarItem['startDate']);
         $endDate = self::formatDate($calendarItem['endDate']);
-        $updatedDate = self::formatDate($calendarItem['updatedDate']);
-        $sequence = (int) $calendarItem['sequence'];
+        $updatedDate = self::formatDate($calendarItem['updatedDate'] ?? null);
+        $sequence = (int) ($calendarItem['sequence'] ?? 0);
 
         $eventItem = "BEGIN:VEVENT\r\nDTSTART;VALUE=DATE-TIME:{$startDate}\r\n" .
             "DTEND;VALUE=DATE-TIME:{$endDate}\r\nUID:{$uid}\r\nSUMMARY:{$name}\r\n" .
@@ -65,20 +65,22 @@ class w2p_Output_iCalendar
     }
 
     /**
-     * This is our kludgy pre-5.3 way of formatting datetimes.
+     * Formats a database datetime, which web2project stores in UTC, as an
+     * iCalendar UTC date-time (20261024T143000Z).
      *
-     * @todo This should get a review once we can make 5.3 our minimum version.
+     * @param string|null $mysqlDate
+     *
+     * @return string
      */
-    private function formatDate($mysqlDate)
+    private static function formatDate($mysqlDate)
     {
-        $myDate = new DateTime($mysqlDate);
+        $utc = new DateTimeZone('UTC');
+        try {
+            $date = new DateTime((string) $mysqlDate !== '' ? (string) $mysqlDate : 'now', $utc);
+        } catch (Exception $e) {
+            $date = new DateTime('now', $utc);
+        }
 
-        $timestamp = strtotime($mysqlDate);
-        // The following line checks to see if the date is in DST range.
-        $timestamp -= $myDate->format('I')*60*60;
-        $myDatetime = date('Ymd His', $timestamp);
-        $myDatetime = str_replace(' ', 'T', $myDatetime).'Z';
-
-        return $myDatetime;
+        return $date->format('Ymd\THis\Z');
     }
 }

@@ -428,7 +428,7 @@ class CEvent extends w2p_Core_BaseObject
         $q = $this->_getQuery();
         $q->addTable('events', 'e');
         $q->addQuery("e.event_id, event_name, event_sequence, event_owner, event_description, " .
-            "ue.user_id, event_cwd, event_start_datetime, event_end_datetime, event_updated, event_recurs");
+            "ue.user_id, event_cwd, event_start_datetime, event_end_datetime, event_updated, event_recurs, event_times_recuring");
         $q->addQuery('projects.project_id, projects.project_name');
         $q->addTable('events', 'e');
         $q->leftJoin('projects', 'projects', 'e.event_project = projects.project_id');
@@ -581,7 +581,8 @@ class CEvent extends w2p_Core_BaseObject
                 $eventList[] = array('id' => $event['event_id'], 'name' => $event['event_name'],
                             'sequence' => $event['event_sequence'], 'description' => $event['event_description'],
                             'startDate' => $myDates[0]->format(FMT_DATETIME_MYSQL), 'endDate' => $myDates[1]->format(FMT_DATETIME_MYSQL),
-                            'updatedDate' => $event['event_updated'], 'url' => $url);
+                            'updatedDate' => $event['event_updated'], 'url' => $url,
+                            'project_id' => $event['project_id'], 'project_name' => $event['project_name']);
             }
         }
 
