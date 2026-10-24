@@ -237,6 +237,24 @@ if (isset($_POST['dosql']) || 0 === strpos($a, 'do_') || 'domodsql' == $a) {
 		$AppUI->setMsg('Your form has expired or did not come from this site. Please try again.', UI_MSG_ERROR);
 		$AppUI->redirect();
 	}
+
+	// ...and may only run for an active module the user can access, so a
+	// handler that forgets its own permission check can't be reached by
+	// users who can't open the module. The exceptions are the self-service
+	// handlers, and only while a user is changing their own record: users
+	// without the Users or System module still edit their own details,
+	// preferences and calendar feed. Each handler keeps its own checks.
+	$handler = $m . '/' . ($u ? $u . '/' : '') . (isset($_POST['dosql']) ? $loader->checkFileName($_POST['dosql']) : $a);
+	$selfService = array(
+		'system/do_preference_aed' => 'pref_user',
+		'users/do_user_aed'        => 'user_id',
+		'users/do_user_token'      => 'user_id',
+	);
+	$ownRecord = isset($selfService[$handler]) && !w2PgetParam($_POST, 'del', 0)
+		&& (int) w2PgetParam($_POST, $selfService[$handler], 0) === (int) $AppUI->user_id;
+	if (!$ownRecord && !($AppUI->isActiveModule($m) && canAccess($m))) {
+		$AppUI->redirect(ACCESS_DENIED);
+	}
 }
 
 // do some db work if dosql is set
