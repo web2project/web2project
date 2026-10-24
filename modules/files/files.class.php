@@ -31,7 +31,6 @@ class CFile extends w2p_Core_BaseObject {
     protected $indexer = false;
     protected $_file_id = 0;
     protected $_file_system = null;
-    // This "breaks" check-in/upload if helpdesk is not present class variable needs to be added "dymanically"
 
     public function __construct() {
         parent::__construct('files', 'file_id');

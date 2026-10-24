@@ -34,9 +34,6 @@ if (!$loaded && $object_id > 0) {
     $AppUI->redirect('m=' . $m);
 }
 
-if (file_exists(W2P_BASE_DIR . '/modules/helpdesk/config.php')) {
-	include (W2P_BASE_DIR . '/modules/helpdesk/config.php');
-}
 $canAdmin = canEdit('system');
 // add to allow for returning to other modules besides Files
 $referrerArray = parse_url(isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '');
@@ -87,10 +84,6 @@ if ($object->file_project) {
 $task = new CTask();
 $task->load($file_task);
 $task_name = $task->task_name;
-
-if (isset($object->file_helpdesk_item)) {
-	$file_helpdesk_item = $object->file_helpdesk_item;
-}
 $folders = getFolderSelectList();
 // New files go into the folder they were added from ("add new file to
 // this folder"); existing files show the folder they are in.
