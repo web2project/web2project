@@ -47,6 +47,11 @@ $view = new w2p_Output_HTML_ViewHelper($AppUI);
                 <?php echo $methods['values'][$key]; ?>
             </p>
         <?php endforeach; ?>
+        <?php
+        // The feed URL gives read access to the user's calendar, so only the
+        // user and those who may edit users see it (do_user_token.php checks
+        // the same).
+        if ($user->user_id == $AppUI->user_id || canEdit('users')) { ?>
         <p><?php $view->showLabel('Calendar Feed'); ?>
             <?php if ($user->feed_token != '') {
                 $calendarFeed = W2P_BASE_URL.'/calendar.php?token='.$user->feed_token.'&amp;ext=.ics';
@@ -60,6 +65,7 @@ $view = new w2p_Output_HTML_ViewHelper($AppUI);
                 <input type="submit" name="regenerate token" value="<?php echo $AppUI->_('regenerate feed url'); ?>" class="button btn btn-primary btn-mini" />
             </form>
         </p>
+        <?php } ?>
         <p><?php $view->showLabel('Signature'); ?>
             <?php $view->showField('user_signature', $user->user_signature); ?>
         </p>
