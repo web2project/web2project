@@ -922,27 +922,35 @@ function displayWeeks_r($list, $task, $level, $fromPeriod, $toPeriod, $user_id =
 
 // from modules/tasks/tasksperuser_sub.php
 // from modules/reports/tasksperuser.php
+/**
+ * The number of the week a period or task starts in.
+ *
+ * Weeks are ISO weeks (Monday to Sunday), the numbering of %U, so this is
+ * the ISO week of the date. (These used to step to the Sunday before, or
+ * the Saturday after, and number that. Stepping to a Sunday and taking its
+ * ISO week would put Monday-Saturday dates one week early.)
+ *
+ * @param w2p_Utilities_Date $d
+ *
+ * @return int
+ */
 function getBeginWeek($d)
 {
-    $dn = (int) $d->Format('%w');
-    $dd = new w2p_Utilities_Date($d);
-    $dd->subtractSeconds($dn * 24 * 3600);
-
-    return (int) $dd->Format('%U');
+    return (int) $d->format('%U');
 }
 
 // from modules/tasks/tasksperuser_sub.php
 // from modules/reports/tasksperuser.php
+/**
+ * The number of the week a period or task ends in (see getBeginWeek()).
+ *
+ * @param w2p_Utilities_Date $d
+ *
+ * @return int
+ */
 function getEndWeek($d)
 {
-    $dn = (int) $d->Format('%w');
-    if ($dn > 0) {
-        $dn = 7 - $dn;
-    }
-    $dd = new w2p_Utilities_Date($d);
-    $dd->addSeconds($dn * 24 * 3600);
-
-    return (int) $dd->Format('%U');
+    return (int) $d->format('%U');
 }
 
 // from modules/tasks/tasksperuser_sub.php
