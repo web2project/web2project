@@ -627,6 +627,54 @@ class w2p_Utilities_Date extends Date {
         $this->setDate( $this->getTime() + $n, DATE_FORMAT_UNIXTIME);
     }
 
+    /**
+     * Moves the date back by $n seconds (forward for a negative $n).
+     *
+     * PEAR Date's version builds a Date_Span, whose PHP 4 style constructor
+     * never runs on PHP 8, so the span was always zero and the date never
+     * moved.
+     *
+     * @param int $n
+     */
+    public function subtractSeconds( $n )
+    {
+        $this->addSeconds(-(int) $n);
+    }
+
+    /**
+     * The day before, at the same time. PEAR Date's version returns a plain
+     * Date, whose addSeconds()/subtractSeconds() don't work on PHP 8.
+     *
+     * @return w2p_Utilities_Date
+     */
+    public function getPrevDay()
+    {
+        return $this->dayFromHere(-1);
+    }
+
+    /**
+     * The day after, at the same time (see getPrevDay()).
+     *
+     * @return w2p_Utilities_Date
+     */
+    public function getNextDay()
+    {
+        return $this->dayFromHere(1);
+    }
+
+    /**
+     * @param int $days
+     *
+     * @return w2p_Utilities_Date
+     */
+    protected function dayFromHere($days)
+    {
+        $day = mktime(12, 0, 0, $this->month, $this->day + $days, $this->year);
+
+        return new w2p_Utilities_Date(sprintf('%s %02d:%02d:%02d', date('Y-m-d', $day), $this->hour, $this->minute, $this->second),
+            $this->tz['id'] ?? '');
+    }
+
 
     /**
      * Formats the date with the strftime-style codes of PEAR Date::format().

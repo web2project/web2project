@@ -1789,15 +1789,15 @@ class w2p_Utilities_DateTest extends CommonSetup
     }
 
     /**
-     * Tests subtractSeconds with a negative number, this appears to NOT work
-     * as expected
+     * Tests subtractSeconds with a negative number, which moves the date
+     * forward, as addSeconds() with a negative number moves it back
      */
     public function testSubtractSecondsNegative()
     {
         $date = new w2p_Utilities_Date('2010-11-07 11:00:00');
         $date->subtractSeconds(-45);
 
-        $this->assertEquals('2010-11-07 11:00:00', $date->getDate(DATE_FORMAT_ISO));
+        $this->assertEquals('2010-11-07 11:00:45', $date->getDate(DATE_FORMAT_ISO));
     }
 
     /**
