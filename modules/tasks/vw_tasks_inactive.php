@@ -8,7 +8,26 @@ global $AppUI, $m, $project_id, $f, $user_id;
 
 $task = new CTask();
 
-$tasks = $task->loadAll('task_start_date, task_end_date', 'task_status = -1 AND task_project = '. $project_id);
+// Same permission filters as the active task list (vw_tasks.php): the
+// project and task allow/deny lists for the current user.
+$q = new w2p_Database_Query();
+$q->addTable('tasks');
+$q->addJoin('projects', 'p', 'p.project_id = task_project', 'inner');
+$q->addQuery('tasks.*');
+$q->addWhere('task_status = -1');
+$q->addWhere('task_project = ' . (int) $project_id);
+
+$project = new CProject();
+$allowedProjects = $project->getAllowedSQL($AppUI->user_id, 'task_project');
+if (count($allowedProjects)) {
+    $q->addWhere($allowedProjects);
+}
+$allowedTasks = $task->getAllowedSQL($AppUI->user_id, 'tasks.task_id');
+if (count($allowedTasks)) {
+    $q->addWhere($allowedTasks);
+}
+$q->addOrder('task_start_date, task_end_date');
+$tasks = $q->loadHashList('task_id');
 
 $module = new w2p_System_Module();
 $fields = $module->loadSettings($m, 'tasklist');
