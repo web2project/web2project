@@ -165,18 +165,23 @@ class w2p_Utilities_Date extends Date {
         /** @var w2p_Core_CAppUI $AppUI */
         global $AppUI;
 
-        // isActiveModule() runs a query; calendars call this once per cell, so look it up once per request
+        // Calendars call this once per cell, so decide once per request
+        // whether the Holiday add-on can be used. It counts only when it is
+        // active *and* its files are there: a module row left active after
+        // the folder was removed must not make every calendar fatal.
         static $holidayModuleActive = null;
         if (is_null($holidayModuleActive)) {
-            $holidayModuleActive = (bool) $AppUI->isActiveModule('holiday');
+            $holidayModuleActive = false;
+            $holidayFile = W2P_BASE_DIR . '/modules/holiday/holiday_functions.class.php';
+            if ($AppUI->isActiveModule('holiday') && is_file($holidayFile)) {
+                require_once $holidayFile;
+                $holidayModuleActive = class_exists('HolidayFunctions', false)
+                    && method_exists('HolidayFunctions', 'isHoliday');
+            }
         }
 
-        if ($holidayModuleActive) {
-            // Holiday module, check the holiday database
-            require_once W2P_BASE_DIR."/modules/holiday/holiday_functions.class.php";
-            if(HolidayFunctions::isHoliday($this)) {
-                return false;
-            }
+        if ($holidayModuleActive && HolidayFunctions::isHoliday($this)) {
+            return false;
         }
 
         $working_days = w2PgetConfig('cal_working_days');
