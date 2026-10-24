@@ -405,11 +405,19 @@ class w2p_Core_CAppUI
     /**
      * Load the known language codes for loaded locales
      */
+    /**
+     * The installed languages, from each locales/<dir>/lang.php.
+     *
+     * Read once per request (scanning locales/ is cheap), not kept in the
+     * session, so a language added or removed shows up without logging out.
+     *
+     * @return array<string, array<int, string>>
+     */
     public function loadLanguages()
     {
-        if (isset($_SESSION['LANGUAGES'])) {
-            $LANGUAGES = &$_SESSION['LANGUAGES'];
-        } else {
+        static $languages = null;
+
+        if (null === $languages) {
             $LANGUAGES = array();
             $loader = new w2p_FileSystem_Loader();
             $langs = $loader->readDirs('locales');
@@ -418,9 +426,12 @@ class w2p_Core_CAppUI
                     include W2P_BASE_DIR . '/locales/' . $lang . '/lang.php';
                 }
             }
-            $_SESSION['LANGUAGES'] = &$LANGUAGES;
+            $languages = $LANGUAGES;
         }
-        return $LANGUAGES;
+        // Sessions from before this change still carry the old cache.
+        unset($_SESSION['LANGUAGES']);
+
+        return $languages;
     }
 
     /**
