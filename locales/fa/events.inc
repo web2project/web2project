@@ -57,6 +57,7 @@
 'My Events'=>'رويدادهاي من',
 'Never'=>'هرگز',
 'New event'=>'رويداد جديد',
+'Non-working day'=>'روز غیرکاری',
 'November'=>'نوامبر',
 'October'=>'اكتبر',
 'Overdue'=>'سررسيده',

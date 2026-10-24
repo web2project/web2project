@@ -57,6 +57,7 @@
 'My Events'=>'Mina händelser',
 'Never'=>'Aldrig',
 'New event'=>'Ny händelse',
+'Non-working day'=>'Arbetsfri dag',
 'November'=>'',
 'October'=>'Oktober',
 'Overdue'=>'försenad',

@@ -57,6 +57,7 @@
 'My Events'=>'Mes événements',
 'Never'=>'Jamais',
 'New event'=>'Nouvel événement',
+'Non-working day'=>'Jour non ouvré',
 'November'=>'Novembre',
 'October'=>'Octobre',
 'Overdue'=>'Débordement',

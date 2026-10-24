@@ -56,6 +56,7 @@
 'Never'=>'Nunca',
 'New event'=>'Novo Evento',
 'next month'=>'próximo mês',
+'Non-working day'=>'Dia não útil',
 'Overdue'=>'Atraso',
 'P'=>'P',
 'Parent Task'=>'Tarefa Mãe',
