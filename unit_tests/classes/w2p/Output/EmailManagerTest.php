@@ -1,6 +1,6 @@
 <?php
 /**
- * Class for testing Web2project\Output\EmailManager functionality
+ * Class for testing w2p_Output_EmailManager functionality
  *
  * PHP version 5
  *
@@ -15,7 +15,7 @@
  * @link       http://www.web2project.net
  */
 
-class Web2project_Output_EmailManagerTest extends CommonSetup
+class w2p_Output_EmailManagerTest extends CommonSetup
 {
     protected $manager = null;
 

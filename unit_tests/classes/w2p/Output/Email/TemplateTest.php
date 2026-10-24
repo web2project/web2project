@@ -1,6 +1,6 @@
 <?php
 /**
- * Class for testing Web2project\Output\EmailTemplate functionality
+ * Class for testing w2p_Output_Email_Template functionality
  *
  * PHP version 5
  *
@@ -15,7 +15,7 @@
  * @link       http://www.web2project.net
  */
 
-class Web2project_Output_EmailTemplateTest extends CommonSetup
+class w2p_Output_Email_TemplateTest extends CommonSetup
 {
     protected $template = null;
     protected function setUp(): void
