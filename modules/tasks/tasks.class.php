@@ -2072,8 +2072,35 @@ class CTask extends w2p_Core_BaseObject
      *
      * @todo Get the start/end dates for the cache.. - updateTaskCache
      */
+    /**
+     * Moves the task and its subtasks to another project.
+     *
+     * The task must be loaded. The user needs edit rights on the task, and
+     * the rights to add a task to the target project (add on Tasks, view on
+     * the project), as on the task add/edit page. Nothing is changed when a
+     * check fails.
+     *
+     * @param int $task_id
+     * @param int $project_old
+     * @param int $project_new
+     *
+     * @return bool false (with getError() set) if the move was refused
+     */
     public function moveTaskBetweenProjects($task_id, $project_old, $project_new)
     {
+        $task_id = (int) $task_id;
+        $project_new = (int) $project_new;
+
+        if (!$task_id || $task_id != (int) $this->task_id || !$project_new) {
+            $this->_error['moveTask'] = 'invalidID';
+            return false;
+        }
+        if (!$this->canEdit() || !$this->canCreate()
+            || !$this->_perms->checkModuleItem('projects', 'view', $project_new)) {
+            $this->_error['moveTask'] = 'You are not allowed to move this task to that project.';
+            return false;
+        }
+
         $this->updateSubTasksProject($project_new, $task_id);
 		$this->removeDependencies();
 		$this->task_project=$project_new;
@@ -2107,6 +2134,8 @@ class CTask extends w2p_Core_BaseObject
         $q->exec();
         $q->clear();
         CProject::updatePercentComplete($project_old);
+
+        return true;
     }
 
     /**
