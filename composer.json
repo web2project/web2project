@@ -13,7 +13,6 @@
         }
     ],
     "require": {
-        "ircmaxell/password-compat": "1.0.4",
         "adodb/adodb-php": "^5.22",
         "nesbot/carbon": "^2.72"
     },
