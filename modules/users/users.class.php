@@ -227,9 +227,14 @@ class CUser extends w2p_Core_BaseObject
 
     public function hook_cron()
     {
+        // Remove sessions that never logged in (session_user is the access
+        // log id, 0 until login), once they are an hour old, so a session
+        // in the middle of logging in is left alone. Times are stored in
+        // UTC (dbfnNowWithTZ()). Expired sessions are w2p_System_Session::gc()'s job.
         $q = $this->_getQuery();
         $q->setDelete('sessions');
-        $q->addWhere("session_user ='' OR session_user IS NULL");
+        $q->addWhere('session_user = 0');
+        $q->addWhere("session_updated < '" . gmdate('Y-m-d H:i:s', time() - 3600) . "'");
         $q->exec();
         $q->clear();
 

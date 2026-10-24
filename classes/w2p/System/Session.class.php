@@ -79,6 +79,13 @@ class w2p_System_Session
             $q->addInsert('session_id', $id);
             $q->addInsert('session_data', $data);
             $q->addInsert('session_created', $q->dbfnNowWithTZ());
+            $q->addInsert('session_updated', $q->dbfnNowWithTZ());
+            // Set on insert too: a session created by the login request
+            // would otherwise stay at 0 until the user's next request, and
+            // CUser::hook_cron() removes sessions still at 0.
+            if (isset($AppUI)) {
+                $q->addInsert('session_user', (int) $AppUI->last_insert_id);
+            }
         }
         $q->exec();
         $q->clear();
