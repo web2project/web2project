@@ -71,6 +71,12 @@ class w2p_FileSystem_Loader
         /** @var w2p_Core_CAppUI $AppUI */
         global $AppUI;
 
+        // A request parameter can be an array (m[]=x); that's no file name.
+        if (is_array($file) || is_object($file)) {
+            $AppUI->redirect(ACCESS_DENIED);
+        }
+        $file = (string) $file;
+
         // define bad characters and their replacement
         $bad_chars = ";/\\";
         $bad_replace = '....'; // Needs the same number of chars as $bad_chars

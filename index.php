@@ -256,7 +256,13 @@ if (isset($_POST['dosql']) || 0 === strpos($a, 'do_') || 'domodsql' == $a) {
 // do some db work if dosql is set
 // TODO - MUST MOVE THESE INTO THE MODULE DIRECTORY
 if (isset($_POST['dosql'])) {
-	require W2P_BASE_DIR . '/modules/' . $m . '/' . ($u ? ($u . '/') : '') . $loader->checkFileName($_POST['dosql']) . '.php';
+	$dosql_file = W2P_BASE_DIR . '/modules/' . $m . '/' . ($u ? ($u . '/') : '') . $loader->checkFileName($_POST['dosql']) . '.php';
+	if (!is_file($dosql_file)) {
+		// No such handler: say so instead of a fatal error that shows the path.
+		$AppUI->setMsg('The requested action does not exist.', UI_MSG_ERROR);
+		$AppUI->redirect('m=' . $m);
+	}
+	require $dosql_file;
 }
 
 // start output proper
