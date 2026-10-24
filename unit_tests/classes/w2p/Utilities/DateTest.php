@@ -1884,4 +1884,79 @@ class w2p_Utilities_DateTest extends CommonSetup
         $Feb_15_2011 = new w2p_Utilities_Date('2011-02-15');
         $this->assertEquals(11, $base->findDaysInRangeOverlap($Jan_15_2011, $Feb_15_2011, $Jan_01_2010, $Jan_31_2011));
     }
+
+    /**
+     * Each supported format code, for Wednesday 2026-10-21 14:05:09.
+     */
+    public function testFormatCodes()
+    {
+        $date = new w2p_Utilities_Date('2026-10-21 14:05:09');
+
+        $expected = array(
+            '%a' => 'Wed',      '%A' => 'Wednesday', '%b' => 'Oct',      '%B' => 'October',
+            '%C' => '20',       '%d' => '21',        '%D' => '10/21/26', '%e' => '21',
+            '%H' => '14',       '%I' => '02',        '%j' => '294',      '%m' => '10',
+            '%M' => '05',       '%n' => "\n",        '%p' => 'pm',       '%P' => 'PM',
+            '%r' => '02:05:09 pm', '%R' => '14:05',  '%S' => '09',       '%t' => "\t",
+            '%T' => '14:05:09', '%U' => '43',        '%w' => '3',        '%y' => '26',
+            '%Y' => '2026',     '%%' => '%',
+        );
+        foreach ($expected as $format => $output) {
+            $this->assertSame($output, $date->format($format), $format);
+        }
+        $this->assertSame(date('T', mktime(14, 5, 9, 10, 21, 2026)), $date->format('%Z'));
+    }
+
+    public function testFormatPadding()
+    {
+        $date = new w2p_Utilities_Date('2026-01-05 09:03:04');
+
+        $this->assertSame(' 5', $date->format('%e'));
+        $this->assertSame('005', $date->format('%j'));
+        $this->assertSame('09:03:04 am', $date->format('%r'));
+        $this->assertSame('0', (new w2p_Utilities_Date('2026-10-18'))->format('%w'));
+    }
+
+    /**
+     * Letters outside a code are copied, not replaced.
+     */
+    public function testFormatLiteralText()
+    {
+        $date = new w2p_Utilities_Date('2026-10-21 14:05:09');
+
+        $this->assertSame('21 de October de 2026', $date->format('%d de %B de %Y'));
+        $this->assertSame('Today: Wednesday',      $date->format('Today: %A'));
+        $this->assertSame('20261021T140509',       $date->format(FMT_DATEISO));
+        $this->assertSame('Wed, 21 Oct 2026 14:05:09', $date->format(FMT_DATERFC822));
+        $this->assertSame('2026-10-21 14:05:09',   $date->format(FMT_DATETIME_MYSQL));
+        $this->assertSame('YmdHIS',                $date->format('YmdHIS'));
+    }
+
+    /**
+     * An unknown code, and a "%" at the end, are output as written.
+     */
+    public function testFormatUnknownCode()
+    {
+        $date = new w2p_Utilities_Date('2026-10-21 14:05:09');
+
+        $this->assertSame('%q 2026 %', $date->format('%q %Y %'));
+    }
+
+    /**
+     * The date and time preferences offered on the preferences page.
+     */
+    public function testFormatPreferenceFormats()
+    {
+        $date = new w2p_Utilities_Date('2026-10-21 14:05:09');
+
+        $expected = array(
+            '%d/%b/%Y' => '21/Oct/2026', '%d/%m/%Y' => '21/10/2026', '%d.%m.%Y' => '21.10.2026',
+            '%b/%d/%Y' => 'Oct/21/2026', '%m.%d.%Y' => '10.21.2026', '%m/%d/%Y' => '10/21/2026',
+            '%Y/%b/%d' => '2026/Oct/21', '%Y/%m/%d' => '2026/10/21', '%Y-%m-%d' => '2026-10-21',
+            '%I:%M %p' => '02:05 pm',    '%H:%M'    => '14:05',      '%H:%M:%S' => '14:05:09',
+        );
+        foreach ($expected as $format => $output) {
+            $this->assertSame($output, $date->format($format), $format);
+        }
+    }
 }

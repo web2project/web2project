@@ -628,57 +628,78 @@ class w2p_Utilities_Date extends Date {
     }
 
 
+    /**
+     * Formats the date with the strftime-style codes of PEAR Date::format().
+     *
+     * Only "%" followed by a code is replaced; everything else, including
+     * letters, is copied through, and an unknown code is output as written
+     * (e.g. "%q"). Names are English.
+     *
+     *   %a  abbreviated weekday (Wed)      %n  newline
+     *   %A  full weekday (Wednesday)       %p  am/pm
+     *   %b  abbreviated month (Oct)        %P  AM/PM
+     *   %B  full month (October)           %r  time, 12h: %I:%M:%S %p
+     *   %C  century (20)                   %R  time, 24h: %H:%M
+     *   %d  day of month (01-31)           %S  seconds (00-59)
+     *   %D  same as %m/%d/%y               %t  tab
+     *   %e  day of month, space padded     %T  same as %H:%M:%S
+     *   %H  hour, 24h (00-23)              %U  ISO-8601 week number (01-53)
+     *   %I  hour, 12h (01-12)              %w  weekday (0 = Sunday)
+     *   %j  day of year (001-366)          %y  year, two digits
+     *   %m  month (01-12)                  %Y  year, four digits
+     *   %M  minutes (00-59)                %Z  time zone abbreviation
+     *   %%  a literal "%"
+     *
+     * %U has always been the ISO week (Monday-start) in web2project, unlike
+     * strftime's Sunday-start week; it is kept that way.
+     *
+     * @param string $format
+     *
+     * @return string
+     */
     public function format($format)
     {
         $myTime = mktime($this->hour, $this->minute, $this->second, $this->month, $this->day, $this->year);
 
-        $_config = str_split($format);
-
+        $format = (string) $format;
+        $length = strlen($format);
         $output = '';
-        foreach($_config as $value)
-        {
-            switch ($value) {
-                case 'Y':   // year, four digit
-                case 'd':   // day of month, two digit
-                case 'm':   // month, two digit
-                case 'H':   // hours, 24h format 
-                    $newValue = date($value, $myTime);
-                    break;
-                case 'I':   // hours, 12h format, two digit
-                    $newValue = date('h', $myTime);
-                    break;
-                case 'S':   // seconds, two digit
-                    $newValue = date('s', $myTime);
-                    break;
-                case 'M':   // minutes, two digit
-                    $newValue = date('i', $myTime);
-                    break;
-                case 'p':   // am/pm, lowercase
-                    $newValue = date('a', $myTime);
-                    break;
-                case 'b':   // month, three letters
-                    $newValue = date('M', $myTime);
-                    break;
-                case 'B':   // month, full name
-                    $newValue = date('F', $myTime);
-                    break;
-                case 'A':   // day, full name
-                    $newValue = date('l', $myTime);
-                    break;
-                case 'T':   // hours, 24 hour format : minutes, two digit : seconds, two digit
-                    $newValue = date('H:i:s', $myTime);
-                    break;
-                case 'U':   // week, number
-                    $newValue = date('W', $myTime);
-                    break;
-                case '%':
-                    $newValue = '';
-                    break;
-                case '/':
-                default:
-                    $newValue = $value;
+        for ($i = 0; $i < $length; $i++) {
+            if ('%' != $format[$i] || $i + 1 == $length) {
+                $output .= $format[$i];
+                continue;
             }
-            $output .= $newValue;
+            $code = $format[++$i];
+            switch ($code) {
+                case 'a':   $output .= date('D', $myTime);                         break;
+                case 'A':   $output .= date('l', $myTime);                         break;
+                case 'b':   $output .= date('M', $myTime);                         break;
+                case 'B':   $output .= date('F', $myTime);                         break;
+                case 'C':   $output .= sprintf('%02d', intdiv((int) date('Y', $myTime), 100)); break;
+                case 'd':   $output .= date('d', $myTime);                         break;
+                case 'D':   $output .= date('m/d/y', $myTime);                     break;
+                case 'e':   $output .= sprintf('%2d', (int) date('j', $myTime));   break;
+                case 'H':   $output .= date('H', $myTime);                         break;
+                case 'I':   $output .= date('h', $myTime);                         break;
+                case 'j':   $output .= sprintf('%03d', (int) date('z', $myTime) + 1); break;
+                case 'm':   $output .= date('m', $myTime);                         break;
+                case 'M':   $output .= date('i', $myTime);                         break;
+                case 'n':   $output .= "\n";                                       break;
+                case 'p':   $output .= date('a', $myTime);                         break;
+                case 'P':   $output .= date('A', $myTime);                         break;
+                case 'r':   $output .= date('h:i:s a', $myTime);                   break;
+                case 'R':   $output .= date('H:i', $myTime);                       break;
+                case 'S':   $output .= date('s', $myTime);                         break;
+                case 't':   $output .= "\t";                                       break;
+                case 'T':   $output .= date('H:i:s', $myTime);                     break;
+                case 'U':   $output .= date('W', $myTime);                         break;
+                case 'w':   $output .= date('w', $myTime);                         break;
+                case 'y':   $output .= date('y', $myTime);                         break;
+                case 'Y':   $output .= date('Y', $myTime);                         break;
+                case 'Z':   $output .= date('T', $myTime);                         break;
+                case '%':   $output .= '%';                                        break;
+                default:    $output .= '%' . $code;
+            }
         }
 
         return $output;
