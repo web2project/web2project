@@ -1224,11 +1224,46 @@ class w2p_Extensions_Permissions extends gacl_api
             return array();
         }
 
+        $allowedRecords = $this->getViewableItems($module, $userid, $mod_class);
+        if (isset($allowedRecords[(int) $item])) {
+            return array('access' => 1, 'acl_id' => 'checked');
+        }
+
+        return array();
+    }
+
+    /**
+     * The items of a module the user may view: the records for which
+     * checkModuleItem($module, 'view', $id) is true, as id => label.
+     *
+     * checkModuleItem() works this list out on every call, so code that
+     * checks many items of one module (a history list, say) should get it
+     * once and look the ids up instead.
+     *
+     * @param string               $module
+     * @param int|null             $userid    defaults to the current user
+     * @param array<string, mixed> $mod_class the module's class and item
+     *                                        table; looked up when empty
+     *
+     * @return array<int|string, mixed> empty for an unknown or inactive module
+     */
+    public function getViewableItems($module, $userid = null, $mod_class = array())
+    {
+        if (!$userid) {
+            $userid = $GLOBALS['AppUI']->user_id;
+        }
+        if (!$userid || !$module) {
+            return array();
+        }
+
+        if (!count($mod_class)) {
+            $mod_class = $this->itemModuleClass($module);
+        }
         if (!count($mod_class)) {
             $q = new w2p_Database_Query;
             $q->addTable('modules');
             $q->addQuery('mod_main_class, permissions_item_table, permissions_item_field, permissions_item_label, mod_directory');
-            $q->addWhere('mod_directory = \'' . $module . '\'');
+            $q->addWhere('mod_directory = ' . $q->quote((string) $module));
             $q->addWhere('mod_active = 1');
             $mod_class = $q->loadHash();
         }
@@ -1236,26 +1271,39 @@ class w2p_Extensions_Permissions extends gacl_api
         //If we don't know what is the module we are dealing with lets deny
         // (loadHash() returns false for an inactive or unknown module)
         if (!is_array($mod_class) || empty($mod_class['mod_directory'])) {
-            dprint(__file__, __line__, 2, 'user:' . $userid . 'module:' . $module . 'Item:' . $item);
+            dprint(__file__, __line__, 2, 'user:' . $userid . 'module:' . $module);
             return array();
         }
         $obj = new $mod_class['mod_main_class'];
-        $allowedRecords = array();
+        $fields = $mod_class['permissions_item_table'] . '.' . $mod_class['permissions_item_field'] . ',' . $mod_class['permissions_item_label'];
         if ($module == 'projects') {
-            $allowedRecords = $obj->getAllowedRecords($userid, $mod_class['permissions_item_table'] . '.' . $mod_class['permissions_item_field'] . ',' . $mod_class['permissions_item_label'], '', null, null, 'projects');
+            $allowedRecords = $obj->getAllowedRecords($userid, $fields, '', null, null, 'projects');
         } else {
-            $allowedRecords = $obj->getAllowedRecords($userid, $mod_class['permissions_item_table'] . '.' . $mod_class['permissions_item_field'] . ',' . $mod_class['permissions_item_label']);
+            $allowedRecords = $obj->getAllowedRecords($userid, $fields);
         }
 
-        if (count($allowedRecords)) {
-            if (isset($allowedRecords[(int) $item])) {
-                return array('access' => 1, 'acl_id' => 'checked');
-            } else {
-                return array();
-            }
-        } else {
-            return array();
+        return is_array($allowedRecords) ? $allowedRecords : array();
+    }
+
+    /**
+     * The class and item table for the "modules" whose items aren't
+     * described by their own row in the modules table.
+     *
+     * @param string $module
+     *
+     * @return array<string, string> empty for any other module
+     */
+    protected function itemModuleClass($module)
+    {
+        if ($module == 'task_log') {
+            return array('mod_main_class' => 'CTask_Log', 'permissions_item_table' => 'task_log', 'permissions_item_field' => 'task_log_id', 'permissions_item_label' => 'task_log_name', 'mod_directory' => 'tasks');
+        } elseif ($module == 'admin' || $module == 'users') {
+            return array('mod_main_class' => 'CUser', 'permissions_item_table' => 'users', 'permissions_item_field' => 'user_id', 'permissions_item_label' => 'user_username', 'mod_directory' => 'admin');
+        } elseif ($module == 'events') {
+            return array('mod_main_class' => 'CEvent', 'permissions_item_table' => 'events', 'permissions_item_field' => 'event_id', 'permissions_item_label' => 'event_title', 'mod_directory' => 'calendar');
         }
+
+        return array();
     }
 
     /**
@@ -1282,16 +1330,7 @@ class w2p_Extensions_Permissions extends gacl_api
             return array();
         }
 
-        $mod_class = array();
-        if ($module == 'task_log') {
-            $mod_class = array('mod_main_class' => 'CTask_Log', 'permissions_item_table' => 'task_log', 'permissions_item_field' => 'task_log_id', 'permissions_item_label' => 'task_log_name', 'mod_directory' => 'tasks');
-        } elseif ($module == 'admin') {
-            $mod_class = array('mod_main_class' => 'CUser', 'permissions_item_table' => 'users', 'permissions_item_field' => 'user_id', 'permissions_item_label' => 'user_username', 'mod_directory' => 'admin');
-        } elseif ($module == 'users') {
-            $mod_class = array('mod_main_class' => 'CUser', 'permissions_item_table' => 'users', 'permissions_item_field' => 'user_id', 'permissions_item_label' => 'user_username', 'mod_directory' => 'admin');
-        } elseif ($module == 'events') {
-            $mod_class = array('mod_main_class' => 'CEvent', 'permissions_item_table' => 'events', 'permissions_item_field' => 'event_id', 'permissions_item_label' => 'event_title', 'mod_directory' => 'calendar');
-        }
+        $mod_class = $this->itemModuleClass($module);
         if ($op == 'view') {
             //Because view is nuclear we can't just check the permission against the results table, so we need to check the allowed records on each class, so it handles the
             //Cascading of permissions.

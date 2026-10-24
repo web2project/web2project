@@ -12,33 +12,85 @@ $project_tab = ('projects' == $m && (int) $project_id > 0);
 $filter_param = ('projects' == $m) ? 'projects' : $filter_param;
 $page = (int) w2PgetParam($_GET, 'page', 1);
 
-$history = new CHistory();
-$where = (-1 == $filter_param) ? '' : "history_table = '".$filter_param."'";
-if ($project_tab) {
-    $where .= ' AND history_item = ' . (int) $project_id;
-}
-$histories = $history->loadAll('history_datetime', $where);
-$items = array_values($histories);
-
-$display = array();
 $perms = $AppUI->acl();
 
 $module_translate = ['modules' => 'system', 'custom_fields_struct' => 'system',
     'budgets' => 'system', 'billingcode' => 'system',
     'forum_messages' => 'forums', 'login' => 'admin'];
 
-foreach ($items as $item) {
-    $_module = $item['history_table'];
-    $_module = isset($module_translate[$_module]) ? $module_translate[$_module] : $_module;
+// Which rows to look at: one module, or one project on its History tab.
+$baseQuery = new w2p_Database_Query();
+$baseWhere = array();
+if (-1 != $filter_param) {
+    $baseWhere[] = 'history_table = ' . $baseQuery->quote((string) $filter_param);
+}
+if ($project_tab) {
+    $baseWhere[] = 'history_item = ' . (int) $project_id;
+}
 
-    if (!$perms->checkModuleItem($_module, 'view', $item['history_item'])) {
+// Filter by permission in SQL, one condition per module the rows belong
+// to, rather than loading every row and checking each one (which also
+// worked out the module's allowed items again for every row). The rules
+// are checkModuleItem($module, 'view', $item)'s: System entries need
+// System view, entries without an item need module view, and the others
+// need their item to be one the user may view.
+$q = new w2p_Database_Query();
+$q->addTable('history');
+$q->addQuery('DISTINCT history_table');
+foreach ($baseWhere as $condition) {
+    $q->addWhere($condition);
+}
+$tables = $q->loadColumn();
+
+$allowed = array();
+foreach ($tables as $table) {
+    $_module = isset($module_translate[$table]) ? $module_translate[$table] : $table;
+    $inTable = 'history_table = ' . $q->quote((string) $table);
+
+    if ('system' == $_module) {
+        if (canView('system')) {
+            $allowed[] = $inTable;
+        }
         continue;
     }
+    $items = array();
+    if ($perms->checkModule($_module, 'view')) {
+        $items[] = 0;
+    }
+    foreach (array_keys($perms->getViewableItems($_module)) as $itemId) {
+        $items[] = (int) $itemId;
+    }
+    if (count($items)) {
+        $allowed[] = '(' . $inTable . ' AND history_item IN (' . implode(',', $items) . '))';
+    }
+}
+$where = $baseWhere;
+$where[] = count($allowed) ? '(' . implode(' OR ', $allowed) . ')' : '1 = 0';
+
+$xpg_pagesize = (int) w2PgetConfig('page_size', 50);
+$xpg_pagesize = ($xpg_pagesize > 0) ? $xpg_pagesize : 50;
+$page = max(1, $page);
+$xpg_min = $xpg_pagesize * ($page - 1); // This is where we start our record set from
+
+$q = new w2p_Database_Query();
+$q->addTable('history');
+$q->addQuery('COUNT(*)');
+$q->addWhere(implode(' AND ', $where));
+$xpg_totalrecs = (int) $q->loadResult();
+
+$q = new w2p_Database_Query();
+$q->addTable('history');
+$q->addQuery('*');
+$q->addWhere(implode(' AND ', $where));
+$q->addOrder('history_datetime');
+$q->addOrder('history_id');
+$q->setLimit($xpg_pagesize, $xpg_min);
+$items = array();
+foreach ($q->loadList() as $item) {
     // @note this next line is a little hack so our templating can resolve which history_user is which user
     $item['user_id'] = $item['history_user'];
-    $display[] = $item;
+    $items[] = $item;
 }
-$items = $display;
 
 $module = new w2p_System_Module();
 $fields = $module->loadSettings('history', 'index_list');
@@ -50,11 +102,6 @@ if (0 == count($fields)) {
     $module->storeSettings('history', 'index_list', $fieldList, $fieldNames);
     $fields = array_combine($fieldList, $fieldNames);
 }
-
-$xpg_pagesize = w2PgetConfig('page_size', 50);
-$xpg_min = $xpg_pagesize * ($page - 1); // This is where we start our record set from
-$xpg_totalrecs = count($items);
-$items = array_slice($items, $xpg_min, $xpg_pagesize);
 
 if ($project_tab) {
     // keep the page links on this project's History tab
