@@ -300,19 +300,19 @@ class w2p_Core_CAppUI
         return $loader->readDirs($path);
     }
 
-    /** @deprecated */
+    /** @deprecated v3.0, removed in v6.0: use w2p_FileSystem_Loader::readFiles() */
     public function readFiles($path, $filter = '.')
     {
-        trigger_error("AppUI->readFiles() has been deprecated in v3.0 and will be removed by v4.0. Please use w2p_FileSystem_Loader->readFiles() instead.", E_USER_NOTICE);
+        trigger_error("CAppUI->readFiles() has been deprecated in v3.0 and will be removed in v6.0. Please use w2p_FileSystem_Loader->readFiles() instead.", E_USER_NOTICE);
 
         $loader = new w2p_FileSystem_Loader();
         return $loader->readFiles($path, $filter);
     }
 
-    /** @deprecated */
+    /** @deprecated v3.0, removed in v6.0: use w2p_FileSystem_Loader::checkFileName() */
     public function checkFileName($file)
     {
-        trigger_error("AppUI->checkFileName() has been deprecated in v3.0 and will be removed by v4.0. Please use w2p_FileSystem_Loader->checkFileName() instead.", E_USER_NOTICE);
+        trigger_error("CAppUI->checkFileName() has been deprecated in v3.0 and will be removed in v6.0. Please use w2p_FileSystem_Loader->checkFileName() instead.", E_USER_NOTICE);
 
         $loader = new w2p_FileSystem_Loader();
         return $loader->checkFileName($file);
@@ -1154,10 +1154,10 @@ class w2p_Core_CAppUI
         return $this->getTheme()->loadFooterJS();
     }
 
-    /** @deprecated */
+    /** @deprecated v3.2, removed in v6.0: use $AppUI->getTheme()->loadCalendarJS() */
     public function loadCalendarJS()
     {
-        trigger_error("CAppUI->loadCalendarJS() has been deprecated in v3.2 and will be removed in v5.0", E_USER_NOTICE);
+        trigger_error('CAppUI->loadCalendarJS() has been deprecated in v3.2 and will be removed in v6.0. Please use $AppUI->getTheme()->loadCalendarJS() instead.', E_USER_NOTICE);
 
         $this->getTheme()->loadCalendarJS();
     }
