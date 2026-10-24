@@ -60,6 +60,15 @@ class w2p_Utilities_Mail extends PHPMailer
     public $defer;
 
     /**
+     *    The recipients actually handed to PHPMailer, by kind. PHPMailer keeps
+     *    its own lists private, so this copy is what a queued mail is
+     *    rebuilt from when the queue sends it.
+     *
+     *    @var array
+     */
+    public $queuedRecipients = array('to' => array(), 'cc' => array(), 'bcc' => array(), 'ReplyTo' => array());
+
+    /**
      *    Mail constructor
      */
     public function __construct()
@@ -193,7 +202,7 @@ class w2p_Utilities_Mail extends PHPMailer
     public function Cc($cc)
     {
 
-        $this->acc = (is_array($cc)) ? explode(',', $cc) : $cc;
+        $this->acc = array_filter(array_map('trim', is_array($cc) ? $cc : explode(',', $cc)));
 
         $this->CheckAddresses($this->acc);
 
@@ -217,7 +226,7 @@ class w2p_Utilities_Mail extends PHPMailer
     public function Bcc($bcc)
     {
 
-        $this->abcc = (is_array($bcc)) ? explode(',', $bcc) : $bcc;
+        $this->abcc = array_filter(array_map('trim', is_array($bcc) ? $bcc : explode(',', $bcc)));
 
         $this->CheckAddresses($this->abcc);
 
@@ -228,7 +237,7 @@ class w2p_Utilities_Mail extends PHPMailer
                     $bcc_address = $matches[1];
                 }
             }
-            $this->AddCC($bcc_address);
+            $this->AddBCC($bcc_address);
         }
 
         return true;
@@ -350,6 +359,66 @@ class w2p_Utilities_Mail extends PHPMailer
         return $ec->add(array('w2p_Utilities_Mail', 'SendQueuedMail'), $vars, 'w2p_Utilities_Mail', true);
     }
 
+    public function AddAddress($address, $name = '')
+    {
+        return $this->rememberRecipient('to', parent::AddAddress($address, $name), $address, $name);
+    }
+
+    public function AddCC($address, $name = '')
+    {
+        return $this->rememberRecipient('cc', parent::AddCC($address, $name), $address, $name);
+    }
+
+    public function AddBCC($address, $name = '')
+    {
+        return $this->rememberRecipient('bcc', parent::AddBCC($address, $name), $address, $name);
+    }
+
+    public function AddReplyTo($address, $name = '')
+    {
+        return $this->rememberRecipient('ReplyTo', parent::AddReplyTo($address, $name), $address, $name);
+    }
+
+    public function ClearAddresses()
+    {
+        $this->queuedRecipients['to'] = array();
+        return parent::ClearAddresses();
+    }
+
+    public function ClearCCs()
+    {
+        $this->queuedRecipients['cc'] = array();
+        return parent::ClearCCs();
+    }
+
+    public function ClearBCCs()
+    {
+        $this->queuedRecipients['bcc'] = array();
+        return parent::ClearBCCs();
+    }
+
+    public function ClearReplyTos()
+    {
+        $this->queuedRecipients['ReplyTo'] = array();
+        return parent::ClearReplyTos();
+    }
+
+    public function ClearAllRecipients()
+    {
+        $this->queuedRecipients['to'] = array();
+        $this->queuedRecipients['cc'] = array();
+        $this->queuedRecipients['bcc'] = array();
+        return parent::ClearAllRecipients();
+    }
+
+    private function rememberRecipient($kind, $added, $address, $name)
+    {
+        if ($added) {
+            $this->queuedRecipients[$kind][] = array($address, $name);
+        }
+        return $added;
+    }
+
     /**
      * Dequeue the email and transfer it.  Called from the queue manager.
      */
@@ -357,10 +426,27 @@ class w2p_Utilities_Mail extends PHPMailer
     {
 
         foreach ($args as $key => $value) {
-            $this->$key = $value;
+            if ('queuedRecipients' != $key) {
+                $this->$key = $value;
+            }
         }
 
-        ($this->transport == 'smtp') ? $this->IsSMTP() : $this->IsMail();
+        // PHPMailer's own recipient lists are private and were not stored,
+        // so add the recipients again.
+        $this->ClearAllRecipients();
+        $this->ClearReplyTos();
+        $recipients = isset($args['queuedRecipients']) ? $args['queuedRecipients'] : array();
+        foreach (array('to' => 'AddAddress', 'cc' => 'AddCC', 'bcc' => 'AddBCC', 'ReplyTo' => 'AddReplyTo') as $kind => $method) {
+            $list = isset($recipients[$kind]) ? $recipients[$kind] : array();
+            foreach ($list as $recipient) {
+                $this->$method($recipient[0], $recipient[1]);
+            }
+        }
+
+        // The stored copy was taken while deferring; send it this time
+        // instead of queueing it again.
+        $this->defer = false;
+        ('smtp' == $this->Mailer) ? $this->IsSMTP() : $this->IsMail();
 
         return $this->Send();
     }

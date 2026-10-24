@@ -2,15 +2,21 @@
 /** @var w2p_Core_CAppUI $AppUI */
 // @todo    remove database query
 
-$show_all = w2PgetParam($_REQUEST, 'show_all', 0);
-$company_id = w2PgetParam($_REQUEST, 'company_id', 0);
-$contact_id = w2PgetParam($_POST, 'contact_id', 0);
+$show_all = (int) w2PgetParam($_REQUEST, 'show_all', 0);
+$company_id = (int) w2PgetParam($_REQUEST, 'company_id', 0);
+$contact_id = (int) w2PgetParam($_POST, 'contact_id', 0);
 $call_back = w2PgetParam($_GET, 'call_back', null);
-$contacts_submited = w2PgetParam($_POST, 'contacts_submited', 0);
+// call_back is written into JavaScript as a function name.
+if (!is_null($call_back) && !preg_match('/^[A-Za-z_][A-Za-z0-9_]*$/', $call_back)) {
+	$call_back = null;
+}
+$contacts_submited = (int) w2PgetParam($_POST, 'contacts_submited', 0);
 $selected_contacts_id = w2PgetParam($_GET, 'selected_contacts_id', '');
 if (w2PgetParam($_POST, 'selected_contacts_id')) {
 	$selected_contacts_id = w2PgetParam($_POST, 'selected_contacts_id');
 }
+// A comma-separated list of contact ids, used in SQL and JavaScript.
+$selected_contacts_id = implode(',', array_filter(array_map('intval', explode(',', (string) $selected_contacts_id))));
 ?>
 <script language="javascript" type="text/javascript">
 // ECMA Script section Carsten Menke <menke@smp-synergie.de>

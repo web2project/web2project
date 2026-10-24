@@ -81,4 +81,3 @@
 'this topic'=>'ten wątek',
 'topics for this forum'=>'wątki dla tego forum',
 'update watches'=>'update watches',
-'view PDF file'=>'zobacz PDF',

@@ -251,7 +251,10 @@ def main():
     for mod in ('forums', 'departments', 'resources'):
         mid = sql_id("select mod_id from modules where mod_directory='%s' and mod_active=0" % mod)
         if mid:
-            admin.get('m=system&u=modules&a=domodsql&mod_id=%s&cmd=toggle&' % mid)
+            # use the page's own link: it carries the session's form token (CSRF)
+            link = re.search(r'href="\?(m=system&u=modules&a=domodsql&__nonce=[0-9a-f]+&mod_id=%s&cmd=toggle&?)"' % mid,
+                             admin.get('m=system&u=modules').text).group(1)
+            admin.get(link)
 
     # A fresh install gives the 'Project worker' role only the login permission,
     # so grant it access/add/edit/view (not delete) on the non-admin modules.

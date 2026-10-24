@@ -16,7 +16,7 @@ error_reporting(E_ALL & ~E_DEPRECATED & ~E_NOTICE);
 //error_reporting(-1);
 
 define('W2P_PERFORMANCE_DEBUG', false);
-define('MIN_PHP_VERSION', '8.0.0');
+define('MIN_PHP_VERSION', '8.3.0');
 // The user interface style is fixed; style/bootstrap is the only theme in use.
 define('W2P_UISTYLE', 'bootstrap');
 

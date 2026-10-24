@@ -59,8 +59,9 @@ if (!$suppressHeaders) {
 setlocale(LC_CTYPE, 'C');
 
 // check if session has previously been initialised
-if (!isset($_SESSION['AppUI']) || isset($_GET['logout'])) {
-	if (isset($_GET['logout']) && isset($_SESSION['AppUI']->user_id)) {
+$logout = w2p_logout_requested();
+if (!isset($_SESSION['AppUI']) || $logout) {
+	if ($logout && isset($_SESSION['AppUI']->user_id)) {
 		$AppUI = &$_SESSION['AppUI'];
 		$user_id = $AppUI->user_id;
 		// the access log row of the login that is ending
@@ -81,7 +82,7 @@ if ($AppUI->doLogin()) {
 }
 
 //Function register logout in user_acces_log
-if (isset($user_id) && isset($_GET['logout'])) {
+if (isset($user_id) && $logout) {
 	$AppUI->registerLogout($user_id, isset($logout_log_id) ? $logout_log_id : 0);
 }
 
@@ -226,6 +227,18 @@ if ($u && file_exists(W2P_BASE_DIR . '/modules/' . $m . '/' . $u . '/' . $u . '.
 	include W2P_BASE_DIR . '/modules/' . $m . '/' . $u . '/' . $u . '.ajax.php';
 }
 
+// Every request that changes data must carry the session's form token
+// (CSRF protection): dosql posts, and the action files that change data
+// directly (a=do_*, a=domodsql). Forms get the token from
+// w2p_add_form_tokens() below; the few GET links put it in the URL.
+if (isset($_POST['dosql']) || 0 === strpos($a, 'do_') || 'domodsql' == $a) {
+	$token = isset($_POST['__nonce']) ? $_POST['__nonce'] : (isset($_GET['__nonce']) ? $_GET['__nonce'] : null);
+	if (!$AppUI->checkFormToken($token)) {
+		$AppUI->setMsg('Your form has expired or did not come from this site. Please try again.', UI_MSG_ERROR);
+		$AppUI->redirect();
+	}
+}
+
 // do some db work if dosql is set
 // TODO - MUST MOVE THESE INTO THE MODULE DIRECTORY
 if (isset($_POST['dosql'])) {
@@ -240,6 +253,8 @@ if (isset($_POST['dosql']) && $_POST['dosql'] == 'do_file_co') {
 		ob_start();
 	}
 }
+// adds the form token to every POST form on the page
+ob_start('w2p_add_form_tokens');
 
 if (!$suppressHeaders) {
 	include $theme->resolveTemplate('header');
@@ -279,4 +294,5 @@ if (!$suppressHeaders) {
 	echo '</body>
           </html>';
 }
+ob_end_flush();
 ob_end_flush();

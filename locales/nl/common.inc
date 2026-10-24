@@ -177,7 +177,6 @@
 'Vendor'=>'Producent',
 'Version'=>'Versie',
 'Versions'=>'Versies',
-'View PDF File'=>'Toon PDF bestand',
 'Wed'=>'Woe',
 'Wednesday'=>'Woensdag',
 'Welcome'=>'Welkom',

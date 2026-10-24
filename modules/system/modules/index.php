@@ -48,7 +48,7 @@ $htmlHelper = new w2p_Output_HTMLHelper($AppUI);
         if (isset($modFiles[$row['mod_directory']])) {
             $modFiles[$row['mod_directory']] = '';
         }
-        $query_string = '?m=' . $m . '&u=' . $u . '&a=domodsql&mod_id=' . $row['mod_id'];
+        $query_string = '?m=' . $m . '&u=' . $u . '&a=domodsql&__nonce=' . $AppUI->getFormToken() . '&mod_id=' . $row['mod_id'];
         $s = '';
         $s .= '<td width="64" align="center">';
         if ($canEdit) {
@@ -133,7 +133,7 @@ $htmlHelper = new w2p_Output_HTMLHelper($AppUI);
             $s .= '<td>';
             $s .= '<img src="' . w2PfindImage('obj/dotgrey.gif') . '" alt="" />&nbsp;';
             if ($canEdit) {
-                $s .= '<a href="?m=' . $m . '&u=modules&a=domodsql&cmd=install&mod_directory=' . $v . '">';
+                $s .= '<a href="?m=' . $m . '&u=modules&a=domodsql&__nonce=' . $AppUI->getFormToken() . '&cmd=install&mod_directory=' . $v . '">';
             }
             $s .= $AppUI->_('install');
             if ($canEdit) {

@@ -11,6 +11,10 @@ if (w2PgetConfig('activate_external_user_creation') != 'true') {
     die();
 }
 
+// the signup check (w2p_Utilities_SignupCheck) keeps its challenge in the session
+$session = new w2p_System_Session();
+$session->start();
+
 $uistyle = W2P_UISTYLE;
 ?>
 <!DOCTYPE html>

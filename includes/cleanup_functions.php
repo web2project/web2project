@@ -66,52 +66,28 @@ function clean_value($str)
 }
 
 
+/**
+ * Converts $text to UTF-8 from its detected encoding. Despite the name, this
+ * encodes to UTF-8; it never decoded. Without mbstring, $text is returned as is.
+ *
+ * @param string $text
+ *
+ * @return string
+ *
+ * @deprecated No core code calls this. Kept for add-on modules. Use
+ *             mb_convert_encoding() directly instead.
+ */
 function strUTF8Decode($text)
 {
-    if (extension_loaded('mbstring')) {
-        $encoding = mb_detect_encoding($text.' ');
+    trigger_error('strUTF8Decode() has been deprecated in v5.0 and will be removed in a later version. Use mb_convert_encoding() instead.', E_USER_NOTICE);
+
+    if (!function_exists('mb_convert_encoding')) {
+        return $text;
     }
-    if (function_exists('iconv')) {
-        $text = mb_convert_encoding($text, 'UTF-8', $encoding);
-    } elseif (function_exists('utf8_decode')) {
-        $text = utf8_decode($text);
-    }
-    // mb functions don't seam to work well here for some reason as the output gets corrupted.
-    // iconv is doing the job just fine though
-    return $text;
+    $encoding = mb_detect_encoding($text . ' ');
+
+    return $encoding ? mb_convert_encoding($text, 'UTF-8', $encoding) : $text;
 }
-
-/**
-* Utility functions for the preparation of task data for GANTT PDF
-*
-* @todo some of these functions are not needed, need to trim this down
-*/
-// PYS : utf_8 decoding as suggested in Vbulletin #3987
-function strEzPdf($text)
-{
-    if (function_exists('iconv') && function_exists('mb_detect_encoding')) {
-        $text = iconv(mb_detect_encoding($text." "), 'UTF-8', $text);
-    }
-
-    return $text;
-}
-
-function dumb_slice( $gantt_arr, $length = 25 )
-{
-    $sliced_array = array();
-
-    $pages = (int) count($gantt_arr) / $length;
-
-    for ( $i = 0; $i <= $pages; $i++ ) {
-        $sliced_array[] = array_slice($gantt_arr, $i * $length, $length);
-    }
-
-    return $sliced_array;
-}
-
-/**
-* 	END OF GANTT PDF UTILITY FUNCTIONS
-*/
 
 /**
 *  This is a kludgy mess because of how the arraySelectTree function is used..
@@ -303,8 +279,8 @@ function cal_work_day_conv($val)
     $wk = Date_Calc::getCalendarWeek(null, null, null, '%a', LOCALE_FIRST_DAY);
     setlocale(LC_ALL, $AppUI->user_lang);
 
+    // Translations are already UTF-8.
     $day_name = $AppUI->_($wk[($val - LOCALE_FIRST_DAY) % 7]);
-    $day_name = utf8_encode($day_name);
 
     return htmlspecialchars($day_name, ENT_COMPAT, $locale_char_set);
 }
@@ -376,16 +352,18 @@ function showtask_new(&$arr, $level = 0, $today_view = false, $listTable = null,
     return __extract_from_showtask($arr, $level, $today_view, $listTable, $fields);
 }
 
-/*
- * 	gantt_arr [ project_id ] [ 0 ]  is a task "object" : 	task['task_id'], task['task_access'], task['task_owner'], task['task_name'], task['project_name']
- * 															task['task_start_date'], task['task_end_date'], task['task_percent_complete'], ['task_milestone']
- * 	gantt_arr [ project_id ] [ 1 ] 	is the level
+/**
+ * Adds a task to the global $gantt_arr, unless it is already there.
  *
- * 	project_id is "optional": a 0 value means we re not handling projects
+ * $gantt_arr is a flat list in drawing order. Each entry is
+ * array(task, level): the task row (task_id, task_project, task_name,
+ * task_start_date, task_end_date, task_percent_complete, task_milestone, ...)
+ * and its depth in the task tree, 0 for a top-level task. To draw one
+ * project's tasks, filter on task_project.
  *
- *	 adds a bidimensional array:
- * 		-1st level: composed of integer project_id
- * 		-2nd level: composed of an array of two items: task "object", integer level
+ * @param array $a        The task row
+ * @param int   $level    Depth in the task tree
+ * @param mixed $notUsed  Unused, kept for old callers
  */
 function showgtask(&$a, $level = 0, $notUsed = 0)
 {
@@ -1123,105 +1101,123 @@ function showcodes(&$a)
 }
 
 // from modules/smartsearch/smartsearch.class.php
+/**
+ * Returns $text HTML-escaped, with every match of the search keywords wrapped
+ * in <span class="highlightN">. The text is escaped piece by piece around the
+ * matches, so values from the database can't inject markup and a keyword can
+ * never match inside the markup this adds.
+ *
+ * @param string       $text   plain text, e.g. a record's fields
+ * @param string|array $keyval the keyword(s) to highlight
+ *
+ * @return string HTML
+ */
 function highlight($text, $keyval)
 {
     global $ssearch;
 
-    $txt = $text;
-    $keys = (!is_array($keyval)) ? array($keyval) : $keyval;
+    $text = (string) $text;
+    $ignoreCase = !isset($ssearch['ignore_case']) || 'on' == $ssearch['ignore_case'];
+    $ignoreSpecChar = isset($ssearch['ignore_specchar']) && 'on' == $ssearch['ignore_specchar'];
 
+    // one capture group per keyword, remembering which keyword each group is
+    $groups = array();
+    $keyIndexes = array();
+    $keys = (!is_array($keyval)) ? array($keyval) : $keyval;
     foreach ($keys as $key_idx => $key) {
+        $key = (string) $key;
         if (mb_strlen($key) > 0) {
-            $key = stripslashes($key);
-            $metacharacters = array('\\', '(', ')', '$', '[', '*', '+', '|', '.', '^', '?');
-            $metareplacement = array('\\\\', '\(', '\)', '\$', '\[', '\*', '\+', '\|', '\.', '\^', '\?');
-            $key = mb_str_replace($metacharacters, $metareplacement, $key);
-            if (isset($ssearch['ignore_specchar']) && ($ssearch['ignore_specchar'] == 'on')) {
-                if ($ssearch['ignore_case'] == 'on') {
-                    $txt = preg_replace('/'.recode2regexp_utf8($key).'/i', '<span class="highlight' . $key_idx . '" >\\0</span>', $txt);
-                } else {
-                    $txt = preg_replace('/'.(recode2regexp_utf8($key)).'/', '<span class="highlight' . $key_idx . '" >\\0</span>', $txt);
-                }
-            } elseif (!isset($ssearch['ignore_specchar']) || ($ssearch['ignore_specchar'] == '')) {
-                if ($ssearch['ignore_case'] == 'on') {
-                    $txt = preg_replace('/'.$key.'/i', '<span class="highlight' . $key_idx . '" >\\0</span>', $txt);
-                } else {
-                    $txt = preg_replace('/'.$key.'/', '<span class="highlight' . $key_idx . '" >\\0</span>', $txt);
-                }
-            } else {
-                $txt = preg_replace('/'.$key.'/i', '<span class="highlight:' . $key_idx . '" >\\0</span>', $txt);
+            // escape every regex metacharacter, including the '/' delimiter
+            $pattern = preg_quote($key, '/');
+            // named, because a recoded pattern has (unnamed) groups of its own
+            $groups[] = '(?<k' . count($groups) . '>' . ($ignoreSpecChar ? recode2regexp_utf8($pattern) : $pattern) . ')';
+            $keyIndexes[] = $key_idx;
+        }
+    }
+
+    $escape = function ($s) {
+        return htmlspecialchars($s, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+    };
+    if (!count($groups)) {
+        return $escape($text);
+    }
+
+    $regex = '/' . implode('|', $groups) . '/u' . ($ignoreCase ? 'i' : '');
+    if (!preg_match_all($regex, $text, $matches, PREG_SET_ORDER | PREG_OFFSET_CAPTURE)) {
+        // no matches, or the text isn't valid UTF-8
+        return $escape($text);
+    }
+
+    $html = '';
+    $pos = 0;
+    foreach ($matches as $match) {
+        list($found, $offset) = $match[0];
+        if ('' === $found) {
+            continue;
+        }
+        // the keyword group that took part in the match tells us which keyword it was
+        $keyIdx = $keyIndexes[0];
+        foreach ($keyIndexes as $i => $idx) {
+            if (isset($match['k' . $i]) && -1 !== $match['k' . $i][1] && '' !== $match['k' . $i][0]) {
+                $keyIdx = $idx;
+                break;
+            }
+        }
+        $html .= $escape(substr($text, $pos, $offset - $pos));
+        $html .= '<span class="highlight' . $keyIdx . '" >' . $escape($found) . '</span>';
+        $pos = $offset + strlen($found);
+    }
+
+    return $html . $escape(substr($text, $pos));
+}
+
+// from modules/smartsearch/smartsearch.class.php
+/**
+ * Turns a (preg_quote()d) keyword into a regular expression that also matches
+ * accented forms of its letters, e.g. "cafe" also matches "café". Each letter
+ * with accented forms becomes a group of alternatives in the letter's own case:
+ * "e" becomes (e|é|è|ê|ë|ě|ę|ė|ē). Plain groups are used, rather than character
+ * classes or (?:), so the pattern works with MySQL's REGEXP as well as PCRE.
+ *
+ * @param string $input the keyword, with regex metacharacters already escaped
+ *
+ * @return string
+ */
+function recode2regexp_utf8($input)
+{
+    static $variants = null;
+    static $baseOf = null;
+
+    if (is_null($variants)) {
+        $variants = array(
+            'a' => 'aáàâäãåąăā', 'c' => 'cçćčĉċ', 'd' => 'dďđ',
+            'e' => 'eéèêëěęėē', 'i' => 'iíìîïīį', 'l' => 'lĺľłļ',
+            'n' => 'nñńňņ', 'o' => 'oóòôöõøőō', 'r' => 'rŕřŗ',
+            's' => 'sśšşș', 't' => 'tťţț', 'u' => 'uúùûüůűūų',
+            'y' => 'yýÿ', 'z' => 'zźžż',
+        );
+        $baseOf = array();
+        foreach ($variants as $base => $chars) {
+            $variants[$base] = mb_str_split($chars);
+            foreach ($variants[$base] as $char) {
+                $baseOf[$char] = $base;
             }
         }
     }
 
-    return $txt;
-}
-
-// from modules/smartsearch/smartsearch.class.php
-function recode2regexp_utf8($input)
-{
     $result = '';
-    for ($i = 0, $i_cmp = mb_strlen($input); $i < $i_cmp; ++$i)
-        switch ($input[$i]) {
-            case 'A':
-            case 'a':
-                $result .= '(a|A!|A�|A?|A�)';
-                break;
-            case 'C':
-            case 'c':
-                $result .= '(c|�?|�O)';
-                break;
-            case 'D':
-            case 'd':
-                $result .= '(d|�?|Ď)';
-                break;
-            case 'E':
-            case 'e':
-                $result .= '(e|A�|ě|A�|Ě)';
-                break;
-            case 'I':
-            case 'i':
-                $result .= '(i|A�|A?)';
-                break;
-            case 'L':
-            case 'l':
-                $result .= '(l|�o|�3|�1|�1)';
-                break;
-            case 'N':
-            case 'n':
-                $result .= '(n|A^|A�)';
-                break;
-            case 'O':
-            case 'o':
-                $result .= '(o|A3|A�|A�|A�)';
-                break;
-            case 'R':
-            case 'r':
-                $result .= '(r|A�|A�|A�|A~)';
-                break;
-            case 'S':
-            case 's':
-                $result .= '(s|A!|A�)';
-                break;
-            case 'T':
-            case 't':
-                $result .= '(t|AY|A�)';
-                break;
-            case 'U':
-            case 'u':
-                $result .= '(u|Ao|A�|A�|A�)';
-                break;
-            case 'Y':
-            case 'y':
-                $result .= '(y|A1|A?)';
-                break;
-            case 'Z':
-            case 'z':
-                $result .= '(z|A3|A1)';
-                break;
-            default:
-                $result .= $input[$i];
+    foreach (mb_str_split((string) $input) as $char) {
+        $lower = mb_strtolower($char);
+        if (!isset($baseOf[$lower])) {
+            $result .= $char;
+            continue;
         }
+        $alternatives = $variants[$baseOf[$lower]];
+        if ($char !== $lower) {
+            $alternatives = array_map('mb_strtoupper', $alternatives);
+        }
+        $result .= '(' . implode('|', array_unique($alternatives)) . ')';
+    }
 
     return $result;
 }
@@ -1286,7 +1282,16 @@ function addDeptId($dataset, $parent)
 }
 
 // From: modules/files/filefolder.class.php
-function getFolderSelectList()
+/**
+ * The folders for a folder select list, Root first.
+ *
+ * @param int $exclude_id leave out this folder and everything below it (for
+ *                        the "Subfolder of" list, so a folder can't be moved
+ *                        into itself)
+ *
+ * @return array
+ */
+function getFolderSelectList($exclude_id = 0)
 {
     /** @var w2p_Core_CAppUI $AppUI */
     global $AppUI;
@@ -1297,9 +1302,18 @@ function getFolderSelectList()
     $q->addOrder('file_folder_name');
     $folderList = $q->loadHashList('file_folder_id');
 
+    $excluded = array();
+    if ($exclude_id) {
+        $folder = new CFile_Folder();
+        $excluded = $folder->getDescendantIds($exclude_id);
+        $excluded[] = (int) $exclude_id;
+    }
+
     $folders = array(0 => 'Root');
-    foreach($folderList as $folder => $data) {
-        $folders[$folder] = $data['file_folder_name'];
+    foreach((array) $folderList as $folder => $data) {
+        if (!in_array((int) $folder, $excluded)) {
+            $folders[$folder] = $data['file_folder_name'];
+        }
     }
 
     return $folders;
@@ -1323,7 +1337,7 @@ function getFolders($parent)
     // display each child
     foreach ($folders as $row) {
         if (array_key_exists($row['file_folder_id'], $allowed_folders_ary) or array_key_exists($parent, $allowed_folders_ary)) {
-            $file_count = count($file_folder->getFoldersByParent($row['file_folder_id']));
+            $file_count = $file_folder->countFiles($row['file_folder_id'], $task_id, $project_id, $company_id);
 
             $s .= '<div class="d-flex align-items-center gap-2 border-bottom py-1 w2p-folder">';
             $s .= '<ul class="me-auto">';
@@ -1339,7 +1353,7 @@ function getFolders($parent)
                 $s .= '</a></li>';
             }
             if ($file_count > 0) {
-                $s .= '<li class="info-text"><a href="javascript: void(0);" onClick="expand(\'files_' . $row['file_folder_id'] . '\')" class="has-files">(' . $file_count . ' files) +</a></li>';
+                $s .= '<li class="info-text"><a href="javascript: void(0);" onClick="expand(\'files_' . $row['file_folder_id'] . '\')" class="has-files">(' . $file_count . ' ' . $AppUI->_($file_count == 1 ? 'file' : 'files') . ') +</a></li>';
             }
             $s .= '</ul>';
             $s .= '<form name="frm_remove_folder_' . $row['file_folder_id'] . '" action="?m=files" method="post" accept-charset="utf-8">
@@ -1613,8 +1627,9 @@ function getHelpdeskFolder()
 // From: modules/files/files.class.php
 function file_show_attr($AppUI, $form)
 {
-    global $object, $canAdmin, $file_project, $file_task, $task_name, $preserve;
+    global $object, $canAdmin, $file_project, $file_task, $task_name, $preserve, $ci, $folders, $file_folder;
 
+    $str_out = '';
     $select_disabled = ' ';
     $onclick_task = ' onclick="popTask()" ';
     if ($ci && $preserve) {
@@ -1635,6 +1650,12 @@ function file_show_attr($AppUI, $form)
     $str_out .= '<p>' . $form->addLabel('Project');
     $str_out .= projectSelectWithOptGroup($AppUI->user_id, 'file_project', 'size="1" class="text"' . $select_disabled, $file_project) . '</p>';
 
+    // Folder
+    if (is_array($folders)) {
+        $str_out .= '<p>' . $form->addLabel('Folder');
+        $str_out .= arraySelect($folders, 'file_folder', 'size="1" class="text"', (int) $file_folder) . '</p>';
+    }
+
     // ---------------------------------------------------------------------------------
 
     // Task
@@ -1651,10 +1672,14 @@ function file_show_attr($AppUI, $form)
  * @param int $limit SQL-limit to limit the number of returned tasks
  *
  * @return array List of criticalTasks
+ *
+ * @deprecated No core code calls this since the task gantt stopped using it.
+ *             Kept for add-on modules. Query the tasks table directly instead.
  */
-//TODO: modules/projectdesigner/projectdesigner.class.php
 function getCriticalTasksInverted($project_id = null, $limit = 1)
 {
+    trigger_error('getCriticalTasksInverted() has been deprecated in v5.0 and will be removed in a later version. Query the tasks table directly instead.', E_USER_NOTICE);
+
     if (!$project_id) {
         $result = array();
         $result[0]['task_end_date'] = '0000-00-00 00:00:00';
@@ -1663,7 +1688,8 @@ function getCriticalTasksInverted($project_id = null, $limit = 1)
     } else {
         $q = new w2p_Database_Query();
         $q->addTable('tasks');
-        $q->addWhere('task_project = ' . (int) $project_id  . ' AND NOT ISNULL( task_end_date ) AND task_end_date <>  \'0000-00-00 00:00:00\'');
+        $q->addWhere('task_project = ' . (int) $project_id);
+        $q->addWhere('task_end_date IS NOT NULL');
         $q->addOrder('task_start_date ASC');
         $q->setLimit($limit);
 
@@ -3211,16 +3237,20 @@ function sendNewPass()
     /** @var w2p_Core_CAppUI $AppUI */
     global $AppUI;
 
-    // ensure no malicous sql gets past
-    $checkusername = preg_replace("/[^A-Za-z0-9]/", "", w2PgetParam($_POST, 'checkusername', ''));
-    $confirmEmail = trim(w2PgetParam($_POST, 'checkemail', ''));
-    $confirmEmail = strtolower((new w2p_Database_Connection($GLOBALS['db']))->escape($confirmEmail));
+    // The same characters CAppUI::login() accepts in a username, so users
+    // whose login contains . _ @ or - can reset their password too.
+    $checkusername = trim(preg_replace("/[^A-Za-z0-9._@-]/", "", (string) w2PgetParam($_POST, 'checkusername', '')));
+    $confirmEmail = strtolower(trim((string) w2PgetParam($_POST, 'checkemail', '')));
+    if ('' == $checkusername || !w2p_check_email($confirmEmail)) {
+        $AppUI->setMsg('Invalid username or email.', UI_MSG_ERROR);
+        $AppUI->redirect();
+    }
 
     $q = new w2p_Database_Query;
     $q->addTable('users');
     $q->addJoin('contacts', 'con', 'user_contact = contact_id', 'inner');
     $q->addQuery('user_id');
-    $q->addWhere("user_username = '$checkusername'");
+    $q->addWhere('user_username = ' . $q->quote($checkusername));
 
     /* Begin Hack */
     /*
@@ -3237,9 +3267,10 @@ function sendNewPass()
     $dbVersion = $qTest->loadResult();
     if ($dbVersion >= 21 && $dbVersion < 26) {
         $q->leftJoin('contacts_methods', 'cm', 'cm.contact_id = con.contact_id');
-        $q->addWhere("cm.method_value = '$confirmEmail'");
+        $q->addWhere('LOWER(cm.method_value) = ' . $q->quote($confirmEmail));
     } else {
-        $q->addWhere("LOWER(user_email) = '$confirmEmail'");
+        // the address lives on the user's contact; users has no email column
+        $q->addWhere('LOWER(con.contact_email) = ' . $q->quote($confirmEmail));
     }
     /* End Hack */
 
@@ -3264,7 +3295,7 @@ function sendNewPass()
 
         $m = new w2p_Utilities_Mail; // create the mail
         $m->To($confirmEmail);
-        $subject = $_sitename . ' :: ' . $AppUI->_('sendpass4', UI_OUTPUT_RAW) . ' - ' . $checkusername;
+        $subject = w2PgetConfig('page_title') . ' :: ' . $AppUI->_('sendpass4', UI_OUTPUT_RAW) . ' - ' . $checkusername;
         $m->Subject($subject);
         $m->Body($body, isset($GLOBALS['locale_char_set']) ? $GLOBALS['locale_char_set'] : ''); // set the body
         $m->Send(); // send the mail
@@ -4139,7 +4170,7 @@ function __extract_from_tasks_gantt1($user_id, $showArcProjs, $showLowTasks, $sh
     $q->addGroup('t.task_id');
     $q->addOrder('t.task_start_date, t.task_end_date, t.task_priority');
     // get any specifically denied tasks
-    $q = $task->setAllowedSQL($AppUI->user_id, $q);
+    $q = $task->setAllowedSQL($AppUI->user_id, $q, 't.task_id');
     $proTasks = $q->loadHashList('task_id');
 
     return $proTasks;
@@ -4209,65 +4240,10 @@ function __extract_from_tasks_gantt2($showNoMilestones, $showMilestonesOnly, $ga
     $q->addOrder('t.task_start_date, t.task_end_date, t.task_priority');
     // get any specifically denied tasks
 
-    $q = $task->setAllowedSQL($AppUI->user_id, $q);
+    $q = $task->setAllowedSQL($AppUI->user_id, $q, 't.task_id');
     $proTasks = $q->loadHashList('task_id');
 
     return $proTasks;
-}
-
-/**
- * @param mixed $a
- *
- * @deprecated
- * @return array
- */
-function __extract_from_gantt_pdf($a)
-{
-    return [];
-}
-
-/**
- * @param mixed $a
- *
- * @deprecated
- * @return array
- */
-function __extract_from_gantt_pdf2($a)
-{
-    return 0.0;
-}
-
-/**
- * @param mixed $user_id
- * @param mixed $showArcProjs
- * @param mixed $showLowTasks
- * @param mixed $showHoldProjs
- * @param mixed $showDynTasks
- * @param mixed $showPinned
- * @param mixed $task
- * @param mixed $AppUI
- *
- * @deprecated
- * @return array
- */
-function __extract_from_gantt_pdf3($user_id, $showArcProjs, $showLowTasks, $showHoldProjs, $showDynTasks, $showPinned, $task, $AppUI)
-{
-    return [];
-}
-
-
-/**
- * @param mixed $project_id
- * @param mixed $f
- * @param mixed $AppUI
- * @param mixed $task
- *
- * @deprecated
- * @return array
- */
-function __extract_from_gantt_pdf4($project_id, $f, $AppUI, $task)
-{
-    return [];
 }
 
 /**

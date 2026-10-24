@@ -37,26 +37,33 @@ $form = new w2p_Output_HTML_FormHelper($AppUI);
             </p>
             <p>
                 <?php $form->showLabel('Start Date'); ?>
-                <input type="hidden" name="event_start_datetime" id="event_start_datetime" value="<?php echo $start_date ? $start_date->format(FMT_TIMESTAMP_DATE) : ''; ?>" />
-                <input type="text" name="start_datetime" id="start_datetime" onchange="setDate_new('editFrm', 'start_datetime');" value="<?php echo $start_date ? $start_date->format($df) : ''; ?>" class="text" />
-                <a href="javascript: void(0);" onclick="return showCalendar('start_datetime', '<?php echo $df ?>', 'editFrm', null, true, true)">
-                    <img src="<?php echo w2PfindImage('calendar.gif'); ?>" alt="<?php echo $AppUI->_('Calendar'); ?>" />
-                </a>
-                <?php echo arraySelect($times, 'start_time', 'size="1" class="text"', $AppUI->formatTZAwareTime($object->event_start_datetime, '%H%M%S')); ?>
+                <span class="w2p-datetime">
+                    <input type="hidden" name="event_start_datetime" id="event_start_datetime" value="<?php echo $start_date ? $start_date->format(FMT_TIMESTAMP_DATE) : ''; ?>" />
+                    <input type="text" name="start_datetime" id="start_datetime" onchange="setDate_new('editFrm', 'start_datetime');" value="<?php echo $start_date ? $start_date->format($df) : ''; ?>" class="text" />
+                    <a href="javascript: void(0);" onclick="return showCalendar('start_datetime', '<?php echo $df ?>', 'editFrm', null, true, true)">
+                        <img src="<?php echo w2PfindImage('calendar.gif'); ?>" alt="<?php echo $AppUI->_('Calendar'); ?>" />
+                    </a>
+                    <?php echo arraySelect($times, 'start_time', 'size="1" class="text"', $AppUI->formatTZAwareTime($object->event_start_datetime, '%H%M%S')); ?>
+                </span>
             </p>
             <p>
                 <?php $form->showLabel('End Date'); ?>
-                <input type="hidden" name="event_end_datetime" id="event_end_datetime" value="<?php echo $end_date ? $end_date->format(FMT_TIMESTAMP_DATE) : ''; ?>" />
-                <input type="text" name="end_datetime" id="end_datetime" onchange="setDate_new('editFrm', 'end_datetime');" value="<?php echo $end_date ? $end_date->format($df) : ''; ?>" class="text" />
-                <a href="javascript: void(0);" onclick="return showCalendar('end_datetime', '<?php echo $df ?>', 'editFrm', null, true, true)">
-                    <img src="<?php echo w2PfindImage('calendar.gif'); ?>" alt="<?php echo $AppUI->_('Calendar'); ?>" />
-                </a>
-                <?php echo arraySelect($times, 'end_time', 'size="1" class="text"', $AppUI->formatTZAwareTime($object->event_end_datetime, '%H%M%S')); ?>
+                <span class="w2p-datetime">
+                    <input type="hidden" name="event_end_datetime" id="event_end_datetime" value="<?php echo $end_date ? $end_date->format(FMT_TIMESTAMP_DATE) : ''; ?>" />
+                    <input type="text" name="end_datetime" id="end_datetime" onchange="setDate_new('editFrm', 'end_datetime');" value="<?php echo $end_date ? $end_date->format($df) : ''; ?>" class="text" />
+                    <a href="javascript: void(0);" onclick="return showCalendar('end_datetime', '<?php echo $df ?>', 'editFrm', null, true, true)">
+                        <img src="<?php echo w2PfindImage('calendar.gif'); ?>" alt="<?php echo $AppUI->_('Calendar'); ?>" />
+                    </a>
+                    <?php echo arraySelect($times, 'end_time', 'size="1" class="text"', $AppUI->formatTZAwareTime($object->event_end_datetime, '%H%M%S')); ?>
+                </span>
             </p>
             <p>
                 <?php $form->showLabel('Recurs'); ?>
-                <?php echo arraySelect($recurs, 'event_recurs', 'size="1" class="text"', $object->event_recurs, true); ?>
-                <input type="text" class="text" name="event_times_recuring" value="<?php echo ((isset($object->event_times_recuring)) ? ($object->event_times_recuring) : '1'); ?>" maxlength="2" size="3" /> <?php echo $AppUI->_('times'); ?>
+                <span class="w2p-inline-fields">
+                    <?php echo arraySelect($recurs, 'event_recurs', 'size="1" class="text"', $object->event_recurs, true); ?>
+                    <input type="text" class="text" name="event_times_recuring" value="<?php echo ((isset($object->event_times_recuring)) ? ($object->event_times_recuring) : '1'); ?>" maxlength="2" size="3" />
+                    <span><?php echo $AppUI->_('times'); ?></span>
+                </span>
             </p>
         </div>
         <div class="column right">

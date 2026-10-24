@@ -64,7 +64,8 @@ class CSmartSearch
 						$tmplink = $this->table_link . $records[preg_replace('/^.*\.([^\.]+)$/', '$1', $this->table_key)] . $this->table_link2 . $records[preg_replace('/^.*\.([^\.]+)$/', '$1', $this->table_key2)];
 					}
 					//--MSy--
-					$outstring .= '<tr><td><a href = "' . $tmplink . '">' . highlight($display_val, $this->keywords) . '</a></td></tr>';
+					// highlight() escapes the record's values
+					$outstring .= '<tr><td><a href="' . htmlspecialchars($tmplink, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') . '">' . highlight($display_val, $this->keywords) . '</a></td></tr>';
 				}
 			}
 			$outstring = '<tr><th><b>' . $AppUI->_($this->table_title) . ' (' . $subrecord_count . ')' . '</b></th></tr> ' . "\n" . $outstring;
@@ -122,6 +123,9 @@ class CSmartSearch
         $ignore = explode(',', $ignore['FileIndexIgnoreWords']);
         $this->keywords = array_diff(array_keys($this->keywords), $ignore);
 
+		// Every keyword goes into the SQL as a quoted literal. LIKE wildcards and
+		// regular expression metacharacters typed by the user are escaped so they
+		// match literally.
 		$sql = '';
 		foreach ($this->keywords as $keyword) {
 			$sql .= '(';
@@ -129,21 +133,23 @@ class CSmartSearch
 			foreach ($this->search_fields as $field) {
 				//OR treatment to each keyword
 				// Search for semi-colons, commas or spaces and allow any to be separators
-				$or_keywords = preg_split('/[\s,;]+/', $keyword);
+				$or_keywords = preg_split('/[\s,;]+/', $keyword, -1, PREG_SPLIT_NO_EMPTY);
 				foreach ($or_keywords as $or_keyword) {
 					if ($this->search_options['ignore_specchar'] == 'on') {
-						$tmppattern = recode2regexp_utf8($or_keyword);
+						$pattern = $q->quote(recode2regexp_utf8(preg_quote($or_keyword)));
 						if ($this->search_options['ignore_case'] == 'on') {
-							$sql .= ' ' . $field . ' REGEXP \'' . $tmppattern . '\' or ';
+							$sql .= ' ' . $field . ' REGEXP ' . $pattern . ' or ';
 						} else {
-							$sql .= ' ' . $field . ' REGEXP BINARY \'' . $tmppattern . '\' or ';
+							$sql .= ' ' . $field . ' REGEXP BINARY ' . $pattern . ' or ';
 						}
-					} else
+					} else {
+						$pattern = $q->quote('%' . addcslashes($or_keyword, '\\%_') . '%');
 						if ($this->search_options['ignore_case'] == 'on') {
-							$sql .= ' ' . $field . ' LIKE "%' . $or_keyword . '%" or ';
+							$sql .= ' ' . $field . ' LIKE ' . $pattern . ' or ';
 						} else {
-							$sql .= ' ' . $field . ' LIKE BINARY "%' . $or_keyword . '%" or ';
+							$sql .= ' ' . $field . ' LIKE BINARY ' . $pattern . ' or ';
 						}
+					}
 				}
 			} // foreach $field
 			$sql = substr($sql, 0, -4);

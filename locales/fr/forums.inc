@@ -83,5 +83,4 @@
 'this topic'=>'Cette discussion',
 'topics for this forum'=>'Discussions de ce forum',
 'update watches'=>'Mise à jour des observations',
-'view PDF file'=>'Voir le fichier PDF',
 'Links'=>'Liens',

@@ -284,7 +284,6 @@
 'Version'=>'Wersja',
 'Versions'=>'Wersje',
 'View'=>'Widok',
-'View PDF File'=>'Zobacz PDF',
 'View Role'=>'Zobacz role',
 'View all allowed companies'=>'Zobacz wszystkie dostępne firmy',
 'Warning'=>'Ostrzeżenie',

@@ -81,4 +81,3 @@
 'this topic'=>'эта тема',
 'topics for this forum'=>'топики этого форума',
 'update watches'=>'обновить наблюдение',
-'view PDF file'=>'просмотреть PDF файл',

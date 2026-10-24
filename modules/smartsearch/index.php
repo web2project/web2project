@@ -10,8 +10,9 @@ $ssearch['keywords'] = array();
 $ssearch['advanced_search'] = w2PgetParam($_POST, 'advancedsearch', '');
 $ssearch['mod_selection'] = w2PgetParam($_POST, 'modselection', '');
 
+// a single module or a nested array would make array_flip() fail, so keep only the names
 $modules = w2PgetParam($_POST, 'modules', []);
-$ssearch['modules'] = array_flip($modules);
+$ssearch['modules'] = array_flip(array_filter((array) $modules, 'is_string'));
 
 $hook_modules = array();
 $moduleList = $AppUI->getLoadableModuleList();
@@ -28,10 +29,20 @@ foreach ($moduleList as $module) {
 
 $ssearch['all_words'] = w2PgetParam($_POST, 'allwords', '');
 
-$keyword1 = (isset($_POST['keyword1'])) ? strip_tags($_POST['keyword1']) : '';
-$keyword2 = (isset($_POST['keyword2'])) ? strip_tags($_POST['keyword2']) : '';
-$keyword3 = (isset($_POST['keyword3'])) ? strip_tags($_POST['keyword3']) : '';
-$keyword4 = (isset($_POST['keyword4'])) ? strip_tags($_POST['keyword4']) : '';
+// a posted keyword, or '' when it's missing or isn't a plain value (e.g. keyword1[]=x)
+$postedKeyword = function ($name) {
+    return (isset($_POST[$name]) && is_scalar($_POST[$name])) ? trim(strip_tags((string) $_POST[$name])) : '';
+};
+// the header's Global Search box posts 'keyword'; this page's own form posts 'keyword1'
+$keyword1 = isset($_POST['keyword1']) ? $postedKeyword('keyword1') : $postedKeyword('keyword');
+$keyword2 = $postedKeyword('keyword2');
+$keyword3 = $postedKeyword('keyword3');
+$keyword4 = $postedKeyword('keyword4');
+
+if ($ssearch['advanced_search'] != 'on') {
+	// keywords 2-4 are part of the advanced search; the page hides them when it's off
+	$keyword2 = $keyword3 = $keyword4 = '';
+}
 
 if ($ssearch['advanced_search'] == 'on') {
 	$ssearch['ignore_case'] = w2PgetParam($_POST, 'ignorecase', '');
@@ -46,57 +57,6 @@ if ($ssearch['advanced_search'] == 'on') {
 }
 
 ?>
-<script language="javascript" type="text/javascript">
-
-	function focusOnSearchBox() {
-		document.forms.frmSearch.keyword.focus();
-	}
-	function toggleStatus(obj) {
-		if (obj.checked) {
-				var block=document.getElementById('div_advancedsearch');
-				block.style.display='block';
-				var block1=document.getElementById('div_advancedsearch1');
-				block1.style.visibility='visible';
-			}
-		else {
-				var block=document.getElementById('div_advancedsearch');
-				block.style.display='none';
-				var block1=document.getElementById('div_advancedsearch1');
-				block1.style.visibility='hidden';
-				var key2=document.getElementById('keyword2');
-				key2.value='';
-				var key3=document.getElementById('keyword3');
-				key3.value='';
-				var key4=document.getElementById('keyword4');
-				key4.value='';
-			}
-	}
-
-	function toggleModules(obj) {
-		var block=document.getElementById('div_selmodules');
-		
-		if (obj.checked) {
-			block.style.display='block';
-		} else {
-			block.style.display='none';
-
-		}
-	}
-	
-	function selModAll() {
-		const select = document.getElementById('search_modules');
-		Array.from(select.options).forEach(option => option.selected = true);
-	}
-
-	function deselModAll() {
-		const select = document.getElementById('search_modules');
-		Array.from(select.options).forEach(option => option.selected = false);   
-	}		
-
-	
-	window.onload = focusOnSearchBox;
-
-</script>
 
 <?php
     $titleBlock = new w2p_Theme_TitleBlock('SmartSearch', 'icon.png', $m);
@@ -107,72 +67,76 @@ if ($ssearch['advanced_search'] == 'on') {
 $form = new w2p_Output_HTML_FormHelper($AppUI);
 
 ?>
-<form name="frmSearch" action="?m=<?php echo $m; ?>"  method="post" accept-charset="utf-8">
+<form name="frmSearch" action="?m=<?php echo $m; ?>" method="post" accept-charset="utf-8">
     <?php echo $form->addNonce(); ?>
 
     <div class="std mb-3 smartsearch">
         <div class="d-flex flex-wrap align-items-center gap-2 mb-2">
-            <span id="div_advancedsearch1" style="<?php echo ($ssearch['advanced_search'] == "on" ? 'visibility:visible' : 'visibility:hidden'); ?> "> 1. </span>
-            <input class="text" size="18" type="text" id="keyword1" name="keyword1" value="<?php echo $keyword1; ?>" />
+            <span class="smartsearch-number">1.</span>
+            <input class="text" size="18" type="text" id="keyword1" name="keyword1" value="<?php echo w2PformSafe($keyword1); ?>" />
             <input class="button btn btn-primary btn-sm" type="submit" value="<?php echo $AppUI->_('Search'); ?>" />
-            <span class="text-nowrap"><input name="allwords" id="allwords" type="checkbox"  <?php echo ($ssearch['all_words'] == "on" ? 'checked="checked"' : ''); ?> /><label for="allwords"><?php echo $AppUI->_('All words'); ?></label></span>
-            <span class="text-nowrap"><input name="modselection" id="modselection" type="checkbox"  <?php echo ($ssearch['mod_selection'] == "on" ? 'checked="checked"' : ''); ?> onclick="toggleModules(this)" /><label for="modselection"><?php echo $AppUI->_('Modules selection'); ?></label></span>
-            <span class="text-nowrap"><input name="advancedsearch" id="advancedsearch" type="checkbox" <?php echo ($ssearch['advanced_search'] == "on" ? 'checked="checked"' : ''); ?> onclick="toggleStatus(this)" /><label for="advancedsearch"><?php echo $AppUI->_('Advanced search'); ?></label></span>
+            <span class="text-nowrap"><input name="allwords" id="allwords" type="checkbox" <?php echo ($ssearch['all_words'] == "on" ? 'checked="checked"' : ''); ?> /><label for="allwords"><?php echo $AppUI->_('All words'); ?></label></span>
+            <span class="text-nowrap"><input name="modselection" id="modselection" type="checkbox" <?php echo ($ssearch['mod_selection'] == "on" ? 'checked="checked"' : ''); ?> /><label for="modselection"><?php echo $AppUI->_('Modules selection'); ?></label></span>
+            <span class="text-nowrap"><input name="advancedsearch" id="advancedsearch" type="checkbox" <?php echo ($ssearch['advanced_search'] == "on" ? 'checked="checked"' : ''); ?> /><label for="advancedsearch"><?php echo $AppUI->_('Advanced search'); ?></label></span>
         </div>
-        <div id="div_advancedsearch" style="<?php echo ($ssearch['advanced_search'] == "on" ? 'display:block' : 'display:none'); ?> ">
-            <div class="d-flex flex-wrap align-items-center gap-2 mb-2">
-                <span class="text-nowrap"> 2. <input class="text" size="18" type="text" id="keyword2" name="keyword2" value="<?php echo $keyword2; ?>" /></span>
-                <span class="text-nowrap"> 3. <input class="text" size="18" type="text" id="keyword3" name="keyword3" value="<?php echo $keyword3; ?>" /></span>
-                <span class="text-nowrap"> 4. <input class="text" size="18" type="text" id="keyword4" name="keyword4" value="<?php echo $keyword4; ?>" /></span>
-                <span class="text-nowrap"><input name="ignorespecchar" id="ignorespecchar" type="checkbox"  <?php echo ($ssearch['ignore_specchar'] == "on" ? 'checked="checked"' : ''); ?> /><label for="ignorespecchar"><?php echo $AppUI->_('Ignore special chars'); ?></label></span>
-                <span class="text-nowrap"><input name="ignorecase" id="ignorecase" type="checkbox"  <?php echo ($ssearch['ignore_case'] == "on" ? 'checked="checked"' : ''); ?> /><label for="ignorecase"><?php echo $AppUI->_('Ignore case'); ?></label></span>
-                <span class="text-nowrap"><input name="displayallflds" id="displayallflds" type="checkbox"  <?php echo ($ssearch['display_all_flds'] == "on" ? 'checked="checked"' : ''); ?> /><label for="displayallflds"><?php echo $AppUI->_('Display all fields'); ?></label></span>
-                <span class="text-nowrap"><input name="showempty" id="showempty" type="checkbox"  <?php echo ($ssearch['show_empty'] == "on" ? 'checked="checked"' : ''); ?> /><label for="showempty"><?php echo $AppUI->_('Show empty'); ?></label></span>
-            </div>
+        <div class="smartsearch-advanced d-flex flex-wrap align-items-center gap-2 mb-2">
+            <span class="text-nowrap">2. <input class="text" size="18" type="text" id="keyword2" name="keyword2" value="<?php echo w2PformSafe($keyword2); ?>" /></span>
+            <span class="text-nowrap">3. <input class="text" size="18" type="text" id="keyword3" name="keyword3" value="<?php echo w2PformSafe($keyword3); ?>" /></span>
+            <span class="text-nowrap">4. <input class="text" size="18" type="text" id="keyword4" name="keyword4" value="<?php echo w2PformSafe($keyword4); ?>" /></span>
+            <span class="text-nowrap"><input name="ignorespecchar" id="ignorespecchar" type="checkbox" <?php echo ($ssearch['ignore_specchar'] == "on" ? 'checked="checked"' : ''); ?> /><label for="ignorespecchar"><?php echo $AppUI->_('Ignore special chars'); ?></label></span>
+            <span class="text-nowrap"><input name="ignorecase" id="ignorecase" type="checkbox" <?php echo ($ssearch['ignore_case'] == "on" ? 'checked="checked"' : ''); ?> /><label for="ignorecase"><?php echo $AppUI->_('Ignore case'); ?></label></span>
+            <span class="text-nowrap"><input name="displayallflds" id="displayallflds" type="checkbox" <?php echo ($ssearch['display_all_flds'] == "on" ? 'checked="checked"' : ''); ?> /><label for="displayallflds"><?php echo $AppUI->_('Display all fields'); ?></label></span>
+            <span class="text-nowrap"><input name="showempty" id="showempty" type="checkbox" <?php echo ($ssearch['show_empty'] == "on" ? 'checked="checked"' : ''); ?> /><label for="showempty"><?php echo $AppUI->_('Show empty'); ?></label></span>
         </div>
-        <div id="div_selmodules" style="<?php echo ($ssearch['mod_selection'] == "on" ? 'display:block' : 'display:none'); ?> ">
-				<select name="modules[]" id="search_modules" multiple="true" size="<?php echo count($hook_modules); ?>">
-					<?php foreach ($hook_modules as $tmp) { ?>
-						<option value="<?php echo $tmp; ?>" <?php echo isset($ssearch['modules'][$tmp]) ? 'selected' : ''; ?> ><?php echo $AppUI->_(ucfirst($tmp)); ?></option>
-					<?php } ?>
-				</select>
-				<a class="button" href="javascript: void(0);" onclick="selModAll(this)"><span><?php echo $AppUI->_('Select all'); ?></span></a>
-				<a class="button" href="javascript: void(0);" onclick="deselModAll(this)"><span><?php echo $AppUI->_('Deselect all'); ?></span></a>
-			</div>
+        <div class="smartsearch-modules d-flex flex-wrap align-items-start gap-2">
+            <select name="modules[]" id="search_modules" multiple size="<?php echo count($hook_modules); ?>" aria-label="<?php echo $AppUI->_('Modules selection'); ?>">
+                <?php foreach ($hook_modules as $tmp) { ?>
+                    <option value="<?php echo $tmp; ?>" <?php echo isset($ssearch['modules'][$tmp]) ? 'selected' : ''; ?>><?php echo $AppUI->_(ucfirst($tmp)); ?></option>
+                <?php } ?>
+            </select>
+            <button type="button" class="btn btn-outline-secondary btn-sm" data-select-modules="1"><?php echo $AppUI->_('Select all'); ?></button>
+            <button type="button" class="btn btn-outline-secondary btn-sm" data-select-modules="0"><?php echo $AppUI->_('Deselect all'); ?></button>
+        </div>
     </div>
 </form>
+<script>
+    document.querySelectorAll('[data-select-modules]').forEach(function (button) {
+        button.addEventListener('click', function () {
+            var select = '1' === button.getAttribute('data-select-modules');
+            Array.from(document.getElementById('search_modules').options).forEach(function (option) {
+                option.selected = select;
+            });
+        });
+    });
+</script>
 <?php
 if ('' !== $keyword1) {
-	$search = new CSmartSearch();
-    $search->keyword = $keyword1;
-    $search->keyword = preg_replace("/[^A-Za-z0-9 ]/", "", $search->keyword);
-
-	if ('' != $keyword1) {
-		$or_keywords = preg_split('/[\s,;]+/', $keyword1);
+	if ('' !== $keyword1) {
+		$or_keywords = preg_split('/[\s,;]+/', $keyword1, -1, PREG_SPLIT_NO_EMPTY);
 		foreach ($or_keywords as $or_keyword) {
 			$ssearch['keywords'][$or_keyword] = array($or_keyword);
 			$ssearch['keywords'][$or_keyword][1] = 0;
 		}
 	}
 
-	if ('' != $keyword2 > 0) {
-		$or_keywords = preg_split('/[\s,;]+/', $keyword2);
+	if ('' !== $keyword2) {
+		$or_keywords = preg_split('/[\s,;]+/', $keyword2, -1, PREG_SPLIT_NO_EMPTY);
 		foreach ($or_keywords as $or_keyword) {
 			$ssearch['keywords'][$or_keyword] = array($or_keyword);
 			$ssearch['keywords'][$or_keyword][1] = 1;
 		}
 	}
 
-	if ('' != $keyword3) {
-		$or_keywords = preg_split('/[\s,;]+/', $keyword3);
+	if ('' !== $keyword3) {
+		$or_keywords = preg_split('/[\s,;]+/', $keyword3, -1, PREG_SPLIT_NO_EMPTY);
 		foreach ($or_keywords as $or_keyword) {
 			$ssearch['keywords'][$or_keyword] = array($or_keyword);
 			$ssearch['keywords'][$or_keyword][1] = 2;
 		}
 	}
 
-	if ('' != $keyword4) {
-		$or_keywords = preg_split('/[\s,;]+/', $keyword4);
+	if ('' !== $keyword4) {
+		$or_keywords = preg_split('/[\s,;]+/', $keyword4, -1, PREG_SPLIT_NO_EMPTY);
 		foreach ($or_keywords as $or_keyword) {
 			$ssearch['keywords'][$or_keyword] = array($or_keyword);
 			$ssearch['keywords'][$or_keyword][1] = 3;
@@ -184,7 +148,8 @@ if ('' !== $keyword1) {
   	<?php
     	$perms = &$AppUI->acl();
     	$reccount = 0;
-		$moduleCount = count($ssearch['modules']);
+		// the selection stays filled in when unchecked, but only filters while checked
+		$moduleCount = ($ssearch['mod_selection'] == 'on') ? count($ssearch['modules']) : 0;
 
         foreach ($moduleList as $module) {
 			if (class_exists($module['mod_main_class'])) {

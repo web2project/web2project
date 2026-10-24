@@ -12,4 +12,11 @@ if (!$link->load($link_id)) {
     $AppUI->redirect(ACCESS_DENIED);
 }
 
-header("Location: " . $link->link_url);
+// Only redirect to http(s)/ftp/mailto URLs, whatever is stored.
+$url = w2p_safe_url(html_entity_decode($link->link_url, ENT_QUOTES));
+if ('' == $url) {
+    $AppUI->setMsg('Link');
+    $AppUI->setMsg('invalidID', UI_MSG_ERROR, true);
+    $AppUI->redirect('m=links');
+}
+header('Location: ' . str_replace(array("\r", "\n"), '', $url));

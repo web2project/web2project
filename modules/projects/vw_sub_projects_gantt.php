@@ -128,21 +128,22 @@ if (!is_array($projects) || sizeof($projects) == 0) {
                 }
                 $projects[$rec['task_project']]['tasks'][] = $rec;
             }
-            reset($projects);
+            // showgtask() appends to the global $gantt_arr: a flat list of
+            // array(task, level) for every project.
+            $gantt_arr = array();
             foreach ($projects as $p) {
-                $tnums = count($p['tasks']);
-                for ($i = 0; $i < $tnums; $i++) {
-                    $task = $p['tasks'][$i];
+                $tasks = isset($p['tasks']) ? $p['tasks'] : array();
+                foreach ($tasks as $task) {
                     if ($task['task_parent'] == $task['task_id']) {
-                        $gantt_arr = showgtask($task, 0, $gantt_arr);
-                        findchild_gantt($p['tasks'], $task['task_id'], 0, $gantt_arr);
+                        showgtask($task, 0);
+                        findchild_gantt($tasks, $task['task_id'], 0);
                     }
                 }
             }
         }
 
         foreach ($projects as $p) {
-            $name = strlen(utf8_decode($p['project_name'])) > 25 ? substr(utf8_decode($p['project_name']), 0, 22) . '...' : utf8_decode($p['project_name']);
+            $name = mb_strlen($p['project_name'], 'UTF-8') > 25 ? mb_substr($p['project_name'], 0, 22, 'UTF-8') . '...' : $p['project_name'];
 
             //using new jpGraph determines using Date object instead of string
             $start = ($p['project_start_date'] > '0000-00-00 00:00:00') ? $p['project_start_date'] : date('Y-m-d H:i:s');
@@ -176,19 +177,19 @@ if (!is_array($projects) || sizeof($projects) == 0) {
             $columnValues = array('project_name' => $name, 'start_date' => $start,
                               'end_date' => $end, 'actual_end' => $actual_enddate->getDate());
             $gantt->addBar($columnValues, $caption, 0.6, $p['project_color_identifier'],
-                $p['project_active'], $progress, $p['project_id']);
+                $p['project_active'], $progress);
 
             // If showAllGant checkbox is checked
             if ($showAllGantt) {
                 // insert tasks into Gantt Chart
                 // cycle for tasks for each project
                 if (is_array($gantt_arr)) {
-                    for ($i = 0, $i_cmp = count($gantt_arr[$p['project_id']]); $i < $i_cmp; $i++) {
-                        $t = $gantt_arr[$p['project_id']][$i][0];
-                        if (!is_array($t)) {
+                    foreach ($gantt_arr as $entry) {
+                        $t = $entry[0];
+                        if (!is_array($t) || $t['task_project'] != $p['project_id']) {
                             continue;
                         }
-                        $level = $gantt_arr[$p['project_id']][$i][1];
+                        $level = $entry[1];
                         if ($t['task_end_date'] == null) {
                             $t['task_end_date'] = $t['task_start_date'];
                         }
@@ -197,20 +198,20 @@ if (!is_array($projects) || sizeof($projects) == 0) {
                         $tStartObj = new w2p_Utilities_Date($tStart);
                         $tEndObj = new w2p_Utilities_Date($tEnd);
 
+                        $advance = str_repeat('  ', $level+2);
                         if ($t['task_milestone'] != 1) {
-                            $advance = str_repeat('  ', $level+2);
                             $name = mb_strlen($advance . $t['task_name']) > 35 ? mb_substr($advance . $t['task_name'], 0, 33) . '...' : $advance . $t['task_name'];
                             $height = ($t['task_dynamic'] == 1) ? 0.1 : 0.6;
 
                             $columnValues = array('project_name' => $name, 'start_date' => $tStartObj->getDate(),
                                               'end_date' => $tEndObj->getDate(), 'actual_end' => '');
                             $gantt->addBar($columnValues, '', $height, $p['project_color_identifier'],
-                                $p['project_active'], $progress, $p['project_id']);
+                                $p['project_active'], (int) $t['task_percent_complete'], $t['task_id']);
                         } else {
                             $name = $advance.'* ' . $t['task_name'];
                             $milestone = substr($t['task_start_date'], 0, 10);
                             $milestoneDate = new w2p_Utilities_Date($milestone);
-                            $gantt->addMilestone(array($name, '', $milestoneDate->format($df)), $t['task_start_date']);
+                            $gantt->addMilestone(array($name, '', $milestoneDate->format($df)), $t['task_start_date'], '#CC0000', $t['task_id']);
                         }
 
                         // End of insert workers for each task into Gantt Chart

@@ -117,20 +117,6 @@
 	</div>
 	<?php
 		$okMessage = "";
-		if (!is_writable( $manager->getTempDir() )) {
-			@chmod( $manager->getTempDir(), $chmod );
-		}
-		$filemode = @fileperms($manager->getTempDir());
-		if ($filemode & 2) {
-			$okMessage='<span class="error"> World Writable</span>';
-		}
-	?>
-	<div class="row py-1 border-bottom">
-	    <div class="col-sm-5 item">./files/temp writable?</div>
-	    <div class="col-sm-7"><?php echo is_writable( $manager->getTempDir() ) ? '<b class="ok">'.$okImg.'</b>'.$okMessage : '<b class="error">'.$failedImg.'</b><span class="warning"> PDF report generation will be disabled</span>';?></div>
-	</div>
-	<?php
-		$okMessage = "";
 		if (!is_writable( $manager->getLanguageDir() )) {
 			@chmod( $manager->getLanguageDir(), $chmod );
 		}

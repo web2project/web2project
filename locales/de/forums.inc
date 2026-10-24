@@ -76,4 +76,3 @@
 'this topic'=>'dieses Thema',
 'topics for this forum'=>'Themen in diesem Forum',
 'update watches'=>'Forenbeobachtung aktualisieren',
-'view PDF file'=>'PDF ansehen',

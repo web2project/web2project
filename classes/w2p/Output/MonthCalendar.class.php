@@ -293,7 +293,8 @@ class w2p_Output_MonthCalendar {
     private function _drawMain() {
         $today = new w2p_Utilities_Date();
         $today->convertTZ($this->_AppUI->getPref('TIMEZONE'));
-        $today = $today->format('%Y%m%d%w');
+        // w2p_Utilities_Date::format() has no %w, so compare the date part only
+        $today = $today->format(FMT_TIMESTAMP_DATE);
 
         $date = $this->this_month;
         $this_day = (int) $date->getDay();
@@ -310,9 +311,9 @@ class w2p_Output_MonthCalendar {
             $html .= '<tr>';
             if ($this->showWeek) {
                 $html .= '<td class="week">';
-                $html .= $this->dayFunc ? "<a href=\"javascript:$this->weekFunc('$week[0]')\">" : '';
-                $html .= '<img src="' . w2PfindImage('view.week.gif') . '" alt="Week View" /></a>';
-                $html .= $this->dayFunc ? '</a>' : '';
+                $html .= $this->weekFunc ? "<a href=\"javascript:$this->weekFunc('$week[0]')\">" : '';
+                $html .= '<img src="' . w2PfindImage('view.week.gif') . '" alt="Week View" />';
+                $html .= $this->weekFunc ? '</a>' : '';
                 $html .= '</td>';
             }
 
@@ -320,11 +321,15 @@ class w2p_Output_MonthCalendar {
                 $this_day = new w2p_Utilities_Date($day);
                 $m = (int) substr($day, 4, 2);
                 $d = (int) substr($day, 6, 2);
-                $dow = (int) substr($day, 8, 1);
-                $cday = (int) substr($day, 0, 8);
+                $ymd = substr($day, 0, 8);
+                $cday = (int) $ymd;
+                $isWorkingDay = $this_day->isWorkingDay();
 
-                //If we are on minical mode and we find tasks or events for this day then lets color code the cell depending on that
-                if (array_key_exists($cday, $this->events) && $this->styleMain == 'minical') {
+                if ($m != $this_month) {
+                    // days from the previous/next month are always drawn as empty
+                    $class = 'empty';
+                } elseif (array_key_exists($cday, $this->events) && $this->styleMain == 'minical') {
+                    //If we are on minical mode and we find tasks or events for this day then lets color code the cell depending on that
                     $nr_tasks = 0;
                     $nr_events = 0;
                     //lets count tasks and events
@@ -345,14 +350,16 @@ class w2p_Output_MonthCalendar {
                         //if we just find tasks
                         $class = 'task';
                     }
-                    if ($day == $today) {
+                    if ($ymd == $today) {
                         $class .= 'today';
                     }
-                } elseif ($m != $this_month) {
-                    $class = 'empty';
-                } elseif ($day == $today) {
+                    if (!$isWorkingDay) {
+                        // keep the non-working day marker alongside the task/event colour
+                        $class .= ' weekend';
+                    }
+                } elseif ($ymd == $today) {
                     $class = 'today';
-                } elseif ($dow == 0 || $dow == 6) {
+                } elseif (!$isWorkingDay) {
                     $class = 'weekend';
                 } else {
                     $class = 'day';

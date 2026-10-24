@@ -21,6 +21,9 @@ if (!$canAddEdit) {
 	$AppUI->redirect(ACCESS_DENIED);
 }
 
+$df = $AppUI->getPref('SHDATEFORMAT');
+$tf = $AppUI->getPref('TIMEFORMAT');
+
 //Pull forum information
 $myForum->load($forum_id);
 if (!$myForum) {
@@ -126,16 +129,16 @@ $form = new w2p_Output_HTML_FormHelper($AppUI);
             <h2 class="h6 border-bottom pb-1"><?php echo $AppUI->_($message_id ? 'Edit Message' : 'Add Message'); ?></h2>
             <?php
             if ($message_parent >= 0) { //check if this is a reply-post; if so, printout the original message
-                $messageAuthor = isset($message->message_author) ? $message->message_author : $AppUI->user_id;
-                $date = intval($message->message_datetime) ? new w2p_Utilities_Date($message->message_datetime) : new w2p_Utilities_Date();
+                // Show the message being replied to, not the (empty) new one.
+                $messageAuthor = $last_message->message_author ? $last_message->message_author : $AppUI->user_id;
                 ?>
                 <p>
                     <?php $form->showLabel('Author'); ?>
-                    <span><?php echo CContact::getContactByUserid($messageAuthor); ?> (<?php echo $AppUI->formatTZAwareTime($message->message_datetime, $df . ' ' . $tf); ?>)</span>
+                    <span><?php echo CContact::getContactByUserid($messageAuthor); ?> (<?php echo $AppUI->formatTZAwareTime($last_message->message_datetime, $df . ' ' . $tf); ?>)</span>
                 </p>
                 <p>
                     <?php $form->showLabel('Subject'); ?>
-                    <span><?php echo $message->message_title ?></span>
+                    <span><?php echo w2PformSafe($last_message->message_title); ?></span>
                 </p>
                 <div class="d-flex flex-wrap gap-2 mb-2">
                     <?php $form->showLabel('Previous Message'); ?>
@@ -154,7 +157,7 @@ $form = new w2p_Output_HTML_FormHelper($AppUI);
             ?>
             <p>
                 <?php $form->showLabel('Subject'); ?>
-                <input type="text" class="text" name="message_title" value="<?php echo ($message_id || $message_parent < 0 ? '' : 'Re: ') . $message->message_title; ?>" size="50" maxlength="250" />
+                <input type="text" class="text" name="message_title" value="<?php echo w2PformSafe($message_id || $message_parent < 0 ? $message->message_title : 'Re: ' . preg_replace('/^Re: /', '', $last_message->message_title)); ?>" size="50" maxlength="250" />
             </p>
             <p>
                 <?php $form->showLabel('Message'); ?>

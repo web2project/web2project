@@ -126,6 +126,17 @@ abstract class w2p_Core_BaseObject extends w2p_System_Event implements w2p_Inter
     }
 
     /**
+     * An object held in the session (CAppUI::holdObject() after a failed
+     *   save) comes back with the query of the request that stored it, whose
+     *   database connection is closed, so every query it ran was a fatal
+     *   "mysqli object is already closed" Error.
+     */
+    public function __wakeup()
+    {
+        $this->_query = new w2p_Database_Query;
+    }
+
+    /**
      * Since Dependency injection isn't feasible due to the sheer number of
      *   calls to the above constructor, this is a way to hijack the current
      *   $this->_query and manipulate it however we want.

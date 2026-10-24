@@ -17,7 +17,7 @@ $form = new w2p_Output_HTML_FormHelper($AppUI);
                 <?php $form->showLabel('Link Name'); ?>
                 <?php $form->showField('link_name', $object->link_name, array('maxlength' => 255)); ?>
                 <?php if ($object_id) { ?>
-                    <a href="<?php echo $object->link_url; ?>" target="_blank"><?php echo $AppUI->_('go'); ?></a>
+                    <a href="<?php echo htmlspecialchars(w2p_safe_url($object->link_url), ENT_QUOTES, 'UTF-8', false); ?>" target="_blank"><?php echo $AppUI->_('go'); ?></a>
                 <?php } ?>
             </p>
             <p>

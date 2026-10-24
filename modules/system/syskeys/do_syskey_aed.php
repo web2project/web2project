@@ -21,17 +21,18 @@ if (!$obj->bind($_POST)) {
 }
 
 $AppUI->setMsg('System Lookup Keys', UI_MSG_ALERT);
+// store() and delete() return true on success (errors are in getError())
 if ($del) {
-	if (($msg = $obj->delete())) {
-		$AppUI->setMsg($msg, UI_MSG_ERROR);
-	} else {
+	if ($obj->delete()) {
 		$AppUI->setMsg('deleted', UI_MSG_ALERT, true);
+	} else {
+		$AppUI->setMsg($obj->getError(), UI_MSG_ERROR);
 	}
 } else {
-	if (($msg = $obj->store())) {
-		$AppUI->setMsg($msg, UI_MSG_ERROR);
+	if ($obj->store()) {
+		$AppUI->setMsg(!empty($_POST['syskey_id']) ? 'updated' : 'inserted', UI_MSG_OK, true);
 	} else {
-		$AppUI->setMsg($_POST['syskey_id'] ? 'updated' : 'inserted', UI_MSG_OK, true);
+		$AppUI->setMsg($obj->getError(), UI_MSG_ERROR);
 	}
 }
 $AppUI->redirect('m=system&u=syskeys&a=keys');

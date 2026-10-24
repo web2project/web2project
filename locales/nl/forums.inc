@@ -82,4 +82,3 @@
 'this topic'=>'dit topic',
 'topics for this forum'=>'onderwerpen voor dit forum',
 'update watches'=>'update volglijsten',
-'view PDF file'=>'bekijk PDF bestand',

@@ -71,7 +71,52 @@ class CFile_Folder extends w2p_Core_BaseObject
             $this->_error['file_folder_name'] = $baseErrorMsg . 'folder name is not set';
         }
 
+        // A folder can't be its own parent or sit under one of its subfolders;
+        // either would cut the folder (and its files) off from the tree.
+        $folder_id = (int) $this->file_folder_id;
+        $parent_id = (int) $this->file_folder_parent;
+        if ($folder_id && $parent_id) {
+            if ($parent_id == $folder_id || in_array($parent_id, $this->getDescendantIds($folder_id))) {
+                $this->_error['file_folder_parent'] = $baseErrorMsg . 'a folder cannot be moved into itself or one of its subfolders';
+            }
+        }
+
         return (count($this->_error)) ? false : true;
+    }
+
+    /**
+     * The ids of every folder below $folder_id (children, grandchildren...).
+     *
+     * @param int $folder_id
+     *
+     * @return int[]
+     */
+    public function getDescendantIds($folder_id)
+    {
+        $q = $this->_getQuery();
+        $q->addTable('file_folders');
+        $q->addQuery('file_folder_id, file_folder_parent');
+        $parents = $q->loadHashList();
+        $q->clear();
+
+        $children = array();
+        foreach ((array) $parents as $id => $parent) {
+            $children[(int) $parent][] = (int) $id;
+        }
+
+        $descendants = array();
+        $pending = array((int) $folder_id);
+        while (count($pending)) {
+            $id = array_pop($pending);
+            foreach ((isset($children[$id]) ? $children[$id] : array()) as $child) {
+                if (!in_array($child, $descendants) && $child != $folder_id) {
+                    $descendants[] = $child;
+                    $pending[] = $child;
+                }
+            }
+        }
+
+        return $descendants;
     }
 
     protected function  hook_preStore() {
@@ -159,6 +204,52 @@ class CFile_Folder extends w2p_Core_BaseObject
         $q->addOrder('file_folder_name');
 
         return $q->loadList();
+    }
+
+    /**
+     * Counts the files in a folder that the current user may see, with the
+     * same project/task/company filters displayFiles() applies.
+     *
+     * @param int $folder_id
+     * @param int $task_id
+     * @param int $project_id
+     * @param int $company_id
+     *
+     * @return int
+     */
+    public function countFiles($folder_id, $task_id = 0, $project_id = 0, $company_id = 0)
+    {
+        // The permission lookups share this object's query, so run them
+        // before building the count.
+        $project = new CProject();
+        $project->overrideDatabase($this->_query);
+        $deny1 = $project->getDeniedRecords($this->_AppUI->user_id);
+        $task = new CTask();
+        $task->overrideDatabase($this->_query);
+        $deny2 = $task->getDeniedRecords($this->_AppUI->user_id);
+
+        $q = $this->_getQuery();
+        $q->addTable('files', 'f');
+        $q->addQuery('COUNT(f.file_id)');
+        $q->addJoin('projects', 'p', 'p.project_id = f.file_project');
+        $q->addWhere('f.file_folder = ' . (int) $folder_id);
+        if (count($deny1) > 0) {
+            $q->addWhere('f.file_project NOT IN (' . implode(',', $deny1) . ')');
+        }
+        if (count($deny2) > 0) {
+            $q->addWhere('f.file_task NOT IN (' . implode(',', $deny2) . ')');
+        }
+        if ($project_id) {
+            $q->addWhere('f.file_project = ' . (int) $project_id);
+        }
+        if ($task_id) {
+            $q->addWhere('f.file_task = ' . (int) $task_id);
+        }
+        if ($company_id) {
+            $q->addWhere('p.project_company = ' . (int) $company_id);
+        }
+
+        return (int) $q->loadResult();
     }
 
     public function getFiles() {

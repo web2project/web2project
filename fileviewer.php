@@ -13,7 +13,7 @@ $session->start();
 $AppUI = is_object($AppUI) ? $AppUI : new w2p_Core_CAppUI();
 // check if session has previously been initialised
 // if no ask for logging and do redirect
-if (!isset($_SESSION['AppUI']) || isset($_GET['logout'])) {
+if (!isset($_SESSION['AppUI']) || w2p_logout_requested()) {
 	$_SESSION['AppUI'] = new w2p_Core_CAppUI();
 	$AppUI = &$_SESSION['AppUI'];
 	$AppUI->setConfig($w2Pconfig);

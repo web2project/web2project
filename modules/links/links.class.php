@@ -71,6 +71,8 @@ class CLink extends w2p_Core_BaseObject
         }
         if (7 >= strlen(trim($this->link_url))) {
             $this->_error['link_url'] = $baseErrorMsg . 'link url is not set';
+        } elseif ('' == w2p_safe_url(html_entity_decode($this->link_url, ENT_QUOTES))) {
+            $this->_error['link_url'] = $baseErrorMsg . 'only http, https, ftp and mailto links are allowed';
         }
 
         return (count($this->_error)) ? false : true;
@@ -81,10 +83,10 @@ class CLink extends w2p_Core_BaseObject
         $q = $this->_getQuery();
         $this->link_datetime = $q->dbfnNowWithTZ();
 
-        if (strpos($this->link_url, ':') === false && strpos($this->link_url, "//") === false) {
-            $this->link_url = 'http://' . $this->link_url;
-        }
         $this->link_url = str_replace(array('"', '"', '<', '>'), '', $this->link_url);
+        // Adds http:// when there is no scheme; isValid() rejected the rest.
+        $safe = w2p_safe_url(html_entity_decode($this->link_url, ENT_QUOTES));
+        $this->link_url = ('' == $safe) ? $this->link_url : htmlentities($safe, ENT_QUOTES);
         $this->link_owner = (int) $this->link_owner ? $this->link_owner : $this->_AppUI->user_id;
     }
 

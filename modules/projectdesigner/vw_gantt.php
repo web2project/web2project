@@ -12,7 +12,7 @@ $projectStatus = w2PgetSysVal('ProjectStatus');
 ?>
 <div class="text-center p-1">
 <?php
-$src = '?m=tasks&a=gantt&suppressHeaders=1&showLabels=0&proFilter=&showInactive=1showAllGantt=1&project_id=' . $project_id . '&width=\' + ((navigator.appName==\'Netscape\'?window.innerWidth:document.body.offsetWidth)*0.90) + \'';
+$src = '?m=tasks&a=gantt&suppressHeaders=1&showLabels=0&f=all&project_id=' . $project_id . '&width=\' + ((navigator.appName==\'Netscape\'?window.innerWidth:document.body.offsetWidth)*0.90) + \'';
 echo '<script>document.write(\'<img src="' . $src . '">\')</script>';
 ?>
 </div>

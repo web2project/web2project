@@ -13,23 +13,42 @@ global $AppUI, $w2Pconfig, $canEdit, $canDelete, $stub, $where, $orderby;
 $canEdit = canEdit('users');
 $canDelete = canDelete('users');
 
-if (isset($_GET['out_user_id']) && $_GET['out_user_id']
-        && isset($_GET['out_name']) && $_GET['out_name']
+if (!function_exists('w2p_session_logout_form')) {
+	function w2p_session_logout_form($label, array $fields)
+	{
+		$s = '<form method="post" action="./index.php?m=users&amp;tab=3" style="display: inline;" accept-charset="utf-8">';
+		foreach ($fields as $name => $value) {
+			$s .= '<input type="hidden" name="' . $name . '" value="' . htmlspecialchars((string) $value, ENT_QUOTES) . '" />';
+		}
+		$s .= '<input type="submit" class="button" value="' . htmlspecialchars($label, ENT_QUOTES) . '" /></form>';
+
+		return $s;
+	}
+}
+
+// Ending sessions changes data, so it is a POST with the session's form token
+// (CSRF protection; the token is added to the forms by w2p_add_form_tokens()).
+if (isset($_POST['out_user_id']) && $_POST['out_user_id']
+        && isset($_POST['out_name']) && $_POST['out_name']
         && $canEdit && $canDelete) {
-	$boot_user_id = (int) w2PgetParam($_GET, 'out_user_id', 0);
-	$boot_user_name = (string) w2PgetParam($_GET, 'out_name', '');
+	if (!$AppUI->checkFormToken(isset($_POST['__nonce']) ? $_POST['__nonce'] : null)) {
+		$AppUI->setMsg('Your form has expired or did not come from this site. Please try again.', UI_MSG_ERROR);
+		$AppUI->redirect('m=users&tab=3');
+	}
+	$boot_user_id = (int) w2PgetParam($_POST, 'out_user_id', 0);
+	$boot_user_name = (string) w2PgetParam($_POST, 'out_name', '');
 	$details = $boot_user_name . ' by ' . $AppUI->user_first_name . ' ' . $AppUI->user_last_name;
 
 	// one session or many?
 	// The session id goes into SQL in w2p_System_Session::destroy(), so only
 	// accept the characters PHP session ids use.
-	$out_session = (string) w2PgetParam($_GET, 'out_session', '');
+	$out_session = (string) w2PgetParam($_POST, 'out_session', '');
 	if ($out_session && !preg_match('/^[A-Za-z0-9,-]+$/', $out_session)) {
 		$AppUI->redirect('m=users&tab=3');
 	}
-	if ($out_session && w2PgetParam($_GET, 'out_user_log_id', 0)) {
+	if ($out_session && w2PgetParam($_POST, 'out_user_log_id', 0)) {
 		$boot_user_session = $out_session;
-		$boot_user_log_id = (int) w2PgetParam($_GET, 'out_user_log_id', 0);
+		$boot_user_log_id = (int) w2PgetParam($_POST, 'out_user_log_id', 0);
 		$boot_query_row = false;
 	} else {
 		if ($canEdit && $canDelete) {
@@ -52,9 +71,9 @@ if (isset($_GET['out_user_id']) && $_GET['out_user_id']
     }
 
 	do {
-		if ($boot_user_id == $AppUI->user_id && $boot_user_session == $_COOKIE['PHPSESSID']) {
+		if ($boot_user_id == $AppUI->user_id && $boot_user_session == session_id()) {
 			$AppUI->resetPlace();
-			$AppUI->redirect('logout=-1');
+			$AppUI->redirect('logout=-1&__nonce=' . $AppUI->getFormToken());
 		} else {
 			addHistory('login', $boot_user_id, 'logout', $details);
             $session = new w2p_System_Session();
@@ -103,20 +122,17 @@ foreach ($rows as $row) {
 
     $s = '<tr>';
 	$s .= '<td align="center" nowrap="nowrap">';
-	// Build the URLs with http_build_query() and escape them for the
-	// attribute: names were added with addslashes() only, so a quote in a
-	// display name broke out of the onclick attribute.
+	// Small POST forms (CSRF: see the handler above); every value is escaped
+	// for the attribute, since display names can hold quotes.
 	if ($canEdit && $canDelete) {
-		$url = './index.php?' . http_build_query(array('m' => 'users', 'tab' => 3,
+		$s .= w2p_session_logout_form($AppUI->_('logout_session'), array(
 			'out_session' => $row['session_id'], 'out_user_log_id' => $row['user_access_log_id'],
 			'out_user_id' => $row['u_user_id'], 'out_name' => $row['contact_display_name']));
-		$s .= '<input type="button" class="button" value="' . $AppUI->_('logout_session') . '" onclick="window.location=' . htmlspecialchars(json_encode($url), ENT_QUOTES) . ';" />';
 	}
 	$s .= '</td><td align="center" nowrap="nowrap">';
 	if ($canEdit && $canDelete) {
-		$url = './index.php?' . http_build_query(array('m' => 'users', 'tab' => 3,
+		$s .= w2p_session_logout_form($AppUI->_('logout_user'), array(
 			'out_user_id' => $row['u_user_id'], 'out_name' => $row['contact_display_name']));
-		$s .= '<input type="button" class="button" value="' . $AppUI->_('logout_user') . '" onclick="window.location=' . htmlspecialchars(json_encode($url), ENT_QUOTES) . ';" />';
 	}
 	$s .= '</td>';
     $s .= $htmlHelper->createCell('na', $row['user_username']);

@@ -1234,8 +1234,9 @@ class w2p_Extensions_Permissions extends gacl_api
         }
 
         //If we don't know what is the module we are dealing with lets deny
-        if (!$mod_class['mod_directory']) {
-            dprint(__file__, __line__, 2, 'user:' . $userid . 'module:' . $module . 'Item:' . $item . $mod_class['mod_main_class']);
+        // (loadHash() returns false for an inactive or unknown module)
+        if (!is_array($mod_class) || empty($mod_class['mod_directory'])) {
+            dprint(__file__, __line__, 2, 'user:' . $userid . 'module:' . $module . 'Item:' . $item);
             return array();
         }
         $obj = new $mod_class['mod_main_class'];

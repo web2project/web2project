@@ -75,11 +75,6 @@ Environment overrides: `W2P_URL`, `W2P_DB`, `W2P_DB_USER`, `W2P_DB_PASS`,
   (Africa/Algiers). Times are converted using the system zone when saved but
   the user zone when shown, and date-only fields (project dates) are shown a
   day early in any zone west of UTC. The seed sets both to a UTC+0 zone.
-- **Gantt charts show only the viewer's tasks:** `tasks/viewgantt.php` and
-  `projectdesigner/vw_gantt.php` build the chart image URL without the `f=`
-  filter, and the `showInactive=1` parameter is missing its `&`. The capture
-  rewrites the image `src` to add `&f=all` and fixes the separator
-  (`gantt_all_tasks` in `screenshots.py`).
 - **Budgets:** the budget reports and budget fields only appear while
   System Configuration > "budget_info_display" is on. The seed turns it on,
   enters budgets, then turns it off. `screenshots.py` turns it on for the

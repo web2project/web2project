@@ -241,7 +241,6 @@
 'Vendor'=>'Prodejce',
 'Version'=>'Verze',
 'Versions'=>'Verze',
-'View PDF File'=>'Zobrazit PDF soubor',
 'Wed'=>'St',
 'Wednesday'=>'Středa',
 'Welcome'=>'Vítejte, uživateli',

@@ -159,12 +159,8 @@ abstract class w2p_Theme_Base
         $s .= '$(document).ready(function() {';
         // Attach tooltips to "span" elements
         $s .= '    $("span").tipTip({maxWidth: "600px;", delay: 200, fadeIn: 150, fadeOut: 150});';
-        // Move the focus to the first textbox available, while avoiding the "Global Search..." textbox
-        if (canAccess('smartsearch')) {
-            $s .= '    $("input[type=\'text\']:eq(1)").focus();';
-        } else {
-            $s .= '    $("input[type=\'text\']:eq(0)").focus();';
-        }
+        // Move the focus to the first textbox available, skipping the header's "Global Search..." box (#keyword)
+        $s .= '    $("input[type=\'text\']:not(#keyword):first").focus();';
         $s .= '});';
         $s .= '</script>';
 

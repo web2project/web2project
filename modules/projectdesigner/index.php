@@ -592,7 +592,8 @@ function calcDuration(f, start_date, end_date, duration_fld, durntype_fld) {
 </div>
 
 <script language="javascript" type="text/javascript">
-    var original_bgc = getStyle('td_sample', 'background-color', 'backgroundColor');
+    // Clearing the inline background restores the row's stylesheet colour.
+    var original_bgc = '';
 </script>
 <?php
 }

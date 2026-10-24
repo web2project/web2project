@@ -135,6 +135,13 @@ class w2p_Core_CAppUI
     protected $objStore = null;
 
     /**
+     * The session's form token (CSRF protection), see getFormToken().
+     *
+     * @var string
+     */
+    public $__nonce = '';
+
+    /**
      * Holds an array of additional javascript files to be loaded
      * in the footer of the page
      *
@@ -542,6 +549,33 @@ class w2p_Core_CAppUI
      *
      * @param object $obj The item to be temporarily stored
      */
+    /**
+     * The token every form that changes data must post as __nonce. It is
+     *   random, made once per session (a new CAppUI is made at login and
+     *   logout), and checked for every dosql request in index.php.
+     *
+     * @return string
+     */
+    public function getFormToken()
+    {
+        if (!is_string($this->__nonce) || 64 != strlen($this->__nonce)) {
+            $this->__nonce = bin2hex(random_bytes(32));
+        }
+
+        return $this->__nonce;
+    }
+
+    /**
+     * @param mixed $token the posted __nonce
+     *
+     * @return bool
+     */
+    public function checkFormToken($token)
+    {
+        return is_string($token) && is_string($this->__nonce) && 64 == strlen($this->__nonce)
+            && hash_equals($this->__nonce, $token);
+    }
+
     public function holdObject($obj)
     {
         $this->objStore = $obj;
@@ -565,22 +599,14 @@ class w2p_Core_CAppUI
      */
     public function redirect($params = '', $hist = '')
     {
-        $session_id = session_id();
-
         session_write_close();
         // are the params empty
         if (!$params) {
             // has a place been saved
             $params = !empty($this->state['SAVEDPLACE' . $hist]) ? $this->state['SAVEDPLACE' . $hist] : $this->defaultRedirect;
         }
-        // Fix to handle cookieless sessions
-        if ($session_id != '') {
-            if (!$params) {
-                $params = $session_id;
-            } else {
-                $params .= '&' . $session_id;
-            }
-        }
+        // The session id is never put in the URL: it travels in the session
+        // cookie only, so it can't leak through logs, history or Referer.
         ob_implicit_flush(); // Ensure any buffering is disabled.
         header('Location: index.php?' . $params);
         exit(); // stop the PHP execution
@@ -822,6 +848,12 @@ class w2p_Core_CAppUI
         if (!$this) {
             dprint(__file__, __line__, 1, 'Failed to load user information');
             return false;
+        }
+
+        // Signed in: switch to a new session id and drop the old one, so an
+        // id that was set or seen before login (session fixation) is useless.
+        if (PHP_SESSION_ACTIVE == session_status()) {
+            session_regenerate_id(true);
         }
 
         // load the user preferences

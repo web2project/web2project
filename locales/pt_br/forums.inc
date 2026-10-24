@@ -77,7 +77,6 @@
 'topics for this forum'=>'tópicos para este fórum',
 'update watches'=>'atualiza acompanhamentos',
 'View'=>'Ver',
-'view PDF file'=>'ver PDF',
 'Watch'=>'Acompanhar',
 'Watch Forced'=>'Acompanhamento forçado',
 'Watch Unforced'=>'Acompanhamento não forçado',

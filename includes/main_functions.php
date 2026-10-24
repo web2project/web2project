@@ -46,12 +46,6 @@ function w2p_old_autoload($class_name)
         case 'html_bbcodeparser':
             require_once W2P_BASE_DIR . '/lib/PEAR/BBCodeParser.php';
             break;
-        case 'cezpdf':
-            require_once W2P_BASE_DIR . '/lib/ezpdf/class.ezpdf.php';
-            break;
-        case 'cpdf':
-            require_once W2P_BASE_DIR . '/lib/ezpdf/class.pdf.php';
-            break;
         case 'gacl':
             require_once W2P_BASE_DIR . '/lib/phpgacl/gacl.class.php';
             break;
@@ -150,9 +144,16 @@ function w2PgetConfig($key, $default = null)
 
 /**
  * Utility function to return a value from a named array or a specified
- *  default, and avoid poisoning the URL by denying:
- * 1) the use of spaces (for SQL and XSS injection)
- * 2) the use of <, ", [, ; and { (for XSS injection)
+ *  default.
+ *
+ * A string value has its HTML tags removed (strip_tags()); nothing else is
+ *  filtered, and array values are returned as they are. The result is NOT
+ *  safe for SQL or HTML: cast it ((int)), quote it (w2p_Database_Query::quote())
+ *  or escape it (w2PformSafe()/htmlspecialchars()) where it is used.
+ *
+ *  Earlier versions also ran preg_replace() with a pattern meant to remove
+ *  quotes, brackets and semicolons. It wasn't a character class, so it only
+ *  matched that exact sequence and never removed anything.
  *
  * @param array<mixed> $arr  Source array, usually $_GET or $_POST
  * @param string       $name Key to read
@@ -166,17 +167,79 @@ function w2PgetParam(&$arr, $name, $def = null)
 
     if (isset($arr[$key])) {
         if (is_array($arr[$key])) {
-            $_result = $arr[$key];
-            foreach($_result as $_key => $_value) {
-                $_result[$_key] = preg_replace("/<>'\"\[\]{}:;/", "", $_value);
-            }
-            $result  = $_result;
+            $result = $arr[$key];
         } else {
-            $_result = strip_tags($arr[$key]);
-            $result  = preg_replace("/<>\`'\"\[\]{}():;/", "", $_result);
+            $result = strip_tags($arr[$key]);
         }
     } else {
         $result = $def;
+    }
+
+    return $result;
+}
+
+/**
+ * Whether this request asks to log the user out. A logged-in user is only
+ *  logged out when the request carries the session's form token (POSTed by
+ *  the Logout button, or in the URL for internal redirects), so another site
+ *  can't log users out (CSRF).
+ *
+ * @return bool
+ */
+function w2p_logout_requested()
+{
+    if (!isset($_GET['logout']) && !isset($_POST['logout'])) {
+        return false;
+    }
+    if (!isset($_SESSION['AppUI']) || !is_object($_SESSION['AppUI']) || empty($_SESSION['AppUI']->user_id)) {
+        return true;    // nobody is logged in, nothing to protect
+    }
+    $token = isset($_POST['__nonce']) ? $_POST['__nonce'] : (isset($_GET['__nonce']) ? $_GET['__nonce'] : null);
+
+    return $_SESSION['AppUI']->checkFormToken($token);
+}
+
+/**
+ * Output filter: adds the session's form token (__nonce) to every POST form
+ *  in an HTML page that doesn't already have one, so forms that never called
+ *  w2p_Output_HTML_FormHelper::addNonce() still pass the token check.
+ *
+ * @param string $buffer
+ *
+ * @return string
+ */
+function w2p_add_form_tokens($buffer)
+{
+    /** @var w2p_Core_CAppUI|null $AppUI */
+    global $AppUI;
+
+    if (!is_object($AppUI) || !$AppUI->user_id || false === stripos($buffer, '<form')) {
+        return $buffer;
+    }
+    foreach (headers_list() as $header) {
+        if (0 === stripos($header, 'Content-Type:') && false === stripos($header, 'text/html')) {
+            return $buffer;
+        }
+    }
+
+    $input = '<input type="hidden" name="__nonce" value="' . $AppUI->getFormToken() . '" />';
+    $parts = preg_split('/(<form\b[^>]*>)/i', $buffer, -1, PREG_SPLIT_DELIM_CAPTURE);
+    if (!is_array($parts)) {
+        return $buffer;
+    }
+    $result = '';
+    $count = count($parts);
+    for ($i = 0; $i < $count; $i++) {
+        $result .= $parts[$i];
+        if (1 == $i % 2 && preg_match('/\bmethod\s*=\s*["\']?post\b/i', $parts[$i])) {
+            // Skip forms that already carry the token.
+            $body = isset($parts[$i + 1]) ? $parts[$i + 1] : '';
+            $end = stripos($body, '</form');
+            $body = (false === $end) ? $body : substr($body, 0, $end);
+            if (false === strpos($body, 'name="__nonce"')) {
+                $result .= $input;
+            }
+        }
     }
 
     return $result;
@@ -229,16 +292,57 @@ function w2Psgn($x)
     return $x ? ($x > 0 ? 1 : -1) : 0;
 }
 
+/**
+ * Makes a user-entered URL safe to use as a link target.
+ *
+ * Only http, https, ftp and mailto links are allowed. Text without a scheme
+ *  (example.com/page) gets http://. Anything else, such as javascript: or
+ *  data: URLs, returns ''.
+ *
+ * The result is not HTML-escaped; escape it when printing it.
+ *
+ * @param string $url
+ *
+ * @return string
+ */
+function w2p_safe_url($url)
+{
+    // Browsers ignore control characters and whitespace inside a scheme
+    // ("java\tscript:"), so drop them before looking at it.
+    // Stored values are often HTML-encoded (bind() runs htmlentities()), and
+    // the browser decodes entities in an href, so check the decoded text.
+    $url = trim(preg_replace('/[\x00-\x20\x7f]+/', ' ', (string) $url));
+    if ('' == $url) {
+        return '';
+    }
+    $squashed = preg_replace('/[\x00-\x20\x7f]+/', '', html_entity_decode($url, ENT_QUOTES | ENT_HTML5, 'UTF-8'));
+
+    if (preg_match('/^([a-z][a-z0-9+.\-]*):/i', $squashed, $matches)) {
+        if (!in_array(strtolower($matches[1]), array('http', 'https', 'ftp', 'mailto'))) {
+            // Could still be host:port without a scheme (example.com:8080).
+            if (!preg_match('/^[a-z0-9.\-]+:\d+(\/|$)/i', $squashed)) {
+                return '';
+            }
+            return 'http://' . $squashed;
+        }
+        return $url;
+    }
+    if (0 === strpos($squashed, '//')) {
+        return 'http:' . $squashed;
+    }
+
+    return 'http://' . ltrim($url, '/');
+}
+
 function w2p_url($link, $text = '')
 {
     $result = '';
 
+    $link = w2p_safe_url($link);
     if ($link != '') {
-        if (strpos($link, 'http') === false) {
-            $link = 'http://' . $link;
-        }
         $text = ('' != $text) ? $text : $link;
-        $result = '<a href="' . $link . '" target="_new">' . $text . '</a>';
+        // Don't double-encode values that were stored HTML-encoded.
+        $result = '<a href="' . htmlspecialchars($link, ENT_QUOTES, 'UTF-8', false) . '" target="_new">' . htmlspecialchars($text, ENT_QUOTES, 'UTF-8', false) . '</a>';
     }
 
     return $result;

@@ -47,12 +47,10 @@ class w2p_Controllers_Base
         }
 
         /**
-         * The nonce validation only throws a warning as of v3.1 so that we don't break anyone's forms. As of v4.0
-         *   this validation will be turned on and any form processing using this controller will have to include
-         *   the __nonce field. See https://docs.web2project.net/docs/security-nonce.html for more details.
+         * The __nonce (form token) is checked in index.php before any dosql
+         *   handler, including the ones that use this controller, runs. See
+         *   w2p_Core_CAppUI::checkFormToken().
          */
-        if (('' != $AppUI->__nonce) && ($AppUI->__nonce != $myArray['__nonce'])) {
-        }
 
         $action = ($this->delete) ? 'deleted' : 'stored';
         $this->success = ($this->delete) ? $this->object->delete() :

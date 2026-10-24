@@ -86,7 +86,15 @@ class w2p_System_UpgradeManager {
         $allErrors = array();
         set_time_limit(0);
         $version = '';
-        //TODO: add support for database prefixes
+
+        /*
+         * The migrations in install/sql create and change unprefixed tables, so
+         * an installation with a table prefix can't be upgraded (or have worked).
+         */
+        if (isset($this->configOptions['dbprefix']) && '' !== (string) $this->configOptions['dbprefix']) {
+            return array('Table prefixes are not supported. Rename the tables without the \'' .
+                $this->configOptions['dbprefix'] . '\' prefix and set $w2Pconfig[\'dbprefix\'] to \'\' in includes/config.php.');
+        }
 
         $dbConn = $this->_openDBConnection();
 
@@ -173,7 +181,6 @@ class w2p_System_UpgradeManager {
         $configFile = str_replace('[DBNAME]', $dbConfig['dbname'], $configFile);
         $configFile = str_replace('[DBUSER]', $dbConfig['dbuser'], $configFile);
         $configFile = str_replace('[DBPASS]', $dbConfig['dbpass'], $configFile);
-        $configFile = str_replace('[DBPREFIX]', '', $configFile);
         //TODO: add support for configurable persistent connections
         $configFile = trim($configFile);
 

@@ -112,9 +112,7 @@ class w2p_Output_HTML_FormHelper extends w2p_Output_HTML_Base
 
     public function addNonce()
     {
-        $nonce = md5(time() . implode($this->AppUI->user_prefs) );
-        $output = '<input type="hidden" name="__nonce" value="'. $nonce . '" />';
-        $this->AppUI->__nonce = $nonce;
+        $output = '<input type="hidden" name="__nonce" value="' . $this->AppUI->getFormToken() . '" />';
 
         return $output;
     }

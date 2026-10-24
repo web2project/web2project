@@ -24,7 +24,6 @@ $showDynTasks = (int) w2PgetParam( $_REQUEST, 'showDynTasks', false );
 $showLowTasks = (int) w2PgetParam( $_REQUEST, 'showLowTasks', true);
 
 // Get the state of formatting variables here /////////////////////////////////////////////////////
-$showTaskNameOnly = (int) w2PgetParam($_REQUEST, 'showTaskNameOnly', 0);
 $showNoMilestones = (int) w2PgetParam($_REQUEST, 'showNoMilestones', 0);
 $showMilestonesOnly = (int) w2PgetParam($_REQUEST, 'showMilestonesOnly', 0);
 $showhgrid = (int) w2PgetParam($_REQUEST, 'showhgrid', 0);
@@ -34,8 +33,6 @@ $monospacefont = (int) w2PgetParam($_REQUEST, 'monospacefont', 0);
 
 $df = $AppUI->getPref('SHDATEFORMAT');
 $project = new CProject();
-$criticalTasks = ($project_id > 0) ? $project->getCriticalTasks($project_id) : null;
-$criticalTasksInverted = ($project_id > 0) ? getCriticalTasksInverted($project_id) : null;
 
 // pull valid projects and their percent complete information
 $projects = $project->getAllowedProjects($AppUI->user_id, false);
@@ -67,10 +64,6 @@ $end_max = '0000-00-00 00:00:00';
 $start_min = $AppUI->convertToSystemTZ(date('Y-m-d H:i:s'));
 
 //pull the tasks into an array
-if ($caller != 'todo') {
-    $criticalTasks = $project->getCriticalTasks($project_id);
-}
-
 foreach ($proTasks as $row) {
     $row['task_start_date'] = __extract_from_projects_gantt3($row);
 
@@ -98,24 +91,6 @@ $width = min(w2PgetParam($_GET, 'width', 600), 1400);
 $start_date = w2PgetParam($_GET, 'start_date', $start_min);
 $end_date = w2PgetParam($_GET, 'end_date', $end_max);
 
-//consider critical (concerning end date) tasks as well
-if (!is_null($criticalTasks)) {
-    if ($caller != 'todo') {
-        $start_min = $projects[$project_id]['project_start_date'];
-        $end_max = (($projects[$project_id]['project_end_date'] > $criticalTasks[0]['task_end_date']) 
-                    ? $projects[$project_id]['project_end_date'] : $criticalTasks[0]['task_end_date']);
-    } else {
-        $start_min = substr($criticalTasksInverted[0]['task_start_date'], 0, 10);
-        if ($start_min == '0000-00-00' || !$start_min) {
-            $start_min = $projects[$project_id]['project_start_date'];
-        }
-        $end_max = substr($criticalTasks[0]['task_end_date'], 0, 10);
-        if ($end_max == '0000-00-00' || !$end_max) {
-            $end_max = $projects[$project_id]['project_end_date'];
-        }
-    }
-}
-
 $count = 0;
 
 // If hyperlinks are to be added then the graph is of a set width///////
@@ -123,35 +98,12 @@ if ($addLinksToGantt == '1') {
     $width = 1450 ;
 }
 
-if (!$start_date || !$end_date) {
-    // find out DateRange from gant_arr
-    $d_start = new w2p_Utilities_Date();
-    $d_end = new w2p_Utilities_Date();
-    $taskArray = count($gantt_arr);
-    for ($i = 0, $i_cmp = $taskArray; $i < $i_cmp; $i++) {
-        $a = $gantt_arr[$i][0];
-        $start = substr($a['task_start_date'], 0, 10);
-        $end = substr($a['task_end_date'], 0, 10);
-
-        $d_start->Date($start);
-        $d_end->Date($end);
-
-        if ($i == 0) {
-            $min_d_start = $d_start;
-            $max_d_end = $d_end;
-            $start_date = $start;
-            $end_date = $end;
-        } else {
-            if (Date::compare($min_d_start, $d_start) > 0) {
-                $min_d_start = $d_start;
-                $start_date = $start;
-            }
-            if (Date::compare($max_d_end, $d_end) < 0) {
-                $max_d_end = $d_end;
-                $end_date = $end;
-            }
-        }
-    }
+// An empty start_date or end_date parameter falls back to the task range.
+if (!$start_date) {
+    $start_date = $start_min;
+}
+if (!$end_date) {
+    $end_date = $end_max;
 }
 if ('0000-00-00' == substr($start_date, 0, 10)) {
     $start_date = date('Y-m-d', time() - 60 * 60 * 24 * 7);
@@ -165,17 +117,12 @@ $pname = $projects[$project_id]['project_name'];
 $gantt->setTitle($pname);
 $field = ($showWork == '1') ? 'Work' : 'Dur';
 
-if ($showTaskNameOnly == '1') {
-    $columnNames = array('Task name');
-    $columnSizes = array(300);
+if ($caller == 'todo') {
+    $columnNames = array('Task name', 'Project name', $field, 'Start', 'Finish');
+    $columnSizes = array(200, 160, 40, 75, 75);
 } else {
-    if ($caller == 'todo') {
-        $columnNames = array('Task name', 'Project name', $field, 'Start', 'Finish');
-        $columnSizes = array(200, 160, 40, 75, 75);
-    } else {
-        $columnNames = array('Task name', $field, 'Start', 'Finish');
-        $columnSizes = array(200, 50, 80, 80);
-    }
+    $columnNames = array('Task name', $field, 'Start', 'Finish');
+    $columnSizes = array(200, 50, 80, 80);
 }
 $gantt->setColumnHeaders($columnNames, $columnSizes);
 $gantt->setProperties(array('showhgrid' => true));
@@ -217,8 +164,6 @@ if ($hide_task_groups) {
 		}
 	}
 }
-
-$gantt->loadTaskArray($gantt_arr);
 
 $row = 0;
 for ($i = 0, $i_cmp = count($gantt_arr); $i < $i_cmp; $i++) {
@@ -301,17 +246,11 @@ for ($i = 0, $i_cmp = count($gantt_arr); $i < $i_cmp; $i++) {
                 $today_date = $today->format($df . ' ' . $AppUI->getPref('TIMEFORMAT'));
                 $today_date_stamp = strtotime($today_mile);
 
-                // honour the choice to show task names only///////////////////////////////////////////////////
-                if ($showTaskNameOnly == '1') {
-                    $fieldArray = array($name);
+                if ($caller == 'todo') {
+                    $fieldArray = array($name, $pname, '', $s, $s);
                 } else {
-                    if ($caller == 'todo') {
-                        $fieldArray = array($name, $pname, '', $s, $s);
-                    } else {
-                        $fieldArray = array($name, '', $s, $s);
-                    }
+                    $fieldArray = array($name, '', $s, $s);
                 }
-                ///////////////////////////////////////////////////////////////////////////////////////
                 //set color for milestone according to progress
                 //red for 'not started' #990000
                 //yellow for 'in progress' #FF9900
@@ -347,7 +286,7 @@ for ($i = 0, $i_cmp = count($gantt_arr); $i < $i_cmp; $i++) {
             if ($mile_date_stamp + 72*60*60 >= strtotime($end_date)) {
                 $captionToTheLeft = true;
             }
-            $gantt->addMilestone($fieldArray, $a['task_start_date'], $color, 0, $captionToTheLeft);
+            $gantt->addMilestone($fieldArray, $a['task_start_date'], $color, $a['task_id'], $captionToTheLeft);
             }
         } else {
             $type = $a['task_duration_type'];
@@ -363,17 +302,13 @@ for ($i = 0, $i_cmp = count($gantt_arr); $i < $i_cmp; $i++) {
 
             $dur .= ' h';
             $height = ($a['task_dynamic'] == 1) ? 0.1 : 0.6;
-            if ($showTaskNameOnly == '1') {
-                $columnValues = array('task_name' => $name);
+            if ($caller == 'todo') {
+                $columnValues = array('task_name' => $name, 'project_name' => $pname,
+                    'duration' => $dur, 'start_date' => $start, 'end_date' => $end,
+                    'actual_end' => '');
             } else {
-                if ($caller == 'todo') {
-                    $columnValues = array('task_name' => $name, 'project_name' => $pname,
-                        'duration' => $dur, 'start_date' => $start, 'end_date' => $end,
-                        'actual_end' => '');
-                } else {
-                    $columnValues = array('task_name' => $name, 'duration' => $dur,
-                        'start_date' => $start, 'end_date' => $end, 'actual_end' => '');
-                }
+                $columnValues = array('task_name' => $name, 'duration' => $dur,
+                    'start_date' => $start, 'end_date' => $end, 'actual_end' => '');
             }
             $gantt->addBar($columnValues, $caption, $height, '8F8FBD', true, $progress, $a['task_id']);
         }

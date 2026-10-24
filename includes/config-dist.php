@@ -22,10 +22,15 @@ $w2Pconfig['dbhost'] = '[DBHOST]';
 $w2Pconfig['dbname'] = '[DBNAME]'; // Your web2Project Database Name
 $w2Pconfig['dbuser'] = '[DBUSER]'; // Your MySQL Username
 $w2Pconfig['dbpass'] = '[DBPASS]'; // Your MySQL Password
-$w2Pconfig['dbprefix'] = '[DBPREFIX]'; // The prefix used for db table names
+$w2Pconfig['dbprefix'] = ''; // Table prefixes are not supported: leave this empty
 
 // set this value to true to use persistent database connections
 $w2Pconfig['dbpersist'] = false;
+
+// Gantt charts draw Chinese, Japanese and Korean text with this font file
+// (.ttf or .ttc). If unset, common system CJK fonts such as Noto Sans CJK
+// (the fonts-noto-cjk package) are used when installed.
+// $w2Pconfig['gantt_cjk_font'] = '/usr/share/fonts/opentype/noto/NotoSansCJK-Regular.ttc';
 
 /***************** Configuration for DEVELOPERS use only! ******/
 // Root directory and base_url are automatically set to avoid

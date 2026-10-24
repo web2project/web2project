@@ -22,17 +22,23 @@ if (!$canAddEdit) {
 $obj = $AppUI->restoreObject();
 if ($obj) {
     $object = $obj;
-    $object_id = $object->file_folder_id;
+    $object_id = (int) $object->file_folder_id;
+    $loaded = true;
 } else {
-    $obj = $object->load($object_id);
+    $loaded = $object->load($object_id);
 }
-if (!$object && $object_id > 0) {
+if (!$loaded && $object_id > 0) {
 	$AppUI->setMsg('File Folder');
 	$AppUI->setMsg('invalidID', UI_MSG_ERROR, true);
 	$AppUI->redirect('m=' . $m);
 }
 
-$folders = getFolderSelectList();
+// A folder can't become a subfolder of itself or of one of its subfolders.
+$folders = getFolderSelectList($object_id);
+
+// add to allow for returning to other modules besides Files
+$referrerArray = parse_url(isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '');
+$referrer = isset($referrerArray['query']) ? $referrerArray['query'] : '';
 
 // setup the title block
 $ttl = $object_id ? 'Edit File Folder' : 'Add File Folder';
@@ -40,7 +46,8 @@ $titleBlock = new w2p_Theme_TitleBlock($ttl, 'icon.png', $m);
 $titleBlock->addCrumb('?m=' . $m, $m . ' list');
 
 $canDelete = $object->canDelete();
-if ($canDelete) {
+$msg = implode(' ', (array) $object->getError());
+if ($object_id && $canDelete) {
 	$titleBlock->addCrumbDelete('delete file folder', $canDelete, $msg);
 }
 $titleBlock->show();
@@ -66,12 +73,6 @@ function delIt() {
 		f.del.value='1';
 		f.submit();
 	}
-    if (confirm( '<?php echo $AppUI->_('doDelete') . ' ' . $AppUI->_('Folder') . '?'; ?>' )) {
-        $.post("?m=companies",
-            {dosql: "do_folder_aed", del: 1, file_folder_id: <?php echo $object_id; ?>},
-            window.location = "?m=companies"
-        );
-    }
 }
 </script>
 <?php

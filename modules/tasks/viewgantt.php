@@ -35,7 +35,6 @@ $showNoMilestones = '';
 $addLinksToGantt = '';
 $ganttTaskFilter = '';
 $monospacefont = '';
-$showTaskNameOnly = '';
 $showhgrid = '';
 
 if ($a == 'todo') {
@@ -320,14 +319,15 @@ if (!$min_view) {
                  $cnt[0]['N'] = ((empty($tasks)) ? 0 : 1);
             }
             if ($cnt[0]['N'] > 0) {
-				 $src = ('?m=tasks&a=gantt&suppressHeaders=1&project_id=' . $project_id 
+				 // f=all: the project's Gantt tab shows every task, like its Tasks
+				 // tab. The to-do gantt (caller=todo) ignores f.
+				 $src = ('?m=tasks&a=gantt&suppressHeaders=1&f=all&project_id=' . $project_id 
 						 . (($display_option == 'all') ? ''
 						    : ('&start_date=' . $start_date->format('%Y-%m-%d')
 						       . '&end_date=' . $end_date->format('%Y-%m-%d')))
 						 . "&width=' + ((navigator.appName=='Netscape'"
 						 . "?window.innerWidth:document.body.offsetWidth)*0.95) + '"
 						 . '&showLabels=' . $showLabels . '&showWork=' . $showWork
-						 . '&showTaskNameOnly=' . $showTaskNameOnly
 					     . '&showhgrid=' . $showhgrid . '&showPinned=' . $showPinned
 						 . '&showArcProjs=' . $showArcProjs . '&showHoldProjs=' . $showHoldProjs
 						 . '&showDynTasks=' . $showDynTasks . '&showLowTasks=' . $showLowTasks

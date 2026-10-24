@@ -23,11 +23,12 @@ if (!$canAddEdit) {
 $obj = $AppUI->restoreObject();
 if ($obj) {
     $object = $obj;
-    $object_id = $file->getId();
+    $object_id = $object->getId();
+    $loaded = true;
 } else {
-    $obj = $object->load($object_id);
+    $loaded = $object->load($object_id);
 }
-if (!$object && $object_id > 0) {
+if (!$loaded && $object_id > 0) {
 	$AppUI->setMsg('File');
 	$AppUI->setMsg('invalidID', UI_MSG_ERROR, true);
     $AppUI->redirect('m=' . $m);
@@ -38,8 +39,8 @@ if (file_exists(W2P_BASE_DIR . '/modules/helpdesk/config.php')) {
 }
 $canAdmin = canEdit('system');
 // add to allow for returning to other modules besides Files
-$referrerArray = parse_url($_SERVER['HTTP_REFERER']);
-$referrer = $referrerArray['query'];
+$referrerArray = parse_url(isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '');
+$referrer = isset($referrerArray['query']) ? $referrerArray['query'] : '';
 
 $file_task = (int) w2PgetParam($_GET, 'file_task', $object->file_task);
 $file_parent = (int) w2PgetParam($_GET, 'file_parent', 0);
@@ -67,6 +68,7 @@ $ttl = $object_id ? 'Edit File' : 'Add File';
 $titleBlock = new w2p_Theme_TitleBlock($ttl, 'icon.png', $m);
 $titleBlock->addCrumb('?m=' . $m, $m . ' list');
 $canDelete = $object->canDelete();
+$msg = '';
 
 if ($canDelete && $object_id > 0 && !$ci) {
 	$titleBlock->addCrumbDelete('delete file', $canDelete, $msg);
@@ -90,6 +92,12 @@ if (isset($object->file_helpdesk_item)) {
 	$file_helpdesk_item = $object->file_helpdesk_item;
 }
 $folders = getFolderSelectList();
+// New files go into the folder they were added from ("add new file to
+// this folder"); existing files show the folder they are in.
+$file_folder = $object_id ? (int) $object->file_folder : $folder;
+if (!isset($folders[$file_folder])) {
+    $file_folder = 0;
+}
 $htmlHelper = new w2p_Output_HTMLHelper($AppUI);
 ?>
 <script language="javascript" type="text/javascript">

@@ -77,7 +77,6 @@
 'topics for this forum'=>'témata tohoto fóra',
 'update watches'=>'aktualizovat sledování',
 'View'=>'Zobrazit',
-'view PDF file'=>'zobrazit PDF soubor',
 'Watch'=>'Sledování',
 'Watch Forced'=>'Vynucené sledování',
 'Watch Unforced'=>'Nevynucené sledování',

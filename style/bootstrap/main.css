@@ -33,6 +33,8 @@
     --w2p-border-light: #ebefff;
     --w2p-border-dark: #c7d3ff;
     --w2p-table-head: #eff3ff;
+    /* non-working days on the calendars: neutral grey, so it doesn't read as the blue task tint */
+    --w2p-nonworking: #e9ebef;
     --w2p-table-hover: #e7eeff;
     --w2p-table-stripe: #f8faff;
     --w2p-success: #21a66c;
@@ -1024,6 +1026,53 @@ div.std.addedit p > select,
 div.std.addedit p > textarea {
     flex: 1 1 14rem;
 }
+/* A date field with its calendar button and time select, kept on one line */
+div.std.addedit p > .w2p-datetime {
+    flex: 1 1 14rem;
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+    min-width: 0;
+}
+div.std.addedit .w2p-datetime > input.text,
+div.std.addedit .w2p-datetime > select {
+    min-width: 0;
+    padding: .5rem .875rem;
+    font-size: .9375rem;
+}
+div.std.addedit .w2p-datetime > input.text {
+    flex: 1 1 8rem;
+}
+div.std.addedit .w2p-datetime > select {
+    flex: 0 1 auto;
+}
+div.std.addedit .w2p-datetime > a {
+    flex: none;
+}
+/* A select with a short number field (and its unit) on one line, e.g. the
+   event form's "Recurs: Weekly 4 times" */
+div.std.addedit p > .w2p-inline-fields {
+    flex: 1 1 14rem;
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+    min-width: 0;
+}
+div.std.addedit .w2p-inline-fields > input.text,
+div.std.addedit .w2p-inline-fields > select {
+    min-width: 0;
+    padding: .5rem .875rem;
+    font-size: .9375rem;
+}
+div.std.addedit .w2p-inline-fields > select {
+    flex: 1 1 8rem;
+}
+div.std.addedit .w2p-inline-fields > input.text {
+    flex: 0 0 4.5rem;
+}
+div.std.addedit .w2p-inline-fields > span {
+    flex: none;
+}
 div.std.addedit input.save,
 div.std.addedit .save {
     float: right;
@@ -1170,8 +1219,17 @@ table.smartsearch td,
     text-align: left;
 }
 .list ._description,
-._description {
+._description,
+table.smartsearch td {
     white-space: normal;
+}
+/* the optional parts of the SmartSearch form follow their checkboxes */
+.smartsearch:has(#advancedsearch:not(:checked)) .smartsearch-number {
+    visibility: hidden;
+}
+.smartsearch:has(#advancedsearch:not(:checked)) .smartsearch-advanced,
+.smartsearch:has(#modselection:not(:checked)) .smartsearch-modules {
+    display: none !important;
 }
 ._duration,
 ._hours,
@@ -1294,7 +1352,7 @@ table.mocal td.today {
     background-color: var(--bs-primary-bg-subtle);
 }
 table.mocal td.weekend {
-    background-color: var(--bs-tertiary-bg);
+    background-color: var(--w2p-nonworking);
 }
 table.mocal td.event,
 table.tbl td.event,
@@ -1316,14 +1374,21 @@ table.minical td {
     padding: .1rem;
 }
 table.minical td.empty {
-    color: var(--bs-secondary-color);
-    background-color: var(--bs-secondary-bg);
+    /* days of the previous/next month: no fill, so they can't be mistaken for task days */
+    background-color: transparent;
+}
+table.minical td.empty a {
+    color: var(--w2p-light);
 }
 table.minical td.today {
     outline: 1px dotted var(--bs-danger);
 }
 table.minical td.weekend {
-    background-color: var(--bs-tertiary-bg);
+    background-color: var(--w2p-nonworking);
+}
+table.mocal td.weekend > a:first-child,
+table.minical td.weekend a {
+    color: var(--w2p-muted);
 }
 table.minical td.event,
 table.minical td.eventtoday {
@@ -1341,6 +1406,15 @@ table.minical td.eventtoday,
 table.minical td.tasktoday,
 table.minical td.eventtasktoday {
     outline: 1px dotted var(--bs-danger);
+}
+table.minical td.weekend.event,
+table.minical td.weekend.task,
+table.minical td.weekend.eventtask,
+table.minical td.weekend.eventtoday,
+table.minical td.weekend.tasktoday,
+table.minical td.weekend.eventtasktoday {
+    /* non-working day that also has tasks/events: hatch over the task/event colour */
+    background-image: repeating-linear-gradient(45deg, rgba(128, 128, 128, .25) 0 2px, transparent 2px 5px);
 }
 .motitle {
     margin-bottom: .5rem;
@@ -1370,7 +1444,7 @@ table.minical td.eventtasktoday {
     background-color: var(--bs-danger-bg-subtle);
 }
 .w2p-cal-key .w2p-swatch.weekend {
-    background-color: var(--bs-tertiary-bg);
+    background-color: var(--w2p-nonworking);
 }
 .w2p-cal-key .w2p-swatch.today {
     outline: 1px dotted var(--bs-danger);
@@ -1383,7 +1457,7 @@ table.minical td.eventtasktoday {
     border: var(--bs-border-width) solid var(--bs-border-color);
 }
 .view td.otherDay {
-    background-color: var(--bs-secondary-bg);
+    background-color: var(--w2p-nonworking);
 }
 span.cal-item * {
     float: left;
@@ -1650,24 +1724,173 @@ h4 {
 /* ---------------------------------------------------------------------
  * Printing
  * ------------------------------------------------------------------- */
+/* ---------------------------------------------------------------------
+ * Printing (replaces the old PDF exports: use the browser's Print or
+ * "Save as PDF"). Only the page title and the content print: navigation,
+ * tabs other than the current one, filters, buttons and row actions are
+ * hidden, tables wrap to the page width and Gantt charts are scaled down.
+ * Add .d-print-none (Bootstrap) to anything else that shouldn't print.
+ * ------------------------------------------------------------------- */
 @media print {
+    @page {
+        margin: 12mm 10mm;
+    }
+
+    /* page chrome */
     .w2p-header,
     .w2p-sidebar,
     .w2p-sidebar-backdrop,
     .w2p-footer,
     .module-nav,
-    .crumb-right {
+    .crumb,
+    .crumb-right,
+    .module-title .icon,
+    #displayOptions,
+    .w2p-gantt-filter {
         display: none !important;
     }
     body,
     .w2p-main {
-        background-color: #fff;
+        background-color: #fff !important;
+        color: #000;
+    }
+    body {
+        font-size: 10pt;
     }
     .w2p-has-sidebar .w2p-main,
     .w2p-main {
         margin: 0 !important;
         padding: 0 !important;
         min-height: 0;
+    }
+    .module-title h1 {
+        font-size: 16pt;
+    }
+
+    /* controls: filters, buttons, date pickers, icon-only script links
+       (scroll arrows, calendar pickers, delete icons) */
+    .w2p-main input:not([type="hidden"]),
+    .w2p-main select,
+    .w2p-main textarea,
+    .w2p-main button,
+    .w2p-main .btn,
+    .w2p-main a[href^="javascript"] > img {
+        display: none !important;
+    }
+
+    /* tabs: only the current tab's label prints, as a heading */
+    .w2p-tabs {
+        border: 0 !important;
+        margin: .5rem 0 .25rem !important;
+    }
+    .w2p-tabs .nav-item:not(:has(.active)) {
+        display: none !important;
+    }
+    .w2p-tabs .nav-link.active {
+        border: 0 !important;
+        padding: 0 !important;
+        background: none !important;
+        box-shadow: none !important;
+        color: #000 !important;
+        font-weight: 600;
+        font-size: 12pt;
+    }
+    .tab-content,
+    .w2p-tab-content {
+        border: 0 !important;
+        padding: 0 !important;
+    }
+
+    /* links print as text */
+    .w2p-main a {
+        color: inherit !important;
+        text-decoration: none !important;
+    }
+
+    /* cards and panels: no shadows */
+    .w2p-main .card,
+    .w2p-main .std,
+    .w2p-main .well,
+    .w2p-main .shadow,
+    .w2p-main .shadow-sm {
+        box-shadow: none !important;
+    }
+
+    /* lists: fit the page, wrap long text, keep rows and headings together */
+    .w2p-main table,
+    .w2p-main .tbl {
+        width: 100% !important;
+        max-width: 100% !important;
+    }
+    .w2p-main .table-responsive {
+        overflow: visible !important;
+    }
+    .w2p-main .tbl th,
+    .w2p-main .tbl td,
+    .w2p-main .nowrap,
+    .w2p-main .text-nowrap {
+        white-space: normal !important;
+    }
+    .w2p-main .tbl th,
+    .w2p-main .tbl td {
+        padding: .15rem .3rem !important;
+        font-size: 9pt;
+    }
+    .w2p-main .tbl td {
+        overflow-wrap: break-word;
+    }
+    .w2p-main thead {
+        display: table-header-group;
+    }
+    .w2p-main tr,
+    .w2p-main img,
+    .w2p-main .contact-info {
+        break-inside: avoid;
+    }
+    .w2p-main h1,
+    .w2p-main h2,
+    .w2p-main h3,
+    .w2p-main h4,
+    .w2p-main .w2p-tabs {
+        break-after: avoid;
+    }
+
+    /* row actions (edit, pin, add log, watch, delete): keep the columns so
+       the headers stay aligned, but print them empty and narrow */
+    .w2p-main td._edit,
+    .w2p-main td._pin,
+    .w2p-main td._log,
+    .w2p-main td._watch,
+    .w2p-main td._delete {
+        width: 0 !important;
+        padding: 0 !important;
+    }
+    .w2p-main td._edit > *,
+    .w2p-main td._pin > *,
+    .w2p-main td._log > *,
+    .w2p-main td._watch > *,
+    .w2p-main td._delete > * {
+        display: none !important;
+    }
+    .w2p-main .contact-info .card-header > span {
+        display: none !important;
+    }
+
+    /* charts and images never run off the page */
+    .w2p-main img {
+        max-width: 100% !important;
+        height: auto !important;
+    }
+
+    /* status colours carry meaning (task rows, keys, swatches) */
+    .w2p-main .tbl tr,
+    .w2p-main .tbl td,
+    .w2p-main .w2p-swatch,
+    .w2p-main .w2p-task-key span,
+    .w2p-main .w2p-gantt-key,
+    .w2p-main [style*="background"] {
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
     }
 }
 
@@ -1731,4 +1954,14 @@ h4 {
     max-width: 26rem;
     margin-top: 1rem;
     text-align: center;
+}
+
+/* Signup form honeypot (w2p_Utilities_SignupCheck): off-screen for people,
+   still in the form for bots. */
+.w2p-hp {
+    position: absolute !important;
+    left: -10000px !important;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
 }

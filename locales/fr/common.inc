@@ -181,7 +181,6 @@
 'Vendor'=>'Prestataire',
 'Version'=>'Version',
 'Versions'=>'Versions',
-'View PDF File'=>'Voir le fichier PDF',
 'Wed'=>'Mer',
 'Wednesday'=>'Mercredi',
 'Welcome'=>'Bienvenue',
