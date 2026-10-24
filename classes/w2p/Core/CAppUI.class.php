@@ -1065,13 +1065,48 @@ class w2p_Core_CAppUI
         return $q->loadHashList('mod_name');
     }
 
+    /**
+     * mod_directory => mod_active for every installed module, loaded on the
+     * first isActiveModule() call of the request.
+     *
+     * @var array<string, mixed>|null
+     */
+    protected static $activeModules = null;
+
+    /**
+     * Says whether a module is installed and active.
+     *
+     * The module list is read once per request, so this can be called per
+     * breadcrumb or per calendar cell without a query each time.
+     *
+     * @param string $module the module's directory name
+     *
+     * @return mixed mod_active ('1' or '0'), or false if not installed
+     */
     public function isActiveModule($module)
     {
-        $q = new w2p_Database_Query;
-        $q->addTable('modules');
-        $q->addQuery('mod_active');
-        $q->addWhere("mod_directory = '$module'");
-        return $q->loadResult();
+        if (null === self::$activeModules) {
+            $q = new w2p_Database_Query;
+            $q->addTable('modules');
+            $q->addQuery('mod_directory, mod_active');
+            $modules = $q->loadHashList();
+            if (!$modules) {
+                // Don't cache a failed lookup as "nothing is active".
+                return false;
+            }
+            self::$activeModules = $modules;
+        }
+
+        return self::$activeModules[(string) $module] ?? false;
+    }
+
+    /**
+     * Forgets the cached module list, for code that installs, removes or
+     * (de)activates a module.
+     */
+    public static function clearActiveModules()
+    {
+        self::$activeModules = null;
     }
 
     /**
