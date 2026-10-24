@@ -255,13 +255,32 @@ class CUser extends w2p_Core_BaseObject
         return '' !== $hash && password_verify((string) $password, $hash);
     }
 
+    /**
+     * Finds the user a calendar feed token belongs to.
+     *
+     * Returns 0 for an unknown token, and for a user who can no longer log
+     * in, so a feed stops working once its owner loses access.
+     *
+     * @param string $token
+     *
+     * @return int
+     */
     public function getIdByToken($token)
     {
+        $token = preg_replace('/[^A-Za-z0-9]/', '', (string) $token);
+        if ('' === $token) {
+            return 0;
+        }
+
         $q = $this->_getQuery();
         $q->addQuery('feed_user');
         $q->addTable('user_feeds');
         $q->addWhere("feed_token = '$token'");
-        $userId = $q->loadResult();
+        $userId = (int) $q->loadResult();
+
+        if ($userId && !$this->isActive($userId)) {
+            return 0;
+        }
 
         return $userId;
     }
@@ -278,13 +297,16 @@ class CUser extends w2p_Core_BaseObject
         if (!$userId) {
             return false;
         }
+        $userId = (int) $userId;
+        $token = preg_replace('/[^A-Za-z0-9]/', '', (string) $token);
+
         $q = $this->_getQuery();
         $q->setDelete('user_feeds');
         $q->addWhere('feed_user = ' . $userId);
         $q->addWhere("feed_token = '$token'");
         $q->exec();
 
-        $token = md5(time() . $userId . $token . time());
+        $token = bin2hex(random_bytes(20));
         $q = $this->_getQuery();
         $q->addTable('user_feeds');
         $q->addInsert('feed_user', $userId);
