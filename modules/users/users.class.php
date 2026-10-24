@@ -285,11 +285,17 @@ class CUser extends w2p_Core_BaseObject
         return $userId;
     }
 
+    /**
+     * @param int $contactId
+     *
+     * @return string the id of the user with this contact, or ''
+     */
     public function getIdByContactId($contactId)
     {
+        // loadAll() keys the list by user_id, not by contact id.
         $users = $this->loadAll('user_id', 'user_contact = ' . (int) $contactId);
 
-        return (string) $users[$contactId]['user_id'];
+        return $users ? (string) key($users) : '';
     }
 
     public function generateToken($userId, $token = '')
