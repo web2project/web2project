@@ -1215,7 +1215,7 @@ class CTask extends w2p_Core_BaseObject
             }
             if (isset($extras) && $extras) {
                 // Search for semi-colons, commas or spaces and allow any to be separators
-                $extra_list = preg_split('/[\s,;]+/', $extras);
+                $extra_list = preg_split('/[\s,;]+/', $extras) ?: array();
                 foreach ($extra_list as $email) {
                     if ($email && !isset($mail_recipients[$email])) {
                         $mail_recipients[$email] = trim($email);

@@ -634,6 +634,8 @@ class w2p_Core_CAppUI
      *
      * @param string $params The URL query string to append to the URL
      * @param string $hist A marker for a historic 'place, only -1 or an empty string is valid.
+     *
+     * @return never
      */
     public function redirect($params = '', $hist = '')
     {

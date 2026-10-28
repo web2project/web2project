@@ -102,7 +102,7 @@ $w2pDialog = (1 == (int) w2PgetParam($_GET, 'dialog', 0));
                     <?php
                     $userName = trim($AppUI->user_display_name ?: ($AppUI->user_first_name . ' ' . $AppUI->user_last_name));
                     $initials = '';
-                    foreach (preg_split('/\s+/', $userName) as $part) {
+                    foreach (preg_split('/\s+/', $userName) ?: array() as $part) {
                         if ('' != $part && strlen($initials) < 2) {
                             $initials .= mb_strtoupper(mb_substr($part, 0, 1));
                         }
