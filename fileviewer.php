@@ -16,7 +16,6 @@ $AppUI = is_object($AppUI) ? $AppUI : new w2p_Core_CAppUI();
 if (!isset($_SESSION['AppUI']) || w2p_logout_requested()) {
 	$_SESSION['AppUI'] = new w2p_Core_CAppUI();
 	$AppUI = &$_SESSION['AppUI'];
-	$AppUI->setConfig($w2Pconfig);
 	$AppUI->setStyle();
 
 	if ($AppUI->doLogin()) {
