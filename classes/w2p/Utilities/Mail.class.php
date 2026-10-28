@@ -120,7 +120,7 @@ class w2p_Utilities_Mail extends PHPMailer
         $this->From = $from;
         $this->FromName = $fromname;
         if ($this->receipt) {
-            $this->ConfirmReadingTo($from);
+            $this->ConfirmReadingTo = $from;
         }
         return true;
     }
@@ -137,7 +137,7 @@ class w2p_Utilities_Mail extends PHPMailer
         }
         $this->AddReplyTo($address);
         if ($this->receipt) {
-            $this->ConfirmReadingTo($address);
+            $this->ConfirmReadingTo = $address;
         }
         return true;
     }
@@ -267,7 +267,8 @@ class w2p_Utilities_Mail extends PHPMailer
     public function Organization($org)
     {
         if ('' != trim($org)) {
-            $this->xheaders['Organization'] = $this->_wordEncode($org, mb_strlen('Organization: '));
+            // PHPMailer encodes custom header values when it builds the message.
+            $this->AddCustomHeader('Organization: ' . trim($org));
         }
     }
 
