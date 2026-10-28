@@ -121,7 +121,7 @@ class CEvent extends w2p_Core_BaseObject
      *
      * @return array Calculated Start and End Dates for the recurrent Event for the given Period
      */
-    public function getRecurrentEventforPeriod($start_date, $end_date, $event_start_datetime, $event_end_datetime, $event_recurs, $event_times_recuring, $j)
+    public static function getRecurrentEventforPeriod($start_date, $end_date, $event_start_datetime, $event_end_datetime, $event_recurs, $event_times_recuring, $j)
     {
 
         //this array will be returned
@@ -570,7 +570,7 @@ class CEvent extends w2p_Core_BaseObject
 
         foreach($events as $event) {
             for ($j = 0 ; $j <= $event['event_recurs']; $j++) {
-                $myDates = $this->getRecurrentEventforPeriod($start, $end, $event['event_start_datetime'], $event['event_end_datetime'],
+                $myDates = self::getRecurrentEventforPeriod($start, $end, $event['event_start_datetime'], $event['event_end_datetime'],
                                 $event['event_recurs'], $event['event_times_recuring'], $j);
                 /*
                  * This list of fields - id, name, description, startDate, endDate,
