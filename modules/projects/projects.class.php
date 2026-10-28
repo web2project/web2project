@@ -267,7 +267,12 @@ class CProject extends w2p_Core_BaseObject
     {
         $oCpy = new CCompany;
         $oCpy->overrideDatabase($this->_query);
-        $query = parent::setAllowedSQL($uid, $query, $index, $key);
+        // project_departments (joined below) also has a project_id column,
+        // so the project rule must name the projects table explicitly.
+        if (null === $index) {
+            $index = ($key ? $key . '.' : '') . 'project_id';
+        }
+        $query = parent::setAllowedSQL($uid, $query, $index);
         $query = $oCpy->setAllowedSQL($uid, $query, ($key ? $key . '.' : '') . 'project_company');
         //Department permissions
         $oDpt = new CDepartment();
