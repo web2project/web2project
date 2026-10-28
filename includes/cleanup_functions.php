@@ -1983,7 +1983,7 @@ function userUsageWeeks()
 
     for ($i = 0; $i <= $week_difference; $i++) {
         if (!$actual_date->before($tsd) && !$actual_date->after($ted)) {
-            $awoy = $actual_date->year . Date_Calc::weekOfYear($actual_date->day, $actual_date->month, $actual_date->year);
+            $awoy = $actual_date->format('%Y%U');
             foreach ($users as $user_id => $user_data) {
                 if (!isset($user_usage[$user_id][$awoy])) {
                     $user_usage[$user_id][$awoy] = 0;
@@ -2023,6 +2023,10 @@ function showWeeks()
 {
     /** @var w2p_Core_CAppUI $AppUI */
     global $allocated_hours_sum, $end_date, $start_date, $AppUI, $user_list, $user_names, $user_usage, $table_header, $table_rows, $working_days_count, $total_hours_capacity, $total_hours_capacity_all;
+
+    if (!is_array($user_list)) {
+        $user_list = [];
+    }
 
     $working_days_count = 0;
     $allocated_hours_sum = 0;
