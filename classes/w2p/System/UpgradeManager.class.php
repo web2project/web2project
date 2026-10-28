@@ -279,7 +279,10 @@ class w2p_System_UpgradeManager {
             return array();
         }
 
-        $query = fread(fopen($sqlfile, "r"), filesize($sqlfile));
+        $query = file_get_contents($sqlfile);
+        if (false === $query) {
+            return array('Could not read ' . $sqlfile);
+        }
         $pieces  = $this->_splitSQLUpdates($query);
         $pieceCount = count($pieces);
         $errorMessages = array();
