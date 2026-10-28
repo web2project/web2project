@@ -2768,11 +2768,17 @@ function w2PformSafe($txt, $deslash = false)
     }
 
     if (is_object($txt)) {
+        // Work on a copy so the caller's object is not escaped in place.
+        $txt = clone $txt;
         foreach (get_object_vars($txt) as $k => $v) {
+            if (!is_scalar($v) && null !== $v) {
+                continue;
+            }
+            $v = (string) $v;
             if ($deslash) {
-                $obj->$k = htmlspecialchars(stripslashes($v), ENT_COMPAT, $locale_char_set);
+                $txt->$k = htmlspecialchars(stripslashes($v), ENT_COMPAT, $locale_char_set);
             } else {
-                $obj->$k = htmlspecialchars($v, ENT_COMPAT, $locale_char_set);
+                $txt->$k = htmlspecialchars($v, ENT_COMPAT, $locale_char_set);
             }
         }
     } elseif (is_array($txt)) {
