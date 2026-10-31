@@ -491,9 +491,10 @@ class CProject extends w2p_Core_BaseObject
     }
 
     /**
-     * @todo TODO: I *really* hate how we have to do the store() twice when we
-     *   create the project.. it's all because the stupid project_original_parent
-     *   has to equal its own project_id if this is a root project. Ugh.
+     * A root project is its own parent and original parent, which needs its
+     * new id. Those two columns are written directly: a nested store() here
+     * was a second full save that logged an extra history entry and turned
+     * the creation's own entry into an "Update".
      */
     protected function hook_postCreate()
     {
@@ -501,7 +502,13 @@ class CProject extends w2p_Core_BaseObject
             $this->project_parent = $this->project_id;
             $this->project_original_parent = $this->project_id;
 
-            parent::store();
+            $q = $this->_getQuery();
+            $q->addTable('projects');
+            $q->addUpdate('project_parent', (int) $this->project_parent);
+            $q->addUpdate('project_original_parent', (int) $this->project_original_parent);
+            $q->addWhere('project_id = ' . (int) $this->project_id);
+            $q->exec();
+            $q->clear();
         }
 
         parent::hook_postCreate();
