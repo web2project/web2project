@@ -66,6 +66,19 @@ foreach ($tables as $table) {
             : '(' . $inTable . ' AND history_item = ' . (int) $AppUI->user_id . ')';
         continue;
     }
+    if ('forum_messages' == $table) {
+        // history_item is a message id, but forum permissions are per
+        // forum: show the entries for messages in a forum the user may view.
+        $forums = array();
+        foreach (array_keys($perms->getViewableItems('forums')) as $forumId) {
+            $forums[] = (int) $forumId;
+        }
+        if (count($forums)) {
+            $allowed[] = '(' . $inTable . ' AND history_item IN (SELECT message_id FROM forum_messages'
+                . ' WHERE message_forum IN (' . implode(',', $forums) . ')))';
+        }
+        continue;
+    }
     $items = array();
     if ($perms->checkModule($_module, 'view')) {
         $items[] = 0;
