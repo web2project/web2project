@@ -353,6 +353,9 @@ class CTask extends w2p_Core_BaseObject
              *   duration type 'hrs' and for those with the duration type 'day'
              */
             $children_allocated_total = $children_allocated_hours + $children_allocated_days;
+            // kept in hours for the progress below; the total itself is
+            // converted to the parent's own unit next
+            $children_allocated_in_hours = $children_allocated_total;
             if (1 == $data['task_duration_type']) {
                 $children_allocated_total = round($children_allocated_total, 2);
                 $duration_type = 1;
@@ -382,10 +385,17 @@ class CTask extends w2p_Core_BaseObject
             $q->addWhere("task_path_enumeration LIKE '$path/%' AND task_duration_type <> 1 AND task_dynamic <> 1");
             $weighted_hours_worked += (float) $q->loadResult();
 
-            if (0 == $children_allocated_total) {
+            // Both sides in hours: progress weighted by each child's duration
+            // in hours, over the children's total hours. (Dividing by the
+            // total after it was converted to days made the result
+            // daily_working_hours times too large; strict MySQL then refused
+            // the whole UPDATE, so the parent's dates and duration never
+            // followed its children either.)
+            if ($children_allocated_in_hours <= 0) {
                 $percent_complete = 0;
             } else {
-                $percent_complete = ceil($weighted_hours_worked / $children_allocated_total);
+                $percent_complete = (int) ceil($weighted_hours_worked / $children_allocated_in_hours);
+                $percent_complete = max(0, min(100, $percent_complete));
             }
 
             $q->clear();
