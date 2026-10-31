@@ -8,7 +8,7 @@ if (!defined('W2P_BASE_DIR')) {
 global $caller, $showWork, $showLabels, $showPinned, $showArcProjs,
         $showHoldProjs, $showDynTasks, $showLowTasks, $user_id;
 
-w2PsetExecutionConditions($w2Pconfig);
+w2PsetExecutionConditions();
 
 $project_id = (int) w2PgetParam($_REQUEST, 'project_id', 0);
 $f = w2PgetParam($_REQUEST, 'f', 0);

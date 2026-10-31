@@ -14,7 +14,7 @@ $titleBlock = new w2p_Theme_TitleBlock('Custom field editor', 'customfields.png'
 $titleBlock->addCrumb('?m=system', 'system admin');
 $titleBlock->show();
 
-$manager = new w2p_Core_CustomFieldManager($AppUI);
+$manager = new w2p_Core_CustomFieldManager();
 $modules = $manager->getModuleList();
 
 ?>

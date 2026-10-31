@@ -62,10 +62,14 @@ abstract class w2p_Authenticators_Base
 
     /**
      * This just returns the userId and will need to be overridden only rarely.
+     * The username is used by authenticators that look the user up by it
+     * (LDAP); CAppUI::login() always passes it.
+     *
+     * @param string|null $username
      *
      * @return int
      */
-    public function userId()
+    public function userId($username = null)
     {
         return (int) $this->user_id;
     }

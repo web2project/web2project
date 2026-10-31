@@ -51,7 +51,7 @@ foreach ($filter as $field => $value) {
 
 // setup the title block
 $titleBlock = new w2p_Theme_TitleBlock('Customize '.$module->mod_name.' Module :: '.
-        $view, 'modules/system/control-center.png', $m, $m . '.' . $a);
+        $view, 'modules/system/control-center.png', $m);
 $titleBlock->addCrumb('?m=system', 'system admin');
 $titleBlock->addCrumb('?m=system&a=viewmods', 'modules list');
 $titleBlock->show();

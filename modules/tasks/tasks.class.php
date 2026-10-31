@@ -469,7 +469,7 @@ class CTask extends w2p_Core_BaseObject
             $tempTask->overrideDatabase($this->_query);
             foreach ($children as $child) {
                 $tempTask->load($child);
-                $tempTask->htmlDecode($child);
+                $tempTask->htmlDecode();
                 $newChild = $tempTask->deepCopy($destProject_id, $new_id);
                 $newChild->store();
             }

@@ -7,7 +7,7 @@ if (!defined('W2P_BASE_DIR')) {
 
 global $AppUI, $dept_ids, $w2Pconfig;
 
-w2PsetExecutionConditions($w2Pconfig);
+w2PsetExecutionConditions();
 
 // get the prefered date format
 $df = $AppUI->getPref('SHDATEFORMAT');
