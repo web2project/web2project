@@ -353,23 +353,21 @@ class CTask_Log extends w2p_Core_BaseObject
 		$oTsk = new CTask();
         $oTsk->overrideDatabase($this->_query);
 
+        // $extra is optional (null by default, e.g. from
+        // Permissions::getViewableItems()), so don't read keys it lacks.
+        if (!is_array($extra)) {
+            $extra = array();
+        }
+        $where = isset($extra['where']) ? (string) $extra['where'] : '';
+
 		$aTasks = $oTsk->getAllowedRecords($uid, 'task_id, task_name');
 		if (count($aTasks)) {
 			$buffer = '(task_log_task IN (' . implode(',', array_keys($aTasks)) . ') OR task_log_task IS NULL OR task_log_task = \'\' OR task_log_task = 0)';
-
-			if ($extra['where'] != '') {
-				$extra['where'] = $extra['where'] . ' AND ' . $buffer;
-			} else {
-				$extra['where'] = $buffer;
-			}
 		} else {
 			// There are no allowed tasks, so don't allow task_logs.
-			if ($extra['where'] != '') {
-				$extra['where'] = $extra['where'] . ' AND 1 = 0 ';
-			} else {
-				$extra['where'] = '1 = 0';
-			}
+			$buffer = '1 = 0';
 		}
+		$extra['where'] = ('' != $where) ? $where . ' AND ' . $buffer : $buffer;
 		return parent::getAllowedRecords($uid, $fields, $orderby, $index, $extra);
 	}
 
