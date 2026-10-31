@@ -27,6 +27,14 @@ class CTask_Log extends w2p_Core_BaseObject
 	public $task_log_task = null;
 
 	/**
+	 * The project of the task this log belongs to. Set from the task on
+	 * every store, and kept in step when the task moves to another project.
+	 *
+	 * @var int
+	 */
+	public $task_log_project = null;
+
+	/**
 	 * The name of the task log
 	 *
 	 * @var string
@@ -137,6 +145,9 @@ class CTask_Log extends w2p_Core_BaseObject
     {
 		$q = $this->_getQuery();
 		$this->task_log_updated = $q->dbfnNowWithTZ();
+
+        // Always the task's project, whatever was bound from the form.
+        $this->task_log_project = $this->getTaskProject();
 
         $this->task_log_creator = (int) $this->task_log_creator ? $this->task_log_creator : $this->_AppUI->user_id;
 
@@ -372,12 +383,22 @@ class CTask_Log extends w2p_Core_BaseObject
 	}
 
     /**
-     * A task log belongs to its task's project. (task_log_project exists in
-     * the table but is never filled, so the task is used instead.)
+     * A task log belongs to its task's project.
      *
      * @return int
      */
     protected function getProjectId()
+    {
+        return $this->getTaskProject();
+    }
+
+    /**
+     * The project of this log's task, read from the tasks table (by the log's
+     * task, or by the log's id when the object was not loaded).
+     *
+     * @return int
+     */
+    protected function getTaskProject()
     {
         $q = new w2p_Database_Query();
         $q->addTable('tasks');

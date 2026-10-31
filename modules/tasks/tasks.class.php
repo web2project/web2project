@@ -2154,6 +2154,13 @@ class CTask extends w2p_Core_BaseObject
         $q->addWhere('task_id = ' . (int) $task_id);
         $q->exec();
 
+        // the task's logs carry its project too
+        $q = $this->_getQuery();
+        $q->addTable('task_log');
+        $q->addUpdate('task_log_project', (int) $new_project);
+        $q->addWhere('task_log_task = ' . (int) $task_id);
+        $q->exec();
+
         $task_ids = $this->getChildren($task_id);
         foreach ($task_ids as $id) {
             $this->updateSubTasksProject($new_project, $id);

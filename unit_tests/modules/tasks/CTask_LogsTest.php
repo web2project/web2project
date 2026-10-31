@@ -51,7 +51,7 @@ class CTask_LogsTest extends CommonSetup
     {
         $unset = array('task_log_problem');
 
-        parent::objectPropertiesTest('CTask_Log', 15, $unset);
+        parent::objectPropertiesTest('CTask_Log', 16, $unset);
     }
 
     /**
