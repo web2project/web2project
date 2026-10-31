@@ -550,13 +550,13 @@ class CTask extends w2p_Core_BaseObject
                 $this->_error['store'] = "There was an error in storing this object.";
                 return false;
             }
+            $stored = true;
 
-            // if task_status changed, then update subtasks
+            // if task_status changed, then update subtasks (written directly,
+            // so the task itself does not need saving again)
             if ($this->task_status != $oTsk->task_status) {
                 $this->updateSubTasksStatus($this->task_status);
             }
-
-            $stored = parent::store();
         }
 
         if (0 == (int) $this->{$this->_tbl_key} && $this->canCreate()) {
