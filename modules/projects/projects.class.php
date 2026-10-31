@@ -388,10 +388,36 @@ class CProject extends w2p_Core_BaseObject
             $q->clear();
         }
 
-        $this->project_target_budget = array_sum($budgets);
-        $this->store();
+        // Only the total changes, so write it directly: a store() here was a
+        // second full save of the project, with its own history entry and
+        // a second pass of every hook_postStore() step.
+        $this->project_target_budget = self::cleanBudget(array_sum($budgets));
+        $q->addTable('projects');
+        $q->addUpdate('project_target_budget', $this->project_target_budget);
+        $q->addWhere('project_id = ' . (int) $this->project_id);
+        $q->exec();
+        $q->clear();
 
         return true;
+    }
+
+    /**
+     * The target budget as it is stored: currency formatting removed, and 0
+     * for anything else that isn't a whole number (unchanged from what
+     * hook_preStore() always did).
+     *
+     * @param mixed $budget
+     *
+     * @return mixed
+     */
+    protected static function cleanBudget($budget)
+    {
+        $budget = filterCurrency($budget);
+        if (!ctype_digit($budget) && !is_float($budget)) {
+            $budget = 0.0;
+        }
+
+        return $budget;
     }
 
     protected function hook_preCreate()
@@ -410,10 +436,7 @@ class CProject extends w2p_Core_BaseObject
         $this->project_active = (int) $this->project_active;
         $this->project_private = (int) $this->project_private;
 
-        $this->project_target_budget = filterCurrency($this->project_target_budget);
-	    if(!ctype_digit($this->project_target_budget) && !is_float($this->project_target_budget)) {
-            $this->project_target_budget = 0.0;
-        }
+        $this->project_target_budget = self::cleanBudget($this->project_target_budget);
         $this->project_url = str_replace(array('"', '"', '<', '>'), '', $this->project_url);
         $this->project_demo_url = str_replace(array('"', '"', '<', '>'), '', $this->project_demo_url);
         $this->project_owner = (int) $this->project_owner ? $this->project_owner : $this->_AppUI->user_id;
