@@ -229,7 +229,10 @@ class CTask_Log extends w2p_Core_BaseObject
                 $q->addOrder('task_log_date DESC, task_log_id DESC');
                 $q->setLimit(1);
                 $results = $q->loadHash();
-                $percentComplete = $results['task_log_percent_complete'];
+                // No log left (the task's last one was just deleted): no
+                // recorded progress, rather than an empty percentage.
+                $percentComplete = (is_array($results) && isset($results['task_log_percent_complete']))
+                    ? $results['task_log_percent_complete'] : 0;
             } else {
                 $percentComplete = 100;
             }
