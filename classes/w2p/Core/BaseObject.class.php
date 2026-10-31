@@ -55,6 +55,12 @@ abstract class w2p_Core_BaseObject extends w2p_System_Event implements w2p_Inter
      * @var int|null
      */
     protected $_old_key = null;
+
+    /**
+     * The project of a record that is being deleted, read before the row is
+     * gone so the delete's history entry can carry it.
+     */
+    protected int $_old_project = 0;
     protected $_dispatcher;
     protected $_locale_char_set;
 
@@ -771,6 +777,7 @@ abstract class w2p_Core_BaseObject extends w2p_System_Event implements w2p_Inter
     protected function hook_preDelete()
     {
         $this->_old_key = (int) $this->{$this->_tbl_key};
+        $this->_old_project = $this->getProjectId();
 
         return $this;
 
@@ -804,7 +811,7 @@ abstract class w2p_Core_BaseObject extends w2p_System_Event implements w2p_Inter
         $prefix = $this->_getColumnPrefixFromTableName($this->_tbl);
         $nameProperty = $prefix . '_name';
         $name = (property_exists($this, $nameProperty) || method_exists($this, '__get')) ? (string) $this->$nameProperty : '';
-        addHistory($this->_tbl, $this->{$this->_tbl_key}, $this->_event, $name );
+        addHistory($this->_tbl, $this->{$this->_tbl_key}, $this->_event, $name, $this->getProjectId());
 
         return $this;
     }
@@ -842,7 +849,7 @@ abstract class w2p_Core_BaseObject extends w2p_System_Event implements w2p_Inter
             'notUsed3', 'notUsed4', 'notUsed5', 'notUsed6');
         $custom_field->deleteByObject($this->_old_key, $this->_tbl_module);
 
-        addHistory($this->_tbl, $this->{$this->_tbl_key}, 'delete');
+        addHistory($this->_tbl, $this->{$this->_tbl_key}, 'delete', '', $this->_old_project);
         return $this;
     }
     /**
@@ -890,6 +897,39 @@ abstract class w2p_Core_BaseObject extends w2p_System_Event implements w2p_Inter
         $this->_query->clear();
         $this->_query->direct_query = false;
         return $this->_query;
+    }
+
+    /**
+     * The project this record belongs to, written to history.history_project
+     * so a project's History tab can list the changes to its tasks, files,
+     * links and so on. Records that keep it in a <prefix>_project column
+     * (task_project, file_project, link_project, ...) are handled here; when
+     * the object was not loaded (e.g. delete($id) on a new object) the value
+     * is read from the table. Classes that keep the project elsewhere
+     * override this. Returns 0 for records without a project.
+     *
+     * @return int
+     */
+    protected function getProjectId()
+    {
+        $column = $this->_getColumnPrefixFromTableName($this->_tbl) . '_project';
+        if (!property_exists($this, $column)) {
+            return 0;
+        }
+        if ((int) $this->$column > 0) {
+            return (int) $this->$column;
+        }
+
+        $id = (int) $this->{$this->_tbl_key};
+        if ($id < 1) {
+            return 0;
+        }
+        $q = new w2p_Database_Query();
+        $q->addTable($this->_tbl);
+        $q->addQuery($column);
+        $q->addWhere($this->_tbl_key . ' = ' . $id);
+
+        return (int) $q->loadResult();
     }
 
     // TODO: create a proper "unpluralize" from this?

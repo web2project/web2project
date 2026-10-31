@@ -7,7 +7,9 @@ if (!defined('W2P_BASE_DIR')) {
 
 global $AppUI, $filter_param, $m, $project_id, $tab;
 
-// On a project's History tab, show only that project's own changes.
+// On a project's History tab, show the changes to the project and to
+// everything that belongs to it (tasks, task logs, files, links, events,
+// forums and messages, contacts): those entries carry history_project.
 $project_tab = ('projects' == $m && (int) $project_id > 0);
 $filter_param = ('projects' == $m) ? 'projects' : $filter_param;
 $page = (int) w2PgetParam($_GET, 'page', 1);
@@ -21,11 +23,13 @@ $module_translate = ['modules' => 'system', 'custom_fields_struct' => 'system',
 // Which rows to look at: one module, or one project on its History tab.
 $baseQuery = new w2p_Database_Query();
 $baseWhere = array();
-if (-1 != $filter_param) {
-    $baseWhere[] = 'history_table = ' . $baseQuery->quote((string) $filter_param);
-}
 if ($project_tab) {
-    $baseWhere[] = 'history_item = ' . (int) $project_id;
+    // Entries written before history_project was filled (and not reached by
+    // migration 072) still show through the project's own rows.
+    $baseWhere[] = '(history_project = ' . (int) $project_id
+        . " OR (history_table = 'projects' AND history_item = " . (int) $project_id . '))';
+} elseif (-1 != $filter_param) {
+    $baseWhere[] = 'history_table = ' . $baseQuery->quote((string) $filter_param);
 }
 
 // Filter by permission in SQL, one condition per module the rows belong

@@ -372,4 +372,27 @@ class CTask_Log extends w2p_Core_BaseObject
 		}
 		return parent::getAllowedRecords($uid, $fields, $orderby, $index, $extra);
 	}
+
+    /**
+     * A task log belongs to its task's project. (task_log_project exists in
+     * the table but is never filled, so the task is used instead.)
+     *
+     * @return int
+     */
+    protected function getProjectId()
+    {
+        $q = new w2p_Database_Query();
+        $q->addTable('tasks');
+        $q->addQuery('task_project');
+        if ((int) $this->task_log_task > 0) {
+            $q->addWhere('task_id = ' . (int) $this->task_log_task);
+        } elseif ((int) $this->task_log_id > 0) {
+            $q->addJoin('task_log', 'tl', 'tl.task_log_task = task_id', 'inner');
+            $q->addWhere('tl.task_log_id = ' . (int) $this->task_log_id);
+        } else {
+            return 0;
+        }
+
+        return (int) $q->loadResult();
+    }
 }

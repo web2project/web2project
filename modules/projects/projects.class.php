@@ -1036,4 +1036,15 @@ class CProject extends w2p_Core_BaseObject
 
         return $statuses;
     }
+
+    /**
+     * A project's own history entries carry its id, so they appear on its
+     * History tab next to the changes to its tasks, files and so on.
+     *
+     * @return int
+     */
+    protected function getProjectId()
+    {
+        return (int) $this->project_id;
+    }
 }
