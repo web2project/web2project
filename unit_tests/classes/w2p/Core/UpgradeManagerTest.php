@@ -71,6 +71,31 @@ class w2p_Core_UpgradeManagerTest extends CommonSetup
     }
 
     /*
+     * A ';' inside a comment or a string must not end the statement (migration
+     * 071 failed on upgrades because its header comment had one).
+     */
+    public function testSplitSQLUpdates()
+    {
+        $split = new ReflectionMethod($this->obj, '_splitSQLUpdates');
+        $split->setAccessible(true);
+        $statements = function ($sql) use ($split) {
+            return array_values(array_filter(array_map(function ($piece) {
+                return trim(preg_replace('/\s+/', ' ', $piece));
+            }, $split->invoke($this->obj, $sql)), 'strlen'));
+        };
+
+        $this->assertEquals(
+            array("UPDATE `modules` SET `mod_ui_active` = 0 WHERE `mod_directory` = 'smartsearch'"),
+            $statements("-- This hides the menu entry; access is still governed\n-- by permissions.\n\nUPDATE `modules` SET `mod_ui_active` = 0 WHERE `mod_directory` = 'smartsearch';\n")
+        );
+        $this->assertEquals(array('SELECT 1', 'SELECT 2'), $statements("# a; b\nSELECT 1; /* c; d */ SELECT 2;"));
+        $this->assertEquals(array("INSERT INTO t VALUES ('a;b', 'it''s; fine', 'back\\'slash;')", 'SELECT "x;y"'),
+            $statements("INSERT INTO t VALUES ('a;b', 'it''s; fine', 'back\\'slash;'); SELECT \"x;y\";"));
+        $this->assertEquals(array('SELECT `odd;name` FROM t'), $statements('SELECT `odd;name` FROM t;'));
+        $this->assertEquals(array('/*!40101 SET NAMES utf8 */', 'SELECT 5--1'), $statements("/*!40101 SET NAMES utf8 */;\nSELECT 5--1;"));
+    }
+
+    /*
      * Realistically, the install/upgrade paths are almost identical and
      * even a system identified for "upgrade" will start with the first database
      * update required even if it's the first (install) script.

@@ -330,8 +330,70 @@ class w2p_System_UpgradeManager {
         return $errorMessages;
     }
 
+    /*
+     * Splits a migration file into statements. A ';' ends a statement only
+     * outside quotes and comments, so a ';' in a comment or a string value no
+     * longer cuts a statement in two. Comments are dropped (MySQL's versioned
+     * comments, /*! ... *\/, are kept because the server runs them), so a
+     * piece made only of comments comes back empty and is skipped.
+     */
     protected function _splitSQLUpdates($sql) {
-        return explode(';', $sql);
+        $statements = array();
+        $current = '';
+        $quote = '';
+        $length = strlen($sql);
+
+        for ($i = 0; $i < $length; $i++) {
+            $char = $sql[$i];
+            $next = ($i + 1 < $length) ? $sql[$i + 1] : '';
+
+            if ('' !== $quote) {
+                $current .= $char;
+                if ('\\' === $char && '`' !== $quote && '' !== $next) {
+                    $current .= $next;
+                    $i++;
+                } elseif ($char === $quote) {
+                    if ($next === $quote) {
+                        $current .= $next;
+                        $i++;
+                    } else {
+                        $quote = '';
+                    }
+                }
+                continue;
+            }
+
+            if ("'" === $char || '"' === $char || '`' === $char) {
+                $quote = $char;
+                $current .= $char;
+                continue;
+            }
+
+            // '-- ' (MySQL needs whitespace after the dashes) and '#' run to the end of the line.
+            if (('-' === $char && '-' === $next && ($i + 2 >= $length || ctype_space($sql[$i + 2]))) || '#' === $char) {
+                $end = strpos($sql, "\n", $i);
+                $i = (false === $end) ? $length : $end - 1;
+                continue;
+            }
+
+            if ('/' === $char && '*' === $next && ($i + 2 >= $length || '!' !== $sql[$i + 2])) {
+                $end = strpos($sql, '*/', $i + 2);
+                $i = (false === $end) ? $length : $end + 1;
+                $current .= ' ';
+                continue;
+            }
+
+            if (';' === $char) {
+                $statements[] = $current;
+                $current = '';
+                continue;
+            }
+
+            $current .= $char;
+        }
+        $statements[] = $current;
+
+        return $statements;
     }
 
     protected function _openDBConnection() {

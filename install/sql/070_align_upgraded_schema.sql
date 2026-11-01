@@ -81,4 +81,16 @@ EXECUTE w2p_stmt;
 DEALLOCATE PREPARE w2p_stmt;
 
 -- 036: textarea custom fields keep their text here, so it stays TEXT.
+-- 036 and dp_to_w2p2 index the whole column, and MySQL refuses to make an
+-- indexed column TEXT ("used in key specification without a key length"), so
+-- drop those indexes first. They aren't recreated: the only query on this
+-- column is a LIKE '%...%' search, which can't use an index.
+SET @w2p_sql = (SELECT IFNULL(CONCAT('ALTER TABLE `custom_fields_values` ',
+        GROUP_CONCAT(DISTINCT CONCAT('DROP INDEX `', `index_name`, '`') SEPARATOR ', ')), 'DO 0')
+    FROM information_schema.statistics
+    WHERE table_schema = DATABASE() AND table_name = 'custom_fields_values' AND column_name = 'value_charvalue');
+PREPARE w2p_stmt FROM @w2p_sql;
+EXECUTE w2p_stmt;
+DEALLOCATE PREPARE w2p_stmt;
+
 ALTER TABLE `custom_fields_values` MODIFY `value_charvalue` TEXT NULL DEFAULT NULL;
