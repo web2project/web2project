@@ -14,20 +14,26 @@
 -- table when an ALTER rebuilds it, so one zero date anywhere in the table makes
 -- the ALTER fail. A DATE column casts to '0000-00-00' and a DATETIME to
 -- '0000-00-00 00:00:00', so these match with LIKE rather than =.
+--
+-- Sites converted from dotProject or installed by early versions don't all
+-- have these columns defined as a fresh install does: created/updated columns
+-- may allow NULL and hold NULLs (010 added task_log's that way). A column that
+-- becomes NOT NULL below gets a real value for NULLs as well as zero dates,
+-- and only columns that allow NULL in every known schema are set to NULL.
 UPDATE `forum_messages` SET `message_date` = NULL WHERE CAST(`message_date` AS CHAR(20)) LIKE '0000-00-00%';
 
-UPDATE `sessions` SET `session_created` = NOW() WHERE CAST(`session_created` AS CHAR(20)) LIKE '0000-00-00%';
-UPDATE `sessions` SET `session_updated` = `session_created` WHERE CAST(`session_updated` AS CHAR(20)) LIKE '0000-00-00%';
+UPDATE `sessions` SET `session_created` = NOW() WHERE `session_created` IS NULL OR CAST(`session_created` AS CHAR(20)) LIKE '0000-00-00%';
+UPDATE `sessions` SET `session_updated` = `session_created` WHERE `session_updated` IS NULL OR CAST(`session_updated` AS CHAR(20)) LIKE '0000-00-00%';
 
 UPDATE `tasks` SET `task_start_date` = NULL WHERE CAST(`task_start_date` AS CHAR(20)) LIKE '0000-00-00%';
 UPDATE `tasks` SET `task_end_date` = NULL WHERE CAST(`task_end_date` AS CHAR(20)) LIKE '0000-00-00%';
-UPDATE `tasks` SET `task_created` = NOW() WHERE CAST(`task_created` AS CHAR(20)) LIKE '0000-00-00%';
-UPDATE `tasks` SET `task_updated` = `task_created` WHERE CAST(`task_updated` AS CHAR(20)) LIKE '0000-00-00%';
+UPDATE `tasks` SET `task_created` = NOW() WHERE `task_created` IS NULL OR CAST(`task_created` AS CHAR(20)) LIKE '0000-00-00%';
+UPDATE `tasks` SET `task_updated` = `task_created` WHERE `task_updated` IS NULL OR CAST(`task_updated` AS CHAR(20)) LIKE '0000-00-00%';
 
 UPDATE `task_log` SET `task_log_date` = NULL WHERE CAST(`task_log_date` AS CHAR(20)) LIKE '0000-00-00%';
-UPDATE `task_log` SET `task_log_created` = IFNULL(`task_log_date`, NOW()) WHERE CAST(`task_log_created` AS CHAR(20)) LIKE '0000-00-00%';
-UPDATE `task_log` SET `task_log_updated` = `task_log_created` WHERE CAST(`task_log_updated` AS CHAR(20)) LIKE '0000-00-00%';
-UPDATE `task_log` SET `task_log_task_end_date` = `task_log_created` WHERE CAST(`task_log_task_end_date` AS CHAR(20)) LIKE '0000-00-00%';
+UPDATE `task_log` SET `task_log_created` = IFNULL(CAST(`task_log_date` AS DATETIME), NOW()) WHERE `task_log_created` IS NULL OR CAST(`task_log_created` AS CHAR(20)) LIKE '0000-00-00%';
+UPDATE `task_log` SET `task_log_updated` = `task_log_created` WHERE `task_log_updated` IS NULL OR CAST(`task_log_updated` AS CHAR(20)) LIKE '0000-00-00%';
+UPDATE `task_log` SET `task_log_task_end_date` = `task_log_created` WHERE `task_log_task_end_date` IS NULL OR CAST(`task_log_task_end_date` AS CHAR(20)) LIKE '0000-00-00%';
 
 ALTER TABLE `forum_messages`  CHANGE `message_date` `message_date` DATETIME DEFAULT CURRENT_TIMESTAMP;
 
@@ -60,7 +66,7 @@ CREATE TABLE IF NOT EXISTS `history` (
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 # Still need the alter statement in case the history table was there but incorrect from a previous install
-UPDATE `history` SET `history_date` = '1000-01-01 00:00:00' WHERE CAST(`history_date` AS CHAR(20)) LIKE '0000-00-00%';
+UPDATE `history` SET `history_date` = '1000-01-01 00:00:00' WHERE `history_date` IS NULL OR CAST(`history_date` AS CHAR(20)) LIKE '0000-00-00%';
 ALTER TABLE `history`         CHANGE `history_date` `history_date` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP;
 
 ALTER TABLE `task_log`
@@ -161,16 +167,14 @@ CREATE TABLE `projects2` (
   KEY `project_original_parent` (`project_original_parent`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
--- project_start_date and project_end_date are DATE columns: a zero value casts
--- to '0000-00-00', which an = '0000-00-00 00:00:00' test never matched.
-UPDATE `projects` SET `project_start_date` = NULL WHERE CAST(`project_start_date` AS CHAR(20)) LIKE '0000-00-00%';
-UPDATE `projects` SET `project_end_date` = NULL WHERE CAST(`project_end_date` AS CHAR(20)) LIKE '0000-00-00%';
-UPDATE `projects` SET `project_actual_end_date` = NULL WHERE CAST(`project_actual_end_date` AS CHAR(20)) LIKE '0000-00-00%';
-UPDATE `projects` SET `project_created` = NOW() WHERE CAST(`project_created` AS CHAR(20)) LIKE '0000-00-00%';
-UPDATE `projects` SET `project_created` = NOW() WHERE `project_created` IS NULL;
-UPDATE `projects` SET `project_updated` = `project_created` WHERE CAST(`project_updated` AS CHAR(20)) LIKE '0000-00-00%';
-UPDATE `projects` SET `project_updated` = `project_created` WHERE `project_updated` IS NULL;
-
+-- The dates are cleaned as they are copied, not in the old table first: on
+-- some upgraded sites the old columns are NOT NULL (project_actual_end_date)
+-- and can't be set to NULL there. old_projects keeps the original values.
+-- Zero dates become NULL, a missing created date becomes now and a missing
+-- updated date the created one. project_start_date and project_end_date are
+-- DATE columns on most sites, so a zero there casts to '0000-00-00'.
+-- dotProject stored colors as '#eeeeee', but web2project stores 'eeeeee' and adds
+-- the '#' itself, so the '#' is dropped to fit the VARCHAR(6) column.
 INSERT INTO `projects2` (`project_id`, `project_company`, `project_department`, `project_name`, `project_short_name`,
       `project_owner`, `project_url`, `project_demo_url`, `project_start_date`, `project_end_date`, `project_actual_end_date`,
       `project_status`, `project_percent_complete`, `project_color_identifier`, `project_description`, `project_target_budget`,
@@ -181,12 +185,20 @@ INSERT INTO `projects2` (`project_id`, `project_company`, `project_department`, 
       `project_subpriority`, `project_end_date_adjusted_user`, `project_location`, `project_last_task`
   ) SELECT
     `project_id`, `project_company`, 0, `project_name`, `project_short_name`,
-    `project_owner`, `project_url`, `project_demo_url`, `project_start_date`, `project_end_date`, `project_actual_end_date`,
-    `project_status`, `project_percent_complete`, `project_color_identifier`, `project_description`, `project_target_budget`,
+    `project_owner`, `project_url`, `project_demo_url`,
+    IF(CAST(`project_start_date` AS CHAR(20)) LIKE '0000-00-00%', NULL, `project_start_date`),
+    IF(CAST(`project_end_date` AS CHAR(20)) LIKE '0000-00-00%', NULL, `project_end_date`),
+    IF(CAST(`project_actual_end_date` AS CHAR(20)) LIKE '0000-00-00%', NULL, `project_actual_end_date`),
+    `project_status`, `project_percent_complete`, LEFT(TRIM(LEADING '#' FROM `project_color_identifier`), 6), `project_description`, `project_target_budget`,
     `project_actual_budget`, `project_scheduled_hours`, `project_worked_hours`, `project_task_count`, `project_creator`,
     `project_private`, `project_departments`, `project_contacts`, `project_priority`, `project_type`, '1000-01-01',
     0, 0, `project_active`, `project_original_parent`, `project_parent`,
-    0, `project_updator`, `project_created`, `project_updated`, `project_status_comment`,
+    0, `project_updator`,
+    IF(`project_created` IS NULL OR CAST(`project_created` AS CHAR(20)) LIKE '0000-00-00%', NOW(), `project_created`),
+    IF(`project_updated` IS NULL OR CAST(`project_updated` AS CHAR(20)) LIKE '0000-00-00%',
+       IF(`project_created` IS NULL OR CAST(`project_created` AS CHAR(20)) LIKE '0000-00-00%', NOW(), `project_created`),
+       `project_updated`),
+    `project_status_comment`,
     `project_subpriority`, `project_end_date_adjusted_user`, `project_location`, `project_last_task`
   FROM `projects`;
 SET @w2p_sql = IF((SELECT COUNT(*) FROM `projects2`) = (SELECT COUNT(*) FROM `projects`),

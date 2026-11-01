@@ -16,32 +16,41 @@
 -- nothing (or only widens value_charvalue back to TEXT).
 
 -- Values first: strict servers (MySQL 8's NO_ZERO_DATE) refuse to ALTER a
--- table that still holds a zero date in any of its date columns.
+-- table that still holds a zero date in any of its date columns. Columns that
+-- become NOT NULL below also get a value where they are NULL, since older
+-- installs and dotProject conversions created some of them allowing NULL.
 UPDATE `tasks` SET `task_start_date` = NULL WHERE CAST(`task_start_date` AS CHAR(20)) LIKE '0000-00-00%';
 UPDATE `tasks` SET `task_end_date` = NULL WHERE CAST(`task_end_date` AS CHAR(20)) LIKE '0000-00-00%';
-UPDATE `tasks` SET `task_created` = NOW() WHERE CAST(`task_created` AS CHAR(20)) LIKE '0000-00-00%';
-UPDATE `tasks` SET `task_updated` = `task_created` WHERE CAST(`task_updated` AS CHAR(20)) LIKE '0000-00-00%';
+UPDATE `tasks` SET `task_created` = NOW() WHERE `task_created` IS NULL OR CAST(`task_created` AS CHAR(20)) LIKE '0000-00-00%';
+UPDATE `tasks` SET `task_updated` = `task_created` WHERE `task_updated` IS NULL OR CAST(`task_updated` AS CHAR(20)) LIKE '0000-00-00%';
 
 UPDATE `projects` SET `project_start_date` = NULL WHERE (CAST(`project_start_date` AS CHAR(20)) LIKE '0000-00-00%' OR CAST(`project_start_date` AS CHAR(20)) LIKE '1000-01-01%');
 UPDATE `projects` SET `project_end_date` = NULL WHERE (CAST(`project_end_date` AS CHAR(20)) LIKE '0000-00-00%' OR CAST(`project_end_date` AS CHAR(20)) LIKE '1000-01-01%');
 UPDATE `projects` SET `project_actual_end_date` = NULL WHERE CAST(`project_actual_end_date` AS CHAR(20)) LIKE '0000-00-00%';
 UPDATE `projects` SET `project_keydate` = NULL WHERE CAST(`project_keydate` AS CHAR(20)) LIKE '0000-00-00%';
-UPDATE `projects` SET `project_created` = NOW() WHERE CAST(`project_created` AS CHAR(20)) LIKE '0000-00-00%';
-UPDATE `projects` SET `project_updated` = `project_created` WHERE CAST(`project_updated` AS CHAR(20)) LIKE '0000-00-00%';
+UPDATE `projects` SET `project_created` = NOW() WHERE `project_created` IS NULL OR CAST(`project_created` AS CHAR(20)) LIKE '0000-00-00%';
+UPDATE `projects` SET `project_updated` = `project_created` WHERE `project_updated` IS NULL OR CAST(`project_updated` AS CHAR(20)) LIKE '0000-00-00%';
 
 UPDATE `task_log` SET `task_log_date` = NULL WHERE CAST(`task_log_date` AS CHAR(20)) LIKE '0000-00-00%';
-UPDATE `task_log` SET `task_log_created` = IFNULL(`task_log_date`, NOW()) WHERE CAST(`task_log_created` AS CHAR(20)) LIKE '0000-00-00%';
-UPDATE `task_log` SET `task_log_updated` = `task_log_created` WHERE CAST(`task_log_updated` AS CHAR(20)) LIKE '0000-00-00%';
-UPDATE `task_log` SET `task_log_task_end_date` = `task_log_created` WHERE CAST(`task_log_task_end_date` AS CHAR(20)) LIKE '0000-00-00%';
+-- dp_to_w2p2 gave converted logs '1000-01-01' as created/updated, a
+-- placeholder like the project dates above, so those take the log's date too.
+UPDATE `task_log` SET `task_log_created` = IFNULL(CAST(`task_log_date` AS DATETIME), NOW())
+    WHERE `task_log_created` IS NULL OR CAST(`task_log_created` AS CHAR(20)) LIKE '0000-00-00%'
+       OR (CAST(`task_log_created` AS CHAR(20)) LIKE '1000-01-01%' AND `task_log_date` IS NOT NULL);
+UPDATE `task_log` SET `task_log_updated` = `task_log_created`
+    WHERE `task_log_updated` IS NULL OR CAST(`task_log_updated` AS CHAR(20)) LIKE '0000-00-00%'
+       OR CAST(`task_log_updated` AS CHAR(20)) LIKE '1000-01-01%';
+UPDATE `task_log` SET `task_log_task_end_date` = `task_log_created` WHERE `task_log_task_end_date` IS NULL OR CAST(`task_log_task_end_date` AS CHAR(20)) LIKE '0000-00-00%';
 
-UPDATE `sessions` SET `session_created` = NOW() WHERE CAST(`session_created` AS CHAR(20)) LIKE '0000-00-00%';
+UPDATE `sessions` SET `session_created` = NOW() WHERE `session_created` IS NULL OR CAST(`session_created` AS CHAR(20)) LIKE '0000-00-00%';
+UPDATE `sessions` SET `session_updated` = `session_created` WHERE `session_updated` IS NULL OR CAST(`session_updated` AS CHAR(20)) LIKE '0000-00-00%';
 
 UPDATE `contacts` SET `contact_birthday` = NULL WHERE CAST(`contact_birthday` AS CHAR(20)) LIKE '0000-00-00%';
 UPDATE `contacts` SET `contact_lastupdate` = NULL WHERE CAST(`contact_lastupdate` AS CHAR(20)) LIKE '0000-00-00%';
 UPDATE `contacts` SET `contact_updateasked` = NULL WHERE CAST(`contact_updateasked` AS CHAR(20)) LIKE '0000-00-00%';
 
-UPDATE `w2pversion` SET `last_db_update` = '2001-01-01' WHERE CAST(`last_db_update` AS CHAR(20)) LIKE '0000-00-00%';
-UPDATE `w2pversion` SET `last_code_update` = `last_db_update` WHERE CAST(`last_code_update` AS CHAR(20)) LIKE '0000-00-00%';
+UPDATE `w2pversion` SET `last_db_update` = '2001-01-01' WHERE `last_db_update` IS NULL OR CAST(`last_db_update` AS CHAR(20)) LIKE '0000-00-00%';
+UPDATE `w2pversion` SET `last_code_update` = `last_db_update` WHERE `last_code_update` IS NULL OR CAST(`last_code_update` AS CHAR(20)) LIKE '0000-00-00%';
 
 -- Defaults, as on a fresh install.
 ALTER TABLE `tasks`
