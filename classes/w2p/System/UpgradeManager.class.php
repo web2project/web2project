@@ -15,6 +15,15 @@ class w2p_System_UpgradeManager {
     protected $updatesApplied = array();
     protected $_w2Pconfig = '';
 
+    /*
+     * Set when a migration statement fails: the upgrade stops there and this
+     * holds what is known about the failure (see getFailure()).
+     */
+    protected $failure = null;
+    /* The database version before this run, and the migrations this run will apply. */
+    protected $startVersion = 0;
+    protected $pendingMigrations = array();
+
     public function __construct()
     {
         global $w2Pconfig;
@@ -101,29 +110,103 @@ class w2p_System_UpgradeManager {
         if ($dbConn) {
             $currentVersion = $this->_getDatabaseVersion($dbConn);
             $migrations = $this->_getMigrations();
-
-            if ($currentVersion < count($migrations)) {
-                foreach ($migrations as $update) {
-                    if ($update == end($migrations)) {
-                        $version = $AppUI->getVersion();
-                    }
-                    $myIndex = (int) substr($update, 0, 3);
-                    if ($myIndex > $currentVersion) {
-                        $this->updatesApplied[] = $update;
-                        $errorMessages = $this->_applySQLUpdates($update, $dbConn);
-                        $allErrors = array_merge($allErrors, $errorMessages);
-                        $sql = "INSERT INTO w2pversion " .
-                            " (db_version, code_version, last_db_update, last_code_update) " .
-                            " VALUES ($myIndex, '$version', now(), now())";
-                        $dbConn->Execute($sql);
-                    }
-                }
-            }
+            $allErrors = $this->_runMigrations($migrations, $currentVersion, $dbConn, $AppUI->getVersion());
         } else {
             $allErrors[] = 'Update failed. Database connection was not found.';
         }
 
         return $allErrors;
+    }
+
+    /*
+     * Applies the migrations numbered above $currentVersion, in order, and
+     * records each one in w2pversion once all of its statements have run. The
+     * first statement that fails stops the run: that migration is not recorded,
+     * so the database version stays at the last migration that completed, and
+     * nothing after it runs. Returns the error messages (empty on success); the
+     * details of a failure are in getFailure() and getFailureReport().
+     */
+    protected function _runMigrations($migrations, $currentVersion, $dbConn, $codeVersion) {
+        $this->failure = null;
+        $this->startVersion = (int) $currentVersion;
+        $this->pendingMigrations = array();
+        foreach ($migrations as $update) {
+            if ((int) substr($update, 0, 3) > $currentVersion) {
+                $this->pendingMigrations[] = $update;
+            }
+        }
+
+        $lastMigration = end($migrations);
+        foreach ($this->pendingMigrations as $update) {
+            $myIndex = (int) substr($update, 0, 3);
+            $version = ($update == $lastMigration) ? $codeVersion : '';
+
+            $errorMessages = $this->_applySQLUpdates($update, $dbConn);
+            if (null !== $this->failure) {
+                return $errorMessages;
+            }
+
+            $sql = $this->_recordMigration($dbConn, $myIndex, $version);
+            if (true !== $sql) {
+                $this->_recordFailure($dbConn, $update, $sql, 0, 0, 0,
+                    'Every statement in ' . $update . ' ran, but recording it in w2pversion failed.');
+                return array($this->getFailureSummary());
+            }
+            $this->updatesApplied[] = $update;
+        }
+
+        return array();
+    }
+
+    /*
+     * Adds the w2pversion row for a migration that completed. Returns true, or
+     * the last statement tried when none worked (its error is still on the
+     * connection).
+     *
+     * Until 056 rebuilds it, w2pversion's primary key isn't db_version: it is
+     * code_revision on installs (0 on every row) and code_version on dotProject
+     * conversions ('' on every row but the last migration's). So only one row
+     * fit and the recorded version stayed put until 056. Each row now gets its
+     * migration number as code_revision, which nothing else uses, and where
+     * the key still clashes the clashing row is replaced: the version is the
+     * highest db_version, so that row is the one that matters.
+     */
+    protected function _recordMigration($dbConn, $myIndex, $version) {
+        $values = "$myIndex, '" . addslashes($version) . "', now(), now()";
+        $attempts = array(
+            "INSERT INTO w2pversion (code_revision, db_version, code_version, last_db_update, last_code_update) VALUES ($myIndex, $values)",
+            "INSERT INTO w2pversion (db_version, code_version, last_db_update, last_code_update) VALUES ($values)",
+        );
+
+        $sql = '';
+        foreach ($attempts as $sql) {
+            if ($dbConn->Execute($sql)) {
+                return true;
+            }
+            $error = $dbConn->ErrorMsg();
+            if (strpos($error, 'Duplicate entry') !== false) {
+                $sql = 'REPLACE' . substr($sql, strlen('INSERT'));
+                return $dbConn->Execute($sql) ? true : $sql;
+            }
+            if (strpos($error, 'code_revision') === false) {
+                return $sql;
+            }
+        }
+        return $sql;
+    }
+
+    /*
+     * Null when nothing has failed. Otherwise an array with: migration (file
+     * name), statement_number and statement_count (within the file),
+     * statements_run (how many before it succeeded), line (in the file),
+     * statement (the SQL), error_number and error_message (from the server),
+     * note (extra context), start_version and db_version (the recorded
+     * version before the run and now), applied (migrations completed this run),
+     * not_applied (the failed one and those after it), server_version and
+     * sql_mode.
+     */
+    public function getFailure() {
+        return $this->failure;
     }
 
     public function getUpdatesApplied() {
@@ -142,33 +225,41 @@ class w2p_System_UpgradeManager {
             $dpVersion = substr($res->fields['code_version'], 0, 5);
         }
 
-        switch ($dpVersion) {
-            case '2.0':
-                $errorMessages = $this->_applySQLUpdates('dp20_to_201.sql', $dbConn);
-                $allErrors = array_merge($allErrors, $errorMessages);
-            case '2.0.1':
-                $errorMessages = $this->_applySQLUpdates('dp201_to_202.sql', $dbConn);
-                $allErrors = array_merge($allErrors, $errorMessages);
-            /**
-             * This default case will handle any other version of dotproject but has been validated to handle:
-             *      2.0.2, 2.0.3, 2.0.4, 
-             *      2.1-rc1, 2.1-rc2, 2.1, 2.1.1, 2.1.2, 2.1.3, 2.1.4, 2.1.5, 2.1.6, 2.1.7, 2.1.8
-             */
-            default:
-                $errorMessages = $this->_applySQLUpdates('dp21rc1_to_21rc2.sql', $dbConn);
-                $allErrors = array_merge($allErrors, $errorMessages);
-
-                $errorMessages = $this->_applySQLUpdates('dp_to_w2p1.sql', $dbConn);
-                $allErrors = array_merge($allErrors, $errorMessages);
-
-                $this->_scrubDotProjectData($dbConn);
-
-                $errorMessages = $this->_applySQLUpdates('dp_to_w2p2.sql', $dbConn);
-                $allErrors = array_merge($allErrors, $errorMessages);
-
-                $errorMessages = $this->upgradeSystem();
-                $allErrors = array_merge($allErrors, $errorMessages);
+        /*
+         * Each step stops the conversion if it fails, like a migration does in
+         * upgradeSystem(): the steps after it assume it worked.
+         *
+         * The first case handles 2.0 and falls through, the second 2.0.1, and
+         * the default any other version of dotproject, validated for:
+         *      2.0.2, 2.0.3, 2.0.4,
+         *      2.1-rc1, 2.1-rc2, 2.1, 2.1.1, 2.1.2, 2.1.3, 2.1.4, 2.1.5, 2.1.6, 2.1.7, 2.1.8
+         */
+        $steps = array('dp21rc1_to_21rc2.sql', 'dp_to_w2p1.sql', 'scrub', 'dp_to_w2p2.sql');
+        if ('2.0.1' == $dpVersion) {
+            array_unshift($steps, 'dp201_to_202.sql');
+        } elseif ('2.0' == $dpVersion) {
+            array_unshift($steps, 'dp20_to_201.sql', 'dp201_to_202.sql');
         }
+
+        $this->failure = null;
+        $this->startVersion = 0;
+        $this->pendingMigrations = array_values(array_diff($steps, array('scrub')));
+        foreach ($steps as $step) {
+            if ('scrub' == $step) {
+                $this->_scrubDotProjectData($dbConn);
+                continue;
+            }
+            $errorMessages = $this->_applySQLUpdates($step, $dbConn);
+            if (null !== $this->failure) {
+                $this->failure['note'] = trim($this->failure['note'] .
+                    ' The dotProject conversion stopped here, so the web2project upgrade did not run.');
+                return $errorMessages;
+            }
+            $this->updatesApplied[] = $step;
+        }
+
+        $errorMessages = $this->upgradeSystem();
+        $allErrors = array_merge($allErrors, $errorMessages);
 
         return $allErrors;
     }
@@ -273,61 +364,245 @@ class w2p_System_UpgradeManager {
         $this->tempDir = W2P_BASE_DIR.'/files/temp';
     }
 
+    /*
+     * Runs one file from install/sql. Stops at the first statement that fails
+     * with an error that isn't ignorable (see _isIgnorableError()), records the
+     * failure and returns its summary. Returns an empty array when the whole
+     * file ran.
+     */
     protected function _applySQLUpdates($sqlfile, $dbConn) {
-        $sqlfile = W2P_BASE_DIR.'/install/sql/'.$sqlfile;
-        if (!file_exists($sqlfile) || filesize($sqlfile) == 0) {
+        $path = W2P_BASE_DIR.'/install/sql/'.$sqlfile;
+        if (!file_exists($path) || filesize($path) == 0) {
             return array();
         }
 
-        $query = file_get_contents($sqlfile);
+        $query = file_get_contents($path);
         if (false === $query) {
-            return array('Could not read ' . $sqlfile);
+            $this->_recordFailure($dbConn, $sqlfile, '', 0, 0, 0,
+                'The file ' . $path . ' could not be read, so none of it ran.', array(0, ''));
+            return array($this->getFailureSummary());
         }
-        $pieces  = $this->_splitSQLUpdates($query);
-        $pieceCount = count($pieces);
-        $errorMessages = array();
 
-        for ($i=0; $i < $pieceCount; $i++) {
-            $pieces[$i] = trim($pieces[$i]);
-            if(!empty($pieces[$i]) && $pieces[$i] != "#") {
-                /*
-                 * While this seems like a good place to use the core classes, it's
-                 * really not.  With all of the dependencies, it just gets to be a huge
-                 * pain and ends up loading all kinds of unnecessary stuff.
-                 */
-                if (strpos($pieces[$i], '[ADMINPASS]') !== false) {
-                    $pieces[$i] = str_replace('[ADMINPASS]', $this->configOptions['adminpass'], $pieces[$i]);
-                }
-                if (strpos($pieces[$i], '[SYSTEM_TIMEZONE]') !== false) {
-                    $pieces[$i] = str_replace('[SYSTEM_TIMEZONE]', $this->configOptions['system_timezone'], $pieces[$i]);
-                }
-                if (strpos($pieces[$i], '[USER_TIMEZONE]') !== false) {
-                    $pieces[$i] = str_replace('[USER_TIMEZONE]', $this->configOptions['user_timezone'], $pieces[$i]);
-                }
-                if (!$dbConn->Execute($pieces[$i])) {
-                    $errorMessage = $dbConn->ErrorMsg();
-                    /*
-                     * TODO: I'm not happy with this solution but have yet to come up
-                     *     with another way of solving it...
-                     *
-                     * Adding a column or key that is already there, or dropping
-                     * one that is already gone, fails with one of these messages.
-                     * The schema is already in the intended state, so they are
-                     * ignored. Everything else is reported.
-                     */
-                    if (strpos($errorMessage, 'Duplicate column name') === false &&
-                      strpos($errorMessage, 'column/key exists') === false &&
-                      strpos($errorMessage, 'Multiple primary key defined') === false &&
-                      strpos($errorMessage, 'Duplicate key name') === false &&
-                      strpos($errorMessage, 'check that it exists') === false) {
+        return $this->_applySQL($query, $sqlfile, $dbConn);
+    }
 
-                      $errorMessages[] = basename($sqlfile) . ': ' . $errorMessage;
-                    }
-                }
+    protected function _applySQL($query, $name, $dbConn) {
+        $statements = array();
+        foreach ($this->_splitSQLStatements($query) as $piece) {
+            $sql = trim($piece['sql']);
+            if ('' !== $sql && '#' !== $sql) {
+                $statements[] = array('sql' => $sql, 'line' => $piece['line']);
+            }
+        }
+        $statementCount = count($statements);
+
+        foreach ($statements as $index => $statement) {
+            /*
+             * While this seems like a good place to use the core classes, it's
+             * really not.  With all of the dependencies, it just gets to be a huge
+             * pain and ends up loading all kinds of unnecessary stuff.
+             */
+            $sql = str_replace(
+                array('[ADMINPASS]', '[SYSTEM_TIMEZONE]', '[USER_TIMEZONE]'),
+                array(
+                    isset($this->configOptions['adminpass']) ? $this->configOptions['adminpass'] : '',
+                    isset($this->configOptions['system_timezone']) ? $this->configOptions['system_timezone'] : '',
+                    isset($this->configOptions['user_timezone']) ? $this->configOptions['user_timezone'] : '',
+                ),
+                $statement['sql']
+            );
+            if ($dbConn->Execute($sql)) {
+                continue;
+            }
+
+            $error = array($this->_errorNumber($dbConn), $dbConn->ErrorMsg());
+            if ($this->_isIgnorableError($error[1], $sql)) {
+                continue;
+            }
+
+            /* The report shows the statement as written, so it never includes the admin password. */
+            $this->_recordFailure($dbConn, $name, $statement['sql'], $index + 1, $statementCount,
+                $statement['line'], '', $error);
+            return array($this->getFailureSummary());
+        }
+
+        return array();
+    }
+
+    /*
+     * Errors that mean the database is already as the statement would leave
+     * it: adding a column, key or primary key that is already there, dropping
+     * one that is already gone, or inserting a row (INSERT ... VALUES) that is
+     * already there. Older migrations repeat each other, so these come up on
+     * upgrades from earlier versions. A duplicate row from INSERT ... SELECT is
+     * not ignored: there it means part of a copy is missing.
+     */
+    protected function _isIgnorableError($errorMessage, $sql) {
+        $alreadyInPlace = array('Duplicate column name', 'column/key exists', 'Multiple primary key defined',
+            'Duplicate key name', 'check that it exists');
+        foreach ($alreadyInPlace as $text) {
+            if (strpos($errorMessage, $text) !== false) {
+                return true;
             }
         }
 
-        return $errorMessages;
+        return strpos($errorMessage, 'Duplicate entry') !== false
+            && preg_match('/^\s*INSERT\b/i', $sql)
+            && !preg_match('/\bSELECT\b/i', $sql);
+    }
+
+    protected function _errorNumber($dbConn) {
+        return method_exists($dbConn, 'ErrorNo') ? (int) $dbConn->ErrorNo() : 0;
+    }
+
+    /*
+     * Stores the failure. $error is array(number, message); when it is null
+     * the connection's last error is used, so call this straight after the
+     * failed Execute().
+     */
+    protected function _recordFailure($dbConn, $migration, $statement, $statementNumber, $statementCount,
+            $line, $note, $error = null) {
+        if (null === $error) {
+            $error = array($this->_errorNumber($dbConn), $dbConn->ErrorMsg());
+        }
+
+        $serverVersion = '';
+        $sqlMode = '';
+        $res = $dbConn->Execute('SELECT VERSION(), @@SESSION.sql_mode');
+        if ($res && is_object($res) && !$res->EOF) {
+            $serverVersion = (string) $res->fields[0];
+            $sqlMode = (string) $res->fields[1];
+        }
+
+        $dbVersion = $this->startVersion;
+        $res = $dbConn->Execute('SELECT MAX(db_version) FROM w2pversion');
+        if ($res && is_object($res) && !$res->EOF) {
+            $dbVersion = (int) $res->fields[0];
+        }
+
+        $position = array_search($migration, $this->pendingMigrations);
+        $notApplied = (false === $position) ? array($migration) : array_slice($this->pendingMigrations, $position);
+
+        $this->failure = array(
+            'migration' => $migration,
+            'migration_number' => (false === $position) ? 0 : $position + 1,
+            'migration_count' => count($this->pendingMigrations),
+            'statement_number' => $statementNumber,
+            'statement_count' => $statementCount,
+            'statements_run' => max(0, $statementNumber - 1),
+            'line' => $line,
+            'statement' => $statement,
+            'error_number' => (int) $error[0],
+            'error_message' => (string) $error[1],
+            'note' => $note,
+            'start_version' => $this->startVersion,
+            'db_version' => $dbVersion,
+            'applied' => $this->updatesApplied,
+            'not_applied' => $notApplied,
+            'server_version' => $serverVersion,
+            'sql_mode' => $sqlMode,
+        );
+    }
+
+    /* "none", "a.sql", "a.sql, b.sql" or "a.sql through f.sql (6 migrations)". */
+    protected function _describeRun($migrations) {
+        $count = count($migrations);
+        if (0 == $count) {
+            return 'none';
+        }
+        if ($count <= 2) {
+            return implode(', ', $migrations);
+        }
+        return reset($migrations) . ' through ' . end($migrations) . ' (' . $count . ' migrations)';
+    }
+
+    /* One line for the error list: where it stopped and the server's error. */
+    public function getFailureSummary() {
+        $f = $this->failure;
+        if (null === $f) {
+            return '';
+        }
+
+        $where = $f['migration'];
+        if ($f['statement_number'] > 0) {
+            $where .= ', statement ' . $f['statement_number'] . ' of ' . $f['statement_count'] . ' (line ' . $f['line'] . ')';
+        }
+        $error = ('' !== $f['error_message'])
+            ? 'MySQL error ' . $f['error_number'] . ': ' . $f['error_message']
+            : $f['note'];
+
+        return $where . ': ' . $error . ' The upgrade stopped here.';
+    }
+
+    /*
+     * Plain text describing the failure in full, for the upgrade pages and for
+     * bug reports. Empty when nothing failed. Escape it before putting it in HTML.
+     */
+    public function getFailureReport() {
+        $f = $this->failure;
+        if (null === $f) {
+            return '';
+        }
+
+        $lines = array();
+        $stoppedAt = 'The upgrade stopped at ' . $f['migration'];
+        if ($f['migration_count'] > 0) {
+            $stoppedAt .= ' (' . $f['migration_number'] . ' of ' . $f['migration_count'] . ' to apply in this run)';
+        }
+        if ($f['statement_number'] > 0) {
+            $stoppedAt .= ', statement ' . $f['statement_number'] . ' of ' . $f['statement_count'] .
+                ', which starts on line ' . $f['line'] . ' of install/sql/' . $f['migration'];
+        }
+        $lines[] = $stoppedAt . '.';
+        $lines[] = '';
+
+        if ('' !== $f['error_message']) {
+            $lines[] = 'MySQL error ' . $f['error_number'] . ': ' . $f['error_message'];
+        }
+        if ('' !== $f['note']) {
+            $lines[] = $f['note'];
+        }
+
+        if ('' !== $f['statement']) {
+            $statement = $f['statement'];
+            $limit = 4000;
+            if (strlen($statement) > $limit) {
+                $statement = substr($statement, 0, $limit) . "\n... (" . (strlen($statement) - $limit) . ' more characters)';
+            }
+            $lines[] = '';
+            $lines[] = 'Statement:';
+            $lines[] = $statement;
+        }
+
+        $lines[] = '';
+        $lines[] = 'Database version: ' . $f['db_version'] . ' (it was ' . $f['start_version'] . ' before this run). ' .
+            $f['migration'] . ' was not recorded as applied.';
+        $lines[] = 'Completed in this run: ' . $this->_describeRun($f['applied']);
+        $lines[] = 'Not applied: ' . $this->_describeRun($f['not_applied']);
+        if ('' !== $f['server_version']) {
+            $lines[] = 'Database server: ' . $f['server_version'] . '; sql_mode: ' .
+                ('' !== $f['sql_mode'] ? $f['sql_mode'] : '(empty)');
+        }
+
+        $lines[] = '';
+        $lines[] = 'What to do next:';
+        if ($f['statement_number'] == 0 && '' === $f['statement']) {
+            $lines[] = '- Make the file readable by the web server and run the upgrade again. It starts at ' . $f['migration'] . '.';
+        } elseif ($f['statement_number'] == 0) {
+            $lines[] = '- The changes in ' . $f['migration'] . ' are in place, but running the upgrade again would apply it a second time.' .
+                ' Fix the problem with w2pversion and add its row by hand, or restore your backup and run the upgrade again.';
+        } elseif ($f['statements_run'] > 0) {
+            $lines[] = '- ' . $f['statements_run'] . ' earlier statement' . ($f['statements_run'] == 1 ? '' : 's') .
+                ' in ' . $f['migration'] . ' had already run, so the database is part-way through this migration.' .
+                ' Restore the backup you made before upgrading (for a new installation, empty the database),' .
+                ' fix the cause, and run the upgrade again.';
+        } else {
+            $lines[] = '- Nothing in ' . $f['migration'] . ' had run yet. Fix the cause and run the upgrade again: it starts at ' .
+                $f['migration'] . '.';
+        }
+        $lines[] = '- If you report this, include this whole message.';
+
+        return implode("\n", $lines);
     }
 
     /*
@@ -338,10 +613,24 @@ class w2p_System_UpgradeManager {
      * piece made only of comments comes back empty and is skipped.
      */
     protected function _splitSQLUpdates($sql) {
+        return array_map(function ($statement) {
+            return $statement['sql'];
+        }, $this->_splitSQLStatements($sql));
+    }
+
+    /*
+     * As _splitSQLUpdates(), but each piece is array('sql' => ..., 'line' => ...)
+     * with the line its first character is on (0 for a piece with no SQL).
+     */
+    protected function _splitSQLStatements($sql) {
         $statements = array();
         $current = '';
+        $start = null;
         $quote = '';
         $length = strlen($sql);
+        $lineOf = function ($offset) use ($sql) {
+            return (null === $offset) ? 0 : substr_count($sql, "\n", 0, $offset) + 1;
+        };
 
         for ($i = 0; $i < $length; $i++) {
             $char = $sql[$i];
@@ -366,6 +655,9 @@ class w2p_System_UpgradeManager {
             if ("'" === $char || '"' === $char || '`' === $char) {
                 $quote = $char;
                 $current .= $char;
+                if (null === $start) {
+                    $start = $i;
+                }
                 continue;
             }
 
@@ -384,14 +676,18 @@ class w2p_System_UpgradeManager {
             }
 
             if (';' === $char) {
-                $statements[] = $current;
+                $statements[] = array('sql' => $current, 'line' => $lineOf($start));
                 $current = '';
+                $start = null;
                 continue;
             }
 
             $current .= $char;
+            if (null === $start && !ctype_space($char)) {
+                $start = $i;
+            }
         }
-        $statements[] = $current;
+        $statements[] = array('sql' => $current, 'line' => $lineOf($start));
 
         return $statements;
     }
