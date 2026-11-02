@@ -55,9 +55,6 @@ $view = new w2p_Output_HTML_ViewHelper($AppUI);
                 <?php echo $methods['values'][$key]; ?>
             </p>
         <?php endforeach; ?>
-        <p><?php $view->showLabel('Waiting Update'); ?>
-            <input type="checkbox" value="1" name="contact_updateasked" disabled="disabled" <?php echo $contact->contact_updatekey ? 'checked="checked"' : ''; ?> />
-        </p>
         <p><?php $view->showLabel('Last Updated'); ?>
             <?php $view->showField('contact_lastupdate', $contact->contact_lastupdate); ?>
         </p>

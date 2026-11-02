@@ -100,24 +100,6 @@ $form = new w2p_Output_HTML_FormHelper($AppUI);
                 <?php $form->showLabel('Birthday'); ?>
                 <?php $form->showField('contact_birthday', $object->contact_birthday, array('maxlength' => 10)); ?> (<?php echo $AppUI->_('yyyy-mm-dd'); ?>)
             </p>
-            <p><strong><?php echo $AppUI->_('Contact Update Info'); ?></strong></p>
-            <p>
-                <?php $form->showLabel('Awaiting Update'); ?>
-                <?php
-                $options = array('onclick' => 'updateVerify()');
-                if ($object->contact_updatekey) {
-                    $options['checked'] = 'checked';
-                }
-                ?>
-                <?php $form->showField('contact_updateask', 1, $options); ?>
-            </p>
-            <p>
-                <?php $form->showLabel('Update Requested'); ?>
-                <?php $last_ask = new w2p_Utilities_Date($object->contact_updateasked); ?>
-                <?php
-                echo $object->contact_updateasked ? $AppUI->formatTZAwareTime($object->contact_updateasked) : '&nbsp;';
-                ?>
-            </p>
             <p>
                 <?php $form->showLabel('Last Updated'); ?>
                 <?php $lastupdated = new w2p_Utilities_Date($object->contact_lastupdate);

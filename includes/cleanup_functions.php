@@ -4443,27 +4443,6 @@ function __extract_from_projectdesigner2()
     return $idx_companies;
 }
 
-/**
- * @param mixed $controller
- */
-function __extract_from_contact_controller($controller)
-{
-    $updatekey = $controller->object->getUpdateKey();
-    $notifyasked = w2PgetParam($_POST, 'contact_updateask', 0);
-    if ($notifyasked && !strlen($updatekey)) {
-        $rnow = new w2p_Utilities_Date();
-        // The key alone lets its holder edit the contact (updatecontact.php),
-        // so it must not be guessable: 32 random hex characters (the column
-        // is VARCHAR(32)), not a hash of the time it was made.
-        $controller->object->contact_updatekey = bin2hex(random_bytes(16));
-        $controller->object->contact_updateasked = $rnow->format(FMT_DATETIME_MYSQL);
-        $controller->object->contact_lastupdate = '';
-        $controller->object->store();
-        $controller->object->notify();
-    }
-
-    return $controller;
-}
 
 /**
  * @param mixed $row

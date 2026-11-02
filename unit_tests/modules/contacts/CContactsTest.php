@@ -51,9 +51,7 @@ class CContactsTest extends CommonSetup
             'contact_owner'             => 1,
             'contact_private'           => 0,
             'contact_job'               => 'King',
-            'contact_updatekey'         => '',
-            'contact_lastupdate'        => '2010-02-02',
-            'contact_updateasked'       => '2010-12-02'
+            'contact_lastupdate'        => '2010-02-02'
         );
     }
 
@@ -61,7 +59,7 @@ class CContactsTest extends CommonSetup
     {
         $unset = array('contact_methods');
 
-        parent::objectPropertiesTest('CContact', 26, $unset);
+        parent::objectPropertiesTest('CContact', 24, $unset);
     }
 
     public function testStoreCreate()
@@ -202,33 +200,6 @@ class CContactsTest extends CommonSetup
         $this->AssertEquals(2,                      count($results));
         $this->assertEquals(1,                      $results['dept_id']);
         $this->assertEquals('Department 1',         $results['dept_name']);
-    }
-
-    public function testGetUpdateKey()
-    {
-        $this->obj->contact_id = 1;
-        $this->mockDB->stageHashList($this->obj->contact_id, 'ASDFASDFASDF');
-
-        $this->assertEquals('ASDFASDFASDF',         $this->obj->getUpdateKey());
-    }
-
-    public function testClearUpdateKey()
-    {
-        $this->mockDB->stageHash(array('contact_updatekey' => 'ASDFASDFASDF'));
-
-        $this->obj->load(1);
-        $this->assertEquals('ASDFASDFASDF',         $this->obj->contact_updatekey);
-
-        $this->obj->clearUpdateKey();
-        $this->assertEquals('',                     $this->obj->contact_updatekey);
-
-        $this->obj->contact_id = 1;
-        $this->assertEquals('',                     $this->obj->getUpdateKey());
-    }
-
-    public function testUpdateNotify()
-    {
-        $this->markTestSkipped('This test has not been implemented yet.');
     }
 
     public function testGetAllowedRecords()
