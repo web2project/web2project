@@ -188,8 +188,6 @@ class CEvent extends w2p_Core_BaseObject
      * @param Date $end_date End date of the period
      *
      * @return array A list of events
-     *
-     * WARNING: This is actually called staticly so $this is not available.
      */
     public static function getEventsForPeriod($start_date, $end_date, $filter = 'all', $user_id = null, $project_id = 0, $company_id = 0)
     {
