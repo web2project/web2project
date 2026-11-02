@@ -473,6 +473,50 @@ class w2p_Utilities_Mail extends PHPMailer
      *
      *    @return bool True if the email address is ok
      */
+    /**
+     * Q-encodes a header value (RFC 2047), as PHPMailer::EncodeQ() does.
+     *
+     * The bundled PHPMailer 5.1 does this with preg_replace()'s /e modifier,
+     * which PHP 7 removed: the call fails and returns '', so a header that
+     * is mostly ASCII with a few accented characters (most subjects in
+     * Latin-script languages) was sent empty. Same rules, with callbacks.
+     *
+     * @param string $str      the text to encode
+     * @param string $position 'phrase', 'comment' or 'text' (see the RFC)
+     *
+     * @return string
+     */
+    public function EncodeQ($str, $position = 'text')
+    {
+        $hex = function ($matches) {
+            return '=' . sprintf('%02X', ord($matches[1]));
+        };
+
+        // There should not be any EOL in the string
+        $encoded = preg_replace('/[\r\n]*/', '', (string) $str);
+
+        // 'text': every high ascii, control, =, ? and _ character
+        $text = '\000-\011\013\014\016-\037\075\077\137\177-\377';
+        switch (strtolower($position)) {
+            case 'phrase':
+                $pattern = '/([^A-Za-z0-9!*+\/ -])/';
+                break;
+            case 'comment':
+                // the 'text' characters plus ( ) and ", in one pass (5.1 ran
+                // two, so the = of the first pass's =28 became =3D28)
+                $pattern = '/([\(\)"' . $text . '])/';
+                break;
+            case 'text':
+            default:
+                $pattern = '/([' . $text . '])/';
+                break;
+        }
+        $encoded = preg_replace_callback($pattern, $hex, $encoded);
+
+        // Replace every spaces to _ (more readable than =20)
+        return str_replace(' ', '_', $encoded);
+    }
+
     public function ValidEmail($address)
     {
         if (preg_match('/^(.*)\<(.+)\>$/D', $address, $regs)) {
