@@ -1977,9 +1977,13 @@ function userUsageWeeks()
     $ted = new w2p_Utilities_Date(Date_Calc::endOfWeek($task_end_date->day, $task_end_date->month, $task_end_date->year));
     $tsd = new w2p_Utilities_Date(Date_Calc::beginOfWeek($task_start_date->day, $task_start_date->month, $task_start_date->year));
 
-    $week_difference = $end_date->workingDaysInSpan($start_date) / count(explode(',', w2PgetConfig('cal_working_days')));
+    // Work on copies: workingDaysInSpan() moves the date it's called on, and
+    // stepping $start_date itself left the next task (and showWeeks())
+    // starting from where this one stopped.
+    $span_end = new w2p_Utilities_Date($end_date);
+    $week_difference = $span_end->workingDaysInSpan(new w2p_Utilities_Date($start_date)) / count(explode(',', w2PgetConfig('cal_working_days')));
 
-    $actual_date = $start_date;
+    $actual_date = new w2p_Utilities_Date($start_date);
 
     for ($i = 0; $i <= $week_difference; $i++) {
         if (!$actual_date->before($tsd) && !$actual_date->after($ted)) {
@@ -2014,7 +2018,7 @@ function userUsageWeeks()
                 $user_tasks_counted_in[$user_id][$task->task_project][$task->task_id] += $hours_added;
             }
         }
-        $actual_date->addSeconds(168 * 3600); // + one week
+        $actual_date->addDays(7); // + one week (168 hours drifts across DST)
     }
 }
 
@@ -2040,7 +2044,7 @@ function showWeeks()
 
     $table_header = '<tr><th>' . $AppUI->_('User') . '</th>';
     for ($i = 0; $i < $week_difference; $i++) {
-        $actual_date->addSeconds(168 * 3600); // + one week
+        $actual_date->addDays(7); // + one week (168 hours drifts across DST)
         $working_days_count = $working_days_count + count(explode(',', w2PgetConfig('cal_working_days')));
     }
     $table_header .= '<th nowrap="nowrap" colspan="2">' . $AppUI->_('Allocated') . '</th></tr>';
@@ -2067,8 +2071,9 @@ function showWeeks()
             $table_rows .= '</tr>';
         }
     }
-    $total_hours_capacity = $working_days_count / 2 * w2PgetConfig('daily_working_hours') * count($user_usage);
-    $total_hours_capacity_all = $working_days_count / 2 * w2PgetConfig('daily_working_hours') * count($user_list);
+    // the same capacity per user as the percentages above, times the users
+    $total_hours_capacity = $working_days_count * w2PgetConfig('daily_working_hours') * count($user_usage);
+    $total_hours_capacity_all = $working_days_count * w2PgetConfig('daily_working_hours') * count($user_list);
 }
 
 // From: modules/reports/reports/allocateduserhours.php
