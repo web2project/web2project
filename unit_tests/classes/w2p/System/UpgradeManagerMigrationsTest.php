@@ -45,12 +45,26 @@ class w2p_FakeUpgradeConnection
     public $executed = array();
     public $failures = array();
     public $dbVersion = 55;
+    /* The session sql_mode; null leaves SELECT/SET @@SESSION.sql_mode unanswered. */
+    public $sqlMode = null;
+    /* Each statement with the sql_mode it ran under, when $sqlMode is set. */
+    public $modes = array();
     private $errorNumber = 0;
     private $errorMessage = '';
 
     public function Execute($sql)
     {
         $this->executed[] = $sql;
+        if (null !== $this->sqlMode) {
+            if ('SELECT @@SESSION.sql_mode' === $sql) {
+                return new w2p_FakeUpgradeResult(array($this->sqlMode));
+            }
+            if (preg_match("/^SET SESSION sql_mode = '(.*)'$/", $sql, $match)) {
+                $this->sqlMode = $match[1];
+                return true;
+            }
+            $this->modes[] = array($sql, $this->sqlMode);
+        }
         if (0 === strpos($sql, 'SELECT VERSION()')) {
             return new w2p_FakeUpgradeResult(array('8.0.36', 'STRICT_TRANS_TABLES,NO_ZERO_DATE'));
         }
@@ -75,6 +89,11 @@ class w2p_FakeUpgradeConnection
     public function ErrorMsg()
     {
         return $this->errorMessage;
+    }
+
+    public function qstr($value)
+    {
+        return "'" . str_replace("'", "''", $value) . "'";
     }
 
     public function ErrorNo()
@@ -263,6 +282,41 @@ class w2p_System_UpgradeManagerMigrationsTest extends \PHPUnit\Framework\TestCas
         $this->assertEquals(array('056_a.sql', '057_b.sql'), $this->manager->getUpdatesApplied());
         $this->assertEquals(57, $this->conn->dbVersion);
         $this->assertSame('', $this->manager->getFailureReport());
+    }
+
+    /*
+     * Migrations before 056 were written for MySQL 5 and run without the
+     * strict and zero-date flags; 056 and later run in the server's mode,
+     * which is put back when the run ends.
+     */
+    public function testMigrationsBefore056RunWithoutStrictModes()
+    {
+        $serverMode = 'STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION';
+        $this->conn->sqlMode = $serverMode;
+        $this->conn->dbVersion = 34;
+        $this->manager->files = array('035_a.sql' => 'ALTER TABLE a ADD x INT;', '056_b.sql' => 'ALTER TABLE b ADD x INT;');
+
+        $this->assertEquals(array(), $this->manager->run(array_keys($this->manager->files), 34, $this->conn));
+
+        $ran = array();
+        foreach ($this->conn->modes as $entry) {
+            $ran[$entry[0]] = $entry[1];
+        }
+        $this->assertSame('NO_ENGINE_SUBSTITUTION', $ran['ALTER TABLE a ADD x INT']);
+        $this->assertSame($serverMode, $ran['ALTER TABLE b ADD x INT']);
+        $this->assertSame($serverMode, $this->conn->sqlMode);
+    }
+
+    public function testServerModeIsRestoredWhenALegacyMigrationFails()
+    {
+        $serverMode = 'STRICT_TRANS_TABLES,NO_ZERO_DATE';
+        $this->conn->sqlMode = $serverMode;
+        $this->conn->dbVersion = 34;
+        $this->conn->failures = array('ALTER TABLE a' => array(1054, "Unknown column 'y'"));
+        $this->manager->files = array('035_a.sql' => 'ALTER TABLE a DROP y;');
+
+        $this->assertNotEquals(array(), $this->manager->run(array_keys($this->manager->files), 34, $this->conn));
+        $this->assertSame($serverMode, $this->conn->sqlMode);
     }
 
     /*

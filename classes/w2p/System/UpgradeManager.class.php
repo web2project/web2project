@@ -137,12 +137,15 @@ class w2p_System_UpgradeManager {
         }
 
         $lastMigration = end($migrations);
+        $serverSqlMode = $this->_sessionSqlMode($dbConn);
         foreach ($this->pendingMigrations as $update) {
             $myIndex = (int) substr($update, 0, 3);
             $version = ($update == $lastMigration) ? $codeVersion : '';
 
+            $this->_setMigrationSqlMode($dbConn, $myIndex, $serverSqlMode);
             $errorMessages = $this->_applySQLUpdates($update, $dbConn);
             if (null !== $this->failure) {
+                $this->_setSessionSqlMode($dbConn, $serverSqlMode);
                 return $errorMessages;
             }
 
@@ -154,8 +157,60 @@ class w2p_System_UpgradeManager {
             }
             $this->updatesApplied[] = $update;
         }
+        $this->_setSessionSqlMode($dbConn, $serverSqlMode);
 
         return array();
+    }
+
+    /**
+     * Migrations before this number were written for MySQL 5's default
+     * sql_mode, which allowed zero dates: the 1.x and 2.x schemas give date
+     * columns a '0000-00-00 00:00:00' default. Under MySQL 8's NO_ZERO_DATE
+     * any ALTER TABLE on such a table fails ("Invalid default value"), so
+     * upgrading a 2.x site stopped at 035. 056 is where the zero dates are
+     * cleaned and the tables rebuilt, so it and everything after run in the
+     * server's own mode.
+     */
+    const STRICT_FROM_MIGRATION = 56;
+
+    /**
+     * The sql_mode flags that migrations before STRICT_FROM_MIGRATION run
+     * without: the ones MySQL 5 did not set by default.
+     *
+     * @var string[]
+     */
+    protected static $legacyOffModes = array('STRICT_TRANS_TABLES', 'STRICT_ALL_TABLES',
+        'NO_ZERO_DATE', 'NO_ZERO_IN_DATE', 'ERROR_FOR_DIVISION_BY_ZERO', 'TRADITIONAL');
+
+    /* The connection's sql_mode, or null if it can't be read. */
+    protected function _sessionSqlMode($dbConn) {
+        $res = $dbConn->Execute('SELECT @@SESSION.sql_mode');
+        if ($res && is_object($res) && !$res->EOF) {
+            return (string) $res->fields[0];
+        }
+        return null;
+    }
+
+    protected function _setSessionSqlMode($dbConn, $sqlMode) {
+        if (null !== $sqlMode && $sqlMode !== $this->_sessionSqlMode($dbConn)) {
+            $dbConn->Execute('SET SESSION sql_mode = ' . $dbConn->qstr($sqlMode));
+        }
+    }
+
+    /*
+     * Runs a migration before STRICT_FROM_MIGRATION without the strict and
+     * zero-date flags, and a later one in the server's mode.
+     */
+    protected function _setMigrationSqlMode($dbConn, $migrationNumber, $serverSqlMode) {
+        if (null === $serverSqlMode) {
+            return;
+        }
+        $mode = $serverSqlMode;
+        if ($migrationNumber < self::STRICT_FROM_MIGRATION) {
+            $flags = array_filter(explode(',', strtoupper($serverSqlMode)));
+            $mode = implode(',', array_diff($flags, self::$legacyOffModes));
+        }
+        $this->_setSessionSqlMode($dbConn, $mode);
     }
 
     /*
