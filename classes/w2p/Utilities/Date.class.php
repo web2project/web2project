@@ -91,12 +91,29 @@ class w2p_Utilities_Date extends Date {
     /**
      * Adds (+/-) a number of days to the current date.
      *
-     * @param int $n Positive or negative number of days
+     * Whole days move the calendar date and keep the clock time, so a loop
+     * from midnight stays on midnight across a daylight saving change
+     * (adding 86,400 seconds to midnight on the day DST ends gives 23:00
+     * the same day). A fractional part is still added as seconds.
+     *
+     * @param int|float $n Positive or negative number of days
      *
      * @author J. Christopher Pereira <kripper@users.sf.net>
      */
     public function addDays($n) {
-        $this->addSeconds($n*24*60*60);
+        $whole = (int) $n;      // truncates towards zero: -2.5 gives -2
+        if (0 != $whole) {
+            // wall-clock arithmetic: UTC has no DST to skip or repeat an hour
+            $date = new DateTime(sprintf('%04d-%02d-%02d %02d:%02d:%02d',
+                $this->year, $this->month, $this->day, $this->hour, $this->minute, $this->second),
+                new DateTimeZone('UTC'));
+            $date->modify(sprintf('%+d days', $whole));
+            $this->setDate($date->format('Y-m-d H:i:s'));
+        }
+        $fraction = $n - $whole;
+        if (0 != $fraction) {
+            $this->addSeconds((int) round($fraction * 24 * 60 * 60));
+        }
     }
 
     /**
