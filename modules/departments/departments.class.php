@@ -102,10 +102,11 @@ class CDepartment extends w2p_Core_BaseObject
             $q->addWhere('dept_type = ' . (int) $deptType);
         }
         if ($searchString != '') {
-            $q->addWhere("dept_name LIKE '%$searchString%'");
+            $q->addWhere('dept_name LIKE ' . $q->quoteLike($searchString));
         }
+        $ownerId = is_numeric($ownerId) ? (int) $ownerId : 0;
         if ($ownerId > 0) {
-            $q->addWhere('dept_owner = '.$ownerId);
+            $q->addWhere('dept_owner = ' . $ownerId);
         }
         $q->addGroup('dept_id');
         $orderby = (property_exists($this, $orderby) || in_array($orderby, array('countp', 'inactive')))

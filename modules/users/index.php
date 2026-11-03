@@ -26,6 +26,11 @@ if (isset($_GET['orderby'])) {
 	$AppUI->setState('UserIdxOrderby', w2PgetParam($_GET, 'orderby', null));
 }
 $orderby = $AppUI->getState('UserIdxOrderby') ? $AppUI->getState('UserIdxOrderby') : 'user_username';
+// The list sorts by one column, named in the URL. It goes into ORDER BY
+// unquoted, so anything but a plain column name is ignored.
+if (!is_string($orderby) || !preg_match('/^[A-Za-z_][A-Za-z0-9_]*$/', $orderby)) {
+    $orderby = 'user_username';
+}
 $orderby = ($tab == 3 || ($orderby != 'date_time_in' && $orderby != 'user_ip')) ? $orderby : 'user_username';
 
 // Pull First Letters

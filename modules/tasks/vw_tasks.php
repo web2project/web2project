@@ -98,7 +98,8 @@ if (isset($task_owner) && (int) $task_owner > 0) {
 
 if (($project_id || !$task_id) && !$min_view) {
     if ($search_text = $AppUI->getState('tasks_search_string')) {
-        $q->addWhere('( task_name LIKE (\'%' . $search_text . '%\') OR task_description LIKE (\'%' . $search_text . '%\') )');
+        $pattern = $q->quoteLike($search_text);
+        $q->addWhere('(task_name LIKE ' . $pattern . ' OR task_description LIKE ' . $pattern . ')');
     }
 }
 

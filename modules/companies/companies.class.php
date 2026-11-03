@@ -113,7 +113,7 @@ class CCompany extends w2p_Core_BaseObject {
             $q->addWhere('c.company_type = ' . (int) $companyType);
         }
         if ($searchString != '') {
-            $q->addWhere('c.company_name LIKE "%'.$searchString.'%"');
+            $q->addWhere('c.company_name LIKE ' . $q->quoteLike($searchString));
         }
         if ($ownerId > 0) {
             $q->addWhere('c.company_owner = '.$ownerId);

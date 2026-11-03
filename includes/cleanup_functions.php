@@ -1866,7 +1866,8 @@ function projects_list_data($user_id = false)
         $q->addWhere('pr.project_owner = ' . (int) $owner);
     }
     if (mb_trim($search_text)) {
-        $q->addWhere('pr.project_name LIKE \'%' . $search_text . '%\' OR pr.project_description LIKE \'%' . $search_text . '%\'');
+        $pattern = $q->quoteLike($search_text);
+        $q->addWhere('(pr.project_name LIKE ' . $pattern . ' OR pr.project_description LIKE ' . $pattern . ')');
     }
     // Show Projects where the Project Owner is in the given department
     if ($addPwOiD && !empty($owner_ids)) {
@@ -2448,9 +2449,10 @@ function getUsers($stub = null, $where = null, $orderby = 'contact_first_name, c
          contact_display_name as contact_name, contact_email, user_type');
     $q->addJoin('contacts', 'con', 'con.contact_id = user_contact', 'inner');
     if ($stub) {
-        $q->addWhere('(UPPER(user_username) LIKE \'' . $stub . '%\' or UPPER(contact_first_name) LIKE \'' . $stub . '%\' OR UPPER(contact_last_name) LIKE \'' . $stub . '%\')');
+        $stub = $q->quoteLike($stub, 'starts');
+        $q->addWhere('(UPPER(user_username) LIKE ' . $stub . ' OR UPPER(contact_first_name) LIKE ' . $stub . ' OR UPPER(contact_last_name) LIKE ' . $stub . ')');
     } elseif ($where) {
-        $where = $q->quote('%' . $where . '%');
+        $where = $q->quoteLike($where);
         $q->addWhere('(UPPER(user_username) LIKE ' . $where . ' OR UPPER(contact_first_name) LIKE ' . $where . ' OR UPPER(contact_last_name) LIKE ' . $where . ')');
     }
 
@@ -4338,7 +4340,8 @@ function __extract_from_projects_gantt2($department, $addPwOiD, $project_type, $
     }
     $search_text = $AppUI->getState('projsearchtext') !== null ? $AppUI->getState('projsearchtext') : '';
     if (mb_trim($search_text)) {
-        $q->addWhere('pr.project_name LIKE \'%' . $search_text . '%\' OR pr.project_description LIKE \'%' . $search_text . '%\'');
+        $pattern = $q->quoteLike($search_text);
+        $q->addWhere('(pr.project_name LIKE ' . $pattern . ' OR pr.project_description LIKE ' . $pattern . ')');
     }
     $q = $pjobj->setAllowedSQL($AppUI->user_id, $q, null, 'pr');
     $q->addGroup('pr.project_id');
