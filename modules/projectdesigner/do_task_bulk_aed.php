@@ -6,6 +6,12 @@ if (!defined('W2P_BASE_DIR')) {
 // @todo    refactor to use a core controller
 // @todo    remove database query
 global $AppUI;
+/** @var w2p_Core_CAppUI $AppUI */
+
+// Ids from the request, as ints (0 for anything that isn't a number).
+$toInt = static function ($value): int {
+    return is_numeric($value) ? (int) $value : 0;
+};
 
 $project_id                          = w2PgetParam($_POST, 'project_id', 0);
 $selected                            = w2PgetParam($_POST, 'selected_task', array());
@@ -55,10 +61,44 @@ $updateFields = array('bulk_task_percent_complete' => $bulk_task_percent_complet
         'bulk_task_access' => $bulk_task_access, 'bulk_task_type' => $bulk_task_type,
     );
 
+$result = true;
+$refused = array();
+
+// The tasks named as the new parent or dependency are changed too (their
+// dynamics and dependents are recalculated), so they must be tasks this
+// user may edit. Checked once, before any task is touched.
+$parent_task = null;
+if ($bulk_task_parent > 0) {
+    $parent_task = new CTask();
+    if (!$parent_task->load($bulk_task_parent) || !$parent_task->canEdit()) {
+        $refused[] = $bulk_task_parent;
+        $bulk_task_parent = 0;
+        $parent_task = null;
+    }
+}
+$dependency_task = null;
+if (is_scalar($bulk_task_dependency) && '' !== (string) $bulk_task_dependency && '0' !== (string) $bulk_task_dependency) {
+    $dependency_task = new CTask();
+    if (!$dependency_task->load($toInt($bulk_task_dependency)) || !$dependency_task->canEdit()) {
+        $refused[] = $toInt($bulk_task_dependency);
+        $bulk_task_dependency = '';
+        $dependency_task = null;
+    }
+}
+
 if (is_array($selected) && count($selected)) {
-    $upd_task = new CTask();
     foreach ($selected as $val) {
-        $upd_task->load($val);
+        $val = $toInt($val);
+        // Every action below changes this task, several of them through
+        // queries of their own rather than store(), so it must be a task
+        // this user may edit - not only "edit" on the Tasks module, which is
+        // all that was checked above (GHSA-48ww-5h48-vwx9). A fresh object
+        // each time: a failed load() keeps the previous task's fields.
+        $upd_task = new CTask();
+        if (!$val || !$upd_task->load($val) || !$upd_task->canEdit()) {
+            $refused[] = $val;
+            continue;
+        }
 
         foreach ($updateFields as $name => $value) {
             if ($value != '' && ((int) $_POST[$name] == (int) $value)) {
@@ -131,14 +171,24 @@ if (is_array($selected) && count($selected)) {
         //Action: Move to Project
         if (isset($_POST['bulk_task_project']) && $bulk_task_project != '' && $bulk_task_project) {
             if ($upd_task->task_id) {
-				$upd_task->moveTaskBetweenProjects($upd_task->task_id,$upd_task->task_project,$bulk_task_project);
+                // Checks the target project itself and changes nothing when refused.
+                if (!$upd_task->moveTaskBetweenProjects($upd_task->task_id, $upd_task->task_project, $bulk_task_project)) {
+                    $refused[] = $val;
+                    continue;
+                }
             }
         }
         //Action: Change parent
         if ($bulk_task_parent) {
-            $new_parent = (-1 == $bulk_task_parent) ? $upd_task->task_id : $bulk_task_parent;
-            $upd_task->task_parent = $new_parent;
-            $result = $upd_task->store();
+            // A parent from another project would make this task a subtask
+            // there; only a task of the same project can be the parent.
+            if (null !== $parent_task && $toInt($parent_task->task_project) != $toInt($upd_task->task_project)) {
+                $refused[] = $val;
+            } else {
+                $new_parent = (-1 == $bulk_task_parent) ? $upd_task->task_id : $bulk_task_parent;
+                $upd_task->task_parent = $new_parent;
+                $result = $upd_task->store();
+            }
         }
 
         //Action: Change dependency
@@ -147,24 +197,26 @@ if (is_array($selected) && count($selected)) {
                 //If parent is self task
                 if ($bulk_task_dependency == '0') {
                     $upd_task->task_dynamic = 0;
-                    $upd_task->store();
-                    $q = new w2p_Database_Query;
-                    $q->setDelete('task_dependencies');
-                    $q->addWhere('dependencies_task_id=' . $upd_task->task_id);
-                    $q->exec();
-                } elseif (!($bulk_task_dependency == $upd_task->task_id)) {
+                    if ($upd_task->store()) {
+                        $q = new w2p_Database_Query;
+                        $q->setDelete('task_dependencies');
+                        $q->addWhere('dependencies_task_id=' . $val);
+                        $q->exec();
+                    } else {
+                        $refused[] = $val;
+                    }
+                } elseif (null !== $dependency_task && $toInt($dependency_task->task_id) != $val) {
                     $upd_task->task_dynamic = 31;
-                    $upd_task->store();
-                    $q = new w2p_Database_Query;
-                    $q->addTable('task_dependencies');
-                    $q->addReplace('dependencies_task_id', $upd_task->task_id);
-                    $q->addReplace('dependencies_req_task_id', $bulk_task_dependency);
-                    $q->exec();
-                    //Lets recalc the dependency
-                    $dep_task = new CTask();
-                    $dep_task->load($bulk_task_dependency);
-                    if ($dep_task->task_id) {
-                        $dep_task->shiftDependentTasks();
+                    if ($upd_task->store()) {
+                        $q = new w2p_Database_Query;
+                        $q->addTable('task_dependencies');
+                        $q->addReplace('dependencies_task_id', $val);
+                        $q->addReplace('dependencies_req_task_id', $toInt($dependency_task->task_id));
+                        $q->exec();
+                        //Lets recalc the dependency
+                        $dependency_task->shiftDependentTasks();
+                    } else {
+                        $refused[] = $val;
                     }
                 }
                 $upd_task->updateDynamics();
@@ -318,6 +370,11 @@ if (is_array($selected) && count($selected)) {
         }
         $AppUI->setMsg($upd_task->getError(), UI_MSG_ERROR);
 	}
+}
+if (count($refused)) {
+    $refused = array_unique(array_filter($refused));
+    $AppUI->setMsg($AppUI->_('You are not allowed to change these tasks; they were left unchanged') . ': '
+        . implode(', ', $refused), UI_MSG_ERROR, true);
 }
 if (!$result) {
     $AppUI->setMsg($result, UI_MSG_ERROR);

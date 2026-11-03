@@ -60,8 +60,11 @@ foreach ($elements as $element => $on) {
 			$tline->task_status = '-1';
 		}
 
+        // store() refuses a project this user may not add tasks to.
         $result = $tline->store();
-        $tline->updateAssigned($AppUI->user_id, array($AppUI->user_id => 100));
+        if ($result) {
+            $tline->updateAssigned($AppUI->user_id, array($AppUI->user_id => 100));
+        }
         if (count($tline->getError())) {
             $taskErrors[] = $tline->getError();
         }

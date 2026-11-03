@@ -1369,6 +1369,72 @@ class CTask extends w2p_Core_BaseObject
         return $result;
     }
 
+    /**
+     * A task can be added to a project by a user who may add tasks and may
+     * see that project: the rule the task add/edit page applies. Every
+     * handler that stores a new task goes through this, not only that page
+     * (GHSA-48ww-5h48-vwx9). Before a project is chosen (the blank add page)
+     * only the Tasks permission applies; isValid() refuses a task without one.
+     *
+     * @return bool
+     */
+    public function canCreate()
+    {
+        $project_id = is_numeric($this->task_project) ? (int) $this->task_project : 0;
+
+        return parent::canCreate() && (0 == $project_id || $this->canUseProject($project_id));
+    }
+
+    /**
+     * Edit permission on this task (which covers its project), and, when a
+     * save moves it to another project, the right to add a task there.
+     * bind() takes task_project from the request, so the project is compared
+     * with the stored one.
+     *
+     * @return bool
+     */
+    public function canEdit()
+    {
+        if (!parent::canEdit()) {
+            return false;
+        }
+
+        $task_id = (int) $this->task_id;
+        $project_id = is_numeric($this->task_project) ? (int) $this->task_project : 0;
+        if ($task_id && $project_id) {
+            $q = $this->_getQuery();
+            $q->addTable('tasks');
+            $q->addQuery('task_project');
+            $q->addWhere('task_id = ' . $task_id);
+            $stored = $q->loadResult();
+            $q->clear();
+            $stored_project = is_numeric($stored) ? (int) $stored : 0;
+            if ($stored_project && $stored_project != $project_id) {
+                return parent::canCreate() && $this->canUseProject($project_id);
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * Whether the current user may see the project, which the task pages
+     * require before a task is added to it or moved into it.
+     *
+     * @param int $project_id
+     *
+     * @return bool
+     */
+    protected function canUseProject($project_id)
+    {
+        $perms = $this->_perms;
+        if ($project_id <= 0 || !is_object($perms) || !method_exists($perms, 'checkModuleItem')) {
+            return false;
+        }
+
+        return (bool) $perms->checkModuleItem('projects', 'view', $project_id);
+    }
+
     public function canAccess($user_id = 0, $task_data_not_loaded=true)
     {
         // Let's see if this user has admin privileges
