@@ -1,5 +1,3 @@
-[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/web2project/web2project/badges/quality-score.png?s=851af835fd13ef11ff20b848ff4aba6fd5325d61)](https://scrutinizer-ci.com/g/web2project/web2project/)
-
 web2Project
 ================
 
