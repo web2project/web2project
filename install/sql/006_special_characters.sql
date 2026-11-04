@@ -27,42 +27,28 @@ ALTER TABLE `forum_visits` CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_ci
 ALTER TABLE `forum_watch` CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_ci;
 ALTER TABLE `gacl_acl` CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_ci;
 ALTER TABLE `gacl_acl_sections` CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_ci;
-ALTER TABLE `gacl_acl_seq` CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_ci;
 ALTER TABLE `gacl_aco` CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_ci;
 ALTER TABLE `gacl_aco_map` CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_ci;
 ALTER TABLE `gacl_aco_sections` CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_ci;
-ALTER TABLE `gacl_aco_sections_seq` CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_ci;
-ALTER TABLE `gacl_aco_seq` CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_ci;
 ALTER TABLE `gacl_aro` CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_ci;
 ALTER TABLE `gacl_aro_groups` CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_ci;
-ALTER TABLE `gacl_aro_groups_id_seq` CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_ci;
 ALTER TABLE `gacl_aro_groups_map` CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_ci;
 ALTER TABLE `gacl_aro_map` CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_ci;
 ALTER TABLE `gacl_aro_sections` CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_ci;
-ALTER TABLE `gacl_aro_sections_seq` CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_ci;
-ALTER TABLE `gacl_aro_seq` CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_ci;
 ALTER TABLE `gacl_axo` CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_ci;
 ALTER TABLE `gacl_axo_groups` CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_ci;
-ALTER TABLE `gacl_axo_groups_id_seq` CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_ci;
 ALTER TABLE `gacl_axo_groups_map` CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_ci;
 ALTER TABLE `gacl_axo_map` CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_ci;
 ALTER TABLE `gacl_axo_sections` CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_ci;
-ALTER TABLE `gacl_axo_sections_seq` CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_ci;
-ALTER TABLE `gacl_axo_seq` CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_ci;
 ALTER TABLE `gacl_groups_aro_map` CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_ci;
 ALTER TABLE `gacl_groups_axo_map` CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_ci;
 ALTER TABLE `gacl_permissions` CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_ci;
 ALTER TABLE `gacl_phpgacl` CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_ci;
-ALTER TABLE `history` CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_ci;
-ALTER TABLE `links` CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_ci;
 ALTER TABLE `modules` CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_ci;
 ALTER TABLE `projects` CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_ci;
 ALTER TABLE `project_contacts` CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_ci;
 ALTER TABLE `project_departments` CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_ci;
 ALTER TABLE `project_designer_options` CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_ci;
-ALTER TABLE `resources` CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_ci;
-ALTER TABLE `resource_tasks` CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_ci;
-ALTER TABLE `resource_types` CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_ci;
 ALTER TABLE `sessions` CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_ci;
 ALTER TABLE `syskeys` CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_ci;
 ALTER TABLE `sysvals` CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_ci;
@@ -87,3 +73,93 @@ ALTER TABLE `user_task_pin` CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_c
 ALTER TABLE `w2pversion` CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_ci;
 
 INSERT INTO w2pversion (code_version, code_revision, last_code_update) VALUES ('1.0.0', 489, now());
+
+-- These tables are only there once something has created them: a fresh install
+-- does (001), but a converted dotProject database may not have them yet. The
+-- phpGACL sequence tables are made by ADOdb the first time an id is needed, and
+-- the History, Links and Resources modules create theirs when they are
+-- installed, already in utf8. So each is converted only if it exists.
+
+SET @w2p_sql = IF((SELECT COUNT(*) FROM information_schema.tables WHERE table_schema = DATABASE() AND table_name = 'gacl_acl_seq') > 0,
+    'ALTER TABLE `gacl_acl_seq` CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_ci', 'DO 0');
+PREPARE w2p_stmt FROM @w2p_sql;
+EXECUTE w2p_stmt;
+DEALLOCATE PREPARE w2p_stmt;
+
+SET @w2p_sql = IF((SELECT COUNT(*) FROM information_schema.tables WHERE table_schema = DATABASE() AND table_name = 'gacl_aco_sections_seq') > 0,
+    'ALTER TABLE `gacl_aco_sections_seq` CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_ci', 'DO 0');
+PREPARE w2p_stmt FROM @w2p_sql;
+EXECUTE w2p_stmt;
+DEALLOCATE PREPARE w2p_stmt;
+
+SET @w2p_sql = IF((SELECT COUNT(*) FROM information_schema.tables WHERE table_schema = DATABASE() AND table_name = 'gacl_aco_seq') > 0,
+    'ALTER TABLE `gacl_aco_seq` CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_ci', 'DO 0');
+PREPARE w2p_stmt FROM @w2p_sql;
+EXECUTE w2p_stmt;
+DEALLOCATE PREPARE w2p_stmt;
+
+SET @w2p_sql = IF((SELECT COUNT(*) FROM information_schema.tables WHERE table_schema = DATABASE() AND table_name = 'gacl_aro_groups_id_seq') > 0,
+    'ALTER TABLE `gacl_aro_groups_id_seq` CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_ci', 'DO 0');
+PREPARE w2p_stmt FROM @w2p_sql;
+EXECUTE w2p_stmt;
+DEALLOCATE PREPARE w2p_stmt;
+
+SET @w2p_sql = IF((SELECT COUNT(*) FROM information_schema.tables WHERE table_schema = DATABASE() AND table_name = 'gacl_aro_sections_seq') > 0,
+    'ALTER TABLE `gacl_aro_sections_seq` CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_ci', 'DO 0');
+PREPARE w2p_stmt FROM @w2p_sql;
+EXECUTE w2p_stmt;
+DEALLOCATE PREPARE w2p_stmt;
+
+SET @w2p_sql = IF((SELECT COUNT(*) FROM information_schema.tables WHERE table_schema = DATABASE() AND table_name = 'gacl_aro_seq') > 0,
+    'ALTER TABLE `gacl_aro_seq` CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_ci', 'DO 0');
+PREPARE w2p_stmt FROM @w2p_sql;
+EXECUTE w2p_stmt;
+DEALLOCATE PREPARE w2p_stmt;
+
+SET @w2p_sql = IF((SELECT COUNT(*) FROM information_schema.tables WHERE table_schema = DATABASE() AND table_name = 'gacl_axo_groups_id_seq') > 0,
+    'ALTER TABLE `gacl_axo_groups_id_seq` CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_ci', 'DO 0');
+PREPARE w2p_stmt FROM @w2p_sql;
+EXECUTE w2p_stmt;
+DEALLOCATE PREPARE w2p_stmt;
+
+SET @w2p_sql = IF((SELECT COUNT(*) FROM information_schema.tables WHERE table_schema = DATABASE() AND table_name = 'gacl_axo_sections_seq') > 0,
+    'ALTER TABLE `gacl_axo_sections_seq` CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_ci', 'DO 0');
+PREPARE w2p_stmt FROM @w2p_sql;
+EXECUTE w2p_stmt;
+DEALLOCATE PREPARE w2p_stmt;
+
+SET @w2p_sql = IF((SELECT COUNT(*) FROM information_schema.tables WHERE table_schema = DATABASE() AND table_name = 'gacl_axo_seq') > 0,
+    'ALTER TABLE `gacl_axo_seq` CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_ci', 'DO 0');
+PREPARE w2p_stmt FROM @w2p_sql;
+EXECUTE w2p_stmt;
+DEALLOCATE PREPARE w2p_stmt;
+
+SET @w2p_sql = IF((SELECT COUNT(*) FROM information_schema.tables WHERE table_schema = DATABASE() AND table_name = 'history') > 0,
+    'ALTER TABLE `history` CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_ci', 'DO 0');
+PREPARE w2p_stmt FROM @w2p_sql;
+EXECUTE w2p_stmt;
+DEALLOCATE PREPARE w2p_stmt;
+
+SET @w2p_sql = IF((SELECT COUNT(*) FROM information_schema.tables WHERE table_schema = DATABASE() AND table_name = 'links') > 0,
+    'ALTER TABLE `links` CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_ci', 'DO 0');
+PREPARE w2p_stmt FROM @w2p_sql;
+EXECUTE w2p_stmt;
+DEALLOCATE PREPARE w2p_stmt;
+
+SET @w2p_sql = IF((SELECT COUNT(*) FROM information_schema.tables WHERE table_schema = DATABASE() AND table_name = 'resources') > 0,
+    'ALTER TABLE `resources` CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_ci', 'DO 0');
+PREPARE w2p_stmt FROM @w2p_sql;
+EXECUTE w2p_stmt;
+DEALLOCATE PREPARE w2p_stmt;
+
+SET @w2p_sql = IF((SELECT COUNT(*) FROM information_schema.tables WHERE table_schema = DATABASE() AND table_name = 'resource_tasks') > 0,
+    'ALTER TABLE `resource_tasks` CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_ci', 'DO 0');
+PREPARE w2p_stmt FROM @w2p_sql;
+EXECUTE w2p_stmt;
+DEALLOCATE PREPARE w2p_stmt;
+
+SET @w2p_sql = IF((SELECT COUNT(*) FROM information_schema.tables WHERE table_schema = DATABASE() AND table_name = 'resource_types') > 0,
+    'ALTER TABLE `resource_types` CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_ci', 'DO 0');
+PREPARE w2p_stmt FROM @w2p_sql;
+EXECUTE w2p_stmt;
+DEALLOCATE PREPARE w2p_stmt;
