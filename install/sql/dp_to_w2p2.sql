@@ -624,3 +624,18 @@ UPDATE `custom_fields_struct` SET field_published = 1;
 
 # 20090309
 UPDATE `projects` SET `project_parent` = `project_id`, `project_original_parent` = `project_id`;
+
+-- Columns a web2project install has from 001 that dotProject never had and
+-- nothing above adds, so a converted database matches a fresh install before
+-- the migrations run. Without queue_module_type, adding anything to the event
+-- queue failed on converted sites. Definitions as in 001.
+ALTER TABLE `companies` ADD `company_private` int(1) unsigned NOT NULL default '0';
+ALTER TABLE `custom_fields_struct` ADD `field_tab` int(10) NOT NULL default '0';
+ALTER TABLE `event_queue` ADD `queue_module_type` varchar(20) NOT NULL default '';
+ALTER TABLE `events` ADD `event_url` varchar(255) default NULL;
+ALTER TABLE `events` ADD `event_task` int(10) default NULL;
+ALTER TABLE `events` ADD `event_location` varchar(255) NOT NULL default '';
+ALTER TABLE `forum_watch` ADD `watch_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT FIRST, ADD PRIMARY KEY (`watch_id`);
+ALTER TABLE `task_log` ADD `task_log_company` int(10) unsigned NOT NULL default '0';
+ALTER TABLE `tasks` ADD `task_dep_reset_dates` tinyint(1) default '0';
+ALTER TABLE `users` ADD `user_empireint_special` int(1) NOT NULL default '0';
