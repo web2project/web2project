@@ -14,7 +14,7 @@
     ],
     "require": {
         "adodb/adodb-php": "^5.22",
-        "nesbot/carbon": "^2.72"
+        "nesbot/carbon": "^3.8"
     },
     "require-dev": {
         "phing/phing": "3.*",
