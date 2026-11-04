@@ -25,7 +25,13 @@ ALTER TABLE `history` CHANGE `history_date` `history_datetime` DATETIME NOT NULL
 UPDATE `module_config` SET `module_config_value` = 'history_datetime' WHERE `module_config_value` = 'history_date';
 
 -- links
-ALTER TABLE `links` CHANGE `link_date` `link_datetime` DATETIME NULL DEFAULT CURRENT_TIMESTAMP;
+-- Only where links exists: a converted dotProject database may not have it yet,
+-- and the Links module creates it with link_datetime when it is installed.
+SET @w2p_sql = IF((SELECT COUNT(*) FROM information_schema.tables WHERE table_schema = DATABASE() AND table_name = 'links') > 0,
+    'ALTER TABLE `links` CHANGE `link_date` `link_datetime` DATETIME NULL DEFAULT CURRENT_TIMESTAMP', 'DO 0');
+PREPARE w2p_stmt FROM @w2p_sql;
+EXECUTE w2p_stmt;
+DEALLOCATE PREPARE w2p_stmt;
 UPDATE `module_config` SET `module_config_value` = 'link_datetime' WHERE `module_config_value` = 'link_date';
 
 -- user_access_log
