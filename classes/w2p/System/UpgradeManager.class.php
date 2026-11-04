@@ -296,6 +296,15 @@ class w2p_System_UpgradeManager {
             array_unshift($steps, 'dp20_to_201.sql', 'dp201_to_202.sql');
         }
 
+        /*
+         * dotProject's tables come from MySQL 5 and hold zero dates, so the
+         * conversion runs in the same mode as migrations before
+         * STRICT_FROM_MIGRATION: under MySQL 8's NO_ZERO_DATE any ALTER on such
+         * a table fails. The server's mode is back before the upgrade runs.
+         */
+        $serverSqlMode = $this->_sessionSqlMode($dbConn);
+        $this->_setMigrationSqlMode($dbConn, 0, $serverSqlMode);
+
         $this->failure = null;
         $this->startVersion = 0;
         $this->pendingMigrations = array_values(array_diff($steps, array('scrub')));
@@ -306,12 +315,14 @@ class w2p_System_UpgradeManager {
             }
             $errorMessages = $this->_applySQLUpdates($step, $dbConn);
             if (null !== $this->failure) {
+                $this->_setSessionSqlMode($dbConn, $serverSqlMode);
                 $this->failure['note'] = trim($this->failure['note'] .
                     ' The dotProject conversion stopped here, so the web2project upgrade did not run.');
                 return $errorMessages;
             }
             $this->updatesApplied[] = $step;
         }
+        $this->_setSessionSqlMode($dbConn, $serverSqlMode);
 
         $errorMessages = $this->upgradeSystem();
         $allErrors = array_merge($allErrors, $errorMessages);

@@ -136,6 +136,26 @@ class w2p_TestableUpgradeManager extends w2p_System_UpgradeManager
     {
         return $this->_applySQL($this->files[$sqlfile], $sqlfile, $dbConn);
     }
+
+    /* For convertDotProject(): the connection it opens, and the sql_mode upgradeSystem() was called in. */
+    public $conn;
+    public $sqlModeAtUpgrade = false;
+
+    protected function _openDBConnection()
+    {
+        return $this->conn;
+    }
+
+    protected function _scrubDotProjectData($dbConn)
+    {
+        return 0;
+    }
+
+    public function upgradeSystem()
+    {
+        $this->sqlModeAtUpgrade = $this->conn->sqlMode;
+        return array();
+    }
 }
 
 class w2p_System_UpgradeManagerMigrationsTest extends \PHPUnit\Framework\TestCase
@@ -317,6 +337,51 @@ class w2p_System_UpgradeManagerMigrationsTest extends \PHPUnit\Framework\TestCas
 
         $this->assertNotEquals(array(), $this->manager->run(array_keys($this->manager->files), 34, $this->conn));
         $this->assertSame($serverMode, $this->conn->sqlMode);
+    }
+
+    private function dotProjectConversion($serverMode)
+    {
+        $this->conn->sqlMode = $serverMode;
+        $this->conn->failures = array('FROM dpversion' => array(1146, "Table 'dpversion' doesn't exist"));
+        $this->manager->conn = $this->conn;
+        $this->manager->files = array(
+            'dp21rc1_to_21rc2.sql' => 'ALTER TABLE contacts ADD a INT;',
+            'dp_to_w2p1.sql' => 'ALTER TABLE contacts ADD b INT;',
+            'dp_to_w2p2.sql' => 'ALTER TABLE contacts ADD c INT;',
+        );
+    }
+
+    /*
+     * dotProject's tables come from MySQL 5 and hold zero dates, so the
+     * conversion runs like a migration before 056; the upgrade after it starts
+     * in the server's mode.
+     */
+    public function testDotProjectConversionRunsWithoutStrictModes()
+    {
+        $serverMode = 'STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION';
+        $this->dotProjectConversion($serverMode);
+
+        $this->assertEquals(array(), $this->manager->convertDotProject());
+
+        $ran = array();
+        foreach ($this->conn->modes as $entry) {
+            $ran[$entry[0]] = $entry[1];
+        }
+        foreach (array('a', 'b', 'c') as $column) {
+            $this->assertSame('NO_ENGINE_SUBSTITUTION', $ran['ALTER TABLE contacts ADD ' . $column . ' INT']);
+        }
+        $this->assertSame($serverMode, $this->manager->sqlModeAtUpgrade);
+    }
+
+    public function testServerModeIsRestoredWhenTheConversionFails()
+    {
+        $serverMode = 'STRICT_TRANS_TABLES,NO_ZERO_DATE';
+        $this->dotProjectConversion($serverMode);
+        $this->conn->failures['ADD b'] = array(1054, "Unknown column 'x'");
+
+        $this->assertNotEquals(array(), $this->manager->convertDotProject());
+        $this->assertSame($serverMode, $this->conn->sqlMode);
+        $this->assertFalse($this->manager->sqlModeAtUpgrade);
     }
 
     /*
