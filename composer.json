@@ -4,7 +4,7 @@
     "type": "application",
     "description": "web-based project management system",
     "keywords": ["gantt charts", "task tracking", "time tracking", "project planning"],
-    "homepage": "http://web2project.net",
+    "homepage": "https://web2project.net",
     "license": "Clear BSD",
     "authors": [
         {
@@ -25,8 +25,5 @@
         "tedivm/jshrink": "^1.7",
         "pear/archive_tar": "^1.5",
         "phpunit/phpunit": "^11.5"
-    },
-    "autoload": {
-        "psr-0": { "Web2project": "src/"}
     }
 }
