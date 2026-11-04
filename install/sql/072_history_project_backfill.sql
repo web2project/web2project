@@ -28,9 +28,15 @@ UPDATE `history` h JOIN `files` f ON f.`file_id` = h.`history_item`
   SET h.`history_project` = f.`file_project`
   WHERE h.`history_table` = 'files' AND h.`history_project` = 0 AND f.`file_project` > 0;
 
-UPDATE `history` h JOIN `links` l ON l.`link_id` = h.`history_item`
+-- Only where links exists: a converted dotProject database may not have it
+-- until the Links module is installed, and then it has no history to fill.
+SET @w2p_sql = IF((SELECT COUNT(*) FROM information_schema.tables WHERE table_schema = DATABASE() AND table_name = 'links') > 0,
+    'UPDATE `history` h JOIN `links` l ON l.`link_id` = h.`history_item`
   SET h.`history_project` = l.`link_project`
-  WHERE h.`history_table` = 'links' AND h.`history_project` = 0 AND l.`link_project` > 0;
+  WHERE h.`history_table` = ''links'' AND h.`history_project` = 0 AND l.`link_project` > 0', 'DO 0');
+PREPARE w2p_stmt FROM @w2p_sql;
+EXECUTE w2p_stmt;
+DEALLOCATE PREPARE w2p_stmt;
 
 UPDATE `history` h JOIN `events` e ON e.`event_id` = h.`history_item`
   SET h.`history_project` = e.`event_project`
