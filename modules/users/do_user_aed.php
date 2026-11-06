@@ -66,9 +66,14 @@ if ($result) {
         if ($isNewUser && w2PgetParam($_POST, 'send_user_mail', 0)) {
             notifyNewUserCredentials($contact->contact_email, $contact->contact_first_name, $obj->user_username, $_POST['user_password']);
 		}
-		if (isset($_REQUEST['user_role']) && $_REQUEST['user_role']) {
+		// The add form sets the first role of a new account. Roles of an
+		// existing account are changed only through do_userrole_aed, so a
+		// user saving their own profile cannot give themselves a role.
+		$user_role = (int) w2PgetParam($_POST, 'user_role', 0);
+		if ($isNewUser && $user_role) {
 			$perms = &$AppUI->acl();
-			if ($perms->insertUserRole($_REQUEST['user_role'], $obj->user_id)) {
+			if ($perms->canChangeUserRole($user_role, $obj->user_id, true)
+				&& $perms->insertUserRole($user_role, $obj->user_id)) {
 				$AppUI->setMsg('', UI_MSG_ALERT, true);
 			} else {
 				$AppUI->setMsg('failed to add role', UI_MSG_ERROR);

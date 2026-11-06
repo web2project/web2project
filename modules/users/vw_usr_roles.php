@@ -6,22 +6,20 @@ if (!defined('W2P_BASE_DIR')) {
 // @todo    convert to template
 
 global $AppUI, $user_id, $user_name, $canDelete, $tab;
- $canEdit = canEdit('users');
 $perms = &$AppUI->acl();
+$canEdit = $perms->checkModuleItem('users', 'edit', $user_id);
 $user_roles = $perms->getUserRoles($user_id);
 $crole = new CSystem_Role;
 $roles = $crole->getRoles();
-// Format the roles for use in arraySelect
+// Only offer the roles this user may grant on this account
+// (same rules as do_userrole_aed).
 $roles_arr = array();
 foreach ($roles as $role) {
-	if ($role['name'] != 'Administrator') {
+    if ($canEdit && $perms->canChangeUserRole($role['id'], $user_id)) {
         $roles_arr[$role['id']] = $role['name'];
-    } else {
-        if ($perms->checkModuleItem('system', 'edit')) {
-            $roles_arr[$role['id']] = $role['name'];
-        }
     }
 }
+$canEdit = $canEdit && count($roles_arr) > 0;
 
 ?>
 
@@ -61,7 +59,7 @@ function clearIt(){
                 foreach ($user_roles as $row) {
                     $buf = "<td>" . $row['name'] . "</td>";
                     $buf .= '<td nowrap>';
-                    if ($canEdit) {
+                    if ($canEdit && isset($roles_arr[$row['id']])) {
                         $buf .= "<a href=\"javascript:delRole({$row['id']});\" title=\"" . $AppUI->_('delete') . "\">" . w2PshowImage('icons/stock_delete-16.png', 16, 16, '') . '</a>';
                     }
                     $buf .= '</td>';

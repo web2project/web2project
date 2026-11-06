@@ -500,8 +500,70 @@ class w2p_Extensions_Permissions extends gacl_api
         return $res;
     }
 
+    /**
+     * Whether the logged-in user may add or remove $role_id on the account
+     * $user_id. Callers must check this before insertUserRole() or
+     * deleteUserRole() when the role or the account comes from a request.
+     *
+     * - The role must be one of the roles (a child of the 'role' group).
+     * - The acting user must be allowed to edit that specific account
+     *   ('add' instead of 'edit' for an account being created), so
+     *   item-level denies on users are honoured.
+     * - Without System edit rights, the acting user may not change their
+     *   own roles, grant or remove the Administrator role, or change the
+     *   roles of an account that holds the Administrator role.
+     *
+     * @param int  $role_id
+     * @param int  $user_id
+     * @param bool $newUser true when $user_id is an account being created
+     *
+     * @return bool
+     */
+    public function canChangeUserRole($role_id, $user_id, $newUser = false)
+    {
+        $role_id = (int) $role_id;
+        $user_id = (int) $user_id;
+        $actor   = (int) $GLOBALS['AppUI']->user_id;
+        if ($role_id < 1 || $user_id < 1 || $actor < 1) {
+            return false;
+        }
+
+        $role = $this->getRole($role_id);
+        if (!$role || (int) $role['parent_id'] !== (int) $this->get_group_id('role')) {
+            return false;
+        }
+
+        if ($newUser) {
+            if (!$this->checkModule('users', 'add', $actor)) {
+                return false;
+            }
+        } elseif (!$this->checkModuleItem('users', 'edit', $user_id, $actor)) {
+            return false;
+        }
+
+        if ($this->checkModule('system', 'edit', $actor)) {
+            return true;
+        }
+
+        if ($user_id === $actor || 'admin' == $role['value']) {
+            return false;
+        }
+        foreach ($this->getUserRoles($user_id) as $held) {
+            if ('admin' == $held['value']) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
     public function insertUserRole($role, $user)
     {
+        $role = (int) $role;
+        $user = (int) $user;
+        if ($role < 1 || $user < 1) {
+            return false;
+        }
         // Check to see if the user ACL exists first.
         $id = $this->get_object_id('user', $user, 'aro');
         if (!$id) {
@@ -531,6 +593,11 @@ class w2p_Extensions_Permissions extends gacl_api
 
     public function deleteUserRole($role, $user)
     {
+        $role = (int) $role;
+        $user = (int) $user;
+        if ($role < 1 || $user < 1) {
+            return false;
+        }
         $res = $this->del_group_object($role, 'user', $user);
         $recalc = $this->recalcPermissions($user);
         if (!$recalc) {
@@ -566,7 +633,7 @@ class w2p_Extensions_Permissions extends gacl_api
         $q->addQuery('a.value');
         $q->addWhere('g1.id = g2.group_id');
         $q->addWhere('a.id = g2.aro_id');
-        $q->addWhere('g1.id = ' . $role);
+        $q->addWhere('g1.id = ' . (int) $role);
         $q->addOrder('g1.value');
 
         $result = array();
