@@ -267,7 +267,12 @@ class CProject extends w2p_Core_BaseObject
     {
         $oCpy = new CCompany;
         $oCpy->overrideDatabase($this->_query);
-        $query = parent::setAllowedSQL($uid, $query, $index, $key);
+        // project_departments (joined below) also has a project_id column,
+        // so the project rule must name the projects table explicitly.
+        if (null === $index) {
+            $index = ($key ? $key . '.' : '') . 'project_id';
+        }
+        $query = parent::setAllowedSQL($uid, $query, $index);
         $query = $oCpy->setAllowedSQL($uid, $query, ($key ? $key . '.' : '') . 'project_company');
         //Department permissions
         $oDpt = new CDepartment();
@@ -383,10 +388,36 @@ class CProject extends w2p_Core_BaseObject
             $q->clear();
         }
 
-        $this->project_target_budget = array_sum($budgets);
-        $this->store();
+        // Only the total changes, so write it directly: a store() here was a
+        // second full save of the project, with its own history entry and
+        // a second pass of every hook_postStore() step.
+        $this->project_target_budget = self::cleanBudget(array_sum($budgets));
+        $q->addTable('projects');
+        $q->addUpdate('project_target_budget', $this->project_target_budget);
+        $q->addWhere('project_id = ' . (int) $this->project_id);
+        $q->exec();
+        $q->clear();
 
         return true;
+    }
+
+    /**
+     * The target budget as it is stored: currency formatting removed, and 0
+     * for anything else that isn't a whole number (unchanged from what
+     * hook_preStore() always did).
+     *
+     * @param mixed $budget
+     *
+     * @return mixed
+     */
+    protected static function cleanBudget($budget)
+    {
+        $budget = filterCurrency($budget);
+        if (!ctype_digit($budget) && !is_float($budget)) {
+            $budget = 0.0;
+        }
+
+        return $budget;
     }
 
     protected function hook_preCreate()
@@ -405,10 +436,7 @@ class CProject extends w2p_Core_BaseObject
         $this->project_active = (int) $this->project_active;
         $this->project_private = (int) $this->project_private;
 
-        $this->project_target_budget = filterCurrency($this->project_target_budget);
-	    if(!ctype_digit($this->project_target_budget) && !is_float($this->project_target_budget)) {
-            $this->project_target_budget = 0.0;
-        }
+        $this->project_target_budget = self::cleanBudget($this->project_target_budget);
         $this->project_url = str_replace(array('"', '"', '<', '>'), '', $this->project_url);
         $this->project_demo_url = str_replace(array('"', '"', '<', '>'), '', $this->project_demo_url);
         $this->project_owner = (int) $this->project_owner ? $this->project_owner : $this->_AppUI->user_id;
@@ -463,9 +491,10 @@ class CProject extends w2p_Core_BaseObject
     }
 
     /**
-     * @todo TODO: I *really* hate how we have to do the store() twice when we
-     *   create the project.. it's all because the stupid project_original_parent
-     *   has to equal its own project_id if this is a root project. Ugh.
+     * A root project is its own parent and original parent, which needs its
+     * new id. Those two columns are written directly: a nested store() here
+     * was a second full save that logged an extra history entry and turned
+     * the creation's own entry into an "Update".
      */
     protected function hook_postCreate()
     {
@@ -473,7 +502,13 @@ class CProject extends w2p_Core_BaseObject
             $this->project_parent = $this->project_id;
             $this->project_original_parent = $this->project_id;
 
-            parent::store();
+            $q = $this->_getQuery();
+            $q->addTable('projects');
+            $q->addUpdate('project_parent', (int) $this->project_parent);
+            $q->addUpdate('project_original_parent', (int) $this->project_original_parent);
+            $q->addWhere('project_id = ' . (int) $this->project_id);
+            $q->exec();
+            $q->clear();
         }
 
         parent::hook_postCreate();
@@ -1030,5 +1065,16 @@ class CProject extends w2p_Core_BaseObject
         }
 
         return $statuses;
+    }
+
+    /**
+     * A project's own history entries carry its id, so they appear on its
+     * History tab next to the changes to its tasks, files and so on.
+     *
+     * @return int
+     */
+    protected function getProjectId()
+    {
+        return (int) $this->project_id;
     }
 }

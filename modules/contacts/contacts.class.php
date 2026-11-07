@@ -39,9 +39,7 @@ class CContact extends w2p_Core_BaseObject
     public $contact_icon = null;
     public $contact_owner = null;
     public $contact_private = null;
-    public $contact_updatekey = null;
     public $contact_lastupdate = null;
-    public $contact_updateasked = null;
     public $contact_methods = array();
 
     public function __construct()
@@ -299,36 +297,6 @@ class CContact extends w2p_Core_BaseObject
         return array('dept_id' => $dept->dept_id, 'dept_name' => $dept->dept_name);
     }
 
-    public function getUpdateKey()
-    {
-        $result = $this->loadAll('contact_id', 'contact_id = ' . (int) $this->contact_id);
-
-        return $result[$this->contact_id];
-    }
-
-    public function clearUpdateKey()
-    {
-        $this->contact_updatekey = '';
-        $this->store();
-    }
-
-    public function notify()
-    {
-        $emailManager = new w2p_Output_EmailManager($this->_AppUI);
-        $body = $emailManager->getContactUpdateNotify(null, $this);
-
-        $mail = new w2p_Utilities_Mail();
-        $mail->To($this->contact_email, true);
-        $mail->Subject('Hello');
-        $mail->Body($body, isset($GLOBALS['locale_char_set']) ? $GLOBALS['locale_char_set'] : '');
-        return $mail->Send();
-    }
-
-    public function updateNotify()
-    {
-        return $this->notify();
-    }
-
     /**
      * *	Overload of the w2PObject::getAllowedRecords
      * *	to ensure that the allowed projects are owned by allowed companies.
@@ -520,17 +488,6 @@ class CContact extends w2p_Core_BaseObject
         return $result;
     }
 
-    public static function getContactByUpdatekey($updateKey)
-    {
-
-        $q = new w2p_Database_Query();
-        $q->addTable('contacts');
-        $q->addQuery('contact_id');
-        $q->addWhere("contact_updatekey= '$updateKey'");
-
-        return $q->loadResult();
-    }
-
     public static function getProjects($contactId)
     {
 
@@ -541,16 +498,6 @@ class CContact extends w2p_Core_BaseObject
         $q->addWhere("contact_id =  $contactId");
 
         return $q->loadList();
-    }
-
-    public function clearOldUpdatekeys($days_for_update)
-    {
-
-        $q = $this->_getQuery();
-        $q->addTable('contacts');
-        $q->addUpdate('contact_updatekey', '');
-        $q->addWhere("(TO_DAYS(NOW()) - TO_DAYS(contact_updateasked) >= $days_for_update)");
-        $q->exec();
     }
 
     public function hook_cron()
@@ -581,11 +528,6 @@ class CContact extends w2p_Core_BaseObject
             $q->exec();
             $q->clear();
         }
-
-        //To Bruce: Clean updatekeys based on datediff to warn about long waiting.
-        //TODO: This should be converted to a system configuration value
-        $days_for_update = 5;
-        $this->clearOldUpdatekeys($days_for_update);
     }
 
     public function hook_search()

@@ -32,7 +32,7 @@ $titleBlock->show();
 		if (count($updatesApplied) > 0) {
 			foreach ($updatesApplied as $update) {
 				?>
-				<div class="my-2">Database update - <?php echo $update; ?> - applied</div>
+				<div class="my-2">Database update - <?php echo htmlspecialchars($update, ENT_QUOTES, 'UTF-8'); ?> - applied</div>
 				<?php
 			}
 		} else {
@@ -41,18 +41,21 @@ $titleBlock->show();
 			<?php
 		}
 
-		if (count($errorMessages) > 0) {
+		$failureReport = $system->getFailureReport();
+		if ('' !== $failureReport) {
+			?>
+			<div class="my-2"><b class="error">The system update stopped because a database update failed.</b></div>
+			<pre class="my-2 p-2 border" style="white-space: pre-wrap;"><?php echo htmlspecialchars($failureReport, ENT_QUOTES, 'UTF-8'); ?></pre>
+			<?php
+		} elseif (count($errorMessages) > 0) {
 			?>
 			<div class="my-2"><b class="error">There were <?php echo count($errorMessages); ?> errors in the system update.</b></div>
 			<?php
 			foreach ($errorMessages as $message) {
 				?>
-				<div class="my-2"><?php echo $message; ?></div>
+				<div class="my-2"><?php echo htmlspecialchars($message, ENT_QUOTES, 'UTF-8'); ?></div>
 				<?php
 			}
-			?>
-			<div class="my-2">Note: Errors noting 'Duplicate entry', 'Table already exists', or 'Unknown table' may not be problems.</div>
-			<?php
 		} else {
 			?>
 			<div class="my-2">Your system update went smoothly without any errors.</div>

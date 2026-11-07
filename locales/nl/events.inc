@@ -62,6 +62,7 @@
 'Never'=>'Nooit',
 'New Event'=>'Nieuwe afspraak',
 'New event'=>'Nieuwe afspraak',
+'Non-working day'=>'Niet-werkdag',
 'Note'=>'Aantekening',
 'November'=>'November',
 'October'=>'Oktober',

@@ -56,11 +56,17 @@
 	$cFileErr = false;
 	$errorMessages = array();
 
+	$failureReport = '';
 	if (($do_db || $do_db_cfg)) {
 		$errorMessages = $manager->upgradeSystem();
+		$failureReport = $manager->getFailureReport();
 		if (count($errorMessages) == 0) {
 			$dbMsg = 'Created';
+		} elseif ('' !== $failureReport) {
+			$dbErr = true;
+			$dbMsg = 'Not finished: the installation stopped because a database update failed.';
 		} else {
+			$dbErr = true;
 			$dbMsg = 'Created, some problems have occurred.';
 		}
 	}
@@ -87,24 +93,22 @@
 	  	cigarettes aren't very healthy and.. oh wait, we're done.
 	  </div>
 	<?php
-		if (count($errorMessages) > 0) { ?>
+		if ('' !== $failureReport) { ?>
+			<div class="my-2"><b class="error">The installation stopped because a database update failed.</b></div>
+			<pre class="my-2 p-2 border" style="white-space: pre-wrap;"><?php echo htmlspecialchars($failureReport, ENT_QUOTES, 'UTF-8'); ?></pre>
+			<?php
+		} elseif (count($errorMessages) > 0) { ?>
 			<div class="my-2"><b class="error">There were <?php echo count($errorMessages); ?> errors in the installation.</b></div>
 			<?php
-				foreach ($errorMessages as $message) { 
-					?><div class="my-2"><?php echo $message; ?></div><?php
+				foreach ($errorMessages as $message) {
+					?><div class="my-2"><?php echo htmlspecialchars($message, ENT_QUOTES, 'UTF-8'); ?></div><?php
 				}
-			?>
-			<div class="my-2">Note: Errors noting 'Duplicate entry', 'Table already exists', or 'Unknown table' are not likely to be problems.  Sit back and relax.</div>
-			<?php
 		}
 	?>
 	<div class="row py-1 border-bottom">
 		<div class="col-sm-5 title">Database Installation Feedback:</div>
 		<div class="col-sm-7 item">
 			<b style="color:<?php echo $dbErr ? 'red' : 'green'; ?>"><?php echo $dbMsg; ?></b>
-			<?php if ($dbErr) { ?> <br />
-				Please note that errors relating to dropping indexes during upgrades are <b>NORMAL</b> and do not indicate a problem.
-			<?php } ?>
 		</div>
 	</div>
 	<div class="row py-1 border-bottom">

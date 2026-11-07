@@ -19,6 +19,14 @@ if (!canEdit('system')) {
 	$AppUI->redirect(ACCESS_DENIED);
 }
 
+// This page writes files but isn't a dosql/do_* handler, so index.php
+// doesn't check the form token for it (CSRF protection): check it here,
+// and only accept the translation form's POST.
+if ('POST' !== ($_SERVER['REQUEST_METHOD'] ?? '') || !$AppUI->checkFormToken(w2PgetParam($_POST, '__nonce', null))) {
+	$AppUI->setMsg('Your form has expired or did not come from this site. Please try again.', UI_MSG_ERROR);
+	$AppUI->redirect('m=system&a=translate');
+}
+
 // Both values become part of the path of the file that is written below, so
 // only an installed module (or the shared common/styles files) and an
 // installed language are accepted. Anything else, such as "../", could

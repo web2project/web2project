@@ -110,6 +110,9 @@ class w2p_Output_GanttRenderer {
         $runs = array();
         $parts = preg_split('/([' . self::CJK_CHARS . ']+)/u', $text, -1,
             PREG_SPLIT_DELIM_CAPTURE | PREG_SPLIT_NO_EMPTY);
+        if (false === $parts) {
+            return $text;
+        }
         foreach ($parts as $part) {
             $runs[] = preg_match('/^[' . self::CJK_CHARS . ']/u', $part)
                 ? array($part, FF_USERFONT, $size + 1)

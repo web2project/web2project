@@ -46,15 +46,7 @@ class CResource extends w2p_Core_BaseObject
     public function typeSelect() {
         trigger_error("CResource->typeSelect() has been deprecated in v3.0 and will be removed in v4.0. Please use w2PgetSysVal('ResourceTypes') instead.", E_USER_NOTICE);
 
-        $typelist = w2PgetSysVal('ResourceTypes');
-        if (!count($typelist)) {
-            include W2P_BASE_DIR . '/modules/resources/setup.php';
-            $setup = new SResource();
-            $setup->upgrade('1.0.1');
-            $typelist = w2PgetSysVal('ResourceTypes');
-        }
-
-        return $typelist;
+        return w2PgetSysVal('ResourceTypes');
     }
 
     /**

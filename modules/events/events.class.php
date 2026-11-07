@@ -121,7 +121,7 @@ class CEvent extends w2p_Core_BaseObject
      *
      * @return array Calculated Start and End Dates for the recurrent Event for the given Period
      */
-    public function getRecurrentEventforPeriod($start_date, $end_date, $event_start_datetime, $event_end_datetime, $event_recurs, $event_times_recuring, $j)
+    public static function getRecurrentEventforPeriod($start_date, $end_date, $event_start_datetime, $event_end_datetime, $event_recurs, $event_times_recuring, $j)
     {
 
         //this array will be returned
@@ -188,8 +188,6 @@ class CEvent extends w2p_Core_BaseObject
      * @param Date $end_date End date of the period
      *
      * @return array A list of events
-     *
-     * WARNING: This is actually called staticly so $this is not available.
      */
     public static function getEventsForPeriod($start_date, $end_date, $filter = 'all', $user_id = null, $project_id = 0, $company_id = 0)
     {
@@ -428,7 +426,7 @@ class CEvent extends w2p_Core_BaseObject
         $q = $this->_getQuery();
         $q->addTable('events', 'e');
         $q->addQuery("e.event_id, event_name, event_sequence, event_owner, event_description, " .
-            "ue.user_id, event_cwd, event_start_datetime, event_end_datetime, event_updated, event_recurs");
+            "ue.user_id, event_cwd, event_start_datetime, event_end_datetime, event_updated, event_recurs, event_times_recuring");
         $q->addQuery('projects.project_id, projects.project_name');
         $q->addTable('events', 'e');
         $q->leftJoin('projects', 'projects', 'e.event_project = projects.project_id');
@@ -570,7 +568,7 @@ class CEvent extends w2p_Core_BaseObject
 
         foreach($events as $event) {
             for ($j = 0 ; $j <= $event['event_recurs']; $j++) {
-                $myDates = $this->getRecurrentEventforPeriod($start, $end, $event['event_start_datetime'], $event['event_end_datetime'],
+                $myDates = self::getRecurrentEventforPeriod($start, $end, $event['event_start_datetime'], $event['event_end_datetime'],
                                 $event['event_recurs'], $event['event_times_recuring'], $j);
                 /*
                  * This list of fields - id, name, description, startDate, endDate,
@@ -581,7 +579,8 @@ class CEvent extends w2p_Core_BaseObject
                 $eventList[] = array('id' => $event['event_id'], 'name' => $event['event_name'],
                             'sequence' => $event['event_sequence'], 'description' => $event['event_description'],
                             'startDate' => $myDates[0]->format(FMT_DATETIME_MYSQL), 'endDate' => $myDates[1]->format(FMT_DATETIME_MYSQL),
-                            'updatedDate' => $event['event_updated'], 'url' => $url);
+                            'updatedDate' => $event['event_updated'], 'url' => $url,
+                            'project_id' => $event['project_id'], 'project_name' => $event['project_name']);
             }
         }
 

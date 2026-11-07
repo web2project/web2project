@@ -227,9 +227,14 @@ class CUser extends w2p_Core_BaseObject
 
     public function hook_cron()
     {
+        // Remove sessions that never logged in (session_user is the access
+        // log id, 0 until login), once they are an hour old, so a session
+        // in the middle of logging in is left alone. Times are stored in
+        // UTC (dbfnNowWithTZ()). Expired sessions are w2p_System_Session::gc()'s job.
         $q = $this->_getQuery();
         $q->setDelete('sessions');
-        $q->addWhere("session_user ='' OR session_user IS NULL");
+        $q->addWhere('session_user = 0');
+        $q->addWhere("session_updated < '" . gmdate('Y-m-d H:i:s', time() - 3600) . "'");
         $q->exec();
         $q->clear();
 
@@ -255,22 +260,47 @@ class CUser extends w2p_Core_BaseObject
         return '' !== $hash && password_verify((string) $password, $hash);
     }
 
+    /**
+     * Finds the user a calendar feed token belongs to.
+     *
+     * Returns 0 for an unknown token, and for a user who can no longer log
+     * in, so a feed stops working once its owner loses access.
+     *
+     * @param string $token
+     *
+     * @return int
+     */
     public function getIdByToken($token)
     {
+        $token = preg_replace('/[^A-Za-z0-9]/', '', (string) $token);
+        if ('' === $token) {
+            return 0;
+        }
+
         $q = $this->_getQuery();
         $q->addQuery('feed_user');
         $q->addTable('user_feeds');
         $q->addWhere("feed_token = '$token'");
-        $userId = $q->loadResult();
+        $userId = (int) $q->loadResult();
+
+        if ($userId && !$this->isActive($userId)) {
+            return 0;
+        }
 
         return $userId;
     }
 
+    /**
+     * @param int $contactId
+     *
+     * @return string the id of the user with this contact, or ''
+     */
     public function getIdByContactId($contactId)
     {
+        // loadAll() keys the list by user_id, not by contact id.
         $users = $this->loadAll('user_id', 'user_contact = ' . (int) $contactId);
 
-        return (string) $users[$contactId]['user_id'];
+        return $users ? (string) key($users) : '';
     }
 
     public function generateToken($userId, $token = '')
@@ -278,13 +308,16 @@ class CUser extends w2p_Core_BaseObject
         if (!$userId) {
             return false;
         }
+        $userId = (int) $userId;
+        $token = preg_replace('/[^A-Za-z0-9]/', '', (string) $token);
+
         $q = $this->_getQuery();
         $q->setDelete('user_feeds');
         $q->addWhere('feed_user = ' . $userId);
         $q->addWhere("feed_token = '$token'");
         $q->exec();
 
-        $token = md5(time() . $userId . $token . time());
+        $token = bin2hex(random_bytes(20));
         $q = $this->_getQuery();
         $q->addTable('user_feeds');
         $q->addInsert('feed_user', $userId);

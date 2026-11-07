@@ -22,7 +22,7 @@ class w2p_Authenticators_SQL extends w2p_Authenticators_Base
 
         // This detects and updates legacy passwords automatically
         if (32 == strlen($result['user_password'])) {
-            if (md5($password) == $result['user_password']) {
+            if (hash_equals($result['user_password'], md5($password))) {
                 $q->clear();
                 $q->addTable('users');
                 $q->addUpdate('user_password', $this->hashPassword($password));

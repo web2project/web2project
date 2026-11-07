@@ -164,6 +164,11 @@ if ($do_report) {
 
 		}
 
+		// showDays()/showWeeks() list one row per user in $user_list and size
+		// "Total capacity for all users" by it: the users this user may see
+		// (by company and department), keyed by user id.
+		$user_list = w2PgetUsersHashList();
+
 		if ($coarseness == 1) {
 			showDays();
 		} elseif ($coarseness == 7) {
@@ -196,6 +201,10 @@ if ($do_report) {
 ?>
 <?php
 	foreach ($user_tasks_counted_in as $user_id => $project_information) {
+		// only the users listed above (showDays()/showWeeks() name them)
+		if (!isset($user_names[$user_id])) {
+			continue;
+		}
 		echo '<b>' . $user_names[$user_id] . '</b><br /><blockquote>';
 		echo '<table width="50%" border="1" class="std">';
 		foreach ($project_information as $project_id => $task_information) {

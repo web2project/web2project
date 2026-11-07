@@ -86,7 +86,9 @@
 		$okMessage = '';
 		if (!file_exists($manager->getConfigFile()) && is_writable( $manager->getConfigDir() )) {
 			$fh = fopen($manager->getConfigFile(), 'w');
-			fclose($fh);
+			if ($fh) {
+				fclose($fh);
+			}
 		}
 		if ( (file_exists( $manager->getConfigFile() ) && !is_writable( $manager->getConfigFile() )) || (!file_exists( $manager->getConfigFile() ) && !(is_writable( $manager->getConfigDir() ))) ) {
 		  @chmod( $manager->getConfigFile(), $chmod );

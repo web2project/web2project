@@ -60,6 +60,13 @@ class w2p_System_Module extends w2p_Core_BaseObject {
         return true;
     }
 
+    protected function hook_postStore()
+    {
+        w2p_Core_CAppUI::clearActiveModules();
+
+        return parent::hook_postStore();
+    }
+
     protected function _compactModuleUIOrder() {
         $q = $this->_getQuery();
         $q->addTable('modules');
@@ -101,6 +108,7 @@ class w2p_System_Module extends w2p_Core_BaseObject {
                 $this->_perms->deleteModuleSection($this->permissions_item_table);
             }
             $this->_compactModuleUIOrder();
+            w2p_Core_CAppUI::clearActiveModules();
             return null;
         }
     }

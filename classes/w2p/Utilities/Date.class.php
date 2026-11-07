@@ -91,12 +91,29 @@ class w2p_Utilities_Date extends Date {
     /**
      * Adds (+/-) a number of days to the current date.
      *
-     * @param int $n Positive or negative number of days
+     * Whole days move the calendar date and keep the clock time, so a loop
+     * from midnight stays on midnight across a daylight saving change
+     * (adding 86,400 seconds to midnight on the day DST ends gives 23:00
+     * the same day). A fractional part is still added as seconds.
+     *
+     * @param int|float $n Positive or negative number of days
      *
      * @author J. Christopher Pereira <kripper@users.sf.net>
      */
     public function addDays($n) {
-        $this->addSeconds($n*24*60*60);
+        $whole = (int) $n;      // truncates towards zero: -2.5 gives -2
+        if (0 != $whole) {
+            // wall-clock arithmetic: UTC has no DST to skip or repeat an hour
+            $date = new DateTime(sprintf('%04d-%02d-%02d %02d:%02d:%02d',
+                $this->year, $this->month, $this->day, $this->hour, $this->minute, $this->second),
+                new DateTimeZone('UTC'));
+            $date->modify(sprintf('%+d days', $whole));
+            $this->setDate($date->format('Y-m-d H:i:s'));
+        }
+        $fraction = $n - $whole;
+        if (0 != $fraction) {
+            $this->addSeconds((int) round($fraction * 24 * 60 * 60));
+        }
     }
 
     /**
@@ -165,18 +182,23 @@ class w2p_Utilities_Date extends Date {
         /** @var w2p_Core_CAppUI $AppUI */
         global $AppUI;
 
-        // isActiveModule() runs a query; calendars call this once per cell, so look it up once per request
+        // Calendars call this once per cell, so decide once per request
+        // whether the Holiday add-on can be used. It counts only when it is
+        // active *and* its files are there: a module row left active after
+        // the folder was removed must not make every calendar fatal.
         static $holidayModuleActive = null;
         if (is_null($holidayModuleActive)) {
-            $holidayModuleActive = (bool) $AppUI->isActiveModule('holiday');
+            $holidayModuleActive = false;
+            $holidayFile = W2P_BASE_DIR . '/modules/holiday/holiday_functions.class.php';
+            if ($AppUI->isActiveModule('holiday') && is_file($holidayFile)) {
+                require_once $holidayFile;
+                $holidayModuleActive = class_exists('HolidayFunctions', false)
+                    && method_exists('HolidayFunctions', 'isHoliday');
+            }
         }
 
-        if ($holidayModuleActive) {
-            // Holiday module, check the holiday database
-            require_once W2P_BASE_DIR."/modules/holiday/holiday_functions.class.php";
-            if(HolidayFunctions::isHoliday($this)) {
-                return false;
-            }
+        if ($holidayModuleActive && HolidayFunctions::isHoliday($this)) {
+            return false;
         }
 
         $working_days = w2PgetConfig('cal_working_days');
@@ -622,58 +644,127 @@ class w2p_Utilities_Date extends Date {
         $this->setDate( $this->getTime() + $n, DATE_FORMAT_UNIXTIME);
     }
 
+    /**
+     * Moves the date back by $n seconds (forward for a negative $n).
+     *
+     * PEAR Date's version builds a Date_Span, whose PHP 4 style constructor
+     * never runs on PHP 8, so the span was always zero and the date never
+     * moved.
+     *
+     * @param int $n
+     */
+    public function subtractSeconds( $n )
+    {
+        $this->addSeconds(-(int) $n);
+    }
 
+    /**
+     * The day before, at the same time. PEAR Date's version returns a plain
+     * Date, whose addSeconds()/subtractSeconds() don't work on PHP 8.
+     *
+     * @return w2p_Utilities_Date
+     */
+    public function getPrevDay()
+    {
+        return $this->dayFromHere(-1);
+    }
+
+    /**
+     * The day after, at the same time (see getPrevDay()).
+     *
+     * @return w2p_Utilities_Date
+     */
+    public function getNextDay()
+    {
+        return $this->dayFromHere(1);
+    }
+
+    /**
+     * @param int $days
+     *
+     * @return w2p_Utilities_Date
+     */
+    protected function dayFromHere($days)
+    {
+        $day = mktime(12, 0, 0, $this->month, $this->day + $days, $this->year);
+
+        return new w2p_Utilities_Date(sprintf('%s %02d:%02d:%02d', date('Y-m-d', $day), $this->hour, $this->minute, $this->second),
+            $this->tz['id'] ?? '');
+    }
+
+
+    /**
+     * Formats the date with the strftime-style codes of PEAR Date::format().
+     *
+     * Only "%" followed by a code is replaced; everything else, including
+     * letters, is copied through, and an unknown code is output as written
+     * (e.g. "%q"). Names are English.
+     *
+     *   %a  abbreviated weekday (Wed)      %n  newline
+     *   %A  full weekday (Wednesday)       %p  am/pm
+     *   %b  abbreviated month (Oct)        %P  AM/PM
+     *   %B  full month (October)           %r  time, 12h: %I:%M:%S %p
+     *   %C  century (20)                   %R  time, 24h: %H:%M
+     *   %d  day of month (01-31)           %S  seconds (00-59)
+     *   %D  same as %m/%d/%y               %t  tab
+     *   %e  day of month, space padded     %T  same as %H:%M:%S
+     *   %H  hour, 24h (00-23)              %U  ISO-8601 week number (01-53)
+     *   %I  hour, 12h (01-12)              %w  weekday (0 = Sunday)
+     *   %j  day of year (001-366)          %y  year, two digits
+     *   %m  month (01-12)                  %Y  year, four digits
+     *   %M  minutes (00-59)                %Z  time zone abbreviation
+     *   %%  a literal "%"
+     *
+     * %U has always been the ISO week (Monday-start) in web2project, unlike
+     * strftime's Sunday-start week; it is kept that way.
+     *
+     * @param string $format
+     *
+     * @return string
+     */
     public function format($format)
     {
         $myTime = mktime($this->hour, $this->minute, $this->second, $this->month, $this->day, $this->year);
 
-        $_config = str_split($format);
-
+        $format = (string) $format;
+        $length = strlen($format);
         $output = '';
-        foreach($_config as $value)
-        {
-            switch ($value) {
-                case 'Y':   // year, four digit
-                case 'd':   // day of month, two digit
-                case 'm':   // month, two digit
-                case 'H':   // hours, 24h format 
-                    $newValue = date($value, $myTime);
-                    break;
-                case 'I':   // hours, 12h format, two digit
-                    $newValue = date('h', $myTime);
-                    break;
-                case 'S':   // seconds, two digit
-                    $newValue = date('s', $myTime);
-                    break;
-                case 'M':   // minutes, two digit
-                    $newValue = date('i', $myTime);
-                    break;
-                case 'p':   // am/pm, lowercase
-                    $newValue = date('a', $myTime);
-                    break;
-                case 'b':   // month, three letters
-                    $newValue = date('M', $myTime);
-                    break;
-                case 'B':   // month, full name
-                    $newValue = date('F', $myTime);
-                    break;
-                case 'A':   // day, full name
-                    $newValue = date('l', $myTime);
-                    break;
-                case 'T':   // hours, 24 hour format : minutes, two digit : seconds, two digit
-                    $newValue = date('H:i:s', $myTime);
-                    break;
-                case 'U':   // week, number
-                    $newValue = date('W', $myTime);
-                    break;
-                case '%':
-                    $newValue = '';
-                    break;
-                case '/':
-                default:
-                    $newValue = $value;
+        for ($i = 0; $i < $length; $i++) {
+            if ('%' != $format[$i] || $i + 1 == $length) {
+                $output .= $format[$i];
+                continue;
             }
-            $output .= $newValue;
+            $code = $format[++$i];
+            switch ($code) {
+                case 'a':   $output .= date('D', $myTime);                         break;
+                case 'A':   $output .= date('l', $myTime);                         break;
+                case 'b':   $output .= date('M', $myTime);                         break;
+                case 'B':   $output .= date('F', $myTime);                         break;
+                case 'C':   $output .= sprintf('%02d', intdiv((int) date('Y', $myTime), 100)); break;
+                case 'd':   $output .= date('d', $myTime);                         break;
+                case 'D':   $output .= date('m/d/y', $myTime);                     break;
+                case 'e':   $output .= sprintf('%2d', (int) date('j', $myTime));   break;
+                case 'H':   $output .= date('H', $myTime);                         break;
+                case 'I':   $output .= date('h', $myTime);                         break;
+                case 'j':   $output .= sprintf('%03d', (int) date('z', $myTime) + 1); break;
+                case 'm':   $output .= date('m', $myTime);                         break;
+                case 'M':   $output .= date('i', $myTime);                         break;
+                case 'n':   $output .= "\n";                                       break;
+                case 'p':   $output .= date('a', $myTime);                         break;
+                case 'P':   $output .= date('A', $myTime);                         break;
+                case 'r':   $output .= date('h:i:s a', $myTime);                   break;
+                case 'R':   $output .= date('H:i', $myTime);                       break;
+                case 'S':   $output .= date('s', $myTime);                         break;
+                case 't':   $output .= "\t";                                       break;
+                case 'T':   $output .= date('H:i:s', $myTime);                     break;
+                case 'U':   $output .= date('W', $myTime);                         break;
+                case 'w':   $output .= date('w', $myTime);                         break;
+                case 'y':   $output .= date('y', $myTime);                         break;
+                case 'Y':   $output .= date('Y', $myTime);                         break;
+                case 'Z':   $output .= date('T', $myTime);                         break;
+                case '%':   $output .= '%';                                        break;
+                default:    $output .= '%' . $code;
+            }
         }
 
         return $output;

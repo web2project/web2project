@@ -60,6 +60,7 @@
 'My Events'=>'Mis Eventos',
 'Never'=>'Nunca',
 'New event'=>'Nuevo Evento',
+'Non-working day'=>'Día no laborable',
 'November'=>'Noviembre',
 'October'=>'Octubre',
 'Overdue'=>'Retrasado',

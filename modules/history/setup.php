@@ -37,7 +37,8 @@ class CSetupHistory extends w2p_System_Setup
 			history_description text,
 			PRIMARY KEY  (history_id),
 			INDEX index_history_module (history_table, history_item),
-		  	INDEX index_history_item (history_item) 
+		  	INDEX index_history_item (history_item),
+			INDEX history_project (history_project) 
             ) ENGINE = MYISAM DEFAULT CHARSET=utf8 ');
 		if (!$q->exec()) {
             return false;

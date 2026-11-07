@@ -77,7 +77,7 @@ if (isset($_POST['out_user_id']) && $_POST['out_user_id']
 		} else {
 			addHistory('login', $boot_user_id, 'logout', $details);
             $session = new w2p_System_Session();
-            $session->destroy($boot_user_session, $boot_user_log_id);
+            $session->destroy($boot_user_session);
 		}
 
 		if ($boot_query_row) {

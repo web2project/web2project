@@ -25,6 +25,9 @@ switch($msg) {
     case 'existing-user':
         $msg = 'The username you selected already exists, please select another or if that user name is yours request the password recovery through the dedicated link.';
         break;
+    case 'email':
+        $msg = 'Please enter a valid e-mail address.';
+        break;
     case 'existing-email':
         $msg = 'The email you selected already exists, please select another or if that email is yours request the password recovery through the dedicated link.';
         break;

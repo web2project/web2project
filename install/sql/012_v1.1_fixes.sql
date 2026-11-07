@@ -111,9 +111,25 @@ ALTER TABLE `gacl_permissions` DROP INDEX `user_id`;
 ALTER TABLE `gacl_permissions` DROP INDEX `action`;
 ALTER TABLE `gacl_permissions` DROP INDEX `acl_id`;
 ALTER TABLE `gacl_permissions` DROP INDEX `module`;
-ALTER TABLE `links` DROP INDEX `idx_link_parent`;
-ALTER TABLE `links` DROP INDEX `idx_link_task`;
-ALTER TABLE `links` DROP INDEX `idx_link_project`;
+-- links is only there once something has created it: a fresh install does (001), but
+-- a converted dotProject database has it only if the Links module was installed
+-- there, and otherwise gets it when the module is installed. So the links
+-- statements here run only if the table exists.
+SET @w2p_sql = IF((SELECT COUNT(*) FROM information_schema.tables WHERE table_schema = DATABASE() AND table_name = 'links') > 0,
+    'ALTER TABLE `links` DROP INDEX `idx_link_parent`', 'DO 0');
+PREPARE w2p_stmt FROM @w2p_sql;
+EXECUTE w2p_stmt;
+DEALLOCATE PREPARE w2p_stmt;
+SET @w2p_sql = IF((SELECT COUNT(*) FROM information_schema.tables WHERE table_schema = DATABASE() AND table_name = 'links') > 0,
+    'ALTER TABLE `links` DROP INDEX `idx_link_task`', 'DO 0');
+PREPARE w2p_stmt FROM @w2p_sql;
+EXECUTE w2p_stmt;
+DEALLOCATE PREPARE w2p_stmt;
+SET @w2p_sql = IF((SELECT COUNT(*) FROM information_schema.tables WHERE table_schema = DATABASE() AND table_name = 'links') > 0,
+    'ALTER TABLE `links` DROP INDEX `idx_link_project`', 'DO 0');
+PREPARE w2p_stmt FROM @w2p_sql;
+EXECUTE w2p_stmt;
+DEALLOCATE PREPARE w2p_stmt;
 ALTER TABLE `modules` DROP INDEX `mod_directory`;
 ALTER TABLE `modules` DROP INDEX `mod_ui_order`;
 ALTER TABLE `modules` DROP INDEX `permissions_item_table`;
@@ -272,11 +288,31 @@ ALTER TABLE `gacl_permissions` ADD INDEX (`module`);
 ALTER TABLE `gacl_permissions` ADD INDEX (`item_id`);
 ALTER TABLE `gacl_permissions` ADD INDEX (`action`);
 ALTER TABLE `gacl_permissions` ADD INDEX (`acl_id`);
-ALTER TABLE `links` ADD INDEX (`link_project`);
-ALTER TABLE `links` ADD INDEX (`link_task`);
-ALTER TABLE `links` ADD INDEX (`link_parent`);
-ALTER TABLE `links` ADD INDEX (`link_owner`);
-ALTER TABLE `links` ADD INDEX (`link_category`);
+SET @w2p_sql = IF((SELECT COUNT(*) FROM information_schema.tables WHERE table_schema = DATABASE() AND table_name = 'links') > 0,
+    'ALTER TABLE `links` ADD INDEX (`link_project`)', 'DO 0');
+PREPARE w2p_stmt FROM @w2p_sql;
+EXECUTE w2p_stmt;
+DEALLOCATE PREPARE w2p_stmt;
+SET @w2p_sql = IF((SELECT COUNT(*) FROM information_schema.tables WHERE table_schema = DATABASE() AND table_name = 'links') > 0,
+    'ALTER TABLE `links` ADD INDEX (`link_task`)', 'DO 0');
+PREPARE w2p_stmt FROM @w2p_sql;
+EXECUTE w2p_stmt;
+DEALLOCATE PREPARE w2p_stmt;
+SET @w2p_sql = IF((SELECT COUNT(*) FROM information_schema.tables WHERE table_schema = DATABASE() AND table_name = 'links') > 0,
+    'ALTER TABLE `links` ADD INDEX (`link_parent`)', 'DO 0');
+PREPARE w2p_stmt FROM @w2p_sql;
+EXECUTE w2p_stmt;
+DEALLOCATE PREPARE w2p_stmt;
+SET @w2p_sql = IF((SELECT COUNT(*) FROM information_schema.tables WHERE table_schema = DATABASE() AND table_name = 'links') > 0,
+    'ALTER TABLE `links` ADD INDEX (`link_owner`)', 'DO 0');
+PREPARE w2p_stmt FROM @w2p_sql;
+EXECUTE w2p_stmt;
+DEALLOCATE PREPARE w2p_stmt;
+SET @w2p_sql = IF((SELECT COUNT(*) FROM information_schema.tables WHERE table_schema = DATABASE() AND table_name = 'links') > 0,
+    'ALTER TABLE `links` ADD INDEX (`link_category`)', 'DO 0');
+PREPARE w2p_stmt FROM @w2p_sql;
+EXECUTE w2p_stmt;
+DEALLOCATE PREPARE w2p_stmt;
 ALTER TABLE `modules` ADD INDEX (`mod_directory`);
 ALTER TABLE `modules` ADD INDEX (`mod_type`);
 ALTER TABLE `modules` ADD INDEX (`mod_ui_order`);

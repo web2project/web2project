@@ -44,7 +44,8 @@ if ($result) {
     $email_project_contacts = w2PgetParam($_POST, 'email_project_contacts', null);
     $email_others           = w2PgetParam($_POST, 'email_others', '');
     $email_log_user         = w2PgetParam($_POST, 'email_log_user', '');
-    $task_log_creator       = (int) w2PgetParam($_POST, 'task_log_creator', 0);
+    // The stored subject of the log, not the one posted (see CTask_Log::canEdit()).
+    $task_log_creator       = (int) $obj->task_log_creator;
     $email_extras           = w2PgetParam($_POST, 'email_extras', null);
 
     // Email the user this task log is being created for, might not be the person

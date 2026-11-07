@@ -9,6 +9,32 @@
 -- Fun times.
 
 # 2026 Update - eliminating '0000-00-00 00:00:00' as defaults and values
+
+-- Values first. MySQL 8 (NO_ZERO_DATE, strict) checks every date column of a
+-- table when an ALTER rebuilds it, so one zero date anywhere in the table makes
+-- the ALTER fail. A DATE column casts to '0000-00-00' and a DATETIME to
+-- '0000-00-00 00:00:00', so these match with LIKE rather than =.
+--
+-- Sites converted from dotProject or installed by early versions don't all
+-- have these columns defined as a fresh install does: created/updated columns
+-- may allow NULL and hold NULLs (010 added task_log's that way). A column that
+-- becomes NOT NULL below gets a real value for NULLs as well as zero dates,
+-- and only columns that allow NULL in every known schema are set to NULL.
+UPDATE `forum_messages` SET `message_date` = NULL WHERE CAST(`message_date` AS CHAR(20)) LIKE '0000-00-00%';
+
+UPDATE `sessions` SET `session_created` = NOW() WHERE `session_created` IS NULL OR CAST(`session_created` AS CHAR(20)) LIKE '0000-00-00%';
+UPDATE `sessions` SET `session_updated` = `session_created` WHERE `session_updated` IS NULL OR CAST(`session_updated` AS CHAR(20)) LIKE '0000-00-00%';
+
+UPDATE `tasks` SET `task_start_date` = NULL WHERE CAST(`task_start_date` AS CHAR(20)) LIKE '0000-00-00%';
+UPDATE `tasks` SET `task_end_date` = NULL WHERE CAST(`task_end_date` AS CHAR(20)) LIKE '0000-00-00%';
+UPDATE `tasks` SET `task_created` = NOW() WHERE `task_created` IS NULL OR CAST(`task_created` AS CHAR(20)) LIKE '0000-00-00%';
+UPDATE `tasks` SET `task_updated` = `task_created` WHERE `task_updated` IS NULL OR CAST(`task_updated` AS CHAR(20)) LIKE '0000-00-00%';
+
+UPDATE `task_log` SET `task_log_date` = NULL WHERE CAST(`task_log_date` AS CHAR(20)) LIKE '0000-00-00%';
+UPDATE `task_log` SET `task_log_created` = IFNULL(CAST(`task_log_date` AS DATETIME), NOW()) WHERE `task_log_created` IS NULL OR CAST(`task_log_created` AS CHAR(20)) LIKE '0000-00-00%';
+UPDATE `task_log` SET `task_log_updated` = `task_log_created` WHERE `task_log_updated` IS NULL OR CAST(`task_log_updated` AS CHAR(20)) LIKE '0000-00-00%';
+UPDATE `task_log` SET `task_log_task_end_date` = `task_log_created` WHERE `task_log_task_end_date` IS NULL OR CAST(`task_log_task_end_date` AS CHAR(20)) LIKE '0000-00-00%';
+
 ALTER TABLE `forum_messages`  CHANGE `message_date` `message_date` DATETIME DEFAULT CURRENT_TIMESTAMP;
 
 ALTER TABLE `sessions`
@@ -40,10 +66,8 @@ CREATE TABLE IF NOT EXISTS `history` (
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 # Still need the alter statement in case the history table was there but incorrect from a previous install
+UPDATE `history` SET `history_date` = '1000-01-01 00:00:00' WHERE `history_date` IS NULL OR CAST(`history_date` AS CHAR(20)) LIKE '0000-00-00%';
 ALTER TABLE `history`         CHANGE `history_date` `history_date` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP;
-
-UPDATE `task_log` SET `task_log_created` = `task_log_date` WHERE `task_log_created` IS NULL;
-UPDATE `task_log` SET `task_log_updated` = `task_log_date` WHERE `task_log_updated` IS NULL;
 
 ALTER TABLE `task_log`
     MODIFY `task_log_created` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -69,13 +93,23 @@ CREATE TABLE `forums2` (
   KEY `forum_name` (`forum_name`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
 
-UPDATE `forums` SET `forum_create_date` = NOW() WHERE CAST(`forum_create_date` AS CHAR(20)) = '0000-00-00 00:00:00';
+UPDATE `forums` SET `forum_create_date` = NOW() WHERE CAST(`forum_create_date` AS CHAR(20)) LIKE '0000-00-00%';
 UPDATE `forums` SET `forum_create_date` = NOW() WHERE `forum_create_date` IS NULL;
-UPDATE `forums` SET `forum_last_date` = `forum_create_date` WHERE CAST(`forum_last_date` AS CHAR(20)) = '0000-00-00 00:00:00';
+UPDATE `forums` SET `forum_last_date` = `forum_create_date` WHERE CAST(`forum_last_date` AS CHAR(20)) LIKE '0000-00-00%';
 UPDATE `forums` SET `forum_last_date` = `forum_create_date` WHERE `forum_last_date` IS NULL;
 INSERT INTO `forums2` SELECT * from `forums`;
-RENAME TABLE `forums` TO `old_forums`;
-RENAME TABLE `forums2` TO `forums`;
+
+-- Swap the tables only when every row was copied. Errors don't stop a
+-- migration, so a failed copy used to be followed by the rename anyway and the
+-- site was left with an empty table (the rows sat in old_<table>). If the copy
+-- failed, the old table stays in use, the new one is left beside it, and the
+-- copy error above is reported.
+SET @w2p_sql = IF((SELECT COUNT(*) FROM `forums2`) = (SELECT COUNT(*) FROM `forums`),
+    'RENAME TABLE `forums` TO `old_forums`, `forums2` TO `forums`',
+    'DO 0');
+PREPARE w2p_stmt FROM @w2p_sql;
+EXECUTE w2p_stmt;
+DEALLOCATE PREPARE w2p_stmt;
 
 # Clean up the projects structure
 CREATE TABLE `projects2` (
@@ -133,13 +167,14 @@ CREATE TABLE `projects2` (
   KEY `project_original_parent` (`project_original_parent`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
-UPDATE `projects` SET `project_start_date` = NULL WHERE CAST(`project_start_date` AS CHAR(20)) = '0000-00-00 00:00:00';
-UPDATE `projects` SET `project_end_date` = NULL WHERE CAST(`project_end_date` AS CHAR(20)) = '0000-00-00 00:00:00';
-UPDATE `projects` SET `project_created` = NOW() WHERE CAST(`project_created` AS CHAR(20)) = '0000-00-00 00:00:00';
-UPDATE `projects` SET `project_created` = NOW() WHERE `project_created` IS NULL;
-UPDATE `projects` SET `project_updated` = NOW() WHERE CAST(`project_updated` AS CHAR(20)) = '0000-00-00 00:00:00';
-UPDATE `projects` SET `project_updated` = NOW() WHERE `project_updated` IS NULL;
-
+-- The dates are cleaned as they are copied, not in the old table first: on
+-- some upgraded sites the old columns are NOT NULL (project_actual_end_date)
+-- and can't be set to NULL there. old_projects keeps the original values.
+-- Zero dates become NULL, a missing created date becomes now and a missing
+-- updated date the created one. project_start_date and project_end_date are
+-- DATE columns on most sites, so a zero there casts to '0000-00-00'.
+-- dotProject stored colors as '#eeeeee', but web2project stores 'eeeeee' and adds
+-- the '#' itself, so the '#' is dropped to fit the VARCHAR(6) column.
 INSERT INTO `projects2` (`project_id`, `project_company`, `project_department`, `project_name`, `project_short_name`,
       `project_owner`, `project_url`, `project_demo_url`, `project_start_date`, `project_end_date`, `project_actual_end_date`,
       `project_status`, `project_percent_complete`, `project_color_identifier`, `project_description`, `project_target_budget`,
@@ -150,16 +185,28 @@ INSERT INTO `projects2` (`project_id`, `project_company`, `project_department`, 
       `project_subpriority`, `project_end_date_adjusted_user`, `project_location`, `project_last_task`
   ) SELECT
     `project_id`, `project_company`, 0, `project_name`, `project_short_name`,
-    `project_owner`, `project_url`, `project_demo_url`, `project_start_date`, `project_end_date`, `project_actual_end_date`,
-    `project_status`, `project_percent_complete`, `project_color_identifier`, `project_description`, `project_target_budget`,
+    `project_owner`, `project_url`, `project_demo_url`,
+    IF(CAST(`project_start_date` AS CHAR(20)) LIKE '0000-00-00%', NULL, `project_start_date`),
+    IF(CAST(`project_end_date` AS CHAR(20)) LIKE '0000-00-00%', NULL, `project_end_date`),
+    IF(CAST(`project_actual_end_date` AS CHAR(20)) LIKE '0000-00-00%', NULL, `project_actual_end_date`),
+    `project_status`, `project_percent_complete`, LEFT(TRIM(LEADING '#' FROM `project_color_identifier`), 6), `project_description`, `project_target_budget`,
     `project_actual_budget`, `project_scheduled_hours`, `project_worked_hours`, `project_task_count`, `project_creator`,
     `project_private`, `project_departments`, `project_contacts`, `project_priority`, `project_type`, '1000-01-01',
     0, 0, `project_active`, `project_original_parent`, `project_parent`,
-    0, `project_updator`, `project_created`, `project_updated`, `project_status_comment`,
+    0, `project_updator`,
+    IF(`project_created` IS NULL OR CAST(`project_created` AS CHAR(20)) LIKE '0000-00-00%', NOW(), `project_created`),
+    IF(`project_updated` IS NULL OR CAST(`project_updated` AS CHAR(20)) LIKE '0000-00-00%',
+       IF(`project_created` IS NULL OR CAST(`project_created` AS CHAR(20)) LIKE '0000-00-00%', NOW(), `project_created`),
+       `project_updated`),
+    `project_status_comment`,
     `project_subpriority`, `project_end_date_adjusted_user`, `project_location`, `project_last_task`
   FROM `projects`;
-RENAME TABLE `projects` TO `old_projects`;
-RENAME TABLE `projects2` TO `projects`;
+SET @w2p_sql = IF((SELECT COUNT(*) FROM `projects2`) = (SELECT COUNT(*) FROM `projects`),
+    'RENAME TABLE `projects` TO `old_projects`, `projects2` TO `projects`',
+    'DO 0');
+PREPARE w2p_stmt FROM @w2p_sql;
+EXECUTE w2p_stmt;
+DEALLOCATE PREPARE w2p_stmt;
 
 CREATE TABLE `user_access_log2` (
   `user_access_log_id` int(10) auto_increment,
@@ -174,18 +221,22 @@ CREATE TABLE `user_access_log2` (
   KEY `date_time_out` (`date_time_out`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
-UPDATE `user_access_log` SET `date_time_out` = NOW() WHERE CAST(`date_time_out` AS CHAR(20)) = '0000-00-00 00:00:00';
+UPDATE `user_access_log` SET `date_time_out` = NOW() WHERE CAST(`date_time_out` AS CHAR(20)) LIKE '0000-00-00%';
 UPDATE `user_access_log` SET `date_time_out` = NOW() WHERE `date_time_out` IS NULL;
 
-UPDATE `user_access_log` SET `date_time_in` = `date_time_out` WHERE CAST(`date_time_in` AS CHAR(20)) = '0000-00-00 00:00:00';
+UPDATE `user_access_log` SET `date_time_in` = `date_time_out` WHERE CAST(`date_time_in` AS CHAR(20)) LIKE '0000-00-00%';
 UPDATE `user_access_log` SET `date_time_in` = `date_time_out` WHERE `date_time_in` IS NULL;
 
-UPDATE `user_access_log` SET `date_time_last_action` = `date_time_out` WHERE CAST(`date_time_last_action` AS CHAR(20)) = '0000-00-00 00:00:00';
+UPDATE `user_access_log` SET `date_time_last_action` = `date_time_out` WHERE CAST(`date_time_last_action` AS CHAR(20)) LIKE '0000-00-00%';
 UPDATE `user_access_log` SET `date_time_last_action` = `date_time_out` WHERE `date_time_last_action` IS NULL;
 
 INSERT INTO `user_access_log2` SELECT * from `user_access_log`;
-RENAME TABLE `user_access_log` TO `old_user_access_log`;
-RENAME TABLE `user_access_log2` TO `user_access_log`;
+SET @w2p_sql = IF((SELECT COUNT(*) FROM `user_access_log2`) = (SELECT COUNT(*) FROM `user_access_log`),
+    'RENAME TABLE `user_access_log` TO `old_user_access_log`, `user_access_log2` TO `user_access_log`',
+    'DO 0');
+PREPARE w2p_stmt FROM @w2p_sql;
+EXECUTE w2p_stmt;
+DEALLOCATE PREPARE w2p_stmt;
 
 CREATE TABLE `w2pversion2` (
   `code_revision` int(10) UNSIGNED NOT NULL DEFAULT '0',
@@ -202,5 +253,9 @@ UPDATE `w2pversion` SET `last_code_update` = `last_db_update` where `last_code_u
 # first row for each version and the rest of the history.
 INSERT IGNORE INTO `w2pversion2` (`code_revision`, `code_version`, `db_version`, `last_db_update`, `last_code_update`)
   SELECT 0, `code_version`, `db_version`, `last_db_update`, `last_code_update` from `w2pversion` ORDER BY `db_version`, `last_db_update`;
-RENAME TABLE `w2pversion` TO `old_w2pversion`;
-RENAME TABLE `w2pversion2` TO `w2pversion`;
+SET @w2p_sql = IF((SELECT COUNT(*) FROM `w2pversion2`) = (SELECT COUNT(DISTINCT `db_version`) FROM `w2pversion`),
+    'RENAME TABLE `w2pversion` TO `old_w2pversion`, `w2pversion2` TO `w2pversion`',
+    'DO 0');
+PREPARE w2p_stmt FROM @w2p_sql;
+EXECUTE w2p_stmt;
+DEALLOCATE PREPARE w2p_stmt;
