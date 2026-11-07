@@ -93,8 +93,7 @@ $theme = $AppUI->getTheme();
 // check is the user needs a new password
 if (w2PgetParam($_POST, 'lostpass', 0)) {
 	$AppUI->setUserLocale();
-	include W2P_BASE_DIR . '/locales/' . $AppUI->user_locale . '/locales.php';
-	include W2P_BASE_DIR . '/locales/core.php';
+	$AppUI->loadLocale();
 	setlocale(LC_TIME, $AppUI->user_lang);
 	if (w2PgetParam($_POST, 'sendpass', 0)) {
 		sendNewPass();
@@ -113,8 +112,7 @@ if (isset($_POST['login'])) {
 	$password = w2PgetParam($_POST, 'password', '');
 	$redirect = w2PgetParam($_POST, 'redirect', '');
 	$AppUI->setUserLocale();
-	include W2P_BASE_DIR . '/locales/' . $AppUI->user_locale . '/locales.php';
-	include W2P_BASE_DIR . '/locales/core.php';
+	$AppUI->loadLocale();
 	$ok = $AppUI->login($username, $password);
 	if (!$ok) {
 		$AppUI->setMsg('Login Failed', UI_MSG_ERROR);
@@ -135,8 +133,7 @@ $u = '';
 if ($AppUI->doLogin()) {
 	// load basic locale settings
 	$AppUI->setUserLocale();
-	include './locales/' . $AppUI->user_locale . '/locales.php';
-	include './locales/core.php';
+	$AppUI->loadLocale();
 	setlocale(LC_TIME, $AppUI->user_lang);
 	$redirect = !empty($_SERVER['QUERY_STRING']) ? strip_tags($_SERVER['QUERY_STRING']) : '';
 	if (strpos($redirect, 'logout') !== false) {
@@ -200,8 +197,7 @@ $u = $loader->checkFileName(w2PgetParam($_GET, 'u', ''));
 $u = preg_replace("/[^a-z0-9_]/", "", $u);
 
 // load module based locale settings
-include W2P_BASE_DIR . '/locales/' . $AppUI->user_locale . '/locales.php';
-include W2P_BASE_DIR . '/locales/core.php';
+$AppUI->loadLocale();
 
 setlocale(LC_TIME, $AppUI->user_lang);
 $m_config = w2PgetConfig($m);
@@ -237,12 +233,36 @@ if (isset($_POST['dosql']) || 0 === strpos($a, 'do_') || 'domodsql' == $a) {
 		$AppUI->setMsg('Your form has expired or did not come from this site. Please try again.', UI_MSG_ERROR);
 		$AppUI->redirect();
 	}
+
+	// ...and may only run for an active module the user can access, so a
+	// handler that forgets its own permission check can't be reached by
+	// users who can't open the module. The exceptions are the self-service
+	// handlers, and only while a user is changing their own record: users
+	// without the Users or System module still edit their own details,
+	// preferences and calendar feed. Each handler keeps its own checks.
+	$handler = $m . '/' . ($u ? $u . '/' : '') . (isset($_POST['dosql']) ? $loader->checkFileName($_POST['dosql']) : $a);
+	$selfService = array(
+		'system/do_preference_aed' => 'pref_user',
+		'users/do_user_aed'        => 'user_id',
+		'users/do_user_token'      => 'user_id',
+	);
+	$ownRecord = isset($selfService[$handler]) && !w2PgetParam($_POST, 'del', 0)
+		&& (int) w2PgetParam($_POST, $selfService[$handler], 0) === (int) $AppUI->user_id;
+	if (!$ownRecord && !($AppUI->isActiveModule($m) && canAccess($m))) {
+		$AppUI->redirect(ACCESS_DENIED);
+	}
 }
 
 // do some db work if dosql is set
 // TODO - MUST MOVE THESE INTO THE MODULE DIRECTORY
 if (isset($_POST['dosql'])) {
-	require W2P_BASE_DIR . '/modules/' . $m . '/' . ($u ? ($u . '/') : '') . $loader->checkFileName($_POST['dosql']) . '.php';
+	$dosql_file = W2P_BASE_DIR . '/modules/' . $m . '/' . ($u ? ($u . '/') : '') . $loader->checkFileName($_POST['dosql']) . '.php';
+	if (!is_file($dosql_file)) {
+		// No such handler: say so instead of a fatal error that shows the path.
+		$AppUI->setMsg('The requested action does not exist.', UI_MSG_ERROR);
+		$AppUI->redirect('m=' . $m);
+	}
+	require $dosql_file;
 }
 
 // start output proper

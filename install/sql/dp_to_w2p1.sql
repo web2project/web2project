@@ -22,6 +22,10 @@ TRUNCATE TABLE `sessions`;
 ALTER TABLE `sessions` CHANGE `session_created` `session_created` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP;
 
 # 0060809
+# dotProject added session_user during 2.0.x (2.0.4 has it, 2.0.1 and 2.0.2 do
+# not), so add it where it is missing; elsewhere the ADD fails as a duplicate
+# column, which the upgrader skips.
+ALTER TABLE `sessions` ADD `session_user` INT NOT NULL DEFAULT '0' AFTER `session_id`;
 ALTER TABLE `sessions` CHANGE `session_user` `session_user` INT NOT NULL DEFAULT '0';
 
 # 2026 Update - setting to eliminate '0000-00-00 00:00:00' datetimes
@@ -32,7 +36,14 @@ ALTER TABLE `projects` CHANGE `project_end_date` `project_end_date` DATETIME NUL
 UPDATE `projects` SET `project_end_date` = NULL WHERE CAST(`project_end_date` AS CHAR(20)) = '0000-00-00 00:00:00';
 UPDATE `tasks` SET `task_end_date` = NULL WHERE CAST(`task_end_date` AS CHAR(20)) = '0000-00-00 00:00:00';
 UPDATE `tasks` SET `task_start_date` = NULL WHERE CAST(`task_start_date` AS CHAR(20)) = '0000-00-00 00:00:00';
-UPDATE `users` SET `user_birthday` = NULL WHERE CAST(`user_birthday` AS CHAR(20)) = '0000-00-00 00:00:00';
+-- dotProject 2.0 moved birthdays to contacts, so users.user_birthday is only
+-- on older databases. Clean it only where it is still there.
+SET @w2p_sql = IF((SELECT COUNT(*) FROM information_schema.columns WHERE table_schema = DATABASE() AND table_name = 'users' AND column_name = 'user_birthday') > 0,
+    'UPDATE `users` SET `user_birthday` = NULL WHERE CAST(`user_birthday` AS CHAR(20)) = ''0000-00-00 00:00:00''',
+    'DO 0');
+PREPARE w2p_stmt FROM @w2p_sql;
+EXECUTE w2p_stmt;
+DEALLOCATE PREPARE w2p_stmt;
 
 # 20061119
 # archived status, do the second line only if project_status name matches 'Archived'

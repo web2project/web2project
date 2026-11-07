@@ -66,7 +66,7 @@ class w2p_Core_CAppUITest extends CommonSetup
         $AppUI = new w2p_Core_CAppUI();
 
         $user_lang = array (
-            0 => 'en_US.ISO8859-15',
+            0 => 'en_US.utf-8',
             1 => 'en_US',
             2 => 'en_US',
             3 => 'en',

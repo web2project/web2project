@@ -9,7 +9,7 @@ global $AppUI, $company_id, $dept_ids, $department, $locale_char_set,
     $proFilter, $projectStatus, $showInactive, $showLabels, $showAllGantt,
     $user_id, $w2Pconfig, $project_id, $project_original_id, $gantt_arr;
 
-w2PsetExecutionConditions($w2Pconfig);
+w2PsetExecutionConditions();
 
 // get the prefered date format
 $df = $AppUI->getPref('SHDATEFORMAT');

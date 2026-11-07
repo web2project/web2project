@@ -19,6 +19,19 @@ class w2p_Core_CustomFields {
 
     public $fields = array();
 
+    /**
+     * Name of the hidden list an edit form posts to say which custom fields
+     * it showed (see getHTML() and bind()).
+     */
+    const SHOWN_FIELDS = 'w2p_custom_fields';
+
+    /**
+     * Names of the fields the last bind() gave a value.
+     *
+     * @var string[]
+     */
+    protected $bound = array();
+
     public function __construct($m, $notUsed, $obj_id = null, $mode = 'edit', $published = 0) {
         $this->m = $m;
         $this->a = 'addedit'; // only addedit pages can carry the custom field for now
@@ -155,22 +168,53 @@ class w2p_Core_CustomFields {
      *
      * @param array<mixed> $hash
      */
+    /**
+     * Takes the custom field values from a hash (usually $_POST).
+     *
+     * A field in the hash gets its value. A field the edit form showed (it
+     * lists them in SHOWN_FIELDS) but didn't post is an unticked checkbox,
+     * so it becomes 0. Every other field keeps the value it was loaded with:
+     * a save from anywhere else (a bulk update, an import, a cron job or API
+     * call with no custom fields in it) must not wipe them.
+     *
+     * @param array<string, mixed> $hash
+     */
     public function bind($hash) {
-        if (!count($this->fields) == 0) {
-            foreach ($this->fields as $k => $notUsed) {
-                if (isset($hash[$k])) {
-                    $this->fields[$k]->setValue($hash[$k]);
-                } else {
-                    $this->fields[$k]->setValue(0);
-                }
+        $this->bound = array();
+        $hash = is_array($hash) ? $hash : array();
+        $shown = (isset($hash[self::SHOWN_FIELDS]) && is_array($hash[self::SHOWN_FIELDS])) ? $hash[self::SHOWN_FIELDS] : array();
+
+        foreach ($this->fields as $k => $notUsed) {
+            if (isset($hash[$k])) {
+                $this->fields[$k]->setValue($hash[$k]);
+                $this->bound[] = $k;
+            } elseif (in_array($k, $shown, true)) {
+                $this->fields[$k]->setValue(0);
+                $this->bound[] = $k;
             }
         }
     }
 
-    public function store($object_id) {
+    /**
+     * Whether the last bind() gave any field a value.
+     *
+     * @return bool
+     */
+    public function hasBoundValues() {
+        return count($this->bound) > 0;
+    }
+
+    /**
+     * @param int  $object_id
+     * @param bool $boundOnly store only the fields the last bind() set
+     */
+    public function store($object_id, $boundOnly = false) {
         if (!count($this->fields) == 0) {
             $store_errors = '';
             foreach ($this->fields as $k => $notUsed) {
+                if ($boundOnly && !in_array($k, $this->bound, true)) {
+                    continue;
+                }
                 $result = $this->fields[$k]->store($object_id);
                 if ($result) {
                     $store_errors .= 'Error storing custom field ' . $k . ':' . $result;
@@ -210,10 +254,17 @@ class w2p_Core_CustomFields {
 
     public function getHTML() {
         $html = '';
+        $shown = '';
         foreach ($this->fields as $cfield) {
             if ($cfield->field_published) {
                 $html .= '<p>' . $cfield->getHTML($this->mode) . '</p>';
+                $shown .= '<input type="hidden" name="' . self::SHOWN_FIELDS . '[]" value="' . w2PformSafe($cfield->field_name) . '" />';
             }
+        }
+        // In an edit form, say which fields were shown, so bind() can tell
+        // an unticked checkbox from a field the form didn't have.
+        if ('edit' == $this->mode) {
+            $html .= $shown;
         }
         return $html;
     }

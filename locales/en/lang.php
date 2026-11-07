@@ -3,12 +3,13 @@
 // countries and language variants supported by this locale pack.
 // Elements are keyed by the ISO 2 character language code in lowercase
 // followed by an underscore and the 2 character country code in Uppercase.
-// Each array element has 4 parts:
+// Each array element has 5 parts:
 // 1. Directory name of locale directory
 // 2. English name of language
 // 3. Name of language in that language
 // 4. Microsoft locale code
+// 5. Character set
 
 $dir = basename(dirname(__file__));
 
-$LANGUAGES['en_US'] = array($dir, 'English', 'English', 'en_US', 'ISO8859-15');
+$LANGUAGES['en_US'] = array($dir, 'English', 'English', 'en_US', 'utf-8');

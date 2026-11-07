@@ -300,19 +300,19 @@ class w2p_Core_CAppUI
         return $loader->readDirs($path);
     }
 
-    /** @deprecated */
+    /** @deprecated v3.0, removed in v6.0: use w2p_FileSystem_Loader::readFiles() */
     public function readFiles($path, $filter = '.')
     {
-        trigger_error("AppUI->readFiles() has been deprecated in v3.0 and will be removed by v4.0. Please use w2p_FileSystem_Loader->readFiles() instead.", E_USER_NOTICE);
+        trigger_error("CAppUI->readFiles() has been deprecated in v3.0 and will be removed in v6.0. Please use w2p_FileSystem_Loader->readFiles() instead.", E_USER_NOTICE);
 
         $loader = new w2p_FileSystem_Loader();
         return $loader->readFiles($path, $filter);
     }
 
-    /** @deprecated */
+    /** @deprecated v3.0, removed in v6.0: use w2p_FileSystem_Loader::checkFileName() */
     public function checkFileName($file)
     {
-        trigger_error("AppUI->checkFileName() has been deprecated in v3.0 and will be removed by v4.0. Please use w2p_FileSystem_Loader->checkFileName() instead.", E_USER_NOTICE);
+        trigger_error("CAppUI->checkFileName() has been deprecated in v3.0 and will be removed in v6.0. Please use w2p_FileSystem_Loader->checkFileName() instead.", E_USER_NOTICE);
 
         $loader = new w2p_FileSystem_Loader();
         return $loader->checkFileName($file);
@@ -349,13 +349,13 @@ class w2p_Core_CAppUI
         } else {
             // Need to try and find the language the user is using, find the first one
             // that has this as the language part
-            if (strlen($loc) > 2) {
-                list($l, $c) = explode('_', $loc);
-                $loc = $this->findLanguage($l, $c);
-            } else {
-                $loc = $this->findLanguage($loc);
+            $parts = explode('_', (string) $loc, 2);
+            $loc = $this->findLanguage($parts[0], isset($parts[1]) ? $parts[1] : false);
+            if (null === $loc) {
+                // The user's (or the host's) language isn't installed: use English.
+                $loc = 'en_US';
             }
-            $lang = $LANGUAGES[$loc];
+            $lang = isset($LANGUAGES[$loc]) ? $LANGUAGES[$loc] : array('en', 'English', 'English', 'en_US', 'utf-8');
         }
         list($base_locale, $notUsed, $notUsed2, $default_language, $lcs) = $lang;
         if (!isset($lcs)) {
@@ -370,6 +370,33 @@ class w2p_Core_CAppUI
         } else {
             return $user_lang;
         }
+    }
+
+    /**
+     * Loads the user's language: its locales.php (LOCALE_FIRST_DAY and the
+     * other locale settings) and its translations (locales/core.php).
+     *
+     * Falls back to English when the language isn't installed, so a
+     * preference naming a removed language can't break the calendars.
+     * Call setUserLocale() first.
+     */
+    public function loadLocale()
+    {
+        // locales.php and core.php run in this scope; give them the globals
+        // they read or set.
+        global $locale_char_set, $m, $perms, $w2Pconfig;
+        $AppUI = $this;
+
+        if ('' == (string) $this->user_locale
+            || !file_exists(W2P_BASE_DIR . '/locales/' . $this->user_locale . '/locales.php')) {
+            $this->user_locale = 'en';
+        }
+        // locales.php defines constants, which can't change later in the
+        // request (saving preferences loads the language a second time).
+        if (!defined('LOCALE_FIRST_DAY')) {
+            include W2P_BASE_DIR . '/locales/' . $this->user_locale . '/locales.php';
+        }
+        include W2P_BASE_DIR . '/locales/core.php';
     }
 
     public function findLanguage($language, $country = false)
@@ -405,11 +432,19 @@ class w2p_Core_CAppUI
     /**
      * Load the known language codes for loaded locales
      */
+    /**
+     * The installed languages, from each locales/<dir>/lang.php.
+     *
+     * Read once per request (scanning locales/ is cheap), not kept in the
+     * session, so a language added or removed shows up without logging out.
+     *
+     * @return array<string, array<int, string>>
+     */
     public function loadLanguages()
     {
-        if (isset($_SESSION['LANGUAGES'])) {
-            $LANGUAGES = &$_SESSION['LANGUAGES'];
-        } else {
+        static $languages = null;
+
+        if (null === $languages) {
             $LANGUAGES = array();
             $loader = new w2p_FileSystem_Loader();
             $langs = $loader->readDirs('locales');
@@ -418,9 +453,12 @@ class w2p_Core_CAppUI
                     include W2P_BASE_DIR . '/locales/' . $lang . '/lang.php';
                 }
             }
-            $_SESSION['LANGUAGES'] = &$LANGUAGES;
+            $languages = $LANGUAGES;
         }
-        return $LANGUAGES;
+        // Sessions from before this change still carry the old cache.
+        unset($_SESSION['LANGUAGES']);
+
+        return $languages;
     }
 
     /**
@@ -596,6 +634,8 @@ class w2p_Core_CAppUI
      *
      * @param string $params The URL query string to append to the URL
      * @param string $hist A marker for a historic 'place, only -1 or an empty string is valid.
+     *
+     * @return never
      */
     public function redirect($params = '', $hist = '')
     {
@@ -1065,13 +1105,48 @@ class w2p_Core_CAppUI
         return $q->loadHashList('mod_name');
     }
 
+    /**
+     * mod_directory => mod_active for every installed module, loaded on the
+     * first isActiveModule() call of the request.
+     *
+     * @var array<string, mixed>|null
+     */
+    protected static $activeModules = null;
+
+    /**
+     * Says whether a module is installed and active.
+     *
+     * The module list is read once per request, so this can be called per
+     * breadcrumb or per calendar cell without a query each time.
+     *
+     * @param string $module the module's directory name
+     *
+     * @return mixed mod_active ('1' or '0'), or false if not installed
+     */
     public function isActiveModule($module)
     {
-        $q = new w2p_Database_Query;
-        $q->addTable('modules');
-        $q->addQuery('mod_active');
-        $q->addWhere("mod_directory = '$module'");
-        return $q->loadResult();
+        if (null === self::$activeModules) {
+            $q = new w2p_Database_Query;
+            $q->addTable('modules');
+            $q->addQuery('mod_directory, mod_active');
+            $modules = $q->loadHashList();
+            if (!$modules) {
+                // Don't cache a failed lookup as "nothing is active".
+                return false;
+            }
+            self::$activeModules = $modules;
+        }
+
+        return self::$activeModules[(string) $module] ?? false;
+    }
+
+    /**
+     * Forgets the cached module list, for code that installs, removes or
+     * (de)activates a module.
+     */
+    public static function clearActiveModules()
+    {
+        self::$activeModules = null;
     }
 
     /**
@@ -1119,10 +1194,10 @@ class w2p_Core_CAppUI
         return $this->getTheme()->loadFooterJS();
     }
 
-    /** @deprecated */
+    /** @deprecated v3.2, removed in v6.0: use $AppUI->getTheme()->loadCalendarJS() */
     public function loadCalendarJS()
     {
-        trigger_error("CAppUI->loadCalendarJS() has been deprecated in v3.2 and will be removed in v5.0", E_USER_NOTICE);
+        trigger_error('CAppUI->loadCalendarJS() has been deprecated in v3.2 and will be removed in v6.0. Please use $AppUI->getTheme()->loadCalendarJS() instead.', E_USER_NOTICE);
 
         $this->getTheme()->loadCalendarJS();
     }

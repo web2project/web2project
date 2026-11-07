@@ -31,6 +31,11 @@ class CSystem
         return $this->upgrader->getUpdatesApplied();
     }
 
+    /* The full report when the last upgradeSystem() stopped on an error, otherwise ''. */
+    public function getFailureReport() {
+        return $this->upgrader->getFailureReport();
+    }
+
     public function hook_cron()
     {
         if (w2PgetConfig('system_update_check', true)) {

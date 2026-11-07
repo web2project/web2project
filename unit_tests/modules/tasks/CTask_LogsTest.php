@@ -51,7 +51,7 @@ class CTask_LogsTest extends CommonSetup
     {
         $unset = array('task_log_problem');
 
-        parent::objectPropertiesTest('CTask_Log', 15, $unset);
+        parent::objectPropertiesTest('CTask_Log', 16, $unset);
     }
 
     /**
@@ -107,6 +107,10 @@ class CTask_LogsTest extends CommonSetup
          *   in this test.
          */
         sleep(1);
+        // the stored log, read once by hook_preStore() and once by canEdit()
+        $stored = array('task_log_creator' => 1, 'task_log_record_creator' => 1, 'task_log_task' => 1);
+        $this->mockDB->stageHash($stored);
+        $this->mockDB->stageHash($stored);
         $result = $this->obj->store();
         $this->assertTrue($result);
         $new_id = $this->obj->task_log_id;
@@ -114,7 +118,8 @@ class CTask_LogsTest extends CommonSetup
         $this->assertEquals($original_id,                    $new_id);
         $this->assertEquals('Updated Task Log',              $this->obj->task_log_name);
         $this->assertEquals('My new description',            $this->obj->task_log_description);
-        $this->assertEquals(2,                               $this->obj->task_log_record_creator);
+        // who recorded the log is not changed by an edit
+        $this->assertEquals(1,                               $this->obj->task_log_record_creator);
         $this->assertNotEquals($this->obj->task_log_created, $this->obj->task_log_updated);
 
         //TODO: figure out a way to test the CTask cascading totals
@@ -191,11 +196,137 @@ class CTask_LogsTest extends CommonSetup
     public function testCanDelete()
     {
         $msg = '';
+        $this->obj->task_log_id = 6;
+        $this->stageStoredLog($this->_AppUI->user_id, $this->_AppUI->user_id, 4);
 
         $return = $this->obj->canDelete($msg);
 
         $this->assertTrue($return);
         $this->assertEquals('', $msg);
+        $this->assertEquals(4, $this->obj->task_log_task);
+    }
+
+    /**
+     * A log id with no row can be neither edited nor deleted.
+     */
+    public function testUnknownLogCannotBeEditedOrDeleted()
+    {
+        $this->obj->task_log_id = 9999;
+
+        $this->assertFalse($this->obj->canEdit());
+        $this->assertFalse($this->obj->canDelete());
+    }
+
+    /**
+     * GHSA-xcpx-p68j-gm7w: posting your own id as the creator of someone
+     *   else's log must not let you edit it.
+     */
+    public function testCanEditChecksStoredCreatorNotPosted()
+    {
+        $log = $this->logWithoutPermissions();
+        $log->task_log_id             = 6;
+        $log->task_log_task           = 4;
+        $log->task_log_creator        = $this->_AppUI->user_id;
+        $log->task_log_record_creator = $this->_AppUI->user_id;
+        $this->stageStoredLog(2, 2, 4);
+
+        $this->assertFalse($log->canEdit());
+    }
+
+    /**
+     * GHSA-xcpx-p68j-gm7w: the same for deletes, which only ever loaded the
+     *   stored log when no creator was posted.
+     */
+    public function testCanDeleteChecksStoredCreatorNotPosted()
+    {
+        $log = $this->logWithoutPermissions();
+        $log->task_log_id             = 5;
+        $log->task_log_creator        = $this->_AppUI->user_id;
+        $log->task_log_record_creator = $this->_AppUI->user_id;
+        $this->stageStoredLog(2, 2, 3);
+
+        $this->assertFalse($log->canDelete());
+    }
+
+    /**
+     * The subject and the recorder of a log may still change it without
+     *   edit permission on the task.
+     */
+    public function testCreatorsCanChangeTheirOwnLog()
+    {
+        $log = $this->logWithoutPermissions();
+        $log->task_log_id   = 6;
+        $log->task_log_task = 4;
+
+        $this->stageStoredLog($this->_AppUI->user_id, 2, 4);
+        $this->assertTrue($log->canEdit());
+
+        $this->stageStoredLog(2, $this->_AppUI->user_id, 4);
+        $this->assertTrue($log->canDelete());
+    }
+
+    /**
+     * An edit keeps the stored creator and record creator, whatever is posted.
+     */
+    public function testStoreUpdateKeepsStoredCreators()
+    {
+        $this->post_data['task_log_id'] = 6;
+        $this->obj->bind($this->post_data);
+        // read once by hook_preStore() and once by canEdit()
+        $this->stageStoredLog(2, 3, 1);
+        $this->stageStoredLog(2, 3, 1);
+
+        $this->assertTrue($this->obj->store());
+        $this->assertEquals(2, $this->obj->task_log_creator);
+        $this->assertEquals(3, $this->obj->task_log_record_creator);
+    }
+
+    /**
+     * A new log is always recorded by the current user, and is for another
+     *   user only when the task allows that and the user is assigned to it.
+     */
+    public function testStoreCreateSetsRecordCreatorAndChecksSubject()
+    {
+        $this->post_data['task_log_creator']        = 99;
+        $this->post_data['task_log_record_creator'] = 99;
+        $this->obj->bind($this->post_data);
+        $this->mockDB->stageResult(0); // user 99 may not be logged for
+
+        $this->assertTrue($this->obj->store());
+        $this->assertEquals($this->_AppUI->user_id, $this->obj->task_log_record_creator);
+        $this->assertEquals($this->_AppUI->user_id, $this->obj->task_log_creator);
+    }
+
+    /**
+     * Stages the row that CTask_Log::getStoredLog() reads.
+     */
+    private function stageStoredLog($creator, $record_creator, $task_id)
+    {
+        $this->mockDB->stageHash(array('task_log_creator' => $creator,
+            'task_log_record_creator' => $record_creator, 'task_log_task' => $task_id));
+    }
+
+    /**
+     * A task log whose permission checks all fail, so only the creator
+     *   checks can allow an edit or delete.
+     */
+    private function logWithoutPermissions()
+    {
+        $log = new class extends CTask_Log {
+            public function denyAllPermissions()
+            {
+                $this->_perms = new class {
+                    public function checkModuleItem($module, $op, $item = null)
+                    {
+                        return false;
+                    }
+                };
+            }
+        };
+        $log->overrideDatabase($this->mockDB);
+        $log->denyAllPermissions();
+
+        return $log;
     }
 
     /**

@@ -73,11 +73,12 @@ class w2p_Authenticators_LDAP extends w2p_Authenticators_Base
                             if ($this->userExists($username)) {
                                 $this->updateSqlPassword($username, $password);
                                 return true;
-                            } else {
-                                $this->createsqluser($username, $password,
-                                                     $first_user);
                             }
-                            return true;
+
+                            // A first-time LDAP user needs a local account;
+                            // without one the login can't continue.
+                            return $this->createsqluser($username, $password,
+                                                        $first_user);
                         }
                     }
                 }
@@ -161,7 +162,18 @@ class w2p_Authenticators_LDAP extends w2p_Authenticators_Base
         return isset($ldap_attribs[$name][0]) ? (string) $ldap_attribs[$name][0] : '';
     }
 
-     public function createsqluser($username, $password, $ldap_attribs = array())
+    /**
+     * Creates the local user (and its contact) for a first-time LDAP user.
+     *
+     * @param string               $username
+     * @param string               $password
+     * @param array<string, mixed> $ldap_attribs
+     *
+     * @return bool false if the user could not be stored; the contact made
+     *              for it is removed again, so failed attempts leave nothing
+     *              behind
+     */
+    public function createsqluser($username, $password, $ldap_attribs = array())
     {
         // Every user needs a contact: the user lists and the per-user
         // permission checks join on it, so a user without one cannot be
@@ -203,10 +215,25 @@ class w2p_Authenticators_LDAP extends w2p_Authenticators_Base
         $u->user_contact = (int) $c->contact_id;
         $result = $u->store(null, true);
 
-        $user_id = $u->user_id;
-        $this->user_id = $user_id;
+        if (!$result || !$u->user_id) {
+            if ($c->contact_id) {
+                // Nobody is logged in yet, so CContact::delete() would be
+                // refused; remove the contact directly.
+                $q = new w2p_Database_Query();
+                $q->setDelete('contacts_methods');
+                $q->addWhere('contact_id = ' . (int) $c->contact_id);
+                $q->exec();
+                $q->clear();
+                $q->setDelete('contacts');
+                $q->addWhere('contact_id = ' . (int) $c->contact_id);
+                $q->exec();
+            }
+            return false;
+        }
+
+        $this->user_id = $u->user_id;
 
         // No role, so user will be created as 'Inactive'
-    
+        return true;
     }
 }

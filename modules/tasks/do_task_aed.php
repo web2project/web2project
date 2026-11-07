@@ -19,10 +19,16 @@ $new_task_project = (int) w2PgetParam($_POST, 'new_task_project', 0);
 
 // Find the task if we are set
 $task_end_date = null;
+$old_task_project = 0;
 $obj = new CTask();
 if ($task_id) {
-    $obj->load($task_id);
+    if (!$obj->load($task_id)) {
+        $AppUI->setMsg('Task');
+        $AppUI->setMsg('invalidID', UI_MSG_ERROR, true);
+        $AppUI->redirect('m=tasks');
+    }
     $task_end_date = new w2p_Utilities_Date($obj->task_end_date);
+    $old_task_project = (int) $obj->task_project;
 }
 
 if (!$obj->bind($_POST)) {
@@ -31,8 +37,12 @@ if (!$obj->bind($_POST)) {
 }
 
 // Check to see if the task_project has changed
-if ($new_task_project != 0 and $obj->task_project != $new_task_project) {
-    $obj->moveTaskBetweenProjects($task_id, $obj->task_project, $new_task_project);
+if ($task_id && $new_task_project != 0 && $old_task_project != $new_task_project) {
+    if (!$obj->moveTaskBetweenProjects($task_id, $old_task_project, $new_task_project)) {
+        $AppUI->setMsg('Task');
+        $AppUI->setMsg($obj->getError(), UI_MSG_ERROR, true);
+        $AppUI->redirect('m=tasks&a=view&task_id=' . $task_id);
+    }
     /**
      * We have to bail out for a redirect here or otherwise the store() below
      *   will screw things up and assign the root task specified back to the

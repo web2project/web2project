@@ -158,15 +158,6 @@ function companyChange() {
 	}
 }
 
-function updateVerify() {
-	var form = document.changecontact;
-	if (form.contact_email.value.length < 1 && form.contact_updateask.checked) {
-		alert('<?php echo $AppUI->_('You must enter a valid email before using this feature.', UI_OUTPUT_JS); ?>');
-		form.contact_updateask.checked = false;
-		form.contact_email.focus();
-	}
-}
-
 function addContactMethod(field, value) {
     var selects, index, select, tr, td;
 

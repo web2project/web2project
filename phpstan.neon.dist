@@ -1,0 +1,22 @@
+# PHPStan configuration for web2project.
+# Run: vendor/bin/phpstan analyse
+# lib/ is third-party code: it is read for class/function symbols only, never analysed.
+# vendor/ is reached through Composer's autoloader and never analysed.
+parameters:
+  level: 10
+  phpVersion: 80300
+  bootstrapFiles:
+    - dev/phpstan-bootstrap.php
+  paths:
+    - .
+  excludePaths:
+    analyseAndScan:
+      - vendor
+      - files
+      - unit_tests/reports (?)
+    analyse:
+      - lib
+      # Deprecated since 3.0 and broken: still read for its class name, but not analysed.
+      - classes/w2p/Authenticators/PostNuke.class.php
+  scanDirectories:
+    - lib

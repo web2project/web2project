@@ -51,7 +51,6 @@ class w2p_Output_HTML_FormHelper extends w2p_Output_HTML_Base
                 $output .= '</a>';
                 break;
             case 'private':
-            case 'updateask':       // @todo This is unique to the contacts module
                 $output  = '<input type="checkbox" value="1" class="text '. $suffix . '" ';
                 $output .= 'name="' . $fieldName. '" ' .$params .' />';
                 break;

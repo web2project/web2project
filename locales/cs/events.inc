@@ -69,6 +69,7 @@
 'Never'=>'Nikdy',
 'New event'=>'Nová událost',
 'next month'=>'příští měsíc',
+'Non-working day'=>'Nepracovní den',
 'November'=>'Listopad',
 'October'=>'Říjen',
 'Overdue'=>'Opožděné',

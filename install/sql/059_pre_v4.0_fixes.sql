@@ -1,4 +1,9 @@
 
+-- A file without an upload date (a zero date from a 1.x/2.x site, or NULL)
+-- makes the NOT NULL change below fail on MySQL 8. Give it the upgrade time,
+-- as 056 does for tasks without a created date.
+UPDATE `files` SET `file_date` = NOW() WHERE `file_date` IS NULL OR CAST(`file_date` AS CHAR(20)) LIKE '0000-00-00%';
+
 -- This changes the column to meet our naming convention to make our auto-formatting work
 ALTER TABLE `files` CHANGE `file_date` `file_datetime` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP;
 

@@ -27,6 +27,14 @@ class CTask_Log extends w2p_Core_BaseObject
 	public $task_log_task = null;
 
 	/**
+	 * The project of the task this log belongs to. Set from the task on
+	 * every store, and kept in step when the task moves to another project.
+	 *
+	 * @var int
+	 */
+	public $task_log_project = null;
+
+	/**
 	 * The name of the task log
 	 *
 	 * @var string
@@ -138,7 +146,24 @@ class CTask_Log extends w2p_Core_BaseObject
 		$q = $this->_getQuery();
 		$this->task_log_updated = $q->dbfnNowWithTZ();
 
-        $this->task_log_creator = (int) $this->task_log_creator ? $this->task_log_creator : $this->_AppUI->user_id;
+        // Always the task's project, whatever was bound from the form.
+        $this->task_log_project = $this->getTaskProject();
+
+        // Who the log is for and who recorded it are never taken from the
+        // request on an edit, and the recorder of a new log is always the
+        // current user. See canEdit().
+        $stored = $this->getStoredLog();
+        if (null !== $stored) {
+            $this->task_log_creator        = $stored['task_log_creator'];
+            $this->task_log_record_creator = $stored['task_log_record_creator'];
+        } else {
+            $this->task_log_record_creator = $this->currentUserId();
+            if (!$this->canLogFor((int) $this->task_log_creator)) {
+                $this->task_log_creator = 0;
+            }
+        }
+
+        $this->task_log_creator = (int) $this->task_log_creator ? $this->task_log_creator : $this->currentUserId();
 
 		if ($this->task_log_date) {
 			$date = new w2p_Utilities_Date($this->task_log_date);
@@ -218,7 +243,10 @@ class CTask_Log extends w2p_Core_BaseObject
                 $q->addOrder('task_log_date DESC, task_log_id DESC');
                 $q->setLimit(1);
                 $results = $q->loadHash();
-                $percentComplete = $results['task_log_percent_complete'];
+                // No log left (the task's last one was just deleted): no
+                // recorded progress, rather than an empty percentage.
+                $percentComplete = (is_array($results) && isset($results['task_log_percent_complete']))
+                    ? $results['task_log_percent_complete'] : 0;
             } else {
                 $percentComplete = 100;
             }
@@ -294,19 +322,16 @@ class CTask_Log extends w2p_Core_BaseObject
 	 */
     public function canDelete($notUsed = null, $notUsed2 = null, $notUsed3 = null)
 	{
-        // Deletes post only the id. The creator check below needs the record,
-        // which hook_preDelete() used to load before this check ran.
-        if ($this->task_log_id && null === $this->task_log_creator) {
-            $this->load($this->task_log_id);
+        $stored = $this->getStoredLog();
+        if (null === $stored) {
+            return false;
         }
-        if($this->_AppUI->user_id == $this->task_log_creator ||
-                $this->_AppUI->user_id == $this->task_log_record_creator ||
-                $this->_perms->checkModuleItem($this->_tbl_module, 'edit', $this->{$this->_tbl_key})) {
-
-            return true;
+        // Deletes post only the id; the caller redirects back to the task.
+        if (!(int) $this->task_log_task) {
+            $this->task_log_task = $stored['task_log_task'];
         }
 
-        return false;
+        return $this->canChangeStoredLog($stored);
 	}
 
     public function canCreate() {
@@ -320,17 +345,111 @@ class CTask_Log extends w2p_Core_BaseObject
      *   b) the subject of the log; OR
      *   c) have edit permissions on the corresponding task.
      *
+     * These are checked against the log as stored, never against the values
+     * bound from a request (GHSA-xcpx-p68j-gm7w). Moving a log to another
+     * task also needs the right to add a log there.
+     *
      * @return bool
      */
     public function canEdit() {
-        if($this->_AppUI->user_id == $this->task_log_creator ||
-                $this->_AppUI->user_id == $this->task_log_record_creator ||
-                $this->_perms->checkModuleItem($this->_tbl_module, 'edit', $this->{$this->_tbl_key})) {
+        $stored = $this->getStoredLog();
+        if (null === $stored || !$this->canChangeStoredLog($stored)) {
+            return false;
+        }
 
+        $task_id = (int) $this->task_log_task;
+        if ($task_id && $task_id != $stored['task_log_task']) {
+            return $this->canCreate();
+        }
+
+        return true;
+    }
+
+    /**
+     * The creator, record creator and task of this log as stored in the
+     * database, or null for a new log or an id with no row.
+     *
+     * @return array{task_log_creator: int, task_log_record_creator: int, task_log_task: int}|null
+     */
+    protected function getStoredLog()
+    {
+        if ((int) $this->task_log_id < 1) {
+            return null;
+        }
+
+        $q = $this->_getQuery();
+        $q->addTable('task_log');
+        $q->addQuery('task_log_creator, task_log_record_creator, task_log_task');
+        $q->addWhere('task_log_id = ' . (int) $this->task_log_id);
+        $row = $q->loadHash();
+        if (!is_array($row) || !isset($row['task_log_task'])) {
+            return null;
+        }
+
+        $toInt = static function ($value): int {
+            return is_numeric($value) ? (int) $value : 0;
+        };
+
+        return array(
+            'task_log_creator'        => $toInt($row['task_log_creator'] ?? 0),
+            'task_log_record_creator' => $toInt($row['task_log_record_creator'] ?? 0),
+            'task_log_task'           => $toInt($row['task_log_task']),
+        );
+    }
+
+    /**
+     * Whether the current user is the stored log's subject or recorder, or
+     * may edit the task it belongs to.
+     *
+     * @param array{task_log_creator: int, task_log_record_creator: int, task_log_task: int} $stored from getStoredLog()
+     *
+     * @return bool
+     */
+    protected function canChangeStoredLog(array $stored)
+    {
+        $user_id = $this->currentUserId();
+
+        return $user_id == $stored['task_log_creator']
+            || $user_id == $stored['task_log_record_creator']
+            || (bool) $this->_perms->checkModuleItem($this->_tbl_module, 'edit', $stored['task_log_task']);
+    }
+
+    /**
+     * @return int
+     */
+    private function currentUserId()
+    {
+        $user_id = $this->_AppUI->user_id;
+
+        return is_numeric($user_id) ? (int) $user_id : 0;
+    }
+
+    /**
+     * Whether the current user may record a new log for $user_id: always for
+     * themselves, and for another user only when the task allows logs for
+     * other users and that user is assigned to it (the users the log form
+     * offers).
+     *
+     * @param int $user_id
+     *
+     * @return bool
+     */
+    protected function canLogFor($user_id)
+    {
+        if (0 == $user_id || $user_id == $this->currentUserId()) {
             return true;
         }
 
-        return false;
+        $q = $this->_getQuery();
+        $q->addTable('tasks', 't');
+        $q->addJoin('user_tasks', 'ut', 'ut.task_id = t.task_id', 'inner');
+        $q->addQuery('COUNT(*)');
+        $q->addWhere('t.task_id = ' . (int) $this->task_log_task);
+        $q->addWhere('t.task_allow_other_user_tasklogs = 1');
+        $q->addWhere('ut.user_id = ' . (int) $user_id);
+        $count = $q->loadResult();
+
+        return is_numeric($count) && (int) $count > 0;
     }
 
     public function canView()
@@ -353,23 +472,54 @@ class CTask_Log extends w2p_Core_BaseObject
 		$oTsk = new CTask();
         $oTsk->overrideDatabase($this->_query);
 
+        // $extra is optional (null by default, e.g. from
+        // Permissions::getViewableItems()), so don't read keys it lacks.
+        if (!is_array($extra)) {
+            $extra = array();
+        }
+        $where = isset($extra['where']) ? (string) $extra['where'] : '';
+
 		$aTasks = $oTsk->getAllowedRecords($uid, 'task_id, task_name');
 		if (count($aTasks)) {
 			$buffer = '(task_log_task IN (' . implode(',', array_keys($aTasks)) . ') OR task_log_task IS NULL OR task_log_task = \'\' OR task_log_task = 0)';
-
-			if ($extra['where'] != '') {
-				$extra['where'] = $extra['where'] . ' AND ' . $buffer;
-			} else {
-				$extra['where'] = $buffer;
-			}
 		} else {
 			// There are no allowed tasks, so don't allow task_logs.
-			if ($extra['where'] != '') {
-				$extra['where'] = $extra['where'] . ' AND 1 = 0 ';
-			} else {
-				$extra['where'] = '1 = 0';
-			}
+			$buffer = '1 = 0';
 		}
+		$extra['where'] = ('' != $where) ? $where . ' AND ' . $buffer : $buffer;
 		return parent::getAllowedRecords($uid, $fields, $orderby, $index, $extra);
 	}
+
+    /**
+     * A task log belongs to its task's project.
+     *
+     * @return int
+     */
+    protected function getProjectId()
+    {
+        return $this->getTaskProject();
+    }
+
+    /**
+     * The project of this log's task, read from the tasks table (by the log's
+     * task, or by the log's id when the object was not loaded).
+     *
+     * @return int
+     */
+    protected function getTaskProject()
+    {
+        $q = new w2p_Database_Query();
+        $q->addTable('tasks');
+        $q->addQuery('task_project');
+        if ((int) $this->task_log_task > 0) {
+            $q->addWhere('task_id = ' . (int) $this->task_log_task);
+        } elseif ((int) $this->task_log_id > 0) {
+            $q->addJoin('task_log', 'tl', 'tl.task_log_task = task_id', 'inner');
+            $q->addWhere('tl.task_log_id = ' . (int) $this->task_log_id);
+        } else {
+            return 0;
+        }
+
+        return (int) $q->loadResult();
+    }
 }

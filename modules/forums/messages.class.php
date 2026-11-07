@@ -214,4 +214,26 @@ class CForum_Message extends w2p_Core_BaseObject
         }
         $q->clear();
     }
+
+    /**
+     * A forum message belongs to its forum's project.
+     *
+     * @return int
+     */
+    protected function getProjectId()
+    {
+        $q = new w2p_Database_Query();
+        $q->addTable('forums');
+        $q->addQuery('forum_project');
+        if ((int) $this->message_forum > 0) {
+            $q->addWhere('forum_id = ' . (int) $this->message_forum);
+        } elseif ((int) $this->message_id > 0) {
+            $q->addJoin('forum_messages', 'fm', 'fm.message_forum = forum_id', 'inner');
+            $q->addWhere('fm.message_id = ' . (int) $this->message_id);
+        } else {
+            return 0;
+        }
+
+        return (int) $q->loadResult();
+    }
 }

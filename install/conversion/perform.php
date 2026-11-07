@@ -42,19 +42,23 @@
 	<h3 class="h6 mt-3 title">Step 2: Update Database &amp; Write Configuration</h3>
 	<?php
 		$errorMessages = $manager->convertDotProject();
+		$failureReport = $manager->getFailureReport();
 
-		if (count($errorMessages) > 0) {
+		if ('' !== $failureReport) {
+			?>
+			<div class="my-2"><b class="error">The conversion stopped because a database update failed.</b></div>
+			<pre class="my-2 p-2 border" style="white-space: pre-wrap;"><?php echo htmlspecialchars($failureReport, ENT_QUOTES, 'UTF-8'); ?></pre>
+			<div class="my-2">It's possible that your dotProject database was not the version it claimed to be.</div>
+			<?php
+		} elseif (count($errorMessages) > 0) {
 			?>
 			<div class="my-2"><b class="error">There were <?php echo count($errorMessages); ?> errors in the system update.</b></div>
 			<?php
 			foreach ($errorMessages as $message) {
 				?>
-				<div class="my-2"><?php echo $message; ?></div>
+				<div class="my-2"><?php echo htmlspecialchars($message, ENT_QUOTES, 'UTF-8'); ?></div>
 				<?php
 			}
-			?>
-			<div class="my-2">Note: Errors noting 'Duplicate entry', 'Table already exists', or 'Unknown table' may not be problems.  It's possible that your dotProject database was not the version it claimed to be.</div>
-			<?php
 		} else {
 			?>
 			<div class="my-2">Your system update went smoothly without any errors.</div>
@@ -63,16 +67,22 @@
 
 		$dpConfig = $manager->getConfigOptions();
 		$config = $manager->createConfigString($dpConfig);
+		$cFileErr = false;
+		$conversionFailed = ('' !== $failureReport);
 
-        if (!isset($errorMessages['version_fail'])) {
-            if ((is_writable(W2P_BASE_DIR.'/includes/config.php')  || !is_file(W2P_BASE_DIR.'/includes/config.php')) && ($fp = @fopen(W2P_BASE_DIR.'/includes/config.php', 'w'))) {
-                fputs( $fp, $config, strlen( $config ) );
-                fclose( $fp );
-                $cFileMsg = 'Config file written successfully'."\n";
-            } else {
-                $cFileErr = true;
-                $cFileMsg = 'Config file could not be written'."\n";
-            }
+        /*
+         * After a failed conversion, writing a web2project config.php would make
+         * the next visit upgrade a half-converted database. Leaving the
+         * dotProject one in place lets the conversion run again once the
+         * database is restored.
+         */
+        if ($conversionFailed) {
+            $cFileErr = true;
+            $cFileMsg = 'Not written: your dotProject config.php was left in place. Restore your database backup and run the conversion again once the problem is fixed.';
+        } elseif ((is_writable(W2P_BASE_DIR.'/includes/config.php')  || !is_file(W2P_BASE_DIR.'/includes/config.php')) && ($fp = @fopen(W2P_BASE_DIR.'/includes/config.php', 'w'))) {
+            fputs( $fp, $config, strlen( $config ) );
+            fclose( $fp );
+            $cFileMsg = 'Config file written successfully'."\n";
         } else {
             $cFileErr = true;
             $cFileMsg = 'Config file could not be written'."\n";
@@ -82,10 +92,12 @@
 		<div class="col-sm-5 title">Config File Creation Feedback:</div>
 		<div class="col-sm-7 item"><b style="color:<?php echo $cFileErr ? 'red' : 'green'; ?>"><?php echo $cFileMsg; ?></b></div>
 	</div>
-	<?php if ($cFileErr) { ?>
+	<?php if ($cFileErr && !$conversionFailed) { ?>
 		<div class="my-2 item">The following content should go to ./includes/config.php. Create that text file manually and copy the following lines in by hand.  This file must be readable by the webserver.</div>
 		<div class="my-2 text-center item"><b class="error">Failure to create this file as instructed will render your web2project installation non-operational.<br />Save yourself (and us!) some time and please follow directions. Thanks.</b></div>
 		<div class="my-2 text-center"><textarea class="button" name="dbhost" cols="100" rows="20" title="Content of config.php for manual creation."><?php echo $msg.$config; ?></textarea></div>
 	<?php } ?>
+	<?php if (!$conversionFailed) { ?>
 	<div class="my-2 text-center item"><br/><b><a href="../index.php?m=system&amp;a=systemconfig&amp;reset=1">Login and Check the web2project System Environment</a></b></div>
+	<?php } ?>
 </div>

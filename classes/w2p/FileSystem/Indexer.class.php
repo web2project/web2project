@@ -34,9 +34,10 @@ class w2p_FileSystem_Indexer
             // buffer the file
             $file->_filepath = W2P_BASE_DIR . '/files/' . $file->file_project . '/' . $file->file_real_filename;
             if (file_exists($file->_filepath)) {
-                $fp = fopen($file->_filepath, 'rb');
-                $x = fread($fp, $file->file_size);
-                fclose($fp);
+                $x = file_get_contents($file->_filepath);
+                if (false === $x) {
+                    return false;
+                }
 
                 $ignore = w2PgetSysVal('FileIndexIgnoreWords');
                 $ignore = $ignore['FileIndexIgnoreWords'];

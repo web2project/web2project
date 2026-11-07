@@ -49,8 +49,7 @@ foreach ($_POST['pref_name'] as $name => $value) {
 // reload user preferences now, even the language files
 $prefs = $AppUI->loadPrefs($AppUI->user_id);
 $AppUI->setUserLocale();
-include W2P_BASE_DIR . '/locales/' . $AppUI->user_locale . '/locales.php';
-include W2P_BASE_DIR . '/locales/core.php';
+$AppUI->loadLocale();
 
 $returnPath = ($pref_user) ? 'm=users&a=view&user_id='.$pref_user : 'm=system';
 $AppUI->redirect($returnPath);

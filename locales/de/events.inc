@@ -37,6 +37,7 @@
 'My Events'=>'Meine Ereignisse',
 'Never'=>'Nie',
 'New event'=>'Neues Ereignis',
+'Non-working day'=>'Arbeitsfreier Tag',
 'Overdue'=>'überfällig',
 'P'=>'P',
 'Parent Task'=>'Übergeordnete Aufgabe',

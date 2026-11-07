@@ -49,10 +49,19 @@ if (count($result) > 0) {
 	w2p_signup_redirect('existing-user');
 }
 
-$email = w2PgetParam($_POST, 'contact_email', 0);
-$email = preg_replace("/[^A-Za-z0-9@.+]/", "", $email);
+// Check the address exactly as it will be stored. Stripping characters
+// here made jane_doe@example.com and janedoe@example.com collide, and
+// missed real duplicates that contain the stripped characters. A valid
+// address can still contain a quote, so quote it for the query.
+$email = w2PgetParam($_POST, 'contact_email', '');
+$email = is_string($email) ? trim($email) : '';
+if ('' == $email || !w2p_check_email($email)) {
+	w2p_signup_redirect('email');
+}
+$_POST['contact_email'] = $email;
 $contact = new CContact();
-$result = $contact->loadAll(null, "contact_email = '$email'");
+$q = new w2p_Database_Query();
+$result = $contact->loadAll(null, 'contact_email = ' . $q->quote($email));
 if (count($result) > 0) {
 	w2p_signup_redirect('existing-email');
 }

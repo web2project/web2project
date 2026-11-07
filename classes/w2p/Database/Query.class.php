@@ -1230,7 +1230,7 @@ class w2p_Database_Query {
 	 * @param mixed $maxrows Maximum number of rows to return
 	 * @param mixed $index Can be used to set the keys of the resulting arrays, useful to find records by primary key.
 	 *
-	 * @return array<mixed>|false Array of associative arrays containing row field values
+	 * @return array<mixed> Array of associative arrays containing row field values (empty if the query fails)
 	 */
 	public function loadList($maxrows = -1, $index = -1) {
 		/** @var w2p_Core_CAppUI $AppUI */
@@ -1239,11 +1239,13 @@ class w2p_Database_Query {
 		if (!$this->exec(ADODB_FETCH_ASSOC)) {
 			$AppUI->setMsg($this->_db->ErrorMsg(), UI_MSG_ERROR);
 			$this->clear();
-			return false;
+			return array();
 		}
 
-		$list = array();
 		$list = $this->_query_id->GetArray($maxrows);
+		if (!is_array($list)) {
+			$list = array();
+		}
 		if ($index != -1) {
 			$indexed_list = array();
 			foreach ($list as $record) {

@@ -922,27 +922,35 @@ function displayWeeks_r($list, $task, $level, $fromPeriod, $toPeriod, $user_id =
 
 // from modules/tasks/tasksperuser_sub.php
 // from modules/reports/tasksperuser.php
+/**
+ * The number of the week a period or task starts in.
+ *
+ * Weeks are ISO weeks (Monday to Sunday), the numbering of %U, so this is
+ * the ISO week of the date. (These used to step to the Sunday before, or
+ * the Saturday after, and number that. Stepping to a Sunday and taking its
+ * ISO week would put Monday-Saturday dates one week early.)
+ *
+ * @param w2p_Utilities_Date $d
+ *
+ * @return int
+ */
 function getBeginWeek($d)
 {
-    $dn = (int) $d->Format('%w');
-    $dd = new w2p_Utilities_Date($d);
-    $dd->subtractSeconds($dn * 24 * 3600);
-
-    return (int) $dd->Format('%U');
+    return (int) $d->format('%U');
 }
 
 // from modules/tasks/tasksperuser_sub.php
 // from modules/reports/tasksperuser.php
+/**
+ * The number of the week a period or task ends in (see getBeginWeek()).
+ *
+ * @param w2p_Utilities_Date $d
+ *
+ * @return int
+ */
 function getEndWeek($d)
 {
-    $dn = (int) $d->Format('%w');
-    if ($dn > 0) {
-        $dn = 7 - $dn;
-    }
-    $dd = new w2p_Utilities_Date($d);
-    $dd->addSeconds($dn * 24 * 3600);
-
-    return (int) $dd->Format('%U');
+    return (int) $d->format('%U');
 }
 
 // from modules/tasks/tasksperuser_sub.php
@@ -1969,13 +1977,17 @@ function userUsageWeeks()
     $ted = new w2p_Utilities_Date(Date_Calc::endOfWeek($task_end_date->day, $task_end_date->month, $task_end_date->year));
     $tsd = new w2p_Utilities_Date(Date_Calc::beginOfWeek($task_start_date->day, $task_start_date->month, $task_start_date->year));
 
-    $week_difference = $end_date->workingDaysInSpan($start_date) / count(explode(',', w2PgetConfig('cal_working_days')));
+    // Work on copies: workingDaysInSpan() moves the date it's called on, and
+    // stepping $start_date itself left the next task (and showWeeks())
+    // starting from where this one stopped.
+    $span_end = new w2p_Utilities_Date($end_date);
+    $week_difference = $span_end->workingDaysInSpan(new w2p_Utilities_Date($start_date)) / count(explode(',', w2PgetConfig('cal_working_days')));
 
-    $actual_date = $start_date;
+    $actual_date = new w2p_Utilities_Date($start_date);
 
     for ($i = 0; $i <= $week_difference; $i++) {
         if (!$actual_date->before($tsd) && !$actual_date->after($ted)) {
-            $awoy = $actual_date->year . Date_Calc::weekOfYear($actual_date->day, $actual_date->month, $actual_date->year);
+            $awoy = $actual_date->format('%Y%U');
             foreach ($users as $user_id => $user_data) {
                 if (!isset($user_usage[$user_id][$awoy])) {
                     $user_usage[$user_id][$awoy] = 0;
@@ -2006,7 +2018,7 @@ function userUsageWeeks()
                 $user_tasks_counted_in[$user_id][$task->task_project][$task->task_id] += $hours_added;
             }
         }
-        $actual_date->addSeconds(168 * 3600); // + one week
+        $actual_date->addDays(7); // + one week (168 hours drifts across DST)
     }
 }
 
@@ -2015,6 +2027,10 @@ function showWeeks()
 {
     /** @var w2p_Core_CAppUI $AppUI */
     global $allocated_hours_sum, $end_date, $start_date, $AppUI, $user_list, $user_names, $user_usage, $table_header, $table_rows, $working_days_count, $total_hours_capacity, $total_hours_capacity_all;
+
+    if (!is_array($user_list)) {
+        $user_list = [];
+    }
 
     $working_days_count = 0;
     $allocated_hours_sum = 0;
@@ -2028,7 +2044,7 @@ function showWeeks()
 
     $table_header = '<tr><th>' . $AppUI->_('User') . '</th>';
     for ($i = 0; $i < $week_difference; $i++) {
-        $actual_date->addSeconds(168 * 3600); // + one week
+        $actual_date->addDays(7); // + one week (168 hours drifts across DST)
         $working_days_count = $working_days_count + count(explode(',', w2PgetConfig('cal_working_days')));
     }
     $table_header .= '<th nowrap="nowrap" colspan="2">' . $AppUI->_('Allocated') . '</th></tr>';
@@ -2055,8 +2071,9 @@ function showWeeks()
             $table_rows .= '</tr>';
         }
     }
-    $total_hours_capacity = $working_days_count / 2 * w2PgetConfig('daily_working_hours') * count($user_usage);
-    $total_hours_capacity_all = $working_days_count / 2 * w2PgetConfig('daily_working_hours') * count($user_list);
+    // the same capacity per user as the percentages above, times the users
+    $total_hours_capacity = $working_days_count * w2PgetConfig('daily_working_hours') * count($user_usage);
+    $total_hours_capacity_all = $working_days_count * w2PgetConfig('daily_working_hours') * count($user_list);
 }
 
 // From: modules/reports/reports/allocateduserhours.php
@@ -2756,11 +2773,17 @@ function w2PformSafe($txt, $deslash = false)
     }
 
     if (is_object($txt)) {
+        // Work on a copy so the caller's object is not escaped in place.
+        $txt = clone $txt;
         foreach (get_object_vars($txt) as $k => $v) {
+            if (!is_scalar($v) && null !== $v) {
+                continue;
+            }
+            $v = (string) $v;
             if ($deslash) {
-                $obj->$k = htmlspecialchars(stripslashes($v), ENT_COMPAT, $locale_char_set);
+                $txt->$k = htmlspecialchars(stripslashes($v), ENT_COMPAT, $locale_char_set);
             } else {
-                $obj->$k = htmlspecialchars($v, ENT_COMPAT, $locale_char_set);
+                $txt->$k = htmlspecialchars($v, ENT_COMPAT, $locale_char_set);
             }
         }
     } elseif (is_array($txt)) {
@@ -4420,24 +4443,6 @@ function __extract_from_projectdesigner2()
     return $idx_companies;
 }
 
-/**
- * @param mixed $controller
- */
-function __extract_from_contact_controller($controller)
-{
-    $updatekey = $controller->object->getUpdateKey();
-    $notifyasked = w2PgetParam($_POST, 'contact_updateask', 0);
-    if ($notifyasked && !strlen($updatekey)) {
-        $rnow = new w2p_Utilities_Date();
-        $controller->object->contact_updatekey = MD5($rnow->format(FMT_DATEISO));
-        $controller->object->contact_updateasked = $rnow->format(FMT_DATETIME_MYSQL);
-        $controller->object->contact_lastupdate = '';
-        $controller->object->store();
-        $controller->object->notify();
-    }
-
-    return $controller;
-}
 
 /**
  * @param mixed $row

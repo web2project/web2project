@@ -87,21 +87,8 @@ $methodLabels = w2PgetSysVal('ContactMethods');
                             <?php
                             $projectList = CContact::getProjects($contactid);
 
-                            $contact_updatekey   = $carr[$z][$x]['contact_updatekey'];
-                            $contact_lastupdate  = $carr[$z][$x]['contact_lastupdate'];
-                            $contact_updateasked = $carr[$z][$x]['contact_updateasked'];
-                            $last_ask = new w2p_Utilities_Date($contact_updateasked);
-                            $lastAskFormatted = $last_ask->format($df);
                             if (count($projectList) > 0) {
                                 echo '<a href="" onclick="	window.open(\'./index.php?m=public&a=selector&dialog=1&callback=goProject&table=projects&user_id=' . $carr[$z][$x]['contact_id'] . '\', \'selector\', \'left=50,top=50,height=250,width=400,resizable\');return false;">' . w2PshowImage('projects.png', '', '', $m, 'click to view projects associated with this contact') . '</a>';
-                            }
-                            if ($contact_updateasked && (!$contact_lastupdate || $contact_lastupdate == 0) && $contact_updatekey) {
-                                echo w2PtoolTip('info', 'Waiting for Contact Update Information. (Asked on: ' . $lastAskFormatted . ')') . '<img src="' . w2PfindImage('log-info.gif') . '" alt="" />' . w2PendTip();
-                            } elseif ($contact_updateasked && (!$contact_lastupdate || $contact_lastupdate== 0) && !$contact_updatekey) {
-                                echo w2PtoolTip('info', 'Waiting for too long! (Asked on ' . $lastAskFormatted . ')') . '<img src="' . w2PfindImage('log-error.gif') . '" alt="" />' . w2PendTip();
-                            } elseif ($contact_updateasked && !$contact_updatekey) {
-                                $last_ask = new w2p_Utilities_Date($contact_lastupdate);
-                                echo w2PtoolTip('info', 'Update sucessfully done on: ' . $last_ask->format($df) . '') . '<img src="' . w2PfindImage('log-notice.gif') . '" alt="" />' . w2PendTip();
                             }
                             ?>
                             <a href="?m=contacts&amp;a=addedit&amp;contact_id=<?php echo $contactid; ?>"><?php

@@ -131,6 +131,17 @@ class CUsersTest extends CommonSetup
         $this->assertEquals(1,                      $result);
     }
 
+    public function testGetIdByContactIdWhenIdsDiffer()
+    {
+        // The list is keyed by user_id, so a user whose id isn't its
+        // contact id must still be found.
+        $this->post_data['user_id'] = 7;
+        $this->post_data['user_contact'] = 3;
+        $this->mockDB->stageHashList(7, $this->post_data);
+        $result = $this->obj->getIdByContactId(3);
+        $this->assertSame('7',                      $result);
+    }
+
     public function testValidatePassword()
     {
         // Don't load a dataset so the validation fails.

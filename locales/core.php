@@ -27,8 +27,11 @@ if (isset($perms)) {
     }
 }
 
-if (W2P_BASE_DIR . '/locales/' . $AppUI->user_locale . '/common.inc') {
+// The common strings, falling back to English for a missing or partial language.
+if (file_exists(W2P_BASE_DIR . '/locales/' . $AppUI->user_locale . '/common.inc')) {
 	readfile(W2P_BASE_DIR . '/locales/' . $AppUI->user_locale . '/common.inc');
+} elseif (file_exists(W2P_BASE_DIR . '/locales/en/common.inc')) {
+	readfile(W2P_BASE_DIR . '/locales/en/common.inc');
 }
 
 /**

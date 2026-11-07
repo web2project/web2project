@@ -353,6 +353,9 @@ class CTask extends w2p_Core_BaseObject
              *   duration type 'hrs' and for those with the duration type 'day'
              */
             $children_allocated_total = $children_allocated_hours + $children_allocated_days;
+            // kept in hours for the progress below; the total itself is
+            // converted to the parent's own unit next
+            $children_allocated_in_hours = $children_allocated_total;
             if (1 == $data['task_duration_type']) {
                 $children_allocated_total = round($children_allocated_total, 2);
                 $duration_type = 1;
@@ -382,10 +385,17 @@ class CTask extends w2p_Core_BaseObject
             $q->addWhere("task_path_enumeration LIKE '$path/%' AND task_duration_type <> 1 AND task_dynamic <> 1");
             $weighted_hours_worked += (float) $q->loadResult();
 
-            if (0 == $children_allocated_total) {
+            // Both sides in hours: progress weighted by each child's duration
+            // in hours, over the children's total hours. (Dividing by the
+            // total after it was converted to days made the result
+            // daily_working_hours times too large; strict MySQL then refused
+            // the whole UPDATE, so the parent's dates and duration never
+            // followed its children either.)
+            if ($children_allocated_in_hours <= 0) {
                 $percent_complete = 0;
             } else {
-                $percent_complete = ceil($weighted_hours_worked / $children_allocated_total);
+                $percent_complete = (int) ceil($weighted_hours_worked / $children_allocated_in_hours);
+                $percent_complete = max(0, min(100, $percent_complete));
             }
 
             $q->clear();
@@ -469,7 +479,7 @@ class CTask extends w2p_Core_BaseObject
             $tempTask->overrideDatabase($this->_query);
             foreach ($children as $child) {
                 $tempTask->load($child);
-                $tempTask->htmlDecode($child);
+                $tempTask->htmlDecode();
                 $newChild = $tempTask->deepCopy($destProject_id, $new_id);
                 $newChild->store();
             }
@@ -550,13 +560,13 @@ class CTask extends w2p_Core_BaseObject
                 $this->_error['store'] = "There was an error in storing this object.";
                 return false;
             }
+            $stored = true;
 
-            // if task_status changed, then update subtasks
+            // if task_status changed, then update subtasks (written directly,
+            // so the task itself does not need saving again)
             if ($this->task_status != $oTsk->task_status) {
                 $this->updateSubTasksStatus($this->task_status);
             }
-
-            $stored = parent::store();
         }
 
         if (0 == (int) $this->{$this->_tbl_key} && $this->canCreate()) {
@@ -1215,7 +1225,7 @@ class CTask extends w2p_Core_BaseObject
             }
             if (isset($extras) && $extras) {
                 // Search for semi-colons, commas or spaces and allow any to be separators
-                $extra_list = preg_split('/[\s,;]+/', $extras);
+                $extra_list = preg_split('/[\s,;]+/', $extras) ?: array();
                 foreach ($extra_list as $email) {
                     if ($email && !isset($mail_recipients[$email])) {
                         $mail_recipients[$email] = trim($email);
@@ -2072,8 +2082,35 @@ class CTask extends w2p_Core_BaseObject
      *
      * @todo Get the start/end dates for the cache.. - updateTaskCache
      */
+    /**
+     * Moves the task and its subtasks to another project.
+     *
+     * The task must be loaded. The user needs edit rights on the task, and
+     * the rights to add a task to the target project (add on Tasks, view on
+     * the project), as on the task add/edit page. Nothing is changed when a
+     * check fails.
+     *
+     * @param int $task_id
+     * @param int $project_old
+     * @param int $project_new
+     *
+     * @return bool false (with getError() set) if the move was refused
+     */
     public function moveTaskBetweenProjects($task_id, $project_old, $project_new)
     {
+        $task_id = (int) $task_id;
+        $project_new = (int) $project_new;
+
+        if (!$task_id || $task_id != (int) $this->task_id || !$project_new) {
+            $this->_error['moveTask'] = 'invalidID';
+            return false;
+        }
+        if (!$this->canEdit() || !$this->canCreate()
+            || !$this->_perms->checkModuleItem('projects', 'view', $project_new)) {
+            $this->_error['moveTask'] = 'You are not allowed to move this task to that project.';
+            return false;
+        }
+
         $this->updateSubTasksProject($project_new, $task_id);
 		$this->removeDependencies();
 		$this->task_project=$project_new;
@@ -2107,6 +2144,8 @@ class CTask extends w2p_Core_BaseObject
         $q->exec();
         $q->clear();
         CProject::updatePercentComplete($project_old);
+
+        return true;
     }
 
     /**
@@ -2123,6 +2162,13 @@ class CTask extends w2p_Core_BaseObject
         $q->addTable('tasks');
         $q->addUpdate('task_project', $new_project);
         $q->addWhere('task_id = ' . (int) $task_id);
+        $q->exec();
+
+        // the task's logs carry its project too
+        $q = $this->_getQuery();
+        $q->addTable('task_log');
+        $q->addUpdate('task_log_project', (int) $new_project);
+        $q->addWhere('task_log_task = ' . (int) $task_id);
         $q->exec();
 
         $task_ids = $this->getChildren($task_id);
@@ -2457,7 +2503,7 @@ class CTask extends w2p_Core_BaseObject
 
         $q = $this->_getQuery();
         $q->addQuery('t.task_id as id');
-        $q->addQuery('task_name as name, task_sequence');
+        $q->addQuery('task_name as name, task_sequence as sequence');
         $q->addQuery('task_description as description');
         $q->addQuery('task_start_date as startDate');
         $q->addQuery('task_end_date as endDate');

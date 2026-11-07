@@ -56,6 +56,7 @@ class w2p_System_HookHandler
     {
         $hookname = 'hook_calendar';
         $moduleList = $this->AppUI->getLoadableModuleList();
+        $buffer = '';
 
         foreach ($moduleList as $module) {
             if (class_exists($module['mod_main_class'])) {
@@ -63,7 +64,7 @@ class w2p_System_HookHandler
                 if (is_callable(array($object, $hookname))) {
                     try {
                         $itemList = $object->{$hookname}($this->AppUI->user_id);
-                        if (count($itemList)) {
+                        if (is_array($itemList) && count($itemList)) {
                             foreach ($itemList as $calendarItem) {
                                 $buffer .= w2p_Output_iCalendar::formatCalendarItem($calendarItem, $module['mod_directory']);
                             }

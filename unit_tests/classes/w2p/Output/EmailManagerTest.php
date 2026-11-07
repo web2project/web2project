@@ -1,6 +1,6 @@
 <?php
 /**
- * Class for testing Web2project\Output\EmailManager functionality
+ * Class for testing w2p_Output_EmailManager functionality
  *
  * PHP version 5
  *
@@ -15,7 +15,7 @@
  * @link       http://www.web2project.net
  */
 
-class Web2project_Output_EmailManagerTest extends CommonSetup
+class w2p_Output_EmailManagerTest extends CommonSetup
 {
     protected $manager = null;
 
@@ -42,24 +42,6 @@ class Web2project_Output_EmailManagerTest extends CommonSetup
 //todo: format dates
 
         $actual_body = $this->manager->getEventNotify($event, false, array());
-
-        $this->assertEquals($target_body, $actual_body);
-    }
-
-    public function testGetContactUpdateNotify()
-    {
-        $contact = new CContact();
-        $contact->contact_title = 'Mr.';
-        $contact->contact_display_name = 'Monkey';
-        $contact->contact_updatekey = 'testkey';
-
-        $target_body  = "Dear Mr. Monkey,\n\nIt was very nice to visit you. Thank you for all the time that you spent with me.\n\n";
-        $target_body .= "I have entered the data from your business card into my contact database so that we may keep in touch. We have implemented a system which allows you to view the information that I've recorded and give you the opportunity to correct it or add information as you see fit. Please click on this link to view what I've recorded:\n\n";
-        $target_body .= W2P_BASE_URL . "/updatecontact.php?updatekey=testkey\n\n";
-        $target_body .= "I assure you that the information will be held in strict confidence and will not be available to anyone other than me. I realize that you may not feel comfortable filling out the entire form so please supply only what you're comfortable with.\n\n";
-        $target_body .= "Thank you. I look forward to seeing you again, soon.\n\nBest Regards,\nAdmin Person";
-
-        $actual_body = $this->manager->getContactUpdateNotify($this->_AppUI, $contact);
 
         $this->assertEquals($target_body, $actual_body);
     }
