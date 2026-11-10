@@ -18,7 +18,7 @@
     <section class="card mb-3">
         <h2 class="card-header h6"><span><?php echo $AppUI->_('web2Project Online Assistance'); ?></span></h2>
         <div class="card-body">
-            <p><?php echo $AppUI->_('We have 3 main places for your assistance, and 1 link for custom development help. Please remember that all of these places are our community. You can help others as well by contributing your thoughts and problems you\'re having, as well as the solutions you develop. This is "open source software" at it\'s best; we\'re all in this together.'); ?></p>
+            <p><?php echo $AppUI->_('We have 3 main places for your assistance. Please remember that all of these places are our community. You can help others as well by contributing your thoughts and problems you\'re having, as well as the solutions you develop. This is "open source software" at it\'s best; we\'re all in this together.'); ?></p>
             <p><?php echo $AppUI->_('Here are several places where you can find help online:'); ?></p>
 
             <h3 class="h6">web2Project Docs</h3>
