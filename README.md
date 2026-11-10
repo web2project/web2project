@@ -35,7 +35,7 @@ http://docs.web2project.net/ is our documentation wiki. We always try to keep th
 
 http://support.web2project.net/ are our support forums. Whenever you have a question not addressed by the documentation, this is the first place to go.
 
-http://bugs.web2project.net/ is where we collect and track bug reports. If you find something that doesn't work as expected or is broken, file a report here. Remember, the more specific you are, the easier it is for others to reproduce and eventually fix it.
+https://github.com/web2project/web2project/issues is where we collect and track bug reports. If you find something that doesn't work as expected or is broken, file a report here. Remember, the more specific you are, the easier it is for others to reproduce and eventually fix it.
 
 ## License
 

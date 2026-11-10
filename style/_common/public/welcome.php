@@ -32,7 +32,7 @@
             </ul>
             <h3 class="h6">web2Project Issue Tracker</h3>
             <ul>
-                <li>For those of you who are a bit more advanced in your open source software involvement, information about known problems and suggested enhancements can be read and submitted at <a href="http://bugs.web2project.net/my_view_page.php">our Mantis site account</a>.</li>
+                <li>For those of you who are a bit more advanced in your open source software involvement, information about known problems and suggested enhancements can be read and submitted at <a href="https://github.com/web2project/web2project/issues">our GitHub Issues</a>.</li>
             </ul>
             <p>Thanks for using web2Project!</p>
         </div>
