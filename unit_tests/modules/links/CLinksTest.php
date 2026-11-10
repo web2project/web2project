@@ -148,14 +148,14 @@ class CLinksTest extends CommonSetup
         $original_id = $this->obj->link_id;
 
         $this->obj->link_name = 'web2project Forums';
-        $this->obj->link_url = 'http://forums.web2project.net';
+        $this->obj->link_url = 'http://support.web2project.net';
         $result = $this->obj->store();
         $this->assertTrue($result);
         $new_id = $this->obj->link_id;
 
         $this->assertEquals($original_id,                    $new_id);
         $this->assertEquals('web2project Forums',            $this->obj->link_name);
-        $this->assertEquals('http://forums.web2project.net', $this->obj->link_url);
+        $this->assertEquals('http://support.web2project.net', $this->obj->link_url);
         $this->assertEquals('This is web2project',           $this->obj->link_description);
     }
 

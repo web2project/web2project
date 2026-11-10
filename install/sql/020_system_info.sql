@@ -13,7 +13,7 @@ UPDATE `modules` SET `mod_main_class` = 'smartsearch'
 
 -- These parameters configure the system to communicate with the core
 --   web2project data collection system. Some of the details on the
---   implementation are here: http://forums.web2project.net/viewtopic.php?t=1960
+--   implementation are here: http://support.web2project.net/viewtopic.php?t=1960
 
 INSERT INTO `config` (`config_name`, `config_value`, `config_group`, `config_type`)
     VALUES ('system_update_day', '0', 'admin_system', 'text');
