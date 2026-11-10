@@ -29,7 +29,6 @@
             <h3 class="h6">web2Project Forums</h3>
             <ul>
                 <li>Find the <a href="http://support.web2project.net/">current support forum here</a>.</li>
-                <li>Our <a href="http://forums.web2project.net/">previous support forum</a> has a lot of good information in it, and can still be accessed. This one is not officially supported anymore so don't drop anything new in it and expect an answer!</li>
             </ul>
             <h3 class="h6">web2Project Issue Tracker</h3>
             <ul>
