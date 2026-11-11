@@ -426,6 +426,9 @@ abstract class w2p_Core_BaseObject extends w2p_System_Event implements w2p_Inter
         }
         if (0 == (int) $this->$k && $this->canCreate()) {
             $store_type = 'add';
+            // A new record's key arrives as '' or 0 from forms; leave it out
+            // so the database assigns it (insertObject() only skips null).
+            $this->$k = null;
             $result = $q->insertObject($this->_tbl, $this, $this->_tbl_key);
         }
 

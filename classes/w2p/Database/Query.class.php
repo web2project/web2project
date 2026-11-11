@@ -1608,19 +1608,58 @@ class w2p_Database_Query {
 	}
 
 	/**
+	 * The columns of $table that can't hold '' (numbers, dates, times),
+	 * keyed by lower-case name. Read once per table and request.
+	 *
+	 * @param string $table
+	 *
+	 * @return array<string, true>
+	 */
+	protected function _columnsWithoutEmptyValue($table) {
+		static $cache = array();
+
+		$name = $this->_table_prefix . $table;
+		if (!isset($cache[$name])) {
+			$cache[$name] = array();
+			$columns = (is_object($this->_db) && method_exists($this->_db, 'MetaColumns')) ? $this->_db->MetaColumns($name) : false;
+			if (is_array($columns)) {
+				foreach ($columns as $column) {
+					if (!preg_match('/char|text|blob|binary|enum|set/i', (string) $column->type)) {
+						$cache[$name][strtolower($column->name)] = true;
+					}
+				}
+			}
+		}
+
+		return $cache[$name];
+	}
+
+	/**
 	 * Document::insertArray()
 	 */
 	public function insertArray($table, &$hash) {
 		$this->addTable($table);
+		$fields = array();
+		$noEmpty = $this->_columnsWithoutEmptyValue($table);
 		foreach ($hash as $k => $v) {
-			if (is_array($v) or is_object($v) or $v == null) {
+			// Only null is left out (the column gets its default). 0 and
+			// false are values, as in updateObject(). '' is a value for text
+			// columns; for number and date columns it isn't one (strict
+			// mode rejects it), so those still get their default.
+			if (is_array($v) or is_object($v) or $v === null) {
 				continue;
+			}
+			if ('' === $v && isset($noEmpty[strtolower($k)])) {
+				continue;
+			}
+			if (is_bool($v)) {
+				$v = (int) $v;
 			}
 			$fields[] = $k;
 			$values[$k] = $v;
 		}
 		foreach ($fields as $field) {
-			if (!in_array($values[$field], $this->_db_funcs)) {
+			if (!in_array($values[$field], $this->_db_funcs, true)) {
 				$this->addInsert($field, $values[$field]);
 			} else {
 				$this->addInsert($field, $values[$field], false, true);
@@ -1657,7 +1696,7 @@ class w2p_Database_Query {
 		}
 		if (count($values)) {
 			foreach ($fields as $field) {
-				if (!in_array($values[$field], $this->_db_funcs)) {
+				if (!in_array($values[$field], $this->_db_funcs, true)) {
 					$this->addUpdate($field, $values[$field]);
 				} else {
 					$this->addUpdate($field, $values[$field], false, true);
@@ -1678,9 +1717,18 @@ class w2p_Database_Query {
 	 */
 	public function insertObject($table, &$object, $keyName = null, $verbose = false) {
 		$this->addTable($table);
+		$fields = array();
+		$noEmpty = $this->_columnsWithoutEmptyValue($table);
 		foreach (get_object_vars($object) as $k => $v) {
-			if (is_array($v) or is_object($v) or $v == null) {
+			// Same rules as insertArray().
+			if (is_array($v) or is_object($v) or $v === null) {
 				continue;
+			}
+			if ('' === $v && isset($noEmpty[strtolower($k)])) {
+				continue;
+			}
+			if (is_bool($v)) {
+				$v = (int) $v;
 			}
 			if ($k[0] == '_') { // internal field
 				continue;
@@ -1689,7 +1737,7 @@ class w2p_Database_Query {
 			$values[$k] = $v;
 		}
 		foreach ($fields as $field) {
-			if (!in_array($values[$field], $this->_db_funcs)) {
+			if (!in_array($values[$field], $this->_db_funcs, true)) {
 				$this->addInsert($field, $values[$field]);
 			} else {
 				$this->addInsert($field, $values[$field], false, true);
@@ -1731,7 +1779,7 @@ class w2p_Database_Query {
 		}
 		if (count($values)) {
 			foreach ($fields as $field) {
-				if (!in_array($values[$field], $this->_db_funcs)) {
+				if (!in_array($values[$field], $this->_db_funcs, true)) {
 					$this->addUpdate($field, $values[$field]);
 				} else {
 					$this->addUpdate($field, $values[$field], false, true);
