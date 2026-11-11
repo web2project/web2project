@@ -321,13 +321,14 @@ class CTask extends w2p_Core_BaseObject
         $dynamics = $q->loadList(-1, 'task_id');
 
         foreach($dynamics as $key => $data) {
-            $path = $data['task_path_enumeration'];
+            // Paths hold only ids and slashes; keep it that way in the SQL.
+            $subtree = $q->quote(preg_replace('#[^0-9/]#', '', (string) $data['task_path_enumeration']) . '/%');
 
             $q->clear();
             $q->addTable('tasks');
             $q->addQuery('MIN(task_start_date) as min_date');
             $q->addQuery('MAX(task_end_date) as max_date');
-            $q->addWhere("task_path_enumeration LIKE '$path/%' ");
+            $q->addWhere('task_path_enumeration LIKE ' . $subtree);
             $q->addWhere("task_start_date IS NOT NULL");
             $q->addWhere("task_end_date IS NOT NULL");
             $dates = $q->loadHash();
@@ -339,13 +340,13 @@ class CTask extends w2p_Core_BaseObject
             $q->clear();
             $q->addTable('tasks');
             $q->addQuery('SUM(task_duration * task_duration_type)');
-            $q->addWhere("task_path_enumeration LIKE '$path/%' AND task_duration_type = 1 AND task_dynamic <> 1");
+            $q->addWhere('task_path_enumeration LIKE ' . $subtree . " AND task_duration_type = 1 AND task_dynamic <> 1");
             $children_allocated_hours = (float) $q->loadResult();
             //Collect allocated hours based on children with duration type of 'days'
             $q->clear();
             $q->addTable('tasks');
             $q->addQuery(' SUM(task_duration * ' . w2PgetConfig('daily_working_hours') . ')');
-            $q->addWhere("task_path_enumeration LIKE '$path/%' AND task_duration_type <> 1 AND task_dynamic <> 1");
+            $q->addWhere('task_path_enumeration LIKE ' . $subtree . " AND task_duration_type <> 1 AND task_dynamic <> 1");
             $children_allocated_days = (float) $q->loadResult();
 
             /**
@@ -369,20 +370,20 @@ class CTask extends w2p_Core_BaseObject
             $q->addTable('tasks', 't');
             $q->innerJoin('task_log', 'tl', 't.task_id = tl.task_log_task');
             $q->addQuery('SUM(task_log_hours)');
-            $q->addWhere("task_path_enumeration LIKE '$path/%' AND task_dynamic <> 1");
+            $q->addWhere('task_path_enumeration LIKE ' . $subtree . " AND task_dynamic <> 1");
             $children_hours_worked = (float) $q->loadResult();
 
             //Collect percent complete based on tasks with duration type of 'hours'
             $q->clear();
             $q->addTable('tasks');
             $q->addQuery('SUM(task_percent_complete * task_duration)');
-            $q->addWhere("task_path_enumeration LIKE '$path/%' AND task_duration_type = 1 AND task_dynamic <> 1");
+            $q->addWhere('task_path_enumeration LIKE ' . $subtree . " AND task_duration_type = 1 AND task_dynamic <> 1");
             $weighted_hours_worked = (float) $q->loadResult();
             //Collect percent complete based on tasks with duration type of 'days'
             $q->clear();
             $q->addTable('tasks');
             $q->addQuery('SUM(task_percent_complete * task_duration * ' . w2PgetConfig('daily_working_hours') . ')');
-            $q->addWhere("task_path_enumeration LIKE '$path/%' AND task_duration_type <> 1 AND task_dynamic <> 1");
+            $q->addWhere('task_path_enumeration LIKE ' . $subtree . " AND task_duration_type <> 1 AND task_dynamic <> 1");
             $weighted_hours_worked += (float) $q->loadResult();
 
             // Both sides in hours: progress weighted by each child's duration
@@ -749,7 +750,7 @@ class CTask extends w2p_Core_BaseObject
         } else {
             $q->addQuery('task_path_enumeration');
             $q->addTable('tasks');
-            $q->addWhere('task_id = ' . $this->task_parent);
+            $q->addWhere('task_id = ' . (int) $this->task_parent);
             $parent = $q->loadResult();
             $path = $parent . '/' . $this->task_id;
         }
@@ -772,8 +773,8 @@ class CTask extends w2p_Core_BaseObject
                 && preg_match('#^[0-9/]+$#', $old_path) && preg_match('#^[0-9/]+$#', $path)) {
             $q->addTable('tasks');
             $q->addUpdate('task_path_enumeration',
-                "CONCAT('" . $path . "', SUBSTRING(task_path_enumeration, " . (strlen($old_path) + 1) . "))", false, true);
-            $q->addWhere("task_path_enumeration LIKE '" . $old_path . "/%'");
+                'CONCAT(' . $q->quote($path) . ', SUBSTRING(task_path_enumeration, ' . (strlen($old_path) + 1) . '))', false, true);
+            $q->addWhere('task_path_enumeration LIKE ' . $q->quote($old_path . '/%'));
             $q->exec();
             $q->clear();
         }
