@@ -12,7 +12,7 @@ if (isset($_GET['orderby'])) {
 	$AppUI->setState('UsrProjIdxOrderBy', w2PgetParam($_GET, 'orderby', null));
 	$AppUI->setState('UsrProjIdxOrderDir', $orderdir);
 }
-$orderby = $AppUI->getState('UsrProjIdxOrderBy') ? $AppUI->getState('UsrProjIdxOrderBy') : 'project_end_date';
+$orderby = w2PsafeOrderBy($AppUI->getState('UsrProjIdxOrderBy'), 'project_end_date');
 $orderdir = $AppUI->getState('UsrProjIdxOrderDir') ? $AppUI->getState('UsrProjIdxOrderDir') : 'asc';
 
 $project = new CProject();

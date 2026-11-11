@@ -76,7 +76,7 @@ class CSystem_Bcode extends w2p_Core_BaseObject
         $q = $this->_getQuery();
         $q->addQuery('billingcode_id');
         $q->addTable('billingcode');
-        $q->addWhere('billingcode_name = \'' . $this->billingcode_name . '\'');
+        $q->addWhere('billingcode_name = ' . $q->quote((string) $this->billingcode_name));
         $q->addWhere('billingcode_company = ' . (int) $this->billingcode_company);
         $q->addWhere('billingcode_id <> ' . (int) $this->billingcode_id);
 

@@ -7,7 +7,7 @@ $df = $AppUI->getPref('SHDATEFORMAT');
 ?>
 <div id="tblProjects" class="card mb-3 std view projects">
     <div class="card-header fw-bold" id="view-header" style="background-color:#<?php echo $project->project_color_identifier; ?>; color:<?php echo bestColor($project->project_color_identifier); ?>">
-        <?php echo $project->project_name; ?>
+        <?php echo htmlspecialchars((string) $project->project_name, ENT_QUOTES, 'UTF-8'); ?>
     </div>
     <div class="card-body" id="project">
     <div class="row g-3">

@@ -108,9 +108,9 @@ $form = new w2p_Output_HTML_FormHelper($AppUI);
                     echo arraySelect($companies, 'billingcode_company', 'size="1" class="text"', $bcode->billingcode_company, false);
                 ?>
             </td>
-            <td><input type="text" class="text" name="billingcode_name" value="<?php echo $bcode->billingcode_name; ?>" /></td>
+            <td><input type="text" class="text" name="billingcode_name" value="<?php echo htmlspecialchars((string) $bcode->billingcode_name, ENT_QUOTES, 'UTF-8'); ?>" /></td>
             <td align="center"><input type="text" class="text" name="billingcode_value" value="<?php echo $bcode->billingcode_value; ?>" size="7" /></td>
-            <td><input type="text" class="text" name="billingcode_desc" value="<?php echo $bcode->billingcode_desc; ?>" /></td>
+            <td><input type="text" class="text" name="billingcode_desc" value="<?php echo htmlspecialchars((string) $bcode->billingcode_desc, ENT_QUOTES, 'UTF-8'); ?>" /></td>
             <td>
                 <?php
                     echo arraySelect($billingCategory, 'billingcode_category', 'size="1" class="text"', $bcode->billingcode_category, false);

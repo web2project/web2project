@@ -79,6 +79,43 @@ class CUsersTest extends CommonSetup
      * Tests that the proper error message is returned we try to create a user
      *   with the same username as another.
      */
+    /**
+     * The username is quoted: an apostrophe can't change the query.
+     */
+    public function testUserExistsQuotesUsername()
+    {
+        $user = new CUser();
+
+        $this->assertTrue($user->user_exists('admin'));
+        $this->assertFalse($user->user_exists("nobody' OR '1'='1"));
+        $this->assertFalse($user->user_exists("O'Brien"));
+    }
+
+    /**
+     * user_username is unique (migration 077); a clash that isValid() can't
+     * see (here: renaming a user onto another's name) is reported as an
+     * existing user, not as a database error.
+     */
+    public function testDuplicateUsernameIsReportedAsExistingUser()
+    {
+        $user = new CUser();
+        $user->user_username = 'unique-index-test';
+        $user->user_password = 'secret';
+        $user->user_type = 0;
+        $this->assertTrue($user->store());
+
+        $user->user_username = 'admin';
+        $this->assertFalse($user->store());
+        $errors = $user->getError();
+        $this->assertArrayHasKey('user_exists', $errors);
+        $this->assertArrayNotHasKey('store', $errors);
+
+        $q = new w2p_Database_Query();
+        $q->setDelete('users');
+        $q->addWhere("user_username = 'unique-index-test'");
+        $q->exec();
+    }
+
     public function testCreateUserExists()
     {
         $this->markTestIncomplete("Unfortunately, we can't test this one because

@@ -13,7 +13,7 @@ if (isset($_GET['orderby'])) {
 	$AppUI->setState('DeptProjIdxOrderBy', w2PgetParam($_GET, 'orderby', null));
 	$AppUI->setState('DeptProjIdxOrderDir', $orderdir);
 }
-$orderby = $AppUI->getState('DeptProjIdxOrderBy') ? $AppUI->getState('DeptProjIdxOrderBy') : 'project_end_date';
+$orderby = w2PsafeOrderBy($AppUI->getState('DeptProjIdxOrderBy'), 'project_end_date');
 $orderdir = $AppUI->getState('DeptProjIdxOrderDir') ? $AppUI->getState('DeptProjIdxOrderDir') : 'asc';
 
 /*

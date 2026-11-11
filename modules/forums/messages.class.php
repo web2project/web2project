@@ -164,7 +164,7 @@ class CForum_Message extends w2p_Core_BaseObject
         $q->clear();
         $q->addTable('forums');
         $q->addQuery('forum_name');
-        $q->addWhere('forum_id = \'' . $this->message_forum . '\'');
+        $q->addWhere('forum_id = ' . (int) $this->message_forum);
         $res = $q->exec();
         if ($row = $q->fetchRow()) {
             $forum_name = $row['forum_name'];

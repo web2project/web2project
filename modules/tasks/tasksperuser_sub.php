@@ -49,7 +49,7 @@ $now = new w2p_Utilities_Date(null, $userTZ);
 $now->convertTZ('UTC');
 
 if (!$log_start_date) {
-	$start_date->subtractSpan(new Date_Span('14,0,0,0'));
+	$start_date->addDays(-14);
 }
 
 // get Users with all Allocation info (e.g. their freeCapacity)

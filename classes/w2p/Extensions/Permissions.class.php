@@ -20,6 +20,9 @@ class w2p_Extensions_Permissions extends gacl_api
     public $config_file = '';
     public $_db_acl_prefix = 'gacl_';
     protected $_query;
+    protected $_debug_msg = '';
+    // The ADOdb connection phpgacl queries through (gacl uses $this->db).
+    public $db;
 
     public function __construct($opts = null)
     {
@@ -204,7 +207,8 @@ class w2p_Extensions_Permissions extends gacl_api
 
     public function addGroupItem($item, $group = 'all', $section = 'app', $type = 'axo')
     {
-        if ($gid = $this->get_group_id($group, null, $type)) {
+        $res = false;
+        if ($gid = $this->get_group_id($group, '', $type)) {
             $res = $this->add_group_object($gid, $section, $item, $type);
         }
         return $res;

@@ -11,7 +11,7 @@ if (isset($_GET['orderby'])) {
 	$AppUI->setState('ForumVwOrderBy', w2PgetParam($_GET, 'orderby', null));
 	$AppUI->setState('ForumVwOrderDir', $orderdir);
 }
-$orderby = $AppUI->getState('ForumVwOrderBy') ? $AppUI->getState('ForumVwOrderBy') : 'latest_reply';
+$orderby = w2PsafeOrderBy($AppUI->getState('ForumVwOrderBy'), 'latest_reply');
 $orderdir = $AppUI->getState('ForumVwOrderDir') ? $AppUI->getState('ForumVwOrderDir') : 'desc';
 
 $items = __extract_from_forums_view_topics($AppUI, $forum_id, $f, $orderby, $orderdir);

@@ -17,7 +17,7 @@ class w2p_Authenticators_SQL extends w2p_Authenticators_Base
         $q = $this->query;
         $q->addTable('users');
         $q->addQuery('user_id, user_password');
-        $q->addWhere("user_username = '$username'");
+        $q->addWhere('user_username = ' . $q->quote((string) $username));
         $result = $q->loadHash();
 
         // This detects and updates legacy passwords automatically
@@ -26,7 +26,7 @@ class w2p_Authenticators_SQL extends w2p_Authenticators_Base
                 $q->clear();
                 $q->addTable('users');
                 $q->addUpdate('user_password', $this->hashPassword($password));
-                $q->addWhere("user_username = '$username'");
+                $q->addWhere('user_username = ' . $q->quote((string) $username));
                 $q->exec();
                 $this->user_id = $result['user_id'];
             }

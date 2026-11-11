@@ -98,24 +98,33 @@ class w2p_Output_ListTable extends w2p_Output_HTMLHelper
     {
         $this->_divider = $key;
     }
+    /**
+     * The heading row printed above each group of rows by addDividers().
+     * Any key ending in _project (file_project, link_project, risk_project,
+     * ...) groups by project: the heading is the project's name in its
+     * colour, from the row's project_name and project_color_identifier.
+     */
     protected function _addDivider($row)
     {
-        $style = 'text-align: left; border: outset 2px #eeeeee;';
-        switch ($this->_divider) {
-            case 'file_project';
-                $style .= 'background-color:#' . $row['project_color_identifier'] . ';color:' . bestColor($row['project_color_identifier']);
-                $project_id = $row['file_project'];
-                $link = ($project_id) ? './index.php?m=projects&a=view&project_id=' . $project_id : './index.php?m=projects';
-                $name = ($project_id) ? $row['project_name'] : $this->_AppUI->_('Not attached to a project');
-                $content = '<a href="' . $link . '">' . $name . '</a>';
-                $row = '<tr><td colspan="' . $this->cellCount . '" style="' . $style . '">' . $content . '</td></tr>';
-                break;
-            default:
-                $row = '';
-                // do nothing
+        $key = (string) $this->_divider;
+        if ('_project' !== substr($key, -strlen('_project'))) {
+            return '';
         }
 
-        return $row;
+        $style = 'text-align: left; border: outset 2px #eeeeee;';
+        $project_id = (int) ($row[$key] ?? 0);
+        if ($project_id) {
+            $color = (string) ($row['project_color_identifier'] ?? '');
+            $style .= 'background-color:#' . htmlspecialchars($color, ENT_QUOTES, 'UTF-8') . ';color:' . bestColor($color);
+            $link = './index.php?m=projects&a=view&project_id=' . $project_id;
+            $name = $row['project_name'] ?? '';
+        } else {
+            $link = './index.php?m=projects';
+            $name = $this->_AppUI->_('Not attached to a project');
+        }
+        $content = '<a href="' . $link . '">' . htmlspecialchars((string) $name, ENT_QUOTES, 'UTF-8', false) . '</a>';
+
+        return '<tr><td colspan="' . $this->cellCount . '" style="' . $style . '">' . $content . '</td></tr>';
     }
 
     public function addBefore($type, $value = '')

@@ -165,7 +165,7 @@ $q->clear();
 	<input type="hidden" name="dosql" value="do_updatetask" />
 	<input type="hidden" name="task_log_id" value="<?php echo $log->task_log_id; ?>" />
 	<input type="hidden" name="task_log_task" value="<?php echo $log->task_log_task; ?>" />
-	<input type="hidden" name="task_log_name" value="Update :<?php echo $log->task_log_name; ?>" />
+	<input type="hidden" name="task_log_name" value="Update :<?php echo htmlspecialchars((string) $log->task_log_name, ENT_QUOTES, 'UTF-8'); ?>" />
     <input type="hidden" name="task_log_record_creator" value="<?php echo (0 == $task_log_id ? $AppUI->user_id : $log->task_log_record_creator); ?>" />
     <input type="hidden" name="datePicker" value="task" />
 

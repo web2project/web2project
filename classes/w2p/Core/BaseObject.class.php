@@ -35,7 +35,8 @@ abstract class w2p_Core_BaseObject extends w2p_System_Event implements w2p_Inter
      * @var object Query Handler
      */
     protected $_query;
-    private $_event;
+    // 'Create' or 'Update' during store(); subclasses read it (CEvent).
+    protected $_event;
 
     /**
      * @var object permissions/preference/translation object
@@ -232,7 +233,7 @@ abstract class w2p_Core_BaseObject extends w2p_System_Event implements w2p_Inter
             
             foreach ($hash as $k => $v) {
                 if (!(is_object($hash[$k]))) {
-                    $filtered_hash[$k] = (is_string($v)) ? htmlentities($v) : $v;
+                    $filtered_hash[$k] = (is_string($v)) ? htmlentities($v, ENT_QUOTES | ENT_SUBSTITUTE | ENT_HTML401, 'UTF-8') : $v;
                 }
             }
             $q = $this->_getQuery();
@@ -286,7 +287,7 @@ abstract class w2p_Core_BaseObject extends w2p_System_Event implements w2p_Inter
      *
      * @deprecated
      */
-    public function loadFull($notUsed = null, $object_id) {     $this->load($object_id);        }
+    public function loadFull($notUsed, $object_id) {     $this->load($object_id);        }
 
     /**
      *     Returns an array, keyed by the key field, of all elements that meet
@@ -426,6 +427,9 @@ abstract class w2p_Core_BaseObject extends w2p_System_Event implements w2p_Inter
         }
         if (0 == (int) $this->$k && $this->canCreate()) {
             $store_type = 'add';
+            // A new record's key arrives as '' or 0 from forms; leave it out
+            // so the database assigns it (insertObject() only skips null).
+            $this->$k = null;
             $result = $q->insertObject($this->_tbl, $this, $this->_tbl_key);
         }
 

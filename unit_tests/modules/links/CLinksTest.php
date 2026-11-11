@@ -37,7 +37,7 @@ class CLinksTest extends CommonSetup
           'link_parent'       => '0',
           'link_description'  => 'This is web2project',
           'link_owner'        => 1,
-          'link_date'         => '2009-01-01',
+          'link_datetime'     => '2009-01-01 00:00:00',
           'link_icon'         => '',
           'link_category'     => 0
       );
@@ -46,6 +46,18 @@ class CLinksTest extends CommonSetup
     public function testObjectProperties()
     {
         parent::objectPropertiesTest('CLink', 11);
+    }
+
+    /**
+     * bind() encodes and w2PHTMLDecode() decodes; with mismatched flags an
+     * apostrophe came back as &#039; on PHP 8.1+ (#556).
+     */
+    public function testBindKeepsQuotes()
+    {
+        $this->post_data['link_name'] = "Jordan's \"link\" & <more>";
+        $this->obj->bind($this->post_data);
+
+        $this->assertEquals("Jordan's \"link\" & <more>", $this->obj->link_name);
     }
 
     /**
@@ -134,7 +146,7 @@ class CLinksTest extends CommonSetup
         $this->assertEquals($this->obj->link_description,       $item->link_description);
         $this->assertEquals($this->obj->link_owner,             $item->link_owner);
         $this->assertEquals($this->obj->link_category,          $item->link_category);
-        $this->assertNotNull($this->obj->link_date);
+        $this->assertNotNull($this->obj->link_datetime);
     }
 
     /**

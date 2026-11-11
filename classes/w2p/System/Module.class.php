@@ -21,6 +21,9 @@ class w2p_System_Module extends w2p_Core_BaseObject {
     public $permissions_item_table = null;
     public $mod_main_class = null;
     protected $modules;
+    // Whether install() files the module under Admin Modules. Not a column:
+    // protected, so insertObject()/updateObject() leave it out.
+    protected $mod_admin = 0;
 
     public function __construct() {
         parent::__construct('modules', 'mod_id', 'system');

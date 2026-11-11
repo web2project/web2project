@@ -139,9 +139,9 @@ $form = new w2p_Output_HTML_FormHelper($AppUI);
             </p>
             <p>
                 <?php $form->showLabel('Color Identifier'); ?>
-                <input type="text" name="project_color_identifier" value="<?php echo ($object->project_color_identifier) ? $object->project_color_identifier : 'FFFFFF'; ?>" size="10" maxlength="6" onblur="setColor();" class="text" /> *
+                <input type="text" name="project_color_identifier" value="<?php echo htmlspecialchars(($object->project_color_identifier) ? (string) $object->project_color_identifier : 'FFFFFF', ENT_QUOTES, 'UTF-8'); ?>" size="10" maxlength="6" onblur="setColor();" class="text" /> *
                 <a href="javascript: void(0);" onclick="newwin=window.open('./index.php?m=public&a=color_selector&dialog=1&callback=setColor', 'calwin', 'width=320, height=300, scrollbars=no');"><?php echo $AppUI->_('change color'); ?></a>
-                <a href="javascript: void(0);" onclick="newwin=window.open('./index.php?m=public&a=color_selector&dialog=1&callback=setColor', 'calwin', 'width=320, height=300, scrollbars=no');"><span id="test" style="border:solid;border-width:1;border-right-width:0;background:#<?php echo ($object->project_color_identifier) ? $object->project_color_identifier : 'FFFFFF'; ?>;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="border:solid;border-width:1;border-left-width:0;background:#FFFFFF">&nbsp;&nbsp;</span></a>
+                <a href="javascript: void(0);" onclick="newwin=window.open('./index.php?m=public&a=color_selector&dialog=1&callback=setColor', 'calwin', 'width=320, height=300, scrollbars=no');"><span id="test" style="border:solid;border-width:1;border-right-width:0;background:#<?php echo htmlspecialchars(($object->project_color_identifier) ? (string) $object->project_color_identifier : 'FFFFFF', ENT_QUOTES, 'UTF-8'); ?>;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="border:solid;border-width:1;border-left-width:0;background:#FFFFFF">&nbsp;&nbsp;</span></a>
             </p>
             <p>
                 <?php $form->showLabel('Project Type'); ?>

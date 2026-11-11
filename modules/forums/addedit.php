@@ -19,7 +19,7 @@ if (!$canAddEdit) {
 	$AppUI->redirect(ACCESS_DENIED);
 }
 
-$obj = $AppUI->restoreObject();
+$obj = $AppUI->restoreObject($object);
 if ($obj) {
     $object = $obj;
     $object_id = $object->getId();

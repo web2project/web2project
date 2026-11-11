@@ -21,8 +21,8 @@ if (isset($_GET['orderby'])) {
 	$AppUI->setState('ForumIdxOrderBy', w2PgetParam($_GET, 'orderby', null));
 	$AppUI->setState('ForumIdxOrderDir', $orderdir);
 }
-$orderby = $AppUI->getState('ForumIdxOrderBy') ? $AppUI->getState('ForumIdxOrderBy') : 'forum_name';
-$orderdir = $AppUI->getState('ForumIdxOrderDir') ? $AppUI->getState('ForumIdxOrderDir') : 'asc';
+$orderby = w2PsafeOrderBy($AppUI->getState('ForumIdxOrderBy'), 'forum_name');
+$orderdir = ('desc' === $AppUI->getState('ForumIdxOrderDir')) ? 'desc' : 'asc';
 
 $f = w2PgetParam($_REQUEST, 'f', 0);
 

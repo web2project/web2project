@@ -2262,7 +2262,7 @@ function bestColor($bg, $lt = '#ffffff', $dk = '#000000')
 ##
 ## returns a select box based on an key,value array where selected is based on key
 ##
-function arraySelect(&$arr, $select_name, $select_attribs, $selected, $translate = false)
+function arraySelect($arr, $select_name, $select_attribs, $selected, $translate = false)
 {
     /** @var w2p_Core_CAppUI $AppUI */
     global $AppUI;
@@ -2279,6 +2279,10 @@ function arraySelect(&$arr, $select_name, $select_attribs, $selected, $translate
         $multiple = count($selected);
     }
     $did_selected = 0;
+    // Keys and the selected value are compared as strings (what the old
+    // `$k == $selected && strcmp($k, $selected) == 0` meant), without
+    // passing null to strcmp().
+    $selectedKey = is_array($selected) ? null : (string) $selected;
     foreach ($arr as $k => $v) {
         if ($translate) {
             $v = $AppUI->_($v);
@@ -2299,8 +2303,8 @@ function arraySelect(&$arr, $select_name, $select_attribs, $selected, $translate
                 $did_selected = 1;
             }
         } else {
-            $s .= '<option value="' . $value . '"' . ((($k == $selected && strcmp($k, $selected) == 0) && !$did_selected) ? ' selected="selected"' : '') . '>' . $label . '</option>';
-            if (($k == $selected && strcmp($k, $selected) == 0)) {
+            $s .= '<option value="' . $value . '"' . ((((string) $k === $selectedKey) && !$did_selected) ? ' selected="selected"' : '') . '>' . $label . '</option>';
+            if ((string) $k === $selectedKey) {
                 // As soon as we find a match we make sure no other gets selected by computer mistake by using the $did_selected lock
                 $did_selected = 1;
             }
@@ -2314,7 +2318,7 @@ function arraySelect(&$arr, $select_name, $select_attribs, $selected, $translate
 ##
 ## returns a select box based on an key,value array where selected is based on key
 ##
-function arraySelectTree(&$arr, $select_name, $select_attribs, $selected, $translate = false)
+function arraySelectTree($arr, $select_name, $select_attribs, $selected, $translate = false)
 {
     reset($arr);
 
@@ -2448,7 +2452,8 @@ function getUsers($stub = null, $where = null, $orderby = 'contact_first_name, c
          contact_display_name as contact_name, contact_email, user_type');
     $q->addJoin('contacts', 'con', 'con.contact_id = user_contact', 'inner');
     if ($stub) {
-        $q->addWhere('(UPPER(user_username) LIKE \'' . $stub . '%\' or UPPER(contact_first_name) LIKE \'' . $stub . '%\' OR UPPER(contact_last_name) LIKE \'' . $stub . '%\')');
+        $like = $q->quote(strtoupper((string) $stub) . '%');
+        $q->addWhere('(UPPER(user_username) LIKE ' . $like . ' OR UPPER(contact_first_name) LIKE ' . $like . ' OR UPPER(contact_last_name) LIKE ' . $like . ')');
     } elseif ($where) {
         $where = $q->quote('%' . $where . '%');
         $q->addWhere('(UPPER(user_username) LIKE ' . $where . ' OR UPPER(contact_first_name) LIKE ' . $where . ' OR UPPER(contact_last_name) LIKE ' . $where . ')');
@@ -2705,7 +2710,7 @@ function w2PuserHasRole($name)
     $q->addTable('roles', 'r');
     $q->addTable('user_roles', 'ur');
     $q->addQuery('r.role_id');
-    $q->addWhere('ur.user_id = ' . $uid . ' AND ur.role_id = r.role_id AND r.role_name = \'' . $name . '\'');
+    $q->addWhere('ur.user_id = ' . (int) $uid . ' AND ur.role_id = r.role_id AND r.role_name = ' . $q->quote((string) $name));
 
     return $q->loadResult();
 }
@@ -3070,6 +3075,11 @@ function w2PcheckMem($min = 0, $revert = false)
 /**
  * Decode HTML entities
  */
+/**
+ * Reverses the htmlentities() that w2p_Core_BaseObject::bind() applies.
+ * The flags must match bind()'s: with ENT_COMPAT here, the &#039; that
+ * PHP 8.1+ produces for ' was never decoded and ended up in the database.
+ */
 function w2PHTMLDecode($txt)
 {
     global $locale_char_set;
@@ -3080,15 +3090,15 @@ function w2PHTMLDecode($txt)
 
     if (is_object($txt)) {
         foreach (get_object_vars($txt) as $k => $v) {
-            $txt->$k = html_entity_decode($v, ENT_COMPAT);
+            $txt->$k = html_entity_decode($v, ENT_QUOTES | ENT_HTML401, 'UTF-8');
         }
     } else {
         if (is_array($txt)) {
             foreach ($txt as $k => $v) {
-                $txt[$k] = (is_array($v)) ? $v : html_entity_decode($v, ENT_COMPAT);
+                $txt[$k] = (is_array($v)) ? $v : html_entity_decode($v, ENT_QUOTES | ENT_HTML401, 'UTF-8');
             }
         } else {
-            $txt = html_entity_decode($txt, ENT_COMPAT);
+            $txt = html_entity_decode($txt, ENT_QUOTES | ENT_HTML401, 'UTF-8');
         }
     }
 
@@ -3100,12 +3110,32 @@ function w2PtoolTip($header = '', $tip = '', $raw = false, $id = '')
     /** @var w2p_Core_CAppUI $AppUI */
     global $AppUI;
 
-    $id = ('' == $id) ? '' : 'id="' . $id . '"';
-    if ($raw) {
-        $starttip = '<span ' . $id . ' title="&lt;h4&gt;' . nl2br($AppUI->_($header)) . '&lt;/h4&gt; ' . nl2br($AppUI->_($tip)) . '">';
-    } else {
-        $starttip = '<span ' . $id . ' title="&lt;h4&gt;' . nl2br(ucwords(strtolower($AppUI->_($header)))) . '&lt;/h4&gt; ' . nl2br(strtolower($AppUI->_($tip))) . '">';
+    // The header and tip become a native title tooltip, which shows plain
+    // text: no script renders HTML from it. Callers pass object names,
+    // descriptions and tooltip markup (getTaskTooltip(), getEventTooltip()),
+    // so the markup is turned into lines of text ("Label: value" for
+    // <dt>/<dd>) and the result is escaped for the attribute.
+    $text = function ($html) {
+        $html = html_entity_decode((string) $html, ENT_QUOTES | ENT_HTML401, 'UTF-8');
+        $html = preg_replace('#</dt>\s*<dd[^>]*>#i', ': ', $html);
+        $html = preg_replace('#<br\s*/?>|</(p|div|dd|dt|li|tr|h[1-6])>#i', "\n", $html);
+        $plain = html_entity_decode(strip_tags($html), ENT_QUOTES | ENT_HTML401, 'UTF-8');
+        $plain = str_replace("\xc2\xa0", ' ', $plain);
+        $plain = preg_replace('/[ \t]+/', ' ', $plain);
+        $plain = preg_replace('/ *\r?\n[\s]*/', "\n", $plain);
+
+        return trim($plain);
+    };
+    // The header is a name or label (plain text), the tip may be markup.
+    $header = trim(html_entity_decode($AppUI->_($header), ENT_QUOTES | ENT_HTML401, 'UTF-8'));
+    $tip = $text($AppUI->_($tip));
+    if (!$raw) {
+        $header = ucwords(strtolower($header));
+        $tip = strtolower($tip);
     }
+    $title = trim($header . "\n" . $tip);
+    $id = ('' == $id) ? '' : 'id="' . htmlspecialchars((string) $id, ENT_QUOTES, 'UTF-8') . '" ';
+    $starttip = '<span ' . $id . 'title="' . htmlspecialchars($title, ENT_QUOTES, 'UTF-8') . '">';
 
     return $starttip;
 }
@@ -3435,7 +3465,7 @@ function getEventLinks($startPeriod, $endPeriod, $links, $notUsed = null, $minic
                     $url = '?m=events&a=view&event_id=' . $row['event_id'];
                     $link['href'] = '';
                     $link['alt'] = '';
-                    $link['text'] = w2PtoolTip($row['event_name'], getEventTooltip($row['event_id']), true) . w2PshowImage('modules/events/event' . $row['event_type'] . '.png', 16, 16, '', '', 'calendar') . '</a>&nbsp;' . '<a href="' . $url . '"><span class="event">' . $row['event_name'] . '</span></a>' . w2PendTip();
+                    $link['text'] = w2PtoolTip($row['event_name'], getEventTooltip($row['event_id']), true) . w2PshowImage('modules/events/event' . $row['event_type'] . '.png', 16, 16, '', '', 'calendar') . '</a>&nbsp;' . '<a href="' . $url . '"><span class="event">' . htmlspecialchars((string) $row['event_name'], ENT_QUOTES, 'UTF-8') . '</span></a>' . w2PendTip();
                 }
                 $links[$date->format(FMT_TIMESTAMP_DATE)][] = $link;
             }
@@ -3527,7 +3557,7 @@ function getTaskLinks($startPeriod, $endPeriod, $links, $strMaxLen, $company_id 
                 $row['short_name'] = $row['task_name'];
             }
 
-            $link['text'] = '<span style="color:' . bestColor($row['color']) . ';background-color:#' . $row['color'] . '">' . $row['short_name'] . ($row['task_milestone'] ? '&nbsp;' . w2PshowImage('icons/milestone.gif') : '') . '</span>';
+            $link['text'] = '<span style="color:' . bestColor($row['color']) . ';background-color:#' . htmlspecialchars((string) $row['color'], ENT_QUOTES, 'UTF-8') . '">' . htmlspecialchars((string) $row['short_name'], ENT_QUOTES, 'UTF-8') . ($row['task_milestone'] ? '&nbsp;' . w2PshowImage('icons/milestone.gif') : '') . '</span>';
         }
 
         // determine which day(s) to display the task

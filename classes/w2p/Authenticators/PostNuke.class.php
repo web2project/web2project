@@ -60,7 +60,7 @@ class w2p_Authenticators_PostNuke extends w2p_Authenticators_Base
         $q = $this->query;
         $q->addTable('users');
         $q->addQuery('user_id, user_password, user_contact');
-        $q->addWhere('user_username = \'' . $username . '\'');
+        $q->addWhere('user_username = ' . $q->quote((string) $username));
         if (!$rs = $q->exec()) {
             die($this->AppUI->_('Failed to get user details') . ' - error was ' . $db->ErrorMsg());
         }

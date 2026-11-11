@@ -619,10 +619,34 @@ class w2p_Core_CAppUI
         $this->objStore = $obj;
     }
 
-    public function restoreObject()
+    /**
+     * Returns the object held after a failed save (holdObject()), once.
+     *
+     * Pass the edit page's own object (its key already set) and the held
+     * one is only returned when it is the same record: same class, same
+     * id. Otherwise a failed link save would be restored into the next
+     * contact form (fatal: CLink::isUser()), or a failed save of task 5
+     * shown, and saved, as task 9.
+     *
+     * @param object|null $expected
+     *
+     * @return object|null
+     */
+    public function restoreObject($expected = null)
     {
         $obj = $this->objStore;
         $this->objStore = null;
+
+        if (null === $expected || null === $obj) {
+            return $obj;
+        }
+        if (!is_object($obj) || get_class($obj) !== get_class($expected)) {
+            return null;
+        }
+        if (method_exists($expected, 'getId') && (int) $obj->getId() !== (int) $expected->getId()) {
+            return null;
+        }
+
         return $obj;
     }
 

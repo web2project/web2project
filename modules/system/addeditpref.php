@@ -19,7 +19,9 @@ if (!$canEdit && $user_id != $AppUI->user_id) {
 }
 
 // load the preferences
-$prefs = getPreferences($user_id);
+// A user without a saved value for a preference (e.g. created outside the
+// user form) sees the system default.
+$prefs = getPreferences($user_id) + ($user_id ? getPreferences(0) : array());
 
 // get the user name
 if ($user_id) {
@@ -260,7 +262,7 @@ echo ' /></p>';
 <div class="d-flex flex-wrap gap-2 mb-2">
 	<label><?php echo $AppUI->_('Task Log Email Subject'); ?>:</label>
 	<div>
-		<input type="text" class="text" name="pref_name[TASKLOGSUBJ]" value="<?php echo $prefs['TASKLOGSUBJ']; ?>" />
+		<input type="text" class="text" name="pref_name[TASKLOGSUBJ]" value="<?php echo htmlspecialchars((string) $prefs['TASKLOGSUBJ'], ENT_QUOTES, 'UTF-8'); ?>" />
 	</div>
 </div>
 <div class="d-flex flex-wrap gap-2 mb-2">

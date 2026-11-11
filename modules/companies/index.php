@@ -11,8 +11,8 @@ if (isset($_GET['orderby'])) {
 	$AppUI->setState('CompIdxOrderBy', w2PgetParam($_GET, 'orderby', null));
 	$AppUI->setState('CompIdxOrderDir', $orderdir);
 }
-$orderby = $AppUI->getState('CompIdxOrderBy') ? $AppUI->getState('CompIdxOrderBy') : 'company_name';
-$orderdir = $AppUI->getState('CompIdxOrderDir') ? $AppUI->getState('CompIdxOrderDir') : 'asc';
+$orderby = w2PsafeOrderBy($AppUI->getState('CompIdxOrderBy'), 'company_name');
+$orderdir = ('desc' === $AppUI->getState('CompIdxOrderDir')) ? 'desc' : 'asc';
 
 $owner_filter_id = $AppUI->processIntState('owner_filter_id', $_POST, 'owner_filter_id', 0);
 

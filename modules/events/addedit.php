@@ -28,7 +28,7 @@ $date = w2PgetParam($_GET, 'date', null);
 $event_project = (int) w2PgetParam($_GET, 'project_id', 0);
 
 $assigned = [];
-$obj = $AppUI->restoreObject();
+$obj = $AppUI->restoreObject($object);
 if ($obj) {
     $object = $obj;
     $object_id = $object->getId();

@@ -785,4 +785,40 @@ class w2p_Core_CAppUITest extends CommonSetup
                 'This test has not been implemented yet.'
         );
     }
+
+    /**
+     * A held object is only restored into an edit page for the same record.
+     */
+    public function testRestoreObjectOnlyForSameRecord()
+    {
+        $AppUI = new w2p_Core_CAppUI();
+
+        $link = new CLink();
+        $link->link_id = 0;
+        $link->link_name = 'held';
+
+        // another class: not restored, and the held object is gone
+        $AppUI->holdObject($link);
+        $contact = new CContact();
+        $contact->setId(0);
+        $this->assertNull($AppUI->restoreObject($contact));
+        $this->assertNull($AppUI->restoreObject());
+
+        // same class, another record: not restored
+        $AppUI->holdObject($link);
+        $other = new CLink();
+        $other->setId(9);
+        $this->assertNull($AppUI->restoreObject($other));
+
+        // same class and record (both new): restored once
+        $AppUI->holdObject($link);
+        $same = new CLink();
+        $same->setId(0);
+        $this->assertSame($link, $AppUI->restoreObject($same));
+        $this->assertNull($AppUI->restoreObject($same));
+
+        // without an expected object it works as before
+        $AppUI->holdObject($link);
+        $this->assertSame($link, $AppUI->restoreObject());
+    }
 }

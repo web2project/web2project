@@ -5,7 +5,7 @@ $htmlHelper = new w2p_Output_HTMLHelper($AppUI);
 
 ?>
 <div class="card mb-3 std view tasks">
-<div class="card-header fw-bold"><?php echo $obj->task_name; ?></div>
+<div class="card-header fw-bold"><?php echo htmlspecialchars((string) $obj->task_name, ENT_QUOTES, 'UTF-8'); ?></div>
 <div class="card-body">
 <div class="row g-3">
 <div class="col-lg-6 view-column">

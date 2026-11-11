@@ -24,7 +24,7 @@ $start_date = $event->event_start_datetime ? new w2p_Utilities_Date($event->even
 $end_date = $event->event_end_datetime ? new w2p_Utilities_Date($event->event_end_datetime) : new w2p_Utilities_Date();
 if ($event->event_project) {
 	$project = new CProject();
-	$event_project = $project->load($event->event_project)->project_name;
+	$event_project = $project->load($event->event_project) ? $project->project_name : '';
 }
 
 // setup the title block

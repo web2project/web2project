@@ -161,6 +161,26 @@ function w2PgetConfig($key, $default = null)
  *
  * @return mixed
  */
+/**
+ * A sort column taken from the request, safe to pass to addOrder(): a
+ * column name (optionally table-qualified) with an optional ASC/DESC.
+ * Anything else gives $default, since ORDER BY can't be quoted.
+ *
+ * @param mixed  $value
+ * @param string $default
+ *
+ * @return string
+ */
+function w2PsafeOrderBy($value, $default)
+{
+    if (!is_string($value)) {
+        return $default;
+    }
+    $value = trim($value);
+
+    return preg_match('/^[A-Za-z_][A-Za-z0-9_]*(\.[A-Za-z_][A-Za-z0-9_]*)?( (ASC|DESC))?$/i', $value) ? $value : $default;
+}
+
 function w2PgetParam(&$arr, $name, $def = null)
 {
     $key = preg_replace("/[^A-Za-z0-9_]/", "", $name);
@@ -354,7 +374,7 @@ function w2p_email($email, $name = '')
 
     if ($email != '') {
         $name = ('' != $name) ? $name : $email;
-        $result = '<a href="mailto:' . $email . '">' . $name . '</a>';
+        $result = '<a href="mailto:' . htmlspecialchars($email, ENT_QUOTES, 'UTF-8') . '">' . htmlspecialchars($name, ENT_QUOTES, 'UTF-8', false) . '</a>';
     }
 
     return $result;

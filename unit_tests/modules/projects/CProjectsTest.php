@@ -151,6 +151,26 @@ $this->obj->overrideDatabase($this->mockDB);
     }
 
     /**
+     * The colour must be six hex digits; a leading # is dropped.
+     */
+    public function testProjectColorIdentifierMustBeHex()
+    {
+        foreach (array('"><b>', 'red', 'abc', '12345g') as $bad) {
+            $this->post_data['project_color_identifier'] = $bad;
+            $this->obj->bind($this->post_data);
+            $this->assertFalse($this->obj->isValid(), $bad);
+            $this->assertArrayHasKey('project_color_identifier', $this->obj->getError(), $bad);
+            $this->obj->clearErrors();
+        }
+
+        $this->post_data['project_color_identifier'] = '#a1B2c3';
+        $this->obj->bind($this->post_data);
+        $this->obj->isValid();
+        $this->assertArrayNotHasKey('project_color_identifier', $this->obj->getError());
+        $this->assertEquals('a1B2c3', $this->obj->project_color_identifier);
+    }
+
+    /**
      * Tests that the proper error message is returned when no type is passed.
      */
     public function testCreateProjectNoType()

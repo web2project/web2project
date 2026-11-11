@@ -163,7 +163,7 @@ $items = $paginator->getItemsOnPage($page);
                                     $s .= '<img src="' . w2PfindImage('corner-dots.gif') . '" />&nbsp;';
                                     $s .= '<a href="./index.php?m=projects&a=view&project_id=' . $row["project_id"] . '">';
                                     $s .= (nl2br($row['project_description']) ? w2PtoolTip($row[$field], nl2br($row['project_description']), true) : w2PtoolTip($row[$field], $AppUI->_('No information available'), true));
-                                    $s .= $row[$field] . (nl2br($row['project_description']) ? w2PendTip() : '') . '</a>';
+                                    $s .= htmlspecialchars((string) $row[$field], ENT_QUOTES, 'UTF-8') . (nl2br($row['project_description']) ? w2PendTip() : '') . '</a>';
                                 } elseif ($count_projects > 0 && !$level) {
                                     $s .= w2PtoolTip($row[$field], nl2br($row['project_description']) .'<br />'.
                                             $AppUI->_('this project is a parent on a multi-project structure').'<br />'.
@@ -171,11 +171,11 @@ $items = $paginator->getItemsOnPage($page);
                                     $s .= '<a href="javascript: void(0);" onclick="expand_collapse(\'multiproject_tr_' . $row["project_id"] . '_\', \'tblProjects\')">';
                                     $s .= '<img id="multiproject_tr_' . $row["project_id"] . '__expand" src="' . w2PfindImage('icons/expand.gif') . '" />';
                                     $s .= '<img id="multiproject_tr_' . $row["project_id"] . '__collapse" src="' . w2PfindImage('icons/collapse.gif') . '" style="display:none" /></a>&nbsp;';
-                                    $s .= '<a href="./index.php?m=projects&a=view&project_id=' . $row["project_id"] . '">' . (nl2br($row['project_description']) ? w2PtoolTip($row[$field], nl2br($row['project_description']), true) : '') . $row[$field] . (nl2br($row['project_description']) ? w2PendTip() : '') . '</a>' . w2PendTip();
+                                    $s .= '<a href="./index.php?m=projects&a=view&project_id=' . $row["project_id"] . '">' . (nl2br($row['project_description']) ? w2PtoolTip($row[$field], nl2br($row['project_description']), true) : '') . htmlspecialchars((string) $row[$field], ENT_QUOTES, 'UTF-8') . (nl2br($row['project_description']) ? w2PendTip() : '') . '</a>' . w2PendTip();
                                 } else {
                                     $s .= '<a href="./index.php?m=projects&a=view&project_id=' . $row["project_id"] . '">';
                                     $s .= (nl2br($row['project_description']) ? w2PtoolTip($row[$field], nl2br($row['project_description']), true) : w2PtoolTip($row[$field], $AppUI->_('No information available'), true));
-                                    $s .= $row[$field] . (nl2br($row['project_description']) ? w2PendTip() : '') . '</a>';
+                                    $s .= htmlspecialchars((string) $row[$field], ENT_QUOTES, 'UTF-8') . (nl2br($row['project_description']) ? w2PendTip() : '') . '</a>';
                                 }
                                 $s .= '</td>';
                                 break;
