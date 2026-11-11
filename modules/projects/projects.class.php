@@ -67,8 +67,13 @@ class CProject extends w2p_Core_BaseObject
         if (0 == (int) $this->project_company) {
             $this->_error['project_company'] = $baseErrorMsg . 'project company is not set';
         }
+        // The colour is printed into style attributes and CSS all over the
+        // app, so only six hex digits are accepted ("#" is dropped).
+        $this->project_color_identifier = ltrim(trim((string) $this->project_color_identifier), '#');
         if ('' == $this->project_color_identifier) {
             $this->_error['project_color_identifier'] = $baseErrorMsg . 'project color identifier is not set';
+        } elseif (!preg_match('/^[0-9A-Fa-f]{6}$/', $this->project_color_identifier)) {
+            $this->_error['project_color_identifier'] = $baseErrorMsg . 'project color identifier is not a six-digit hex colour';
         }
         return (count($this->_error)) ? false : true;
     }
