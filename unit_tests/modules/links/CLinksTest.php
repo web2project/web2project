@@ -37,7 +37,7 @@ class CLinksTest extends CommonSetup
           'link_parent'       => '0',
           'link_description'  => 'This is web2project',
           'link_owner'        => 1,
-          'link_date'         => '2009-01-01',
+          'link_datetime'     => '2009-01-01 00:00:00',
           'link_icon'         => '',
           'link_category'     => 0
       );
@@ -146,7 +146,7 @@ class CLinksTest extends CommonSetup
         $this->assertEquals($this->obj->link_description,       $item->link_description);
         $this->assertEquals($this->obj->link_owner,             $item->link_owner);
         $this->assertEquals($this->obj->link_category,          $item->link_category);
-        $this->assertNotNull($this->obj->link_date);
+        $this->assertNotNull($this->obj->link_datetime);
     }
 
     /**
