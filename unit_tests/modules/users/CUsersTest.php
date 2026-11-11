@@ -79,6 +79,18 @@ class CUsersTest extends CommonSetup
      * Tests that the proper error message is returned we try to create a user
      *   with the same username as another.
      */
+    /**
+     * The username is quoted: an apostrophe can't change the query.
+     */
+    public function testUserExistsQuotesUsername()
+    {
+        $user = new CUser();
+
+        $this->assertTrue($user->user_exists('admin'));
+        $this->assertFalse($user->user_exists("nobody' OR '1'='1"));
+        $this->assertFalse($user->user_exists("O'Brien"));
+    }
+
     public function testCreateUserExists()
     {
         $this->markTestIncomplete("Unfortunately, we can't test this one because

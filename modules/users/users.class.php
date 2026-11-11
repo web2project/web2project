@@ -340,7 +340,7 @@ class CUser extends w2p_Core_BaseObject
 
     public function user_exists($username)
     {
-        $users = $this->loadAll('user_id', "user_username = '$username'");
+        $users = $this->loadAll('user_id', 'user_username = ' . $this->_getQuery()->quote((string) $username));
 
         return (count($users) > 0) ? true : false;
     }

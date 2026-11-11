@@ -60,7 +60,7 @@ class CSystem_SysVal extends w2p_Core_BaseObject
 		if ($this->sysval_key_id && $this->sysval_title) {
 			$q->setDelete('sysvals');
 			$q->addWhere('sysval_key_id = ' . (int)$this->sysval_key_id);
-			$q->addWhere('sysval_title = \'' . $this->sysval_title . '\'');
+			$q->addWhere('sysval_title = ' . $q->quote((string) $this->sysval_title));
 			if (!$q->exec()) {
                 $this->_error['store'] = get_class($this) . '::store failed: ' . (new w2p_Database_Connection($GLOBALS['db']))->error();
                 return false;
@@ -89,7 +89,7 @@ class CSystem_SysVal extends w2p_Core_BaseObject
 		if ($this->sysval_title) {
             $q = $this->_getQuery();
 			$q->setDelete('sysvals');
-			$q->addWhere('sysval_title = \'' . $this->sysval_title . '\'');
+			$q->addWhere('sysval_title = ' . $q->quote((string) $this->sysval_title));
 
             $result = $q->exec();
             if(!$result) {
