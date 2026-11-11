@@ -46,3 +46,12 @@ $view = new w2p_Controllers_View($AppUI, $contact, 'Contact');
 echo $view->renderDelete();
 
 include $AppUI->getTheme()->resolveTemplate('contacts/view');
+
+// Tabs other modules add to the contact page
+// (modules/<module>/contacts_tab.view.<name>.php, e.g. the Todos add-on's
+// todos for this contact). Shown only when a module adds one, so contacts
+// don't get an empty tab strip.
+if (!empty($_SESSION['all_tabs']['contacts']['view'])) {
+    $tabBox = new CTabBox('?m=contacts&a=view&contact_id=' . $contact_id, '', $tab);
+    $tabBox->show();
+}
