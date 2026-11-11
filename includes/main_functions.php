@@ -354,7 +354,7 @@ function w2p_email($email, $name = '')
 
     if ($email != '') {
         $name = ('' != $name) ? $name : $email;
-        $result = '<a href="mailto:' . $email . '">' . $name . '</a>';
+        $result = '<a href="mailto:' . htmlspecialchars($email, ENT_QUOTES, 'UTF-8') . '">' . htmlspecialchars($name, ENT_QUOTES, 'UTF-8', false) . '</a>';
     }
 
     return $result;

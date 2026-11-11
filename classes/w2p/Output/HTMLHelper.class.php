@@ -130,7 +130,7 @@ class w2p_Output_HTMLHelper extends w2p_Output_HTML_Base
                 $obj = new $class();
                 $obj->load($value);
                 $link = '?m='. w2p_pluralize($module) .'&a=view&'.$module.'_id='.$value;
-                $cell = '<a href="'.$link.'">'.$obj->{"$module".'_name'}.'</a>';
+                $cell = '<a href="'.$link.'">'.$this->escape($obj->{"$module".'_name'}).'</a>';
                 $suffix .= ' _name';
                 break;
             case '_department':
@@ -145,7 +145,7 @@ class w2p_Output_HTMLHelper extends w2p_Output_HTML_Base
                  *                                                              ~ caseydk, Dec 11 2013
                  */
                 $link = '?m='. w2p_pluralize($module) .'&a=view&dept_id='.$value;
-                $cell = '<a href="'.$link.'">'.$obj->dept_name.'</a>';
+                $cell = '<a href="'.$link.'">'.$this->escape($obj->dept_name).'</a>';
                 $suffix .= ' _name';
                 break;
             case '_folder':
@@ -154,7 +154,7 @@ class w2p_Output_HTMLHelper extends w2p_Output_HTML_Base
                 $foldername = ($value) ? $obj->file_folder_name : 'Root';
                 $image = '<img src="'.w2PfindImage('folder5_small.png', 'files').'" />';
                 $link = '?m=files&tab=4&folder=' . (int) $value;
-                $cell = '<a href="'.$link.'">' . $image . ' ' . $foldername . '</a>';
+                $cell = '<a href="'.$link.'">' . $image . ' ' . $this->escape($foldername) . '</a>';
                 $suffix .= ' _name';
                 break;
             case '_user':
@@ -162,7 +162,7 @@ class w2p_Output_HTMLHelper extends w2p_Output_HTML_Base
                 $obj = new CContact();
                 $obj->findContactByUserid($this->tableRowData['user_id']);
                 $link = '?m=users&a=view&user_id='.$this->tableRowData['user_id'];
-                $cell = '<a href="'.$link.'">'.$obj->user_username.'</a>';
+                $cell = '<a href="'.$link.'">'.$this->escape($obj->user_username).'</a>';
                 break;
 //END: object-based linkings
 
@@ -182,7 +182,7 @@ class w2p_Output_HTMLHelper extends w2p_Output_HTML_Base
                 $link  .= ($prefix == 'task_log') ? '&tab=1&task_id='.$this->tableRowData['task_id'] : '';
                 $icon   = ($fieldName == 'file_name') ? '<img src="' . 
                     w2PfindImage(getIcon($this->tableRowData['file_type']), 'files') . '" />&nbsp;' : '';
-                $cell   = '<a href="'.$link.'">'.$icon.$value.'</a>';
+                $cell   = '<a href="'.$link.'">'.$icon.$this->escape($value).'</a>';
 //TODO: task_logs are another oddball..
                 $cell = ($prefix == 'task_log') ? str_replace('task_logs', 'tasks', $cell) : $cell;
                 break;
@@ -195,9 +195,9 @@ class w2p_Output_HTMLHelper extends w2p_Output_HTML_Base
                     $obj->findContactByUserid($value);
                     $suffix .= ' nowrap';
                     $link = '?m=users&a=view&user_id='.$value;
-                    $cell = '<a href="'.$link.'">'.$obj->contact_display_name.'</a>';
+                    $cell = '<a href="'.$link.'">'.$this->escape($obj->contact_display_name).'</a>';
                 } else {
-                    $cell = $value;
+                    $cell = $this->escape($value);
                 }
                 break;
                 // The above are all contact/user display names, the below are numbers.
@@ -283,7 +283,7 @@ class w2p_Output_HTMLHelper extends w2p_Output_HTML_Base
                 $cell = number_format($value/100, 2);
                 break;
             case '_identifier':
-                $additional = 'style="background-color:#'.$value.'; color:'.bestColor($value).'" ';
+                $additional = 'style="background-color:#'.$this->escape($value).'; color:'.bestColor($value).'" ';
                 $cell = $this->tableRowData['project_percent_complete'].'%';
                 break;
             case '_project':
@@ -294,7 +294,7 @@ class w2p_Output_HTMLHelper extends w2p_Output_HTML_Base
                 $obj->load($value);
                 $color = $obj->project_color_identifier;
                 $link = '?m='. w2p_pluralize($module) .'&a=view&'.$module.'_id='.$value;
-                $cell = '<span style="background-color:#'.$color.'; padding: 3px"><a href="'.$link.'" style="color:'.bestColor($color) .'">'.$obj->{"$module".'_name'}.'</a></span>';
+                $cell = '<span style="background-color:#'.$this->escape($color).'; padding: 3px"><a href="'.$link.'" style="color:'.bestColor($color) .'">'.$this->escape($obj->{"$module".'_name'}).'</a></span>';
                 $suffix .= ' _name';
                 break;
             case '_assignees':

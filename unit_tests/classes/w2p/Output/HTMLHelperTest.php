@@ -57,6 +57,20 @@ class w2p_Output_HTMLHelperTest extends CommonSetup
     }
 
     /*
+     * Names come from user input, so markup in them must be printed as text.
+     */
+    public function testCreateCell_nameIsEscaped()
+    {
+        $this->obj->stageRowData(array('link_id' => 5));
+
+        $cell = $this->obj->createCell('link_name', '<img src=x onerror=alert(1)> & Jordan\'s');
+        $this->assertEquals('<td class="_name"><a href="?m=links&a=view&link_id=5">&lt;img src=x onerror=alert(1)&gt; &amp; Jordan&#039;s</a></td>', $cell);
+
+        $cell = $this->obj->createCell('x_owner', '<b>someone</b>');
+        $this->assertEquals('<td class="_owner">&lt;b&gt;someone&lt;/b&gt;</td>', $cell);
+    }
+
+    /*
      * This test makes sure that the lookups against our custom arrays are
      *   applied properly.
      */

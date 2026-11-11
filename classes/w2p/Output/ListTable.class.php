@@ -103,11 +103,11 @@ class w2p_Output_ListTable extends w2p_Output_HTMLHelper
         $style = 'text-align: left; border: outset 2px #eeeeee;';
         switch ($this->_divider) {
             case 'file_project';
-                $style .= 'background-color:#' . $row['project_color_identifier'] . ';color:' . bestColor($row['project_color_identifier']);
+                $style .= 'background-color:#' . htmlspecialchars((string) $row['project_color_identifier'], ENT_QUOTES, 'UTF-8') . ';color:' . bestColor($row['project_color_identifier']);
                 $project_id = $row['file_project'];
                 $link = ($project_id) ? './index.php?m=projects&a=view&project_id=' . $project_id : './index.php?m=projects';
                 $name = ($project_id) ? $row['project_name'] : $this->_AppUI->_('Not attached to a project');
-                $content = '<a href="' . $link . '">' . $name . '</a>';
+                $content = '<a href="' . $link . '">' . htmlspecialchars((string) $name, ENT_QUOTES, 'UTF-8') . '</a>';
                 $row = '<tr><td colspan="' . $this->cellCount . '" style="' . $style . '">' . $content . '</td></tr>';
                 break;
             default:
