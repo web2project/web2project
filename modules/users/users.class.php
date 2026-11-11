@@ -82,7 +82,17 @@ class CUser extends w2p_Core_BaseObject
             return false;
         }
 
-        return parent::store();
+        $result = parent::store();
+        // users.user_username is unique (migration 077). Another request can
+        // add the same username between isValid() and the insert; report
+        // that as an existing user rather than a database error.
+        if (!$result && isset($this->_error['store'])
+                && false !== stripos((string) $this->_error['store'], 'Duplicate entry')) {
+            unset($this->_error['store']);
+            $this->_error['user_exists'] = get_class($this) . '::store-check failed - this user already exists';
+        }
+
+        return $result;
     }
 
     protected function hook_postStore()

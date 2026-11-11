@@ -103,7 +103,7 @@ class w2p_Authenticators_LDAP extends w2p_Authenticators_Base
     {
         $q = $this->query;
         $q->addTable('users');
-        $q->addWhere('user_username = \'' . $username . '\'');
+        $q->addWhere('user_username = ' . $q->quote((string) $username));
         $rs = $q->exec();
         $row = $rs->FetchRow();
 
@@ -227,6 +227,13 @@ class w2p_Authenticators_LDAP extends w2p_Authenticators_Base
                 $q->setDelete('contacts');
                 $q->addWhere('contact_id = ' . (int) $c->contact_id);
                 $q->exec();
+            }
+            // A login for the same new user running at the same time may have
+            // created it first (users.user_username is unique): use that one.
+            $errors = $u->getError();
+            if (is_array($errors) && isset($errors['user_exists']) && ($existing = (int) $this->userId($username))) {
+                $this->user_id = $existing;
+                return true;
             }
             return false;
         }
