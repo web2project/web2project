@@ -104,7 +104,8 @@ class w2p_Output_HTML_TaskTable extends w2p_Output_ListTable
                     $prefix .= '<img src="' . w2PfindImage('icons/collapse.gif') . '" />&nbsp;';
                 }
                 if ('' != $rowData['task_description'] ) {
-                    $prefix .= w2PtoolTip($this->_AppUI->_('Task Description'), $rowData['task_description']);
+                    // raw: keep the description's own capitalisation
+                    $prefix .= w2PtoolTip($this->_AppUI->_('Task Description'), $rowData['task_description'], true);
                     $suffix .= w2PendTip();
                 }
                 if ($rowData['task_milestone']) {

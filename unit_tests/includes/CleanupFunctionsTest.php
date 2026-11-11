@@ -138,4 +138,17 @@ class CleanupFunctionsTest extends \PHPUnit\Framework\TestCase
         $q->addWhere('pref_user = 0');
         $this->assertGreaterThan(0, (int) $q->loadResult());
     }
+
+    /**
+     * Tooltips are plain text in a title attribute: markup in the tip
+     * becomes lines, names stay literal and everything is escaped.
+     */
+    public function testToolTipIsPlainEscapedText()
+    {
+        $tip = '<dl><dt>Type</dt><dd>Meeting</dd><dt>Note</dt><dd>' . htmlspecialchars('a "quoted" <b>note</b>') . '</dd></dl>';
+        $html = w2PtoolTip('O\'Brien <img src=x onerror=alert(1)>', $tip, true);
+
+        $this->assertSame('<span title="O&#039;Brien &lt;img src=x onerror=alert(1)&gt;' . "\n" . 'Type: Meeting' . "\n" . 'Note: a &quot;quoted&quot; &lt;b&gt;note&lt;/b&gt;">', $html);
+        $this->assertSame('<span id="x" title="Edit This' . "\n" . 'click to edit">', w2PtoolTip('edit this', 'Click to edit', false, 'x'));
+    }
 }

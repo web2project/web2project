@@ -3110,18 +3110,32 @@ function w2PtoolTip($header = '', $tip = '', $raw = false, $id = '')
     /** @var w2p_Core_CAppUI $AppUI */
     global $AppUI;
 
-    // The header and tip end up inside a title attribute, and callers pass
-    // object names, descriptions and tooltip markup with double quotes, so
-    // both are escaped (existing entities such as &nbsp; are kept).
-    $attr = function ($text) {
-        return nl2br(htmlspecialchars((string) $text, ENT_QUOTES, 'UTF-8', false));
+    // The header and tip become a native title tooltip, which shows plain
+    // text: no script renders HTML from it. Callers pass object names,
+    // descriptions and tooltip markup (getTaskTooltip(), getEventTooltip()),
+    // so the markup is turned into lines of text ("Label: value" for
+    // <dt>/<dd>) and the result is escaped for the attribute.
+    $text = function ($html) {
+        $html = html_entity_decode((string) $html, ENT_QUOTES | ENT_HTML401, 'UTF-8');
+        $html = preg_replace('#</dt>\s*<dd[^>]*>#i', ': ', $html);
+        $html = preg_replace('#<br\s*/?>|</(p|div|dd|dt|li|tr|h[1-6])>#i', "\n", $html);
+        $plain = html_entity_decode(strip_tags($html), ENT_QUOTES | ENT_HTML401, 'UTF-8');
+        $plain = str_replace("\xc2\xa0", ' ', $plain);
+        $plain = preg_replace('/[ \t]+/', ' ', $plain);
+        $plain = preg_replace('/ *\r?\n[\s]*/', "\n", $plain);
+
+        return trim($plain);
     };
-    $id = ('' == $id) ? '' : 'id="' . htmlspecialchars((string) $id, ENT_QUOTES, 'UTF-8') . '"';
-    if ($raw) {
-        $starttip = '<span ' . $id . ' title="&lt;h4&gt;' . $attr($AppUI->_($header)) . '&lt;/h4&gt; ' . $attr($AppUI->_($tip)) . '">';
-    } else {
-        $starttip = '<span ' . $id . ' title="&lt;h4&gt;' . $attr(ucwords(strtolower($AppUI->_($header)))) . '&lt;/h4&gt; ' . $attr(strtolower($AppUI->_($tip))) . '">';
+    // The header is a name or label (plain text), the tip may be markup.
+    $header = trim(html_entity_decode($AppUI->_($header), ENT_QUOTES | ENT_HTML401, 'UTF-8'));
+    $tip = $text($AppUI->_($tip));
+    if (!$raw) {
+        $header = ucwords(strtolower($header));
+        $tip = strtolower($tip);
     }
+    $title = trim($header . "\n" . $tip);
+    $id = ('' == $id) ? '' : 'id="' . htmlspecialchars((string) $id, ENT_QUOTES, 'UTF-8') . '" ';
+    $starttip = '<span ' . $id . 'title="' . htmlspecialchars($title, ENT_QUOTES, 'UTF-8') . '">';
 
     return $starttip;
 }
