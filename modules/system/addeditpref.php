@@ -260,7 +260,7 @@ echo ' /></p>';
 <div class="d-flex flex-wrap gap-2 mb-2">
 	<label><?php echo $AppUI->_('Task Log Email Subject'); ?>:</label>
 	<div>
-		<input type="text" class="text" name="pref_name[TASKLOGSUBJ]" value="<?php echo $prefs['TASKLOGSUBJ']; ?>" />
+		<input type="text" class="text" name="pref_name[TASKLOGSUBJ]" value="<?php echo htmlspecialchars((string) $prefs['TASKLOGSUBJ'], ENT_QUOTES, 'UTF-8'); ?>" />
 	</div>
 </div>
 <div class="d-flex flex-wrap gap-2 mb-2">

@@ -113,7 +113,7 @@ for ($i = 0, $n = ($end - $start) * 60 / $inc; $i < $n; $i++) {
 			$html .= '<b>' . $AppUI->_($types[$row['event_type']]) . '</b></div>';
 			$html .= w2PtoolTip($row['event_name'], getEventTooltip($row['event_id']), true);
 			$html .= $href ? '<a href="' . $href . '" class="event">' : '';
-			$html .= $row['event_name'];
+			$html .= htmlspecialchars((string) $row['event_name'], ENT_QUOTES, 'UTF-8');
 			$html .= $href ? '</a>' : '';
 			$html .= w2PendTip();
 			$html .= '</td>';

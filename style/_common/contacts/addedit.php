@@ -52,7 +52,7 @@ $form = new w2p_Output_HTML_FormHelper($AppUI);
             <?php if ($AppUI->isActiveModule('departments')) { ?>
                 <p>
                     <?php $form->showLabel('Department'); ?>
-                    <input type="text" class="text" name="contact_department_name" id="contact_department_name" value="<?php echo $dept_detail['dept_name']; ?>" maxlength="100" size="25" />
+                    <input type="text" class="text" name="contact_department_name" id="contact_department_name" value="<?php echo htmlspecialchars((string) $dept_detail['dept_name'], ENT_QUOTES, 'UTF-8'); ?>" maxlength="100" size="25" />
                     <input type='hidden' name='contact_department' value='<?php echo $dept_detail['dept_id']; ?>' />
                     <input type="button" class="button btn btn-primary btn-mini" value="<?php echo $AppUI->_('select department...'); ?>" onclick="popDepartment()" />
                 </p>

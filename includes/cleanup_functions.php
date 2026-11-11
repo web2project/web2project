@@ -3105,11 +3105,17 @@ function w2PtoolTip($header = '', $tip = '', $raw = false, $id = '')
     /** @var w2p_Core_CAppUI $AppUI */
     global $AppUI;
 
-    $id = ('' == $id) ? '' : 'id="' . $id . '"';
+    // The header and tip end up inside a title attribute, and callers pass
+    // object names, descriptions and tooltip markup with double quotes, so
+    // both are escaped (existing entities such as &nbsp; are kept).
+    $attr = function ($text) {
+        return nl2br(htmlspecialchars((string) $text, ENT_QUOTES, 'UTF-8', false));
+    };
+    $id = ('' == $id) ? '' : 'id="' . htmlspecialchars((string) $id, ENT_QUOTES, 'UTF-8') . '"';
     if ($raw) {
-        $starttip = '<span ' . $id . ' title="&lt;h4&gt;' . nl2br($AppUI->_($header)) . '&lt;/h4&gt; ' . nl2br($AppUI->_($tip)) . '">';
+        $starttip = '<span ' . $id . ' title="&lt;h4&gt;' . $attr($AppUI->_($header)) . '&lt;/h4&gt; ' . $attr($AppUI->_($tip)) . '">';
     } else {
-        $starttip = '<span ' . $id . ' title="&lt;h4&gt;' . nl2br(ucwords(strtolower($AppUI->_($header)))) . '&lt;/h4&gt; ' . nl2br(strtolower($AppUI->_($tip))) . '">';
+        $starttip = '<span ' . $id . ' title="&lt;h4&gt;' . $attr(ucwords(strtolower($AppUI->_($header)))) . '&lt;/h4&gt; ' . $attr(strtolower($AppUI->_($tip))) . '">';
     }
 
     return $starttip;
@@ -3440,7 +3446,7 @@ function getEventLinks($startPeriod, $endPeriod, $links, $notUsed = null, $minic
                     $url = '?m=events&a=view&event_id=' . $row['event_id'];
                     $link['href'] = '';
                     $link['alt'] = '';
-                    $link['text'] = w2PtoolTip($row['event_name'], getEventTooltip($row['event_id']), true) . w2PshowImage('modules/events/event' . $row['event_type'] . '.png', 16, 16, '', '', 'calendar') . '</a>&nbsp;' . '<a href="' . $url . '"><span class="event">' . $row['event_name'] . '</span></a>' . w2PendTip();
+                    $link['text'] = w2PtoolTip($row['event_name'], getEventTooltip($row['event_id']), true) . w2PshowImage('modules/events/event' . $row['event_type'] . '.png', 16, 16, '', '', 'calendar') . '</a>&nbsp;' . '<a href="' . $url . '"><span class="event">' . htmlspecialchars((string) $row['event_name'], ENT_QUOTES, 'UTF-8') . '</span></a>' . w2PendTip();
                 }
                 $links[$date->format(FMT_TIMESTAMP_DATE)][] = $link;
             }
@@ -3532,7 +3538,7 @@ function getTaskLinks($startPeriod, $endPeriod, $links, $strMaxLen, $company_id 
                 $row['short_name'] = $row['task_name'];
             }
 
-            $link['text'] = '<span style="color:' . bestColor($row['color']) . ';background-color:#' . $row['color'] . '">' . $row['short_name'] . ($row['task_milestone'] ? '&nbsp;' . w2PshowImage('icons/milestone.gif') : '') . '</span>';
+            $link['text'] = '<span style="color:' . bestColor($row['color']) . ';background-color:#' . htmlspecialchars((string) $row['color'], ENT_QUOTES, 'UTF-8') . '">' . htmlspecialchars((string) $row['short_name'], ENT_QUOTES, 'UTF-8') . ($row['task_milestone'] ? '&nbsp;' . w2PshowImage('icons/milestone.gif') : '') . '</span>';
         }
 
         // determine which day(s) to display the task

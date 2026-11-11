@@ -110,17 +110,22 @@ class w2p_Output_HTML_TaskTable extends w2p_Output_ListTable
                 if ($rowData['task_milestone']) {
                     $suffix .= '&nbsp;' . '<img src="' . w2PfindImage('icons/milestone.gif') . '" />';
                 }
+                // The name is escaped here and the cell built here, because
+                // createCell() escapes _name values (#546) and this one
+                // carries markup (indent, tooltip, milestone icon).
+                $name = $this->escape($rowData[$column]);
                 if (1 == $rowData['task_dynamic'] || $rowData['task_milestone']) {
-                    $rowData[$column] = '<b>' . $rowData[$column] . '</b>';
+                    $name = '<b>' . $name . '</b>';
                 }
 
-                $rowData[$column] = $prefix . $rowData[$column] . $suffix;
+                $row .= '<td class="_name"><a href="?m=tasks&a=view&task_id=' . (int) $rowData['task_id'] . '">' . $prefix . $name . $suffix . '</a></td>';
+                continue;
             }
             if ('task_assignees' == $column) {
                 $parsed = array();
                 $assignees = $this->task->assignees($rowData['task_id']);
                 foreach ($assignees as $assignee) {
-                    $parsed[] = '<a href="?m=users&a=view&user_id=' . $assignee['user_id'] . '">' . $assignee['contact_name'] . '</a>';
+                    $parsed[] = '<a href="?m=users&a=view&user_id=' . (int) $assignee['user_id'] . '">' . $this->escape($assignee['contact_name']) . '</a>';
                 }
                 $rowData[$column] = implode(', ', $parsed);
             }

@@ -49,7 +49,7 @@ $form = new w2p_Output_HTML_FormHelper($AppUI);
             <p>
                 <?php $form->showLabel('Department'); ?>
                 <input type="hidden" name="contact_department" value="<?php echo $object->contact_department; ?>" />
-                <input type="text" class="text" name="dept_name" value="<?php echo $object->dept_name; ?>" size="40" disabled="disabled" />
+                <input type="text" class="text" name="dept_name" value="<?php echo htmlspecialchars((string) $object->dept_name, ENT_QUOTES, 'UTF-8'); ?>" size="40" disabled="disabled" />
                 <input type="button" class="button btn btn-primary btn-mini" value="<?php echo $AppUI->_('select dept'); ?>..." onclick="popDept()" />
             </p>
             <?php
