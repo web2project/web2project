@@ -1286,7 +1286,8 @@ class w2p_Database_Query {
 				if (!$keys) {
 					$keys = array_keys($hash);
 				}
-				$hashlist[$hash[$keys[0]]] = $hash[$keys[1]];
+				// one column: it is both the key and the value
+				$hashlist[$hash[$keys[0]]] = $hash[$keys[1] ?? $keys[0]];
 			}
 		}
 		$this->clear();

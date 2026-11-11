@@ -19,7 +19,9 @@ if (!$canEdit && $user_id != $AppUI->user_id) {
 }
 
 // load the preferences
-$prefs = getPreferences($user_id);
+// A user without a saved value for a preference (e.g. created outside the
+// user form) sees the system default.
+$prefs = getPreferences($user_id) + ($user_id ? getPreferences(0) : array());
 
 // get the user name
 if ($user_id) {

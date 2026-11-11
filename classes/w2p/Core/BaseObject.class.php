@@ -35,7 +35,8 @@ abstract class w2p_Core_BaseObject extends w2p_System_Event implements w2p_Inter
      * @var object Query Handler
      */
     protected $_query;
-    private $_event;
+    // 'Create' or 'Update' during store(); subclasses read it (CEvent).
+    protected $_event;
 
     /**
      * @var object permissions/preference/translation object
@@ -286,7 +287,7 @@ abstract class w2p_Core_BaseObject extends w2p_System_Event implements w2p_Inter
      *
      * @deprecated
      */
-    public function loadFull($notUsed = null, $object_id) {     $this->load($object_id);        }
+    public function loadFull($notUsed, $object_id) {     $this->load($object_id);        }
 
     /**
      *     Returns an array, keyed by the key field, of all elements that meet
