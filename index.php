@@ -156,10 +156,8 @@ $AppUI->setUserLocale();
 $perms = &$AppUI->acl();
 
 $loader = new w2p_FileSystem_Loader();
-/**
- * TODO: We should validate that the module identified by $m is actually
- *   installed & active. If not, we should go back to the defaults.
- */
+// The module in $m is checked (active, and accessible to this user) below,
+// once $m, $a and $u are known.
 $def_a = 'index';
 if (!isset($_GET['m']) && !empty($w2Pconfig['default_view_m'])) {
 	if (!$perms->checkModule($w2Pconfig['default_view_m'], 'view', $AppUI->user_id)) {
@@ -180,7 +178,7 @@ $m = preg_replace("/[^a-z0-9_]/", "", $m);
 $a = $loader->checkFileName(w2PgetParam($_GET, 'a', $def_a));
 $a = preg_replace("/[^a-z0-9_]/", "", $a);
 if ($m == 'projects' && $a == 'view' && $w2Pconfig['projectdesigner_view_project'] && !w2PgetParam($_GET, 'bypass') && !(isset($_GET['tab']))) {
-	if ($AppUI->isActiveModule('projectdesigner')) {
+	if ($AppUI->isActiveModule('projectdesigner') && canAccess('projectdesigner')) {
 		$m = 'projectdesigner';
 		$a = 'index';
 	}
@@ -213,21 +211,12 @@ if ($u && file_exists(W2P_BASE_DIR . '/modules/' . $m . '/' . $u . '/' . $u . '.
 	include W2P_BASE_DIR . '/modules/' . $m . '/' . $u . '/' . $u . '.class.php';
 }
 
-// include the module ajax file - we use file_exists instead of @ so  that any parse errors in the file are reported,
-//   rather than errors further down the track.
-$modajax = $AppUI->getModuleAjax($m);
-if (file_exists($modajax)) {
-	include $modajax;
-}
-if ($u && file_exists(W2P_BASE_DIR . '/modules/' . $m . '/' . $u . '/' . $u . '.ajax.php')) {
-	include W2P_BASE_DIR . '/modules/' . $m . '/' . $u . '/' . $u . '.ajax.php';
-}
-
 // Every request that changes data must carry the session's form token
 // (CSRF protection): dosql posts, and the action files that change data
 // directly (a=do_*, a=domodsql). Forms get the token from
 // w2p_add_form_tokens() below; the few GET links put it in the URL.
-if (isset($_POST['dosql']) || 0 === strpos($a, 'do_') || 'domodsql' == $a) {
+$isAction = isset($_POST['dosql']) || 0 === strpos($a, 'do_') || 'domodsql' == $a;
+if ($isAction) {
 	$token = isset($_POST['__nonce']) ? $_POST['__nonce'] : (isset($_GET['__nonce']) ? $_GET['__nonce'] : null);
 	if (!$AppUI->checkFormToken($token)) {
 		$AppUI->setMsg('Your form has expired or did not come from this site. Please try again.', UI_MSG_ERROR);
@@ -251,6 +240,35 @@ if (isset($_POST['dosql']) || 0 === strpos($a, 'do_') || 'domodsql' == $a) {
 	if (!$ownRecord && !($AppUI->isActiveModule($m) && canAccess($m))) {
 		$AppUI->redirect(ACCESS_DENIED);
 	}
+} else {
+	// Every page load, too, may only open an active module the user can
+	// access (#547). Core modules mostly relied on per-object checks, and an
+	// add-on without its own canAccess() check was open to every user even
+	// when switched off. Exceptions: the public pages, the m=admin and
+	// m=calendar stubs (they only redirect to m=users and m=events, which
+	// are checked in turn), and the pages users open for their own record.
+	$openModules = array('public', 'admin', 'calendar');
+	$selfServicePages = array(
+		'users/view'         => 'user_id',
+		'users/addedit'      => 'user_id',
+		'system/addeditpref' => 'user_id',
+	);
+	$page = $m . '/' . ($u ? $u . '/' : '') . $a;
+	$ownPage = isset($selfServicePages[$page])
+		&& (int) w2PgetParam($_GET, $selfServicePages[$page], 0) === (int) $AppUI->user_id;
+	if (!in_array($m, $openModules, true) && !$ownPage && !($AppUI->isActiveModule($m) && canAccess($m))) {
+		$AppUI->redirect(ACCESS_DENIED);
+	}
+}
+
+// include the module ajax file - we use file_exists instead of @ so  that any parse errors in the file are reported,
+//   rather than errors further down the track.
+$modajax = $AppUI->getModuleAjax($m);
+if (file_exists($modajax)) {
+	include $modajax;
+}
+if ($u && file_exists(W2P_BASE_DIR . '/modules/' . $m . '/' . $u . '/' . $u . '.ajax.php')) {
+	include W2P_BASE_DIR . '/modules/' . $m . '/' . $u . '/' . $u . '.ajax.php';
 }
 
 // do some db work if dosql is set
