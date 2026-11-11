@@ -49,6 +49,18 @@ class CLinksTest extends CommonSetup
     }
 
     /**
+     * bind() encodes and w2PHTMLDecode() decodes; with mismatched flags an
+     * apostrophe came back as &#039; on PHP 8.1+ (#556).
+     */
+    public function testBindKeepsQuotes()
+    {
+        $this->post_data['link_name'] = "Jordan's \"link\" & <more>";
+        $this->obj->bind($this->post_data);
+
+        $this->assertEquals("Jordan's \"link\" & <more>", $this->obj->link_name);
+    }
+
+    /**
      * Tests that the proper error message is returned when a link is attempted
      * to be created without a name.
      */

@@ -3070,6 +3070,11 @@ function w2PcheckMem($min = 0, $revert = false)
 /**
  * Decode HTML entities
  */
+/**
+ * Reverses the htmlentities() that w2p_Core_BaseObject::bind() applies.
+ * The flags must match bind()'s: with ENT_COMPAT here, the &#039; that
+ * PHP 8.1+ produces for ' was never decoded and ended up in the database.
+ */
 function w2PHTMLDecode($txt)
 {
     global $locale_char_set;
@@ -3080,15 +3085,15 @@ function w2PHTMLDecode($txt)
 
     if (is_object($txt)) {
         foreach (get_object_vars($txt) as $k => $v) {
-            $txt->$k = html_entity_decode($v, ENT_COMPAT);
+            $txt->$k = html_entity_decode($v, ENT_QUOTES | ENT_HTML401, 'UTF-8');
         }
     } else {
         if (is_array($txt)) {
             foreach ($txt as $k => $v) {
-                $txt[$k] = (is_array($v)) ? $v : html_entity_decode($v, ENT_COMPAT);
+                $txt[$k] = (is_array($v)) ? $v : html_entity_decode($v, ENT_QUOTES | ENT_HTML401, 'UTF-8');
             }
         } else {
-            $txt = html_entity_decode($txt, ENT_COMPAT);
+            $txt = html_entity_decode($txt, ENT_QUOTES | ENT_HTML401, 'UTF-8');
         }
     }
 

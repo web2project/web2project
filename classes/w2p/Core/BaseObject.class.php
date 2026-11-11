@@ -232,7 +232,7 @@ abstract class w2p_Core_BaseObject extends w2p_System_Event implements w2p_Inter
             
             foreach ($hash as $k => $v) {
                 if (!(is_object($hash[$k]))) {
-                    $filtered_hash[$k] = (is_string($v)) ? htmlentities($v) : $v;
+                    $filtered_hash[$k] = (is_string($v)) ? htmlentities($v, ENT_QUOTES | ENT_SUBSTITUTE | ENT_HTML401, 'UTF-8') : $v;
                 }
             }
             $q = $this->_getQuery();
