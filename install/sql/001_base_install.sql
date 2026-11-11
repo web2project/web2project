@@ -602,6 +602,10 @@ CREATE TABLE `gacl_acl` (
 
 INSERT INTO `gacl_acl` (`id`, `section_value`, `allow`, `enabled`, `return_value`, `note`, `updated_date`) VALUES (10, 'user', 1, 1, '', '', 1195510857);
 INSERT INTO `gacl_acl` (`id`, `section_value`, `allow`, `enabled`, `return_value`, `note`, `updated_date`) VALUES (11, 'user', 1, 1, '', '', 1195510857);
+-- Project worker: access, view, add and edit on the Non-Admin Modules group.
+-- The axo group mapping for acl 14 below was always here; the acl itself,
+-- its actions and its role were missing, so the role could only log in.
+INSERT INTO `gacl_acl` (`id`, `section_value`, `allow`, `enabled`, `return_value`, `note`, `updated_date`) VALUES (14, 'user', 1, 1, '', '', 1195510857);
 
 -- --------------------------------------------------------
 
@@ -696,6 +700,10 @@ INSERT INTO `gacl_aco_map` (`acl_id`, `section_value`, `value`) VALUES (11, 'app
 INSERT INTO `gacl_aco_map` (`acl_id`, `section_value`, `value`) VALUES (11, 'application', 'delete');
 INSERT INTO `gacl_aco_map` (`acl_id`, `section_value`, `value`) VALUES (11, 'application', 'edit');
 INSERT INTO `gacl_aco_map` (`acl_id`, `section_value`, `value`) VALUES (11, 'application', 'view');
+INSERT INTO `gacl_aco_map` (`acl_id`, `section_value`, `value`) VALUES (14, 'application', 'access');
+INSERT INTO `gacl_aco_map` (`acl_id`, `section_value`, `value`) VALUES (14, 'application', 'add');
+INSERT INTO `gacl_aco_map` (`acl_id`, `section_value`, `value`) VALUES (14, 'application', 'edit');
+INSERT INTO `gacl_aco_map` (`acl_id`, `section_value`, `value`) VALUES (14, 'application', 'view');
 
 -- --------------------------------------------------------
 
@@ -844,6 +852,7 @@ CREATE TABLE `gacl_aro_groups_map` (
 
 INSERT INTO `gacl_aro_groups_map` (`acl_id`, `group_id`) VALUES (10, 10);
 INSERT INTO `gacl_aro_groups_map` (`acl_id`, `group_id`) VALUES (11, 11);
+INSERT INTO `gacl_aro_groups_map` (`acl_id`, `group_id`) VALUES (14, 14);
 
 -- --------------------------------------------------------
 
