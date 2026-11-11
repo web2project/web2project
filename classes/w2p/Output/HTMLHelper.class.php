@@ -128,8 +128,11 @@ class w2p_Output_HTMLHelper extends w2p_Output_HTML_Base
                 $class  = 'C'.ucfirst($module);
 
                 $obj = new $class();
-                $obj->load($value);
-                $link = '?m='. w2p_pluralize($module) .'&a=view&'.$module.'_id='.$value;
+                if (!(int) $value || !$obj->load($value)) {
+                    $cell = '-';
+                    break;
+                }
+                $link = '?m='. w2p_pluralize($module) .'&a=view&'.$module.'_id='.(int) $value;
                 $cell = '<a href="'.$link.'">'.$this->escape($obj->{"$module".'_name'}).'</a>';
                 $suffix .= ' _name';
                 break;
@@ -138,13 +141,16 @@ class w2p_Output_HTMLHelper extends w2p_Output_HTML_Base
                 $class  = 'C'.ucfirst($module);
 
                 $obj = new $class();
-                $obj->load($value);
+                if (!(int) $value || !$obj->load($value)) {
+                    $cell = '-';
+                    break;
+                }
                 /**
                  * This is a branch separate from _company, _contact, etc above because although the module is called
                  *   departments, the fields are dept_id and dept_name. :(
                  *                                                              ~ caseydk, Dec 11 2013
                  */
-                $link = '?m='. w2p_pluralize($module) .'&a=view&dept_id='.$value;
+                $link = '?m='. w2p_pluralize($module) .'&a=view&dept_id='.(int) $value;
                 $cell = '<a href="'.$link.'">'.$this->escape($obj->dept_name).'</a>';
                 $suffix .= ' _name';
                 break;
@@ -291,9 +297,12 @@ class w2p_Output_HTMLHelper extends w2p_Output_HTML_Base
                 $class  = 'C'.ucfirst($module);
 
                 $obj = new $class();
-                $obj->load($value);
+                if (!(int) $value || !$obj->load($value)) {
+                    $cell = '-';
+                    break;
+                }
                 $color = $obj->project_color_identifier;
-                $link = '?m='. w2p_pluralize($module) .'&a=view&'.$module.'_id='.$value;
+                $link = '?m='. w2p_pluralize($module) .'&a=view&'.$module.'_id='.(int) $value;
                 $cell = '<span style="background-color:#'.$this->escape($color).'; padding: 3px"><a href="'.$link.'" style="color:'.bestColor($color) .'">'.$this->escape($obj->{"$module".'_name'}).'</a></span>';
                 $suffix .= ' _name';
                 break;

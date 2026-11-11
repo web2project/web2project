@@ -71,6 +71,18 @@ class w2p_Output_HTMLHelperTest extends CommonSetup
     }
 
     /*
+     * An unset reference ('0') or a missing object shows '-', not an empty link.
+     */
+    public function testCreateCell_objectLinkWithoutObject()
+    {
+        foreach (array('link_task', 'link_project', 'x_company', 'x_contact', 'x_department') as $field) {
+            $suffix = substr($field, strrpos($field, '_'));
+            $this->assertEquals('<td class="' . $suffix . '">-</td>', $this->obj->createCell($field, '0'), $field);
+            $this->assertEquals('<td class="' . $suffix . '">-</td>', $this->obj->createCell($field, '999999'), $field);
+        }
+    }
+
+    /*
      * This test makes sure that the lookups against our custom arrays are
      *   applied properly.
      */
