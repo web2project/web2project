@@ -6,7 +6,7 @@ if (!defined('W2P_BASE_DIR')) {
 
 global $AppUI, $company, $tab, $customLookups;
 
-$sort = w2PgetParam($_GET, 'sort', 'project_name');
+$sort = w2PsafeOrderBy(w2PgetParam($_GET, 'sort', 'project_name'), 'project_name');
 if ($sort == 'project_priority') {
 	$sort .= ' DESC';
 }

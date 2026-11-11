@@ -6,7 +6,7 @@ if (!defined('W2P_BASE_DIR')) {
 // @todo    convert to template
 // @todo    remove database query
 
-$sort = w2PgetParam($_REQUEST, 'sort', 'asc');
+$sort = ('desc' === strtolower((string) w2PgetParam($_REQUEST, 'sort', 'asc'))) ? 'desc' : 'asc';
 $viewtype = w2PgetParam($_REQUEST, 'viewtype', 'normal');
 $hideEmail = w2PgetConfig('hide_email_addresses', false);
 

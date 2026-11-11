@@ -82,7 +82,7 @@ class w2p_System_Preferences {
 
         $q->setDelete('user_preferences');
         $q->addWhere('pref_user = ' . (int)$this->pref_user);
-        $q->addWhere('pref_name = \'' . $this->pref_name . '\'');
+        $q->addWhere('pref_name = ' . $q->quote((string) $this->pref_name));
         if (!$q->exec()) {
             return (new w2p_Database_Connection($GLOBALS['db']))->error();
         } else {

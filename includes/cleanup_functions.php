@@ -2452,7 +2452,8 @@ function getUsers($stub = null, $where = null, $orderby = 'contact_first_name, c
          contact_display_name as contact_name, contact_email, user_type');
     $q->addJoin('contacts', 'con', 'con.contact_id = user_contact', 'inner');
     if ($stub) {
-        $q->addWhere('(UPPER(user_username) LIKE \'' . $stub . '%\' or UPPER(contact_first_name) LIKE \'' . $stub . '%\' OR UPPER(contact_last_name) LIKE \'' . $stub . '%\')');
+        $like = $q->quote(strtoupper((string) $stub) . '%');
+        $q->addWhere('(UPPER(user_username) LIKE ' . $like . ' OR UPPER(contact_first_name) LIKE ' . $like . ' OR UPPER(contact_last_name) LIKE ' . $like . ')');
     } elseif ($where) {
         $where = $q->quote('%' . $where . '%');
         $q->addWhere('(UPPER(user_username) LIKE ' . $where . ' OR UPPER(contact_first_name) LIKE ' . $where . ' OR UPPER(contact_last_name) LIKE ' . $where . ')');
@@ -2709,7 +2710,7 @@ function w2PuserHasRole($name)
     $q->addTable('roles', 'r');
     $q->addTable('user_roles', 'ur');
     $q->addQuery('r.role_id');
-    $q->addWhere('ur.user_id = ' . $uid . ' AND ur.role_id = r.role_id AND r.role_name = \'' . $name . '\'');
+    $q->addWhere('ur.user_id = ' . (int) $uid . ' AND ur.role_id = r.role_id AND r.role_name = ' . $q->quote((string) $name));
 
     return $q->loadResult();
 }

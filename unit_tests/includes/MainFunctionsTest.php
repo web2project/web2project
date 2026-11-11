@@ -238,4 +238,14 @@ class MainFunctionsTest extends \PHPUnit\Framework\TestCase
         $object = getAuth('something else');
         $this->assertInstanceOf('w2p_Authenticators_SQL', $object);
     }
+
+    public function testSafeOrderBy()
+    {
+        $this->assertEquals('company_name', w2PsafeOrderBy('company_name', 'x'));
+        $this->assertEquals('p.project_name DESC', w2PsafeOrderBy('p.project_name DESC', 'x'));
+        $this->assertEquals('x', w2PsafeOrderBy('company_name, (SELECT 1)', 'x'));
+        $this->assertEquals('x', w2PsafeOrderBy("1; DROP TABLE users", 'x'));
+        $this->assertEquals('x', w2PsafeOrderBy(null, 'x'));
+        $this->assertEquals('x', w2PsafeOrderBy(array('a'), 'x'));
+    }
 }

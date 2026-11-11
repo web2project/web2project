@@ -114,7 +114,7 @@ class w2p_Authenticators_LDAP extends w2p_Authenticators_Base
     {
         $q = $this->query;
         $q->addTable('contacts');
-        $q->addWhere('contact_owner = \'' . $user_id . '\'');
+        $q->addWhere('contact_owner = ' . (int) $user_id);
         $rs = $q->exec();
         $row = $rs->FetchRow();
 

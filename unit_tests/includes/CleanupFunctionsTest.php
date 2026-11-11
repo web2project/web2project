@@ -114,4 +114,28 @@ class CleanupFunctionsTest extends \PHPUnit\Framework\TestCase
         $this->assertStringNotContainsString('<option value="0" selected', $html);
         $this->assertStringNotContainsString('<option value="1a" selected', $html);
     }
+
+    /**
+     * The Users list's letter filter (stub) and the preferences key are
+     * quoted, not pasted into the SQL.
+     */
+    public function testUserStubAndPreferenceNameAreQuoted()
+    {
+        $sql = getUsers("A' OR '1'='1")->prepare();
+        $this->assertStringContainsString("LIKE 'A\\' OR \\'1\\'=\\'1%'", $sql);
+
+        $users = w2PgetUsersList("zz' OR '1'='1");
+        $this->assertSame(array(), $users);
+
+        $pref = new w2p_System_Preferences();
+        $pref->pref_user = 0;
+        $pref->pref_name = "NOSUCHPREF' OR '1'='1";
+        $this->assertNull($pref->delete());
+
+        $q = new w2p_Database_Query();
+        $q->addTable('user_preferences');
+        $q->addQuery('COUNT(*)');
+        $q->addWhere('pref_user = 0');
+        $this->assertGreaterThan(0, (int) $q->loadResult());
+    }
 }

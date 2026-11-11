@@ -479,7 +479,7 @@ class CContact extends w2p_Core_BaseObject
         $q->addJoin('contacts', 'con', 'contact_id = user_contact', 'inner');
 
         $q->leftJoin('contacts_methods', 'cm', 'cm.contact_id = user_contact');
-        $q->addWhere("cm.method_value = '$email'");
+        $q->addWhere('cm.method_value = ' . $q->quote((string) $email));
 //TODO: add primary email
         $q->setLimit(1);
         $r = $q->loadResult();
