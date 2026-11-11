@@ -15,7 +15,8 @@ if (!canEdit('system')) {
 
 // load the record data
 $field = new w2p_Core_CustomFieldManager();
-$obj = $AppUI->restoreObject();
+$field->field_id = $field_id;
+$obj = $AppUI->restoreObject($field);
 if ($obj) {
     $field = $obj;
     $field_id = $field->field_id;

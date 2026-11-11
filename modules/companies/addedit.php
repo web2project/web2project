@@ -19,7 +19,7 @@ if (!$canAddEdit) {
 }
 
 // load the record data
-$obj = $AppUI->restoreObject();
+$obj = $AppUI->restoreObject($object);
 if ($obj) {
     $object = $obj;
     $object_id = $object->getId();
