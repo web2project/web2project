@@ -2262,7 +2262,7 @@ function bestColor($bg, $lt = '#ffffff', $dk = '#000000')
 ##
 ## returns a select box based on an key,value array where selected is based on key
 ##
-function arraySelect(&$arr, $select_name, $select_attribs, $selected, $translate = false)
+function arraySelect($arr, $select_name, $select_attribs, $selected, $translate = false)
 {
     /** @var w2p_Core_CAppUI $AppUI */
     global $AppUI;
@@ -2279,6 +2279,10 @@ function arraySelect(&$arr, $select_name, $select_attribs, $selected, $translate
         $multiple = count($selected);
     }
     $did_selected = 0;
+    // Keys and the selected value are compared as strings (what the old
+    // `$k == $selected && strcmp($k, $selected) == 0` meant), without
+    // passing null to strcmp().
+    $selectedKey = is_array($selected) ? null : (string) $selected;
     foreach ($arr as $k => $v) {
         if ($translate) {
             $v = $AppUI->_($v);
@@ -2299,8 +2303,8 @@ function arraySelect(&$arr, $select_name, $select_attribs, $selected, $translate
                 $did_selected = 1;
             }
         } else {
-            $s .= '<option value="' . $value . '"' . ((($k == $selected && strcmp($k, $selected) == 0) && !$did_selected) ? ' selected="selected"' : '') . '>' . $label . '</option>';
-            if (($k == $selected && strcmp($k, $selected) == 0)) {
+            $s .= '<option value="' . $value . '"' . ((((string) $k === $selectedKey) && !$did_selected) ? ' selected="selected"' : '') . '>' . $label . '</option>';
+            if ((string) $k === $selectedKey) {
                 // As soon as we find a match we make sure no other gets selected by computer mistake by using the $did_selected lock
                 $did_selected = 1;
             }
@@ -2314,7 +2318,7 @@ function arraySelect(&$arr, $select_name, $select_attribs, $selected, $translate
 ##
 ## returns a select box based on an key,value array where selected is based on key
 ##
-function arraySelectTree(&$arr, $select_name, $select_attribs, $selected, $translate = false)
+function arraySelectTree($arr, $select_name, $select_attribs, $selected, $translate = false)
 {
     reset($arr);
 

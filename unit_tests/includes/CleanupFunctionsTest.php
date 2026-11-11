@@ -98,4 +98,20 @@ class CleanupFunctionsTest extends \PHPUnit\Framework\TestCase
             $this->assertEquals('', $options);
         }
     }
+
+    /**
+     * arraySelect() takes its list by value, so an expression can be passed,
+     * and compares keys as strings (#554).
+     */
+    public function testArraySelectAcceptsExpressionsAndNullSelected()
+    {
+        $html = arraySelect(array_merge(array('' => 'None'), array(5 => 'Five')), 'x', '', null);
+        $this->assertStringContainsString('<option value="" selected="selected">None</option>', $html);
+        $this->assertStringContainsString('<option value="0">Five</option>', $html);
+
+        $html = arraySelect(array(0 => 'Zero', 1 => 'One', '1a' => 'Odd'), 'x', '', '1');
+        $this->assertStringContainsString('<option value="1" selected="selected">One</option>', $html);
+        $this->assertStringNotContainsString('<option value="0" selected', $html);
+        $this->assertStringNotContainsString('<option value="1a" selected', $html);
+    }
 }
