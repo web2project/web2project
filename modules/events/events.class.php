@@ -135,8 +135,8 @@ class CEvent extends w2p_Core_BaseObject
         if ($j > 0) {
             switch ($event_recurs) {
                 case 1:
-                    $eventStart->addSpan(new Date_Span(3600 * $j));
-                    $eventEnd->addSpan(new Date_Span(3600 * $j));
+                    $eventStart->addSeconds(3600 * $j);
+                    $eventEnd->addSeconds(3600 * $j);
                     break;
                 case 2:
                     $eventStart->addDays($j);

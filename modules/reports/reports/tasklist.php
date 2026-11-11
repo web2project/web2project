@@ -43,9 +43,9 @@ if ($period) {
 	$end_date = new w2p_Utilities_Date($ts);
 
 	if ($sign > 0) {
-		$end_date->addSpan(new Date_Span(array($days,0,0,0)));
+		$end_date->addDays($days);
 	} else {
-		$start_date->subtractSpan(new Date_Span(array($days,0,0,0)));
+		$start_date->addDays(-$days);
 	}
 
 	$do_report = 1;
@@ -57,7 +57,7 @@ if ($period) {
 }
 
 if (!$log_start_date) {
-	$start_date->subtractSpan(new Date_Span('14,0,0,0'));
+	$start_date->addDays(-14);
 }
 $end_date->setTime(23, 59, 59);
 
