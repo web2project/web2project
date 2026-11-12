@@ -84,7 +84,8 @@ class w2p_Core_UpgradeManagerTest extends CommonSetup
                 $this->assertTrue($this->obj->testDatabaseCredentials($w2Pconfig));
 
                 $errors = $this->obj->upgradeSystem();
-                $this->assertEquals(0, count($errors));
+                // On failure, say which migration and statement failed.
+                $this->assertEquals(0, count($errors), implode("\n", $errors) . "\n" . $this->obj->getFailureReport());
 
                 $updates = $this->obj->getUpdatesApplied();
                 $this->assertGreaterThanOrEqual(5, count($updates));
@@ -94,7 +95,8 @@ class w2p_Core_UpgradeManagerTest extends CommonSetup
                 $this->assertTrue($this->obj->testDatabaseCredentials($w2Pconfig));
 
                 $errors = $this->obj->upgradeSystem();
-                $this->assertEquals(0, count($errors));
+                // On failure, say which migration and statement failed.
+                $this->assertEquals(0, count($errors), implode("\n", $errors) . "\n" . $this->obj->getFailureReport());
 
                 $updates = $this->obj->getUpdatesApplied();
                 $this->assertGreaterThanOrEqual(0, count($updates));

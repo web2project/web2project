@@ -229,7 +229,7 @@ $this->markTestIncomplete('These tests have yet to be written because we need to
     {
         $result = $this->obj->renderContactTable('companies', array());
 
-        $this->assertEquals('<table class="tbl list"><tr><th>Name</th><th>Email</th><th>Phone</th><th>Department</th></tr><tr><td colspan="4">No data available</td></tr></table>',     $result);
+        $this->assertEquals('<table id="contacts-companies_view" class="tbl list"><thead><tr><th>Name</th><th>Email</th><th>Phone</th><th>Department</th></tr></thead><tbody><tr><td colspan="4">No data available</td></tr></tbody></table>',     $result);
     }
 
     public function testRenderContactTable()
@@ -242,6 +242,6 @@ $this->markTestIncomplete('These tests have yet to be written because we need to
                             'contact_phone' => '1212555IRON')
             ));
 
-        $this->assertEquals('<table class="tbl list"><tr><th>Name</th><th>Email</th><th>Phone</th><th>Department</th></tr><tr><td class="_name"><a href="?m=contacts&a=view&contact_id=1">Tony Stark</a></td><td class="_email"><a href="mailto:iron.man@example.com">iron.man@example.com</a></td><td class="_phone">1212555IRON</td><td>-</td></tr></table>',     $result);
+        $this->assertEquals('<table id="contacts-companies_view" class="tbl list"><thead><tr><th>Name</th><th>Email</th><th>Phone</th><th>Department</th></tr></thead><tbody><tr><td class="_name"><a href="?m=contacts&a=view&contact_id=1">Tony Stark</a></td><td class="_email"><a href="mailto:iron.man@example.com">iron.man@example.com</a></td><td class="_phone">1212555IRON</td><td>-</td></tr></tbody></table>',     $result);
     }
 }

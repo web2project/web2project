@@ -69,6 +69,13 @@ $_REQUEST['login'] = 'sql';
 $AppUI->login('admin', 'passwd');
 $AppUI->user_email = 'something@something.com';
 
+/*
+ * Load the translations as index.php does, so tests that check translated
+ * text (e.g. mail bodies) don't depend on an earlier test having loaded them.
+ */
+$AppUI->setUserLocale();
+$AppUI->loadLocale();
+
 class CommonSetup extends \PHPUnit\Framework\TestCase
 {
     protected $backupGlobals = false;

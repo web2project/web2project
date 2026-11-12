@@ -124,8 +124,10 @@ class w2p_Core_CAppUITest extends CommonSetup
 
         /* Turn on 'untranslatable' warning */
         $w2Pconfig['locale_warn'] = true;
-        $this->assertEquals('Projects^', $AppUI->__('Projects'));
-        $this->assertEquals('Add File^', $AppUI->__('Add File'));
+        // CommonSetup loads the English translations, so only strings missing
+        // from them get the marker
+        $this->assertEquals('Projects', $AppUI->__('Projects'));
+        $this->assertEquals('Not A Real Key^', $AppUI->__('Not A Real Key'));
 
         /* Change to another language and reload tranlations */
         $AppUI->user_locale = 'es';

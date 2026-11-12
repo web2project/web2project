@@ -27,6 +27,30 @@ class w2p_Output_HTML_FormHelperTest extends CommonSetup
         parent::setUp();
 
         $this->obj = new w2p_Output_HTML_FormHelper($this->_AppUI);
+
+        // The company the 'company' field links to (the test used to expect
+        // whatever company 1 was in the database).
+        $this->deleteCompany();
+        $q = new w2p_Database_Query();
+        $q->addTable('companies');
+        $q->addInsert('company_id', 99951);
+        $q->addInsert('company_name', 'UnitTest <Company>');
+        $q->addInsert('company_owner', 1);
+        $q->exec();
+    }
+
+    protected function tearDown(): void
+    {
+        $this->deleteCompany();
+        parent::tearDown();
+    }
+
+    protected function deleteCompany()
+    {
+        $q = new w2p_Database_Query();
+        $q->setDelete('companies');
+        $q->addWhere('company_id = 99951');
+        $q->exec();
     }
 
     public function testAddLabel()
@@ -76,8 +100,8 @@ class w2p_Output_HTML_FormHelperTest extends CommonSetup
         $this->assertGreaterThan(0, strpos($output, 'value="http://google.com"'));
         $this->assertGreaterThan(0, strpos($output, 'onclick="testURL()"'));
 
-        $output = $this->obj->addField('company', '1');
-        $this->assertEquals('<a href="?m=companies&a=view&company_id=1">UnitTestCompany</a>', $output);
+        $output = $this->obj->addField('company', '99951');
+        $this->assertEquals('<a href="?m=companies&a=view&company_id=99951">UnitTest &lt;Company&gt;</a>', $output);
 
         $output = $this->obj->addField('other', 'fieldvalue', $options, $values);
         // @todo $this->assertEquals('<input type="text" xx="text other" name="other" value="fieldvalue" />', $output);

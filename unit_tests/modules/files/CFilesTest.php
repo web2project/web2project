@@ -198,7 +198,7 @@ class CFilesTest extends CommonSetup
         $this->assertEquals($this->obj->file_real_filename,     $item->file_real_filename);
         $this->assertEquals($this->obj->file_parent,            $item->file_parent);
         $this->assertEquals($this->obj->file_description,       $item->file_description);
-        $this->assertNotNull($this->obj->file_date);
+        $this->assertNotNull($this->obj->file_datetime);
     }
 
     /**
@@ -226,7 +226,7 @@ class CFilesTest extends CommonSetup
       $result = $this->obj->store();
       $this->assertTrue($result);
       $original_id = $this->obj->file_id;
-      $original_date = $this->obj->file_date;   // Once created, this should not change
+      $original_date = $this->obj->file_datetime;   // Once created, this should not change
 
       $this->obj->file_name = 'Some new file name';
       $this->obj->file_description = 'A new file description';
@@ -235,7 +235,7 @@ class CFilesTest extends CommonSetup
       $new_id = $this->obj->file_id;
 
       $this->assertEquals($original_id,             $new_id);
-      $this->assertEquals($original_date,           $this->obj->file_date);
+      $this->assertEquals($original_date,           $this->obj->file_datetime);
       $this->assertEquals('Some new file name',     $this->obj->file_name);
       $this->assertEquals('A new file description', $this->obj->file_description);
     }
