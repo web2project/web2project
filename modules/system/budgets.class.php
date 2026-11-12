@@ -38,7 +38,9 @@ class CSystem_Budget extends w2p_Core_BaseObject
     {
         $baseErrorMsg = get_class($this) . '::store-check failed - ';
 
-        if (0 == trim($this->budget_amount)) {
+        // On PHP 8, 0 == '' is false, so the old `0 == trim(...)` let an empty
+        // or missing amount through.
+        if (0.0 === (float) trim((string) $this->budget_amount)) {
             $this->_error['budget_amount'] = $baseErrorMsg . 'budget amount must be greater than zero';
         }
 
