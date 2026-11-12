@@ -591,10 +591,7 @@ class w2p_Utilities_Date extends Date {
         if(is_a($tz, 'Date_TimeZone')) {
             $tz = $tz->getID();
         }
-        if ($tz === null || $tz == '') {
-            // Avoid deprecated null to DateTimeZone
-            $tz = date_default_timezone_get();
-        }
+        $tz = w2PvalidTimezone($tz, date_default_timezone_get());
         $newTZ = new DateTimeZone($tz);
 
         $tzId = $this->tz['id'] ?? date_default_timezone_get();
@@ -611,10 +608,9 @@ class w2p_Utilities_Date extends Date {
     public function setTZ($tz)
     {
         $tz_array = [];
-        if ($tz === null || $tz == '') {
-            // Avoid deprecated null to DateTimeZone
-            $tz = date_default_timezone_get();
-        }
+        // An empty zone means PHP's default; an unknown one ("Halifax") falls
+        // back to it too instead of throwing from CarbonTimeZone::create().
+        $tz = w2PvalidTimezone($tz, date_default_timezone_get());
 
         $timezone_info = CarbonTimeZone::create($tz);
 

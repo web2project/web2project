@@ -169,13 +169,9 @@ class w2p_Utilities_DateTest extends CommonSetup
         $this->assertEquals($datetime->format('H'),   $date->hour);
         $this->assertEquals($datetime->format('i'),   $date->minute);
         $this->assertEquals($datetime->format('s'),   $date->second);
-        $this->assertEquals('Halifax',                $date->tz['id']);
-        $this->assertFalse(isset($date->tz['offset']));
-        $this->assertFalse(isset($date->tz['longname']));
-        $this->assertFalse(isset($date->tz['shortname']));
-        $this->assertFalse(isset($date->tz['dstlongname']));
-        $this->assertFalse(isset($date->tz['dstshortname']));
-        $this->assertFalse(isset($date->tz['hasdst']));
+        // An unknown zone falls back to PHP's default instead of throwing.
+        $this->assertEquals(date_default_timezone_get(), $date->tz['id']);
+        $this->assertTrue(isset($date->tz['offset']));
     }
 
     /**
@@ -1345,7 +1341,7 @@ class w2p_Utilities_DateTest extends CommonSetup
      */
     public function testConvertTZ()
     {
-        $myDate1 = new w2p_Utilities_Date('', 'US/Eastern');
+        $myDate1 = new w2p_Utilities_Date('', 'America/New_York');
         $myDate2 = new w2p_Utilities_Date('', 'CST');
         $myDate2->convertTZ('EST');
 
@@ -1364,11 +1360,11 @@ class w2p_Utilities_DateTest extends CommonSetup
      */
     public function testSetTZ()
     {
-        $date = new w2p_Utilities_Date('', 'US/Atlantic');
-        $this->assertEquals(new w2p_Utilities_Date('', 'US/Atlantic'), $date);
+        $date = new w2p_Utilities_Date('', 'America/Halifax');
+        $this->assertEquals(new w2p_Utilities_Date('', 'America/Halifax'), $date);
 
-        $date->setTZ('US/Eastern');
-        $this->assertEquals(new w2p_Utilities_Date('', 'US/Eastern'), $date);
+        $date->setTZ('America/New_York');
+        $this->assertEquals(new w2p_Utilities_Date('', 'America/New_York'), $date);
     }
 
     /**
@@ -1529,9 +1525,11 @@ class w2p_Utilities_DateTest extends CommonSetup
     public function testGetDateUnixtime()
     {
         $date = new w2p_Utilities_Date('2010-11-05 11:00:00');
-        $offset = $date->tz['offset']/1000 + $date->tz['hasdst']*3600;
+        // the same wall-clock time in the date's zone, whatever that zone is
+        // (adding an hour for any zone with DST was wrong outside DST)
+        $expected = new DateTime('2010-11-05 11:00:00', new DateTimeZone($date->tz['id']));
 
-        $this->assertEquals(1288954800-$offset, $date->getDate(DATE_FORMAT_UNIXTIME));
+        $this->assertEquals($expected->getTimestamp(), $date->getDate(DATE_FORMAT_UNIXTIME));
     }
 
     /**
