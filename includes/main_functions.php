@@ -171,6 +171,40 @@ function w2PgetConfig($key, $default = null)
  *
  * @return string
  */
+function w2PvalidTimezone(...$candidates)
+{
+    /*
+     * The first of $candidates that PHP knows as a time zone, else the
+     * system time zone, PHP's default or UTC. A user preference or config
+     * value can be empty or hold a name this PHP doesn't know ("Halifax",
+     * "US/Atlantic", or "US/Eastern" where the tz database has no backward
+     * links), and new DateTimeZone() throws on those.
+     */
+    static $known = array();
+
+    $candidates[] = w2PgetConfig('system_timezone', '');
+    $candidates[] = date_default_timezone_get();
+    foreach ($candidates as $tz) {
+        $tz = is_string($tz) ? trim($tz) : '';
+        if ('' === $tz) {
+            continue;
+        }
+        if (!isset($known[$tz])) {
+            try {
+                new DateTimeZone($tz);
+                $known[$tz] = true;
+            } catch (Exception $e) {
+                $known[$tz] = false;
+            }
+        }
+        if ($known[$tz]) {
+            return $tz;
+        }
+    }
+
+    return 'UTC';
+}
+
 function w2PsafeOrderBy($value, $default)
 {
     if (!is_string($value)) {

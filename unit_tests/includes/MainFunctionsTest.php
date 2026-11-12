@@ -248,4 +248,21 @@ class MainFunctionsTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('x', w2PsafeOrderBy(null, 'x'));
         $this->assertEquals('x', w2PsafeOrderBy(array('a'), 'x'));
     }
+
+    public function testValidTimezone()
+    {
+        $this->assertEquals('America/Halifax', w2PvalidTimezone('America/Halifax'));
+        $this->assertEquals('Europe/Paris', w2PvalidTimezone('Halifax', 'Europe/Paris'));
+        $this->assertEquals(w2PvalidTimezone(w2PgetConfig('system_timezone')), w2PvalidTimezone(''));
+        $this->assertEquals(w2PvalidTimezone(w2PgetConfig('system_timezone')), w2PvalidTimezone(null));
+        $this->assertEquals(w2PvalidTimezone(w2PgetConfig('system_timezone')), w2PvalidTimezone('US/Atlantic'));
+
+        global $AppUI;
+        $saved = $AppUI->user_prefs['TIMEZONE'] ?? null;
+        $AppUI->user_prefs['TIMEZONE'] = '';
+        $this->assertNotEquals('', $AppUI->getPref('TIMEZONE'));
+        $AppUI->user_prefs['TIMEZONE'] = 'Nowhere/Special';
+        $this->assertEquals(w2PvalidTimezone(''), $AppUI->getPref('TIMEZONE'));
+        $AppUI->user_prefs['TIMEZONE'] = $saved;
+    }
 }

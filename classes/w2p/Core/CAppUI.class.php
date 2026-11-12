@@ -1003,7 +1003,12 @@ class w2p_Core_CAppUI
      */
     public function getPref($name)
     {
-        return isset($this->user_prefs[$name]) ? $this->user_prefs[$name] : '';
+        $value = isset($this->user_prefs[$name]) ? $this->user_prefs[$name] : '';
+
+        // Callers pass TIMEZONE straight to DateTimeZone / convertTZ(), so it
+        // is always a zone PHP knows: an empty or unknown preference gives
+        // the system time zone.
+        return ('TIMEZONE' === $name) ? w2PvalidTimezone($value) : $value;
     }
 
     /**
