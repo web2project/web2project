@@ -19,6 +19,38 @@ global $AppUI;
 require_once '../base.php';
 require_once W2P_BASE_DIR . '/includes/main_functions.php';
 require_once W2P_BASE_DIR . '/includes/config.php';
+
+/*
+ * The tests change and delete data and expect a fresh install, so they run on
+ * their own database, never the one in includes/config.php. See test-db.php.
+ */
+require_once __DIR__ . '/test-db.php';
+$appConfig = $w2Pconfig;
+$w2Pconfig = w2p_unit_test_db_config($w2Pconfig);
+$testDbProblem = w2p_unit_test_db_problem($appConfig, $w2Pconfig);
+if (null === $testDbProblem) {
+    try {
+        mysqli_report(MYSQLI_REPORT_OFF);
+        $check = @new mysqli($w2Pconfig['dbhost'], $w2Pconfig['dbuser'], $w2Pconfig['dbpass'], $w2Pconfig['dbname']);
+        if ($check->connect_errno) {
+            $testDbProblem = $check->connect_error;
+        } else {
+            $check->close();
+        }
+    } catch (Throwable $e) {
+        $testDbProblem = $e->getMessage();
+    }
+    if (null !== $testDbProblem) {
+        $testDbProblem = "Can't use the test database " . $w2Pconfig['dbname'] . ' on ' . $w2Pconfig['dbhost'] .
+            ': ' . $testDbProblem . "\nBuild it with: php unit_tests/build-test-db.php (see unit_tests/test-db.php).";
+    }
+}
+if (null !== $testDbProblem) {
+    fwrite(STDERR, $testDbProblem . "\n");
+    exit(1);
+}
+unset($appConfig, $testDbProblem, $check);
+
 require_once W2P_BASE_DIR . '/includes/db_adodb.php';
 
 /*
