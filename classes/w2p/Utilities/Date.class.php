@@ -605,6 +605,34 @@ class w2p_Utilities_Date extends Date {
         return $this;
     }
 
+    /**
+     * The week of the year, as PEAR Date computes it (not the ISO week; see
+     * format('%V') for that). PEAR's getWeekOfYear() calls Date_Calc's
+     * weekOfYear() and julianDate() statically, which is an Error on PHP 8,
+     * so the same formula is done here.
+     *
+     * @return int
+     */
+    public function getWeekOfYear()
+    {
+        $day = (int) $this->day;
+        $month = (int) $this->month;
+        $year = (int) $this->year;
+
+        $cumulative = array(0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334);
+        $julian = ($cumulative[$month - 1] ?? 0) + $day;
+        $leap = (0 == $year % 4 && 0 != $year % 100) || 0 == $year % 400;
+        if ($month > 2 && $leap) {
+            $julian++;
+        }
+
+        $weekYear = $year - 1501;
+        $weekDay = $weekYear * 365 + floor($weekYear / 4) - 29872 + 1
+            - floor($weekYear / 100) + floor(($weekYear - 300) / 400);
+
+        return (int) ceil(($julian + floor(($weekDay + 4) % 7)) / 7);
+    }
+
     public function setTZ($tz)
     {
         $tz_array = [];
