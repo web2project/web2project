@@ -24,7 +24,7 @@ class w2p_Output_HTML_FormHelper extends w2p_Output_HTML_Base
                 $obj = new $class();
                 $obj->load($fieldValue);
                 $link = '?m='. w2p_pluralize($suffix) .'&a=view&'.$suffix.'_id='.$fieldValue;
-                $output = '<a href="'.$link.'">'.$obj->{"$suffix".'_name'}.'</a>';
+                $output = '<a href="'.$link.'">'.htmlspecialchars((string) $obj->{"$suffix".'_name'}, ENT_QUOTES, 'UTF-8').'</a>';
                 break;
             case 'desc':            // @todo This is a special case because department->dept_notes should be renamed department->dept_description
             case 'note':            // @todo This is a special case because resource->resource_note should be renamed resource->resource_description
