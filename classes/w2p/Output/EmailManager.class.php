@@ -127,7 +127,8 @@ class w2p_Output_EmailManager
         $body .= $this->_AppUI->_('Priority', UI_OUTPUT_RAW) . ":\t" . $task->task_priority . "\n";
         $body .= $this->_AppUI->_('Progress', UI_OUTPUT_RAW) . ":\t" . $task->task_percent_complete . "%\n";
         $tmp_tz = $this->_AppUI->getPref('TIMEZONE');
-        $user_prefs = $this->_AppUI->loadPrefs($user['assignee_id'], true);
+        $user_prefs = $this->_AppUI->loadPrefs($user['assignee_id'] ?? 0, true);
+        $user_prefs['TIMEZONE'] = w2PvalidTimezone($user_prefs['TIMEZONE'] ?? '');
         $this->_AppUI->user_prefs['TIMEZONE'] = $user_prefs['TIMEZONE'];
 
         $start_date = new w2p_Utilities_Date($this->_AppUI->formatTZAwareTime($task->task_start_date, '%Y-%m-%d %T'));
@@ -135,13 +136,21 @@ class w2p_Output_EmailManager
         $end_date = new w2p_Utilities_Date($this->_AppUI->formatTZAwareTime($task->task_end_date, '%Y-%m-%d %T'));
         $fmt_end_date = $end_date->format($user_prefs['DISPLAYFORMAT']);
 
-        $timezoneObj = new Date_TimeZone($user_prefs['TIMEZONE']);
-        $tzString = $timezoneObj->getShortName();
+        // PEAR's Date_TimeZone has no abbreviation for most Olson names
+        // (America/Chicago gave ''), so ask PHP, for each date's own offset
+        // (CST in January, CDT in July).
+        $zone = new DateTimeZone($user_prefs['TIMEZONE']);
+        $abbreviation = function ($utc) use ($zone) {
+            $when = new DateTime(intval($utc) ? $utc : 'now', new DateTimeZone('UTC'));
+            return $when->setTimezone($zone)->format('T');
+        };
+        $startTz = $abbreviation($task->task_start_date);
+        $endTz = $abbreviation($task->task_end_date);
         $this->_AppUI->user_prefs['TIMEZONE'] = $tmp_tz;
 
         // Format dates using preferences but add T as Timezone abbreviation
-        $body .= $this->_AppUI->_('Start Date') . ":\t" . $fmt_start_date . " $tzString\n";
-        $body .= $this->_AppUI->_('Finish Date') . ":\t" . $fmt_end_date . " $tzString\n";
+        $body .= $this->_AppUI->_('Start Date') . ":\t" . $fmt_start_date . " $startTz\n";
+        $body .= $this->_AppUI->_('Finish Date') . ":\t" . $fmt_end_date . " $endTz\n";
 
         $body .= $this->_AppUI->_('URL', UI_OUTPUT_RAW) . ":\t\t" . W2P_BASE_URL . '/index.php?m=tasks&a=view&task_id=' . $task->task_id . "\n\n";
         $body .= $this->_AppUI->_('Description', UI_OUTPUT_RAW) . ': ' . "\n" . $task->task_description;
