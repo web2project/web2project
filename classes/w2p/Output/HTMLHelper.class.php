@@ -231,7 +231,16 @@ class w2p_Output_HTMLHelper extends w2p_Output_HTML_Base
                 break;
             case '_birthday':
             case '_date':
-                $myDate = intval($value) ? new w2p_Utilities_Date($this->AppUI->formatTZAwareTime($value, '%Y-%m-%d %T')) : null;
+                if (!intval($value)) {
+                    $myDate = null;
+                } elseif (preg_match('/^\d{4}-\d{2}-\d{2}$/', trim((string) $value))) {
+                    // A date without a time (a birthday, a DATE column) is a
+                    // calendar day, not a UTC instant: shifting it into the
+                    // user's zone showed 04/Jul as 03/Jul west of UTC.
+                    $myDate = new w2p_Utilities_Date(trim((string) $value));
+                } else {
+                    $myDate = new w2p_Utilities_Date($this->AppUI->formatTZAwareTime($value, '%Y-%m-%d %T'));
+                }
                 $cell = $myDate ? $myDate->format($this->df) : '-';
                 break;
             case '_actual':
@@ -279,14 +288,14 @@ class w2p_Output_HTMLHelper extends w2p_Output_HTML_Base
             case '_assignment':
             case '_allocated':
             case '_allocation':
-                $cell = round($value).'%';
+                $cell = round((float) $value).'%';
                 break;
             case '_password':
                 $cell = '('.$this->AppUI->_('hidden').')';
                 break;
             case '_version':
-                $value = (int) (100 * $value);
-                $cell = number_format($value/100, 2);
+                // non-numeric versions show 0.00 (100 * 'abc' is a TypeError)
+                $cell = number_format(round((float) $value, 2), 2);
                 break;
             case '_identifier':
                 $additional = 'style="background-color:#'.$this->escape($value).'; color:'.bestColor($value).'" ';
