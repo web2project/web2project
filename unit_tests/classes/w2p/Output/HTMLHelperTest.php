@@ -192,8 +192,9 @@ class w2p_Output_HTMLHelperTest extends CommonSetup
         $this->assertEquals('<td class="_birthday">04/Jul/1776</td>', $cell);
         $cell = $this->obj->createCell('x_date', '1776-07-04');
         $this->assertEquals('<td class="_date">04/Jul/1776</td>', $cell);
+        // only '' (and null) skip the cell's class; 0 is a value since PHP 8
         $cell = $this->obj->createCell('x_date', 0);
-        $this->assertEquals('<td>-</td>', $cell);
+        $this->assertEquals('<td class="_date">-</td>', $cell);
 
         $cell = $this->obj->createCell('x_datetime', null);
         $this->assertEquals('<td>-</td>', $cell);
