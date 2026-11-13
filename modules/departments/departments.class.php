@@ -102,7 +102,7 @@ class CDepartment extends w2p_Core_BaseObject
             $q->addWhere('dept_type = ' . (int) $deptType);
         }
         if ($searchString != '') {
-            $q->addWhere("dept_name LIKE '%$searchString%'");
+            $q->addWhere('dept_name LIKE ' . $q->quote('%' . addcslashes($searchString, '\\%_') . '%'));
         }
         if ($ownerId > 0) {
             $q->addWhere('dept_owner = '.$ownerId);
