@@ -350,8 +350,9 @@ class CContact extends w2p_Core_BaseObject
         $hook = $this->hook_search();
         $searchfields = $hook['search_fields'];
 
+        $searchQuoted = $this->_query->quote('%' . $search . '%');
         foreach($searchfields as $key => $field) {
-            $searchfields[$key] = "$field like '%$search%'";
+            $searchfields[$key] = "$field like $searchQuoted";
         }
         $where = implode(' OR ', $searchfields);
 
