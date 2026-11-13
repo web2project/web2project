@@ -350,13 +350,16 @@ class CContact extends w2p_Core_BaseObject
         $hook = $this->hook_search();
         $searchfields = $hook['search_fields'];
 
-        $searchQuoted = $this->_query->quote('%' . $search . '%');
+        $q = $this->_getQuery();
+        // An empty term (or the list's '%' default) lists every contact; any
+        // other term is matched literally, quotes and wildcards included.
+        $search  = is_scalar($search) ? (string) $search : '';
+        $pattern = ('' === $search || '%' === $search) ? $q->quote('%') : $q->quoteLike($search);
         foreach($searchfields as $key => $field) {
-            $searchfields[$key] = "$field like $searchQuoted";
+            $searchfields[$key] = $field . ' LIKE ' . $pattern;
         }
         $where = implode(' OR ', $searchfields);
 
-        $q = $this->_getQuery();
         $q->addQuery('distinct(c.contact_id)');
         $q->addQuery('c.*');
         $q->addQuery('user_id');
@@ -433,7 +436,7 @@ class CContact extends w2p_Core_BaseObject
         $q->addTable('users');
         $q->addQuery('contact_display_name as contact_name');
         $q->addJoin('contacts', 'con', 'contact_id = user_contact', 'inner');
-        $q->addWhere("user_username like '%$username%'");
+        $q->addWhere('user_username LIKE ' . $q->quoteLike($username));
         $q->setLimit(1);
         $r = $q->loadResult();
         $result = (is_array($r)) ? $r[0]['contact_name'] : 'User Not Found';

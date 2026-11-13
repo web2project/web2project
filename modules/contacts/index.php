@@ -18,7 +18,7 @@ if (!$canAccess) {
 $titleBlock = new w2p_Theme_TitleBlock('Contacts', 'icon.png', $m);
 $titleBlock->addCell('<a href="./index.php?m=contacts&amp;tab=0">' . $AppUI->_('Reset search') . '</a>');
 $titleBlock->addCell('<form action="index.php?m=contacts&tab=27" method="post" accept-charset="utf-8" name="searchform">' .
-        '<input type="text" class="text" name="search_string" value="' . $searchString . '" /></form>');
+        '<input type="text" class="text" name="search_string" value="' . htmlspecialchars((string) $searchString, ENT_QUOTES) . '" /></form>');
 $titleBlock->addCell($AppUI->_('Search') . ':');
 if ($canCreate) {
     $titleBlock->addButton('New contact', '?m=contacts&a=addedit');

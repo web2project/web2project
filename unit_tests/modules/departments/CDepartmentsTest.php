@@ -197,14 +197,39 @@ class CDepartmentsTest extends CommonSetup
     }
 
     /**
-     * @todo Implement testGetFilteredDepartmentList().
+     * The SQL getFilteredDepartmentList() built on the mock query, run
+     *   against the real database.
+     */
+    private function filteredListSql($searchString)
+    {
+        global $db;
+
+        $this->mockDB->stageList(array());
+        $this->obj->getFilteredDepartmentList(null, -1, $searchString);
+        $sql = $this->mockDB->prepare();
+
+        $rs = $db->Execute($sql);
+        $this->assertNotFalse($rs, 'getFilteredDepartmentList() built invalid SQL: ' . $sql);
+
+        return array($sql, $rs->RecordCount());
+    }
+
+    /**
+     * GHSA-mj5m-6227-52vv: a quote in the search term stays inside the SQL
+     *   string, so it cannot add conditions to the query.
      */
     public function testGetFilteredDepartmentList()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-                'This test has not been implemented yet.'
-        );
+        list($sql, $count) = $this->filteredListSql("zzqqxx' OR 1=1 -- ");
+        $this->assertStringNotContainsString("'%zzqqxx' OR 1=1", $sql);
+        $this->assertStringContainsString("dept_name LIKE '%zzqqxx\\' OR 1=1 -- %'", $sql);
+        $this->assertEquals(0, $count);
+
+        list($sql, $count) = $this->filteredListSql("zzqqxx%' OR SLEEP(1) OR '%");
+        $this->assertEquals(0, $count);
+
+        list($sql) = $this->filteredListSql('');
+        $this->assertStringNotContainsString('dept_name LIKE', $sql);
     }
 
     /**

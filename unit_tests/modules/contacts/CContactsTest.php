@@ -212,6 +212,52 @@ class CContactsTest extends CommonSetup
         $this->markTestSkipped('This method is static.');
     }
 
+    /**
+     * The SQL search() built on the mock query, run against the real database.
+     */
+    private function searchSql($term)
+    {
+        global $db;
+
+        $this->mockDB->stageList(array());
+        $this->obj->search($term);
+        $sql = $this->mockDB->prepare();
+
+        $rs = $db->Execute($sql);
+        $this->assertNotFalse($rs, 'search() built invalid SQL: ' . $sql);
+
+        return array($sql, $rs->RecordCount());
+    }
+
+    /**
+     * GHSA-mj5m-6227-52vv: a quote in the search term stays inside the SQL
+     *   string, so it cannot add conditions to the query.
+     */
+    public function testSearchQuotesTheTerm()
+    {
+        list($sql, $count) = $this->searchSql("zzqqxx' OR 1=1 -- ");
+        $this->assertStringNotContainsString("'%zzqqxx' OR 1=1", $sql);
+        $this->assertEquals(0, $count);
+
+        list($sql, $count) = $this->searchSql('zzqqxx" OR 1=1 OR "');
+        $this->assertEquals(0, $count);
+
+        list($sql, $count) = $this->searchSql("'");
+        $this->assertEquals(0, $count);
+    }
+
+    /**
+     * An empty term and the list's '%' default still match every contact.
+     */
+    public function testSearchEmptyTermMatchesAll()
+    {
+        list($sql) = $this->searchSql('');
+        $this->assertStringContainsString("contact_first_name LIKE '%'", $sql);
+
+        list($sql) = $this->searchSql('%');
+        $this->assertStringContainsString("contact_first_name LIKE '%'", $sql);
+    }
+
     public function testGetFirstLetters()
     {
         $this->markTestSkipped('This method is static.');
