@@ -281,8 +281,8 @@ class w2p_Core_CustomFields {
         $q->addQuery('cfv.value_charvalue');
         $q->addJoin('custom_fields_struct', 'cfs', 'cfs.field_id = cfv.value_field_id');
         $q->addJoin($moduleTable, 'm', 'm.' . $moduleTableId . ' = cfv. value_object_id');
-        $q->addWhere('cfs.field_module = \'' . $this->m . '\'');
-        $q->addWhere('cfv.value_charvalue LIKE \'%' . $keyword . '%\'');
+        $q->addWhere('cfs.field_module = ' . $q->quote(is_string($this->m) ? $this->m : ''));
+        $q->addWhere('cfv.value_charvalue LIKE ' . $q->quoteLike($keyword));
         return $q->loadList();
     }
     public static function getCustomFieldList($module) {

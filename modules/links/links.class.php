@@ -41,7 +41,7 @@ class CLink extends w2p_Core_BaseObject
         $q->leftJoin('tasks', 't', 'task_id = link_task');
 
         if ($search != '') {
-            $pattern = $q->quote('%' . addcslashes($search, '\\%_') . '%');
+            $pattern = $q->quoteLike($search);
             $q->addWhere('(link_name LIKE ' . $pattern . ' OR link_description LIKE ' . $pattern . ')');
         }
         if ($project_id > 0) { // Project

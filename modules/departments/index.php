@@ -14,16 +14,8 @@ if (isset($_GET['orderby'])) {
 $orderby = w2PsafeOrderBy($AppUI->getState('DeptIdxOrderBy'), 'dept_name');
 $orderdir = ('desc' === $AppUI->getState('DeptIdxOrderDir')) ? 'desc' : 'asc';
 
-if (isset($_REQUEST['owner_filter_id'])) {
-	$AppUI->setState('dept_owner_filter_id', w2PgetParam($_REQUEST, 'owner_filter_id', null));
-	$owner_filter_id = w2PgetParam($_REQUEST, 'owner_filter_id', null);
-} else {
-	$owner_filter_id = $AppUI->getState('dept_owner_filter_id');
-	if (!isset($owner_filter_id)) {
-		$owner_filter_id = 0; //By default show all companies instead of $AppUI->user_id current user.
-		$AppUI->setState('dept_owner_filter_id', $owner_filter_id);
-	}
-}
+// By default show all owners instead of only the current user.
+$owner_filter_id = $AppUI->processIntState('dept_owner_filter_id', $_REQUEST, 'owner_filter_id', 0);
 
 $search_string = w2PgetParam($_POST, 'search_string', '');
 $AppUI->setState($m . '_search_string', $search_string);

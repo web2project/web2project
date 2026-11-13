@@ -1598,6 +1598,27 @@ class w2p_Database_Query {
 	}
 
 	/**
+	 * A quoted LIKE pattern for a search term: matching the term anywhere
+	 * ('contains', the default) or at the start ('starts'). LIKE wildcards
+	 * typed by the user (% and _) match literally.
+	 *
+	 * Use this for every LIKE built from user input, never '%$term%' in quotes:
+	 * escaping for HTML (w2PformSafe(), htmlspecialchars()) does not make a
+	 * value safe for SQL.
+	 *
+	 * @param mixed  $string The search term.
+	 * @param string $match  'contains' or 'starts'.
+	 *
+	 * @return string The quoted pattern, ready to follow LIKE.
+	 */
+	public function quoteLike($string, $match = 'contains') {
+		$escaped = addcslashes(is_scalar($string) ? (string) $string : '', '\\%_');
+		$pattern = ('starts' === $match) ? $escaped . '%' : '%' . $escaped . '%';
+
+		return (string) $this->quote($pattern);
+	}
+
+	/**
 	 * Add quotes to a database identifier
 	 *
 	 * @param mixed $string The identifier to quote
