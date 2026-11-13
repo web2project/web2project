@@ -11,7 +11,6 @@ $structprojs = $project->getProjects();
 
 $search_string = w2PgetParam($_POST, 'search_string', '');
 $AppUI->setState($m . '_search_string', $search_string);
-$search_string = w2PformSafe($search_string, true);
 
 $canCreate = $project->canCreate();
 

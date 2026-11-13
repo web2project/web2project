@@ -17,7 +17,6 @@ $orderdir = ('desc' === $AppUI->getState('CompIdxOrderDir')) ? 'desc' : 'asc';
 $owner_filter_id = $AppUI->processIntState('owner_filter_id', $_POST, 'owner_filter_id', 0);
 
 $search_string = w2PgetParam($_POST, 'search_string', '');
-$search_string = w2PformSafe($search_string, true);
 
 $company = new CCompany();
 $canCreate = $company->canCreate();

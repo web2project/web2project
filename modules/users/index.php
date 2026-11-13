@@ -20,7 +20,6 @@ if (isset($_GET['stub'])) {
 }
 $stub = $AppUI->getState('UserIdxStub');
 $where = $AppUI->getState('UserIdxWhere');
-$where = w2PformSafe($where, true);
 
 if (isset($_GET['orderby'])) {
 	$AppUI->setState('UserIdxOrderby', w2PgetParam($_GET, 'orderby', null));

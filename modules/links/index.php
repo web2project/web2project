@@ -27,7 +27,6 @@ $projects = arrayMerge(array('0' => $AppUI->_('All', UI_OUTPUT_JS)), $projects);
 
 $search_string = w2PgetParam($_POST, 'search_string', '');
 $AppUI->setState($m . '_search_string', $search_string);
-$search_string = w2PformSafe($search_string, true);
 
 // setup the title block
 $titleBlock = new w2p_Theme_TitleBlock('Links', 'icon.png', $m);

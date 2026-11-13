@@ -19,7 +19,6 @@ $owner_filter_id = $AppUI->processIntState('dept_owner_filter_id', $_REQUEST, 'o
 
 $search_string = w2PgetParam($_POST, 'search_string', '');
 $AppUI->setState($m . '_search_string', $search_string);
-$search_string = w2PformSafe($search_string, true);
 
 $perms = &$AppUI->acl();
 $owner_list = array(0 => $AppUI->_('All', UI_OUTPUT_RAW)) + $perms->getPermittedUsers('departments');

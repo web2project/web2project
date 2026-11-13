@@ -35,7 +35,6 @@ $filters = array('my' => 'My Tasks', 'myunfinished' => 'My Unfinished Tasks', 'a
 
 $search_string = w2PgetParam($_POST, 'search_string', '');
 $AppUI->setState($m . '_search_string', $search_string);
-$search_string = w2PformSafe($search_string, true);
 
 // setup the title block
 $titleBlock = new w2p_Theme_TitleBlock('Tasks', 'icon.png', $m);

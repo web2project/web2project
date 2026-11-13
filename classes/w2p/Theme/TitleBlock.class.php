@@ -56,8 +56,14 @@ class w2p_Theme_TitleBlock {
         $this->cells1[] = array($attribs, $data, $prefix, $suffix);
     }
 
+    /**
+     * The search box. $search is the term as the user typed it: it is
+     * escaped here, so pass it unescaped (and to the query unescaped too,
+     * through w2p_Database_Query::quoteLike()).
+     */
     public function addSearchCell($search)
     {
+        $search = is_scalar($search) ? htmlspecialchars((string) $search, ENT_QUOTES) : '';
         $this->addCell('<form name="searchform" action="?m=' . $this->module . '" method="post" accept-charset="utf-8">
                 <input type="text" class="text" name="search_string" value="' . $search . '" /></form>');
         $this->addCell($this->_AppUI->_('Search') . ':');
