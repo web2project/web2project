@@ -15,17 +15,19 @@ if (!$canView) {
 }
 
 $company_id = $AppUI->processIntState('ProjIdxCompany', $_GET, 'company_id', $AppUI->user_company);
-$orderby = $AppUI->processIntState('ProjIdxOrderBy', $_GET, 'orderby', 'project_end_date');
+if (isset($_GET['orderby'])) {
+	$AppUI->setState('ProjIdxOrderBy', w2PgetParam($_GET, 'orderby', null));
+}
+// A column of the projects table; anything else (including the 0 that older
+// sessions stored here) sorts by end date.
+$orderby = $AppUI->getState('ProjIdxOrderBy');
+$orderby = (is_string($orderby) && property_exists('CProject', $orderby)) ? $orderby : 'project_end_date';
 $project_type = $AppUI->processIntState('ProjIdxType', $_GET, 'project_type', -1);
 $owner = $AppUI->processIntState('ProjIdxowner', $_GET, 'project_owner', -1);
 
-$orderdir = $AppUI->getState('ProjIdxOrderDir') ? $AppUI->getState('ProjIdxOrderDir') : 'asc';
+$orderdir = ('desc' === $AppUI->getState('ProjIdxOrderDir')) ? 'desc' : 'asc';
 if (isset($_GET['orderby'])) {
-	if ($AppUI->getState('ProjIdxOrderDir') == 'asc') {
-		$orderdir = 'desc';
-	} else {
-		$orderdir = 'asc';
-	}
+	$orderdir = ('asc' === $orderdir) ? 'desc' : 'asc';
 }
 $AppUI->setState('ProjIdxOrderDir', $orderdir);
 
@@ -86,7 +88,6 @@ $project_statuses = w2PgetSysVal('ProjectStatus');
                 }
             }
 
-            $fixed_project_status_file = array($AppUI->_('In Progress', UI_OUTPUT_RAW) . ' (' . $active . ')' => 'vw_idx_active', $AppUI->_('Complete', UI_OUTPUT_RAW) . ' (' . $complete . ')' => 'vw_idx_complete', $AppUI->_('Archived', UI_OUTPUT_RAW) . ' (' . $archive . ')' => 'vw_idx_archived');
             // we need to manually add Archived project type because this status is defined by
             // other field (Active) in the project table, not project_status
             $project_statuses[] = $AppUI->_('Archived', UI_OUTPUT_RAW) . ' (' . $archived . ')';

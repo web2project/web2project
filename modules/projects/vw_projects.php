@@ -36,6 +36,8 @@ if (($project_status_filter == -1 || $project_status_filter == -2 || $project_st
 	$show_all_projects = true;
 }
 
+$projects = is_array($projects) ? $projects : array();
+
 //Lets remove the unnecessary projects:
 //All
 if ($project_status_filter == -1) {
@@ -49,12 +51,7 @@ if ($project_status_filter == -1) {
 		}
 		$key++;
 	}
-	$key = 0;
-	foreach ($projects as $project) {
-		$tmp_projects[$key] = $project;
-		$key++;
-	}
-	$projects = $tmp_projects;
+	$projects = array_values($projects);
 	//Archived
 } elseif ($project_status_filter == -3) {
 	$key = 0;
@@ -64,12 +61,7 @@ if ($project_status_filter == -1) {
 		}
 		$key++;
 	}
-	$key = 0;
-	foreach ($projects as $project) {
-		$tmp_projects[$key] = $project;
-		$key++;
-	}
-	$projects = $tmp_projects;
+	$projects = array_values($projects);
 	//The Status themselves
 }
 
