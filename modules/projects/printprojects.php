@@ -14,8 +14,6 @@ if (!$canView) {
 	$AppUI->redirect(ACCESS_DENIED);
 }
 
-$search_text = $AppUI->getState('projsearchtext') ? $AppUI->getState('projsearchtext') : '';
-
 $company_id = $AppUI->processIntState('ProjIdxCompany', $_GET, 'company_id', $AppUI->user_company);
 $orderby = $AppUI->processIntState('ProjIdxOrderBy', $_GET, 'orderby', 'project_end_date');
 $project_type = $AppUI->processIntState('ProjIdxType', $_GET, 'project_type', -1);
@@ -118,8 +116,7 @@ $project_statuses = w2PgetSysVal('ProjectStatus');
 	</div>
 	<div>
             <?php
-            $txt = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' . $AppUI->_('Search') . ':&nbsp;' . '<input type="text" disabled class="text" SIZE="20" name="projsearchtext" onChange="document.searchfilter.submit();" value=' . "'$search_text'" . 'title="' . $AppUI->_('Search in name and description fields') . '"/>&nbsp;';
-            $txt .= $AppUI->_('Type') . ':&nbsp;' . arraySelect($project_types, 'project_type', 'size="1" disabled class="text"', $project_type, false);
+            $txt = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' . $AppUI->_('Type') . ':&nbsp;' . arraySelect($project_types, 'project_type', 'size="1" disabled class="text"', $project_type, false);
             $user_list = array(0 => '(all)') + CProject::getOwners();
             $txt .= $AppUI->_('Owner') . ':&nbsp;' . arraySelect($user_list, 'project_owner', 'size="1" disabled class="text"', $owner, false);
             $txt .= $AppUI->_('Company') . ':&nbsp;' . str_replace('<select', '<select disabled="disabled"', $buffer);

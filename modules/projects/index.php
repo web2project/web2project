@@ -9,9 +9,6 @@ $tab = $AppUI->processIntState('ProjIdxTab', $_GET, 'tab', 5);
 $project = new CProject();
 $structprojs = $project->getProjects();
 
-$search_string = w2PgetParam($_POST, 'search_string', '');
-$AppUI->setState($m . '_search_string', $search_string);
-
 $canCreate = $project->canCreate();
 
 $company_id = (int) w2PgetParam($_POST, 'project_company', -1);
@@ -20,9 +17,6 @@ $company_id = ($company_id) ? $company_id : $AppUI->user_company;
 $orderby = (isset($_GET['orderby']) && property_exists('CProject', $_GET['orderby'])) ? $_GET['orderby'] : 'project_name';
 $project_type = $AppUI->processIntState('ProjIdxType', $_POST, 'project_type', -1);
 $owner = $AppUI->processIntState('ProjIdxowner', $_POST, 'project_owner', -1);
-
-// collect the full projects list data via function in projects.class.php
-$search_text = $search_string;      // @note this is only because the projects_list_data function takes a bunch of globals
 
 $oCompany = new CCompany;
 $allowedCompanies[-1] = $AppUI->_('all');

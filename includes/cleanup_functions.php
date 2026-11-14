@@ -1751,7 +1751,7 @@ function projects_list_data($user_id = false)
     /** @var w2p_Core_CAppUI $AppUI */
     global $AppUI, $addPwOiD, $buffer, $company, $company_id, $company_prefix,
         $deny, $department, $dept_ids, $orderby, $orderdir,
-        $tasks_problems, $owner, $search_text, $project_type;
+        $tasks_problems, $owner, $project_type;
 
     $addProjectsWithAssignedTasks = $AppUI->getState('addProjWithTasks') ? $AppUI->getState('addProjWithTasks') : 0;
 
@@ -1864,10 +1864,6 @@ function projects_list_data($user_id = false)
     }
     if ($owner > 0) {
         $q->addWhere('pr.project_owner = ' . (int) $owner);
-    }
-    if (mb_trim($search_text)) {
-        $pattern = $q->quoteLike($search_text);
-        $q->addWhere('(pr.project_name LIKE ' . $pattern . ' OR pr.project_description LIKE ' . $pattern . ')');
     }
     // Show Projects where the Project Owner is in the given department
     if ($addPwOiD && !empty($owner_ids)) {
@@ -4366,11 +4362,6 @@ function __extract_from_projects_gantt2($department, $addPwOiD, $project_type, $
         if (($template_status = w2PgetConfig('template_projects_status_id')) != '') {
             $q->addWhere('pr.project_status <> ' . $template_status);
         }
-    }
-    $search_text = $AppUI->getState('projsearchtext') !== null ? $AppUI->getState('projsearchtext') : '';
-    if (mb_trim($search_text)) {
-        $pattern = $q->quoteLike($search_text);
-        $q->addWhere('(pr.project_name LIKE ' . $pattern . ' OR pr.project_description LIKE ' . $pattern . ')');
     }
     $q = $pjobj->setAllowedSQL($AppUI->user_id, $q, null, 'pr');
     $q->addGroup('pr.project_id');
