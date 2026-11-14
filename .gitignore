@@ -8,3 +8,4 @@
 /vendor/**
 composer.phar
 unit_tests/.phpunit.result.cache
+/Claude outputs/
