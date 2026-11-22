@@ -137,7 +137,8 @@ def add_task_rows(*names):
     """ProjectDesigner Add Tasks panel: press the green + once per row and name it."""
     def act(pg):
         for i, name in enumerate(names):
-            pg.click('#addtasks a:has(img), #addtasks img[src*="add"]', timeout=5000)
+            # the date fields' calendar links also hold an (hidden) img, so look for the add icon itself
+            pg.click('#addtasks a:has(img[src*="add"]), #addtasks img[src*="add"]', timeout=5000)
             pg.wait_for_timeout(300)
             boxes = pg.locator('#addtasks input[name^="add_task_name"]')
             boxes.nth(boxes.count() - 1).fill(name)
