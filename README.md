@@ -11,9 +11,10 @@ The best part is that it's free software. That means you can use it, extend it, 
 *  Mysql 8.x+
 *  Apache 1.x+ or IIS 7+
 *  PHP extensions:
-  *  GD  (for Gantt Chart generation)
-  *  mbstring (only if you're using multi-byte strings)
-  *  zlib (for output compression)
+  *  required: ctype, filter, gd (Gantt charts), json, mysqli, session
+  *  optional: mbstring (or iconv), zlib (output compression), curl, ldap (LDAP authentication)
+
+  The installer's first step checks these.
 
 ## Installing
 

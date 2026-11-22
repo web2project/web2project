@@ -13,8 +13,8 @@
 	<div class="my-2">
 			There is an initial Check for (minimal) requirements appended below for
 			troubleshooting. At minimum, a database and corresponding database
-			connection must be available in addition to PHP5, the GD libraries
-			installed for Gantt charts, and file_uploads should be allowed.  In
+			connection must be available in addition to PHP <?= MIN_PHP_VERSION; ?>, the
+			required PHP extensions below, and file_uploads should be allowed.  In
 			addition ../includes/config.php should be writable for the webserver.
 		</div>
 	<h3 class="h6 mt-3 title">Confirm Requirements</h3>
@@ -32,19 +32,6 @@
 		</div>
 	</div>
 	<div class="row py-1 border-bottom">
-	    <div class="col-sm-5 item">GD Support (for GANTT Charts)</div>
-	    <div class="col-sm-7">
-		<?php
-			if (!extension_loaded('gd')) {
-				echo '<b class="error">'.$failedImg.'</b> <span class="item">GANTT Chart functionality may not work correctly.</span>';
-				$continue = false;
-			} else {
-				echo '<b class="ok">'.$okImg.'</b>';
-			}
-		?>
-		</div>
-	</div>
-	<div class="row py-1 border-bottom">
 	    <div class="col-sm-5 item">File Uploads</div>
 	    <div class="col-sm-7">
 		<?php
@@ -57,6 +44,24 @@
 		?>
 		</div>
 	</div>
+	<h3 class="h6 mt-3 title">PHP Extensions</h3>
+	<?php foreach ($manager->getExtensionChecks() as $extension => $check) { ?>
+	<div class="row py-1 border-bottom">
+	    <div class="col-sm-5 item"><?php echo $extension; ?> <span class="text-muted">(<?php echo $check['required'] ? 'required' : 'optional'; ?>)</span></div>
+	    <div class="col-sm-7">
+		<?php
+			if ($check['loaded']) {
+				echo '<b class="ok">'.$okImg.'</b> <span class="item">'.$check['purpose'].'</span>';
+			} elseif ($check['required']) {
+				echo '<b class="error">'.$failedImg.' Not available:</b> <span class="item">'.$check['purpose'].' will not work. Install or enable the PHP '.$extension.' extension.</span>';
+				$continue = false;
+			} else {
+				echo '<span class="warning">'.$failedImg.' Not available:</span> <span class="item">'.$check['purpose'].'</span>';
+			}
+		?>
+		</div>
+	</div>
+	<?php } ?>
 	<h3 class="h6 mt-3 title">Database Connectors</h3>
 	<div class="my-2 item">
 			<p>The next tests check for database support compiled with php. We use
@@ -132,18 +137,6 @@
 	    <div class="col-sm-7"><?php echo is_writable( $manager->getLanguageDir() ) ? '<b class="ok">'.$okImg.'</b>'.$okMessage : '<b class="error">'.$failedImg.'</b><span class="warning"> Translation files cannot be saved. Check /locales and subdirectories for permissions.</span>';?></div>
 	</div>
 	<h3 class="h6 mt-3 title">Check requirements for optional components</h3>
-	<div class="row py-1 border-bottom">
-	    <div class="col-sm-5 item">LDAP Support</div>
-	    <div class="col-sm-7"><?php echo function_exists( 'ldap_connect' ) ? '<b class="ok">'.$okImg.'</b><span class="item"> </span>' : '<span class="warning">'.$failedImg.' Not available</span>';?></div>
-	</div>
-	<div class="row py-1 border-bottom">
-	    <div class="col-sm-5 item">Zlib compression Support</div>
-	    <div class="col-sm-7">
-		<?php
-			echo (!extension_loaded('zlib')) ? '<b class="error">'.$failedImg.'</b> <span class="item">Some non-core modules may have restricted operation.</span>' : '<b class="ok">'.$okImg.'</b>';
-		?>
-		</div>
-	</div>
 	<div class="row py-1 border-bottom">
 	    <div class="col-sm-5 item">Session Save Path writable?</div>
 	    <div class="col-sm-7">

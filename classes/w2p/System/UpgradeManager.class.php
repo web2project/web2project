@@ -344,6 +344,40 @@ class w2p_System_UpgradeManager {
         return $configFile;
     }
 
+    /**
+     * The PHP extensions web2project uses, for the installer's check page.
+     * Required ones stop the install when missing; optional ones only
+     * disable what is named in 'purpose'. (MySQL support, mysqli, has its
+     * own row under Database Connectors.)
+     *
+     * @return array<string, array{required: bool, purpose: string, loaded: bool}>
+     */
+    public function getExtensionChecks() {
+        $extensions = array(
+            'ctype'    => array(true,  'Input checks and the upgrade manager'),
+            'filter'   => array(true,  'Email address validation'),
+            'gd'       => array(true,  'Gantt charts'),
+            'json'     => array(true,  'Ajax responses and stored settings'),
+            'session'  => array(true,  'Logging in'),
+            'mbstring' => array(false, 'Faster multi-byte text handling (a slower fallback that needs iconv is used without it)'),
+            'iconv'    => array(false, 'The multi-byte fallback when mbstring is missing'),
+            'zlib'     => array(false, 'Output compression; some add-on modules need it'),
+            'curl'     => array(false, 'Outgoing HTTP requests (a slower fallback is used without it)'),
+            'ldap'     => array(false, 'LDAP authentication'),
+        );
+
+        $checks = array();
+        foreach ($extensions as $name => list($required, $purpose)) {
+            $checks[$name] = array(
+                'required' => $required,
+                'purpose'  => $purpose,
+                'loaded'   => extension_loaded($name),
+            );
+        }
+
+        return $checks;
+    }
+
     public function getMaxFileUpload() {
         $maxfileuploadsize = min($this->_getIniSize(ini_get('upload_max_filesize')), $this->_getIniSize(ini_get('post_max_size')));
         $memory_limit = $this->_getIniSize(ini_get('memory_limit'));

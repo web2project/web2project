@@ -236,4 +236,20 @@ class w2p_Core_UpgradeManagerTest extends CommonSetup
                 'This test has not been implemented yet.'
         );
     }
+
+    public function testGetExtensionChecks()
+    {
+        $checks = $this->obj->getExtensionChecks();
+
+        foreach (array('ctype', 'filter', 'gd', 'json', 'session') as $required) {
+            $this->assertTrue($checks[$required]['required'], $required);
+        }
+        foreach (array('mbstring', 'iconv', 'zlib', 'curl', 'ldap') as $optional) {
+            $this->assertFalse($checks[$optional]['required'], $optional);
+        }
+        foreach ($checks as $name => $check) {
+            $this->assertSame(extension_loaded($name), $check['loaded'], $name);
+            $this->assertNotEmpty($check['purpose'], $name);
+        }
+    }
 }
