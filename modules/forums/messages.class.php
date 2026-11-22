@@ -102,6 +102,37 @@ class CForum_Message extends w2p_Core_BaseObject
     }
 
     /**
+     * Deleting a message follows the same rule as editing it: its owner (the
+     * author) or an admin (System edit rights), who can also read the
+     * message's forum. (The generic check looked the message id up as a forum
+     * id.)
+     *
+     * @param string $notUsed
+     * @param int    $oid
+     * @param array  $joins
+     *
+     * @return bool
+     */
+    public function canDelete($notUsed = '', $oid = null, $joins = null)
+    {
+        if ($oid) {
+            $this->message_id = (int) $oid;
+        }
+        $stored = $this->storedMessage();
+        $userId = (int) $this->_AppUI->user_id;
+        $forum = new CForum();
+        $allowed = $stored
+            && (($userId > 0 && (int) $stored['message_author'] == $userId)
+                || $this->_perms->checkModuleItem('system', 'edit'))
+            && count($forum->filterViewable($userId, array($stored['message_forum'])));
+        if (!$allowed) {
+            $this->_error['noDeletePermission'] = $this->_AppUI->_('noDeletePermission');
+        }
+
+        return (bool) $allowed;
+    }
+
+    /**
      * The saved row for this message.
      *
      * @return array|null message_author, message_forum
