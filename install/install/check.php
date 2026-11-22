@@ -107,7 +107,7 @@
 	?>
 	<div class="row py-1 border-bottom">
 	    <div class="col-sm-5 item">./includes/config.php writable?</div>
-	    <div class="col-sm-7"><?php echo ( is_writable( $manager->getConfigFile() ) || is_writable( $manager->getConfigDir ))  ? '<b class="ok">'.$okImg.'</b>'.$okMessage : '<b class="error">'.$failedImg.'</b><span class="warning"> Configuration process can still be continued. Configuration file will be displayed at the end, just copy & paste this and upload.</span>';?></div>
+	    <div class="col-sm-7"><?php echo ( is_writable( $manager->getConfigFile() ) || is_writable( $manager->getConfigDir() ))  ? '<b class="ok">'.$okImg.'</b>'.$okMessage : '<b class="error">'.$failedImg.'</b><span class="warning"> Configuration process can still be continued. Configuration file will be displayed at the end, just copy & paste this and upload.</span>';?></div>
 	</div>
 	<?php
 		$okMessage = "";
