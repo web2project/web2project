@@ -41,8 +41,18 @@ if ('' != $failure) {
 	w2p_signup_redirect($failure);
 }
 
-$username = w2PgetParam($_POST, 'user_username', 0);
-$username = preg_replace("/[^A-Za-z0-9]/", "", $username);
+// Sign-up user names are letters and digits only. The check used to strip
+// other characters but the account kept the name as posted, so "pat.doe"
+// was checked as "patdoe" and stored as "pat.doe". Refuse such names, and
+// store exactly the name that was checked (lower case, as the Users module
+// stores them).
+$username = w2PgetParam($_POST, 'user_username', '');
+$username = is_string($username) ? strtolower(trim($username)) : '';
+if (!preg_match('/^[a-z0-9]+$/', $username)
+	|| strlen($username) < (int) w2PgetConfig('username_min_len', 4)) {
+	w2p_signup_redirect('username');
+}
+$_POST['user_username'] = $username;
 $user = new CUser();
 $result = $user->loadAll(null, "user_username = '$username'");
 if (count($result) > 0) {

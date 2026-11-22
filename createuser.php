@@ -22,6 +22,9 @@ switch($msg) {
     case 'expired':
         $msg = 'The signup form expired. Please fill it in again.';
         break;
+    case 'username':
+        $msg = 'User names may contain only letters and digits, and need at least ' . (int) w2PgetConfig('username_min_len', 4) . ' characters.';
+        break;
     case 'existing-user':
         $msg = 'The username you selected already exists, please select another or if that user name is yours request the password recovery through the dedicated link.';
         break;
