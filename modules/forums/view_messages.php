@@ -10,7 +10,12 @@ $sort = ('desc' === strtolower((string) w2PgetParam($_REQUEST, 'sort', 'asc'))) 
 $viewtype = w2PgetParam($_REQUEST, 'viewtype', 'normal');
 $hideEmail = w2PgetConfig('hide_email_addresses', false);
 
+// Shown inside view.php, which checks the forum; refuse a direct request.
+$forum_id = isset($forum_id) ? (int) $forum_id : 0;
 $forum = new CForum();
+if (!$forum_id || !count($forum->filterViewable($AppUI->user_id, array($forum_id)))) {
+	$AppUI->redirect(ACCESS_DENIED);
+}
 $messages = $forum->getMessages(null, $forum_id, $message_id, $sort);
 $htmlHelper = new w2p_Output_HTMLHelper($AppUI);
 ?>

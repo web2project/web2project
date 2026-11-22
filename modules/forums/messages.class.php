@@ -38,6 +38,72 @@ class CForum_Message extends w2p_Core_BaseObject
         return (count($this->_error)) ? false : true;
     }
 
+    /**
+     * Reading a message needs view on Forums and read access to its forum.
+     * (The generic check looked the message id up as a forum id.) load()
+     * calls this before it reads the row, so the forum comes from the table.
+     *
+     * @return bool
+     */
+    public function canView()
+    {
+        $forumId = 0;
+        if ((int) $this->message_id) {
+            $q = $this->_getQuery();
+            $q->addTable('forum_messages');
+            $q->addQuery('message_forum');
+            $q->addWhere('message_id = ' . (int) $this->message_id);
+            $forumId = (int) $q->loadResult();
+            $q->clear();
+        }
+        $forum = new CForum();
+
+        return $this->_perms->checkModuleItem('forums', 'view')
+            && count($forum->filterViewable($this->_AppUI->user_id, array($forumId)));
+    }
+
+    /**
+     * Posting needs "add" on Forums, read access to the message's forum, and
+     * a parent (for a reply) in the same forum.
+     *
+     * @return bool
+     */
+    public function canCreate()
+    {
+        return parent::canCreate() && $this->inReadableForum();
+    }
+
+    /**
+     * @return bool
+     */
+    public function canEdit()
+    {
+        return parent::canEdit() && $this->inReadableForum();
+    }
+
+    /**
+     * @return bool
+     */
+    protected function inReadableForum()
+    {
+        $forum = new CForum();
+        if (!count($forum->filterViewable($this->_AppUI->user_id, array($this->message_forum)))) {
+            return false;
+        }
+        if ((int) $this->message_parent > 0) {
+            $q = $this->_getQuery();
+            $q->addTable('forum_messages');
+            $q->addQuery('message_forum');
+            $q->addWhere('message_id = ' . (int) $this->message_parent);
+            $parentForum = $q->loadResult();
+            $q->clear();
+            if ((int) $parentForum != (int) $this->message_forum) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     public function hook_preStore()
     {
         $this->message_author = (int) $this->message_author ? $this->message_author : $this->_AppUI->user_id;

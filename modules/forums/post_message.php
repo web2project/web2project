@@ -41,9 +41,24 @@ foreach ($_GET as $k => $v) {
 }
 $back_url = implode('&', $back_url_params);
 
+if (!count($myForum->filterViewable($AppUI->user_id, array($forum_id)))) {
+	$AppUI->redirect(ACCESS_DENIED);
+}
+
 //pull message information
 $message = new CForum_Message();
 $message->load($message_id);
+// The message being edited and the one replied to must be in this forum, or
+// their text would be shown from a forum the user may not read.
+if ($message_id && (int) $message->message_forum != $forum_id) {
+	$AppUI->redirect(ACCESS_DENIED);
+}
+if ($message_parent > 0) {
+	$parentCheck = new CForum_Message();
+	if ($parentCheck->load($message_parent) && (int) $parentCheck->message_forum != $forum_id) {
+		$AppUI->redirect(ACCESS_DENIED);
+	}
+}
 
 //pull message information from last response
 if ($message_parent != -1) {
