@@ -145,6 +145,60 @@ class CForum extends w2p_Core_BaseObject
         $q->exec();
     }
 
+    /**
+     * The forums in $forumIds that user $uid may see: view rights on the
+     * forum, and on its project when it has one (the same rule as the forum
+     * list).
+     *
+     * @param int   $uid
+     * @param array $forumIds
+     *
+     * @return array forum ids
+     */
+    public function filterViewable($uid, array $forumIds)
+    {
+        $forumIds = array_values(array_unique(array_filter(array_map('intval', $forumIds))));
+        if (!count($forumIds) || !(int) $uid) {
+            return array();
+        }
+        $rows = $this->getAllowedRecords((int) $uid, 'forums.forum_id', '', null,
+            array('where' => 'forums.forum_id IN (' . implode(',', $forumIds) . ')'));
+
+        return array_values(array_intersect($forumIds, array_map('intval', array_keys($rows))));
+    }
+
+    /**
+     * The topics (message ids) in $topicIds that user $uid may see: those in
+     * a forum that filterViewable() allows.
+     *
+     * @param int   $uid
+     * @param array $topicIds
+     *
+     * @return array message ids
+     */
+    public function filterViewableTopics($uid, array $topicIds)
+    {
+        $topicIds = array_values(array_unique(array_filter(array_map('intval', $topicIds))));
+        if (!count($topicIds) || !(int) $uid) {
+            return array();
+        }
+        $q = $this->_getQuery();
+        $q->addTable('forum_messages');
+        $q->addQuery('message_id, message_forum');
+        $q->addWhere('message_id IN (' . implode(',', $topicIds) . ')');
+        $topicForums = $q->loadHashList();
+        $q->clear();
+
+        $forums = $this->filterViewable($uid, array_values($topicForums));
+        $topics = array();
+        foreach ($topicForums as $topicId => $forumId) {
+            if (in_array((int) $forumId, $forums, true)) {
+                $topics[] = (int) $topicId;
+            }
+        }
+        return $topics;
+    }
+
     public function getAllowedRecords($uid, $fields = '*', $orderby = '', $index = null, $extra = null, $unused = '')
     {
         $oPrj = new CProject();

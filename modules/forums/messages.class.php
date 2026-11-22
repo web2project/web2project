@@ -192,11 +192,19 @@ class CForum_Message extends w2p_Core_BaseObject
             $q->addWhere('user_id = watch_user AND (watch_forum = ' . (int) $this->message_forum . ' OR watch_topic = ' . (int) $this->message_parent . ')');
         }
 
-        if (!($res = $q->exec(ADODB_FETCH_ASSOC))) {
-            $q->clear();
-            return;
+        $recipients = $q->loadList();
+        $q->clear();
+
+        // Mail only the users who may read this forum: a watch (or "watch
+        // all") is no permission to read it. (GHSA-qp43-fcwc-p3j3)
+        $forum = new CForum();
+        $readers = array();
+        foreach ($recipients as $row) {
+            if (count($forum->filterViewable($row['user_id'], array($this->message_forum)))) {
+                $readers[] = $row;
+            }
         }
-        if ((new w2p_Database_Connection($GLOBALS['db']))->num_rows($res) < 1) {
+        if (!count($readers)) {
             return;
         }
 
@@ -208,11 +216,10 @@ class CForum_Message extends w2p_Core_BaseObject
         $body = $emailManager->getForumWatchEmail($this, $forum_name, $message_from);
         $mail->Body($body, isset($GLOBALS['locale_char_set']) ? $GLOBALS['locale_char_set'] : '');
 
-        while ($row = $q->fetchRow()) {
+        foreach ($readers as $row) {
             $mail->To($row['contact_email'], true);
             $mail->Send();
         }
-        $q->clear();
     }
 
     /**

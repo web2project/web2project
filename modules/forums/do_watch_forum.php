@@ -31,18 +31,30 @@ if ($watch) {
 		$q->clear();
 	} else {
 		$q->clear();
+		// The checkboxes are named forum_<id>: forum ids on the forum list,
+		// topic (message) ids on a forum's topic list.
+		$ids = array();
 		foreach ($_POST as $k => $v) {
-			if (strpos($k, 'forum_') !== false) {
-				$q->addTable('forum_watch');
-				$q->addInsert('watch_user', $AppUI->user_id);
-				$q->addInsert('watch_' . $watch, (int) substr($k, 6));
-				if (!$q->exec()) {
-					$AppUI->setMsg((new w2p_Database_Connection($GLOBALS['db']))->error(), UI_MSG_ERROR);
-				} else {
-					$AppUI->setMsg('Watch updated', UI_MSG_OK);
-				}
-				$q->clear();
+			if (0 === strpos($k, 'forum_')) {
+				$ids[] = (int) substr($k, 6);
 			}
+		}
+		// Watch only what this user may read: a watch mails every new post,
+		// so a watch on any posted id read forums and projects the user
+		// can't see. (GHSA-qp43-fcwc-p3j3)
+		$forum = new CForum();
+		$ids = ('forum' == $watch) ? $forum->filterViewable($AppUI->user_id, $ids)
+			: $forum->filterViewableTopics($AppUI->user_id, $ids);
+		foreach ($ids as $id) {
+			$q->addTable('forum_watch');
+			$q->addInsert('watch_user', $AppUI->user_id);
+			$q->addInsert('watch_' . $watch, (int) $id);
+			if (!$q->exec()) {
+				$AppUI->setMsg((new w2p_Database_Connection($GLOBALS['db']))->error(), UI_MSG_ERROR);
+			} else {
+				$AppUI->setMsg('Watch updated', UI_MSG_OK);
+			}
+			$q->clear();
 		}
 	}
 } else {
