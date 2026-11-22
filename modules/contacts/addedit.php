@@ -192,7 +192,7 @@ function addContactMethod(field, value) {
     addOption('#method_select_' + index, "<?php echo $value; ?>", "<?php echo $text; ?>", field);
     <?php endforeach; ?>
     /* Make sure the newly added remove span has its tooltip working*/
-    $("span").tipTip({maxWidth: "auto", delay: 200, fadeIn: 150, fadeOut: 150});
+    w2pTipTip("span[title]");
 }
 
 function removeContactMethod(index) {

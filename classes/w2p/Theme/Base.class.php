@@ -156,11 +156,24 @@ abstract class w2p_Theme_Base
     public function loadFooterJS()
     {
         $s = '<script type="text/javascript">';
+        // Tooltips: tipTip puts the title into the bubble with .html(), and
+        // the browser has already decoded the attribute, so a name holding
+        // markup (an event called <img onerror=...>) ran as soon as someone
+        // hovered it. Hand tipTip the text escaped instead, one line per line
+        // of the title. Only spans that have a title: on others (e.g. the
+        // date fields' wrapper) tipTip showed an empty bubble on hover.
+        // Pages that add rows later call w2pTipTip() for the new spans.
+        $s .= 'function w2pTipTip(selector) {';
+        $s .= '    $(selector || "span[title]").filter("[title]").each(function() {';
+        $s .= '        var text = $(this).attr("title");';
+        $s .= '        $(this).removeAttr("title");';
+        $s .= '        if (text) {';
+        $s .= '            $(this).tipTip({content: $("<div/>").text(text).html().replace(/\\n/g, "<br />"), maxWidth: "600px", delay: 200, fadeIn: 150, fadeOut: 150});';
+        $s .= '        }';
+        $s .= '    });';
+        $s .= '}';
         $s .= '$(document).ready(function() {';
-        // Attach tooltips to "span" elements
-        // only spans that have a tooltip: on others (e.g. the date fields'
-        // wrapper) tipTip showed an empty bubble on hover
-        $s .= '    $("span[title]").tipTip({maxWidth: "600px;", delay: 200, fadeIn: 150, fadeOut: 150});';
+        $s .= '    w2pTipTip("span[title]");';
         // Move the focus to the first textbox available, skipping the header's "Global Search..." box (#keyword)
         $s .= '    $("input[type=\'text\']:not(#keyword):first").focus();';
         $s .= '});';

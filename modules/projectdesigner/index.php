@@ -337,7 +337,7 @@ function addComponent() {
 	durntype_fld = eval( 'document.editFrm.add_task_durntype_'+line_nr );
 
 //activate new tooltips on the fly
-    $("span").tipTip({maxWidth: "auto", delay: 200, fadeIn: 150, fadeOut: 150});
+    w2pTipTip("span[title]");
 }
 
 function removeComponent(tr_id) {
