@@ -1041,13 +1041,206 @@ div.std.addedit .w2p-datetime > select {
     font-size: .9375rem;
 }
 div.std.addedit .w2p-datetime > input.text {
+    /* wide enough for the longest date format ("22/Nov/2026") */
     flex: 1 1 8rem;
+    min-width: 7.75rem;
 }
 div.std.addedit .w2p-datetime > select {
-    flex: 0 1 auto;
+    /* the time select keeps its full width ("12:00 am") */
+    flex: none;
 }
 div.std.addedit .w2p-datetime > a {
     flex: none;
+}
+
+/* ---------------------------------------------------------------------
+ * Date picker (lib/jscalendar with its aqua skin, which the theme loads
+ * after this file; "body" outranks the skin's selectors). Restyled to
+ * match the Bootstrap layout: one surface with a shadow, flat buttons, a
+ * primary-colour selected day and no background images.
+ * ------------------------------------------------------------------- */
+/* The button that opens it: an outline button with a calendar icon in
+   place of the old calendar.gif, wherever the trigger is used. */
+a:has(> img[src$="calendar.gif"]) {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2rem;
+    height: 2rem;
+    flex: none;
+    vertical-align: middle;
+    color: var(--w2p-text);
+    background-color: var(--w2p-surface);
+    border: 1px solid var(--w2p-border);
+    border-radius: .25rem;
+    text-decoration: none;
+}
+a:has(> img[src$="calendar.gif"])::before {
+    font-family: "bootstrap-icons";
+    content: "\f214"; /* bi-calendar3 */
+    font-size: 1rem;
+    line-height: 1;
+}
+a:has(> img[src$="calendar.gif"]):hover,
+a:has(> img[src$="calendar.gif"]):focus-visible {
+    color: var(--w2p-accent);
+    border-color: var(--w2p-accent);
+}
+a:has(> img[src$="calendar.gif"]) > img {
+    display: none;
+}
+/* full size next to the full-size fields of add/edit forms */
+div.std.addedit .w2p-datetime > a:has(> img[src$="calendar.gif"]) {
+    width: 2.375rem;
+    height: 2.375rem;
+}
+body div.calendar {
+    z-index: 1080;
+    padding: .5rem;
+    font-family: inherit;
+    font-size: .8125rem;
+    color: var(--w2p-text);
+    background: var(--w2p-surface);
+    border: 1px solid var(--w2p-border);
+    border-radius: .5rem;
+    box-shadow: 0 .5rem 1.5rem rgb(1 41 112 / .15);
+}
+body div.calendar table {
+    border: 0;
+    border-collapse: separate;
+    border-spacing: 2px;
+    font: inherit;
+    color: inherit;
+    background: none;
+}
+body div.calendar thead tr,
+body div.calendar thead .headrow,
+body div.calendar thead .daynames,
+body div.calendar tfoot .footrow {
+    background: none;
+}
+body div.calendar thead .title {
+    padding: .25rem;
+    font-size: .875rem;
+    font-weight: 600;
+    color: var(--w2p-heading);
+    background: none;
+    border: 0;
+}
+body div.calendar .button {
+    padding: .25rem .375rem;
+    font-weight: 600;
+    white-space: nowrap;
+    color: var(--w2p-accent);
+    background: none;
+    border: 0;
+    border-radius: .25rem;
+    cursor: pointer;
+}
+/* the arrows' cells have class "nav", which Bootstrap makes display:flex */
+body div.calendar td.nav {
+    display: table-cell;
+    flex-wrap: nowrap;
+    padding: .25rem .375rem;
+    margin: 0;
+}
+body div.calendar .nav div {
+    background: none;
+}
+body div.calendar thead .name {
+    padding: .25rem 0;
+    font-weight: 600;
+    color: var(--w2p-muted);
+    background: none;
+    border: 0;
+    border-bottom: 1px solid var(--w2p-border);
+    text-align: center;
+}
+body div.calendar thead .weekend {
+    color: #b02a37;
+}
+body div.calendar thead .hilite,
+body div.calendar tfoot .hilite,
+body div.calendar tbody td.hilite,
+body div.calendar tbody .rowhilite td {
+    padding: inherit;
+    color: inherit;
+    background: rgb(65 84 241 / .08);
+    border: 0;
+}
+body div.calendar thead .active,
+body div.calendar tfoot .active,
+body div.calendar tbody td.active {
+    color: inherit;
+    background: rgb(65 84 241 / .18);
+    border: 0;
+}
+body div.calendar tbody .day {
+    width: 2rem;
+    height: 1.875rem;
+    padding: 0;
+    text-align: center;
+    color: inherit;
+    border: 0;
+    border-radius: .25rem;
+}
+body div.calendar tbody .day.othermonth,
+body div.calendar tbody .day.othermonth.oweekend {
+    color: var(--w2p-muted);
+    opacity: .6;
+}
+body div.calendar tbody td.weekend {
+    color: #b02a37;
+}
+body div.calendar tbody td.today {
+    font-weight: 700;
+    box-shadow: inset 0 0 0 1px var(--w2p-accent);
+}
+body div.calendar tbody td.selected,
+body div.calendar tbody td.selected.hilite {
+    font-weight: 600;
+    color: #fff;
+    background: var(--w2p-accent);
+    border: 0;
+}
+body div.calendar table .wn {
+    padding: 0 .25rem;
+    font-size: .75rem;
+    color: var(--w2p-muted);
+    background: none;
+    border: 0;
+    border-right: 1px solid var(--w2p-border);
+}
+body div.calendar tbody .rowhilite td.wn {
+    background: none;
+}
+body div.calendar tfoot .ttip {
+    padding: .375rem 0 0;
+    color: var(--w2p-muted);
+    background: none;
+    border: 0;
+    border-top: 1px solid var(--w2p-border);
+}
+body div.calendar .combo {
+    padding: .25rem 0;
+    font-size: .8125rem;
+    color: var(--w2p-text);
+    background: var(--w2p-surface);
+    border: 1px solid var(--w2p-border);
+    border-radius: .375rem;
+    box-shadow: 0 .25rem .75rem rgb(1 41 112 / .15);
+}
+body div.calendar .combo .label {
+    padding: .125rem .75rem;
+}
+body div.calendar .combo .hilite {
+    background: rgb(65 84 241 / .08);
+}
+body div.calendar .combo .active {
+    font-weight: 600;
+    color: #fff;
+    background: var(--w2p-accent);
+    border: 0;
 }
 /* A select with a short number field (and its unit) on one line, e.g. the
    event form's "Recurs: Weekly 4 times" */

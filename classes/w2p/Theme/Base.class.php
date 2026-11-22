@@ -158,7 +158,9 @@ abstract class w2p_Theme_Base
         $s = '<script type="text/javascript">';
         $s .= '$(document).ready(function() {';
         // Attach tooltips to "span" elements
-        $s .= '    $("span").tipTip({maxWidth: "600px;", delay: 200, fadeIn: 150, fadeOut: 150});';
+        // only spans that have a tooltip: on others (e.g. the date fields'
+        // wrapper) tipTip showed an empty bubble on hover
+        $s .= '    $("span[title]").tipTip({maxWidth: "600px;", delay: 200, fadeIn: 150, fadeOut: 150});';
         // Move the focus to the first textbox available, skipping the header's "Global Search..." box (#keyword)
         $s .= '    $("input[type=\'text\']:not(#keyword):first").focus();';
         $s .= '});';
