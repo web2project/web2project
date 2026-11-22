@@ -9,42 +9,42 @@ global $AppUI, $company_id, $dept_ids, $department, $min_view, $m, $a, $user_id,
 $AppUI->getTheme()->loadCalendarJS();
 
 $min_view = defVal($min_view, false);
-$project_id = w2PgetParam($_GET, 'project_id', 0);
-$user_id = w2PgetParam($_GET, 'user_id', $AppUI->user_id);
+// Every value below ends up in the chart's image URL, which the page builds
+// in JavaScript, so each one is reduced to the int or flag it stands for.
+// (#542: a quote in user_id, add_pwoid or proFilter closed the script's
+// string and ran script in the page.)
+$project_id = (int) w2PgetParam($_GET, 'project_id', 0);
+$user_id = (int) w2PgetParam($_GET, 'user_id', $AppUI->user_id);
 // sdate and edate passed as unix time stamps
 $sdate = w2PgetParam($_POST, 'project_start_date', 0);
 $edate = w2PgetParam($_POST, 'project_end_date', 0);
-$showInactive = w2PgetParam($_POST, 'showInactive', '0');
-$showLabels = w2PgetParam($_POST, 'showLabels', '0');
-$sortTasksByName = w2PgetParam($_POST, 'sortTasksByName', '0');
-$showAllGantt = w2PgetParam($_POST, 'showAllGantt', '0');
-$showTaskGantt = w2PgetParam($_POST, 'showTaskGantt', '0');
-$addPwOiD = w2PgetParam($_POST, 'add_pwoid', isset($addPwOiD) ? $addPwOiD : 0);
-
 //if set GantChart includes user labels as captions of every GantBar
-if ($showLabels != '0') {
-	$showLabels = '1';
-}
-if ($showInactive != '0') {
-	$showInactive = '1';
-}
-
-if ($showAllGantt != '0') {
-	$showAllGantt = '1';
-}
+$showInactive = w2PgetParam($_POST, 'showInactive', '0') ? '1' : '0';
+$showLabels = w2PgetParam($_POST, 'showLabels', '0') ? '1' : '0';
+$sortTasksByName = w2PgetParam($_POST, 'sortTasksByName', '0') ? '1' : '0';
+$showAllGantt = w2PgetParam($_POST, 'showAllGantt', '0') ? '1' : '0';
+$showTaskGantt = w2PgetParam($_POST, 'showTaskGantt', '0') ? '1' : '0';
+$addPwOiD = (int) w2PgetParam($_POST, 'add_pwoid', isset($addPwOiD) ? $addPwOiD : 0);
 
 $projectStatus = w2PgetSysVal('ProjectStatus');
-
-if (isset($_POST['proFilter'])) {
-	$AppUI->setState('ProjectIdxFilter', $_POST['proFilter']);
-}
-$proFilter = $AppUI->getState('ProjectIdxFilter') !== null ? $AppUI->getState('ProjectIdxFilter') : '-1';
-
 $projFilter = arrayMerge(array('-1' => 'All Projects'), $projectStatus);
+
+// Only a status from the list is kept (it is saved in the session).
+if (isset($_POST['proFilter']) && is_scalar($_POST['proFilter'])
+	&& array_key_exists((int) $_POST['proFilter'], $projFilter)) {
+	$AppUI->setState('ProjectIdxFilter', (int) $_POST['proFilter']);
+}
+$proFilter = (int) ($AppUI->getState('ProjectIdxFilter') !== null ? $AppUI->getState('ProjectIdxFilter') : -1);
+if (!array_key_exists($proFilter, $projFilter)) {
+	$proFilter = -1;
+}
 // months to scroll
 $scroll_date = 1;
 
 $display_option = w2PgetParam($_POST, 'display_option', 'this_month');
+if (!in_array($display_option, array('this_month', 'custom', 'all'), true)) {
+	$display_option = 'this_month';
+}
 
 // format dates
 $df = $AppUI->getPref('SHDATEFORMAT');
@@ -114,8 +114,8 @@ function showFullProject() {
 }
 
 </script>
-<form name="editFrm" method="post" action="?<?php echo 'm=' . $m . '&a=' . $a . (isset($user_id) ? '&user_id=' . $user_id : '') . '&tab=' . $tab; ?>" accept-charset="utf-8">
-    <input type="hidden" name="display_option" value="<?php echo $display_option; ?>" />
+<form name="editFrm" method="post" action="?<?php echo htmlspecialchars('m=' . $m . '&a=' . $a . '&user_id=' . (int) $user_id . '&tab=' . (int) $tab, ENT_QUOTES, 'UTF-8'); ?>" accept-charset="utf-8">
+    <input type="hidden" name="display_option" value="<?php echo htmlspecialchars($display_option, ENT_QUOTES, 'UTF-8'); ?>" />
     <input type="hidden" name="datePicker" value="project" />
 
     <div class="std">
@@ -170,9 +170,31 @@ function showFullProject() {
         </div>
         <div class="text-center">
             <?php
-            $src = '?m=projects&a=gantt&suppressHeaders=1' . ($display_option == 'all' ? '' : '&start_date=' . $start_date->format('%Y-%m-%d') . '&end_date=' . $end_date->format('%Y-%m-%d')) . "&width=' + ((navigator.appName=='Netscape'?window.innerWidth:document.body.offsetWidth)*0.95) + '&showLabels=$showLabels&sortTasksByName=$sortTasksByName&proFilter=$proFilter&showInactive=$showInactive&company_id=$company_id&department=$department&dept_ids=$dept_ids&showAllGantt=$showAllGantt&user_id=$user_id&addPwOiD=$addPwOiD";
-            echo "<script>document.write('<img src=\"$src\">')</script>";
+            $ganttParams = array('m' => 'projects', 'a' => 'gantt', 'suppressHeaders' => 1);
+            if ($display_option != 'all') {
+                $ganttParams['start_date'] = $start_date->format('%Y-%m-%d');
+                $ganttParams['end_date'] = $end_date->format('%Y-%m-%d');
+            }
+            $ganttDepts = array_filter(array_map('intval', explode(',', is_scalar($dept_ids) ? (string) $dept_ids : '')));
+            $ganttParams += array(
+                'showLabels' => $showLabels,
+                'sortTasksByName' => $sortTasksByName,
+                'proFilter' => $proFilter,
+                'showInactive' => $showInactive,
+                'company_id' => (int) $company_id,
+                'department' => (int) $department,
+                'dept_ids' => implode(',', $ganttDepts),
+                'showAllGantt' => $showAllGantt,
+                'user_id' => $user_id,
+                'addPwOiD' => $addPwOiD,
+            );
+            $src = '?' . http_build_query($ganttParams);
             ?>
+            <img id="w2pProjectsGanttChart" alt="<?php echo $AppUI->_('Gantt Chart'); ?>" />
+            <script>
+                document.getElementById('w2pProjectsGanttChart').src = <?php echo json_encode($src, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP); ?>
+                    + '&width=' + Math.round((window.innerWidth || document.body.offsetWidth) * 0.95);
+            </script>
         </div>
     </div>
 </form>
