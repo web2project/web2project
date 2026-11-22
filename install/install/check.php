@@ -35,9 +35,10 @@
 	    <div class="col-sm-5 item">File Uploads</div>
 	    <div class="col-sm-7">
 		<?php
-			if (!ini_get('file_uploads') && is_writable(W2P_BASE_DIR.'/files')) {
-        echo '<b class="error">'.$failedImg.'</b> <span class="warning">Upload functionality will not be available, please make the ./files directory writable.</span>';
-				$continue = false;
+			// file_uploads is the php.ini switch; ./files is checked below.
+			// Without uploads web2project still works, so this only warns.
+			if (!ini_get('file_uploads')) {
+				echo '<b class="error">'.$failedImg.'</b> <span class="warning">file_uploads is off in php.ini, so files can\'t be uploaded. Turn it on to use the Files module and attachments.</span>';
 			} else {
 				echo '<b class="ok">'.$okImg.'</b> <span class="item">(Max File Upload Size: '. $manager->getMaxFileUpload() .')</span>';
 			}
