@@ -43,6 +43,15 @@ if ($contact_id) {
 if (!$object_id) {
     $object->_role = array_search('Project worker', $roles_arr);
 }
+// A new user has no contact row yet (loadFull() found nothing), and a user
+// made from a contact has no user fields: give the form empty values.
+foreach (array('user_id', 'user_username', 'user_password', 'user_signature', 'contact_id',
+    'contact_first_name', 'contact_last_name', 'contact_email', 'contact_company',
+    'contact_department', 'dept_name') as $field) {
+    if (!isset($object->$field)) {
+        $object->$field = null;
+    }
+}
 
 // pull companies
 $company = new CCompany();
