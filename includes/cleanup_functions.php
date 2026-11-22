@@ -3132,7 +3132,11 @@ function w2PtoolTip($header = '', $tip = '', $raw = false, $id = '')
     }
     $title = trim($header . "\n" . $tip);
     $id = ('' == $id) ? '' : 'id="' . htmlspecialchars((string) $id, ENT_QUOTES, 'UTF-8') . '" ';
-    $starttip = '<span ' . $id . 'title="' . htmlspecialchars($title, ENT_QUOTES, 'UTF-8') . '">';
+    // Line breaks go in as &#10;: the browser shows them the same, and the
+    // markup stays on one line. Pages put tooltips inside JavaScript string
+    // literals (ProjectDesigner's add-task rows), where a raw line break is a
+    // syntax error that stops the whole script.
+    $starttip = '<span ' . $id . 'title="' . str_replace(array("\r", "\n"), array('', '&#10;'), htmlspecialchars($title, ENT_QUOTES, 'UTF-8')) . '">';
 
     return $starttip;
 }
