@@ -151,4 +151,31 @@ class CleanupFunctionsTest extends \PHPUnit\Framework\TestCase
         $this->assertSame('<span title="O&#039;Brien &lt;img src=x onerror=alert(1)&gt;' . "\n" . 'Type: Meeting' . "\n" . 'Note: a &quot;quoted&quot; &lt;b&gt;note&lt;/b&gt;">', $html);
         $this->assertSame('<span id="x" title="Edit This' . "\n" . 'click to edit">', w2PtoolTip('edit this', 'Click to edit', false, 'x'));
     }
+
+    /**
+     * Forum titles and bodies are escaped on output, whether the row holds
+     * plain text or entity-encoded text (#533).
+     */
+    public function testForumTextAndBodyAreEscaped()
+    {
+        $bbparser = new HTML_BBCodeParser();
+
+        $raw = "<script>alert(1)</script> Café & co\n[b]bold[/b] [url=http://example.com/?a=1&b=2]link[/url] <img src=x onerror=alert(2)>";
+        $encoded = htmlentities($raw, ENT_QUOTES, 'UTF-8');
+
+        foreach (array($raw, $encoded) as $text) {
+            $html = w2PforumBody($text, $bbparser);
+            $this->assertStringNotContainsString('<script', $html);
+            $this->assertStringNotContainsString('<img', $html);
+            $this->assertStringContainsString('&lt;script&gt;alert(1)&lt;/script&gt;', $html);
+            $this->assertStringContainsString('Café &amp; co<br />', $html);
+            $this->assertStringContainsString('<strong>bold</strong>', $html);
+            $this->assertStringContainsString('<a href="http://example.com/?a=1&amp;b=2">link</a>', $html);
+        }
+        $this->assertSame(w2PforumBody($raw, $bbparser), w2PforumBody($encoded, $bbparser));
+        $this->assertStringNotContainsString('<br />', w2PforumBody($raw, $bbparser, false));
+
+        $this->assertSame('Re: &lt;b&gt; &amp; &quot;co&quot;', w2PforumText('Re: <b> & "co"'));
+        $this->assertSame('Re: &lt;b&gt; &amp; &quot;co&quot;', w2PforumText('Re: &lt;b&gt; &amp; &quot;co&quot;'));
+    }
 }

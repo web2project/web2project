@@ -138,15 +138,13 @@ $form = new w2p_Output_HTML_FormHelper($AppUI);
                 </p>
                 <p>
                     <?php $form->showLabel('Subject'); ?>
-                    <span><?php echo w2PformSafe($last_message->message_title); ?></span>
+                    <span><?php echo w2PforumText($last_message->message_title); ?></span>
                 </p>
                 <div class="d-flex flex-wrap gap-2 mb-2">
                     <?php $form->showLabel('Previous Message'); ?>
                     <div>
                     <?php
-                        $messageBody = $bbparser->qparse($last_message->message_body);
-                        $messageBody = nl2br($messageBody);
-                        echo $messageBody;
+                        echo w2PforumBody($last_message->message_body, $bbparser);
                     ?>
                     </div>
                 </div>

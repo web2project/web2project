@@ -4881,6 +4881,40 @@ function __extract_from_projects_gantt4($row)
 }
 
 /**
+ * Forum text (titles, names) for HTML output.
+ *
+ * Rows are a mix: plain text, and (saved by 3.2 to 5.0-rc) text whose
+ * entities came back from bind(). Decoding first and escaping once shows
+ * both the same way, without double-encoding "&amp;". (#533)
+ *
+ * @param mixed $text
+ *
+ * @return string
+ */
+function w2PforumText($text)
+{
+    return htmlspecialchars(html_entity_decode((string) $text, ENT_QUOTES | ENT_HTML5, 'UTF-8'), ENT_QUOTES, 'UTF-8');
+}
+
+/**
+ * A forum message body for HTML output: escaped like w2PforumText(), then
+ * BBCode turned into markup. HTML_BBCodeParser passes HTML through
+ * untouched, so the body is never given to it unescaped. (#533)
+ *
+ * @param mixed $text
+ * @param HTML_BBCodeParser $bbparser
+ * @param bool $lineBreaks
+ *
+ * @return string
+ */
+function w2PforumBody($text, $bbparser, $lineBreaks = true)
+{
+    $html = $bbparser->qparse(w2PforumText($text));
+
+    return $lineBreaks ? nl2br($html) : $html;
+}
+
+/**
  * @param mixed $s
  * @param mixed $style
  * @param mixed $row
@@ -4893,18 +4927,17 @@ function __extract_from_projects_gantt4($row)
 function __extract_from_view_messages1($s, $style, $row, $editor, $AppUI, $bbparser)
 {
     $s .= '<div class="border-bottom px-2 py-1 w2p-forum-message" style="' . $style . '">';
-    $s .= '<a href="mailto:' . $row['contact_email'] . '">';
-    $s .= $row['contact_name'] . '</a> ';
+    $s .= '<a href="mailto:' . w2PforumText($row['contact_email']) . '">';
+    $s .= w2PforumText($row['contact_name']) . '</a> ';
     if (sizeof($editor) > 0) {
         $s .= '<small>(' . $AppUI->_('last edited by');
-        $s .= ': <a href="mailto:' . $editor[0]['contact_email'] . '">';
-        $s .= $editor[0]['contact_name'] . '</a>)</small> ';
+        $s .= ': <a href="mailto:' . w2PforumText($editor[0]['contact_email']) . '">';
+        $s .= w2PforumText($editor[0]['contact_name']) . '</a>)</small> ';
     }
-    $s .= '<a name="' . $row['message_id'] . '" href="javascript: void(0);" onclick="toggle(' . $row['message_id'] . ')">';
-    $s .= '<strong>' . $row['message_title'] . '</strong></a>';
-    $s .= '<div class="message" id="' . $row['message_id'] . '" style="display: none">';
-    $row['message_body'] = $bbparser->qparse($row['message_body']);
-    $s .= $row['message_body'];
+    $s .= '<a name="' . (int) $row['message_id'] . '" href="javascript: void(0);" onclick="toggle(' . (int) $row['message_id'] . ')">';
+    $s .= '<strong>' . w2PforumText($row['message_title']) . '</strong></a>';
+    $s .= '<div class="message" id="' . (int) $row['message_id'] . '" style="display: none">';
+    $s .= w2PforumBody($row['message_body'], $bbparser, false);
     $s .= '</div>';
 
     $s .= '</div>';
@@ -4930,18 +4963,18 @@ function __extract_from_view_messages3($s, $style, $AppUI, $row, $df, $tf, $edit
 {
     $s .= '<div class="border-bottom px-2 py-1 w2p-forum-message" style="' . $style . '">';
     $s .= $AppUI->formatTZAwareTime($row['message_datetime'], $df . ' ' . $tf) . ' - ';
-    $s .= '<a href="mailto:' . $row['contact_email'] . '">' . $row['contact_name'] . '</a>';
+    $s .= '<a href="mailto:' . w2PforumText($row['contact_email']) . '">' . w2PforumText($row['contact_name']) . '</a>';
     if (sizeof($editor) > 0) {
         $s .= ' <small>(' . $AppUI->_('last edited by');
-        $s .= ': <a href="mailto:' . $editor[0]['contact_email'] . '">';
-        $s .= $editor[0]['contact_name'] . '</a>)</small>';
+        $s .= ': <a href="mailto:' . w2PforumText($editor[0]['contact_email']) . '">';
+        $s .= w2PforumText($editor[0]['contact_name']) . '</a>)</small>';
     }
     $s .= '<br />';
-    $s .= '<a href="javascript: void(0);" onclick="toggle(' . $row['message_id'] . ')">';
-    $s .= '<strong>' . $row['message_title'] . '</strong></a>';
+    $s .= '<a href="javascript: void(0);" onclick="toggle(' . (int) $row['message_id'] . ')">';
+    $s .= '<strong>' . w2PforumText($row['message_title']) . '</strong></a>';
     $s .= '</div>';
-    $side .= '<div class="message" id="' . $row['message_id'] . '" style="display: none">';
-    $side .= $row['message_body'];
+    $side .= '<div class="message" id="' . (int) $row['message_id'] . '" style="display: none">';
+    $side .= w2PforumBody($row['message_body'], $bbparser);
     $side .= '</div>';
     return array($s, $side);
 }
@@ -4970,12 +5003,12 @@ function __extract_from_view_messages4($s, $style, $row, $hideEmail, $editor, $A
     $s .= '<div class="row g-2 border-bottom py-2 mx-0 w2p-forum-message" style="' . $style . '">';
 
     $s .= '<div class="col-md-3 text-nowrap">';
-    $s .= '<a href="?m=users&amp;a=view&amp;user_id=' . $row['message_author'] . '">';
-    $s .= $row['contact_name'];
+    $s .= '<a href="?m=users&amp;a=view&amp;user_id=' . (int) $row['message_author'] . '">';
+    $s .= w2PforumText($row['contact_name']);
     $s .= '</a>';
     if (!$hideEmail) {
         $s .= '&nbsp;';
-        $s .= '<a href="mailto:' . $row['contact_email'] . '">';
+        $s .= '<a href="mailto:' . w2PforumText($row['contact_email']) . '">';
         $s .= '<img src="' . w2PfindImage('email.gif') . '" alt="email" />';
         $s .= '</a>';
     }
@@ -4984,9 +5017,9 @@ function __extract_from_view_messages4($s, $style, $row, $hideEmail, $editor, $A
         $s .= '<br/>&nbsp;<br/>' . $AppUI->_('last edited by');
         $s .= ':<br/>';
         if (!$hideEmail) {
-            $s .= '<a href="mailto:' . $editor[0]['contact_email'] . '">';
+            $s .= '<a href="mailto:' . w2PforumText($editor[0]['contact_email']) . '">';
         }
-        $s .= $editor[0]['contact_name'];
+        $s .= w2PforumText($editor[0]['contact_name']);
         if (!$hideEmail) {
             $s .= '</a>';
         }
@@ -4998,10 +5031,8 @@ function __extract_from_view_messages4($s, $style, $row, $hideEmail, $editor, $A
     $s .= '<div class="mt-2"><img src="' . w2PfindImage('icons/posticon.gif', $m) . '" alt="date posted" />' . $AppUI->formatTZAwareTime($row['message_datetime'], $df . ' ' . $tf) . '</div>';
     $s .= '</div>';
     $s .= '<div class="col-md-9">';
-    $s .= '<strong>' . $row['message_title'] . '</strong><hr />';
-    $row['message_body'] = $bbparser->qparse($row['message_body']);
-    $row['message_body'] = nl2br($row['message_body']);
-    $s .= $row['message_body'];
+    $s .= '<strong>' . w2PforumText($row['message_title']) . '</strong><hr />';
+    $s .= w2PforumBody($row['message_body'], $bbparser);
 
     $s .= '<div class="d-flex justify-content-end gap-2">';
     //the following users are allowed to edit/delete a forum message: 1. the forum creator  2. a superuser with read-write access to 'all' 3. the message author
