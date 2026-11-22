@@ -40,6 +40,26 @@ if ($del) {
 	}
 }
 
+// The user form edits the contact details only. bind() took every posted
+// field, so saving an account (one's own needs no users rights) could also
+// set user_type (1 = "full access" in the Overall report), user_parent, the
+// password hash, the login name or the linked contact. An existing account
+// keeps those stored values; a new one starts as a normal user.
+// (GHSA-65x8-6jcq-fc5r)
+if (!$del && !$isNewUser) {
+	$stored = new CUser();
+	if (!$stored->load($user_id)) {
+		$AppUI->redirect(ACCESS_DENIED);
+	}
+	foreach (array('user_username', 'user_password', 'user_type', 'user_parent', 'user_contact') as $field) {
+		$obj->$field = $stored->$field;
+	}
+	$contact->contact_id = (int) $stored->user_contact;
+} elseif ($isNewUser) {
+	$obj->user_type = 0;
+	$obj->user_parent = 0;
+}
+
 $obj->user_username = strtolower($obj->user_username);
 
 // !User's contact information not deleted - left for history.

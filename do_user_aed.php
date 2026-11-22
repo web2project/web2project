@@ -74,6 +74,13 @@ if (!$contact->bind($_POST)) {
 	w2p_signup_redirect('contact');
 }
 
+// A sign-up creates a new, normal account and a new contact, whatever else
+// was posted. (GHSA-65x8-6jcq-fc5r)
+$user->user_id = 0;
+$user->user_type = 0;
+$user->user_parent = 0;
+$contact->contact_id = 0;
+
 $contact->contact_owner = 1;
 $result = $contact->store();
 
