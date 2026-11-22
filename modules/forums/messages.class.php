@@ -74,11 +74,51 @@ class CForum_Message extends w2p_Core_BaseObject
     }
 
     /**
+     * Editing a message needs its owner (the author) or an admin (System
+     * edit rights). The user must also be able to read the forum the message
+     * is in, and the one it is saved to. (The generic check looked the message
+     * id up as a forum id, so anyone with edit on every forum could edit any
+     * message, and nobody else could edit their own.)
+     *
      * @return bool
      */
     public function canEdit()
     {
-        return parent::canEdit() && $this->inReadableForum();
+        $stored = $this->storedMessage();
+        if (!$stored) {
+            return false;
+        }
+        $userId = (int) $this->_AppUI->user_id;
+        $isOwner = $userId > 0 && (int) $stored['message_author'] == $userId;
+        $isAdmin = $this->_perms->checkModuleItem('system', 'edit');
+        if (!$isOwner && !$isAdmin) {
+            return false;
+        }
+
+        $forum = new CForum();
+
+        return count($forum->filterViewable($userId, array($stored['message_forum'])))
+            && $this->inReadableForum();
+    }
+
+    /**
+     * The saved row for this message.
+     *
+     * @return array|null message_author, message_forum
+     */
+    protected function storedMessage()
+    {
+        if (!(int) $this->message_id) {
+            return null;
+        }
+        $q = $this->_getQuery();
+        $q->addTable('forum_messages');
+        $q->addQuery('message_author, message_forum');
+        $q->addWhere('message_id = ' . (int) $this->message_id);
+        $row = $q->loadHash();
+        $q->clear();
+
+        return $row ? $row : null;
     }
 
     /**
@@ -106,7 +146,17 @@ class CForum_Message extends w2p_Core_BaseObject
 
     public function hook_preStore()
     {
-        $this->message_author = (int) $this->message_author ? $this->message_author : $this->_AppUI->user_id;
+        // The author is whoever wrote the message: the current user for a new
+        // one, the saved author for an edit (the form posts it, so it could be
+        // changed to make someone else the "owner"). The editor is the
+        // current user.
+        $stored = $this->storedMessage();
+        if ($stored) {
+            $this->message_author = (int) $stored['message_author'];
+            $this->message_editor = (int) $this->_AppUI->user_id;
+        } else {
+            $this->message_author = (int) $this->_AppUI->user_id;
+        }
     }
 
     public function store($unused = null)

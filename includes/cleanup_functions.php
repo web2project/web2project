@@ -5035,8 +5035,9 @@ function __extract_from_view_messages4($s, $style, $row, $hideEmail, $editor, $A
     $s .= w2PforumBody($row['message_body'], $bbparser);
 
     $s .= '<div class="d-flex justify-content-end gap-2">';
-    //the following users are allowed to edit/delete a forum message: 1. the forum creator  2. a superuser with read-write access to 'all' 3. the message author
-    if ($canEdit || $AppUI->user_id == $row['forum_moderated'] || $AppUI->user_id == $row['message_author'] || $canAdminEdit) {
+    // Edit: the message's owner (author) or an admin (System edit), as
+    // CForum_Message::canEdit() checks. Delete: as before.
+    if ($AppUI->user_id == $row['message_author'] || $canAdminEdit) {
         // edit message
         $s .= '<a href="./index.php?m=forums&amp;a=view&amp;post_message=1&amp;forum_id=' . $row['message_forum'] . '&amp;message_parent=' . $row['message_parent'] . '&amp;message_id=' . $row["message_id"] . '" title="' . $AppUI->_('Edit') . ' ' . $AppUI->_('Message') . '">';
         $s .= w2PshowImage('icons/stock_edit-16.png', '16', '16');
