@@ -114,12 +114,17 @@ $companies = arrayMerge(array('0' => 'All Companies'), $companies);
                     $start_date->format(FMT_DATETIME_MYSQL),
                     $end_date->format(FMT_DATETIME_MYSQL));
             $pstart = new w2p_Utilities_Date($project->project_start_date);
-            $pend = intval($criticalTasks[0]['task_end_date']) ? new w2p_Utilities_Date($criticalTasks[0]['task_end_date']) : new w2p_Utilities_Date();
+            // A project with no dated tasks has no critical task.
+            $lastTaskEnd = isset($criticalTasks[0]['task_end_date']) ? $criticalTasks[0]['task_end_date'] : null;
+            $pend = intval($lastTaskEnd) ? new w2p_Utilities_Date($lastTaskEnd) : new w2p_Utilities_Date();
             $filterStart = $start_date;
             $filterEnd = $end_date;
             $workingDaysInSpans = $filterStart->findDaysInRangeOverlap($pstart, $pend, $filterStart, $filterEnd);
             $workingDaysForProj = $pstart->workingDaysInSpan($pend);
-            $factor = $workingDaysInSpans/$workingDaysForProj;
+            // A project without a start date or with no working days spans
+            // nothing: count all of it when it falls in the range.
+            $factor = ($workingDaysForProj > 0) ? $workingDaysInSpans / $workingDaysForProj
+                : (($workingDaysInSpans > 0) ? 1 : 0);
             $factor = ($factor > 1) ? 1 : $factor;
             ?><tr>
                 <td width="10" align="right" style="border: outset #eeeeee 1px;background-color:#<?php echo $project->project_color_identifier; ?>">
