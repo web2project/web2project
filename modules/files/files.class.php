@@ -213,9 +213,18 @@ class CFile extends w2p_Core_BaseObject {
         return null;
     }
 
+    /**
+     * A file is seen only by users who may see its project and task, the
+     * rule the Files lists apply. fileviewer.php loads a file by id, so
+     * without this any file id could be downloaded.
+     */
     public function canView()
     {
-        return ($this->indexer || parent::canView());
+        if ($this->indexer) {
+            return true;
+        }
+
+        return parent::canView() && $this->canSeeProjectAndTask($this->file_project, $this->file_task);
     }
 
     /**

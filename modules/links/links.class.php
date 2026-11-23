@@ -64,6 +64,15 @@ class CLink extends w2p_Core_BaseObject
     }
 
     /**
+     * A link is seen only by users who may see its project and task, the
+     * rule the Links list applies.
+     */
+    public function canView()
+    {
+        return parent::canView() && $this->canSeeProjectAndTask($this->link_project, $this->link_task);
+    }
+
+    /**
      * A link is added only to a project and task the user may see
      * (GHSA-5748-w3cw-m24j). bind() takes both from the request.
      */

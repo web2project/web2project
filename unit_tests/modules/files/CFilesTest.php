@@ -81,9 +81,11 @@ class CFilesTest extends CommonSetup
         $this->setPerms($this->obj, false);
 
         $this->assertFalse($this->obj->canCreate());
+        $this->assertFalse($this->obj->canView());
 
         $this->setPerms($this->obj, true);
         $this->assertTrue($this->obj->canCreate());
+        $this->assertTrue($this->obj->canView());
     }
 
     /**
