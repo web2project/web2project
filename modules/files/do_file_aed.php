@@ -46,6 +46,24 @@ if ($file_id) {
 } else {
 	$obj->_message = 'added';
 }
+
+// The form edits the description, category, folder, project, task and
+// version label. bind() took every posted field, so a request could set
+// file_real_filename, the name on disk that the download, copy, index and
+// delete code join to files/<project>/, and point it at any file on the
+// server (GHSA-pw38-j7w8-hvpc), or set the owner, size or type. These come
+// from the upload below on a new file or version, and are left as stored
+// otherwise: null is not written on an update.
+foreach (array('file_real_filename', 'file_name', 'file_type', 'file_size', 'file_owner',
+	'file_version_id', 'file_parent', 'file_datetime', 'file_checkout', 'file_co_reason',
+	'file_indexed', 'file_icon') as $field) {
+	$obj->$field = null;
+}
+if ($file_id) {
+	// A new version keeps the file's version group; the owner stays the uploader.
+	$obj->file_version_id = $oldObj->file_version_id;
+	$obj->file_owner = $oldObj->file_owner;
+}
 $obj->file_category = (int) w2PgetParam($_POST, 'file_category', 0);
 $version = w2PgetParam($_POST, 'file_version', 0);
 $revision_type = w2PgetParam($_POST, 'revision_type', 0);

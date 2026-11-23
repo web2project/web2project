@@ -32,8 +32,8 @@ class w2p_FileSystem_Indexer
                 return false;
             }
             // buffer the file
-            $file->_filepath = W2P_BASE_DIR . '/files/' . $file->file_project . '/' . $file->file_real_filename;
-            if (file_exists($file->_filepath)) {
+            $file->_filepath = w2p_FileSystem_Local::path($file->file_project, $file->file_real_filename);
+            if (false !== $file->_filepath && is_file($file->_filepath)) {
                 $x = file_get_contents($file->_filepath);
                 if (false === $x) {
                     return false;

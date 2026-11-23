@@ -8,6 +8,46 @@
  */
 class w2p_FileSystem_Local implements w2p_Interfaces_FileSystem
 {
+    /**
+     * Whether a stored file name is a plain name: no directory part, so it
+     * stays inside files/<project>/ when joined to it. Names this class
+     * generates are hex strings (uniqid(rand())).
+     *
+     * @param mixed $name
+     *
+     * @return bool
+     */
+    public static function isPlainName($name)
+    {
+        if (!is_string($name) && !is_int($name)) {
+            return false;
+        }
+        $name = (string) $name;
+
+        return '' !== $name && '.' !== $name && '..' !== $name
+            && false === strpbrk($name, "/\\\0");
+    }
+
+    /**
+     * The path of a stored file, or false when the stored name is not a
+     * plain name. Every read, copy, move and delete builds its path here,
+     * so a name like ../../includes/config.php can never leave the project
+     * directory (GHSA-pw38-j7w8-hvpc).
+     *
+     * @param int|string $project_id
+     * @param mixed      $name
+     *
+     * @return string|false
+     */
+    public static function path($project_id, $name)
+    {
+        if (!self::isPlainName($name)) {
+            return false;
+        }
+
+        return W2P_BASE_DIR . '/files/' . (int) $project_id . '/' . $name;
+    }
+
     public function isWritable()
     {
         return (is_writable(W2P_BASE_DIR.'/files'));
@@ -24,7 +64,12 @@ class w2p_FileSystem_Local implements w2p_Interfaces_FileSystem
             }
         }
 
-        $res = rename(W2P_BASE_DIR . '/files/' . $old_project_id . '/' . $actual_file_name, W2P_BASE_DIR . '/files/' . $file->file_project . '/' . $actual_file_name);
+        $from = self::path($old_project_id, $actual_file_name);
+        $to = self::path($file->file_project, $actual_file_name);
+        if (false === $from || false === $to) {
+            return false;
+        }
+        $res = rename($from, $to);
 
         if (!$res) {
             return false;
@@ -46,8 +91,12 @@ class w2p_FileSystem_Local implements w2p_Interfaces_FileSystem
                 return false;
             }
         }
+        $source = self::path($old_project_id, $actual_file_name);
+        if (false === $source) {
+            return false;
+        }
         $dest_realname = uniqid(rand());
-        $res = copy($dir . '/' . $actual_file_name, $dir . '/' . $dest_realname);
+        $res = copy($source, $dir . '/' . $dest_realname);
 
         if (!$res) {
             return false;
@@ -89,20 +138,26 @@ class w2p_FileSystem_Local implements w2p_Interfaces_FileSystem
     {
         $file->file_project = (int) $file->file_project;
 
-        if ('' == $file->file_real_filename ||
-            !file_exists(W2P_BASE_DIR . '/files/' . $file->file_project . '/' . $file->file_real_filename)) {
+        // A name that is not a plain name was never written by this class,
+        // so there is nothing of ours to remove; the record can still go.
+        $path = self::path($file->file_project, $file->file_real_filename);
+        if (false === $path || !file_exists($path)) {
             return true;
         }
 
         if ($file->canDelete()) {
-            return @unlink(W2P_BASE_DIR . '/files/' . $file->file_project . '/' . $file->file_real_filename);
+            return @unlink($path);
         }
         return false;
     }
 
     public function read($project_id, $filename)
     {
-        $handle = fopen(W2P_BASE_DIR . '/files/' . (int) $project_id . '/' . $filename, 'rb');
+        $path = self::path($project_id, $filename);
+        if (false === $path) {
+            return false;
+        }
+        $handle = fopen($path, 'rb');
         if ($handle) {
             while (!feof($handle)) {
                 print fread($handle, 8192);
@@ -114,8 +169,8 @@ class w2p_FileSystem_Local implements w2p_Interfaces_FileSystem
 
     public function exists($project_id, $filename)
     {
-        $fname = W2P_BASE_DIR . '/files/' . (int) $project_id . '/' . $filename;
+        $path = self::path($project_id, $filename);
 
-        return file_exists($fname);
+        return false !== $path && is_file($path);
     }
 }

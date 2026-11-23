@@ -56,6 +56,22 @@ class CFilesTest extends CommonSetup
     }
 
     /**
+     * GHSA-pw38-j7w8-hvpc: the stored name on disk must be a plain name.
+     */
+    public function testStoreRejectsPathInRealName()
+    {
+        foreach (array('../../includes/config.php', 'a/b', '..') as $name) {
+            $this->obj = new CFile();
+            $this->obj->overrideDatabase($this->mockDB);
+            $this->post_data['file_real_filename'] = $name;
+            $this->obj->bind($this->post_data);
+
+            $this->assertFalse($this->obj->store(), $name);
+            $this->assertArrayHasKey('file_real_filename', $this->obj->getError());
+        }
+    }
+
+    /**
      * Tests that the proper error message is returned when no filename is
      * passed.
      */

@@ -240,6 +240,12 @@ class CFile extends w2p_Core_BaseObject {
         if ($this->file_id == 0 && '' == $this->file_real_filename) {
             $this->_error['file_real_filename'] = $baseErrorMsg . 'file real name is not set';
         }
+        // The stored name is joined to files/<project>/ to find the file on
+        // disk, so it must be a plain name (GHSA-pw38-j7w8-hvpc).
+        if (!is_null($this->file_real_filename) && '' != $this->file_real_filename
+            && !w2p_FileSystem_Local::isPlainName($this->file_real_filename)) {
+            $this->_error['file_real_filename'] = $baseErrorMsg . 'file real name is not a plain file name';
+        }
         if ($this->file_id == 0 && '' == $this->file_name) {
             $this->_error['file_name'] = $baseErrorMsg . 'file name is not set';
         }
