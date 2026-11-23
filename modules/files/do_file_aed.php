@@ -87,6 +87,13 @@ if ($del) {
 		$AppUI->setMsg($obj->getError(), UI_MSG_ERROR);
 		$AppUI->redirect($redirect);
 	}
+	// Stop here: going on to store() saved the deleted file again as a new
+	// row (owned by whoever deleted it) pointing at the removed file.
+	if (!$result) {
+		$AppUI->redirect(ACCESS_DENIED);
+	}
+	$AppUI->setMsg('deleted', UI_MSG_ALERT, true);
+	$AppUI->redirect($redirect);
 }
 
 if (!ini_get('safe_mode')) {
