@@ -20,15 +20,15 @@ $view = new w2p_Output_HTML_ViewHelper($AppUI);
             <?php if ($object->file_id) { ?>
                 <p>
                     <?php $form->showLabel('File Name'); ?>
-                    <?php echo strlen($object->file_name) == 0 ? 'n/a' : $object->file_name; ?>
+                    <?php echo strlen((string) $object->file_name) == 0 ? 'n/a' : htmlspecialchars((string) $object->file_name, ENT_QUOTES, 'UTF-8'); ?>
                 </p>
                 <p>
                     <?php $form->showLabel('Type'); ?>
-                    <?php echo $object->file_type; ?>
+                    <?php echo htmlspecialchars((string) $object->file_type, ENT_QUOTES, 'UTF-8'); ?>
                 </p>
                 <p>
                     <?php $form->showLabel('Size'); ?>
-                    <?php echo $object->file_size; ?> <?php echo $AppUI->_('bytes'); ?>
+                    <?php echo (int) $object->file_size; ?> <?php echo $AppUI->_('bytes'); ?>
                 </p>
                 <p>
                     <?php $form->showLabel('Uploaded By'); ?>
