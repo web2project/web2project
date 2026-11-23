@@ -55,23 +55,27 @@
         <mkdir dir="${dir.package}" />
 
         <property name="releaseName" value="master" override="true"/>
-        <input propertyname="releaseName">What version should be packaged?</input>
+        <property name="branchName" value="master" override="true"/>
 
+        <input propertyname="releaseName">What is the name of this release?</input>
+
+        <input propertyname="branchName">What branch should be packaged?</input>
+        <property name="branchName" value="master" override="true"/>
         <if>
-            <equals arg1="${releaseName}" arg2="master" />
+            <equals arg1="${branchName}" arg2="master" />
             <then>
                 <echo message="master!" />
-                <property name="version" value="${releaseName}" override="true"/>
+                <property name="version" value="${branchName}" override="true"/>
             </then>
             <else>
-                <echo message="version${releaseName}!" />
-                <property name="version" value="tags/version${releaseName}" override="true"/>
+                <echo message="version${branchName}!" />
+                <property name="version" value="tags/version${branchName}" override="true"/>
             </else>
         </if>
 
         <property name="gitUrl" value="https://github.com/web2project/web2project.git" override="true"/>
         <echo message="Working with ${gitUrl}..." />
-        <gitclone repository="${gitUrl}" targetPath="${dir.package}/${phing.project.name}" branch="${releaseName}" />
+        <gitclone repository="${gitUrl}" targetPath="${dir.package}/${phing.project.name}" branch="${branchName}" />
 
         <delete dir="${dir.package}/${phing.project.name}/.git" />
 
