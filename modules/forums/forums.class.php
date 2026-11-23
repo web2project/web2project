@@ -23,6 +23,32 @@ class CForum extends w2p_Core_BaseObject
         parent::__construct('forums', 'forum_id');
     }
 
+    /**
+     * A forum is added only to a project the user may see
+     * (GHSA-5748-w3cw-m24j). bind() takes forum_project from the request.
+     */
+    public function canCreate()
+    {
+        return parent::canCreate() && $this->canUseProjectAndTask($this->forum_project);
+    }
+
+    /**
+     * Edit permission on this forum and, when a save moves it to another
+     * project, the right to add a forum there (GHSA-5748-w3cw-m24j).
+     */
+    public function canEdit()
+    {
+        if (!parent::canEdit()) {
+            return false;
+        }
+        $stored = $this->storedValues(array('forum_project'));
+        if (is_null($stored) || (int) $stored['forum_project'] != (int) $this->forum_project) {
+            return $this->canUseProjectAndTask($this->forum_project);
+        }
+
+        return true;
+    }
+
     public function isValid()
     {
         $baseErrorMsg = get_class($this) . '::store-check failed - ';

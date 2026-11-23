@@ -63,6 +63,34 @@ class CLink extends w2p_Core_BaseObject
         return $q->loadList();
     }
 
+    /**
+     * A link is added only to a project and task the user may see
+     * (GHSA-5748-w3cw-m24j). bind() takes both from the request.
+     */
+    public function canCreate()
+    {
+        return parent::canCreate() && $this->canUseProjectAndTask($this->link_project, $this->link_task);
+    }
+
+    /**
+     * Edit permission on this link and, when a save moves it to another
+     * project or task, the right to add a link there (GHSA-5748-w3cw-m24j).
+     */
+    public function canEdit()
+    {
+        if (!parent::canEdit()) {
+            return false;
+        }
+        $stored = $this->storedValues(array('link_project', 'link_task'));
+        if (is_null($stored)
+            || (int) $stored['link_project'] != (int) $this->link_project
+            || (int) $stored['link_task'] != (int) $this->link_task) {
+            return $this->canUseProjectAndTask($this->link_project, $this->link_task);
+        }
+
+        return true;
+    }
+
     public function isValid()
     {
         $baseErrorMsg = get_class($this) . '::store-check failed - ';

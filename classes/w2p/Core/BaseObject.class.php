@@ -482,6 +482,92 @@ abstract class w2p_Core_BaseObject extends w2p_System_Event implements w2p_Inter
     }
 
     /**
+     * Whether the current user may see the project and the task an object
+     * is attached to. 0 (or empty) means none, which needs no check. This
+     * is the rule the module lists apply (they leave out rows whose project
+     * or task the user may not see), for pages that load one row by id.
+     *
+     * @param int|string|null $project_id
+     * @param int|string|null $task_id
+     *
+     * @return bool
+     */
+    protected function canSeeProjectAndTask($project_id, $task_id = 0)
+    {
+        $project_id = is_numeric($project_id) ? (int) $project_id : 0;
+        $task_id = is_numeric($task_id) ? (int) $task_id : 0;
+        if (0 == $project_id && 0 == $task_id) {
+            return true;
+        }
+        $perms = $this->_perms;
+        if ($project_id < 0 || $task_id < 0 || !is_object($perms) || !method_exists($perms, 'checkModuleItem')) {
+            return false;
+        }
+        if ($project_id && !$perms->checkModuleItem('projects', 'view', $project_id)) {
+            return false;
+        }
+
+        return (0 == $task_id || (bool) $perms->checkModuleItem('tasks', 'view', $task_id));
+    }
+
+    /**
+     * Whether the current user may attach an object to the project and task
+     * given: the task must exist and belong to that project (or the project
+     * is left at 0), and the user must be able to see both. bind() takes the
+     * project and task from the request, so classes whose rows carry them
+     * call this when one is added or moved (GHSA-5748-w3cw-m24j; the tasks
+     * equivalent is GHSA-48ww-5h48-vwx9).
+     *
+     * @param int|string|null $project_id
+     * @param int|string|null $task_id
+     *
+     * @return bool
+     */
+    protected function canUseProjectAndTask($project_id, $task_id = 0)
+    {
+        $project_id = is_numeric($project_id) ? (int) $project_id : 0;
+        $task_id = is_numeric($task_id) ? (int) $task_id : 0;
+        if ($task_id > 0) {
+            $q = $this->_getQuery();
+            $q->addTable('tasks');
+            $q->addQuery('task_project');
+            $q->addWhere('task_id = ' . $task_id);
+            $task_project = $q->loadResult();
+            $q->clear();
+            if (!is_numeric($task_project) || ($project_id && (int) $task_project != $project_id)) {
+                return false;
+            }
+            $project_id = (int) $task_project;
+        }
+
+        return $this->canSeeProjectAndTask($project_id, $task_id);
+    }
+
+    /**
+     * The values the given columns hold in this object's stored row, or null
+     * for a new object (or a row that is gone).
+     *
+     * @param array<string> $fields
+     *
+     * @return array<string, mixed>|null
+     */
+    protected function storedValues(array $fields)
+    {
+        $id = (int) $this->{$this->_tbl_key};
+        if ($id <= 0) {
+            return null;
+        }
+        $q = $this->_getQuery();
+        $q->addTable($this->_tbl);
+        $q->addQuery(implode(', ', $fields));
+        $q->addWhere($this->_tbl_key . ' = ' . $id);
+        $row = $q->loadHash();
+        $q->clear();
+
+        return (is_array($row) && count($row)) ? $row : null;
+    }
+
+    /**
      *     Generic check for whether dependencies exist for this object in the db schema, overload as needed
      *
      * @param string $notUsed

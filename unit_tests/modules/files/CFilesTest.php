@@ -72,6 +72,61 @@ class CFilesTest extends CommonSetup
     }
 
     /**
+     * GHSA-5748-w3cw-m24j: a file is added only to a project the user may see.
+     */
+    public function testCreateInHiddenProjectIsRefused()
+    {
+        $this->post_data['file_project'] = 7;
+        $this->obj->bind($this->post_data);
+        $this->setPerms($this->obj, false);
+
+        $this->assertFalse($this->obj->canCreate());
+
+        $this->setPerms($this->obj, true);
+        $this->assertTrue($this->obj->canCreate());
+    }
+
+    /**
+     * GHSA-5748-w3cw-m24j: a file is not attached to a task of another
+     * project, or to a task that does not exist.
+     */
+    public function testCreateWithTaskOfAnotherProjectIsRefused()
+    {
+        $this->post_data['file_project'] = 7;
+        $this->post_data['file_task'] = 3;
+        $this->obj->bind($this->post_data);
+        $this->setPerms($this->obj, true);
+
+        $this->mockDB->stageResult(8);
+        $this->assertFalse($this->obj->canCreate());
+
+        $this->mockDB->stageResult(7);
+        $this->assertTrue($this->obj->canCreate());
+
+        $this->mockDB->stageResult(null);
+        $this->assertFalse($this->obj->canCreate());
+    }
+
+    /**
+     * Gives the object permissions that allow everything, or everything but
+     * the projects module.
+     */
+    protected function setPerms($object, $allowProjects)
+    {
+        $perms = new class extends w2p_Mocks_Permissions {
+            public $allowProjects = true;
+            public function checkModuleItem($module, $op, $item = null, $userid = null)
+            {
+                return ('projects' == $module) ? $this->allowProjects : true;
+            }
+        };
+        $perms->allowProjects = $allowProjects;
+        $property = new ReflectionProperty('w2p_Core_BaseObject', '_perms');
+        $property->setAccessible(true);
+        $property->setValue($object, $perms);
+    }
+
+    /**
      * Tests that the proper error message is returned when no filename is
      * passed.
      */

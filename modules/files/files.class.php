@@ -218,6 +218,34 @@ class CFile extends w2p_Core_BaseObject {
         return ($this->indexer || parent::canView());
     }
 
+    /**
+     * A file is added only to a project and task the user may see
+     * (GHSA-5748-w3cw-m24j). bind() takes both from the request.
+     */
+    public function canCreate()
+    {
+        return parent::canCreate() && $this->canUseProjectAndTask($this->file_project, $this->file_task);
+    }
+
+    /**
+     * Edit permission on this file and, when a save moves it to another
+     * project or task, the right to add a file there (GHSA-5748-w3cw-m24j).
+     */
+    public function canEdit()
+    {
+        if (!parent::canEdit()) {
+            return false;
+        }
+        $stored = $this->storedValues(array('file_project', 'file_task'));
+        if (is_null($stored)
+            || (int) $stored['file_project'] != (int) $this->file_project
+            || (int) $stored['file_task'] != (int) $this->file_task) {
+            return $this->canUseProjectAndTask($this->file_project, $this->file_task);
+        }
+
+        return true;
+    }
+
     public function canAdmin() {
         if (!$this->file_project) {
             return false;
