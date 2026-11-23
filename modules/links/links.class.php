@@ -125,7 +125,12 @@ class CLink extends w2p_Core_BaseObject
         // Adds http:// when there is no scheme; isValid() rejected the rest.
         $safe = w2p_safe_url(html_entity_decode($this->link_url, ENT_QUOTES));
         $this->link_url = ('' == $safe) ? $this->link_url : htmlentities($safe, ENT_QUOTES);
-        $this->link_owner = (int) $this->link_owner ? $this->link_owner : $this->_AppUI->user_id;
+        // The owner is whoever created the link. bind() took link_owner from
+        // the request, so a link could be created or edited in someone
+        // else's name.
+        $stored = $this->storedValues(array('link_owner'));
+        $this->link_owner = (is_null($stored) || !(int) $stored['link_owner'])
+            ? (int) $this->_AppUI->user_id : (int) $stored['link_owner'];
     }
 
     public function hook_search()

@@ -70,10 +70,6 @@ $projects = arrayMerge(array('0' => $AppUI->_('All', UI_OUTPUT_JS)), $projects);
 
 $types = w2PgetSysVal('LinkType');
 
-// Load the users
-$perms = &$AppUI->acl();
-$users = $perms->getPermittedUsers('links');
-
 $view = new w2p_Controllers_View($AppUI, $object, 'Link');
 echo $view->renderDelete();
 ?>

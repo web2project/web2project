@@ -2,13 +2,12 @@
 /** @var w2p_Core_CAppUI $AppUI */
 
 $form = new w2p_Output_HTML_FormHelper($AppUI);
+$viewHelper = new w2p_Output_HTML_ViewHelper($AppUI);
 
 ?>
 <form name="editFrm" action="?m=<?php echo $m; ?>" method="post" accept-charset="utf-8" class="addedit links">
     <input type="hidden" name="dosql" value="do_link_aed" />
     <input type="hidden" name="link_id" value="<?php echo $object->getId(); ?>" />
-    <!-- TODO: Right now, link owner is hard coded, we should make this a select box like elsewhere. -->
-    <input type="hidden" name="link_owner" value="<?php echo $object->link_owner; ?>" />
     <?php echo $form->addNonce(); ?>
 
     <div class="std addedit links">
@@ -22,7 +21,7 @@ $form = new w2p_Output_HTML_FormHelper($AppUI);
             </p>
             <p>
                 <?php $form->showLabel('Created By'); ?>
-                <?php $form->showField('link_owner', $object->link_owner, array(), $users); ?>
+                <?php $viewHelper->showField('link_owner', $object->link_owner); ?>
             </p>
             <p>
                 <?php $form->showLabel('Category'); ?>
