@@ -119,6 +119,7 @@
 'Postcode'=>'كدپستي',
 'Private'=>'شخصي',
 'Private Entry'=>'ورودي شخصي',
+'Private Task'=>'فعاليت شخصي',
 'Project'=>'پروژه',
 'Projects'=>'پروژه ها',
 'Projects on Hold'=>'پروژه هاي مسكوت',

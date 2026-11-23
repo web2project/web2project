@@ -122,6 +122,7 @@
 'Postcode'=>'Postcode',
 'Private'=>'Prive',
 'Private Entry'=>'Prive notitie',
+'Private Task'=>'Prive taak',
 'Project'=>'Project',
 'ProjectDesigner'=>'ProjectOntwerper',
 'Projects'=>'Projecten',

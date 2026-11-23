@@ -123,6 +123,7 @@
 'Postcode'=>'Code postal',
 'Private'=>'Privé',
 'Private Entry'=>'Information privée',
+'Private Task'=>'Tâche privée',
 'Project'=>'Projet',
 'Project Reports'=>'Rapports projets',
 'ProjectDesigner'=>'Concepteur projet',

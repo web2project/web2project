@@ -121,6 +121,7 @@
 'Postcode'=>'CAP',
 'Private'=>'Privato',
 'Private Entry'=>'Registrazione Privata',
+'Private Task'=>'Attività privata',
 'Project'=>'Progetto',
 'Projects'=>'Progetti',
 'Projects on Hold'=>'Progetti in Attesa',

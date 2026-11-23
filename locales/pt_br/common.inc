@@ -154,6 +154,7 @@
 'previous'=>'anterior',
 'Private'=>'Privado',
 'Private Entry'=>'Registo Privado',
+'Private Task'=>'Tarefa privada',
 'Project'=>'Projeto',
 'Projects'=>'Projetos',
 'Projects on Hold'=>'Projetos Em Espera',

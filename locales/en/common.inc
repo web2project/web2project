@@ -154,6 +154,7 @@
 'previous',
 'Private',
 'Private Entry',
+'Private Task',
 'Project',
 'Projects',
 'Projects on Hold',

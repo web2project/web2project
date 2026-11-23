@@ -121,6 +121,7 @@
 'Postcode'=>'Código Postal',
 'Private'=>'Privado',
 'Private Entry'=>'Registo Privado',
+'Private Task'=>'Tarefa privada',
 'Project'=>'Projecto',
 'ProjectDesigner'=>'Projectista',
 'Projects'=>'Projectos',

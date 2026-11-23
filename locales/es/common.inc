@@ -119,6 +119,7 @@
 'Postcode'=>'Código Postal',
 'Private'=>'Privado',
 'Private Entry'=>'Registro Privado',
+'Private Task'=>'Tarea privada',
 'Project'=>'Proyecto',
 'Projects'=>'Proyectos',
 'Projects on Hold'=>'Proyectos Detenidos',

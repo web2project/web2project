@@ -121,6 +121,7 @@
 'Postcode'=>'Postnummer',
 'Private'=>'Privat',
 'Private Entry'=>'Privat notering',
+'Private Task'=>'Privat uppgift',
 'Project'=>'Projekt',
 'Projects'=>'Projekt',
 'Projects on Hold'=>'Avvaktande projekt',

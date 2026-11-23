@@ -164,6 +164,7 @@
 'previous'=>'předchozí',
 'Private'=>'Soukromé',
 'Private Entry'=>'Soukromá položka',
+'Private Task'=>'Soukromý úkol',
 'Project'=>'Projekt',
 'projectdesigner'=>'Navrhář projektu',
 'projectimporter'=>'ProjectImporter',

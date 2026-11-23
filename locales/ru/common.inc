@@ -126,6 +126,7 @@
 'Postcode'=>'Почтовый индекс',
 'Private'=>'Частное',
 'Private Entry'=>'Частный элемент',
+'Private Task'=>'Частная задача',
 'Project'=>'Проект',
 'Project Importer'=>'Импорт проектов',
 'ProjectDesigner'=>'Дизайнер проектов',

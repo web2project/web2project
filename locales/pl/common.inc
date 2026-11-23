@@ -188,6 +188,7 @@
 'Previous Week'=>'Poprzedni tydzień',
 'Private'=>'Prywatne',
 'Private Entry'=>'Privatny wpis',
+'Private Task'=>'Zadanie prywatne',
 'Problem Report'=>'Zgłoszenie problemu',
 'Problem!'=>'Problem!',
 'Project'=>'Projekt',
