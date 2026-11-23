@@ -40,11 +40,21 @@ if (0 == $object_id && ($project_id || $task_id)) {
     // and task id
     $object->link_project = $project_id;
     $object->link_task    = $task_id;
+}
 
-    if ($task_id) {
-        $link_task = new CTask;
-        $link_task->load($task_id);
-        $link->task_name = $link_task->task_name;
+// The read-only Task field shows the name of the link's task, for a new link
+// opened from a task and for an existing link alike, when the user may see
+// that task. A new link opened from a task without a project takes the
+// task's project, so the task selector has a project to list.
+$task_name = '';
+if ((int) $object->link_task) {
+    $link_task = new CTask();
+    if ($link_task->load((int) $object->link_task) && $link_task->canView()
+        && $link_task->canAccess($AppUI->user_id, false)) {
+        $task_name = (string) $link_task->task_name;
+        if (!(int) $object->link_project) {
+            $object->link_project = (int) $link_task->task_project;
+        }
     }
 }
 

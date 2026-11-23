@@ -33,8 +33,8 @@ $viewHelper = new w2p_Output_HTML_ViewHelper($AppUI);
             </p>
             <p>
                 <?php $form->showLabel('Task'); ?>
-                <input type="hidden" name="link_task" value="<?php echo $object->link_task; ?>" />
-                <input type="text" class="text" name="task_name" value="<?php echo isset($object->task_name) ? $object->task_name : ''; ?>" size="40" disabled="disabled" />
+                <input type="hidden" name="link_task" value="<?php echo (int) $object->link_task; ?>" />
+                <input type="text" class="text" name="task_name" value="<?php echo htmlspecialchars(isset($task_name) ? (string) $task_name : '', ENT_QUOTES, 'UTF-8'); ?>" size="40" disabled="disabled" />
                 <input type="button" class="button btn btn-primary btn-mini" value="<?php echo $AppUI->_('select task'); ?>..." onclick="popTask()" />
             </p>
             <p>
