@@ -13,6 +13,7 @@
         }
     ],
     "require": {
+        "php": ">=8.3",
         "adodb/adodb-php": "^5.22",
         "nesbot/carbon": "^3.8"
     },
