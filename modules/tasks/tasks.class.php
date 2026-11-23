@@ -1485,6 +1485,138 @@ class CTask extends w2p_Core_BaseObject
     }
 
     /**
+     * Whether the current user may see a task, given its access setting
+     * (public, protected, participant or private), as canAccess() decides.
+     * The access setting, owner and id are read from the stored row, so
+     * posted values never count. 0 (no task) is always allowed; for anyone
+     * but System viewers, a task that does not exist is not.
+     *
+     * @param int $task_id the task to check; defaults to this object's id
+     *
+     * @return bool
+     */
+    public function canAccessStored($task_id = 0)
+    {
+        $task_id = (int) ($task_id ? $task_id : $this->task_id);
+        if ($task_id <= 0) {
+            return true;
+        }
+        // System viewers see every task (as in canAccess()); no need to look.
+        if (canView('system')) {
+            return true;
+        }
+        $q = $this->_getQuery();
+        $q->addTable('tasks');
+        $q->addQuery('task_id, task_access, task_owner');
+        $q->addWhere('task_id = ' . $task_id);
+        $row = $q->loadHash();
+        $q->clear();
+        if (!is_array($row) || !count($row)) {
+            return false;
+        }
+
+        $task = new CTask();
+        $task->overrideDatabase($this->_query);
+        $task->task_id = (int) $row['task_id'];
+        $task->task_access = (int) $row['task_access'];
+        $task->task_owner = (int) $row['task_owner'];
+
+        return $task->canAccess((int) $this->_AppUI->user_id, false);
+    }
+
+    /**
+     * SQL condition that keeps only the tasks the user may see under their
+     * access setting: the same rule as canAccess(), for lists. '' when the
+     * user may see every task (System viewers).
+     *
+     * @param int    $user_id defaults to the current user
+     * @param string $alias   table name or alias of the tasks table
+     *
+     * @return string
+     */
+    public function getAccessSQL($user_id = 0, $alias = 'tasks')
+    {
+        if (canView('system')) {
+            return '';
+        }
+        $uid = (int) ($user_id ? $user_id : $this->_AppUI->user_id);
+        $a = preg_replace('/[^A-Za-z0-9_]/', '', (string) $alias);
+
+        $q = $this->_getQuery();
+        $q->addTable('users');
+        $q->addQuery('user_company');
+        $q->addWhere('user_id = ' . $uid);
+        $company = (int) $q->loadResult();
+        $q->clear();
+
+        $assigned = 'EXISTS (SELECT 1 FROM user_tasks ua WHERE ua.task_id = ' . $a . '.task_id AND ua.user_id = ' . $uid . ')';
+        $sameCompany = 'NOT EXISTS (SELECT 1 FROM users uo WHERE uo.user_id = ' . $a . '.task_owner AND COALESCE(uo.user_company, 0) <> ' . $company . ')';
+        $access = 'COALESCE(' . $a . '.task_access, 0)';
+
+        return '(' . $a . '.task_owner = ' . $uid
+            . ' OR ' . $access . ' = ' . self::ACCESS_PUBLIC
+            . ' OR (' . $access . ' = ' . self::ACCESS_PARTICIPANT . ' AND ' . $assigned . ')'
+            . ' OR (' . $access . ' = ' . self::ACCESS_PROTECTED . ' AND ' . $assigned . ' AND ' . $sameCompany . '))';
+    }
+
+    /**
+     * Ids of the tasks in a project that the user may not see under their
+     * access setting (see getAccessSQL()).
+     *
+     * @param int $project_id
+     *
+     * @return array<int>
+     */
+    public function getInaccessibleTaskIds($project_id)
+    {
+        $accessSQL = $this->getAccessSQL(0, 't');
+        if ('' == $accessSQL) {
+            return array();
+        }
+        $q = $this->_getQuery();
+        $q->addTable('tasks', 't');
+        $q->addQuery('t.task_id');
+        $q->addWhere('t.task_project = ' . (int) $project_id);
+        $q->addWhere('NOT ' . $accessSQL);
+        $ids = $q->loadColumn();
+        $q->clear();
+
+        return is_array($ids) ? array_map('intval', $ids) : array();
+    }
+
+    /**
+     * Replaces the names of tasks the user may not see with "Private Task".
+     * For the task pickers (parent, dependencies), which must keep every task
+     * of the project so that saving a form doesn't drop a parent or a
+     * dependency the user can't see. Takes a list keyed by task id whose
+     * values are either rows with a task_name or the names themselves.
+     *
+     * @param array<int, mixed> $tasks
+     * @param int               $project_id
+     *
+     * @return array<int, mixed>
+     */
+    public function maskInaccessibleNames(array $tasks, $project_id)
+    {
+        $hidden = array_flip($this->getInaccessibleTaskIds($project_id));
+        if (!count($hidden)) {
+            return $tasks;
+        }
+        $label = $this->_AppUI->_('Private Task');
+        foreach ($tasks as $id => $task) {
+            if (isset($hidden[(int) $id])) {
+                if (is_array($task)) {
+                    $tasks[$id]['task_name'] = $label;
+                } else {
+                    $tasks[$id] = $label;
+                }
+            }
+        }
+
+        return $tasks;
+    }
+
+    /**
      * 		 Retrieve tasks are dependent of another.
      *
      * 		 @param int|false $taskId		 ID of the master task

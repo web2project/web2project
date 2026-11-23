@@ -182,6 +182,10 @@ $htmlHelper = new w2p_Output_HTMLHelper($AppUI);
     <table class="tbl list well">
         <?php
         $taskDep = $obj->getDependencyList($task_id);
+        // leave out tasks the user may not see under their access setting
+        $taskDep = array_filter($taskDep, function ($row) use ($obj) {
+            return $obj->canAccessStored((int) $row['task_id']);
+        });
         $s = count($taskDep) == 0 ? '<tr><td>' . $AppUI->_('none') . '</td></tr>' :
             '<tr><th>' . $AppUI->_('Task') . '</th>' .
             '<th>' . $AppUI->_('Work') . '</th>' .
@@ -204,6 +208,10 @@ $htmlHelper = new w2p_Output_HTMLHelper($AppUI);
     <table class="tbl list well">
         <?php
         $dependingTasks = $obj->getDependentTaskList($task_id);
+        // leave out tasks the user may not see under their access setting
+        $dependingTasks = array_filter($dependingTasks, function ($row) use ($obj) {
+            return $obj->canAccessStored((int) $row['task_id']);
+        });
         $s = count($dependingTasks) == 0 ? '<tr><td>' . $AppUI->_('none') . '</td></tr>' :
             '<tr><th>' . $AppUI->_('Task') . '</th>' .
             '<th>' . $AppUI->_('Work') . '</th>' .

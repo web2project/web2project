@@ -96,7 +96,7 @@ $parents = array();
 $projTasksWithEndDates = array($object->task_id => $AppUI->_('None')); //arrays contains task end date info for setting new task start date as maximum end date of dependenced tasks
 $all_tasks = array();
 
-$subtasks = $object->getNonRootTasks($task_project);
+$subtasks = $object->maskInaccessibleNames($object->getNonRootTasks($task_project), $task_project);
 foreach ($subtasks as $sub_task) {
     // Build parent/child task list
     $parents[$sub_task['task_parent']][] = $sub_task['task_id'];
@@ -106,7 +106,7 @@ foreach ($subtasks as $sub_task) {
 
 $task_parent_options = '';
 
-$root_tasks = $object->getRootTasks((int)$task_project);
+$root_tasks = $object->maskInaccessibleNames($object->getRootTasks((int)$task_project), $task_project);
 foreach ($root_tasks as $root_task) {
     build_date_list($projTasksWithEndDates, $root_task);
 	if ($root_task['task_id'] != $object_id) {

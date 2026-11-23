@@ -76,7 +76,7 @@ class w2p_Output_HTML_TaskTable extends w2p_Output_ListTable
 
         $_obj = new CTask();
         $_obj->task_id = $rowData['task_id'];
-        if (!$_obj->canView()) {
+        if (!$_obj->canView() || !$_obj->canAccessStored()) {
             return '';
         }
 

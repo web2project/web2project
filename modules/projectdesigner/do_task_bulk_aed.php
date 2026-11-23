@@ -70,7 +70,7 @@ $refused = array();
 $parent_task = null;
 if ($bulk_task_parent > 0) {
     $parent_task = new CTask();
-    if (!$parent_task->load($bulk_task_parent) || !$parent_task->canEdit()) {
+    if (!$parent_task->load($bulk_task_parent) || !$parent_task->canEdit() || !$parent_task->canAccessStored()) {
         $refused[] = $bulk_task_parent;
         $bulk_task_parent = 0;
         $parent_task = null;
@@ -79,7 +79,8 @@ if ($bulk_task_parent > 0) {
 $dependency_task = null;
 if (is_scalar($bulk_task_dependency) && '' !== (string) $bulk_task_dependency && '0' !== (string) $bulk_task_dependency) {
     $dependency_task = new CTask();
-    if (!$dependency_task->load($toInt($bulk_task_dependency)) || !$dependency_task->canEdit()) {
+    if (!$dependency_task->load($toInt($bulk_task_dependency)) || !$dependency_task->canEdit()
+        || !$dependency_task->canAccessStored()) {
         $refused[] = $toInt($bulk_task_dependency);
         $bulk_task_dependency = '';
         $dependency_task = null;
@@ -95,7 +96,8 @@ if (is_array($selected) && count($selected)) {
         // all that was checked above (GHSA-48ww-5h48-vwx9). A fresh object
         // each time: a failed load() keeps the previous task's fields.
         $upd_task = new CTask();
-        if (!$val || !$upd_task->load($val) || !$upd_task->canEdit()) {
+        // It must also be a task the user may see under its access setting.
+        if (!$val || !$upd_task->load($val) || !$upd_task->canEdit() || !$upd_task->canAccessStored()) {
             $refused[] = $val;
             continue;
         }

@@ -24,6 +24,36 @@ class CSmartSearch
 	public $keywords = null;
 	public $search_options = null;
 
+	/**
+	 * The checks beyond the module's item permission that the record's own
+	 * page applies: a task's access setting (private, participant,
+	 * protected), and the project and task of a file or link. Without them
+	 * search listed records their pages refuse.
+	 *
+	 * @param int|string $id
+	 *
+	 * @return bool
+	 */
+	protected function canSeeRecord($id)
+	{
+		switch ($this->table_module) {
+			case 'tasks':
+				$task = new CTask();
+
+				return $task->canAccessStored((int) $id);
+			case 'files':
+				$file = new CFile();
+
+				return $file->load((int) $id) && $file->canView();
+			case 'links':
+				$link = new CLink();
+
+				return $link->load((int) $id) && $link->canView();
+		}
+
+		return true;
+	}
+
 	public function fetchResults(&$permissions, &$record_count)
     {
 		/** @var w2p_Core_CAppUI $AppUI */
@@ -41,7 +71,8 @@ class CSmartSearch
 			foreach ($results as $records) {
 				// Added this line to strip out the alias that doesn't get loaded into the recordset array
 				$_id = str_contains($this->table_key, '.') ? substr($this->table_key, 2) : $this->table_key;
-                if ($permissions->checkModuleItem($this->table_module, 'view', $records[$_id])) {
+                if ($permissions->checkModuleItem($this->table_module, 'view', $records[$_id])
+                    && $this->canSeeRecord($records[$_id])) {
 					//Don't count records for which the user does not have permission
 					$record_count++;
 					$subrecord_count++;

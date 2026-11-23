@@ -151,6 +151,11 @@ class CFile extends w2p_Core_BaseObject {
         if (count($deny2) > 0) {
             $q->addWhere('file_task NOT IN (' . implode(',', $deny2) . ')');
         }
+        // and the files of tasks hidden by their access setting
+        $accessSQL = $task->getAccessSQL($this->_AppUI->user_id, 'tx');
+        if ('' != $accessSQL) {
+            $q->addWhere('(file_task IS NULL OR file_task NOT IN (SELECT tx.task_id FROM tasks tx WHERE NOT ' . $accessSQL . '))');
+        }
 
         foreach($filter as $key => $value) {
             switch ($key) {
@@ -195,6 +200,12 @@ class CFile extends w2p_Core_BaseObject {
         }
         if (isset($task_id) && (int) $task_id > 0) {
             $q->addWhere('file_task = ' . (int)$task_id);
+        }
+        // leave out the files of tasks hidden by their access setting
+        $accessTask = new CTask();
+        $accessSQL = $accessTask->getAccessSQL($AppUI->user_id, 'tx');
+        if ('' != $accessSQL) {
+            $q->addWhere('(file_task IS NULL OR file_task NOT IN (SELECT tx.task_id FROM tasks tx WHERE NOT ' . $accessSQL . '))');
         }
         if ($category_id >= 0) {
             $q->addWhere('file_category = ' . (int) $category_id);

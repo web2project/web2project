@@ -27,6 +27,11 @@ if ($task_id) {
         $AppUI->setMsg('invalidID', UI_MSG_ERROR, true);
         $AppUI->redirect('m=tasks');
     }
+    // Saving, moving or deleting a task needs the right to see it under its
+    // access setting (private, participant, protected) as stored.
+    if (!$obj->canAccessStored()) {
+        $AppUI->redirect(ACCESS_DENIED);
+    }
     $task_end_date = new w2p_Utilities_Date($obj->task_end_date);
     $old_task_project = (int) $obj->task_project;
 }

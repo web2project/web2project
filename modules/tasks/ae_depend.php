@@ -44,6 +44,9 @@ for ($current = $start; $current < $end + 1; $current++) {
 // Pull tasks dependencies
 $deps = false;
 $taskDep = __extract_from_ae_depend2($object_id);
+// keep every dependency, but not the names of tasks the user may not see
+$maskTask = new CTask();
+$taskDep = $maskTask->maskInaccessibleNames($taskDep, (int) $task_project);
 
 ?>
 <script>

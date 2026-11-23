@@ -507,7 +507,18 @@ abstract class w2p_Core_BaseObject extends w2p_System_Event implements w2p_Inter
             return false;
         }
 
-        return (0 == $task_id || (bool) $perms->checkModuleItem('tasks', 'view', $task_id));
+        if (0 == $task_id) {
+            return true;
+        }
+        if (!$perms->checkModuleItem('tasks', 'view', $task_id)) {
+            return false;
+        }
+        // The task's own access setting (private, participant, protected)
+        // applies as well.
+        $task = new CTask();
+        $task->overrideDatabase($this->_query);
+
+        return $task->canAccessStored($task_id);
     }
 
     /**

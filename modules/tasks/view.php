@@ -14,6 +14,11 @@ $obj = new CTask();
 if (!$obj->load($task_id)) {
     $AppUI->redirect(ACCESS_DENIED);
 }
+// The task's own access setting (private, participant, protected) applies
+// here too, not only in the lists.
+if (!$obj->canAccessStored()) {
+    $AppUI->redirect(ACCESS_DENIED);
+}
 
 $canEdit   = $obj->canEdit();
 $canDelete = $obj->canDelete();

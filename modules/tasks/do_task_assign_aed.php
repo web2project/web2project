@@ -49,6 +49,11 @@ for ($i = 0; $i <= $sizeof; $i++) {
 		if (!$perms->checkModuleItem('tasks', 'edit', $_POST['task_id'])) {
 			continue;
 		}
+		// nor on a task its access setting hides from them
+		$check = new CTask();
+		if (!$check->canAccessStored((int) $_POST['task_id'])) {
+			continue;
+		}
 		
 		$obj = new CTask();
 

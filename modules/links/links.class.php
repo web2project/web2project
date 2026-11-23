@@ -58,6 +58,11 @@ class CLink extends w2p_Core_BaseObject
         // Permissions
         $q = $project->setAllowedSQL($this->_AppUI->user_id, $q, 'link_project');
         $q = $task->setAllowedSQL($this->_AppUI->user_id, $q, 'link_task');
+        // and leave out the links of tasks hidden by their access setting
+        $accessSQL = $task->getAccessSQL($this->_AppUI->user_id, 'tx');
+        if ('' != $accessSQL) {
+            $q->addWhere('(link_task IS NULL OR link_task NOT IN (SELECT tx.task_id FROM tasks tx WHERE NOT ' . $accessSQL . '))');
+        }
         $q->addOrder('project_name, link_name');
 
         return $q->loadList();

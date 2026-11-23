@@ -118,6 +118,11 @@ $allowedTasks = $obj->getAllowedSQL($AppUI->user_id, 'tasks.task_id');
 if (count($allowedTasks)) {
     $q->addWhere($allowedTasks);
 }
+// and each task's own access setting (private, participant, protected)
+$accessSQL = $obj->getAccessSQL($AppUI->user_id, 'tasks');
+if ('' != $accessSQL) {
+    $q->addWhere($accessSQL);
+}
 
 $q->addGroup('tasks.task_id');
 if (!$project_id && !$task_id) {

@@ -336,7 +336,14 @@ class CTask_Log extends w2p_Core_BaseObject
 
     public function canCreate() {
 //TODO: allow someone to add a log if they're assigned to the Task
-        return $this->_perms->checkModuleItem($this->_tbl_module, 'view', $this->task_log_task);
+        if (!$this->_perms->checkModuleItem($this->_tbl_module, 'view', $this->task_log_task)) {
+            return false;
+        }
+        // and the task must be one the user may see under its access setting
+        $task = new CTask();
+        $task->overrideDatabase($this->_query);
+
+        return $task->canAccessStored((int) $this->task_log_task);
     }
 
     /**
